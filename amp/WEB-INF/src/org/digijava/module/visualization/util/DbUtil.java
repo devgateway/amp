@@ -1136,12 +1136,21 @@ public class DbUtil {
             	
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
             	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-            	if (item.length==4) 
+            	if (item.length==4){
+            		item[3]=item[3]==null?100f:item[3];//if a percentage is null is assumed that item has the 100% of the funding
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
-            	if (item.length==5) 
+            	}
+            	if (item.length==5){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
-            	if (item.length==6) 
+            	}
+            	if (item.length==6){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
+            		item[5]=item[5]==null?100f:item[5];
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            	}
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if(hm.containsKey(id)){
@@ -1265,12 +1274,21 @@ public class DbUtil {
             	
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
             	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-            	if (item.length==4 && item[3] != null) 
+            	if (item.length==4){
+            		item[3]=item[3]==null?100f:item[3];//if a percentage is null is assumed that item has the 100% of the funding
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
-            	if (item.length==5) 
+            	}
+            	if (item.length==5){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
-            	if (item.length==6) 
+            	}
+            	if (item.length==6){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
+            		item[5]=item[5]==null?100f:item[5];
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            	}
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if(hm.containsKey(id)){
@@ -1457,12 +1475,21 @@ public class DbUtil {
             	
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
             	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-            	if (item.length==4) 
+            	if (item.length==4){
+            		item[3]=item[3]==null?100f:item[3];//if a percentage is null is assumed that item has the 100% of the funding
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
-            	if (item.length==5) 
+            	}
+            	if (item.length==5){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
-            	if (item.length==6) 
+            	}
+            	if (item.length==6){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
+            		item[5]=item[5]==null?100f:item[5];
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            	}
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if (!sectorCondition) {
@@ -1655,12 +1682,21 @@ public class DbUtil {
             	Object[] item = (Object[])it.next();
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
             	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-            	if (item.length==4 && item[3] != null) 
+            	if (item.length==4){
+            		item[3]=item[3]==null?100f:item[3];//if a percentage is null is assumed that item has the 100% of the funding
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
-            	if (item.length==5 && item[3] != null && item[4] != null) 
+            	}
+            	if (item.length==5){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
-            	if (item.length==6 && item[3] != null && item[4] != null && item[5] != null ) 
+            	}
+            	if (item.length==6){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
+            		item[5]=item[5]==null?100f:item[5];
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            	}
             	Long id = (Long) item[1];
             	String name = (String) item[2];
 
@@ -1853,12 +1889,21 @@ public class DbUtil {
             	
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
             	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-            	if (item.length==4) 
+            	if (item.length==4){
+            		item[3]=item[3]==null?100f:item[3];//if a percentage is null is assumed that item has the 100% of the funding
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
-            	if (item.length==5) 
+            	}
+            	if (item.length==5){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
-            	if (item.length==6) 
+            	}
+            	if (item.length==6){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
+            		item[5]=item[5]==null?100f:item[5];
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            	}
             	Long id = (Long) item[1];
             	String name = programParentList.get(id).getName();
             	id = programParentList.get(id).getAmpThemeId();

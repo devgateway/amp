@@ -90,8 +90,8 @@ public class CategoryConstants {
 	public static final String TRANSACTION_TYPE_NAME		= "Transaction Type";
 	public static final String TRANSACTION_TYPE_KEY			= "transaction_type";
 
-    public static final String WORKSPACE_PREFIX_NAME		= "Translation Prefix";
-    public static final String WORKSPACE_PREFIX_KEY		= "workspace_prefix";
+    public static final String WORKSPACE_PREFIX_NAME		= "Workspace Prefix";
+    public static final String WORKSPACE_PREFIX_KEY		    = "workspace_prefix";
 
 	public static final String REPORT_CATEGORY_NAME					="Report Category";
 	public static final String REPORT_CATEGORY_KEY					="report_category";

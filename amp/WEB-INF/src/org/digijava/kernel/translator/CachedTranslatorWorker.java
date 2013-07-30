@@ -23,7 +23,6 @@
 package org.digijava.kernel.translator;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +36,6 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -147,7 +145,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
             HttpSession session = TLSUtils.getRequest().getSession();
             TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
             if (tm != null){
-                AmpCategoryValue trnPrefix = tm.getTranslationPrefix();
+                AmpCategoryValue trnPrefix = tm.getWorkspacePrefix();
                 if (trnPrefix != null){
                     String prefix = trnPrefix.getValue();
                     return prefix;

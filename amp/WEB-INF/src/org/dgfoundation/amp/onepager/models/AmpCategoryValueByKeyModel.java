@@ -9,7 +9,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategoryFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -39,7 +41,7 @@ public class AmpCategoryValueByKeyModel implements
 	 */
 	public AmpCategoryValueByKeyModel(IModel<Set<AmpCategoryValue>> model, String categoryKey) {
 		this.model=model;
-		this.categoryKey=categoryKey;
+		this.categoryKey= AmpCategoryFieldPanel.getAlternateKey(Session.get(), categoryKey);
 	}
 
 	@Override

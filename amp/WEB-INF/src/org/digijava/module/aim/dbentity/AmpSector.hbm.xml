@@ -24,7 +24,7 @@
 		<property name="version" column="version" type="java.lang.String"/>
 		<property name="deleted" column="deleted" type="java.lang.Boolean"/>
 
-		<property name="segmentCode" column="segment_code" type="java.lang.Integer"/>
+		<property name="segmentCode" column="segment_code" type="java.lang.Integer" />
 
         <set name="indicators" table="AMP_SECTOR_INDICATOR" lazy="true" inverse="true" cascade="none">
 			<key column="amp_sector_id"/>

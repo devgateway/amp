@@ -307,6 +307,9 @@
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 		<many-to-one name="mergeSource2" column="merge_source2"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+
+		<property name="activityType" column="activity_type" type="java.lang.Long" />
+
 	' 
 	>
 ]>

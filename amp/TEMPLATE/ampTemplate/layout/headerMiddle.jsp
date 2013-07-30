@@ -443,6 +443,14 @@ function adminHelp(){
 												</field:display>
 												</c:if>
 											</c:if>
+                                              <li class="yuiampmenuitem_drop">
+                                                  <c:set var="trnClickToAddNewActivit">
+                                                      <digi:trn>Click here to Add New SSC</digi:trn>
+                                                  </c:set>
+                                                  <a class="yuiampmenuitemlabel" href="/wicket/onepager/ssc/new" title="${trnClickToAddNewActivit}">
+                                                      <digi:trn>Add SSC</digi:trn>
+                                                  </a>
+                                              </li>
                                             <%--<a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
                                             <digi:trn key="aim:addTab">Add Tab</digi:trn>
                                             </a> --%>

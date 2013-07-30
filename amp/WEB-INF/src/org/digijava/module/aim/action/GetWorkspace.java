@@ -15,15 +15,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
-import org.digijava.kernel.taglib.util.TagUtil;
-import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -105,7 +99,7 @@ public class GetWorkspace extends Action {
                 uwForm.setActionEvent("add");
                 uwForm.setAddFlag(true);
                 uwForm.setFmTemplate(null);
-                uwForm.setTranslationPrefix(null);
+                uwForm.setWorkspacePrefix(null);
 
                 return mapping.findForward("showAddWorkspace");
             }
@@ -188,10 +182,10 @@ public class GetWorkspace extends Action {
                     uwForm.setFmTemplate(workspace.getFmTemplate().getId());
                 else
                     uwForm.setFmTemplate(null);
-                if (workspace.getTranslationPrefix() != null)
-                    uwForm.setTranslationPrefix(workspace.getTranslationPrefix().getId());
+                if (workspace.getWorkspacePrefix() != null)
+                    uwForm.setWorkspacePrefix(workspace.getWorkspacePrefix().getId());
                 else
-                    uwForm.setTranslationPrefix(null);
+                    uwForm.setWorkspacePrefix(null);
 
 
                 if (null == uwForm.getRelatedTeam()) {

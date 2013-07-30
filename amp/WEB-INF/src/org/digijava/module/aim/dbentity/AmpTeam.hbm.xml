@@ -61,7 +61,7 @@
         <many-to-one name="fmTemplate" column="fm_template"
                      class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" cascade="none" lazy="proxy" />
 
-        <many-to-one name="translationPrefix" column="translation_prefix_categoryvalue_id"
+        <many-to-one name="workspacePrefix" column="workspace_prefix_categoryvalue_id"
                      class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
     </class>

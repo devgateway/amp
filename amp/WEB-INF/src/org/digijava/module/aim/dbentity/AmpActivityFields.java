@@ -409,7 +409,9 @@ LoggerIdentifiable, Cloneable {
 	protected Boolean mergedActivity;
 	protected AmpActivityVersion mergeSource1;
 	protected AmpActivityVersion mergeSource2;
-	
+
+    protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
+
 	//protected Set <AmpActivityContact> activityContacts;
 
 	public Boolean getMergedActivity() {
@@ -2011,6 +2013,14 @@ contactName = string;
 
     public void setIndirectOnBudget(Boolean indirectOnBudget) {
         this.indirectOnBudget = indirectOnBudget;
+    }
+
+    public Long getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(Long activityType) {
+        this.activityType = activityType;
     }
 
     @Override

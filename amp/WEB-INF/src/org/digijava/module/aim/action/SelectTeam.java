@@ -10,7 +10,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -154,7 +153,7 @@ public class SelectTeam extends Action {
             tm.setPledger(member.getUser().getPledger());
             tm.setPublishDocuments(member.getPublishDocPermission());
             tm.setApprover(member.getAmpMemberRole().isApprover());
-			tm.setTranslationPrefix(member.getAmpTeam().getTranslationPrefix());
+			tm.setWorkspacePrefix(member.getAmpTeam().getWorkspacePrefix());
 
             if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
                 tm.setTranslator(true);
@@ -188,9 +187,6 @@ public class SelectTeam extends Action {
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
             request.getServletContext().setAttribute("ampTreeVisibility", ampTreeVisibility);
-
-            //Check if this workspace uses a different translation set
-            AmpCategoryValue trnPrefix = currentTeam.getTranslationPrefix();
 
         } catch (Exception e) {
             e.printStackTrace(System.out);

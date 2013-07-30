@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionErrors;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.multistepwizard.MultiStepActionForm;
 import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
@@ -100,7 +99,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 
     private Long fmTemplate;
     private Collection<AmpTemplatesVisibility> fmTemplateList;
-    private Long translationPrefix;
+    private Long workspacePrefix;
 
 
     public Collection getAllChildren() {
@@ -733,11 +732,11 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
         this.fmTemplateList = fmTemplateList;
     }
 
-    public Long getTranslationPrefix() {
-        return translationPrefix;
+    public Long getWorkspacePrefix() {
+        return workspacePrefix;
     }
 
-    public void setTranslationPrefix(Long translationPrefix) {
-        this.translationPrefix = translationPrefix;
+    public void setWorkspacePrefix(Long workspacePrefix) {
+        this.workspacePrefix = workspacePrefix;
     }
 }

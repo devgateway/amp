@@ -43,6 +43,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsForm
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -54,6 +55,7 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -132,10 +134,20 @@ public class OnePager extends AmpHeaderFooter {
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		session.reset();
 		StringValue activityParam = parameters.get(OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY);
-		String activityId = (activityParam==null ? null : activityParam.toString());
+        if (activityParam.toString() == null){
+            activityParam = parameters.get(OnePagerConst.ONEPAGER_URL_PARAMETER_SSC);
+            if (activityParam.toString() != null)
+                session.setFormType(ActivityUtil.ACTIVITY_TYPE_SSC);
+        }
+
+        if (activityParam.toString() == null)
+            throw new AssertionError("unsuported form type");
+
+		String activityId = activityParam.toString();
 		boolean newActivity = false;
-		if ((activityId == null) || (activityId.compareTo("new") == 0)){
+        if ((activityId == null) || (activityId.compareTo("new") == 0)){
 			am = new AmpActivityModel();
+
 			newActivity = true;
 			
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
@@ -144,6 +156,7 @@ public class OnePager extends AmpHeaderFooter {
 			
 			am.getObject().setActivityCreator(session.getAmpCurrentMember());
 			am.getObject().setTeam(session.getAmpCurrentMember().getAmpTeam());
+            am.getObject().setActivityType(session.getFormType());
 			
 			if(parameters.get("lat") != null && parameters.get("lat") != null && parameters.get("geoId") != null && parameters.get("name") != null){
 				String activityName = parameters.get("name").toString();
@@ -153,6 +166,7 @@ public class OnePager extends AmpHeaderFooter {
 				
 				initializeActivity(am.getObject(), activityName, latitude, longitude, geoId);
 			}
+
 		}
 		else{
 			//try to acquire lock for activity editing
@@ -173,6 +187,9 @@ public class OnePager extends AmpHeaderFooter {
 //			boolean canDo = am.getObject().canDo(GatePermConst.Actions.EDIT, PermissionUtil.getScope(session.getHttpSession()));
 //			if(!canDo)  throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));			
 		}
+
+        if (!am.getObject().getActivityType().equals(session.getFormType()))
+            throw new AssertionError("Form type is not compatible with activity type!");
 		
 		try {
 			initializeFormComponents(am);
@@ -201,7 +218,6 @@ public class OnePager extends AmpHeaderFooter {
 				protected void onTimer(AjaxRequestTarget target) {
 					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
 					if (editLockRefresher.isEnabled() && refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
-					if (editLockRefresher.isEnabled() && refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED)
                         throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId())));
 
 					if (DEBUG_ACTIVITY_LOCK){

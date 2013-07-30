@@ -48,7 +48,7 @@ public class TeamMember implements Comparable, Serializable{
 	
 	private Boolean publishDocuments; /*permissions to make docs public*/
 	private boolean approver;
-    private AmpCategoryValue translationPrefix;
+    private AmpCategoryValue workspacePrefix;
 
 	public TeamMember()
 	{
@@ -283,12 +283,12 @@ public class TeamMember implements Comparable, Serializable{
 		return this.useFilters;
 	}
 
-    public AmpCategoryValue getTranslationPrefix() {
-        return translationPrefix;
+    public AmpCategoryValue getWorkspacePrefix() {
+        return workspacePrefix;
     }
 
-    public void setTranslationPrefix(AmpCategoryValue translationPrefix) {
-        this.translationPrefix = translationPrefix;
+    public void setWorkspacePrefix(AmpCategoryValue workspacePrefix) {
+        this.workspacePrefix = workspacePrefix;
     }
 
     @Override

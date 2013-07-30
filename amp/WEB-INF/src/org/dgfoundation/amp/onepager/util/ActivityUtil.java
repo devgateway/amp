@@ -81,7 +81,9 @@ import org.hibernate.Session;
  */
 public class ActivityUtil {
 	private static final Logger logger = Logger.getLogger(ActivityUtil.class);
-	
+
+    public static final Long ACTIVITY_TYPE_PROJECT = 0L;
+    public static final Long ACTIVITY_TYPE_SSC = 1L;
 	
 	/**
 	 * Method used to save an Activity/ActivityVersion depending

@@ -9,13 +9,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -28,8 +26,6 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import net.sf.jasperreports.engine.util.Pair;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -45,7 +41,6 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPages;
@@ -470,7 +465,7 @@ public class TeamUtil {
                 workspace.setWorkspaceGroup(team.getWorkspaceGroup());
                 workspace.setHideDraftActivities(team.getHideDraftActivities() );
                 workspace.setFmTemplate(team.getFmTemplate());
-                workspace.setTranslationPrefix(team.getTranslationPrefix());
+                workspace.setWorkspacePrefix(team.getWorkspacePrefix());
                 
                 if(null == team.getRelatedTeamId())
                     workspace.setRelatedTeam(null);
@@ -594,7 +589,7 @@ public class TeamUtil {
                 updTeam.setHideDraftActivities(team.getHideDraftActivities() );
                 updTeam.setWorkspaceGroup(team.getWorkspaceGroup());
                 updTeam.setFmTemplate(team.getFmTemplate());
-                updTeam.setTranslationPrefix(team.getTranslationPrefix());
+                updTeam.setWorkspacePrefix(team.getWorkspacePrefix());
                 if (updTeam.getFilterDataSet() == null)
                 	updTeam.setFilterDataSet(new HashSet());
                 else

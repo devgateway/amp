@@ -30,7 +30,7 @@ public class Workspace {
 	private Boolean useFilter;
 
     private AmpTemplatesVisibility fmTemplate;
-    private AmpCategoryValue translationPrefix;
+    private AmpCategoryValue workspacePrefix;
 	
 	public Boolean getAddActivity() {
 		return addActivity;
@@ -214,11 +214,11 @@ public class Workspace {
         this.fmTemplate = fmTemplate;
     }
 
-    public AmpCategoryValue getTranslationPrefix() {
-        return translationPrefix;
+    public AmpCategoryValue getWorkspacePrefix() {
+        return workspacePrefix;
     }
 
-    public void setTranslationPrefix(AmpCategoryValue translationPrefix) {
-        this.translationPrefix = translationPrefix;
+    public void setWorkspacePrefix(AmpCategoryValue workspacePrefix) {
+        this.workspacePrefix = workspacePrefix;
     }
 }

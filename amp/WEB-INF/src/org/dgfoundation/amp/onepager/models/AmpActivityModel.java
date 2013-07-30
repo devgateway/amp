@@ -91,6 +91,8 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	protected AmpActivityVersion load() {
 		beginConversation();
 		AmpActivityVersion ret = ActivityUtil.load(this, id);
+        if (ret.getActivityType() == null) //set default type for previously saved activities
+            ret.setActivityType(ActivityUtil.ACTIVITY_TYPE_PROJECT);
 
 		return ret;
 	}

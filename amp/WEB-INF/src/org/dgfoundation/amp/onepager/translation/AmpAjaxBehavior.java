@@ -56,7 +56,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 		Request request = RequestCycle.get().getRequest();
         ServletWebRequest servletWebRequest = (ServletWebRequest) request;
         HttpServletRequest httpServletRequest = servletWebRequest.getContainerRequest();
-        TLSUtils.populate(httpServletRequest);
+        //TLSUtils.populate(httpServletRequest);
 		String method = request.getRequestParameters().getParameterValue("method").toString();
         String activityId = request.getRequestParameters().getParameterValue("actId").toString();
 		if ("translate".compareTo(method.toLowerCase()) == 0){

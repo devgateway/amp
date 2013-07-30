@@ -14,6 +14,7 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
 import org.dgfoundation.amp.onepager.models.AmpRelatedRolesModel;
+import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -52,7 +53,7 @@ public class AmpOrgRoleSelectorComponent extends Panel {
 				am,roleFilter);	
 		// selector for organization role
 		roleSelect = new AmpSelectFieldPanel<AmpRole>("roleSelect", roleModel,
-				rolesList,(recipientMode?"Recipient ":"")+"Org Role", false, false, null, true);
+				rolesList,(recipientMode?"Recipient ":"")+"Org Role", false, false, new TranslatedChoiceRenderer<AmpRole>(), true);
 		
 		// read the list of organizations from related organizations page, and
 		// create a unique set with the orgs chosen

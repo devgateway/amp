@@ -15,6 +15,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.FMFormCache;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
@@ -45,6 +46,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	private HttpSession httpSession;
 	private Site site;
 	private String isAdmin;
+    private Long formType;
 	
 	FMFormCache formCache	= null;
 	
@@ -77,6 +79,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	}
 
 	public void reset(){
+        formType = ActivityUtil.ACTIVITY_TYPE_PROJECT;
 		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
 		isAdmin = (String)httpSession.getAttribute("ampAdmin");
 		if (currentMember != null)
@@ -160,7 +163,15 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 		this.formCache = formCache;
 	}
 
-	/**
+    public Long getFormType() {
+        return formType;
+    }
+
+    public void setFormType(Long formType) {
+        this.formType = formType;
+    }
+
+    /**
      * Attempts to authenticate a user that has provided the given username and password.
      * @param username current username
      * @param password current password

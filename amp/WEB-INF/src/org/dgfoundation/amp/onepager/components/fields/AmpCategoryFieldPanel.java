@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -80,12 +81,15 @@ public abstract class AmpCategoryFieldPanel extends
 	 * @see CategoryConstants#IMPLEMENTATION_LOCATION_NAME
 	 * @throws Exception
 	 */
-	public AmpCategoryFieldPanel(String id, final String categoryKey, String fmName,
+	public AmpCategoryFieldPanel(String id, String categKey, String fmName,
 			boolean ordered, Boolean isMultiselect,
 			final IModel<Set<AmpCategoryValue>> relatedChoicesModel,boolean hideLabel, boolean hideNewLine) throws Exception {
 		super(id, fmName,hideLabel, hideNewLine);
-		selectedMultiselect = isMultiselect;
-		this.categoryKey = categoryKey;
+
+        //set the categoryKey accordingly
+        this.categoryKey = getAlternateKey(getSession(), categKey);
+
+        selectedMultiselect = isMultiselect;
 		this.relatedChoicesModel = relatedChoicesModel;
 		if (selectedMultiselect == null) {
 			AmpCategoryClass categoryClass = CategoryManagerUtil
@@ -121,6 +125,20 @@ public abstract class AmpCategoryFieldPanel extends
 		};
 		
 	}
+
+    public static String getAlternateKey(Session s, final String categKey) {
+        AmpAuthWebSession session = (AmpAuthWebSession) s;
+        if (session.getCurrentMember().getWorkspacePrefix() != null){
+            String tmpKey = session.getCurrentMember().getWorkspacePrefix().getValue() + categKey;
+            try {
+                CategoryManagerUtil.loadAmpCategoryClassByKey(tmpKey);
+                return tmpKey;
+            } catch (NoCategoryClassException e){
+                //then we don't alter the categoryKey
+            }
+        }
+        return categKey;
+    }
 
     public AmpCategoryFieldPanel(String id, final String categoryKey, String fmName,
                                  boolean ordered, Boolean isMultiselect,

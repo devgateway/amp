@@ -22,7 +22,6 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
-import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
 import org.digijava.module.aim.helper.TeamMember;
@@ -136,7 +135,7 @@ public class UpdateWorkspace extends Action {
 			}
 
             newTeam.setFmTemplate(FeaturesUtil.getTemplateById(uwForm.getFmTemplate()));
-            newTeam.setTranslationPrefix(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getTranslationPrefix()));
+            newTeam.setWorkspacePrefix(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspacePrefix()));
 		}
 
 		if (event != null && event.trim().equalsIgnoreCase("reset")) {

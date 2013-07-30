@@ -741,23 +741,23 @@ function cancel()
 
                                                     <tr>
                                                         <td width="150" align="right" bgcolor="#FFFFFF">
-                                                            <digi:trn key="aim:translationPrefix">Translation Prefix</digi:trn>
+                                                            <digi:trn key="aim:workspacePrefix">Workspace Prefix</digi:trn>
                                                         </td>
                                                         <td align="left" bgcolor="#FFFFFF">
                                                             <c:set var="translation">
-                                                                <digi:trn>Select, if workspace will use a different translation set</digi:trn>
+                                                                <digi:trn>Select, if workspace will use a different translation set or category set</digi:trn>
                                                             </c:set>
                                                             <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
-                                                                <b><bean:write name="aimUpdateWorkspaceForm" property="translationPrefix" /></b>
+                                                                <b><bean:write name="aimUpdateWorkspaceForm" property="workspacePrefix" /></b>
                                                             </logic:equal>
                                                             <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="view">
-                                                                <b><bean:write name="aimUpdateWorkspaceForm" property="translationPrefix" /></b>
+                                                                <b><bean:write name="aimUpdateWorkspaceForm" property="workspacePrefix" /></b>
                                                             </logic:equal>
                                                             <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="edit">
-                                                                <category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="translationPrefix" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TRANSLATION_PREFIX_KEY %>" styleClass="inp-text" />
+                                                                <category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="workspacePrefix" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_PREFIX_KEY %>" styleClass="inp-text" />
                                                             </logic:equal>
                                                             <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
-                                                                <category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="translationPrefix" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TRANSLATION_PREFIX_KEY %>" styleClass="inp-text" />
+                                                                <category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="workspacePrefix" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_PREFIX_KEY %>" styleClass="inp-text" />
                                                             </logic:equal>
                                                         </td>
                                                     </tr>

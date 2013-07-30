@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
@@ -25,6 +26,7 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFe
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -50,6 +52,9 @@ public class AmpDonorFundingFormSectionFeature extends
 	private PropertyModel<Set<AmpFunding>> fundingModel;
 	private AmpAjaxLinkField addNewFunding;
 	private AmpOrgRoleSelectorComponent orgRoleSelector;
+
+    private final static String[] ACTIVITY_ROLE_FILTER = {Constants.FUNDING_AGENCY};
+    private final static String[] SSC_ROLE_FILTER = {Constants.FUNDING_AGENCY, Constants.EXECUTING_AGENCY, Constants.BENEFICIARY_AGENCY};
 
 	public ListEditor<AmpOrganisation> getList() {
 		return list;
@@ -216,8 +221,13 @@ public class AmpDonorFundingFormSectionFeature extends
 //				"Search Funding Organizations",   searchOrgs );
 //		wmc.add(searchOrganization);
 
-		
-		orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, new String[]{Constants.FUNDING_AGENCY});
+
+        String[] roleFilter = ACTIVITY_ROLE_FILTER;
+        if (ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession)getSession()).getFormType()))
+            roleFilter = SSC_ROLE_FILTER;
+
+
+        orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, roleFilter);
 		add(orgRoleSelector);
 		
 		// when the org select changes, update the status of the addNewFunding

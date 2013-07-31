@@ -172,7 +172,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				
 				//
                 response.setContentType("application/pdf");
-				response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll(" ","_") + ".pdf");	   	       
+                response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll("[ ,;]","_") + ".pdf");
                 //
 				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());		
                 //

@@ -71,7 +71,7 @@ public class AmpEstimatedDonorDisbursementsSubsectionFeature extends
 		add(disbursementsTableFeature);
 		fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");
 		
-		AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addDisbursement","Add Disbursement","Add Disbursement") {
+		AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addDisbursement","Add Estimated Disbursement","Add Estimated Disbursement") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				AmpFundingDetail fd= new AmpFundingDetail();

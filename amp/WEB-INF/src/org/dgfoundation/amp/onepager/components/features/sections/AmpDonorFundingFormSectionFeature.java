@@ -24,9 +24,12 @@ import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
+import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -34,6 +37,8 @@ import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * The donor funding section of the activity form. Includes selecting an org,
@@ -139,7 +144,32 @@ public class AmpDonorFundingFormSectionFeature extends
 		AmpProposedProjectCost propProjectCost = new AmpProposedProjectCost("propProjCost", "Proposed Project Cost", am);
 		add(propProjectCost);
 
-		fundingModel = new PropertyModel<Set<AmpFunding>>(am, "funding");
+        AmpCategorySelectFieldPanel typeOfCooperation = new AmpCategorySelectFieldPanel(
+                "typeOfCooperation", CategoryConstants.TYPE_OF_COOPERATION_KEY,
+                new AmpCategoryValueByKeyModel(
+                        new PropertyModel<Set<AmpCategoryValue>>(am, "categories"),
+                        CategoryConstants.TYPE_OF_COOPERATION_KEY),
+                CategoryConstants.TYPE_OF_COOPERATION_NAME, true, false, null, AmpFMTypes.MODULE);
+        add(typeOfCooperation);
+
+        AmpCategorySelectFieldPanel typeOfImplementation = new AmpCategorySelectFieldPanel(
+                "typeOfImplementation", CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY,
+                new AmpCategoryValueByKeyModel(
+                        new PropertyModel<Set<AmpCategoryValue>>(am, "categories"),
+                        CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
+                CategoryConstants.TYPE_OF_IMPLEMENTATION_NAME, true, false, null, AmpFMTypes.MODULE);
+        add(typeOfImplementation);
+
+        AmpCategorySelectFieldPanel modalities= new AmpCategorySelectFieldPanel(
+                "modalities", CategoryConstants.MODALITIES_KEY,
+                new AmpCategoryValueByKeyModel(
+                        new PropertyModel<Set<AmpCategoryValue>>(am, "categories"),
+                        CategoryConstants.MODALITIES_KEY),
+                CategoryConstants.MODALITIES_NAME, true, false, null, AmpFMTypes.MODULE);
+        add(modalities);
+
+
+        fundingModel = new PropertyModel<Set<AmpFunding>>(am, "funding");
 		if (fundingModel.getObject() == null)
 			fundingModel.setObject(new LinkedHashSet<AmpFunding>());
 		

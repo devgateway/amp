@@ -92,8 +92,17 @@ public class CategoryConstants {
 
     public static final String WORKSPACE_PREFIX_NAME		= "Workspace Prefix";
     public static final String WORKSPACE_PREFIX_KEY		    = "workspace_prefix";
+    //categ for SSC
+    public static final String MODALITIES_NAME		        = "Modalities";
+    public static final String MODALITIES_KEY		        = "modalities";
+    //categ for SSC
+    public static final String TYPE_OF_COOPERATION_NAME		= "Type of Cooperation";
+    public static final String TYPE_OF_COOPERATION_KEY		= "type_of_cooperation";
+    //categ for SSC
+    public static final String TYPE_OF_IMPLEMENTATION_NAME	= "Type of Implementation";
+    public static final String TYPE_OF_IMPLEMENTATION_KEY	= "type_of_implementation";
 
-	public static final String REPORT_CATEGORY_NAME					="Report Category";
+    public static final String REPORT_CATEGORY_NAME					="Report Category";
 	public static final String REPORT_CATEGORY_KEY					="report_category";
 	
 	

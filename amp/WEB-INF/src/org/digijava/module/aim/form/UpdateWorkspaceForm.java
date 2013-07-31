@@ -435,6 +435,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			relatedTeamBilatCollSize = null;
 			deleteFlag = null;
 			updateFlag = false;
+            fmTemplate = null;
 			workspaceType = null;
 			//availChildWorkspaces = null;
 			actionType=null;
@@ -445,8 +446,10 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			addActivity=null;
 			computation=null;
 			useFilter=true;
-			
-		}		
+
+            workspacePrefix=null;
+            fmTemplate=null;
+		}
 		if (popupReset) {
 			availChildWorkspaces = null;
 			selChildWorkspaces = null;	

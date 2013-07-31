@@ -4,7 +4,15 @@
 		<a style="display: none;" id="collapseDonorItems" onclick="$(this).parents('div:eq(2)').find('.collapsable').hide();$('#expandDonorItems').show();$('#collapseDonorItems').hide();"><wicket:trn>Collapse all</wicket:trn></a>
 	</div>
 	<div wicket:id="propProjCost" />
-	<tr><td colspan="2" align="left"><p/>
+    <tr>
+        <td><div wicket:id="typeOfCooperation"/></td>
+        <td><div wicket:id="typeOfImplementation"/></td>
+    </tr>
+    <tr>
+        <td><div wicket:id="modalities"/></td>
+        <td></td>
+    </tr>
+    <tr><td colspan="2" align="left"><p/>
         <div wicket:id="container">
             <div wicket:id="listFunding" class="funding_group_feature_box">
                 <div wicket:id="fundingItem" />

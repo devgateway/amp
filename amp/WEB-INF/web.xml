@@ -70,27 +70,26 @@
 		</param-value>
 	</context-param>
 
-	<!-- Acegi -->
 	<filter>
-		<filter-name>Acegi Filter Chain Proxy</filter-name>
+		<filter-name>filterChainProxy</filter-name>
 		<filter-class>
-			org.springframework.security.util.FilterToBeanProxy
+			org.springframework.web.filter.DelegatingFilterProxy
 		</filter-class>
 		<init-param>
 			<param-name>targetClass</param-name>
 			<param-value>
-				org.springframework.security.util.FilterChainProxy
+				org.springframework.security.web.FilterChainProxy
 			</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
-		<filter-name>Acegi Filter Chain Proxy</filter-name>
+		<filter-name>filterChainProxy</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<filter>
-		<filter-name>Acegi Authentication</filter-name>
+		<filter-name>authenticationProcessingFilter</filter-name>
 		<filter-class>
-			org.springframework.security.util.FilterToBeanProxy
+		org.springframework.web.filter.DelegatingFilterProxy
 		</filter-class>
 		<init-param>
 			<param-name>targetBean</param-name>
@@ -98,7 +97,7 @@
 		</init-param>
 	</filter>
 	<filter-mapping>
-		<filter-name>Acegi Authentication</filter-name>
+		<filter-name>authenticationProcessingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
     

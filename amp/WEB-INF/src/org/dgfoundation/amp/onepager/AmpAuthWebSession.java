@@ -4,8 +4,7 @@
 */
 package org.dgfoundation.amp.onepager;
 
-import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,13 +22,13 @@ import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.AuthenticationManager;
-import org.springframework.security.BadCredentialsException;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * @author aartimon@dginternational.org 
@@ -234,11 +233,11 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
             Roles roles = new Roles();
             // Retrieve the granted authorities from the current authentication. These correspond one on
             // one with user roles.
-            GrantedAuthority[] authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-            for (int i = 0; i < authorities.length; i++) {
-                GrantedAuthority authority = authorities[i];
-                roles.add(authority.getAuthority());
-            }
+            Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+            for (GrantedAuthority grantedAuthority : authorities) {
+                 roles.add(grantedAuthority.getAuthority());
+			}
+         
             return roles;
         }
         return null;

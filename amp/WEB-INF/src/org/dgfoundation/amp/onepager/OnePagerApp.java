@@ -3,7 +3,14 @@
  */
 package org.dgfoundation.amp.onepager;
 
+import java.io.IOException;
+import java.net.SocketException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import net.ftlines.wicketsource.WicketSource;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
@@ -34,12 +41,7 @@ import org.dgfoundation.amp.onepager.util.JspResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.springframework.security.AuthenticationManager;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.SocketException;
+import org.springframework.security.authentication.AuthenticationManager;
 
 /**
  * @author mihai

@@ -18,27 +18,26 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.ui.webapp.AuthenticationProcessingFilter;
-import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 public class AmpAuthenticationProcessingFilter
-    extends AuthenticationProcessingFilter {
+    extends UsernamePasswordAuthenticationFilter {
 
     public Authentication attemptAuthentication(HttpServletRequest request) throws
         AuthenticationException {
 
     	String id = request.getParameter("j_autoWorkspaceId");
     	request.getSession().setAttribute("j_autoWorkspaceId", id);
-        Authentication authResult = super.attemptAuthentication(request);
+        Authentication authResult = super.attemptAuthentication(request, null);
         User currentUser = null;
         try {
             currentUser = getUser(authResult);

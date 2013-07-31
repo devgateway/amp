@@ -9,8 +9,20 @@
 	<properties>
 		<wicketVersion>6.7.0</wicketVersion>
 		<tomcatVersion>7.0.37</tomcatVersion>
+		<springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
+		<springVersion>3.0.7.RELEASE</springVersion>
 	</properties>
  <repositories>
+ 		<repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>ibiblio</id>
+          <name>ibiblio</name>
+          <url>http://mirrors.ibiblio.org/maven2</url>
+        </repository>
+ 
+ 
 		<repository>
           <snapshots>
             <enabled>false</enabled>
@@ -528,37 +540,37 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-asm</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<version>${springVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<version>${springVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<version>${springVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<version>${springVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-expression</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<version>${springVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<version>${springVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>3.0.5.RELEASE</version>
+			<version>${springVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -622,13 +634,18 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-cas-client</artifactId>
-			<version>2.0.6.RELEASE</version>
+			<artifactId>spring-security-core</artifactId>
+			<version>${springSecurityVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>2.0.6.RELEASE</version>
+			<artifactId>spring-security-config</artifactId>
+			<version>${springSecurityVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${springSecurityVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>taglibs</groupId>
@@ -880,6 +897,7 @@
 			<artifactId>wicket-source</artifactId>
 			<version>6.0.0.8</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

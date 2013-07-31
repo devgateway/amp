@@ -1,6 +1,6 @@
 package org.digijava.module.aim.auth;
 
-import org.springframework.security.AuthenticationException;
+import org.springframework.security.core.AuthenticationException;
 
 public class InvalidUserException
     extends AuthenticationException {

@@ -22,6 +22,8 @@
 
 package org.digijava.kernel.security.auth;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -36,11 +38,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataRetrievalFailureException;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class DigiUserDetailsService
     implements UserDetailsService {
@@ -86,15 +88,15 @@ public class DigiUserDetailsService
     }
 
     protected UserDetails getUserDetails(User user) throws DataAccessException {
-        GrantedAuthority[] authorities = getAssignedAuthorities(user);
+        Collection<? extends GrantedAuthority> authorities = getAssignedAuthorities(user);
 
-        UserDetails ud = new org.springframework.security.userdetails.User(user.getEmail(),
+        UserDetails ud = new org.springframework.security.core.userdetails.User(user.getEmail(),
             user.getPassword(), true, true, true, true, authorities);
 
         return ud;
     }
 
-    protected GrantedAuthority[] getAssignedAuthorities(User user) throws
+    protected Collection<? extends GrantedAuthority> getAssignedAuthorities(User user) throws
         DataAccessException {
         Set authorities = new HashSet();
 
@@ -120,12 +122,12 @@ public class DigiUserDetailsService
                     group.getSite().getSiteId() + "_" + group.getName()));
             }
         }
-        GrantedAuthority[] result = new GrantedAuthority[authorities.size()];
+        Collection<GrantedAuthority> result = new ArrayList<GrantedAuthority>();
         Iterator iter = authorities.iterator();
         int i = 0;
         while (iter.hasNext()) {
             GrantedAuthority item = (GrantedAuthority) iter.next();
-            result[i++] = item;
+            result.add(item);
         }
         return  result;
     }

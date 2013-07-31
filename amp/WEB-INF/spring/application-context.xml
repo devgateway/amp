@@ -1,12 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-<!--
-  - Root application context for application.
-  -->
-<beans>
-<!--
-  <import resource="acegi-digiSSO-context.xml" />
-  <import resource="acegi-CAS-context.xml" />
--->
-  <import resource="acegi-noSSO-context.xml" />
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+				http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+  <bean id="wicketApp" class="org.dgfoundation.amp.onepager.OnePagerApp">
+    <property name="authenticationManager">
+      <ref bean="authenticationManager" />
+    </property>
+  </bean>
+
+  <bean id="digiUserDetailsService" class="org.digijava.kernel.security.auth.DigiUserDetailsService">
+    <property name="populateGroupAuthorities">
+	<value>false</value>
+    </property>
+  </bean>
+
+  <bean id="daoAuthenticationProvider" class="org.digijava.kernel.security.auth.DigiDaoAuthenticationProvider">
+    <property name="userDetailsService">
+      <ref bean="digiUserDetailsService" />
+    </property>
+  </bean>
+
+  <bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+    <property name="providers">
+      <list>
+        <ref bean="daoAuthenticationProvider" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter" />
+
+  <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+    <property name="decisionVoters">
+      <list>
+        <ref bean="roleVoter" />
+      </list>
+    </property>
+  </bean>
+
+
+  <bean id="digiAuthenticationProcessingFilterEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+    <property name="loginFormUrl">
+      <value>/showLayout.do?layout=login</value>
+    </property>
+  </bean>
+
+
+<bean id="exceptionMappingAuthenticationFailureHandler" class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
+<property name="defaultFailureUrl">
+      <value>/aim/getLoginStatus.do?loginError=invalidLogin</value>
+ </property>
+ <property name="exceptionMappings">
+     <props>
+       <prop key="org.digijava.module.aim.auth.InvalidUserException">/aim/getLoginStatus.do?loginError=invalidUser</prop>
+       <prop key="org.digijava.module.aim.auth.NotTeamMemberException">/aim/getLoginStatus.do?loginError=noTeamMember</prop>
+     </props>
+    </property>
+</bean>
+
+<bean id="simpleUrlAuthenticationSuccessHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
+<property name="defaultTargetUrl">
+      <value>/aim/getLoginStatus.do?loginError=noError</value>
+</property>
+ <property name="alwaysUseDefaultTargetUrl">
+      <value>true</value>
+ </property>
+</bean>
+
+  <bean id="authenticationProcessingFilter" class="org.digijava.module.aim.auth.AmpAuthenticationProcessingFilter">
+    <property name="filterProcessesUrl">
+      <value>/j_spring_security_check</value>
+    </property>
+    
+   <property name="authenticationFailureHandler" ref="exceptionMappingAuthenticationFailureHandler"/>   
+   <property name="authenticationSuccessHandler" ref="simpleUrlAuthenticationSuccessHandler" />
+    
+   
+    <property name="authenticationManager">
+      <ref bean="authenticationManager" />
+    </property>
+  </bean>
+
+  <bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+    <!-- URL redirected to after logout -->
+    <constructor-arg value="/aim/logout.do"/> 
+    <constructor-arg>
+      <list>
+        <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler">
+          <property name="invalidateHttpSession" value="false"/>
+         </bean>
+        <bean class="org.digijava.module.aim.auth.AmpLogoutHandler" />
+      </list>
+    </constructor-arg>
+    <property name="filterProcessesUrl">
+      <value>/j_spring_logout</value>
+    </property>
+</bean>
+
+<bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
+<security:filter-chain-map path-type="ant">
+	 <security:filter-chain pattern="/**" filters="httpSessionContextIntegrationFilter, logoutFilter, exceptionTranslationFilter, authenticationProcessingFilter" />
+</security:filter-chain-map>
+    </bean>
+
+<bean id="httpSessionContextIntegrationFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+  <property name="forceEagerSessionCreation"><value>true</value></property>
+</bean>
+
+<bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
+  <property name="authenticationEntryPoint"><ref
+    local="digiAuthenticationProcessingFilterEntryPoint"/></property>
+    <property name="accessDeniedHandler">
+      <bean class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+        <property name="errorPage">
+           <value>/aim/getLoginStatus.do?loginError=noTeamMember</value>
+        </property>
+      </bean>
+</property>
+</bean>
+
 </beans>

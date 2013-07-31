@@ -252,7 +252,7 @@ public class AmpDonorFundingFormSectionFeature extends
 //		wmc.add(searchOrganization);
 
 
-        String[] roleFilter = ACTIVITY_ROLE_FILTER;
+        String[] roleFilter = null;//ACTIVITY_ROLE_FILTER;
         if (ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession)getSession()).getFormType()))
             roleFilter = SSC_ROLE_FILTER;
 

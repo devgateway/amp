@@ -447,11 +447,23 @@ ${aimMainProjectDetailsForm.activityExists}
 					</field:display>
 				</feature:display>
 			</module:display>
+
+            <field:display name="Add Activity Button" feature="Edit Activity">
+                <c:set var="activityEditURL">
+                    /wicket/onepager/activity/<%=request.getParameter("ampActivityId")%>
+                </c:set>
+            </field:display>
+            <field:display name="Add SSC Button" feature="Edit Activity">
+                <c:set var="activityEditURL">
+                    /wicket/onepager/ssc/<%=request.getParameter("ampActivityId")%>
+                </c:set>
+            </field:display>
+
 			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Edit Activity" module="Previews">
 					<field:display feature="Edit Activity" name="Edit Activity Button">  
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
-	                		<a href="/wicket/onepager/activity/<%=request.getParameter("ampActivityId")%>" style="cursor:pointer" target="_self" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
+	                		<a href="${activityEditURL}" style="cursor:pointer" target="_self" title="<digi:trn key='btn:edit'>Edit</digi:trn>">
 								<img src="/repository/aim/images/tangopack_edit.png" border="0"></a>&nbsp;
 	                		 <a style="cursor:pointer" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:oldedit'>Edit using Old Form</digi:trn>"> 
 								<img src="/repository/aim/images/tangopack_old_edit.png" border="0"></a>&nbsp;
@@ -465,7 +477,7 @@ ${aimMainProjectDetailsForm.activityExists}
 					<field:display feature="Edit Activity" name="Validate Activity Button">
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="validate">
 							<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
-								<a href="/wicket/onepager/activity/<%=request.getParameter("ampActivityId")%>" style="cursor:pointer" target="_self" title="<digi:trn key='btn:validate'>Validate</digi:trn>"> 
+								<a href="${activityEditURL}" style="cursor:pointer" target="_self" title="<digi:trn key='btn:validate'>Validate</digi:trn>">
 									<img src="/repository/aim/images/tangopack_validate2.png" border="0"></a>&nbsp;
 							</c:if>
 						</logic:equal>

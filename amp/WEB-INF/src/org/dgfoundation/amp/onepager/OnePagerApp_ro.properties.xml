@@ -7,6 +7,7 @@
 	<entry key="ContactEmailValidator">Formatul adresei de email este incorect!</entry>
 	<entry key="not_unique">Adresa de email trebuie să fie unică!</entry>
 	<entry key="AmpMinSizeCollectionValidator">Adăugați cel puțin ${minimum} articol(e) aici!</entry>
+    <entry key="AmpMaxSizeCollectionValidator">Adăugați cel mult ${maximum} articol(e) aici!</entry>
 	<entry key="AmpPercentageCollectionValidator">Suma tuturor procentajelor este  ${label}, dar trebuie să fie 100!</entry>
 	<entry key="AmpUniqueCollectionValidator">Următoarele elemente sunt repetate cel puțin o dată: ${label}</entry>
 	<entry key="AmpTreeCollectionValidator">Atât elementul părinte cât și elementul copil sunt prezente: ${label}</entry>

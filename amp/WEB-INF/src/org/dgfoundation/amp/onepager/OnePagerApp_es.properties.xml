@@ -7,7 +7,9 @@
 	<entry key="ContactEmailValidator">Formato incorrecto de correo electrónico</entry>
 	<entry key="not_unique">El correo electrónico debería ser único</entry>
 	<entry key="AmpMinSizeCollectionValidator">Agregue al menos ${minimum} item(s) aqui.</entry>
-	<entry key="AmpPercentageCollectionValidator">La suma de todos los porcentajes es ${label}, debería ser 100.</entry>
+    <entry key="AmpMaxSizeCollectionValidator">Please add no more than ${maximum} item(s) here!</entry>
+    <entry key="AmpMaxSizeCollectionValidator">Por favor, no agregue más de ${maximum} items aquí.</entry>
+    <entry key="AmpPercentageCollectionValidator">La suma de todos los porcentajes es ${label}, debería ser 100.</entry>
 	<entry key="AmpUniqueCollectionValidator">Los siguientes items se repiten al menos una vez: ${label}</entry>
 	<entry key="AmpTreeCollectionValidator">Ambos ítems padre e hijo se encuentran presentes: ${label}</entry>
 	<entry key="AmpUniqueActivityTitleValidator">Una actividad con este titulo ya existe en es espacio de trabajo ${workspace}.</entry>

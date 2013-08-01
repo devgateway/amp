@@ -300,4 +300,11 @@ public class AmpDonorFundingFormSectionFeature extends
 		add(addNewFunding);
 	}
 
+    public AmpOrgRoleSelectorComponent getOrgRoleSelector() {
+        return orgRoleSelector;
+    }
+
+    public PropertyModel<Set<AmpFunding>> getFundingModel() {
+        return fundingModel;
+    }
 }

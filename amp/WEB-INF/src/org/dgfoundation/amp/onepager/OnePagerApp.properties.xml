@@ -7,6 +7,7 @@
 	<entry key="ContactEmailValidator">incorrect email format!</entry>
 	<entry key="not_unique">email should be unique!</entry>
 	<entry key="AmpMinSizeCollectionValidator">Please add at least ${minimum} item(s) here!</entry>
+    <entry key="AmpMaxSizeCollectionValidator">Please add no more than ${maximum} item(s) here!</entry>
 	<entry key="AmpPercentageCollectionValidator">Sum of all percentages is ${label}, it needs to be 100!</entry>
 	<entry key="AmpUniqueCollectionValidator">The following items are repeated at least once: ${label}</entry>
 	<entry key="AmpTreeCollectionValidator">Both parent and child items are present: ${label}</entry>

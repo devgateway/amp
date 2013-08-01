@@ -96,6 +96,16 @@ if(validateItem){
 <% 
 		if(bckColor.equals("true")) {
 %>
+    <field:display name="Add Activity Button" feature="Edit Activity">
+        <c:set var="activityEditURL">
+            /wicket/onepager/activity
+        </c:set>
+    </field:display>
+    <field:display name="Add SSC Button" feature="Edit Activity">
+        <c:set var="activityEditURL">
+            /wicket/onepager/ssc
+        </c:set>
+    </field:display>
 
 <bean:define id="bckColor" value="false" toScope="page"/>
 <tr style="<%=display%>">
@@ -105,7 +115,7 @@ if(validateItem){
 		<td align="center" class="report_inside" width="25">
 			<logic:present name="currentMember" scope="session">
 				<%if (showColumn) { %>
-				<a href='/wicket/onepager/activity/${ownerId}' style="text-decoration: none">
+				<a href='${activityEditURL}/${ownerId}' style="text-decoration: none">
 					<img src="/TEMPLATE/ampTemplate/img_2/ico_${action}.gif" border="0" height="16" width="16" title="<digi:trn>${actionString}</digi:trn>"><br/>
 				</a>
 				<%} %>
@@ -131,7 +141,7 @@ if(validateItem){
 			<td align="center" class="report_inside" width="25">
 				<logic:present name="currentMember" scope="session">
 				<%if (showColumn) { %>
-					<a href='/wicket/onepager/activity/${ownerId}' style="text-decoration: none">
+					<a href='${activityEditURL}/${ownerId}' style="text-decoration: none">
 						<img src="/TEMPLATE/ampTemplate/img_2/ico_${action}.gif" border="0" height="16" width="16" title="<digi:trn>${actionString}</digi:trn>"><br/>
 					</a>
 				<%} %>

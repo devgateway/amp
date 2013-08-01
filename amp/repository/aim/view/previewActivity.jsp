@@ -148,7 +148,10 @@ function viewChanges(){
 }
 
 function editActivity() {
-	<digi:context name="editActivity" property="/wicket/onepager/activity" />
+    <digi:context name="editActivity" property="/wicket/onepager/activity" />
+    <field:display name="Add SSC Button" feature="Edit Activity">
+        <digi:context name="editActivity" property="/wicket/onepager/ssc" />
+    </field:display>
 	document.location.href="<%=editActivity%>/<%=request.getAttribute("actId")%>";
 }
 

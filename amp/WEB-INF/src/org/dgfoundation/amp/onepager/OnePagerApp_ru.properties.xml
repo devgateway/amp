@@ -7,7 +7,8 @@
 	<entry key="ContactEmailValidator">неправильных формат электронной почты!</entry>
 	<entry key="not_unique">электронная почта должна быть уникальной!</entry>
 	<entry key="AmpMinSizeCollectionValidator">Пожалуйста, добавьте по крайней мере ${minimum} товар (ов) здесь!</entry>
-	<entry key="AmpPercentageCollectionValidator">Сумма все проценты ${label}, она должна быть 100!</entry>
+    <entry key="AmpMaxSizeCollectionValidator">Максимальное количество пунктов не должно превышать ${maximum}!</entry>
+    <entry key="AmpPercentageCollectionValidator">Сумма все проценты ${label}, она должна быть 100!</entry>
 	<entry key="AmpUniqueCollectionValidator">Следующие элементы повторяются не реже одного раза: ${label}</entry>
 	<entry key="AmpTreeCollectionValidator">Обоих родителей и ребенка предметы имеются в наличии: ${label}</entry>
 	<entry key="AmpUniqueActivityTitleValidator">Деятельности с таким названием существует внутри рабочего пространства ${workspace}.</entry>

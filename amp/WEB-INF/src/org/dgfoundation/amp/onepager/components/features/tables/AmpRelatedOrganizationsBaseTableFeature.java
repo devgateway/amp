@@ -27,17 +27,15 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpMaxSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.*;
 
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.util.DbUtil;
 
 /**
@@ -50,15 +48,18 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected AmpUniqueCollectionValidatorField<AmpOrgRole> uniqueCollectionValidationField;
+    private final AmpComponentPanel addFundingItemAutomatically;
+    protected AmpUniqueCollectionValidatorField<AmpOrgRole> uniqueCollectionValidationField;
 	protected AmpPercentageCollectionValidatorField<AmpOrgRole> percentageValidationField;
     protected AmpMinSizeCollectionValidationField<AmpOrgRole> minSizeCollectionValidationField;
+    protected AmpMaxSizeCollectionValidationField<AmpOrgRole> maxSizeCollectionValidationField;
 	protected final IModel<ListView<AmpOrgRole>> list = new Model<ListView<AmpOrgRole>>();
 	protected IModel<List<AmpOrgRole>> listModel;
 	protected IModel<Set<AmpOrgRole>> setModel;
 	private TransparentWebMarkupContainer updateColSpan1;
 	private TransparentWebMarkupContainer updateColSpan2;
 	private AmpDonorFundingFormSectionFeature donorFundingSection;
+    private AmpSearchOrganizationComponent<String> searchOrganization;
 	
 	
 	/**
@@ -69,16 +70,58 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	public void roleAdded(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
 	    target.add(donorFundingSection);
         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
-
+        
+        changeSearchVisibility(target, ampOrgRole);
+        addFundingAutomatically(target, ampOrgRole);
 	}
-	
-	/**
+
+    private void addFundingAutomatically(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
+        if (addFundingItemAutomatically.isVisible()){
+            donorFundingSection.getOrgRoleSelector().getOrgSelect().getModel().setObject(ampOrgRole.getOrganisation());
+            donorFundingSection.getOrgRoleSelector().getRoleSelect().getModel().setObject(ampOrgRole.getRole());
+            donorFundingSection.getList().addItem(ampOrgRole.getOrganisation());
+            target.add(donorFundingSection);
+        }
+    }
+    private void removeFundingAutomatically(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
+        if (addFundingItemAutomatically.isVisible()){
+            Set<AmpFunding> set = donorFundingSection.getFundingModel().getObject();
+            Iterator<AmpFunding> it = set.iterator();
+            while (it.hasNext()){
+                AmpFunding funding = it.next();
+                AmpOrganisation fundingOrg = funding.getAmpDonorOrgId();
+                if (fundingOrg.getAmpOrgId().equals(ampOrgRole.getOrganisation().getAmpOrgId())){
+                    it.remove();
+                }
+            }
+            donorFundingSection.updateFundingGroups(ampOrgRole.getOrganisation(), target);
+            target.add(donorFundingSection);
+        }
+    }
+
+    private void changeSearchVisibility(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
+        if (maxSizeCollectionValidationField.isVisible()){
+            List<AmpOrgRole> tmpList = listModel.getObject();
+            if (tmpList != null && tmpList.size() > 0){
+                searchOrganization.setVisibilityAllowed(false);
+            }
+            else{
+                searchOrganization.setVisibilityAllowed(true);
+            }
+            target.add(searchOrganization);
+        }
+    }
+
+    /**
 	 * Override to notify of newly removed roles, if you need to refresh/change other sections of the form
 	 * @param ampOrgRole
 	 */
 	public void roleRemoved(AjaxRequestTarget target,AmpOrgRole ampOrgRole) {
 	    target.add(donorFundingSection);
-        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));	
+        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
+        changeSearchVisibility(target, ampOrgRole);
+
+        removeFundingAutomatically(target, ampOrgRole);
 	}
 	
 	/**
@@ -160,7 +203,15 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         };
         add(minSizeCollectionValidationField);
 
-		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
+        maxSizeCollectionValidationField = new AmpMaxSizeCollectionValidationField<AmpOrgRole>("maxSizeValidator", listModel, "Max Size Validator");
+        maxSizeCollectionValidationField.setOutputMarkupPlaceholderTag(true);
+        add(maxSizeCollectionValidationField);
+
+        addFundingItemAutomatically = new AmpComponentPanel("addFundingItemAutomatically", "Add Funding Item Automatically"){};
+        add(addFundingItemAutomatically);
+
+
+        WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
 		add(wmc);
 		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
 		wmc.add(iValidator);
@@ -231,6 +282,9 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 				
 				setModel.getObject().add(ampOrgRole);
 				uniqueCollectionValidationField.reloadValidationField(target);
+                minSizeCollectionValidationField.reloadValidationField(target);
+                maxSizeCollectionValidationField.reloadValidationField(target);
+
 				list.getObject().removeAll();
 				target.add(list.getObject().getParent());				
 				roleAdded(target,ampOrgRole);
@@ -242,7 +296,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 			}
 		};
 
-		AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (),
+		searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (),
 				"Search Organizations",   searchOrgs );
 		add(searchOrganization);
 

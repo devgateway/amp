@@ -51,7 +51,7 @@ public class AmpSelectFieldPanel<T> extends AmpFieldPanel<T> {
 			IModel<? extends List<? extends T>> choicesList, String fmName,
 			boolean hideLabel, boolean nullValid,
 			IChoiceRenderer<? super T> renderer, boolean hideNewLine) {
-		super(id, fmName, hideLabel, hideNewLine);
+		super(id, model, fmName, hideLabel, hideNewLine);
 		choiceContainer = new DropDownChoice<T>("choice", model, choicesList,
 				renderer){
 			protected boolean isDisabled(T object, int index, String selected) {

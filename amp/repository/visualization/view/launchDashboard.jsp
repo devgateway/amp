@@ -412,7 +412,7 @@ function initializeGlobalVariables(){
 													<tr>
 														<td><digi:trn>Adjustment Type</digi:trn>:</td>
 														<td>
-															<html:select property="filter.adjustmentType"
+															<html:select property="filter.adjustmentTypeFilter"
 																styleId="adjustment_type" styleClass="dropdwn_sm"
 																style="width:150px;">
 																<html:optionsCollection property="filter.adjustmentTypeList" value="valueKey" label="valueKey" />

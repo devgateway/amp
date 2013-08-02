@@ -294,11 +294,11 @@
 		</java>
     </target>
 
-    <target name="compileTest" depends="compile,testResources">
+<!--    <target name="compileTest" depends="compile,testResources">
         <javac  srcdir="${ampTest}" destdir="${classes}" deprecation="off" debug="${debug}">
             <classpath refid="compile.classpath"/>
         </javac>
-    </target>
+    </target> -->
 	
 	<target name="compileSelenium" depends="compile,seleniumResources">
         <javac  srcdir="${ampSelenium}" destdir="${classes}" deprecation="off" debug="${debug}">
@@ -306,7 +306,7 @@
         </javac>
     </target>
 	
-	<target name="runTest" depends="compileTest">
+<!--	<target name="runTest" depends="compileTest">
 		<mkdir dir="test-reports"/>
     	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
     	  <classpath refid="run.classpath"/>
@@ -322,7 +322,7 @@
 	    	 	<formatter type="xml"/>
 	    		 <test   name="org.dgfoundation.amp.test.${test-class}" haltonfailure="no"  todir="test-reports"/>
 	    	</junit>
-	    </target>
+	    </target> -->
 
     <!-- Remove classes directory for clean build -->
     <target name="clean"
@@ -784,14 +784,14 @@
 	</target>	
 
 
-	<target name="junit" depends="compileTest">
+<!--	<target name="junit" depends="compileTest">
         <junit printsummary="yes" haltonfailure="yes" showoutput="yes">
     	    <classpath refid="run.classpath"/>
   		<formatter type="xml"/>
   		<formatter type="plain"/>
   		<test name="org.digijava.test.AllTests" haltonfailure="no" outfile="test_result"/>
 	</junit>
-    </target>
+    </target> -->
 
     <target name="restart" description="restarts the web application">
     	<touch file="${webinf}/web.xml"/>

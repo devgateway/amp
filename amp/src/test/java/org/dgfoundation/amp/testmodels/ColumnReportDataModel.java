@@ -7,10 +7,15 @@ import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.testutils.ColumnComparator;
 
+/**
+ * a model (sketch) for a flat (sub)report - a ColumnReportData instance
+ * @author Dolghier Constantin
+ *
+ */
 public class ColumnReportDataModel extends ReportModel {
 	
 	/**
-	 * ColumnModel
+	 * ColumnModel instances
 	 */
 	ReportModel[] columnsModels;
 	
@@ -20,7 +25,12 @@ public class ColumnReportDataModel extends ReportModel {
 		this.columnsModels = sort(columns);
 	}
 	
-	
+	/**
+	 * optional-column-enumeration NOT implemented yet
+	 * @param name
+	 * @param columns
+	 * @return
+	 */
 	public static ColumnReportDataModel withColumns(String name, ColumnModel... columns)
 	{
 		return new ColumnReportDataModel(name, columns);

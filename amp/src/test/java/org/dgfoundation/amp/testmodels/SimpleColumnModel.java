@@ -7,6 +7,11 @@ import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 
+/**
+ * a model (sketch) of a CellColumn
+ * @author Dolghier Constantin
+ *
+ */
 public class SimpleColumnModel extends ColumnModel {
 	
 	Map<String, String> correctContents;
@@ -19,6 +24,12 @@ public class SimpleColumnModel extends ColumnModel {
 			this.correctContents = new HashMap<String, String>(contents);
 	}
 	
+	/**
+	 * generates a sketch of a CellColumn defined by its name and (optionally) contents. If contents is not specified, the a check on it is simply not run
+	 * @param name [mandatory non-null] name 
+	 * @param contents [may be null, where null is placeholded by #ReportTestingUtils.NULL_PLACEHOLDER] - a linear-list encoded Map<String, String> of contents for the column<br />The list encodes the map as [activityName_1 activityValue_1] [activityName_2 activityValue_2... ]. "ActivityValue" should be equal to << cellColumn.getByOwnerId(AmpActivity.getByName[activityName].getAmpActivityId()).toString() >>
+	 * @return
+	 */
 	public static SimpleColumnModel withContents(String name, Object...contents)
 	{
 		if (contents != null && contents.length == 1 && contents[0].equals(ReportTestingUtils.NULL_PLACEHOLDER))
@@ -59,7 +70,12 @@ public class SimpleColumnModel extends ColumnModel {
 		return null;
 	}
 	
-	public String matchContents(CellColumn column)
+	/**
+	 * checks whether the contents of the column, as encoded in {@link #correctContents}, matches the one of the presented column
+	 * @param column
+	 * @return
+	 */
+	protected String matchContents(CellColumn column)
 	{
 		Set<Long> activityIds = column.getOwnerIds();
 		if (activityIds.size() != correctContents.size())

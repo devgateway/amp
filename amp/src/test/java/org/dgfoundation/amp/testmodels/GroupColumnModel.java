@@ -8,7 +8,11 @@ import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.testmodels.ColumnReportDataModel;
 import org.dgfoundation.amp.testutils.ColumnComparator;
 
-
+/**
+ * a model (sketch) of a GroupColumn
+ * @author Dolghier Constantin
+ *
+ */
 public class GroupColumnModel extends ColumnModel{
 	List<ColumnModel> subColumns;
 	
@@ -19,6 +23,12 @@ public class GroupColumnModel extends ColumnModel{
 		Collections.sort(subColumns);
 	}
 	
+	/**
+	 * generates a sketch of a GroupColumn defined by its name and (optionally) subcolumns
+	 * @param name
+	 * @param subColumns
+	 * @return
+	 */
 	public static GroupColumnModel withSubColumns(String name, ColumnModel...subColumns)
 	{
 		return new GroupColumnModel(name, Arrays.asList(subColumns));
@@ -39,7 +49,7 @@ public class GroupColumnModel extends ColumnModel{
 		return null;
 	}
 	
-	public String matchContents(GroupColumn column)
+	protected String matchContents(GroupColumn column)
 	{
 		Column[] sortedColumns = getAndSortColumns(column);
 		

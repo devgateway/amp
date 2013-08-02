@@ -17,8 +17,16 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+/**
+ * various static methods and constants for the report testing infrastructure
+ * @author Dolghier Constantin
+ *
+ */
 public class ReportTestingUtils 
 {
+	/**
+	 * "null" placeholder in "Object..." or "String..."-taking functions in the testing code (as putting null there is not adviseable)
+	 */
 	public final static String NULL_PLACEHOLDER = "###null###";
 	
 	/**
@@ -54,6 +62,11 @@ public class ReportTestingUtils
 		return result;
 	}
 	
+	/**
+	 * loads a report with a given name. If multiple reports with the name exist, it is not defined which of them will be chosen. Given that this will only be run on a testcases database, it is ok
+	 * @param reportName
+	 * @return
+	 */
 	public static AmpReports loadReportByName(String reportName)
 	{
 		Session session = null;
@@ -76,6 +89,11 @@ public class ReportTestingUtils
 		throw new RuntimeException("no report with the given name " + reportName + " exists");
 	}
 	
+	/**
+	 * returns the name of an activity looked up by id
+	 * @param activityId
+	 * @return
+	 */
 	public static String getActivityName(Long activityId)
 	{
 		Session session = null;

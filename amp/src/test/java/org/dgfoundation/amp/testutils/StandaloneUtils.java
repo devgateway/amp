@@ -61,7 +61,9 @@ public class StandaloneUtils {
 	  }
 	
 	/**
-	 * @param args
+	 * not used anymore, as AllTests.suite() does the whole init thing (VERY expensive operation)
+	 * @param runnable
+	 * @throws Exception
 	 */
 	private static void runWithinAmpContext_internal(MyRunnable runnable) throws Exception
 	{

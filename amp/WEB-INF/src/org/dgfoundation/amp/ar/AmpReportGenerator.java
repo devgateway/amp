@@ -1276,7 +1276,12 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter, boolean regenerateFilterQuery) {
 		super(USE_FILTER_CACHING ? new FastFilterCacher(filter) : new NopFilterCacher(filter));
-		this.session		= TLSUtils.getRequest().getSession();
+		
+		if (TLSUtils.getRequest() != null)
+			this.session		= TLSUtils.getRequest().getSession();
+		else
+			this.session = null;
+		
 		this.reportMetadata = reportMetadata;
 		this.reportMetadata.setReportGenerator(this);
 		

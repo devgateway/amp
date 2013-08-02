@@ -585,7 +585,11 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public static AmpApplicationSettings getEffectiveSettings()
 	{
-		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+		HttpServletRequest request = TLSUtils.getRequest();
+		if (request == null)
+			return null;
+		
+		TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 		if (tm == null)
 			return null;
 		
@@ -655,7 +659,11 @@ public class AmpARFilter extends PropertyListable {
 
 		AmpApplicationSettings settings = getEffectiveSettings();
 		
-		TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);	
+		TeamMember tm = null;
+		
+		if (request != null)
+			tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+		
 		if (tm == null || tm.getTeamId() == null )
 			tm	= null;
 
@@ -988,11 +996,7 @@ public class AmpARFilter extends PropertyListable {
 		this.pledgeFilter = false;
 		
 		TeamMember loggedInTeamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);		
-		
-		boolean thisIsComputedWorkspaceWithFilters = workspaceFilter && (loggedInTeamMember != null) && 
-											(loggedInTeamMember.getComputation() != null) && (loggedInTeamMember.getComputation()) &&
-											(loggedInTeamMember.getUseFilters() != null) && (loggedInTeamMember.getUseFilters());
-				
+						
 		indexedParams=new ArrayList<FilterParam>();
 		
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM v_on_off_budget WHERE budget_id IN ("
@@ -1537,9 +1541,50 @@ public class AmpARFilter extends PropertyListable {
 		 * because in certain situations this zone can add an OR, any queryAppend calls MUST be done BEFORE THIS AREA
 		 */
 		
+		processTeamFilter(request, loggedInTeamMember, workspaceFilter);
+		
 		/**
-		 * NO queryAppend CALLS (except TEAM_FILTER) AFTER THIS POINT !
+		 * NO queryAppend CALLS AFTER THIS POINT !
 		 */
+		
+		if ( this.isPublicView() && ! this.budgetExport  ){
+			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
+		}
+
+		//DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
+		logger.info(this.generatedFilterQuery);
+	}
+	
+	
+	@PropertyListableIgnore
+	protected StringGenerator overridingTeamFilter = null;
+	
+	
+	@PropertyListableIgnore
+	public void setOverridingTeamFilter(StringGenerator overridingTeamFilter)
+	{
+		this.overridingTeamFilter = overridingTeamFilter;
+	}
+	
+	@PropertyListableIgnore
+	public StringGenerator getOverridingTeamFilter()
+	{
+		return overridingTeamFilter;
+	}
+	
+	protected void processTeamFilter(HttpServletRequest request, TeamMember loggedInTeamMember, boolean workspaceFilter)
+	{
+		if (overridingTeamFilter != null)
+		{
+			if (overridingTeamFilter.getString() != null)
+				queryAppend(overridingTeamFilter.getString());
+			return;
+		}
+		
+		boolean thisIsComputedWorkspaceWithFilters = workspaceFilter && (loggedInTeamMember != null) && 
+				(loggedInTeamMember.getComputation() != null) && (loggedInTeamMember.getComputation()) &&
+				(loggedInTeamMember.getUseFilters() != null) && (loggedInTeamMember.getUseFilters());
+
 		String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMemberId, this.isPublicView());
 
 		if (needsTeamFilter)
@@ -1567,17 +1612,6 @@ public class AmpARFilter extends PropertyListable {
 				queryAppend(TEAM_FILTER);
 			}
 		}
-		
-		/**
-		 * NO queryAppend CALLS AFTER THIS POINT !
-		 */
-		
-		if ( this.isPublicView() && ! this.budgetExport  ){
-			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
-		}
-
-		//DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
-		logger.info(this.generatedFilterQuery);
 	}
 	
 	

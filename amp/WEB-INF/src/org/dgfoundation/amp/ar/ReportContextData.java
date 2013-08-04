@@ -93,7 +93,7 @@ public class ReportContextData
 	
 	public AmpCurrency getSelectedAmpCurrency()
 	{
-		if (getFilter() != null)
+		if (getFilter() != null && getFilter().getCurrency() != null)
 			return getFilter().getCurrency();
 		else
 			return AmpARFilter.getDefaultCurrency();

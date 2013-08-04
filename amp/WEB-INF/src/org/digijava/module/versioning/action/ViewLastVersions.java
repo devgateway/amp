@@ -27,17 +27,8 @@ public class ViewLastVersions extends TilesAction {
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		HttpSession session = request.getSession();
-		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-		Set ampTeams = null;
-
-		AmpTeam currentTeam = null;
-		if (tm != null) {
-			currentTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-		}
-		ampTeams = TeamUtil.getRelatedTeamsForMember(tm);
-		Set teamAssignedOrgs = TeamUtil.getComputedOrgs(ampTeams);
 		
-		List<AmpActivityVersion> updatedAcitvities = ActivityUtil.getLastUpdatedActivities(currentTeam, teamAssignedOrgs);
+		List<AmpActivityVersion> updatedAcitvities = ActivityUtil.getLastUpdatedActivities();
 		session.setAttribute(Constants.MY_LAST_VERSIONS, updatedAcitvities);
 		return null;
 	}

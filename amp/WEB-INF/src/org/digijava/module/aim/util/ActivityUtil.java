@@ -3574,7 +3574,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		  return execRate;
   	}
 
-  	public static List<AmpActivityVersion> getLastUpdatedActivities(AmpTeam team, Set teamAssignedOrgs) {
+  	public static List<AmpActivityVersion> getLastUpdatedActivities() {
   		
   		String workspaceQuery = Util.toCSString(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
   		

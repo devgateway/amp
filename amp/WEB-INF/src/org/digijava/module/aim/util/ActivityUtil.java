@@ -31,6 +31,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
@@ -39,6 +40,7 @@ import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.action.GetFundingTotals;
@@ -3575,36 +3577,23 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
   	}
 
   	public static List<AmpActivityVersion> getLastUpdatedActivities(AmpTeam team, Set teamAssignedOrgs) {
+  		
+  		String workspaceQuery = Util.toCSString(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
+  		
 		List col = null;
 		Session session = null;
 		Query qry = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString;
-			if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
-				queryString = "select distinct ampAct from "
-					+ AmpActivityVersion.class.getName()
-					+ " ampAct left join ampAct.orgrole orgRole"
-					+ " left join ampAct.funding fundingDetail"
-					+ " where ampAct.ampActivityId = ampAct.ampActivityGroup.ampActivityLastVersion and (ampAct.team.ampTeamId = :teamId  "
-					+ " OR fundingDetail.ampDonorOrgId.ampOrgId IN (" + Util.toCSString(teamAssignedOrgs) + ") "
-					+ " OR orgRole.organisation.ampOrgId IN (" + Util.toCSString(teamAssignedOrgs) + "))"
-					+ " and ampAct.team is not null "
-					+ " and ampAct.deleted = false or ampAct.deleted is null "
-					+ " and (ampAct.approvalStatus like '"+Constants.APPROVED_STATUS+"' or ampAct.approvalStatus like '"+Constants.STARTED_APPROVED_STATUS+"')"
-					+ " order by ampAct.ampActivityId desc";
-			}
-			else
-			{
-				queryString = "select ampAct from "
-					+ AmpActivityVersion.class.getName()
-					+ " ampAct"
-					+ " where ampAct.ampActivityId = ampAct.ampActivityGroup.ampActivityLastVersion and ampAct.team.ampTeamId = :teamId and ampAct.deleted = false or ampAct.deleted is null order by ampAct.ampActivityId desc";
-			}
+			String queryString = "select distinct ampAct from "
+				+ AmpActivityVersion.class.getName()
+				+ " ampAct where ampAct.ampActivityId IN (" + workspaceQuery + ")"
+				+ " and ampAct.deleted = false or ampAct.deleted is null "
+				+ " order by ampAct.ampActivityId desc";
 			qry = session.createQuery(queryString).setMaxResults(5);
-			qry.setLong("teamId", team.getAmpTeamId());
 			col = qry.list();
 		} catch (Exception e1) {
+			e1.printStackTrace();
 			logger.error("Could not retrieve the activities list from getLastUpdatedActivities", e1);
 		}
 		return col;

@@ -24,14 +24,9 @@ package org.digijava.kernel.security.auth;
 
 import java.util.List;
 
-import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.ShaCrypt;
-import org.digijava.kernel.util.UnixCrypt;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.InitializingBean;
@@ -70,60 +65,23 @@ public class DigiDaoAuthenticationProvider
         }
 
 		boolean passwordMatched = false;
-		
-		DigiConfig config = DigiConfigManager.getConfig();
-		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTO_LOGIN);
-		if (pass.length() == 40 && "true".equalsIgnoreCase(value) && config.isEnableAutoLogin()) {
-			String auxToCompare = ShaCrypt.crypt(userDetails.getUsername().trim() + "_" + userPassword);
-			if (!auxToCompare.equals(pass)) {
-				throw new BadCredentialsException(
-						"Invalid username/password, autologin denied");
-			}
-		} else {
-			for (int i = 0; i < 3; i++) {
-
-				switch (i) {
-				case 0:
-
-					compare = pass.trim() + salt;
-
-					// first try new user ( using SHA1 )
-					encryptPassword = ShaCrypt.crypt(compare.trim()).trim()
-							.toUpperCase();
-					break;
-
-				case 1:
-
 					compare = pass.trim();
 
 					// first try new user ( using SHA1 )
 					encryptPassword = ShaCrypt.crypt(compare.trim()).trim();
-					break;
-
-				case 2:
-
-					// second try old user ( using unix crypt )
-					if (!pass.startsWith("8x")) {
-						encryptPassword = UnixCrypt.crypt("8x", pass.trim())
-								.trim();
-					} else {
-						encryptPassword = pass.trim();
-					}
-					break;
-				}
-
+	
+			
 				// check user in database
 				if (encryptPassword.equalsIgnoreCase(userPassword.trim())) {
 					passwordMatched = true;
 				}
-			}
-
+		
 			if (!passwordMatched) {
 				throw new BadCredentialsException(
 						"Invalid username/password, login denied");
 			}
 		}
-	}
+	
 
 	public boolean supports(Class authentication) {
 		return (UsernamePasswordAuthenticationToken.class

@@ -29,9 +29,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.security.auth.Subject;
+
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.security.DgSecurityManager;
+import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.UserUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -39,7 +47,7 @@ import org.hibernate.Session;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -100,9 +108,10 @@ public class DigiUserDetailsService
         DataAccessException {
         Set authorities = new HashSet();
 
-        authorities.add(new GrantedAuthorityImpl("ROLE_AUTHENTICATED"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_AUTHENTICATED"));
+       
         if (user.isGlobalAdmin()) {
-            authorities.add(new GrantedAuthorityImpl("ROLE_GLOBAL_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_GLOBAL_ADMIN"));
         }
 
         if (populateGroupAuthorities) {
@@ -117,7 +126,7 @@ public class DigiUserDetailsService
             Iterator groupIter = user.getGroups().iterator();
             while (groupIter.hasNext()) {
                 Group group = (Group) groupIter.next();
-                authorities.add(new GrantedAuthorityImpl(
+                authorities.add(new SimpleGrantedAuthority(
                     "GROUP_" +
                     group.getSite().getSiteId() + "_" + group.getName()));
             }

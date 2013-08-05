@@ -750,6 +750,7 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimFlagUploaderForm" path="/aim/displayFlag" scope="request" type="org.digijava.module.aim.action.DisplayFlag" validate="false" />
+     <action name="aimPostLoginAction" path="/aim/postLogin" scope="request" type="org.digijava.module.aim.auth.AmpPostLoginAction" validate="false" />
     <action name="aimWorkspaceForm" path="/aim/workspaceManager" scope="session" type="org.digijava.module.aim.action.WorkspaceManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=workspaceManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />

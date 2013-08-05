@@ -10,6 +10,8 @@
 
 <digi:secure authenticated="false">
 <logic:notPresent name="currentMember" scope="session">
+
+
 <script type="text/javascript">
 	        $(document).ready(function() {
 
@@ -53,25 +55,12 @@
 		$(".error_text_login").remove();
 		$('#result').before("<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif' style='vertical-align:middle;'></div>");
 
-		
-		$.ajax({
-					url : "/j_spring_security_check",
-					type : "POST",
-					data : $("#loginForm").serialize(),
-					success : function(data) {
+		var digestAuth = new pl.arrowgroup.DigestAuthentication(
+	   			{
+					onSuccess : function(data) {
 						var error = jQuery.trim(data);
 						$(".error_text_login").remove();
 						switch (error) {
-						case 'invalidLogin':
-							$('#result')
-									.before(
-											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>Invalid username or password</digi:trn>.</div>");
-							break;
-						case 'userBanned':
-							$('#result')
-									.before(
-											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>User is banned</digi:trn>.</div>");
-							break;
 						case 'noTeamMember':
 							$('#result')
 									.before(
@@ -86,12 +75,23 @@
 							location.href = '/index.do';
 							break;
 						}
-					}
-				});
+					},
+	   				onFailure : function(response){
+	   					$(".error_text_login").remove();
+						$('#result')
+						.before(
+								"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>Invalid username or password</digi:trn>.</div>");	   			
+	   				},
+	   				cnonce : 'testCnonce'
+	   			}
+	   		);	   		
+
+  			digestAuth.setCredentials($('#j_username').val(),$('#j_password').val());
+   			digestAuth.call('/aim/postLogin.do');
 	}
 </script>
 <div id="show_login_pop_box" style="width: 270px;">
-						<form action="/j_spring_security_check" id="loginForm" method="post" style="margin:0;z-index:9999" onsubmit="ajaxLogin();return false;">
+						<form action="/aim/postLogin.do" id="loginForm" method="post" style="margin:0;z-index:9999" onsubmit="ajaxLogin();return false;">
 				    				<label for="j_username">
 				    					<digi:trn>Username</digi:trn>:
 				    				</label>

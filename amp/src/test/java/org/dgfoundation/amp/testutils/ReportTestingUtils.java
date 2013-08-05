@@ -28,6 +28,7 @@ public class ReportTestingUtils
 	 * "null" placeholder in "Object..." or "String..."-taking functions in the testing code (as putting null there is not adviseable)
 	 */
 	public final static String NULL_PLACEHOLDER = "###null###";
+	public final static String MUST_BE_EMPTY = "###must-be-empty###";
 	
 	/**
 	 * runs the report "reportName" from the database; the report will be presented a dummy WorkspaceFilter 

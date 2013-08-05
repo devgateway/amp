@@ -94,9 +94,10 @@ public class TotalComputedAmountColumn extends TotalAmountColumn<ComputedAmountC
 		Values groupValues=new Values();
 		
 		while (i.hasNext()) {
-			ComputedAmountCell element = (ComputedAmountCell) i.next();
+			AmountCell element = (AmountCell) i.next();
 			ac.merge(element,ac);
-			groupValues.collectTrailVariables(element.getValues());
+			if (element instanceof ComputedAmountCell)
+				groupValues.collectTrailVariables(((ComputedAmountCell)element).getValues());
 		}
 		
 		///ac=new trail cell 

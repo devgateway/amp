@@ -25,6 +25,7 @@ public class AllTests {
 
 		//suite.addTestSuite(DirectedDisbursementsTests.class);
 		suite.addTest(DirectedDisbursementsTests.suite());
+		suite.addTest(MtefTests.suite());
 		//suite.addTest(new DirectedDisbursementsTests("testReports"));
 		//$JUnit-END$
 		return suite;

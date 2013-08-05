@@ -32,7 +32,7 @@ public class ListCell extends Cell {
 		new MetaInfo(GenericViews.HTML,"ListCell.jsp")
 		};
 	
-	protected List value;
+	protected List<Cell> value;
 	
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Cell#toString()
@@ -41,14 +41,14 @@ public class ListCell extends Cell {
 	
 	public ListCell() {
 		super();
-		value=new ArrayList();
+		value = new ArrayList();
 	}
 	
 
 	public ListCell(ListCell src) {
 		super();
-		value=new ArrayList();
-		value.addAll((Collection) src.getValue());
+		value = new ArrayList();
+		value.addAll(src.getValue());
 	}
 	
 	
@@ -72,7 +72,7 @@ public class ListCell extends Cell {
 		 * @author dan
 		 * to avoid the lists with the same elements such as...."Japan Japan Japan"
 		 */
-		TreeSet<Object> aux=new TreeSet<Object>(/*new CellContentsComparator()*/);
+		TreeSet<Cell> aux=new TreeSet<Cell>(/*new CellContentsComparator()*/);
 		aux.addAll(value);
 		aux.add(c);
 		value.clear();
@@ -104,7 +104,8 @@ public class ListCell extends Cell {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Cell#getValue()
 	 */
-	public Object getValue() {
+	@Override
+	public List<Cell> getValue() {
 		// TODO Auto-generated method stub
 		return value;
 	}
@@ -112,9 +113,8 @@ public class ListCell extends Cell {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Cell#setValue(java.lang.Object)
 	 */
+	@Override
 	public void setValue(Object value) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public int size() {
@@ -184,4 +184,33 @@ public class ListCell extends Cell {
 		}
 	}
 	
+	/**
+	 * create an element which has the same class as the first element in the ListCell (or AmountCell if no child exist)
+	 * @return
+	 */
+	public Cell createSummaryElement()
+	{
+		if (this.getValue() == null)
+			return new AmountCell(); // failsafe result, preserves old behaviour
+		
+		if (this.getValue().size() == 0)
+			return new AmountCell(); //failsafe result, preserves old behaviour
+		
+		Class childClass = this.getValue().get(0).getClass();
+		try
+		{
+			return (Cell) (childClass.newInstance());
+		}
+		catch(IllegalAccessException e)
+		{
+			e.printStackTrace();
+			return new AmountCell();
+		}
+		catch(InstantiationException e)
+		{
+			e.printStackTrace();
+			return new AmountCell();
+		}
+		
+	}
 }

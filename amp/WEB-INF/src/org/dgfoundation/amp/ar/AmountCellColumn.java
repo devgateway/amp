@@ -61,13 +61,14 @@ public class AmountCellColumn<K extends AmountCell> extends CellColumn<K> {
 		// TODO Auto-generated constructor stub
 	}
 	
+	@Override
 	public Column postProcess() {
 		AmountCellColumn res=(AmountCellColumn) super.postProcess();
 		//now we get rid of those ListCellS, we merge the content - we can do that now because there is no forking in the future
 		for(int i = 0; i < res.getItems().size(); i++) {
 			Cell element = (Cell) res.getItem(i);
 			if(element instanceof ListCell) {
-				Cell repl=new AmountCell();
+				Cell repl = ((ListCell) element).createSummaryElement();
 				Iterator ii=((ListCell)element).iterator();
 				while (ii.hasNext()) {
 					AmountCell ac = (AmountCell) ii.next();

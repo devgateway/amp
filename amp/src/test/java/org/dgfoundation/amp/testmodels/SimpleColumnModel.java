@@ -32,8 +32,18 @@ public class SimpleColumnModel extends ColumnModel {
 	 */
 	public static SimpleColumnModel withContents(String name, Object...contents)
 	{
-		if (contents != null && contents.length == 1 && contents[0].equals(ReportTestingUtils.NULL_PLACEHOLDER))
-			contents = null;
+		boolean mustBeEmpty = false;
+		if (contents != null && contents.length == 1)
+		{
+			if (contents[0].equals(ReportTestingUtils.NULL_PLACEHOLDER))
+				contents = null;
+			else
+				if (contents[0].equals(ReportTestingUtils.MUST_BE_EMPTY))
+				{
+					mustBeEmpty = true;
+					contents = null;
+				}
+		}
 		
 		if (contents != null && contents.length % 2 == 1)
 			throw new RuntimeException("odd length not supported!");
@@ -52,6 +62,10 @@ public class SimpleColumnModel extends ColumnModel {
 				con.put(activityName, activityAmm);
 			}
 		}
+		
+		if (mustBeEmpty)
+			con = new HashMap<String, String>();
+		
 		return new SimpleColumnModel(name, con);
 	}
 	

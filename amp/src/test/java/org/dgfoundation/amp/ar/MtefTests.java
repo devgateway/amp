@@ -3,6 +3,7 @@ package org.dgfoundation.amp.ar;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.axis.handlers.soap.MustUnderstandChecker;
 import org.dgfoundation.amp.testmodels.ColumnReportDataModel;
 import org.dgfoundation.amp.testmodels.GroupColumnModel;
 import org.dgfoundation.amp.testmodels.GroupReportModel;
@@ -18,8 +19,10 @@ import org.hibernate.Query;
 import org.hibernate.cfg.*;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
+import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
 
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
@@ -28,54 +31,42 @@ import junit.framework.TestSuite;
  * @author Dolghier Constantin
  *
  */
-public class DirectedDisbursementsTests extends ReportsTestCase
+public class MtefTests extends ReportsTestCase
 {
-	public DirectedDisbursementsTests(String name) {
+	public MtefTests(String name) {
 		super(name);
 	}
 		
 	public static Test suite()
 	{
 		TestSuite suite = new TestSuite(AllTests.class.getName());
-		suite.addTest(new DirectedDisbursementsTests("testFlatReport"));
-		suite.addTest(new DirectedDisbursementsTests("testByBeneficiary"));
-		suite.addTest(new DirectedDisbursementsTests("testByDonor"));
-		suite.addTest(new DirectedDisbursementsTests("testByExecuting"));
+		suite.addTest(new MtefTests("testAllMtef"));
 		return suite;
-	}	
+	}		
 		
-	protected List<AmpActivity> getAllActivities() throws Exception
-	{
-		 org.hibernate.Session session = PersistenceManager.getRequestDBSession();
-	      String qryStr = "select a from " + AmpActivity.class.getName() + " a ";
-	      Query qry = session.createQuery(qryStr);
-	      return (List<AmpActivity>) qry.list();
-	}
-		
+	
 	/**
 	 * a flat report containing RealDisbursements of a single activity
 	 */
-	public void testFlatReport()
+	public void testAllMtef()
 	{
 		// ========================= one more report ===============================
-		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-15337-real-disbursements", 
-				ColumnReportDataModel.withColumns("AMP-15337-real-disbursements", 
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-15794", 
+				ColumnReportDataModel.withColumns("AMP-15794", 
 						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", "mtef activity 1", "789 123", "mtef activity 2", "123 654"),
+						SimpleColumnModel.withContents("MTEF 2013/2014", "mtef activity 1", "789 123", "mtef activity 2", "123 654"),
 						GroupColumnModel.withSubColumns("Funding", 
 								GroupColumnModel.withSubColumns("2013", 
-										GroupColumnModel.withSubColumns("Real Disbursements", 
-												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "545 000"),
-												SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "100 000"),
-												SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "15 000")
-												))),
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "660 000")
+												)),
 						GroupColumnModel.withSubColumns("Total Costs", 
-										GroupColumnModel.withSubColumns("Real Disbursements", 
-												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "545 000"),
-												SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "100 000"),
-												SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "15 000")
-						))));
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY/*"Eth Water", "0", "mtef activity 1", "0", "mtef activity 2", "0"*/),
+								SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "660 000")
+						)));
 		
-		runReportTest("flat Directed Disbursements Report", "AMP-15337-real-disbursements", new String[] {"Eth Water"}, fddr_correct);
+		runReportTest("all Mtef report", "AMP-15794", new String[] {"Eth Water", "mtef activity 1", "mtef activity 2"}, fddr_correct);
 	}
 	
 	/**

@@ -84,7 +84,7 @@ public class ComputedAmountColWorker extends ColumnWorker {
 	 * ResultSet)
 	 */
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
-		AmpARFilter filter = (AmpARFilter) generator.getFilter();
+		//AmpARFilter filter = (AmpARFilter) generator.getFilter();
 		Long ownerId = new Long(rs.getLong(1));
 		Long id = new Long(rs.getLong(2));
 		BigDecimal value = rs.getBigDecimal(3);

@@ -199,6 +199,30 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		
 	}
+	
+	/**
+	 * ONLY call for extractorView.equals("v_mtef_funding")
+	 * @param columnFilterSQLClause - already-generated columnFilterSQLClause
+	 * @param columnAlias - the alias, of the form "mtefYYYY"
+	 * @return
+	 */
+	protected String generate_mtef_filter_statement(String columnFilterSQLClause, String columnAlias)
+	{
+		if (columnFilterSQLClause == null)
+			columnFilterSQLClause = "";
+		
+//		if (columnFilterSQLClause.isEmpty())
+//			columnFilterSQLClause = "AND (1 = 1)";
+		
+		if ((columnAlias == null) || (!columnAlias.startsWith("mtef")) || (columnAlias.length() != 8))
+			throw new RuntimeException("invalid column alias for an MTEF column: " + columnAlias);
+		
+		String fundingYearStr = columnAlias.substring(4);
+		int fundingYear = Integer.parseInt(fundingYearStr);
+		
+		columnFilterSQLClause += " AND (extract(year from currency_date) = " + fundingYear + ")";
+		return columnFilterSQLClause;
+	}
 
 	/**
 	 * creates the data structures for the list of columns.
@@ -292,6 +316,10 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 				
 				ce.setRelatedColumn(col);
+				
+				if ((extractorView != null) && extractorView.equals("v_mtef_funding"))
+					columnFilterSQLClause = generate_mtef_filter_statement(columnFilterSQLClause, col.getAliasName());
+				
 				ce.setInternalCondition(columnFilterSQLClause);
 				ce.setSession(this.session);
 				

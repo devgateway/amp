@@ -18,15 +18,15 @@
 	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css)"
 		request-matcher="regex" security="none" />
 
+	<!-- alllow bypass for login page -->
+	<http pattern="/showLayout.do\?layout=login" request-matcher="regex"
+		security="none" />
+
 	<!-- import digi module spring configuration files -->
 	<beans:import resource="classpath:../../repository/**/module-spring.xml" />
 
 	<!-- uncomment this to see debugging info about spring security -->
-	<!-- <debug/> -->
-
-	<!-- alllow bypass for login page -->
-	<http pattern="/showLayout.do\?layout=login" request-matcher="regex"
-		security="none" />
+	<debug/> 
 
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm">
@@ -36,12 +36,13 @@
 		<!-- digest filter reference, as the authentication filter for the security 
 			chain -->
 		<custom-filter ref="digestFilter" position="BASIC_AUTH_FILTER" />
-
+		
 		<!-- all the rest of the AMP pages need the user to be authenticated -->
 		<intercept-url pattern="/**" access="ROLE_AUTHENTICATED" />
-
-		<!-- standard logout url to terminate the session -->
-		<logout logout-url="/j_spring_logout" />
+		
+		<!-- standard logout url to terminate the session and delete Tomcat cookies -->
+		<logout delete-cookies="JSESSIONID" logout-url="/j_spring_logout" />
+				
 	</http>
 
 	<!-- the authentication manager references the auth service -->

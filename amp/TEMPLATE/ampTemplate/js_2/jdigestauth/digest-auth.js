@@ -58,7 +58,8 @@ $.Class("pl.arrowgroup.DigestAuthentication", {
 		        	var authorizationHeaderValue = digestAuth.generateAuthorizationHeader(paramParser.headerValue, response, uri); 
 		        	digestAuth.attempts++;
 		        	digestAuth.invokeCall(uri, authorizationHeaderValue);
-		        }	    		       
+		        }, 
+		        cache: false
 		    });
 	},
 	calculateResponse : function(uri, nonce, realm, qop){

@@ -392,7 +392,7 @@
 			                                                <logic:notEqual value="true" name="removeAddButton">
 			                                                	<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">
 			                                                		<td>
-																		<html:button styleClass="buttonx" property="submitButton"onclick="return selectOrganization()" styleId="selOrgBtn">
+																		<html:button styleClass="buttonx" property="submitButton" onclick="return selectOrganization()" styleId="selOrgBtn">
 																			<digi:trn>Add</digi:trn>
 																		</html:button>
 																	</td>

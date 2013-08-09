@@ -1811,19 +1811,10 @@ public class FeaturesUtil {
 	 */
 	public static String getModuleNameVisibility(Long id) {
 		Session session = null;
-		Query q = null;
 		AmpModulesVisibility ft = new AmpModulesVisibility();
-		String ret = null;//It might return null value if the module was removed but it still having a permission associated.
 		try {
 			session = PersistenceManager.getSession();
-			String queryString = new String();
-			queryString = "select a from " + AmpModulesVisibility.class.getName()
-			+ " a where (a.id=:id) ";
-			q = session.createQuery(queryString);
-			q.setParameter("id", id, Hibernate.LONG);
-			ft = (AmpModulesVisibility) q.uniqueResult();
-			if (ft!=null)
-				ret = ft.getName();
+			ft = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
 		}
 		catch (Exception ex) {
 			logger.error("Exception : ", ex);
@@ -1838,7 +1829,7 @@ public class FeaturesUtil {
 				}
 			}
 		}
-		return ret;
+		return ft.getName();
 	}
 
 	/**

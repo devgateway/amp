@@ -24,14 +24,12 @@ public class AmpPMFieldPermissionViewer implements Comparable, Serializable{
 	}
 
 	public AmpPMFieldPermissionViewer(PermissionMap pm) {
-		if (FeaturesUtil.getModuleNameVisibility(pm.getObjectIdentifier())!=null){
-			this.fullName  	= FeaturesUtil.getModuleNameVisibility(pm.getObjectIdentifier());
-			this.path		= this.getPath(fullName);
-			this.name 		= this.getShortName(fullName);
-			this.strategy	= getStringBuilder(pm).toString();
-			this.id			= pm.getObjectIdentifier();
-			this.pm 		= pm;
-		}
+		this.fullName  	= FeaturesUtil.getModuleNameVisibility(pm.getObjectIdentifier());
+		this.path		= this.getPath(fullName);
+		this.name 		= this.getShortName(fullName);
+		this.strategy	= getStringBuilder(pm).toString();
+		this.id			= pm.getObjectIdentifier();
+		this.pm 		= pm;
 	}
 
 	private StringBuilder getStringBuilder(PermissionMap pm) {

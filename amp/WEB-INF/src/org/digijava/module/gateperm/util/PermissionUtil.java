@@ -328,8 +328,7 @@ public final class PermissionUtil {
 		PermissionMap element = (PermissionMap) i.next();
 			//ret.put(element.getObjectIdentifier(), element);
 		AmpPMFieldPermissionViewer v = new AmpPMFieldPermissionViewer(element);
-		if (v.getFullName()!=null)//Only add those modules that yet exist
-			ret.add(v);
+		ret.add(v);
 	    }
 	    return ret;
 	} catch (HibernateException e) {

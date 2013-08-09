@@ -1160,7 +1160,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 				pgraphic = new esri.Graphic(transpt, sms, attr,stinfoTemplate);
 				pgraphic.setAttributes({
 						"Structure Name" : structure.name,
-						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+ activity.ampactivityid
+						"Activity" : '<a href="/aim/viewActivityPreview.do~public=true~pageId=2~activityId='+ activity.ampactivityid
 									+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
 						"Structure Type" : structure.type,
 						"Structure Description" : description,
@@ -1179,7 +1179,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 					pgraphic.setAttributes({
 						"Structure Name" : name,
 						"Structure Type" : structure.type,
-						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+ activity.ampactivityid
+						"Activity" : '<a href="/aim/viewActivityPreview.do~public=true~pageId=2~activityId='+ activity.ampactivityid
 								+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
 						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y,
 						"Structure Description" : description
@@ -1200,7 +1200,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 					pgraphic.setAttributes({
 						"Structure Name" : name,
 						"Structure Type" : structure.type,
-						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
+						"Activity" : '<a href="/aim/viewActivityPreview.do~public=true~pageId=2~activityId='
 							+ activity.ampactivityid+ '~isPreview=1" target="_blank">'
 							+ activity.activityname+ '</a>',
 						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y,
@@ -1526,7 +1526,7 @@ function getContent(graphicAttributes, baseGraphic) {
     				}
     			});
                 attr=({
-					"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
+					"Activity" : '<a href="/aim/viewActivityPreview.do~public=true~pageId=2~activityId='
 							+ attr[0].id
 							+ '~isPreview=1" target="_blank">'
 							+ attr[0].activityname

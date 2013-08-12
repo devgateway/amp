@@ -2377,22 +2377,15 @@ public class DataDispatcher extends DispatchAction {
 				}
 				if(amtTotal.compareTo(BigDecimal.ZERO) == 1){
 					Iterator<AmpCategoryValue> it = categoryValues.iterator();
-					//budgetCVIds = new Long[categoryValues.size()];
-					int i = 0;
 					BigDecimal total = hm.get(acGrandTotal);
 					BigDecimal unallocated = hm.get(acUnallocated);
-					filter.setBudgetCVIds(budgetCVIds);
-	                newFilter = filter.getCopyFilterForFunding();
-					Long[] selCVIds = {-1l};
-					newFilter.setSelCVIds(selCVIds);
-					DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 
 					while (it.hasNext()){
 						AmpCategoryValue value = it.next();
 						BigDecimal currentCVvalue = hm.get(value);
 						BigDecimal percentage = getPercentage(currentCVvalue, total);
 		                if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue()) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue()) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue()) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ currentCVvalue.divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue()) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
 					

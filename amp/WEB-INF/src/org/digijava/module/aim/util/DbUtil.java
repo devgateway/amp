@@ -2713,18 +2713,53 @@ public class DbUtil {
 		return col;
 	}
 
-	public static ArrayList<AmpOrganisation> getAmpOrganisations() {
-		Session session = null;
+    /**
+     * Appends the NOT IN criteria to the queryString
+     * @param columnName
+     * @param excludeIds
+     * @param queryString
+     * @return
+     */
+    private static StringBuilder appendNotIn(String columnName, long[] excludeIds, StringBuilder queryString) {
+        if (excludeIds != null && excludeIds.length > 0) {
+            queryString.append(" and ").append(columnName).append(" not in (");
+            for (long orgId : excludeIds) {
+                queryString.append(orgId).append(",");
+            }
+            // remove last comma
+            queryString.setLength(queryString.length() - 1);
+            queryString.append(")");
+        }
+        return queryString;
+    }
+
+    public static ArrayList<AmpOrganisation> getAmpOrganisations() {
+        return getAmpOrganisations(null);
+    }
+
+    /**
+     * Returns list of amp organizations, excluding the <code>excludeIds</code>
+     * @param excludeIds if not null, the organizations with these ids will be excluded from the search result
+     * @return
+     */
+	public static ArrayList<AmpOrganisation> getAmpOrganisations(long[] excludeIds) {
+
+        Session session = null;
 		Query q = null;
 		ArrayList<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-		String queryString = null;
+		StringBuilder queryString = new StringBuilder();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			queryString = " select org from " + AmpOrganisation.class.getName()
-					+ " org ";
-			queryString += " where (org.deleted is null or org.deleted = false) order by org.name";
-			q = session.createQuery(queryString);
+
+            queryString.append(" select org from ").append(AmpOrganisation.class.getName()).append(" org ");
+            queryString.append(" where (org.deleted is null or org.deleted = false)");
+
+            appendNotIn("org.ampOrgId", excludeIds, queryString);
+
+            queryString.append(" order by org.name");
+
+			q = session.createQuery(queryString.toString());
 			if (q.list() != null && q.list().size() > 0) {
 				organizations.addAll(q.list());
 			}

@@ -927,16 +927,19 @@ function cancel()
 																					<digi:trn>Add</digi:trn>
 																			</aim:addOrganizationButton>
                                                                             <script>
-                                                                                // this is actually JS function override
+                                                                                /**
+                                                                                  * this is actually JS function override
+                                                                                  * the default implementation will be called first
+                                                                                  */
                                                                                 var selectOrgSelectedAware = selectOrg;
                                                                                 selectOrg = function(params) {
                                                                                     var selectedItems = getSelectedItems();
 
-                                                                                    selectOrgSelectedAware(params + "&selectedItems=" + selectedItems);
-                                                                                    alert (selectedItems);
+                                                                                    selectOrgSelectedAware(params + "&" + "<%= org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm.EXCLUDED_ORG_IDS_SEPARATED %>"
+                                                                                        + "=" + selectedItems);
                                                                                 }
 
-                                                                                /* List of Ids separated by "|" */
+                                                                                /* List of Ids separated by "_" */
                                                                                 function getSelectedItems() {
                                                                                     var ids = [];
                                                                                     var selectedOrganizations = $('[name="selectedOrgId"]');
@@ -946,7 +949,7 @@ function cancel()
                                                                                         });
                                                                                     }
 
-                                                                                    return ids.length > 0 ? ids.join('|') : "";
+                                                                                    return ids.length > 0 ? ids.join('_') : "";
                                                                                 }
                                                                             </script>
 																		</c:if>

@@ -208,6 +208,8 @@
 <digi:form action="/selectOrganizationComponent.do" method="post">
 
 <html:hidden property="selectedOrganisationFromPages" />
+<html:hidden property="<%= org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm.EXCLUDED_ORG_IDS_SEPARATED %>"/>
+
 	<script language="JavaScript">
 	//if use client yes
 	
@@ -218,7 +220,7 @@
 			window.close();
 		}
 	</logic:equal>
-	//was selcted
+	//was selected
 
 	function processLoad(){	
 	<logic:equal name="aimSelectOrganizationForm" property="afterSelect" value="true">

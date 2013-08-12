@@ -1730,8 +1730,8 @@ public class ExportActivityToPDF extends Action {
 	   
     public final static String getLatinLettersEquivalent(String src)// returns text without diacritics should be called with a Printable Equivalent
     {
-    	src = src.replace('ţ', 'ţ').replace("ț", "ţ").replace('Ţ', 'Ţ').replace('î', 'î').replace('ş', 'ş').replace('Ş', 'Ş').replace("ş", "ş").replace("î", "î").replace("ă", "ă").replace("ţ", "ţ");
-    	src = src.replace("ș", "ş").replace("ț", "ţ").replace('ă', 'ă').replace('Ț', 'Ţ');
+    	src = src.replace("ţ", "ţ").replace("ț", "ţ").replace("Ţ", "Ţ").replace("î", "î").replace("ş", "ş").replace("Ş", "Ş").replace("ş", "ş").replace("î", "î").replace("ă", "ă").replace("ţ", "ţ");
+    	src = src.replace("ș", "ş").replace("ț", "ţ").replace("ă", "ă").replace("Ț", "Ţ");
     	
     	return src;
     	
@@ -2091,7 +2091,8 @@ public class ExportActivityToPDF extends Action {
 		}
 	}
 	
-	private void buildRelatedDocsPart(EditActivityForm myForm,PdfPTable mainLayout, PdfPTableEvents event,String locale,Long siteId,ServletContext ampContext) throws WorkerException {
+	private void buildRelatedDocsPart(EditActivityForm myForm,PdfPTable mainLayout, PdfPTableEvents event,String locale,Long siteId,ServletContext ampContext) 
+			throws WorkerException {
 		Paragraph p1;
 		PdfPCell relDocCell1=new PdfPCell();
 		relDocCell1.setBackgroundColor(new Color(244,244,242));
@@ -2107,7 +2108,7 @@ public class ExportActivityToPDF extends Action {
 		PdfPTable relatedDocnested=new PdfPTable(2);
 		relatedDocnested.setTableEvent(event);
 		//documents
-		if(myForm.getDocuments().getCrDocuments()!=null && myForm.getDocuments().getCrDocuments().size()>0 || myForm.getDocuments().getDocumentList()!=null && myForm.getDocuments().getDocumentList().size()>0){				
+		if( myForm.getDocuments().getDocuments() != null && myForm.getDocuments().getDocuments().size() > 0){				
 			for (Documents doc : (Collection<Documents>)myForm.getDocuments().getDocuments()) {
 				if(doc.getIsFile()){						
 					//document fields						
@@ -2150,7 +2151,7 @@ public class ExportActivityToPDF extends Action {
 					}
 				}
 			}				
-			
+		}
 			if(myForm.getDocuments().getCrDocuments()!=null && myForm.getDocuments().getCrDocuments().size()>0){
 				for (DocumentData crDoc : myForm.getDocuments().getCrDocuments()) {
 					//title
@@ -2186,7 +2187,7 @@ public class ExportActivityToPDF extends Action {
 					}
 				}
 			}
-		}
+		
 		
 		//links
 		if(myForm.getDocuments().getLinksList()!=null && myForm.getDocuments().getLinksList().size()>0){				

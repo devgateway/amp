@@ -231,14 +231,14 @@ public class selectOrganizationComponent extends Action {
 				if (eaForm.getKeyword().trim().length() != 0) {
 					// serach for organisations based on the keyword and the
 					// organisation type
-					organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
+					organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId(), selectedOrganizations);
 				} else {
 					// search for organisations based on organisation type only
-					organizationResult = DbUtil.searchForOrganisationByType(eaForm.getAmpOrgTypeId());
+					organizationResult = DbUtil.searchForOrganisationByType(eaForm.getAmpOrgTypeId(), selectedOrganizations);
 				}
 			} else if (eaForm.getKeyword().trim().length() != 0) {
 				// search based on the given keyword only.
-				organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim());
+				organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), selectedOrganizations);
 			} else {
 				// get all organisations since keyword field is blank and org
 				// type field has 'ALL'.
@@ -342,13 +342,13 @@ public class selectOrganizationComponent extends Action {
 		if (numPages > 1) {
 			pages = new ArrayList();
 			for (int i = 0; i < numPages; i++) {
-				Integer pageNum = new Integer(i + 1);
+				Integer pageNum = i + 1;
 				pages.add(pageNum);
 			}
 		}
 		eaForm.setOrganizations(filteredResult);
 		eaForm.setPages(pages);
-		eaForm.setCurrentPage(new Integer(1));
+		eaForm.setCurrentPage(1);
 
 		return mapping.findForward("forward");
 

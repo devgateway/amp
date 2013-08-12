@@ -2581,24 +2581,30 @@ public class DbUtil {
 		return ampFisCal;
 	}
 
-	public static Collection searchForOrganisation(String keyword, Long orgType) {
+    public static Collection searchForOrganisation(String keyword, Long orgType) {
+        return searchForOrganisation(keyword, orgType, (long[]) null);
+    }
+
+	public static Collection searchForOrganisation(String keyword, Long orgType, long[] excludeIds) {
 		Session session = null;
 		Collection col = null;
 		keyword = keyword.toLowerCase();
+        StringBuilder queryString = new StringBuilder();
 
-		try {
+        try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = " select org from "
-					+ AmpOrganisation.class.getName()
-					+ " org "
-					+ " inner join org.orgGrpId grp "
-					+ " where(lower(org.acronym) like '%"
-					+ keyword
-					+ "%' or lower(org.name) like '%"
-					+ keyword
-					+ "%') and grp.orgType=:orgType and (org.deleted is null or org.deleted = false)";
+			queryString.append(" select org from ")
+                    .append(AmpOrganisation.class.getName()).append(" org ")
+                    .append(" inner join org.orgGrpId grp ")
+                    .append(" where(lower(org.acronym) like '%")
+                    .append(keyword)
+                    .append("%' or lower(org.name) like '%")
+                    .append(keyword)
+                    .append("%') and grp.orgType=:orgType and (org.deleted is null or org.deleted = false)");
 
-			Query qry = session.createQuery(queryString);
+            appendNotIn("org.ampOrgId", excludeIds, queryString);
+
+			Query qry = session.createQuery(queryString.toString());
 			qry.setParameter("orgType", orgType, Hibernate.LONG);
 			col = qry.list();
 		} catch (Exception ex) {
@@ -2607,19 +2613,28 @@ public class DbUtil {
 		return col;
 	}
 
-	public static Collection searchForOrganisation(String keyword) {
+    public static Collection searchForOrganisation(String keyword) {
+        return searchForOrganisation(keyword, (long[]) null);
+    }
+
+	public static Collection searchForOrganisation(String keyword, long[] excludeIds) {
+
 		Session session = null;
 		Collection col = null;
 		keyword = keyword.toLowerCase();
+        StringBuilder queryString = new StringBuilder();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select distinct org from "
-					+ AmpOrganisation.class.getName() + " org "
-					+ "where (lower(acronym) like '%" + keyword
-					+ "%' or lower(name) like '%" + keyword
-					+ "%') and (org.deleted is null or org.deleted = false) ";
-			Query qry = session.createQuery(queryString);
+			queryString.append("select distinct org from ")
+                    .append(AmpOrganisation.class.getName()).append(" org ")
+                    .append("where (lower(acronym) like '%").append(keyword)
+                    .append("%' or lower(name) like '%").append(keyword)
+                    .append("%') and (org.deleted is null or org.deleted = false) ");
+
+            appendNotIn("org.ampOrgId", excludeIds, queryString);
+
+			Query qry = session.createQuery(queryString.toString());
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to search ", ex);
@@ -2694,17 +2709,25 @@ public class DbUtil {
 		return col;
 	}
 
-	public static Collection searchForOrganisationByType(Long orgType) {
+    public static Collection searchForOrganisationByType(Long orgType) {
+        return searchForOrganisationByType(orgType, (long[]) null);
+    }
+
+	public static Collection searchForOrganisationByType(Long orgType, long[] excludeIds) {
+
 		Session session = null;
 		Collection col = null;
+        StringBuilder queryString = new StringBuilder();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select distinct org from "
-					+ AmpOrganisation.class.getName()
-					+ " org "
-					+ " inner join org.orgGrpId grp where grp.orgType=:orgType and (org.deleted is null or org.deleted = false)";
-			Query qry = session.createQuery(queryString);
+			queryString.append("select distinct org from ")
+                    .append(AmpOrganisation.class.getName()).append(" org ")
+                    .append(" inner join org.orgGrpId grp where grp.orgType=:orgType and (org.deleted is null or org.deleted = false)");
+
+            appendNotIn("org.ampOrgId", excludeIds, queryString);
+
+			Query qry = session.createQuery(queryString.toString());
 			qry.setParameter("orgType", orgType, Hibernate.LONG);
 			col = qry.list();
 		} catch (Exception ex) {
@@ -2722,13 +2745,13 @@ public class DbUtil {
      */
     private static StringBuilder appendNotIn(String columnName, long[] excludeIds, StringBuilder queryString) {
         if (excludeIds != null && excludeIds.length > 0) {
-            queryString.append(" and ").append(columnName).append(" not in (");
+            queryString.append(" and (").append(columnName).append(" not in (");
             for (long orgId : excludeIds) {
                 queryString.append(orgId).append(",");
             }
             // remove last comma
             queryString.setLength(queryString.length() - 1);
-            queryString.append(")");
+            queryString.append("))");
         }
         return queryString;
     }

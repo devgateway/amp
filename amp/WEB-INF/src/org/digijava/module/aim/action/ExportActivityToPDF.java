@@ -1105,34 +1105,38 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell relOrgCell2=new PdfPCell();
 				relOrgCell2.setBorder(0);
 				PdfPTable relatedOrgnested=new PdfPTable(1); //table that holds all related organisations			
+				//Donor Organizations
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Funding", ampContext)){
+					buildRelatedOrganisationsOutput(relatedOrgnested,"Donor Agency",null,myForm.getFunding().getFundingOrganizations(), myForm.getAgencies().getRespOrgPercentage(),ampContext);
+				}				
 				//Responsible Organizations
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization", ampContext)){
-					buildRelatedOrganisationsOutput(relatedOrgnested,"Responsible Organization",myForm.getAgencies().getRespOrganisations(), myForm.getAgencies().getRespOrgPercentage(),ampContext);
+					buildRelatedOrganisationsOutput(relatedOrgnested,"Responsible Organization",myForm.getAgencies().getRespOrganisations(),null, myForm.getAgencies().getRespOrgPercentage(),ampContext);
 				}				
 				//Executing Agency
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency", ampContext)){
-					buildRelatedOrganisationsOutput(relatedOrgnested,"Executing Agency",myForm.getAgencies().getExecutingAgencies(), myForm.getAgencies().getExecutingOrgPercentage(), ampContext);
+					buildRelatedOrganisationsOutput(relatedOrgnested,"Executing Agency",myForm.getAgencies().getExecutingAgencies(),null, myForm.getAgencies().getExecutingOrgPercentage(), ampContext);
 				}				
 				//Implementing Agency
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency", ampContext)){
-					buildRelatedOrganisationsOutput(relatedOrgnested,"Implementing Agency",myForm.getAgencies().getImpAgencies(),myForm.getAgencies().getImpOrgPercentage(), ampContext);
+					buildRelatedOrganisationsOutput(relatedOrgnested,"Implementing Agency",myForm.getAgencies().getImpAgencies(),null,myForm.getAgencies().getImpOrgPercentage(), ampContext);
 				}				
 				//Beneficiary Agency
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency", ampContext)){
-					buildRelatedOrganisationsOutput(relatedOrgnested,"Beneficiary Agency",myForm.getAgencies().getBenAgencies(), myForm.getAgencies().getBenOrgPercentage(),ampContext);
+					buildRelatedOrganisationsOutput(relatedOrgnested,"Beneficiary Agency",myForm.getAgencies().getBenAgencies(),null, myForm.getAgencies().getBenOrgPercentage(),ampContext);
 				}				
 				//Contracting Agency
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency", ampContext)){
-					buildRelatedOrganisationsOutput(relatedOrgnested,"Contracting Agency",myForm.getAgencies().getConAgencies(),myForm.getAgencies().getConOrgPercentage(),ampContext);
+					buildRelatedOrganisationsOutput(relatedOrgnested,"Contracting Agency",myForm.getAgencies().getConAgencies(),null,myForm.getAgencies().getConOrgPercentage(),ampContext);
 				}
 				
 				//Sector Group
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Sector Group", ampContext)){
-					buildRelatedOrganisationsOutput(relatedOrgnested,"Sector Group",myForm.getAgencies().getSectGroups(),myForm.getAgencies().getSectOrgPercentage(), ampContext);
+					buildRelatedOrganisationsOutput(relatedOrgnested,"Sector Group",myForm.getAgencies().getSectGroups(),null,myForm.getAgencies().getSectOrgPercentage(), ampContext);
 				}
 				//Regional Group
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Regional Group", ampContext)){
-					buildRelatedOrganisationsOutput(relatedOrgnested,"Regional Group",myForm.getAgencies().getRegGroups(),myForm.getAgencies().getRegOrgPercentage(), ampContext);
+					buildRelatedOrganisationsOutput(relatedOrgnested,"Regional Group",myForm.getAgencies().getRegGroups(),null,myForm.getAgencies().getRegOrgPercentage(), ampContext);
 				}			
 				
 				relOrgCell2.addElement(relatedOrgnested);
@@ -3520,19 +3524,26 @@ public class ExportActivityToPDF extends Action {
 	/**
 	 * builds all related organizations Info that should be exported to PDF
 	 */
-	private void buildRelatedOrganisationsOutput(PdfPTable relatedOrgsTable, String orgType , Collection<AmpOrganisation> orgs, HashMap<String, String> percentages, ServletContext ampContext) throws WorkerException{
+	private void buildRelatedOrganisationsOutput(PdfPTable relatedOrgsTable, String orgType , Collection<AmpOrganisation> orgs, Collection<FundingOrganization> fundingOrgs, HashMap<String, String> percentages, ServletContext ampContext) throws WorkerException{
 		Paragraph paragraph=new Paragraph(new Paragraph(new Phrase(postprocessText(TranslatorWorker.translateText(orgType))+":",titleFont)));
 		PdfPCell orgTypeCell=new PdfPCell(paragraph);
 		orgTypeCell.setBorder(0);
 		orgTypeCell.setBackgroundColor(new Color(255,255,255));
 		relatedOrgsTable.addCell(orgTypeCell);
+		PdfPCell respOrgCell=new PdfPCell();			
+		respOrgCell.setBorder(1);
+		respOrgCell.setBorderColor(new Color(201,201,199));
+		com.lowagie.text.List orgList=new com.lowagie.text.List(false); //not numbered list
+		orgList.setListSymbol(new Chunk("\u2022"));
 		
-		if(orgs!=null && orgs.size()>0){
-			PdfPCell respOrgCell=new PdfPCell();			
-			respOrgCell.setBorder(1);
-			respOrgCell.setBorderColor(new Color(201,201,199));
-			com.lowagie.text.List orgList=new com.lowagie.text.List(false); //not numbered list
-			orgList.setListSymbol(new Chunk("\u2022"));
+		if (fundingOrgs!=null && fundingOrgs.size()>0){
+			for (FundingOrganization org : fundingOrgs) {
+				ListItem item=new ListItem(postprocessText(org.getOrgName()), plainFont);
+				orgList.add(item);
+			}
+			respOrgCell.addElement(orgList);
+			relatedOrgsTable.addCell(respOrgCell);
+		} else if(orgs!=null && orgs.size()>0){
 			for (AmpOrganisation org : orgs) {
 				String percentage = percentages.get(org.getAmpOrgId().toString());
 				if ( percentage != null){

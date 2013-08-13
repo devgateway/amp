@@ -1901,7 +1901,27 @@ body {background:none;}
 									  </b>									</td>
 
 										<td bgcolor="#ffffff">
-										
+										<module:display name="/Activity Form/Funding" parentModule="/Activity Form">
+											<b><digi:trn key="aim:donororganisation">Donor Organization</digi:trn></b>
+											<br/>
+											<logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
+												<div id="act_donor_organisation" style="display: block;">
+													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding" >
+														<tr>
+															<td>
+																<logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
+																<ul>
+																	<li>
+																		<bean:write name="fundingOrganization" property="orgName"/> 
+																	</li>
+																</ul>
+																</logic:iterate>
+															</td>
+														</tr>
+													</table>	
+												</div>
+											</logic:notEmpty>				
+										</module:display>					
 										<feature:display name="Responsible Organization" module="Organizations">
 											<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">

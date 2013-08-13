@@ -1603,6 +1603,11 @@ public class ExportActivityToWord extends Action {
                         for (String roleCode : roleGrouper.keySet()) {
                         	Set<AmpOrgRole> groupedRoleSet = roleGrouper.get(roleCode);
                         	
+                        	if (roleCode.equals(Constants.FUNDING_AGENCY) &&
+                        			FeaturesUtil.isVisibleModule("/Activity Form/Funding", ampContext)){
+                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Donor Agency");
+                        	}
+                        	
                         	if (roleCode.equals(Constants.RESPONSIBLE_ORGANISATION) &&
                         			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization", ampContext)){
                         		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Responsible Organization");

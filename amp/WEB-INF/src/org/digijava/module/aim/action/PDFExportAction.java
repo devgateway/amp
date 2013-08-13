@@ -80,7 +80,14 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	private HttpServletResponse response;
 	private HttpServletRequest request;
 
-	public PDFExportAction(HttpSession session,String locale,Site site,GroupReportData rd,AmpARFilter arf,AmpReports r ,HttpServletResponse response,HttpServletRequest request) {
+	public PDFExportAction(HttpSession session,
+                           String locale,
+                           Site site,
+                           GroupReportData rd,
+                           AmpARFilter arf,
+                           AmpReports r,
+                           HttpServletResponse response,
+                           HttpServletRequest request) {
 	    this.session=session;
 	    this.locale=locale;
 	    this.site=site;
@@ -89,10 +96,11 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    this.r=r;
 	    this.response=response;
 	    this.request=request;
-        }
+    }
+
 	public PDFExportAction() {
-	 super();
-        }
+
+    }
 	
 	@SuppressWarnings("unchecked")
         public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -116,8 +124,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 //		}	
 		
 	    AmpARFilter filter = ReportContextData.getFromRequest().loadOrCreateFilter(initFiltersFromDB, report);
-	    if (tm == null)
-	    {
+        arf = ReportContextData.getFromRequest().getFilter();
+	    if (tm == null) {
 			//Prepare filter for Public View export
 	    	arf.setPublicView(true);
 	    }
@@ -129,21 +137,16 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		rd.setCurrentView(GenericViews.PDF);
 		
 		AmpReports r =  ReportContextData.getFromRequest().getReportMeta();
-		AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
 		/*
 		 * this should not be used anymore as the page size has been included in the ARFilters.
 		 * String pageSize=formBean.getPdfPageSize();
 		 */
 		//use the session to get the existing filters
-		if (sessionInExec.getAttribute("currentMember")!=null || arf.isPublicView()){
-			String pageSize=null;
-			if ( arf != null )
-				pageSize=arf.getPageSize();//use the page size set in the filters 
+		if (sessionInExec.getAttribute("currentMember") != null || arf.isPublicView()) {
 
-		
 			//This a temporal fix to avoid stack overflow error in large reports AMP-5324
-			Rectangle page= new Rectangle(new Float("1500"),new Float("1500"));
-			
+			Rectangle page = new Rectangle(new Float("1500"), new Float("1500"));
+
 			//the pagesize is not initialized in the filters
 			/*
 			if(pageSize==null)
@@ -169,7 +172,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				
 				//
                 response.setContentType("application/pdf");
-				response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll(" ","_") + ".pdf");	   	       
+                response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll("[ ,;]","_") + ".pdf");
                 //
 				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());		
                 //

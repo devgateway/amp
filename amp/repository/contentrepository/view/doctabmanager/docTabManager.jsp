@@ -216,7 +216,7 @@ var trnObj		= {
 								</tr>
 								<tr>
 						        	<td>
-								    	<button id="publicFilterButtonId" class="buttonx" type="button" onclick="publicListObj.getFilterPanel('publicFilterButtonId','publicFilterDivId').show();">
+								    	<button id="publicFilterButtonId" class="buttonx" type="button" onclick="publicListObj.getFilterPanel('publicFilterButtonId','publicFilterDivId', false).show();">
 								    		<digi:trn>Filters</digi:trn>
 								    	</button>
 								    	<button id="publicLabelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();">

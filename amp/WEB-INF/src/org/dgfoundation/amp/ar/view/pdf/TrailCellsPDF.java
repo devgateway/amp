@@ -158,7 +158,6 @@ public class TrailCellsPDF extends PDFExporter {
 			
 			// +1 is because we use the first column for title
 			// trailCells which should be drawn: [n - totalNrOfDrawnColumns + 1, n-1]
-			
 			int nrOfTitleColumns = parent.getReportMetadata().getHideActivities() ? 0 : 1;
 			int firstRelevantTrailCell = allTrailCells.size() - totalNrOfDrawnColumns + nrOfTitleColumns; 
 			

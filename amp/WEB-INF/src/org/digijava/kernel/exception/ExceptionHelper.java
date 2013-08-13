@@ -162,13 +162,13 @@ public class ExceptionHelper {
             return new ActionForward("/exception/showExceptionReport.do");
         } else {
             long exceptionId = ExceptionHelper.storeTilesExceptioinInfo(request, info);
-            String url = DgUtil.getCurrRootUrl(request) + "/exception/showExceptionReport.do?reportId=" + exceptionId;
+            String relativeUrl = "/exception/showExceptionReport.do?reportId=" + exceptionId;
+            String url = DgUtil.getCurrRootUrl(request) + relativeUrl;
             ActionMessage error = new ActionMessage("errors.detail", url);
             String property = error.getKey();
 
             storeException(context, request, property, error);
-
-            return null;
+            return new ActionForward(relativeUrl);
         }
     }
 

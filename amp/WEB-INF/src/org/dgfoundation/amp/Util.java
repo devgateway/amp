@@ -485,5 +485,49 @@ public final class Util {
 		
 		return year;
 	}
+	
+	/**
+	 * returns null if the current browser is not IE<br />
+	 * Partial copy-paste from http://www.java2s.com/Code/Java/Servlets/Browserdetection.htm
+	 * @param request
+	 * @return
+	 */
+	public static Integer getIEVersion(HttpServletRequest request)
+	{
+		String userAgent = request.getHeader("user-agent");
+		int msiePos = userAgent.indexOf("MSIE ");
+		if (msiePos == -1 || userAgent.contains("Opera"))
+		{
+			return null;
+		}
+		return parseNumberAtStart(userAgent.substring(msiePos + 5));
+	}
+	
+	 /**
+     * We've found the start of a sequence of numbers, what is it as an int?
+     */
+    private static int parseNumberAtStart(String numberString)
+    {
+        if (numberString == null || numberString.length() == 0)
+        {
+            return -1;
+        }
+
+        int endOfNumbers = 0;
+        while (Character.isDigit(numberString.charAt(endOfNumbers)))
+        {
+            endOfNumbers++;
+        }
+
+        try
+        {
+            return Integer.parseInt(numberString.substring(0, endOfNumbers));
+        }
+        catch (NumberFormatException ex)
+        {
+            return -1;
+        }
+    }
+
 
 }

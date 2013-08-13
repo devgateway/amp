@@ -127,14 +127,10 @@
 									<div id="private">
 										<img src= "/repository/contentrepository/view/images/make_private.gif">
 										<c:if test="${aimTeamReportsForm.showReportList == true}">
-											<digi:trn key="aim:teamReportListViewableByManagerdAndCreator">
-											Indicates the report is not viewable by the team members
-											</digi:trn>
+											<digi:trn>Indicates the report is only viewable by the owner</digi:trn>
 										</c:if>
 										<c:if test="${aimTeamReportsForm.showReportList == false}">
-											<digi:trn key="aim:teamTabListViewableByManagerAndCreator">
-											Indicates the tab  viewable by the Workspace Manager and the Creator of the Report
-											</digi:trn>
+											<digi:trn>Indicates the tab is only viewable by the owner</digi:trn>
 										</c:if>
 										<br>
 										<digi:trn key="aim:clicktomakethispublic">Click here to make this team-visible</digi:trn>

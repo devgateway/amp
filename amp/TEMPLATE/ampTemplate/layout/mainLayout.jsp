@@ -7,7 +7,15 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <html>
-	<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=8">
+	<%-- request.setAttribute("compatibility_shim", String) - use it to overwrite specific pages' X-UA-Compatible meta tags --%>
+	<c:choose>
+    	<c:when test="${empty compatibility_shim}">
+			<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=8">
+		</c:when>
+    	<c:otherwise>
+        	<meta http-equiv="X-UA-Compatible" content="<c:out value="${compatibility_shim}" />">
+    	</c:otherwise>
+	</c:choose>
 	<digi:base />
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 	<digi:context name="digiContext" property="context"/>

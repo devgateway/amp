@@ -172,7 +172,7 @@ public class AmpComponentFunding implements Versionable, Cloneable, Serializable
 	}
 	*/
 	
-	public boolean equals(Object obj) {
+	/*public boolean equals(Object obj) {
 		if (obj == null) throw new NullPointerException();
 		if (!(obj instanceof AmpComponentFunding)) throw new ClassCastException();
 		if(this.ampComponentFundingId == null) 
@@ -181,7 +181,7 @@ public class AmpComponentFunding implements Versionable, Cloneable, Serializable
 		AmpComponentFunding comp = (AmpComponentFunding) obj;
 		return this.ampComponentFundingId.equals(comp.ampComponentFundingId);
 		
-	}
+	}*/
 	public void setExchangeRate(Float exchangeRate) {
 		this.exchangeRate = exchangeRate;
 	}

@@ -15,6 +15,7 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.AmountCell;
@@ -67,15 +68,13 @@ public class AmountCellXLS extends XLSExporter {
 			amountStyle=this.getAmountStyle();
 		
 		HSSFCell cell=this.getCell(amountStyle);
+		double tempAm = ac.getAmount();
+			
+		// According to AMP-15607 the Excel export will contain the values formatted as numbers		 
 		
 		cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+		cell.setCellValue(((long)(tempAm * 1000)) / 1000.0);
 
-		//DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
-		//mf.setMaximumFractionDigits(2);
-		double tempAm = ac.getAmount();
-		BigDecimal bd = new BigDecimal(tempAm);
-		bd = bd.setScale(2, BigDecimal.ROUND_UP);
-		cell.setCellValue(FormatHelper.formatNumber(bd.doubleValue()));
 		colId.inc();
 	}
 

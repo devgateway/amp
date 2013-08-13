@@ -252,7 +252,14 @@ public class CurrencyUtil {
 		Transaction tx = null;
 		Query qry = null;
 		String qryStr = null;
-		AmpCaching.getInstance().currencyCache.reset();
+		try
+		{
+			AmpCaching.getInstance().currencyCache.reset();
+		}
+		catch(NullPointerException ex)
+		{
+			logger.warn("ignored a NPE while resetting currency caches; this is normal if happening from inside a Quartz Job", ex);
+		}
 
 		try {
 			//session = PersistenceManager.getSession();

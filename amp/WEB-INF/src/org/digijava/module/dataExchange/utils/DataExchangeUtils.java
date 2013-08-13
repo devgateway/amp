@@ -1775,7 +1775,7 @@ public class DataExchangeUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return result;
 	}
 
 	public static void getAmpClassesFromDb(TreeSet<String> ampClasses) {

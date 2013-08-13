@@ -205,15 +205,15 @@ public class ShowTeamReports extends Action {
 		} else {
 			rf.setCurrentMemberId(tm.getMemberId());
 			ApplicationSettings appSettings = tm.getAppSettings();
-			if ( appSettings != null && appSettings.getDefReportsPerPage() == 0)
-				rf.setTotalPages(FIRST_PAGE);
-			
-			if (appSettings != null ) {
-				appSettingSet = true;
-			}
+			if (appSettings != null) {
+                appSettingSet = true;
+                if (appSettings.getDefReportsPerPage() == 0) {
+				    rf.setTotalPages(FIRST_PAGE);
+                }
 
-            
-            switch(col){
+            }
+
+            switch(col) {
                 case NAME_ASC: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.ASC,collator);break;
                 case NAME_DESC: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.DESC,collator); break;
                 case OWNER_ASC: sort=new AdvancedReportUtil.AmpReportOwnerComparator(AdvancedReportUtil.SortOrder.ASC,collator);break;
@@ -222,8 +222,8 @@ public class ShowTeamReports extends Action {
                 case DATE_DESC: sort=new AdvancedReportUtil.AmpReportCreationDateComparator(AdvancedReportUtil.SortOrder.DESC);break;
                 default: sort=new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.ASC, collator);break;
             }
-           
-			List<AmpReports> teamResults =null;
+
+			List<AmpReports> teamResults = null;
 			//Collection teamMemberResults = null;
 			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 			AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
@@ -233,7 +233,7 @@ public class ShowTeamReports extends Action {
 				}else{
 					teamResults = TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword(),rf.getSelectedReportCategory());
 				}
-				
+
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(), rf.getShowTabs(), true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 				rf.setTempNumResults(appSettings.getDefReportsPerPage());
@@ -244,13 +244,13 @@ public class ShowTeamReports extends Action {
 				}else{
 					teamResults = TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword(),rf.getSelectedReportCategory());
 				}
-				
+
 				}
 			boolean found = false;
 			if (defaultTeamReport != null){
 				Iterator iter = teamResults.iterator();
 				while (iter.hasNext()) {
-					AmpReports el = (AmpReports) iter.next();                                 
+					AmpReports el = (AmpReports) iter.next();
 					if (el.compareTo(defaultTeamReport) == 0){
 						found = true;
 						break;
@@ -260,10 +260,10 @@ public class ShowTeamReports extends Action {
 			if (!found && defaultTeamReport!=null && rf.getShowTabs()){
 				teamResults.add(defaultTeamReport);
 			}
-			
+
 			List<AmpReports> sortedReports = new ArrayList<AmpReports>(teamResults);
-			
-			//			
+
+			//
 			//do not add this in ArrayList constructor.
 			Collections.sort(sortedReports,sort);
 			rf.setReports(sortedReports);

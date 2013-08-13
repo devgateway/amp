@@ -112,7 +112,17 @@ div.fakefile2 input{
 
 <script type="text/javascript">
 function saveRecord(id) {
-	//alert('NOP');
+	var loadingImgDiv = document.getElementById("loadingImg");
+	loadingImgDiv.style.display="block";
+		 var el = document.getElementById("ampValues["+id+"]");
+		 var txt = el.options[el.selectedIndex].innerHTML;
+		 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
+		 url = "<%= saveRecord %>?actionType=saveRecord&id="+id+"&ampId="+el.value+"&mappedValue="+txt;
+		 mapFieldsForm.action =url;
+		 //alert(url);
+		 mapFieldsForm.submit();
+		 return true;
+	<%-- //alert('NOP');
 	return;
 	//debugger;
 	var loadingImgDiv = document.getElementById("loadingImg");
@@ -128,7 +138,7 @@ function saveRecord(id) {
 	mapFieldsForm.action =url;
 	//alert(url);
 	mapFieldsForm.submit();
-	return true;
+	return true; --%>
 }
 
 function saveAll() {
@@ -448,15 +458,15 @@ span.extContactDropdownEmail {
 								    	</div>
 								    </td>
 								    <td bgcolor="#FFFFFF" class="inside ampvalues" style="width:40%;">
-								    	<%-- <html:select  name="mapFieldsForm"  property="allSelectedAmpValues" styleClass="dropdwn_sm" styleId="ampValues[${field.ampField.id}]">
+								    	<html:select  name="mapFieldsForm"  property="allSelectedAmpValues" styleClass="dropdwn_sm" styleId="ampValues[${field.ampField.id}]">
 								  			<html:option value="-1" ><digi:trn>Add new</digi:trn></html:option>
         									<logic:iterate id="cls" name="field" property="sortedLabels" >
 												<html:option value="${cls.key}">
 												${cls.value}
 												</html:option>
 											</logic:iterate>
-        								</html:select> --%>
-								    	<div>
+        								</html:select>
+								    	<%-- <div>
 								        <div style="width:100%;" class="">
 								            <html:text name="mapFieldsForm"  property="allSelectedAmpValues" style="width:100%;"  styleId="statesinput[${field.ampField.id}]"></html:text>
 								            <div id="statesautocomplete[${field.ampField.id}]"></div>
@@ -501,13 +511,13 @@ span.extContactDropdownEmail {
 										//subscribe your handler to the event, assuming
 										//you have an AutoComplete instance myAC:
 										relatedActAutoComp.itemSelectEvent.subscribe(itemSelectHandler);
-									 </script>
+									 </script> --%>
 								  	</td>
-								  	<%--
+								  	
 								    	<td bgcolor="#FFFFFF" class="inside" align="center">
 								    		<input type="button" value="<digi:trn>Save</digi:trn>" class="buttonx_sm" onclick="saveRecord(${field.ampField.id})" />
 								    	</td>
-								    --%>
+								   
 								</tr>
 							</logic:iterate>
 						</logic:notEmpty>

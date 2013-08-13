@@ -154,7 +154,7 @@ public class XLSExportAction extends Action {
 		IntWrapper colId=new IntWrapper();
 		
 		HSSFRow row = sheet.createRow(rowId.intValue());
-		HSSFPatriarch patriarch = sheet.createDrawingPatriarch();	    
+		//HSSFPatriarch patriarch = sheet.createDrawingPatriarch();	    
 	    
 		HSSFFooter footer = sheet.getFooter();
 		footer.setRight( "Page " + HSSFFooter.page() + " of " + HSSFFooter.numPages() );
@@ -173,7 +173,10 @@ public class XLSExportAction extends Action {
 
 		GroupReportDataXLS grdx	= ARUtil.instatiateGroupReportDataXLS(request.getSession(), wb, sheet, row, rowId,
 		        colId, null, rd, isPlainReport);
+		
 		grdx.setMetadata(r);
+		grdx.setFilter(arf);
+		
 		colId.reset();
 		if (isPublicPortalMode){
 			rowId.reset();

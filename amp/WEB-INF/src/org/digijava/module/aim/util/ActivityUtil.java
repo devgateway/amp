@@ -31,6 +31,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
@@ -39,6 +40,7 @@ import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.action.GetFundingTotals;
@@ -3575,6 +3577,9 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
   	}
 
   	public static List<AmpActivityVersion> getLastUpdatedActivities() {
+  		
+  		String workspaceQuery = Util.toCSString(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
+  		
   		
   		String workspaceQuery = Util.toCSString(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
   		

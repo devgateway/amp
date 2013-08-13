@@ -81,7 +81,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 		
 		IModel<List<TemporaryDocument>> listModel  = new AbstractReadOnlyModel<List<TemporaryDocument>>() {
 
-            transient List<TemporaryDocument> existingTmpDocs = getExistingObject();
+            private transient List<TemporaryDocument> existingTmpDocs = getExistingObject();
             
             private List<TemporaryDocument> getExistingObject() {
                 AmpAuthWebSession session = (AmpAuthWebSession) getSession();

@@ -191,7 +191,10 @@ public class selectOrganizationComponent extends Action {
                 for (int i = 0; i < selectedOrganizationsAsStrings.length; i++) {
                     selectedOrganizations[i] = Long.parseLong(selectedOrganizationsAsStrings[i]);
                 }
-            } catch (RuntimeException ex){}
+            } catch (RuntimeException ex){
+                // if something went wrong during conversion let's null all the collection to be on the safe side
+                selectedOrganizations = null;
+            }
         }
         return selectedOrganizations;
     }

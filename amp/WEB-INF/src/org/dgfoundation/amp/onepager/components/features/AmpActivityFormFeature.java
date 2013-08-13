@@ -4,16 +4,28 @@
 */
 package org.dgfoundation.amp.onepager.components.features;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AjaxChannel;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -38,8 +50,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.Util;
@@ -48,7 +60,11 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
@@ -59,7 +75,14 @@ import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.validators.AmpSemanticValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AuditLoggerUtil;
@@ -412,6 +435,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				formSubmitErrorHandle(form, target, feedbackPanel); 
 			}
 		};
+		
+	
 
         String onClickSaveAsDraft = "$(\"#"+ saveAsDraftAction.getButton().getMarkupId() +"\").prop('disabled', true);";
         onClickSaveAsDraft += "$(\"#"+ cancelSaveAsDraft.getButton().getMarkupId() +"\").prop('disabled', true);";
@@ -421,6 +446,59 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model<String>(onClickSaveAsDraft), ""));
 		saveAsDraftAction.getButton().add(updateEditors);
 		activityForm.add(saveAsDraftAction);
+		
+		// this div will be "submitted" by the autoSaveTimer
+		final WebMarkupContainer autoSaveDiv = new WebMarkupContainer(
+				"autoSaveDiv");
+		autoSaveDiv.setOutputMarkupId(true);
+		// it implements an ajaxformsubmitbehavior, just like an AjaxButton, and
+		// hooked on the "click" event
+		autoSaveDiv.add(new AjaxFormSubmitBehavior(activityForm, "click") {
+			// we do something very similar during Save Draft: disable semantic
+			// validation, and process the form
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				am.setObject(am.getObject());
+				toggleSemanticValidation(false, activityForm, target);
+				// process the form for this request
+				activityForm.process(null);
+				// only in the eventuality that the title field is valid (is not
+				// empty) we proceed with the real save!
+				if (!activityForm.hasError())
+					saveMethod(target, am, feedbackPanel, true, redirected);
+				else {
+					formSubmitErrorHandle(activityForm, target, feedbackPanel);
+				}
+			}
+
+			// we disable the normal form processing, just like the save buttons
+			// do
+			@Override
+			public boolean getDefaultProcessing() {
+				return false;
+			}
+		});
+		activityForm.add(autoSaveDiv);
+
+		// this timer will be invoked every X minutes and the onTimer method
+		// will fire
+		int autoSaveSeconds = Integer.parseInt(FeaturesUtil
+		.getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_AUTO_SAVE_SECONDS));
+		
+		AbstractAjaxTimerBehavior autoSaveTimer = null;
+		if (autoSaveSeconds != 0) {
+			autoSaveTimer = new AbstractAjaxTimerBehavior(
+					Duration.seconds(autoSaveSeconds)) {
+				@Override
+				protected void onTimer(AjaxRequestTarget target) {
+					// we send a javascript event to the autoSaveDiv
+					target.appendJavaScript(String.format("$('#%s').click()",
+							autoSaveDiv.getMarkupId()));
+					target.add(autoSaveDiv);
+				}
+			};
+			activityForm.add(autoSaveTimer);
+		}
 
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
 			@Override

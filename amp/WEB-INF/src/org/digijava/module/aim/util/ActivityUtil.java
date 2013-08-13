@@ -3577,12 +3577,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
   	}
 
   	public static List<AmpActivityVersion> getLastUpdatedActivities() {
-  		
   		String workspaceQuery = Util.toCSString(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
-  		
-  		
-  		String workspaceQuery = Util.toCSString(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
-  		
 		List col = null;
 		Session session = null;
 		Query qry = null;

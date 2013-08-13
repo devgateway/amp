@@ -18,6 +18,8 @@ CREATE TABLE cached_v_sectors AS SELECT * FROM v_sectors;
 DROP TABLE IF EXISTS cached_v_m_sectors CASCADE;
 CREATE TABLE cached_v_m_sectors AS SELECT * FROM v_m_sectors;
 
+DROP TABLE IF EXISTS cached_v_capital_and_exp;
+CREATE TABLE cached_v_capital_and_exp AS SELECT * from v_capital_and_exp;
 
 DROP TABLE IF EXISTS cached_v_regions;
 CREATE TABLE cached_v_regions AS SELECT * FROM v_regions;

@@ -1050,6 +1050,15 @@ function addResultsToMap(featureSet) {
 	});
 }
 
+function generate_colors_styling(color)
+{
+	if (dojo.isIE <= 8)
+		return "style='background-color:rgb("+ color.toRgb() + "); -ms-filter:\"progid:DXImageTransform.Microsoft.Alpha(Opacity=" + Math.round(100 * color.a) + ")\";'"; // degraded view in IE<=8: no alpha
+	
+	return "style='background-color:rgba("+ color.toRgba() + ");'";
+}
+
+
 /**
  * 
  * @param rangeColors
@@ -1058,15 +1067,14 @@ function addResultsToMap(featureSet) {
 function showLegend(rangeColors, colors, typeFunding, currencyCode) {
 	var df = new DecimalFormat(currentFormat);
 	var currencyString = currencyCode;
-
+	//debugger;
 	var htmlDiv = "";
 	htmlDiv += "<div onclick='closeHide(\"highlightLegend\")' style='color:white;float:right;cursor:pointer;'>X</div>";
 	htmlDiv += "<div class='legendHeader'>"+translate('Showing ' + typeFunding + ' for ' + currentLevel.name);
 	htmlDiv +=  "<br/><hr/></div>";
 	for ( var i = 0; i < rangeColors.length; i++) {
 		htmlDiv += "<div class='legendContentContainer'>"
-				+ "<div class='legendContentValue' style='background-color:rgba("
-				+ colors[i].toRgba() + ");'></div>" + "</div>"
+				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i]) + "></div>" + "</div>"
 				+ "<div class='legendContentLabel'>"
 				+ df.format(Math.ceil(rangeColors[i][0])) + " "
 				+ currencyString + " - "
@@ -1074,7 +1082,7 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode) {
 				+ currencyString + " </div><br/>";
 	}
 	htmlDiv += "<div class='legendContentContainer'>"
-			+ "<div class='legendContentValue' style='background-color:rgba(201,195,197,0.8);'></div>"
+			+ "<div class='legendContentValue' " + generate_colors_styling(new dojo.Color({r:201,g:195,b:197,a:0.8})) + "></div>"
 			+ "</div>" + "<div class='legendContentLabel'>No Data</div><br/>";
 
 	$('#highlightLegend').html(htmlDiv);
@@ -1543,9 +1551,8 @@ function showLegendClusterDonor(pointSymbolBank) {
 	if (donorArray.length < 10) {
 		for ( var i = 0; i < donorArray.length; i++) {
 			htmlDiv += "<div class='legendContentContainer'>"
-					+ "<div class='legendContentValue' style='background-color:rgba("
-					+ pointSymbolBank[donorArray[i].donorCode].color.toRgba()
-					+ ");' ></div>" + "</div>"
+					+ "<div class='legendContentValue' " + generate_colors_styling(pointSymbolBank[donorArray[i].donorCode].color)
+					+ "></div>" + "</div>"
 					+ "<div class='legendContentLabel' title='"+donorArray[i].donorname+"'>"
 					+ donorArray[i].donorCode + " </div><br/>";
 		}
@@ -1555,9 +1562,8 @@ function showLegendClusterDonor(pointSymbolBank) {
 				var acronym =donorArray[int2].donorCode.latinise();
 				if (acronym==fixeddonorlist[int]){
 					htmlDiv += "<div class='legendContentContainer'>"
-						+ "<div class='legendContentValue' style='background-color:rgba("
-						+ pointSymbolBank[donorArray[int2].donorCode].color.toRgba()
-						+ ");' ></div>" + "</div>"
+						+ "<div class='legendContentValue' " + generate_colors_styling(pointSymbolBank[donorArray[int2].donorCode].color)
+						+ "></div>" + "</div>"
 						+ "<div class='legendContentLabel' title='"+donorArray[int2].donorname+"'>"
 						+ donorArray[int2].donorCode + " </div><br/>";
 				}
@@ -1566,16 +1572,15 @@ function showLegendClusterDonor(pointSymbolBank) {
 	}else{
 		for ( var i = 0; i < 10; i++) {
 			htmlDiv += "<div class='legendContentContainer'>"
-					+ "<div class='legendContentValue' style='background-color:rgba("
-					+ pointSymbolBank[donorArray[i].donorCode].color.toRgba()
-					+ ");' ></div>" + "</div>"
+					+ "<div class='legendContentValue' " + generate_colors_styling(pointSymbolBank[donorArray[i].donorCode].color)
+					+ "></div>" + "</div>"
 					+ "<div class='legendContentLabel' title='"+donorArray[i].donorname+"'>"
 					+ donorArray[i].donorCode + " </div><br/>";
 		}
 	}
 	
 	htmlDiv += "<div class='legendContentContainer'>"
-		+ "<div class='legendContentValue' style='background-color:rgba(255,255,255,1);'></div>" 
+		+ "<div class='legendContentValue' style='background-color:rgb(255,255,255);'></div>" 
 		+"</div>"
 		+ "<div class='legendContentLabel' title='"+translate('Others')+"'>"
 		+ translate('Others') + " </div><br/>";

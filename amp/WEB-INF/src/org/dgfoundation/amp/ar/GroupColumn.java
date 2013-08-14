@@ -231,7 +231,7 @@ public class GroupColumn extends Column<Column> {
     	
     	HashMap<String,String> yearMapping = new HashMap<String, String>();
     	HashMap<String,String> monthMapping = new HashMap<String, String>();
-    	    	
+    	    	    	
     	GroupColumn ret = new GroupColumn(src);
         Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
         Iterator<? extends CategAmountCell> i = src.iterator();

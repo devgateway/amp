@@ -76,8 +76,9 @@ public class AmpComponentType implements ARDimensionable, Serializable{
 
 	@Override
 	public boolean equals(Object obj) {
-		AmpComponentType target= (AmpComponentType) obj;
-		
+        if (!(obj instanceof AmpComponentType))
+            return false;
+        AmpComponentType target= (AmpComponentType) obj;
 		if (target!=null && this.type_id!=null){
 			if (target.getType_id().doubleValue()==this.getType_id().doubleValue()){
 				return true;

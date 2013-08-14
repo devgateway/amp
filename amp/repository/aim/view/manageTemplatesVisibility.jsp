@@ -76,7 +76,7 @@ div.fakefile2 input{
 		var button = document.createElement('input');
 		button.type = 'button';
 
-		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
+		button.value = '<digi:trn jsFriendly="true" key="aim:browse">Browse...</digi:trn>';
 		fakeFileUpload2.appendChild(button);
 
 		fakeFileUpload.appendChild(fakeFileUpload2);
@@ -98,7 +98,7 @@ div.fakefile2 input{
 
 <script language="JavaScript">
 	function onDelete() {
-		var flag = confirm("<digi:trn key="aim:deletetemplates">Delete this Template?</digi:trn>");
+		var flag = confirm("<digi:trn jsFriendly="true" key="aim:deletetemplates">Delete this Template?</digi:trn>");
 		return flag;
 	}
     function deleteTemplate(id) {
@@ -238,8 +238,8 @@ div.fakefile2 input{
 
 <script type="text/javascript">
 	initFileUploads();
-	if (crDocumentManagerForm in document && document.crDocumentManagerForm.pageCloseFlag.value == "true" ) {
-			window.opener.location.replace(window.opener.location.href); 
-			window.close();
-		}
+	if (document.forms['crDocumentManagerForm'] && document.forms['crDocumentManagerForm'].pageCloseFlag.value == "true" ) {
+        window.opener.location.replace(window.opener.location.href);
+        window.close();
+	}
 </script>

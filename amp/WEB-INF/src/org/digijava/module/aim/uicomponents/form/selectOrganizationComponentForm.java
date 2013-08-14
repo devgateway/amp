@@ -43,8 +43,18 @@ public class selectOrganizationComponentForm extends ActionForm {
 	private String delegateClass;
 	private HashMap<String, String> aditionalParameters=new HashMap<String, String>();
 	private boolean filterDonorGroups;
-	
-	private List<Long> allSelectedOrgsIds; //used to hold all selected organisations (when going to another page, previously selected orgs were lost)
+
+    /*
+     * used to hold all selected organisations (when going to another page, previously selected orgs were lost)
+     */
+	private List<Long> allSelectedOrgsIds;
+
+
+    /*
+     * List of org Ids that will be excluded from search results. IDs are separated with "_"
+     */
+    private String excludedOrgIdsSeparated;
+    public static final String EXCLUDED_ORG_IDS_SEPARATED = "excludedOrgIdsSeparated";
 	
 	String styleClass="";
 	
@@ -370,6 +380,14 @@ public class selectOrganizationComponentForm extends ActionForm {
 	public void setFilterDonorGroups(boolean filterDonorGroups) {
 		this.filterDonorGroups = filterDonorGroups;
 	}
+
+    public String getExcludedOrgIdsSeparated() {
+        return excludedOrgIdsSeparated;
+    }
+
+    public void setExcludedOrgIdsSeparated(String excludedOrgIdsSeparated) {
+        this.excludedOrgIdsSeparated = excludedOrgIdsSeparated;
+    }
 	
 	
 }

@@ -843,7 +843,7 @@
 		</axiis:layouts>
 	</axiis:DataCanvas>
 	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="{showTrackHighlight}" thumbCount="{thumbCount}" change="sliderYear_changeHandler(event)" width="450" x="92" y="420" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
-	<mx:Label width="450" x="92" y="420" id="printLabel" height="36" fontSize="12" visible="false"/>
+	<mx:Label width="450" x="10" y="25" id="printLabel" height="36" fontSize="12" visible="false"/>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
 	
 	</mx:Canvas>

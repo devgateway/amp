@@ -1775,7 +1775,7 @@ public class DataExchangeUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return result;
 	}
 
 	public static void getAmpClassesFromDb(TreeSet<String> ampClasses) {
@@ -1807,7 +1807,7 @@ public class DataExchangeUtils {
 			 
 			SdmItem item = null;
 			if (attachedFile!=null) {
-				for (SdmItem sdmItem : (Set<SdmItem>)attachedFile.getItems()) {
+				for (SdmItem sdmItem : attachedFile.getItems()) {
 					item = sdmItem;
 					break;
 				}

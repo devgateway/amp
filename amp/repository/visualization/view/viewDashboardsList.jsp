@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <style type="text/css">
 .jcol {
@@ -44,7 +44,7 @@
 }
 </style>
 
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 function addDashboard() {
 	document.dashboardform.action="/visualization/addDashboard.do?reset=true";
 	document.dashboardform.submit();
@@ -57,7 +57,7 @@ function editDashboard(id){
 
 function removeDashboard(id){
 	<c:set var="confirmDelete">
-	  <digi:trn>
+	  <digi:trn jsFriendly="true">
 	 	 Are you sure to remove the dashboard?
 	  </digi:trn>
 	</c:set>
@@ -78,9 +78,9 @@ function setStripsTable(tableId, classOdd, classEven) {
 	}
 	rows = null;
 }
-function setHoveredTable(tableId, hasHeaders) {
 
-	var tableElement = document.getElementById(tableId);
+function setHoveredTable(tableId, hasHeaders) {
+ 	var tableElement = document.getElementById(tableId);
 	if(tableElement){
     	var className = 'Hovered',
         pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
@@ -99,9 +99,7 @@ function setHoveredTable(tableId, hasHeaders) {
 	}
 }
 
-
 function setHoveredRow(rowId) {
-
 	var rowElement = document.getElementById(rowId);
 	if(rowElement){
     	var className = 'Hovered',
@@ -120,8 +118,6 @@ function setHoveredRow(rowId) {
 		cells = null;
 	}
 }
-
-
 </script>
 
 <digi:instance property="dashboardform" />
@@ -191,22 +187,20 @@ function setHoveredRow(rowId) {
 	</tr>
 </table>
 
-
-					<table width="1000" cellSpacing="5" cellPadding="3" vAlign="top" border="0" align=center>
-						<tr>
-							<td width="75%" vAlign="middle" height="40" align=center>
-								<table cellpadding="0" cellspacing="0" width="100%" border="0">
-									<html:button styleClass="buttonx" property="submitButton" onclick="return addDashboard()">
-	                                       <digi:trn>Add Dashboard</digi:trn>
-									</html:button>
-								</table>
-							</td>
-						</tr>
-					</table>
+<table width="1000" cellSpacing="5" cellPadding="3" vAlign="top" border="0" align=center>
+    <tr>
+        <td width="75%" vAlign="middle" height="40" align=center>
+            <table cellpadding="0" cellspacing="0" width="100%" border="0">
+                <html:button styleClass="buttonx" property="submitButton" onclick="return addDashboard()">
+                       <digi:trn>Add Dashboard</digi:trn>
+                </html:button>
+            </table>
+        </td>
+    </tr>
+</table>
 	
-<script language="javascript">
-
-	setStripsTable("dataTable", "tableEven", "tableOdd");
+<script type="text/javascript">
+   	setStripsTable("dataTable", "tableEven", "tableOdd");
 	setHoveredTable("dataTable", false);
 	setHoveredRow("rowHighlight");
 </script> 

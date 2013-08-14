@@ -201,6 +201,15 @@ public class MapFieldsAction extends MultiAction {
 					newMappedValue = getValueorCode(ampDEMappingField.getIatiValues());
 				}
 			}
+
+			if(DataExchangeConstants.IMPLEMENTATION_LEVEL_TYPE.compareTo(ampDEMappingField.getIatiPath())==0)
+			{
+				AmpCategoryValue o = addCategValueToAmp(CategoryConstants.IMPLEMENTATION_LEVEL_KEY,ampDEMappingField.getIatiValues());
+				if(o!=null){
+					id = o.getId();
+					newMappedValue = getValueorCode(ampDEMappingField.getIatiValues());
+				}
+			}
 			if(DataExchangeConstants.IATI_FINANCE_TYPE.compareTo(ampDEMappingField.getIatiPath())==0)
 			{
 				AmpCategoryValue o = addCategValueToAmp(CategoryConstants.TYPE_OF_ASSISTENCE_KEY, ampDEMappingField.getIatiValues());
@@ -293,7 +302,9 @@ public class MapFieldsAction extends MultiAction {
 			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.MODE_OF_PAYMENT_KEY);
 		}
 		
-		
+		if(CategoryConstants.IMPLEMENTATION_LEVEL_NAME.compareTo(ampClassTypeSelected)==0){
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.IMPLEMENTATION_LEVEL_KEY);
+		}
 		return allEntities;
 	}
 

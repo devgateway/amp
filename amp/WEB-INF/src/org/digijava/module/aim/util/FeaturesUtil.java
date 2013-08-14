@@ -1812,9 +1812,12 @@ public class FeaturesUtil {
 	public static String getModuleNameVisibility(Long id) {
 		Session session = null;
 		AmpModulesVisibility ft = new AmpModulesVisibility();
+		String ret = null;//It might return null value if the module was removed but it still having a permission associated.
 		try {
 			session = PersistenceManager.getSession();
-			ft = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
+			ft = (AmpModulesVisibility) session.get(AmpModulesVisibility.class, id);
+			if (ft!=null)
+				ret = ft.getName();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : ", ex);
@@ -1829,7 +1832,7 @@ public class FeaturesUtil {
 				}
 			}
 		}
-		return ft.getName();
+		return ret;
 	}
 
 	/**

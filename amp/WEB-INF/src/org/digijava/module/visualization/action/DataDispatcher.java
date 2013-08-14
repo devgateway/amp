@@ -663,10 +663,16 @@ public class DataDispatcher extends DispatchAction {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear.intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
         	Map map = null;
+        	Long id = null;
+        	if(filter.getSectorIds()!=null){
+        		if (filter.getSectorIds().length == 1 && filter.getSectorIds()[0] != -1) //If there's a selected sector, get subsectors
+        			id = filter.getSectorIds()[0];
+        	} else if (filter.getSectorId()!=null && filter.getSectorId() != -1){
+        		id = filter.getSectorId();
+        	}
         	//If the startYear/endYear selected is the same as in the general filter, use the stored rank
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
-        		if(sectorId != null && !sectorId.equals("") && !sectorId.equals("-1")){ //If there's a selected sector, get subsectors
-                	Long id = Long.parseLong(sectorId);
+        		if(id!=null){ //If there's a selected sector, get subsectors
                 	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), filter, null, null);
                 }
         		else
@@ -677,8 +683,7 @@ public class DataDispatcher extends DispatchAction {
         		DashboardFilter newFilter = filter.getCopyFilterForFunding();
             	newFilter.setStartYear(startYear);
             	newFilter.setEndYear(endYear);
-            	if(sectorId != null && !sectorId.equals("") && !sectorId.equals("-1")){
-	            	Long id = Long.parseLong(sectorId);
+            	if(id!=null){
 	            	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), newFilter, startYear.intValue(), endYear.intValue());
 	            } else {
 	            	map = DashboardUtil.getRankSectorsByKey(DbUtil.getSectors(newFilter), DbUtil.getSectors(newFilter), newFilter);
@@ -820,7 +825,7 @@ public class DataDispatcher extends DispatchAction {
 	            Map.Entry entry = (Map.Entry)it.next();
 	            AmpSector sec = (AmpSector) entry.getKey();
 	            if (index <= 4){
-		            csvString.append(sec.getName());
+		            csvString.append(sec.getName().replace(",", ""));
 		            csvString.append("#");
 		            csvString.append(sec.getAmpSectorId());
 		            csvString.append(",");
@@ -2405,22 +2410,15 @@ public class DataDispatcher extends DispatchAction {
 				}
 				if(amtTotal.compareTo(BigDecimal.ZERO) == 1){
 					Iterator<AmpCategoryValue> it = categoryValues.iterator();
-					//budgetCVIds = new Long[categoryValues.size()];
-					int i = 0;
 					BigDecimal total = hm.get(acGrandTotal);
 					BigDecimal unallocated = hm.get(acUnallocated);
-					filter.setBudgetCVIds(budgetCVIds);
-	                newFilter = filter.getCopyFilterForFunding();
-					Long[] selCVIds = {-1l};
-					newFilter.setSelCVIds(selCVIds);
-					DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 
 					while (it.hasNext()){
 						AmpCategoryValue value = it.next();
 						BigDecimal currentCVvalue = hm.get(value);
 						BigDecimal percentage = getPercentage(currentCVvalue, total);
 		                if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue()) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue()) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue()) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ currentCVvalue.divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue()) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
 					

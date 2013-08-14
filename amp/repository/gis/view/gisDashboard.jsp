@@ -520,79 +520,79 @@
 	    
 	    <table class="tableElement" border="1" color="white" bgcolor="#dcd8c1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse; style="font-size: 12px;"">
 		    <tr>
-			    <td nowrap width="50%" id="reg_district_caption" style="font-size: 12px; color:#373735;"><digi:trn>Region</digi:trn></td>
+			    <td nowrap width="50%" id="reg_district_caption" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Region</digi:trn></td>
 			    <td width="50%" id="tooltipRegionContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 
 		    <tr>
-			    <td nowrap bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;"><digi:trn>Funding details</digi:trn></td>
+			    <td nowrap bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Funding details</digi:trn></td>
 		    </tr>
 		    <tr>
 			    <td colspan="2" nowrap id="tooltipCurencyYearRange" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    <tr>
-			    <td nowrap bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;"><digi:trn>Total funding for this sector</digi:trn></td>
+			    <td nowrap bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Total funding for this sector</digi:trn></td>
 		    </tr>
 		    <field:display name="Measure Commitment" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Commitment</digi:trn></td>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Commitment</digi:trn></td>
 			    <td width="50%" id="tooltipTotalCommitmentContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Disbursement</digi:trn></td>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Disbursement</digi:trn></td>
 			    <td width="50%" id="tooltipTotalDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Expenditure</digi:trn></td>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Expenditure</digi:trn></td>
 			    <td width="50%" id="tooltipTotalExpenditureContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Planned Disbursement</digi:trn></td>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Planned Disbursement</digi:trn></td>
 			    <td width="50%" id="tooltipTotalPlannedDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <tr>
-			    <td nowrap bgcolor="#c3b6a5" colspan="2" id="reg_district_caption_for" style="font-size: 12px; color:#373735;"><digi:trn>For this region</digi:trn></td>
+			    <td nowrap bgcolor="#c3b6a5" colspan="2" id="reg_district_caption_for" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>For this region</digi:trn></td>
 		    </tr>
 		     <field:display name="Measure Commitment" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Commitment</digi:trn></td>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Commitment</digi:trn></td>
 			    <td width="50%" id="tooltipCurrentCommitmentContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		     <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Disbursement</digi:trn></td>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Disbursement</digi:trn></td>
 			    <td width="50%" id="tooltipCurrentDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		     <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Expenditure</digi:trn></td>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Expenditure</digi:trn></td>
 			    <td width="50%" id="tooltipCurrentExpenditureContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
 		    <tr>
-			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Planned Disbursement</digi:trn></td>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Planned Disbursement</digi:trn></td>
 			    <td width="50%" id="tooltipCurrentPlannedDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <tr>
-			    <td nowrap bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;"><digi:trn>Indicator</digi:trn></td>
+			    <td nowrap bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Indicator</digi:trn></td>
 		    </tr>
 		    <tr>
-			    <td nowrap width="50%" id="tooltipIndVal" style="font-size: 12px; color:#373735;"><digi:trn>value</digi:trn></td>
+			    <td nowrap width="50%" id="tooltipIndVal" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>value</digi:trn></td>
 			    <td width="50%" id="tooltipIndUnit" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    <tr>
-			    <td nowrap width="50%" style="font-size: 12px; color:#373735;">Source</td>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title">Source</td>
 			    <td id="tooltipIndSrc" style="width:100px; overflow-x: hidden; font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 	    </table>
@@ -607,71 +607,71 @@
         
         <table class="tableElement" bgcolor="#dcd8c1" color="white" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
             <tr>
-                <td color="white" nowrap width="50%" id="reg_district_caption" style="font-size: 12px; color:#373735;"><digi:trn>Region</digi:trn></td>
+                <td color="white" nowrap width="50%" id="reg_district_caption" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Region</digi:trn></td>
                 <td color="white" width="50%" id="tooltipRegionContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             <tr>
-                <td color="white" nowrap width="50%" id="donor" style="font-size: 12px; color:#373735;"><digi:trn>Donor</digi:trn></td>
+                <td color="white" nowrap width="50%" id="donor" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Donor</digi:trn></td>
                 <td color="white" width="50%" id="tooltipDonorContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             
             <tr>
-                <td color="white" nowrap bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;"><digi:trn>Funding details</digi:trn></td>
+                <td color="white" nowrap bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Funding details</digi:trn></td>
             </tr>
             <tr>
                 <td color="white" colspan="2" nowrap bgcolor="#c3b6a5" id="tooltipCurencyYearRange" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             <tr>
-                <td color="white" bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;"><digi:trn>Total funding for this sector</digi:trn></td>
+                <td color="white" bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Total funding for this sector</digi:trn></td>
             </tr>
             <field:display name="Measure Commitment" feature="GIS DASHBOARD">
             <tr>
-                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Commitment</digi:trn></td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Commitment</digi:trn></td>
                 <td color="white" width="50%" id="tooltipTotalCommitmentContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             </field:display>
             <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
             <tr>
-                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Disbursement</digi:trn></td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Disbursement</digi:trn></td>
                 <td color="white" width="50%" id="tooltipTotalDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             </field:display>
             <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
             <tr>
-                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Expenditure</digi:trn></td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Expenditure</digi:trn></td>
                 <td color="white" width="50%" id="tooltipTotalExpenditureContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             </field:display>
             <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
 				    <tr>
-					    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Planned Disbursement</digi:trn></td>
+					    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Planned Disbursement</digi:trn></td>
 					    <td width="50%" id="tooltipTotalPlannedDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 				    </tr>
 				    </field:display>
             <tr>
-                <td color="white" nowrap bgcolor="#c3b6a5" colspan="2" id="reg_district_caption_for" style="font-size: 12px; color:#373735;"><digi:trn>For this region</digi:trn></td>
+                <td color="white" nowrap bgcolor="#c3b6a5" colspan="2" id="reg_district_caption_for" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>For this region</digi:trn></td>
             </tr>
             <field:display name="Measure Commitment" feature="GIS DASHBOARD">
             <tr>
-                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Commitment</digi:trn></td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Commitment</digi:trn></td>
                 <td color="white" width="50%" id="tooltipCurrentCommitmentContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             </field:display>
             <field:display name="Measure Disbursement" feature="GIS DASHBOARD">
             <tr>
-                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Disbursement</digi:trn></td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Disbursement</digi:trn></td>
                 <td color="white" width="50%" id="tooltipCurrentDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             </field:display>
             <field:display name="Measure Expenditure" feature="GIS DASHBOARD">
             <tr>
-                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Expenditure</digi:trn></td>
+                <td color="white" nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Expenditure</digi:trn></td>
                 <td color="white" width="50%" id="tooltipCurrentExpenditureContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             </field:display>
             <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
 				    <tr>
-					    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Planned Disbursement</digi:trn></td>
+					    <td nowrap width="50%" style="font-size: 12px; color:#373735;" class="gis_title"><digi:trn>Planned Disbursement</digi:trn></td>
 					    <td width="50%" id="tooltipCurrentPlannedDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 				    </tr>
 				    </field:display>

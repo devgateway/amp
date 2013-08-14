@@ -1541,6 +1541,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			   final ArrayList rendertype = new ArrayList();
 		        WidgetVisitor adapter = new WidgetVisitorAdapter() {
 		        
+		        	@Override
+		            public void visit(AmpWidgetIndicatorChart chart)
+		            {
+		            	rendertype.add(WidgetUtil.CHART_INDICATOR);
+		            }
+		            
 		            @Override
 		            public void visit(AmpDaTable table){
 		                 rendertype.add(WidgetUtil.TABLE);
@@ -1561,9 +1567,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		        widget.accept(adapter);
 		        int rType = (Integer) rendertype.get(0);
 		        switch(rType){
-		        case WidgetUtil.SECTOR_TABLE: return getSectorTableWidget(widget.getId());
-		        case WidgetUtil.PARIS_INDICAROR_TABLE: return getAEPIndicators(widget.getId());
-		        case WidgetUtil.TOP_TEN_DONORS: return getTopTenDonors(selectedFromYear, selectedToYear);
+		        	case WidgetUtil.SECTOR_TABLE: return getSectorTableWidget(widget.getId());
+		        	case WidgetUtil.PARIS_INDICAROR_TABLE: return getAEPIndicators(widget.getId());
+		        	case WidgetUtil.TOP_TEN_DONORS: return getTopTenDonors(selectedFromYear, selectedToYear);
+		        	case WidgetUtil.CHART_INDICATOR: return null; // surely?
 		        }
 			try {
 				WiTable table = new WiTable.TableBuilder(widget.getId())

@@ -74,13 +74,16 @@
 	</c:if>
 	</c:if>
 	
-	<c:if test="${aimEditActivityForm.funding.showActual}">
+<c:if test="${aimEditActivityForm.funding.showActual}">
 <c:if test="${!empty funding.actualRoFDetails}">
 	
 <tr><td colspan="4" height="7px"></td></tr>
 	<tr bgcolor="#ffffff">
-		<td colspan="4" bgcolor="#FFFFCC" 
-			style="text-transform: uppercase; text-transform: uppercase"><digi:trn>Release of Funds</digi:trn>:</td>
+		<td colspan="4" bgcolor="#FFFFCC" style="text-transform: uppercase">
+            <a title="">
+                <digi:trn>Release of Funds</digi:trn>:
+            </a>
+        </td>
 	</tr>
 
 	<!-- Start Actual Release of Funds -->
@@ -117,8 +120,8 @@
 	<!-- End Actual RoF -->
 
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><digi:trn>Subtotal Actual RoF</digi:trn>:
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+            <digi:trn>Subtotal Actual RoF</digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
@@ -129,9 +132,68 @@
                    
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+</c:if>
+</c:if>
+
+<c:if test="${aimEditActivityForm.funding.showPipeline}">
+<c:if test="${!empty funding.pipelineRoFDetails}">
+	
+<tr><td colspan="4" height="7px"></td></tr>
+	<tr bgcolor="#ffffff">
+		<td colspan="4" bgcolor="#FFFFCC" 
+			style="text-transform: uppercase; text-transform: uppercase"><digi:trn>Release of Funds</digi:trn>:</td>
+	</tr>
+
+	<!-- Start Pipeline Release of Funds -->
+	<c:if test="${!empty funding.pipelineRoFDetails}">	
+	<logic:iterate name="funding" property="pipelineRoFDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+						<tr bgcolor="#ffffff">
+							<td align="right" bgcolor="#FFFFFF">
+								<b>
+									<digi:trn><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></digi:trn>
+								</b>										
+							</td>
+
+							<td align="right" align="right">
+								<b><bean:write name="fundingDetail" property="transactionDate" /></b>								
+							</td>
+							<td align="right">
+								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
+								
+								<b><bean:write name="fundingDetail" property="currencyCode" /></b>&nbsp;
+							</td>
+							<td align="right">									
+								<logic:present name="fundingDetail" property="recipientOrganisation">
+									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
+								</logic:present>
+							</td>
+							<td height="18">
+								<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
+								</c:if>
+							</td>
+						</tr>
+	</logic:iterate>
 	</c:if>
-	</c:if>
-	</module:display>
+	<!-- End Actual RoF -->
+
+	<tr>
+		<td colspan="2" bgcolor="#eeeeee"
+			style="border-top: 1px solid #000000"><digi:trn>Subtotal Pipeline RoF</digi:trn>:
+		</td>
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+			style="border-top: 1px solid #000000">
+			 <c:if test="${not empty funding.subtotalPipelineRoF}">
+                <b>${funding.subtotalPipelineRoF} ${aimEditActivityForm.currCode}</b>
+             </c:if>&nbsp;
+        </td>
+                   
+		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+	</tr>
+</c:if>
+</c:if>
+
+</module:display>
 
 
 

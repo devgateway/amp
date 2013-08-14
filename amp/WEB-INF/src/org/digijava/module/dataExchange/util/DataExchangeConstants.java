@@ -60,6 +60,7 @@ public class DataExchangeConstants {
 	public static final String IATI_FINANCE_TYPE = "Finance Type";
 	//financing instrument
 	public static final String IATI_AID_TYPE = "Aid Type";
+	public static final String IMPLEMENTATION_LEVEL_TYPE = "Implementation Level";
 	//mode of payment
 	public static final String IATI_DISBURSEMENT_CHANNEL = "Disbursement Channel";
 	public static final String TEST = "test";

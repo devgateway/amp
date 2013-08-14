@@ -31,6 +31,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
@@ -39,6 +40,7 @@ import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.action.GetFundingTotals;
@@ -3590,7 +3592,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 			qry = session.createQuery(queryString).setMaxResults(5);
 			col = qry.list();
 		} catch (Exception e1) {
-			e1.printStackTrace();
 			logger.error("Could not retrieve the activities list from getLastUpdatedActivities", e1);
 		}
 		return col;

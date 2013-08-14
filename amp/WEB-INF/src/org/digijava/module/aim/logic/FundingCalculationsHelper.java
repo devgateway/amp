@@ -155,6 +155,16 @@ public class FundingCalculationsHelper {
 		return this.totPlannedEDD;
 	}
 	
+	public DecimalWraper getTotalPipelineRoF()
+	{
+		return this.totPlannedReleaseOfFunds;
+	}
+	
+	public DecimalWraper getTotalPipelineEDD()
+	{
+		return this.totPlannedEDD;
+	}
+	
 	public void doCalculations(Collection<AmpFundingDetail> details, String userCurrencyCode) {
 		Iterator<AmpFundingDetail> fundDetItr = details.iterator();
 		fundDetailList = new ArrayList<FundingDetail>();

@@ -17,12 +17,11 @@
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedDisbursementDetails}">
 	<tr bgcolor="#ffffff">
-		<td height="20" colspan="4" bgcolor="#FFFFCC"
-			style="text-transform: uppercase"><a
-			title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
-	
-		<digi:trn key="aim:planneddisbursements">Planned Disbursement</digi:trn>
-		</a></td>
+		<td height="20" colspan="4" bgcolor="#FFFFCC" style="text-transform: uppercase">
+            <a title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
+	        	<digi:trn key="aim:planneddisbursements">Planned Disbursement</digi:trn>
+		    </a>
+        </td>
 	</tr>
 	
 	<!-- Start Planned Disbursements -->
@@ -97,13 +96,17 @@
 	</c:if>
 	
 	<c:if test="${aimEditActivityForm.funding.showActual}">
-<c:if test="${!empty funding.actualDisbursementDetails}">
+    <c:if test="${!empty funding.actualDisbursementDetails}">
 	
-<tr><td colspan="4" height="7px"></td></tr>
+    <tr>
+        <td colspan="4" height="7px"></td>
+    </tr>
 	<tr bgcolor="#ffffff">
-		<td colspan="4" bgcolor="#FFFFCC" 
-			style="text-transform: uppercase; text-transform: uppercase"><digi:trn
-			key="aim:actualisbursements">Actual Disbursement</digi:trn>:</td>
+		<td colspan="4" bgcolor="#FFFFCC" style="text-transform: uppercase;" >
+            <a title="">
+                <digi:trn key="aim:actualisbursements">Actual Disbursement</digi:trn>:
+            </a>
+        </td>
 	</tr>
 
 	<!-- Start Actual Disbursements -->
@@ -161,12 +164,10 @@
 	<!-- End Actual Disbursements -->
 
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><digi:trn
-			key='aim:subtotalActualdisbursement'>Subtotal Actual Disbursement </digi:trn>:
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+            <digi:trn key='aim:subtotalActualdisbursement'>Subtotal Actual Disbursement</digi:trn>:
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
 			 <c:if test="${not empty funding.subtotalDisbursements}">
                 <b>${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;

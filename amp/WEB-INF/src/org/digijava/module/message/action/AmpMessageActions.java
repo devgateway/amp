@@ -959,8 +959,7 @@ public class AmpMessageActions extends DispatchAction {
     	}
     	//messageHolder should contain at least one attachment(the one we want to remove)
     	if(attachmentOrder!=null){
-    		for (Object item : attachmentsHolder.getItems()) {
-    			SdmItem attachment=(SdmItem)item;
+    		for (SdmItem attachment : attachmentsHolder.getItems()) {
     			if(attachment.getParagraphOrder().equals(attachmentOrder)){    				
     				attachmentsHolder.getItems().remove(attachment);
     				//decrement attached files size
@@ -1441,8 +1440,7 @@ public class AmpMessageActions extends DispatchAction {
                 	DigiConfig config = DigiConfigManager.getConfig();
 			        String partialURL = config.getSiteDomain().getContent() ;
                 	String links="";
-                	for (Object item : attachedDocs.getItems()) {
-						SdmItem attachedFile=(SdmItem)item;						
+                	for (SdmItem attachedFile : attachedDocs.getItems()) {				
 						links += "<img src=\""+"/TEMPLATE/ampTemplate/imagesSource/common/attachment.png"+"\" border=\""+"0\" />";
 						links += "<a  href=\"" + partialURL+"sdm/showFile.do~activeParagraphOrder="+attachedFile.getParagraphOrder()+"~documentId="+attachedDocs.getId()+"\" >";
 						links += attachedFile.getContentTitle();
@@ -1517,8 +1515,7 @@ public class AmpMessageActions extends DispatchAction {
         	DigiConfig config = DigiConfigManager.getConfig();
 	        String partialURL = config.getSiteDomain().getContent() ;
         	String links="";
-        	for (Object item : attachedDocs.getItems()) {
-				SdmItem attachedFile=(SdmItem)item;						
+        	for (SdmItem attachedFile : attachedDocs.getItems()) {				
 				links += "<img src=\""+"/repository/message/view/images/attachment.png"+"\" border=\""+"0\" />";
 				links += "<a  href=\"" + partialURL+"sdm/showFile.do~activeParagraphOrder="+attachedFile.getParagraphOrder()+"~documentId="+attachedDocs.getId()+"\" >";
 				links += attachedFile.getContentTitle();

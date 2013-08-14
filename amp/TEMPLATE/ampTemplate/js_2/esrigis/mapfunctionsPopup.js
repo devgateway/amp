@@ -495,7 +495,7 @@ function locate() {
       candidate = candidates[i];
       if (candidate.score > 80) {
         var attributes = { address: candidate.attributes.Name, score:candidate.score,Type:candidate.attributes.type, locatorName:candidate.attributes.Loc_name };
-        var graphic = new esri.Graphic(candidate.location, symbol, attributes, infoTemplate);
+        var graphic = new esri.Graphic(esri.geometry.geographicToWebMercator(candidate.location), symbol, attributes, infoTemplate);
         map.graphics.add(graphic);
        // map.graphics.add(new esri.Graphic(candidate.location, new esri.symbol.TextSymbol(candidate.attributes.Name).setOffset(0, 8)));
         stpoints.push(graphic);
@@ -507,7 +507,7 @@ function locate() {
       }
     }
     if (points.getExtent()){
-    	map.setExtent(points.getExtent().expand(3));
+    	//map.setExtent(points.getExtent().expand(3));
     }
     hideLoading();
   }

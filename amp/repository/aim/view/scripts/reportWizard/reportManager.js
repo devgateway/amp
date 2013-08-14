@@ -318,9 +318,38 @@ var callbackRepTypeCall = {
 					innerText += "</li>";
 	    		}
 				ulElem.innerHTML = innerText;
+
+				var destination = document.getElementById("dest_measures_ul");
+				// clean-up the destination
+				destination.innerHTML = "";
+
+				var measuresDragAndDropObject = new MyDragAndDropObject('source_measures_ul','dest_measures_ul');
+                measuresDragAndDropObject.createDragAndDropItems();
+                /* Commented scenario below is workable, but has 2 bugs:
+                1. Items are duplicated while dropping.
+                2. Cannot Drug an item back from the destination */
+				 /* var results = YAHOO.lang.JSON.parse(o.responseText);
+					var newDDObj = new MyDragAndDropObject("source_measures_ul","dest_measures_ul");
+					var hierUlEl = document.getElementById("source_measures_ul") ;
+                	for (var i=0; i < results.children.length; i++ ) {
+                        var innerText = results.children[i].nameTrn;
+                        if (results.children[i].description.length > 0){
+                            innerText += "<img src= '../ampTemplate/images/help.gif' border='0' title='"+results.children[i].description+"'>";
+                        }
+                        var newObj = ColumnsDragAndDropObject.generateLi(
+                                    "measure_"+results.children[i].ID,
+                                    "list1",
+                                    "msr_chk_" + results.children[i].ID,
+                                    results.children[i].name,
+                                    "selectedMeasures", innerText
+                        );
+                        hierUlEl.appendChild( newObj );
+                        var newDDProxy				= new YAHOO.util.DDProxy( newObj.id );
+                        newDDObj.addActions( newDDProxy );
+                	} */
 			}
 			catch (e) {
-			    alert("Invalid respose.");
+			    alert("Invalid respose." + e);
 			}
 	  },
 	  failure: function(o) {//Fail silently

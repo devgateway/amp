@@ -64,6 +64,7 @@ import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Location;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.OtherIdentifier;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ParticipatingOrg;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.PlainType;
+import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.PlannedDisbursement;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ReportingOrg;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Sector;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.TextType;
@@ -249,6 +250,13 @@ public class IatiActivityWorker {
 						if(existAidType!=null) logs.add(existAidType);
 					}
 					
+					//implementation-level
+					if(i.getName().equals(new QName("implementation-level"))){
+						JAXBElement<CodeType> item = (JAXBElement<CodeType>)i;
+						AmpMappedField existAidType = checkLevelType(item);
+						if(existAidType!=null) logs.add(existAidType);
+					}
+					
 				}
 	
 				if(contentItem instanceof IatiIdentifier){
@@ -297,6 +305,12 @@ public class IatiActivityWorker {
 					boolean ok 		 = false;
 					ok 				 = checkIATITransaction(item,logs);
 				}
+				
+				/*if(contentItem instanceof PlannedDisbursement){
+					PlannedDisbursement item = (PlannedDisbursement)contentItem;
+					boolean ok 		 = false;
+					ok 				 = checkIATITransaction(item,logs);
+				}*/
 			}
 			AmpMappedField checkedActivity = checkActivity(this.title, this.iatiID, this.lang);
 			logs.add(checkedActivity);
@@ -319,6 +333,7 @@ public class IatiActivityWorker {
 		
 		ArrayList<JAXBElement<TextType>> iatiTitleList = new ArrayList<JAXBElement<TextType>>();
 		ArrayList<JAXBElement<CodeType>> iatiStatusList = new ArrayList<JAXBElement<CodeType>>();
+		ArrayList<JAXBElement<CodeType>> iatiImplementationLevelList = new ArrayList<JAXBElement<CodeType>>();
 		ArrayList<ParticipatingOrg> iatiPartOrgList = new ArrayList<ParticipatingOrg>();
 		ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList = new ArrayList<ParticipatingOrg>();
 		ArrayList<ParticipatingOrg> iatiExtendingOrgList = new ArrayList<ParticipatingOrg>();
@@ -326,6 +341,7 @@ public class IatiActivityWorker {
 		ArrayList<Sector> iatiSectorList = new ArrayList<Sector>();
 		ArrayList<Budget> iatiBudgetList = new ArrayList<Budget>();
 		ArrayList<Transaction> iatiTransactionList = new ArrayList<Transaction>();
+		ArrayList<PlannedDisbursement> iatiPlannedDisbList = new ArrayList<PlannedDisbursement>();
 		ArrayList<Description> iatiDescriptionList = new ArrayList<Description>();
 		ArrayList<IatiIdentifier> iatiID = new ArrayList<IatiIdentifier>();
 		ArrayList<OtherIdentifier> iatiOtherIdList = new ArrayList<OtherIdentifier>();
@@ -360,19 +376,19 @@ public class IatiActivityWorker {
 		//workspace settings + team lead owner
 		
 		//populate the lists with IATI values of the activity
-		extractIATIEntities(iatiTitleList, iatiStatusList, iatiPartOrgList,iatiDefaultFundingOrgList, iatiExtendingOrgList,
-				iatiRepOrgList, iatiSectorList, iatiBudgetList, iatiTransactionList,
+		extractIATIEntities(iatiTitleList, iatiStatusList, iatiImplementationLevelList, iatiPartOrgList,iatiDefaultFundingOrgList, iatiExtendingOrgList,
+				iatiRepOrgList, iatiSectorList, iatiBudgetList, iatiTransactionList,iatiPlannedDisbList,
 				iatiDescriptionList, iatiOtherIdList, iatiActDateList,
 				iatiContactList, iatiLocationList,iatiDefaultFinanceType, iatiDefaultAidType, iatiID);
 		
 		processTitle(a, iatiTitleList);
-		processIdentificationStep(a,iatiStatusList,iatiDescriptionList,iatiID);
+		processIdentificationStep(a,iatiStatusList,iatiImplementationLevelList,iatiDescriptionList,iatiID);
 		processPlanningStep(a,iatiActDateList);
 		processSectorsStep(a,iatiSectorList,allClassificationConfiguration);
 		processRelOrgsStep(a,iatiPartOrgList);
 		processActInternalIdsStep(a,iatiOtherIdList, iatiRepOrgList);
 		processBudgetStep(a,iatiBudgetList,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency);
-		processFundingStep(a,iatiTransactionList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
+		processFundingStep(a,iatiTransactionList,iatiPlannedDisbList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
 		processLocationStep(a,iatiLocationList);
 		processContactsStep(a,iatiContactList);
 		return logs;
@@ -527,7 +543,7 @@ public class IatiActivityWorker {
 	}
 	
 
-	private void processFundingStep(AmpActivityVersion activity, ArrayList<Transaction> iatiTransactionList,ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
+	private void processFundingStep(AmpActivityVersion activity, ArrayList<Transaction> iatiTransactionList,ArrayList<PlannedDisbursement> iatiPlannedDisbList,ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
 			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency, 
 			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, 
 			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
@@ -556,6 +572,14 @@ public class IatiActivityWorker {
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction transaction = (Transaction) it.next();
 			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,
+					iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
+					proposedProjectCost);
+			if(f!=null)
+				fundings.add(f);
+		}
+		for (Iterator<PlannedDisbursement> it = iatiPlannedDisbList.iterator(); it.hasNext();) {
+			PlannedDisbursement plannedDisb = (PlannedDisbursement) it.next();
+			AmpFunding f = getFundingIATItoAMP(activity,plannedDisb,typeOfAssistance, financingInstrument, iatiDefaultCurrency,
 					iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
 					proposedProjectCost);
 			if(f!=null)
@@ -682,6 +706,118 @@ public class IatiActivityWorker {
 		return ampFunding;
 	}
 
+	private AmpFunding getFundingIATItoAMP(AmpActivityVersion a, PlannedDisbursement t,	AmpCategoryValue iatiDefaultFinanceType, AmpCategoryValue iatiDefaultAidType,
+			String iatiDefaultCurrency, 
+			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, 
+			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
+			ArrayList<ReportingOrg> iatiRepOrgList, 
+			DEProposedProjectCost ppc){
+		
+		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
+		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
+		AmpOrganisation ampOrg = null;
+		AmpCategoryValue typeOfAssistance = iatiDefaultFinanceType;
+		AmpCategoryValue modeOfPayment = null;
+		AmpCategoryValue financingInstrument = iatiDefaultAidType;
+		String transactionType = "";
+		String description ="";
+		Date sDate = new Date();
+		Date eDate = new Date();
+		Double currencyValue = new Double(0);
+		String currencyName = iatiDefaultCurrency;
+		
+		for (Iterator<Object> it = t.getPeriodStartOrPeriodEndOrValue().iterator(); it.hasNext();) {
+			Object contentItem = (Object) it.next();
+			if(contentItem instanceof JAXBElement){
+				JAXBElement i = (JAXBElement)contentItem;
+
+				if(i.getName().equals(new QName("period-start"))){
+					PlannedDisbursement.PeriodStart item = (PlannedDisbursement.PeriodStart)i.getValue();
+					sDate = DataExchangeUtils.XMLGregorianDateToDate(item.getIsoDate());
+				}
+				
+				if(i.getName().equals(new QName("period-end"))){
+					DateType item = (DateType)i.getValue();
+					eDate = DataExchangeUtils.XMLGregorianDateToDate(item.getIsoDate());
+				}
+				
+				if(i.getName().equals(new QName("value"))){
+					CurrencyType item = (CurrencyType)i.getValue();
+					currencyValue = new Double(item.getValue().doubleValue());
+					if(isValidString(item.getCurrency()))
+						currencyName = item.getCurrency();
+				}
+				
+			}
+		}
+		
+		if(ampOrg == null) 
+		{
+				ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
+				//we can not import funding with Donor null
+				if (ampOrg == null) return null;
+		}
+		
+		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
+		populateFundingDetails(currencyValue, currencyName, sDate, ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+		
+		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
+		if(ampFundings == null) 
+			ampFundings = new HashSet<AmpFunding>();
+		AmpFunding ampFunding = new AmpFunding();
+		boolean found = false;
+		for (AmpFunding af : ampFundings) {
+			if(ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
+//				ampFunding.setFinancingId(af.getFinancingId());
+//				ampFunding.setModeOfPayment(af.getModeOfPayment());
+//				ampFunding.setFundingStatus(af.getFundingStatus());
+//				ampFunding.setActualStartDate(af.getActualStartDate());
+//				ampFunding.setActualCompletionDate(af.getActualCompletionDate());
+//				ampFunding.setPlannedStartDate(af.getPlannedStartDate());
+//				ampFunding.setPlannedCompletionDate(af.getPlannedCompletionDate());
+//				ampFunding.setConditions(af.getConditions());
+//				ampFunding.setDonorObjective(af.getDonorObjective());
+//				ampFunding.setGroupVersionedFunding(af.getGroupVersionedFunding());
+				ampFunding = af;
+				ampFunding.getFundingDetails().addAll(ampFundDetails);
+				found = true;
+				break;
+			}
+		}
+		
+		//AmpFunding ampFunding = new AmpFunding();
+				ampFunding.setActive(true);
+				//ampFunding.setAmpDonorOrgId(ampOrg);
+				if(found==false){
+					ampFunding.setAmpDonorOrgId(ampOrg);
+					ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
+					ampFunding.setFundingDetails(ampFundDetails);
+					ampFunding.setTypeOfAssistance(typeOfAssistance);
+					ampFunding.setFinancingInstrument(financingInstrument);
+					ampFunding.setModeOfPayment(modeOfPayment);
+				}
+				
+				
+				if(a !=null ) 
+					ampFunding.setAmpActivityId(a);
+				
+				//TODO: the language - lang attribute
+				if(isValidString(description)) ampFunding.setConditions(description);
+				
+				AmpOrgRole ampOrgRole = new AmpOrgRole();
+				ampOrgRole.setActivity(a);
+				ampOrgRole.setRole(role);
+				ampOrgRole.setOrganisation(ampOrg);
+				orgRole.add(ampOrgRole);
+				
+				if (a.getOrgrole()==null){
+					a.setOrgrole(orgRole);
+				}else{
+					a.getOrgrole().addAll(orgRole);
+				}
+				
+				return ampFunding;
+	}
 	
 	private AmpFunding getFundingIATItoAMP(AmpActivityVersion a, Transaction t,	AmpCategoryValue iatiDefaultFinanceType, AmpCategoryValue iatiDefaultAidType,
 			String iatiDefaultCurrency, 
@@ -1059,8 +1195,9 @@ public class IatiActivityWorker {
 		}
 	}
 
-	private void processIdentificationStep(AmpActivityVersion a, ArrayList<JAXBElement<CodeType>> iatiStatusList, ArrayList<Description> iatiDescriptionList,ArrayList<IatiIdentifier> iatiIDList) {
+	private void processIdentificationStep(AmpActivityVersion a, ArrayList<JAXBElement<CodeType>> iatiStatusList,ArrayList<JAXBElement<CodeType>> iatiImplementationLevelList, ArrayList<Description> iatiDescriptionList,ArrayList<IatiIdentifier> iatiIDList) {
 		processStatus(a,iatiStatusList);
+		processImplementationLevel(a,iatiImplementationLevelList);
 		processDescriptions(a,iatiDescriptionList);
 		processIatiID(a,iatiIDList);
 		
@@ -1156,6 +1293,34 @@ public class IatiActivityWorker {
 				activity.getCategories().add(acv);
 		}
 	}
+	
+
+	private void processImplementationLevel(AmpActivityVersion activity, ArrayList<JAXBElement<CodeType>> iatiImplementationList) {
+		// TODO Auto-generated method stub
+		if(iatiImplementationList.isEmpty()) return;
+		JAXBElement<CodeType> item = getElementByLang(iatiImplementationList,this.getLang());
+		if(item!=null)
+		{
+			String code = getAttributeCodeType(item, "code");
+			String value = printCodeType(item);
+			DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IMPLEMENTATION_LEVEL_TYPE,toIATIValues("implementationLevelName","implementationLevelCode"),toIATIValues(value,code),
+					this.getLang(),null,DataExchangeConstants.IMPLEMENTATION_LEVEL_TYPE,null,null,"active");
+			//we are sure that activity id is not null - activity is mapped
+			if(checkMappedField==null || checkMappedField.getAmpId() == null) return;
+			AmpCategoryValue acv = CategoryManagerUtil.getAmpCategoryValueFromDb(checkMappedField.getAmpId());
+			if (activity.getCategories() == null) {
+				activity.setCategories( new HashSet() );
+			}
+			for (Iterator it = activity.getCategories().iterator(); it.hasNext();) {
+				AmpCategoryValue acvAux = (AmpCategoryValue) it.next();
+				if(org.digijava.module.dataExchange.utils.Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL.equals(acvAux.getAmpCategoryClass().getKeyName()))
+					it.remove();
+			}
+			if(acv!=null)
+				activity.getCategories().add(acv);
+		}
+	}
+
 
 	private JAXBElement<CodeType> getElementByLang(ArrayList<JAXBElement<CodeType>> iatiStatusList, String lang) {
 		// TODO Auto-generated method stub
@@ -1173,11 +1338,12 @@ public class IatiActivityWorker {
 	//populate the lists with IATI values of the activity
 	private void extractIATIEntities(ArrayList<JAXBElement<TextType>> iatiTitleList,
 			ArrayList<JAXBElement<CodeType>> iatiStatusList,
+			ArrayList<JAXBElement<CodeType>> iatiImplementationLevelList,
 			ArrayList<ParticipatingOrg> iatiPartOrgList,
 			ArrayList<ParticipatingOrg> iatiFundOrgList,ArrayList<ParticipatingOrg> iatiExtendingOrgList,
 			ArrayList<ReportingOrg> iatiRepOrgList,
 			ArrayList<Sector> iatiSectorList,
-			ArrayList<Budget> iatiBudgetList, ArrayList<Transaction> iatiTransactionList,
+			ArrayList<Budget> iatiBudgetList, ArrayList<Transaction> iatiTransactionList, ArrayList<PlannedDisbursement> iatiPlannedDisbList,
 			ArrayList<Description> iatiDescriptionList,
 			ArrayList<OtherIdentifier> iatiOtherIdList,
 			ArrayList<ActivityDate> iatiActDateList,
@@ -1217,6 +1383,12 @@ public class IatiActivityWorker {
 					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 					if(iatiDefaultAidType == null) iatiDefaultAidType=new ArrayList<JAXBElement<CodeReqType>>(); 
 					iatiDefaultAidType.add(item);
+				}
+				
+				//implementation level
+				if(i.getName().equals(new QName("implementation-level"))){
+					JAXBElement<CodeType> item = (JAXBElement<CodeType>)i;
+					iatiImplementationLevelList.add(item);
 				}
 				
 			}
@@ -1273,6 +1445,11 @@ public class IatiActivityWorker {
 			if(contentItem instanceof Transaction){
 				Transaction item = (Transaction)contentItem;
 				iatiTransactionList.add(item);
+			}
+			
+			if(contentItem instanceof PlannedDisbursement){
+				PlannedDisbursement item = (PlannedDisbursement)contentItem;
+				iatiPlannedDisbList.add(item);
 			}
 			
 			if(contentItem instanceof Budget){
@@ -1438,6 +1615,23 @@ public class IatiActivityWorker {
 				CategoryConstants.FINANCING_INSTRUMENT_NAME,null,null,"inactive");
 	}
 	
+	
+	//Implementation Level
+			/*private AmpMappedField checkLevelType(JAXBElement<CodeReqType> item) {
+				return checkCodeReqType(item, DataExchangeConstants.IMPLEMENTATION_LEVEL_TYPE,toIATIValues("ImplementationLevelValue","ImplementationLevelCode"),this.getLang(),null,
+						CategoryConstants.IMPLEMENTATION_LEVEL_NAME,null,null,"inactive");
+			}*/
+			private AmpMappedField checkLevelType(JAXBElement<CodeType> item) {
+				// TODO Auto-generated method stub
+				String code = getAttributeCodeType(item, "code");
+				String value = printCodeType(item);
+				DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IMPLEMENTATION_LEVEL_TYPE,toIATIValues("implementationLevelName","implementationLevelCode"),toIATIValues(value,code),
+						this.getLang(),null,DataExchangeConstants.IMPLEMENTATION_LEVEL_TYPE,null,null,"inactive");
+				AmpMappedField log = new AmpMappedField(checkMappedField);
+				logMappingField(DataExchangeConstants.IMPLEMENTATION_LEVEL_TYPE,toIATIValues("implementationLevelName","implementationLevelCode"),toIATIValues(value,code),
+						this.getLang(),null,DataExchangeConstants.IMPLEMENTATION_LEVEL_TYPE,null,null,"inactive", checkMappedField, log);
+				return log;
+			}
 	//Mode of Payment
 	private AmpMappedField checkDisbursementChannel(JAXBElement<CodeReqType> item) {
 		return checkCodeReqType(item, DataExchangeConstants.IATI_DISBURSEMENT_CHANNEL,toIATIValues("disbursementChannelValue","disbursementChannelCode"),this.getLang(),null,
@@ -1501,6 +1695,64 @@ public class IatiActivityWorker {
 		return false;
 	}
 
+	private boolean checkIATIPlannedDisbursement(PlannedDisbursement t, ArrayList<AmpMappedField> logs) {
+		// TODO Auto-generated method stub
+		
+		for (Iterator it = t.getPeriodStartOrPeriodEndOrValue().iterator(); it.hasNext();) {
+			Object contentItem = (Object) it.next();
+			if(contentItem instanceof JAXBElement){
+				JAXBElement i = (JAXBElement)contentItem;
+
+				//flow-type, tied-status
+				//TODO
+				/*if(i.getName().equals(new QName("period-start"))){
+					i.getValue()
+				}*/
+				//receiver-org - usually in AMP gov is the receiver
+				if(i.getName().equals(new QName("receiver-org"))){
+					Transaction.ReceiverOrg item = (Transaction.ReceiverOrg)(i.getValue());
+					AmpMappedField existReceiverOrg = checkOrganization(printList(item.getContent()), this.getLang(),item.getRef());
+					//TODO logging
+					if(existReceiverOrg!=null) logs.add(existReceiverOrg);
+				}
+
+				//provider-org - usually in AMP gov is the receiver
+				if(i.getName().equals(new QName("provider-org"))){
+					Transaction.ProviderOrg item = (Transaction.ProviderOrg)(i.getValue());
+					AmpMappedField existReceiverOrg = checkOrganization(printList(item.getContent()), this.getLang(),item.getRef());
+					//TODO logging
+					if(existReceiverOrg!=null) logs.add(existReceiverOrg);
+				}
+				
+				//disbursement-channel == mode of payment
+				if(i.getName().equals(new QName("disbursement-channel"))){
+					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
+					AmpMappedField existDisbursementChannel = checkDisbursementChannel(item);
+					//TODO logging
+					if(existDisbursementChannel!=null) logs.add(existDisbursementChannel);
+				}
+				
+				//finance-type == type of assistance
+				if(i.getName().equals(new QName("finance-type"))){
+					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
+					AmpMappedField existFinanceType = checkFinanceType(item);
+					//TODO logging
+					if(existFinanceType!=null) logs.add(existFinanceType);
+				}
+				
+				//aid-type == financing instrument
+				if(i.getName().equals(new QName("aid-type"))){
+					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
+					AmpMappedField existAidType = checkAidType(item);
+					if(existAidType!=null) logs.add(existAidType);
+				}
+				
+			}
+		}
+		
+		
+		return false;
+	}
 	
 	private AmpMappedField checkCodeReqType(JAXBElement<CodeReqType> item, String iatiPath, String iatiItems,
 			String iatiLang, Long ampId, String ampClass,

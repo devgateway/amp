@@ -568,7 +568,7 @@ body {background:none;}
 												</tr>
 												</field:display>
 												
-												<field:display name="Proposed Start Date" feature="Planning">
+												<module:display name="/Activity Form/Planning/Proposed Start Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">
 														<digi:trn>Proposed Start Date</digi:trn>
@@ -577,16 +577,17 @@ body {background:none;}
 													<td align="left">
 														${aimEditActivityForm.planning.originalStartDate}													</td>
 												</tr>
-												</field:display>
-												<field:display name="Actual Start Date" feature="Planning">
+												</module:display>
+												
+												<module:display name="/Activity Form/Planning/Actual Start Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%"><digi:trn>Actual Start Date</digi:trn></td>													<td width="1">:</td>
 													<td align="left">
 														${aimEditActivityForm.planning.revisedStartDate}													</td>
 												</tr>
-												</field:display>
+												</module:display>
 											
-												<field:display name="Proposed Approval Date" feature="Planning">
+												<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">
 														<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
@@ -595,18 +596,18 @@ body {background:none;}
 													<td align="left">
 														${aimEditActivityForm.planning.originalAppDate}													</td>
 												</tr>
-												</field:display>
-												<field:display name="Actual Approval Date" feature="Planning">
+												</module:display>
+												
+												<module:display name="/Activity Form/Planning/Actual Approval Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:actualapprovaldate">Actual Approval Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
 														${aimEditActivityForm.planning.revisedAppDate}													</td>
 												</tr>
+												</module:display>
 												
-												</field:display>
-												
-												<field:display name="Final Date for Contracting" feature="Planning">
+												<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">													
 													<digi:trn key="aim:ContractingDateofProject1">Final Date for Contracting</digi:trn></td>
@@ -614,17 +615,18 @@ body {background:none;}
 													<td align="left">
 														<c:out value="${aimEditActivityForm.planning.contractingDate}"/>													</td>
 												</tr>
-												</field:display>
-												<field:display name="Final Date for Disbursements" feature="Planning">
+												</module:display>
+												
+												<module:display name="/Activity Form/Planning/Final Date for Disbursements" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:DisbursementsDateofProject1">Final Date for Disbursements</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
 														<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>													</td>
 												</tr>
-												</field:display>
+												</module:display>
 												
-												<field:display name="Proposed Completion Date" feature="Planning">
+												<module:display name="/Activity Form/Planning/Proposed Completion Date" parentModule="/Activity Form/Planning">
 												<c:if test="${!aimEditActivityForm.editAct}">
 												<tr>
 													<td width="32%"><digi:trn key="aim:proposedCompletionDate">
@@ -634,7 +636,8 @@ body {background:none;}
 														${aimEditActivityForm.planning.proposedCompDate}													</td>
 												</tr>
 												</c:if>
-												</field:display>
+												</module:display>
+												
 												<module:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">
@@ -1297,6 +1300,33 @@ body {background:none;}
 		                  </td>
                         </tr>
                         </feature:display>
+                        
+                        
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase">
+                                <digi:trn key="aim:undisbursedBalance"> Consumption Rate</digi:trn>: </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000">
+                            	 <c:if test="${not empty aimEditActivityForm.funding.consumptionRate}">
+                                	<b>${aimEditActivityForm.funding.consumptionRate}</b>
+                                </c:if>
+                                &nbsp;
+                            </td>
+                        </tr>
+                         <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase">
+                                <digi:trn>Delivery Rate</digi:trn>: </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000">
+                                <c:if test="${not empty aimEditActivityForm.funding.deliveryRate}">
+                                <b>${aimEditActivityForm.funding.deliveryRate}</b>
+                                </c:if>
+                                &nbsp;
+                            </td>
+                        </tr>
+                        
                         </table>
                                              
                                                                 

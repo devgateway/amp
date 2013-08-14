@@ -65,9 +65,16 @@ ${fn:replace(message,quote,escapedQuote)}
       	 <ul class="first-of-type">
       	 	<module:display name="Home Page Menu Entry" parentModule="PUBLIC VIEW">
 	            <li class="yuiampmenuitem">
+	            <logic:present name="currentMember" scope="session">
 	                <a class="yuiampmenuitemlabel" href="/aim" title="${trn3}">
 	                	<digi:trn>Home Page</digi:trn>
 		            </a>
+		        </logic:present>
+		        <logic:notPresent name="currentMember" scope="session">
+		                <a class="yuiampmenuitemlabel" href="/" title="${trn3}">
+		                	<digi:trn>Home Page</digi:trn>
+			            </a>
+		            </logic:notPresent>    
 	            </li>
             </module:display>
             

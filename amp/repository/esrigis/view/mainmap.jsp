@@ -14,11 +14,20 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <digi:instance property="datadispatcherform" />
 <html>
-  
+ <%
+ 	Integer msieVersion = org.dgfoundation.amp.Util.getIEVersion(request);
+ 	if (msieVersion == null) { %>
+ 		<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+ 	<%} else
+ 	if (msieVersion <= 8) {  %>
+ 		<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=7" />
+ 	<%} else {%>
+ 		<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=9" />
+<% 	}
+ %> 
   <head>
-  	<title><digi:trn>Aid Management Platform - Advanced GIS</digi:trn></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=7" /> 
+	<title><digi:trn>Aid Management Platform - Advanced GIS</digi:trn></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
     <!--The viewport meta tag is used to improve the presentation and behavior of the samples 
       on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
@@ -42,7 +51,7 @@
    	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/DecimalFormat.js"/>"></script>
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/latinise.min_.js"/>"></script>
    	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
-   	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-debug.js"/>"></script>
+   	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-debug.js?versiondate=20130712"/>"></script>
    	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
    	
    	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
@@ -366,15 +375,16 @@
    	<link href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css" rel="stylesheet" type="text/css"></link>
 	
 	<!-- Filter Scripts-->
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dom/dom-min.js"></script> 
-	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"/>"></script> 
-	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dom/dom.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview.js"></script> 
+		
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection.js"/>"></script> 
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container.js"/>"></script> 
 	
 		
 	
@@ -649,7 +659,7 @@
         </feature:display>	
         
 	<div class="tooltip" style="position: absolute; display: block;z-index:100;" id="tooltipHolder"></div>
-	<digi:form action="/datadispatcher.do" method="post">
+	<digi:form action="/datadispatcher.do" method="post" styleId="datadispatcherform">
 		<html:hidden name="datadispatcherform" property="structures"  styleId="st"/>
 	</digi:form>
 	

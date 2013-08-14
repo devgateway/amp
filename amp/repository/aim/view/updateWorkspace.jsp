@@ -965,6 +965,7 @@ function cancel()
 																			<c:forEach var="org" items="${aimUpdateWorkspaceForm.organizations}">
 																				<tr>
 																					<td align="left">&nbsp;
+                                                                                        <input type="hidden" value="${org.ampOrgId}" name="selectedOrgId">
 																						<c:out value="${org.name}"/>
 																					</td>
 																					<td align="right" width="10">
@@ -982,6 +983,32 @@ function cancel()
 																			<aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${aimUpdateWorkspaceForm}" styleClass="buttonx_sm btn_save">
 																					<digi:trn>Add</digi:trn>
 																			</aim:addOrganizationButton>
+                                                                            <script>
+                                                                                /**
+                                                                                  * this is actually JS function override
+                                                                                  * the default implementation will be called first
+                                                                                  */
+                                                                                var selectOrgSelectedAware = selectOrg;
+                                                                                selectOrg = function(params) {
+                                                                                    var selectedItems = getSelectedItems();
+
+                                                                                    selectOrgSelectedAware(params + "&" + "<%= org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm.EXCLUDED_ORG_IDS_SEPARATED %>"
+                                                                                        + "=" + selectedItems);
+                                                                                }
+
+                                                                                /* List of Ids separated by "_" */
+                                                                                function getSelectedItems() {
+                                                                                    var ids = [];
+                                                                                    var selectedOrganizations = $('[name="selectedOrgId"]');
+                                                                                    if (selectedOrganizations && selectedOrganizations.length > 0) {
+                                                                                        selectedOrganizations.each(function(){
+                                                                                            ids.push($(this).val());
+                                                                                        });
+                                                                                    }
+
+                                                                                    return ids.length > 0 ? ids.join('_') : "";
+                                                                                }
+                                                                            </script>
 																		</c:if>
 																	</c:if>
 																</fieldset>																			

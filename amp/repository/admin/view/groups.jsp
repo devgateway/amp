@@ -74,9 +74,9 @@
 <logic:iterate id="otherGroup" name="groupsForm" property="otherGroups">
 <bean:define id="keySiteId" name="otherGroup" property="site.siteId" type="java.lang.String" />
 <tr>
-  <td><digi:trn siteId="<%=keySiteId%>" key="<%= "groups:" + keySiteId %>"><c:out value="${otherGroup.site.name}" /></digi:trn></td>
+  <td><digi:trn siteId="<%=keySiteId%>" key="<%= \"groups:\" + keySiteId %>"><c:out value="${otherGroup.site.name}" /></digi:trn></td>
   <bean:define id="keyGroupName" name="otherGroup" property="groupName" />
-  <td><digi:trn siteId="<%=keySiteId%>" key="<%= "groups:" + keyGroupName %>"><c:out value="${otherGroup.groupName}" /></digi:trn></td>
+  <td><digi:trn siteId="<%=keySiteId%>" key="<%= \"groups:\" + keyGroupName %>"><c:out value="${otherGroup.groupName}" /></digi:trn></td>
   <td><digi:link href="/showPermissions.do" paramId="groupId" paramName="otherGroup" paramProperty="id"><digi:trn key="admin:permissions">Permissions</digi:trn></digi:link></td>
 </tr>
 </logic:iterate>

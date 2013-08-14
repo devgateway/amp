@@ -43,7 +43,7 @@ public class Sdm {
     private String siteId;
     private String instanceId;
     private String name;
-    private Set items;
+    private Set<SdmItem> items;
 
     public String getName() {
         return name;
@@ -61,11 +61,11 @@ public class Sdm {
         this.id = id;
     }
 
-    public Set getItems() {
+    public Set<SdmItem> getItems() {
         return items;
     }
 
-    public void setItems(Set items) {
+    public void setItems(Set<SdmItem> items) {
         this.items = items;
     }
 
@@ -85,12 +85,12 @@ public class Sdm {
         this.siteId = siteId;
     }
     public SdmItem getItemByIndex(Long index) {
-    	Set sdmItems = this.getItems();
+    	Set<SdmItem> sdmItems = this.getItems();
         SdmItem  result = null;
 
-        Iterator iter = sdmItems.iterator();
+        Iterator<SdmItem> iter = sdmItems.iterator();
         while(iter.hasNext()) {
-            SdmItem item = (SdmItem) iter.next();
+            SdmItem item = iter.next();
 
             if (item.getParagraphOrder().equals(index)) {
                 result = item;

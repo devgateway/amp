@@ -72,7 +72,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private Long[] selChildOrgs;
 	private boolean popupReset;
 	private String dest;
-	private Collection allChildren;
+	//private Collection allChildren;
 	private Collection allOrganizations;
 	private Collection orgTypes;
 
@@ -111,8 +111,13 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 		return aux;
 	}
 
+	/**
+	 * DOES NOTHING, AS THE FIELD IS COMPUTED IN THE GETTER
+	 * @param allChildren
+	 */
 	public void setAllChildren(Collection allChildren) {
-		this.allChildren = allChildren;
+		// NO-OP
+				
 	}
 
 	public boolean getUpdateFlag() {

@@ -377,16 +377,16 @@ public class DbUtil {
     
     public static List<AmpSector> getSectors(DashboardFilter filter) throws DgException {
     	List<AmpSector> sectors = new ArrayList<AmpSector>();
-        if (filter.getSelSectorIds()!=null && filter.getSelSectorIds().length > 0 && filter.getSelSectorIds()[0] != -1) {
-			if (filter.getSelSectorIds().length == 1) {
-				List<AmpSector> sector = getSubSectors(filter.getSelSectorIds()[0]);
-				AmpSector parentSector = SectorUtil.getAmpSector(filter.getSelSectorIds()[0]);
+        if (filter.getSectorIds()!=null && filter.getSectorIds().length > 0 && filter.getSectorIds()[0] != -1) {
+			if (filter.getSectorIds().length == 1) {
+				List<AmpSector> sector = getSubSectors(filter.getSectorIds()[0]);
+				AmpSector parentSector = SectorUtil.getAmpSector(filter.getSectorIds()[0]);
 				sector.add(parentSector);
 				sectors.addAll(sector);
 				return sectors;
 			} else {
-				for (int i = 0; i < filter.getSelSectorIds().length; i++) {
-					AmpSector sector = SectorUtil.getAmpSector(filter.getSelSectorIds()[i]);
+				for (int i = 0; i < filter.getSectorIds().length; i++) {
+					AmpSector sector = SectorUtil.getAmpSector(filter.getSectorIds()[i]);
 					sectors.add(sector);
 				}
 				return sectors;
@@ -1378,10 +1378,17 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
                 }
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
-            	if (item.length==5) 
+            	if (item.length==5){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
-            	if (item.length==6) 
+            	}
+            	if (item.length==6){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
+            		item[5]=item[5]==null?100f:item[5];
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            	}
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if(hm.containsKey(id)){
@@ -1533,10 +1540,17 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
                 }
             	if (item.length==4 && item[3] != null) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
-            	if (item.length==5) 
+            	if (item.length==5){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
-            	if (item.length==6) 
+            	}
+            	if (item.length==6){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
+            		item[5]=item[5]==null?100f:item[5];
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            	}
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if(hm.containsKey(id)){
@@ -1783,10 +1797,17 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
                 }
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
-            	if (item.length==5) 
+            	if (item.length==5){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
-            	if (item.length==6) 
+            	}
+            	if (item.length==6){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
+            		item[5]=item[5]==null?100f:item[5];
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            	}
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if (!sectorCondition) {
@@ -2050,10 +2071,17 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
                 }
             	if (item.length==4 && item[3] != null) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
-            	if (item.length==5 && item[3] != null && item[4] != null) 
+            	if (item.length==5){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
-            	if (item.length==6 && item[3] != null && item[4] != null && item[5] != null ) 
+            	}
+            	if (item.length==6){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
+            		item[5]=item[5]==null?100f:item[5];
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            	}
             	Long id = (Long) item[1];
             	String name = (String) item[2];
 
@@ -2319,10 +2347,17 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
                 }
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
-            	if (item.length==5) 
+            	if (item.length==5){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
-            	if (item.length==6) 
+            	}
+            	if (item.length==6){
+            		item[3]=item[3]==null?100f:item[3];
+            		item[4]=item[4]==null?100f:item[4];
+            		item[5]=item[5]==null?100f:item[5];
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            	}
             	Long id = (Long) item[1];
             	String name = programParentList.get(id).getName();
             	id = programParentList.get(id).getAmpThemeId();

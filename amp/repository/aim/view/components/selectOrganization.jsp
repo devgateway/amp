@@ -208,6 +208,8 @@
 <digi:form action="/selectOrganizationComponent.do" method="post">
 
 <html:hidden property="selectedOrganisationFromPages" />
+<html:hidden property="<%= org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm.EXCLUDED_ORG_IDS_SEPARATED %>"/>
+
 	<script language="JavaScript">
 	//if use client yes
 	
@@ -218,7 +220,7 @@
 			window.close();
 		}
 	</logic:equal>
-	//was selcted
+	//was selected
 
 	function processLoad(){	
 	<logic:equal name="aimSelectOrganizationForm" property="afterSelect" value="true">
@@ -392,7 +394,7 @@
 			                                                <logic:notEqual value="true" name="removeAddButton">
 			                                                	<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">
 			                                                		<td>
-																		<html:button styleClass="buttonx" property="submitButton"onclick="return selectOrganization()" styleId="selOrgBtn">
+																		<html:button styleClass="buttonx" property="submitButton" onclick="return selectOrganization()" styleId="selOrgBtn">
 																			<digi:trn>Add</digi:trn>
 																		</html:button>
 																	</td>

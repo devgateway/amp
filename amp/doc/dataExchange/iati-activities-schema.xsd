@@ -75,6 +75,7 @@
         <xsd:element ref="collaboration-type"/>
         <xsd:element ref="default-flow-type"/>
         <xsd:element ref="default-aid-type"/>
+        <xsd:element ref="implementation-level"/>
         <xsd:element ref="default-finance-type"/>
         <xsd:element ref="iati-identifier"/>
         <xsd:element ref="other-identifier"/>
@@ -297,6 +298,22 @@
       </xsd:documentation>
     </xsd:annotation>
   </xsd:element>
+  
+   
+  <xsd:element name="implementation-level" type="codeType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        The type of aid being supplied (budget support, debt relief,
+        etc.).  This element specifies a default for all the
+        activity's financial transactions; it can be overridden at the
+        individual transaction level.
+
+        For the value of the @code attribute, see
+        http://iatistandard.org/codelists/aid_type
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  
 
   <xsd:element name="default-finance-type" type="codeReqType">
     <xsd:annotation>
@@ -1111,15 +1128,27 @@
     </xsd:annotation>
     <xsd:complexType>
       <xsd:choice minOccurs="0" maxOccurs="unbounded">
-        <xsd:element name="period-start" type="dateType">
-          <xsd:annotation>
-            <xsd:documentation xml:lang="en">
-              The starting date for the disbursement period, in ISO 8601
-              format (e.g. 2010-04-01 for 1 April 2010).  This element
-              must be present.
-            </xsd:documentation>
-          </xsd:annotation>
-        </xsd:element>
+        <xsd:element name="period-start">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">
+                A milestone date for this transaction (such as the
+                decision date, disbursement date, etc.).
+              </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType mixed="true">
+              <xsd:sequence>
+                <xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+              </xsd:sequence>
+              <xsd:attribute name="iso-date" type="xsd:date" use="required">
+                <xsd:annotation>
+                  <xsd:documentation xml:lang="en">
+                    The ISO 8601 version of the transaction date.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:attribute>
+              <xsd:anyAttribute processContents="lax" namespace="##other"/>
+            </xsd:complexType>
+          </xsd:element>
         <xsd:element name="period-end" type="dateType">
           <xsd:annotation>
             <xsd:documentation xml:lang="en">

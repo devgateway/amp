@@ -96,7 +96,8 @@ public final class ArConstants {
 	 */
 	public final static String ZONE="Zone";
 	
-	public final static String COMPONENT="Component Type";
+	public final static String COMPONENT_NAME = "Component Name";
+	public final static String COMPONENT_TYPE_S = "Component Type";
 	public final static String RECIPIENT_NAME = "Recipient Name";
 	public final static String RECIPIENT_ROLE_NAME = "Recipient Role Name";
 	public final static String RECIPIENT_ROLE_CODE = "Recipient Role Code";

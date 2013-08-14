@@ -94,7 +94,7 @@ public class ViewAmp
             response.sendRedirect(fwdUrl);
             return null;
         } else if (siteAdmin != null && "yes".equals(siteAdmin)) {
-            String fwdUrl = "admin.do";
+            String fwdUrl = "/aim/admin.do";
             response.sendRedirect(fwdUrl);
             return null;
         } else if(workspaceId != null){

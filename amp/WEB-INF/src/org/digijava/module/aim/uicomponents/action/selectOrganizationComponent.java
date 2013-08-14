@@ -82,6 +82,8 @@ public class selectOrganizationComponent extends Action {
 		HttpSession session = request.getSession();
 		Object targetForm = session.getAttribute(AddOrganizationButton.PARAM_PARAM_FORM_NAME);
 
+        oForm.setExcludedOrgIdsSeparated(request.getParameter("excludedOrgIdsSeparated"));
+
 		if ("true".equalsIgnoreCase(request.getParameter("reset"))) {
 			oForm.clearSelected();
 		}
@@ -179,6 +181,24 @@ public class selectOrganizationComponent extends Action {
 
 	}
 
+    private static long[] getSelectedItems(selectOrganizationComponentForm form) {
+        String selectedItemsParam = form.getExcludedOrgIdsSeparated();
+        long[] selectedOrganizations = null;
+        if (selectedItemsParam != null && selectedItemsParam.length() > 0) {
+            try {
+                String[] selectedOrganizationsAsStrings = selectedItemsParam.split("_");
+                selectedOrganizations = new long[selectedOrganizationsAsStrings.length];
+                for (int i = 0; i < selectedOrganizationsAsStrings.length; i++) {
+                    selectedOrganizations[i] = Long.parseLong(selectedOrganizationsAsStrings[i]);
+                }
+            } catch (RuntimeException ex){
+                // if something went wrong during conversion let's null all the collection to be on the safe side
+                selectedOrganizations = null;
+            }
+        }
+        return selectedOrganizations;
+    }
+
 	@SuppressWarnings("unchecked")
 	public ActionForward search(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		selectOrganizationComponentForm eaForm = (selectOrganizationComponentForm) form;
@@ -208,22 +228,24 @@ public class selectOrganizationComponent extends Action {
 			}
 			organizationResult = new ArrayList();
 
+            long[] selectedOrganizations = getSelectedItems(eaForm);
+
 			if (!eaForm.getAmpOrgTypeId().equals(new Long(-1))) {
 				if (eaForm.getKeyword().trim().length() != 0) {
 					// serach for organisations based on the keyword and the
 					// organisation type
-					organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
+					organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId(), selectedOrganizations);
 				} else {
 					// search for organisations based on organisation type only
-					organizationResult = DbUtil.searchForOrganisationByType(eaForm.getAmpOrgTypeId());
+					organizationResult = DbUtil.searchForOrganisationByType(eaForm.getAmpOrgTypeId(), selectedOrganizations);
 				}
 			} else if (eaForm.getKeyword().trim().length() != 0) {
 				// search based on the given keyword only.
-				organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim());
+				organizationResult = DbUtil.searchForOrganisation(eaForm.getKeyword().trim(), selectedOrganizations);
 			} else {
 				// get all organisations since keyword field is blank and org
 				// type field has 'ALL'.
-				organizationResult = DbUtil.getAmpOrganisations();
+				organizationResult = DbUtil.getAmpOrganisations(selectedOrganizations);
 			}
 
 			if (organizationResult != null && organizationResult.size() > 0) {
@@ -323,13 +345,13 @@ public class selectOrganizationComponent extends Action {
 		if (numPages > 1) {
 			pages = new ArrayList();
 			for (int i = 0; i < numPages; i++) {
-				Integer pageNum = new Integer(i + 1);
+				Integer pageNum = i + 1;
 				pages.add(pageNum);
 			}
 		}
 		eaForm.setOrganizations(filteredResult);
 		eaForm.setPages(pages);
-		eaForm.setCurrentPage(new Integer(1));
+		eaForm.setCurrentPage(1);
 
 		return mapping.findForward("forward");
 

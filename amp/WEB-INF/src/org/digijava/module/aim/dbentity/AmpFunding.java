@@ -640,10 +640,12 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 					extraValues += " - " + auxDetail.getDisbOrderId();
 				if (auxDetail.getContract() != null)
 					extraValues += " - " + auxDetail.getContract().getContractName();
-				if (auxDetail.getDisbursementOrderRejected())
-					extraValues += " - " + "Rejected";
-				else
-					extraValues += " - " + "Not Rejected";
+                if (auxDetail.getDisbursementOrderRejected() != null){
+	    			if (auxDetail.getDisbursementOrderRejected())
+                        extraValues += " - " + "Rejected";
+                    else
+                        extraValues += " - " + "Not Rejected";
+                }
 
 				if (!trnDisbOrder) {
 					out.getOutputs().add(

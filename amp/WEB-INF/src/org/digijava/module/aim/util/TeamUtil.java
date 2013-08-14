@@ -889,7 +889,8 @@ public class TeamUtil {
      */
     public static AmpTeam getAmpTeam(Long id) {
 
-        long t2, t1;
+        if (id == null)
+        	return null;
         Session session = null;
         AmpTeam team = null;
 

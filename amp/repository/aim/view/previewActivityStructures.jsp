@@ -65,8 +65,7 @@ function loadImages(){
 	var imgDomId = "";
 	var idx = 0;
 
-	<logic:iterate id="structure" name="aimEditActivityForm"
-		property="structures">
+	<logic:iterate id="structure" name="aimEditActivityForm" property="structures">
 		var imgCount = parseInt("${fn:length(structure.images)}");
 		$("#aPrev${structure.ampStructureId}").hide();
 		if (imgCount <= maxNumDisplayedImgs){

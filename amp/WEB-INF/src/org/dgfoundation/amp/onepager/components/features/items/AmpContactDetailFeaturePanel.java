@@ -173,14 +173,14 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         AmpTextFieldPanel<String> detailField=new AmpTextFieldPanel<String>("detail", value, fmName, true,true);
                         if(item.getModelObject().getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
                         	TextField<String> detailTextField=detailField.getTextContainer();
-                        	detailTextField.add(new AttributeModifier("size", "50"));
+                        	detailTextField.add(new AttributeModifier("size", "20"));
                         	detailTextField.setRequired(true);
                         	ContactEmailValidator validator=new ContactEmailValidator(model.getObject().getId());
                         	detailTextField.add(validator);
                         }
                         else{
                         	TextField<String> detailTextField=detailField.getTextContainer();
-                        	detailTextField.add(new AttributeModifier("size", "50"));
+                        	detailTextField.add(new AttributeModifier("size", "20"));
                         	detailTextField.add(new PatternValidator(EXPRESSION));
                         	detailTextField.setRequired(true);
                         }

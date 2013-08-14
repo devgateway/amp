@@ -675,9 +675,6 @@ function initializeGlobalVariables(){
 													<td rowspan=2 width=15>&nbsp;</td>
    										 <td class="dashboard_generator_opt"><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
    										 <td class="dashboard_generator_opt"><html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:150px;">
-											<html:option value="-1">
-											<digi:trn>None</digi:trn>
-											</html:option>
 											<html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
 										</html:select></td>
 										<td rowspan=2 width=15>&nbsp;</td>

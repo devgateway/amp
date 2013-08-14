@@ -68,7 +68,7 @@ public class TableWidgetUtil {
     }
     
     /**
-     * Lads table widget by ID.
+     * Loads table widget by ID.
      * @param id
      * @return
      * @throws DgException

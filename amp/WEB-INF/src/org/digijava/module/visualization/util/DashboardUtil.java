@@ -986,9 +986,6 @@ public class DashboardUtil {
 		if (filter.getDivideThousandsDecimalPlaces() == null) {
 			filter.setDivideThousandsDecimalPlaces(0);
 		}
-		if (filter.getShowAmountsInThousands() == null) {
-			filter.setShowAmountsInThousands(AmpARFilter.AMOUNT_OPTION_IN_UNITS);
-		}
 		//Initialize formatting information
 		if(filter.getDecimalSeparator() == null || filter.getGroupSeparator() == null ){
 			filter.setDecimalSeparator(FormatHelper.getDecimalSymbol());
@@ -1060,6 +1057,7 @@ public class DashboardUtil {
 		filter.setPeacebuilderMarkerList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY)));
 		filter.setPeacebuildingList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACEBUILDING_GOALS_KEY)));
         
+        filter.setShowAmountsInThousands(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))==0?1:Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 	}
 
 

@@ -222,8 +222,7 @@ public class CreateEditSourceActions extends DispatchAction {
     	}
     	//messageHolder should contain at least one attachment(the one we want to remove)
     	if(attachmentOrder!=null){
-    		for (Object item : attachmentsHolder.getItems()) {
-    			SdmItem attachment=(SdmItem)item;
+    		for (SdmItem attachment : attachmentsHolder.getItems()) {
     			if(attachment.getParagraphOrder().equals(attachmentOrder)){    				
     				attachmentsHolder.getItems().remove(attachment);
     				break;

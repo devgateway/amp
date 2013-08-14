@@ -119,6 +119,7 @@ public class DashboardFilter {
     private int topLists = 5;
     private String flashSliderLabels = "";
     private String adjustmentType = "Actual";
+    private String adjustmentTypeFilter = "Actual";
     private String adjustmentTypeQuickFilter = "Actual";
     private List<CategoryConstants.HardCodedCategoryValue>adjustmentTypeList;
     private Long[] selStatusIds;
@@ -165,6 +166,7 @@ public class DashboardFilter {
     	newFilter.setTeamMember(this.getTeamMember());
     	newFilter.setSelLocationIds(this.getSelLocationIds());
     	newFilter.setSelSectorIds(this.getSelSectorIds());
+    	newFilter.setSectorIds(this.getSectorIds());
     	newFilter.setActivityId(this.getActivityId());
     	newFilter.setShowOnlyApprovedActivities(this.getShowOnlyApprovedActivities());
     	newFilter.setFromPublicView(this.getFromPublicView());
@@ -987,6 +989,14 @@ public class DashboardFilter {
 
 	public void setAdjustmentTypeQuickFilter(String adjustmentTypeQuickFilter) {
 		this.adjustmentTypeQuickFilter = adjustmentTypeQuickFilter;
+	}
+
+	public String getAdjustmentTypeFilter() {
+		return adjustmentTypeFilter;
+	}
+
+	public void setAdjustmentTypeFilter(String adjustmentTypeFilter) {
+		this.adjustmentTypeFilter = adjustmentTypeFilter;
 	}
 
 	public List<CategoryConstants.HardCodedCategoryValue> getAdjustmentTypeList() {

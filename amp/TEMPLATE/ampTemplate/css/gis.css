@@ -26,3 +26,13 @@ SELECT {
 	width:350px;
 }
 
+/** hack for AMP-15531: first lowercase the whole text, then uppercase first letter only, so that "AAAA" and "aaaa" are both displayed as "Aaaa"
+*/
+.gis_title
+{
+	text-transform: lowercase;
+}
+
+.gis_title:FIRST-LETTER{
+	text-transform: uppercase;
+}

@@ -414,7 +414,7 @@ function initializeGlobalVariables(){
 													<tr>
 														<td><digi:trn>Adjustment Type</digi:trn>:</td>
 														<td>
-															<html:select property="filter.adjustmentType"
+															<html:select property="filter.adjustmentTypeFilter"
 																styleId="adjustment_type" styleClass="dropdwn_sm"
 																style="width:150px;">
 																<html:optionsCollection property="filter.adjustmentTypeList" value="valueKey" label="valueKey" />
@@ -638,9 +638,6 @@ function initializeGlobalVariables(){
 												<td><html:select property="filter.fiscalCalendarId"
 														styleId="fiscalCalendar_dropdown_Id"
 														styleClass="dropdwn_sm" style="width:150px;">
-														<html:option value="-1">
-															<digi:trn>None</digi:trn>
-														</html:option>
 														<html:optionsCollection property="filter.fiscalCalendars"
 															label="name" value="ampFiscalCalId" />
 													</html:select></td>

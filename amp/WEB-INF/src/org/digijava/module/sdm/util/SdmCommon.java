@@ -414,18 +414,18 @@ public class SdmCommon {
     //------
     public static List loadDocumentItemsList(Sdm sdmDocument) {
         //
-        Set dbDocumentItemsList = sdmDocument.getItems();
+        Set<SdmItem> dbDocumentItemsList = sdmDocument.getItems();
 
         if ( (dbDocumentItemsList != null) && (dbDocumentItemsList.size() != 0)) {
 
             Long max = getMaxParagraphNumber(dbDocumentItemsList);
             Long min = getMinParagraphNumber(dbDocumentItemsList);
 
-            List documentItemsList = new ArrayList();
+            List<SdmForm.SdmItemInfo> documentItemsList = new ArrayList<SdmForm.SdmItemInfo>();
 
-            Iterator iterator = dbDocumentItemsList.iterator();
+            Iterator<SdmItem> iterator = dbDocumentItemsList.iterator();
             while (iterator.hasNext()) {
-                SdmItem item = (SdmItem) iterator.next();
+                SdmItem item = iterator.next();
                 SdmForm.SdmItemInfo sdm_i = new SdmForm.SdmItemInfo();
 
                 SdmParagraph paragraph = SdmCommon.createParagraph(item);

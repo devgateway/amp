@@ -190,7 +190,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 		{
 			ArConstants.COLUMN_CAPITAL_EXPENDITRURE, ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT,
 			ArConstants.DONOR_GROUP, ArConstants.DONOR_TYPE_COL, ArConstants.TERMS_OF_ASSISTANCE, ArConstants.FINANCING_INSTRUMENT,
-			ArConstants.FUNDING_STATUS, ArConstants.MODE_OF_PAYMENT, ArConstants.COMPONENT, ArConstants.AGREEMENT_CODE, ArConstants.AGREEMENT_TITLE_CODE
+			ArConstants.FUNDING_STATUS, ArConstants.MODE_OF_PAYMENT, ArConstants.COMPONENT_NAME, ArConstants.COMPONENT_TYPE_S, ArConstants.AGREEMENT_CODE, ArConstants.AGREEMENT_TITLE_CODE
 		};
 	public final static Set<String> fundingFilteringColumns = new HashSet<String>(Arrays.asList(fundingFilteringColumnsArr));
 	

@@ -320,7 +320,7 @@ function editEvent(){
 					               <td style="font-family: Arial;font-size: 12px;">
 				                		<html:hidden name="calendarEventForm" property="recurrEndDate" value="${calendarEventForm.recurrEndDate}"/>
 				                		<html:hidden name="calendarEventForm" property="recurrSelectedEndTime" value="${calendarEventForm.recurrSelectedEndTime}"/>
-				                		<c:if test="${calendarEventForm.recurrEndDate.length() != 0}">${calendarEventForm.recurrEndDate}</c:if>
+				                		<c:if test="${not empty calendarEventForm.recurrEndDate}">${calendarEventForm.recurrEndDate}</c:if>
 					               </td>
 					            </tr>
 				            </c:if>

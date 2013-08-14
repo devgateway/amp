@@ -718,7 +718,7 @@ function validateDates(){
 function validateText(){
 	var title = "" + document.getElementById("titleMax").value;
    	var decription = "" + document.getElementById("descMax").value; 
-   	var regexp = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()а-яА-ЯşŞţŢîÎăĂâÂ]+");
+   	var regexp = new RegExp("[a-zA-Z0-9 \r\n,._ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()а-яА-ЯşŞţŢîÎăĂâÂ]+");
    	
    	if (title==""){
 		alert ("<digi:trn jsFriendly='true'>Title can't be empty!</digi:trn>");

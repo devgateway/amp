@@ -2194,6 +2194,9 @@ function updateGraph(e, chartName){
 	if (type==2) {
 		fundType += trnExpenditures;
 	}
+	if (type==3) {
+		fundType = trnMTEFProjections;
+	}	
 	//Get array of graphs
 	var allGraphs = getElementsByName_iefix("div", "flashContent");
 	//Iterate and refresh the graph

@@ -184,8 +184,8 @@ function resetToDefaults(){
 	
 	document.getElementById("transaction_type_0").checked = true;
 	document.getElementById("transaction_type_1").checked = false;
-	if (document.getElementById("transaction_type_2")!=null){
-		document.getElementById("transaction_type_2").checked = false;
+	if (document.getElementById("transaction_type_127")!=null){
+		document.getElementById("transaction_type_127").checked = false;
 	}
 	
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
@@ -576,6 +576,7 @@ var callbackUpdateLoadingPanel = {
 		};
 
 function applyFilterPopin(e){
+	
 	document.getElementById("startYear").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
 	document.getElementById("endYear").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
@@ -587,9 +588,12 @@ function applyFilterPopin(e){
 	if (document.getElementById("transaction_type_1").checked == true) {
 		document.getElementById("transactionType").value = document.getElementById("transaction_type_1").value;
 	}
-	if (document.getElementById("transaction_type_2")!=null){
-		if (document.getElementById("transaction_type_2").checked == true) {
-			document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
+	if (document.getElementById("transaction_type_3").checked == true) {
+		document.getElementById("transactionType").value = document.getElementById("transaction_type_3").value;
+	}	
+	if (document.getElementById("transaction_type_127")!=null){
+		if (document.getElementById("transaction_type_127").checked == true) {
+			document.getElementById("transactionType").value = document.getElementById("transaction_type_127").value;
 		}
 	}
 	document.getElementById("onBudget").value = document.getElementById("budget_dropdown").options[document.getElementById("budget_dropdown").selectedIndex].value;
@@ -614,7 +618,8 @@ function applyFilterPopin(e){
 	}
 	
 	//loadingPanel.show();
-	YAHOO.util.Connect.setForm('datadispatcherform');
+	var ddf = document.getElementById("datadispatcherform_real_one"); // there are two forms with the same name of "datadispatcherform", so we should choose by ID instead - one of them has the id, while the other doesn't
+	YAHOO.util.Connect.setForm(ddf);
 	var sUrl="/esrigis/datadispatcher.do?applyfilter=true" + params;
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
 	hidePopin();

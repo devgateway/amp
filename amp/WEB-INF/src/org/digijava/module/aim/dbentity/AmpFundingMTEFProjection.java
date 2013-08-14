@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
-public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection> {
+public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>, FundingInformationItem {
 	
 	
 	public static class FundingMTEFProjectionComparator implements Comparator<AmpFundingMTEFProjection>, Serializable {
@@ -84,13 +88,85 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		public void setProjectionDate(Date projectionDate) {
 			this.projectionDate = projectionDate;
 		}
+		
 		@Override
 		protected Object clone() throws CloneNotSupportedException {
-			// TODO Auto-generated method stub
 			return super.clone();
 		}
+		
 		@Override
 		public int compareTo(AmpFundingMTEFProjection o) {
 			return o.getAmpFundingMTEFProjectionId().compareTo(getAmpFundingMTEFProjectionId());
 		}
+		
+		public Double getTransactionAmount()
+		{
+			return FeaturesUtil.applyThousandsForVisibility(this.getAmount());
+		}
+		
+		public Double getAbsoluteTransactionAmount()
+		{
+			return this.getAmount();
+		}
+		
+		public AmpCurrency getAmpCurrencyId()
+		{
+			return this.getAmpCurrency();
+		}
+		
+		public Date getTransactionDate()
+		{
+			return this.getProjectionDate();
+		}
+				
+		public AmpOrganisation getRecipientOrg()
+		{
+			return null;
+		}
+		
+		public AmpRole getRecipientRole()
+		{
+			return null;
+		}
+		
+		public Integer getTransactionType()
+		{
+			return Constants.MTEFPROJECTION;
+		}
+		
+		public AmpCategoryValue getAdjustmentType()
+		{
+			try {
+				return CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			} catch (Exception e) {				
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		public String getDisbOrderId()
+		{
+			return null;
+		}
+		
+		public Double getFixedExchangeRate()
+		{
+			return null;
+		}
+		
+		public IPAContract getContract()
+		{
+			return null;
+		}
+		
+		public String getExpCategory()
+		{
+			return null;
+		}
+		
+		public FundingPledges getPledgeid()
+		{
+			return null;
+		}
+		
 }

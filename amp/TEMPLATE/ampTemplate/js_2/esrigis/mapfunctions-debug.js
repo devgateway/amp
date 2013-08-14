@@ -705,6 +705,10 @@ function MapFind(activity) {
 						"Disbursements for this location" : '<b>'
 								+ location.disbursements
 								+ '</b>',
+						"MTEF Projections for this location" : '<b>'
+									+ location.mtef
+									+ '</b>',
+						
 						"Code" : '' + donorCode + '',
 						"id" :activity.id,
 						"name":location.name
@@ -869,10 +873,12 @@ function drawpoints() {
 										+ "<tr><td nowrap><b>"+translate('Primary Sector')+"<b></td><td>${Primary Sector}</td></tr>"
 										+ "<tr><td nowrap><b>"+translate('Total commitments')+"<b></td><td>${Total commitments}</td></tr>"
 										+ "<tr><td nowrap><b>"+translate('Total disbursements')+"<b></td><td>${Total disbursements}</td></tr>"
+										+ "<tr><td nowrap><b>"+translate('Total MTEF Projections')+"<b></td><td>${Total mtef}</td></tr>"
 										+ "<tr><td nowrap><b>"+translate('Commitments for this location')+"<b></td><td>${Commitments for this location}</td></tr>"
-										+ "<tr><td nowrap><b>"+translate('Disbursements for this location')+"<b></td><td>${Disbursements for this location}</td></tr></table>"),
+										+ "<tr><td nowrap><b>"+translate('Disbursements for this location')+"<b></td><td>${Disbursements for this location}</td></tr></table>",
+										+ "<tr><td nowrap><b>"+translate('MTEF Projections for this location')+"<b></td><td>${MTEF for this location}</td></tr></table>"),
 						width : 400,
-						height : 260
+						height : 290
 					},
 					flareLimit : 20,
 					flareDistanceFromCenter : 30
@@ -971,8 +977,11 @@ function addResultsToMap(featureSet) {
 	case "1":
 		typeFunding = "disbursements";
 		break;
-	case "2":
+	case "127":
 		typeFunding = "expenditures";
+		break;
+	case "3":
+		typeFunding = "mtef";
 		break;
 	}
 
@@ -1011,6 +1020,7 @@ function addResultsToMap(featureSet) {
 			"COMMITMENTSFMT" : 0,
 			"DISBURSEMENTSFMT" : 0,
 			"EXPENDITURESFMT" : 0,
+			"MTEFFMT": 0,
 			"COUNTY" : county,
 			"DISTRICT" : district,
 			"GEO_ID" : geoId,
@@ -1021,6 +1031,7 @@ function addResultsToMap(featureSet) {
 						+ translate('Commitments')+": ${COMMITMENTSFMT}<br/> "
 						+ translate('Disbursements')+": ${DISBURSEMENTSFMT}<br/> "
 						+ translate('Expenditures')+": ${EXPENDITURESFMT}<br/> "
+						+ translate('MTEF')+": ${MTEFFMT}<br/> "
 
 		));
 		localGraphicLayer.add(feature);
@@ -1106,6 +1117,10 @@ function updateLocationAttributes(graphicLayer, typeFunding) {
 				g.attributes["EXPENDITURESFMT"] = df
 						.format(currentLocation.expenditures)
 						+ " " + currentLocation.amountsCurrencyCode;
+				g.attributes["MTEFFMT"] = df
+				.format(currentLocation.mtef)
+				+ " " + currentLocation.amountsCurrencyCode;
+				
 				break;
 			}
 		}
@@ -1664,6 +1679,10 @@ function getContent(graphicAttributes, baseGraphic) {
 					"Total disbursements" : '<b>'
 							+ attr[0].disbursements + ' '
 							+ attr[0].currecycode + '</b>',
+					"Total MTEF Projections" : '<b>'
+								+ attr[0].mtef + ' '
+								+ attr[0].currecycode + '</b>',
+							
 					"Commitments for this location" : '<b>'
 							+ attr[0].commitmentsforlocation
 							//+ graphicAttributes["Commitments for this location"]+ ' '
@@ -1674,6 +1693,13 @@ function getContent(graphicAttributes, baseGraphic) {
 							//+ graphicAttributes["Disbursements for this location"]
 							+ ' '
 							+ attr[0].currecycode + '</b>',
+							
+					"MTEF Projections for this location" : '<b>'
+								+ attr[0].mtefforlocation
+								//+ graphicAttributes["Disbursements for this location"]
+								+ ' '
+								+ attr[0].currecycode + '</b>',
+							
 					"Code" : '' + donorCode 
 				});
             if (baseGraphic) {

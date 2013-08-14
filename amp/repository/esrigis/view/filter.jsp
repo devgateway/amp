@@ -46,7 +46,7 @@ function initializeTranslations(){
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script>
 <digi:instance property="datadispatcherform" />
-<digi:form action="/mainmap.do">
+<digi:form action="/mainmap.do" styleId = "datadispatcherform_real_one">
 	<table>
 		<tr>
 			<td>
@@ -166,12 +166,15 @@ function initializeTranslations(){
 													<digi:trn>Disbursements</digi:trn>
 												</html:radio>
 												<br />
-												<feature:display module="Funding" name="Expenditures">
-													<html:radio property="filter.transactionType" styleId="transaction_type_2" value="2">
-														<digi:trn>Expenditures</digi:trn>
-													</html:radio>
-													<br />
-												</feature:display>
+												<html:radio property="filter.transactionType" styleId="transaction_type_127" value="127">
+													<digi:trn>Commitments</digi:trn> <digi:trn>and</digi:trn> <digi:trn>Disbursements</digi:trn>
+												</html:radio>
+												<br />
+												
+												<html:radio property="filter.transactionType" styleId="transaction_type_3" value="3">
+													<digi:trn>MTEF Projections</digi:trn>
+												</html:radio>
+												
 												<hr />
 											</div>
 										</div>

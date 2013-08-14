@@ -3,9 +3,8 @@ package org.digijava.module.esrigis.helpers;
 /**
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
  * @author Diego Dimunzio
- * Simplified location object to manage locations in JSON 
+ * Simplified location object to manage locations in JSON - keeps (locationData, locationFundingSummaryInfo) for a location
  */
-
 public class SimpleLocation {
 	private String name;
 	private String GeoId;
@@ -13,6 +12,7 @@ public class SimpleLocation {
 	private String disbursements;
 	private String expenditures;
 	private String pledges;
+	private String mtef;
 	private String lat;
 	private String lon;
 	private Boolean islocated = false;
@@ -160,5 +160,19 @@ public class SimpleLocation {
 
 	public String getAmountsCurrencyCode() {
 		return amountsCurrencyCode;
+	}
+	
+	/**
+	 * formatted numeric expression of total MTEF Projections for the location
+	 * @return
+	 */
+	public String getMtef()
+	{
+		return mtef;
+	}
+	
+	public void setMtef(String mtef)
+	{
+		this.mtef = mtef;
 	}
 }

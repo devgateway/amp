@@ -525,6 +525,10 @@ public class DashboardUtil {
 	}    
 
     public static String getInStatement(Collection objs) {
+    	
+    	if (objs.isEmpty())
+    		return "-999"; // avoid generating statements like "loc.id in ()", as they trigger "org.hibernate.hql.ast.QuerySyntaxException: unexpected end of subtree"
+    	
         String oql = "";
         for (Object obj : objs) {
             if (oql.length()!=0) {

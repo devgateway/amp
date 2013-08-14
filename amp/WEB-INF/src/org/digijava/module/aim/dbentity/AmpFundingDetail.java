@@ -9,7 +9,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
-public class AmpFundingDetail implements Serializable, Cloneable {
+public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
 	
 	public static class FundingDetailComparator implements Comparator<AmpFundingDetail>, Serializable {
 

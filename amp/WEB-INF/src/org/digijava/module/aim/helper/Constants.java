@@ -31,8 +31,13 @@ public class Constants
     public static final int PLEDGES_DISBURSEMENT = 6;
     public static final int PLEDGE = 7;
     public static final int RELEASE_OF_FUNDS = 8 ;
-    public static final int ESTIMATED_DONOR_DISBURSEMENT = 9 ;
-
+    public static final int ESTIMATED_DONOR_DISBURSEMENT = 9;
+    
+    /**
+     * dummy transaction type for the ESRI option "commitments + disbursements"
+     */
+    public static final int TRANSACTION_TYPE_COMMITMENTS_AND_DISBURSEMENTS = 127;
+    
     
 	public static final int PLANNED = 0 ;
 	public static final int ACTUAL = 1 ;

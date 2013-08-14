@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang.ObjectUtils.Null;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
@@ -55,6 +56,7 @@ public class FundingCalculationsHelper {
 
 	
 	DecimalWraper unDisbursementsBalance =  new DecimalWraper();
+	DecimalWraper totalMtef = new DecimalWraper();
 
 	boolean debug;
 	public boolean isDebug() {
@@ -165,15 +167,20 @@ public class FundingCalculationsHelper {
 		return this.totPlannedEDD;
 	}
 	
-	public void doCalculations(Collection<AmpFundingDetail> details, String userCurrencyCode) {
-		Iterator<AmpFundingDetail> fundDetItr = details.iterator();
+	public DecimalWraper getTotalMtef()
+	{
+		return this.totalMtef;
+	}
+	
+	public void doCalculations(Collection<? extends FundingInformationItem> details, String userCurrencyCode) {
+		Iterator<? extends FundingInformationItem> fundDetItr = details.iterator();
 		fundDetailList = new ArrayList<FundingDetail>();
 		int indexId = 0;
 		String toCurrCode = Constants.DEFAULT_CURRENCY;
 
 		while (fundDetItr.hasNext()) {
 
-			AmpFundingDetail fundDet = fundDetItr.next();
+			FundingInformationItem fundDet = fundDetItr.next();
 			AmpCategoryValue adjType=null;
 			if(fundDet.getAdjustmentType() != null) 
 				adjType=fundDet.getAdjustmentType();
@@ -235,6 +242,12 @@ public class FundingCalculationsHelper {
 			if (fundDet.getPledgeid()!= null){
 				fundingDetail.setPledge(fundDet.getPledgeid().getId());
 			}
+			
+			/**
+			 * no adjustment type for MTEF transactions, so this "if" is outside the PLANNED / ACTUAL / PIPELINE branching if's
+			 */
+			if (fundDet.getTransactionType().intValue() == Constants.MTEFPROJECTION)
+				totalMtef.setValue(totalMtef.getValue().add(amt.getValue()));
 			
 			// TOTALS
 			if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) ) {
@@ -321,6 +334,8 @@ public class FundingCalculationsHelper {
 		unDisbursementsBalance = Logic.getInstance().getTotalDonorFundingCalculator().getunDisbursementsBalance(totalCommitments, totActualDisb);
 
 	}
+	
+	
 	public void doCalculations(Collection<AmpFundingDetail> details, String userCurrencyCode, int transactionType, AmpCategoryValue adjustmentType) {
 		Iterator<AmpFundingDetail> fundDetItr = details.iterator();
 		fundDetailList = new ArrayList<FundingDetail>();

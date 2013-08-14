@@ -5066,16 +5066,21 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
         }
       
 	public static String getApprovedActivityQueryString(String label) {
-		String query = null;
-		query = " AND " + label + ".draft = false AND " + label + ".approvalStatus LIKE 'approved' ";
+//		String query = null;
+//		query = " AND " + label + ".draft = false AND " + label + ".approvalStatus LIKE 'approved' ";
+		String query = String.format(" AND (%s.draft IS NULL OR %s.draft = false) AND (%s.approvalStatus='%s' OR %s.approvalStatus='%s')",
+				label, label, 
+				label, Constants.APPROVED_STATUS,
+				label, Constants.STARTED_APPROVED_STATUS
+				);
 		return query;
 	}
 
-	public static String getNonDraftActivityQueryString(String label) {
-		String query = null;
-		query = " AND " + label + ".draft = false ";
-		return query;
-	}
+//	public static String getNonDraftActivityQueryString(String label) {
+//		String query = null;
+//		query = " AND " + label + ".draft = false ";
+//		return query;
+//	}
 	
 	/**
 	 * Insert into table 'amp_activity_access' a new record to keep track of users access to activities.

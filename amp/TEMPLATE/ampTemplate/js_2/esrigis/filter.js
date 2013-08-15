@@ -614,7 +614,9 @@ function applyFilterPopin(e){
 	}
 	
 	//loadingPanel.show();
-	YAHOO.util.Connect.setForm('datadispatcherform');
+	var ddf = document.getElementById("datadispatcherform_real_one"); // there are two forms with the same name of "datadispatcherform", so we should choose by ID instead - one of them has the id, while the other doesn't
+	YAHOO.util.Connect.setForm(ddf);
+
 	var sUrl="/esrigis/datadispatcher.do?applyfilter=true" + params;
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
 	hidePopin();

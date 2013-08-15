@@ -46,7 +46,7 @@ function initializeTranslations(){
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script>
 <digi:instance property="datadispatcherform" />
-<digi:form action="/mainmap.do">
+<digi:form action="/mainmap.do" styleId = "datadispatcherform_real_one">
 	<table>
 		<tr>
 			<td>

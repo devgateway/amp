@@ -1120,6 +1120,6 @@ initContactScript();
 		<script language="javascript" type="text/javascript">
     setStyle(document.getElementById("staffTable"),false);
     setStyle(document.getElementById("table_contact_content"),true);
-    var enterBinder	= new EnterHitBinder('addOrgBtn');
+    //var enterBinder	= new EnterHitBinder('addOrgBtn');
 </script>
 	</div>

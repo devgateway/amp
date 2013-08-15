@@ -2207,7 +2207,7 @@ public class ExportActivityToWord extends Action {
 			if (visibleModuleDisbOrders) {
 				// TOTAL ACTUAL DISBURSeMENT ORDERS:
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL ACTUAL DISBURSeMENT ORDERS") + ":";
+						"TOTAL ACTUAL DISBURSEMENT ORDERS") + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalActualDisbursementsOrders() != null
 						&& myForm.getFunding()
@@ -2233,7 +2233,31 @@ public class ExportActivityToWord extends Action {
 				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
 						totalAmountType).addRowData(totalsOutput));
 			}
+			
+			// Consumption Rate
+			{				
+				if(myForm.getFunding().getConsumptionRate()!=null && myForm.getFunding().getConsumptionRate().length()>0)
+				{
+					totalsOutput = "";
+					totalAmountType = TranslatorWorker.translateText("Consumption Rate") + ":";
+					totalsOutput=myForm.getFunding().getConsumptionRate();
+					
+					fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType).addRowData(totalsOutput));
+				}
+			}
 
+			// Delivery Rate
+			{				
+				if (myForm.getFunding().getDeliveryRate() != null && myForm.getFunding().getDeliveryRate().length() > 0)
+				{
+					totalsOutput = "";
+					totalAmountType = TranslatorWorker.translateText("Delivery Rate") + ":";
+					totalsOutput = myForm.getFunding().getDeliveryRate();
+					
+					fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType).addRowData(totalsOutput));
+				}
+			}
+			
 			retVal.add(createSectionTable(fundingTotalsDetails, request,
 					ampContext));
         
@@ -2856,27 +2880,27 @@ public class ExportActivityToWord extends Action {
 			rowAmountForCell1++;
 		}
 		
-		//if(FeaturesUtil.isVisibleField("Delivery rate", ampContext))
-		{
-			if(myForm.getFunding().getDeliveryRate()!=null){
-				columnVal =  myForm.getFunding().getDeliveryRate();
-			}else{
-				columnVal = "";
-			}
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Delivery rate")+": ",columnVal,CELLCOLORGRAY);
-			rowAmountForCell1++;
-		}
-		
-		//if(FeaturesUtil.isVisibleField("Consumption rate", ampContext))
-		{
-			if(myForm.getFunding().getConsumptionRate()!=null){
-				columnVal =  myForm.getFunding().getConsumptionRate();
-			}else{
-				columnVal = "";
-			}
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Consumption rate")+": ",columnVal,CELLCOLORGRAY);	
-			rowAmountForCell1++;
-		}	            
+//		//if(FeaturesUtil.isVisibleField("Delivery rate", ampContext))
+//		{
+//			if(myForm.getFunding().getDeliveryRate()!=null){
+//				columnVal =  myForm.getFunding().getDeliveryRate();
+//			}else{
+//				columnVal = "";
+//			}
+//			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Delivery rate")+": ",columnVal,CELLCOLORGRAY);
+//			rowAmountForCell1++;
+//		}
+//		
+//		//if(FeaturesUtil.isVisibleField("Consumption rate", ampContext))
+//		{
+//			if(myForm.getFunding().getConsumptionRate()!=null){
+//				columnVal =  myForm.getFunding().getConsumptionRate();
+//			}else{
+//				columnVal = "";
+//			}
+//			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Consumption rate")+": ",columnVal,CELLCOLORGRAY);	
+//			rowAmountForCell1++;
+//		}	            
 		overallFundingCell.add(overAllFundingSubTable);	            
 		overAllTable.addCell(overallFundingCell);
 		

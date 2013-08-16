@@ -83,8 +83,8 @@
 														<td nowrap="nowrap" >
 															<digi:trn>Results</digi:trn>&nbsp;
 															<html:select property="tempNumResults" style="width:100px" styleClass="inp-text" onchange="return searchActivity('${aimTeamReportsForm.teamId }')">
-																<c:if test="${aimTeamReportsForm.tempNumResults!=-1}">
-																	<html:option value="${aimTeamReportsForm.tempNumResults}">${aimTeamReportsForm.tempNumResults}</html:option>
+																<c:if test="${aimTeamReportsForm.defReportsPerPage!=-1}">
+																	<html:option value="${aimTeamReportsForm.defReportsPerPage}">${aimTeamReportsForm.defReportsPerPage}</html:option>
 																</c:if>
 																<html:option value="10">10</html:option>
 																<html:option value="20">20</html:option>

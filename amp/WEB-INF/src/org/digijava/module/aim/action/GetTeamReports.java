@@ -74,13 +74,16 @@ public class GetTeamReports extends Action {
 			id = tm.getTeamId();
 			
 			if(tm.getAppSettings()!=null&&tm.getAppSettings().getDefReportsPerPage()!=0){
-            	defReportsPerPage=tm.getAppSettings().getDefReportsPerPage();
+				raForm.setDefReportsPerPage(tm.getAppSettings().getDefReportsPerPage());
             }
 			
 			String reset = request.getParameter("reset");
+			String tempNumResultsParam = request.getParameter("tempNumResults");
             
             if(reset!=null && reset.equalsIgnoreCase("true")){
             	//raForm.setTempNumResults(-1);
+            	defReportsPerPage=tm.getAppSettings().getDefReportsPerPage();
+            	tempNumResultsParam = ""+defReportsPerPage;
             	raForm.setTempNumResults(defReportsPerPage==0?-1:defReportsPerPage);
             	raForm.setKeyword(null);
             }
@@ -89,7 +92,6 @@ public class GetTeamReports extends Action {
             	defReportsPerPage = raForm.getTempNumResults();
             }
             
-            String tempNumResultsParam = request.getParameter("tempNumResults");
             if (tempNumResultsParam != null && tempNumResultsParam.length() > 0) {
             	try {
             		defReportsPerPage = Integer.parseInt(tempNumResultsParam);

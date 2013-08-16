@@ -12,6 +12,7 @@ public class ReportsForm extends ActionForm {
 	private Collection reports = null;
 	private Collection reportsList;
 	private int tempNumResults = 10;
+	private int defReportsPerPage = 10;
 	private int pageSize = 10;
 	private Long reportId = null;
 	private String name = null;
@@ -277,6 +278,14 @@ public class ReportsForm extends ActionForm {
 
 	public void setTempNumResults(int tempNumResults) {
 		this.tempNumResults = tempNumResults;
+	}
+
+	public int getDefReportsPerPage() {
+		return defReportsPerPage;
+	}
+
+	public void setDefReportsPerPage(int defReportsPerPage) {
+		this.defReportsPerPage = defReportsPerPage;
 	}
 
 	public int getPageSize() {

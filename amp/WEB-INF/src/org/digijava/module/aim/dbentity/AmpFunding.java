@@ -505,6 +505,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 				ret += "-" + auxDetail.getContract().getId();
 			ret += "-" + auxDetail.getExpCategory();
 			ret += "-" + auxDetail.getDisbursementOrderRejected();
+			if (auxDetail.getRecipientOrg() != null)
+				ret += "- recipient " + auxDetail.getRecipientOrg().getAmpOrgId() + " with role of " + auxDetail.getRecipientRole().getAmpRoleId();
 		}
 		return ret;
 	}
@@ -585,6 +587,9 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 		boolean trnExp = false;
 		boolean trnDisbOrder = false;
 		boolean trnMTEF = false;
+		boolean trnEDD = false;
+		boolean trnRoF = false;
+		
 		List<AmpFundingDetail> auxDetails = new ArrayList(this.fundingDetails);
 		Collections.sort(auxDetails, fundingDetailsComparator);
 		Iterator<AmpFundingDetail> iter = auxDetails.iterator();
@@ -594,6 +599,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			String transactionType = "";
 			String extraValues = "";
 			Output auxOutDetail = null;
+
 			switch (auxDetail.getTransactionType().intValue()) {
 			case Constants.COMMITMENT:
 				transactionType = "Commitments";
@@ -653,18 +659,41 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 					trnDisbOrder = true;
 				}
 				break;
+				
+			case Constants.ESTIMATED_DONOR_DISBURSEMENT:
+				transactionType = " Estimated Donor Disbursements";
+				if (!trnEDD)
+				{
+					out.getOutputs().add(new Output(new ArrayList<Output>(), new String[] {transactionType}, new Object[] {""}));
+					trnEDD = true;
+				}
+				break;
+				
+			case Constants.RELEASE_OF_FUNDS:
+				transactionType = " Release of Funds";
+				if (!trnRoF)
+				{
+					out.getOutputs().add(new Output(new ArrayList<Output>(), new String[] {transactionType}, new Object[] {""}));
+					trnRoF = true;
+				}
+				break;
+				
 			
 			default:
 				error = true;
 				break;
 			}
 			if (!error) {
+				String recipientInfo = "";
+				if (auxDetail.getRecipientOrg() != null)
+					recipientInfo = String.format(" to %s as %s", auxDetail.getRecipientOrg().getName(), auxDetail.getRecipientRole().getName());
+				
 				String adjustment = auxDetail.getAdjustmentType().getValue();
 				auxOutDetail = out.getOutputs().get(out.getOutputs().size() - 1);
 				auxOutDetail.getOutputs().add(
 						new Output(null, new String[] { "" }, new Object[] { adjustment, " - ",
 								auxDetail.getTransactionAmount(), " ", auxDetail.getAmpCurrencyId(), " - ",
-								auxDetail.getTransactionDate() + extraValues }));
+								auxDetail.getTransactionDate() + extraValues + recipientInfo}));
 			}
 		}
 		

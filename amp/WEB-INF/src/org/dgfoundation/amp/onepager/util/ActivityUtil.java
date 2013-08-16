@@ -156,16 +156,7 @@ public class ActivityUtil {
 			saveIndicators(a, session);
 			
 			setCreationTimeOnStructureImages(a);
-			if (createNewVersion){
-				//a.setAmpActivityId(null); //hibernate will save as a new version
-				session.save(a);
-			}
-			else{
-				//session.saveOrUpdate(a);
-				session.update(a);
-			}
-				
-			
+
 			AmpActivityGroup group = a.getAmpActivityGroup();
 			if (group == null){
 				throw new RuntimeException("Non-existent group should have been added by now!");
@@ -198,9 +189,16 @@ public class ActivityUtil {
 			saveAgreements(session);
 			
 			updateComponentFunding(a, session);
-			
-			session.update(a); //should have saved by now
-			
+
+            if (createNewVersion){
+                //a.setAmpActivityId(null); //hibernate will save as a new version
+                session.save(a);
+            }
+            else{
+                //session.saveOrUpdate(a);
+                session.update(a);
+            }
+
 			am.setObject(a);
 		} catch (Exception exception) {
 			logger.error("Error saving activity:", exception); // Log the exception			

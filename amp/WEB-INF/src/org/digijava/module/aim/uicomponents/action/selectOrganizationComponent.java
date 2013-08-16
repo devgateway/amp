@@ -353,6 +353,7 @@ public class selectOrganizationComponent extends Action {
 		eaForm.setPages(pages);
 		eaForm.setCurrentPage(1);
 
+        fillSelectedOrgIds(eaForm);
 		return mapping.findForward("forward");
 
 	}
@@ -411,10 +412,17 @@ public class selectOrganizationComponent extends Action {
 			eaForm.setOrganizations(tempCol);
 			eaForm.setCurrentPage(new Integer(page));
 		}
+
+        fillSelectedOrgIds(eaForm);
 		return mapping.findForward("forward");
 	}
 
-	public ActionForward setOrganizationToForm(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void fillSelectedOrgIds(selectOrganizationComponentForm eaForm) {
+        List<Long> allSelectedOrgsIds = eaForm.getAllSelectedOrgsIds();
+        eaForm.setSelOrganisations(allSelectedOrgsIds == null ? new Long[0] : allSelectedOrgsIds.toArray(new Long[0]));
+    }
+
+    public ActionForward setOrganizationToForm(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		selectOrganizationComponentForm eaForm = (selectOrganizationComponentForm) form;
 
 		Long id = Long.parseLong(request.getParameter("id"));

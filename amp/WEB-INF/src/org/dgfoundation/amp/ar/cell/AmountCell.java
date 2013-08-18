@@ -155,7 +155,10 @@ public class AmountCell extends Cell {
 		if (am == 0)
 			return "0";
 		else
-			return ReportContextData.formatNumberUsingCustomFormat(getAmount());
+		{
+			String res = ReportContextData.formatNumberUsingCustomFormat(getAmount());
+			return res;
+		}
 	}
 
 	/*

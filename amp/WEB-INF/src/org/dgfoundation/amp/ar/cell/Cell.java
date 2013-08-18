@@ -298,5 +298,5 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 	public String getObjectId() {
 		return super.toString();
 	}
-	
+		
 }

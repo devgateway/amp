@@ -17,4 +17,12 @@ public class EqualsLogicalToken extends LogicalToken {
 		return super.evaluate(c);
 	}
 	
+	@Override
+	public String toString()
+	{
+		String result = String.format("[%s %s %s]", this.type.toString(), this.negation ? "NOT_EQUALS " : "EQUALS", this.value.toString());
+		return result;
+
+	}
+	
 }

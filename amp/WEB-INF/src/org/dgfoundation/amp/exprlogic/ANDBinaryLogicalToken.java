@@ -34,4 +34,12 @@ public class ANDBinaryLogicalToken extends BinaryLogicalToken {
 		return realRet;
 	}
 	
+	@Override
+	public String toString()
+	{
+		String result = String.format("[%s[%s AND %s]]", this.negation ? "NOT " : "", this.left.toString(), this.right.toString());
+		if (this.negation)
+			result = result.substring(1, result.length() - 1);
+		return result;
+	}
 }

@@ -146,14 +146,14 @@ public class Values extends HashMap<String, BigDecimal> {
 		this.addValue(ArConstants.ACTUAL_COMMITMENT, TokenRepository.buildActualCommitmentsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.ACTUAL_DISBURSEMENT, TokenRepository.buildActualDisbursementsLogicalToken().evaluate(cell));
 
-		this.addValue(ArConstants.PLANNED_COMMITMENT, (TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(cell)));
-		this.addValue(ArConstants.PLANNED_DISBURSEMENT, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.PLANNED_COMMITMENT, (TokenRepository.buildPlannedCommitmentsLogicalToken().evaluate(cell)));
+		this.addValue(ArConstants.PLANNED_DISBURSEMENT, TokenRepository.buildPlannedDisbursementsLogicalToken().evaluate(cell));
 
 		this.addValue(ArConstants.TOTAL_ACTUAL_COMMITMENT, TokenRepository.buildActualCommitmentsLogicalToken().evaluate(cell));
 		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT, TokenRepository.buildActualDisbursementsLogicalToken().evaluate(cell));
 
-		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, TokenRepository.buildPlannedCommitmentsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, TokenRepository.buildPlannedDisbursementsLogicalToken().evaluate(cell));
 		//this.addValue(ArConstants.ACTUAL_PLEDGE_COMMITMENT, TokenRepository.buildPledgesCommitmentsLogicalToken().evaluateOriginalvalue(cell));
 		
 		// no filtered, affected by %
@@ -168,8 +168,8 @@ public class Values extends HashMap<String, BigDecimal> {
 		if (cell.isShow()) {
 			this.addValue(ArConstants.ACTUAL_COMMITMENT_FILTERED, TokenRepository.buildActualCommitmentsLogicalToken().evaluate(cell));
 			this.addValue(ArConstants.ACTUAL_DISBURSEMENT_FILTERED, TokenRepository.buildActualDisbursementsLogicalToken().evaluate(cell));
-			this.addValue(ArConstants.PLANNED_COMMITMENT_FILTERED, TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(cell));
-			this.addValue(ArConstants.PLANNED_DISBURSEMENT_FILTERED, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(cell));
+			this.addValue(ArConstants.PLANNED_COMMITMENT_FILTERED, TokenRepository.buildPlannedCommitmentsLogicalToken().evaluate(cell));
+			this.addValue(ArConstants.PLANNED_DISBURSEMENT_FILTERED, TokenRepository.buildPlannedDisbursementsLogicalToken().evaluate(cell));
 		}
 
 		if (cell.getMetaValueString(ArConstants.ADJUSTMENT_TYPE) != null) {

@@ -216,4 +216,15 @@ public class MathExpression {
 
 		return false;
 	}
+	
+	@Override
+	public String toString()
+	{
+		if (oper1 == null)
+			return operation.name(); 
+		if (oper2 == null)			
+			return String.format("(%s %s)", operation.name(), oper1.toString());
+		
+		return String.format("(%s %s %s)", oper1.toString(), operation.name(), oper2.toString());
+	}
 }

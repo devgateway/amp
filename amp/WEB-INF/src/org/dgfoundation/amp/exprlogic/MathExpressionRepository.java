@@ -181,7 +181,7 @@ public class MathExpressionRepository {
 	private static void buildPercentageOfTotalCommitments() {
 		try {
 			MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_COMMITMENT_FILTERED, new BigDecimal(100));
-			MathExpression m2 = new MathExpression(MathExpression.Operation.DIVIDE_ROUND_TWO_DECIMALS, m1, ArConstants.GRAND_TOTAL_ACTUAL_COMMITMENTS);
+			MathExpression m2 = new MathExpression(MathExpression.Operation.DIVIDE_ROUND_TWO_DECIMALS, m1, ArConstants.TOTAL_ACTUAL_COMMITMENT);
 			expresions.put(PERCENTAGE_OF_TOTAL_COMMITMENTS, m2);
 		} catch (Exception e) {
 			logger.error(e);

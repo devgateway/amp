@@ -24,4 +24,9 @@ public class PresentLogicalToken extends LogicalToken {
 		return super.evaluate(c);
 	}
 	
+	@Override
+	public String toString()
+	{
+		return String.format("[%s %s]", this.negation ? "NOT HAS_META " : "HAS_META", this.type); 
+	}
 }

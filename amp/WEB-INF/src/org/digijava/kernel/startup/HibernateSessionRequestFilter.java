@@ -60,6 +60,7 @@ public class HibernateSessionRequestFilter implements Filter {
             	if (tx.isActive())
             		tx.commit();
             
+            PersistenceManager.removeClosedSessionsFromMap();
             //PersistenceManager.checkClosedOrLongSessionsFromTraceMap();
  
         } catch (StaleObjectStateException staleEx) {

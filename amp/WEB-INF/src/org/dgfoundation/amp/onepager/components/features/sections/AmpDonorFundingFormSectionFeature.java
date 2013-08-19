@@ -26,6 +26,7 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFe
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
@@ -138,8 +139,7 @@ public class AmpDonorFundingFormSectionFeature extends
 	public AmpDonorFundingFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
-		
-		
+
 		//group fields in FM under "Proposed Project Cost"
 		AmpProposedProjectCost propProjectCost = new AmpProposedProjectCost("propProjCost", "Proposed Project Cost", am);
 		add(propProjectCost);
@@ -167,6 +167,12 @@ public class AmpDonorFundingFormSectionFeature extends
                         CategoryConstants.MODALITIES_KEY),
                 CategoryConstants.MODALITIES_NAME, true, false, null, AmpFMTypes.MODULE);
         add(modalities);
+
+        AmpTextAreaFieldPanel sscComponentTitle = new AmpTextAreaFieldPanel("sscComponentTitle", new PropertyModel(am, "sscComponentTitle"), "Title of Component", false, false, false);
+        add(sscComponentTitle);
+
+        AmpTextAreaFieldPanel sscComponentDescription = new AmpTextAreaFieldPanel("sscComponentDescription", new PropertyModel(am, "sscComponentDescription"), "Title of Component", false, false, false);
+        add(sscComponentDescription);
 
 
         fundingModel = new PropertyModel<Set<AmpFunding>>(am, "funding");

@@ -96,17 +96,17 @@ if(validateItem){
 <% 
 		if(bckColor.equals("true")) {
 %>
+    <field:display name="Add SSC Button" feature="Edit Activity">
+        <c:set var="activityEditURL">
+            /wicket/onepager/ssc
+        </c:set>
+    </field:display>
     <field:display name="Add Activity Button" feature="Edit Activity">
         <c:set var="activityEditURL">
             /wicket/onepager/activity
         </c:set>
     </field:display>
-<%-- <field:display name="Add SSC Button" feature="Edit Activity">
-        <c:set var="activityEditURL">
-            /wicket/onepager/ssc
-        </c:set>
-    </field:display>
---%>
+
 <bean:define id="bckColor" value="false" toScope="page"/>
 <tr style="<%=display%>">
 	<c:if test="${addFakeColumn}">

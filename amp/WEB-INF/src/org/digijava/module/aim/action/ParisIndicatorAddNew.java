@@ -33,12 +33,13 @@ public class ParisIndicatorAddNew extends Action
 		AmpAhsurveyIndicator surveyInd = new AmpAhsurveyIndicator();
 		surveyInd.setIndicatorCode(parisForm.getAddNewIndicatorCode());
 		Integer a1 = new Integer(15);
-		surveyInd.setIndicatorNumber(a1);		
+		surveyInd.setIndicatorNumber(a1);
 		surveyInd.setName(parisForm.getAddNewIndicatorText());		
 		Integer a2 = new Integer(1); 
 		surveyInd.setTotalQuestions(a2);		
 		surveyInd.setStatus(null);
 		DbUtil.add(surveyInd);
+
 		
 		
 		AmpAhsurveyIndicator ahSurveyInd = ParisUtil.findIndicatorId(parisForm.getAddNewIndicatorText(),parisForm.getAddNewIndicatorCode());

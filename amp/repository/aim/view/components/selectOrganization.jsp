@@ -485,6 +485,20 @@
 								</logic:notEmpty>
 							</logic:notEmpty>
 
+                            <c:if test="${empty aimSelectOrganizationForm.alphaPages && empty aimSelectOrganizationForm.pages}">
+                                <tr>
+                                    <td align="center">
+                                        <table align="center" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td height="18" align="center" style="size: 9px; color: #333333">
+                                                    <digi:trn>No results for this search</digi:trn>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </c:if>
+
 							<logic:notEmpty name="aimSelectOrganizationForm" property="alphaPages">
 								<tr>
 									<td align="center">

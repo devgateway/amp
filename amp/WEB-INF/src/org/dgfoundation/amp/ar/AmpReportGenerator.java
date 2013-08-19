@@ -588,7 +588,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		    				GroupColumn.isRealDisbursement(item); // add ACTUAL DISBURSEMENT items to the REAL DISBURSEMENTS column - as they have the same datasource (ACTUAL DISBURSEMENTS), they have the same metadata
 					boolean shouldAddCellToColumn = item.hasMetaInfo(metaInfo) || shouldAddRealDisbursement; // ugly hack because the same data source (actual disbursements) should fill two columns: actual disbursements + real disbursements								
 					if (shouldAddCellToColumn)
-						cc.addCell(item);
+						cc.addCellRaw(item); //addCellRaw because we don't want TotalAmountCellColumn to merge everything in one huge cell
 				}
 			}
 			

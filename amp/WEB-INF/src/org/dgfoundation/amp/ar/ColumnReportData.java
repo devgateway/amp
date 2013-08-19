@@ -408,6 +408,8 @@ public class ColumnReportData extends ReportData<Column> {
 
 		prepareAspect();
 
+		buildComputedTotals();
+		
 		// create trail cells...
 		trailCells = new ArrayList<AmountCell>();
 		
@@ -416,7 +418,7 @@ public class ColumnReportData extends ReportData<Column> {
 		for (Column element:items) {
 			List<AmountCell> l = element.getTrailCells();
 			if (l != null){
-				trailCells.addAll(filterTrailCells(l, element));
+				trailCells.addAll(l);
 			}else{
 				if ((ctbr!=null)&& (!ctbr.contains(element.getName()))){
 				//add just to keep the space
@@ -425,7 +427,6 @@ public class ColumnReportData extends ReportData<Column> {
 			}
 		}
 		
-		buildComputedTotals();
 		
 		//remove columns to be removed		
 		
@@ -454,11 +455,33 @@ public class ColumnReportData extends ReportData<Column> {
 		
 	
 	protected void buildComputedTotals()
-	{
+	{ // step 1: calculate trail 
+		List<AmountCell> interestingTrailCells = new ArrayList<AmountCell>();
+		Set<String> interestingColumnNames = new HashSet<String>() 
+				{{
+					add(ArConstants.ACTUAL_COMMITMENTS); 
+					add(ArConstants.ACTUAL_DISBURSEMENTS);
+					add(ArConstants.PLANNED_COMMITMENTS);
+					add(ArConstants.PLANNED_DISBURSEMENTS);
+				}};
+		
+		for (Column element:items) {
+			List<AmountCell> l = element.getTrailCells();
+			if (l != null)
+			{
+				for(AmountCell amCell:l)
+				{
+					if (interestingColumnNames.contains(amCell.getColumn().getName()))
+						interestingTrailCells.add(amCell);
+				}
+			}
+		}
+		
+		// step 2: extract totals
 		subReportTotals.clear();//instanceof totalamountcolumn "Actual Commitments"
 		double actualCommitments = 0, actualDisbursements = 0, plannedCommitments = 0, plannedDisbursements = 0;
 		
-		for(AmountCell caca:this.getTrailCells())
+		for(AmountCell caca:interestingTrailCells)
 		{
 			if ((caca != null) && (caca.getColumn() instanceof TotalAmountColumn))
 				if ((caca.getColumn().getParent() != null) && (caca.getColumn().getParent() instanceof GroupColumn))
@@ -469,13 +492,13 @@ public class ColumnReportData extends ReportData<Column> {
 						if (ArConstants.ACTUAL_COMMITMENTS.equals(columnName))
 							actualCommitments += caca.getAmount();
 				
-						if ("Actual Disbursements".equals(columnName))
+						if (ArConstants.ACTUAL_DISBURSEMENTS.equals(columnName))
 							actualDisbursements += caca.getAmount();
 				
-						if ("Planned Commitments".equals(columnName))
+						if (ArConstants.PLANNED_COMMITMENTS.equals(columnName))
 							plannedCommitments += caca.getAmount();
 				
-						if ("Planned Disbursements".equals(columnName))
+						if (ArConstants.PLANNED_DISBURSEMENTS.equals(columnName))
 							plannedDisbursements += caca.getAmount();
 				
 						//System.out.println("THE COLUMN NAME IS:" + columnName);
@@ -488,21 +511,21 @@ public class ColumnReportData extends ReportData<Column> {
 	}
 	
 	
-	protected List<AmountCell> filterTrailCells(List<AmountCell> input, Column column)
-	{
-		if (!column.getName().equals(ArConstants.COLUMN_FUNDING))
-			return input;
-		
-		List<AmountCell> result = new ArrayList<AmountCell>();
-		for(AmountCell cell:input)
-		{
-			if (cell instanceof CategAmountCell)
-			{
-				CategAmountCell cac = (CategAmountCell) cell;
-			}
-		}
-		return input;
-	}
+//	protected List<AmountCell> filterTrailCells(List<AmountCell> input, Column column)
+//	{
+//		if (!column.getName().equals(ArConstants.COLUMN_FUNDING))
+//			return input;
+//		
+//		List<AmountCell> result = new ArrayList<AmountCell>();
+//		for(AmountCell cell:input)
+//		{
+//			if (cell instanceof CategAmountCell)
+//			{
+//				CategAmountCell cac = (CategAmountCell) cell;
+//			}
+//		}
+//		return input;
+//	}
 	
 	/**
 	 * removes all rows whose funding columns have no data
@@ -806,6 +829,7 @@ public class ColumnReportData extends ReportData<Column> {
 		}
 		return src;
 	}
+	
 	public double retrieveSubReportDataValue(String val)
 	{
 		Double d = subReportTotals.get(val);

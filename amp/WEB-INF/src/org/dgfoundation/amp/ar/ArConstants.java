@@ -251,6 +251,9 @@ public final class ArConstants {
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
 	public final static String ACTUAL_COMMITMENTS="Actual Commitments";
 	public final static String ACTUAL_DISBURSEMENTS = "Actual Disbursements";
+	public final static String PLANNED_COMMITMENTS = "Planned Commitments";
+	public final static String PLANNED_DISBURSEMENTS = "Planned Disbursements";
+	
 	public final static String REAL_DISBURSEMENTS = "Real Disbursements";
 	public final static String UNCOMMITTED_BALANCE="Uncommitted Balance";
 	public final static String TOTAL_COMMITMENTS="Total Commitments";

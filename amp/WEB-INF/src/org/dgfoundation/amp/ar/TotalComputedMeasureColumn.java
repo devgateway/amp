@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedMeasureCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
@@ -66,14 +67,14 @@ public class TotalComputedMeasureColumn extends TotalAmountColumn {
 	}
 
 	/**
-	 * Overrides the method for adding cells, to make sure we add only
-	 * UndisbursedAmountCellS
+	 * Overrides the method for adding cells, to make sure we add only UndisbursedAmountCellS
 	 * 
 	 * @param c
 	 *            the cell to be added
 	 * @see UndisbursedAmountCell
 	 */
-	public void addCell(Object c) {
+	@Override
+	public void addCell(Cell c) {
 		AmountCell ac = (AmountCell) c;
 		ComputedMeasureCell uac = new ComputedMeasureCell(ac.getOwnerId());
 		uac.merge(uac, ac);
@@ -94,7 +95,7 @@ public class TotalComputedMeasureColumn extends TotalAmountColumn {
 			Object el = i.next();
 			ComputedMeasureCell element = (ComputedMeasureCell) el;
 			ac.merge(element, ac);
-			groupValues.collectTrailVariables(element.getValues());
+			groupValues.collectTrailVariables(((ComputedMeasureCell) element).getValues());
 		}
 		ac.setColumn(this);
 		ReportData root = getRootReportData(this.getNearestReportData());

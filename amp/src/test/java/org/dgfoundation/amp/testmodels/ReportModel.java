@@ -39,6 +39,6 @@ public abstract class ReportModel implements Comparable<ReportModel>{
 	@Override
 	public String toString()
 	{
-		return String.format("[%s] %s", this.getClass().getName(), this.getName());
+		return String.format("[%s] %s", this.getClass().getSimpleName(), this.getName());
 	}
 }

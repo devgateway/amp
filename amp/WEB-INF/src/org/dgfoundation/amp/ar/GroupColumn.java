@@ -672,6 +672,7 @@ public class GroupColumn extends Column<Column> {
      * 
      * @see org.dgfoundation.amp.ar.Column#filterCopy(org.dgfoundation.amp.ar.cell.Cell)
      */
+    @Override
     public Column filterCopy(Cell filter, Set<Long> ids) {
         GroupColumn dest = new GroupColumn(this.getName());
         Iterator i = items.iterator();

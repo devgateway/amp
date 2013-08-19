@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.TotalCommitmentsAmountCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
@@ -61,11 +62,12 @@ public class TotalCommitmentsAmountColumn extends TotalAmountColumn {
 	}
 
 	/**
-	 * Overrides the method for adding cells, to make sure we add only UndisbursedAmountCellS
+	 * Overrides the method for adding cells, to make sure we add only TotalCommitmentsAmountCellS
 	 * @param c the cell to be added
-	 * @see UndisbursedAmountCell
+	 * @see TotalCommitmentsAmountCellS
 	 */
-	public void addCell(Object c) {
+	@Override
+	public void addCell(Cell c) {
 		AmountCell ac=(AmountCell) c;
 		TotalCommitmentsAmountCell uac=new TotalCommitmentsAmountCell(ac.getOwnerId());		
 		super.addCell(uac.merge(ac));
@@ -80,8 +82,8 @@ public class TotalCommitmentsAmountColumn extends TotalAmountColumn {
 		TotalCommitmentsAmountCell ac = new TotalCommitmentsAmountCell();		
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
-		    TotalCommitmentsAmountCell element = (TotalCommitmentsAmountCell) i.next();
-			ac.merge(element,ac);			
+			TotalCommitmentsAmountCell element = (TotalCommitmentsAmountCell) i.next();
+			ac.merge(element,ac);
 		}
 		ac.setColumn(this);
 		ar.add(ac);

@@ -301,7 +301,7 @@ public class GroupReportData extends ReportData<ReportData> {
 					} else {
 						math = MathExpressionRepository.get(((ComputedMeasureCell) cell).getColumn().getWorker().getRelatedColumn().getTokenExpression());
 					}
-					ComputedMeasureCell c0=(ComputedMeasureCell) cell ;
+					ComputedMeasureCell c0=(ComputedMeasureCell) cell;
 					Values values = c0.getValues();
 					if(this.getTotalActualCommitments() != null)
 						values.put(ArConstants.GRAND_TOTAL_ACTUAL_COMMITMENTS, this.getTotalActualCommitments());

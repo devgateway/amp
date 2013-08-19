@@ -333,6 +333,8 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 	
 	@Override
 	public ReportData getNearestReportData() {
+		if (parent == null)
+			return null;
 		return parent.getNearestReportData();
 	}
 	

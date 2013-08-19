@@ -115,19 +115,27 @@ public class CellColumn<K extends Cell> extends Column<K> {
 		return null;
 	}
 
-	public Cell getCell(int i) {
-		return (Cell) getItem(i);
+	public K getCell(int i) {
+		return (K) getItem(i);
 	}
 
-	public void addCell(K c) {
+	/**
+	 * do not parametrize this function, as we need it to accept raw Cell as argument for overriding purposes in subclasses (some subclasses do an "addCell(AmountCell cell)" which call "super.addCell(new TotalAmountCell(cell))"
+	 * @param c
+	 */
+	public void addCell(Cell c) {
 		//Cell c = (Cell) cc;
+		addCellRaw(c);
+	}
+
+	public final void addCellRaw(Cell c)
+	{
 		c.setColumn(this);
 		if (!itemsMap.containsKey(c.getOwnerId()))
 			itemsMap.put(c.getOwnerId(), new ArrayList<Cell>());
 		itemsMap.get(c.getOwnerId()).add(c);
-		items.add(c);
+		items.add((K) c);
 	}
-
 	/*
 	 * (non-Javadoc)
 	 * 

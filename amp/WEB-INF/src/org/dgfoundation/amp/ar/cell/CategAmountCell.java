@@ -218,6 +218,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 				((CategAmountCell) amCell).removeDirectedFundingMetadata();
 	}
 	
+@Override
 public Cell filter(Cell metaCell,Set ids) {
 	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);
 	if(ret==null) return null;

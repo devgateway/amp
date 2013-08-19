@@ -2,15 +2,18 @@ package org.dgfoundation.amp.testmodels;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportData;
+import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.testutils.*;
 
 public class GroupReportModel extends ReportModel
 {
 	private ReportModel[] childModels;
+	private String[] trailCells;
 	
 	private enum GRModelType {GROUP_REPORTS, COLUMN_REPORTS};
 	
@@ -33,11 +36,24 @@ public class GroupReportModel extends ReportModel
 		return new GroupReportModel(name, columnReportDataModels, GRModelType.COLUMN_REPORTS);
 	}
 	
+	public GroupReportModel withTrailCells(String... trailCells)
+	{
+		this.trailCells = trailCells;
+		return this;
+	}
+	
 	public String matches(GroupReportData grd)
 	{
 		if (this.getName().compareTo(grd.getName()) != 0)
 			return String.format("name mismatch: %s vs %s", grd.getName(), this.getName());
 
+		if (trailCells != null)
+		{
+			String trailCellComparisonResult = matches_trail_cells(grd);
+			if (trailCellComparisonResult != null)
+				return trailCellComparisonResult;
+		}
+		
 		if (childModels != null)
 		{
 			// comparison is relevant iff childModels is specified
@@ -56,6 +72,43 @@ public class GroupReportModel extends ReportModel
 			default:
 				throw new RuntimeException("unknown GRModelType: " + type);
 		}
+	}
+	
+	protected String matches_trail_cells(GroupReportData grd)
+	{
+		List<AmountCell> cells = grd.getTrailCells();
+		if (cells == null)
+			return String.format("GRD %s has no trail cells, but should have %d", this.getName(), trailCells.length);
+		
+		if (cells.size() != trailCells.length)
+			return String.format("GRD %s has %d trail cells, but should have %d", this.getName(), cells.size(), trailCells.length);
+			
+		for(int i = 0; i < trailCells.length; i++)		
+		{
+			AmountCell cell = cells.get(i);
+			
+			String cellContents = cell == null ? null : cell.toString();			
+			String correctCell = trailCells[i];
+
+			String rs = compareCells(cellContents, correctCell, i);
+			if (rs != null)
+				return rs;
+		}
+		return null;
+	}
+	
+	protected String compareCells(String cellContents, String correctCell, int i)
+	{
+		if (cellContents == null)
+			cellContents = "<null>";
+		
+		if (correctCell == null)
+			correctCell = "<null>";
+		
+		if (!correctCell.equals(cellContents))
+			return String.format("GRD %s has trail cell %d equal %s instead of %s", this.getName(), i, cellContents, correctCell);
+		
+		return null;
 	}
 	
 	/**

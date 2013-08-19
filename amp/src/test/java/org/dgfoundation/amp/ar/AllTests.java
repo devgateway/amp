@@ -1,6 +1,6 @@
 package org.dgfoundation.amp.ar;
 
-import org.dgfoundation.amp.testutils.LiberiaFiller;
+//import org.dgfoundation.amp.testutils.LiberiaFiller;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -21,13 +21,14 @@ public class AllTests {
 	public static Test suite() {
 		
 		setUp();
-		LiberiaFiller.fillInDatabase();
+//		LiberiaFiller.fillInDatabase();
 		TestSuite suite = new TestSuite(AllTests.class.getName());
 		//$JUnit-BEGIN$
 
 		//suite.addTestSuite(DirectedDisbursementsTests.class);
 		suite.addTest(DirectedDisbursementsTests.suite());
 		suite.addTest(MtefTests.suite());
+		suite.addTest(ComputedMeasuresTests.suite());
 		//suite.addTest(new DirectedDisbursementsTests("testReports"));
 		//$JUnit-END$
 		return suite;

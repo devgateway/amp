@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
@@ -67,14 +68,14 @@ public class TotalComputedAmountColumn extends TotalAmountColumn<ComputedAmountC
 	}
 
 	/**
-	 * Overrides the method for adding cells, to make sure we add only
-	 * UndisbursedAmountCellS
+	 * Overrides the method for adding cells, to make sure we add only ComputedAmountCell
 	 * 
 	 * @param c
 	 *            the cell to be added
-	 * @see UndisbursedAmountCell
+	 * @see ComputedAmountCell
 	 */
-	public void addCell(Object c) {
+	@Override
+	public void addCell(Cell c) {
 		AmountCell ac = (AmountCell) c;
 		ComputedAmountCell uac = new ComputedAmountCell(ac.getOwnerId());
 		uac.merge(uac, ac);

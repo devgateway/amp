@@ -36,13 +36,13 @@ public class DirectedDisbursementsTests extends ReportsTestCase
 		
 	public static Test suite()
 	{
-		TestSuite suite = new TestSuite(AllTests.class.getName());
+		TestSuite suite = new TestSuite(DirectedDisbursementsTests.class.getName());
 		suite.addTest(new DirectedDisbursementsTests("testFlatReport"));
 		suite.addTest(new DirectedDisbursementsTests("testByBeneficiary"));
 		suite.addTest(new DirectedDisbursementsTests("testByDonor"));
 		suite.addTest(new DirectedDisbursementsTests("testByExecuting"));
 		return suite;
-	}	
+	}
 		
 	protected List<AmpActivity> getAllActivities() throws Exception
 	{

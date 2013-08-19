@@ -140,21 +140,18 @@
 		if(checkNumeric(document.aimSelectOrganizationForm.tempNumResults	,'','','')==true)
 		{
 			if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
-				  alert ("Invalid value at 'Number of results per page'");
-				  document.aimSelectOrganizationForm.tempNumResults.focus();
-				  return false;
+			    alert ("Invalid value at 'Number of results per page'");
+			    document.aimSelectOrganizationForm.tempNumResults.focus();
+			    return false;
 			} else {
-				 <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&subAction=search"/>
+			    <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&subAction=search"/>
 			    document.aimSelectOrganizationForm.action = "<%= searchOrg %>";
 			    document.aimSelectOrganizationForm.submit();
-				  return true;
+				return true;
 			}
 		}
 		else return false;
 	}
-
-
-
 
 	function searchAlpha(val) {
 		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
@@ -226,7 +223,7 @@
 	<logic:equal name="aimSelectOrganizationForm" property="afterSelect" value="true">
 	//call back function 
 	<logic:notEmpty name="aimSelectOrganizationForm" property="callbackFunction">
-			window.opener.<bean:write name="aimSelectOrganizationForm" property="callbackFunction"/>;
+		window.opener.<bean:write name="aimSelectOrganizationForm" property="callbackFunction"/>;
 	</logic:notEmpty>	
 	//Refresh
 	<logic:equal name="aimSelectOrganizationForm" property="refreshParent" value="true">
@@ -259,7 +256,8 @@
 						class=box-border-nopadding>
 						<tr bgcolor="#4A687A">
 							<td vAlign="center" width="100%" align="center" class="textalb" height="20">
-								<digi:trn>Search Organizations</digi:trn></td>
+								<digi:trn>Search Organizations</digi:trn>
+                            </td>
 						</tr>
 						<tr>
 							<td align="center" bgcolor="#F8F8F8">
@@ -333,14 +331,14 @@
 											<logic:iterate name="aimSelectOrganizationForm"	id="organisations" property="organizations"	type="org.digijava.module.aim.dbentity.AmpOrganisation">		
 												<tr>
 													<td bgcolor=#F8F8F8 width="1%">&nbsp;</td>		
-													<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">		
-														<td bgcolor="#F8F8F8" width="10%">
-															<html:multibox	property="selOrganisations" styleClass="orgsMultibox">
-																<bean:write name="organisations" property="ampOrgId" />
-															</html:multibox>&nbsp;
-														</td>
-													</logic:equal>
-													<td bgcolor="#F8F8F8" width="90%">
+                                                        <logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="true">
+                                                            <td bgcolor="#F8F8F8" width="10%">
+                                                                <html:multibox	property="selOrganisations" styleClass="orgsMultibox">
+                                                                    <bean:write name="organisations" property="ampOrgId" />
+                                                                </html:multibox>&nbsp;
+                                                            </td>
+                                                        </logic:equal>
+                                                    <td bgcolor="#F8F8F8" width="90%">
 														<bean:write	name="organisations" property="acronym" />&nbsp;&nbsp; ( <bean:write  name="organisations" property="name" /> )
 													</td>		
 													<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="false">
@@ -363,30 +361,24 @@
 												</tr>
 											</logic:iterate>
 											<!-- code recheck selOrganisations lost by pagination -->
-									<c:if
-										test="${aimSelectOrganizationForm.allSelectedOrgsIds != null}">
-											<c:forEach
-												items="${aimSelectOrganizationForm.allSelectedOrgsIds}"
-												var="itemy">
-												<c:set var="mio">
-													<c:out value="${itemy}" />
-												</c:set>
-											    	<script language="javascript">
-															 for(var i = 0; i < 10; i++){
+									        <c:if test="${aimSelectOrganizationForm.allSelectedOrgsIds != null}">
+                                                <c:forEach items="${aimSelectOrganizationForm.allSelectedOrgsIds}" var="itemy">
+                                                    <c:set var="mio">
+                                                        <c:out value="${itemy}" />
+                                                    </c:set>
+                                                    <script language="javascript">
+                                                        for(var i = 0; i < 10; i++){
+                                                            var chekbox = document.getElementsByName("selOrganisations")[i];
+                                                            var elebox = chekbox.value;
+                                                            if(elebox==${mio}){
+                                                                chekbox.checked = true;
+                                                            }
+                                                        }
+                                                    </script>
+                                                </c:forEach>
+									        </c:if>
+                                            <!-- end code recheck selOrganisations lost by pagination -->
 
-																 var chekbox = document.getElementsByName("selOrganisations")[i];
-															     var elebox = chekbox.value ;
-				                                                if(elebox==${mio}){
-				                                                	chekbox.checked = true;
-				                                                    }
-															 }
-														</script>
-											</c:forEach>
-									</c:if>
-                                  <!-- end code recheck selOrganisations lost by pagination -->
-											
-											
-											
 											<tr>
 												<td align="center" colspan="3" bgcolor=#F8F8F8>
 													<table cellPadding=5>
@@ -417,104 +409,107 @@
 										<td align="center">
 										<table align="center" cellpadding="0" cellspacing="0">
 											<tr>
-												<td height="18" align="center"
-													style="size: 9px; color: #333333"><digi:trn
-													key="aim:pages">Pages</digi:trn> <c:if
-													test="${aimSelectOrganizationForm.currentPage > 1}">
+												<td height="18" align="center" style="size: 9px; color: #333333">
+                                                    <digi:trn key="aim:pages">Pages</digi:trn>
+                                                    <c:if test="${aimSelectOrganizationForm.currentPage > 1}">
 	
-													<c:set var="translation">
-														<digi:trn key="aim:firstpage">First Page</digi:trn>
-													</c:set>
-	
-													<a style="text-decoration: none; color: #333333"
-														href="javascript:selectOrganizationPages(1)"
-														title="${translation}"> &lt;&lt; </a>
-	
-													<c:set var="translation">
-														<digi:trn key="aim:previouspage">Previous Page</digi:trn>
-													</c:set>
-													<c:set var="prevPage">
-														${aimSelectOrganizationForm.currentPage -1}
-													</c:set>
-													<a style="text-decoration: none; color: #333333"
-														href="javascript:selectOrganizationPages(${prevPage})"
-														title="${translation}"> &lt; </a>
-												</c:if> <c:set var="length"
-													value="${aimSelectOrganizationForm.pagesToShow}"></c:set> <c:set
-													var="start" value="${aimSelectOrganizationForm.startPage}" />
-												<logic:iterate name="aimSelectOrganizationForm"
+                                                        <c:set var="translation">
+                                                            <digi:trn key="aim:firstpage">First Page</digi:trn>
+                                                        </c:set>
+
+                                                        <a style="text-decoration: none; color: #333333"
+                                                            href="javascript:selectOrganizationPages(1)"
+                                                            title="${translation}"> &lt;&lt; </a>
+
+                                                        <c:set var="translation">
+                                                            <digi:trn key="aim:previouspage">Previous Page</digi:trn>
+                                                        </c:set>
+                                                        <c:set var="prevPage">
+                                                            ${aimSelectOrganizationForm.currentPage -1}
+                                                        </c:set>
+                                                        <a style="text-decoration: none; color: #333333"
+                                                            href="javascript:selectOrganizationPages(${prevPage})"
+                                                            title="${translation}"> &lt; </a>
+                                                    </c:if>
+
+                                                    <c:set var="length" value="${aimSelectOrganizationForm.pagesToShow}"></c:set>
+                                                    <c:set var="start" value="${aimSelectOrganizationForm.startPage}" />
+
+												    <logic:iterate name="aimSelectOrganizationForm"
 													property="pages" id="pages" type="java.lang.Integer"
 													offset="start" length="length">
-	
-	
-													<c:if
-														test="${aimSelectOrganizationForm.currentPage == pages}">
-														<font color="#FF0000"><%=pages%></font>
-													</c:if>
-													<c:if
-														test="${aimSelectOrganizationForm.currentPage != pages}">
-														<c:set var="translation">
-															<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-														</c:set>
-														<a style="color: #333333; text-decoration: none;"
-															href="javascript:selectOrganizationPages(<%=pages%>);"><%=pages%></a>
-													</c:if>
-											|&nbsp;
-										</logic:iterate> <c:if
-													test="${aimSelectOrganizationForm.currentPage != aimSelectOrganizationForm.pagesSize}">
-	
-													<c:set var="nextPage">
-														${aimSelectOrganizationForm.currentPage + 1} 
-														</c:set>
-													<c:set var="translation">
-														<digi:trn key="aim:nextpage">Next Page</digi:trn>
-													</c:set>
-													
-													<a style="color: #333333; text-decoration: none;" href="javascript:selectOrganizationPages(${nextPage})" title="${translation}"> &gt; </a>
-													
-													 &nbsp;
-													<c:set var="translation">
-														<digi:trn key="aim:lastpage">Last Page</digi:trn>
-													</c:set>
-													<a style="color: #333333; text-decoration: none;" href="javascript:selectOrganizationPages(${aimSelectOrganizationForm.pagesSize});"
-													title="${translation}">
-												&gt;&gt;  
-												</a>
-											&nbsp;
-											</c:if> <c:out value="${aimSelectOrganizationForm.currentPage}"></c:out>&nbsp;<digi:trn
-													key="aim:of">of</digi:trn>&nbsp;<c:out
-													value="${aimSelectOrganizationForm.pagesSize}"></c:out></td>
+                                                        <c:if test="${aimSelectOrganizationForm.currentPage == pages}">
+                                                            <font color="#FF0000"><%=pages%></font>
+                                                        </c:if>
+                                                        <c:if test="${aimSelectOrganizationForm.currentPage != pages}">
+                                                            <c:set var="translation">
+                                                                <digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+                                                            </c:set>
+                                                            <a style="color: #333333; text-decoration: none;"
+                                                                href="javascript:selectOrganizationPages(<%=pages%>);"><%=pages%></a>
+                                                        </c:if>
+                                                        |&nbsp;
+                                                    </logic:iterate>
+
+                                                    <c:if test="${aimSelectOrganizationForm.currentPage != aimSelectOrganizationForm.pagesSize}">
+
+                                                        <c:set var="nextPage">
+                                                            ${aimSelectOrganizationForm.currentPage + 1}
+                                                        </c:set>
+
+                                                        <c:set var="translation">
+                                                            <digi:trn key="aim:nextpage">Next Page</digi:trn>
+                                                        </c:set>
+
+                                                        <a style="color: #333333; text-decoration: none;" href="javascript:selectOrganizationPages(${nextPage})" title="${translation}"> &gt; </a>
+                                                        &nbsp;
+
+                                                        <c:set var="translation">
+                                                            <digi:trn key="aim:lastpage">Last Page</digi:trn>
+                                                        </c:set>
+
+                                                        <a style="color: #333333; text-decoration: none;" href="javascript:selectOrganizationPages(${aimSelectOrganizationForm.pagesSize});" title="${translation}">
+                                                            &gt;&gt;
+                                                        </a>
+                                                        &nbsp;
+                                                    </c:if>
+
+                                                    <c:out value="${aimSelectOrganizationForm.currentPage}"></c:out>&nbsp;
+                                                    <digi:trn key="aim:of">of</digi:trn>&nbsp;
+                                                    <c:out value="${aimSelectOrganizationForm.pagesSize}"></c:out>
+                                                </td>
 											</tr>
 										</table>
 										</td>
 									</tr>
 								</logic:notEmpty>
 							</logic:notEmpty>
-							<logic:notEmpty name="aimSelectOrganizationForm"
-								property="alphaPages">
+
+							<logic:notEmpty name="aimSelectOrganizationForm" property="alphaPages">
 								<tr>
 									<td align="center">
 									<table cellpadding="0" cellspacing="0">
 										<tr>
-											<td height="18" align="center" style="size: 9px;"><logic:iterate
-												name="aimSelectOrganizationForm" property="alphaPages"
-												id="alphaPages" type="java.lang.String">
-												<c:if test="${alphaPages != null}">
-													<c:if
-														test="${aimSelectOrganizationForm.currentAlpha == alphaPages}">
-														<font color="#FF0000"><%=alphaPages%></font>
-													</c:if>
-													<c:if
-														test="${aimSelectOrganizationForm.currentAlpha != alphaPages}">
-														<c:set var="translation">
-															<digi:trn key="aim:clickToViewNextPage">Click here to go to next page</digi:trn>
-														</c:set>
-														<a style="color: #333333"
-															href="javascript:searchAlpha('<%=alphaPages%>')"
-															title="${translation}"><%=alphaPages%></a>
-													</c:if>
-												|&nbsp;											</c:if>
-											</logic:iterate></td>
+											<td height="18" align="center" style="size: 9px;">
+                                                <logic:iterate name="aimSelectOrganizationForm" property="alphaPages" id="alphaPages" type="java.lang.String">
+                                                    <c:if test="${alphaPages != null}">
+                                                        <c:if
+                                                            test="${aimSelectOrganizationForm.currentAlpha == alphaPages}">
+                                                            <font color="#FF0000"><%=alphaPages%></font>
+                                                        </c:if>
+                                                        <c:if
+                                                            test="${aimSelectOrganizationForm.currentAlpha != alphaPages}">
+                                                            <c:set var="translation">
+                                                                <digi:trn key="aim:clickToViewNextPage">Click here to go to next page</digi:trn>
+                                                            </c:set>
+                                                            <a style="color: #333333"
+                                                                href="javascript:searchAlpha('<%=alphaPages%>')"
+                                                                title="${translation}"><%=alphaPages%></a>
+                                                        </c:if>
+                                                    |&nbsp;
+                                                    </c:if>
+											    </logic:iterate>
+                                            </td>
 										</tr>
 										<tr>
 											<td height="18" align="center"><c:set var="translation">

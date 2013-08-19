@@ -1,5 +1,6 @@
 package org.digijava.module.widget.dbentity;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.widget.helper.WidgetVisitor;
 
@@ -8,6 +9,7 @@ import org.digijava.module.widget.helper.WidgetVisitor;
  * @author Irakli Kobiashvili
  *
  */
+@TranslatableClass
 public class AmpWidgetIndicatorChart extends AmpWidget {
 
 	private static final long serialVersionUID = 1L;

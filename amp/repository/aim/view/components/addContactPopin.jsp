@@ -27,13 +27,14 @@
 				<tr>
 					<td align="right" style="font-size:12px;"><strong><digi:trn>Firstname</digi:trn></strong></td>
 					<td align="left" style="padding-right:10px;"><html:text property="firstName" styleClass="inputx" size="30"
-						styleId="name" /></td>
+						styleId="name" onkeypress="checkKeyAndSearch(event);"/></td>
 
 					<td align="right" style="font-size:12px;"><strong><digi:trn>Lastname</digi:trn></strong></td>
 					<td align="left" style="padding-right:10px;"><html:text property="lastname" styleClass="inputx" size="30"
-						styleId="lastname" /></td>
-					<td align="left"><html:button property="submitButton"
-						onclick="return searchContact()" styleClass="buttonx_sm">
+						styleId="lastname" onkeypress="checkKeyAndSearch(event);"/></td>
+					<td align="left">
+					<html:button property="submitButton"
+						onclick="return searchContact()" styleId="searchBtn" styleClass="buttonx_sm">
 						<digi:trn>Search</digi:trn>
 					</html:button></td>
 					<td align="left"><html:button property="submitButton"

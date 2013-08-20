@@ -517,7 +517,7 @@
 		<div class="breadcrump_cont">
 			<span class="sec_name"><digi:trn>Address Book</digi:trn></span>
 			<span class="breadcrump_sep">|</span><a class="l_sm"><digi:trn>Tools</digi:trn></a>
-			<span class="breadcrump_sep"><b>»</b></span>
+			<span class="breadcrump_sep"><b>ï¿½</b></span>
 			<span class="bread_sel"><digi:trn>Address Book</digi:trn></span>
 		</div>
 	</div>
@@ -588,7 +588,7 @@
 													<td>
 													<html:select  multiple="multiple" property="selOrgs" size="4" style="width: 300px;">
 														<logic:notEmpty name="addressbookForm" property="organizations">
-															<logic:iterate name="addressbookForm" property="organizations" id="organization"type="org.digijava.module.aim.dbentity.AmpOrganisation">
+															<logic:iterate name="addressbookForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 																<html:option value="${organization.ampOrgId}" style="font-family: Arial;font-size:11px;">${organization.name}</html:option>
 															</logic:iterate>
 														</logic:notEmpty>

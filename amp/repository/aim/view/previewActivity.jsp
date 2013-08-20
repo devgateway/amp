@@ -2181,6 +2181,28 @@ function collapseAll() {
 		</span>	
 	</legend>
 	<div id="relateorgdiv">
+		<module:display name="/Activity Form/Funding" parentModule="/Activity Form">
+			<digi:trn key="aim:donororganisation">Donor Organization</digi:trn>
+			<br/>
+			<logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
+				<div id="act_donor_organisation" style="display: block;">
+					<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding" >
+						<tr>
+							<td>
+								<logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
+								<ul>
+									<li>
+										<b><bean:write name="fundingOrganization" property="orgName"/></b> 
+									</li>
+								</ul>
+								</logic:iterate>
+							</td>
+						</tr>
+					</table>	
+				</div>
+			</logic:notEmpty>				
+		</module:display>					
+		<hr />	
 		<module:display name="/Activity Form/Related Organizations/Responsible Organization" parentModule="/Activity Form/Related Organizations">
 			<digi:trn key="aim:responsibleorganisation">Responsible Organization</digi:trn>
 			<br/>

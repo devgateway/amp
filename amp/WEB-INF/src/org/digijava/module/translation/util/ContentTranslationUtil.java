@@ -11,6 +11,7 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.proxy.HibernateProxyHelper;
 import org.hibernate.type.Type;
 
 import java.io.Serializable;
@@ -175,7 +176,7 @@ public class ContentTranslationUtil {
         boolean isVersionable =  obj instanceof Versionable;
     	//get new object id - hibernate already updated it
         Long objectId = (Long)id;
-        Class clazz = obj.getClass();
+        Class clazz = Hibernate.getClass(obj);
         String objectClass = clazz.getName();
         String currentLocale = TLSUtils.getLangCode();
         try {
@@ -422,7 +423,7 @@ public class ContentTranslationUtil {
     public static Long getObjectId(Object obj){
         try{
             Session session = PersistenceManager.getRequestDBSession();
-            Class clazz = obj.getClass();
+            Class clazz = Hibernate.getClass(obj);// obj.getClass();
             String objIdField = getObjectIdField(clazz, session.getSessionFactory());
             Method methGetId = clazz.getMethod("get" + Strings.capitalize(objIdField));
             return (Long) methGetId.invoke(obj);

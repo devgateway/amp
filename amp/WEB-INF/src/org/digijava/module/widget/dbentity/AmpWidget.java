@@ -1,6 +1,9 @@
 package org.digijava.module.widget.dbentity;
 
 import java.io.Serializable;
+
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.widget.helper.WidgetVisitor;
 
 /**
@@ -9,10 +12,12 @@ import org.digijava.module.widget.helper.WidgetVisitor;
  * @author Irakli Kobiashvili
  *
  */
+@TranslatableClass
 public class AmpWidget implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Long id;
+    @TranslatableField
 	private String name;
 	private String code;
 	private Boolean nameAsTitle;

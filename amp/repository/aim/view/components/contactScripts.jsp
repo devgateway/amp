@@ -365,6 +365,11 @@ YAHOO.namespace("YAHOO.amp");
    //     checkErrorAndCloseContact();
    // }
          
+         function checkKeyAndSearch(e){
+        	 if(e.keyCode===13) 
+        		 searchContact();
+         }
+         
         function searchContact(){
             var flg=checkEmptyKeywordContact();
             if(flg){

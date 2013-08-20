@@ -32,9 +32,9 @@
 		<key column="contact_id" />
 		<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationContact" />
 	</set>
-	<property name="fullname"  formula="name||' '||lastname||'('||contact_Id||')'" />
+    <property name="fullname"  formula="name||$cnt$ $cnt$||lastname||$cnt$($cnt$||contact_Id||$cnt$)$cnt$" />
 
-	<!-- 
+	<!--
 		<set name="organizations" table="AMP_ORG_CONTACTS" lazy="false" >
     	<key column="contact_id"/>
         <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="amp_org_id"/>

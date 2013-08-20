@@ -4,19 +4,24 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
+@TranslatableClass
 public class AmpIndicator implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
 	private Long indicatorId;
 	private boolean defaultInd;
+    @TranslatableField
 	private String name;
 	private String code;
 	private String type;
 	private Date creationDate;
 	private int category;
+    @TranslatableField
 	private String description;
 	private Set sectors;
 	private String comments;

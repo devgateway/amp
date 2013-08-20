@@ -131,8 +131,7 @@ public class CompareActivityVersions extends DispatchAction {
 				if (!(auxResult1 == null && auxResult2 == null)) {
 					if ((auxResult1 != null && auxResult2 == null)
 							|| (auxResult1 == null && auxResult2 != null)
-							|| (!auxMethod.invoke(vForm.getActivityOne(), null).equals(
-									auxMethod.invoke(vForm.getActivityTwo(), null)))) {
+							|| (!auxResult1.equals(auxResult2))) {
 
 						logger.warn(fields[i].getName() + ": " + auxResult1 + "-" + auxResult2);
 						output.setDescriptionOutput(auxAnnotation.fieldTitle());

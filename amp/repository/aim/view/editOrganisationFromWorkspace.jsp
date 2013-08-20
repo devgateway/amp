@@ -203,11 +203,15 @@ initContactScript();
             }
 
         }
-        function selectAll(className){
-            $("."+className).each(function () {
-                this.checked=true;
-            });
-
+        function selectAll(e,className){
+            if (e.checked==true)
+	            $("."+className).each(function () {
+	                this.checked=true;
+	            });
+            else
+            	$("."+className).each(function () {
+	                this.checked=false;
+	            });
         }
         function addSectors() {
             var sectorSchemeId=document.aimAddOrgForm.ampSecSchemeId;
@@ -829,7 +833,7 @@ initContactScript();
 																<tr>
 																	<td colspan="5" style="text-align: left;"
 																		class="tdBoldClass"><input type="checkbox"
-																		onclick="selectAll('staffInfo')"> <digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input
+																		onclick="selectAll(this,'staffInfo')"> <digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input
 																		type="button" class="buttonx_sm"
 																		onclick="deleteStaff()"
 																		value="<digi:trn>Delete</digi:trn>"></td>
@@ -1027,7 +1031,7 @@ initContactScript();
 																<tr>
 																	<td colspan="2" class="tdBoldClass"
 																		style="text-align: left;"><input type="checkbox"
-																		onclick="selectAll('selectedContactInfoIds')">
+																		onclick="selectAll(this,'selectedContactInfoIds')">
 																		<digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input
 																		type="button" class="buttonx_sm"
 																		onclick="removeSelectedContacts()"
@@ -1120,6 +1124,6 @@ initContactScript();
 		<script language="javascript" type="text/javascript">
     setStyle(document.getElementById("staffTable"),false);
     setStyle(document.getElementById("table_contact_content"),true);
-    var enterBinder	= new EnterHitBinder('addOrgBtn');
+    //var enterBinder	= new EnterHitBinder('addOrgBtn');
 </script>
 	</div>

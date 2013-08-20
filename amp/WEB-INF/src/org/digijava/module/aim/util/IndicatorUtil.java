@@ -15,6 +15,7 @@ import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -906,10 +907,12 @@ public class IndicatorUtil {
 
             }
             if (ActivityVersionUtil.isVersioningEnabled()) {
-                AmpActivityVersion act = (AmpActivityVersion) session.get(AmpActivityVersion.class, actInd.getActivityId());
+                AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, actInd.getActivityId());
+                Hibernate.initialize(act);
                 Hibernate.initialize(act.getActivityContacts());
                 AmpActivityGroup tmpGroup = act.getAmpActivityGroup();
                 act = ActivityVersionUtil.cloneActivity(act,member);
+                ContentTranslationUtil.cloneTranslations(act);
                 act.setAmpActivityId(null);
 								
                 if (tmpGroup == null) {

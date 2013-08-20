@@ -166,6 +166,22 @@ public class AmpTeamMember implements Serializable/*, Versionable*/ {
 		this.publishDocPermission = publishDocPermission;
 	}
 
+	@Override
+	public boolean equals(Object oth)
+	{
+		if (!(oth instanceof AmpTeamMember))
+			return false;
+		
+		AmpTeamMember other = (AmpTeamMember) oth;
+		return this.getAmpTeamMemId().longValue() == other.getAmpTeamMemId().longValue();
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("User: %s, team %s", user.getName(), ampTeam.getName());
+	}
+	
 	/*
 	@Override
 	public boolean equalsForVersioning(Object obj) {

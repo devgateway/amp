@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>amp-2.6-release</groupId>
-	<artifactId>amp-2.6-release</artifactId>
+	<groupId>org.devgateway</groupId>
+	<artifactId>amp</artifactId>
 	<version>2.6.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Aid Management Platform</name>
@@ -12,17 +12,7 @@
 		<springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
 		<springVersion>3.0.7.RELEASE</springVersion>
 	</properties>
- <repositories>
- 		<repository>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <id>ibiblio</id>
-          <name>ibiblio</name>
-          <url>http://mirrors.ibiblio.org/maven2</url>
-        </repository>
- 
- 
+ <repositories> 
 		<repository>
           <snapshots>
             <enabled>false</enabled>

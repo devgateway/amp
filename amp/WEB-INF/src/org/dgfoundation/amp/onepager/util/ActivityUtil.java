@@ -82,6 +82,9 @@ import org.hibernate.Session;
 public class ActivityUtil {
 	private static final Logger logger = Logger.getLogger(ActivityUtil.class);
 
+	/**
+	 * types for {@link org.digijava.module.aim.dbentity.AmpActivityFields#activityType} 
+	 */
     public static final Long ACTIVITY_TYPE_PROJECT = 0L;
     public static final Long ACTIVITY_TYPE_SSC = 1L;
 	

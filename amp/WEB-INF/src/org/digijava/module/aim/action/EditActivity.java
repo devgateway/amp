@@ -758,6 +758,21 @@ public class EditActivity extends Action {
             }
         }
 
+        eaForm.getIdentification().setSsc_component_title(activity.getSscComponentTitle());
+        eaForm.getIdentification().setSsc_component_description(activity.getSscComponentDescription());
+        
+        AmpCategoryValue modalities = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.MODALITIES_KEY, activity.getCategories());
+        eaForm.getIdentification().setSsc_modalities(modalities == null ? null : modalities.getLabel());
+        
+        AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
+        eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null :typeOfCooperation.getLabel());
+
+        AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
+        eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null :typeOfImplementation.getLabel());
+
+        
+        //eaForm.getIdentification().setSsc_typeOfCooperation(activity.)
+        
         if (activity != null) {
           // set title,description and objective
 

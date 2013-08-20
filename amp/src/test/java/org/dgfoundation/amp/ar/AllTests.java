@@ -29,6 +29,7 @@ public class AllTests {
 		suite.addTest(DirectedDisbursementsTests.suite());
 		suite.addTest(MtefTests.suite());
 		suite.addTest(ComputedMeasuresTests.suite());
+		suite.addTest(MiscColumnsTests.suite());
 		//suite.addTest(new DirectedDisbursementsTests("testReports"));
 		//$JUnit-END$
 		return suite;

@@ -2305,6 +2305,64 @@ public class ExportActivityToWord extends Action {
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
+		
+		
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Title of Component", ampContext)){
+			columnName=TranslatorWorker.translateText("Title of Component");
+
+			columnVal = identification.getSsc_component_title();
+							
+			if (columnVal != null) {
+				columnVal = TranslatorWorker.translateText(columnVal);
+			}
+			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
+		}
+
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Description of Component", ampContext)){
+			columnName=TranslatorWorker.translateText("Description of Component");
+
+			columnVal = identification.getSsc_component_description();
+							
+			if (columnVal != null) {
+				columnVal = TranslatorWorker.translateText(columnVal);
+			}
+			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
+		}
+
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Cooperation", ampContext)){
+			
+			columnName=TranslatorWorker.translateText("Type of Cooperation");
+			columnVal = identification.getSsc_typeOfCooperation();
+							
+			if (columnVal != null) {
+				columnVal = TranslatorWorker.translateText(columnVal);
+			}
+			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
+		}
+
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Implementation", ampContext)){
+			
+			columnName=TranslatorWorker.translateText("Type of Implementation");
+			columnVal = identification.getSsc_typeOfImplementation();
+							
+			if (columnVal != null) {
+				columnVal = TranslatorWorker.translateText(columnVal);
+			}
+			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
+		}
+
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities", ampContext)){
+			
+			columnName=TranslatorWorker.translateText("Modalities");
+			columnVal = identification.getSsc_modalities();
+							
+			if (columnVal != null) {
+				columnVal = TranslatorWorker.translateText(columnVal);
+			}
+			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
+		}
+		
+		
 		if (FeaturesUtil.isVisibleField("Contract Number", ampContext)) {
 			columnName = TranslatorWorker.translateText("Contract Number");
 			generateOverAllTableRows(identificationSubTable1, columnName,

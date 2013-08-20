@@ -501,6 +501,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String actAthLastName;
 		private String conditions;
 		
+		private String ssc_component_title;
+		private String ssc_component_description;
+		
+		private String ssc_typeOfCooperation;
+		private String ssc_typeOfImplementation;
+		private String ssc_modalities;
+		
 		private String FY;
 		
 		private List<LabelValueBean> yearsRange;
@@ -813,7 +820,25 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			return draft;
 		}
 
+		public String getSsc_component_title()
+		{
+			return ssc_component_title;
+		}
+
+		public void setSsc_component_title(String value)
+		{
+			this.ssc_component_title = value;
+		}
 	
+		public String getSsc_component_description()
+		{
+			return ssc_component_description;
+		}
+
+		public void setSsc_component_description(String value)
+		{
+			this.ssc_component_description = value;
+		}
 
 		public void setDraft(Boolean draft) {
 			this.draft = draft;
@@ -1262,6 +1287,30 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setProjectImplUnitId(Long projectImplUnitId) {
 			this.projectImplUnitId = projectImplUnitId;
+		}
+
+		public String getSsc_typeOfCooperation() {
+			return ssc_typeOfCooperation;
+		}
+
+		public void setSsc_typeOfCooperation(String ssc_typeOfCooperation) {
+			this.ssc_typeOfCooperation = ssc_typeOfCooperation;
+		}
+
+		public String getSsc_typeOfImplementation() {
+			return ssc_typeOfImplementation;
+		}
+
+		public void setSsc_typeOfImplementation(String ssc_typeOfImplementation) {
+			this.ssc_typeOfImplementation = ssc_typeOfImplementation;
+		}
+
+		public String getSsc_modalities() {
+			return ssc_modalities;
+		}
+
+		public void setSsc_modalities(String ssc_modalities) {
+			this.ssc_modalities = ssc_modalities;
 		}
 
 	}

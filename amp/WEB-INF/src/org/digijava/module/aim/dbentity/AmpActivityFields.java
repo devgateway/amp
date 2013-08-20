@@ -417,6 +417,9 @@ LoggerIdentifiable, Cloneable {
 	protected AmpActivityVersion mergeSource1;
 	protected AmpActivityVersion mergeSource2;
 
+	/**
+	 * whether this is a PROJECT or a South-South Cooperation
+	 */
     protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
 	//protected Set <AmpActivityContact> activityContacts;

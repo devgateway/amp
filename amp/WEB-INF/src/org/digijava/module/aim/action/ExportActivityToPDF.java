@@ -241,6 +241,76 @@ public class ExportActivityToPDF extends Action {
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
 			}
 			
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Title of Component", ampContext)){
+				columnName=TranslatorWorker.translateText("Title of Component");
+
+				columnVal = identification.getSsc_component_title();
+								
+				if (columnVal != null) {
+					columnVal = TranslatorWorker.translateText(columnVal);
+				}
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
+
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Description of Component", ampContext)){
+				columnName=TranslatorWorker.translateText("Description of Component");
+
+				columnVal = identification.getSsc_component_description();
+								
+				if (columnVal != null) {
+					columnVal = TranslatorWorker.translateText(columnVal);
+				}
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
+
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Cooperation", ampContext)){
+				
+				columnName=TranslatorWorker.translateText("Type of Cooperation");
+				columnVal = identification.getSsc_typeOfCooperation();
+								
+				if (columnVal != null) {
+					columnVal = TranslatorWorker.translateText(columnVal);
+				}
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
+
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Implementation", ampContext)){
+				
+				columnName=TranslatorWorker.translateText("Type of Implementation");
+				columnVal = identification.getSsc_typeOfImplementation();
+								
+				if (columnVal != null) {
+					columnVal = TranslatorWorker.translateText(columnVal);
+				}
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
+
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities", ampContext)){
+				
+				columnName=TranslatorWorker.translateText("Modalities");
+				columnVal = identification.getSsc_modalities();
+								
+				if (columnVal != null) {
+					columnVal = TranslatorWorker.translateText(columnVal);
+				}
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
+
+			/*
+			 *        eaForm.getIdentification().setSsc_component_title(activity.getSscComponentTitle());
+        eaForm.getIdentification().setSsc_component_description(activity.getSscComponentDescription());
+        
+        AmpCategoryValue modalities = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.MODALITIES_KEY, activity.getCategories());
+        eaForm.getIdentification().setSsc_modalities(modalities == null ? null : modalities.getLabel());
+        
+        AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
+        eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null :typeOfCooperation.getLabel());
+
+        AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
+        eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null :typeOfImplementation.getLabel());
+
+			 */
+			
 			//contract Number
 			if(FeaturesUtil.isVisibleField("Contract Number", ampContext)){
 				columnName=TranslatorWorker.translateText("Contract Number");

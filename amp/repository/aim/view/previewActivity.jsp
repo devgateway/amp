@@ -616,6 +616,37 @@ function collapseAll() {
 				<hr />
 				</c:if>
 			</module:display>
+	
+			<module:display name="/Activity Form/Funding/Title of Component" parentModule="/Activity Form/Funding">
+				<digi:trn>Title of Component</digi:trn>:&nbsp;<br />
+				<b><c:out value="${aimEditActivityForm.identification.ssc_component_title}"/></b>
+				<hr />
+			</module:display>
+
+			<module:display name="/Activity Form/Funding/Description of Component" parentModule="/Activity Form/Funding">
+				<digi:trn>Description of Component</digi:trn>:&nbsp;<br />
+				<b><c:out value="${aimEditActivityForm.identification.ssc_component_description}"/></b>
+				<hr />
+			</module:display>
+
+			<module:display name="/Activity Form/Identification/Type of Cooperation" parentModule="/Activity Form/Identification">
+				<digi:trn>Type of Cooperation</digi:trn>:&nbsp;<br />
+				<b><c:out value="${aimEditActivityForm.identification.ssc_typeOfCooperation}"/></b>
+				<hr />
+			</module:display>
+
+			<module:display name="/Activity Form/Identification/Type of Implementation" parentModule="/Activity Form/Identification">
+				<digi:trn>Type of Implementation</digi:trn>:&nbsp;<br />
+				<b><c:out value="${aimEditActivityForm.identification.ssc_typeOfImplementation}"/></b>
+				<hr />
+			</module:display>
+
+			<module:display name="/Activity Form/Funding/Modalities" parentModule="/Activity Form/Funding">
+				<digi:trn>Modalities</digi:trn>:&nbsp;<br />
+				<b><c:out value="${aimEditActivityForm.identification.ssc_modalities}"/></b>
+				<hr />
+			</module:display>
+
 			
 			<module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:objectives">Objectives</digi:trn>:&nbsp;<br />

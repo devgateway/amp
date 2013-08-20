@@ -171,7 +171,7 @@ public class AmpDonorFundingFormSectionFeature extends
         AmpTextAreaFieldPanel sscComponentTitle = new AmpTextAreaFieldPanel("sscComponentTitle", new PropertyModel(am, "sscComponentTitle"), "Title of Component", false, false, false);
         add(sscComponentTitle);
 
-        AmpTextAreaFieldPanel sscComponentDescription = new AmpTextAreaFieldPanel("sscComponentDescription", new PropertyModel(am, "sscComponentDescription"), "Title of Component", false, false, false);
+        AmpTextAreaFieldPanel sscComponentDescription = new AmpTextAreaFieldPanel("sscComponentDescription", new PropertyModel(am, "sscComponentDescription"), "Description of Component", false, false, false);
         add(sscComponentDescription);
 
 

@@ -82,6 +82,9 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Contracting Agency Acronym'                
                 , 'Contracting Agency Groups'
                 , 'Project Implementing Unit'
+                , 'Type of Cooperation'
+                , 'Type of Implementation'
+                , 'Modalities'                
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

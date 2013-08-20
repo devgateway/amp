@@ -10,10 +10,10 @@ public class AmpCurrency implements Serializable,Comparable, Identifiable
 {
 	private Long ampCurrencyId;
 	private String currencyCode;
-	@TranslatableField
-	private String countryName;
-	private String currencyName;
-	private AmpCategoryValueLocations countryLocation;
+    private String countryName;
+    @TranslatableField
+    private String currencyName;
+    private AmpCategoryValueLocations countryLocation;
 	private Integer activeFlag;
 
 	/**

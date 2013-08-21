@@ -782,6 +782,21 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 				aux.organizations = null;
 		}
 		
+		Set funding = newActivity.getFunding();
+        if (funding != null){
+            Iterator it = funding.iterator();
+            while (it.hasNext()){
+                AmpFunding fun = (AmpFunding) it.next();
+                Set<AmpFundingDetail> fdSet = fun.getFundingDetails();
+                if (fdSet != null){
+                    for (AmpFundingDetail fd: fdSet){
+                        if (fd.getContract() != null && this.equals(fd.getContract()))
+                            fd.setContract(aux);
+                    }
+                }
+ 
+            }
+        }
 		
 		/*
 		 * Amendments don't seem to be used no more

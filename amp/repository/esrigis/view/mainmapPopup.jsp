@@ -12,7 +12,7 @@
   <digi:instance property="datadispatcherform" />
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=7" /> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
     <!--The viewport meta tag is used to improve the presentation and behavior of the samples 
       on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>

@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
+import org.dgfoundation.amp.esri.EsriTestCases;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -30,6 +31,7 @@ public class AllTests {
 		suite.addTest(MtefTests.suite());
 		suite.addTest(ComputedMeasuresTests.suite());
 		suite.addTest(MiscColumnsTests.suite());
+		suite.addTest(EsriTestCases.suite());
 		//suite.addTest(new DirectedDisbursementsTests("testReports"));
 		//$JUnit-END$
 		return suite;

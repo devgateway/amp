@@ -95,7 +95,7 @@ public class DbHelper {
 	 * @return
 	 * @throws DgException
 	 */
-	public static List<AmpActivityVersion> getActivities(MapFilter filter, HttpServletRequest request)
+	public static List<AmpActivityVersion> getActivities(MapFilter filter/*, HttpServletRequest request*/)
 			throws DgException {
 		Long[] orgGroupIds = filter.getSelOrgGroupIds();
 		List<AmpActivityVersion> activities = null;
@@ -230,27 +230,9 @@ public class DbHelper {
 				oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)";
 			}
 			
-			ArrayList<BigInteger> workSpaceactivityList = new ArrayList<BigInteger>();
-			if (filter.getFromPublicView() != null
-					&& filter.getFromPublicView() == true) {
-				String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
-				workSpaceactivityList = getInActivities(workSpacequery);
-			} else if(!filter.isModeexport()){
-				String workSpacequery = WorkspaceFilter.getWorkspaceFilterQuery(request.getSession());
-				workSpaceactivityList = getInActivities(workSpacequery);
-			}
-			String inactivities= "";
-			for (Iterator iterator = workSpaceactivityList.iterator(); iterator.hasNext();) {
-				BigInteger id = (BigInteger) iterator.next();
-				if (inactivities ==""){
-					inactivities += id.toString();
-				}else{
-					inactivities +="," + id.toString();
-				}
-			}
-			if (inactivities.length()>0){
-				oql += " and act.ampActivityId in("+ inactivities +")";
-			}
+			List<Long> workSpaceactivityList = filter.buildFilteredActivitiesList(); 
+			String inactivities = Util.collectionAsString(workSpaceactivityList);
+			oql += " and act.ampActivityId in("+ inactivities +")";
 			
 			//locations filter
 			
@@ -347,18 +329,8 @@ public class DbHelper {
 			}
 
 			if (filter.isModeexport()) {
-				inactivities = "";
-				ArrayList<BigInteger> filteractivities = getInActivities(filter
-						.getReportfilterquery());
-				for (Iterator iterator = filteractivities.iterator(); iterator
-						.hasNext();) {
-					BigInteger id = (BigInteger) iterator.next();
-					if (inactivities == "") {
-						inactivities += id.toString();
-					} else {
-						inactivities += "," + id.toString();
-					}
-				}
+				ArrayList<Long> filteractivities = getInActivities(filter.getReportfilterquery());
+				inactivities = Util.toCSString(filteractivities);
 				oql += " and act.ampActivityId in(" + inactivities + ")";
 			}
 			
@@ -380,11 +352,10 @@ public class DbHelper {
 
 	}
 
-	public static ArrayList<BigInteger> getInActivities(String query)
+	public static ArrayList<Long> getInActivities(String query)
 			throws Exception {
 		Session session = PersistenceManager.getRequestDBSession();
-		ArrayList<BigInteger> result = (ArrayList<BigInteger>) session
-				.createSQLQuery(query).list();
+		ArrayList<Long> result = (ArrayList<Long>) session.createSQLQuery(query).list();
 		return result;
 	}
 	
@@ -395,6 +366,7 @@ public class DbHelper {
 		}
 		return location;
 	}
+	
 	public static List<AmpCategoryValueLocations> getTopLevelLocationList(List<AmpCategoryValueLocations> list) {
     	List<AmpCategoryValueLocations> locs = new ArrayList<AmpCategoryValueLocations>();
     	for (Iterator iterator = list.iterator(); iterator.hasNext();) {
@@ -415,8 +387,7 @@ public class DbHelper {
 	 * @return
 	 * @throws DgException
 	 */
-	public static List<AmpCategoryValueLocations> getLocations(
-			MapFilter filter, String implementationLevel,HttpServletRequest request) throws DgException {
+	public static List<AmpCategoryValueLocations> getLocations(MapFilter filter, String implementationLevel/*, HttpServletRequest request*/) throws DgException {
 		
 		boolean useMtefProjections = filter.getTransactionType() == Constants.MTEFPROJECTION;
 		
@@ -524,26 +495,9 @@ public class DbHelper {
 	            
 	            oql += " and act.team is not null AND (act.draft=false OR act.draft IS NULL) AND act.approvalStatus IN ('approved','startedapproved')";
 	            
-	            ArrayList<BigInteger> workSpaceactivityList = new ArrayList<BigInteger>();
-
-	            if (filter.getFromPublicView() != null && filter.getFromPublicView() == true) {
-	    			String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
-	    			workSpaceactivityList = getInActivities(workSpacequery);
-	    		} else if(!filter.isModeexport()){
-	    			String workSpacequery = WorkspaceFilter.getWorkspaceFilterQuery(request.getSession());
-	    			workSpaceactivityList = getInActivities(workSpacequery);
-	    		}
-
-	            String inactivities = "";
-	    		for (Iterator iterator = workSpaceactivityList.iterator(); iterator.hasNext();) {
-	    			BigInteger id = (BigInteger) iterator.next();
-	    			if (inactivities ==""){
-	    				inactivities += id.toString();
-	    			}else{
-	    				inactivities +="," + id.toString();
-	    			}
-	    		}
-	    		//oql += " and act.ampActivityId in("+ inactivities +")";
+	            List<Long> workSpaceActivityList = filter.buildFilteredActivitiesList();
+	            String inactivities = Util.toCSString(workSpaceActivityList);	            
+	    		oql += " and act.ampActivityId in("+ inactivities +")";
 	            
 	            
 	            if (sectorCondition) {
@@ -585,15 +539,8 @@ public class DbHelper {
 	            }
 	           
 	            if (filter.isModeexport()){
-					ArrayList<BigInteger> filteractivities = getInActivities(filter.getReportfilterquery());
-					for (Iterator iterator = filteractivities.iterator(); iterator.hasNext();) {
-						BigInteger id = (BigInteger) iterator.next();
-						if (inactivities ==""){
-							inactivities += id.toString();
-						}else{
-							inactivities +="," + id.toString();
-						}
-					}
+					List<Long> filteractivities = getInActivities(filter.getReportfilterquery());
+					inactivities = Util.toCSString(filteractivities);
 					oql += " and act.ampActivityId in("+ inactivities +")";
 				}
 	            
@@ -969,35 +916,10 @@ public class DbHelper {
             oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
         }
 
-        ArrayList<BigInteger> workSpaceactivityList = new ArrayList<BigInteger>();
-        String inactivities= "";
-        
-        try {
-        	if (filter.getFromPublicView() != null
-					&& filter.getFromPublicView() == true) {
-				String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(TLSUtils.getRequest().getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
-				workSpaceactivityList = getInActivities(workSpacequery);
-			} else if(!filter.isModeexport()){
-				String workSpacequery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
-				workSpaceactivityList = getInActivities(workSpacequery);
-			}
-			for (Iterator iterator = workSpaceactivityList.iterator(); iterator.hasNext();) {
-				BigInteger id = (BigInteger) iterator.next();
-				if (inactivities ==""){
-					inactivities += id.toString();
-				}else{
-					inactivities +="," + id.toString();
-				}
-			}
-			if (inactivities.length()>0){
-				oql += " and act.ampActivityId in("+ inactivities +")";
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-        	logger.error(e);
-            throw new DgException(
-                    "Can get Activities from Workspace Filter", e);
-		}
+        List<Long> workSpaceActivityList = filter.buildFilteredActivitiesList();
+        String inactivities= Util.toCSString(workSpaceActivityList);
+		oql += " and act.ampActivityId in("+ inactivities +")";
+
         
         if (ActivityVersionUtil.isVersioningEnabled()) {
 			oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
@@ -1046,7 +968,7 @@ public class DbHelper {
 	 * @throws DgException
 	 */
 	public static ArrayList<SimpleLocation> getFundingByRegionList(Collection<AmpCategoryValueLocations> regListChildren, String impLevel, String currCode,  Date startDate,
-            Date endDate, /*int transactionType, */HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, MapFilter filter, HttpServletRequest request) throws DgException {
+            Date endDate, /*int transactionType, */HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, MapFilter filter/*, HttpServletRequest request*/) throws DgException {
         
         
         List<Object[]> mtefFunding = getFundingsOfType(filter, regListChildren, adjustmentType, startDate, endDate, true);

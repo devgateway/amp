@@ -5,7 +5,7 @@ package org.digijava.module.esrigis.helpers;
  * @author Diego Dimunzio
  * Simplified location object to manage locations in JSON - keeps (locationData, locationFundingSummaryInfo) for a location
  */
-public class SimpleLocation {
+public class SimpleLocation implements Comparable<SimpleLocation> {
 	private String name;
 	private String GeoId;
 	private String commitments;
@@ -23,7 +23,14 @@ public class SimpleLocation {
 	private String amountsCurrencyCode;
 	private Long[] ids;
 	
-
+	
+	public SimpleLocation(String name, String commitments, String disbursements, String mtef)
+	{
+		this.name = name;
+		this.commitments = commitments;
+		this.disbursements = disbursements;
+		this.mtef = mtef;
+	}
 
 	public Long[] getIds() {
 		return ids;
@@ -41,8 +48,7 @@ public class SimpleLocation {
 	}
 
 	public SimpleLocation() {
-		super();
-		// TODO Auto-generated constructor stub
+		super();		
 	}
 
 	public void setName(String name) {
@@ -174,5 +180,30 @@ public class SimpleLocation {
 	public void setMtef(String mtef)
 	{
 		this.mtef = mtef;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("%s: (comm: %s, disb: %s, mtef: %s)", this.getName(), this.commitments, this.disbursements, this.mtef);
+	}
+	
+	@Override
+	public int compareTo(SimpleLocation other)
+	{
+		return this.name.compareTo(other.name);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return toString().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object oth)
+	{
+		SimpleLocation other = (SimpleLocation) oth;
+		return this.toString().equals(other.toString());
 	}
 }

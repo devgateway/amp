@@ -10,6 +10,9 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -915,4 +918,28 @@ public class MapFilter {
 		this.projectstatus = projectstatus;
 	}
 
+	/**
+	 * computes the list of activity Id's which should be displayed by a map which uses this filter's workspace setting. DOES NOT TAKE INTO ACCOUNT 
+	 * @return
+	 */
+	public List<Long> buildFilteredActivitiesList()
+	{
+		List<Long> workspaceActivityList = new ArrayList<Long>();
+		
+		try
+		{
+			if (this.getFromPublicView() != null && this.getFromPublicView() == true) {
+				String workSpaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(TLSUtils.getRequest().getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
+				workspaceActivityList = DbHelper.getInActivities(workSpaceQuery);
+			} else if(!this.isModeexport()){
+				String workSpaceQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
+				workspaceActivityList = DbHelper.getInActivities(workSpaceQuery);
+			}
+			return workspaceActivityList;
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
 }

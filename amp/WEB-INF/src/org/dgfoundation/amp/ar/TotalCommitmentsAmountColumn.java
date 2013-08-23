@@ -67,8 +67,14 @@ public class TotalCommitmentsAmountColumn extends TotalAmountColumn {
 	 */
 	public void addCell(Object c) {
 		AmountCell ac=(AmountCell) c;
-		TotalCommitmentsAmountCell uac=new TotalCommitmentsAmountCell(ac.getOwnerId());		
-		super.addCell(uac.merge(ac));
+		TotalCommitmentsAmountCell uac = new TotalCommitmentsAmountCell(ac.getOwnerId());
+		AmountCell cell = uac.merge(ac);
+		if ((uac.getAmount() > 0) || (!uac.getMergedCells().isEmpty()))
+			super.addCell(cell);
+		else
+		{
+			// nothing to add - do nothing so as not to pollute the column with "zeroes with ownerIds"
+		}
 	}
 
     public Column newInstance() {

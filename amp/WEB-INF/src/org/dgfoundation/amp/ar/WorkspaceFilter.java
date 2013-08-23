@@ -174,6 +174,8 @@ public class WorkspaceFilter
 		//return "101791";
 		//return "SELECT amp_activity_id from amp_activity WHERE (amp_activity_id >= 101789)";
 		return TEAM_FILTER;
+		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537', '8723851641', '8723851222')";
+		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537')";
 	}
 	
 	/**

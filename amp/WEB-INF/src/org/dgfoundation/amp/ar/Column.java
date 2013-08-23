@@ -482,5 +482,24 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	 */
 	public abstract void deleteByOwnerId(Set<Long> ownerId);
 	
+	@Override
+	public String prettyPrint()
+	{
+		StringBuffer res = new StringBuffer(String.format("(%s %s: ", this.getClass().getSimpleName(), this.getName()));
+		boolean smthAdded = false;
+		for(Object child:this.getItems())
+		{
+			String z = child.toString(); 
+			if (child instanceof Viewable)
+				z = ((Viewable) child).prettyPrint();
+			if (smthAdded)
+				res.append(", ");
+			res.append(z);
+			smthAdded = true;
+		}
+		res.append(")");
+		return res.toString();
+	}
+	
 }
 

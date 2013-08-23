@@ -298,5 +298,10 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 	public String getObjectId() {
 		return super.toString();
 	}
-		
+	
+	@Override
+	public String prettyPrint()
+	{
+		return String.format("%s %s", this.getClass().getSimpleName(), this.toString());
+	}
 }

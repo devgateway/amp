@@ -3,14 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.devgateway</groupId>
 	<artifactId>amp</artifactId>
-	<version>2.6.0-SNAPSHOT</version>
+	<version>${version}</version>
 	<packaging>war</packaging>
 	<name>Aid Management Platform</name>
 	<properties>
 		<wicketVersion>6.7.0</wicketVersion>
 		<tomcatVersion>7.0.37</tomcatVersion>
 		<springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
-		<springVersion>3.0.7.RELEASE</springVersion>
+		<springVersion>3.0.7.RELEASE</springVersion>		 
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+    	<version>2.6-SNAPSHOT</version>
 	</properties>
  <repositories> 
 		<repository>
@@ -19,7 +21,7 @@
           </snapshots>
           <id>central</id>
           <name>amp</name>
-          <url>http://artifactory.ampdev.net/artifactory/amp</url>
+         <url>http://artifactory.ampdev.net/artifactory/amp</url>
         </repository>
 	</repositories>
 	<pluginRepositories>
@@ -29,7 +31,7 @@
 			</snapshots>
 			<id>central</id>
 			<name>amp</name>
-			<url>http://artifactory.ampdev.net/artifactory/amp</url>
+			 <url>http://artifactory.ampdev.net/artifactory/amp</url>
 		</pluginRepository>
 	</pluginRepositories>
 	<!--
@@ -897,9 +899,21 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1</version>
-				<configuration>
+				<artifactId>maven-war-plugin</artifactId>				
+				<configuration>				
+				 <webResources>
+            <resource>
+	              <directory>/</directory>
+	              <includes>
+	                 <include>**/*</include> 
+	              </includes>
+	              <excludes>
+	              	<exclude>WEB-INF/src/**</exclude>
+    				<exclude>.settings/**</exclude>
+    				<exclude>.externalToolBuilders/**</exclude>
+	              </excludes>	             
+            </resource>
+          </webResources>
 					<webXml>WEB-INF\web.xml</webXml>
 				</configuration>
 			</plugin>

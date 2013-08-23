@@ -80,6 +80,7 @@ public class AmpStructuresFormSectionFeature extends
 
 				structureTypes.getChoiceContainer().setRequired(true);
 				structureTypes.setOutputMarkupId(true);
+                structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;"));
 				item.add(structureTypes);
 				
 				final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(structureModel, "title"), "Structure Title",true, true);

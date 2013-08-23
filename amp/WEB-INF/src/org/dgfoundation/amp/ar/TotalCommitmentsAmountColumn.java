@@ -61,6 +61,15 @@ public class TotalCommitmentsAmountColumn extends TotalAmountColumn {
 		// TODO Auto-generated constructor stub
 	}
 
+	protected boolean isACommitmentCell(AmountCell cell)
+	{
+		if (!(cell instanceof CategAmountCell))
+			return false;
+		
+		CategAmountCell c = (CategAmountCell) cell;
+		return ArConstants.COMMITMENT.equals(c.getMetaValueString(ArConstants.TRANSACTION_TYPE));
+	}
+
 	/**
 	 * Overrides the method for adding cells, to make sure we add only TotalCommitmentsAmountCellS
 	 * @param c the cell to be added
@@ -69,8 +78,15 @@ public class TotalCommitmentsAmountColumn extends TotalAmountColumn {
 	@Override
 	public void addCell(Cell c) {
 		AmountCell ac=(AmountCell) c;
-		TotalCommitmentsAmountCell uac=new TotalCommitmentsAmountCell(ac.getOwnerId());		
-		super.addCell(uac.merge(ac));
+		TotalCommitmentsAmountCell uac = new TotalCommitmentsAmountCell(ac.getOwnerId());
+		AmountCell cell = uac.merge(ac);
+		if ((cell.getAmount() > 0) || (isACommitmentCell(ac)))
+			super.addCell(cell);
+		else
+		{
+			//System.out.println(cell.getAmount());
+			// nothing to add - do nothing so as not to pollute the column with "zeroes with ownerIds"
+		}
 	}
 
     public Column newInstance() {

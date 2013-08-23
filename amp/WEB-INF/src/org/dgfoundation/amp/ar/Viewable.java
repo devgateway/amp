@@ -151,5 +151,6 @@ public abstract class Viewable implements Cloneable {
 		return rd.getParent().getArchReportGenerator();
 	}
 	
+	public abstract String prettyPrint();
 }
 

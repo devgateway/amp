@@ -373,4 +373,10 @@ public boolean hasMetaInfo(MetaInfo m) {
 		return 0;
 	}
 	
+	@Override
+	public String prettyPrint()
+	{
+		return String.format("%s %s %s on %s", this.getMetaValueString(ArConstants.ADJUSTMENT_TYPE), this.getMetaValueString(ArConstants.TRANSACTION_TYPE), this.toString(), this.getMetaValueString(ArConstants.QUARTER) + " " + this.getMetaValueString(ArConstants.YEAR));
+	}
+	
 }

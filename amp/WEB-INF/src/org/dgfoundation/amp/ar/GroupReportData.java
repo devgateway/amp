@@ -311,6 +311,8 @@ public class GroupReportData extends ReportData<ReportData> {
 					if (math!=null){
 						values.put("COMPUTED_VALUE", math.result(values));
 					}
+					if (cell.getColumn().getName().equals("Percentage of Total Commitments"))
+						values.put("COMPUTED_VALUE", new BigDecimal(100));
 				}
 				
 			}

@@ -66,13 +66,18 @@ public abstract class ReportGenerator {
 	 * the main method of this class. it generates a displayable report object
 	 */
 	public void generate() {
+		
+//		// BOZO BOZO BOZO
+//		((AmpReportGenerator) this).setCleanupMetadata(false); // BOZO BOZO BOZO COMMENT OUT THIS LINE IN COMMIT
+		
 		long startTS = System.currentTimeMillis();
 		retrieveData();
 		filterCacher.closeConnection();
 		long retrTS = System.currentTimeMillis();
 		
-		
+//		String jopa = this.rawColumns.prettyPrint();
 		prepareData();
+//		String popa = this.report.prettyPrint();
 		long endTS = System.currentTimeMillis();
 		logger.info("Report "+getReport().getName()+" generated in "+(endTS-startTS)/1000.0+" seconds. Data retrieval completed in "+(retrTS-startTS)/1000.0+" seconds");
 				

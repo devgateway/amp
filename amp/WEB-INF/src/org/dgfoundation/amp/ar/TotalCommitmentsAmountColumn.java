@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.TotalCommitmentsAmountCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
@@ -60,6 +61,14 @@ public class TotalCommitmentsAmountColumn extends TotalAmountColumn {
 		// TODO Auto-generated constructor stub
 	}
 
+	protected boolean isACommitmentCell(AmountCell cell)
+	{
+		if (!(cell instanceof CategAmountCell))
+			return false;
+		
+		CategAmountCell c = (CategAmountCell) cell;
+		return ArConstants.COMMITMENT.equals(c.getMetaValueString(ArConstants.TRANSACTION_TYPE));
+	}
 	/**
 	 * Overrides the method for adding cells, to make sure we add only UndisbursedAmountCellS
 	 * @param c the cell to be added
@@ -69,10 +78,11 @@ public class TotalCommitmentsAmountColumn extends TotalAmountColumn {
 		AmountCell ac=(AmountCell) c;
 		TotalCommitmentsAmountCell uac = new TotalCommitmentsAmountCell(ac.getOwnerId());
 		AmountCell cell = uac.merge(ac);
-		if ((uac.getAmount() > 0) || (!uac.getMergedCells().isEmpty()))
+		if ((cell.getAmount() > 0) || (isACommitmentCell(ac)))
 			super.addCell(cell);
 		else
 		{
+			//System.out.println(cell.getAmount());
 			// nothing to add - do nothing so as not to pollute the column with "zeroes with ownerIds"
 		}
 	}

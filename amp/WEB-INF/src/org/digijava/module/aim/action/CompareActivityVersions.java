@@ -33,11 +33,10 @@ import org.digijava.module.aim.form.CompareActivityVersionsForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -190,6 +189,7 @@ public class CompareActivityVersions extends DispatchAction {
 						} else {
 							output.setStringOutput(new String[] { auxResult1 != null ? auxResult1.toString() : "",
 									auxResult2 != null ? auxResult2.toString() : "" });
+                            output.setOriginalValueOutput(new Object[] { auxResult1, auxResult2 });
 						}
 						vForm.getOutputCollection().add(output);
 					}
@@ -485,11 +485,12 @@ public class CompareActivityVersions extends DispatchAction {
 		// method to get the value of the field in a right format for inserting
 		// into a new activity, ie: set the activityid property, etc.
 		Session session = null;
-		Transaction tx = null;
+		Transaction transaction = null;
 		try {
-			session = PersistenceManager.getRequestDBSession();
-			//session.connection().setAutoCommit(false);
-//beginTransaction();
+			session = PersistenceManager.openNewSession();
+            session.setFlushMode(FlushMode.COMMIT);
+            transaction = session.beginTransaction();
+
 
 			TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
 			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class, tm.getMemberId());
@@ -567,7 +568,8 @@ public class CompareActivityVersions extends DispatchAction {
 					}
 				}
 			}
-			
+
+            ContentTranslationUtil.cloneTranslations(oldActivity);
 			AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, member);
 			auxActivity.setAmpActivityId(null);
 
@@ -586,38 +588,41 @@ public class CompareActivityVersions extends DispatchAction {
 			auxActivity.setMergedActivity(true);
 			auxActivity.setMergeSource1(vForm.getActivityOne());
 			auxActivity.setMergeSource2(vForm.getActivityTwo());
-			session.save(auxActivity);
-			
-			AmpActivityContact actCont;
-			Set<AmpActivityContact> contacts = new HashSet<AmpActivityContact>();
-			Iterator<AmpActivityContact> it = auxActivity.getActivityContacts().iterator();
-			while(it.hasNext()){
-				actCont = it.next();
-				actCont.setId(null);
-				actCont.setActivity(auxActivity);
-				session.save(actCont);
-				contacts.add(actCont);
-			}
-			auxActivity.setActivityContacts(contacts);
-			String ampId = ActivityUtil.generateAmpId(member.getUser(), auxActivity.getAmpActivityId(), session);
-			auxActivity.setAmpId(ampId);
-			session.update(auxActivity);
-			
-					
+
+            String ampId = ActivityUtil.generateAmpId(member.getUser(), auxActivity.getAmpActivityId(), session);
+            auxActivity.setAmpId(ampId);
+
+            AmpActivityContact actCont;
+            Set<AmpActivityContact> contacts = new HashSet<AmpActivityContact>();
+            Set<AmpActivityContact> activityContacts = auxActivity.getActivityContacts();
+            if (activityContacts != null){
+                Iterator<AmpActivityContact> it = activityContacts.iterator();
+                while(it.hasNext()){
+                    actCont = it.next();
+                    actCont.setId(null);
+                    actCont.setActivity(auxActivity);
+                    session.save(actCont);
+                    contacts.add(actCont);
+                }
+                auxActivity.setActivityContacts(contacts);
+            }
+            session.save(auxActivity);
+			transaction.commit();
+
 			logger.warn("Activity Saved.");
 			
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 			java.util.Locale locale = new java.util.Locale(navigationLanguage.getCode());
 			LuceneUtil.addUpdateActivity(request.getSession().getServletContext(), true, site, locale, auxActivity, prevVersion);
-			
-			
+            AuditLoggerUtil.logObject(request, auxActivity, "add", "merged");
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-			tx.rollback();
-		}
-		return mapping.findForward("index");
+			logger.error("Can't save merged activity:", e);
+            transaction.rollback();
+		} finally {
+            session.close();
+        }
+        return mapping.findForward("index");
 	}
 
 	// TODO: Note: ONLY FOR DEVELOPMENT PURPOSES. Delete this method when the

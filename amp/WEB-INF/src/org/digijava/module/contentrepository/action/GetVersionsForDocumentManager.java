@@ -108,6 +108,8 @@ public class GetVersionsForDocumentManager extends Action {
 		docData.setVersionNumber( nodeWrapper.getVersionNumber() );
 		docData.setUuid			( nodeWrapper.getUuid() );
 		docData.setLabels( nodeWrapper.getLabels() );
+		docData.setIndex(nodeWrapper.getIndex());
+		docData.setCategory(nodeWrapper.getCategory());
 		
 		if ( docData.getVersionNumber() == 0 )
 			docData.setVersionNumber(verNum);

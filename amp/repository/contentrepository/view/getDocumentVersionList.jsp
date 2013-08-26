@@ -27,7 +27,7 @@
 								<th><digi:trn>Pub.Year</digi:trn></th>
 								<th><digi:trn>Size (MB)</digi:trn></th>
 								<field:display name="Resource Index" feature="Resource Columns"><th><digi:trn>Index</digi:trn></th></field:display>
-								<field:display name="Resource Category" feature="Resource Columns"><th><digi:trn>Index</digi:trn></th></field:display>								
+								<field:display name="Resource Category" feature="Resource Columns"><th><digi:trn>Category</digi:trn></th></field:display>								
 								<th><digi:trn>Notes</digi:trn></th>
 								<th><digi:trn>Actions</digi:trn></th>
 							</tr>

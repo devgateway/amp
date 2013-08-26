@@ -128,6 +128,10 @@ var validationCallback =
 		var params="edit=true&orgSelReset=false&subAction=organizationSelected&id="+id;
 		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback);
 	}
+
+	function closeWindow() {
+		myPanel.hide();
+	}
 	
 	function selectOrganization() {
 
@@ -206,6 +210,7 @@ var validationCallback =
 				  document.aimSelectOrganizationForm.tempNumResults.focus();
 				  //return false;
 			} else {
+				alert("dudu");
 				 <digi:context name="searchOrg" property="/aim/selectOrganizationComponent.do"/>
 			    var url = "<%=searchOrg %>"
 				var params = "?edit=true&subAction=search"+getParams();    

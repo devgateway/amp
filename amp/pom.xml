@@ -903,7 +903,7 @@
 				<configuration>				
 				 <webResources>
             <resource>
-	              <directory>/</directory>
+	              <directory>.</directory>
 	              <includes>
 	                 <include>**/*</include> 
 	              </includes>

@@ -914,7 +914,7 @@
 	              </excludes>	             
             </resource>
           </webResources>
-					<webXml>WEB-INF\web.xml</webXml>
+					<webXml>WEB-INF/web.xml</webXml>
 				</configuration>
 			</plugin>
 

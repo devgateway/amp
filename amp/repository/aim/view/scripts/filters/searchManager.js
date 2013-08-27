@@ -98,7 +98,7 @@ SearchManager.prototype.findNext	= function() {
 				var additionalSrchDivString	= '';
 				if(additionalSrchDivs.length > 0){
 					if (i>0) {
-						additionalSrchDivString = additionalSrchDivs[i].innerHTML.toLowerCase();
+						additionalSrchDivString = additionalSrchDivs[i-1].innerHTML.toLowerCase();
 					}
 				}				 
 				
@@ -149,7 +149,7 @@ SearchManager.prototype.findPrev	= function() {
 			var additionalSrchDivString	= '';
 			if(additionalSrchDivs.length > 0){
 				if (i>0) {
-					additionalSrchDivString = additionalSrchDivs[i].innerHTML.toLowerCase();
+					additionalSrchDivString = additionalSrchDivs[i-1].innerHTML.toLowerCase();
 				}
 			}
 			

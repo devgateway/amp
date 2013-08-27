@@ -908,13 +908,13 @@
 	                 <include>**/*</include> 
 	              </includes>
 	              <excludes>
+	              	<exclude>META-INF/context.xml</exclude>
 	              	<exclude>WEB-INF/src/**</exclude>
     				<exclude>.settings/**</exclude>
     				<exclude>.externalToolBuilders/**</exclude>
 	              </excludes>	             
             </resource>
           </webResources>
-					<webXml>WEB-INF/web.xml</webXml>
 				</configuration>
 			</plugin>
 
@@ -939,7 +939,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.7</version>
 				<executions>
 					<execution>
 						<id>add-source</id>

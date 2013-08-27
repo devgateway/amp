@@ -16,10 +16,12 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
+import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
@@ -29,8 +31,10 @@ import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
+import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -38,6 +42,7 @@ import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -221,41 +226,41 @@ public class AmpDonorFundingFormSectionFeature extends
 		wmc.add(list);
 
 		
-//		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations", true, AmpOrganisationSearchModel.class) {
-//			@Override
-//			protected String getChoiceValue(AmpOrganisation choice) {
-//				return DbUtil.filter(choice.getName());
-//			}
-//			
-//			@Override
-//			protected boolean showAcronyms() {
-//				return true;
-//			}
-//			
-//			@Override
-//			protected String getAcronym(AmpOrganisation choice) {
-//				return choice.getAcronym();
-//			}
-//
-//			@Override
-//			public void onSelect(AjaxRequestTarget target,
-//					AmpOrganisation choice) {
-//				list.addItem(choice);
-//
-//				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
-//				target.add(wmc);
-//			}
-//
-//			@Override
-//			public Integer getChoiceLevel(AmpOrganisation choice) {
-//				// TODO Auto-generated method stub
-//				return null;
-//			}
-//		};
+		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations", true, AmpOrganisationSearchModel.class) {
+			@Override
+			protected String getChoiceValue(AmpOrganisation choice) {
+				return DbUtil.filter(choice.getName());
+			}
+			
+			@Override
+			protected boolean showAcronyms() {
+				return true;
+			}
+		
+			@Override
+			protected String getAcronym(AmpOrganisation choice) {
+				return choice.getAcronym();
+			}
 
-//		AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>("searchFundingOrgs", new Model<String> (),
-//				"Search Funding Organizations",   searchOrgs );
-//		wmc.add(searchOrganization);
+			@Override
+			public void onSelect(AjaxRequestTarget target,
+					AmpOrganisation choice) {
+				list.addItem(choice);
+
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
+				target.add(wmc);
+			}
+
+			@Override
+			public Integer getChoiceLevel(AmpOrganisation choice) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+
+		AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>("searchFundingOrgs", new Model<String> (),
+				"Search Funding Organizations",   searchOrgs );
+		wmc.add(searchOrganization);
 
 
         String[] roleFilter = null;//ACTIVITY_ROLE_FILTER;

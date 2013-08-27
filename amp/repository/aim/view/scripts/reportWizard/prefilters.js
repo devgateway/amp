@@ -206,11 +206,15 @@ SaveFilters.prototype.success	= function (o) {
 	if ( o.responseText.length > 0 ) {
 		this.panel.hide();
 		this.filterObj.listFiltersDiv.innerHTML	= o.responseText;
-		repManager.showUseFilters(true);
+		
+		if (!(typeof repManager === 'undefined')) {
+			repManager.showUseFilters(true);
+		}
 	}
 	else
 		this.panel.setBody (this.filterObj.cannotSaveFiltersMessage);
 };
+
 SaveFilters.prototype.failure	= function (o) {
 	this.panel.setBody( "<font color='red'>" + this.connectionFailureMessage + "</font>");
 };

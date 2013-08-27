@@ -203,6 +203,8 @@ public class AmpDonorFundingFormSectionFeature extends
 				AmpFunding funding = new AmpFunding();
 				if(orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject()!=null)
 					funding.setSourceRole((AmpRole)orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject());
+				else funding.setSourceRole(DbUtil.getAmpRole(Constants.FUNDING_AGENCY));
+				
 				funding.setAmpDonorOrgId(org);
 				funding.setAmpActivityId(am.getObject());
 				funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());

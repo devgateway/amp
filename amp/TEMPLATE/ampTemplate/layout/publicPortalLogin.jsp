@@ -12,6 +12,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Home</title>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.class.min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/md5-min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/digest-auth.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jdigestauth/sha1.js"/>" ></script>
+
 <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp_public_portal_login.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript">
 var loginFailed = function(data, status) {
@@ -20,46 +25,6 @@ var loginFailed = function(data, status) {
 };
 
 
-function ajaxLogin() {
-$(".error").remove();
-$('#result').before("<div class='error'><img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif' style='vertical-align:middle;'></div>");
-
-
-$.ajax({
-		url : "/j_spring_security_check",
-		type : "POST",
-		data : $("#loginForm").serialize(),
-		success : function(data) {
-			var error = jQuery.trim(data);
-			$(".error").remove();
-			switch (error) {
-			case 'invalidLogin':
-				$('#result')
-						.before(
-								"<div class='error'><digi:trn>Invalid username or password</digi:trn>.</div>");
-				break;
-			case 'userBanned':
-				$('#result')
-						.before(
-								"<div class='error'><digi:trn>User is banned</digi:trn>.</div>");
-				break;
-			case 'noTeamMember':
-				$('#result')
-						.before(
-								"<div class='error'><digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</div>");
-				break;
-			case 'invalidUser':
-				$('#result')
-						.before(
-								"<div class='error'><digi:trn>Invalid User</digi:trn>.</div>");
-				break;
-			case 'noError':
-				location.href = '/index.do';
-				break;
-			}
-		}
-	});
-}
 </script>
 </head>
 
@@ -94,15 +59,15 @@ $.ajax({
 		 
         <div id="loginbox">  
         	<div class="logintitle"><h2><digi:trn>Member Login</digi:trn></h2></div>
-        	<form action="/j_spring_security_check" id="loginForm" method="post"
+        	<form action="/aim/postLogin.do" id="loginForm" method="post"
 				onsubmit="ajaxLogin();return false;">
             	<p class="userfield">
 					<label><digi:trn>Username</digi:trn>:</label> <input
-						name="j_username" type="text" id="user"/>
+						name="j_username" type="text" id="j_username"/>
 						
 				</p>
 				<p class="passfield">
-					<label><digi:trn>Password</digi:trn>:</label> <input name="j_password" type="password" id="pass">
+					<label><digi:trn>Password</digi:trn>:</label> <input name="j_password" type="password" id="j_password">
 				</p>
 				<div id="result"></div>
                 <input type="submit" id="amplogin" value="Login"/>
@@ -113,10 +78,8 @@ $.ajax({
                 <c:set var="title">
 						<digi:trn>Click here to change your password</digi:trn>
 					</c:set>
-				<%-- <digi:link href="/showChangePassword.do"  styleId="changePassword" 
-					title="${title}">&raquo;&nbsp;<digi:trn>Change Password</digi:trn></digi:link> --%>
 				<a href="/aim/showChangePassword.do" id="changePassword" title="${title}">&raquo;&nbsp;<digi:trn>Change Password</digi:trn></a>
-				<digi:link href="/showEmailForm.do" styleId="trouble" title="${trn1}">&raquo;&nbsp;<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn></digi:link>
+				<digi:link href="/showEmailForm.do" module="aim" styleId="trouble" title="${trn1}">&raquo;&nbsp;<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn></digi:link>
 				</div>
 				<feature:display name="Enable New User Registration"
 							module="Login - User Management">
@@ -124,7 +87,7 @@ $.ajax({
 				<c:set var="trn3">
 						<digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>
 					</c:set>
-				<digi:link href="/showRegisterUser.do?init=true" styleId="new" title="${trn3}"><digi:trn key="aim:newUserRegistration"> New user registration</digi:trn></digi:link></div>
+				<digi:link module="aim" href="/showRegisterUser.do?init=true" styleId="new" title="${trn3}"><digi:trn key="aim:newUserRegistration"> New user registration</digi:trn></digi:link></div>
 				</feature:display>
 				</form>
             

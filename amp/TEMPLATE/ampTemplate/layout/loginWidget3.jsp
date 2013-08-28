@@ -51,44 +51,6 @@
 	        };
 
 	        
-	function ajaxLogin() {
-		$(".error_text_login").remove();
-		$('#result').before("<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif' style='vertical-align:middle;'></div>");
-
-		var digestAuth = new pl.arrowgroup.DigestAuthentication(
-	   			{
-					onSuccess : function(data) {
-						var error = jQuery.trim(data);
-						$(".error_text_login").remove();
-						switch (error) {
-						case 'noTeamMember':
-							$('#result')
-									.before(
-											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</div>");
-							break;
-						case 'invalidUser':
-							$('#result')
-									.before(
-											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>Invalid User</digi:trn>.</div>");
-							break;
-						case 'noError':
-							location.href = '/index.do';
-							break;
-						}
-					},
-	   				onFailure : function(response){
-	   					$(".error_text_login").remove();
-						$('#result')
-						.before(
-								"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>Invalid username or password</digi:trn>.</div>");	   			
-	   				},
-	   				cnonce : 'testCnonce'
-	   			}
-	   		);	   		
-
-  			digestAuth.setCredentials($('#j_username').val(),$('#j_password').val());
-   			digestAuth.call('/aim/postLogin.do');
-	}
 </script>
 <div id="show_login_pop_box" style="width: 270px;">
 						<form action="/aim/postLogin.do" id="loginForm" method="post" style="margin:0;z-index:9999" onsubmit="ajaxLogin();return false;">

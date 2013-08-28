@@ -203,9 +203,9 @@
 									<td>
 									 		<c:set var="translation">
 												<digi:trn>Click here to see possible actions</digi:trn>
-											</c:set> 
-											<a style="cursor:pointer; text-decoration:none; color: blue; white-space: nowrap;" id="Actions<bean:write name='documentData' property='uuid' />"
-											onClick="showActions('Actions${documentData.uuid}', 'ActionsDiv${documentData.uuid}','${dynamicListLocal}',${currentTimeInMillis})" title="${translation}">
+											</c:set>
+											<a style="cursor:pointer; text-decoration:none; color: blue; white-space: nowrap;" id="Actions<bean:write name='documentData' property='uuid' />_${counter}"
+											onClick="showActions('Actions${documentData.uuid}_${counter}', 'ActionsDiv${documentData.uuid}','${dynamicListLocal}',${currentTimeInMillis})" title="${translation}">
 												&nbsp;-<digi:trn>Actions</digi:trn>-
 												<!-- <img src="/repository/contentrepository/view/images/dropdown_arrow.png"  height="100%"> -->																								
 											</a>

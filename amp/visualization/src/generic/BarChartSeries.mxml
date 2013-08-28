@@ -95,16 +95,16 @@
 				var fillCategories:Boolean = false;
 				var i:Number, j:Number, currentValue:Number;
 				try {
-					for(j = 0; j < service.lastResult.year[dataField].length; j++){
-						try {
-							maxValue = service.lastResult.year[dataField].amount
-						} catch (errObject:Error) {
+					if(service.lastResult.year[dataField].hasOwnProperty("length")){
+						for(j = 0; j < service.lastResult.year[dataField].length; j++){
 							currentValue = service.lastResult.year[dataField][j].amount;
 							//Just add the categories in the last iteration
 							//if(i == service.lastResult.year.length-1)
 							categoriesLocal.addItem(service.lastResult.year[dataField][j]);
-							if (maxValue < currentValue) maxValue = currentValue;
+							if (maxValue < currentValue) maxValue = currentValue; 
 						}
+					} else {
+						maxValue = service.lastResult.year[dataField].amount;
 					}
 				} catch (errObject:Error) {
 					for(i = 0; i < service.lastResult.year.length; i++){
@@ -161,8 +161,12 @@
 					}
 				} else {
 					if ("name" in service.lastResult.year && service.lastResult.year["name"] != "") {
-						for(j = 0; j < service.lastResult.year[dataField].length; j++){
-							totalAmount = totalAmount + Number(service.lastResult.year[dataField][j].amount);
+						if(service.lastResult.year[dataField].hasOwnProperty("length")){
+							for(j = 0; j < service.lastResult.year[dataField].length; j++){
+								totalAmount = totalAmount + Number(service.lastResult.year[dataField][j].amount);
+							}
+						} else {
+							totalAmount = totalAmount + Number(service.lastResult.year[dataField].amount);
 						}
 					}
 				} 

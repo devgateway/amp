@@ -377,6 +377,7 @@
 				messagePanel.visible = true;
 				sizePanel(300, 200);
 				sliderYear.visible = true;
+				var delayer:Delay = new Delay(captureSnapshot,4000,1);
 			}
 			protected function hideYearMessage():void {
 				dc.visible = true;

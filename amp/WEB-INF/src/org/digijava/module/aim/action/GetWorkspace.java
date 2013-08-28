@@ -40,7 +40,7 @@ public class GetWorkspace extends Action {
 
 		logger.debug("In GetWorkspace");
 		
-		ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, false);
+		ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, true);
 		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_WORKSPACE_EDITOR);
 
 		boolean permitted = false;

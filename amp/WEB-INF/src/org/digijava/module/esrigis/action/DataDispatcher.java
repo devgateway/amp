@@ -15,15 +15,21 @@ import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +45,9 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -71,6 +79,7 @@ import org.digijava.module.esrigis.helpers.SimpleLocation;
 import org.digijava.module.esrigis.helpers.Structure;
 import org.digijava.module.esrigis.helpers.XlsHelper;
 import org.digijava.module.visualization.util.DbUtil;
+import org.hibernate.Session;
 public class DataDispatcher extends MultiAction {
 	private static Logger logger = Logger.getLogger(DataDispatcher.class);
 
@@ -413,7 +422,7 @@ public class DataDispatcher extends MultiAction {
 			ap.setDonors(new ArrayList<SimpleDonor>());
 			while (fundItr.hasNext()) {
 				AmpFunding ampFunding = (AmpFunding) fundItr.next();
-				Collection fundDetails = ampFunding.getFundingDetails();
+				//Collection fundDetails = ampFunding.getFundingDetails();
 				SimpleDonor donor = new SimpleDonor(); 
 				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
 				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
@@ -521,6 +530,202 @@ public class DataDispatcher extends MultiAction {
 		return null;
 	}
 	
+	/**
+	 * safely closes a connection, swallowing any exception
+	 * @param conn
+	 */
+	public final static void closeConnection(Connection conn)
+	{
+		try
+		{
+			if (conn != null)
+				conn.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+	}
+	
+	/**
+	 * fetches a Map<ActivityId, ActivityName> of activities which have an id in a predetermined set
+	 * @param activityIdList
+	 * @return
+	 */
+	protected Map<Long, String> getActivityNamesByIds(List<Long> activityIdList)
+	{
+		Map<Long, String> activityNamesByAmpIds = new TreeMap<Long, String>();
+		Connection conn = null;
+		ResultSet rs = null;
+		try
+		{
+			conn = PersistenceManager.getJdbcConnection();
+			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_activity_id IN (" + Util.toCSString(activityIdList) + ")");
+			while (rs.next())
+			{
+				Long actId = rs.getLong(1);
+				String actName = rs.getString(2);
+				
+				activityNamesByAmpIds.put(actId, actName);
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			closeConnection(conn);
+		}
+		return activityNamesByAmpIds;
+	}
+	
+	/**
+	 * fetches structs attached to any of the ampActivityIds given in the input
+	 * @param activityIdList
+	 * @return Map<ActivityId, Set<StructId>>
+	 */
+	protected Map<Long, Set<Long>> populateStructs(List<Long> activityIdList)
+	{
+		Map<Long, Set<Long>> structsByAmpIds = new TreeMap<Long, Set<Long>>();
+		Connection conn = null;
+		ResultSet rs = null;
+		try
+		{
+			conn = PersistenceManager.getJdbcConnection();
+			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, amp_structure_id FROM amp_activity_structures WHERE amp_activity_id IN (" + Util.toCSString(activityIdList) + ")");
+			while (rs.next())
+			{
+				Long actId = rs.getLong(1);
+				Long strucId = rs.getLong(2);
+				
+				if (!structsByAmpIds.containsKey(actId))
+					structsByAmpIds.put(actId, new TreeSet<Long>());
+				
+				structsByAmpIds.get(actId).add(strucId);
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			closeConnection(conn);
+		}
+		return structsByAmpIds;
+	}
+	
+	/**
+	 * collects all values from within the values if a map
+	 * @param in
+	 * @return
+	 */
+	public final static Set<Long> collectIds(Map<Long, Set<Long>> in)
+	{
+		Set<Long> res = new TreeSet<Long>();
+		for(Collection<Long> set:in.values())
+			res.addAll(set);				
+		return res;
+	}
+	
+	
+	/**
+	 * fetches Amp_structures, fills their info in Structure instances and returns the fetched instances mapped by amp_structure_id
+	 * @param ids
+	 * @return
+	 */
+	public final static Map<Long, Structure> fetchStructs(Set<Long> ids)
+	{
+		Map<Long, Structure> z = new TreeMap<Long, Structure>();
+		
+		Connection conn = null;
+		ResultSet rs = null;
+		try
+		{
+			conn = PersistenceManager.getJdbcConnection();
+			
+			// populate set of structures which have an image
+			Set<Long> strucImages = new HashSet<Long>();
+			rs = conn.createStatement().executeQuery("SELECT DISTINCT(amp_structure_id) FROM amp_structure_img");
+			while (rs.next())
+				strucImages.add(rs.getLong(1));
+			rs.close();
+			
+			// cache structure type names
+			Map<Long, String> typeNamesById = new HashMap<Long, String>();
+			rs = conn.createStatement().executeQuery("SELECT typeid, name FROM amp_structure_type");
+			while (rs.next())
+				typeNamesById.put(rs.getLong(1), rs.getString(2));
+			rs.close();
+			
+			rs = conn.createStatement().executeQuery("SELECT amp_structure_id, title, description, latitude, longitude, shape, type FROM amp_structure WHERE amp_structure_id IN (" + Util.toCSString(ids) + ")");
+			while (rs.next())
+			{
+				Long strucId = rs.getLong(1);
+				String title = rs.getString(2);
+				String description = rs.getString(3);
+				String latitude = rs.getString(4);
+				String longitude = rs.getString(5);
+				String shape = rs.getString(6);
+				
+				long typeId = rs.getLong(7); // guaranteed not null
+				String typeName = typeNamesById.get(typeId);
+				
+				Structure structureJSON = new Structure();
+				structureJSON.setId(strucId);
+				structureJSON.setDescription(description);
+				structureJSON.setLat(latitude);
+				structureJSON.setLon(longitude);
+				structureJSON.setName(title);
+				structureJSON.setShape(shape);
+				structureJSON.setType(typeName);
+				structureJSON.setTypeId(typeId);
+				structureJSON.setHasImage(strucImages.contains(strucId));
+				
+				z.put(strucId, structureJSON);
+			}
+			rs.close();
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			closeConnection(conn);
+		}
+		return z;
+	}
+	
+	/**
+	 * returns true IFF structure passes the "structure type id" part of a MapFilter
+	 * @param filter
+	 * @param structureJSON
+	 * @return
+	 */
+	public boolean structurePassesFilter(MapFilter filter, Structure structureJSON)
+	{
+   		Long[] selectedStructures = filter.getSelStructureTypes();
+		boolean structureMatch = false;
+		
+		if (selectedStructures != null){
+			for(int idx = 0; idx < selectedStructures.length; idx++){
+				if (selectedStructures[idx].equals(structureJSON.getTypeId())){
+					structureMatch = true;
+				}
+				else if(selectedStructures[idx].equals(-1l)){
+					structureMatch = true;
+				}
+			}
+		}
+			
+		return (structureMatch || selectedStructures == null || selectedStructures.length == 0 );	
+	}
+	
+	
 	public ActionForward modeShowStructures(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)throws Exception {
 		DataDispatcherForm maphelperform = (DataDispatcherForm)form;
@@ -529,56 +734,54 @@ public class DataDispatcher extends MultiAction {
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		maphelperform.getFilter().setTeamMember(tm);
 		
+		long aaa = System.currentTimeMillis();
+		
 		JSONArray jsonArray = new JSONArray();
-		 List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
-		 list = DbHelper.getActivities(maphelperform.getFilter(),request);
-   		 boolean structuresExists = false;
-   		 Long[] selectedStructures = maphelperform.getFilter().getSelStructureTypes();
-   		 
-		 for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
-			 ActivityPoint ap = new ActivityPoint();
-			 AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
-			 ap.setActivityname(aA.getName());
-			 ap.setAmpactivityid(aA.getAmpActivityId().toString());
-			ArrayList<Structure> structures = new ArrayList<Structure>();
-			
-			for (Iterator<AmpStructure> iterator2 =aA.getStructures().iterator(); iterator2.hasNext();) {
-				AmpStructure structure = iterator2.next();
-				Structure structureJSON = new Structure();
-				boolean structureMatch = false;
-				if(selectedStructures != null){
-					for(int idx = 0; idx < selectedStructures.length; idx++){
-						if(selectedStructures[idx].equals(structure.getType().getTypeId())){
-							structureMatch = true;
-						}
-						else if(selectedStructures[idx].equals(-1l)){
-							structureMatch = true;
-						}
-					}
-				}
-					
-				if(structureMatch || selectedStructures == null || selectedStructures.length == 0 ){
-					structureJSON.setId(structure.getAmpStructureId());
-					structureJSON.setDescription(structure.getDescription());
-					structureJSON.setLat(structure.getLatitude());
-					structureJSON.setLon(structure.getLongitude());
-					structureJSON.setName(structure.getTitle());
-					structureJSON.setShape(structure.getShape());
-					structureJSON.setType(structure.getType().getName());
-					structureJSON.setTypeId(structure.getType().getTypeId());
-					structureJSON.setHasImage(structure.getImages() != null && structure.getImages().size() > 0);
-					structures.add(structureJSON);
-					structuresExists = true;
-				}
-			}
-			ap.setStructures(structures);
-			if(structuresExists) {
+		List<Long> activityIdList = new ArrayList<Long>();
+		activityIdList = DbHelper.getActivitiesIds(maphelperform.getFilter(),request);
+		
+		long bbb = System.currentTimeMillis();
+		long gettingActivitiesTime = bbb - aaa;
+		System.out.println("fetching all activities took " + gettingActivitiesTime + " millies");
+		
+		Map<Long, Set<Long>> structsByAmpIds = populateStructs(activityIdList);
+		Map<Long, Structure> structsByIds = fetchStructs(collectIds(structsByAmpIds));
+		Map<Long, String> activityNamesByIds = getActivityNamesByIds(activityIdList);
+				   		 
+   		for(Long activityId:structsByAmpIds.keySet())
+   		{
+   	  		boolean structuresExists = false;
+   	  		
+   			Set<Long> curStructs = structsByAmpIds.get(activityId);
+   			ActivityPoint ap = new ActivityPoint();
+   			ArrayList<Structure> structures = new ArrayList<Structure>();
+   			
+   			ap.setActivityname(activityNamesByIds.get(activityId));
+   			ap.setAmpactivityid(activityId.toString());
+   			
+   			for(Long structId:curStructs)
+   			{
+   				Structure structure = structsByIds.get(structId);
+   				boolean structureMatch = structurePassesFilter(maphelperform.getFilter(), structure);
+   				if (structureMatch)
+   				{
+   					structures.add(structure);
+   					structuresExists = true;
+   				}
+   			}
+   			
+   			ap.setStructures(structures);
+   			if(structuresExists)
+   			{
 				jsonArray.add(ap);
-				structuresExists = false;
 			}
-		 }
+   		}
 
-	
+   		long ccc = System.currentTimeMillis();
+		 
+   		long secondPartMillies = ccc - bbb;
+   		System.out.println("doing the second part took " + secondPartMillies);
+   		//watch STRUCTS here
 		PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());
 		pw.flush();

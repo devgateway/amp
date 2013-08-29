@@ -86,10 +86,10 @@ public class DbHelper {
 
 	}
 
-	public static List<AmpActivityVersion> getActivities(MapFilter filter,HttpServletRequest request)
+	public static List<Long> getActivitiesIds(MapFilter filter,HttpServletRequest request)
 			throws DgException {
 		Long[] orgGroupIds = filter.getSelOrgGroupIds();
-		List<AmpActivityVersion> activities = null;
+		List<Long> activities = null;
 		Long[] orgIds = filter.getOrgIds();
 		Long[] implOrgIds = filter.getImplOrgIds();
 		Long[] implOrgGroupIds = filter.getImplOrgGroupIds();
@@ -129,7 +129,7 @@ public class DbHelper {
 		 * selected organization
 		 */
 		try {
-			String oql = "select distinct act from ";
+			String oql = "select distinct act.ampActivityId from ";
 			oql += AmpFundingDetail.class.getName()
 					+ " as fd inner join fd.ampFundingId f ";
 			oql += " inner join f.ampActivityId act ";
@@ -327,6 +327,27 @@ public class DbHelper {
 			if (filter.getTransactionType() < 2) { // the option comm&disb is
 				query.setLong("transactionType", transactionType);
 			}
+			
+			activities = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("Cannot load activities from db", e);
+		}
+		return activities;
+
+	}
+	
+	public static List<AmpActivityVersion> getActivities(MapFilter filter,HttpServletRequest request)
+			throws DgException {
+
+		List<AmpActivityVersion> activities;
+		try {
+			List<Long> ids = getActivitiesIds(filter, request);
+			String oql = "select distinct act from ";
+			oql += AmpActivityVersion.class.getName()
+					+ " act WHERE ampActivityId IN (" + Util.toCSString(ids) + ")";
+			Session session = PersistenceManager.getRequestDBSession();
+			Query query = session.createQuery(oql);
 			
 			activities = query.list();
 		} catch (Exception e) {

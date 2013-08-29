@@ -56,7 +56,7 @@ public class DocumentManager extends Action {
 
 		ActionMessages errors					= new ActionMessages();
 		DocumentManagerForm myForm		= (DocumentManagerForm) form;
-		
+
 		request.setAttribute("ServletContext", this.getServlet().getServletContext() );		
 //		if ( request.getParameter(CrConstants.REQUEST_GET_SHOW_DOCS) != null )
 //			showOnlyDocs 	= true;
@@ -563,7 +563,7 @@ public class DocumentManager extends Action {
 					if ( hasShowVersionsRights != null )
 						documentData.setHasShowVersionsRights(hasShowVersionsRights && !isPending); 
 					
-					hasVersioningRights		= DocumentManagerRights.hasViewAddNewVersioninsRights(baseNode, request); //just indicates whether add version button is visible or not
+					hasVersioningRights		= DocumentManagerRights.hasVersioningRights(baseNode, request); //just indicates whether add version button is visible or not
 					if ( hasVersioningRights != null ) {
 						documentData.setHasVersioningRights( hasVersioningRights.booleanValue() && !isPending);
 					}

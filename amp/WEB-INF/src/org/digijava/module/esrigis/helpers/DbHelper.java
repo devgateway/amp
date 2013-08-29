@@ -171,7 +171,7 @@ public class DbHelper {
 				oql += " inner join act.structures str  ";
 			}
 			// Status
-			if (filter.getSelprojectstatus() != null) {
+			if ((filter.getSelprojectstatus()) != null || (filter.getOnBudget() != null)) {
 				oql += " join  act.categories as categories ";
 			}
 

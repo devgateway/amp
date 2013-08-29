@@ -128,6 +128,10 @@ var validationCallback =
 		var params="edit=true&orgSelReset=false&subAction=organizationSelected&id="+id;
 		YAHOO.util.Connect.asyncRequest("POST", urlParams+"?"+params, callback);
 	}
+
+	function closeWindow() {
+		myPanel.hide();
+	}
 	
 	function selectOrganization() {
 

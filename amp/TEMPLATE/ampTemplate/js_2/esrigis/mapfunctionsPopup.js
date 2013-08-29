@@ -446,6 +446,7 @@ function selectLocationCallerShape(selectedGraphic){
 	}else{
 		var shapeField = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[3]; //this is the "shape" field
 		shapeField.value = JSON.stringify(selectedGraphic.toJson());
+        window.opener.postvaluesy(shapeField);
 	}
 	
 	element = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];

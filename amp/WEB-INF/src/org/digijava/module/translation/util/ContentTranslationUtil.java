@@ -105,7 +105,7 @@ public class ContentTranslationUtil {
      * @param obj Object that needs translation cloning
      */
     public static void cloneTranslations(Object obj){
-
+        Hibernate.initialize(obj);
         String objClass = getObjectClass(obj);
         String currentLocale = TLSUtils.getLangCode();
 
@@ -434,7 +434,7 @@ public class ContentTranslationUtil {
     }
 
     private static String getObjectClass(Object obj){
-        return obj.getClass().getName();
+        return Hibernate.getClass(obj).getName();
     }
 
     /**

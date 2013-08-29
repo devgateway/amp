@@ -464,7 +464,7 @@ myTable.enhanceMarkup = function(markupName) {
 	    if (show_index)
 	    	this.columnHeaders.push({key:"resource_index",label:"${trans_headerResourceIndex}", sortable:true/*, width:40 + extraSpacePerFreeLoader*/});
 	    if (show_category)
-	    	this.columnHeaders.push({key:"resource_category",label:"${trans_headerResourceCategory}", sortable:true/*, width:50 + extraSpacePerFreeLoader*/});
+	    	this.columnHeaders.push({key:"resource_category",label:"${trans_headerResourceCategory}", sortable:true, width:70/* + extraSpacePerFreeLoader*/});
 	    if (show_organisations)
 	    	this.columnHeaders.push({key:"resource_organisations",label:"${trans_headerResourceOrganisations}", sortable:true/*, width:50 + extraSpacePerFreeLoader*/});
 	    this.columnHeaders.push({key:"labels",label:"${trans_headerLabels}",sortable:false, width:50});
@@ -1303,7 +1303,7 @@ function selectResourceType(isUrl) {
 		elFile.style.display	= "none";
 		elUrl.style.display		= "";
 	}else{
-		alex					= 'ùù éè &é"\'(-è_çà';
+		alex					= 'ï¿½ï¿½ ï¿½ï¿½ &ï¿½"\'(-ï¿½_ï¿½ï¿½';
 		elFile.style.display	= "";
 		elUrl.style.display		= "none";
 	}
@@ -1324,8 +1324,8 @@ function setType(typeValue) {
 
 function validateAddDocument() {
 	// This code was commented. See https://jira.dgfoundation.org/browse/AMP-15171 for details
-	// var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
-	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü!@#$%^&' ()]+");
+	// var regexp	= new RegExp("[a-zA-Z0-9_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%&' ()]+");
+	var regexp	= new RegExp("[a-zA-Z0-9_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!@#$%^&' ()]+");
 	var urlFormat = new RegExp('(http|ftp|https)://[a-z0-9\-_]+(\.[a-z0-9\-_]+)+([a-z0-9\-\.,@\?^=%&;:/~\+#]*[a-z0-9\-@\?^=%&;/~\+#])?', 'i');
 	var msg	= '';	
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '') {

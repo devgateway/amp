@@ -10,9 +10,9 @@
 
 <script language="JavaScript">
 
-	    $(window).load(function() {
+	$(window).load(function() {
 		    $("#loader_background").fadeOut('fast'); 
-		    });
+	});
 
 	function changeLevel(id) {
 		<digi:context name="urlVal" property="context/module/moduleinstance/visibilityManager.do" />			  
@@ -88,9 +88,11 @@ function showDescriptionToolbox(id){
 	padding:10px 10px 10px 10px;
  	background-color: #FFFFFF;
 }
-	</style>
-<div id="loader_background" style="background-color:grey;position:absolute;width:100%;height:2000;top:81;left:0;opacity:0.4;z-index:2;">
-	<img style="position:relative;top:300;left:500;opacity:1;z-index:3;" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-white.gif">
+</style>
+<div id="loader_background" 
+	style = 'background-color:grey; position:absolute; width:100%; height:2000px; top:81px; left:0;opacity:0.4;z-index:2; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)"; filter: alpha(opacity=40);'>
+	<img style="position:relative;top:300px;opacity:1;z-index:3; margin: 0 auto; display: block;" 
+		src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-white.gif">
 </div>
 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 	<!--<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">-->

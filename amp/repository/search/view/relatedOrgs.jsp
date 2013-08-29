@@ -30,7 +30,7 @@
         <td bgcolor="#dadada">
             <img id="activityRows${requestScope.relatedOrgIndex}_plus"  onclick="toggleResultsGroup('activityRows${requestScope.relatedOrgIndex}')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif" align="absmiddle" style="float:left;"/>
             <img id="activityRows${requestScope.relatedOrgIndex}_minus" onclick="toggleResultsGroup('activityRows${requestScope.relatedOrgIndex}')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display:none;float:left;" align="absmiddle"/>
-            &nbsp;&nbsp;${fn:length(requestScope.resultActivitiesWithOrgs)} <strong><digi:trn>activities using this organization as ${requestScope.relatedOrgType}.</digi:trn></strong>
+            &nbsp;&nbsp;${fn:length(requestScope.resultActivitiesWithOrgs)} <strong><digi:trn>activities using this organization as</digi:trn> <digi:trn>${requestScope.relatedOrgType}.</digi:trn></strong>
         </td>
     </tr>
     <tr>

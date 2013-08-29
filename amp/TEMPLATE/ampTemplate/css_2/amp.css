@@ -42,7 +42,7 @@ fieldset {background-color:#FFFFFF; border-top:1px solid #DADAD6; border-left:1p
 fieldset table {font-size:12px;}
 legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bold; padding-left:5px; padding-right:5px;display:block;}
 .legend_label {line-height:22px;white-space:normal;}
-html.ie .legend_label {line-height:22px;display:block;white-space:normal;}
+html.ie .legend_label {line-height:22px;/*display:block;*/white-space:normal;}
 .mand {color:#FF0000;}
 table.inside, td.inside,td.report_inside {border:1px solid #b8b7b7;  font-size:11px;}
 td.inside ul{padding-left: 1.3em;}

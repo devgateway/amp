@@ -1,4 +1,3 @@
-
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;

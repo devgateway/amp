@@ -448,14 +448,14 @@ ${aimMainProjectDetailsForm.activityExists}
 				</feature:display>
 			</module:display>
 
-            <field:display name="Add Activity Button" feature="Edit Activity">
-                <c:set var="activityEditURL">
-                    /wicket/onepager/activity/<%=request.getParameter("ampActivityId")%>
-                </c:set>
-            </field:display>
             <field:display name="Add SSC Button" feature="Edit Activity">
                 <c:set var="activityEditURL">
                     /wicket/onepager/ssc/<%=request.getParameter("ampActivityId")%>
+                </c:set>
+            </field:display>
+            <field:display name="Add Activity Button" feature="Edit Activity">
+                <c:set var="activityEditURL">
+                    /wicket/onepager/activity/<%=request.getParameter("ampActivityId")%>
                 </c:set>
             </field:display>
 

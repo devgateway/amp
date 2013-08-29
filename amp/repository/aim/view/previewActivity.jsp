@@ -148,11 +148,14 @@ function viewChanges(){
 }
 
 function editActivity() {
-    <digi:context name="editActivity" property="/wicket/onepager/activity" />
     <field:display name="Add SSC Button" feature="Edit Activity">
         <digi:context name="editActivity" property="/wicket/onepager/ssc" />
+        document.location.href="<%=editActivity%>/<%=request.getAttribute("actId")%>";
     </field:display>
-	document.location.href="<%=editActivity%>/<%=request.getAttribute("actId")%>";
+    <field:display name="Add Activity Button" feature="Edit Activity">
+        <digi:context name="editActivity" property="/wicket/onepager/activity" />
+        document.location.href="<%=editActivity%>/<%=request.getAttribute("actId")%>";
+    </field:display>
 }
 
 function expandAll(){

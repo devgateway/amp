@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.devgateway</groupId>
 	<artifactId>amp</artifactId>
-	<version>2.6</version>
+	<version>${buildVersion}</version>
 	<packaging>war</packaging>
 	<name>Aid Management Platform</name>
 	<properties>
@@ -11,8 +11,8 @@
 		<tomcatVersion>7.0.37</tomcatVersion>
 		<springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
 		<springVersion>3.0.7.RELEASE</springVersion>		 
-    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
-    	<build.name>SNAPSHOT</build.name>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<buildVersion>2.6-SNAPSHOT</buildVersion>      
 	</properties>
  <repositories> 
 		<repository>
@@ -897,11 +897,14 @@
 		<sourceDirectory>${project.basedir}/WEB-INF/src</sourceDirectory>
 		<outputDirectory>${project.basedir}/WEB-INF/classes</outputDirectory>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>				
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>				
 				<configuration>
-				<warName>${artifactId}-${project.version}-${build.name}</warName>
+				<warName>${project.artifactId}-${project.version}</warName>
+				
 				<recompressZippedFiles>false</recompressZippedFiles>
 				 <manifest>
                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
@@ -909,8 +912,7 @@
                   <archive>
                     <manifestEntries>
                         <Specification-Title>${project.name}</Specification-Title>                        
-                        <Specification-Version>${project.version}</Specification-Version>
-                        <Implementation-Version>${build.name}</Implementation-Version>
+                        <Implementation-Version>${project.version}</Implementation-Version>
                         <Implementation-Vendor>Development Gateway</Implementation-Vendor>
                     </manifestEntries>
                 </archive>                		
@@ -953,6 +955,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.8</version>
 				<executions>
 					<execution>
 						<id>add-source</id>

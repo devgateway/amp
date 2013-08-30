@@ -903,7 +903,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>				
 				<configuration>
-				<warName>${project.artifactId}-${project.version}</warName>
+				<warName>${project.version}</warName>
 				
 				<recompressZippedFiles>false</recompressZippedFiles>
 				 <manifest>

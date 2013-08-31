@@ -433,6 +433,7 @@ function findbydistance(evt) {
  */
 function showStInfoWindow() {
 	searchactive = false;
+	alert('Ion!');
 	hideTooltip();
 	var content =
 	    "<table border='0' width='100%' cellpadding='0' cellspacing='0' style='border: 1px solid gray;font-size: 10px;'>"
@@ -1203,18 +1204,25 @@ function getStructures(clear) {
 	}
 }
 function changeTabStructureInfo(info){
+	//alert('Marinela!');
 	if(info){
 		$("#strImage").css("display", "none");
 		$("#strInfo").css("display", "block");
-		$("#aStrImage").removeAttr('disable');
-		$("#aStrInfo").attr('disable', 'disable');
+//		$("#aStrImage").parent().css('visibility', 'visible');
+//		$("#aStrInfo").parent().css('visibility', 'hidden');
+		$("#aStrImage").css('display', 'inline-block');
+		$("#aStrInfo").css('display', 'none');		
 		$("#aStrInfo").addClass("selected");
 		$("#aStrImage").removeClass("selected");
 	}else{
 		$("#strInfo").css("display", "none");
 		$("#strImage").css("display", "block");
-		$("#aStrImage").attr('disable', 'disable');
-		$("#aStrInfo").removeAttr('disable');
+//		$("#aStrImage").parent().css('visibility', 'hidden');
+//		$("#aStrInfo").parent().css('visibility', 'visible');
+		
+		$("#aStrImage").css('display', 'none');
+		$("#aStrInfo").css('display', 'inline-block');		
+		
 		$("#aStrImage").addClass("selected");
 		$("#aStrInfo").removeClass("selected");
 	}
@@ -1236,8 +1244,10 @@ function MapFindStructure(activity, structureGraphicLayer) {
 		+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>";
 
 	var tabTemplate = "<div id='infotabs' class='infotab'>"
-		+ " <ul><li><a id='aStrInfo' class='selected' href='#' onclick='changeTabStructureInfo(true);'>Details</a></li>"
-		+ "<li><a id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Image</a></li></ul>"
+
+		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>Show Info</a>"
+		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Show Image</a>"
+		
 		+ "<div id='strInfo' ><br /><br />"+ noTabTemplate +"</div>"
 		+ "<div id='strImage' align='center' style='display:none;' >${Structure Image}</div>"
 		+ "</div>";
@@ -1252,7 +1262,7 @@ var structureID=1;
 			name =  structure.name.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 			
 			var previewActivityUrl ="/aim/viewActivityPreview.do~pageId=2~isPreview=1~activityId=" + activity.ampactivityid;
-			
+			//debugger;
 			if(structure.hasImage){
 				stinfoTemplate = new esri.InfoTemplate(
 						"Structure Details",
@@ -1382,12 +1392,15 @@ function CluterStructures(){
 		+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>";
 
 	var tabTemplate = "<div id='infotabs'>"
-		+ " <ul><li><a href='#strInfo'>Details</a></li>"
-		+ "<li><a href='#strImage'>Image</a></li></ul>"
+		
+		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>Show Info</a>"
+		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Show Image</a>"
+		
 		+ "<div id='strInfo'>"+ infoTemplate +"</div>"
 		+ "<div id='strImage'>${Structure Image}</div>"
 		+ "</div>";
 		
+	//debugger;
 	if (structurespoint.length > 0){
 	cLs = new esri.ux.layers.AmpCluster(
 			{

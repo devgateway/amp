@@ -279,9 +279,9 @@ public final class Util {
 	 * @author mihai 06.05.2007
 	 */
 	public static String toCSString(Collection col) {
-		String ret = "";
+		StringBuilder ret = new StringBuilder("");
 		if (col == null || col.size() == 0)
-			return ret;
+			return ret.toString();
 		Iterator i = col.iterator();
 		while (i.hasNext()) {
 			Object element = (Object) i.next();
@@ -291,15 +291,15 @@ public final class Util {
 			if(element instanceof Identifiable) item=((Identifiable)element).getIdentifier();
 			
 			if (item instanceof String)
-				ret += "'" + (String) item + "'"; else
+				ret.append("'" + (String) item + "'"); else
 			if (item instanceof PropertyListable)
-				ret += ((PropertyListable)item).getBeanName();
-			
-			else	ret += item.toString();
+				ret.append(((PropertyListable)item).getBeanName());			
+			else
+				ret.append(item.toString());
 			if (i.hasNext())
-				ret += ",";
+				ret.append(",");
 		}
-		return ret;
+		return ret.toString();
 	}
 	
 
@@ -314,9 +314,9 @@ public final class Util {
 	 */
 	//AMP-3372
 	public static String collectionAsString(Collection col) {
-		String ret = "";
+		StringBuilder ret = new StringBuilder("");
 		if (col == null || col.size() == 0)
-			return ret;
+			return ret.toString();
 		Iterator i = col.iterator();
 		while (i.hasNext()) {
 			Object element = (Object) i.next();
@@ -331,11 +331,11 @@ public final class Util {
 //				ret += ((PropertyListable)item).getBeanName();
 			
 //			else
-				ret += item.toString();
+				ret.append(item.toString());
 			if (i.hasNext())
-				ret += ", ";
+				ret.append(", ");
 		}
-		return ret;
+		return ret.toString();
 	}
 	
 

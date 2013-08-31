@@ -95,10 +95,10 @@ public class DbHelper {
 	 * @return
 	 * @throws DgException
 	 */
-	public static List<AmpActivityVersion> getActivities(MapFilter filter/*, HttpServletRequest request*/)
+	public static List<Long> getActivitiesIds(MapFilter filter)
 			throws DgException {
 		Long[] orgGroupIds = filter.getSelOrgGroupIds();
-		List<AmpActivityVersion> activities = null;
+		List<Long> activities = null;
 		Long[] orgIds = filter.getOrgIds();
 		Long[] implOrgIds = filter.getImplOrgIds();
 		Long[] implOrgGroupIds = filter.getImplOrgGroupIds();
@@ -141,7 +141,7 @@ public class DbHelper {
 		 * selected organization
 		 */
 		try {
-			String oql = "select distinct act from ";
+			String oql = "select distinct act.ampActivityId from ";
 			
 			if (useMtefProjections)
 			{
@@ -352,6 +352,27 @@ public class DbHelper {
 
 	}
 
+	public static List<AmpActivityVersion> getActivities(MapFilter filter)
+			throws DgException {
+
+		List<AmpActivityVersion> activities;
+		try {
+			List<Long> ids = getActivitiesIds(filter);
+			String oql = "select distinct act from ";
+			oql += AmpActivityVersion.class.getName()
+					+ " act WHERE ampActivityId IN (" + Util.toCSString(ids) + ")";
+			Session session = PersistenceManager.getRequestDBSession();
+			Query query = session.createQuery(oql);
+			
+			activities = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("Cannot load activities from db", e);
+		}
+		return activities;
+
+	}
+	
 	public static ArrayList<Long> getInActivities(String query)
 			throws Exception {
 		Session session = PersistenceManager.getRequestDBSession();

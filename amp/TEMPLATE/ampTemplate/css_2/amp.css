@@ -983,3 +983,19 @@ div.innerTab {
 .reportsBorderTD {padding:10px;}
 
 .ampvalues select {width:500px;}
+
+.tab_vis_link
+{
+	margin-bottom: 15px;
+	margin-left: 15px;
+	font-size: 1.15em;
+	display: inline-block;
+	padding: 3px;
+}
+
+.tab_vis_link:hover
+{
+	border: 1px dashed gray;
+	padding: 2px; /* swallow border's +1 paddings */
+	background-color: #FFFFDD;
+}

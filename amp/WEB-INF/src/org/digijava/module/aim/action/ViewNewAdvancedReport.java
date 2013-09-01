@@ -379,7 +379,7 @@ public class ViewNewAdvancedReport extends Action {
 		int endPage = startPage + numberOfPagesToDisplay-1;//= Math.min(totalPages, currentPage + numberOfPagesToDisplay / 2 + numberOfPagesToDisplay % 2);
 		if (endPage >= totalPages){
 			endPage = totalPages-1;
-			startPage = endPage - numberOfPagesToDisplay+1;
+			startPage = Math.max(0,  endPage - numberOfPagesToDisplay+1);
 		}
 			
 		if (endPage + 1 - startPage < numberOfPagesToDisplay) // if we are pegged, e.g. 10 pages allowed, showing 7...10 or 0..3

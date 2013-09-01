@@ -27,6 +27,7 @@ public class MiscColumnsTests extends ReportsTestCase
 	{
 		TestSuite suite = new TestSuite(MiscColumnsTests.class.getName());
 		suite.addTest(new MiscColumnsTests("testSscColumns"));
+		suite.addTest(new MiscColumnsTests("testModeOfPaymentUndisbursedBalance"));
 		return suite;
 	}
 	
@@ -51,5 +52,19 @@ public class MiscColumnsTests extends ReportsTestCase
 								SimpleColumnModel.withContents("Actual Disbursements", "SSC Project 1", "555 111", "SSC Project 2", "131 845")))
 						);
 		runReportTest("flat SSC Columns", "AMP-15844-ssc-columns", new String[] {"ptc activity 1", "SSC Project 1", "SSC Project 2"}, fssc_correct);
+	}
+	
+	public void testModeOfPaymentUndisbursedBalance()
+	{
+		GroupReportModel mop_ub_correct = GroupReportModel.withColumnReports("AMP-15863-mode-of-payment-undisbursed-balance", 
+				ColumnReportDataModel.withColumns("AMP-15863-mode-of-payment-undisbursed-balance",
+						SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water", "mtef activity 2", "mtef activity 2", "SSC Project 1", "SSC Project 1"),
+						SimpleColumnModel.withContents("Mode of Payment", "Eth Water", "Mode of Payment Unallocated", "mtef activity 2", "Mode of Payment Unallocated", "SSC Project 1", "Mode of Payment Unallocated"),
+						GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Undisbursed Balance", "Eth Water", "-660 000", "SSC Project 1", "-443 778")
+								)
+						)
+				);
+		runReportTest("Mode of payment + Undisbursed Balance", "AMP-15863-mode-of-payment-undisbursed-balance", new String[] {"Eth Water", "mtef activity 2", "SSC Project 1"}, mop_ub_correct);
 	}
 }

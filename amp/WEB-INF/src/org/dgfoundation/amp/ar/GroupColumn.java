@@ -229,6 +229,9 @@ public class GroupColumn extends Column<Column> {
     private static Column verticalSplitByCateg(CellColumn<? extends CategAmountCell> src,
     	String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
     	
+    	if (src instanceof TotalComputedMeasureColumn)
+    		return src;
+    	
     	HashMap<String,String> yearMapping = new HashMap<String, String>();
     	HashMap<String,String> monthMapping = new HashMap<String, String>();
     	    	    	
@@ -251,7 +254,7 @@ public class GroupColumn extends Column<Column> {
         
         
         while (i.hasNext()) {
-            Categorizable element = (Categorizable) i.next();
+        	Categorizable element = (Categorizable) i.next();
             if(!element.isShow()) continue;
             MetaInfo minfo = MetaInfo.getMetaInfo(element.getMetaData(),category);
             if (minfo == null || minfo.getValue() == null) 

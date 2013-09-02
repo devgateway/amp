@@ -1013,30 +1013,31 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.yearTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            
-            String[] singleRow = fundingRows[1].split(">");
-            for (int i = 1; i < singleRow.length; i=i+2) {
-            	data.cell = data.row.createCell(data.cellNum++);
-	            data.headerText = new HSSFRichTextString(singleRow[i]);
-	            data.cell.setCellValue(data.headerText);
-	            data.cell.setCellStyle(data.subHeaderCS);
-			}
-	        for (int i = 1; i < fundingRows.length; i++) {
-	        	data.cellNum = 0;
-		        data.row = data.sheet2.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == fundingRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	singleRow = fundingRows[i].split(">");
-            	for (int j = 0; j < singleRow.length; j=j+2) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (fundingRows.length>1){
+	            String[] singleRow = fundingRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i=i+2) {
+	            	data.cell = data.row.createCell(data.cellNum++);
+		            data.headerText = new HSSFRichTextString(singleRow[i]);
+		            data.cell.setCellValue(data.headerText);
+		            data.cell.setCellStyle(data.subHeaderCS);
+				}
+		        for (int i = 1; i < fundingRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet2.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == fundingRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	singleRow = fundingRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j=j+2) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
 	    }
 	    
 	    if (fundingOpt.equals("2") || fundingOpt.equals("3")){
@@ -1100,23 +1101,24 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.actualTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            
-            for (int i = 1; i < aidPredRows.length; i++) {
-	        	data.cellNum = 0;
-		        data.row = data.sheet3.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == aidPredRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	String[] singleRow = aidPredRows[i].split(">");
-            	for (int j = 0; j < singleRow.length; j=j+2) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (aidPredRows.length>1){
+	            for (int i = 1; i < aidPredRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet3.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == aidPredRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	String[] singleRow = aidPredRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j=j+2) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
 	    }
 	    
 	    if (aidPredicOpt.equals("2") || aidPredicOpt.equals("3")){
@@ -1171,29 +1173,31 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.yearTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            String[] singleRow = aidTypeRows[1].split(">");
-            for (int i = 1; i < singleRow.length; i=i+2) {
-            	data.cell = data.row.createCell(data.cellNum++);
- 	            data.headerText = new HSSFRichTextString(singleRow[i]);
- 	            data.cell.setCellValue(data.headerText);
- 	            data.cell.setCellStyle(data.subHeaderCS);
-			}
-            for (int i = 1; i < aidTypeRows.length; i++) {
-	        	data.cellNum = 0;
-		        data.row = data.sheet4.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == aidTypeRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	singleRow = aidTypeRows[i].split(">");
-            	for (int j = 0; j < singleRow.length; j=j+2) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (aidTypeRows.length>1){
+	            String[] singleRow = aidTypeRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i=i+2) {
+	            	data.cell = data.row.createCell(data.cellNum++);
+	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+	 	            data.cell.setCellValue(data.headerText);
+	 	            data.cell.setCellStyle(data.subHeaderCS);
+				}
+	            for (int i = 1; i < aidTypeRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet4.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == aidTypeRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	singleRow = aidTypeRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j=j+2) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
 	    }
 	    
 	    if (aidTypeOpt.equals("2") || aidTypeOpt.equals("3")){
@@ -1248,29 +1252,31 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.yearTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            String[] singleRow = finInstRows[1].split(">");
-            for (int i = 1; i < singleRow.length; i=i+2) {
-            	data.cell = data.row.createCell(data.cellNum++);
- 	            data.headerText = new HSSFRichTextString(singleRow[i]);
- 	            data.cell.setCellValue(data.headerText);
- 	            data.cell.setCellStyle(data.subHeaderCS);
-			}
-            for (int i = 1; i < finInstRows.length; i++) {
-	        	data.cellNum = 0;
-		        data.row = data.sheet5.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == finInstRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	singleRow = finInstRows[i].split(">");
-            	for (int j = 0; j < singleRow.length; j=j+2) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (finInstRows.length>1){
+	            String[] singleRow = finInstRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i=i+2) {
+	            	data.cell = data.row.createCell(data.cellNum++);
+	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+	 	            data.cell.setCellValue(data.headerText);
+	 	            data.cell.setCellStyle(data.subHeaderCS);
+				}
+	            for (int i = 1; i < finInstRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet5.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == finInstRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	singleRow = finInstRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j=j+2) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
 	    }
 	    
 	    if (financingInstOpt.equals("2") || financingInstOpt.equals("3")){
@@ -1325,29 +1331,31 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.sectorTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            String[] singleRow = sectorProfRows[1].split(">");
-            for (int i = 1; i < singleRow.length; i++) {
-            	data.cell = data.row.createCell(data.cellNum++);
- 	            data.headerText = new HSSFRichTextString(singleRow[i]);
- 	            data.cell.setCellValue(data.headerText);
- 	            data.cell.setCellStyle(data.subHeaderCS);
-			}
-            for (int i = 2; i < sectorProfRows.length; i++) {
-	        	data.cellNum = 0;
-		        data.row = data.sheet6.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == sectorProfRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	singleRow = sectorProfRows[i].split(">");
-            	for (int j = 0; j < singleRow.length; j++) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (sectorProfRows.length>1){
+	            String[] singleRow = sectorProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	data.cell = data.row.createCell(data.cellNum++);
+	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+	 	            data.cell.setCellValue(data.headerText);
+	 	            data.cell.setCellStyle(data.subHeaderCS);
+				}
+	            for (int i = 2; i < sectorProfRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet6.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == sectorProfRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	singleRow = sectorProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
 	    }
 	    if (sectorOpt.equals("2") || sectorOpt.equals("3")){
 	    	data.rowNum++;
@@ -1400,29 +1408,31 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.regionTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            String[] singleRow = regionProfRows[1].split(">");
-            for (int i = 1; i < singleRow.length; i++) {
-            	data.cell = data.row.createCell(data.cellNum++);
- 	            data.headerText = new HSSFRichTextString(singleRow[i]);
- 	            data.cell.setCellValue(data.headerText);
- 	            data.cell.setCellStyle(data.subHeaderCS);
-			}
-            for (int i = 2; i < regionProfRows.length; i++) {
-	        	data.cellNum = 0;
-		        data.row = data.sheet7.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == regionProfRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	singleRow = regionProfRows[i].split(">");
-            	for (int j = 0; j < singleRow.length; j++) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (regionProfRows.length>1){
+	            String[] singleRow = regionProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	data.cell = data.row.createCell(data.cellNum++);
+	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+	 	            data.cell.setCellValue(data.headerText);
+	 	            data.cell.setCellStyle(data.subHeaderCS);
+				}
+	            for (int i = 2; i < regionProfRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet7.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == regionProfRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	singleRow = regionProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
 	    }
 	    
 	    if (regionOpt.equals("2") || regionOpt.equals("3")){
@@ -1476,29 +1486,31 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.organizationTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            String[] singleRow = organizationProfRows[1].split(">");
-            for (int i = 1; i < singleRow.length; i++) {
-            	data.cell = data.row.createCell(data.cellNum++);
- 	            data.headerText = new HSSFRichTextString(singleRow[i]);
- 	            data.cell.setCellValue(data.headerText);
- 	            data.cell.setCellStyle(data.subHeaderCS);
-			}
-            for (int i = 2; i < organizationProfRows.length; i++) {
-	        	data.cellNum = 0;
-		        data.row = data.sheet8.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == organizationProfRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	singleRow = organizationProfRows[i].split(">");
-            	for (int j = 0; j < singleRow.length; j++) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (organizationProfRows.length>1){
+	            String[] singleRow = organizationProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	data.cell = data.row.createCell(data.cellNum++);
+	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+	 	            data.cell.setCellValue(data.headerText);
+	 	            data.cell.setCellStyle(data.subHeaderCS);
+				}
+	            for (int i = 2; i < organizationProfRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet8.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == organizationProfRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	singleRow = organizationProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
 	    }
 	    
 	    if (organizationOpt.equals("2") || organizationOpt.equals("3")){
@@ -1545,29 +1557,31 @@ public class ExportToExcel extends Action {
 	            
 	    	data.cellNum = 0;
             data.row = data.sheet1.createRow(data.rowNum++);
-            String[] singleRow = ODAGrowthRows[1].split(">");
-            for (int i = 0; i < singleRow.length; i++) {
-            	data.cell = data.row.createCell(data.cellNum++);
-	            data.headerText = new HSSFRichTextString(singleRow[i]);
-	            data.cell.setCellValue(data.headerText);
-	            data.cell.setCellStyle(data.subHeaderCS);
-			}
-            for (int i = 2; i < ODAGrowthRows.length; i++) {
-            	singleRow = ODAGrowthRows[i].split(">");
-            	data.cellNum = 0;
-		        data.row = data.sheet1.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == ODAGrowthRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	for (int j = 0; j < singleRow.length; j++) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (ODAGrowthRows.length>1){
+	            String[] singleRow = ODAGrowthRows[1].split(">");
+	            for (int i = 0; i < singleRow.length; i++) {
+	            	data.cell = data.row.createCell(data.cellNum++);
+		            data.headerText = new HSSFRichTextString(singleRow[i]);
+		            data.cell.setCellValue(data.headerText);
+		            data.cell.setCellStyle(data.subHeaderCS);
+				}
+	            for (int i = 2; i < ODAGrowthRows.length; i++) {
+	            	singleRow = ODAGrowthRows[i].split(">");
+	            	data.cellNum = 0;
+			        data.row = data.sheet1.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == ODAGrowthRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
         }
 	    if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
 	    	data.rowNum++;
@@ -1620,29 +1634,31 @@ public class ExportToExcel extends Action {
 	            data.headerText = new HSSFRichTextString(data.NPOTrn);
 	            data.cell.setCellValue(data.headerText);
 	            data.cell.setCellStyle(data.subHeaderCS);
-	            String[] singleRow = NPOProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	data.cell = data.row.createCell(data.cellNum++);
-	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
-	 	            data.cell.setCellValue(data.headerText);
-	 	            data.cell.setCellStyle(data.subHeaderCS);
-				}
-	            for (int i = 2; i < NPOProfRows.length; i++) {
-		        	data.cellNum = 0;
-			        data.row = data.sheet9.createRow(data.rowNum++);
-			        HSSFCellStyle st = null;
-			    	if (i == NPOProfRows.length-1)
-			    		st = data.lastCellStyle;
-		            else
-		            	st = data.cellStyle;
-	            	singleRow = NPOProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	            		data.cell = data.row.createCell(data.cellNum++);
-	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
-	 		            data.cell.setCellValue(data.headerText);
-	 		            data.cell.setCellStyle(st);
-	    			}
-				}
+	            if (NPOProfRows.length>1){
+		            String[] singleRow = NPOProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	data.cell = data.row.createCell(data.cellNum++);
+		 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+		 	            data.cell.setCellValue(data.headerText);
+		 	            data.cell.setCellStyle(data.subHeaderCS);
+					}
+		            for (int i = 2; i < NPOProfRows.length; i++) {
+			        	data.cellNum = 0;
+				        data.row = data.sheet9.createRow(data.rowNum++);
+				        HSSFCellStyle st = null;
+				    	if (i == NPOProfRows.length-1)
+				    		st = data.lastCellStyle;
+			            else
+			            	st = data.cellStyle;
+		            	singleRow = NPOProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		            		data.cell = data.row.createCell(data.cellNum++);
+		 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+		 		            data.cell.setCellValue(data.headerText);
+		 		            data.cell.setCellStyle(st);
+		    			}
+					}
+	            }
 		    }
 		    
 		    if (NPOOpt.equals("2") || NPOOpt.equals("3")){
@@ -1696,29 +1712,31 @@ public class ExportToExcel extends Action {
 	            data.headerText = new HSSFRichTextString(data.programTrn);
 	            data.cell.setCellValue(data.headerText);
 	            data.cell.setCellStyle(data.subHeaderCS);
-	            String[] singleRow = programProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	data.cell = data.row.createCell(data.cellNum++);
-	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
-	 	            data.cell.setCellValue(data.headerText);
-	 	            data.cell.setCellStyle(data.subHeaderCS);
-				}
-	            for (int i = 2; i < programProfRows.length; i++) {
-		        	data.cellNum = 0;
-			        data.row = data.sheet10.createRow(data.rowNum++);
-			        HSSFCellStyle st = null;
-			    	if (i == programProfRows.length-1)
-			    		st = data.lastCellStyle;
-		            else
-		            	st = data.cellStyle;
-	            	singleRow = programProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	            		data.cell = data.row.createCell(data.cellNum++);
-	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
-	 		            data.cell.setCellValue(data.headerText);
-	 		            data.cell.setCellStyle(st);
-	    			}
-				}
+	            if (programProfRows.length>1){
+		            String[] singleRow = programProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	data.cell = data.row.createCell(data.cellNum++);
+		 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+		 	            data.cell.setCellValue(data.headerText);
+		 	            data.cell.setCellStyle(data.subHeaderCS);
+					}
+		            for (int i = 2; i < programProfRows.length; i++) {
+			        	data.cellNum = 0;
+				        data.row = data.sheet10.createRow(data.rowNum++);
+				        HSSFCellStyle st = null;
+				    	if (i == programProfRows.length-1)
+				    		st = data.lastCellStyle;
+			            else
+			            	st = data.cellStyle;
+		            	singleRow = programProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		            		data.cell = data.row.createCell(data.cellNum++);
+		 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+		 		            data.cell.setCellValue(data.headerText);
+		 		            data.cell.setCellStyle(st);
+		    			}
+					}
+	            }
 		    }
 		    
 		    if (programOpt.equals("2") || programOpt.equals("3")){
@@ -1772,29 +1790,31 @@ public class ExportToExcel extends Action {
 	            data.headerText = new HSSFRichTextString(data.programTrn);
 	            data.cell.setCellValue(data.headerText);
 	            data.cell.setCellStyle(data.subHeaderCS);
-	            String[] singleRow = programProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	data.cell = data.row.createCell(data.cellNum++);
-	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
-	 	            data.cell.setCellValue(data.headerText);
-	 	            data.cell.setCellStyle(data.subHeaderCS);
-				}
-	            for (int i = 2; i < programProfRows.length; i++) {
-		        	data.cellNum = 0;
-			        data.row = data.sheet10.createRow(data.rowNum++);
-			        HSSFCellStyle st = null;
-			    	if (i == programProfRows.length-1)
-			    		st = data.lastCellStyle;
-		            else
-		            	st = data.cellStyle;
-	            	singleRow = programProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	            		data.cell = data.row.createCell(data.cellNum++);
-	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
-	 		            data.cell.setCellValue(data.headerText);
-	 		            data.cell.setCellStyle(st);
-	    			}
-				}
+	            if (programProfRows.length>1){
+		            String[] singleRow = programProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	data.cell = data.row.createCell(data.cellNum++);
+		 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+		 	            data.cell.setCellValue(data.headerText);
+		 	            data.cell.setCellStyle(data.subHeaderCS);
+					}
+		            for (int i = 2; i < programProfRows.length; i++) {
+			        	data.cellNum = 0;
+				        data.row = data.sheet10.createRow(data.rowNum++);
+				        HSSFCellStyle st = null;
+				    	if (i == programProfRows.length-1)
+				    		st = data.lastCellStyle;
+			            else
+			            	st = data.cellStyle;
+		            	singleRow = programProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		            		data.cell = data.row.createCell(data.cellNum++);
+		 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+		 		            data.cell.setCellValue(data.headerText);
+		 		            data.cell.setCellStyle(st);
+		    			}
+					}
+	            }
 		    }
 		    
 		    if (programOpt.equals("2") || programOpt.equals("3")){
@@ -1856,23 +1876,24 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.actualTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            
-            for (int i = 1; i < aidPredQuarterRows.length; i++) {
-	        	data.cellNum = 0;
-		        data.row = data.sheet11.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == aidPredQuarterRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	String[] singleRow = aidPredQuarterRows[i].split(">");
-            	for (int j = 0; j < singleRow.length; j=j+2) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (aidPredQuarterRows.length>1){
+	            for (int i = 1; i < aidPredQuarterRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet11.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == aidPredQuarterRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	String[] singleRow = aidPredQuarterRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j=j+2) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
 	    }
 	    
 	    if (aidPredicQuarterOpt.equals("2") || aidPredicQuarterOpt.equals("3")){
@@ -1926,29 +1947,31 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.yearTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            String[] singleRow = budgetBreakdownRows[1].split(">");
-            for (int i = 1; i < singleRow.length; i=i+2) {
-            	data.cell = data.row.createCell(data.cellNum++);
- 	            data.headerText = new HSSFRichTextString(singleRow[i]);
- 	            data.cell.setCellValue(data.headerText);
- 	            data.cell.setCellStyle(data.subHeaderCS);
-			}
-            for (int i = 1; i < budgetBreakdownRows.length; i++) {
-	        	data.cellNum = 0;
-		        data.row = data.sheet12.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == budgetBreakdownRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	singleRow = budgetBreakdownRows[i].split(">");
-            	for (int j = 0; j < singleRow.length; j=j+2) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (budgetBreakdownRows.length>1){
+	            String[] singleRow = budgetBreakdownRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i=i+2) {
+	            	data.cell = data.row.createCell(data.cellNum++);
+	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+	 	            data.cell.setCellValue(data.headerText);
+	 	            data.cell.setCellStyle(data.subHeaderCS);
+				}
+	            for (int i = 1; i < budgetBreakdownRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet12.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == budgetBreakdownRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	singleRow = budgetBreakdownRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j=j+2) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
 	    }
 	    
 	    if (budgetBreakdownOpt.equals("2") || budgetBreakdownOpt.equals("3")){
@@ -2002,29 +2025,31 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.organizationTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            String[] singleRow = organizationProfRows[1].split(">");
-            for (int i = 1; i < singleRow.length; i++) {
-            	data.cell = data.row.createCell(data.cellNum++);
- 	            data.headerText = new HSSFRichTextString(singleRow[i]);
- 	            data.cell.setCellValue(data.headerText);
- 	            data.cell.setCellStyle(data.subHeaderCS);
-			}
-            for (int i = 2; i < organizationProfRows.length; i++) {
-	        	data.cellNum = 0;
-		        data.row = data.sheet13.createRow(data.rowNum++);
-		        HSSFCellStyle st = null;
-		    	if (i == organizationProfRows.length-1)
-		    		st = data.lastCellStyle;
-	            else
-	            	st = data.cellStyle;
-            	singleRow = organizationProfRows[i].split(">");
-            	for (int j = 0; j < singleRow.length; j++) {
-            		data.cell = data.row.createCell(data.cellNum++);
- 		            data.headerText = new HSSFRichTextString(singleRow[j]);
- 		            data.cell.setCellValue(data.headerText);
- 		            data.cell.setCellStyle(st);
-    			}
-			}
+            if (organizationProfRows.length>1){
+	            String[] singleRow = organizationProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	data.cell = data.row.createCell(data.cellNum++);
+	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+	 	            data.cell.setCellValue(data.headerText);
+	 	            data.cell.setCellStyle(data.subHeaderCS);
+				}
+	            for (int i = 2; i < organizationProfRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet13.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == organizationProfRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	singleRow = organizationProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+            }
 	    }
 	    
 	    if (beneficiaryAgencyOpt.equals("2") || beneficiaryAgencyOpt.equals("3")){

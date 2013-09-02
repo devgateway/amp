@@ -891,7 +891,7 @@ function cancel()
 																	<legend>
 																		<html:radio property="useFilter" value="${true}" onclick="toggleFilterVsOrgs(this);"/>
 																		<span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
-																	<div id="listFiltersDiv" style="height:85px; overflow-y:auto; overflow-x:hidden; margin-bottom: 5px;" class="inputx">
+																	<div id="listFiltersDiv" style="height:85px; width: 713px; overflow-y:auto; overflow-x:auto; margin-bottom: 5px; white-space: normal;" class="inputx">
 																		<jsp:include page="reportWizard/showSelectedFilters.jsp" />				
 																	</div>
 																	<button type="button" value="Filters" class="buttonx_sm btn_save" id="add_filters_button" style="margin-right:2px;" onclick="repFilters.showFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>')"/>

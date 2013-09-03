@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.message.dbentity.AmpMessageState;
 
@@ -184,5 +185,28 @@ public class AmpTeamMember implements Serializable, Versionable {
 		this.activities = new HashSet<AmpActivityVersion>();
 		this.activities.add(newActivity);
 		return this;
+	}
+	
+	public TeamMember toTeamMember()
+	{
+		TeamMember tm = new TeamMember();
+		
+        tm.setMemberId(this.getAmpTeamMemId());
+        tm.setMemberName(this.getUser().getName());
+        tm.setRoleId(this.getAmpMemberRole().getAmpTeamMemRoleId());
+        tm.setRoleName(this.getAmpMemberRole().getRole());
+        tm.setTeamId(this.getAmpTeam().getAmpTeamId());
+        tm.setTeamName(this.getAmpTeam().getName());
+        tm.setTeamType(this.getAmpTeam().getTeamCategory());
+        tm.setEmail(this.getUser().getEmail());
+        tm.setTeamAccessType(this.getAmpTeam().getAccessType());
+        tm.setComputation(this.getAmpTeam().getComputation());
+        tm.setUseFilters(this.getAmpTeam().getUseFilter());
+        tm.setAddActivity(this.getAmpTeam().getAddActivity());
+        tm.setPledger(this.getUser().getPledger());
+        tm.setPublishDocuments(this.getPublishDocPermission());
+        tm.setApprover(this.getAmpMemberRole().isApprover());   
+        
+        return tm;
 	}
 }

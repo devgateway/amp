@@ -577,7 +577,7 @@ public class AmpARFilter extends PropertyListable {
 		}
 		initRenderStartEndYears(settings);
 	}
-	
+
 	/**
 	 * computes the current user's effective AmpApplicationSettings, searching through the hierarchy
 	 * returns null if there is no current user
@@ -592,6 +592,20 @@ public class AmpARFilter extends PropertyListable {
 		if (AmpCaching.getInstance().applicationSettingsRetrieved)
 			return AmpCaching.getInstance().applicationSettings;
 		
+		return getEffectiveSettings(tm);
+	}
+	
+	/**
+	 * computes a TeamMember's effective AmpApplicationSettings, searching through the hierarchy
+	 * returns null of nothing could be found OR if the teammember is null
+	 * @param tm
+	 * @return
+	 */
+	public static AmpApplicationSettings getEffectiveSettings(TeamMember tm)
+	{
+		if (tm == null)
+			return null;
+
 		AmpApplicationSettings settings = null;
 		if (tm.getMemberId() != null)
 			settings = DbUtil.getMemberAppSettings(tm.getMemberId()); // member settings take precedence
@@ -599,8 +613,15 @@ public class AmpARFilter extends PropertyListable {
 		if (settings == null && tm.getTeamId() != null)
 			settings = DbUtil.getTeamAppSettings(tm.getTeamId()); // use workspace settings if no member settings present
 		
-		AmpCaching.getInstance().applicationSettingsRetrieved = true;
-		AmpCaching.getInstance().applicationSettings = settings;
+		try
+		{
+			AmpCaching.getInstance().applicationSettingsRetrieved = true;
+			AmpCaching.getInstance().applicationSettings = settings;
+		}
+		catch(Exception e)
+		{
+			// AmpCaching does not work out of the Struts request cycle
+		}
 		return settings;
 	}
 	

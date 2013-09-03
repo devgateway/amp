@@ -33,6 +33,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
@@ -242,7 +243,7 @@ public class DEImportBuilder {
 			details=new ArrayList<String>();
 			action="update";
 		}
-		if(!("allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(activity.getTeam().getAmpTeamId()).getValidation()))&&!activity.getApprovalStatus().equals(org.digijava.module.aim.helper.Constants.APPROVED_STATUS)){
+		if(!("allOff".equals(AmpARFilter.getEffectiveSettings().getValidation()))&&!activity.getApprovalStatus().equals(org.digijava.module.aim.helper.Constants.APPROVED_STATUS)){
 			new NotApprovedActivityTrigger(activity);
 			additionalDetails="imported & pending approval";
 		}

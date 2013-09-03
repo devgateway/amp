@@ -5,6 +5,11 @@ import org.digijava.module.aim.dbentity.AmpReports;
 
 public class ApplicationSettings {
 
+			public ApplicationSettings()
+			{
+				
+			}
+			
 		  private Long appSettingsId;
 		  private Integer defRecsPerPage;
 		  private Integer numberOfPagesToDisplay;

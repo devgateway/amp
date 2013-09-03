@@ -957,6 +957,7 @@ public class TeamUtil {
 //beginTransaction();
             session.saveOrUpdate(member);
             session.saveOrUpdate(appSettings);
+            // this is where newly-created AmpApplicationSettings settings are saved in the database
             
             if(member.getAmpMemberRole().getTeamHead()!=null&&member.getAmpMemberRole().getTeamHead()) {
                 AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());

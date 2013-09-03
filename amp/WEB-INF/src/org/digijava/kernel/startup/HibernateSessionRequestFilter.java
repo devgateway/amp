@@ -60,7 +60,8 @@ public class HibernateSessionRequestFilter implements Filter {
             	if (tx.isActive())
             		tx.commit();
             
-            PersistenceManager.checkClosedOrLongSessionsFromTraceMap();
+            PersistenceManager.removeClosedSessionsFromMap();
+            //PersistenceManager.checkClosedOrLongSessionsFromTraceMap();
  
         } catch (StaleObjectStateException staleEx) {
             log.error("This interceptor does not implement optimistic concurrency control!");

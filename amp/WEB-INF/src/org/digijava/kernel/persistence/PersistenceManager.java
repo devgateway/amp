@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -130,6 +131,24 @@ public class PersistenceManager {
 
 			}
 		}
+	}
+	/**
+	 * Removes only the closed sessions from the map that tracks opened sessions. 
+	 * No other check is being done.
+	 */
+	public static void removeClosedSessionsFromMap() {
+		int count	= 0;
+		synchronized (sessionStackTraceMap) {
+			Iterator<Entry<Session, Object[]>> iterator = PersistenceManager.sessionStackTraceMap.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Session sess	= iterator.next().getKey();
+				if ( !sess.isOpen() ) { 
+					iterator.remove();
+					count++;
+				}
+			}
+		}
+		logger.info( count + " closed sessions were removed from 'sessionStackTraceMap' ");
 	}
 	
 	/**

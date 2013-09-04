@@ -40,6 +40,14 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
 		this.ampId=ampid;
 	}
 
+    /* Note, archived should be Boolean to support null values */
+    public AmpActivityVersion(Long ampActivityId, String name, String ampid, Boolean archived) {
+        this.ampActivityId=ampActivityId;
+        this.name=name;
+        this.ampId=ampid;
+        this.archived = archived;
+    }
+
     @Override
     public boolean equalsForVersioning(Object obj) {
         throw new AssertionError("Not implemented");

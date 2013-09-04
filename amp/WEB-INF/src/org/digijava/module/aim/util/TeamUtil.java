@@ -1748,7 +1748,7 @@ public class TeamUtil {
 
 			String queryString = "";
 			Query qry = null;
-			queryString = "select new AmpActivityVersion(act.ampActivityId, act.name, act.ampId) from "+ AmpActivity.class.getName()	+ " act  ";
+			queryString = "select new AmpActivityVersion(act.ampActivityId, act.name, act.ampId, act.archived) from "+ AmpActivity.class.getName()	+ " act  ";
 			if(teamId!=null){
 				queryString+="where act.team="+teamId;
 			}else{

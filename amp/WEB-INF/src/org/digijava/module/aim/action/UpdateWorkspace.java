@@ -133,8 +133,10 @@ public class UpdateWorkspace extends Action {
 			} else {
 				newTeam.setDescription(" ");
 			}
-
-            newTeam.setFmTemplate(FeaturesUtil.getTemplateById(uwForm.getFmTemplate()));
+			if(uwForm.getFmTemplate()!=null)
+				newTeam.setFmTemplate(FeaturesUtil.getTemplateById(uwForm.getFmTemplate()));
+			else
+				newTeam.setFmTemplate(null);
             newTeam.setWorkspacePrefix(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspacePrefix()));
 		}
 

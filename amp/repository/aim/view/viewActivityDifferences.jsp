@@ -109,19 +109,25 @@
 									</td>
 									<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
 										<td align="center" valign="middle" class="inside">
-											<button type="button" onClick="javascript:left(${diffItem.index});" style="border: none; background-color: transparent">
-												<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
-											</button>	
+                                            <c:if test="${!diffItem.blockSingleChangeOutput}">
+                                                <button type="button" onClick="javascript:left(${diffItem.index});" style="border: none; background-color: transparent">
+                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
+                                                </button>
+                                            </c:if>
 										</td>
 										<td align="left" valign="top" style="padding-left: 5px;" class="inside">
 											<div id="merge${diffItem.index}">&nbsp;</div>
 										</td>
 										<td align="center" valign="middle" class="inside" style="border-right-width: 0px;">
-											<button type="button" onClick="javascript:right(${diffItem.index});" style="border: none; background-color: transparent">
-												<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
-											</button>	
+                                            <c:if test="${!diffItem.blockSingleChangeOutput}">
+                                                <button type="button" onClick="javascript:right(${diffItem.index});" style="border: none; background-color: transparent">
+                                                    <img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
+                                                </button>
+                                            </c:if>
 										</td>
-										<input type="hidden" id='mergedValues[${diffItem.index}]' value="" name="mergedValues[${index}]"/>
+                                        <c:if test="${!diffItem.blockSingleChangeOutput}">
+										    <input type="hidden" id='mergedValues[${diffItem.index}]' value="" name="mergedValues[${index}]"/>
+                                        </c:if>
 									</logic:equal>
 									<td width="50%" align="left" valign="top" style="padding-left: 5px; border-left-width: 0px;" class="inside">
 										<div id="right${diffItem.index}">

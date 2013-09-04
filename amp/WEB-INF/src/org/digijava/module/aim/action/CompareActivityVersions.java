@@ -440,12 +440,17 @@ public class CompareActivityVersions extends DispatchAction {
         Map<String, List<CompareOutput>> retVal = new HashMap<String, List<CompareOutput>>();
         int idx = 0;
         for (CompareOutput obj: outputCollection) {
-            obj.setIndex(idx);
+            if (!obj.getBlockSingleChangeOutput()) {
+                obj.setIndex(idx);
+                idx ++;
+            } else {
+                obj.setIndex(-1); // skip from merge process
+            }
             if (!retVal.containsKey(obj.getDescriptionOutput())) {
                 retVal.put(obj.getDescriptionOutput(), new ArrayList<CompareOutput>());
             }
             retVal.get(obj.getDescriptionOutput()).add(obj);
-            idx ++;
+
         }
 
         return retVal;

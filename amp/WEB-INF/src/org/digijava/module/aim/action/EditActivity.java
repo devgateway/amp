@@ -2309,6 +2309,7 @@ public class EditActivity extends Action {
 		  z.setAmpStructureId(struc.getAmpStructureId());
 		  z.setCreationdate(struc.getCreationdate());
 		  z.setDescription(struc.getDescription());*/
+		  res.add(z);
 	  }
 	  return res;
   }

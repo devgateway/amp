@@ -139,40 +139,40 @@ function moveDisplayedImages(structureId, imgCount, next){
 				</tr>
 				
 				<module:display
-					name="/Activity Form/Structures/Structure/Structure/Structure Type"
-					parentModule="/Activity Form/Structures/Structure/Structure">
+					name="/Activity Form/Structures/Structure Type"
+					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
 						<td align="right" width="15%"><digi:trn key="trn:type">Type</digi:trn></td>
 						<td align="left"><b> ${structure.type.name} </b></td>
 					</tr>
 				</module:display>
 				<module:display
-					name="/Activity Form/Structures/Structure/Structure/Structure Title"
-					parentModule="/Activity Form/Structures/Structure/Structure">
+					name="/Activity Form/Structures/Structure Title"
+					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
 						<td align="right"><digi:trn key="trn:title">Title</digi:trn></td>
 						<td align="left"> <b> ${structure.title} </b></td>
 					</tr>
 				</module:display>
 				<module:display
-					name="/Activity Form/Structures/Structure/Structure/Structure Description"
-					parentModule="/Activity Form/Structures/Structure/Structure">
+					name="/Activity Form/Structures/Structure Description"
+					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
 						<td align="right"><digi:trn key="trn:description">Description</digi:trn></td>
 						<td align="left"><b> ${structure.description} </b></td>
 					</tr>
 				</module:display>
 				<module:display
-					name="/Activity Form/Structures/Structure/Structure/Structure Latitude"
-					parentModule="/Activity Form/Structures/Structure/Structure">
+					name="/Activity Form/Structures/Structure Latitude"
+					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
 						<td align="right"><digi:trn key="trn:latitude">Latitude</digi:trn></td>
 						<td align="left"> <b> ${structure.latitude} </b></td>
 					</tr>
 				</module:display>
 				<module:display
-					name="/Activity Form/Structures/Structure/Structure/Structure Longitude"
-					parentModule="/Activity Form/Structures/Structure/Structure">
+					name="/Activity Form/Structures/Structure Longitude"
+					parentModule="/Activity Form/Structures">
 					<tr bgcolor="#f0f0f0">
 						<td align="right"><digi:trn key="trn:longitude">Longitude</digi:trn></td>
 						<td align="left"><b> ${structure.longitude} </b></td>

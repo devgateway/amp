@@ -148,7 +148,7 @@ public class PersistenceManager {
 				}
 			}
 		}
-		logger.info( count + " closed sessions were removed from 'sessionStackTraceMap' ");
+		logger.debug( count + " closed sessions were removed from 'sessionStackTraceMap' ");
 	}
 	
 	/**

@@ -2016,6 +2016,11 @@ public class ExportActivityToWord extends Action {
                     if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation", ampContext)) {
                         eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Name", null, null, true)).addRowData(fnd.getAmpDonorOrgId().getName()));
                     }
+                    
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation", ampContext)) {
+                        AmpRole orgRole = fnd.getSourceRole();
+						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Organization Role", null, null, true)).addRowData(orgRole != null ? orgRole.getName():""));
+                    }
 
                     if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", ampContext)) {
                         AmpCategoryValue typeOfAssistance = fnd.getTypeOfAssistance();

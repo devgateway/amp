@@ -2633,6 +2633,23 @@ public class ExportActivityToPDF extends Action {
 								fundingTable.addCell(foNameCell3);							
 							}
 							
+							//funding org role
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation", ampContext)){								
+								PdfPCell foAssitanceCell1=new PdfPCell();
+								foAssitanceCell1.setBackgroundColor(new Color(221,221,221));
+								foAssitanceCell1.setBorder(0);
+								foAssitanceCell1.setColspan(2);
+								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Organization Role"))+":",plainFont);
+								foAssitanceCell1.addElement(p1);
+								fundingTable.addCell(foAssitanceCell1);							
+								//meaning
+								PdfPCell foAssistanceCell2=new PdfPCell(new Paragraph(funding.getSourceRole()!=null?funding.getSourceRole():" ",plainFont));
+								foAssistanceCell2.setBorder(0);
+								foAssistanceCell2.setColspan(2);
+								foAssistanceCell2.setBackgroundColor(new Color(221,221,221));
+								fundingTable.addCell(foAssistanceCell2);
+							}
+							
 							//funding org Assistance
 							if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", ampContext)){								
 								PdfPCell foAssitanceCell1=new PdfPCell();

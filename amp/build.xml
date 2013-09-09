@@ -38,13 +38,19 @@
 		<isset property="jboss-lib"/>
 	</condition>
 	
-	<!-- amp_clean specific -->
 	<condition property="jdbc.password" value="1234">
 	 	<not>
 	 		<isset property="jdbc.password"/>                              
 	 	</not>
 	 </condition>
 
+	<condition property="serverName" value="generic">
+	 	<not>
+	 		<isset property="serverName"/>                              
+	 	</not>
+	 </condition>
+
+	
 	<condition property="jdbc.user" value="postgres">
 	 	<not>
 	 		<isset property="jdbc.user"/>                              

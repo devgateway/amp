@@ -1253,9 +1253,8 @@ public class ExportActivityToPDF extends Action {
 					if(myForm.getFunding().getProProjCost().getCurrencyCode()!=null){
 						costOutput+=" "+myForm.getFunding().getProProjCost().getCurrencyCode();
 					}
-					costOutput+="\n Proposed Completion Date \t";
 					if(myForm.getFunding().getProProjCost().getFunDate()!=null){
-						costOutput+=myForm.getFunding().getProProjCost().getFunDate();
+						costOutput+="\n"+TranslatorWorker.translateText("Date")+ "\t: "+myForm.getFunding().getProProjCost().getFunDate();
 					}
 				}
 				

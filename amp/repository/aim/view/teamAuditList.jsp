@@ -76,11 +76,15 @@ function showUser(email){
 							    		<c:if test="${aimTeamAuditListForm.sortBy!='nameasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=nameasc" styleClass="l_sm">
 													<digi:trn key="aim:name">Name</digi:trn>
+                                                    <c:if test="${aimTeamAuditListForm.sortBy=='namedesc'}">
+                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                    </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='nameasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=namedesc" styleClass="l_sm">
 													<digi:trn key="aim:name">Name</digi:trn>
+                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
 												</digi:link>
 							  			</c:if>
 							  		</b>
@@ -90,11 +94,15 @@ function showUser(email){
 											<c:if test="${aimTeamAuditListForm.sortBy!='typeasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=typeasc" styleClass="l_sm">
 													<digi:trn key="aim:objectType">Object Type</digi:trn>
+                                                    <c:if test="${aimTeamAuditListForm.sortBy=='typedesc'}">
+                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                    </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='typeasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=typedesc" styleClass="l_sm">
 													<digi:trn key="aim:objectType">Object Type</digi:trn>
+                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
@@ -104,11 +112,15 @@ function showUser(email){
 								    	<c:if test="${aimTeamAuditListForm.sortBy!='teamasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=teamasc" styleClass="l_sm">
 													<digi:trn key="aim:teamName">Team Name</digi:trn>
+                                                    <c:if test="${aimTeamAuditListForm.sortBy=='teamdesc'}">
+                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                    </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='teamasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=teamdesc" styleClass="l_sm">
 													<digi:trn key="aim:teamName">Team Name</digi:trn>
+                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
@@ -118,11 +130,15 @@ function showUser(email){
 											<c:if test="${aimTeamAuditListForm.sortBy!='authorasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=authorasc" styleClass="l_sm">
 													<digi:trn key="aim:authorName">Author Name</digi:trn>
+                                                    <c:if test="${aimTeamAuditListForm.sortBy=='authordesc'}">
+                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                    </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='authorasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=authordesc" styleClass="l_sm">
 													<digi:trn key="aim:authorName">Author Name</digi:trn>
+                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
@@ -132,12 +148,16 @@ function showUser(email){
 											<c:if test="${aimTeamAuditListForm.sortBy!='creationdateasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=creationdateasc" styleClass="l_sm">
 													<digi:trn key="aim:creationDateLogger">Creation Date</digi:trn>
+                                                    <c:if test="${aimTeamAuditListForm.sortBy=='creationdatedesc'}">
+                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                    </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='creationdateasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=creationdatedesc" styleClass="l_sm">
 													<digi:trn key="aim:creationDateLogger">Creation Date</digi:trn>
-												</digi:link>
+                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+                                                </digi:link>
 								  		</c:if>
 							  		</b>
 							  	</td>
@@ -146,11 +166,15 @@ function showUser(email){
 											<c:if test="${aimTeamAuditListForm.sortBy!='editorasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=editorasc" styleClass="l_sm">
 													<digi:trn key="aim:editorName">Editor Name</digi:trn>
+                                                    <c:if test="${aimTeamAuditListForm.sortBy=='editordesc'}">
+                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                    </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='editorasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=editordesc" styleClass="l_sm">
 													<digi:trn key="aim:editorName">Editor Name</digi:trn>
+                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
@@ -160,11 +184,15 @@ function showUser(email){
 											<c:if test="${aimTeamAuditListForm.sortBy!='changedateasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=changedateasc" styleClass="l_sm">
 													<digi:trn key="aim:changeDate">Change Date</digi:trn>
+                                                    <c:if test="${aimTeamAuditListForm.sortBy=='changedatedesc'}">
+                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                    </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='changedateasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=changedatedesc" styleClass="l_sm">
 													<digi:trn key="aim:changeDate">Change Date</digi:trn>
+                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>
@@ -174,11 +202,15 @@ function showUser(email){
 											<c:if test="${aimTeamAuditListForm.sortBy!='actionasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=actionasc" styleClass="l_sm">
 													<digi:trn key="aim:action">Action</digi:trn>
+                                                    <c:if test="${aimTeamAuditListForm.sortBy=='actiondesc'}">
+                                                        <img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+                                                    </c:if>
 												</digi:link>
 											</c:if>
 											<c:if test="${not empty aimTeamAuditListForm.sortBy && aimTeamAuditListForm.sortBy=='actionasc'}">
 												<digi:link style="color:black" href="/teamAuditList.do?sortBy=actiondesc" styleClass="l_sm">
 													<digi:trn key="aim:action">Action</digi:trn>
+                                                    <img id="activityColumnImg" src="/repository/aim/images/down.gif" />
 												</digi:link>
 											</c:if>
 										</b>

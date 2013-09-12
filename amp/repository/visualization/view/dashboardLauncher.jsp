@@ -236,6 +236,7 @@ function initializeGlobalVariables(){
 <digi:instance property="visualizationform"/>
 
 <digi:form action="/launchDashboard.do">
+<html:hidden property="filter.dashboardType" styleId="dashboardType" />
 
 <head>
 
@@ -353,13 +354,19 @@ function initializeGlobalVariables(){
 								<digi:trn>Disbursements</digi:trn>
 							</html:radio>
 						</li>
-						<li>
-							<feature:display module="Funding" name="Expenditures">
+						<feature:display module="Funding" name="Expenditures">
+							<li>
 								<html:radio property="filter.transactionTypeFilter" styleId="transaction_type_2" value="2">
 									<digi:trn>Expenditures</digi:trn>
 								</html:radio>
-							</feature:display>
+							</li>
+						</feature:display>
+						<li>
+							<html:radio property="filter.transactionTypeFilter" styleId="transaction_type_3" value="3">
+								<digi:trn>MTEF Projections</digi:trn>
+							</html:radio>
 						</li>
+						
 					</ul>
 					</td></tr>
 					<tr><td><hr/></td></tr>
@@ -451,6 +458,10 @@ function initializeGlobalVariables(){
 								                    <li><a class="side_opt_sel" id="general_selector_1" href="JavaScript:changeTab(1);"><digi:trn>Organization Groups With Organizations</digi:trn></a></li>
 								                    <li><a class="side_opt_sel" id="general_selector_2" href="JavaScript:changeTab(2);"><digi:trn>Regions With Zones</digi:trn></a></li>
 								                    <li><a class="side_opt_sel" id="general_selector_3" href="JavaScript:changeTab(3);"><digi:trn>Sectors and Sub Sectors</digi:trn></a></li>
+								                    
+								                    <li id="benAgencyLI"><a class="side_opt_sel" id="general_selector_4" href="JavaScript:changeTab(4);"><digi:trn>Beneficiary Agencies</digi:trn></a></li>
+								                    <li id="impAgencyLI"><a class="side_opt_sel" id="general_selector_5" href="JavaScript:changeTab(5);"><digi:trn>Implementing Agencies</digi:trn></a></li>
+								                    <li id="secProgramLI"><a class="side_opt_sel" id="general_selector_6" href="JavaScript:changeTab(6);"><digi:trn>Secondary Programs</digi:trn></a></li>
 								                </ul>
 								             </div>
 										</div>
@@ -647,6 +658,102 @@ function initializeGlobalVariables(){
 													</ul>
 												</div>
 											</div>
+												<div class="rightbox" id="beneficiaryAgencyDivContent" style=display:none">
+													<div
+														style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+														<div class="inside" style="float: left">
+															&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+															</b>
+														</div>
+														<div class="inside" style="float: right">
+															<input onkeypress="clearSearch('beneficiaryAgencyDivList')"
+																id="beneficiaryAgencyDivList_search" type="text" class="inputx" />
+															<input type="button" class="buttonx"
+																onclick="findPrev('beneficiaryAgencyDivList')" value='&lt;&lt;' />
+															<input type="button" onclick="findNext('beneficiaryAgencyDivList')"
+																class="buttonx" value="&gt;&gt;" />
+	
+														</div>
+	
+													</div>
+													<div class="innerbox" id="beneficiaryAgencyDivList">
+														<ul style="list-style-type: none;margin-left: 0px;">
+															<c:forEach items="${visualizationform.filter.beneficiaryAgencyList}" var="item">
+																<li>
+																	<input type="checkbox" name="beneficiary_agency_check"
+																		id="beneficiary_agency_check_${item.ampOrgId}"
+																		title="${item.name}"
+																		value="${item.ampOrgId}" >
+																	<span><c:out value="${item.name}"/>
+																</span> <br />
+															</c:forEach>
+														</ul>
+													</div>
+												</div>
+												<div class="rightbox" id="implementingAgencyDivContent" style="display:none">
+													<div
+														style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+														<div class="inside" style="float: left">
+															&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+															</b>
+														</div>
+														<div class="inside" style="float: right">
+															<input onkeypress="clearSearch('implementingAgencyDivList')"
+																id="implementingAgencyDivList_search" type="text" class="inputx" />
+															<input type="button" class="buttonx"
+																onclick="findPrev('implementingAgencyDivList')" value='&lt;&lt;' />
+															<input type="button" onclick="findNext('implementingAgencyDivList')"
+																class="buttonx" value="&gt;&gt;" />
+	
+														</div>
+	
+													</div>
+													<div class="innerbox" id="implementingAgencyDivList">
+														<ul style="list-style-type: none;margin-left: 0px;">
+															<c:forEach items="${visualizationform.filter.implementingAgencyList}" var="item">
+																<li>
+																	<input type="checkbox" name="implementing_agency_check"
+																		id="implementing_agency_check_${item.ampOrgId}"
+																		title="${item.name}"
+																		value="${item.ampOrgId}" >
+																	<span><c:out value="${item.name}"/>
+																</span> <br />
+															</c:forEach>
+														</ul>
+													</div>
+												</div>
+												<div class="rightbox" id="secondaryProgramDivContent" style="display:none">
+													<div
+														style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+														<div class="inside" style="float: left">
+															&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+															</b>
+														</div>
+														<div class="inside" style="float: right">
+															<input onkeypress="clearSearch('secondaryProgramDivList')"
+																id="secondaryProgramDivList_search" type="text" class="inputx" />
+															<input type="button" class="buttonx"
+																onclick="findPrev('secondaryProgramDivList')" value='&lt;&lt;' />
+															<input type="button" onclick="findNext('secondaryProgramDivList')"
+																class="buttonx" value="&gt;&gt;" />
+	
+														</div>
+	
+													</div>
+													<div class="innerbox" id="secondaryProgramDivList">
+														<ul style="list-style-type: none;margin-left: 0px;">
+															<c:forEach items="${visualizationform.filter.secondaryProgramsList}" var="item">
+																<li>
+																	<input type="checkbox" name="secondary_program_check"
+																		id="secondary_program_check_${item.ampThemeId}"
+																		title="${item.name}"
+																		value="${item.ampThemeId}" >
+																	<span><c:out value="${item.name}"/>
+																</span> <br />
+															</c:forEach>
+														</ul>
+													</div>
+												</div>
 											<div style="clear:both;">
 					        		</div>
 							</div>

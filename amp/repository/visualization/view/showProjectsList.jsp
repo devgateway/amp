@@ -26,6 +26,15 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 	function closeWindow() {
 		window.close();
 	}
+
+	function exportList(){
+
+		document.visualizationform.action= "/visualization/exportPojectList.do" ;
+		document.visualizationform.target="_blank";
+		document.visualizationform.submit();
+
+	}
+	
 </script>
 
 <digi:instance property="visualizationform" />
@@ -75,7 +84,10 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 		<br />
 		<br />
 	</c:if>	
-	<center><input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()"></center>
+	<center>
+		<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
+		<input type="button" value="<digi:trn>Export</digi:trn>" class="dr-menu" onclick="exportList()">
+	</center>
 	</td>
 	</tr>
 </table>

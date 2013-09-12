@@ -587,6 +587,8 @@ function getOptionChecked (elements){
 function resetToDefaults(){
 	//loadingPanel.show();
 	
+	var dashboardType = document.getElementById("dashboardType").value;
+	
 	unCheckOptions("org_grp_check");
 	unCheckOptions("region_check");
 	unCheckOptions("sector_config_check");
@@ -594,6 +596,11 @@ function resetToDefaults(){
 	unCheckOptions("organization_check");
 	unCheckOptions("zone_check");
 	unCheckOptions("sub_sector_check");
+	if (dashboardType==4){
+		unCheckOptions("beneficiary_agency_check");
+		unCheckOptions("implementing_agency_check");
+		unCheckOptions("secondary_program_check");
+	}
 	
 	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
 	document.getElementById("topLists_dropdown").selectedIndex = 0;
@@ -610,19 +617,20 @@ function resetToDefaults(){
 		document.getElementById("workspace_only").checked = false;
 	}
 	
-	var dashboardType = document.getElementById("dashboardType").value;
 	if (dashboardType==4){ // if it is a Deal Dashboard
-		document.getElementById("donor_agency_dropdown_id").selectedIndex = 0;
 		document.getElementById("implementing_agency_dropdown_id").selectedIndex = 0;
 		document.getElementById("beneficiary_agency_dropdown_id").selectedIndex = 0;
+		document.getElementById("secondary_program_dropdown_id").selectedIndex = 0;
 	}
 	document.getElementById("transaction_type").selectedIndex = 1;
-	document.getElementById("org_group_dropdown_id").selectedIndex = 0;
+	if (dashboardType!=4){
+		document.getElementById("org_group_dropdown_id").selectedIndex = 0;
+		removeOptionsDropdown("org_dropdown_id");
+	}
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_config_dropdown_id").selectedIndex = 0;
 	callbackChildren.call(document.getElementById("sector_config_dropdown_id"), null);
-	removeOptionsDropdown("org_dropdown_id");
 	removeOptionsDropdown("zone_dropdown_id");
 	removeOptionsDropdown("sector_dropdown_id");
 	removeOptionsDropdown("sub_sector_dropdown_id");
@@ -663,7 +671,7 @@ function unCheckOptions (obj){
 }
 
 function changeTab (selected){
-	for(var i=0;i<4;i++){
+	for(var i=0;i<7;i++){
 		if(i!=selected){
 			$("#general_selector_"+i).removeClass("side_opt_sel");	
 		}
@@ -675,6 +683,9 @@ function changeTab (selected){
 	$("#orgGrpContent").css("display","none");
 	$("#regionDivContent").css("display","none");
 	$("#sectorDivContent").css("display","none");
+	$("#beneficiaryAgencyDivContent").css("display","none");
+	$("#implementingAgencyDivContent").css("display","none");
+	$("#secondaryProgramDivContent").css("display","none");
 	
 	if(selected!=0){
 		clearAllLocalSearchResults();
@@ -693,6 +704,15 @@ function changeTab (selected){
 		break;
 	case 3:
 		$("#sectorDivContent").css("display","block");
+		break;
+	case 4:
+		$("#beneficiaryAgencyDivContent").css("display","block");
+		break;
+	case 5:
+		$("#implementingAgencyDivContent").css("display","block");
+		break;
+	case 6:
+		$("#secondaryProgramDivContent").css("display","block");
 		break;
 	default:
 		break;
@@ -969,11 +989,11 @@ function callbackApplyFilter(e){
 		document.getElementById("workspace_only").checked = document.getElementById("workspaceOnlyQuickFilter").checked;
 	}
 	document.getElementById("currencyId").value = document.getElementById("currencyQuickFilter_dropdown").value;
-	if (dashboardType!=4) {
+	//if (dashboardType!=4) {
 		document.getElementById("adjustmentType").value = document.getElementById("adjustment_type_quick").value;
 		document.getElementById("adjustment_type").value = document.getElementById("adjustment_type_quick").options[document.getElementById("adjustment_type").selectedIndex].value;
 		document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
-	}
+	//}
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("startYear").value = document.getElementById("startYearQuickFilter_dropdown").value;
 	document.getElementById("endYear").value = document.getElementById("endYearQuickFilter_dropdown").value;
@@ -1052,6 +1072,35 @@ function callbackApplyFilter(e){
 		}
 	}
 	
+	if (dashboardType==4) {
+		if(document.getElementById("beneficiary_agency_dropdown_id")!=null){
+			if (document.getElementById("beneficiary_agency_dropdown_id").value!=-1){
+			 	unCheckOptions("beneficiary_agency_check");
+				document.getElementById("beneficiary_agency_check_"+document.getElementById("beneficiary_agency_dropdown_id").value).checked = true;
+			} else {
+				unCheckOptions("beneficiary_agency_check");
+			}
+		}
+		
+		if(document.getElementById("implementing_agency_dropdown_id")!=null){
+			if (document.getElementById("implementing_agency_dropdown_id").value!=-1){
+				unCheckOptions("implementing_agency_check");
+				document.getElementById("implementing_agency_check_"+document.getElementById("implementing_agency_dropdown_id").value).checked = true;
+			} else {
+				unCheckOptions("implementing_agency_check");
+			}
+		}
+		
+		if(document.getElementById("secondary_program_dropdown_id")!=null){
+			if (document.getElementById("secondary_program_dropdown_id").value!=-1){
+				unCheckOptions("secondary_program_check");
+				document.getElementById("secondary_program_check_"+document.getElementById("secondary_program_dropdown_id").value).checked = true;
+			} else {
+				unCheckOptions("secondary_program_check");
+			}
+		}
+	}
+	
 	var params = "";
 	params = params + "&orgGroupIds=" + getQueryParameter("orgGroupIds");
 	params = params + "&orgIds=" + getQueryParameter("orgIds");
@@ -1061,6 +1110,9 @@ function callbackApplyFilter(e){
 	params = params + "&sectorIds=" + getQueryParameter("sectorIds");
 	params = params + "&subSectorIds=" + getQueryParameter("subSectorIds");
 	params = params + "&statusIds=" + getQueryParameter("statusIds");
+	params = params + "&beneficiaryAgencyIds=" + getQueryParameter("beneficiaryAgencyIds");
+	params = params + "&implementingAgencyIds=" + getQueryParameter("implementingAgencyIds");
+	params = params + "&secondaryProgramIds=" + getQueryParameter("secondaryProgramIds");
 
 	loadingPanel.show();
 
@@ -1188,6 +1240,11 @@ function applyFilterPopin(e){
 	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
 	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);
 	params = params + "&statusIds=" + getSelectionsFromElement("status_check",false);
+	if (dashboardType==4) {
+		params = params + "&beneficiaryAgencyIds=" + getSelectionsFromElement("beneficiary_agency_check",false);
+		params = params + "&implementingAgencyIds=" + getSelectionsFromElement("implementing_agency_check",false);
+		params = params + "&secondaryProgramIds=" + getSelectionsFromElement("secondary_program_check",false);
+	}
 
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
@@ -1455,7 +1512,7 @@ function refreshBoxes(o){
 				}
 				break;
 			case "SelOrgsList":
-				if (dashboardType!=4) {
+				//if (dashboardType!=4) {
 					if (child.list.length > 0) {
 					inner = "<hr/>";
 					inner2 = "";
@@ -1474,6 +1531,75 @@ function refreshBoxes(o){
 					} else {
 						document.getElementById("org_list_id").style.display = "none";
 						document.getElementById("org_dropdown_id").style.display = "";
+					}
+				//}
+				break;
+			case "SelImpAgList":
+				if (document.getElementById("imp_ag_list_id")!=null){
+					if (child.list.length > 0) {
+					inner = "<hr/>";
+					inner2 = "";
+					for(var i = 0; i < child.list.length; i++){
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
+						if (fromGenerator=="true")
+							checkOptionByNameAndValue("implementing_agency_check",child.list[i].id);
+					}
+					inner = inner + "<hr/>";
+					var div = document.getElementById("imp_ag_list_id");
+					div.innerHTML = inner;
+					document.getElementById("filterImpAgencies").innerHTML = inner2;
+					div.style.display = "";
+					document.getElementById("implementing_agency_dropdown_id").style.display = "none";
+					} else {
+						document.getElementById("imp_ag_list_id").style.display = "none";
+						document.getElementById("implementing_agency_dropdown_id").style.display = "";
+					}
+				}
+				break;
+			case "SelBenAgList":
+				if (document.getElementById("ben_ag_list_id")!=null){
+					if (child.list.length > 0) {
+					inner = "<hr/>";
+					inner2 = "";
+					for(var i = 0; i < child.list.length; i++){
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
+						if (fromGenerator=="true")
+							checkOptionByNameAndValue("beneficiary_agency_check",child.list[i].id);
+					}
+					inner = inner + "<hr/>";
+					var div = document.getElementById("ben_ag_list_id");
+					div.innerHTML = inner;
+					document.getElementById("filterBenAgencies").innerHTML = inner2;
+					div.style.display = "";
+					document.getElementById("beneficiary_agency_dropdown_id").style.display = "none";
+					} else {
+						document.getElementById("ben_ag_list_id").style.display = "none";
+						document.getElementById("beneficiary_agency_dropdown_id").style.display = "";
+					}
+				}
+				break;
+			case "SelSecProgList":
+				if (document.getElementById("sec_prog_list_id")!=null){
+					if (child.list.length > 0) {
+					inner = "<hr/>";
+					inner2 = "";
+					for(var i = 0; i < child.list.length; i++){
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
+						if (fromGenerator=="true")
+							checkOptionByNameAndValue("secondary_program_check",child.list[i].id);
+					}
+					inner = inner + "<hr/>";
+					var div = document.getElementById("sec_prog_list_id");
+					div.innerHTML = inner;
+					document.getElementById("filterSecPrograms").innerHTML = inner2;
+					div.style.display = "";
+					document.getElementById("secondary_program_dropdown_id").style.display = "none";
+					} else {
+						document.getElementById("sec_prog_list_id").style.display = "none";
+						document.getElementById("secondary_program_dropdown_id").style.display = "";
 					}
 				}
 				break;
@@ -2436,6 +2562,7 @@ function itemClick(id, type, startYear, endYear){
 }
 
 function callbackGetGraphs(id,baseType) {
+	document.getElementById("dashboardType").value = baseType;
 	var elems = document.getElementsByName("dsbd");
 	for ( var i = 0; i < elems.length; i++) {
 		var id2 = elems[i].getAttribute("id");
@@ -2447,6 +2574,10 @@ function callbackGetGraphs(id,baseType) {
 	}
 	var typeSel1 = document.getElementById("agencyTypeSelector1");
 	var typeSel2 = document.getElementById("agencyTypeSelector2");
+	var benAgencyLI = document.getElementById("benAgencyLI");
+	var impAgencyLI = document.getElementById("impAgencyLI");
+	var secProgramLI = document.getElementById("secProgramLI");
+	
 	if (baseType==1 || baseType=='undefined') {
 		typeSel1.style.display='';
 		typeSel2.style.display='';
@@ -2454,6 +2585,18 @@ function callbackGetGraphs(id,baseType) {
 		typeSel1.style.display='none';
 		typeSel2.style.display='none';
 	}
+	
+	if (baseType==4 || baseType=='undefined') {
+		benAgencyLI.style.display='';
+		impAgencyLI.style.display='';
+		secProgramLI.style.display='';
+	} else {
+		benAgencyLI.style.display='none';
+		impAgencyLI.style.display='none';
+		secProgramLI.style.display='none';
+	}
+	
+	
 	/*switch(baseType){
 	case 0:
 		var elems = document.getElementsByName("org_grp_check");
@@ -2540,6 +2683,7 @@ var callbackGetGraphsCall = {
 
 
 function launchDashboard(){
+	var dashboardType = document.getElementById("dashboardType").value;
 	var graphList = document.getElementsByName("graphChech");
 	var graphs = "";
 	for(var i = 0; i < graphList.length; i++){
@@ -2582,6 +2726,9 @@ function launchDashboard(){
 			document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
 		}
 	}
+	if (document.getElementById("transaction_type_3").checked == true) {
+		document.getElementById("transactionType").value = document.getElementById("transaction_type_3").value;
+	}
 	
 	var adTypes = document.getElementById("adjustment_type");
 	for ( var i = 0; i < adTypes.length; i++) {
@@ -2614,6 +2761,11 @@ function launchDashboard(){
 	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
 	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);
 	params = params + "&statusIds=" + getSelectionsFromElement("status_check",false);
+	if (dashboardType=="4") {
+		params = params + "&beneficiaryAgencyIds=" + getSelectionsFromElement("beneficiary_agency_check",false);
+		params = params + "&implementingAgencyIds=" + getSelectionsFromElement("implementing_agency_check",false);
+		params = params + "&secondaryProgramIds=" + getSelectionsFromElement("secondary_program_check",false);
+	}
 
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	

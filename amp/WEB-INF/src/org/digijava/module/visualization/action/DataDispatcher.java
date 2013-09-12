@@ -124,7 +124,7 @@ public class DataDispatcher extends DispatchAction {
 		if (request.getParameter("orgGroupIds")!=null && !request.getParameter("orgGroupIds").equals("null"))
 			visualizationForm.getFilter().setOrgGroupIds(getLongArrayFromParameter(request.getParameter("orgGroupIds")));
 		if (request.getParameter("orgIds")!=null && !request.getParameter("orgIds").equals("null"))
-			visualizationForm.getFilter().setSelOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	
+			visualizationForm.getFilter().setOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	
 		if (request.getParameter("regionIds")!=null && !request.getParameter("regionIds").equals("null"))
 			visualizationForm.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
 		if (request.getParameter("zoneIds")!=null && !request.getParameter("zoneIds").equals("null"))
@@ -135,6 +135,12 @@ public class DataDispatcher extends DispatchAction {
 			visualizationForm.getFilter().setSubSectorIds(getLongArrayFromParameter(request.getParameter("subSectorIds")));
 		if (request.getParameter("statusIds")!=null && !request.getParameter("statusIds").equals("null"))
 			visualizationForm.getFilter().setSelStatusIds(getLongArrayFromParameter(request.getParameter("statusIds")));
+		if (request.getParameter("beneficiaryAgencyIds")!=null && !request.getParameter("beneficiaryAgencyIds").equals("null"))
+			visualizationForm.getFilter().setBeneficiaryAgencyIds(getLongArrayFromParameter(request.getParameter("beneficiaryAgencyIds")));
+		if (request.getParameter("implementingAgencyIds")!=null && !request.getParameter("implementingAgencyIds").equals("null"))
+			visualizationForm.getFilter().setImplementingAgencyIds(getLongArrayFromParameter(request.getParameter("implementingAgencyIds")));
+		if (request.getParameter("secondaryProgramIds")!=null && !request.getParameter("secondaryProgramIds").equals("null"))
+			visualizationForm.getFilter().setSecondaryProgramIds(getLongArrayFromParameter(request.getParameter("secondaryProgramIds")));
 		
 		// The organization groups can either be only one selected, or many, from either the Quick Filter or the Advanced Filter
 		// This checks that Filter.getSelOrgGroupsIds always has the correct list of organizationGroup/s (either one or many)
@@ -238,6 +244,60 @@ public class DataDispatcher extends DispatchAction {
 			}
 		}
 		
+		Long[] impAgIds = visualizationForm.getFilter().getImplementingAgencyIds();
+		Long impAgId = visualizationForm.getFilter().getImplementingAgencyId();
+		if (impAgIds == null || impAgIds.length == 0 || impAgIds[0] == -1) {
+			if (impAgId != null){
+				Long[] temp = {impAgId};
+				visualizationForm.getFilter().setSelImplementingAgencyIds(temp);
+			}
+		} else {
+			visualizationForm.getFilter().setImplementingAgencyId(-1l);//unset implementingAgencyId
+			visualizationForm.getFilter().setSelImplementingAgencyIds(impAgIds);
+		}
+		
+		Long[] benAgIds = visualizationForm.getFilter().getBeneficiaryAgencyIds();
+		Long benAgId = visualizationForm.getFilter().getBeneficiaryAgencyId();
+		if (benAgIds == null || benAgIds.length == 0 || benAgIds[0] == -1) {
+			if (benAgId != null){
+				Long[] temp = {benAgId};
+				visualizationForm.getFilter().setSelBeneficiaryAgencyIds(temp);
+			}
+		} else {
+			visualizationForm.getFilter().setBeneficiaryAgencyId(-1l);//unset beneficiaryAgencyId
+			visualizationForm.getFilter().setSelBeneficiaryAgencyIds(benAgIds);
+		}
+
+		Long[] secProgIds = visualizationForm.getFilter().getSecondaryProgramIds();
+		Long secProgId = visualizationForm.getFilter().getSecondaryProgramId();
+		if (secProgIds == null || secProgIds.length == 0 || secProgIds[0] == -1) {
+			if (secProgId != null){
+				Long[] temp = {secProgId};
+				visualizationForm.getFilter().setSelSecondaryProgramIds(temp);
+			}
+		} else {
+			visualizationForm.getFilter().setSecondaryProgramId(-1l);//unset beneficiaryAgencyId
+			visualizationForm.getFilter().setSelSecondaryProgramIds(secProgIds);
+		}
+
+		visualizationForm.getFilter().setSelProgramIds(visualizationForm.getFilter().getSelSecondaryProgramIds());//set programs on filter with secondary programs (for NDD)
+		
+		if(visualizationForm.getFilter().getDashboardType()==4){ //if it is deal dashboard, it fill the filter by peacebuiding marker with the 1, 2 and 3 markers
+			if (visualizationForm.getFilter().getPeacebuilderMarkerId()!=null && visualizationForm.getFilter().getPeacebuilderMarkerId()!=-1){
+				Long[] temp = {visualizationForm.getFilter().getPeacebuilderMarkerId()};
+				visualizationForm.getFilter().setSelPeacebuilderMarkerIds(temp);
+			} else {
+				ArrayList<AmpCategoryValue> catList = (ArrayList<AmpCategoryValue>) visualizationForm.getFilter().getPeacebuilderMarkerList();
+				Long[] temp = new Long[catList.size()];
+				int i=0;
+				for (Iterator iterator = catList.iterator(); iterator.hasNext();) {
+					AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+					temp[i++] = Long.valueOf(ampCategoryValue.getValue());
+				}
+				visualizationForm.getFilter().setSelPeacebuilderMarkerIds(temp);
+			}
+		}
+		
 		DashboardUtil.getSummaryAndRankInformation(visualizationForm, request);
         request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, trnStep8);
 		JSONObject root = new JSONObject();
@@ -269,6 +329,12 @@ public class DataDispatcher extends DispatchAction {
 		JSONArray selOrgGroups = new JSONArray();
 		JSONObject rootSelOrgs = new JSONObject();
 		JSONArray selOrgs = new JSONArray();
+		JSONObject rootSelImpAg = new JSONObject();
+		JSONArray selImpAg = new JSONArray();
+		JSONObject rootSelBenAg = new JSONObject();
+		JSONArray selBenAg = new JSONArray();
+		JSONObject rootSelSecProg = new JSONObject();
+		JSONArray selSecProg = new JSONArray();
 		JSONObject rootSelRegions = new JSONObject();
 		JSONArray selRegions = new JSONArray();
 		JSONObject rootSelZones = new JSONObject();
@@ -456,6 +522,39 @@ public class DataDispatcher extends DispatchAction {
 		rootSelSubSectors.put("type", "SelSubSectorsList");
 		rootSelSubSectors.put("list", selSubSectors);
 		children.add(rootSelSubSectors);
+		
+		if (impAgIds!=null && impAgIds.length>0 && impAgIds[0]!=-1) {
+			for (int i = 0; i < impAgIds.length; i++) {
+				child.put("name", DbUtil.getOrganisation(impAgIds[i]).getName());
+				child.put("id", DbUtil.getOrganisation(impAgIds[i]).getAmpOrgId());
+				selImpAg.add(child);
+			}
+		}
+		rootSelImpAg.put("type", "SelImpAgList");
+		rootSelImpAg.put("list", selImpAg);
+		children.add(rootSelImpAg);
+		
+		if (benAgIds!=null && benAgIds.length>0 && benAgIds[0]!=-1) {
+			for (int i = 0; i < benAgIds.length; i++) {
+				child.put("name", DbUtil.getOrganisation(benAgIds[i]).getName());
+				child.put("id", DbUtil.getOrganisation(benAgIds[i]).getAmpOrgId());
+				selBenAg.add(child);
+			}
+		}
+		rootSelBenAg.put("type", "SelBenAgList");
+		rootSelBenAg.put("list", selBenAg);
+		children.add(rootSelBenAg);
+		
+		if (secProgIds!=null && secProgIds.length>0 && secProgIds[0]!=-1) {
+			for (int i = 0; i < secProgIds.length; i++) {
+				child.put("name", DbUtil.getAmpThemeById(secProgIds[i]).getName());
+				child.put("id", DbUtil.getAmpThemeById(secProgIds[i]).getAmpThemeId());
+				selSecProg.add(child);
+			}
+		}
+		rootSelSecProg.put("type", "SelSecProgList");
+		rootSelSecProg.put("list", selSecProg);
+		children.add(rootSelSecProg);
 		
 		List list = null;
 		Map<AmpActivityVersion, BigDecimal> projectsList = visualizationForm.getRanksInformation().getTopProjects();

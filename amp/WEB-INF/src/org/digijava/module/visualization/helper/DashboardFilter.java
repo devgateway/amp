@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -133,18 +134,25 @@ public class DashboardFilter {
     private List<AmpCategoryValue> peacebuilderMarkerList;
     private List<AmpCategoryValue> peacebuildingList;
     private List<AmpSector>secondarySectors;
+    private List<AmpTheme>secondaryProgramsList;
     private Long[] donorAgencyIds;
     private Long donorAgencyId;
     private Long[] implementingAgencyIds;
+    private Long[] selImplementingAgencyIds;
     private Long implementingAgencyId;
     private Long[] beneficiaryAgencyIds;
+    private Long[] selBeneficiaryAgencyIds;
     private Long beneficiaryAgencyId;
     private Long[] secondarySectorsIds;
     private Long secondarySectorsId;
     private Long[] peacebuilderMarkerIds;
     private Long peacebuilderMarkerId;
+    private Long[] selPeacebuilderMarkerIds;
     private Long[] peacebuildingIds;
     private Long peacebuildingId;
+    private Long[] secondaryProgramIds;
+    private Long secondaryProgramId;
+    private Long[] selSecondaryProgramIds;
     
      
 	public int getTopLists() {
@@ -184,7 +192,10 @@ public class DashboardFilter {
     	newFilter.setDonorAgencyId(this.getDonorAgencyId());
     	newFilter.setBeneficiaryAgencyId(this.getBeneficiaryAgencyId());
     	newFilter.setImplementingAgencyId(this.getImplementingAgencyId());
+    	newFilter.setSelBeneficiaryAgencyIds(this.getSelBeneficiaryAgencyIds());
+    	newFilter.setSelImplementingAgencyIds(this.getSelImplementingAgencyIds());
     	newFilter.setPeacebuilderMarkerId(this.getPeacebuilderMarkerId());
+    	newFilter.setSelPeacebuilderMarkerIds(this.getSelPeacebuilderMarkerIds());
     	newFilter.setPeacebuildingId(this.getPeacebuildingId());
     	return newFilter;
     }
@@ -371,7 +382,8 @@ public class DashboardFilter {
     }
 
     public void setTransactionType(int transactionType) {
-        this.transactionType = transactionType;
+    	this.transactionType = transactionType;
+    	this.transactionTypeFilter = transactionType;
         this.transactionTypeQuickFilter = transactionType;
     }
     
@@ -1124,6 +1136,22 @@ public class DashboardFilter {
 		this.beneficiaryAgencyIds = beneficiaryAgencyIds;
 	}
 
+	public Long[] getSelImplementingAgencyIds() {
+		return selImplementingAgencyIds;
+	}
+
+	public void setSelImplementingAgencyIds(Long[] selImplementingAgencyIds) {
+		this.selImplementingAgencyIds = selImplementingAgencyIds;
+	}
+
+	public Long[] getSelBeneficiaryAgencyIds() {
+		return selBeneficiaryAgencyIds;
+	}
+
+	public void setSelBeneficiaryAgencyIds(Long[] selBeneficiaryAgencyIds) {
+		this.selBeneficiaryAgencyIds = selBeneficiaryAgencyIds;
+	}
+
 	public Long getBeneficiaryAgencyId() {
 		return beneficiaryAgencyId;
 	}
@@ -1178,6 +1206,46 @@ public class DashboardFilter {
 
 	public void setPeacebuildingId(Long peacebuildingId) {
 		this.peacebuildingId = peacebuildingId;
+	}
+
+	public List<AmpTheme> getSecondaryProgramsList() {
+		return secondaryProgramsList;
+	}
+
+	public void setSecondaryProgramsList(List<AmpTheme> secondaryProgramsList) {
+		this.secondaryProgramsList = secondaryProgramsList;
+	}
+
+	public Long[] getSecondaryProgramIds() {
+		return secondaryProgramIds;
+	}
+
+	public void setSecondaryProgramIds(Long[] secondaryProgramIds) {
+		this.secondaryProgramIds = secondaryProgramIds;
+	}
+
+	public Long getSecondaryProgramId() {
+		return secondaryProgramId;
+	}
+
+	public void setSecondaryProgramId(Long secondaryProgramId) {
+		this.secondaryProgramId = secondaryProgramId;
+	}
+
+	public Long[] getSelSecondaryProgramIds() {
+		return selSecondaryProgramIds;
+	}
+
+	public void setSelSecondaryProgramIds(Long[] selSecondaryProgramIds) {
+		this.selSecondaryProgramIds = selSecondaryProgramIds;
+	}
+
+	public Long[] getSelPeacebuilderMarkerIds() {
+		return selPeacebuilderMarkerIds;
+	}
+
+	public void setSelPeacebuilderMarkerIds(Long[] selPeacebuilderMarkerIds) {
+		this.selPeacebuilderMarkerIds = selPeacebuilderMarkerIds;
 	}
 	
 }

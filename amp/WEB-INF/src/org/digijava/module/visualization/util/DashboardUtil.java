@@ -1055,148 +1055,20 @@ public class DashboardUtil {
 		adjustmentTypeList.add(CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
         filter.setAdjustmentTypeList(adjustmentTypeList);
         filter.setStatusList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY)));
-        filter.setDonorAgencyList(DbUtil.getOrganisationByRole("DN"));
-		filter.setImplementingAgencyList(DbUtil.getOrganisationByRole("IA"));
-		filter.setBeneficiaryAgencyList(DbUtil.getOrganisationByRole("BA"));
-		filter.setPeacebuilderMarkerList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY)));
+        filter.setOrganizations(DbUtil.getOrganisations());
+		filter.setImplementingAgencyList(DbUtil.getOrganisations());
+		filter.setBeneficiaryAgencyList(DbUtil.getOrganisations());
+		filter.setSecondaryProgramsList(DbUtil.getPrograms(2));
+		filter.setPeacebuilderMarkerList(new ArrayList<AmpCategoryValue>());
+		ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));
+		for (Iterator iterator = catList.iterator(); iterator.hasNext();) {
+			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+			if (ampCategoryValue.getValue().equals("1")||ampCategoryValue.getValue().equals("2")||ampCategoryValue.getValue().equals("3"))
+			filter.getPeacebuilderMarkerList().add(ampCategoryValue);
+		}
 		filter.setPeacebuildingList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACEBUILDING_GOALS_KEY)));
         
         filter.setShowAmountsInThousands(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))==0?1:Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
-	}
-
-
-public static void initializeFilterDealDashboard(DashboardFilter filter, HttpServletRequest request) {
-		
-		String publicView = request.getParameter("publicView") != null ? (String) request.getParameter("publicView") : "false";
-		if (publicView.equals("true")) {
-			filter.setFromPublicView(true);
-		} else {
-			filter.setFromPublicView(false);
-		}
-		filter.setDashboardType(Constants.DashboardType.DEALDASHBOARD);
-		filter.setCommitmentsVisible(true);
-		filter.setDisbursementsVisible(true);
-		filter.setExpendituresVisible(true);
-		filter.setPledgeVisible(true);
-		filter.setShowOrganizationsRanking(false);
-		filter.setShowRegionsRanking(false);
-		filter.setShowSectorsRanking(false);
-		filter.setShowProjectsRanking(false);
-		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		if (value != null) {
-			Long fisCalId = Long.parseLong(value);
-			filter.setFiscalCalendarId(fisCalId);
-		}
-
-		filter.setDonorAgencyList(DbUtil.getOrganisationByRole("DN"));
-		filter.setImplementingAgencyList(DbUtil.getOrganisationByRole("IA"));
-		filter.setBeneficiaryAgencyList(DbUtil.getOrganisationByRole("BA"));
-		
-		
-		try {
-			filter.setRegions(new ArrayList<AmpCategoryValueLocations>(DynLocationManagerUtil.getRegionsOfDefCountryHierarchy()));
-			filter.setSectors(DbUtil.getParentSectorsFromConfig(SectorUtil.getPrimaryConfigClassification().getId()));
-			filter.setSecondarySectors(DbUtil.getParentSectorsFromConfig(SectorUtil.getSecondaryConfigClassification().getId()));
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
-		
-		if (filter.getStartYear() == null) {
-			Long year = null;
-			try {
-				year = Long.parseLong(FeaturesUtil
-						.getGlobalSettingValue("Current Fiscal Year"));
-			} catch (NumberFormatException ex) {
-				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
-			}
-			filter.setDefaultStartYear(year-3);
-			filter.setStartYear(year-3);
-			filter.setStartYearQuickFilter(year-3);
-			filter.setStartYearFilter(year-3);
-			filter.setEndYear(year);
-			filter.setDefaultEndYear(year);
-			filter.setEndYearQuickFilter(year);
-			filter.setEndYearFilter(year);
-			filter.setYearToCompare(year-1);
-		}
-		filter.setYears(new TreeMap<String, Integer>());
-		int yearFrom = Integer.parseInt(FeaturesUtil
-						.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
-		int countYear = Integer.parseInt(FeaturesUtil
-						.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
-		long maxYear = yearFrom + countYear;
-		if (maxYear < filter.getStartYear()) {
-			maxYear = filter.getStartYear();
-		}
-		for (int i = yearFrom; i <= maxYear; i++) {
-			Long fiscalCalendarId = filter.getFiscalCalendarId();
-			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
-			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-            String headingFY = TranslatorWorker.translateText("FY");
-			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
-			filter.getYears().put(yearName,i);
-		}
-		String sliderLabels = "";
-		for (Long i = filter.getStartYear(); i <= filter.getEndYear(); i++) {
-			Long fiscalCalendarId = filter.getFiscalCalendarId();
-			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
-			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-            String headingFY = TranslatorWorker.translateText("FY");
-			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
-			sliderLabels = sliderLabels + yearName + ",";
-		}
-		filter.setFlashSliderLabels(sliderLabels);
-		
-		Collection calendars = org.digijava.module.aim.util.DbUtil.getAllFisCalenders();
-		if (calendars != null) {
-			filter.setFiscalCalendars(new ArrayList(calendars));
-		}
-		if (filter.getLargestProjectNumber() == null) {
-			filter.setLargestProjectNumber(10);
-		}
-		if (filter.getDivideThousands() == null) {
-			filter.setDivideThousands(false);
-		}
-		if (filter.getDivideThousandsDecimalPlaces() == null) {
-			filter.setDivideThousandsDecimalPlaces(0);
-		}
-		if (filter.getShowAmountsInThousands() == null) {
-			filter.setShowAmountsInThousands(AmpARFilter.AMOUNT_OPTION_IN_UNITS);
-		}
-		//Initialize formatting information
-		if(filter.getDecimalSeparator() == null || filter.getGroupSeparator() == null ){
-			filter.setDecimalSeparator(FormatHelper.getDecimalSymbol());
-			filter.setGroupSeparator(FormatHelper.getGroupSymbol());
-		}
-		
-		
-		Collection currency = CurrencyUtil.getActiveAmpCurrencyByName();
-        List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-        filter.setCurrencies(validcurrencies);
-        //Only currencies which have exchanges rates
-        for (Iterator iter = currency.iterator(); iter.hasNext();) {
-            AmpCurrency element = (AmpCurrency) iter.next();
-            if (CurrencyUtil.isRate(element.getCurrencyCode()) == true) {
-                filter.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-            }
-        }
-        HttpSession httpSession = request.getSession();
-        TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");
-		AmpApplicationSettings tempSettings = null;
-		if (teamMember != null) {
-			tempSettings = org.digijava.module.aim.util.DbUtil.getMemberAppSettings(teamMember.getMemberId());
-			if (tempSettings!=null && tempSettings.getCurrency()!=null){
-				filter.setCurrencyId(tempSettings.getCurrency().getAmpCurrencyId());
-				filter.setCurrencyIdQuickFilter(tempSettings.getCurrency().getAmpCurrencyId());
-			}
-		}
-		List<CategoryConstants.HardCodedCategoryValue> adjustmentTypeList = new ArrayList<CategoryConstants.HardCodedCategoryValue>();
-		adjustmentTypeList.add(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-		adjustmentTypeList.add(CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
-        filter.setAdjustmentTypeList(adjustmentTypeList);
-        filter.setStatusList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY)));
 	}
 
 }

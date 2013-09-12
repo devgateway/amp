@@ -77,6 +77,9 @@ public class LaunchDashboard extends Action {
 			Long dId = Long.parseLong(dashId);
 			dashboard = org.digijava.module.visualization.util.DbUtil.getDashboardById(dId);
 			DashboardFilter filter = new DashboardFilter();
+			if (dashboard.getBaseType()==4)//for Deal based dashboard set MTEF projections as Transaction type by default
+	        	filter.setTransactionType(org.digijava.module.aim.helper.Constants.MTEFPROJECTION);
+	        
 			DashboardUtil.initializeFilter(filter, request);
 			dForm.setDashboard(dashboard);
 			dForm.setFilter(filter);
@@ -119,8 +122,6 @@ public class LaunchDashboard extends Action {
 				}
 			}
 	        dForm.getFilter().setDashboardType(dashboard.getBaseType());
-	        if (dashboard.getBaseType()==4)//for Deal based dashboard set MTEF projections as Transaction type by default
-	        	dForm.getFilter().setTransactionType(org.digijava.module.aim.helper.Constants.MTEFPROJECTION);
 	        
 	        String sliderLabels = "";
 			for (Long i = dForm.getFilter().getStartYear(); i <= dForm.getFilter().getEndYear(); i++) {

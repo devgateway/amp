@@ -27,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -107,6 +108,23 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             q = session.createQuery(queryString.toString());
 
+            organizations = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get organization from database ", ex);
+        }
+        Collections.sort(organizations);
+        return organizations;
+    }	
+	
+	public static List<AmpOrganisation> getOrganisations() {
+        Session session = null;
+        Query q = null;
+        
+        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
+        StringBuilder queryString = new StringBuilder("select distinct org from " + AmpOrganisation.class.getName() + " org ");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
             organizations = q.list();
         } catch (Exception ex) {
             logger.error("Unable to get organization from database ", ex);
@@ -441,7 +459,7 @@ public class DbUtil {
     	}
      }
     
-    public static List<AmpTheme> getPrograms(DashboardFilter filter, int programSetting) throws DgException {
+    public static List<AmpTheme> getPrograms(DashboardFilter filter, int programSetting){
     	List<AmpTheme> programs = new ArrayList<AmpTheme>();
        
 		//Get the selected Organization Groups and Organizations
@@ -488,7 +506,44 @@ public class DbUtil {
         }
         catch (Exception e) {
             logger.error(e);
-            throw new DgException("Cannot load sectors from db", e);
+        }
+        AmpActivityProgramSettings sett = null;
+        switch (programSetting) {
+        case 0:
+			sett = getProgramSettingByName("National Plan Objective");
+			break;
+        case 1:
+			sett = getProgramSettingByName("Primary Program");
+			break;
+        case 2:
+			sett = getProgramSettingByName("Secondary Program");
+			break;
+
+		default:
+			break;
+		}
+       
+        List<AmpTheme> programs2 = new ArrayList<AmpTheme>();
+        for (Iterator iterator = programs.iterator(); iterator.hasNext();) {
+			AmpTheme ampTheme = (AmpTheme) iterator.next();
+			if (ampTheme.getIndlevel()>0)
+				if (sett.getDefaultHierarchyId()== DashboardUtil.getTopLevelProgram(ampTheme).getParentThemeId().getAmpThemeId())
+					programs2.add(ampTheme);
+		}
+        return programs2;
+	}
+    
+    public static List<AmpTheme> getPrograms(int programSetting){
+    	List<AmpTheme> programs = new ArrayList<AmpTheme>();
+       
+        try {
+            String oql = "select prog from " + AmpTheme.class.getName() + " prog";
+            Session session = PersistenceManager.getRequestDBSession();
+            Query query = session.createQuery(oql);
+            programs = query.list();
+        }
+        catch (Exception e) {
+            logger.error(e);
         }
         AmpActivityProgramSettings sett = null;
         switch (programSetting) {
@@ -535,6 +590,18 @@ public class DbUtil {
             logger.error("Unable to get Program Setting from database", ex);
         }
         return sett;
+    }
+    
+    public static AmpTheme getAmpThemeById(Long id) {
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            AmpTheme theme = (AmpTheme) session.get(AmpTheme.class, id);
+            return theme;
+        } catch (Exception ex) {
+        	logger.error("Unable to get Theme from DB:", ex);
+        }
+        return null;
     }
     
     public static List getActivities(DashboardFilter filter, Date startDate,
@@ -841,9 +908,9 @@ public class DbUtil {
 		
 		
 		String oql = "";
-		boolean donorCondition = (filter.getDonorAgencyId()!=null && filter.getDonorAgencyId()!=-1)? true : false;
-        boolean implementingCondition = (filter.getImplementingAgencyId()!=null && filter.getImplementingAgencyId()!=-1)? true : false;
-        boolean beneficiaryCondition = (filter.getBeneficiaryAgencyId()!=null && filter.getBeneficiaryAgencyId()!=-1)? true : false;
+		boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
+        boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
+        boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
         boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
         boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
@@ -913,7 +980,7 @@ public class DbUtil {
         }
 
         // Filter for the selected programs
-        if (programCondition && filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
+        if (programCondition && filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0 && filter.getSelProgramIds()[0]!=-1) {
         	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
 		}
 
@@ -928,18 +995,18 @@ public class DbUtil {
         
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
-        	oql += " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
         } 
         if (implementingCondition) {
-        	oql += " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
         } 
         if (beneficiaryCondition) {
-        	oql += " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
         } 
         
         //Filter for Category Values
         if (peaceMarkerCondition) {
-        	oql += " and categ.id in ("+filter.getPeacebuilderMarkerId()+") ";
+        	oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelPeacebuilderMarkerIds())+") ";
 		}
         if (peacebuildingCondition) {
         	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
@@ -1031,9 +1098,9 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
 		oql += " from ";
 		oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
         oql += "   inner join f.ampActivityId act ";
-        boolean donorCondition = (filter.getDonorAgencyId()!=null && filter.getDonorAgencyId()!=-1)? true : false;
-        boolean implementingCondition = (filter.getImplementingAgencyId()!=null && filter.getImplementingAgencyId()!=-1)? true : false;
-        boolean beneficiaryCondition = (filter.getBeneficiaryAgencyId()!=null && filter.getBeneficiaryAgencyId()!=-1)? true : false;
+        boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
+        boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
+        boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
         boolean regionCondition = (filter.getRegionId()!=null && filter.getRegionId()!=-1)? true : false;
         boolean sectorCondition = (filter.getSectorId()!=null && filter.getSectorId()!=-1)? true : false;
         boolean secSectorCondition = (filter.getSecondarySectorsId()!=null && filter.getSecondarySectorsId()!=-1)? true : false;
@@ -1065,13 +1132,13 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
 
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
-        	oql += " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
         } 
         if (implementingCondition) {
-        	oql += " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
         } 
         if (beneficiaryCondition) {
-        	oql += " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
         } 
         
 
@@ -1097,7 +1164,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
 
         //Filter for Category Values
         if (peaceMarkerCondition) {
-        	oql += " and categ.id in ("+filter.getPeacebuilderMarkerId()+") ";
+        	oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelPeacebuilderMarkerIds())+") ";
 		}
         if (peacebuildingCondition) {
         	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
@@ -1644,10 +1711,10 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         	
         oql += ", actsec.sectorPercentage ";
 
-    	boolean donorCondition = (filter.getDonorAgencyId()!=null && filter.getDonorAgencyId()!=-1)? true : false;
-        boolean implementingCondition = (filter.getImplementingAgencyId()!=null && filter.getImplementingAgencyId()!=-1)? true : false;
-        boolean beneficiaryCondition = (filter.getBeneficiaryAgencyId()!=null && filter.getBeneficiaryAgencyId()!=-1)? true : false;
-        boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+        boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
+        boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
+    	boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
+    	boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
         boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
@@ -1703,18 +1770,18 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
-        	oql += " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
         } 
         if (implementingCondition) {
-        	oql += " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
         } 
         if (beneficiaryCondition) {
-        	oql += " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
         } 
        
         //Filter for Category Values
         if (peaceMarkerCondition) {
-        	oql += " and categ.id in ("+filter.getPeacebuilderMarkerId()+") ";
+        	oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelPeacebuilderMarkerIds())+") ";
 		}
         if (peacebuildingCondition) {
         	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
@@ -1910,9 +1977,9 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         if (sectorCondition)        	
         	oql += ", actsec.sectorPercentage ";
         
-        boolean donorCondition = (filter.getDonorAgencyId()!=null && filter.getDonorAgencyId()!=-1)? true : false;
-        boolean implementingCondition = (filter.getImplementingAgencyId()!=null && filter.getImplementingAgencyId()!=-1)? true : false;
-        boolean beneficiaryCondition = (filter.getBeneficiaryAgencyId()!=null && filter.getBeneficiaryAgencyId()!=-1)? true : false;
+        boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
+        boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
+        boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
         boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
         boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
@@ -1973,18 +2040,18 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
 
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
-        	oql += " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
         } 
         if (implementingCondition) {
-        	oql += " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
         } 
         if (beneficiaryCondition) {
-        	oql += " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
         } 
        
         //Filter for Category Values
         if (peaceMarkerCondition) {
-        	oql += " and categ.id in ("+filter.getPeacebuilderMarkerId()+") ";
+        	oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelPeacebuilderMarkerIds())+") ";
 		}
         if (peacebuildingCondition) {
         	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
@@ -2189,9 +2256,9 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         if (sectorCondition)
         	oql += ", actsec.sectorPercentage ";
         
-        boolean donorCondition = (filter.getDonorAgencyId()!=null && filter.getDonorAgencyId()!=-1)? true : false;
-        boolean implementingCondition = (filter.getImplementingAgencyId()!=null && filter.getImplementingAgencyId()!=-1)? true : false;
-        boolean beneficiaryCondition = (filter.getBeneficiaryAgencyId()!=null && filter.getBeneficiaryAgencyId()!=-1)? true : false;
+        boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
+        boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
+        boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
         boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
         boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
@@ -2248,24 +2315,24 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
 
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
-        	oql += " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
         } 
         if (implementingCondition) {
-        	oql += " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
         } 
         if (beneficiaryCondition) {
-        	oql += " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
         } 
 
         //Filter for Category Values
         if (peaceMarkerCondition) {
-        	oql += " and categ.id in ("+filter.getPeacebuilderMarkerId()+") ";
+        	oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelPeacebuilderMarkerIds())+") ";
 		}
         if (peacebuildingCondition) {
         	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
 		}
         
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
+        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0 && filter.getSelProgramIds()[0]!=-1) {
         	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
 		}
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {

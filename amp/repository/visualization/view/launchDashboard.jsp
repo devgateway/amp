@@ -315,13 +315,15 @@ function initializeGlobalVariables(){
 															</div></td>
 
 													</tr>
-													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_1" >
-															<div class="selector_type_cont" onclick="changeTab(1)">
-																<digi:trn>Organization Groups With Organizations</digi:trn>
-															</div></td>
-
-													</tr>
+													<c:if test="${visualizationform.filter.dashboardType ne '4' }">
+														<tr style="cursor: pointer;">
+															<td class="side_opt_sel" id="general_selector_1" >
+																<div class="selector_type_cont" onclick="changeTab(1)">
+																	<digi:trn>Organization Groups With Organizations</digi:trn>
+																</div></td>
+	
+														</tr>
+													</c:if>
 													<tr style="cursor: pointer;">
 														<td class="side_opt_sel" id="general_selector_2">
 															<div class="selector_type_cont" onclick="changeTab(2)">
@@ -336,6 +338,36 @@ function initializeGlobalVariables(){
 															</div></td>
 
 													</tr>
+													<c:if test="${visualizationform.filter.dashboardType eq '4' }">
+														<tr style="cursor: pointer;">
+															<td class="side_opt_sel" id="general_selector_1" >
+																<div class="selector_type_cont" onclick="changeTab(1)">
+																	<digi:trn>Donor Agencies</digi:trn>
+																</div></td>
+	
+														</tr>
+														<tr style="cursor: pointer;">
+															<td class="side_opt_sel" id="general_selector_4" >
+																<div class="selector_type_cont" onclick="changeTab(4)">
+																	<digi:trn>Beneficiary Agencies</digi:trn>
+																</div></td>
+	
+														</tr>
+														<tr style="cursor: pointer;">
+															<td class="side_opt_sel" id="general_selector_5" >
+																<div class="selector_type_cont" onclick="changeTab(5)">
+																	<digi:trn>Implementing Agencies</digi:trn>
+																</div></td>
+	
+														</tr>
+														<tr style="cursor: pointer;">
+															<td class="side_opt_sel" id="general_selector_6" >
+																<div class="selector_type_cont" onclick="changeTab(6)">
+																	<digi:trn>Secondary Programs</digi:trn>
+																</div></td>
+	
+														</tr>
+													</c:if>
 												</table>
 											</div>
 										</div>
@@ -408,6 +440,7 @@ function initializeGlobalVariables(){
 																<feature:display module="Funding" name="Expenditures">
 																	<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
 																</feature:display>
+																<html:option value="3"><digi:trn>MTEF Projections</digi:trn></html:option>
 															</html:select>
 														</td>
 													</tr>
@@ -439,65 +472,67 @@ function initializeGlobalVariables(){
 												<br />
 											</div>
 										</div>
-										<div class="member_selector_wrapper" id="orgGrpContent"
-											style="margin-left: 40%; padding: 0px; height: 98%; display:none">
-											<div
-												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
-												<div class="inside" style="float: left">
-													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
-													</b>
+										<c:if test="${visualizationform.filter.dashboardType ne '4' }">
+											<div class="member_selector_wrapper" id="orgGrpContent"
+												style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+												<div
+													style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+													<div class="inside" style="float: left">
+														&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+														</b>
+													</div>
+													<div style="float: right">
+														<input onkeypress="clearSearch('orgGrpDivList')"
+															id="orgGrpDivList_search" type="text" class="inputx" /> <input
+															type="button" class="buttonx"
+															onclick="findPrev('orgGrpDivList')" value='&lt;&lt;' /> <input
+															type="button" onclick="findNext('orgGrpDivList')"
+															class="buttonx" value="&gt;&gt;" />
+													</div>
+	
 												</div>
-												<div style="float: right">
-													<input onkeypress="clearSearch('orgGrpDivList')"
-														id="orgGrpDivList_search" type="text" class="inputx" /> <input
-														type="button" class="buttonx"
-														onclick="findPrev('orgGrpDivList')" value='&lt;&lt;' /> <input
-														type="button" onclick="findNext('orgGrpDivList')"
-														class="buttonx" value="&gt;&gt;" />
-												</div>
-
-											</div>
-											<div
-												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-												id="orgGrpDivList">
-												<ul style="list-style-type: none;margin-left: 0px;">
-													<li>
-														<input type="checkbox" id="org_grp_check_all" value="-1"
-															name="org_grp_check"
-															onClick="allOptionChecked(this,'org_grp_check','organization_check')" />
-														<span><digi:trn>All</digi:trn>
-														</span>
-													</li>
-													<c:forEach
-														items="${visualizationform.filter.orgGroupWithOrgsList}"
-														var="item">
-														<c:set var="orgGrp">
-															<c:out value="${item.mainEntity.orgGrpName}"/>
-														</c:set>
+												<div
+													style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
+													id="orgGrpDivList">
+													<ul style="list-style-type: none;margin-left: 0px;">
 														<li>
-															<input type="checkbox" name="org_grp_check"
-																id="org_grp_check_${item.mainEntity.ampOrgGrpId}"
-																title="${orgGrp}"
-																value="${item.mainEntity.ampOrgGrpId}"
-																onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															<span><c:out value="${orgGrp}"/>
-															</span> <br />
-															<ul style="list-style-type: none">
-																<c:forEach items="${item.subordinateEntityList}"
-																	var="organization">
-																	<li><input type="checkbox"
-																		id="organization_check_${organization.ampOrgId}"
-																		class="organization_check_${item.mainEntity.ampOrgGrpId}"
-																		name="organization_check" title="<c:out value='${organization.name}'/>"
-																		value="${organization.ampOrgId}"
-																		onclick="uncheckAllOption('org_grp_check');checkParentOption('org_grp_check',${item.mainEntity.ampOrgGrpId})" /> <span><c:out value="${organization.name}"/></span>
-																	</li>
-																</c:forEach>
-															</ul></li>
-													</c:forEach>
-												</ul>
+															<input type="checkbox" id="org_grp_check_all" value="-1"
+																name="org_grp_check"
+																onClick="allOptionChecked(this,'org_grp_check','organization_check')" />
+															<span><digi:trn>All</digi:trn>
+															</span>
+														</li>
+														<c:forEach
+															items="${visualizationform.filter.orgGroupWithOrgsList}"
+															var="item">
+															<c:set var="orgGrp">
+																<c:out value="${item.mainEntity.orgGrpName}"/>
+															</c:set>
+															<li>
+																<input type="checkbox" name="org_grp_check"
+																	id="org_grp_check_${item.mainEntity.ampOrgGrpId}"
+																	title="${orgGrp}"
+																	value="${item.mainEntity.ampOrgGrpId}"
+																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
+																<span><c:out value="${orgGrp}"/>
+																</span> <br />
+																<ul style="list-style-type: none">
+																	<c:forEach items="${item.subordinateEntityList}"
+																		var="organization">
+																		<li><input type="checkbox"
+																			id="organization_check_${organization.ampOrgId}"
+																			class="organization_check_${item.mainEntity.ampOrgGrpId}"
+																			name="organization_check" title="<c:out value='${organization.name}'/>"
+																			value="${organization.ampOrgId}"
+																			onclick="uncheckAllOption('org_grp_check');checkParentOption('org_grp_check',${item.mainEntity.ampOrgGrpId})" /> <span><c:out value="${organization.name}"/></span>
+																		</li>
+																	</c:forEach>
+																</ul></li>
+														</c:forEach>
+													</ul>
+												</div>
 											</div>
-										</div>
+										</c:if>
 										<div class="member_selector_wrapper" id="regionDivContent"
 											style="margin-left: 40%; padding: 0px; height: 98%; display:none">
 											<div
@@ -602,6 +637,143 @@ function initializeGlobalVariables(){
 													</ul>
 												</div>
 											</div>
+											<c:if test="${visualizationform.filter.dashboardType eq '4' }">
+												<div class="member_selector_wrapper" id="orgGrpContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+													<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+														<div class="inside" style="float: left">
+															&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+															</b>
+														</div>
+														<div style="float: right">
+															<input onkeypress="clearSearch('orgGrpDivList')"
+																id="orgGrpDivList_search" type="text" class="inputx" /> <input
+																type="button" class="buttonx"
+																onclick="findPrev('orgGrpDivList')" value='&lt;&lt;' /> <input
+																type="button" onclick="findNext('orgGrpDivList')"
+																class="buttonx" value="&gt;&gt;" />
+														</div>
+		
+													</div>
+													<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;" id="orgGrpDivList">
+														<ul style="list-style-type: none;margin-left: 0px;">
+															<c:forEach items="${visualizationform.filter.organizations}" var="item">
+																<li>
+																	<input type="checkbox" name="organization_check"
+																		id="organization_check_${item.ampOrgId}"
+																		title="${item.name}"
+																		value="${item.ampOrgId}" >
+																	<span><c:out value="${item.name}"/>
+																</span> <br />
+															</c:forEach>
+														</ul>
+													</div>
+												</div>
+												<div class="member_selector_wrapper" id="beneficiaryAgencyDivContent"
+													style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+													<div
+														style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+														<div class="inside" style="float: left">
+															&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+															</b>
+														</div>
+														<div class="inside" style="float: right">
+															<input onkeypress="clearSearch('beneficiaryAgencyDivList')"
+																id="beneficiaryAgencyDivList_search" type="text" class="inputx" />
+															<input type="button" class="buttonx"
+																onclick="findPrev('beneficiaryAgencyDivList')" value='&lt;&lt;' />
+															<input type="button" onclick="findNext('beneficiaryAgencyDivList')"
+																class="buttonx" value="&gt;&gt;" />
+	
+														</div>
+	
+													</div>
+													<div
+														style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
+														id="beneficiaryAgencyDivList">
+														<ul style="list-style-type: none;margin-left: 0px;">
+															<c:forEach items="${visualizationform.filter.beneficiaryAgencyList}" var="item">
+																<li>
+																	<input type="checkbox" name="beneficiary_agency_check"
+																		id="beneficiary_agency_check_${item.ampOrgId}"
+																		title="${item.name}"
+																		value="${item.ampOrgId}" >
+																	<span><c:out value="${item.name}"/>
+																</span> <br />
+															</c:forEach>
+														</ul>
+													</div>
+												</div>
+												<div class="member_selector_wrapper" id="implementingAgencyDivContent"
+													style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+													<div
+														style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+														<div class="inside" style="float: left">
+															&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+															</b>
+														</div>
+														<div class="inside" style="float: right">
+															<input onkeypress="clearSearch('implementingAgencyDivList')"
+																id="implementingAgencyDivList_search" type="text" class="inputx" />
+															<input type="button" class="buttonx"
+																onclick="findPrev('implementingAgencyDivList')" value='&lt;&lt;' />
+															<input type="button" onclick="findNext('implementingAgencyDivList')"
+																class="buttonx" value="&gt;&gt;" />
+	
+														</div>
+	
+													</div>
+													<div
+														style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
+														id="implementingAgencyDivList">
+														<ul style="list-style-type: none;margin-left: 0px;">
+															<c:forEach items="${visualizationform.filter.implementingAgencyList}" var="item">
+																<li>
+																	<input type="checkbox" name="implementing_agency_check"
+																		id="implementing_agency_check_${item.ampOrgId}"
+																		title="${item.name}"
+																		value="${item.ampOrgId}" >
+																	<span><c:out value="${item.name}"/>
+																</span> <br />
+															</c:forEach>
+														</ul>
+													</div>
+												</div>
+												<div class="member_selector_wrapper" id="secondaryProgramDivContent"
+													style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+													<div
+														style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+														<div class="inside" style="float: left">
+															&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+															</b>
+														</div>
+														<div class="inside" style="float: right">
+															<input onkeypress="clearSearch('secondaryProgramDivList')"
+																id="secondaryProgramDivList_search" type="text" class="inputx" />
+															<input type="button" class="buttonx"
+																onclick="findPrev('secondaryProgramDivList')" value='&lt;&lt;' />
+															<input type="button" onclick="findNext('secondaryProgramDivList')"
+																class="buttonx" value="&gt;&gt;" />
+	
+														</div>
+	
+													</div>
+													<div
+														style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
+														id="secondaryProgramDivList">
+														<ul style="list-style-type: none;margin-left: 0px;">
+															<c:forEach items="${visualizationform.filter.secondaryProgramsList}" var="item">
+																<li>
+																	<input type="checkbox" name="secondary_program_check"
+																		id="secondary_program_check_${item.ampThemeId}"
+																		title="${item.name}"
+																		value="${item.ampThemeId}" >
+																	<span><c:out value="${item.name}"/>
+																</span> <br />
+															</c:forEach>
+														</ul>
+													</div>
+												</div>
+											</c:if>
 									<div>
 										<table border="0" cellspacing="3" cellpadding="3">
 											<tr>
@@ -823,7 +995,10 @@ function initializeGlobalVariables(){
 	   <i><digi:trn>Start year</digi:trn>: </i><label id="filterStartYear">${visualizationform.filter.startYear}</label> | 
 	   <i><digi:trn>End year</digi:trn>: </i><label id="filterEndYear">${visualizationform.filter.endYear}</label> | 
 	   <i><digi:trn>Org. groups</digi:trn>: </i><label id="filterOrgGroups"><digi:trn>All</digi:trn></label> | 
-	   <i><digi:trn>Organizations</digi:trn>: </i><label id="filterOrganizations"><digi:trn>All</digi:trn></label> | 
+	   <i><digi:trn>Donor Agencies</digi:trn>: </i><label id="filterOrganizations"><digi:trn>All</digi:trn></label> | 
+	   <i><digi:trn>Implementing Agencies</digi:trn>: </i><label id="filterImpAgencies"><digi:trn>All</digi:trn></label> | 
+	   <i><digi:trn>Beneficiary Agencies</digi:trn>: </i><label id="filterBenAgencies"><digi:trn>All</digi:trn></label> | 
+	   <i><digi:trn>Secondary Programs</digi:trn>: </i><label id="filterSecPrograms"><digi:trn>All</digi:trn></label> | 
 	   <i><digi:trn>Configuration</digi:trn>: </i><label id="filterSectorConfiguration"><digi:trn>Primary</digi:trn></label> | 
 	   <i><digi:trn>Sectors</digi:trn>: </i><label id="filterSectors"><digi:trn>All</digi:trn></label> |
 	   <i><digi:trn>SubSectors</digi:trn>: </i><label id="filterSubSectors"><digi:trn>All</digi:trn></label> |
@@ -878,14 +1053,15 @@ function initializeGlobalVariables(){
 					</td>
 				</tr>
 				<tr>
-				  <td><digi:trn>Donor Agency</digi:trn>:</td>
-				  	<td align=right>
-				     <html:select property="filter.donorAgencyId" styleId="donor_agency_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-				         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-				          <c:forEach var="org" items="${visualizationform.filter.donorAgencyList}">
-				         	<html:option value="${org.ampOrgId}"><c:out value="${org.name}"/></html:option>
-				         </c:forEach>
-				     </html:select>
+					<td><digi:trn>Donor Agency</digi:trn>:</td>
+					<td align=right>
+					   <html:select property="filter.orgId" styleId="org_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+					       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+					          <c:forEach var="org" items="${visualizationform.filter.organizations}">
+					         	<html:option value="${org.ampOrgId}"><c:out value="${org.name}"/></html:option>
+					         </c:forEach>
+					   </html:select>
+					   <div id="org_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 					</td>
 				</tr>
 				<tr>
@@ -897,6 +1073,7 @@ function initializeGlobalVariables(){
 				         	<html:option value="${org.ampOrgId}"><c:out value="${org.name}"/></html:option>
 				         </c:forEach>
 				     </html:select>
+				     <div id="imp_ag_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 					</td>
 				</tr>
 				<tr>
@@ -908,6 +1085,19 @@ function initializeGlobalVariables(){
 				         	<html:option value="${org.ampOrgId}"><c:out value="${org.name}"/></html:option>
 				         </c:forEach>
 				     </html:select>
+				     <div id="ben_ag_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
+					</td>
+				</tr>
+				<tr>
+				  <td><digi:trn>Secondary Program</digi:trn>:</td>
+				  	<td align=right>
+				     <html:select property="filter.secondaryProgramId" styleId="secondary_program_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+				         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+				          <c:forEach var="prog" items="${visualizationform.filter.secondaryProgramsList}">
+				         	<html:option value="${prog.ampThemeId}"><c:out value="${prog.name}"/></html:option>
+				         </c:forEach>
+				     </html:select>
+				     <div id="sec_prog_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 					</td>
 				</tr>
 		</c:if>
@@ -1132,13 +1322,10 @@ function initializeGlobalVariables(){
 	<input type="button" value="<digi:trn>Filter</digi:trn>" class="buttonx" style="margin-top:10px;" id="applyButton">
 	<input type="button" value="<digi:trn>Reset</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
 	<hr />
-	<c:if test="${visualizationform.filter.dashboardType ne '4' }">
 		<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm"><digi:trn>Advanced Filters</digi:trn></a></div></div>
-	</c:if>
 	</center>
 </fieldset>
 
-<c:if test="${visualizationform.filter.dashboardType ne '4' }">
 <fieldset>
 	<legend><span class=legend_label><digi:trn>Data Source</digi:trn></span></legend>
 	<table cellspacing="0" cellpadding="0" width="100%"> 
@@ -1181,7 +1368,6 @@ function initializeGlobalVariables(){
 		<tr>
 	</table>
 </fieldset>
-</c:if>
 <c:if test="${visualizationform.filter.dashboardType==1}">
 <fieldset id="additional_info">
 	<legend><span class=legend_label><digi:trn>Additional Info</digi:trn></span></legend>

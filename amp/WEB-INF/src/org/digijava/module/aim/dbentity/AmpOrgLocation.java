@@ -3,12 +3,11 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
-
-import com.rc.retroweaver.runtime.Arrays;
 
 
 public class AmpOrgLocation implements Serializable,OrgProfileValue {
@@ -54,7 +53,7 @@ public class AmpOrgLocation implements Serializable,OrgProfileValue {
 	public List<ValueTranslatabePair> getValuesForOrgReport() {
 		List<ValueTranslatabePair> values = new ArrayList<ValueTranslatabePair>();
 		values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getLocation().getName()}), false));
-		values.add(new ValueTranslatabePair(Arrays.asList(new String[]{((getPercent() == null) ? "0%": getPercent() +"%")}), false));
+		values.add(new ValueTranslatabePair(Arrays.asList(new String[]{((getPercent() == null) ? "0%" : getPercent() + "%")}), false));
 		return values;
 	}
 

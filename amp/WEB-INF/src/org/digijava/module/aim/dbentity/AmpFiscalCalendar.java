@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
@@ -12,8 +13,6 @@ import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
 import org.digijava.module.aim.util.Identifiable;
-
-import com.rc.retroweaver.runtime.Arrays;
 
 public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileValue {
 	private Long ampFiscalCalId;

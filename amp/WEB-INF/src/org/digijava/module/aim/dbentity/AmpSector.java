@@ -1,10 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.SectorDimension;
@@ -15,9 +12,6 @@ import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
-
-import com.rc.retroweaver.runtime.Arrays;
-
 import edu.emory.mathcs.backport.java.util.TreeSet;
 
 @TranslatableClass

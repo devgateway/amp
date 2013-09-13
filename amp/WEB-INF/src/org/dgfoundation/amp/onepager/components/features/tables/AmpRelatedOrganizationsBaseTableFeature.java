@@ -71,7 +71,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	    target.add(donorFundingSection);
         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
         
-        changeSearchVisibility(target, ampOrgRole);
+        changeSearchVisibility(target);
         addFundingAutomatically(target, ampOrgRole);
 	}
 
@@ -99,7 +99,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         }
     }
 
-    private void changeSearchVisibility(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
+    private void changeSearchVisibility(AjaxRequestTarget target) {
         if (maxSizeCollectionValidationField.isVisible()){
             List<AmpOrgRole> tmpList = listModel.getObject();
             if (tmpList != null && tmpList.size() > 0){
@@ -119,7 +119,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	public void roleRemoved(AjaxRequestTarget target,AmpOrgRole ampOrgRole) {
 	    target.add(donorFundingSection);
         target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
-        changeSearchVisibility(target, ampOrgRole);
+        changeSearchVisibility(target);
 
         removeFundingAutomatically(target, ampOrgRole);
 	}

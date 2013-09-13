@@ -835,7 +835,7 @@ public class DbUtil {
             	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
             		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
             		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
             	} else {
             		AmpFundingDetail fd = (AmpFundingDetail) item[0];
             		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
@@ -1298,7 +1298,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
             		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
             		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
             	} else {
             		AmpFundingDetail fd = (AmpFundingDetail) item[0];
             		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
@@ -1438,7 +1438,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
             		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
             		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
             	} else {
             		AmpFundingDetail fd = (AmpFundingDetail) item[0];
             		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
@@ -1600,7 +1600,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
             		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
             		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
             	} else {
             		AmpFundingDetail fd = (AmpFundingDetail) item[0];
             		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
@@ -1857,7 +1857,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
             		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
             		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
             	} else {
             		AmpFundingDetail fd = (AmpFundingDetail) item[0];
             		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
@@ -2131,7 +2131,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
             		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
             		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
             	} else {
             		AmpFundingDetail fd = (AmpFundingDetail) item[0];
             		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
@@ -2407,7 +2407,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
             		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
             		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
             	} else {
             		AmpFundingDetail fd = (AmpFundingDetail) item[0];
             		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());

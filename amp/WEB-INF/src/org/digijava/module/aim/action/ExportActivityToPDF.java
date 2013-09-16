@@ -2671,7 +2671,7 @@ public class ExportActivityToPDF extends Action {
 								foAssitanceCell1.addElement(p1);
 								fundingTable.addCell(foAssitanceCell1);							
 								//meaning
-								PdfPCell foAssistanceCell2=new PdfPCell(new Paragraph(funding.getSourceRole()!=null?funding.getSourceRole():" ",plainFont));
+								PdfPCell foAssistanceCell2=new PdfPCell(new Paragraph(funding.getSourceRole()!=null?TranslatorWorker.translateText(funding.getSourceRole()):" ",plainFont));
 								foAssistanceCell2.setBorder(0);
 								foAssistanceCell2.setColspan(2);
 								foAssistanceCell2.setBackgroundColor(new Color(221,221,221));

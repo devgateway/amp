@@ -80,7 +80,7 @@
 																	</td>
 																	<td width="1">:</td>
 																	<td align="left">
-																			<b><bean:write name="funding" property="sourceRole"/></b>
+																			<b><digi:trn><bean:write name="funding" property="sourceRole"/></digi:trn></b>
 																	</td>
 																</tr>
 																</logic:present>

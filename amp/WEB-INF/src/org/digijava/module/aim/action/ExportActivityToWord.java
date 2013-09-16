@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -51,6 +53,8 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.aim.helper.GlobalSettings;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -123,7 +127,7 @@ public class ExportActivityToWord extends Action {
         RtfWriter2.getInstance(doc, baos);
         doc.open();
         try {
-        	activity=ActivityUtil.loadActivity(actId);        	
+        	activity=ActivityUtil.loadActivity(actId);
 			if(activity != null){
 				AmpCategoryValue catVal=null;
 				String translatedValue="";
@@ -487,6 +491,11 @@ public class ExportActivityToWord extends Action {
 				for (Table tbl : activityRiskTables) {
 					doc.add(tbl);
 				}
+				
+				List<Table> structures1 = getStructures(myForm, request, ampContext, activity);
+				for (Table tbl : structures1) {
+                    doc.add(tbl);
+                }
 			}
         	
             
@@ -1432,8 +1441,43 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 	}
+	
+	/*
+     * Structures
+     */
+    private List<Table> getStructures (EditActivityForm myForm, HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws CloneNotSupportedException,BadElementException, WorkerException {
+        List<Table> retVal = new ArrayList<Table>();
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Structures",ampContext)) {
 
-
+	        ExportSectionHelper eshTitle = new ExportSectionHelper("Structures", true).setWidth(100f).setAlign("left");
+	
+				retVal.add(createSectionTable(eshTitle, request, ampContext));
+				
+				Set<AmpStructure> structures = act.getStructures();
+   
+				ArrayList<AmpStructure> res = new ArrayList<AmpStructure>();
+				for (AmpStructure struc : structures) {
+					ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(
+							null, false).setWidth(100f).setAlign("left");
+					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+							"Name", null, null, true).addRowData(struc.getTitle()));
+					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+							"Type", null, null, true).addRowData(struc.getType().getName()));
+					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+							"Description", null, null, true).addRowData(struc
+							.getDescription()));
+					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+							"Latitude", null, null, true).addRowData(struc
+							.getLatitude()));
+					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+							"Longitude", null, null, true).addRowData(struc
+							.getLongitude()));
+					retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
+				}
+			
+		}
+        return retVal;
+    }
     /*
      * Proposed Project Cost
      */

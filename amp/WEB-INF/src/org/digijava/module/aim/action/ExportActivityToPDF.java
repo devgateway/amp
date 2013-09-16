@@ -45,6 +45,7 @@ import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpImputation;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -1259,7 +1260,8 @@ public class ExportActivityToPDF extends Action {
 				}
 				
 				createGeneralInfoRow(mainLayout,columnName,costOutput);
-			}			
+			}
+			
 			
 			/**
 			 * Costing
@@ -1475,6 +1477,33 @@ public class ExportActivityToPDF extends Action {
 		        }
 				mainLayout.addCell(riskCell2);
 			}
+			
+			/**
+			 * Structure
+			 */
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Structures", ampContext)){
+				String costOutput="";
+				columnName=TranslatorWorker.translateText("Structures");
+				Set<AmpStructure> structures = activity.getStructures();
+				   
+				ArrayList<AmpStructure> res = new ArrayList<AmpStructure>();
+				for (AmpStructure struc : structures) {
+					if(struc.getTitle()!=null){
+						costOutput+="\n"+TranslatorWorker.translateText("Title")+": "+struc.getTitle();
+					}
+					if(struc.getType()!=null)
+						costOutput+="\n"+TranslatorWorker.translateText("Type")+": "+struc.getType().getName();
+					if(struc.getDescription()!=null)
+						costOutput+="\n"+TranslatorWorker.translateText("Description")+": "+struc.getDescription();
+					if(struc.getLatitude()!=null)
+						costOutput+="\n"+TranslatorWorker.translateText("Latitude")+": "+struc.getLatitude();
+					if(struc.getLongitude()!=null)
+						costOutput+="\n"+TranslatorWorker.translateText("Longitude")+": "+struc.getLongitude();
+					costOutput+="\n";
+				}
+				
+				createGeneralInfoRow(mainLayout,columnName,costOutput);
+			}			
 			
 		}
 		

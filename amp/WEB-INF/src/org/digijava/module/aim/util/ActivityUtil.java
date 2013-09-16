@@ -1981,6 +1981,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			Hibernate.initialize(result.getOrgrole());
 			Hibernate.initialize(result.getIssues());
 			Hibernate.initialize(result.getRegionalObservations());
+			Hibernate.initialize(result.getStructures());
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivityVersion with id=" + id + " not found");
 		} catch (Exception e) {

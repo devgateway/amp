@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,6 +51,7 @@ import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.EditActivityForm;
@@ -1143,7 +1146,15 @@ public class ShowActivityPrintPreview
                         }
                         
                         eaForm.getComments().setAllComments(allComments);
-                        
+                //stuctures
+	                Set<AmpStructure> structures = activity.getStructures();
+	                ArrayList<AmpStructure> res = new ArrayList<AmpStructure>();
+	          	  for(AmpStructure struc:structures)
+	          	  {
+	          		  res.add(struc);
+	          	  }
+	                Collections.sort(res);
+	            	eaForm.setStructures(res);
                         
                  //purpose and results
                 if (activity.getPurpose() != null)

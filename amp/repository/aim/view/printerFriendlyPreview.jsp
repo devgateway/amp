@@ -15,6 +15,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript">
 	function load() {
@@ -2521,6 +2522,78 @@ body {background:none;}
 									</tr>
 									</field:display>
 									</logic:notEmpty>
+					
+									<logic:notEmpty name="aimEditActivityForm" property="structures">
+									<field:display name="Structures Column" feature="Structures">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+											<digi:trn>Structures</digi:trn>
+											</b>
+										</td>
+
+										<td bgcolor="#ffffff">
+											<logic:iterate id="structure" name="aimEditActivityForm"
+			property="structures">
+			<table style="cellspacing:1; cellPadding:3; bgcolor:#aaaaaa; width:100%;">
+				<tr bgcolor="#f0f0f0">
+					<td colspan="2" align="center">
+						<b>
+							${structure.title}
+						</b>
+					</td>
+				</tr>
+				
+				<module:display
+					name="/Activity Form/Structures/Structure Type"
+					parentModule="/Activity Form/Structures">
+					<tr bgcolor="#f0f0f0">
+						<td align="right" width="15%"><digi:trn key="trn:type">Type</digi:trn></td>
+						<td align="left"><b> ${structure.type.name} </b></td>
+					</tr>
+				</module:display>
+				<module:display
+					name="/Activity Form/Structures/Structure Title"
+					parentModule="/Activity Form/Structures">
+					<tr bgcolor="#f0f0f0">
+						<td align="right"><digi:trn key="trn:title">Title</digi:trn></td>
+						<td align="left"> <b> ${structure.title} </b></td>
+					</tr>
+				</module:display>
+				<module:display
+					name="/Activity Form/Structures/Structure Description"
+					parentModule="/Activity Form/Structures">
+					<tr bgcolor="#f0f0f0">
+						<td align="right"><digi:trn key="trn:description">Description</digi:trn></td>
+						<td align="left"><b> ${structure.description} </b></td>
+					</tr>
+				</module:display>
+				<module:display
+					name="/Activity Form/Structures/Structure Latitude"
+					parentModule="/Activity Form/Structures">
+					<tr bgcolor="#f0f0f0">
+						<td align="right"><digi:trn key="trn:latitude">Latitude</digi:trn></td>
+						<td align="left"> <b> ${structure.latitude} </b></td>
+					</tr>
+				</module:display>
+				<module:display
+					name="/Activity Form/Structures/Structure Longitude"
+					parentModule="/Activity Form/Structures">
+					<tr bgcolor="#f0f0f0">
+						<td align="right"><digi:trn key="trn:longitude">Longitude</digi:trn></td>
+						<td align="left"><b> ${structure.longitude} </b></td>
+					</tr>
+				</module:display>
+			
+	</table>
+	<br />
+	<hr>
+	</logic:iterate>										
+										</td>
+									</tr>
+									</field:display>
+									</logic:notEmpty>
+									
 
 									<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
 									<field:display name="${customField.FM_field}" feature="Step${customField.step.step}">												

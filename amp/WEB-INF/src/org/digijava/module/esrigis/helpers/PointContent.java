@@ -13,6 +13,7 @@ private static final long serialVersionUID = 1L;
 	private String commitments;
 	private String disbursements;
 	private String expenditures;
+	private String mtef;
 	private List<ActivitySector> sectors;
     private List<SimpleDonor> donors;
     private String currecycode; 
@@ -20,6 +21,7 @@ private static final long serialVersionUID = 1L;
 	private String commitmentsforlocation;
 	private String disbursementsforlocation;
 	private String expendituresforlocation;
+    private String mtefforlocation;
     
     public PointContent() {
 		super();
@@ -35,7 +37,7 @@ private static final long serialVersionUID = 1L;
 	}
     
     public String getCommitmentsforlocation() {
-		return commitmentsforlocation;
+		return fixZero(commitmentsforlocation);
 	}
 
 	public void setCommitmentsforlocation(String commitmentsforlocation) {
@@ -43,7 +45,7 @@ private static final long serialVersionUID = 1L;
 	}
 
 	public String getDisbursementsforlocation() {
-		return disbursementsforlocation;
+		return fixZero(disbursementsforlocation);
 	}
 
 	public void setDisbursementsforlocation(String disbursementsforlocation) {
@@ -51,7 +53,7 @@ private static final long serialVersionUID = 1L;
 	}
 
 	public String getExpendituresforlocation() {
-		return expendituresforlocation;
+		return fixZero(expendituresforlocation);
 	}
 
 	public void setExpendituresforlocation(String expendituresforlocation) {
@@ -75,7 +77,7 @@ private static final long serialVersionUID = 1L;
 	}
 
 	public String getCommitments() {
-		return commitments;
+		return fixZero(commitments);
 	}
 
 	public void setCommitments(String commitments) {
@@ -83,7 +85,7 @@ private static final long serialVersionUID = 1L;
 	}
 
 	public String getDisbursements() {
-		return disbursements;
+		return fixZero(disbursements);
 	}
 
 	public void setDisbursements(String disbursements) {
@@ -91,7 +93,7 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	public String getExpenditures() {
-		return expenditures;
+		return fixZero(expenditures);
 	}
 
 	public void setExpenditures(String expenditures) {
@@ -122,4 +124,30 @@ private static final long serialVersionUID = 1L;
 		this.currecycode = currecycode;
 	}
 
+	public String getMtef()
+	{
+		return fixZero(mtef);
+	}
+	
+	public void setMtef(String mtef)
+	{
+		this.mtef = mtef;
+	}
+	
+	public String getMtefforlocation()
+	{
+		return fixZero(mtefforlocation);
+	}
+	
+	public void setMtefforlocation(String mtefforlocation)
+	{
+		this.mtefforlocation = mtefforlocation;
+	}
+	
+	public final static String fixZero(String input)
+	{
+		if ((input == null || input.isEmpty()))
+			return "0";
+		return input;
+	}
 }

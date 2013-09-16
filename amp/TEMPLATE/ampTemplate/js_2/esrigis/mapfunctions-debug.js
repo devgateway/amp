@@ -874,7 +874,7 @@ function drawpoints() {
 										+ "<tr><td nowrap><b>"+translate('Primary Sector')+"<b></td><td>${Primary Sector}</td></tr>"
 										+ "<tr><td nowrap><b>"+translate('Total commitments')+"<b></td><td>${Total commitments}</td></tr>"
 										+ "<tr><td nowrap><b>"+translate('Total disbursements')+"<b></td><td>${Total disbursements}</td></tr>"
-										+ "<tr><td nowrap><b>"+translate('Total MTEF Projections')+"<b></td><td>${Total mtef}</td></tr>"
+										+ "<tr><td nowrap><b>"+translate('Total MTEF Projections')+"<b></td><td>${Total MTEF Projections}</td></tr>"
 										+ "<tr><td nowrap><b>"+translate('Commitments for this location')+"<b></td><td>${Commitments for this location}</td></tr>"
 										+ "<tr><td nowrap><b>"+translate('Disbursements for this location')+"<b></td><td>${Disbursements for this location}</td></tr></table>",
 										+ "<tr><td nowrap><b>"+translate('MTEF Projections for this location')+"<b></td><td>${MTEF for this location}</td></tr></table>"),
@@ -1680,6 +1680,7 @@ function getContent(graphicAttributes, baseGraphic) {
     					}
     				}
     			});
+    			//debugger;
                 attr=({
 					"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
 							+ attr[0].id

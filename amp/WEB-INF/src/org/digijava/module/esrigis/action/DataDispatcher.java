@@ -175,8 +175,7 @@ public class DataDispatcher extends MultiAction {
 			ap.setDonors(new ArrayList<SimpleDonor>());
 			while (fundItr.hasNext()) {
 				AmpFunding ampFunding = (AmpFunding) fundItr.next();
-				Collection fundDetails = ampFunding.getFundingDetails();
-				calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
+				calculations.doCalculations(ampFunding, maphelperform.getFilter().getCurrencyCode());
 				SimpleDonor donor = new SimpleDonor(); 
 				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
 				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
@@ -351,8 +350,7 @@ public class DataDispatcher extends MultiAction {
 		ct.setDonors(new ArrayList<SimpleDonor>());
 		while (fundItr.hasNext()) {
 			AmpFunding ampFunding = (AmpFunding) fundItr.next();
-			Collection fundDetails = ampFunding.getFundingDetails();
-			calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
+			calculations.doCalculations(ampFunding, maphelperform.getFilter().getCurrencyCode());
 			SimpleDonor donor = new SimpleDonor(); 
 			donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
 			donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
@@ -365,6 +363,7 @@ public class DataDispatcher extends MultiAction {
 		ct.setCommitments(calculations.getTotalCommitments().toString());
 		ct.setDisbursements(calculations.getTotActualDisb().toString());
 		ct.setExpenditures(calculations.getTotPlannedExp().toString());
+		ct.setMtef(calculations.getTotalMtef().toString());
 		ct.setSectors(SectorsToJson(activity));
 		ct.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
 		for (Iterator iterator = activity.getLocations().iterator(); iterator.hasNext();) {
@@ -373,6 +372,7 @@ public class DataDispatcher extends MultiAction {
 				ct.setCommitmentsforlocation(QueryUtil.getPercentage(calculations.getTotalCommitments().getValue(),new BigDecimal(alocation.getLocationPercentage())));
 				ct.setDisbursementsforlocation(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(alocation.getLocationPercentage())));
 				ct.setExpendituresforlocation(QueryUtil.getPercentage(calculations.getTotActualExp().getValue(),new BigDecimal(alocation.getLocationPercentage())));
+				ct.setMtefforlocation(QueryUtil.getPercentage(calculations.getTotalMtef().getValue(), new BigDecimal(alocation.getLocationPercentage())));
 				break;
 			}
 		}

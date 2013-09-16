@@ -82,6 +82,7 @@ public class XlsHelper {
 		columnNames.add(TranslatorWorker.translateText("Disbursement for this location"));
 		columnNames.add(TranslatorWorker.translateText("Total Commitments"));
 		columnNames.add(TranslatorWorker.translateText("Total Disbursement"));
+		columnNames.add(TranslatorWorker.translateText("Total MTEF"));
 		
 		
 		int x = 0;
@@ -131,8 +132,7 @@ public class XlsHelper {
 				Iterator fundItr = aA.getFunding().iterator();
 				while (fundItr.hasNext()) {
 					AmpFunding ampFunding = (AmpFunding) fundItr.next();
-					Collection fundDetails = ampFunding.getFundingDetails();
-					calculations.doCalculations(fundDetails,filter.getCurrencyCode());
+					calculations.doCalculations(ampFunding, filter.getCurrencyCode());
 					if (fundItr.hasNext()) {
 						donors = donors+ ampFunding.getAmpDonorOrgId().getName()+ " - ";
 					} else {
@@ -167,6 +167,7 @@ public class XlsHelper {
 					values.add("");
 					values.add(calculations.getTotalCommitments().toString());
 					values.add(calculations.getTotActualDisb().toString());
+					values.add(calculations.getTotalMtef().toString());
 	
 					for (int j = 0; j < columnNames.size(); j++) {
 						HSSFCell cell = row.createCell(j);

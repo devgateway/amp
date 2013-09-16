@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils.Null;
 import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
@@ -170,6 +171,24 @@ public class FundingCalculationsHelper {
 	public DecimalWraper getTotalMtef()
 	{
 		return this.totalMtef;
+	}
+	
+	/**
+	 * extracts all the donor funding + MTEF funding from a source and adds them into a single source; then calculated the totals
+	 * @param fundingSource
+	 * @param userCurrencyCode
+	 */
+	public void doCalculations(AmpFunding fundingSource, String userCurrencyCode)
+	{
+		ArrayList<FundingInformationItem> funding = new ArrayList<FundingInformationItem>();
+		
+		if (fundingSource.getFundingDetails() != null)
+			funding.addAll(fundingSource.getFundingDetails());
+		
+		if (fundingSource.getMtefProjections() != null)
+			funding.addAll(fundingSource.getMtefProjections());
+		
+		doCalculations(funding, userCurrencyCode);
 	}
 	
 	public void doCalculations(Collection<? extends FundingInformationItem> details, String userCurrencyCode) {

@@ -66,7 +66,13 @@ public class DbHelper {
 		AmpMapConfig map = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			map = (AmpMapConfig) session.load(AmpMapConfig.class, id);
+            StringBuilder qs = new StringBuilder("from ").append(AmpMapConfig.class.getName()).
+                    append(" mc where mc.id=:ID");
+            Query q = session.createQuery(qs.toString());
+            q.setLong("ID", id);
+
+			//map = (AmpMapConfig) session.load(AmpMapConfig.class, id);
+            map = (AmpMapConfig) q.uniqueResult();
 		} catch (Exception e) {
 			logger.error("Unable to get object of class "
 					+ AmpMapConfig.class.getName() + " width id=" + id

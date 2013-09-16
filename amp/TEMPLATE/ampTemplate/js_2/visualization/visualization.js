@@ -2200,12 +2200,14 @@ function initGraph(){
 }
 
 function drawGraph(id){
-
+	
 	if (id.indexOf("Sector")!=-1)
 		changeChart(null, 'donut', id, true);
 	else if (id.indexOf("Region")!=-1)
 		changeChart(null, 'line', id, true);
 	else if (id.indexOf("Budget")!=-1)
+		changeChart('start', 'donut', id, true);
+	else if (id.indexOf("SecondaryProgram")!=-1)
 		changeChart('start', 'donut', id, true);
 	else if (id.indexOf("Profile")!=-1)
 		changeChart(null, 'bar_profile', id, true);

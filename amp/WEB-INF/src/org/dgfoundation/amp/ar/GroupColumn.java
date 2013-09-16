@@ -143,6 +143,9 @@ public class GroupColumn extends Column {
     private static Column verticalSplitByCateg(CellColumn src,
     	String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
     	
+    	if (src instanceof TotalComputedMeasureColumn)
+    		return src;
+
     	HashMap<String,String> yearMapping = new HashMap<String, String>();
     	HashMap<String,String> monthMapping = new HashMap<String, String>();
     	

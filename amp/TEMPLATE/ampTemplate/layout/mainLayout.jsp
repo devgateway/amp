@@ -66,16 +66,15 @@
 	 <digi:ref href="css/ampPrint.css" type="text/css" rel="stylesheet" media="print" />
 </head>
 
+
 <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
 <div class="headerTop">
-	<digi:secure authenticated="false">
-		<logic:notPresent name="currentMember" scope="session">
-			<digi:insert attribute="headerTop" />	
-		</logic:notPresent>
-	</digi:secure>
-	<digi:secure authenticated="true">
+	<logic:present name="currentMember" scope="session">
 		<jsp:include page="headerTop_2.jsp"/>
-	</digi:secure>
+	</logic:present>
+	<logic:notPresent name="currentMember" scope="session">
+		<digi:insert attribute="headerTop" />
+	</logic:notPresent>
 </div>
 	<div class="main_menu" >
 		  	<table cellpadding="0"cellspacing="0" width="1000">

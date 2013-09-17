@@ -84,6 +84,9 @@ function resetFilter(){
 			aimReportsFilterPickerForm.computedYear.selectedIndex=0;
 		}
 		
+		if (aimReportsFilterPickerForm.actualAppYear)
+			aimReportsFilterPickerForm.actualAppYear.selectedIndex = 0;
+		
 		resetDateOptions();
 	}
 

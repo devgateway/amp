@@ -11,25 +11,6 @@
 	<!-- by default allow displaying of the flag -->
 	<http pattern="/aim/default/displayFlag.do**" security="none" />
 	
-	<http pattern="/aim/confirmRegisteration.do**" security="none" />
-	
-	<http pattern="/visualization/dataDispatcher.do**" security="none" />
-	
-	<http pattern="/visualization/launchDashboard.do**" security="none" />
-	
-	<http pattern="/visualization/launchGraph.do**" security="none" />
-	
-	<http pattern="/aim/csvExport.do**" security="none" />
-	
-	<http pattern="/aim/xlsExport.do**" security="none" />
-	
-	<http pattern="/aim/viewNewAdvancedReport.do**" security="none" />
-	
-	<http pattern="/exception/showExceptionReport.do**" security="none" />
-	
-	<http pattern="/aim/viewActivityPreview.do**" security="none" />
-	
-	<http pattern="/aim/default/previewActivity.do**" security="none" />
 
 	<!-- move this to the reports module -->
 	<http pattern="/reportsPublicView.do**" security="none" />

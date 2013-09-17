@@ -305,8 +305,18 @@ public Cell filter(Cell metaCell,Set ids) {
 		boolean passesTest = false;
 		String columnRoleCode = ArConstants.COLUMN_ROLE_CODES.get(metaCell.getColumn().getName());
 		
-		passesTest = (this.getMetaValueString(ArConstants.SOURCE_ROLE_CODE).equals(columnRoleCode) && this.getMetaValueString(ArConstants.DONOR).equals(metaCell.getValue().toString())) ||
-					(this.getMetaValueString(ArConstants.RECIPIENT_ROLE_CODE).equals(columnRoleCode) && this.getMetaValueString(ArConstants.RECIPIENT_NAME).equals(metaCell.getValue().toString()));
+		String sourceRole = this.getMetaValueString(ArConstants.SOURCE_ROLE_CODE);
+		String sourceName = this.getMetaValueString(ArConstants.DONOR);
+		String recipientRole = this.getMetaValueString(ArConstants.RECIPIENT_ROLE_CODE);
+		String recipientName = this.getMetaValueString(ArConstants.RECIPIENT_NAME);
+		
+//		if ((sourceRole == null) || (sourceName == null) || (recipientRole == null) || (recipientName == null) || (metaCell == null) || (metaCell.getValue() == null))
+//			System.out.println("my name is msh");
+		
+		passesTest = (sourceRole.equals(columnRoleCode) && sourceName.equals(metaCell.getValue().toString())) // all transactions have a non-null source
+					||
+					(recipientRole != null && recipientName != null && recipientRole.equals(columnRoleCode) && recipientName.equals(metaCell.getValue().toString()));
+		
 		if (!passesTest)
 			return null;
 	}

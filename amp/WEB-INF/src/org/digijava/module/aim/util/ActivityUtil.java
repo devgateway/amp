@@ -3189,38 +3189,39 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     //logger.info("Canview =" + canView);
     return canView;
   }
-     public static StringBuilder getDonorsForActivity(Long activityId) {
-        try {
-            StringBuilder donors = new StringBuilder();
-            if (activityId != null) {
-                Session session = PersistenceManager.getSession();
-                String queryString = "select distinct donor from " + AmpFunding.class.getName() + " f inner join f.ampDonorOrgId donor inner join f.ampActivityId act ";
-                queryString += " where act.ampActivityId=:activityId";
-                Query qry = session.createQuery(queryString);
-                qry.setLong("activityId", activityId);
 
-                List<AmpOrganisation> organizations = qry.list();
-                if (organizations != null && organizations.size() > 1) {
-                    Collections.sort(organizations, new Comparator<AmpOrganisation>() {
-                        public int compare(AmpOrganisation o1, AmpOrganisation o2) {
-                            return o1.getName().compareTo(o2.getName());
-                        }
-                    });
-                }
+    public static StringBuilder getDonorsForActivity(Long activityId) {
+        StringBuilder donors = new StringBuilder();
+        if (activityId != null) {
+            Session session = PersistenceManager.getSession();
+            String queryString = "select distinct donor from " + AmpFunding.class.getName() + " f inner join f.ampDonorOrgId donor inner join f.ampActivityId act ";
+            queryString += " where act.ampActivityId=:activityId";
+            Query qry = session.createQuery(queryString);
+            qry.setLong("activityId", activityId);
+
+            List<AmpOrganisation> organizations = qry.list();
+            if (organizations != null && organizations.size() > 1) {
+                Collections.sort(organizations, new Comparator<AmpOrganisation>() {
+                    public int compare(AmpOrganisation o1, AmpOrganisation o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
+            }
+
+            if (organizations != null) {
                 for (AmpOrganisation donor : organizations) {
                     donors.append(donor.getName());
-                    donors.append(",");
+                    donors.append(", ");
                 }
 
+                if (donors.length() > 1) {
+                    // remove last coma
+                    donors.setLength(donors.length() - 2);
+                }
             }
-            return donors;
-
-        } catch (Exception ex) {
-            logger.debug("unable to get donors for activity");
-            logger.debug(ex);
-            throw new RuntimeException(ex);
 
         }
+        return donors;
     }
 
     public static List getSortedActivitiesByDonors (List<AmpActivityVersion> acts, boolean acs) {

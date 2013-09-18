@@ -106,6 +106,7 @@ import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.helper.RegionalFundingsHelper;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
@@ -120,6 +121,7 @@ import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.ProposedProjCostHelper;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -764,6 +766,7 @@ public class EditActivity extends Action {
             pg.setFunAmountAsDouble(activity.getFunAmount());
           pg.setCurrencyCode(activity.getCurrencyCode());
           pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
+          pg = ProposedProjCostHelper.getProposedProjCost(pg, CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode());
           eaForm.getFunding().setProProjCost(pg);
 
           //load programs by type
@@ -1483,8 +1486,8 @@ public class EditActivity extends Action {
 		  }
 
 
-          ArrayList regFunds = new ArrayList();
-          Iterator rItr = activity.getRegionalFundings().iterator();
+		  ArrayList regFunds = RegionalFundingsHelper.getRegionalFundings(activity.getRegionalFundings(), toCurrCode, 0);
+          /*Iterator rItr = activity.getRegionalFundings().iterator();
 
           eaForm.getFunding().setRegionTotalDisb(0);
           while (rItr.hasNext()) {
@@ -1580,7 +1583,7 @@ public class EditActivity extends Action {
             regFund.setExpenditures(list);
             regFunds.set(index++, regFund);
           }
-
+*/
           eaForm.getFunding().setRegionalFundings(regFunds);
 
           eaForm.getComponents().setSelectedComponents(null);

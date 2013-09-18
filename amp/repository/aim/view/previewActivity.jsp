@@ -1526,14 +1526,19 @@ function collapseAll() {
 					</td>
 				</tr>
 				<tr bgcolor="#f0f0f0">
-					<td>
-						<digi:trn>Date</digi:trn>					
-					</td>
-					<td bgcolor="#f0f0f0" align="left" width="150">
-						<c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
-							<b>${aimEditActivityForm.funding.proProjCost.funDate}</b>						
-						</c:if>					
-					</td>
+					<c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
+						<td>
+							<digi:trn>Date</digi:trn>					
+						</td>
+						<td bgcolor="#f0f0f0" align="left" width="150">
+								<b>${aimEditActivityForm.funding.proProjCost.funDate}</b>						
+						</td>
+					</c:if>
+					<c:if test="${aimEditActivityForm.funding.proProjCost.funDate==null}">
+						<td>
+							<digi:trn>*cost could not be exchanged to workspace currency bacause date is not set</digi:trn>	
+						</td>
+					</c:if>	
 				</tr>
 			</table>
 		</c:if>

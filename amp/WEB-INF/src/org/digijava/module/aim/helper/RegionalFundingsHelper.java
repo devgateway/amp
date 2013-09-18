@@ -70,6 +70,7 @@ public class RegionalFundingsHelper {
 			double amt = CurrencyWorker.convert1(regFund.getTransactionAmount().doubleValue(),frmExRt,toExRt);
 			fd.setTransactionAmount(FormatHelper.formatNumber(amt));
 			fd.setCurrencyCode(currCode);
+			fd.setAdjustmentTypeName(regFund.getAdjustmentType());
 			//fd.setAdjustmentType(regFund.getAdjustmentType().intValue());
 			if (fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) ) {				
 				amt = 0;

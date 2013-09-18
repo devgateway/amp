@@ -49,7 +49,7 @@
 	<beans:import resource="classpath:../../repository/**/module-spring.xml" />
 
 	<!-- uncomment this to see debugging info about spring security -->
-	<debug/>
+	<!-- <debug/> -->
 
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm">

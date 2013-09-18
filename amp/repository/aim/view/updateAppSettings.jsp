@@ -20,12 +20,15 @@
 BASE_YEAR	= <globalsettings:value name="Year Range Start" />;
 var helpBody=' <digi:trn jsFriendly="true"> to open all reports on one page, please enter the digit "0"</digi:trn>';
 var helpBodyAct=' <digi:trn jsFriendly="true"> Please enter a number greater than "1"</digi:trn>';
+var wrongNumber = '<digi:trn jsFriendly="true">Wrong number of activities/projects per page. </digi:trn>';
 var helpTitle='<digi:trn jsFriendly="true">Report Sheet</digi:trn>';
 var helpNumberPages = '<digi:trn>Wrong number of pages to display in paginator. The number should be greater than 1.</digi:trn>';
+var wrongNumberOfReportsPerPage = '<digi:trn jsFriendly="true">Wrong number of activities/projects per page. </digi:trn>';
+
 function validade(){
 	var defReportsPerPage = document.getElementById("defRecsPerPage");
   	if(parseInt(defReportsPerPage.value)<=1){
-	  alert(helpBodyAct);
+	  alert(wrongNumber + helpBodyAct);
 	  return false;
   	}
 
@@ -39,7 +42,7 @@ function validade(){
  	for (var i = 0;  i < reportsperPage.length;  i++) {
  		var ch = reportsperPage.charAt(i);
   		if (validChars.indexOf(ch)==-1){
-  			alert('<digi:trn jsFriendly="true">enter correct number</digi:trn>');	   			
+  			alert(wrongNumberOfReportsPerPage + '<digi:trn jsFriendly="true">enter correct number</digi:trn>');	   			
    			return false;
   		}
  	}

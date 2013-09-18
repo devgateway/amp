@@ -1532,12 +1532,12 @@ public class ExportActivityToWord extends Action {
 								.getContactInformation().getMofedContacts(),ampContext, request);
 			}
 			// Sec Min funding contact information
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information",	ampContext)) {
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information",	ampContext)) {
 				buildContactInfoOutput(eshContactInfoTable,	"Sector Ministry contact information", myForm
 								.getContactInformation().getSectorMinistryContacts(), ampContext, request);
 			}
 			// Project Coordinator contact information
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information",	ampContext)) {
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information",	ampContext)) {
 				buildContactInfoOutput(eshContactInfoTable,	"Proj. Coordinator contact information", myForm					.getContactInformation()
 								.getProjCoordinatorContacts(), ampContext,request);
 			}

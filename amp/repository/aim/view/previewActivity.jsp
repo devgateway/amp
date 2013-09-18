@@ -28,12 +28,14 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-min.js"/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" ></script>
-<script type="text/javascript" src="<digi:file src="script/ajaxconnection/connection-min.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="js_2/yui/yahoo/yahoo-min.js"/>" ></script>
+
+	
+<script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/yahoo-dom-event/yahoo-dom-event.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/container/container-min.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/dragdrop/dragdrop-min.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/event/event-min.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src="js_2/yui/connection/connection-min.js"/>"></script>
 
 
 	<DIV id="TipLayer"
@@ -263,7 +265,7 @@ function collapseAll() {
 	
 
 <!-- MAIN CONTENT PART START -->
-
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 <logic:present scope="request" parameter="editError">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>
@@ -1346,7 +1348,9 @@ function collapseAll() {
 								coordinates.push('<c:out value="${selectedLocs.lat}"/>;<c:out value="${selectedLocs.lon}"/>;<c:out value="${selectedLocs.locationName}"/>');
 							</c:forEach>
 							</script>
-							<jsp:include page="previewmap.jsp"/>						
+							<jsp:include page="previewmap.jsp">
+								<jsp:param name="esriapiurl" value="${aimEditActivityForm.esriapiurl}}" />
+							</jsp:include>
 						</td>
 					</tr>
 					</table>

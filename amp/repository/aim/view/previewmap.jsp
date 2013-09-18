@@ -1,4 +1,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
@@ -8,7 +10,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
     <style type="text/css"> a { color: blue; } </style>
 
-<script type="text/javascript" src="<c:out value="${aimEditActivityForm.esriapiurl}"/>/jsapi/arcgis/?v=2.2"></script>
+<script type="text/javascript" src="<c:out value="${paramValues.esriapiurl[0]}"/>/jsapi/arcgis/?v=2.2"></script>
 
     
 <script type="text/javascript">

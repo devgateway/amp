@@ -1,23 +1,28 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
+
+
+<script type="text/javascript" src="<digi:file src='js_2/yui/yahoo/yahoo-min.js'/>">.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/yahoo-dom-event/yahoo-dom-event.js'/>">.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/container/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/element/element.js'/>" >.</script>
+<script type="text/javascript" src="<digi:file src='js_2/yui/event/event-min.js'/>">.</script>
+<script type="text/javascript" src="<digi:file src='js_2/yui/animation/animation-min.js'/>" >.</script>
+<script type="text/javascript" src="<digi:file src='js_2/yui/dom/dom-min.js'/>">.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/tabview/tabview.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/connection/connection-min.js'/>" > .</script>
+<link rel="stylesheet" type="text/css" href="<digi:file src='js_2/yui/tabview/assets/tabview.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='js_2/yui/tabview/assets/border_tabs.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='/repository/aim/view/css/filters/filters2.css'/>">
+
+	<link rel="stylesheet" type="text/css" href="<digi:file src='css_2/amp.css '/>">
+
 <div id="myHistory" class="invisible-item">
 	<div id="myHistoryContent" class="content">
 		===== ERROR =====
 	</div>
 </div>
 
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>">.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>">.</script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/animation-min.js'/>" >.</script>
-<script type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dom-min.js'/>">.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tab/tabview.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/ajaxconnection/connection-min.js'/>" > .</script>
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
 <script type="text/javascript">
 	YAHOOAmp.namespace("YAHOOAmp.amptab");

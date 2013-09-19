@@ -78,7 +78,8 @@ public class GetTeamReports extends Action {
             }
 			
 			String reset = request.getParameter("reset");
-            
+			raForm.setDefaultNumResults(tm.getAppSettings().getDefReportsPerPage());
+			
             if(reset!=null && reset.equalsIgnoreCase("true")){
             	//raForm.setTempNumResults(-1);
             	raForm.setTempNumResults(defReportsPerPage==0?-1:defReportsPerPage);

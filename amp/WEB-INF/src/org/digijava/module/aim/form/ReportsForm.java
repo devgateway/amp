@@ -12,6 +12,7 @@ public class ReportsForm extends ActionForm {
 	private Collection reports = null;
 	private Collection reportsList;
 	private int tempNumResults = 10;
+	private int defaultNumResults=10;
 	private int pageSize = 10;
 	private Long reportId = null;
 	private String name = null;
@@ -317,6 +318,14 @@ public class ReportsForm extends ActionForm {
 
 	public void setOnlyFavourites(Boolean onlyFavourites) {
 		this.onlyFavourites = onlyFavourites;
+	}
+
+	public int getDefaultNumResults() {
+		return defaultNumResults;
+	}
+
+	public void setDefaultNumResults(int defaultNumResults) {
+		this.defaultNumResults = defaultNumResults;
 	}
 
 	public enum ReportSortBy{

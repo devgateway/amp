@@ -12,7 +12,7 @@
 		<springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
 		<springVersion>3.0.7.RELEASE</springVersion>		 
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	<buildVersion>2.6-SNAPSHOT</buildVersion>      
+    	<buildVersion>2.7-SNAPSHOT</buildVersion>
 	</properties>
  <repositories> 
 		<repository>

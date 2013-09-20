@@ -20,8 +20,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -53,6 +55,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
 import org.hibernate.HibernateException;
@@ -454,6 +457,7 @@ public class LuceneUtil implements Serializable {
 				String numcont;
 				String CRIS;
 				String budgetNumber;
+				String newBudgetNumber;
 				String contractingArr;
 				ArrayList<String> componentcode=new ArrayList<String>();
 			};
@@ -600,6 +604,19 @@ public class LuceneUtil implements Serializable {
 				isNext = rs.next();
 			}
 			
+			// new budget codes
+			qryStr = "select r.activity,string_agg(r.budget_code, ' ; ' ) as budget_codes from amp_org_role r, amp_activity a where a.amp_activity_id=r.activity and activity >= " + chunkStart + " and activity < " + chunkEnd + " group by activity";
+			rs = st.executeQuery(qryStr);
+			rs.last();
+			logger.info("Starting iteration of " + rs.getRow() + " new budget codes!");
+			isNext = rs.first();
+			while (isNext){
+				int actId = Integer.parseInt(rs.getString("activity"));
+				x = (Items) list.get(actId);
+				x.newBudgetNumber = rs.getString("budget_codes");
+				isNext = rs.next();
+			}
+			
 			//New fields for Senegal.
 			/*qryStr = "select * from v_senegal_cris_budget where amp_activity_id >= " + chunkStart
 					+ " and amp_activity_id < " + chunkEnd + " ";
@@ -623,7 +640,7 @@ public class LuceneUtil implements Serializable {
 			while (it.hasNext()) {
 				Items el = (Items) it.next();
 				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, 
-						el.results,el.numcont, el.contractingArr, el.componentcode, el.CRIS, el.budgetNumber);
+						el.results,el.numcont, el.contractingArr, el.componentcode, el.CRIS, el.budgetNumber, el.newBudgetNumber);
 				if (doc != null)
 					indexWriter.addDocument(doc);
 			}
@@ -660,7 +677,7 @@ public class LuceneUtil implements Serializable {
 	 */
     public static Document activity2Document(String actId, String projectId, String title, String description,
 			String objective, String purpose, String results, String numcont, String contractingArr, ArrayList<String> componentcodes,
-			String CRIS, String budgetNumber) {
+			String CRIS, String budgetNumber, String newBudgetNumber) {
 		Document doc = new Document();
 		String all = new String("");
 		if (actId != null){
@@ -705,6 +722,10 @@ public class LuceneUtil implements Serializable {
 		if (budgetNumber != null && budgetNumber.length() > 0) {
 			doc.add(new Field("budgetNumber", budgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + budgetNumber);
+		}
+		if (newBudgetNumber != null && newBudgetNumber.length() > 0 ) {
+			doc.add(new Field("newBudgetNumber", newBudgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
+			all = all.concat(" " + newBudgetNumber);
 		}
 		if (contractingArr != null && contractingArr.length() > 0 ) {
 			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.TOKENIZED));
@@ -776,7 +797,7 @@ public class LuceneUtil implements Serializable {
 					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getResults(), language),
 					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getContactName(), language),
 					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getContractingArrangements(), language),
-					componentsCode, newActivity.getCrisNumber(), newActivity.getBudgetCodeProjectID());
+					componentsCode, newActivity.getCrisNumber(), newActivity.getBudgetCodeProjectID(), LuceneUtil.getBudgetCodesForActivity(newActivity) );
 
 			if (doc != null) {
 				try {
@@ -790,6 +811,19 @@ public class LuceneUtil implements Serializable {
 		} catch (Exception e) {
 			logger.error(e);
 		}
+    }
+    
+    private static String getBudgetCodesForActivity(AmpActivityVersion newActivity) {
+    	StringBuffer sBuffer		= new StringBuffer();
+		if ( newActivity.getOrgrole() != null) {
+			for (AmpOrgRole role:newActivity.getOrgrole()) {
+				if (role.getBudgetCode() != null) {
+					sBuffer.append(role.getBudgetCode() + " ; ");
+				}
+			}
+		}
+    	
+		return sBuffer.toString();
     }
     
     

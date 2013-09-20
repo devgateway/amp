@@ -146,6 +146,10 @@ font-weight : bold;
 </script>
 
 
+<c:set var="headerPublYear">
+	<digi:trn>Publ.Year</digi:trn>
+</c:set>
+
 <c:set var="headerType">
 	<digi:trn>Type</digi:trn>
 </c:set>
@@ -224,19 +228,20 @@ font-weight : bold;
 	/* Function for creating YAHOO datatable for versions */
 	YAHOO.amp.table.enhanceVersionsMarkup = function() {
 		    this.columnHeadersForVersions = [
-			    {key:"v_ver_num", type:"number", text:"${headerVersion}", sortable:true},		    
-			    {key:"v_type", text:"${headerType}", sortable:true},
-		        {key:"v_file_name", text:"${headerFileName}", sortable:true},
-		        {key:"v_date", text:"${headerDate}",type:"date", sortable:true},
-		        {key:"size", type:"number",text:"${headerFileSize}", sortable:true},
+			    {key:"v_ver_num", type:"number", label:"${headerVersion}", sortable:true},
+			    {key:"v_type", label:"${headerType}", sortable:true},
+		        {key:"v_file_name", label:"${headerFileName}", sortable:true},
+		        {key:"v_date", label:"${headerDate}",type:"date", sortable:true},
+		        {key:"v_pub", label:"Pub.year",type:"date", sortable:true},
+		        {key:"size", type:"number",label:"${headerFileSize}", sortable:true},
 		        <field:display name="Resource Index" feature="Resource Columns">
-		        	{key:"resource_index", text:"${trans_headerResourceIndex}", sortable:true},
+		        	{key:"resource_index", label:"${headerIndex}", sortable:true},
 		        </field:display>
 		        <field:display name="Resource Index" feature="Resource Columns">
-		        	{key:"resource_category", text:"${trans_headerResourceCategory}", sortable:true},
+		        	{key:"resource_category", label:"${headerCategory}", sortable:true},
 		        </field:display>		        	
-		        {key:"v_notes", text:"${headerNotes}", sortable:false},
-		        {key:"v_actions", text:"${headerAction}", sortable:false}
+		        {key:"v_notes", label:"${headerNotes}", sortable:false},
+		        {key:"v_actions", label:"${headerAction}", sortable:false}
 		    ];
 		    this.columnSetForVersions = new YAHOO.widget.ColumnSet(this.columnHeadersForVersions);
 	      var options					= {
@@ -247,10 +252,21 @@ font-weight : bold;
 								        MSG_EMPTY: "<digi:trn>No records found</digi:trn>",
 								        MSG_LOADING: "<digi:trn>Loading</digi:trn>"
 	                			};
-		
-		    var versionsDiv = YAHOO.util.Dom.get("versions_div");
-		    YAHOO.amp.table.dataTableForVersions = new YAHOO.widget.DataTable(versionsDiv,this.columnSetForVersions, null, options	);
-	};
+
+
+
+
+
+    var versionsDiv = YAHOO.util.Dom.get("versions_div");
+
+    var tableEl						= versionsDiv.getElementsByTagName("table")[0];
+    var ds 				= new YAHOO.util.DataSource( tableEl );
+    ds.responseType 		= YAHOO.util.DataSource.TYPE_HTMLTABLE;
+    ds.responseSchema		= {fields: this.columnHeadersForVersions};
+
+
+    YAHOO.amp.table.dataTableForVersions = new YAHOO.widget.DataTable(versionsDiv,this.columnSetForVersions,ds , options	);
+   };
 	
 	function getfiltertext(){
 		return '${filterstrn}';
@@ -324,10 +340,10 @@ font-weight : bold;
 	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Select</digi:trn> </b></span> 
 </c:set>
 <c:set var="trans_headerResourceIndex">
-	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Index</digi:trn></b></span>  
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Index</digi:trn></b></span>
 </c:set>
 <c:set var="trans_headerResourceCategory">
-	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Category</digi:trn></b></span>  
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Category</digi:trn></b></span>
 </c:set>
 <c:set var="trans_headerResourceOrganisations">
 	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Organisations</digi:trn></b></span>  

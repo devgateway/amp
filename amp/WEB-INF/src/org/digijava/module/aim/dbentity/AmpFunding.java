@@ -769,4 +769,9 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			groupVersionedFunding = System.currentTimeMillis();
 		return super.clone();
 	}
+	
+	public boolean isDonorFunding()
+	{
+		return (this.getSourceRole() == null) || ((this.getSourceRole() != null) && this.getSourceRole().getRoleCode().equals(Constants.ROLE_CODE_DONOR));
+	}
 }

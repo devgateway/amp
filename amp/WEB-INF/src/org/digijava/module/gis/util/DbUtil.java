@@ -55,6 +55,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.exception.NoCategoryClassException;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -2033,7 +2034,8 @@ public class DbUtil {
      * @return
      */
     public static List<Object[]> fetchFundingInformation(String view_prefix, Set<Long> allActivityIdsSet, String donorIdsWhereclause, String donorGroupIdsWhereclause,
-    		String donorTypeIdsWhereclause, String workspaceIdsWhereclause, String typeOfAssistanceWhereclause, java.util.Date startDate, java.util.Date endDate)
+    		String donorTypeIdsWhereclause, String workspaceIdsWhereclause, String typeOfAssistanceWhereclause, java.util.Date startDate, java.util.Date endDate,
+    		boolean donorFundingOnly)
     		throws SQLException
     {
         String activityWhereclause = generateWhereclause(allActivityIdsSet, new GenericIdGetter());        
@@ -2057,6 +2059,9 @@ public class DbUtil {
         	queryString.append(" AND f.org_grp_id IN ");
         	queryString.append(donorGroupIdsWhereclause);
         }
+        
+        if (donorFundingOnly)
+        	queryString.append(" AND f.source_role_code = '" + Constants.ROLE_CODE_DONOR + "'");
         
         if (donorTypeIdsWhereclause != null) {
         	queryString.append(" AND f.org_type_id IN ");
@@ -2236,12 +2241,13 @@ public class DbUtil {
         try
         {
         	// Object[7]
-            List<Object[]> queryResults = fetchFundingInformation(view_prefix, allActivityIdsSet, donorIdsWhereclause, donorGroupIdsWhereclause, donorTypeIdsWhereclause, workspaceIdsWhereclause, typeOfAssistanceWhereclause, startDate, endDate);
+            List<Object[]> queryResults = fetchFundingInformation(view_prefix, allActivityIdsSet, donorIdsWhereclause, donorGroupIdsWhereclause, donorTypeIdsWhereclause, workspaceIdsWhereclause, typeOfAssistanceWhereclause, startDate, endDate, true);
         	return new Object[] {queryResults, sectorPercentageMap, programPercentageMap, locationPercentageMap, secondarySectorPercentageMap};
         }
         catch(SQLException ex)
         {
         	logger.error("Error getting activity fundings from database " + ex);
+        	ex.printStackTrace();
         	return new Object[]{};
         }
 

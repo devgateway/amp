@@ -60,7 +60,7 @@ public class GetFundingTotals extends Action {
         FundingCalculationsHelper calReg = new FundingCalculationsHelper();
         Collection fundDets = eaForm.getFunding().getFundingDetails();
         Collection<AmpFundingDetail> ampFundDets = ActivityUtil.createAmpFundingDetails(fundDets);
-        cal.doCalculations(ampFundDets, curr);
+        cal.doCalculations(ampFundDets, curr, true);
         Collection<AmpFundingDetail> compFundingDets = new ArrayList<AmpFundingDetail>();
         Collection<AmpFundingDetail> regionalFundingDets = new ArrayList<AmpFundingDetail>();
         Collection<FundingDetail> compFunDets = null;
@@ -106,9 +106,9 @@ public class GetFundingTotals extends Action {
         xml += "disb=\"" + FormatHelper.formatNumber(cal.getTotActualDisb().doubleValue()) + "\" ";
         xml += "expn=\"" + FormatHelper.formatNumber(cal.getTotActualExp().doubleValue()) + "\" ";
         xml += "curr=\"" + curr + "\" ";
-        calComp.doCalculations(compFundingDets, curr);
+        calComp.doCalculations(compFundingDets, curr, true);
         xml += "comp_disb=\"" + FormatHelper.formatNumber(calComp.getTotActualDisb().doubleValue()) + "\" ";
-        calReg.doCalculations(regionalFundingDets, curr);
+        calReg.doCalculations(regionalFundingDets, curr, true);
         xml += "regional_disb=\"" + FormatHelper.formatNumber(calReg.getTotActualDisb().doubleValue()) + "\" ";
         xml += "/>";
         out.println(xml);

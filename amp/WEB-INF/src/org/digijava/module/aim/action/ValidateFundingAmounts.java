@@ -33,7 +33,7 @@ public class ValidateFundingAmounts extends Action {
         
         Collection fundDets = eaForm.getFunding().getFundingDetails();
         Collection<AmpFundingDetail> ampFundDets = ActivityUtil.createAmpFundingDetails(fundDets);
-        cal.doCalculations(ampFundDets, curr);
+        cal.doCalculations(ampFundDets, curr, true);
         
         Collection<AmpFundingDetail> regionalFundingDets = new ArrayList<AmpFundingDetail>();
         Collection<FundingDetail> regFunDets=new ArrayList<FundingDetail>();
@@ -71,7 +71,7 @@ public class ValidateFundingAmounts extends Action {
             }
             regionalFundingDets = ActivityUtil.createAmpFundingDetails(regFunDets);            
         }        
-        calReg.doCalculations(regionalFundingDets, curr);
+        calReg.doCalculations(regionalFundingDets, curr, true);
         
         String alertNeeded="";
         double totalActCommitments = cal.getTotActualComm().doubleValue();

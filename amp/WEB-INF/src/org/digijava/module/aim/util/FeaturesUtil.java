@@ -2160,6 +2160,8 @@ public class FeaturesUtil {
 				feature.setHasLevel(false);
 			else feature.setHasLevel(true);
 			
+			if (module.getItems() == null)
+				module.setItems(new TreeSet<AmpFeaturesVisibility>());
 			module.getItems().add(feature);
 			
 			session.update(module);

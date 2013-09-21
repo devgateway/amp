@@ -608,7 +608,7 @@ public class RMMapCalculationUtil {
 
                 for (Long actId : actIds) {
                     FundingCalculationsHelper fch = new FundingCalculationsHelper();
-                    fch.doCalculations(activityGrouped.get(actId), currencyCode);
+                    fch.doCalculations(activityGrouped.get(actId), currencyCode, true);
                     ActivityLocationFunding actData = new ActivityLocationFunding(
                             fch.getTotActualComm().getValue(),
                             fch.getTotActualDisb().getValue(),
@@ -629,7 +629,7 @@ public class RMMapCalculationUtil {
 
 
             FundingCalculationsHelper fch = new FundingCalculationsHelper();
-            fch.doCalculations(fundingsForCurrentLoc, currencyCode);
+            fch.doCalculations(fundingsForCurrentLoc, currencyCode, true);
 
             BigDecimal commitment = fch.getTotActualComm().getValue();
             BigDecimal disbursement = fch.getTotActualDisb().getValue();

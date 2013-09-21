@@ -150,7 +150,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelLocationIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 				if (!activities.isEmpty())
-					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator)));
+					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true)));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 	    }
@@ -163,7 +163,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelSectorIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 				if (!activities.isEmpty()){
-					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator)));
+					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true)));
 				}
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -177,7 +177,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelOrgIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 				if (!activities.isEmpty()){
-					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator)));
+					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true)));
 				}
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -192,7 +192,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelOrgIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 				if (!activities.isEmpty()){
-					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator)));
+					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true)));
 				}
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -207,7 +207,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelOrgIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 				if (!activities.isEmpty()){
-					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator)));
+					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true)));
 				}
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -222,7 +222,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelProgramIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 				if (!activities.isEmpty()){
-					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator)));
+					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true)));
 				}
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -241,7 +241,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelCVIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 				if (!activities.isEmpty()){
-					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator)));
+					itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true)));
 				}
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -262,7 +262,7 @@ public class ShowProjectsList extends Action {
 				}
             activities = this.getActivities(filter, startDate, endDate, null, null, Integer.parseInt(id), filter.getAdjustmentType());
 			if (!activities.isEmpty()){
-				itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, null, Integer.parseInt(id), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator)));
+				itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, null, Integer.parseInt(id), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true)));
 			}
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -278,7 +278,7 @@ public class ShowProjectsList extends Action {
     		}
             activities = this.getActivities(filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType);
 			if (!activities.isEmpty()){
-				itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType, filter.getDecimalsToShow(),divideByDenominator)));
+				itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType, filter.getDecimalsToShow(),divideByDenominator, true)));
 			}
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -330,7 +330,7 @@ public class ShowProjectsList extends Action {
 			}
             activities = this.getActivities(filter, startDateQ, endDateQ, null, null, filter.getTransactionType(), adjustmentType);
 			if (!activities.isEmpty()){
-				itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), filter, startDateQ, endDateQ, null, null, filter.getTransactionType(), adjustmentType, filter.getDecimalsToShow(),divideByDenominator)));
+				itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), filter, startDateQ, endDateQ, null, null, filter.getTransactionType(), adjustmentType, filter.getDecimalsToShow(),divideByDenominator, true)));
 			}
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -344,7 +344,7 @@ public class ShowProjectsList extends Action {
 			}
 			activities = this.getActivities(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), filter.getAdjustmentType());
 			if (!activities.isEmpty()){
-				itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator)));
+				itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true)));
 			}
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -358,7 +358,7 @@ public class ShowProjectsList extends Action {
 			}
 			activities = this.getActivities(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), filter.getAdjustmentType());
 			if (!activities.isEmpty()){
-				itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator)));
+				itemProjectsList.put(itemName+dividerText, formatMapValues(DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true)));
 			}
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}

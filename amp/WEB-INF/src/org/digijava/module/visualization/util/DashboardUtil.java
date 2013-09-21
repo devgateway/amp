@@ -89,7 +89,7 @@ public class DashboardUtil {
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
         if (secListChildren!=null && secListChildren.size()!=0)
-        	map = DbUtil.getFundingBySectorList(secListChildren, secListParent, currCode, startDate, endDate, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, filter);
+        	map = DbUtil.getFundingBySectorList(secListChildren, secListParent, currCode, startDate, endDate, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, filter, true);
 		return sortByValue (map, null);
 	}
 	
@@ -157,7 +157,7 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 		if (actList!=null && actList.size()!=0)
-        	map = DbUtil.getFundingByActivityList(actList, filter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator);
+        	map = DbUtil.getFundingByActivityList(actList, filter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, true);
         return sortByValue (map, null);
 	}
 	
@@ -345,7 +345,7 @@ public class DashboardUtil {
         
 		if (activityListReduced.size()>0) {
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep2);
-	        List<AmpFundingDetail> preloadFundingDetails = DbUtil.getFundingDetails(filter, startDate, endDate, null, null);
+	        List<AmpFundingDetail> preloadFundingDetails = DbUtil.getFundingDetails(filter, startDate, endDate, null, null, true);
 			DecimalWraper fundingCal = null;
 			if (filter.getTransactionType()!=org.digijava.module.aim.helper.Constants.MTEFPROJECTION){
 				fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, filter.getAdjustmentType());

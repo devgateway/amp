@@ -2300,7 +2300,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 	private FundingData getActivityTotalFundingInBaseCurrency(AmpActivityVersion activity) {
 		FundingData retVal = null;
-		Set fundSet = activity.getFunding();
+		Set<AmpFunding> fundSet = activity.getFunding();
 		Iterator<AmpFunding> fundIt = fundSet.iterator();
 
 		BigDecimal commitment = null;
@@ -2311,15 +2311,17 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		FundingCalculationsHelper fch = new FundingCalculationsHelper();
 		// fch.doCalculations();
 
-		Set fundDetSet = new HashSet();
+		Set<AmpFundingDetail> fundDetSet = new HashSet<AmpFundingDetail>();
 
 		try {
 			while (fundIt.hasNext()) {
 				AmpFunding fund = fundIt.next();
+				if (!fund.isDonorFunding())
+					continue;
 
-				Set fundDetails = fund.getFundingDetails();
+				Set<AmpFundingDetail> fundDetails = fund.getFundingDetails();
 
-				Iterator fdIt = fundDetails.iterator();
+				Iterator<AmpFundingDetail> fdIt = fundDetails.iterator();
 				while (fdIt.hasNext()) {
 					AmpFundingDetail fd = (AmpFundingDetail) fdIt.next();
 					fundDetSet.add(fd);
@@ -2332,7 +2334,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				baseCurr = "USD";
 			}
 
-			fch.doCalculations(fundDetSet, baseCurr);
+			fch.doCalculations(fundDetSet, baseCurr, true);
 
 			commitment = fch.getTotActualComm().getValue();
 			disbursement = fch.getTotActualDisb().getValue();

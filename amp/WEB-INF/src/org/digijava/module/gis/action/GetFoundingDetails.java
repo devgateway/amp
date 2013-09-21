@@ -1477,7 +1477,7 @@ public class GetFoundingDetails extends Action {
     public static FundingData getActivityTotalFundingInBaseCurrency(AmpActivityVersion activity,
             Date start, Date end, Long donorId) {
         FundingData retVal = null;
-        Set fundSet = activity.getFunding();
+        Set<AmpFunding> fundSet = activity.getFunding();
         Iterator<AmpFunding> fundIt = fundSet.iterator();
 
         BigDecimal commitment = null;
@@ -1493,33 +1493,34 @@ public class GetFoundingDetails extends Action {
         FundingCalculationsHelper fch = new FundingCalculationsHelper();
 //        fch.doCalculations();
 
-        Set fundDetSet = new HashSet();
-
+        Set<AmpFundingDetail> fundDetSet = new HashSet<AmpFundingDetail>();
 
         try {
             while (fundIt.hasNext()) {
                 AmpFunding fund = fundIt.next();
 
-                if (donorId == null || donorId < 0 || donorId.equals(fund.getAmpDonorOrgId().getAmpOrgId())){
-
-                Set fundDetails = fund.getFundingDetails();
-
-                Iterator fdIt = fundDetails.iterator();
-                while (fdIt.hasNext()) {
-                    AmpFundingDetail fd = (AmpFundingDetail) fdIt.next();
-                    if ((fd.getTransactionDate().after(startTs) || fd.getTransactionDate().equals(startTs)) &&
-                        (fd.getTransactionDate().before(endTs)) || fd.getTransactionDate().equals(endTs)) {
-                        fundDetSet.add(fd);
-                    }
+                if (!fund.isDonorFunding())
+                	continue;
+                if (donorId == null || donorId < 0 || donorId.equals(fund.getAmpDonorOrgId().getAmpOrgId()))
+                {
+                	Set<AmpFundingDetail> fundDetails = fund.getFundingDetails();
+                	Iterator<AmpFundingDetail> fdIt = fundDetails.iterator();
+                	while (fdIt.hasNext()) 
+                	{
+                		AmpFundingDetail fd = (AmpFundingDetail) fdIt.next();
+                		if ((fd.getTransactionDate().after(startTs) || fd.getTransactionDate().equals(startTs)) &&
+                				(fd.getTransactionDate().before(endTs)) || fd.getTransactionDate().equals(endTs)) {
+                			fundDetSet.add(fd);
+                		}
+                	}
                 }
             }
-        }
 
            String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
         	if ( baseCurr == null ){
         		baseCurr	= "USD";
             }
-            fch.doCalculations(fundDetSet, baseCurr);
+            fch.doCalculations(fundDetSet, baseCurr, true);
 
             commitment = fch.getTotActualComm().getValue();
             disbursement = fch.getTotActualDisb().getValue();
@@ -1556,7 +1557,7 @@ public class GetFoundingDetails extends Action {
         FundingCalculationsHelper fch = new FundingCalculationsHelper();
 //        fch.doCalculations();
 
-        Set fundDetSet = new HashSet();
+        Set<AmpFundingDetail> fundDetSet = new HashSet<AmpFundingDetail>();
 
 
         try {
@@ -1584,7 +1585,7 @@ public class GetFoundingDetails extends Action {
             if ( baseCurr == null ){
                 baseCurr	= "USD";
             }
-            fch.doCalculations(fundDetSet, baseCurr);
+            fch.doCalculations(fundDetSet, baseCurr, true);
 
             commitment = fch.getTotActualComm().getValue();
             disbursement = fch.getTotActualDisb().getValue();

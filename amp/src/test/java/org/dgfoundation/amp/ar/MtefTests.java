@@ -59,11 +59,11 @@ public class MtefTests extends ReportsTestCase
 						GroupColumnModel.withSubColumns("Funding", 
 								GroupColumnModel.withSubColumns("2013", 
 										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
-										SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "660 000")
+										SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545 000")
 												)),
 						GroupColumnModel.withSubColumns("Total Costs", 
 								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY/*"Eth Water", "0", "mtef activity 1", "0", "mtef activity 2", "0"*/),
-								SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "660 000")
+								SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545 000")
 						)));
 		
 		runReportTest("all Mtef report", "AMP-15794", new String[] {"Eth Water", "mtef activity 1", "mtef activity 2"}, fddr_correct);

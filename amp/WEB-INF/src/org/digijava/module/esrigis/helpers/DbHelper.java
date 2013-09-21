@@ -364,9 +364,12 @@ public class DbHelper {
 		List<AmpActivityVersion> activities;
 		try {
 			List<Long> ids = getActivitiesIds(filter);
+			String activityIdsCSV = Util.toCSString(ids);
+			if (activityIdsCSV.trim().isEmpty())
+				activityIdsCSV = "-999";
 			String oql = "select distinct act from ";
 			oql += AmpActivityVersion.class.getName()
-					+ " act WHERE ampActivityId IN (" + Util.toCSString(ids) + ")";
+					+ " act WHERE ampActivityId IN (" + activityIdsCSV + ")";
 			Session session = PersistenceManager.getRequestDBSession();
 			Query query = session.createQuery(oql);
 			
@@ -813,7 +816,7 @@ public class DbHelper {
             Long locId = it2.next();
         	ArrayList<FundingInformationItem> afda = fundingByRegion.get(locId);
             
-            cal.doCalculations(afda, currCode);
+            cal.doCalculations(afda, currCode, true);
            
             if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
             	totalexpenditures = cal.getTotActualExp();

@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.exception.NoCategoryClassException;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -764,6 +765,14 @@ public class WidgetUtil {
 //        activityFundngObj.setExpenditure(cal.getTotActualExp());
 //    }
 
+    /**
+     * writes in-place into activityFundngObjs
+     * @param activityFundngObjs
+     * @param fromDate
+     * @param toDate
+     * @param sectorIDs
+     * @throws DgException
+     */
     @SuppressWarnings("unchecked")
     public static void getFunding(Collection<ActivitySectorDonorFunding> activityFundngObjs, Date fromDate, Date toDate, Long[] sectorIDs) throws DgException 
     {
@@ -829,6 +838,7 @@ public class WidgetUtil {
         oql += " and actSec.sectorId in (" + ChartWidgetUtil.getInStatment(sectorIDs) + ") ";
         oql += " and act in (" + ChartWidgetUtil.getInStatment(allActivityIds) + ") ";
         oql += " and config.name='Primary' ";
+        oql += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "' ";
         oql += " order by actSec";
         Session session = PersistenceManager.getRequestDBSession();
         Query query = session.createQuery(oql);
@@ -874,7 +884,7 @@ public class WidgetUtil {
         {
         	List<AmpFundingDetail> msh = filteredFundingDets.get(ampActivityId);
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
-        	cal.doCalculations(msh, baseCurr);
+        	cal.doCalculations(msh, baseCurr, true);
         	ActivitySectorDonorFunding activityFundngObj = fundingsItems.get(ampActivityId);
         	activityFundngObj.setCommitment(cal.getTotActualComm());
         	activityFundngObj.setDisbursement(cal.getTotActualDisb());
@@ -924,6 +934,7 @@ public class WidgetUtil {
         queryString += "  inner join f.ampActivityId act ";
         queryString += " where  fd.transactionType = 0 and fd.adjustmentType = " + actualCommitmentCatValId.toString();
         queryString += " and act.team is not null ";
+        queryString += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "' ";
         queryString += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)  ";
         queryString += " group by orgGrp.ampOrgGrpId, orgGrp.orgGrpName ";
         queryString += " order by sum(fd.transactionAmountInBaseCurrency) desc ";

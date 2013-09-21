@@ -474,6 +474,7 @@ public class OrgProfileUtil {
                 queryString += " and loc.id in (:locations) ";
 
             }
+            queryString += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "' ";
             if (orgIds == null) {
                 if (orgGroupId != -1) {
                     queryString += ChartWidgetUtil.getOrganizationQuery(true, orgIds);
@@ -523,6 +524,8 @@ public class OrgProfileUtil {
                     queryString += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
                 }
                 queryString += " where    fd.adjustmentType = 1  ";
+                queryString += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "' ";
+
                 if (orgIds == null) {
                     if (orgGroupId != -1) {
                         queryString += ChartWidgetUtil.getOrganizationQuery(true, orgIds);
@@ -568,7 +571,7 @@ public class OrgProfileUtil {
 
                 //project.setSectorNames(sectorsName);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(details, currCode);
+                cal.doCalculations(details, currCode, true);
 
                 BigDecimal amount = cal.getTotActualComm().getValue();
                 project.setAmount(FormatHelper.formatNumber(amount));
@@ -740,7 +743,9 @@ public class OrgProfileUtil {
         }
         queryString += " where  fd.transactionType =1 and  fd.adjustmentType =:adjustmentType"
                 + "  and fd.transactionDate>=:startDate and  fd.transactionDate<=:endDate ";
-       
+        
+        queryString += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "' ";
+        
         if (orgIds == null) {
             if (orgGroupId != null && orgGroupId != -1) {
                 queryString += " and ah.ampDonorOrgId.orgGrpId=:orgGroupId ";
@@ -774,7 +779,7 @@ public class OrgProfileUtil {
         }
         List<AmpFundingDetail> fundingDets = qry.list();
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
-        cal.doCalculations(fundingDets, currCode);
+        cal.doCalculations(fundingDets, currCode, true);
         DecimalWraper tot = null;
         if (adjustmentType == 1) {
             tot = cal.getTotActualDisb();

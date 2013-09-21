@@ -37,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
@@ -369,7 +370,7 @@ public class DbUtil {
 	         */
 	        try {
 	            String oql = "select distinct loc  ";
-	            oql += getHQLQuery(filter, orgIds, orgGroupIds, true, sectorCondition, programCondition, null, sectorIds, programIds, null, null, tm, true);
+	            oql += getHQLQuery(filter, orgIds, orgGroupIds, true, sectorCondition, programCondition, null, sectorIds, programIds, null, null, tm, true, true);
 	            oql+=" order by loc.parentCategoryValue";
 	            
 	            Session session = PersistenceManager.getRequestDBSession();
@@ -435,7 +436,7 @@ public class DbUtil {
 	         */
 	        try {
 	            String oql = "select distinct sec ";
-	            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, true, programCondition, locationIds, null, programIds, null, null, tm, true);
+	            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, true, programCondition, locationIds, null, programIds, null, null, tm, true, true);
 
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
@@ -487,7 +488,7 @@ public class DbUtil {
          */
         try {
             String oql = "select distinct prog ";
-            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, true, locationIds, sectorIds, null, null, null, tm, true);
+            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, true, locationIds, sectorIds, null, null, null, tm, true, true);
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
@@ -637,7 +638,7 @@ public class DbUtil {
          */
         try {
         	String oql = "select act.ampActivityId, act.ampId, act.name ";
-            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true);
+            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true, true);
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
@@ -720,7 +721,7 @@ public class DbUtil {
 	            	specialCondition = " and role.roleCode='BA' ";
 	    			break;
 	            }
-	        	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, specialCondition);
+	        	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, specialCondition, true);
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
 	            query.setDate("startDate", startDate);
@@ -798,7 +799,7 @@ public class DbUtil {
         if (programCondition)
         	oql += ", actProg.programPercentage ";
 
-    	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true);
+    	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true, true);
         Session session = PersistenceManager.getRequestDBSession();
         List fundings = null;
         try {
@@ -817,7 +818,7 @@ public class DbUtil {
             if (financingInstrumentId != null) {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
-            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+            if (filter.getTransactionType() != Constants.MTEFPROJECTION){
 	            query.setLong("transactionType", transactionType);
 	            query.setString("adjustmentType",adjustmentTypeActual);
             }
@@ -832,14 +833,8 @@ public class DbUtil {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	AmpFundingDetail currentFd = null;
-            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
-            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
-            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
-            	} else {
-            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-                }
+            	FundingInformationItem fd = (FundingInformationItem) item[0];
+            	currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
@@ -854,43 +849,8 @@ public class DbUtil {
             /*the objects returned by query  and   selected currency
             are passed doCalculations  method*/
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
-            cal.doCalculations(afda, currCode);
-            /*Depending on what is selected in the filter
-            we should return either actual commitments
-            or actual Disbursement or  */
-            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
-            	total = cal.getTotActualComm(); //takes the actual commitments 
-        	} else {
-                switch (transactionType) {
-                case Constants.EXPENDITURE:
-                    if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                        total = cal.getTotActualExp();
-                    } else if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                        total = cal.getTotPlannedExp();
-                    } else {
-                        total = cal.getTotPipelineExp();
-                    }
-                    break;
-                case Constants.DISBURSEMENT:
-                    if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                        total = cal.getTotActualDisb();
-                    } else if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                        total = cal.getTotPlanDisb();
-                    } else {
-                        total = cal.getTotPipelineDisb();
-                    }
-                    break;
-                default:
-                    if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                        total = cal.getTotActualComm();
-                    } else if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                        total = cal.getTotPlannedComm();
-                    } else {
-                        total = cal.getTotPipelineComm();
-                    }
-                }
-            }
-
+            cal.doCalculations(afda, currCode, true);
+            total = extractTotals(cal, transactionType, adjustmentTypeActual);
         } catch (Exception e) {
             logger.error(e);
             throw new DgException(
@@ -901,10 +861,12 @@ public class DbUtil {
         return total;
     }
 
-    private static String getHQLQuery(DashboardFilter filter, Long[] orgIds, Long[] orgGroupIds, boolean locationCondition, boolean sectorCondition, boolean programCondition, Long[] locationIds, Long[] sectorIds, Long[] programIds, Long assistanceTypeId, Long financingInstrumentId, TeamMember tm, boolean fundingTypeSpecified) {
-		return getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, fundingTypeSpecified, null, null);
+    private static String getHQLQuery(DashboardFilter filter, Long[] orgIds, Long[] orgGroupIds, boolean locationCondition, boolean sectorCondition, boolean programCondition, Long[] locationIds, Long[] sectorIds, Long[] programIds, Long assistanceTypeId, Long financingInstrumentId, TeamMember tm, boolean fundingTypeSpecified, boolean donorFundingOnly) {
+		return getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, fundingTypeSpecified, null, null, donorFundingOnly);
     }
-	private static String getHQLQuery(DashboardFilter filter, Long[] orgIds, Long[] orgGroupIds, boolean locationCondition, boolean sectorCondition, boolean programCondition, Long[] locationIds, Long[] sectorIds, Long[] programIds, Long assistanceTypeId, Long financingInstrumentId, TeamMember tm, boolean fundingTypeSpecified, String specialInner, String specialCondition) {
+    
+    
+	private static String getHQLQuery(DashboardFilter filter, Long[] orgIds, Long[] orgGroupIds, boolean locationCondition, boolean sectorCondition, boolean programCondition, Long[] locationIds, Long[] sectorIds, Long[] programIds, Long assistanceTypeId, Long financingInstrumentId, TeamMember tm, boolean fundingTypeSpecified, String specialInner, String specialCondition, boolean donorFundingOnly) {
 		
 		
 		String oql = "";
@@ -978,6 +940,11 @@ public class DbUtil {
         if (sectorCondition) {
         	oql += " and config.id=:config ";
         }
+        
+        if (donorFundingOnly)
+        {
+        	oql += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "' ";
+        }
 
         // Filter for the selected programs
         if (programCondition && filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0 && filter.getSelProgramIds()[0]!=-1) {
@@ -1048,7 +1015,7 @@ public class DbUtil {
         }
 
         //Filter for the Fiscal Year Start and End
-        if(filter.getTransactionType()==Constants.MTEFPROJECTION)
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION)
         	oql += " and  (fp.projectionDate>=:startDate and fp.projectionDate<=:endDate)  ";
         else
         	oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
@@ -1221,6 +1188,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
 		}
 		return ret;
 	}
+	
 	/**
      * Returns funding amount
      * @param orgID
@@ -1234,7 +1202,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
     @SuppressWarnings("unchecked")
     public static List<AmpFundingDetail> getFundingDetails(DashboardFilter filter, Date startDate,
             Date endDate, Long assistanceTypeId,
-            Long financingInstrumentId) throws DgException {
+            Long financingInstrumentId,
+            boolean donorFundingOnly) throws DgException {
         
         String oql = "";
         Long[] orgIds = filter.getSelOrgIds();
@@ -1264,7 +1233,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         if (programCondition)
         	oql += ", actProg.programPercentage ";
 
-        oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, false);
+        oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, false, donorFundingOnly);
 
         Session session = PersistenceManager.getRequestDBSession();
         List fundings = null;
@@ -1295,14 +1264,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	AmpFundingDetail currentFd = null;
-            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
-            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
-            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
-            	} else {
-            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-                }
+            	FundingInformationItem fd = (FundingInformationItem) item[0];
+           		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
@@ -1323,51 +1286,72 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         return fundingDets;
     }
 
+    /**
+     * extracts a relevant Total from a FundingCalculationsHelper instance
+     * @param cal
+     * @param transactionType
+     * @param adjustmentType
+     * @return
+     */
+    public static DecimalWraper extractTotals(FundingCalculationsHelper cal, int transactionType, String adjustmentType)
+    {    	
+    	switch (transactionType) {
+        
+    		case Constants.MTEFPROJECTION:
+    			return cal.getTotalMtef();
+    		
+    		case Constants.EXPENDITURE:
+    			if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+    				return cal.getTotActualExp();
+    			} else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+    				return cal.getTotPlannedExp();
+    			} else {
+    				return cal.getTotPipelineExp();
+    			}
+
+    		case Constants.DISBURSEMENT:
+    			if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+    				return cal.getTotActualDisb();
+    			} else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+    				return cal.getTotPlanDisb();
+    			} else {
+    				return cal.getTotPipelineDisb();
+    			}
+
+    		case Constants.COMMITMENT:
+    			if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+    				return cal.getTotActualComm();
+    			} else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+    				return cal.getTotPlannedComm();
+    			} else {
+    				return cal.getTotPipelineComm();
+    			}
+    	}
+    	throw new RuntimeException("unknown / unsupported transaction type " + transactionType);
+    }
+    
+    
     public static DecimalWraper calculateDetails(DashboardFilter filter, List<AmpFundingDetail> fundingDets,
             int transactionType,String adjustmentType){
-        DecimalWraper total = null;
+
         String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
         	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
 		} 
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
-        cal.doCalculations(fundingDets, currCode);
-        switch (transactionType) {
-	        case Constants.EXPENDITURE:
-	            if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                total = cal.getTotActualExp();
-	            } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                total = cal.getTotPlannedExp();
-	            } else {
-	                total = cal.getTotPipelineExp();
-	            }
-	            break;
-	        case Constants.DISBURSEMENT:
-	            if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                total = cal.getTotActualDisb();
-	            } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                total = cal.getTotPlanDisb();
-	            } else {
-	                total = cal.getTotPipelineDisb();
-	            }
-	            break;
-	        default:
-	            if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                total = cal.getTotActualComm();
-	            } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                total = cal.getTotPlannedComm();
-	            } else {
-	                total = cal.getTotPipelineComm();
-	            }
-        }
+        cal.doCalculations(fundingDets, currCode, true);
+        DecimalWraper total = extractTotals(cal, transactionType, adjustmentType);
+        
         return total;
     }
+    
 	@SuppressWarnings("unchecked")
     public static Map<AmpActivityVersion, BigDecimal> getFundingByActivityList(Collection<Long> actList, DashboardFilter filter, Date startDate,
             Date endDate, Long assistanceTypeId,
             Long financingInstrumentId,
             int transactionType,String adjustmentType,
-            int decimalsToShow, BigDecimal divideByDenominator) throws DgException {
+            int decimalsToShow, BigDecimal divideByDenominator,
+            boolean donorFundingOnly) throws DgException {
         
 		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
 		Long[] orgIds = filter.getSelOrgIds();
@@ -1403,7 +1387,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         if (organizationRoleQuery)
         	oql += ", orole.percentage ";
         
-        oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true);
+        oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true, donorFundingOnly);
     	
         oql += " and f.ampActivityId in (" + DashboardUtil.getInStatement(actList.toArray()) + ")";
 
@@ -1435,14 +1419,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	AmpFundingDetail currentFd = null;
-            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
-            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
-            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
-            	} else {
-            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-                }
+            	FundingInformationItem fd = (FundingInformationItem) item[0];
+           		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5){
@@ -1477,42 +1455,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	Long activityId = it2.next();
             	ArrayList<AmpFundingDetail> afda = hm.get(activityId);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(afda, currCode);
-                /*Depending on what is selected in the filter
-                we should return either actual commitments
-                or actual Disbursement or  */
-                if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
-                	total = cal.getTotActualComm(); //takes the actual commitments 
-            	} else {
-	                switch (transactionType) {
-	                case Constants.EXPENDITURE:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualExp();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlannedExp();
-	                    } else {
-	                        total = cal.getTotPipelineExp();
-	                    }
-	                    break;
-	                case Constants.DISBURSEMENT:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualDisb();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlanDisb();
-	                    } else {
-	                        total = cal.getTotPipelineDisb();
-	                    }
-	                    break;
-	                default:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualComm();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlannedComm();
-	                    } else {
-	                        total = cal.getTotPipelineComm();
-	                    }
-	                }
-                }
+                cal.doCalculations(afda, currCode, true);
+                total = extractTotals(cal, transactionType, adjustmentType);
                 AmpActivityVersion aav = new AmpActivityVersion(activityId, hmName.get(activityId), "");
                 map.put(aav, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
@@ -1523,9 +1467,10 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
                     "Cannot load fundings from db", e);
         }
 
-
         return map;
     }
+	
+	
 	public static Map<AmpOrganisation, BigDecimal> getFundingByAgencyList(Collection<Long> orgList, String currCode,  Date startDate,
             Date endDate, int transactionType,String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
         
@@ -1571,7 +1516,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
     	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     		specialInner = " inner join act.orgrole orole inner join orole.role role inner join orole.organisation roleOrg ";
     
-    	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, null);
+    	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, null, true);
     	
 
         Session session = PersistenceManager.getRequestDBSession();
@@ -1597,14 +1542,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	Object[] item = (Object[])it.next();
             	
             	AmpFundingDetail currentFd = null;
-            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
-            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
-            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
-            	} else {
-            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-                }
+            	FundingInformationItem fd = (FundingInformationItem) item[0];
+           		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4 && item[3] != null) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5){
@@ -1638,38 +1577,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	Long orgId = it2.next();
             	ArrayList<AmpFundingDetail> afda = hm.get(orgId);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(afda, currCode);
-                /*Depending on what is selected in the filter
-                we should return either actual commitments
-                or actual Disbursement or  */
-                switch (transactionType) {
-	                case Constants.EXPENDITURE:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualExp();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlannedExp();
-	                    } else {
-	                        total = cal.getTotPipelineExp();
-	                    }
-	                    break;
-	                case Constants.DISBURSEMENT:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualDisb();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlanDisb();
-	                    } else {
-	                        total = cal.getTotPipelineDisb();
-	                    }
-	                    break;
-	                default:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualComm();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlannedComm();
-	                    } else {
-	                        total = cal.getTotPipelineComm();
-	                    }
-                }
+                cal.doCalculations(afda, currCode, true);
+                total = extractTotals(cal, transactionType, adjustmentType);
                 AmpOrganisation aorg = new AmpOrganisation();
                 aorg.setAmpOrgId(orgId);
                 aorg.setName(hmName.get(orgId));
@@ -1685,7 +1594,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
     }
 	
 	public static Map<AmpSector, BigDecimal> getFundingBySectorList(Collection<AmpSector> secListChildren, Collection<AmpSector> secListParent, String currCode,  Date startDate,
-            Date endDate, int transactionType,String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
+            Date endDate, int transactionType,String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter, boolean donorFundingOnly) throws DgException {
         
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
 		Long[] orgIds = filter.getSelOrgIds();
@@ -1761,6 +1670,9 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         }
         oql += " and sec.ampSectorId in (" + DashboardUtil.getInStatement(secListChildren) + ")";
+        
+        if (donorFundingOnly)
+        	oql += " and f.sourceRole.roleCode='" + Constants.ROLE_CODE_DONOR + "'";
         
         //Mapping the subsectors with their parents
         HashMap<Long, Long> sectorMap = new HashMap<Long, Long>();
@@ -1854,14 +1766,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	AmpFundingDetail currentFd = null;
-            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
-            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
-            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
-            	} else {
-            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-                }
+           		FundingInformationItem fd = (FundingInformationItem) item[0];
+           		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5){
@@ -1902,42 +1808,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	Long secId = it2.next();
             	ArrayList<AmpFundingDetail> afda = hm.get(secId);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(afda, currCode);
-                /*Depending on what is selected in the filter
-                we should return either actual commitments
-                or actual Disbursement or  */
-                if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
-                	total = cal.getTotActualComm(); //takes the actual commitments 
-            	} else {
-	                switch (transactionType) {
-		                case Constants.EXPENDITURE:
-		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-		                        total = cal.getTotActualExp();
-		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-		                        total = cal.getTotPlannedExp();
-		                    } else {
-		                        total = cal.getTotPipelineExp();
-		                    }
-		                    break;
-		                case Constants.DISBURSEMENT:
-		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-		                        total = cal.getTotActualDisb();
-		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-		                        total = cal.getTotPlanDisb();
-		                    } else {
-		                        total = cal.getTotPipelineDisb();
-		                    }
-		                    break;
-		                default:
-		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-		                        total = cal.getTotActualComm();
-		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-		                        total = cal.getTotPlannedComm();
-		                    } else {
-		                        total = cal.getTotPipelineComm();
-		                    }
-	                }
-            	}
+                cal.doCalculations(afda, currCode, true);
+                total = extractTotals(cal, transactionType, adjustmentType);
                 AmpSector asec = new AmpSector();
                 asec.setAmpSectorId(secId);
                 asec.setName(hmName.get(secId));
@@ -2096,6 +1968,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         	
         oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
         oql += " and (act.deleted = false or act.deleted is null)";
+        oql += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "'";
 
         Session session = PersistenceManager.getRequestDBSession();
         List fundings = null;
@@ -2128,14 +2001,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	AmpFundingDetail currentFd = null;
-            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
-            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
-            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
-            	} else {
-            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-                }
+            	FundingInformationItem fd = (FundingInformationItem) item[0];
+           		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4 && item[3] != null) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5){
@@ -2179,42 +2046,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	Long locId = it2.next();
             	ArrayList<AmpFundingDetail> afda = hm.get(locId);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(afda, currCode);
-                /*Depending on what is selected in the filter
-                we should return either actual commitments
-                or actual Disbursement or  */
-                if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
-                	total = cal.getTotActualComm(); //takes the actual commitments 
-            	} else {
-	                switch (transactionType) {
-		                case Constants.EXPENDITURE:
-		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-		                        total = cal.getTotActualExp();
-		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-		                        total = cal.getTotPlannedExp();
-		                    } else {
-		                        total = cal.getTotPipelineExp();
-		                    }
-		                    break;
-		                case Constants.DISBURSEMENT:
-		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-		                        total = cal.getTotActualDisb();
-		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-		                        total = cal.getTotPlanDisb();
-		                    } else {
-		                        total = cal.getTotPipelineDisb();
-		                    }
-		                    break;
-		                default:
-		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-		                        total = cal.getTotActualComm();
-		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-		                        total = cal.getTotPlannedComm();
-		                    } else {
-		                        total = cal.getTotPipelineComm();
-		                    }
-	                }
-            	}
+                cal.doCalculations(afda, currCode, true);
+                total = extractTotals(cal, transactionType, adjustmentType);
                 AmpCategoryValueLocations aloc = new AmpCategoryValueLocations();
                 aloc.setId(locId);
                 aloc.setName(hmName.get(locId));
@@ -2312,6 +2145,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         }
         oql += " and prog.ampThemeId in (" + DashboardUtil.getInStatement(progList) + ")";
+        oql += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "'";
 
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
@@ -2404,14 +2238,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	AmpFundingDetail currentFd = null;
-            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
-            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
-            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
-            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),null);
-            	} else {
-            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-                }
+           		AmpFundingDetail fd = (AmpFundingDetail) item[0];
+           		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5){
@@ -2446,42 +2274,8 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             	Long progId = it2.next();
             	ArrayList<AmpFundingDetail> afda = hm.get(progId);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(afda, currCode);
-                /*Depending on what is selected in the filter
-                we should return either actual commitments
-                or actual Disbursement or  */
-                if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
-                	total = cal.getTotActualComm(); //takes the actual commitments 
-            	} else {
-	                switch (transactionType) {
-	                case Constants.EXPENDITURE:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualExp();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlannedExp();
-	                    } else {
-	                        total = cal.getTotPipelineExp();
-	                    }
-	                    break;
-	                case Constants.DISBURSEMENT:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualDisb();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlanDisb();
-	                    } else {
-	                        total = cal.getTotPipelineDisb();
-	                    }
-	                    break;
-	                default:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualComm();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlannedComm();
-	                    } else {
-	                        total = cal.getTotPipelineComm();
-	                    }
-	                }
-                }
+                cal.doCalculations(afda, currCode, true);
+                total = extractTotals(cal, transactionType, adjustmentType);
                 AmpTheme aprog = new AmpTheme();
                 aprog.setAmpThemeId(progId);
                 aprog.setName(hmName.get(progId));

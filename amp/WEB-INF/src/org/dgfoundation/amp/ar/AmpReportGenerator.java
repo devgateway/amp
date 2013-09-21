@@ -586,7 +586,14 @@ public class AmpReportGenerator extends ReportGenerator {
 					CategAmountCell item = (CategAmountCell) it.next();
 					boolean shouldAddRealDisbursement = element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS) &&
 		    				GroupColumn.isRealDisbursement(item); // add ACTUAL DISBURSEMENT items to the REAL DISBURSEMENTS column - as they have the same datasource (ACTUAL DISBURSEMENTS), they have the same metadata
-					boolean shouldAddCellToColumn = item.hasMetaInfo(metaInfo) || shouldAddRealDisbursement; // ugly hack because the same data source (actual disbursements) should fill two columns: actual disbursements + real disbursements								
+					
+					boolean shouldAddEstimatedDisbursement = element.getMeasureName().equals(ArConstants.ACTUAL_DISBURSEMENTS) && 
+							GroupColumn.isEstimatedDisbursement(item);
+					
+					boolean shouldAddGenericFunding = item.hasMetaInfo(metaInfo) && (!(element.getMeasureName().equals(ArConstants.ACTUAL_DISBURSEMENTS) || element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS)));
+					
+					boolean shouldAddCellToColumn = shouldAddGenericFunding || shouldAddEstimatedDisbursement || shouldAddRealDisbursement; // ugly hack because the same data source (actual disbursements) should fill two columns: actual disbursements + real disbursements
+					
 					if (shouldAddCellToColumn)
 						cc.addCellRaw(item); //addCellRaw because we don't want TotalAmountCellColumn to merge everything in one huge cell
 				}

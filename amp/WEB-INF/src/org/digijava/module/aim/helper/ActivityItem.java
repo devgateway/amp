@@ -143,7 +143,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
 			name = name.replaceAll("&","&amp;");
 			name = name.replaceAll("\"","&quot;");
 			try {
-				amounts = ActivityUtil.getActivityAmmountIn(entity,curenncyCode,percent);
+				amounts = ActivityUtil.getActivityAmmountIn(entity, curenncyCode, percent, true);
 				if(!amounts.proposedAmout().equalsIgnoreCase("N/A")){
 					proposedAmount=FormatHelper.formatNumber(amounts.getProposedAmout());
 				}else{

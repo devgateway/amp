@@ -62,6 +62,8 @@ public class TotalAmountColumn<K extends AmountCell> extends AmountCellColumn<K>
     public TotalAmountColumn(Column source) {
 	super(source);
 	filterShowable = false;
+	if (source instanceof TotalAmountColumn)
+		filterShowable = ((TotalAmountColumn) source).isFilterShowable();
     }
 
     @Override
@@ -82,7 +84,7 @@ public class TotalAmountColumn<K extends AmountCell> extends AmountCellColumn<K>
     		for (AmountCell ac:tobeMergedCells) 
     		{
     			if (filterShowable && !ac.isShow())
-    				return;
+    				continue;
 
     			AmountCell byOwner = (AmountCell) this.getByOwner(ac.getOwnerId());
     			if (byOwner != null)

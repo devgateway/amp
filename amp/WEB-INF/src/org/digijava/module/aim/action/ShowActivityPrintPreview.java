@@ -596,7 +596,7 @@ public class ShowActivityPrintPreview
                         if(fundDetails != null && fundDetails.size() > 0) {
                           
 
-                            calculations.doCalculations(fundDetails, toCurrCode);
+                            calculations.doCalculations(ampFunding, toCurrCode);
     			            
     			            List<FundingDetail> fundDetail = calculations.getFundDetailList();
 	                        Iterator fundingIterator = fundDetail.iterator();
@@ -654,7 +654,7 @@ public class ShowActivityPrintPreview
                   		  Funding currFunding = iterFunding.next();
                             FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper(); 
                                 if(currFunding.getAmpFundingDetails()!=null){
-                                	calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
+                                	calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode, true);
                                   	currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
                                   	currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
                                   	currFunding.setSubtotalPipelineCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue()));

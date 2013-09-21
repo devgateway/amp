@@ -24,6 +24,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -133,6 +134,11 @@ public class GroupColumn extends Column<Column> {
     	}
     }
     
+    /**
+     * returns true IFF an actual disbursement has a recipient specified 
+     * @param item
+     * @return
+     */
     public static boolean isRealDisbursement(Categorizable item)
     {
     	boolean isActualDisbursement = false;
@@ -149,27 +155,42 @@ public class GroupColumn extends Column<Column> {
     		if (minfo.getCategory().equals(ArConstants.RECIPIENT_NAME))
     			hasDestination = true;
     	}
-    	
-//    	if (isActualDisbursement && hasDestination)
-//    		System.out.println("masha");
-    	
+    	   	
     	return isActualDisbursement && hasDestination;
     	
-//    	return isActualDisbursement(metadata) && 
-//    	for(MetaInfo minfo:metadata)
-//    	{
-//    		if (minfo!=null && minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
-//    		{
-//    			String val = minfo.getValue().toString();
-//    			if (val.equals(ArConstants.ACTUAL_DISBURSEMENTS))
-//    			{    				
-//    				return true;
-//    			}
-//    		}
-//    	}
     	//return false;
     }
     
+    /**
+     * returns true iff an actual disbursement has the source not specified or specified as a donor (mirrors {@link org.digijava.module.aim.dbentity.AmpFunding#detachCells(Column)})
+     * @param item
+     * @return
+     */
+    public static boolean isEstimatedDisbursement(Categorizable item)
+    {
+    	boolean isActualDisbursement = false;
+    	boolean hasDonorSource = false;
+    	boolean hasSource = false;
+
+    	for(MetaInfo minfo:item.getMetaData())
+    	{
+    		if (minfo == null)
+    			continue; // shouldn't happen
+    		
+    		if (minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
+    			isActualDisbursement = minfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
+    		
+    		if (minfo.getCategory().equals( ArConstants.SOURCE_ROLE_CODE))
+    		{
+    			hasSource = true;
+    			if (minfo.getValue().toString().equals(Constants.ROLE_CODE_DONOR))
+    				hasDonorSource = true;
+    		}
+    	}
+    	return isActualDisbursement && ((!hasSource) || (hasSource && hasDonorSource));
+    	
+    	//return false;
+    }    
     /**
      * clone all cells and detach them
      * @param column
@@ -457,7 +478,9 @@ public class GroupColumn extends Column<Column> {
     				(element.getValue().toString().equals(ArConstants.REAL_DISBURSEMENTS) || element.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS)) &&
     				isRealDisbursement(item))
     			{
-    				// 
+    				//
+    				if (element.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS) && (!isEstimatedDisbursement(item)))
+    					continue;
     				try
     				{
         				Cell obj = (Cell)(((Cell) item).clone());
@@ -473,6 +496,7 @@ public class GroupColumn extends Column<Column> {
     				
     				continue;
     			}
+    			
     			if(item.hasMetaInfo(element)) 
     			{
     				cc.addCell(item);

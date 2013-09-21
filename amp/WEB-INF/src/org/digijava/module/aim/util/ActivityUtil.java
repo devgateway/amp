@@ -3580,6 +3580,8 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 
   	public static List<AmpActivityVersion> getLastUpdatedActivities() {
  		String workspaceQuery = Util.toCSString(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
+ 		if (workspaceQuery.equals(Util.toCSString(new HashSet<Long>())))
+ 			workspaceQuery = "-999";
   		
 		List col = null;
 		Session session = null;
@@ -4371,7 +4373,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
   }
 
   public static ActivityAmounts getActivityAmmountIn(AmpActivityVersion act,
-      String tocode,Float percent) throws Exception {
+      String tocode,Float percent, boolean donorFundingOnly) throws Exception {
     double tempProposed = 0;
     double tempActual = 0;
     double tempPlanned = 0;
@@ -4395,15 +4397,13 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
       }
       else {
 
-          Set fundings = act.getFunding();
+          Set<AmpFunding> fundings = act.getFunding();
           if (fundings != null) {
-              Iterator fundItr = act.getFunding().iterator();
+              Iterator<AmpFunding> fundItr = act.getFunding().iterator();
               while(fundItr.hasNext()) {
-                  AmpFunding ampFunding = (AmpFunding) fundItr.next();
-				  Collection fundDetails = ampFunding.getFundingDetails();
-
+                  AmpFunding ampFunding = fundItr.next();
                   org.digijava.module.aim.logic.FundingCalculationsHelper calculations = new org.digijava.module.aim.logic.FundingCalculationsHelper();
-                  calculations.doCalculations(fundDetails, tocode);
+                  calculations.doCalculations(ampFunding, tocode);
                   //apply program percent
                   result.AddActual(calculations.getTotActualComm().doubleValue()*percent/100);
                   result.AddPalenned(calculations.getTotPlannedComm().doubleValue()*percent/100);

@@ -46,7 +46,7 @@
 
 
 	<!-- match images -->
-	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css)"
+	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf)"
 		request-matcher="regex" security="none" />
 
 	<!-- alllow bypass for login page -->

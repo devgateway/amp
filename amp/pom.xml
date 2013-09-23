@@ -10,7 +10,7 @@
 		<wicketVersion>6.7.0</wicketVersion>
 		<tomcatVersion>7.0.37</tomcatVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	<buildVersion>2.6-SNAPSHOT</buildVersion>      
+    	<buildVersion>2.5-SNAPSHOT</buildVersion>      
 	</properties>
  <repositories>
 		<repository>

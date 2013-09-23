@@ -761,7 +761,7 @@ public class DataDispatcher extends DispatchAction {
 	            // Take the top 5
 	            while(it.hasNext()){
 	                Map.Entry entry = (Map.Entry)it.next();
-	        		csvString.append(entry.getKey().toString().replace(',', ';'));
+	        		csvString.append(entry.getKey().toString().replace(',', ';').replace('\r', ' ').replace('\n', ' '));
 	        		csvString.append(",");
 	        		csvString.append(entry.getValue());
 	        		csvString.append("\n");
@@ -809,7 +809,7 @@ public class DataDispatcher extends DispatchAction {
 	            Map.Entry entry = (Map.Entry)it.next();
 	            AmpSector sec = (AmpSector) entry.getKey();
 	            if (index <= 4){
-		            csvString.append(sec.getName().replace(",", ""));
+		            csvString.append(sec.getName().replace(",", "").replace('\r', ' ').replace('\n', ' '));
 		            csvString.append("#");
 		            csvString.append(sec.getAmpSectorId());
 		            csvString.append(",");
@@ -1122,7 +1122,7 @@ public class DataDispatcher extends DispatchAction {
 	            // Take the top 5
 	            while(it.hasNext()){
 	                Map.Entry entry = (Map.Entry)it.next();
-	        		csvString.append(entry.getKey().toString().replace(',', ';'));
+	        		csvString.append(entry.getKey().toString().replace(',', ';').replace('\r', ' ').replace('\n', ' '));
 	        		csvString.append(",");
 	        		csvString.append(entry.getValue());
 	        		csvString.append("\n");
@@ -1485,7 +1485,7 @@ public class DataDispatcher extends DispatchAction {
 
                 while(it.hasNext()){
                     Map.Entry entry = (Map.Entry)it.next();
-            		csvString.append(entry.getKey().toString().replace(',', ';'));
+            		csvString.append(entry.getKey().toString().replace(',', ';').replace('\r', ' ').replace('\n', ' '));
             		csvString.append(",");
             		csvString.append(entry.getValue());
             		csvString.append("\n");
@@ -1822,7 +1822,7 @@ public class DataDispatcher extends DispatchAction {
 
                 while(it.hasNext()){
                     Map.Entry entry = (Map.Entry)it.next();
-            		csvString.append(entry.getKey().toString().replace(',', ';'));
+            		csvString.append(entry.getKey().toString().replace(',', ';').replace('\r', ' ').replace('\n', ' '));
             		csvString.append(",");
             		csvString.append(entry.getValue());
             		csvString.append("\n");
@@ -3503,7 +3503,7 @@ public class DataDispatcher extends DispatchAction {
 	            
 	            while(it.hasNext()){
 	                Map.Entry entry = (Map.Entry)it.next();
-	        		csvString.append(entry.getKey().toString().replace(',', ';'));
+	        		csvString.append(entry.getKey().toString().replace(',', ';').replace('\r', ' ').replace('\n', ' '));
 	        		csvString.append(",");
 	        		csvString.append(entry.getValue());
 	        		csvString.append("\n");
@@ -3860,7 +3860,7 @@ public class DataDispatcher extends DispatchAction {
 	            	BigDecimal growthPercent = amtCurrentYear.divide(amtPreviousYear, RoundingMode.HALF_UP).subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
 	                if (!ignore || (growthPercent.compareTo(new BigDecimal(100))==-1) && (growthPercent.compareTo(new BigDecimal(-100))==1)) {
 	                	map.put(ampOrganisation, growthPercent);
-	                    csvString.append(ampOrganisation.getName().replace(",", " "));
+	                    csvString.append(ampOrganisation.getName().replace(",", " ").replace('\r', ' ').replace('\n', ' '));
 	            		csvString.append(",");
 	            		odaGrowthData += "<"+ ampOrganisation.getName() +">";
 	            		csvString.append(amtPreviousYear);

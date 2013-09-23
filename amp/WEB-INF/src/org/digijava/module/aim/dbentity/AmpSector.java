@@ -16,7 +16,7 @@ import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 
-import com.rc.retroweaver.runtime.Arrays;
+import java.util.Arrays;
 
 import edu.emory.mathcs.backport.java.util.TreeSet;
 

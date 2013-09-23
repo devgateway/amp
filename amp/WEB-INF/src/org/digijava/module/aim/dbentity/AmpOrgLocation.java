@@ -8,7 +8,7 @@ import java.util.List;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 
-import com.rc.retroweaver.runtime.Arrays;
+import java.util.Arrays;
 
 
 public class AmpOrgLocation implements Serializable,OrgProfileValue {

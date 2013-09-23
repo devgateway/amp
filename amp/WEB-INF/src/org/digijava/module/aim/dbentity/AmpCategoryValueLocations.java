@@ -19,7 +19,7 @@ import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-import com.rc.retroweaver.runtime.Arrays;
+import java.util.Arrays;
 
 /**
  * 

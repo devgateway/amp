@@ -14,7 +14,7 @@ import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 
-import com.rc.retroweaver.runtime.Arrays;
+import java.util.Arrays;
 
 @TranslatableClass
 public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,OrgProfileValue

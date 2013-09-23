@@ -43,7 +43,7 @@ import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.DbUtil;
 
 import com.lowagie.text.Paragraph;
-import com.rc.retroweaver.runtime.Arrays;
+import java.util.Arrays;
 
 public class OrganizationProfileReportGenerator extends DispatchAction {
 

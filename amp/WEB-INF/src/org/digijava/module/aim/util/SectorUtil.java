@@ -1680,6 +1680,7 @@ public class SectorUtil {
 			//sector.setAidlist(null);
 			sector.setDeleted(true);
 			session.saveOrUpdate(sector);
+			AmpCaching.getInstance().sectorsCache=null;
 			// tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from deleteQuestion() :" + e.getMessage());
@@ -1885,7 +1886,7 @@ public class SectorUtil {
 					+ " aps,"
 					+ AmpActivityGroup.class.getName()
 					+ " apg "
-					+ " where aps.activityId.ampActivityId = apg.ampActivityLastVersion.ampActivityId and  aps.sectorId.ampSectorId=:id";
+					+ " where aps.activityId.ampActivityId = apg.ampActivityLastVersion.ampActivityId and  aps.sectorId.ampSectorId=:id and apg.ampActivityLastVersion.deleted is not true";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("id", id);
 			activities = qry.list();

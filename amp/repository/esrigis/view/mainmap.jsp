@@ -531,23 +531,24 @@
         	</p>
         </div>
        
-        <div class="usaidlogo">
-        	<table>
-        		<tr>
-        			<td align="right" style="font-size: 11px;color: white;">
-        				<b>
-        					<digi:trn>Funding Provided By</digi:trn>
-        				</b> 
-        			</td>
-        		</tr>
-        		<tr>
-        			<td>
-        				<img alt="USAID" src="/TEMPLATE/ampTemplate/img_2/gis/usaid_horizontal_150.png" border="0">
-        			</td>
-        		</tr>
-        	</table>
-        </div>
-        
+       <feature:display name="USAID logo" module="Map Module">
+	        <div class="usaidlogo">
+	        	<table>
+	        		<tr>
+	        			<td align="right" style="font-size: 11px;color: white;">
+	        				<b>
+	        					<digi:trn>Funding Provided By</digi:trn>
+	        				</b> 
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				<img alt="USAID" src="/TEMPLATE/ampTemplate/img_2/gis/usaid_horizontal_150.png" border="0">
+	        			</td>
+	        		</tr>
+	        	</table>
+	        </div>
+       </feature:display> 
         <!-- Filter -->
         <div id="selectedfilter" class="legendContent" style="top:80px;left:100px;display:none;width: 35%;"> 
         	<div onclick="$('#selectedfilter').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>

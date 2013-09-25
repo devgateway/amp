@@ -168,10 +168,6 @@ public class ActivityUtil {
 				group.setAmpActivityLastVersion(a);
 				session.update(group);
 			}
-			else{
-				//set Amp ID
-				a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
-			}
 
 			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity);
 			a.setAmpActivityGroup(group);
@@ -196,6 +192,13 @@ public class ActivityUtil {
             }
             else{
                 //session.saveOrUpdate(a);
+                session.update(a);
+            }
+
+            if (newActivity){
+                //translations need cloning again or the update on the activity will fail
+                ContentTranslationUtil.cloneTranslations(a);
+                a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
                 session.update(a);
             }
 

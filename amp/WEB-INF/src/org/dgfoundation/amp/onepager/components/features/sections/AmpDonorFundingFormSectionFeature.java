@@ -13,6 +13,7 @@ import java.util.TreeMap;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -24,14 +25,11 @@ import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
+import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * The donor funding section of the activity form. Includes selecting an org,
@@ -46,6 +44,7 @@ public class AmpDonorFundingFormSectionFeature extends
 	private TreeMap<AmpOrganisation, AmpFundingGroupFeaturePanel> listItems = new TreeMap<AmpOrganisation, AmpFundingGroupFeaturePanel>();
 	protected ListEditor<AmpOrganisation> list;
 	private IModel<Set<AmpOrganisation>> setModel;
+    private IModel<Set<AmpOrgRole>> roleModel;
 	private AbstractReadOnlyModel<List<AmpFunding>> listModel;
 	private PropertyModel<Set<AmpFunding>> fundingModel;
 	private AmpAjaxLinkField addNewFunding;
@@ -95,6 +94,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		}
 		
 		if (!found){
+            //remove the org group
 			int idx = -1;
 			ListItem<AmpOrganisation> delItem = null;
 			for (int i = 0; i < list.size(); i++){
@@ -117,6 +117,17 @@ public class AmpDonorFundingFormSectionFeature extends
 				list.remove(delItem);
 				listItems.remove(missing);
 			}
+            //also remove the org role
+            Set<AmpOrgRole> roles = roleModel.getObject();
+            for (Iterator<AmpOrgRole> it2 = roles.iterator(); it2.hasNext();){
+                AmpOrgRole role = it2.next();
+                if (role.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY) && role.getOrganisation().getAmpOrgId().equals(missing.getAmpOrgId())){
+                    it2.remove();
+                    send(getPage(), Broadcast.BREADTH, new DonorFundingRolesEvent(target));
+                    break;
+                }
+            }
+
 		}
 	}
 	/**
@@ -139,6 +150,7 @@ public class AmpDonorFundingFormSectionFeature extends
 			fundingModel.setObject(new LinkedHashSet<AmpFunding>());
 		
 		setModel = new AmpFundingGroupModel(fundingModel);
+        roleModel = new PropertyModel<Set<AmpOrgRole>>(am, "orgrole");
 
         final WebMarkupContainer wmc = new WebMarkupContainer("container");
         wmc.setOutputMarkupId(true);
@@ -175,6 +187,22 @@ public class AmpDonorFundingFormSectionFeature extends
 					fundingModel.getObject().add(funding);
 					super.addItem(org);
 				}
+
+                //check if donor role for this org has been added, if not then add it
+                boolean found = false;
+                Set<AmpOrgRole> orgRoles = roleModel.getObject();
+                for (AmpOrgRole role: orgRoles)
+                    if (role.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY) && role.getOrganisation().getAmpOrgId().equals(org.getAmpOrgId())){
+                        found = true;
+                        break;
+                    }
+                if (!found){
+                    AmpOrgRole role = new AmpOrgRole();
+                    role.setOrganisation(org);
+                    role.setActivity(am.getObject());
+                    role.setRole(DbUtil.getAmpRole(Constants.FUNDING_AGENCY));
+                    orgRoles.add(role);
+                }
 			}
 		};
 		wmc.add(list);

@@ -81,7 +81,6 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 				item.add(delRelOrg);
 			}
 		});
-		list.getObject().setReuseItems(true);
 		add(list.getObject());
 	}
 

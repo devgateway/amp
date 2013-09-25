@@ -36,8 +36,9 @@ public class AmpRelatedRolesModel extends AbstractReadOnlyModel<List<AmpRole>> {
 		Set<AmpRole> set = new TreeSet<AmpRole>();
 		Set<AmpOrgRole> orgroles = am.getObject().getOrgrole();
 		if (orgroles == null || orgroles.size() == 0)
-			new ArrayList<AmpRole>(set);
-		for (AmpOrgRole orgrole : orgroles) {
+            return new ArrayList<AmpRole>();
+
+        for (AmpOrgRole orgrole : orgroles) {
 			if (roleFilter != null)
 				for (int i = 0; i < roleFilter.length; i++) {
 					if (roleFilter[i].equals(orgrole.getRole().getRoleCode()))

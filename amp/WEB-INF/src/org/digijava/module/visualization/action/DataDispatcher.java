@@ -292,7 +292,7 @@ public class DataDispatcher extends DispatchAction {
 				int i=0;
 				for (Iterator iterator = catList.iterator(); iterator.hasNext();) {
 					AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
-					temp[i++] = Long.valueOf(ampCategoryValue.getValue());
+					temp[i++] = ampCategoryValue.getId();
 				}
 				visualizationForm.getFilter().setSelPeacebuilderMarkerIds(temp);
 			}

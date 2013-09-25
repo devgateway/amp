@@ -873,7 +873,7 @@ public class DbUtil {
 		boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
         boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
         boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
-        boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+        boolean peaceMarkerCondition = (filter.getSelPeacebuilderMarkerIds()!=null && filter.getSelPeacebuilderMarkerIds().length>0 && filter.getSelPeacebuilderMarkerIds()[0]!=-1)? true : false;
         boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
@@ -1071,7 +1071,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         boolean regionCondition = (filter.getRegionId()!=null && filter.getRegionId()!=-1)? true : false;
         boolean sectorCondition = (filter.getSectorId()!=null && filter.getSectorId()!=-1)? true : false;
         boolean secSectorCondition = (filter.getSecondarySectorsId()!=null && filter.getSecondarySectorsId()!=-1)? true : false;
-        boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+        boolean peaceMarkerCondition = (filter.getSelPeacebuilderMarkerIds()!=null && filter.getSelPeacebuilderMarkerIds().length>0 && filter.getSelPeacebuilderMarkerIds()[0]!=-1)? true : false;
         boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
         //Join  for Organization/Organization Groups and their role
@@ -1623,7 +1623,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
         boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
     	boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
-    	boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+    	boolean peaceMarkerCondition = (filter.getSelPeacebuilderMarkerIds()!=null && filter.getSelPeacebuilderMarkerIds().length>0 && filter.getSelPeacebuilderMarkerIds()[0]!=-1)? true : false;
         boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
@@ -1852,7 +1852,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
         boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
         boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
-        boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+        boolean peaceMarkerCondition = (filter.getSelPeacebuilderMarkerIds()!=null && filter.getSelPeacebuilderMarkerIds().length>0 && filter.getSelPeacebuilderMarkerIds()[0]!=-1)? true : false;
         boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
@@ -2092,7 +2092,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
         boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
         boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
-        boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+        boolean peaceMarkerCondition = (filter.getSelPeacebuilderMarkerIds()!=null && filter.getSelPeacebuilderMarkerIds().length>0 && filter.getSelPeacebuilderMarkerIds()[0]!=-1)? true : false;
         boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
@@ -2238,7 +2238,7 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	AmpFundingDetail currentFd = null;
-           		AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            	FundingInformationItem fd = (FundingInformationItem) item[0];
            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);

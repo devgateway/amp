@@ -535,10 +535,12 @@ function validate() {
 </script>
 
 
-
 <script language="javascript">
-		$("#checkAll").bind("change", function (obj){
-		$("input[name=selReports]").attr("checked", $("#checkAll").attr("checked"));
-	}
-	);
+    $("#checkAll").bind("change", function (obj) {
+        var checkedFlag = $("#checkAll").attr("checked");
+        if(typeof checkedFlag == 'undefined') {
+            checkedFlag = false;
+        }
+        $("input[name=selReports]").attr("checked", checkedFlag);
+    });
 </script>

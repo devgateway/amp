@@ -397,8 +397,11 @@
 </digi:form>
 
 <script language="javascript">
-		$("#checkAll").bind("change", function (obj){
-		$("input[name=selActivities]").attr("checked", $("#checkAll").attr("checked"));
-	}
-	);
+	$("#checkAll").bind("change", function (obj) {
+        var checkedFlag = $("#checkAll").attr("checked");
+        if(typeof checkedFlag == 'undefined') {
+            checkedFlag = false;
+        }
+		$("input[name=selActivities]").attr("checked", checkedFlag);
+	});
 </script>

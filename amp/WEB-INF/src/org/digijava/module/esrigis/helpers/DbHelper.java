@@ -345,7 +345,7 @@ public class DbHelper {
 			List<Long> ids = getActivitiesIds(filter, request);
 			String oql = "select distinct act from ";
 			oql += AmpActivityVersion.class.getName()
-					+ " act WHERE ampActivityId IN (" + Util.toCSString(ids) + ")";
+					+ " act WHERE ampActivityId IN (" + Util.toCSStringForIN(ids) + ")";
 			Session session = PersistenceManager.getRequestDBSession();
 			Query query = session.createQuery(oql);
 			

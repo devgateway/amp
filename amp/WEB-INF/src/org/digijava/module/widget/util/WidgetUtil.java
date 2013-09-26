@@ -690,7 +690,7 @@ public class WidgetUtil {
             throw new DgException("Cannot load sector fundings by donors from db", e);
         }
         long timeSpent = System.currentTimeMillis() - aaa;
-        System.out.format("\t%d milliseconds spent while fetching funding for sectors %s\n", timeSpent, Util.toCSString(Arrays.asList(sectorIds)));
+        System.out.format("\t%d milliseconds spent while fetching funding for sectors %s\n", timeSpent, Util.toCSStringForIN(Arrays.asList(sectorIds)));
         return result;
     }
 

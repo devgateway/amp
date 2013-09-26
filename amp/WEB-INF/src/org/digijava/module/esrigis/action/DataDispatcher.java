@@ -560,7 +560,7 @@ public class DataDispatcher extends MultiAction {
 		try
 		{
 			conn = PersistenceManager.getJdbcConnection();
-			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_activity_id IN (" + Util.toCSString(activityIdList) + ")");
+			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")");
 			while (rs.next())
 			{
 				Long actId = rs.getLong(1);
@@ -594,7 +594,7 @@ public class DataDispatcher extends MultiAction {
 		try
 		{
 			conn = PersistenceManager.getJdbcConnection();
-			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, amp_structure_id FROM amp_activity_structures WHERE amp_activity_id IN (" + Util.toCSString(activityIdList) + ")");
+			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, amp_structure_id FROM amp_activity_structures WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")");
 			while (rs.next())
 			{
 				Long actId = rs.getLong(1);
@@ -661,7 +661,7 @@ public class DataDispatcher extends MultiAction {
 				typeNamesById.put(rs.getLong(1), rs.getString(2));
 			rs.close();
 			
-			rs = conn.createStatement().executeQuery("SELECT amp_structure_id, title, description, latitude, longitude, shape, type FROM amp_structure WHERE amp_structure_id IN (" + Util.toCSString(ids) + ")");
+			rs = conn.createStatement().executeQuery("SELECT amp_structure_id, title, description, latitude, longitude, shape, type FROM amp_structure WHERE amp_structure_id IN (" + Util.toCSStringForIN(ids) + ")");
 			while (rs.next())
 			{
 				Long strucId = rs.getLong(1);

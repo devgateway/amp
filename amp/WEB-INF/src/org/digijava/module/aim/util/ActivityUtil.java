@@ -3577,7 +3577,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
   	}
 
   	public static List<AmpActivityVersion> getLastUpdatedActivities() {
-  		String workspaceQuery = Util.toCSString(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
+  		String workspaceQuery = Util.toCSStringForIN(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
 		List col = null;
 		Session session = null;
 		Query qry = null;
@@ -3585,7 +3585,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select distinct ampAct from "
 				+ AmpActivityVersion.class.getName()
-				+ " ampAct where ampAct.ampActivityId IN (" + workspaceQuery + ")"
+				+ " ampAct where ampAct.ampActivityId IN (" + workspaceQuery + ")"  // BOZO BOZO SHMOZO
 				+ " and ampAct.deleted = false or ampAct.deleted is null "
 				+ " order by ampAct.ampActivityId desc";
 			qry = session.createQuery(queryString).setMaxResults(5);
@@ -4755,7 +4755,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     // computed workspace
                     if (teamAO != null && !teamAO.isEmpty()) {
                         queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
-                                " where  a.team in  (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) order by a.name";
+                                " where  a.team in  (" + Util.toCSStringForIN(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) order by a.name";
 
                     } else {
                         // none computed workspace
@@ -4823,12 +4823,12 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     queryString ="select gr.ampActivityLastVersion.name, gr.ampActivityLastVersion.ampActivityId from "+ AmpActivityGroup.class.getName()+" gr ";                    
                     if (teamAO != null && !teamAO.isEmpty()) {
                     	queryString +=" left outer join gr.ampActivityLastVersion.orgrole r  left outer join gr.ampActivityLastVersion.funding f "+
-                    	" where gr.ampActivityLastVersion.team in (" + Util.toCSString(relatedTeams) + ")  " +
-                    			" or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) ";
+                    	" where gr.ampActivityLastVersion.team in (" + Util.toCSStringForIN(relatedTeams) + ")  " +
+                    			" or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) ";
                     	
                     } else {
                         // none computed workspace
-                    	queryString +=" where gr.ampActivityLastVersion.team in  (" + Util.toCSString(relatedTeams) + ") ";                    	
+                    	queryString +=" where gr.ampActivityLastVersion.team in  (" + Util.toCSStringForIN(relatedTeams) + ") ";                    	
                         if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                             queryString += "  and gr.ampActivityLastVersion.approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
                         }
@@ -5445,7 +5445,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 			try {
 				Session session 			= PersistenceManager.getRequestDBSession();
 				String qryString			= "update " + AmpActivityVersion.class.getName()  + 
-						" av  set av.archived=:archived where av.ampActivityId in (" + Util.toCSString(activityIds) + ")";
+						" av  set av.archived=:archived where av.ampActivityId in (" + Util.toCSStringForIN(activityIds) + ")";
 				Query query					= session.createQuery(qryString);
 				query.setBoolean("archived", status);
 				query.executeUpdate();

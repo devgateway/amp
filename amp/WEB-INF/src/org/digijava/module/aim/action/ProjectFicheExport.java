@@ -127,7 +127,7 @@ public class ProjectFicheExport extends Action {
 		//document.add(newParagraph("Background:",subSectionFont,1));
 		document.add(newParagraph("1.1 CRIS Number: "+act.getCrisNumber(),regularFont,1));
 		document.add(newParagraph("1.2 Title: "+act.getName(),regularFont,1));
-		document.add(newParagraph("1.3 Sector: "+Util.toCSString(act.getSectors()),regularFont,1));
+		document.add(newParagraph("1.3 Sector: "+Util.toCSStringForIN(act.getSectors()),regularFont,1));
 		document.add(newParagraph("1.4 Location: ",regularFont,1));
 		Iterator i=act.getLocations().iterator();
 		while (i.hasNext()) {

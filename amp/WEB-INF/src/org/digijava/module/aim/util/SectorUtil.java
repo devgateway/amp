@@ -1831,7 +1831,7 @@ public class SectorUtil {
 		try
 		{
 			conn = PersistenceManager.getJdbcConnection();
-			String query = "SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN (" + org.dgfoundation.amp.Util.toCSString(inIds) + ")";
+			String query = "SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN (" + org.dgfoundation.amp.Util.toCSStringForIN(inIds) + ")";
 			ResultSet rs = conn.createStatement().executeQuery(query);
 			while (rs.next())
 				result.add(rs.getLong(1));

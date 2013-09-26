@@ -228,7 +228,7 @@
 
 				messageLoadingPanel.visible = false;
 				sizeLoadingPanel(0, 0);
-				printLabel.text = trnYears + ": " + sliderYear.values[0] + " to " + sliderYear.values[1] +" - " + trnCurrency + ": " + currCode;
+				printLabel.text = trnYears + ": " + sliderYear.labels[sliderYear.values[0]-startYear] + " to " + sliderYear.labels[sliderYear.values[1]-startYear] +" - " + trnCurrency + ": " + currCode;
 				sliderYear.setVisible(true);//dc.visible = true;
 			}
 			private function getDeterminedMaxValue(magnitude, maxValue, step){
@@ -422,7 +422,7 @@
 				params["startYear"] = sliderYear.values[0];
 				params["endYear"] = sliderYear.values[1];
 				params["action"] = dataAction;
-				printLabel.text = trnYears + ": " + sliderYear.values[0] + " to " + sliderYear.values[1] +" - " + trnCurrency + ": " + currCode;
+				printLabel.text = trnYears + ": " + sliderYear.labels[sliderYear.values[0]-startYear] + " to " + sliderYear.labels[sliderYear.values[1]-startYear] +" - " + trnCurrency + ": " + currCode;
 				
 				service.send(params);
 				var delayer:Delay = new Delay(captureSnapshot,4000,1); //capture snapshot

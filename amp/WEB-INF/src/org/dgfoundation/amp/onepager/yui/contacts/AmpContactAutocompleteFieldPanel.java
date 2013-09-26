@@ -1,15 +1,6 @@
 package org.dgfoundation.amp.onepager.yui.contacts;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
-import org.dgfoundation.amp.onepager.models.AmpContactSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -17,6 +8,11 @@ import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public abstract class AmpContactAutocompleteFieldPanel extends
 		AmpAutocompleteFieldPanel<AmpContact> {
@@ -39,33 +35,35 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 		Collection<AmpContact> choices = getChoices(input);
 		List<String[]> choiceValues = new ArrayList<String[]>();
 		for (AmpContact choice : choices) {
+            Long choiceId = getChoiceId(choice);
 			Integer choiceLevel = getChoiceLevel(choice);
 			String details = getAdditionalDetails(choice);
 			String styleClass = getStyleClass(choice);
 			choiceValues.add(new String[] { getChoiceValue(choice),
 					choiceLevel != null ? choiceLevel.toString() : "0",
-					details, styleClass });
+					details, styleClass, choiceId.toString() });
 		}
 
 		return choiceValues.toArray(new String[0][0]);
 	}
-	@Override
-	protected AmpContact getSelectedChoice(String input) {
-		try {
-			AmpAuthWebSession session = (AmpAuthWebSession) this.getSession();
-			String language=session.getLocale().getLanguage();
-			
-			AmpContactSearchModel newInstance = new AmpContactSearchModel(input, language, modelParams);
-			newInstance.getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, true);
-			Collection<AmpContact> choices = newInstance.getObject();
-			if(choices==null || choices.size()==0) throw new RuntimeException("Cannot find selection object!");
-			return choices.iterator().next();
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} 
-	}
+
+    /**
+     * Get the object coresponding to the user's selection
+     * @param objId
+     * @return
+     */
+    @Override
+    protected AmpContact getSelectedChoice(Long objId) {
+        if (objId.equals(-1L)){
+            AmpContact newContact = new AmpContact();
+            newContact.setName(TranslatorUtil.getTranslation("Change Name"));
+            newContact.setLastname(TranslatorUtil.getTranslation("Change Lastname"));
+            newContact.setTemporaryId("_"+new Date().getTime());
+
+            return newContact;
+        }
+        return super.getSelectedChoice(objId);
+    }
 
 	@Override
 	protected String getChoiceValue(AmpContact choice) {

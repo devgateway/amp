@@ -12,6 +12,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
+import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
 import org.dgfoundation.amp.onepager.models.AmpRelatedRolesModel;
 import org.dgfoundation.amp.onepager.translation.TranslatedChoiceRenderer;
@@ -33,18 +35,18 @@ public class AmpOrgRoleSelectorComponent extends Panel {
 	
 	
 	public AmpOrgRoleSelectorComponent(String id, IModel<AmpActivityVersion> am,String [] roleFilter) {
-		this(id, am, new Model<AmpRole>(), new Model<AmpOrganisation>(), false,roleFilter);
+		this(id, am, new Model<AmpRole>(), new Model<AmpOrganisation>(), false,roleFilter, true);
 	}
 
 	public AmpOrgRoleSelectorComponent(String id,
 			IModel<AmpActivityVersion> am, IModel<AmpRole> roleModel,
 			IModel<AmpOrganisation> orgModel,String [] roleFilter) {
-		this(id, am, roleModel, orgModel, true,roleFilter);
+		this(id, am, roleModel, orgModel, true,roleFilter, true);
 	}
 
 	public AmpOrgRoleSelectorComponent(String id,
 			IModel<AmpActivityVersion> am, IModel<AmpRole> roleModel,
-			IModel<AmpOrganisation> orgModel, boolean recipientMode, String [] roleFilter) {
+			IModel<AmpOrganisation> orgModel, boolean recipientMode, String [] roleFilter, boolean hideNewLine) {
 		super(id, am);
 
 		// read the list of roles from Related Organizations page, and create a
@@ -53,7 +55,8 @@ public class AmpOrgRoleSelectorComponent extends Panel {
 				am,roleFilter);	
 		// selector for organization role
 		roleSelect = new AmpSelectFieldPanel<AmpRole>("roleSelect", roleModel,
-				rolesList,(recipientMode?"Recipient ":"")+"Org Role", false, false, new TranslatedChoiceRenderer<AmpRole>(), true);
+				rolesList,(recipientMode?"Recipient ":"")+"Org Role", false, false, new TranslatedChoiceRenderer<AmpRole>(), hideNewLine);
+        roleSelect.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
 		
 		// read the list of organizations from related organizations page, and
 		// create a unique set with the orgs chosen
@@ -63,7 +66,8 @@ public class AmpOrgRoleSelectorComponent extends Panel {
 
 		// selector for related orgs
 		orgSelect = new AmpSelectFieldPanel<AmpOrganisation>("orgSelect",
-				orgModel, orgsList, (recipientMode?"Recipient ":"")+"Organization", false, true, null, true);
+				orgModel, orgsList, (recipientMode?"Recipient ":"")+"Organization", false, true, null, hideNewLine);
+        orgSelect.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
 
 		// when the role select changes, refresh the org selector
 		roleSelect.getChoiceContainer().add(

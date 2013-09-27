@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -18,6 +19,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpEditLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 
@@ -76,12 +78,15 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
+                        send(getPage(), Broadcast.BREADTH, new FundingOrgListUpdateEvent(target));
+
                         AmpOrgRole modelObject = item.getModelObject();
                         setModel.getObject().remove(modelObject);
                         uniqueCollectionValidationField.reloadValidationField(target);
                         target.add(listParent);
                         roleRemoved(target, modelObject);
                         list.getObject().removeAll();
+
                     }
 				};
 				item.add(delRelOrg);

@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -31,6 +32,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpMaxSizeCollectionValid
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
+import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -68,12 +70,18 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	 * @param ampOrgRole
 	 */
 	public void roleAdded(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
-	    target.add(donorFundingSection);
-        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
-        
         changeSearchVisibility(target);
         addFundingAutomatically(target, ampOrgRole);
 	}
+
+    /**
+     * Override to notify of newly removed roles, if you need to refresh/change other sections of the form
+     * @param ampOrgRole
+     */
+    public void roleRemoved(AjaxRequestTarget target,AmpOrgRole ampOrgRole) {
+        changeSearchVisibility(target);
+        removeFundingAutomatically(target, ampOrgRole);
+    }
 
     private void addFundingAutomatically(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
         if (addFundingItemAutomatically.isVisible()){
@@ -112,18 +120,6 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         }
     }
 
-    /**
-	 * Override to notify of newly removed roles, if you need to refresh/change other sections of the form
-	 * @param ampOrgRole
-	 */
-	public void roleRemoved(AjaxRequestTarget target,AmpOrgRole ampOrgRole) {
-	    target.add(donorFundingSection);
-        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
-        changeSearchVisibility(target);
-
-        removeFundingAutomatically(target, ampOrgRole);
-	}
-	
 	/**
 	 * @param id
 	 * @param fmName
@@ -268,26 +264,27 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 
 			@Override
 			public void onSelect(AjaxRequestTarget target, AmpOrganisation choice) {
+                send(getPage(), Broadcast.BREADTH, new FundingOrgListUpdateEvent(target));
+
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
 				ampOrgRole.setOrganisation(choice);
 				ampOrgRole.setActivity(am.getObject());
 				ampOrgRole.setRole(specificRole);
 				if(list.getObject().size()>0)
 					ampOrgRole.setPercentage(0f);
-				else 
+				else
 					ampOrgRole.setPercentage(100f);
-				
 				if (setModel.getObject() == null)
-					setModel.setObject(new HashSet<AmpOrgRole>());
-				
-				setModel.getObject().add(ampOrgRole);
+                    setModel.setObject(new HashSet<AmpOrgRole>());
+                setModel.getObject().add(ampOrgRole);
+
 				uniqueCollectionValidationField.reloadValidationField(target);
                 minSizeCollectionValidationField.reloadValidationField(target);
                 maxSizeCollectionValidationField.reloadValidationField(target);
 
 				list.getObject().removeAll();
-				target.add(list.getObject().getParent());				
-				roleAdded(target,ampOrgRole);
+				target.add(list.getObject().getParent());
+				roleAdded(target, ampOrgRole);
 			}
 
 			@Override

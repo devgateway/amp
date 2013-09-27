@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -18,6 +19,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundin
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -60,20 +62,21 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						Set<AmpFunding> fundings=am.getObject().getFunding();
-						AmpOrgRole ampOrgRole = (AmpOrgRole)item.getModelObject();
-						for (Iterator iterator = fundings.iterator(); iterator.hasNext();) {
-							AmpFunding ampFunding = (AmpFunding) iterator.next();
-							if (ampFunding.getAmpDonorOrgId().getAmpOrgId() == ampOrgRole.getOrganisation().getAmpOrgId()){
-								String translatedMessage = TranslatorUtil.getTranslation("This organization has a funding related.");
-								target.appendJavaScript("alert ('"+translatedMessage+"')");
-								return;
-							}
-						}
-                        setModel.getObject().remove(item.getModelObject());
+                        send(getPage(), Broadcast.BREADTH, new FundingOrgListUpdateEvent(target));
+
+                        Set<AmpFunding> fundings = am.getObject().getFunding();
+                        AmpOrgRole ampOrgRole = item.getModelObject();
+                        for (AmpFunding ampFunding: fundings) {
+                            if (ampFunding.getAmpDonorOrgId().getAmpOrgId() == ampOrgRole.getOrganisation().getAmpOrgId()){
+                                String translatedMessage = TranslatorUtil.getTranslation("This organization has a funding related.");
+                                target.appendJavaScript("alert ('"+translatedMessage+"')");
+                                return;
+                            }
+                        }
+                        setModel.getObject().remove(ampOrgRole);
                         uniqueCollectionValidationField.reloadValidationField(target);
                         target.add(listParent);
-                        roleRemoved(target,item.getModelObject());
+                        roleRemoved(target, ampOrgRole);
                         list.getObject().removeAll();
 					}
 				};

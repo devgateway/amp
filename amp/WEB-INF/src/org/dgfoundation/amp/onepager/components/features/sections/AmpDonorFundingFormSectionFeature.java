@@ -66,6 +66,7 @@ public class AmpDonorFundingFormSectionFeature extends
 
     private final static String[] ACTIVITY_ROLE_FILTER = {Constants.FUNDING_AGENCY};
     private final static String[] SSC_ROLE_FILTER = {Constants.FUNDING_AGENCY, Constants.EXECUTING_AGENCY, Constants.BENEFICIARY_AGENCY};
+    public final static String[] DISBURSEMENTS_ROLE_FILTER = new String[]{Constants.IMPLEMENTING_AGENCY,Constants.EXECUTING_AGENCY,Constants.BENEFICIARY_AGENCY};
 
 	public ListEditor<AmpOrganisation> getList() {
 		return list;
@@ -74,6 +75,13 @@ public class AmpDonorFundingFormSectionFeature extends
 	public IModel<Set<AmpOrganisation>> getSetModel() {
 		return setModel;
 	}
+
+    public String[] getRoleFilter(){
+        String[] roleFilter = ACTIVITY_ROLE_FILTER;
+        if (ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession)getSession()).getFormType()))
+            roleFilter = SSC_ROLE_FILTER;
+        return roleFilter;
+    }
 	
 	public void switchOrg(ListItem item, AmpFunding funding, AmpOrganisation newOrg, AmpRole role, AjaxRequestTarget target) {
 		
@@ -265,12 +273,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		wmc.add(searchOrganization);
 
 
-        String[] roleFilter = null;//ACTIVITY_ROLE_FILTER;
-        if (ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession)getSession()).getFormType()))
-            roleFilter = SSC_ROLE_FILTER;
-
-
-        orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, roleFilter);
+        orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, getRoleFilter());
 		add(orgRoleSelector);
 		
 		// when the org select changes, update the status of the addNewFunding

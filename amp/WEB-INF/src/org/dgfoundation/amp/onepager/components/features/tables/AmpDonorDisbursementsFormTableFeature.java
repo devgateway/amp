@@ -24,6 +24,7 @@ import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
@@ -137,7 +138,9 @@ public class AmpDonorDisbursementsFormTableFeature extends
 				
 				
 				AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("orgRoleSelector", 
-						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(item.getModel(),"recipientRole"), new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"), new String[]{Constants.IMPLEMENTING_AGENCY,Constants.EXECUTING_AGENCY,Constants.BENEFICIARY_AGENCY});
+						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(item.getModel(),"recipientRole"),
+                        new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"),
+                        true, AmpDonorFundingFormSectionFeature.DISBURSEMENTS_ROLE_FILTER, true);
 				
 				item.add(orgRoleSelector);
 				

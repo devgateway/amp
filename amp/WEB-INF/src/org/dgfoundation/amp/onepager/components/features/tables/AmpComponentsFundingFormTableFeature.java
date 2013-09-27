@@ -4,7 +4,9 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -14,13 +16,15 @@ import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.AmpTableFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
+import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -42,7 +46,7 @@ public class AmpComponentsFundingFormTableFeature extends
 			final IModel<AmpActivityVersion> activityModel, String fmName,
 			final int transactionType) throws Exception {
 		super(id, activityModel, fmName);
-		setTitleHeaderColSpan(5);
+		setTitleHeaderColSpan(6);
 
         AbstractMixedSetModel<AmpComponentFunding> listModel = new AbstractMixedSetModel<AmpComponentFunding>(compFundsModel) {
             @Override
@@ -61,18 +65,35 @@ public class AmpComponentsFundingFormTableFeature extends
                             "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
                             new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
                             CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
-                            false, false, true, null, true);
+                            false, false, false, null, false);
                     adjustmentTypes.getChoiceContainer().setRequired(true);
+                    adjustmentTypes.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
                     item.add(adjustmentTypes);
 
-                } catch(Exception e)
-                {
+                } catch(Exception e) {
                     logger.error("AmpCategoryGroupFieldPanel initialization failed");
                 }
-                AmpFundingAmountComponent amountComponent = new AmpTableFundingAmountComponent<AmpComponentFunding>("fundingAmount",
+
+                // read the list of organizations from related organizations page, and
+                // create a unique set with the orgs chosen
+                AbstractReadOnlyModel<List<AmpOrganisation>> orgsList = new AmpRelatedOrgsModel(activityModel, null, true);
+
+
+                // selector for related orgs
+                AmpSelectFieldPanel<AmpOrganisation> orgSelect = new AmpSelectFieldPanel<AmpOrganisation>("orgSelect",
+                        new PropertyModel<AmpOrganisation>(model, "reportingOrganization"), orgsList, "Component Organization", false, true, null, false);
+                orgSelect.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
+                orgSelect.getChoiceContainer().add(new AttributeModifier("style", "width: 100px;"));
+                item.add(orgSelect);
+
+                AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<AmpComponentFunding>("fundingAmount",
                         model, "Amount", "transactionAmount", "Currency",
                         "currency", "Transaction Date", "transactionDate", false);
+                amountComponent.getAmount().getTextContainer().setRequired(false);
                 item.add(amountComponent);
+
+                AmpTextFieldPanel<String> description = new AmpTextFieldPanel<String>("description", new PropertyModel<String>(model, "description"), "Description", false);
+                item.add(description);
 
                 item.add(new ListEditorRemoveButton("delete", "Delete"));
             }

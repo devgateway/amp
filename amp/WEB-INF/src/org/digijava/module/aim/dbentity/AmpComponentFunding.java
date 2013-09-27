@@ -22,9 +22,10 @@ public class AmpComponentFunding implements Versionable, Cloneable, Serializable
 	private Date transactionDate;
 	private Date reportingDate;
 	private Double transactionAmount;
+    //reusing field to store the organisation related to the current component
 	private AmpOrganisation reportingOrganization;
 	private AmpCurrency currency;
-	private String expenditureCategory;
+	private String description;
 	private AmpComponent component;
 	private Float exchangeRate;
 	
@@ -89,16 +90,16 @@ public class AmpComponentFunding implements Versionable, Cloneable, Serializable
 		this.currency = currency;
 	}
 	/**
-	 * @return Returns the expenditureCategory.
+	 * @return Returns the description.
 	 */
-	public String getExpenditureCategory() {
-		return expenditureCategory;
+	public String getDescription() {
+		return description;
 	}
 	/**
-	 * @param expenditureCategory The expenditureCategory to set.
+	 * @param description The description to set.
 	 */
-	public void setExpenditureCategory(String expenditureCategory) {
-		this.expenditureCategory = expenditureCategory;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	/**
 	 * @return Returns the reportingDate.
@@ -193,10 +194,10 @@ public class AmpComponentFunding implements Versionable, Cloneable, Serializable
 	public boolean equalsForVersioning(Object obj) {
 		AmpComponentFunding aux = (AmpComponentFunding) obj;
 		String original = " " + this.currency + this.transactionType + this.transactionAmount + this.transactionDate
-				+ this.adjustmentType.getValue() + this.reportingDate + this.reportingOrganization + this.expenditureCategory
+				+ this.adjustmentType.getValue() + this.reportingDate + this.reportingOrganization + this.description
 				+ this.component.getTitle() + this.exchangeRate;
 		String copy = " " + aux.currency + aux.transactionType + aux.transactionAmount + aux.transactionDate
-				+ aux.adjustmentType.getValue() + aux.reportingDate + aux.reportingOrganization + aux.expenditureCategory
+				+ aux.adjustmentType.getValue() + aux.reportingDate + aux.reportingOrganization + aux.description
 				+ aux.component.getTitle() + aux.exchangeRate;
 		if (original.equals(copy)) {
 			return true;
@@ -237,7 +238,7 @@ public class AmpComponentFunding implements Versionable, Cloneable, Serializable
 	@Override
 	public Object getValue() {
 		return " " + this.currency + this.transactionType + (this.transactionAmount==null?"null":this.transactionAmount.longValue()) + this.transactionDate
-				+ this.adjustmentType.getValue() + this.reportingDate + this.expenditureCategory
+				+ this.adjustmentType.getValue() + this.reportingDate + this.description
 				+ this.component.getTitle() + (this.exchangeRate==null?"null":this.exchangeRate.floatValue());
 	}
 	

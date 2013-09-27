@@ -71,8 +71,6 @@ public class AmpComponentsFormSectionFeature extends
 						target.add(this.findParent(AmpComponentsFormSectionFeature.class));
 						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.findParent(AmpComponentsFormSectionFeature.class)));
 						super.onClick(target);
-						
-						
 					}
 				};
 				comp.add(delButton);

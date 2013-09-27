@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -291,7 +289,7 @@ public class FreeBalanceHarvester {
 				while (i.hasNext()) {
 					AmpComponentFunding element = (AmpComponentFunding) i
 							.next();
-					if (element.getExpenditureCategory().equals(compFundName) && element.getTransactionType().intValue()==trType) {
+					if (element.getDescription().equals(compFundName) && element.getTransactionType().intValue()==trType) {
 						acf = element;
 						
 						//add amount
@@ -307,7 +305,7 @@ public class FreeBalanceHarvester {
 				}
 				if (acf == null) {
 					acf = new AmpComponentFunding();
-					acf.setExpenditureCategory(compFundName);
+					acf.setDescription(compFundName);
 					acf.setCurrency(curr);
 					acf.setComponent(ac);
 					acf.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL));

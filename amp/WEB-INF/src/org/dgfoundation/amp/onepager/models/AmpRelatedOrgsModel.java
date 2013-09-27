@@ -24,21 +24,33 @@ public class AmpRelatedOrgsModel extends AbstractReadOnlyModel<List<AmpOrganisat
 	
 	private IModel<AmpActivityVersion> am;
 	protected AbstractChoice<?, AmpRole> roleChoiceContainer;
+    private boolean showAllIfNoRolePresent;
 
-	public AmpRelatedOrgsModel(IModel<AmpActivityVersion> am, AbstractChoice<?, AmpRole> roleChoiceContainer) {
+	public AmpRelatedOrgsModel(IModel<AmpActivityVersion> am, AbstractChoice<?, AmpRole> roleChoiceContainer, boolean showAllIfNoRolePresent) {
 		this.am=am;
 		this.roleChoiceContainer=roleChoiceContainer;
+        this.showAllIfNoRolePresent = showAllIfNoRolePresent;
 	}
+
+    public AmpRelatedOrgsModel(IModel<AmpActivityVersion> am, AbstractChoice<?, AmpRole> roleChoiceContainer) {
+        this(am, roleChoiceContainer, false);
+    }
 	
 	
 	@Override
 	public List<AmpOrganisation> getObject() {
 		Set<AmpOrganisation> set=new TreeSet<AmpOrganisation>();
 		Set<AmpOrgRole> orgroles=am.getObject().getOrgrole();
-		AmpRole role=(AmpRole) roleChoiceContainer.getModelObject();
-		if(role==null) return new ArrayList<AmpOrganisation>(set);
-		for (AmpOrgRole orgrole  : orgroles) 
-			if(role.getAmpRoleId().equals(orgrole.getRole().getAmpRoleId())) set.add(orgrole.getOrganisation());
+		AmpRole role = null;
+        if (roleChoiceContainer != null)
+            role = (AmpRole) roleChoiceContainer.getModelObject();
+        //if no role is present and we don't want to show all the organisations, then return empty collection
+		if (role == null && !showAllIfNoRolePresent)
+            return new ArrayList<AmpOrganisation>(set);
+		for (AmpOrgRole orgrole  : orgroles)
+            //either the role is matched or we want to show all the orgs
+			if (showAllIfNoRolePresent || role.getAmpRoleId().equals(orgrole.getRole().getAmpRoleId()))
+                set.add(orgrole.getOrganisation());
 		return new ArrayList<AmpOrganisation>(set);
 	}
 }

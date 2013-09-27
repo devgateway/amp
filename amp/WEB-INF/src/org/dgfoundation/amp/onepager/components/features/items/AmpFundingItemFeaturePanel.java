@@ -161,7 +161,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 //		add(searchOrganization);
 	
 		
-		final AmpOrgRoleSelectorComponent orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, new String[]{Constants.FUNDING_AGENCY});
+		final AmpOrgRoleSelectorComponent orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, parent.getRoleFilter());
 		add(orgRoleSelector);
 		
 		// button used to add funding based on the selected organization and

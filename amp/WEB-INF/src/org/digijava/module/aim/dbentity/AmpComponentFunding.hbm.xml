@@ -16,7 +16,7 @@
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />
 		<property access="field" name="transactionAmount" column="transaction_amount"
 			type="java.lang.Double" />
-		<property name="expenditureCategory" column="exp_category" type="java.lang.String" />
+		<property name="description" column="description" type="java.lang.String" />
 		<property name="exchangeRate" column="exchange_rate" type="java.lang.Float" />
 
 		<many-to-one name="activity" column="activity_id"

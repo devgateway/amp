@@ -19,14 +19,18 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.LoginForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -117,8 +121,13 @@ public class SelectTeam extends Action {
             appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
             appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
             appSettings.setDefReportsPerPage((ampAppSettings.getDefaultReportsPerPage()==null)?0:ampAppSettings.getDefaultReportsPerPage());
-            appSettings.setCurrencyId(ampAppSettings.getCurrency()
-                    .getAmpCurrencyId());
+            if (ampAppSettings.getCurrency()!=null){
+ 	 	 	 	appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
+ 	 	 	 } else {
+ 	 	 	 	String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+ 	 	 	 	AmpCurrency baseCurr = CurrencyUtil.getAmpcurrency(currCode);
+ 	 	 	 	appSettings.setCurrencyId(baseCurr.getAmpCurrencyId());
+ 	 	 	 }
             if (ampAppSettings.getFiscalCalendar() == null) {
                 logger.info("AmpAppSettings.getFisCal is null");
             } else {

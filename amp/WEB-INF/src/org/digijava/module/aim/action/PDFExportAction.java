@@ -430,8 +430,9 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				String stmt = "";
 				try {
 					//TODO TRN:this should use default text instead of this key. if there is no such default text in this case, then leaving key is jut all right.
-					stmt = TranslatorWorker.translateText("Report Name", locale,siteId);
-				} catch (WorkerException e){
+					stmt = TranslatorWorker.translateText("This REPORT was created by AMP");
+					stmt += " " + FeaturesUtil.getCurrentCountryName();
+				} catch (Exception e){
 				    logger.error("Error translating ", e);}
 				stmt += " " + FeaturesUtil.getCurrentCountryName();
 				if (this.request.getAttribute("dateOptions").equals("0")) {//disabled

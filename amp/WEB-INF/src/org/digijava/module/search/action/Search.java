@@ -29,7 +29,7 @@ public class Search extends Action {
 		HttpSession session = request.getSession();
 		ServletContext ampContext = session.getServletContext();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-
+		request.setCharacterEncoding("UTF-8");
 		if (request.getParameter("desksearch") != null){
 			String keyword = request.getParameter("keyword");
 			int querytype = Integer.parseInt(request.getParameter("type"));

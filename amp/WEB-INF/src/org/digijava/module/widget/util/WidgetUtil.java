@@ -1,14 +1,6 @@
 package org.digijava.module.widget.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -50,8 +42,6 @@ import org.digijava.module.widget.helper.WidgetPlaceHelper;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * Widgets utilities.
@@ -691,7 +681,7 @@ public class WidgetUtil {
             throw new DgException("Cannot load sector fundings by donors from db", e);
         }
         long timeSpent = System.currentTimeMillis() - aaa;
-        System.out.format("\t%d milliseconds spent while fetching funding for sectors %s\n", timeSpent, Util.toCSString(Arrays.asList(sectorIds)));
+        System.out.format("\t%d milliseconds spent while fetching funding for sectors %s\n", timeSpent, Util.toCSStringForIN(Arrays.asList(sectorIds)));
         return result;
     }
 

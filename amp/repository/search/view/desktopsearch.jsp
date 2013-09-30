@@ -7,10 +7,15 @@ function search() {
 	if ($("#querytype").val() == '' || $("#keyword").val()==''){
 		alert(trn);
 	}else{
-		var url = "/search/search.do?desksearch=true&keyword="+$("#keyword").val()+"&type="+$("#querytype").val()+"&searchMode="+$("#searchMode").val();    
-		$(location).attr('href',url);
+		$('<form action="/search/search.do" method="POST" />')
+		.append($('<input type="hidden" name="desksearch" value="' + "true" + '">'))
+		.append($('<input type="hidden" name="type" value="' + $("#querytype").val() + '">'))
+		.append($('<input type="hidden" name="searchMode" value="' + $("#searchMode").val() + '">'))
+		.append($('<input type="hidden" name="keyword" value="' + $("#keyword").val() + '">'))
+        .appendTo($(document.body)) //it has to be added somewhere into the <body>
+        .submit();		
 	}
-	return true;
+	//return true;
 }
 
 function searchEnter(e)

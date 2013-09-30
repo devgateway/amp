@@ -268,7 +268,12 @@ public final class Util {
 	}
 
 	
-	
+	public static String toCSStringForIN(Collection col)
+	{
+		if (col == null  || col.isEmpty())
+			return "-32768"; // the most unlikely ID one is supposed to find in an AMP database
+		return toCSString(col);
+	}
 	/**
 	 * Returns comma separated view string representation of the collection
 	 * items

@@ -44,7 +44,9 @@
 	<ul class="yui-nav" style="border-bottom: 1px solid #CCCCCC">
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a></li>
 		<logic:notEqual name="is_pledge_report" value="true" scope="request">
-			<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
+			<logic:notEmpty name="aimReportsFilterPickerForm" property="relatedAgenciesElements">
+				<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
+			</logic:notEmpty>
 		</logic:notEqual>
 		<li><a href="#sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a></li>
 		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
@@ -69,14 +71,16 @@
 		StopWatch.next("Filters", true, "related agencies tab begin");
 	%>
         <logic:notEqual name="is_pledge_report" value="true" scope="request">
-            <div id="relAgenciesTab" class="yui-hidden clrfix" style="height: 91%;">
-                <div class="grayBorder clrfix">
-                    <bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
-                    <bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
-                    <bean:define id="reqSearchManagerId" toScope="request" value="relAgenciesTab_search" />
-                    <%@include file="bigFilterTable.jsp" %>
-                </div>
-            </div>
+        	<logic:notEmpty name="aimReportsFilterPickerForm" property="relatedAgenciesElements">
+            	<div id="relAgenciesTab" class="yui-hidden clrfix" style="height: 91%;">
+                	<div class="grayBorder clrfix">
+                    	<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
+                    	<bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
+                    	<bean:define id="reqSearchManagerId" toScope="request" value="relAgenciesTab_search" />
+                    	<%@include file="bigFilterTable.jsp" %>
+                	</div>
+            	</div>
+        	</logic:notEmpty>    
         </logic:notEqual>
 	<% 
 		StopWatch.next("Filters", true, "sectors tab begin");

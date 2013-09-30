@@ -12,7 +12,8 @@ import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
-import edu.emory.mathcs.backport.java.util.TreeSet;
+import java.util.Arrays;
+
 
 @TranslatableClass
 public class AmpSector implements Serializable, Comparable, Identifiable,

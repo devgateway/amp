@@ -43,25 +43,25 @@
 								</td>
 								<td>
 									<c:choose>
-									<c:when test="${documentData.webLink == null}">
-										&nbsp;<bean:write name="documentData" property="name" />
-									</c:when>
-									<c:otherwise>
-										<c:set var="translation">
-											<digi:trn>Follow link to</digi:trn>
-										</c:set>
-										<a onmouseover="Tip('${translation} ${documentData.webLink}')" onmouseout="UnTip()" onclick="window.open('${documentData.webLink}')" 
-											style="cursor:pointer;  color: blue; font-size: 11px"> 
-											<bean:write name="documentData" property="name" />
-										</a>
-									</c:otherwise>
-									 </c:choose>
-									  <c:if test="${documentData.isPublic}">
-									 	<font size="3px" color="blue">*</font>
-									 </c:if>
-									 <c:if test="${documentData.isShared}">
-									  	<font size="3px" color="red">*</font>
-									  </c:if>								 
+                                        <c:when test="${documentData.webLink == null}">
+                                            &nbsp;<bean:write name="documentData" property="name" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:set var="translation">
+                                                <digi:trn>Follow link to</digi:trn>
+                                            </c:set>
+                                            <a onmouseover="Tip('${translation} ${documentData.webLink}')" onmouseout="UnTip()" onclick="window.open('${documentData.webLink}')"
+                                                style="cursor:pointer;  color: blue; font-size: 11px">
+                                                <bean:write name="documentData" property="name" />
+                                            </a>
+                                        </c:otherwise>
+									</c:choose>
+									<c:if test="${documentData.isPublic}">
+										 <span style="color: CC0000;">*</span>
+									</c:if>
+									<c:if test="${documentData.isShared}">
+                                        <span style="color: 00CC00;">*</span>
+									</c:if>
 								</td>
 								<td>
 									<bean:write name="documentData" property="calendar" />
@@ -123,10 +123,14 @@
 							</tr>
 						</logic:iterate>
 					</table>
-					<span class="t_sm">
-						<font color="red">*</font> indicates shared versions of the document
-					* The colored row marks the public version
-					</span>
+					<div class="t_sm" style="text-align: left;">
+                        <div>
+                            <span style="color: 00CC00;">* star</span>&nbsp; Indicates shared versions of the document
+                        </div>
+                        <div>
+                            <span style="color: CC0000;">* star</span>&nbsp; The colored row marks the public version
+                        </div>
+					</div>
 										
 					<br />
 				</logic:notEmpty>

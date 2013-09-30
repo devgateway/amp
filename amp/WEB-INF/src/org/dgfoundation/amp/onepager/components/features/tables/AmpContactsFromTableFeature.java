@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -37,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.Hibernate;
 
 /**
  * @author dmihaila@dginternational.org
@@ -224,6 +224,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 					activityContact.setContact(choice);			
 					activityContact.setActivity(am.getObject());
 					activityContact.setContactType(contactType);
+                    Hibernate.initialize(choice.getActivityContacts()); //lazy init:)
 					
 					setModel.getObject().add(activityContact);
 				}

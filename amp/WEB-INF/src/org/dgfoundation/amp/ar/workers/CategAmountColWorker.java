@@ -201,9 +201,11 @@ public class CategAmountColWorker extends ColumnWorker {
 		Double fixedExchangeRate = null;
 		Double pledgetotal = null;
 		Double capitalPercent	= null;
+		
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();
-
+		if (this.getViewName().equals("v_proposed_cost"))
+			headMetaName = null; // no source name for v_proposed_cost
 
 		if (columnsMetaData.containsKey("fixed_exchange_rate")){
 		    fixedExchangeRate = rs.getDouble("fixed_exchange_rate");
@@ -423,9 +425,15 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.getMetaData().add(mMs);	
 		acc.getMetaData().add(faMs);
 		acc.getMetaData().add(fmMs);
-		if (headMeta == null)
-			throw new RuntimeException("headMeta is null!");
-		acc.getMetaData().add(headMeta);
+		if (headMeta != null)
+		{
+			acc.getMetaData().add(headMeta);
+		}
+		else
+		{
+			if (!this.getViewName().equals("v_proposed_cost"))
+				throw new RuntimeException("headMeta is null!");
+		}
 		
 		if(this.getViewName().equals("v_proposed_cost")) {
 		    //used as a flag, no value needed

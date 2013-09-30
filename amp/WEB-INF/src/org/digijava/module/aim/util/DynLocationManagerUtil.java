@@ -108,7 +108,7 @@ public class DynLocationManagerUtil {
 		Session dbSession = PersistenceManager.getSession();
 		
 		String queryString = "select loc from "
-				+ AmpCategoryValueLocations.class.getName() + " loc WHERE loc.id IN (" + Util.toCSString(allSelectedLocations) + ")";
+				+ AmpCategoryValueLocations.class.getName() + " loc WHERE loc.id IN (" + Util.toCSStringForIN(allSelectedLocations) + ")";
 		Query qry = dbSession.createQuery(queryString);
 		List<AmpCategoryValueLocations> locations = qry.list();
 		return locations;
@@ -826,7 +826,7 @@ public class DynLocationManagerUtil {
 		try
 		{
 			conn = PersistenceManager.getJdbcConnection();
-			String query = "SELECT DISTINCT id FROM amp_category_value_location WHERE parent_location IN (" + Util.toCSString(inIds) + ")";
+			String query = "SELECT DISTINCT id FROM amp_category_value_location WHERE parent_location IN (" + Util.toCSStringForIN(inIds) + ")";
 			ResultSet rs = conn.createStatement().executeQuery(query);
 			while (rs.next())
 				result.add(rs.getLong(1));

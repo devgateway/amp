@@ -301,6 +301,12 @@ function checkSelectedLanguages(){
 															<digi:trn>Translation Cleanup Manager</digi:trn></digi:link>
 												</td>
 											</tr>
+											<tr>
+												<td class="inside">
+														<digi:link href="/contentTrnImportExport.do" >
+															<digi:trn>Content Translation Manager</digi:trn></digi:link>
+												</td>
+											</tr>
 											
 											<!-- end of other links -->
 										</table>

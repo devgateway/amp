@@ -1,6 +1,10 @@
 package org.digijava.module.translation.action;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -32,7 +36,7 @@ import java.util.*;
 
 public class ContentTrnImportExport extends DispatchAction {
     private static Logger logger	= Logger.getLogger(ContentTrnImportExport.class);
-    private static int PERMAMENT_COLUMN_COUNT = 3;
+    private static String[] PERMAMENT_HEADER_ITEMS = {"Object Class", "Object ID", "Field Name"};
 
 
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
@@ -88,7 +92,11 @@ public class ContentTrnImportExport extends DispatchAction {
         Collection<ContentTrnObjectType> types = ContentTranslationUtil.getContentTranslationUniques();
         Set<String>langs = new HashSet<String>();
 
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet("Content Translations");
+
         //Header
+        HSSFRow row = sheet.createRow(0);
         for (ContentTrnObjectType type : types) {
             if (selTypes.contains(type.getObjectType())) {
                 for (String lang : type.getLangs()) {
@@ -96,16 +104,19 @@ public class ContentTrnImportExport extends DispatchAction {
                 }
             }
         }
-        StringBuilder csvContent = new StringBuilder("Object Class, Object ID, Field Name, ");
-        Iterator <String> it = langs.iterator();
-        while (it.hasNext()) {
-            csvContent.append(it.next());
-            if (it.hasNext()) {
-                csvContent.append(",");
-            }
-        }
-        csvContent.append("\n");
 
+        for (int hIdx = 0; hIdx < PERMAMENT_HEADER_ITEMS.length; hIdx ++) {
+            HSSFCell hCell = row.createCell(hIdx);
+            hCell.setCellValue(PERMAMENT_HEADER_ITEMS[hIdx]);
+        }
+
+        Iterator <String> it = langs.iterator();
+        int hLangIdx = 0;
+        while (it.hasNext()) {
+            HSSFCell hCell = row.createCell(hLangIdx + PERMAMENT_HEADER_ITEMS.length);
+            hCell.setCellValue(it.next());
+            hLangIdx ++;
+        }
         //Content
         Map <Long, Set<AmpContentTranslation>> objectIdGrouper = new HashMap<Long, Set<AmpContentTranslation>>();
         for (AmpContentTranslation trn : allTrns) {
@@ -135,40 +146,39 @@ public class ContentTrnImportExport extends DispatchAction {
 
             //Write appropreate rows/columns
             Set <ContentTrnClassFieldPair> groupKeys = groupByField.keySet();
-            //for (Map<String, AmpContentTranslation> obj : groupByField.values()) {
+
             for (ContentTrnClassFieldPair groupKey : groupKeys) {
+                HSSFRow contentRow = sheet.createRow(sheet.getLastRowNum() + 1);
                 Map<String, AmpContentTranslation> obj = groupByField.get(groupKey);
                 AmpContentTranslation commonObj = obj.get(obj.keySet().iterator().next());
-                csvContent.append(groupKey.getObjClass()).append(",");
-                csvContent.append(commonObj.getObjectId()).append(",");
-                csvContent.append(groupKey.getObjField()).append(",");
+                contentRow.createCell(0).setCellValue(groupKey.getObjClass());
+                contentRow.createCell(1).setCellValue(commonObj.getObjectId());
+                contentRow.createCell(2).setCellValue(groupKey.getObjField());
                 int counter = 0;
                 for (String lang : langs) {
-                    counter++;
+
                     AmpContentTranslation forLang = obj.get(lang);
+                    String trn = null;
                     if (forLang != null) {
-                        csvContent.append("\"").append(forLang.getTranslation().replaceAll("\n", " ")).append("\"");
+                        trn = forLang.getTranslation();
                     } else {
-                        csvContent.append("\"\"");
+                        trn = "";
                     }
-                    if (langs.size() > counter) csvContent.append(",");
+                    contentRow.createCell(counter + PERMAMENT_HEADER_ITEMS.length).setCellValue(trn);
+                    counter++;
                 }
-                csvContent.append("\n");
             }
         }
 
-
-        response.setContentType("application/download; charset=UTF-8");
+        response.setContentType("application/vnd.ms-excel; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Disposition",
-                "inline; filename=contentTranslations.csv ");
+                "inline; filename=contentTranslations.xls");
 
         try {
-            String csvStr = csvContent.toString();
+
             ServletOutputStream out = response.getOutputStream();
-            Writer wrt = new OutputStreamWriter(out, "UTF-8");
-            wrt.write(csvStr);
-            wrt.close();
+            wb.write(out);
             out.close();
 
         } catch (IOException e) {
@@ -191,67 +201,55 @@ public class ContentTrnImportExport extends DispatchAction {
 
         ContentTrnImportExportForm contentTrnImportExportForm = (ContentTrnImportExportForm) form;
         FormFile ff = contentTrnImportExportForm.getUpFile();
-
-        String csvContent = null;
+        HSSFWorkbook wb = null;
         try {
-            csvContent = new String(ff.getFileData(), "UTF-8");
+            wb = new HSSFWorkbook(ff.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-        StringTokenizer rowTokenizer = new StringTokenizer(csvContent, "\n");
+        HSSFSheet sheet = wb.getSheetAt(0);
+        int RowCount = sheet.getLastRowNum();
 
-        List<String> rows = new ArrayList<String>();
-        while (rowTokenizer.hasMoreElements()) {
-            rows.add(rowTokenizer.nextToken());
-        }
 
         List<String> headerCols = new ArrayList<String>();
-        if (!rows.isEmpty()) {
-            StringTokenizer headerColsTokenizer = new StringTokenizer(rows.get(0), ",");
-            while (headerColsTokenizer.hasMoreElements()) {
-                headerCols.add(headerColsTokenizer.nextToken().trim());
-            }
+
+        HSSFRow headerRow = sheet.getRow(0);
+        for (int cellIdx = headerRow.getFirstCellNum(); cellIdx < headerRow.getLastCellNum(); cellIdx ++) {
+            headerCols.add(headerRow.getCell(cellIdx).getStringCellValue());
         }
 
-        boolean headerSkipped = false;
         Set <AmpContentTranslation> objectsForDb = new HashSet<AmpContentTranslation>();
         List<AmpContentTranslation> allTrns = ContentTranslationUtil.getContentTranslationsByTypes();
 
-        for (String row : rows) {
-            if (headerSkipped) {
-                String[] rowData = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
-                for (int trnColumnIdx = PERMAMENT_COLUMN_COUNT; trnColumnIdx < rowData.length; trnColumnIdx ++) {
-                    String trn = rowData[trnColumnIdx].trim();
-                    String trnNoQuotes = trn.substring(1, trn.length() - 1);
+        for (int rowIdx = 1; rowIdx < RowCount; rowIdx ++) {
+            HSSFRow contentRow = sheet.getRow(rowIdx);
+            for (int trnColumnIdx = PERMAMENT_HEADER_ITEMS.length; trnColumnIdx < contentRow.getLastCellNum(); trnColumnIdx ++) {
+                String trn = contentRow.getCell(trnColumnIdx).getStringCellValue();
+                if (!trn.trim().isEmpty()) {
+                    String objectClass = contentRow.getCell(0).getStringCellValue();
+                    Long objectId = new Double(contentRow.getCell(1).getNumericCellValue()).longValue();
+                    String fieldName = contentRow.getCell(2).getStringCellValue();
+                    String locale = headerCols.get(trnColumnIdx);
 
-                    if (!trnNoQuotes.trim().isEmpty()) {
+                    AmpContentTranslation trnItem = ContentTranslationUtil.getByTypeObjidFieldLocale(allTrns,
+                            objectClass, objectId, fieldName, locale);
 
-                        String objectClass = rowData[0];
-                        Long objectId = Long.parseLong(rowData[1]);
-                        String fieldName = rowData[2];
-                        String locale = headerCols.get(trnColumnIdx);
-
-                        AmpContentTranslation trnItem = ContentTranslationUtil.getByTypeObjidFieldLocale(allTrns,
-                                objectClass, objectId, fieldName, locale);
-
-                        //If new item
-                        if (trnItem == null) {
-                            trnItem = new AmpContentTranslation();
-                            trnItem.setObjectClass(objectClass);
-                            trnItem.setObjectId(objectId);
-                            trnItem.setFieldName(fieldName);
-                            trnItem.setLocale(locale);
-                            trnItem.setTranslation(trnNoQuotes);
-                            objectsForDb.add(trnItem);
-                        } else if (!trnItem.getTranslation().equals(trnNoQuotes)){ //If needs to be updated
-                            trnItem.setTranslation(trnNoQuotes);
-                            objectsForDb.add(trnItem);
-                        }
+                    //If new item
+                    if (trnItem == null) {
+                        trnItem = new AmpContentTranslation();
+                        trnItem.setObjectClass(objectClass);
+                        trnItem.setObjectId(objectId);
+                        trnItem.setFieldName(fieldName);
+                        trnItem.setLocale(locale);
+                        trnItem.setTranslation(trn);
+                        objectsForDb.add(trnItem);
+                    } else if (!trnItem.getTranslation().equals(trn)){ //If needs to be updated
+                        trnItem.setTranslation(trn);
+                        objectsForDb.add(trnItem);
                     }
                 }
             }
-            headerSkipped = true;
         }
 
         ContentTranslationUtil.saveOrUpdateContentTrns(objectsForDb);

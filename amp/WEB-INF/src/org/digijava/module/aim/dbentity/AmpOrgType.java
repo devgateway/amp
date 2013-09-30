@@ -11,7 +11,7 @@ import org.digijava.module.aim.helper.donorReport.OrganizationReportColumn;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Organisation Type")
 public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimensionable, HierarchyListable {
 	
 	private Long ampOrgTypeId;

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-@TranslatableClass
+@TranslatableClass (displayName = "Line Ministry Observation Measure")
 public class AmpLineMinistryObservationMeasure implements Serializable, Cloneable {
 	private Long ampLineMinistryObservationMeasureId;
 	@TranslatableField

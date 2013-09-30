@@ -28,7 +28,7 @@ import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Report")
 public class AmpReports implements Comparable, LoggerIdentifiable, Serializable, FilterDataSetInterface {
 
 	private Long ampReportId;

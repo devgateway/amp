@@ -16,7 +16,7 @@ import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import edu.emory.mathcs.backport.java.util.TreeSet;
-@TranslatableClass
+@TranslatableClass (displayName = "Theme")
 public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable
 {
 	private static final long serialVersionUID = 1L;

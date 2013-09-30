@@ -21,7 +21,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Activity Form Field")
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
 LoggerIdentifiable, Cloneable {
 

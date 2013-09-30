@@ -5,7 +5,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Currency")
 public class AmpCurrency implements Serializable,Comparable, Identifiable
 {
 	private Long ampCurrencyId;

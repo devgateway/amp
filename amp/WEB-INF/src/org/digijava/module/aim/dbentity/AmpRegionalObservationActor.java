@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-@TranslatableClass
+@TranslatableClass (displayName = "Regional Observation Actor")
 public class AmpRegionalObservationActor implements Serializable, Cloneable {
 
 	private Long ampRegionalObservationActorId;

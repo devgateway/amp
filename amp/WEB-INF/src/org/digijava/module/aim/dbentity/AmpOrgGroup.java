@@ -15,7 +15,7 @@ import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Organisation Group")
 public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,OrgProfileValue
 {
 	private Long ampOrgGrpId;

@@ -21,7 +21,7 @@ import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Team")
 public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface {
 	private static final Logger logger = Logger.getLogger(AmpTeam.class);
 	private Long ampTeamId;

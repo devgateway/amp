@@ -19,7 +19,7 @@ import org.digijava.module.aim.util.Output;
  * Persister class for Components
  * @author Priyajith
  */
-@TranslatableClass
+@TranslatableClass (displayName = "Component")
 public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable, Cloneable {
 	private static Logger logger = Logger.getLogger(AmpComponent.class);
 	private Long ampComponentId;

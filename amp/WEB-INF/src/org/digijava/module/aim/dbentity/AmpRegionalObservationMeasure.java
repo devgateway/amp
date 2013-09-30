@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
-@TranslatableClass
+@TranslatableClass (displayName = "Regional Observation Measure")
 public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
 	private Long ampRegionalObservationMeasureId;
 	@TranslatableField

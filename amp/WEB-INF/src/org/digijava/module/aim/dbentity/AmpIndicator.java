@@ -8,7 +8,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Indicator")
 public class AmpIndicator implements Serializable
 {
 	private static final long serialVersionUID = 1L;

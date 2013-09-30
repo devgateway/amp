@@ -14,7 +14,7 @@ import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import edu.emory.mathcs.backport.java.util.TreeSet;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Sector")
 public class AmpSector implements Serializable, Comparable, Identifiable,
 		ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
 		Cloneable, OrgProfileValue {

@@ -11,7 +11,7 @@ import java.util.Set;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
-@TranslatableClass
+@TranslatableClass (displayName = "Regional Observation")
 public class AmpRegionalObservation implements Serializable, Versionable, Cloneable {
 
 	private Long ampRegionalObservationId;

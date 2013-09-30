@@ -6,7 +6,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.SectorUtil;
-@TranslatableClass
+@TranslatableClass (displayName = "Sector Scheme")
 public class AmpSectorScheme implements Serializable
 {
 	private Long ampSecSchemeId ;

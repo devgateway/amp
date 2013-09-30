@@ -6,7 +6,7 @@ import java.util.Set;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Measure")
 public class AmpMeasure  implements Serializable, Cloneable
 {
 

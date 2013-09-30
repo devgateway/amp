@@ -23,7 +23,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author mihai
  *
  */
-@TranslatableClass
+@TranslatableClass (displayName = "IPA Contract")
 public class IPAContract implements Serializable, Versionable, Cloneable {
 
 	/**

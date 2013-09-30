@@ -9,7 +9,7 @@ import org.digijava.module.widget.helper.WidgetVisitor;
  * @author Irakli Kobiashvili
  *
  */
-@TranslatableClass
+@TranslatableClass (displayName = "Widget Indicator Chart")
 public class AmpWidgetIndicatorChart extends AmpWidget {
 
 	private static final long serialVersionUID = 1L;

@@ -12,7 +12,7 @@ import java.util.Date;
  * @author aartimon@dginternational.org
  * @since Apr 27, 2011
  */
-@TranslatableClass
+@TranslatableClass (displayName = "Activity Version")
 public class AmpActivityVersion extends AmpActivityFields implements Versionable{
 	
 	/**

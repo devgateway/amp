@@ -12,7 +12,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Line Ministry Observation")
 public class AmpLineMinistryObservation implements Serializable, Versionable, Cloneable {
 	private static final long serialVersionUID = 1L;
 	

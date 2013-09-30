@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Actor")
 public class AmpActor  implements Serializable, Cloneable
 {
 

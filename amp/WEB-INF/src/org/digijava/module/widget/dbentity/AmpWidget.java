@@ -12,7 +12,7 @@ import org.digijava.module.widget.helper.WidgetVisitor;
  * @author Irakli Kobiashvili
  *
  */
-@TranslatableClass
+@TranslatableClass (displayName = "Widget")
 public class AmpWidget implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -7,7 +7,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.springframework.transaction.annotation.Transactional;
 
-@TranslatableClass
+@TranslatableClass (displayName = "Agreement")
 public class AmpAgreement implements Serializable {
 	private static final long serialVersionUID = 1L;
 

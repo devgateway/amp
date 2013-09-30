@@ -13,7 +13,10 @@
     <form-bean name="importExportForm" type="org.digijava.module.translation.form.ImportExportForm" />
     <form-bean name="newAdvancedTrnForm" type="org.digijava.module.translation.form.NewAdvancedTrnForm" />
     <form-bean name="translationCleanupForm" type="org.digijava.module.translation.form.TranslationCleanupForm" />
+    <form-bean name="contentTrnImportExportForm" type="org.digijava.module.translation.form.ContentTrnImportExportForm" />
   </form-beans>
+
+
   <action-mappings>
     <!-- Action mappings added by Shamanth -->
     <!-- Translator Mappings -->
@@ -114,8 +117,16 @@
     <action name="importExportForm" type="org.digijava.module.translation.action.ImportExportTranslations" scope="request" path="/translation/importexport">
       <forward name="forward" path="/showLayout.do?layout=importExportLayout" />
     </action>
-     <action name="translationCleanupForm" type="org.digijava.module.translation.action.TranslationCleanupManager" scope="session" path="/translation/msgCleanupManager">
+    <action name="translationCleanupForm" type="org.digijava.module.translation.action.TranslationCleanupManager" scope="session" path="/translation/msgCleanupManager">
       <forward name="forward" path="/showLayout.do?layout=translationCleanupLayout" />
     </action>
+
+    <!-- Content translation export/import  -->
+    <action name="contentTrnImportExportForm" type="org.digijava.module.translation.action.ContentTrnImportExport" scope="request" path="/translation/contentTrnImportExport" parameter="action">
+      <forward name="forward" path="/showLayout.do?layout=contentTrnImportExportLayout" />
+      <forward name="forwardExport" path="/showLayout.do?layout=contentTrnExportLayout" />
+      <forward name="forwardImport" path="/showLayout.do?layout=contentTrnImportLayout" />
+    </action>
+
   </action-mappings>
 </struts-config>

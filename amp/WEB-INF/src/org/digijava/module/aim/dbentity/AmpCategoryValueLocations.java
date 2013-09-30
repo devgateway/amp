@@ -20,7 +20,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * 
  * @author medea
  */
-@TranslatableClass
+@TranslatableClass (displayName = "Location")
 public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCategoryValueLocations>, 
 		HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable,OrgProfileValue {
 

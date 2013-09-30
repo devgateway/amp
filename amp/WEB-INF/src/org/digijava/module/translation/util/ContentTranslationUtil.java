@@ -2,6 +2,7 @@ package org.digijava.module.translation.util;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -15,7 +16,9 @@ import org.hibernate.proxy.HibernateProxyHelper;
 import org.hibernate.type.Type;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -384,6 +387,22 @@ public class ContentTranslationUtil {
         }
     }
 
+    public static AmpContentTranslation getByTypeObjidFieldLocale (List<AmpContentTranslation> allTrns,
+                                                                   String type, Long objId,
+                                                                   String field, String locale) {
+        AmpContentTranslation retVal = null;
+
+        for (AmpContentTranslation obj : allTrns) {
+            if (obj.getObjectClass().equals(type) && obj.getObjectId().equals(objId) &&
+                    obj.getFieldName().equals(field) && obj.getLocale().equals(locale)) {
+                retVal = obj;
+                break;
+            }
+        }
+
+        return retVal;
+    }
+
     public static void deleteFieldTranslations(Long objectId, Object entity) {
         Session session = null;
         try {
@@ -404,6 +423,98 @@ public class ContentTranslationUtil {
         } finally {
             session.close();
         }
+    }
+
+    public static List<AmpContentTranslation> getContentTranslationsByTypes() {
+        return getContentTranslationsByTypes(null);
+    }
+
+    public static List<AmpContentTranslation> getContentTranslationsByTypes(List<String> types) {
+        List<AmpContentTranslation> retVal = null;
+        Session session = null;
+        StringBuilder typesWhereClause = null;
+        if (types != null && !types.isEmpty()) {
+            typesWhereClause = new StringBuilder();
+            Iterator<String> it = types.iterator();
+            while (it.hasNext()) {
+                typesWhereClause.append("'").append(it.next()).append("'");
+                if (it.hasNext()) {
+                    typesWhereClause.append(",");
+                }
+            }
+        }
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            StringBuilder qs = new StringBuilder("from ").
+                    append(AmpContentTranslation.class.getName()).append(" ct");
+
+            if (typesWhereClause != null) {
+                qs.append(" where ct.objectClass in (").append(typesWhereClause).append(")");
+            }
+            qs.append(" order by ct.objectId");
+
+            retVal = (List<AmpContentTranslation>) session.createQuery(qs.toString()).list();
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return retVal;
+    }
+
+    public static List<String[]> getContentTrnUniqueTypesAndLangs() {
+        List<String[]> retVal = null;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            StringBuilder qs = new StringBuilder("select distinct ct.objectClass, ct.locale from ").
+                    append(AmpContentTranslation.class.getName()).
+                    append(" ct");
+            retVal = (List<String[]>) session.createQuery(qs.toString()).list();
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return retVal;
+    }
+
+    public static Collection<ContentTrnObjectType> getContentTranslationUniques() {
+        List uniqs = getContentTrnUniqueTypesAndLangs();
+        Map<String, ContentTrnObjectType> trnObjectInfoCreator = new HashMap<String, ContentTrnObjectType>();
+
+        Iterator uniqIt = uniqs.iterator();
+        for (Object uniq : uniqs) {
+            String objType = (String)((Object[])uniq)[0];
+            if (!trnObjectInfoCreator.containsKey(objType)) {
+                ContentTrnObjectType newObj = new ContentTrnObjectType(objType);
+                trnObjectInfoCreator.put(objType, newObj);
+            }
+
+            ContentTrnObjectType exObj = trnObjectInfoCreator.get(objType);
+            exObj.addLangKey((String)((Object[])uniq)[1]);
+        }
+
+        Collection<ContentTrnObjectType> displayBeans =
+                trnObjectInfoCreator.values();
+
+        for (ContentTrnObjectType displayBean : displayBeans) {
+            String contentObjType = displayBean.getObjectType();
+            Class clazz = null;
+            String displayName = null;
+            try {
+                clazz = Class.forName(contentObjType);
+                Annotation a = clazz.getAnnotation(TranslatableClass.class);
+                displayName = (String) (a.annotationType().getMethod("displayName").invoke(a));
+                displayBean.setObjectDisplayName(displayName);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+        }
+        return displayBeans;
     }
 
     /**
@@ -465,6 +576,18 @@ public class ContentTranslationUtil {
             return getFieldByName(type.getSuperclass(), name);
         }
         return null;
+    }
+
+    public static void saveOrUpdateContentTrns(Set <AmpContentTranslation> objectsForDb) {
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            for (AmpContentTranslation trn : objectsForDb) {
+                session.saveOrUpdate(trn);
+            }
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
     }
 
 }

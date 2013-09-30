@@ -12,5 +12,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TranslatableClass {
+    String displayName();
 
 }

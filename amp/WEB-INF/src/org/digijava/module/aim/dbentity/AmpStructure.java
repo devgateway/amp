@@ -14,7 +14,7 @@ import org.digijava.module.aim.util.Output;
  * Persister class for Structures
  * @author fferreyra
  */
-@TranslatableClass
+@TranslatableClass (displayName = "Structure")
 public class AmpStructure implements Serializable,Comparable, Versionable, Cloneable {
 	private static Logger logger = Logger.getLogger(AmpStructure.class);
 	private Long ampStructureId;

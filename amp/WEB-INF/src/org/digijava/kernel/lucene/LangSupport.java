@@ -21,7 +21,8 @@ public enum LangSupport {
 	ENGLISH ("en"), 
 	FRENCH ("fr"), 
 	SPANISH ("es"),
-	ROMANIAN ("ro");
+	ROMANIAN ("ro"),
+	RUSSIAN ("ru");
 	
 	private String languageCode;
 	

@@ -1789,7 +1789,8 @@ public class DataExchangeUtils {
             while (iter.hasNext()) {
                // Object[] item = (Object[])iter.next();
                 String ampClass = (String) iter.next();
-                ampClasses.add(ampClass);
+                if(ampClass !=null && ampClass.length()>0)
+                	ampClasses.add(ampClass);
             }
 
         } catch (Exception e) {

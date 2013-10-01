@@ -95,6 +95,7 @@ public class DEMappingFields implements Serializable {
 		boolean result = false;
 		String lang = o.getIatiLang()==null?"en":o.getIatiLang();
 		try{
+			if(o.getIatiPath()!=null && o.getIatiItems()!=null && o.getIatiValues()!=null && lang!=null && o.getAmpClass()!=null )
 		result	=
 			this.getIatiPath().compareTo(o.getIatiPath()) == 0 && 
 			this.getIatiItems().compareTo(o.getIatiItems()) == 0 && 

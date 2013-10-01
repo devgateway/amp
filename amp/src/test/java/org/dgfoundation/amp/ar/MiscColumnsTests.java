@@ -28,6 +28,8 @@ public class MiscColumnsTests extends ReportsTestCase
 		TestSuite suite = new TestSuite(MiscColumnsTests.class.getName());
 		suite.addTest(new MiscColumnsTests("testSscColumns"));
 		suite.addTest(new MiscColumnsTests("testModeOfPaymentUndisbursedBalance"));
+		suite.addTest(new MiscColumnsTests("testProjectedProjectCostEUR"));
+		suite.addTest(new MiscColumnsTests("testProjectedProjectCostUSD"));
 		return suite;
 	}
 	
@@ -67,4 +69,35 @@ public class MiscColumnsTests extends ReportsTestCase
 				);
 		runReportTest("Mode of payment + Undisbursed Balance", "AMP-15863-mode-of-payment-undisbursed-balance", new String[] {"Eth Water", "mtef activity 2", "SSC Project 1"}, mop_ub_correct);
 	}
+	
+	public void testProjectedProjectCostEUR()
+	{
+		GroupReportModel prop_cost_eur_correct = GroupReportModel.withColumnReports("Proposed-cost-EUR",
+				ColumnReportDataModel.withColumns("Proposed-cost-EUR", 
+					SimpleColumnModel.withContents("Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 2 - EUR"),
+					SimpleColumnModel.withContents("Proposed Project Amount", "Proposed Project Cost 1 - USD", "770 600", "Proposed Project Cost 2 - EUR", "2 500 000"),
+					GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
+							SimpleColumnModel.withContents("Actual Disbursements", NULL_PLACEHOLDER)
+							)
+				));
+		
+		runReportTest("Proposed-cost in EUR", "Proposed-cost-EUR", new String[] {"Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, prop_cost_eur_correct);
+	}
+	
+	public void testProjectedProjectCostUSD()
+	{
+		GroupReportModel prop_cost_eur_correct = GroupReportModel.withColumnReports("Proposed-cost-USD",
+				ColumnReportDataModel.withColumns("Proposed-cost-USD", 
+					SimpleColumnModel.withContents("Project Title", "Proposed Project Cost 1 - USD", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 2 - EUR"),
+					SimpleColumnModel.withContents("Proposed Project Amount", "Proposed Project Cost 1 - USD", "1 000 000", "Proposed Project Cost 2 - EUR", "3 359 312,01"),
+					GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
+							SimpleColumnModel.withContents("Actual Disbursements", NULL_PLACEHOLDER)
+							)
+				));
+		
+		runReportTest("Proposed-cost in USD", "Proposed-cost-USD", new String[] {"Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, prop_cost_eur_correct);
+	}
+
 }

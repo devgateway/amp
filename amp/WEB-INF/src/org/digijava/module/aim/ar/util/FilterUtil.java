@@ -75,7 +75,7 @@ public class FilterUtil {
 		arf.readRequestData(TLSUtils.getRequest(), AmpARFilter.FILTER_SECTION_ALL, forcedAmpReportId);
 		arf.rememberDefaultValues();
 		if (source != null)
-			FilterUtil.populateFilter(source, arf);		
+			FilterUtil.populateFilter(source, arf);
 		/* The prepare function needs to have the filter (af) already populated */
 		arf.postprocess();
 		return arf;

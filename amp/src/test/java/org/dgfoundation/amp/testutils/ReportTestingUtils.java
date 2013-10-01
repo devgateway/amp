@@ -55,6 +55,7 @@ public class ReportTestingUtils
 		else
 			filter.setOverridingTeamFilter(new NameFilteringTeamFilter(activityNames));
 		
+		ReportContextData.getFromRequest(mockRequest, false).setFilter(filter);
 		AmpReportGenerator arg = new AmpReportGenerator(report, filter, true);
 		arg.setCleanupMetadata(true);
 		arg.generate();

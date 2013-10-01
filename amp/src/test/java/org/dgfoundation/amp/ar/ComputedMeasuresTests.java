@@ -51,7 +51,7 @@ public class ComputedMeasuresTests extends ReportsTestCase
 						GroupColumnModel.withSubColumns("Total Costs", 
 								SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666 777", "ptc activity 2", "333 222"),
 								SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545 000"),
-								SimpleColumnModel.withContents("Percentage of Total Commitments", "Eth Water", "", "ptc activity 1", "66,68", "ptc activity 2", "33,32")
+								SimpleColumnModel.withContents("Percentage of Total Commitments", "Eth Water", "0", "ptc activity 1", "66,68", "ptc activity 2", "33,32")
 						))).withTrailCells(null, "999 999", "545 000", "999 999", "999 999", "545 000", "100");
 		runReportTest("flat Percentage of Total Commitments", "AMP-15795-percentage-of-total-commitments", new String[] {"ptc activity 1", "ptc activity 2", "Eth Water"}, fptc_correct);
 	}

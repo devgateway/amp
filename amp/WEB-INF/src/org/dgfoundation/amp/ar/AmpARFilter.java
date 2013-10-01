@@ -121,6 +121,11 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	private final SimpleDateFormat sdfIn = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
 	
+	/**
+	 * this is true iff this filter has been touched by a "change filters" functionality
+	 */
+	private boolean settingsHaveBeenAppliedFlag = false;
+	
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	
 	private Long id;
@@ -657,7 +662,7 @@ public class AmpARFilter extends PropertyListable {
 			}
 		}
 
-		AmpApplicationSettings settings = getEffectiveSettings();
+		getEffectiveSettings(); // do not remove call - also writes into the caches
 		
 		TeamMember tm = null;
 		
@@ -2959,5 +2964,15 @@ public class AmpARFilter extends PropertyListable {
 	private void setNeedsTeamFilter(boolean needs)
 	{
 		this.needsTeamFilter = needs;
+	}
+	
+	public void signalSettingsHaveBeenApplied()
+	{
+		this.settingsHaveBeenAppliedFlag = true;
+	}
+	
+	public boolean haveSettingsBeenApplied()
+	{
+		return settingsHaveBeenAppliedFlag;
 	}
 }

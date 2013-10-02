@@ -22,10 +22,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 @TranslatableClass (displayName = "Organisation")
 public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable, HierarchyListable
 {
-
-    private static String OBJ_DISPLAY_NAME = "Organization";
-
-
 	private Long ampOrgId;
 	@TranslatableField
 	private String name ;

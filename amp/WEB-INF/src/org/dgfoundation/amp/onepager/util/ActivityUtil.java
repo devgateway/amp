@@ -197,8 +197,8 @@ public class ActivityUtil {
                 session.save(a);
             }
             else{
-                //session.saveOrUpdate(a);
-                session.update(a);
+                session.saveOrUpdate(a);
+                //session.update(a);
             }
 
             if (newActivity){

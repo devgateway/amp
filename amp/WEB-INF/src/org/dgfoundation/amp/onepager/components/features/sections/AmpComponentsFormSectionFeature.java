@@ -4,10 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -93,6 +91,8 @@ public class AmpComponentsFormSectionFeature extends
                 }
 
                 comp.setType(defaultType);
+                comp.setActivities(new HashSet());
+                comp.getActivities().add(am.getObject());
 				target.add(this.getParent());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
 			}

@@ -2267,6 +2267,7 @@ public class DEImportBuilder {
 						{
 							DELogPerItem deLogPerItem = DataExchangeUtils.getDELogPerItemById(new Long(itemId));
 							if( iWorker.existActivityByTitleIatiId(deLogPerItem.getName())){
+								System.out.println(".......Starting importing activity "+noAct);
 								Long grpId = new Long(deLogPerItem.getItemType());
 								AmpActivityVersion ampActivity = new AmpActivityVersion();
 								activityLogs	=	iWorker.populateActivity(ampActivity);
@@ -2280,6 +2281,7 @@ public class DEImportBuilder {
 								item.setAmpId(ampActivity.getAmpActivityGroup().getAmpActivityGroupId());//getAmpActivityId());
 								item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(),iWorker.getIatiID()));
 								DataExchangeUtils.addObjectoToAmp(item);
+								System.out.println("..................End importing activity "+noAct);
 							}
 							else continue;
 						}

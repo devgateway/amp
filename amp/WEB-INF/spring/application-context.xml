@@ -11,8 +11,11 @@
 	<!-- by default allow displaying of the flag -->
 	<http pattern="/aim/default/displayFlag.do**" security="none" />
 	
-	
 	<http pattern="/aim/confirmRegisteration.do**" security="none" />
+
+	<http pattern="/aim/showRegisterUser.do**" security="none" />
+
+	<http pattern="/aim/registerUser.do**" security="none" />
 	
 	<http pattern="/visualization/dataDispatcher.do**" security="none" />
 	

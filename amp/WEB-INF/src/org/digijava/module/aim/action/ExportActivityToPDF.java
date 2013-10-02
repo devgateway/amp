@@ -242,28 +242,6 @@ public class ExportActivityToPDF extends Action {
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
 			}
 			
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Title of Component", ampContext)){
-				columnName=TranslatorWorker.translateText("Title of Component");
-
-				columnVal = identification.getSsc_component_title();
-								
-				if (columnVal != null) {
-					columnVal = TranslatorWorker.translateText(columnVal);
-				}
-				createGeneralInfoRow(mainLayout,columnName,columnVal);
-			}
-
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Description of Component", ampContext)){
-				columnName=TranslatorWorker.translateText("Description of Component");
-
-				columnVal = identification.getSsc_component_description();
-								
-				if (columnVal != null) {
-					columnVal = TranslatorWorker.translateText(columnVal);
-				}
-				createGeneralInfoRow(mainLayout,columnName,columnVal);
-			}
-
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Cooperation", ampContext)){
 				
 				columnName=TranslatorWorker.translateText("Type of Cooperation");

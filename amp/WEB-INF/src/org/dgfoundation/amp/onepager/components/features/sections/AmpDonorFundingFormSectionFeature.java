@@ -181,13 +181,6 @@ public class AmpDonorFundingFormSectionFeature extends
                 CategoryConstants.MODALITIES_NAME, true, false, null, AmpFMTypes.MODULE);
         add(modalities);
 
-        AmpTextAreaFieldPanel sscComponentTitle = new AmpTextAreaFieldPanel("sscComponentTitle", new PropertyModel(am, "sscComponentTitle"), "Title of Component", false, false, false);
-        add(sscComponentTitle);
-
-        AmpTextAreaFieldPanel sscComponentDescription = new AmpTextAreaFieldPanel("sscComponentDescription", new PropertyModel(am, "sscComponentDescription"), "Description of Component", false, false, false);
-        add(sscComponentDescription);
-
-
         fundingModel = new PropertyModel<Set<AmpFunding>>(am, "funding");
 		if (fundingModel.getObject() == null)
 			fundingModel.setObject(new LinkedHashSet<AmpFunding>());

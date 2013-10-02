@@ -310,9 +310,6 @@
 
 		<property name="activityType" column="activity_type" type="java.lang.Long" />
 
-		<property name="sscComponentTitle" column="ssc_component_title" type="java.lang.String" />
-		<property name="sscComponentDescription" column="ssc_component_description" type="java.lang.String" />
-
 	' 
 	>
 ]>

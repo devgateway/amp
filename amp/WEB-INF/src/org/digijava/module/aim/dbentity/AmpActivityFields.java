@@ -315,13 +315,6 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Deleted")
 	protected Boolean deleted;
 
-    //SSC Form - extra fields
-    @VersionableFieldTextEditor(fieldTitle = "Description of Component")
-    protected String sscComponentDescription;
-    @VersionableFieldTextEditor(fieldTitle = "Title of Component")
-    protected String sscComponentTitle;
-
-
     public Boolean getDeleted() {
 		return deleted;
 	}
@@ -2031,22 +2024,6 @@ contactName = string;
 
     public void setActivityType(Long activityType) {
         this.activityType = activityType;
-    }
-
-    public String getSscComponentDescription() {
-        return sscComponentDescription;
-    }
-
-    public void setSscComponentDescription(String sscComponentDescription) {
-        this.sscComponentDescription = sscComponentDescription;
-    }
-
-    public String getSscComponentTitle() {
-        return sscComponentTitle;
-    }
-
-    public void setSscComponentTitle(String sscComponentTitle) {
-        this.sscComponentTitle = sscComponentTitle;
     }
 
     @Override

@@ -758,9 +758,6 @@ public class EditActivity extends Action {
             }
         }
 
-        eaForm.getIdentification().setSsc_component_title(activity.getSscComponentTitle());
-        eaForm.getIdentification().setSsc_component_description(activity.getSscComponentDescription());
-        
         AmpCategoryValue modalities = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.MODALITIES_KEY, activity.getCategories());
         eaForm.getIdentification().setSsc_modalities(modalities == null ? null : modalities.getLabel());
         

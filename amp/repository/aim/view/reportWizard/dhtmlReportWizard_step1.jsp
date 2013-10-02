@@ -31,7 +31,7 @@
 						</c:if>
 							<table style="${tableVisibility}" width="99%" border="0" cellspacing="0" cellpadding="0" id="moreSettingsTable">
 								<tr>
-									<td width="48%" valign="top">
+									<td width="340px" valign="top">
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn>Funding Grouping</digi:trn></span></legend>
 											<div id="reportGroupDiv" class="inputx" style="text-align: left;">
@@ -75,8 +75,8 @@
                                          </div>
 										</fieldset>
 									</td>
-									<td width="2%">&nbsp;</td>
-									<td width="48%" valign="top">
+									<td>&nbsp;</td>
+									<td width="340px" valign="top">
 										<fieldset class="main_side_cont">
 											<nested:hidden property="reportDescription" />
 											<legend><span class="legend_label">${descriptionName}</span></legend>

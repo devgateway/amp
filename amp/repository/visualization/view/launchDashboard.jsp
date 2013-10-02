@@ -723,9 +723,9 @@ function initializeGlobalVariables(){
 				<td class="inside" width="30%" >
 				<div class="selector_type"><b><digi:trn>Export Type</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.exportTypeOption" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>  </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"><br />
-		            <html:radio property="exportData.exportTypeOption" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"><br />
-		        	<html:radio property="exportData.exportTypeOption" styleId="export_type_2" value="2"><digi:trn>Excel</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif"><br />
+		            <html:radio property="exportData.exportTypeOption" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>&nbsp;&nbsp;</html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"><br />
+		            <html:radio property="exportData.exportTypeOption" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>&nbsp;&nbsp;</html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"><br />
+		        	<html:radio property="exportData.exportTypeOption" styleId="export_type_2" value="2"><digi:trn>Excel</digi:trn>&nbsp;&nbsp;</html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif"><br />
 		        </div>
 		        </td>
 				<td class="inside" width="30%" >

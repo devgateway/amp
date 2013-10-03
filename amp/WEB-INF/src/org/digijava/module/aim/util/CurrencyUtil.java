@@ -247,18 +247,14 @@ public class CurrencyUtil {
 	 * Saves an AmpCurrencyRate object to the database
 	 * @param cRate The AmpCurrencyRate object
 	 */
-	public static void saveCurrencyRate(AmpCurrencyRate cRate) {
+	public static void saveCurrencyRate(AmpCurrencyRate cRate, boolean calledFromQuartzJob) {
 		Session session = null;
 		Transaction tx = null;
 		Query qry = null;
 		String qryStr = null;
-		try
+		if (!calledFromQuartzJob)
 		{
 			AmpCaching.getInstance().currencyCache.reset();
-		}
-		catch(NullPointerException ex)
-		{
-			logger.warn("ignored a NPE while resetting currency caches; this is normal if happening from inside a Quartz Job", ex);
 		}
 
 		try {

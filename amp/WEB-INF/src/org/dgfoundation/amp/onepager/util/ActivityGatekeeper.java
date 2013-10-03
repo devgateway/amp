@@ -2,6 +2,8 @@ package org.dgfoundation.amp.onepager.util;
 
 import java.util.HashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.log4j.Logger;
 import org.apache.wicket.util.time.Duration;
 import org.digijava.kernel.util.ShaCrypt;
 
@@ -16,6 +18,8 @@ public class ActivityGatekeeper {
 	public final static Integer REFRESH_LOCK_LOCKED = 1; //activity locked by other user
 	public final static Integer REFRESH_LOCK_EXPIRED = 2; //activity lock expired on purpose (eg. fm mode change)
 
+	private static final Logger logger = Logger.getLogger(ActivityGatekeeper.class);
+	
 	public static Duration getRefreshInterval(){
 		return Duration.milliseconds((long) (LOCK_TIMEOUT*0.7));
 	}
@@ -90,8 +94,14 @@ public class ActivityGatekeeper {
 		return userEditing.get(id);
 	}
 	
-	public static String buildRedirectLink(String id){
-		return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editError=" + ActivityGatekeeper.getUserEditing(String.valueOf(id));
+	public static String buildRedirectLink(String id, long currentUserId){
+		Long editingUserId = ActivityGatekeeper.getUserEditing(String.valueOf(id));
+		if (editingUserId == null)
+		{
+			logger.error("user editing " + id + " not found in the userEditing list, inserting a dummy value!", new RuntimeException("dummy exception"));
+			editingUserId = currentUserId;
+		}
+		return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editError=" + editingUserId;
 	}
 	
 	public static String buildPermissionRedirectLink(String id){

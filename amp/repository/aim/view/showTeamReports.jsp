@@ -14,7 +14,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
-
+<h1>PRIVATE${numberOfPagesToDisplay}</h1>
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer" style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
@@ -334,96 +334,13 @@ $(document).ready(function() {
 					           									</logic:present>
 					           									<table>
 					                    						<tr style="font-size: 11px; font-family: Aria, sans-serif;">
-					                      							<td>                                     
-												                        <%
-												                        ReportsForm aimTeamReportsForm = (ReportsForm) pageContext.getAttribute("aimTeamReportsForm");
-												                        java.util.List pagelist = new java.util.ArrayList();
-																		for(int i = 0; i < aimTeamReportsForm.getTotalPages(); i++)
-												                        	pagelist.add(new Integer(i + 1));
-												                        pageContext.setAttribute("pagelist",pagelist);
-																		pageContext.setAttribute("maxpages", new Integer(aimTeamReportsForm.getTotalPages()));
-												                        pageContext.setAttribute("actualPage", new Integer(aimTeamReportsForm.getPage()));
-												                        %>
-					                        							<jsp:useBean id="urlParamsPagination" type="java.util.Map" class="java.util.HashMap"/>
-												                        <c:set target="${urlParamsPagination}" property="action" value="getPage"/>
-												                        <c:if test="${aimTeamReportsForm.currentPage >0}">
-					                          								<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
-													                        <c:set target="${urlParamsFirst}" property="page" value="0"/>
-													                        <c:set target="${urlParamsFirst}" property="action" value="getPage"/>
-													                        <c:if test="${aimTeamReportsForm.showTabs}">
-													                        	<c:set target="${urlParamsFirst}" property="tabs" value="true"/>
-													                        </c:if>
-					                          								<c:set var="translation">
-					                            								<digi:trn key="aim:firstpage">First Page</digi:trn>
-					                          								</c:set>
-													                        <digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}" ><digi:trn key="aim:firstpage">First Page</digi:trn></digi:link>
-					                          								<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
-																			<c:set target="${urlParamsPrevious}" property="page" value="${aimTeamReportsForm.currentPage -1}"/>
-														                    <c:set target="${urlParamsPrevious}" property="action" value="getPage"/>
-														                    <c:if test="${aimTeamReportsForm.showTabs}">
-					                          									<c:set target="${urlParamsPrevious}" property="tabs" value="true"/>
-					                          								</c:if>
-					                          								&nbsp;|&nbsp; 
-					                          								<c:set var="translation">
-						                          								<digi:trn key="aim:previous">Previous</digi:trn>
-					                          								</c:set>
-																			<!--<digi:link href="/viewTeamReports.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >-->
-																				<!--<digi:trn key="aim:previous">Previous</digi:trn>-->
-																			<!--</digi:link>-->
-																			<!--&nbsp;|&nbsp;-->
-					                        							</c:if>
-												                        <c:set var="length" value="${aimTeamReportsForm.pagesToShow}"></c:set>
-												                        <c:set var="start" value="${aimTeamReportsForm.offset}"/>
-					                        							<c:if test="${maxpages > 1}">
-						                        							<logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer" offset="${start}" length="${length}">
-						                          								<c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>                         
-						                            							<c:if test="${(pageidx - 1) eq actualPage}"> 
-						                                							<span style="background-color: #FF6000; margin-left:2px; margin-right:2px; color: white; padding: 1px 3px; font-weight: bold; border: 1px solid #CCCCCC;">
-						                                								<bean:write name="pageidx"/>
-						                                							</span>
-						                            							</c:if>
-						                            							<c:if test="${(pageidx - 1) ne actualPage}"> 
-							                          								<c:if test="${aimTeamReportsForm.showTabs}">
-							                          									<c:set target="${urlParamsPagination}" property="tabs" value="true"/>
-							                          								</c:if>
-						                              								<digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
-						                                								<bean:write name="pageidx"/>
-						                              								</digi:link>
-						                            							</c:if>
-						                          								<c:if test="${pageidx < maxpages}">&nbsp;|&nbsp;</c:if>
-						                       								</logic:iterate>
-						                       							</c:if>
-					                        							<c:if test="${aimTeamReportsForm.currentPage+1 != aimTeamReportsForm.totalPages}">
-					                          								<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
-					                          								<c:if test="${aimTeamReportsForm.currentPage+1 > aimTeamReportsForm.totalPages}">
-					                            								<c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage}"/>
-					                          								</c:if>
-					                          								<c:if test="${aimTeamReportsForm.currentPage+1 <= aimTeamReportsForm.totalPages}">
-					                            								<c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage+1}"/>
-					                          								</c:if>
-					                         								<c:set target="${urlParamsNext}" property="action" value="getPage"/>
-					                          								<c:set var="translation">
-					                            								<digi:trn key="aim:nextpage">Next Page</digi:trn>
-					                          								</c:set>
-					                          								<c:if test="${aimTeamReportsForm.showTabs}">
-					                          									<c:set target="${urlParamsNext}" property="tabs" value="true"/>
-					                          								</c:if>
-																			<!--<digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >-->
-																				<!--<digi:trn key="aim:next">Next</digi:trn>-->
-																			<!--</digi:link>-->
-					                          								&nbsp;|&nbsp;
-					                          								<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-					                          								<c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-1}"/>
-					                          								<c:set target="${urlParamsLast}" property="action" value="getPage"/>
-					                          								<c:if test="${aimTeamReportsForm.showTabs}">
-					                          									<c:set target="${urlParamsLast}" property="tabs" value="true"/>
-					                          								</c:if>
-					                          								<c:set var="translation">
-					                            								<digi:trn key="aim:lastpage">Last Page</digi:trn>
-					                          								</c:set>
-					                          								<digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"><digi:trn key="aim:lastpage">Last Page</digi:trn></digi:link>
-					                          								&nbsp;&nbsp; 
-					                        							</c:if>
+					                      							<td>
+                                                                        <jsp:useBean id="urlParamsPagination" type="java.util.Map" class="java.util.HashMap"/>
+                                                                        <jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
+                                                                        <jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
+                                                                        <jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
+                                                                        <jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
+                                                                        <%@include file="reports_paginator.jsp" %>
 																		<!--<c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>-->
 					                      							</td>
 					                    						</tr>
@@ -866,82 +783,8 @@ $(document).ready(function() {
 					              						<c:if test="${reportNumber != 0}">
 					                  						<table style="font-size: 11px; font-family: Aria, sans-serif;">
 					                    						<tr>
-					                      							<td align="center">                                     
-					                        							<c:set target="${urlParamsPagination}" property="action" value="getPage"/>
-					                        							<c:if test="${aimTeamReportsForm.currentPage >0}">
-					                          								<c:set target="${urlParamsFirst}" property="page" value="0"/>
-					                          								<c:set target="${urlParamsFirst}" property="action" value="getPage"/>
-					                          								<c:if test="${aimTeamReportsForm.showTabs}">
-					                          									<c:set target="${urlParamsFirst}" property="tabs" value="true"/>
-					                          								</c:if>
-					                          								<c:set var="translation">
-					                            								<digi:trn key="aim:firstpage">First Page</digi:trn>
-					                          								</c:set>
-					                          								<digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"><digi:trn key="aim:firstpage">First Page</digi:trn></digi:link>
-					                          								<c:set target="${urlParamsPrevious}" property="page" value="${aimTeamReportsForm.currentPage -1}"/>
-					                          								<c:set target="${urlParamsPrevious}" property="action" value="getPage"/>
-					                          								<c:if test="${aimTeamReportsForm.showTabs}">
-					                          									<c:set target="${urlParamsPrevious}" property="tabs" value="true"/>
-					                          								</c:if>
-					                          								&nbsp;|&nbsp; 
-					                          								<c:set var="translation">
-						                          								<digi:trn key="aim:previous">Previous</digi:trn>
-					                          								</c:set>
-<!--					                          								<digi:link href="/viewTeamReports.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >-->
-<!--					                            								<digi:trn key="aim:previous">Previous</digi:trn>-->
-<!--					                          								</digi:link>-->
-<!--					                          								&nbsp;|&nbsp;-->
-					                        							</c:if>
-					                        							<c:set var="length" value="${aimTeamReportsForm.pagesToShow}"></c:set>
-					                        							<c:set var="start" value="${aimTeamReportsForm.offset}"/>
-					                        							<c:if test="${maxpages > 1}">
-						                        							<logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer" offset="${start}" length="${length}">
-						                          								<c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>                         
-						                            							<c:if test="${(pageidx - 1) eq actualPage}"> 
-						                                							<span style="background-color: #FF6000; margin-left:2px; margin-right:2px; color: white; padding: 1px 3px; font-weight: bold; border: 1px solid #CCCCCC;">
-						                                								<bean:write name="pageidx"/>
-						                                							</span>
-						                            							</c:if>
-						                            							<c:if test="${(pageidx - 1) ne actualPage}"> 
-							                          								<c:if test="${aimTeamReportsForm.showTabs}">
-							                          									<c:set target="${urlParamsPagination}" property="tabs" value="true"/>
-							                          								</c:if>
-						                              								<digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
-						                                								<bean:write name="pageidx"/>
-						                              								</digi:link>
-						                            							</c:if>
-						                          								<c:if test="${pageidx < maxpages}">&nbsp;|&nbsp;</c:if>
-						                        							</logic:iterate>
-					                        							</c:if>
-					                        							<c:if test="${aimTeamReportsForm.currentPage+1 != aimTeamReportsForm.totalPages}">
-					                          								<c:if test="${aimTeamReportsForm.currentPage+1 > aimTeamReportsForm.totalPages}">
-					                            								<c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage}"/>
-					                          								</c:if>
-					                          								<c:if test="${aimTeamReportsForm.currentPage+1 <= aimTeamReportsForm.totalPages}">
-					                            								<c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage+1}"/>
-					                          								</c:if>
-					                          								<c:if test="${aimTeamReportsForm.showTabs}">
-					                          									<c:set target="${urlParamsNext}" property="tabs" value="true"/>
-					                          								</c:if>
-					                         								<c:set target="${urlParamsNext}" property="action" value="getPage"/>
-					                          								<c:set var="translation">
-					                            								<digi:trn key="aim:nextpage">Next Page</digi:trn>
-					                          								</c:set>
-<!--					                          								<digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >-->
-<!--					                            								<digi:trn key="aim:next">Next</digi:trn>-->
-<!--					                          								</digi:link>-->
-					                          								&nbsp;|&nbsp;
-													                       	<c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-1}"/>
-													                        <c:set target="${urlParamsLast}" property="action" value="getPage"/>
-													                        <c:if test="${aimTeamReportsForm.showTabs}">
-					                          									<c:set target="${urlParamsLast}" property="tabs" value="true"/>
-					                          								</c:if>
-					                          								<c:set var="translation">
-					                            								<digi:trn key="aim:lastpage">Last Page</digi:trn>
-					                          								</c:set>
-					                          								<digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"><digi:trn key="aim:lastpage">Last Page</digi:trn></digi:link>
-					                          								&nbsp;&nbsp; 
-					                        							</c:if>
+					                      							<td align="center">
+                                                                        <%@include file="reports_paginator.jsp" %>
 																		<!--<c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>-->
 					                      							</td>
 					                    						</tr>

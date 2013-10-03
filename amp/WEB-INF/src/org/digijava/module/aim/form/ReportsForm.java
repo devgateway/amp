@@ -104,13 +104,13 @@ public class ReportsForm extends ActionForm {
 	}
 
     public int getOffset() {
-    	int value;
-    	if (getCurrentPage()> (this.getPagesToShow()/2)){
-    		value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
-    	}
-    	else {
-    		value = 0;
-    	}
+    	final int value;
+    	if (getCurrentPage() + getPagesToShow() / 2 < getTotalPages()){
+            int add = getPagesToShow() % 2 == 0 ? 1 : 0;
+    		value = getCurrentPage() - getPagesToShow() / 2 + add;
+    	} else {
+            value = getTotalPages() - getPagesToShow();
+        }
     	setOffset(value);
     	return this.offset;
     }

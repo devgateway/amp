@@ -36,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.exception.UMException;
 import org.digijava.kernel.entity.Interests;
 import org.digijava.kernel.entity.OrganizationType;
@@ -282,6 +283,11 @@ public class UmUtil {
 		}
 		return newMember;
 	}
+
+    public static List<SuspendLogin> getUserSuspendReasons (User user) {
+        return DbUtil.getUserSuspendReasonsFromDB(user);
+    }
+
 
     static {
         organizationNameComparator = new Comparator() {

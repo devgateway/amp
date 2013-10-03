@@ -27,6 +27,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.digijava.module.um.dbentity.SuspendLogin;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
@@ -1185,6 +1186,106 @@ public class DbUtil {
             }
         }
         return col;
+    }
+
+    public static List<SuspendLogin> getSuspendedLoginObjs() {
+        List<SuspendLogin> sls = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder qs = new StringBuilder("From ").
+                    append(SuspendLogin.class.getName());
+            Query q = sess.createQuery(qs.toString());
+            sls = q.list();
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return sls;
+    }
+
+
+    public static void saveSuspendedLoginObj(SuspendLogin sl) {
+        try {
+            if (sl.getActive() == null) sl.setActive(false);
+            if (sl.getExpires() == null) sl.setExpires(false);
+
+            Session sess = PersistenceManager.getRequestDBSession();
+            sess.saveOrUpdate(sl);
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    public static void deleteSuspendedLoginObj(SuspendLogin sl) {
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            sess.delete(sl);
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    public static SuspendLogin getSuspendedLoginObjById(Long id) {
+        SuspendLogin sl = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            sl = (SuspendLogin)sess.get(SuspendLogin.class, id);
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return sl;
+    }
+
+    public static SuspendLogin getSuspendedLoginObjByName(String name) {
+        SuspendLogin sl = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder qs = new StringBuilder("From ").
+                    append(SuspendLogin.class.getName()).
+                    append(" sl where sl.name = :NAME");
+            Query q = sess.createQuery(qs.toString());
+            q.setString("NAME", name);
+            sl = (SuspendLogin) q.uniqueResult();
+
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return sl;
+    }
+
+    public static List<User> getAllUsers() {
+        List<User> retVal = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder qs = new StringBuilder("From ").
+                    append(User.class.getName()).
+                    append(" u order by u.firstNames");
+            Query q = sess.createQuery(qs.toString());
+            retVal = q.list();
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return retVal;
+    }
+
+    public static List<SuspendLogin> getUserSuspendReasonsFromDB (User user) {
+        List<SuspendLogin> sl = null;
+        try {
+            Session sess = PersistenceManager.getRequestDBSession();
+            StringBuilder qs = new StringBuilder("From ").
+                    append(SuspendLogin.class.getName()).
+                    append(" sl where :USER_ID in elements(sl.users)").
+                    append(" and sl.active = true and (sl.expires=false or").
+                    append(" (sl.expires=true and sl.suspendTil > current_date()))");
+            Query q = sess.createQuery(qs.toString());
+            q.setLong("USER_ID", user.getId());
+            sl = (List<SuspendLogin>) q.list();
+
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return sl;
     }
 
 }

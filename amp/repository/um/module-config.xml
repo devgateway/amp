@@ -25,10 +25,13 @@
 		<action login-required="true" pattern="/userUpdateGateway" />
 		<action login-required="true" pattern="/userUpdateMarket" />
 		<action login-required="true" pattern="/showUserRegisterSuccess" />
+		<action login-required="true" pattern="/suspendLoginManager" />
+
 	</security>
 
 	<hibernate-classes required="false">
 		<hibernate-class>org.digijava.module.um.dbentity.ResetPassword</hibernate-class>
+		<hibernate-class>org.digijava.module.um.dbentity.SuspendLogin</hibernate-class>
 	</hibernate-classes>
 
 </module-config>

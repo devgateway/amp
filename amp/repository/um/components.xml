@@ -31,6 +31,10 @@
     <page name="waitingUserConfirmation" title=" - Successfully registered user" />
     <page name="addWorkSpaceUser" title=" - Add user to workspace" />
     <page name="assignWorkspaceToUser" title=" - Add user to workspace" />
+    <page page="suspendLoginManager" name="suspendLoginManager" title="Suspend Log in Manager" />
+    <page page="addEditSuspendLogin" name="addEditSuspendLogin" title="Add/Edit Suspend Login" />
+    <page page="suspendLoginUserManager" name="suspendLoginUserManager" title="Suspend Login User Manager" />
+
 </secondary-pages>
 
 <module>

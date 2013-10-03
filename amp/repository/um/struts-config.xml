@@ -17,6 +17,8 @@
     <form-bean name="umViewAllUsersForm" type="org.digijava.module.um.form.ViewAllUsersForm" />
     <form-bean name="umViewEditUserForm" type="org.digijava.module.um.form.ViewEditUserForm" />
     <form-bean name="umAddUserForm" type="org.digijava.module.um.form.AddUserForm" />    
+    <form-bean name="suspendLoginManagerForm" type="org.digijava.module.um.form.SuspendLoginManagerForm" />    
+
   </form-beans>
   <action-mappings>
     <!--- UM (USER MANAGMENT) -->
@@ -164,5 +166,15 @@
    		<forward name="index" path="/aim/index.do" redirect="true" />
    		<forward name="forward" path="/showLayout.do?layout=umViewAllUsers" /> 
     </action>
+
+    <!-- Suspend LogIn Manager  -->
+    <action name="suspendLoginManagerForm" type="org.digijava.module.um.action.SuspendLoginManager" scope="request" path="/um/suspendLoginManager" parameter="action">
+      <forward name="forward" path="/showLayout.do?layout=suspendLoginManager" />
+      <forward name="add" path="/showLayout.do?layout=addEditSuspendLogin" />
+      <forward name="users" path="/showLayout.do?layout=suspendLoginUserManager" />
+
+
+    </action>
+
   </action-mappings>
 </struts-config>

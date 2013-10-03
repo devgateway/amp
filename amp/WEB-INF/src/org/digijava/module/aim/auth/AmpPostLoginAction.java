@@ -6,6 +6,7 @@ package org.digijava.module.aim.auth;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.um.dbentity.SuspendLogin;
+import org.digijava.module.um.util.UmUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -82,7 +85,22 @@ public class AmpPostLoginAction extends Action {
             	return null;
             }
         }
-        
+
+        //Suspended login
+        List<SuspendLogin> su = UmUtil.getUserSuspendReasons (currentUser);
+        if (su != null && !su.isEmpty()) {
+            if(!siteAdmin) {
+                StringBuilder suReasons = new StringBuilder("userSuspended");
+                for (SuspendLogin suObject : su) {
+                    suReasons.append("{").append(suObject.getReasonText()).append("}");
+                }
+                SecurityContextHolder.getContext().setAuthentication(null);
+                out.println(suReasons.toString());
+                return null;
+            }
+        }
+
+
         /*
          * Checking user Activity settings
          */

@@ -597,6 +597,16 @@ function banUser(txt) {
 																</tr>
 															</c:otherwise>
 														</c:choose>
+														<tr>
+															<td class="inside"><digi:img
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <digi:link module="aim"
+																	href="/../um/suspendLoginManager.do">
+																	<digi:trn>
+																		Account Suspend Manager
+																	</digi:trn>
+																</digi:link></td>
+														</tr>
 														<!-- end of other links -->
 													</table></td>
 											</tr>

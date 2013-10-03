@@ -16,6 +16,28 @@ function ajaxLogin() {
 					onSuccess : function(data) {
 						var error = jQuery.trim(data);
 						$(".error_text_login").remove();
+						
+						//Suspended login
+						var suspendedLoginText = null;
+						var suspendReasons = [];
+						if (error != null && error.length > 13) {
+							if (error.substring (0, 13) == "userSuspended") {
+								//split reasons
+								var startIndex = 0;
+								var endIndex = 0;
+								
+								while (endIndex != error.length - 1) {
+									startIndex = error.indexOf("{", endIndex);
+									endIndex = error.indexOf("}", startIndex);
+									var reasonTxt = error.substring (startIndex + 1, endIndex);
+									suspendReasons.push(reasonTxt);
+								}
+							}
+							error = "userSuspended";
+						}
+						
+						//endOf Suspended login
+						
 						switch (error) {
 						case 'noTeamMember':
 							$('#result')
@@ -26,6 +48,19 @@ function ajaxLogin() {
 							$('#result')
 									.before(
 											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>Invalid User</digi:trn>.</div>");
+							break;
+						case 'userSuspended':
+							var suspUserErrTxt = "<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;";
+							var reasonIdx = 0;
+							for (reasonIdx = 0; reasonIdx < suspendReasons.length; reasonIdx ++){
+								suspUserErrTxt += suspendReasons[reasonIdx];
+								if (reasonIdx < suspendReasons.length) {
+									suspUserErrTxt += "<br>"
+								}
+							}
+							suspUserErrTxt += "</div>";
+							$('#result')
+									.before(suspUserErrTxt);
 							break;
 						case 'noError':
 							location.href = '/index.do';

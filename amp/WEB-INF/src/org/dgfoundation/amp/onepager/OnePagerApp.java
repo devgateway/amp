@@ -24,6 +24,8 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
@@ -31,11 +33,14 @@ import org.dgfoundation.amp.onepager.util.FMComponentResolver;
 import org.dgfoundation.amp.onepager.util.JspResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.springframework.security.AuthenticationManager;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.Locale;
 
 /**
  * @author mihai
@@ -202,6 +207,16 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 				});
 		  */
 
+        getRequestCycleListeners().add(
+            new AbstractRequestCycleListener(){
+                public void onBeginRequest(RequestCycle cycle){
+                    if (cycle.getRequest().getContainerRequest() instanceof HttpServletRequest){
+                        HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest().getContainerRequest();
+                        TLSUtils.populate(containerRequest);
+                    }
+                };
+            }
+        );
 
     }
 

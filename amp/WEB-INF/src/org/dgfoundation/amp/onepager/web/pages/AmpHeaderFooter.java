@@ -10,6 +10,8 @@ import java.util.Locale;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -18,19 +20,31 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.behaviors.DocumentReadyBehavior;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
+import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.entity.UserPreferencesPK;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
+import org.hibernate.ObjectNotFoundException;
 
 /**
  * @author mpostelnicu@dgateway.org
  * @since Sep 22, 2010
  */
 public class AmpHeaderFooter extends WebPage {
-	public AmpHeaderFooter() {
+    private static Logger logger = Logger.getLogger(AmpHeaderFooter.class);
+
+    public AmpHeaderFooter() {
 		List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
 		if (cookies != null) {
 			boolean localeSet = false;
@@ -42,18 +56,19 @@ public class AmpHeaderFooter extends WebPage {
                 	Session.get().setLocale(new Locale(languageCode));
                 	org.digijava.kernel.entity.Locale newLocale = new org.digijava.kernel.entity.Locale();
                 	newLocale.setCode(languageCode);
-                	TLSUtils.forceLocaleUpdate(newLocale);
+                	//TLSUtils.forceLocaleUpdate(newLocale);
                     if (languageCode != null) {
                     	localeSet = true;
                         break;
                     }
                 }
 			}
+
             if (!localeSet){
             	Session.get().setLocale(new Locale(TranslatorWorker.getDefaultLocalCode()));
             	org.digijava.kernel.entity.Locale newLocale = new org.digijava.kernel.entity.Locale();
             	newLocale.setCode(TranslatorWorker.getDefaultLocalCode());
-            	TLSUtils.forceLocaleUpdate(newLocale);
+            	//TLSUtils.forceLocaleUpdate(newLocale);
             }
         }
 		

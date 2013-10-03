@@ -62,9 +62,12 @@ public class TLSUtils {
 		SiteDomain siteDomain = RequestUtils.getSiteDomain(request);
 		TLSUtils.getThreadLocalInstance().request = request;
         TLSUtils.getThreadLocalInstance().site = siteDomain == null ? null : siteDomain.getSite();
-        if (TLSUtils.getThreadLocalInstance().locale != null)
-        	logger.debug("TLSUtils -> Populate Locale Update from " + TLSUtils.getThreadLocalInstance().locale.getCode() + " to " + RequestUtils.getNavigationLanguage(request).getCode());
-        TLSUtils.getThreadLocalInstance().locale = RequestUtils.getNavigationLanguage(request);
+        Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+        if (navigationLanguage != null){
+            if (TLSUtils.getThreadLocalInstance().locale != null)
+                logger.error("TLSUtils -> Populate Locale Update from " + TLSUtils.getThreadLocalInstance().locale.getCode() + " to " + navigationLanguage.getCode());
+            TLSUtils.getThreadLocalInstance().locale = navigationLanguage;
+        }
 	}
 	
 	public static void forceLocaleUpdate(Locale locale){

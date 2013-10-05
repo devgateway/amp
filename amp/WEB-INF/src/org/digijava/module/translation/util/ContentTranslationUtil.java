@@ -305,6 +305,9 @@ public class ContentTranslationUtil {
         return null;
     }
 
+    private static Session session = PersistenceManager.openNewSession();
+    private static Object sessionLock = new Object();
+    
     /**
      * Get's the translation for a field in a specified locale
      * (uses a new session)
@@ -316,8 +319,10 @@ public class ContentTranslationUtil {
      * @return translation for field
      */
     public static String loadFieldTranslationInLocale(String objClass, Long objId, String fieldName, String locale){
-    	Session session = PersistenceManager.openNewSession();
+    	synchronized(sessionLock)
+    	{
         try{
+        	//System.out.format("translator intercepting for %s, %s, %s\n", objClass.substring(objClass.lastIndexOf('.')), objId.toString(), fieldName);
         	StringBuilder query = new StringBuilder();
 			query.append("select t.translation from ");
 			query.append(AmpContentTranslation.class.getName());
@@ -334,8 +339,9 @@ public class ContentTranslationUtil {
         } catch (Exception e) {
             logger.error("can't load field translations", e);
         } finally {
-        	session.close();
+        	//session.close();
         }
+    	}
         return null;
     }
 

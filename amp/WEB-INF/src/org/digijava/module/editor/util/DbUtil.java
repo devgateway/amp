@@ -22,6 +22,8 @@
 
 package org.digijava.module.editor.util;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -548,7 +550,7 @@ public class DbUtil {
     }
 
     /**
-     * Retrieves editor body text.
+     * Retrieves editor body text. Gives priority to chosen language, else returns any
      * @param siteId
      * @param editorKey
      * @param language
@@ -559,35 +561,64 @@ public class DbUtil {
 
         Session session = null;
         String body = null;
+        Connection conn = null;
 
         try {
             session = PersistenceManager.getRequestDBSession();
+            conn = PersistenceManager.getJdbcConnection();
+            String stat = String.format("SELECT body, language FROM dg_editor WHERE site_id = '%s' AND editor_key = '%s'", site.getSiteId(), editorKey);
+            ResultSet rs = conn.prepareStatement(stat).executeQuery();
+            while (rs.next())
+            {
+               	String editorBody = rs.getString(1);
+            	String editorLanguage = rs.getString(2);
+            	
+            	if ("".equals(editorBody))
+            		continue; // ignore this one
+            	
+            	if (editorLanguage.equalsIgnoreCase(language))
+            		return editorBody;
+            	else
+            		body = editorBody;
+            }
 
-            Query q = session.createQuery(
-                "select e from " + Editor.class.getName() + " e " +
-                " where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
-
-          //  q.setCacheable(true);
-            q.setString("siteId", site.getSiteId());
-            q.setString("editorKey", editorKey);
-            //q.setString("language", language);
-
-            @SuppressWarnings("unchecked")
-			List<Editor> result = q.list();
-            for (Iterator iterator = result.iterator(); iterator.hasNext();) {
-				Editor editor = (Editor) iterator.next();
-				if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())){
-					body = editor.getBody();
-					break;
-				}else if (!"".equalsIgnoreCase(editor.getBody())){
-					body = editor.getBody();
-				}
-			}
+//            Query q = session.createQuery(
+//                "select e.body, e.language from " + Editor.class.getName() + " e " +
+//            	" where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
+//                //" where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (lower(e.language) = :language)");
+//
+//          //  q.setCacheable(true);
+//            q.setString("siteId", site.getSiteId());
+//            q.setString("editorKey", editorKey);
+//            //q.setString("language", language.toLowerCase());
+//            //q.setString("language", language);
+//
+//            @SuppressWarnings("unchecked")
+//			List<Object[]> result = q.list();
+//            System.out.format("getEditorBody, HQL just gave me %d results\n", result.size());
+//            for (Object[] editorInfo:result) 
+//            {
+//            	String editorBody = (String) (editorInfo[0]);
+//            	String editorLanguage = (String) (editorInfo[1]);
+//            	
+//            	if ("".equals(editorBody))
+//            		continue; // ignore this one
+//            	
+//            	if (editorLanguage.equalsIgnoreCase(language))
+//            		return editorBody;
+//            	else
+//            		body = editorBody;
+//            }
 
         }
         catch (Exception ex) {
             logger.debug("Unable to get editor from database", ex);
             throw new EditorException("Unable to get editor from database", ex);
+        }
+        finally
+        {
+        	try {conn.close();}
+        	catch(Exception e) {};
         }
 
         return body;

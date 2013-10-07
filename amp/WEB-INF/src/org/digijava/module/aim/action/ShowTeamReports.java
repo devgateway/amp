@@ -156,7 +156,7 @@ public class ShowTeamReports extends Action {
 
         if (ampAppSettings != null){
             Integer defRecordsPerPage = ampAppSettings.getDefaultRecordsPerPage();
-            if(defRecordsPerPage != null && defRecordsPerPage > 0) {
+            if(defRecordsPerPage != null && defRecordsPerPage > 0 && (ampAppSettings.getNumberOfPagesToDisplay() != null)) {
                 numberOfPagesToDisplay = ampAppSettings.getNumberOfPagesToDisplay();
             }
         }

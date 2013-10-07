@@ -40,8 +40,11 @@ public class DirectedDisbursementsTests extends ReportsTestCase
 		suite.addTest(new DirectedDisbursementsTests("testFlatReport"));
 		suite.addTest(new DirectedDisbursementsTests("testByBeneficiary"));
 		suite.addTest(new DirectedDisbursementsTests("testByDonor"));
+		suite.addTest(new DirectedDisbursementsTests("testDonorAgencyFlat"));
+		suite.addTest(new DirectedDisbursementsTests("testDonorAgencyHier"));
 		suite.addTest(new DirectedDisbursementsTests("testByExecuting"));
 		suite.addTest(new DirectedDisbursementsTests("testActualDisbursementsNotDoubleCounted"));
+		
 		return suite;
 	}
 		
@@ -247,5 +250,69 @@ public class DirectedDisbursementsTests extends ReportsTestCase
 		
 		runReportTest("actual disbursements on real-disbursements-containing activity doublecounting", "AMP-15988-actual-disbursements-doublecounting-real-disbursements", new String[] {"Eth Water"}, by_exec_ddr_correct);		
 	}
+	
+	/**
+	 * "Donor Agency" column for an activity with multiple donors and intermediary donors
+	 */
+	public void testDonorAgencyFlat()
+	{
+		// ========================= one more report ===============================
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16093-no-hier", 
+				ColumnReportDataModel.withColumns("AMP-16093-no-hier", 
+						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("Donor Agency", "Eth Water", "[Finland, Norway, USAID]"),
+						GroupColumnModel.withSubColumns("Funding", 
+								GroupColumnModel.withSubColumns("2013", 
+										SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
+										SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545 000")
+										)),
+						GroupColumnModel.withSubColumns("Total Costs", 
+										SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
+										SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545 000")
+						)));
+		
+		runReportTest("flat Donor Agency Report", "AMP-16093-no-hier", new String[] {"Eth Water"}, fddr_correct);
+	}
+
+	public void testDonorAgencyHier()
+	{
+		// ========================= one more report ===============================
+		GroupReportModel fddr_correct = GroupReportModel.withGroupReports("AMP-16093-with-hier", 
+				GroupReportModel.withColumnReports("AMP-16093-with-hier", 
+						ColumnReportDataModel.withColumns("Donor Agency: Finland", 
+								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+								GroupColumnModel.withSubColumns("Funding", 
+										GroupColumnModel.withSubColumns("2013", 
+												SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
+												SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "20 000"))),
+									GroupColumnModel.withSubColumns("Total Costs", 
+										SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
+										SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "20 000"))), 
+										
+						ColumnReportDataModel.withColumns("Donor Agency: Norway", 
+								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+									GroupColumnModel.withSubColumns("Funding", 
+										GroupColumnModel.withSubColumns("2013", 
+											SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
+													SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "110 000"))),
+										GroupColumnModel.withSubColumns("Total Costs", 
+											SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
+											SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "110 000"))),
+
+						ColumnReportDataModel.withColumns("Donor Agency: USAID", 
+								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+									GroupColumnModel.withSubColumns("Funding", 
+										GroupColumnModel.withSubColumns("2013", 
+											SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
+													SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "415 000"))),
+										GroupColumnModel.withSubColumns("Total Costs", 
+											SimpleColumnModel.withContents("Actual Commitments", NULL_PLACEHOLDER),
+											SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "415 000")))
+											
+			));
+		
+		runReportTest("hier Donor Agency Report", "AMP-16093-with-hier", new String[] {"Eth Water"}, fddr_correct);
+	}
+
 }
 

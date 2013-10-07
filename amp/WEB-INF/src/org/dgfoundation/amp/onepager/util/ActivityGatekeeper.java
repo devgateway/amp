@@ -51,28 +51,28 @@ public class ActivityGatekeeper {
 				}
 			}
 			timestamp.put(id, String.valueOf(currentTime));
-		}
-		
-		String hash = ShaCrypt.crypt(id + currentTime);;
-		keycode.put(id, hash);
-		userEditing.put(id, userId);
-		return hash;
-	}
+            String hash = ShaCrypt.crypt(id + currentTime);;
+            keycode.put(id, hash);
+            userEditing.put(id, userId);
+            return hash;
+        }
+    }
 	
 	public static Integer refreshLock(String id, String hash, Long userId){
 		long currentTime = System.currentTimeMillis();
-		if (verifyLock(id, hash)){
-			timestamp.put(id, String.valueOf(currentTime));
-			return REFRESH_LOCK_VALID;
-		}
-		else{
-			if ((keycode.get(id) == null && timestamp.get(id) == null && userEditing.get(id) == null) ||
-				(keycode.get(id) != null && userEditing.get(id) == userId))
-				return REFRESH_LOCK_EXPIRED; //lock was cleared on purpose, page probably getting refreshed now
-			else
-				return REFRESH_LOCK_LOCKED;
-		}
-			
+        synchronized (timestamp){
+            if (verifyLock(id, hash)){
+                    timestamp.put(id, String.valueOf(currentTime));
+                return REFRESH_LOCK_VALID;
+            }
+            else{
+                if ((keycode.get(id) == null && timestamp.get(id) == null && userEditing.get(id) == null) ||
+                    (keycode.get(id) != null && userEditing.get(id) == userId))
+                    return REFRESH_LOCK_EXPIRED; //lock was cleared on purpose, page probably getting refreshed now
+                else
+                    return REFRESH_LOCK_LOCKED;
+            }
+        }
 	}
 	
 	public static boolean verifyLock(String id, String hash){

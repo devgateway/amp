@@ -106,7 +106,7 @@
 	  </tr>
 	  <tr>
 		<td height="18" align="right" nowrap="nowrap" style="font-size: 11px">
-			<digi:trn key="aim:formatPicket:Amountinthousands">Amount in thousands</digi:trn> &nbsp;
+			<digi:trn>Amounts units</digi:trn> &nbsp;
 		</td>
 		<td height="18" colspan="2" nowrap="nowrap">
 		 	<%-- <html:checkbox property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />  --%>

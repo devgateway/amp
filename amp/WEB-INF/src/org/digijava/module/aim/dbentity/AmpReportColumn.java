@@ -88,5 +88,12 @@ public class AmpReportColumn  implements Serializable, Comparable
 	    }
 	}
 
+	@Override
+	public String toString()
+	{
+		if (column == null)
+			return "AmpReportColumn [null]";
+		return "ARC: " + column.toString() + "";
+	}
 	
 }

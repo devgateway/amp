@@ -2257,9 +2257,11 @@ public class DEImportBuilder {
 				if( "check".compareTo(actionType) ==0 )
 					//CHECK content
 					{
-						System.out.println(".......Starting processing activity "+noAct);
+						logger.info(".......Starting processing activity "+noAct);
+						//System.out.println(".......Starting processing activity "+noAct);
 						activityLogs	=	iWorker.checkContent(noAct, this.getHierarchies());
-						System.out.println("..................End processing activity "+noAct);
+						logger.info("..................End processing activity "+noAct);
+						//System.out.println("..................End processing activity "+noAct);
 					}
 				else
 					if( "import".compareTo(actionType) ==0 )
@@ -2267,7 +2269,8 @@ public class DEImportBuilder {
 						{
 							DELogPerItem deLogPerItem = DataExchangeUtils.getDELogPerItemById(new Long(itemId));
 							if( iWorker.existActivityByTitleIatiId(deLogPerItem.getName())){
-								System.out.println(".......Starting importing activity "+noAct);
+								logger.info(".......Starting importing activity "+noAct);
+								//System.out.println(".......Starting importing activity "+noAct);
 								Long grpId = new Long(deLogPerItem.getItemType());
 								AmpActivityVersion ampActivity = new AmpActivityVersion();
 								activityLogs	=	iWorker.populateActivity(ampActivity);
@@ -2281,7 +2284,8 @@ public class DEImportBuilder {
 								item.setAmpId(ampActivity.getAmpActivityGroup().getAmpActivityGroupId());//getAmpActivityId());
 								item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(),iWorker.getIatiID()));
 								DataExchangeUtils.addObjectoToAmp(item);
-								System.out.println("..................End importing activity "+noAct);
+								logger.info("..................End importing activity "+noAct);
+								//System.out.println("..................End importing activity "+noAct);
 							}
 							else continue;
 						}

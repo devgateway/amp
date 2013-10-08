@@ -448,16 +448,10 @@ ${aimMainProjectDetailsForm.activityExists}
 				</feature:display>
 			</module:display>
 
-            <field:display name="Add SSC Button" feature="Edit Activity">
-                <c:set var="activityEditURL">
-                    /wicket/onepager/ssc/<%=request.getParameter("ampActivityId")%>
-                </c:set>
-            </field:display>
-            <field:display name="Add Activity Button" feature="Edit Activity">
-                <c:set var="activityEditURL">
-                    /wicket/onepager/activity/<%=request.getParameter("ampActivityId")%>
-                </c:set>
-            </field:display>
+			<c:set var="activityEditURL">
+				<field:display name="Add SSC Button" feature="Edit Activity">/wicket/onepager/ssc/<%=request.getParameter("ampActivityId")%></field:display>
+				<field:display name="Add Activity Button" feature="Edit Activity">/wicket/onepager/activity/<%=request.getParameter("ampActivityId")%></field:display>
+			</c:set>
 
 			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Edit Activity" module="Previews">

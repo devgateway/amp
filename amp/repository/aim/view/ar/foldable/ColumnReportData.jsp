@@ -11,6 +11,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 
 <%
 	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
@@ -23,6 +27,10 @@
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="../reportHeadings.jsp"/>
 
+<c:set var="activityEditURL">
+	<field:display name="Add SSC Button" feature="Edit Activity">/wicket/onepager/ssc</field:display>
+	<field:display name="Add Activity Button" feature="Edit Activity">/wicket/onepager/activity</field:display>
+</c:set>
 
 <% String display=columnReport.getLevelDepth()>1?"display:none":"";%>
 
@@ -96,16 +104,6 @@ if(validateItem){
 <% 
 		if(bckColor.equals("true")) {
 %>
-    <field:display name="Add SSC Button" feature="Edit Activity">
-        <c:set var="activityEditURL">
-            /wicket/onepager/ssc
-        </c:set>
-    </field:display>
-    <field:display name="Add Activity Button" feature="Edit Activity">
-        <c:set var="activityEditURL">
-            /wicket/onepager/activity
-        </c:set>
-    </field:display>
 
 <bean:define id="bckColor" value="false" toScope="page"/>
 <tr style="<%=display%>">

@@ -184,16 +184,19 @@
 	});
 	
 	$(function(){
-  		$('#basemap').click(function(){
+  		$('#basemap').click(function(evt){
+  			evt.stopPropagation();
      		$('#basemapGalleryesri').toggle();
      	});
 	});
 	
 	$(function(){
-  		$('#basemaplocal').click(function(){
+  		$('#basemaplocal').click(function(evt){
+  			evt.stopPropagation();
      		$('#basemapGallery').toggle();
      	});
 	});
+	
 	$(function(){
   		$('#minmenu').click(function(){
   			$('#divmenucontent').toggle('slow');

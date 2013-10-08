@@ -74,6 +74,10 @@ function createBasemapGallery() {
 		map : map
 	}, "basemapGallery");
 	basemapGallery.startup();
+	var domNode = $(basemapGallery.domNode);
+  $(document).bind("click", function(){
+		domNode.hide();
+	});
 
 	dojo.connect(basemapGallery, "onError", function(error) {
 		console.log(error);
@@ -90,6 +94,10 @@ function createBasemapGalleryEsri() {
     }, "basemapGalleryesri");
 
     basemapGallery.startup();
-    
+    var domNode = $(basemapGallery.domNode);
+    $(document).bind("click", function(){
+			domNode.hide();
+		});
+		
     dojo.connect(basemapGallery, "onError", function(msg) {console.log(msg)});
   }

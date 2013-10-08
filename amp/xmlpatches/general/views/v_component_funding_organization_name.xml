@@ -19,14 +19,13 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-					DROP VIEW IF EXISTS v_component_funding;
-			    	CREATE OR REPLACE VIEW v_component_funding AS 
-			    		SELECT f.activity_id AS amp_activity_id, f.amp_component_funding_id, f.amp_component_funding_id AS amp_fund_detail_id, c.title AS component_name, f.transaction_type, f.adjustment_type, adj.category_value AS adjustment_type_name, f.transaction_date, f.transaction_amount, f.currency_id, cu.currency_code, ct.name AS component_type
-  						FROM amp_component_funding f, amp_components c, amp_currency cu, amp_category_value adj, amp_component_type ct, amp_activity_components aac
-  						WHERE cu.amp_currency_id = f.currency_id AND f.amp_component_id = c.amp_component_id AND f.adjustment_type = adj.id AND ct.type_id = c.type
-						AND f.activity_id = aac.amp_activity_id AND f.amp_component_id = aac.amp_component_id
-  						ORDER BY f.activity_id;
-        		</lang>
+					DROP VIEW IF EXISTS v_component_funding_description;
+			    	CREATE OR REPLACE VIEW v_component_funding_description AS 
+						SELECT f.activity_id AS amp_activity_id, org.name AS title, f.amp_component_id AS amp_component_id
+						FROM amp_component_funding f, amp_components c, amp_activity_components aac, amp_activity activ, amp_organisation org
+						WHERE f.amp_component_id = c.amp_component_id AND f.activity_id = aac.amp_activity_id AND activ.amp_activity_id = aac.amp_activity_id AND f.amp_component_id = aac.amp_component_id AND org.amp_org_id = f.rep_organization_id
+					ORDER BY f.activity_id;	
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

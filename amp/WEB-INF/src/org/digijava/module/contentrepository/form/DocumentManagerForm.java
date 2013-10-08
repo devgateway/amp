@@ -39,7 +39,9 @@ public class DocumentManagerForm extends ActionForm {
 	private Long[] filterTeamIds			= null;
 	private String[] filterLabelsUUID		= null;
 	private String [] filterKeywords 		= null;
-	
+	private String filterFromDate			= null;
+	private String filterToDate		 		= null;
+    
 	private String docListInSession			= null;
 	private String showSharedDocs			= null;
 	private String filterOrganisations = null;
@@ -393,6 +395,22 @@ public class DocumentManagerForm extends ActionForm {
 
 	public void setFilterLabelsUUID(String[] filterLabelsUUID) {
 		this.filterLabelsUUID = filterLabelsUUID;
+	}
+
+	public String getFilterFromDate() {
+		return filterFromDate;
+	}
+
+	public void setFilterFromDate(String filterFromDate) {
+		this.filterFromDate = filterFromDate;
+	}
+
+	public String getFilterToDate() {
+		return filterToDate;
+	}
+
+	public void setFilterToDate(String filterToDate) {
+		this.filterToDate = filterToDate;
 	}
 
 	public Boolean getSharedDocsTabVisible() {

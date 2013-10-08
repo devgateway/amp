@@ -43,6 +43,8 @@
 	
 	<http pattern="/visualization/showProjectsList.do**" security="none" />
 
+	<http pattern="/contentrepository/documentManager.do**" security="none" />
+
 	<!-- move this to the reports module -->
 	<http pattern="/reportsPublicView.do**" security="none" />
 

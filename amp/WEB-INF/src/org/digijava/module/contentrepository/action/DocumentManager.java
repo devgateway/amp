@@ -206,8 +206,11 @@ public class DocumentManager extends Action {
 		if (myForm.getFilterOrganisations() != null)
 			orgId = Long.parseLong(myForm.getFilterOrganisations());
 		
+		String filterFromDate = myForm.getFilterFromDate();
+		String filterToDate = myForm.getFilterToDate();
+		
 		DocumentFilter documentFilter	= new DocumentFilter(source, filterLablesUUID, filterDocTypes, 
-						filterFileTypes, filterTeamIds, filterOwners,filterkeywords, myForm.getOtherUsername(), myForm.getOtherTeamId(), orgId );
+						filterFileTypes, filterTeamIds, filterOwners,filterkeywords, myForm.getOtherUsername(), myForm.getOtherTeamId(), orgId, filterFromDate, filterToDate);
 		
 
 		if ( DocumentFilter.SOURCE_PRIVATE_DOCUMENTS.equals(documentFilter.getSource()) ) {

@@ -30,9 +30,11 @@ function FilterWrapper( trnObj ) {
 	this.filterTeamIds			= new Array();
 	this.filterKeywords			= new Array();	
 	this.filterOrganisations	= new Array();
+	this.filterFromDate			= new Array();
+	this.filterToDate			= new Array();
 	
 	this.trnObj				= {
-			labels: "Lables",
+			labels: "Labels",
 			filters: "Filters",
 			keywords: "Keywords"
 	};
@@ -125,6 +127,16 @@ AbstractDynamicList.prototype.setKeywordTextboxInformation = function (inputId,b
 	
 };
 
+AbstractDynamicList.prototype.setKeywordTextboxInformationPublic = function (inputId,buttonId,id,listObj){
+	this.searchBtn = document.getElementById(buttonId);
+	this.searchBox	= document.getElementById(inputId);
+	this.listObject	= document.getElementById(listObj);
+	this.objId	= id;
+	YAHOO.util.Event.on(this.searchBtn,"click", this.sendRequestPublic, this, true, this.objId, this.listObject);
+	//YAHOO.util.Event.on(this.searchBox,"keydown", handleKeyPress, this, true);
+	
+};
+
 
 
 function handleKeyPress(arg) {
@@ -163,7 +175,6 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 	else 
 		this.createFilterString(true);
 	this.createReqString();
-	
 	var callbackObj		= getCallbackForOtherDocuments(this.containerEl, null, this.thisObjName +"DivId");
 	//alert(this.reqString);
 	YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do?ajaxDocumentList=true&dynamicList='+this.thisObjName+
@@ -176,6 +187,27 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 		divEl.innerHTML = this.filterWrapper.labelsToHTML(getlabelsext()) + "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.fToHTML(getfiltertext())
 		+ "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.kToHTML(getkeywordsext());
 	}
+};
+AbstractDynamicList.prototype.sendRequestPublic	= function (shouldRetrieveFilters, id, listObj) {
+	if (this.searchBox != null && this.searchBox.value.length > 0) {
+		var typedText = this.searchBox.value.split(" ");
+		this.filterWrapper["filterKeywords"] = new Array();
+		for (var i =0;i< typedText.length ; i++) {
+			this.filterWrapper["filterKeywords"].push( new KeyValue(typedText[i], 'keyword'+i) );
+		}
+	}else{
+		this.filterWrapper["filterKeywords"] = new Array();
+		this.filterWrapper["filterKeywords"].push( new KeyValue('', 'keyword'+i) );
+	}
+	var reqStr="";
+	for (var field in this.filterWrapper) {
+		if ( field.indexOf("filterKeywords") == 0 ) {
+			for (var i=0; i<this.filterWrapper[field].length; i++)
+				reqStr	+= "&"+field+"="+this.filterWrapper[field][i].key;
+		}
+	}
+	YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?time='+ new Date().getTime()+reqStr+'&action=jsonfilter&filterId='+this.objId, 
+			new RetrieveFilters(this));
 };
 
 AbstractDynamicList.prototype.sendResetRequest		= function (shouldRetrieveFilters) {
@@ -224,7 +256,7 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 	form = divEl.getElementsByTagName("form")[0];
 	
 	for (var field in this.filterWrapper) {
-		if ( field.indexOf("filter") == 0 && field!="filterLabels" && field!="filterKeywords") {
+		if ( field.indexOf("filter") == 0 && field!="filterLabels" && field!="filterKeywords" && field!="filterFromDate" && field!="filterToDate") {
 			var selectEl	= form.elements[field];
 			if(typeof selectEl == 'undefined')
 				continue;
@@ -232,6 +264,10 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 			
 			this.filterWrapper[field]	= new Array();
 			this.filterWrapper[field].push( new KeyValue(optionEl.value, optionEl.text) );
+		} else if (field=="filterFromDate" || field=="filterToDate"){
+			var elem = form.elements[field];
+			this.filterWrapper[field]	= new Array();
+			this.filterWrapper[field].push( new KeyValue(elem.value, elem.text) );
 		}
 	}
 	}	
@@ -248,7 +284,6 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 }
 
 AbstractDynamicList.prototype.createFilterString	= function (shouldRetrieveFilters) {
-	
 		if ( shouldRetrieveFilters == null || shouldRetrieveFilters )
 			if ( this.fDivId != null )
 				this.retrieveFilterData(this.fDivId);

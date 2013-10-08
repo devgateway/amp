@@ -121,9 +121,18 @@ public class DocTabManagerAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		String filterIdStr		= request.getParameter("filterId");
+		String filterKeywords		= request.getParameter("filterKeywords");
+		
 		if ( filterIdStr != null ) {
 			Long filterId				= Long.parseLong(filterIdStr);
 			DocumentFilter df			= new DocumentFilterDAO().getDocumentFilter(filterId);
+			if (filterKeywords!=null && filterKeywords.length()>0){
+				String[] fkArray = filterKeywords.split(" ");
+				List<String> fkList = new ArrayList<String>();
+				for (int i = 0; i < fkArray.length; i++) 
+					fkList.add(fkArray[i]);
+				df.setFilterKeywords(fkList);
+			}
 			DocumentFilterJson dfJSON	= new DocumentFilterJson(df, request);	
 			
 			JsonConfig jsonConfig	= new JsonConfig();

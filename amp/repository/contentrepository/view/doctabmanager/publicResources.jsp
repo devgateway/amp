@@ -132,6 +132,8 @@
 		publicListObj.sendRequest();
 		<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
 			public${filter.id}ListObj	= new PublicDynamicList(document.getElementById("${filter.id}_markup"), "public${filter.id}ListObj",null);
+			//if(public${filter.id}ListObj.setKeywordTextboxInformationPublic)
+				public${filter.id}ListObj.setKeywordTextboxInformationPublic("tabSearchStr${filter.id}","tabSearchButtonId${filter.id}","${filter.id}","public${filter.id}ListObj");
 			public${filter.id}ListObj.filterInfoDivId	= "FilterInfoDiv${filter.id}";
 			YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/publicDocTabManager.do?time='+ new Date().getTime()+'&action=jsonfilter&filterId=${filter.id}', 
 					new RetrieveFilters(public${filter.id}ListObj) );
@@ -212,6 +214,11 @@ border-right: 1px solid rgb(208, 208, 208);
 			    	</div>
 			    	<c:forEach var="filter" items="${myForm.publicFiltersPositioned}">
 			    		<div id="Ref${filter.id}">
+			    			<input type="text" id="tabSearchStr${filter.id}">
+			        		<button id="tabSearchButtonId${filter.id}" type="button" class="buttonx button_resources">
+				        		<digi:trn>Search</digi:trn>
+				        	</button>
+			    			<br />
 			    			<br />
 			    			<div id="FilterInfoDiv${filter.id}" style="padding-left: 10px;"> </div>
 			    			<div id="${filter.id}_markup" align="left"></div>

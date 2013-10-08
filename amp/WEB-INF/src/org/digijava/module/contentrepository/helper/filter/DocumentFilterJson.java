@@ -16,12 +16,16 @@ import org.digijava.module.contentrepository.jcrentity.LabelDAO;
 
 public class DocumentFilterJson {
 	private List<Label> filterLabels;
+	private List<KeyValue> filterKeywords;
 	
 	private List<KeyValue> filterDocTypeIds;
 	private List<KeyValue> filterFileTypes;
 	
 	private List<KeyValue> filterTeamIds;
 	private List<KeyValue> filterOwners;
+	
+	private List<KeyValue> filterFromDate;
+	private List<KeyValue> filterToDate;
 	
 	public DocumentFilterJson(DocumentFilter df, HttpServletRequest request) {
 		this.filterLabels	= new ArrayList<Label>();
@@ -30,6 +34,13 @@ public class DocumentFilterJson {
 				LabelDAO lDAO	= new LabelDAO(request, false);
 				Label label		= lDAO.getLabel(uuid);
 				this.filterLabels.add(label);
+			}
+		}
+		
+		this.filterKeywords	= new ArrayList<KeyValue>();
+		if (df.getFilterKeywords()!= null) {
+			for (String kw: df.getFilterKeywords()) {
+				this.filterKeywords.add(new KeyValue(kw, kw));
 			}
 		}
 		
@@ -63,6 +74,17 @@ public class DocumentFilterJson {
 				this.filterOwners.add( new KeyValue(email, email) );
 			}
 		}
+		
+		this.filterFromDate		= new ArrayList<KeyValue>();
+		if ( df.getFilterFromDate() != null ) {
+			this.filterFromDate.add( new KeyValue(df.getFilterFromDate(), df.getFilterFromDate()) );
+		}
+		
+		this.filterToDate		= new ArrayList<KeyValue>();
+		if ( df.getFilterToDate() != null ) {
+			this.filterToDate.add( new KeyValue(df.getFilterToDate(), df.getFilterToDate()) );
+		}
+		
 	}
 	
 	public List<Label> getFilterLabels() {
@@ -70,6 +92,12 @@ public class DocumentFilterJson {
 	}
 	public void setFilterLabels(List<Label> filterLabels) {
 		this.filterLabels = filterLabels;
+	}
+	public List<KeyValue> getFilterKeywords() {
+		return filterKeywords;
+	}
+	public void setFilterKeywords(List<KeyValue> filterKeywords) {
+		this.filterKeywords = filterKeywords;
 	}
 	public List<KeyValue> getFilterDocTypeIds() {
 		return filterDocTypeIds;
@@ -94,6 +122,22 @@ public class DocumentFilterJson {
 	}
 	public void setFilterOwners(List<KeyValue> filterOwners) {
 		this.filterOwners = filterOwners;
+	}
+
+	public List<KeyValue> getFilterFromDate() {
+		return filterFromDate;
+	}
+
+	public void setFilterFromDate(List<KeyValue> filterFromDate) {
+		this.filterFromDate = filterFromDate;
+	}
+
+	public List<KeyValue> getFilterToDate() {
+		return filterToDate;
+	}
+
+	public void setFilterToDate(List<KeyValue> filterToDate) {
+		this.filterToDate = filterToDate;
 	}
 	
 	

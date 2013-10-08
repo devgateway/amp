@@ -296,7 +296,7 @@
 		        visible:false,
 		        
 		        context:[buttonId,  calendarCorner, objectCorner],
-		        draggable:false,
+		        draggable:true,
 		        close:true
 		        
 		    });
@@ -360,7 +360,7 @@
             
 		//}
 		dialog.show();
-		dialog.align(calendarCorner, objectCorner);
+		//dialog.align(calendarCorner, objectCorner);
 	}
 	
 	/*Just for compatibility reasons with functions that were used with the old DHTMLSuite calendar widget*/

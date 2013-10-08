@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
+<jsp:include page="/repository/aim/view/scripts/newCalendar.jsp"  />
 <%-- This file renders the Resource-Filtering popup table. Add one <tr></tr> per filter criterium --%>
 <style>
 #docTypes {
@@ -79,6 +79,30 @@
 					</td>
 				</tr>
 			</field:display>			
+			<tr>
+				<td><div class="t_sm"><b><digi:trn>From date</digi:trn>:</b></div></td>
+				<td>
+					<input id="filterFromDate" type="text" readonly="readonly" name="filterFromDate" class="dropdwn_sm"/>
+					<a id="date1" href='javascript:pickDateById("date1","filterFromDate")'>
+			        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>	
+			        </a>
+			        <a id="clear1" href="javascript:clearDate('filterFromDate')">
+                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this date"/>
+                   	</a>
+				</td>
+			</tr>
+			<tr>
+				<td><div class="t_sm"><b><digi:trn>To date</digi:trn>:</b></div></td>
+				<td>
+					<input id="filterToDate" type="text" readonly="readonly" name="filterToDate" class="dropdwn_sm"/>
+					<a id="date2" href='javascript:pickDateById("date2","filterToDate")'>
+			        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>	
+			        </a>
+			        <a id="clear2" href='javascript:clearDate("filterToDate")'>
+                    <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" alt="Delete this date"/>
+                   	</a>
+				</td>
+			</tr>
 			<tr>
 				<td colspan="2" style="text-align: center;">
 					<button class="buttonx" type="button">

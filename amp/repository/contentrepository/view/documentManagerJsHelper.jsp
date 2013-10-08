@@ -467,7 +467,7 @@ myTable.enhanceMarkup = function(markupName) {
 	    	this.columnHeaders.push({key:"resource_category",label:"${trans_headerResourceCategory}", sortable:true, width:70/* + extraSpacePerFreeLoader*/});
 	    if (show_organisations)
 	    	this.columnHeaders.push({key:"resource_organisations",label:"${trans_headerResourceOrganisations}", sortable:true/*, width:50 + extraSpacePerFreeLoader*/});
-	    this.columnHeaders.push({key:"labels",label:"${trans_headerLabels}",sortable:false, width:50});
+	    this.columnHeaders.push({key:"labels",label:"${trans_headerLabels}",sortable:true, width:50});
 	    this.columnHeaders.push({key:"size",type:"number",label:"${trans_fileSize}",sortable:true, width:50});	    
 	    this.columnHeaders.push({key:"actions",label:"${trans_headerActions}",sortable:false, width:50});
 	}
@@ -763,7 +763,7 @@ function WindowControllerObject(bodyContainerEl) {
 				//parameters += "&type=team2"
 				//alert(parameters);
 				this.bodyContainerElement.innerHTML="<div align='center'>${trans_wait}<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
-				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
+				YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
 								'ajaxDocumentList=true'+parameters );
 				};
 				

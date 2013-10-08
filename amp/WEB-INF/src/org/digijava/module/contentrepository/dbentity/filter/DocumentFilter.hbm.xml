@@ -16,6 +16,8 @@
 		<property name="baseUsername" column="base_username" type="java.lang.String" />
 		<property name="baseTeamId" column="base_team_id" type="java.lang.Long" />
 		<property name="publicViewPosition" column="public_view_position" type="java.lang.Long" />
+		<property name="filterFromDate" column="filter_from_date" type="java.lang.String" />
+		<property name="filterToDate" column="filter_to_date" type="java.lang.String" />
 		
 		<list name="filterLabelsUUID" table="cr_document_filter_labels_uuid" cascade="all" lazy="false">
 			<cache usage="read-write"/>

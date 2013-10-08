@@ -1,6 +1,9 @@
 package org.digijava.module.contentrepository.dbentity.filter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -48,6 +51,9 @@ public class DocumentFilter {
 	private List<Long> filterTeamIds;
 	private List<String> filterOwners;
 	
+	private String filterFromDate;
+	private String filterToDate;
+	
 	private Long publicViewPosition;
 	
 	private List<String> filterKeywords;
@@ -59,7 +65,7 @@ public class DocumentFilter {
 	
 	public DocumentFilter(String source, List<String> filterLabelsUUID, List<Long> filterDocTypeIds,
 			List<String> filterFileType, List<Long> filterTeamIds,
-			List<String> filterOwners,List<String> filterKeywords, String baseUsername, Long baseTeamId, Long orgId) {
+			List<String> filterOwners,List<String> filterKeywords, String baseUsername, Long baseTeamId, Long orgId, String filterFromDate, String filterToDate) {
 		
 		this.source = source;
 		
@@ -83,6 +89,14 @@ public class DocumentFilter {
 		
 		if(filterKeywords !=null && filterKeywords.size() > 0){
 			this.filterKeywords = filterKeywords;
+		}
+		
+		if(filterFromDate !=null && filterFromDate.length() > 0){
+			this.filterFromDate = filterFromDate;
+		}
+		
+		if(filterToDate !=null && filterToDate.length() > 0){
+			this.filterToDate = filterToDate;
 		}
 		
 		this.organisationId = orgId;
@@ -123,11 +137,14 @@ public class DocumentFilter {
 						ArrayList<String> ddLabelsUUID	= new ArrayList<String>();	
 						for ( Label l: dd.getLabels() ) 
 							ddLabelsUUID.add( l.getUuid() );
-						for ( String uuid: this.filterLabelsUUID ) 
-							if ( !ddLabelsUUID.contains(uuid) ) {
-								pass = false;
-								break;
+						boolean tempPass = false;
+						for ( String uuid: this.filterLabelsUUID ){
+							if ( ddLabelsUUID.contains(uuid) ) {
+								tempPass = true;
 							}
+						}
+						if (!tempPass)
+							pass = false;
 					}
 					else 
 						pass	= false;
@@ -147,6 +164,34 @@ public class DocumentFilter {
 						iterationNo++;
 					}
 					
+				}
+				
+				SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+				SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
+			    if (this.filterFromDate !=null && this.filterFromDate.length() > 0){
+					Calendar cal = Calendar.getInstance();
+					Calendar ddCal = Calendar.getInstance();
+					try {
+						cal.setTime(sdf1.parse(this.filterFromDate));
+						ddCal.setTime(sdf2.parse(dd.getCalendar()));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					if (ddCal.before(cal))
+						pass = false;
+				}
+				
+				if (this.filterToDate !=null && this.filterToDate.length() > 0){
+					Calendar cal = Calendar.getInstance();
+					Calendar ddCal = Calendar.getInstance();
+					try {
+						cal.setTime(sdf1.parse(this.filterToDate));
+						ddCal.setTime(sdf2.parse(dd.getCalendar()));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					if (ddCal.after(cal))
+						pass = false;
 				}
 				
 				if (pass)
@@ -276,6 +321,26 @@ public class DocumentFilter {
 
 	public void setFilterKeywords(List<String> filterKeywords) {
 		this.filterKeywords = filterKeywords;
+	}
+
+
+	public String getFilterFromDate() {
+		return filterFromDate;
+	}
+
+
+	public void setFilterFromDate(String filterFromDate) {
+		this.filterFromDate = filterFromDate;
+	}
+
+
+	public String getFilterToDate() {
+		return filterToDate;
+	}
+
+
+	public void setFilterToDate(String filterToDate) {
+		this.filterToDate = filterToDate;
 	}
 	
 	

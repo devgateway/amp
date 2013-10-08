@@ -192,7 +192,7 @@ var trnObj		= {
 						<table border="0" cellPadding="1" cellSpacing="0" width="980" style="position: relative; font-size:12px;" align=center>
 								<tr>
 									<td>
-										<c:forEach var="iterateIndex" begin="1" end="4">
+										<c:forEach var="iterateIndex" begin="1" end="12">
 											<span style="white-space: nowrap;">
 												<digi:trn>Position</digi:trn>${iterateIndex}:
 												<select name="select" class="inp-text" style="font-size: 10px; margin-right:20px;" id="pos_${iterateIndex-1}">

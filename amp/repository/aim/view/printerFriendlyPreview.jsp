@@ -1505,7 +1505,8 @@ body {background:none;}
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:commitments">
-																				Commitments</digi:trn>																			</td>
+																				Commitments</digi:trn>																			
+																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.commitments}">
@@ -1518,21 +1519,48 @@ body {background:none;}
 																							</td>
 																							</field:display>
 																							<field:display name="Components Amount Commitments" feature="Activity - Component Step">
-																							<td align="right" width="100" bgcolor="#ffffff">
-																								<FONT color="blue">*</FONT>
-																								<c:out value="${fd.transactionAmount}"/>																							</td>
+																								<td align="right" width="100" bgcolor="#ffffff">
+																									<FONT color="blue">*</FONT>
+																									<c:out value="${fd.transactionAmount}"/>
+																								</td>
 																							</field:display>
 																							<field:display name="Components Currency Commitments" feature="Activity - Component Step">
-																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.currencyCode}"/>																							</td>
-																							</field:display>
+																								<td bgcolor="#ffffff">
+																									<c:out value="${fd.currencyCode}"/>
+																								</td>
+																							</field:display>																						
 																							<field:display name="Components Date Commitments" feature="Activity - Component Step">
-																							<td bgcolor="#ffffff" width="70">
-																								<c:out value="${fd.transactionDate}"/>																							</td>
-																							</field:display>
+																								<td bgcolor="#ffffff" width="70">
+																									<c:out value="${fd.transactionDate}"/>
+																								</td>
+																							</field:display>																							
 																						</tr>
+																						<field:display name="Component Funding Organization" feature="Activity - Component Step">
+																							<tr>
+																								<td bgcolor="#ffffff">
+																									<b><digi:trn>Organisation</digi:trn></b>
+																								</td>
+																								<td colspan="3">
+																									<logic:notEmpty property="componentOrganisation" name="fd">
+																										<c:out value="${fd.componentOrganisation.name}" />
+																									</logic:notEmpty>
+																								</td>
+																							</tr>
+																						</field:display>
+																						
+																						<field:display name="Description of Component Funding" feature="Activity - Component Step">
+																							<tr>
+																								<td width="50" bgcolor="#ffffff">
+																									<b><digi:trn>Description</digi:trn></b>
+																								</td>
+																								<td colspan="3" bgcolor="white">
+																									<c:out value="${fd.componentTransactionDescription}" />
+																								</td>
+																							</tr>																							
+																						</field:display>
 																					</c:forEach>
-																				</table>																			</td>
+																				</table>																			
+																			</td>
 																		</tr>
 																	</table>
 																</td></tr>

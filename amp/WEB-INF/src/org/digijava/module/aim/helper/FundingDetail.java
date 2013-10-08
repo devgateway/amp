@@ -53,7 +53,27 @@ public class FundingDetail implements Serializable, Comparable
 	{
 		return recipientOrganisationRole;
 	}
+	
+	public void setComponentOrganisation(AmpOrganisation compOrganisation)
+	{
+		this.componentOrganisation = compOrganisation;
+	}
+	
+	public AmpOrganisation getComponentOrganisation()
+	{
+		return this.componentOrganisation;
+	}
+	
+	public void setComponentTransactionDescription(String ctDescription)
+	{
+		this.componentTransactionDescription = ctDescription;
+	}
 
+	public String getComponentTransactionDescription()
+	{
+		return this.componentTransactionDescription;
+	}
+	
 	private Date reportingDate;
 	private AmpCategoryValue adjustmentTypeName;
 	private String transactionDate;
@@ -77,6 +97,9 @@ public class FundingDetail implements Serializable, Comparable
     private Boolean disbursementOrderRejected;        
     private Long pledge;
     private AmpCategoryValue pledgename;
+    
+    private AmpOrganisation componentOrganisation;
+    private String componentTransactionDescription;
        
 	
     

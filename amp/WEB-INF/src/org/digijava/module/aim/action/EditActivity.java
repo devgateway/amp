@@ -2496,6 +2496,8 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
 				
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
+				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
+				fd.setComponentTransactionDescription(ampCompFund.getDescription());
 				
 				if (fd.getTransactionType() == 0) {
 				

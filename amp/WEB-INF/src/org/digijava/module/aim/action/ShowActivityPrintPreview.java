@@ -1344,6 +1344,8 @@ public class ShowActivityPrintPreview
 				fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
 				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
+				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
+				fd.setComponentTransactionDescription(ampCompFund.getDescription());
 				if (fd.getTransactionType() == 0) {
 					tempComp.getCommitments().add(fd);
 				} else if (fd.getTransactionType() == 1) {

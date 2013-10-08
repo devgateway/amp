@@ -3655,10 +3655,29 @@ public class ExportActivityToPDF extends Action {
 		relatedOrgsTable.addCell(emptyCell);
 	}
 	
+	protected PdfPCell buildPdfCell(String text, Font font, int colSpan)
+	{
+		PdfPCell result = new PdfPCell();
+		result.setColspan(colSpan);
+		Paragraph paragraph;
+		
+		if (font == null)
+			font = plainFont;
+		
+		paragraph = new Paragraph(text, font);
+		
+		result.addElement(paragraph);
+		result.setBorder(0);
+		return result;
+	}
+	
 	/**
 	 * builds commitments, expenditures, disbursement data output
 	 */
-	private PdfPTable buildFinanceInfoOutput(PdfPTable nestedTable,String elemntName, List<FundingDetail> listToIterate,String[] fmFields,ServletContext ampContext) throws WorkerException,DocumentException{			
+	private PdfPTable buildFinanceInfoOutput(PdfPTable nestedTable,String elemntName, List<FundingDetail> listToIterate,String[] fmFields,ServletContext ampContext) throws WorkerException,DocumentException
+	{			
+		String descriptionFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description";
+		String orgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization";
 		
 		PdfPCell cell=new PdfPCell();
 		cell.setBorder(0);
@@ -3683,47 +3702,55 @@ public class ExportActivityToPDF extends Action {
 //				widthArray[i]=1f;
 //			}			
 //		}
-		if (visibleFmFieldsAmount > 0){
+		if (visibleFmFieldsAmount > 0)
+		{
 			PdfPTable fdTable=new PdfPTable(visibleFmFieldsAmount);
 	//		fdTable.setWidths(widthArray);
-			for (FundingDetail fd : listToIterate) {
+			for (FundingDetail fd : listToIterate) 
+			{
 				if(FeaturesUtil.isVisibleModule(fmFields[0], ampContext)){
-					cell=new PdfPCell();
-					paragraph=new Paragraph(postprocessText(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue())),plainFont);
-					cell.addElement(paragraph);
-					cell.setBorder(0);
-					fdTable.addCell(cell);
+					fdTable.addCell(buildPdfCell(postprocessText(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue())), plainFont, 1));
 				}			
-				
-				String output="";
-				if(FeaturesUtil.isVisibleModule(fmFields[1], ampContext)){
-					output+=fd.getTransactionAmount();
+				String output = "";
+				if (FeaturesUtil.isVisibleModule(fmFields[1], ampContext)){
+					output += fd.getTransactionAmount();
 				}
-				if(FeaturesUtil.isVisibleModule(fmFields[2], ampContext)){
-					output+= " " + fd.getCurrencyCode();
+				if (FeaturesUtil.isVisibleModule(fmFields[2], ampContext)){
+					output += " " + fd.getCurrencyCode();
 				}
-				cell=new PdfPCell();
-				paragraph=new Paragraph(postprocessText(output),plainFont);
-				cell.addElement(paragraph);
-				cell.setBorder(0);
-				fdTable.addCell(cell);
+				fdTable.addCell(buildPdfCell(postprocessText(output), plainFont, 1));
 				
 				if(FeaturesUtil.isVisibleModule(fmFields[3], ampContext)){
-					cell=new PdfPCell();
-					paragraph=new Paragraph(fd.getTransactionDate(),plainFont);
-					cell.addElement(paragraph);
-					cell.setBorder(0);
-					fdTable.addCell(cell);
+					fdTable.addCell(buildPdfCell(fd.getTransactionDate(), plainFont, 1));
 				}
+								
+				fdTable.addCell(buildPdfCell(fd.getFormattedRate()!=null?fd.getFormattedRate():" ", plainFont, 1));
 				
-				cell=new PdfPCell();
-				paragraph=new Paragraph(fd.getFormattedRate()!=null?fd.getFormattedRate():" ",plainFont);
-				cell.addElement(paragraph);
-				cell.setBorder(0);
-				fdTable.addCell(cell);
+				if (fmFields[0].equals("/Activity Form/Components/Component/Components Commitments")) // dirty hack to detect "we are rendering Components Commitments, so we need to render comp-funding organisation and description
+				{										
+					if (FeaturesUtil.isVisibleModule(orgNameFm, ampContext))
+					{
+						fdTable.completeRow();
+						fdTable.addCell(buildPdfCell("", null, 1));
+						fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Organization"), null, 1));
+						String orgNameTxt = fd.getComponentOrganisation() == null ? "" : fd.getComponentOrganisation().getName();
+						fdTable.addCell(buildPdfCell(orgNameTxt, null, fdTable.getNumberOfColumns() - 2));
+						fdTable.completeRow();
+					}
+
+					if (FeaturesUtil.isVisibleModule(descriptionFm, ampContext))
+					{
+						fdTable.completeRow();
+						fdTable.addCell(buildPdfCell("", null, 1));						
+						fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Transaction Description"), titleFont, 2));
+						fdTable.addCell(buildPdfCell(fd.getComponentTransactionDescription(), null, fdTable.getNumberOfColumns() - 3));
+						fdTable.completeRow();
+					}
+					
 				}
-				nestedTable.addCell(fdTable);
 			}
+			nestedTable.addCell(fdTable);
+		}
 		return nestedTable;
 	}
 	

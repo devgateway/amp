@@ -1777,7 +1777,7 @@ function collapseAll() {
 													<digi:trn key="aim:commitments">Commitments</digi:trn>												
 												</td>
 												<td class="prv_right">
-												<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+												<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee" class="component-funding-table">
 													<c:forEach var="fd" items="${comp.commitments}">
 														<tr>
 															<module:display name="/Activity Form/Components/Component/Components Commitments" 
@@ -1800,6 +1800,16 @@ function collapseAll() {
 																	<b><c:out value="${fd.currencyCode}"/></b>																
 																</td>
 															</module:display>
+															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
+																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																<td class="prv_right">
+																	<b><digi:trn>Organisation</digi:trn>:</b>
+																	<logic:notEmpty property="componentOrganisation" name="fd">
+																		<c:out value="${fd.componentOrganisation.name}"/>
+																	</logic:notEmpty>																																
+																</td>
+															</module:display>
+															
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																<td bgcolor="#f0f0f0" width="70">
@@ -1807,6 +1817,17 @@ function collapseAll() {
 															   </td>
 															</module:display>
 														</tr>
+														<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Description"
+																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
+																<tr>
+																	<td width="50" bgcolor="#f0f0f0">
+																		<b><digi:trn>Description</digi:trn></b>
+																	</td>
+																	<td colspan="5" style="padding-left: 15px" bgcolor="white">
+																		<b><c:out value="${fd.componentTransactionDescription}" /></b>
+																	</td>
+																</tr>
+														</module:display>
 													</c:forEach>
 												</table>												</td>
 											</tr>

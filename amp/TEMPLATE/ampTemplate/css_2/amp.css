@@ -999,3 +999,8 @@ div.innerTab {
 	padding: 2px; /* swallow border's +1 paddings */
 	background-color: #FFFFDD;
 }
+
+table.component-funding-table tr
+{
+	border-top: 1px solid black;
+}

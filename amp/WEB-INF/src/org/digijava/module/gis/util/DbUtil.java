@@ -1968,9 +1968,16 @@ public class DbUtil {
      * returns a set of all ampActivityIds passed by the workspace filter
      * @param session
      */
-    public static Set<Long> getAllLegalAmpActivityIds()
+    public static Set<Long> getAllLegalAmpActivityIds() {
+        return getAllLegalAmpActivityIds(true);
+    }
+
+    public static Set<Long> getAllLegalAmpActivityIds(boolean inclideDrafts)
     {
     	String usedQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
+        if (!inclideDrafts) {
+            usedQuery += " and draft=false";
+        }
     	return getAllAmpActivityIds(usedQuery);
     }
     

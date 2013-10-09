@@ -554,7 +554,7 @@ public class WidgetUtil {
         if (sectorIds != null) {
         	
             Map<Long, ActivitySectorDonorFunding> activityFundingInfos = new HashMap<Long, ActivitySectorDonorFunding>();            
-            Set<Long> allActivityIdsSet = DbUtil.getAllLegalAmpActivityIds();
+            Set<Long> allActivityIdsSet = DbUtil.getAllLegalAmpActivityIds(false);
             
             for (Long sectId : sectorIds) {
                 Set<Long> ids = new HashSet<Long>();

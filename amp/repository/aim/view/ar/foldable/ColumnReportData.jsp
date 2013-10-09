@@ -88,7 +88,7 @@ if ( showColumn && validatedActivities.contains(ownerId) )
 if(validateItem){
 	%>
 	<c:set var="action" value="validate"/>
-	<c:set var="actionString" value="${translatedValidate}"/>
+	<c:set var="actionString" value="Validate activity"/>
 	<%
 }
 %>

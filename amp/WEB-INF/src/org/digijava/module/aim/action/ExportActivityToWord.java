@@ -1944,6 +1944,24 @@ public class ExportActivityToWord extends Action {
 			sectionHelper
 					.addRowData(compFnd.getFormattedRate() != null ? compFnd
 							.getFormattedRate() : "");
+			
+			if (componentFMfields[0].equals("/Activity Form/Components/Component/Components Commitments")) // hacky way of detecting "we are rendering a component funding item"
+			{
+				String descriptionFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description";
+				String orgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization";
+				
+				if (FeaturesUtil.isVisibleModule(orgNameFm, ampContext))
+				{
+					String orgString = compFnd.getComponentOrganisation() != null ? compFnd.getComponentOrganisation().getName() : "";
+					sectionHelper.addRowData(TranslatorWorker.translateText("Organization") + ":" + orgString);
+				}
+				
+				if (FeaturesUtil.isVisibleModule(descriptionFm, ampContext))
+				{
+					String compTransStr = compFnd.getComponentTransactionDescription() == null ? "" : compFnd.getComponentTransactionDescription();
+					sectionHelper.addRowData(TranslatorWorker.translateText("Transaction Description") + ": " + compTransStr);
+				}
+			}
 
 			eshCompFundingDetails.addRowData(sectionHelper);
 		}

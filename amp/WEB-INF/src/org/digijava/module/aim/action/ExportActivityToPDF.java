@@ -3676,8 +3676,6 @@ public class ExportActivityToPDF extends Action {
 	 */
 	private PdfPTable buildFinanceInfoOutput(PdfPTable nestedTable,String elemntName, List<FundingDetail> listToIterate,String[] fmFields,ServletContext ampContext) throws WorkerException,DocumentException
 	{			
-		String descriptionFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description";
-		String orgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization";
 		
 		PdfPCell cell=new PdfPCell();
 		cell.setBorder(0);
@@ -3727,23 +3725,26 @@ public class ExportActivityToPDF extends Action {
 				fdTable.addCell(buildPdfCell(fd.getFormattedRate()!=null?fd.getFormattedRate():" ", plainFont, 1));
 				
 				if (fmFields[0].equals("/Activity Form/Components/Component/Components Commitments")) // dirty hack to detect "we are rendering Components Commitments, so we need to render comp-funding organisation and description
-				{										
-					if (FeaturesUtil.isVisibleModule(orgNameFm, ampContext))
+				{
+					String descriptionFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description";
+					String orgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization";
+
+					if (FeaturesUtil.isVisibleModule(orgNameFm, ampContext) && (fd.getComponentOrganisation() != null))
 					{
 						fdTable.completeRow();
 						fdTable.addCell(buildPdfCell("", null, 1));
-						fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Organization"), null, 1));
+						fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Organization"), titleFont, 1));
 						String orgNameTxt = fd.getComponentOrganisation() == null ? "" : fd.getComponentOrganisation().getName();
 						fdTable.addCell(buildPdfCell(orgNameTxt, null, fdTable.getNumberOfColumns() - 2));
 						fdTable.completeRow();
 					}
 
-					if (FeaturesUtil.isVisibleModule(descriptionFm, ampContext))
+					if (FeaturesUtil.isVisibleModule(descriptionFm, ampContext) && (fd.getComponentTransactionDescription() != null) && (!fd.getComponentTransactionDescription().isEmpty()))
 					{
 						fdTable.completeRow();
 						fdTable.addCell(buildPdfCell("", null, 1));						
-						fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Transaction Description"), titleFont, 2));
-						fdTable.addCell(buildPdfCell(fd.getComponentTransactionDescription(), null, fdTable.getNumberOfColumns() - 3));
+						fdTable.addCell(buildPdfCell(TranslatorWorker.translateText("Transaction Description"), titleFont, 1));
+						fdTable.addCell(buildPdfCell(fd.getComponentTransactionDescription(), null, fdTable.getNumberOfColumns() - 2));
 						fdTable.completeRow();
 					}
 					

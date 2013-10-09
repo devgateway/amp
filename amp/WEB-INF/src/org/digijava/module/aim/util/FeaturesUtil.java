@@ -2425,7 +2425,7 @@ public class FeaturesUtil {
 		AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
 		try {
 			session = PersistenceManager.getSession();
-			ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
+			ft = (AmpTemplatesVisibility) session.get(AmpTemplatesVisibility.class,
 					id);
 			List list = session.createQuery("from " +
 					AmpModulesVisibility.class.getName() ). list();

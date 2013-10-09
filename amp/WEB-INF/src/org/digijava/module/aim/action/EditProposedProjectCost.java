@@ -33,7 +33,7 @@ public class EditProposedProjectCost extends Action{
 
         EditActivityForm eaForm = (EditActivityForm) form;
         TeamMember teamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
-        AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+        AmpApplicationSettings tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
 
         eaForm.setReset(false);
         if(eaForm.getFunding().getProProjCost()==null){

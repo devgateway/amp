@@ -26,9 +26,7 @@ public class MTEFYearsModel implements IModel<KeyValue> {
 
         TeamMember tm = ((AmpAuthWebSession) Session.get()).getCurrentMember();
         if (tm != null){
-            AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
-            if (tempSettings == null)
-                tempSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+            AmpApplicationSettings tempSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
             Long defaultCalendarId=null;
             if (tempSettings!=null && tempSettings.getFiscalCalendar()!=null){
                 defaultCalendarId=tempSettings.getFiscalCalendar().getAmpFiscalCalId();

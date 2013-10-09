@@ -112,9 +112,7 @@ public class UpdateAppSettings extends Action {
 			} else if (path != null
 					&& (path.trim().equals("/aim/customizeSettings") || path
 							.trim().equals("/customizeSettings"))) {
-				uForm.setType("userSpecific");
-				uForm.setMemberName(tm.getMemberName());
-				ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+				throw new RuntimeException("Unsupported: userSpecific settings");
 			}
 
 			if (ampAppSettings != null && loadValues) {
@@ -242,12 +240,7 @@ public class UpdateAppSettings extends Action {
 			uForm.setLanguages(sortedLanguages);
 
 			logger.info("TYpe =" + uForm.getType());
-			if (uForm.getType().equalsIgnoreCase("userSpecific")) {
-				logger.info("mapping to showUserSettings");
-				return mapping.findForward("showUserSettings");
-			} else {
-				return mapping.findForward("showDefaultSettings");
-			}
+			return mapping.findForward("showDefaultSettings");
 		} else {
 			logger.debug("In saving");
 			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
@@ -272,17 +265,7 @@ public class UpdateAppSettings extends Action {
 						logger.debug("redirecting " + url + " ....");
 						uForm.setErrors(true);
 						return null;
-					} else if (uForm.getType().equals("userSpecific")) {
-						uForm.setType(null);
-						String url = context + "/translation/switchLanguage.do?code="
-								+ uForm.getLanguage() + "&rfr=" + context
-								+ "/aim/customizeSettings.do~errors=true~updated="
-								+ uForm.getUpdated();
-						response.sendRedirect(url);
-						logger.debug("redirecting " + url + " ....");
-						uForm.setErrors(false);
-						return null;
-					 }
+					}
 				}
 			AmpApplicationSettings ampAppSettings = null;
 			if ("save".equals(uForm.getSave())) {
@@ -322,24 +305,6 @@ public class UpdateAppSettings extends Action {
 //				String name = "- "+ ampAppSettings.getCurrency().getCurrencyName();
 //				session.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 				// end
-				if (uForm.getType().equals("userSpecific")) {
-					ampAppSettings.setMember(TeamMemberUtil.getAmpTeamMember(tm.getMemberId()));
-					ampAppSettings.setUseDefault(new Boolean(false));
-				} else {
-					/* change all members settings whose has 'useDefault' set */
-					Iterator itr = TeamMemberUtil.getAllTeamMembers(tm.getTeamId()).iterator();
-					logger.debug("before while");
-					while (itr.hasNext()) {
-						TeamMember member = (TeamMember) itr.next();
-						AmpApplicationSettings memSettings = DbUtil.getMemberAppSettings(member.getMemberId());
-						if (memSettings != null) {
-							if (memSettings.getUseDefault().booleanValue() == true) {
-								AmpTeamMember ampMember = TeamMemberUtil.getAmpTeamMember(member.getMemberId());
-								restoreApplicationSettings(memSettings, ampAppSettings, ampMember);
-							}
-						}
-					}
-				}
 				try {
 					DbUtil.update(ampAppSettings);
 					//update team members
@@ -375,17 +340,18 @@ public class UpdateAppSettings extends Action {
 					uForm.setUpdated(false);
 				}
 			} else if (uForm.getRestore() != null) {
-				ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
-				AmpApplicationSettings memSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
-				AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-				try {
-					restoreApplicationSettings(memSettings, ampAppSettings, member);
-					uForm.setUpdated(true);
-				} catch (Exception e) {
-					uForm.setUpdated(false);
-				}
+				throw new RuntimeException("unimplemented functionality: restoring workspace settings");
+				//ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+				//AmpApplicationSettings memSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+				//AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+				//try {
+				//	//restoreApplicationSettings(memSettings, ampAppSettings, member);
+				//	uForm.setUpdated(true);
+				//} catch (Exception e) {
+				//	uForm.setUpdated(false);
+				//}
 			}
-			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+			AmpApplicationSettings tempSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 			if(tempSettings!=null){
 				ApplicationSettings applicationSettings = getReloadedAppSettings(tempSettings);
 				tm.setAppSettings(applicationSettings);
@@ -415,45 +381,11 @@ public class UpdateAppSettings extends Action {
 				logger.debug("redirecting " + url + " ....");
 				// return mapping.findForward("default");
 				return null;
-			} else if (uForm.getType().equals("userSpecific")) {
-				uForm.setType(null);
-				String url = context + "/translation/switchLanguage.do?code="
-						+ ampAppSettings.getLanguage() + "&rfr=" + context
-						+ "/aim/customizeSettings.do~updated="
-						+ uForm.getUpdated();
-				response.sendRedirect(url);
-				logger.debug("redirecting " + url + " ....");
-				// return mapping.findForward("userSpecific");
-				return null;
-			} else {
+			} else 
+			{
 				return mapping.findForward("index");
 			}
 		}
-	}
-
-	/* restoreApplicationSettings( oldSettings , newSettings , member) */
-	public void restoreApplicationSettings(AmpApplicationSettings oldSettings,
-			AmpApplicationSettings newSettings, AmpTeamMember ampMember) {
-
-		logger.debug("In restoreApplicationSettings() ");
-
-		/* set all values except id from oldSettings to newSettings */
-		oldSettings.setDefaultRecordsPerPage(newSettings.getDefaultRecordsPerPage());
-		oldSettings.setNumberOfPagesToDisplay(newSettings.getNumberOfPagesToDisplay());
-		oldSettings.setDefaultReportsPerPage(newSettings.getDefaultReportsPerPage());
-		oldSettings.setCurrency(newSettings.getCurrency());
-		oldSettings.setFiscalCalendar(newSettings.getFiscalCalendar());
-		oldSettings.setLanguage(newSettings.getLanguage());
-		oldSettings.setValidation(newSettings.getValidation());
-		oldSettings.setTeam(newSettings.getTeam());
-		oldSettings.setMember(ampMember);
-		oldSettings.setReportStartYear(newSettings.getReportStartYear());
-		oldSettings.setReportEndYear(newSettings.getReportEndYear());
-
-		oldSettings.setUseDefault(new Boolean(true));
-		oldSettings.setDefaultTeamReport(newSettings.getDefaultTeamReport());
-		DbUtil.update(oldSettings);
-		logger.debug("restoreApplicationSettings() returning");
 	}
 
 	public ApplicationSettings getReloadedAppSettings(AmpApplicationSettings ampAppSettings) {
@@ -476,38 +408,38 @@ public class UpdateAppSettings extends Action {
 		return appSettings;
 	}
 
-	private void updateAllTeamMembersDefaultReport(Long teamId,AmpReports ampReport) {
-		Session session = null;
-		try {
-			session = PersistenceManager.getSession();
-//beginTransaction();
-			String queryString = "SELECT a FROM "
-					+ AmpApplicationSettings.class.getName() + " a WHERE  "
-					+ "a.team=:teamId";
-			Query query = session.createQuery(queryString);
-			query.setParameter("teamId", teamId, Hibernate.LONG);
-			Collection reports = query.list();
-			Iterator iterator = reports.iterator();
-
-			while (iterator.hasNext()) {
-				AmpApplicationSettings setting = (AmpApplicationSettings) iterator.next();
-				setting.setDefaultTeamReport(ampReport);
-			}
-
-			//tx.commit();
-//session.flush();
-
-		} catch (Exception ex) {
-			logger.error("Unable to get fundingDetails :" + ex);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
-
-	}
+//	private void updateAllTeamMembersDefaultReport(Long teamId,AmpReports ampReport) {
+//		Session session = null;
+//		try {
+//			session = PersistenceManager.getSession();
+////beginTransaction();
+//			String queryString = "SELECT a FROM "
+//					+ AmpApplicationSettings.class.getName() + " a WHERE  "
+//					+ "a.team=:teamId";
+//			Query query = session.createQuery(queryString);
+//			query.setParameter("teamId", teamId, Hibernate.LONG);
+//			Collection reports = query.list();
+//			Iterator iterator = reports.iterator();
+//
+//			while (iterator.hasNext()) {
+//				AmpApplicationSettings setting = (AmpApplicationSettings) iterator.next();
+//				setting.setDefaultTeamReport(ampReport);
+//			}
+//
+//			//tx.commit();
+////session.flush();
+//
+//		} catch (Exception ex) {
+//			logger.error("Unable to get fundingDetails :" + ex);
+//		} finally {
+//			try {
+//				PersistenceManager.releaseSession(session);
+//			} catch (Exception ex2) {
+//				logger.error("releaseSession() failed :" + ex2);
+//			}
+//		}
+//
+//	}
 	
 	private void populatePossibleValsAddTR (UpdateAppSettingsForm uForm) {
 		if (uForm.getPossibleValsAddTR() == null || uForm.getPossibleValsAddTR().size() == 0 ) {

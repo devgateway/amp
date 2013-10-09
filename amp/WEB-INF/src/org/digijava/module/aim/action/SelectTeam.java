@@ -112,8 +112,7 @@ public class SelectTeam extends Action {
                 tm.setTeamHead(false);
             }
 
-            AmpApplicationSettings ampAppSettings =DbUtil
-                    .getMemberAppSettings(member.getAmpTeamMemId());
+            AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
             ApplicationSettings appSettings = new ApplicationSettings();
             appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
             appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());

@@ -1645,32 +1645,32 @@ public class TeamMemberUtil {
 	}
 
 
-	public static void updateAppSettingDefReport(Long memId) {
-		Session session = null;
-		Transaction tx = null;
-
-		try {
-				session = PersistenceManager.getSession();
-//beginTransaction();
-
-				String queryString = "select app from "
-					+ AmpApplicationSettings.class.getName()
-					+ " app where (app.member.ampTeamMemId=:memId)";
-
-				Query qry = session.createQuery(queryString);
-				qry.setParameter("memId", memId, Hibernate.LONG);
-				Iterator itr = qry.list().iterator();
-				if(itr.hasNext()){
-					AmpApplicationSettings app=(AmpApplicationSettings) itr.next();
-					app.setDefaultTeamReport(null);
-					session.saveOrUpdate(app);
-				}
-				//tx.commit();
-			}
-		catch (Exception ex){
-			ex.printStackTrace();
-		}
-	}
+//	public static void updateAppSettingDefReport(Long memId) {
+//		Session session = null;
+//		Transaction tx = null;
+//
+//		try {
+//				session = PersistenceManager.getSession();
+////beginTransaction();
+//
+//				String queryString = "select app from "
+//					+ AmpApplicationSettings.class.getName()
+//					+ " app where (app.member.ampTeamMemId=:memId)";
+//
+//				Query qry = session.createQuery(queryString);
+//				qry.setParameter("memId", memId, Hibernate.LONG);
+//				Iterator itr = qry.list().iterator();
+//				if(itr.hasNext()){
+//					AmpApplicationSettings app=(AmpApplicationSettings) itr.next();
+//					app.setDefaultTeamReport(null);
+//					session.saveOrUpdate(app);
+//				}
+//				//tx.commit();
+//			}
+//		catch (Exception ex){
+//			ex.printStackTrace();
+//		}
+//	}
 
     public static void removeTeamMembers(Long id[]) {
         Session session = null;
@@ -1745,7 +1745,7 @@ public class TeamMemberUtil {
                             //verify Default Report in App Settings
                             queryString = "select app from " + AmpApplicationSettings.class.getName() + " app " + "where app.defaultTeamReport=:rId ";
                             qry = session.createQuery(queryString);
-                            qry.setParameter("rId", rep.getAmpReportId(), Hibernate.LONG);
+                            qry.setLong("rId", rep.getAmpReportId());
 
                             Collection memAppSettings = qry.list();
                             if (memAppSettings != null && !memAppSettings.isEmpty()) {
@@ -1759,7 +1759,7 @@ public class TeamMemberUtil {
                             // delete related information before we delete the report
                             String deleteTeamReports = " select tr from " + AmpTeamReports.class.getName() + " tr where (tr.report=:ampReportId)";
                             Query qryaux = session.createQuery(deleteTeamReports);
-                            qryaux.setParameter("ampReportId", rep.getAmpReportId(), Hibernate.LONG);
+                            qryaux.setLong("ampReportId", rep.getAmpReportId());
 
                             Collection tmReports= qryaux.list();
                             if(tmReports!=null && !tmReports.isEmpty()){
@@ -1802,22 +1802,22 @@ public class TeamMemberUtil {
                     }
                    
 
-                    qryStr = "select a from " + AmpApplicationSettings.class.getName() +
-                        " a where (a.member.ampTeamMemId=:memberId)";
-                    qry = session.createQuery(qryStr);
-                    qry.setParameter("memberId", id[i], Hibernate.LONG);
-
-                    Collection memAppSettings = qry.list();
-                    if (memAppSettings != null && !memAppSettings.isEmpty()) {
-                        Iterator itr = memAppSettings.iterator();
-                        if (itr.hasNext()) {
-                            logger.info("Got the app settings..");
-                            AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
-                            ampAppSettings.setDefaultTeamReport(null);                            
-                            session.delete(ampAppSettings);
-                            logger.info("deleted the app settings..");
-                        }
-                    }
+//                    qryStr = "select a from " + AmpApplicationSettings.class.getName() +
+//                        " a where (a.member.ampTeamMemId=:memberId)";
+//                    qry = session.createQuery(qryStr);
+//                    qry.setParameter("memberId", id[i], Hibernate.LONG);
+//
+//                    Collection memAppSettings = qry.list();
+//                    if (memAppSettings != null && !memAppSettings.isEmpty()) {
+//                        Iterator itr = memAppSettings.iterator();
+//                        if (itr.hasNext()) {
+//                            logger.info("Got the app settings..");
+//                            AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
+//                            ampAppSettings.setDefaultTeamReport(null);                            
+//                            session.delete(ampAppSettings);
+//                            logger.info("deleted the app settings..");
+//                        }
+//                    }
                     
                     qryStr = "select cont from "+AmpContact.class.getName() +" cont where (cont.creator=:memberId) ";
                     qry = session.createQuery(qryStr);

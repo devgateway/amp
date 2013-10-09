@@ -825,7 +825,7 @@ function adminHelp(){
 		                                                  	<digi:insert flush="false" attribute="dropdownLangSwitch" />
 		                                                  </ul>
 		                                              </div>
-		                                          </div>                              
+		                                          </div>
 		                                    </li>
                                       	</feature:display>                                     
    

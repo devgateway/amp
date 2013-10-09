@@ -41,7 +41,7 @@ public class GetFundingTotals extends Action {
         String curr=null;
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-        String defCurr = DbUtil.getMemberAppSettings(tm.getMemberId()).getCurrency().getCurrencyCode();
+        String defCurr = DbUtil.getTeamAppSettings(tm.getTeamId()).getCurrency().getCurrencyCode();
         EditActivityForm eaForm = (EditActivityForm) form;
          if(isRegCurr.equals("true")){
             curr=eaForm.getRegFundingPageCurrCode();

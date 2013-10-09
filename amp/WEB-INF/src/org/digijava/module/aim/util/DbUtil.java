@@ -1855,7 +1855,7 @@ public class DbUtil {
 					+ AmpApplicationSettings.class.getName()
 					+ " a where (a.defaultTeamReport=:repId)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("repId", reportId, Hibernate.LONG);
+			qry.setLong("repId", reportId);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				ampAppSettings = (AmpApplicationSettings) itr.next();
@@ -1879,9 +1879,9 @@ public class DbUtil {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "from "
 					+ AmpApplicationSettings.class.getName()
-					+ " a where (a.team.ampTeamId=:teamId) and a.member is null";
+					+ " a where (a.team.ampTeamId=:teamId)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setLong("teamId", teamId);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				ampAppSettings = (AmpApplicationSettings) itr.next();
@@ -1905,7 +1905,7 @@ public class DbUtil {
 					+ AmpApplicationSettings.class.getName()
 					+ " a where (a.team=:teamId) ";
 			qry = session.createQuery(queryString);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setLong("teamId", teamId);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				ampAppSettings = (AmpApplicationSettings) itr.next();
@@ -1960,40 +1960,6 @@ public class DbUtil {
 			logger.error("Unable to get team member ", ex);
 		}
 		return flag;
-	}
-
-	public static AmpApplicationSettings getMemberAppSettings(Long memberId) {
-		Session session = null;
-		Query qry = null;
-		AmpApplicationSettings ampAppSettings = null;
-		Transaction tx = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			// beginTransaction();
-			String queryString = "from "
-					+ AmpApplicationSettings.class.getName()
-					+ " a where (a.member.ampTeamMemId = :memberId)";
-			// String queryString = "from " +
-			// AmpApplicationSettings.class.getName();
-			qry = session.createQuery(queryString);
-			qry.setParameter("memberId", memberId, Hibernate.LONG);
-			/*
-			 * Iterator itr = qry.list().iterator(); if (itr.hasNext()) {
-			 * ampAppSettings = (AmpApplicationSettings) itr.next(); }
-			 */
-			ampAppSettings = (AmpApplicationSettings) qry.uniqueResult();
-			// tx.commit();
-		} catch (Exception e) {
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception tex) {
-					logger.error("Transaction rollback failed");
-				}
-			}
-			logger.error("Unable to get MemberAppSettings", e);
-		}
-		return ampAppSettings;
 	}
 
 	/*
@@ -2547,7 +2513,7 @@ public class DbUtil {
 					+ AmpApplicationSettings.class.getName()
 					+ " o where (o.fiscalCalendar=:ampFisCalId)";
 			qry = sess.createQuery(queryString);
-			qry.setParameter("ampFisCalId", fiscalCalId, Hibernate.LONG);
+			qry.setLong("ampFisCalId", fiscalCalId);
 			Iterator<AmpApplicationSettings> itr = qry.list().iterator();
 			col = new ArrayList();
 			while (itr.hasNext()) {
@@ -7462,7 +7428,7 @@ public class DbUtil {
 					+ AmpApplicationSettings.class.getName()
 					+ " a where (a.team=:teamId) ";
 			qry = session.createQuery(queryString);
-			qry.setParameter("teamId", ampTeamId, Hibernate.LONG);
+			qry.setLong("teamId", ampTeamId);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				ampAppSettings = (AmpApplicationSettings) itr.next();

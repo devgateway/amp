@@ -174,8 +174,6 @@ public class AddTeamMember extends Action {
 			newMember.setUser(user);
 			newMember.setAmpTeam(ampTeam);
 			newMember.setAmpMemberRole(role);
-					
-			
 			
 			// add the default application settings for the user  
 			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
@@ -189,23 +187,23 @@ public class AddTeamMember extends Action {
 				}
 			}			
 			
-			AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
-			//newAppSettings.setTeam(ampAppSettings.getTeam());
-			newAppSettings.setTeam(newMember.getAmpTeam());
-			newAppSettings.setMember(newMember);
-			newAppSettings.setDefaultRecordsPerPage(ampAppSettings.getDefaultRecordsPerPage());
-			newAppSettings.setCurrency(ampAppSettings.getCurrency());
-			newAppSettings.setFiscalCalendar(ampAppSettings.getFiscalCalendar());
-			newAppSettings.setLanguage(ampAppSettings.getLanguage());
-			newAppSettings.setUseDefault(new Boolean(true));
-			newAppSettings.setValidation(ampAppSettings.getValidation());
-			try{
-				TeamUtil.addTeamMember(newMember,newAppSettings,site);
-			}catch (Exception e){
-					e.printStackTrace();
-					logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "
-							+ newMember.getAmpTeam().getName());
-				}
+//			AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
+//			//newAppSettings.setTeam(ampAppSettings.getTeam());
+//			newAppSettings.setTeam(newMember.getAmpTeam());
+//			newAppSettings.setMember(newMember);
+//			newAppSettings.setDefaultRecordsPerPage(ampAppSettings.getDefaultRecordsPerPage());
+//			newAppSettings.setCurrency(ampAppSettings.getCurrency());
+//			newAppSettings.setFiscalCalendar(ampAppSettings.getFiscalCalendar());
+//			newAppSettings.setLanguage(ampAppSettings.getLanguage());
+//			newAppSettings.setUseDefault(new Boolean(true));
+//			newAppSettings.setValidation(ampAppSettings.getValidation());
+//			try{
+//				TeamUtil.addTeamMember(newMember,newAppSettings,site);
+//			}catch (Exception e){
+//					e.printStackTrace();
+//					logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "
+//							+ newMember.getAmpTeam().getName());
+//				}
 			
 			upMemForm.setEmail(null);
 			upMemForm.setRole(null);

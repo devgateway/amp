@@ -385,7 +385,7 @@ public class TeamUtil {
     		// create application settings for the team and save
     		AmpApplicationSettings ampAppSettings = new AmpApplicationSettings();
     		ampAppSettings.setTeam(team);
-    		ampAppSettings.setMember(null);
+    		//ampAppSettings.setMember(null);
     		ampAppSettings.setDefaultRecordsPerPage(new Integer(10));
     		ampAppSettings.setCurrency(curr);
     		ampAppSettings.setFiscalCalendar(fiscal);
@@ -925,30 +925,32 @@ public class TeamUtil {
         return member;
     }
 
-    public static void testDan(AmpTeamMember member, AmpApplicationSettings appSettings) {
-			Session session = null;
-			Transaction tx = null;
-			
-			try {
-			session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-			session.saveOrUpdate(member);
-			session.saveOrUpdate(appSettings);
-			
-			}catch(Exception e) {
-	            logger.error("Exception from addTeamMember :" + e);
-	            e.printStackTrace();
-	            if(tx != null) {
-	                try {
-	                    tx.rollback();
-	                } catch(Exception rbf) {
-	                    logger.error("Rollback failed :" + rbf);
-	                }
-	            }
-			}
-    }
+//    public static void testDan(AmpTeamMember member, AmpApplicationSettings appSettings) {
+//			Session session = null;
+//			Transaction tx = null;
+//			
+//			try {
+//			session = PersistenceManager.getRequestDBSession();
+////beginTransaction();
+//			session.saveOrUpdate(member);
+//			session.saveOrUpdate(appSettings);
+//			
+//			}catch(Exception e) {
+//	            logger.error("Exception from addTeamMember :" + e);
+//	            e.printStackTrace();
+//	            if(tx != null) {
+//	                try {
+//	                    tx.rollback();
+//	                } catch(Exception rbf) {
+//	                    logger.error("Rollback failed :" + rbf);
+//	                }
+//	            }
+//			}
+//    }
+    
     public static void addTeamMember(AmpTeamMember member,
-                                     AmpApplicationSettings appSettings, Site site) {
+                                     /*AmpApplicationSettings appSettings,*/ 
+    								Site site) {
         Session session = null;
         Transaction tx = null;
        
@@ -956,7 +958,7 @@ public class TeamUtil {
             session = PersistenceManager.getRequestDBSession();
 //beginTransaction();
             session.saveOrUpdate(member);
-            session.saveOrUpdate(appSettings);
+            //session.saveOrUpdate(appSettings);
             
             if(member.getAmpMemberRole().getTeamHead()!=null&&member.getAmpMemberRole().getTeamHead()) {
                 AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());

@@ -53,8 +53,7 @@ public class QuarterInformationPanel extends AmpFieldPanel {
 
 		AmpAuthWebSession session = (AmpAuthWebSession) wsession;
 		AmpTeamMember currentMember = session.getAmpCurrentMember();
-		AmpApplicationSettings appSettings = DbUtil
-				.getMemberAppSettings(currentMember.getAmpTeamMemId());
+		AmpApplicationSettings appSettings = DbUtil.getTeamAppSettings(currentMember.getAmpTeam().getAmpTeamId());
 		if (appSettings != null) { // try the workspace fiscal calendar
 			fiscalCalendar = appSettings.getFiscalCalendar();
 		}

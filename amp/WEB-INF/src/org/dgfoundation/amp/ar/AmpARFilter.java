@@ -597,11 +597,9 @@ public class AmpARFilter extends PropertyListable {
 			return AmpCaching.getInstance().applicationSettings;
 		
 		AmpApplicationSettings settings = null;
-		if (tm.getMemberId() != null)
-			settings = DbUtil.getMemberAppSettings(tm.getMemberId()); // member settings take precedence
 
-		if (settings == null && tm.getTeamId() != null)
-			settings = DbUtil.getTeamAppSettings(tm.getTeamId()); // use workspace settings if no member settings present
+		if (tm.getTeamId() != null)
+			settings = DbUtil.getTeamAppSettings(tm.getTeamId()); // use workspace settings
 		
 		AmpCaching.getInstance().applicationSettingsRetrieved = true;
 		AmpCaching.getInstance().applicationSettings = settings;

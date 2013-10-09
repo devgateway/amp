@@ -216,7 +216,7 @@ public class MainMap extends Action {
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 		AmpApplicationSettings tempSettings = null;
 		if (teamMember != null) {
-			tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
 		}
 		return tempSettings;
 	}

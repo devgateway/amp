@@ -311,7 +311,7 @@ public class ShowDashboard extends Action {
         TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");
         AmpApplicationSettings tempSettings = null;
 		if (teamMember != null) {
-			tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
 			if (tempSettings!=null && tempSettings.getCurrency()!=null){
 				filter.setCurrencyId(tempSettings.getCurrency().getAmpCurrencyId());
 				filter.setCurrencyIdQuickFilter(tempSettings.getCurrency().getAmpCurrencyId());

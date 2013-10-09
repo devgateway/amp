@@ -34,12 +34,11 @@ public class UpdateAppSettingsForm extends ActionForm {
 	private int reportStartYear;
 	private int reportEndYear;
 	
-	private String type = null; 				/*
+	/**
+	 * null - creating, "default" - saving
+	 */
+	private String type = null;
 	
-									 * specifies whether updating team level
-								 * settings or user specific settings
-								 */
-
 	private String workspaceType = null;
 	
 	private Collection currencies = null;

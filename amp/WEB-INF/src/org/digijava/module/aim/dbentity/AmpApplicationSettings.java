@@ -14,7 +14,7 @@ public class AmpApplicationSettings implements Serializable {
 
 	private AmpTeam team;
 
-	private AmpTeamMember member;
+	//private AmpTeamMember member;
 
 	private Integer defaultRecordsPerPage;
 	
@@ -30,10 +30,10 @@ public class AmpApplicationSettings implements Serializable {
 	
 	private String validation;
 
-	private Boolean useDefault; /*
-								 * use customized settings or use default team
-								 * settings
-								 */
+//	private Boolean useDefault; /*
+//								 * use customized settings or use default team
+//								 * settings
+//								 */
 
 	private AmpReports defaultTeamReport;
     private Integer defaultReportsPerPage;
@@ -70,13 +70,13 @@ public class AmpApplicationSettings implements Serializable {
 		this.team = team;
 	}
 
-	public AmpTeamMember getMember() {
-		return this.member;
-	}
-
-	public void setMember(AmpTeamMember member) {
-		this.member = member;
-	}
+//	public AmpTeamMember getMember() {
+//		return this.member;
+//	}
+//
+//	public void setMember(AmpTeamMember member) {
+//		this.member = member;
+//	}
 
 	public Integer getDefaultRecordsPerPage() {
 		return this.defaultRecordsPerPage;
@@ -110,13 +110,13 @@ public class AmpApplicationSettings implements Serializable {
 		this.language = language;
 	}
 
-	public Boolean getUseDefault() {
-		return this.useDefault;
-	}
-
-	public void setUseDefault(Boolean useDefault) {
-		this.useDefault = useDefault;
-	}
+//	public Boolean getUseDefault() {
+//		return this.useDefault;
+//	}
+//
+//	public void setUseDefault(Boolean useDefault) {
+//		this.useDefault = useDefault;
+//	}
 
         public Integer getDefaultReportsPerPage() {
           return defaultReportsPerPage;

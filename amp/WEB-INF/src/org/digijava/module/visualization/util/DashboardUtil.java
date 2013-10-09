@@ -1044,7 +1044,7 @@ public class DashboardUtil {
         TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");
 		AmpApplicationSettings tempSettings = null;
 		if (teamMember != null) {
-			tempSettings = org.digijava.module.aim.util.DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			tempSettings = org.digijava.module.aim.util.DbUtil.getTeamAppSettings(teamMember.getTeamId());
 			if (tempSettings!=null && tempSettings.getCurrency()!=null){
 				filter.setCurrencyId(tempSettings.getCurrency().getAmpCurrencyId());
 				filter.setCurrencyIdQuickFilter(tempSettings.getCurrency().getAmpCurrencyId());

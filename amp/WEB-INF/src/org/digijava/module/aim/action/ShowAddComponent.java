@@ -57,7 +57,7 @@ public class ShowAddComponent extends Action {
 			HttpSession session = request.getSession();
 			TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 
-			String defCurr = DbUtil.getMemberAppSettings(tm.getMemberId()).getCurrency().getCurrencyCode();
+			String defCurr = DbUtil.getTeamAppSettings(tm.getTeamId()).getCurrency().getCurrencyCode();
 			request.setAttribute("defCurrency", defCurr);
 			
 			String event = (request.getParameter("compFundAct") != null) ? request.getParameter("compFundAct") : "";
@@ -129,7 +129,7 @@ public class ShowAddComponent extends Action {
 		eaForm.getComponents().setComponentDesc(null);
 		eaForm.getComponents().setNewCompoenentName(null);
 		//String defCurr = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-		String defCurr = DbUtil.getMemberAppSettings(tm.getMemberId()).getCurrency().getCurrencyCode();
+		String defCurr = DbUtil.getTeamAppSettings(tm.getTeamId()).getCurrency().getCurrencyCode();
 		request.setAttribute("defCurrency", defCurr);
         if(eaForm.getComponents().getFundingCurrCode()==null){
             eaForm.getComponents().setFundingCurrCode(defCurr);

@@ -258,8 +258,7 @@ public class Login extends Action {
 					}
 
 					// Get the team members application settings
-					AmpApplicationSettings ampAppSettings = DbUtil
-							.getMemberAppSettings(member.getAmpTeamMemId());
+					AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
 					ApplicationSettings appSettings = new ApplicationSettings();
 					appSettings.setAppSettingsId(ampAppSettings
 							.getAmpAppSettingsId());

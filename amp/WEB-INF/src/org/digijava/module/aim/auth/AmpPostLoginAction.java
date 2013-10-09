@@ -101,21 +101,21 @@ public class AmpPostLoginAction extends Action {
         }
 
 
-        /*
-         * Checking user Activity settings
-         */
-        Iterator itr = members.iterator();
-        while (itr.hasNext()){
-        	AmpTeamMember member = (AmpTeamMember) itr.next();
-        	AmpApplicationSettings ampAppSettings = DbUtil.getMemberAppSettings(member.getAmpTeamMemId());
-        	//if the user hasn't got the personalized settings
-        	if (ampAppSettings == null) {
-        		SecurityContextHolder.getContext().setAuthentication(null);
-            	out.println("invalidUser");
-            	return null;
-        	}
-            	
-        }
+//        /*
+//         * Checking user Activity settings
+//         */
+//        Iterator itr = members.iterator();
+//        while (itr.hasNext()){
+//        	AmpTeamMember member = (AmpTeamMember) itr.next();
+//        	AmpApplicationSettings ampAppSettings = DbUtil.getMemberAppSettings(member.getAmpTeamMemId());
+//        	//if the user hasn't got the personalized settings
+//        	if (ampAppSettings == null) {
+//        		SecurityContextHolder.getContext().setAuthentication(null);
+//            	out.println("invalidUser");
+//            	return null;
+//        	}
+//            	
+//        }
         AuditLoggerUtil.logUserLogin(request,currentUser, Constants.LOGIN_ACTION);
         out.println("noError");
 		return null;

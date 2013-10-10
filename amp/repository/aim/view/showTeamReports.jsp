@@ -14,7 +14,8 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
-<h1>PRIVATE${numberOfPagesToDisplay}</h1>
+
+
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer" style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 

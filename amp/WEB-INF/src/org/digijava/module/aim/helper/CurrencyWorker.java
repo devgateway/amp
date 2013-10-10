@@ -116,6 +116,8 @@ public class CurrencyWorker {
 		BigDecimal reference = new BigDecimal(1d);
 		BigDecimal amount = new BigDecimal(amt);
 		BigDecimal fromRate = new BigDecimal(fromExchangeRate);
+//		if (Math.abs(fromRate.doubleValue()) < 0.00001)
+//			System.out.println("BOZO HERE");
 		BigDecimal toRate = new BigDecimal(toExchangeRate);
 		BigDecimal inter = reference.divide(fromRate,30,java.math.RoundingMode.HALF_EVEN);
 		
@@ -137,8 +139,8 @@ public class CurrencyWorker {
 	 * Formats the amount to include commas and decimal places Commas will be
 	 * inserted after every three digits
 	 *
-	 * @param amt The aount value in String which is to be formatted
-	 * @return The formatted ammount
+	 * @param amt The amount value in String which is to be formatted
+	 * @return The formatted amount
 	 *
 	 * eg: The input will be a String like 25000000 and output will be a
 	 * formatted string in the form 25,000,000.00

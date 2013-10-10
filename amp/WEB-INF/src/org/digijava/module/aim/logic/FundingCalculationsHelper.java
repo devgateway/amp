@@ -235,11 +235,15 @@ public class FundingCalculationsHelper {
 
 			java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
 			
+			Double fixedExchangeRate = fundDet.getFixedExchangeRate();
+			if (fixedExchangeRate != null && (Math.abs(fixedExchangeRate.doubleValue()) < 1e-15))
+				fixedExchangeRate = null;
+			
 			double frmExRt;
-			if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(baseCurrCode)||fundDet.getFixedExchangeRate() == null){
+			if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(baseCurrCode) || fixedExchangeRate == null){
 				frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
 			}else{
-				frmExRt = fundDet.getFixedExchangeRate();
+				frmExRt = fixedExchangeRate;
 			}
 			
 			double toExRt;

@@ -423,7 +423,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.getMetaData().add(mMs);	
 		acc.getMetaData().add(faMs);
 		acc.getMetaData().add(fmMs);
-		if (headMeta == null)
+		if ( !"v_pledges_funding_st".equals(this.getViewName()) && headMeta == null)
 			throw new RuntimeException("headMeta is null!");
 		acc.getMetaData().add(headMeta);
 		

@@ -494,7 +494,7 @@ public class DataDispatcher extends DispatchAction {
 		children.add(rootSelStatus);
 		
 		if (configId!=null) {
-				child.put("name", SectorUtil.getClassificationConfigById(configId).getName());
+				child.put("name", SectorUtil.getClassificationConfigById(configId).getClassification().getSecSchemeName());
 				selConfigs.add(child);
 		}
 		rootSelConfigs.put("type", "SelSectorConfig");

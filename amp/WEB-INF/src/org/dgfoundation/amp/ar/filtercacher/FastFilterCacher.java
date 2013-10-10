@@ -4,10 +4,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 
 public class FastFilterCacher extends FilterCacher {
 
+	private static Logger logger	= Logger.getLogger(FilterCacher.class);
 	private String tempTableName;
 	
 	public FastFilterCacher(AmpARFilter filter)
@@ -18,7 +20,10 @@ public class FastFilterCacher extends FilterCacher {
 	@Override
 	protected String customRewriteFilterQuery(String inQuery) {
 		ensureTemporaryTableExists(inQuery);
-		return String.format("SELECT distinct(%s) FROM %s", this.primaryKeyName, this.tempTableName);
+		String ret =  String.format("SELECT distinct(%s) AS %s FROM %s", this.primaryKeyName, this.primaryKeyName, this.tempTableName);
+		logger.info("Query is: " + ret);
+		return ret;
+		
 	}
 
 	private void ensureTemporaryTableExists(String inQuery)

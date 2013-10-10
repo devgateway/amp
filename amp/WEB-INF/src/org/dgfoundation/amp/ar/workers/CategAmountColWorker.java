@@ -431,7 +431,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 		else
 		{
-			if (!this.getViewName().equals("v_proposed_cost"))
+			if (!"v_pledges_funding_st".equals(this.getViewName()) && !this.getViewName().equals("v_proposed_cost"))
 				throw new RuntimeException("headMeta is null!");
 		}
 		

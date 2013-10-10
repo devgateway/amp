@@ -510,7 +510,7 @@ public class AmpARFilter extends PropertyListable {
 	private String text;
 	private String indexText;
 	private String searchMode;
-	private static final String initialPledgeFilterQuery = "SELECT distinct(id) FROM amp_funding_pledges WHERE 1=1 ";
+	private static final String initialPledgeFilterQuery = "SELECT distinct(id) as pledge_id FROM amp_funding_pledges WHERE 1=1 ";
 	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1=1 ";
 	private String generatedFilterQuery;
 	private int initialQueryLength = initialFilterQuery.length();
@@ -659,6 +659,7 @@ public class AmpARFilter extends PropertyListable {
 			this.budgetExport	= ampReport.getBudgetExporter()==null ? false:ampReport.getBudgetExporter();				
 			if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
 					this.generatedFilterQuery = initialPledgeFilterQuery;
+					this.pledgeFilter = true;
 			}
 		}
 

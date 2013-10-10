@@ -789,7 +789,10 @@ public class DbUtil {
         } else {
         	oql = "select fd, act.ampId, act.name ";
         }
-        
+    	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			oql += ", orole.percentage ";
+		
         if (locationCondition)
         	oql += ", actloc.locationPercentage ";
         	
@@ -961,15 +964,17 @@ public class DbUtil {
         }
         
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
-        if (donorCondition) {
-        	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
-        } 
-        if (implementingCondition) {
-        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
-        } 
-        if (beneficiaryCondition) {
-        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
-        } 
+        if (filter.getAgencyType()==0){
+	        if (donorCondition) {
+	        	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
+	        } 
+	        if (implementingCondition) {
+	        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
+	        } 
+	        if (beneficiaryCondition) {
+	        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
+	        } 
+        }
         
         //Filter for Category Values
         if (peaceMarkerCondition) {

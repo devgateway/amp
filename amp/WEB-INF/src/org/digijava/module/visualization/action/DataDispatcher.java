@@ -1991,11 +1991,14 @@ public class DataDispatcher extends DispatchAction {
                 organizationData += "<" + org.getName() + ">";
                 for (Long i = startYear; i <= endYear; i++) {
         			Long[] ids = {org.getAmpOrgId()};
-        			//DashboardFilter newFilter = filter.getCopyFilterForFunding();
-	    			newFilter.setSelOrgIds(ids);
+        			DashboardFilter newFilter2 = filter.getCopyFilterForFunding();
+        			//newFilter2.setStartYear(startYear);
+                	//newFilter2.setEndYear(endYear);
+                	newFilter2.setAgencyType(2);//set beneficiary agency 
+                	newFilter2.setSelOrgIds(ids);
                     startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
+                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter2, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
                     //filter.setOrgIds(temp);
                     BigDecimal amount = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     organizationData += amount.compareTo(BigDecimal.ZERO) == 0 ? "0>" : amount.toPlainString() + ">";

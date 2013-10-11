@@ -290,8 +290,8 @@ public class ReportWizardAction extends MultiAction {
 	    for (Iterator iterator = repForm.getAmpMeasures().iterator(); iterator.hasNext();) {
 			AmpMeasures measure = (AmpMeasures) iterator.next();
 			JSONObject child = new JSONObject();
-			child.put("ID", measure.getMeasureId());
-			child.put("name", measure.getMeasureName());
+			child.put("ID", measure.getMeasureName());
+			child.put("name", measure.getMeasureId());
 			String nameTrn = TranslatorWorker.translateText(measure.getMeasureName());
 			child.put("nameTrn", nameTrn);
 			if (measure.getDescription()!=null)

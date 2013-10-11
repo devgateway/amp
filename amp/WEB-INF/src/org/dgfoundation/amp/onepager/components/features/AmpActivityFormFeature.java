@@ -369,6 +369,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
 				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpActivityFormFeature.class, "saveNavigationPanel.js")));
+				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpActivityFormFeature.class, "previewLogframe.js")));
 			}
 		});
 
@@ -500,6 +501,20 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			activityForm.add(autoSaveTimer);
 		}
 
+		AmpButtonField logframe = new AmpButtonField("logframe", "Logframe", AmpFMTypes.MODULE, true) {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			}
+		};
+		if (am.getObject().getAmpActivityId() == null)
+			logframe.setVisible(false);
+		else{
+			logframe.getButton().add(new AttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");"));
+			logframe.setVisible(true);
+		}
+		logframe.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		activityForm.add(logframe);
+		
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

@@ -40,26 +40,10 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * @since Jun 13, 2006
  * 
  */
-public class CategAmountColWorker extends ColumnWorker {
+public class CategAmountColWorker extends MetaCellColumnWorker {
 
 	private static Logger logger	= Logger.getLogger(CategAmountColWorker.class);
-	
-	protected Map<String, Map<Comparable, MetaInfo>> metaInfoCache;
-
-	protected MetaInfo<?> getCachedMetaInfo(String category, Comparable<?> value) {
-		Map<Comparable, MetaInfo> valuesMap = metaInfoCache.get(category);
-		if (valuesMap == null) {
-			valuesMap = new HashMap();
-			metaInfoCache.put(category, valuesMap);
-		}
-		MetaInfo mi = valuesMap.get(value);
-		if (mi != null)
-			return mi;
-		mi = new MetaInfo(category, value);
-		valuesMap.put(value, mi);
-		return mi;
-	}
-    	
+	    	
 	/**
 	 * @param condition
 	 * @param viewName
@@ -141,29 +125,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		if(cellYear>filter.getYearTo().intValue()) return false;
 		return true;
 	}
-
 	
-	protected String retrieveValueFromRS ( ResultSet rs, String columnName ) throws SQLException {
-		return rs.getString(columnName);
-	}
-	
-	protected void addMetaIfExists(ResultSet rs, CategAmountCell acc, String columnName, String metaKeyName, String defaultValue, boolean retrieveDirectly) throws SQLException
-	{
-		if (columnsMetaData.containsKey(columnName)) {
-			
-			String fundingStatus = retrieveDirectly ? rs.getString(columnsMetaData.get(columnName) ) :
-													retrieveValueFromRS(rs, columnsMetaData.get(columnName));
-			
-			if (fundingStatus == null && defaultValue != null)
-				fundingStatus = defaultValue;
-			
-			if (fundingStatus != null) {
-				MetaInfo termsAssistMeta = this.getCachedMetaInfo(metaKeyName, fundingStatus);
-				acc.getMetaData().add(termsAssistMeta);
-			}
-				
-		}	
-	}
 	
 	/*
 	 * (non-Javadoc)

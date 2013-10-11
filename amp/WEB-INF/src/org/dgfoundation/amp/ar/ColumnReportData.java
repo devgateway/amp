@@ -27,6 +27,7 @@ import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.digijava.module.aim.action.GetAllFlags;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -100,10 +101,10 @@ public class ColumnReportData extends ReportData<Column> {
      */
     public void removeActivitiesWithoutFunding()
     {
-    	Column fundingColumn = getMainFundingColumn();
-    	if (fundingColumn == null)
+    	List<Column> fundingColumns = getFundingColumns();
+    	if (fundingColumns.isEmpty())
     		return;
-    	Set<Long> allFundedActivities = fundingColumn.getOwnerIds();
+    	Set<Long> allFundedActivities = this.getFundedActivityIds();
     	for(Column column:this.getItems())
     	{
     		Set<Long> columnOwnerIds = column.getOwnerIds();
@@ -113,20 +114,39 @@ public class ColumnReportData extends ReportData<Column> {
     }
     
     /**
-     * calculates the "funding" column of this report - the column which, if it is empty for an activity, would mean that the activity has no business of remaining in the CRD
+     * calculates the "funding" columns of this report - the columns which, if it all of them are empty for an activity, would mean that the activity has no business of remaining in the CRD
      * @return
      */
-    protected Column getMainFundingColumn()
+    protected List<Column> getFundingColumns()
     {
-    	Column fundingColumn = getColumn(ArConstants.COLUMN_FUNDING);
+    	Column mainFundingColumn = getColumn(ArConstants.COLUMN_FUNDING);
     	
-    	if (fundingColumn == null)
-    		fundingColumn = getColumn(ArConstants.COLUMN_TOTAL);
+    	if (mainFundingColumn == null)
+    		mainFundingColumn = getColumn(ArConstants.COLUMN_TOTAL);
     	
-    	if (fundingColumn == null)
-    		fundingColumn = getColumn(ArConstants.COSTING_GRAND_TOTAL);
+    	if (mainFundingColumn == null)
+    		mainFundingColumn = getColumn(ArConstants.COSTING_GRAND_TOTAL);
     	
-    	return fundingColumn;
+    	List<Column> res = new ArrayList<Column>();
+    	if (mainFundingColumn != null)
+    		res.add(mainFundingColumn);
+    	
+    	for(Column column:this.getColumns())
+    	{
+    		if ((column instanceof CellColumn) && ((CellColumn) column).extractorView.equals("v_mtef_funding"))
+    		{
+    			res.add(column);
+    		}
+    	}
+    	return res;
+    }
+    
+    protected Set<Long> getFundedActivityIds()
+    {
+    	Set<Long> res = new HashSet<Long>();
+    	for(Column column:getFundingColumns())
+    		res.addAll(column.getOwnerIds());
+    	return res;
     }
     
     /**
@@ -140,10 +160,10 @@ public class ColumnReportData extends ReportData<Column> {
      */
     public boolean shouldBeRemoved()
     {
-    	Column fundingColumn = getMainFundingColumn(); 	
-    	if (fundingColumn == null)
+    	List<Column> fundingColumns = getFundingColumns(); 	
+    	if (fundingColumns.isEmpty())
     		return false;
-    	return fundingColumn.getOwnerIds().isEmpty();
+    	return getFundedActivityIds().isEmpty();
     }
     
 	public void addColumns(Collection col) {

@@ -41,6 +41,18 @@ public class MtefTests extends ReportsTestCase
 	{
 		TestSuite suite = new TestSuite(AllTests.class.getName());
 		suite.addTest(new MtefTests("testAllMtef"));
+		suite.addTest(new MtefTests("testPlainMtef"));
+		suite.addTest(new MtefTests("testMtefByDonorAgency"));
+		suite.addTest(new MtefTests("testMtefByImplementingAgency"));
+		suite.addTest(new MtefTests("testMtefByExecutingAgency"));
+		
+		suite.addTest(new MtefTests("testPurePlainMtef"));
+		suite.addTest(new MtefTests("testPureMtefByDonorAgency"));
+		suite.addTest(new MtefTests("testPureMtefByImplementingAgency"));
+		suite.addTest(new MtefTests("testPureMtefByExecutingAgency"));
+		
+		suite.addTest(new MtefTests("testPurePlainMtefEUR"));
+
 		return suite;
 	}		
 		
@@ -69,129 +81,195 @@ public class MtefTests extends ReportsTestCase
 		runReportTest("all Mtef report", "AMP-15794", new String[] {"Eth Water", "mtef activity 1", "mtef activity 2"}, fddr_correct);
 	}
 	
-	/**
-	 * same report as {@link #testFlatReport()}, but with a hierarchy by Beneficiary Agency
-	 */
-	public void testByBeneficiary()
+	public void testPlainMtef()
 	{
-		/// ========================= one more report ===============================
-		GroupReportModel by_benef_ddr_correct = GroupReportModel.withGroupReports("AMP-15337-real-disbursements-by-beneficiary",
-				GroupReportModel.withColumnReports("AMP-15337-real-disbursements-by-beneficiary",					
-				ColumnReportDataModel.withColumns("Beneficiary Agency: Water Foundation", 
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs", 
+				ColumnReportDataModel.withColumns("AMP-16100-flat-mtefs", 
 						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Test MTEF directed", "150 000"),
+						SimpleColumnModel.withContents("MTEF 2012/2013", "Test MTEF directed", "65 000"),
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
 						GroupColumnModel.withSubColumns("Funding", 
-								GroupColumnModel.withSubColumns("2013", 
-										GroupColumnModel.withSubColumns("Real Disbursements", 
-												SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "5 000")
-												))),
+								GroupColumnModel.withSubColumns("2010", 
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "143 777")
+												)),
 						GroupColumnModel.withSubColumns("Total Costs", 
-										GroupColumnModel.withSubColumns("Real Disbursements", 
-												SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "5 000")
-						))),
-						ColumnReportDataModel.withColumns("Beneficiary Agency: Water Org", 
-								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
-								GroupColumnModel.withSubColumns("Funding", 
-										GroupColumnModel.withSubColumns("2013", 
-												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "10 000")
-														))),
-								GroupColumnModel.withSubColumns("Total Costs", 
-												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "10 000")
-								)))
-						
-				));	
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+								SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "143 777")
+						))).withTrailCells(null, "150 000", "65 000", "0", "0", "143 777", "0", "143 777");
 		
-		runReportTest("by beneficiary Directed Disbursements Report", "AMP-15337-real-disbursements-by-beneficiary", new String[] {"Eth Water"}, by_benef_ddr_correct);
+		runReportTest("all Mtef, implicit filter by Donor", "AMP-16100-flat-mtefs", new String[] {"Test MTEF directed"}, fddr_correct);
+	}
+
+	public void testMtefByDonorAgency()
+	{
+		GroupReportModel fddr_correct =
+				GroupReportModel.withGroupReports("AMP-16100-mtef-by-donor-agency", 
+				GroupReportModel.withColumnReports("AMP-16100-mtef-by-donor-agency", 
+				ColumnReportDataModel.withColumns("Donor Agency: Ministry of Economy", 
+						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Test MTEF directed", "150 000"),
+						SimpleColumnModel.withContents("MTEF 2012/2013", "Test MTEF directed", "65 000"),
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
+						GroupColumnModel.withSubColumns("Funding", 
+								GroupColumnModel.withSubColumns("2010", 
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "143 777")
+												)),
+						GroupColumnModel.withSubColumns("Total Costs", 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+								SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "143 777")
+						))).withTrailCells(null, "150 000", "65 000", "0", "0", "143 777", "0", "143 777")
+					).withTrailCells(null, "150 000", "65 000", "0", "0", "143 777", "0", "143 777");
+		
+		runReportTest("all Mtef, by Donor", "AMP-16100-mtef-by-donor-agency", new String[] {"Test MTEF directed"}, fddr_correct);
+	}
+
+	public void testMtefByImplementingAgency()
+	{
+		GroupReportModel fddr_correct =
+				GroupReportModel.withGroupReports("AMP-16100-mtef-projection-by-impl", 
+				GroupReportModel.withColumnReports("AMP-16100-mtef-projection-by-impl", 
+				ColumnReportDataModel.withColumns("Implementing Agency: USAID", 
+						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Test MTEF directed", "25 400"),
+						SimpleColumnModel.withContents("MTEF 2012/2013", "Test MTEF directed", "62 500"),
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
+						GroupColumnModel.withSubColumns("Funding", 
+								GroupColumnModel.withSubColumns("2010", 
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "143 777")
+												)),
+						GroupColumnModel.withSubColumns("Total Costs", 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+								SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "143 777")
+						))).withTrailCells(null, "25 400", "62 500", "0", "0", "143 777", "0", "143 777")
+					).withTrailCells(null, "25 400", "62 500", "0", "0", "143 777", "0", "143 777");
+		
+		runReportTest("all Mtef, by Implementing Agency", "AMP-16100-mtef-projection-by-impl", new String[] {"Test MTEF directed"}, fddr_correct);
+	}
+
+	public void testMtefByExecutingAgency()
+	{
+		GroupReportModel fddr_correct =
+				GroupReportModel.withGroupReports("AMP-16100-mtef-projections-by-exec", 
+				GroupReportModel.withColumnReports("AMP-16100-mtef-projections-by-exec", 
+				ColumnReportDataModel.withColumns("Executing Agency: Water Foundation", 
+						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", MUST_BE_EMPTY),
+						SimpleColumnModel.withContents("MTEF 2012/2013", MUST_BE_EMPTY),
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
+						GroupColumnModel.withSubColumns("Funding", 
+								GroupColumnModel.withSubColumns("2010", 
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "143 777")
+												)),
+						GroupColumnModel.withSubColumns("Total Costs", 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+								SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "143 777")
+						))).withTrailCells(null, "0", "0", "0", "0", "143 777", "0", "143 777")
+					).withTrailCells(null, "0", "0", "0", "0", "143 777", "0", "143 777");
+		
+		runReportTest("all Mtef, by Executing Agency", "AMP-16100-mtef-projections-by-exec", new String[] {"Test MTEF directed"}, fddr_correct);
+	}
+
+	public void testPurePlainMtef()
+	{
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs", 
+				ColumnReportDataModel.withColumns("AMP-16100-flat-mtefs", 
+						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "33 888"),
+						SimpleColumnModel.withContents("MTEF 2012/2013", MUST_BE_EMPTY),
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
+						/*GroupColumnModel.withSubColumns("Funding", 
+								GroupColumnModel.withSubColumns("2010", 
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+												)),*/
+						GroupColumnModel.withSubColumns("Total Costs", 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+						))).withTrailCells(null, "33 888", "0", "0", "0", "0");
+		
+		runReportTest("pure Mtef, implicit filter by Donor", "AMP-16100-flat-mtefs", new String[] {"Pure MTEF Project"}, fddr_correct);
+	}
+
+	public void testPureMtefByDonorAgency()
+	{
+		GroupReportModel fddr_correct =
+				GroupReportModel.withGroupReports("AMP-16100-mtef-by-donor-agency", 
+				GroupReportModel.withColumnReports("AMP-16100-mtef-by-donor-agency", 
+				ColumnReportDataModel.withColumns("Donor Agency: Ministry of Finance", 
+						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "33 888"),
+						SimpleColumnModel.withContents("MTEF 2012/2013", MUST_BE_EMPTY),
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
+						/*GroupColumnModel.withSubColumns("Funding", 
+								GroupColumnModel.withSubColumns("2010", 
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+												)),*/
+						GroupColumnModel.withSubColumns("Total Costs", 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+						))).withTrailCells(null, "33 888", "0", "0", "0", "0")
+					).withTrailCells(null, "33 888", "0", "0", "0", "0");
+		
+		runReportTest("pure Mtef, by Donor", "AMP-16100-mtef-by-donor-agency", new String[] {"Pure MTEF Project"}, fddr_correct);
+	}
+
+	public void testPureMtefByImplementingAgency()
+	{
+		GroupReportModel fddr_correct = GroupReportModel.empty("AMP-16100-mtef-projection-by-impl");
+		
+		runReportTest("pure Mtef, by Implementing Agency", "AMP-16100-mtef-projection-by-impl", new String[] {"Pure MTEF Project"}, fddr_correct);
+	}
+
+	public void testPureMtefByExecutingAgency()
+	{
+		GroupReportModel fddr_correct =
+				GroupReportModel.withGroupReports("AMP-16100-mtef-projections-by-exec", 
+				GroupReportModel.withColumnReports("AMP-16100-mtef-projections-by-exec", 
+				ColumnReportDataModel.withColumns("Executing Agency: Ministry of Economy", 
+						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", MUST_BE_EMPTY),
+						SimpleColumnModel.withContents("MTEF 2012/2013", "Pure MTEF Project", "55 333"),
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
+						/*GroupColumnModel.withSubColumns("Funding", 
+								GroupColumnModel.withSubColumns("2010", 
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+												)),*/
+						GroupColumnModel.withSubColumns("Total Costs", 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+						))).withTrailCells(null, "0", "55 333", "0", "0", "0")
+					).withTrailCells(null, "0", "55 333", "0", "0", "0");
+		
+		runReportTest("pure Mtef, by Executing Agency", "AMP-16100-mtef-projections-by-exec", new String[] {"Pure MTEF Project"}, fddr_correct);
+	}
+
+	public void testPurePlainMtefEUR()
+	{
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs-eur", 
+				ColumnReportDataModel.withColumns("AMP-16100-flat-mtefs-eur", 
+						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "25 311"),
+						SimpleColumnModel.withContents("MTEF 2012/2013", MUST_BE_EMPTY),
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
+						/*GroupColumnModel.withSubColumns("Funding", 
+								GroupColumnModel.withSubColumns("2010", 
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+												)),*/
+						GroupColumnModel.withSubColumns("Total Costs", 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+						))).withTrailCells(null, "25 311", "0", "0", "0", "0");
+		
+		runReportTest("pure Mtef, implicit filter by Donor, EUR", "AMP-16100-flat-mtefs-eur", new String[] {"Pure MTEF Project"}, fddr_correct);
 	}
 	
-	/**
-	 * same report as {@link #testFlatReport()}, but with a hierarchy by Donor Agency
-	 */
-	public void testByDonor()
-	{
-		/// ========================= one more report ===============================
-		GroupReportModel by_donor_ddr_correct = GroupReportModel.withGroupReports("AMP-15337-real-disbursements-by-donor",
-				GroupReportModel.withColumnReports("AMP-15337-real-disbursements-by-donor",					
-				ColumnReportDataModel.withColumns("Donor Agency: Finland", 
-						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
-						GroupColumnModel.withSubColumns("Funding", 
-								GroupColumnModel.withSubColumns("2013", 
-										GroupColumnModel.withSubColumns("Real Disbursements", 
-												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "20 000")
-												))),
-						GroupColumnModel.withSubColumns("Total Costs", 
-										GroupColumnModel.withSubColumns("Real Disbursements", 
-												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "20 000")
-						))),
-						ColumnReportDataModel.withColumns("Donor Agency: Norway", 
-								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
-								GroupColumnModel.withSubColumns("Funding", 
-										GroupColumnModel.withSubColumns("2013", 
-												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "110 000")
-														))),
-								GroupColumnModel.withSubColumns("Total Costs", 
-												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "110 000")
-								))),
-								
-						ColumnReportDataModel.withColumns("Donor Agency: USAID", 
-								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
-								GroupColumnModel.withSubColumns("Funding", 
-										GroupColumnModel.withSubColumns("2013", 
-												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "415 000")
-														))),
-								GroupColumnModel.withSubColumns("Total Costs", 
-												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "415 000")
-								)))
-																
-				));	
-		
-		runReportTest("by donor Directed Disbursements Report", "AMP-15337-real-disbursements-by-donor", new String[] {"Eth Water"}, by_donor_ddr_correct);
-	}
-	
-	/**
-	 * same report as {@link #testFlatReport()}, but with a hierarchy by Executing Agency
-	 */	
-	public void testByExecuting()
-	{
-		/// ========================= one more report ===============================
-		GroupReportModel by_exec_ddr_correct = GroupReportModel.withGroupReports("AMP-15337-real-disbursements-by-executing",
-				GroupReportModel.withColumnReports("AMP-15337-real-disbursements-by-executing",					
-				ColumnReportDataModel.withColumns("Executing Agency: UNDP", 
-						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
-						GroupColumnModel.withSubColumns("Funding", 
-								GroupColumnModel.withSubColumns("2013", 
-										GroupColumnModel.withSubColumns("Real Disbursements", 
-												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "300 000"),
-												SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "40 000")
-												))),
-						GroupColumnModel.withSubColumns("Total Costs", 
-										GroupColumnModel.withSubColumns("Real Disbursements", 
-												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "300 000"),
-												SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "40 000")
-						))),
-						ColumnReportDataModel.withColumns("Executing Agency: World Bank", 
-								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
-								GroupColumnModel.withSubColumns("Funding", 
-										GroupColumnModel.withSubColumns("2013", 
-												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "245 000"),
-														SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "10 000")
-														))),
-								GroupColumnModel.withSubColumns("Total Costs", 
-												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "245 000"),
-														SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "10 000")
-								)))
-						
-				));	
-		
-		runReportTest("by executing Directed Disbursements Report", "AMP-15337-real-disbursements-by-executing", new String[] {"Eth Water"}, by_exec_ddr_correct);
-				
-	}	
 }
 

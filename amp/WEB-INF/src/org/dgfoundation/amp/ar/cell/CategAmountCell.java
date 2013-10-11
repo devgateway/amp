@@ -218,6 +218,26 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 				((CategAmountCell) amCell).removeDirectedFundingMetadata();
 	}
 	
+	public boolean passesDirectedTransactionFilter(Cell metaCell)
+	{
+		boolean passesTest = false;
+		String columnRoleCode = ArConstants.COLUMN_ROLE_CODES.get(metaCell.getColumn().getName());
+		
+		String sourceRole = this.getMetaValueString(ArConstants.SOURCE_ROLE_CODE);
+		String sourceName = this.getMetaValueString(ArConstants.DONOR);
+		String recipientRole = this.getMetaValueString(ArConstants.RECIPIENT_ROLE_CODE);
+		String recipientName = this.getMetaValueString(ArConstants.RECIPIENT_NAME);
+		
+//		if ((sourceRole == null) || (sourceName == null) || (recipientRole == null) || (recipientName == null) || (metaCell == null) || (metaCell.getValue() == null))
+//			System.out.println("my name is msh");
+		
+		passesTest = (sourceRole.equals(columnRoleCode) && sourceName.equals(metaCell.getValue().toString())) // all transactions have a non-null source
+					||
+					(recipientRole != null && recipientName != null && recipientRole.equals(columnRoleCode) && recipientName.equals(metaCell.getValue().toString()));
+
+		return passesTest;
+	}
+	
 @Override
 public Cell filter(Cell metaCell,Set ids) {
 	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);
@@ -288,6 +308,7 @@ public Cell filter(Cell metaCell,Set ids) {
 			}
 		}
 	}
+	
 
 	/**
 	 * when doing a hierarchy by Donor Agency, the <Real Disbursements> column should only have flow DN-EXEC shown
@@ -299,28 +320,18 @@ public Cell filter(Cell metaCell,Set ids) {
 	 */
 	String directedType = this.getMetaValueString(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE);
 	boolean isDirectedActualDisbursement = directedType != null;
+	boolean isMtefCell = this.existsMetaString(ArConstants.IS_AN_MTEF_FUNDING);
 	
-	if (isDirectedActualDisbursement && mergedCells.isEmpty() && ArConstants.COLUMN_ROLE_CODES.containsKey(metaCell.getColumn().getName()))
+	boolean doingADirectedDisbursementFilter = isDirectedActualDisbursement && mergedCells.isEmpty() && ArConstants.COLUMN_ROLE_CODES.containsKey(metaCell.getColumn().getName());
+	boolean doingAMtefFilter = isMtefCell && mergedCells.isEmpty() && ArConstants.COLUMN_ROLE_CODES.containsKey(metaCell.getColumn().getName());
+	
+	if (doingADirectedDisbursementFilter || doingAMtefFilter)
 	{
-		boolean passesTest = false;
-		String columnRoleCode = ArConstants.COLUMN_ROLE_CODES.get(metaCell.getColumn().getName());
-		
-		String sourceRole = this.getMetaValueString(ArConstants.SOURCE_ROLE_CODE);
-		String sourceName = this.getMetaValueString(ArConstants.DONOR);
-		String recipientRole = this.getMetaValueString(ArConstants.RECIPIENT_ROLE_CODE);
-		String recipientName = this.getMetaValueString(ArConstants.RECIPIENT_NAME);
-		
-//		if ((sourceRole == null) || (sourceName == null) || (recipientRole == null) || (recipientName == null) || (metaCell == null) || (metaCell.getValue() == null))
-//			System.out.println("my name is msh");
-		
-		passesTest = (sourceRole.equals(columnRoleCode) && sourceName.equals(metaCell.getValue().toString())) // all transactions have a non-null source
-					||
-					(recipientRole != null && recipientName != null && recipientRole.equals(columnRoleCode) && recipientName.equals(metaCell.getValue().toString()));
-		
+		boolean passesTest = passesDirectedTransactionFilter(metaCell);
 		if (!passesTest)
 			return null;
 	}
-	
+		
     //apply metatext filters
 	if(metaCell instanceof MetaTextCell) {
 			//apply metatext filters for column Sector

@@ -36,6 +36,11 @@ public class GroupReportModel extends ReportModel
 		return new GroupReportModel(name, columnReportDataModels, GRModelType.COLUMN_REPORTS);
 	}
 	
+	public static GroupReportModel empty(String name)
+	{
+		return new GroupReportModel(name, new ColumnReportDataModel[0], GRModelType.COLUMN_REPORTS);
+	}
+	
 	public GroupReportModel withTrailCells(String... trailCells)
 	{
 		this.trailCells = trailCells;

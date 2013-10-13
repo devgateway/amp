@@ -609,7 +609,7 @@ public class DbUtil {
         return null;
     }
     
-    public static List getActivities(DashboardFilter filter, Date startDate,
+    public static List<Object[]> getActivities(DashboardFilter filter, Date startDate,
             Date endDate, Long assistanceTypeId,
             Long financingInstrumentId,
             int transactionType,String adjustmentTypeActual) throws DgException {
@@ -620,7 +620,7 @@ public class DbUtil {
         //int transactionType = filter.getTransactionType();
         TeamMember tm = filter.getTeamMember();
         // apply calendar filter
-        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        //Long fiscalCalendarId = filter.getFiscalCalendarId();
         
         //Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         //Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
@@ -643,6 +643,7 @@ public class DbUtil {
         try {
         	String oql = "select act.ampActivityId, act.ampId, act.name ";
             oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true, true);
+            //oql += " order by act.name";
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);

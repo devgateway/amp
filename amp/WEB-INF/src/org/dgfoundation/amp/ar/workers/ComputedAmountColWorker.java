@@ -64,8 +64,8 @@ public class ComputedAmountColWorker extends MetaCellColumnWorker {
 	 * ResultSet)
 	 */
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
-		//AmpARFilter filter = (AmpARFilter) generator.getFilter();		
 		
+		AmpARFilter filter = generator.getFilter();		
 		Long ownerId = new Long(rs.getLong(1));
 		Long id = new Long(rs.getLong(2));
 		BigDecimal value = rs.getBigDecimal(3);
@@ -77,7 +77,8 @@ public class ComputedAmountColWorker extends MetaCellColumnWorker {
 
 		ComputedAmountCell ret = new ComputedAmountCell(ownerId);
 		ret.setId(id);
-		ret.setAmount(value.doubleValue());
+		ret.setAmount(filter.adaptAmountToThousandsSetting(value.doubleValue()));
+		
 		ret.setFromExchangeRate(Util.getExchange(currencyCode, currencyDate));
 		//ret.setFromExchangeRate(exchangeRate);
 		ret.setCurrencyDate(currencyDate);

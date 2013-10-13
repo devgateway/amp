@@ -37,7 +37,7 @@ public class ReportTestingUtils
 	 * @param activitiyNames - the names of the activities which should be presented to the report (through WorkspaceFilter). If null, WorkspaceFilter will not filter out any
 	 * @return
 	 */
-	public static GroupReportData runReportOn(String reportName, String... activityNames)
+	public static GroupReportData runReportOn(String reportName, AmpReportModifier modifier, String... activityNames)
 	{		
 		Session hibSession = PersistenceManager.getSession();
 		
@@ -54,6 +54,9 @@ public class ReportTestingUtils
 			filter.setOverridingTeamFilter(new NonFilteringTeamFilter());
 		else
 			filter.setOverridingTeamFilter(new NameFilteringTeamFilter(activityNames));
+		
+		if (modifier != null)
+			modifier.modifyAmpReportSettings(report, filter);
 		
 		ReportContextData.getFromRequest(mockRequest, false).setFilter(filter);
 		AmpReportGenerator arg = new AmpReportGenerator(report, filter, true);

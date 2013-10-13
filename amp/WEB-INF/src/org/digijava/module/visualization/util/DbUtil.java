@@ -1067,107 +1067,107 @@ public class DbUtil {
 		return oql;
 	}
 	
-private static String getHQLQueryForDD(DashboardFilter filter) {
-		
-		String oql = "";
-		
-		oql += " from ";
-		oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
-        oql += "   inner join f.ampActivityId act ";
-        boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
-        boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
-        boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
-        boolean regionCondition = (filter.getRegionId()!=null && filter.getRegionId()!=-1)? true : false;
-        boolean sectorCondition = (filter.getSectorId()!=null && filter.getSectorId()!=-1)? true : false;
-        boolean secSectorCondition = (filter.getSecondarySectorsId()!=null && filter.getSecondarySectorsId()!=-1)? true : false;
-        boolean peaceMarkerCondition = (filter.getSelPeacebuilderMarkerIds()!=null && filter.getSelPeacebuilderMarkerIds().length>0 && filter.getSelPeacebuilderMarkerIds()[0]!=-1)? true : false;
-        boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
-        
-        //Join  for Organization/Organization Groups and their role
-        if (donorCondition || implementingCondition || beneficiaryCondition)
-    		oql += " inner join act.orgrole orole inner join orole.role role ";
- 
-        //Join for locations filter
-        if (regionCondition) {
-            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-        }
-
-        //Join for Category Values
-        if (peaceMarkerCondition || peacebuildingCondition) {
-        	oql += " inner join act.categories categ ";
-		}
-
-        //Join for the Sectors (actsec) and the sector scheme (config)
-        if (sectorCondition || secSectorCondition) {
-            oql += "  inner join act.sectors actsec ";
-            oql += "  inner join actsec.classificationConfig config  ";
-            oql += " inner join actsec.sectorId sec ";
-        }
-        
-        oql += " where 1 = 1 ";
-
-        // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
-        if (donorCondition) {
-        	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
-        } 
-        if (implementingCondition) {
-        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
-        } 
-        if (beneficiaryCondition) {
-        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
-        } 
-        
-
-        //Filter for regions. If there's a location selected, it adds that location as well as all child locations. Null is used for unallocated locations on the Activities.
-        if (regionCondition) {
-            Long[] locationIds = {filter.getRegionId()};
-            locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-        }
-
-        //Filter for sectors. If there's a sector selected, it adds that sector as well as all children.
-        if (sectorCondition) {
-        	Long[] sectorIds = {filter.getSectorId()};
-            sectorIds = getAllDescendants(sectorIds, DbUtil.getAmpSectors());
-            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-        }
-
-        if (secSectorCondition) {
-        	Long[] secSectorIds = {filter.getSecondarySectorsId()};
-            secSectorIds = getAllDescendants(secSectorIds, DbUtil.getAmpSectors());
-            oql += " and sec.id in ("+DashboardUtil.getInStatement(secSectorIds)+") ";
-        }
-
-        //Filter for Category Values
-        if (peaceMarkerCondition) {
-        	oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelPeacebuilderMarkerIds())+") ";
-		}
-        if (peacebuildingCondition) {
-        	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
-		}
-
-        //Filter for individual activity information (used for the list of projects that appear when you click on a line/bar/pie slice.
-        if (filter.getActivityId()!=null) {
-            oql += " and act.ampActivityId =:activityId ";
-        }
-
-        //Filter for the Fiscal Year Start and End
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-
-        //The getActivityComputedList holds the list of activities that the workspace has, it could come from a computed workspace that has a filter instead of children organizations.
-        if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
-        	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
-        else
-        	oql += "  and act.team is not null ";
-        	
-        // This restricts to only show activities that are non draft, non deleted and validated
-        oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
-        oql += " and (act.deleted = false or act.deleted is null)";
-        
-		return oql;
-	}
+//private static String getHQLQueryForDD(DashboardFilter filter) {
+//		
+//		String oql = "";
+//		
+//		oql += " from ";
+//		oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
+//        oql += "   inner join f.ampActivityId act ";
+//        boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
+//        boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
+//        boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
+//        boolean regionCondition = (filter.getRegionId()!=null && filter.getRegionId()!=-1)? true : false;
+//        boolean sectorCondition = (filter.getSectorId()!=null && filter.getSectorId()!=-1)? true : false;
+//        boolean secSectorCondition = (filter.getSecondarySectorsId()!=null && filter.getSecondarySectorsId()!=-1)? true : false;
+//        boolean peaceMarkerCondition = (filter.getSelPeacebuilderMarkerIds()!=null && filter.getSelPeacebuilderMarkerIds().length>0 && filter.getSelPeacebuilderMarkerIds()[0]!=-1)? true : false;
+//        boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
+//        
+//        //Join  for Organization/Organization Groups and their role
+//        if (donorCondition || implementingCondition || beneficiaryCondition)
+//    		oql += " inner join act.orgrole orole inner join orole.role role ";
+// 
+//        //Join for locations filter
+//        if (regionCondition) {
+//            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+//        }
+//
+//        //Join for Category Values
+//        if (peaceMarkerCondition || peacebuildingCondition) {
+//        	oql += " inner join act.categories categ ";
+//		}
+//
+//        //Join for the Sectors (actsec) and the sector scheme (config)
+//        if (sectorCondition || secSectorCondition) {
+//            oql += "  inner join act.sectors actsec ";
+//            oql += "  inner join actsec.classificationConfig config  ";
+//            oql += " inner join actsec.sectorId sec ";
+//        }
+//        
+//        oql += " where 1 = 1 ";
+//
+//        // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
+//        if (donorCondition) {
+//        	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
+//        } 
+//        if (implementingCondition) {
+//        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
+//        } 
+//        if (beneficiaryCondition) {
+//        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
+//        } 
+//        
+//
+//        //Filter for regions. If there's a location selected, it adds that location as well as all child locations. Null is used for unallocated locations on the Activities.
+//        if (regionCondition) {
+//            Long[] locationIds = {filter.getRegionId()};
+//            locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+//            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+//        }
+//
+//        //Filter for sectors. If there's a sector selected, it adds that sector as well as all children.
+//        if (sectorCondition) {
+//        	Long[] sectorIds = {filter.getSectorId()};
+//            sectorIds = getAllDescendants(sectorIds, DbUtil.getAmpSectors());
+//            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+//        }
+//
+//        if (secSectorCondition) {
+//        	Long[] secSectorIds = {filter.getSecondarySectorsId()};
+//            secSectorIds = getAllDescendants(secSectorIds, DbUtil.getAmpSectors());
+//            oql += " and sec.id in ("+DashboardUtil.getInStatement(secSectorIds)+") ";
+//        }
+//
+//        //Filter for Category Values
+//        if (peaceMarkerCondition) {
+//        	oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelPeacebuilderMarkerIds())+") ";
+//		}
+//        if (peacebuildingCondition) {
+//        	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
+//		}
+//
+//        //Filter for individual activity information (used for the list of projects that appear when you click on a line/bar/pie slice.
+//        if (filter.getActivityId()!=null) {
+//            oql += " and act.ampActivityId =:activityId ";
+//        }
+//
+//        //Filter for the Fiscal Year Start and End
+//        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+//
+//        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+//
+//        //The getActivityComputedList holds the list of activities that the workspace has, it could come from a computed workspace that has a filter instead of children organizations.
+//        if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
+//        	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
+//        else
+//        	oql += "  and act.team is not null ";
+//        	
+//        // This restricts to only show activities that are non draft, non deleted and validated
+//        oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
+//        oql += " and (act.deleted = false or act.deleted is null)";
+//        
+//		return oql;
+//	}
 	
 	private static String getActivitiesIdByCategoryRelated (String catList){
 		String ret = "";

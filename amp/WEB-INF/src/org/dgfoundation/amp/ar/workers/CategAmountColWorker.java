@@ -252,19 +252,8 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 //			filter.setAmountinthousand(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 //		} 
 		
-		if (filter.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){
-			if (tr_amount != 0){
-				acc.setAmount(tr_amount * 0.001d * 0.001d);
-			}
-		} else if (filter.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){
-			if (tr_amount != 0){
-				acc.setAmount(tr_amount * 0.001d);
-			}
-		}
-		else{
-			acc.setAmount(tr_amount);
-		}
-		
+		acc.setAmount(filter.adaptAmountToThousandsSetting(tr_amount));
+				
 		//use fixed exchange rate only if it has been entered. Else use Agency
 		if (fixedExchangeRate != null && fixedExchangeRate != 0) {
 			acc.setFromExchangeRate(fixedExchangeRate);

@@ -14,6 +14,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.hibernate.Query;
 
 import org.hibernate.cfg.*;
@@ -52,6 +53,8 @@ public class MtefTests extends ReportsTestCase
 		suite.addTest(new MtefTests("testPureMtefByExecutingAgency"));
 		
 		suite.addTest(new MtefTests("testPurePlainMtefEUR"));
+		suite.addTest(new MtefTests("testPurePlainMtefEURInThousands"));
+		suite.addTest(new MtefTests("testPurePlainMtefEURInThousandsMoreActivities"));
 
 		return suite;
 	}		
@@ -270,6 +273,66 @@ public class MtefTests extends ReportsTestCase
 		
 		runReportTest("pure Mtef, implicit filter by Donor, EUR", "AMP-16100-flat-mtefs-eur", new String[] {"Pure MTEF Project"}, fddr_correct);
 	}
+
+	public void testPurePlainMtefEURInThousands()
+	{
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs-eur", 
+				ColumnReportDataModel.withColumns("AMP-16100-flat-mtefs-eur", 
+						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "25"),
+						SimpleColumnModel.withContents("MTEF 2012/2013", MUST_BE_EMPTY),
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
+						/*GroupColumnModel.withSubColumns("Funding", 
+								GroupColumnModel.withSubColumns("2010", 
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+												)),*/
+						GroupColumnModel.withSubColumns("Total Costs", 
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+						))).withTrailCells(null, "25", "0", "0", "0", "0");
+		
+		AmpReportModifier modifier = new AmpReportModifier() {			
+			@Override
+			public void modifyAmpReportSettings(AmpReports report, AmpARFilter filter) {				
+				filter.setAmountinthousand(AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS);
+			}
+		};
+		runReportTest("pure Mtef, implicit filter by Donor, EUR, THOUSANDS", "AMP-16100-flat-mtefs-eur", new String[] {"Pure MTEF Project"}, fddr_correct, modifier);
+	}
+	
+	public void testPurePlainMtefEURInThousandsMoreActivities()
+	{
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16100-flat-mtefs-eur", 
+				ColumnReportDataModel.withColumns("AMP-16100-flat-mtefs-eur", 
+						SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
+						SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "25", "Test MTEF directed", "112"),
+						SimpleColumnModel.withContents("MTEF 2012/2013", "Test MTEF directed", "49"),
+						SimpleColumnModel.withContents("MTEF 2013/2014", MUST_BE_EMPTY),
+						GroupColumnModel.withSubColumns("Funding", 
+								GroupColumnModel.withSubColumns("2010", 
+										SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY),
+										SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_2", "332", "Test MTEF directed", "105")
+										),
+								GroupColumnModel.withSubColumns("2011", 
+										SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_2", "747"),
+										SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)
+										)
+												
+								),
+						GroupColumnModel.withSubColumns("Total Costs", 
+								SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_2", "747"),
+								SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_2", "332", "Test MTEF directed", "105")
+						))).withTrailCells(null, "137", "49", "0", "0", "438", "747", "0", "747", "438");
+		
+		AmpReportModifier modifier = new AmpReportModifier() {			
+			@Override
+			public void modifyAmpReportSettings(AmpReports report, AmpARFilter filter) {				
+				filter.setAmountinthousand(AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS);
+			}
+		};
+		runReportTest("pure Mtef, implicit filter by Donor, EUR, THOUSANDS", "AMP-16100-flat-mtefs-eur", new String[] {"Pure MTEF Project", "Test MTEF directed", "TAC_activity_2"}, fddr_correct, modifier);
+	}	
 	
 }
 

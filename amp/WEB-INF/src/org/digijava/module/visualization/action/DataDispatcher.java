@@ -298,7 +298,7 @@ public class DataDispatcher extends DispatchAction {
 			}
 		}
 		
-		DashboardUtil.getSummaryAndRankInformation(visualizationForm, request);
+		DashboardUtil.getSummaryAndRankInformation(visualizationForm, true, request);
         request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, trnStep8);
 		JSONObject root = new JSONObject();
 		JSONArray children = new JSONArray();
@@ -1156,7 +1156,7 @@ public class DataDispatcher extends DispatchAction {
         		DashboardFilter newFilter = filter.getCopyFilterForFunding();
             	newFilter.setStartYear(startYear);
             	newFilter.setEndYear(endYear);
-            	map = DashboardUtil.getRankProgramsByKey(DbUtil.getPrograms(newFilter,programSetting), newFilter);
+            	map = DashboardUtil.getRankProgramsByKey(DbUtil.getPrograms(newFilter,programSetting), newFilter, true);
         	}
 	        
 	        if (map==null) {
@@ -1511,7 +1511,7 @@ public class DataDispatcher extends DispatchAction {
         		DashboardFilter newFilter = filter.getCopyFilterForFunding();
             	newFilter.setStartYear(startYear);
             	newFilter.setEndYear(endYear);
-            	Collection agencyListRed = DbUtil.getAgencies(newFilter);
+            	Collection agencyListRed = DbUtil.getAgencies(newFilter, true);
                 Iterator iter = agencyListRed.iterator();
                 while (iter.hasNext()) {
                 	AmpOrganisation org = (AmpOrganisation)iter.next();
@@ -1853,7 +1853,7 @@ public class DataDispatcher extends DispatchAction {
         	newFilter.setStartYear(startYear);
         	newFilter.setEndYear(endYear);
         	newFilter.setAgencyType(2);//set beneficiary agency 
-        	Collection agencyListRed = DbUtil.getAgencies(newFilter);
+        	Collection agencyListRed = DbUtil.getAgencies(newFilter, true);
             Iterator iter = agencyListRed.iterator();
             while (iter.hasNext()) {
             	AmpOrganisation org = (AmpOrganisation)iter.next();
@@ -3561,7 +3561,7 @@ public class DataDispatcher extends DispatchAction {
 	            	Long id = Long.parseLong(regionId);
 	            	map = DashboardUtil.getRankSubRegions(DbUtil.getSubRegions(id), newFilter, startYear.intValue(), endYear.intValue());
 	            } else {
-	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(newFilter), DbUtil.getRegions(newFilter), newFilter,request);
+	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(newFilter), DbUtil.getRegions(newFilter), newFilter, true, request);
 	            }
         	}
         	
@@ -3875,7 +3875,7 @@ public class DataDispatcher extends DispatchAction {
 		} else if (filter.getSelOrgGroupIds() != null && filter.getSelOrgGroupIds().length == 1 && filter.getSelOrgGroupIds()[0]!=-1) {
 			organizationList.addAll(DbUtil.getOrganisationsFromGroup(filter.getSelOrgGroupIds()[0]));
 		} else {
-			organizationList.addAll(DbUtil.getAgencies(filter));
+			organizationList.addAll(DbUtil.getAgencies(filter, true));
 		}
         //organizationList = DbUtil.getOrganizations(filter);
         if (filter.getSelOrgIds()!= null && filter.getSelOrgIds().length == 1 && filter.getSelOrgIds()[0]!=-1){

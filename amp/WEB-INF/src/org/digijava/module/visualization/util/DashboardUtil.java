@@ -93,7 +93,7 @@ public class DashboardUtil {
 		return sortByValue (map, null);
 	}
 	
-	public static Map<AmpCategoryValueLocations, BigDecimal> getRankRegionsByKey(Collection<AmpCategoryValueLocations> regListChildren, Collection<AmpCategoryValueLocations> regListParent, DashboardFilter filter, HttpServletRequest request) throws DgException{
+	public static Map<AmpCategoryValueLocations, BigDecimal> getRankRegionsByKey(Collection<AmpCategoryValueLocations> regListChildren, Collection<AmpCategoryValueLocations> regListParent, DashboardFilter filter, boolean donorFundingOnly, HttpServletRequest request) throws DgException{
 		Map<AmpCategoryValueLocations, BigDecimal> map = new HashMap<AmpCategoryValueLocations, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
@@ -121,7 +121,7 @@ public class DashboardUtil {
 		tempLoc.setName(TranslatorWorker.translateText("National"));
 		tempLoc.setId(natLevelLocation.getId());
 //		regList.add(natLevelLocation); // add national location to list
-        map = DbUtil.getFundingByRegionList(regListChildren, regListParent, tempLoc, currCode, startDate, endDate, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, filter, request);
+        map = DbUtil.getFundingByRegionList(regListChildren, regListParent, tempLoc, currCode, startDate, endDate, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, filter, donorFundingOnly, request);
       //Unallocated values   
         AmpCategoryValueLocations tempLoc2 = new AmpCategoryValueLocations();
         tempLoc2.setName(TranslatorWorker.translateText("Unallocated"));
@@ -136,7 +136,7 @@ public class DashboardUtil {
         return sortByValue (map, null);
 	}
 	
-	public static Map<AmpTheme, BigDecimal> getRankProgramsByKey(Collection<AmpTheme> progList,  DashboardFilter filter) throws DgException{
+	public static Map<AmpTheme, BigDecimal> getRankProgramsByKey(Collection<AmpTheme> progList,  DashboardFilter filter, boolean donorFundingOnly) throws DgException{
 		Map<AmpTheme, BigDecimal> map = new HashMap<AmpTheme, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
@@ -145,7 +145,7 @@ public class DashboardUtil {
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
         if (progList!=null && progList.size()!=0)
-        	map = DbUtil.getFundingByProgramList(progList, currCode, startDate, endDate, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, filter);
+        	map = DbUtil.getFundingByProgramList(progList, currCode, startDate, endDate, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, filter, donorFundingOnly);
 		return sortByValue (map, null);
 	}
 	
@@ -242,7 +242,7 @@ public class DashboardUtil {
 	    return result;
 	}
 	
-	public static void getSummaryAndRankInformation (VisualizationForm form, HttpServletRequest request) throws DgException{
+	public static void getSummaryAndRankInformation (VisualizationForm form, boolean donorFundingOnly, HttpServletRequest request) throws DgException{
 		String trnStep1, trnStep2, trnStep3, trnStep4, trnStep5, trnStep6, trnStep7, trnStep8, trnStep9;
 		trnStep1 = trnStep2 = trnStep3 = trnStep4 = trnStep5 = trnStep6 = trnStep7 = trnStep8 = trnStep9 = "";
 		try{
@@ -299,7 +299,7 @@ public class DashboardUtil {
 		Collection<AmpTheme> NPOListReduced = DbUtil.getPrograms(filter, 0);
         Collection<AmpTheme> programListReduced = DbUtil.getPrograms(filter, 1);
         Collection<AmpTheme> secondaryProgramListReduced = DbUtil.getPrograms(filter, 2);
-		Collection<AmpOrganisation> agencyListReduced = DbUtil.getAgencies(filter);
+		Collection<AmpOrganisation> agencyListReduced = DbUtil.getAgencies(filter, true);
 		
 		HashMap<Long, AmpSector> sectorList = new HashMap<Long, AmpSector>();
         iter = sectorListParent.iterator();
@@ -380,7 +380,7 @@ public class DashboardUtil {
 	        			form.getRanksInformation().setFullRegions(null);
 			        	form.getRanksInformation().setTopRegions(null);
 					} else {
-						form.getRanksInformation().setFullRegions(getRankRegionsByKey(regionListChildren, regionListParent, form.getFilter(), request));
+						form.getRanksInformation().setFullRegions(getRankRegionsByKey(regionListChildren, regionListParent, form.getFilter(), donorFundingOnly, request));
 			        	form.getRanksInformation().setTopRegions(getTop(form.getRanksInformation().getFullRegions(),form.getFilter().getTopLists()));
 					}
 		        }
@@ -411,7 +411,7 @@ public class DashboardUtil {
 		        		form.getRanksInformation().setFullNPOs(null);
 			        	form.getRanksInformation().setTopNPOs(null);
 					} else {
-						form.getRanksInformation().setFullNPOs(getRankProgramsByKey(NPOListReduced, form.getFilter()));
+						form.getRanksInformation().setFullNPOs(getRankProgramsByKey(NPOListReduced, form.getFilter(), donorFundingOnly));
 						form.getRanksInformation().setTopNPOs(getTop(form.getRanksInformation().getFullNPOs(),form.getFilter().getTopLists()));
 					}
 				} 
@@ -421,7 +421,7 @@ public class DashboardUtil {
 		        		form.getRanksInformation().setFullPrograms(null);
 			        	form.getRanksInformation().setTopPrograms(null);
 					} else {
-						form.getRanksInformation().setFullPrograms(getRankProgramsByKey(programListReduced, form.getFilter()));
+						form.getRanksInformation().setFullPrograms(getRankProgramsByKey(programListReduced, form.getFilter(), donorFundingOnly));
 						form.getRanksInformation().setTopPrograms(getTop(form.getRanksInformation().getFullPrograms(),form.getFilter().getTopLists()));
 					}
 				} 
@@ -430,7 +430,7 @@ public class DashboardUtil {
 		        		form.getRanksInformation().setFullSecondaryPrograms(null);
 			        	form.getRanksInformation().setTopSecondaryPrograms(null);
 					} else {
-						form.getRanksInformation().setFullSecondaryPrograms(getRankProgramsByKey(secondaryProgramListReduced, form.getFilter())); 
+						form.getRanksInformation().setFullSecondaryPrograms(getRankProgramsByKey(secondaryProgramListReduced, form.getFilter(), donorFundingOnly)); 
 						form.getRanksInformation().setTopSecondaryPrograms(getTop(form.getRanksInformation().getFullSecondaryPrograms(),form.getFilter().getTopLists()));
 					}
 				}
@@ -625,15 +625,18 @@ public class DashboardUtil {
         return dt.toDate();
     }
 
-    public static String getOrganizationQuery(boolean orgGroupView, Long[] selectedOrganizations, Long[] selectedOrgGroups, int agencyType) {
+    
+    public static String getOrganizationQuery(boolean orgGroupView, Long[] selectedOrganizations, Long[] selectedOrgGroups, int agencyType, boolean donorFundingOnly) {
         String qry = "";
         switch (agencyType) {
         case org.digijava.module.visualization.util.Constants.DONOR_AGENCY:
 			if (orgGroupView) {
-	            qry = " and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId in (" + getInStatement(selectedOrgGroups) + ") ";
+	            qry = " and f.ampDonorOrgId.orgGrpId.ampOrgGrpId in (" + getInStatement(selectedOrgGroups) + ") ";
 	        } else {
 	            qry = " and f.ampDonorOrgId in (" + getInStatement(selectedOrganizations) + ") ";
 	        }
+			if (donorFundingOnly)
+				qry += " and f.sourceRole.roleCode = '" + org.digijava.module.aim.helper.Constants.ROLE_CODE_DONOR + "' ";
 			break;
 
         case org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY:
@@ -708,7 +711,7 @@ public class DashboardUtil {
             qr += ")";
 
         } else {
-            qr += "  and act.draft=false and act.team is not null ";
+            qr += "  and (act.draft=false OR act.draft is null) and act.team is not null ";
         }
         return qr;
     }

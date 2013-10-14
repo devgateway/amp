@@ -15,6 +15,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * Wraps the items that can be displayed in a report column. A Column can hold
@@ -298,6 +299,7 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 	 */
 	public void setCurrentDepth(int currentDepth) {
 		this.currentDepth = currentDepth;
+		//String z = TranslatorWorker.translateText(this.getName());
 	}
 
 	/**

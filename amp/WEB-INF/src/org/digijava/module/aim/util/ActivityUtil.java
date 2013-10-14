@@ -1747,7 +1747,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           }
           else{
 				if (team.getAccessType().equals("Management")) {
-					whereTeamStatement.append( " and latestAct.draft=false and latestAct.approvalStatus ='approved' ");
+					whereTeamStatement.append(String.format(" and (latestAct.draft=false or latestAct.draft is null) and latestAct.approvalStatus IN ('%s', '%s') ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
 					List<AmpTeam> teams = new ArrayList<AmpTeam>();
 					DashboardUtil.getTeams(team, teams);
 					String relatedOrgs = "", teamIds = "";

@@ -1635,11 +1635,11 @@ public class ChartWidgetUtil {
             String relatedOrgs = "";
             String teamIds = "";
             if (teamMember.getTeamAccessType().equals("Management")) {
-                qr += " and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
+                qr += " and (act.draft=false OR act.draft is null) and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
             }
             else{
             	if (team.getComputation() != null && team.getComputation()&&team.getHideDraftActivities()!=null&&team.getHideDraftActivities()) {
-        			qr+=" and act.draft=false ";
+        			qr+=" and (act.draft=false or act.draft is null) ";
         		}
             }
             qr += " and (";
@@ -1680,7 +1680,7 @@ public class ChartWidgetUtil {
     
     public static String getTeamQueryManagement() {
         String qr = "";
-        qr += " and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
+        qr += " and (act.draft=false or act.draft is null) and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
         qr += " and act.team is not null and act.team in (select at.ampTeamId from " 
 		+ AmpTeam.class.getName() + " at where parentTeamId is not null)";
         

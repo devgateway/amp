@@ -475,11 +475,11 @@ public class DbUtil {
 
                 if (teamId != null) {
                 	if (team.getAccessType().equals("Management")) {
-                		qs.append(" and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ");
+                		qs.append(" and (act.draft=false or act.draft is null) and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ");
     				}
                 	else{
                 		if (team.getComputation() != null && team.getComputation()&&team.getHideDraftActivities()!=null&&team.getHideDraftActivities()) {
-                			qs.append(" and act.draft=false ");
+                			qs.append(" and (act.draft=false or act.draft is null) ");
                 		}
                 	}
                 }
@@ -524,13 +524,13 @@ public class DbUtil {
 
                 if (teamId != null) {
 					if (team.getAccessType().equals("Management")) {
-						qs.append(" and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ");
+						qs.append(" and (act.draft=false OR act.draft is null) and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ");
 					} else {
 						if (team.getComputation() != null
 								&& team.getComputation()
 								&& team.getHideDraftActivities() != null
 								&& team.getHideDraftActivities()) {
-							qs.append(" and act.draft=false ");
+							qs.append(" and (act.draft=false OR act.draft is null) ");
 						}
 					}
                 }

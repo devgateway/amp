@@ -541,7 +541,7 @@ public class DbHelper {
 					oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)";
 				}
 	            
-	            oql += " and act.team is not null AND (act.draft=false OR act.draft IS NULL) AND act.approvalStatus IN ('approved','startedapproved')";
+	            oql += String.format(" and act.team is not null AND (act.draft=false OR act.draft IS NULL) AND act.approvalStatus IN ('%s','%s') ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS);
 	            
 	            List<Long> workSpaceActivityList = filter.buildFilteredActivitiesList();
 	            String inactivities = Util.toCSString(workSpaceActivityList);	            
@@ -1247,8 +1247,7 @@ public class DbHelper {
 			queryString.append(" and org.orgGrpId=:orgGroupId ");
 		}
 		if (publicView) {
-			queryString
-					.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+			queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus IN ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
 		}
 
 		queryString.append("order by org.name asc");
@@ -1284,8 +1283,7 @@ public class DbHelper {
 			queryString.append(" and org.orgGrpId.orgType=:orgtypeId ");
 		}
 		if (publicView) {
-			queryString
-					.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+			queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
 		}
 
 		queryString.append("order by org.name asc");

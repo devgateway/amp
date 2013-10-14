@@ -362,7 +362,7 @@ public class SearchUtil {
         if (!hasComputedOrgs) {
             query.append(" and org.name like :name");
             if (tm.getTeamAccessType().equals("Management")) {
-                query.append(" and act.draft=false and act.approvalStatus ='approved' ");
+                query.append(String.format(" and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
             }
         }
        

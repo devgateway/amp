@@ -82,7 +82,7 @@ public class DbUtil {
 			queryString.append(" where  role.roleCode='DN' ");
 
         if (publicView) {
-            queryString.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+            queryString.append(String.format(" and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
         }
 
 //        queryString.append("order by org.orgGrpId.orgGrpName asc");
@@ -153,7 +153,7 @@ public class DbUtil {
             queryString.append(" and org.orgGrpId=:orgGroupId ");
         }
         if (publicView) {
-            queryString.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+            queryString.append(String.format(" and (act.draft is null or act.draft=false) and act.approvalStatus IN ('%s, '%s') and tm.parentTeamId is not null ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
         }
 
         queryString.append("order by org.name asc");
@@ -671,7 +671,7 @@ public class DbUtil {
 
      }
       
-	public static List<AmpOrganisation> getAgencies(DashboardFilter filter) throws DgException {
+	public static List<AmpOrganisation> getAgencies(DashboardFilter filter, boolean donorFundingOnly) throws DgException {
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         List<AmpOrganisation> agencies = new ArrayList<AmpOrganisation>();
         Long[] orgIds= filter.getSelOrgIds();
@@ -714,17 +714,19 @@ public class DbUtil {
 	            	specialInner = " inner join act.orgrole orole inner join orole.role role ";
 	            
 	            switch (filter.getAgencyType()) {
-	            case org.digijava.module.visualization.util.Constants.DONOR_AGENCY:
-	            	specialInner += " inner join f.ampDonorOrgId agency ";
-	    			break;
-	            case org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY:
-	            	specialInner += " inner join orole.organisation agency ";
-	            	specialCondition = " and role.roleCode='EA' ";
-	    			break;
-	            case org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY:
-	            	specialInner += " inner join orole.organisation agency ";
-	            	specialCondition = " and role.roleCode='BA' ";
-	    			break;
+	            	case org.digijava.module.visualization.util.Constants.DONOR_AGENCY:
+	            		specialInner += " inner join f.ampDonorOrgId agency ";
+	            		if (donorFundingOnly)
+	            			specialCondition += String.format(" and f.sourceRole.roleCode='%s' ", Constants.ROLE_CODE_DONOR);
+	            		break;
+	            	case org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY:
+	            		specialInner += " inner join orole.organisation agency ";
+	            		specialCondition = " and role.roleCode='EA' ";
+	            		break;
+	            	case org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY:
+	            		specialInner += " inner join orole.organisation agency ";
+	            		specialCondition = " and role.roleCode='BA' ";
+	            		break;
 	            }
 	        	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, specialCondition, true);
 	            Session session = PersistenceManager.getRequestDBSession();
@@ -878,10 +880,11 @@ public class DbUtil {
 		
 		
 		String oql = "";
-		boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1)? true : false;
-        boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1)? true : false;
-        boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1)? true : false;
-        boolean peaceMarkerCondition = (filter.getSelPeacebuilderMarkerIds()!=null && filter.getSelPeacebuilderMarkerIds().length>0 && filter.getSelPeacebuilderMarkerIds()[0]!=-1)? true : false;
+		//boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1);
+        boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1);
+        boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1);
+        
+        boolean peaceMarkerCondition = (filter.getSelPeacebuilderMarkerIds()!=null && filter.getSelPeacebuilderMarkerIds().length>0 && filter.getSelPeacebuilderMarkerIds()[0]!=-1);
         boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
@@ -919,8 +922,9 @@ public class DbUtil {
         	oql += " inner join act.actPrograms actProg ";
             oql += " inner join actProg.program prog ";
 		}
+        
         //Join  for Organization/Organization Groups and their role
-        if (donorCondition || implementingCondition || beneficiaryCondition)
+        if (implementingCondition || beneficiaryCondition)
     		oql += " inner join act.orgrole orole inner join orole.role role ";
         
         //Join for Category Values
@@ -962,17 +966,17 @@ public class DbUtil {
         // Filter for the Organizations/Organization Groups and their roles (Donor, Executing or Beneficiary)
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) { // If there are any individual organizations selected, goes through the else and adds them to the query. If not, checks if there are organization groups selected. If none of those are selected, then nothing is added.
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
+                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType(), donorFundingOnly);
             }
         } else {
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
+            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType(), donorFundingOnly);
         }
         
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (filter.getAgencyType()==0){
-	        if (donorCondition) {
-	        	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
-	        } 
+//	        if (donorCondition) {
+//	        	oql += " and f.ampDonorOrgId in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
+//	        } 
 	        if (implementingCondition) {
 	        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
 	        } 
@@ -1062,7 +1066,7 @@ public class DbUtil {
         	oql += "  and act.team is not null ";
         	
         // This restricts to only show activities that are non draft, non deleted and validated
-        oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
+        oql += " and (act.draft=false OR act.draft is null) and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
         oql += " and (act.deleted = false or act.deleted is null)";
         
 		return oql;
@@ -1711,9 +1715,9 @@ public class DbUtil {
         
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) 
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType());
+                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType(), donorFundingOnly);
         } else 
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds, filter.getAgencyType());
+            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds, filter.getAgencyType(), donorFundingOnly);
         if (locationCondition) {
         	if (locationIds[0].equals(0l)) {
         		oql += " and actloc is NULL "; //Unallocated condition
@@ -1746,7 +1750,7 @@ public class DbUtil {
         else
         	oql += "  and act.team is not null ";
         	
-        oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
+        oql += " and (act.draft=false OR act.draft is null) and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
         oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
@@ -1835,7 +1839,7 @@ public class DbUtil {
     }
 	
 	public static Map<AmpCategoryValueLocations, BigDecimal> getFundingByRegionList(Collection<AmpCategoryValueLocations> regListChildren, Collection<AmpCategoryValueLocations> regListParent, AmpCategoryValueLocations natLoc, String currCode,  Date startDate,
-            Date endDate, int transactionType,String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter, HttpServletRequest request) throws DgException {
+            Date endDate, int transactionType,String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter, boolean donorFundingOnly, HttpServletRequest request) throws DgException {
         
 		Map<AmpCategoryValueLocations, BigDecimal> map = new HashMap<AmpCategoryValueLocations, BigDecimal>();
 		Long[] orgIds = filter.getSelOrgIds();
@@ -1941,9 +1945,9 @@ public class DbUtil {
         
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) 
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType());
+                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType(), donorFundingOnly);
         } else 
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds, filter.getAgencyType());
+            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds, filter.getAgencyType(), donorFundingOnly);
         if (locationCondition) {
         	if (locationIds[0].equals(0l)) {
         		oql += " and actloc is NULL "; //Unallocated condition
@@ -1976,7 +1980,7 @@ public class DbUtil {
         else
         	oql += "  and act.team is not null ";
         	
-        oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
+        oql += " and (act.draft=false OR act.draft is null) and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
         oql += " and (act.deleted = false or act.deleted is null)";
         oql += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "'";
 
@@ -2073,7 +2077,7 @@ public class DbUtil {
     }
 	
 	public static Map<AmpTheme, BigDecimal> getFundingByProgramList(Collection<AmpTheme> progList, String currCode,  Date startDate,
-            Date endDate, int transactionType, String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
+            Date endDate, int transactionType, String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter, boolean donorFundingOnly) throws DgException {
         
 		Map<AmpTheme, BigDecimal> map = new HashMap<AmpTheme, BigDecimal>();
 		Long[] orgIds = filter.getSelOrgIds();
@@ -2181,9 +2185,9 @@ public class DbUtil {
 		}
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) 
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType());
+                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType(), donorFundingOnly);
         } else 
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds, filter.getAgencyType());
+            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds, filter.getAgencyType(), donorFundingOnly);
         if (locationCondition) {
         	if (locationIds[0].equals(0l)) {
         		oql += " and actloc is NULL "; //Unallocated condition
@@ -2216,7 +2220,7 @@ public class DbUtil {
         else
         	oql += "  and act.team is not null ";
         	
-        oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
+        oql += " and (act.draft=false or act.draft is null)  and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
         oql += " and (act.deleted = false or act.deleted is null)";
         
         Session session = PersistenceManager.getRequestDBSession();

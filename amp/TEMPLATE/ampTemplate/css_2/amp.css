@@ -999,3 +999,20 @@ div.innerTab {
 	padding: 2px; /* swallow border's +1 paddings */
 	background-color: #FFFFDD;
 }
+
+.dashboards_left_container
+{
+	height: 210px; 
+	border: 1px solid #CCCCCC; 
+	overflow: auto; 
+	background: white; 
+	maxHeight: 210px; 
+	padding: 5px;
+	padding-left: 20px;
+}
+
+.dashboards_left_container ul.root_list {
+	margin-left: 0px;
+	padding-left: 0px;
+	list-style-type: none;
+}

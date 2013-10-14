@@ -304,9 +304,8 @@ function initializeGlobalVariables(){
 													</b>
 												</div>
 											</div>
-											<div
-												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;">
-												<table style="width: 95%; margin-top: 15px;" align="center"
+											<div class="dashboards_left_container">
+												<table style="width: 100%; margin-top: 0px;" align="center"
 													class="inside">
 													<tr style="cursor: pointer;">
 														<td class="side_opt_sel" id="general_selector_0">
@@ -380,9 +379,7 @@ function initializeGlobalVariables(){
 													</b>
 												</div>
 											</div>
-											<div
-												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-												id="generalDivList">
+											<div class="dashboards_left_container" id="generalDivList">
 												<c:if test="${!visualizationform.filter.fromPublicView}">
 													<html:checkbox property="filter.workspaceOnly"
 														styleId="workspace_only">
@@ -491,11 +488,9 @@ function initializeGlobalVariables(){
 													</div>
 	
 												</div>
-												<div
-													style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-													id="orgGrpDivList">
-													<ul style="list-style-type: none;margin-left: 0px;">
-														<li>
+												<div class="dashboards_left_container" id="orgGrpDivList">
+													<ul class="root_list">
+														<li style="margin-left: -15px;">
 															<input type="checkbox" id="org_grp_check_all" value="-1"
 																name="org_grp_check"
 																onClick="allOptionChecked(this,'org_grp_check','organization_check')" />
@@ -551,11 +546,9 @@ function initializeGlobalVariables(){
 														class="buttonx" value="&gt;&gt;" />
 												</div>
 											</div>
-											<div
-												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-												id="regionDivList">
-												<ul style="list-style-type: none;margin-left: 0px;">
-													<li>
+											<div class="dashboards_left_container" id="regionDivList">
+												<ul class="root_list">
+													<li style="margin-left: -15px">
 														<input type="checkbox" id="region_check_all"
 															name="region_check" value="-1"
 															onClick="allOptionChecked(this,'region_check','zone_check')" />
@@ -607,10 +600,8 @@ function initializeGlobalVariables(){
 													</div>
 
 												</div>
-												<div
-													style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-													id="sectorDivList">
-													<ul style="list-style-type: none;margin-left: 0px;">
+												<div class="dashboards_left_container" id="sectorDivList">
+													<ul class="root_list">
 														<c:forEach
 															items="${visualizationform.filter.configWithSectorAndSubSectors}"
 															var="item">
@@ -687,10 +678,8 @@ function initializeGlobalVariables(){
 														</div>
 	
 													</div>
-													<div
-														style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-														id="beneficiaryAgencyDivList">
-														<ul style="list-style-type: none;margin-left: 0px;">
+													<div class="dashboards_left_container" id="beneficiaryAgencyDivList">
+														<ul class="root_list">
 															<c:forEach items="${visualizationform.filter.beneficiaryAgencyList}" var="item">
 																<li>
 																	<input type="checkbox" name="beneficiary_agency_check"
@@ -722,10 +711,8 @@ function initializeGlobalVariables(){
 														</div>
 	
 													</div>
-													<div
-														style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-														id="implementingAgencyDivList">
-														<ul style="list-style-type: none;margin-left: 0px;">
+													<div class="dashboards_left_container" id="implementingAgencyDivList">
+														<ul class="root_list">
 															<c:forEach items="${visualizationform.filter.implementingAgencyList}" var="item">
 																<li>
 																	<input type="checkbox" name="implementing_agency_check"
@@ -757,10 +744,8 @@ function initializeGlobalVariables(){
 														</div>
 	
 													</div>
-													<div
-														style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-														id="secondaryProgramDivList">
-														<ul style="list-style-type: none;margin-left: 0px;">
+													<div class="dashboards_left_container" id="secondaryProgramDivList">
+														<ul class="root_list">
 															<c:forEach items="${visualizationform.filter.secondaryProgramsList}" var="item">
 																<li>
 																	<input type="checkbox" name="secondary_program_check"
@@ -834,8 +819,8 @@ function initializeGlobalVariables(){
 												<c:if test="${visualizationform.filter.dashboardType==1}">
 												<td><b><digi:trn>Type of Agency</digi:trn>:</b>
 												 	</td>
-													<td align="right">
-														<html:select property="filter.agencyTypeFilter" styleId="agencyType_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+													<td>
+														<html:select property="filter.agencyTypeFilter" styleId="agencyType_dropdown" styleClass="dropdwn_sm" style="width:150px;">
 															<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
 															<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
 															<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
@@ -865,12 +850,11 @@ function initializeGlobalVariables(){
 
 							</div>
 			
-
-
- <input type="button" value="<digi:trn>Apply</digi:trn>" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin">
-<input type="button" value="<digi:trn>Reset to defaults</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
-<input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;">
-
+							<center>
+								<input type="button" value="<digi:trn>Apply</digi:trn>" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin" />
+								<input type="button" value="<digi:trn>Reset to defaults</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;" />
+								<input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;" />
+							</center>
 
 </div>
 </div>

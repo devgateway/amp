@@ -383,6 +383,8 @@ public class ReportsFilterPicker extends Action {
 			AmpCaching.getInstance().allFisCalendars = DbUtil.getAllFisCalenders();
 		    
 		filterForm.setCalendars(AmpCaching.getInstance().allFisCalendars);
+        AmpFiscalCalendar defaultCalendar = AmpARFilter.getDefaultCalendar();
+        filterForm.setDefaultCalendar(defaultCalendar != null ? defaultCalendar.getAmpFiscalCalId() : null);
 		StopWatch.next("Filters-Settings", true, "Settings part dropdowns END");
 	}
 	
@@ -1246,8 +1248,14 @@ public class ReportsFilterPicker extends Action {
 		
 		if (filterForm.getRenderEndYear() != null)
 			arf.setRenderEndYear(filterForm.getRenderEndYear());
-		
-		AmpFiscalCalendar selcal = (AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class, filterForm.getCalendar());
+
+        AmpFiscalCalendar selcal =  null;
+        if (filterForm.getCalendar() != null) {
+            selcal = (AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class, filterForm.getCalendar());
+        } else {
+            selcal = (AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class, filterForm.getDefaultCalendar());
+        }
+
 		arf.setCalendarType(selcal);
 		arf.buildCustomFormat();
 	}

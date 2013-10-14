@@ -57,7 +57,6 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.mondrian.query.MoConstants;
@@ -1650,7 +1649,8 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 		return new Date[]{dfromDate, dtoDate};
-	}	
+	}
+
 	/**
 	 * returns the default currency name
 	 * default is taken from either user settings, workspace settings or hardcoded global setting, whichever has the value first
@@ -1664,6 +1664,25 @@ public class AmpARFilter extends PropertyListable {
 			result = tempSettings.getCurrency();
 		return result; 
 	}
+
+    /**
+     * returns the default calendar
+     * default is taken from either user settings, workspace settings or hardcoded global setting, whichever has the value first
+     */
+    public static AmpFiscalCalendar getDefaultCalendar() {
+        AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
+        String calendarCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+        try {
+            AmpFiscalCalendar result = FiscalCalendarUtil.getAmpFiscalCalendar(Long.valueOf(calendarCode));
+            if (tempSettings != null && tempSettings.getFiscalCalendar()!=null)
+                result = tempSettings.getFiscalCalendar();
+            return result;
+        } catch (NumberFormatException ignore) {
+            return null;
+        }
+
+    }
+
 	
 	/**
 	 * computes the name of the effectively-used currency name: if one is set, then its name is returned, else the user/workspace/system default

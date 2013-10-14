@@ -166,13 +166,16 @@ public class FilterUtil {
 		form.getDynamicActivityFinalContractingFilter().setAmount(filter.getDynActivityFinalContractingFilterAmount());
 		form.getDynamicActivityFinalContractingFilter().setOperator(filter.getDynActivityFinalContractingFilterOperator());
 		form.getDynamicActivityFinalContractingFilter().setxPeriod(filter.getDynActivityFinalContractingFilterXPeriod());
-		
-		if (filter.getCurrency() != null)
+
+
+		if (filter.getCurrency() != null) {
 			form.setCurrency( filter.getCurrency().getAmpCurrencyId() );
-		else
+        } else {
 			form.setCurrency(null);
+        }
 		
 		form.setCalendar(filter.getCalendarType().getAmpFiscalCalId());
+
 		
 		if ( filter.getLineMinRank() != null && filter.getLineMinRank().size() > 0) {
 	 		int i = 0;

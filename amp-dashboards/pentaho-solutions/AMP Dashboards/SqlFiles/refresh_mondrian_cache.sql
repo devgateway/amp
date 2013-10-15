@@ -289,6 +289,11 @@ CREATE TABLE cached_v_pledges_zones AS SELECT * FROM v_pledges_zones;
 DROP TABLE IF EXISTS cached_v_sectorloc;
 CREATE TABLE cached_v_sectorloc AS SELECT * FROM v_sectorloc;
 
+CREATE OR REPLACE VIEW v_zones_special AS 
+ SELECT ra.amp_activity_id, getlocationname(getlocationidbyimplloc(l.location_id, 'Region'::character varying)) AS region_name, getlocationname(getlocationidbyimplloc(l.location_id, 'Zone'::character varying)) AS location_name, getlocationidbyimplloc(l.location_id, 'Zone'::character varying) AS location_id, sum(ra.location_percentage) AS location_percentage
+   FROM amp_activity_location ra, amp_location l
+  WHERE ra.amp_location_id = l.amp_location_id AND getlocationidbyimplloc(l.location_id, 'Zone'::character varying) IS NOT NULL
+  GROUP BY ra.amp_activity_id, getlocationidbyimplloc(l.location_id, 'Region'::character varying), getlocationidbyimplloc(l.location_id, 'Zone'::character varying);
 
 
 
@@ -473,6 +478,7 @@ select
 	rc.location_name AS zone,
 	npl1.name as npl1_name,
 	cro.name as RO_name,
+	cro.amp_org_id AS ro_id,
 	cia.name as IA_name
 from cached_amp_activity aa 
 	join amp_funding f on aa.amp_activity_id = f.amp_activity_id
@@ -517,6 +523,7 @@ from cached_amp_activity aa
            npl1.amp_program_id,
            rc.location_percentage,
            cro.percentage,
+		   cro.amp_org_id,
            cia.percentage,
            npl1.program_percentage,
            s.sector_percentage,
@@ -541,7 +548,6 @@ CREATE INDEX idx_donor_type ON cached_v_m_donor_funding (donor_type_name);
 CREATE INDEX idx_donor_group ON cached_v_m_donor_funding (org_grp_name);
 CREATE INDEX idx_region_name ON cached_v_m_donor_funding (Region);
 CREATE INDEX idx_pri_sector_name ON cached_v_m_donor_funding (p_sectorname);
-CREATE INDEX idx_npl1_name ON cached_v_m_donor_funding (npl1_name);
 
 DROP TABLE IF EXISTS pentaho_dependence_aid_by_ministry;
 CREATE TABLE pentaho_dependence_aid_by_ministry AS (

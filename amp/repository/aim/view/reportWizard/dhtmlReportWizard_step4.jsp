@@ -21,7 +21,7 @@
 							<br />			
 							<table align="center" cellpadding="0" cellspacing="0" style="width: 735px; vertical-align: middle">
 								<tr>
-									<td width="48%" align="center">
+									<td width="340px" align="center">
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:availableMeasures">Available Measures</digi:trn></span></legend>
 											<ul id="source_measures_ul" class="draglist">
@@ -38,7 +38,7 @@
 											<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
 										</button>
 									</td>
-									<td width="48%" align="center">
+									<td width="340px" align="center">
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:selectedMeasures">Selected Measures</digi:trn></span></legend>
 											<ul id="dest_measures_ul" class="draglist">

@@ -769,14 +769,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		Long oldId = activity.getAmpActivityId();
 		Boolean wasDraft=activity.getDraft();
 		AmpTeamMember modifiedBy = activity.getModifiedBy();
-		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get(); 
+		long currentUserId = wicketSession.getCurrentMember().getMemberId();
+		
 		AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 
 
 		//Before starting to save check lock
 		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())){
 			//Someone else has grabbed the lock ... maybe connection slow and lock refresh timed out
-            throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId())));
+            throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
 		}
 		
 		ActivityUtil.saveActivity((AmpActivityModel) am, draft);

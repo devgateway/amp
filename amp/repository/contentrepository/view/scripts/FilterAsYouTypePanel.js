@@ -299,7 +299,9 @@ FilterAsYouTypePanel.prototype.initLabelArray	= function (shouldShow) {
 						}
 					}
 					else
-						alert("The returned label array is empty !");
+					{
+						// alert("The returned label array is empty !");
+					}
 				},
 				failure: function () {
 					alert("We are sorry but your request cannot be processed at this time");

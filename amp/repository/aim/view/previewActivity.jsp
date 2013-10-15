@@ -2994,7 +2994,7 @@ function collapseAll() {
 											</td>
 											<td>&nbsp; 
 											<%if(ct.getDonorContractFundinAmount()!=null){ %> 
-												<b><%=BigDecimal .valueOf(ct.getTotAmountCountryContractFunding()).toPlainString()%></b>
+												<b><%=BigDecimal.valueOf(ct.getTotAmountCountryContractFunding()).toPlainString()%></b>
 											<%}%>
 												&nbsp;&nbsp;&nbsp;&nbsp;
 												<b>${contract.totalAmountCurrencyCountry.currencyName}</b>											

@@ -73,7 +73,7 @@
 					<a onclick="toggleHeader(this, '${graph.containerId}Header')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
 					<div id="${graph.containerId}Header" class="chart_header" style="display:none;">
 					<digi:trn>Title</digi:trn> <input type="text" id="${graph.containerId}Title" value="" size="50">
-					&nbsp;<digi:trn>Size</digi:trn>
+					<br /><digi:trn>Size</digi:trn>
 					<select id="${graph.containerId}FontSize">
 						<option value="12">12</option>
 						<option value="13">13</option>
@@ -84,7 +84,7 @@
 					&nbsp;<input type="checkbox" id="${graph.containerId}Bold"><label for="${graph.containerId}Bold"><digi:trn>Bold</digi:trn></label><br/>
 					<input type="checkbox" id="${graph.containerId}ShowLegend" checked="checked"><label id="${graph.containerId}ShowLegendLabel" for="${graph.containerId}ShowLegend"><digi:trn>Show legend</digi:trn></label>
 					&nbsp;<input type="checkbox" id="${graph.containerId}Divide"><label id="${graph.containerId}DivideLabel" for="${graph.containerId}Divide"><digi:trn>Divide by thousands</digi:trn></label>
-					&nbsp;<input type="checkbox" id="${graph.containerId}ShowDataLabel"><label id="${graph.containerId}ShowDataLabelLabel" for="${graph.containerId}ShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+					<br /><input type="checkbox" id="${graph.containerId}ShowDataLabel"><label id="${graph.containerId}ShowDataLabelLabel" for="${graph.containerId}ShowDataLabel"><digi:trn>Show data label</digi:trn></label>
 					&nbsp;<input type="checkbox" id="${graph.containerId}RotateDataLabel"><label id="${graph.containerId}RotateDataLabelLabel" for="${graph.containerId}RotateDataLabel"><digi:trn>Rotate data label</digi:trn></label>
 					&nbsp;<input type="checkbox" id="${graph.containerId}Ignore" style="display: none;" checked="checked"><label id="${graph.containerId}IgnoreLabel" style="display: none;" for="${graph.containerId}Ignore"><digi:trn>Ignore big values</digi:trn></label></br>
 					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, '${graph.containerId}')">

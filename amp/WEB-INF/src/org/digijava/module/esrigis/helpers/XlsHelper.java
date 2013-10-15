@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.esrigis.action.DataDispatcher;
@@ -173,6 +174,7 @@ public class XlsHelper {
 		
 		startTS=System.currentTimeMillis();
 		for (Iterator iterator = activitylist.iterator(); iterator.hasNext();) {
+			
 			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
 			
 			FundingCalculationsHelper calculations = getTotalsForActivity(aA, filter.getCurrencyCode());
@@ -186,6 +188,7 @@ public class XlsHelper {
 				h2t = new Html2Text();
 				h2t.parse(body);
 			}
+			
 			if (aA.getStructures().size() >0){
 				
 				long startActivity=System.currentTimeMillis();	

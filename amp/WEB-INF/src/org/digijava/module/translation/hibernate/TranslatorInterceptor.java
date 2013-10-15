@@ -43,6 +43,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
         	logger.debug("Current language in TLS Util:" + TLSUtils.getLangCode());
             logger.debug("flushDirty versionable: " + entity);
             boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, previousState, currentState, propertyNames, types);
+            ContentTranslationUtil.evictEntitiyFromCache(entity);
             logger.debug("flushDirty returning: " + ret);
             return ret;
         }
@@ -86,6 +87,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
                         ContentTranslationUtil.saveFieldTranslations(objectId, ftp);
                     }
 				}
+                ContentTranslationUtil.evictEntitiyFromCache(entity);
 			}
 		}
     }
@@ -100,6 +102,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
             Long objectId = (Long) id;
             //delete translations
+            ContentTranslationUtil.evictEntitiyFromCache(entity);
             ContentTranslationUtil.deleteFieldTranslations(objectId, entity);
         }
     }
@@ -119,6 +122,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
             boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, null, state, propertyNames, types);
+            ContentTranslationUtil.evictEntitiyFromCache(entity);
             return ret;
         }
         return false;

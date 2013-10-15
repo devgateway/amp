@@ -16,7 +16,6 @@
 
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
-<bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
 <bean:define id="filterBean" name="reportCD" type="org.dgfoundation.amp.ar.AmpARFilter" property="filter" />
 
 <c:set var="categoryYear"><%=ArConstants.YEAR%></c:set>
@@ -44,7 +43,9 @@
   						indexId="hIdx" id="repHierarchy" scope="page">
   		<c:set var="hSortOrder">descending</c:set>
   		<c:set var="sortIconPath"></c:set>
-  		<logic:notEmpty name="generatedReport" property="levelSorters">
+  		<logic:notEmpty name="reportCD" property="generatedReport">
+  			<bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
+  			<logic:notEmpty name="generatedReport" property="levelSorters">
 				<logic:iterate name="generatedReport" property="levelSorters" id="sorter" indexId="levelId">
 					<c:if test="${levelId==hIdx}">
 						<c:set var="hSortOrder">${sorter.value}</c:set>
@@ -54,6 +55,7 @@
 						</c:if>
 					</c:if>
 				</logic:iterate>
+			</logic:notEmpty>
 		</logic:notEmpty>
   		<td nowrap="nowrap" class="reportHeader" onclick="sortHierarchy( '${repHierarchy.column.columnName}', '${hSortOrder}' )"
   		rowspan="${columnReport.maxColumnDepth+1}">

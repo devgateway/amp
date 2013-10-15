@@ -21,7 +21,7 @@
 							<br />
 							<table align="center" cellpadding="0" cellspacing="0" style="width: 735px;" border=0>
 								<tr>
-								<td width="48%" align="center">
+								<td width="340px" align="center">
 									<fieldset class="main_side_cont">
 										<legend><span class="legend_label"><digi:trn key="rep:wizard:availableHierarchies">Available Hierarchies</digi:trn></span></legend>
 										<ul id="source_hierarchies_ul" class="draglist">
@@ -37,7 +37,7 @@
 										<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
 									</button>
 								</td>
-								<td width="48%" align="center">
+								<td width="340px" align="center">
 									<fieldset class="main_side_cont">
 										<legend><span class="legend_label"><digi:trn key="rep:wizard:selectedHierarchies">Selected Hierarchies</digi:trn></span></legend>
 										<ol id="dest_hierarchies_ul" class="draglist">

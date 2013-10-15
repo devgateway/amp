@@ -642,9 +642,9 @@ function initializeGlobalVariables(){
 				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Export Type</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.exportTypeOption" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>  </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"><br />
-		            <html:radio property="exportData.exportTypeOption" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"><br />
-		        	<html:radio property="exportData.exportTypeOption" styleId="export_type_2" value="2"><digi:trn>Excel</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif"><br />
+		            <html:radio property="exportData.exportTypeOption" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>&nbsp;&nbsp;</html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"><br />
+		            <html:radio property="exportData.exportTypeOption" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>&nbsp;&nbsp;</html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"><br />
+		        	<html:radio property="exportData.exportTypeOption" styleId="export_type_2" value="2"><digi:trn>Excel</digi:trn>&nbsp;&nbsp;</html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif"><br />
 		        </div>
 		        </td>
 				<c:if test="${visualizationform.filter.dashboardType eq '1' }">
@@ -1274,7 +1274,7 @@ function initializeGlobalVariables(){
 				<div id="RegionProfileHeader" class="chart_header" style="display:none;float:left">
 				<digi:trn>Title</digi:trn> <input type="text" id="RegionProfileTitle" value="" size="50">
 				<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="RegionProfileFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1317,7 +1317,7 @@ function initializeGlobalVariables(){
 				<div id="SectorProfileHeader" class="chart_header" style="display:none;float:left">
 				<digi:trn>Title</digi:trn> <input type="text" id="SectorProfileTitle" value="" size="50">
 				<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="SectorProfileFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1383,7 +1383,7 @@ function initializeGlobalVariables(){
 				<div id="FundingsHeader" class="chart_header" style="display:none;">
 				<digi:trn>Title</digi:trn> <input type="text" id="FundingsTitle" value="" size="50">
 				<input type="hidden" id="FundingsShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="FundingsFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1426,7 +1426,7 @@ function initializeGlobalVariables(){
 					<div id="ODAGrowthHeader" class="chart_header" style="display:none;">
 					<digi:trn>Title</digi:trn> <input type="text" id="ODAGrowthTitle" value="" size="50">
 					<input type="hidden" id="ODAGrowthShowFontFamily" value="Verdana"/>
-					&nbsp;<digi:trn>Size</digi:trn>
+					<br /><digi:trn>Size</digi:trn>
 					<select id="ODAGrowthFontSize">
 						<option value="12">12</option>
 						<option value="13">13</option>
@@ -1496,7 +1496,7 @@ function initializeGlobalVariables(){
 				<div id="AidPredictabilityHeader" class="chart_header" style="display:none;">
 				<digi:trn>Title</digi:trn> <input type="text" id="AidPredictabilityTitle" value="" size="50">
 				<input type="hidden" id="AidPredictabilityShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="AidPredictabilityFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1563,7 +1563,7 @@ function initializeGlobalVariables(){
 				<div id="AidTypeHeader" class="chart_header" style="display:none;">
 				<digi:trn>Title</digi:trn> <input type="text" id="AidTypeTitle" value="" size="50">
 				<input type="hidden" id="AidTypeShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="AidTypeFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1629,7 +1629,7 @@ function initializeGlobalVariables(){
 				<div id="AidModalityHeader" class="chart_header" style="display:none;">
 				<digi:trn>Title</digi:trn> <input type="text" id="AidModalityTitle" value="" size="50">
 				<input type="hidden" id="AidModalityShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="AidModalityFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1689,7 +1689,7 @@ function initializeGlobalVariables(){
 					<div id="OrganizationProfileHeader" class="chart_header" style="display:none;">
 					<digi:trn>Title</digi:trn> <input type="text" id="OrganizationProfileTitle" value="" size="50">
 					<input type="hidden" id="OrganizationProfileShowFontFamily" value="Verdana"/>
-					&nbsp;<digi:trn>Size</digi:trn>
+					<br /><digi:trn>Size</digi:trn>
 					<select id="OrganizationProfileFontSize">
 						<option value="12">12</option>
 						<option value="13">13</option>
@@ -1750,7 +1750,7 @@ function initializeGlobalVariables(){
 					<div id="SectorProfileHeader" class="chart_header" style="display:none;">
 					<digi:trn>Title</digi:trn> <input type="text" id="SectorProfileTitle" value="" size="50">
 					<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
-					&nbsp;<digi:trn>Size</digi:trn>
+					<br /><digi:trn>Size</digi:trn>
 					<select id="SectorProfileFontSize">
 						<option value="12">12</option>
 						<option value="13">13</option>
@@ -1812,7 +1812,7 @@ function initializeGlobalVariables(){
 					<div id="RegionProfileHeader" class="chart_header" style="display:none;">
 					<digi:trn>Title</digi:trn> <input type="text" id="RegionProfileTitle" value="" size="50">
 					<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
-					&nbsp;<digi:trn>Size</digi:trn>
+					<br /><digi:trn>Size</digi:trn>
 					<select id="RegionProfileFontSize">
 						<option value="12">12</option>
 						<option value="13">13</option>

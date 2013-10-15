@@ -169,11 +169,12 @@ public class OnePager extends AmpHeaderFooter {
 
 		}
 		else{
+			long currentUserId = ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId();
 			//try to acquire lock for activity editing
-			String key = ActivityGatekeeper.lockActivity(activityId, ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
+			String key = ActivityGatekeeper.lockActivity(activityId, currentUserId);
 			if (key == null){ //lock not acquired
 				//redirect page
-                throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId));
+                throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId, currentUserId));
 				//return;
 			}
 			
@@ -216,9 +217,10 @@ public class OnePager extends AmpHeaderFooter {
 				
 				@Override
 				protected void onTimer(AjaxRequestTarget target) {
-					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
+					long currentUserId = ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId();
+					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), currentUserId);
 					if (editLockRefresher.isEnabled() && refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
-                        throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId())));
+                        throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()), currentUserId));
 
 					if (DEBUG_ACTIVITY_LOCK){
 						if (refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))

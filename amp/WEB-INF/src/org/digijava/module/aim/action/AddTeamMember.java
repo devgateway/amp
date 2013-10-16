@@ -197,13 +197,13 @@ public class AddTeamMember extends Action {
 //			newAppSettings.setLanguage(ampAppSettings.getLanguage());
 //			newAppSettings.setUseDefault(new Boolean(true));
 //			newAppSettings.setValidation(ampAppSettings.getValidation());
-//			try{
-//				TeamUtil.addTeamMember(newMember,newAppSettings,site);
-//			}catch (Exception e){
-//					e.printStackTrace();
-//					logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "
-//							+ newMember.getAmpTeam().getName());
-//				}
+			try{
+				TeamUtil.addTeamMember(newMember, site);
+			}catch (Exception e){
+					e.printStackTrace();
+					logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "
+							+ newMember.getAmpTeam().getName());
+				}
 			
 			upMemForm.setEmail(null);
 			upMemForm.setRole(null);

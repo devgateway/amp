@@ -10,6 +10,8 @@
 			</generator>
 		</id>
 		
+		<property column="autoClosedOnExpiration" name="autoClosedOnExpiration" type="java.lang.Boolean" />
+		
 		<many-to-one name="ampActivityLastVersion" column="amp_activity_last_version_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none"
 			not-null="false" />

@@ -67,7 +67,7 @@ public class UpdateWorkspace extends Action {
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 
 		String event = request.getParameter("event");
-		String dest = request.getParameter("dest");
+//		String dest = request.getParameter("dest");
 		String tId1 = request.getParameter("tId");
 
 		ActionMessages errors = new ActionMessages();

@@ -103,111 +103,15 @@ public class ActivityUtil {
 			tmpLocale.setCode(wicketSession.getLocale().getLanguage());
 			TLSUtils.forceLocaleUpdate(tmpLocale);
 		}
+		
 		AmpActivityVersion a = am.getObject();
 		AmpActivityVersion oldA = a;
-		boolean newActivity = false;
-		try {
-			//saveFundingOrganizationRole(a);
-            AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 		
-			if (a.getAmpActivityId() == null){
-				a.setActivityCreator(ampCurrentMember);
-				a.setCreatedBy(ampCurrentMember);
-				a.setTeam(ampCurrentMember.getAmpTeam());
-				newActivity = true;
-			}
-			
-			if (a.getDraft() == null)
-				a.setDraft(false);
-			boolean draftChange = draft != a.getDraft();
-			a.setDraft(draft);
-
-			a.setDeleted(false);
-            ContentTranslationUtil.cloneTranslations(a);
-			//is versioning activated?
-            boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
-			if (createNewVersion){
-				try {
-					AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
-					
-					a = ActivityVersionUtil.cloneActivity(a, wicketSession.getAmpCurrentMember());
-					session.clear();
-					if (tmpGroup == null){
-						//we need to create a group for this activity
-						tmpGroup = new AmpActivityGroup();
-						tmpGroup.setAmpActivityLastVersion(a);
-						
-						session.save(tmpGroup);
-					}
-					
-					a.setAmpActivityGroup(tmpGroup);
-					a.setMember(new HashSet());
-					a.setAmpActivityId(null);
-					if (oldA.getAmpActivityId() != null)
-						session.evict(oldA);
-				} catch (CloneNotSupportedException e) {
-					logger.error("Can't clone current Activity: ", e);
-				}
-			}
-			
-			if (a.getAmpActivityGroup() == null){
-				//we need to create a group for this activity
-				AmpActivityGroup tmpGroup = new AmpActivityGroup();
-				tmpGroup.setAmpActivityLastVersion(a);
-				a.setAmpActivityGroup(tmpGroup);
-				session.save(tmpGroup);
-			}
-			
-			saveContacts(a, session,(draft != draftChange));
-			saveIndicators(a, session);
-			
-			setCreationTimeOnStructureImages(a);
-
-			AmpActivityGroup group = a.getAmpActivityGroup();
-			if (group == null){
-				throw new RuntimeException("Non-existent group should have been added by now!");
-			}
-			
-			if (!newActivity){
-				//existing activity
-				//previousVersion for current activity
-				group.setAmpActivityLastVersion(a);
-				session.update(group);
-			}
-
-			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity);
-			a.setAmpActivityGroup(group);
-			Date updatedDate = Calendar.getInstance().getTime();
-			if (a.getCreatedDate() == null)
-				a.setCreatedDate(updatedDate);
-			a.setUpdatedDate(updatedDate);
-			a.setModifiedDate(updatedDate);
-			a.setModifiedBy(ampCurrentMember);
-			
-			
-			saveResources(a); 
-			saveEditors(session, createNewVersion); 
-			saveComments(a, session,draft); 
-			saveAgreements(session);
-			
-			updateComponentFunding(a, session);
-
-            if (createNewVersion){
-                //a.setAmpActivityId(null); //hibernate will save as a new version
-                session.save(a);
-            }
-            else{
-                session.saveOrUpdate(a);
-                //session.update(a);
-            }
-
-            if (newActivity){
-                //translations need cloning again or the update on the activity will fail
-                ContentTranslationUtil.cloneTranslations(a);
-                a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
-                session.update(a);
-            }
-
+		boolean newActivity = a.getAmpActivityId() == null;
+		try 
+		{
+			AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
+			a = saveActivityNewVersion(a, ampCurrentMember, draft, session);
 			am.setObject(a);
 		} catch (Exception exception) {
 			logger.error("Error saving activity:", exception); // Log the exception			
@@ -225,6 +129,116 @@ public class ActivityUtil {
 			}
 			AmpActivityModel.endConversation();
 		}
+	}
+	
+	/**
+	 * saves a new version of an activity
+	 * returns newActivity
+	 */
+	public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a, AmpTeamMember ampCurrentMember, boolean draft, Session session) throws Exception
+	{
+		//saveFundingOrganizationRole(a);
+		AmpActivityVersion oldA = a;
+		boolean newActivity = false;
+		
+		if (a.getAmpActivityId() == null){
+			a.setActivityCreator(ampCurrentMember);
+			a.setCreatedBy(ampCurrentMember);
+			a.setTeam(ampCurrentMember.getAmpTeam());
+			newActivity = true;
+		}
+		
+		if (a.getDraft() == null)
+			a.setDraft(false);
+		boolean draftChange = draft != a.getDraft();
+		a.setDraft(draft);
+
+		a.setDeleted(false);
+        ContentTranslationUtil.cloneTranslations(a);
+		//is versioning activated?
+        boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
+		if (createNewVersion){
+			try {
+				AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
+				
+				a = ActivityVersionUtil.cloneActivity(a, ampCurrentMember);
+				session.clear();
+				if (tmpGroup == null){
+					//we need to create a group for this activity
+					tmpGroup = new AmpActivityGroup();
+					tmpGroup.setAmpActivityLastVersion(a);
+					
+					session.save(tmpGroup);
+				}
+				
+				a.setAmpActivityGroup(tmpGroup);
+				a.setMember(new HashSet());
+				a.setAmpActivityId(null);
+				if (oldA.getAmpActivityId() != null)
+					session.evict(oldA);
+			} catch (CloneNotSupportedException e) {
+				logger.error("Can't clone current Activity: ", e);
+			}
+		}
+		
+		if (a.getAmpActivityGroup() == null){
+			//we need to create a group for this activity
+			AmpActivityGroup tmpGroup = new AmpActivityGroup();
+			tmpGroup.setAmpActivityLastVersion(a);
+			a.setAmpActivityGroup(tmpGroup);
+			session.save(tmpGroup);
+		}
+		
+		saveContacts(a, session,(draft != draftChange));
+		saveIndicators(a, session);
+		
+		setCreationTimeOnStructureImages(a);
+
+		AmpActivityGroup group = a.getAmpActivityGroup();
+		if (group == null){
+			throw new RuntimeException("Non-existent group should have been added by now!");
+		}
+		
+		if (!newActivity){
+			//existing activity
+			//previousVersion for current activity
+			group.setAmpActivityLastVersion(a);
+			session.update(group);
+		}
+
+		setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity);
+		a.setAmpActivityGroup(group);
+		Date updatedDate = Calendar.getInstance().getTime();
+		if (a.getCreatedDate() == null)
+			a.setCreatedDate(updatedDate);
+		a.setUpdatedDate(updatedDate);
+		a.setModifiedDate(updatedDate);
+		a.setModifiedBy(ampCurrentMember);
+		
+		
+		saveResources(a); 
+		saveEditors(session, createNewVersion); 
+		saveComments(a, session,draft); 
+		saveAgreements(session);
+		
+		updateComponentFunding(a, session);
+
+        if (createNewVersion){
+            //a.setAmpActivityId(null); //hibernate will save as a new version
+            session.save(a);
+        }
+        else{
+            session.saveOrUpdate(a);
+            //session.update(a);
+        }
+
+        if (newActivity){
+            //translations need cloning again or the update on the activity will fail
+            ContentTranslationUtil.cloneTranslations(a);
+            a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
+            session.update(a);
+        }
+        return a;
 	}
 	
 	private static void setCreationTimeOnStructureImages(AmpActivityVersion activity){

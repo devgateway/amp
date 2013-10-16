@@ -53,7 +53,7 @@ public class RequestUtils {
     /**
      * Get attribute from request/tiles context. At first, method searches
      * attribute by key <code>attribute</code> in the tiles context (if it
-     * exists for the currrent request). If search is unsuccessfull, then it
+     * exists for the current request). If search is unsuccessful, then it
      * searches this attribute in the request scope
      * @param request HttpServletRequest
      * @param attribute key of the attribute

@@ -297,8 +297,8 @@ CREATE TABLE cached_v_sectorloc AS SELECT * FROM v_sectorloc;
 DROP TABLE IF EXISTS cached_amp_activity;
 CREATE TABLE cached_amp_activity AS  select * from amp_activity;
 
-TRUNCATE cached_amp_activity_group;
-INSERT INTO cached_amp_activity_group select * from amp_activity_group;
+DROP TABLE IF EXISTS cached_amp_activity_group;
+CREATE TABLE cached_amp_activity_group AS select * from amp_activity_group;
 
 DROP TABLE IF EXISTS cached_v_donor_date_hierarchy;
 CREATE TABLE cached_v_donor_date_hierarchy AS SELECT * FROM v_donor_date_hierarchy limit 0;

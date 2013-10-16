@@ -7,6 +7,7 @@ public class AmpActivityGroupCached implements Serializable {
 
 	private AmpActivityVersion ampActivityLastVersion;
 	private AmpActivityGroup ampActivityGroup;
+	private boolean autoClosedOnExpiration = false;
 	
 	public AmpActivityVersion getAmpActivityLastVersion() {
 		return ampActivityLastVersion;
@@ -32,6 +33,16 @@ public class AmpActivityGroupCached implements Serializable {
 	@Override
 	public int hashCode() {
 		return 29*this.getAmpActivityGroup().hashCode()+this.getAmpActivityLastVersion().hashCode();
+	}
+	
+	public void setAutoClosedOnExpiration(boolean autoClosedOnExpiration)
+	{
+		this.autoClosedOnExpiration = autoClosedOnExpiration;
+	}
+	
+	public boolean getAutoClosedOnExpiration()
+	{
+		return autoClosedOnExpiration;
 	}
 	
 }

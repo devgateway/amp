@@ -381,6 +381,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set actPrograms;
 
 	protected boolean createdAsDraft;
+	
 
 	protected String customField1;
 	protected String customField2;   

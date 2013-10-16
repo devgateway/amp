@@ -1607,11 +1607,11 @@ public class DbUtil {
 	/*
 	 * @author Priyajith C
 	 */
-	// Retreives all organisation;
-	public static Collection<AmpOrganisation> getAllOrganisation() {
+	// Retrieves all organizations
+	public static List<AmpOrganisation> getAllOrganisation() {
 		Session session = null;
 		Query qry = null;
-		Collection<AmpOrganisation> organisation = new ArrayList();
+		List<AmpOrganisation> organisation = new ArrayList<AmpOrganisation>();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
@@ -1625,6 +1625,29 @@ public class DbUtil {
 			logger.debug("Exceptiion " + e);
 		}
 		return organisation;
+	}
+	
+	/**
+	 * SLOW - optimize it later in case you need it
+	 * @return
+	 */
+	public static AmpOrganisation getRandomOrganisation()
+	{
+		Session session = null;
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select o from "
+					+ AmpOrganisation.class.getName()
+					+ " o where (o.deleted is null or o.deleted = false) order by ampOrgId asc";
+			qry = session.createQuery(queryString);
+			return (AmpOrganisation) (qry.list().get(0));
+		} catch (Exception e) {
+			logger.error("Unable to get all organisations");
+			logger.debug("Exceptiion " + e);
+		}
+		throw new RuntimeException("no organizations found in the database - looks surrealistic");
 	}
 
 	public static List<AmpFiscalCalendar> getAllFisCalenders() {
@@ -7185,7 +7208,7 @@ public class DbUtil {
 					+ AmpOrganisation.class.getName()
 					+ " o where (TRIM(o.name)=:orgName) and (o.deleted is null or o.deleted = false) ";
 			qry = sess.createQuery(queryString);
-			qry.setParameter("orgName", name, Hibernate.STRING);
+			qry.setString("orgName", name);
 
 			List result = qry.list();
 			if (result.size() > 0) {

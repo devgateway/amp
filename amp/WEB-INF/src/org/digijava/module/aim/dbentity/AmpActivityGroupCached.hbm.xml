@@ -7,5 +7,7 @@
 			<key-many-to-one name="ampActivityLastVersion" class="org.digijava.module.aim.dbentity.AmpActivityVersion" column="amp_activity_last_version_id" />
 		</composite-id>
 
+	<property column="autoClosedOnExpiration" name="autoClosedOnExpiration" type="java.lang.Boolean" />
+	
 	</class>
 </hibernate-mapping>

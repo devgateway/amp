@@ -3,8 +3,10 @@
  */
 package org.digijava.module.aim.startup;
 
+import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -23,14 +25,18 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.QuartzJobForm;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.QuartzJobClassUtils;
+import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -53,6 +59,7 @@ public class AMPStartupListener extends HttpServlet implements
 
 	private static Logger logger = Logger.getLogger(AMPStartupListener.class);
 
+	
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		ServletContext ampContext = sce.getServletContext();
@@ -129,6 +136,8 @@ public class AMPStartupListener extends HttpServlet implements
 			scheduler.getContext().put(Constants.AMP_SERVLET_CONTEXT, ampContext);
 
 			scheduler.start();
+		
+			enableActivityCloserIfNeeded();
 
 		} catch (SchedulerException e) {
 			e.printStackTrace();
@@ -136,6 +145,65 @@ public class AMPStartupListener extends HttpServlet implements
 		}
 	}
 	
+	
+	protected boolean isActivityCloserEnabled()
+	{
+		Connection connection = null;
+		 try {
+	            connection = PersistenceManager.getJdbcConnection();
+	            String statement = String.format("SELECT job_name from qrtz_job_details where job_class_name='%s'", "org.digijava.module.message.jobs.CloseExpiredActivitiesJob");
+	            ResultSet resultSet = connection.createStatement().executeQuery(statement);
+	            return resultSet.next();
+	        } catch (Exception ex) {
+	            throw new RuntimeException(ex);
+	        }
+		 finally
+		 {
+			 if (connection != null)
+			 {
+				 try {connection.close();}
+				 catch(SQLException e){};
+			 }
+		 }		
+	}
+	
+	/**
+	 * a somewhat hacky way of making sure a quartz job is added & configured to run hourly. Did not risk doing it via an XML patch writing directly to qrtz_triggers, because there is a "job_data" binary column there.
+	 * so, the job is added via Java calls to Quartz classes. This is the only way I have found to "run this Java code once and only once". A side-effect of this is that you won't ever be able to disable this job, but it is ok - it does nothing when the corresponding feature is disabled from the GS, so you won't save resources by disabling it
+	 */
+	protected void enableActivityCloserIfNeeded()
+	{
+		if (isActivityCloserEnabled())
+			return; //nothing to do
+		
+		AmpQuartzJobClass jobClass = QuartzJobClassUtils.getJobClassesByClassfullName("org.digijava.module.message.jobs.CloseExpiredActivitiesJob");
+		
+		QuartzJobForm jobForm = new QuartzJobForm();
+		jobForm.setClassFullname(jobClass.getClassFullname());
+		jobForm.setDayOfMonth(1);
+		jobForm.setDayOfWeek(1);
+		jobForm.setGroupName("ampServices");
+		jobForm.setManualJob(false);
+		jobForm.setName(jobClass.getName());
+//		jobForm.setTriggerGroupName(triggerGroupName);
+//		jobForm.setTriggerName(triggerName);
+		jobForm.setTriggerType(1); // BOZO - THIS IS MINUTELY. CHANGE TO 2 = HOURLY
+		jobForm.setExeTimeH("1");
+		jobForm.setExeTimeM("1");
+		jobForm.setExeTimeS("1");
+		jobForm.setStartDateTime("01/01/2013");
+		jobForm.setStartH("00");
+		jobForm.setStartM("00");
+		try
+		{
+			QuartzJobUtils.addJob(jobForm);
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+		
+	}
 
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext ampContext = null;
@@ -206,6 +274,7 @@ public class AMPStartupListener extends HttpServlet implements
 						GatePermConst.availablePermissibles[i]);
 			}
 
+			AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
 			initializeQuartz(sce);
 
 			CustomFieldsUtil.parseXMLFile(sce.getServletContext().getResourceAsStream("/WEB-INF/custom-fields.xml"));

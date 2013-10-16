@@ -8,6 +8,9 @@ public class AmpActivityGroup implements Serializable{
 
 	private Long ampActivityGroupId;
 	private AmpActivityVersion ampActivityLastVersion;
+
+	private boolean autoClosedOnExpiration = false;
+	
 	private Set<AmpActivityVersion> activities;
 
 	public Long getAmpActivityGroupId() {
@@ -32,5 +35,15 @@ public class AmpActivityGroup implements Serializable{
 
 	public void setActivities(Set<AmpActivityVersion> activities) {
 		this.activities = activities;
+	}
+	
+	public void setAutoClosedOnExpiration(boolean autoClosedOnExpiration)
+	{
+		this.autoClosedOnExpiration = autoClosedOnExpiration;
+	}
+	
+	public boolean getAutoClosedOnExpiration()
+	{
+		return autoClosedOnExpiration;
 	}
 }

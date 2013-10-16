@@ -76,7 +76,7 @@ function saveClicked() {
   document.aimGlobalSettingsForm.submit();
 
 }
-function validateCustomFields(form) {
+function validateCustomFields(form) {	
 	if (typeof form.gsfValue != "undefined") {
  		if (form.gsfValue.value=='') {
  	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)        
@@ -89,6 +89,12 @@ function validateCustomFields(form) {
 		}
 	}
 	return true;
+}
+
+function boolean_field_changed(sel)
+{
+	// do nothing in the meantime
+	//$(sel).parent().find("input[@name='globalId']")
 }
 
 function populateWithDays(monthId, targetId) {
@@ -372,7 +378,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
  				                                    	} else {
  				                                    %>
 			                                    
-			                                    <html:select   property="gsfValue" alt="prueba"  style="width:100%"  styleClass="inp-text;width:100%" value='<%= globalSett.getGlobalSettingsValue() %>'>
+			                                    <html:select   property="gsfValue" alt="prueba" style="max-width: 100%" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
 			                                      	<%
 			                                      		String key2 = "aim:globalSettings:"+ globalSett.getGlobalSettingsName()+ ":"+ global.getValue();
@@ -706,7 +712,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 														</c:when>
 														
 				                                    	<c:when test='${type == "t_Boolean"}'>
-				                                    		<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
+				                                    		<html:select property="gsfValue" styleClass="inp-text" onchange='boolean_field_changed(this);' value='<%= globalSett.getGlobalSettingsValue() %>'>
 				                                    			<html:option value="true"><digi:trn key="aim:globalsettings:true">true</digi:trn></html:option>
 				                                    			<html:option value="false"><digi:trn key="aim:globalsettings:false">false</digi:trn></html:option>
 				                                    		</html:select>

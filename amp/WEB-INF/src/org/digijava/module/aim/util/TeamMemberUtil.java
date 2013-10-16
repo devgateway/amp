@@ -886,8 +886,8 @@ public class TeamMemberUtil {
 					+ AmpTeamMember.class.getName()
 					+ " tm where (tm.user=:user) and  (tm.ampTeam=:ampTeam) ";
 			qry = session.createQuery(queryString);
-			qry.setParameter("user", user.getId(), Hibernate.LONG);
-			qry.setParameter("ampTeam", ampTeam.getAmpTeamId(), Hibernate.LONG);
+			qry.setLong("user", user.getId());
+			qry.setLong("ampTeam", ampTeam.getAmpTeamId());
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				member = (AmpTeamMember) itr.next();
@@ -993,9 +993,27 @@ public class TeamMemberUtil {
 		return ampRole;
 	}
 
+	
 	public static Collection<AmpTeamMemberRoles> getAllTeamMemberRoles() {
 		return getAllTeamMemberRoles(true);
 	}
+	
+	/**
+	 * searches for a "workspace member" role indirectly, through his capabilities of not being a team head and not being an approver. Does not search by name, as those can be i18n-ed
+	 * @return
+	 */
+	public static AmpTeamMemberRoles getWorkspaceMemberTeamMemberRole()
+	{
+		for(AmpTeamMemberRoles role:getAllTeamMemberRoles())
+		{
+			if ((!role.getTeamHead()) && (!role.isApprover()))
+				return role;
+		}
+		// oopsie, shouldn't happen
+		throw new RuntimeException("could not find a non-team-head non-approver workspace member role!");
+	}
+	
+	
 	public static Collection<AmpTeamMemberRoles> getAllTeamMemberRoles(boolean includeApprover) {
 		Session session = null;
 		Query qry = null;

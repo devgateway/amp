@@ -1268,17 +1268,17 @@ public class EditActivity extends Action {
         	  }
 
         	   
-        	  if (fundOrg.getFundings() == null)
-        		  fundOrg.setFundings(new ArrayList<Funding>());
-        	  
-        	  fundOrg.getFundings().add(fund);
-
         	  int index = fundingOrgs.indexOf(fundOrg);
         	  // logger.info("Getting the index as " + index
         	  //	+ " for fundorg " + fundOrg.getOrgName());
         	  if(index > -1) {
         		  fundOrg = (FundingOrganization) fundingOrgs.get(index);
         	  }
+        	  if (fundOrg.getFundings() == null)
+        		  fundOrg.setFundings(new ArrayList<Funding>());
+        	  
+        	  fundOrg.getFundings().add(fund);
+
         	  if (index > -1) {
         		  fundingOrgs.set(index, fundOrg);
         		  //logger.info("!!!! Setting the fund org obj to the index :"	+ index);

@@ -99,8 +99,10 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     			
         		AmpTeamMember ampClosingMember = AmpBackgroundActivitiesCloser.createActivityCloserTeamMemberIfNeeded(ver.getTeam());
         		
+        		// the session.load call is a fallback, because saveActivityNewVersion is too tightly-coupled with Wicket to be usable now.
     			//AmpActivityVersion newVer = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(ver, ampClosingMember, false, session);
         		AmpActivityVersion newVer = (AmpActivityVersion) session.load(AmpActivityVersion.class, ver.getAmpActivityId());
+        		
     			newVer.setApprovalStatus(newStatus);
     			newVer.getAmpActivityGroup().setAutoClosedOnExpiration(true);
     			newVer.setModifiedBy(ampClosingMember);

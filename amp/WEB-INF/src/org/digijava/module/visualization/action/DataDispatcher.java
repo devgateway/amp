@@ -3839,8 +3839,9 @@ public class DataDispatcher extends DispatchAction {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
-		DashboardFilter filter = visualizationForm.getFilter();
-
+		DashboardFilter filter = visualizationForm.getFilter().getCopyFilterForFunding();
+		filter.setAgencyType(org.digijava.module.visualization.util.Constants.DONOR_AGENCY);//Set agency type as donor to get the growth
+		
 		String format = request.getParameter("format");
 		
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000 / 

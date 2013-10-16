@@ -197,6 +197,8 @@ public class DashboardFilter {
     	newFilter.setPeacebuilderMarkerId(this.getPeacebuilderMarkerId());
     	newFilter.setSelPeacebuilderMarkerIds(this.getSelPeacebuilderMarkerIds());
     	newFilter.setPeacebuildingId(this.getPeacebuildingId());
+    	newFilter.setEndYear(this.getEndYear());
+    	newFilter.setStartYear(this.getStartYear());
     	return newFilter;
     }
 	

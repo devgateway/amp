@@ -1,14 +1,21 @@
 package org.digijava.module.message.jobs;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.action.GlobalSettings;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -17,6 +24,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.startup.AmpBackgroundActivitiesCloser;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.editor.util.DbUtil;
@@ -24,6 +32,7 @@ import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -51,6 +60,52 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 		return res;
 	}
 	
+	/**
+	 * clones activity, sets modifying member, modification date, etc
+	 * @param session
+	 * @param member
+	 * @param oldActivity
+	 * @return
+	 * @throws CloneNotSupportedException
+	 */
+	protected AmpActivityVersion cloneActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity, String newStatus) throws CloneNotSupportedException
+	{		
+        ContentTranslationUtil.cloneTranslations(oldActivity);
+        Long ampActivityGroupId = oldActivity.getAmpActivityGroup().getAmpActivityGroupId();
+		AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, member);
+		auxActivity.setAmpActivityId(null);
+
+		session.evict(oldActivity);
+		
+		// Code related to versioning.
+		AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class, ampActivityGroupId);
+		AmpActivityVersion prevVersion		= auxActivityGroup.getAmpActivityLastVersion();
+		auxActivityGroup.setAmpActivityLastVersion(auxActivity);
+		session.save(auxActivityGroup);
+		auxActivity.setAmpActivityGroup(auxActivityGroup);
+		auxActivity.setModifiedDate(Calendar.getInstance().getTime());
+		auxActivity.setModifiedBy(member);
+		       
+		// don't ask me why is this done
+        AmpActivityContact actCont;
+        Set<AmpActivityContact> contacts = new HashSet<AmpActivityContact>();
+        Set<AmpActivityContact> activityContacts = auxActivity.getActivityContacts();
+        if (activityContacts != null){
+            Iterator<AmpActivityContact> it = activityContacts.iterator();
+            while(it.hasNext()){
+                actCont = it.next();
+                actCont.setId(null);
+                actCont.setActivity(auxActivity);
+                session.save(actCont);
+                contacts.add(actCont);
+            }
+            auxActivity.setActivityContacts(contacts);
+        }
+        auxActivity.setApprovalStatus(newStatus);
+        session.save(auxActivity);
+        return auxActivity;
+	}
+	
 //	public String getNewStatusReason(Session session, AmpActivityVersion ver)
 //	{
 //		if (ver.getStatusReason() == null)
@@ -64,6 +119,9 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 
     	try
     	{
+    		TLSUtils.forceLocaleUpdate(org.digijava.module.um.util.DbUtil.getLanguageByCode("en"));
+    		TLSUtils.getThreadLocalInstance().site = SiteUtils.getDefaultSite();
+    		
     		Session session = PersistenceManager.getSession();
     		
     		String val = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATICALLY_CLOSE_ACTIVITIES);
@@ -100,15 +158,15 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
         		AmpTeamMember ampClosingMember = AmpBackgroundActivitiesCloser.createActivityCloserTeamMemberIfNeeded(ver.getTeam());
         		
         		// the session.load call is a fallback, because saveActivityNewVersion is too tightly-coupled with Wicket to be usable now.
-    			//AmpActivityVersion newVer = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(ver, ampClosingMember, false, session);
-        		AmpActivityVersion newVer = (AmpActivityVersion) session.load(AmpActivityVersion.class, ver.getAmpActivityId());
+    			//AmpActivityVersion newVer = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(ver, ampClosingMember, false, session);        		    			
+        		//AmpActivityVersion newVer = (AmpActivityVersion) session.load(AmpActivityVersion.class, ver.getAmpActivityId());
         		
-    			newVer.setApprovalStatus(newStatus);
-    			newVer.getAmpActivityGroup().setAutoClosedOnExpiration(true);
-    			newVer.setModifiedBy(ampClosingMember);
+    			AmpActivityVersion newVer = cloneActivity(session, ampClosingMember, ver, newStatus);
+//    			newVer.setApprovalStatus(newStatus);
+//    			session.update(newVer);
+    			
     			//newVer.setStatusReason(getNewStatusReason(newVer));
-    			session.update(newVer.getAmpActivityGroup());
-    			session.update(newVer);
+    			//session.update(newVer);
     			
     			Query updateQuery1 = session.createSQLQuery("UPDATE amp_activities_categoryvalues SET amp_categoryvalue_id=:closedCategoryValue WHERE amp_activity_id=:amp_activity_id AND amp_categoryvalue_id=:oldCategoryValue") 
     					.addSynchronizedQuerySpace("amp_activities_categoryvalues")

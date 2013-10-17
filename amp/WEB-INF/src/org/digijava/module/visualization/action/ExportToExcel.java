@@ -205,7 +205,7 @@ public class ExportToExcel extends Action {
 			filtersZonesTrn = TranslatorWorker.translateText("Zones");
 			filtersStatusTrn = TranslatorWorker.translateText("Status");
 			ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth");
-			fundingTrn = TranslatorWorker.translateText("Funding");
+			fundingTrn = TranslatorWorker.translateText("ODA Historical Trend");
 	        topPrjTrn = TranslatorWorker.translateText("Top Projects");
 	        topSectorTrn = TranslatorWorker.translateText("Top Sectors");
 	        topOrganizationTrn = TranslatorWorker.translateText("Top Organizations");
@@ -220,7 +220,7 @@ public class ExportToExcel extends Action {
 	        aidPredTrn = TranslatorWorker.translateText("Aid Predictability");
 	        aidPredQuarterTrn = TranslatorWorker.translateText("Aid Predictability Quarterly");
 	        aidTypeTrn = TranslatorWorker.translateText("Aid Type");
-	        finInstTrn = TranslatorWorker.translateText("Financing Instrument");
+	        finInstTrn = TranslatorWorker.translateText("Aid Modality");
 	        sectorProfTrn = TranslatorWorker.translateText("Sector Profile");
 	        regionProfTrn = TranslatorWorker.translateText("Region Profile");
 	        organizationProfTrn = TranslatorWorker.translateText("Organization Profile");

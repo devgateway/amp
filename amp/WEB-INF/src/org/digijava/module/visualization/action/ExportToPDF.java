@@ -191,7 +191,7 @@ public class ExportToPDF extends Action {
 			String filtersZonesTrn = TranslatorWorker.translateText("Zones");
 			String filtersStatusTrn = TranslatorWorker.translateText("Status");
 			String filtersLocationsTrn = TranslatorWorker.translateText("Locations");
-			this.fundingTrn = TranslatorWorker.translateText("Funding");
+			this.fundingTrn = TranslatorWorker.translateText("ODA Historical Trend");
 			this.ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth");
 			this.topPrjTrn = TranslatorWorker.translateText("Top Projects");
 			this.topOrganizationTrn = TranslatorWorker.translateText("Top Organizations");
@@ -206,7 +206,7 @@ public class ExportToPDF extends Action {
 	        this.aidPredQuarterTrn = TranslatorWorker.translateText("Aid Predictability Quarterly");
 	        this.aidTypeTrn = TranslatorWorker.translateText("Aid Type");
             this.budgetBreakdownTrn = TranslatorWorker.translateText("Budget Breakdown");
-            this.finInstTrn = TranslatorWorker.translateText("Financing Instrument");
+            this.finInstTrn = TranslatorWorker.translateText("Aid Modality");
             this.sectorProfTrn = TranslatorWorker.translateText("Sector Profile");
             this.regionProfTrn = TranslatorWorker.translateText("Region Profile");
             this.NPOProfTrn = TranslatorWorker.translateText("NPO Profile");

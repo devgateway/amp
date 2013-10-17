@@ -991,8 +991,10 @@ function callbackApplyFilter(e){
 	document.getElementById("currencyId").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	//if (dashboardType!=4) {
 		document.getElementById("adjustmentType").value = document.getElementById("adjustment_type_quick").value;
-		document.getElementById("adjustment_type").value = document.getElementById("adjustment_type_quick").options[document.getElementById("adjustment_type").selectedIndex].value;
+		document.getElementById("adjustment_type").value = document.getElementById("adjustment_type_quick").value;//document.getElementById("adjustment_type_quick").options[document.getElementById("adjustment_type").selectedIndex].value;
 		document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
+		document.getElementById("transaction_type").value = document.getElementById("transactionType_dropdown").value;
+		
 	//}
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("startYear").value = document.getElementById("startYearQuickFilter_dropdown").value;

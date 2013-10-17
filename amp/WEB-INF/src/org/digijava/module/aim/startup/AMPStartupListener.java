@@ -58,6 +58,11 @@ public class AMPStartupListener extends HttpServlet implements
 	private static final String PATCH_METHOD_KEY = "patchAMP";
 
 	private static Logger logger = Logger.getLogger(AMPStartupListener.class);
+	
+	/**
+	 * READ ONLY, the result of calling ServletContext.getRealPath("/")
+	 */
+	public static String SERVLET_CONTEXT_ROOT_REAL_PATH = null;
 
 	
 	@Override
@@ -210,6 +215,7 @@ public class AMPStartupListener extends HttpServlet implements
 
 		try {
 			ampContext = sce.getServletContext();
+			SERVLET_CONTEXT_ROOT_REAL_PATH = ampContext.getRealPath("/");
 
 			ampContext.setAttribute(Constants.ME_FEATURE, new Boolean(true));
 			ampContext.setAttribute(Constants.AA_FEATURE, new Boolean(true));

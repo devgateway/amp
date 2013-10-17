@@ -29,6 +29,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.util.AmpUserUtil;
+import org.hibernate.Session;
 
 public class AmpBackgroundActivitiesCloser 
 {
@@ -99,7 +100,7 @@ public class AmpBackgroundActivitiesCloser
 	
 	protected static void createAmpModifierUser() throws DgException
 	{
-		User user = new User(AMP_MODIFIER_USER_EMAIL.toLowerCase(),	"", "AMP Activities Modifier");
+		User user = new User(AMP_MODIFIER_USER_EMAIL.toLowerCase(),	"AMP", "Activities Modifier");
 		Site site = SiteUtils.getDefaultSite();
 
 		// set client IP address

@@ -80,7 +80,7 @@ public class CompareActivityVersions extends DispatchAction {
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 			java.util.Locale locale = new java.util.Locale(navigationLanguage.getCode());
-			LuceneUtil.addUpdateActivity(request.getSession().getServletContext(), true, site, locale, activity, prevVer);
+			LuceneUtil.addUpdateActivity(request.getSession().getServletContext().getRealPath("/"), true, site, locale, activity, prevVer);
 			
 			return new ActionForward(mapping.findForward("reload").getPath() + "?ampActivityId=" + activityId);
 		}
@@ -661,7 +661,7 @@ public class CompareActivityVersions extends DispatchAction {
 			Site site = RequestUtils.getSite(request);
 			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 			java.util.Locale locale = new java.util.Locale(navigationLanguage.getCode());
-			LuceneUtil.addUpdateActivity(request.getSession().getServletContext(), true, site, locale, auxActivity, prevVersion);
+			LuceneUtil.addUpdateActivity(request.getSession().getServletContext().getRealPath("/"), true, site, locale, auxActivity, prevVersion);
             AuditLoggerUtil.logObject(request, auxActivity, "add", "merged");
 		} catch (Exception e) {
 			logger.error("Can't save merged activity:", e);

@@ -342,7 +342,7 @@ LoggerIdentifiable, Cloneable {
 	protected Set<AmpActivityDocument> activityDocuments	= null;
 	/* Categories */
 	@VersionableCollection(fieldTitle = "Categories")
-	protected Set categories;
+	protected Set<AmpCategoryValue> categories;
 
 	/*
 	 * Tanzania adds
@@ -475,11 +475,11 @@ LoggerIdentifiable, Cloneable {
 		this.jointCriteria = jointCriteria;
 	}
 
-	public Set getCategories() {
+	public Set<AmpCategoryValue> getCategories() {
 		return categories;
 	}
 
-	public void setCategories(Set categories) {
+	public void setCategories(Set<AmpCategoryValue> categories) {
 		this.categories = categories;
 	}
 

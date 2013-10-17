@@ -753,18 +753,18 @@ public class LuceneUtil implements Serializable {
 		}
 	}
     
-    public static void deleteActivity(ServletContext sc, Long activityId){
-    	deleteActivity(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
+    public static void deleteActivity(String rootRealPath, Long activityId){
+    	deleteActivity(rootRealPath + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
     }
-	
-    public static void addUpdateActivity(ServletContext sc, boolean update, Site site, java.util.Locale navigationLanguage, AmpActivityVersion newActivity, AmpActivityVersion previousActivity){
+	    
+    public static void addUpdateActivity(String rootRealPath, boolean update, Site site, java.util.Locale navigationLanguage, AmpActivityVersion newActivity, AmpActivityVersion previousActivity){
     	logger.info("Updating activity!");
 		try {
 			if (update) {
-				deleteActivity(sc, previousActivity.getAmpActivityId());
+				deleteActivity(rootRealPath, previousActivity.getAmpActivityId());
 			}
 			IndexWriter indexWriter = null;
-			indexWriter = new IndexWriter(sc.getRealPath("/") + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
+			indexWriter = new IndexWriter(rootRealPath + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
 			// Util.getEditorBody(site,act.getDescription(),navigationLanguage);
 			Document doc = null;
 			String projectid = newActivity.getAmpId();

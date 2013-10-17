@@ -123,7 +123,7 @@ public class ActivityUtil {
 				ServletContext sc = wicketSession.getHttpSession().getServletContext();
 				Site site = wicketSession.getSite();
 				Locale locale = wicketSession.getLocale();
-				LuceneUtil.addUpdateActivity(sc, !newActivity, site, locale, am.getObject(), oldA);
+				LuceneUtil.addUpdateActivity(sc.getRealPath("/"), !newActivity, site, locale, am.getObject(), oldA);
 			} catch (Exception e) {
 				logger.error("error while trying to update lucene logs:", e);
 			}

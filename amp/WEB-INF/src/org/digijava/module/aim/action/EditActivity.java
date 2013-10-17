@@ -683,14 +683,14 @@ public class EditActivity extends Action {
         // Since this action is used for previews only
         // We can set this flag to true
         String[] tmp = {"true"};
-        request.getParameterMap().put("viewAllRights", tmp);
+        //request.getParameterMap().put("viewAllRights", tmp);
         
         SelectDocumentDM.clearContentRepositoryHashMap(request);
         
-        //Added because of a problem with the save as draft and redirect.
+        //Added because of a problem with the save as draft and redirect; also because of problem with logframe link from activity form
         try {
         	//this does not work, throws java.lang.IllegalStateException: No modifications are allowed to a locked ParameterMap
-        	//request.getParameterMap().put("viewAllRights", "true");
+        	request.getParameterMap().put("viewAllRights", tmp);
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();

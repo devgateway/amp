@@ -264,7 +264,7 @@ public class ExportToPDF extends Action {
         	PdfWriter pdfWriter =PdfWriter.getInstance(doc, baos);
             HttpSession session = request.getSession();
             String footerText = pageTrn + " - ";
-            doc.setPageCount(1);
+            doc.setPageCount(0);
             HeaderFooter footer = new HeaderFooter(new Phrase(footerText), true);
             footer.setBorder(0);
             doc.setFooter(footer);

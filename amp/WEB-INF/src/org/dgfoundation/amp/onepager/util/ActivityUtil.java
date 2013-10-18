@@ -276,7 +276,7 @@ public class ActivityUtil {
 //				a.setApprovalStatus(Constants.STARTED_STATUS);
 //			}
 //			else
-				if("validationOff".equals(validation)){
+				if(validation == null || "validationOff".equals(validation)){
 					if(newActivity)
 						a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
 					else a.setApprovalStatus(Constants.APPROVED_STATUS);

@@ -955,21 +955,15 @@ function MapFindLocation(level) {
  * @param featureSet
  */
 function addResultsToMap(featureSet) {
-	var border = new esri.symbol.SimpleLineSymbol(
-			esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([ 150,
-					150, 150 ]), 1);
-	var symbol = new esri.symbol.SimpleFillSymbol(
-			esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([
-					150, 150, 150, 0.5 ]));
-	var colors = colorsOrange;
-	var numRanges = colors.length;
+	var border = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([ 150,150, 150 ]), 1);
+	var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, breaksColors[6]);
+	var colors = breaksColors;
 	var localGraphicLayer = esri.layers.GraphicsLayer({
 		displayOnPan : true,
 		id : "highlightMap",
 		visible : true
 	});
-	var typeFundingValue = getCheckedValue(document
-			.getElementsByName("filter.transactionType"));
+	var typeFundingValue = getCheckedValue(document.getElementsByName("filter.transactionType"));
 	var typeFunding = "commitments";
 	switch (typeFundingValue) {
 	case "0":
@@ -986,25 +980,14 @@ function addResultsToMap(featureSet) {
 		break;
 	}
 
-	// Using logarithmic scale
-	var maxLog = Math.log(getMaxValue(locations, typeFunding));
-	var minLog = Math.log(getMinValue(locations, typeFunding));
-
-	var max = getMaxValue(locations, typeFunding);
-	var min = getMinValue(locations, typeFunding);
-
-	var breaksLog = (maxLog - minLog) / numRanges;
-	var breaks = (max - min) / numRanges;
-
-	var rangeColors = new Array();
+	var breaks = getGVF(locations,typeFunding,5);
 	var renderer = new esri.renderer.ClassBreaksRenderer(symbol, COUNT);
-	for ( var i = 0; i < numRanges; i++) {
-		rangeColors.push([ parseFloat(min + (i * breaks)),
-				parseFloat(min + ((i + 1) * breaks)) ]);
-		renderer.addBreak(parseFloat(min + (i * breaks)), parseFloat(min
-				+ ((i+2) * breaks)), new esri.symbol.SimpleFillSymbol(
-				esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
-	}
+	renderer.addBreak(breaks[0],breaks[1] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[4]));
+	renderer.addBreak(breaks[1],breaks[2] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[3]));
+	renderer.addBreak(breaks[2],breaks[3] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[2]));
+	renderer.addBreak(breaks[3],breaks[4] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[1]));
+	renderer.addBreak(breaks[4],breaks[5] +10, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[0]));
+	
 
 	dojo.forEach(featureSet.features, function(feature) {
 		// Read current attributes and assign a new set
@@ -1053,7 +1036,7 @@ function addResultsToMap(featureSet) {
 		}
 	}
 
-	showLegend(rangeColors, colors, typeFunding, currencyCode);
+	showLegend(breaks, colors, typeFunding, currencyCode);
 	$('#hlight').bind('click', function() {
 		getHighlights(0);
 	});
@@ -1080,18 +1063,20 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode) {
 	var df = new DecimalFormat(currentFormat);
 	var currencyString = currencyCode;
 	//debugger;
+	var x = 0;
 	var htmlDiv = "";
 	htmlDiv += "<div onclick='closeHide(\"highlightLegend\")' style='color:white;float:right;cursor:pointer;'>X</div>";
 	htmlDiv += "<div class='legendHeader'>"+translate('Showing ' + typeFunding + ' for ' + currentLevel.name);
 	htmlDiv +=  "<br/><hr/></div>";
-	for ( var i = 0; i < rangeColors.length; i++) {
+	for ( var i = 4; i >= 0 ; i--) {
 		htmlDiv += "<div class='legendContentContainer'>"
 				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i]) + "></div>" + "</div>"
 				+ "<div class='legendContentLabel'>"
-				+ df.format(Math.ceil(rangeColors[i][0])) + " "
+				+ df.format(Math.ceil(rangeColors[x])) + " "
 				+ currencyString + " - "
-				+ df.format(Math.floor(rangeColors[i][1])) + " "
+				+ df.format(Math.floor(rangeColors[x+1])) + " "
 				+ currencyString + " </div><br/>";
+		x++;
 	}
 	htmlDiv += "<div class='legendContentContainer'>"
 			+ "<div class='legendContentValue' " + generate_colors_styling(new dojo.Color({r:201,g:195,b:197,a:0.8})) + "></div>"

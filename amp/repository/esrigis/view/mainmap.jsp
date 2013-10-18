@@ -63,9 +63,8 @@
 	<field:display   name="Esri Printing" feature="Printing">
 		<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.customPrintTask.js"/>"></script>
 		<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/map-printingfunctions-esri.js"/>"></script>
-		
 	</field:display>
-	
+	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/jenks.js"/>"></script>
 	   		
    	<script type="text/javascript" defer="defer"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
    	

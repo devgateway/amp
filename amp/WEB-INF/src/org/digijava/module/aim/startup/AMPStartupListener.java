@@ -280,7 +280,7 @@ public class AMPStartupListener extends HttpServlet implements
 						GatePermConst.availablePermissibles[i]);
 			}
 
-			AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
+			//AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
 			initializeQuartz(sce);
 
 			CustomFieldsUtil.parseXMLFile(sce.getServletContext().getResourceAsStream("/WEB-INF/custom-fields.xml"));

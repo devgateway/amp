@@ -138,7 +138,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 	 */
 	public final static void cleanupSession(Session session)
 	{
-		session.getTransaction().commit();
+		try{session.getTransaction().commit();}catch(Exception e){System.out.println("error committing transaction");e.printStackTrace();}
 		try{session.close();}catch(Exception e){};
 		try{PersistenceManager.removeClosedSessionsFromMap();}catch(Exception e){};
 		try{
@@ -165,6 +165,10 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     		TLSUtils.getThreadLocalInstance().site = SiteUtils.getDefaultSite();
     		
 			Session session = PersistenceManager.getRequestDBSession();
+			
+			AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
+			cleanupSession(session); // commit user in case it was created
+			session = PersistenceManager.getRequestDBSession();
 		
     		Long closedCategoryValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
     		

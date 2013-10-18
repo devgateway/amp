@@ -9,6 +9,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+
+                create sequence util_global_settings_possible__seq;
+                ALTER TABLE util_global_settings_possible_ ALTER COLUMN id SET DEFAULT nextval('util_global_settings_possible__seq');
+                update amp_field set amp_field_id=amp_field_id WHERE setval('util_global_settings_possible__seq', (SELECT MAX(id) FROM util_global_settings_possible_)) is not null;
 			
 				DELETE FROM util_global_settings_possible_ WHERE setting_name = 'Amounts in Thousands';
 				

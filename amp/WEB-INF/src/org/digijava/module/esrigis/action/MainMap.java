@@ -380,6 +380,12 @@ public class MainMap extends Action {
 		List<AmpCategoryValue> categoryvaluesprojectstatus = null;
 		categoryvaluesprojectstatus = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
 		filter.setProjectstatus(categoryvaluesprojectstatus);
+
+        filter.setPeacebuildingMarkers(DbHelper.getPeacebuildingMarkers());
+        if (filter.getPeacebuildingMarkers() != null &&
+                !filter.getPeacebuildingMarkers().isEmpty()) {
+            filter.setSelectedPeacebuildingMarkerId(filter.getPeacebuildingMarkers().get(0).getId());
+        }
 	}
 
 	public ActionForward displayIcon(ActionMapping mapping, ActionForm form,

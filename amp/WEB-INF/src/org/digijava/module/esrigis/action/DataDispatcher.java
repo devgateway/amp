@@ -17,19 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -122,10 +110,60 @@ public class DataDispatcher extends MultiAction {
 			return modeGetContent(mapping, form, request, response);
 		}else if (request.getParameter("exporttocsv") != null){
 			return modeExportToCsv(mapping, form, request, response);
-		}
+		}else if (request.getParameter("getPeaceBuildingValues") != null){
+            return modeGetPeaceBuildingValues(mapping, form, request, response);
+        }
 		return null;
 	}
-		
+
+
+
+    private ActionForward modeGetPeaceBuildingValues(ActionMapping mapping,ActionForm form, HttpServletRequest request,
+                                          HttpServletResponse response) throws Exception {
+
+        DataDispatcherForm maphelperform = (DataDispatcherForm) form;
+        /*
+        String geoIDsStr = request.getParameter("geoIds");
+        List<String> geoIDs = new ArrayList<String>();
+        StringTokenizer geoIDTokenizer = new StringTokenizer(geoIDsStr, "|", false);
+        while (geoIDTokenizer.hasMoreTokens()) {
+            geoIDs.add(geoIDTokenizer.nextToken());
+        } */
+
+        HttpSession session = request.getSession();
+        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+        MapFilter filter = maphelperform.getFilter();
+        filter.setTeamMember(tm);
+
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
+
+
+        String implementationLevel = "";
+        if (request.getParameter("level") != null && request.getParameter("level").equals("Region")) {
+            implementationLevel = "Region";
+        } else {
+            implementationLevel = "Zone";
+        }
+        JSONArray jsonArray = new JSONArray();
+        List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel);
+        ArrayList<SimpleLocation> mapregions = new ArrayList<SimpleLocation>();
+
+
+        filter.setFilterByPeacebuildingMarker(true);
+        mapregions = DbHelper.getFundingByRegionList(locations, implementationLevel, filter.getCurrencyCode(), startDate, endDate,
+				/*filter.getTransactionType(),*/ CategoryConstants.ADJUSTMENT_TYPE_ACTUAL,
+                new Integer(3), new BigDecimal(1), filter);
+        filter.setFilterByPeacebuildingMarker(false);
+
+        jsonArray.addAll(mapregions);
+        PrintWriter pw = response.getWriter();
+        pw.write(jsonArray.toString());
+        pw.flush();
+        pw.close();
+        return null;
+    }
 	private ActionForward modeExportToCsv(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		

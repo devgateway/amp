@@ -361,16 +361,23 @@ public class DbHelper {
 	public static List<AmpActivityVersion> getActivities(MapFilter filter)
 			throws DgException {
 
-		List<AmpActivityVersion> activities;
+		List<AmpActivityVersion> activities = null;
 		try {
 			List<Long> ids = getActivitiesIds(filter);
-			String oql = "select distinct act from ";
-			oql += AmpActivityVersion.class.getName()
-					+ " act WHERE ampActivityId IN (" + Util.toCSString(ids) + ")";
-			Session session = PersistenceManager.getRequestDBSession();
-			Query query = session.createQuery(oql);
-			
-			activities = query.list();
+            if (ids != null && !ids.isEmpty()) {
+                StringBuilder oql = new StringBuilder("select distinct act from ").
+                        append(AmpActivityVersion.class.getName()).
+                        append(" act WHERE ampActivityId IN (").
+                        append(Util.toCSString(ids)).append(")");
+
+                Session session = PersistenceManager.getRequestDBSession();
+                Query query = session.createQuery(oql.toString());
+
+                activities = query.list();
+            } else {
+                activities = new ArrayList<AmpActivityVersion> ();
+            }
+
 		} catch (Exception e) {
 			logger.error(e);
 			throw new DgException("Cannot load activities from db", e);
@@ -855,8 +862,7 @@ public class DbHelper {
 	
         return regionTotals;
 	}
-	
-	
+
 	/**
 	 * fetches all fundings of type (mtef or non-mtef) which match a set of filters
 	 * the format of the output Object[] instances is documented in {@link #generateFundingSummaries(List, String, HardCodedCategoryValue, String, Collection, int, BigDecimal)}
@@ -928,7 +934,7 @@ public class DbHelper {
         	oql += " and (fd.projectionDate>=:startDate and fd.projectionDate<=:endDate)  ";
         }
         oql += " and loc.id in (" + DashboardUtil.getInStatement(regListChildren) + ")";
-        
+
        
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) 
@@ -947,21 +953,29 @@ public class DbHelper {
         String inactivities= Util.toCSString(workSpaceActivityList);
 		oql += " and act.ampActivityId in("+ inactivities +")";
 
-        
+
         if (ActivityVersionUtil.isVersioningEnabled()) {
 			oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 		}
-        
+
         oql += " and (act.draft = FALSE OR act.draft IS NULL) and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
         oql += " and (act.deleted = FALSE or act.deleted IS NULL)";
-        
-        
+
+        if (filter.isFilterByPeacebuildingMarker() && filter.getSelectedPeacebuildingMarkerId() != null) {
+            oql += " and :PB_MARK_ID in elements(act.categories) ";
+        }
+
+
         Session session = PersistenceManager.getRequestDBSession();
         List<Object[]> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
+            if (filter.isFilterByPeacebuildingMarker() && filter.getSelectedPeacebuildingMarkerId() != null) {
+                query.setLong("PB_MARK_ID", filter.getSelectedPeacebuildingMarkerId());
+            }
+
             if (!mtef)
             {
             	query.setString("adjustmentType",adjustmentType.getValueKey());
@@ -1542,5 +1556,36 @@ public class DbHelper {
 		}
 		return maps;		
 	}
+
+    public static List<AmpCategoryValue> getPeacebuildingMarkers() {
+        List<AmpCategoryValue> retVal = null;
+        StringBuilder qs = new StringBuilder("from ").
+                append(AmpCategoryValue.class.getName()).
+                append(" cv where cv.ampCategoryClass.keyName='procurement_system'");
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            Query q = session.createQuery(qs.toString());
+            retVal = q.list();
+
+            if (retVal != null && !retVal.isEmpty()) {
+
+                Collections.sort(retVal, new Comparator <AmpCategoryValue> (){
+                    public int compare(AmpCategoryValue o1, AmpCategoryValue o2) {
+                        int retVal;
+                        if (o1.getIndex()<o2.getIndex()) retVal = -1;
+                                else if (o1.getIndex()<o2.getIndex()) retVal = 0;
+                                else retVal = 1;
+                        return retVal;
+                    }
+                }
+                );
+            }
+
+        } catch (Exception ex) {
+            logger.error("Unable to get peacebuilding markers from database", ex);
+        }
+
+        return retVal;
+    }
 
 }

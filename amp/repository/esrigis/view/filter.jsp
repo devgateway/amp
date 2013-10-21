@@ -534,6 +534,14 @@ function initializeTranslations(){
 														<html:optionsCollection property="filter.years" label="key" value="value" />
 													</html:select>
 												</td>
+												<td>
+													<b><digi:trn>Peacebuilding Marker</digi:trn>:</b>
+												</td>	
+												<td>
+													<html:select styleId="selected_Peacebuilding_Marker_Id" property="filter.selectedPeacebuildingMarkerId" styleClass="dropdwn_sm" style="width:70px;">
+														<html:optionsCollection property="filter.peacebuildingMarkers" label="value" value="id" />
+													</html:select>
+												</td>
 											</tr>
 										</table>
 									</div>
@@ -560,6 +568,8 @@ function initializeTranslations(){
 	<html:hidden property="filter.defaultEndYear" styleId="defaultEndYear" />
 	<html:hidden property="filter.transactionType" styleId="transactionType" />
 	<html:hidden property="filter.onBudget" styleId="onBudget" />
+	<html:hidden property="filter.selectedPeacebuildingMarkerId" styleId="selectedPeacebuildingMarkerId" />
+		
 </digi:form>
 
 <script type="text/javascript">

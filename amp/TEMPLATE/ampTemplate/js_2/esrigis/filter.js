@@ -458,6 +458,9 @@ var callbackApplyFilterCall = {
 				  getStructures(true);
 				  getSelectedFilter();
 				  getActivities(true);
+				  if (map.getLayer("regionalFeatureLayer") != null) {
+				  	createPeaceBuildingFeatureLayer(map);
+					}
 				}
 				catch (e) {
 				    alert("Invalid response.");
@@ -597,6 +600,9 @@ function applyFilterPopin(e){
 		}
 	}
 	document.getElementById("onBudget").value = document.getElementById("budget_dropdown").options[document.getElementById("budget_dropdown").selectedIndex].value;
+	document.getElementById("selectedPeacebuildingMarkerId").value = document.getElementById("selected_Peacebuilding_Marker_Id").options[document.getElementById("selected_Peacebuilding_Marker_Id").selectedIndex].value;
+	
+	
 	
 	var params = "";
 	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);

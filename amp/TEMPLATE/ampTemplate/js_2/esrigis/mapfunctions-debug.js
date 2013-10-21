@@ -17,6 +17,10 @@ dojo.require("esri.layers.FeatureLayer");
 dojo.require("dojo.dnd.Moveable");
 dojo.require("dojo.io.script");
 dojo.require("esri.dijit.Print");
+dojo.require("esri.tasks.query");
+
+
+
 
 /*----variables---------*/
 var map,geometryService, findTask, findParams;
@@ -156,7 +160,7 @@ function init() {
 		id : 'base'
 	}); // Levels at which this layer will be visible);
 	countrymap = new esri.layers.ArcGISDynamicMapServiceLayer(countrymapurl, {opacity : 0.50,id : 'countrymap'});
-
+	
 	/*
 	 povertyratesmap = new esri.layers.FeatureLayer(povertyratesurl, { mode:
 	 esri.layers.FeatureLayer.MODE_ONDEMAND,outFields: ["*"],
@@ -190,6 +194,7 @@ function init() {
 			if (layerLoadCount === 2) {
 				createMapAddLayers(basemap, countrymap);
 			}
+			
 		});
 	}
 	if (countrymap.loaded) {
@@ -211,6 +216,9 @@ function init() {
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("structuresdiv"));
 	
+	
+
+	
 }
 
 /**
@@ -220,7 +228,7 @@ function init() {
  * @param myService2
  */
 
-function createMapAddLayers(myService1, myService2) {
+function createMapAddLayers(myService1, myService2, feature) {
 	customLods = [
 	       {"level" : 0,"resolution" : 19567.87924099992,"scale" : 7.3957190948944E7}, 
            {"level" : 1,"resolution" : 4891.96981024998,"scale" : 18489297.737236}, 
@@ -267,12 +275,264 @@ function createMapAddLayers(myService1, myService2) {
 	for(var idx = 0; idx < indicatorMapArray.length; idx++){
 		map.addLayer(indicatorMapArray[idx]);
 	}
+	
+	
+	
 	//dojo.connect(map, "onExtentChange", showExtent);
 	
 	createBasemapGalleryEsri();
 	createBasemapGallery();
 	maxExtent = map.extent;
 	searchactive = false;
+	
+	//createPeaceBuildingFeatureLayer(map);
+}
+
+function togglePeaceBuildingFeatureLayer() {
+	if (map.getLayer("regionalFeatureLayer") != null) {
+		map.removeLayer(map.getLayer("regionalFeatureLayer"));
+		peaceBuldingClickHandler.remove();
+	} else {
+		createPeaceBuildingFeatureLayer();
+	}
+}
+
+
+var peaceBuldingClickHandler = null;
+var peaceBuldingCurLoc = null;
+function createPeaceBuildingFeatureLayer() {
+	
+	
+	
+	if (map.getLayer("regionalFeatureLayer") != null) {
+		map.removeLayer(map.getLayer("regionalFeatureLayer"));
+		peaceBuldingClickHandler.remove();
+	}
+	
+	var regionalFeatureLayer = regionalFeatureLayer = new esri.layers.GraphicsLayer({
+			displayOnPan : true,
+			id : "regionalFeatureLayer",
+			visible : true
+		});
+	
+	
+	var queryTask = new esri.tasks.QueryTask(countrymapurl + "/0");
+	query = new esri.tasks.Query();
+	query.returnGeometry = true;
+	query.where = "1=1";
+	query.outSpatialReference = map.spatialReference;
+	query.outFields = ["*"];
+	
+
+	
+	
+	var highlightSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, 
+				new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, 
+				new dojo.Color([255,0,0]), 1), new dojo.Color([125,125,125,0.2]));
+	var symbol = 
+				new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, 
+				new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, 
+				new dojo.Color([255,255,255,0]), 1), new dojo.Color([125,125,125,0]));
+	
+	
+			
+			var xhrArgs = {
+	      url: "/esrigis/datadispatcher.do?getPeaceBuildingValues=true&level=Region",
+	      //postData: "&geoIds=" + geoIdsDelimetedStr,
+	      handleAs: "json",
+	      load: function(jsonData){
+	      	
+	      	locations = [];
+	      	dojo.forEach(jsonData, function(location) {
+						locations.push(location);
+					});
+					
+					//MapFindLocation(COUNTY);
+	      	
+	      	
+	      	dojo.connect(queryTask, "onComplete", function(featureSet) {
+	      		
+	      		var border = new esri.symbol.SimpleLineSymbol(
+								esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([ 150,
+										150, 150, 0.5 ]), 1);
+										/*
+								var symbol = new esri.symbol.SimpleFillSymbol(
+										esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([
+												150, 150, 150, 0.5 ]));*/
+								
+								var emptySymbol = new esri.symbol.SimpleFillSymbol(
+										esri.symbol.SimpleFillSymbol.STYLE_BACKWARD_DIAGONAL, border, new dojo.Color([
+												150, 150, 150, 0.2 ]));				
+								
+								var colors = colorsOrange;
+								var numRanges = colors.length;
+								var typeFundingAttrName;
+								
+								var typeFundingValue = getCheckedValue(document
+										.getElementsByName("filter.transactionType"));
+								var typeFunding = "commitments";
+								switch (typeFundingValue) {
+								case "0":
+									typeFunding = "commitments";
+									typeFundingAttrName = "COMMITMENTSFMT"; 
+									break;
+								case "1":
+									typeFunding = "disbursements";
+									typeFundingAttrName = "DISBURSEMENTSFMT";
+									break;
+								case "127":
+									typeFunding = "expenditures";
+									typeFundingAttrName = "EXPENDITURESFMT";
+									break;
+								case "3":
+									typeFunding = "mtef";
+									typeFundingAttrName = "MTEFFMT";
+									break;
+								}
+							
+								// Using logarithmic scale
+								var maxLog = Math.log(getMaxValue(locations, typeFunding));
+								var minLog = Math.log(getMinValue(locations, typeFunding));
+							
+								var max = getMaxValue(locations, typeFunding);
+								var min = getMinValue(locations, typeFunding);
+							
+								var breaksLog = (maxLog - minLog) / numRanges;
+								var breaks = (max - min) / numRanges;
+							
+								var rangeColors = new Array();
+								var renderer = new esri.renderer.ClassBreaksRenderer(symbol, COUNT);
+								
+								
+								for ( var i = 0; i < numRanges; i++) {
+									rangeColors.push([ parseFloat(min + (i * breaks)),
+											parseFloat(min + ((i + 1) * breaks)) ]);
+									renderer.addBreak(parseFloat(min + (i * breaks)), parseFloat(min
+											+ ((i+2) * breaks)), new esri.symbol.SimpleFillSymbol(
+											esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
+								}
+	      		
+	      		dojo.forEach(featureSet.features, function(feature) {
+
+								// Read current attributes and assign a new set
+								var count = feature.attributes[COUNT];
+								var county = feature.attributes[COUNTY];
+								var district = feature.attributes[DISTRICT];
+								var geoId = feature.attributes[GEO_ID];
+								var commitments = 0;
+								var disbursements = 0;
+								var expenditures = 0;
+								var mtef = 0;
+								
+								
+								dojo.forEach(jsonData, function(jsonDataItem) {
+									if (geoId == jsonDataItem.geoId) {
+										commitments = jsonDataItem.commitments;
+										disbursements = jsonDataItem.disbursements;
+										expenditures = jsonDataItem.expenditures;
+										mtef = jsonDataItem.mtef;
+									}
+								})
+								
+								
+								var names=new Array();
+									names[0]=[county];
+									names[1]=[district];
+								
+								feature.setAttributes({
+									"COUNT" : count,
+									"COMMITMENTSFMT" : commitments,
+									"DISBURSEMENTSFMT" : disbursements,
+									"EXPENDITURESFMT" : expenditures,
+									"MTEFFMT": mtef,
+									"COUNTY" : county,
+									"DISTRICT" : district,
+									"GEO_ID" : geoId,
+									"NAME" : names[implementationLevel[0].mapId]
+								});
+								
+								
+								feature.setInfoTemplate(new esri.InfoTemplate(translate('Funding'),
+												translate(implementationLevel[0].name) + ": ${NAME} <br/>"
+												+ translate('Commitments')+": ${COMMITMENTSFMT}<br/> "
+												+ translate('Disbursements')+": ${DISBURSEMENTSFMT}<br/> "
+												+ translate('Expenditures')+": ${EXPENDITURESFMT}<br/> "
+												+ translate('MTEF')+": ${MTEFFMT}<br/> "
+						
+								));
+								
+							});
+							
+	      		
+	      		//updateLocationAttributes(regionalFeatureLayer, typeFunding);
+	      		//regionalFeatureLayer.setRenderer(renderer);
+	      		
+	      		
+						dojo.forEach(featureSet.features, function(feature) {
+		      			if (feature.attributes[typeFundingAttrName] == null ||
+		      				feature.attributes[typeFundingAttrName]==0) {
+		      					feature.setSymbol(emptySymbol);
+		      			} else {
+		      				var ammt = feature.attributes[typeFundingAttrName];
+		      				var symbol = null;
+		      				for (rangeIdx = 0; rangeIdx < rangeColors.length; rangeIdx ++) {
+		      					if ((ammt == rangeColors[rangeIdx][0]) || (ammt > rangeColors[rangeIdx][0] && ammt < rangeColors[rangeIdx][1])) {
+		      						symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[rangeIdx]);
+		      						break;
+		      					}
+		      				}
+		      				
+		      				feature.setSymbol(symbol);
+		      			}
+								regionalFeatureLayer.add(feature);
+		      		});	
+		      		
+
+						map.addLayer(regionalFeatureLayer);
+						map.graphics.enableMouseEvents();
+						map.reorderLayer(map.getLayer("regionalFeatureLayer"), 0);
+
+						
+						
+						/*
+						dojo.connect(regionalFeatureLayer, "onClick", function(evt) {
+							alert("ggg");
+							console.log(evt.graphic.geometry.infoTemplate);
+						});*/
+						
+						peaceBuldingClickHandler = dojo.connect(map, "onClick", function(evt) {
+							map.infoWindow.resize(300, 200);
+							map.infoWindow.setTitle(peaceBuldingCurLoc.getTitle());
+							map.infoWindow.setContent(peaceBuldingCurLoc.getContent());
+							map.infoWindow.show(evt.screenPoint,map.getInfoWindowAnchor(evt.screenPoint));
+						});
+						
+						dojo.connect(regionalFeatureLayer, "onMouseOver", function(evt) {
+							map.graphics.clear();
+							var highlightGraphic = new esri.Graphic(evt.graphic.geometry,highlightSymbol);
+							map.graphics.add(highlightGraphic);
+							map.setMapCursor('pointer');
+							peaceBuldingCurLoc = evt.graphic;
+						});
+			
+						dojo.connect(map.graphics, "onMouseOut", function(evt) {
+							map.graphics.clear();
+							map.setMapCursor('default');
+							peaceBuldingCurLoc = null;
+						});
+	     		}); 
+	     			
+	      	queryTask.execute(query,function(evt){
+
+					});
+	        	
+	      },
+	      error: function(error){
+	        console.log(error);
+	      }
+    	}
+		
+			var deferred = dojo.xhrGet(xhrArgs);
 }
 
 /**
@@ -1044,6 +1304,11 @@ function addResultsToMap(featureSet) {
 		getHighlights(1);
 	});
 }
+
+
+
+
+
 
 function generate_colors_styling(color)
 {

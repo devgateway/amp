@@ -39,6 +39,7 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.digijava.module.visualization.util.Constants;
 import org.joda.time.DateTime;
@@ -410,6 +411,13 @@ public class QueryUtil {
 				e.printStackTrace();
 			}
         }
+
+        filter.setPeacebuildingMarkers(DbHelper.getPeacebuildingMarkers());
+        if (filter.getPeacebuildingMarkers() != null &&
+                !filter.getPeacebuildingMarkers().isEmpty()) {
+            filter.setSelectedPeacebuildingMarkerId(filter.getPeacebuildingMarkers().get(0).getId());
+        }
+
         filter.setIsinitialized(true);
 		return filter;
     	
@@ -424,7 +432,5 @@ public class QueryUtil {
     	}
     	return false;
     }
-    
-    
-    
+
 }

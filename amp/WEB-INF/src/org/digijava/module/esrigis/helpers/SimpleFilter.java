@@ -20,6 +20,7 @@ public class SimpleFilter {
 	private ArrayList<String> organizationtype;
 	private ArrayList<String> sector;
 	private String locationfiltered;
+    private Long selectedPeacebuildingMarkerId;
 	
 	public String getLocationfiltered() {
 		return locationfiltered;
@@ -148,5 +149,12 @@ public class SimpleFilter {
 	public void setImpselecteddonors(ArrayList<SimpleDonor> impselecteddonors) {
 		this.impselecteddonors = impselecteddonors;
 	}
-	
+
+    public Long getSelectedPeacebuildingMarkerId() {
+        return selectedPeacebuildingMarkerId;
+    }
+
+    public void setSelectedPeacebuildingMarkerId(Long selectedPeacebuildingMarkerId) {
+        this.selectedPeacebuildingMarkerId = selectedPeacebuildingMarkerId;
+    }
 }

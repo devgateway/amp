@@ -118,6 +118,10 @@ public class MapFilter {
 	private Long activityId;
 	private int decimalsToShow;
 
+    private List <AmpCategoryValue> peacebuildingMarkers;
+    private Long selectedPeacebuildingMarkerId;
+    private boolean filterByPeacebuildingMarker;
+
 	public MapFilter getCopyFilterForFunding() {
 		MapFilter newFilter = new MapFilter();
 
@@ -273,7 +277,16 @@ public class MapFilter {
 			}
 		}
 		selectedfilter.setOrganizationtype(selorgtypes);
-		
+
+        //sel PeaceBuilding marker
+        Long selPeaceBuildingMarkerId = getSelectedPeacebuildingMarkerId();
+        if (selPeaceBuildingMarkerId == null &&
+                getPeacebuildingMarkers() != null &&
+                !getPeacebuildingMarkers().isEmpty()) {
+            selPeaceBuildingMarkerId = getPeacebuildingMarkers().get(0).getId();
+        }
+		selectedfilter.setSelectedPeacebuildingMarkerId(selPeaceBuildingMarkerId);
+
 		result.add(selectedfilter);
 		return result;
 	}
@@ -942,4 +955,28 @@ public class MapFilter {
 			throw new RuntimeException(e);
 		}
 	}
+
+    public List<AmpCategoryValue> getPeacebuildingMarkers() {
+        return peacebuildingMarkers;
+    }
+
+    public void setPeacebuildingMarkers(List<AmpCategoryValue> peacebuildingMarkers) {
+        this.peacebuildingMarkers = peacebuildingMarkers;
+    }
+
+    public Long getSelectedPeacebuildingMarkerId() {
+        return selectedPeacebuildingMarkerId;
+    }
+
+    public void setSelectedPeacebuildingMarkerId(Long selectedPeacebuildingMarkerId) {
+        this.selectedPeacebuildingMarkerId = selectedPeacebuildingMarkerId;
+    }
+
+    public boolean isFilterByPeacebuildingMarker() {
+        return filterByPeacebuildingMarker;
+    }
+
+    public void setFilterByPeacebuildingMarker(boolean filterByPeacebuildingMarker) {
+        this.filterByPeacebuildingMarker = filterByPeacebuildingMarker;
+    }
 }

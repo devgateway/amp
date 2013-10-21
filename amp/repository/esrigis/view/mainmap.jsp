@@ -437,11 +437,14 @@
 							<li id="structures" onclick="getStructures(false);" style="cursor: pointer;display: none;"><digi:trn>Structures</digi:trn></li>
 							<li id="clusterStructures" onclick="resetStructureCluster(false);" style="display:none; cursor: pointer;"><digi:trn>Reset Expanded Structures</digi:trn></li>
 						</feature:display>
-		              	<feature:display name="Highlight regions" module="Map Module">
+		        <feature:display name="Highlight regions" module="Map Module">
 							<li id="hlight" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></li>
 						</feature:display>
 						<feature:display name="Highlight Zones" module="Map Module">
 							<li id="hlightz" onclick="getHighlights(1);" style="cursor: pointer;"><digi:trn>Highlight Zones</digi:trn></li>
+						</feature:display>
+						<feature:display name="Peacebuilding Markers" module="Map Module">
+							<li id="hlightPBuilding" align="left" onclick="togglePeaceBuildingFeatureLayer();" style="cursor: pointer;"><digi:trn>Peacebuilding Markers</digi:trn></li>
 						</feature:display>
 						<feature:display name="Add activity" module="Map Module">
 							<li id="add" onclick="addActivity();" style="cursor: pointer;"><digi:trn>Add Activity</digi:trn></li>
@@ -744,7 +747,6 @@ function htmlWithStyles() {
         return result;
     }
 };
-
 
 </script>
         

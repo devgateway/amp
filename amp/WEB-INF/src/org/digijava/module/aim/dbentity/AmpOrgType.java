@@ -17,6 +17,8 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	private Long ampOrgTypeId;
     @TranslatableField
 	private String orgType;
+    
+    @TranslatableField
 	private String orgTypeCode;
 	@Deprecated
 	private Boolean orgTypeIsGovernmental;

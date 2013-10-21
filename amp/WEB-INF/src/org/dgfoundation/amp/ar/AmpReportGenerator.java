@@ -39,12 +39,16 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.filtercacher.FastFilterCacher;
 import org.dgfoundation.amp.ar.filtercacher.NopFilterCacher;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpColumnsFilters;
 import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
@@ -52,6 +56,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.hibernate.Session;
 
 /**
  * 
@@ -143,6 +148,21 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		Set<String> extractableNames = new TreeSet<String>();
 
+//		try
+//		{
+//			long aaaa = System.currentTimeMillis();
+//			Session session = PersistenceManager.getRequestDBSession();
+//			List<AmpOrgGroup> allTypes = session.createQuery("select ot from " + AmpOrgGroup.class.getName() + " ot").list();
+//			for(AmpOrgGroup s:allTypes)
+//				System.out.println("\torgType: " + s.getOrgGrpName());
+//			long time = System.currentTimeMillis() - aaaa;
+//			System.out.format("fetching all orgTypes took " + time + " ms\n");
+//		}
+//		catch(DgException dge)
+//		{
+//			dge.printStackTrace();
+//		}
+		
 		extractable = new ArrayList<AmpReportColumn>();
 		List<AmpReportColumn> generated = new ArrayList<AmpReportColumn>();
 		List<AmpReportColumn> colNames = reportMetadata.getOrderedColumns();
@@ -273,7 +293,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				String relatedContentPersisterClass = col
 						.getRelatedContentPersisterClass();
 
-				logger.debug("Seeking class " + cellTypeName);
+				//logger.debug("Seeking class " + cellTypeName);
 
 				Class cellType = Class.forName(cellTypeName);
 
@@ -351,7 +371,7 @@ public class AmpReportGenerator extends ReportGenerator {
 							.newInstance();
 					column.setDimensionClass(cp.getDimensionClass());
 				}
-				logger.info("Adding column " + column.getName());
+				//logger.info("Adding column " + column.getName());
 				CellColumn older = (CellColumn) rawColumns.getColumn(column.getColumnId());
 				if (older != null) {
 				    for ( Object o : column.getItems() ) 

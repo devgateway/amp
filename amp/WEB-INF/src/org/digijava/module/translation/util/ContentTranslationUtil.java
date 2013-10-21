@@ -42,7 +42,7 @@ public class ContentTranslationUtil {
      */
     public static boolean translateObject(Object obj, Serializable id, Object[] state, String[] propertyNames, Type[] types){
     	boolean stateModified = false;
-        String currentLocale = TLSUtils.getLangCode();
+        String currentLocale = TLSUtils.getEffectiveLangCode(); // BOZO, Arty, please review this change: effectiveLangCode is NEVER null
         if (currentLocale == null)
             return stateModified;
 
@@ -110,7 +110,7 @@ public class ContentTranslationUtil {
     public static void cloneTranslations(Object obj){
         Hibernate.initialize(obj);
         String objClass = getObjectClass(obj);
-        String currentLocale = TLSUtils.getLangCode();
+        String currentLocale = TLSUtils.getEffectiveLangCode();
 
         Class clazz = obj.getClass();
         try{
@@ -181,7 +181,7 @@ public class ContentTranslationUtil {
         Long objectId = (Long)id;
         Class clazz = Hibernate.getClass(obj);
         String objectClass = clazz.getName();
-        String currentLocale = TLSUtils.getLangCode();
+        String currentLocale = TLSUtils.getEffectiveLangCode();
         try {
             /*
                 Iterate all String fields and replace their contents with the base language
@@ -553,7 +553,7 @@ public class ContentTranslationUtil {
      * @param fields list of fields to be populated
      * @param type class for which we want to get all the fields
      */
-    private static void getAllFields(List<Field> fields, Class<?> type) {
+    public static void getAllFields(List<Field> fields, Class<?> type) {
         Collections.addAll(fields, type.getDeclaredFields());
         if (type.getSuperclass() != null) {
             getAllFields(fields, type.getSuperclass());

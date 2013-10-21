@@ -252,7 +252,7 @@ public class GroupReportData extends ReportData<ReportData> {
 					}
 				}
 					
-				logger.debug("GroupTrail.size=" + trailCells.size());
+				//logger.debug("GroupTrail.size=" + trailCells.size());
 
 				i = items.iterator();
 				while (i.hasNext()) {

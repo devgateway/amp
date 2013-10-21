@@ -24,7 +24,7 @@
 			    	SELECT DISTINCT f.amp_activity_id, ag.effective_date as effective_date, ag.id,
 			    	(ag.title::text || ' - '::text) || ag.code::text AS "Agreement Title + Code",
 			    		ag.code AS "Agreement Code",
-			    		o.name AS "Donor Agency" 
+			    		o.name AS "Donor Agency" , o.amp_org_id
 			    	FROM amp_agreement ag, amp_funding f, amp_organisation o 
  					WHERE f.agreement=ag.id AND f.amp_donor_org_id = o.amp_org_id AND 
  						ag.effective_date IS NOT NULL;

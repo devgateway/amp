@@ -29,6 +29,18 @@ public class TLSUtils {
 		return instance.locale.getCode();
 	}
 	
+	/**
+	 * calculates the effectively-used language code, e.g. either the currently-set one OR the default one ("en")
+	 * @return
+	 */
+	public static String getEffectiveLangCode()
+	{
+		String langCode = getLangCode();
+		if (langCode == null)
+			langCode = "en";
+		return langCode;
+	}
+	
 	public static Long getSiteId()
 	{
 		Site site = getSite();

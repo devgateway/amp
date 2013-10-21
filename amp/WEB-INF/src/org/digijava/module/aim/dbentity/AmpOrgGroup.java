@@ -19,9 +19,13 @@ import org.digijava.module.aim.util.Identifiable;
 public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,OrgProfileValue
 {
 	private Long ampOrgGrpId;
+	
 	@TranslatableField
 	private String orgGrpName;
+	
+	@TranslatableField
 	private String orgGrpCode;
+	
 	private AmpLevel levelId;	// defunct
 	//private Set organizations; 
 	

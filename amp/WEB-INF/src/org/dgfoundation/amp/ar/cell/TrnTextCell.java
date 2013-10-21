@@ -58,7 +58,7 @@ public class TrnTextCell extends TextCell{
 		{
 			parent=parent.getParent();
 		}
-		logger.debug(this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()));
+		//logger.debug(this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()));
 		return this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()) ;
 	}
 }

@@ -210,7 +210,7 @@ public class TranslatorWorker {
     {
     	try
     	{
-    		return translateText(text, null, TLSUtils.getLangCode(), TLSUtils.getSiteId());
+    		return translateText(text, null, TLSUtils.getEffectiveLangCode(), TLSUtils.getSiteId());
     	}
     	catch(WorkerException e)
     	{

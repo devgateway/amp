@@ -460,7 +460,7 @@ public class ChartGenerator {
 
 				String url = cp.getUrl();
 				if (url != null && url.trim().length() > 0) {
-					plot.setURLGenerator(new PieChartURLGenerator(url,"risk", TLSUtils.getLangCode(), TLSUtils.getSiteId()));
+					plot.setURLGenerator(new PieChartURLGenerator(url,"risk", TLSUtils.getEffectiveLangCode(), TLSUtils.getSiteId()));
 				}
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 

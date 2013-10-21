@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-14475</jira>
+	<jira>AMP-15571</jira>
 	<keyword>Views</keyword>
 	<keyword>Agreement</keyword>
 	<author>apopescu</author>
@@ -24,7 +24,7 @@
 			    	SELECT DISTINCT f.amp_activity_id, ag.close_date as close_date, ag.id, 
 			    		(ag.title::text || ' - '::text) || ag.code::text AS "Agreement Title + Code",
 			    		ag.code AS "Agreement Code",
-			    		o.name AS "Donor Agency" 
+			    		o.name AS "Donor Agency", o.amp_org_id 
 			    		FROM amp_agreement ag, amp_funding f, amp_organisation o 
  						WHERE f.agreement=ag.id AND f.amp_donor_org_id = o.amp_org_id AND 
  						ag.close_date IS NOT NULL;

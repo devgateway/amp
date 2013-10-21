@@ -26,7 +26,11 @@ import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
+import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
+import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.budgetexport.util.MappingEncoder;
 import org.hibernate.HibernateException;
@@ -144,30 +148,26 @@ public abstract class ColumnWorker {
 		
 		CellColumn cc = null;
 		
-		String query = "SELECT * FROM " + viewName + " WHERE amp_activity_id IN ("
-				+ filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition!=null ? internalCondition:"");
-		PreparedStatement ps;
+		String queryCondition = "WHERE amp_activity_id IN (" + filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition!=null ? internalCondition:"");
+		String queryView = viewName;
+		
+		//PreparedStatement ps;
 	
 		if (debugMode){
 			//if debug override the query
-			 query = "SELECT * FROM TEST_"+viewName;
+			 queryView = "TEST_" + viewName;
+			 queryCondition = "";
 		}else if (pledgereport){
-			query = "SELECT * FROM " + viewName + " WHERE pledge_id IN ("
-			+ filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition!=null?internalCondition:"");
+			queryCondition = "WHERE pledge_id IN (" + filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition != null ? internalCondition:"");
 		}
 		
 		try {
+			// public static DatabaseViewFetcher getFetcherForView(String viewName, String condition, String locale, java.util.Map<InternationalizedPropertyDescription, ColumnValuesCacher> cachers, Connection connection, String... columnNames)
+			String locale = TLSUtils.getEffectiveLangCode();
 			
-			ps = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-
-			//add params if exist
-			ArrayList<FilterParam> params = generator.getFilter().getIndexedParams();
-			for (int i = 0; i < params.size(); i++) {
-				ps.setObject(i + 1, params.get(i).getValue(),params.get(i).getSqlType());	
-			}
-					
-			ResultSet rs = ps.executeQuery();
-			rs.setFetchSize(500);
+			DatabaseViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView(queryView, queryCondition, locale, generator.getColumnCachers(), conn, "*");			
+			ResultSet rs = fetcher.fetch(generator.getFilter().getIndexedParams());
+			
 			rsmd = rs.getMetaData();
 			
 			//Set parameters to query
@@ -175,11 +175,10 @@ public abstract class ColumnWorker {
 			
 			int colsCount = rsmd.getColumnCount()+1;
 			
+			
 			columnsMetaData=new HashMap<String,String>();
 			
 			for (int i = 1; i < colsCount; i++){
-//				if ( viewName.equals("v_donor_funding")) 
-//					logger.info(i + " - " + rsmd.getColumnLabel(i).toLowerCase() );
 			    columnsMetaData.put(rsmd.getColumnLabel(i).toLowerCase(), rsmd.getColumnName(i).toLowerCase());
 			}
 					
@@ -201,7 +200,7 @@ public abstract class ColumnWorker {
 			rs.close();
 
 		} catch (SQLException e) {
-			logger.error("Unable to complete extraction for column "+columnName+". Master query was "+query);
+			logger.error(String.format("Unable to complete extraction for column %s. Master query was run on view %s, condition was", columnName, viewName, queryCondition));
 			logger.error(e);
 			e.printStackTrace();
 		} catch (Exception e) {

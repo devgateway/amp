@@ -244,7 +244,7 @@ public class GroupColumn extends Column<Column> {
         	myFilters	= src.getWorker().getGenerator().getFilter();
         }
         catch (NullPointerException e) {
-			logger.warn("Could not get filter object when type is: " + category);
+			//logger.warn("Could not get filter object when type is: " + category);
 		}
        if ( (reportMetadata.getAllowEmptyFundingColumns() != null && reportMetadata.getAllowEmptyFundingColumns()) && 
     		  ( category.equals(ArConstants.YEAR) || category.equals(ArConstants.QUARTER) 
@@ -487,7 +487,7 @@ public class GroupColumn extends Column<Column> {
         	List<Column> columns = ret.getItems();
         	for(Column column:columns)
         	{
-        		System.out.println("column = " + column);
+        		//System.out.println("column = " + column);
         		if (column.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS) || column.getName().equals(ArConstants.REAL_DISBURSEMENTS))
         		{
         			detachCells(column);

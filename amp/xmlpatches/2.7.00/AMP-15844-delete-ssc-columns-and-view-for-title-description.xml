@@ -12,8 +12,8 @@
                 delete from amp_columns where extractorview like 'v_ssc_component_title';
                 delete from amp_columns where extractorview like 'v_ssc_component_description';
 
-                drop view v_ssc_component_title;
-                drop view v_ssc_component_description;
+                drop view if exists v_ssc_component_title;
+                drop view if exists v_ssc_component_description;
 			</lang>
 		</script>
 	</apply>

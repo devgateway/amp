@@ -194,7 +194,6 @@ function init() {
 			if (layerLoadCount === 2) {
 				createMapAddLayers(basemap, countrymap);
 			}
-			
 		});
 	}
 	if (countrymap.loaded) {
@@ -1305,11 +1304,6 @@ function addResultsToMap(featureSet) {
 	});
 }
 
-
-
-
-
-
 function generate_colors_styling(color)
 {
 	if (dojo.isIE <= 8)
@@ -1906,8 +1900,9 @@ function placemedia(){
 //Get info windows content
 
 function getContent(graphicAttributes, baseGraphic) {
+	showLoading();
     var attributes;
-
+    
     var xhrArgs = {
     	url : "/esrigis/datadispatcher.do?getcontent=true&id="+graphicAttributes.id+"&name="+graphicAttributes.name,
         handleAs : "json",
@@ -1985,7 +1980,9 @@ function getContent(graphicAttributes, baseGraphic) {
 
     }
     var deferred = dojo.xhrGet(xhrArgs);
+    hideLoading();
     return attributes;
+    
 }
 
 

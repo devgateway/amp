@@ -220,7 +220,7 @@ public class XlsHelper {
 					values.add(calculations.getTotalCommitments().toString());
 					values.add(calculations.getTotActualDisb().toString());
 					
-					for (int j = 0; j < columnNames.size(); j++) {
+					for (int j = 0; j < columnNames.size()-1; j++) {
 						HSSFCell cell = row.createCell(j);
 						str = new HSSFRichTextString(values.get(j));
 						cell.setCellValue(str);

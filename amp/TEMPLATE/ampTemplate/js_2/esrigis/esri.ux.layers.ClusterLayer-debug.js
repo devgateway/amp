@@ -56,9 +56,9 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
 
         //connects for cluster layer itself that handles the loading and mouse events on the graphics
         dojo.connect(this, 'onLoad', this.handleLayerLoaded);
-        dojo.connect(this, 'onMouseOver', this.handleMouseOver);
-        dojo.connect(this, 'onMouseOut', this.handleMouseOut);
-        dojo.connect(this, 'onMouseClick', this.handleMouseClick);
+        //dojo.connect(this, 'onMouseOver', this.handleMouseOver);
+       // dojo.connect(this, 'onMouseOut', this.handleMouseOut);
+        dojo.connect(this, 'onClick', this.handleMouseClick);
         
         //default symbol bank for clusters and single graphics
         //TODO: allow for user supplied symbol bank to override.  just use an ESRI renderer somehow?
@@ -124,17 +124,47 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
     handleLayerLoaded: function(lyr) {
         this.clusterFeatures();
     },
+   
+    //Find the point under the text when the user click
+    pointToExtent : function (map, point, toleranceInPixel) {
+    	  //calculate map coords represented per pixel
+    	  var pixelWidth = map.extent.getWidth() / map.width;
+    	  //calculate map coords for tolerance in pixel
+    	  var toleraceInMapCoords = toleranceInPixel * pixelWidth;
+    	  //calculate & return computed extent
+    	  var pointExtent=new esri.geometry.Extent( point.x - toleraceInMapCoords,
+    	               point.y - toleraceInMapCoords,
+    	               point.x + toleraceInMapCoords,
+    	               point.y + toleraceInMapCoords,
+    	               map.spatialReference );
+    	  
+    	  return filteredGraphics = dojo.filter(this.graphics, function(graphic) {
+    		    return pointExtent.contains(graphic.geometry);
+    		  });	  
+    },
 
-    //fires when any graphic (clustered or single) is moused over
-    handleMouseOver: function(evt) {
-        var graphic = evt.graphic;
+    //fires when any graphic (clustered or single) is clicked
+    handleMouseClick: function(evt) {
+    	var graphic = evt.graphic;
         if (graphic.symbol.type == 'textsymbol' || graphic.symbol.type == 'simplelinesymbol') {
+        	var pointsUnderText = this.pointToExtent(this._map,graphic.geometry,1);
+        	for ( var int = 0; int < pointsUnderText.length; int++) {
+        		if (pointsUnderText[int].attributes){
+					if (pointsUnderText[int].attributes.isExpanded== true){
+						this.handleMouseOut(pointsUnderText[0]);
+						return;
+					}
+					dojo.mixin(pointsUnderText[int].attributes, {isExpanded: true});
+					graphic = pointsUnderText[0];
+					break;
+				}
+			}
             if (graphic.attributes) {
-                if (graphic.attributes.baseGraphic && graphic.attributes.baseGraphic.task) {
+            	if (graphic.attributes.baseGraphic && graphic.attributes.baseGraphic.task) {
                     graphic.attributes.baseGraphic.task.cancel();
                 }
             }
-            return;
+           
         }
         if (graphic.attributes.isCluster) { //cluster mouse over
             if (graphic.attributes.clustered) {
@@ -149,7 +179,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                     baseGraphic = graphic.attributes.baseGraphic;
                     var attr = getContent(graphic.attributes, baseGraphic);
                     graphic.setAttributes(attr);
-                    graphic.attributes.baseGraphic.task.cancel();
+                    //graphic.attributes.baseGraphic.task.cancel();
                 }
             } else {
                 if (graphic.attributes.id) {
@@ -250,7 +280,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
     //fires when any cluster graphic (flare or individual) is moused out of
     //this utilizes the DelayedTask from ExtJS's library.  If anyone wants to re-write using Dojo, by all means...
     handleMouseOut: function(evt) {
-        var graphic = evt.graphic,
+        var graphic = evt,
             task;
 
         if (graphic.symbol.type == 'textsymbol') {
@@ -263,7 +293,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 delete g.clusterGraphics;
                 g.attributes.clustered = false;
             }, this, [graphic]);
-            task.delay(900);
+            task.delay(0);
             graphic.task = task;
         } else {
             if (graphic.attributes.baseGraphic) { //cluster flare
@@ -272,21 +302,13 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                     delete g.attributes.baseGraphic.clusterGraphics;
                     g.attributes.baseGraphic.attributes.clustered = false;
                 }, this, [graphic]);
-                task.delay(900);
+                task.delay(0);
                 graphic.attributes.baseGraphic.task = task;
             }
-            //if (map.infoWindow.isShowing & !this.keepinfowindow) {
-            //    map.infoWindow.hide();
-            //}
+            if (map.infoWindow.isShowing & !this.keepinfowindow) {
+                map.infoWindow.hide();
+            }
         }
-    },
-    
-    
-    handleMouseClick: function(evt) {
-        var graphic = evt.graphic;
-        //this.showInfoWindow(graphic);
-        this.keepinfowindow=true;
-        alert('click');
     },
     
     
@@ -402,9 +424,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                                     	}
                                         this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), currentSymbol, graphicAtts));
                                     }, this);
-                                }
-                                else
-                                {
+                                }else{
                                     this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), sym, graphicAtts));
                                 }
 

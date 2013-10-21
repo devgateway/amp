@@ -49,12 +49,12 @@ function closeHide(divId) {
 	}
 }
 
-var breaksColors = [ new dojo.Color([ 26, 150, 65, 1 ]),
-		new dojo.Color([ 166, 217, 106, 1 ]),
-		new dojo.Color([ 255, 242, 0, 1 ]),
-		new dojo.Color([ 255, 127, 39, 1 ]),
-		new dojo.Color([ 215, 25, 28, 1 ]),
-		new dojo.Color([ 195, 195, 195, 1 ]) ];
+var breaksColors = [ new dojo.Color([ 26, 150, 65, 0.9 ]),
+		new dojo.Color([ 166, 217, 106, 0.9 ]),
+		new dojo.Color([ 255, 242, 0, 0.9 ]),
+		new dojo.Color([ 255, 127, 39, 0.9 ]),
+		new dojo.Color([ 215, 25, 28, 0.9 ]),
+		new dojo.Color([ 195, 195, 195, 0.9 ]) ];
 
 var colorsOrange = [ new dojo.Color([ 229, 252, 120, 0.8 ]),
 		new dojo.Color([ 224, 231, 102, 0.9 ]),

@@ -2106,6 +2106,15 @@ function refreshBoxes(o){
 	if (div!=null)
 		div.innerHTML = inner;
 	
+	div = document.getElementById("topSecondaryProgramsTitle");
+	if (startYear == endYear) {
+		inner = trnTopSecondaryPrograms + " (" + startYear + ")";
+	} else {
+		inner = trnTopSecondaryPrograms + " (" + startYear + "-" + endYear + ")";
+	}
+	if (div!=null)
+		div.innerHTML = inner;
+	
 }
 
 function updateTitles(){

@@ -99,6 +99,7 @@ var trnTopRegions = "";
 var trnTopOrganizations = "";
 var trnTopNPOs = "";
 var trnTopPrograms = "";
+var trnTopSecondaryPrograms = "";
 var trnShowFilterSetttings = "";
 var trnHideFilterSetttings = "";
 var trnTotalCommitments = "";
@@ -193,6 +194,7 @@ function initializeTranslations(){
 	trnTopOrganizations="<digi:trn jsFriendly='true'>Top Organizations</digi:trn>"; 
 	trnTopNPOs="<digi:trn jsFriendly='true'>Top NPO</digi:trn>"; 
 	trnTopPrograms="<digi:trn jsFriendly='true'>Top Programs</digi:trn>"; 
+	trnTopSecondaryPrograms="<digi:trn jsFriendly='true'>Top Secondary Programs</digi:trn>"; 
 	trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter settings</digi:trn>"; 
 	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
 	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>:";

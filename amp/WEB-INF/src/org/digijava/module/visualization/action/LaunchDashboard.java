@@ -88,6 +88,7 @@ public class LaunchDashboard extends Action {
 			dForm.setDashboard(dashboard);
 			dForm.setFilter(filter);
 			dForm.getFilter().setAgencyType(dashboard.getPivot());
+			dForm.getFilter().setAgencyTypeDefault(dashboard.getPivot());
 			dForm.getFilter().setAgencyTypeFilter(dashboard.getPivot());
 			dForm.getFilter().setAgencyTypeQuickFilter(dashboard.getPivot());
 			List<AmpDashboardGraph> listDG = org.digijava.module.visualization.util.DbUtil.getDashboardGraphByDashboard(dId);

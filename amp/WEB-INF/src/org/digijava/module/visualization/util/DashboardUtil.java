@@ -1051,6 +1051,7 @@ public class DashboardUtil {
 			if (tempSettings!=null && tempSettings.getCurrency()!=null){
 				filter.setCurrencyId(tempSettings.getCurrency().getAmpCurrencyId());
 				filter.setCurrencyIdQuickFilter(tempSettings.getCurrency().getAmpCurrencyId());
+				filter.setCurrencyIdDefault(filter.getCurrencyId());
 			}
 		}
 		List<CategoryConstants.HardCodedCategoryValue> adjustmentTypeList = new ArrayList<CategoryConstants.HardCodedCategoryValue>();
@@ -1072,6 +1073,7 @@ public class DashboardUtil {
 		filter.setPeacebuildingList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACEBUILDING_GOALS_KEY)));
         
         filter.setShowAmountsInThousands(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))==0?1:Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
+        filter.setShowAmountsInThousandsDefault(filter.getShowAmountsInThousands());
 	}
 
 }

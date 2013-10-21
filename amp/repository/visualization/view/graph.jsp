@@ -16,6 +16,7 @@
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
 <html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
 <html:hidden property="filter.showAmountsInThousands" styleId="showAmountsInThousands"/>
+<html:hidden property="filter.showAmountsInThousandsDefault" styleId="showAmountsInThousandsDefault"/>
 <html:hidden property="filter.showMonochrome" styleId="showMonochrome"/>
 <html:hidden property="filter.commitmentsVisible" styleId="commitmentsVisible"/>
 <html:hidden property="filter.disbursementsVisible" styleId="disbursementsVisible" />
@@ -24,6 +25,8 @@
 <html:hidden property="filter.transactionType" styleId="transactionType" />
 <html:hidden property="filter.agencyType" styleId="agencyType" />
 <html:hidden property="filter.currencyId" styleId="currencyId" />
+<html:hidden property="filter.agencyTypeDefault" styleId="agencyTypeDefault" />
+<html:hidden property="filter.currencyIdDefault" styleId="currencyIdDefault" />
 <html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
 <html:hidden property="filter.groupSeparator" styleId="groupSeparator" />
 <html:hidden property="filter.decimalSeparator" styleId="decimalSeparator" />

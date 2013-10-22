@@ -191,7 +191,7 @@ public class ContentTranslationUtil {
             for (int i = 0; i < types.length; i++){
             	String fieldName = propertyNames[i];
             	Field field = getFieldByName(clazz, fieldName);
-                if (field.getAnnotation(TranslatableField.class) != null){
+                if (field.getAnnotation(TranslatableField.class) != null && (previousState == null || (currentState[i] != null && !currentState[i].equals(previousState[i])))){
                 	FieldTranslationPack ftp;
                     Long ftpId;
                 	if (isVersionable){ //if versionable we already cloned the translations
@@ -217,10 +217,17 @@ public class ContentTranslationUtil {
                     	baseTranslation = ftp.getNonNull(getBaseLanguage(), TLSUtils.getLangCode());
                     else
                         //for non-versionable entities just load the base translation from the db
-                    	baseTranslation = loadFieldTranslationInLocale(objectClass, objectId, fieldName, getBaseLanguage());
-                    
-                    if (baseTranslation == null)
+                        baseTranslation = loadFieldTranslationInLocale(objectClass, objectId, fieldName, getBaseLanguage());
+
+                    if (baseTranslation == null){
                     	logger.debug("Object without base translation");
+                        //create base translation for object
+                        baseTranslation = (String) loadFieldFromDb(clazz, objectId, fieldName);
+                        ftp.add(getBaseLanguage(), baseTranslation);
+                        //restore current state of the object
+                        currentState[i] = baseTranslation;
+                        stateModified = true;
+                    }
                     else{
                     	logger.debug("Updated base translation with: " + baseTranslation + " (currentlocale =" + TLSUtils.getLangCode() + ")");
                     	if (previousState != null && previousState[i] != null){
@@ -256,7 +263,7 @@ public class ContentTranslationUtil {
      * evict the translations associated with the object from the cache
      * @param entity current object
      */
-    public static void evictEntitiyFromCache(Object entity){
+    public static void evictEntityFromCache(Object entity){
         String key = getCacheKey(getObjectClass(entity), getObjectId(entity));
         cache.evict(key);
     }

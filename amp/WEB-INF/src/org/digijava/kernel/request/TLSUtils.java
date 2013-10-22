@@ -65,7 +65,7 @@ public class TLSUtils {
         Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
         if (navigationLanguage != null){
             if (TLSUtils.getThreadLocalInstance().locale != null)
-                logger.error("TLSUtils -> Populate Locale Update from " + TLSUtils.getThreadLocalInstance().locale.getCode() + " to " + navigationLanguage.getCode());
+                logger.debug("TLSUtils -> Populate Locale Update from " + TLSUtils.getThreadLocalInstance().locale.getCode() + " to " + navigationLanguage.getCode());
             TLSUtils.getThreadLocalInstance().locale = navigationLanguage;
         }
 	}

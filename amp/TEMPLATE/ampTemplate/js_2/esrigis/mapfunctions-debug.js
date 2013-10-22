@@ -344,23 +344,19 @@ function createPeaceBuildingFeatureLayer() {
 	      	var jsonDataFunding = jsonData[0];
 	      	var jsonDataMapping = jsonData[1];
 	      	
-//	      	console.log(jsonDataFunding);
-//	      	console.log(jsonDataMapping);
 	      	
 	      	var locationMapping = [];
 	      	dojo.forEach(jsonDataMapping, function(mapItem) {
 	      		locationMapping[mapItem.key] = mapItem.value;
 					});
 					
-					//console.log(locationMapping);
+					
 	      	
 	      	locations = [];
 	      	dojo.forEach(jsonDataFunding, function(location) {
 						locations.push(location);
 					});
 					
-					//MapFindLocation(COUNTY);
-	      	
 	      	
 	      	dojo.connect(queryTask, "onComplete", function(featureSet) {
 	      		
@@ -408,6 +404,8 @@ function createPeaceBuildingFeatureLayer() {
 							
 								var max = getMaxValue(locations, typeFunding);
 								var min = getMinValue(locations, typeFunding);
+								
+								
 							
 								var breaksLog = (maxLog - minLog) / numRanges;
 								var breaks = (max - min) / numRanges;
@@ -419,11 +417,9 @@ function createPeaceBuildingFeatureLayer() {
 								for ( var i = 0; i < numRanges; i++) {
 									rangeColors.push([ parseFloat(min + (i * breaks)),
 											parseFloat(min + ((i + 1) * breaks)) ]);
-									renderer.addBreak(parseFloat(min + (i * breaks)), parseFloat(min
-											+ ((i+2) * breaks)), new esri.symbol.SimpleFillSymbol(
-											esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
 								}
 	      		
+
 	      		dojo.forEach(featureSet.features, function(feature) {
 
 								// Read current attributes and assign a new set
@@ -437,6 +433,7 @@ function createPeaceBuildingFeatureLayer() {
 								var mtef = 0;
 								
 								
+								
 								dojo.forEach(locations, function(jsonDataItem) {
 									if (geoId == jsonDataItem.geoId) {
 										commitments = jsonDataItem.commitments;
@@ -445,6 +442,7 @@ function createPeaceBuildingFeatureLayer() {
 										mtef = jsonDataItem.mtef;
 									}
 								})
+								
 								
 								
 								var names=new Array();
@@ -475,12 +473,9 @@ function createPeaceBuildingFeatureLayer() {
 								
 							});
 							
-	      		
-	      		//updateLocationAttributes(regionalFeatureLayer, typeFunding);
-	      		//regionalFeatureLayer.setRenderer(renderer);
-	      		
-	      		
+	      		var df = new DecimalFormat(currentFormat);
 						dojo.forEach(featureSet.features, function(feature) {
+								var curSymbol = null;
 		      			if (feature.attributes[typeFundingAttrName] == null ||
 		      				feature.attributes[typeFundingAttrName]==0) {
 		      					feature.setSymbol(emptySymbol);
@@ -488,13 +483,20 @@ function createPeaceBuildingFeatureLayer() {
 		      				var ammt = feature.attributes[typeFundingAttrName];
 		      				var symbol = null;
 		      				for (rangeIdx = 0; rangeIdx < rangeColors.length; rangeIdx ++) {
-		      					if ((ammt == rangeColors[rangeIdx][0]) || (ammt > rangeColors[rangeIdx][0] && ammt < rangeColors[rangeIdx][1])) {
-		      						symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[rangeIdx]);
+//		      					if ((ammt == rangeColors[rangeIdx][0]) || (ammt > rangeColors[rangeIdx][0] && ammt < rangeColors[rangeIdx][1])) {
+		      					if (ammt >= rangeColors[rangeIdx][0] && ammt <= rangeColors[rangeIdx][1]) {
+		      						curSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[rangeIdx]);
+		      						
 		      						break;
 		      					}
 		      				}
 		      				
-		      				feature.setSymbol(symbol);
+		      				feature.attributes["COMMITMENTSFMT"] = df.format(feature.attributes["COMMITMENTSFMT"]);
+		      				feature.attributes["DISBURSEMENTSFMT"] = df.format(feature.attributes["DISBURSEMENTSFMT"]);
+		      				feature.attributes["EXPENDITURESFMT"] = df.format(feature.attributes["EXPENDITURESFMT"]);
+		      				feature.attributes["MTEFFMT"] = df.format(feature.attributes["MTEFFMT"]);
+		      				
+		      				feature.setSymbol(curSymbol);
 		      			}
 								regionalFeatureLayer.add(feature);
 		      		});	
@@ -505,12 +507,6 @@ function createPeaceBuildingFeatureLayer() {
 						map.reorderLayer(map.getLayer("regionalFeatureLayer"), 0);
 
 						
-						
-						/*
-						dojo.connect(regionalFeatureLayer, "onClick", function(evt) {
-							alert("ggg");
-							console.log(evt.graphic.geometry.infoTemplate);
-						});*/
 						
 						peaceBuldingClickHandler = dojo.connect(map, "onClick", function(evt) {
 							map.infoWindow.resize(300, 200);

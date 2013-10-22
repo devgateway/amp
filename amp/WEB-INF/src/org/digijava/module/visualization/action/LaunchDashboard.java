@@ -79,7 +79,10 @@ public class LaunchDashboard extends Action {
 			DashboardFilter filter = new DashboardFilter();
 			if (dashboard.getBaseType()==4)//for Deal based dashboard set MTEF projections as Transaction type by default
 	        	filter.setTransactionType(org.digijava.module.aim.helper.Constants.MTEFPROJECTION);
-	        
+
+
+
+
 			DashboardUtil.initializeFilter(filter, request);
 			dForm.setDashboard(dashboard);
 			dForm.setFilter(filter);
@@ -215,6 +218,10 @@ public class LaunchDashboard extends Action {
 			default:
 				break;
 			}
+
+        if (request.getParameter("fromMap") != null && request.getParameter("fromMap").trim().equalsIgnoreCase("true")) {
+            dForm.getFilter().setRegionId(Long.parseLong(request.getParameter("filter.regionId")));
+        }
 			
 			dForm.getFilter().setFromGenerator(true);
 			//Set a reduced list of Organization Groups considering the role in the list of activities

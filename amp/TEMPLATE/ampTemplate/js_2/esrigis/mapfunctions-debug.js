@@ -341,8 +341,21 @@ function createPeaceBuildingFeatureLayer() {
 	      handleAs: "json",
 	      load: function(jsonData){
 	      	
+	      	var jsonDataFunding = jsonData[0];
+	      	var jsonDataMapping = jsonData[1];
+	      	
+//	      	console.log(jsonDataFunding);
+//	      	console.log(jsonDataMapping);
+	      	
+	      	var locationMapping = [];
+	      	dojo.forEach(jsonDataMapping, function(mapItem) {
+	      		locationMapping[mapItem.key] = mapItem.value;
+					});
+					
+					//console.log(locationMapping);
+	      	
 	      	locations = [];
-	      	dojo.forEach(jsonData, function(location) {
+	      	dojo.forEach(jsonDataFunding, function(location) {
 						locations.push(location);
 					});
 					
@@ -424,7 +437,7 @@ function createPeaceBuildingFeatureLayer() {
 								var mtef = 0;
 								
 								
-								dojo.forEach(jsonData, function(jsonDataItem) {
+								dojo.forEach(locations, function(jsonDataItem) {
 									if (geoId == jsonDataItem.geoId) {
 										commitments = jsonDataItem.commitments;
 										disbursements = jsonDataItem.disbursements;
@@ -447,7 +460,8 @@ function createPeaceBuildingFeatureLayer() {
 									"COUNTY" : county,
 									"DISTRICT" : district,
 									"GEO_ID" : geoId,
-									"NAME" : names[implementationLevel[0].mapId]
+									"NAME" : names[implementationLevel[0].mapId],
+									"DB_ID" : locationMapping[geoId]
 								});
 								
 								
@@ -456,9 +470,8 @@ function createPeaceBuildingFeatureLayer() {
 												+ translate('Commitments')+": ${COMMITMENTSFMT}<br/> "
 												+ translate('Disbursements')+": ${DISBURSEMENTSFMT}<br/> "
 												+ translate('Expenditures')+": ${EXPENDITURESFMT}<br/> "
-												+ translate('MTEF')+": ${MTEFFMT}<br/> "
-						
-								));
+												+ translate('MTEF')+": ${MTEFFMT}<br/> " 
+												+ "<a href='/visualization/launchDashboard.do?fromMap=true&reset=true&id=4&filter.regionId=${DB_ID}' target='_new'>Dashboard</a>"));
 								
 							});
 							

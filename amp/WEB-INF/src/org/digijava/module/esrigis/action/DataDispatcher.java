@@ -50,6 +50,7 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -157,7 +158,20 @@ public class DataDispatcher extends MultiAction {
                 new Integer(3), new BigDecimal(1), filter);
         filter.setFilterByPeacebuildingMarker(false);
 
-        jsonArray.addAll(mapregions);
+        Collection<AmpCategoryValueLocations> allRegions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
+
+        List allRegs = new ArrayList();
+        for(AmpCategoryValueLocations catValLoc : allRegions) {
+            if (catValLoc.getGeoCode() != null && !catValLoc.getGeoCode().trim().isEmpty()) {
+                allRegs.add(new java.util.AbstractMap.SimpleEntry<String, Long>(catValLoc.getGeoCode(), catValLoc.getId()));
+            }
+        }
+
+        List withGeoIdMapping = new ArrayList();
+        withGeoIdMapping.add(mapregions);
+        withGeoIdMapping.add(allRegs);
+
+        jsonArray.addAll(withGeoIdMapping);
         PrintWriter pw = response.getWriter();
         pw.write(jsonArray.toString());
         pw.flush();
@@ -555,11 +569,11 @@ public class DataDispatcher extends MultiAction {
 		ArrayList<SimpleLocation> mapregions = new ArrayList<SimpleLocation>();
 		
 		
-		
+
 		mapregions = DbHelper.getFundingByRegionList(locations, implementationLevel, filter.getCurrencyCode(), startDate, endDate, 
 				/*filter.getTransactionType(),*/ CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, 
 				new Integer(3), new BigDecimal(1), filter);
-		
+
 		jsonArray.addAll(mapregions);
 		PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());

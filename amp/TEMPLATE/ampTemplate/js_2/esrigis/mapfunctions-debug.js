@@ -302,7 +302,7 @@ var peaceBuldingCurLoc = null;
 function createPeaceBuildingFeatureLayer() {
 	
 	
-	
+	showLoading();
 	if (map.getLayer("regionalFeatureLayer") != null) {
 		map.removeLayer(map.getLayer("regionalFeatureLayer"));
 		peaceBuldingClickHandler.remove();
@@ -528,6 +528,8 @@ function createPeaceBuildingFeatureLayer() {
 							map.setMapCursor('default');
 							peaceBuldingCurLoc = null;
 						});
+						
+						hideLoading();
 	     		}); 
 	     			
 	      	queryTask.execute(query,function(evt){

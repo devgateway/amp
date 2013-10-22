@@ -19,6 +19,10 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 	 */
 	public final Map<PropertyDescription, ColumnValuesCacher> cachers;
 	public final String locale;
+	
+	/**
+	 * the description of the view this instance will be fetching and translating
+	 */
 	public final I18nViewDescription viewDesc;
 	
 	/**
@@ -53,7 +57,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 	@Override
 	public ResultSet fetchRows(ArrayList<FilterParam> params) throws SQLException
 	{
-		String queryColumnsPart = buildColumnsPart();
+		String queryColumnsPart = buildColumnsPart(); // rewrite query's SELECT part
 		String query = "SELECT " + queryColumnsPart + " FROM " + this.viewName + " " + this.condition;
 		ResultSet rawResults = rawRunQuery(connection, query, params);
 				
@@ -128,16 +132,17 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 		
 		List<String> columnStrings = new ArrayList<String>();
 		
-		int number = 0;
+		int number = 0; // the currently-processed column name (for building the colNameToNr and colNrtoName mappings)
 		for(String columnName:this.columnNames)
 		{
 			number ++;
 			I18nViewColumnDescription colDesc = viewDesc.getColumnDescription(columnName);
 			if (colDesc == null)
-				columnStrings.add(columnName);
+				columnStrings.add(columnName); // this is a raw column, it will be fetched via SELECT
 			else
 			{
-				columnStrings.add(String.format("'' as %s", columnName)); // do not fetch this column from database - save time, memory and bandwidth
+				// this is a translated column - do not fetch it from the DB as it would be useless - save time, memory and bandwidth
+				columnStrings.add(String.format("'' as %s", columnName)); // instead, replace with a constant so as not to displace the column numbering
 			
 				colNameToColNumber.put(columnName, number);
 				colNumberToColName.put(number, columnName);

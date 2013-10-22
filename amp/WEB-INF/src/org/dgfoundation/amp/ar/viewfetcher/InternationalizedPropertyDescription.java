@@ -8,8 +8,8 @@ import java.util.*;
  * <b>IMMUTABLE</b>class holding the data necessary reading the i18n value of a property of a Translatable model<br />
  * <b>NEVER EVER MAKE THIS CLASS MUTABLE OR CONTAIN MUTABLE FIELDS</b>
  * there are two sources for fetching a translated value: <br />
- * 1. SELECT [modelColumnName] FROM [modelTableName] WHERE [modelTableId] = (id) -> for English
- * 2. SELECT translation FROM amp_content_translation where field_name = [propertyName] AND object_class = [className] AND locale = (locale) AND object_id = (id)
+ * 1. SELECT [modelTableId], [modelColumnName] FROM [modelTableName] WHERE [modelTableId] = (id) -> for English
+ * 2. SELECT object_id, translation FROM amp_content_translation where field_name = [propertyName] AND object_class = [className] AND locale = (locale) AND object_id = (id)
  * @author Dolghier Constantin
  *
  */

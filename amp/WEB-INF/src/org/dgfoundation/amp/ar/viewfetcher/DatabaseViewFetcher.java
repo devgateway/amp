@@ -201,7 +201,7 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 	 * @param viewName - the view to fetch
 	 * @param condition - the condition to pass in raw form to SQL
 	 * @param locale - the locale. Ignored if it is a non-i18n-view
-	 * @param cachers - the cacher for the fetched i18n valued. Ignored if it is a non-i18n-view
+	 * @param cachers - the cacher for the fetched i18n values. Ignored if it is a non-i18n-view
 	 * @param connection - the connection to run the SQL queries on
 	 * @param columnNames - the columns to fetch. "*" or "null" or "none" means all
 	 * @return

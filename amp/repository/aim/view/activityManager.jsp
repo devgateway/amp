@@ -116,11 +116,12 @@
 			document.aimActivityForm.sortOrder.value = "asc";
 		
 		document.aimActivityForm.sort.value=val;
-		
+
 		<digi:context name="sorting" property="context/module/moduleinstance/activityManager.do" />
-		document.aimActivityForm.action = "<%= sorting %>";
-		document.aimActivityForm.target = "_self";
-		document.aimActivityForm.submit();
+		url = "<%= sorting %>?action=sort";
+	    document.aimActivityForm.action = url;
+	    document.aimActivityForm.target="_self";
+	    document.aimActivityForm.submit();
 	}
 	
 	function resetSearch() {

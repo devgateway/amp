@@ -23,6 +23,8 @@ public class FieldTranslationPack {
     }
 
     public void add(String locale, String translation){
+        if (translation == null) //do not try to store null
+            translation = "";
         translations.put(locale, translation);
     }
 

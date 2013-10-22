@@ -19,8 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_project_id AS SELECT i.amp_activity_id, ((((i.internal_id)::text || ' ('::text) || (o.name)::text) || ')'::text) FROM amp_organisation o, amp_activity_internal_id i WHERE (o.amp_org_id = i.amp_org_id);;;
-        		</lang>
+				DROP VIEW IF EXISTS v_project_id;
+				CREATE OR REPLACE VIEW v_project_id AS 
+					SELECT i.amp_activity_id, ((((i.internal_id)::text || ' ('::text) || (o.name)::text) || ')'::text) as proj_id, o.amp_org_id as amp_org_id, o.name as orgname, i.internal_id
+					FROM amp_organisation o, amp_activity_internal_id i 
+					WHERE (o.amp_org_id = i.amp_org_id);;;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

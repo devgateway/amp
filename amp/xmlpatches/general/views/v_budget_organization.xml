@@ -19,7 +19,13 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_budget_organization AS SELECT a.amp_activity_id, (((org.name)::text || ' - '::text) || (org.budget_org_code)::text) AS budget_sector FROM amp_activity a, amp_organisation org WHERE (a.budget_organization = org.amp_org_id) ORDER BY a.amp_activity_id;;;
+					DROP VIEW IF EXISTS v_budget_organization;
+					
+			    	CREATE OR REPLACE VIEW v_budget_organization AS 
+			    		SELECT a.amp_activity_id, (org.name::text || ' - '::text) || org.budget_org_code::text AS budget_sector, org.amp_org_id as amp_org_id, org.name as orgname, org.budget_org_code
+			    			FROM amp_activity a, amp_organisation org 
+			    			WHERE (a.budget_organization = org.amp_org_id) 
+			    			ORDER BY a.amp_activity_id;;;
         		</lang>
 		</script>
 	</apply>

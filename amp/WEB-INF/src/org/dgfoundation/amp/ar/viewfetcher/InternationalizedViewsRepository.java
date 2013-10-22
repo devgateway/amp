@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 import org.digijava.module.aim.dbentity.*;
@@ -10,21 +12,122 @@ import org.digijava.module.aim.dbentity.*;
  *
  */
 public class InternationalizedViewsRepository {
+	public final static String AGREEMENT_TITLE_AND_CODE = "Agreement Title + Code";
+	public final static String CALCULATED_COLUMN = "_Calculated_Column_";
+	
+	public final static ColumnValueCalculator agreement_title_code_calculator = new ColumnValueCalculator() {
+		
+		@Override
+		public String calculateValue(ResultSet resultSet) throws SQLException{
+			return sqlconcat(resultSet.getString("agreement_title"), " - ", resultSet.getString("Agreement_Code"));
+		}
+	};	
+	
+	public final static ColumnValueCalculator budget_sector_calculator = new ColumnValueCalculator() {
+		
+		@Override
+		public String calculateValue(ResultSet resultSet) throws SQLException{
+			//(org.name::text || ' - '::text) || org.budget_org_code::text
+			return sqlconcat(resultSet.getString("orgname"), " - ", resultSet.getString("budget_org_code"));
+		}
+	};	
+
+	public final static ColumnValueCalculator budget_program_calculator = new ColumnValueCalculator() {
+		
+		@Override
+		public String calculateValue(ResultSet resultSet) throws SQLException{
+			// prog.theme_code::text || ' - '::text) || prog.name::text
+			return sqlconcat(resultSet.getString("theme_code"), " - ", resultSet.getString("progname"));
+		}
+	};
+	
+	public final static ColumnValueCalculator organization_projectid_calculator = new ColumnValueCalculator() {
+		
+		@Override
+		public String calculateValue(ResultSet resultSet) throws SQLException{
+			// (org.name::text || ' -- '::text) || aaii.internal_id::text
+			return sqlconcat(resultSet.getString("orgname"), " - ", resultSet.getString("internal_id"));
+		}
+	};		
+
+	public final static ColumnValueCalculator projectid_calculator = new ColumnValueCalculator() {
+		
+		@Override
+		public String calculateValue(ResultSet resultSet) throws SQLException{
+			// (org.name::text || ' -- '::text) || aaii.internal_id::text
+			return sqlconcat(resultSet.getString("internal_id"), " (", resultSet.getString("orgname"), ")");
+		}
+	};
+	
+	/**
+	 * concatenates all of the input String's. If <b>any</b> of them is null, returns null
+	 * @param inputs
+	 * @return
+	 */
+	public final static String sqlconcat(String... inputs)
+	{
+		StringBuilder bld = new StringBuilder();
+		for(String str:inputs)
+		{
+			if (str == null)
+				return null;
+			bld.append(str);
+		}
+		return bld.toString();
+	}
+
 	public final static Map<String, I18nViewDescription> i18Models =  // Map<view_name, view_description>
 			Collections.<String, I18nViewDescription>unmodifiableMap(
 			new HashMap<String, I18nViewDescription>()
 			{{
 				addViewDef(this, new I18nViewDescription("v_act_pp_details").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name")));
+				
 				addViewDef(this, new I18nViewDescription("v_actors").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_actor_id", AmpActor.class, "name")));
-				// backlog: v_agreement_close_date makes concatenations in SQL -> untranslatable
-				// backlog: v_agreement_code makes concatenations in SQL -> untranslatable
-				// backlog: v_agreement_effective_date
-				// backlog: v_agreement_signature_date
-				// backlog: v_agreement_title_code
-				// backlog: v_budget_organization does concatenation with orgname
-				// backlog: v_budget_program does concatenation with prog.name 
+				
+				addViewDef(this, new I18nViewDescription("v_agreement_close_date").
+						addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
+						addColumnDef(new I18nViewColumnDescription(AGREEMENT_TITLE_AND_CODE, "v_agreement_close_date", agreement_title_code_calculator)).
+						addColumnDef(new I18nViewColumnDescription("Donor Agency", "amp_org_id", AmpOrganisation.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_agreement_code").
+						addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
+						addColumnDef(new I18nViewColumnDescription(AGREEMENT_TITLE_AND_CODE, "v_agreement_code", agreement_title_code_calculator)).
+						addColumnDef(new I18nViewColumnDescription("Donor Agency", "amp_org_id", AmpOrganisation.class, "name")));
+				
+				addViewDef(this, new I18nViewDescription("v_agreement_effective_date").
+						addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
+						addColumnDef(new I18nViewColumnDescription(AGREEMENT_TITLE_AND_CODE, "v_agreement_effective_date", agreement_title_code_calculator)).
+						addColumnDef(new I18nViewColumnDescription("Donor Agency", "amp_org_id", AmpOrganisation.class, "name")));			
+
+				addViewDef(this, new I18nViewDescription("v_agreement_signature_date").
+						addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
+						addColumnDef(new I18nViewColumnDescription(AGREEMENT_TITLE_AND_CODE, "v_agreement_signature_date", agreement_title_code_calculator)).
+						addColumnDef(new I18nViewColumnDescription("Donor Agency", "amp_org_id", AmpOrganisation.class, "name")));			
+
+				addViewDef(this, new I18nViewDescription("v_agreement_title_code").
+						addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
+						addColumnDef(new I18nViewColumnDescription(AGREEMENT_TITLE_AND_CODE, "v_agreement_title_code", agreement_title_code_calculator)).
+						addColumnDef(new I18nViewColumnDescription("Donor Agency", "amp_org_id", AmpOrganisation.class, "name")));			
+
+
+				addViewDef(this, new I18nViewDescription("v_budget_organization").
+						addColumnDef(new I18nViewColumnDescription("budget_sector", "v_budget_organization", budget_sector_calculator)).
+						addColumnDef(new I18nViewColumnDescription("orgname", "amp_org_id", AmpOrganisation.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_budget_program").
+						addColumnDef(new I18nViewColumnDescription("budget_program", "v_budget_program", budget_program_calculator)).
+						addColumnDef(new I18nViewColumnDescription("progname", "amp_theme_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_organization_projectid").
+						addColumnDef(new I18nViewColumnDescription("name", "v_organization_projectid", organization_projectid_calculator)).
+						addColumnDef(new I18nViewColumnDescription("orgname", "amp_org_id", AmpOrganisation.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_project_id").
+						addColumnDef(new I18nViewColumnDescription("proj_id", "v_project_id", projectid_calculator)).
+						addColumnDef(new I18nViewColumnDescription("orgname", "amp_org_id", AmpOrganisation.class, "name")));
+
 				
 				// QUESTION: AmpComponent should not be translateable? If it should - v_component_* should be added to the conf, too
 				// backlog: v_organization_projectid does concatenation with orgname, but not used in reports
@@ -320,7 +423,7 @@ public class InternationalizedViewsRepository {
 			String replacingIndexColumnName = column.indexColumnName; // the index column we are using
 			if (!columns.contains(columnName))
 				throw new RuntimeException("trying to override an nonexisting column: " + columnName + " of table " + viewDesc.viewName);
-			if (!columns.contains(replacingIndexColumnName))
+			if ((!column.isCalculated()) && (!columns.contains(replacingIndexColumnName)))
 				throw new RuntimeException("trying to override an i18n by using a non-existant ID column " + replacingIndexColumnName + " of table " + viewDesc.viewName);
 		}
 		

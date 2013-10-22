@@ -16,7 +16,7 @@ public class TLSUtils {
 	private static ThreadLocal<TLSUtils> threadLocalInstance = new ThreadLocal<TLSUtils>();
 	
 	public Site site;
-	public Locale locale;
+	protected Locale locale;
 	public HttpServletRequest request;
 	
 	public static String getLangCode()
@@ -26,7 +26,8 @@ public class TLSUtils {
 			return null;
 		if (instance.locale == null)
 			return null;
-		return instance.locale.getCode();
+		String res = instance.locale.getCode();
+		return res;
 	}
 	
 	/**
@@ -70,6 +71,11 @@ public class TLSUtils {
 		return res;
 	}
 	
+	public void setLocale(Locale locale)
+	{
+		this.locale = locale;
+	}
+	
 	public static void populate(HttpServletRequest request){
 		SiteDomain siteDomain = RequestUtils.getSiteDomain(request);
 		TLSUtils.getThreadLocalInstance().request = request;
@@ -77,14 +83,16 @@ public class TLSUtils {
         Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
         if (navigationLanguage != null){
             if (TLSUtils.getThreadLocalInstance().locale != null)
+            {
                 logger.debug("TLSUtils -> Populate Locale Update from " + TLSUtils.getThreadLocalInstance().locale.getCode() + " to " + navigationLanguage.getCode());
-            TLSUtils.getThreadLocalInstance().locale = navigationLanguage;
+            }
+            TLSUtils.getThreadLocalInstance().setLocale(navigationLanguage);
         }
 	}
 	
 	public static void forceLocaleUpdate(Locale locale){
 		logger.debug("TLSUtils -> Force Locale Update from " + (TLSUtils.getThreadLocalInstance().locale!=null?TLSUtils.getThreadLocalInstance().locale.getCode():"null") + " to " + locale.getCode());
-		TLSUtils.getThreadLocalInstance().locale = locale;
+		TLSUtils.getThreadLocalInstance().setLocale(locale);
 	}
 	
 	

@@ -17,7 +17,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 	/**
 	 * Map<ClassName, ColumnCache>
 	 */
-	public final Map<InternationalizedPropertyDescription, ColumnValuesCacher> cachers;
+	public final Map<PropertyDescription, ColumnValuesCacher> cachers;
 	public final String locale;
 	public final I18nViewDescription viewDesc;
 	
@@ -31,7 +31,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 	 */
 	private Map<Integer, String> colNumberToColName;
 	
-	public I18nDatabaseViewFetcher(String viewName, String condition, String locale, Map<InternationalizedPropertyDescription, ColumnValuesCacher> cachers, Connection connection, String... columnNames)
+	public I18nDatabaseViewFetcher(String viewName, String condition, String locale, Map<PropertyDescription, ColumnValuesCacher> cachers, Connection connection, String... columnNames)
 	{
 		super(viewName, condition, connection, columnNames);
 		this.locale = locale;
@@ -62,8 +62,12 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 		Map<Integer, String> indexColumnNames = new HashMap<Integer, String>();
 		for(int colNr:this.colNumberToColName.keySet())
 		{
-			usedIds.put(colNr, new HashSet<Long>());
-			indexColumnNames.put(colNr, viewDesc.getColumnDescription(colNumberToColName.get(colNr)).indexColumnName);
+			I18nViewColumnDescription colDesc = viewDesc.getColumnDescription(colNumberToColName.get(colNr));
+			if (!colDesc.isCalculated())
+			{
+				usedIds.put(colNr, new HashSet<Long>());
+				indexColumnNames.put(colNr, colDesc.indexColumnName);
+			}
 		}
 		
 		// FIRST STEP: scan ids of entities to translate
@@ -71,47 +75,44 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 		while (rawResults.next())
 		{
 			for(int colNr:this.colNumberToColName.keySet())
-			{
-				Long id = rawResults.getLong(indexColumnNames.get(colNr));
-				if (id != null)
-					usedIds.get(colNr).add(id);
-			}
+				if (usedIds.containsKey(colNr)) // no usedIds kept for calculated columns
+				{
+					Long id = rawResults.getLong(indexColumnNames.get(colNr));
+					if (id != null)
+						usedIds.get(colNr).add(id);
+				}
 		}		
 		rawResults.beforeFirst(); // reset for the wrapper
 		
 		// SECOND STEP: subtract the ids of translatable entities which are already in the cacher
 		for(int colNr:this.colNumberToColName.keySet())
-		{
-			String columnName = this.colNumberToColName.get(colNr);
-			InternationalizedPropertyDescription propDescr = viewDesc.getColumnDescription(columnName).prop;
-			if (!cachers.containsKey(propDescr))
-				cachers.put(propDescr, new ColumnValuesCacher(propDescr));
+			if (usedIds.containsKey(colNr))
+			{
+				String columnName = this.colNumberToColName.get(colNr);
+				PropertyDescription propDescr = viewDesc.getColumnDescription(columnName).prop;
+				if (!cachers.containsKey(propDescr))
+					cachers.put(propDescr, new ColumnValuesCacher(propDescr));
 
-			Set<Long> existingIdsSet = usedIds.get(colNr);
-			Set<Long> alreadyExistingTranslations = cachers.get(propDescr).values.keySet();
-			for(Long existingId:alreadyExistingTranslations)
-				existingIdsSet.remove(existingId);
-		}
+				Set<Long> existingIdsSet = usedIds.get(colNr);
+				Set<Long> alreadyExistingTranslations = cachers.get(propDescr).values.keySet();
+				for(Long existingId:alreadyExistingTranslations)
+					existingIdsSet.remove(existingId);
+			}
+		
 		
 		// THIRD STEP: fetch the translations
 		for(int colNr:this.colNumberToColName.keySet())
 		{
 			String columnName = this.colNumberToColName.get(colNr);
-			InternationalizedPropertyDescription prop = viewDesc.getColumnDescription(columnName).prop;
-			//String className =prop.className;
+			PropertyDescription prop = viewDesc.getColumnDescription(columnName).prop;
+			if (!prop.isCalculated())
+			{
+				//String className =prop.className;
 			
-			Set<Long> ids = usedIds.get(colNr);
-			
-			/**
-			 * fetch order:
-			 * 1) fetch basic names (the ones written in the model)
-			 * 2) then overwrite those with the English-translated ones
-			 * 3) then overwrite those with the current-locale-translated ones (if current locale != English)
-			 */
-			cachers.get(prop).importValues(rawRunQuery(connection, prop.generateEnglishQuery(ids), null)); 
-			cachers.get(prop).importValues(rawRunQuery(connection, prop.generateGeneralizedQuery(ids, "en"), null));
-			if (!locale.equals("en"))
-				cachers.get(prop).importValues(rawRunQuery(connection, prop.generateGeneralizedQuery(ids, locale), null));
+				Set<Long> ids = usedIds.get(colNr);
+				Map<Long, String> values = prop.generateValues(connection, ids, locale);
+				cachers.get(prop).importValues(values);
+			}
 		}
 		return new TranslatingResultSet(rawResults); // STEP 4: return delegating ResultSet
 	}
@@ -198,10 +199,16 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 		protected String getTranslation(String columnLabel) throws SQLException
 		{
 			I18nViewColumnDescription colDesc = viewDesc.getColumnDescription(columnLabel);
+			if (colDesc.isCalculated())
+			{
+				return colDesc.prop.getValueFor(this);
+			}
+			
 			Long idToTranslate = super.getDelegate().getLong(colDesc.indexColumnName);
 			
 			if ((idToTranslate == null) || (idToTranslate.longValue() <= 0))
 				return super.getString(columnLabel); // this particular entry should not be translated
+			
 			
 			if (!cachers.get(colDesc.prop).values.containsKey(idToTranslate))
 				throw new RuntimeException("error getting item with id " + idToTranslate + " from view " + viewName + ", column " + columnLabel);

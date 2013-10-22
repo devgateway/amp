@@ -206,15 +206,15 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 	 * @param columnNames - the columns to fetch. "*" or "null" or "none" means all
 	 * @return
 	 */
-	public static DatabaseViewFetcher getFetcherForView(String viewName, String condition, String locale, java.util.Map<InternationalizedPropertyDescription, ColumnValuesCacher> cachers, Connection connection, String... columnNames)
-	{
+	public static DatabaseViewFetcher getFetcherForView(String viewName, String condition, String locale, java.util.Map<PropertyDescription, ColumnValuesCacher> cachers, Connection connection, String... columnNames)
+	{		
 		I18nViewDescription viewDesc = InternationalizedViewsRepository.i18Models.get(viewName);
 		if (viewDesc == null)
 		{
 			logger.info("for view " + viewName + ", selected RawFetcher");
 			return new RawDatabaseViewFetcher(viewName, condition, connection, columnNames);
 		}
-		logger.info("for view " + viewName + ", selected i18nFetcher");
+		logger.info("for view " + viewDesc.viewName + ", selected i18nFetcher");
 		return new I18nDatabaseViewFetcher(viewName, condition, locale, cachers, connection, columnNames);
 	}
 }

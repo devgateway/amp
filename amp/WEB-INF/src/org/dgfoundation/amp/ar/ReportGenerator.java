@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 
@@ -36,7 +37,7 @@ public abstract class ReportGenerator {
 	
 	protected AmpReports reportMetadata;
 	protected FilterCacher filterCacher;
-	protected java.util.Map<InternationalizedPropertyDescription, ColumnValuesCacher> columnCachers;
+	protected java.util.Map<PropertyDescription, ColumnValuesCacher> columnCachers;
 	
 	protected static Logger logger = Logger.getLogger(ReportGenerator.class);
 	
@@ -74,7 +75,7 @@ public abstract class ReportGenerator {
 //		((AmpReportGenerator) this).setCleanupMetadata(false); // BOZO BOZO BOZO COMMENT OUT THIS LINE IN COMMIT
 		
 		long startTS = System.currentTimeMillis();
-		columnCachers = new java.util.HashMap<InternationalizedPropertyDescription, ColumnValuesCacher>();
+		columnCachers = new java.util.HashMap<PropertyDescription, ColumnValuesCacher>();
 		retrieveData();
 		filterCacher.closeConnection();
 		long retrTS = System.currentTimeMillis();
@@ -136,7 +137,7 @@ public abstract class ReportGenerator {
 		return this.filterCacher;
 	}
 	
-	public java.util.Map<InternationalizedPropertyDescription, ColumnValuesCacher> getColumnCachers()
+	public java.util.Map<PropertyDescription, ColumnValuesCacher> getColumnCachers()
 	{
 		return columnCachers;
 	}

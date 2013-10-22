@@ -2,6 +2,8 @@ package org.dgfoundation.amp.ar.viewfetcher;
 
 import java.util.*;
 
+import org.dgfoundation.amp.Util;
+
 /**
  * description of an i18n view: contains a description of all the columns which should be overridden by the translation
  * @author Dolghier Constantin
@@ -43,5 +45,11 @@ public class I18nViewDescription {
 		I18nViewDescription res = new I18nViewDescription(newViewName);
 		res.columns.putAll(this.columns); // I18nViewColumnDescription is immutable, so this is a safe way to copy
 		return res;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("i18n view description of %s, columns: [%s]", this.viewName, Util.toCSString(this.columns.keySet()));
 	}
 }

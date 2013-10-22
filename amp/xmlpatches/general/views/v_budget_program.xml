@@ -19,7 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_budget_program AS SELECT a.amp_activity_id, (((prog.theme_code)::text || ' - '::text) || (prog.name)::text) AS budget_sector FROM amp_activity a, amp_theme prog WHERE (a.budget_program = prog.amp_theme_id) ORDER BY a.amp_activity_id;;;
+				DROP VIEW IF EXISTS v_budget_program;
+				CREATE OR REPLACE VIEW v_budget_program AS 
+			    	SELECT a.amp_activity_id, (prog.theme_code::text || ' - '::text) || prog.name::text AS budget_program, prog.amp_theme_id, prog.name AS progname, prog.theme_code 
+			    	FROM amp_activity a, amp_theme prog WHERE (a.budget_program = prog.amp_theme_id) 
+			    	ORDER BY a.amp_activity_id;;;
         		</lang>
 		</script>
 	</apply>

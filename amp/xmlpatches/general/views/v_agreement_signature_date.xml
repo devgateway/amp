@@ -20,15 +20,13 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
- 						
+ 					DROP VIEW IF EXISTS v_agreement_signature_date;
+ 					
  					CREATE OR REPLACE VIEW v_agreement_signature_date AS 
-			    	SELECT DISTINCT f.amp_activity_id, ag.signature_date as signature_date, ag.id,
-			    	(ag.title::text || ' - '::text) || ag.code::text AS "Agreement Title + Code",
-			    		ag.code AS "Agreement Code",
-			    		o.name AS "Donor Agency", o.amp_org_id
-			    	FROM amp_agreement ag, amp_funding f, amp_organisation o 
- 					WHERE f.agreement=ag.id AND f.amp_donor_org_id = o.amp_org_id AND 
- 						ag.signature_date IS NOT NULL;
+						SELECT DISTINCT f.amp_activity_id, ag.signature_date as signature_date, ag.id,
+							(ag.title::text || ' - '::text) || ag.code::text AS "Agreement Title + Code", ag.code AS "Agreement Code", o.name AS "Donor Agency", o.amp_org_id, ag.title as agreement_title
+						FROM amp_agreement ag, amp_funding f, amp_organisation o 
+						WHERE f.agreement=ag.id AND f.amp_donor_org_id = o.amp_org_id AND ag.signature_date IS NOT NULL;
  					
         		</lang>
 		</script>

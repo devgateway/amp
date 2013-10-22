@@ -74,7 +74,7 @@ public class CategoryManagerUtil {
 	public static String translate(String key, String defaultValue) {
 		Session session	= null;
 		String ret		= "";
-		String lang = TLSUtils.getThreadLocalInstance().locale.getCode();
+		String lang = TLSUtils.getEffectiveLangCode();
 		try{
 			session			= PersistenceManager.getSession();
 			String qryStr	= "select m from "

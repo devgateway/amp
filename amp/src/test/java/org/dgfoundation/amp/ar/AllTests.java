@@ -55,7 +55,7 @@ public class AllTests {
 			PersistenceManager.initialize(false, null);
 			Configuration cfg = HibernateClassLoader.getConfiguration();
 			System.out.println("AMP started up!");
-			TLSUtils.getThreadLocalInstance().locale = SiteUtils.getDefaultSite().getDefaultLanguage();
+			TLSUtils.getThreadLocalInstance().setLocale(SiteUtils.getDefaultSite().getDefaultLanguage());
 		}
 		catch(Exception e)
 		{

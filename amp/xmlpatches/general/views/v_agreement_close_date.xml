@@ -20,14 +20,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+					DROP VIEW IF EXISTS v_agreement_close_date;
 			    	CREATE OR REPLACE VIEW v_agreement_close_date AS 
-			    	SELECT DISTINCT f.amp_activity_id, ag.close_date as close_date, ag.id, 
-			    		(ag.title::text || ' - '::text) || ag.code::text AS "Agreement Title + Code",
-			    		ag.code AS "Agreement Code",
-			    		o.name AS "Donor Agency", o.amp_org_id 
-			    		FROM amp_agreement ag, amp_funding f, amp_organisation o 
- 						WHERE f.agreement=ag.id AND f.amp_donor_org_id = o.amp_org_id AND 
- 						ag.close_date IS NOT NULL;
+			    	SELECT DISTINCT f.amp_activity_id, ag.close_date as close_date, ag.id, (ag.title::text || ' - '::text) || ag.code::text AS "Agreement Title + Code", ag.code AS "Agreement Code",
+						o.name AS "Donor Agency", o.amp_org_id, ag.title AS agreement_title
+			    	FROM amp_agreement ag, amp_funding f, amp_organisation o 
+ 					WHERE f.agreement=ag.id AND f.amp_donor_org_id = o.amp_org_id AND ag.close_date IS NOT NULL;
         		</lang>
 		</script>
 	</apply>

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import org.apache.jackrabbit.util.TransientFileFactory;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
@@ -287,6 +288,13 @@ public class AMPStartupListener extends HttpServlet implements
 			
 			logger.info("Checking if any MTEF columns need to be created...");
 			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
+			
+			logger.info("loading the i18ned views description and checking for consistency with the database...");
+			for(String viewName:InternationalizedViewsRepository.i18Models.keySet())
+			{
+				String s = InternationalizedViewsRepository.i18Models.get(viewName).toString();
+				logger.info("loaded " + s);
+			}
 			
 			PersistenceManager.getSession().getTransaction().commit();
 			

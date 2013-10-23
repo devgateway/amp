@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
@@ -31,28 +32,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-public class ComputedAmountColWorker extends ColumnWorker {
-
-	protected Map metaInfoCache;
-
-	protected MetaInfo getCachedMetaInfo(String category, Comparable value) {
-
-		if (metaInfoCache == null) {
-			metaInfoCache = new HashMap();
-		}
-
-		Map valuesMap = (Map) metaInfoCache.get(category);
-		if (valuesMap == null) {
-			valuesMap = new HashMap();
-			metaInfoCache.put(category, valuesMap);
-		}
-		MetaInfo mi = (MetaInfo) valuesMap.get(value);
-		if (mi != null)
-			return mi;
-		mi = new MetaInfo(category, value);
-		valuesMap.put(value, mi);
-		return mi;
-	}
+public class ComputedAmountColWorker extends MetaCellColumnWorker {
 
 	/**
 	 * @param destName
@@ -84,22 +64,31 @@ public class ComputedAmountColWorker extends ColumnWorker {
 	 * ResultSet)
 	 */
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
-		//AmpARFilter filter = (AmpARFilter) generator.getFilter();
+		
+		AmpARFilter filter = generator.getFilter();		
 		Long ownerId = new Long(rs.getLong(1));
 		Long id = new Long(rs.getLong(2));
 		BigDecimal value = rs.getBigDecimal(3);
 		String currencyCode = rs.getString(4);
 		Date currencyDate = rs.getDate(5);
-		double exchangeRate = rs.getDouble(6);
-		
+		//java.sql.Date td= rs.getDate("transaction_date");
+		//double exchangeRate = rs.getDouble(6);
+		//String donorName = rs.getString("donor_name");
 
 		ComputedAmountCell ret = new ComputedAmountCell(ownerId);
 		ret.setId(id);
-		ret.setAmount(value.doubleValue());
-		ret.setFromExchangeRate(exchangeRate);
+		ret.setAmount(filter.adaptAmountToThousandsSetting(value.doubleValue()));
+		
+		ret.setFromExchangeRate(Util.getExchange(currencyCode, currencyDate));
+		//ret.setFromExchangeRate(exchangeRate);
 		ret.setCurrencyDate(currencyDate);
 		ret.setCurrencyCode(currencyCode);
 		ret.setToExchangeRate(1);
+		addMetaIfExists(rs, ret, "source_role_code", ArConstants.SOURCE_ROLE_CODE, null, false);
+		
+		//MetaInfo donorNameMI = getCachedMetaInfo(ArConstants.DONOR, donorName);
+		//ret.getMetaData().add(donorNameMI);
+
 		MetaInfo costMs = getCachedMetaInfo(this.getColumnName(), null);
 		ret.getMetaData().add(costMs);
 		
@@ -146,6 +135,19 @@ public class ComputedAmountColWorker extends ColumnWorker {
 		if (usedCurrency != null && !baseCurrency.equals(usedCurrency))
 			ret.setToExchangeRate(Util.getExchange(usedCurrency, currencyDate));
 
+		if (this.getViewName().equals("v_mtef_funding"))
+		{
+			AmpReportGenerator arg = (AmpReportGenerator) this.getGenerator();
+			if (arg.getMtefExtractOnlyDonorData())
+			{
+				String srcRole = ret.getMetaValueString(ArConstants.SOURCE_ROLE_CODE);
+				if ((srcRole != null) && (!srcRole.equals(Constants.ROLE_CODE_DONOR)))
+					return null;
+			}
+				
+			MetaInfo minfo = this.getCachedMetaInfo(ArConstants.IS_AN_MTEF_FUNDING, "yes");
+			ret.getMetaData().add(minfo);
+		}
 		return ret;
 	}
 

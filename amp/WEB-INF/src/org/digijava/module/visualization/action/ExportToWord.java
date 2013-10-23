@@ -202,7 +202,7 @@ public class ExportToWord extends Action {
 			String filtersRegionsTrn = TranslatorWorker.translateText("Regions");
 			String filtersZonesTrn = TranslatorWorker.translateText("Zones");
 			String filtersStatusTrn = TranslatorWorker.translateText("Status");
-			String fundingTrn = TranslatorWorker.translateText("Funding");
+			String fundingTrn = TranslatorWorker.translateText("ODA Historical Trend");
             String topPrjTrn = TranslatorWorker.translateText("Top Projects");
             String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth");
             String topSectorTrn = TranslatorWorker.translateText("Top Sectors");
@@ -218,7 +218,7 @@ public class ExportToWord extends Action {
 	        String aidPredQuarterTrn = TranslatorWorker.translateText("Aid Predictability Quarterly");
             String aidTypeTrn = TranslatorWorker.translateText("Aid Type");
             String budgetBreakdownTrn = TranslatorWorker.translateText("Budget Breakdown");
-            String finInstTrn = TranslatorWorker.translateText("Financing Instrument");
+            String finInstTrn = TranslatorWorker.translateText("Aid Modality");
             String sectorProfTrn = TranslatorWorker.translateText("Sector Profile");
             String regionProfTrn = TranslatorWorker.translateText("Region Profile");
             String NPOProfTrn = TranslatorWorker.translateText("NPO Profile");

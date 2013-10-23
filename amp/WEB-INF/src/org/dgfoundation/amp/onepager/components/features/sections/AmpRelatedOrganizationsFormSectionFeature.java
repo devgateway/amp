@@ -8,6 +8,8 @@ import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpRelatedOrganizationsOtherTableFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpRelatedOrganizationsResponsibleTableFeature;
+import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
@@ -28,8 +30,10 @@ public class AmpRelatedOrganizationsFormSectionFeature extends
 		this.fmType = AmpFMTypes.MODULE;
 		this.fundingSection=(AmpDonorFundingFormSectionFeature) componentPanel;
 
-		add(new AmpRelatedOrganizationsOtherTableFeature(
-				"donorOrganization", "Donor Organization", am, Constants.FUNDING_AGENCY,fundingSection));
+        AmpRelatedOrganizationsOtherTableFeature donorOrgRole = new AmpRelatedOrganizationsOtherTableFeature(
+                "donorOrganization", "Donor Organization", am, Constants.FUNDING_AGENCY, fundingSection);
+        donorOrgRole.add(UpdateEventBehavior.of(DonorFundingRolesEvent.class));
+        add(donorOrgRole);
 				
 		add(new AmpRelatedOrganizationsResponsibleTableFeature(
 				"responsibleOrganization", "Responsible Organization", am, Constants.RESPONSIBLE_ORGANISATION,fundingSection));

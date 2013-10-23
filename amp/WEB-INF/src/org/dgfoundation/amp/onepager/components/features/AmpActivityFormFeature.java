@@ -369,6 +369,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
 				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpActivityFormFeature.class, "saveNavigationPanel.js")));
+				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpActivityFormFeature.class, "previewLogframe.js")));
 			}
 		});
 
@@ -500,6 +501,20 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			activityForm.add(autoSaveTimer);
 		}
 
+		AmpButtonField logframe = new AmpButtonField("logframe", "Logframe", AmpFMTypes.MODULE, true) {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			}
+		};
+		if (am.getObject().getAmpActivityId() == null)
+			logframe.setVisible(false);
+		else{
+			logframe.getButton().add(new AttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");"));
+			logframe.setVisible(true);
+		}
+		logframe.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		activityForm.add(logframe);
+		
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -754,14 +769,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		Long oldId = activity.getAmpActivityId();
 		Boolean wasDraft=activity.getDraft();
 		AmpTeamMember modifiedBy = activity.getModifiedBy();
-		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get(); 
+		long currentUserId = wicketSession.getCurrentMember().getMemberId();
+		
 		AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 
 
 		//Before starting to save check lock
 		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())){
 			//Someone else has grabbed the lock ... maybe connection slow and lock refresh timed out
-            throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId())));
+            throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
 		}
 		
 		ActivityUtil.saveActivity((AmpActivityModel) am, draft);

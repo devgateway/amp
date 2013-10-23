@@ -47,7 +47,7 @@
 							
 							
 								<tr>
-									<td width="48%" align="center">
+									<td width="340px" align="center">
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:availableColumns">Available Columns</digi:trn></span></legend>
 											<div id="source_col_div" class="draglist">
@@ -64,7 +64,7 @@
 											<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
 										</button>
 									</td>
-									<td width="48%" align="center">
+									<td width="340px" align="center">
 										<fieldset class="main_side_cont">
 											<legend><span class="legend_label"><digi:trn key="rep:wizard:selectedColumns">Selected Columns</digi:trn></span></legend>
 											<ul id="dest_col_ul" class="draglist" style="line-height: 20px;">

@@ -23,7 +23,9 @@ import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.GroupColumn;
+import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportGenerator;
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
@@ -183,6 +185,7 @@ public abstract class ColumnWorker {
 			}
 					
 			cc = newColumnInstance(1000); // don't waste time counting nr of rows - it is more expensive than just reallocating an ArrayList in-mem
+			cc.setExtractorView(this.getViewName());
 			
 			/* CachedRowSet -> ResultSet change argumentation: 
 			/* results:
@@ -399,5 +402,5 @@ public abstract class ColumnWorker {
 	public void setSession(HttpSession session) {
 		;
 	}
-
+	
 }

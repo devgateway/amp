@@ -1190,6 +1190,7 @@ public class ReportsFilterPicker extends Action {
 		if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0)
 			fillFilterFromSettingsForm(arf, filterForm);
 
+		arf.signalSettingsHaveBeenApplied();
 		return arf;
 	}
 	
@@ -1267,20 +1268,9 @@ public class ReportsFilterPicker extends Action {
 		arf.buildCustomFormat();
 	}
 	
-	// the following 2 functions are copy paste... damn Java generics
-	public static HashSet<AmpSector> nullOrCopy_s(Set<AmpSector> in)
-	{
-		if (in == null)
-			return null;
-		
-		if (in.isEmpty())
-			return null;
-		
-		return new HashSet<AmpSector>(in);
-	}
+
 	
-	// the following 2 functions are copy paste... damn Java generics
-	public static HashSet<AmpTheme> nullOrCopy_t(Set<AmpTheme> in)
+	public static <T extends Object> HashSet<T> nullOrCopy(Set<T> in)
 	{
 		if (in == null)
 			return null;
@@ -1288,7 +1278,7 @@ public class ReportsFilterPicker extends Action {
 		if (in.isEmpty())
 			return null;
 		
-		return new HashSet<AmpTheme>(in);
+		return new HashSet<T>(in);
 	}
 	
 	public static Set<AmpCategoryValue> pumpCategoryValueSetFromForm(Object[] ids)
@@ -1324,19 +1314,19 @@ public class ReportsFilterPicker extends Action {
         Set<AmpSector> selectedTertiarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTertiarySectors());
         Set<AmpSector> selectedTagSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTagSectors() );
 
-		arf.setSelectedSectors(nullOrCopy_s(selectedSectors));
-		arf.setSelectedSecondarySectors(nullOrCopy_s(selectedSecondarySectors));
-		arf.setSelectedTertiarySectors(nullOrCopy_s(selectedTertiarySectors));
-		arf.setSelectedTagSectors(nullOrCopy_s(selectedTagSectors));
+		arf.setSelectedSectors(nullOrCopy(selectedSectors));
+		arf.setSelectedSecondarySectors(nullOrCopy(selectedSecondarySectors));
+		arf.setSelectedTertiarySectors(nullOrCopy(selectedTertiarySectors));
+		arf.setSelectedTagSectors(nullOrCopy(selectedTagSectors));
 		
 
 		Set<AmpTheme> selectedNatPlanObj = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedNatPlanObj());
 		Set<AmpTheme> selectedPrimaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedPrimaryPrograms());
 		Set<AmpTheme> selectedSecondaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedSecondaryPrograms());
 
-		arf.setSelectedNatPlanObj(nullOrCopy_t(selectedNatPlanObj));
-		arf.setSelectedPrimaryPrograms(nullOrCopy_t(selectedPrimaryPrograms));
-		arf.setSelectedSecondaryPrograms(nullOrCopy_t(selectedSecondaryPrograms));
+		arf.setSelectedNatPlanObj(nullOrCopy(selectedNatPlanObj));
+		arf.setSelectedPrimaryPrograms(nullOrCopy(selectedPrimaryPrograms));
+		arf.setSelectedSecondaryPrograms(nullOrCopy(selectedSecondaryPrograms));
 		
 //		AmpApplicationSettings tempSettings = ReportFilterFormUtil.getAppSetting();
 

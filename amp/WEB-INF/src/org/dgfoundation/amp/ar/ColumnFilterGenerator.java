@@ -107,7 +107,7 @@ public class ColumnFilterGenerator {
 			return viewFieldName
 					+ " IN ("
 					+ org.dgfoundation.amp.Util
-							.toCSString((Collection) property) + ")";
+							.toCSStringForIN((Collection) property) + ")";
 		if (property instanceof String)
 			return viewFieldName + "='" + property + "'";
 		if (property instanceof Identifiable)

@@ -1680,6 +1680,7 @@ public class SectorUtil {
 			//sector.setAidlist(null);
 			sector.setDeleted(true);
 			session.saveOrUpdate(sector);
+			AmpCaching.getInstance().sectorsCache=null;
 			// tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from deleteQuestion() :" + e.getMessage());
@@ -1857,7 +1858,7 @@ public class SectorUtil {
 		try
 		{
 			conn = PersistenceManager.getJdbcConnection();
-			String query = "SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN (" + org.dgfoundation.amp.Util.toCSString(inIds) + ")";
+			String query = "SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN (" + org.dgfoundation.amp.Util.toCSStringForIN(inIds) + ")";
 			ResultSet rs = conn.createStatement().executeQuery(query);
 			while (rs.next())
 				result.add(rs.getLong(1));
@@ -1885,7 +1886,7 @@ public class SectorUtil {
 					+ " aps,"
 					+ AmpActivityGroup.class.getName()
 					+ " apg "
-					+ " where aps.activityId.ampActivityId = apg.ampActivityLastVersion.ampActivityId and  aps.sectorId.ampSectorId=:id";
+					+ " where aps.activityId.ampActivityId = apg.ampActivityLastVersion.ampActivityId and  aps.sectorId.ampSectorId=:id and apg.ampActivityLastVersion.deleted is not true";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("id", id);
 			activities = qry.list();

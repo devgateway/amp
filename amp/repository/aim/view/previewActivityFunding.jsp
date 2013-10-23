@@ -49,7 +49,7 @@
 																<tr>
 																	<td align="left" width="150">
 																		<a title='<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
-																			<digi:trn key="aim:orgId">Organization Id</digi:trn>
+																			<digi:trn>Funding Organization Id</digi:trn>
 																		</a>																		
 																	</td>
 																	<td width="1">:</td>

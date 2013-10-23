@@ -257,9 +257,8 @@ function initializeGlobalVariables(){
 													</b>
 												</div>
 											</div>
-											<div
-												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;">
-												<table style="width: 95%; margin-top: 15px;" align="center"
+											<div class="dashboards_left_container">
+												<table style="width: 100%; margin-top: 0px;" align="center"
 													class="inside">
 													<tr style="cursor: pointer;">
 														<td class="side_opt_sel inside" id="general_selector_0">
@@ -301,9 +300,7 @@ function initializeGlobalVariables(){
 													</b>
 												</div>
 											</div>
-											<div
-												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-												id="generalDivList">
+											<div class="dashboards_left_container" id="generalDivList">
 												<c:if test="${!visualizationform.filter.fromPublicView}">
 													<html:checkbox property="filter.workspaceOnly"
 														styleId="workspace_only">
@@ -388,10 +385,8 @@ function initializeGlobalVariables(){
 												</div>
 
 											</div>
-											<div
-												style="height: 180px; width:400px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-												id="orgGrpDivList">
-												<ul style="list-style-type: none;margin-left: 0px;">
+											<div class="dashboards_left_container" id="orgGrpDivList">
+												<ul class="root_list">
 													<li><input type="checkbox" id="org_grp_check_all" value="-1"
 																name="org_grp_check"
 																onClick="allOptionChecked(this,'org_grp_check','organization_check')" />
@@ -443,11 +438,9 @@ function initializeGlobalVariables(){
 														class="buttonx" value="&gt;&gt;" />
 												</div>
 											</div>
-											<div
-												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-												id="regionDivList">
-												<ul style="list-style-type: none;margin-left: 0px;">
-													<li>
+											<div class="dashboards_left_container" id="regionDivList">
+												<ul class="root_list">
+													<li style="margin-left: -15px">
 														<input type="checkbox" id="region_check_all"
 																name="region_check" value="-1"
 																onClick="allOptionChecked(this,'region_check','zone_check')" />
@@ -497,10 +490,8 @@ function initializeGlobalVariables(){
 													</div>
 
 												</div>
-												<div
-													style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
-													id="sectorDivList">
-													<ul style="list-style-type: none;margin-left: 0px;">
+												<div class="dashboards_left_container" id="sectorDivList">
+													<ul class="root_list">
 														<c:forEach
 															items="${visualizationform.filter.configWithSectorAndSubSectors}"
 															var="item">
@@ -599,8 +590,8 @@ function initializeGlobalVariables(){
 													</html:select></td>
 													<td><b><digi:trn>Type of Agency</digi:trn>:</b>
 												 	</td>
-													<td align="right">
-														<html:select property="filter.agencyTypeFilter" styleId="agencyType_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+													<td>
+														<html:select property="filter.agencyTypeFilter" styleId="agencyType_dropdown" styleClass="dropdwn_sm" style="width:150px;">
 															<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
 															<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
 															<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
@@ -619,11 +610,11 @@ function initializeGlobalVariables(){
 							</div>
 			
 
-<center>
- <input type="button" value="<digi:trn>Apply</digi:trn>" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin">
-<input type="button" value="<digi:trn>Reset to defaults</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
-<input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;">
-</center>
+	<center>
+		<input type="button" value="<digi:trn>Apply</digi:trn>" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin" />
+		<input type="button" value="<digi:trn>Reset to defaults</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;" />
+		<input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;" />
+	</center>
 
 
 </div>
@@ -651,9 +642,9 @@ function initializeGlobalVariables(){
 				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Export Type</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.exportTypeOption" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>  </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"><br />
-		            <html:radio property="exportData.exportTypeOption" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"><br />
-		        	<html:radio property="exportData.exportTypeOption" styleId="export_type_2" value="2"><digi:trn>Excel</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif"><br />
+		            <html:radio property="exportData.exportTypeOption" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>&nbsp;&nbsp;</html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"><br />
+		            <html:radio property="exportData.exportTypeOption" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>&nbsp;&nbsp;</html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"><br />
+		        	<html:radio property="exportData.exportTypeOption" styleId="export_type_2" value="2"><digi:trn>Excel</digi:trn>&nbsp;&nbsp;</html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif"><br />
 		        </div>
 		        </td>
 				<c:if test="${visualizationform.filter.dashboardType eq '1' }">
@@ -1283,7 +1274,7 @@ function initializeGlobalVariables(){
 				<div id="RegionProfileHeader" class="chart_header" style="display:none;float:left">
 				<digi:trn>Title</digi:trn> <input type="text" id="RegionProfileTitle" value="" size="50">
 				<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="RegionProfileFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1326,7 +1317,7 @@ function initializeGlobalVariables(){
 				<div id="SectorProfileHeader" class="chart_header" style="display:none;float:left">
 				<digi:trn>Title</digi:trn> <input type="text" id="SectorProfileTitle" value="" size="50">
 				<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="SectorProfileFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1392,7 +1383,7 @@ function initializeGlobalVariables(){
 				<div id="FundingsHeader" class="chart_header" style="display:none;">
 				<digi:trn>Title</digi:trn> <input type="text" id="FundingsTitle" value="" size="50">
 				<input type="hidden" id="FundingsShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="FundingsFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1435,7 +1426,7 @@ function initializeGlobalVariables(){
 					<div id="ODAGrowthHeader" class="chart_header" style="display:none;">
 					<digi:trn>Title</digi:trn> <input type="text" id="ODAGrowthTitle" value="" size="50">
 					<input type="hidden" id="ODAGrowthShowFontFamily" value="Verdana"/>
-					&nbsp;<digi:trn>Size</digi:trn>
+					<br /><digi:trn>Size</digi:trn>
 					<select id="ODAGrowthFontSize">
 						<option value="12">12</option>
 						<option value="13">13</option>
@@ -1505,7 +1496,7 @@ function initializeGlobalVariables(){
 				<div id="AidPredictabilityHeader" class="chart_header" style="display:none;">
 				<digi:trn>Title</digi:trn> <input type="text" id="AidPredictabilityTitle" value="" size="50">
 				<input type="hidden" id="AidPredictabilityShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="AidPredictabilityFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1572,7 +1563,7 @@ function initializeGlobalVariables(){
 				<div id="AidTypeHeader" class="chart_header" style="display:none;">
 				<digi:trn>Title</digi:trn> <input type="text" id="AidTypeTitle" value="" size="50">
 				<input type="hidden" id="AidTypeShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="AidTypeFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1638,7 +1629,7 @@ function initializeGlobalVariables(){
 				<div id="AidModalityHeader" class="chart_header" style="display:none;">
 				<digi:trn>Title</digi:trn> <input type="text" id="AidModalityTitle" value="" size="50">
 				<input type="hidden" id="AidModalityShowFontFamily" value="Verdana"/>
-				&nbsp;<digi:trn>Size</digi:trn>
+				<br /><digi:trn>Size</digi:trn>
 				<select id="AidModalityFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
@@ -1698,7 +1689,7 @@ function initializeGlobalVariables(){
 					<div id="OrganizationProfileHeader" class="chart_header" style="display:none;">
 					<digi:trn>Title</digi:trn> <input type="text" id="OrganizationProfileTitle" value="" size="50">
 					<input type="hidden" id="OrganizationProfileShowFontFamily" value="Verdana"/>
-					&nbsp;<digi:trn>Size</digi:trn>
+					<br /><digi:trn>Size</digi:trn>
 					<select id="OrganizationProfileFontSize">
 						<option value="12">12</option>
 						<option value="13">13</option>
@@ -1759,7 +1750,7 @@ function initializeGlobalVariables(){
 					<div id="SectorProfileHeader" class="chart_header" style="display:none;">
 					<digi:trn>Title</digi:trn> <input type="text" id="SectorProfileTitle" value="" size="50">
 					<input type="hidden" id="SectorProfileShowFontFamily" value="Verdana"/>
-					&nbsp;<digi:trn>Size</digi:trn>
+					<br /><digi:trn>Size</digi:trn>
 					<select id="SectorProfileFontSize">
 						<option value="12">12</option>
 						<option value="13">13</option>
@@ -1821,7 +1812,7 @@ function initializeGlobalVariables(){
 					<div id="RegionProfileHeader" class="chart_header" style="display:none;">
 					<digi:trn>Title</digi:trn> <input type="text" id="RegionProfileTitle" value="" size="50">
 					<input type="hidden" id="RegionProfileShowFontFamily" value="Verdana"/>
-					&nbsp;<digi:trn>Size</digi:trn>
+					<br /><digi:trn>Size</digi:trn>
 					<select id="RegionProfileFontSize">
 						<option value="12">12</option>
 						<option value="13">13</option>

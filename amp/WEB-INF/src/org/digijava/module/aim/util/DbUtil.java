@@ -2943,8 +2943,7 @@ public class DbUtil {
 			queryString.append(" and org.orgGrpId=:orgGroupId ");
 		}
 		if (publicView) {
-			queryString
-					.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+			queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') and tm.parentTeamId is not null ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
 		}
 
 		queryString.append("order by org.name asc");

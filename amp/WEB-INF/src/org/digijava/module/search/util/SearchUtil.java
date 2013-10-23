@@ -350,11 +350,11 @@ public class SearchUtil {
         query.append(" inner join role.organisation org ");
         query.append(" inner join role.role roleCode ");
         query.append("where (team.ampTeamId in (");
-        query.append(Util.toCSString(teams));
+        query.append(Util.toCSStringForIN(teams));
         query.append( ")");
         if(hasComputedOrgs){
               query.append( " or org.ampOrgId in (");
-              query.append( Util.toCSString(teamAO));
+              query.append( Util.toCSStringForIN(teamAO));
               query.append( ")");
         }
         query.append(")");
@@ -362,7 +362,7 @@ public class SearchUtil {
         if (!hasComputedOrgs) {
             query.append(" and org.name like :name");
             if (tm.getTeamAccessType().equals("Management")) {
-                query.append(" and act.draft=false and act.approvalStatus ='approved' ");
+                query.append(String.format(" and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
             }
         }
        
@@ -391,7 +391,7 @@ public class SearchUtil {
                 queryString.append(" inner join role.role roleCode ");
                 queryString.append(" where roleCode.roleCode=:roleCode ");
                 queryString.append(" and act.ampActivityId in (");
-                queryString.append(Util.toCSString(result));
+                queryString.append(Util.toCSStringForIN(result));
                 queryString.append(")");
                 queryString.append(" and org.name like :name");
                 qry = session.createQuery(queryString.toString());

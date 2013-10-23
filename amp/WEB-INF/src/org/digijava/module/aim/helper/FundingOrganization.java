@@ -2,6 +2,9 @@ package org.digijava.module.aim.helper;
 
 import java.util.Collection;
 
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+
 /**
  * @author jose
  */
@@ -10,7 +13,7 @@ public class FundingOrganization implements Comparable{
 	private Long ampOrgId;
 	private String orgName ;
 	//Collection of Funding objects
-	private Collection fundings;
+	private Collection<Funding> fundings;
 	private String currentOrganization;
 	Boolean fundingActive;
 	String fundingActiveString;
@@ -19,6 +22,34 @@ public class FundingOrganization implements Comparable{
 	Boolean delegatedPartner;
 	String delegatedPartnerString;
 	String fundingorgid;
+	
+	public FundingOrganization()
+	{
+		
+	}
+	
+	public FundingOrganization(AmpFunding ampFunding)
+	{
+		AmpOrganisation org = ampFunding.getAmpDonorOrgId();
+		this.setAmpOrgId(org.getAmpOrgId());
+  	  	this.setOrgName(org.getName());
+  	  	this.setFundingorgid(org.getFundingorgid());
+  	  	this.setFundingActive(ampFunding.getActive());
+  	  	this.setDelegatedCooperation(ampFunding.getDelegatedCooperation());
+  	  	this.setDelegatedPartner(ampFunding.getDelegatedPartner());
+
+  	  	if (this.getDelegatedCooperation() != null && this.getDelegatedCooperation() ) {
+  	  		this.setDelegatedCooperationString("checked");
+  	  	}
+  	  	else
+  	  		this.setDelegatedCooperationString("unchecked");
+
+  	  	if (this.getDelegatedPartner() != null && this.getDelegatedPartner() ) {
+  	  		this.setDelegatedPartnerString("checked");
+  	  	}
+  	  	else
+  	  		this.setDelegatedPartnerString("unchecked");	
+	}
 	
 	public String getFundingorgid() {
 		return fundingorgid;
@@ -47,11 +78,11 @@ public class FundingOrganization implements Comparable{
 		this.orgName = orgName;
 	}
 	
-	public Collection getFundings() {
+	public Collection<Funding> getFundings() {
 		return fundings;
 	}
 	
-	public void setFundings(Collection fundings) {
+	public void setFundings(Collection<Funding> fundings) {
 		this.fundings = fundings;
 	}
     public String getCurrentOrganization() {

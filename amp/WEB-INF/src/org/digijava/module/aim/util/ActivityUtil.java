@@ -1747,7 +1747,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           }
           else{
 				if (team.getAccessType().equals("Management")) {
-					whereTeamStatement.append( " and latestAct.draft=false and latestAct.approvalStatus ='approved' ");
+					whereTeamStatement.append(String.format(" and (latestAct.draft=false or latestAct.draft is null) and latestAct.approvalStatus IN ('%s', '%s') ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
 					List<AmpTeam> teams = new ArrayList<AmpTeam>();
 					DashboardUtil.getTeams(team, teams);
 					String relatedOrgs = "", teamIds = "";
@@ -3580,6 +3580,8 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 
   	public static List<AmpActivityVersion> getLastUpdatedActivities() {
  		String workspaceQuery = Util.toCSString(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
+ 		if (workspaceQuery.equals(Util.toCSString(new HashSet<Long>())))
+ 			workspaceQuery = "-999";
   		
 		List col = null;
 		Session session = null;
@@ -3588,7 +3590,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select distinct ampAct from "
 				+ AmpActivityVersion.class.getName()
-				+ " ampAct where ampAct.ampActivityId IN (" + workspaceQuery + ")"
+				+ " ampAct where ampAct.ampActivityId IN (" + workspaceQuery + ")"  // BOZO BOZO SHMOZO
 				+ " and ampAct.deleted = false or ampAct.deleted is null "
 				+ " order by ampAct.ampActivityId desc";
 			qry = session.createQuery(queryString).setMaxResults(5);
@@ -4371,7 +4373,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
   }
 
   public static ActivityAmounts getActivityAmmountIn(AmpActivityVersion act,
-      String tocode,Float percent) throws Exception {
+      String tocode,Float percent, boolean donorFundingOnly) throws Exception {
     double tempProposed = 0;
     double tempActual = 0;
     double tempPlanned = 0;
@@ -4395,15 +4397,13 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
       }
       else {
 
-          Set fundings = act.getFunding();
+          Set<AmpFunding> fundings = act.getFunding();
           if (fundings != null) {
-              Iterator fundItr = act.getFunding().iterator();
+              Iterator<AmpFunding> fundItr = act.getFunding().iterator();
               while(fundItr.hasNext()) {
-                  AmpFunding ampFunding = (AmpFunding) fundItr.next();
-				  Collection fundDetails = ampFunding.getFundingDetails();
-
+                  AmpFunding ampFunding = fundItr.next();
                   org.digijava.module.aim.logic.FundingCalculationsHelper calculations = new org.digijava.module.aim.logic.FundingCalculationsHelper();
-                  calculations.doCalculations(fundDetails, tocode);
+                  calculations.doCalculations(ampFunding, tocode);
                   //apply program percent
                   result.AddActual(calculations.getTotActualComm().doubleValue()*percent/100);
                   result.AddPalenned(calculations.getTotPlannedComm().doubleValue()*percent/100);
@@ -4757,7 +4757,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     // computed workspace
                     if (teamAO != null && !teamAO.isEmpty()) {
                         queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
-                                " where  a.team in  (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) order by a.name";
+                                " where  a.team in  (" + Util.toCSStringForIN(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) order by a.name";
 
                     } else {
                         // none computed workspace
@@ -4825,12 +4825,12 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     queryString ="select gr.ampActivityLastVersion.name, gr.ampActivityLastVersion.ampActivityId from "+ AmpActivityGroup.class.getName()+" gr ";                    
                     if (teamAO != null && !teamAO.isEmpty()) {
                     	queryString +=" left outer join gr.ampActivityLastVersion.orgrole r  left outer join gr.ampActivityLastVersion.funding f "+
-                    	" where gr.ampActivityLastVersion.team in (" + Util.toCSString(relatedTeams) + ")  " +
-                    			" or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) ";
+                    	" where gr.ampActivityLastVersion.team in (" + Util.toCSStringForIN(relatedTeams) + ")  " +
+                    			" or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) ";
                     	
                     } else {
                         // none computed workspace
-                    	queryString +=" where gr.ampActivityLastVersion.team in  (" + Util.toCSString(relatedTeams) + ") ";                    	
+                    	queryString +=" where gr.ampActivityLastVersion.team in  (" + Util.toCSStringForIN(relatedTeams) + ") ";                    	
                         if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                             queryString += "  and gr.ampActivityLastVersion.approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
                         }
@@ -5452,7 +5452,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 			try {
 				Session session 			= PersistenceManager.getRequestDBSession();
 				String qryString			= "update " + AmpActivityVersion.class.getName()  + 
-						" av  set av.archived=:archived where av.ampActivityId in (" + Util.toCSString(activityIds) + ")";
+						" av  set av.archived=:archived where av.ampActivityId in (" + Util.toCSStringForIN(activityIds) + ")";
 				Query query					= session.createQuery(qryString);
 				query.setBoolean("archived", status);
 				query.executeUpdate();

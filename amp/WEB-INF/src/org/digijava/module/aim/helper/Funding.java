@@ -85,10 +85,18 @@ public class Funding implements Serializable
 		this.typeOfAssistance = typeOfAssistance;
 	}
 
+	/**
+	 * Funding Organization Id
+	 * @return
+	 */
 	public String getOrgFundingId() {
 		return orgFundingId;
 	}
-	
+
+	/**
+	 * Funding Organization Id
+	 * @return
+	 */
 	public void setOrgFundingId(String orgFundingId) {
 		this.orgFundingId = orgFundingId;
 	}

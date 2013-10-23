@@ -41,6 +41,7 @@ import org.dgfoundation.amp.ar.filtercacher.NopFilterCacher;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -77,6 +78,8 @@ public class AmpReportGenerator extends ReportGenerator {
 	private boolean debugMode = false;
 	private boolean pledgereport = false;
 	private boolean cleanupMetadata = true;
+	private boolean mtefExtractOnlyDonorData = false;
+	private Set<String> fundingOrgHiers;
 	
 	private HttpSession session	= null;
 	private BigDecimal totalac;
@@ -205,6 +208,14 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		else
 			this.columnsToBeRemoved = new ArrayList<String>();
+		
+		/**
+		 * see whether we have any hierarchy relevant for Directed Transactions (Donor Agency, Implementing Agency, ... etc)
+		 */
+		this.fundingOrgHiers = reportMetadata.getHierarchyNames();
+		fundingOrgHiers.retainAll(ArConstants.COLUMN_ROLE_CODES.keySet()); // list of  hiers which are relevant
+		
+		this.setMtefExtractOnlyDonorData(fundingOrgHiers.isEmpty());
 		
 		if (extractable.size() > 0) {
 			createDataForColumns(extractable);
@@ -606,7 +617,14 @@ public class AmpReportGenerator extends ReportGenerator {
 					CategAmountCell item = (CategAmountCell) it.next();
 					boolean shouldAddRealDisbursement = element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS) &&
 		    				GroupColumn.isRealDisbursement(item); // add ACTUAL DISBURSEMENT items to the REAL DISBURSEMENTS column - as they have the same datasource (ACTUAL DISBURSEMENTS), they have the same metadata
-					boolean shouldAddCellToColumn = item.hasMetaInfo(metaInfo) || shouldAddRealDisbursement; // ugly hack because the same data source (actual disbursements) should fill two columns: actual disbursements + real disbursements								
+					
+					boolean shouldAddEstimatedDisbursement = element.getMeasureName().equals(ArConstants.ACTUAL_DISBURSEMENTS) && 
+							GroupColumn.isEstimatedDisbursement(item);
+					
+					boolean shouldAddGenericFunding = item.hasMetaInfo(metaInfo) && (!(element.getMeasureName().equals(ArConstants.ACTUAL_DISBURSEMENTS) || element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS)));
+					
+					boolean shouldAddCellToColumn = shouldAddGenericFunding || shouldAddEstimatedDisbursement || shouldAddRealDisbursement; // ugly hack because the same data source (actual disbursements) should fill two columns: actual disbursements + real disbursements
+					
 					if (shouldAddCellToColumn)
 						cc.addCellRaw(item); //addCellRaw because we don't want TotalAmountCellColumn to merge everything in one huge cell
 				}
@@ -961,7 +979,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (!arf.isWidget() && !("N".equals(reportMetadata.getOptions()))) {
 			categorizeData();
 		}
-		
+
 		/**
 		 * If we handle a normal report (not tab) and allowEmptyColumns is not set then we need to remove 
 		 * empty funding columns
@@ -983,8 +1001,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		// not need this but ...
 		rawColumns.setParent(report);
 
-		ColumnReportData reportChild = new ColumnReportData(reportMetadata
-				.getName());
+		ColumnReportData reportChild = new ColumnReportData(reportMetadata.getName());
 
 		// add a fake first column ONLY IF the Columns metadata is empty (if we
 		// only have hierarchies but no columns). This is needed
@@ -1014,12 +1031,11 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 			}
 		}
-		
-		
+
 		// find out if this is a hierarchical report or not:
 		if (reportMetadata.getHierarchies().size() != 0)
 			createHierarchies();
-
+		
 		report.setTotalActualCommitments(this.getTotalActualCommitments());
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
@@ -1036,14 +1052,12 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.removeEmptyChildren();
 		
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
-		Set<String> fundingOrgHiers = reportMetadata.getHierarchyNames();
-		fundingOrgHiers.retainAll(ArConstants.COLUMN_ROLE_CODES.keySet());
 
 		if (reportMetadata.getMeasureNames().contains(ArConstants.REAL_DISBURSEMENTS) && !fundingOrgHiers.isEmpty())
 		{
 			removeUnusedRealDisbursementsFlowsFromReport(fundingOrgHiers);
 		}
-						
+								
 		if (dateFilterHidesProjects && !reportMetadata.getDrilldownTab() && 
 				(this.getFilter().wasDateFilterUsed() || (reportMetadata.getHierarchies().size() > 0))
 			)
@@ -1428,5 +1442,15 @@ public class AmpReportGenerator extends ReportGenerator {
 	public void setCleanupMetadata(boolean cleanupMetadata)
 	{
 		this.cleanupMetadata = cleanupMetadata;
+	}
+	
+	public void setMtefExtractOnlyDonorData(boolean meodd)
+	{
+		this.mtefExtractOnlyDonorData = meodd;
+	}
+	
+	public boolean getMtefExtractOnlyDonorData()
+	{
+		return this.mtefExtractOnlyDonorData;
 	}
 }

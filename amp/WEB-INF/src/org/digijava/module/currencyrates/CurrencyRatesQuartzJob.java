@@ -162,7 +162,7 @@ public class CurrencyRatesQuartzJob implements Job {
 			currRate.setToCurrencyCode(currencies[i]);
 			currRate.setFromCurrencyCode(baseCurrency);
 			currRate.setDataSource(CurrencyUtil.RATE_FROM_WEB_SERVICE);
-			CurrencyUtil.saveCurrencyRate(currRate);
+			CurrencyUtil.saveCurrencyRate(currRate, true);
 		}
 	}
  
@@ -197,7 +197,7 @@ public class CurrencyRatesQuartzJob implements Job {
 			currRate.setToCurrencyCode(ampCurrency.getCurrencyCode().trim());
 			currRate.setFromCurrencyCode(baseCurrency);
 			currRate.setDataSource(CurrencyUtil.RATE_FROM_WEB_SERVICE);
-			CurrencyUtil.saveCurrencyRate(currRate);
+			CurrencyUtil.saveCurrencyRate(currRate, true);
 		}
 	}
 

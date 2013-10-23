@@ -176,9 +176,12 @@
 				{
 					newMaxValue = maxValue;
 				}
-				if(newMaxValue > 9999999) //Allow to show big numbers
-				{
-					dcLeft = 60;
+				if(newMaxValue > 999999999999){ //Allow to show big numbers
+					dcLeft = 130;
+				} else if(newMaxValue > 999999999){ 
+					dcLeft = 100;
+				} else if(newMaxValue > 9999999){
+					dcLeft = 70;
 				} else {
 					dcLeft = 40;
 				}

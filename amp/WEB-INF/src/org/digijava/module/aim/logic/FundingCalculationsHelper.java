@@ -175,6 +175,7 @@ public class FundingCalculationsHelper {
 	
 	/**
 	 * extracts all the donor funding + MTEF funding from a source and adds them into a single source; then calculated the totals
+	 * also resets the internal {@link #getFundDetailList()}
 	 * @param fundingSource
 	 * @param userCurrencyCode
 	 */
@@ -188,10 +189,17 @@ public class FundingCalculationsHelper {
 		if (fundingSource.getMtefProjections() != null)
 			funding.addAll(fundingSource.getMtefProjections());
 		
-		doCalculations(funding, userCurrencyCode);
+		boolean updateTotals = fundingSource.isDonorFunding(); 
+		doCalculations(funding, userCurrencyCode, updateTotals);
 	}
 	
-	public void doCalculations(Collection<? extends FundingInformationItem> details, String userCurrencyCode) {
+	/**
+	 * also resets the internal {@link #getFundDetailList()}
+	 * @param details
+	 * @param userCurrencyCode
+	 * @param updateTotals - if false, then only fundDetailList will be built, without updating the totals
+	 */
+	public void doCalculations(Collection<? extends FundingInformationItem> details, String userCurrencyCode, boolean updateTotals) {
 		Iterator<? extends FundingInformationItem> fundDetItr = details.iterator();
 		fundDetailList = new ArrayList<FundingDetail>();
 		int indexId = 0;
@@ -273,81 +281,8 @@ public class FundingCalculationsHelper {
 				totalMtef.setValue(totalMtef.getValue().add(amt.getValue()));
 			
 			// TOTALS
-			if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) ) {
-				//fundingDetail.setAdjustmentTypeName("Planned");
-				if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-					totPlanDisb.setValue(totPlanDisb.getValue().add(amt.getValue()));
-					totPlanDisb.setCalculations(totPlanDisb.getCalculations() + " + " + amt.getCalculations());
-				} else if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-
-					totPlannedComm.setValue(totPlannedComm.getValue().add(amt.getValue()));
-					totPlannedComm.setCalculations(totPlannedComm.getCalculations() + " + " + amt.getCalculations());
-
-				} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-					totPlannedExp.setValue(totPlannedExp.getValue().add(amt.getValue()));
-					totPlannedExp.setCalculations(totPlannedExp.getCalculations() + " + " + amt.getCalculations());
-				}
-
-				else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
-					totPlannedDisbOrder.setValue(totPlannedDisbOrder.getValue().add(amt.getValue()));
-					totPlannedDisbOrder.setCalculations(totPlannedDisbOrder.getCalculations() + " + " + amt.getCalculations());
-				} 
-				else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
-					totPlannedReleaseOfFunds.setValue(totPlannedReleaseOfFunds.getValue().add(amt.getValue()));
-					totPlannedReleaseOfFunds.setCalculations(totPlannedReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
-				} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
-					totPlannedEDD.setValue(totPlannedEDD.getValue().add(amt.getValue()));
-					totPlannedEDD.setCalculations(totPlannedEDD.getCalculations() + " + " + amt.getCalculations());
-				}
-			} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-
-				//fundingDetail.setAdjustmentTypeName("Actual");
-				if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-					totActualComm.setValue(totActualComm.getValue().add(amt.getValue()));
-					totActualComm.setCalculations(totActualComm.getCalculations() + " + " + amt.getCalculations());
-
-				} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-					totActualDisb.setValue(totActualDisb.getValue().add(amt.getValue()));
-					totActualDisb.setCalculations(totActualDisb.getCalculations() + " + " + amt.getCalculations());
-
-				} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-					totActualExp.setValue(totActualExp.getValue().add(amt.getValue()));
-					totActualExp.setCalculations(totActualExp.getCalculations() + " + " + amt.getCalculations());
-
-				} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
-					totActualDisbOrder.setValue(totActualDisbOrder.getValue().add(amt.getValue()));
-					totActualDisbOrder.setCalculations(totActualDisbOrder.getCalculations() + " + " + amt.getCalculations());
-				} else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
-					totActualReleaseOfFunds.setValue(totActualReleaseOfFunds.getValue().add(amt.getValue()));
-					totActualReleaseOfFunds.setCalculations(totActualReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
-				} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
-					totActualEDD.setValue(totActualEDD.getValue().add(amt.getValue()));
-					totActualEDD.setCalculations(totActualEDD.getCalculations() + " + " + amt.getCalculations());
-				}
-            } else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
-               // fundingDetail.setAdjustmentTypeName("Pipeline");
-                if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-                	totPipelineComm.setValue(totPipelineComm.getValue().add(amt.getValue()));
-                    totPipelineComm.setCalculations(totPipelineComm.getCalculations() + " + " + amt.getCalculations());
-                } else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-					totPipelineDisb.setValue(totPipelineDisb.getValue().add(amt.getValue()));
-					totPipelineDisb.setCalculations(totPipelineDisb.getCalculations() + " + " + amt.getCalculations());
-
-				} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-					totPipelineExp.setValue(totPipelineExp.getValue().add(amt.getValue()));
-					totPipelineExp.setCalculations(totPipelineExp.getCalculations() + " + " + amt.getCalculations());
-
-				} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
-					totPipelineDisbOrder.setValue(totPipelineDisbOrder.getValue().add(amt.getValue()));
-					totPipelineDisbOrder.setCalculations(totPipelineDisbOrder.getCalculations() + " + " + amt.getCalculations());
-				} else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
-					totPipelineReleaseOfFunds.setValue(totPipelineReleaseOfFunds.getValue().add(amt.getValue()));
-					totPipelineReleaseOfFunds.setCalculations(totPipelineReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
-				} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
-					totPipelineEDD.setValue(totPipelineEDD.getValue().add(amt.getValue()));
-					totPipelineEDD.setCalculations(totPipelineEDD.getCalculations() + " + " + amt.getCalculations());
-				}
-            }
+			if (updateTotals)
+				addToTotals(adjType, fundDet, amt);
 
 			fundDetailList.add(fundingDetail);
 		}
@@ -358,145 +293,223 @@ public class FundingCalculationsHelper {
 
 	}
 	
-	
-	public void doCalculations(Collection<AmpFundingDetail> details, String userCurrencyCode, int transactionType, AmpCategoryValue adjustmentType) {
-		Iterator<AmpFundingDetail> fundDetItr = details.iterator();
-		fundDetailList = new ArrayList<FundingDetail>();
-		int indexId = 0;
-		String toCurrCode = Constants.DEFAULT_CURRENCY;
+	protected void addToTotals(AmpCategoryValue adjType, FundingInformationItem fundDet, DecimalWraper amt)
+	{
+		if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) ) {
+			//fundingDetail.setAdjustmentTypeName("Planned");
+			if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+				totPlanDisb.setValue(totPlanDisb.getValue().add(amt.getValue()));
+				totPlanDisb.setCalculations(totPlanDisb.getCalculations() + " + " + amt.getCalculations());
+			} else if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
 
-		while (fundDetItr.hasNext()) {
+				totPlannedComm.setValue(totPlannedComm.getValue().add(amt.getValue()));
+				totPlannedComm.setCalculations(totPlannedComm.getCalculations() + " + " + amt.getCalculations());
 
-			
-			AmpFundingDetail fundDet = fundDetItr.next();
-			AmpCategoryValue adjType = null;
-			if(fundDet.getAdjustmentType() != null) 
-				adjType = fundDet.getAdjustmentType();
-			else
-			{
-				try {
-					adjType = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					logger.info("", e);
-				}
-			}	
-
-			if(adjType.equals(adjustmentType) && fundDet.getTransactionType().intValue() == transactionType){
-				FundingDetail fundingDetail = new FundingDetail();
-				fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
-
-				if (fundDet.getFixedExchangeRate() != null && fundDet.getFixedExchangeRate().doubleValue() != 1) {
-					// We cannot use FormatHelper.formatNumber as this might roundup our number (and this would be very wrong)
-					fundingDetail.setFixedExchangeRate( (fundDet.getFixedExchangeRate()+"").replace(".", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR)) );
-					fundingDetail.setUseFixedRate(true);
-				}
-				fundingDetail.setIndexId(indexId++);
-				fundingDetail.setAdjustmentTypeName(fundDet.getAdjustmentType());
-				fundingDetail.setContract(fundDet.getContract());
-
-				java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
-
-				double frmExRt = fundDet.getFixedExchangeRate() != null ? fundDet.getFixedExchangeRate() : Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
-
-				if (userCurrencyCode != null)
-					toCurrCode = userCurrencyCode;
-
-				//double toExRt = Util.getExchange(toCurrCode, dt);
-				double toExRt;
-				if (userCurrencyCode != null)
-					toCurrCode = userCurrencyCode;
-				if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(toCurrCode)){
-					toExRt=frmExRt;
-				}else{
-					toExRt = Util.getExchange(toCurrCode, dt);
-				}
-				
-				DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
-
-				if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-					fundingDetail.setClassification(fundDet.getExpCategory());
-				}
-				fundingDetail.setCurrencyCode(fundDet.getAmpCurrencyId().getCurrencyCode());
-				fundingDetail.setCurrencyName(fundDet.getAmpCurrencyId().getCountryName());
-
-				fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(), 1, 1));
-				fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
-				fundingDetail.setReportingDate(fundDet.getReportingDate());
-
-				fundingDetail.setTransactionType(fundDet.getTransactionType().intValue());
-				fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
-				if (fundDet.getPledgeid()!= null){
-					fundingDetail.setPledge(fundDet.getPledgeid().getId());
-				}
-				
-				// TOTALS
-				if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-					//fundingDetail.setAdjustmentTypeName("Planned");
-					if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-						totPlanDisb.setValue(totPlanDisb.getValue().add(amt.getValue()));
-						totPlanDisb.setCalculations(totPlanDisb.getCalculations() + " + " + amt.getCalculations());
-					} else if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-
-						totPlannedComm.setValue(totPlannedComm.getValue().add(amt.getValue()));
-						totPlannedComm.setCalculations(totPlannedComm.getCalculations() + " + " + amt.getCalculations());
-
-					} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-						totPlannedExp.setValue(totPlannedExp.getValue().add(amt.getValue()));
-						totPlannedExp.setCalculations(totPlannedExp.getCalculations() + " + " + amt.getCalculations());
-					}
-
-					else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
-						totPlannedDisbOrder.setValue(totPlannedDisbOrder.getValue().add(amt.getValue()));
-						totPlannedDisbOrder.setCalculations(totPlannedDisbOrder.getCalculations() + " + " + amt.getCalculations());
-					}
-				} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-
-					//fundingDetail.setAdjustmentTypeName("Actual");
-					if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-						totActualComm.setValue(totActualComm.getValue().add(amt.getValue()));
-						totActualComm.setCalculations(totActualComm.getCalculations() + " + " + amt.getCalculations());
-
-					} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-						totActualDisb.setValue(totActualDisb.getValue().add(amt.getValue()));
-						totActualDisb.setCalculations(totActualDisb.getCalculations() + " + " + amt.getCalculations());
-
-					} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-						totActualExp.setValue(totActualExp.getValue().add(amt.getValue()));
-						totActualExp.setCalculations(totActualExp.getCalculations() + " + " + amt.getCalculations());
-
-					} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
-						totActualDisbOrder.setValue(totActualDisbOrder.getValue().add(amt.getValue()));
-						totActualDisbOrder.setCalculations(totActualDisbOrder.getCalculations() + " + " + amt.getCalculations());
-					}
-	            } else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())) {
-	               // fundingDetail.setAdjustmentTypeName("Pipeline");
-	                if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-	                	totPipelineComm.setValue(totPipelineComm.getValue().add(amt.getValue()));
-	                    totPipelineComm.setCalculations(totPipelineComm.getCalculations() + " + " + amt.getCalculations());
-	                } else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-						totPipelineDisb.setValue(totPipelineDisb.getValue().add(amt.getValue()));
-						totPipelineDisb.setCalculations(totPipelineDisb.getCalculations() + " + " + amt.getCalculations());
-
-					} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-						totPipelineExp.setValue(totPipelineExp.getValue().add(amt.getValue()));
-						totPipelineExp.setCalculations(totPipelineExp.getCalculations() + " + " + amt.getCalculations());
-
-					} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
-						totPipelineDisbOrder.setValue(totPipelineDisbOrder.getValue().add(amt.getValue()));
-						totPipelineDisbOrder.setCalculations(totPipelineDisbOrder.getCalculations() + " + " + amt.getCalculations());
-					}
-	            }
-
-				fundDetailList.add(fundingDetail);
+			} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+				totPlannedExp.setValue(totPlannedExp.getValue().add(amt.getValue()));
+				totPlannedExp.setCalculations(totPlannedExp.getCalculations() + " + " + amt.getCalculations());
 			}
-		}
 
-		totalCommitments = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(totPlannedComm, totActualComm, totPipelineComm);
+			else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
+				totPlannedDisbOrder.setValue(totPlannedDisbOrder.getValue().add(amt.getValue()));
+				totPlannedDisbOrder.setCalculations(totPlannedDisbOrder.getCalculations() + " + " + amt.getCalculations());
+			} 
+			else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
+				totPlannedReleaseOfFunds.setValue(totPlannedReleaseOfFunds.getValue().add(amt.getValue()));
+				totPlannedReleaseOfFunds.setCalculations(totPlannedReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
+			} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
+				totPlannedEDD.setValue(totPlannedEDD.getValue().add(amt.getValue()));
+				totPlannedEDD.setCalculations(totPlannedEDD.getCalculations() + " + " + amt.getCalculations());
+			}
+		} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 
-		unDisbursementsBalance = Logic.getInstance().getTotalDonorFundingCalculator().getunDisbursementsBalance(totalCommitments, totActualDisb);
+			//fundingDetail.setAdjustmentTypeName("Actual");
+			if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
+				totActualComm.setValue(totActualComm.getValue().add(amt.getValue()));
+				totActualComm.setCalculations(totActualComm.getCalculations() + " + " + amt.getCalculations());
 
+			} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+				totActualDisb.setValue(totActualDisb.getValue().add(amt.getValue()));
+				totActualDisb.setCalculations(totActualDisb.getCalculations() + " + " + amt.getCalculations());
+
+			} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+				totActualExp.setValue(totActualExp.getValue().add(amt.getValue()));
+				totActualExp.setCalculations(totActualExp.getCalculations() + " + " + amt.getCalculations());
+
+			} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
+				totActualDisbOrder.setValue(totActualDisbOrder.getValue().add(amt.getValue()));
+				totActualDisbOrder.setCalculations(totActualDisbOrder.getCalculations() + " + " + amt.getCalculations());
+			} else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
+				totActualReleaseOfFunds.setValue(totActualReleaseOfFunds.getValue().add(amt.getValue()));
+				totActualReleaseOfFunds.setCalculations(totActualReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
+			} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
+				totActualEDD.setValue(totActualEDD.getValue().add(amt.getValue()));
+				totActualEDD.setCalculations(totActualEDD.getCalculations() + " + " + amt.getCalculations());
+			}
+        } else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+           // fundingDetail.setAdjustmentTypeName("Pipeline");
+            if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
+            	totPipelineComm.setValue(totPipelineComm.getValue().add(amt.getValue()));
+                totPipelineComm.setCalculations(totPipelineComm.getCalculations() + " + " + amt.getCalculations());
+            } else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+				totPipelineDisb.setValue(totPipelineDisb.getValue().add(amt.getValue()));
+				totPipelineDisb.setCalculations(totPipelineDisb.getCalculations() + " + " + amt.getCalculations());
+
+			} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+				totPipelineExp.setValue(totPipelineExp.getValue().add(amt.getValue()));
+				totPipelineExp.setCalculations(totPipelineExp.getCalculations() + " + " + amt.getCalculations());
+
+			} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
+				totPipelineDisbOrder.setValue(totPipelineDisbOrder.getValue().add(amt.getValue()));
+				totPipelineDisbOrder.setCalculations(totPipelineDisbOrder.getCalculations() + " + " + amt.getCalculations());
+			} else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
+				totPipelineReleaseOfFunds.setValue(totPipelineReleaseOfFunds.getValue().add(amt.getValue()));
+				totPipelineReleaseOfFunds.setCalculations(totPipelineReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
+			} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
+				totPipelineEDD.setValue(totPipelineEDD.getValue().add(amt.getValue()));
+				totPipelineEDD.setCalculations(totPipelineEDD.getCalculations() + " + " + amt.getCalculations());
+			}
+        }	
 	}
+	
+//	public void doCalculations(Collection<AmpFundingDetail> details, String userCurrencyCode, int transactionType, AmpCategoryValue adjustmentType) {
+//		Iterator<AmpFundingDetail> fundDetItr = details.iterator();
+//		fundDetailList = new ArrayList<FundingDetail>();
+//		int indexId = 0;
+//		String toCurrCode = Constants.DEFAULT_CURRENCY;
+//
+//		while (fundDetItr.hasNext()) {
+//
+//			
+//			AmpFundingDetail fundDet = fundDetItr.next();
+//			AmpCategoryValue adjType = null;
+//			if(fundDet.getAdjustmentType() != null) 
+//				adjType = fundDet.getAdjustmentType();
+//			else
+//			{
+//				try {
+//					adjType = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					logger.info("", e);
+//				}
+//			}	
+//
+//			if(adjType.equals(adjustmentType) && fundDet.getTransactionType().intValue() == transactionType){
+//				FundingDetail fundingDetail = new FundingDetail();
+//				fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
+//
+//				if (fundDet.getFixedExchangeRate() != null && fundDet.getFixedExchangeRate().doubleValue() != 1) {
+//					// We cannot use FormatHelper.formatNumber as this might roundup our number (and this would be very wrong)
+//					fundingDetail.setFixedExchangeRate( (fundDet.getFixedExchangeRate()+"").replace(".", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR)) );
+//					fundingDetail.setUseFixedRate(true);
+//				}
+//				fundingDetail.setIndexId(indexId++);
+//				fundingDetail.setAdjustmentTypeName(fundDet.getAdjustmentType());
+//				fundingDetail.setContract(fundDet.getContract());
+//
+//				java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
+//
+//				double frmExRt = fundDet.getFixedExchangeRate() != null ? fundDet.getFixedExchangeRate() : Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
+//
+//				if (userCurrencyCode != null)
+//					toCurrCode = userCurrencyCode;
+//
+//				//double toExRt = Util.getExchange(toCurrCode, dt);
+//				double toExRt;
+//				if (userCurrencyCode != null)
+//					toCurrCode = userCurrencyCode;
+//				if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(toCurrCode)){
+//					toExRt=frmExRt;
+//				}else{
+//					toExRt = Util.getExchange(toCurrCode, dt);
+//				}
+//				
+//				DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
+//
+//				if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+//					fundingDetail.setClassification(fundDet.getExpCategory());
+//				}
+//				fundingDetail.setCurrencyCode(fundDet.getAmpCurrencyId().getCurrencyCode());
+//				fundingDetail.setCurrencyName(fundDet.getAmpCurrencyId().getCountryName());
+//
+//				fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(), 1, 1));
+//				fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
+//				fundingDetail.setReportingDate(fundDet.getReportingDate());
+//
+//				fundingDetail.setTransactionType(fundDet.getTransactionType().intValue());
+//				fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
+//				if (fundDet.getPledgeid()!= null){
+//					fundingDetail.setPledge(fundDet.getPledgeid().getId());
+//				}
+//				
+//				// TOTALS
+//				if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+//					//fundingDetail.setAdjustmentTypeName("Planned");
+//					if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+//						totPlanDisb.setValue(totPlanDisb.getValue().add(amt.getValue()));
+//						totPlanDisb.setCalculations(totPlanDisb.getCalculations() + " + " + amt.getCalculations());
+//					} else if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
+//
+//						totPlannedComm.setValue(totPlannedComm.getValue().add(amt.getValue()));
+//						totPlannedComm.setCalculations(totPlannedComm.getCalculations() + " + " + amt.getCalculations());
+//
+//					} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+//						totPlannedExp.setValue(totPlannedExp.getValue().add(amt.getValue()));
+//						totPlannedExp.setCalculations(totPlannedExp.getCalculations() + " + " + amt.getCalculations());
+//					}
+//
+//					else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
+//						totPlannedDisbOrder.setValue(totPlannedDisbOrder.getValue().add(amt.getValue()));
+//						totPlannedDisbOrder.setCalculations(totPlannedDisbOrder.getCalculations() + " + " + amt.getCalculations());
+//					}
+//				} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+//
+//					//fundingDetail.setAdjustmentTypeName("Actual");
+//					if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
+//						totActualComm.setValue(totActualComm.getValue().add(amt.getValue()));
+//						totActualComm.setCalculations(totActualComm.getCalculations() + " + " + amt.getCalculations());
+//
+//					} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+//						totActualDisb.setValue(totActualDisb.getValue().add(amt.getValue()));
+//						totActualDisb.setCalculations(totActualDisb.getCalculations() + " + " + amt.getCalculations());
+//
+//					} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+//						totActualExp.setValue(totActualExp.getValue().add(amt.getValue()));
+//						totActualExp.setCalculations(totActualExp.getCalculations() + " + " + amt.getCalculations());
+//
+//					} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
+//						totActualDisbOrder.setValue(totActualDisbOrder.getValue().add(amt.getValue()));
+//						totActualDisbOrder.setCalculations(totActualDisbOrder.getCalculations() + " + " + amt.getCalculations());
+//					}
+//	            } else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())) {
+//	               // fundingDetail.setAdjustmentTypeName("Pipeline");
+//	                if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
+//	                	totPipelineComm.setValue(totPipelineComm.getValue().add(amt.getValue()));
+//	                    totPipelineComm.setCalculations(totPipelineComm.getCalculations() + " + " + amt.getCalculations());
+//	                } else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+//						totPipelineDisb.setValue(totPipelineDisb.getValue().add(amt.getValue()));
+//						totPipelineDisb.setCalculations(totPipelineDisb.getCalculations() + " + " + amt.getCalculations());
+//
+//					} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+//						totPipelineExp.setValue(totPipelineExp.getValue().add(amt.getValue()));
+//						totPipelineExp.setCalculations(totPipelineExp.getCalculations() + " + " + amt.getCalculations());
+//
+//					} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
+//						totPipelineDisbOrder.setValue(totPipelineDisbOrder.getValue().add(amt.getValue()));
+//						totPipelineDisbOrder.setCalculations(totPipelineDisbOrder.getCalculations() + " + " + amt.getCalculations());
+//					}
+//	            }
+//
+//				fundDetailList.add(fundingDetail);
+//			}
+//		}
+//
+//		totalCommitments = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(totPlannedComm, totActualComm, totPipelineComm);
+//
+//		unDisbursementsBalance = Logic.getInstance().getTotalDonorFundingCalculator().getunDisbursementsBalance(totalCommitments, totActualDisb);
+//
+//	}
 
 	public DecimalWraper getTotalCommitments() {
 		return totalCommitments;

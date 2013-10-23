@@ -95,7 +95,7 @@ public class ShowCalendarEvent extends Action {
         
         String print = request.getParameter("method");
         String ampCalendarId = request.getParameter("calendarId");
-        if(!print.isEmpty() && print.equals("print")){
+        if(print!=null && print.equals("print")){
         	ceform.setAmpCalendarId(new Long(ampCalendarId));
         	ceform.setMethod(print);
         }

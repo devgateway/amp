@@ -131,7 +131,12 @@ public class ActivityManager extends Action {
 	}
 	
 	private void sortActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivityFake> activities = actForm.getAllActivityList();
+		List<AmpActivityFake> activities = null;
+		if (actForm.getKeyword()!=null && actForm.getKeyword().trim().length()>0){
+			activities = ActivityUtil.getAllActivitiesAdmin(actForm.getKeyword().trim());
+		} else {
+			activities = actForm.getAllActivityList();
+		}
 
 		String sort = (actForm.getSort() == null) ? null : actForm.getSort().trim();
 	    String sortOrder = (actForm.getSortOrder() == null) ? null : actForm.getSortOrder().trim();
@@ -276,6 +281,7 @@ public class ActivityManager extends Action {
 			});
 			break;
 		}
+		actForm.setAllActivityList(activities);
 	}
 
 	/**

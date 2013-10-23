@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -87,14 +88,14 @@ public class ShowTeamReports extends Action {
 				                                        	
 		getAllReports(appSettingSet, rf, tm, request);
 		rf.setCurrentPage(rf.getPage());
-		rf.setPagesToShow(10);
+//		rf.setPagesToShow(10);
         if (action != null && action.equalsIgnoreCase("search")) {
             rf.setCurrentPage(0);
             rf.setPage(0);
         }
 		
 		doPagination(rf, request);
-		
+
 		if(tm == null){
 			//Prepare filter for Public View export
 //			this code makes no sense as report publicness is saved on report-by-report basis			
@@ -149,6 +150,21 @@ public class ShowTeamReports extends Action {
 			totalPages=1.0;       	
         }
 
+        AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings();
+
+        int numberOfPagesToDisplay = Integer.MAX_VALUE;
+
+        if (ampAppSettings != null){
+            Integer defRecordsPerPage = ampAppSettings.getDefaultRecordsPerPage();
+            if(defRecordsPerPage != null && defRecordsPerPage > 0 && (ampAppSettings.getNumberOfPagesToDisplay() != null)) {
+                numberOfPagesToDisplay = ampAppSettings.getNumberOfPagesToDisplay();
+            }
+        }
+
+        numberOfPagesToDisplay = Math.min(numberOfPagesToDisplay, totalPages.intValue());
+
+        request.setAttribute("pagesToDisplay", numberOfPagesToDisplay);
+        rf.setPagesToShow(numberOfPagesToDisplay);
 		rf.setTotalPages(totalPages.intValue());
 	}
 

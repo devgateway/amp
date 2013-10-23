@@ -191,7 +191,7 @@ public class MathExpressionRepository {
 	
 	private static void buildCommitmentGap() {
 		try {
-			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PLEDGED_TOTAL, ArConstants.TOTAL_ACTUAL_COMMITMENT);
+			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PLEDGED_TOTAL, ArConstants.ACTUAL_COMMITMENT);
 			expresions.put(COMMITMENT_GAP, m1);
 		} catch (Exception e) {
 			logger.error(e);

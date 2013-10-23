@@ -40,26 +40,10 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * @since Jun 13, 2006
  * 
  */
-public class CategAmountColWorker extends ColumnWorker {
+public class CategAmountColWorker extends MetaCellColumnWorker {
 
 	private static Logger logger	= Logger.getLogger(CategAmountColWorker.class);
-	
-	protected Map<String, Map<Comparable, MetaInfo>> metaInfoCache;
-
-	protected MetaInfo<?> getCachedMetaInfo(String category, Comparable<?> value) {
-		Map<Comparable, MetaInfo> valuesMap = metaInfoCache.get(category);
-		if (valuesMap == null) {
-			valuesMap = new HashMap();
-			metaInfoCache.put(category, valuesMap);
-		}
-		MetaInfo mi = valuesMap.get(value);
-		if (mi != null)
-			return mi;
-		mi = new MetaInfo(category, value);
-		valuesMap.put(value, mi);
-		return mi;
-	}
-    	
+	    	
 	/**
 	 * @param condition
 	 * @param viewName
@@ -141,29 +125,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		if(cellYear>filter.getYearTo().intValue()) return false;
 		return true;
 	}
-
 	
-	protected String retrieveValueFromRS ( ResultSet rs, String columnName ) throws SQLException {
-		return rs.getString(columnName);
-	}
-	
-	protected void addMetaIfExists(ResultSet rs, CategAmountCell acc, String columnName, String metaKeyName, String defaultValue, boolean retrieveDirectly) throws SQLException
-	{
-		if (columnsMetaData.containsKey(columnName)) {
-			
-			String fundingStatus = retrieveDirectly ? rs.getString(columnsMetaData.get(columnName) ) :
-													retrieveValueFromRS(rs, columnsMetaData.get(columnName));
-			
-			if (fundingStatus == null && defaultValue != null)
-				fundingStatus = defaultValue;
-			
-			if (fundingStatus != null) {
-				MetaInfo termsAssistMeta = this.getCachedMetaInfo(metaKeyName, fundingStatus);
-				acc.getMetaData().add(termsAssistMeta);
-			}
-				
-		}	
-	}
 	
 	/*
 	 * (non-Javadoc)
@@ -201,9 +163,11 @@ public class CategAmountColWorker extends ColumnWorker {
 		Double fixedExchangeRate = null;
 		Double pledgetotal = null;
 		Double capitalPercent	= null;
+		
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4).toLowerCase();
-
+		if (this.getViewName().equals("v_proposed_cost"))
+			headMetaName = null; // no source name for v_proposed_cost
 
 		if (columnsMetaData.containsKey("fixed_exchange_rate")){
 		    fixedExchangeRate = rs.getDouble("fixed_exchange_rate");
@@ -288,19 +252,8 @@ public class CategAmountColWorker extends ColumnWorker {
 //			filter.setAmountinthousand(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 //		} 
 		
-		if (filter.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){
-			if (tr_amount != 0){
-				acc.setAmount(tr_amount * 0.001d * 0.001d);
-			}
-		} else if (filter.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){
-			if (tr_amount != 0){
-				acc.setAmount(tr_amount * 0.001d);
-			}
-		}
-		else{
-			acc.setAmount(tr_amount);
-		}
-		
+		acc.setAmount(filter.adaptAmountToThousandsSetting(tr_amount));
+				
 		//use fixed exchange rate only if it has been entered. Else use Agency
 		if (fixedExchangeRate != null && fixedExchangeRate != 0) {
 			acc.setFromExchangeRate(fixedExchangeRate);
@@ -423,9 +376,15 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.getMetaData().add(mMs);	
 		acc.getMetaData().add(faMs);
 		acc.getMetaData().add(fmMs);
-		if ( !"v_pledges_funding_st".equals(this.getViewName()) && headMeta == null)
-			throw new RuntimeException("headMeta is null!");
-		acc.getMetaData().add(headMeta);
+		if (headMeta != null)
+		{
+			acc.getMetaData().add(headMeta);
+		}
+		else
+		{
+			if (!"v_pledges_funding_st".equals(this.getViewName()) && !this.getViewName().equals("v_proposed_cost"))
+				throw new RuntimeException("headMeta is null!");
+		}
 		
 		if(this.getViewName().equals("v_proposed_cost")) {
 		    //used as a flag, no value needed

@@ -11,6 +11,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
@@ -69,10 +70,11 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 
 			@Override
     		public void validate(IValidatable<String> validatable) {
-    			// Check value against pattern
-    			if (!getPattern().matcher(validatable.getValue()).matches()){
-    				error("CoordinatesValidator");
-    			}
+				if (!getPattern().matcher(validatable.getValue()).matches()){
+					ValidationError error = new ValidationError();
+					error.addKey("CoordinatesValidator");
+					validatable.error(error);
+				}
     		}
    		};
     	
@@ -89,9 +91,11 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 
 			@Override
     		public void validate(IValidatable<String> validatable) {
-    			if (!getPattern().matcher(validatable.getValue()).matches()){
-    				error("CoordinatesValidator");
-    			}
+				if (!getPattern().matcher(validatable.getValue()).matches()){
+					ValidationError error = new ValidationError();
+					error.addKey("CoordinatesValidator");
+					validatable.error(error);
+				}
     		}
    		};
 		AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitudeid", 

@@ -57,7 +57,7 @@ public class LaunchDashboard extends Action {
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
-
+		HttpSession session = request.getSession();
 		request.setAttribute("compatibility_shim", "chrome=1; IE=7");
 		VisualizationForm dForm = (VisualizationForm) form;
 		AmpDashboard dashboard = dForm.getDashboard();
@@ -84,9 +84,14 @@ public class LaunchDashboard extends Action {
 
 
 			DashboardUtil.initializeFilter(filter, request);
+			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+			if (tm==null) {
+				filter.setFromPublicView(true);
+	        }
 			dForm.setDashboard(dashboard);
 			dForm.setFilter(filter);
 			dForm.getFilter().setAgencyType(dashboard.getPivot());
+			dForm.getFilter().setAgencyTypeDefault(dashboard.getPivot());
 			dForm.getFilter().setAgencyTypeFilter(dashboard.getPivot());
 			dForm.getFilter().setAgencyTypeQuickFilter(dashboard.getPivot());
 			List<AmpDashboardGraph> listDG = org.digijava.module.visualization.util.DbUtil.getDashboardGraphByDashboard(dId);

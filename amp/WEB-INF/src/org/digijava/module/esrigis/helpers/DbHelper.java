@@ -8,31 +8,28 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
-import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.util.DashboardUtil;
 import org.digijava.module.visualization.util.DbUtil;
 import org.hibernate.*;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.*;
 
@@ -357,6 +354,27 @@ public class DbHelper {
 		return activities;
 
 	}
+	
+	public static List<AmpActivityVersion> getActivities(MapFilter filter,HttpServletRequest request)
+			throws DgException {
+
+		List<AmpActivityVersion> activities;
+		try {
+			List<Long> ids = getActivitiesIds(filter);
+			String oql = "select distinct act from ";
+			oql += AmpActivityVersion.class.getName()
+					+ " act WHERE ampActivityId IN (" + Util.toCSStringForIN(ids) + ")";
+			Session session = PersistenceManager.getRequestDBSession();
+			Query query = session.createQuery(oql);
+			
+			activities = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("Cannot load activities from db", e);
+		}
+		return activities;
+
+	}
 
 	public static List<AmpActivityVersion> getActivities(MapFilter filter)
 			throws DgException {
@@ -364,20 +382,16 @@ public class DbHelper {
 		List<AmpActivityVersion> activities = null;
 		try {
 			List<Long> ids = getActivitiesIds(filter);
-            if (ids != null && !ids.isEmpty()) {
-                StringBuilder oql = new StringBuilder("select distinct act from ").
-                        append(AmpActivityVersion.class.getName()).
-                        append(" act WHERE ampActivityId IN (").
-                        append(Util.toCSString(ids)).append(")");
-
-                Session session = PersistenceManager.getRequestDBSession();
-                Query query = session.createQuery(oql.toString());
-
-                activities = query.list();
-            } else {
-                activities = new ArrayList<AmpActivityVersion> ();
-            }
-
+			String activityIdsCSV = Util.toCSString(ids);
+			if (activityIdsCSV.trim().isEmpty())
+				activityIdsCSV = "-999";
+			String oql = "select distinct act from ";
+			oql += AmpActivityVersion.class.getName()
+					+ " act WHERE ampActivityId IN (" + activityIdsCSV + ")";
+			Session session = PersistenceManager.getRequestDBSession();
+			Query query = session.createQuery(oql);
+			
+			activities = query.list();
 		} catch (Exception e) {
 			logger.error(e);
 			throw new DgException("Cannot load activities from db", e);
@@ -527,7 +541,7 @@ public class DbHelper {
 					oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)";
 				}
 	            
-	            oql += " and act.team is not null AND (act.draft=false OR act.draft IS NULL) AND act.approvalStatus IN ('approved','startedapproved')";
+	            oql += String.format(" and act.team is not null AND (act.draft=false OR act.draft IS NULL) AND act.approvalStatus IN ('%s','%s') ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS);
 	            
 	            List<Long> workSpaceActivityList = filter.buildFilteredActivitiesList();
 	            String inactivities = Util.toCSString(workSpaceActivityList);	            
@@ -820,7 +834,7 @@ public class DbHelper {
             Long locId = it2.next();
         	ArrayList<FundingInformationItem> afda = fundingByRegion.get(locId);
             
-            cal.doCalculations(afda, currCode);
+            cal.doCalculations(afda, currCode, true);
            
             if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
             	totalexpenditures = cal.getTotActualExp();
@@ -1240,8 +1254,7 @@ public class DbHelper {
 			queryString.append(" and org.orgGrpId=:orgGroupId ");
 		}
 		if (publicView) {
-			queryString
-					.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+			queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus IN ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
 		}
 
 		queryString.append("order by org.name asc");
@@ -1277,8 +1290,7 @@ public class DbHelper {
 			queryString.append(" and org.orgGrpId.orgType=:orgtypeId ");
 		}
 		if (publicView) {
-			queryString
-					.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+			queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') and tm.parentTeamId is not null ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
 		}
 
 		queryString.append("order by org.name asc");

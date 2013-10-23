@@ -264,30 +264,35 @@ background-color:#FFFFFF;
 					</div>
 					</div>
 					<div class="dashboard_bottom">
-					<div class="dashboard_filters"><digi:trn>Filter</digi:trn>:
-					<table width="50%" border="0" cellpadding="0" cellspacing="0">
+					<div class="dashboard_filters"><digi:trn>Filters</digi:trn>
+					<table width="60%" border="0" cellpadding="0" cellspacing="0">
 						<tr>
-							<td><category:showoptions
+							<td valign="top" align="right" style="padding-top: 5px"><digi:trn>Statuses</digi:trn>:</td>
+							<td valign="top"><category:showoptions
 								name="aimNPDForm" property="selectedStatuses"
 								keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>"
 								multiselect="true" size="5" ordered="true"
 								styleClass="inputx insidex" styleId="selectedStatusesId"/></td>
-							<td><html:select multiple="true" size="5"
+								
+							<td valign="top" align="right" style="padding-top: 5px"><digi:trn>Donors</digi:trn>:</td>
+							<td valign="top"><html:select multiple="true" size="5"
 								property="selectedDonors" styleClass="inputx insidex" styleId="selectedDonorsId">
 								<html:optionsCollection name="aimNPDForm" property="donors"
 									value="value" label="label" />
 							</html:select></td>
 						</tr>
 						<tr>
-							<td>
+							<td valign="top" align="right" style="padding-top: 5px"><digi:trn>From Year</digi:trn>:</td>
+							<td valign="top">
 								<html:select property="yearFrom" styleClass="inputx insidex" styleId="yearFrom">
-									<option value="-1"><digi:trn key="aim:npd:dropDownFromYear">From Year</digi:trn></option>
+									<option value="-1"><digi:trn>Select</digi:trn></option>
 									<html:optionsCollection name="aimNPDForm" property="years" value="value" label="label" />
 								</html:select>
 							</td>
-							<td>
+							<td valign="top" align="right" style="padding-top: 5px"><digi:trn>To Year</digi:trn>:</td>
+							<td valign="top">
 								<html:select property="yearTo"	styleClass="inputx insidex" styleId="yearTo">
-								<option value="-1"><digi:trn key="aim:npd:dropDownToYear">To Year</digi:trn></option>
+								<option value="-1"><digi:trn>Select</digi:trn></option>
 								<html:optionsCollection name="aimNPDForm" property="years" value="value" label="label" />
 								</html:select>
 							</td>

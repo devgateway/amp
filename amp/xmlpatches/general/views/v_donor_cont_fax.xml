@@ -19,7 +19,9 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_donor_cont_fax AS SELECT ac.activity_id AS amp_activity_id, cp.value AS fax FROM amp_activity_contact ac, amp_contact_properties cp WHERE ((((ac.contact_id = cp.contact_id) AND ((ac.contact_type)::text = 'DONOR_CONT'::text)) AND ((cp.name)::text = 'contact fax'::text)) AND (btrim((cp.value)::text) != ''::text));;;
+			    	CREATE OR REPLACE VIEW v_donor_cont_fax AS 
+			    	SELECT ac.activity_id AS amp_activity_id, cp.value AS fax FROM amp_activity_contact ac, amp_contact_properties cp 
+			    	WHERE ((((ac.contact_id = cp.contact_id) AND ((ac.contact_type)::text = 'DONOR_CONT'::text)) AND ((cp.name)::text = 'contact fax'::text)) AND (btrim((cp.value)::text) != ''::text));;;
         		</lang>
 		</script>
 	</apply>

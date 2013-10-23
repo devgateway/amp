@@ -105,7 +105,7 @@ public class SimpleColumnModel extends ColumnModel {
 			Cell cell = column.getByOwner(activityId);
 			String reportOutput = cell.toString();
 			if (reportOutput.compareTo(activityCorOutput) != 0)
-				return String.format("SimpleColumnModel %s, activity %s has output %s instead of %s", this.getName(), activityName, reportOutput, activityCorOutput);
+				return String.format("SimpleColumnModel %s, activity %s has output <%s> instead of <%s>", this.getName(), activityName, reportOutput, activityCorOutput);
 		}
 		return null;
 	}

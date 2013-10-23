@@ -292,13 +292,13 @@ public class DataDispatcher extends DispatchAction {
 				int i=0;
 				for (Iterator iterator = catList.iterator(); iterator.hasNext();) {
 					AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
-					temp[i++] = Long.valueOf(ampCategoryValue.getValue());
+					temp[i++] = ampCategoryValue.getId();
 				}
 				visualizationForm.getFilter().setSelPeacebuilderMarkerIds(temp);
 			}
 		}
 		
-		DashboardUtil.getSummaryAndRankInformation(visualizationForm, request);
+		DashboardUtil.getSummaryAndRankInformation(visualizationForm, true, request);
         request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, trnStep8);
 		JSONObject root = new JSONObject();
 		JSONArray children = new JSONArray();
@@ -494,7 +494,7 @@ public class DataDispatcher extends DispatchAction {
 		children.add(rootSelStatus);
 		
 		if (configId!=null) {
-				child.put("name", SectorUtil.getClassificationConfigById(configId).getName());
+				child.put("name", SectorUtil.getClassificationConfigById(configId).getClassification().getSecSchemeName());
 				selConfigs.add(child);
 		}
 		rootSelConfigs.put("type", "SelSectorConfig");
@@ -876,7 +876,7 @@ public class DataDispatcher extends DispatchAction {
 	            // Take the top 5
 	            while(it.hasNext()){
 	                Map.Entry entry = (Map.Entry)it.next();
-	        		csvString.append(entry.getKey().toString().replace(',', ';'));
+	        		csvString.append(entry.getKey().toString().replace(',', ';').replace('\r', ' ').replace('\n', ' '));
 	        		csvString.append(",");
 	        		csvString.append(entry.getValue());
 	        		csvString.append("\n");
@@ -924,7 +924,7 @@ public class DataDispatcher extends DispatchAction {
 	            Map.Entry entry = (Map.Entry)it.next();
 	            AmpSector sec = (AmpSector) entry.getKey();
 	            if (index <= 4){
-		            csvString.append(sec.getName().replace(",", ""));
+		            csvString.append(sec.getName().replace(",", "").replace('\r', ' ').replace('\n', ' '));
 		            csvString.append("#");
 		            csvString.append(sec.getAmpSectorId());
 		            csvString.append(",");
@@ -1156,7 +1156,7 @@ public class DataDispatcher extends DispatchAction {
         		DashboardFilter newFilter = filter.getCopyFilterForFunding();
             	newFilter.setStartYear(startYear);
             	newFilter.setEndYear(endYear);
-            	map = DashboardUtil.getRankProgramsByKey(DbUtil.getPrograms(newFilter,programSetting), newFilter);
+            	map = DashboardUtil.getRankProgramsByKey(DbUtil.getPrograms(newFilter,programSetting), newFilter, true);
         	}
 	        
 	        if (map==null) {
@@ -1246,7 +1246,7 @@ public class DataDispatcher extends DispatchAction {
 	            // Take the top 5
 	            while(it.hasNext()){
 	                Map.Entry entry = (Map.Entry)it.next();
-	        		csvString.append(entry.getKey().toString().replace(',', ';'));
+	        		csvString.append(entry.getKey().toString().replace(',', ';').replace('\r', ' ').replace('\n', ' '));
 	        		csvString.append(",");
 	        		csvString.append(entry.getValue());
 	        		csvString.append("\n");
@@ -1511,7 +1511,7 @@ public class DataDispatcher extends DispatchAction {
         		DashboardFilter newFilter = filter.getCopyFilterForFunding();
             	newFilter.setStartYear(startYear);
             	newFilter.setEndYear(endYear);
-            	Collection agencyListRed = DbUtil.getAgencies(newFilter);
+            	Collection agencyListRed = DbUtil.getAgencies(newFilter, true);
                 Iterator iter = agencyListRed.iterator();
                 while (iter.hasNext()) {
                 	AmpOrganisation org = (AmpOrganisation)iter.next();
@@ -1611,7 +1611,7 @@ public class DataDispatcher extends DispatchAction {
 
                 while(it.hasNext()){
                     Map.Entry entry = (Map.Entry)it.next();
-            		csvString.append(entry.getKey().toString().replace(',', ';'));
+            		csvString.append(entry.getKey().toString().replace(',', ';').replace('\r', ' ').replace('\n', ' '));
             		csvString.append(",");
             		csvString.append(entry.getValue());
             		csvString.append("\n");
@@ -1853,7 +1853,7 @@ public class DataDispatcher extends DispatchAction {
         	newFilter.setStartYear(startYear);
         	newFilter.setEndYear(endYear);
         	newFilter.setAgencyType(2);//set beneficiary agency 
-        	Collection agencyListRed = DbUtil.getAgencies(newFilter);
+        	Collection agencyListRed = DbUtil.getAgencies(newFilter, true);
             Iterator iter = agencyListRed.iterator();
             while (iter.hasNext()) {
             	AmpOrganisation org = (AmpOrganisation)iter.next();
@@ -1948,7 +1948,7 @@ public class DataDispatcher extends DispatchAction {
 
                 while(it.hasNext()){
                     Map.Entry entry = (Map.Entry)it.next();
-            		csvString.append(entry.getKey().toString().replace(',', ';'));
+            		csvString.append(entry.getKey().toString().replace(',', ';').replace('\r', ' ').replace('\n', ' '));
             		csvString.append(",");
             		csvString.append(entry.getValue());
             		csvString.append("\n");
@@ -1991,11 +1991,14 @@ public class DataDispatcher extends DispatchAction {
                 organizationData += "<" + org.getName() + ">";
                 for (Long i = startYear; i <= endYear; i++) {
         			Long[] ids = {org.getAmpOrgId()};
-        			//DashboardFilter newFilter = filter.getCopyFilterForFunding();
-	    			newFilter.setSelOrgIds(ids);
+        			DashboardFilter newFilter2 = filter.getCopyFilterForFunding();
+        			//newFilter2.setStartYear(startYear);
+                	//newFilter2.setEndYear(endYear);
+                	newFilter2.setAgencyType(2);//set beneficiary agency 
+                	newFilter2.setSelOrgIds(ids);
                     startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
+                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter2, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
                     //filter.setOrgIds(temp);
                     BigDecimal amount = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     organizationData += amount.compareTo(BigDecimal.ZERO) == 0 ? "0>" : amount.toPlainString() + ">";
@@ -3558,7 +3561,7 @@ public class DataDispatcher extends DispatchAction {
 	            	Long id = Long.parseLong(regionId);
 	            	map = DashboardUtil.getRankSubRegions(DbUtil.getSubRegions(id), newFilter, startYear.intValue(), endYear.intValue());
 	            } else {
-	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(newFilter), DbUtil.getRegions(newFilter), newFilter,request);
+	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(newFilter), DbUtil.getRegions(newFilter), newFilter, true, request);
 	            }
         	}
         	
@@ -3647,7 +3650,7 @@ public class DataDispatcher extends DispatchAction {
 	            
 	            while(it.hasNext()){
 	                Map.Entry entry = (Map.Entry)it.next();
-	        		csvString.append(entry.getKey().toString().replace(',', ';'));
+	        		csvString.append(entry.getKey().toString().replace(',', ';').replace('\r', ' ').replace('\n', ' '));
 	        		csvString.append(",");
 	        		csvString.append(entry.getValue());
 	        		csvString.append("\n");
@@ -3836,8 +3839,9 @@ public class DataDispatcher extends DispatchAction {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
-		DashboardFilter filter = visualizationForm.getFilter();
-
+		DashboardFilter filter = visualizationForm.getFilter().getCopyFilterForFunding();
+		filter.setAgencyType(org.digijava.module.visualization.util.Constants.DONOR_AGENCY);//Set agency type as donor to get the growth
+		
 		String format = request.getParameter("format");
 		
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000 / 
@@ -3872,7 +3876,7 @@ public class DataDispatcher extends DispatchAction {
 		} else if (filter.getSelOrgGroupIds() != null && filter.getSelOrgGroupIds().length == 1 && filter.getSelOrgGroupIds()[0]!=-1) {
 			organizationList.addAll(DbUtil.getOrganisationsFromGroup(filter.getSelOrgGroupIds()[0]));
 		} else {
-			organizationList.addAll(DbUtil.getAgencies(filter));
+			organizationList.addAll(DbUtil.getAgencies(filter, true));
 		}
         //organizationList = DbUtil.getOrganizations(filter);
         if (filter.getSelOrgIds()!= null && filter.getSelOrgIds().length == 1 && filter.getSelOrgIds()[0]!=-1){
@@ -4004,7 +4008,7 @@ public class DataDispatcher extends DispatchAction {
 	            	BigDecimal growthPercent = amtCurrentYear.divide(amtPreviousYear, RoundingMode.HALF_UP).subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
 	                if (!ignore || (growthPercent.compareTo(new BigDecimal(100))==-1) && (growthPercent.compareTo(new BigDecimal(-100))==1)) {
 	                	map.put(ampOrganisation, growthPercent);
-	                    csvString.append(ampOrganisation.getName().replace(",", " "));
+	                    csvString.append(ampOrganisation.getName().replace(",", " ").replace('\r', ' ').replace('\n', ' '));
 	            		csvString.append(",");
 	            		odaGrowthData += "<"+ ampOrganisation.getName() +">";
 	            		csvString.append(amtPreviousYear);

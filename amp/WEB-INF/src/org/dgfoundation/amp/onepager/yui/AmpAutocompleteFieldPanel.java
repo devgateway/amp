@@ -4,15 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.yui;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -40,20 +31,25 @@ import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.Session;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * Autocomplete Combobox Component based on YUI 2.8.x (or upper). This component
- * can be used to show an autocomplete editbox {@linkplain http
- * ://developer.yahoo.com/yui/examples/autocomplete/ac_combobox.html}
+ * can be used to show an autocomplete editbox {@linkplain http://developer.yahoo.com/yui/examples/autocomplete/ac_combobox.html}
  * 
  * @author mpostelnicu@dgateway.org
  * @since Jun 14, 2011
- * @see {@linkplain http ://ptrthomas.wordpress.com/2009/08/12/wicket
- *      -tutorial-yui-autocomplete-using-json-and-ajax/}
+ * @see {@linkplain http://ptrthomas.wordpress.com/2009/08/12/wicket-tutorial-yui-autocomplete-using-json-and-ajax/}
  */
 public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
-		AmpFieldPanel<String> implements IAjaxIndicatorAware {
+		AmpFieldPanel<CHOICE> implements IAjaxIndicatorAware {
 
 	private static final long serialVersionUID = 1L;
 	public static final String ACRONYM_DELIMITER_START = "(";
@@ -101,8 +97,11 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 * If YUI client side datasource cache should be used (some instances of this control may require no cache)
 	 */
 	private boolean useCache=true;
-	
 
+    /**
+     * store the class of CHOICE, needed to load the selected object by id
+     */
+    private Class<CHOICE> objClass;
 	
 	
 
@@ -178,8 +177,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	
 	/**
 	 * 
-	 * @param id
-	 * @param fmName
+	 * @param id id
+	 * @param fmName FM name
 	 * @param hideLabel  the FM name @see {@link AmpFMTypes}
 	 * @param objectListModelClass the model to retrieve the list of items
 	 * @param useCache if YUI should use client side cache
@@ -198,7 +197,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 
 	/**
 	 * 
-	 * @param id
+	 * @param id id
 	 * @param fmName  the FM name @see {@link AmpFMTypes}
 	 * @param objectListModelClass the model to retrieve the list of items
 	 * @param useCache if YUI should use client side cache
@@ -277,9 +276,10 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			protected void respond(final AjaxRequestTarget target) {
 				String selectedString = getRequestCycle().getRequest().getRequestParameters().getParameterValue("selectedString").toString();
 				// hide loading icon:
+                Long objId = Long.parseLong(selectedString);
 				target.appendJavaScript("$('#" + indicator.getMarkupId() + "').hide();");
-				CHOICE choice = getSelectedChoice(DbUtil.deFilter(selectedString, false));
-				
+                CHOICE choice = getSelectedChoice(objId);
+
 				onSelect(target, choice);
 			}
 		};
@@ -289,11 +289,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	/**
 	 * Constructs a new component. Initializes all subcomponents
 	 * 
-	 * @see YuiAutoComplete#YuiAutoComplete(String, String, Class)
 	 * @param id
 	 * @param hideLabel
 	 *            if true, the visible text label of the component is not shown
-	 * @param model
 	 */
 	public AmpAutocompleteFieldPanel(
 			String id,
@@ -303,7 +301,21 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		this(id, fmName, hideLabel, objectListModelClass, AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js","WicketAutoComplete");
 	}
 
-	/**
+    /**
+     * Gets the hibernate id for the specified choice
+     *
+     * @param choice
+     *            the choice that needs value extraction
+     * @return the unique id value of the choice
+     */
+    protected Long getChoiceId(final CHOICE choice){
+        if (objClass == null){
+            objClass = (Class<CHOICE>) choice.getClass();
+        }
+        return ContentTranslationUtil.getObjectId(choice);
+    }
+
+    /**
 	 * Gets the string value from the specified choice
 	 * 
 	 * @param choice
@@ -367,6 +379,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		List<String[]> choiceValues = new ArrayList<String[]>();
 		for (CHOICE choice : choices) {
 			Integer choiceLevel = getChoiceLevel(choice);
+            Long choiceId = getChoiceId(choice);
 			String choiceValue = getChoiceValue(choice);
 			if (showAcronyms()){
 				String acronym = getAcronym(choice);
@@ -379,7 +392,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			}
 				
 			choiceValues.add(new String[] { choiceValue,
-					choiceLevel != null ? choiceLevel.toString() : "0" });
+					choiceLevel != null ? choiceLevel.toString() : "0", choiceId.toString()});
 		}
 
 		return choiceValues.toArray(new String[0][0]);
@@ -428,49 +441,21 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
 
-	protected CHOICE getSelectedChoice(String input) {
-	
-		Constructor<? extends AbstractAmpAutoCompleteModel<CHOICE>> constructor;
-		try {
-			
-			if (showAcronyms() && input.indexOf(ACRONYM_DELIMITER_STOP) != -1){
-				input = input.substring(input.indexOf(ACRONYM_DELIMITER_STOP) + ACRONYM_DELIMITER_STOP.length());
-			}
-			
-			int extraInfoEnd = input.indexOf(BOLD_DELIMITER_STOP);
-			if (extraInfoEnd >= 0)
-				input = input.substring(extraInfoEnd + BOLD_DELIMITER_STOP.length());
-			
-			constructor = objectListModelClass.getConstructor(String.class,String.class,
-					Map.class);
-			AmpAuthWebSession session = (AmpAuthWebSession) this.getSession();
-			String language=session.getLocale().getLanguage();
-			AbstractAmpAutoCompleteModel<CHOICE> newInstance = constructor
-					.newInstance(input, language, modelParams);
-			newInstance.getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, true);
-			Collection<CHOICE> choices = newInstance.getObject();
-			
-			if(choices==null || choices.size()==0) throw new RuntimeException("Cannot find selection object " + input +"!");
-			CHOICE[] allChoices = (CHOICE[]) choices.toArray();
-			return allChoices[allChoices.length - 1];
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (InstantiationException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
+    /**
+     * Retrieve the object coresponding to the user's selection
+     * @param objId
+     * @return
+     */
+    protected CHOICE getSelectedChoice(Long objId) {
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+        } catch (DgException e) {
+            logger.error("Can't get hibernate session", e);
+        }
+        return (CHOICE)session.get(objClass, objId);
+    }
 
 	/**
 	 * YAHOO.widget.WicketAutoComplete using {@link YuiAutoComplete#textField

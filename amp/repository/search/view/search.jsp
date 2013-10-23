@@ -164,7 +164,7 @@
 					<td width="50%" valign="top"><c:choose>
 						<c:when test="${empty resultList}">
 							<c:if test="${param.reset != 'true'}">
-    							<div class="txt_sm_b"><digi:trn>Your search return no results. Please try another keyword.</digi:trn></div>
+    							<div class="txt_sm_b"><digi:trn>Your search returned no results. Please try another keyword.</digi:trn></div>
 							</c:if>
 						</c:when>
 						<c:otherwise>

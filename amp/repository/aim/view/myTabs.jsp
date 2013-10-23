@@ -10,6 +10,7 @@
 <%
 	{
 		org.digijava.module.aim.dbentity.AmpReports report = (org.digijava.module.aim.dbentity.AmpReports) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_TAB_REPORT);
+		//Long currentTabAmpReportId = (report != null) ? report.getAmpReportId() : null;
 		if (report != null)
 			{
 				if (report.getDrilldownTab())
@@ -17,6 +18,7 @@
 				else
 					new RuntimeException("Current tab report is not a drill-down tab!").printStackTrace();
 			}
+		
 	}
 %>
 
@@ -35,7 +37,13 @@
     	else
     		xmlhttp = new XMLHttpRequest();
 
-		xmlhttp.open("GET","/aim/viewNewAdvancedReport.do~loadstatus=true&"+new Date().getTime(),true);
+    	<logic:notPresent name="currentTabReport">
+    		return;
+    	</logic:notPresent>
+    	
+	<logic:present name="currentTabReport">
+    	
+		xmlhttp.open("GET","/aim/viewNewAdvancedReport.do~loadstatus=true~ampReportId=<bean:write name="currentTabReport" property="ampReportId"/>&"+new Date().getTime(),true);
 
 		xmlhttp.onreadystatechange=function()
 		{
@@ -69,6 +77,7 @@
 		   }
 		}
 		xmlhttp.send(null);
+	</logic:present>		
     }
     
 </script>

@@ -138,7 +138,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Internal IDs")
 	protected Set internalIds ;
 	@VersionableCollection(fieldTitle = "Fundings")
-	protected Set funding ;
+	protected Set<AmpFunding> funding ;
 	@VersionableCollection(fieldTitle = "Progress")
 	protected Set progress;
 	
@@ -524,7 +524,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * @return
 	 */
-	public Set getFunding() {
+	public Set<AmpFunding> getFunding() {
 		return funding;
 	}
 

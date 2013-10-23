@@ -474,7 +474,7 @@ public class ShowAddComponent extends Action {
         Collection fundDets = eaForm.getFunding().getFundingDetails();
         if (fundDets != null) {
             Collection<AmpFundingDetail> ampFundDets = ActivityUtil.createAmpFundingDetails(fundDets);
-            cal.doCalculations(ampFundDets, eaForm.getComponents().getFundingCurrCode());
+            cal.doCalculations(ampFundDets, eaForm.getComponents().getFundingCurrCode(), true);
             session.setAttribute("totalComm", cal.getTotActualComm());
             session.setAttribute("totalDisb", cal.getTotActualDisb());
             session.setAttribute("totalExpn", cal.getTotActualExp());

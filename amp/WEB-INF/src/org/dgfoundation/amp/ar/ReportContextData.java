@@ -331,6 +331,26 @@ public class ReportContextData
 		setGeneratedReport(null);
 		progressTotalRows = 0;
 		progressValue = 0;
+		if (this.getReportMeta() != null)
+			if (!this.getReportMeta().currencyIsSpecified())
+			{
+				resetCurrency(this.getFilter());
+				resetCurrency(this.getSerializedFilter());
+			}
+	}
+	
+	/**
+	 * resets the currency of a filter to the default one - the default one being specified off {@link AmpARFilter#getDefaultCurrency()} <br />
+	 * if filter is null OR this filter has been touched by applying filters / settings, nothing is done (NPE is not thrown)
+	 * @param filter
+	 */
+	protected void resetCurrency(AmpARFilter filter)
+	{
+		if (filter == null)
+			return;
+		if (filter.haveSettingsBeenApplied())
+			return;
+		filter.setCurrency(AmpARFilter.getDefaultCurrency());
 	}
 	
 	public static boolean contextIdExists()

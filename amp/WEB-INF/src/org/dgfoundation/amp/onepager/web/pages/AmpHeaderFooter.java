@@ -4,12 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.web.pages;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -25,12 +20,21 @@ import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * @author mpostelnicu@dgateway.org
  * @since Sep 22, 2010
  */
 public class AmpHeaderFooter extends WebPage {
-	public AmpHeaderFooter() {
+    private static Logger logger = Logger.getLogger(AmpHeaderFooter.class);
+
+    public AmpHeaderFooter() {
 		List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
 
         //TLSUtils.populate(getServletRequest());
@@ -52,6 +56,7 @@ public class AmpHeaderFooter extends WebPage {
                     }
                 }
 			}
+
             if (!localeSet){
             	Session.get().setLocale(new Locale(TranslatorWorker.getDefaultLocalCode()));
             	org.digijava.kernel.entity.Locale newLocale = new org.digijava.kernel.entity.Locale();

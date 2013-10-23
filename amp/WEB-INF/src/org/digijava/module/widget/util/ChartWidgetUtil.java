@@ -665,7 +665,7 @@ public class ChartWidgetUtil {
     	for(Long sectorId:fundingsByTopLevelSectorId.keySet())
     	{
     		FundingCalculationsHelper fch = new FundingCalculationsHelper();
-    		fch.doCalculations(fundingsByTopLevelSectorId.get(sectorId).fundings, calcCurrencyCode);
+    		fch.doCalculations(fundingsByTopLevelSectorId.get(sectorId).fundings, calcCurrencyCode, true);
     		
     		DonorSectorFundingHelper dsfh = new DonorSectorFundingHelper(fundingsByTopLevelSectorId.get(sectorId).sector);
     		dsfh.addFunding(FeaturesUtil.applyThousandsForVisibility(fch.getTotActualComm().doubleValue()));
@@ -773,7 +773,7 @@ public class ChartWidgetUtil {
         }
         return result;
     }
-    public static List<AmpFundingDetail> getLocationFunding(FilterHelper filter,AmpCategoryValueLocations location) throws DgException {
+    public static List<AmpFundingDetail> getLocationFunding(FilterHelper filter,AmpCategoryValueLocations location, boolean donorFundingOnly) throws DgException {
         Long orgGroupId = filter.getOrgGroupId();
         Long[] orgIds = filter.getOrgIds();
         int transactionType = filter.getTransactionType();
@@ -799,6 +799,9 @@ public class ChartWidgetUtil {
                 else{
                      oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
                 }
+                if (donorFundingOnly)
+                	oql += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "' ";
+                
                 if (orgIds == null) {
                     if (orgGroupId != -1) {
                         oql += getOrganizationQuery(true, orgIds);
@@ -937,11 +940,11 @@ public class ChartWidgetUtil {
             while (regionIter.hasNext()) {
                 //calculating funding for each region
                 AmpCategoryValueLocations location = regionIter.next();
-                List<AmpFundingDetail> fundingDets = getLocationFunding(filter, location);
+                List<AmpFundingDetail> fundingDets = getLocationFunding(filter, location, true);
                 /*Newly created objects and   selected currency
                 are passed doCalculations  method*/
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(fundingDets, currCode);
+                cal.doCalculations(fundingDets, currCode, true);
                 DecimalWraper total = null;
 
                 /*Depending on what is selected in the filter
@@ -1013,7 +1016,7 @@ public class ChartWidgetUtil {
             if (unallocatedCondition) {
                 List<AmpFundingDetail> unallocatedFundings = getUnallocatedFunding(filter);
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(unallocatedFundings, currCode);
+                cal.doCalculations(unallocatedFundings, currCode, true);
                 DecimalWraper total = null;
 
                 /*Depending on what is selected in the filter
@@ -1096,7 +1099,7 @@ public class ChartWidgetUtil {
 
     }
 
-    public static List<AmpSector> getSectorList(FilterHelper filter,Long sectorClassConfigId) throws DgException {
+    public static List<AmpSector> getSectorList(FilterHelper filter,Long sectorClassConfigId, boolean donorFundingOnly) throws DgException {
         Long[] orgIds = filter.getOrgIds();
         Long orgGroupId = filter.getOrgGroupId();
         int transactionType = filter.getTransactionType();
@@ -1132,6 +1135,8 @@ public class ChartWidgetUtil {
         } else {
             oql += " and (fd.transactionType =0 or  fd.transactionType =1) "; // the option comm&disb is selected
         }
+        if (donorFundingOnly)
+        	oql += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "' ";
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += getOrganizationQuery(true, orgIds);
@@ -1180,15 +1185,15 @@ public class ChartWidgetUtil {
     public static Collection<DonorSectorFundingHelper> getDonorSectorFundingHelperList(FilterHelper filter,Long sectorClassConfigId) throws DgException {
         int transactionType = filter.getTransactionType();
         String currCode = CurrencyUtil.getCurrency(filter.getCurrId()).getCurrencyCode();
-        List<AmpSector> sectors = getSectorList(filter,sectorClassConfigId);
+        List<AmpSector> sectors = getSectorList(filter, sectorClassConfigId, true);
         Iterator<AmpSector> sectorIter = sectors.iterator();
         Map<Long, DonorSectorFundingHelper> sectorsMap = new HashMap<Long, DonorSectorFundingHelper>();
         while (sectorIter.hasNext()) {
             AmpSector sector = sectorIter.next();
             Long sectorId = sector.getAmpSectorId();
-            List<AmpFundingDetail> fundingDets = getSectorFunding(filter, sectorId,sectorClassConfigId);
+            List<AmpFundingDetail> fundingDets = getSectorFunding(filter, sectorId,sectorClassConfigId, true);
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
-            cal.doCalculations(fundingDets, currCode);
+            cal.doCalculations(fundingDets, currCode, true);
             DecimalWraper amount = null;
             DecimalWraper disbAmount = null;
 
@@ -1251,7 +1256,7 @@ public class ChartWidgetUtil {
     public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter,Long sectorClassConfigId,String othersTitle) throws DgException {
         Double divideByMillionDenominator = new Double(1000000) / FeaturesUtil.getAmountMultiplier();
         DefaultPieDataset ds = new DefaultPieDataset();
-        List<AmpSector> sectors = getSectorList(filter,sectorClassConfigId);
+        List<AmpSector> sectors = getSectorList(filter,sectorClassConfigId, true);
         // to calculate funding for all sectors
         Double totAllSectors = 0d;
         Iterator<AmpSector> sectorIter = sectors.iterator();
@@ -1302,7 +1307,7 @@ public class ChartWidgetUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<AmpFundingDetail> getSectorFunding(FilterHelper filter, Long sectorId,Long sectorClassConfigId)
+    public static List<AmpFundingDetail> getSectorFunding(FilterHelper filter, Long sectorId,Long sectorClassConfigId, boolean donorFundingOnly)
             throws DgException {
         Long[] orgIds = filter.getOrgIds();
         Long orgGroupId = filter.getOrgGroupId();
@@ -1339,6 +1344,9 @@ public class ChartWidgetUtil {
             oql += " and (fd.transactionType=1 or fd.transactionType=0) "; // the option comm&disb is selected
         }
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)    and config.id=:configId  ";
+        if (donorFundingOnly)
+        	oql += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "' ";
+
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += getOrganizationQuery(true, orgIds);
@@ -1405,10 +1413,10 @@ public class ChartWidgetUtil {
     @SuppressWarnings("unchecked")
     public static DecimalWraper getSectorFundingAmount(FilterHelper filter, Long sectorId,Long sectorClassConfigId)
             throws DgException {
-        List<AmpFundingDetail> fundingDets = getSectorFunding(filter,sectorId,sectorClassConfigId);
+        List<AmpFundingDetail> fundingDets = getSectorFunding(filter,sectorId,sectorClassConfigId, true);
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
         String currCode = CurrencyUtil.getCurrency(filter.getCurrId()).getCurrencyCode();
-        cal.doCalculations(fundingDets, currCode);
+        cal.doCalculations(fundingDets, currCode, true);
         DecimalWraper amount = null;
         /*Depending on what is selected in the filter
         we should return either actual commitments
@@ -1439,7 +1447,7 @@ public class ChartWidgetUtil {
     public static DecimalWraper getFunding(FilterHelper filter, Date startDate,
             Date endDate, Long assistanceTypeId,
             Long financingInstrumentId,
-            int transactionType,int adjustmentType) throws DgException {
+            int transactionType, int adjustmentType, boolean donorFundingOnly) throws DgException {
         DecimalWraper total = null;
         String oql = "";
         String currCode = CurrencyUtil.getCurrency(filter.getCurrId()).getCurrencyCode();
@@ -1463,6 +1471,10 @@ public class ChartWidgetUtil {
         }
 
         oql += " where  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        
+        if (donorFundingOnly)
+        	oql += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "' ";
+        
         if (orgIds == null) {
             if (orgGroupId != -1) {
                 oql += getOrganizationQuery(true, orgIds);
@@ -1514,7 +1526,7 @@ public class ChartWidgetUtil {
             /*the objects retuned by query  and   selected currency
             are passed doCalculations  method*/
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
-            cal.doCalculations(fundingDets, currCode);
+            cal.doCalculations(fundingDets, currCode, true);
             /*Depending on what is selected in the filter
             we should return either actual commitments
             or actual Disbursement or  */
@@ -1623,11 +1635,11 @@ public class ChartWidgetUtil {
             String relatedOrgs = "";
             String teamIds = "";
             if (teamMember.getTeamAccessType().equals("Management")) {
-                qr += " and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
+                qr += " and (act.draft=false OR act.draft is null) and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
             }
             else{
             	if (team.getComputation() != null && team.getComputation()&&team.getHideDraftActivities()!=null&&team.getHideDraftActivities()) {
-        			qr+=" and act.draft=false ";
+        			qr+=" and (act.draft=false or act.draft is null) ";
         		}
             }
             qr += " and (";
@@ -1668,7 +1680,7 @@ public class ChartWidgetUtil {
     
     public static String getTeamQueryManagement() {
         String qr = "";
-        qr += " and act.draft=false and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
+        qr += " and (act.draft=false or act.draft is null) and (act.approvalStatus ='approved' or act.approvalStatus ='startedapproved') ";
         qr += " and act.team is not null and act.team in (select at.ampTeamId from " 
 		+ AmpTeam.class.getName() + " at where parentTeamId is not null)";
         

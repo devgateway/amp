@@ -596,11 +596,24 @@ function resetToDefaults(){
 	unCheckOptions("organization_check");
 	unCheckOptions("zone_check");
 	unCheckOptions("sub_sector_check");
+	unCheckOptions("status_check");
 	if (dashboardType==4){
 		unCheckOptions("beneficiary_agency_check");
 		unCheckOptions("implementing_agency_check");
 		unCheckOptions("secondary_program_check");
 	}
+	if (dashboardType==1) {
+		document.getElementById("agencyType").value = document.getElementById("agencyTypeDefault").value;
+		document.getElementById("agencyType_dropdown").value = document.getElementById("agencyTypeDefault").value;
+		document.getElementById("agencyTypeQuickFilter_dropdown").value = document.getElementById("agencyTypeDefault").value;
+	}
+	
+	document.getElementById("currencyId").value = document.getElementById("currencyIdDefault").value;
+	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyIdDefault").value;
+	document.getElementById("currencyQuickFilter_dropdown").value = document.getElementById("currencyIdDefault").value;
+	
+	document.getElementById("showAmountsInThousands").value = document.getElementById("showAmountsInThousandsDefault").value;
+	document.getElementById("show_amounts_in_thousands").value = document.getElementById("showAmountsInThousandsDefault").value;
 	
 	document.getElementById("decimalsToShow_dropdown").selectedIndex = 2;
 	document.getElementById("topLists_dropdown").selectedIndex = 0;
@@ -623,6 +636,7 @@ function resetToDefaults(){
 		document.getElementById("secondary_program_dropdown_id").selectedIndex = 0;
 	}
 	document.getElementById("transaction_type").selectedIndex = 1;
+	document.getElementById("adjustment_type").selectedIndex = 1;
 	if (dashboardType!=4){
 		document.getElementById("org_group_dropdown_id").selectedIndex = 0;
 		removeOptionsDropdown("org_dropdown_id");
@@ -641,7 +655,7 @@ function resetToDefaults(){
 	document.getElementById("filterZones").innerHTML = trnAll;
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
-	setSelectedValue("show_amounts_in_thousands", 2); // Show amounts in millions
+	//setSelectedValue("show_amounts_in_thousands", 2); // Show amounts in millions
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
@@ -991,8 +1005,10 @@ function callbackApplyFilter(e){
 	document.getElementById("currencyId").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	//if (dashboardType!=4) {
 		document.getElementById("adjustmentType").value = document.getElementById("adjustment_type_quick").value;
-		document.getElementById("adjustment_type").value = document.getElementById("adjustment_type_quick").options[document.getElementById("adjustment_type").selectedIndex].value;
+		document.getElementById("adjustment_type").value = document.getElementById("adjustment_type_quick").value;//document.getElementById("adjustment_type_quick").options[document.getElementById("adjustment_type").selectedIndex].value;
 		document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
+		document.getElementById("transaction_type").value = document.getElementById("transactionType_dropdown").value;
+		
 	//}
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("startYear").value = document.getElementById("startYearQuickFilter_dropdown").value;
@@ -2086,6 +2102,15 @@ function refreshBoxes(o){
 		inner = trnTopPrograms + " (" + startYear + ")";
 	} else {
 		inner = trnTopPrograms + " (" + startYear + "-" + endYear + ")";
+	}
+	if (div!=null)
+		div.innerHTML = inner;
+	
+	div = document.getElementById("topSecondaryProgramsTitle");
+	if (startYear == endYear) {
+		inner = trnTopSecondaryPrograms + " (" + startYear + ")";
+	} else {
+		inner = trnTopSecondaryPrograms + " (" + startYear + "-" + endYear + ")";
 	}
 	if (div!=null)
 		div.innerHTML = inner;

@@ -29,6 +29,11 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
 public class CellColumn<K extends Cell> extends Column<K> {
 
 	/**
+	 * view used for having extracted the column. Might be null!
+	 */
+	protected String extractorView;
+	
+	/**
 	 * Returns the number of items in the column as the visible rows (they are already unique) so this means
 	 * the number activities that have data for this column
 	 */
@@ -63,15 +68,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 
 	public CellColumn(Column source) {
 		super(source.getParent(), source.getName());
-		this.contentCategory = source.getContentCategory();
-		this.dimensionClass = source.getDimensionClass();
-		this.relatedContentPersisterClass = source.getRelatedContentPersisterClass();
-		
-		this.worker=source.getWorker();
-		
-		this.setDescription(source.getDescription());
-		this.setExpression(source.getExpression());
-		this.setTotalExpression(source.getTotalExpression());
+		copyColumnData(this, source);
 	}
 
 	public CellColumn(Column parent, String name) {
@@ -79,6 +76,28 @@ public class CellColumn<K extends Cell> extends Column<K> {
 		this.contentCategory = parent.getContentCategory();
 	}
 
+	/**
+	 * copies all the misc fields from a source column to a destination column
+	 * @param dest
+	 * @param source
+	 */
+	private static void copyColumnData(CellColumn dest, Column source)
+	{
+		dest.contentCategory = source.getContentCategory();
+		dest.dimensionClass = source.getDimensionClass();
+		dest.relatedContentPersisterClass = source.getRelatedContentPersisterClass();
+		
+		if (source instanceof CellColumn)
+			dest.setExtractorView(((CellColumn) source).getExtractorView());
+		
+		dest.worker=source.getWorker();
+		
+		dest.setDescription(source.getDescription());
+		dest.setExpression(source.getExpression());
+		dest.setTotalExpression(source.getTotalExpression());
+	}
+	
+	
 	public Cell getByOwner(Long ownerId) {
 		List<Cell> cells = itemsMap.get(ownerId);
 		if (cells == null || cells.isEmpty())
@@ -136,22 +155,33 @@ public class CellColumn<K extends Cell> extends Column<K> {
 		itemsMap.get(c.getOwnerId()).add(c);
 		items.add((K) c);
 	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.dgfoundation.amp.ar.Column#filterCopy(org.dgfoundation.amp.ar.cell.Cell)
 	 */
 	@Override
-	public Column filterCopy(Cell metaCell, Set<Long> ids) {
+	public Column filterCopy(final Cell metaCell, final Set<Long> ids) {
+		
+		CellFilterCriteria filter = new CellFilterCriteria(){
+			public Cell filter(Cell source){
+				return source.filter(metaCell, ids);
+			}};		
+		return filterCopy(filter);
+	}
+	
+	public Column filterCopy(CellFilterCriteria crit)
+	{
 		CellColumn dest = (CellColumn) this.newInstance();
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
-			Cell destCell = element.filter(metaCell, ids);
+			Cell destCell = crit.filter(element);
 			if (destCell != null)
 				dest.addCell(destCell);
 		}
-		return dest;
+		return dest;		
 	}
 
 	/*
@@ -439,6 +469,20 @@ public class CellColumn<K extends Cell> extends Column<K> {
 			if (ownerId.contains(cell.getOwnerId()))
 				iter.remove();
 		}
+	}
+	
+	public void setExtractorView(String ev)
+	{
+		this.extractorView = ev;
+	}
+	
+	/**
+	 * the view used for having extracted this column
+	 * @return
+	 */
+	public String getExtractorView()
+	{
+		return this.extractorView;
 	}
 }
 

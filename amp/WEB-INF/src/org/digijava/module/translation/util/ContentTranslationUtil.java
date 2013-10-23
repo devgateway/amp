@@ -3,8 +3,10 @@ package org.digijava.module.translation.util;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -12,7 +14,6 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.proxy.HibernateProxyHelper;
 import org.hibernate.type.Type;
 
 import java.io.Serializable;
@@ -28,6 +29,7 @@ import java.util.*;
  */
 public class ContentTranslationUtil {
     private static Logger logger = Logger.getLogger(ContentTranslationUtil.class);
+    private static final AbstractCache cache = DigiCacheManager.getInstance().getCache(ContentTranslationUtil.class.getName());
 
     /**
      * Called by the hibernate interceptor onLoad method in order to load the translations
@@ -107,6 +109,7 @@ public class ContentTranslationUtil {
      *
      * @param obj Object that needs translation cloning
      */
+    @SuppressWarnings("unchecked")
     public static void cloneTranslations(Object obj){
         Hibernate.initialize(obj);
         String objClass = getObjectClass(obj);
@@ -191,7 +194,7 @@ public class ContentTranslationUtil {
             for (int i = 0; i < types.length; i++){
             	String fieldName = propertyNames[i];
             	Field field = getFieldByName(clazz, fieldName);
-                if (field.getAnnotation(TranslatableField.class) != null){
+                if (field.getAnnotation(TranslatableField.class) != null && (previousState == null || (currentState[i] != null && !currentState[i].equals(previousState[i])))){
                 	FieldTranslationPack ftp;
                     Long ftpId;
                 	if (isVersionable){ //if versionable we already cloned the translations
@@ -217,10 +220,17 @@ public class ContentTranslationUtil {
                     	baseTranslation = ftp.getNonNull(getBaseLanguage(), TLSUtils.getLangCode());
                     else
                         //for non-versionable entities just load the base translation from the db
-                    	baseTranslation = loadFieldTranslationInLocale(objectClass, objectId, fieldName, getBaseLanguage());
-                    
-                    if (baseTranslation == null)
+                        baseTranslation = loadFieldTranslationInLocale(objectClass, objectId, fieldName, getBaseLanguage());
+
+                    if (baseTranslation == null){
                     	logger.debug("Object without base translation");
+                        //create base translation for object
+                        baseTranslation = (String) loadFieldFromDb(clazz, objectId, fieldName);
+                        ftp.add(getBaseLanguage(), baseTranslation);
+                        //restore current state of the object
+                        currentState[i] = baseTranslation;
+                        stateModified = true;
+                    }
                     else{
                     	logger.debug("Updated base translation with: " + baseTranslation + " (currentlocale =" + TLSUtils.getLangCode() + ")");
                     	if (previousState != null && previousState[i] != null){
@@ -242,25 +252,40 @@ public class ContentTranslationUtil {
         return stateModified;
     }
 
+
     /**
-     * Method to load all the available translations for the field of an object
      * @param objClass class of the current object
      * @param objId object id
-     * @param fieldName name of the field
-     * @return list of available translations
+     * @return cache key built from the two parameters
      */
-    public static List<AmpContentTranslation> loadFieldTranslations(String objClass, Long objId, String fieldName){
-        try{
-        	Session session = PersistenceManager.getRequestDBSession();
-        	return loadFieldTranslations(session, objClass, objId, fieldName);
-        } catch (Exception e) {
-            logger.error("can't load field translations", e);
-        }
-        return null;
+    private static String getCacheKey(String objClass, Long objId){
+        return objClass+objId;
     }
 
     /**
-     * Method to load all the available translations for the field of an object, using a
+     * evict the translations associated with the object from the cache
+     * @param entity current object
+     */
+    public static void evictEntityFromCache(Object entity){
+        String key = getCacheKey(getObjectClass(entity), getObjectId(entity));
+        cache.evict(key);
+    }
+
+    /**
+     * Method to load all the available translations for an object, using a
+     * provided session. Useful when you need the translations loaded in a new session.
+     *
+     * @param session session to use for loading entities
+     * @param objClass class of the current object
+     * @param objId object id
+     * @return list of available translations
+     */
+    private static List<AmpContentTranslation> loadTranslations(Session session, String objClass, Long objId){
+        return loadTranslations(session, objClass, objId, null);
+    }
+
+    /**
+     * Method to load all the available translations for an object, using a
      * provided session. Useful when you need the translations loaded in a new session.
      *
      * @param session session to use for loading entities
@@ -269,12 +294,75 @@ public class ContentTranslationUtil {
      * @param fieldName name of the field
      * @return list of available translations
      */
-    public static List<AmpContentTranslation> loadFieldTranslations(Session session, String objClass, Long objId, String fieldName){
+    private static List<AmpContentTranslation> loadTranslations(Session session, String objClass, Long objId, String fieldName){
+        //method is used to build the cache
         Criteria criteria = session.createCriteria(AmpContentTranslation.class);
         criteria.add(Restrictions.eq("objectClass", objClass));
         criteria.add(Restrictions.eq("objectId", objId));
-        criteria.add(Restrictions.eq("fieldName", fieldName));
+        if (fieldName != null){
+            criteria.add(Restrictions.eq("fieldName", fieldName));
+        }
         return criteria.list();
+    }
+
+    /**
+     * Gets all of the translations associated with a field of an object, if the translations are not
+     * present in the cache, the method will fetch them from the database
+     * @param objClass class of the current object
+     * @param objId object id
+     * @param fieldName name of the field
+     * @return map between locale and the translation object
+     */
+    @SuppressWarnings("unchecked")
+    private static HashMap<String, AmpContentTranslation> loadCachedFieldTranslations(String objClass, Long objId, String fieldName){
+        HashMap<String, HashMap<String, AmpContentTranslation>> fieldMap = (HashMap<String, HashMap<String, AmpContentTranslation>>) cache.get(getCacheKey(objClass, objId));
+        if (fieldMap == null){
+            List<AmpContentTranslation> list;
+            synchronized (sessionLock){
+                list = loadTranslations(session, objClass, objId);
+            }
+            fieldMap = new HashMap<String, HashMap<String, AmpContentTranslation>>();
+            for (AmpContentTranslation t: list){
+                HashMap<String, AmpContentTranslation> localeMap = fieldMap.get(t.getFieldName());
+                if (localeMap == null){
+                    localeMap = new HashMap<String, AmpContentTranslation>();
+                    fieldMap.put(t.getFieldName(), localeMap);
+                }
+                localeMap.put(t.getLocale(), t);
+            }
+            cache.put(getCacheKey(objClass, objId), fieldMap);
+        }
+
+        return fieldMap.get(fieldName);
+    }
+
+    /**
+     * Get a translation for a field
+     * @param objClass class of the current object
+     * @param objId object id
+     * @param fieldName name of the field
+     * @param locale language in which the translation is requested
+     * @return translation object
+     */
+    private static AmpContentTranslation loadCachedFieldTranslationsInLocale(String objClass, Long objId, String fieldName, String locale){
+        HashMap<String, AmpContentTranslation> localeMap = loadCachedFieldTranslations(objClass, objId, fieldName);
+        if (localeMap == null)
+            return null;
+        return localeMap.get(locale);
+    }
+
+    /**
+     * Method to get all the available translations for the field of an object
+     * @param objClass class of the current object
+     * @param objId object id
+     * @param fieldName name of the field
+     * @return list of available translations
+     */
+    public static List<AmpContentTranslation> loadFieldTranslations(String objClass, Long objId, String fieldName){
+        HashMap<String, AmpContentTranslation> map = loadCachedFieldTranslations(objClass, objId, fieldName);
+        if (map == null)
+            return new ArrayList<AmpContentTranslation>();
+        return new ArrayList<AmpContentTranslation>(map.values());
     }
 
     /**
@@ -293,24 +381,31 @@ public class ContentTranslationUtil {
         	SessionFactory sf = PersistenceManager.getRequestDBSession().getSessionFactory();
         	session = sf.openStatelessSession(); //this does the trick, doesn't work when entity contains collections
         	StringBuilder query = new StringBuilder();
-			query.append("select c." + fieldName + " from ");
+			query.append("select c.");
+            query.append(fieldName);
+            query.append(" from ");
 			query.append(clazz.getName());
 			String objIdField = getObjectIdField(clazz, sf);
-			query.append(" c where c."+objIdField+"=:id");
+			query.append(" c where c.");
+            query.append(objIdField);
+            query.append("=:id");
 			Query qry = session.createQuery(query.toString());
 			qry.setLong("id", id);
             return qry.uniqueResult();
         } catch (Exception e) {
             logger.error("can't load object from database", e);
         } finally {
-            session.close();
+            if (session != null)
+                session.close();
         }
         return null;
     }
 
+    private static Session session = PersistenceManager.openNewSession();
+    private static Object sessionLock = new Object();
+    
     /**
      * Get's the translation for a field in a specified locale
-     * (uses a new session)
      *
      * @param objClass class of object
      * @param objId if of object
@@ -319,27 +414,10 @@ public class ContentTranslationUtil {
      * @return translation for field
      */
     public static String loadFieldTranslationInLocale(String objClass, Long objId, String fieldName, String locale){
-    	Session session = PersistenceManager.openNewSession();
-        try{
-        	StringBuilder query = new StringBuilder();
-			query.append("select t.translation from ");
-			query.append(AmpContentTranslation.class.getName());
-			query.append(" t where t.objectClass=:objectClass");
-			query.append(" and t.objectId=:objectId");
-			query.append(" and t.fieldName=:fieldName");
-			query.append(" and t.locale=:locale");
-			Query qry = session.createQuery(query.toString());
-			qry.setString("objectClass", objClass);
-			qry.setLong("objectId", objId);
-			qry.setString("fieldName", fieldName);
-			qry.setString("locale", locale);
-            return (String) qry.uniqueResult();
-        } catch (Exception e) {
-            logger.error("can't load field translations", e);
-        } finally {
-        	session.close();
-        }
-        return null;
+        AmpContentTranslation ampContentTranslation = loadCachedFieldTranslationsInLocale(objClass, objId, fieldName, locale);
+        if (ampContentTranslation == null)
+            return null;
+        return ampContentTranslation.getTranslation();
     }
 
     /**
@@ -356,10 +434,10 @@ public class ContentTranslationUtil {
         	session = PersistenceManager.openNewSession();
             String objClass = ftp.getObjClass();
             String fieldName = ftp.getFieldName();
-            
-            List<AmpContentTranslation> oldTrns = loadFieldTranslations(session, objClass, newId, fieldName);
-            
-            
+
+            //load the translations from db, not cache
+            List<AmpContentTranslation> oldTrns = loadTranslations(session, objClass, newId, fieldName);
+
             HashMap<String, String> trns = ftp.getTranslations();
             Set<String> locales = trns.keySet();
             for (String locale : locales) {
@@ -383,7 +461,8 @@ public class ContentTranslationUtil {
         } catch (Exception e) {
             logger.error("can't save field translations", e);
         } finally {
-        	session.close();
+            if (session != null)
+        	    session.close();
         }
     }
 
@@ -421,7 +500,8 @@ public class ContentTranslationUtil {
         } catch (Exception e) {
             logger.error("Can't delete field translations", e);
         } finally {
-            session.close();
+            if (session != null)
+                session.close();
         }
     }
 
@@ -589,5 +669,6 @@ public class ContentTranslationUtil {
         }
 
     }
+
 
 }

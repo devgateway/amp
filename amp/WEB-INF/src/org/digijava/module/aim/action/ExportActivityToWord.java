@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,8 +25,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -53,8 +50,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.aim.helper.GlobalSettings;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -2216,8 +2211,8 @@ public class ExportActivityToWord extends Action {
 
 
 			// TOTALS
-			String currencyCode = act.getCurrencyCode() != null ? act
-					.getCurrencyCode() : "";
+			String currencyCode = myForm.getCurrCode() == null ? Constants.DEFAULT_CURRENCY : myForm.getCurrCode();
+
 			String totalsOutput = "";
 			String totalAmountType = null;
 			ExportSectionHelper fundingTotalsDetails = new ExportSectionHelper(
@@ -2252,7 +2247,7 @@ public class ExportActivityToWord extends Action {
 			if (visibleModuleDisbursement) {
 				// TOTAL PLANNED DISBURSEMENT
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL PLANNED DISBURSEMENT") + ":";
+						"TOTAL PLANNED DISBURSEMENT").toUpperCase() + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalPlannedDisbursements() != null
 						&& myForm.getFunding().getTotalPlannedDisbursements()
@@ -2265,7 +2260,7 @@ public class ExportActivityToWord extends Action {
 
 				// TOTAL ACTUAL DISBURSEMENT
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL ACTUAL DISBURSEMENT") + ":";
+						"TOTAL ACTUAL DISBURSEMENT").toUpperCase() + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalDisbursements() != null
 						&& myForm.getFunding().getTotalDisbursements().length() > 0) {
@@ -2279,7 +2274,7 @@ public class ExportActivityToWord extends Action {
 			if (visibleModuleExpenditures) {
 				// TOTAL PLANNED EXPENDITURES
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL PLANNED EXPENDITURES") + ":";
+						"TOTAL PLANNED EXPENDITURES").toUpperCase() + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalPlannedExpenditures() != null
 						&& myForm.getFunding().getTotalPlannedExpenditures()
@@ -2292,7 +2287,7 @@ public class ExportActivityToWord extends Action {
 
 				// TOTAL ACTUAL EXPENDITURES
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL ACTUAL EXPENDITURES") + ":";
+						"TOTAL ACTUAL EXPENDITURES").toUpperCase() + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalExpenditures() != null
 						&& myForm.getFunding().getTotalExpenditures().length() > 0) {
@@ -2302,6 +2297,34 @@ public class ExportActivityToWord extends Action {
 				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
 						totalAmountType).addRowData(totalsOutput));
 			}
+
+        if (visibleModuleRoF) {
+            // Total Planned Release of Funds
+            totalAmountType = TranslatorWorker.translateText(
+                    "Total Planned Release of Funds").toUpperCase() + ":";
+            totalsOutput = "";
+            if (myForm.getFunding().getTotalPlannedReleaseOfFunds() != null
+                    && myForm.getFunding().getTotalPlannedReleaseOfFunds()
+                    .length() > 0) {
+                totalsOutput = myForm.getFunding()
+                        .getTotalPlannedReleaseOfFunds() + currencyCode;
+            }
+            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
+                    totalAmountType).addRowData(totalsOutput));
+
+            // Total Actual Release of Funds
+            totalAmountType = TranslatorWorker.translateText(
+                    "Total Actual Release of Funds").toUpperCase() + ":";
+            totalsOutput = "";
+            if (myForm.getFunding().getTotalActualRoF() != null
+                    && myForm.getFunding().getTotalActualRoF().length() > 0) {
+                totalsOutput = myForm.getFunding().getTotalActualRoF()
+                        + currencyCode;
+            }
+            fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
+                    totalAmountType).addRowData(totalsOutput));
+        }
+
 
 			if (visibleModuleDisbOrders) {
 				// TOTAL ACTUAL DISBURSeMENT ORDERS:
@@ -2334,29 +2357,23 @@ public class ExportActivityToWord extends Action {
 			}
 			
 			// Consumption Rate
-			{				
-				if(myForm.getFunding().getConsumptionRate()!=null && myForm.getFunding().getConsumptionRate().length()>0)
-				{
-					totalsOutput = "";
-					totalAmountType = TranslatorWorker.translateText("Consumption Rate") + ":";
-					totalsOutput=myForm.getFunding().getConsumptionRate();
-					
-					fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType).addRowData(totalsOutput));
-				}
-			}
+            if (myForm.getFunding().getConsumptionRate()!=null && myForm.getFunding().getConsumptionRate().length()>0) {
+                totalsOutput = "";
+                totalAmountType = TranslatorWorker.translateText("Consumption Rate") + ":";
+                totalsOutput=myForm.getFunding().getConsumptionRate();
+
+                fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType).addRowData(totalsOutput));
+            }
 
 			// Delivery Rate
-			{				
-				if (myForm.getFunding().getDeliveryRate() != null && myForm.getFunding().getDeliveryRate().length() > 0)
-				{
-					totalsOutput = "";
-					totalAmountType = TranslatorWorker.translateText("Delivery Rate") + ":";
-					totalsOutput = myForm.getFunding().getDeliveryRate();
-					
-					fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType).addRowData(totalsOutput));
-				}
-			}
-			
+            if (myForm.getFunding().getDeliveryRate() != null && myForm.getFunding().getDeliveryRate().length() > 0) {
+                totalsOutput = "";
+                totalAmountType = TranslatorWorker.translateText("Delivery Rate") + ":";
+                totalsOutput = myForm.getFunding().getDeliveryRate();
+
+                fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType).addRowData(totalsOutput));
+            }
+
 			retVal.add(createSectionTable(fundingTotalsDetails, request,
 					ampContext));
         

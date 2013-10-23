@@ -363,7 +363,7 @@ public class ViewNewAdvancedReport extends Action {
 		return mapping.findForward("forward");
 	}
 
-	private void setPaginationOfPagesParameters(HttpServletRequest request, Integer totalRows, Integer recordsPerPage, Integer numberOfPagesToDisplay ){
+	static void setPaginationOfPagesParameters(HttpServletRequest request, Integer totalRows, Integer recordsPerPage, Integer numberOfPagesToDisplay ){
 		//Pagination of pages
 		if (numberOfPagesToDisplay == null || numberOfPagesToDisplay < 1 ){
 			numberOfPagesToDisplay = 10;

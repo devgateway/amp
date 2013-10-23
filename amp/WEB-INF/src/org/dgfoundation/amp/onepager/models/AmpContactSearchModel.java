@@ -3,21 +3,18 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author dan
@@ -66,9 +63,8 @@ public class AmpContactSearchModel extends
 				ret = new ArrayList<AmpContact>();
 			}
 			AmpContact newContact = new AmpContact();
-			newContact.setName(TranslatorUtil.getTranslation("Change Name"));
-			newContact.setLastname(TranslatorUtil.getTranslation("Change Lastname"));
-			newContact.setTemporaryId("_"+new Date().getTime());
+            newContact.setId(-1L);
+            newContact.setFullname(TranslatorUtil.getTranslatedText("Add new contact"));
 			ret.add(newContact);
 			return ret;
 		} catch (HibernateException e) {

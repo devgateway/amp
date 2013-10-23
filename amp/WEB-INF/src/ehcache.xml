@@ -67,9 +67,22 @@
 		statistics="true"
 		/>
 
-	<!-- 
-		This cache is used by SiteCache (for version synchs) and by DigiPolicy (Permission Storage)
-	-->
+    <!--
+    This cache contains content translations
+    -->
+    <cache
+        name="org.digijava.module.translation.util.ContentTranslationUtil"
+        maxElementsInMemory="5000"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        maxElementsOnDisk="50000"
+        statistics="true"
+        />
+
+    <!--
+        This cache is used by SiteCache (for version synchs) and by DigiPolicy (Permission Storage)
+    -->
 	<cache
 		name="org.digijava.kernel.caches.application_scope"
 		maxElementsInMemory="2000"

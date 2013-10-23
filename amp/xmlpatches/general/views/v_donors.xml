@@ -22,7 +22,7 @@
 			    CREATE OR REPLACE VIEW v_donors AS 
 			    	SELECT f.amp_activity_id, o.name, f.amp_donor_org_id, o.org_grp_id, gr.org_type AS org_type_id
    					FROM amp_funding f, amp_organisation o LEFT JOIN amp_org_group gr ON o.org_grp_id = gr.amp_org_grp_id
-  					WHERE f.amp_donor_org_id = o.amp_org_id 
+  					WHERE f.amp_donor_org_id = o.amp_org_id AND f.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN' )
   					ORDER BY f.amp_activity_id, o.name;
         		</lang>
 		</script>

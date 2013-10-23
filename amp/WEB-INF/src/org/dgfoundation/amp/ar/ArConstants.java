@@ -202,6 +202,8 @@ public final class ArConstants {
 	public final static String ROLE_NAME_IMPLEMENTING_AGENCY = "Implementing Agency";
 	public final static String ROLE_NAME_BENEFICIARY_AGENCY = "Beneficiary Agency";
 	
+	public final static String IS_AN_MTEF_FUNDING = "Is MTEF Funding";
+	
 	
 	public final static String COLUMN_SECTOR_TAG="Sector Tag";
 	

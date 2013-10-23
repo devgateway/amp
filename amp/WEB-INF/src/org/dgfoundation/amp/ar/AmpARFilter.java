@@ -121,6 +121,11 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	private final SimpleDateFormat sdfIn = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
 	
+	/**
+	 * this is true iff this filter has been touched by a "change filters" functionality
+	 */
+	private boolean settingsHaveBeenAppliedFlag = false;
+	
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	
 	private Long id;
@@ -656,7 +661,7 @@ public class AmpARFilter extends PropertyListable {
 			}
 		}
 
-		AmpApplicationSettings settings = getEffectiveSettings();
+		getEffectiveSettings(); // do not remove call - also writes into the caches
 		
 		TeamMember tm = null;
 		
@@ -1685,8 +1690,9 @@ public class AmpARFilter extends PropertyListable {
 	public static AmpCurrency getDefaultCurrency()
 	{
 		AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
-		AmpCurrency result = CurrencyUtil.getDefaultCurrency();
-		if (tempSettings != null)
+		String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+    	AmpCurrency result = CurrencyUtil.getAmpcurrency(currCode);
+		if (tempSettings != null && tempSettings.getCurrency()!=null)
 			result = tempSettings.getCurrency();
 		return result; 
 	}
@@ -2957,5 +2963,38 @@ public class AmpARFilter extends PropertyListable {
 	private void setNeedsTeamFilter(boolean needs)
 	{
 		this.needsTeamFilter = needs;
+	}
+	
+	public void signalSettingsHaveBeenApplied()
+	{
+		this.settingsHaveBeenAppliedFlag = true;
+	}
+	
+	public boolean haveSettingsBeenApplied()
+	{
+		return settingsHaveBeenAppliedFlag;
+	}
+	
+	/**
+	 * multiplies the input value by 1, 1000 or 1000000; depending on the amountInThousand option value
+	 * @param val
+	 * @return
+	 */
+	public double adaptAmountToThousandsSetting(double val)
+	{
+		switch(this.computeEffectiveAmountInThousand())
+		{
+			case AMOUNT_OPTION_IN_MILLIONS:
+				return val * 0.001d * 0.001d;
+				
+			case AMOUNT_OPTION_IN_THOUSANDS:
+				return val * 0.001d;
+				
+			case AMOUNT_OPTION_IN_UNITS:
+				return val;
+				
+			default:
+				throw new RuntimeException("unsupported amountInThousand option: " + this.computeEffectiveAmountInThousand());
+		}
 	}
 }

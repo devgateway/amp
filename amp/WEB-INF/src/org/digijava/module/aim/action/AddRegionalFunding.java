@@ -281,7 +281,7 @@ public class AddRegionalFunding extends Action {
         Collection fundDets = eaForm.getFunding().getFundingDetails();
         if (fundDets != null) {
             Collection<AmpFundingDetail> ampFundDets = ActivityUtil.createAmpFundingDetails(fundDets);
-            cal.doCalculations(ampFundDets, eaForm.getFunding().getFundingCurrCode());
+            cal.doCalculations(ampFundDets, eaForm.getFunding().getFundingCurrCode(), true);
             session.setAttribute("totalComm", cal.getTotActualComm());
             session.setAttribute("totalDisb", cal.getTotActualDisb());
             session.setAttribute("totalExpn", cal.getTotActualExp());

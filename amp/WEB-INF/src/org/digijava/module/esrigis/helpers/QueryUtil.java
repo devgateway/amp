@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 
+import static org.digijava.module.aim.helper.Constants.*;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.dgfoundation.amp.Util;
@@ -186,7 +188,7 @@ public class QueryUtil {
 	 
 	public static String getTeamQueryManagement() {
 		String qr = "";
-		qr += " and act.draft=false and act.approvalStatus ='approved' ";
+		qr += String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') ", APPROVED_STATUS, STARTED_APPROVED_STATUS);
 		qr += " and act.team is not null and act.team in (select at.ampTeamId from "
 				+ AmpTeam.class.getName()
 				+ " at where parentTeamId is not null)";
@@ -214,7 +216,7 @@ public class QueryUtil {
 	            String relatedOrgs = "";
 	            String teamIds = "";
 	            if (teamMember.getTeamAccessType().equals("Management")) {
-	                qr += " and act.draft=false and act.approvalStatus ='approved' ";
+	            	qr += String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') ", APPROVED_STATUS, STARTED_APPROVED_STATUS);
 	            }
 	            qr += " and (";
 	            for (AmpTeam tm : teams) {
@@ -236,7 +238,7 @@ public class QueryUtil {
 	            qr += ")";
 
 	        } else {
-	            qr += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
+	            qr += String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') and act.team is not null ", APPROVED_STATUS, STARTED_APPROVED_STATUS);
 	        }
 	        return qr;
 	    }

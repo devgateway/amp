@@ -35,6 +35,7 @@ public class DashboardFilter {
     private Long startYearFilter;
     private Long endYearFilter;
     private Long currencyId;
+    private Long currencyIdDefault;
     private Long currencyIdQuickFilter;
     private Boolean workspaceOnly;
     private Boolean workspaceOnlyQuickFilter;
@@ -95,6 +96,7 @@ public class DashboardFilter {
     private Boolean showOnlyNonDraftActivities;
     
     private Integer showAmountsInThousands;
+    private Integer showAmountsInThousandsDefault;
     private Boolean showProjectsRanking;
     private Boolean showOrganizationsRanking;
     private Boolean showSectorsRanking;
@@ -104,6 +106,7 @@ public class DashboardFilter {
     private Boolean showSecondaryProgramsRanking;
     private Boolean fromGenerator;
     private int agencyType;
+    private int agencyTypeDefault;
     private int agencyTypeQuickFilter;
     private int agencyTypeFilter;
     
@@ -197,6 +200,8 @@ public class DashboardFilter {
     	newFilter.setPeacebuilderMarkerId(this.getPeacebuilderMarkerId());
     	newFilter.setSelPeacebuilderMarkerIds(this.getSelPeacebuilderMarkerIds());
     	newFilter.setPeacebuildingId(this.getPeacebuildingId());
+    	newFilter.setEndYear(this.getEndYear());
+    	newFilter.setStartYear(this.getStartYear());
     	return newFilter;
     }
 	
@@ -1246,6 +1251,31 @@ public class DashboardFilter {
 
 	public void setSelPeacebuilderMarkerIds(Long[] selPeacebuilderMarkerIds) {
 		this.selPeacebuilderMarkerIds = selPeacebuilderMarkerIds;
+	}
+
+	public Long getCurrencyIdDefault() {
+		return currencyIdDefault;
+	}
+
+	public void setCurrencyIdDefault(Long currencyIdDefault) {
+		this.currencyIdDefault = currencyIdDefault;
+	}
+
+	public Integer getShowAmountsInThousandsDefault() {
+		return showAmountsInThousandsDefault;
+	}
+
+	public void setShowAmountsInThousandsDefault(
+			Integer showAmountsInThousandsDefault) {
+		this.showAmountsInThousandsDefault = showAmountsInThousandsDefault;
+	}
+
+	public int getAgencyTypeDefault() {
+		return agencyTypeDefault;
+	}
+
+	public void setAgencyTypeDefault(int agencyTypeDefault) {
+		this.agencyTypeDefault = agencyTypeDefault;
 	}
 	
 }

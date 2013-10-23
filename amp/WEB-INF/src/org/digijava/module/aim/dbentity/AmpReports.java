@@ -637,5 +637,18 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 			res.add(hier.getColumn().getColumnName());
 		return res;
 	}
+	
+	public boolean currencyIsSpecified()
+	{
+		if (this.getFilterDataSet() == null)
+			return false;
+		
+		for(AmpFilterData filterData:this.getFilterDataSet())
+		{
+			if (filterData.getPropertyName().equals("currency"))
+				return true;
+		}
+		return false;
+	}
 }
 

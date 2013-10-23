@@ -117,7 +117,8 @@ public class ExportCategoryManager2XSL extends Action {
 				String currentRecord = "";
 				if (values != null) {
 					for (AmpCategoryValue value : values) {
-						currentRecord += AdminXSLExportUtil.BULLETCHAR
+						if (value!=null)
+							currentRecord += AdminXSLExportUtil.BULLETCHAR
 								+ TranslatorWorker.translateText(value.getValue(),locale, siteId)
 								+ AdminXSLExportUtil.NEWLINECHAR;
 					}

@@ -13,6 +13,6 @@ import org.apache.wicket.model.IModel;
 public class AmpTableFundingAmountComponent<T> extends AmpFundingAmountComponent<T> {
 
     public AmpTableFundingAmountComponent(String id, IModel<T> model, String fmAmount, String propertyAmount, String fmCurrency, String propertyCurrency, String fmDate, String propertyDate, boolean isMTEFProjection) {
-        super(id, model, fmAmount, propertyAmount, fmCurrency, propertyCurrency, fmDate, propertyDate, isMTEFProjection, true);
+        super(id, model, fmAmount, propertyAmount, fmCurrency, propertyCurrency, fmDate, propertyDate, isMTEFProjection, true,null);
     }
 }

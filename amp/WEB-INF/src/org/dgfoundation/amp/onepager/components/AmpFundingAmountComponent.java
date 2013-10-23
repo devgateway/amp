@@ -73,12 +73,20 @@ public class AmpFundingAmountComponent<T> extends Panel {
                                      String propertyAmount, String fmCurrency, String propertyCurrency,
                                      String fmDate, String propertyDate, boolean isMTEFProjection) {
         this(id, model, fmAmount, propertyAmount, fmCurrency, propertyCurrency, fmDate, propertyDate,
-                isMTEFProjection, false);
+                isMTEFProjection, false,null);
+    }
+    
+    public AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,
+            String propertyAmount, String fmCurrency, String propertyCurrency,
+            String fmDate, String propertyDate, boolean isMTEFProjection,String amountSize) {
+    	this(id, model, fmAmount, propertyAmount, fmCurrency, propertyCurrency, fmDate, propertyDate,
+    			isMTEFProjection, false,amountSize);
     }
 
+    
     protected AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,
 			String propertyAmount, String fmCurrency, String propertyCurrency,
-			String fmDate, String propertyDate, boolean isMTEFProjection, boolean fundingComponentTableMode) {
+			String fmDate, String propertyDate, boolean isMTEFProjection, boolean fundingComponentTableMode,String amountSize) {
 		super(id, model);
 
         boolean hideLabel = fundingComponentTableMode;
@@ -114,8 +122,10 @@ public class AmpFundingAmountComponent<T> extends Panel {
 			}
 		};
 		amount.getTextContainer().setRequired(true);
-		amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("9")));
-		
+		if(amountSize==null)
+			amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("9")));
+		else
+			amount.getTextContainer().add(new AttributeModifier("size", new Model<String>(amountSize)));
 		
 		add(amount);
 		

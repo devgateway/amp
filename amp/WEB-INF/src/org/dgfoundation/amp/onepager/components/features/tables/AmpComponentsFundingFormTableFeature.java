@@ -88,7 +88,7 @@ public class AmpComponentsFundingFormTableFeature extends
 
                 AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<AmpComponentFunding>("fundingAmount",
                         model, "Amount", "transactionAmount", "Currency",
-                        "currency", "Transaction Date", "transactionDate", false);
+                        "currency", "Transaction Date", "transactionDate", false,"6");
                 amountComponent.getAmount().getTextContainer().setRequired(false);
                 item.add(amountComponent);
 

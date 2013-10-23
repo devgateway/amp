@@ -110,6 +110,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	private String fromProposedApprovalDate;
 	private String toProposedApprovalDate;
+	private DynamicDateFilter dynamicProposedApprovalFilter = new DynamicDateFilter();
 	
 	private String fromActivityActualCompletionDate;
 	private String toActivityActualCompletionDate;
@@ -1211,6 +1212,10 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public DynamicDateFilter getDynamicActivityFinalContractingFilter() {
 		return dynamicActivityFinalContractingFilter;
+	}
+	
+	public DynamicDateFilter getDynamicProposedApprovalFilter() {
+		return dynamicProposedApprovalFilter;
 	}
 
 	public Boolean getPledged() {

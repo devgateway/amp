@@ -382,6 +382,10 @@ public class AmpARFilter extends PropertyListable {
 
 	private String fromProposedApprovalDate;	// view: v_actual_proposed_date, column name: [Proposed Approval Date], translated in Nepal as [Date of Agreement]
 	private String toProposedApprovalDate;		// view: v_actual_proposed_date, column name: [Proposed Approval Date], translated in Nepal as [Date of Agreement]
+	private String dynProposedApprovalFilterCurrentPeriod;
+	private Integer dynProposedApprovalFilterAmount;
+	private String dynProposedApprovalFilterOperator;
+	private String dynProposedApprovalFilterXPeriod;
 
 	private Integer fromMonth;
 	private Integer yearFrom;
@@ -1281,7 +1285,11 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(ACTIVITY_FINAL_CONTRACTING_DATE_FILTER);
 		}
 		
-		String ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER	 	= this.createDateCriteria(this.toProposedApprovalDate, fromProposedApprovalDate, "apsd.proposed_approval_date");
+		dates = this.calculateDateFilters(fromProposedApprovalDate, toProposedApprovalDate, dynProposedApprovalFilterCurrentPeriod, dynProposedApprovalFilterAmount, dynProposedApprovalFilterOperator, dynProposedApprovalFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+		
+		String ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "apsd.proposed_approval_date");
 		if ( ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER = "SELECT apsd.amp_activity_id from v_actual_proposed_date apsd WHERE " + ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER;
 			queryAppend(ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER);
@@ -2564,6 +2572,42 @@ public class AmpARFilter extends PropertyListable {
 	public void setDynActivityFinalContractingFilterXPeriod(
 			String dynActivityFinalContractingFilterXPeriod) {
 		this.dynActivityFinalContractingFilterXPeriod = dynActivityFinalContractingFilterXPeriod;
+	}
+	
+	public String getDynProposedApprovalFilterCurrentPeriod() {
+		return dynProposedApprovalFilterCurrentPeriod;
+	}
+
+	public void setDynProposedApprovalFilterCurrentPeriod(
+			String dynProposedApprovalFilterCurrentPeriod) {
+		this.dynProposedApprovalFilterCurrentPeriod = dynProposedApprovalFilterCurrentPeriod;
+	}
+
+	public Integer getDynProposedApprovalFilterAmount() {
+		return dynProposedApprovalFilterAmount;
+	}
+
+	public void setDynProposedApprovalFilterAmount(
+			Integer dynProposedApprovalFilterAmount) {
+		this.dynProposedApprovalFilterAmount = dynProposedApprovalFilterAmount;
+	}
+
+	public String getDynProposedApprovalFilterOperator() {
+		return dynProposedApprovalFilterOperator;
+	}
+
+	public void setDynProposedApprovalFilterOperator(
+			String dynProposedApprovalFilterOperator) {
+		this.dynProposedApprovalFilterOperator = dynProposedApprovalFilterOperator;
+	}
+
+	public String getDynProposedApprovalFilterXPeriod() {
+		return dynProposedApprovalFilterXPeriod;
+	}
+
+	public void setDynProposedApprovalFilterXPeriod(
+			String dynProposedApprovalFilterXPeriod) {
+		this.dynProposedApprovalFilterXPeriod = dynProposedApprovalFilterXPeriod;
 	}
 
 	/**

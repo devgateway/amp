@@ -37,8 +37,6 @@ public class AmpHeaderFooter extends WebPage {
     public AmpHeaderFooter() {
 		List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
 
-        //TLSUtils.populate(getServletRequest());
-
 		if (cookies != null) {
 			boolean localeSet = false;
 			Iterator<Cookie> it = cookies.iterator();
@@ -49,7 +47,7 @@ public class AmpHeaderFooter extends WebPage {
                 	Session.get().setLocale(new Locale(languageCode));
                 	org.digijava.kernel.entity.Locale newLocale = new org.digijava.kernel.entity.Locale();
                 	newLocale.setCode(languageCode);
-                	//TLSUtils.forceLocaleUpdate(newLocale);
+                	TLSUtils.forceLocaleUpdate(newLocale);
                     if (languageCode != null) {
                     	localeSet = true;
                         break;
@@ -61,7 +59,7 @@ public class AmpHeaderFooter extends WebPage {
             	Session.get().setLocale(new Locale(TranslatorWorker.getDefaultLocalCode()));
             	org.digijava.kernel.entity.Locale newLocale = new org.digijava.kernel.entity.Locale();
             	newLocale.setCode(TranslatorWorker.getDefaultLocalCode());
-            	//TLSUtils.forceLocaleUpdate(newLocale);
+            	TLSUtils.forceLocaleUpdate(newLocale);
             }
         }
 		

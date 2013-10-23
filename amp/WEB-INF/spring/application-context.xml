@@ -30,8 +30,8 @@
 	<http pattern="/aim/viewNewAdvancedReport.do**" security="none" />
 	
 	<http pattern="/exception/showExceptionReport.do**" security="none" />
-	
-	<http pattern="/aim/viewActivityPreview.do**" security="none" />
+
+    <!--<http pattern="/aim/viewActivityPreview.do**" security="none"  />-->
 	
 	<http pattern="/aim/default/previewActivity.do**" security="none" />
 	
@@ -62,6 +62,11 @@
 	<!-- uncomment this to see debugging info about spring security -->
 	<!-- <debug/> -->
 
+    <!-- Anonymous is allowed for one page only -->
+    <http pattern="/aim/viewActivityPreview.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/aim/viewActivityPreview.do**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm">
 		<!-- do not allow anonymous tokens, they are enabled by default ! -->
@@ -70,7 +75,7 @@
 		<!-- digest filter reference, as the authentication filter for the security 
 			chain -->
 		<custom-filter ref="digestFilter" position="BASIC_AUTH_FILTER" />
-		
+
 		<!-- all the rest of the AMP pages need the user to be authenticated -->
 		<intercept-url pattern="/**" access="ROLE_AUTHENTICATED" />
 		

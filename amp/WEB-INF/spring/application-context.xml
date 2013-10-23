@@ -19,7 +19,7 @@
 	
 	<http pattern="/visualization/dataDispatcher.do**" security="none" />
 	
-	<http pattern="/visualization/launchDashboard.do**" security="none" />
+	<!--http pattern="/visualization/launchDashboard.do**" security="none" /-->
 	
 	<http pattern="/visualization/launchGraph.do**" security="none" />
 	
@@ -64,7 +64,12 @@
 
     <!-- Anonymous is allowed for one page only -->
     <http pattern="/aim/viewActivityPreview.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
-        <intercept-url pattern="/aim/viewActivityPreview.do**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+
+    <!-- Anonymous is allowed for one page only -->
+    <http pattern="/visualization/launchDashboard.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
 
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->

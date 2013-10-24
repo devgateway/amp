@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
@@ -167,7 +168,7 @@ public abstract class ColumnWorker {
 			// public static DatabaseViewFetcher getFetcherForView(String viewName, String condition, String locale, java.util.Map<InternationalizedPropertyDescription, ColumnValuesCacher> cachers, Connection connection, String... columnNames)
 			String locale = TLSUtils.getEffectiveLangCode();
 			
-			DatabaseViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView(queryView, queryCondition, locale, generator.getColumnCachers(), conn, "*");			
+			ViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView(queryView, queryCondition, locale, generator.getColumnCachers(), conn, "*");			
 			ResultSet rs = fetcher.fetch(generator.getFilter().getIndexedParams());
 			
 			rsmd = rs.getMetaData();

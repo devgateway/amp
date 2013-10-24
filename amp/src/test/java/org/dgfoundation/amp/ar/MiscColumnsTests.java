@@ -26,7 +26,7 @@ public class MiscColumnsTests extends ReportsTestCase
 	public static Test suite()
 	{
 		TestSuite suite = new TestSuite(MiscColumnsTests.class.getName());
-		suite.addTest(new MiscColumnsTests("testSscColumns"));
+		suite.addTest(new MiscColumnsTests("testSscColumns"));// - these columns removed in AMP 2.7
 		suite.addTest(new MiscColumnsTests("testModeOfPaymentUndisbursedBalance"));
 		suite.addTest(new MiscColumnsTests("testProjectedProjectCostEUR"));
 		suite.addTest(new MiscColumnsTests("testProjectedProjectCostUSD"));
@@ -53,8 +53,19 @@ public class MiscColumnsTests extends ReportsTestCase
 								SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666 777", "SSC Project 1", "111 333", "SSC Project 2", "567 421"),
 								SimpleColumnModel.withContents("Actual Disbursements", "SSC Project 1", "555 111", "SSC Project 2", "131 845")))
 						);
-		runReportTest("flat SSC Columns", "AMP-15844-ssc-columns", new String[] {"ptc activity 1", "SSC Project 1", "SSC Project 2"}, fssc_correct);
+		
+		boolean caughtException = false;
+		try
+		{
+			runReportTest("flat SSC Columns", "AMP-15844-ssc-columns", new String[] {"ptc activity 1", "SSC Project 1", "SSC Project 2"}, fssc_correct);
+		}
+		catch(RuntimeException ex)
+		{
+			caughtException = ex.getMessage().startsWith("no report with the given name");
+		}
+		assertEquals("report AMP-15844-ssc-columns should have been deleted and non-existant", true, caughtException);
 	}
+	
 	
 	public void testModeOfPaymentUndisbursedBalance()
 	{

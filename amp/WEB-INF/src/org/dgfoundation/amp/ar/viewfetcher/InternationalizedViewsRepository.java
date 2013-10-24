@@ -13,7 +13,6 @@ import org.digijava.module.aim.dbentity.*;
  */
 public class InternationalizedViewsRepository {
 	public final static String AGREEMENT_TITLE_AND_CODE = "Agreement Title + Code";
-	public final static String CALCULATED_COLUMN = "_Calculated_Column_";
 	
 	public final static ColumnValueCalculator agreement_title_code_calculator = new ColumnValueCalculator() {
 		
@@ -437,5 +436,11 @@ public class InternationalizedViewsRepository {
 			I18nViewDescription clonedView = viewDesc.cloneView(viewDesc.viewName + "_cached");
 			map.put(clonedView.viewName, clonedView);
 		}
+		if (RawDatabaseViewFetcher.tableExists(InternationalizedModelDescription.connection, "cached_" + viewDesc.viewName))
+		{
+			I18nViewDescription clonedView = viewDesc.cloneView("cached_" + viewDesc.viewName);
+			map.put(clonedView.viewName, clonedView);
+		}
+		
 	}
 }

@@ -2375,7 +2375,7 @@ body {background:none;}
 								
                                     
                                     
-                              <feature:display name="Proposed Project Cost" module="Funding">
+                              <module:display name="/Activity Form/Funding/Proposed Project Cost" parentModule="/Activity Form/Funding">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -2409,7 +2409,7 @@ body {background:none;}
                                               		</table>
                             				</c:if>										</td>
 									</tr>
-								  </feature:display>
+								  </module:display>
 								
                                 
                                  <logic:present name="currentMember" scope="session">

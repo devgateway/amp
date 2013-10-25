@@ -55,6 +55,11 @@ public class HibernateClassLoader {
 	private static SessionFactory sessionFactory;
 	private static Configuration cfg = null;
 	public static String HIBERNATE_CFG_XML = "/hibernate.cfg.xml";
+	
+	/**
+	 * for testcases - override the database defined in the {@link #HIBERNATE_CFG_XML} conf file, if not null
+	 */
+	public static String HIBERNATE_CFG_OVERRIDE_DATABASE;
 
 	/**
 	 * get Hibernate SessionFactory object, you will call openSession();
@@ -192,6 +197,9 @@ public class HibernateClassLoader {
 			else {
 				Configuration newConfig = cfg.configure(HIBERNATE_CFG_XML);
                 newConfig.setInterceptor(new TranslatorInterceptor());
+                if (HIBERNATE_CFG_OVERRIDE_DATABASE != null)
+                	newConfig.setProperty("hibernate.connection.url", HIBERNATE_CFG_OVERRIDE_DATABASE);
+                HIBERNATE_CFG_OVERRIDE_DATABASE = null; //reset after each session
 				sessionFactory = newConfig.buildSessionFactory();
 			}
 		}

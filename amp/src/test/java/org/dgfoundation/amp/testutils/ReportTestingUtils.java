@@ -13,6 +13,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -41,7 +42,7 @@ public class ReportTestingUtils
 	{		
 		Session hibSession = PersistenceManager.getSession();
 		
-		AmpReports report = loadReportByName(reportName);;
+		AmpReports report = loadReportByName(reportName);
 		
 		org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
 		mockRequest.setAttribute("ampReportId", report.getId().toString());
@@ -103,7 +104,37 @@ public class ReportTestingUtils
 	{
 		Session session = null;
 		Query qry = null;
+		List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>();
+		String locale = TLSUtils.getEffectiveLangCode();		
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select r from " + AmpActivityVersion.class.getName()
+					+ " r WHERE r.ampActivityId=:activityId";
+			qry = session.createQuery(queryString);
+			qry.setLong("activityId", activityId);
+			activities = qry.list();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		if (activities.size() >= 1)
+			return activities.get(0).getName();
+		throw new RuntimeException("no activity with the given id " + activityId + " exists");
+		
+	}
+	
+	/**
+	 * returns the name of an activity looked up by id
+	 * @param activityId
+	 * @return
+	 */
+	public static String getActivityName_notVersion(Long activityId)
+	{
+		Session session = null;
+		Query qry = null;
 		List<AmpActivity> activities = new ArrayList<AmpActivity>();
+		String locale = TLSUtils.getEffectiveLangCode();		
 
 		try {
 			session = PersistenceManager.getRequestDBSession();

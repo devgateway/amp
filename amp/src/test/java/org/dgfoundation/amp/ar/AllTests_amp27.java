@@ -14,33 +14,32 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
- * entry point for AMP 2.6 tests. Initializes standalone AMP as part of the discovery process.
+ * entry point for AMP 2.7 tests. Initializes standalone AMP as part of the discovery process.
  * standalone AMP configuration is taken off standAloneAmpHibernate.cfg.xml
  * @author Dolghier Constantin
  *
  */
-public class AllTests {
+public class AllTests_amp27 {
 
 	public static Test suite() {
 		
 		setUp();
 //		LiberiaFiller.fillInDatabase();
-		TestSuite suite = new TestSuite(AllTests.class.getName());
+		TestSuite suite = new TestSuite(AllTests_amp27.class.getName());
 		//$JUnit-BEGIN$
 
-		//suite.addTestSuite(DirectedDisbursementsTests.class);
-		suite.addTest(DirectedDisbursementsTests.suite());
-		suite.addTest(MtefTests.suite());
-		suite.addTest(ComputedMeasuresTests.suite());
-		suite.addTest(MiscColumnsTests.suite());
-		suite.addTest(EsriTestCases.suite());
-		suite.addTest(FiltersTests.suite());
-		//suite.addTest(new DirectedDisbursementsTests("testReports"));
+		suite.addTest(DirectedDisbursementsTests_amp27.suite());
+		suite.addTest(MultilingualTests.suite());
+//		suite.addTest(MtefTests.suite());
+//		suite.addTest(ComputedMeasuresTests.suite());
+//		suite.addTest(MiscColumnsTests.suite());
+//		suite.addTest(EsriTestCases.suite());
+//		suite.addTest(FiltersTests.suite());
 		//$JUnit-END$
 		return suite;
 	}
 	
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
 		junit.textui.TestRunner.run(suite());
 	}
 
@@ -49,7 +48,7 @@ public class AllTests {
 		try
 		{ 
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_26_amp27";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_27";
     	
 			ResourceStreamHandlerFactory.installIfNeeded();
 

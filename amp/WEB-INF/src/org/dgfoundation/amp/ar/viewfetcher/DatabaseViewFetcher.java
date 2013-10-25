@@ -151,8 +151,21 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 	{
 		try
 		{
-			ArrayList<T> result = new ArrayList<T>();
 			ResultSet rs = rawRunQuery(connection, query, null);
+			return fetchAsList(rs, n, " with query " + query);
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException("Error fetching list of values with query " + query, e);
+		}
+	}
+	
+	public static <T> List<T> fetchAsList(ResultSet rs, int n, String errMsgAdd)
+	{
+		try
+		{
+			ArrayList<T> result = new ArrayList<T>();
+			
 			while (rs.next())
 			{
 				T elem = (T) rs.getObject(n);
@@ -162,9 +175,9 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 		}
 		catch(SQLException e)
 		{
-			throw new RuntimeException("Error fetching list of values with query " + query, e);
+			throw new RuntimeException("Error fetching list of values" + errMsgAdd, e);
 		}
-	}
+	}	
 	
 	/**
 	 * the implementation-dependent way of fetching rows from a database - either rawly or through translations

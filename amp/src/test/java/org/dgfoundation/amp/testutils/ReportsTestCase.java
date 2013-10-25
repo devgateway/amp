@@ -2,6 +2,9 @@ package org.dgfoundation.amp.testutils;
 
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.testmodels.GroupReportModel;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.um.exception.UMException;
+
 import junit.framework.TestCase;
 
 public abstract class ReportsTestCase extends TestCase
@@ -18,8 +21,17 @@ public abstract class ReportsTestCase extends TestCase
 	 * @param correctResult - a model (sketch) of the expected result
 	 * @param modifier - the modifier (might be null) to postprocess AmpReports and AmpARFilter after being loaded from the DB
 	 */
-	protected void runReportTest(String testName, String reportName, String[] activities, GroupReportModel correctResult, AmpReportModifier modifier)
+	protected void runReportTest(String testName, String reportName, String[] activities, GroupReportModel correctResult, AmpReportModifier modifier, String locale)
 	{
+		try
+		{
+			if (locale != null)
+				TLSUtils.getThreadLocalInstance().setLocale(org.digijava.module.um.util.DbUtil.getLanguageByCode(locale));
+		}
+		catch(UMException e)
+		{
+			throw new RuntimeException(e);
+		}
 		GroupReportData report = ReportTestingUtils.runReportOn(reportName, modifier, activities);
 		String error = correctResult.matches(report);
 		assertNull(String.format("test %s, report %s: %s", testName, reportName, error), error);
@@ -34,7 +46,7 @@ public abstract class ReportsTestCase extends TestCase
 	 */
 	protected void runReportTest(String testName, String reportName, String[] activities, GroupReportModel correctResult)
 	{
-		runReportTest(testName, reportName, activities, correctResult, null);
+		runReportTest(testName, reportName, activities, correctResult, null, null);
 	}
 
 }

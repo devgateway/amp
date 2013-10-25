@@ -298,7 +298,7 @@ public class MtefTests extends ReportsTestCase
 				filter.setAmountinthousand(AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS);
 			}
 		};
-		runReportTest("pure Mtef, implicit filter by Donor, EUR, THOUSANDS", "AMP-16100-flat-mtefs-eur", new String[] {"Pure MTEF Project"}, fddr_correct, modifier);
+		runReportTest("pure Mtef, implicit filter by Donor, EUR, THOUSANDS", "AMP-16100-flat-mtefs-eur", new String[] {"Pure MTEF Project"}, fddr_correct, modifier, null);
 	}
 	
 	public void testPurePlainMtefEURInThousandsMoreActivities()
@@ -331,7 +331,7 @@ public class MtefTests extends ReportsTestCase
 				filter.setAmountinthousand(AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS);
 			}
 		};
-		runReportTest("pure Mtef, implicit filter by Donor, EUR, THOUSANDS", "AMP-16100-flat-mtefs-eur", new String[] {"Pure MTEF Project", "Test MTEF directed", "TAC_activity_2"}, fddr_correct, modifier);
+		runReportTest("pure Mtef, implicit filter by Donor, EUR, THOUSANDS", "AMP-16100-flat-mtefs-eur", new String[] {"Pure MTEF Project", "Test MTEF directed", "TAC_activity_2"}, fddr_correct, modifier, null);
 	}	
 	
 }

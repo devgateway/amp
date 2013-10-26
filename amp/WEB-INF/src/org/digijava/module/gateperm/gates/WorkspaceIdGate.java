@@ -60,6 +60,13 @@ public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.Scop
 		Session session = PersistenceManager.getSession();
 		
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
+		
+		if (tm == null)
+			return false;
+		
+		if (tm.getTeamId() == null)
+			return false;
+		
 		//we get the team
 		AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
 		

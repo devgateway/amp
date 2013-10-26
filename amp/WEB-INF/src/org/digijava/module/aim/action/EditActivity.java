@@ -107,6 +107,7 @@ import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.helper.RegionalFundingsHelper;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
@@ -123,6 +124,7 @@ import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.ProposedProjCostHelper;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
@@ -759,14 +761,15 @@ public class EditActivity extends Action {
         }
 
         if (activity != null) {
-          // set title,description and objective
+        	// set title,description and objective
 
-          ProposedProjCost pg = new ProposedProjCost();
-          if (activity.getFunAmount() != null)
-            pg.setFunAmountAsDouble(activity.getFunAmount());
-          pg.setCurrencyCode(activity.getCurrencyCode());
-          pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
-          eaForm.getFunding().setProProjCost(pg);
+        	ProposedProjCost pg = new ProposedProjCost();
+        	if (activity.getFunAmount() != null)
+        		pg.setFunAmountAsDouble(activity.getFunAmount());
+        	pg.setCurrencyCode(activity.getCurrencyCode());
+        	pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
+        	pg = ProposedProjCostHelper.getProposedProjCost(pg, CurrencyUtil.getWorkspaceCurrency(tm).getCurrencyCode());
+        	eaForm.getFunding().setProProjCost(pg);
 
           //load programs by type
           if(ProgramUtil.getAmpActivityProgramSettingsList()!=null){
@@ -1504,8 +1507,8 @@ public class EditActivity extends Action {
 		  }		  
           
           
-          ArrayList regFunds = new ArrayList(); 
-          Iterator rItr = activity.getRegionalFundings().iterator();
+          ArrayList regFunds = RegionalFundingsHelper.getRegionalFundings(activity.getRegionalFundings(), toCurrCode, 0);
+          /*Iterator rItr = activity.getRegionalFundings().iterator();
 
           eaForm.getFunding().setRegionTotalDisb(0);
           while (rItr.hasNext()) {
@@ -1523,7 +1526,8 @@ public class EditActivity extends Action {
 
             //	disb/=ARUtil.getExchange(ampCompFund.getCurrency().getCurrencyCode(),new java.sql.Date(ampCompFund.getTransactionDate().getTime()));
             //}
-            eaForm.getFunding().setRegionTotalDisb(eaForm.getFunding().getRegionTotalDisb() +
+
+          eaForm.getFunding().setRegionTotalDisb(eaForm.getFunding().getRegionTotalDisb() +
                                       disb);
 
             FundingDetail fd = new FundingDetail();
@@ -1575,7 +1579,7 @@ public class EditActivity extends Action {
             }
             regFunds.set(index, regFund);
           }
-
+*/
           // Sort the funding details based on Transaction date.
           Iterator itr1 = regFunds.iterator();
           int index = 0;

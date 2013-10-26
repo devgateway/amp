@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
@@ -1377,17 +1378,24 @@ public class CurrencyUtil {
 		}*/
 	}
 
-	public static AmpCurrency getWorkspaceCurrency(TeamMember tm) {		 
-		 if(tm.getAppSettings().getCurrencyId()!= null)
-		    return getAmpcurrency(tm.getAppSettings().getCurrencyId());
-		return CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY ));		
+	/**
+	 * returns default currency if no team member logged in
+	 * @param tm
+	 * @return
+	 */
+	public static AmpCurrency getWorkspaceCurrency(TeamMember tm) {
+		if ((tm != null) && (tm.getAppSettings() != null))
+			return getAmpcurrency(tm.getAppSettings().getCurrencyId());
+		return getDefaultCurrency();		
 	}
-		
+
+	/**
+	 * returns default currency if no team member logged in
+	 * @param tm
+	 * @return
+	 */
 	public static AmpCurrency getWicketWorkspaceCurrency() {
 		TeamMember tm =  AmpAuthWebSession.getYourAppSession().getCurrentMember();
-		if(tm == null)
-			return CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY ));
-			
 		return getWorkspaceCurrency(tm);		
 	}
 	
@@ -1398,7 +1406,14 @@ public class CurrencyUtil {
 	public static AmpCurrency getDefaultCurrency()
 	{
 		if (defaultCurrency == null)
-			defaultCurrency = getCurrencyByCode(Constants.DEFAULT_CURRENCY);
+			defaultCurrency = AmpARFilter.getDefaultCurrency();
 		return defaultCurrency;
 	}
+	
+//	public static AmpCurrency getEffectiveCurrency(TeamMember tm)
+//	{
+//		if ((tm != null) && (tm.getAppSettings() != null))
+//			return getAmpcurrency(tm.getAppSettings().getCurrencyId());
+//		return getDefaultCurrency();
+//	}
 }

@@ -1658,9 +1658,9 @@ public class AmpARFilter extends PropertyListable {
 	public static AmpCurrency getDefaultCurrency()
 	{
 		AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
-		 String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-	 	 AmpCurrency result = CurrencyUtil.getAmpcurrency(currCode);
-	 	 if (tempSettings != null && tempSettings.getCurrency()!=null)
+		String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+		AmpCurrency result = CurrencyUtil.getAmpcurrency(currCode);
+		if (tempSettings != null && tempSettings.getCurrency()!=null)
 			result = tempSettings.getCurrency();
 		return result; 
 	}

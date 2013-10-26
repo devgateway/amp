@@ -766,7 +766,7 @@ public class EditActivity extends Action {
             pg.setFunAmountAsDouble(activity.getFunAmount());
           pg.setCurrencyCode(activity.getCurrencyCode());
           pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
-          pg = ProposedProjCostHelper.getProposedProjCost(pg, CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode());
+          pg = ProposedProjCostHelper.getProposedProjCost(pg, CurrencyUtil.getWorkspaceCurrency(tm).getCurrencyCode());
           eaForm.getFunding().setProProjCost(pg);
 
           //load programs by type

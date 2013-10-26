@@ -54,6 +54,12 @@ public class WorkspaceGate extends Gate {
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
 		Long workspaceId = Long.parseLong(parameters.poll().trim());
 		
+		if (tm == null)
+			return false; // no user logged in -> NO
+		
+		if (tm.getTeamId() == null)
+			return false; // user.noTeamId -> NO
+		
 		if (tm.getTeamId().compareTo(workspaceId) == 0)
 			return true;
 		

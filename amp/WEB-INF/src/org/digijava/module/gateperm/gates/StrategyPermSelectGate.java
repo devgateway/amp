@@ -54,6 +54,13 @@ public class StrategyPermSelectGate extends Gate {
 	@Override
 	public boolean logic() throws Exception {
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
+		
+		if (tm == null)
+			return false;
+		
+		if (tm.getTeamId() == null)
+			return false;
+		
 		String permStrategy = parameters.poll().trim();
 		AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
 		if (ampTeam.getPermissionStrategy()!=null && ampTeam.getPermissionStrategy().compareTo(permStrategy) == 0)

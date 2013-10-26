@@ -67,7 +67,7 @@
 						viewAllRights		: ${viewAllRights}
 				};
 				</logic:notEmpty>
-				//alert('showselecteddocumentsdm.jsp');
+//				alert('showselecteddocumentsdm.jsp');
 				windowController	= newWindow('${windowName}',false,'selDocumentsDiv');
 				// windowController.setTitle('${windowName}');
 				windowController.populateWithSelDocs('<%=documentsType%>', rights);

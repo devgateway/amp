@@ -57,7 +57,7 @@ public class DocumentManager extends Action {
 		ActionMessages errors					= new ActionMessages();
 		DocumentManagerForm myForm		= (DocumentManagerForm) form;
 
-		request.setAttribute("ServletContext", this.getServlet().getServletContext() );		
+		request.setAttribute("ServletContext", this.getServlet().getServletContext() );
 //		if ( request.getParameter(CrConstants.REQUEST_GET_SHOW_DOCS) != null )
 //			showOnlyDocs 	= true;
 //		else

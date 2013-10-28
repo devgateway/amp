@@ -53,6 +53,7 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
@@ -153,9 +154,20 @@ public class DataDispatcher extends MultiAction {
 
 
         filter.setFilterByPeacebuildingMarker(true);
-        mapregions = DbHelper.getFundingByRegionList(locations, implementationLevel, filter.getCurrencyCode(), startDate, endDate,
+        List<AmpCategoryValue> allMarkers = DbHelper.getPeacebuildingMarkers();
+
+        List <AbstractMap.SimpleEntry> indicatorValueMap = new ArrayList <AbstractMap.SimpleEntry> ();
+
+        Long curMarkerId = filter.getSelectedPeacebuildingMarkerId();
+        for(AmpCategoryValue indicator : allMarkers) {
+            filter.setSelectedPeacebuildingMarkerId(indicator.getId());
+            mapregions = DbHelper.getFundingByRegionList(locations, implementationLevel, filter.getCurrencyCode(), startDate, endDate,
 				/*filter.getTransactionType(),*/ CategoryConstants.ADJUSTMENT_TYPE_ACTUAL,
-                new Integer(3), new BigDecimal(1), filter);
+                    new Integer(3), new BigDecimal(1), filter);
+            AbstractMap.SimpleEntry entry = new AbstractMap.SimpleEntry(indicator.getId(), mapregions);
+            indicatorValueMap.add(entry);
+        }
+        filter.setSelectedPeacebuildingMarkerId(curMarkerId);
         filter.setFilterByPeacebuildingMarker(false);
 
         Collection<AmpCategoryValueLocations> allRegions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
@@ -163,12 +175,13 @@ public class DataDispatcher extends MultiAction {
         List allRegs = new ArrayList();
         for(AmpCategoryValueLocations catValLoc : allRegions) {
             if (catValLoc.getGeoCode() != null && !catValLoc.getGeoCode().trim().isEmpty()) {
-                allRegs.add(new java.util.AbstractMap.SimpleEntry<String, Long>(catValLoc.getGeoCode(), catValLoc.getId()));
+                allRegs.add(new AbstractMap.SimpleEntry<String, Long>(catValLoc.getGeoCode(), catValLoc.getId()));
             }
         }
 
         List withGeoIdMapping = new ArrayList();
-        withGeoIdMapping.add(mapregions);
+        //withGeoIdMapping.add(mapregions);
+        withGeoIdMapping.add(indicatorValueMap);
         withGeoIdMapping.add(allRegs);
 
         jsonArray.addAll(withGeoIdMapping);

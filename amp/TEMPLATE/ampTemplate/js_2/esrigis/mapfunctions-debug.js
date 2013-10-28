@@ -351,11 +351,31 @@ function createPeaceBuildingFeatureLayer() {
 					});
 					
 					
+	      	var selMarkerId = $('#selected_Peacebuilding_Marker_Id').find(":selected").val();
+	      	var otherMarkers = [];
+
+	      	$('#selected_Peacebuilding_Marker_Id option').each(function() {
+	      		if (selMarkerId != $(this).val()) {
+							otherMarkers.push([$(this).text(), $(this).val()]);
+						}
+					});	      		
+	      	
 	      	
 	      	locations = [];
-	      	dojo.forEach(jsonDataFunding, function(location) {
+	      	var selLocations = null;
+	      	var otherLocations = [];
+	      	dojo.forEach(jsonDataFunding, function(locations) {
+						if (locations.key == selMarkerId) {
+							selLocations = locations.value;
+						} else {
+							otherLocations.push(locations);
+						}
+					});
+					
+	      	dojo.forEach(selLocations, function(location) {
 						locations.push(location);
 					});
+					
 					
 	      	
 	      	dojo.connect(queryTask, "onComplete", function(featureSet) {
@@ -419,7 +439,7 @@ function createPeaceBuildingFeatureLayer() {
 											parseFloat(min + ((i + 1) * breaks)) ]);
 								}
 	      		
-
+						var df = new DecimalFormat(currentFormat);
 	      		dojo.forEach(featureSet.features, function(feature) {
 
 								// Read current attributes and assign a new set
@@ -433,7 +453,7 @@ function createPeaceBuildingFeatureLayer() {
 								var mtef = 0;
 								
 								
-								
+
 								dojo.forEach(locations, function(jsonDataItem) {
 									if (geoId == jsonDataItem.geoId) {
 										commitments = jsonDataItem.commitments;
@@ -441,7 +461,8 @@ function createPeaceBuildingFeatureLayer() {
 										expenditures = jsonDataItem.expenditures;
 										mtef = jsonDataItem.mtef;
 									}
-								})
+								});
+								
 								
 								
 								
@@ -463,17 +484,76 @@ function createPeaceBuildingFeatureLayer() {
 								});
 								
 								
-								feature.setInfoTemplate(new esri.InfoTemplate(translate('Funding'),
-												translate(implementationLevel[0].name) + ": ${NAME} <br/>"
-												+ translate('Commitments')+": ${COMMITMENTSFMT}<br/> "
-												+ translate('Disbursements')+": ${DISBURSEMENTSFMT}<br/> "
-												+ translate('Expenditures')+": ${EXPENDITURESFMT}<br/> "
-												+ translate('MTEF')+": ${MTEFFMT}<br/> " 
-												+ "<a href='/visualization/launchDashboard.do?fromMap=true&reset=true&id=4&filter.regionId=${DB_ID}' target='_new'>Dashboard</a>"));
+								
+								dojo.forEach(otherMarkers, function(otherMarker) {
+									feature.attributes["OTHER_" + otherMarker[1] + "_COMMITMENTSFMT"] = 0;
+									feature.attributes["OTHER_" + otherMarker[1] + "_DISBURSEMENTSFMT"] = 0;
+									feature.attributes["OTHER_" + otherMarker[1] + "_EXPENDITURESFMT"] = 0;
+									feature.attributes["OTHER_" + otherMarker[1] + "_MTEFFMT"] = 0;
+								});
+								
+								
+								
+								
+								dojo.forEach(otherLocations, function(otherLocation) {
+									for (var idx = 0; idx < otherLocation.value.length; idx ++) {
+										var obj = otherLocation.value[idx];
+										if (geoId == obj.geoId) {
+											feature.attributes["OTHER_" + otherLocation.key + "_COMMITMENTSFMT"] = df.format(obj.commitments);
+											feature.attributes["OTHER_" + otherLocation.key + "_DISBURSEMENTSFMT"] = df.format(obj.disbursements);
+											feature.attributes["OTHER_" + otherLocation.key + "_EXPENDITURESFMT"] = df.format(obj.expenditures);
+											feature.attributes["OTHER_" + otherLocation.key + "_MTEFFMT"] = df.format(obj.mtef);
+										}
+									}
+								});
+								
+					dojo.forEach(jsonDataFunding, function(locations) {
+						if (locations.key == selMarkerId) {
+							selLocations = locations.value;
+						} else {
+							otherLocations.push(locations);
+						}
+					});
+								
+								var infoTemplateContent = "<table><tr><td width='20'>" + translate(implementationLevel[0].name) + ":</td><td align='left'> ${NAME} </td></tr><tr><td colspan='2'>";
+								
+								infoTemplateContent += "<table border='1' style='border-collapse:collapse;'><tr><td>Markers:</td><td>Selected</td>";
+								dojo.forEach(otherMarkers, function(otherMarker) {
+									infoTemplateContent += "<td>" + otherMarker[0] + "</td>";
+								});
+								infoTemplateContent += "</tr>";
+								
+								infoTemplateContent += "<tr><td>" + translate('Commitments')+":</td><td> ${COMMITMENTSFMT} </td>";
+								dojo.forEach(otherMarkers, function(otherMarker) {
+									infoTemplateContent += "<td> ${OTHER_" + otherMarker[1] + "_COMMITMENTSFMT} </td>";
+								});
+								infoTemplateContent += "</tr>";
+								infoTemplateContent += "<tr><td>" + translate('Disbursements')+":</td><td> ${DISBURSEMENTSFMT} </td>"
+								dojo.forEach(otherMarkers, function(otherMarker) {
+									infoTemplateContent += "<td> ${OTHER_" + otherMarker[1] + "_DISBURSEMENTSFMT} </td>";
+								});
+								infoTemplateContent += "</tr>";
+								infoTemplateContent += "<tr><td>" + translate('Expenditures')+":</td><td> ${EXPENDITURESFMT} </td>"
+								dojo.forEach(otherMarkers, function(otherMarker) {
+									infoTemplateContent += "<td> ${OTHER_" + otherMarker[1] + "_EXPENDITURESFMT} </td>";
+								});
+								infoTemplateContent += "</tr>";
+								infoTemplateContent += "<tr><td>" + translate('MTEF')+":</td><td> ${MTEFFMT} </td>";
+								dojo.forEach(otherMarkers, function(otherMarker) {
+									infoTemplateContent += "<td> ${OTHER_" + otherMarker[1] + "_MTEFFMT} </td>";
+								});
+								infoTemplateContent += "</tr></table>";
+								
+									
+									
+									infoTemplateContent +=  "</td></tr><tr><td colspan='2'><a href='/visualization/launchDashboard.do?fromMap=true&reset=true&id=4&filter.regionId=${DB_ID}' target='_new'>Dashboard</a>"
+									+ "</td></tr></table>";
+								
+								feature.setInfoTemplate(new esri.InfoTemplate(translate('Funding'),infoTemplateContent));
 								
 							});
 							
-	      		var df = new DecimalFormat(currentFormat);
+	      		
 						dojo.forEach(featureSet.features, function(feature) {
 								var curSymbol = null;
 		      			if (feature.attributes[typeFundingAttrName] == null ||

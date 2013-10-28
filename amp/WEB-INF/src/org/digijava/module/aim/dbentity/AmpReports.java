@@ -6,6 +6,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpSession;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
@@ -22,10 +24,13 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 @TranslatableClass (displayName = "Report")
@@ -649,6 +654,38 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 				return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Checks if all columns in the report are added as 
+	 * hierarchies, if it is, then add the column "Project Title".
+	 * Also checks if the column "Project Title" is already added,
+	 * if it is, then removes it from the hierarchies list.
+	 * @param ampReport
+	 */
+	public void validateColumnsAndHierarchies(){
+		AdvancedReportUtil.removeDuplicatedColumns(this);
+		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
+		AmpCategoryValue level1		= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
+		if (this.getColumns().size() == this.getHierarchies().size()) {
+			for ( AmpColumns tempCol: availableCols ) {
+				if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
+					if (!AdvancedReportUtil.isColumnAdded(this.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {
+						AmpReportColumn titleCol= new AmpReportColumn();
+						titleCol.setLevel(level1);
+						titleCol.setOrderId( new Long((this.getColumns().size()+1)));
+						titleCol.setColumn(tempCol); 
+						this.getColumns().add(titleCol);
+						break;
+					}else{
+						/*if Project Title column is already added then remove it from hierarchies list*/
+						if(!FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECT_TITLE_HIRARCHY).equalsIgnoreCase("true"))
+							AdvancedReportUtil.removeColumnFromHierarchies(this.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
+						break;
+					}
+				}
+			}
+		}
 	}
 }
 

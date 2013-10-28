@@ -211,7 +211,7 @@ public class ViewNewAdvancedReport extends Action {
 			if (ar == null) {
 				ar = ReportContextData.getFromRequest().getReportMeta();
 			}
-			validateColumnsAndHierarchies(ar);
+			ar.validateColumnsAndHierarchies();
 			//This is for public views to avoid nullPointerException due to there is no logged user.
 			if(tm != null){
 				saveOrUpdateReportLog(tm, ar);
@@ -425,37 +425,5 @@ public class ViewNewAdvancedReport extends Action {
 			DbUtil.add(reportlog);				
 		}
 	}
-	
-	/**
-	 * Checks if all columns in the report are added as 
-	 * hierarchies, if it is, then add the column "Project Title".
-	 * Also checks if the column "Project Title" is already added,
-	 * if it is, then removes it from the hierarchies list.
-	 * @param ampReport
-	 */
-	private void validateColumnsAndHierarchies (AmpReports ampReport){
-		AdvancedReportUtil.removeDuplicatedColumns(ampReport);
-		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
-		AmpCategoryValue level1		= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
-		if (ampReport.getColumns().size() == ampReport.getHierarchies().size()) {
-			for ( AmpColumns tempCol: availableCols ) {
-				if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
-					if (!AdvancedReportUtil.isColumnAdded(ampReport.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {
-						AmpReportColumn titleCol= new AmpReportColumn();
-						titleCol.setLevel(level1);
-						titleCol.setOrderId( new Long((ampReport.getColumns().size()+1)));
-						titleCol.setColumn(tempCol); 
-						ampReport.getColumns().add(titleCol);
-						break;
-					}else{
-						/*if Project Title column is already added then remove it from hierarchies list*/
-						if(!FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECT_TITLE_HIRARCHY).equalsIgnoreCase("true"))
-							AdvancedReportUtil.removeColumnFromHierarchies(ampReport.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
-						break;
-					}
-				}
-			}
-		}
-	}
-	
+		
 }

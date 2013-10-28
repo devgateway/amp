@@ -42,6 +42,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.budgetexport.util.BudgetExportConstants;
+import org.apache.log4j.Logger;
 
 /**
  * CSV Export is actually using the XLS export API. The difference is only at
@@ -54,6 +55,8 @@ import org.digijava.module.budgetexport.util.BudgetExportConstants;
 public class CSVExportAction
     extends Action {
 
+	protected static Logger logger = Logger.getLogger(CSVExportAction.class);
+	
   public ActionForward execute(ActionMapping mapping, ActionForm form,
                                HttpServletRequest request,
                                HttpServletResponse response) throws java.lang.
@@ -67,22 +70,28 @@ public class CSVExportAction
         request.getSession().setAttribute(BudgetExportConstants.BUDGET_EXPORT_PROJECT_ID, request.getParameter("projectId"));
     }
 
-	AmpReports r = ARUtil.getReferenceToReport();
-
-    boolean initFiltersFromDB = false;
-    TeamMember tm = (TeamMember) session.getAttribute("currentMember");    
-	if (tm == null){
-		initFiltersFromDB = "true".equals(request.getParameter("resetFilter"));
-	}	
+    boolean initFromDB = false;
+    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	if (tm == null || tm.getTeamId() == null )
+		tm = null;
 	
-    AmpARFilter arf = ReportContextData.getFromRequest().loadOrCreateFilter(initFiltersFromDB, r);
     if (tm == null)
     {
-		//Prepare filter for Public View export
-    	arf.setPublicView(true);
+    	initFromDB = "true".equals(request.getParameter("resetFilter"));
     }
+    
+    logger.info("reportContextId: " + ReportContextData.getFromRequest(true).getContextId());
+    
+    AmpReports report = ARUtil.getReferenceToReport();
+    report.validateColumnsAndHierarchies();
+    
+    AmpARFilter arf = ReportContextData.getFromRequest().loadOrCreateFilter(initFromDB, report);
+    
+	if (tm == null){
+		arf.setPublicView(true);
+		}
 
-    GroupReportData rd = ARUtil.generateReport(r, arf, true, false);
+    GroupReportData rd = ARUtil.generateReport(report, arf, true, false);
 
     rd.setCurrentView(GenericViews.XLS);
 	
@@ -114,7 +123,7 @@ public class CSVExportAction
 	    GroupReportDataXLS grdx = ARUtil.instatiateGroupReportDataXLS(request.getSession(), wb, sheet, row, rowId,
 	        colId, null, rd);
 	
-	    grdx.setMetadata(r);
+	    grdx.setMetadata(report);
 	
 	    String sortBy = ReportContextData.getFromRequest().getSortBy();
 	    if (sortBy != null) {

@@ -107,30 +107,32 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 		
-		AmpReports report = ARUtil.getReferenceToReport();
-		
 		Site siteInExec = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				
-		String localeInExec=navigationLanguage.getCode();
 		HttpSession sessionInExec = request.getSession();
+		String localeInExec = RequestUtils.getNavigationLanguage(request).getCode();
 		
-	    boolean initFiltersFromDB = false;
-	    //BOZO: no support for reload filters in PDF, but present in XLS and CSV?
-	    
-	    TeamMember tm = (TeamMember) sessionInExec.getAttribute("currentMember");    
-//		if (tm == null){
-//			initFiltersFromDB = "true".equals(request.getParameter("resetFilter"));
-//		}	
+		boolean initFromDB = false;
+	    TeamMember tm = (TeamMember) sessionInExec.getAttribute("currentMember");
+		if (tm == null || tm.getTeamId() == null )
+			tm = null;
 		
-	    AmpARFilter filter = ReportContextData.getFromRequest().loadOrCreateFilter(initFiltersFromDB, report);
-        arf = ReportContextData.getFromRequest().getFilter();
-	    if (tm == null) {
-			//Prepare filter for Public View export
-	    	arf.setPublicView(true);
+	    if (tm == null)
+	    {
+	    	initFromDB = "true".equals(request.getParameter("resetFilter"));
 	    }
+	    
+	    logger.info("reportContextId: " + ReportContextData.getFromRequest(true).getContextId()); // DO NOT DELETE THIS CALL - it ensures that a ReportContextMap exists
+	    
+	    AmpReports report = ARUtil.getReferenceToReport();
+	    report.validateColumnsAndHierarchies();
+	    
+	    AmpARFilter arf = ReportContextData.getFromRequest().loadOrCreateFilter(initFromDB, report);
+	    
+		if (tm == null){
+			arf.setPublicView(true);
+			}
 	 
-		GroupReportData rd = ARUtil.generateReport(report, filter, true, false);
+		GroupReportData rd = ARUtil.generateReport(report, arf, true, false);
 		
 		ARUtil.cleanReportOfHtmlCodes(rd);
 		

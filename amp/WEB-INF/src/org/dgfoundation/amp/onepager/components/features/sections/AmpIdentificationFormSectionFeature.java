@@ -110,19 +110,19 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			public String getObject() {
 				if (title.getTextAreaContainer().getModelObject() == null)
 					return null;
-
+				String stitle=(String) title.getTextAreaContainer().getModelObject();
 				ServletContext context = ((WebApplication) Application.get())
 						.getServletContext();
 				List<String> list = LuceneUtil.findActivitiesMoreLikeThis(
 						context.getRealPath("/")
-								+ LuceneUtil.ACTVITY_INDEX_DIRECTORY,
-						(String) title.getTextAreaContainer().getModelObject(),
+								+ LuceneUtil.ACTVITY_INDEX_DIRECTORY,stitle,
 						5);
 				if (!list.isEmpty()) {
 					String ret=TranslatorUtil
 							.getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";
 					for (String string : list) 
-						ret+=" - "+string+ "\n";
+						if(string!=null && string.trim().compareTo(stitle.trim())!=0)
+							ret+=" - "+string+ "\n";
 					return ret;
 					
 					

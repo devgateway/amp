@@ -23,6 +23,7 @@ import org.apache.commons.vfs.FileContent;
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
@@ -70,6 +71,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class XLSExportAction extends Action {
 
+	private static Logger logger = Logger.getLogger(XLSExportAction.class) ;
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
@@ -78,10 +81,19 @@ public class XLSExportAction extends Action {
 	    
 	    boolean initFromDB = false;
 	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (tm == null || tm.getTeamId() == null )
+			tm = null;
+		
 	    if (tm == null)
+	    {
 	    	initFromDB = "true".equals(request.getParameter("resetFilter"));
+	    }
+	    
+	    logger.info("reportContextId: " + ReportContextData.getFromRequest(true).getContextId()); // DO NOT DELETE THIS CALL - it ensures that a ReportContextMap exists
 	    
 	    AmpReports report = ARUtil.getReferenceToReport();
+	    report.validateColumnsAndHierarchies();
+	    
 	    AmpARFilter arf = ReportContextData.getFromRequest().loadOrCreateFilter(initFromDB, report);
 	    
 		if (tm == null){

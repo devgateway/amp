@@ -329,7 +329,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
         /**
          * Do not reverse the order of fmEnabled and fmVisible
          */
-        boolean fmEnabled = (foundEnabledChild.getObject() || FMUtil.isFmEnabled(this));
+        boolean fmEnabled = (FMUtil.isFmEnabled(this) || foundEnabledChild.getObject()); //reversing the order of enabled with enabled child will create problems for upgrades when regenerating the FM tree
         boolean fmVisible = FMUtil.isFmVisible(this);
 
         if (fmMode){

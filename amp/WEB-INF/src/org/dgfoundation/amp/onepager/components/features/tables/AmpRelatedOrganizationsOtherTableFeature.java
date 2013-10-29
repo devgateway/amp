@@ -70,10 +70,10 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 								return;
 							}
 						}
+						roleRemoved(target,item.getModelObject());
                         setModel.getObject().remove(item.getModelObject());
                         uniqueCollectionValidationField.reloadValidationField(target);
                         target.add(listParent);
-                        roleRemoved(target,item.getModelObject());
                         list.getObject().removeAll();
 					}
 				};

@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.dbentity ;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.HierarchyListable;
 
 import java.util.Collection;
@@ -12,6 +13,7 @@ import java.util.Set;
  * @author aartimon@dginternational.org
  * @since Apr 27, 2011
  */
+@TranslatableClass
 public class AmpActivity extends AmpActivityVersion implements Cloneable, HierarchyListable {
 
 	/**

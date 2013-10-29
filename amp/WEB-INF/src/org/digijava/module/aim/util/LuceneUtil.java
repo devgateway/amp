@@ -695,7 +695,7 @@ public class LuceneUtil implements Serializable {
 			all = all.concat(" " + projectId);
 		}
 		if (title != null){
-			doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED));
+			doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
 			all = all.concat(" " + title);
 		}
 		if (description != null && description.length()>0){
@@ -891,7 +891,11 @@ public class LuceneUtil implements Serializable {
 			MoreLikeThis mlt = new MoreLikeThis(ir);
 			mlt.setMinDocFreq(1);
 			mlt.setMinTermFreq(1);
+			
+				
 			mlt.setFieldNames(new String[] { "title" });
+			mlt.setAnalyzer(analyzer);
+		
 
 			Reader reader = new StringReader(origSearchString);
 			Query query = mlt.like(reader);

@@ -270,11 +270,7 @@ public class DashboardUtil {
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 
         request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep1);
-        ArrayList<AmpSector> allSectorList = DbUtil.getAmpSectors();
-		filter.setAllSectorList(allSectorList);
 
-        ArrayList<AmpCategoryValueLocations> allLocationsList = DbUtil.getAmpLocations();
-		filter.setAllLocationsList(allLocationsList);
 		//long startTime = System.currentTimeMillis();
 		Collection activityListReduced = DbUtil.getActivities(filter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 		//long endTime = System.currentTimeMillis();

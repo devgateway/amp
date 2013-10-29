@@ -92,10 +92,7 @@ public class ActivityUtil {
 		Session session = AmpActivityModel.getHibernateSession();	
 		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
-			logger.debug("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");
-			org.digijava.kernel.entity.Locale tmpLocale = new org.digijava.kernel.entity.Locale();
-			tmpLocale.setCode(wicketSession.getLocale().getLanguage());
-			TLSUtils.forceLocaleUpdate(tmpLocale);
+			logger.error("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");
 		}
 		AmpActivityVersion a = am.getObject();
 		AmpActivityVersion oldA = a;

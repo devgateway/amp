@@ -212,7 +212,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
                 public void onBeginRequest(RequestCycle cycle){
                     if (cycle.getRequest().getContainerRequest() instanceof HttpServletRequest){
                         HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest().getContainerRequest();
-                        TLSUtils.populate(containerRequest);
+                        //TLSUtils.populate(containerRequest);
                     }
                 };
             }

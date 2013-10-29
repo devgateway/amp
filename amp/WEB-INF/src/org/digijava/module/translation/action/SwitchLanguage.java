@@ -83,8 +83,6 @@ public class SwitchLanguage
         //String localeKey=(String)request.getParameter("lang");
         Locale locale = new Locale();
         locale.setCode(localeKey);
-        logger.debug("Forcing locale update: " + locale.getCode());
-        TLSUtils.forceLocaleUpdate(locale);
         DgUtil.switchLanguage(locale, request, response);
 
         if(referrerUrl.equals("/translation/default/showAdvancedTranslation.do")) {

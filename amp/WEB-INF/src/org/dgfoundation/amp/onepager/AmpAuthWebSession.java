@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager;
 
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import org.apache.wicket.request.Request;
 import org.dgfoundation.amp.onepager.util.FMFormCache;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
@@ -59,7 +61,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 		this.isAdmin = isAdmin;
 	}
 
-	public AmpAuthWebSession(final Request request) {
+    public AmpAuthWebSession(final Request request) {
 		super(request);
 		fmMode = false;
 		translatorMode = false;

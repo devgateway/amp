@@ -2140,7 +2140,7 @@ public class EditActivity extends Action {
     				//only the team leader of the team that owns the activity has rights to validate it
     				//if activity is already approved it will display the edit value
     				if( apps.getValidation()!= null && "alledits".compareTo(apps.getValidation().toLowerCase())==0 )
-    					if(teamLeadFlag &&
+    					if(teamLeadFlag && activity.getTeam() !=null &&
     					   teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId()) &&
     					   (Constants.STARTED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0 || 
     					    Constants.EDITED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0)

@@ -13,7 +13,6 @@ import java.util.Set;
  * @author aartimon@dginternational.org
  * @since Apr 27, 2011
  */
-@TranslatableClass
 public class AmpActivity extends AmpActivityVersion implements Cloneable, HierarchyListable {
 
 	/**

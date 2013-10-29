@@ -18,6 +18,7 @@ import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -240,12 +241,10 @@ public class DbHelper {
 			//locations filter
 			
 			if (locationCondition) {
-				locationIds = getAllDescendantsLocation(locationIds,
-						DbUtil.getAmpLocations());
+				locationIds = getAllDescendantsLocation(locationIds);
 				filter.setSelLocationIds(locationIds);
 				if (zonesids!=null && zonesids.length > 0) {
-					zonesids = getAllDescendantsLocation(zonesids,
-							DbUtil.getAmpLocations());
+					zonesids = getAllDescendantsLocation(zonesids);
 					Long[] both = (Long[]) ArrayUtils.addAll(locationIds,
 							zonesids);
 					filter.setSelLocationIds(both);
@@ -1502,32 +1501,10 @@ public class DbHelper {
 		return (Long[]) tempSectorIds.toArray(new Long[0]);
 	}
 
-	public static Long[] getAllDescendantsLocation(Long[] locationIds,
-			ArrayList<AmpCategoryValueLocations> allLocationsList) {
-		List<Long> tempLocationsIds = new ArrayList<Long>();
-		for (AmpCategoryValueLocations as : allLocationsList) {
-			for (Long i : locationIds) {
-				if (!tempLocationsIds.contains(i))
-					tempLocationsIds.add(i);
-				if (as.getParentLocation() != null
-						&& as.getParentLocation().getId().equals(i)) {
-					tempLocationsIds.add(as.getId());
-				} else if (as.getParentLocation() != null
-						&& as.getParentLocation().getParentLocation() != null
-						&& as.getParentLocation().getParentLocation().getId()
-								.equals(i)) {
-					tempLocationsIds.add(as.getId());
-				} else if (as.getParentLocation() != null
-						&& as.getParentLocation().getParentLocation() != null
-						&& as.getParentLocation().getParentLocation()
-								.getParentLocation() != null
-						&& as.getParentLocation().getParentLocation()
-								.getParentLocation().getId().equals(i)) {
-					tempLocationsIds.add(as.getId());
-				}
-			}
-		}
-		return (Long[]) tempLocationsIds.toArray(new Long[0]);
+	public static Long[] getAllDescendantsLocation(Long[] locationIds) 
+	{
+		Set<Long> ids = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(Arrays.asList(locationIds));
+		return (Long[]) ids.toArray(new Long[0]);
 	}
 
 	public static AmpMapConfig getMapByType(Integer mapType) {

@@ -6,6 +6,7 @@ import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -42,6 +43,7 @@ import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -524,7 +526,7 @@ public class DbUtil {
 
         //Sectors should include all the subsectors
         if(sectorCondition){
-        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
+        	sectorIds = getAllDescendants(sectorIds);
         }
         /*
          * We are selecting sectors which are funded
@@ -856,14 +858,14 @@ public class DbUtil {
         	if (locationIds[0].equals(0l)) {
         		oql += " and actloc is NULL "; //Unallocated condition
 			} else {
-				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+				locationIds = getAllDescendantsLocation(locationIds);
 	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
 			}
         }
 
         //Filter for sectors. If there's a sector selected, it adds that sector as well as all children.
         if (sectorCondition && sectorIds != null && sectorIds.length > 0) {
-        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
+        	sectorIds = getAllDescendants(sectorIds);
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
 
@@ -1418,12 +1420,12 @@ public class DbUtil {
         	if (locationIds[0].equals(0l)) {
         		oql += " and actloc is NULL "; //Unallocated condition
 			} else {
-				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+				locationIds = getAllDescendantsLocation(locationIds);
 	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
 			}
         }
         if (sectorCondition) {
-        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
+        	sectorIds = getAllDescendants(sectorIds);
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
 
@@ -1624,12 +1626,12 @@ public class DbUtil {
         	if (locationIds[0].equals(0l)) {
         		oql += " and actloc is NULL "; //Unallocated condition
 			} else {
-				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+				locationIds = getAllDescendantsLocation(locationIds);
 	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
 			}
         }
         if (sectorCondition) {
-        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
+        	sectorIds = getAllDescendants(sectorIds);
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
 
@@ -1832,12 +1834,12 @@ public class DbUtil {
         	if (locationIds[0].equals(0l)) {
         		oql += " and actloc is NULL "; //Unallocated condition
 			} else {
-				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+				locationIds = getAllDescendantsLocation(locationIds);
 	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
 			}
         }
         if (sectorCondition) {
-        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
+        	sectorIds = getAllDescendants(sectorIds);
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
 
@@ -2089,33 +2091,33 @@ public class DbUtil {
 
     }
 
-	public static ArrayList<AmpSector> getAmpSectors() {
-		Session session = null;
-		Query q = null;
-		AmpSector ampSector = null;
-		ArrayList<AmpSector> sector = new ArrayList<AmpSector>();
-		String queryString = null;
-		Iterator<AmpSector> iter = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			queryString = " select Sector from "
-					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is not null and (Sector.deleted is null or Sector.deleted = false) order by Sector.name";
-			q = session.createQuery(queryString);
-			iter = q.list().iterator();
-
-			while (iter.hasNext()) {
-				ampSector = (AmpSector) iter.next();
-				sector.add(ampSector);
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get Sector names  from database "
-					+ ex.getMessage());
-		}
-		return sector;
-	}
+//	public static ArrayList<AmpSector> getAmpSectors() {
+//		Session session = null;
+//		Query q = null;
+//		AmpSector ampSector = null;
+//		ArrayList<AmpSector> sector = new ArrayList<AmpSector>();
+//		String queryString = null;
+//		Iterator<AmpSector> iter = null;
+//
+//		try {
+//			session = PersistenceManager.getSession();
+//			queryString = " select Sector from "
+//					+ AmpSector.class.getName()
+//					+ " Sector where Sector.parentSectorId is not null and (Sector.deleted is null or Sector.deleted = false) order by Sector.name";
+//			q = session.createQuery(queryString);
+//			iter = q.list().iterator();
+//
+//			while (iter.hasNext()) {
+//				ampSector = (AmpSector) iter.next();
+//				sector.add(ampSector);
+//			}
+//
+//		} catch (Exception ex) {
+//			logger.error("Unable to get Sector names  from database "
+//					+ ex.getMessage());
+//		}
+//		return sector;
+//	}
 	
 	/**
 	 * filters descendants and sector - e.g. complete subtree
@@ -2123,72 +2125,79 @@ public class DbUtil {
 	 * @param allSectorList
 	 * @return
 	 */
-    private static Long[] getAllDescendants(Long[] sectorIds,
-			ArrayList<AmpSector> allSectorList) {
-    	//Go through the list to determine the children
-    	Set<Long> tempSectorIds = new java.util.HashSet<Long>();
+    private static Long[] getAllDescendants(Long[] sectorIds) {
     	
-    	for(Long i : sectorIds)
-    	{
-			tempSectorIds.add(i);
-    		for(AmpSector as : allSectorList)
-			{
-    			if(as.getParentSectorId() != null && as.getParentSectorId().getAmpSectorId().equals(i))
-    	    		tempSectorIds.add(as.getAmpSectorId());
-    			if(as.getParentSectorId() != null && as.getParentSectorId().getParentSectorId() != null && as.getParentSectorId().getParentSectorId().getAmpSectorId().equals(i))
-    	    		tempSectorIds.add(as.getAmpSectorId());    			
-    		}
-    	}
-		return (Long[]) tempSectorIds.toArray(new Long[0]);
+    	Set<Long> ids = SectorUtil.getRecursiveChildrenOfSectors(Arrays.asList(sectorIds));
+    	return (Long[]) ids.toArray(new Long[0]);
+    	
+//    	//Go through the list to determine the children
+//    	Set<Long> tempSectorIds = new java.util.HashSet<Long>();
+//    	
+//    	for(Long i : sectorIds)
+//    	{
+//			tempSectorIds.add(i);
+//    		for(AmpSector as : allSectorList)
+//			{
+//    			if(as.getParentSectorId() != null && as.getParentSectorId().getAmpSectorId().equals(i))
+//    	    		tempSectorIds.add(as.getAmpSectorId());
+//    			if(as.getParentSectorId() != null && as.getParentSectorId().getParentSectorId() != null && as.getParentSectorId().getParentSectorId().getAmpSectorId().equals(i))
+//    	    		tempSectorIds.add(as.getAmpSectorId());    			
+//    		}
+//    	}
+//		return (Long[]) tempSectorIds.toArray(new Long[0]);
 	}
 
-	public static ArrayList<AmpCategoryValueLocations> getAmpLocations() {
-		Session session = null;
-		Query q = null;
-		AmpCategoryValueLocations location = null;
-		ArrayList<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();
-		Iterator<AmpCategoryValueLocations> iter = null;
+//	public static ArrayList<AmpCategoryValueLocations> getAmpLocations() {
+//		Session session = null;
+//		Query q = null;
+//		AmpCategoryValueLocations location = null;
+//		ArrayList<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();
+//		Iterator<AmpCategoryValueLocations> iter = null;
+//
+//		try {
+//			session = PersistenceManager.getSession();
+//			String queryString = " from " + AmpCategoryValueLocations.class.getName()+
+//            " vl where vl.parentLocation  is not null " ;
+//			q = session.createQuery(queryString);
+//			iter = q.list().iterator();
+//
+//			while (iter.hasNext()) {
+//				location = (AmpCategoryValueLocations) iter.next();
+//				locations.add(location);
+//			}
+//
+//		} catch (Exception ex) {
+//			logger.error("Unable to get Sector names  from database "
+//					+ ex.getMessage());
+//		}
+//		return locations;
+//	}
 
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = " from " + AmpCategoryValueLocations.class.getName()+
-            " vl where vl.parentLocation  is not null " ;
-			q = session.createQuery(queryString);
-			iter = q.list().iterator();
+	/**
+	 * filters all descendants and root location - e.g. complete subtree
+	 * @param locationIds
+	 * @param allLocationsList
+	 * @return
+	 */
+	private static Long[] getAllDescendantsLocation(Long[] locationIds) {
 
-			while (iter.hasNext()) {
-				location = (AmpCategoryValueLocations) iter.next();
-				locations.add(location);
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get Sector names  from database "
-					+ ex.getMessage());
-		}
-		return locations;
-	}
-
-	private static Long[] getAllDescendantsLocation(Long[] locationIds,
-			ArrayList<AmpCategoryValueLocations> allLocationsList) {
-    	List<Long> tempLocationsIds = new ArrayList<Long>();
-    	if (locationIds.length == 1){
-    		AmpCategoryValueLocations loc = getLocationById(locationIds[0]);
-    		if (loc.getParentLocation()==null) {
-    			Long[] ids = {loc.getId()};
-				return ids;
-			}
-    	}
-		for(AmpCategoryValueLocations as : allLocationsList){
-			for(Long i : locationIds){
-		    	if(!tempLocationsIds.contains(i)) tempLocationsIds.add(i);
-    			if(as.getParentLocation() != null && as.getParentLocation().getId().equals(i)){
-    				tempLocationsIds.add(as.getId());
-    			} else if(as.getParentLocation() != null && as.getParentLocation().getParentLocation() != null && as.getParentLocation().getParentLocation().getId().equals(i)){
-    				tempLocationsIds.add(as.getId());
-    			}
-    		}
-    	}
-		return (Long[]) tempLocationsIds.toArray(new Long[0]);
+		Set<Long> ids = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(Arrays.asList(locationIds));
+		return (Long[]) ids.toArray(new Long[0]);
+		
+//    	Set<Long> tempLocationsIds = new java.util.HashSet<Long>();    	
+//		for(Long i : locationIds)
+//		{
+//			tempLocationsIds.add(i);
+//			for(AmpCategoryValueLocations as : allLocationsList)
+//			{
+//    			if(as.getParentLocation() != null && as.getParentLocation().getId().equals(i))
+//    				tempLocationsIds.add(as.getId());
+//    			if(as.getParentLocation() != null && as.getParentLocation().getParentLocation() != null && as.getParentLocation().getParentLocation().getId().equals(i))
+//    				tempLocationsIds.add(as.getId());
+//    			
+//    		}
+//    	}
+//		return (Long[]) tempLocationsIds.toArray(new Long[0]);
 	}
 
 	public static List<AmpTeam> getAllChildComputedWorkspaces() {

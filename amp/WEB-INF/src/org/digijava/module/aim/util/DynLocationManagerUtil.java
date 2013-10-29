@@ -798,7 +798,7 @@ public class DynLocationManagerUtil {
 	 * @param inIds
 	 * @return
 	 */
-	private static Set<Long> getRecursiveChildrenOfCategoryValueLocations(Collection<Long> inIds)
+	public static Set<Long> getRecursiveChildrenOfCategoryValueLocations(Collection<Long> inIds)
 	{
 		Set<Long> result = new HashSet<Long>();
 		if (inIds == null)

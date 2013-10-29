@@ -111,8 +111,8 @@ public class DashboardFilter {
     private List<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>> regionWithZones;
     //private List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorWithSubSectors;
     private List<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>> configWithSectorAndSubSectors;
-    private ArrayList<AmpSector> allSectorList;
-    private ArrayList<AmpCategoryValueLocations> allLocationsList;
+//    private ArrayList<AmpSector> allSectorList;
+//    private ArrayList<AmpCategoryValueLocations> allLocationsList;
     private int topLists = 5;
     private String flashSliderLabels = "";
     
@@ -140,7 +140,7 @@ public class DashboardFilter {
     	newFilter.setShowOnlyApprovedActivities(this.getShowOnlyApprovedActivities());
     	newFilter.setFromPublicView(this.getFromPublicView());
     	newFilter.setSelSectorConfigId(this.getSelSectorConfigId());
-    	newFilter.setAllSectorList(this.getAllSectorList());
+    	//newFilter.setAllSectorList(this.getAllSectorList());
     	newFilter.setTransactionType(this.getTransactionType());
     	newFilter.setAgencyType(this.getAgencyType());
     	newFilter.setSelProgramIds(this.getSelProgramIds());
@@ -737,14 +737,6 @@ public class DashboardFilter {
 		this.selSectorConfigId= selSectorConfigId;
 	}
 
-
-	public void setAllSectorList(ArrayList<AmpSector> allSectorList) {
-		this.allSectorList = allSectorList;
-	}
-	public ArrayList<AmpSector> getAllSectorList() {
-		return allSectorList;
-	}
-
 	public void setStartYearQuickFilter(Long startYearQuickFilter) {
 		this.startYearQuickFilter = startYearQuickFilter;
 	}
@@ -775,14 +767,6 @@ public class DashboardFilter {
 
 	public Long getEndYearFilter() {
 		return endYearFilter;
-	}
-
-	public void setAllLocationsList(ArrayList<AmpCategoryValueLocations> allLocationsList) {
-		this.allLocationsList = allLocationsList;
-	}
-
-	public ArrayList<AmpCategoryValueLocations> getAllLocationsList() {
-		return allLocationsList;
 	}
 
 	/**

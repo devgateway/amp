@@ -854,10 +854,9 @@ public class DataDispatcher extends DispatchAction {
 	        for (Long i = startYear; i <= endYear.intValue(); i++) {
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-	            Long[] temp = filter.getSelSectorIds();
-    			filter.setSelSectorIds(idsArray);
-		        DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-		        filter.setSelSectorIds(temp);
+	            DashboardFilter newFilter = filter.getCopyFilterForFunding();
+    			newFilter.setSelSectorIds(idsArray);
+		        DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 		        BigDecimal amount = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	            if (ids.size()==0){
 	            	othersYearlyValue.put(i, BigDecimal.ZERO);
@@ -1214,9 +1213,9 @@ public class DataDispatcher extends DispatchAction {
 	        for (Long i = startYear; i <= endYear.intValue(); i++) {
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-	            filter.setSelProgramIds(idsArray);
-	            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-	            filter.setSelProgramIds(null);
+	            DashboardFilter newFilter = filter.getCopyFilterForFunding();
+    			newFilter.setSelProgramIds(idsArray);
+	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 		        BigDecimal amount = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	            if (ids.size()==0){
 	            	othersYearlyValue.put(i, BigDecimal.ZERO);
@@ -3594,10 +3593,9 @@ public class DataDispatcher extends DispatchAction {
             for (Long i = startYear; i <= endYear; i++) {
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-	            Long[] temp = filter.getSelLocationIds();
-	            filter.setSelLocationIds(idsArray);
-		        DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-		        filter.setSelLocationIds(temp);
+	            DashboardFilter newFilter = filter.getCopyFilterForFunding();
+    			newFilter.setSelLocationIds(idsArray);
+		        DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 		        BigDecimal amount = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	            if (ids.size()==0){
 	            	othersYearlyValue.put(i, BigDecimal.ZERO);

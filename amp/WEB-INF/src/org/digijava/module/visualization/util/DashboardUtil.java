@@ -270,12 +270,8 @@ public class DashboardUtil {
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 
         request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep1);
-        ArrayList<AmpSector> allSectorList = DbUtil.getAmpSectors();
-		filter.setAllSectorList(allSectorList);
 
-        ArrayList<AmpCategoryValueLocations> allLocationsList = DbUtil.getAmpLocations();
-		filter.setAllLocationsList(allLocationsList);
-		//long startTime = System.currentTimeMillis();
+        //long startTime = System.currentTimeMillis();
 		Collection activityListReduced = DbUtil.getActivities(filter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 		//long endTime = System.currentTimeMillis();
 		//System.out.println("Total elapsed time in execution: "+ (endTime-startTime));
@@ -467,58 +463,69 @@ public class DashboardUtil {
 	}
 	
 	public static String getInStatement(Long ids[]) {
-        String oql = "";
+		if (ids.length == 0)
+			return "-999"; // avoid generating statements like "loc.id in ()", as they trigger "org.hibernate.hql.ast.QuerySyntaxException: unexpected end of subtree"
+        StringBuffer oql = new StringBuffer();
         for (int i = 0; i < ids.length; i++) {
-            oql += "" + ids[i];
+            oql.append(ids[i]);
             if (i < ids.length - 1) {
-                oql += ",";
+                oql.append(",");
             }
         }
-        return oql;
+        return oql.toString();
     }
 
     public static String getInStatement(Object[] ids) {
-        String oql = "";
+		if (ids.length == 0)
+			return "-999"; // avoid generating statements like "loc.id in ()", as they trigger "org.hibernate.hql.ast.QuerySyntaxException: unexpected end of subtree"
+        StringBuffer oql = new StringBuffer();
         for (int i = 0; i < ids.length; i++) {
-            oql += "" + ids[i];
+            oql.append(ids[i]);
             if (i < ids.length - 1) {
-                oql += ",";
+                oql.append(",");
             }
         }
-        return oql;
+        return oql.toString();
 	}    
 
     public static String getInStatement(ArrayList ids) {
-        String oql = "";
+		if (ids.isEmpty())
+			return "-999"; // avoid generating statements like "loc.id in ()", as they trigger "org.hibernate.hql.ast.QuerySyntaxException: unexpected end of subtree"
+
+        StringBuffer oql = new StringBuffer();;
         for (Object object : ids) {
             if (oql.length()!=0) {
-                oql += ",";
+                oql.append(",");
             }
-            oql += ""+object;
+            oql.append(object);
         }
-        return oql;
+        return oql.toString();
 	}    
 
     public static String getInStatement(Collection objs) {
-        String oql = "";
+    	
+    	if (objs.isEmpty())
+    		return "-999"; // avoid generating statements like "loc.id in ()", as they trigger "org.hibernate.hql.ast.QuerySyntaxException: unexpected end of subtree"
+    	
+        StringBuffer oql = new StringBuffer();
         for (Object obj : objs) {
             if (oql.length()!=0) {
-                oql += ",";
+                oql.append(",");
             }
             if (obj instanceof AmpSector){
             	AmpSector sec = (AmpSector)obj;
-            	oql += ""+sec.getAmpSectorId();
+            	oql.append(sec.getAmpSectorId());
             }
             if (obj instanceof AmpCategoryValueLocations){
             	AmpCategoryValueLocations loc = (AmpCategoryValueLocations)obj;
-            	oql += ""+loc.getId();
+            	oql.append(loc.getId());
             }
             if (obj instanceof AmpTheme){
             	AmpTheme prog = (AmpTheme)obj;
-            	oql += ""+prog.getAmpThemeId();
+            	oql.append(prog.getAmpThemeId());
             }
         }
-        return oql;
+        return oql.toString();
 	}    
 
     public static Date getStartDate(Long fiscalCalendarId, int year) {

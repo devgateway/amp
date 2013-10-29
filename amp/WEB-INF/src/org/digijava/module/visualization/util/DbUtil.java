@@ -2116,18 +2116,27 @@ public class DbUtil {
 		}
 		return sector;
 	}
+	
+	/**
+	 * filters descendants and sector - e.g. complete subtree
+	 * @param sectorIds
+	 * @param allSectorList
+	 * @return
+	 */
     private static Long[] getAllDescendants(Long[] sectorIds,
 			ArrayList<AmpSector> allSectorList) {
     	//Go through the list to determine the children
-    	List<Long> tempSectorIds = new ArrayList<Long>();
-		for(AmpSector as : allSectorList){
-			for(Long i : sectorIds){
-		    	if(!tempSectorIds.contains(i)) tempSectorIds.add(i);
-    			if(as.getParentSectorId() != null && as.getParentSectorId().getAmpSectorId().equals(i)){
+    	Set<Long> tempSectorIds = new java.util.HashSet<Long>();
+    	
+    	for(Long i : sectorIds)
+    	{
+			tempSectorIds.add(i);
+    		for(AmpSector as : allSectorList)
+			{
+    			if(as.getParentSectorId() != null && as.getParentSectorId().getAmpSectorId().equals(i))
     	    		tempSectorIds.add(as.getAmpSectorId());
-    			} else if(as.getParentSectorId() != null && as.getParentSectorId().getParentSectorId() != null && as.getParentSectorId().getParentSectorId().getAmpSectorId().equals(i)){
-    	    		tempSectorIds.add(as.getAmpSectorId());
-    			}
+    			if(as.getParentSectorId() != null && as.getParentSectorId().getParentSectorId() != null && as.getParentSectorId().getParentSectorId().getAmpSectorId().equals(i))
+    	    		tempSectorIds.add(as.getAmpSectorId());    			
     		}
     	}
 		return (Long[]) tempSectorIds.toArray(new Long[0]);

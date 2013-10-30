@@ -13,7 +13,7 @@
 <digi:instance property="aimEditActivityForm" />
 
 	<!-- Disbursement orders-->
-	<!-- Comment added by mouhamad for burkina AMP-3361
+	<%-- Comment added by mouhamad for burkina AMP-3361
 	<tr bgcolor="#ffffff">
 		<td height="25" colspan="5" bgcolor="#FFFFCC" style="text-transform: uppercase"><a
 			title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
@@ -62,8 +62,9 @@
 			</logic:equal>
 		</logic:iterate>
 	</c:if>
-	 -->
-	<!-- tr>
+	 --%>
+<%--	 
+	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;"><digi:trn
 			key='aim:totalPlannedDisbursementOrder'>
@@ -74,7 +75,7 @@
 			style="border-top: 1px solid #000000; text-transform: uppercase;"></TD>
 	    <TD align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">&nbsp;</TD>
-	</tr-->
+	</tr> --%>
 	<tr bgcolor="#ffffff">
 		<td height="7" colspan="5" bgcolor="#ffffff"></td>
 	</tr>

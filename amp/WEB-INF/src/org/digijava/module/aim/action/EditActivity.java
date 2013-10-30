@@ -2205,7 +2205,7 @@ public class EditActivity extends Action {
 //    	}
 
     	String globalProjectsValidation		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION);
-    	boolean isManagement = false;
+//    	boolean isManagement = false;
     	if("Management".toLowerCase().compareTo(teamMember.getTeamAccessType().toLowerCase()) == 0) {
     		eaForm.setButtonText("none");
     	}

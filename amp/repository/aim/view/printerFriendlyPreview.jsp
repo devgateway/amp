@@ -91,7 +91,42 @@ body {background:none;}
 										<td  align="center" colspan="2" bgcolor=#C7D4DB>
 											<b><digi:trn key="aim:activityDetail">Activity Details</digi:trn></b>										
 										</td>
-									</tr>								
+									</tr>
+								<feature:display name="Identification" module="Project ID and Planning">   
+									<field:display name="AMP ID" feature="Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn key="aim:ampId">AMP ID</digi:trn>		
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.ampId!=null}">
+													${aimEditActivityForm.identification.ampId}
+											</c:if>
+										</td>
+									</tr>
+                                    </field:display>
+                                    </feature:display>
+                                 <feature:display name="Identification" module="Project ID and Planning">
+										
+										<field:display name="Status" feature="Identification">							
+                                            <tr>
+                                            	  <td align="right" valign="top" nowrap="nowrap" >
+                                                  	<b>
+                                                  	<digi:trn key="aim:status"> Status</digi:trn>
+                                                  	</b>                      	      
+                                                  	</td>
+													<td bgcolor="#FFFFFF">
+												   	  <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/><br><br>
+                                                      <c:if test="${not empty aimEditActivityForm.identification.statusReason}">
+				  											<b> <c:set var="statusReasonKey" value="${aimEditActivityForm.identification.statusReason}"/>
+															<digi:edit key="${statusReasonKey}"></digi:edit></b>
+													  </c:if>                                                       
+                                                   </td>									
+                                         	 </tr>
+										</field:display>									
+                                        </feature:display>   								
 								<feature:display name="Identification" module="Project ID and Planning">
 
 									<field:display feature="Identification" name="Project Comments">
@@ -165,20 +200,6 @@ body {background:none;}
 									</field:display>
 									 </feature:display>
                                        <feature:display name="Identification" module="Project ID and Planning">   
-									<field:display name="AMP ID" feature="Identification">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-												<digi:trn key="aim:ampId">AMP ID</digi:trn>		
-									  		</b>								
-									  	</td>
-									  	<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.ampId!=null}">
-													${aimEditActivityForm.identification.ampId}
-											</c:if>
-										</td>
-									</tr>
-                                    </field:display>                         
 									<field:display name="Contract Number" feature="Planning">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
@@ -254,6 +275,72 @@ body {background:none;}
 									</logic:present>
 									</field:display>
 
+									
+									
+									<field:display name="Project Impact" feature="Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn key="aim:Project Impact">Project Impact</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.projectImpact!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.projectImpact}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</field:display>
+									
+									<field:display name="Activity Summary" feature="Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn>Activity Summary:</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.activitySummary!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.activitySummary}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</field:display> 
+									
+									<field:display name="Contracting Arrangements" feature="Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn>Contracting Arrangements</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.contractingArrangements!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.contractingArrangements}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</field:display>
+
+									<field:display name="Conditionalities" feature="Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn>Conditionalities</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.conditionality!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.conditionality}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</field:display> 
+									
 									<field:display feature="Identification" name="Results">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
@@ -301,23 +388,6 @@ body {background:none;}
 									</tr>
 									</logic:present>
 									</field:display>
-									
-									<field:display name="Project Impact" feature="Identification">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-												<digi:trn key="aim:Project Impact">Project Impact</digi:trn>
-									  		</b>								
-									  	</td>
-									  	<td bgcolor="#ffffff">
-                                        <c:if test="${aimEditActivityForm.identification.projectImpact!=null}">
-											<c:set var="descKey" value="${aimEditActivityForm.identification.projectImpact}" />
-											<digi:edit key="${descKey}"></digi:edit>
-                                        </c:if>										
-                                        </td>
-									</tr>
-									</field:display> 
-									
 									
 									<field:display name="Accession Instrument" feature="Identification">
 									<tr>
@@ -587,6 +657,14 @@ body {background:none;}
 														${aimEditActivityForm.planning.revisedStartDate}													</td>
 												</tr>
 												</module:display>
+												
+												<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
+												<tr>
+													<td width="32%"><digi:trn>Original Completion Date</digi:trn></td>													<td width="1">:</td>
+													<td align="left">
+														${aimEditActivityForm.planning.originalCompDate}													</td>
+												</tr>
+												</module:display>
 											
 												<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 												<tr>
@@ -669,29 +747,23 @@ body {background:none;}
 													<td colspan="3">&nbsp;</td>
 												</tr>
 												</c:if>
+												
+												<field:display name="Duration of Project" feature="Planning"> 
+												<c:if test="${!aimEditActivityForm.editAct}">
+												<tr>
+													<td width="32%"><digi:trn>
+													Duration of project</digi:trn></td>
+													<td width="1">:</td>
+													<td align="left">
+														${aimEditActivityForm.planning.projectPeriod}													</td>
+												</tr>
+												</c:if>
+												</field:display>
+												
 											</table>
 											</div>										</td>
 									</tr>
 									</feature:display>
-                                    <feature:display name="Identification" module="Project ID and Planning">
-										
-										<field:display name="Status" feature="Identification">							
-                                            <tr>
-                                            	  <td align="right" valign="top" nowrap="nowrap" >
-                                                  	<b>
-                                                  	<digi:trn key="aim:status"> Status</digi:trn>
-                                                  	</b>                      	      
-                                                  	</td>
-													<td bgcolor="#FFFFFF">
-												   	  <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/><br><br>
-                                                      <c:if test="${not empty aimEditActivityForm.identification.statusReason}">
-				  											<b> <c:set var="statusReasonKey" value="${aimEditActivityForm.identification.statusReason}"/>
-															<digi:edit key="${statusReasonKey}"></digi:edit></b>
-													  </c:if>                                                       
-                                                   </td>									
-                                         	 </tr>
-										</field:display>									
-                                        </feature:display>
                                         <module:display name="References" parentModule="PROJECT MANAGEMENT">
 									<tr>
 									<td width="27%" align="right" valign="top" nowrap="nowrap">
@@ -805,8 +877,58 @@ body {background:none;}
 									
                             </feature:display>   
                             
+                            <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+								
+                                	<feature:display name="NPD Programs" module="National Planning Dashboard">
+									<field:display name="National Planning Objectives" feature="NPD Programs">
+									<TR>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+												<b>
+								      <digi:trn key="aim:national Plan Objective"> National Plan Objective</digi:trn>
+												</b></TD>
+
+<TD bgcolor="#ffffff">
+											<c:forEach var="program" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+                                                 <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                             </c:forEach>
+                                      </TD>
+									</TR>
+                                      </field:display> 
+                                     <field:display name="Primary Program" feature="NPD Programs">
+                                     <c:if test="${aimEditActivityForm.programs.primaryPrograms != null} }">
+                                           <TR>
+												<td width="27%" align="right" valign="top" nowrap="nowrap">
+																												<b>
+										     <digi:trn key="aim:primary Programs"> Primary Programs</digi:trn>
+																												</b></TD>
+
+						  <TD bgcolor="#ffffff">
+								<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
+                                	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                </c:forEach>
+                   		</TD>
+						</TR>
+						</c:if>
+										</field:display>
+										<field:display name="Secondary Program" feature="NPD Programs">
+											<c:if test="${aimEditActivityForm.programs.secondaryPrograms != null} }">
+                                         	<TR>
+												<td width="27%" align="right" valign="top" nowrap="nowrap" >
+													<b>	
+											  <digi:trn key="aim:secondary Programs"> Secondary Programs</digi:trn>
+													</b></TD>
+<TD bgcolor="#ffffff">
+                                                      <c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
+	                                                      <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                      </c:forEach>
+                                        		</TD>
+											</TR>
+											</c:if>
+										</field:display>
+									</feature:display>
+                                   </module:display>
                             
-							<feature:display name="Program" module="Program">
+							<%-- <feature:display name="Program" module="Program">
                             <field:display name="National Planning Objectives" feature="NPD Programs">                       
                           	<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
@@ -831,7 +953,7 @@ body {background:none;}
 							</td>
 							</tr>
 						</field:display>
-                            </feature:display>   
+                            </feature:display> --%>   
                                     <feature:display name="Sectors" module="Project ID and Planning">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" class="t-name">
@@ -915,52 +1037,7 @@ body {background:none;}
 								  </c:if>
 									
                                     
-                                  <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
-								
-                                	<feature:display name="NPD Programs" module="National Planning Dashboard">
-									<field:display name="National Planning Objectives" feature="NPD Programs">
-									<TR>
-										<td width="27%" align="right" valign="top" nowrap="nowrap">
-												<b>
-								      <digi:trn key="aim:national Plan Objective"> National Plan Objective</digi:trn>
-												</b></TD>
-
-<TD bgcolor="#ffffff">
-											<c:forEach var="program" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
-                                                 <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
-                                             </c:forEach>
-                                      </TD>
-									</TR>
-                                      </field:display> 
-                                     <field:display name="Primary Program" feature="NPD Programs">
-                                           <TR>
-												<td width="27%" align="right" valign="top" nowrap="nowrap">
-																												<b>
-										     <digi:trn key="aim:primary Programs"> Primary Programs</digi:trn>
-																												</b></TD>
-
-						  <TD bgcolor="#ffffff">
-								<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
-                                	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
-                                </c:forEach>
-                   		</TD>
-						</TR>
-										</field:display>
-										<field:display name="Secondary Program" feature="NPD Programs">
-                                         	<TR>
-												<td width="27%" align="right" valign="top" nowrap="nowrap" >
-													<b>	
-											  <digi:trn key="aim:secondary Programs"> Secondary Programs</digi:trn>
-													</b></TD>
-<TD bgcolor="#ffffff">
-                                                      <c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
-	                                                      <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
-                                                      </c:forEach>
-                                        		</TD>
-											</TR>
-										</field:display>
-									</feature:display>
-                                   </module:display>
+                                  
                                    
                                   <logic:present name="currentMember" scope="session">
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">

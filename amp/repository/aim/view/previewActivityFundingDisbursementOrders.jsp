@@ -63,7 +63,7 @@
 		</logic:iterate>
 	</c:if>
 	 --%>
-	<!-- tr>
+	<%-- <tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;"><digi:trn
 			key='aim:totalPlannedDisbursementOrder'>
@@ -74,7 +74,7 @@
 			style="border-top: 1px solid #000000; text-transform: uppercase;"></TD>
 	    <TD align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">&nbsp;</TD>
-	</tr-->
+	</tr> --%>
 	<tr bgcolor="#ffffff">
 		<td height="7" colspan="5" bgcolor="#ffffff"></td>
 	</tr>

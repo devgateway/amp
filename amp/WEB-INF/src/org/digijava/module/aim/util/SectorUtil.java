@@ -65,6 +65,7 @@ public class SectorUtil {
 			 * "country.iso = region.country";
 			 */
 
+			// AMP-16239
 			String qryStr = "select sector from " + AmpSector.class.getName()
 					+ " sector inner join sector.ampSecSchemeId " + " sscheme"
 					+ " where lower(sector.name) like '%"
@@ -216,6 +217,7 @@ public class SectorUtil {
 
 		try {
 			session = PersistenceManager.getSession();
+			// AMP-16239
 			String queryString = "select ss from "
 					+ AmpSectorScheme.class.getName() + " ss "
 					+ "order by ss.secSchemeName";
@@ -904,6 +906,7 @@ public class SectorUtil {
 
 		try {
 			sess = PersistenceManager.getSession();
+			// AMP-16239
 			String queryString = "select s from " + AmpSector.class.getName()
 					+ " s where s.name like '%" + key + "%' and (s.deleted is null or s.deleted = false) ";
 			qry = sess.createQuery(queryString);
@@ -1744,22 +1747,6 @@ public class SectorUtil {
 		return generatedSectors;
 	}
 
-	/*
-	 * this is to delete a sector
-	 * 
-	 * public static void deleteSector(Long schemeId) {
-	 * logger.info(" deleting the scheme"); Session session = null; Transaction
-	 * tx = null; try { session = PersistenceManager.getSession(); AmpSector
-	 * scheme = (AmpSector) session.load( AmpSectorScheme.class,schemeId);
-	 * //beginTransaction(); session.delete(scheme); //tx.commit(); } catch
-	 * (Exception e) { logger.error("Exception from deleteQuestion() :" +
-	 * e.getMessage()); e.printStackTrace(System.out); if (tx != null) { try {
-	 * tx.rollback(); } catch (Exception trbf) {
-	 * logger.error("Transaction roll back failed ");
-	 * e.printStackTrace(System.out); } } } finally { if (session != null) { try
-	 * { PersistenceManager.releaseSession(session); } catch (Exception rsf) {
-	 * logger.error("Failed to release session :" + rsf.getMessage()); } } } }
-	 */
 	// This recursive method helps the generateLevelHierarchy method.
 	public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
 		if (topLevelSector.getParentSectorId() != null) {

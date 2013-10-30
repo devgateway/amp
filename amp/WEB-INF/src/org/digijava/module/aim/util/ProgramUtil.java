@@ -148,6 +148,7 @@ public class ProgramUtil {
 
 			try {
 				session = PersistenceManager.getRequestDBSession();
+				// AMP-16239
 				String qryStr = "select theme from " + AmpTheme.class.getName()
 						+ " theme where (theme.name=:name)";
 				Query qry = session.createQuery(qryStr);
@@ -610,94 +611,6 @@ public class ProgramUtil {
 			result += prog.getName();
 			return result;
 		}
-
-
-
-	/* Commemted by pcsingh
-	 * due to some doubt abt assignment of indicator from one theme to other
-	 * doubt are like what should be default values, same indicator can be
-	 * assign to mant theme or not etc.
-	 * Note: same functions are written twice for future use
-
-		public static void assignThemeInd(Long indId, Long themeId){
-			Session session = null;
-			Transaction tx = null;
-			AmpThemeIndicators ampThInd = null;
-			AmpTheme ampTh = getThemeObject(themeId);
-			try{
-				session = PersistenceManager.getRequestDBSession();
-				ampThInd = (AmpThemeIndicators)session.load(AmpThemeIndicators.class, indId);
-				logger.info("Inside assignIndacators:::\n"+
-						"ampThemeIndicators.getName"+ampThInd.getName()+"\n\n\n");
-				Iterator getTheme = ampThInd.getThemes().iterator();
-				while(getTheme.hasNext()){
-					AmpTheme tmpAmpTheme = (AmpTheme)getTheme.next();
-					logger.info("Getting thems related to given indicator::::"+
-							"tmpAmpTheme.getName="+tmpAmpTheme.getName());
-				}
-				logger.info("\n\n\n");
-
-				logger.info("Current theme name:::="+ampTh.getName());
-				Iterator itr = ampTh.getIndicators().iterator();
-				while(itr.hasNext()){
-					AmpThemeIndicators tmpAmpThemeInd = (AmpThemeIndicators)itr.next();
-					logger.info("\nGetting all Indicators related to theme::::\n"
-							+"tmpAmpThemeIndicators.getName="+tmpAmpThemeInd.getName());
-				}
-				logger.info("\n\n\n");
-
-			}catch(Exception ex){
-				logger.error("Exception from assignThemeIndicator  "+ex.getMessage());
-				ex.printStackTrace(System.out);
-			}
-		}
-*/
-	
-		@Deprecated
-		public static void assignThemeInd(Long indId, Long themeId)
-		{
-
-//			logger.info("\n\nInside program Util\n"+indId+"      "+themeId);
-//			Session session = null;
-//			Transaction tx = null;
-//			AmpIndicator ampThInd = null;
-//			AmpTheme ampTh = getThemeObject(themeId);
-//			Set tmpTest = ampTh.getIndicators();
-//			try
-//			{
-//				session = PersistenceManager.getRequestDBSession();
-//				ampThInd = (AmpIndicator) session.load(AmpIndicator.class, indId);
-//				logger.info(ampThInd.getName());
-//				Set tempTh = ampThInd.getThemes();
-//				Iterator itr = tempTh.iterator();
-//				while(itr.hasNext()){
-//					AmpTheme tmp = (AmpTheme)itr.next();
-//					logger.info("Themes related to indicator\n\n"+tmp.getName());
-//				}
-//				tempTh.clear();
-//				logger.info(tempTh.isEmpty());
-//				tempTh.add(ampTh);
-//				itr = tempTh.iterator();
-//				while(itr.hasNext()){
-//					AmpTheme tmp = (AmpTheme)itr.next();
-//					logger.info("Now Themes related to indicator\n\n"+tmp.getName());
-//				}
-//				logger.info(tempTh.isEmpty());
-				//ampThInd.setThemes(ampThInd);
-//				ampThInd.setThemes(tempTh);
-
-//				tmpTest.add(ampThInd);
-//				ampTh.setIndicators(tmpTest);
-//beginTransaction();
-//				session.saveOrUpdate(ampThInd);
-//				//tx.commit();
-//			}
-//			catch(Exception ex) {
-//				logger.error("Exception from getThemeIndicators()  " + ex.getMessage());
-//				ex.printStackTrace(System.out);
-//			}
-		}
- //Comment over pcsing
 		
 		public static Collection getSectorIndicator(Long themeIndicatorId)
 		{

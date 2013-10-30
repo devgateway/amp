@@ -366,6 +366,7 @@ public class ComponentsUtil {
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
+            // AMP-16239
             queryString = "select co from " + AmpComponent.class.getName() + " co where co.title=:title";
             qry = session.createQuery(queryString);
             qry.setParameter("title", title, Hibernate.STRING);
@@ -394,7 +395,7 @@ public class ComponentsUtil {
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            
+            // AMP-16239
             queryString = "select co.title from "+AmpActivity.class.getName() +  " a, " +   AmpComponent.class.getName()+
                     " co  where co  in elements(a.components)  and" +
                     " co.title=:title";
@@ -436,6 +437,7 @@ public class ComponentsUtil {
             Query qry = null;
             try {
                 session = PersistenceManager.getRequestDBSession();
+                // AMP-16239
                 queryString = "select co from " + AmpComponent.class.getName() + " as co inner join co.activities ac inner join ac.ampActivityGroup actGroup where co.title=:title and actGroup.ampActivityGroupId <> :groupId ";
                 qry = session.createQuery(queryString);
                 qry.setParameter("title", title, Hibernate.STRING);

@@ -46,6 +46,7 @@ public class AmpAgreementSearchModel extends
 			Session session = PersistenceManager.getRequestDBSession();
 			Integer maxResults = (Integer) getParams().get(
 					AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
+			// AMP-16239
 			Criteria crit = session.createCriteria(AmpAgreement.class);
 			crit.setCacheable(true);
 			Junction junction = Restrictions.disjunction().add(

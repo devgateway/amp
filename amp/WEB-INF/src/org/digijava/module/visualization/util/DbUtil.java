@@ -2214,32 +2214,6 @@ public class DbUtil {
 //		return (Long[]) tempSectorIds.toArray(new Long[0]);
 	}
 
-//	public static ArrayList<AmpCategoryValueLocations> getAmpLocations() {
-//		Session session = null;
-//		Query q = null;
-//		AmpCategoryValueLocations location = null;
-//		ArrayList<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();
-//		Iterator<AmpCategoryValueLocations> iter = null;
-//
-//		try {
-//			session = PersistenceManager.getSession();
-//			String queryString = " from " + AmpCategoryValueLocations.class.getName()+
-//            " vl where vl.parentLocation  is not null " ;
-//			q = session.createQuery(queryString);
-//			iter = q.list().iterator();
-//
-//			while (iter.hasNext()) {
-//				location = (AmpCategoryValueLocations) iter.next();
-//				locations.add(location);
-//			}
-//
-//		} catch (Exception ex) {
-//			logger.error("Unable to get Sector names  from database "
-//					+ ex.getMessage());
-//		}
-//		return locations;
-//	}
-
 	/**
 	 * filters all descendants and root location - e.g. complete subtree
 	 * @param locationIds

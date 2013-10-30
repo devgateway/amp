@@ -112,6 +112,7 @@ public class IndicatorUtil {
 
         try {
             Session session = PersistenceManager.getRequestDBSession();
+            // AMP-16239
             String qrString = "Select ind  from " + AmpIndicator.class.getName() + " ind where ind.name=:name ";
             Long indicatorId = indicator.getIndicatorId();
             if (indicatorId != null && indicatorId != 0) {
@@ -1226,102 +1227,6 @@ public class IndicatorUtil {
 	}
 	
 	
-	
-	//TODO INDIC - Old Methods below this. Above are added by Irakli.
-	//most code below is deprecated or removed because of ugly names and ugly implementation!
-	/*
-	@Deprecated
-	public static void saveIndicators(AmpPrgIndicator tempPrgInd) {
-
-		Session session = null;
-		Transaction tx = null;
-		AmpActivity act = null;
-		AmpIndicator tempind = new AmpIndicator();
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			if (tempPrgInd.getIndicatorId() != null) {
-				tempind = (AmpIndicator) session.load(AmpIndicator.class,
-						tempPrgInd.getIndicatorId());
-			}
-			tempind.setName(tempPrgInd.getName());
-			tempind.setCode(tempPrgInd.getCode());
-			tempind.setType(tempPrgInd.getType());
-			tempind.setDescription(tempPrgInd.getDescription());
-			tempind.setCreationDate(DateConversion.getDate(tempPrgInd
-					.getCreationDate()));
-			tempind.setDefaultInd(tempPrgInd.isDefaultInd());
-
-			Collection sect = tempPrgInd.getIndSectores();
-			if (sect != null && sect.size() > 0) {
-				Iterator<ActivitySector> sectIter = sect.iterator();
-				while (sectIter.hasNext()) {
-					ActivitySector sector = sectIter.next();
-					AmpSector tempAmpSector = null;
-					tempAmpSector = (AmpSector) session.load(AmpSector.class,
-							sector.getSectorId());
-					Set ampThemeSet = new HashSet();
-					if (tempAmpSector.getIndicators() != null) {
-						tempAmpSector.getIndicators().add(tempind);
-					} else {
-						Set indcators = new HashSet();
-						indcators.add(tempind);
-						tempAmpSector.setIndicators(indcators);
-					}
-					ampThemeSet.add(tempAmpSector);
-					tempind.setSectors(ampThemeSet);
-				}
-			}
-			Collection selActivity = tempPrgInd.getSelectedActivity();
-			if (selActivity != null && selActivity.size() > 0 ) {
-				Iterator<LabelValueBean> selAct = selActivity.iterator();
-				while(selAct.hasNext()){
-					LabelValueBean 	selActivitys = selAct.next(); 
-				AmpActivity tmpAmpActivity = null;
-				tmpAmpActivity = (AmpActivity) session.load(AmpActivity.class,
-						new Long(selActivitys.getValue()));
-				Set activity = new HashSet();
-				if (tmpAmpActivity.getIndicators() != null) {
-					//TODO INDIC tmpAmpActivity.getIndicators().add(tempind);
-				} else {
-
-					Set indcators = new HashSet();
-					indcators.add(tempind);
-					tmpAmpActivity.setIndicators(indcators);
-				}
-				activity.add(tmpAmpActivity);
-				//TODO INDIC tempind.setActivity(activity);
-			}
-		}
-			
-			
-			if(tempPrgInd.isPrjStatus() 
-					&& tempPrgInd.getSelectedActivity() != null
-					&& tempPrgInd.getSelectedActivity().size() > 0){
-				
-				if (selActivity != null && selActivity.size() > 0 ){
-					
-					Iterator<LabelValueBean> selAct = selActivity.iterator();
-				
-					while(selAct.hasNext()){
-						LabelValueBean 	selActivitys = selAct.next(); 
-					AmpActivity tmpAmpActivity = null;
-					tmpAmpActivity = (AmpActivity) session.load(AmpActivity.class,
-							new Long(selActivitys.getValue()));
-					tmpAmpActivity.getIndicators().remove(tempind);
-					//TODO INDIC tempind.getActivity().remove(tmpAmpActivity);
-			   }
-			}
-		}
-//beginTransaction();
-			session.saveOrUpdate(tempind);
-			//tx.commit();
-
-		} catch (Exception ex) {
-			logger.error("Unable to get non-default indicators");
-			logger.debug("Exception : " + ex);
-		}
-	}
-	*/
 	@Deprecated
 	public static ArrayList getAmpIndicator() {
 		Session session = null;
@@ -1522,20 +1427,6 @@ public class IndicatorUtil {
 					tempindInd.getSectors().remove(tempAmpSector);
 				}
 			}
-
-			//TODO INDIC
-//			Collection activity = tempindInd.getActivity();
-//			if (activity != null && activity.size() > 0) {
-//				Iterator<AmpActivity> actItre = activity.iterator();
-//				while (actItre.hasNext()) {
-//					AmpActivity activit = actItre.next();
-//					AmpActivity tempActivity = null;
-//					tempActivity = (AmpActivity) session.load(
-//							AmpActivity.class, activit.getAmpActivityId());
-//					tempActivity.getIndicators().remove(tempindInd);
-//					tempindInd.getActivity().remove(tempActivity);
-//				}
-//			}
 
 			session.delete(tempindInd);
 			//tx.commit();
@@ -1780,6 +1671,7 @@ public class IndicatorUtil {
 		ArrayList Indicator = new ArrayList();
   		try {
   			session = PersistenceManager.getRequestDBSession();
+  			// AMP-16239
   		    String queryString = "select sec from "
                 + AmpSector.class.getName() + " sec "
                 + "where sec.name=:name and (sec.deleted is null or sec.deleted = false) ";
@@ -1819,12 +1711,14 @@ public class IndicatorUtil {
 				String queryString=null;			
 				
 				if (keyWord!=null && keyWord.length()>0){
+					// AMP-16239
 					if(sectorName!=null && sectorName.length()>0 && !sectorName.equals("-1")){
 						queryString="select ind from "+ AmpIndicator.class.getName() +" ind inner join ind.sectors sec where ind.name like '%" + keyWord + "%'"
 						+" and sec.name='"+sectorName+"'";
 						qry = session.createQuery(queryString);
 						retValue=qry.list();
 					}else {
+						// AMP-16239
 						 queryString="select ind from "+ AmpIndicator.class.getName() +" ind where ind.name like '%" + keyWord + "%'";
 						 qry = session.createQuery(queryString);
 						 retValue=qry.list();

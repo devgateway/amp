@@ -265,6 +265,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = null;
+            // AMP-16239
                 StringBuffer qs = new StringBuffer("select org.name, org.ampOrgId from ");
                 qs.append(AmpOrganisation.class.getName());
                 qs.append(" org where (org.deleted is null or org.deleted = false) ");
@@ -283,7 +284,8 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = null;
-            String queryString = null;    
+            String queryString = null;
+            // AMP-16239
             queryString="select o.name, o.ampOrgId from " 
             	+ AmpOrganisation.class.getName()+ " o "
             	+" where (o.deleted is null or o.deleted = false) and o.ampOrgId in (select f.ampDonorOrgId from "+ AmpFunding.class.getName() 
@@ -308,6 +310,7 @@ public class DbUtil {
         Long retVal = null;
         Session sess = null;
         try {
+        	// AMP-16239
             sess = PersistenceManager.getRequestDBSession();
             StringBuilder queryStr = new StringBuilder("select reg.id from ");
             queryStr.append(AmpCategoryValueLocations.class.getName());
@@ -341,6 +344,7 @@ public class DbUtil {
         Session sess = null;
         try {
             sess = PersistenceManager.getRequestDBSession();
+            // AMP-16239
             StringBuilder queryStr = new StringBuilder("select reg.name from ");
             queryStr.append(AmpCategoryValueLocations.class.getName());
             queryStr.append(" as reg where reg.id = :REG_ID");
@@ -2851,6 +2855,8 @@ public class DbUtil {
         try {
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();
+         
+            // AMP-16239
             StringBuilder queryStr = new StringBuilder("select act.ampActivityId, act.name from ");
             queryStr.append(AmpActivityVersion.class.getName());
             queryStr.append(" as act where act.ampActivityId in ");
@@ -2984,6 +2990,7 @@ public class DbUtil {
         String retVal = null;
         try {
             Session sess = PersistenceManager.getRequestDBSession();
+            // AMP-16239
             StringBuilder qs = new StringBuilder("select s.name from ");
             qs.append(AmpSector.class.getName());
             qs.append(" as s where s.ampSectorId = :SEC_ID  and (s.deleted is null or s.deleted = false) ");

@@ -572,6 +572,7 @@ public class DataExchangeUtils {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
+            // AMP-16239
             queryString = "select o from " + AmpOrganisation.class.getName()
                 + " o where (TRIM(o.name)=:orgName) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
@@ -605,6 +606,7 @@ public class DataExchangeUtils {
 		
 		query = "select a from " + AmpActivity.class.getName() + " a where 1=1";
 		
+		// AMP-16239
 		int i=0;
 		while  (stKey.hasMoreElements())
 		{
@@ -635,6 +637,7 @@ public class DataExchangeUtils {
 		return query;
 	}
 	
+	// AMP-16239 - see where it is used - might search by name
 	  public static AmpActivity getActivityByComposedKey(String query, HashMap<String,String> param,HashMap<String,NullableType> types) {
 		    AmpActivity activity = null;
 		    Session session = null;
@@ -725,33 +728,6 @@ public class DataExchangeUtils {
 		}
 		return ampOrg;
 	}
-	
-	
-	
-	/*
-	 * AmpTheme obResult=null;
-        Session sess = null;
-        Query qry = null;
-        String queryString = null;
-
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            queryString = "select o from " + AmpTheme.class.getName()
-                + " o where (TRIM(o.name)=:programName)";
-            qry = sess.createQuery(queryString);
-            qry.setParameter("programName", name.trim(), Hibernate.STRING);
-
-            List  result=qry.list();
-            if (result.size() > 0){
-            	obResult= (AmpTheme) result.get(0);
-            }
-        } catch (Exception e) {
-            logger.debug("Exception from getSectorByname(): " + e);
-            e.printStackTrace(System.out);
-        }
-        return obResult;
-	 */
-	
 	
 	public static AmpActivityGroup getAmpActivityGroupById(Long id) {
 		Session session = null;
@@ -922,6 +898,7 @@ public class DataExchangeUtils {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
+            // AMP-16239
             queryString = "select o from " + AmpSector.class.getName()
                 + " o where (TRIM(o.name)=:sectorName) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
@@ -953,6 +930,7 @@ public class DataExchangeUtils {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
+            // AMP-16239
             queryString = "select o from " + AmpSector.class.getName()
                 + " o where (LOWER(TRIM(o.name))=:sectorName) and (LOWER(TRIM(o.sectorCodeOfficial))=:sectorCode) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
@@ -1051,6 +1029,7 @@ public class DataExchangeUtils {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
+            // AMP-16239
             queryString = "select o from " + AmpTheme.class.getName()
                 + " o where (TRIM(o.name)=:programName)";
             qry = sess.createQuery(queryString);
@@ -1082,6 +1061,7 @@ public class DataExchangeUtils {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
+            // AMP-16239
             queryString = "select o from " + AmpTheme.class.getName()
                 + " o where (TRIM(o.name)=:programName) and (TRIM(o.themeCode)=:themeCode)";
             qry = sess.createQuery(queryString);
@@ -1540,6 +1520,7 @@ public class DataExchangeUtils {
         TreeMap<Long,String> result = new TreeMap<Long,String>();
         try {
             session = PersistenceManager.getSession();
+            // AMP-16239
             String queryString = "select f.name, f.ampActivityGroup from " + AmpActivity.class.getName()
                 + " f order by f.name asc";
             qry = session.createQuery(queryString);
@@ -1566,6 +1547,7 @@ public class DataExchangeUtils {
         List<String> result1 = new ArrayList<String>();
         try {
             session = PersistenceManager.getSession();
+            // AMP-16239
             String queryString = "select f.name, f.ampActivityGroup from " + AmpActivity.class.getName()
                 + " f where lower(f.name) like lower('"+str+"%') order by f.name asc";
             qry = session.createQuery(queryString);
@@ -1658,6 +1640,7 @@ public class DataExchangeUtils {
         try {
             session = PersistenceManager.getSession();
     		//String orgIds = "SELECT DISTINCT(organisation) from amp_org_role";
+            // AMP-16239
             String queryString = "select sec.ampSectorId, sec.ampSecSchemeId.secSchemeName, sec.name, sec.sectorCode FROM " + AmpSector.class.getName()
                 + " sec WHERE lower(sec.name) like lower('"+str+"%') ORDER BY sec.sectorCode ASC";
             qry = session.createQuery(queryString);
@@ -1686,7 +1669,7 @@ public class DataExchangeUtils {
         List<String> result1 = new ArrayList<String>();
         try {
             session = PersistenceManager.getSession();
-
+            // AMP-16239
             String queryString = "select scheme.ampSecSchemeId, scheme.secSchemeName FROM " + AmpSectorScheme.class.getName()
                 + " scheme WHERE lower(scheme.secSchemeName) like lower('"+str+"%') ORDER BY scheme.secSchemeName ASC";
             qry = session.createQuery(queryString);

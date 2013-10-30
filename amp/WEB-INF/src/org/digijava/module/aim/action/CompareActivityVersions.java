@@ -486,7 +486,7 @@ public class CompareActivityVersions extends DispatchAction {
 		// method to get the value of the field in a right format for inserting
 		// into a new activity, ie: set the activityid property, etc.
 		Session session = null;
-		Transaction tx = null;
+		//Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			//session.connection().setAutoCommit(false);
@@ -616,7 +616,8 @@ public class CompareActivityVersions extends DispatchAction {
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
-			tx.rollback();
+			throw new RuntimeException(e);
+			//tx.rollback();
 		}
 		return mapping.findForward("index");
 	}

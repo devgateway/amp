@@ -570,7 +570,7 @@ public class RequestProcessor
             }
             else {
                 logger.debug("Site domain does not have language assigned");
-                DgUtil.setUserLanguage(request);
+                DgUtil.setUserLanguage(request, response);
             }
 
             // Verify navigation language

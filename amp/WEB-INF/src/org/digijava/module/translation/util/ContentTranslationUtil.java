@@ -223,6 +223,8 @@ public class ContentTranslationUtil {
                     	logger.debug("Object without base translation");
                         //create base translation for object
                         baseTranslation = (String) loadFieldFromDb(clazz, objectId, fieldName);
+                        if (baseTranslation == null) //new object, hasn't been saved yet
+                            baseTranslation = (String) currentState[i];
                         ftp.add(getBaseLanguage(), baseTranslation);
                         //restore current state of the object
                         currentState[i] = baseTranslation;

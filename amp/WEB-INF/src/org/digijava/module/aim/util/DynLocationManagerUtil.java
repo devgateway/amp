@@ -460,6 +460,7 @@ public class DynLocationManagerUtil {
 
 		try {
 			dbSession = PersistenceManager.getSession();
+			// AMP-16239
 			String queryString = "select loc from "
 					+ AmpCategoryValueLocations.class.getName()
 					+ " loc where (loc.name=:name)";
@@ -563,6 +564,7 @@ public class DynLocationManagerUtil {
 					"Value for Implementation Location cannot be null");
 		try {
 			dbSession = PersistenceManager.getSession();
+			// AMP-16239
 			String queryString = "select loc from "
 					+ AmpCategoryValueLocations.class.getName()
 					+ " loc where (loc.name=:name) "

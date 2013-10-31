@@ -186,7 +186,7 @@ public class DgUtil {
                 // Language is not supported
                 logger.warn("Language " + language.getCode() + "(" +
                             language.getName() + ") is not supported");
-                DgUtil.setUserLanguage(request);
+                DgUtil.setUserLanguage(request, response);
                 return;
             }
             User user = RequestUtils.getUser(request);
@@ -250,25 +250,25 @@ public class DgUtil {
 
             }
             request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
-
-            SiteDomain currDomain = RequestUtils.getSiteDomain(request);
-            Cookie cookie = new Cookie("digi_language", language.getCode());
-            cookie.setMaxAge(Integer.MAX_VALUE);
-            cookie.setDomain(currDomain.getSiteDomain());
-
-            String cookiePath = request.getContextPath() +
-                (currDomain.getSitePath() == null ? "" :
-                 currDomain.getSitePath());
-            cookiePath = cookiePath.trim();
-            if (cookiePath.length() == 0) {
-                cookiePath = "/";
-            }
-
-            cookie.setPath(cookiePath);
-
-            response.addCookie(cookie);
+            setLanguageCookie(language, request, response);
 
         }
+    }
+
+    private static void setLanguageCookie(Locale language, HttpServletRequest request, HttpServletResponse response) {
+        SiteDomain currDomain = RequestUtils.getSiteDomain(request);
+        Cookie cookie = new Cookie("digi_language", language.getCode());
+        cookie.setMaxAge(Integer.MAX_VALUE);
+        cookie.setDomain(currDomain.getSiteDomain());
+        String cookiePath = request.getContextPath() +
+            (currDomain.getSitePath() == null ? "" :
+             currDomain.getSitePath());
+        cookiePath = cookiePath.trim();
+        if (cookiePath.length() == 0) {
+            cookiePath = "/";
+        }
+        cookie.setPath(cookiePath);
+        response.addCookie(cookie);
     }
 
     /**
@@ -724,7 +724,7 @@ public class DgUtil {
      *
      * @param request
      */
-    public static void setUserLanguage(HttpServletRequest request) {
+    public static void setUserLanguage(HttpServletRequest request, HttpServletResponse response) {
 
         // determine current user language
         Locale language = DgUtil.getLanguageFromRequest(request);
@@ -733,6 +733,7 @@ public class DgUtil {
 
         // set in session
         request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
+        DgUtil.setLanguageCookie(language, request, response);
 
         User user = RequestUtils.getUser(request);
         if (user != null && user.getUserLangPreferences() == null) {

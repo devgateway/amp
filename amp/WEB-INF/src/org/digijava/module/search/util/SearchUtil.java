@@ -75,6 +75,7 @@ public class SearchUtil {
 
 			if (team.getAccessType().equalsIgnoreCase(
 					Constants.ACCESS_TYPE_MNGMT)) {
+				// AMP-16239: name and description
 				queryString = "select DISTINCT r from "
 						+ AmpReports.class.getName()
 						+ " r where r.drilldownTab=false AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
@@ -87,6 +88,7 @@ public class SearchUtil {
 				qry.setParameter("keyword", "%" + string + "%");
 				col = qry.list();
 			} else {
+				// AMP-16239
 				queryString = "select distinct r from "
 						+ AmpReports.class.getName()
 						+ "  r left join r.members m where "
@@ -136,6 +138,7 @@ public class SearchUtil {
 
 			if (team.getAccessType().equalsIgnoreCase(
 					Constants.ACCESS_TYPE_MNGMT)) {
+				// AMP-16239
 				queryString = "select DISTINCT r from "
 						+ AmpReports.class.getName()
 						+ " r where r.drilldownTab=true AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
@@ -148,6 +151,7 @@ public class SearchUtil {
 				qry.setParameter("keyword", "%" + string + "%");
 				col = qry.list();
 			} else {
+				// AMP-16239
 				queryString = "select distinct r from "
 						+ AmpReports.class.getName()
 						+ "  r left join r.members m where "
@@ -199,6 +203,7 @@ public class SearchUtil {
 			session = PersistenceManager.getRequestDBSession();
 
 			//not a very nice solution, but I kept the old code and idea and just added some speed
+			// AMP-16239
 			String newQueryString = "select f.amp_activity_id, f.amp_id,  f.name from amp_activity f where f.amp_activity_id in ("+filter.getGeneratedFilterQuery()+")";
 			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", org.hibernate.Hibernate.LONG);
 			newQuery		  = newQuery.addScalar("amp_id", org.hibernate.Hibernate.STRING);
@@ -360,6 +365,7 @@ public class SearchUtil {
         query.append(")");
         query.append(" and roleCode.roleCode=:roleCode ");
         if (!hasComputedOrgs) {
+        	// AMP-16239
             query.append(" and org.name like :name");
             if (tm.getTeamAccessType().equals("Management")) {
                 query.append(String.format(" and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
@@ -382,6 +388,7 @@ public class SearchUtil {
             if (!hasComputedOrgs) {
                 activities.addAll(result);
             } else {
+            	// AMP-16239
                 StringBuilder queryString = new StringBuilder();
                 queryString.append(" select act from ");
                 queryString.append(AmpActivity.class.getName());

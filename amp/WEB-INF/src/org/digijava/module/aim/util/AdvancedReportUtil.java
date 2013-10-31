@@ -368,49 +368,49 @@ public final class AdvancedReportUtil {
 		}
 		return coll;
 	}
-	@Deprecated
-	public static AmpTeamMember checkDuplicateReportName(String reportTitle){
-		AmpTeamMember teamMember=null;
-		Session session = null;
-		Query query = null;
-		Iterator iter=null;
-		String queryString;
-		try {
-			session = PersistenceManager.getSession();
-			queryString = "select report from " + AmpReports.class.getName() + " report ";
-			//logger.info( " Query :" + queryString);
-			query = session.createQuery(queryString);
-	//		iter = query.list().iterator();
-			
-			if(query!=null)
-			{
-				iter = query.list().iterator();
-				//logger.info("............Query is not null............");
-				while(iter.hasNext())
-				{
-					AmpReports r = (AmpReports) iter.next();
-					if( reportTitle.trim().equals(r.getName()) )
-					{
-						teamMember=r.getOwnerId();
-						break;
-					}
-						
-				}
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get checkDupilcateReportName()", ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
-		return teamMember;
-	}
+//	@Deprecated
+//	public static AmpTeamMember checkDuplicateReportName(String reportTitle){
+//		AmpTeamMember teamMember=null;
+//		Session session = null;
+//		Query query = null;
+//		Iterator iter=null;
+//		String queryString;
+//		try {
+//			session = PersistenceManager.getSession();
+//			queryString = "select report from " + AmpReports.class.getName() + " report ";
+//			//logger.info( " Query :" + queryString);
+//			query = session.createQuery(queryString);
+//	//		iter = query.list().iterator();
+//			
+//			if(query!=null)
+//			{
+//				iter = query.list().iterator();
+//				//logger.info("............Query is not null............");
+//				while(iter.hasNext())
+//				{
+//					AmpReports r = (AmpReports) iter.next();
+//					if( reportTitle.trim().equals(r.getName()) )
+//					{
+//						teamMember=r.getOwnerId();
+//						break;
+//					}
+//						
+//				}
+//			}
+//
+//		} catch (Exception ex) {
+//			logger.error("Unable to get checkDupilcateReportName()", ex);
+//		} finally {
+//			try {
+//				if (session != null) {
+//					PersistenceManager.releaseSession(session);
+//				}
+//			} catch (Exception ex) {
+//				logger.debug("releaseSession() failed");
+//			}
+//		}
+//		return teamMember;
+//	}
         
         public static boolean checkDuplicateReportName(String reportTitle, Long ownerId, Long dbReportId, Boolean drilldownTab) throws Exception{
 		boolean exist=false;
@@ -420,6 +420,7 @@ public final class AdvancedReportUtil {
 		String queryString;
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			queryString = "select report.ownerId from " + AmpReports.class.getName() 
                                 + " report where report.name=:name and report.ownerId=:ownerId and report.drilldownTab=:drilldownTab";
                         if(dbReportId!=null){

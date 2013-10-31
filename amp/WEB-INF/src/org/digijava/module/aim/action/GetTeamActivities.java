@@ -183,11 +183,11 @@ public class GetTeamActivities
                         else
                             Collections.sort(temp, Collections.reverseOrder());
                     } else if("donor".equals(sort)) {
-                        /*
+                        
                         if("asc".equals(sortOrder))
                             Collections.sort(temp, acronymComp);
                         else
-                            Collections.sort(temp, racronymComp);*/
+                            Collections.sort(temp, racronymComp);
 
                         boolean order = "asc".equals(sortOrder)?true:false;
                         temp = ActivityUtil.getSortedActivitiesByDonors(temp, order);

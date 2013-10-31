@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.bouncycastle.cms.CMSException;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -101,6 +102,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -1870,6 +1872,11 @@ public class DbUtil {
 		}
 	}
 
+	/**
+	 * returns the WORKSPACE setttings (e.g. not a team-member specific one, but one written to by the ws manager)
+	 * @param teamId
+	 * @return
+	 */
 	public static AmpApplicationSettings getTeamAppSettings(Long teamId) {
 		Session session = null;
 		Query qry = null;
@@ -1893,31 +1900,30 @@ public class DbUtil {
 		return ampAppSettings;
 	}
 
-	public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(
-			Long teamId) {
-		Session session = null;
-		Query qry = null;
-		AmpApplicationSettings ampAppSettings = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from "
-					+ AmpApplicationSettings.class.getName()
-					+ " a where (a.team=:teamId) ";
-			qry = session.createQuery(queryString);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				ampAppSettings = (AmpApplicationSettings) itr.next();
-				if (ampAppSettings != null)
-					break;
-			}
-
-		} catch (Exception e) {
-			logger.error("Unable to get TeamAppSettings", e);
-		}
-		return ampAppSettings;
-	}
+//	public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(Long teamId) {
+//		Session session = null;
+//		Query qry = null;
+//		AmpApplicationSettings ampAppSettings = null;
+//
+//		try {
+//			session = PersistenceManager.getRequestDBSession();
+//			String queryString = "select a from "
+//					+ AmpApplicationSettings.class.getName()
+//					+ " a where (a.team=:teamId) ";
+//			qry = session.createQuery(queryString);
+//			qry.setParameter("teamId", teamId, Hibernate.LONG);
+//			Iterator itr = qry.list().iterator();
+//			while (itr.hasNext()) {
+//				ampAppSettings = (AmpApplicationSettings) itr.next();
+//				if (ampAppSettings != null)
+//					break;
+//			}
+//
+//		} catch (Exception e) {
+//			logger.error("Unable to get TeamAppSettings", e);
+//		}
+//		return ampAppSettings;
+//	}
 
 	public static boolean isUserTranslator(Long userId) {
 
@@ -1973,14 +1979,10 @@ public class DbUtil {
 			String queryString = "from "
 					+ AmpApplicationSettings.class.getName()
 					+ " a where (a.member.ampTeamMemId = :memberId)";
-			// String queryString = "from " +
-			// AmpApplicationSettings.class.getName();
+
 			qry = session.createQuery(queryString);
-			qry.setParameter("memberId", memberId, Hibernate.LONG);
-			/*
-			 * Iterator itr = qry.list().iterator(); if (itr.hasNext()) {
-			 * ampAppSettings = (AmpApplicationSettings) itr.next(); }
-			 */
+			qry.setLong("memberId", memberId);
+
 			ampAppSettings = (AmpApplicationSettings) qry.uniqueResult();
 			// tx.commit();
 		} catch (Exception e) {
@@ -2593,6 +2595,7 @@ public class DbUtil {
 
         try {
 			session = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			queryString.append(" select org from ")
                     .append(AmpOrganisation.class.getName()).append(" org ")
                     .append(" inner join org.orgGrpId grp ")
@@ -2626,6 +2629,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			queryString.append("select distinct org from ")
                     .append(AmpOrganisation.class.getName()).append(" org ")
                     .append("where (lower(acronym) like '%").append(keyword)
@@ -2659,6 +2663,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			String queryString = "select distinct org from "
 					+ AmpOrganisation.class.getName() + " org "
 					+ "where ((lower(acronym) like '%" + keyword
@@ -2691,6 +2696,7 @@ public class DbUtil {
 		namesFirstLetter = namesFirstLetter.toLowerCase();
 
 		try {
+			// AMP-16239
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select distinct org from "
 					+ AmpOrganisation.class.getName()
@@ -3165,8 +3171,12 @@ public class DbUtil {
 		}
 		return col;
 	}
-
+	
 	public static void add(Object object) {
+		
+		if (object instanceof AmpApplicationSettings)
+			System.out.println("BOZO BOZO BOZO");
+		
 		logger.debug("In add " + object.getClass().getName());
 		Session sess = null;
 		Transaction tx = null;
@@ -3188,7 +3198,7 @@ public class DbUtil {
 			}
 		}
 	}
-
+	
 	public static void update(Object object) {
 		Session sess = null;
 		Transaction tx = null;
@@ -4890,98 +4900,7 @@ public class DbUtil {
 		return level;
 	}
 
-	// filterFlag, adjustmentFlag, CurrencyCode, calendarId, region,
-	// modalityId,donorId(orgId)
-	// statusId, sectorId
-	/*
-	 * public static String[] setFilterDetails(FilterProperties filter) {
-	 * logger.debug("In setFilterDetails(FilterProperties filter) Function");
-	 * Session session = null; String names = ""; String name[] = new String[2];
-	 * try { Query q = null; session = PersistenceManager.getRequestDBSession();
-	 * 
-	 * logger.debug("In setFilterDetails()"); logger .info(filter.getAmpTeamId()
-	 * + " : " + filter.getCurrencyCode() + " :" + filter.getPerspective());
-	 * logger.debug(filter.getCalendarId() + ", " + filter.getRegionId() + " : "
-	 * + filter.getModalityId()); logger.debug(filter.getOrgId() + ": " +
-	 * filter.getStatusId() + ": " + filter.getSectorId()); String currQ = "",
-	 * q2 = "", flag = ""; String regionName = "Region(All) - ", currName =
-	 * "Currency(All) - ", calName = "Calendar(All) - ", perspective = "";
-	 * String modName = " Financing Instrument(All) -  ", statusName =
-	 * "Status(All) - ", sectorName = "Sector(All) - ", orgName =
-	 * "Donor(All) - "; String fromYear = "", toYear = "", startDate = "",
-	 * closeDate = ""; Iterator iter = null; //AmpModality mod;
-	 * AmpFiscalCalendar fisCal; AmpRegion region; AmpSector sector; AmpStatus
-	 * status; AmpOrganisation org; AmpCurrency curr; if
-	 * (filter.getCurrencyCode().length() == 1) { currName = "Currency(All) - ";
-	 * logger.debug("Currency is 0"); } else { currName = "Currency(" +
-	 * filter.getCurrencyCode() + ") - "; logger.debug("Currency is NOt 0 : " +
-	 * filter.getCurrencyCode().length()); }
-	 * 
-	 * // Gets the Organisation name corresponding to the Modality Id currQ =
-	 * "select report from " + AmpOrganisation.class.getName() +
-	 * " report where (report.ampOrgId=:orgId)"; q = session.createQuery(currQ);
-	 * q.setParameter("orgId", filter.getOrgId(), Hibernate.LONG); if (q !=
-	 * null) { iter = q.list().iterator(); while (iter.hasNext()) { org =
-	 * (AmpOrganisation) iter.next(); logger.debug(" Organiation Name : " +
-	 * org.getOrgCode()); orgName = "Donor(" + org.getOrgCode() + ") - "; flag =
-	 * "found"; break; } }
-	 * 
-	 * // Gets the Modality name corresponding to the Modality Id currQ =
-	 * "select report from " + AmpModality.class.getName() +
-	 * " report where (report.ampModalityId=:modalityId)"; q =
-	 * session.createQuery(currQ); q .setParameter("modalityId",
-	 * filter.getModalityId(), Hibernate.LONG); if (q != null) { iter =
-	 * q.list().iterator(); while (iter.hasNext()) { mod = (AmpModality)
-	 * iter.next(); logger.debug(" Modality Name : " + mod.getName()); modName =
-	 * " Financing Instrument(" + mod.getName() + ") - "; flag = "found"; break;
-	 * } } // Gets the Status Name corresponding to the Region Id currQ =
-	 * "select report from " + AmpStatus.class.getName() +
-	 * " report where (report.ampStatusId=:statusId)"; q =
-	 * session.createQuery(currQ); q.setParameter("statusId",
-	 * filter.getStatusId(), Hibernate.LONG); if (q != null) { iter =
-	 * q.list().iterator(); while (iter.hasNext()) { status = (AmpStatus)
-	 * iter.next(); logger.debug(" Status Name : " + status.getName());
-	 * statusName = "Status(" + status.getName() + ") - "; flag = "found";
-	 * break; } } // Gets the Sector Name corresponding to the Region Id currQ =
-	 * "select report from " + AmpSector.class.getName() +
-	 * " report where (report.ampSectorId=:sectorId)"; q =
-	 * session.createQuery(currQ); q.setParameter("sectorId",
-	 * filter.getSectorId(), Hibernate.LONG); if (q != null) { iter =
-	 * q.list().iterator(); while (iter.hasNext()) { sector = (AmpSector)
-	 * iter.next(); logger.debug(" Sector Name : " + sector.getName());
-	 * sectorName = "Sector(" + sector.getName() + ") - "; flag = "found";
-	 * break; } }
-	 * 
-	 * // Gets the Calendar Name corresponding to the Calendar Id currQ =
-	 * "select report from " + AmpFiscalCalendar.class.getName() +
-	 * " report where (report.ampFiscalCalId=:calendarId)"; q =
-	 * session.createQuery(currQ); q.setParameter("calendarId",
-	 * filter.getCalendarId(), Hibernate.INTEGER); if (q != null) { iter =
-	 * q.list().iterator(); while (iter.hasNext()) { fisCal =
-	 * (AmpFiscalCalendar) iter.next(); logger.debug(" Calendar Name : " +
-	 * fisCal.getName()); calName = "Calendar(" + fisCal.getName() + ") - ";
-	 * flag = "found"; break; } }
-	 * 
-	 * regionName = "Region(" + filter.getRegionId() + ")"; perspective =
-	 * "Perspective(" + filter.getPerspective() + ") - "; fromYear = "FromYear("
-	 * + filter.getFromYear() + ") - "; toYear = "ToYear(" + filter.getToYear()
-	 * + ") - "; if (filter.getStartDate() == null) startDate =
-	 * "StartDate(Not Selected) - "; else startDate = "StartDate(" +
-	 * filter.getStartDate() + ") - "; if (filter.getCloseDate() == null)
-	 * closeDate = "CloseDate(Not Selected)"; else closeDate = "CloseDate(" +
-	 * filter.getCloseDate() + ") - ";
-	 * 
-	 * name[0] = perspective + currName + calName + fromYear + toYear + orgName
-	 * + regionName; name[1] = modName + statusName + sectorName + startDate +
-	 * closeDate; //names = perspective + currName + calName + fromYear + toYear
-	 * + // orgName + regionName + modName + statusName + sectorName //
-	 * +startDate + closeDate;
-	 * 
-	 * } catch (Exception e) { logger.debug("Exception in filterDetails : " +
-	 * e); e.printStackTrace(System.out); } logger.debug("Before Return " +
-	 * name); logger.debug("End of setFilterDetails()"); return (name); } // End
-	 * of SetFilterDetails Function
-	 */
+
 	public static Collection getAllLevels() {
 		Session session = null;
 		Collection col = null;
@@ -5128,6 +5047,7 @@ public class DbUtil {
 		Collection<AmpOrgGroup> col = new ArrayList();
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			String queryString = "select distinct amp_org_grp_id, name from v_contracting_agency_groups order by name";
 			Query qry = session.createSQLQuery(queryString).addEntity(
 					AmpOrgGroup.class);
@@ -5147,6 +5067,7 @@ public class DbUtil {
 		Collection<AmpOrgGroup> col = new ArrayList();
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			String queryString = "select distinct aog.* from amp_org_group aog "
 					+ "inner join amp_organisation ao on (ao.org_grp_id = aog.amp_org_grp_id) "
 					+ "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) "
@@ -5169,6 +5090,7 @@ public class DbUtil {
 		Session session = null;
 		List<AmpOrgType> col = new ArrayList<AmpOrgType>();
 		try {
+			// AMP-16239
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select distinct aot.* from amp_org_type aot "
 					+ "inner join amp_org_group aog on (aot.amp_org_type_id=aog.org_type ) "
@@ -5235,6 +5157,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			String queryString = "select l from " + AmpOrgGroup.class.getName()
 					+ " l " + "where (l.orgGrpName=:name)";
 			Query qry = session.createQuery(queryString);
@@ -5255,6 +5178,7 @@ public class DbUtil {
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			String queryString = "select count(l) from "
 					+ AmpOrgGroup.class.getName() + " l "
 					+ "where upper(l.orgGrpName) like upper(:name) ";
@@ -5302,6 +5226,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			String queryString = "select distinct org from "
 					+ AmpOrgGroup.class.getName() + " org "
 					+ " where (lower(org.orgGrpName) like '%" + keyword
@@ -5323,6 +5248,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			String queryString = "select distinct org from "
 					+ AmpOrgGroup.class.getName() + " org "
 					+ " where lower(org.orgGrpName) like '%" + keyword
@@ -7214,6 +7140,7 @@ public class DbUtil {
 
 		try {
 			sess = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			queryString = "select o from "
 					+ AmpOrganisation.class.getName()
 					+ " o where (TRIM(o.name)=:orgName) and (o.deleted is null or o.deleted = false) ";
@@ -7320,6 +7247,7 @@ public class DbUtil {
 		int count = 0;
 		try {
 			sess = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			String queryString = "select count(*) from "
 					+ AmpOrgType.class.getName()
 					+ " o where upper(o.orgType) like upper('" + name + "')";
@@ -7342,6 +7270,7 @@ public class DbUtil {
 		int count = 0;
 		try {
 			sess = PersistenceManager.getRequestDBSession();
+			// AMP-16239
 			String queryString = "select count(*) from "
 					+ AmpOrgType.class.getName()
 					+ " o where upper(o.orgTypeCode) like upper('" + code
@@ -7450,30 +7379,8 @@ public class DbUtil {
 
 	}
 
-	public static String getValidationFromTeamAppSettings(Long ampTeamId) {
-		Session session = null;
-		Query qry = null;
-		AmpApplicationSettings ampAppSettings = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from "
-					+ AmpApplicationSettings.class.getName()
-					+ " a where (a.team=:teamId) ";
-			qry = session.createQuery(queryString);
-			qry.setParameter("teamId", ampTeamId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				ampAppSettings = (AmpApplicationSettings) itr.next();
-				if (ampAppSettings != null
-						&& ampAppSettings.getValidation() != null
-						&& !"".equals(ampAppSettings.getValidation()))
-					break;
-			}
-
-		} catch (Exception e) {
-			logger.error("Unable to get TeamAppSettings", e);
-		}
+	public static String getValidationFromTeamAppSettings(TeamMember teamMember) {
+		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings(teamMember);
 		return ampAppSettings != null ? ampAppSettings.getValidation() : null;
 	}
 	

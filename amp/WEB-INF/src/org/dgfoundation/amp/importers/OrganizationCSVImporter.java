@@ -58,6 +58,7 @@ public class OrganizationCSVImporter extends CSVImporter {
 
 	public AmpOrgType getAmpGroupTypeByName(String name) throws HibernateException {
 		AmpOrgType orgGrp=null;
+			// AMP-16239
 		   String queryString = "select o from "
                + AmpOrgType.class.getName() + " o "
                + "where (o.orgType=:name)";
@@ -68,8 +69,6 @@ public class OrganizationCSVImporter extends CSVImporter {
 			orgGrp = (AmpOrgType) itr.next();
            }
            return orgGrp;
-           
-          
 	}
 
 	

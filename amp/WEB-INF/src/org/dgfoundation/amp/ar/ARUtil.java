@@ -107,6 +107,7 @@ public final class ARUtil {
 		}
 		try {
 			session = PersistenceManager.getSession();
+			// AMP-16239
 			String queryString = "select r from " + AmpReports.class.getName()+ " r " + "where ( " + tabFilter + " r.publicReport=true)";
             if (name != null) {
                 queryString += " and lower(r.name) like lower(:name) ";

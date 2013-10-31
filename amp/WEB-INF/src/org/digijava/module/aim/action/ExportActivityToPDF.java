@@ -1227,11 +1227,11 @@ public class ExportActivityToPDF extends Action {
 					buildContactInfoOutput(mainLayout,"MOFED contact information",myForm.getContactInformation().getMofedContacts(),ampContext);	
 				}				
 				//Sec Min funding contact information
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information", ampContext)){
 					buildContactInfoOutput(mainLayout,"Sector Ministry contact information",myForm.getContactInformation().getSectorMinistryContacts(),ampContext);	
 				}				
 				//Project Coordinator contact information
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information", ampContext)){
 					buildContactInfoOutput(mainLayout,"Proj. Coordinator contact information",myForm.getContactInformation().getProjCoordinatorContacts(),ampContext);	
 				}				
 				//Implementing/executing agency contact information

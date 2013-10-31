@@ -49,6 +49,7 @@ public class ActivityDocumentsUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
+            // AMP-16239
             String queryString = "select a.name " +
                 " from " + AmpActivityDocument.class.getName() + " ad, " + AmpActivity.class.getName() + " a " +
                 " where ad.ampActivity=a AND ad.uuid=:uuid";

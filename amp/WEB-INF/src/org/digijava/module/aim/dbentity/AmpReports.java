@@ -627,34 +627,6 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 		this.reportGenerator = generator;
 	}
 	
-	public Set<String> getMeasureNames()
-	{
-		Set<String> res = new HashSet<String>();
-		for(AmpReportMeasures measure:getMeasures())
-			res.add(measure.getMeasure().getMeasureName());
-		return res;
-	}
-	
-	public Set<String> getHierarchyNames()
-	{
-		Set<String> res = new HashSet<String>();
-		for(AmpReportHierarchy hier: getHierarchies())
-			res.add(hier.getColumn().getColumnName());
-		return res;
-	}
-	
-	public boolean currencyIsSpecified()
-	{
-		if (this.getFilterDataSet() == null)
-			return false;
-		
-		for(AmpFilterData filterData:this.getFilterDataSet())
-		{
-			if (filterData.getPropertyName().equals("currency"))
-				return true;
-		}
-		return false;
-	}
 	
 	/**
 	 * Checks if all columns in the report are added as 
@@ -686,6 +658,35 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 				}
 			}
 		}
+	}
+	
+	public Set<String> getMeasureNames()
+	{
+		Set<String> res = new HashSet<String>();
+		for(AmpReportMeasures measure:getMeasures())
+			res.add(measure.getMeasure().getMeasureName());
+		return res;
+	}
+	
+	public Set<String> getHierarchyNames()
+	{
+		Set<String> res = new HashSet<String>();
+		for(AmpReportHierarchy hier: getHierarchies())
+			res.add(hier.getColumn().getColumnName());
+		return res;
+	}
+	
+	public boolean currencyIsSpecified()
+	{
+		if (this.getFilterDataSet() == null)
+			return false;
+		
+		for(AmpFilterData filterData:this.getFilterDataSet())
+		{
+			if (filterData.getPropertyName().equals("currency"))
+				return true;
+		}
+		return false;
 	}
 	
 }

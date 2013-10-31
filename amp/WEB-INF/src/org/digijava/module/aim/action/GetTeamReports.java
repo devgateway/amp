@@ -80,6 +80,8 @@ public class GetTeamReports extends Action {
 			String reset = request.getParameter("reset");
 			String tempNumResultsParam = request.getParameter("tempNumResults");
             
+			raForm.setDefaultNumResults(tm.getAppSettings().getDefReportsPerPage());
+			
             if(reset!=null && reset.equalsIgnoreCase("true")){
             	//raForm.setTempNumResults(-1);
             	defReportsPerPage=tm.getAppSettings().getDefReportsPerPage();

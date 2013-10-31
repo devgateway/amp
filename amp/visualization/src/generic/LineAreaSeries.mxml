@@ -261,7 +261,7 @@
 				messageLoadingPanel.visible = false;
 				sizeLoadingPanel(0, 0);
 				//dc.visible = true;
-				printLabel.text = trnYears + ": " + sliderYear.values[0] + " to " + sliderYear.values[1] +" - " + trnCurrency + ": " + currCode;
+				printLabel.text = trnYears + ": " + sliderYear.labels[sliderYear.values[0]-startYear] + " to " + sliderYear.labels[sliderYear.values[1]-startYear] +" - " + trnCurrency + ": " + currCode;
 				sliderYear.setVisible(true);
 			}
 			private function sizeLoadingPanel(w:uint, h:uint):void {
@@ -628,7 +628,7 @@
 				if(itemId != null && itemId != "-1"){
 					params["itemId"] = itemId;
 				}
-				printLabel.text = trnYears + ": " + sliderYear.values[0] + " to " + sliderYear.values[1] +" - " + trnCurrency + ": " + currCode;
+				printLabel.text = trnYears + ": " + sliderYear.labels[sliderYear.values[0]-startYear] + " to " + sliderYear.labels[sliderYear.values[1]-startYear] +" - " + trnCurrency + ": " + currCode;
 				messageLoadingPanel.visible = true;
 				sizeLoadingPanel(300, 200);
 				dc.visible = false;

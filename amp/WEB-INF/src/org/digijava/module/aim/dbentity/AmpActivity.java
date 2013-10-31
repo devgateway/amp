@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.dbentity ;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.HierarchyListable;
 
 import java.util.Collection;

@@ -33,8 +33,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	
 	private Object[] selectedHistory;
-	
-	public Object[] getSelectedHistory() {
+    public Object[] getSelectedHistory() {
 		return selectedHistory;
 	}
 
@@ -123,6 +122,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long countYear;
 	private Long currency;
 	private Long calendar;
+    private Long defaultCalendar;
 	private String ampReportId;
 	private Object[] lineMinRanks;
 	private Object[] planMinRanks;
@@ -1232,5 +1232,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 
     public void setShowWorkspaceFilter(boolean showWorkspaceFilter) {
         this.showWorkspaceFilter = showWorkspaceFilter;
+    }
+
+    public void setDefaultCalendar(Long defaultCalendar) {
+        this.defaultCalendar = defaultCalendar;
+    }
+
+    public Long getDefaultCalendar() {
+        return defaultCalendar;
     }
 }

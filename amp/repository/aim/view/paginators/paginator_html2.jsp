@@ -8,7 +8,7 @@
 <%-- paginator for the html and html2 view formats, since they are identical --%>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%
-	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
 %>
 
 <bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>

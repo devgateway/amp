@@ -45,10 +45,7 @@ public class AmpHeaderFooter extends WebPage {
 				if (cookie.getName().equals("digi_language")) {
                 	String languageCode = cookie.getValue();
                 	Session.get().setLocale(new Locale(languageCode));
-                	org.digijava.kernel.entity.Locale newLocale = new org.digijava.kernel.entity.Locale();
-                	newLocale.setCode(languageCode);
-                	TLSUtils.forceLocaleUpdate(newLocale);
-                    if (languageCode != null) {
+                	if (languageCode != null) {
                     	localeSet = true;
                         break;
                     }
@@ -57,9 +54,6 @@ public class AmpHeaderFooter extends WebPage {
 
             if (!localeSet){
             	Session.get().setLocale(new Locale(TranslatorWorker.getDefaultLocalCode()));
-            	org.digijava.kernel.entity.Locale newLocale = new org.digijava.kernel.entity.Locale();
-            	newLocale.setCode(TranslatorWorker.getDefaultLocalCode());
-            	TLSUtils.forceLocaleUpdate(newLocale);
             }
         }
 		

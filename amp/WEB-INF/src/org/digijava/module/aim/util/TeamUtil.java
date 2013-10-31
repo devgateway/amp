@@ -337,7 +337,7 @@ public class TeamUtil {
     	try {
     		session = PersistenceManager.getSession();
 //beginTransaction();
-
+    		// AMP-16239	
             //check whether a team with the same name already exists
     		String qryStr = "select t from " + AmpTeam.class.getName() + " t "
     				+ "where (t.name=:name)";
@@ -547,7 +547,7 @@ public class TeamUtil {
 
             session = PersistenceManager.getSession();
 //beginTransaction();
-
+            // AMP-16239
             // check whether a team with the same name already exist
             String qryStr = "select t from " + AmpTeam.class.getName() + " t "
                 + "where (t.name=:name)";
@@ -957,6 +957,7 @@ public class TeamUtil {
 //beginTransaction();
             session.saveOrUpdate(member);
             session.saveOrUpdate(appSettings);
+            // this is where newly-created AmpApplicationSettings settings are saved in the database
             
             if(member.getAmpMemberRole().getTeamHead()!=null&&member.getAmpMemberRole().getTeamHead()) {
                 AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
@@ -1479,6 +1480,7 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
+            // AMP-16239
             String queryString = "select t from " + AmpTeam.class.getName()
                 + " t where (t.name=:teamName)";
             qry = session.createQuery(queryString);
@@ -2032,7 +2034,7 @@ public class TeamUtil {
             AmpTeamMember ampteammember = TeamMemberUtil.getAmpTeamMember(memberId);
             String queryString = null;
             Query qry = null;
-
+            // AMP-16239
             if(team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                 queryString = "select DISTINCT r from " + AmpReports.class.getName()
                     + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
@@ -2099,6 +2101,7 @@ public class TeamUtil {
                 }
                 col = qry.list();
             }else if(inlcludeMemberReport){
+            	// AMP-16239
          	   queryString="select distinct r from " + AmpReports.class.getName()+
 				"  r left join r.members m where " + tabFilter + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
@@ -2434,6 +2437,7 @@ public class TeamUtil {
             queryString.append(AmpTeam.class.getName());
             queryString.append(" t ");
             queryString.append(" where 1=1 ");
+            // AMP-16239
             if(keyword!=null&&keyword.trim().length()>0){
             	queryString.append(" and lower(t.name) like lower(:keyword) ");
             }

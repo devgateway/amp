@@ -83,7 +83,8 @@ public class TeamMemberUtil {
 			AmpTeamMember tm = (AmpTeamMember) session.load(AmpTeamMember.class,
 					id);
 			User user = tm.getUser();
-
+			
+			// AMP-16239
 			String qryStr = "select o.ampOrgId from " + AmpOrganisation.class.getName() + " o " +
 					"where (o.name=:name) and (o.deleted is null or o.deleted = false) ";
 			Query qry = session.createQuery(qryStr);

@@ -109,7 +109,7 @@ if(validateItem){
 			<logic:present name="currentMember" scope="session">
 				<%if (showColumn) { %>
 				<a href='/wicket/onepager/activity/${ownerId}' style="text-decoration: none">
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_${action}.gif" border="0" height="16" width="16" title="<digi:trn>${actionString}</digi:trn>"><br/>
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_${action}.gif" border="0" height="16" width="16" title="${actionString}"><br/>
 				</a>
 				<%} %>
 			</logic:present>

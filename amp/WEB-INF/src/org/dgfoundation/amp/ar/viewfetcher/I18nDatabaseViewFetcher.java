@@ -59,7 +59,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 	{
 		String queryColumnsPart = buildColumnsPart(); // rewrite query's SELECT part
 		String query = "SELECT " + queryColumnsPart + " FROM " + this.viewName + " " + this.condition;
-		ResultSet rawResults = rawRunQuery(connection, query, params);
+		ResultSet rawResults = SQLUtils.rawRunQuery(connection, query, params);
 				
 		// scan all ids of all i18n'ed columns, fetch all results into cache IF NOT ALREADY EXISTING, return a delegator which reads the cache
 		Map<Integer, Set<Long>> usedIds = new HashMap<Integer, Set<Long>>(); // Map<columnNumber, Set<TranslatedElementId>> - everything which the user requested
@@ -148,7 +148,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 				colNumberToColName.put(number, columnName);
 			}
 		}
-		return generateCSV(columnStrings);
+		return SQLUtils.generateCSV(columnStrings);
 	}
 	
 	/**

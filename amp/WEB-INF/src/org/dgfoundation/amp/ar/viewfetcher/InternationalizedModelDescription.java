@@ -54,7 +54,7 @@ public class InternationalizedModelDescription {
 		Column keyColumn = (Column) (classMapping.getIdentifierProperty().getColumnIterator().next());
 		String keyColumnName = keyColumn.getName();
 		String modelTableName = classMapping.getTable().getName();
-		Set<String> existingColumns = DatabaseViewFetcher.getTableColumns(connection, modelTableName);
+		Set<String> existingColumns = SQLUtils.getTableColumns(connection, modelTableName);
 		boolean idColumnExists = existingColumns.contains(keyColumnName);
 				
 		if (!idColumnExists)

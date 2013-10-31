@@ -68,7 +68,7 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 	 */
 	public String generateEnglishQuery(Collection<Long> ids)
 	{
-		return String.format("SELECT %s, %s FROM %s WHERE %s IN (%s)", modelTableId, modelColumnName, modelTableName, modelTableId, ids.isEmpty() ? "-999" : DatabaseViewFetcher.generateCSV(ids));
+		return String.format("SELECT %s, %s FROM %s WHERE %s IN (%s)", modelTableId, modelColumnName, modelTableName, modelTableId, ids.isEmpty() ? "-999" : SQLUtils.generateCSV(ids));
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 	public String generateGeneralizedQuery(Collection<Long> ids, String locale)
 	{
 		return String.format("SELECT object_id, translation FROM amp_content_translation where field_name = '%s' AND object_class = '%s' AND locale = '%s' AND object_id IN (%s)",
-				propertyName, className, locale, ids.isEmpty() ? "-999" : DatabaseViewFetcher.generateCSV(ids));
+				propertyName, className, locale, ids.isEmpty() ? "-999" : SQLUtils.generateCSV(ids));
 	}
 	
 	/**
@@ -117,10 +117,10 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 		 * 2) then overwrite those with the English-translated ones
 		 * 3) then overwrite those with the current-locale-translated ones (if current locale != English)
 		 */
-		importValues(res, DatabaseViewFetcher.rawRunQuery(connection, generateEnglishQuery(ids), null)); 
-		importValues(res, DatabaseViewFetcher.rawRunQuery(connection, generateGeneralizedQuery(ids, "en"), null));
+		importValues(res, SQLUtils.rawRunQuery(connection, generateEnglishQuery(ids), null)); 
+		importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, "en"), null));
 		if (!locale.equals("en"))
-			importValues(res, DatabaseViewFetcher.rawRunQuery(connection, generateGeneralizedQuery(ids, locale), null));
+			importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, locale), null));
 		return res;
 	}
 	

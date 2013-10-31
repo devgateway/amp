@@ -22,7 +22,7 @@ public class RawDatabaseViewFetcher extends DatabaseViewFetcher
 	@Override
 	public ResultSet fetchRows(ArrayList<FilterParam> params) throws SQLException
 	{
-		String query = "SELECT " + generateCSV(this.columnNames) + " FROM " + this.viewName + " " + this.condition;
-		return rawRunQuery(connection, query, params);
+		String query = "SELECT " + SQLUtils.generateCSV(this.columnNames) + " FROM " + this.viewName + " " + this.condition;
+		return SQLUtils.rawRunQuery(connection, query, params);
 	}
 }

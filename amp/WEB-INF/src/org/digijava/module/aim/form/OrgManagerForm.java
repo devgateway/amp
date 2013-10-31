@@ -42,8 +42,9 @@ private String keyword;
   private int offset;
   private String sortBy;
   private boolean adminSide;
-  
-  public boolean isAdminSide() {
+    private String[] digitPages;
+
+    public boolean isAdminSide() {
 	return adminSide;
 }
 
@@ -417,4 +418,11 @@ public void setOldAmpOrgTypeId(Long oldAmpOrgTypeId) {
 	this.oldAmpOrgTypeId = oldAmpOrgTypeId;
 }
 
+public void setDigitPages(String[] digitPages) {
+    this.digitPages = digitPages;
+}
+
+public String[] getDigitPages() {
+    return digitPages;
+}
 }

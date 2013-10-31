@@ -482,13 +482,14 @@
 																							</c:set>
 																							<a href="javascript:searchAlpha('viewAll')"
 																								title="${trnViewAllLink}"> <digi:trn
-																									key="aim:viewAllLink">viewAll</digi:trn>
+																									key="aim:viewAllLink">viewAll</digi:trn>&nbsp;|&nbsp;
 																							</a>
 																						</c:if>
 																					</c:if>
 																				</c:if> <logic:iterate name="aimOrgManagerForm"
 																					property="alphaPages" id="alphaPages"
 																					type="java.lang.String">
+
 																					<c:if test="${alphaPages != null}">
 																						<c:if
 																							test="${aimOrgManagerForm.currentAlpha == alphaPages}">
@@ -506,6 +507,28 @@
 															|&nbsp;
 															</c:if>
 																				</logic:iterate>
+                                                                                <br />
+                                                                                <logic:iterate name="aimOrgManagerForm"
+                                                                                               property="digitPages" id="digitPages"
+                                                                                               type="java.lang.String">
+
+                                                                                    <c:if test="${digitPages != null}">
+                                                                                        <c:if
+                                                                                                test="${aimOrgManagerForm.currentAlpha == digitPages}">
+                                                                                            <font color="#FF0000"><%=digitPages %></font>
+                                                                                        </c:if>
+                                                                                        <c:if
+                                                                                                test="${aimOrgManagerForm.currentAlpha != digitPages}">
+                                                                                            <c:set var="translation">
+                                                                                                <digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>
+                                                                                            </c:set>
+                                                                                            <a
+                                                                                                    href="javascript:searchAlpha('<%=digitPages%>')"
+                                                                                                    title="${translation}"> <%=digitPages %></a>
+                                                                                        </c:if>
+                                                                                        |&nbsp;
+                                                                                    </c:if>
+                                                                                </logic:iterate>
 																			</td>
 																		</tr>
 

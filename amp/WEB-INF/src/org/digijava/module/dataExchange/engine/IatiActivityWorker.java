@@ -759,7 +759,7 @@ public class IatiActivityWorker {
 		}
 		
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
-		populateFundingDetails(currencyValue, currencyName, sDate, ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+		populateFundingDetails(currencyValue, currencyName, sDate, ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.PLANNED);
 		
 		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
 		if(ampFundings == null) 

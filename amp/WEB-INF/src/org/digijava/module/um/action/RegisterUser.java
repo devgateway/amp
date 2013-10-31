@@ -119,8 +119,7 @@ public class RegisterUser extends Action {
 			userLangPreferences.setAlertsLanguage(language);
 
 			// set navigation language
-			userLangPreferences.setNavigationLanguage(RequestUtils
-					.getNavigationLanguage(request));
+			userLangPreferences.setNavigationLanguage(language);
 			user.setUserLangPreferences(userLangPreferences);
 
 			// ===== start user extension setup =====

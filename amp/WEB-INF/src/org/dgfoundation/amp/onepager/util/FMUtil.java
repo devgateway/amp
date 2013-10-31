@@ -87,7 +87,7 @@ public final class FMUtil {
 			if(ampTreeVisibility!=null && fmParentPathString.length()>0){
 				if (!existInVisibilityTree(ampTreeVisibility, fmParentPathString, AmpFMTypes.MODULE)){
 					logger.error("Parent of current component isn't in the FM Tree: " + fmPathString);
-					logger.error("Current feature is disabled!");
+					logger.error("Current feature '"+fmPathString+"' is disabled!");
 					result = false;
 				}
 				else {

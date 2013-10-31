@@ -476,38 +476,38 @@ public class UpdateAppSettings extends Action {
 		return appSettings;
 	}
 
-	private void updateAllTeamMembersDefaultReport(Long teamId,AmpReports ampReport) {
-		Session session = null;
-		try {
-			session = PersistenceManager.getSession();
-//beginTransaction();
-			String queryString = "SELECT a FROM "
-					+ AmpApplicationSettings.class.getName() + " a WHERE  "
-					+ "a.team=:teamId";
-			Query query = session.createQuery(queryString);
-			query.setParameter("teamId", teamId, Hibernate.LONG);
-			Collection reports = query.list();
-			Iterator iterator = reports.iterator();
-
-			while (iterator.hasNext()) {
-				AmpApplicationSettings setting = (AmpApplicationSettings) iterator.next();
-				setting.setDefaultTeamReport(ampReport);
-			}
-
-			//tx.commit();
-//session.flush();
-
-		} catch (Exception ex) {
-			logger.error("Unable to get fundingDetails :" + ex);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
-
-	}
+//	private void updateAllTeamMembersDefaultReport(Long teamId,AmpReports ampReport) {
+//		Session session = null;
+//		try {
+//			session = PersistenceManager.getSession();
+////beginTransaction();
+//			String queryString = "SELECT a FROM "
+//					+ AmpApplicationSettings.class.getName() + " a WHERE  "
+//					+ "a.team=:teamId";
+//			Query query = session.createQuery(queryString);
+//			query.setParameter("teamId", teamId, Hibernate.LONG);
+//			Collection reports = query.list();
+//			Iterator iterator = reports.iterator();
+//
+//			while (iterator.hasNext()) {
+//				AmpApplicationSettings setting = (AmpApplicationSettings) iterator.next();
+//				setting.setDefaultTeamReport(ampReport);
+//			}
+//
+//			//tx.commit();
+////session.flush();
+//
+//		} catch (Exception ex) {
+//			logger.error("Unable to get fundingDetails :" + ex);
+//		} finally {
+//			try {
+//				PersistenceManager.releaseSession(session);
+//			} catch (Exception ex2) {
+//				logger.error("releaseSession() failed :" + ex2);
+//			}
+//		}
+//
+//	}
 	
 	private void populatePossibleValsAddTR (UpdateAppSettingsForm uForm) {
 		if (uForm.getPossibleValsAddTR() == null || uForm.getPossibleValsAddTR().size() == 0 ) {

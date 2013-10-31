@@ -783,6 +783,25 @@ public class LocationUtil {
 		return col;
 	}
         
+        public static List<AmpCategoryValueLocations> getAllCountriesAndRegions() throws DgException{
+    		Session session = null;
+    		 List<AmpCategoryValueLocations> col = null;
+
+    		try {
+                        
+    			session = PersistenceManager.getRequestDBSession();
+    			String queryString = " from " + AmpCategoryValueLocations.class.getName();
+
+    			Query qry = session.createQuery(queryString);
+    			col = qry.list();
+    		} catch (Exception e) {
+    			logger.error("Unable to get locations from database "
+    					+ e.getMessage());
+                            throw new DgException(e);
+    		} 
+    		return col;
+    	}
+        
          /**
          * Returns location using its id
          * @param id of location

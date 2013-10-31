@@ -550,6 +550,10 @@ function ResetCustom(maxFractionDigits) {
 	}
 	if (aimReportsFilterPickerForm3.currency)
 		aimReportsFilterPickerForm3.currency.value=aimReportsFilterPickerForm3.defaultCurrency.value;
+
+    if (aimReportsFilterPickerForm3.calendar)
+        aimReportsFilterPickerForm3.calendar.value=aimReportsFilterPickerForm3.defaultCalendar.value;
+
 }
 
 function initFormatPopup(){

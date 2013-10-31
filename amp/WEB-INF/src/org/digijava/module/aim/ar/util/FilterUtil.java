@@ -176,10 +176,12 @@ public class FilterUtil {
 		
 		if (filter.getCurrency() != null)
 			form.setCurrency( filter.getCurrency().getAmpCurrencyId() );
-		else
+        else {
 			form.setCurrency(null);
+        }
 		
 		form.setCalendar(filter.getCalendarType().getAmpFiscalCalId());
+
 		
 		if ( filter.getLineMinRank() != null && filter.getLineMinRank().size() > 0) {
 	 		int i = 0;

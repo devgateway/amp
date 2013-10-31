@@ -59,6 +59,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
@@ -264,9 +265,10 @@ public class ActivityUtil {
 
 	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity) {
 		Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
-		Long  activityTeamId=(a.getTeam()!=null)?a.getTeam().getAmpTeamId():teamMemberTeamId;
+		//Long  activityTeamId=(a.getTeam()!=null)?a.getTeam().getAmpTeamId():teamMemberTeamId;
 		
-		String validation=org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(activityTeamId);
+		String validation=org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.toTeamMember());
+		
 		//setting activity status....
 		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
 		boolean teamLeadFlag    = role.isApprover() ;
@@ -285,7 +287,7 @@ public class ActivityUtil {
 //				a.setApprovalStatus(Constants.STARTED_STATUS);
 //			}
 //			else
-				if("validationOff".equals(validation)){
+				if(validation == null || "validationOff".equals(validation)){
 					if(newActivity)
 						a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
 					else a.setApprovalStatus(Constants.APPROVED_STATUS);

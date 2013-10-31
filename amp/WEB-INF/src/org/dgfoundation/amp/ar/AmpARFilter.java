@@ -51,13 +51,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.mondrian.query.MoConstants;
@@ -581,7 +575,7 @@ public class AmpARFilter extends PropertyListable {
 		}
 		initRenderStartEndYears(settings);
 	}
-	
+
 	/**
 	 * computes the current user's effective AmpApplicationSettings, searching through the hierarchy
 	 * returns null if there is no current user
@@ -596,6 +590,20 @@ public class AmpARFilter extends PropertyListable {
 		if (AmpCaching.getInstance().applicationSettingsRetrieved)
 			return AmpCaching.getInstance().applicationSettings;
 		
+		return getEffectiveSettings(tm);
+	}
+	
+	/**
+	 * computes a TeamMember's effective AmpApplicationSettings, searching through the hierarchy
+	 * returns null of nothing could be found OR if the teammember is null
+	 * @param tm
+	 * @return
+	 */
+	public static AmpApplicationSettings getEffectiveSettings(TeamMember tm)
+	{
+		if (tm == null)
+			return null;
+
 		AmpApplicationSettings settings = null;
 		if (tm.getMemberId() != null)
 			settings = DbUtil.getMemberAppSettings(tm.getMemberId()); // member settings take precedence
@@ -603,8 +611,15 @@ public class AmpARFilter extends PropertyListable {
 		if (settings == null && tm.getTeamId() != null)
 			settings = DbUtil.getTeamAppSettings(tm.getTeamId()); // use workspace settings if no member settings present
 		
-		AmpCaching.getInstance().applicationSettingsRetrieved = true;
-		AmpCaching.getInstance().applicationSettings = settings;
+		try
+		{
+			AmpCaching.getInstance().applicationSettingsRetrieved = true;
+			AmpCaching.getInstance().applicationSettings = settings;
+		}
+		catch(Exception e)
+		{
+			// AmpCaching does not work out of the Struts request cycle
+		}
 		return settings;
 	}
 	
@@ -1652,7 +1667,8 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 		return new Date[]{dfromDate, dtoDate};
-	}	
+	}
+
 	/**
 	 * returns the default currency name
 	 * default is taken from either user settings, workspace settings or hardcoded global setting, whichever has the value first
@@ -1666,6 +1682,25 @@ public class AmpARFilter extends PropertyListable {
 			result = tempSettings.getCurrency();
 		return result; 
 	}
+
+    /**
+     * returns the default calendar
+     * default is taken from either user settings, workspace settings or hardcoded global setting, whichever has the value first
+     */
+    public static AmpFiscalCalendar getDefaultCalendar() {
+        AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
+        String calendarCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+        try {
+            AmpFiscalCalendar result = FiscalCalendarUtil.getAmpFiscalCalendar(Long.valueOf(calendarCode));
+            if (tempSettings != null && tempSettings.getFiscalCalendar()!=null)
+                result = tempSettings.getFiscalCalendar();
+            return result;
+        } catch (NumberFormatException ignore) {
+            return null;
+        }
+
+    }
+
 	
 	/**
 	 * computes the name of the effectively-used currency name: if one is set, then its name is returned, else the user/workspace/system default

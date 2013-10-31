@@ -703,7 +703,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		}
     	String additionalDetails="approved";
 		//if validation is off in team setup no messages should be generated
-		String validation = DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
+
+		String validation = DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.toTeamMember());
 		
 		if (activity.getDraft() != null&& !activity.getDraft()&&!("validationOff".equals(validation))) {
         	String approvalStatus = newActivity.getApprovalStatus();

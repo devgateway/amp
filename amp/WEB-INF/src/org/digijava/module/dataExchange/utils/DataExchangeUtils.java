@@ -1749,7 +1749,7 @@ public class DataExchangeUtils {
 		// TODO Auto-generated method stub
 		TreeMap<Long,String> result = new TreeMap<Long,String>();
 		try {
-			List<AmpCategoryValueLocations> allLocations = LocationUtil.getAllLocations(null);
+			List<AmpCategoryValueLocations> allLocations = LocationUtil.getAllCountriesAndRegions();
 			for (Iterator<AmpCategoryValueLocations> iterator = allLocations.iterator(); iterator.hasNext();) {
 				AmpCategoryValueLocations acv = (AmpCategoryValueLocations) iterator.next();
 				result.put(acv.getId(), acv.getLabel());
@@ -1772,7 +1772,8 @@ public class DataExchangeUtils {
             while (iter.hasNext()) {
                // Object[] item = (Object[])iter.next();
                 String ampClass = (String) iter.next();
-                ampClasses.add(ampClass);
+                if(ampClass !=null && ampClass.length()>0)
+                	ampClasses.add(ampClass);
             }
 
         } catch (Exception e) {

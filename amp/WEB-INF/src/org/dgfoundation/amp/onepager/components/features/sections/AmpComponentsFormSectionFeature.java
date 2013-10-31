@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -86,6 +87,9 @@ public class AmpComponentsFormSectionFeature extends
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				AmpComponent comp = new AmpComponent();
+				Set<AmpActivityVersion> relatedActivities = new HashSet<AmpActivityVersion>();
+				relatedActivities.add(am.getObject());
+				comp.setActivities(relatedActivities); 
 				list.addItem(comp);
                 String gsComponentType = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.COMPONENT_TYPE);
                 AmpComponentType defaultType = null;

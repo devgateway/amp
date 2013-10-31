@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.bouncycastle.cms.CMSException;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -101,6 +102,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -1870,6 +1872,11 @@ public class DbUtil {
 		}
 	}
 
+	/**
+	 * returns the WORKSPACE setttings (e.g. not a team-member specific one, but one written to by the ws manager)
+	 * @param teamId
+	 * @return
+	 */
 	public static AmpApplicationSettings getTeamAppSettings(Long teamId) {
 		Session session = null;
 		Query qry = null;
@@ -1893,31 +1900,30 @@ public class DbUtil {
 		return ampAppSettings;
 	}
 
-	public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(
-			Long teamId) {
-		Session session = null;
-		Query qry = null;
-		AmpApplicationSettings ampAppSettings = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from "
-					+ AmpApplicationSettings.class.getName()
-					+ " a where (a.team=:teamId) ";
-			qry = session.createQuery(queryString);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				ampAppSettings = (AmpApplicationSettings) itr.next();
-				if (ampAppSettings != null)
-					break;
-			}
-
-		} catch (Exception e) {
-			logger.error("Unable to get TeamAppSettings", e);
-		}
-		return ampAppSettings;
-	}
+//	public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(Long teamId) {
+//		Session session = null;
+//		Query qry = null;
+//		AmpApplicationSettings ampAppSettings = null;
+//
+//		try {
+//			session = PersistenceManager.getRequestDBSession();
+//			String queryString = "select a from "
+//					+ AmpApplicationSettings.class.getName()
+//					+ " a where (a.team=:teamId) ";
+//			qry = session.createQuery(queryString);
+//			qry.setParameter("teamId", teamId, Hibernate.LONG);
+//			Iterator itr = qry.list().iterator();
+//			while (itr.hasNext()) {
+//				ampAppSettings = (AmpApplicationSettings) itr.next();
+//				if (ampAppSettings != null)
+//					break;
+//			}
+//
+//		} catch (Exception e) {
+//			logger.error("Unable to get TeamAppSettings", e);
+//		}
+//		return ampAppSettings;
+//	}
 
 	public static boolean isUserTranslator(Long userId) {
 
@@ -1973,14 +1979,10 @@ public class DbUtil {
 			String queryString = "from "
 					+ AmpApplicationSettings.class.getName()
 					+ " a where (a.member.ampTeamMemId = :memberId)";
-			// String queryString = "from " +
-			// AmpApplicationSettings.class.getName();
+
 			qry = session.createQuery(queryString);
-			qry.setParameter("memberId", memberId, Hibernate.LONG);
-			/*
-			 * Iterator itr = qry.list().iterator(); if (itr.hasNext()) {
-			 * ampAppSettings = (AmpApplicationSettings) itr.next(); }
-			 */
+			qry.setLong("memberId", memberId);
+
 			ampAppSettings = (AmpApplicationSettings) qry.uniqueResult();
 			// tx.commit();
 		} catch (Exception e) {
@@ -3170,8 +3172,12 @@ public class DbUtil {
 		}
 		return col;
 	}
-
+	
 	public static void add(Object object) {
+		
+		if (object instanceof AmpApplicationSettings)
+			System.out.println("BOZO BOZO BOZO");
+		
 		logger.debug("In add " + object.getClass().getName());
 		Session sess = null;
 		Transaction tx = null;
@@ -3193,7 +3199,7 @@ public class DbUtil {
 			}
 		}
 	}
-
+	
 	public static void update(Object object) {
 		Session sess = null;
 		Transaction tx = null;
@@ -7374,30 +7380,8 @@ public class DbUtil {
 
 	}
 
-	public static String getValidationFromTeamAppSettings(Long ampTeamId) {
-		Session session = null;
-		Query qry = null;
-		AmpApplicationSettings ampAppSettings = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from "
-					+ AmpApplicationSettings.class.getName()
-					+ " a where (a.team=:teamId) ";
-			qry = session.createQuery(queryString);
-			qry.setParameter("teamId", ampTeamId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				ampAppSettings = (AmpApplicationSettings) itr.next();
-				if (ampAppSettings != null
-						&& ampAppSettings.getValidation() != null
-						&& !"".equals(ampAppSettings.getValidation()))
-					break;
-			}
-
-		} catch (Exception e) {
-			logger.error("Unable to get TeamAppSettings", e);
-		}
+	public static String getValidationFromTeamAppSettings(TeamMember teamMember) {
+		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings(teamMember);
 		return ampAppSettings != null ? ampAppSettings.getValidation() : null;
 	}
 	

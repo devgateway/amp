@@ -48,6 +48,9 @@
 <c:set var="translatedEdit"> 
 	<digi:trn>Edit</digi:trn>
 </c:set>
+<c:set var="translatedValidate">
+    <digi:trn>Validate activity</digi:trn>
+</c:set>
 <c:set var="translatedActivate">
 	<digi:trn>Activate</digi:trn>
 </c:set>
@@ -88,7 +91,7 @@ if ( showColumn && validatedActivities.contains(ownerId) )
 if(validateItem){
 	%>
 	<c:set var="action" value="validate"/>
-	<c:set var="actionString" value="Validate activity"/>
+	<c:set var="actionString" value="${translatedValidate}"/>
 	<%
 }
 %>
@@ -117,7 +120,7 @@ if(validateItem){
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
 		<bean:define id="columnNo" name="columnNo" type="java.lang.Integer" scope="page" toScope="request"/>
 		<bean:define id="bckColor" name="bckColor" type="java.lang.String" toScope="request"/>		
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>
 	</logic:iterate>
 </tr>
 <% } else { %>

@@ -15,6 +15,10 @@
 
 	<http pattern="/aim/showRegisterUser.do**" security="none" />
 
+    <http pattern="/aim/showChangePassword.do**" security="none" />
+
+    <http pattern="/aim/showEmailForm.do**" security="none" />
+
 	<http pattern="/aim/registerUser.do**" security="none" />
 	
 	<http pattern="/visualization/dataDispatcher.do**" security="none" />

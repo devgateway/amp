@@ -647,20 +647,16 @@ public class DataDispatcher extends DispatchAction {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear.intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
         	Map map = null;
-        	Long id = null;
-        	if(filter.getSectorIds()!=null){
-        		if (filter.getSectorIds().length == 1 && filter.getSectorIds()[0] != -1) //If there's a selected sector, get subsectors
-        			id = filter.getSectorIds()[0];
-        	} else if (filter.getSectorId()!=null && filter.getSectorId() != -1){
-        		id = filter.getSectorId();
-        	}
+        	Long id = filter.getSelSectorIds().length == 1? filter.getSelSectorIds()[0]:null;
         	//If the startYear/endYear selected is the same as in the general filter, use the stored rank
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
-        		if(id!=null){ //If there's a selected sector, get subsectors
+        		if(id!=null && id!=-1){ //If there's a selected sector, get subsectors
                 	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), filter, null, null);
-                }
-        		else
+                	if (map.size()==0)
+                		map = visualizationForm.getRanksInformation().getFullSectors();
+                } else {
             		map = visualizationForm.getRanksInformation().getFullSectors();
+                }
         	}
         	else 
         	{
@@ -3395,11 +3391,13 @@ public class DataDispatcher extends DispatchAction {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear.intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
         	Map map = null;
+        	Long id = filter.getSelLocationIds().length == 1? filter.getSelLocationIds()[0]:null;
         	//If the startYear/endYear selected is the same as in the general filter, use the stored rank
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
-	            if(regionId != null && !regionId.equals("") && !regionId.equals("-1")){
-	            	Long id = Long.parseLong(regionId);
+        		if(id!=null && id!=-1){
 	            	map = DashboardUtil.getRankSubRegions(DbUtil.getSubRegions(id), filter, null, null);
+	            	if (map.size()==0)
+                		map = visualizationForm.getRanksInformation().getFullRegions();
 	            }
 	            else
 	        		map = visualizationForm.getRanksInformation().getFullRegions();
@@ -3410,9 +3408,10 @@ public class DataDispatcher extends DispatchAction {
         		DashboardFilter newFilter = filter.getCopyFilterForFunding();
             	newFilter.setStartYear(startYear);
             	newFilter.setEndYear(endYear);
-            	if(regionId != null && !regionId.equals("") && !regionId.equals("-1")){
-	            	Long id = Long.parseLong(regionId);
+            	if(id!=null && id!=-1){
 	            	map = DashboardUtil.getRankSubRegions(DbUtil.getSubRegions(id), newFilter, startYear.intValue(), endYear.intValue());
+	            	if (map.size()==0)
+	            		map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(newFilter), DbUtil.getRegions(newFilter), newFilter,request);
 	            } else {
 	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(newFilter), DbUtil.getRegions(newFilter), newFilter,request);
 	            }

@@ -174,7 +174,7 @@ import org.digijava.module.um.util.AmpUserUtil;
 	    	
 	    	vwForm.setAlphaUsers(new ArrayList<UserBean>());
 	    	Collection<User> users=null;
-	    	 String alpha = vwForm.getCurrentAlpha(); //request.getParameter("alpha");
+	    	 String alpha = request.getParameter("currentAlpha"); //vwForm.getCurrentAlpha();
 	    	    if (alpha == null || alpha.trim().length() == 0 || alpha.equals("viewAll")) {
 	    	    	users = AmpUserUtil.getAllUsers(vwForm.getShowBanned());
 	    	    	vwForm.setSelectedNoLetter(true);

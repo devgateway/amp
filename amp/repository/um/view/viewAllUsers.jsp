@@ -451,8 +451,7 @@ function banUser(txt) {
 																		</tr>
 																	</logic:notEmpty>
 
-																	<logic:notEmpty name="umViewAllUsersForm"
-																		property="alphaPages">
+                                                                    <c:if test="${not empty umViewAllUsersForm.alphaPages || not empty umViewAllUsersForm.digitPages}">
 																		<tr>
 																			<td align="center" colspan="4">
 																				<table width="90%">
@@ -521,7 +520,7 @@ function banUser(txt) {
 
 																				</table></td>
 																		</tr>
-																	</logic:notEmpty>
+																	</c:if>
 																	<logic:notEmpty name="umViewAllUsersForm"
 																		property="alphaPages">
 																		<tr>

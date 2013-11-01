@@ -4,14 +4,13 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-
-import com.rc.retroweaver.runtime.Arrays;
 
 
 public class AmpOrganizationBudgetInformation implements Serializable,OrgProfileValue{

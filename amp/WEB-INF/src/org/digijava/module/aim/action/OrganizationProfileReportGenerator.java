@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,9 +42,6 @@ import org.digijava.module.aim.helper.donorReport.OrganizationReportRecord;
 import org.digijava.module.aim.helper.donorReport.PropertyType;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.DbUtil;
-
-import com.lowagie.text.Paragraph;
-import com.rc.retroweaver.runtime.Arrays;
 
 public class OrganizationProfileReportGenerator extends DispatchAction {
 

@@ -3398,7 +3398,7 @@ public class DataDispatcher extends DispatchAction {
         		DashboardFilter newFilter = filter.getCopyFilterForFunding();
             	newFilter.setStartYear(startYear);
             	newFilter.setEndYear(endYear);
-            	if(id!=null){
+            	if(id!=null && id!=-1){
 	            	map = DashboardUtil.getRankSubRegions(DbUtil.getSubRegions(id), newFilter, startYear.intValue(), endYear.intValue());
 	            	if (map.size()==0)
 	            		map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(newFilter), DbUtil.getRegions(newFilter), newFilter,request);

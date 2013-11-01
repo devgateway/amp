@@ -1,11 +1,6 @@
 package org.digijava.module.um.action;
 	
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +17,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DbUtil.UserManagerSorting;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.calendar.util.AmpUtil;
 import org.digijava.module.um.form.ViewAllUsersForm;
 import org.digijava.module.um.util.AmpUserUtil;
 	
@@ -57,7 +53,7 @@ import org.digijava.module.um.util.AmpUserUtil;
 	    	vwForm.setPagesToShow(10);
 	    	vwForm.setReset("false");
 	    	vwForm.setNumResults(vwForm.getTempNumResults());
-	        Collection ubCol = getUsers(vwForm,request);
+            Collection<UserBean> ubCol = getUsers(vwForm, request);
 	        vwForm.setSelectedNoLetter(true);
 	        String alpha=vwForm.getCurrentAlpha();
 	
@@ -109,20 +105,7 @@ import org.digijava.module.um.util.AmpUserUtil;
 	          	  vwForm.setCurrentAlpha(alpha);
 	            }            
 	
-	
-	            String[] alphaArray = new String[26];
-	            int i = 0;
-	            for (char c = 'A'; c <= 'Z'; c++) {
-	              Iterator itr = ubCol.iterator();
-	              while (itr.hasNext()) {
-	            	  UserBean us = (UserBean) itr.next();
-	                if (us.getFirstNames().toUpperCase().indexOf(c) == 0) {
-	                  alphaArray[i++] = String.valueOf(c);
-	                  break;
-	                }
-	              }
-	            }
-	            vwForm.setAlphaPages(alphaArray);
+                collectAlphaArray(vwForm, ubCol);
 	          }
 	          else {
 	            vwForm.setAlphaPages(null);
@@ -265,4 +248,23 @@ import org.digijava.module.um.util.AmpUserUtil;
 	
 	    public ViewAllUsers() {
 	    }
-	}
+
+        private void collectAlphaArray(ViewAllUsersForm eaForm, Collection<UserBean> ubCol) {
+            SortedSet<String> chars = new TreeSet<String>(AmpUtil.CharUnicodeComparator);
+            SortedSet<String> digits = new TreeSet<String>(AmpUtil.CharUnicodeComparator);
+            for (UserBean user : ubCol) {
+                if (user.getFirstNames() != null && user.getFirstNames().length() > 0) {
+                    Character firstLetter = user.getFirstNames().toUpperCase().charAt(0);
+                    if (Character.isLetter(firstLetter)) {
+                        chars.add(String.valueOf(firstLetter));
+                    } else if ( Character.isDigit(firstLetter)) {
+                        digits.add(String.valueOf(firstLetter));
+                    }
+                }
+            }
+            eaForm.setAlphaPages(chars.toArray(new String[0]));
+            eaForm.setDigitPages(digits.toArray(new String[0]));
+        }
+
+
+}

@@ -1,16 +1,9 @@
 package org.digijava.module.calendar.util;
 
+import java.text.Collator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.digijava.kernel.util.collections.CollectionSynchronizer;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -35,6 +28,22 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 public class AmpUtil {
     public static CollectionSynchronizer attendeeSyncronizer = new
         AttendeeSyncronizer();
+
+    private final static Collator collator = Collator.getInstance();
+    public final static Comparator<String> CharUnicodeComparator = new Comparator<String>() {
+        public final int compare(String ch1, String ch2) {
+            if (Character.isDigit(ch1.charAt(0)) && Character.isLetter(ch2.charAt(0))) {
+                return -1;
+            } else if (Character.isDigit(ch2.charAt(0)) && Character.isLetter(ch1.charAt(0)) ) {
+                return 1;
+            }
+            return collator.compare(ch1, ch2);
+        }
+    };
+
+    static {
+        collator.setStrength(Collator.TERTIARY);
+    }
 
     public static String SimpleEthipianToGregorian(String date, CalendarConversor convert){
     	

@@ -118,10 +118,12 @@ div.charcounter-progress-bar {
         //initOrganizationScript();
         initPopInScript();
         initContactScript();
-        clearDisplay(document.aimAddOrgForm.minPlanRegDate, "clear1");
-        clearDisplay(document.aimAddOrgForm.legalPersonRegDate, "clear2");
-        clearDisplay(document.aimAddOrgForm.operFuncApprDate, "clearOperFunc");
-        clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
+
+        // uncomment if needed
+        //clearDisplay(document.aimAddOrgForm.minPlanRegDate, "clear1");
+        //clearDisplay(document.aimAddOrgForm.legalPersonRegDate, "clear2");
+        //clearDisplay(document.aimAddOrgForm.operFuncApprDate, "clearOperFunc");
+        //clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
     }
     addLoadEvent(initScripts);
 

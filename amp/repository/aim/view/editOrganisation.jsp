@@ -113,16 +113,16 @@ div.charcounter-progress-bar {
 	
 
 
-function initScripts() {
-//initSectorScript();
-//initOrganizationScript();
-initPopInScript();
-initContactScript();
-clearDisplay(document.aimAddOrgForm.minPlanRegDate, "clear1");
-clearDisplay(document.aimAddOrgForm.legalPersonRegDate, "clear2");
-clearDisplay(document.aimAddOrgForm.operFuncApprDate, "clearOperFunc");
-clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
-}
+    function initScripts() {
+        //initSectorScript();
+        //initOrganizationScript();
+        initPopInScript();
+        initContactScript();
+        clearDisplay(document.aimAddOrgForm.minPlanRegDate, "clear1");
+        clearDisplay(document.aimAddOrgForm.legalPersonRegDate, "clear2");
+        clearDisplay(document.aimAddOrgForm.operFuncApprDate, "clearOperFunc");
+        clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
+    }
     addLoadEvent(initScripts);
 
     function refreshPage(){
@@ -2103,6 +2103,10 @@ border-right: 1px solid rgb(208, 208, 208);
             <html:textarea property="otherInformation"  cols="50" rows="4"  styleId="otherInformation"/>
         </td>
     </tr>
+
+
+
+
 </c:if>
 <c:if test="${aimAddOrgForm.type!='NGO'}">
     <tr>
@@ -2208,36 +2212,39 @@ border-right: 1px solid rgb(208, 208, 208);
     setStyle(document.getElementById("staffTable"),false);
     setStyle(document.getElementById("orgInfosTable"),false);
     setStyle(document.getElementById("table_contact_content"),true);
-	var otherInformationCounter = $("#otherInformationCharCounter");
-	var otherInformationProgressBar = $("#otherInformationProgressBar");
-	
-	initOtherInformationCounter();
-	
-	function initOtherInformationCounter() {
-		var otherInformationCounterTxt = ["(", 256 - $("#otherInformation").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
-		otherInformationCounter.html(otherInformationCounterTxt.join(""));
-		otherInformationProgressBar.css("width", $("#otherInformation").val().length/256*100 + "%");
-	}
-	$("#otherInformation").bind("keyup", function (event) {
-		if (this.value.length > 256) {
-			this.value = this.value.substring(0, 256);
-		}
-		var otherInformationCounterText = ["(", 256 - this.value.length, " <digi:trn>characters remaining</digi:trn>", ")"];
-		otherInformationCounter.html(otherInformationCounterText.join(""));
-		otherInformationProgressBar.css("width", this.value.length/256*100 + "%");
-	});
-	$("#otherInformation").bind("paste", function (event) { 
-	  	var browser=navigator.appName;
-	  	if(browser=="Microsoft Internet Explorer"){
-	  		var textThatNeedsToBePasted = window.clipboardData.getData("Text");
-	  		var otherInformationValue = document.getElementById('otherInformation');
-	  		if(textThatNeedsToBePasted.length + otherInformationValue.value.length >256){
-	  			var msg="<digi:trn jsFriendly='true'>You can not exceed 256 symbols</digi:trn>";
-	  			alert(msg);
-	  			window.clipboardData.setData("Text",'');
-	  		}
-	      }				
-		});
+
+    <c:if test="${aimAddOrgForm.type=='NGO'}">
+        var otherInformationCounter = $("#otherInformationCharCounter");
+        var otherInformationProgressBar = $("#otherInformationProgressBar");
+
+        initOtherInformationCounter();
+
+        function initOtherInformationCounter() {
+            var otherInformationCounterTxt = ["(", 256 - $("#otherInformation").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
+            otherInformationCounter.html(otherInformationCounterTxt.join(""));
+            otherInformationProgressBar.css("width", $("#otherInformation").val().length/256*100 + "%");
+        }
+        $("#otherInformation").bind("keyup", function (event) {
+            if (this.value.length > 256) {
+                this.value = this.value.substring(0, 256);
+            }
+            var otherInformationCounterText = ["(", 256 - this.value.length, " <digi:trn>characters remaining</digi:trn>", ")"];
+            otherInformationCounter.html(otherInformationCounterText.join(""));
+            otherInformationProgressBar.css("width", this.value.length/256*100 + "%");
+        });
+        $("#otherInformation").bind("paste", function (event) {
+            var browser=navigator.appName;
+            if(browser=="Microsoft Internet Explorer"){
+                var textThatNeedsToBePasted = window.clipboardData.getData("Text");
+                var otherInformationValue = document.getElementById('otherInformation');
+                if(textThatNeedsToBePasted.length + otherInformationValue.value.length >256){
+                    var msg="<digi:trn jsFriendly='true'>You can not exceed 256 symbols</digi:trn>";
+                    alert(msg);
+                    window.clipboardData.setData("Text",'');
+                }
+              }
+            });
+    </c:if>
 
     
     var enterBinder	= new EnterHitBinder('addOrgBtn');

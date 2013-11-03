@@ -308,7 +308,7 @@ function stm(t,s) {
 function MoveTip(e) {
 
 
-	if(move) {
+	if(move && !(tbody === undefined)) {
 
 
 

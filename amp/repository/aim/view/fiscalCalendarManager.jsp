@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<DIV id="TipLayer" style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
 <script type="text/javascript">
  function exportXSL(){
         <digi:context name="exportUrl" property="context/module/moduleinstance/exportCalanderManager2XSL.do"/>;

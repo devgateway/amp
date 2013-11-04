@@ -2386,7 +2386,20 @@ public class DbUtil {
             queryString.append(" where org.ampOrgId=:orgId and orgContact.primaryContact=true and (org.deleted is null or org.deleted = false) ");
 			qry = session.createQuery(queryString.toString());
 			qry.setLong("orgId", orgId);
-			contact=(AmpContact)qry.uniqueResult();
+			if (qry.uniqueResult()!=null){
+				contact=(AmpContact)qry.uniqueResult();
+			} else {
+				queryString = new StringBuilder();
+				queryString.append("select con from ");
+	            queryString.append(AmpOrganisation.class.getName());
+	            queryString.append(" org inner join org.organizationContacts orgContact  ");
+	            queryString.append(" inner join orgContact.contact con ");
+	            queryString.append(" where org.ampOrgId=:orgId and (org.deleted is null or org.deleted = false) ");
+				qry = session.createQuery(queryString.toString());
+				qry.setLong("orgId", orgId);
+				if (qry.list()!=null && qry.list().size()>0)
+					contact=(AmpContact)qry.list().iterator().next();
+			}
         } catch (Exception ex) {
             logger.error("Unable to get contact from database ",ex);
             throw new DgException(ex);

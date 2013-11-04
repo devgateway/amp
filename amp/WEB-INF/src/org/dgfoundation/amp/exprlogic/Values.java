@@ -104,6 +104,7 @@ public class Values extends HashMap<String, BigDecimal> {
 		
 		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH, values.get(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH));
 		this.addValue(ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, values.get(ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT));
+		this.addValue(ArConstants.PLEDGED_TOTAL, values.get(ArConstants.PLEDGED_TOTAL));
 		
 //		this.addValue(ArConstants.MTEF_COLUMN, values.get(ArConstants.MTEF_COLUMN) );
 		if ( this.mtefCols != null )

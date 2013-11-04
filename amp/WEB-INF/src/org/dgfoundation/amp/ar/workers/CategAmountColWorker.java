@@ -210,7 +210,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 			}
 		} -- not used anymore */
 		
-		addMetaIfExists(rs, acc, "terms_assist_name", ArConstants.TERMS_OF_ASSISTANCE, null, false);
+		addMetaIfExists(rs, acc, "terms_assist_name", createMetadataNameBasedOnSource(ArConstants.TERMS_OF_ASSISTANCE), null, false);
 		addMetaIfExists(rs, acc, "financing_instrument_name", ArConstants.FINANCING_INSTRUMENT, null, false);
 		addMetaIfExists(rs, acc, "mode_of_payment_name", ArConstants.MODE_OF_PAYMENT, ArConstants.MODE_OF_PAYMENT_UNALLOCATED, false);
 		addMetaIfExists(rs, acc, "funding_status_name", ArConstants.FUNDING_STATUS, null, false);
@@ -482,6 +482,13 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 	protected void cleanup()
 	{
 		metaInfoCache.clear();
+	}
+	
+	private String createMetadataNameBasedOnSource(String normalName) {
+		if ( ArConstants.VIEW_PLEDGES_FUNDING.equals(this.viewName) ) {
+			return ArConstants.PLEDGES_METADATA_NAME + normalName;
+		}
+		return normalName;
 	}
 
 }

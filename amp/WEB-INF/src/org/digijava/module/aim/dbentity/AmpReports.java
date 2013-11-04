@@ -20,6 +20,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -689,5 +690,14 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 		return false;
 	}
 	
+    public static String hqlStringForName(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(AmpReports.class, "name").getSQLFunctionCall(idSource + ".ampReportId");
+    }
+    
+    public static String hqlStringForDescription(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(AmpReports.class, "reportDescription").getSQLFunctionCall(idSource + ".ampReportId");
+    }
 }
 

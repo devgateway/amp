@@ -45,7 +45,7 @@ public class AmpOrganisationSearchModel extends
 			session = PersistenceManager.getRequestDBSession();
 			Criteria crit = session.createCriteria(AmpOrganisation.class);
 			crit.setCacheable(true);
-			// AMP-16239
+			
 			if (input.trim().length() > 0)
 				crit.add(
 						Restrictions.disjunction()

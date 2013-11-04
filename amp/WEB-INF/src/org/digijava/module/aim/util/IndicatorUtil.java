@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
@@ -112,8 +113,8 @@ public class IndicatorUtil {
 
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            // AMP-16239
-            String qrString = "Select ind  from " + AmpIndicator.class.getName() + " ind where ind.name=:name ";
+            String indicatorName = InternationalizedModelDescription.getForProperty(AmpIndicator.class, "name").getSQLFunctionCall("ind.indicatorId");
+            String qrString = "Select ind  from " + AmpIndicator.class.getName() + " ind where " + indicatorName + "=:name ";
             Long indicatorId = indicator.getIndicatorId();
             if (indicatorId != null && indicatorId != 0) {
                 qrString += "and ind.indicatorId !=:id ";
@@ -975,9 +976,10 @@ public class IndicatorUtil {
 	public static Set<AmpIndicator> getActivityIndicators(Long activityId) throws DgException{
 		Set<AmpIndicator> result=null;
 		Session sesison=PersistenceManager.getRequestDBSession();
+        String indicatorName = InternationalizedModelDescription.getForProperty(AmpIndicator.class, "name").getSQLFunctionCall("indi.indicatorId");
 		String oql="select indi from "+AmpIndicator.class.getName()+" indi ";
 		oql+="where indi.valuesActivity.activity.ampActivityId =:actId ";
-		oql+="order by indi.name";
+		oql+="order by " + indicatorName;
 		try {
 			Query query=sesison.createQuery(oql);
 			query.setLong("actId", activityId);
@@ -1238,8 +1240,9 @@ public class IndicatorUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
+            String indicatorName = InternationalizedModelDescription.getForProperty(AmpIndicator.class, "name").getSQLFunctionCall("t.indicatorId");
 			queryString = " select t from " + AmpIndicator.class.getName()
-					+ " t order by t.name";
+					+ " t order by " + indicatorName;
 			q = session.createQuery(queryString);
 			iter = q.list().iterator();
 
@@ -1671,10 +1674,10 @@ public class IndicatorUtil {
 		ArrayList Indicator = new ArrayList();
   		try {
   			session = PersistenceManager.getRequestDBSession();
-  			// AMP-16239
+  			String sectorName = AmpSector.hqlStringForName("sec");
   		    String queryString = "select sec from "
                 + AmpSector.class.getName() + " sec "
-                + "where sec.name=:name and (sec.deleted is null or sec.deleted = false) ";
+                + "where " + sectorName + "=:name and (sec.deleted is null or sec.deleted = false) ";
                 Query qry = session.createQuery(queryString);
                 qry.setString("name", sectorname);
    	
@@ -1709,17 +1712,16 @@ public class IndicatorUtil {
 			try{
 				session=PersistenceManager.getRequestDBSession();
 				String queryString=null;			
-				
+				String sectorNameHql = AmpSector.hqlStringForName("sec");
+				String indicatorNameHql = InternationalizedModelDescription.getForProperty(AmpIndicator.class, "name").getSQLFunctionCall("ind.indicatorId");
 				if (keyWord!=null && keyWord.length()>0){
-					// AMP-16239
 					if(sectorName!=null && sectorName.length()>0 && !sectorName.equals("-1")){
-						queryString="select ind from "+ AmpIndicator.class.getName() +" ind inner join ind.sectors sec where ind.name like '%" + keyWord + "%'"
-						+" and sec.name='"+sectorName+"'";
+						queryString="select ind from "+ AmpIndicator.class.getName() +" ind inner join ind.sectors sec where " + indicatorNameHql + " like '%" + keyWord + "%'"
+						+" and " + sectorNameHql + "='"+sectorName+"'";
 						qry = session.createQuery(queryString);
 						retValue=qry.list();
 					}else {
-						// AMP-16239
-						 queryString="select ind from "+ AmpIndicator.class.getName() +" ind where ind.name like '%" + keyWord + "%'";
+						 queryString="select ind from "+ AmpIndicator.class.getName() +" ind where " + indicatorNameHql + " like '%" + keyWord + "%'";
 						 qry = session.createQuery(queryString);
 						 retValue=qry.list();
 					} 

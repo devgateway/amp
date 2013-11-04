@@ -460,10 +460,10 @@ public class DynLocationManagerUtil {
 
 		try {
 			dbSession = PersistenceManager.getSession();
-			// AMP-16239
+			String locationNameHql = AmpCategoryValueLocations.hqlStringForName("loc");
 			String queryString = "select loc from "
 					+ AmpCategoryValueLocations.class.getName()
-					+ " loc where (loc.name=:name)";
+					+ " loc where (" + locationNameHql + "=:name)";
 			if (cvLocationLayer != null) {
 				queryString += " AND (loc.parentCategoryValue=:cvId) ";
 			}
@@ -564,10 +564,10 @@ public class DynLocationManagerUtil {
 					"Value for Implementation Location cannot be null");
 		try {
 			dbSession = PersistenceManager.getSession();
-			// AMP-16239
+			String locationNameHql = AmpCategoryValueLocations.hqlStringForName("loc");
 			String queryString = "select loc from "
 					+ AmpCategoryValueLocations.class.getName()
-					+ " loc where (loc.name=:name) "
+					+ " loc where (" + locationNameHql + "=:name) "
 					+ " AND (loc.parentCategoryValue=:cvId) ";
 			if (parentLocation == null) {
 				queryString += "AND (loc.parentLocation is null) ";

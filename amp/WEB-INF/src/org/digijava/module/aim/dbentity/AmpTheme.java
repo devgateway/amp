@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
@@ -480,4 +481,9 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 		}
 		return currentTheme;
 	}
+	
+    public static String hqlStringForName(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(AmpTheme.class, "name").getSQLFunctionCall(idSource + ".ampThemeId");
+    }
 }

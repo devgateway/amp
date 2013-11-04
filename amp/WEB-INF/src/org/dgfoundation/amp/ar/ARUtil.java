@@ -40,6 +40,7 @@ import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.PlainColumnReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.PlainGroupReportDataXLS;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
 import org.dgfoundation.amp.ar.workers.TextColWorker;
@@ -107,10 +108,11 @@ public final class ARUtil {
 		}
 		try {
 			session = PersistenceManager.getSession();
-			// AMP-16239
+			
 			String queryString = "select r from " + AmpReports.class.getName()+ " r " + "where ( " + tabFilter + " r.publicReport=true)";
             if (name != null) {
-                queryString += " and lower(r.name) like lower(:name) ";
+                //queryString += " and lower(r.name) like lower(:name) ";
+                queryString += String.format(" and lower(%s) like lower(:name) ", AmpReports.hqlStringForName("r"));
             }
             if(onlyCategorizied!=null && onlyCategorizied){
             	queryString += " and r.reportCategory is not null ";

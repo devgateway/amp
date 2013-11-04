@@ -524,7 +524,7 @@ public class ContentTranslationUtil {
      * @param fields list of fields to be populated
      * @param type class for which we want to get all the fields
      */
-    private static void getAllFields(List<Field> fields, Class<?> type) {
+    public static void getAllFields(List<Field> fields, Class<?> type) {
         Collections.addAll(fields, type.getDeclaredFields());
         if (type.getSuperclass() != null) {
             getAllFields(fields, type.getSuperclass());

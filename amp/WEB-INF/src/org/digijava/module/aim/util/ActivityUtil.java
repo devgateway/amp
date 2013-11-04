@@ -32,9 +32,12 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
+import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.dbentity.Country;
@@ -1537,9 +1540,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Collection col = new ArrayList();
     logger.info(" this is the other components getting called....");
     try {
-      session = PersistenceManager.getRequestDBSession();
-      // AMP-16239
-      String queryString = "select ac.* from amp_components ac " +
+    	session = PersistenceManager.getRequestDBSession();
+		String rewrittenColumns = SQLUtils.rewriteQuery("amp_component", "ac", 
+				new HashMap<String, String>(){{
+					put("title", InternationalizedModelDescription.getForProperty(AmpComponent.class, "name").getSQLFunctionCall("ac.amp_component_id"));
+					put("description", InternationalizedModelDescription.getForProperty(AmpComponent.class, "description").getSQLFunctionCall("ac.amp_component_id"));
+				}});      
+		String queryString = "select " + rewrittenColumns + " from amp_components ac " +
       		"inner join amp_activity_components aac on (aac.amp_component_id = ac.amp_component_id) " +
       		"where (aac.amp_activity_id=:actId)";
       Query qry = session.createSQLQuery(queryString).addEntity(AmpComponent.class);
@@ -2457,8 +2464,12 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    AmpOrganisation organisation = null;
 	    try {
 	      session = PersistenceManager.getSession();
-	      // AMP-16239
-	      String queryString = "select ao.* from amp_organisation ao " +
+	      String rewrittenColumns = SQLUtils.rewriteQuery("amp_organisation", "ao", 
+					new HashMap<String, String>(){{
+						put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall("ao.amp_org_id"));
+						put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "description").getSQLFunctionCall("ao.amp_org_id"));
+					}});
+	      String queryString = "select " + rewrittenColumns + " from amp_organisation ao " +
 	      		"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
 	      		"inner join amp_activity aa on (aa.amp_activity_id = aor.activity) " +
 	      		"where (aa.amp_activity_id=:actId) and (aor.amp_org_role_id=:orgRoleId)";
@@ -3033,11 +3044,11 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 			e.printStackTrace();
 		}
 		
-		// AMP-16239
 	  Criteria crit = session.createCriteria(AmpActivity.class);
 	  
 	  Conjunction conjunction = Restrictions.conjunction();
-	  conjunction.add(Restrictions.ilike("name", name, MatchMode.EXACT));
+	  String locale = TLSUtils.getLangCode();
+	  conjunction.add(SQLUtils.getUnaccentILikeExpression("name", name, locale, MatchMode.EXACT));
 	  if(g!=null) conjunction.add(Restrictions.not(Restrictions.eq("ampActivityGroup",g)));
 	  crit.add(conjunction);
 	  
@@ -3053,9 +3064,10 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     Session session = null;
     try {
       session = PersistenceManager.getSession();
-      // AMP-16239
+
       String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
-          "where lower(a.name) = :lowerName";
+          String.format("where lower(%s) = :lowerName",
+        		  AmpActivityVersion.hqlStringForName("a"));
       if(actId!=null){
     	  qryStr+=" and a.ampActivityId!="+actId;
       }
@@ -3661,9 +3673,9 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     try {
       session = PersistenceManager.getSession();
       
-      // AMP-16239
       String queryString = "select ampAct from " + AmpActivityVersion.class.getName() +
-          " ampAct where upper(ampAct.name) like upper(:name)";
+          String.format(" ampAct where upper(%s) like upper(:name)",
+        		  AmpActivityVersion.hqlStringForName("ampAct"));
       qry = session.createQuery(queryString);
       qry.setParameter("name", "%" + name + "%", Hibernate.STRING);
       col = qry.list();
@@ -4760,20 +4772,19 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		activityStatus.add(Constants.EDITED_STATUS);
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
                     Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
+                    String activityNameString = AmpActivityVersion.hqlStringForName("a");
                     // computed workspace
                     if (teamAO != null && !teamAO.isEmpty()) {
-                    	// AMP-16239
-                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
-                                " where  a.team in  (" + Util.toCSStringForIN(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) order by a.name";
+                        queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
+                                " where  a.team in  (" + Util.toCSStringForIN(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) order by " + activityNameString;
 
                     } else {
                         // none computed workspace
-                    	// AMP-16239
-                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
+                        queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
                         if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                             queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
                         }
-                        queryString += " order by a.name ";
+                        queryString += " order by " + activityNameString;
                     }
     			  			
     			query=session.createQuery(queryString);    			
@@ -4830,8 +4841,8 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 //                        queryString += " order by a.name ";
 //                    }
                     
-                    // AMP-16239
-                    queryString ="select gr.ampActivityLastVersion.name, gr.ampActivityLastVersion.ampActivityId from "+ AmpActivityGroup.class.getName()+" gr ";                    
+                    String activityName = AmpActivityVersion.hqlStringForName("gr.ampActivityLastVersion");
+                    queryString ="select " + activityName + ", gr.ampActivityLastVersion.ampActivityId from "+ AmpActivityGroup.class.getName()+" gr ";                    
                     if (teamAO != null && !teamAO.isEmpty()) {
                     	queryString +=" left outer join gr.ampActivityLastVersion.orgrole r  left outer join gr.ampActivityLastVersion.funding f "+
                     	" where gr.ampActivityLastVersion.team in (" + Util.toCSStringForIN(relatedTeams) + ")  " +
@@ -4845,7 +4856,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                         }
                         
                     }
-                queryString += "  and lower(gr.ampActivityLastVersion.name) like lower(:searchStr) group by gr.ampActivityLastVersion.ampActivityId,gr.ampActivityLastVersion.name order by gr.ampActivityLastVersion.name ";
+                queryString += "  and lower(" + activityName + ") like lower(:searchStr) group by gr.ampActivityLastVersion.ampActivityId," + activityName + " order by " + activityName;
     			query=session.createQuery(queryString);
                 query.setParameter("searchStr", searchStr + "%", Hibernate.STRING);
     			activities=query.list();
@@ -4884,10 +4895,10 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     		String name=null;
     		try {
     			session=PersistenceManager.getRequestDBSession();
-    			// AMP-16239
-    			queryString= "select a.name  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
-    			query=session.createQuery(queryString);    			
-    			name=(String)query.uniqueResult();    			
+    			String activityName = AmpActivityVersion.hqlStringForName("a");
+    			queryString = "select " + activityName + " from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+    			query = session.createQuery(queryString);
+    			name = (String)query.uniqueResult();   			
     		}catch(Exception ex) { 
     			logger.error("couldn't load Activity" + ex.getMessage());	
     			ex.printStackTrace(); 
@@ -5129,15 +5140,14 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
             String queryString = "";
             
             boolean isSearchByName = actName!=null && "".compareTo(actName.trim())!=0;
+            String activityName = AmpActivityVersion.hqlStringForName("f");
 			if(isSearchByName) {
-				// AMP-16239
-            	queryString = "select f.ampActivityId, f.ampId,  f.name,  ampTeam, ampGroup  from " + AmpActivity.class.getName()+
-            	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where upper(f.name) like upper(:name) and (deleted = false or deleted is null)";
+            	queryString = "select f.ampActivityId, f.ampId, " + activityName + ",  ampTeam, ampGroup  from " + AmpActivity.class.getName()+
+            	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where upper(" + activityName + ") like upper(:name) and (deleted = false or deleted is null)";
             }
             else
             {
-            	// AMP-16239
-            	queryString = "select f.ampActivityId, f.ampId,  f.name, ampTeam , ampGroup from " + AmpActivity.class.getName()+ 
+            	queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup from " + AmpActivity.class.getName()+ 
             	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where deleted = false or deleted is null";
             }
             qry = session.createQuery(queryString);

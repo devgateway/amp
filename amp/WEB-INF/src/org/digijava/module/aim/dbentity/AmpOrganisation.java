@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -735,5 +736,9 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		this.orgKeyAreas = orgKeyAreas;
 	}
 	
+    public static String hqlStringForName(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall(idSource + ".ampOrgId");
+    }
 	
 }	

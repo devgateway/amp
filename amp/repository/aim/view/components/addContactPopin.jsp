@@ -236,7 +236,7 @@
 					<td align="right" valign="top"><strong><digi:trn>Phone Number</digi:trn></strong></td>
 					<td align="left" nowrap="nowrap">
 						<logic:notEmpty	name="aimAddContactForm" property="phones">
-							<logic:iterate name="aimAddContactForm" property="phones" id="foo"indexId="ctr">
+							<logic:iterate name="aimAddContactForm" property="phones" id="foo" indexId="ctr">
 								<div>
 									<c:set var="translationNone"><digi:trn>None</digi:trn></c:set> 
 									<category:showoptions multiselect="false"	firstLine="${translationNone}" name="aimAddContactForm"	property="phones[${ctr}].phoneTypeId"

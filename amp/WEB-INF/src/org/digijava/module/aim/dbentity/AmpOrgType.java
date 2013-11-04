@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorTypeDimension;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrganizationReportColumn;
@@ -130,5 +131,12 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
     public String getAdditionalSearchString() {
         return this.orgTypeCode;
     }
+    
+    
+    public static String hqlStringForName(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(AmpOrgType.class, "orgType").getSQLFunctionCall(idSource + ".ampOrgTypeId");
+    }
+
 	
 }

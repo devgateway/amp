@@ -16,6 +16,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
@@ -366,8 +367,8 @@ public class ComponentsUtil {
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            // AMP-16239
-            queryString = "select co from " + AmpComponent.class.getName() + " co where co.title=:title";
+            String componentTitle = InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("co.ampComponentId");
+            queryString = "select co from " + AmpComponent.class.getName() + " co where " + componentTitle + "=:title";
             qry = session.createQuery(queryString);
             qry.setParameter("title", title, Hibernate.STRING);
 
@@ -395,10 +396,10 @@ public class ComponentsUtil {
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            // AMP-16239
-            queryString = "select co.title from "+AmpActivity.class.getName() +  " a, " +   AmpComponent.class.getName()+
-                    " co  where co  in elements(a.components)  and" +
-                    " co.title=:title";
+            String componentTitle = InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("co.ampComponentId");
+            queryString = "select " + componentTitle + " from "+AmpActivity.class.getName() +  " a, " +   AmpComponent.class.getName()+
+                    " co  where co  in elements(a.components)  and " +
+                    componentTitle + "=:title";
 
             if (excludeId != null)
             	queryString += " and not co.ampComponentId=:excludeId";
@@ -437,8 +438,8 @@ public class ComponentsUtil {
             Query qry = null;
             try {
                 session = PersistenceManager.getRequestDBSession();
-                // AMP-16239
-                queryString = "select co from " + AmpComponent.class.getName() + " as co inner join co.activities ac inner join ac.ampActivityGroup actGroup where co.title=:title and actGroup.ampActivityGroupId <> :groupId ";
+                String componentTitle = InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("co.ampComponentId");
+                queryString = "select co from " + AmpComponent.class.getName() + " as co inner join co.activities ac inner join ac.ampActivityGroup actGroup where " + componentTitle + "=:title and actGroup.ampActivityGroupId <> :groupId ";
                 qry = session.createQuery(queryString);
                 qry.setParameter("title", title, Hibernate.STRING);
                 qry.setParameter("groupId", g.getAmpActivityGroupId(), Hibernate.LONG);

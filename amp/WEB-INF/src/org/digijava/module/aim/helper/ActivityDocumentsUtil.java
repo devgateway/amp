@@ -10,9 +10,12 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.exception.NoDocumentTypeException;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.hibernate.Query;
@@ -49,8 +52,8 @@ public class ActivityDocumentsUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            // AMP-16239
-            String queryString = "select a.name " +
+
+            String queryString = "select " + AmpActivityVersion.hqlStringForName("a") + " " +
                 " from " + AmpActivityDocument.class.getName() + " ad, " + AmpActivity.class.getName() + " a " +
                 " where ad.ampActivity=a AND ad.uuid=:uuid";
             

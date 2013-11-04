@@ -70,6 +70,7 @@ import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.util.ExportBuilder;
+import org.digijava.module.message.jobs.ActivityVersionDeletionJob;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.hibernate.Hibernate;
@@ -572,9 +573,9 @@ public class DataExchangeUtils {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            // AMP-16239
+            String orgNameHql = AmpOrganisation.hqlStringForName("o");
             queryString = "select o from " + AmpOrganisation.class.getName()
-                + " o where (TRIM(o.name)=:orgName) and (o.deleted is null or o.deleted = false) ";
+                + String.format(" o where (TRIM(%s)=:orgName) and (o.deleted is null or o.deleted = false) ", orgNameHql);
             qry = sess.createQuery(queryString);
             qry.setParameter("orgName", name.trim(), Hibernate.STRING);
 
@@ -591,7 +592,6 @@ public class DataExchangeUtils {
 	}
 	
 	public static String generateQuery(String info, String key, String separator, HashMap<String, String> hs) {
-		// TODO Auto-generated method stub
 		StringTokenizer stInfo = new StringTokenizer(info, separator);
 		StringTokenizer stKey = new StringTokenizer(key, separator);
 		if(stInfo.countTokens() != stKey.countTokens())
@@ -606,7 +606,6 @@ public class DataExchangeUtils {
 		
 		query = "select a from " + AmpActivity.class.getName() + " a where 1=1";
 		
-		// AMP-16239
 		int i=0;
 		while  (stKey.hasMoreElements())
 		{
@@ -629,7 +628,8 @@ public class DataExchangeUtils {
 			
 			if(DataExchangeConstants.COLUMN_KEY_TITLE.equals(token.toLowerCase().trim()))
 			{
-				query	+=	" and TRIM(lower(a.name)) = :title";
+				String activityNameHql = AmpActivityVersion.hqlStringForName("a");
+				query	+=	String.format(" and TRIM(lower(%s)) = :title", activityNameHql);
 				hs.put(DataExchangeConstants.COLUMN_KEY_TITLE, alInfo.get(i).trim().toLowerCase());
 			}
 			i++;
@@ -898,9 +898,9 @@ public class DataExchangeUtils {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            // AMP-16239
+            String sectorNameHql = AmpSector.hqlStringForName("o");
             queryString = "select o from " + AmpSector.class.getName()
-                + " o where (TRIM(o.name)=:sectorName) and (o.deleted is null or o.deleted = false) ";
+                + String.format(" o where (TRIM(%s)=:sectorName) and (o.deleted is null or o.deleted = false) ", sectorNameHql);
             qry = sess.createQuery(queryString);
             qry.setParameter("sectorName", name.trim(), Hibernate.STRING);
 
@@ -930,9 +930,9 @@ public class DataExchangeUtils {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            // AMP-16239
+            String sectorNameHql = AmpSector.hqlStringForName("o");
             queryString = "select o from " + AmpSector.class.getName()
-                + " o where (LOWER(TRIM(o.name))=:sectorName) and (LOWER(TRIM(o.sectorCodeOfficial))=:sectorCode) and (o.deleted is null or o.deleted = false) ";
+                + String.format(" o where (LOWER(TRIM(%s))=:sectorName) and (LOWER(TRIM(o.sectorCodeOfficial))=:sectorCode) and (o.deleted is null or o.deleted = false) ", sectorNameHql);
             qry = sess.createQuery(queryString);
             qry.setParameter("sectorName", name.trim().toLowerCase(), Hibernate.STRING);
             qry.setParameter("sectorCode", code.trim().toLowerCase(), Hibernate.STRING);
@@ -1029,9 +1029,9 @@ public class DataExchangeUtils {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            // AMP-16239
+            String themeNameHql = AmpTheme.hqlStringForName("o");
             queryString = "select o from " + AmpTheme.class.getName()
-                + " o where (TRIM(o.name)=:programName)";
+                + String.format(" o where (TRIM(%s)=:programName)", themeNameHql);
             qry = sess.createQuery(queryString);
             qry.setParameter("programName", name.trim(), Hibernate.STRING);
 
@@ -1061,9 +1061,9 @@ public class DataExchangeUtils {
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-            // AMP-16239
+            String themeNameHql = AmpTheme.hqlStringForName("o");
             queryString = "select o from " + AmpTheme.class.getName()
-                + " o where (TRIM(o.name)=:programName) and (TRIM(o.themeCode)=:themeCode)";
+                + String.format(" o where (TRIM(%s)=:programName) and (TRIM(o.themeCode)=:themeCode)", themeNameHql);
             qry = sess.createQuery(queryString);
             qry.setParameter("programName", name.trim(), Hibernate.STRING);
             qry.setParameter("themeCode", code.trim(), Hibernate.STRING);
@@ -1520,9 +1520,9 @@ public class DataExchangeUtils {
         TreeMap<Long,String> result = new TreeMap<Long,String>();
         try {
             session = PersistenceManager.getSession();
-            // AMP-16239
-            String queryString = "select f.name, f.ampActivityGroup from " + AmpActivity.class.getName()
-                + " f order by f.name asc";
+            String activityNameHql = AmpActivityVersion.hqlStringForName("f");
+            String queryString = String.format("select %s, f.ampActivityGroup from " + AmpActivity.class.getName()
+                + " f order by %s asc", activityNameHql, activityNameHql);
             qry = session.createQuery(queryString);
             Iterator iter = qry.list().iterator();
             while (iter.hasNext()) {
@@ -1547,9 +1547,9 @@ public class DataExchangeUtils {
         List<String> result1 = new ArrayList<String>();
         try {
             session = PersistenceManager.getSession();
-            // AMP-16239
-            String queryString = "select f.name, f.ampActivityGroup from " + AmpActivity.class.getName()
-                + " f where lower(f.name) like lower('"+str+"%') order by f.name asc";
+            String activityNameHql = AmpActivityVersion.hqlStringForName("f");
+            String queryString = String.format("select %s, f.ampActivityGroup from " + AmpActivity.class.getName()
+                + " f where lower(%s) like lower('%s%%') order by %s asc", activityNameHql, activityNameHql, str, activityNameHql);
             qry = session.createQuery(queryString);
             Iterator iter = qry.list().iterator();
             while (iter.hasNext()) {
@@ -1640,15 +1640,16 @@ public class DataExchangeUtils {
         try {
             session = PersistenceManager.getSession();
     		//String orgIds = "SELECT DISTINCT(organisation) from amp_org_role";
-            // AMP-16239
-            String queryString = "select sec.ampSectorId, sec.ampSecSchemeId.secSchemeName, sec.name, sec.sectorCode FROM " + AmpSector.class.getName()
-                + " sec WHERE lower(sec.name) like lower('"+str+"%') ORDER BY sec.sectorCode ASC";
+            String sectorNameHql = AmpSector.hqlStringForName("sec");
+            String sectorSchemeNameHql = AmpSectorScheme.hqlStringForName("sec.ampSecSchemeId");
+            String queryString = String.format("select sec.ampSectorId, %s, %s, sec.sectorCode FROM " + AmpSector.class.getName()
+                + " sec WHERE lower(%s) like lower('%s%%') ORDER BY sec.sectorCode ASC", sectorSchemeNameHql, sectorNameHql, sectorNameHql, str);
             qry = session.createQuery(queryString);
             Iterator iter = qry.list().iterator();
             while (iter.hasNext()) {
             	Object[] item = (Object[])iter.next();
             	Object secId = item[0];
-            	Object schemeName = item[1];
+//            	Object schemeName = item[1];
             	Object sectorName = item[2];
             	Object sectorCode = item[3];
             	result1.add((String)sectorName + ", code " + sectorCode + " (" + secId + ")");
@@ -1669,9 +1670,9 @@ public class DataExchangeUtils {
         List<String> result1 = new ArrayList<String>();
         try {
             session = PersistenceManager.getSession();
-            // AMP-16239
-            String queryString = "select scheme.ampSecSchemeId, scheme.secSchemeName FROM " + AmpSectorScheme.class.getName()
-                + " scheme WHERE lower(scheme.secSchemeName) like lower('"+str+"%') ORDER BY scheme.secSchemeName ASC";
+            String sectorSchemeNameHql = AmpSectorScheme.hqlStringForName("scheme");
+            String queryString = String.format("select scheme.ampSecSchemeId, %s FROM " + AmpSectorScheme.class.getName()
+                + " scheme WHERE lower(%s) like lower('%s%%') ORDER BY %s ASC", sectorSchemeNameHql, sectorSchemeNameHql, str, sectorSchemeNameHql);
             qry = session.createQuery(queryString);
             Iterator iter = qry.list().iterator();
             while (iter.hasNext()) {

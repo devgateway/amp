@@ -54,6 +54,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
 
 public class PersistenceManager {
@@ -180,6 +181,10 @@ public class PersistenceManager {
 		return sf.getClassMetadata(clazz);
 	}
 	
+	public static PersistentClass getClassMapping(Class<?> clazz)
+	{
+		return cfg.getClassMapping(clazz.getName());
+	}
 	
 	/**
 	 * Gets a RAW jdbc connection to the database. Use with caution ! Close it yourself manually when done!

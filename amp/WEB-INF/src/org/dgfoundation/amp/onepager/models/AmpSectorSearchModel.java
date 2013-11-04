@@ -63,7 +63,7 @@ public class AmpSectorSearchModel extends
 			crit.setCacheable(true);
 			Junction junction = Restrictions.conjunction().add(
 					Restrictions.eq("ampSecSchemeId", scheme));
-			// AMP-16239
+
 			if (input.trim().length() > 0)
 				junction.add(getTextCriterion("name", input));
 			junction.add( Restrictions.or( Restrictions.isNull("deleted"), Restrictions.eq( "deleted", Boolean.FALSE)));

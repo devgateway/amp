@@ -9,6 +9,7 @@ package org.digijava.module.aim.action;
 
 import java.awt.image.renderable.RenderContext;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,6 +36,8 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -44,6 +47,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportLog;
@@ -64,6 +68,7 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -84,7 +89,39 @@ public class ViewNewAdvancedReport extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-		
+//		String rewrittenColumns = SQLUtils.rewriteQuery("amp_organisation", "ao", 
+//				new HashMap<String, String>(){{
+//					put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall("ao.amp_org_id"));
+//					put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "description").getSQLFunctionCall("ao.amp_org_id"));
+//				}});
+//        String queryString = "select distinct " + rewrittenColumns + " from amp_organisation ao " +
+//						"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
+//						"inner join amp_role ar on ((ar.amp_role_id = aor.role) and (ar.role_code=:roleCode)) where (ao.deleted is null or ao.deleted = false) ";
+//        Query qry = PersistenceManager.getRequestDBSession().createSQLQuery(queryString).addEntity(AmpOrganisation.class);
+//        qry.setCacheable(true);
+//        List<AmpOrganisation>col = qry.setString("roleCode", "DN").list();
+//
+//        Collections.sort(col, new Comparator<AmpOrganisation>() {
+//            public int compare(AmpOrganisation o1, AmpOrganisation o2) {
+//                return o1.getName().trim().compareTo(o2.getName().trim());
+//            }
+//        });
+//        for(AmpOrganisation aorg:col)
+//        	System.out.println(aorg.getName());
+        
+//		{
+//			Session session = PersistenceManager.getRequestDBSession();
+////			String qString = "SELECT rep.ampReportId, translate_field('org.digijava.module.aim.dbentity.AmpReports', 'name', rep.ampReportId, 'amp_reports', 'name', 'amp_report_id', 'ru') FROM " + AmpReports.class.getName() + " rep ORDER BY rep.ampReportId";
+//			String qString = String.format("SELECT rep.ampReportId, %s FROM " + AmpReports.class.getName() + " rep order by %s",
+//				 InternationalizedModelDescription.getForProperty(AmpReports.class, "name").getSQLFunctionCall("rep.ampReportId"),
+//				 InternationalizedModelDescription.getForProperty(AmpReports.class, "name").getSQLFunctionCall("rep.ampReportId")
+//				 );
+//			List<Object[]> bbb = session.createQuery(qString).list();
+//			for(Object[] zz:bbb)
+//			{
+//				System.out.println(zz[0] + ": " + zz[1]);
+//			}
+//		}
 		String loadStatus = request.getParameter("loadstatus");
 
 		if (loadStatus != null){

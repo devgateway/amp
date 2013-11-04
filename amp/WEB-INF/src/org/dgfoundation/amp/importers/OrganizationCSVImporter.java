@@ -13,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -58,10 +59,10 @@ public class OrganizationCSVImporter extends CSVImporter {
 
 	public AmpOrgType getAmpGroupTypeByName(String name) throws HibernateException {
 		AmpOrgType orgGrp=null;
-			// AMP-16239
 		   String queryString = "select o from "
                + AmpOrgType.class.getName() + " o "
-               + "where (o.orgType=:name)";
+               //+ "where (o.orgType=:name)";
+               + String.format("where (%s=:name)", AmpOrgType.hqlStringForName("o"));
            Query qry = session.createQuery(queryString);
            qry.setParameter("name", name, Hibernate.STRING);
            Iterator itr = qry.list().iterator();

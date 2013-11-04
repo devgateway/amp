@@ -339,8 +339,8 @@ public class DbUtil {
         List<AmpEntityNameIdPair> retVal = null;
         try {
             Session sess = PersistenceManager.getRequestDBSession();
-            // AMP-16239
-            StringBuilder queryStr = new StringBuilder("select report.ampReportId, report.name from ");
+            String reportNameHql = AmpReports.hqlStringForName("report");
+            StringBuilder queryStr = new StringBuilder("select report.ampReportId, " + reportNameHql + " from ");
             queryStr.append(AmpReports.class.getName());
             queryStr.append(" report where report.budgetExporter=:budgetExporter");
             

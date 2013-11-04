@@ -10,6 +10,7 @@ import javax.persistence.FieldResult;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.LocationsDimension;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
@@ -261,5 +262,10 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 	@Override
 	public int compareTo(AmpCategoryValueLocations o) {
 		return id.compareTo(o.getId());
+	}
+	
+	public static String hqlStringForName(String idSource)
+	{
+		return InternationalizedModelDescription.getForProperty(AmpCategoryValueLocations.class, "name").getSQLFunctionCall(idSource + ".id");
 	}
 }

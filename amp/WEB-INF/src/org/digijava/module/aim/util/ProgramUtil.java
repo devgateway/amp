@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -148,9 +149,9 @@ public class ProgramUtil {
 
 			try {
 				session = PersistenceManager.getRequestDBSession();
-				// AMP-16239
+				String themeNameHql = AmpTheme.hqlStringForName("theme");
 				String qryStr = "select theme from " + AmpTheme.class.getName()
-						+ " theme where (theme.name=:name)";
+						+ " theme where (" + themeNameHql + "=:name)";
 				Query qry = session.createQuery(qryStr);
 				qry.setParameter("name", name, Hibernate.STRING);
 				Iterator itr = qry.list().iterator();

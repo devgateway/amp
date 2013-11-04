@@ -33,10 +33,11 @@ public class TLSUtils {
                 }
             }
             //no cookie found
-            throw new RuntimeException("please enable cookies!"); //we shouldn't get here :)
+            logger.error("Barely missed an exception", new RuntimeException("please enable cookies!")); //we shouldn't get here :) - but we do EVERYTIME IN CHROME
+            return "en";
         }
         String code = lang.getCode();
-        logger.error("Current language:" + code);
+        //logger.error("Current language:" + code);
         return code;
 	}
 	

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -23,11 +24,14 @@ import org.apache.struts.util.LabelValueBean;
 import org.bouncycastle.cms.CMSException;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -1872,11 +1876,6 @@ public class DbUtil {
 		}
 	}
 
-	/**
-	 * returns the WORKSPACE setttings (e.g. not a team-member specific one, but one written to by the ws manager)
-	 * @param teamId
-	 * @return
-	 */
 	public static AmpApplicationSettings getTeamAppSettings(Long teamId) {
 		Session session = null;
 		Query qry = null;
@@ -1900,30 +1899,31 @@ public class DbUtil {
 		return ampAppSettings;
 	}
 
-//	public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(Long teamId) {
-//		Session session = null;
-//		Query qry = null;
-//		AmpApplicationSettings ampAppSettings = null;
-//
-//		try {
-//			session = PersistenceManager.getRequestDBSession();
-//			String queryString = "select a from "
-//					+ AmpApplicationSettings.class.getName()
-//					+ " a where (a.team=:teamId) ";
-//			qry = session.createQuery(queryString);
-//			qry.setParameter("teamId", teamId, Hibernate.LONG);
-//			Iterator itr = qry.list().iterator();
-//			while (itr.hasNext()) {
-//				ampAppSettings = (AmpApplicationSettings) itr.next();
-//				if (ampAppSettings != null)
-//					break;
-//			}
-//
-//		} catch (Exception e) {
-//			logger.error("Unable to get TeamAppSettings", e);
-//		}
-//		return ampAppSettings;
-//	}
+	public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(
+			Long teamId) {
+		Session session = null;
+		Query qry = null;
+		AmpApplicationSettings ampAppSettings = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select a from "
+					+ AmpApplicationSettings.class.getName()
+					+ " a where (a.team=:teamId) ";
+			qry = session.createQuery(queryString);
+			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				ampAppSettings = (AmpApplicationSettings) itr.next();
+				if (ampAppSettings != null)
+					break;
+			}
+
+		} catch (Exception e) {
+			logger.error("Unable to get TeamAppSettings", e);
+		}
+		return ampAppSettings;
+	}
 
 	public static boolean isUserTranslator(Long userId) {
 
@@ -1979,10 +1979,14 @@ public class DbUtil {
 			String queryString = "from "
 					+ AmpApplicationSettings.class.getName()
 					+ " a where (a.member.ampTeamMemId = :memberId)";
-
+			// String queryString = "from " +
+			// AmpApplicationSettings.class.getName();
 			qry = session.createQuery(queryString);
-			qry.setLong("memberId", memberId);
-
+			qry.setParameter("memberId", memberId, Hibernate.LONG);
+			/*
+			 * Iterator itr = qry.list().iterator(); if (itr.hasNext()) {
+			 * ampAppSettings = (AmpApplicationSettings) itr.next(); }
+			 */
 			ampAppSettings = (AmpApplicationSettings) qry.uniqueResult();
 			// tx.commit();
 		} catch (Exception e) {
@@ -2595,13 +2599,13 @@ public class DbUtil {
 
         try {
 			session = PersistenceManager.getRequestDBSession();
-			// AMP-16239
+			String organizationName = AmpOrganisation.hqlStringForName("org");
 			queryString.append(" select org from ")
                     .append(AmpOrganisation.class.getName()).append(" org ")
                     .append(" inner join org.orgGrpId grp ")
                     .append(" where(lower(org.acronym) like '%")
                     .append(keyword)
-                    .append("%' or lower(org.name) like '%")
+                    .append("%' or lower(" + organizationName + ") like '%")
                     .append(keyword)
                     .append("%') and grp.orgType=:orgType and (org.deleted is null or org.deleted = false)");
 
@@ -2629,11 +2633,11 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// AMP-16239
+			String organizationName = AmpOrganisation.hqlStringForName("org");
 			queryString.append("select distinct org from ")
                     .append(AmpOrganisation.class.getName()).append(" org ")
                     .append("where (lower(acronym) like '%").append(keyword)
-                    .append("%' or lower(name) like '%").append(keyword)
+                    .append("%' or lower(" + organizationName + ") like '%").append(keyword)
                     .append("%') and (org.deleted is null or org.deleted = false) ");
 
             appendNotIn("org.ampOrgId", excludeIds, queryString);
@@ -2663,12 +2667,12 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// AMP-16239
+			String organizationName = AmpOrganisation.hqlStringForName("org");
 			String queryString = "select distinct org from "
 					+ AmpOrganisation.class.getName() + " org "
 					+ "where ((lower(acronym) like '%" + keyword
-					+ "%' and lower(name) like '" + namesFirstLetter
-					+ "%') or lower(name) like '" + namesFirstLetter + "%"
+					+ "%' and lower(" + organizationName + ") like '" + namesFirstLetter
+					+ "%') or lower(" + organizationName + ") like '" + namesFirstLetter + "%"
 					+ keyword
 					+ "%') and (org.deleted is null or org.deleted = false)";
 			Query qry = session.createQuery(queryString);
@@ -2696,14 +2700,14 @@ public class DbUtil {
 		namesFirstLetter = namesFirstLetter.toLowerCase();
 
 		try {
-			// AMP-16239
+			String organizationName = AmpOrganisation.hqlStringForName("org");
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select distinct org from "
 					+ AmpOrganisation.class.getName()
 					+ " org inner join org.orgGrpId grp "
 					+ "where grp.orgType=:orgType and ((lower(acronym) like '%"
-					+ keyword + "%' and lower(name) like '" + namesFirstLetter
-					+ "%') or lower(name) like '" + namesFirstLetter + "%"
+					+ keyword + "%' and lower(" + organizationName + ") like '" + namesFirstLetter
+					+ "%') or lower(" + organizationName + ") like '" + namesFirstLetter + "%"
 					+ keyword
 					+ "%') and (org.deleted is null or org.deleted = false)";
 			Query qry = session.createQuery(queryString);
@@ -3172,12 +3176,8 @@ public class DbUtil {
 		}
 		return col;
 	}
-	
+
 	public static void add(Object object) {
-		
-		if (object instanceof AmpApplicationSettings)
-			System.out.println("BOZO BOZO BOZO");
-		
 		logger.debug("In add " + object.getClass().getName());
 		Session sess = null;
 		Transaction tx = null;
@@ -3199,7 +3199,7 @@ public class DbUtil {
 			}
 		}
 	}
-	
+
 	public static void update(Object object) {
 		Session sess = null;
 		Transaction tx = null;
@@ -5048,8 +5048,10 @@ public class DbUtil {
 		Collection<AmpOrgGroup> col = new ArrayList();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// AMP-16239
-			String queryString = "select distinct amp_org_grp_id, name from v_contracting_agency_groups order by name";
+
+			String queryString = String.format("select distinct amp_org_grp_id, %s AS name from v_contracting_agency_groups order by name", 
+					InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall());
+			
 			Query qry = session.createSQLQuery(queryString).addEntity(
 					AmpOrgGroup.class);
 			col = qry.list();
@@ -5068,8 +5070,11 @@ public class DbUtil {
 		Collection<AmpOrgGroup> col = new ArrayList();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// AMP-16239
-			String queryString = "select distinct aog.* from amp_org_group aog "
+			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_group", "aog", 
+					new HashMap<String, String>(){{
+						put("org_grp_name", InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "name").getSQLFunctionCall("aog.amp_org_grp_id"));
+					}});
+			String queryString = "select distinct " + rewrittenColumns + " from amp_org_group aog "
 					+ "inner join amp_organisation ao on (ao.org_grp_id = aog.amp_org_grp_id) "
 					+ "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) "
 					+ "inner join amp_activity aa on (aa.amp_activity_id = af.amp_activity_id) where (ao.deleted is null or ao.deleted = false) ";
@@ -5091,9 +5096,12 @@ public class DbUtil {
 		Session session = null;
 		List<AmpOrgType> col = new ArrayList<AmpOrgType>();
 		try {
-			// AMP-16239
+			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_type", "aot", 
+					new HashMap<String, String>(){{
+						put("org_type", InternationalizedModelDescription.getForProperty(AmpOrgType.class, "orgType").getSQLFunctionCall("aot.amp_org_type_id"));
+					}});
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select distinct aot.* from amp_org_type aot "
+			String queryString = "select distinct " + rewrittenColumns +" from amp_org_type aot "
 					+ "inner join amp_org_group aog on (aot.amp_org_type_id=aog.org_type ) "
 					+ "inner join amp_organisation ao on (aog.amp_org_grp_id=ao.org_grp_id ) "
 					+ "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) "
@@ -5158,9 +5166,9 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// AMP-16239
+			String orgGrpName = AmpOrgGroup.hqlStringForName("l");
 			String queryString = "select l from " + AmpOrgGroup.class.getName()
-					+ " l " + "where (l.orgGrpName=:name)";
+					+ " l " + "where (" + orgGrpName + "=:name)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("name", name, Hibernate.STRING);
 			Iterator itr = qry.list().iterator();
@@ -5179,10 +5187,10 @@ public class DbUtil {
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// AMP-16239
+			String orgGrpName = AmpOrgGroup.hqlStringForName("l");
 			String queryString = "select count(l) from "
 					+ AmpOrgGroup.class.getName() + " l "
-					+ "where upper(l.orgGrpName) like upper(:name) ";
+					+ "where upper(" + orgGrpName + ") like upper(:name) ";
 			if (id != null) {
 				queryString += " and l.ampOrgGrpId!=" + id;
 			}
@@ -5227,10 +5235,10 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// AMP-16239
+			String orgGrpName = AmpOrgGroup.hqlStringForName("org");
 			String queryString = "select distinct org from "
 					+ AmpOrgGroup.class.getName() + " org "
-					+ " where (lower(org.orgGrpName) like '%" + keyword
+					+ " where (lower(" + orgGrpName + ") like '%" + keyword
 					+ "%') and org.orgType=:orgType";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("orgType", orgType, Hibernate.LONG);
@@ -5249,10 +5257,10 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// AMP-16239
+			String orgGrpName = AmpOrgGroup.hqlStringForName("org");
 			String queryString = "select distinct org from "
 					+ AmpOrgGroup.class.getName() + " org "
-					+ " where lower(org.orgGrpName) like '%" + keyword
+					+ " where lower(" + orgGrpName + ") like '%" + keyword
 					+ "%' or lower(org.orgGrpCode) like '%" + keyword + "%'";
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
@@ -5270,7 +5278,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select o from " + AmpOrgGroup.class.getName()
-					+ " o order by org_grp_name asc";
+					+ " o order by " + AmpOrgGroup.hqlStringForName("o") + " asc";
 			qry = session.createQuery(queryString);
 			organisation = qry.list();
 		} catch (Exception e) {
@@ -7141,10 +7149,10 @@ public class DbUtil {
 
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			// AMP-16239
+			String orgName = AmpOrganisation.hqlStringForName("o");
 			queryString = "select o from "
 					+ AmpOrganisation.class.getName()
-					+ " o where (TRIM(o.name)=:orgName) and (o.deleted is null or o.deleted = false) ";
+					+ " o where (TRIM(" + orgName + ")=:orgName) and (o.deleted is null or o.deleted = false) ";
 			qry = sess.createQuery(queryString);
 			qry.setParameter("orgName", name, Hibernate.STRING);
 
@@ -7248,10 +7256,10 @@ public class DbUtil {
 		int count = 0;
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			// AMP-16239
+			String orgTypeName = AmpOrgType.hqlStringForName("o");
 			String queryString = "select count(*) from "
 					+ AmpOrgType.class.getName()
-					+ " o where upper(o.orgType) like upper('" + name + "')";
+					+ " o where upper(" + orgTypeName + ") like upper('" + name + "')";
 			if (groupId != null && groupId.longValue() != 0) {
 				queryString += " and o.ampOrgTypeId!=" + groupId;
 			}
@@ -7271,7 +7279,6 @@ public class DbUtil {
 		int count = 0;
 		try {
 			sess = PersistenceManager.getRequestDBSession();
-			// AMP-16239
 			String queryString = "select count(*) from "
 					+ AmpOrgType.class.getName()
 					+ " o where upper(o.orgTypeCode) like upper('" + code

@@ -48,10 +48,10 @@ public class AmpPMWorkspaceSearchModel extends AbstractAmpAutoCompleteModel<AmpT
 			Criteria crit = session.createCriteria(AmpTeam.class);
 			crit.setCacheable(true);
 			
-			// AMP-16239
 			if(input.trim().length()>0){
 					crit.add(Restrictions.disjunction()
-							.add(Restrictions.ilike("name", "%" + input + "%")))
+							.add(getTextCriterion("name", input)))
+//							.add(Restrictions.ilike("name", "%" + input + "%")))
 							.addOrder(Order.asc("name"));
 		
 					if (params != null) {

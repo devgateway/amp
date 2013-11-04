@@ -259,25 +259,6 @@ public class DbUtil {
         return retVal;
     }
     
-    public static List getAllDonors() {
-        List retVal = null;
-        Session session = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            Query q = null;
-            // AMP-16239
-                StringBuffer qs = new StringBuffer("select org.name, org.ampOrgId from ");
-                qs.append(AmpOrganisation.class.getName());
-                qs.append(" org where (org.deleted is null or org.deleted = false) ");
-                q = session.createQuery(qs.toString());
-            
-            retVal = q.list();
-        } catch (Exception ex) {
-            logger.debug("Unable to get sector funding donors from DB", ex);
-        }
-        return retVal;
-    }
-    
     public static List getFundingDonors() {
         List retVal = null;
         Session session = null;
@@ -285,14 +266,14 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             Query q = null;
             String queryString = null;
-            // AMP-16239
-            queryString="select o.name, o.ampOrgId from " 
+            String orgNameHql = AmpOrganisation.hqlStringForName("o");
+            queryString="select " + orgNameHql + ", o.ampOrgId from " 
             	+ AmpOrganisation.class.getName()+ " o "
             	+" where (o.deleted is null or o.deleted = false) and o.ampOrgId in (select f.ampDonorOrgId from "+ AmpFunding.class.getName() 
             	+" f where f.ampActivityId in (select al.activity from "
             	+ AmpActivityLocation.class.getName()+ " al)" 
             	+" and f.ampFundingId in (select afd.ampFundingId from "
-            	+ AmpFundingDetail.class.getName()+ " afd)) order by o.name";
+            	+ AmpFundingDetail.class.getName()+ " afd)) order by " + orgNameHql;
                 q = session.createQuery(queryString);
             
             retVal = q.list();
@@ -310,11 +291,11 @@ public class DbUtil {
         Long retVal = null;
         Session sess = null;
         try {
-        	// AMP-16239
+        	String regNameHql = AmpCategoryValueLocations.hqlStringForName("reg");
             sess = PersistenceManager.getRequestDBSession();
             StringBuilder queryStr = new StringBuilder("select reg.id from ");
             queryStr.append(AmpCategoryValueLocations.class.getName());
-            queryStr.append(" as reg where reg.name = :REG_NAME ");
+            queryStr.append(String.format(" as reg where %s = :REG_NAME ", regNameHql));
             queryStr.append(" and reg.parentCategoryValue.value = :MAP_LEVEL");
 
             Query q = sess.createQuery(queryStr.toString());
@@ -344,13 +325,8 @@ public class DbUtil {
         Session sess = null;
         try {
             sess = PersistenceManager.getRequestDBSession();
-            // AMP-16239
-            StringBuilder queryStr = new StringBuilder("select reg.name from ");
-            queryStr.append(AmpCategoryValueLocations.class.getName());
-            queryStr.append(" as reg where reg.id = :REG_ID");
-            Query q = sess.createQuery(queryStr.toString());
-            q.setLong("REG_ID", locId);
-            retVal = (String) q.uniqueResult();
+            AmpCategoryValueLocations loc = (AmpCategoryValueLocations) sess.load(AmpCategoryValueLocations.class, locId);
+            retVal = loc.getName();
         } catch (Exception ex) {
             logger.debug("Unable to get region name from DB", ex);
         }
@@ -2856,8 +2832,8 @@ public class DbUtil {
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();
          
-            // AMP-16239
-            StringBuilder queryStr = new StringBuilder("select act.ampActivityId, act.name from ");
+            String activityNameHql = AmpActivityVersion.hqlStringForName("act");
+            StringBuilder queryStr = new StringBuilder("select act.ampActivityId, " + activityNameHql + " from ");
             queryStr.append(AmpActivityVersion.class.getName());
             queryStr.append(" as act where act.ampActivityId in ");
             queryStr.append(actIdWhereclause);
@@ -2990,13 +2966,14 @@ public class DbUtil {
         String retVal = null;
         try {
             Session sess = PersistenceManager.getRequestDBSession();
-            // AMP-16239
-            StringBuilder qs = new StringBuilder("select s.name from ");
+
+            StringBuilder qs = new StringBuilder("select s from ");
             qs.append(AmpSector.class.getName());
             qs.append(" as s where s.ampSectorId = :SEC_ID  and (s.deleted is null or s.deleted = false) ");
             Query q = sess.createQuery(qs.toString());
             q.setLong("SEC_ID", sectorId);
-            retVal = (String) q.uniqueResult();
+            AmpSector sec = (AmpSector) q.uniqueResult();
+            retVal = sec.getName();
         } catch (Exception ex) {
           logger.error("Error getting sector name from database " + ex);
         }

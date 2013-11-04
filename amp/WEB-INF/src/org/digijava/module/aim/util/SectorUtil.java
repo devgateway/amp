@@ -65,10 +65,10 @@ public class SectorUtil {
 			 * "country.iso = region.country";
 			 */
 
-			// AMP-16239
+			String sectorNameHql = AmpSector.hqlStringForName("sector");
 			String qryStr = "select sector from " + AmpSector.class.getName()
 					+ " sector inner join sector.ampSecSchemeId " + " sscheme"
-					+ " where lower(sector.name) like '%"
+					+ " where lower(" + sectorNameHql + ") like '%"
 					+ keyword.toLowerCase() + "%' and (sector.deleted is null or sector.deleted = false) ";
 			if (ampSecSchemeId != null) {
 				qryStr += " and sscheme.ampSecSchemeId=:ampSecSchemeId";
@@ -217,10 +217,10 @@ public class SectorUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			// AMP-16239
+			String sectorSchemeNameHql = AmpSectorScheme.hqlStringForName("ss");
 			String queryString = "select ss from "
 					+ AmpSectorScheme.class.getName() + " ss "
-					+ "order by ss.secSchemeName";
+					+ "order by " + sectorSchemeNameHql;
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception ex) {
@@ -247,7 +247,7 @@ public class SectorUtil {
 														// session?
 			String queryString = "select s from " + AmpSector.class.getName()
 					+ " s " + "where amp_sec_scheme_id = " + secSchemeId
-					+ " and parent_sector_id is null and (s.deleted is null or s.deleted = false)  " + "order by s.name";
+					+ " and parent_sector_id is null and (s.deleted is null or s.deleted = false)  " + "order by " + AmpSector.hqlStringForName("s");
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 
@@ -284,7 +284,7 @@ public class SectorUtil {
 					+ " s "
 					+ " where parent_sector_id is null and amp_sec_scheme_id = "
 					+ auxConfig.getClassification().getAmpSecSchemeId()
-					+ " and (s.deleted is null or s.deleted = false)  order by s.name";
+					+ " and (s.deleted is null or s.deleted = false)  order by " + AmpSector.hqlStringForName("s");
 			qry = session.createQuery(queryString);
 			col = qry.list();
 
@@ -335,7 +335,7 @@ public class SectorUtil {
 			try {
 				session = PersistenceManager.getRequestDBSession();
 				String queryString = "select sc from " + AmpSector.class.getName()
-					+ " sc where (sc.deleted is null or sc.deleted = false) order by sc.name";
+					+ " sc where (sc.deleted is null or sc.deleted = false) order by " + AmpSector.hqlStringForName("sc");
 				Query qry = session.createQuery(queryString);
 				AmpCaching.getInstance().initSectorsCache(qry.list());
 			} catch (Exception e) {
@@ -409,13 +409,13 @@ public class SectorUtil {
 
 			if (parentSecId.intValue() == 0) {
 				queryString = "select s from " + AmpSector.class.getName()
-						+ " s where s.parentSectorId is null and (s.deleted is null or s.deleted = false) order by s.name";
+						+ " s where s.parentSectorId is null and (s.deleted is null or s.deleted = false) order by " + AmpSector.hqlStringForName("s");
 
 				qry = session.createQuery(queryString);
 			} else {
 				queryString = "select s from " + AmpSector.class.getName()
 						+ " s where (s.parentSectorId=:parentSectorId) "
-						+ " and (s.deleted is null or s.deleted = false) order by s.name";
+						+ " and (s.deleted is null or s.deleted = false) order by " + AmpSector.hqlStringForName("s");
 
 				qry = session.createQuery(queryString);
 				qry.setParameter("parentSectorId", parentSecId, Hibernate.LONG);
@@ -649,7 +649,7 @@ public class SectorUtil {
 			session = PersistenceManager.getSession();
 			queryString = " select Sector from "
 					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is null and (Sector.deleted is null or Sector.deleted = false) order by Sector.name";
+					+ " Sector where Sector.parentSectorId is null and (Sector.deleted is null or Sector.deleted = false) order by " + AmpSector.hqlStringForName("Sector");
 			q = session.createQuery(queryString);
 			iter = q.list().iterator();
 
@@ -684,7 +684,7 @@ public class SectorUtil {
 			session = PersistenceManager.getSession();
 			queryString = " select Sector from "
 					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is not null and (Sector.deleted is null or Sector.deleted = false) order by Sector.name";
+					+ " Sector where Sector.parentSectorId is not null and (Sector.deleted is null or Sector.deleted = false) order by " + AmpSector.hqlStringForName("Sector");
 			q = session.createQuery(queryString);
 			iter = q.list().iterator();
 			while (iter.hasNext()) {
@@ -906,9 +906,9 @@ public class SectorUtil {
 
 		try {
 			sess = PersistenceManager.getSession();
-			// AMP-16239
+			String sectorNameHql = AmpSector.hqlStringForName("s");
 			String queryString = "select s from " + AmpSector.class.getName()
-					+ " s where s.name like '%" + key + "%' and (s.deleted is null or s.deleted = false) ";
+					+ " s where " + sectorNameHql + " like '%" + key + "%' and (s.deleted is null or s.deleted = false) ";
 			qry = sess.createQuery(queryString);
 			Iterator itr = qry.list().iterator();
 			col = new ArrayList();
@@ -1144,7 +1144,7 @@ public class SectorUtil {
 			session = PersistenceManager.getSession();
 			queryString = "select pi from "
 					+ AmpSector.class.getName()
-					+ " pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null and (pi.deleted is null or pi.deleted = false) order by pi.name ";
+					+ " pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null and (pi.deleted is null or pi.deleted = false) order by " + AmpSector.hqlStringForName("pi");
 			qry = session.createQuery(queryString);
 			qry.setParameter("schemeId", schemeId, Hibernate.INTEGER);
 			col = qry.list();
@@ -1222,7 +1222,7 @@ public class SectorUtil {
 					+ "where af.ampFundingId in (select afd.ampFundingId from "
 					+ AmpFundingDetail.class.getName() + " afd)))))" +
 
-					") order by pi.name ";
+					") order by " + AmpSector.hqlStringForName("pi");
 
 			qry = session.createQuery(queryString);
 			qry.setParameter("schemeId", schemeId, Hibernate.INTEGER);

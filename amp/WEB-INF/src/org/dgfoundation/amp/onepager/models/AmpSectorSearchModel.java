@@ -61,12 +61,12 @@ public class AmpSectorSearchModel extends
 					PARAM.SECTOR_SCHEME);
 			Criteria crit = session.createCriteria(AmpSector.class);
 			crit.setCacheable(true);
-			Junction junction = Restrictions.conjunction().add(
+			Junction junction = Restrictions.conjunction().add(Restrictions.and(Restrictions.eq("ampSecSchemeId", scheme), Restrictions.or( Restrictions.isNull("deleted"), Restrictions.eq( "deleted", Boolean.FALSE))));
+			/*Junction junction = Restrictions.conjunction().add(
 					Restrictions.eq("ampSecSchemeId", scheme));
-
 			if (input.trim().length() > 0)
 				junction.add(getTextCriterion("name", input));
-			junction.add( Restrictions.or( Restrictions.isNull("deleted"), Restrictions.eq( "deleted", Boolean.FALSE)));
+			junction.add( Restrictions.or( Restrictions.isNull("deleted"), Restrictions.eq( "deleted", Boolean.FALSE)));*/
 			crit.add(junction);
 			crit.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)

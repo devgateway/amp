@@ -155,7 +155,7 @@ public class DbUtil {
             queryString.append(" and org.orgGrpId=:orgGroupId ");
         }
         if (publicView) {
-            queryString.append(String.format(" and (act.draft is null or act.draft=false) and act.approvalStatus IN ('%s, '%s') and tm.parentTeamId is not null ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
+            queryString.append(String.format(" and (act.draft is null or act.draft=false) and act.approvalStatus IN ('%s', '%s') and tm.parentTeamId is not null ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
         }
 
         queryString.append("order by org.name asc");

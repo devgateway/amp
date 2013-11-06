@@ -644,7 +644,7 @@ public class DbUtil {
          */
         try {
         	String oql = "select act.ampActivityId, act.ampId, act.name ";
-            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true, true);
+            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, false, true);
             //oql += " order by act.name";
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
@@ -659,10 +659,10 @@ public class DbUtil {
             if (financingInstrumentId != null) {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
-            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
-	            query.setLong("transactionType", transactionType);
-	            query.setString("adjustmentType",adjustmentTypeActual);
-            }
+            //if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+	            //query.setLong("transactionType", transactionType);
+	            //query.setString("adjustmentType",adjustmentTypeActual);
+            //}
             activities = query.list();
         }
         catch (Exception e) {

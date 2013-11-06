@@ -684,7 +684,7 @@
 				<page>aim_addRegionalObservationActor</page>
 				
 				<page>aim_addChildWorkspaces</page>
-				<page>aim_addOrgGrpPopupLayout</page>
+
 				<page>aim_viewOrgDetailPopupLayout</page>
 				<page>aim_viewCommentPopupLayout</page>
 				<page>aim_viewCommentOverviewPopupLayout</page>
@@ -786,6 +786,7 @@
 				<page>selectPledgeLocation</page>
 				<page>selectPledgeProgram</page>
 				<page>previewActivityPopin</page>
+                <page>aim_addOrgGrpPopupLayout</page>
 			</module>
             <module name="orgProfile">
                 <page>orgSummary</page>

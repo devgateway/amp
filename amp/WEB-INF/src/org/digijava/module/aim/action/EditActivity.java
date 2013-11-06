@@ -220,7 +220,7 @@ public class EditActivity extends Action {
     		eaForm.getMessages().clear();
         }
     }
-    
+
     /* Set Map configuration */
     AmpMapConfig map = DbHelper.getMapByType(MapConstants.MapType.ARCGIS_API);
     if (map != null && map.getMapUrl() != null && !map.getMapUrl().equals(""))
@@ -679,19 +679,19 @@ public class EditActivity extends Action {
             else
             	 eaForm.getIdentification().setBudgetCV(0L);
 
-            
 
-        /* End - Insert Categories */ 
-        
+
+        /* End - Insert Categories */
+
         /* Injecting documents into session */
 
         // Since this action is used for previews only
         // We can set this flag to true
         String[] tmp = {"true"};
         //request.getParameterMap().put("viewAllRights", tmp);
-        
+
         SelectDocumentDM.clearContentRepositoryHashMap(request);
-        
+
         //Added because of a problem with the save as draft and redirect; also because of problem with logframe link from activity form
         try {
         	//this does not work, throws java.lang.IllegalStateException: No modifications are allowed to a locked ParameterMap
@@ -765,19 +765,19 @@ public class EditActivity extends Action {
 
         eaForm.getIdentification().setSsc_component_title(activity.getSscComponentTitle());
         eaForm.getIdentification().setSsc_component_description(activity.getSscComponentDescription());
-        
+
         AmpCategoryValue modalities = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.MODALITIES_KEY, activity.getCategories());
         eaForm.getIdentification().setSsc_modalities(modalities == null ? null : modalities.getLabel());
-        
+
         AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
         eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null :typeOfCooperation.getLabel());
 
         AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
         eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null :typeOfImplementation.getLabel());
 
-        
+
         //eaForm.getIdentification().setSsc_typeOfCooperation(activity.)
-        
+
         if (activity != null) {
         	// set title,description and objective
 
@@ -870,7 +870,7 @@ public class EditActivity extends Action {
       	}else{
       		eaForm.getIdentification().setBudgetdepartments(new ArrayList<AmpDepartments>());
       	}
-          
+
           /*
            * Tanzania adds
            */
@@ -944,7 +944,7 @@ public class EditActivity extends Action {
       		//
 //      		Iterator it = activity.getChapter().getImputations().iterator();
 //      		while (it.hasNext()) {
-//      			
+//
 //      		}
       	}
 
@@ -1219,9 +1219,9 @@ public class EditActivity extends Action {
         	  eaForm.getPrograms().setProgramDescription(activity
                                        .getProgramDescription().trim());
 
-          
-          
-            
+
+
+
           try{
         	  eaForm.getFunding().setShowActual(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL)==null?false:true);
         	  eaForm.getFunding().setShowActual(true);
@@ -1250,7 +1250,7 @@ public class EditActivity extends Action {
           else{
         	  toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
           }
-          
+
           FundingCalculationsHelper activityTotalCalculations = new FundingCalculationsHelper();
           activityTotalCalculations.setDebug(debug);
 
@@ -1260,20 +1260,20 @@ public class EditActivity extends Action {
           {
         	  AmpFunding ampFunding = fundItr.next();
         	  AmpOrganisation org = ampFunding.getAmpDonorOrgId();
-        	  if(org == null || org.getAmpOrgId()==null) 
+        	  if(org == null || org.getAmpOrgId()==null)
         		  continue;
-                        
+
         	  FundingOrganization fundOrg = new FundingOrganization(ampFunding);
 
         	  Funding fund = buildFundingItem(ampFunding, activityTotalCalculations, toCurrCode, isPreview, tm);
-        	  
+
         	  Collection<AmpFundingDetail> fundDetails = ampFunding.getFundingDetails();
         	  if (fundDetails != null && fundDetails.size() > 0)
         	  {
         		  eaForm.getFunding().setFundingDetails(new ArrayList<FundingDetail>(fund.getFundingDetails()));
         	  }
 
-        	   
+
         	  int index = fundingOrgs.indexOf(fundOrg);
         	  // logger.info("Getting the index as " + index
         	  //	+ " for fundorg " + fundOrg.getOrgName());
@@ -1282,7 +1282,7 @@ public class EditActivity extends Action {
         	  }
         	  if (fundOrg.getFundings() == null)
         		  fundOrg.setFundings(new ArrayList<Funding>());
-        	  
+
         	  fundOrg.getFundings().add(fund);
 
         	  if (index > -1) {
@@ -1323,7 +1323,7 @@ public class EditActivity extends Action {
                 		  	currFunding.setSubtotalActualDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
                 			currFunding.setSubtotalPlannedDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedDisbOrder().doubleValue()));
                 			currFunding.setSubtotalPipelineDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineDisbOrder().doubleValue()));
-                		  
+
                 			currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
                 			currFunding.setAmpFundingDetails(null);
 		        		  //TODO:aca se setearia el resto
@@ -1345,10 +1345,10 @@ public class EditActivity extends Action {
         	  eaForm.getFunding().setTotalCommitments(activityTotalCalculations.getTotalCommitments().getCalculations());
         	  eaForm.getFunding().setTotalCommitmentsDouble(activityTotalCalculations.getTotalCommitments()
         			  .getValue().doubleValue());
-        	  
+
         	  eaForm.getFunding().setTotalDisbursements(activityTotalCalculations.getTotActualDisb().getCalculations());
         	  eaForm.getFunding().setTotalPlannedDisbursements(activityTotalCalculations.getTotPlanDisb().getCalculations());
-        	  eaForm.getFunding().setTotalExpenditures(activityTotalCalculations.getTotPlannedExp().getCalculations());  
+        	  eaForm.getFunding().setTotalExpenditures(activityTotalCalculations.getTotPlannedExp().getCalculations());
         	  eaForm.getFunding().setTotalPlannedCommitments(activityTotalCalculations.getTotPlannedComm().getCalculations());
         	  eaForm.getFunding().setTotalPlannedReleaseOfFunds(activityTotalCalculations.getTotPlannedRoF().getCalculations());
         	  eaForm.getFunding().setTotalPlannedEDD(activityTotalCalculations.getTotPlannedEDD().getCalculations());
@@ -1357,7 +1357,7 @@ public class EditActivity extends Action {
         	  eaForm.getFunding().setTotalActualDisbursementsOrders(activityTotalCalculations.getTotActualDisbOrder().getCalculations());
         	  eaForm.getFunding().setTotalPlannedDisbursementsOrders(activityTotalCalculations.getTotPlannedDisbOrder().getCalculations());
         	  eaForm.getFunding().setUnDisbursementsBalance(activityTotalCalculations.getUnDisbursementsBalance().getCalculations());
-        	  
+
           }
           else {
               	//actual
@@ -1378,23 +1378,23 @@ public class EditActivity extends Action {
               //pipeline
               eaForm.getFunding().setTotalPipelineCommitments(activityTotalCalculations.getTotPipelineComm().toString());
           }
-          
-          // calculate consumption and delivery rates 
-		  if (activityTotalCalculations.getTotActualExp() != null && activityTotalCalculations.getTotActualExp().doubleValue() != 0 
+
+          // calculate consumption and delivery rates
+		  if (activityTotalCalculations.getTotActualExp() != null && activityTotalCalculations.getTotActualExp().doubleValue() != 0
 					&& activityTotalCalculations.getTotActualDisb() != null && activityTotalCalculations.getTotActualDisb().doubleValue() != 0) {
 			  double consumptionRate = activityTotalCalculations.getTotActualExp().doubleValue() / activityTotalCalculations.getTotActualDisb().doubleValue();
 			  NumberFormat formatter = DecimalFormat.getPercentInstance();
 			  eaForm.getFunding().setConsumptionRate(formatter.format(consumptionRate));
 		  }
-		  
+
 		  if (activityTotalCalculations.getTotActualComm() != null && activityTotalCalculations.getTotActualComm().doubleValue() != 0
 				    && activityTotalCalculations.getTotActualDisb() != null && activityTotalCalculations.getTotActualDisb().doubleValue() !=0) {
 			  double deliveryRate = activityTotalCalculations.getTotActualDisb().doubleValue() / activityTotalCalculations.getTotActualComm().doubleValue();
 			  NumberFormat formatter = DecimalFormat.getPercentInstance();
 			  eaForm.getFunding().setDeliveryRate(formatter.format(deliveryRate));
-		  }		  
-          
-          
+		  }
+
+
 		  ArrayList regFunds = RegionalFundingsHelper.getRegionalFundings(activity.getRegionalFundings(), toCurrCode, 0);
           /*Iterator rItr = activity.getRegionalFundings().iterator();
 
@@ -1764,7 +1764,7 @@ public class EditActivity extends Action {
           eaForm.getContactInfo().setMfdCntOrganization(activity.getMfdCntOrganization());
           eaForm.getContactInfo().setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
           eaForm.getContactInfo().setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
-          
+
           eaForm.getContactInfo().setPrjCoFirstName(activity.getPrjCoFirstName());
           eaForm.getContactInfo().setPrjCoLastName(activity.getPrjCoLastName());
           eaForm.getContactInfo().setPrjCoEmail(activity.getPrjCoEmail());
@@ -1772,7 +1772,7 @@ public class EditActivity extends Action {
           eaForm.getContactInfo().setPrjCoOrganization(activity.getPrjCoOrganization());
           eaForm.getContactInfo().setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
           eaForm.getContactInfo().setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
-          
+
           eaForm.getContactInfo().setSecMiCntFirstName(activity.getSecMiCntFirstName());
           eaForm.getContactInfo().setSecMiCntLastName(activity.getSecMiCntLastName());
           eaForm.getContactInfo().setSecMiCntEmail(activity.getSecMiCntEmail());
@@ -1904,11 +1904,11 @@ public class EditActivity extends Action {
 	      }
 
 
-// The if block below doesn't seem to make any sense. I don't see any reason to set the 
-// activity creator when editing the activity. 
-// If someone still need to re-enable this piece of code at least change the condition 
+// The if block below doesn't seem to make any sense. I don't see any reason to set the
+// activity creator when editing the activity.
+// If someone still need to re-enable this piece of code at least change the condition
 // eaForm.getIsPreview!=1 => isPreview
-//          
+//
 //          if (eaForm.getIsPreview() != 1 && !isPublicView) {
 //            AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.
 //                getMemberId());
@@ -2107,7 +2107,7 @@ public class EditActivity extends Action {
 //    	 			eaForm.setButtonText("validate");
 //    	 		}/*else {
 //    	 			formBean.setButtonText("approvalAwaited");
-//    	 		}*/		 		
+//    	 		}*/
 //    	 	}
 //    	} else {
 //    		eaForm.setButtonText("none");	// In case of management-workspace
@@ -2134,20 +2134,22 @@ public class EditActivity extends Action {
 
     				//only the team leader of the team that owns the activity has rights to validate it
     				//if activity is already approved it will display the edit value
-    				if( apps.getValidation()!= null && "alledits".compareTo(apps.getValidation().toLowerCase())==0 )
-    					if(teamLeadFlag && activity.getTeam() !=null &&
+    				if ( apps.getValidation() != null && "alledits".equalsIgnoreCase(apps.getValidation())) {
+    					if (teamLeadFlag && activity.getTeam() != null &&
     					   teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId()) &&
-    					   (Constants.STARTED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0 ||
-    					    Constants.EDITED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0)
-    					   )
-    					eaForm.setButtonText("validate");
+    					   (Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()) ||
+    					    Constants.EDITED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()))
+    					   ) {
+    					    eaForm.setButtonText("validate");
+                        }
+                    }
     					//else eaForm.setButtonText("edit");
 
     				//only the team leader of the team that owns the activity has rights to validate it
     				//it will display the validate label only if it is just started and was not approved not even once
-    				if(apps.getValidation()!=null && "newonly".compareTo(apps.getValidation().toLowerCase())==0)
-    					if(teamLeadFlag &&
-    							Constants.STARTED_STATUS.compareTo(activity.getApprovalStatus().toLowerCase())==0
+    				if (apps.getValidation() != null && "newonly".equalsIgnoreCase(apps.getValidation()))
+    					if (teamLeadFlag &&
+    							Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())
     							 && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())
     					) eaForm.setButtonText("validate");
     					//else eaForm.setButtonText("edit");
@@ -2157,7 +2159,7 @@ public class EditActivity extends Action {
     setLineMinistryObservationsToForm(activity, eaForm);
 
 	//structures
-    
+
     ArrayList<AmpStructure> structures = new ArrayList<AmpStructure>(activity.getStructures());
     Collections.sort(structures);
 
@@ -2178,28 +2180,28 @@ public class EditActivity extends Action {
     	return mapping.findForward("forwardDebugFM");
     return mapping.findForward("forward");
   }
-    
+
   public Funding buildFundingItem(AmpFunding ampFunding, FundingCalculationsHelper activityTotalCalculations, String toCurrCode, boolean isPreview, TeamMember tm)
   {
 	  //Funding funding = new Funding();
-	  
+
    	  Funding fund = new Funding();
 	  //fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
 	  fund.setTypeOfAssistance(ampFunding.getTypeOfAssistance());
 	  fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
 	  fund.setFundingStatus(ampFunding.getFundingStatus());
 	  fund.setModeOfPayment(ampFunding.getModeOfPayment());
-	            
+
 	  fund.setActStartDate(DateConversion.ConvertDateToString(ampFunding.getActualStartDate()));
 	  fund.setActCloseDate(DateConversion.ConvertDateToString(ampFunding.getActualCompletionDate()));
-	            
+
 	  fund.setFundingId(ampFunding.getAmpFundingId().longValue());
 	  fund.setGroupVersionedFunding(ampFunding.getGroupVersionedFunding());
 	  fund.setOrgFundingId(ampFunding.getFinancingId());
-	  
+
 	  if (ampFunding.getSourceRole() != null)
 		  fund.setSourceRole(ampFunding.getSourceRole().getName());
-	            
+
 	  fund.setConditions(ampFunding.getConditions());
 	  fund.setDonorObjective(ampFunding.getDonorObjective());
 	  fund.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
@@ -2211,13 +2213,13 @@ public class EditActivity extends Action {
 		  fund.setCode("");
 		  fund.setTitle("");
 	  }
-                	
+
 	  /* Get MTEF Projections */
 	  ArrayList<MTEFProjection> MTEFProjections	= new ArrayList<MTEFProjection>();
-	  if (ampFunding.getMtefProjections() != null) 
+	  if (ampFunding.getMtefProjections() != null)
 	  {
 		  Iterator<AmpFundingMTEFProjection> iterMtef	= ampFunding.getMtefProjections().iterator();
-		  while ( iterMtef.hasNext() ) 
+		  while ( iterMtef.hasNext() )
 		  {
 			  AmpFundingMTEFProjection ampProjection		= iterMtef.next();
 			  MTEFProjection	projection					= new MTEFProjection();
@@ -2227,7 +2229,7 @@ public class EditActivity extends Action {
 				  projection.setProjected( ampProjection.getProjected().getId() );
 			  else
 				  logger.error("Projection with date " + ampProjection.getProjectionDate() + " has no type (neither projection nor pipeline) !!!!");
-			  
+
 			  projection.setCurrencyCode( ampProjection.getAmpCurrency().getCurrencyCode() );
 			  projection.setCurrencyName( ampProjection.getAmpCurrency().getCurrencyName() );
 			  if (ampProjection.getProjectionDate() != null) {
@@ -2238,7 +2240,7 @@ public class EditActivity extends Action {
 			  }
 		  }
 	  }
-	       
+
 	  Collections.sort(MTEFProjections);
 	  fund.setMtefProjections(MTEFProjections);
 	  /* END - Get MTEF Projections */
@@ -2249,17 +2251,17 @@ public class EditActivity extends Action {
 	  if (tm != null) {
 		  currencyCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
 	  }
-	  else { 
+	  else {
 		  currencyCode = Constants.DEFAULT_CURRENCY;
 	  }
 
-	  if (fundDetails != null && fundDetails.size() > 0) 
+	  if (fundDetails != null && fundDetails.size() > 0)
 	  {
 		  //  Iterator fundDetItr = fundDetails.iterator();
 		  // long indexId = System.currentTimeMillis();
-	      
+
 		  activityTotalCalculations.doCalculations(ampFunding, toCurrCode);
-                                
+
 		  List<FundingDetail> fundDetail = activityTotalCalculations.getFundDetailList();
 		  if (isPreview)
 		  {
@@ -2267,14 +2269,14 @@ public class EditActivity extends Action {
 			  while(fundingIterator.hasNext())
 			  {
 				  FundingDetail currentFundingDetail = fundingIterator.next();
-                 	
+
 				  currentFundingDetail.getContract();
 				  Double currencyAppliedAmount;
-				  
+
 				  if(currentFundingDetail.getFixedExchangeRate() == null)
 				  {
-					  
-					  currencyAppliedAmount			= getAmountInDefaultCurrency(currentFundingDetail, currencyCode );                    	
+
+					  currencyAppliedAmount			= getAmountInDefaultCurrency(currentFundingDetail, currencyCode );
 				  }
 				  else
 				  {
@@ -2287,19 +2289,19 @@ public class EditActivity extends Action {
 
 			  }
 		  }
-	            
+
 		  if (fundDetail != null)
 			  Collections.sort(fundDetail, FundingValidator.dateComp);
-		  
+
 		  fund.setFundingDetails(fundDetail);
 		  fund.setAmpFundingDetails(fundDetails);
 	              // funding.add(fund);
 	  }
-	  
+
 	  return fund;
   }
-  
-  
+
+
   public final static ArrayList<AmpStructure> eager_copy(Set<AmpStructure> structures) throws CloneNotSupportedException
   {
 	  ArrayList<AmpStructure> res = new ArrayList<AmpStructure>();
@@ -2316,8 +2318,8 @@ public class EditActivity extends Action {
 	  }
 	  return res;
   }
-  
-  
+
+
   private Long getCorrectActivityVersionIdToUse(Long activityId, EditActivityForm form) {
 	  Long lastVersionId	= ActivityVersionUtil.getLastVersionForVersion(activityId);
 	  if ( lastVersionId != null && !lastVersionId.equals(activityId) ) {

@@ -79,7 +79,7 @@ public class AmpAgreementSearchModel extends
 
             if (!isExactMatch()){
                 list.addAll(agItems);
-				list.add(NEW_AGREEMENT);
+				list.add(0,NEW_AGREEMENT);
 			}
 			else{
 				Iterator<AmpAgreement> it = agItems.iterator();

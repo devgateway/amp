@@ -12,9 +12,6 @@ function isVoid(name){
 	if ( name == null ||name.length==0){
     	return true;
     }		
-	if (!isNaN(name)){
-    	return 2;
-    }		
 	return false;		
 }
 

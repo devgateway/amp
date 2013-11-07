@@ -3215,6 +3215,21 @@ public class DbUtil {
 		}
 	}
 
+    public static void saveOrUpdate(Object object) {
+        Session sess = null;
+        Transaction tx = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            sess.saveOrUpdate(object);
+            // session.flush();
+        } catch (Exception e) {
+            logger.error(e);
+        } finally {
+            PersistenceManager.releaseSession(sess);
+        }
+    }
+
 	public static AmpSectorScheme getAmpSectorSchemeById(Long schemeId) {
 		Session session = null;
 		Query q = null;

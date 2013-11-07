@@ -14,12 +14,8 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddSectorForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -116,7 +112,7 @@ public class EditSector extends Action {
 										}
 										
 										logger.debug("Updating.............................................");
-										DbUtil.update(ampSector);
+										DbUtil.saveOrUpdate(ampSector);
 										Long schemeId =ampSector.getAmpSecSchemeId().getAmpSecSchemeId();
 										Integer schemeID = new Integer(schemeId.intValue());
 										editSectorForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(schemeID));

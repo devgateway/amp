@@ -4,6 +4,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
 import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.function.VarArgsSQLFunction;
+import org.hibernate.type.StandardBasicTypes;
 
 public class AmpPostgresDialect extends org.hibernate.dialect.PostgreSQLDialect
 {
@@ -15,7 +16,7 @@ public class AmpPostgresDialect extends org.hibernate.dialect.PostgreSQLDialect
 //				new SQLFunctionTemplate(Hibernate.STRING, "translate_field('?1, ?2, ?3, ?4, ?5, ?6, ?7)"));
 		
 		registerFunction("translate_field", // the HQL function **NEEDS** to have the same name and order of arguments as the SQL one, else the SQL-HQL duality in constructing queries will not work!
-				new VarArgsSQLFunction(Hibernate.STRING, "translate_field(", ", " , ")" ));
+				new VarArgsSQLFunction(StandardBasicTypes.STRING, "translate_field(", ", " , ")" ));
 		
 	}
 }

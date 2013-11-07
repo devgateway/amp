@@ -2045,17 +2045,17 @@ public class TeamUtil {
                     + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
                     + AmpTeamReports.class.getName() 
                     + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
-                   if (name != null) {
-                    queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
-                   }
                    if(onlyCategorized!=null && onlyCategorized){
                 	   queryString += " and r.reportCategory is not null ";
                    }
                    if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
                   	 queryString += " and r.reportCategory=:repCat ";
                   }
+                   if (name != null) {
+                	   queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
+               	       queryString +=  " order by " + reportNameHql;
+                   }
 
-                queryString +=  " order by " + reportNameHql;
                 qry = session.createQuery(queryString);
                 qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
                 qry.setParameter("teamid", teamId);

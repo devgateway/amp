@@ -2222,9 +2222,10 @@ border-right: 1px solid rgb(208, 208, 208);
         initOtherInformationCounter();
 
         function initOtherInformationCounter() {
-            var otherInformationCounterTxt = ["(", 256 - $("#otherInformation").val().length, " <digi:trn>characters remaining</digi:trn>", ")"];
-            otherInformationCounter.html(otherInformationCounterTxt.join(""));
-            otherInformationProgressBar.css("width", $("#otherInformation").val().length/256*100 + "%");
+        	var otherInformationTxt = $("#otherInformation").val() == undefined? "" : $("#otherInformation").val(); 
+    		var otherInformationCounterTxt = ["(", 256 - otherInformationTxt.length, " <digi:trn>characters remaining</digi:trn>", ")"];
+    		otherInformationCounter.html(otherInformationCounterTxt.join(""));
+    		otherInformationProgressBar.css("width", otherInformationTxt.length/256*100 + "%");
         }
         $("#otherInformation").bind("keyup", function (event) {
             if (this.value.length > 256) {

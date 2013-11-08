@@ -3311,6 +3311,7 @@ public class DataDispatcher extends DispatchAction {
 		
 
 		try {
+			//logger.error("getProgress: outputting " + progressText.toString());
 			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
 			outputStream.write(progressText.toString());
 		} finally {
@@ -3731,6 +3732,7 @@ public class DataDispatcher extends DispatchAction {
 		}
         //organizationList = DbUtil.getOrganizations(filter);
         if (filter.getSelOrgIds()!= null && filter.getSelOrgIds().length == 1 && filter.getSelOrgIds()[0]!=-1){
+        	// the user has selected / filtered by org
         	StringBuffer csvString = new StringBuffer();
             String odaGrowthData = "";
             Map<String, BigDecimal> map = new LinkedHashMap<String, BigDecimal>();
@@ -3822,6 +3824,8 @@ public class DataDispatcher extends DispatchAction {
 		    	return null;
 			}
         } else {
+        	
+        	// no org filter - take all the organizations one by one and compare
         	StringBuffer csvString = new StringBuffer();
             String odaGrowthData = "";
             Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();

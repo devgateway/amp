@@ -941,10 +941,22 @@ function countSelected (selector){
 	return count;
 }
 
+function closeLoadingPanel()
+{
+    loadingPanel.hide();
+    loadingPanel.cancelEvent.fire();
+    panelLoaded = true;
+    if(navigator.appName == "Microsoft Internet Explorer")
+        window.document.execCommand('Stop');
+    else
+        window.stop();
+}
+
 var callbackApplyFilterCall = {
 		  success: function(o) {
 			  //loadingPanel.hide();
 			  panelLoaded = true;
+			  closeLoadingPanel();
 			  refreshBoxes(o);
 			  refreshGraphs();
 			  if (document.getElementById("dashboardType").value!=4)

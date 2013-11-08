@@ -1808,10 +1808,15 @@ public class TeamUtil {
             Map<Long, Boolean> map = new TreeMap<Long, Boolean>(); // we want them ordered by id
             for(Object[] item:rs)
             	map.put((Long) item[0], (Boolean) item[1]);
+            if(map.isEmpty()){
+            	//no reports to fetch
+            	return col;
+            }
             
             String idsList = getCommaSeparatedList(map.keySet());
             
             col = new ArrayList();
+
             queryString = String.format("select r from " + AmpReports.class.getName()
 	                    + " r " + "where (r.ampReportId in (%s)) ", idsList);
             

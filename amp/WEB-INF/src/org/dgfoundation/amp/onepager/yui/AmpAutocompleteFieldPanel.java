@@ -33,9 +33,11 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Session;
 
+import javax.jcr.RepositoryException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -275,12 +277,34 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			@Override
 			protected void respond(final AjaxRequestTarget target) {
 				String selectedString = getRequestCycle().getRequest().getRequestParameters().getParameterValue("selectedString").toString();
-				// hide loading icon:
-                Long objId = Long.parseLong(selectedString);
-				target.appendJavaScript("$('#" + indicator.getMarkupId() + "').hide();");
-                CHOICE choice = getSelectedChoice(objId);
-
-				onSelect(target, choice);
+                CHOICE choice = null;
+                if (objClass.isAssignableFrom(NodeWrapper.class)){
+                    //we need to treat Jackrabbit Node differently
+                    String objId = selectedString;
+                    //get all choices
+                    Collection<CHOICE> choices = getChoices(null);
+                    for (CHOICE ch: choices){
+                        NodeWrapper nw = (NodeWrapper) ch;
+                        String uuid = null;
+                        try {
+                            uuid = nw.getNode().getUUID();
+                        } catch (RepositoryException e) {
+                            logger.error("Can't get uuid for node: ", e);
+                            break;
+                        }
+                        if (objId.equals(uuid)){
+                            choice = ch;
+                            break;
+                        }
+                    }
+                }
+                else{
+                    Long objId = Long.parseLong(selectedString);
+                    // hide loading icon:
+                    choice = getSelectedChoice(objId);
+                }
+                target.appendJavaScript("$('#" + indicator.getMarkupId() + "').hide();");
+                onSelect(target, choice);
 			}
 		};
 		textField.add(onSelectBehavior);
@@ -302,17 +326,32 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	}
 
     /**
-     * Gets the hibernate id for the specified choice
+     * Gets the object id for the specified choice
+     * Beware: it returns String uuid for Jackrabbit nodes
      *
      * @param choice
      *            the choice that needs value extraction
      * @return the unique id value of the choice
      */
-    protected Long getChoiceId(final CHOICE choice){
+    protected String getChoiceId(final CHOICE choice){
         if (objClass == null){
             objClass = (Class<CHOICE>) choice.getClass();
         }
-        return ContentTranslationUtil.getObjectId(choice);
+        if (choice instanceof NodeWrapper){
+            //we can't use the ContentTranslationUtil for Jackrabbit items, since it works only with hibernate
+            NodeWrapper nodeWrapper = (NodeWrapper) choice;
+            String uuid = null;
+            try {
+                uuid = nodeWrapper.getNode().getUUID();
+            } catch (RepositoryException e) {
+                logger.error("can't get node's uuid:" + e);
+                return null;
+            }
+            return uuid;
+        }
+        else{
+            return String.valueOf(ContentTranslationUtil.getObjectId(choice));
+        }
     }
 
     /**
@@ -379,7 +418,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		List<String[]> choiceValues = new ArrayList<String[]>();
 		for (CHOICE choice : choices) {
 			Integer choiceLevel = getChoiceLevel(choice);
-            Long choiceId = getChoiceId(choice);
+            String choiceId = getChoiceId(choice);
 			String choiceValue = getChoiceValue(choice);
 			if (showAcronyms()){
 				String acronym = getAcronym(choice);
@@ -392,7 +431,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			}
 				
 			choiceValues.add(new String[] { choiceValue,
-					choiceLevel != null ? choiceLevel.toString() : "0", choiceId.toString()});
+					choiceLevel != null ? choiceLevel.toString() : "0", choiceId});
 		}
 
 		return choiceValues.toArray(new String[0][0]);

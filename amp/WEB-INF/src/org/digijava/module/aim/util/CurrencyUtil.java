@@ -19,18 +19,11 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
-import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpCurrencyRate;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
@@ -732,6 +725,10 @@ public class CurrencyUtil {
 			qry1 = sess.createQuery(queryString);
 			qry1.setParameter("id", id, Hibernate.LONG);
 			ampCurrency = (AmpCurrency)qry1.uniqueResult();
+
+            if (ampCurrency == null) {
+                ampCurrency = getDefaultCurrency();
+            }
 			
 			curr = new Currency();
 			curr.setCurrencyId(ampCurrency.getAmpCurrencyId());
@@ -747,7 +744,7 @@ public class CurrencyUtil {
 				curr.setCurrencyRateId(ampCurrRate.getAmpCurrencyRateId());
 				curr.setExchangeRate(ampCurrRate.getExchangeRate());
 			}else{
-				curr.setExchangeRate(new Double(1));
+				curr.setExchangeRate(1.0);
 			}
 	
 		

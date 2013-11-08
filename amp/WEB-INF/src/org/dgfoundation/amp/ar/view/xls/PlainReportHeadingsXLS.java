@@ -49,6 +49,7 @@ public class PlainReportHeadingsXLS extends ReportHeadingsXLS {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	protected void createHierarchyHeaderCell (int curDepth) {
 		ColumnReportData columnReport = (ColumnReportData) item;
 		Integer rowSpan = columnReport.getMaxColumnDepth();
@@ -77,13 +78,12 @@ public class PlainReportHeadingsXLS extends ReportHeadingsXLS {
 						}
 					}					
 				}
-			}else{
-				colId.dec();
 			}
 
 	}
 	
-	protected void createHeadingBorders (int curDepth) {
+	@Override
+	protected void createHeadingBorders (int curDepth) {		
 		ColumnReportData columnReport = (ColumnReportData) item;
 		if (curDepth == 0) {
 			int maxRowSpan		= 1;

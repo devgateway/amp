@@ -779,7 +779,8 @@ public class AmpMessageActions extends DispatchAction {
         	   }        	   
            }else if(request.getParameter("fwd")!=null && request.getParameter("fwd").equals("fillForm")){
         	   messagesForm.setMessageName("FWD: "+ msg.getName());
-        	   messagesForm.setForwardedMsg(msgHelper);
+        	   messagesForm.setDescription(msg.getDescription());
+          	   messagesForm.setForwardedMsg(msgHelper);
            }
            //related activity possibilities
             HttpSession session = request.getSession();

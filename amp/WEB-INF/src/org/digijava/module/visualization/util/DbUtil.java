@@ -929,19 +929,19 @@ public class DbUtil {
 		Session session = null;
 		Query q = null;
 		String queryString = null;
-		Iterator<AmpActivityVersion> iter = null;
+		Iterator<Long> iter = null;
 
 		try {
 			session = PersistenceManager.getSession();
-			queryString = " select act from "
+			queryString = " select act.ampActivityId from "
 					+ AmpActivityVersion.class.getName()
 					+ " act inner join act.categories categ where categ.id in ("+catList+")";
 			q = session.createQuery(queryString);
 			iter = q.list().iterator();
 
 			while (iter.hasNext()) {
-				AmpActivityVersion act = (AmpActivityVersion) iter.next();
-				ret += act.getAmpActivityId().toString();
+				Long actId = (Long) iter.next();
+				ret += actId.toString();
 				if (iter.hasNext())
 					ret += ",";
 			}

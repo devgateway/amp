@@ -216,7 +216,7 @@ var updateFullList = {
 				}
 		  },
 		  failure: function(o) {
-			  alert("problema");
+			  //alert("problema");
 		  }
 		};
 
@@ -1096,7 +1096,7 @@ var callbackUpdateLoadingPanel = {
 			  	setTimeout(refreshLoadingPanel, 1000);
 		  },
 		  failure: function(o) {
-			  alert("error 45");
+		//  alert("error 45");
 		  }
 		};
 

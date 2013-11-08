@@ -216,7 +216,7 @@ var updateFullList = {
 				}
 		  },
 		  failure: function(o) {
-//			  alert("problema");
+			  alert("problema");
 		  }
 		};
 
@@ -876,7 +876,8 @@ function countSelected (selector){
 var callbackApplyFilterCall = {
 		  success: function(o) {
 			  //loadingPanel.hide();
-			  panelLoaded = true;
+			 // alert('panel loaded!');
+			  closeLoadingPanel();
 			  refreshBoxes(o);
 			  refreshGraphs();
 			  refreshDropdowns();
@@ -1026,6 +1027,7 @@ function callbackApplyFilter(e){
 
 	YAHOO.util.Connect.setForm('visualizationform');
 
+	// loading stuff
 	var sUrl="/visualization/dataDispatcher.do?action=applyFilter" + params;
 
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
@@ -1064,6 +1066,18 @@ function refreshLoadingPanel(){
 		var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackUpdateLoadingPanel);
 	}
 }
+
+function closeLoadingPanel()
+{
+    loadingPanel.hide();
+    loadingPanel.cancelEvent.fire();
+    panelLoaded = true;
+    if(navigator.appName == "Microsoft Internet Explorer")
+        window.document.execCommand('Stop');
+    else
+        window.stop();	
+}
+
 var callbackUpdateLoadingPanel = {
 		  success: function(o) {
 			   loadingPanel.loadingPanel.setBody(o.responseText + '<br/> <img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
@@ -1072,13 +1086,7 @@ var callbackUpdateLoadingPanel = {
 		       $D.setStyle(cancelLink, 'cursor', 'pointer');
 		       cancelLink.appendChild(document.createTextNode(trnCancel));
 		       $E.on(cancelLink, 'click', function(e, o){
-		           loadingPanel.loadingPanel.hide();
-		           loadingPanel.cancelEvent.fire();
-		           panelLoaded = true
-		           if(navigator.appName == "Microsoft Internet Explorer")
-			           window.document.execCommand('Stop');
-		           else
-			           window.stop();
+		    	   closeLoadingPanel();
 		           }, {self:this});
 		       loadingPanel.loadingPanel.appendToBody(document.createElement('br'));
 		       loadingPanel.loadingPanel.appendToBody(cancelLink);
@@ -1089,7 +1097,7 @@ var callbackUpdateLoadingPanel = {
 			  	setTimeout(refreshLoadingPanel, 1000);
 		  },
 		  failure: function(o) {
-//			  alert("error");
+			  alert("error 45");
 		  }
 		};
 
@@ -1165,6 +1173,7 @@ function applyFilterPopin(e){
 	
 	loadingPanel.show();
 	YAHOO.util.Connect.setForm('visualizationform');
+
 	var sUrl="/visualization/dataDispatcher.do?action=applyFilter" + params;
 
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
@@ -1995,6 +2004,7 @@ function initGraph(){
 			};
 
 	YAHOO.util.Connect.setForm('visualizationform');
+
 	var sUrl="/visualization/dataDispatcher.do?action=applyFilter";
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
 }

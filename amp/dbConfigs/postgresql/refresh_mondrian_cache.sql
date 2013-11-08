@@ -298,7 +298,7 @@ DROP TABLE IF EXISTS cached_amp_activity;
 CREATE TABLE cached_amp_activity AS  select * from amp_activity;
 
 DROP TABLE IF EXISTS cached_amp_activity_group;
-CREATE TABLE cached_amp_activity_group AS select * from amp_activity_group;
+INSERT INTO cached_amp_activity_group SELECT * FROM amp_activity_group WHERE amp_activity_last_version_id IS NOT NULL;
 
 DROP TABLE IF EXISTS cached_v_donor_date_hierarchy;
 CREATE TABLE cached_v_donor_date_hierarchy AS SELECT * FROM v_donor_date_hierarchy limit 0;

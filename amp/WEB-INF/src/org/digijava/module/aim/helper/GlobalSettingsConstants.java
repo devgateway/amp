@@ -128,4 +128,6 @@ public class GlobalSettingsConstants {
     public static final String SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES = "Show Workspace Filter In Team Workspace";
     
     public static final String ACTIVITY_AUTO_SAVE_SECONDS = "Seconds to Auto-Save Activity";
+    
+    public static final String ACTIVITY_TITLE_SIMILARITY_SENSITIVITY = "Activity Title Similarity Sensitivity";
 }

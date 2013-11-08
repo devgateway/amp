@@ -32,7 +32,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
         	logger.debug("Current language in TLS Util:" + TLSUtils.getLangCode());
             logger.debug("flushDirty versionable: " + entity);
             boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, previousState, currentState, propertyNames, types);
-            //ContentTranslationUtil.evictEntityFromCache(entity);
+            ContentTranslationUtil.evictEntityFromCache(entity);
             logger.debug("flushDirty returning: " + ret);
             return ret;
         }

@@ -370,8 +370,7 @@ public class SearchUtil {
         query.append(")");
         query.append(" and roleCode.roleCode=:roleCode ");
         if (!hasComputedOrgs) {
-        	// AMP-16239
-            query.append(" and org.name like :name");
+            query.append(" and " + orgNameHql +" like :name");
             if (tm.getTeamAccessType().equals("Management")) {
                 query.append(String.format(" and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
             }

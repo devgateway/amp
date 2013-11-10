@@ -4927,8 +4927,8 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllLevels()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllLevels()");
+			logger.error(e.toString());
 		}
 		return col;
 	}
@@ -4944,8 +4944,8 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllActivityStatus()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllActivityStatus()");
+			logger.error(e.toString());
 		}
 		return col;
 	}
@@ -4961,8 +4961,8 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllTermAssist()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllTermAssist()");
+			logger.error(e.toString());
 		}
 		return col;
 	}
@@ -4997,8 +4997,8 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception ex) {
-			logger.debug("Exception from getAllDonorOrgs() : " + ex);
-			ex.printStackTrace(System.out);
+			logger.error("Exception from getAllDonorOrgs() : " + ex);
+			logger.error(ex.toString());
 		}
 		return col;
 	}
@@ -5015,8 +5015,8 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllOrgGrpBeeingUsed()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllOrgGrpBeeingUsed()");
+			logger.error(e.toString());
 		}
 		return col;
 
@@ -5050,8 +5050,8 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllOrgTypes()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllOrgTypes()");
+			logger.error(e.toString());
 		}
 		return col;
 	}
@@ -5070,8 +5070,8 @@ public class DbUtil {
 					AmpOrgGroup.class);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllOrgGroupsOfPortfolio()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllOrgGroupsOfPortfolio()");
+			logger.error(e.toString());
 		}
 		return col;		
 	}
@@ -5086,7 +5086,7 @@ public class DbUtil {
 			session = PersistenceManager.getRequestDBSession();
 			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_group", "aog", 
 					new HashMap<String, String>(){{
-						put("org_grp_name", InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "name").getSQLFunctionCall("aog.amp_org_grp_id"));
+						put("org_grp_name", InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall("aog.amp_org_grp_id"));
 					}});
 			String queryString = "select distinct " + rewrittenColumns + " from amp_org_group aog "
 					+ "inner join amp_organisation ao on (ao.org_grp_id = aog.amp_org_grp_id) "
@@ -5096,8 +5096,8 @@ public class DbUtil {
 					AmpOrgGroup.class);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllOrgGroupsOfPortfolio()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllOrgGroupsOfPortfolio()");
+			logger.error(e.toString());
 		}
 		AmpCaching.getInstance().allOrgGroupsOfPortfolio = new ArrayList<AmpOrgGroup>(col);
 		return col;
@@ -5124,8 +5124,8 @@ public class DbUtil {
 					AmpOrgType.class);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllOrgTypesOfPortfolio()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllOrgTypesOfPortfolio()");
+			logger.error(e.toString());
 		}
 		AmpCaching.getInstance().allOrgTypesOfPortfolio = new ArrayList<AmpOrgType>(col);
 		return col;
@@ -5148,7 +5148,7 @@ public class DbUtil {
 			}
 		} catch (Exception e) {
 			logger.error("Unable to get Org Type");
-			logger.debug("Exceptiion " + e);
+			logger.error("Exceptiion " + e);
 		}
 		return ampOrgType;
 	}
@@ -5236,7 +5236,7 @@ public class DbUtil {
 			qry.setParameter("orgType", orgType, Hibernate.LONG);
 			col = qry.list();
 		} catch (Exception ex) {
-			logger.debug("Unable to search " + ex);
+			logger.error("Unable to search " + ex);
 		}
 		return col;
 	}
@@ -5258,7 +5258,7 @@ public class DbUtil {
 			qry.setParameter("orgType", orgType, Hibernate.LONG);
 			col = qry.list();
 		} catch (Exception ex) {
-			logger.debug("Unable to search " + ex);
+			logger.error("Unable to search " + ex);
 		}
 		return col;
 	}
@@ -5279,7 +5279,7 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception ex) {
-			logger.debug("Unable to search " + ex);
+			logger.error("Unable to search " + ex);
 		}
 		return col;
 	}
@@ -5297,7 +5297,7 @@ public class DbUtil {
 			organisation = qry.list();
 		} catch (Exception e) {
 			logger.error("Unable to get all organisation groups");
-			logger.debug("Exceptiion " + e);
+			logger.error("Exceptiion " + e);
 		}
 		return organisation;
 	}
@@ -5317,8 +5317,8 @@ public class DbUtil {
 			qry.setParameter("orgGrpId", Id, Hibernate.LONG);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getOrgByGroup(): " + e);
-			e.printStackTrace(System.out);
+			logger.error("Exception from getOrgByGroup(): " + e);
+			logger.error(e.getMessage() );
 		}
 		return col;
 	}

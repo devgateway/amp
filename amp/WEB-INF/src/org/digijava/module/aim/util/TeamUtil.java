@@ -2381,18 +2381,21 @@ public class TeamUtil {
         	String queryString = "select tr.report.ampReportId from "+ AmpTeamReports.class.getName()+ " tr where (tr.team=:teamId) ";            
         	Query qry = session.createQuery(queryString);
         	qry.setLong("teamId", id);
-        	String excludedIds = getCommaSeparatedList(qry.list());
-        
-        	queryString = String.format("select r from " + AmpReports.class.getName() + " r where r.ampReportId NOT IN (%s) ", excludedIds);
-        	if (tabs != null) {
-        		if (tabs) {
-        			queryString += " and r.drilldownTab=true ";
-        		} else {
-        			queryString += " and r.drilldownTab=false ";
-        		}
-        	};
-        	qry = session.createQuery(queryString);
-        	List<AmpReports> ret = qry.list();
+        	List ids=qry.list();
+        	List<AmpReports> ret=new ArrayList<AmpReports>();
+        	if(ids.size()>0){
+	        	String excludedIds = getCommaSeparatedList(ids);
+	        	queryString = String.format("select r from " + AmpReports.class.getName() + " r where r.ampReportId NOT IN (%s) ", excludedIds);
+	        	if (tabs != null) {
+	        		if (tabs) {
+	        			queryString += " and r.drilldownTab=true ";
+	        		} else {
+	        			queryString += " and r.drilldownTab=false ";
+	        		}
+	        	};
+	        	qry = session.createQuery(queryString);
+	        	ret = qry.list();
+        	}
         	return ret;
         }
 

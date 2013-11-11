@@ -101,8 +101,10 @@ public class ReportHeadingsXLS extends XLSExporter {
 			this.createHierarchyHeaderCell(curDepth);
 			
 			this.createHeadingBorders(curDepth);
-			
-			colId.inc();			
+			if(! (this instanceof PlainReportHeadingsXLS )){
+				//this should only be called if it's not a plain XLS report.
+				colId.inc();
+			}
 			Iterator i = columnReport.getItems().iterator();
 			//int cellCount = 0;
 			while (i.hasNext()) {

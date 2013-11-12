@@ -52,6 +52,7 @@ function showSection(itemId){
 		$('html, body').animate({scrollTop: $('#' + itemId).offset().top}, 1200);
 	}
 	else{
+		window.scrollTo(0,0);
 		$('span[name=section]').hide();
 		$('#'+itemId).parents('span[name=section]').show();
 	}

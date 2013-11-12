@@ -74,7 +74,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
 		add(currency);
         final PropertyModel<Date> funDateModel = new PropertyModel<Date>(
                 am, "funDate");
-        AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", funDateModel, null, "Date");
+        AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", funDateModel, null, "Signature Date");
 		add(date);
 	}
 }

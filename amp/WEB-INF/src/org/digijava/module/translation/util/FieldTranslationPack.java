@@ -32,10 +32,12 @@ public class FieldTranslationPack {
         return translations.get(locale);
     }
     
-    public String getNonNull(String locale, String currentLocale){
+    public String getNonNullBaseTrn(String locale, String currentLocale){
     	String ret = get(locale);
     	if (ret == null){
     		ret = get(currentLocale);
+            if (ret != null) //this is used to get the base translation, if it's not set we need to set it
+                add(locale, ret);
     	}
     	return ret;
     }

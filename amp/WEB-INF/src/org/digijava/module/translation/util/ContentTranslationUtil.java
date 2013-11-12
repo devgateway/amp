@@ -223,7 +223,7 @@ public class ContentTranslationUtil {
                     String baseTranslation = null;
                     if (isVersionable)
                     	//base translation should be in the FTP
-                    	baseTranslation = ftp.get(getBaseLanguage());
+                    	baseTranslation = ftp.getNonNullBaseTrn(getBaseLanguage(), currentLocale);
                     else
                         if (notInBaseLanguage()){
                             //for non-versionable entities just load the base translation from the db
@@ -389,6 +389,9 @@ public class ContentTranslationUtil {
      * @return database value for the field
      */
     public static Object loadFieldFromDb(Class clazz, Long id, String fieldName){
+        if (clazz == null || id == null || fieldName == null)
+            return null;
+
     	StatelessSession session = null;
     	try{
         	SessionFactory sf = PersistenceManager.getRequestDBSession().getSessionFactory();

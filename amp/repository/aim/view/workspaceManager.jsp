@@ -218,6 +218,18 @@
     }
 
     YAHOO.util.Event.addListener(window, "load", initWorkspaceManagerScript);
+    function returnYesOrNo (boolStr) {
+	    if (boolStr == 'true')
+			return '<digi:trn jsFriendly="true">yes</digi:trn>';
+		return '<digi:trn jsFriendly="true">no</digi:trn>';
+    }
+    
+    function returnAccesType (accType) {
+	    if (accType == 'Team')
+			return '<digi:trn jsFriendly="true">Team</digi:trn>';
+		return '<digi:trn jsFriendly="true">Management</digi:trn>';
+    }
+    
     function initDynamicTable() {
 		
         YAHOO.example.XHR_JSON = new function() {
@@ -265,9 +277,9 @@
                     name
                     +'<div id="tooltip'+oRecord.getData( 'ID' )+'" style="z-index:1;display:none">'+
                     '<ul>'+
-                    '<li><digi:trn>'+accType+'</digi:trn></li>'+ 
+                    '<li>'+returnAccesType(accType)+'</li>'+ 
                     '<li><digi:trn>Children (Workspaces)</digi:trn>:'+children+'</li>'+
-                    '<li><digi:trn>Computation</digi:trn>:<digi:trn>'+comp+'</digi:trn></li>'+
+                    '<li><digi:trn>Computation</digi:trn>:'+returnYesOrNo(comp)+'</li>'+
                     '</ul>'+
                     '</div>';
             };

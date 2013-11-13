@@ -121,8 +121,11 @@ public class ActivityUtil {
 			a.setDraft(draft);
 
 			a.setDeleted(false);
-            ContentTranslationUtil.cloneTranslations(a);
-			//is versioning activated?
+						            
+			String auxName = a.getName();
+			ContentTranslationUtil.cloneTranslations(a);							
+			
+            //is versioning activated?
             boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
 			if (createNewVersion){
 				try {
@@ -202,8 +205,14 @@ public class ActivityUtil {
             if (newActivity){
                 //translations need cloning again or the update on the activity will fail
                 ContentTranslationUtil.cloneTranslations(a);
-                a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));
+                a.setAmpId(org.digijava.module.aim.util.ActivityUtil.generateAmpId(ampCurrentMember.getUser(), a.getAmpActivityId(), session));                
                 session.update(a);
+                
+                //AMP-16373: The first time the activity is saved (not draft) the method cloneTranslations will replace the project´s title text by and ID and Lucene will index that making the project impossible to find by title.
+                //TODO: Check if the problem could be the null parameter "objId" when calling method "getFieldTrnPack" in the case of creating a new activity.
+                if (newActivity) {
+    				a.setName(auxName);
+    			}
             }
 
 			am.setObject(a);

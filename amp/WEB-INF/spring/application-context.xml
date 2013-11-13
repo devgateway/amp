@@ -17,6 +17,8 @@
 
     <http pattern="/aim/showChangePassword.do**" security="none" />
 
+    <http pattern="/aim/changePassword.do**" security="none" />
+
     <http pattern="/aim/showEmailForm.do**" security="none" />
 
 	<http pattern="/aim/registerUser.do**" security="none" />

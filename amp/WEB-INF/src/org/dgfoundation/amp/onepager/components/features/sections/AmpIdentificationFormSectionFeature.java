@@ -120,11 +120,14 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 				if (!list.isEmpty()) {
 					String ret=TranslatorUtil
 							.getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";
+					boolean moreThanSelf=false;
 					for (String string : list) 
-						if(string!=null && string.trim().compareTo(stitle.trim())!=0)
+						if(string!=null && string.trim().compareTo(stitle.trim())!=0) {
+							moreThanSelf=true;
 							ret+=" - "+string+ "\n";
-					return ret;
-					
+						}
+					if(moreThanSelf) return ret;
+					else return null;
 					
 				} else
 					return null;

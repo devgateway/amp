@@ -305,8 +305,9 @@ public class DbUtil {
 	 * @param teamId
 	 *            The team id of the team to which the reports are to be
 	 *            assigned
+	 * @param teamMemberId the teamMemer           
 	 */
-	public static void addTeamReports(Long reportId[], Long teamId) {
+	public static void addTeamReports(Long reportId[], Long teamId,Long ampMemberId) {
 		Session session = null;
 		Transaction tx = null;
 
@@ -362,9 +363,26 @@ public class DbUtil {
 								session.save(tr);
 							}
 						}
+						
+//						//here we should 
+
+						AmpTeamMember ampTeamMember =null;
+						//if(report.getOwnerId()!=null){
+						//	ampTeamMember=(AmpTeamMember) session.get(AmpTeamMember.class, report.getOwnerId().getAmpTeamMemId());	
+						//}else {
+							ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);	
+						//}					
+						Set reportSet = ampTeamMember.getReports();
+						//reportSet.add(ampReports);  // Not needed because it is set from ampReports object
+						report.getMembers().add(ampTeamMember);
+						session.saveOrUpdate(ampTeamMember);						
+						
 					}
 				}
 			}
+			
+
+			
 			// tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from addTeamReports()");

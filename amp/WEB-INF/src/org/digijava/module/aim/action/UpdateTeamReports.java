@@ -139,7 +139,7 @@ public class UpdateTeamReports extends Action {
 
 			logger.info("in assign reports");
 			Long selReports[] = raForm.getSelReports();
-			DbUtil.addTeamReports(selReports,tm.getTeamId());
+			DbUtil.addTeamReports(selReports,tm.getTeamId(),tm.getMemberId());
 			raForm.setAssignReports(null);
 
 			if(!raForm.isShowReportList())

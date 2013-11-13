@@ -21,6 +21,8 @@
 
     <http pattern="/aim/showEmailForm.do**" security="none" />
 
+    <http pattern="/aim/resetUserPassword.do**" security="none" />
+
 	<http pattern="/aim/registerUser.do**" security="none" />
 	
 	<http pattern="/visualization/dataDispatcher.do**" security="none" />

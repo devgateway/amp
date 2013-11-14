@@ -33,6 +33,7 @@ import org.apache.jackrabbit.api.JackrabbitRepository;
 import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.TransientRepository;
+import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
@@ -69,6 +70,7 @@ import org.hibernate.Query;
 
 
 public class DocumentManagerUtil {
+	private static final String IS_ALREADY_LOCKED_BY_THE_CURRENT_PROCESS = "is already locked by the current process";
 	private static Logger logger	= Logger.getLogger(DocumentManagerUtil.class);
 	public static Repository getJCRRepository (HttpSession httpSession) {
 		
@@ -78,19 +80,37 @@ public class DocumentManagerUtil {
 			logger.error("The request doesn't contain a ServletContext");
 			return null;
 		}
-		Repository repository			= (Repository)context.getAttribute( "JackrabbitRepository" );
-		if (repository == null) {
-			try{
-				String appPath				= DocumentManagerUtil.getApplicationPath();
-				String repPath				= appPath + "/jackrabbit";
-				repository 					= new TransientRepository(repPath + "/repository.xml", repPath);
-				context.setAttribute("JackrabbitRepository", repository);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null; 
+		synchronized (context) {
+			Repository repository			= (Repository)context.getAttribute( CrConstants.JACKRABBIT_REPOSITORY );
+			if (repository == null) {
+				try{
+					String appPath				= DocumentManagerUtil.getApplicationPath();
+					String repPath				= appPath + "/jackrabbit";
+					repository 					= new TransientRepository(repPath + "/repository.xml", repPath);
+					context.setAttribute(CrConstants.JACKRABBIT_REPOSITORY, repository);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null; 
+				}
+			}
+			return repository;
+		}
+		
+	}
+	public static void shutdownJCRRepository(HttpSession httpSession) {
+		ServletContext context			= httpSession.getServletContext();
+		if (context == null) {
+			logger.error("The request doesn't contain a ServletContext");
+		}
+		else {
+			synchronized (context) {
+				Repository repository			= (Repository)context.getAttribute( CrConstants.JACKRABBIT_REPOSITORY );
+				if (repository != null) {
+					((TransientRepository)repository).shutdown();
+					context.removeAttribute(CrConstants.JACKRABBIT_REPOSITORY);
+				}
 			}
 		}
-		return repository;
 	}
 
     public static String getUUIDByPublicVersionUUID (String publicVersionUUID) {
@@ -117,7 +137,7 @@ public class DocumentManagerUtil {
 	
 	public static Session getReadSession(HttpSession httpSession) {
 		synchronized (httpSession) {
-		
+			Repository rep			= null;
 			Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_READ_SESSION);
 			
 			if ( jcrSession!=null && !jcrSession.isLive() ) {
@@ -127,10 +147,17 @@ public class DocumentManagerUtil {
 			
 			if (jcrSession == null) {
 				try {
-					jcrSession	= getJCRRepository(httpSession).login();
+					rep				= getJCRRepository(httpSession) ;
+					jcrSession		= rep.login();
 					httpSession.setAttribute(CrConstants.JCR_READ_SESSION, jcrSession);
+				}catch (RepositoryException re) {
+						if ( re.getMessage().contains(IS_ALREADY_LOCKED_BY_THE_CURRENT_PROCESS) ) {
+							logger.error(re.getMessage() );
+							
+							logger.error("Trying to shut down the repository.");
+							shutdownJCRRepository(httpSession);
+						}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return null;
 				}
@@ -155,14 +182,18 @@ public class DocumentManagerUtil {
 	}
 	
 	public static void logoutJcrSessions(HttpSession httpSession) {
-		Session jcrWriteSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
-		if(jcrWriteSession!=null) jcrWriteSession.logout();		
-		Session jcrReadSession		= (Session)httpSession.getAttribute(CrConstants.JCR_READ_SESSION);
-		if(jcrReadSession!=null) jcrReadSession.logout();
+		synchronized (httpSession) {
+			Session jcrWriteSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
+			if(jcrWriteSession!=null) jcrWriteSession.logout();		
+			httpSession.removeAttribute(CrConstants.JCR_WRITE_SESSION);
+			
+			Session jcrReadSession		= (Session)httpSession.getAttribute(CrConstants.JCR_READ_SESSION);
+			if(jcrReadSession!=null) jcrReadSession.logout();
+			httpSession.removeAttribute(CrConstants.JCR_READ_SESSION);
+		}
 	}
 	
 	public static Session getWriteSession(HttpSession httpSession) {
-		
 		synchronized (httpSession) {
 			Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
 			
@@ -202,7 +233,16 @@ public class DocumentManagerUtil {
 					registerNamespace(jcrSession, "ampdoc", "http://amp-demo.code.ro/ampdoc");
 					registerNamespace(jcrSession, "amplabel", "http://amp-demo.code.ro/label");
 					
-				} catch (Exception e) {
+				}
+				catch (RepositoryException re) {
+					if ( re.getMessage().contains(IS_ALREADY_LOCKED_BY_THE_CURRENT_PROCESS) ) {
+						logger.error(re.getMessage() );
+						
+						logger.error("Trying to shut down the repository.");
+						shutdownJCRRepository(httpSession);
+					}
+				}
+				catch (Exception e) {
 					logger.warn("getWriteSession: " + e.getMessage());
 					//e.printStackTrace();
 					return null;
@@ -1110,7 +1150,7 @@ public class DocumentManagerUtil {
 	
 	public synchronized static void shutdownRepository( ServletContext sContext ) {
 		logger.info("Shutting down jackrabbit repository");
-		JackrabbitRepository repository			= (JackrabbitRepository)sContext.getAttribute( "JackrabbitRepository" );
+		JackrabbitRepository repository			= (JackrabbitRepository)sContext.getAttribute( CrConstants.JACKRABBIT_REPOSITORY );
 		if ( repository == null ) {
 			logger.warn("No repository found! Only normal if AMP was not used at all !");
 		} else

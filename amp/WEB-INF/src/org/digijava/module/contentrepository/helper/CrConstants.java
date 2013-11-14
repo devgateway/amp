@@ -84,5 +84,6 @@ public class CrConstants {
 	public static final String TEAM_PATH_ITEM						= "team";
 	
 	public static final String LABEL_CONTAINER_NODE_NAME			= "LabelContainer";
+	public static final String JACKRABBIT_REPOSITORY = "JackrabbitRepository";
 	
 }

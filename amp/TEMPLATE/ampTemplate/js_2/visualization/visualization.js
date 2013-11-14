@@ -1408,11 +1408,8 @@ function refreshBoxes(o){
 					var isPublicView = document.getElementById("fromPublicView").value;
 					for(var i = 0; i < child.top.length; i++){
 						inner = inner + (i+1) + ". ";
-						if (isPublicView == "false"){
-							inner = inner + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>(" + child.top[i].value + ")</b> <hr />";
-						} else {
-							inner = inner + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
-						}
+						inner = inner + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						
 					}
 					inner = inner + "<a href='javascript:showFullList(\"projects\")' style='float:right;'>"+trnShowFullList+"</a>";
 				}

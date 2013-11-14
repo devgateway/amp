@@ -4,7 +4,9 @@ package org.dgfoundation.amp.ar;
 import org.dgfoundation.amp.esri.EsriTestCases;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -54,6 +56,7 @@ public class AllTests {
 			PersistenceManager.initialize(false, null);
 			Configuration cfg = HibernateClassLoader.getConfiguration();
 			System.out.println("AMP started up!");
+			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
 		}
 		catch(Exception e)
 		{

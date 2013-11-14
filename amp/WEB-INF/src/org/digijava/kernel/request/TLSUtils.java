@@ -21,8 +21,13 @@ public class TLSUtils {
 
 	public Site site;
 	public HttpServletRequest request;
+	private String forcedLangCode = null;
 	
 	public static String getLangCode() {
+				
+		if (TLSUtils.getThreadLocalInstance().forcedLangCode != null)
+			return TLSUtils.getThreadLocalInstance().forcedLangCode;	
+
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = sra.getRequest();
         Locale lang = (Locale) request.getAttribute(Constants.NAVIGATION_LANGUAGE);
@@ -39,6 +44,15 @@ public class TLSUtils {
         String code = lang.getCode();
         //logger.error("Current language:" + code);
         return code;
+	}
+	
+	/**
+	 * DANGEROUS! ONLY USE IN TESTCASES!
+	 * @param langCode
+	 */
+	public void setForcedLangCode(String langCode)
+	{
+		forcedLangCode = langCode;
 	}
 	
 	public static Long getSiteId()

@@ -485,7 +485,7 @@ function adminHelp(){
 	                                          		<div class="bd">      
 	                                          		
 	                                          		<c:if test="${fn:length(USER_WORKSPACES) ge 16}">
-	                                          		      <ul style="overflow-x:hidden;overflow-y:scroll;height: 400px;width:auto;">
+	                                          		      <ul>
 	                                          		</c:if>
 	                                          		<c:if test="${fn:length(USER_WORKSPACES) le 15}">             
 	                                          			  <ul>
@@ -493,12 +493,12 @@ function adminHelp(){
 															<logic:iterate id="item" name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
 																<bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
 																<logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-																	<li class="yuiampmenuitemlabel yuimenuitemlabel"  style="height:18px;white-space: nowrap;font-size: 10px;">
+																	<li class="yuiampmenuitemlabel yuimenuitemlabel">
 																		<a href="#"><bean:write name="team" property="name"/></a>
 																	</li>
 																</logic:equal>
 																<logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-																	<li class="yuiampmenuitemlabel yuimenuitemlabel" style="height:18px;white-space: nowrap;font-size: 10px;">
+																	<li class="yuiampmenuitemlabel yuimenuitemlabel">
 																		<a href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>' onclick="return canExit()"><bean:write name="team" property="name"/></a>
 																	</li>
 																</logic:notEqual>

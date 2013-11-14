@@ -1,16 +1,8 @@
 	package org.digijava.module.aim.action;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
+import java.text.Collator;
+import java.util.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -23,10 +15,26 @@ import org.digijava.module.aim.form.OrgManagerForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 
-public class OrganisationManager
-    extends Action {
+public class OrganisationManager extends Action {
 
   private static Logger logger = Logger.getLogger(OrganisationManager.class);
+
+    final static Collator collator = Collator.getInstance();
+    final static Comparator<String> CharUnicodeComparator = new Comparator<String>() {
+        public final int compare(String ch1, String ch2) {
+            if (Character.isDigit(ch1.charAt(0)) && Character.isLetter(ch2.charAt(0))) {
+                return -1;
+            } else if (Character.isDigit(ch2.charAt(0)) && Character.isLetter(ch1.charAt(0)) ) {
+                return 1;
+            }
+            return collator.compare(ch1, ch2);
+        }
+    };
+
+    static {
+        collator.setStrength(Collator.TERTIARY);
+    }
+
 
   public ActionForward execute(ActionMapping mapping, ActionForm form,
                                javax.servlet.http.HttpServletRequest request,
@@ -34,6 +42,7 @@ public class OrganisationManager
       java.lang.Exception {
 
     HttpSession session = request.getSession();
+
     TeamMember tm = (TeamMember) session.getAttribute("currentMember");
     boolean isAdmin=false;
     boolean plainTeamMember = tm==null||!tm.getTeamHead();
@@ -166,19 +175,7 @@ public class OrganisationManager
           
           eaForm.setStartAlphaFlag(true);
 
-          String[] alphaArray = new String[26];
-          int i = 0;
-          for (char c = 'A'; c <= 'Z'; c++) {
-            Iterator itr = col.iterator();
-            while (itr.hasNext()) {
-              AmpOrganisation org = (AmpOrganisation) itr.next();
-              if (org.getName().toUpperCase().indexOf(c) == 0) {
-                alphaArray[i++] = String.valueOf(c);
-                break;
-              }
-            }
-          }
-          eaForm.setAlphaPages(alphaArray);
+          collectAlphaArray(eaForm, col);
         }
         else {
           eaForm.setAlphaPages(null);
@@ -250,5 +247,22 @@ public class OrganisationManager
 	return mapping.findForward("forward");
 
   }
-	
+
+    private void collectAlphaArray(OrgManagerForm eaForm, Collection<AmpOrganisation> col) {
+        SortedSet<String> chars = new TreeSet<String>(CharUnicodeComparator);
+        SortedSet<String> digits = new TreeSet<String>(CharUnicodeComparator);
+        for (AmpOrganisation ampOrganisation : col) {
+            if (ampOrganisation.getName() != null && ampOrganisation.getName().length() > 0) {
+                Character firstLetter = ampOrganisation.getName().toUpperCase().charAt(0);
+                if (Character.isLetter(firstLetter)) {
+                    chars.add(String.valueOf(firstLetter));
+                } else if ( Character.isDigit(firstLetter)) {
+                    digits.add(String.valueOf(firstLetter));
+                }
+            }
+        }
+        eaForm.setAlphaPages(chars.toArray(new String[0]));
+        eaForm.setDigitPages(digits.toArray(new String[0]));
+    }
+
 }

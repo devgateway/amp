@@ -1022,7 +1022,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	                            	<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
 	                            </digi:link>
 	                            <digi:link href="#" onclick="javascript:exportNGOToPDF(); return false;" title="Export to PDF">
-	                            	<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
+	                            	<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
 	                            </digi:link>
                             </c:if>                           
 

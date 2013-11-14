@@ -749,7 +749,9 @@ public final class HttpLoginManager {
             return;
         }
 
-        if (currentAuth.getPrincipal() == null) {
+        // do not provide any additional operations with anonymous user.
+        // treat anonymous in the same way as empty user
+        if (currentAuth.getPrincipal() == null || "anonymousUser".equals(currentAuth.getPrincipal())) {
             return;
         }
 

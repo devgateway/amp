@@ -45,6 +45,7 @@ public class AmpOrganisationSearchModel extends
 			session = PersistenceManager.getRequestDBSession();
 			Criteria crit = session.createCriteria(AmpOrganisation.class);
 			crit.setCacheable(true);
+			// AMP-16239
 			if (input.trim().length() > 0)
 				crit.add(
 						Restrictions.disjunction()
@@ -52,7 +53,7 @@ public class AmpOrganisationSearchModel extends
 								.add(getTextCriterion("acronym", input)));	
 			if(params != null && getParams().get(PARAM.GROUP_FILTER) !=null) 
 				crit.add(Restrictions.conjunction().add(Restrictions.eq("orgGrpId", getParams().get(PARAM.GROUP_FILTER))));
-			crit.add(Restrictions.or( Restrictions.isNull("deleted"), Restrictions.eq( "deleted", null )));
+				crit.add( Restrictions.or( Restrictions.isNull("deleted"), Restrictions.eq( "deleted", Boolean.FALSE)));
 			crit.addOrder(Order.asc("name"));
 
 			if (params != null) {

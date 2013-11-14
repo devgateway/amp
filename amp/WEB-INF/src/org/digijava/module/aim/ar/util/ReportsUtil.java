@@ -43,6 +43,7 @@ public class ReportsUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
 
+            // AMP-16239
             String queryString = "select distinct ao.* from amp_organisation ao " +
 						"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
 						"inner join amp_role ar on ((ar.amp_role_id = aor.role) and (ar.role_code=:roleCode)) where (ao.deleted is null or ao.deleted = false) ";

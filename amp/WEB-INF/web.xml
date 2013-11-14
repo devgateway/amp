@@ -29,8 +29,17 @@
 			org.digijava.kernel.startup.ConfigLoaderListener
 		</listener-class>
 	</listener>
+
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 	
-	
+
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
  	<filter>
         <filter-name>HibernateFilter</filter-name>
         <filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>
@@ -44,7 +53,7 @@
         <filter-name>HibernateFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+
 
 	<!-- Correct EhCache shutdown -->
  	<listener>
@@ -77,10 +86,7 @@
          <param-value>utf-8</param-value>
       </init-param>
    </filter>
-   <filter-mapping>
-      <filter-name>characterEncodingFilter</filter-name>
-      <url-pattern>/*</url-pattern>
-   </filter-mapping>
+
 
    <filter>
       <filter-name>springSecurityFilterChain</filter-name>

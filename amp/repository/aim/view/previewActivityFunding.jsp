@@ -567,16 +567,19 @@
                             </td>
                         </tr>
                         </feature:display>
-                       <tr>
-                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
-                                <digi:trn key="aim:undisbursedBalance"> Consumption Rate</digi:trn>: </td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
-                            	 <c:if test="${not empty aimEditActivityForm.funding.consumptionRate}">
-                                	<b>${aimEditActivityForm.funding.consumptionRate}</b>
-                                </c:if>
-                                &nbsp;
-                            </td>
-                        </tr>
+                        <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+	                       <tr>
+	                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
+	                                <digi:trn key="aim:undisbursedBalance"> Consumption Rate</digi:trn>: </td>
+	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
+	                            	 <c:if test="${not empty aimEditActivityForm.funding.consumptionRate}">
+	                                	<b>${aimEditActivityForm.funding.consumptionRate}</b>
+	                                </c:if>
+	                                &nbsp;
+	                            </td>
+	                        </tr>
+	                     </module:display>
                          <tr>
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
                                 <digi:trn>Delivery Rate</digi:trn>: </td>

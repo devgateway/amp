@@ -51,13 +51,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.mondrian.query.MoConstants;
@@ -382,6 +376,10 @@ public class AmpARFilter extends PropertyListable {
 
 	private String fromProposedApprovalDate;	// view: v_actual_proposed_date, column name: [Proposed Approval Date], translated in Nepal as [Date of Agreement]
 	private String toProposedApprovalDate;		// view: v_actual_proposed_date, column name: [Proposed Approval Date], translated in Nepal as [Date of Agreement]
+	private String dynProposedApprovalFilterCurrentPeriod;
+	private Integer dynProposedApprovalFilterAmount;
+	private String dynProposedApprovalFilterOperator;
+	private String dynProposedApprovalFilterXPeriod;
 
 	private Integer fromMonth;
 	private Integer yearFrom;
@@ -582,7 +580,7 @@ public class AmpARFilter extends PropertyListable {
 		}
 		initRenderStartEndYears(settings);
 	}
-	
+
 	/**
 	 * computes the current user's effective AmpApplicationSettings, searching through the hierarchy
 	 * returns null if there is no current user
@@ -601,13 +599,34 @@ public class AmpARFilter extends PropertyListable {
 		if (AmpCaching.getInstance().applicationSettingsRetrieved)
 			return AmpCaching.getInstance().applicationSettings;
 		
+		return getEffectiveSettings(tm);
+	}
+	
+	/**
+	 * computes a TeamMember's effective AmpApplicationSettings, searching through the hierarchy
+	 * returns null of nothing could be found OR if the teammember is null
+	 * @param tm
+	 * @return
+	 */
+	public static AmpApplicationSettings getEffectiveSettings(TeamMember tm)
+	{
+		if (tm == null)
+			return null;
+
 		AmpApplicationSettings settings = null;
 
 		if (tm.getTeamId() != null)
 			settings = DbUtil.getTeamAppSettings(tm.getTeamId()); // use workspace settings
 		
-		AmpCaching.getInstance().applicationSettingsRetrieved = true;
-		AmpCaching.getInstance().applicationSettings = settings;
+		try
+		{
+			AmpCaching.getInstance().applicationSettingsRetrieved = true;
+			AmpCaching.getInstance().applicationSettings = settings;
+		}
+		catch(Exception e)
+		{
+			// AmpCaching does not work out of the Struts request cycle
+		}
 		return settings;
 	}
 	
@@ -1279,7 +1298,11 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(ACTIVITY_FINAL_CONTRACTING_DATE_FILTER);
 		}
 		
-		String ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER	 	= this.createDateCriteria(this.toProposedApprovalDate, fromProposedApprovalDate, "apsd.proposed_approval_date");
+		dates = this.calculateDateFilters(fromProposedApprovalDate, toProposedApprovalDate, dynProposedApprovalFilterCurrentPeriod, dynProposedApprovalFilterAmount, dynProposedApprovalFilterOperator, dynProposedApprovalFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+		
+		String ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "apsd.proposed_approval_date");
 		if ( ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER = "SELECT apsd.amp_activity_id from v_actual_proposed_date apsd WHERE " + ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER;
 			queryAppend(ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER);
@@ -1682,7 +1705,8 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 		return new Date[]{dfromDate, dtoDate};
-	}	
+	}
+
 	/**
 	 * returns the default currency name
 	 * default is taken from either user settings, workspace settings or hardcoded global setting, whichever has the value first
@@ -1696,6 +1720,25 @@ public class AmpARFilter extends PropertyListable {
 			result = tempSettings.getCurrency();
 		return result; 
 	}
+
+    /**
+     * returns the default calendar
+     * default is taken from either user settings, workspace settings or hardcoded global setting, whichever has the value first
+     */
+    public static AmpFiscalCalendar getDefaultCalendar() {
+        AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
+        String calendarCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+        try {
+            AmpFiscalCalendar result = FiscalCalendarUtil.getAmpFiscalCalendar(Long.valueOf(calendarCode));
+            if (tempSettings != null && tempSettings.getFiscalCalendar()!=null)
+                result = tempSettings.getFiscalCalendar();
+            return result;
+        } catch (NumberFormatException ignore) {
+            return null;
+        }
+
+    }
+
 	
 	/**
 	 * computes the name of the effectively-used currency name: if one is set, then its name is returned, else the user/workspace/system default
@@ -2562,6 +2605,42 @@ public class AmpARFilter extends PropertyListable {
 	public void setDynActivityFinalContractingFilterXPeriod(
 			String dynActivityFinalContractingFilterXPeriod) {
 		this.dynActivityFinalContractingFilterXPeriod = dynActivityFinalContractingFilterXPeriod;
+	}
+	
+	public String getDynProposedApprovalFilterCurrentPeriod() {
+		return dynProposedApprovalFilterCurrentPeriod;
+	}
+
+	public void setDynProposedApprovalFilterCurrentPeriod(
+			String dynProposedApprovalFilterCurrentPeriod) {
+		this.dynProposedApprovalFilterCurrentPeriod = dynProposedApprovalFilterCurrentPeriod;
+	}
+
+	public Integer getDynProposedApprovalFilterAmount() {
+		return dynProposedApprovalFilterAmount;
+	}
+
+	public void setDynProposedApprovalFilterAmount(
+			Integer dynProposedApprovalFilterAmount) {
+		this.dynProposedApprovalFilterAmount = dynProposedApprovalFilterAmount;
+	}
+
+	public String getDynProposedApprovalFilterOperator() {
+		return dynProposedApprovalFilterOperator;
+	}
+
+	public void setDynProposedApprovalFilterOperator(
+			String dynProposedApprovalFilterOperator) {
+		this.dynProposedApprovalFilterOperator = dynProposedApprovalFilterOperator;
+	}
+
+	public String getDynProposedApprovalFilterXPeriod() {
+		return dynProposedApprovalFilterXPeriod;
+	}
+
+	public void setDynProposedApprovalFilterXPeriod(
+			String dynProposedApprovalFilterXPeriod) {
+		this.dynProposedApprovalFilterXPeriod = dynProposedApprovalFilterXPeriod;
 	}
 
 	/**

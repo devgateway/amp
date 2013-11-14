@@ -161,7 +161,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 
     		System.out.println("Running the activity autocloser job...");
     		
-    		TLSUtils.forceLocaleUpdate(org.digijava.module.um.util.DbUtil.getLanguageByCode("en"));
+    		//no longer available: TLSUtils.forceLocaleUpdate(org.digijava.module.um.util.DbUtil.getLanguageByCode("en"));
     		TLSUtils.getThreadLocalInstance().site = SiteUtils.getDefaultSite();
     		
 			Session session = PersistenceManager.getRequestDBSession();

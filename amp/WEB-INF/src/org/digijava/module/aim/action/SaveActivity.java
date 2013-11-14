@@ -2411,7 +2411,7 @@ public class SaveActivity extends Action {
 				logger.error(e);
 			}
 			teamId=aAct.getTeam().getAmpTeamId();
-			String validation = DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation();
+			String validation = DbUtil.getValidationFromTeamAppSettings(tm);
 			eaForm.getIdentification().setPreviousApprovalStatus(aAct.getApprovalStatus());
 
 			activity.setApprovalStatus(aAct.getApprovalStatus());
@@ -2473,7 +2473,7 @@ public class SaveActivity extends Action {
 			if(activity!=null && activity.getTeam()!=null && activity.getTeam().getAmpTeamId() !=null)
 				ampTeamId = activity.getTeam().getAmpTeamId();
 			else ampTeamId = teamMember.getAmpTeamMemId();
-			String validation = DbUtil.getTeamAppSettingsMemberNotNull(ampTeamId).getValidation();
+			String validation = DbUtil.getValidationFromTeamAppSettings(tm);
 			if (activity.getDraft() && tm.getTeamHead() || (validation!=null&&"validationOff".equals(validation))||tm.isApprover()){
 				activity.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
 			}else{
@@ -2481,7 +2481,7 @@ public class SaveActivity extends Action {
 			}
 
 		}
-		if("allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(teamId).getValidation())){
+		if("allOff".equals(DbUtil.getValidationFromTeamAppSettings(tm))){
 				activity.setApprovalStatus(Constants.APPROVED_STATUS);
 		}
 
@@ -3066,7 +3066,7 @@ public class SaveActivity extends Action {
 			
 			String additionalDetails="approved";
 			//if validation is off in team setup no messages should be generated
-			if (!"allOff".equals(DbUtil.getTeamAppSettingsMemberNotNull(tm.getTeamId()).getValidation())){
+			if (!"allOff".equals(DbUtil.getValidationFromTeamAppSettings(tm))){
 				AmpActivityVersion aAct = ActivityUtil.loadActivity(actId);
                 if (aAct.getDraft() != null && !aAct.getDraft() &&
                 		!(aAct.getApprovalStatus().equals(eaForm.getIdentification().getPreviousApprovalStatus()) && aAct.getApprovalStatus().equals(Constants.EDITED_STATUS))) { //AMP-6948
@@ -3171,9 +3171,7 @@ public class SaveActivity extends Action {
 			//if validation is off in team setup no messages should be generated
 				if (activity.getDraft() != null
 						&& !activity.getDraft()
-						&& !("allOff"
-								.equals(DbUtil.getTeamAppSettingsMemberNotNull(
-										tm.getTeamId()).getValidation()))) {
+						&& !("allOff".equals(DbUtil.getValidationFromTeamAppSettings(tm)))) {
             	if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)||activity.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS)){
             		AmpTeamMemberRoles role=aAct.getActivityCreator().getAmpMemberRole();
             		boolean isTeamHead=false;

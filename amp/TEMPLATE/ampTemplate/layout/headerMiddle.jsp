@@ -164,7 +164,7 @@ ${fn:replace(message,quote,escapedQuote)}
 									<module:display name="GIS DASHBOARD" >
 										<feature:display name="Show in public view" module="GIS DASHBOARD">
 			                            	<li class="yuiampmenuitem_drop">
-			                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/gis/showPublicGis.do?public=true"  onclick="return canExit()">
+			                              	<a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/gis/showPublicGis.do?public=true">
 			                                	<digi:trn key="fm:gis">GIS Dashboard</digi:trn>
 			                                </a> 
 		                                	</li>

@@ -38,7 +38,9 @@ import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.EditActivityForm.Planning;
 import org.digijava.module.aim.form.EditActivityForm.Programs;
 import org.digijava.module.aim.helper.*;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -1551,12 +1553,12 @@ public class ExportActivityToWord extends Action {
 								.getContactInformation().getMofedContacts(),ampContext, request);
 			}
 			// Sec Min funding contact information
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information",	ampContext)) {
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information",	ampContext)) {
 				buildContactInfoOutput(eshContactInfoTable,	"Sector Ministry contact information", myForm
 								.getContactInformation().getSectorMinistryContacts(), ampContext, request);
 			}
 			// Project Coordinator contact information
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information",	ampContext)) {
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information",	ampContext)) {
 				buildContactInfoOutput(eshContactInfoTable,	"Proj. Coordinator contact information", myForm					.getContactInformation()
 								.getProjCoordinatorContacts(), ampContext,request);
 			}
@@ -2124,6 +2126,11 @@ public class ExportActivityToWord extends Action {
                     Set <AmpFundingDetail> fndDets = fnd.getFundingDetails();
 
                     Map<String, Map<String, Set<AmpFundingDetail>>> structuredFundings = getStructuredFundings(fndDets);
+                    String toCurrCode=null;
+                    HttpSession session = request.getSession();
+                    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+                    if (tm != null)
+                        toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
                     
                     if (structuredFundings.size() > 0) {
 	                    ExportSectionHelper eshDonorFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
@@ -2170,7 +2177,32 @@ public class ExportActivityToWord extends Action {
                                         eshDonorFundingDetails.addRowData(sectionHelperRowData);
 									}
 	                            }
-	
+	                            FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper();
+	                            calculationsSubtotal.doCalculations(structuredFndDets, toCurrCode, true);
+	                            String subTotal = "";
+	                            String subTotalValue = "";
+	                            if (transTypeKey.equals("Commitment")&&adjTypeKey.equals("Actual")){
+	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Commitment")+" "+TranslatorWorker.translateText("Actual")+ ":";
+	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue());
+	                            } else if (transTypeKey.equals("Commitment")&&adjTypeKey.equals("Planned")){
+	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Commitment")+" "+TranslatorWorker.translateText("Planned")+ ":";
+	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue());
+	                            } else if (transTypeKey.equals("Disbursement")&&adjTypeKey.equals("Actual")){
+	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Disbursement")+" "+TranslatorWorker.translateText("Actual")+ ":";
+	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue());
+	                            } else if (transTypeKey.equals("Disbursement")&&adjTypeKey.equals("Planned")){
+	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Disbursement")+" "+TranslatorWorker.translateText("Planned")+ ":";
+	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue());
+	                            } else if (transTypeKey.equals("Expenditure")&&adjTypeKey.equals("Actual")){
+	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Expenditure")+" "+TranslatorWorker.translateText("Actual")+ ":";
+	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue());
+	                            } else if (transTypeKey.equals("Expenditure")&&adjTypeKey.equals("Planned")){
+	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Expenditure")+" "+TranslatorWorker.translateText("Planned")+ ":";
+	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue());
+	                            }
+	                            
+	                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(subTotal).addRowData(subTotalValue + toCurrCode));
+                              	
 	                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
 	                        }
 	                    }

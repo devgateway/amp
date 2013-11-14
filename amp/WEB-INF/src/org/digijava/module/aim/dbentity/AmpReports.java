@@ -687,5 +687,6 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 			}
 		}
 	}
+	
 }
 

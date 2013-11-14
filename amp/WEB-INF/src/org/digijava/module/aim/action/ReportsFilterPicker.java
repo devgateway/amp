@@ -21,6 +21,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.form.DynamicDateFilter;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -206,6 +207,73 @@ public class ReportsFilterPicker extends Action {
 		/*AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
 		return decideNextForward(mapping, filterForm, request, arf);*/
 	}
+    
+    /**
+     * 
+     * @param filterForm the struts ActionForm
+     * @param fmField the FM field that should be checked in order to see if this element should be shown in the page.
+     * If null, no check will be done.
+     * @param baseFormProperty the string that will be used to construct the HTML form properties
+     * @param label the name that will appear next to this field
+     * @param dynamicDateFilterObj the object from the ActionForm that defines this dynamic date filter 
+     * @param htmlDivId
+     */
+    private static void addDateFilter(ReportsFilterPickerForm filterForm, String fmField, String baseFormProperty, String label,
+    									DynamicDateFilter dynamicDateFilterObj, String htmlDivId) {
+    		if (fmField == null || FeaturesUtil.isVisibleField(fmField) ) {
+			
+				Collection<DateListableImplementation> children		= 
+						new ArrayList<DateListableImplementation>();
+				DateListableImplementation fromDate			= new DateListableImplementation();	
+				fromDate.setLabel("From");
+				fromDate.setUniqueId("from" + baseFormProperty + "Date");
+				fromDate.setActionFormProperty("from" + baseFormProperty + "Date");
+				fromDate.setTranslateable(true);
+				children.add(fromDate);
+				
+				DateListableImplementation toDate			= new DateListableImplementation();	
+				toDate.setLabel("To");
+				toDate.setUniqueId("to" + baseFormProperty + "Date");
+				toDate.setActionFormProperty("to" + baseFormProperty + "Date");
+				toDate.setTranslateable(true);
+				children.add(toDate);
+				
+				DateListableImplementation groupFromTo = new DateListableImplementation();
+				groupFromTo.setLabel("");
+				groupFromTo.setUniqueId("0");
+				groupFromTo.setTranslateable(false);
+				groupFromTo.setChildren(children);
+				
+				children		= 
+						new ArrayList<DateListableImplementation>();
+				children.add(groupFromTo);
+				
+				// little ugly hack
+				String dynamicFilterBaseFormProperty	= "".equals(baseFormProperty)?"Date":baseFormProperty;
+				DateListableImplementation dynamicFilter			= new DateListableImplementation();	
+				dynamicFilter.setLabel("Dynamic Date Filter");
+				dynamicFilter.setUniqueId("dynamic" + dynamicFilterBaseFormProperty + "Filter");
+				dynamicFilter.setActionFormProperty("dynamic" + dynamicFilterBaseFormProperty + "Filter");
+				dynamicFilter.setTranslateable(true);
+				children.add(dynamicFilter);
+				
+				if(dynamicDateFilterObj.getCurrentPeriod() != null){
+					dynamicFilter.setSelected(true);
+				}else{
+					groupFromTo.setSelected(true);
+				}
+				
+				DateListableImplementation rootDate			= new DateListableImplementation();
+				rootDate.setLabel( label );
+				rootDate.setTranslateable(true);
+				rootDate.setUniqueId("root" + baseFormProperty );
+				rootDate.setChildren(children);
+				GroupingElement<HierarchyListableImplementation> filterByDate	= 
+						new GroupingElement<HierarchyListableImplementation>(label, htmlDivId, rootDate, "");
+				
+				filterForm.getOtherCriteriaElements().add(filterByDate);
+			}
+    }
 	
 	/**
 	 * add to the Filter Form an element regarding filtering by a certain type of agencies, if feature is enabled. 
@@ -398,6 +466,8 @@ public class ReportsFilterPicker extends Action {
 			AmpCaching.getInstance().allFisCalendars = DbUtil.getAllFisCalenders();
 		    
 		filterForm.setCalendars(AmpCaching.getInstance().allFisCalendars);
+        AmpFiscalCalendar defaultCalendar = AmpARFilter.getDefaultCalendar();
+        filterForm.setDefaultCalendar(defaultCalendar != null ? defaultCalendar.getAmpFiscalCalId() : null);
 		StopWatch.next("Filters-Settings", true, "Settings part dropdowns END");
 	}
 	
@@ -830,208 +900,21 @@ public class ReportsFilterPicker extends Action {
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
 		
-		if (FeaturesUtil.isVisibleField("Actual Start Date") ) {
-			
-			Collection<DateListableImplementation> children		= 
-					new ArrayList<DateListableImplementation>();
-			DateListableImplementation fromDate			= new DateListableImplementation();	
-			fromDate.setLabel("From");
-			fromDate.setUniqueId("fromActivityStartDate");
-			fromDate.setActionFormProperty("fromActivityStartDate");
-			fromDate.setTranslateable(true);
-			children.add(fromDate);
-			
-			DateListableImplementation toDate			= new DateListableImplementation();	
-			toDate.setLabel("To");
-			toDate.setUniqueId("toActivityStartDate");
-			toDate.setActionFormProperty("toActivityStartDate");
-			toDate.setTranslateable(true);
-			children.add(toDate);
-			
-			DateListableImplementation groupFromTo = new DateListableImplementation();
-			groupFromTo.setLabel("");
-			groupFromTo.setUniqueId("0");
-			groupFromTo.setTranslateable(false);
-			groupFromTo.setChildren(children);
-			
-			children		= 
-					new ArrayList<DateListableImplementation>();
-			children.add(groupFromTo);
-			
-			DateListableImplementation dynamicFilter			= new DateListableImplementation();	
-			dynamicFilter.setLabel("Dynamic Date Filter");
-			dynamicFilter.setUniqueId("dynamicActivityStartFilter");
-			dynamicFilter.setActionFormProperty("dynamicActivityStartFilter");
-			dynamicFilter.setTranslateable(true);
-			children.add(dynamicFilter);
-			
-			if(filterForm.getDynamicActivityStartFilter().getCurrentPeriod() != null){
-				dynamicFilter.setSelected(true);
-			}else{
-				groupFromTo.setSelected(true);
-			}
-			
-			DateListableImplementation rootDate			= new DateListableImplementation();
-			rootDate.setLabel("Actual Start Date");
-			rootDate.setTranslateable(true);
-			rootDate.setUniqueId("rootActivityStart");
-			rootDate.setChildren(children);
-			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
-					new GroupingElement<HierarchyListableImplementation>("Actual Start Date", "filter_activity_start_date_div", rootDate, "");
-			
-			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
-		}
-		if (FeaturesUtil.isVisibleField("Current Completion Date") ) {
-			
-			Collection<DateListableImplementation> children		= 
-					new ArrayList<DateListableImplementation>();
-			DateListableImplementation fromDate			= new DateListableImplementation();	
-			fromDate.setLabel("From");
-			fromDate.setUniqueId("fromActivityActualCompletionDate");
-			fromDate.setActionFormProperty("fromActivityActualCompletionDate");
-			fromDate.setTranslateable(true);
-			children.add(fromDate);
-			
-			DateListableImplementation toDate			= new DateListableImplementation();	
-			toDate.setLabel("To");
-			toDate.setUniqueId("toActivityActualCompletionDate");
-			toDate.setActionFormProperty("toActivityActualCompletionDate");
-			toDate.setTranslateable(true);
-			children.add(toDate);
-
-			DateListableImplementation groupFromTo = new DateListableImplementation();
-			groupFromTo.setLabel("");
-			groupFromTo.setUniqueId("0");
-			groupFromTo.setTranslateable(false);
-			groupFromTo.setChildren(children);
-			
-			children		= 
-					new ArrayList<DateListableImplementation>();
-			children.add(groupFromTo);
-			
-			DateListableImplementation dynamicFilter			= new DateListableImplementation();	
-			dynamicFilter.setLabel("Dynamic Date Filter");
-			dynamicFilter.setUniqueId("dynamicActivityActualCompletionFilter");
-			dynamicFilter.setActionFormProperty("dynamicActivityActualCompletionFilter");
-			dynamicFilter.setTranslateable(true);
-			children.add(dynamicFilter);
-
-			if(filterForm.getDynamicActivityActualCompletionFilter().getCurrentPeriod() != null){
-				dynamicFilter.setSelected(true);
-			}else{
-				groupFromTo.setSelected(true);
-			}
-			
-			DateListableImplementation rootDate			= new DateListableImplementation();
-			rootDate.setLabel("Current Completion Date");
-			rootDate.setTranslateable(true);
-			rootDate.setUniqueId("rootActivityActualCompletion");
-			rootDate.setChildren(children);
-			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
-					new GroupingElement<HierarchyListableImplementation>("Current Completion Date", "filter_activity_actual_completion_date_div", rootDate, "");
-			
-			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
-		}
-		if (FeaturesUtil.isVisibleField("Final Date for Contracting") ) {
-			Collection<DateListableImplementation> children		= 
-					new ArrayList<DateListableImplementation>();
-			DateListableImplementation fromDate			= new DateListableImplementation();	
-			fromDate.setLabel("From");
-			fromDate.setUniqueId("fromActivityFinalContractingDate");
-			fromDate.setActionFormProperty("fromActivityFinalContractingDate");
-			fromDate.setTranslateable(true);
-			children.add(fromDate);
-			
-			DateListableImplementation toDate			= new DateListableImplementation();	
-			toDate.setLabel("To");
-			toDate.setUniqueId("toActivityFinalContractingDate");
-			toDate.setActionFormProperty("toActivityFinalContractingDate");
-			toDate.setTranslateable(true);
-			children.add(toDate);
-			
-			DateListableImplementation groupFromTo = new DateListableImplementation();
-			groupFromTo.setLabel("");
-			groupFromTo.setUniqueId("0");
-			groupFromTo.setTranslateable(false);
-			groupFromTo.setChildren(children);
-			
-			children = new ArrayList<DateListableImplementation>();
-			children.add(groupFromTo);
-
-			DateListableImplementation dynamicFilter			= new DateListableImplementation();	
-			dynamicFilter.setLabel("Dynamic Date Filter");
-			dynamicFilter.setUniqueId("dynamicActivityFinalContractingFilter");
-			dynamicFilter.setActionFormProperty("dynamicActivityFinalContractingFilter");
-			dynamicFilter.setTranslateable(true);
-			children.add(dynamicFilter);
-
-			if(filterForm.getDynamicActivityFinalContractingFilter().getCurrentPeriod() != null){
-				dynamicFilter.setSelected(true);
-			}else{
-				groupFromTo.setSelected(true);
-			}
-			
-			DateListableImplementation rootDate			= new DateListableImplementation();
-			rootDate.setLabel("Final Date for Contracting");
-			rootDate.setTranslateable(true);
-			rootDate.setUniqueId("rootActivityFinalContracting");
-			rootDate.setChildren(children);
-			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
-					new GroupingElement<HierarchyListableImplementation>("Final Date for Contracting", "filter_activity_final_contracting_date_div", rootDate, "");
-			
-			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
-		}
+		addDateFilter(filterForm, "Actual Start Date", "ActivityStart", "Actual Start Date", 
+				filterForm.getDynamicActivityStartFilter(), "filter_activity_start_date_div");
+		
+		addDateFilter(filterForm, "Current Completion Date", "ActivityActualCompletion", 
+				"Current Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), "filter_activity_actual_completion_date_div");
+		
+		addDateFilter(filterForm, "Final Date for Contracting", "ActivityFinalContracting", 
+				"Final Date for Contracting", filterForm.getDynamicActivityFinalContractingFilter(), "filter_activity_final_contracting_date_div");
+		
+		addDateFilter(filterForm, "Proposed Approval Date", "ProposedApproval", 
+				"Proposed Approval Date", filterForm.getDynamicProposedApprovalFilter(), "filter_proposed_approval_date_div");
+		
 		//Finance date filter
-		//TODO validate field name
-		if (true ) {
-			Collection<DateListableImplementation> children		= 
-					new ArrayList<DateListableImplementation>();
-			DateListableImplementation fromDate			= new DateListableImplementation();	
-			fromDate.setLabel("From");
-			fromDate.setUniqueId("fromDate");
-			fromDate.setActionFormProperty("fromDate");
-			fromDate.setTranslateable(true);
-			children.add(fromDate);
-			
-			DateListableImplementation toDate			= new DateListableImplementation();	
-			toDate.setLabel("To");
-			toDate.setUniqueId("toDate");
-			toDate.setActionFormProperty("toDate");
-			toDate.setTranslateable(true);
-			children.add(toDate);
-			
-			DateListableImplementation groupFromTo = new DateListableImplementation();
-			groupFromTo.setLabel("");
-			groupFromTo.setUniqueId("0");
-			groupFromTo.setTranslateable(false);
-			groupFromTo.setChildren(children);
-			
-			children = new ArrayList<DateListableImplementation>();
-			children.add(groupFromTo);
-
-			DateListableImplementation dynamicFilter			= new DateListableImplementation();	
-			dynamicFilter.setLabel("Dynamic Date Filter");
-			dynamicFilter.setUniqueId("dynamicDateFilter");
-			dynamicFilter.setActionFormProperty("dynamicDateFilter");
-			dynamicFilter.setTranslateable(true);
-			children.add(dynamicFilter);
-
-			if(filterForm.getDynamicDateFilter().getCurrentPeriod() != null){
-				dynamicFilter.setSelected(true);
-			}else{
-				groupFromTo.setSelected(true);
-			}
-
-			DateListableImplementation rootDate			= new DateListableImplementation();
-			rootDate.setLabel("Date Filter");
-			rootDate.setTranslateable(true);
-			rootDate.setUniqueId("rootDate");
-			rootDate.setChildren(children);
-			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
-					new GroupingElement<HierarchyListableImplementation>("Date Filter", "filter_date_div", rootDate, "");
-			
-			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
-		}		
+		addDateFilter(filterForm, null, "", "Date Filter", filterForm.getDynamicDateFilter(), "filter_date_div");
+		
 		
 		Collection<AmpIndicatorRiskRatings> meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
 		for (AmpIndicatorRiskRatings element:meRisks) {
@@ -1262,8 +1145,14 @@ public class ReportsFilterPicker extends Action {
 		
 		if (filterForm.getRenderEndYear() != null)
 			arf.setRenderEndYear(filterForm.getRenderEndYear());
-		
-		AmpFiscalCalendar selcal = (AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class, filterForm.getCalendar());
+
+        AmpFiscalCalendar selcal =  null;
+        if (filterForm.getCalendar() != null) {
+            selcal = (AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class, filterForm.getCalendar());
+        } else {
+            selcal = (AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class, filterForm.getDefaultCalendar());
+        }
+
 		arf.setCalendarType(selcal);
 		arf.buildCustomFormat();
 	}
@@ -1357,8 +1246,14 @@ public class ReportsFilterPicker extends Action {
 		arf.setDynActivityStartFilterAmount(filterForm.getDynamicActivityStartFilter().getAmount());
 		arf.setDynActivityStartFilterOperator(filterForm.getDynamicActivityStartFilter().getOperator());
 		arf.setDynActivityStartFilterXPeriod(filterForm.getDynamicActivityStartFilter().getxPeriod());
+		
+		
 		arf.setFromProposedApprovalDate(filterForm.getFromProposedApprovalDate());
 		arf.setToProposedApprovalDate(filterForm.getToProposedApprovalDate());
+		arf.setDynProposedApprovalFilterCurrentPeriod(filterForm.getDynamicProposedApprovalFilter().getCurrentPeriod());
+		arf.setDynProposedApprovalFilterAmount(filterForm.getDynamicProposedApprovalFilter().getAmount());
+		arf.setDynProposedApprovalFilterOperator(filterForm.getDynamicProposedApprovalFilter().getOperator());
+		arf.setDynProposedApprovalFilterXPeriod(filterForm.getDynamicProposedApprovalFilter().getxPeriod());
 		
 		arf.setToActivityActualCompletionDate(filterForm.getToActivityActualCompletionDate() );
 		arf.setFromActivityActualCompletionDate(filterForm.getFromActivityActualCompletionDate());

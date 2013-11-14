@@ -82,6 +82,9 @@ public class AmpComponentsFormSectionFeature extends
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				AmpComponent comp = new AmpComponent();
+				Set<AmpActivityVersion> relatedActivities = new HashSet<AmpActivityVersion>();
+				relatedActivities.add(am.getObject());
+				comp.setActivities(relatedActivities); 
 				list.addItem(comp);
                 String gsComponentType = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.COMPONENT_TYPE);
                 AmpComponentType defaultType = null;

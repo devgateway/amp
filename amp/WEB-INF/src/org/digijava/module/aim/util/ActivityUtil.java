@@ -1538,6 +1538,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     logger.info(" this is the other components getting called....");
     try {
       session = PersistenceManager.getRequestDBSession();
+      // AMP-16239
       String queryString = "select ac.* from amp_components ac " +
       		"inner join amp_activity_components aac on (aac.amp_component_id = ac.amp_component_id) " +
       		"where (aac.amp_activity_id=:actId)";
@@ -2456,6 +2457,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    AmpOrganisation organisation = null;
 	    try {
 	      session = PersistenceManager.getSession();
+	      // AMP-16239
 	      String queryString = "select ao.* from amp_organisation ao " +
 	      		"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
 	      		"inner join amp_activity aa on (aa.amp_activity_id = aor.activity) " +
@@ -3031,6 +3033,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 			e.printStackTrace();
 		}
 		
+		// AMP-16239
 	  Criteria crit = session.createCriteria(AmpActivity.class);
 	  
 	  Conjunction conjunction = Restrictions.conjunction();
@@ -3050,6 +3053,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     Session session = null;
     try {
       session = PersistenceManager.getSession();
+      // AMP-16239
       String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
           "where lower(a.name) = :lowerName";
       if(actId!=null){
@@ -3656,6 +3660,8 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 
     try {
       session = PersistenceManager.getSession();
+      
+      // AMP-16239
       String queryString = "select ampAct from " + AmpActivityVersion.class.getName() +
           " ampAct where upper(ampAct.name) like upper(:name)";
       qry = session.createQuery(queryString);
@@ -4756,11 +4762,13 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
                     // computed workspace
                     if (teamAO != null && !teamAO.isEmpty()) {
+                    	// AMP-16239
                         queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
                                 " where  a.team in  (" + Util.toCSStringForIN(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) order by a.name";
 
                     } else {
                         // none computed workspace
+                    	// AMP-16239
                         queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
                         if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                             queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
@@ -4822,6 +4830,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 //                        queryString += " order by a.name ";
 //                    }
                     
+                    // AMP-16239
                     queryString ="select gr.ampActivityLastVersion.name, gr.ampActivityLastVersion.ampActivityId from "+ AmpActivityGroup.class.getName()+" gr ";                    
                     if (teamAO != null && !teamAO.isEmpty()) {
                     	queryString +=" left outer join gr.ampActivityLastVersion.orgrole r  left outer join gr.ampActivityLastVersion.funding f "+
@@ -4875,6 +4884,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     		String name=null;
     		try {
     			session=PersistenceManager.getRequestDBSession();
+    			// AMP-16239
     			queryString= "select a.name  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
     			query=session.createQuery(queryString);    			
     			name=(String)query.uniqueResult();    			
@@ -5120,12 +5130,16 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
             
             boolean isSearchByName = actName!=null && "".compareTo(actName.trim())!=0;
 			if(isSearchByName) {
+				// AMP-16239
             	queryString = "select f.ampActivityId, f.ampId,  f.name,  ampTeam, ampGroup  from " + AmpActivity.class.getName()+
             	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where upper(f.name) like upper(:name) and (deleted = false or deleted is null)";
             }
             else
+            {
+            	// AMP-16239
             	queryString = "select f.ampActivityId, f.ampId,  f.name, ampTeam , ampGroup from " + AmpActivity.class.getName()+ 
             	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where deleted = false or deleted is null";
+            }
             qry = session.createQuery(queryString);
             if(isSearchByName) {
             	qry.setString("name", "%" + actName + "%");
@@ -5227,85 +5241,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     	ActivityUtil.deleteActivityIndicatorsSession(ampActId, session);
     }
     
-    /*
-     * old delete method; not functioning properly
-     * kept for historic reference only
-    @deprecated
-	public static void deleteAmpActivity(Long ampActId) {
-			Date startDate = new Date(System.currentTimeMillis());
-		    Session session = null;
-		    Transaction tx = null;
-
-		    try {
-		      session = PersistenceManager.getSession();
-//beginTransaction();
-
-		      AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
-
-		      if (ampAct == null)
-					logger.debug("Activity is null. Hence no activity with id : " + ampActId);
-				else {
-
-					// Delete group info.
-					AmpActivityGroup auxGroup = ampAct.getAmpActivityGroup();
-					Query qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = " + ampActId);
-					qry.executeUpdate();
-					ampAct.setAmpActivityGroup(null);
-					
-					session.update(ampAct);
-			    	auxGroup.getActivities().remove(ampAct);
-			    	session.update(auxGroup);
-			    	session.update(ampAct);
-			    	
-			    	// Delete group info.
-			      	List<AmpActivityGroup> groups=getActivityGroups(session , ampAct.getAmpActivityId());
-			      	if(groups!=null && groups.size()>0){
-			      		for (AmpActivityGroup ampActivityGroup : groups) {
-			      			Set<AmpActivityVersion> activityversions=ampActivityGroup.getActivities();
-			      			if(activityversions!=null && activityversions.size()>0){
-			      				for (Iterator<AmpActivityVersion> iterator = activityversions.iterator(); iterator.hasNext();) {
-			      					AmpActivityVersion ampActivityVersion=iterator.next();
-			      					ampActivityVersion.setAmpActivityGroup(null);
-			      					session.update(ampActivityVersion);
-								}
-			      			}
-			  				session.delete(ampActivityGroup);
-			  			}
-			      	}
-					
-			      	deleteActivityContent(ampAct,session);
-				}
-		      
-		    ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
-		  	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
-		  	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
-		  	ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
-		  	ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
-		  	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
-		  	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
-
-   		   session.delete(ampAct);
-		   //tx.commit();
-//session.flush();
-		 }
-		    catch (Exception e1) {
-		      logger.error("Could not delete the activity with id : " + ampActId);
-		      e1.printStackTrace(System.out);
-		    }
-		    finally {
-		      if (session != null) {
-		        try {
-		          PersistenceManager.releaseSession(session);
-		        }
-		        catch (Exception e2) {
-		          logger.error("Release session failed");
-		        }
-		      }
-		    }
-		    logger.warn(new Date(System.currentTimeMillis()).getTime() - startDate.getTime());
-		  
-		
-	}*/
 
 	public static void archiveAmpActivityWithVersions(Long ampActId) {
 		// TODO Auto-generated method stub

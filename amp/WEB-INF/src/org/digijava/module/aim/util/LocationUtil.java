@@ -576,40 +576,8 @@ public class LocationUtil {
 		} 
 		return ampRegions;
 	}
-	/*
-	public static Collection getAllLocations(Long id) {
-		AmpLocation ampLocation = null;
-		ArrayList ampLocations = new ArrayList();
-		Session session = null;
-		Iterator iter = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
 
-			// modified by Priyajith
-			// Desc: removed the usage of session.load and used the select query
-			// start
-			String queryString = "select a from " + AmpActivity.class.getName()
-					+ " a " + "where (a.ampActivityId=:id)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			AmpActivity ampActivity = null;
-			while (itr.hasNext()) {
-				ampActivity = (AmpActivity) itr.next();
-			}
-			// end
 
-			iter = ampActivity.getLocations().iterator();
-			while (iter.hasNext()) {
-				ampLocation = (AmpLocation) iter.next();
-				ampLocations.add(ampLocation);
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get amp locations :" + ex.getMessage());
-		} 
-		return ampLocations;
-	}
-*/
 	public static AmpLocation getAmpLocation(Long id) {
 		AmpLocation ampLocation = null;
 		Session session = null;
@@ -814,6 +782,25 @@ public class LocationUtil {
 		} 
 		return col;
 	}
+        
+        public static List<AmpCategoryValueLocations> getAllCountriesAndRegions() throws DgException{
+    		Session session = null;
+    		 List<AmpCategoryValueLocations> col = null;
+
+    		try {
+                        
+    			session = PersistenceManager.getRequestDBSession();
+    			String queryString = " from " + AmpCategoryValueLocations.class.getName();
+
+    			Query qry = session.createQuery(queryString);
+    			col = qry.list();
+    		} catch (Exception e) {
+    			logger.error("Unable to get locations from database "
+    					+ e.getMessage());
+                            throw new DgException(e);
+    		} 
+    		return col;
+    	}
         
          /**
          * Returns location using its id

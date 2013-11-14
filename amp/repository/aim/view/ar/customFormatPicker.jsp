@@ -195,7 +195,10 @@
 			<%-- <html:hidden property="ampReportId" />  --%> 
 			<input type="hidden" name="ampReportId" value="${reportCD.ampReportId}" />
 			<input type="hidden" name="reportContextId" value="${reportCD.contextId}" />
+
 			<html:hidden property="defaultCurrency" />
+            <html:hidden property="defaultCalendar" />
+
 			<html:submit styleClass="buttonx"  property="applyFormat" styleId="applyFormatBtn">
 				<digi:trn key="rep:filer:ApplyFormat">Apply Format</digi:trn>
 			</html:submit>&nbsp; 

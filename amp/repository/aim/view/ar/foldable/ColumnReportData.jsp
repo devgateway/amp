@@ -56,6 +56,9 @@
 <c:set var="translatedEdit"> 
 	<digi:trn>Edit</digi:trn>
 </c:set>
+<c:set var="translatedValidate">
+    <digi:trn>Validate activity</digi:trn>
+</c:set>
 <c:set var="translatedActivate">
 	<digi:trn>Activate</digi:trn>
 </c:set>
@@ -114,7 +117,7 @@ if(validateItem){
 			<logic:present name="currentMember" scope="session">
 				<%if (showColumn) { %>
 				<a href='${activityEditURL}/${ownerId}' style="text-decoration: none">
-					<img src="/TEMPLATE/ampTemplate/img_2/ico_${action}.gif" border="0" height="16" width="16" title="<digi:trn>${actionString}</digi:trn>"><br/>
+					<img src="/TEMPLATE/ampTemplate/img_2/ico_${action}.gif" border="0" height="16" width="16" title="${actionString}"><br/>
 				</a>
 				<%} %>
 			</logic:present>
@@ -125,7 +128,7 @@ if(validateItem){
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
 		<bean:define id="columnNo" name="columnNo" type="java.lang.Integer" scope="page" toScope="request"/>
 		<bean:define id="bckColor" name="bckColor" type="java.lang.String" toScope="request"/>		
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>
 	</logic:iterate>
 </tr>
 <% } else { %>

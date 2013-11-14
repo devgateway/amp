@@ -100,6 +100,7 @@ public class AmpLocationSearchModel extends
 				if(isExactMatch()) {
 					String[] strings = input.split(PARENT_DELIMITER);
 					if(strings.length>1) {
+						// AMP-16239
 						String locName = strings[strings.length-1].substring(0,strings[strings.length-1].length()-2);
 						junction.add( getTextCriterion("name", locName));
 						String parentName = null;

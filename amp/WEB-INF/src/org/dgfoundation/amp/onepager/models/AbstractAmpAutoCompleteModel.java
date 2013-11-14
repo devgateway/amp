@@ -100,8 +100,11 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 		return getUnaccentILikeExpression(propertyName, value);
 	}
 
+	protected Criterion getUnaccentILikeExpression(final String propertyName, final String value) {
+		return getUnaccentILikeExpression(propertyName, value, this.language);
+	}
 
-    protected Criterion getUnaccentILikeExpression(final String propertyName, final String value) {
+    public static Criterion getUnaccentILikeExpression(final String propertyName, final String value, final String locale) {
         return new Criterion(){
             private static final long serialVersionUID = -8979378752879206485L;
 
@@ -119,7 +122,7 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 
                 if ( dialect instanceof PostgreSQLDialect ) {
                     //AMP-15628 - the replace of "this_." with "" inside the ids and columns was removed
-                    String ret=" "+ids[0]+" = any(contentmatch('"+entityName+"','"+columns[0]+"','"+language+"', ?)) OR ";
+                    String ret=" "+ids[0]+" = any(contentmatch('"+entityName+"','"+columns[0]+"','"+locale+"', ?)) OR ";
                     ret+=" unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";
                     return ret;
                 } else {

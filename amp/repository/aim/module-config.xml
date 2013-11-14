@@ -61,6 +61,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFieldsVisibility</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingDetail</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFundingMTEFProjection</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpAnnualProjectBudget</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpCurrency</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpCurrencyRate</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFilteredCurrencyRate</hibernate-class>

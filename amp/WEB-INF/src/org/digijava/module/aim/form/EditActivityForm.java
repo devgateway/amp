@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpChapter;
 import org.digijava.module.aim.dbentity.AmpComponentType;
@@ -2568,6 +2569,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public class Funding {
 		private ProposedProjCost proProjCost;
+		private List<ProposedProjCost> proposedAnnualBudgets;
 		private Collection<FundingOrganization> fundingOrganizations;
 		private String donorObjective;
 		private List<FundingDetail> fundingDetails;
@@ -3420,6 +3422,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		 */
 		public void setSourceRole(String sourceRole) {
 			this.sourceRole = sourceRole;
+		}
+
+		public List<ProposedProjCost> getProposedAnnualBudgets() {
+			return proposedAnnualBudgets;
+		}
+
+		public void setProposedAnnualBudgets(List<ProposedProjCost> proposedAnnualBudgets) {
+			this.proposedAnnualBudgets = proposedAnnualBudgets;
 		}	
 		
 	}

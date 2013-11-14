@@ -54,6 +54,7 @@ import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
+import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -91,6 +92,7 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPTableEvent;
+import com.lowagie.text.pdf.PdfTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
 import org.digijava.module.aim.helper.GlobalSettings;
@@ -1239,6 +1241,8 @@ public class ExportActivityToPDF extends Action {
 				
 				createGeneralInfoRow(mainLayout,columnName,costOutput);
 			}
+			
+			buildAnnualProjectBudgetTable(myForm,request,mainLayout);
 			
 			
 			/**
@@ -3493,6 +3497,42 @@ public class ExportActivityToPDF extends Action {
 		cell2.addElement(p1);
 		cell2.setBorder(0);
 		mainLayout.addCell(cell2);
+	}
+	
+	private void buildAnnualProjectBudgetTable(EditActivityForm myForm, HttpServletRequest request, PdfPTable mainLayout){
+		if(myForm.getFunding().getProposedAnnualBudgets()!=null && myForm.getFunding().getProposedAnnualBudgets().size()>0){
+			PdfPCell innerCell = new PdfPCell();
+			innerCell.setBorder(0);
+			Paragraph p1=new Paragraph(TranslatorWorker.translateText("Annual Proposed Project Budget"),titleFont);
+			p1.setAlignment(Element.ALIGN_RIGHT);
+			innerCell.addElement(p1);
+			innerCell.setBackgroundColor(new Color(244,244,242));
+			mainLayout.addCell(innerCell);
+			PdfPCell dataCell = new PdfPCell();
+			PdfPTable dataTable = new PdfPTable(2);
+			innerCell = new PdfPCell();
+			innerCell.setBorder(0);
+			innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Costs"), titleFont));
+			dataTable.addCell(innerCell);
+			innerCell = new PdfPCell();
+			innerCell.setBorder(0);
+			innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText("Year"), titleFont));
+			dataTable.addCell(innerCell);
+			Iterator<ProposedProjCost> it = myForm.getFunding().getProposedAnnualBudgets().iterator();
+			while(it.hasNext()){
+				ProposedProjCost ppc = it.next();
+				innerCell = new PdfPCell();
+				innerCell.setBorder(0);
+				innerCell = new PdfPCell(new Paragraph(ppc.getFunAmount()+" "+ppc.getCurrencyCode(), plainFont));
+				dataTable.addCell(innerCell);
+				innerCell = new PdfPCell();
+				innerCell.setBorder(0);
+				innerCell = new PdfPCell(new Paragraph(ppc.getFunDate(), plainFont));
+				dataTable.addCell(innerCell);
+			}
+			dataCell.addElement(dataTable);
+			mainLayout.addCell(dataCell);
+		}
 	}
 	
 	private void buildFundingInfoInnerTable(PdfPTable infoTable, FundingDetail fd,String []fmFields,ServletContext ampContext) throws WorkerException {

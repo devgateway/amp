@@ -141,6 +141,8 @@ LoggerIdentifiable, Cloneable {
 	protected Set<AmpFunding> funding ;
 	@VersionableCollection(fieldTitle = "Progress")
 	protected Set progress;
+	@VersionableCollection(fieldTitle = "Annual Project Budgets")
+	protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
 	
 	/**
 	 * Old, not used anymore
@@ -578,6 +580,7 @@ LoggerIdentifiable, Cloneable {
 	public Set<AmpOrgRole> getOrgrole() {
 		return orgrole;
 	}
+	
 
 	/**
 	 * @return
@@ -691,7 +694,6 @@ LoggerIdentifiable, Cloneable {
 		orgrole = set;
 	}
 
-
 	/**
 	 * @param set
 	 */
@@ -745,6 +747,13 @@ LoggerIdentifiable, Cloneable {
 	public Set getProgress() {
 		return progress;
 	}
+	
+	/**
+	 * @return
+	 */
+	public Set<AmpAnnualProjectBudget> getAnnualProjectBudgets() {
+		return annualProjectBudgets;
+	}
 
 	/**
 	 * @return
@@ -758,6 +767,13 @@ LoggerIdentifiable, Cloneable {
 	 */
 	public void setProgress(Set progress) {
 		this.progress = progress;
+	}
+	
+	/**
+	 * @param string
+	 */
+	public void setAnnualProjectBudgets(Set<AmpAnnualProjectBudget> annualProjectBudgets) {
+		this.annualProjectBudgets = annualProjectBudgets;
 	}
 
 	/**
@@ -2035,4 +2051,6 @@ contactName = string;
 			throw new InternalError(e.toString());
 		}
 	}
+
+	
 }

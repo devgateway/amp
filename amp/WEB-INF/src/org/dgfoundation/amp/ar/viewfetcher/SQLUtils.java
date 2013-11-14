@@ -9,6 +9,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.FilterParam;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 
 public class SQLUtils {
 	/**

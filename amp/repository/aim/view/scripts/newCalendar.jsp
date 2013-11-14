@@ -219,7 +219,9 @@
 
 	function clearDate(objectId){
 		var textboxEl= document.getElementById(objectId);
-		textboxEl.value = "";
+		if (textboxEl != null) {
+			textboxEl.value = "";
+		}
 	}
 	
 	function positionHelper (buttonId) {

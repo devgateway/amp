@@ -15,6 +15,10 @@
 
 	<http pattern="/aim/showRegisterUser.do**" security="none" />
 
+    <http pattern="/aim/showChangePassword.do**" security="none" />
+
+    <http pattern="/aim/showEmailForm.do**" security="none" />
+
 	<http pattern="/aim/registerUser.do**" security="none" />
 	
 	<http pattern="/visualization/dataDispatcher.do**" security="none" />
@@ -64,12 +68,10 @@
 	<!-- uncomment this to see debugging info about spring security -->
 	<!-- <debug/> -->
 
-    <!-- Anonymous is allowed for one page only -->
+    <!-- Pages with anonymous access -->
     <http pattern="/aim/viewActivityPreview.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
-
-    <!-- Anonymous is allowed for one page only -->
     <http pattern="/visualization/launchDashboard.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>

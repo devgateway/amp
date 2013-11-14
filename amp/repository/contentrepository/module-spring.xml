@@ -7,7 +7,11 @@
                     http://www.springframework.org/schema/security 
                     http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-	<http pattern="/contentrepository/publicDocTabManager.do**" security="none" />	
+    <!-- Pages with anonymous access -->
+    <http pattern="/contentrepository/publicDocTabManager.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+
  	<http pattern="/contentrepository/documentManager.do\?ajaxDocumentList=true&amp;dynamicList=publicListObj" request-matcher="regex" security="none" />
  	<http pattern="/contentrepository/getResourcesInfo.do\?type=null\u0026unique=[0-9]+" security="none" request-matcher="regex"/>
  	<http pattern="/contentrepository/downloadFile.do\?uuid=[a-z0-9\-]+" request-matcher="regex" security="none" /> 

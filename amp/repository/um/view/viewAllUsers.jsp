@@ -451,8 +451,7 @@ function banUser(txt) {
 																		</tr>
 																	</logic:notEmpty>
 
-																	<logic:notEmpty name="umViewAllUsersForm"
-																		property="alphaPages">
+                                                                    <c:if test="${not empty umViewAllUsersForm.alphaPages || not empty umViewAllUsersForm.digitPages}">
 																		<tr>
 																			<td align="center" colspan="4">
 																				<table width="90%">
@@ -491,12 +490,37 @@ function banUser(txt) {
 																									</c:if>
 															|&nbsp;
 															</c:if>
-																							</logic:iterate></td>
+																							</logic:iterate>
+
+                                                                                            <br />
+                                                                                            <logic:iterate name="umViewAllUsersForm"
+                                                                                                           property="digitPages" id="digitPages"
+                                                                                                           type="java.lang.String">
+
+                                                                                                <c:if test="${digitPages != null}">
+                                                                                                    <c:if
+                                                                                                            test="${aimOrgManagerForm.currentAlpha == digitPages}">
+                                                                                                        <font color="#FF0000"><%=digitPages %></font>
+                                                                                                    </c:if>
+                                                                                                    <c:if
+                                                                                                            test="${aimOrgManagerForm.currentAlpha != digitPages}">
+                                                                                                        <c:set var="translation">
+                                                                                                            <digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>
+                                                                                                        </c:set>
+                                                                                                        <a
+                                                                                                                href="javascript:searchAlpha('<%=digitPages%>')"
+                                                                                                                title="${translation}"> <%=digitPages %></a>
+                                                                                                    </c:if>
+                                                                                                    |&nbsp;
+                                                                                                </c:if>
+                                                                                            </logic:iterate>
+
+                                                                                        </td>
 																					</tr>
 
 																				</table></td>
 																		</tr>
-																	</logic:notEmpty>
+																	</c:if>
 																	<logic:notEmpty name="umViewAllUsersForm"
 																		property="alphaPages">
 																		<tr>

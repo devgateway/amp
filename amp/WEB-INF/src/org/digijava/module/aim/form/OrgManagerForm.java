@@ -30,7 +30,6 @@ private String keyword;
   private Collection<AmpOrganisation> pagedCol = null;
   private Collection colsAlpha = null;
   private Collection pages = null;
-  private String[] alphaPages = null;
   private boolean orgSelReset;
   private boolean reset;
   private boolean orgPopupReset;
@@ -42,31 +41,33 @@ private String keyword;
   private int offset;
   private String sortBy;
   private boolean adminSide;
-    private String[] digitPages;
+
+  private String[] digitPages;
+  private String[] alphaPages = null;
 
     public boolean isAdminSide() {
-	return adminSide;
-}
+	    return adminSide;
+    }
 
-public void setAdminSide(boolean adminSide) {
-	this.adminSide = adminSide;
-}
+    public void setAdminSide(boolean adminSide) {
+        this.adminSide = adminSide;
+    }
 
-public String getSortBy() {
-	return sortBy;
-}
+    public String getSortBy() {
+        return sortBy;
+    }
 
-public void setSortBy(String sortBy) {
-	this.sortBy = sortBy;
-}
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
 
-public OrgManagerForm() {
-    reset = false;
-    orgPopupReset = true;
-    numResults = 0;
-    tempNumResults = 0;
-    //ampOrgTypeId = new Long(-1);
-  }
+    public OrgManagerForm() {
+        reset = false;
+        orgPopupReset = true;
+        numResults = 0;
+        tempNumResults = 0;
+        //ampOrgTypeId = new Long(-1);
+    }
 
   public void reset(ActionMapping mapping, HttpServletRequest request) {
 

@@ -272,12 +272,12 @@ public class MapFieldsAction extends MultiAction {
 		if(DataExchangeConstants.IATI_ACTIVITY.compareTo(ampClassTypeSelected) ==0 )
 			allEntities 	=	DataExchangeUtils.getNameGroupAllActivities();
 		if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(ampClassTypeSelected)==0){
-			// AMP-16239
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.orgType, f.ampOrgTypeId from " + AmpOrgType.class.getName()+ " f order by f.orgType asc");
+			String orgTypeNameHql = AmpOrgType.hqlStringForName("f");
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select %s, f.ampOrgTypeId from " + AmpOrgType.class.getName()+ " f order by %s asc", orgTypeNameHql, orgTypeNameHql));
 		}
 		if(DataExchangeConstants.IATI_ORGANIZATION.compareTo(ampClassTypeSelected)==0){
-			// AMP-16239
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f where (f.deleted is null or f.deleted = false) order by f.name asc");
+			String orgNameHql = AmpOrganisation.hqlStringForName("f");
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select %s, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f where (f.deleted is null or f.deleted = false) order by %s asc", orgNameHql, orgNameHql));
 		}
 		if(DataExchangeConstants.IATI_LOCATION.compareTo(ampClassTypeSelected)==0){
 			allEntities 	=	DataExchangeUtils.getNameIdAllLocations();
@@ -286,12 +286,12 @@ public class MapFieldsAction extends MultiAction {
 			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.ACTIVITY_STATUS_KEY);
 		}
 		if(DataExchangeConstants.AMP_VOCABULARY_CODE.compareTo(ampClassTypeSelected)==0){
-			// AMP-16239
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.secSchemeName, f.ampSecSchemeId from " + AmpSectorScheme.class.getName()+ " f");
+			String secSchemeNameHql = AmpSectorScheme.hqlStringForName("f");
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select %s, f.ampSecSchemeId from " + AmpSectorScheme.class.getName()+ " f", secSchemeNameHql));
 		}
 		if(DataExchangeConstants.IATI_SECTOR.compareTo(ampClassTypeSelected)==0){
-			// AMP-16239
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select concat(f.sectorCodeOfficial,concat(' - ',f.name)) as sname, f.ampSectorId  from " + AmpSector.class.getName()+ " f  where (f.deleted is null or f.deleted = false) order by sname");
+			String sectorNameHql = AmpSector.hqlStringForName("f");
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select concat(f.sectorCodeOfficial,concat(' - ',%s)) as sname, f.ampSectorId  from " + AmpSector.class.getName()+ " f  where (f.deleted is null or f.deleted = false) order by sname", sectorNameHql));
 		}
 		//type of assistance
 		if(CategoryConstants.TYPE_OF_ASSISTENCE_NAME.compareTo(ampClassTypeSelected)==0){

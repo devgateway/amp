@@ -17,7 +17,6 @@ public class ViewAllUsersForm
     private Collection<UserBean> pagedUsers;
     //users list for selected alpha
     private Collection<UserBean> alphaUsers;
-    private String[] alphaPages = null;
     //its true when no letter is selected
     private boolean selectedNoLetter;
     private Integer currentPage;
@@ -34,6 +33,9 @@ public class ViewAllUsersForm
     private int pagesToShow;
     private int offset;
     private int pagesSize;
+
+    private String[] digitPages;
+    private String[] alphaPages = null;
     
     private boolean showBanned	= false;
     
@@ -209,6 +211,14 @@ public class ViewAllUsersForm
 	public void setShowBanned(boolean showBanned) {
 		this.showBanned = showBanned;
 	}
+
+    public void setDigitPages(String[] digitPages) {
+        this.digitPages = digitPages;
+    }
+
+    public String[] getDigitPages() {
+        return digitPages;
+    }
 
 	
 	

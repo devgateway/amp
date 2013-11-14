@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -77,5 +78,10 @@ public class AmpSectorScheme implements Serializable
         }
         return used;
     }
+       
+   	public static String hqlStringForName(String idSource)
+   	{
+   		return InternationalizedModelDescription.getForProperty(AmpSectorScheme.class, "secSchemeName").getSQLFunctionCall(idSource + ".ampSecSchemeId");
+   	}
 
 }

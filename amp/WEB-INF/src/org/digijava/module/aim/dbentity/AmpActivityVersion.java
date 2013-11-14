@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.dbentity;
 
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
@@ -66,5 +67,15 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     @Override
     public Object prepareMerge(AmpActivityVersion newActivity) throws Exception {
         throw new AssertionError("Not implemented");
+    }
+    
+    public static String sqlStringForName(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(AmpActivityVersion.class, "name").getSQLFunctionCall(idSource);
+    }
+
+    public static String hqlStringForName(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(AmpActivityVersion.class, "name").getSQLFunctionCall(idSource + ".ampActivityId");
     }
 }

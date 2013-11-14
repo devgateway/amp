@@ -84,9 +84,8 @@ public class TeamMemberUtil {
 					id);
 			User user = tm.getUser();
 			
-			// AMP-16239
 			String qryStr = "select o.ampOrgId from " + AmpOrganisation.class.getName() + " o " +
-					"where (o.name=:name) and (o.deleted is null or o.deleted = false) ";
+					"where (" + AmpOrganisation.hqlStringForName("o") + "=:name) and (o.deleted is null or o.deleted = false) ";
 			Query qry = session.createQuery(qryStr);
 			qry.setParameter("name",user.getOrganizationName(),Hibernate.STRING);
 			Iterator itr = qry.list().iterator();
@@ -769,7 +768,7 @@ public class TeamMemberUtil {
 
                         String queryString = "select r from "
 					+ AmpTeamMember.class.getName() + " t  inner join  t.reports r "
-                            + "  where (t.ampTeamMemId=:teamId) order by r.name limit " + currentPage + ", " +
+                            + "  where (t.ampTeamMemId=:teamId) order by " + AmpReports.hqlStringForName("r") +" limit " + currentPage + ", " +
                             reportPerPage;
                         Query qry = session.createQuery(queryString);
                         qry.setLong("teamId", id);

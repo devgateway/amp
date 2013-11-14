@@ -155,7 +155,7 @@ public class DbUtil {
             queryString.append(" and org.orgGrpId=:orgGroupId ");
         }
         if (publicView) {
-            queryString.append(String.format(" and (act.draft is null or act.draft=false) and act.approvalStatus IN ('%s, '%s') and tm.parentTeamId is not null ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
+            queryString.append(String.format(" and (act.draft is null or act.draft=false) and act.approvalStatus IN ('%s', '%s') and tm.parentTeamId is not null ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
         }
 
         queryString.append("order by org.name asc");
@@ -644,7 +644,7 @@ public class DbUtil {
          */
         try {
         	String oql = "select act.ampActivityId, act.ampId, act.name ";
-            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true, true);
+            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, false, true);
             //oql += " order by act.name";
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
@@ -659,10 +659,10 @@ public class DbUtil {
             if (financingInstrumentId != null) {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
-            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
-	            query.setLong("transactionType", transactionType);
-	            query.setString("adjustmentType",adjustmentTypeActual);
-            }
+            //if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+	            //query.setLong("transactionType", transactionType);
+	            //query.setString("adjustmentType",adjustmentTypeActual);
+            //}
             activities = query.list();
         }
         catch (Exception e) {
@@ -2386,7 +2386,20 @@ public class DbUtil {
             queryString.append(" where org.ampOrgId=:orgId and orgContact.primaryContact=true and (org.deleted is null or org.deleted = false) ");
 			qry = session.createQuery(queryString.toString());
 			qry.setLong("orgId", orgId);
-			contact=(AmpContact)qry.uniqueResult();
+			if (qry.uniqueResult()!=null){
+				contact=(AmpContact)qry.uniqueResult();
+			} else {
+				queryString = new StringBuilder();
+				queryString.append("select con from ");
+	            queryString.append(AmpOrganisation.class.getName());
+	            queryString.append(" org inner join org.organizationContacts orgContact  ");
+	            queryString.append(" inner join orgContact.contact con ");
+	            queryString.append(" where org.ampOrgId=:orgId and (org.deleted is null or org.deleted = false) ");
+				qry = session.createQuery(queryString.toString());
+				qry.setLong("orgId", orgId);
+				if (qry.list()!=null && qry.list().size()>0)
+					contact=(AmpContact)qry.list().iterator().next();
+			}
         } catch (Exception ex) {
             logger.error("Unable to get contact from database ",ex);
             throw new DgException(ex);

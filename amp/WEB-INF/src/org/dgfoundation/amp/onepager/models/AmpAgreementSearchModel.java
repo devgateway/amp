@@ -46,7 +46,7 @@ public class AmpAgreementSearchModel extends
 			Session session = PersistenceManager.getRequestDBSession();
 			Integer maxResults = (Integer) getParams().get(
 					AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
-			// AMP-16239
+
 			Criteria crit = session.createCriteria(AmpAgreement.class);
 			crit.setCacheable(true);
 			Junction junction = Restrictions.disjunction().add(
@@ -79,7 +79,7 @@ public class AmpAgreementSearchModel extends
 
             if (!isExactMatch()){
                 list.addAll(agItems);
-				list.add(NEW_AGREEMENT);
+				list.add(0,NEW_AGREEMENT);
 			}
 			else{
 				Iterator<AmpAgreement> it = agItems.iterator();

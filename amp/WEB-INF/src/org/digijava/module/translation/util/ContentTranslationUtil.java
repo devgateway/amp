@@ -87,7 +87,7 @@ public class ContentTranslationUtil {
      * @param fieldTrnCurrentLocale new value for the field in the currentLocale
      * @return the identifier for the object in the TranslationStore
      */
-    private static Long getFieldTrnPack(String objClass, Long objId, String fieldName, String currentLocale, String fieldTrnCurrentLocale){
+    private static Long getFieldTrnPack(Class clazz, String objClass, Long objId, String fieldName, String currentLocale, String fieldTrnCurrentLocale){
         //get old translations for current field
         List<AmpContentTranslation> currentTranslations = loadFieldTranslations(objClass, objId, fieldName);
         //create the FieldTranslationPack object
@@ -100,6 +100,14 @@ public class ContentTranslationUtil {
 
         //update the translation for the current locale
         trnPack.add(currentLocale, fieldTrnCurrentLocale);
+
+        if (trnPack.get(getBaseLanguage()) == null){
+            //retrieve the current value from the db and set it as the base language translation
+            String baseTrn = (String)loadFieldFromDb(clazz, objId, fieldName);
+            if (baseTrn != null)
+                trnPack.add(getBaseLanguage(), baseTrn);
+        }
+
         return TranslationStore.insert(trnPack);
     }
 
@@ -133,7 +141,7 @@ public class ContentTranslationUtil {
                     Method methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
                     String fieldTrnCurrentLocale = (String) methGetField.invoke(obj);
                     //generate FTP with old translations + insert updated translation
-                    Long packId = getFieldTrnPack(objClass, objId, fieldName, currentLocale, fieldTrnCurrentLocale);
+                    Long packId = getFieldTrnPack(clazz, objClass, objId, fieldName, currentLocale, fieldTrnCurrentLocale);
                     //replace the value of the field with the identifier for the FTP from the TranslationStore
                     Method methSetField = clazz.getMethod("set" + Strings.capitalize(fieldName), String.class);
                     methSetField.invoke(obj, String.valueOf(packId));
@@ -194,6 +202,7 @@ public class ContentTranslationUtil {
             for (int i = 0; i < types.length; i++){
             	String fieldName = propertyNames[i];
             	Field field = getFieldByName(clazz, fieldName);
+
                 if (field.getAnnotation(TranslatableField.class) != null && (previousState == null || (currentState[i] != null && !currentState[i].equals(previousState[i])))){
                 	FieldTranslationPack ftp;
                     Long ftpId;
@@ -214,36 +223,37 @@ public class ContentTranslationUtil {
                     if (ftp == null)
                     	throw new AssertionError("Can't get the field translation pack ... should be in the cache!");
                     //restore the base translation to the current object
-                    String baseTranslation;
+                    String baseTranslation = null;
                     if (isVersionable)
                     	//base translation should be in the FTP
-                    	baseTranslation = ftp.getNonNull(getBaseLanguage(), TLSUtils.getLangCode());
+                    	baseTranslation = ftp.get(getBaseLanguage());
                     else
-                        //for non-versionable entities just load the base translation from the db
-                        baseTranslation = loadFieldTranslationInLocale(objectClass, objectId, fieldName, getBaseLanguage());
+                        if (notInBaseLanguage()){
+                            //for non-versionable entities just load the base translation from the db
+                            baseTranslation = loadFieldTranslationInLocale(objectClass, objectId, fieldName, getBaseLanguage());
+                        }
 
                     if (baseTranslation == null){
                     	logger.debug("Object without base translation");
                         //create base translation for object
-                        baseTranslation = (String) loadFieldFromDb(clazz, objectId, fieldName);
+                        if (notInBaseLanguage()) //if we're in the base language we don't load the field
+                            baseTranslation = (String) loadFieldFromDb(clazz, objectId, fieldName);
                         if (baseTranslation == null) //new object, hasn't been saved yet
                             baseTranslation = (String) currentState[i];
                         ftp.add(getBaseLanguage(), baseTranslation);
-                        //restore current state of the object
-                        currentState[i] = baseTranslation;
-                        stateModified = true;
                     }
-                    else{
-                    	logger.debug("Updated base translation with: " + baseTranslation + " (currentlocale =" + TLSUtils.getLangCode() + ")");
-                    	if (previousState != null && previousState[i] != null){
-                    		//since we changed the object on load, we need to change the previous state to the db state
-                    		Object prevState = loadFieldFromDb(clazz, objectId, fieldName);
-                    		previousState[i] = prevState;
-                    	}
-                        //restore current state to the translation in the base language
-                    	currentState[i] = baseTranslation;
-                    	stateModified = true;
+
+                    //restore current state to the translation in the base language
+                    currentState[i] = baseTranslation;
+                    stateModified = true;
+
+                    logger.debug("Updated base translation with: " + baseTranslation + " (currentlocale =" + TLSUtils.getLangCode() + ")");
+                    if (previousState != null && previousState[i] != null){
+                        //since we changed the object on load, we need to change the previous state to the db state
+                        Object prevState = loadFieldFromDb(clazz, objectId, fieldName);
+                        previousState[i] = prevState;
                     }
+
                 }
             }
 
@@ -252,6 +262,10 @@ public class ContentTranslationUtil {
         }
         
         return stateModified;
+    }
+
+    private static boolean notInBaseLanguage() {
+        return !getBaseLanguage().equals(TLSUtils.getLangCode());
     }
 
 

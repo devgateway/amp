@@ -341,13 +341,17 @@ public class DashboardUtil {
         
 		if (activityListReduced.size()>0) {
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep2);
-	        List<AmpFundingDetail> preloadFundingDetails = DbUtil.getFundingDetails(filter, startDate, endDate, null, null, true);
+	        DashboardFilter newFilter = filter.getCopyFilterForFunding();
+	        newFilter.setTransactionType(org.digijava.module.aim.helper.Constants.COMMITMENT);
+	        List<AmpFundingDetail> preloadFundingDetailsCommitments = DbUtil.getFundingDetails(newFilter, startDate, endDate, null, null, true);
+	        newFilter.setTransactionType(org.digijava.module.aim.helper.Constants.DISBURSEMENT);
+	        List<AmpFundingDetail> preloadFundingDetailsDisbursements = DbUtil.getFundingDetails(newFilter, startDate, endDate, null, null, true);
 			DecimalWraper fundingCal = null;
 			if (filter.getTransactionType()!=org.digijava.module.aim.helper.Constants.MTEFPROJECTION){
-				fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, filter.getAdjustmentType());
+				fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetailsCommitments, org.digijava.module.aim.helper.Constants.COMMITMENT, filter.getAdjustmentType());
 				form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep3);
-				fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, filter.getAdjustmentType());
+				fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetailsDisbursements, org.digijava.module.aim.helper.Constants.DISBURSEMENT, filter.getAdjustmentType());
 				form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 				form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			} else {

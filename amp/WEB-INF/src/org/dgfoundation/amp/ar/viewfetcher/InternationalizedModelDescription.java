@@ -7,6 +7,7 @@ import java.util.*;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.mapping.Column;
 import org.hibernate.mapping.PersistentClass;
@@ -94,5 +95,5 @@ public class InternationalizedModelDescription {
 			globalRepository.put(className, new InternationalizedModelDescription(clazz));
 		return globalRepository.get(className);
 	}
-	
+
 }

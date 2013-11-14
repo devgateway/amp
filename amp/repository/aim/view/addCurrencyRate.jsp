@@ -65,7 +65,7 @@
 		myPanel.render(document.body);
 	}
 	//this is called from editActivityMenu.jsp
-	window.onload=initCurrencyScripts();
+	window.onload=initCurrencyScripts;
 -->	
 </script>
 <style type="text/css">

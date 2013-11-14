@@ -41,7 +41,7 @@ public class AmpPIOrganisationSearchModel extends
 			Integer maxResults = (Integer) getParams().get(PARAM.MAX_RESULTS);
 			Criteria crit = session.createCriteria(AmpOrganisation.class);
 			crit.setCacheable(true);
-			// AMP-16239
+
 			Junction junction = Restrictions
 					.conjunction()
 					.add(Restrictions.disjunction()

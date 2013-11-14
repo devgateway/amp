@@ -14,27 +14,11 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.OrgManagerForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.calendar.util.AmpUtil;
 
-public class OrganisationManager extends Action {
+    public class OrganisationManager extends Action {
 
   private static Logger logger = Logger.getLogger(OrganisationManager.class);
-
-    final static Collator collator = Collator.getInstance();
-    final static Comparator<String> CharUnicodeComparator = new Comparator<String>() {
-        public final int compare(String ch1, String ch2) {
-            if (Character.isDigit(ch1.charAt(0)) && Character.isLetter(ch2.charAt(0))) {
-                return -1;
-            } else if (Character.isDigit(ch2.charAt(0)) && Character.isLetter(ch1.charAt(0)) ) {
-                return 1;
-            }
-            return collator.compare(ch1, ch2);
-        }
-    };
-
-    static {
-        collator.setStrength(Collator.TERTIARY);
-    }
-
 
   public ActionForward execute(ActionMapping mapping, ActionForm form,
                                javax.servlet.http.HttpServletRequest request,
@@ -249,8 +233,8 @@ public class OrganisationManager extends Action {
   }
 
     private void collectAlphaArray(OrgManagerForm eaForm, Collection<AmpOrganisation> col) {
-        SortedSet<String> chars = new TreeSet<String>(CharUnicodeComparator);
-        SortedSet<String> digits = new TreeSet<String>(CharUnicodeComparator);
+        SortedSet<String> chars = new TreeSet<String>(AmpUtil.CharUnicodeComparator);
+        SortedSet<String> digits = new TreeSet<String>(AmpUtil.CharUnicodeComparator);
         for (AmpOrganisation ampOrganisation : col) {
             if (ampOrganisation.getName() != null && ampOrganisation.getName().length() > 0) {
                 Character firstLetter = ampOrganisation.getName().toUpperCase().charAt(0);

@@ -127,8 +127,14 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 			if (ampCategoryValues != null) {
 				boolean isMultiselect = false;
 				if(ampCategoryValues.size() > 0){
-					ampCategoryClass			= ((AmpCategoryValue)ampCategoryValues.toArray()[0]).getAmpCategoryClass();
-					isMultiselect		= this.getMultiselect(ampCategoryClass);
+					for (Iterator iterator = ampCategoryValues.iterator(); iterator.hasNext();) {
+						AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+						if (ampCategoryValue!=null){
+							ampCategoryClass = ampCategoryValue.getAmpCategoryClass();
+							break; 
+						}
+					}
+					isMultiselect = this.getMultiselect(ampCategoryClass);
 				}
 				if (isMultiselect) {
 				

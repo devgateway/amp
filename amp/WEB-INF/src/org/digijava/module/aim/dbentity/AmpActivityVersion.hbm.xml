@@ -282,7 +282,7 @@
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey" />
 		</set>
-		<set name="actPrograms" cascade="all" inverse="true">
+		<set name="actPrograms" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityProgram" />

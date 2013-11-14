@@ -17,11 +17,14 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -72,15 +75,17 @@ public class SearchUtil {
 					.getMemberId());
 			String queryString = null;
 			Query qry = null;
+			
+			String reportNameHql = AmpReports.hqlStringForName("r");
+			String reportDescriptionHql = AmpReports.hqlStringForDescription("r");
 
 			if (team.getAccessType().equalsIgnoreCase(
 					Constants.ACCESS_TYPE_MNGMT)) {
-				// AMP-16239: name and description
 				queryString = "select DISTINCT r from "
 						+ AmpReports.class.getName()
-						+ " r where r.drilldownTab=false AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
+						+ " r where r.drilldownTab=false AND (lower(" + reportNameHql + ") LIKE lower(:keyword) OR " + reportDescriptionHql + " LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
 						+ AmpTeamReports.class.getName()
-						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
+						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by " + reportNameHql;
 				qry = session.createQuery(queryString);
 
 				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
@@ -88,11 +93,10 @@ public class SearchUtil {
 				qry.setParameter("keyword", "%" + string + "%");
 				col = qry.list();
 			} else {
-				// AMP-16239
 				queryString = "select distinct r from "
 						+ AmpReports.class.getName()
 						+ "  r left join r.members m where "
-						+ " r.drilldownTab=false AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND "
+						+ " r.drilldownTab=false AND (lower(" + reportNameHql + ") LIKE lower(:keyword) OR " + reportDescriptionHql + " LIKE :keyword) AND "
 						+ " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"
 						+ " or r.id in (select r2.id from "
 						+ AmpTeamReports.class.getName()
@@ -136,14 +140,16 @@ public class SearchUtil {
 			String queryString = null;
 			Query qry = null;
 
+			String reportNameHql = AmpReports.hqlStringForName("r");
+			String reportDescriptionHql = AmpReports.hqlStringForDescription("r");
+
 			if (team.getAccessType().equalsIgnoreCase(
 					Constants.ACCESS_TYPE_MNGMT)) {
-				// AMP-16239
 				queryString = "select DISTINCT r from "
 						+ AmpReports.class.getName()
-						+ " r where r.drilldownTab=true AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
+						+ " r where r.drilldownTab=true AND (lower(" + reportNameHql + ") LIKE lower(:keyword) OR " + reportDescriptionHql + " LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
 						+ AmpTeamReports.class.getName()
-						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
+						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by " + reportNameHql;
 				qry = session.createQuery(queryString);
 
 				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
@@ -151,11 +157,10 @@ public class SearchUtil {
 				qry.setParameter("keyword", "%" + string + "%");
 				col = qry.list();
 			} else {
-				// AMP-16239
 				queryString = "select distinct r from "
 						+ AmpReports.class.getName()
 						+ "  r left join r.members m where "
-						+ " r.drilldownTab=true AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND "
+						+ " r.drilldownTab=true AND (lower(" + reportNameHql + ") LIKE lower(:keyword) OR " + reportDescriptionHql + " LIKE :keyword) AND "
 						+ " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"
 						+ " or r.id in (select r2.id from "
 						+ AmpTeamReports.class.getName()
@@ -203,8 +208,7 @@ public class SearchUtil {
 			session = PersistenceManager.getRequestDBSession();
 
 			//not a very nice solution, but I kept the old code and idea and just added some speed
-			// AMP-16239
-			String newQueryString = "select f.amp_activity_id, f.amp_id,  f.name from amp_activity f where f.amp_activity_id in ("+filter.getGeneratedFilterQuery()+")";
+			String newQueryString = "SELECT f.amp_activity_id, f.amp_id, " + AmpActivityVersion.sqlStringForName("f.amp_activity_id") + " AS name FROM amp_activity f WHERE f.amp_activity_id in ("+filter.getGeneratedFilterQuery()+")";
 			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", org.hibernate.Hibernate.LONG);
 			newQuery		  = newQuery.addScalar("amp_id", org.hibernate.Hibernate.STRING);
 			newQuery		  = newQuery.addScalar("name", org.hibernate.Hibernate.STRING);
@@ -357,6 +361,7 @@ public class SearchUtil {
         query.append("where (team.ampTeamId in (");
         query.append(Util.toCSStringForIN(teams));
         query.append( ")");
+        String orgNameHql = AmpOrganisation.hqlStringForName("org");
         if(hasComputedOrgs){
               query.append( " or org.ampOrgId in (");
               query.append( Util.toCSStringForIN(teamAO));
@@ -365,8 +370,7 @@ public class SearchUtil {
         query.append(")");
         query.append(" and roleCode.roleCode=:roleCode ");
         if (!hasComputedOrgs) {
-        	// AMP-16239
-            query.append(" and org.name like :name");
+            query.append(" and " + orgNameHql +" like :name");
             if (tm.getTeamAccessType().equals("Management")) {
                 query.append(String.format(" and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
             }
@@ -388,7 +392,6 @@ public class SearchUtil {
             if (!hasComputedOrgs) {
                 activities.addAll(result);
             } else {
-            	// AMP-16239
                 StringBuilder queryString = new StringBuilder();
                 queryString.append(" select act from ");
                 queryString.append(AmpActivity.class.getName());
@@ -400,7 +403,7 @@ public class SearchUtil {
                 queryString.append(" and act.ampActivityId in (");
                 queryString.append(Util.toCSStringForIN(result));
                 queryString.append(")");
-                queryString.append(" and org.name like :name");
+                queryString.append(" and " + orgNameHql +" like :name");
                 qry = session.createQuery(queryString.toString());
                 qry.setString("roleCode", roleCode);
                 qry.setString("name", '%' + keyword + '%');

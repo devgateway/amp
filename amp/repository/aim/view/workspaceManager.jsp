@@ -258,15 +258,16 @@
                 }
           
                 var name=oRecord.getData( 'name' ).replace("\'", "'").replace("<", "&lt;").replace(">", "&gt;");
-                var accType = "<digi:trn jsFriendly="true">"+oRecord.getData( 'accessType' )+"</digi:trn>";
-                var comp = "<digi:trn jsFriendly="true">"+oRecord.getData( 'computation' )+compOrgs+"</digi:trn>";
+                var accType = oRecord.getData( 'accessType' );
+                var comp = oRecord.getData( 'computation' )+compOrgs;
+              
                 elCell.innerHTML =
                     name
                     +'<div id="tooltip'+oRecord.getData( 'ID' )+'" style="z-index:1;display:none">'+
                     '<ul>'+
-                    '<li>'+accType+'</li>'+ 
+                    '<li><digi:trn>'+accType+'</digi:trn></li>'+ 
                     '<li><digi:trn>Children (Workspaces)</digi:trn>:'+children+'</li>'+
-                   '<li><digi:trn>Computation</digi:trn>:'+comp+'</li>'+
+                    '<li><digi:trn>Computation</digi:trn>:<digi:trn>'+comp+'</digi:trn></li>'+
                     '</ul>'+
                     '</div>';
             };

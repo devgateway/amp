@@ -44,7 +44,7 @@ public class AmpMEIndicatorSearchModel extends
 			Integer maxResults = (Integer) getParams().get(
 					AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 			Criteria crit = session.createCriteria(AmpIndicator.class);
-			// AMP-16239
+			
 			crit.setCacheable(true);
 			if (input.trim().length() > 0){
 				Junction junction = Restrictions.conjunction().add(getTextCriterion("name", input));

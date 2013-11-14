@@ -420,9 +420,9 @@ public final class AdvancedReportUtil {
 		String queryString;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// AMP-16239
+			String reportName = AmpReports.hqlStringForName("report");
 			queryString = "select report.ownerId from " + AmpReports.class.getName() 
-                                + " report where report.name=:name and report.ownerId=:ownerId and report.drilldownTab=:drilldownTab";
+                                + " report where " + reportName + "=:name and report.ownerId=:ownerId and report.drilldownTab=:drilldownTab";
                         if(dbReportId!=null){
                             queryString+=" and report.ampReportId!=:dbReportId";
                         }

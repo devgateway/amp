@@ -636,7 +636,7 @@ public class CompareActivityVersions extends DispatchAction {
 			auxActivity.setMergeSource1(vForm.getActivityOne());
 			auxActivity.setMergeSource2(vForm.getActivityTwo());
 
-            String ampId = ActivityUtil.generateAmpId(member.getUser(), auxActivity.getAmpActivityId(), session);
+            String ampId = ActivityUtil.generateAmpId(member.getUser(), prevVersion.getAmpActivityId(), session);
             auxActivity.setAmpId(ampId);
 
             AmpActivityContact actCont;

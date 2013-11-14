@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddSectorForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.caching.AmpCaching;
 
 
 public class AddSector extends Action {
@@ -262,6 +263,10 @@ public class AddSector extends Action {
 					newSector.setVersion(null);
 					ARUtil.clearDimension(SectorDimension.class);
 					DbUtil.add(newSector);
+					//jdeanquin was here
+					//after the second level sector is added we clean the sector cache in order to the new sector gets displayed
+					//perhaps this should be done in sector util but DbUtil is called directly from here
+					AmpCaching.getInstance().sectorsCache=null;
 					
 					//Long parentId = id;//new Long(id);
 					addSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
@@ -371,7 +376,9 @@ public class AddSector extends Action {
 					
 					ARUtil.clearDimension(SectorDimension.class);
 					DbUtil.add(newSector);
-					
+					//jdeanquin was here
+					//in case of a level3 sector we do clean the cache
+					AmpCaching.getInstance().sectorsCache=null;
 					//Long parentId = id;//new Long(id);
 					addSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
 					Collection _subSectors = addSectorForm.getSubSectors();

@@ -3,7 +3,7 @@ html{background:url(/TEMPLATE/ampTemplate/img_2/bg.jpg) repeat-x #fff;font-famil
 input{background:none;border:transparent;}
 h1{color:#fff;font-size:14px;text-shadow: 1px 1px 5px #2b3942;}
 #header h1{line-height:65px;width:400px;float:left;}
-#loginbox{width:390px;min-height:255px;margin:0 auto;background:url(/TEMPLATE/ampTemplate/img_2/loginbox.jpg) no-repeat top left;margin-top:20px;padding:0px 0px 0px 0px;}
+#loginbox{width:390px;min-height:205px;margin:0 auto;background:url(/TEMPLATE/ampTemplate/img_2/loginbox.jpg) no-repeat top left;margin-top:20px;padding:0px 0px 0px 0px;}
 #loginbox div#footer{height:20px;width:390px;background:url(/TEMPLATE/ampTemplate/img_2/loginft.jpg) no-repeat top left;clear:both;}
 #loginbox form{width:352px;margin:10px 20px 0px 18px;}
 #loginbox p.userfield{display:block;width:352px;height:37px;background:url(/TEMPLATE/ampTemplate/img_2/login.gif) no-repeat top left;margin:0px 0px 0px 0px;}

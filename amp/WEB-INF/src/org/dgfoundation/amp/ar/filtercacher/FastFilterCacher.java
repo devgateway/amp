@@ -7,6 +7,14 @@ import java.sql.Statement;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 
+/**
+ * 
+ * Chuck Norris doesn't need technical documentation. 
+ * He just stares down the code until it tells him everything he wants to know.
+ * 
+ * Please write javadocs!!! Chuck Norris has retired...
+ *
+ */
 public class FastFilterCacher extends FilterCacher {
 
 	private static Logger logger	= Logger.getLogger(FilterCacher.class);

@@ -62,6 +62,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
 import org.hibernate.HibernateException;
@@ -890,11 +891,14 @@ public class LuceneUtil implements Serializable {
 
 			MoreLikeThis mlt = new MoreLikeThis(ir);
 			mlt.setMinDocFreq(1);
+			mlt.setMinWordLen(2);
+			mlt.setBoost(true);
 			mlt.setMinTermFreq(1);
 			
 				
 			mlt.setFieldNames(new String[] { "title" });
 			mlt.setAnalyzer(analyzer);
+			//System.out.println("mlt.describeparams="+mlt.describeParams());
 		
 
 			Reader reader = new StringReader(origSearchString);
@@ -902,9 +906,15 @@ public class LuceneUtil implements Serializable {
 			reader.close();
 			TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
 			logger.info("found " + topDocs.totalHits + " topDocs");
-
+			
+			int minDocumentScore = Integer.parseInt(FeaturesUtil
+					.getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_TITLE_SIMILARITY_SENSITIVITY));
+					
+			
 			List<String> titles = new ArrayList<String>();
 			for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+				//skip documents with a score lower than #minDocumentScore
+				if(scoreDoc.score<minDocumentScore) continue;
 
 				Document doc = indexSearcher.doc(scoreDoc.doc);
 

@@ -45,22 +45,16 @@ function openEUActivityDetails(euActivityId) {
 	</tr>
 	<%Double grandCost = new Double(0);
 	Double grandContribution = new Double(0);%>
-	<%-- TODO AMP-2579 temporary fix--%>
-	<logic:present name="currentMember" scope="session">
-		<bean:define id="defaultCurrency" name="currentMember"
-			property="appSettings.currencyId" type="java.lang.Long"
-			scope="session" toScope="page" />
-	</logic:present>
-	<logic:notPresent name="currentMember" scope="session">
-		<bean:define id="defaultCurrency" value="USD" toScope="page" />
-	</logic:notPresent>
+
 	<logic:iterate name="costs" id="cost"
 		type="org.digijava.module.aim.dbentity.EUActivity" indexId="idx">
 		<bean:define id="euActivity" name="cost"
 			type="org.digijava.module.aim.dbentity.EUActivity" scope="page"
 			toScope="request" />
+
 		<c:set target="${euActivity}" property="desktopCurrencyId"
-			value="${defaultCurrency}" />
+			value="<%= org.digijava.module.aim.util.CurrencyUtil.getDefaultCurrency().getCurrencyCode()%>" />
+
 		<%grandCost = new Double(euActivity.getTotalCostConverted()+grandCost.doubleValue());%>
 		<%grandContribution = new Double(euActivity
 						.getTotalContributionsConverted()+grandContribution.doubleValue());%>

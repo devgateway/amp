@@ -132,4 +132,6 @@ public class GlobalSettingsConstants {
     public static final String AUTOMATICALLY_CLOSE_ACTIVITIES = "Change activity status once the Planned End Date has passed";
     
     public static final String CLOSED_ACTIVITY_VALUE = "Closed activity status";
+    
+    public static final String ACTIVITY_TITLE_SIMILARITY_SENSITIVITY = "Activity Title Similarity Sensitivity";
 }

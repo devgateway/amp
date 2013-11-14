@@ -35,13 +35,13 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 		Collection<AmpContact> choices = getChoices(input);
 		List<String[]> choiceValues = new ArrayList<String[]>();
 		for (AmpContact choice : choices) {
-            Long choiceId = getChoiceId(choice);
+            String choiceId = getChoiceId(choice);
 			Integer choiceLevel = getChoiceLevel(choice);
 			String details = getAdditionalDetails(choice);
 			String styleClass = getStyleClass(choice);
 			choiceValues.add(new String[] { getChoiceValue(choice),
 					choiceLevel != null ? choiceLevel.toString() : "0",
-					details, styleClass, choiceId.toString() });
+					details, styleClass, choiceId });
 		}
 
 		return choiceValues.toArray(new String[0][0]);

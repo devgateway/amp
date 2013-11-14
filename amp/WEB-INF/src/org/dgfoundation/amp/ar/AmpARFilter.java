@@ -660,6 +660,7 @@ public class AmpARFilter extends PropertyListable {
 		this.setJustSearch(false);
 		this.setWorkspaceonly(false);
 		this.setLocationSelected(null);
+		this.setRelatedLocations(null);
 		this.setApprovalStatusSelected(null);
 		this.setProjectImplementingUnits(null);
 		this.setSortByAsc(true);

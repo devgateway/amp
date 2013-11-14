@@ -477,7 +477,8 @@ function locate() {
     var typeSelect = callerButton.parentNode.parentNode.getElementsByTagName("SELECT")[0];
 	var typeText = typeSelect.options[typeSelect.selectedIndex].text; 
 	var typeValue = typeSelect.options[typeSelect.selectedIndex].value;
-    
+  
+  
 	
 	if (typeValue!=""){
 		symbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 21, 25);
@@ -488,7 +489,6 @@ function locate() {
 	}
     var infoTemplate = new esri.InfoTemplate("Location", "Location: ${address}<br/>Score: ${score}<br/>FCL:${Type}");
     
-
     var points =  new esri.geometry.Multipoint(map.spatialReference);
     stpoints = [];
     clearOptions("fclList");
@@ -496,20 +496,36 @@ function locate() {
       candidate = candidates[i];
       if (candidate.score > 80) {
         var attributes = { address: candidate.attributes.Name, score:candidate.score,Type:candidate.attributes.type, locatorName:candidate.attributes.Loc_name };
-        var graphic = new esri.Graphic(esri.geometry.geographicToWebMercator(candidate.location), symbol, attributes, infoTemplate);
+        
+        var pointCoordinates = null;
+        
+        if(candidate.location.spatialReference != null) {
+        	pointCoordinates = candidate.location;
+        } else {
+        	pointCoordinates = esri.geometry.geographicToWebMercator(candidate.location);
+        }
+        
+        var graphic = new esri.Graphic(pointCoordinates, symbol, attributes, infoTemplate);
         map.graphics.add(graphic);
-       // map.graphics.add(new esri.Graphic(candidate.location, new esri.symbol.TextSymbol(candidate.attributes.Name).setOffset(0, 8)));
+        
+//        map.graphics.add(new esri.Graphic(candidate.location, new esri.symbol.TextSymbol(candidate.attributes.Name).setOffset(0, 8)));
         stpoints.push(graphic);
         points.addPoint(candidate.location);
+        
+        
+        
         if (!isInList(candidate.attributes.type)){
         	var select = document.getElementById("fclList");
         	select.options[select.options.length] = new Option(candidate.attributes.type, candidate.attributes.type);
         }
       }
     }
+
+/*    
     if (points.getExtent()){
-    	//map.setExtent(points.getExtent().expand(3));
+    	map.setExtent(points.getExtent().expand(3));
     }
+*/    
     hideLoading();
   }
 

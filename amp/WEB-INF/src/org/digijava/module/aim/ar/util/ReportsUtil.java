@@ -45,14 +45,15 @@ public class ReportsUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
 
-    		String rewrittenColumns = SQLUtils.rewriteQuery("amp_organisation", "ao", 
-    				new HashMap<String, String>(){{
-    					put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall("ao.amp_org_id"));
-    					put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "description").getSQLFunctionCall("ao.amp_org_id"));
-    				}});
-            String queryString = "select distinct " + rewrittenColumns + " from amp_organisation ao " +
-    						"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
-    						"inner join amp_role ar on ((ar.amp_role_id = aor.role) and (ar.role_code=:roleCode)) where (ao.deleted is null or ao.deleted = false) ";
+            String rewrittenColumns = SQLUtils.rewriteQuery("amp_organisation", "ao", 
+            		new HashMap<String, String>(){{
+            			put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall("ao.amp_org_id"));
+            			put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "description").getSQLFunctionCall("ao.amp_org_id"));
+            		}});
+            		String queryString = "select distinct " + rewrittenColumns + " from amp_organisation ao " +
+            				"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
+            				"inner join amp_role ar on ((ar.amp_role_id = aor.role) and (ar.role_code=:roleCode)) where (ao.deleted is null or ao.deleted = false) ";
+
             Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
             qry.setCacheable(true);
             col = qry.setString("roleCode", roleCode).list();

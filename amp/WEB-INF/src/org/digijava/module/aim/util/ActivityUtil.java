@@ -1540,13 +1540,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     Collection col = new ArrayList();
     logger.info(" this is the other components getting called....");
     try {
-    	session = PersistenceManager.getRequestDBSession();
-		String rewrittenColumns = SQLUtils.rewriteQuery("amp_component", "ac", 
-				new HashMap<String, String>(){{
-					put("title", InternationalizedModelDescription.getForProperty(AmpComponent.class, "name").getSQLFunctionCall("ac.amp_component_id"));
-					put("description", InternationalizedModelDescription.getForProperty(AmpComponent.class, "description").getSQLFunctionCall("ac.amp_component_id"));
-				}});      
-		String queryString = "select " + rewrittenColumns + " from amp_components ac " +
+      session = PersistenceManager.getRequestDBSession();
+      String rewrittenColumns = SQLUtils.rewriteQuery("amp_component", "ac", 
+    		  new HashMap<String, String>(){{
+    			  put("title", InternationalizedModelDescription.getForProperty(AmpComponent.class, "name").getSQLFunctionCall("ac.amp_component_id"));
+    			  put("description", InternationalizedModelDescription.getForProperty(AmpComponent.class, "description").getSQLFunctionCall("ac.amp_component_id"));
+    		  }});      
+      String queryString = "select " + rewrittenColumns + " from amp_components ac " +
       		"inner join amp_activity_components aac on (aac.amp_component_id = ac.amp_component_id) " +
       		"where (aac.amp_activity_id=:actId)";
       Query qry = session.createSQLQuery(queryString).addEntity(AmpComponent.class);
@@ -2056,275 +2056,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     try {
       session = PersistenceManager.getSession();
       activity = (AmpActivityVersion) session.load( AmpActivityVersion.class, actId);
-//      Collection act = qry.list();
-//      Iterator actItr = act.iterator();
-//
-//      activity.setCurrCompDate(DateConversion.
-//                                 ConvertDateToString(ampAct.
-//            getActualCompletionDate()));
-//        activity.setOrigAppDate(DateConversion.
-//                                ConvertDateToString(ampAct.
-//            getProposedApprovalDate()));
-//        activity.setOrigStartDate(DateConversion.
-//                                  ConvertDateToString(ampAct.
-//            getProposedStartDate()));
-//        activity.setPropCompDate(DateConversion.ConvertDateToString(ampAct.getProposedCompletionDate()));
-//        activity.setRevAppDate(DateConversion.
-//                               ConvertDateToString(ampAct.getActualApprovalDate()));
-//        activity.setRevStartDate(DateConversion.
-//                                 ConvertDateToString(ampAct.getActualStartDate()));
-//        activity.setContractingDate(DateConversion.
-//                                    ConvertDateToString(ampAct.
-//            getContractingDate()));
-//        activity.setDisbursmentsDate(DateConversion.
-//                                     ConvertDateToString(ampAct.
-//            getDisbursmentsDate()));
-//
-//        /* Set Categories */
-//        activity.setProjectCategory(
-//            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-//                CategoryManagerUtil.getAmpCategoryValueFromList(
-//            CategoryConstants.PROJECT_CATEGORY_NAME, ampAct.getCategories())
-//            )
-//            );
-//        activity.setAccessionInstrument(
-//                CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-//                    CategoryManagerUtil.getAmpCategoryValueFromList(
-//                CategoryConstants.ACCESSION_INSTRUMENT_NAME, ampAct.getCategories())
-//                )
-//                );
-//        activity.setAcChapter(
-//            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-//                CategoryManagerUtil.getAmpCategoryValueFromList(
-//            CategoryConstants.ACCHAPTER_NAME, ampAct.getCategories())
-//            )
-//            );
-//        activity.setStatus(
-//            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-//                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-//            CategoryConstants.ACTIVITY_STATUS_KEY, ampAct.getCategories())
-//            )
-//            );
-//        activity.setImpLevel(
-//            CategoryManagerUtil.getStringValueOfAmpCategoryValues(
-//                CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
-//            CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories())
-//            )
-//            );
-//      
-//        
-//        activity.setImpLocation(
-//                CategoryManagerUtil.getStringValueOfAmpCategoryValues(
-//                    CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
-//                CategoryConstants.IMPLEMENTATION_LOCATION_KEY, ampAct.getCategories())
-//                )
-//                );
-//          
-//        activity.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-//                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-//            CategoryConstants.FINANCIAL_INSTRUMENT_KEY, ampAct.getCategories())
-//            ));
-//        
-//        /* END - Set Categories */
-//        
-//        Collection col = ampAct.getClosingDates();
-//        List dates = new ArrayList();
-//        if (col != null && col.size() > 0) {
-//          Iterator itr = col.iterator();
-//          while (itr.hasNext()) {
-//            AmpActivityClosingDates cDate = (AmpActivityClosingDates) itr
-//                .next();
-//            if (cDate.getType().intValue() == Constants.REVISED.intValue()) {
-//              dates.add(DateConversion.ConvertDateToString(cDate
-//                  .getClosingDate()));
-//            }
-//          }
-//        }
-//        Collections.sort(dates, DateConversion.dtComp);
-//        activity.setRevCompDates(dates);
-//
-//        if (ampAct.getThemeId() != null) {
-//          activity.setProgram(ampAct.getThemeId().getName());
-//          activity.setProgramDescription(ampAct.getProgramDescription());
-//        }
-//
-//
-//        activity.setMfdContFirstName(ampAct.getMofedCntFirstName());
-//        activity.setMfdContLastName(ampAct.getMofedCntLastName());
-//        activity.setMfdContEmail(ampAct.getMofedCntEmail());
-//        
-//        if (ampAct.getCreatedDate() != null) {
-//          activity.setCreatedDate(
-//              DateConversion.ConvertDateToString(ampAct.getCreatedDate()));
-//        }
-//
-//        if (ampAct.getActivityCreator() != null) {
-//          activity.setCreatedBy(ampAct.getActivityCreator());
-//          User usr = ampAct.getActivityCreator().getUser();
-//          if (usr != null) {
-//            activity.setActAthFirstName(usr.getFirstNames());
-//            activity.setActAthLastName(usr.getLastName());
-//            activity.setActAthEmail(usr.getEmail());
-//            activity.setActAthAgencySource(usr.getOrganizationName());
-//          }
-//        }
-//
-//        if (ampAct.getModality() != null) {
-//          activity.setModality(ampAct.getModality().getValue());
-//          activity.setModalityCode(ampAct.getModality().getIndex() + "");
-//        }
-//
-//        queryString = "select distinct f.typeOfAssistance.value from " +
-//            AmpFunding.class.getName() + " f where f.ampActivityId=:actId";
-//
-//        qry = session.createQuery(queryString);
-//        qry.setParameter("actId", actId, Hibernate.LONG);
-//
-//        Collection temp = new ArrayList();
-//        Iterator typesItr = qry.list().iterator();
-//        while (typesItr.hasNext()) {
-//          String code = (String) typesItr.next();
-//          temp.add(code);
-//        }
-//        activity.setAssistanceType(temp);
-//
-//        Collection relOrgs = new ArrayList();
-//        if (ampAct.getOrgrole() != null) {
-//          Iterator orgItr = ampAct.getOrgrole().iterator();
-//          while (orgItr.hasNext()) {
-//            AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-//            AmpOrganisation auxOrgRel = orgRole.getOrganisation();
-//            if(auxOrgRel!=null)
-//            {
-//            	RelOrganization relOrg = new RelOrganization();
-//                relOrg.setOrgName(auxOrgRel.getName());
-//                relOrg.setRole(orgRole.getRole().getRoleCode());
-//                relOrg.setAcronym(auxOrgRel.getAcronym());
-//                relOrg.setOrgCode(auxOrgRel.getOrgCode());
-//                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
-//                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
-//                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
-//                if (!relOrgs.contains(relOrg)) {
-//                	relOrgs.add(relOrg);
-//                }
-//            }
-//          }
-//        }
-//        activity.setRelOrgs(relOrgs);
-//
-//        List<ActivitySector> sectors = new ArrayList<ActivitySector>();
-//
-//        if (ampAct.getSectors() != null) {
-//          Iterator sectItr = ampAct.getSectors().iterator();
-//			while (sectItr.hasNext()) {
-//				AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
-//				if (ampActSect != null) {
-//					AmpSector sec = ampActSect.getSectorId();
-//					if (sec != null) {
-//						AmpSector parent = null;
-//						AmpSector subsectorLevel1 = null;
-//						AmpSector subsectorLevel2 = null;
-//						if (sec.getParentSectorId() != null) {
-//							if (sec.getParentSectorId().getParentSectorId() != null) {
-//								subsectorLevel2 = sec;
-//								subsectorLevel1 = sec.getParentSectorId();
-//								parent = sec.getParentSectorId().getParentSectorId();
-//							} else {
-//								subsectorLevel1 = sec;
-//								parent = sec.getParentSectorId();
-//							}
-//						} else {
-//							parent = sec;
-//						}
-//						ActivitySector actSect = new ActivitySector();
-//                                                actSect.setConfigId(ampActSect.getClassificationConfig().getId());
-//						if (parent != null) {
-//							actSect.setId(parent.getAmpSectorId());
-//							String view = FeaturesUtil.getGlobalSettingValue("Allow Multiple Sectors");
-//							if (view != null)
-//								if (view.equalsIgnoreCase("On")) {
-//									actSect.setCount(1);
-//								} else {
-//									actSect.setCount(2);
-//								}
-//
-//							actSect.setSectorId(parent.getAmpSectorId());
-//							actSect.setSectorName(parent.getName());
-//							if (subsectorLevel1 != null) {
-//								actSect.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
-//								actSect.setSubsectorLevel1Name(subsectorLevel1.getName());
-//								if (subsectorLevel2 != null) {
-//									actSect.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
-//									actSect.setSubsectorLevel2Name(subsectorLevel2.getName());
-//								}
-//							}
-//							actSect.setSectorPercentage(ampActSect.getSectorPercentage());
-//                                                        actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
-//                                                        
-//						}
-//                                               
-//						sectors.add(actSect);
-//					}
-//				}
-//          }
-//        }
-//        
-//        Collections.sort(sectors);
-//        activity.setSectors(sectors);
-//        
-//        
-//        if (ampAct.getActivityPrograms() != null) {
-//          Collection programs = new ArrayList();
-//          programs.addAll(ampAct.getActivityPrograms());
-//          activity.setActPrograms(programs);
-//        }
-//            
-//        Collection locColl = new ArrayList();
-//        if (ampAct.getLocations() != null) {
-//          Iterator locItr = ampAct.getLocations().iterator();
-//          while (locItr.hasNext()) {
-//            AmpActivityLocation actLoc = (AmpActivityLocation) locItr.next();
-//            if(actLoc!=null){
-//            	AmpLocation ampLoc = actLoc.getLocation();
-//                Location loc = new Location();
-//                if (ampLoc.getAmpRegion() != null) {
-//                  loc.setRegion(ampLoc.getAmpRegion().getName());
-//                }
-//                if (ampLoc.getAmpZone() != null) {
-//                  loc.setZone(ampLoc.getAmpZone().getName());
-//                }
-//                if (ampLoc.getAmpWoreda() != null) {
-//                  loc.setWoreda(ampLoc.getAmpWoreda().getName());
-//                }
-//                if(actLoc.getLocationPercentage()!=null)
-//                	loc.setPercent(DecimalToText.ConvertDecimalToText(actLoc.getLocationPercentage()));
-//                locColl.add(loc);
-//            }
-//            
-//          }
-//        }
-//        activity.setLocations(locColl);
-//        //set lessons learned
-//        //activity.setLessonsLearned(ampAct.getLessonsLearned());
-//
-//        activity.setProjectIds(ampAct.getInternalIds());
-//
-//        Collection modalities = new ArrayList();
-//        queryString = "select fund from " + AmpFunding.class.getName() +
-//            " fund " +
-//            "where (fund.ampActivityId=:actId)";
-//        qry = session.createQuery(queryString);
-//        qry.setParameter("actId", actId, Hibernate.LONG);
-//        Iterator itr = qry.list().iterator();
-//        while (itr.hasNext()) {
-//          AmpFunding fund = (AmpFunding) itr.next();
-//          if (fund.getFinancingInstrument() != null)
-//        	  modalities.add( fund.getFinancingInstrument() );
-//        }
-//        activity.setModalities(modalities);
-//        activity.setUniqueModalities(new TreeSet(modalities));
-
-
       }
     catch (Exception e) {
       logger.error("Unable to get channnel overview");
@@ -2465,12 +2196,11 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    try {
 	      session = PersistenceManager.getSession();
 	      String rewrittenColumns = SQLUtils.rewriteQuery("amp_organisation", "ao", 
-					new HashMap<String, String>(){{
-						put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall("ao.amp_org_id"));
-						put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "description").getSQLFunctionCall("ao.amp_org_id"));
-					}});
-	      String queryString = "select " + rewrittenColumns + " from amp_organisation ao " +
-	      		"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
+	    		  new HashMap<String, String>(){{
+	    			  put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall("ao.amp_org_id"));
+	    			  put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "description").getSQLFunctionCall("ao.amp_org_id"));
+	    		  	}});
+	      String queryString = "select " + rewrittenColumns + " from amp_organisation ao " +	      		"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
 	      		"inner join amp_activity aa on (aa.amp_activity_id = aor.activity) " +
 	      		"where (aa.amp_activity_id=:actId) and (aor.amp_org_role_id=:orgRoleId)";
 	      Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
@@ -3064,10 +2794,9 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     Session session = null;
     try {
       session = PersistenceManager.getSession();
-
       String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
-          String.format("where lower(%s) = :lowerName",
-        		  AmpActivityVersion.hqlStringForName("a"));
+    		  String.format("where lower(%s) = :lowerName",
+    				  AmpActivityVersion.hqlStringForName("a"));      
       if(actId!=null){
     	  qryStr+=" and a.ampActivityId!="+actId;
       }
@@ -3672,10 +3401,9 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 
     try {
       session = PersistenceManager.getSession();
-      
       String queryString = "select ampAct from " + AmpActivityVersion.class.getName() +
-          String.format(" ampAct where upper(%s) like upper(:name)",
-        		  AmpActivityVersion.hqlStringForName("ampAct"));
+    		String.format(" ampAct where upper(%s) like upper(:name)",
+    		AmpActivityVersion.hqlStringForName("ampAct"));
       qry = session.createQuery(queryString);
       qry.setParameter("name", "%" + name + "%", Hibernate.STRING);
       col = qry.list();
@@ -4775,12 +4503,12 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     String activityNameString = AmpActivityVersion.hqlStringForName("a");
                     // computed workspace
                     if (teamAO != null && !teamAO.isEmpty()) {
-                        queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
-                                " where  a.team in  (" + Util.toCSStringForIN(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) order by " + activityNameString;
+                    	queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
+                    			" where  a.team in  (" + Util.toCSStringForIN(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) order by " + activityNameString;
 
                     } else {
                         // none computed workspace
-                        queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
+                    	queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
                         if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                             queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
                         }
@@ -4894,11 +4622,11 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     		Query query=null;    		
     		String name=null;
     		try {
-    			session=PersistenceManager.getRequestDBSession();
-    			String activityName = AmpActivityVersion.hqlStringForName("a");
-    			queryString = "select " + activityName + " from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
-    			query = session.createQuery(queryString);
-    			name = (String)query.uniqueResult();   			
+    			session=PersistenceManager.getRequestDBSession();                   
+    			String activityName = AmpActivityVersion.hqlStringForName("gr.ampActivityLastVersion");
+    			queryString ="select " + activityName + ", gr.ampActivityLastVersion.ampActivityId from "+ AmpActivityGroup.class.getName()+" gr ";                    
+    			query=session.createQuery(queryString);    			
+    			name=(String)query.uniqueResult();    			
     		}catch(Exception ex) { 
     			logger.error("couldn't load Activity" + ex.getMessage());	
     			ex.printStackTrace(); 
@@ -5123,7 +4851,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 			qry.setParameter(3, user.getId().intValue());
 			qry.setParameter(4, activityId);
 			qry.executeUpdate();
-			logger.info("Access logued for activity: " + activityId + " - User: " + user.getId());
+			logger.info("Access logged for activity: " + activityId + " - User: " + user.getId());
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();	
@@ -5142,12 +4870,12 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
             boolean isSearchByName = actName!=null && "".compareTo(actName.trim())!=0;
             String activityName = AmpActivityVersion.hqlStringForName("f");
 			if(isSearchByName) {
-            	queryString = "select f.ampActivityId, f.ampId, " + activityName + ",  ampTeam, ampGroup  from " + AmpActivity.class.getName()+
-            	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where upper(" + activityName + ") like upper(:name) and (deleted = false or deleted is null)";
+				queryString = "select f.ampActivityId, f.ampId, " + activityName + ",  ampTeam, ampGroup  from " + AmpActivity.class.getName()+
+							" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where upper(" + activityName + ") like upper(:name) and (deleted = false or deleted is null)";
             }
             else
             {
-            	queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup from " + AmpActivity.class.getName()+ 
+            	queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup from " + AmpActivity.class.getName()+  
             	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where deleted = false or deleted is null";
             }
             qry = session.createQuery(queryString);
@@ -5251,6 +4979,85 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     	ActivityUtil.deleteActivityIndicatorsSession(ampActId, session);
     }
     
+    /*
+     * old delete method; not functioning properly
+     * kept for historic reference only
+    @deprecated
+	public static void deleteAmpActivity(Long ampActId) {
+			Date startDate = new Date(System.currentTimeMillis());
+		    Session session = null;
+		    Transaction tx = null;
+
+		    try {
+		      session = PersistenceManager.getSession();
+//beginTransaction();
+
+		      AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
+
+		      if (ampAct == null)
+					logger.debug("Activity is null. Hence no activity with id : " + ampActId);
+				else {
+
+					// Delete group info.
+					AmpActivityGroup auxGroup = ampAct.getAmpActivityGroup();
+					Query qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityPreviousVersion = " + ampActId);
+					qry.executeUpdate();
+					ampAct.setAmpActivityGroup(null);
+					
+					session.update(ampAct);
+			    	auxGroup.getActivities().remove(ampAct);
+			    	session.update(auxGroup);
+			    	session.update(ampAct);
+			    	
+			    	// Delete group info.
+			      	List<AmpActivityGroup> groups=getActivityGroups(session , ampAct.getAmpActivityId());
+			      	if(groups!=null && groups.size()>0){
+			      		for (AmpActivityGroup ampActivityGroup : groups) {
+			      			Set<AmpActivityVersion> activityversions=ampActivityGroup.getActivities();
+			      			if(activityversions!=null && activityversions.size()>0){
+			      				for (Iterator<AmpActivityVersion> iterator = activityversions.iterator(); iterator.hasNext();) {
+			      					AmpActivityVersion ampActivityVersion=iterator.next();
+			      					ampActivityVersion.setAmpActivityGroup(null);
+			      					session.update(ampActivityVersion);
+								}
+			      			}
+			  				session.delete(ampActivityGroup);
+			  			}
+			      	}
+					
+			      	deleteActivityContent(ampAct,session);
+				}
+		      
+		    ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
+		  	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
+		  	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
+		  	ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
+		  	ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
+		  	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
+		  	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
+
+   		   session.delete(ampAct);
+		   //tx.commit();
+//session.flush();
+		 }
+		    catch (Exception e1) {
+		      logger.error("Could not delete the activity with id : " + ampActId);
+		      e1.printStackTrace(System.out);
+		    }
+		    finally {
+		      if (session != null) {
+		        try {
+		          PersistenceManager.releaseSession(session);
+		        }
+		        catch (Exception e2) {
+		          logger.error("Release session failed");
+		        }
+		      }
+		    }
+		    logger.warn(new Date(System.currentTimeMillis()).getTime() - startDate.getTime());
+		  
+		
+	}*/
 
 	public static void archiveAmpActivityWithVersions(Long ampActId) {
 		// TODO Auto-generated method stub

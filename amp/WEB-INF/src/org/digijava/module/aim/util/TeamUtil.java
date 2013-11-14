@@ -337,6 +337,7 @@ public class TeamUtil {
     	try {
     		session = PersistenceManager.getSession();
 //beginTransaction();
+
             //check whether a team with the same name already exists
     		String teamNameHql = AmpTeam.hqlStringForName("t");
     		String qryStr = "select t from " + AmpTeam.class.getName() + " t "
@@ -550,7 +551,7 @@ public class TeamUtil {
             String teamNameHql = AmpTeam.hqlStringForName("t");
             // check whether a team with the same name already exist
             String qryStr = "select t from " + AmpTeam.class.getName() + " t "
-                + String.format("where (%s=:name)", teamNameHql);
+            		+ String.format("where (%s=:name)", teamNameHql);
             Query qry = session.createQuery(qryStr);
             qry.setParameter("name", team.getName(), Hibernate.STRING);
             Iterator tempItr = qry.list().iterator();
@@ -959,7 +960,6 @@ public class TeamUtil {
 //beginTransaction();
             session.saveOrUpdate(member);
             //session.saveOrUpdate(appSettings);
-            // this is where newly-created AmpApplicationSettings settings are saved in the database
             
             if(member.getAmpMemberRole().getTeamHead()!=null&&member.getAmpMemberRole().getTeamHead()) {
                 AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
@@ -1484,7 +1484,7 @@ public class TeamUtil {
             session = PersistenceManager.getSession();
             String teamNameHql = AmpTeam.hqlStringForName("t");
             String queryString = "select t from " + AmpTeam.class.getName()
-                + String.format(" t where (%s=:teamName)", teamNameHql);
+            	+ String.format(" t where (%s=:teamName)", teamNameHql);
             qry = session.createQuery(queryString);
             qry.setParameter("teamName", teamName, Hibernate.STRING);
             Iterator itr = qry.list().iterator();
@@ -1574,7 +1574,8 @@ public class TeamUtil {
             	queryString.append("  and   (g.ampActivityLastVersion.draft is null or g.ampActivityLastVersion.draft=false)) ");
             }
             if(keyword!=null && keyword.length()>0){
-            	queryString.append(" and lower(g.ampActivityLastVersion.name) like lower(:name)") ;
+            	String activityNameHql = AmpActivityVersion.hqlStringForName("g.ampActivityLastVersion");
+            	queryString.append(" and lower(" + activityNameHql + ") like lower(:name)") ;
             }
             
             qry = session.createQuery(queryString.toString());
@@ -1722,9 +1723,10 @@ public class TeamUtil {
             childIds.add(teamId);
             if(childIds != null && childIds.size() > 0) { 
             	session = PersistenceManager.getRequestDBSession();
-            	StringBuilder queryString = new StringBuilder("select new AmpActivityVersion(a.ampActivityId,a.name, a.ampId) from "+ AmpActivityGroup.class.getName()+" g inner join g.ampActivityLastVersion a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false) and ( a.deleted is null or a.deleted=false )");     
+            	String activityNameHql = AmpActivityVersion.hqlStringForName("a");
+            	StringBuilder queryString = new StringBuilder("select new AmpActivityVersion(a.ampActivityId," + activityNameHql + ", a.ampId) from "+ AmpActivityGroup.class.getName()+" g inner join g.ampActivityLastVersion a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false) and ( a.deleted is null or a.deleted=false )");     
                 if(keyword!=null && keyword.length()>0){
-                 	queryString.append(" and lower(a.name) like lower(:name)") ;
+                 	queryString.append(" and lower(" + activityNameHql + ") like lower(:name)") ;
                 }
                 qry = session.createQuery(queryString.toString());
                 if(keyword!=null){
@@ -1749,13 +1751,13 @@ public class TeamUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-
+			
 			String queryString = "";
 			Query qry = null;
 			
-			String activityNameHql = AmpActivityVersion.hqlStringForName("act");			
+			String activityNameHql = AmpActivityVersion.hqlStringForName("act");	
 			queryString = "select new AmpActivityVersion(act.ampActivityId, " + activityNameHql + ", act.ampId) from "+ AmpActivity.class.getName()	+ " act  ";
-
+			
 			if(teamId!=null){
 				queryString+="where act.team="+teamId;
 			}else{
@@ -1826,7 +1828,8 @@ public class TeamUtil {
             }
             
             if(keyword != null && keyword.trim().length() > 0){
-            	queryString += " and lower(r.name) like lower(:keyword) ";
+            	String reportNameHql = AmpReports.hqlStringForName("r");
+            	queryString += " and (lower(" + reportNameHql + ") like lower(:keyword) ";
             }
 	                
             queryString += " order by r.name";
@@ -2047,17 +2050,17 @@ public class TeamUtil {
                     + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
                     + AmpTeamReports.class.getName() 
                     + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
+                   if (name != null) {
+                	   queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
+                   }
                    if(onlyCategorized!=null && onlyCategorized){
                 	   queryString += " and r.reportCategory is not null ";
                    }
                    if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
                   	 queryString += " and r.reportCategory=:repCat ";
                   }
-                   if (name != null) {
-                	   queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
-               	       queryString +=  " order by " + reportNameHql;
-                   }
 
+                queryString +=  " order by " + reportNameHql;
                 qry = session.createQuery(queryString);
                 qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
                 qry.setParameter("teamid", teamId);
@@ -2078,18 +2081,17 @@ public class TeamUtil {
                 col = qry.list();
             } else if (!inlcludeMemberReport){
                 queryString = "select r from "+ AmpTeamReports.class.getName()+" tr inner join  tr.report r " + "  where " + tabFilter + " (tr.team=:teamId)";
-                if(onlyCategorized!=null && onlyCategorized){
-                	queryString += " and r.reportCategory is not null ";
-                }
-                if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
-                	queryString += " and r.reportCategory=:repCat ";
-                }
-                if (name != null) {
-                	queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
-                	queryString +=  " order by " + reportNameHql;
-                }
+                   if (name != null) {
+                	   queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
+                   }
+                   if(onlyCategorized!=null && onlyCategorized){
+                	   queryString += " and r.reportCategory is not null ";
+                   }
+                   if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+                  	 queryString += " and r.reportCategory=:repCat ";
+                  }
 
-
+                queryString +=  " order by " + reportNameHql;
                 qry = session.createQuery(queryString);
                 qry.setLong("teamId", teamId);
                 if ( getTabs!=null )
@@ -2109,13 +2111,12 @@ public class TeamUtil {
                 }
                 col = qry.list();
             }else if(inlcludeMemberReport){
-
          	   queryString="select distinct r from " + AmpReports.class.getName()+
 				"  r left join r.members m where " + tabFilter + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
 				" tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
                if(name!=null){
-                        queryString += String.format(" and lower(%s) like lower(:name)", reportNameHql);
+            	   queryString += String.format(" and lower(%s) like lower(:name)", reportNameHql);
                }
                if(onlyCategorized!=null && onlyCategorized){
             	   queryString += " and r.reportCategory is not null ";
@@ -2287,11 +2288,12 @@ public class TeamUtil {
 
            String queryString = null;
            Query qry = null;
-
+           String reportNameHql = AmpReports.hqlStringForName("r");
+           
            if(team.getAccessType().equalsIgnoreCase(
-               Constants.ACCESS_TYPE_MNGMT)) {
+               Constants.ACCESS_TYPE_MNGMT)) {        	  
                queryString = "select r from " + AmpReports.class.getName()
-                   + " r " + " order by r.name ";
+                   + " r " + " order by " + reportNameHql + " ";
                qry = session.createQuery(queryString);
                if (currentPage !=null){
             	   qry.setFirstResult(currentPage);
@@ -2303,7 +2305,7 @@ public class TeamUtil {
            } else {
                queryString = "select r from "
                    + AmpTeamReports.class.getName()+" tr inner join  tr.report r "
-                   + "  where (tr.team=:teamId) order by r.name ";
+                   + "  where (tr.team=:teamId) order by " + reportNameHql + " ";
                qry = session.createQuery(queryString);
                qry.setLong("teamId", teamId);
                if (currentPage !=null){
@@ -2406,7 +2408,8 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            String queryString = "select t from " + AmpTeam.class.getName() + " t order by name";
+            String teamNameHql = AmpTeam.hqlStringForName("t");
+            String queryString = "select t from " + AmpTeam.class.getName() + " t order by " + teamNameHql;
             qry = session.createQuery(queryString);
             qry.setCacheable(true);
             teams = qry.list();
@@ -2440,13 +2443,13 @@ public class TeamUtil {
         
         try {
             session = PersistenceManager.getSession();
+            String teamNameHql = AmpTeam.hqlStringForName("t");
             StringBuilder queryString =new StringBuilder();
             queryString.append("select t from ");
             queryString.append(AmpTeam.class.getName());
             queryString.append(" t ");
             queryString.append(" where 1=1 ");
-            String teamNameHql = AmpTeam.hqlStringForName("t");
-            if(keyword!=null&&keyword.trim().length()>0){
+            if (keyword!=null&&keyword.trim().length()>0){
             	queryString.append(String.format(" and lower(%s) like lower(:keyword) ", teamNameHql));
             }
             if(computed){

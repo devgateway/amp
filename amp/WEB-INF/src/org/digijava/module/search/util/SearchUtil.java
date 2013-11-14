@@ -78,7 +78,7 @@ public class SearchUtil {
 			
 			String reportNameHql = AmpReports.hqlStringForName("r");
 			String reportDescriptionHql = AmpReports.hqlStringForDescription("r");
-
+			
 			if (team.getAccessType().equalsIgnoreCase(
 					Constants.ACCESS_TYPE_MNGMT)) {
 				queryString = "select DISTINCT r from "
@@ -139,10 +139,10 @@ public class SearchUtil {
 					.getMemberId());
 			String queryString = null;
 			Query qry = null;
-
+			
 			String reportNameHql = AmpReports.hqlStringForName("r");
 			String reportDescriptionHql = AmpReports.hqlStringForDescription("r");
-
+			
 			if (team.getAccessType().equalsIgnoreCase(
 					Constants.ACCESS_TYPE_MNGMT)) {
 				queryString = "select DISTINCT r from "
@@ -370,7 +370,7 @@ public class SearchUtil {
         query.append(")");
         query.append(" and roleCode.roleCode=:roleCode ");
         if (!hasComputedOrgs) {
-            query.append(" and " + orgNameHql +" like :name");
+            query.append(" and " + orgNameHql + " like :name");
             if (tm.getTeamAccessType().equals("Management")) {
                 query.append(String.format(" and (act.draft=false or act.draft is null) and act.approvalStatus in ('%s', '%s') ", Constants.STARTED_APPROVED_STATUS, Constants.APPROVED_STATUS));
             }

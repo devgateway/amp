@@ -112,7 +112,7 @@ public class EditSector extends Action {
 										}
 										
 										logger.debug("Updating.............................................");
-										DbUtil.saveOrUpdate(ampSector);
+										DbUtil.saveOrUpdateObject(ampSector);
 										Long schemeId =ampSector.getAmpSecSchemeId().getAmpSecSchemeId();
 										Integer schemeID = new Integer(schemeId.intValue());
 										editSectorForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(schemeID));

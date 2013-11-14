@@ -47,11 +47,11 @@ public class AmpPMWorkspaceSearchModel extends AbstractAmpAutoCompleteModel<AmpT
 			session = PersistenceManager.getRequestDBSession();
 			Criteria crit = session.createCriteria(AmpTeam.class);
 			crit.setCacheable(true);
-			
+				
 			if(input.trim().length()>0){
 					crit.add(Restrictions.disjunction()
 							.add(getTextCriterion("name", input)))
-//							.add(Restrictions.ilike("name", "%" + input + "%")))
+							//.add(Restrictions.ilike("name", "%" + input + "%")))
 							.addOrder(Order.asc("name"));
 		
 					if (params != null) {

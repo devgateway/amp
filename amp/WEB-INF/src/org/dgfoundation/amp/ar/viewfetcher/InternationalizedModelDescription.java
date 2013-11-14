@@ -96,4 +96,8 @@ public class InternationalizedModelDescription {
 		return globalRepository.get(className);
 	}
 
+	public static InternationalizedPropertyDescription getForProperty(Class<?> clazz, String propertyName)
+	{
+		return getForClass(clazz).properties.get(propertyName);
+	}
 }

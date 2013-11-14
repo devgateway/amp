@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import org.digijava.kernel.request.TLSUtils;
+
 /**
  * <b>IMMUTABLE</b>class holding the data necessary reading the i18n value of a property of a Translatable model<br />
  * <b>NEVER EVER MAKE THIS CLASS MUTABLE OR CONTAIN MUTABLE FIELDS</b>
@@ -140,5 +142,39 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 	public String getNiceDescription()
 	{
 		return String.format("%s[%s]::%s", modelTableName, modelTableId, modelColumnName);
+	}
+	
+	/**
+	 * computes the function call (good as a column definition) to retrieve the value of this property
+	 * @param idSource:  null if the select is plain, else an SQL-statement-valid String. Example: <br />
+	 * SELECT amp_report_id, [getSQLFunctionCall(null, locale)] FROM amp_reports WHERE ... -> to retrieve all reports and their i18n values <br /> <br />
+	 * SELECT [getSQLFunctionCall(arc.amp_report_id", locale)], arc.* FROM amp_report_column arc, amp_reports ar WHERE arc.amp_report_id = ar.amp_report_id; -> notice that the id value is got from arc.ampReport_id
+	 *  
+	 * @return
+	 */
+	public String getSQLFunctionCall(String idSource, String locale)
+	{
+		String tableId = idSource == null ? this.modelTableId : idSource;
+		return String.format("translate_field('%s', '%s', %s, '%s', '%s', '%s', '%s')", 
+				this.className, this.propertyName, tableId, this.modelTableName, this.modelColumnName, this.modelTableId, locale);
+	}
+		
+	/**
+	 * equivalent to calling {@link #getSQLFunctionCall(idSource, TLSUtils.getLangCode())}
+	 * @param idSource
+	 * @return
+	 */
+	public String getSQLFunctionCall(String idSource)
+	{
+		return getSQLFunctionCall(idSource, TLSUtils.getLangCode());
+	}
+		
+	/**
+	 * equivalent to calling {@link #getSQLFunctionCall(null)}
+	 * @return
+	 */
+	public String getSQLFunctionCall()
+	{
+		return getSQLFunctionCall(null);
 	}
 }

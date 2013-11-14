@@ -76,6 +76,11 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 		return false;
 	}
 
+	
+	protected Criterion getTextCriterion(String propertyName, String value) {
+		return getUnaccentILikeExpression(propertyName, value, MatchMode.ANYWHERE);
+	}
+	
 	/**
 	 * Returns the text criterion for searching text in the autocompletemodel
 	 * This is used in {@link MatchMode} when {@link PARAM#EXACT_MATCH} is
@@ -91,17 +96,14 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 	 * @return a {@link Criterion} that can be added to the main
 	 *         {@link org.hibernate.Criteria}
 	 */
-	protected Criterion getTextCriterion(String propertyName, String value) {
-		return getUnaccentILikeExpression(propertyName, value, MatchMode.ANYWHERE);
-	}		
-
 	protected Criterion getTextCriterion(String propertyName, String value, MatchMode matchMode) {
 		return getUnaccentILikeExpression(propertyName, value, matchMode);
 	}
-	
+
+
 	protected Criterion getUnaccentILikeExpression(final String propertyName, final String value, MatchMode matchMode) {
 		return SQLUtils.getUnaccentILikeExpression(propertyName, value, this.language, matchMode);
-	}
+    }
 	
 	/**
 	 * This recursive method adds to the sector root tree the given sector. It

@@ -23,7 +23,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.bouncycastle.cms.CMSException;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.dbentity.Country;
@@ -106,7 +105,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -1934,7 +1932,7 @@ public class DbUtil {
 					+ AmpApplicationSettings.class.getName()
 					+ " a where (a.team=:teamId) ";
 			qry = session.createQuery(queryString);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setLong("teamId", teamId);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				ampAppSettings = (AmpApplicationSettings) itr.next();
@@ -1989,40 +1987,6 @@ public class DbUtil {
 			logger.error("Unable to get team member ", ex);
 		}
 		return flag;
-	}
-
-	public static AmpApplicationSettings getMemberAppSettings(Long memberId) {
-		Session session = null;
-		Query qry = null;
-		AmpApplicationSettings ampAppSettings = null;
-		Transaction tx = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			// beginTransaction();
-			String queryString = "from "
-					+ AmpApplicationSettings.class.getName()
-					+ " a where (a.member.ampTeamMemId = :memberId)";
-			// String queryString = "from " +
-			// AmpApplicationSettings.class.getName();
-			qry = session.createQuery(queryString);
-			qry.setParameter("memberId", memberId, Hibernate.LONG);
-			/*
-			 * Iterator itr = qry.list().iterator(); if (itr.hasNext()) {
-			 * ampAppSettings = (AmpApplicationSettings) itr.next(); }
-			 */
-			ampAppSettings = (AmpApplicationSettings) qry.uniqueResult();
-			// tx.commit();
-		} catch (Exception e) {
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception tex) {
-					logger.error("Transaction rollback failed");
-				}
-			}
-			logger.error("Unable to get MemberAppSettings", e);
-		}
-		return ampAppSettings;
 	}
 
 	/*
@@ -2723,8 +2687,8 @@ public class DbUtil {
 		namesFirstLetter = namesFirstLetter.toLowerCase();
 
 		try {
-			String organizationName = AmpOrganisation.hqlStringForName("org");
 			session = PersistenceManager.getRequestDBSession();
+			String organizationName = AmpOrganisation.hqlStringForName("org");
 			String queryString = "select distinct org from "
 					+ AmpOrganisation.class.getName()
 					+ " org inner join org.orgGrpId grp "
@@ -3200,7 +3164,7 @@ public class DbUtil {
 	}
 
 	public static void add(Object object) {
-		logger.debug("In add " + object.getClass().getName());
+		//logger.debug("In add " + object.getClass().getName());
 		Session sess = null;
 		Transaction tx = null;
 
@@ -3236,21 +3200,6 @@ public class DbUtil {
 			PersistenceManager.releaseSession(sess);
 		}
 	}
-
-    public static void saveOrUpdate(Object object) {
-        Session sess = null;
-        Transaction tx = null;
-
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            sess.saveOrUpdate(object);
-            // session.flush();
-        } catch (Exception e) {
-            logger.error(e);
-        } finally {
-            PersistenceManager.releaseSession(sess);
-        }
-    }
 
 	public static AmpSectorScheme getAmpSectorSchemeById(Long schemeId) {
 		Session session = null;
@@ -4938,7 +4887,6 @@ public class DbUtil {
 		return level;
 	}
 
-
 	public static Collection getAllLevels() {
 		Session session = null;
 		Collection col = null;
@@ -5085,10 +5033,9 @@ public class DbUtil {
 		Collection<AmpOrgGroup> col = new ArrayList();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-
 			String queryString = String.format("select distinct amp_org_grp_id, %s AS name from v_contracting_agency_groups order by name", 
-					InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall());
-			
+									InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall());							
+
 			Query qry = session.createSQLQuery(queryString).addEntity(
 					AmpOrgGroup.class);
 			col = qry.list();
@@ -5108,9 +5055,9 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_group", "aog", 
-					new HashMap<String, String>(){{
-						put("org_grp_name", InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "name").getSQLFunctionCall("aog.amp_org_grp_id"));
-					}});
+						new HashMap<String, String>(){{
+							put("org_grp_name", InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "name").getSQLFunctionCall("aog.amp_org_grp_id"));
+						}});
 			String queryString = "select distinct " + rewrittenColumns + " from amp_org_group aog "
 					+ "inner join amp_organisation ao on (ao.org_grp_id = aog.amp_org_grp_id) "
 					+ "inner join amp_funding af on (af.amp_donor_org_id = ao.amp_org_id) "
@@ -5133,11 +5080,12 @@ public class DbUtil {
 		Session session = null;
 		List<AmpOrgType> col = new ArrayList<AmpOrgType>();
 		try {
-			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_type", "aot", 
-					new HashMap<String, String>(){{
-						put("org_type", InternationalizedModelDescription.getForProperty(AmpOrgType.class, "orgType").getSQLFunctionCall("aot.amp_org_type_id"));
-					}});
 			session = PersistenceManager.getRequestDBSession();
+			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_type", "aot", 
+				new HashMap<String, String>(){{
+					put("org_type", InternationalizedModelDescription.getForProperty(AmpOrgType.class, "orgType").getSQLFunctionCall("aot.amp_org_type_id"));
+				}});
+
 			String queryString = "select distinct " + rewrittenColumns +" from amp_org_type aot "
 					+ "inner join amp_org_group aog on (aot.amp_org_type_id=aog.org_type ) "
 					+ "inner join amp_organisation ao on (aog.amp_org_grp_id=ao.org_grp_id ) "
@@ -5251,10 +5199,11 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			String orgGrpName = AmpOrgGroup.hqlStringForName("org");
 			String queryString = "select distinct org from "
 					+ AmpOrgGroup.class.getName() + " org "
 					+ " where org.orgType=:orgType";
-			queryString += "  order by orgGrpName";
+			queryString += "  order by " + orgGrpName;
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("orgType", orgType, Hibernate.LONG);
 			col = qry.list();
@@ -5275,7 +5224,7 @@ public class DbUtil {
 			String orgGrpName = AmpOrgGroup.hqlStringForName("org");
 			String queryString = "select distinct org from "
 					+ AmpOrgGroup.class.getName() + " org "
-					+ " where (lower(" + orgGrpName + ") like '%" + keyword
+					+ " where lower(" + orgGrpName + ") like '%" + keyword
 					+ "%') and org.orgType=:orgType";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("orgType", orgType, Hibernate.LONG);
@@ -5314,6 +5263,7 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			String orgName = AmpOrganisation.hqlStringForName("o");
 			String queryString = "select o from " + AmpOrgGroup.class.getName()
 					+ " o order by " + AmpOrgGroup.hqlStringForName("o") + " asc";
 			qry = session.createQuery(queryString);
@@ -7424,8 +7374,30 @@ public class DbUtil {
 
 	}
 
-	public static String getValidationFromTeamAppSettings(TeamMember teamMember) {
-		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings(teamMember);
+	public static String getValidationFromTeamAppSettings(Long ampTeamId) {
+		Session session = null;
+		Query qry = null;
+		AmpApplicationSettings ampAppSettings = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select a from "
+					+ AmpApplicationSettings.class.getName()
+					+ " a where (a.team=:teamId) ";
+			qry = session.createQuery(queryString);
+			qry.setLong("teamId", ampTeamId);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				ampAppSettings = (AmpApplicationSettings) itr.next();
+				if (ampAppSettings != null
+						&& ampAppSettings.getValidation() != null
+						&& !"".equals(ampAppSettings.getValidation()))
+					break;
+			}
+
+		} catch (Exception e) {
+			logger.error("Unable to get TeamAppSettings", e);
+		}
 		return ampAppSettings != null ? ampAppSettings.getValidation() : null;
 	}
 	

@@ -83,7 +83,7 @@ public class TeamMemberUtil {
 			AmpTeamMember tm = (AmpTeamMember) session.load(AmpTeamMember.class,
 					id);
 			User user = tm.getUser();
-			
+
 			String qryStr = "select o.ampOrgId from " + AmpOrganisation.class.getName() + " o " +
 					"where (" + AmpOrganisation.hqlStringForName("o") + "=:name) and (o.deleted is null or o.deleted = false) ";
 			Query qry = session.createQuery(qryStr);
@@ -767,8 +767,8 @@ public class TeamMemberUtil {
                         // start
 
                         String queryString = "select r from "
-					+ AmpTeamMember.class.getName() + " t  inner join  t.reports r "
-                            + "  where (t.ampTeamMemId=:teamId) order by " + AmpReports.hqlStringForName("r") +" limit " + currentPage + ", " +
+                        					+ AmpTeamMember.class.getName() + " t  inner join  t.reports r "
+											+ "  where (t.ampTeamMemId=:teamId) order by " + AmpReports.hqlStringForName("r") +" limit " + currentPage + ", " +
                             reportPerPage;
                         Query qry = session.createQuery(queryString);
                         qry.setLong("teamId", id);

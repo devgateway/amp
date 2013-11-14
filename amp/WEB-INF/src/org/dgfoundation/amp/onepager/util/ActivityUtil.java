@@ -288,7 +288,7 @@ public class ActivityUtil {
 		Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
 		//Long  activityTeamId=(a.getTeam()!=null)?a.getTeam().getAmpTeamId():teamMemberTeamId;
 		
-		String validation=org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.toTeamMember());
+		String validation=org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
 		
 		//setting activity status....
 		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();

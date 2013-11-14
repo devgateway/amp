@@ -41,6 +41,12 @@ public class TLSUtils {
         return code;
 	}
 	
+	@Deprecated
+	public void setLocale(Locale locale)
+	{
+		// STUB so that it compiles
+	}
+	
 	/**
 	 * calculates the effectively-used language code, e.g. either the currently-set one OR the default one ("en")
 	 * @return

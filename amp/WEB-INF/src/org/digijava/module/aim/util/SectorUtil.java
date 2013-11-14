@@ -64,7 +64,6 @@ public class SectorUtil {
 			 * "region where region.name like '%" + keyword + "%' and " +
 			 * "country.iso = region.country";
 			 */
-
 			String sectorNameHql = AmpSector.hqlStringForName("sector");
 			String qryStr = "select sector from " + AmpSector.class.getName()
 					+ " sector inner join sector.ampSecSchemeId " + " sscheme"
@@ -335,7 +334,7 @@ public class SectorUtil {
 			try {
 				session = PersistenceManager.getRequestDBSession();
 				String queryString = "select sc from " + AmpSector.class.getName()
-					+ " sc where (sc.deleted is null or sc.deleted = false) order by " + AmpSector.hqlStringForName("sc");
+						+ " sc where (sc.deleted is null or sc.deleted = false) order by " + AmpSector.hqlStringForName("sc");
 				Query qry = session.createQuery(queryString);
 				AmpCaching.getInstance().initSectorsCache(qry.list());
 			} catch (Exception e) {
@@ -1774,6 +1773,22 @@ public class SectorUtil {
 		return generatedSectors;
 	}
 
+	/*
+	 * this is to delete a sector
+	 * 
+	 * public static void deleteSector(Long schemeId) {
+	 * logger.info(" deleting the scheme"); Session session = null; Transaction
+	 * tx = null; try { session = PersistenceManager.getSession(); AmpSector
+	 * scheme = (AmpSector) session.load( AmpSectorScheme.class,schemeId);
+	 * //beginTransaction(); session.delete(scheme); //tx.commit(); } catch
+	 * (Exception e) { logger.error("Exception from deleteQuestion() :" +
+	 * e.getMessage()); e.printStackTrace(System.out); if (tx != null) { try {
+	 * tx.rollback(); } catch (Exception trbf) {
+	 * logger.error("Transaction roll back failed ");
+	 * e.printStackTrace(System.out); } } } finally { if (session != null) { try
+	 * { PersistenceManager.releaseSession(session); } catch (Exception rsf) {
+	 * logger.error("Failed to release session :" + rsf.getMessage()); } } } }
+	 */
 	// This recursive method helps the generateLevelHierarchy method.
 	public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
 		if (topLevelSector.getParentSectorId() != null) {

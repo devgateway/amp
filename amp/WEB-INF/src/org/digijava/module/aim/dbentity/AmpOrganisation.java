@@ -736,9 +736,9 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		this.orgKeyAreas = orgKeyAreas;
 	}
 	
-    public static String hqlStringForName(String idSource)
-    {
-    	return InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall(idSource + ".ampOrgId");
-    }
-	
+	public static String hqlStringForName(String idSource)
+	{
+		return InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall(idSource + ".ampOrgId");
+	}
+
 }	

@@ -689,14 +689,14 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 		}
 	}
 	
-    public static String hqlStringForName(String idSource)
-    {
-    	return InternationalizedModelDescription.getForProperty(AmpReports.class, "name").getSQLFunctionCall(idSource + ".ampReportId");
-    }
-    
-    public static String hqlStringForDescription(String idSource)
-    {
-    	return InternationalizedModelDescription.getForProperty(AmpReports.class, "reportDescription").getSQLFunctionCall(idSource + ".ampReportId");
-    }
+	public static String hqlStringForName(String idSource)
+	{
+		return InternationalizedModelDescription.getForProperty(AmpReports.class, "name").getSQLFunctionCall(idSource + ".ampReportId");
+	}
+	    
+	public static String hqlStringForDescription(String idSource)
+	{
+		return InternationalizedModelDescription.getForProperty(AmpReports.class, "reportDescription").getSQLFunctionCall(idSource + ".ampReportId");
+	}
 }
 

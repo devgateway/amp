@@ -7,10 +7,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.engine.TypedValue;
 
 public class SQLUtils {
 	/**
@@ -115,4 +123,72 @@ public class SQLUtils {
 		}
 		return result.toString();
 	}
+	
+	public static Criterion getUnaccentILikeExpression(final String propertyName, final String value, final String locale, final MatchMode matchMode) {
+		return new Criterion(){
+			private static final long serialVersionUID = -8979378752879206485L;
+
+			@Override
+			public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
+				Dialect dialect = criteriaQuery.getFactory().getDialect();
+				String[] columns = criteriaQuery.findColumns(propertyName, criteria);
+				String entityName = criteriaQuery.getEntityName(criteria);
+              
+				String []ids=criteriaQuery.getIdentifierColumns(criteria);
+				if (columns.length!=1)
+					throw new HibernateException("ilike may only be used with single-column properties");
+				if (ids.length!=1)
+					throw new HibernateException("We do not support multiple identifiers just yet!");
+
+				if ( dialect instanceof PostgreSQLDialect ) {
+					//AMP-15628 - the replace of "this_." with "" inside the ids and columns was removed
+					String ret=" "+ids[0]+" = any(contentmatch('"+entityName+"','"+columns[0]+"','"+locale+"', ?)) OR ";
+					ret+=" unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";
+					return ret;
+				} else {
+					throw new HibernateException("We do not handle non-postgresql databases yet, sorry!");
+				}
+			}
+		
+
+			@Override
+			public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException 
+			{
+				return new TypedValue[] { criteriaQuery.getTypedValue( criteria, propertyName, matchMode.toMatchString(value).toLowerCase() ) ,
+					criteriaQuery.getTypedValue( criteria, propertyName, matchMode.toMatchString(value).toLowerCase() )};
+			}
+			};
+		}
+		
+		    
+		//ao.* from amp_organisation ao -> "ao.amp_org_id, ao.column2, getOrgName(....), ...."
+		/**
+		 * 
+		 * @param tableName
+		 * @param tableAlias
+		 * @param renames Map<ColumnName, String to Replace with>
+		 * @return
+		 */
+		public static String rewriteQuery(String tableName, String tableAlias, Map<String, String> renames)
+		{
+			try
+			{
+				Connection conn = org.digijava.kernel.persistence.PersistenceManager.getJdbcConnection();
+				LinkedHashSet<String> columns = SQLUtils.getTableColumns(conn, tableName);
+				ArrayList<String> outputs = new ArrayList<String>();
+				for(String column:columns)
+				{
+					if (renames.containsKey(column))
+						outputs.add(renames.get(column) + " AS " + column);
+					else
+						outputs.add(tableAlias + "." + column);
+				}
+    		
+				return Util.collectionAsString(outputs);
+			}
+			catch(SQLException ex)
+			{
+				throw new RuntimeException(ex);
+			}
+		}	
 }

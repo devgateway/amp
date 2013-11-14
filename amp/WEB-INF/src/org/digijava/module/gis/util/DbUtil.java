@@ -259,7 +259,7 @@ public class DbUtil {
         }
         return retVal;
     }
-    
+      
     public static List getFundingDonors() {
         List retVal = null;
         Session session = null;
@@ -2844,7 +2844,6 @@ public class DbUtil {
         try {
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();
-         
             String activityNameHql = AmpActivityVersion.hqlStringForName("act");
             StringBuilder queryStr = new StringBuilder("select act.ampActivityId, " + activityNameHql + " from ");
             queryStr.append(AmpActivityVersion.class.getName());
@@ -2871,7 +2870,8 @@ public class DbUtil {
         try {
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();
-            StringBuilder queryStr = new StringBuilder("select actSec.activityId.ampActivityId, actSec.sectorId.name from ");
+            String sectorNameHql = AmpSector.hqlStringForName("actSec.sectorId");
+            StringBuilder queryStr = new StringBuilder("select actSec.activityId.ampActivityId, " + sectorNameHql + " from ");
             queryStr.append(AmpActivitySector.class.getName());
             queryStr.append(" as actSec where actSec.activityId.ampActivityId in ");
             queryStr.append(actIdWhereclause);
@@ -2901,7 +2901,8 @@ public class DbUtil {
         try {
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();
-            StringBuilder queryStr = new StringBuilder("select fnd.ampActivityId.ampActivityId, fnd.ampDonorOrgId.name from ");
+            String activityNameHql = AmpActivityVersion.hqlStringForName("fnd.ampDonorOrgId");
+            StringBuilder queryStr = new StringBuilder("select fnd.ampActivityId.ampActivityId, " + activityNameHql + " from ");
             queryStr.append(AmpFunding.class.getName());
             queryStr.append(" as fnd where fnd.ampActivityId.ampActivityId in ");
             queryStr.append(actIdWhereclause);
@@ -2943,8 +2944,8 @@ public class DbUtil {
             String lasVersionsWhereclause = generateWhereclause(lastVersions, new GenericIdGetter());
             */
 
-
-            StringBuilder queryStr = new StringBuilder("select loc.activity.ampActivityId, loc.location.location.name from ");
+            String locationNameHql = AmpCategoryValueLocations.hqlStringForName("loc.location.location");
+            StringBuilder queryStr = new StringBuilder("select loc.activity.ampActivityId, " + locationNameHql + " from ");
             queryStr.append(AmpActivityLocation.class.getName());
             queryStr.append(" as loc where loc.activity.ampActivityId in ");
             queryStr.append(actIdWhereclause);
@@ -2979,14 +2980,13 @@ public class DbUtil {
         String retVal = null;
         try {
             Session sess = PersistenceManager.getRequestDBSession();
-
-            StringBuilder qs = new StringBuilder("select s from ");
+            String sectorNameHql = AmpSector.hqlStringForName("s");
+            StringBuilder qs = new StringBuilder("select " + sectorNameHql + " from ");
             qs.append(AmpSector.class.getName());
             qs.append(" as s where s.ampSectorId = :SEC_ID  and (s.deleted is null or s.deleted = false) ");
             Query q = sess.createQuery(qs.toString());
             q.setLong("SEC_ID", sectorId);
-            AmpSector sec = (AmpSector) q.uniqueResult();
-            retVal = sec.getName();
+            retVal = (String) q.uniqueResult();
         } catch (Exception ex) {
           logger.error("Error getting sector name from database " + ex);
         }
@@ -3000,21 +3000,25 @@ public class DbUtil {
             List<String> result = null;
 
             Session sess = PersistenceManager.getRequestDBSession();
-            StringBuilder queryStr = new StringBuilder("select s.name from ");
+            String sectorNameHql = AmpSector.hqlStringForName("s");
+            String parentSectorNameHql = AmpSector.hqlStringForName("s.parentSectorId");
+            String parentParentSectorNameHql = AmpSector.hqlStringForName("s.parentSectorId.parentSectorId");
+            
+            StringBuilder queryStr = new StringBuilder("select " + sectorNameHql + " from ");
             queryStr.append(AmpSector.class.getName());
             queryStr.append(" as s where s.parentSectorId=null and (s.deleted is null or s.deleted = false) and s.ampSectorId in ");
             queryStr.append(whereClause);
             Query q = sess.createQuery(queryStr.toString());
             result = q.list();
 
-            queryStr = new StringBuilder("select s.parentSectorId.name from ");
+            queryStr = new StringBuilder("select " + parentSectorNameHql + " from ");
             queryStr.append(AmpSector.class.getName());
             queryStr.append(" as s where s.parentSectorId.parentSectorId=null and (s.deleted is null or s.deleted = false) and s.ampSectorId in ");
             queryStr.append(whereClause);
             q = sess.createQuery(queryStr.toString());
             result.addAll(q.list());
 
-            queryStr = new StringBuilder("select s.parentSectorId.parentSectorId.name from ");
+            queryStr = new StringBuilder("select " + parentParentSectorNameHql + " from ");
             queryStr.append(AmpSector.class.getName());
             queryStr.append(" as s where s.parentSectorId.parentSectorId.parentSectorId=null and (s.deleted is null or s.deleted = false) and s.ampSectorId in ");
             queryStr.append(whereClause);

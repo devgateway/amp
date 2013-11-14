@@ -398,8 +398,8 @@ public class ComponentsUtil {
             session = PersistenceManager.getRequestDBSession();
             String componentTitle = InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("co.ampComponentId");
             queryString = "select " + componentTitle + " from "+AmpActivity.class.getName() +  " a, " +   AmpComponent.class.getName()+
-                    " co  where co  in elements(a.components)  and " +
-                    componentTitle + "=:title";
+            		" co  where co  in elements(a.components)  and " +
+            		componentTitle + "=:title";
 
             if (excludeId != null)
             	queryString += " and not co.ampComponentId=:excludeId";
@@ -421,6 +421,7 @@ public class ComponentsUtil {
         } else
             return true;
     }
+    
     /*
      * this is to check whether a component with the same name already exists in the AMP Components Table.returns true if present and false if not present for the activity group
      */

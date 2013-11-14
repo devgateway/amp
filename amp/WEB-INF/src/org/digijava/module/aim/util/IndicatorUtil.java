@@ -115,6 +115,7 @@ public class IndicatorUtil {
             Session session = PersistenceManager.getRequestDBSession();
             String indicatorName = InternationalizedModelDescription.getForProperty(AmpIndicator.class, "name").getSQLFunctionCall("ind.indicatorId");
             String qrString = "Select ind  from " + AmpIndicator.class.getName() + " ind where " + indicatorName + "=:name ";
+            
             Long indicatorId = indicator.getIndicatorId();
             if (indicatorId != null && indicatorId != 0) {
                 qrString += "and ind.indicatorId !=:id ";
@@ -976,7 +977,7 @@ public class IndicatorUtil {
 	public static Set<AmpIndicator> getActivityIndicators(Long activityId) throws DgException{
 		Set<AmpIndicator> result=null;
 		Session sesison=PersistenceManager.getRequestDBSession();
-        String indicatorName = InternationalizedModelDescription.getForProperty(AmpIndicator.class, "name").getSQLFunctionCall("indi.indicatorId");
+		String indicatorName = InternationalizedModelDescription.getForProperty(AmpIndicator.class, "name").getSQLFunctionCall("indi.indicatorId");
 		String oql="select indi from "+AmpIndicator.class.getName()+" indi ";
 		oql+="where indi.valuesActivity.activity.ampActivityId =:actId ";
 		oql+="order by " + indicatorName;
@@ -1228,7 +1229,6 @@ public class IndicatorUtil {
 		return bean;
 	}
 	
-	
 	@Deprecated
 	public static ArrayList getAmpIndicator() {
 		Session session = null;
@@ -1240,7 +1240,7 @@ public class IndicatorUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-            String indicatorName = InternationalizedModelDescription.getForProperty(AmpIndicator.class, "name").getSQLFunctionCall("t.indicatorId");
+			String indicatorName = InternationalizedModelDescription.getForProperty(AmpIndicator.class, "name").getSQLFunctionCall("t.indicatorId");
 			queryString = " select t from " + AmpIndicator.class.getName()
 					+ " t order by " + indicatorName;
 			q = session.createQuery(queryString);
@@ -1711,19 +1711,20 @@ public class IndicatorUtil {
 			List retValue=new ArrayList();
 			try{
 				session=PersistenceManager.getRequestDBSession();
-				String queryString=null;			
+				String queryString=null;	
 				String sectorNameHql = AmpSector.hqlStringForName("sec");
 				String indicatorNameHql = InternationalizedModelDescription.getForProperty(AmpIndicator.class, "name").getSQLFunctionCall("ind.indicatorId");
+				
 				if (keyWord!=null && keyWord.length()>0){
 					if(sectorName!=null && sectorName.length()>0 && !sectorName.equals("-1")){
 						queryString="select ind from "+ AmpIndicator.class.getName() +" ind inner join ind.sectors sec where " + indicatorNameHql + " like '%" + keyWord + "%'"
-						+" and " + sectorNameHql + "='"+sectorName+"'";
+								+ " and " + sectorNameHql + "='" + sectorName + "'";
 						qry = session.createQuery(queryString);
 						retValue=qry.list();
 					}else {
-						 queryString="select ind from "+ AmpIndicator.class.getName() +" ind where " + indicatorNameHql + " like '%" + keyWord + "%'";
-						 qry = session.createQuery(queryString);
-						 retValue=qry.list();
+						queryString="select ind from "+ AmpIndicator.class.getName() +" ind where " + indicatorNameHql + " like '%" + keyWord + "%'";
+						qry = session.createQuery(queryString);
+						retValue=qry.list();
 					} 
 				}else if (sectorName!=null && sectorName.length()>0 && !sectorName.equals("-1")){
 					retValue=searchForindicator(sectorName);

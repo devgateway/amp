@@ -26,9 +26,9 @@ public abstract class ReportsTestCase extends TestCase
 		try
 		{
 			if (locale != null)
-				TLSUtils.getThreadLocalInstance().setLocale(org.digijava.module.um.util.DbUtil.getLanguageByCode(locale));
+				TLSUtils.getThreadLocalInstance().setForcedLangCode(locale);
 		}
-		catch(UMException e)
+		catch(Exception e)
 		{
 			throw new RuntimeException(e);
 		}

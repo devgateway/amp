@@ -26,9 +26,10 @@ public class MultilingualTests extends TestCase
 	{
 		for(int i = 0; i < 500; i++)
 		{
-			TLSUtils.getThreadLocalInstance().setLocale(org.digijava.module.um.util.DbUtil.getLanguageByCode("ru"));
+			//TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
+			TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
 			String ruVer = ReportTestingUtils.getActivityName(2L);
-			TLSUtils.getThreadLocalInstance().setLocale(org.digijava.module.um.util.DbUtil.getLanguageByCode("en"));
+			TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
 			String enVer = ReportTestingUtils.getActivityName(2L);
 			
 			assertEquals("Вода Eth", ruVer);
@@ -38,11 +39,11 @@ public class MultilingualTests extends TestCase
 	
 	public void testAmpActivityMappedCorrectly() throws Exception
 	{
-		TLSUtils.getThreadLocalInstance().setLocale(org.digijava.module.um.util.DbUtil.getLanguageByCode("ru"));
+		TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
 		String ruVer = ReportTestingUtils.getActivityName(2L);
 		String ruVerView = ReportTestingUtils.getActivityName_notVersion(2L);
 		
-		TLSUtils.getThreadLocalInstance().setLocale(org.digijava.module.um.util.DbUtil.getLanguageByCode("en"));
+		TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
 		String enVer = ReportTestingUtils.getActivityName(2L);
 		String enVerView = ReportTestingUtils.getActivityName_notVersion(2L);
 		

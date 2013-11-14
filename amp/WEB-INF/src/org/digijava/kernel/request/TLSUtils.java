@@ -21,8 +21,13 @@ public class TLSUtils {
 
 	public Site site;
 	public HttpServletRequest request;
+	private String forcedLangCode = null;
 	
 	public static String getLangCode() {
+		
+		if (TLSUtils.getThreadLocalInstance().forcedLangCode != null)
+			return TLSUtils.getThreadLocalInstance().forcedLangCode;
+		
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = sra.getRequest();
         Locale lang = (Locale) request.getAttribute(Constants.NAVIGATION_LANGUAGE);
@@ -41,10 +46,13 @@ public class TLSUtils {
         return code;
 	}
 	
-	@Deprecated
-	public void setLocale(Locale locale)
+	/**
+	 * DANGEROUS! ONLY USE IN TESTCASES!
+	 * @param langCode
+	 */
+	public void setForcedLangCode(String langCode)
 	{
-		// STUB so that it compiles
+		forcedLangCode = langCode;
 	}
 	
 	/**

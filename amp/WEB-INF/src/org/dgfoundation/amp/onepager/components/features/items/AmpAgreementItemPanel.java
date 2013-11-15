@@ -87,6 +87,13 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 			}
 			
 			@Override
+			protected AmpAgreement getSelectedChoice(Long objId) {
+				if (objId.equals(-1L))
+					return new AmpAgreement();
+				return super.getSelectedChoice(objId);
+			}
+			
+			@Override
 			protected boolean showAcronyms() {
 				return true;
 			}

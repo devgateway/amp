@@ -156,7 +156,7 @@ public class FundingCalculationsHelper {
 			java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
 			
 			double frmExRt;
-			if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(baseCurrCode)||fundDet.getFixedExchangeRate() == null){
+			if (fundDet.getFixedExchangeRate() == null){
 				frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
 			}else{
 				frmExRt = fundDet.getFixedExchangeRate();

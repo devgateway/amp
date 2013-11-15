@@ -141,7 +141,7 @@ div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/c
 	z-Index:100;
 	display: none;
 	top:256px;
-	width:240px;
+	width:250px;
 	padding:10px; 
 	filter:alpha(opacity=80);opacity: .80;-moz-opacity:.80;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";   
     color:#fff;

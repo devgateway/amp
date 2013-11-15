@@ -57,16 +57,15 @@ DHTMLSuite.modalMessage = function()
 	}
 
 	this.objectIndex = DHTMLSuite.variableStorage.arrayOfDhtmlSuiteObjects.length;
-	debugger;
 	DHTMLSuite.variableStorage.arrayOfDhtmlSuiteObjects[this.objectIndex] = this;
 	var ind = this.objectIndex;
 	var variableStorage = DHTMLSuite.variableStorage;
 		
-		DHTMLSuite.commonObj.addEvent(window,"resize",function() {
-			if(variableStorage != undefined){
-				variableStorage.arrayOfDhtmlSuiteObjects[ind].__resizeTransparentDiv();
-			}
-		});	
+	DHTMLSuite.commonObj.addEvent(window,"resize",function() {
+		if(variableStorage != undefined){
+			variableStorage.arrayOfDhtmlSuiteObjects[ind].__resizeTransparentDiv();
+		}
+	});	
 }
 
 DHTMLSuite.modalMessage.prototype = {

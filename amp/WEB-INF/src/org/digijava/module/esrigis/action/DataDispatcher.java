@@ -410,7 +410,6 @@ public class DataDispatcher extends MultiAction {
 		logger.info("Iteration Starts");
 		startTS=System.currentTimeMillis();
 		
-		Boolean isaggregatable = true;
 		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
 			ActivityPoint ap = new ActivityPoint();
 			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
@@ -438,7 +437,6 @@ public class DataDispatcher extends MultiAction {
 				
 				boolean isfiltered = locationIds != null && locationIds.size() > 0 && !locationIds.get(0).equals(-1l) ;
 				if (!implocation) {
-					isaggregatable = true;
 					SimpleLocation sl = new SimpleLocation();
 					String lat = alocation.getLocation().getLocation().getGsLat();
 					String lon = alocation.getLocation().getLocation().getGsLong();
@@ -469,15 +467,10 @@ public class DataDispatcher extends MultiAction {
 						sla.add(sl);
 					}
 					
-				} else {
-					isaggregatable = false;
-					break;
-				}
+				} 
 			}
-			if (isaggregatable) {
 				ap.setLocations(sla);
 				jsonArray.add(ap);
-			}
 		}
 		
 		endTS=System.currentTimeMillis();
@@ -560,7 +553,7 @@ public class DataDispatcher extends MultiAction {
 		try
 		{
 			conn = PersistenceManager.getJdbcConnection();
-			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")");
+			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_activity_id IN (" + Util.toCSString(activityIdList) + ")");
 			while (rs.next())
 			{
 				Long actId = rs.getLong(1);
@@ -594,7 +587,7 @@ public class DataDispatcher extends MultiAction {
 		try
 		{
 			conn = PersistenceManager.getJdbcConnection();
-			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, amp_structure_id FROM amp_activity_structures WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")");
+			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, amp_structure_id FROM amp_activity_structures WHERE amp_activity_id IN (" + Util.toCSString(activityIdList) + ")");
 			while (rs.next())
 			{
 				Long actId = rs.getLong(1);
@@ -661,7 +654,7 @@ public class DataDispatcher extends MultiAction {
 				typeNamesById.put(rs.getLong(1), rs.getString(2));
 			rs.close();
 			
-			rs = conn.createStatement().executeQuery("SELECT amp_structure_id, title, description, latitude, longitude, shape, type FROM amp_structure WHERE amp_structure_id IN (" + Util.toCSStringForIN(ids) + ")");
+			rs = conn.createStatement().executeQuery("SELECT amp_structure_id, title, description, latitude, longitude, shape, type FROM amp_structure WHERE amp_structure_id IN (" + Util.toCSString(ids) + ")");
 			while (rs.next())
 			{
 				Long strucId = rs.getLong(1);

@@ -615,7 +615,11 @@ public final class ARUtil {
 	}
 
 	private static void cleanTextCell(TextCell cell) {
-		cell.setValue(DataExchangeUtils.convertHTMLtoChar(cell.getFullTextVersion()));
+		if(cell.getFullTextVersion()!=null){
+			cell.setValue(DataExchangeUtils.convertHTMLtoChar(cell.getFullTextVersion()));
+		}else{
+			cell.setValue("");
+		}
 	}
 	
 	public static double retrievePercentageFromCell ( MetaTextCell mtc ) throws Exception {

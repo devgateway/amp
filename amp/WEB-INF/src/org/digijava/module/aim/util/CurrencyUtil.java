@@ -1384,8 +1384,14 @@ public class CurrencyUtil {
 	 * @return
 	 */
 	public static AmpCurrency getWorkspaceCurrency(TeamMember tm) {
-		if ((tm != null) && (tm.getAppSettings() != null))
-			return getAmpcurrency(tm.getAppSettings().getCurrencyId());
+		AmpCurrency currency = null;
+		if (tm != null && tm.getAppSettings() != null) {
+			currency = getAmpcurrency(tm.getAppSettings().getCurrencyId()); 
+			if(currency != null) {
+				return currency;
+			}
+			return getDefaultCurrency();
+		}
 		return getDefaultCurrency();		
 	}
 

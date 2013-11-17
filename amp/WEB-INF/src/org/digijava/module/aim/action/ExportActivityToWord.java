@@ -2089,11 +2089,11 @@ public class ExportActivityToWord extends Action {
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Donor Objective", null, null, true))
 										.addRowData(fnd.getDonorObjective()));
 					}
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Conditions", ampContext)) {
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions", ampContext)) {
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Conditions", null, null, true))
 										.addRowData(fnd.getConditions()));
 					}
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext)) {
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext)) {
 						String agreementTitle = fnd.getAgreement() != null ? fnd.getAgreement().getTitle() : " ";
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Agreement Title", null, null, true))
 										.addRowData(agreementTitle));

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -21,13 +22,13 @@ public class TLSUtils {
 
 	public Site site;
 	public HttpServletRequest request;
-	private String forcedLangCode = null;
+	private static String forcedLangCode = null;
 	
 	public static String getLangCode() {
-				
-		if (TLSUtils.getThreadLocalInstance().forcedLangCode != null)
-			return TLSUtils.getThreadLocalInstance().forcedLangCode;	
-
+		
+		if (TLSUtils.forcedLangCode != null)
+			return TLSUtils.forcedLangCode;
+		
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = sra.getRequest();
         Locale lang = (Locale) request.getAttribute(Constants.NAVIGATION_LANGUAGE);
@@ -46,13 +47,44 @@ public class TLSUtils {
         return code;
 	}
 	
+	public final static boolean equalValues(Object a, Object b)
+	{
+		if (a == null)
+			return b == null;
+		return a.equals(b);
+	}
+	
 	/**
 	 * DANGEROUS! ONLY USE IN TESTCASES!
 	 * @param langCode
 	 */
 	public void setForcedLangCode(String langCode)
 	{
+		if (!equalValues(langCode, forcedLangCode))
+		{
+			try
+			{
+				PersistenceManager.getRequestDBSession().flush();
+				PersistenceManager.getRequestDBSession().clear();
+			}
+			catch(Exception e)
+			{
+				throw new RuntimeException(e);
+			}
+		}
 		forcedLangCode = langCode;
+	}
+	
+	/**
+	 * calculates the effectively-used language code, e.g. either the currently-set one OR the default one ("en")
+	 * @return
+	 */
+	public static String getEffectiveLangCode()
+	{
+		String langCode = getLangCode();
+		if (langCode == null)
+			langCode = "en";
+		return langCode;
 	}
 	
 	public static Long getSiteId()

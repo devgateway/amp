@@ -2866,8 +2866,8 @@ public class DbUtil {
         return retVal;
     }
 
-    public static Map <Long, Set> getActivitySectorNames (Set<Long> actIds) {
-        Map <Long, Set> retVal = new HashMap <Long, Set> ();
+    public static Map <Long, Set<String>> getActivitySectorNames (Set<Long> actIds) {
+        Map <Long, Set<String>> retVal = new HashMap <Long, Set<String>> ();
         try {
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();
@@ -2896,8 +2896,8 @@ public class DbUtil {
         return retVal;
     }
 
-    public static Map <Long, Set> getActivityDonorNames (Set<Long> actIds) {
-        Map <Long, Set> retVal = new HashMap <Long, Set> ();
+    public static Map <Long, Set<String>> getActivityDonorNames (Set<Long> actIds) {
+        Map <Long, Set<String>> retVal = new HashMap <Long, Set<String>> ();
         try {
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();

@@ -387,6 +387,7 @@ public class ComponentsUtil {
     public static boolean checkComponentNameExists(String title) {
     	return checkComponentNameExists(title, null);
     }
+    
     public static boolean checkComponentNameExists(String title, Long excludeId) {
         logger.info(" in the checking for components existence through title ");
         boolean flag = false;

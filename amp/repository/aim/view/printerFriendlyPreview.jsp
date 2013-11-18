@@ -2526,17 +2526,6 @@ body {background:none;}
 											<c:out value="${aimEditActivityForm.identification.actAthEmail}"/>										</td>
 									</tr>
 									</field:display>
-									<field:display feature="Identification" name="Data Source">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap">
-											<b>
-											<digi:trn key="aim:dataSource">
-										    Data Source</digi:trn>
-											</b>									</td>
-<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.actAthAgencySource}"/>										</td>
-									</tr>
-									</field:display>
 									<field:display name="Activity Updated On" feature="Identification">
 									<logic:notEmpty name="aimEditActivityForm" property="identification.updatedDate">
 									<tr>

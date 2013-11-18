@@ -1298,14 +1298,6 @@ public class ExportActivityToPDF extends Action {
 			}
 			
 			/**
-			 * Data Source
-			 */
-			if(FeaturesUtil.isVisibleField("Data Source", ampContext)){
-				columnName=TranslatorWorker.translateText("Data Source");
-				createGeneralInfoRow(mainLayout,columnName,identification.getActAthAgencySource());
-			}			
-			
-			/**
 			 * Activity updated on
 			 */
 			if(FeaturesUtil.isVisibleField("Activity Updated On", ampContext)){

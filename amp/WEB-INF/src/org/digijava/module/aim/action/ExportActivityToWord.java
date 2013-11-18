@@ -650,15 +650,6 @@ public class ExportActivityToWord extends Action {
 			sectionHelper.addRowData(rowData);
 		}
 
-		/**
-		 * Data Source
-		 */
-		if (FeaturesUtil.isVisibleField("Data Source", ampContext)) {
-			ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-					"Data Source", null, null, true).addRowData(identification
-					.getActAthAgencySource());
-			sectionHelper.addRowData(rowData);
-		}
 
 		/**
 		 * Activity updated on

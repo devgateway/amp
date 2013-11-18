@@ -24,6 +24,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -42,6 +43,7 @@ import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
@@ -2128,13 +2130,38 @@ public class ExportActivityToWord extends Action {
 										// DisbOrders
 										|| (fndDet.getTransactionType() == Constants.DISBURSEMENT_ORDER && visibleModuleDisbOrders)) {
 
+        	                            //convert TransactionAmount to toCurrCode										
+										Double total=0D;
+										java.sql.Date dt = new java.sql.Date(fndDet.getTransactionDate().getTime());
+
+        	                			double frmExRt;
+        	                			if ( fndDet.getFixedExchangeRate() == null){
+        	                				frmExRt = Util.getExchange(fndDet.getAmpCurrencyId().getCurrencyCode(), dt);
+        	                			}else{
+        	                				frmExRt = fndDet.getFixedExchangeRate();
+        	                			}
+        	                			
+        	                			double toExRt;
+        	                			if (fndDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(toCurrCode)){
+        	                				toExRt=frmExRt;
+        	                			}else{
+        	                				toExRt = Util.getExchange(toCurrCode, dt);
+        	                			}
+        	                			
+        	                            DecimalWraper amt = CurrencyWorker.convertWrapper(fndDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
+        	                            
+        	                            
+
                                         ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true);
 
                                         ExportSectionHelperRowData currentRowData = sectionHelperRowData.
 		                                        addRowData(fndDet.getAdjustmentType().getLabel(), true).
 		                                        addRowData(DateConversion.ConvertDateToString(fndDet.getTransactionDate())).
-		                                        addRowData(FormatHelper.formatNumber(fndDet.getTransactionAmount())).
-		                                        addRowData(fndDet.getAmpCurrencyId().getCurrencyCode());
+		                                        addRowData(FormatHelper.formatNumber(amt.doubleValue())).
+		                                        addRowData(toCurrCode);
+
+
+                                        
 
                                         if (fndDet.getFixedExchangeRate() != null) {
                                             String exchangeRateStr = TranslatorWorker.translateText("Exchange Rate: ");

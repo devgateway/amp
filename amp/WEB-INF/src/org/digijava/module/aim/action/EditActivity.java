@@ -2011,7 +2011,8 @@ public class EditActivity extends Action {
 
     }
     catch (Exception e) {
-      e.printStackTrace(System.out);
+        logger.error(e);
+        e.printStackTrace();
     }
     if (request.getParameter("logframepr") != null)
       if (request.getParameter("logframepr").compareTo("true") == 0) {

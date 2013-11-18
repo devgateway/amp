@@ -1372,12 +1372,13 @@ public class CurrencyUtil {
 	}
 
 	/**
-	 * returns default currency if no team member logged in
+     * Returns workspace settings currency or
+	 * returns default currency if no team member logged in or the currency is not set in the workspace settings
 	 * @param tm
 	 * @return
 	 */
 	public static AmpCurrency getWorkspaceCurrency(TeamMember tm) {
-		if ((tm != null) && (tm.getAppSettings() != null))
+		if ((tm != null) && (tm.getAppSettings() != null) && tm.getAppSettings().getCurrencyId() != null)
 			return getAmpcurrency(tm.getAppSettings().getCurrencyId());
 		return getDefaultCurrency();		
 	}

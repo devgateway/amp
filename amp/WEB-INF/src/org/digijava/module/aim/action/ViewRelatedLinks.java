@@ -89,7 +89,7 @@ public class ViewRelatedLinks extends Action {
 			pagedCol = new ArrayList<Documents>();
 			
 			//TeamUtil.getAllTeamAmpActivitiesResume(teamId,true,null, "ampActivityId", "name");
-			Map<Long, Object[]> collectionActivities = TeamUtil.getAllTeamAmpActivitiesResume(teamId,true,null, "ampActivityId", "name");
+			Map<Long, Object[]> collectionActivities = TeamUtil.getAllTeamAmpActivitiesResume(teamId, true, null, "ampActivityId", "name");
 			Map<Long, List<AmpActivityDocument>> documentsByAmpActivityId = TeamUtil.getDocumentsByActivityIds(collectionActivities.keySet());
 			
 			for(Long ampActivityId:documentsByAmpActivityId.keySet())

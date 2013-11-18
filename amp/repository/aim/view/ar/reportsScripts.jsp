@@ -188,9 +188,8 @@ SaveReportEngine.reportSavedMessage =
 	"<digi:trn key='aim:reports:reportSaved' jsFriendly='true'>Report and filters have been saved.</digi:trn>";
 saveReportEngine	= null;	
 </script>
-
 <script type="text/javascript">
-		dateFilterErrorMsg = "<digi:trn>'From' date must be on or before 'To' date</digi:trn>";
+		dateFilterErrorMsg = "<digi:trn jsFriendly='true'>'From' date must be on or before 'To' date</digi:trn>";
 		var currentReportId	= -1;
 		<logic:present name="reportObject">
 			currentReportId	= ${reportObject.ampReportId};
@@ -644,27 +643,27 @@ function validateFormat(){
 	var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;
 	
 	if ((decimalSymbol==customGroupCharacter)&&(customUseGrouping)){
-	        var msg='<digi:trn key="rep:format:equalsSymbol">Decimal Symbol and group symbol must be diferents</digi:trn>';
+	        var msg='<digi:trn jsFriendly="true" key="rep:format:equalsSymbol">Decimal Symbol and group symbol must be diferents</digi:trn>';
 			alert(msg);
 			return false;
 	}
 	var validNumbers="0123456789";
 	
 	if (decimalSymbol=="" || customGroupCharacter==""){
-		 var msg='<digi:trn key="rep:format:badSymbolEmpty">Symbols can not be a empty, you can use the space character</digi:trn>';
+		 var msg='<digi:trn jsFriendly="true" key="rep:format:badSymbolEmpty">Symbols can not be a empty, you can use the space character</digi:trn>';
 		alert(msg);
 		return false;
 	}
 	
 	
 	if ((validNumbers.indexOf(decimalSymbol)!=-1)||(validNumbers.indexOf(customGroupCharacter)!=-1)){
-		     var msg='<digi:trn key="rep:format:badSymbolNumber">Symbols can not be a number</digi:trn>';
+		     var msg='<digi:trn jsFriendly="true" key="rep:format:badSymbolNumber">Symbols can not be a number</digi:trn>';
 			alert(msg);
 			return false;
 	}
 	
 	if ((customGroupSize < 1) && (document.aimReportsFilterPickerForm3.customUseGrouping.checked == true)) {
-		  var msg='<digi:trn key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
+		  var msg='<digi:trn jsFriendly="true" key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
 			alert(msg);
 			return false;
 	}

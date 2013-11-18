@@ -39,16 +39,27 @@ public class AmpCaching {
 		sectorsCache = new SectorsCache(liveSectors);
 	}
 	
+	private static Map<String, AmpCaching> getAmpCaches()
+	{
+		HttpSession session = TLSUtils.getRequest().getSession();
+		Map<String, AmpCaching> caches = (Map<String, AmpCaching>) session.getAttribute("session_local_cache");
+		if (caches == null)
+		{
+			caches = new HashMap<String, AmpCaching>();
+			session.setAttribute("session_local_cache", caches);
+		}
+		return caches;
+	}
+	
 	public static AmpCaching getInstance()
 	{
 		HttpSession session = TLSUtils.getRequest().getSession();
-		AmpCaching res = (AmpCaching) session.getAttribute("session_local_cache");
-		if (res == null)
-		{
-			res = new AmpCaching();
-			session.setAttribute("session_local_cache", res);
-		}
-		return res;			
+		String locale = TLSUtils.getEffectiveLangCode();
+		
+		Map<String, AmpCaching> caches = getAmpCaches();
+		if (!caches.containsKey(locale))
+			caches.put(locale, new AmpCaching());
+		return caches.get(locale);			
 	}
 	
 	public static void clearInstance()

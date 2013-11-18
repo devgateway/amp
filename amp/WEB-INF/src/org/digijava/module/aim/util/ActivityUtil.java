@@ -1535,15 +1535,15 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		}
 	}
   
-  public static Collection getComponents(Long actId) {
+  public static List<AmpComponent> getComponents(Long actId) {
     Session session = null;
-    Collection col = new ArrayList();
+    List<AmpComponent> col = new ArrayList<AmpComponent>();
     logger.info(" this is the other components getting called....");
     try {
     	session = PersistenceManager.getRequestDBSession();
-		String rewrittenColumns = SQLUtils.rewriteQuery("amp_component", "ac", 
+		String rewrittenColumns = SQLUtils.rewriteQuery("amp_components", "ac", 
 				new HashMap<String, String>(){{
-					put("title", InternationalizedModelDescription.getForProperty(AmpComponent.class, "name").getSQLFunctionCall("ac.amp_component_id"));
+					put("title", InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("ac.amp_component_id"));
 					put("description", InternationalizedModelDescription.getForProperty(AmpComponent.class, "description").getSQLFunctionCall("ac.amp_component_id"));
 				}});      
 		String queryString = "select " + rewrittenColumns + " from amp_components ac " +
@@ -3058,41 +3058,41 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
   }
 
   
-  public static AmpActivity getActivityByName(String name , Long actId) {
-    AmpActivity activity = null;
-    Session session = null;
-    try {
-      session = PersistenceManager.getSession();
-
-      String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
-          String.format("where lower(%s) = :lowerName",
-        		  AmpActivityVersion.hqlStringForName("a"));
-      if(actId!=null){
-    	  qryStr+=" and a.ampActivityId!="+actId;
-      }
-      Query qry = session.createQuery(qryStr);
-      qry.setString("lowerName", name.toLowerCase());
-      Iterator itr = qry.list().iterator();
-      if (itr.hasNext()) {
-        activity = (AmpActivity) itr.next();
-      }
-    }
-    catch (Exception e) {
-      logger.debug("Exception in isActivityExisting() " + e.getMessage());
-      e.printStackTrace(System.out);
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception ex) {
-          logger.debug("Exception while releasing session " + ex.getMessage());
-        }
-      }
-    }
-    return activity;
-  }
+//  public static AmpActivity getActivityByName(String name , Long actId) {
+//    AmpActivity activity = null;
+//    Session session = null;
+//    try {
+//      session = PersistenceManager.getSession();
+//
+//      String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
+//          String.format("where lower(%s) = :lowerName",
+//        		  AmpActivityVersion.hqlStringForName("a"));
+//      if(actId!=null){
+//    	  qryStr+=" and a.ampActivityId!="+actId;
+//      }
+//      Query qry = session.createQuery(qryStr);
+//      qry.setString("lowerName", name.toLowerCase());
+//      Iterator itr = qry.list().iterator();
+//      if (itr.hasNext()) {
+//        activity = (AmpActivity) itr.next();
+//      }
+//    }
+//    catch (Exception e) {
+//      logger.debug("Exception in isActivityExisting() " + e.getMessage());
+//      e.printStackTrace(System.out);
+//    }
+//    finally {
+//      if (session != null) {
+//        try {
+//          PersistenceManager.releaseSession(session);
+//        }
+//        catch (Exception ex) {
+//          logger.debug("Exception while releasing session " + ex.getMessage());
+//        }
+//      }
+//    }
+//    return activity;
+//  }
 
   public static void saveDonorFundingInfo(Long actId, Set fundings) {
     Session session = null;
@@ -4086,6 +4086,13 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
       }
   }
   
+  /**
+   * @deprecated
+   * VERY SLOW. Use {@link #getAllTeamAmpActivitiesResume(Long, boolean, String, String...)}
+   * @param ampActIds
+   * @param session
+   * @return
+   */
   public static List<AmpActivity> getActivityById(Set<Long> ampActIds ,Session session){
 	  List<AmpActivity> act = null;
       if (ampActIds != null && !ampActIds.isEmpty()) {
@@ -4766,24 +4773,24 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     
                 Set<String> activityStatus = new HashSet<String>();
                 String teamType=member.getTeamType();
-		activityStatus.add(Constants.APPROVED_STATUS);
-		activityStatus.add(Constants.EDITED_STATUS);
+                activityStatus.add(Constants.APPROVED_STATUS);
+                activityStatus.add(Constants.EDITED_STATUS);
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
-                    Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
-                    String activityNameString = AmpActivityVersion.hqlStringForName("a");
-                    // computed workspace
-                    if (teamAO != null && !teamAO.isEmpty()) {
-                        queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
+                Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
+                String activityNameString = AmpActivityVersion.hqlStringForName("a");
+                // computed workspace
+                if (teamAO != null && !teamAO.isEmpty()) {
+                	queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
                                 " where  a.team in  (" + Util.toCSStringForIN(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSStringForIN(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSStringForIN(teamAO) + ")) order by " + activityNameString;
 
-                    } else {
-                        // none computed workspace
-                        queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
-                        if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                            queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
-                        }
-                        queryString += " order by " + activityNameString;
-                    }
+                } else {
+                	//none computed workspace
+                	queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
+                	if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+                		queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
+                	}
+                	queryString += " order by " + activityNameString;
+                }
     			  			
     			query=session.createQuery(queryString);    			
     			activities=query.list(); 		

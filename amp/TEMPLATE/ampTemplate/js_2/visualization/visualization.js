@@ -519,7 +519,7 @@ function showInstallFlashPopin() {
 		fixedcenter: true,
 	    constraintoviewport: false,
 	    underlay:"none",
-	    close:false,
+	    close:true,
 	    visible:false,
 	    modal:true,
 	    draggable:true,

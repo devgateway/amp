@@ -603,7 +603,7 @@ public class RMMapCalculationUtil {
 
                 Map <Long, String> allActIdNames = DbUtil.getActivityNames(actIds);
                 Map <Long, Set> allActIdSectorNames =  DbUtil.getActivitySectorNames(actIds);
-                Map <Long, Set> allActIdDonorNames =  DbUtil.getActivityDonorNames(actIds);
+                Map <Long, Set<String>> allActIdDonorNames =  DbUtil.getActivityDonorNames(actIds);
                 Map <Long, Set> allActIdLocationNames =  DbUtil.getActivityLocationNames(actIds);
 
                 for (Long actId : actIds) {

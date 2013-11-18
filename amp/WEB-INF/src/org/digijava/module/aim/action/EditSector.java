@@ -42,7 +42,7 @@ public class EditSector extends Action {
 		}
 					 AddSectorForm editSectorForm = (AddSectorForm) form;
 					 logger.debug("In edit sector action");
-					 logger.debug("In edit sector action");
+//					 logger.debug("In edit sector action");
 					 if (request.getParameter("id") != null) {
 						 	String id = (String)request.getParameter("id");
 							Long secId = new Long(Long.parseLong(request.getParameter("id")));

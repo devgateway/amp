@@ -2896,12 +2896,12 @@ public class DbUtil {
         return retVal;
     }
 
-    public static Map <Long, Set> getActivityDonorNames (Set<Long> actIds) {
-        Map <Long, Set> retVal = new HashMap <Long, Set> ();
+    public static Map <Long, Set<String>> getActivityDonorNames (Set<Long> actIds) {
+        Map <Long, Set<String>> retVal = new HashMap <Long, Set<String>> ();
         try {
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();
-            String activityNameHql = AmpActivityVersion.hqlStringForName("fnd.ampDonorOrgId");
+            String activityNameHql = AmpOrganisation.hqlStringForName("fnd.ampDonorOrgId");
             StringBuilder queryStr = new StringBuilder("select fnd.ampActivityId.ampActivityId, " + activityNameHql + " from ");
             queryStr.append(AmpFunding.class.getName());
             queryStr.append(" as fnd where fnd.ampActivityId.ampActivityId in ");

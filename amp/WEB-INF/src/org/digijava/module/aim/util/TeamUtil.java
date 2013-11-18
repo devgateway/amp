@@ -1549,13 +1549,19 @@ public class TeamUtil {
      */
     public static Map<Long, Object[]> getAllTeamAmpActivitiesResume(Long teamId, boolean includedraft, String keyword, String...fieldsList) {
     	Session session = null;
+    	String activityNameHql = AmpActivityVersion.hqlStringForName("g.ampActivityLastVersion");
     	
         StringBuilder fieldsQuery = new StringBuilder();
         for(String field:fieldsList)
         {
         	if (fieldsQuery.length() > 0)
         		fieldsQuery.append(", ");
-        	fieldsQuery.append("g.ampActivityLastVersion." + field);
+        	if (field.equals("name"))
+        	{
+        		fieldsQuery.append(activityNameHql);
+        	}
+        	else
+        		fieldsQuery.append("g.ampActivityLastVersion." + field);
         }
         
         List<Object[]> col = new ArrayList<Object[]>();
@@ -1574,7 +1580,6 @@ public class TeamUtil {
             	queryString.append("  and   (g.ampActivityLastVersion.draft is null or g.ampActivityLastVersion.draft=false)) ");
             }
             if(keyword!=null && keyword.length()>0){
-            	String activityNameHql = AmpActivityVersion.hqlStringForName("g.ampActivityLastVersion");
             	queryString.append(" and lower(" + activityNameHql + ") like lower(:name)") ;
             }
             
@@ -1601,8 +1606,7 @@ public class TeamUtil {
     }
 
     /**
-     * @deprecated
-     * ONLY USE THIS IF YOU NEED THE FULL DATASET - EXTREMELY SLOW. Use {@link #getAllTeamAmpActivitiesResume(Long, boolean, String, String...)} instead
+     *  
      * @param teamId
      * @param includedraft
      * @param keyword
@@ -1662,7 +1666,7 @@ public class TeamUtil {
         
         List<AmpActivity> res = new ArrayList<AmpActivity>();
         Session session = PersistenceManager.getSession();
-        	res.addAll(ActivityUtil.getActivityById(ids, session));
+        res.addAll(ActivityUtil.getActivityById(ids, session));
         return res;
         
     } catch(Exception e) {
@@ -1832,12 +1836,13 @@ public class TeamUtil {
             		}
             }
             
+        	String reportNameHql = AmpReports.hqlStringForName("r");
+        	
             if(keyword != null && keyword.trim().length() > 0){
-            	String reportNameHql = AmpReports.hqlStringForName("r");
             	queryString += " and (lower(" + reportNameHql + ") like lower(:keyword) ";
             }
 	                
-            queryString += " order by r.name";
+            queryString += " order by " + reportNameHql;
             qry = session.createQuery(queryString);
             if(keyword != null && keyword.trim().length() > 0){
             	qry.setString("keyword", '%' + keyword + '%');
@@ -2440,6 +2445,7 @@ public class TeamUtil {
         }
         return teams;
     }
+    
     public static List<AmpTeam> getAllTeams(String keyword,String type) {
         Session session = null;
         Query qry = null;

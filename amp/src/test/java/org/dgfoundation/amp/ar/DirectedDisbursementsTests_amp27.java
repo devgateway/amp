@@ -173,22 +173,22 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 						GroupColumnModel.withSubColumns("Funding", 
 								GroupColumnModel.withSubColumns("2013", 
 										GroupColumnModel.withSubColumns("Real Disbursements", 
-												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "20 000")
+												SimpleColumnModel.withContents("DN-EXEC", "Вода Eth", "20 000")
 												))),
 						GroupColumnModel.withSubColumns("Total Costs", 
 										GroupColumnModel.withSubColumns("Real Disbursements", 
-												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "20 000")
+												SimpleColumnModel.withContents("DN-EXEC", "Вода Eth", "20 000")
 						))),
 						ColumnReportDataModel.withColumns("Donor Agency: Норвегия", 
 								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
 								GroupColumnModel.withSubColumns("Funding", 
 										GroupColumnModel.withSubColumns("2013", 
 												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "110 000")
+														SimpleColumnModel.withContents("DN-EXEC", "Вода Eth", "110 000")
 														))),
 								GroupColumnModel.withSubColumns("Total Costs", 
 												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "110 000")
+														SimpleColumnModel.withContents("DN-EXEC", "Вода Eth", "110 000")
 								))),
 								
 						ColumnReportDataModel.withColumns("Donor Agency: УСАИД", 
@@ -196,11 +196,11 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 								GroupColumnModel.withSubColumns("Funding", 
 										GroupColumnModel.withSubColumns("2013", 
 												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "415 000")
+														SimpleColumnModel.withContents("DN-EXEC", "Вода Eth", "415 000")
 														))),
 								GroupColumnModel.withSubColumns("Total Costs", 
 												GroupColumnModel.withSubColumns("Real Disbursements", 
-														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "415 000")
+														SimpleColumnModel.withContents("DN-EXEC", "Вода Eth", "415 000")
 								)))
 																
 				));	

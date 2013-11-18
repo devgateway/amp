@@ -149,7 +149,26 @@ public class ReportTestingUtils
 		
 		if (activities.size() >= 1)
 			return activities.get(0).getName();
-		throw new RuntimeException("no activity with the given id " + activityId + " exists");
+		throw new RuntimeException("no activity with the given id " + activityId + " exists");		
+	}
+	
+	public static Long getActivityIdByName(String actName)
+	{
+		try
+		{
+			String queryString = "select act.ampActivityId from " + AmpActivity.class.getName() + " act WHERE " + AmpActivityVersion.hqlStringForName("act") + "=:activityName";
+			List<Long> ids = PersistenceManager.getRequestDBSession().createQuery(queryString).setString("activityName", actName).list();
+			
+			if (ids.isEmpty())
+				throw new RuntimeException("no activities with name " + actName + " found");
+			if (ids.size() > 1)
+				throw new RuntimeException("multiple activities with name " + actName + " found");
 		
+			return ids.get(0);
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 }

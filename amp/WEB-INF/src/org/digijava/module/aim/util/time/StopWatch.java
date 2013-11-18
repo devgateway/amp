@@ -16,6 +16,7 @@ public class StopWatch {
 	public static long next(String watchName, boolean logDifference ) {
 		return StopWatch.next(watchName, logDifference, null);
 	}
+	
 	public static long next(String watchName, boolean logDifference, String marker ) {
 		StopWatch watch		= StopWatch.watches.get(watchName);
 		if ( watch == null ) {

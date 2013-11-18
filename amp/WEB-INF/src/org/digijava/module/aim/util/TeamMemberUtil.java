@@ -178,6 +178,34 @@ public class TeamMemberUtil {
 			return ampMember;
 		}
 	}
+	public static AmpTeamMember getAmpTeamMemberByUserId(Long userId) {
+		AmpTeamMember ampMember = null;
+		Session session = null;
+		
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			// modified by Priyajith
+			// desc:used select query instead of session.load
+			// start
+			String queryString = "select t from "
+					+ AmpTeamMember.class.getName() + " t "
+					+ "where (t.user=:userId)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("userId", userId, Hibernate.LONG);
+			qry.setCacheable(true);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				ampMember = (AmpTeamMember) itr.next();
+			}
+			// end
+		} catch (Exception ex) {
+			logger.error("Unable to get team member ", ex);
+		} 
+		
+		
+		
+		return ampMember;
+	}
 	
 	public static AmpTeamMember getAmpTeamMember(Long id) {
 		AmpTeamMember ampMember = null;

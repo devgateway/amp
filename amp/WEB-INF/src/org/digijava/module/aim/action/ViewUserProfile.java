@@ -62,16 +62,19 @@ public class ViewUserProfile
         if (httpSession.getAttribute("ampAdmin") == null || httpSession.getAttribute("ampAdmin").equals("no")) {
             
             if(user != null) member = TeamMemberUtil.getAmpTeamMember(user);
-            else if(userid != null) member = TeamMemberUtil.getAmpTeamMember(userid);
+            else if(userid != null) member = TeamMemberUtil.getAmpTeamMemberByUserId(userid); 
             
             if (member == null && request.getParameter("id") != null) {
                 if (userid.equals(teamMember.getMemberId())) {
                     user = DbUtil.getUser(teamMember.getMemberId());
                     memberInformationn.add(new TeamMember(teamMember.getTeamName(),teamMember.getRoleName()));
                 } else {
-                    errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
-                    saveErrors(request, errors);
-                    mapping.findForward("forward");
+                	user = DbUtil.getUser(userid);
+                	if(user==null){
+                		errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
+                    	saveErrors(request, errors);
+                    	mapping.findForward("forward");
+                	}
                 }
             } else if (member != null) {
 //            	user = DbUtil.getUser(member.getUser().getId()); 

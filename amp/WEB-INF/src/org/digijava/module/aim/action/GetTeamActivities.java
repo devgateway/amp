@@ -103,11 +103,11 @@ public class GetTeamActivities
                     
                     if(reset!=null && reset.equalsIgnoreCase("true")){
                     	//taForm.setTempNumResults(-1);
-                    	taForm.setTempNumResults(numRecords==0?-1:numRecords);
+                    	if (numRecords!=0) {
+                    		taForm.setTempNumResults(numRecords);
+                    	}
                     }
-                    if(taForm.getTempNumResults()!=-1){
-                    	numRecords = taForm.getTempNumResults();
-                    }
+                    numRecords = taForm.getTempNumResults();
                 }
             }
             

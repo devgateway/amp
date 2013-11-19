@@ -471,14 +471,14 @@ myTable.enhanceMarkup = function(markupName) {
 		var extraSpacePerFreeLoader = freeloaders = 0 ? 0 : freeWidth / freeloaders;
 		
 	    this.columnHeaders = [];
-	    this.columnHeaders.push({key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true, width:100});
+	    this.columnHeaders.push({key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true, width:60});
 	    this.columnHeaders.push({key:"type",label:"${trans_headerType}",sortable:true, width: 30});
-	    this.columnHeaders.push({key:"file_name",label:"${trans_headerFileName}",sortable:true, width:70});
+	    this.columnHeaders.push({key:"file_name",label:"${trans_headerFileName}",sortable:true, width:77});
 	    this.columnHeaders.push({key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate, width:50 });
-	    this.columnHeaders.push({key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true/*, width:50*/});
+	    this.columnHeaders.push({key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true, width:50});
 	    this.columnHeaders.push({key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true/*, width:50 + 3 * extraSpacePerFreeLoader / 2*/});
 	    if (show_index)
-	    	this.columnHeaders.push({key:"resource_index",label:"${trans_headerResourceIndex}", sortable:true/*, width:40 + extraSpacePerFreeLoader*/});
+	    	this.columnHeaders.push({key:"resource_index",label:"${trans_headerResourceIndex}", sortable:true, width: 30/*, width:40 + extraSpacePerFreeLoader*/});
 	    if (show_category)
 	    	this.columnHeaders.push({key:"resource_category",label:"${trans_headerResourceCategory}", sortable:true, width:70/* + extraSpacePerFreeLoader*/});
 	    if (show_organisations)

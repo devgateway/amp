@@ -7162,7 +7162,7 @@ public class DbUtil {
 			// such long and complicated case is necessary because orgType maybe
 			// empty for organisation
 			AmpOrgType orgType1 = o1.getOrgGrpId().getOrgType();
-			AmpOrgType orgType2 = o1.getOrgGrpId().getOrgType();
+			AmpOrgType orgType2 = o2.getOrgGrpId().getOrgType();
 			if (orgType1 != null && orgType2 != null) {
 				result = new HelperAmpOrgTypeNameComparator().compare(orgType1,
 						orgType2);

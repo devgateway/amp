@@ -2853,26 +2853,28 @@ public class ExportActivityToPDF extends Action {
 							createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL COMMITMENTS:", funding.getSubtotalActualCommitments(), currencyCode);
 							
 							//pipeline commitments
-							output=TranslatorWorker.translateText("PIPELINE COMMITMENTS");
-							if(myForm.getFunding().isFixerate() && visibleCommitmentsExchRate){
-								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
-							}
-							PdfPCell plCommCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
-							plCommCell2.setBorder(0);
-							plCommCell2.setBackgroundColor(new Color(255,255,204));
-							plCommCell2.setColspan(4);
-							fundingTable.addCell(plCommCell2);
-						
-							if(funding.getFundingDetails()!=null){
-							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
-								if(fd.getTransactionType()== Constants.COMMITMENT){
-									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
-										buildFundingInfoInnerTable(fundingTable, fd,fundingCommitmentsFMfields,ampContext);
-									}
+							if (myForm.getFunding().isShowPipeline()) {
+								output=TranslatorWorker.translateText("PIPELINE COMMITMENTS");
+								if(myForm.getFunding().isFixerate() && visibleCommitmentsExchRate){
+									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 								}
-							}
-
-							createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE COMMITMENTS:", funding.getSubtotalPipelineCommitments(), currencyCode);
+								PdfPCell plCommCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+								plCommCell2.setBorder(0);
+								plCommCell2.setBackgroundColor(new Color(255,255,204));
+								plCommCell2.setColspan(4);
+								fundingTable.addCell(plCommCell2);
+							
+								if(funding.getFundingDetails()!=null){
+									for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+										if(fd.getTransactionType()== Constants.COMMITMENT){
+											if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+												buildFundingInfoInnerTable(fundingTable, fd,fundingCommitmentsFMfields,ampContext);
+											}
+										}
+									}
+	
+								createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE COMMITMENTS:", funding.getSubtotalPipelineCommitments(), currencyCode);
+								}
 							}
 						}
 					}
@@ -2927,25 +2929,27 @@ public class ExportActivityToPDF extends Action {
 									createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL DISBURSEMENT:", funding.getSubtotalDisbursements(), currencyCode);
 									
 									//pipeline disbursement
-									output=TranslatorWorker.translateText("PIPELINE DISBURSEMENT:");
-									if(myForm.getFunding().isFixerate()){
-										output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
-									}
-									PdfPCell actDisbCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
-									actDisbCell2.setBorder(0);
-									actDisbCell2.setBackgroundColor(new Color(255,255,204));
-									actDisbCell2.setColspan(4);
-									fundingTable.addCell(actDisbCell2);
-									
-									for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
-										if(fd.getTransactionType()== Constants.DISBURSEMENT){
-											if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
-												buildFundingInfoInnerTable(fundingTable, fd,fundingDisbursementsFMfields,ampContext);
+									if (myForm.getFunding().isShowPipeline()) {
+										output=TranslatorWorker.translateText("PIPELINE DISBURSEMENT:");
+										if(myForm.getFunding().isFixerate()){
+											output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+										}
+										PdfPCell actDisbCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+										actDisbCell2.setBorder(0);
+										actDisbCell2.setBackgroundColor(new Color(255,255,204));
+										actDisbCell2.setColspan(4);
+										fundingTable.addCell(actDisbCell2);
+										
+										for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+											if(fd.getTransactionType()== Constants.DISBURSEMENT){
+												if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+													buildFundingInfoInnerTable(fundingTable, fd,fundingDisbursementsFMfields,ampContext);
+												}
 											}
 										}
+										
+										createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE DISBURSEMENT:", funding.getSubtotalPipelineDisbursements(), currencyCode);
 									}
-									
-									createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE DISBURSEMENT:", funding.getSubtotalPipelineDisbursements(), currencyCode);
 								}
 							}
 							
@@ -2995,24 +2999,26 @@ public class ExportActivityToPDF extends Action {
 								createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL EXPENDITURES:", funding.getSubtotalExpenditures(), currencyCode);
 								
 								//pipeline expenditures
-								output=TranslatorWorker.translateText("PIPELINE EXPENDITURES:");
-								if(myForm.getFunding().isFixerate()){
-									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
-								}
-								PdfPCell actExpCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
-								actExpCell2.setBorder(0);
-								actExpCell2.setBackgroundColor(new Color(255,255,204));
-								actExpCell2.setColspan(4);
-								fundingTable.addCell(actExpCell2);
-								
-								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
-									if(fd.getTransactionType()== Constants.EXPENDITURE){
-										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
-											buildFundingInfoInnerTable(fundingTable, fd,fundingExpendituresFMfields,ampContext);
-										}
+								if (myForm.getFunding().isShowPipeline()) {
+									output=TranslatorWorker.translateText("PIPELINE EXPENDITURES:");
+									if(myForm.getFunding().isFixerate()){
+										output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 									}
-								}								
-								createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE EXPENDITURES:", funding.getSubtotalPipelineExpenditures(), currencyCode);
+									PdfPCell actExpCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+									actExpCell2.setBorder(0);
+									actExpCell2.setBackgroundColor(new Color(255,255,204));
+									actExpCell2.setColspan(4);
+									fundingTable.addCell(actExpCell2);
+									
+									for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+										if(fd.getTransactionType()== Constants.EXPENDITURE){
+											if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+												buildFundingInfoInnerTable(fundingTable, fd,fundingExpendituresFMfields,ampContext);
+											}
+										}
+									}								
+									createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE EXPENDITURES:", funding.getSubtotalPipelineExpenditures(), currencyCode);
+								}
 							}
 							
 						}

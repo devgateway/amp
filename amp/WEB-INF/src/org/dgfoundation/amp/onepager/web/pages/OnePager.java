@@ -443,4 +443,8 @@ public class OnePager extends AmpHeaderFooter {
                 session.close();
         }
     }
+
+    public AmpActivityModel getActivityModel() {
+        return am;
+    }
 }

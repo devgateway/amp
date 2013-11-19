@@ -89,7 +89,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			title.getTextAreaContainer().setRequired(true);
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));			
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
-			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px"));
+			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
 			title.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
 				@Override

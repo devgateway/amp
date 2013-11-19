@@ -7,7 +7,6 @@ package org.dgfoundation.amp.onepager.components.fields;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
@@ -66,7 +65,8 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 	
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, boolean showRedStarForNotReqComp, boolean enableReqStar) {
 		super(id, model, fmName, hideLabel, hideNewLine, showRedStarForNotReqComp, enableReqStar);
-		textContainer = new TextField<T>("textContainer",model) {
+
+		textContainer = new TextField<T>("textContainer",TranslationDecorator.proxyModel((IModel<String>) model)) {
 			@SuppressWarnings("unchecked")
 			@Override
 			public final <T> IConverter<T> getConverter(Class<T> type){
@@ -75,27 +75,8 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 			}
 		};
 		textContainer.setOutputMarkupId(true);
-		addFormComponent(textContainer);
+
+        add(TranslationDecorator.of("trnContainer", (IModel<String>) textContainer.getModel(), textContainer));
+        addFormComponent(textContainer);
 	}
-	
-	
-	
-	/**
-	 * You can use this constructor to specify the class 
-	 * for the convertor in TextField
-	 * 
-	 * @param id
-	 * @param model
-	 * @param fmName
-	 * @param hideLabel
-	 * @param hideNewLine
-	 * @param clazz  Class is needed for convertor
-	 */
-	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, Class<T> clazz) {
-		super(id, fmName, hideLabel, hideNewLine);
-		textContainer = new TextField<T>("textContainer",model, clazz);
-		textContainer.setOutputMarkupId(true);
-		addFormComponent(textContainer);
-	}
-	
 }

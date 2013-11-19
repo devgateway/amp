@@ -24,9 +24,11 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 	 * 
 	 */
 	private static final long serialVersionUID = 335388041997101521L;
-	protected TextArea<T> textAreaContainer;
+    private final boolean wysiwyg;
+    protected TextArea<T> textAreaContainer;
+    private WebMarkupContainer closeLink;
 
-	public TextArea<T> getTextAreaContainer() {
+    public TextArea<T> getTextAreaContainer() {
 		return textAreaContainer;
 	}
 	
@@ -37,18 +39,29 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 	 */
 	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine) {
 		super(id, fmName, hideLabel, hideNewLine);
+        this.wysiwyg = wysiwyg;
 		if (wysiwyg){
 			model = (IModel<T>) new EditorWrapperModel((IModel<String>) model, id);
 		}
 		
-		textAreaContainer = new TextArea<T>("richText", model);
+		textAreaContainer = new TextArea<T>("richText", TranslationDecorator.proxyModel((IModel<String>) model));
 		textAreaContainer.setOutputMarkupId(true);
 		
 		final Label preview = (Label) new Label("previewText", model).setEscapeModelStrings(false);
 
-		WebMarkupContainer closeLink = new WebMarkupContainer("closeLink");
+        closeLink = new WebMarkupContainer("closeLink");
 		closeLink.setOutputMarkupId(true);
-		closeLink.add(new AttributeModifier("onclick", "CKEDITOR.instances['"+ textAreaContainer.getMarkupId() +"'].updateElement(); $('#"+ preview.getMarkupId() +"').html($('#"+ textAreaContainer.getMarkupId() +"').val()); ;$('#"+ preview.getMarkupId() +"').show(); CKEDITOR.instances['"+ textAreaContainer.getMarkupId() +"'].destroy(); $('#"+ textAreaContainer.getMarkupId() +"').hide(); $('#"+ closeLink.getMarkupId() +"').hide(); return false;"));
+		closeLink.add(new AttributeModifier("onclick",
+                "CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); " +
+                        "$('#" + preview.getMarkupId() + "').html($('#" + textAreaContainer.getMarkupId() + "').val()); " +
+                        "$('#" + preview.getMarkupId() + "').show(); " +
+                        "CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy(); " +
+                        "$('#" + textAreaContainer.getMarkupId() + "').show();" +
+                        "$('#" + textAreaContainer.getMarkupId() + "').focus();" +
+                        "$('#" + textAreaContainer.getMarkupId() + "').blur();" +
+                        "$('#" + textAreaContainer.getMarkupId() + "').hide(); " +
+                        "$('#" + closeLink.getMarkupId() + "').hide(); " +
+                        "return false;"));
 		add(closeLink);
 		
 		preview.setVisible(false);
@@ -62,9 +75,14 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 				language = "en";
 			
 			textAreaContainer.add(new AttributeModifier("style", "display: none;"));
-			preview.add(new AttributeModifier("onclick", "$('#"+ preview.getMarkupId() +"').hide();CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady : function( ev ){this.focus();}}} );$('#"+ textAreaContainer.getMarkupId() +"').show(); $('#"+ closeLink.getMarkupId() +"').show();"));
+			preview.add(new AttributeModifier("onclick",
+                    "$('#"+ preview.getMarkupId() +"').hide();" +
+                    "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady : function( ev ){this.focus();}}} );" +
+                    "$('#"+ closeLink.getMarkupId() +"').show();"));
 		}
 		add(preview);
+
+        add(TranslationDecorator.of("trnContainer", (IModel<String>) textAreaContainer.getModel(), (wysiwyg?this:textAreaContainer)));
 		addFormComponent(textAreaContainer);
 	}
 
@@ -76,6 +94,12 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg) {
 		this(id, model, fmName, wysiwyg, false, false);
 	}
-	
 
+    public WebMarkupContainer getCloseLink() {
+        return closeLink;
+    }
+
+    public boolean isWysiwyg() {
+        return wysiwyg;
+    }
 }

@@ -10,17 +10,22 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author aartimon@dginternational.org 
  * @since Jun 16, 2011
  */
-public class EditorWrapperModel extends Model<String> {
+public class EditorWrapperModel extends LocaleAwareProxyModel<String> {
 	private static final Logger logger = Logger.getLogger(EditorWrapperModel.class);
 
 	private static final String KEY_PREFIX = "aim-wckt-";
@@ -28,18 +33,17 @@ public class EditorWrapperModel extends Model<String> {
 	private IModel<String> keyModel;
 
 	public EditorWrapperModel(IModel<String> m, String id) {
-		super();
+		super(Model.of(""));
 		this.keyModel = m;
 		
 		String valueStoredInActivityVal = "";
-
 		AmpAuthWebSession session = ((AmpAuthWebSession)Session.get());
 
         if(keyModel.getObject() != null && !keyModel.getObject().startsWith("aim-")){
 			//all editor keys start with "aim-" so it should be fine to 
 			//assume value was stored inside AmpActivity instead of the key
 			valueStoredInActivityVal = keyModel.getObject();
-			keyModel.setObject(null); // to generate a proper editor ket for it
+			keyModel.setObject(null); // to generate a proper editor key for it
 		}
 		
 		//if (m.getObject() == null || m.getObject().trim().compareTo("") == 0 || !m.getObject().startsWith(KEY_PREFIX)){
@@ -50,17 +54,7 @@ public class EditorWrapperModel extends Model<String> {
 			setObject(valueStoredInActivityVal);
 		}
 		else{
-			try {
-				Editor editor = DbUtil.getEditor(session.getSite(), keyModel.getObject(), TLSUtils.getLangCode());
-				if (editor != null){
-					super.setObject(editor.getBody());
-				}
-				else
-					super.setObject("");
-			} catch (EditorException e) {
-				logger.error("Can't get editor:", e);
-				super.setObject("");
-			}
+
 		}
 		
 		if (Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS) == null)
@@ -71,9 +65,19 @@ public class EditorWrapperModel extends Model<String> {
 			String newKey = generateEditorKey(session, id);
 			Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS).getOldKey().put(newKey, oldKey);
 			keyModel.setObject(newKey);
-		}
-		//update the EDITOR_ITEMS object after we've possibly changed the key
-		setObject(getObject());
+
+            //if we cloned the editors we need to put all the old values in the session
+            List<String> languages = TranslatorUtil.getLocaleCache();
+            IModel<String> langModel = getLangModel();
+            if (langModel == null){
+                langModel = Model.of("");
+                setLangModel(langModel);
+            }
+            for (String lang: languages){
+                langModel.setObject(lang);
+                setObject(getObject());
+            }
+        }
 	}
 	
 	private String generateEditorKey(AmpAuthWebSession session, String id) {
@@ -86,15 +90,54 @@ public class EditorWrapperModel extends Model<String> {
 
 	@Override
 	public void setObject(String object) {
-		super.setObject(object);
+		//model.setObject(object);
 		if (Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS) == null)
 			Session.get().setMetaData(OnePagerConst.EDITOR_ITEMS, new EditorStore());
-		
-		Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS).getValues().put(keyModel.getObject(), object);
+
+        HashMap<String, HashMap<String, String>> valuesMap = Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS).getValues();
+        HashMap<String, String> trnSet = valuesMap.get(keyModel.getObject());
+        if (trnSet == null){
+            trnSet = new HashMap<String, String>();
+            valuesMap.put(keyModel.getObject(), trnSet);
+        }
+        trnSet.put(localeOfLangModel(), object);
 	}
 	
 	@Override
 	public String getObject() {
-		return super.getObject();
+        //first, try and see if we have the object in the editor store
+        EditorStore editorStore = Session.get().getMetaData(OnePagerConst.EDITOR_ITEMS);
+        if (editorStore != null){
+            HashMap<String, HashMap<String, String>> valuesMap = editorStore.getValues();
+            String oldKey = editorStore.getOldKey().get(keyModel.getObject());
+            HashMap<String, String> trnSet = valuesMap.get(keyModel.getObject());
+            if (trnSet != null){
+                String val = trnSet.get(localeOfLangModel());
+                if (val != null)
+                    return val;
+            }
+            AmpAuthWebSession session = ((AmpAuthWebSession)Session.get());
+            try {
+                Editor editor = DbUtil.getEditor(session.getSite(), oldKey, localeOfLangModel());
+                if (editor != null){
+                    return editor.getBody();
+                }
+            } catch (EditorException e) {
+                logger.error("Can't get editor:", e);
+                return null;
+            }
+        }
+
+
+		return null;
 	}
+
+    public IModel<String> getKeyModel() {
+        return keyModel;
+    }
+
+    @Override
+    public void detach() {
+        model.detach();
+    }
 }

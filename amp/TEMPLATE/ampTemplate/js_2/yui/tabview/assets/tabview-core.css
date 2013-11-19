@@ -45,7 +45,7 @@ version: 2.8.2r1
 
 .yui-navset-top,
 .yui-navset-bottom {
-    padding:auto;
+    padding:0;
 }
 /* core */
 

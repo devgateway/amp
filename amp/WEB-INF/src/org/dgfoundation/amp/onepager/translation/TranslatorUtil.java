@@ -7,9 +7,19 @@ package org.dgfoundation.amp.onepager.translation;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+
+import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -17,6 +27,8 @@ import org.digijava.kernel.translator.TranslatorWorker;
  */
 public final class TranslatorUtil {
 	public static Logger logger = Logger.getLogger(TranslatorUtil.class);
+
+    public static List<String> localeCache;
 
 	public static boolean isTranslatorMode(Session session) {
 		AmpAuthWebSession ampSession=(AmpAuthWebSession) session;
@@ -42,4 +54,23 @@ public final class TranslatorUtil {
 		}
 		return translatedValue;
 	}
+
+    public static List<String> getLocaleCache(){
+        if (localeCache == null){
+            try{
+                AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
+                Site site = session.getSite();
+                Set<Locale> list = site.getTranslationLanguages();
+                localeCache = new ArrayList<String>();
+                for (Locale loc: list){
+                    localeCache.add(loc.getCode());
+                }
+                Collections.sort(localeCache);
+            } finally {
+            }
+        }
+
+        return localeCache;
+    }
+
 }

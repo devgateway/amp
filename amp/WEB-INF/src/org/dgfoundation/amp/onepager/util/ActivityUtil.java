@@ -48,11 +48,8 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -60,7 +57,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
@@ -73,7 +69,6 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -103,14 +98,13 @@ public class ActivityUtil {
 			logger.error("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");
 		}
 		
-		AmpActivityVersion a = am.getObject();
-		AmpActivityVersion oldA = a;
+		AmpActivityVersion oldA = am.getObject();
 
-		boolean newActivity = a.getAmpActivityId() == null;
+		boolean newActivity = oldA.getAmpActivityId() == null;
 		try 
 		{
 			AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
-			a = saveActivityNewVersion(a, ampCurrentMember, draft, session);
+			AmpActivityVersion a = saveActivityNewVersion(am, ampCurrentMember, draft, session);
 			am.setObject(a);
 		} catch (Exception exception) {
 			logger.error("Error saving activity:", exception); // Log the exception			
@@ -134,9 +128,10 @@ public class ActivityUtil {
 	 * saves a new version of an activity
 	 * returns newActivity
 	 */
-	public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a, AmpTeamMember ampCurrentMember, boolean draft, Session session) throws Exception
+	public static AmpActivityVersion saveActivityNewVersion(AmpActivityModel am, AmpTeamMember ampCurrentMember, boolean draft, Session session) throws Exception
 	{
 		//saveFundingOrganizationRole(a);
+        AmpActivityVersion a = am.getObject();
 		AmpActivityVersion oldA = a;
 		boolean newActivity = false;
 		
@@ -153,7 +148,7 @@ public class ActivityUtil {
 		a.setDraft(draft);
 
 		a.setDeleted(false);
-        ContentTranslationUtil.cloneTranslations(a);
+        ContentTranslationUtil.cloneTranslations(a, am.getTranslationHashMap().values());
 		//is versioning activated?
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
 		if (createNewVersion){
@@ -461,59 +456,69 @@ public class ActivityUtil {
 	private static void saveEditors(Session session, boolean createNewVersion) {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		EditorStore editorStore = s.getMetaData(OnePagerConst.EDITOR_ITEMS);
-		HashMap<String, String> editors = editorStore.getValues();
+		HashMap<String, HashMap<String, String>> editors = editorStore.getValues();
 		
 		AmpAuthWebSession wicketSession = ((AmpAuthWebSession)org.apache.wicket.Session.get());
 		
-		String currentLanguage = TLSUtils.getLangCode();
+		//String currentLanguage = TLSUtils.getLangCode();
 		if (editors == null || editors.keySet() == null)
 			return;
 		Iterator<String> it = editors.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
 			String oldKey = editorStore.getOldKey().get(key);
-			String value = editors.get(key);
-			
-			if (value == null || value.trim().length() == 0)
-				continue; //we don't save empty editors
-			
-			try {
-				boolean editorFound = false;
-				List<Editor> edList = DbUtil.getEditorList(oldKey, wicketSession.getSite());
-				Iterator<Editor> it2 = edList.iterator();
-				while (it2.hasNext()) {
-					Editor editor = (Editor) it2.next();
-					if (editor.getLanguage().equals(currentLanguage)){
-						editor.setBody(value);
-						editorFound = true;
-					}
-					//create a new editor and copy the old values
-					Editor toSaveEditor = new Editor();
-					toSaveEditor.setBody(editor.getBody());
-					toSaveEditor.setSiteId(editor.getSiteId());
-					toSaveEditor.setLanguage(editor.getLanguage());
-					toSaveEditor.setEditorKey(key);
-					session.save(toSaveEditor);
-					
-					if (!createNewVersion){
-						//we need to delete the old editor since this is not a new activity version
-						session.delete(editor);
-					}
-				}
-				
-				if (!editorFound){
-					//add new editor
-					Editor editor = new Editor();
-					editor.setBody(value);
-					editor.setSite(wicketSession.getSite());
-					editor.setLanguage(currentLanguage);
-					editor.setEditorKey(key);
-					session.saveOrUpdate(editor);
-				}
+			HashMap<String, String> values = editors.get(key);
+            Set<String> locales = values.keySet();
 
-			} catch (EditorException e) {
-				logger.error("Can't get editor:", e);
-			}
+            for (String locale: locales){
+                String value = values.get(locale);
+
+                if (value == null || value.trim().length() == 0)
+                    continue; //we don't save empty editors
+
+                try {
+                    boolean editorFound = false;
+                    List<Editor> edList = DbUtil.getEditorList(oldKey, wicketSession.getSite());
+                    Iterator<Editor> it2 = edList.iterator();
+                    while (it2.hasNext()) {
+                        Editor editor = (Editor) it2.next();
+                        if (editor.getLanguage().equals(locale)){
+                            //editor.setBody(value);
+                            editorFound = true;
+
+                            //create a new editor and copy the old values
+                            Editor toSaveEditor = new Editor();
+                            toSaveEditor.setBody(value);
+                            toSaveEditor.setSiteId(editor.getSiteId());
+                            toSaveEditor.setLanguage(editor.getLanguage());
+                            toSaveEditor.setEditorKey(key);
+                            session.save(toSaveEditor);
+
+                            if (!createNewVersion){
+                                //we need to delete the old editor since this is not a new activity version
+                                session.delete(editor);
+                            }
+
+                            break;
+                        }
+                    }
+
+                    if (!editorFound){
+                        //add new editor
+                        Editor editor = new Editor();
+                        editor.setBody(value);
+                        editor.setSite(wicketSession.getSite());
+                        editor.setLanguage(locale);
+                        editor.setEditorKey(key);
+                        session.saveOrUpdate(editor);
+                    }
+
+                } catch (EditorException e) {
+                    logger.error("Can't get editor:", e);
+                }
+            }
+
+
 		}
 	}
 

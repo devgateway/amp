@@ -53,8 +53,9 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
 		super(id, fmName, true);
 		this.fmType = AmpFMTypes.MODULE;
 		
-		value = new AmpTextFieldPanel<Double>("value", val, fieldPrefix + " Value", false, false, Double.class);
+		value = new AmpTextFieldPanel<Double>("value", val, fieldPrefix + " Value", false, false);
 		value.getTextContainer().setRequired(true);
+        value.getTextContainer().setType(Double.class);
 		add(value);
 		
 		date = new AmpDatePickerFieldPanel("valueDate", valueDate, fieldPrefix + " Date");

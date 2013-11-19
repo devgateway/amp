@@ -147,7 +147,7 @@
 }
 .yuiamp-skin-amp .yuiampmenu .bd {
 	
-	line-height:1.5em;!important
+	line-height:1.5em;
 	z-index:9999;
 
 }
@@ -319,5 +319,3 @@ html.ie9 .bd_drop ul.first-of-type, html.ie8 .bd_drop ul.first-of-type, html.ie7
 html.chrome .bd_drop ul.first-of-type {border:none;margin-top:5px;}
 html.ie div.header {height:46px;}-------*/
 #content ul.yui-nav {z-index:1000;}
-
-html.ie #yui-gen5{width:80px;}

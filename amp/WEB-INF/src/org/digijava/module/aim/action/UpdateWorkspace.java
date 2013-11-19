@@ -133,14 +133,14 @@ public class UpdateWorkspace extends Action {
 			} else {
 				newTeam.setDescription(" ");
 			}
-			
-			if(uwForm.getFmTemplate() != null && !uwForm.getFmTemplate().equals(-1L))
+			if(uwForm.getFmTemplate()!=null && !uwForm.getFmTemplate().equals(-1L))
 				newTeam.setFmTemplate(FeaturesUtil.getTemplateById(uwForm.getFmTemplate()));
 			else
 				newTeam.setFmTemplate(null);
-			
-			if (uwForm.getWorkspacePrefix() != null && !uwForm.getWorkspacePrefix().equals(-1L))
-				newTeam.setWorkspacePrefix(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspacePrefix()));
+            if (uwForm.getWorkspacePrefix() != null && !uwForm.getWorkspacePrefix().equals(-1L))
+                newTeam.setWorkspacePrefix(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspacePrefix()));
+            else
+                newTeam.setWorkspacePrefix(null);
 		}
 
 		if (event != null && event.trim().equalsIgnoreCase("reset")) {

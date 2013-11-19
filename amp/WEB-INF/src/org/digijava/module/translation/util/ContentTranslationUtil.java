@@ -80,23 +80,32 @@ public class ContentTranslationUtil {
      * object specified in the parameters. The FTP will be inserted in the TranslationStore and the
      * identifier will be returned
      *
+     *
      * @param objClass class for your object
      * @param objId object id
      * @param fieldName field name
      * @param currentLocale language in which the field has been modified
      * @param fieldTrnCurrentLocale new value for the field in the currentLocale
+     * @param formFieldTrns extra translations from the activity form
+     *
      * @return the identifier for the object in the TranslationStore
      */
-    private static Long getFieldTrnPack(Class clazz, String objClass, Long objId, String fieldName, String currentLocale, String fieldTrnCurrentLocale){
+    private static Long getFieldTrnPack(Class clazz, String objClass, Long objId, String fieldName, String currentLocale, String fieldTrnCurrentLocale, List<AmpContentTranslation> formFieldTrns){
         //get old translations for current field
         List<AmpContentTranslation> currentTranslations = loadFieldTranslations(objClass, objId, fieldName);
         //create the FieldTranslationPack object
         FieldTranslationPack trnPack = new FieldTranslationPack(objClass, fieldName);
-        if (currentTranslations != null){
+        if (currentTranslations != null){ //if we have trns from the db, add them to the list
             for (AmpContentTranslation ampContentTranslation : currentTranslations) {
                 trnPack.add(ampContentTranslation);
             }
         }
+
+        if (formFieldTrns != null){//override the translations from the db with the ones from the form if available
+            for (AmpContentTranslation act: formFieldTrns)
+                trnPack.add(act);
+        }
+
 
         //update the translation for the current locale
         trnPack.add(currentLocale, fieldTrnCurrentLocale);
@@ -117,8 +126,19 @@ public class ContentTranslationUtil {
      *
      * @param obj Object that needs translation cloning
      */
-    @SuppressWarnings("unchecked")
     public static void cloneTranslations(Object obj){
+        cloneTranslations(obj, null);
+    }
+
+    /**
+     * Method that will clone the translations for all the translatable fields
+     * in the current object
+     *
+     * @param obj Object that needs translation cloning
+     * @param formTranslations the list of translations that were modified using the activity form
+     */
+    @SuppressWarnings("unchecked")
+    public static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations){
         Hibernate.initialize(obj);
         String objClass = getObjectClass(obj);
         String currentLocale = TLSUtils.getEffectiveLangCode();
@@ -140,8 +160,22 @@ public class ContentTranslationUtil {
                     String fieldName = field.getName();
                     Method methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
                     String fieldTrnCurrentLocale = (String) methGetField.invoke(obj);
+                    //create a list with translations from the activity form
+                    List<AmpContentTranslation> formFieldTrns = null;
+                    if (formTranslations != null){//if request is coming from the activity form save
+                        Long revObjId = (objId == null ? System.identityHashCode(obj) : objId);
+                        for (AmpContentTranslation ft: formTranslations){
+                            if (ft.getObjectClass().equals(objClass) && ft.getObjectId().equals(revObjId) &&
+                                    ft.getFieldName().equals(fieldName)){
+                                if (formFieldTrns == null)
+                                    formFieldTrns = new ArrayList<AmpContentTranslation>();
+                                formFieldTrns.add(ft);
+                            }
+                        }
+                    }
+
                     //generate FTP with old translations + insert updated translation
-                    Long packId = getFieldTrnPack(clazz, objClass, objId, fieldName, currentLocale, fieldTrnCurrentLocale);
+                    Long packId = getFieldTrnPack(clazz, objClass, objId, fieldName, currentLocale, fieldTrnCurrentLocale, formFieldTrns);
                     //replace the value of the field with the identifier for the FTP from the TranslationStore
                     Method methSetField = clazz.getMethod("set" + Strings.capitalize(fieldName), String.class);
                     methSetField.invoke(obj, String.valueOf(packId));
@@ -360,7 +394,7 @@ public class ContentTranslationUtil {
      * @param locale language in which the translation is requested
      * @return translation object
      */
-    private static AmpContentTranslation loadCachedFieldTranslationsInLocale(String objClass, Long objId, String fieldName, String locale){
+    public static AmpContentTranslation loadCachedFieldTranslationsInLocale(String objClass, Long objId, String fieldName, String locale){
         HashMap<String, AmpContentTranslation> localeMap = loadCachedFieldTranslations(objClass, objId, fieldName);
         if (localeMap == null)
             return null;

@@ -74,12 +74,12 @@ td.inside {margin: 0; padding: 4px; background-color: #FFF;border:1px solid #b8b
 .login_nav {float:right;  font-size:11px; padding-top:13px;}
 .login_nav a {color:#FFFFFF;}
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
-top_nav a {color:#FFFFFF;}
+.top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px;}
 .workspace_choose {line-height:35px; font-size:17px; margin-top:25px;}
 
 /* MENU */
-..menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; width:auto; float:left; margin-right:5px;}
+.menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; width:auto; float:left; margin-right:5px;}
 .menu_item_cont {padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
 .menu_item_sel {background-color:#FF6000; border:1px solid #FF6000; width:auto; float:left; margin-right:5px;}
 .menu_item_cont_sel {color:#FFFFFF; padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
@@ -116,8 +116,8 @@ top_nav a {color:#FFFFFF;}
 .right_menu_cont {padding:10px; font-size:11px;margin-top:10px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
-.tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) repeat-x; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:5px; padding-left:7px;width:148px;}
-html.ie .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) repeat-x; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:5px; padding-left:7px;width:160px;}
+.tri {background:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) repeat-x; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:5px; padding-left:7px;width:148px;}
+html.ie .tri {background:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif) repeat-x; list-style-position:inside; list-style:none; display:block; font-size:12px; padding-bottom:5px; padding-left:7px;width:160px;}
 .tri_adv {background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:5px; padding-left:7px; margin-top:7px;}
 .desktop_tab_base {border-bottom:1px solid #D0D0D0;}
 .filter_tab_base {height:29px; border-bottom:1px solid #D0D0D0; background-color:#FFFFFF;}
@@ -308,7 +308,6 @@ div.tabpanel div.comment-word-break {
   white-space: -moz-pre-wrap; /* Mozilla */
   white-space: -hp-pre-wrap; /* HP printers */
   white-space: -o-pre-wrap; /* Opera 7 */
-  white-space: -pre-wrap; /* Opera 4-6 */
   white-space: pre-wrap; /* CSS 2.1 */
   white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
   word-wrap: break-word; /* IE */
@@ -347,6 +346,53 @@ div.tabpanel div.tab-row li.selected a:link, div.tabpanel div.tab-row a.active:v
 div.tabpanel div.tab-row a:hover {
 	background:none repeat scroll 0 0 #FFFFFF;
 }
+
+
+/* Translate tags */
+div.trnpanel div.trn-row ul {
+    background:repeat-x scroll center top transparent;
+    height:18px;
+    margin:0;
+    padding-left:5px;
+    width: 360px;
+    overflow: hidden;
+}
+div.trnpanel div.trn-panel {
+    width: 300px;
+    border: 1px solid #CCCCCC;
+    font-size:10px;
+}
+
+div.trnpanel div.trn-row li {
+    display:inline;
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+div.trnpanel div.trn-row a {
+    background:none repeat scroll 0 0 #F3F3F3;
+    border:1px solid #CCCCCC;
+    float:left;
+    font-size:11px;
+    line-height:12px;
+    margin-right:4px;
+    padding:2px 4px;
+    text-decoration:none;
+    margin-top:1px;
+}
+div.trnpanel div.trn-row li.selected a {
+    background:none repeat scroll 0 0 #FFFFFF;
+    border-bottom:1px solid #FFFFFF;
+    color:#FF6000;
+    margin-top:1px;
+    font-size:11px;
+    font-weight:bold;
+}
+div.trnpanel div.trn-row a:hover {
+    background:none repeat scroll 0 0 #FFFFFF;
+}
+
+
 
 .opt_item {background-color:#F3F2F1; border:1px solid #C2C1C0; margin-top:10px; }
 .opt_item_tree_1 {background-color:#F3F2F1; border:1px solid #C2C1C0;  margin-top:10px;}

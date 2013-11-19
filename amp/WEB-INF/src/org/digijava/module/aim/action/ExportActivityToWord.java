@@ -644,11 +644,13 @@ public class ExportActivityToWord extends Action {
 		 */
 
 		if (FeaturesUtil.isVisibleField("Activity Created By", ampContext)) {
+			String actCreatedByString = identification.getActAthEmail() == null ? "(unknown)" : 
+					identification.getActAthFirstName() + " "
+					+ identification.getActAthLastName() + "-"
+					+ identification.getActAthEmail();
 			ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 					"Activity created by", null, null, true)
-					.addRowData(identification.getActAthFirstName() + " "
-							+ identification.getActAthLastName() + "-"
-							+ identification.getActAthEmail());
+					.addRowData(actCreatedByString);
 			sectionHelper.addRowData(rowData);
 		}
 
@@ -2236,7 +2238,8 @@ public class ExportActivityToWord extends Action {
 
                             sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType), null, null, true);
                             sectionHelperRowData.addRowData(DateConversion.ConvertDateToString(projection.getProjectionDate()));
-                            sectionHelperRowData.addRowData(projection.getAmount() + " " + projection.getAmpCurrency().getCurrencyCode());
+                            
+                            sectionHelperRowData.addRowData(FormatHelper.formatNumber(projection.getAmount()) + " " + projection.getAmpCurrency().getCurrencyCode());
                             mtefProjections.addRowData(sectionHelperRowData);
                         }
 

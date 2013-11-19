@@ -258,6 +258,12 @@ public class EditActivity extends Action {
         eaForm.getIdentification().setWasDraft(activity.isCreatedAsDraft());
         if(activity!=null)
         {
+        	if (activity.getCreatedBy() != null && activity.getCreatedBy().getUser() != null)
+        	{
+        		eaForm.getIdentification().setActAthFirstName(activity.getCreatedBy().getUser().getFirstNames());
+        		eaForm.getIdentification().setActAthLastName(activity.getCreatedBy().getUser().getLastName());
+        		eaForm.getIdentification().setActAthEmail(activity.getCreatedBy().getUser().getEmail());
+        	}
             boolean hasTeamLead = true;
             if (currentTeam != null) {
                 AmpTeamMember teamHead = TeamMemberUtil.getTeamHead(currentTeam.getAmpTeamId());

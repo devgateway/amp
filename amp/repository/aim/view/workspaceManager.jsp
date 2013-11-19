@@ -702,14 +702,14 @@
         tbl        = demo.getElementsByTagName('table')[0],
         tbody      = tbl.getElementsByTagName('tbody')[0],
         tmp        = document.createElement('div'),
-        html       = ["<table id=\"dataTable\" class=\"inside\"><tbody>"],i,j = 1,l,item;
+        html       = ["<table id=\"dataTable\" class=\"inside\" width=\"100%\"><tbody>"],i,j = 1,l,item;
 
         if (members && members.length>0) {
             for (i = 0, l = members.length; i < l; ++i) {
                 item = members[i];
-                html[j++] = '<tr><td width="300" class="inside">';
+                html[j++] = '<tr><td width="75%" class="inside">';
                 html[j++] = '<a href=\'javascript:showTeamMemberProfile("'+item.email+'")\' title=\'<digi:trn jsFriendly="true">Click to View Member Detais</digi:trn>\'>'+item.name+'</a>';
-                html[j++] = '</td><td align=\'center\' width="100" class="inside">';
+                html[j++] = '</td><td align=\'center\' width="25%" class="inside">';
                 html[j++] = '<a href=\'JavaScript:memberAction("edit",' +item.ID+')\' title=\'<digi:trn jsFriendly="true">Click here to Edit Team Member Details</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png\'/>' + '</a>'
                 html[j++] = '&nbsp;&nbsp;&nbsp;&nbsp;<a href=\'JavaScript:memberAction("delete",' +item.ID+')\'  title=\'<digi:trn  jsFriendly="true">Click here to Delete Team Member</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\'/>' + '</a>'
                 html[j++] = '</td></tr>';
@@ -785,9 +785,9 @@
             		
             	}
                 item = members[i];
-                html[j++] = '<tr><td width="300" class="inside">';
+                html[j++] = '<tr><td width="75%" class="inside">';
                 html[j++] = item.name.replace("<", "&lt;").replace(">", "&gt;");
-                html[j++] = '</td ><td align=\'center\' width="100" class="inside">';
+                html[j++] = '</td ><td align=\'center\' width="25%" class="inside">';
                 html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn jsFriendly="true">Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\' />' + '</a>';
                 html[j++] = '</td></tr>';
                 if(i%10==9||i==l-1){
@@ -900,8 +900,9 @@
                 try {
                     members = YAHOO.lang.JSON.parse(res.responseText);
                     updateTableMembers(members);
-                    document.getElementById('teamTitle').innerHTML=document.getElementsByName('teamName')[0].value;
-                    document.getElementById('addNew').innerHTML='<a title="Click here to Add Workspace Member" style="font-size:12px; padding-left:5px;" href="JavaScript:assignNewMember()"><digi:trn jsFriendly="true">Add Workspace Member</digi:trn></a>'
+                    document.getElementById('teamTitle').innerHTML = document.getElementsByName('teamName')[0].value;
+                    document.getElementById('addNew').innerHTML =
+                        '<a title="Click here to Add Workspace Member" style="font-size:12px; padding-left:5px;" href="JavaScript:assignNewMember()"><digi:trn jsFriendly="true">Add Workspace Member</digi:trn></a>'
                 }
                 catch(e) {
                     alert("<digi:trn jsFriendly='true'>Error getting members data</digi:trn>");
@@ -1318,28 +1319,32 @@
                                 <input type="hidden" name="teamName" value=""/>
                                 <table  cellspacing="1" cellpadding="2" align="left" width="100%" style="font-size:12px;">
                                     <tr><td>
-				<div class="reportHead" style="width: 100%; height: 22px; max-height: 22px; ">
-                                                <table width="100%" class="inside"style="border-top:1px solid #cccccc;">																				
-                                                    <tr class="headTableTr">
-                                                        <td align="center" width="300" class="inside" bgcolor=#F2F2f2><b><digi:trn>Name</digi:trn></b></td>
-                                                    <td align="center" width="100" class="inside" bgcolor=#F2F2f2><b><digi:trn>Actions</digi:trn></b></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-						<div id="demo" class="report box-border-nopadding scrollable" >
-                                                <table class="inside" width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left" >
-                                                    <tbody>
-                                                        <tr><td colspan="2" class="inside"><em><digi:trn>Select Team to Get Data</digi:trn></em></td></tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div id="paginatorPlace"></div>
-                                            <table cellspacing="1" cellpadding="2" align="left" width="100%">
+				                        <div class="reportHead" style="width: 100%; height: 22px; max-height: 22px; ">
+                                            <table width="100%" class="inside"style="border-top:1px solid #cccccc;">
+                                                <tr class="headTableTr">
+                                                    <td align="center" width="75%" class="inside" bgcolor=#F2F2f2><b><digi:trn>Name</digi:trn></b></td>
+                                                <td align="center" width="25%" class="inside" bgcolor=#F2F2f2><b><digi:trn>Actions</digi:trn></b></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+						                <div id="demo" class="report box-border-nopadding scrollable" >
+                                            <table class="inside" width="100%" id="dataTable" cellspacing="0" cellpadding="4" valign="top"  align="left" >
                                                 <tbody>
-                                                    <tr><td colspan="2" id="footerMessage">&nbsp;
-                                                        </td></tr>
+                                                    <tr><td colspan="2" class="inside"><em><digi:trn>Select Team to Get Data</digi:trn></em></td></tr>
                                                 </tbody>
                                             </table>
+                                        </div>
+
+                                        <div id="paginatorPlace"></div>
+
+                                        <table cellspacing="1" cellpadding="2" align="left" width="100%">
+                                            <tbody>
+                                                <tr><td colspan="2" id="footerMessage">&nbsp;
+                                                    </td></tr>
+                                            </tbody>
+                                        </table>
+
                                         </td>
                                     </tr>
                                 </table>

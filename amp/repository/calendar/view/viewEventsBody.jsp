@@ -363,7 +363,7 @@ window.onload=init;
 			<div class="dhx_cal_tab" name="day_tab"></div>
 			
 		</div>
-		<div id="newContainer" style="width: 100%; height: 110%; position: relative; top: 15px; border: 1px #CCCCCC solid;">
+		<div id="newContainer" style="width: 100%; height: 630px; position: relative; top: 15px; border: 1px #CCCCCC solid;">
 			<div style="z-index: 1">
 				<table cellpadding="5" cellspacing="5">
 					<tr style="margin-bottom: 10px;">

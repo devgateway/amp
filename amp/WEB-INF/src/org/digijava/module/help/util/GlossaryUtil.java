@@ -184,8 +184,8 @@ public class GlossaryUtil {
 		}
 
         if (site != null){
-			queryStr.append(" and trn.siteId = :SITE_ID_LONG");
-            queryStr.append(" and eng.siteId = :SITE_ID_LONG");
+			queryStr.append(" and trn.siteId = :SITE_ID");
+            queryStr.append(" and eng.siteId = :SITE_ID");
             queryStr.append(" and ht.siteId = :SITE_ID");
 
 		}
@@ -215,7 +215,6 @@ public class GlossaryUtil {
 
         if (site != null){
 			query.setString("SITE_ID", site.getSiteId());
-            query.setLong("SITE_ID_LONG", site.getId());
 		}
 
         if (locale!=null && locale.length()>0){

@@ -88,8 +88,11 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 			
 			@Override
 			protected AmpAgreement getSelectedChoice(Long objId) {
-				if (objId.equals(-1L))
-					return new AmpAgreement();
+				if (objId.equals(-1L)){
+					AmpAgreement ag = new AmpAgreement();
+					ag.setId(-1L);
+					return ag;
+				}
 				return super.getSelectedChoice(objId);
 			}
 			
@@ -106,12 +109,11 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 			
 			@Override
 			public void onSelect(AjaxRequestTarget target, AmpAgreement choice) {
-				if (choice.getId() != null && choice.getId() < 0){
-					newAgreementForm.setVisibilityAllowed(true);
-				}
-				else{
 					model.getObject().setAgreement(choice);
-				}
+					if (choice.getId() != null && choice.getId() < 0){
+						newAgreementForm.setVisibilityAllowed(true);
+						editAgModel.setObject(agreement.getObject());
+					}
 				target.add(this.getParent());
 			}
 

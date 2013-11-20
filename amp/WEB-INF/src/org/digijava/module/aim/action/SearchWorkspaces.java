@@ -21,6 +21,13 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.hibernate.Session;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.WorkspaceForm;
@@ -82,7 +89,15 @@ public class SearchWorkspaces extends Action {
 			AmpTeam team = (AmpTeam) it.next();
 			JSONObject jteam = new JSONObject();
 			jteam.put("ID", team.getAmpTeamId());
-			jteam.put("name", team.getName());
+			
+			// Translate workspace name right after changing the language (AMP-16324).
+			String locale = RequestUtils.getNavigationLanguage(request).getName();
+			Long siteId = ((Site)RequestUtils.getSite(request)).getId();
+			Session hibernateSession = PersistenceManager.getSession();
+            AmpTeam auxAmpTeam = (AmpTeam) hibernateSession.load(AmpTeam.class, team.getAmpTeamId());
+			String name = TranslatorWorker.translateText(auxAmpTeam.getName(), locale, siteId);
+			jteam.put("name", name);
+			
             jteam.put("accessType", team.getAccessType());
             if(team.getComputation()!=null&&team.getComputation()){
                  jteam.put("computation", "yes");

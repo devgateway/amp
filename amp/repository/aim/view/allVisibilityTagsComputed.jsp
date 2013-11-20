@@ -210,7 +210,6 @@
 <feature:display name="Save Filters from Desktop" module="Report Generator"></feature:display> 
 <feature:display name="Sector Group" module="Organizations"></feature:display> 
 <feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Support Request Form" module="HELP"></feature:display> 
 <feature:display name="Table Widgets" module="WIDGETS"></feature:display> 
 <feature:display name="Target Value" module="PI Reports"></feature:display> 
 <feature:display name="Total Commitments" module="Measures"></feature:display> 

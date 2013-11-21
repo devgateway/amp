@@ -3222,9 +3222,16 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                         }
                     });
                 }
-                for (AmpOrganisation donor : organizations) {
-                    donors.append(donor.getName());
-                    donors.append(",");
+                if (organizations != null) {
+                    for (AmpOrganisation donor : organizations) {
+                        donors.append(donor.getName());
+                        donors.append(", ");
+                    }
+
+                    if (donors.length() > 1) {
+                        // remove last coma
+                        donors.setLength(donors.length() - 2);
+                    }
                 }
 
             }

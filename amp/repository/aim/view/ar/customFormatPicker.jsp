@@ -49,7 +49,7 @@
 						<digi:trn>Custom</digi:trn>
 					</html:option>
 				</html:select> 
-				<html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customDecimalSymbolTxt" value="" onchange="initFormatPopup()"/>
+				<html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customDecimalSymbolTxt" value="." onchange="initFormatPopup()"/>
            </td>
       	</tr>
 		<tr>
@@ -94,7 +94,7 @@
 	    			</c:forEach>
 	    			<html:option value="CUSTOM"><digi:trn>Custom</digi:trn></html:option>
             	</html:select>
-				<html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customGroupCharacterTxt" onchange="initFormatPopup()"/>
+				<html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customGroupCharacterTxt" value="," onchange="initFormatPopup()"/>
             </td>
       	</tr>
 		<tr>

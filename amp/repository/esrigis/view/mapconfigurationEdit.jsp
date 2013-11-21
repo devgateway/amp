@@ -479,7 +479,7 @@ function validateUrl(str)
 	var temp="";
 	if(str.substr(0,3) == "www")
 		flag = checkDot(str, 2);
-	else if(str.substr(0,7) == "http://")
+	else if(str.substr(0,7) == "http://"  || str.substr(0,8) == "https://")
 	{
 		temp = str.substring(7,10);
 		if(temp == "www")

@@ -499,7 +499,7 @@
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
         <span id="indicatorLegend">
 			<c:forEach var="indicatorItem" items="${datadispatcherform.indicators}">
-		        <div id="indicator_legend_${indicatorItem.id}" class="legendContent" style="top:585px;left:65px;width: 180px;text-align:center">
+		        <div id="indicator_legend_${indicatorItem.id}" class="legendContent" style="top:585px;left:65px;width: 200px;text-align:center">
 		        	<img src="/esrigis/MapsConfiguration.do~action=displayLegend~id=${indicatorItem.id}">	
 		        </div>
 			</c:forEach>

@@ -350,6 +350,10 @@ public final class ArConstants {
 			new SyntheticColumnsMeta("Actual Disbursements - Recurrent", new ActualDisbRecurrentCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements - Recurrent","Actual Disbursements")),
 			new SyntheticColumnsMeta("Actual Disbursements", new ActualDisbSplitCapRecTotalsCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements","Actual Disbursements"))
 	) ;
+
+	public static final String ACTIVITY_ID = "ACTIVITY_ID";
+
+	public static final String ACTIVITY_PLEDGES_TITLE_NAME = "Activity Pledges Title";
 	
 	public static class SyntheticColumnsMeta {
 		String columnName;

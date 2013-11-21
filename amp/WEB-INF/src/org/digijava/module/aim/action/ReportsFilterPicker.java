@@ -636,6 +636,8 @@ public class ReportsFilterPicker extends Action {
 		if (FeaturesUtil.isVisibleField("Project Category")) {
 			addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory");
 		}
+		
+		addFinancingLocationElement(filterForm, "Activity Pledges Title", "All pledges", CategoryConstants.PLEDGES_NAMES_KEY, "Pledges titles", "filter_activity_peldges_title_div", "selectedActivityPledgesTitle");
 						
 		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
@@ -1368,6 +1370,7 @@ public class ReportsFilterPicker extends Action {
 		arf.setTypeOfAssistance(pumpCategoryValueSetFromForm(filterForm.getSelectedTypeOfAssistance()));
 		arf.setModeOfPayment(pumpCategoryValueSetFromForm(filterForm.getSelectedModeOfPayment()));
 		arf.setProjectImplementingUnits(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectImplUnit()));
+		arf.setActivityPledgesTitle( pumpCategoryValueSetFromForm(filterForm.getSelectedActivityPledgesTitle()) );
 		
 		if (filterForm.getPageSize() != null) {
 			arf.setPageSize(filterForm.getPageSize()); // set page size in the ARF filter

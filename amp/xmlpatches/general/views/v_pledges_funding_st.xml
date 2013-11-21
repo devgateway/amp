@@ -22,18 +22,18 @@
 			DROP VIEW IF EXISTS v_pledges_funding_st;
 			
 			CREATE OR REPLACE VIEW v_pledges_funding_st AS 
-	    	SELECT f.id AS pledge_id,afd.amp_fund_detail_id, afd.amp_fund_detail_id as id,
+	    	SELECT coalesce(f.id,-1)AS pledge_id,afd.amp_fund_detail_id, afd.amp_fund_detail_id as id,
             afd.transaction_type, afd.adjustment_type, 
             cval3.category_value AS adjustment_type_name, afd.transaction_date, 
             afd.transaction_amount, c.currency_code, cval.id AS terms_assist_id, 
             cval.category_value AS terms_assist_name, b.org_grp_name, 
-            ot.org_type AS donor_type_name,
+            ot.org_type AS donor_type_name, 
             cval2.category_value AS financing_instrument_name, 
             cval2.id AS financing_instrument_id, 
             b.amp_org_grp_id, ot.amp_org_type_id AS org_type_id, 
             a.name AS related_project
            FROM amp_funding_pledges f
-			      JOIN amp_funding_detail afd ON afd.pledge_id = f.id
+			   RIGHT JOIN amp_funding_detail afd ON afd.pledge_id = f.id
 			   LEFT JOIN amp_funding ampf ON ampf.amp_funding_id = afd.amp_funding_id
 			   LEFT JOIN amp_category_value cval ON cval.id = ampf.type_of_assistance_category_va
 			   LEFT JOIN amp_org_group b ON b.amp_org_grp_id = f.amp_org_grp_id

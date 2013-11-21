@@ -61,6 +61,8 @@ public class ColumnFilterGenerator {
 			c.getFilters().add(acf4);
 			AmpColumnsFilters acf5= new AmpColumnsFilters(c,"donnorgAgency","org_id");
 			c.getFilters().add(acf5);
+			AmpColumnsFilters acf6= new AmpColumnsFilters(c,"activityPledgesTitle","activity_pledges_title_id");
+			c.getFilters().add(acf6);
 		}
 	 
 		if (ArConstants.VIEW_PLEDGES_FUNDING.equals(c.getExtractorView())){

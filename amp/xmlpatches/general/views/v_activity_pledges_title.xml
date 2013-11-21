@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-14167</jira>
+	<jira>AMP-16001</jira>
 	<keyword>Views</keyword>
-	<author>Alexandru Artimon</author>
+	<author>Alex Gartner</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -19,8 +19,17 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_pledges_projects AS SELECT coalesce(fp.id,-1) AS pledge_id, ac.name AS title, ac.amp_activity_id,ac.amp_team_id,ac.approval_status FROM amp_funding_pledges fp RIGHT JOIN amp_funding_detail fd ON fd.pledge_id = fp.id JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id JOIN amp_activity ac ON fu.amp_activity_id = ac.amp_activity_id WHERE ac.amp_team_id IS NOT NULL AND ac.deleted = false AND ac.draft!=true GROUP BY ac.amp_activity_id, fp.id, ac.name,ac.amp_team_id,ac.approval_status;
-        		</lang>
+			DROP VIEW IF EXISTS v_activity_pledges;
+			
+			CREATE OR REPLACE VIEW v_activity_pledges_title AS 
+	    	 SELECT DISTINCT ac.amp_activity_id, cv.category_value as pledge_title ,fp.id AS pledge_id, cv.id AS title_id  
+			   FROM amp_funding_pledges fp 
+			   JOIN amp_category_value cv ON cv.id = fp.title 
+			   JOIN amp_funding_detail fd ON fd.pledge_id = fp.id 
+			   JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id 
+			   JOIN amp_activity ac ON fu.amp_activity_id = ac.amp_activity_id  
+			  WHERE ac.amp_team_id IS NOT NULL AND ac.deleted &lt;&gt; true AND ac.draft &lt;&gt; true;; 
+        </lang>
 		</script>
 	</apply>
 </tns:patch>

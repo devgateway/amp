@@ -321,6 +321,7 @@ public class AmpARFilter extends PropertyListable {
 	
 	private Set<AmpCategoryValue> typeOfAssistance = null;
 	private Set<AmpCategoryValue> modeOfPayment = null;
+	private Set<AmpCategoryValue> activityPledgesTitle = null;
 	// private Long ampModalityId=null;
 
 	private AmpCurrency currency = null;
@@ -508,7 +509,7 @@ public class AmpARFilter extends PropertyListable {
 	private String text;
 	private String indexText;
 	private String searchMode;
-	private static final String initialPledgeFilterQuery = "SELECT distinct(id) as pledge_id FROM amp_funding_pledges WHERE 1=1 ";
+	private static final String initialPledgeFilterQuery = "SELECT -1 AS pledge_id UNION SELECT distinct(id) as pledge_id FROM amp_funding_pledges WHERE 1=1 ";
 	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1=1 ";
 	private String generatedFilterQuery;
 	private int initialQueryLength = initialFilterQuery.length();
@@ -1186,6 +1187,9 @@ public class AmpARFilter extends PropertyListable {
 
 		String MODE_OF_PAYMENT_FILTER = "SELECT amp_activity_id FROM v_mode_of_payment WHERE mode_of_payment_code IN ("
 			+ Util.toCSString(modeOfPayment) + ")";
+		
+		String ACTIVITY_PLEDGES_TITLE = "SELECT amp_activity_id FROM v_activity_pledges_title WHERE title_id IN (" 
+			+ Util.toCSString(activityPledgesTitle) + ")";
 
 		String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
 			+ Util.toCSString(projectCategory) + ")";
@@ -1511,6 +1515,10 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(MODE_OF_PAYMENT_FILTER);
 		if (projectCategory != null && projectCategory.size() > 0)
 			queryAppend(PROJECT_CATEGORY_FILTER);
+		
+		if ( activityPledgesTitle != null && activityPledgesTitle.size() > 0 ) {
+			queryAppend(ACTIVITY_PLEDGES_TITLE);
+		}
 		
 		if(projectImplementingUnits!=null && projectImplementingUnits.size() > 0){
 			queryAppend(PROJECT_IMPL_UNIT_FILTER);
@@ -2281,6 +2289,14 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setModeOfPayment(Set<AmpCategoryValue> modeOfPayment) {
 		this.modeOfPayment = modeOfPayment;
+	}
+
+	public Set<AmpCategoryValue> getActivityPledgesTitle() {
+		return activityPledgesTitle;
+	}
+
+	public void setActivityPledgesTitle(Set<AmpCategoryValue> activityPledgesTitle) {
+		this.activityPledgesTitle = activityPledgesTitle;
 	}
 
 	public Integer getRenderStartYear() {

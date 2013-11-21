@@ -223,6 +223,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		addMetaIfExists(rs, acc, "recipient_role_name", ArConstants.RECIPIENT_ROLE_NAME, null, false);
 		addMetaIfExists(rs, acc, "recipient_role_code", ArConstants.RECIPIENT_ROLE_CODE, null, false);
 		addMetaIfExists(rs, acc, "source_role_code", ArConstants.SOURCE_ROLE_CODE, null, false);
+		addMetaIfExists(rs, acc, "activity_pledges_title_name", ArConstants.ACTIVITY_PLEDGES_TITLE_NAME, null, false);
 		
 		MetaInfo headMeta=null;
 		

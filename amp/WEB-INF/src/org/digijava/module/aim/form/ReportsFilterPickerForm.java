@@ -90,6 +90,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedresponsibleorg;
 	private Object[] selectedArchivedStatus	= new Object[]{"1"};
 	private Object[] selectedActivitySettings;
+	private Object[] selectedActivityPledgesTitle;
 	
 	//private Collection regionSelectedCollection;
 	private Collection approvalStatusSelectedCollection;//AMP-3386
@@ -1241,4 +1242,14 @@ public class ReportsFilterPickerForm extends ActionForm {
     public Long getDefaultCalendar() {
         return defaultCalendar;
     }
+
+	public Object[] getSelectedActivityPledgesTitle() {
+		return selectedActivityPledgesTitle;
+	}
+
+	public void setSelectedActivityPledgesTitle(
+			Object[] selectedActivityPledgesTitle) {
+		this.selectedActivityPledgesTitle = selectedActivityPledgesTitle;
+	}
+    
 }

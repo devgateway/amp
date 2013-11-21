@@ -91,7 +91,12 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 				return new LinkedHashSet<String>(Arrays.asList(columnNamesRaw)); // not "*" was specified -> use them rawly
 			// else fall through: the user specified "*", e.g. he wants all columns
 		}
-		return SQLUtils.getTableColumns(connection, viewName);
+		
+		LinkedHashSet<String> ret = SQLUtils.getTableColumns(connection, viewName);
+		if ( ret.isEmpty() ) {
+			throw new RuntimeException("Table/view is empty:" + viewName);
+		}
+		return ret;
 	}
 	
 	/**

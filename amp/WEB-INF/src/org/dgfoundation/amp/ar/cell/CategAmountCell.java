@@ -189,7 +189,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	public final static String[] fundingFilteringColumnsArr = 
 		{
 			ArConstants.COLUMN_CAPITAL_EXPENDITRURE, ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT,
-			ArConstants.DONOR_GROUP, ArConstants.DONOR_TYPE_COL, ArConstants.TERMS_OF_ASSISTANCE, ArConstants.FINANCING_INSTRUMENT,
+			ArConstants.DONOR_GROUP, ArConstants.DONOR_TYPE_COL, ArConstants.TERMS_OF_ASSISTANCE, ArConstants.FINANCING_INSTRUMENT, ArConstants.ACTIVITY_PLEDGES_TITLE_NAME,
 			ArConstants.FUNDING_STATUS, ArConstants.MODE_OF_PAYMENT, ArConstants.COMPONENT_NAME, ArConstants.COMPONENT_TYPE_S, ArConstants.AGREEMENT_CODE, ArConstants.AGREEMENT_TITLE_CODE,
 			ArConstants.PLEDGES_METADATA_NAME+ArConstants.TERMS_OF_ASSISTANCE
 		};

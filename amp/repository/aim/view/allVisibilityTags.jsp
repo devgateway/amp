@@ -140,6 +140,7 @@
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 
+<feature:display module="Funding" name="Activity Pledges"></feature:display>
 <feature:display module="Funding" name="Commitments"></feature:display> 
 <feature:display module="Funding" name="Disbursement Orders"></feature:display> 
 <feature:display module="Funding" name="Disbursement"></feature:display> 
@@ -318,6 +319,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Regional Observations Actors" feature="Regional Observations"></field:display>
 <field:display name="Regional Observations Date" feature="Regional Observations"></field:display>
 
+<field:display feature="Activity Pledges" name="Activity Pledges Title"></field:display> 
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 

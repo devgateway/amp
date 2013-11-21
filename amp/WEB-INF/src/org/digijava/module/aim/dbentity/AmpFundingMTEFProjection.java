@@ -169,4 +169,37 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 			return null;
 		}
 		
+		@Override
+		public String toString()
+		{
+			String currency = this.getAmpCurrencyId() == null ? "NOCUR" : this.getAmpCurrencyId().getCurrencyCode();
+			String recipient = this.getRecipientOrg() == null ? "NOORG" : this.getRecipientOrg().getName();
+			String trTypeName = "NOTRTYPE";
+			switch(getTransactionType().intValue())
+			{
+			case 0:
+				trTypeName = "Commitment";
+				break;
+				
+			case 1:
+				trTypeName = "Disbursement";
+				break;
+				
+			case 2:
+				trTypeName = "Expenditure";
+				break;
+				
+			case 3:
+				trTypeName = "MTEF Projection";
+				break;
+				
+			default:
+				trTypeName = String.format("trType %d", getTransactionType());
+				break;
+			}
+			
+			String transText = (this.getAdjustmentType() == null ? "NOADJUST" : this.getAdjustmentType().getLabel()) + " " + trTypeName;			
+			
+			return String.format("%s %s %s to %s", transText, this.getAbsoluteTransactionAmount(), currency, recipient);
+		}
 }

@@ -79,7 +79,11 @@ public class FundingDetail implements Serializable, Comparable
     private AmpCategoryValue pledgename;
        
 	
-    
+    @Override
+    public String toString()
+    {
+    	return String.format("%s %s at %s (type = %d)", this.transactionAmount, this.currencyCode, this.transactionDate, this.transactionType);
+    }
     
 	public AmpCategoryValue getPledgename() {
 		if (this.pledge!=null && !this.pledge.equals(0L)){

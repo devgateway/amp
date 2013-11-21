@@ -9,6 +9,7 @@ import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.StringGenerator;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -139,6 +140,18 @@ public class ReportTestingUtils
 		catch(Exception e)
 		{
 			throw new RuntimeException(e);
+		}
+	}
+	
+	public static AmpActivityVersion loadActivityByName(String actName)
+	{
+		try
+		{
+			return (AmpActivityVersion) PersistenceManager.getRequestDBSession().load(AmpActivityVersion.class, getActivityIdByName(actName));
+		}
+		catch(DgException dge)
+		{
+			throw new RuntimeException(dge);
 		}
 	}
 }

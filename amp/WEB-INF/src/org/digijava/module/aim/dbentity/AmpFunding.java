@@ -774,4 +774,5 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	{
 		return (this.getSourceRole() == null) || ((this.getSourceRole() != null) && this.getSourceRole().getRoleCode().equals(Constants.ROLE_CODE_DONOR));
 	}
+		
 }

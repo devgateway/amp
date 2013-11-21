@@ -41,6 +41,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -553,148 +554,12 @@ public class ShowActivityPrintPreview
                 	 eaForm.getPrograms().setProgramDescription(activity.getProgramDescription().trim()); 	
                 }
                 
-                FundingCalculationsHelper calculations=new FundingCalculationsHelper();  
+               // FundingCalculationsHelper calculations=new FundingCalculationsHelper();  
                 String toCurrCode=null;
                 if (tm != null)
                     toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 
-          
-                ArrayList fundingOrgs = new ArrayList();
-                Iterator fundItr=null;
-                List listf = DbUtil.getAmpFunding(activity.getAmpActivityId());
-                if(listf!=null) {                	
-                	fundItr = listf.iterator();
-                    while(fundItr.hasNext()) {
-                        AmpFunding ampFunding = (AmpFunding) fundItr.next();
-                        AmpOrganisation org = ampFunding.getAmpDonorOrgId();
-                        FundingOrganization fundOrg = new FundingOrganization();
-                        fundOrg.setAmpOrgId(org.getAmpOrgId());
-                        fundOrg.setOrgName(org.getName());
-                        int index = fundingOrgs.indexOf(fundOrg);
-                        //logger.info("Getting the index as " + index
-                        //	+ " for fundorg " + fundOrg.getOrgName());
-                        if(index > -1) {
-                            fundOrg = (FundingOrganization) fundingOrgs
-                                .get(index);
-                        }
-                        
-                        Funding fund = new Funding();
-                        //fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
-                        fund.setTypeOfAssistance( ampFunding.getTypeOfAssistance() );
-                        fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
-                        fund.setFundingStatus( ampFunding.getFundingStatus() );
-                        fund.setModeOfPayment( ampFunding.getModeOfPayment() );
-                        
-                        fund.setFundingId(ampFunding.getAmpFundingId().
-                                          longValue());
-                        fund.setOrgFundingId(ampFunding.getFinancingId());
-                        if(ampFunding.getSourceRole()!=null) fund.setSourceRole(ampFunding.getSourceRole().getName());
-                        //fund.setModality(ampFunding.getModalityId());
-                        fund.setConditions(ampFunding.getConditions());
-                        Collection<AmpFundingDetail> fundDetails = ampFunding.getFundingDetails();
-                       
-                        if(fundDetails != null && fundDetails.size() > 0) {
-                          
-
-                            calculations.doCalculations(ampFunding, toCurrCode);
-    			            
-    			            List<FundingDetail> fundDetail = calculations.getFundDetailList();
-	                        Iterator fundingIterator = fundDetail.iterator();
-	                         while(fundingIterator.hasNext())
-	                         {
-	                         	FundingDetail currentFundingDetail = (FundingDetail)fundingIterator.next();
-	                         	
-	                         	if(currentFundingDetail.getFixedExchangeRate() == null)
-	                         	{
-	                            	Double currencyAppliedAmount = getAmountInDefaultCurrency(currentFundingDetail, tm.getAppSettings());
-
-	                            	String currentAmount = FormatHelper.formatNumber(currencyAppliedAmount);
-	                            	currentFundingDetail.setTransactionAmount(currentAmount);
-	                            	currentFundingDetail.setCurrencyCode(CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId() ).getCurrencyCode());
-	                         	}
-	                         	else
-	                         	{
-	                         		Double fixedExchangeRate = FormatHelper.parseDouble( currentFundingDetail.getFixedExchangeRate() );
-	                         		Double currencyAppliedAmount = CurrencyWorker.convert1(FormatHelper.parseDouble(currentFundingDetail.getTransactionAmount()),fixedExchangeRate,1);
-	                            	String currentAmount = FormatHelper.formatNumber(currencyAppliedAmount);
-	                            	currentFundingDetail.setTransactionAmount(currentAmount);
-	                            	currentFundingDetail.setCurrencyCode(CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId() ).getCurrencyCode());
-	                         	}
-	                         }
-    			            
-                            if(fundDetail != null)
-                                Collections.sort(fundDetail,
-                                                 FundingValidator.dateComp);
-                            fund.setFundingDetails(fundDetail);
-                            fund.setAmpFundingDetails(fundDetails);
-                            eaForm.getFunding().setFundingDetails(fundDetail);
-                            // funding.add(fund);
-                        }
-                        if(fundOrg.getFundings() == null)
-                            fundOrg.setFundings(new ArrayList());
-                        fundOrg.getFundings().add(fund);
-
-                        if(index > -1) {
-                            fundingOrgs.set(index, fundOrg);
-                            //	logger
-                            //		.info("Setting the fund org obj to the index :"
-                            //			+ index);
-                        } else {
-                            fundingOrgs.add(fundOrg);
-                            //	logger.info("Adding new fund org object");
-                        }
-                    }
-                    //Added for the calculation of the subtotal per Organization          
-                    Iterator<FundingOrganization> iterFundOrg = fundingOrgs.iterator();
-                    while (iterFundOrg.hasNext())
-                    {
-                  	  FundingOrganization currFundingOrganization = iterFundOrg.next();
-                  	  Iterator<Funding> iterFunding = currFundingOrganization.getFundings().iterator();
-                  	  while(iterFunding.hasNext()){
-                  		  Funding currFunding = iterFunding.next();
-                            FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper(); 
-                                if(currFunding.getAmpFundingDetails()!=null){
-                                	calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode, true);
-                                  	currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
-                                  	currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
-                                  	currFunding.setSubtotalPipelineCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue()));
-                                  
-                                  	currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
-                                  	currFunding.setSubtotalPipelineDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineDisb().doubleValue()));
-		                  		  	currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
-		                  		  
-		                  		  	currFunding.setSubtotalPlannedExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue()));
-		                  		  	currFunding.setSubtotalPipelineExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineExp().doubleValue()));
-		                  		  	currFunding.setSubtotalExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
-		                  		  
-		                  		  	currFunding.setSubtotalActualDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
-		                  			currFunding.setSubtotalPlannedDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedDisbOrder().doubleValue()));
-		                  			currFunding.setSubtotalPipelineDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineDisbOrder().doubleValue()));
-		                  		  
-		                  			currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
-                                }
-                  		 
-                  		  currFunding.setAmpFundingDetails(null);
-                  		  //TODO:aca se setearia el resto
-                  		  
-                  	  }
-                    }
-
-                  eaForm.getFunding().setFundingOrganizations(fundingOrgs);
-                  eaForm.getFunding().setTotalCommitments(calculations.getTotalCommitments().toString());
-              	  eaForm.getFunding().setTotalDisbursements(calculations.getTotActualDisb().toString());
-              	  eaForm.getFunding().setTotalExpenditures(calculations.getTotActualExp().toString());
-              	  eaForm.getFunding().setTotalActualDisbursementsOrders(calculations.getTotActualDisbOrder().toString());
-              	  eaForm.getFunding().setTotalPlannedDisbursements(calculations.getTotPlanDisb().toString());
-              	  eaForm.getFunding().setTotalPlannedCommitments(calculations.getTotPlannedComm().toString());
-              	  eaForm.getFunding().setTotalPlannedExpenditures(calculations.getTotPlannedExp().toString());
-              	  eaForm.getFunding().setTotalPlannedDisbursementsOrders(calculations.getTotPlannedDisbOrder().toString());
-              	  eaForm.getFunding().setUnDisbursementsBalance(calculations.getUnDisbursementsBalance().toString());
-              	  eaForm.getFunding().setTotalPipelineCommitments(calculations.getTotPipelineComm().toString());
-                }
-
-                
-
+                eaForm.getFunding().populateFromFundings(activity.getFunding(), toCurrCode, tm, false); // alternative to activity.getFunding(): DbUtil.getAmpFunding(activity.getAmpActivityId());
         
                 ArrayList regFunds = new ArrayList();
                 Iterator rItr=null;

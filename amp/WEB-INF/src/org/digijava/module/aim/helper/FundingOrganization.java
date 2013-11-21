@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -13,7 +14,7 @@ public class FundingOrganization implements Comparable{
 	private Long ampOrgId;
 	private String orgName ;
 	//Collection of Funding objects
-	private Collection<Funding> fundings;
+	private List<Funding> fundings;
 	private String currentOrganization;
 	Boolean fundingActive;
 	String fundingActiveString;
@@ -78,11 +79,11 @@ public class FundingOrganization implements Comparable{
 		this.orgName = orgName;
 	}
 	
-	public Collection<Funding> getFundings() {
+	public List<Funding> getFundings() {
 		return fundings;
 	}
 	
-	public void setFundings(Collection<Funding> fundings) {
+	public void setFundings(List<Funding> fundings) {
 		this.fundings = fundings;
 	}
     public String getCurrentOrganization() {

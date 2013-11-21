@@ -120,6 +120,7 @@ body {background:none;}
 													<td bgcolor="#FFFFFF">
 												   	  <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/><br><br>
                                                       <c:if test="${not empty aimEditActivityForm.identification.statusReason}">
+                                                      status reason is &lt;${aimEditActivityForm.identification.statusReason}&gt;<br />
 				  											<b> <c:set var="statusReasonKey" value="${aimEditActivityForm.identification.statusReason}"/>
 															<digi:edit key="${statusReasonKey}"></digi:edit></b>
 													  </c:if>                                                       
@@ -1089,7 +1090,19 @@ body {background:none;}
                                                                                   ${fundingOrganization.orgName}                                                                                </td>
                                                                               </tr>
                                                                              </field:display>
-
+																		<logic:present name="funding" property="sourceRole">
+																			<tr>
+																				<td align="left" width="150">
+																					<a title='<digi:trn key="aim:orgRole">Organization Role</digi:trn>'>
+																						<digi:trn key="aim:OrgRole">Organization Role</digi:trn>
+																					</a>
+																				</td>
+																				<td width="1">:</td>
+																				<td align="left">
+																					<b><digi:trn><bean:write name="funding" property="sourceRole"/></digi:trn></b>
+																				</td>
+																			</tr>
+																		</logic:present>
                                                                               <!-- type of assistance -->
                                                                               <field:display name="Type Of Assistance" feature="Funding Information">
                                                                               <tr>
@@ -1203,6 +1216,16 @@ body {background:none;}
                                                                         	<jsp:include page="previewActivityFundingExpenditures.jsp" />
                                                                         </feature:display>
                                                                         
+																		<jsp:include page="previewMtefProjections.jsp" />
+
+<%--                                                                        <feature:display module="Funding" name="Expenditures">
+                                                                        	<jsp:include page="previewActivityFundingExpenditures.jsp" />
+                                                                        </feature:display>
+
+                                                                        <feature:display module="Funding" name="Expenditures">
+                                                                        	<jsp:include page="previewActivityFundingExpenditures.jsp" />
+                                                                        </feature:display>
+     --%>                                                                   
                                                                         <feature:display module="Funding" name="Disbursement Orders">
                                                                         	<jsp:include page="previewActivityFundingDisbursementOrders.jsp" />
                                                                         </feature:display>

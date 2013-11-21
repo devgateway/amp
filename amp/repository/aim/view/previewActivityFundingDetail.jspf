@@ -1,0 +1,43 @@
+<%--
+	renders 1 or 2 rows (<tr /> items) for a funding item. The second row is generated only if it is a directed disbursement
+	
+	col 1: Title	OR	Adjustments
+	col 2: Transaction date
+	col 3: Transaction sum
+	col 4: Recipient
+	col 5: spacing for non-totals
+	
+ --%>
+<tr bgcolor="#ffffff">
+	<td width="40%" align="right"  bgcolor="#FFFFFF">
+		<digi:trn><b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b></digi:trn>
+	</td>
+	<td height="18" align="right">								
+		<b><bean:write name="fundingDetail" property="transactionDate" /></b>
+	</td>
+	<c:choose>
+		<c:when test="${aimEditActivityForm.funding.fixerate}">
+			<td height="18" align="right">
+				<b><bean:write name="fundingDetail" property="transactionAmount" /></b> &nbsp;
+				<b><bean:write name="fundingDetail" property="currencyCode" /></b>
+			</td>
+			<td>
+				<b><bean:write name="fundingDetail" property="formattedRate" /></b>
+			</td>
+		</c:when>
+		<c:otherwise>
+			<td height="18" align="right" colspan="2">
+				<b><bean:write name="fundingDetail" property="transactionAmount" /></b> &nbsp;
+				<b><bean:write name="fundingDetail" property="currencyCode" /></b>
+			</td>
+		</c:otherwise>
+	</c:choose>	
+</tr>
+<logic:present name="fundingDetail" property="recipientOrganisation">
+	<tr>
+		<td colspan="1">&nbsp;</td>
+		<td colspan="3" align="right">
+			<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><digi:trn>&nbsp;as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;			
+		</td>
+	</tr>
+</logic:present>

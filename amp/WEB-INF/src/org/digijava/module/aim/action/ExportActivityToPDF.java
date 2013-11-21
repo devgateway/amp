@@ -3172,20 +3172,13 @@ public class ExportActivityToPDF extends Action {
                             fundingTable.addCell(plExpCell1);
 
 
-                            if (funding.getMtefProjections() != null) {
-                                for (MTEFProjection mtefProjection : funding.getMtefProjections()) {
+                            if (funding.getMtefDetails() != null) {
+                                for (FundingDetail mtefProjection : funding.getMtefDetails()) {
                                     PdfPCell innerCell = new PdfPCell();
 
                                     if (FeaturesUtil.isVisibleModule(mtefProjectionFields[0], ampContext)) {
                                         innerCell.setBorder(0);
-                                        String projectedType = "";
-                                        if (MTEFProjection.PROJECTION_ID == mtefProjection.getProjected()) {
-                                            projectedType = "Projection";
-                                        }
-
-                                        if (MTEFProjection.PIPELINE_ID == mtefProjection.getProjected()) {
-                                            projectedType = "Pipeline";
-                                        }
+                                        String projectedType = mtefProjection.getAdjustmentTypeNameTrimmed();
 
                                         innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText(projectedType), plainFont));
                                         innerCell.setBorder(0);
@@ -3195,7 +3188,7 @@ public class ExportActivityToPDF extends Action {
                                     }
 
                                     if (FeaturesUtil.isVisibleModule(mtefProjectionFields[1], ampContext)){
-                                        innerCell = new PdfPCell(new Paragraph(mtefProjection.getProjectionDate(), plainFont));
+                                        innerCell = new PdfPCell(new Paragraph(mtefProjection.getTransactionDate(), plainFont));
                                         innerCell.setBorder(0);
                                         fundingTable.addCell(innerCell);
                                     } else {
@@ -3204,8 +3197,8 @@ public class ExportActivityToPDF extends Action {
 
                                     if (FeaturesUtil.isVisibleModule(mtefProjectionFields[2], ampContext)) {
                                         output = "";
-                                        if (mtefProjection.getAmount() != null && mtefProjection.getAmount().length() > 0) {
-                                            output = mtefProjection.getAmount() + " " + mtefProjection.getCurrencyCode();
+                                        if (mtefProjection.getTransactionAmount() != null && mtefProjection.getTransactionAmount().length() > 0) {
+                                            output = mtefProjection.getTransactionAmount() + " " + mtefProjection.getCurrencyCode();
                                         }
 
                                         innerCell = new PdfPCell(new Paragraph(output, plainFont));

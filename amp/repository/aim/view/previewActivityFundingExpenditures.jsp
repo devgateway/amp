@@ -20,7 +20,7 @@
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedExpendituresDetails}">
 <tr bgcolor="#FFFFCC">
-	<td colspan="4" style="text-transform: uppercase"><a
+	<td colspan="5" style="text-transform: uppercase"><a
 		title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
 
 	<digi:trn key="aim:plannedexpenditures">Planned Expenditures</digi:trn>
@@ -51,7 +51,7 @@
 								</module:display>
 							</td>
 
-							<td align="right">
+							<td align="right" colspan="2"><!-- no recipient organisation -->
 								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Amount"
 									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 									<b><bean:write name="fundingDetail" property="transactionAmount"/></b>&nbsp;																								
@@ -76,7 +76,7 @@
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
 			<digi:trn key="aim:subtotalActualExpenditures">Subtotal Planned Expenditures</digi:trn>:
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.subtotalPlannedExpenditures}">
             	<b>${funding.subtotalPlannedExpenditures} ${aimEditActivityForm.currCode}</b>
             </c:if> &nbsp;
@@ -91,7 +91,7 @@
 	<c:if test="${aimEditActivityForm.funding.showActual}">
 	<c:if test="${!empty funding.actualExpendituresDetails}">
 	<tr bgcolor="#FFFFCC">
-		<td colspan="4" style="text-transform: uppercase">
+		<td colspan="5" style="text-transform: uppercase">
 			<a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
 				<digi:trn key="aim:actualexpenditures">Actual Expenditures</digi:trn>:
 			</a>
@@ -147,7 +147,7 @@
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
 			<digi:trn key="aim:subtotalplannedExpenditures">Subtotal Actual Expenditures</digi:trn>:
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.subtotalExpenditures}">
  				<b>${funding.subtotalExpenditures} ${aimEditActivityForm.currCode}</b>
  			</c:if> &nbsp;

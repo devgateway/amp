@@ -45,6 +45,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpPledge</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSector</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivitySector</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityBudgetStructure</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLocation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganisation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRole</hibernate-class>

@@ -84,7 +84,8 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Project Implementing Unit'
                 , 'Type of Cooperation'
                 , 'Type of Implementation'
-                , 'Modalities'                
+                , 'Modalities'
+                , 'Budget Structure'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

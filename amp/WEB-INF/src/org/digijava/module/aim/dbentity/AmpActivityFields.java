@@ -381,6 +381,9 @@ LoggerIdentifiable, Cloneable {
 
 	@VersionableCollection(fieldTitle = "Act. Programs")
 	protected Set actPrograms;
+	
+	@VersionableCollection(fieldTitle = "Act. Budget Structure")
+	protected Set actBudgetStructure;
 
 	protected boolean createdAsDraft;
 	
@@ -1502,6 +1505,14 @@ contactName = string;
 
 	public Set getActPrograms() {
 		return actPrograms;
+	}
+	
+	public Set getActBudgetStructure(){
+		return actBudgetStructure;
+	}
+	
+	public void setActBudgetStructure(Set actBudgetStructure){
+		this.actBudgetStructure = actBudgetStructure;
 	}
 
 	public void setReferenceDocs(Set referenceDocs) {

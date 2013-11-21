@@ -46,6 +46,17 @@ public class AmpPercentageTextField extends AmpTextFieldPanel<Double> {
 		textContainer.add(new AttributeModifier("style", "width: 40px;"));
 	}
 	
+	public AmpPercentageTextField(String id, IModel<Double> model,
+			String fmName,
+			AmpPercentageCollectionValidatorField<?> validationHiddenField,boolean required) {
+		super(id, model, fmName, true, true, false, true);
+		this.validationHiddenField = validationHiddenField;
+		textContainer.setType(Double.class);
+		textContainer.setRequired(required);
+		textContainer.add(new RangeValidator<Double>(0.0d, null));
+		textContainer.add(new AttributeModifier("style", "width: 40px;"));
+	}
+	
 	@Override
 	protected void onAjaxOnUpdate(AjaxRequestTarget target) {
 		validationHiddenField.reloadValidationField(target);

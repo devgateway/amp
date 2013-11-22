@@ -141,12 +141,12 @@ public class ExportToWord extends Action {
     
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
-        ServletContext ampContext = getServlet().getServletContext();
+        //ServletContext ampContext = getServlet().getServletContext();
         response.setContentType("application/msword");
         response.setHeader("content-disposition", "inline;filename=dashboard.doc");
         com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+        //String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        //String langCode = RequestUtils.getNavigationLanguage(request).getCode();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         VisualizationForm vForm = (VisualizationForm) form;
         String fundingOpt = request.getParameter("fundingOpt");
@@ -202,34 +202,34 @@ public class ExportToWord extends Action {
 			String filtersRegionsTrn = TranslatorWorker.translateText("Regions");
 			String filtersZonesTrn = TranslatorWorker.translateText("Zones");
 			String filtersStatusTrn = TranslatorWorker.translateText("Status");
-			String fundingTrn = TranslatorWorker.translateText("ODA Historical Trend");
-            String topPrjTrn = TranslatorWorker.translateText("Top Projects");
-            String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth");
-            String topSectorTrn = TranslatorWorker.translateText("Top Sectors");
-            String topOrganizationTrn = TranslatorWorker.translateText("Top Organizations");
-            String topRegionTrn = TranslatorWorker.translateText("Top Regions");
+			this.fundingTrn = TranslatorWorker.translateText("ODA Historical Trend");
+			this.topPrjTrn = TranslatorWorker.translateText("Top Projects");
+			this.ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth");
+			this.topSectorTrn = TranslatorWorker.translateText("Top Sectors");
+			this.topOrganizationTrn = TranslatorWorker.translateText("Top Organizations");
+			this.topRegionTrn = TranslatorWorker.translateText("Top Regions");
             String projectTrn = TranslatorWorker.translateText("Project");
-            String sectorTrn = TranslatorWorker.translateText("Sector");
-            String organizationTrn = TranslatorWorker.translateText("Organization");
-            String regionTrn = TranslatorWorker.translateText("Region");
-            String NPOTrn = TranslatorWorker.translateText("NPO");
-	        String programTrn = TranslatorWorker.translateText("Program");
-	        String aidPredTrn = TranslatorWorker.translateText("Aid Predictability");
-	        String aidPredQuarterTrn = TranslatorWorker.translateText("Aid Predictability Quarterly");
-            String aidTypeTrn = TranslatorWorker.translateText("Aid Type");
-            String budgetBreakdownTrn = TranslatorWorker.translateText("Budget Breakdown");
-            String finInstTrn = TranslatorWorker.translateText("Aid Modality");
-            String sectorProfTrn = TranslatorWorker.translateText("Sector Profile");
-            String regionProfTrn = TranslatorWorker.translateText("Region Profile");
-            String NPOProfTrn = TranslatorWorker.translateText("NPO Profile");
-            String programProfTrn = TranslatorWorker.translateText("Program Profile");
-            String secProgramProfTrn = TranslatorWorker.translateText("Secondary Program Profile");
-	        String organizationProfTrn = TranslatorWorker.translateText("Organization Profile");
-            String beneficiaryAgencyProfTrn = TranslatorWorker.translateText("Beneficiary Agency Profile");
-            String plannedTrn = TranslatorWorker.translateText("Planned");
-            String actualTrn = TranslatorWorker.translateText("Actual");
-            String yearTrn = TranslatorWorker.translateText("Year");
-            String quarterTrn = TranslatorWorker.translateText("Year");
+            this.sectorTrn = TranslatorWorker.translateText("Sector");
+            this.organizationTrn = TranslatorWorker.translateText("Organization");
+            this.regionTrn = TranslatorWorker.translateText("Region");
+            this.NPOTrn = TranslatorWorker.translateText("NPO");
+            this.programTrn = TranslatorWorker.translateText("Program");
+            this.aidPredTrn = TranslatorWorker.translateText("Aid Predictability");
+            this.aidPredQuarterTrn = TranslatorWorker.translateText("Aid Predictability Quarterly");
+            this.aidTypeTrn = TranslatorWorker.translateText("Aid Type");
+            this.budgetBreakdownTrn = TranslatorWorker.translateText("Budget Breakdown");
+            this.finInstTrn = TranslatorWorker.translateText("Aid Modality");
+            this.sectorProfTrn = TranslatorWorker.translateText("Sector Profile");
+            this.regionProfTrn = TranslatorWorker.translateText("Region Profile");
+            this.NPOProfTrn = TranslatorWorker.translateText("NPO Profile");
+            this.programProfTrn = TranslatorWorker.translateText("Program Profile");
+            this.secProgramProfTrn = TranslatorWorker.translateText("Secondary Program Profile");
+            this.organizationProfTrn = TranslatorWorker.translateText("Organization Profile");
+            this.beneficiaryAgencyProfTrn = TranslatorWorker.translateText("Beneficiary Agency Profile");
+            this.plannedTrn = TranslatorWorker.translateText("Planned");
+            this.actualTrn = TranslatorWorker.translateText("Actual");
+            this.yearTrn = TranslatorWorker.translateText("Year");
+            this.quarterTrn = TranslatorWorker.translateText("Year");
             String dashboardTrn = TranslatorWorker.translateText("Dashboard");
             String summaryTrn = TranslatorWorker.translateText("Summary");
             String totalCommsTrn = TranslatorWorker.translateText("Total Commitments");
@@ -275,7 +275,7 @@ public class ExportToWord extends Action {
 			}
         
             RtfWriter2.getInstance(doc, baos);
-            HttpSession session = request.getSession();
+            //HttpSession session = request.getSession();
             String footerText = pageTrn + " - ";
             doc.setPageCount(1);
             HeaderFooter footer = new HeaderFooter(new Phrase(footerText), true);
@@ -388,9 +388,9 @@ public class ExportToWord extends Action {
             
             RtfCell cell = null;
             List list = null;
-            int colspan = 0;
-            Image img = null;
-            String[] singleRow = null;
+            //int colspan = 0;
+            //Image img = null;
+            //String[] singleRow = null;
             int count = 0;
             
           //Org. Information

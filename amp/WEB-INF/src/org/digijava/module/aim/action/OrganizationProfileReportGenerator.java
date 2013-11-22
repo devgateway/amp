@@ -170,16 +170,21 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 				mainHeaderCell.setCellStyle(titleCS);
 
 				for (OrgProfileReportHelper helper : record.getHelpers()) {
-					row = sheet.createRow(rowIndex++);
-					cellIndex = 0;
+
 					if (helper.isAllTypeProperty()
 							|| helper.isNgoOnlyProperty() == record.isNgo()) {
 						if (helper.getSubHeaders() == null
 								|| helper.getSubHeaders().isEmpty()) {
-							row.createCell(cellIndex++).setCellValue(
-									TranslatorWorker.translateText(helper.getColumnName(), locale, siteId));
+
 							if (helper.getValues() != null
 									&& !helper.getValues().isEmpty()) {
+
+                                row = sheet.createRow(rowIndex++);
+                                cellIndex = 0;
+
+                                row.createCell(cellIndex++).setCellValue(
+                                        TranslatorWorker.translateText(helper.getColumnName(), locale, siteId));
+
 								HSSFCell cell = row.createCell(cellIndex++);
 								cell.setCellStyle(cs);
 								StringBuilder values = new StringBuilder();

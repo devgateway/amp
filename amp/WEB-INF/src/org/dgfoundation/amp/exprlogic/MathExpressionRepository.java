@@ -94,6 +94,8 @@ public class MathExpressionRepository {
 	//public static final String PLEDGES_COMMITMENT_GAP = "commitmentgap";
 	
 	//public static final String PLEDGES_TOTAL = "totalpledge";
+	 public static final String DISBURSEMENT_RATION = "disbursmentRatio";
+		
 
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -145,7 +147,20 @@ public class MathExpressionRepository {
 		buildPercentageOfTotalCommitments();
 //		buildPledgesGap();
 //		buildTotalPledged();
+	    buildDisbursementRatio();//AMP-15581
+	 	
 	}
+
+	 private static void buildDisbursementRatio() {
+	        try {
+	            //MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.PLANNED_DISBURSEMENT, ArConstants.TOTAL_ACTUAL_DISBURSEMENT);
+	            MathExpression m1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.TOTAL_ACTUAL_DISBURSEMENT);
+	            MathExpression m2 = new MathExpression(MathExpression.Operation.MULTIPLY, m1, new BigDecimal(100));
+	            expresions.put(DISBURSEMENT_RATION, m2);
+	        } catch (Exception e) {
+	            logger.error(e);
+	        }
+	    }
 
 	/**
 	 * buildPledgesPercentageOfDisbursement (Total disbursed by year/quarter/month)/(TOTAL_ACTUAL_DISBURSEMENT)*100 

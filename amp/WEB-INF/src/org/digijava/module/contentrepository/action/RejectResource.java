@@ -31,7 +31,7 @@ public class RejectResource extends DispatchAction {
 		 //create approval
 		 Node node=DocumentManagerUtil.getReadNode(sharedPrivateResourceVersionUUID, request);
 		 new RejectResourceSharetrigger(node);
-		 DocumentManagerUtil.logoutJcrSessions(request.getSession());
+		 DocumentManagerUtil.logoutJcrSessions(request);
 		 request.getSession().setAttribute("resourcesTab", request.getParameter("type"));
 		 return null;
 	}

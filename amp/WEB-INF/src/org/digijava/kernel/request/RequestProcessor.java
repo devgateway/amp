@@ -75,6 +75,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -377,15 +378,17 @@ public class RequestProcessor
         }
         
         super.process(request, response);
+        DocumentManagerUtil.closeJCRSessions(request);
     }
 
     @Override
     public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response)
     {
     	TLSUtils.populate(request);
+    	DocumentManagerUtil.initJCRSessions(request);
     	return true;
     }
-    
+        
     /**
      * Select the mapping used to process the selection path for this request.
      * If no mapping can be identified, create an error response and return

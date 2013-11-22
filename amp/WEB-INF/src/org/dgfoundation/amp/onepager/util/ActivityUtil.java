@@ -22,11 +22,13 @@ import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
@@ -518,6 +520,8 @@ public class ActivityUtil {
 	private static void saveResources(AmpActivityVersion a) {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		
+		HttpServletRequest req = SessionUtil.getCurrentServletRequest();
+		
 		if (a.getActivityDocuments() == null)
 			a.setActivityDocuments(new HashSet<AmpActivityDocument>());
 
@@ -530,7 +534,7 @@ public class ActivityUtil {
          */
         if (existingTitles != null && !existingTitles.isEmpty()) {
             for (TemporaryDocument d : existingTitles) {
-                Node node = DocumentManagerUtil.getWriteNode(d.getExistingDocument().getUuid(), s.getHttpSession());
+                Node node = DocumentManagerUtil.getWriteNode(d.getExistingDocument().getUuid(), req);
                 if (node != null) {
                     NodeWrapper nw = new NodeWrapper(node);
                     if (!nw.getTitle().equals(d.getTitle())) {
@@ -550,7 +554,7 @@ public class ActivityUtil {
                                 
                                 Property size = nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE);
                                 fileSize = Bytes.bytes(size.getLong());
-                                DocumentManagerUtil.logoutJcrSessions( s.getHttpSession());
+                                DocumentManagerUtil.logoutJcrSessions(req);
                             } catch (RepositoryException e) {
                                 logger.error("Error while getting data stream from JCR:", e);
                             }
@@ -758,7 +762,7 @@ public class ActivityUtil {
 				tdd.setWebLink(temp.getWebLink());
 				
 				ActionMessages messages = new ActionMessages();
-				NodeWrapper node = tdd.saveToRepository(s.getHttpSession(), messages);
+				NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
 				
 				AmpActivityDocument aad = new AmpActivityDocument();
 				aad.setAmpActivity(a);

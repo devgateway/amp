@@ -326,7 +326,7 @@ public class NodeWrapper{
 	}	
 	
 	
-	public NodeWrapper(TemporaryDocumentData tempDoc, HttpSession httpSession, Node parentNode,boolean isANewVersion, ActionMessages errors) {
+	public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest httpRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
 		
 		FormFile formFile		= tempDoc.getFormFile(); 
 		
@@ -345,7 +345,7 @@ public class NodeWrapper{
 		}
 		
 		try {
-			TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+			TeamMember teamMember		= (TeamMember)httpRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
 			Node newNode 	= null;
 			if (isANewVersion){
 				newNode		= parentNode;
@@ -358,7 +358,7 @@ public class NodeWrapper{
 			}
 			
 			if (isANewVersion){
-				int vernum	= DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), httpSession);
+				int vernum	= DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), httpRequest);
 				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
 			}
 			else{

@@ -28,11 +28,11 @@ public class AmpLogoutHandler
         //save dev mode setting after logout.
         boolean wasDevMode=RequestUtils.isDevelopmentModeActive(httpServletRequest);
        // session.removeAttribute("debugFM");
-    	Session jcrWriteSession		= (Session)session.getAttribute(CrConstants.JCR_WRITE_SESSION);
-    	if(jcrWriteSession!=null) jcrWriteSession.logout();
-    	
-    	Session jcrReadSession		= (Session)session.getAttribute(CrConstants.JCR_READ_SESSION);
-    	if(jcrReadSession!=null) jcrReadSession.logout();
+//    	Session jcrWriteSession		= (Session)session.getAttribute(CrConstants.JCR_WRITE_SESSION);
+//    	if(jcrWriteSession!=null) jcrWriteSession.logout();
+//    	
+//    	Session jcrReadSession		= (Session)session.getAttribute(CrConstants.JCR_READ_SESSION);
+//    	if(jcrReadSession!=null) jcrReadSession.logout();
     	
         session.invalidate();
 

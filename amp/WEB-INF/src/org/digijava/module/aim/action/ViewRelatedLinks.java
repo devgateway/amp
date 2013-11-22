@@ -119,7 +119,7 @@ public class ViewRelatedLinks extends Action {
 			        	 pagedCol.add(document);
 			        }
 		        }
-		        DocumentManagerUtil.logoutJcrSessions(request.getSession());
+		        DocumentManagerUtil.logoutJcrSessions(request);
 			}
 			rlForm.setAllDocuments(pagedCol);
 		}

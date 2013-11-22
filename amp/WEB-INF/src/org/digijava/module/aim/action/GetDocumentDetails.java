@@ -69,7 +69,7 @@ extends Action {
 			document.setFileName(nodeWrapper.getName());
 			document.setUrl(nodeWrapper.getWebLink());
 			rlForm.setDocument(document);
-			DocumentManagerUtil.logoutJcrSessions(request.getSession());
+			DocumentManagerUtil.logoutJcrSessions(request);
 		}
 
 		rlForm.setPageId(pageId);	  

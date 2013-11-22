@@ -45,6 +45,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	private TeamMember currentMember;
 	private AmpTeamMember ampCurrentMember;
 	private HttpSession httpSession;
+	//private HttpServletRequest httpRequest;
 	private Site site;
 	private String isAdmin;
     private Long formType;
@@ -67,7 +68,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 		fmMode = false;
 		translatorMode = false;
 		HttpServletRequest wRequest = (HttpServletRequest) request.getContainerRequest();
-		httpSession = wRequest.getSession();
+		httpSession = wRequest.getSession();		
 		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
 		isAdmin = (String)httpSession.getAttribute("ampAdmin");
 		if (currentMember != null)
@@ -123,9 +124,14 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	public HttpSession getHttpSession() {
 		return httpSession;
 	}
-	public void setHttpSession(HttpSession httpSession) {
-		this.httpSession = httpSession;
-	}
+//	public void setHttpSession(HttpSession httpSession) {
+//		this.httpSession = httpSession;
+//	}
+	
+//	public HttpServletRequest getHttpRequest()
+//	{
+//		return httpRequest;
+//	}
 	/*
 	public AmpAuthWebSession(final AuthenticatedWebApplication application, final Request request) {
 		super(application, request);

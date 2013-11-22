@@ -143,7 +143,7 @@ public class DocumentFromTemplateActions extends DispatchAction {
 
 			myForm.setDocOwnerType(null);
 		}
-		DocumentManagerUtil.logoutJcrSessions(request.getSession());	
+		DocumentManagerUtil.logoutJcrSessions(request);	
 		return mapping.findForward("showResources");
 	}
 	

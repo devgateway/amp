@@ -118,18 +118,13 @@ public class TemporaryDocumentData extends DocumentData {
 		this.setUuid( CrConstants.TEMPORARY_UUID + (list.size()-1) );
 	}
 	
-	
 	public NodeWrapper saveToRepository (HttpServletRequest request, ActionMessages errors) {
-		return saveToRepository(request.getSession(), errors);
-	}
-	
-	public NodeWrapper saveToRepository (HttpSession httpSession, ActionMessages errors) {
-		Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(httpSession);
-		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
+		TeamMember teamMember		= (TeamMember)request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 		
 		Node homeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
 		
-		NodeWrapper nodeWrapper		= new NodeWrapper(this, httpSession, homeNode, false, errors);
+		NodeWrapper nodeWrapper		= new NodeWrapper(this, request, homeNode, false, errors);
 		
 		if ( !nodeWrapper.isErrorAppeared() ) {
 			if ( nodeWrapper.saveNode(jcrWriteSession) ) {
@@ -142,14 +137,14 @@ public class TemporaryDocumentData extends DocumentData {
 	
 	public NodeWrapper saveToRepositoryDataExchange (HttpServletRequest request, ActionMessages errors) {
 		HttpSession httpSession = request.getSession();
-		Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(httpSession);
+		Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		
 		// 
 //		Node homeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
 		Node homeNode				= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember.getTeamId());
 	
-		NodeWrapper nodeWrapper		= new NodeWrapper(this, httpSession, homeNode, false, errors);
+		NodeWrapper nodeWrapper		= new NodeWrapper(this, request, homeNode, false, errors);
 		
 		if ( !nodeWrapper.isErrorAppeared() ) {
 			if ( nodeWrapper.saveNode(jcrWriteSession) ) {

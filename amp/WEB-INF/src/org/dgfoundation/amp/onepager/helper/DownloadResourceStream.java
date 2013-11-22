@@ -14,6 +14,7 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.time.Time;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -56,7 +57,7 @@ public class DownloadResourceStream implements IResourceStream {
 			}
 			else{
 				AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
-				Node node = DocumentManagerUtil.getWriteNode(doc.getObject().getUuid(), s.getHttpSession());
+				Node node = DocumentManagerUtil.getWriteNode(doc.getObject().getUuid(), SessionUtil.getCurrentServletRequest());
 				NodeWrapper nw = new NodeWrapper(node);
 				
 				contentType = nw.getContentType();
@@ -67,7 +68,7 @@ public class DownloadResourceStream implements IResourceStream {
 					
 					Property size = nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE);
 					fileSize = Bytes.bytes(size.getLong());
-					DocumentManagerUtil.logoutJcrSessions( s.getHttpSession());
+					DocumentManagerUtil.logoutJcrSessions(SessionUtil.getCurrentServletRequest());
 				} catch (RepositoryException e) {
 					logger.error("Error while getting data stream from JCR:", e);
 				}

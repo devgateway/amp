@@ -41,6 +41,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.helper.DownloadResourceStream;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
@@ -84,15 +85,14 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
             private transient List<TemporaryDocument> existingTmpDocs = getExistingObject();
             
             private List<TemporaryDocument> getExistingObject() {
-                AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-                Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
+                 Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
                 List<TemporaryDocument> ret = new ArrayList<TemporaryDocument>();
                 HashSet <TemporaryDocument> existingDocTitles = new HashSet<TemporaryDocument>();
 
                 while (it.hasNext()) {
                     AmpActivityDocument d = (AmpActivityDocument) it
                             .next();
-                    Node node = DocumentManagerUtil.getWriteNode(d.getUuid(), session.getHttpSession());
+                    Node node = DocumentManagerUtil.getWriteNode(d.getUuid(), SessionUtil.getCurrentServletRequest());
                     NodeWrapper nw = new NodeWrapper(node);
 
 
@@ -179,8 +179,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 			@Override
 			protected void onAfterRender() {
 				super.onAfterRender();
-				AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-				DocumentManagerUtil.logoutJcrSessions( session.getHttpSession());
+				DocumentManagerUtil.logoutJcrSessions(SessionUtil.getCurrentServletRequest());
 			}
 			
 			@Override

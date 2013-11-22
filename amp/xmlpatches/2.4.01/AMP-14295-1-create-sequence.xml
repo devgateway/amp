@@ -28,5 +28,5 @@
                 LANGUAGE plpgsql VOLATILE@
             </lang>
         </script>
-    <apply>
+    </apply>
 </tns:patch>

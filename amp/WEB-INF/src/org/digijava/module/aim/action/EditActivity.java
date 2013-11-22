@@ -715,7 +715,7 @@ public class EditActivity extends Action {
         eaForm.getDocuments().setCrDocuments(DocumentManagerUtil.createDocumentDataCollectionFromSession(request));
         /* END - Injecting documents into session */
 
-        DocumentManagerUtil.logoutJcrSessions(request.getSession());
+        DocumentManagerUtil.logoutJcrSessions(request);
         /* Clearing session information about comments */
         String action = request.getParameter("action");
         if (action != null && action.trim().length() != 0) {

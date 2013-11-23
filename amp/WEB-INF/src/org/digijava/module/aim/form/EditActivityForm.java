@@ -3047,8 +3047,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private boolean docReset;
 		private boolean showInHomePage;
 		private int pageId;
-		private Collection documentList;
-		private Collection documents;
+		//private Collection documentList;
+		private List<org.digijava.module.aim.helper.Documents> documents = new ArrayList<org.digijava.module.aim.helper.Documents>();
 		private Collection<DocumentData> crDocuments;
 		private Collection managedDocumentList;
 		private long selDocs[];
@@ -3176,19 +3176,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.documentSpace = documentSpace;
 		}
 
-		public Collection getDocumentList() {
-			return documentList;
-		}
+//		public Collection getDocumentList() {
+//			return documentList;
+//		}
+//
+//		public void setDocumentList(Collection documentList) {
+//			this.documentList = documentList;
+//		}
 
-		public void setDocumentList(Collection documentList) {
-			this.documentList = documentList;
-		}
-
-		public Collection getDocuments() {
+		public List<org.digijava.module.aim.helper.Documents> getDocuments() {
 			return documents;
 		}
 
-		public void setDocuments(Collection documents) {
+		public void setDocuments(List<org.digijava.module.aim.helper.Documents> documents) {
 			this.documents = documents;
 		}
 

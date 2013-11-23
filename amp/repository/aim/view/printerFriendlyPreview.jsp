@@ -119,12 +119,14 @@ body {background:none;}
                                                   	</td>
 													<td bgcolor="#FFFFFF">
 												   	  <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/><br><br>
-                                                      <c:if test="${not empty aimEditActivityForm.identification.statusReason}">
-                                                      status reason is &lt;${aimEditActivityForm.identification.statusReason}&gt;<br />
-				  											<b> <c:set var="statusReasonKey" value="${aimEditActivityForm.identification.statusReason}"/>
-															<digi:edit key="${statusReasonKey}"></digi:edit></b>
-													  </c:if>                                                       
-                                                   </td>									
+												   	</td>
+											</tr>
+												<c:if test="${not empty aimEditActivityForm.identification.statusReason}">
+													<tr>
+														<td align="right" valign="top" nowrap="nowrap"><b><digi:trn>Status Reason</digi:trn></b><td>
+														<td>${aimEditActivityForm.identification.statusReason}&gt;</td>
+													</tr>
+												</c:if>                                                       									
                                          	 </tr>
 										</field:display>									
                                         </feature:display>   								
@@ -1896,7 +1898,7 @@ body {background:none;}
 											<digi:trn key="aim:relatedDocuments">
 										    Related Documents</digi:trn>
 											</b>									</td>
-<td bgcolor="#ffffff">						<c:if test="${ (!empty aimEditActivityForm.documents.documentList) || (!empty aimEditActivityForm.documents.crDocuments)}">
+<td bgcolor="#ffffff">						<c:if test="${ (!empty aimEditActivityForm.documents.documents) || (!empty aimEditActivityForm.documents.crDocuments)}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
 												 <logic:iterate name="aimEditActivityForm"  property="documents.documents"
 													id="docs" type="org.digijava.module.aim.helper.Documents">

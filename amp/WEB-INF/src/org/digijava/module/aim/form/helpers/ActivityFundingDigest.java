@@ -43,13 +43,13 @@ public class ActivityFundingDigest {
 	private String donorObjective;
 	private List<FundingDetail> fundingDetails;
 
-	private String totalCommitted = "";
-	private String totalDisbursed = "";
-	private String totalUnDisbursed = "";
-	private String totalExpenditure = "";
-	private String totalUnExpended = "";
-	private String totalExpended = "";
-	private String totalDisbOrder = "";
+//	private String totalCommitted = "";
+//	private String totalDisbursed = "";
+//	private String totalUnDisbursed = "";
+//	private String totalExpenditure = "";
+//	private String totalUnExpended = "";
+//	private String totalExpended = "";
+//	private String totalDisbOrder = "";
 
 	private String totalCommitments;
 	private String totalPlannedCommitments;
@@ -581,44 +581,44 @@ public class ActivityFundingDigest {
 	    //Collection ampFundingsAux = DbUtil.getAmpFunding(activityId);
 //	    TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 
-		FilterParams fp = buildFilterParams();
-
-		Collection<FinancingBreakdown> fb = FinancingBreakdownWorker.getFinancingBreakdownList(activityId, ampFundingsAux, fp, debug);
-		this.setFinancingBreakdown(fb);
-		String overallTotalCommitted = "";
-		String overallTotalDisbursed = "";
-		String overallTotalUnDisbursed = "";
-		String overallTotalExpenditure = "";
-		String overallTotalUnExpended = "";
-		String overallTotalDisburOrder = "";
-
-		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(fb, Constants.COMMITMENT, Constants.ACTUAL, debug);
-		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(fb, Constants.DISBURSEMENT,Constants.ACTUAL,debug);
-		overallTotalDisburOrder=FinancingBreakdownWorker.getOverallTotal(fb, Constants.DISBURSEMENT_ORDER,Constants.ACTUAL,debug);
-		if(!debug)
-		{
-			overallTotalUnDisbursed = FormatHelper.getDifference(overallTotalCommitted, overallTotalDisbursed);
-		}
-		else
-		{
-			overallTotalUnDisbursed =overallTotalCommitted + "-" +overallTotalDisbursed;
-		}
-		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(fb, Constants.EXPENDITURE,Constants.ACTUAL,debug);
-		if(!debug)
-		{
-			overallTotalUnExpended = FormatHelper.getDifference(overallTotalDisbursed, overallTotalExpenditure);
-		}
-		else
-		{
-			overallTotalExpenditure = overallTotalDisbursed+ "-" + overallTotalExpenditure;
-		}
-
-		this.setTotalCommitted(overallTotalCommitted);
-		this.setTotalDisbursed(overallTotalDisbursed);
-		this.setTotalExpended(overallTotalExpenditure);
-	    this.setTotalUnDisbursed(overallTotalUnDisbursed);
-	    this.setTotalUnExpended(overallTotalUnExpended);
-	    this.setTotalDisbOrder(overallTotalDisburOrder);
+//		FilterParams fp = buildFilterParams();
+//
+//		Collection<FinancingBreakdown> fb = FinancingBreakdownWorker.getFinancingBreakdownList(activityId, ampFundingsAux, fp, debug);
+//		this.setFinancingBreakdown(fb);
+//		String overallTotalCommitted = "";
+//		String overallTotalDisbursed = "";
+//		String overallTotalUnDisbursed = "";
+//		String overallTotalExpenditure = "";
+//		String overallTotalUnExpended = "";
+//		String overallTotalDisburOrder = "";
+//
+//		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(fb, Constants.COMMITMENT, Constants.ACTUAL, debug);
+//		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(fb, Constants.DISBURSEMENT,Constants.ACTUAL,debug);
+//		overallTotalDisburOrder=FinancingBreakdownWorker.getOverallTotal(fb, Constants.DISBURSEMENT_ORDER,Constants.ACTUAL,debug);
+//		if(!debug)
+//		{
+//			overallTotalUnDisbursed = FormatHelper.getDifference(overallTotalCommitted, overallTotalDisbursed);
+//		}
+//		else
+//		{
+//			overallTotalUnDisbursed =overallTotalCommitted + "-" +overallTotalDisbursed;
+//		}
+//		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(fb, Constants.EXPENDITURE,Constants.ACTUAL,debug);
+//		if(!debug)
+//		{
+//			overallTotalUnExpended = FormatHelper.getDifference(overallTotalDisbursed, overallTotalExpenditure);
+//		}
+//		else
+//		{
+//			overallTotalExpenditure = overallTotalDisbursed+ "-" + overallTotalExpenditure;
+//		}
+//
+//		this.setTotalCommitted(overallTotalCommitted);
+//		this.setTotalDisbursed(overallTotalDisbursed);
+//		this.setTotalExpended(overallTotalExpenditure);
+//	    this.setTotalUnDisbursed(overallTotalUnDisbursed);
+//	    this.setTotalUnExpended(overallTotalUnExpended);
+//	    this.setTotalDisbOrder(overallTotalDisburOrder);
 	}
 	
 	public List<FundingDetail> getFundingDetails() {
@@ -629,25 +629,25 @@ public class ActivityFundingDigest {
 		this.fundingDetails = fundingDetails;
 	}
 
-	public String getTotalCommitted() {
-		return totalCommitted;
-	}
-
-	private void setTotalCommitted(String totalCommitted) {
-		this.totalCommitted = totalCommitted;
-	}
-
-	public String getTotalDisbursed() {
-		return totalDisbursed;
-	}
-
-	private void setTotalDisbursed(String totalDisbursed) {
-		this.totalDisbursed = totalDisbursed;
-	}
-
-	public String getTotalUnDisbursed() {
-		return totalUnDisbursed;
-	}
+//	public String getTotalCommitted() {
+//		return totalCommitted;
+//	}
+//
+//	private void setTotalCommitted(String totalCommitted) {
+//		this.totalCommitted = totalCommitted;
+//	}
+//
+//	public String getTotalDisbursed() {
+//		return totalDisbursed;
+//	}
+//
+//	private void setTotalDisbursed(String totalDisbursed) {
+//		this.totalDisbursed = totalDisbursed;
+//	}
+//
+//	public String getTotalUnDisbursed() {
+//		return totalUnDisbursed;
+//	}
 	
 	private void setTotalActualRoF(String totalActualRoF)
 	{
@@ -669,41 +669,41 @@ public class ActivityFundingDigest {
 		return this.totalActualEDD;
 	}
 	
-	private void setTotalUnDisbursed(String totalUnDisbursed) {
-		this.totalUnDisbursed = totalUnDisbursed;
-	}
-
-	public String getTotalExpenditure() {
-		return totalExpenditure;
-	}
-
-	private void setTotalExpenditure(String totalExpenditure) {
-		this.totalExpenditure = totalExpenditure;
-	}
-
-	public String getTotalUnExpended() {
-		return totalUnExpended;
-	}
-
-	private void setTotalUnExpended(String totalUnExpended) {
-		this.totalUnExpended = totalUnExpended;
-	}
-
-	public String getTotalExpended() {
-		return totalExpended;
-	}
-
-	private void setTotalExpended(String totalExpended) {
-		this.totalExpended = totalExpended;
-	}
-
-	public String getTotalDisbOrder() {
-		return totalDisbOrder;
-	}
-
-	private void setTotalDisbOrder(String totalDisbOrder) {
-		this.totalDisbOrder = totalDisbOrder;
-	}
+//	private void setTotalUnDisbursed(String totalUnDisbursed) {
+//		this.totalUnDisbursed = totalUnDisbursed;
+//	}
+//
+//	public String getTotalExpenditure() {
+//		return totalExpenditure;
+//	}
+//
+//	private void setTotalExpenditure(String totalExpenditure) {
+//		this.totalExpenditure = totalExpenditure;
+//	}
+//
+//	public String getTotalUnExpended() {
+//		return totalUnExpended;
+//	}
+//
+//	private void setTotalUnExpended(String totalUnExpended) {
+//		this.totalUnExpended = totalUnExpended;
+//	}
+//
+//	public String getTotalExpended() {
+//		return totalExpended;
+//	}
+//
+//	private void setTotalExpended(String totalExpended) {
+//		this.totalExpended = totalExpended;
+//	}
+//
+//	public String getTotalDisbOrder() {
+//		return totalDisbOrder;
+//	}
+//
+//	private void setTotalDisbOrder(String totalDisbOrder) {
+//		this.totalDisbOrder = totalDisbOrder;
+//	}
 
 	public String getTotalCommitments() {
 		return totalCommitments;

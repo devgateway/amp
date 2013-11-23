@@ -678,9 +678,9 @@ public class DbUtil {
 		return docs;
 	}
 
-	public static Collection getKnowledgeDocuments(Long id) {
+	public static List<org.digijava.module.aim.helper.Documents> getKnowledgeDocuments(Long id) {
 		Session session = null;
-		Collection docs = new ArrayList();
+		List<org.digijava.module.aim.helper.Documents> docs = new ArrayList<org.digijava.module.aim.helper.Documents>();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();

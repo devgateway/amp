@@ -2209,8 +2209,9 @@ public class ExportActivityToPDF extends Action {
 		PdfPTable relatedDocnested=new PdfPTable(2);
 		relatedDocnested.setTableEvent(event);
 		//documents
-		if(myForm.getDocuments().getCrDocuments()!=null && myForm.getDocuments().getCrDocuments().size()>0 || myForm.getDocuments().getDocumentList()!=null && myForm.getDocuments().getDocumentList().size()>0){				
-			for (Documents doc : (Collection<Documents>)myForm.getDocuments().getDocuments()) {
+		if(myForm.getDocuments().getCrDocuments()!=null && myForm.getDocuments().getCrDocuments().size()>0 || myForm.getDocuments().getDocuments() != null && myForm.getDocuments().getDocuments().size()>0)
+		{
+			for (Documents doc : myForm.getDocuments().getDocuments()) {
 				if(doc.getIsFile()){						
 					//document fields						
 					PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(postprocessText(doc.getTitle()))+"- \t",plainFont));

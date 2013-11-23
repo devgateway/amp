@@ -95,6 +95,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.editor.dbentity.Editor;
 
 public class ShowActivityPrintPreview
     extends Action {
@@ -235,7 +236,13 @@ public class ShowActivityPrintPreview
 
                 eaForm.getIdentification().setStatus(DbUtil.getActivityApprovalStatus(new Long(actId)));
                 
-                eaForm.getIdentification().setStatusReason(activity.getStatusReason());
+                String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+                Editor reason=org.digijava.module.editor.util.DbUtil.getEditor(activity.getStatusReason(), langCode);
+                if(reason!=null){
+                  eaForm.getIdentification().setStatusReason(reason.getBody());
+                }
+                else
+                	eaForm.getIdentification().setStatusReason(null);
 
                 if(null != activity.getLineMinRank())
                     eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().
@@ -448,7 +455,7 @@ public class ShowActivityPrintPreview
                       }
                     }
                     if (locs != null) {
-                        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+                        //String langCode = RequestUtils.getNavigationLanguage(request).getCode();
                         Collections.sort(locs, new HelperLocationAncestorLocationNamesAsc(langCode));
                     }
                     eaForm.getLocation().setSelectedLocs(locs);
@@ -672,7 +679,7 @@ public class ShowActivityPrintPreview
                 Collection memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
                 Collection actDocs = DocumentUtil.getDocumentsForActivity(RequestUtils.getSite(request), activity);
                 if(actDocs != null && actDocs.size() > 0) {
-                    Collection docsList = new ArrayList();
+                    //Collection docsList = new ArrayList();
                     Collection linksList = new ArrayList();
 
                     Iterator docItr = actDocs.iterator();
@@ -695,12 +702,12 @@ public class ShowActivityPrintPreview
                         }
 
                         if(cmsItem.getIsFile()) {
-                            docsList.add(rl);
+                            //docsList.add(rl);
                         } else {
                             linksList.add(rl);
                         }
                     }
-                    eaForm.getDocuments().setDocumentList(docsList);
+                    //eaForm.getDocuments().setDocumentList(docsList);
                     eaForm.getDocuments().setLinksList(linksList);
                 }                
                 eaForm.getDocuments().setManagedDocumentList(actDocs);

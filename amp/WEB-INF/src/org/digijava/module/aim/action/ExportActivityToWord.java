@@ -1240,8 +1240,7 @@ public class ExportActivityToWord extends Action {
 			if (myForm.getDocuments().getDocuments() != null
 					&& myForm.getDocuments().getDocuments().size() > 0) {
 				createTable = true;
-				for (Documents doc : (Collection<Documents>) myForm
-						.getDocuments().getDocuments()) {
+				for (Documents doc : myForm.getDocuments().getDocuments()) {
 
 					if (doc.getIsFile()) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(

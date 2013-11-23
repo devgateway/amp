@@ -1373,7 +1373,7 @@ public class EditActivity extends Action {
             memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
           Collection actDocs = activity.getDocuments();
           if (tm != null && actDocs != null && actDocs.size() > 0) {
-            Collection docsList = new ArrayList();
+            //Collection docsList = new ArrayList();
             Collection linksList = new ArrayList();
 
             Iterator docItr = actDocs.iterator();
@@ -1399,14 +1399,14 @@ public class EditActivity extends Action {
               }
 
               if (cmsItem.getIsFile()) {
-                docsList.add(rl);
+                //docsList.add(rl);
               }
               else {
                 linksList.add(rl);
               }
             }
             eaForm.getDocuments().setDocuments(DbUtil.getKnowledgeDocuments(eaForm.getActivityId()));
-            eaForm.getDocuments().setDocumentList(docsList);
+            //eaForm.getDocuments().setDocumentList(docsList);
             eaForm.getDocuments().setLinksList(linksList);
           }
           Site currentSite = RequestUtils.getSite(request);

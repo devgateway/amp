@@ -161,7 +161,8 @@ public abstract class Permissible implements Identifiable {
 	 * @return
 	 */
 	public boolean canDo(String actionName, Map scope) {
-		//logger.info("Testing canDo for Permissible: "+this);
+//		return true;
+//		//logger.info("Testing canDo for Permissible: "+this);
 		Collection<String> allowedActions = getAllowedActions(scope);
 		return allowedActions.contains(actionName);
 	}

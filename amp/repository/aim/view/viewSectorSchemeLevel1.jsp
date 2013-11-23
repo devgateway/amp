@@ -162,7 +162,7 @@
 																					id="sectorSchemeLevelOne"
 																					type="org.digijava.module.aim.dbentity.AmpSector	">
 																					<tr>
-																						<td bgcolor="#ffffff"><jsp:useBean
+																						<td bgcolor="#ffffff" width="73%"><jsp:useBean
 																								id="urlParams2" type="java.util.Map"
 																								class="java.util.HashMap" /> <c:set
 																								target="${urlParams2}" property="ampSectorId">
@@ -180,7 +180,7 @@
 																							</digi:link>
 																						</td>
 
-																						<td bgcolor="#ffffff" width="75" align="center"
+																						<td bgcolor="#ffffff" width="15%" align="center"
 																							class="ignore"><c:set
 																								var="clickToEditSector">
 																								<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
@@ -189,7 +189,7 @@
 																							</c:set> [ <digi:link href="/viewSectorDetails.do"
 																								name="urlParams2" title="${clickToEditSector}">${edittext}</digi:link>
 																							]</td>
-																						<td bgcolor="#ffffff" width="75" align="center"
+																						<td bgcolor="#ffffff" width="12%" align="center"
 																							class="ignore"><jsp:useBean id="urlParams4"
 																								type="java.util.Map" class="java.util.HashMap" />
 																							<c:set target="${urlParams4}"
@@ -233,7 +233,7 @@
 											<tr>
 												<td>
 													<!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="100">
+													<table cellpadding="0" cellspacing="0" width="120">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title>
 																	<b style="font-size: 12px; padding-left: 5px;"><digi:trn

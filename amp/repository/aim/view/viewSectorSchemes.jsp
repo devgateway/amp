@@ -71,7 +71,7 @@
 													<logic:iterate name="aimAddSectorForm" property="formSectorSchemes" id="sectorScheme"
 																	type="org.digijava.module.aim.dbentity.AmpSectorScheme	">
 													<tr>
-														<td width="74%" bgcolor="#ffffff" class="inside">
+														<td width="72%" bgcolor="#ffffff" class="inside">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams2}" property="ampSecSchemeId">
 															<bean:write name="sectorScheme" property="ampSecSchemeId" />
@@ -88,7 +88,7 @@
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 													  </td>
 
-														<td bgcolor="#ffffff" width="13%" align="center" class="inside ignore">
+														<td bgcolor="#ffffff" width="15%" align="center" class="inside ignore">
 															<c:set var="trnEditScheme">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</c:set>

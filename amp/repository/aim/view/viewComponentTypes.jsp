@@ -161,12 +161,12 @@ if (onDelete()){
     <tr>
       <td>
         <!-- Other Links -->
-        <table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
+        <table cellpadding="0" cellspacing="0" width="120" style="font-size:12px;">
           <tr>
             <td bgColor=#c9c9c7>
               <digi:trn key="aim:otherLinks">Other links</digi:trn>
             </td>
-            <td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+            <td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
           </tr>
         </table>
       </td>

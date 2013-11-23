@@ -512,7 +512,7 @@ function fnSubmit() {
 												border="0">
 												<tr>
 													<td><!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px; margin-top:10px;">
+													<table cellpadding="0" cellspacing="0" width="120" style="font-size:12px; margin-top:10px;">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title><digi:trn
 																key="aim:otherLinks">

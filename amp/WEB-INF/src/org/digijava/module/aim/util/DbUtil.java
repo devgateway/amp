@@ -5080,6 +5080,10 @@ public class DbUtil {
 		return col;		
 	}
 
+	/**
+	 * fetches DONOR org groups of the database portfolio
+	 * @return
+	 */
 	public static Collection<AmpOrgGroup> getAllOrgGroupsOfPortfolio() {
 		if (AmpCaching.getInstance().allOrgGroupsOfPortfolio != null)
 			return new ArrayList<AmpOrgGroup>(AmpCaching.getInstance().allOrgGroupsOfPortfolio);
@@ -5090,7 +5094,7 @@ public class DbUtil {
 			session = PersistenceManager.getRequestDBSession();
 			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_group", "aog", 
 					new HashMap<String, String>(){{
-						put("org_grp_name", InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "name").getSQLFunctionCall("aog.amp_org_grp_id"));
+						put("org_grp_name", InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall("aog.amp_org_grp_id"));
 					}});
 			String queryString = "select distinct " + rewrittenColumns + " from amp_org_group aog "
 					+ "inner join amp_organisation ao on (ao.org_grp_id = aog.amp_org_grp_id) "
@@ -5100,8 +5104,8 @@ public class DbUtil {
 					AmpOrgGroup.class);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllOrgGroupsOfPortfolio()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllOrgGroupsOfPortfolio()", e);
+			logger.error(e.toString());
 		}
 		AmpCaching.getInstance().allOrgGroupsOfPortfolio = new ArrayList<AmpOrgGroup>(col);
 		return col;

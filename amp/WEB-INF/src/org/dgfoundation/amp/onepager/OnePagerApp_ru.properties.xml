@@ -2,17 +2,17 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
     <entry key="Required">Поле необходимо заполнить!</entry>
-	<entry key="nullValid">Выбрать один</entry>
-	<entry key="null">Выбрать один</entry>
-	<entry key="ContactEmailValidator">неправильных формат электронной почты!</entry>
-	<entry key="not_unique">электронная почта должна быть уникальной!</entry>
-	<entry key="AmpMinSizeCollectionValidator">Пожалуйста, добавьте по крайней мере ${minimum} товар (ов) здесь!</entry>
-	<entry key="AmpPercentageCollectionValidator">Сумма все проценты ${label}, она должна быть 100!</entry>
-	<entry key="AmpUniqueCollectionValidator">Следующие элементы повторяются не реже одного раза: ${label}</entry>
-	<entry key="AmpTreeCollectionValidator">Обоих родителей и ребенка предметы имеются в наличии: ${label}</entry>
-	<entry key="AmpUniqueActivityTitleValidator">Деятельности с таким названием существует внутри рабочего пространства ${workspace}.</entry>
-	<entry key="AmpUniqueComponentTitleValidator">Компонент с таким названием уже существует.</entry>
-	<entry key="CoordinatesValidator">Координаты не в правильном формате.</entry>
+	<entry key="nullValid">Выберите</entry>
+	<entry key="null">Выберите</entry>
+	<entry key="ContactEmailValidator">неправильный формат адреса эл. почты!</entry>
+	<entry key="not_unique">адрес эл. почты должен быть уникальным!</entry>
+	<entry key="AmpMinSizeCollectionValidator">Пожалуйста, введите не меньше ${minimum} элементa!</entry>
+	<entry key="AmpPercentageCollectionValidator">Сумма всех процентов ${label}, она должна быть 100!</entry>
+	<entry key="AmpUniqueCollectionValidator">Эти элементы повторяются 2 или более раз: ${label}</entry>
+	<entry key="AmpTreeCollectionValidator">Нелизя иметь и родительские и потомочные элементы: ${label}</entry>
+	<entry key="AmpUniqueActivityTitleValidator">Проект с таким названием уже существует в этом раб. столе ( ${workspace} ).</entry>
+	<entry key="AmpUniqueComponentTitleValidator">Подпроект с таким названием уже существует.</entry>
+	<entry key="CoordinatesValidator">Координаты в неправильном формате.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Выплаты больше, чем сумма обязательств</entry>
 	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Расходы больше, чем сумма выплат</entry>
 </properties>

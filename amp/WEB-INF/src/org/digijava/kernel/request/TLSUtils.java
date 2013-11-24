@@ -50,7 +50,7 @@ public class TLSUtils {
 		}
 		catch(Exception e)
 		{
-			logger.info("trying to get TLSLangCode threw an exception. THIS IS AN ERROR IF happened OUTSIDE A REQUEST");
+			logger.info("trying to get TLSLangCode threw an exception. THIS IS AN ERROR IF happened OUTSIDE A REQUEST", e);
 			return "en";
 		}
 	}

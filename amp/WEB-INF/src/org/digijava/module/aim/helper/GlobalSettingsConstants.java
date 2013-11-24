@@ -134,4 +134,7 @@ public class GlobalSettingsConstants {
     public static final String CLOSED_ACTIVITY_VALUE = "Closed activity status";
     
     public static final String ACTIVITY_TITLE_SIMILARITY_SENSITIVITY = "Activity Title Similarity Sensitivity";
+    
+    public static final String UNLINKED_FUNDING_IN_PLEDGES_REPORTS = "Unlinked commitments and disburesements in pledges reports";
+    
 }

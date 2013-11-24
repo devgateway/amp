@@ -509,7 +509,8 @@ public class AmpARFilter extends PropertyListable {
 	private String text;
 	private String indexText;
 	private String searchMode;
-	private static final String initialPledgeFilterQuery = "SELECT -1 AS pledge_id UNION SELECT distinct(id) as pledge_id FROM amp_funding_pledges WHERE 1=1 ";
+	private static final String initialPledgeFilterQueryWithUnrelatedFunding = "SELECT -1 AS pledge_id UNION SELECT distinct(id) as pledge_id FROM amp_funding_pledges WHERE 1=1 ";
+	private static final String initialPledgeFilterQueryWithoutUnrelatedFunding = "SELECT distinct(id) as pledge_id FROM amp_funding_pledges WHERE 1=1 ";
 	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1=1 ";
 	private String generatedFilterQuery;
 	private int initialQueryLength = initialFilterQuery.length();
@@ -633,8 +634,13 @@ public class AmpARFilter extends PropertyListable {
 	
 	public void initFilterQuery()
 	{
-		if (this.pledgeFilter)
-			this.generatedFilterQuery = initialPledgeFilterQuery;
+		if (this.pledgeFilter) {
+			String showUnlinkedFunging	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.UNLINKED_FUNDING_IN_PLEDGES_REPORTS);
+			if ( "true".equals(showUnlinkedFunging ) )
+				this.generatedFilterQuery = initialPledgeFilterQueryWithUnrelatedFunding;
+			else
+				this.generatedFilterQuery = initialPledgeFilterQueryWithoutUnrelatedFunding;
+		}
 		else			
 			this.generatedFilterQuery = initialFilterQuery;
 	}
@@ -669,7 +675,6 @@ public class AmpARFilter extends PropertyListable {
 		this.budgetExport = false;
 		
 		HttpServletRequest request = TLSUtils.getRequest();
-		this.generatedFilterQuery = initialFilterQuery;
 		this.setAmpReportId(ampReportId);
 		
 		AmpReports ampReport = ampReportId == null ? null : DbUtil.getAmpReport(ampReportId);
@@ -677,10 +682,10 @@ public class AmpARFilter extends PropertyListable {
 		{			
 			this.budgetExport	= ampReport.getBudgetExporter()==null ? false:ampReport.getBudgetExporter();				
 			if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
-					this.generatedFilterQuery = initialPledgeFilterQuery;
 					this.pledgeFilter = true;
 			}
 		}
+		this.initFilterQuery();
 
 		getEffectiveSettings(); // do not remove call - also writes into the caches
 		

@@ -683,7 +683,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 * @return The AmpCategoryClass object with the specified key. If not found returns null.
 	 */
 	public static AmpCategoryClass loadAmpCategoryClassByKey(String key) throws NoCategoryClassException{
-		return loadAmpCategoryClassByKey(key, true);
+		return loadAmpCategoryClassByKey(key, false);
 	}
 	 
 	public static AmpCategoryClass loadAmpCategoryClassByKey(String key, boolean closeSession) throws NoCategoryClassException

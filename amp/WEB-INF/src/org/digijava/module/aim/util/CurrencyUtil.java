@@ -840,7 +840,7 @@ public class CurrencyUtil {
 		return currency;
 	}
 	
-	public static ArrayList<AmpCurrency> getActiveAmpCurrencyByCode() {
+	public static List<AmpCurrency> getActiveAmpCurrencyByCode() {
 		AmpCurrency ampCurrency = null;
 		Session session = null;
 		Query q = null;
@@ -852,12 +852,8 @@ public class CurrencyUtil {
 			queryString = " select c from " + AmpCurrency.class.getName()
 					+ " c where c.activeFlag='1' order by c.currencyCode";
 			q = session.createQuery(queryString);
-			iter = q.list().iterator();
-
-			while (iter.hasNext()) {
-				ampCurrency = iter.next();
-				currency.add(ampCurrency);
-			}
+			q.setCacheable(true);
+			return (List<AmpCurrency>) q.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get currency " + ex);
 		}

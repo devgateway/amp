@@ -2455,8 +2455,8 @@ public class DbUtil {
 	public static void updateDashboard(AmpDashboard dashboard, DashboardForm form) throws DgException {
 		
 		try {
-			Session session = PersistenceManager.getSession();
-			session.update(dashboard);
+			Session session = PersistenceManager.openNewSession();
+			session.saveOrUpdate(dashboard);
 			Collection<AmpDashboardGraph> dashGraphs = getDashboardGraphByDashboard(dashboard.getId());
 
 			if(form.getDashGraphList()!=null && form.getDashGraphList().size()>0){
@@ -2487,6 +2487,8 @@ public class DbUtil {
 					}
 				}
 			}
+            session.flush();
+            session.close();
 		} catch (HibernateException e) {
 			logger.error("Error saving dashboard",e);
 		}

@@ -15,6 +15,17 @@ CREATE TABLE cached_v_actual_completion_date AS SELECT * FROM v_actual_completio
 DROP TABLE IF EXISTS cached_v_sectors CASCADE;
 CREATE TABLE cached_v_sectors AS SELECT * FROM v_sectors;
 
+DROP TABLE IF EXISTS cached_v_contracting_arrangements;
+CREATE TABLE cached_v_contracting_arrangements AS SELECT * FROM v_contracting_arrangements;
+DROP TABLE IF EXISTS cached_v_activity_modified_by;
+CREATE TABLE cached_v_activity_modified_by AS SELECT * FROM v_activity_modified_by;
+
+CREATE INDEX ON cached_v_contracting_arrangements(amp_activity_id);
+CREATE INDEX ON cached_v_contracting_arrangements(act_id);
+
+CREATE INDEX ON cached_v_activity_modified_by(amp_activity_id);
+CREATE INDEX ON cached_v_activity_modified_by(user_id);
+
 DROP TABLE IF EXISTS cached_v_m_sectors CASCADE;
 CREATE TABLE cached_v_m_sectors AS SELECT * FROM v_m_sectors;
 

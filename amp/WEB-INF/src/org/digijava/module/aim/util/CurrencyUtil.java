@@ -787,6 +787,7 @@ public class CurrencyUtil {
 			String queryString = "select c from " + AmpCurrency.class.getName()
 					+ " c " + "where (c.currencyCode=:id)";
 			Query qry = session.createQuery(queryString);
+			qry.setCacheable(true);
 			qry.setParameter("id", currCode, Hibernate.STRING);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {

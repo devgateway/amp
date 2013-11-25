@@ -1,6 +1,6 @@
 package org.dgfoundation.amp.testmodels;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.util.Arrays;
 
 public abstract class ReportModel implements Comparable<ReportModel>{
 	

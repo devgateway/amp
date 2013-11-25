@@ -3,7 +3,7 @@ package org.dgfoundation.amp.testutils;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.StringGenerator;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.util.Arrays;
 
 public class NameFilteringTeamFilter implements StringGenerator {
 

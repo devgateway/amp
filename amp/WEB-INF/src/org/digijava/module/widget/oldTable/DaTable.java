@@ -12,7 +12,7 @@ import org.digijava.module.widget.dbentity.AmpDaValue;
 import org.digijava.module.widget.util.TableWidgetUtil;
 import org.digijava.module.widget.web.HtmlGenerator;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 /**
  * Html table bean.

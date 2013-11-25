@@ -17,7 +17,7 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 /**
  * Permissible.java TODO description here

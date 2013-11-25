@@ -6,7 +6,7 @@ import org.apache.commons.collections.map.LRUMap;
 import org.digijava.kernel.request.TLSUtils;
 import java.util.Map;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 /**
  * per-HttpSession LRU cache holding GroupReportData instances, which knows how to regenerate them.<br />

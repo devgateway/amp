@@ -34,7 +34,7 @@ import org.digijava.module.parisindicator.util.PIUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 public class PIReport6 extends PIAbstractReport {
 

@@ -38,7 +38,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 public class CategoryManagerUtil {
 	private static Logger logger = Logger.getLogger(CategoryManagerUtil.class);

@@ -15,7 +15,7 @@ import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.table.util.TableWidgetUtil;
 import org.hibernate.Session;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 /**
  * Table widget. To create new instance use Builder inner class like this:
@@ -454,7 +454,9 @@ public class WiTable extends Widget{
 			dataRowsByPk.remove(new Long(rowPk));
 			dataRows.remove(deletedRow);
 			for (WiColumn col : this.columns) {
-                            WiCell trashedCell=col.removeCellWithPk(deletedRow.getPk());                            col.addTrashedCell(trashedCell);			}
+                            WiCell trashedCell=col.removeCellWithPk(deletedRow.getPk());
+                            col.addTrashedCell(trashedCell);
+			}
 			rebuildDataRowsMap();
 		}
 		return deletedRow;

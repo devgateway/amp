@@ -24,7 +24,7 @@ import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.esrigis.form.StructuresImporterForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 import au.com.bytecode.opencsv.CSVReader;
 

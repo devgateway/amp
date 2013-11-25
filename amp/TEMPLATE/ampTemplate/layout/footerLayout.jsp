@@ -9,7 +9,7 @@
 	<div class="footer">
 			AMP <b><tiles:getAsString name="version"/></b> build <b><tiles:getAsString name="build_version"/></b> - <digi:trn>Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF</digi:trn>
 			<logic:notEmpty name="currentMember" scope="session">
-				<digi:secure actions="ADMIN">
+				<digi:secure globalAdmin="true">
             		<a href='<digi:site property="url"/>/admin/'>Admin</a>
             		<a href='<digi:site property="url"/>/admin/switchDevelopmentMode.do'><digi:trn key="admin:devMode">User/Dev Mode</digi:trn></a>
        			</digi:secure>

@@ -50,6 +50,12 @@
 	<http pattern="/visualization/excelExport.do**" security="none" />
 	
 	<http pattern="/visualization/showProjectsList.do**" security="none" />
+	
+	<http pattern="/aim/reportsFilterPicker.do**" security="none" />
+	<http pattern="/reportsFilterPicker.do**" security="none" />
+	
+	<http pattern="/aim/viewTeamReports.do*" security="none" />
+	<http pattern="/viewTeamReports.do*" security="none" />
 
 	<!-- move this to the reports module -->
 	<http pattern="/reportsPublicView.do**" security="none" />

@@ -32,15 +32,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.helper.TeamMember;
-import org.hibernate.Session;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -95,14 +88,6 @@ public class SwitchLanguage
         if(referrerUrl.equals("/translation/default/showAdvancedTranslation.do")) {
         	referrerUrl = "/translation/showAdvancedTranslation.do";
         }
-        
-        // Update the TeamMember helper with the default (english) team name since the page has a translation tag where the default value is needed not a translation.
-		TeamMember currentMember = (TeamMember) request.getSession().getAttribute("currentMember");		
-		if (currentMember != null) {			
-			Session hibernateSession = PersistenceManager.getSession();
-            AmpTeam auxAmpTeam = (AmpTeam) hibernateSession.load(AmpTeam.class, currentMember.getTeamId());
-			currentMember.setTeamName(auxAmpTeam.getName());
-		}
         
         return new ActionForward(referrerUrl, true);
     }

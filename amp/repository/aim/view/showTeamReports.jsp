@@ -628,8 +628,8 @@ $(document).ready(function() {
 					                              								</td>
 					                              								<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
 					                                								<p style="white-space: nowrap">
-					                                  									<logic:present name="report" property="updatedDate">
-					                                      									<bean:write name="report" property="formatedUpdatedDate" />
+					                                  									<logic:present name="report" property="publishedDate">
+					                                      									<bean:write name="report" property="formatedPublishedDate" />
 					                                  									</logic:present>
 					                                								</p>
 					                              								</td>

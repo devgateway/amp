@@ -1569,7 +1569,7 @@ public class DbUtil {
 		Session session = null;
 		Query q = null;
 		Collection c = null;
-		Collection ret = new ArrayList();
+		List<Object[]> ret = new ArrayList<Object[]>();
 		Integer trsType = new Integer(transactionType);
 		Integer adjType = new Integer(adjustmentType);
 
@@ -1620,11 +1620,10 @@ public class DbUtil {
 			}
 
 		} catch (Exception ex) {
-			logger.error("Unable to get quarterly data from database", ex);
-		}
+			logger.error("Unable to get quarterly data from database", ex);		
+		}	
 
-		logger.debug("getQuarterlyData() returning a list of size : "
-				+ c.size());
+		logger.debug("getQuarterlyData() returning a list of size : " + ret.size());
 		return ret;
 	}
 

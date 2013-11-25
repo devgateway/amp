@@ -61,23 +61,7 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						Set<AmpFunding> fundings=am.getObject().getFunding();
-						AmpOrgRole ampOrgRole = (AmpOrgRole)item.getModelObject();
-						for (Iterator iterator = fundings.iterator(); iterator.hasNext();) {
-							AmpFunding ampFunding = (AmpFunding) iterator.next();
-							if (ampFunding.getAmpDonorOrgId().getAmpOrgId().equals(ampOrgRole.getOrganisation().getAmpOrgId()) &&
-                                    ((ampFunding.getSourceRole() == null && ampOrgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY))
-                                            ||(ampFunding.getSourceRole() != null && ampFunding.getSourceRole().getRoleCode().equals(ampOrgRole.getRole().getRoleCode())))){
-								String translatedMessage = TranslatorUtil.getTranslation("This organization has a funding related.");
-								target.appendJavaScript("alert ('"+translatedMessage+"')");
-								return;
-							}
-						}
-						roleRemoved(target,item.getModelObject());
-                        setModel.getObject().remove(item.getModelObject());
-                        uniqueCollectionValidationField.reloadValidationField(target);
-                        target.add(listParent);
-                        list.getObject().removeAll();
+                        onDeleteOrg(target, item, am);
 					}
 				};
 				item.add(delRelOrg);

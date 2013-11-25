@@ -74,12 +74,7 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-                        AmpOrgRole modelObject = item.getModelObject();
-                        setModel.getObject().remove(modelObject);
-                        uniqueCollectionValidationField.reloadValidationField(target);
-                        target.add(listParent);
-                        roleRemoved(target, modelObject);
-                        list.getObject().removeAll();
+                        onDeleteOrg(target, item, am);
                     }
 				};
 				item.add(delRelOrg);

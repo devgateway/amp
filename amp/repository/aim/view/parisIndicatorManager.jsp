@@ -273,7 +273,7 @@
 
 									<!-- Other Links -->
 
-									<table cellpadding="0" cellspacing="0" width="10"0>
+									<table cellpadding="0" cellspacing="0" width="120">
 
 										<tr>
 
@@ -287,7 +287,7 @@
 
 											</td>
 
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
+											<td background="module/aim/images/corner-r.gif" height="17" width="17">
 
 												&nbsp;
 

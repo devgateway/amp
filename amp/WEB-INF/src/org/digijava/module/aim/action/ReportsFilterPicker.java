@@ -558,7 +558,7 @@ public class ReportsFilterPicker extends Action {
  	 	StopWatch.next("Filters", true, "After Programs");
  	 	//long a = System.currentTimeMillis();
  	 	Collection<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
- 	 	Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
+ 	 	Collection<AmpOrgGroup> donorGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllOrgGroupsOfPortfolio();//);
  	 	
  	 	HierarchyListableUtil.changeTranslateable(donorTypes, false);
  	 	HierarchyListableUtil.changeTranslateable(donorGroups, false);

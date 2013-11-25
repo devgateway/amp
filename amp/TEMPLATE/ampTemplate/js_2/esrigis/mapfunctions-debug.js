@@ -600,6 +600,10 @@ function getActivities(clear) {
 	}
 	// Call the asynchronous xhrGet
 	var deferred = dojo.xhrGet(xhrArgs);
+	closeHide("highlightLegend");
+	if (highlightson == true){
+		highlightson =false;
+	} 
 	
 }
 /**
@@ -955,21 +959,15 @@ function MapFindLocation(level) {
  * @param featureSet
  */
 function addResultsToMap(featureSet) {
-	var border = new esri.symbol.SimpleLineSymbol(
-			esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([ 150,
-					150, 150 ]), 1);
-	var symbol = new esri.symbol.SimpleFillSymbol(
-			esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([
-					150, 150, 150, 0.5 ]));
+	var border = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([ 150,150, 150 ]), 1);
+	var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colorsOrange[0]);
 	var colors = colorsOrange;
-	var numRanges = colors.length;
 	var localGraphicLayer = esri.layers.GraphicsLayer({
 		displayOnPan : true,
 		id : "highlightMap",
 		visible : true
 	});
-	var typeFundingValue = getCheckedValue(document
-			.getElementsByName("filter.transactionType"));
+	var typeFundingValue = getCheckedValue(document.getElementsByName("filter.transactionType"));
 	var typeFunding = "commitments";
 	switch (typeFundingValue) {
 	case "0":
@@ -985,26 +983,26 @@ function addResultsToMap(featureSet) {
 		typeFunding = "mtef";
 		break;
 	}
-
-	// Using logarithmic scale
-	var maxLog = Math.log(getMaxValue(locations, typeFunding));
-	var minLog = Math.log(getMinValue(locations, typeFunding));
-
-	var max = getMaxValue(locations, typeFunding);
-	var min = getMinValue(locations, typeFunding);
-
-	var breaksLog = (maxLog - minLog) / numRanges;
-	var breaks = (max - min) / numRanges;
-
-	var rangeColors = new Array();
-	var renderer = new esri.renderer.ClassBreaksRenderer(symbol, COUNT);
-	for ( var i = 0; i < numRanges; i++) {
-		rangeColors.push([ parseFloat(min + (i * breaks)),
-				parseFloat(min + ((i + 1) * breaks)) ]);
-		renderer.addBreak(parseFloat(min + (i * breaks)), parseFloat(min
-				+ ((i+2) * breaks)), new esri.symbol.SimpleFillSymbol(
-				esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
+		
+	var breaks = null;
+	if (locations.length==1){
+		breaks = getGVF(locations,typeFunding,1);
+	}else if (locations.length<=5){
+		 breaks = getGVF(locations,typeFunding,locations.length-1);
+	}else{
+		 breaks = getGVF(locations,typeFunding,5);
 	}
+	
+	
+	var renderer = new esri.renderer.ClassBreaksRenderer(symbol, COUNT);
+	for ( var int = 0; int < breaks.length; int++) {
+		if (int < breaks.length-2){
+			renderer.addBreak(breaks[int],breaks[int+1] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[int+1]));
+		}else{
+			renderer.addBreak(breaks[int],breaks[int+1] +10, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[int+1]));
+		}
+	}
+	
 
 	dojo.forEach(featureSet.features, function(feature) {
 		// Read current attributes and assign a new set
@@ -1044,7 +1042,7 @@ function addResultsToMap(featureSet) {
 	map.reorderLayer(map.getLayer("highlightMap"), 0);
 	map.setExtent(map.extent.expand(1.01));
 	hideLoading();
-	var currencyCode;
+	var currencyCode="";
 	for ( var j = 0; j < locations.length; j++) {
 		var currentLocation = locations[j];
 		if (currentLocation.amountsCurrencyCode != "") {
@@ -1053,7 +1051,7 @@ function addResultsToMap(featureSet) {
 		}
 	}
 
-	showLegend(rangeColors, colors, typeFunding, currencyCode);
+	showLegend(breaks, colors, typeFunding, currencyCode);
 	$('#hlight').bind('click', function() {
 		getHighlights(0);
 	});
@@ -1080,17 +1078,19 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode) {
 	var df = new DecimalFormat(currentFormat);
 	var currencyString = currencyCode;
 	//debugger;
+	var x = 0;
 	var htmlDiv = "";
 	htmlDiv += "<div onclick='closeHide(\"highlightLegend\")' style='color:white;float:right;cursor:pointer;'>X</div>";
 	htmlDiv += "<div class='legendHeader'>"+translate('Showing ' + typeFunding + ' for ' + currentLevel.name);
 	htmlDiv +=  "<br/><hr/></div>";
-	for ( var i = 0; i < rangeColors.length; i++) {
+	
+	for ( var i = 0; i <  rangeColors.length-1; i++) {	
 		htmlDiv += "<div class='legendContentContainer'>"
-				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i]) + "></div>" + "</div>"
+				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i+1]) + "></div>" + "</div>"
 				+ "<div class='legendContentLabel'>"
-				+ df.format(Math.ceil(rangeColors[i][0])) + " "
+				+ df.format(Math.ceil(rangeColors[i])) + " "
 				+ currencyString + " - "
-				+ df.format(Math.floor(rangeColors[i][1])) + " "
+				+ df.format(Math.floor(rangeColors[i+1])) + " "
 				+ currencyString + " </div><br/>";
 	}
 	htmlDiv += "<div class='legendContentContainer'>"
@@ -1656,6 +1656,7 @@ function placemedia(){
 //Get info windows content
 
 function getContent(graphicAttributes, baseGraphic) {
+	showLoading();
     var attributes;
 
     var xhrArgs = {
@@ -1735,6 +1736,7 @@ function getContent(graphicAttributes, baseGraphic) {
 
     }
     var deferred = dojo.xhrGet(xhrArgs);
+    hideLoading();
     return attributes;
 }
 

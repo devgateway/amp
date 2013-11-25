@@ -5096,6 +5096,10 @@ public class DbUtil {
 		return col;		
 	}
 
+	/**
+	 * fetches DONOR org groups of the database portfolio
+	 * @return
+	 */
 	public static Collection<AmpOrgGroup> getAllOrgGroupsOfPortfolio() {
 		if (AmpCaching.getInstance().allOrgGroupsOfPortfolio != null)
 			return new ArrayList<AmpOrgGroup>(AmpCaching.getInstance().allOrgGroupsOfPortfolio);

@@ -192,7 +192,7 @@
 												<tr>
 													<td align="left" width="100%" colspan="2">
 													
-													<table width="100" cellspacing="0" cellpadding="0">
+													<table width="120" cellspacing="0" cellpadding="0">
 														<tbody><tr>
 															<td bgcolor="#c9c9c7" class="box-title"><b style="font-size: 12px; padding-left: 5px;"><b><digi:trn>
 															Other Links

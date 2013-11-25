@@ -31,7 +31,7 @@ public class Search extends Action {
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 
 		if (request.getParameter("desksearch") != null){
-			String keyword = request.getParameter("keyword");
+			String keyword = new String(request.getParameter("keyword").getBytes(), "UTF-8");
 			int querytype = Integer.parseInt(request.getParameter("type"));
 			searchForm.setKeyword(keyword);
 			searchForm.setQueryType(querytype);

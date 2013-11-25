@@ -491,8 +491,8 @@ $(document).ready(function() {
 																							<c:if
 																								test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=5}">
 																								<digi:link href="/viewTeamReports.do?sortBy=5">
-																									<digi:trn key="aim:reportCreationDate">
-															                                          Creation Date
+																									<digi:trn key="aim:reportUpdateDate">
+															                                          Update Date
 															                                      </digi:trn>
 																								</digi:link>
 																								<c:if test="${aimTeamReportsForm.sortBy==6}">
@@ -502,8 +502,8 @@ $(document).ready(function() {
 																							</c:if> <c:if
 																								test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==5}">
 																								<digi:link href="/viewTeamReports.do?sortBy=6">
-																									<digi:trn key="aim:reportCreationDate">
-														                                            Creation Date
+																									<digi:trn key="aim:reportUpdateDate">
+														                                            Update Date
 														                                        </digi:trn>
 																								</digi:link>
 																								<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif"
@@ -628,8 +628,8 @@ $(document).ready(function() {
 					                              								</td>
 					                              								<td align="center" class="inside" style="padding-right: 15px; padding-left: 15px; font-size: 11px;" bgcolor="<%=color%>">
 					                                								<p style="white-space: nowrap">
-					                                  									<logic:present name="report" property="publishedDate">
-					                                      									<bean:write name="report" property="formatedPublishedDate" />
+					                                  									<logic:present name="report" property="updatedDate">
+					                                      									<bean:write name="report" property="formatedUpdatedDate" />
 					                                  									</logic:present>
 					                                								</p>
 					                              								</td>

@@ -249,7 +249,7 @@ public class XlsHelper {
 					row = sheet.createRow((short) (i));
 					ArrayList<String> values = new ArrayList<String>();
 					values.add(date.toString());
-					values.add(alocation.getLocation().getLocation().getParentCategoryValue().getValue());
+					values.add(TranslatorWorker.translateText(alocation.getLocation().getLocation().getParentCategoryValue().getValue()));
 					values.add(aA.getAmpId());
 					values.add(aA.getName());
 					

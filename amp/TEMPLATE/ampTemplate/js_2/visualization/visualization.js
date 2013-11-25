@@ -557,7 +557,6 @@ function getOptionChecked (elements){
 
 function resetToDefaults(){
 	//loadingPanel.show();
-	
 	unCheckOptions("org_grp_check");
 	unCheckOptions("region_check");
 	unCheckOptions("sector_config_check");
@@ -607,7 +606,7 @@ function resetToDefaults(){
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
-	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
+	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value; 
 	//document.getElementById("SectorProfileItemId").value = -1;
 	applyFilterPopin();
 }
@@ -933,7 +932,6 @@ function callbackApplyFilter(e){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspaceOnlyQuickFilter").checked;
 		document.getElementById("workspace_only").checked = document.getElementById("workspaceOnlyQuickFilter").checked;
 	}
-	document.getElementById("currencyId").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("startYear").value = document.getElementById("startYearQuickFilter_dropdown").value;
 	document.getElementById("endYear").value = document.getElementById("endYearQuickFilter_dropdown").value;
@@ -1118,7 +1116,7 @@ function applyFilterPopin(e){
 	}
 	
 	//document.getElementById("yearToCompare").value = document.getElementById("yearToCompare_dropdown").options[document.getElementById("yearToCompare_dropdown").selectedIndex].value;
-	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
+	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyId").value;
 	document.getElementById("currencyQuickFilter_dropdown").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
 	document.getElementById("fiscalCalendarId").value = document.getElementById("fiscalCalendar_dropdown_Id").options[document.getElementById("fiscalCalendar_dropdown_Id").selectedIndex].value;
 	document.getElementById("commitmentsVisible").value = document.getElementById("commitments_visible").checked;

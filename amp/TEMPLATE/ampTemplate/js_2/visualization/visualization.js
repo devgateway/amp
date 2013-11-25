@@ -929,7 +929,6 @@ function callbackApplyFilter(e){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspaceOnlyQuickFilter").checked;
 		document.getElementById("workspace_only").checked = document.getElementById("workspaceOnlyQuickFilter").checked;
 	}
-	document.getElementById("currencyId").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("adjustmentType").value = document.getElementById("adjustment_type_quick").value;
 	document.getElementById("adjustment_type").value = document.getElementById("adjustment_type_quick").options[document.getElementById("adjustment_type").selectedIndex].value;
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyQuickFilter_dropdown").value;
@@ -1117,7 +1116,7 @@ function applyFilterPopin(e){
 	}
 	
 	//document.getElementById("yearToCompare").value = document.getElementById("yearToCompare_dropdown").options[document.getElementById("yearToCompare_dropdown").selectedIndex].value;
-	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
+	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyId").value;
 	document.getElementById("currencyQuickFilter_dropdown").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
 	document.getElementById("adjustmentType").value = document.getElementById("adjustment_type").options[document.getElementById("adjustment_type").selectedIndex].value;
 	document.getElementById("adjustment_type_quick").value = document.getElementById("adjustment_type").options[document.getElementById("adjustment_type").selectedIndex].value;

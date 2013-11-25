@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -197,27 +196,29 @@ public class GetTeamActivities
                 decideArchiveMode(mapping, taForm, request, response);
 
                 int totActivities = taForm.getAllActivities().size();
-                if(numRecords== -1 ){
+                if (numRecords == -1) {
                 	numRecords = totActivities;
-                }else if(totActivities / numRecords >50)
-                {
+                } else if (totActivities / numRecords > 50) {
                 	numRecords = totActivities / 50;
                 }
                 	
                 int numPages = totActivities / numRecords;
                 numPages += (totActivities % numRecords != 0) ? 1 : 0;
-                if(numPages<page){
+                if (numPages < page) {
                     page--;
                 }
                 
                 int stIndex = ((page - 1) * numRecords) + 1;
                 int edIndex = 1;
-                if(page != 0) edIndex = page * numRecords;
-                else edIndex = numRecords;
+                if (page != 0) {
+                    edIndex = page * numRecords;
+                } else {
+                    edIndex = numRecords;
+                }
                           
                 edIndex = (edIndex > totActivities) ? totActivities : edIndex;
                 if (stIndex<1) stIndex=1;
-                Vector vect = new Vector();
+                List vect = new ArrayList();
                 vect.addAll(taForm.getAllActivities());
 
                 taForm.setActivities(new ArrayList());
@@ -230,13 +231,13 @@ public class GetTeamActivities
                 if(numPages > 1) {
                     pages = new ArrayList();
                     for(int i = 0; i < numPages; i++) {
-                        Integer pageNum = new Integer(i + 1);
+                        Integer pageNum = i + 1;
                         pages.add(pageNum);
                     }
                 }
-                taForm.setCurrentPage(new Integer(page));
+                taForm.setCurrentPage(page);
                 taForm.setPages(pages);
-                session.setAttribute("pageno", new Integer(page));
+                session.setAttribute("pageno", page);
                 taForm.setSelActivities(new Long[0]);
                 return mapping.findForward("forward");
             } else {

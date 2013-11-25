@@ -1,4 +1,5 @@
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ page import="org.dgfoundation.amp.ar.cell.MetaTextCell"%>
 <%@ page import="org.dgfoundation.amp.ar.cell.Cell" %>
 <%@ page import="org.digijava.module.aim.util.ActivityUtil" %>

@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ page import="org.dgfoundation.amp.ar.cell.Cell" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>

@@ -1,5 +1,6 @@
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 <%@ page pageEncoding="UTF-8" %>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>

@@ -140,7 +140,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Boolean pledged;
 	private Boolean unallocatedLocation = null;
 
-	// to keep the default currency after user changues
+	// to keep the default currency after user changes
 	private Long defaultCurrency;
 	//private boolean isnewreport;
 	private Long countYearFrom;

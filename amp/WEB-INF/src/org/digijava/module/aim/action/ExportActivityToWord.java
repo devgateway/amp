@@ -1378,6 +1378,16 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 		
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date", ampContext)){
+			columnName=TranslatorWorker.translateText("Proposed Approval Date") +": ";
+			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalAppDate(),null);
+		}
+
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext)){
+			columnName=TranslatorWorker.translateText("Actual Approval Date")+": "; 
+			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedAppDate(),null);
+		}
+		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext)){
 			columnName=TranslatorWorker.translateText("Proposed Start Date") + ":";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalStartDate(),null);
@@ -1387,40 +1397,29 @@ public class ExportActivityToWord extends Action {
 			columnName=TranslatorWorker.translateText("Actual Start Date") +": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedStartDate(),null);
 		}
-		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Proposed Approval Date") +": ";
-			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalAppDate(),null);
+			
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext)) {
+            columnName = TranslatorWorker.translateText("Original Completion Date")+": ";
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null);
+        }
+        
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
+			columnName=TranslatorWorker.translateText("Proposed Completion Date")+": ";
+			generateOverAllTableRows(planningSubTable1,columnName,planning.getProposedCompDate(),null);
 		}
-		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Actual Approval Date")+": "; 
-			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedAppDate(),null);
+
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
+			columnName=TranslatorWorker.translateText("Actual Completion Date")+": ";
+			generateOverAllTableRows(planningSubTable1,columnName,planning.getCurrentCompDate(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext)){
 			columnName=TranslatorWorker.translateText("Final Date for Contracting")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getContractingDate(),null);
 		}
-		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements", ampContext)){
 			columnName=TranslatorWorker.translateText("Final Date for Disbursements")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getDisbursementsDate(),null);
-		}
-		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Proposed Completion Date")+": ";
-			generateOverAllTableRows(planningSubTable1,columnName,planning.getProposedCompDate(),null);
-		}
-
-        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext)) {
-            columnName = TranslatorWorker.translateText("Original Completion Date")+": ";
-            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null);
-        }
-		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Actual Completion Date")+": ";
-			generateOverAllTableRows(planningSubTable1,columnName,planning.getCurrentCompDate(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
@@ -1690,21 +1689,22 @@ public class ExportActivityToWord extends Action {
     	 buildRoleOrgInfo( eshRelatedOrgsTable, groupedRoleSet, roleName,true);
     }
     private void buildRoleOrgInfo(ExportSectionHelper eshRelatedOrgsTable, Set<AmpOrgRole> groupedRoleSet, String roleName,boolean addPercentage){
-    	
-        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(roleName, null, null,  true));
-        for (AmpOrgRole role : groupedRoleSet) {
-            Double orgPercentage = role.getPercentage() == null ? new Double(0) : role.getPercentage();
-            if(addPercentage){
-	            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).
-	                    addRowData(role.getOrganisation().getName())
-	                    .addRowData(orgPercentage.toString() + "%"));
-            }
-            else{
-            	eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).
-	                    addRowData(role.getOrganisation().getName()));
-            }
-        }
-        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(null,null,null, false).setSeparator(true));
+    	if(!groupedRoleSet.isEmpty()){
+	        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(roleName, null, null,  true));
+	        for (AmpOrgRole role : groupedRoleSet) {
+	            Double orgPercentage = role.getPercentage() == null ? new Double(0) : role.getPercentage();
+	            if(addPercentage){
+		            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).
+		                    addRowData(role.getOrganisation().getName())
+		                    .addRowData(orgPercentage.toString() + "%"));
+	            }
+	            else{
+	            	eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).
+		                    addRowData(role.getOrganisation().getName()));
+	            }
+	        }
+	        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(null,null,null, false).setSeparator(true));
+    	}
     }
 
     /*
@@ -2868,24 +2868,28 @@ public class ExportActivityToWord extends Action {
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Budget", ampContext)){
-			cell = new RtfCell();
-			cell.setBorder(0);
+			columnName=TranslatorWorker.translateText("Budget");
+
 			if (identification.getBudgetCV()!=null) {
 				if(identification.getBudgetCV().equals(identification.getBudgetCVOn())){
-					p1=new Paragraph(TranslatorWorker.translateText("Activity is on budget"),PLAINFONT) ;
+					//p1=new Paragraph(TranslatorWorker.translateText("Activity is on budget"),PLAINFONT) ;
+					columnVal=TranslatorWorker.translateText("Activity is on budget");
 				}else if (identification.getBudgetCV().equals(identification.getBudgetCVOff())){
-					p1=new Paragraph(TranslatorWorker.translateText("Activity is off budget"),PLAINFONT) ;
+					//p1=new Paragraph(TranslatorWorker.translateText("Activity is off budget"),PLAINFONT) ;
+					columnVal=TranslatorWorker.translateText("Activity is off budget");
 				}else if (identification.getBudgetCV().equals(new Long(0))) {
-					p1=new Paragraph(TranslatorWorker.translateText("Budget Unallocated"),PLAINFONT) ;
+					//p1=new Paragraph(TranslatorWorker.translateText("Budget Unallocated"),PLAINFONT) ;
+					columnVal=TranslatorWorker.translateText("Budget Unallocated");
 				}else{
 					p1=new Paragraph(TranslatorWorker.translateText("Activity is on ")+identification.getBudgetCV(),PLAINFONT) ;
+					columnVal=TranslatorWorker.translateText("Activity is on ")+identification.getBudgetCV();
 				}
+				generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 			}
 			
-			if (p1 != null) {
-				cell.add(p1);
-			}
-			
+
+			cell = new RtfCell();
+			cell.setBorder(0);			
 			if (identification.getChapterForPreview() !=null){
 				cell.add(new Paragraph(TranslatorWorker.translateText("Code Chapitre")+": ",PLAINFONT));
 				cell.add(new Paragraph(identification.getChapterForPreview().getCode() + " - " 
@@ -2904,30 +2908,34 @@ public class ExportActivityToWord extends Action {
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras", ampContext)){
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY", ampContext)){
-				columnName=TranslatorWorker.translateText("FY");
-				generateOverAllTableRows(identificationSubTable1,columnName,identification.getFY(),null);
-			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Ministry Code", ampContext)) {
-				columnName = TranslatorWorker.translateText("Ministry Code");
-				generateOverAllTableRows(identificationSubTable1, columnName, identification.getMinistryCode(), null);
-			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Project Code", ampContext)) {
-				columnName = TranslatorWorker.translateText("Project Code");
-				generateOverAllTableRows(identificationSubTable1, columnName, identification.getProjectCode(), null);
-			}
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Vote", ampContext)){
-				columnName=TranslatorWorker.translateText("Vote");
-				generateOverAllTableRows(identificationSubTable1,columnName,identification.getVote(),null);
-			}
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Vote", ampContext)){
-				columnName=TranslatorWorker.translateText("Sub-Vote");
-				generateOverAllTableRows(identificationSubTable1,columnName,identification.getSubVote(),null);
-			}
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Program", ampContext)){
-				columnName=TranslatorWorker.translateText("Sub-Program");
-				generateOverAllTableRows(identificationSubTable1,columnName,identification.getSubProgram(),null);
-			}
+			//AMP-16421
+			if(identification.getBudgetCV()==identification.getBudgetCVOn()){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY", ampContext)){
+				//	
+					columnName=TranslatorWorker.translateText("FY");
+					generateOverAllTableRows(identificationSubTable1,columnName,identification.getFY(),null);
+				}
+				if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Ministry Code", ampContext)) {
+					columnName = TranslatorWorker.translateText("Ministry Code");
+					generateOverAllTableRows(identificationSubTable1, columnName, identification.getMinistryCode(), null);
+				}
+				if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Project Code", ampContext)) {
+					columnName = TranslatorWorker.translateText("Project Code");
+					generateOverAllTableRows(identificationSubTable1, columnName, identification.getProjectCode(), null);
+				}
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Vote", ampContext)){
+					columnName=TranslatorWorker.translateText("Vote");
+					generateOverAllTableRows(identificationSubTable1,columnName,identification.getVote(),null);
+				}
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Vote", ampContext)){
+					columnName=TranslatorWorker.translateText("Sub-Vote");
+					generateOverAllTableRows(identificationSubTable1,columnName,identification.getSubVote(),null);
+				}
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Program", ampContext)){
+					columnName=TranslatorWorker.translateText("Sub-Program");
+					generateOverAllTableRows(identificationSubTable1,columnName,identification.getSubProgram(),null);
+				}
+			}	
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Classification", ampContext)) {

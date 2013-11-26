@@ -1,7 +1,9 @@
 package org.digijava.module.help.action;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -813,36 +815,44 @@ public class HelpActions extends DispatchAction {
 	
 	
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-
-        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
-        Marshaller m = jc.createMarshaller();
-        //response.setContentType("text/xml");
-        response.setContentType("application/zip");
-		response.setHeader("content-disposition", "attachment; filename=exportHelp.zip");
-		ObjectFactory objFactory = new ObjectFactory();
-		AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
-		List <AmpHelpType> rsAux;
-        logger.info("loading helpData");
-        ServletOutputStream ouputStream = response.getOutputStream();
-        ZipOutputStream out = new ZipOutputStream(ouputStream);
-        rsAux= HelpUtil.getExportData(out);
-
-
-        help_out.getAmpHelp().addAll(rsAux);
-        
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        
-        m.marshal(help_out,bos);
-        out.putNextEntry(new ZipEntry("helpExport.xml"));
-        byte [] myArray= bos.toByteArray();
-        out.write(myArray, 0, myArray.length);
-        // Complete the entry
-        out.closeEntry();        
-        // Complete the ZIP file     
-	    out.close();
-      
-        return null;
-
+		ZipOutputStream out = null;
+		try{
+			JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
+			Marshaller m = jc.createMarshaller();
+			//response.setContentType("text/xml");
+			response.setContentType("application/zip");
+			response.setHeader("content-disposition", "attachment; filename=exportHelp.zip");		
+			ObjectFactory objFactory = new ObjectFactory();
+			AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
+			List <AmpHelpType> rsAux;
+			logger.info("loading helpData");
+			BufferedOutputStream ouputStream = new BufferedOutputStream(response.getOutputStream());
+			out = new ZipOutputStream(ouputStream);
+			
+			rsAux= HelpUtil.getExportData(out);
+			help_out.getAmpHelp().addAll(rsAux);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			m.marshal(help_out,bos);
+			out.putNextEntry(new ZipEntry("helpExport.xml"));
+			byte [] myArray= bos.toByteArray();
+			//int size = bos.size();
+			//response.setHeader("Content-Length", String.valueOf(size));
+			//logger.info(size);
+			out.write(myArray);
+			// Complete the entry
+			out.closeEntry();
+			out.flush();
+		}catch(IOException  e){
+			e.printStackTrace();
+		}finally{
+			try{
+				// Complete the ZIP file
+				out.close();
+			}catch(IOException e2){
+				e2.printStackTrace();
+			}
+		}
+		return null;
 	}
 	
 	public ActionForward importing(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {

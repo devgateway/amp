@@ -1655,7 +1655,7 @@ public class TeamUtil {
         	queryString.append("  and   (A.draft is null or A.draft=false) ");
         }
         if(keyword!=null && keyword.length()>0){
-        	queryString.append(" and lower(A.name) like lower(?)") ;
+        	queryString.append(" and lower(" + AmpActivityVersion.sqlStringForName("A.amp_activity_id") + ") like lower(?)") ;
         }
         
         PreparedStatement statement = conn.prepareStatement(queryString.toString());

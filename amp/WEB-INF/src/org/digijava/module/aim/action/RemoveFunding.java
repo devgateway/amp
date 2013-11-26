@@ -22,42 +22,43 @@ public class RemoveFunding extends Action {
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 	
-		EditActivityForm eaForm = (EditActivityForm) form;
-		
-		String temp = request.getParameter("fundId");
-		String temp1 = request.getParameter("fundOrgId");
-		long fundId = -1;
-		long fundOrgId = -1;
-		
-		if (temp != null) {
-			try {
-				fundId = Long.parseLong(temp);	
-			} catch (NumberFormatException nfe) {
-				logger.error("Invalid funding Id :" + temp);
-			}
-		}
-		
-		if (temp1 != null) {
-			try {
-				fundOrgId = Long.parseLong(temp1);
-			} catch (NumberFormatException nfe) {
-				logger.error("Invalid funding organisation Id :" + temp1);
-			}
-		}
-		
-		if (fundId > 0 && fundOrgId > 0) {
-			Iterator itr = eaForm.getFunding().getFundingOrganizations().iterator();
-			while (itr.hasNext()) {
-				FundingOrganization fOrg = (FundingOrganization) itr.next();
-				if (fOrg.getAmpOrgId().longValue() == fundOrgId) {
-					Funding fund = new Funding();
-					fund.setFundingId(fundId);
-					fOrg.getFundings().remove(fund);
-					break;
-				}
-			}
-		}
-		
-		return mapping.findForward("forward");
+		throw new RuntimeException("SaveActivity::execute: not implemented!");
+//		EditActivityForm eaForm = (EditActivityForm) form;
+//		
+//		String temp = request.getParameter("fundId");
+//		String temp1 = request.getParameter("fundOrgId");
+//		long fundId = -1;
+//		long fundOrgId = -1;
+//		
+//		if (temp != null) {
+//			try {
+//				fundId = Long.parseLong(temp);	
+//			} catch (NumberFormatException nfe) {
+//				logger.error("Invalid funding Id :" + temp);
+//			}
+//		}
+//		
+//		if (temp1 != null) {
+//			try {
+//				fundOrgId = Long.parseLong(temp1);
+//			} catch (NumberFormatException nfe) {
+//				logger.error("Invalid funding organisation Id :" + temp1);
+//			}
+//		}
+//		
+//		if (fundId > 0 && fundOrgId > 0) {
+//			Iterator itr = eaForm.getFunding().getFundingOrganizations().iterator();
+//			while (itr.hasNext()) {
+//				FundingOrganization fOrg = (FundingOrganization) itr.next();
+//				if (fOrg.getAmpOrgId().longValue() == fundOrgId) {
+//					Funding fund = new Funding();
+//					fund.setFundingId(fundId);
+//					fOrg.getFundings().remove(fund);
+//					break;
+//				}
+//			}
+//		}
+//		
+//		return mapping.findForward("forward");
 	}
 }

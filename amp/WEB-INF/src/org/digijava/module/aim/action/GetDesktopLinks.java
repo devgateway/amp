@@ -62,7 +62,7 @@ public class GetDesktopLinks extends TilesAction {
 			}
 				
 			session.setAttribute(Constants.MY_LINKS,reducedList);
-			DocumentManagerUtil.logoutJcrSessions(request.getSession());
+			DocumentManagerUtil.logoutJcrSessions(request);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

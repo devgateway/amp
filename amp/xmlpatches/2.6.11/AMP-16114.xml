@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-16114</jira>
+	<keyword>Category Manager</keyword>
+	<author>ginchauspe</author>
+	<description>AmpCategoryClass.possibleValues returns a List with more elements than existing in the DB (and with null value)</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				UPDATE amp_category_value SET index_column = 0 
+				WHERE amp_category_class_id = (SELECT id FROM amp_category_class acc WHERE category_name LIKE 'Contact Title')
+				AND category_value LIKE 'Dr'
+				AND index_column = 1
+				AND (SELECT COUNT(*) FROM amp_category_value acv2 WHERE amp_category_class_id = (SELECT id FROM amp_category_class acc WHERE category_name LIKE 'Contact Title')) = 1
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

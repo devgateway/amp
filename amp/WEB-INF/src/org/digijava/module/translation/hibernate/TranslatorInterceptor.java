@@ -31,7 +31,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
         	logger.debug("Current language in TLS Util:" + TLSUtils.getEffectiveLangCode());
             logger.debug("flushDirty versionable: " + entity);
-            boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, previousState, currentState, propertyNames, types);
+            boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, previousState, currentState, propertyNames);
             ContentTranslationUtil.evictEntityFromCache(entity);
             logger.debug("flushDirty returning: " + ret);
             return ret;
@@ -50,7 +50,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
         	logger.debug("Current language in TLS Util:" + TLSUtils.getEffectiveLangCode());
         	logger.debug("onLoad: " + entity);
             //change the state to use the translations
-            return ContentTranslationUtil.translateObject(entity, id, state, propertyNames, types);
+            return ContentTranslationUtil.translateObject(entity, id, state, propertyNames);
         }
         return false; //we didn't modify the state
     }
@@ -110,7 +110,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
     @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
-            boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, null, state, propertyNames, types);
+            boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, null, state, propertyNames);
             ContentTranslationUtil.evictEntityFromCache(entity);
             return ret;
         }

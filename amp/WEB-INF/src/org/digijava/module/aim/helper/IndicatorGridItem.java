@@ -13,7 +13,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil.AmpIndicatorValuesComparatorByTypeAndYear;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 /**
  * Indicator value helper bean. Stores indicator name and both values, target,

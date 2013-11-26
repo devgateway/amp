@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.jcr.Node;
 
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.util.SessionUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
@@ -35,7 +36,7 @@ public class AmpResourcesSearchModel extends
 		ArrayList<NodeWrapper> ret = new ArrayList<NodeWrapper>();
 		try {
 			AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
-			javax.jcr.Session jcrWriteSession = DocumentManagerUtil.getWriteSession(s.getHttpSession());
+			javax.jcr.Session jcrWriteSession = DocumentManagerUtil.getWriteSession(SessionUtil.getCurrentServletRequest());
 
 			Node otherHomeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession , s.getCurrentMember());
 			Iterator<Node> nit = otherHomeNode.getNodes();

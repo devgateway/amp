@@ -84,14 +84,14 @@
 								<tr>
 									<td style="border-bottom:1px solid #ccc;">
 										<!-- Other Links -->
-										<table cellpadding="0" cellspacing="0" width="100">
+										<table cellpadding="0" cellspacing="0" width="120">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title style="font-size:12px;">
 													<digi:trn key="aim:otherLinks">
 													Other links
 													</digi:trn>
 												</td>
-												<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+												<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
 											</tr>
 										</table>
 									</td>

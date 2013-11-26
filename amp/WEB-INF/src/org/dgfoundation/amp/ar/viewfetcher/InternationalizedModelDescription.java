@@ -78,7 +78,7 @@ public class InternationalizedModelDescription {
 				if (!dataColumnExists)
 					throw new RuntimeException(String.format("could not init property %s of model %s: data column %s does not exist in table %s", propertyName, modelClass, columnName, modelTableName));
 
-				properties.put(propertyName, new InternationalizedPropertyDescription(propertyName, this.className, modelTableName.toLowerCase(), keyColumnName, columnName));
+				properties.put(propertyName, new InternationalizedPropertyDescription(field, propertyName, this.className, modelTableName.toLowerCase(), keyColumnName, columnName));
 			}
 		}
 	}

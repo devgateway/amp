@@ -18,7 +18,7 @@
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
 			key="aim:undisbursedBalance">Undisbursed Balance</digi:trn>:
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.unDisbursementBalance}">
 				<b>${funding.unDisbursementBalance} ${aimEditActivityForm.currCode}</b>

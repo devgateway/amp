@@ -32,7 +32,7 @@ import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 import org.digijava.module.parisindicator.util.PIConstants;
 import org.digijava.module.parisindicator.util.PIUtils;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 public class PIReport3 extends PIAbstractReport {
 

@@ -47,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
+import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
@@ -1256,6 +1257,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 
 		public void setStatusReason(String statusReason) {
+			if (statusReason != null)
+				statusReason = statusReason.trim();
 			this.statusReason = statusReason;
 		}
 
@@ -2567,882 +2570,18 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	}
 
-	public class Funding {
-		private ProposedProjCost proProjCost;
-		private List<ProposedProjCost> proposedAnnualBudgets;
-		private Collection<FundingOrganization> fundingOrganizations;
-		private String donorObjective;
-		private List<FundingDetail> fundingDetails;
 
-		private String totalCommitted = "";
-		private String totalDisbursed = "";
-		private String totalUnDisbursed = "";
-		private String totalExpenditure = "";
-		private String totalUnExpended = "";
-		private String totalExpended = "";
-		private String totalDisbOrder = "";
-
-		private String totalCommitments;
-		private String totalPlannedCommitments;
-		private String totalPlannedRoF;
-		private String totalPlannedEDD;		
-		private String totalActualRoF;
-		private String totalActualEDD;
-		
-		private String totalPipelineCommitments;
-		private double totalCommitmentsDouble;
-		private String totalDisbursements;
-		private String totalExpenditures;
-		private String totalPlannedExpenditures;
-		private String totalPlannedDisbursements;
-		private String totalPlannedDisbursementsOrders;
-		private String totalActualDisbursementsOrders;
-		private String unDisbursementsBalance;
-		private boolean fixerate;
-		private double regionTotalDisb;
-		private Collection orderedFundingOrganizations;
-		private Collection financingBreakdown = null;
-		
-		private String consumptionRate;
-		private String deliveryRate;
-
-		// Add Funding fields
-
-		private Collection organizations;
-		private Collection<AmpCurrency> validcurrencies;
-		private Collection<FundingPledges> pledgeslist;
-		private boolean dupFunding;
-		private String orgName;
-		
-		private Long assistanceType = null;  // this is id of a category value from category Type Of Assistance
-		private Long modality = null; // this is id of a category value from category Financing Instrument
-		private Long fundingStatus = null; // this is id of a category value from category Funding Status
-		private Long modeOfPayment = null; // this is id of a category value from category Mode Of Payment
-		
-		private List<MTEFProjection> fundingMTEFProjections;
-		private List<KeyValue> availableMTEFProjectionYears;
-		private Collection projections;
-		private String orgFundingId;
-		private String sourceRole;
-		private int numComm;
-		private int numDisb;
-		private int numExp;
-		private int numDisbOrder;
-		private int numProjections;
-		private String disbOrderId;
-		private String signatureDate;
-		private String reportingDate;
-		private String plannedStartDate;
-		private String plannedCompletionDate;
-		private String actualStartDate;
-		private String actualCompletionDate;
-		private String fundingConditions;
-
-		// flags field
-		private boolean firstSubmit;
-		private String event;
-		private boolean editFunding;
-		private Long fundDonor;
-		private Long fundingId;
-		private Long fundingRegionId;
-		private Collection<AmpCategoryValueLocations> fundingRegions;
-		private Long[] selRegFundings;
-
-		private Collection regionalFundings;
-		private Long selFundingOrgs[];
-		private long orgId;
-		private int offset;
-		private int indexId;
-		private long transIndexId;
-        private String fundingCurrCode;
-        private int selectedMTEFProjectionYear;
-        
-        private float capitalSpendingPercentage;
-        private boolean showActual;
-        private boolean showPlanned;
-        private boolean showPipeline;
-        
-        
-        public boolean isShowPipeline() {
-			return showPipeline;
-		}
-
-		public void setShowPipeline(boolean showPipeline) {
-			this.showPipeline = showPipeline;
-		}
-
-		public boolean isShowActual() {
-			return showActual;
-		}
-
-		public void setShowActual(boolean showActual) {
-			this.showActual = showActual;
-		}
-
-		public boolean isShowPlanned() {
-			return showPlanned;
-		}
-
-		public void setShowPlanned(boolean showPlanned) {
-			this.showPlanned = showPlanned;
-		}
-
-		public float getCapitalSpendingPercentage() {
-            return capitalSpendingPercentage;
-        }
-
-        public void setCapitalSpendingPercentage(float capitalSpendingPercentage) {
-            this.capitalSpendingPercentage = capitalSpendingPercentage;
-        }
-
-        public void setConsumptionRate(String consumptionRate) {
-            this.consumptionRate = consumptionRate;
-        }   
-        
-		public void setDeliveryRate(String deliveryRate) {
-			this.deliveryRate = deliveryRate;
-		}             
-        
-		public String getConsumptionRate() {
-			return consumptionRate;
-		}
-		
-		public String getDeliveryRate() {
-			return deliveryRate;
-		}
-        
-        public List<FundingDetail> getCommitmentsDetails() {
-			if(fundingDetails != null){
-				List<FundingDetail> commitments = new ArrayList<FundingDetail>();
-				for (FundingDetail detail : fundingDetails){
-					if(detail.getTransactionType() == Constants.COMMITMENT) commitments.add(detail);
-				}
-				return commitments;
-			}
-			return fundingDetails;
-		}
-        
-     
-		
-		public List<FundingDetail> getDisbursementsDetails() {
-			if(fundingDetails != null){
-				List<FundingDetail> disbursements = new ArrayList<FundingDetail>();
-				for (FundingDetail detail : fundingDetails){
-					if(detail.getTransactionType() == Constants.DISBURSEMENT) disbursements.add(detail);
-				}
-				return disbursements;
-			}
-			return fundingDetails;
-		}
-		
-		public List<FundingDetail> getDisbursementOrdersDetails() {
-			
-			if(fundingDetails != null){
-				List<FundingDetail> disbursementOrder = new ArrayList<FundingDetail>();
-				for (FundingDetail detail : fundingDetails){
-					if(detail.getTransactionType() == Constants.DISBURSEMENT_ORDER) disbursementOrder.add(detail);
-				}
-				return disbursementOrder;
-			}
-			return fundingDetails;
-		}
-
-		public List<FundingDetail> getExpendituresDetails() {
-			if(fundingDetails != null){
-				List<FundingDetail> expenditures = new ArrayList<FundingDetail>();
-				for (FundingDetail detail : fundingDetails){
-					if(detail.getTransactionType() == Constants.EXPENDITURE) expenditures.add(detail);
-				}
-				return expenditures;
-			}
-			return fundingDetails;
-		}
-        
-        public Collection<FundingPledges> getPledgeslist() {
-			return pledgeslist;
-		}
-
-		public void setPledgeslist(Collection<FundingPledges> pledgeslist) {
-			this.pledgeslist = pledgeslist;
-		}
-        
-        public String getFundingCurrCode() {
-            return fundingCurrCode;
-        }
-
-        public void setFundingCurrCode(String fundingCurrCode) {
-            this.fundingCurrCode = fundingCurrCode;
-        }
-		
-		private boolean totDisbIsBiggerThanTotCom;
-		
-		public int getIndexId() {
-			return indexId;
-		}
-
-		public void setIndexId(int indexId) {
-			this.indexId = indexId;
-		}
-
-		public int getOffset() {
-			return offset;
-		}
-
-		public void setOffset(int offset) {
-			this.offset = offset;
-		}
-
-		public long getOrgId() {
-			return orgId;
-		}
-
-		public void setOrgId(long orgId) {
-			this.orgId = orgId;
-		}
-
-		public Collection<AmpCategoryValueLocations> getFundingRegions() {
-			return fundingRegions;
-		}
-		
-		public Collection<AmpCategoryValueLocations> getFundingRegionsUnique() {
-			Collection<AmpCategoryValueLocations> unique = new ArrayList<AmpCategoryValueLocations>();
-			Iterator<AmpCategoryValueLocations> it = fundingRegions.iterator();
-			while (it.hasNext()) {
-				AmpCategoryValueLocations val = (AmpCategoryValueLocations) it.next();
-				if (!unique.contains(val))
-					unique.add(val);
-			}
-			return unique;
-		}
-				
-				
-		public void setFundingRegions(Collection<AmpCategoryValueLocations> fundingRegions) {
-			this.fundingRegions = fundingRegions;
-		}
-
-		public int getNumComm() {
-			return numComm;
-		}
-
-		public void setNumComm(int numComm) {
-			this.numComm = numComm;
-		}
-
-		public int getNumDisb() {
-			return numDisb;
-		}
-
-		public void setNumDisb(int numDisb) {
-			this.numDisb = numDisb;
-		}
-
-		public int getNumExp() {
-			return numExp;
-		}
-
-		public void setNumExp(int numExp) {
-			this.numExp = numExp;
-		}
-
-		public int getNumProjections() {
-			return numProjections;
-		}
-
-		public void setNumProjections(int numProjections) {
-			this.numProjections = numProjections;
-		}
-
-		public ProposedProjCost getProProjCost() {
-			return proProjCost;
-		}
-
-		public void setProProjCost(ProposedProjCost proProjCost) {
-			this.proProjCost = proProjCost;
-		}
-
-		public Collection<FundingOrganization> getFundingOrganizations() {
-			return fundingOrganizations;
-		}
-
-		public void setFundingOrganizations(Collection<FundingOrganization> fundingOrganizations) {
-			this.fundingOrganizations = fundingOrganizations;
-		}
-
-	
-
-		public boolean isDisbursementOrders() {
-			boolean disbOrdersExist = false;
-			if (fundingDetails != null && fundingDetails.size() > 0) {
-				Iterator<FundingDetail> detailIter = fundingDetails.iterator();
-				while (detailIter.hasNext()) {
-					FundingDetail det = detailIter.next();
-					if (det.getTransactionType() == 4) {
-						disbOrdersExist = true;
-						break;
-					}
-				}
-			}
-			return disbOrdersExist;
-
-		}
-
-		public boolean isFixerate() {
-			this.fixerate = false;
-			if (fundingDetails != null) {
-				Iterator iter = fundingDetails.iterator();
-				while (iter.hasNext()) {
-					FundingDetail element = (FundingDetail) iter.next();
-					if (element.getFixedExchangeRate() != null) {
-						this.fixerate = true;
-						break;
-					}
-				}
-			}
-			return fixerate;
-		}
-
-		public List<FundingDetail> getFundingDetails() {
-			return fundingDetails;
-		}
-
-		public void setFundingDetails(List<FundingDetail> fundingDetails) {
-			this.fundingDetails = fundingDetails;
-		}
-
-		public String getTotalCommitted() {
-			return totalCommitted;
-		}
-
-		public void setTotalCommitted(String totalCommitted) {
-			this.totalCommitted = totalCommitted;
-		}
-
-		public String getTotalDisbursed() {
-			return totalDisbursed;
-		}
-
-		public void setTotalDisbursed(String totalDisbursed) {
-			this.totalDisbursed = totalDisbursed;
-		}
-
-		public String getTotalUnDisbursed() {
-			return totalUnDisbursed;
-		}
-		
-		public void setTotalActualRoF(String totalActualRoF)
-		{
-			this.totalActualRoF = totalActualRoF;
-		}
-
-		public void setTotalActualEDD(String totalActualEDD)
-		{
-			this.totalActualEDD = totalActualEDD;
-		}
-		
-		public String getTotalActualRoF()
-		{
-			return this.totalActualRoF;
-		}
-		
-		public String getTotalActualEDD()
-		{
-			return this.totalActualEDD;
-		}
-		
-		public void setTotalUnDisbursed(String totalUnDisbursed) {
-			this.totalUnDisbursed = totalUnDisbursed;
-		}
-
-		public String getTotalExpenditure() {
-			return totalExpenditure;
-		}
-
-		public void setTotalExpenditure(String totalExpenditure) {
-			this.totalExpenditure = totalExpenditure;
-		}
-
-		public String getTotalUnExpended() {
-			return totalUnExpended;
-		}
-
-		public void setTotalUnExpended(String totalUnExpended) {
-			this.totalUnExpended = totalUnExpended;
-		}
-
-		public String getTotalExpended() {
-			return totalExpended;
-		}
-
-		public void setTotalExpended(String totalExpended) {
-			this.totalExpended = totalExpended;
-		}
-
-		public String getTotalDisbOrder() {
-			return totalDisbOrder;
-		}
-
-		public void setTotalDisbOrder(String totalDisbOrder) {
-			this.totalDisbOrder = totalDisbOrder;
-		}
-
-		public String getTotalCommitments() {
-			return totalCommitments;
-		}
-
-		public void setTotalCommitments(String totalCommitments) {
-			this.totalCommitments = totalCommitments;
-		}
-
-		public String getTotalPlannedCommitments() {
-			return totalPlannedCommitments;
-		}
-
-		public void setTotalPlannedCommitments(String totalPlannedCommitments) {
-			this.totalPlannedCommitments = totalPlannedCommitments;
-		}
-
-		public String getTotalPlannedReleaseOfFunds() {
-			return totalPlannedRoF;
-		}
-
-		public void setTotalPlannedReleaseOfFunds(String totalPlannedRoF) {
-			this.totalPlannedRoF = totalPlannedRoF;
-		}
-		public String getTotalPlannedEDD() {
-			return totalPlannedEDD;
-		}
-
-		public void setTotalPlannedEDD(String totalPlannedEDD) {
-			this.totalPlannedEDD = totalPlannedEDD;
-		}
-		
-		
-		public double getTotalCommitmentsDouble() {
-			return totalCommitmentsDouble;
-		}
-
-		public void setTotalCommitmentsDouble(double totalCommitmentsDouble) {
-			this.totalCommitmentsDouble = totalCommitmentsDouble;
-		}
-
-		public String getTotalDisbursements() {
-			return totalDisbursements;
-		}
-
-		public void setTotalDisbursements(String totalDisbursements) {
-			this.totalDisbursements = totalDisbursements;
-		}
-
-		public String getTotalExpenditures() {
-			return totalExpenditures;
-		}
-
-		public void setTotalExpenditures(String totalExpenditures) {
-			this.totalExpenditures = totalExpenditures;
-		}
-
-		public String getTotalPlannedExpenditures() {
-			return totalPlannedExpenditures;
-		}
-
-		public void setTotalPlannedExpenditures(String totalPlannedExpenditures) {
-			this.totalPlannedExpenditures = totalPlannedExpenditures;
-		}
-
-		public String getTotalPlannedDisbursements() {
-			return totalPlannedDisbursements;
-		}
-
-		public void setTotalPlannedDisbursements(String totalPlannedDisbursements) {
-			this.totalPlannedDisbursements = totalPlannedDisbursements;
-		}
-
-		public String getTotalPlannedDisbursementsOrders() {
-			return totalPlannedDisbursementsOrders;
-		}
-
-		public void setTotalPlannedDisbursementsOrders(String totalPlannedDisbursementsOrders) {
-			this.totalPlannedDisbursementsOrders = totalPlannedDisbursementsOrders;
-		}
-
-		public String getTotalActualDisbursementsOrders() {
-			return totalActualDisbursementsOrders;
-		}
-
-		public void setTotalActualDisbursementsOrders(String totalActualDisbursementsOrders) {
-			this.totalActualDisbursementsOrders = totalActualDisbursementsOrders;
-		}
-
-		public String getUnDisbursementsBalance() {
-			return unDisbursementsBalance;
-		}
-
-		public void setUnDisbursementsBalance(String unDisbursementsBalance) {
-			this.unDisbursementsBalance = unDisbursementsBalance;
-		}
-
-		public void setFixerate(boolean fixerate) {
-			this.fixerate = fixerate;
-		}
-
-		public Collection<AmpCurrency> getValidcurrencies() {
-			return validcurrencies;
-		}
-
-		public void setValidcurrencies(Collection<AmpCurrency> validcurrencies) {
-			this.validcurrencies = validcurrencies;
-		}
-
-		public boolean isDupFunding() {
-			return dupFunding;
-		}
-
-		public void setDupFunding(boolean dupFunding) {
-			this.dupFunding = dupFunding;
-		}
-
-		public String getOrgName() {
-			return orgName;
-		}
-
-		public void setOrgName(String orgName) {
-			this.orgName = orgName;
-		}
-
-		public Long getAssistanceType() {
-			return assistanceType;
-		}
-
-		public void setAssistanceType(Long assistanceType) {
-			this.assistanceType = assistanceType;
-		}
-
-		public Long getModality() {
-			return modality;
-		}
-
-		public void setModality(Long modality) {
-			this.modality = modality;
-		}
-
-		/**
-		 * @return the fundingStatus
-		 */
-		public Long getFundingStatus() {
-			return fundingStatus;
-		}
-
-		/**
-		 * @param fundingStatus the fundingStatus to set
-		 */
-		public void setFundingStatus(Long fundingStatus) {
-			this.fundingStatus = fundingStatus;
-		}
-
-		public List<MTEFProjection> getFundingMTEFProjections() {
-			return fundingMTEFProjections;
-		}
-
-		public void setFundingMTEFProjections(List<MTEFProjection> fundingMTEFProjections) {
-			this.fundingMTEFProjections = fundingMTEFProjections;
-		}
-		
-
-		/**
-		 * @return the availableMTEFProjectionYears
-		 */
-		public List<KeyValue> getAvailableMTEFProjectionYears() {
-			return availableMTEFProjectionYears;
-		}
-
-		/**
-		 * @param availableMTEFProjectionYears the availableMTEFProjectionYears to set
-		 */
-		public void setAvailableMTEFProjectionYears(
-				List<KeyValue> availableMTEFProjectionYears) {
-			this.availableMTEFProjectionYears = availableMTEFProjectionYears;
-		}
-
-		public Collection getProjections() {
-			return projections;
-		}
-
-		public void setProjections(Collection projections) {
-			this.projections = projections;
-		}
-
-		public String getOrgFundingId() {
-			return orgFundingId;
-		}
-
-		public void setOrgFundingId(String orgFundingId) {
-			this.orgFundingId = orgFundingId;
-		}
-
-		public Collection getOrganizations() {
-			return organizations;
-		}
-
-		public void setOrganizations(Collection organizations) {
-			this.organizations = organizations;
-		}
-
-		public int getNumDisbOrder() {
-			return numDisbOrder;
-		}
-
-		public void setNumDisbOrder(int numDisbOrder) {
-			this.numDisbOrder = numDisbOrder;
-		}
-
-		public String getDisbOrderId() {
-			return disbOrderId;
-		}
-
-		public void setDisbOrderId(String disbOrderId) {
-			this.disbOrderId = disbOrderId;
-		}
-
-		public String getSignatureDate() {
-			return signatureDate;
-		}
-
-		public void setSignatureDate(String signatureDate) {
-			this.signatureDate = signatureDate;
-		}
-
-		public String getPlannedStartDate() {
-			return plannedStartDate;
-		}
-
-		public void setPlannedStartDate(String plannedStartDate) {
-			this.plannedStartDate = plannedStartDate;
-		}
-
-		public String getPlannedCompletionDate() {
-			return plannedCompletionDate;
-		}
-
-		public void setPlannedCompletionDate(String plannedCompletionDate) {
-			this.plannedCompletionDate = plannedCompletionDate;
-		}
-
-		public String getActualStartDate() {
-			return actualStartDate;
-		}
-
-		public void setActualStartDate(String actualStartDate) {
-			this.actualStartDate = actualStartDate;
-		}
-
-		public String getActualCompletionDate() {
-			return actualCompletionDate;
-		}
-
-		public void setActualCompletionDate(String actualCompletionDate) {
-			this.actualCompletionDate = actualCompletionDate;
-		}
-
-		public String getFundingConditions() {
-			return fundingConditions;
-		}
-
-		public void setFundingConditions(String fundingConditions) {
-			this.fundingConditions = fundingConditions;
-		}
-
-		public boolean isFirstSubmit() {
-			return firstSubmit;
-		}
-
-		public void setFirstSubmit(boolean firstSubmit) {
-			this.firstSubmit = firstSubmit;
-		}
-
-		public String getEvent() {
-			return event;
-		}
-
-		public void setEvent(String event) {
-			this.event = event;
-		}
-
-		public boolean isEditFunding() {
-			return editFunding;
-		}
-
-		public void setEditFunding(boolean editFunding) {
-			this.editFunding = editFunding;
-		}
-
-		public String getReportingDate() {
-			return reportingDate;
-		}
-
-		public void setReportingDate(String reportingDate) {
-			this.reportingDate = reportingDate;
-		}
-
-		public String getDonorObjective() {
-			return donorObjective;
-		}
-
-		public void setDonorObjective(String donorObjective) {
-			this.donorObjective = donorObjective;
-		}
-
-		public Long getFundDonor() {
-			return fundDonor;
-		}
-
-		public void setFundDonor(Long fundDonor) {
-			this.fundDonor = fundDonor;
-		}
-
-		public Long getFundingId() {
-			return fundingId;
-		}
-
-		public void setFundingId(Long fundingId) {
-			this.fundingId = fundingId;
-		}
-
-		public Long getFundingRegionId() {
-			return fundingRegionId;
-		}
-
-		public void setFundingRegionId(Long fundingRegionId) {
-			this.fundingRegionId = fundingRegionId;
-		}
-
-		public double getRegionTotalDisb() {
-			return regionTotalDisb;
-		}
-
-		public void setRegionTotalDisb(double regionTotalDisb) {
-			this.regionTotalDisb = regionTotalDisb;
-		}
-
-		public Collection getOrderedFundingOrganizations() {
-			return orderedFundingOrganizations;
-		}
-
-		public void setOrderedFundingOrganizations(Collection orderedFundingOrganizations) {
-			this.orderedFundingOrganizations = orderedFundingOrganizations;
-		}
-
-
-		public Collection getFinancingBreakdown() {
-			return financingBreakdown;
-		}
-
-		public void setFinancingBreakdown(Collection financingBreakdown) {
-			this.financingBreakdown = financingBreakdown;
-		}
-
-		public Collection getRegionalFundings() {
-			return regionalFundings;
-		}
-
-		public void setRegionalFundings(Collection regionalFundings) {
-			this.regionalFundings = regionalFundings;
-		}
-
-		public Long[] getSelFundingOrgs() {
-			return selFundingOrgs;
-		}
-
-		public void setSelFundingOrgs(Long[] selFundingOrgs) {
-			this.selFundingOrgs = selFundingOrgs;
-		}
-
-	
-
-		public Long[] getSelRegFundings() {
-			return selRegFundings;
-		}
-
-		public void setSelRegFundings(Long[] selRegFundings) {
-			this.selRegFundings = selRegFundings;
-		}
-
-		public long getTransIndexId() {
-			return transIndexId;
-		}
-
-		public void setTransIndexId(long transIndexId) {
-			this.transIndexId = transIndexId;
-		}
-
-		/**
-		 * @return the selectedMTEFProjectionYear
-		 */
-		public int getSelectedMTEFProjectionYear() {
-			return selectedMTEFProjectionYear;
-		}
-
-		/**
-		 * @param selectedMTEFProjectionYear the selectedMTEFProjectionYear to set
-		 */
-		public void setSelectedMTEFProjectionYear(int selectedMTEFProjectionYear) {
-			this.selectedMTEFProjectionYear = selectedMTEFProjectionYear;
-		}
-
-		public String getTotalPipelineCommitments() {
-			return totalPipelineCommitments;
-		}
-
-		public void setTotalPipelineCommitments(String totalPipelineCommitments) {
-			this.totalPipelineCommitments = totalPipelineCommitments;
-		}
-
-		/**
-		 * @return the modeOfPayment
-		 */
-		public Long getModeOfPayment() {
-			return modeOfPayment;
-		}
-
-		/**
-		 * @param modeOfPayment the modeOfPayment to set
-		 */
-		public void setModeOfPayment(Long modeOfPayment) {
-			this.modeOfPayment = modeOfPayment;
-		}
-
-		/**
-		 * @return the sourceRole
-		 */
-		public String getSourceRole() {
-			return sourceRole;
-		}
-
-		/**
-		 * @param sourceRole the sourceRole to set
-		 */
-		public void setSourceRole(String sourceRole) {
-			this.sourceRole = sourceRole;
-		}
-
-		public List<ProposedProjCost> getProposedAnnualBudgets() {
-			return proposedAnnualBudgets;
-		}
-
-		public void setProposedAnnualBudgets(List<ProposedProjCost> proposedAnnualBudgets) {
-			this.proposedAnnualBudgets = proposedAnnualBudgets;
-		}	
-		
-	}
 
 	public FundingOrganization getFundingOrganization(int index) {
-		if(getFunding().fundingOrganizations==null) return null;
-		int currentSize = getFunding().fundingOrganizations.size();
+		if(getFunding().getFundingOrganizations() == null)
+			return null;
+		int currentSize = getFunding().getFundingOrganizations().size();
 		if (index >= currentSize) {
 			for (int i = 0; i <= index - currentSize; i++) {
-				getFunding().fundingOrganizations.add(new FundingOrganization());
+				getFunding().getFundingOrganizations().add(new FundingOrganization());
 			}
 		}
-		return (FundingOrganization) ((ArrayList) getFunding().fundingOrganizations).get(index);
+		return (FundingOrganization) ((ArrayList) getFunding().getFundingOrganizations()).get(index);
 	}
 	
 	public class ContactInformation {
@@ -3886,8 +3025,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private boolean docReset;
 		private boolean showInHomePage;
 		private int pageId;
-		private Collection documentList;
-		private Collection documents;
+		//private Collection documentList;
+		private List<org.digijava.module.aim.helper.Documents> documents = new ArrayList<org.digijava.module.aim.helper.Documents>();
 		private Collection<DocumentData> crDocuments;
 		private Collection managedDocumentList;
 		private long selDocs[];
@@ -4015,19 +3154,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.documentSpace = documentSpace;
 		}
 
-		public Collection getDocumentList() {
-			return documentList;
-		}
+//		public Collection getDocumentList() {
+//			return documentList;
+//		}
+//
+//		public void setDocumentList(Collection documentList) {
+//			this.documentList = documentList;
+//		}
 
-		public void setDocumentList(Collection documentList) {
-			this.documentList = documentList;
-		}
-
-		public Collection getDocuments() {
+		public List<org.digijava.module.aim.helper.Documents> getDocuments() {
 			return documents;
 		}
 
-		public void setDocuments(Collection documents) {
+		public void setDocuments(List<org.digijava.module.aim.helper.Documents> documents) {
 			this.documents = documents;
 		}
 
@@ -4827,8 +3966,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Component components;
 	private Programs programs;
 	private CrossCuttingIssues crossIssues;
-	private Funding funding;
-	private Funding oldFunding;
+	private ActivityFundingDigest funding;
+	private ActivityFundingDigest oldFunding;
 	private Documents documents = null;
 	private Agencies agencies;
 	
@@ -5140,16 +4279,16 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	}
 	
-	public Funding getFunding() {
+	public ActivityFundingDigest getFunding() {
 		if (this.funding == null) {
-			this.funding = new Funding();
+			this.funding = new ActivityFundingDigest();
 		}
 		return this.funding;
 	}
 	
-	public Funding getOldFunding() {
+	public ActivityFundingDigest getOldFunding() {
 		if (this.oldFunding == null) {
-			this.oldFunding = new Funding();
+			this.oldFunding = new ActivityFundingDigest();
 		}
 		return this.oldFunding;
 	}
@@ -5252,21 +4391,21 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 
 	public FundingDetail getFundingDetail(int index) {
-		int currentSize = funding.fundingDetails.size();
+		int currentSize = funding.getFundingDetails().size();
 		if (index >= currentSize) {
 			for (int i = 0; i <= index - currentSize; i++) {
-				funding.fundingDetails.add(new FundingDetail());
+				funding.getFundingDetails().add(new FundingDetail());
 			}
 		}
-		return (FundingDetail) funding.fundingDetails.get(index);
+		return (FundingDetail) funding.getFundingDetails().get(index);
 	}
 
-	public MTEFProjection getMtefProjection(int index) {
-		while (funding.fundingMTEFProjections.size() <= index) {
-			funding.fundingMTEFProjections.add(new MTEFProjection());
-		}
-		return funding.fundingMTEFProjections.get(index);
-	}
+//	public MTEFProjection getMtefProjection(int index) {
+//		while (funding.fundingMTEFProjections.size() <= index) {
+//			funding.fundingMTEFProjections.add(new MTEFProjection());
+//		}
+//		return funding.fundingMTEFProjections.get(index);
+//	}
 
 	public IndicatorME getIndicator() {
 		if (this.indicatorME == null) {

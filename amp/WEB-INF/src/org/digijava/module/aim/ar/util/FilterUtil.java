@@ -174,12 +174,8 @@ public class FilterUtil {
 		form.getDynamicProposedApprovalFilter().setOperator(filter.getDynProposedApprovalFilterOperator());
 		form.getDynamicProposedApprovalFilter().setxPeriod(filter.getDynProposedApprovalFilterXPeriod());
 		
-		if (filter.getCurrency() != null)
-			form.setCurrency( filter.getCurrency().getAmpCurrencyId() );
-        else {
-			form.setCurrency(null);
-        }
-		
+		form.setCurrency(filter.getUsedCurrency().getAmpCurrencyId());
+		form.setDefaultCurrency(form.getCurrency());
 		form.setCalendar(filter.getCalendarType().getAmpFiscalCalId());
 
 		

@@ -1383,12 +1383,13 @@ function initializeGlobalVariables(){
 		<c:if test="${visualizationform.filter.showProjectsRanking eq 'true'}">
 			<fieldset>
 				<legend><span id="topProjectsTitle" class=legend_label style="width:200px"></span></legend>
-				<div id="divTopProjects" class="field_text">
+				<div id="divTopProject" class="field_text">
+				
 					<c:set var="index" value="0"/>
 					<c:forEach items="${visualizationform.ranksInformation.topProjects}" var="projectItem">
 					<c:set var="index" value="${index+1}"/>
 					
-					 <c:out value="${index}"/>. <a href="/aim/selectActivityTabs.do~ampActivityId=${projectItem.key.ampActivityId}">${projectItem.key}</a> <b>($<c:out value="${projectItem.value}"/>)</b>
+					 <c:out value="${index}"/>. <a class='activity-link' href="/aim/selectActivityTabs.do~ampActivityId=${projectItem.key.ampActivityId}">${projectItem.key}</a> <b>($<c:out value="${projectItem.value}"/>)</b>
 						<hr />
 					</c:forEach>
 				

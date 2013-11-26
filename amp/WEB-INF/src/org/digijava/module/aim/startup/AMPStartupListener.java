@@ -289,6 +289,17 @@ public class AMPStartupListener extends HttpServlet implements
 			
 			PersistenceManager.getSession().getTransaction().commit();
 			
+			logger.info("Starting up JackRabbit repository...");
+			javax.jcr.Session jrSession = DocumentManagerUtil.getSession(ampContext, null);
+			if (jrSession != null)
+			{
+				DocumentManagerUtil.closeSession(jrSession);
+				logger.info("\t... JackRabbit startup ok!");
+			}
+			else 
+				logger.info("\t... JackRabbit startup failed!");
+				
+			
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
 			e.printStackTrace(System.out);

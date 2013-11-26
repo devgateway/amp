@@ -126,7 +126,7 @@ function loadShareRules(){
 <html:hidden property="type" />
 <html:hidden property="appSettingsId" />
 <html:hidden property="save" />
-<html:hidden styleId="setectedTMs" value="${aimAddOrgForm.resetTeamMembers}" name="aimAddOrgForm" property="resetTeamMembers"/>
+<html:hidden styleId="setectedTMs" value="${aimUpdateAppSettingsForm.resetTeamMembers}" property="resetTeamMembers"/>
 <!-- Start include of reportDescriptionSheet.jsp  -->
 	<%@include file="reportDescriptionSheet.jsp"%>
 <!-- END include of reportDescriptionSheet.jsp  -->

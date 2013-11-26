@@ -30,7 +30,7 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 /**
  * @author aartimon@dginternational.org

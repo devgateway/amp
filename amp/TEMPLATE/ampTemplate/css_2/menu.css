@@ -306,6 +306,16 @@ html.ie .bd_drop  { line-height:25px;height:25px;padding:0px 0px 0px 0px;width:9
 html.ie7 .bd_drop {width: auto;}
 html.ie7 .main_menu .yuiamp-skin-amp {width: auto !important;}
 
+#workspaceSubMenu ul {overflow-x:hidden; overflow-y:scroll; height: 400px; width:auto;}
+#workspaceSubMenu li {height:18px; white-space: nowrap;font-size: 10px;}
+
+html.ie7 #workspaceSubMenu ul {overflow-x:hidden; overflow-y:scroll; height: 400px; width:500px; min-width:100px;}
+/* Sorry for the line below, but I do not know who created this "li#yui-gen5" in other places,
+most likely those lines should be deleted in other places and then this line could be deleted too */
+html.ie7 #workspaceSubMenu li#yui-gen5 {width: auto !important;}
+html.ie7 #workspaceSubMenu li {height:18px; white-space: nowrap; font-size: 10px; overflow:hidden}
+html.ie7 #workspaceSubMenu li a {padding-left: 0px;}
+
 html.ie .bd_drop .bd_drop{width:180px;}
 #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
 html.ie #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}

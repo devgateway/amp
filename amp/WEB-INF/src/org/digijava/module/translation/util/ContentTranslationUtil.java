@@ -3,6 +3,8 @@ package org.digijava.module.translation.util;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
 import org.digijava.kernel.exception.DgException;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -42,31 +44,34 @@ public class ContentTranslationUtil {
      * @param types field types
      * @return true if the entity state was modified
      */
-    public static boolean translateObject(Object obj, Serializable id, Object[] state, String[] propertyNames, Type[] types){
+    public static boolean translateObject(Object obj, Serializable id, Object[] state, String[] propertyNames){
     	boolean stateModified = false;
         String currentLocale = TLSUtils.getEffectiveLangCode(); // BOZO, Arty, please review this change: effectiveLangCode is NEVER null
         if (currentLocale == null)
             return stateModified;
 
         String objClass = getObjectClass(obj);
-        Class clazz = obj.getClass();
         try{
             /*
                 Iterate all String fields and replace them with their translation
              */
-            for (int i = 0; i < types.length; i++){
+            InternationalizedModelDescription entityDescription = InternationalizedModelDescription.getForClass(obj.getClass());
+            for(int i = 0; i < propertyNames.length; i++)
+            {
             	String fieldName = propertyNames[i];
-            	Field field = getFieldByName(clazz, fieldName);
-                if (field.getAnnotation(TranslatableField.class) != null){
-                    //get translations for current field
-                    String trnLocale = loadFieldTranslationInLocale(objClass, (Long)id, fieldName, currentLocale);
-                    if (trnLocale != null){
-                    	logger.debug("translate field from: " + state[i] + " to: " + trnLocale);
-                        //replace the value of the field with the translation in the current locale
-                        state[i] = trnLocale;
-                        stateModified = true;
-                    }
-                }
+            	InternationalizedPropertyDescription prop = entityDescription.properties.get(fieldName);
+            	if (prop == null)
+            		continue; //this field is not internationalized
+                
+            	// get translations for current field
+            	String trnLocale = loadFieldTranslationInLocale(objClass, (Long)id, fieldName, currentLocale);
+            	if (trnLocale != null)
+            	{
+            		logger.debug("translate field from: " + state[i] + " to: " + trnLocale);
+            		//replace the value of the field with the translation in the current locale
+            		state[i] = trnLocale;
+            		stateModified = true;
+            	}
             }
         } catch (Exception e){
             logger.error("Can't translate object", e);
@@ -183,19 +188,31 @@ public class ContentTranslationUtil {
                     //if we have a collection of objects in the current entity, then we look for translatable
                     //entities and we clone their translations recursively
                     String fieldName = field.getName();
-                    Method methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
-                    Collection collection = (Collection) methGetField.invoke(obj);
-                    if (collection != null) {
-                        for (Object o : collection) {
-                            if (o.getClass().isAnnotationPresent(TranslatableClass.class) &&
+                    Method methGetField = null;
+                    try
+                    {
+                    	methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
+                    }
+                    catch(NoSuchMethodException e)
+                    {
+                    	// do nothing -> we won't process this field and that's it
+                    }
+                    if (methGetField != null)
+                    {
+                    	// no method -> no getter -> no need to clone translations
+                    	Collection collection = (Collection) methGetField.invoke(obj);
+                    	if (collection != null) {
+                    		for (Object o : collection) {
+                    			if (o.getClass().isAnnotationPresent(TranslatableClass.class) &&
                                     !o.getClass().isAssignableFrom(AmpActivityVersion.class) //not supported
                                     )
                                 cloneTranslations(o);
-                            else {
-                                //we don't have mixed collections, no point in iterating forward through the collection
-                                break;
-                            }
-                        }
+                    			else {
+                    				//we don't have mixed collections, no point in iterating forward through the collection
+                    				break;
+                    			}
+                    		}
+                    	}
                     }
                 }
             }
@@ -219,7 +236,7 @@ public class ContentTranslationUtil {
      * @return true if we altered the object state in any way
      */
     public static boolean prepareTranslations(Object obj, Serializable id, Object[] previousState, Object[] currentState,
-    		String[] propertyNames, Type[] types){
+    		String[] propertyNames){
     	boolean stateModified = false;
         boolean isVersionable =  obj instanceof Versionable;
     	//get new object id - hibernate already updated it
@@ -233,11 +250,16 @@ public class ContentTranslationUtil {
                 translation and prepare for save all the FieldTranslationPack's in the database with the
                 new object id
              */
-            for (int i = 0; i < types.length; i++){
+        	InternationalizedModelDescription entityDescription = InternationalizedModelDescription.getForClass(clazz);
+            for (int i = 0; i < propertyNames.length; i++){            	
             	String fieldName = propertyNames[i];
-            	Field field = getFieldByName(clazz, fieldName);
+            	InternationalizedPropertyDescription propertyDescription = entityDescription.properties.get(fieldName);
+            	if (propertyDescription == null)
+            		continue; // field not translated -> nothing to do
+            	Field field = propertyDescription.field;
 
-                if (field.getAnnotation(TranslatableField.class) != null && (previousState == null || (currentState[i] != null && !currentState[i].equals(previousState[i])))){
+                if ((previousState == null || (currentState[i] != null && !currentState[i].equals(previousState[i])))){
+                	// "field.getAnnotation(TranslatableField.class) != null" deleted from "if", as InternationalizedModelDescription only contains translateable fields
                 	FieldTranslationPack ftp;
                     Long ftpId;
                 	if (isVersionable){ //if versionable we already cloned the translations
@@ -693,23 +715,23 @@ public class ContentTranslationUtil {
         }
     }
 
-    /**
-     * Retrieve the Field for a class (safe for inheritance)
-     * @param type class for which we want to get all the fields
-     * @param name field name
-     * @return the Field object representing
-     */
-    private static Field getFieldByName(Class<?> type, String name){
-        for (Field field: type.getDeclaredFields()) {
-            if (field.getName().equals(name))
-            	return field;
-        }
-
-        if (type.getSuperclass() != null) {
-            return getFieldByName(type.getSuperclass(), name);
-        }
-        return null;
-    }
+//    /**
+//     * Retrieve the Field for a class (safe for inheritance)
+//     * @param type class for which we want to get all the fields
+//     * @param name field name
+//     * @return the Field object representing
+//     */
+//    private static Field getFieldByName(Class<?> type, String name){
+//        for (Field field: type.getDeclaredFields()) {
+//            if (field.getName().equals(name))
+//            	return field;
+//        }
+//
+//        if (type.getSuperclass() != null) {
+//            return getFieldByName(type.getSuperclass(), name);
+//        }
+//        return null;
+//    }
 
     public static void saveOrUpdateContentTrns(Set <AmpContentTranslation> objectsForDb) {
         try {

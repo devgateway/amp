@@ -17,6 +17,8 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
+import java.util.Collections;
+
 /**
  * Permissible.java TODO description here
  * 
@@ -106,16 +108,49 @@ public abstract class Permissible implements Identifiable {
 		scope.put(GatePermConst.ScopeKeys.PERMISSIBLE,this);
 		
 		
-		  PermissionMap permissionMapForPermissible = PermissionUtil.getPermissionMapForPermissible(this);
-		  Collection<String> actions = processPermissions(permissionMapForPermissible, scope);
-		 
-		  
-		  
-		  Collection implementedActions = Arrays.asList(getImplementedActions());
-		  actions.retainAll(implementedActions);
+		PermissionMap permissionMapForPermissible = getPermissionMap();
+		Collection<String> actions = processPermissions(permissionMapForPermissible, scope);
+		 		  		  
+		java.util.List<String> implementedActions = buildImplementedActionsAsList();
+		actions.retainAll(implementedActions);
 			
 		  
 		return actions;
+	}
+	
+	protected java.util.List<String> implementedActionsAsList = null;
+	
+	/**
+	 * getImplementedActions() is, by default, a clone() call (for safety reasons) - which is very expensive. Because this function always returns the same value for a class instance (and even for a class, but let's be paranoid about it), we'll cache Arrays.asList(getImplementedActions()) per instance
+	 * @return
+	 */
+	protected java.util.List<String> buildImplementedActionsAsList()
+	{
+		if (implementedActionsAsList == null)
+			implementedActionsAsList = Collections.unmodifiableList(Arrays.asList(getImplementedActions()));
+		return implementedActionsAsList;
+	}
+	
+	protected PermissionMap cachedPermissionMap = null;
+	protected boolean permissionMapCached = false;
+	protected static long permMapCalls = 0;
+	protected static long permMapCachedCalls = 0;
+	
+	protected synchronized PermissionMap getPermissionMap()
+	{
+		permMapCalls ++;
+		if (!permissionMapCached)
+		{
+			cachedPermissionMap = PermissionUtil.getPermissionMapForPermissible(this);
+			permissionMapCached = true;
+		}
+		else
+		{
+			permMapCachedCalls ++;
+		}
+		if (permMapCalls % 100 == 0)
+			logger.info(String.format("getPermissionMap(): called %d times, out of which cached %d (%.2f percent)", permMapCalls, permMapCachedCalls, 100.0 * permMapCachedCalls / permMapCalls));
+		return cachedPermissionMap;
 	}
 	
 	public static Collection<String> processPermissions(PermissionMap permissionMapForPermissible,Map scope) {
@@ -161,7 +196,8 @@ public abstract class Permissible implements Identifiable {
 	 * @return
 	 */
 	public boolean canDo(String actionName, Map scope) {
-		//logger.info("Testing canDo for Permissible: "+this);
+//		return true;
+//		//logger.info("Testing canDo for Permissible: "+this);
 		Collection<String> allowedActions = getAllowedActions(scope);
 		return allowedActions.contains(actionName);
 	}

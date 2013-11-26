@@ -28,24 +28,25 @@ public class AddDisbOrderToContract  extends Action {
         public ActionForward execute(ActionMapping mapping, ActionForm form,
                         HttpServletRequest request, HttpServletResponse response)
                         throws java.lang.Exception {
-                        EditActivityForm eaForm = (EditActivityForm) form;
-                        String event=eaForm.getFunding().getEvent();
-                        if(event.equals("Add")){
-                                long indexId = eaForm.getFunding().getTransIndexId();
-                                Integer conId=eaForm.getContracts().getSelContractId();
-                                FundingDetail fd = new FundingDetail();
-                                fd.setIndexId(indexId);
-                                int index = eaForm.getFunding().getFundingDetails().indexOf(
-                                    fd);
-                                FundingDetail disbOrder = eaForm.getFundingDetail(
-                                    index);
-                                List<IPAContract> contracts=eaForm.getContracts().getContracts();
-                                disbOrder.setContract(contracts.get(conId-1));
-                                eaForm.getFunding().setEvent(null);
-                                request.setAttribute("close", "close");
-                        }
-                           
-                        return mapping.findForward("forward");
+        	throw new RuntimeException("not implemented");
+//                        EditActivityForm eaForm = (EditActivityForm) form;
+//                        String event=eaForm.getFunding().getEvent();
+//                        if(event.equals("Add")){
+//                                long indexId = eaForm.getFunding().getTransIndexId();
+//                                Integer conId=eaForm.getContracts().getSelContractId();
+//                                FundingDetail fd = new FundingDetail();
+//                                fd.setIndexId(indexId);
+//                                int index = eaForm.getFunding().getFundingDetails().indexOf(
+//                                    fd);
+//                                FundingDetail disbOrder = eaForm.getFundingDetail(
+//                                    index);
+//                                List<IPAContract> contracts=eaForm.getContracts().getContracts();
+//                                disbOrder.setContract(contracts.get(conId-1));
+//                                eaForm.getFunding().setEvent(null);
+//                                request.setAttribute("close", "close");
+//                        }
+//                           
+//                        return mapping.findForward("forward");
 
           }
 

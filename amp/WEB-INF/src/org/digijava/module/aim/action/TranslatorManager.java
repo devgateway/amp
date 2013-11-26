@@ -42,7 +42,7 @@ import org.digijava.module.translation.jaxb.Trn;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.util.Arrays;
 
 //TODO replaced with ImportExportTranslations.java in translator module. Remove this file. see AMP-9085
 @Deprecated

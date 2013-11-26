@@ -17,22 +17,23 @@ public class AddDisbOrderToDisb  extends Action {
         public ActionForward execute(ActionMapping mapping, ActionForm form,
                         HttpServletRequest request, HttpServletResponse response)
                         throws java.lang.Exception {
-                        EditActivityForm eaForm = (EditActivityForm) form;
-                        String event=eaForm.getFunding().getEvent();
-                        if(event.equals("Add")){
-                                long indexId = eaForm.getFunding().getTransIndexId();
-                                FundingDetail fd = new FundingDetail();
-                                fd.setIndexId(indexId);
-                                int index = eaForm.getFunding().getFundingDetails().indexOf(
-                                    fd);
-                                FundingDetail disb = eaForm.getFundingDetail(
-                                    index);
-                                disb.setDisbOrderId(eaForm.getFunding().getDisbOrderId());
-                                eaForm.getFunding().setEvent(null);
-                                request.setAttribute("close", "close");
-                        }
-                        return mapping.findForward("forward");
-
+        	throw new RuntimeException("not implemented");
+//                        EditActivityForm eaForm = (EditActivityForm) form;
+//                        String event=eaForm.getFunding().getEvent();
+//                        if(event.equals("Add")){
+//                                long indexId = eaForm.getFunding().getTransIndexId();
+//                                FundingDetail fd = new FundingDetail();
+//                                fd.setIndexId(indexId);
+//                                int index = eaForm.getFunding().getFundingDetails().indexOf(
+//                                    fd);
+//                                FundingDetail disb = eaForm.getFundingDetail(
+//                                    index);
+//                                disb.setDisbOrderId(eaForm.getFunding().getDisbOrderId());
+//                                eaForm.getFunding().setEvent(null);
+//                                request.setAttribute("close", "close");
+//                        }
+//                        return mapping.findForward("forward");
+//
           }
 
 }

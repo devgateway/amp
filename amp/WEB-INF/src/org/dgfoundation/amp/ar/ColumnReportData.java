@@ -133,7 +133,7 @@ public class ColumnReportData extends ReportData<Column> {
     	
     	for(Column column:this.getColumns())
     	{
-    		if ((column instanceof CellColumn) && ((CellColumn) column).extractorView.equals("v_mtef_funding"))
+    		if ((column instanceof CellColumn) && ((CellColumn) column).extractorView !=null && ((CellColumn) column).extractorView.equals("v_mtef_funding"))
     		{
     			res.add(column);
     		}

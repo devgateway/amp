@@ -43,7 +43,7 @@ public class RejectVersion extends Action {
 			}
 			prevVersion			= v;
 		}
-		DocumentManagerUtil.logoutJcrSessions(request.getSession());
+		DocumentManagerUtil.logoutJcrSessions(request);
 		return null;
 	}
 }

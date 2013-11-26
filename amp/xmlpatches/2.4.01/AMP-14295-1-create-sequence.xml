@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-14295</jira>
+    <keyword>Sequence</keyword>
+    <author>Volodymyr Lymanskyi</author>
+    <description>
+        Create sequence and associate it with the table column
+        The function is dynamic: i.e. it's NOT tied to a table or a sequence name
+        It can be used by other patches
+    </description>
+    <apply>
+        <script>
+            <lang delimiter="@" type="postgres">
+
+                CREATE OR REPLACE FUNCTION create_sequence(seqName TEXT, tableName TEXT, columnName TEXT)
+                    RETURNS bigint AS $BODY$
+
+                    BEGIN
+                        IF NOT EXISTS (SELECT 0 FROM pg_class where relname = seqName ) THEN
+                            EXECUTE format('create sequence %I', seqName);
+                            EXECUTE format('ALTER TABLE %I ALTER COLUMN %I SET DEFAULT nextval(''%s'')', tableName, columnName, seqName);
+                    END IF;
+                    return 0;
+                END;
+                $BODY$
+                LANGUAGE plpgsql VOLATILE@
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

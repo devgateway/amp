@@ -61,29 +61,29 @@ public class FinancingBreakdownWorker
 		return "";
 	}
 
-	public static String getTotalDonorDisbursement(Long ampFundingId,
-												   double fromExchangeRate,
-												   double toExchangeRate)
-	{
-		Integer trsType = new Integer(Constants.DISBURSEMENT) ;
-		Integer adjType = new Integer(Constants.ACTUAL) ;
-		double total = DbUtil.getTotalDonorFund(ampFundingId,trsType,adjType) ;
-		String strTotal = CurrencyWorker.convert(total,fromExchangeRate,toExchangeRate) ;
-		if ( logger.isDebugEnabled() )
-		logger.debug("getTotalDonorDisbursement() strTotal " + strTotal ) ;
-		return strTotal ;
-	}
-
-	public static String getTotalDonorExpenditure(Long ampFundingId,
-												  double fromExchangeRate,
-	 											  double toExchangeRate)
-	{
-		Integer trsType = new Integer(Constants.EXPENDITURE) ;
-		Integer adjType = new Integer(Constants.ACTUAL) ;
-		double total = DbUtil.getTotalDonorFund(ampFundingId,trsType,adjType) ;
-		String strTotal =  CurrencyWorker.convert(total,fromExchangeRate,toExchangeRate) ;
-		return strTotal ;
-	}
+//	public static String getTotalDonorDisbursement(Long ampFundingId,
+//												   double fromExchangeRate,
+//												   double toExchangeRate)
+//	{
+//		Integer trsType = new Integer(Constants.DISBURSEMENT) ;
+//		Integer adjType = new Integer(Constants.ACTUAL) ;
+//		double total = DbUtil.getTotalDonorFund(ampFundingId,trsType,adjType) ;
+//		String strTotal = CurrencyWorker.convert(total,fromExchangeRate,toExchangeRate) ;
+//		if ( logger.isDebugEnabled() )
+//		logger.debug("getTotalDonorDisbursement() strTotal " + strTotal ) ;
+//		return strTotal ;
+//	}
+//
+//	public static String getTotalDonorExpenditure(Long ampFundingId,
+//												  double fromExchangeRate,
+//	 											  double toExchangeRate)
+//	{
+//		Integer trsType = new Integer(Constants.EXPENDITURE) ;
+//		Integer adjType = new Integer(Constants.ACTUAL) ;
+//		double total = DbUtil.getTotalDonorFund(ampFundingId,trsType,adjType) ;
+//		String strTotal =  CurrencyWorker.convert(total,fromExchangeRate,toExchangeRate) ;
+//		return strTotal ;
+//	}
 
 	public static String getOverallTotal(Collection c,int type, int adjustmentType,boolean isDebug)
 	{

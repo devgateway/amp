@@ -38,7 +38,7 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ProposedProjCostHelper;
 import org.digijava.module.gateperm.core.GatePermConst;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 public class ViewFinancingBreakdown extends TilesAction {
 	private static Logger logger = Logger.getLogger(ViewFinancingBreakdown.class);

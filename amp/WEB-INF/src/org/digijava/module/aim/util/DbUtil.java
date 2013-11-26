@@ -303,8 +303,9 @@ public class DbUtil {
 	 * @param teamId
 	 *            The team id of the team to which the reports are to be
 	 *            assigned
+	 * @param teamMemberId the teamMemer           
 	 */
-	public static void addTeamReports(Long reportId[], Long teamId) {
+	public static void addTeamReports(Long reportId[], Long teamId,Long ampMemberId) {
 		Session session = null;
 		Transaction tx = null;
 
@@ -360,9 +361,26 @@ public class DbUtil {
 								session.save(tr);
 							}
 						}
+						
+//						//here we should 
+
+						AmpTeamMember ampTeamMember =null;
+						//if(report.getOwnerId()!=null){
+						//	ampTeamMember=(AmpTeamMember) session.get(AmpTeamMember.class, report.getOwnerId().getAmpTeamMemId());	
+						//}else {
+							ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);	
+						//}					
+						Set reportSet = ampTeamMember.getReports();
+						//reportSet.add(ampReports);  // Not needed because it is set from ampReports object
+						report.getMembers().add(ampTeamMember);
+						session.saveOrUpdate(ampTeamMember);						
+						
 					}
 				}
 			}
+			
+
+			
 			// tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from addTeamReports()");
@@ -658,9 +676,9 @@ public class DbUtil {
 		return docs;
 	}
 
-	public static Collection getKnowledgeDocuments(Long id) {
+	public static List<org.digijava.module.aim.helper.Documents> getKnowledgeDocuments(Long id) {
 		Session session = null;
-		Collection docs = new ArrayList();
+		List<org.digijava.module.aim.helper.Documents> docs = new ArrayList<org.digijava.module.aim.helper.Documents>();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
@@ -1549,7 +1567,7 @@ public class DbUtil {
 		Session session = null;
 		Query q = null;
 		Collection c = null;
-		Collection ret = new ArrayList();
+		List<Object[]> ret = new ArrayList<Object[]>();
 		Integer trsType = new Integer(transactionType);
 		Integer adjType = new Integer(adjustmentType);
 
@@ -1600,11 +1618,10 @@ public class DbUtil {
 			}
 
 		} catch (Exception ex) {
-			logger.error("Unable to get quarterly data from database", ex);
-		}
+			logger.error("Unable to get quarterly data from database", ex);		
+		}	
 
-		logger.debug("getQuarterlyData() returning a list of size : "
-				+ c.size());
+		logger.debug("getQuarterlyData() returning a list of size : " + ret.size());
 		return ret;
 	}
 
@@ -5048,6 +5065,10 @@ public class DbUtil {
 		return col;		
 	}
 
+	/**
+	 * fetches DONOR org groups of the database portfolio
+	 * @return
+	 */
 	public static Collection<AmpOrgGroup> getAllOrgGroupsOfPortfolio() {
 		if (AmpCaching.getInstance().allOrgGroupsOfPortfolio != null)
 			return new ArrayList<AmpOrgGroup>(AmpCaching.getInstance().allOrgGroupsOfPortfolio);
@@ -5224,7 +5245,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String orgGrpName = AmpOrgGroup.hqlStringForName("org");
-			String queryString = "select distinct org from "
+			String queryString = "select org from "
 					+ AmpOrgGroup.class.getName() + " org "
 					+ " where lower(" + orgGrpName + ") like '%" + keyword
 					+ "%') and org.orgType=:orgType";
@@ -7116,7 +7137,7 @@ public class DbUtil {
 			// such long and complicated case is necessary because orgType maybe
 			// empty for organisation
 			AmpOrgType orgType1 = o1.getOrgGrpId().getOrgType();
-			AmpOrgType orgType2 = o1.getOrgGrpId().getOrgType();
+			AmpOrgType orgType2 = o2.getOrgGrpId().getOrgType();
 			if (orgType1 != null && orgType2 != null) {
 				result = new HelperAmpOrgTypeNameComparator().compare(orgType1,
 						orgType2);

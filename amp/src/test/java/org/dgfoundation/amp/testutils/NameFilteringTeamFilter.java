@@ -7,6 +7,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import java.util.*;
 
+import java.util.Arrays;
 
 public class NameFilteringTeamFilter implements StringGenerator {
 

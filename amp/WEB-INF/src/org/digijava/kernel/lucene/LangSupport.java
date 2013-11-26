@@ -62,7 +62,7 @@ public enum LangSupport {
 		//P.S. please do not think this is stupid implementation and I missed ENGLISH.
 		//We do not need ENGLISH because all unsupported languages go 
 		//together with ENGLISH which is kind of default language. 
-		return EnumSet.of(LangSupport.FRENCH, LangSupport.SPANISH, LangSupport.ROMANIAN);
+		return EnumSet.of(LangSupport.FRENCH, LangSupport.SPANISH, LangSupport.ROMANIAN, LangSupport.RUSSIAN );
 	}
 
 	/**

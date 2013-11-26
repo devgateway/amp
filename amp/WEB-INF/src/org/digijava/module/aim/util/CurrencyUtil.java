@@ -787,6 +787,7 @@ public class CurrencyUtil {
 			String queryString = "select c from " + AmpCurrency.class.getName()
 					+ " c " + "where (c.currencyCode=:id)";
 			Query qry = session.createQuery(queryString);
+			qry.setCacheable(true);
 			qry.setParameter("id", currCode, Hibernate.STRING);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
@@ -840,7 +841,7 @@ public class CurrencyUtil {
 		return currency;
 	}
 	
-	public static ArrayList<AmpCurrency> getActiveAmpCurrencyByCode() {
+	public static List<AmpCurrency> getActiveAmpCurrencyByCode() {
 		AmpCurrency ampCurrency = null;
 		Session session = null;
 		Query q = null;
@@ -852,12 +853,8 @@ public class CurrencyUtil {
 			queryString = " select c from " + AmpCurrency.class.getName()
 					+ " c where c.activeFlag='1' order by c.currencyCode";
 			q = session.createQuery(queryString);
-			iter = q.list().iterator();
-
-			while (iter.hasNext()) {
-				ampCurrency = iter.next();
-				currency.add(ampCurrency);
-			}
+			q.setCacheable(true);
+			return (List<AmpCurrency>) q.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get currency " + ex);
 		}
@@ -1372,14 +1369,22 @@ public class CurrencyUtil {
 	}
 
 	/**
-	 * returns default currency if no team member logged in
+     * Returns workspace settings currency or
+	 * returns default currency if no team member logged in or the currency is not set in the workspace settings
 	 * @param tm
 	 * @return
 	 */
 	public static AmpCurrency getWorkspaceCurrency(TeamMember tm) {
-		if ((tm != null) && (tm.getAppSettings() != null))
-			return getAmpcurrency(tm.getAppSettings().getCurrencyId());
-		return getDefaultCurrency();		
+		AmpCurrency currency = null;
+		if (tm != null && tm.getAppSettings() != null) {
+			currency = getAmpcurrency(tm.getAppSettings().getCurrencyId());
+			if (currency != null) {
+				return currency;
+			}
+
+			return getDefaultCurrency();
+		}
+		return getDefaultCurrency();
 	}
 
 	/**

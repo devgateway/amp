@@ -950,6 +950,10 @@ function getActivities(clear) {
 	}
 	// Call the asynchronous xhrGet
 	var deferred = dojo.xhrGet(xhrArgs);
+	closeHide("highlightLegend");
+	if (highlightson == true){
+		highlightson =false;
+	} 
 	
 }
 /**
@@ -1377,7 +1381,7 @@ function addResultsToMap(featureSet) {
 	map.reorderLayer(map.getLayer("highlightMap"), 0);
 	map.setExtent(map.extent.expand(1.01));
 	hideLoading();
-	var currencyCode;
+	var currencyCode="";
 	for ( var j = 0; j < locations.length; j++) {
 		var currentLocation = locations[j];
 		if (currentLocation.amountsCurrencyCode != "") {
@@ -1420,7 +1424,7 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode) {
 	htmlDiv +=  "<br/><hr/></div>";
 	for ( var i = 4; i >= 0 ; i--) {
 		htmlDiv += "<div class='legendContentContainer'>"
-				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i]) + "></div>" + "</div>"
+				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i+1]) + "></div>" + "</div>"
 				+ "<div class='legendContentLabel'>"
 				+ df.format(Math.ceil(rangeColors[x])) + " "
 				+ currencyString + " - "

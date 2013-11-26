@@ -81,7 +81,7 @@ public class GetVersionsForDocumentManager extends Action {
 				
 			}
 		}
-		DocumentManagerUtil.logoutJcrSessions(request.getSession());
+		DocumentManagerUtil.logoutJcrSessions(request);
 		return mapping.findForward("forward");
 	}
 	

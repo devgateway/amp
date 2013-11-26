@@ -60,7 +60,13 @@ DHTMLSuite.modalMessage = function()
 	DHTMLSuite.variableStorage.arrayOfDhtmlSuiteObjects[this.objectIndex] = this;
 	var ind = this.objectIndex;
 	
-	DHTMLSuite.commonObj.addEvent(window,"resize",function() { DHTMLSuite.variableStorage.arrayOfDhtmlSuiteObjects[ind].__resizeTransparentDiv(); });	
+	var variableStorage = DHTMLSuite.variableStorage;
+	
+	DHTMLSuite.commonObj.addEvent(window,"resize",function() {
+		if(variableStorage != undefined){
+			variableStorage.arrayOfDhtmlSuiteObjects[ind].__resizeTransparentDiv();
+		}
+	});	
 	
 	
 }

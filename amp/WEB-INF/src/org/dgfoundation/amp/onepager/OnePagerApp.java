@@ -34,6 +34,7 @@ import org.dgfoundation.amp.onepager.util.JspResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import javax.servlet.http.HttpServletRequest;
@@ -212,9 +213,17 @@ public class OnePagerApp extends AuthenticatedWebApplication {
                 public void onBeginRequest(RequestCycle cycle){
                     if (cycle.getRequest().getContainerRequest() instanceof HttpServletRequest){
                         HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest().getContainerRequest();
-                        //TLSUtils.populate(containerRequest);
+                        TLSUtils.populate(containerRequest);
+                        DocumentManagerUtil.initJCRSessions(containerRequest);
                     }
                 };
+                public void onEndRequest(RequestCycle cycle){
+                    if (cycle.getRequest().getContainerRequest() instanceof HttpServletRequest){
+                        HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest().getContainerRequest();
+                        DocumentManagerUtil.closeJCRSessions(containerRequest);
+
+                    }                	
+                }
             }
         );
 

@@ -3,14 +3,25 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * @author jose
+ * 
+ * funding digest for an AmpFunding instance
  *
  */
 public class Funding implements Serializable 
@@ -28,8 +39,8 @@ public class Funding implements Serializable
 	private String sourceRole;
 	private String signatureDate;
 	//private AmpModality modality;
-	private Collection<FundingDetail> fundingDetails;	// Collection of Funding Details
-	private Collection<MTEFProjection> mtefProjections;
+	private List<FundingDetail> fundingDetails;	// Collection of Funding Details
+//	private Collection<MTEFProjection> mtefProjections;
    	private String currentFunding;
    	private String propStartDate;
    	private String propCloseDate;
@@ -39,7 +50,7 @@ public class Funding implements Serializable
    	private String conditions;
    	private String donorObjective;
 
-	private Collection ampFundingDetails;
+	private List<FundingInformationItem> ampRawFunding;
 
 	private String subtotalActualCommitments;
 	private String subtotalPlannedCommitments;
@@ -61,6 +72,7 @@ public class Funding implements Serializable
 	private String subtotalPlannedEDD;
 	private String subtotalPipelineEDD;
 	private String subtotalEDD;
+	private String subtotalMTEFs;
 	private String undisbursementbalance;
 	private String title;
 	private String code;
@@ -108,10 +120,10 @@ public class Funding implements Serializable
 	public void setSignatureDate(String signatureDate) {
 		this.signatureDate = signatureDate;
 	}
-    public Collection<FundingDetail> getFundingDetails() {
+    public List<FundingDetail> getFundingDetails() {
         return fundingDetails;
     }
-    public void setFundingDetails(Collection fundingDetails) {
+    public void setFundingDetails(List<FundingDetail> fundingDetails) {
         this.fundingDetails = fundingDetails;
     }
     public long getFundingId() {
@@ -219,13 +231,13 @@ public class Funding implements Serializable
 		throw new ClassCastException();
 	}
 
-	public Collection<MTEFProjection> getMtefProjections() {
-		return mtefProjections;
-	}
-
-	public void setMtefProjections(Collection<MTEFProjection> mtefProjections) {
-		this.mtefProjections = mtefProjections;
-	}
+//	public Collection<MTEFProjection> getMtefProjections() {
+//		return mtefProjections;
+//	}
+//
+//	public void setMtefProjections(Collection<MTEFProjection> mtefProjections) {
+//		this.mtefProjections = mtefProjections;
+//	}
 	
 	public String getSubtotalActualCommitments(){
 		
@@ -276,6 +288,16 @@ public class Funding implements Serializable
 		
 		this.subtotalExpenditures = s;
 	}
+	
+	public String getSubtotalMTEFs()
+	{
+		return this.subtotalMTEFs;
+	}
+	
+	public void setSubtotalMTEFs(String s)
+	{
+		this.subtotalMTEFs = s;
+	}
 
 	public void setSubtotalActualDisbursementsOrders(
 			String s) {
@@ -321,12 +343,26 @@ public class Funding implements Serializable
 		this.subtotalPipelineExpenditures = subtotalPipelineExpenditures;
 	}
 
-	public void setAmpFundingDetails(Collection fundDetails) {
-		this.ampFundingDetails = fundDetails;
+	public void populateAmpRawFunding(AmpFunding fundingSource) 
+	{
+		ArrayList<FundingInformationItem> funding = new ArrayList<FundingInformationItem>();
+		
+		if (fundingSource.getFundingDetails() != null)
+			funding.addAll(fundingSource.getFundingDetails());
+		
+		if (fundingSource.getMtefProjections() != null)
+			funding.addAll(fundingSource.getMtefProjections());
+		
+		this.ampRawFunding = funding;
 	}
 
-	public Collection getAmpFundingDetails() {
-		return this.ampFundingDetails;
+	public void cleanAmpRawFunding()
+	{
+		this.ampRawFunding = null;
+	}
+	
+	public List<FundingInformationItem> getAmpRawFunding() {
+		return this.ampRawFunding;
 	}
 
 	public void setUnDisbursementBalance(String formatNumber) {
@@ -413,6 +449,11 @@ public class Funding implements Serializable
 			return retDetails;
 		}
 		return null;		
+	}
+	
+	public Collection<FundingDetail> getMtefDetails()
+	{
+		return filterFundings(Constants.MTEFPROJECTION);
 	}
 	
 	public Collection<FundingDetail> getPlannedCommitmentsDetails() {
@@ -613,6 +654,146 @@ public class Funding implements Serializable
 		
 		this.subtotalPipelineEDD = s;
 	}	
+	
+	  /**
+	   * returns a funding item built and with all its' currency Codes overwritten to a single one
+	   * WARNING, BUG! CurrencyName is not overwritten
+	   * WARNING 2, BUG 2 - MTEF projections do not have their currency updated anyway - only the totals are
+	   * @param ampFunding
+	   * @param activityTotalCalculations
+	   * @param toCurrCode
+	   * @param isPreview
+	   * @param tm
+	   * @return
+	   */
+	  public Funding(AmpFunding ampFunding, FundingCalculationsHelper activityTotalCalculations, String toCurrCode, boolean changeToWorkspaceCurrency, TeamMember tm)
+	  {
+		  //Funding funding = new Funding();
+
+		  //fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
+		  this.setTypeOfAssistance(ampFunding.getTypeOfAssistance());
+		  this.setFinancingInstrument(ampFunding.getFinancingInstrument());
+		  this.setFundingStatus(ampFunding.getFundingStatus());
+		  this.setModeOfPayment(ampFunding.getModeOfPayment());
+
+		  this.setActStartDate(DateConversion.ConvertDateToString(ampFunding.getActualStartDate()));
+		  this.setActCloseDate(DateConversion.ConvertDateToString(ampFunding.getActualCompletionDate()));
+
+		  this.setFundingId(ampFunding.getAmpFundingId().longValue());
+		  this.setGroupVersionedFunding(ampFunding.getGroupVersionedFunding());
+		  this.setOrgFundingId(ampFunding.getFinancingId());
+
+		  if (ampFunding.getSourceRole() != null)
+			  this.setSourceRole(ampFunding.getSourceRole().getName());
+
+		  this.setConditions(ampFunding.getConditions());
+		  this.setDonorObjective(ampFunding.getDonorObjective());
+		  this.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
+		  if(ampFunding.getAgreement() != null){
+			  this.setTitle(ampFunding.getAgreement().getTitle());
+			  this.setCode(ampFunding.getAgreement().getCode());
+		  }
+		  else{
+			  this.setCode("");
+			  this.setTitle("");
+		  }
+
+//		  /* Get MTEF Projections */
+//		  ArrayList<MTEFProjection> mtefProjections = new ArrayList<MTEFProjection>();
+//		  if (ampFunding.getMtefProjections() != null)
+//		  {
+//			  Iterator<AmpFundingMTEFProjection> iterMtef	= ampFunding.getMtefProjections().iterator();
+//			  while ( iterMtef.hasNext() )
+//			  {
+//				  AmpFundingMTEFProjection ampProjection		= iterMtef.next();
+//				  MTEFProjection	projection					= new MTEFProjection();
+//
+//				  projection.setAmount( FormatHelper.formatNumber(ampProjection.getAmount()) + "" );
+//				  if ( ampProjection.getProjected() != null )
+//					  projection.setProjected( ampProjection.getProjected().getId() );
+//				  else
+//					  logger.error("Projection with date " + ampProjection.getProjectionDate() + " has no type (neither projection nor pipeline) !!!!");
+//
+//				  projection.setCurrencyCode( ampProjection.getAmpCurrency().getCurrencyCode() );
+//				  projection.setCurrencyName( ampProjection.getAmpCurrency().getCurrencyName() );
+//				  if (ampProjection.getProjectionDate() != null) {
+//					  projection.setProjectionDate(DateConversion.ConvertDateToString(ampProjection.getProjectionDate()));
+//					  // projection.setIndex();
+//					  projection.setAmpFunding( ampProjection.getAmpFunding() );
+//					  mtefProjections.add(projection);
+//				  }
+//			  }
+//		  }
+//
+//		  Collections.sort(mtefProjections);
+//		  this.setMtefProjections(mtefProjections);
+//		  /* END - Get MTEF Projections */
+
+		  //Collection<AmpFundingDetail> fundDetails = ampFunding.getFundingDetails();
+
+		  String currencyCode;
+		  if (tm != null) {
+			  currencyCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
+		  }
+		  else {
+			  currencyCode = Constants.DEFAULT_CURRENCY;
+		  }
+
+		  if (true) // we might also have MTEFs, so no reason to do the "if". Plus, anyway, this will be a NOP if there are no fundings inside
+		  {
+			  //  Iterator fundDetItr = fundDetails.iterator();
+			  // long indexId = System.currentTimeMillis();
+
+			  activityTotalCalculations.doCalculations(ampFunding, toCurrCode);
+
+			  List<FundingDetail> fundDetail = activityTotalCalculations.getFundDetailList();
+			  if (changeToWorkspaceCurrency)
+			  {
+				  Iterator<FundingDetail> fundingIterator = fundDetail.iterator();
+				  while(fundingIterator.hasNext())
+				  {
+					  FundingDetail currentFundingDetail = fundingIterator.next();
+
+					  currentFundingDetail.getContract();
+					  Double currencyAppliedAmount;
+
+					  if(currentFundingDetail.getFixedExchangeRate() == null)
+					  {
+
+						  currencyAppliedAmount			= getAmountInCurrency(currentFundingDetail, currencyCode );
+					  }
+					  else
+					  {
+						  Double fixedExchangeRate = FormatHelper.parseDouble( currentFundingDetail.getFixedExchangeRate() );
+						  currencyAppliedAmount = CurrencyWorker.convert1(FormatHelper.parseDouble(currentFundingDetail.getTransactionAmount()),fixedExchangeRate,1);
+					  }
+					  String currentAmount = FormatHelper.formatNumber(currencyAppliedAmount);
+					  currentFundingDetail.setTransactionAmount(currentAmount);
+					  currentFundingDetail.setCurrencyCode( currencyCode );
+
+				  }
+			  }
+
+			  if (fundDetail != null)
+				  Collections.sort(fundDetail, FundingValidator.dateComp);
+
+			  this.setFundingDetails(fundDetail);
+			  this.populateAmpRawFunding(ampFunding);
+		              // funding.add(fund);
+		  }
+	  }
+	  
+	  private double getAmountInCurrency(FundingDetail fundDet, String toCurrCode ) 
+	  {
+		  java.sql.Date dt = new java.sql.Date(DateConversion.getDate(fundDet.getTransactionDate()).getTime());
+		  double frmExRt = Util.getExchange(fundDet.getCurrencyCode(),dt);
+		  // String toCurrCode = CurrencyUtil.getAmpcurrency( appSet.getCurrencyId() ).getCurrencyCode();
+		  double toExRt = Util.getExchange(toCurrCode, dt);
+		  
+		  double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
+		  return amt;
+	  }
+
 }
 
 

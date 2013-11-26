@@ -12,59 +12,46 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
+<!-- mtefs -->
 <digi:instance property="aimEditActivityForm" />
 
-<c:if test="${!empty funding.mtefProjections}">
-    <tr bgcolor="#FFFFCC">
-        <td colspan="4" style="text-transform: uppercase">
-            <a><digi:trn key="aim:plannedexpenditures">MTEF Projections</digi:trn></a>
-        </td>
-    </tr>
+<c:if test="${!empty funding.mtefDetails}">
+	<tr bgcolor="#FFFFCC">
+		<td colspan="3" style="text-transform: uppercase">
+			<a title='<digi:trn>Medium-Term Expenditure Framework Projections</digi:trn>'>
+				<digi:trn>MTEF Projections</digi:trn>:
+			</a>
+		</td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>		
+	</tr>
+	<c:if test="${!empty funding.fundingDetails}">
+	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+		<logic:equal name="fundingDetail" property="transactionType" value="3">
+				<%@include file="previewActivityFundingDetail.jspf" %>
+			</logic:equal>
+		<%-- </logic:equal> --%>
+	</logic:iterate>
+	</c:if>
+	<tr>
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+			<digi:trn>Subtotal MTEFs</digi:trn>:
+		</td>
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+			<c:if test="${not empty funding.subtotalMTEFs}">
+ 				<b>${funding.subtotalMTEFs} ${aimEditActivityForm.currCode}</b>
+ 			</c:if> &nbsp;
+           </td>
+		<%-- <td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td> --%>
+	</tr>
+</c:if> 
+<%--	</c:if>--%>
+	<tr>
+		<td colspan="5" height="7px"></td>
+	</tr>
 
-    <logic:iterate name="funding" property="mtefProjections"
-        id="projection" type="org.digijava.module.aim.helper.MTEFProjection">
-         <tr bgcolor="#ffffff">
-            <td align="right" bgcolor="#FFFFFF">
-                <module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/MTEF Projection"
-                       parentModule="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table">
-                    <c:set var="PROJECTION_ID"><%= org.digijava.module.aim.helper.MTEFProjection.PROJECTION_ID %></c:set>
-                    <c:set var="PIPELINE_ID"><%= org.digijava.module.aim.helper.MTEFProjection.PIPELINE_ID %></c:set>
-                    <c:choose>
-                        <c:when test="${PROJECTION_ID eq projection.projected}">
-                            <b><digi:trn>Projected</digi:trn></b>
-                        </c:when>
-                        <c:when test="${PIPELINE_ID eq projection.projected}">
-                            <b><digi:trn>Pipeline</digi:trn></b>
-                        </c:when>
-                    </c:choose>
-                </module:display>
-             </td>
-
-             <td align="right">
-                 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Projection Date"
-                                 parentModule="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table">
-                     <b>${projection.projectionDate}</b>
-                 </module:display>&nbsp;
-             </td>
-
-             <td align="right" bgcolor="#FFFFFF">
-                <module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Amount"
-                                parentModule="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table">
-                    <b>${projection.amount}</b>&nbsp;
-                </module:display>
-                <module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Currency"
-                                parentModule="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table">
-                    <b>${projection.currencyCode}</b>
-                </module:display>&nbsp;
-             </td>
-         </tr>
-    </logic:iterate>
-
-</c:if>
-
-<tr>
-    <td colspan="4" height="7px"></td>
-</tr>
-
-
+<!-- MTEFs end -->
 

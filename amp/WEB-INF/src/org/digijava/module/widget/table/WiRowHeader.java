@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.digijava.module.widget.table.util.TableWidgetUtil;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 /**
  * Header row of the table widget.

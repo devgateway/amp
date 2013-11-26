@@ -1753,6 +1753,17 @@ public class AmpARFilter extends PropertyListable {
 
     }
 
+	/**
+	 * computes the effectively-used currency name: if one is set, then its name is returned, else the user/workspace/system default
+	 * @return
+	 */
+	public AmpCurrency getUsedCurrency()
+	{
+		if (getCurrency() != null)
+			return getCurrency();
+		else
+			return getDefaultCurrency();
+	}
 	
 	/**
 	 * computes the name of the effectively-used currency name: if one is set, then its name is returned, else the user/workspace/system default
@@ -1760,10 +1771,7 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public String getUsedCurrencyName()
 	{
-		if (getCurrency() != null)
-			return getCurrency().getCurrencyName();
-		else
-			return getDefaultCurrency().getCurrencyName();
+		return getUsedCurrency().getCurrencyName();
 	}
 	
 	/**

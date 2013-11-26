@@ -692,29 +692,32 @@ public class ExportActivityToPDF extends Action {
 			}					
 			
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras", ampContext)){
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY", ampContext)){
-					columnName=TranslatorWorker.translateText("FY");
-					createGeneralInfoRow(mainLayout,columnName,identification.getFY());
-				}
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Ministry Code", ampContext)){
-					columnName=TranslatorWorker.translateText("Ministry Code");
-					createGeneralInfoRow(mainLayout,columnName,identification.getMinistryCode());
-				}
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Project Code", ampContext)){
-					columnName=TranslatorWorker.translateText("Project Code");
-					createGeneralInfoRow(mainLayout,columnName,identification.getProjectCode());
-				}
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Vote", ampContext)){
-					columnName=TranslatorWorker.translateText("Vote");
-					createGeneralInfoRow(mainLayout,columnName,identification.getVote());
-				}
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Vote", ampContext)){
-					columnName=TranslatorWorker.translateText("Sub-Vote");
-					createGeneralInfoRow(mainLayout,columnName,identification.getSubVote());					
-				}
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Program", ampContext)){
-					columnName=TranslatorWorker.translateText("Sub-Program");
-					createGeneralInfoRow(mainLayout,columnName,identification.getSubProgram());
+				//AMP-16421
+				if(identification.getBudgetCV()==identification.getBudgetCVOn()){				
+					if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY", ampContext)){
+						columnName=TranslatorWorker.translateText("FY");
+						createGeneralInfoRow(mainLayout,columnName,identification.getFY());
+					}
+					if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Ministry Code", ampContext)){
+						columnName=TranslatorWorker.translateText("Ministry Code");
+						createGeneralInfoRow(mainLayout,columnName,identification.getMinistryCode());
+					}
+					if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Project Code", ampContext)){
+						columnName=TranslatorWorker.translateText("Project Code");
+						createGeneralInfoRow(mainLayout,columnName,identification.getProjectCode());
+					}
+					if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Vote", ampContext)){
+						columnName=TranslatorWorker.translateText("Vote");
+						createGeneralInfoRow(mainLayout,columnName,identification.getVote());
+					}
+					if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Vote", ampContext)){
+						columnName=TranslatorWorker.translateText("Sub-Vote");
+						createGeneralInfoRow(mainLayout,columnName,identification.getSubVote());					
+					}
+					if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Program", ampContext)){
+						columnName=TranslatorWorker.translateText("Sub-Program");
+						createGeneralInfoRow(mainLayout,columnName,identification.getSubProgram());
+					}
 				}
 			}
 
@@ -825,41 +828,42 @@ public class ExportActivityToPDF extends Action {
 					}
 				}
 				
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Proposed Start Date")+ "\t: " + myForm.getPlanning().getOriginalStartDate()+"\n";
-				}
-
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Actual Start Date ")+ "\t: " +myForm.getPlanning().getRevisedStartDate() +"\n";
-				}
-
+				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Proposed Approval Date ")+ "\t: " + myForm.getPlanning().getOriginalAppDate()+"\n";
 				}
-				
+
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Actual Approval Date ")+ "\t: " + myForm.getPlanning().getRevisedAppDate()+"\n";
 				}
 				
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Final Date for Contracting ")+ "\t: " + myForm.getPlanning().getContractingDate()+"\n";
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext)){
+					outputValue+=TranslatorWorker.translateText("Proposed Start Date")+ "\t: " + myForm.getPlanning().getOriginalStartDate()+"\n";
+				}
+					
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date", ampContext)){
+					outputValue+=TranslatorWorker.translateText("Actual Start Date ")+ "\t: " +myForm.getPlanning().getRevisedStartDate() +"\n";
 				}
 				
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Final Date for Disbursements ")+ "\t: " + myForm.getPlanning().getDisbursementsDate()+"\n";
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext)){
+					outputValue+=TranslatorWorker.translateText("Original Completion Date", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalCompDate() +"\n";
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getProposedCompDate() +"\n";
 				}
-
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext)){
-                    outputValue+=TranslatorWorker.translateText("Original Completion Date", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalCompDate() +"\n";
-                }
-
+						
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Actual Completion Date", locale, siteId)+ "\t: " + myForm.getPlanning().getCurrentCompDate() +"\n";
 				}
+				
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext)){
+					outputValue+=TranslatorWorker.translateText("Final Date for Contracting ")+ "\t: " + myForm.getPlanning().getContractingDate()+"\n";
+				}
+
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements", ampContext)){
+					outputValue+=TranslatorWorker.translateText("Final Date for Disbursements ")+ "\t: " + myForm.getPlanning().getDisbursementsDate()+"\n";
+				}				
 
 				if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
                     outputValue+=TranslatorWorker.translateText("Duration of Project");
@@ -1278,14 +1282,6 @@ public class ExportActivityToPDF extends Action {
 							TranslatorWorker.translateText("No"));
 
 			}
-			
-			/**
-			 * Data Source
-			 */
-			if(FeaturesUtil.isVisibleField("Data Source", ampContext)){
-				columnName=TranslatorWorker.translateText("Data Source");
-				createGeneralInfoRow(mainLayout,columnName,identification.getActAthAgencySource());
-			}			
 			
 			/**
 			 * Activity updated on
@@ -2199,8 +2195,9 @@ public class ExportActivityToPDF extends Action {
 		PdfPTable relatedDocnested=new PdfPTable(2);
 		relatedDocnested.setTableEvent(event);
 		//documents
-		if(myForm.getDocuments().getCrDocuments()!=null && myForm.getDocuments().getCrDocuments().size()>0 || myForm.getDocuments().getDocumentList()!=null && myForm.getDocuments().getDocumentList().size()>0){				
-			for (Documents doc : (Collection<Documents>)myForm.getDocuments().getDocuments()) {
+		if(myForm.getDocuments().getCrDocuments()!=null && myForm.getDocuments().getCrDocuments().size()>0 || myForm.getDocuments().getDocuments() != null && myForm.getDocuments().getDocuments().size()>0)
+		{
+			for (Documents doc : myForm.getDocuments().getDocuments()) {
 				if(doc.getIsFile()){						
 					//document fields						
 					PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(postprocessText(doc.getTitle()))+"- \t",plainFont));
@@ -2747,16 +2744,17 @@ public class ExportActivityToPDF extends Action {
 							fundingTable.addCell(donorObjCell2);
 						}
 						//Funding conditions
-						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Conditions", ampContext)){								
-							PdfPCell condCell1=new PdfPCell();
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions", ampContext)){
+							PdfPCell condCell1 = new PdfPCell();
 							condCell1.setBackgroundColor(new Color(221,221,221));
 							condCell1.setBorder(0);
-							p1=new Paragraph(TranslatorWorker.translateText("Conditions")+":",plainFont);
+                            condCell1.setColspan(2);
+							p1 = new Paragraph(TranslatorWorker.translateText("Conditions")+":", plainFont);
 							condCell1.addElement(p1);
 							fundingTable.addCell(condCell1);
 							//meaning
-							PdfPCell condCell2=new PdfPCell();
-							p1=new Paragraph(funding.getConditions(),plainFont);						
+							PdfPCell condCell2 = new PdfPCell();
+							p1 = new Paragraph(funding.getConditions(), plainFont);
 							condCell2.addElement(p1);
 							condCell2.setBorder(0);
 							condCell2.setColspan(2);
@@ -2792,7 +2790,6 @@ public class ExportActivityToPDF extends Action {
 							agreementCell2.setColspan(2);
 							agreementCell2.setBackgroundColor(new Color(221,221,221));
 							fundingTable.addCell(agreementCell2);
-							
 						}
 											
 						if (visibleModuleCommitments) {
@@ -2843,26 +2840,28 @@ public class ExportActivityToPDF extends Action {
 							createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL COMMITMENTS:", funding.getSubtotalActualCommitments(), currencyCode);
 							
 							//pipeline commitments
-							output=TranslatorWorker.translateText("PIPELINE COMMITMENTS");
-							if(myForm.getFunding().isFixerate() && visibleCommitmentsExchRate){
-								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
-							}
-							PdfPCell plCommCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
-							plCommCell2.setBorder(0);
-							plCommCell2.setBackgroundColor(new Color(255,255,204));
-							plCommCell2.setColspan(4);
-							fundingTable.addCell(plCommCell2);
-						
-							if(funding.getFundingDetails()!=null){
-							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
-								if(fd.getTransactionType()== Constants.COMMITMENT){
-									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
-										buildFundingInfoInnerTable(fundingTable, fd,fundingCommitmentsFMfields,ampContext);
-									}
+							if (myForm.getFunding().isShowPipeline()) {
+								output=TranslatorWorker.translateText("PIPELINE COMMITMENTS");
+								if(myForm.getFunding().isFixerate() && visibleCommitmentsExchRate){
+									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 								}
-							}
-
-							createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE COMMITMENTS:", funding.getSubtotalPipelineCommitments(), currencyCode);
+								PdfPCell plCommCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+								plCommCell2.setBorder(0);
+								plCommCell2.setBackgroundColor(new Color(255,255,204));
+								plCommCell2.setColspan(4);
+								fundingTable.addCell(plCommCell2);
+							
+								if(funding.getFundingDetails()!=null){
+									for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+										if(fd.getTransactionType()== Constants.COMMITMENT){
+											if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+												buildFundingInfoInnerTable(fundingTable, fd,fundingCommitmentsFMfields,ampContext);
+											}
+										}
+									}
+	
+								createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE COMMITMENTS:", funding.getSubtotalPipelineCommitments(), currencyCode);
+								}
 							}
 						}
 					}
@@ -2917,25 +2916,27 @@ public class ExportActivityToPDF extends Action {
 									createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL DISBURSEMENT:", funding.getSubtotalDisbursements(), currencyCode);
 									
 									//pipeline disbursement
-									output=TranslatorWorker.translateText("PIPELINE DISBURSEMENT:");
-									if(myForm.getFunding().isFixerate()){
-										output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
-									}
-									PdfPCell actDisbCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
-									actDisbCell2.setBorder(0);
-									actDisbCell2.setBackgroundColor(new Color(255,255,204));
-									actDisbCell2.setColspan(4);
-									fundingTable.addCell(actDisbCell2);
-									
-									for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
-										if(fd.getTransactionType()== Constants.DISBURSEMENT){
-											if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
-												buildFundingInfoInnerTable(fundingTable, fd,fundingDisbursementsFMfields,ampContext);
+									if (myForm.getFunding().isShowPipeline()) {
+										output=TranslatorWorker.translateText("PIPELINE DISBURSEMENT:");
+										if(myForm.getFunding().isFixerate()){
+											output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+										}
+										PdfPCell actDisbCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+										actDisbCell2.setBorder(0);
+										actDisbCell2.setBackgroundColor(new Color(255,255,204));
+										actDisbCell2.setColspan(4);
+										fundingTable.addCell(actDisbCell2);
+										
+										for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+											if(fd.getTransactionType()== Constants.DISBURSEMENT){
+												if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+													buildFundingInfoInnerTable(fundingTable, fd,fundingDisbursementsFMfields,ampContext);
+												}
 											}
 										}
+										
+										createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE DISBURSEMENT:", funding.getSubtotalPipelineDisbursements(), currencyCode);
 									}
-									
-									createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE DISBURSEMENT:", funding.getSubtotalPipelineDisbursements(), currencyCode);
 								}
 							}
 							
@@ -2985,24 +2986,26 @@ public class ExportActivityToPDF extends Action {
 								createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL EXPENDITURES:", funding.getSubtotalExpenditures(), currencyCode);
 								
 								//pipeline expenditures
-								output=TranslatorWorker.translateText("PIPELINE EXPENDITURES:");
-								if(myForm.getFunding().isFixerate()){
-									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
-								}
-								PdfPCell actExpCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
-								actExpCell2.setBorder(0);
-								actExpCell2.setBackgroundColor(new Color(255,255,204));
-								actExpCell2.setColspan(4);
-								fundingTable.addCell(actExpCell2);
-								
-								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
-									if(fd.getTransactionType()== Constants.EXPENDITURE){
-										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
-											buildFundingInfoInnerTable(fundingTable, fd,fundingExpendituresFMfields,ampContext);
-										}
+								if (myForm.getFunding().isShowPipeline()) {
+									output=TranslatorWorker.translateText("PIPELINE EXPENDITURES:");
+									if(myForm.getFunding().isFixerate()){
+										output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 									}
-								}								
-								createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE EXPENDITURES:", funding.getSubtotalPipelineExpenditures(), currencyCode);
+									PdfPCell actExpCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+									actExpCell2.setBorder(0);
+									actExpCell2.setBackgroundColor(new Color(255,255,204));
+									actExpCell2.setColspan(4);
+									fundingTable.addCell(actExpCell2);
+									
+									for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+										if(fd.getTransactionType()== Constants.EXPENDITURE){
+											if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+												buildFundingInfoInnerTable(fundingTable, fd,fundingExpendituresFMfields,ampContext);
+											}
+										}
+									}								
+									createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE EXPENDITURES:", funding.getSubtotalPipelineExpenditures(), currencyCode);
+								}
 							}
 							
 						}
@@ -3156,20 +3159,13 @@ public class ExportActivityToPDF extends Action {
                             fundingTable.addCell(plExpCell1);
 
 
-                            if (funding.getMtefProjections() != null) {
-                                for (MTEFProjection mtefProjection : funding.getMtefProjections()) {
+                            if (funding.getMtefDetails() != null) {
+                                for (FundingDetail mtefProjection : funding.getMtefDetails()) {
                                     PdfPCell innerCell = new PdfPCell();
 
                                     if (FeaturesUtil.isVisibleModule(mtefProjectionFields[0], ampContext)) {
                                         innerCell.setBorder(0);
-                                        String projectedType = "";
-                                        if (MTEFProjection.PROJECTION_ID == mtefProjection.getProjected()) {
-                                            projectedType = "Projection";
-                                        }
-
-                                        if (MTEFProjection.PIPELINE_ID == mtefProjection.getProjected()) {
-                                            projectedType = "Pipeline";
-                                        }
+                                        String projectedType = mtefProjection.getAdjustmentTypeNameTrimmed();
 
                                         innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText(projectedType), plainFont));
                                         innerCell.setBorder(0);
@@ -3179,7 +3175,7 @@ public class ExportActivityToPDF extends Action {
                                     }
 
                                     if (FeaturesUtil.isVisibleModule(mtefProjectionFields[1], ampContext)){
-                                        innerCell = new PdfPCell(new Paragraph(mtefProjection.getProjectionDate(), plainFont));
+                                        innerCell = new PdfPCell(new Paragraph(mtefProjection.getTransactionDate(), plainFont));
                                         innerCell.setBorder(0);
                                         fundingTable.addCell(innerCell);
                                     } else {
@@ -3188,8 +3184,8 @@ public class ExportActivityToPDF extends Action {
 
                                     if (FeaturesUtil.isVisibleModule(mtefProjectionFields[2], ampContext)) {
                                         output = "";
-                                        if (mtefProjection.getAmount() != null && mtefProjection.getAmount().length() > 0) {
-                                            output = mtefProjection.getAmount() + " " + mtefProjection.getCurrencyCode();
+                                        if (mtefProjection.getTransactionAmount() != null && mtefProjection.getTransactionAmount().length() > 0) {
+                                            output = mtefProjection.getTransactionAmount() + " " + mtefProjection.getCurrencyCode();
                                         }
 
                                         innerCell = new PdfPCell(new Paragraph(output, plainFont));
@@ -3658,43 +3654,44 @@ public class ExportActivityToPDF extends Action {
 	 * builds all related organizations Info that should be exported to PDF
 	 */
 	private void buildRelatedOrganisationsOutput(PdfPTable relatedOrgsTable, String orgType , Collection<AmpOrganisation> orgs, Collection<FundingOrganization> fundingOrgs, HashMap<String, String> percentages, ServletContext ampContext) throws WorkerException{
-		Paragraph paragraph=new Paragraph(new Paragraph(new Phrase(postprocessText(TranslatorWorker.translateText(orgType))+":",titleFont)));
-		PdfPCell orgTypeCell=new PdfPCell(paragraph);
-		orgTypeCell.setBorder(0);
-		orgTypeCell.setBackgroundColor(new Color(255,255,255));
-		relatedOrgsTable.addCell(orgTypeCell);
-		PdfPCell respOrgCell=new PdfPCell();			
-		respOrgCell.setBorder(1);
-		respOrgCell.setBorderColor(new Color(201,201,199));
-		com.lowagie.text.List orgList=new com.lowagie.text.List(false); //not numbered list
-		orgList.setListSymbol(new Chunk("\u2022"));
-		
-		if (fundingOrgs!=null && fundingOrgs.size()>0){
-			for (FundingOrganization org : fundingOrgs) {
-				ListItem item=new ListItem(postprocessText(org.getOrgName()), plainFont);
-				orgList.add(item);
-			}
-			respOrgCell.addElement(orgList);
-			relatedOrgsTable.addCell(respOrgCell);
-		} else if(orgs!=null && orgs.size()>0){
-			for (AmpOrganisation org : orgs) {
-				String percentage = percentages.get(org.getAmpOrgId().toString());
-				if ( percentage != null){
-					percentage += "%";
-				}else{
-					percentage = "";
+		if((orgs!=null && !orgs.isEmpty() ) || (fundingOrgs!=null && !fundingOrgs.isEmpty() )){
+			Paragraph paragraph=new Paragraph(new Paragraph(new Phrase(postprocessText(TranslatorWorker.translateText(orgType))+":",titleFont)));
+			PdfPCell orgTypeCell=new PdfPCell(paragraph);
+			orgTypeCell.setBorder(0);
+			orgTypeCell.setBackgroundColor(new Color(255,255,255));
+			relatedOrgsTable.addCell(orgTypeCell);
+			PdfPCell respOrgCell=new PdfPCell();			
+			respOrgCell.setBorder(1);
+			respOrgCell.setBorderColor(new Color(201,201,199));
+			com.lowagie.text.List orgList=new com.lowagie.text.List(false); //not numbered list
+			orgList.setListSymbol(new Chunk("\u2022"));
+			
+			if (fundingOrgs!=null && fundingOrgs.size()>0){
+				for (FundingOrganization org : fundingOrgs) {
+					ListItem item=new ListItem(postprocessText(org.getOrgName()), plainFont);
+					orgList.add(item);
 				}
-				ListItem item=new ListItem(postprocessText(org.getName()) + "  " + percentage, plainFont);
-				orgList.add(item);
+				respOrgCell.addElement(orgList);
+				relatedOrgsTable.addCell(respOrgCell);
+			} else if(orgs!=null && orgs.size()>0){
+				for (AmpOrganisation org : orgs) {
+					String percentage = percentages.get(org.getAmpOrgId().toString());
+					if ( percentage != null){
+						percentage += "%";
+					}else{
+						percentage = "";
+					}
+					ListItem item=new ListItem(postprocessText(org.getName()) + "  " + percentage, plainFont);
+					orgList.add(item);
+				}
+				respOrgCell.addElement(orgList);
+				relatedOrgsTable.addCell(respOrgCell);
 			}
-			respOrgCell.addElement(orgList);
-			relatedOrgsTable.addCell(respOrgCell);
+			PdfPCell emptyCell=new PdfPCell(new Paragraph(" "));
+			emptyCell.setBorder(0);
+			relatedOrgsTable.addCell(emptyCell);
 		}
-		PdfPCell emptyCell=new PdfPCell(new Paragraph(" "));
-		emptyCell.setBorder(0);
-		relatedOrgsTable.addCell(emptyCell);
 	}
-	
 	protected PdfPCell buildPdfCell(String text, Font font, int colSpan)
 	{
 		PdfPCell result = new PdfPCell();

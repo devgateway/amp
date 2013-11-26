@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.ar.viewfetcher;
 
+import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -22,17 +23,19 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 	public final String modelColumnName;
 	public final String modelTableName;
 	public final String modelTableId;
+	public final Field field;
 	
 	private final String _toString;
 	private final int _hashCode;
 	
-	public InternationalizedPropertyDescription(String propertyName, String className, String modelTableName, String modelTableId, String modelColumnName)
+	public InternationalizedPropertyDescription(Field field, String propertyName, String className, String modelTableName, String modelTableId, String modelColumnName)
 	{
 		this.propertyName = propertyName;
 		this.className = className;
 		this.modelTableName = modelTableName;
 		this.modelColumnName = modelColumnName;
 		this.modelTableId = modelTableId;
+		this.field = field;
 		
 		_toString = String.format("i18n IPP: %s.%s -> %s[%s]::%s", className.substring(className.lastIndexOf('.') + 1), propertyName, modelTableName, modelTableId, modelColumnName);
 		_hashCode = _toString.hashCode();

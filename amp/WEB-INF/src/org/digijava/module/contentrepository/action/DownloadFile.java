@@ -62,7 +62,7 @@ public class DownloadFile extends Action {
 			}
 		}
 
-		DocumentManagerUtil.logoutJcrSessions(request.getSession());
+		DocumentManagerUtil.logoutJcrSessions(request);
 		return null;
 	}
 	

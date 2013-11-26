@@ -87,14 +87,16 @@ public class UpdateTeamReports extends Action {
 			
 			String reset = request.getParameter("reset");
             
-            if(reset!=null && reset.equalsIgnoreCase("true")){
+			if(reset!=null && reset.equalsIgnoreCase("true")){
             	//raForm.setTempNumResults(-1);
-            	raForm.setTempNumResults(defReportsPerPage==0?-1:defReportsPerPage);
+            	if (defReportsPerPage!=0)
+            		{
+            		raForm.setTempNumResults(defReportsPerPage);
+            		}
             	raForm.setKeyword(null);
             }
-            if(raForm.getTempNumResults()!=-1){
-            	defReportsPerPage = raForm.getTempNumResults();
-            }
+            defReportsPerPage = raForm.getTempNumResults();
+            
             
             Collection col = null;
             Double totalPages=null;
@@ -139,7 +141,7 @@ public class UpdateTeamReports extends Action {
 
 			logger.info("in assign reports");
 			Long selReports[] = raForm.getSelReports();
-			DbUtil.addTeamReports(selReports,tm.getTeamId());
+			DbUtil.addTeamReports(selReports,tm.getTeamId(),tm.getMemberId());
 			raForm.setAssignReports(null);
 
 			if(!raForm.isShowReportList())

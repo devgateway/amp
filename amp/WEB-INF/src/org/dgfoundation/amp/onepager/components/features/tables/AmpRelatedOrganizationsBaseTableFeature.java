@@ -13,11 +13,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -34,10 +36,12 @@ import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionVa
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
 
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 
 /**
@@ -306,4 +310,27 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 		updateColSpan2.add(new AttributeModifier("colspan", new Model<Integer>(colspan)));
 	}
 
+    protected void onDeleteOrg(AjaxRequestTarget target, ListItem<AmpOrgRole> item, IModel<AmpActivityVersion> am){
+        MarkupContainer listParent = list.getObject().getParent();
+
+        Set<AmpFunding> fundings=am.getObject().getFunding();
+        AmpOrgRole modelObject = item.getModelObject();
+        AmpOrgRole ampOrgRole = (AmpOrgRole) modelObject;
+        for (Iterator iterator = fundings.iterator(); iterator.hasNext();) {
+            AmpFunding ampFunding = (AmpFunding) iterator.next();
+            if (ampFunding.getAmpDonorOrgId().getAmpOrgId().equals(ampOrgRole.getOrganisation().getAmpOrgId()) &&
+                    ((ampFunding.getSourceRole() == null && ampOrgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY))
+                            ||(ampFunding.getSourceRole() != null && ampFunding.getSourceRole().getRoleCode().equals(ampOrgRole.getRole().getRoleCode())))){
+                String translatedMessage = TranslatorUtil.getTranslation("This organization has a funding related.");
+                target.appendJavaScript("alert ('"+translatedMessage+"')");
+                return;
+            }
+        }
+        setModel.getObject().remove(modelObject);
+        uniqueCollectionValidationField.reloadValidationField(target);
+        target.add(listParent);
+        //do not move the roleRemoved method above the listParent refresh
+        roleRemoved(target, modelObject);
+        list.getObject().removeAll();
+    }
 }

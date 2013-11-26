@@ -475,7 +475,6 @@ public class DataDispatcher extends MultiAction {
 		logger.info("Iteration Starts");
 		startTS=System.currentTimeMillis();
 		
-		Boolean isaggregatable = true;
 		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
 			ActivityPoint ap = new ActivityPoint();
 			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
@@ -503,7 +502,6 @@ public class DataDispatcher extends MultiAction {
 				
 				boolean isfiltered = locationIds != null && locationIds.size() > 0 && !locationIds.get(0).equals(-1l) ;
 				if (!implocation) {
-					isaggregatable = true;
 					SimpleLocation sl = new SimpleLocation();
 					String lat = alocation.getLocation().getLocation().getGsLat();
 					String lon = alocation.getLocation().getLocation().getGsLong();
@@ -526,23 +524,20 @@ public class DataDispatcher extends MultiAction {
 					} else {
 						sl.setIslocated(true);
 					}
+					//add only locations which are in the filter list
 					if (isfiltered){
 						if (locationIds.contains(alocation.getLocation().getLocation().getId())){
 							sla.add(sl);
 						}
+					
 					}else{
 						sla.add(sl);
 					}
-					
-				} else {
-					isaggregatable = false;
-					break;
 				}
 			}
-			if (isaggregatable) {
-				ap.setLocations(sla);
-				jsonArray.add(ap);
-			}
+			//Add simple locations array to the activity
+			ap.setLocations(sla);
+			jsonArray.add(ap);
 		}
 		
 		endTS=System.currentTimeMillis();

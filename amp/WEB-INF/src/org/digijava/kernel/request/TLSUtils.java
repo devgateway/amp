@@ -86,7 +86,7 @@ public class TLSUtils {
 			langCode = "en";
 		return langCode;
 	}
-	
+
 	public static Long getSiteId()
 	{
 		Site site = getSite();

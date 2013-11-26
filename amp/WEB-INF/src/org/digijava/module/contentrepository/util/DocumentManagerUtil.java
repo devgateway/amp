@@ -33,11 +33,13 @@ import org.apache.jackrabbit.api.JackrabbitRepository;
 import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.TransientRepository;
+import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
@@ -69,28 +71,60 @@ import org.hibernate.Query;
 
 
 public class DocumentManagerUtil {
+	private static final String IS_ALREADY_LOCKED_BY_THE_CURRENT_PROCESS = "is already locked by the current process";
+	
+	/* Name for jcr sessions stored in http request */	
+	private static final String JCR_READ_SESSION						= "jcrReadSession";
+	private static final String JCR_WRITE_SESSION						= "jcrWriteSession";
+
 	private static Logger logger	= Logger.getLogger(DocumentManagerUtil.class);
-	public static Repository getJCRRepository (HttpSession httpSession) {
-		
-//		ServletContext context			= (ServletContext)request.getAttribute("ServletContext");
-		ServletContext context			= httpSession.getServletContext();
+	
+	private static Object repoLock = new Object();
+	
+	/**
+	 * returns null if failed to open repo
+	 * @param context
+	 * @return
+	 */
+	public static Repository getJCRRepository (ServletContext context) 
+	{		
 		if (context == null) {
-			logger.error("The request doesn't contain a ServletContext");
+			logger.error("The request doesn't contain a ServletContext", new RuntimeException());
 			return null;
 		}
-		Repository repository			= (Repository)context.getAttribute( "JackrabbitRepository" );
-		if (repository == null) {
-			try{
-				String appPath				= DocumentManagerUtil.getApplicationPath();
-				String repPath				= appPath + "/jackrabbit";
-				repository 					= new TransientRepository(repPath + "/repository.xml", repPath);
-				context.setAttribute("JackrabbitRepository", repository);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null; 
+		synchronized (repoLock) {
+			Repository repository = (Repository) context.getAttribute(CrConstants.JACKRABBIT_REPOSITORY);
+			if (repository == null) {
+				try{
+					String appPath				= DocumentManagerUtil.getApplicationPath();
+					String repPath				= appPath + "/jackrabbit";
+					repository 					= new TransientRepository(repPath + "/repository.xml", repPath);
+					context.setAttribute(CrConstants.JACKRABBIT_REPOSITORY, repository);
+				} catch (Exception e) {
+					logger.error("error opening JackRabbit repository", e);
+					return null; 
+				}
+			}
+			return repository;
+		}
+	}
+	
+	public static void shutdownJCRRepository(ServletContext context)
+	{		
+		if (context == null)
+		{
+			logger.error("The request doesn't contain a ServletContext");
+			return;
+		}
+		synchronized (repoLock)
+		{
+			Repository repository = (Repository)context.getAttribute(CrConstants.JACKRABBIT_REPOSITORY);
+			if (repository != null)
+			{
+				context.removeAttribute(CrConstants.JACKRABBIT_REPOSITORY);
+				((TransientRepository)repository).shutdown();
 			}
 		}
-		return repository;
 	}
 
     public static String getUUIDByPublicVersionUUID (String publicVersionUUID) {
@@ -104,119 +138,189 @@ public class DocumentManagerUtil {
             Query query = session.createQuery(queryStr.toString());
             query.setString("publicVersionUUID", publicVersionUUID);
             retVal = (String) query.uniqueResult();
-            session.flush();
+            //session.flush();
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         return retVal;
     }
 	
-	public static Session getReadSession(HttpServletRequest request) {
-		return getReadSession(request.getSession());
+    /**
+     * to be called before every HttpServletRequest processed
+     * @param request
+     */
+    public static void initJCRSessions(HttpServletRequest request)
+    {
+    	//nop
+    }
+
+    /**
+     * to be called after every HttpServletRequest processed
+     * @param request
+     */
+    public static void closeJCRSessions(HttpServletRequest request)
+    {
+    	logoutJcrSessions(request);
+    }
+	
+	/**
+	 * returns null if logging in failed for some reason
+	 * @param context
+	 * @return
+	 */
+	public static Session getSession(ServletContext context, SimpleCredentials creden)
+	{
+		synchronized (repoLock) {			
+			try
+			{
+				Repository rep = getJCRRepository(context);
+				if (rep == null)
+					return null;
+				if (creden == null)
+					return rep.login();
+				else
+					return rep.login(creden);
+			}
+			catch (Exception re) 
+			{
+				if ( re.getMessage().contains(IS_ALREADY_LOCKED_BY_THE_CURRENT_PROCESS) ) 
+				{
+					logger.error("error trying to login to JCR, trying to recover by shutting down the repo", re);
+					shutdownJCRRepository(context);
+				}
+				return null;
+			}
+		}
 	}
 	
-	public static Session getReadSession(HttpSession httpSession) {
-		synchronized (httpSession) {
+	/**
+	 * closes a JCR session, guaranteed exception- and fat- free
+	 * @param sess
+	 */
+	public static void closeSession(Session sess)
+	{
+		if (sess == null)
+			return;		
+		try{sess.logout();}
+		catch(Exception e){logger.error("paranoid exception caught while logging out of a JR session", e);}; // just being paranoid
+	}
+	
+	/**
+	 * if given Session is null or alive, returns it without touching it. Else, closes it and returns null
+	 * @param sess
+	 * @return
+	 */
+	public static Session annulateSessionIfNotAlive(Session sess)
+	{
+		if (sess == null)
+			return null;
 		
-			Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_READ_SESSION);
+		if (sess != null && (!sess.isLive()))
+		{
+			closeSession(sess);
+			return null;
+		}
+		return sess;
+	}
+	
+	public static Session getReadSession(HttpServletRequest request) {
+		synchronized (repoLock)
+		{		
+			Session jcrSession		= annulateSessionIfNotAlive((Session) request.getAttribute(JCR_READ_SESSION));			
 			
-			if ( jcrSession!=null && !jcrSession.isLive() ) {
-				jcrSession.logout();
-				jcrSession			= null;
+			if (jcrSession == null)
+				jcrSession = getSession(request.getServletContext(), null);
+			
+			if (jcrSession == null)
+			{
+				logger.warn("trying to open a JCR read session for the second time...");
+				jcrSession = getSession(request.getServletContext(), null);
 			}
 			
-			if (jcrSession == null) {
-				try {
-					jcrSession	= getJCRRepository(httpSession).login();
-					httpSession.setAttribute(CrConstants.JCR_READ_SESSION, jcrSession);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return null;
-				}
-			}
+			if (jcrSession == null)
+				throw new RuntimeException("could not open a JCR ReadSession, giving up");
+			
+			request.setAttribute(JCR_READ_SESSION, jcrSession);
 			
 			try {
 				jcrSession.getRootNode().refresh(false);
-			} catch (InvalidItemStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RepositoryException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} 
+			catch (Exception e) {
+				logger.error("could not refresh() readSession", e);
 			}
 			
 			return jcrSession;
 		}
 	}
 	
-	public static Session getWriteSession(HttpServletRequest request) {
-		return getWriteSession(request.getSession());
+	public static void logoutJcrSessions(HttpServletRequest httpRequest) {
+		synchronized (repoLock) {
+			closeSession((Session) httpRequest.getAttribute(JCR_WRITE_SESSION));
+			httpRequest.removeAttribute(JCR_WRITE_SESSION);
+			
+			closeSession((Session) httpRequest.getAttribute(JCR_READ_SESSION));
+			httpRequest.removeAttribute(JCR_READ_SESSION);
+		}
 	}
 	
-	public static void logoutJcrSessions(HttpSession httpSession) {
-		Session jcrWriteSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
-		if(jcrWriteSession!=null) jcrWriteSession.logout();		
-		Session jcrReadSession		= (Session)httpSession.getAttribute(CrConstants.JCR_READ_SESSION);
-		if(jcrReadSession!=null) jcrReadSession.logout();
-	}
-	
-	public static Session getWriteSession(HttpSession httpSession) {
-		
-		synchronized (httpSession) {
-			Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
+	public static Session getWriteSession(HttpServletRequest request)
+	{
+		synchronized (repoLock)
+		{
+			Session jcrSession = annulateSessionIfNotAlive((Session) request.getAttribute(JCR_WRITE_SESSION));				
 			
-			if ( jcrSession!=null && !jcrSession.isLive() ) {
-				jcrSession.logout();
-				jcrSession			= null;
-			}
+			boolean newlyCreatedSession = (jcrSession == null);
 			
-			if (jcrSession == null) {
-				try {
-					TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
-					/* Commented out this check. See https://jira.dgfoundation.org/browse/AMP-15251 for details
-					 * It should not hurt since we're only reading email from it
-					if (teamMember == null) {
-						throw new Exception("No TeamMember found in HttpSession !");
-					}
-					*/
-					
-					/* From add organization the user is always admin and this user has not email*/
-					String userName;
-					if (teamMember != null && teamMember.getEmail() != null) {
-					   userName = teamMember.getEmail();
-					} else {
-					   userName = "admin@amp.org";
-					}
-					
-					SimpleCredentials creden	= new SimpleCredentials(userName, userName.toCharArray());
-					
-					Repository rep				= getJCRRepository(httpSession); 
-					
-					jcrSession					= rep.login( creden );
-					
-					jcrSession.save();
-					
-					httpSession.setAttribute(CrConstants.JCR_WRITE_SESSION, jcrSession);
-					
-					registerNamespace(jcrSession, "ampdoc", "http://amp-demo.code.ro/ampdoc");
-					registerNamespace(jcrSession, "amplabel", "http://amp-demo.code.ro/label");
-					
-				} catch (Exception e) {
-					logger.warn("getWriteSession: " + e.getMessage());
-					//e.printStackTrace();
-					return null;
+			if (jcrSession == null)
+			{
+				HttpSession session = request.getSession();
+
+				if (session == null)
+				{
+					throw new RuntimeException("no session found! why?");
 				}
+				
+				TeamMember teamMember = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+				String userName;
+				if (teamMember != null && teamMember.getEmail() != null) {
+				   userName = teamMember.getEmail();
+				} else {
+				   userName = "admin@amp.org";
+				}
+				
+				SimpleCredentials creden	= new SimpleCredentials(userName, userName.toCharArray());
+
+				if (jcrSession == null)
+					jcrSession = getSession(request.getServletContext(), creden);
+				
+				if (jcrSession == null)
+				{
+					logger.warn("trying to open a JCR write session for the second time...");
+					jcrSession = getSession(request.getServletContext(), creden);
+				}
+					
+				if (jcrSession == null)
+					throw new RuntimeException("could not open a JCR WriteSession");
+			}
+	
+			
+			if (newlyCreatedSession)
+			{
+				try {jcrSession.save();}
+				catch(Exception e){logger.error("error saving JCR WriteSession", e);}
+				registerNamespace(jcrSession, "ampdoc", "http://amp-demo.code.ro/ampdoc");
+				registerNamespace(jcrSession, "amplabel", "http://amp-demo.code.ro/label");
 			}
 			
+			request.setAttribute(JCR_WRITE_SESSION, jcrSession);
 			try {
-				jcrSession.getRootNode().refresh(false);
-			} catch (InvalidItemStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (RepositoryException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Node rootNode = jcrSession.getRootNode();
+				if (rootNode == null)
+					throw new RuntimeException("jcr root node is null, how can this be?");				
+				rootNode.refresh(false);
+			}			
+			catch (Exception e) {
+				logger.error("could not refresh() writeSession", e);
 			}
 			
 			return jcrSession;
@@ -224,20 +328,16 @@ public class DocumentManagerUtil {
 	}
 	
 	public static NodeWrapper getReadNodeWrapper(String uuid, HttpServletRequest request) {
-		HttpSession httpSession = request.getSession();
-		Node n 	= getReadNode(uuid, httpSession);
-		if ( n!=null ) {
-			return new NodeWrapper (n);
+		Node n = getReadNode(uuid, request);
+		if (n != null) 
+		{
+			return new NodeWrapper(n);
 		}
 		return null;
 	}
-
-	public static Node getReadNode (String uuid, HttpServletRequest request) {
-		return getReadNode(uuid, request.getSession());
-	}
 	
-	public static Node getReadNode (String uuid, HttpSession httpSession) {
-		Session session	= getReadSession(httpSession);
+	public static Node getReadNode(String uuid, HttpServletRequest request) {
+		Session session	= getReadSession(request);
 		try {
 			//session.getRootNode().refresh(false);
 			//session.refresh(false);
@@ -247,12 +347,9 @@ public class DocumentManagerUtil {
 			return null;
 		}
 	}
+
 	public static Node getWriteNode (String uuid, HttpServletRequest request) {
-		return getWriteNode(uuid, request.getSession());
-	}
-	
-	public static Node getWriteNode (String uuid, HttpSession httpSession) {
-		Session session	= getWriteSession(httpSession);
+		Session session	= getWriteSession(request);
 		try {
 			//session.getRootNode().refresh(false);
 			//session.refresh(false);
@@ -292,16 +389,16 @@ public class DocumentManagerUtil {
 	
 	public static String calendarToString(Calendar cal,boolean yearofPublication) {
 		String retVal=null;
-		String [] monthNames	= {"", "January", "February", "March", "April", "May", "June",
-									"July", "August", "September", "October", "November", "December"};
+//		String [] monthNames	= {"", "January", "February", "March", "April", "May", "June",
+//									"July", "August", "September", "October", "November", "December"};
 		
 		int year		= cal.get(Calendar.YEAR);
 		int month		= cal.get(Calendar.MONTH) + 1;
 		int day			= cal.get(Calendar.DAY_OF_MONTH);
 		
-		int hour		= cal.get(Calendar.HOUR_OF_DAY);
-		int minute		= cal.get(Calendar.MINUTE);
-		int second		= cal.get(Calendar.SECOND);
+//		int hour		= cal.get(Calendar.HOUR_OF_DAY);
+//		int minute		= cal.get(Calendar.MINUTE);
+//		int second		= cal.get(Calendar.SECOND);
 		
 		if(yearofPublication){
 			retVal= new Long(year).toString() ;
@@ -348,28 +445,20 @@ public class DocumentManagerUtil {
 		
 		
 	}
-
-	public static int getNextVersionNumber(String uuid, HttpServletRequest request) {
-		return getNextVersionNumber(uuid, request.getSession());
-	}
 	
-	public static int getNextVersionNumber(String uuid, HttpSession httpSession) {
-		List versions	= getVersions(uuid, httpSession, false);
+	public static int getNextVersionNumber(String uuid, HttpServletRequest request) {
+		List versions	= getVersions(uuid, request, false);
 		return versions.size() + 1;
 	}
 
 	public static List<Version> getVersions(String uuid, HttpServletRequest request, boolean needWriteSession) {
-		return getVersions(uuid, request.getSession(), needWriteSession);
-	}
-	
-	public static List<Version> getVersions(String uuid, HttpSession httpSession, boolean needWriteSession) {
 		if (uuid != null) {
 			Node node;
 			ArrayList<Version> versions		= new ArrayList<Version>();
 			if (needWriteSession)
-				node				= DocumentManagerUtil.getWriteNode(uuid, httpSession);
+				node				= DocumentManagerUtil.getWriteNode(uuid, request);
 			else
-				node				= DocumentManagerUtil.getReadNode(uuid, httpSession);
+				node				= DocumentManagerUtil.getReadNode(uuid, request);
 			VersionHistory history;
 			try {
 				history 						= node.getVersionHistory();
@@ -403,14 +492,10 @@ public class DocumentManagerUtil {
 		else
 			return new Boolean(false);
 	}
-	
+		
 	private static boolean deleteDocument (String uuid, HttpServletRequest request) {
-		return deleteDocument(uuid, request.getSession());
-	}
-	
-	private static boolean deleteDocument (String uuid, HttpSession httpSession) {
 		if (uuid != null) {
-			Node node		= DocumentManagerUtil.getWriteNode(uuid, httpSession);
+			Node node		= DocumentManagerUtil.getWriteNode(uuid, request);
 			try {
 				Node parent		= node.getParent();
 				node.remove();
@@ -1110,7 +1195,7 @@ public class DocumentManagerUtil {
 	
 	public synchronized static void shutdownRepository( ServletContext sContext ) {
 		logger.info("Shutting down jackrabbit repository");
-		JackrabbitRepository repository			= (JackrabbitRepository)sContext.getAttribute( "JackrabbitRepository" );
+		JackrabbitRepository repository			= (JackrabbitRepository)sContext.getAttribute( CrConstants.JACKRABBIT_REPOSITORY );
 		if ( repository == null ) {
 			logger.warn("No repository found! Only normal if AMP was not used at all !");
 		} else

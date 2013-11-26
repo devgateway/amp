@@ -66,6 +66,7 @@ public class ReportContextData
 	private String sortBy;									// session["sortBy"]
 	private Boolean sortAscending;							// session[ArConstants.SORT_ASCENDING]
 	private String contextId;
+	private AmpCurrency selectedCurrency;					// the report's currency
 	
 	/**
 	 * BOZO: why is this done, if "report" has this same field?
@@ -92,12 +93,19 @@ public class ReportContextData
 		this.pledgeReport = pledgeReport;
 	}
 	
-	public AmpCurrency getSelectedAmpCurrency()
+	public AmpCurrency fetch_SelectedAmpCurrency()
 	{
 		if (getFilter() != null && getFilter().getCurrency() != null)
 			return getFilter().getCurrency();
 		else
 			return AmpARFilter.getDefaultCurrency();
+	}
+	
+	public AmpCurrency getSelectedAmpCurrency()
+	{
+		if (selectedCurrency == null)
+			selectedCurrency = fetch_SelectedAmpCurrency();
+		return selectedCurrency;
 	}
 	
 	public String getSelectedCurrencyCode()
@@ -331,6 +339,7 @@ public class ReportContextData
 		setGeneratedReport(null);
 		progressTotalRows = 0;
 		progressValue = 0;
+		selectedCurrency = null;
 		if (this.getReportMeta() != null)
 			if (!this.getReportMeta().currencyIsSpecified())
 			{

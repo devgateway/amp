@@ -24,6 +24,7 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * @author aartimon@dginternational.org
@@ -62,22 +63,7 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-                        send(getPage(), Broadcast.BREADTH, new FundingOrgListUpdateEvent(target));
-
-                        Set<AmpFunding> fundings = am.getObject().getFunding();
-                        AmpOrgRole ampOrgRole = item.getModelObject();
-                        for (AmpFunding ampFunding: fundings) {
-                            if (ampFunding.getAmpDonorOrgId().getAmpOrgId() == ampOrgRole.getOrganisation().getAmpOrgId()){
-                                String translatedMessage = TranslatorUtil.getTranslation("This organization has a funding related.");
-                                target.appendJavaScript("alert ('"+translatedMessage+"')");
-                                return;
-                            }
-                        }
-                        roleRemoved(target, ampOrgRole);
-                        setModel.getObject().remove(ampOrgRole);
-                        uniqueCollectionValidationField.reloadValidationField(target);
-                        target.add(listParent);
-                        list.getObject().removeAll();
+                        onDeleteOrg(target, item, am);
 					}
 				};
 				item.add(delRelOrg);

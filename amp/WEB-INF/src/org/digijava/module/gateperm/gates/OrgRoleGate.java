@@ -107,15 +107,15 @@ public class OrgRoleGate extends Gate {
 		return false;
 	}
 	// iterate the assigned orgs:
-	if (ampa != null) {	    
-	    if (ampa.getOrgrole() == null)
-		return false;
-	    Iterator i = ampa.getOrgrole().iterator();
-	    while (i.hasNext()) {
-			AmpOrgRole element = (AmpOrgRole) i.next();
+	if (ampa != null)
+	{	    
+		if (ampa.getOrgrole() == null)
+			return false;
+	    for (AmpOrgRole element:ampa.getOrgrole()) 
+	    {
 			String roleCode = element.getRole().getRoleCode();
 			if (roleCode.equals(paramRoleCode) && user.hasVerifiedOrganizationId(element.getOrganisation().getAmpOrgId()))
-			    return true;
+				return true;
 	    }
 	}
 //	if (a != null) {

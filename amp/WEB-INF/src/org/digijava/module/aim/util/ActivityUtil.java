@@ -4365,125 +4365,125 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	 */
         public static List getSteps(){
             List<Step> steps=new ArrayList();
-            Long templId=FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE);
-            AmpFeaturesVisibility step1=FeaturesUtil.getFeatureByName("Identification", "Project ID and Planning", templId);// step 1
-            AmpFeaturesVisibility step1_1=FeaturesUtil.getFeatureByName("Planning", "Project ID and Planning", templId); // step 1
-            AmpModulesVisibility step2=FeaturesUtil.getModuleByName("References", "PROJECT MANAGEMENT", templId);
-            AmpFeaturesVisibility step3=FeaturesUtil.getFeatureByName("Location", "Project ID and Planning", templId);
-            AmpFeaturesVisibility step3_2=FeaturesUtil.getFeatureByName("Sectors", "Project ID and Planning", templId);
-            AmpModulesVisibility step3_3=FeaturesUtil.getModuleByName("National Planning Dashboard", "NATIONAL PLAN DASHBOARD", templId);
-            AmpFeaturesVisibility step4=FeaturesUtil.getFeatureByName("Funding Information", "Funding", templId);
-            AmpFeaturesVisibility step5=FeaturesUtil.getFeatureByName("Regional Funding", "Funding", templId);
-            AmpFeaturesVisibility step6=FeaturesUtil.getFeatureByName("Components", "Components", templId);
-            AmpFeaturesVisibility step6_2=FeaturesUtil.getFeatureByName("Issues", "Issues", templId);
-            AmpModulesVisibility step7=FeaturesUtil.getModuleByName("Document", "PROJECT MANAGEMENT", templId);
-            AmpFeaturesVisibility step10=FeaturesUtil.getFeatureByName("Paris Indicator", "Add & Edit Activity", templId);
-            
-            AmpModulesVisibility step11=FeaturesUtil.getModuleByName("M & E", "MONITORING AND EVALUATING", templId);
-            AmpFeaturesVisibility step12=FeaturesUtil.getFeatureByName("Costing", "Activity Costing", templId);
-            AmpFeaturesVisibility step13=FeaturesUtil.getFeatureByName("Contracting", "Contracting", templId);
-            
-            AmpFeaturesVisibility step14=FeaturesUtil.getFeatureByName("Regional Observations", "Regional Observations", templId);
-            
-            if(step1!=null||step1_1!=null){
-                Step newStep1=new Step();
-                newStep1.setStepActualNumber(steps.size()+1);
-                newStep1.setStepNumber("1");
-                steps.add(newStep1);
-                        
-            }
-            if(step2!=null){
-                Step newStep2=new Step();
-                newStep2.setStepActualNumber(steps.size()+1);
-                newStep2.setStepNumber("1_5");
-                steps.add(newStep2);
-                
-            }
-            if(step3!=null||step3_2!=null||step3_3!=null){
-                Step newStep3=new Step();
-                newStep3.setStepActualNumber(steps.size()+1);
-                newStep3.setStepNumber("2");
-                steps.add(newStep3);
-                
-            }
-            if(step4!=null){
-                Step newStep4=new Step();
-                newStep4.setStepActualNumber(steps.size()+1);
-                newStep4.setStepNumber("3");
-                steps.add(newStep4);
-                
-            }
-             if(step5!=null){
-                Step newStep5=new Step();
-                newStep5.setStepActualNumber(steps.size()+1);
-                newStep5.setStepNumber("4");
-                steps.add(newStep5);
-                
-            }
-            if(step6!=null||step6_2!=null){
-                Step newStep6=new Step();
-                newStep6.setStepActualNumber(steps.size()+1);
-                newStep6.setStepNumber("5");
-                steps.add(newStep6);
-                
-            }
-            
-            if(step7!=null){
-                Step newStep7=new Step();
-                newStep7.setStepActualNumber(steps.size()+1);
-                newStep7.setStepNumber("6");
-                steps.add(newStep7);
-                
-            }
-            Step newStep8 = new Step();
-            newStep8.setStepActualNumber(steps.size() + 1);
-            newStep8.setStepNumber("7");
-            steps.add(newStep8);
-                
-            Step newStep9 = new Step();
-            newStep9.setStepActualNumber(steps.size() + 1);
-            newStep9.setStepNumber("8");
-            steps.add(newStep9);
-            
-            if (step10 != null) {
-                Step newStep10 = new Step();
-                newStep10.setStepActualNumber(steps.size() + 1);
-                newStep10.setStepNumber("17");
-                steps.add(newStep10);
-            }
-            
-             if(step11!=null){
-                Step newStep11=new Step();
-                newStep11.setStepActualNumber(steps.size()+1);
-                newStep11.setStepNumber("10");
-                steps.add(newStep11);
-                
-            }
-            
-             if(step12!=null){
-                Step newStep12=new Step();
-                newStep12.setStepActualNumber(steps.size()+1);
-                newStep12.setStepNumber("11");
-                steps.add(newStep12);
-                
-            }
-           
-            
-              if(step13!=null){
-                Step newStep13=new Step();
-                newStep13.setStepActualNumber(steps.size()+1);
-                newStep13.setStepNumber("13");
-                steps.add(newStep13);
-                
-            }
-              
-            if (step14 != null) {
-				Step newStep14 = new Step();
-				newStep14.setStepActualNumber(steps.size() + 1);
-				newStep14.setStepNumber("14");
-				steps.add(newStep14);
-            }
-            
+//            Long templId=FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE);
+//            AmpFeaturesVisibility step1=FeaturesUtil.getFeatureByName("Identification", "Project ID and Planning", templId);// step 1
+//            AmpFeaturesVisibility step1_1=FeaturesUtil.getFeatureByName("Planning", "Project ID and Planning", templId); // step 1
+//            AmpModulesVisibility step2=FeaturesUtil.getModuleByName("References", "PROJECT MANAGEMENT", templId);
+//            AmpFeaturesVisibility step3=FeaturesUtil.getFeatureByName("Location", "Project ID and Planning", templId);
+//            AmpFeaturesVisibility step3_2=FeaturesUtil.getFeatureByName("Sectors", "Project ID and Planning", templId);
+//            AmpModulesVisibility step3_3=FeaturesUtil.getModuleByName("National Planning Dashboard", "NATIONAL PLAN DASHBOARD", templId);
+//            AmpFeaturesVisibility step4=FeaturesUtil.getFeatureByName("Funding Information", "Funding", templId);
+//            AmpFeaturesVisibility step5=FeaturesUtil.getFeatureByName("Regional Funding", "Funding", templId);
+//            AmpFeaturesVisibility step6=FeaturesUtil.getFeatureByName("Components", "Components", templId);
+//            AmpFeaturesVisibility step6_2=FeaturesUtil.getFeatureByName("Issues", "Issues", templId);
+//            AmpModulesVisibility step7=FeaturesUtil.getModuleByName("Document", "PROJECT MANAGEMENT", templId);
+//            AmpFeaturesVisibility step10=FeaturesUtil.getFeatureByName("Paris Indicator", "Add & Edit Activity", templId);
+//            
+//            AmpModulesVisibility step11=FeaturesUtil.getModuleByName("M & E", "MONITORING AND EVALUATING", templId);
+//            AmpFeaturesVisibility step12=FeaturesUtil.getFeatureByName("Costing", "Activity Costing", templId);
+//            AmpFeaturesVisibility step13=FeaturesUtil.getFeatureByName("Contracting", "Contracting", templId);
+//            
+//            AmpFeaturesVisibility step14=FeaturesUtil.getFeatureByName("Regional Observations", "Regional Observations", templId);
+//            
+//            if(step1!=null||step1_1!=null){
+//                Step newStep1=new Step();
+//                newStep1.setStepActualNumber(steps.size()+1);
+//                newStep1.setStepNumber("1");
+//                steps.add(newStep1);
+//                        
+//            }
+//            if(step2!=null){
+//                Step newStep2=new Step();
+//                newStep2.setStepActualNumber(steps.size()+1);
+//                newStep2.setStepNumber("1_5");
+//                steps.add(newStep2);
+//                
+//            }
+//            if(step3!=null||step3_2!=null||step3_3!=null){
+//                Step newStep3=new Step();
+//                newStep3.setStepActualNumber(steps.size()+1);
+//                newStep3.setStepNumber("2");
+//                steps.add(newStep3);
+//                
+//            }
+//            if(step4!=null){
+//                Step newStep4=new Step();
+//                newStep4.setStepActualNumber(steps.size()+1);
+//                newStep4.setStepNumber("3");
+//                steps.add(newStep4);
+//                
+//            }
+//             if(step5!=null){
+//                Step newStep5=new Step();
+//                newStep5.setStepActualNumber(steps.size()+1);
+//                newStep5.setStepNumber("4");
+//                steps.add(newStep5);
+//                
+//            }
+//            if(step6!=null||step6_2!=null){
+//                Step newStep6=new Step();
+//                newStep6.setStepActualNumber(steps.size()+1);
+//                newStep6.setStepNumber("5");
+//                steps.add(newStep6);
+//                
+//            }
+//            
+//            if(step7!=null){
+//                Step newStep7=new Step();
+//                newStep7.setStepActualNumber(steps.size()+1);
+//                newStep7.setStepNumber("6");
+//                steps.add(newStep7);
+//                
+//            }
+//            Step newStep8 = new Step();
+//            newStep8.setStepActualNumber(steps.size() + 1);
+//            newStep8.setStepNumber("7");
+//            steps.add(newStep8);
+//                
+//            Step newStep9 = new Step();
+//            newStep9.setStepActualNumber(steps.size() + 1);
+//            newStep9.setStepNumber("8");
+//            steps.add(newStep9);
+//            
+//            if (step10 != null) {
+//                Step newStep10 = new Step();
+//                newStep10.setStepActualNumber(steps.size() + 1);
+//                newStep10.setStepNumber("17");
+//                steps.add(newStep10);
+//            }
+//            
+//             if(step11!=null){
+//                Step newStep11=new Step();
+//                newStep11.setStepActualNumber(steps.size()+1);
+//                newStep11.setStepNumber("10");
+//                steps.add(newStep11);
+//                
+//            }
+//            
+//             if(step12!=null){
+//                Step newStep12=new Step();
+//                newStep12.setStepActualNumber(steps.size()+1);
+//                newStep12.setStepNumber("11");
+//                steps.add(newStep12);
+//                
+//            }
+//           
+//            
+//              if(step13!=null){
+//                Step newStep13=new Step();
+//                newStep13.setStepActualNumber(steps.size()+1);
+//                newStep13.setStepNumber("13");
+//                steps.add(newStep13);
+//                
+//            }
+//              
+//            if (step14 != null) {
+//				Step newStep14 = new Step();
+//				newStep14.setStepActualNumber(steps.size() + 1);
+//				newStep14.setStepNumber("14");
+//				steps.add(newStep14);
+//            }
+//            
             return steps;
         }
         
@@ -4835,11 +4835,11 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		return query;
 	}
 
-//	public static String getNonDraftActivityQueryString(String label) {
-//		String query = null;
-//		query = " AND " + label + ".draft = false ";
-//		return query;
-//	}
+	public static String getNonDraftActivityQueryString(String label) {
+		String query = null;
+		query = " AND " + label + ".draft = false ";
+		return query;
+	}
 	
 	/**
 	 * Insert into table 'amp_activity_access' a new record to keep track of users access to activities.

@@ -17,11 +17,16 @@
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedDisbursementDetails}">
 	<tr bgcolor="#ffffff">
-		<td height="20" colspan="4" bgcolor="#FFFFCC" style="text-transform: uppercase">
+		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase;">
             <a title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
 	        	<digi:trn key="aim:planneddisbursements">Planned Disbursement</digi:trn>
 		    </a>
         </td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>
 	</tr>
 	
 	<!-- Start Planned Disbursements -->
@@ -29,50 +34,8 @@
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
-			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">
-			
-						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Adjustment Type"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-									<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-										<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
-									</digi:trn>
-								</module:display>
-							</td>
-							<td align="right">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Transaction Date"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-									<b><bean:write name="fundingDetail" property="transactionDate" /></b>
-								</module:display>
-							</td>
-							<td align="right">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Amount"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-									<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
-								</module:display>
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Currency"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-										<b><bean:write name="fundingDetail" property="currencyCode" /></b>
-								</module:display>
-								
-								</td>
-								<td align="right">								
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Recipient Organization">																
-								<logic:present name="fundingDetail" property="recipientOrganisation">
-									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
-								</logic:present>
-								</module:display>
-								</td>
-							<td height="18">
-							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/exchangeRate"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-								<b><bean:write name="fundingDetail" property="formattedRate" /></b>
-								</module:display>
-							</c:if>
-							</td>
-						</tr>
+			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">			
+				<%@include file="previewActivityFundingDetail.jspf" %>
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
@@ -80,11 +43,10 @@
 	
 	<!-- End Planned Disbursements -->
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase">
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
 			<digi:trn key='aim:subtotalplanneddisbursement'>Subtotal Planned Disbursement</digi:trn>:
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.subtotalPlannedDisbursements}">
           		  <b>${funding.subtotalPlannedDisbursements} ${aimEditActivityForm.currCode}</b>
@@ -102,11 +64,14 @@
         <td colspan="4" height="7px"></td>
     </tr>
 	<tr bgcolor="#ffffff">
-		<td colspan="4" bgcolor="#FFFFCC" style="text-transform: uppercase;" >
-            <a title="">
-                <digi:trn key="aim:actualisbursements">Actual Disbursement</digi:trn>:
-            </a>
+		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase;">
+			<digi:trn key="aim:actualisbursements">Actual Disbursement</digi:trn>:
         </td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>
 	</tr>
 
 	<!-- Start Actual Disbursements -->
@@ -114,49 +79,7 @@
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Actual">
-						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Adjustment Type"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">	
-										<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-											<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
-										</digi:trn>
-								</module:display>
-							</td>
-
-							<td align="right" align="right">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Transaction Date"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">	
-										<b><bean:write name="fundingDetail" property="transactionDate" /></b>
-								</module:display>								
-							</td>
-							<td align="right">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Amount"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-									<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
-								</module:display>
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Currency"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-									<b><bean:write name="fundingDetail" property="currencyCode" /></b>&nbsp;
-								</module:display>
-																
-								<td align="right">								
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Recipient Organization">																
-								<logic:present name="fundingDetail" property="recipientOrganisation">
-									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
-								</logic:present>
-								</module:display>
-								</td>
-							</td>
-							<td height="18">
-							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/exchangeRate"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-								<b><bean:write name="fundingDetail" property="formattedRate" /></b>
-								</module:display>
-							</c:if>
-							</td>
-						</tr>
+				<%@include file="previewActivityFundingDetail.jspf" %>
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
@@ -167,7 +90,7 @@
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
             <digi:trn key='aim:subtotalActualdisbursement'>Subtotal Actual Disbursement</digi:trn>:
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
 			 <c:if test="${not empty funding.subtotalDisbursements}">
                 <b>${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;
@@ -183,8 +106,14 @@
 	
 <tr><td colspan="4" height="7px"></td></tr>
 	<tr bgcolor="#ffffff">
-		<td colspan="4" bgcolor="#FFFFCC" 
-			style="text-transform: uppercase; text-transform: uppercase"><digi:trn>Pipeline Disbursement</digi:trn>:</td>
+		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase">
+			<digi:trn>Pipeline Disbursement</digi:trn>:
+		</td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>
 	</tr>
 
 	<!-- Start Pipeline Disbursements -->
@@ -192,41 +121,7 @@
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Pipeline">
-						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF">
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Adjustment Type"
-									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">	
-										<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-											<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
-										</digi:trn>
-								</module:display>
-							</td>
-
-							<td align="right" align="right">
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Transaction Date"
-									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">	
-										<b><bean:write name="fundingDetail" property="transactionDate" /></b>
-								</module:display>								
-							</td>
-							<td align="right">
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Amount"
-									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-									<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
-								</module:display>
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Currency"
-									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-									<b><bean:write name="fundingDetail" property="currencyCode" /></b>&nbsp;
-								</module:display>
-							</td>
-							<td height="18">
-							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/exchangeRate"
-									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
-								<b><bean:write name="fundingDetail" property="formattedRate" /></b>
-								</module:display>
-							</c:if>
-							</td>
-						</tr>
+				<%@include file="previewActivityFundingDetail.jspf" %>
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
@@ -237,8 +132,7 @@
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000"><digi:trn>Subtotal Pipeline Disbursement </digi:trn>:
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
 			 <c:if test="${not empty funding.subtotalDisbursements}">
                 <b>${funding.subtotalPipelineDisbursements} ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;
@@ -249,11 +143,11 @@
 	</c:if>
 	</c:if>
 	
-	
-	</module:display>
-
-
-
 	<tr><td colspan="4" height="7px"></td></tr>
+</module:display>
+
+
+
+
 
 

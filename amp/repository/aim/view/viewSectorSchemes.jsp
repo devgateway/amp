@@ -71,7 +71,7 @@
 													<logic:iterate name="aimAddSectorForm" property="formSectorSchemes" id="sectorScheme"
 																	type="org.digijava.module.aim.dbentity.AmpSectorScheme	">
 													<tr>
-														<td width="80%" bgcolor="#ffffff" class="inside">
+														<td width="72%" bgcolor="#ffffff" class="inside">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams2}" property="ampSecSchemeId">
 															<bean:write name="sectorScheme" property="ampSecSchemeId" />
@@ -88,7 +88,7 @@
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 													  </td>
 
-														<td bgcolor="#ffffff" width="10%" align="center" class="inside ignore">
+														<td bgcolor="#ffffff" width="15%" align="center" class="inside ignore">
 															<c:set var="trnEditScheme">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</c:set>
@@ -102,7 +102,7 @@
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
                                                                                                                
-														<td bgcolor="#ffffff" width="10%" align="center" class="inside ignore">
+														<td bgcolor="#ffffff" width="13%" align="center" class="inside ignore">
                                                            <c:if test="${!sectorScheme.used}">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">
@@ -154,7 +154,7 @@
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="100">
+									<table cellpadding="0" cellspacing="0" width="120">
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<b style="font-size:12px; padding-left:5px;">
@@ -163,7 +163,7 @@
 													</digi:trn>
 												</b>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
+											<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
 										</tr>
 									</table>
 								</td>

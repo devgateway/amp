@@ -273,13 +273,7 @@ public class FundingCalculationsHelper {
 			if (fundDet.getPledgeid()!= null){
 				fundingDetail.setPledge(fundDet.getPledgeid().getId());
 			}
-			
-			/**
-			 * no adjustment type for MTEF transactions, so this "if" is outside the PLANNED / ACTUAL / PIPELINE branching if's
-			 */
-			if (fundDet.getTransactionType().intValue() == Constants.MTEFPROJECTION)
-				totalMtef.setValue(totalMtef.getValue().add(amt.getValue()));
-			
+						
 			// TOTALS
 			if (updateTotals)
 				addToTotals(adjType, fundDet, amt);
@@ -295,6 +289,15 @@ public class FundingCalculationsHelper {
 	
 	protected void addToTotals(AmpCategoryValue adjType, FundingInformationItem fundDet, DecimalWraper amt)
 	{
+		/**
+		 * no adjustment type for MTEF transactions, so this "if" is outside the PLANNED / ACTUAL / PIPELINE branching if's
+		 */
+		if (fundDet.getTransactionType().intValue() == Constants.MTEFPROJECTION)
+		{
+			totalMtef.setValue(totalMtef.getValue().add(amt.getValue()));
+			return;
+		}
+
 		if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()) ) {
 			//fundingDetail.setAdjustmentTypeName("Planned");
 			if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {

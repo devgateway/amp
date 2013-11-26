@@ -312,7 +312,7 @@ public class SearchUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		DocumentManagerUtil.logoutJcrSessions(request.getSession());
+		DocumentManagerUtil.logoutJcrSessions(request);
 		return resultList;
 	}
 

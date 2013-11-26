@@ -3,7 +3,7 @@
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.AmpStructureType" table="AMP_STRUCTURE_TYPE">
 		<cache usage="read-write" />
-		<id name="typeId" column="typeId" type="java.lang.Long">
+		<id name="typeId" column="typeid" type="java.lang.Long">
 			<generator class="native">
 				<param name="sequence">AMP_STRUCTURE_TYPE_seq</param>
 			</generator>

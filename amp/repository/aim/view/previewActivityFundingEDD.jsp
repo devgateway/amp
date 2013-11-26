@@ -28,31 +28,7 @@
 	<c:if test="${!empty funding.plannedEDDDetails}">	
 	<logic:iterate name="funding" property="plannedEDDDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
-		<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF">
-								<b>
-									<digi:trn><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></digi:trn>
-								</b>
-							</td>
-							<td align="right">
-								<b><bean:write name="fundingDetail" property="transactionDate" /></b>
-							</td>
-							<td align="right">
-								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
-								<b><bean:write name="fundingDetail" property="currencyCode" /></b>
-								&nbsp;
-							</td>
-							<td align="right">									
-								<logic:present name="fundingDetail" property="recipientOrganisation">
-									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
-								</logic:present>
-							</td>
-							<td height="18">
-								<c:if test="${aimEditActivityForm.funding.fixerate == true}">								
-									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
-								</c:if>
-							</td>
-		</tr>
+			<%@include file="previewActivityFundingDetail.jspf" %>
 	</logic:iterate>
 	</c:if>
 	
@@ -88,33 +64,7 @@
 	<!-- Start Actual EDD -->
 	<c:if test="${!empty funding.actualEDDDetails}">	
 	<logic:iterate name="funding" property="actualEDDDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
-						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF">
-								<b>
-									<digi:trn><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></digi:trn>
-								</b>										
-							</td>
-
-							<td align="right" align="right">
-								<b><bean:write name="fundingDetail" property="transactionDate" /></b>								
-							</td>
-							<td align="right">
-								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
-								
-								<b><bean:write name="fundingDetail" property="currencyCode" /></b>&nbsp;
-																
-							</td>
-							<td align="right">									
-								<logic:present name="fundingDetail" property="recipientOrganisation">
-									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
-								</logic:present>
-							</td>
-							<td height="18">
-								<c:if test="${aimEditActivityForm.funding.fixerate == true}">
-									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
-								</c:if>
-							</td>
-						</tr>
+		<%@include file="previewActivityFundingDetail.jspf" %>
 	</logic:iterate>
 	</c:if>
 	<!-- End Actual EDD -->
@@ -147,32 +97,7 @@
 	<!-- Start Pipeline EDD -->
 	<c:if test="${!empty funding.pipelineEDDDetails}">	
 	<logic:iterate name="funding" property="pipelineEDDDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
-						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF">
-								<b>
-									<digi:trn><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></digi:trn>
-								</b>										
-							</td>
-
-							<td align="right" align="right">
-								<b><bean:write name="fundingDetail" property="transactionDate" /></b>								
-							</td>
-							<td align="right">
-								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
-								
-								<b><bean:write name="fundingDetail" property="currencyCode" /></b>&nbsp;
-							</td>
-							<td align="right">									
-								<logic:present name="fundingDetail" property="recipientOrganisation">
-									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
-								</logic:present>
-							</td>
-							<td height="18">
-								<c:if test="${aimEditActivityForm.funding.fixerate == true}">
-									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
-								</c:if>
-							</td>
-						</tr>
+		<%@include file="previewActivityFundingDetail.jspf" %>
 	</logic:iterate>
 	</c:if>
 	<!-- End Actual EDD -->

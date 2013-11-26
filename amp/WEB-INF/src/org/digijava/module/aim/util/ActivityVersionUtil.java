@@ -38,7 +38,7 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 public class ActivityVersionUtil {
 

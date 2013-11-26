@@ -27,16 +27,17 @@ public class AddProposedFunding extends Action{
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws java.lang.Exception{
 
-        EditActivityForm eaForm = (EditActivityForm) form;
-        ProposedProjCost propProjCost=new ProposedProjCost();
-        eaForm.setReset(false);
-        if(eaForm.getFunding().getProProjCost()==null){
-            propProjCost.setCurrencyCode(null);
-            propProjCost.setFunAmount(null);
-            propProjCost.setFunDate(null);
-            eaForm.getFunding().setProProjCost(propProjCost);
-        }
-
-        return mapping.findForward("forward");
+    	throw new RuntimeException("not implemented");
+//        EditActivityForm eaForm = (EditActivityForm) form;
+//        ProposedProjCost propProjCost=new ProposedProjCost();
+//        eaForm.setReset(false);
+//        if(eaForm.getFunding().getProProjCost()==null){
+//            propProjCost.setCurrencyCode(null);
+//            propProjCost.setFunAmount(null);
+//            propProjCost.setFunDate(null);
+//            eaForm.getFunding().setProProjCost(propProjCost);
+//        }
+//
+//        return mapping.findForward("forward");
     }
 }

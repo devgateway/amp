@@ -930,7 +930,7 @@ public class MapFilter {
 	public void setProjectstatus(List<AmpCategoryValue> projectstatus) {
 		this.projectstatus = projectstatus;
 	}
-
+	
 	/**
 	 * computes the list of activity Id's which should be displayed by a map which uses this filter's workspace setting. DOES NOT TAKE INTO ACCOUNT 
 	 * @return
@@ -943,10 +943,10 @@ public class MapFilter {
 		{
 			if (this.getFromPublicView() != null && this.getFromPublicView() == true) {
 				String workSpaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(TLSUtils.getRequest().getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
-				workspaceActivityList = DbHelper.getInActivities(workSpaceQuery);
+				workspaceActivityList = DbHelper.getInActivitiesLong(workSpaceQuery);
 			} else if(!this.isModeexport()){
 				String workSpaceQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
-				workspaceActivityList = DbHelper.getInActivities(workSpaceQuery);
+				workspaceActivityList = DbHelper.getInActivitiesLong(workSpaceQuery);
 			}
 			return workspaceActivityList;
 		}

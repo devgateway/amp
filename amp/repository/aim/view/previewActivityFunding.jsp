@@ -230,7 +230,7 @@
 
                                                     <module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"
                                                             parentModule="/Activity Form/Funding/Funding Group/Funding Item">
-                                                        <jsp:include page="previewMtefProjections.jsp" />
+                                                        <jsp:include page="previewActivityFundingMTEF.jsp" />
                                                     </module:display>
 
  												    <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds"

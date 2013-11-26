@@ -101,6 +101,7 @@ function showFullList(objectType){
 			divTopName = "divTopProjects";
 			break;
 	}
+	
 	var divFull = document.getElementById(divFullName);
 	divFull.innerHTML = trnLoading + "<br/> <img src=\"/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif\" />"; 
 	var divTop = document.getElementById(divTopName);

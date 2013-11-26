@@ -116,5 +116,11 @@ public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
 	public int compareTo(AmpXmlPatch o) {
 		return this.getPatchId().compareTo(o.getPatchId());
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.location + this.patchId + "(state:" + this.state + ")";
+	}
 
 }

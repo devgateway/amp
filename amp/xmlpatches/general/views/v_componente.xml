@@ -19,7 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_componente AS SELECT sa.amp_activity_id, s.name, sa.amp_sector_id, sa.percentage FROM amp_activity_componente sa, amp_sector s WHERE (sa.amp_sector_id = s.amp_sector_id) ORDER BY sa.amp_activity_id, s.name;;;
+				DROP VIEW IF EXISTS v_componente;
         		</lang>
 		</script>
 	</apply>

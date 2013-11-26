@@ -2060,9 +2060,9 @@ public class TeamUtil {
                     + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
                     + AmpTeamReports.class.getName() 
                     + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
-                   if (name != null) {
-                	   queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
-                   }
+//                   if (name != null) {
+//                	   queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
+//                   }
                    if(onlyCategorized!=null && onlyCategorized){
                 	   queryString += " and r.reportCategory is not null ";
                    }
@@ -2070,9 +2070,13 @@ public class TeamUtil {
                   	 queryString += " and r.reportCategory=:repCat ";
                   }
 
-                queryString +=  " order by " + reportNameHql;
-                qry = session.createQuery(queryString);
-                qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
+                   if (name != null) 
+                   {
+            	 	 	queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
+            	 	 	queryString +=  " order by " + reportNameHql;                   
+                   }
+                   qry = session.createQuery(queryString);
+                   qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
                 qry.setParameter("teamid", teamId);
                 if ( getTabs!=null )
              	   qry.setBoolean("getTabs", getTabs);
@@ -2125,15 +2129,20 @@ public class TeamUtil {
 				"  r left join r.members m where " + tabFilter + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
 				" tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
-               if(name!=null){
-            	   queryString += String.format(" and lower(%s) like lower(:name)", reportNameHql);
-               }
+//               if(name!=null){
+//            	   queryString += String.format(" and lower(%s) like lower(:name)", reportNameHql);
+//               }
                if(onlyCategorized!=null && onlyCategorized){
             	   queryString += " and r.reportCategory is not null ";
                }
                if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
               	 queryString += " and r.reportCategory=:repCat ";
               }
+               if (name != null) 
+               {
+        	 	 	queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
+        	 	 	queryString +=  " order by " + reportNameHql;                   
+               }
          	  qry = session.createQuery(queryString); 
          	  qry.setLong("ampTeamMemId", memberId);
           	  qry.setLong("teamId", teamId);

@@ -38,37 +38,42 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 		
 		ServletContext ctx = null;
 		Connection connection = null;
-		Session session = null;
-		try {
+		try 
+		{
+			connection = PersistenceManager.getJdbcConnection();		
+			connection.setAutoCommit(false);
+			
+			// make sure that, in case the following SQL stuff fails, at least the Java side executed correctly and committed its stuff
+			connection.setAutoCommit(true);
+			PublicViewColumnsUtil.maintainPublicViewCaches(connection, true); // let Java do all the repetitive work
+			connection.setAutoCommit(false); // this will commit any unfinished transaction started by PublicViewColumnsUtil
+			
+			// handle special stuff in SQL - right now, create cached_v_m_donor_funding
 			ctx = (ServletContext) arg0.getScheduler().getContext().get(Constants.AMP_SERVLET_CONTEXT);
+			
+			String patchFile = ctx.getRealPath("/repository/mondrian/sql/refresh_mondrian_cache.sql");
 		
-		String patchFile = ctx.getRealPath("/repository/mondrian/sql/refresh_mondrian_cache.sql");
-		
-		LineNumberReader bis = new LineNumberReader(new FileReader(patchFile));
-		StringBuffer sb = new StringBuffer();
-		String s = bis.readLine();
-		while (s != null) {
-			sb.append(s);
-			s = bis.readLine();
-		}
-		
-		connection = PersistenceManager.getJdbcConnection();
-		
-		connection.setAutoCommit(false);
+			LineNumberReader bis = new LineNumberReader(new FileReader(patchFile));
+			StringBuffer sb = new StringBuffer();
+			String s = bis.readLine();
+			while (s != null) {
+				sb.append(s);
+				s = bis.readLine();
+			}		
 
-		StringTokenizer stok = new StringTokenizer(sb.toString(),";");
+			StringTokenizer stok = new StringTokenizer(sb.toString(),";");
 			
 			Statement st = connection.createStatement();
 			
-			while (stok.hasMoreTokens()) {
+			while (stok.hasMoreTokens()) 
+			{
 				String sqlCommand = stok.nextToken();
 				if (sqlCommand.trim().equals(""))
 					continue;
 				st.addBatch(sqlCommand);
 			}
 			st.executeBatch();
-			connection.commit();
-		
+			connection.commit();		
 		}
 		catch (SchedulerException e) {
 			logger.error(e);

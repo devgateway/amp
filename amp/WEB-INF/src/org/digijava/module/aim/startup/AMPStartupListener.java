@@ -41,6 +41,7 @@ import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.mondrian.job.PublicViewColumnsUtil;
 import org.hibernate.Session;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -55,8 +56,6 @@ public class AMPStartupListener extends HttpServlet implements
 	 * 
 	 */
 	private static final long serialVersionUID = 5724776790911414323L;
-
-	private static final String PATCH_METHOD_KEY = "patchAMP";
 
 	private static Logger logger = Logger.getLogger(AMPStartupListener.class);
 	
@@ -236,17 +235,8 @@ public class AMPStartupListener extends HttpServlet implements
 			// get the default amp template!!!
 			Session session = PersistenceManager.getSession();
 
-			AmpTemplatesVisibility currentTemplate = null;
-			try {
-				currentTemplate = FeaturesUtil
-						.getTemplateVisibility(
-								FeaturesUtil
-										.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),
-								session);
-				ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-			} finally {
-				PersistenceManager.releaseSession(session);
-			}
+			AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE), session);
+			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 			ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 			ampContext.setAttribute("FMcache", "read");
 
@@ -259,11 +249,12 @@ public class AMPStartupListener extends HttpServlet implements
 			ampContext.setAttribute("ampColumnsOrder", ampColumns);
 
 			GlobalSettings globalSettings = GlobalSettings.getInstance();
-			globalSettings.setShowComponentFundingByYear(FeaturesUtil
-					.isShowComponentFundingByYear());
+			globalSettings.setShowComponentFundingByYear(FeaturesUtil.isShowComponentFundingByYear());
 			FeaturesUtil.switchLogicInstance();
 
 			ampContext.setAttribute(Constants.GLOBAL_SETTINGS, globalSettings);
+			
+			maintainMondrianCaches();
 
 			// Lucene indexation
 			LuceneUtil.checkIndex(sce.getServletContext());
@@ -301,6 +292,34 @@ public class AMPStartupListener extends HttpServlet implements
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
 			e.printStackTrace(System.out);
+		}
+	}
+	
+	public void maintainMondrianCaches()
+	{
+//		org.hibernate.jdbc.Work mondrianMaintenanceWork = new org.hibernate.jdbc.Work()
+//		{
+//			@Override
+//			public void execute(Connection connection) throws SQLException
+//			{
+//				PublicViewColumnsUtil.maintainPublicViewCaches(connection, false);
+//			}
+//		};
+//		session.doWork(mondrianMaintenanceWork);		
+		try
+		{
+			java.sql.Connection connection = PersistenceManager.getJdbcConnection();		
+			connection.setAutoCommit(false);
+		
+			// make sure that, in case the following SQL stuff fails, at least the Java side executed correctly and committed its stuff
+			connection.setAutoCommit(true);
+			PublicViewColumnsUtil.maintainPublicViewCaches(connection, false); // let Java do all the repetitive work
+			connection.setAutoCommit(false); // this will commit any unfinished transaction started by PublicViewColumnsUtil
+			connection.close();
+		}
+		catch(Exception e)
+		{
+			logger.error("some serious error happened while maintaining Mondrian caches", e);
 		}
 	}
 }

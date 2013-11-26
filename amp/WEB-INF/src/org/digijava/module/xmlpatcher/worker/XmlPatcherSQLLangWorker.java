@@ -85,6 +85,7 @@ public class XmlPatcherSQLLangWorker extends XmlPatcherLangWorker {
 					.trim(), getEntity().getDelimiter());
 			while (stok.hasMoreTokens()) {
 				String sqlCommand = stok.nextToken();
+				//logger.info("XML PATCH preparing to run " + sqlCommand);
 				if (sqlCommand.trim().equals(""))
 					continue;
 				statement.addBatch(sqlCommand);

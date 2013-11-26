@@ -169,8 +169,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 	 * @param serviceContext
 	 * @throws DgException
 	 */
-	private Collection<AmpXmlPatch> processUnclosedPatches(
-			Collection<AmpXmlPatch> scheduledPatches,
+	private Collection<AmpXmlPatch> processUnclosedPatches(Collection<AmpXmlPatch> scheduledPatches,
 			ServiceContext serviceContext) throws DgException {
 		Iterator<AmpXmlPatch> iterator = scheduledPatches.iterator();
 		logger.info(scheduledPatches.size()+" patches scheduled for execution...");
@@ -241,14 +240,12 @@ public class XmlPatcherService extends AbstractServiceImpl {
 
 			//applying deprecation tags -read all deprecate tags in all patches
 			//and flag deprecated the patches mentioned
-			List<AmpXmlPatch> rawPatches = XmlPatcherUtil
-			.getAllDiscoveredUnclosedPatches();
+			List<AmpXmlPatch> rawPatches = XmlPatcherUtil.getAllDiscoveredUnclosedPatches();
 			
 			processDeprecation(rawPatches, serviceContext);
 
 			//read patches again, after deprecation flags set (so only the ones that are not depr)
-			rawPatches = XmlPatcherUtil
-					.getAllDiscoveredUnclosedPatches();
+			rawPatches = XmlPatcherUtil.getAllDiscoveredUnclosedPatches();
 			scheduler = (XmlPatcherScheduler) Class.forName(
 					XmlPatcherConstants.schedulersPackage + schedulerName)
 					.getConstructors()[0].newInstance(new Object[] {

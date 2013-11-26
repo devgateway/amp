@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -36,6 +37,20 @@ public class SQLUtils {
 	public static boolean tableExists(Connection connection, String tableName)
 	{
 		return !getTableColumns(connection, tableName).isEmpty();
+	}
+	
+	public static void executeQuery(Connection conn, String query)
+	{
+		try
+		{
+			Statement statement = conn.createStatement();
+			statement.execute(query);
+			statement.close();
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**

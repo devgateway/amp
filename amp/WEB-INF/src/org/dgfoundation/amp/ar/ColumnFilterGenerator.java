@@ -199,6 +199,10 @@ public class ColumnFilterGenerator {
 			while (i.hasNext()) {
 				AmpColumnsFilters cf = (AmpColumnsFilters) i.next();
 				
+				if (cf == null)
+					continue;
+				if (cf.getColumn() == null)
+					continue;
 				if(colNames.contains(cf.getColumn().getColumnName())) continue;
 				
 				Object property = PropertyUtils.getSimpleProperty(filter, cf

@@ -568,9 +568,19 @@ public class DbUtil {
         Long[] orgIds= filter.getSelOrgIds();
         if (orgGroupIds!=null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
 			if (orgGroupIds.length == 1) {
+				//in the quick filter, all organizations are selected for a given group (orgIds[0]==-1) 
+				if (orgIds!=null && orgIds[0]== -1) {
 				List<AmpOrganisation> donorsByGrp = org.digijava.module.aim.util.DbUtil.getOrganisationByGroupId(orgGroupIds[0]);
 				agencies.addAll(donorsByGrp);
 				return agencies;
+				}
+				//if only one organization is selected for a given group
+				else {
+					AmpOrganisation organisation = org.digijava.module.aim.util.DbUtil.getOrganisation(orgIds[0]);
+					List <AmpOrganisation> listOrganisation = new ArrayList<AmpOrganisation>();
+					listOrganisation.add(organisation);
+					return listOrganisation;
+				}
 			} else {
 				for (int i = 0; i < orgGroupIds.length; i++) {
 					List<AmpOrganisation> donorsByGrp = org.digijava.module.aim.util.DbUtil.getOrganisationByGroupId(orgGroupIds[i]);

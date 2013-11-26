@@ -16,6 +16,13 @@ public class PublicViewColumnsUtil
 {
 	protected static Logger logger = Logger.getLogger(PublicViewColumnsUtil.class);
 	
+	/**
+	 * only change this to false when you have REALLY good reasons for this and ONLY WHILE TESTING OTHER STUFF <br />
+	 * NEVER RUN ANY AMP 2.7+ PRODUCTION INSTANCE WITH THIS SET TO false !!! 
+	 * Злой маньяк Constantin is taking care that this rule is enforced!
+	 */
+	public final static boolean CRASH_ON_INVALID_COLUMNS = true;
+	
 	public static String getPublicViewTable(String extractorView)
 	{
 		return ArConstants.VIEW_PUBLIC_PREFIX + extractorView;
@@ -103,6 +110,11 @@ public class PublicViewColumnsUtil
 			case ORIGINAL_TABLE_MISSING:
 			{
 				logger.error(String.format("a view referenced in amp_columns [%s] is nonexistant in the database. THIS IS A SERIOUS ERROR!", viewName));
+				if (CRASH_ON_INVALID_COLUMNS)
+				{
+					logger.fatal("Crashing AMP on purpose. DO NOT IGNORE THIS MESSAGE OR DISABLE THE CHECK - FIX THE DATABASE. Offending amp_columns-referenced view is " + viewName);
+					throw new Error("a column references non-existant view " + viewName + ". Fix your database!");
+				}
 				return;
 			}
 			case CACHED_TABLE_MISSING:

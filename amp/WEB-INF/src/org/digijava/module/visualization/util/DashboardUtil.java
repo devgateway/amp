@@ -201,7 +201,9 @@ public class DashboardUtil {
 			newFilter.setSelLocationIds(ids);
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType());
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-	        map.put(location, total);
+	        if(total.doubleValue()!=0d){
+	        	map.put(location, total);
+	        }
 		}
 		return sortByValue (map, null);
 	}	

@@ -1069,8 +1069,10 @@ public class DashboardUtil {
 		ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));
 		for (Iterator iterator = catList.iterator(); iterator.hasNext();) {
 			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
-			if (ampCategoryValue.getValue().equals("1")||ampCategoryValue.getValue().equals("2")||ampCategoryValue.getValue().equals("3"))
-			filter.getPeacebuilderMarkerList().add(ampCategoryValue);
+			if (ampCategoryValue.getValue().equals("1")||ampCategoryValue.getValue().equals("2")||ampCategoryValue.getValue().equals("3")){
+				ampCategoryValue.setValue(CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue));
+				filter.getPeacebuilderMarkerList().add(ampCategoryValue);
+			}
 		}
 		filter.setPeacebuildingList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACEBUILDING_GOALS_KEY)));
         

@@ -199,6 +199,21 @@
 		}
 		return true;
 	}
+	
+	function resetFields () {
+		var list = document.getElementsByTagName('input');
+		for(var i = 0; i < list.length; i++) {
+		  if(list[i].type == 'text' || list[i].type == 'password')
+		    {
+			  list[i].value = '';
+			}
+		}
+		document.getElementsByName("selectedOrgType")[0].selectedIndex = 0;
+		document.getElementsByName("selectedOrgGroup")[0].selectedIndex = 0;
+		document.getElementsByName("selectedOrganizationId")[0].selectedIndex = 0;
+
+	}
+
 
 	var enterBinder	= new EnterHitBinder('registerUserBtn');
 
@@ -373,7 +388,7 @@
               <c:set var="btnReset">
                 <digi:trn key="btn:reset">Reset</digi:trn>
               </c:set>
-                <html:reset styleClass="buttonx" value="${btnReset}" onclick=""/>
+             	<input type="button" class="buttonx" value="${btnReset}" onclick="return resetFields();"/>
              </td>
 			 <td></td>
               </tr>

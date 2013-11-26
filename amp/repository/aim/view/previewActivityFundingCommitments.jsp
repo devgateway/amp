@@ -24,12 +24,12 @@
 <c:if test="${!empty funding.plannedCommitmentsDetails}">
 	
 	<tr bgcolor="#ffffff">
-		<td height="20" colspan="4" valign="bottom" bgcolor="#FFFFCC"
+		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
 			style="text-transform: uppercase;"><a
 			title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
 		<digi:trn key="aim:plannedcommitments">Planned Commitments </digi:trn>
 		</a></td>
-		<td bgcolor="#FFFFCC">
+		<td height="20" bgcolor="#FFFFCC" align="center">
 			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
 				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
 			</c:if>
@@ -58,8 +58,7 @@
                 	<b>${funding.subtotalPlannedCommitments} ${aimEditActivityForm.currCode}</b>
                 </c:if>&nbsp;
             </td>
-      		<td align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">&nbsp;</td>
+ 	<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 	</c:if>
 </c:if>	
@@ -72,7 +71,7 @@
 			<a title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
 			<digi:trn key="aim:actualcommitments">Actual Commitments </digi:trn> </a>
 		</td>
-		<td height="20" bgcolor="#FFFFCC">
+		<td height="20" bgcolor="#FFFFCC" align="center">
 			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
 				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
 			</c:if>
@@ -111,14 +110,14 @@
         	<td colspan="4" height="7px"></td>
         </tr>
         <tr>
-            <td height="20" colspan="4" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase"><a>
+            <td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase"><a>
                 <digi:trn>Pipeline Commitments </digi:trn> </a>
-                </td>
-                <td height="20" bgcolor="#FFFFCC">
-                	<c:if test="${aimEditActivityForm.funding.fixerate == true}">
-                        <b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
-                	</c:if>
-                </td>
+			</td>
+			<td height="20" bgcolor="#FFFFCC" align="center">
+				<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+					<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+				</c:if>
+			</td>
         </tr>
         <c:if test="${!empty funding.fundingDetails}">
         	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">

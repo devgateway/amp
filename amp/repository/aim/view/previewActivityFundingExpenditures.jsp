@@ -20,11 +20,17 @@
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedExpendituresDetails}">
 <tr bgcolor="#FFFFCC">
-	<td colspan="5" style="text-transform: uppercase"><a
+	<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
+			style="text-transform: uppercase;"><a
 		title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
 
 	<digi:trn key="aim:plannedexpenditures">Planned Expenditures</digi:trn>
 	</a></td>
+	<td height="20" bgcolor="#FFFFCC" align="center">
+		<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+			<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+		</c:if>
+	</td>	
 </tr>
 
 <c:if test="${!empty funding.fundingDetails}">
@@ -32,41 +38,7 @@
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="2">
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">
-
-						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF">
-							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
-								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
-								<b>
-									<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-										<bean:write name="fundingDetail" property="adjustmentTypeName.value"/>
-									</digi:trn>
-								</b>
-							</module:display>
-							</td>
-							<td align="right">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Transaction Date"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
-									<b><bean:write name="fundingDetail" property="transactionDate"/></b>
-								</module:display>
-							</td>
-
-							<td align="right" colspan="2"><!-- no recipient organisation -->
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Amount"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
-									<b><bean:write name="fundingDetail" property="transactionAmount"/></b>&nbsp;																								
-								</module:display>
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Currency"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
-									<b><bean:write name="fundingDetail" property="currencyCode"/></b>&nbsp;
-								</module:display>
-								</td>
-							<td align="left" bgcolor="#ffffff"></td>
-						</tr>
-						<tr>
-							<td colspan="4"></td>
-						</tr>
-
+				<%@include file="previewActivityFundingDetail.jspf" %>
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
@@ -91,54 +63,23 @@
 	<c:if test="${aimEditActivityForm.funding.showActual}">
 	<c:if test="${!empty funding.actualExpendituresDetails}">
 	<tr bgcolor="#FFFFCC">
-		<td colspan="5" style="text-transform: uppercase">
+		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase">
 			<a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
 				<digi:trn key="aim:actualexpenditures">Actual Expenditures</digi:trn>:
 			</a>
 		</td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>		
 	</tr>
 	<c:if test="${!empty funding.fundingDetails}">
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 	<!--Actual-->
 		<logic:equal name="fundingDetail" property="transactionType" value="2">
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Actual">
-
-						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF">
-							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
-								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
-								<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value"/></b>
-								</digi:trn>
-							</module:display>
-							</td>
-							<td align="right">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Transaction Date"
-									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
-									<b><bean:write name="fundingDetail" property="transactionDate"/></b>
-								</module:display>
-							</td>
-							<td align="right">
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Amount"
-										parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
-									<b><bean:write name="fundingDetail" property="transactionAmount"/></b>&nbsp;
-								</module:display>		
-								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Currency"
-										parentModule="/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
-									<b><bean:write name="fundingDetail" property="currencyCode"/></b>
-								</module:display>&nbsp;
-							</td>
-							<td align="left" bgcolor="#ffffff"></td>
-
-						</tr>
-						<field:display name="Classification Expenditure" feature="Funding Information">
-							<tr>
-								<td colspan="4">
-									<b><bean:write name="fundingDetail" property="classification"/></b>
-								</td>
-							</tr>
-						</field:display>
-
+				<%@include file="previewActivityFundingDetail.jspf" %>
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>

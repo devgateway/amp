@@ -15,9 +15,14 @@
 <digi:instance property="aimEditActivityForm" />
 <c:if test="${!empty funding.mtefDetails}">
     <tr bgcolor="#FFFFCC">
-        <td colspan="4" style="text-transform: uppercase">
+        <td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase;">
             <a><digi:trn key="aim:plannedexpenditures">MTEF Projections</digi:trn></a>
         </td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>        
     </tr>
 
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">

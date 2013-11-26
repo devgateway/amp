@@ -17,11 +17,16 @@
 
 <c:if test="${!empty funding.mtefDetails}">
 	<tr bgcolor="#FFFFCC">
-		<td colspan="4" style="text-transform: uppercase">
+		<td colspan="3" style="text-transform: uppercase">
 			<a title='<digi:trn>Medium-Term Expenditure Framework Projections</digi:trn>'>
 				<digi:trn>MTEF Projections</digi:trn>:
 			</a>
 		</td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>		
 	</tr>
 	<c:if test="${!empty funding.fundingDetails}">
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">

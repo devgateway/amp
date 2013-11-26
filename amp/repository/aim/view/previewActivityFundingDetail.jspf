@@ -1,11 +1,15 @@
 <%--
 	renders 1 or 2 rows (<tr /> items) for a funding item. The second row is generated only if it is a directed disbursement
 	
+	column 5 of layout left untouched (for spacing)
+first row (always):
 	col 1: Title	OR	Adjustments
 	col 2: Transaction date
-	col 3: Transaction sum
-	col 4: Recipient
-	col 5: spacing for non-totals
+	col 3,4: Transaction amount, transaction currency, fixed exchange rate (if any)
+	
+second row (if any):	
+	col 1: spacing
+	col 2,3,4: recipient
 	
  --%>
 <tr bgcolor="#ffffff">
@@ -21,7 +25,7 @@
 				<b><bean:write name="fundingDetail" property="transactionAmount" /></b> &nbsp;
 				<b><bean:write name="fundingDetail" property="currencyCode" /></b>
 			</td>
-			<td>
+			<td align='right'>
 				<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 			</td>
 		</c:when>
@@ -37,7 +41,15 @@
 	<tr>
 		<td colspan="1">&nbsp;</td>
 		<td colspan="3" align="right">
-			<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><digi:trn>&nbsp;as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;			
+			<digi:trn>Recipient</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><digi:trn>&nbsp;as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;			
+		</td>
+	</tr>
+</logic:present>
+<logic:present name="fundingDetail" property="classification">
+	<tr>
+		<td colspan="1">&nbsp;</td>
+		<td colspan="3" align="right">
+			<digi:trn>Classification</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="classification"/></b>&nbsp;			
 		</td>
 	</tr>
 </logic:present>

@@ -17,11 +17,16 @@
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedDisbursementDetails}">
 	<tr bgcolor="#ffffff">
-		<td height="20" colspan="5" bgcolor="#FFFFCC" style="text-transform: uppercase">
+		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase;">
             <a title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
 	        	<digi:trn key="aim:planneddisbursements">Planned Disbursement</digi:trn>
 		    </a>
         </td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>
 	</tr>
 	
 	<!-- Start Planned Disbursements -->
@@ -38,8 +43,7 @@
 	
 	<!-- End Planned Disbursements -->
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase">
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
 			<digi:trn key='aim:subtotalplanneddisbursement'>Subtotal Planned Disbursement</digi:trn>:
 		</td>
 		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"
@@ -60,11 +64,14 @@
         <td colspan="4" height="7px"></td>
     </tr>
 	<tr bgcolor="#ffffff">
-		<td colspan="4" bgcolor="#FFFFCC" style="text-transform: uppercase;" >
-            <a title="">
-                <digi:trn key="aim:actualisbursements">Actual Disbursement</digi:trn>:
-            </a>
+		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase;">
+			<digi:trn key="aim:actualisbursements">Actual Disbursement</digi:trn>:
         </td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>
 	</tr>
 
 	<!-- Start Actual Disbursements -->
@@ -99,8 +106,14 @@
 	
 <tr><td colspan="4" height="7px"></td></tr>
 	<tr bgcolor="#ffffff">
-		<td colspan="5" bgcolor="#FFFFCC" 
-			style="text-transform: uppercase; text-transform: uppercase"><digi:trn>Pipeline Disbursement</digi:trn>:</td>
+		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase">
+			<digi:trn>Pipeline Disbursement</digi:trn>:
+		</td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>
 	</tr>
 
 	<!-- Start Pipeline Disbursements -->
@@ -119,8 +132,7 @@
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000"><digi:trn>Subtotal Pipeline Disbursement </digi:trn>:
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
 			 <c:if test="${not empty funding.subtotalDisbursements}">
                 <b>${funding.subtotalPipelineDisbursements} ${aimEditActivityForm.currCode}</b>
              </c:if>&nbsp;
@@ -131,11 +143,11 @@
 	</c:if>
 	</c:if>
 	
-	
-	</module:display>
-
-
-
 	<tr><td colspan="4" height="7px"></td></tr>
+</module:display>
+
+
+
+
 
 

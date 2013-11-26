@@ -84,7 +84,7 @@
 															<digi:trn>Results</digi:trn>&nbsp;
 															<html:select property="tempNumResults" style="width:100px" value='${aimTeamReportsForm.tempNumResults}'  styleClass="inp-text" onchange="return searchActivity('${aimTeamReportsForm.teamId }')">
 																<c:if test="${aimTeamReportsForm.tempNumResults!=-1}">
-																	<html:option value="${aimTeamReportsForm.tempNumResults}">${aimTeamReportsForm.tempNumResults}</html:option>
+																	<html:option value="${aimTeamReportsForm.tempNumResults}"><digi:trn>Current</digi:trn>: ${aimTeamReportsForm.tempNumResults}</html:option>
 																</c:if>
 																<html:option value="10">10</html:option>
 																<html:option value="20">20</html:option>

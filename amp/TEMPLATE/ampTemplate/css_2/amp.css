@@ -999,3 +999,16 @@ div.innerTab {
 	padding: 2px; /* swallow border's +1 paddings */
 	background-color: #FFFFDD;
 }
+
+#mainmenuHeader a.arrow_dropdown {
+    vertical-align: middle;
+    text-decoration: none;
+    padding: 4px 8px 5px 0px;
+    cursor: pointer;
+    display: block;
+    float: left;
+}
+#mainmenuHeader a.arrow_dropdown img {
+    border: 0px;
+    padding:0px 0px 0px 0px;
+}

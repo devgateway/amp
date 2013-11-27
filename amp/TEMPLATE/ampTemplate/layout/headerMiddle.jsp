@@ -52,12 +52,12 @@ ${fn:replace(message,quote,escapedQuote)}
 
 <logic:notPresent name="currentMember">
 
-<style>
-.yuiampmenuitemlabel
-{
-	cursor:pointer;
-}
+<style type="text/css">
+    .yuiampmenuitemlabel {
+        cursor:pointer;
+    }
 </style>
+
 <div class="menucontainer">
 <div class="yuiamp-skin-amp" style="clear:both;" >
     <div id="mainmenuHeader" class="yuiampmenu">
@@ -103,8 +103,8 @@ ${fn:replace(message,quote,escapedQuote)}
                     <digi:trn>Reports</digi:trn>
                 </span>
             
-                	<a style="text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                		<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                	<a class="arrow_dropdown">
+                		<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
 					</a>
 	                <div id="reports" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
 	                	<div class="bd bd_drop">
@@ -143,8 +143,8 @@ ${fn:replace(message,quote,escapedQuote)}
 	                	<span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
 	                		<digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
 	                    </span>
-	                    <a  style="text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-	                    	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br/>
+	                    <a class="arrow_dropdown">
+	                    	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br/>
 	                    </a>
 	                  	<div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
 	                    	<div class="bd bd_drop">                    
@@ -200,8 +200,8 @@ ${fn:replace(message,quote,escapedQuote)}
 		                <span class="yuiampmenuitemlabel" href="#" style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
 		                	<digi:trn>Language</digi:trn>
 		                </span>
-		                 <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-		                   <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+		                 <a class="arrow_dropdown">
+		                   <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
 		                </a>               
 		                <div id="language" class="yuiampmenu">
 		                    <div class="bd bd_drop">                    
@@ -248,8 +248,8 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
-                              <a   style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a class="arrow_dropdown">
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">                    
@@ -283,8 +283,8 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
-                              <a   style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a class="arrow_dropdown">
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop" style="border: 1px solid transparent; width:100px;">                    
@@ -407,8 +407,8 @@ function adminHelp(){
                               <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()" >
                                  <digi:trn>Desktop</digi:trn>
                               </a>
-                              <a  style="text-decoration:none;padding: 4px 8px 5px 0px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a class="arrow_dropdown" >
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">
@@ -514,8 +514,8 @@ function adminHelp(){
                               <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
-                              <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a class="arrow_dropdown">
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">                    
@@ -586,8 +586,8 @@ function adminHelp(){
                                 <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:resources">Resources</digi:trn>
                               </a>
-                              <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-	                          	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a class="arrow_dropdown">
+	                          	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
 	                          </a>
                              <div id="Resources" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
                            	 	<div class="bd bd_drop">
@@ -638,8 +638,8 @@ function adminHelp(){
 	                              <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
 	                                  <digi:trn>Calendar</digi:trn>
 	                              </a>
-	                              <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-	                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+	                              <a class="arrow_dropdown">
+	                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
 	                              </a>
 						  		 <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
                             	   <div class="bd bd_drop">
@@ -689,8 +689,8 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                   <digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
                               </span>
-                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a class="arrow_dropdown">
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
                                   <div class="bd bd_drop">                    
@@ -750,8 +750,8 @@ function adminHelp(){
                           		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                           			<digi:trn key="fm:messages">Messages</digi:trn>
                               	</a> 
-                          		<a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                          		<a class="arrow_dropdown">
+                                 	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               	</a>
                              <div id="messages" class="yuiampmenu" style="opacity:0.9;">
 	                             <div class="bd bd_drop">                    
@@ -791,8 +791,8 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
-                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a class="arrow_dropdown">
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;z-index:9999;">
                                   <div class="bd bd_drop" >                    
@@ -862,8 +862,8 @@ function adminHelp(){
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;">
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
-                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a class="arrow_dropdown">
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">                    

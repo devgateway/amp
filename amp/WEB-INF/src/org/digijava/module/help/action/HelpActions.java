@@ -3,10 +3,14 @@ package org.digijava.module.help.action;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -817,38 +821,51 @@ public class HelpActions extends DispatchAction {
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		ZipOutputStream outZip = null;
 		ServletOutputStream ouputStream = null;
+
+		// Create temp file for the zip (this way we can tell the user how big the file is).
+		String randomFileName = String.valueOf(Math.random()*1000000);
+		File tmpZipFile = File.createTempFile(randomFileName, ".tmp");
+		FileOutputStream fileOutputStream = new FileOutputStream(tmpZipFile);
+		outZip = new ZipOutputStream(fileOutputStream);
 		try{
+			// Create zip object with all the images.
 			JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
-			Marshaller m = jc.createMarshaller();
-			//response.setContentType("text/xml");
-			response.setContentType("application/zip");
-			response.setHeader("content-disposition", "attachment; filename=exportHelp.zip");		
+			Marshaller m = jc.createMarshaller();					
 			ObjectFactory objFactory = new ObjectFactory();
 			AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
 			List <AmpHelpType> rsAux;
-			logger.info("loading helpData");
-			ouputStream = response.getOutputStream();
-			outZip = new ZipOutputStream(ouputStream);
-			
+			logger.info("loading helpData");				
 			rsAux= HelpUtil.getExportData(outZip);
 			help_out.getAmpHelp().addAll(rsAux);
+
+			// Create xml structure to be saved too in the zip.
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			m.marshal(help_out,bos);
+			m.marshal(help_out,bos);						
 			outZip.putNextEntry(new ZipEntry("helpExport.xml"));
 			byte [] myArray= bos.toByteArray();
-			int size = myArray.length;
-			//response.setHeader("Content-Length", String.valueOf(size));
-			//logger.info(size);
-			outZip.write(myArray, 0, size);
-			// Complete the entry
-			outZip.closeEntry();			
+			outZip.write(myArray, 0, myArray.length);
+			outZip.closeEntry();
+			outZip.flush();
+			outZip.close();
+
+			// Create an input stream to read the temp zip file. 
+			FileInputStream fileInputStream = new FileInputStream(tmpZipFile);			
+			response.setContentType("application/zip");
+			response.setHeader("content-disposition", "attachment; filename=exportHelp.zip");
+			response.setHeader("Content-Length", String.valueOf(tmpZipFile.length()));
+			
+			// Write the zip stream into the response.
+			ouputStream = response.getOutputStream();
+			byte[] outputByte = new byte[4096];
+			while(fileInputStream.read(outputByte,0, 4096) != -1){
+				ouputStream.write(outputByte, 0, 4096);
+			}
+			fileInputStream.close();
 		}catch(IOException  e){
 			e.printStackTrace();
 		}finally{
 			try{
-				//outZip.flush();
-				// Complete the ZIP file
-				outZip.close();
+				ouputStream.flush();
 				ouputStream.close();
 			}catch(IOException e2){
 				e2.printStackTrace();

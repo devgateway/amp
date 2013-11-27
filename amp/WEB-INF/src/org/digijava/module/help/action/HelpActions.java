@@ -815,7 +815,8 @@ public class HelpActions extends DispatchAction {
 	
 	
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-		ZipOutputStream out = null;
+		ZipOutputStream outZip = null;
+		ServletOutputStream ouputStream = null;
 		try{
 			JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
 			Marshaller m = jc.createMarshaller();
@@ -826,28 +827,29 @@ public class HelpActions extends DispatchAction {
 			AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
 			List <AmpHelpType> rsAux;
 			logger.info("loading helpData");
-			BufferedOutputStream ouputStream = new BufferedOutputStream(response.getOutputStream());
-			out = new ZipOutputStream(ouputStream);
+			ouputStream = response.getOutputStream();
+			outZip = new ZipOutputStream(ouputStream);
 			
-			rsAux= HelpUtil.getExportData(out);
+			rsAux= HelpUtil.getExportData(outZip);
 			help_out.getAmpHelp().addAll(rsAux);
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			m.marshal(help_out,bos);
-			out.putNextEntry(new ZipEntry("helpExport.xml"));
+			outZip.putNextEntry(new ZipEntry("helpExport.xml"));
 			byte [] myArray= bos.toByteArray();
-			//int size = bos.size();
+			int size = myArray.length;
 			//response.setHeader("Content-Length", String.valueOf(size));
 			//logger.info(size);
-			out.write(myArray);
+			outZip.write(myArray, 0, size);
 			// Complete the entry
-			out.closeEntry();
-			out.flush();
+			outZip.closeEntry();			
 		}catch(IOException  e){
 			e.printStackTrace();
 		}finally{
 			try{
+				//outZip.flush();
 				// Complete the ZIP file
-				out.close();
+				outZip.close();
+				ouputStream.close();
 			}catch(IOException e2){
 				e2.printStackTrace();
 			}

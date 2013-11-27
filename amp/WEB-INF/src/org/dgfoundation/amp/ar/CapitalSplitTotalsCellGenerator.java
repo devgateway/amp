@@ -39,7 +39,7 @@ public class CapitalSplitTotalsCellGenerator extends SyntheticCellGenerator {
 	 * @see org.dgfoundation.amp.ar.SyntheticCellGenerator#computeAmount(double, java.util.Set)
 	 */
 	@Override
-	public double computeAmount(double originalAmount, Set metaData) {
+	public double computeAmount(double originalAmount, MetaInfoSet metaData) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

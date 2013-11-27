@@ -1408,7 +1408,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	
 	public static MetaTextCell generateFakeMetaTextCell(TextCell cell, Double percentage) {
 		MetaTextCell fakeC				= new MetaTextCell(cell);
-		Set<MetaInfo<Double>> metaSet	= new HashSet<MetaInfo<Double>>();
+		MetaInfoSet metaSet	= new MetaInfoSet();
 		metaSet.add( new MetaInfo<Double>(ArConstants.PERCENTAGE, percentage) );
 		fakeC.setMetaData(metaSet);
 		return fakeC;

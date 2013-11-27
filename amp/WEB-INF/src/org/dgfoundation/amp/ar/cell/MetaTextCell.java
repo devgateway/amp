@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import org.apache.ecs.vxml.Return;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.MetaInfoSet;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
 
 /**
@@ -20,15 +21,15 @@ import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
  */
 public class MetaTextCell extends TextCell {
 
-	private Set metaData;
+	private MetaInfoSet metaData;
 	
-	public Set getMetaData() {
+	public MetaInfoSet getMetaData() {
 		return metaData;
 	}
 	
-	public MetaInfo getFirstMetaInfo() {
-		return (MetaInfo) metaData.iterator().next();
-	}
+//	public MetaInfo getFirstMetaInfo() {
+//		return (MetaInfo) metaData.iterator().next();
+//	}
 	
 	public boolean getDraftFlag() {
 		MetaInfo metaInfo = getMetaInfo(ArConstants.DRAFT);
@@ -56,14 +57,14 @@ public class MetaTextCell extends TextCell {
 	}
 	
 	public MetaInfo getMetaInfo(String category) {
-		return MetaInfo.getMetaInfo(metaData, category);
+		return metaData.getMetaInfo(category);
 	}
 
 	public Class getWorker() {
 		return MetaTextColWorker.class;
 	}
 	
-	public void setMetaData(Set metaData) {
+	public void setMetaData(MetaInfoSet metaData) {
 		this.metaData = metaData;
 	}
 
@@ -72,7 +73,7 @@ public class MetaTextCell extends TextCell {
 	 */
 	public MetaTextCell() {
 		super();
-		metaData=new TreeSet();
+		metaData = new MetaInfoSet();
 	}
 	
 	public MetaTextCell(TextCell c) {
@@ -81,7 +82,7 @@ public class MetaTextCell extends TextCell {
 		this.setOwnerId(c.getOwnerId());
 		this.setShow(c.isShow());
 		this.setValue(c.getValue());
-		metaData=new TreeSet();
+		metaData = new MetaInfoSet();
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class MetaTextCell extends TextCell {
 	 */
 	public MetaTextCell(Long id) {
 		super(id);
-		metaData=new TreeSet();
+		metaData = new MetaInfoSet();
 	}
 
 }

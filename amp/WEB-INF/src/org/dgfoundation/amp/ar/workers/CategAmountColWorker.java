@@ -52,7 +52,6 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 	public CategAmountColWorker(String condition, String viewName,
 			String columnName,ReportGenerator generator) {
 		super(condition, viewName, columnName,generator);
-		this.metaInfoCache = new HashMap<String, Map<Comparable, MetaInfo>>();	
 	}
 
 	/**filter.getFromYear()!=null

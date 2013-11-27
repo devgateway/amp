@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
@@ -141,20 +142,11 @@ public class GroupColumn extends Column<Column> {
      */
     public static boolean isRealDisbursement(Categorizable item)
     {
-    	boolean isActualDisbursement = false;
-    	boolean hasDestination = false;
-
-    	for(MetaInfo minfo:item.getMetaData())
-    	{
-    		if (minfo == null)
-    			continue; // shouldn't happen
-    		
-    		if (minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
-    			isActualDisbursement = minfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
-    		
-    		if (minfo.getCategory().equals(ArConstants.RECIPIENT_NAME))
-    			hasDestination = true;
-    	}
+    	MetaInfoSet metaData = item.getMetaData();
+    	MetaInfo fundingTypeMetaInfo = metaData.getMetaInfo(ArConstants.FUNDING_TYPE); 
+    	
+    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
+    	boolean hasDestination = metaData.hasMetaInfo(ArConstants.RECIPIENT_NAME);    	
     	   	
     	return isActualDisbursement && hasDestination;
     	
@@ -168,25 +160,14 @@ public class GroupColumn extends Column<Column> {
      */
     public static boolean isEstimatedDisbursement(Categorizable item)
     {
-    	boolean isActualDisbursement = false;
-    	boolean hasDonorSource = false;
-    	boolean hasSource = false;
+       	MetaInfoSet metaData = item.getMetaData();
+    	MetaInfo fundingTypeMetaInfo = metaData.getMetaInfo(ArConstants.FUNDING_TYPE);
+    	MetaInfo sourceRoleMetaInfo = metaData.getMetaInfo(ArConstants.SOURCE_ROLE_CODE);
+    	
+    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
+    	boolean hasSource = sourceRoleMetaInfo != null;
+    	boolean hasDonorSource = hasSource && (sourceRoleMetaInfo.getValue().toString().equals(Constants.ROLE_CODE_DONOR));
 
-    	for(MetaInfo minfo:item.getMetaData())
-    	{
-    		if (minfo == null)
-    			continue; // shouldn't happen
-    		
-    		if (minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
-    			isActualDisbursement = minfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
-    		
-    		if (minfo.getCategory().equals( ArConstants.SOURCE_ROLE_CODE))
-    		{
-    			hasSource = true;
-    			if (minfo.getValue().toString().equals(Constants.ROLE_CODE_DONOR))
-    				hasDonorSource = true;
-    		}
-    	}
     	return isActualDisbursement && ((!hasSource) || (hasSource && hasDonorSource));
     	
     	//return false;
@@ -257,7 +238,10 @@ public class GroupColumn extends Column<Column> {
     	HashMap<String,String> monthMapping = new HashMap<String, String>();
     	    	    	
     	GroupColumn ret = new GroupColumn(src);
-        Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
+        SortedSet<MetaInfo> metaSet = new TreeSet<MetaInfo>(new java.util.Comparator<MetaInfo>(){
+			public int compare(MetaInfo a, MetaInfo b){
+				return ((Comparable)a.value).compareTo((Comparable) b.value);
+			}});
         Iterator<? extends CategAmountCell> i = src.iterator();
        
         AmpARFilter myFilters	= null;
@@ -277,7 +261,7 @@ public class GroupColumn extends Column<Column> {
         while (i.hasNext()) {
         	Categorizable element = (Categorizable) i.next();
             if(!element.isShow()) continue;
-            MetaInfo minfo = MetaInfo.getMetaInfo(element.getMetaData(),category);
+            MetaInfo minfo = element.getMetaData().getMetaInfo(category);
             if (minfo == null || minfo.getValue() == null) 
             	return null;
             	//if the year is not renderizable just not add it to minfo
@@ -292,7 +276,7 @@ public class GroupColumn extends Column<Column> {
 					e.printStackTrace();
 				}
         	    if (category.equalsIgnoreCase(ArConstants.YEAR)){
-                	MetaInfo minfo2=MetaInfo.getMetaInfo(element.getMetaData(),ArConstants.FISCAL_Y);
+                	MetaInfo minfo2 = element.getMetaData().getMetaInfo(ArConstants.FISCAL_Y);
                 	
                 	//Replace the year in pledges report for unspecified dates funding
                 	if (reportMetadata.getType() == ArConstants.PLEDGES_TYPE){
@@ -300,7 +284,8 @@ public class GroupColumn extends Column<Column> {
 	                	String year = pledgesfakeyear.format(new Date(ArConstants.PLEDGE_FAKE_YEAR.getTime())).toString();
 
 	                	if (minfo.getValue().toString().equalsIgnoreCase(year)){
-	                			minfo2.setValue(unspecified);
+	                		element.getMetaData().replace(new MetaInfo(minfo2.getCategory(), unspecified));
+	                		//minfo2.setValue(unspecified);
 	                	}
                 	}
                 	
@@ -308,7 +293,7 @@ public class GroupColumn extends Column<Column> {
                 	
                }
         	    if (category.equalsIgnoreCase(ArConstants.MONTH)){
-                	MetaInfo minfo2=MetaInfo.getMetaInfo(element.getMetaData(),ArConstants.FISCAL_M);
+                	MetaInfo minfo2 = element.getMetaData().getMetaInfo(ArConstants.FISCAL_M);
                 	monthMapping.put(minfo.getValue().toString(), minfo2.getValue() == null ? unspecified : minfo2.getValue().toString());
                 	
                }

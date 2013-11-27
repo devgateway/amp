@@ -30,10 +30,10 @@ public class ActualDisbCapitalCellGenerator extends SyntheticCellGenerator {
 	 * @see org.dgfoundation.amp.ar.SyntheticCellGenerator#computeAmount(double, java.util.Set)
 	 */
 	@Override
-	public double computeAmount(double originalAmount, Set metaData) {
+	public double computeAmount(double originalAmount, MetaInfoSet metaData) {
 		
 		
-		MetaInfo<String> mi	= MetaInfo.getMetaInfo( metaData, this.getMetaDataName() );
+		MetaInfo<String> mi	= metaData.getMetaInfo(this.getMetaDataName() );
 		if ( CategoryConstants.MODE_OF_PAYMENT_CAPITAL_DEVELOPMENT.getValueKey().equals( mi.getValue() ) || 
 				CategoryConstants.MODE_OF_PAYMENT_MINOR_CAPITAL.getValueKey().equals( mi.getValue() ) ) {
 			return originalAmount;

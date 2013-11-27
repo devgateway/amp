@@ -71,7 +71,7 @@ public class MetaTextColWorker extends TextColWorker {
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
 		}
 		
-		MetaInfo percentageMeta = MetaInfo.getMetaInfo(mtc.getMetaData(), ArConstants.PERCENTAGE);
+		MetaInfo percentageMeta = mtc.getMetaData().getMetaInfo(ArConstants.PERCENTAGE);
 		if(percentageMeta!=null && ((Double)percentageMeta.getValue()).doubleValue()==0 && columnName.equals(ArConstants.COLUMN_REGION) && ARUtil.hasHierarchy(generator.getReportMetadata().getHierarchies(),ArConstants.COLUMN_REGION )){ 
 			mtc.setValue(ArConstants.UNALLOCATED);
 		}

@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.Categorizable;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.MetaInfoSet;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -24,10 +25,10 @@ public abstract class CategCell extends Cell implements Categorizable {
 
 	public CategCell() {
 		super();
-		metaData=new HashSet<MetaInfo>();
+		metaData = new MetaInfoSet();
 	}
 	
-	protected HashSet<MetaInfo> metaData;
+	protected MetaInfoSet metaData;
 	
 	/**
 	 * @deprecated
@@ -51,12 +52,7 @@ public abstract class CategCell extends Cell implements Categorizable {
 	
 
 	public MetaInfo getMetaInfo(String category) {
-		Iterator i=metaData.iterator();
-		while (i.hasNext()) {
-			MetaInfo element = (MetaInfo) i.next();
-			if(element.getCategory().equals(category)) return element;
-		}
-		return null;
+		return metaData.getMetaInfo(category);
 	}
 	
 	/**
@@ -66,7 +62,7 @@ public abstract class CategCell extends Cell implements Categorizable {
 	 */
 	public CategCell(Long id) {
 		super(id);
-		metaData = new HashSet<MetaInfo>();
+		metaData = new MetaInfoSet();
 	}
 
 	/* (non-Javadoc)
@@ -80,7 +76,7 @@ public abstract class CategCell extends Cell implements Categorizable {
 	/**
 	 * @return Returns the metaData.
 	 */
-	public HashSet<MetaInfo> getMetaData() {
+	public MetaInfoSet getMetaData() {
 		return metaData;
 	}
 

@@ -36,6 +36,7 @@ public class AllTests {
 		suite.addTest(MiscColumnsTests.suite());
 		suite.addTest(EsriTestCases.suite());
 		suite.addTest(FiltersTests.suite());
+		suite.addTest(MiscReportsTests.suite());
 		//suite.addTest(new DirectedDisbursementsTests("testReports"));
 		//$JUnit-END$
 		return suite;

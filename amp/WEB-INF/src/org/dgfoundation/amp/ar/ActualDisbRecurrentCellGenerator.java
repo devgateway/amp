@@ -29,10 +29,10 @@ public class ActualDisbRecurrentCellGenerator extends SyntheticCellGenerator {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.SyntheticCellGenerator#computeAmount(double, java.util.Set)
 	 */
-	public double computeAmount(double originalAmount, Set metaData) {
+	public double computeAmount(double originalAmount, MetaInfoSet metaData) {
 		
 		
-		MetaInfo<String> mi	= MetaInfo.getMetaInfo( metaData, this.getMetaDataName() );
+		MetaInfo<String> mi	= metaData.getMetaInfo(this.getMetaDataName() );
 		if ( CategoryConstants.MODE_OF_PAYMENT_SALARIES_WAGES.getValueKey().equals( mi.getValue() ) || 
 				CategoryConstants.MODE_OF_PAYMENT_GOODS_SERVICES.getValueKey().equals( mi.getValue() ) ) {
 			return originalAmount;

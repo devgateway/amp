@@ -1128,15 +1128,14 @@ function updateLocationAttributes(graphicLayer, typeFunding) {
 function getStructures(clear) {
 	if (clear) {
 		try {
-			structureGraphicLayer = null;
 			structures = [];
 			structurespoint=[];
-			map.removeLayer(map.getLayer("structuresMap"));
+			cLs.clean();
 		} catch (e) {
 			console.log(e);
 		}
 	}
-	if (structureGraphicLayer) {
+	if (structureGraphicLayer && !clear) {
 		if (structureGraphicLayer.visible) {
 			structureGraphicLayer.hide();
 			cLs.hide();
@@ -1155,7 +1154,7 @@ function getStructures(clear) {
 			id : "structuresMap",
 			visible : structureVisible
 		});
-		
+	
 		structureson = true;
 		var xhrArgs = {
 			url : "/esrigis/datadispatcher.do?showstructures=true&rnd=" + new Date().getTime(),

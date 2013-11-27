@@ -368,6 +368,12 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
         }
     },
 	
+    clean : function(){
+    	this.clear();
+    	this.expandedPointsLayers.clear();
+    	this._features = [];
+    },
+    
     resetCluster:function(){
     	dojo.forEach(this.expandedPointsLayers.graphics,function(item){
     		var point=item.geometry

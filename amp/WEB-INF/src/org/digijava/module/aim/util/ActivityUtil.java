@@ -5369,10 +5369,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	private static Connection conn = createConnection();
-	private static Object lock = new Object();
+	}	
 	
 	/**
 	 * returns a subset of activities which can/should be validated by a team member
@@ -5383,17 +5380,14 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	public static Set<Long> getActivitiesWhichShouldBeValidated(TeamMember tm, Collection<Long> activityIds)
 	{
 		try
-		{
-			if (conn == null)
-				conn = PersistenceManager.getJdbcConnection();
-			
+		{			
 			String query = "SELECT a.amp_activity_id FROM amp_activity_version a WHERE a.amp_activity_id IN (" + TeamUtil.getCommaSeparatedList(activityIds) + ") " +
 				"AND (a.approval_status = 'started' OR a.approval_status='edited') AND (a.draft IS NULL OR a.draft IS FALSE)"; // AND (a.amp_team_id = " + tm.getTeamId() + ")";
 			
+			List<BigInteger> validated_activity_ids = PersistenceManager.getSession().createSQLQuery(query).list();
 			Set<Long> result = new HashSet<Long>();
-			ResultSet resultSet = conn.createStatement().executeQuery(query);
-			while (resultSet.next())
-				result.add(resultSet.getLong(1));
+			for(BigInteger bi:validated_activity_ids)
+				result.add(bi.longValue());
 			
 			return result;
 		}
@@ -5408,35 +5402,30 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		//synchronized(lock) // cheaper to synchronize than to get a new connection every time
 		{
 			try 
-			{		
-				if (conn == null)
-					conn = PersistenceManager.getJdbcConnection();
-				
+			{						
 				String query = "SELECT a.amp_activity_id, a.amp_team_id, a.draft, a.approval_status from amp_activity_version a where a.amp_activity_id = " + activityId;
-				Statement stmt = conn.createStatement();
-				ResultSet resultSet = stmt.executeQuery(query);
+				
+				List<Object[]> sqlRes = PersistenceManager.getSession().createSQLQuery(query).list();				
 				
 				boolean returnValue = false;
 				
-				int count = 0;
-				while (resultSet.next())
-				{
-					count ++;
-					if (count == 2)
-						return false; // 2+ results
+				int count = sqlRes.size();
+				if (count != 1)
+					return false;
+				
+				Object[] rs = sqlRes.get(0);
+
+				long actId = ((BigInteger) rs[0]).longValue();
+				long teamId = ((BigInteger) rs[1]).longValue();
+				Boolean draft = (Boolean) rs[2];
+				String status = (String) rs[3];
 					
-					long actId = resultSet.getLong(1);
-					long teamId = resultSet.getLong(2);
-					Boolean draft = resultSet.getBoolean(3);
-					String status = resultSet.getString(4);
+				if (draft == null)
+					draft = false;
 					
-					if (draft == null)
-						draft = false;
-					
-					if (true || tm.getTeamId().equals(teamId) ) {
-						if ( !draft && ("started".equals(status)||"edited".equals(status)) )
-							returnValue = true;
-					}
+				if (true || tm.getTeamId().equals(teamId) ) {
+					if ( !draft && ("started".equals(status)||"edited".equals(status)) )
+					returnValue = true;
 				}
 				
 				return returnValue;

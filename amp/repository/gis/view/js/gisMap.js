@@ -1036,6 +1036,7 @@
 				document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund;
 			}
 			if (document.getElementById("tooltipTotalPlannedDisbursementContainer")){
+				//alert(totalPlannedDisbFund);
 				document.getElementById("tooltipTotalPlannedDisbursementContainer").innerHTML = totalPlannedDisbFund;
 			}
 		
@@ -1056,7 +1057,12 @@
 				document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2] + note;
 			}
 			if(document.getElementById("tooltipCurrentPlannedDisbursementContainer")){
-				document.getElementById("tooltipCurrentPlannedDisbursementContainer").innerHTML = regData[3] + note;
+				if(regData[3]==undefined){
+					document.getElementById("tooltipCurrentPlannedDisbursementContainer").innerHTML = '0' + note;
+				}else{
+					document.getElementById("tooltipCurrentPlannedDisbursementContainer").innerHTML = regData[3] + note;
+				}
+				//document.getElementById("tooltipCurrentPlannedDisbursementContainer").innerHTML = regData[3] + note;
 			}
 			
 			

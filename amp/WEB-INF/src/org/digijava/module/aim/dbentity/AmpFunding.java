@@ -693,7 +693,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 				auxOutDetail.getOutputs().add(
 						new Output(null, new String[] { "" }, new Object[] { adjustment, " - ",
 								auxDetail.getTransactionAmount(), " ", auxDetail.getAmpCurrencyId(), " - ",
-								auxDetail.getTransactionDate() + extraValues + recipientInfo}));
+								auxDetail.getTransactionDate(), extraValues + recipientInfo}));
 			}
 		}
 		

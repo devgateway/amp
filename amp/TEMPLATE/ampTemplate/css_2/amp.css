@@ -1007,6 +1007,7 @@ div.innerTab {
     cursor: pointer;
     display: block;
     float: left;
+    padding-bottom:5px;
 }
 #mainmenuHeader a.arrow_dropdown img {
     border: 0px;

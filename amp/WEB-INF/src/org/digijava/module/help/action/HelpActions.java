@@ -827,6 +827,7 @@ public class HelpActions extends DispatchAction {
 		File tmpZipFile = File.createTempFile(randomFileName, ".tmp");
 		FileOutputStream fileOutputStream = new FileOutputStream(tmpZipFile);
 		outZip = new ZipOutputStream(fileOutputStream);
+		ouputStream = response.getOutputStream();
 		try{
 			// Create zip object with all the images.
 			JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
@@ -839,6 +840,7 @@ public class HelpActions extends DispatchAction {
 			help_out.getAmpHelp().addAll(rsAux);
 
 			// Create xml structure to be saved too in the zip.
+			logger.info("Writing helpExport.xml to zip file.");
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			m.marshal(help_out,bos);						
 			outZip.putNextEntry(new ZipEntry("helpExport.xml"));
@@ -848,25 +850,30 @@ public class HelpActions extends DispatchAction {
 			outZip.flush();
 			outZip.close();
 
-			// Create an input stream to read the temp zip file. 
+			// Create an input stream to read the temp zip file.
+			logger.info("Setup response.");
 			FileInputStream fileInputStream = new FileInputStream(tmpZipFile);			
 			response.setContentType("application/zip");
 			response.setHeader("content-disposition", "attachment; filename=exportHelp.zip");
 			response.setHeader("Content-Length", String.valueOf(tmpZipFile.length()));
 			
 			// Write the zip stream into the response.
-			ouputStream = response.getOutputStream();
+			logger.info("Write from zip file stream to response output stream.");
 			byte[] outputByte = new byte[4096];
 			while(fileInputStream.read(outputByte,0, 4096) != -1){
 				ouputStream.write(outputByte, 0, 4096);
 			}
+			logger.info("Close fileInputStream.");
 			fileInputStream.close();
 		}catch(IOException  e){
 			e.printStackTrace();
 		}finally{
-			try{
-				ouputStream.flush();
-				ouputStream.close();
+			try{				
+				if(ouputStream != null) {
+					logger.info("Finally HelpActions.");
+					ouputStream.flush();
+					ouputStream.close();
+				}
 			}catch(IOException e2){
 				e2.printStackTrace();
 			}

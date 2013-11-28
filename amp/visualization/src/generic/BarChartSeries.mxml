@@ -516,6 +516,10 @@
 				return ret;
 			}
 			
+			private function getShortText (text:String):String{
+				return text.length>45? text.substr(0,42)+"..." : text;
+			}
+			
 			private function getLegendX(currentIndex:Number ,x:Number):Number{
 				return (currentIndex < 4) ? currentIndex*160 : (currentIndex < 8) ? (currentIndex-4)*160 : (currentIndex-8)*160;
 			}
@@ -824,7 +828,7 @@
 						id="legendText" 
 						y="{getLegendY(legendLayout.currentIndex,legendLayout.currentReference.y)}" 
 						x="{getLegendX(legendLayout.currentIndex,legendLayout.currentReference.x)}" 
-						text="{legendLayout.currentDatum['category']}"
+						text="{getShortText(legendLayout.currentDatum['category'])}"
 						fontFamily="{fontFamily}"
 						fontSize="{fontSize}"
 						fontWeight="{fontWeight}"

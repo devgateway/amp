@@ -33,10 +33,10 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.form.TranslationForm;
 import org.digijava.module.translation.util.TranslationManager;
 import org.digijava.module.visualization.dbentity.AmpDashboard;
+import org.digijava.module.visualization.util.DashboardUtil;
 
 public class RenderTeaser
     extends TilesAction {
@@ -56,8 +56,9 @@ public class RenderTeaser
             generateRoots = Boolean.valueOf(rootPathesParam).booleanValue();
         }
 
-        Collection<AmpDashboard> dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
-		request.getSession().setAttribute(Constants.MENU_DASHBOARDS, dashboards);
+        Collection<AmpDashboard> dashboards 	= org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
+       
+		request.getSession().setAttribute(Constants.MENU_DASHBOARDS, DashboardUtil.generateIdToNameForDashboards(dashboards));
         
 		TranslationManager.generateLanguages(generateRoots, request, formBean);
 

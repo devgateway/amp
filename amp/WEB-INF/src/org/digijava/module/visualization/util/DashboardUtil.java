@@ -55,6 +55,7 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
@@ -1049,7 +1050,7 @@ public class DashboardUtil {
         TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");
 		AmpApplicationSettings tempSettings = null;
 		if (teamMember != null) {
-			tempSettings = org.digijava.module.aim.util.DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			tempSettings = org.digijava.module.aim.util.DbUtil.getMemberAppSettings(teamMember.getMemberId(	));
 			if (tempSettings!=null && tempSettings.getCurrency()!=null){
 				filter.setCurrencyId(tempSettings.getCurrency().getAmpCurrencyId());
 				filter.setCurrencyIdQuickFilter(tempSettings.getCurrency().getAmpCurrencyId());
@@ -1078,6 +1079,16 @@ public class DashboardUtil {
         
         filter.setShowAmountsInThousands(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))==0?1:Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
         filter.setShowAmountsInThousandsDefault(filter.getShowAmountsInThousands());
+	}
+	
+	public static TreeMap<Long, String> generateIdToNameForDashboards(Collection<AmpDashboard> dashboards) {
+		TreeMap<Long, String> dashboardNames	= new TreeMap<Long, String>();
+        if ( dashboards != null ) {
+        	for (AmpDashboard ampDashboard : dashboards) {
+        		dashboardNames.put(ampDashboard.getId(), ampDashboard.getName() );
+			}
+        }
+        return dashboardNames;
 	}
 
 }

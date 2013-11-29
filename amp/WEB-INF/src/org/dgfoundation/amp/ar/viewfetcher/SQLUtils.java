@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.jackrabbit.core.persistence.PersistenceManager;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
+import org.digijava.kernel.exception.DgException;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.CriteriaQuery;
@@ -173,7 +174,7 @@ public class SQLUtils {
     {
     	try
     	{
-    		Connection conn = org.digijava.kernel.persistence.PersistenceManager.getJdbcConnection();
+    		Connection conn = org.digijava.kernel.persistence.PersistenceManager.getRequestDBSession().connection(); //org.digijava.kernel.persistence.PersistenceManager.getJdbcConnection();
     		LinkedHashSet<String> columns = SQLUtils.getTableColumns(conn, tableName);
     		ArrayList<String> outputs = new ArrayList<String>();
     		for(String column:columns)
@@ -186,7 +187,11 @@ public class SQLUtils {
     		
     		return Util.collectionAsString(outputs);
     	}
-    	catch(SQLException ex)
+//    	catch(SQLException ex)
+//    	{
+//    		throw new RuntimeException(ex);
+//    	}
+    	catch(DgException ex)
     	{
     		throw new RuntimeException(ex);
     	}

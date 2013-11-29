@@ -45,6 +45,8 @@ import org.digijava.kernel.security.permission.ObjectPermission;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 
 public class SecureTag
     extends BodyTagSupport {
@@ -114,9 +116,15 @@ public class SecureTag
         }
         else {
             if (authenticated != null) {
-                User user = RequestUtils.getUser(request);
-                if ( (user != null && authenticated.booleanValue()) ||
-                    (user == null && !authenticated.booleanValue())
+                User user 			= RequestUtils.getUser(request);
+                boolean userIsNull = user==null;
+                if (userIsNull) {
+                	TeamMember tm	= (TeamMember)request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+                	if (tm != null)
+                		userIsNull 	= false;
+                }
+                if ( (!userIsNull && authenticated.booleanValue()) ||
+                    (userIsNull && !authenticated.booleanValue())
                     ) {
                     return EVAL_BODY_INCLUDE;
                 }

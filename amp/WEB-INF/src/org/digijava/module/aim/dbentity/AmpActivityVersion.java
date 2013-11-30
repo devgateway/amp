@@ -27,12 +27,18 @@ public class AmpActivityVersion extends AmpActivityFields{
 		//this.budget=budget;
 		this.updatedDate=updatedDate;
 		this.modifiedBy = modifiedBy;
-		this.ampId=ampid;
+		this.ampId=ampid;		
 	}
-
 	public AmpActivityVersion(Long ampActivityId, String name, String ampid) {
 		this.ampActivityId=ampActivityId;
 		this.name=name;
 		this.ampId=ampid;
+	}
+	
+	public AmpActivityVersion(Long ampActivityId, String name, String ampid,Boolean archived) {
+		this.ampActivityId=ampActivityId;
+		this.name=name;
+		this.ampId=ampid;
+		this.archived=archived;		
 	}
 }

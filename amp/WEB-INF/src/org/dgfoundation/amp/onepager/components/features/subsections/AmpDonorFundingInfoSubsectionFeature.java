@@ -63,15 +63,15 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				"typeOfAssistance", CategoryConstants.TYPE_OF_ASSISTENCE_KEY,
 				new PropertyModel<AmpCategoryValue>(model, "typeOfAssistance"),
 				CategoryConstants.TYPE_OF_ASSISTENCE_NAME, true, false);
-		
-		
-		
+		//for issue AMP-16434 both selects where made smaller
+		financingInstrument.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
+		typeOfAssistance.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
 		loanTerms =  new AmpTextAreaFieldPanel("loanTerms", 
 				          new PropertyModel<String>(model, "loanTerms"), 
 				          "Loan Terms", false, false, false);
 		
-		loanTerms.getTextAreaContainer().add(new AttributeModifier("style", "width: 225px; height: 65px;"));          	
-			
+			          	
+		
 		AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
 		boolean isLoan = (value == null ? false : value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey()));
 		loanTerms.getTextAreaContainer().setVisible(isLoan);

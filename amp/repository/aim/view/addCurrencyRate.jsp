@@ -65,7 +65,7 @@
 		myPanel.render(document.body);
 	}
 	//this is called from editActivityMenu.jsp
-	window.onload=initCurrencyScripts;
+	window.onload=initCurrencyScripts();
 -->	
 </script>
 <style type="text/css">
@@ -109,7 +109,8 @@
 	 * o.responseXML
 	 * o.argument
 	 */
-		var response = o.responseText; 
+		var response = o.responseText;
+	    console.log (response);
 		var content = document.getElementById("myContentContent");
 	    //response = response.split("<!")[0];
 		content.innerHTML = response;
@@ -146,7 +147,7 @@
 		load();
 	}
 
-	function generateFields(type){
+	function generateFields(type, action){
 		var ret="";
 		if(type==1){//add sector  or reload sectors
 			ret=
@@ -156,8 +157,12 @@
 			"currUrl="          +(document.getElementsByName("currUrl")[0].value==""?"\"\"":document.getElementsByName("currUrl")[0].value);
 		}
 		else if (type==2){
+			//"doAction="		    +document.getElementsByName("doAction")[0].value+"&"+
+			if (action == null || action == undefined) {
+				action = document.getElementsByName("doAction")[0].value
+			}
 			ret=
-			"doAction="		    +document.getElementsByName("doAction")[0].value+"&"+
+			"doAction="+action+"&"+
 			"updateCRateCode="  +document.getElementsByName("updateCRateCode")[0].value+"&"+
 			"updateCRateAmount="+document.getElementsByName("updateCRateAmount")[0].value+"&"+
 			"updateCRateDate="  +document.getElementsByName("updateCRateDate")[0].value;
@@ -169,6 +174,28 @@
 		panelStart=1;
 	
 	}
+	function myConfirm () {
+		var value = confirm ("<digi:trn>The exchange rate for the selected date already exists. Do you want to override the existant rate?</digi:trn>");
+		if (value == true)
+		  {
+			var callbackImpl	= {
+			success: function (o) {
+				console.log ('Success');
+				
+			},
+			failure: function() {
+				console.log('Error');
+			}
+			};
+				
+			var postString		= generateFields(2);
+			<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
+			var url = "<%=addExchangeRate %>";
+			YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackImpl, postString);
+		}
+    }  
+		
+	
 
 	function myAddExchangeRate(){
 		var postString		= "reset=true&"+generateFields(1);
@@ -228,11 +255,16 @@ function validateFields() {
 
 function saveRate() {
 	var valid = validateFields();
-	
 	var callbackImpl	= {
-		success: function () {
+		success: function (o) {
+			var response = o.responseText;
+			console.log (response);
+			if (response =!null && response.indexOf("true")!=-1) {
+				 myConfirm ();
+			}
 			myclose();
 			reload();
+			
 		},
 		failure: function() {
 			alert ("<digi:trn>There was a connection error. Please try again.</digi:trn>");
@@ -240,7 +272,7 @@ function saveRate() {
 	};
 	
 	if (valid == true) {
-		var postString		= generateFields(2);
+		var postString		= generateFields(2,'validateRateExistance');
 		
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 		var url = "<%=addExchangeRate %>";

@@ -7,6 +7,8 @@ package org.digijava.module.aim.action;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -111,6 +113,9 @@ public class UpdateCurrencyRate extends Action {
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
+		if (crForm.getDoAction().equals("")) {
+			crForm = populateFromRequest (crForm,request);
+		}
 		CurrencyRates currencyRates = null;
 		Collection<CurrencyRates> col = new ArrayList<CurrencyRates>();
 		
@@ -232,45 +237,80 @@ public class UpdateCurrencyRate extends Action {
 
                     }
                     else {
-                      AmpCurrencyRate cRate = new AmpCurrencyRate();
-                      if (crForm.getUpdateCRateAmount() != null) {
-                    	//String amountRate=DecimalToText.removeCommas(crForm.getUpdateCRateAmount());
-                        //Double rate = new Double(Double.parseDouble(crForm.getUpdateCRateAmount()));
-                	 //AMP-2600: not use removeCommas because we can use comma as decimal separator
-                    	Double amountRate=FormatHelper.parseDouble(crForm.getUpdateCRateAmount());
-                    	//Double rate = new Double(Double.parseDouble(amountRate));
-                    	Double rate= 0d;
-                    	if (amountRate!=null){
-                    	    //rate= new Double(1/amountRate);
-                    	    rate= new Double(amountRate);
+                    	AmpCurrencyRate cRate = new AmpCurrencyRate();
+                        if (crForm.getUpdateCRateAmount() != null) {
+                      	//String amountRate=DecimalToText.removeCommas(crForm.getUpdateCRateAmount());
+                          //Double rate = new Double(Double.parseDouble(crForm.getUpdateCRateAmount()));
+                  	 //AMP-2600: not use removeCommas because we can use comma as decimal separator
+                      	Double amountRate=FormatHelper.parseDouble(crForm.getUpdateCRateAmount());
+                      	//Double rate = new Double(Double.parseDouble(amountRate));
+                      	Double rate= 0d;
+                      	if (amountRate!=null){
+                      	    //rate= new Double(1/amountRate);
+                      	    rate= new Double(amountRate);
+                      	}
+                  	  
+                          cRate.setExchangeRate(rate);
+                        }
+                        if (crForm.getUpdateCRateDate() != null) {
+                      	 cRate.setExchangeRateDate(DateTimeUtil.parseDate(crForm.getUpdateCRateDate())); 
+                          //cRate.setExchangeRateDate(DateConversion.getDate(crForm.getUpdateCRateDate()));
+                        }
+
+                        cRate.setToCurrencyCode(crForm.getUpdateCRateCode());
+                        cRate.setFromCurrencyCode(baseCurrency);
+                        cRate.setDataSource(CurrencyUtil.RATE_BY_HAND);
+                    	if (crForm.getDoAction().equals("validateRateExistance")) {
+                    		response.setHeader("Cache-Control","no-cache");
+                    		PrintWriter out = response.getWriter();				
+                    	
+                    		if (!CurrencyUtil.isCurrencyRateExist(cRate)) {
+                    			crForm.setDoAction("saveRate");
+                        		saveRate (cRate,crForm);
+                        		out.println("false");
+                            	
+                    		}
+                    		else {
+                    			out.println("true");
+                    		}
+                    		out.flush();
+                    		out.close();
+                    		return null;
+                    
+                    	
                     	}
-                	  
-                        cRate.setExchangeRate(rate);
-                      }
-                      if (crForm.getUpdateCRateDate() != null) {
-                    	 cRate.setExchangeRateDate(DateTimeUtil.parseDate(crForm.getUpdateCRateDate())); 
-                        //cRate.setExchangeRateDate(DateConversion.getDate(crForm.getUpdateCRateDate()));
-                      }
-
-                      cRate.setToCurrencyCode(crForm.getUpdateCRateCode());
-                      cRate.setFromCurrencyCode(baseCurrency);
-                      cRate.setDataSource(CurrencyUtil.RATE_BY_HAND);
-                      if(cRate.getExchangeRate()!=null && cRate.getExchangeRateDate()!=null && crForm.getDoAction().equalsIgnoreCase("saveRate"))
-                    	  CurrencyUtil.saveCurrencyRate(cRate, false);
-                      else 
-                    	  logger.warn("Either exchange rate or exchange rate date is null");
-                      AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
-                      ratesCache.clear();
-
-                      crForm.setAllRates(null);
-                      crForm.setUpdateCRateAmount(null);
-                      crForm.setUpdateCRateCode(null);
-                      crForm.setUpdateCRateDate(null);
-                      crForm.setUpdateCRateId(null);
-                      crForm.setDoAction(null);
+                    	else {
+                    		saveRate (cRate,crForm);
+                    	}
                     }
                   }
 		return mapping.findForward("forward");
 	}
+	
+	private void saveRate (AmpCurrencyRate cRate,CurrencyRateForm crForm) throws Exception {
+	    if(cRate.getExchangeRate()!=null && cRate.getExchangeRateDate()!=null && crForm.getDoAction().equalsIgnoreCase("saveRate"))
+      	  CurrencyUtil.saveCurrencyRate(cRate,false);
+        else 
+      	  logger.warn("Either exchange rate or exchange rate date is null");
+        AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
+        ratesCache.clear();
+
+        crForm.setAllRates(null);
+        crForm.setUpdateCRateAmount(null);
+        crForm.setUpdateCRateCode(null);
+        crForm.setUpdateCRateDate(null);
+        crForm.setUpdateCRateId(null);
+        crForm.setDoAction(null);
+
+	}
+	
+	private CurrencyRateForm populateFromRequest (CurrencyRateForm form, HttpServletRequest request) {
+		form.setDoAction(request.getParameter("doAction"));
+		form.setUpdateCRateCode(request.getParameter("updateCRateCode"));
+		form.setUpdateCRateAmount(request.getParameter("updateCRateAmount"));
+		form.setUpdateCRateDate(request.getParameter("updateCRateDate"));
+		return form;
+	}
+	
 
 }

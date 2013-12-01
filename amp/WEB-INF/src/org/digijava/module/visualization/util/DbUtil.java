@@ -848,7 +848,7 @@ public class DbUtil {
             	FundingInformationItem fd = (FundingInformationItem) item[0];
             	currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
-            		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
+            		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)(item[3]!=null?item[3]:0F)/100);
             	if (item.length==5) 
             		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
             	if (item.length==6) 

@@ -46,7 +46,11 @@
 	function load() {
 		document.aimAddOrgGroupForm.orgGrpName.focus();
 	}
-    <c:if test="${aimAddOrgGroupForm.flag=='refreshParent'}">
+	</script>
+	
+	<digi:instance property="aimAddOrgGroupForm" />
+	<script language="JavaScript">
+	<c:if test="${aimAddOrgGroupForm.flag=='refreshParent'}">
         <digi:context name="selectLoc" property="/aim/editOrganisation.do" />
         url = "<%= selectLoc %>?orgGroupAdded=true&ampOrgId="+window.opener.document.aimAddOrgForm.ampOrgId.value+"&actionFlag="+window.opener.document.aimAddOrgForm.actionFlag.value;
         window.opener.document.aimAddOrgForm.action = url;
@@ -56,10 +60,8 @@
     </c:if>
 </script>
 
-
-<digi:instance property="aimAddOrgGroupForm" />
 <digi:context name="digiContext" property="context"/>
-
+<bean:write name="aimAddOrgGroupForm" property="flag"/>
 <%-- Add vertical spacing. It will look much better in this way
 <div style="height: 75px">
 </div --%>

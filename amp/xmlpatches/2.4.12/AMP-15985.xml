@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-15985</jira>
+    <keyword>EAMM help icons</keyword>
+    <author>vlymanskyi</author>
+    <description>change icons for EAMM help</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                update DG_EDITOR set BODY = replace(BODY, 'http://amp-staging.code.ro/sdm/showFile.do?activeParagraphOrder=35&amp;documentId=4', '../ampTemplate/images/show-calendar.gif')
+                where BODY like '%http://amp-staging.code.ro/sdm/showFile.do?activeParagraphOrder=35&amp;documentId=4%';
+
+                update DG_EDITOR set BODY = replace(BODY, 'http://amp-staging.code.ro/sdm/showFile.do?activeParagraphOrder=36&amp;documentId=4', '../ampTemplate/img_2/ico_plus.gif')
+                where BODY like '%http://amp-staging.code.ro/sdm/showFile.do?activeParagraphOrder=36&amp;documentId=4%';
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

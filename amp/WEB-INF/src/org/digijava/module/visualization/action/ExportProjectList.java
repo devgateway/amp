@@ -103,7 +103,7 @@ public class ExportProjectList extends Action {
 					cell.setColspan(7);
 					listTbl.addCell(cell);
 					
-					cell = new PdfPCell(new Paragraph(entry2.getValue(), HEADERFONT));
+					cell = new PdfPCell(new Paragraph(entry2.getValue() + " " + vForm.getFilter().getCurrencyCode(), HEADERFONT));
 					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cell.setColspan(3);
 					listTbl.addCell(cell);

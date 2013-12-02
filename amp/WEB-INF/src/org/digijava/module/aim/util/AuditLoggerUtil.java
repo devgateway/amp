@@ -483,9 +483,7 @@ public class AuditLoggerUtil {
 			session = PersistenceManager.getSession();
 			qryStr = "delete from "
 				+ AmpAuditLogger.class.getName()
-				//+ " where action<>'login' and (loggedDate <= :dateParam or loggedDate=null)";
-				//Comented out for issue AMP-16505
-			      + " where (loggedDate <= :dateParam or loggedDate=null)";
+				+ " where action<>'login' and (loggedDate <= :dateParam or loggedDate=null)";
 			
 			qry = session.createQuery(qryStr);
 			qry.setParameter("dateParam",getDateRange(Integer.parseInt(interval)),Hibernate.DATE);

@@ -436,7 +436,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		
 		return acc;
 	}
-
+	
 	protected void fillRealDisbursementTypes(CategAmountCell acc)
 	{
 		String recipientRoleTypeCode = acc.getMetaValueString(ArConstants.RECIPIENT_ROLE_CODE);
@@ -453,6 +453,9 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 
 			if (sourceRoleTypeCode.equals(Constants.IMPLEMENTING_AGENCY) && recipientRoleTypeCode.equals(Constants.BENEFICIARY_AGENCY))
 				recognizedTransactionType = ArConstants.TRANSACTION_IMPL_BENF;
+			
+			if (recognizedTransactionType == null)
+				recognizedTransactionType = ArConstants.userFriendlyNameOfRole(sourceRoleTypeCode) + "-" + ArConstants.userFriendlyNameOfRole(recipientRoleTypeCode);
 			
 			if (recognizedTransactionType != null)
 				acc.getMetaData().add(this.getCachedMetaInfo(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE, recognizedTransactionType));

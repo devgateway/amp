@@ -80,155 +80,97 @@ public class ReportHeadingsXLS extends XLSExporter {
 		colId.reset();			
 	}
 	
+	public static int getAverageLengthOfCells(Column col, int minLength)
+	{
+		int medium = 0;
+		int count = 0;
+		for(Object o:col.getItems()) {
+			int length = o.toString().length();
+			if (length > minLength){ //we're only interested in cells that exceed our minimum cell length
+				medium += length;
+				count++;
+			}
+		}
+		//medium += element2.getName().length();
+		if (count > 0){
+			medium = medium/count;
+			medium += 5;	
+		}
+		return medium;
+	}
+	
 	private void generate(ColumnReportData columnReport){
 
 //		requirements for translation purposes
-		Long siteId=this.getMetadata().getSiteId();
-		String locale=this.getMetadata().getLocale();
+//		Long siteId=this.getMetadata().getSiteId();
+//		String locale=this.getMetadata().getLocale();
 //		boolean fundingReached = false;
 		
 		// column headings:
 
 		rowId.inc();
-		colId.reset();
 		
 		columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
 		int maxColumnDepth = columnReport.getMaxColumnDepth();
-		for (int curDepth = 0; curDepth <= maxColumnDepth; curDepth++) {
+		for (int curDepth = 0; curDepth < maxColumnDepth; curDepth++)
+		{
+			colId.reset();
 			row = sheet.createRow(rowId.shortValue());
 			
 			
 			this.createHierarchyHeaderCell(curDepth);
 			
 			this.createHeadingBorders(curDepth);
-			if(! (this instanceof PlainReportHeadingsXLS )){
-				//this should only be called if it's not a plain XLS report.
-				colId.inc();
-			}
-			Iterator i = columnReport.getItems().iterator();
-			//int cellCount = 0;
-			while (i.hasNext()) {
-				Column col = (Column) i.next();
+			int colIdBaseValue = colId.intValue();
+			for(Column col:columnReport.getItems())
+			{
 				col.setCurrentDepth(curDepth);
-				int rowsp = col.getCurrentRowSpan();
-				Iterator ii = col.getSubColumnList().iterator();
-				if (ii.hasNext()){
-					while (ii.hasNext()) {
-						//cellCount++;
-						Column element2 = (Column) ii.next();
+				List<Column> columnsOnCurrentLine = col.getSubColumns(curDepth);
+				if (!columnsOnCurrentLine.isEmpty())
+				{
+					for(Column element2:columnsOnCurrentLine)
+					{
+						colId.set(colIdBaseValue + element2.getPositionInHeading().getStartColumn());
+						int medium = getAverageLengthOfCells(element2, 10);
 						
-						int medium = 0;
-						int count = 0;
-						Iterator ei = element2.getItems().iterator();
-						while (ei.hasNext()) {
-							Object o = (Object) ei.next();
-							int length = o.toString().length();
-							if (length > 10){ //we're only interested in cells that exceed our minimum cell length
-								medium += length;
-								count++;
-							}
-						}
-						//medium += element2.getName().length();
-						if (count > 0){
-							medium = medium/count;
-							medium += 5;	
-						}
-						
-						if (!"-".equalsIgnoreCase(element2.getName(metadata.getHideActivities()))){
-						
-						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle());
-						HSSFCellStyle style = null;
-						try{	
-							style = cell.getCellStyle();
-						}
-						catch (ClassCastException ex) {
-							
-							throw ex;
-						}
-						style.setWrapText(true);
-						cell.setCellStyle(style);
-						String cellValue=element2.getName(metadata.getHideActivities());
-						//if (rowId.value == 8){
-						if (rowId.value < 10 && cellValue!=null && cellValue.length() > 0){
-							//here we set the cell width
-							//if (sheet.getColumnWidth((short)colId.value)<cellValue.length()*256){
+						//if (!"-".equalsIgnoreCase(element2.getName(metadata.getHideActivities())))
+						{						
+							HSSFCell cell =  this.getCell(row,this.getHighlightedStyle());
+							HSSFCellStyle style = cell.getCellStyle();
+							style.setWrapText(true);
+							cell.setCellStyle(style);
+							String cellValue=element2.getName(metadata.getHideActivities());
+							//if (rowId.value == 8){
+							if (cellValue!=null && cellValue.length() > 0)
+							{
 								short val;
 								if ((short)(medium*256) < 2560)
 									val = 2560; //at least 10 chars
 								else
 									val = (short)(medium*256);
-								/*
-								if (rowId.value == 6 && !fundingReached){
-									if (cellValue == "Funding")
-										fundingReached = true;
-									else
-										val *=3;
-								}
-								*/
-								if (colId.value == 0)
-									sheet.setColumnWidth((short)colId.value, (short)10240);
-								else
-									sheet.setColumnWidth((short)colId.value, val);
-							//}
+								sheet.setColumnWidth((short)colId.value, val);
 
-						}
-						//this value should be translated
-						String translatedCellValue = getColumnDisplayName(cellValue);
-						//String prefix="aim:reportBuilder:";
-						if(translatedCellValue.compareTo("")==0)
-							cell.setCellValue(cellValue + "III");
-						else 
-							cell.setCellValue(translatedCellValue);
-						
-					   /*This is a quick fix related to AMP-13537 there should be a better way to fix the problem
-						* We have to review this afterwards.
-						*/
-						if (!this.getMetadata().getHideActivities()){
-							if(rowsp>1) makeRowSpan(rowsp-1,true);
-						}
-						
-						/**
-						 * on the totals column there are no years to be displayed
-						 */
-						if ( this.getMetadata().getHideActivities() && curDepth == 1 && 
-								ArConstants.COLUMN_TOTAL.equals( col.getName() )) { 
-							
-								makeRowSpan(maxColumnDepth-1, true);
-							
-						}
-						
-						if (element2.getWidth() > 1){
-							makeColSpan(element2.getWidth(),true);
-						}else{
-							colId.inc();
-						}
-						
-					}
-					}		
-				}
-				else {
-					//add padding cells before creating a colspan here. Making a colspan before these cells are created 
-					//will make the borders look ugly
-					if (!"-".equalsIgnoreCase(col.getName(metadata.getHideActivities()))){
-						if(col.getWidth()>1) {
-							for(int k=0;k<col.getWidth();k++) {
-								HSSFCell cell = row.getCell((short) (colId.intValue()+k));
-								if(cell==null) cell=row.createCell((short) (colId.intValue()+k));
-								HSSFCellStyle cellstyle = wb.createCellStyle();
-								cellstyle.cloneStyleFrom(this.getHighlightedStyle());
-								cell.setCellStyle(cellstyle);
 							}
+							//this value should be translated
+							String translatedCellValue = getColumnDisplayName(cellValue);
+							//String prefix="aim:reportBuilder:";
+							if(translatedCellValue.compareTo("")==0)
+								cell.setCellValue(cellValue);
+							else 
+								cell.setCellValue(translatedCellValue);
+						
+							//int rowsp = element2.getPositionInHeading().getRowSpan();
+							makeColSpanAndRowSpan(element2.getPositionInHeading().getColSpan(), element2.getPositionInHeading().getRowSpan(), true);
 						}
 
-					 if(col.getWidth()==1) makeColSpan(col.getWidth(),true);
-					}
+					}		
 				}
 			}
 			rowId.inc();
-			colId.reset();
 		}
-		
+		colId.reset();
 	}
+	
 	protected void createHierarchyHeaderCell (int curDepth) {
 		HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
 		if (curDepth == 0) {
@@ -249,24 +191,20 @@ public class ReportHeadingsXLS extends XLSExporter {
 		if (curDepth == 0) {
 			int maxRowSpan		= 1;
 			Boolean summaryReport		= this.getMetadata().getHideActivities();
-			if (  summaryReport == null  || !summaryReport ) {
+			if (  summaryReport == null  || !summaryReport )
+			{
 				Column tempCol			= (Column)columnReport.getItems().get(0);
-				maxRowSpan				= (tempCol.getRowSpan()>maxRowSpan)?tempCol.getRowSpan():maxRowSpan;
-                                    if(maxRowSpan>1) maxRowSpan-=1;
+				maxRowSpan				= (tempCol.getPositionInHeading().getRowSpan()>maxRowSpan)?tempCol.getPositionInHeading().getRowSpan():maxRowSpan;
+                if (maxRowSpan>1) maxRowSpan -= 1;
 			}
 			else {
-				Iterator<Column> colIter	= columnReport.getItems().iterator();
-				while ( colIter.hasNext() ) {
-					Column tempCol	= colIter.next();
-					int currentRowSpan = tempCol.getCurrentRowSpan() - 1;
-					maxRowSpan		= (currentRowSpan>maxRowSpan)?currentRowSpan:maxRowSpan;
-				}
-				if ( maxRowSpan > 3 ) maxRowSpan = 3;
-                                    
+				maxRowSpan = columnReport.getMaxColumnDepth() - 1;
+				//if ( maxRowSpan > 3 ) maxRowSpan = 3;                                    
 			}
 			makeRowSpan(maxRowSpan,true);
 			sheet.setColumnWidth((short)colId.value, (short)5120);
 		}
+		colId.inc();
 	}
 
 	public void setMachineFriendlyColName(boolean machineFriendlyColName) {

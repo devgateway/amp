@@ -1,4 +1,5 @@
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -582,20 +583,20 @@ function toggleSettings(){
 			<c:if test="${not empty param.pageNumber }">
 				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter(\"pageNumber\"))%>" scope="request"/>
 			</c:if>
-		<logic:equal name="viewFormat" value="print">
-			<table id='reportTable' cellSpacing="0" width="900px" style="overflow:hidden">
-				<bean:define id="viewable" name="generatedReport" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
-				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
-			</table>
-		</logic:equal>
-		<logic:notEqual name="viewFormat" value="print">
-		<table id='reportTable' class="html2ReportTable inside" width="100%" cellpadding="0" cellspacing="0">
-			<bean:define id="viewable" name="generatedReport" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
-				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
-			</tr>
-			</tbody>
-		</table>
-		</logic:notEqual>
+			<logic:equal name="viewFormat" value="print">
+				<table id='reportTable' cellSpacing="0" width="900px" style="overflow:hidden">
+					<bean:define id="viewable" name="generatedReport" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
+					<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
+				</table>
+			</logic:equal>
+			<logic:notEqual name="viewFormat" value="print">
+				<table id='reportTable' class="html2ReportTable inside" width="100%" cellpadding="0" cellspacing="0">
+				      <bean:define id="viewable" name="generatedReport" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
+				      <jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
+				      </tr>
+				      </tbody>
+				</table>
+			</logic:notEqual>
 		</td>
 		</tr>
 		</table>

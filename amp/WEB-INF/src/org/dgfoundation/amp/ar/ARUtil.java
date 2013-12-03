@@ -229,6 +229,8 @@ public final class ARUtil {
 		if (r == null) {
 			Session session = PersistenceManager.getSession();
 			r = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+			if (r == null)
+				throw new RuntimeException("no report with ampReportId = " + ampReportId + " found!");
 		}
 		
 		r.setSiteId(siteId);
@@ -345,18 +347,27 @@ public final class ARUtil {
 		return false;
 	}
 	
-	public static boolean containsMeasure(String measureName, Set measures) {
+	public static boolean containsMeasure(String measureName, Collection<AmpReportMeasures> measures)
+	{
 		if (measureName == null)
 			return false;
-		Iterator i = measures.iterator();
-		while (i.hasNext()) {
-			AmpMeasures element = ((AmpReportMeasures) i.next()).getMeasure();
-			if (element.getMeasureName().indexOf(measureName) != -1)
+		
+		for(AmpReportMeasures measure:measures){
+			AmpMeasures element = measure.getMeasure();
+			if (element.getMeasureName().equals(measureName))
 				return true;
 		}
 		return false;
 	}
 	
+//	public static boolean containsMeasure(String measureName, Collection<AmpReportMeasures> measures)
+//	{
+//		boolean a = containsMeasureWhichContains(measureName, measures);
+//		boolean b = containsMeasureWithExact(measureName, measures);
+//		if (a != b)
+//			System.out.println("BOZO CE XUINEA!");
+//		return a;
+//	}
 	
 	public static boolean hasHeaderValue(AmpColumns column){
 		return (column.getTotalExpression()!=null )|| column.getColumnName().equalsIgnoreCase(ArConstants.COLUMN_FUNDING);

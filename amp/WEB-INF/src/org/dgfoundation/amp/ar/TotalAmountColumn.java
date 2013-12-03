@@ -87,12 +87,12 @@ public class TotalAmountColumn<K extends AmountCell> extends AmountCellColumn<K>
     				continue;
 
     			AmountCell byOwner = (AmountCell) this.getByOwner(ac.getOwnerId());
-    			if (byOwner != null)
-    				byOwner.merge(byOwner, ac);
+    			if (byOwner != null && (ac != byOwner))
+    				byOwner.mergeWithCell(ac);
     			else {
     				AmountCell newcell = (AmountCell) ac.newInstance();
     				//AmountCell newcell = new AmountCell();
-    				newcell.merge(newcell, ac);
+    				newcell.mergeWithCell(ac);
     				newcell.setColumn(this);
     				super.addCell((K) newcell);
     			}
@@ -103,7 +103,14 @@ public class TotalAmountColumn<K extends AmountCell> extends AmountCellColumn<K>
     	}
     }
 
-    public Column newInstance() {
-	return new TotalAmountColumn(this);
+	public void absorbColumn(AmountCellColumn<? extends AmountCell> column)
+	{
+		for(AmountCell cell:column.getItems())
+			addCell(cell);
+	}
+	
+    public Column newInstance()
+    {
+    	return new TotalAmountColumn(this);
     }
 }

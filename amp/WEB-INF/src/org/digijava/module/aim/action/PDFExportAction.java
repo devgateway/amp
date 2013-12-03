@@ -189,13 +189,13 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				}
 				
 				PDFExporter.widths=new float[rd.getTotalDepth()];		
-				for (int k = 0; k < rd.getSourceColsCount().intValue(); k++) {
+				for (int k = 0; k < PDFExporter.widths.length; k++) {
 					if (k<rd.getTotalDepth()){
 						PDFExporter.widths[k]=0.120f;
 					}
 				}
 			
-				for (int k = rd.getSourceColsCount().intValue();k<rd.getTotalDepth() ; k++) {
+				for (int k = PDFExporter.widths.length; k<rd.getTotalDepth() ; k++) {
 					PDFExporter.widths[k]=0.08f;
 				}
 				contenTable = new PdfPTable(PDFExporter.widths);
@@ -372,17 +372,18 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 
 		strFilters.delete(strFilters.length()-2,strFilters.length());
 		try {
+			table.completeRow();
 			//adding the table to the document before adding cells avoid stack overflow error, we can flush the memory and send the content to the client
-
-			Iterator i=PDFExporter.headingCells.iterator();
-			while (i.hasNext()) {
-				PdfPCell element = (PdfPCell) i.next();
-				table.addCell(element);
-				writer.flush();
+			for(PdfPCell element:PDFExporter.headingCells)
+			{
+				if (element.getPhrase() != null && element.getPhrase().getContent().equals(PDFExporter.FORCE_NEW_LINE))
+					table.completeRow(); // workaround for lowagie's inability to render AxB merged cells when both A and B are > 1 (text is rendered and positioned correctly, but internal borders are drawn and calculations are screwed)
+				else
+				{
+					table.addCell(element);
+				}
 			}
 			arg1.add(table);
-
-
 		} catch (Exception e) {
 			logger.error("Error onStartPage",e);
 		}

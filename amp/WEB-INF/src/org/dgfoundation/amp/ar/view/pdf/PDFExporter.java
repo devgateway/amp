@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 
+import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 
 /**
@@ -23,10 +24,14 @@ import com.lowagie.text.pdf.PdfPTable;
 public abstract class PDFExporter extends Exporter {
 	
 	/**
+	 * lowagie has a big in cells with rowspan X colspan cells - so forcing a newline after each line so that failures do not propagate
+	 */
+	public final static String FORCE_NEW_LINE = "FORCE_NEW_LINE_DUMMY_CELL_NAME";
+	/**
 	 * this static array will hold the heading cells that need to be displayed on the start of each page.
 	 * it will get initialized only once and then used by onStartPage
 	 */
-	public static ArrayList headingCells=null;
+	public static ArrayList<PdfPCell> headingCells=null;
 	
 	public static float[] widths;
 	

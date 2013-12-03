@@ -180,13 +180,13 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	
 	public abstract Collection<Long> getOwnerIds();
 
-	public abstract Integer getSourceColsCount();
+	//public abstract Integer getSourceColsCount();
 	
 	public abstract String getSorterColumn();
 	
 	public abstract boolean getSortAscending();
 	
-	public abstract void removeColumnsByName(String name);
+	//public abstract void removeColumnsByName(String name);
 
 	public abstract String getAbsoluteReportName();
 	
@@ -365,6 +365,10 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 		return ret;
 	}*/
 	
+	/**
+	 * returns the total number of columns in the report, "unpacked" (e.g. a column's subcolumns are each added in the sum)
+	 * @return
+	 */
 	public abstract int getTotalDepth();
 	
 	public abstract int getLevelDepth();
@@ -488,6 +492,7 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 			return name;
 	}
 	
+	public abstract List<String> digestReportHeadingData();
 
 	@Override
 	public String prettyPrint()

@@ -50,6 +50,18 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 		categ1.getMetaData().addAll(categ2.getMetaData());
 	}
 	
+	@Override
+	public void mergeWithCell(AmountCell anoth)
+	{
+		super.mergeWithCell(anoth);
+		CategAmountCell another = (CategAmountCell) anoth;
+		for(MetaInfo mi:another.getMetaData())
+		{
+			if (!this.hasMetaInfo(mi))
+				this.getMetaData().add(mi);
+		}
+	}
+	
 	/**
 	 * this item is a customized show only for cummulative amounts
 	 */
@@ -90,6 +102,8 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	}
 
 	public String getMetaValueString(String category) {
+		if (metaData == null)
+			return null;
 		MetaInfo mi = metaData.getMetaInfo(category);
 		if (mi == null || mi.getValue()==null)
 			return null;
@@ -208,7 +222,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	
 	public void removeDirectedFundingMetadata()
 	{		
-		this.metaData.removeItemsByCategory(ArConstants.RECIPIENT_NAME, ArConstants.RECIPIENT_ROLE_NAME, ArConstants.RECIPIENT_ROLE_CODE);
+		this.metaData.removeItemsByCategory(ArConstants.RECIPIENT_NAME, ArConstants.RECIPIENT_ROLE_NAME, ArConstants.RECIPIENT_ROLE_CODE, ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE, ArConstants.SOURCE_ROLE_CODE);
 		for(AmountCell amCell:mergedCells)
 			if (amCell instanceof CategAmountCell)
 				((CategAmountCell) amCell).removeDirectedFundingMetadata();
@@ -394,7 +408,9 @@ public Cell filter(Cell metaCell,Set ids) {
 	@Override
 	public String prettyPrint()
 	{
-		return String.format("%s %s %s on %s", this.getMetaValueString(ArConstants.ADJUSTMENT_TYPE), this.getMetaValueString(ArConstants.TRANSACTION_TYPE), this.toString(), this.getMetaValueString(ArConstants.QUARTER) + " " + this.getMetaValueString(ArConstants.YEAR));
+		String isRealTransaction = (this.metaData != null && this.metaData.hasMetaInfo(ArConstants.RECIPIENT_ROLE_CODE)) ? "Real " : "";
+		return String.format("%s%s %s %s on %s", isRealTransaction, this.getMetaValueString(ArConstants.ADJUSTMENT_TYPE), this.getMetaValueString(ArConstants.TRANSACTION_TYPE),  
+				this.toString(), this.getMetaValueString(ArConstants.QUARTER) + " " + this.getMetaValueString(ArConstants.YEAR));
 	}
 	
 }

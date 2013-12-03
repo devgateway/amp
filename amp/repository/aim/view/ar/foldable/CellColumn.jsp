@@ -1,4 +1,5 @@
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
+<%@page import="org.dgfoundation.amp.ar.AmountCellColumn"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ page import="org.dgfoundation.amp.ar.cell.Cell" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
@@ -41,7 +42,9 @@
 	<%
 		String parent = cellColumn.getParent().toString();
 		String name = ArConstants.COLUMN_TOTAL;
-		if (parent.contains("(") && parent.contains("Total Costs")) {%>
+		//if (parent.contains("(") && parent.contains("Total Costs"))
+		if (cellColumn instanceof AmountCellColumn)
+		{%>
 		<logic:notEqual name="columnNo" value="0">
 			<div class="desktop_project_count_sel">0</div>
 		</logic:notEqual>

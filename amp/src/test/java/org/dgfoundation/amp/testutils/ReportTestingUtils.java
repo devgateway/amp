@@ -3,12 +3,20 @@ package org.dgfoundation.amp.testutils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.AmpReportGenerator;
+import org.dgfoundation.amp.ar.CellColumn;
+import org.dgfoundation.amp.ar.Column;
+import org.dgfoundation.amp.ar.ColumnReportData;
+import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.StringGenerator;
+import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -16,6 +24,7 @@ import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -154,4 +163,5 @@ public class ReportTestingUtils
 			throw new RuntimeException(dge);
 		}
 	}
+	
 }

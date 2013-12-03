@@ -30,6 +30,7 @@ public class AllTests {
 
 		//suite.addTestSuite(DirectedDisbursementsTests.class);
 		suite.addTest(DirectedDisbursementsTests.suite());
+		suite.addTest(ComplicatedLayoutsTests.suite());
 		suite.addTest(MtefTests.suite());
 		suite.addTest(ActivityPreviewTests.suite());
 		suite.addTest(ComputedMeasuresTests.suite());

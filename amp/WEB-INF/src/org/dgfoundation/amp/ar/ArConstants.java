@@ -269,9 +269,10 @@ public final class ArConstants {
 	public final static String PERCENTAGE="Percentage";
 	
 	public final static String TRANSACTION_REAL_DISBURSEMENT_TYPE = "Real Disbursement Type";
-	public final static String TRANSACTION_DN_EXEC = "DN-EXEC";
-	public final static String TRANSACTION_EXEC_IMPL = "EXEC-IMPL";
-	public final static String TRANSACTION_IMPL_BENF = "IMPL-BENF";
+	
+	public final static String TRANSACTION_DN_EXEC = userFriendlyNameOfRole(Constants.FUNDING_AGENCY) + "-" + userFriendlyNameOfRole(Constants.EXECUTING_AGENCY);
+	public final static String TRANSACTION_EXEC_IMPL = userFriendlyNameOfRole(Constants.EXECUTING_AGENCY) + "-" + userFriendlyNameOfRole(Constants.IMPLEMENTING_AGENCY);
+	public final static String TRANSACTION_IMPL_BENF = userFriendlyNameOfRole(Constants.IMPLEMENTING_AGENCY) + "-" + userFriendlyNameOfRole(Constants.BENEFICIARY_AGENCY);
 	
 	//draft in title
 	public final static String DRAFT="DRAFT";
@@ -387,12 +388,19 @@ public final class ArConstants {
 			this.generator = generator;
 		}
 		
-		
-		
-		
-		
-		
-		
 	}
-	
+
+	public final static String userFriendlyNameOfRole(String src)
+	{
+		if (src.equals("DN"))
+			return src;
+		if (src.equals("IA"))
+			return "IMPL";
+		if (src.equals("EA"))
+			return "EXEC";
+		if (src.equals("BA"))
+			return "BENF";
+		return src;
+	}
+
 }

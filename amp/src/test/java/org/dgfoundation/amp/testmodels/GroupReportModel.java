@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.testmodels;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -14,6 +15,7 @@ public class GroupReportModel extends ReportModel
 {
 	private ReportModel[] childModels;
 	private String[] trailCells;
+	private List<String> positionDigest;
 	
 	private enum GRModelType {GROUP_REPORTS, COLUMN_REPORTS};
 	
@@ -41,6 +43,14 @@ public class GroupReportModel extends ReportModel
 		return new GroupReportModel(name, new ColumnReportDataModel[0], GRModelType.COLUMN_REPORTS);
 	}
 	
+	public GroupReportModel withPositionDigest(String... lines)
+	{
+		this.positionDigest = new ArrayList<String>();
+		for(String lineDigest:lines)
+			positionDigest.add(lineDigest);
+		return this;
+	}
+	
 	public GroupReportModel withTrailCells(String... trailCells)
 	{
 		this.trailCells = trailCells;
@@ -57,6 +67,13 @@ public class GroupReportModel extends ReportModel
 			String trailCellComparisonResult = matches_trail_cells(grd);
 			if (trailCellComparisonResult != null)
 				return trailCellComparisonResult;
+		}
+		
+		if (positionDigest != null)
+		{
+			String positionDigestComparisonResult = matches_position_digest(grd);
+			if (positionDigestComparisonResult != null)
+				return positionDigestComparisonResult;
 		}
 		
 		if (childModels != null)
@@ -77,6 +94,22 @@ public class GroupReportModel extends ReportModel
 			default:
 				throw new RuntimeException("unknown GRModelType: " + type);
 		}
+	}
+	
+	protected String matches_position_digest(GroupReportData grd)
+	{
+		List<String> digest = grd.digestReportHeadingData();
+		if (digest.size() != positionDigest.size())
+			return String.format("GRD %s has %d rows in report-headings, but should have %d", this.getName(), digest.size(), positionDigest.size());
+		
+		for(int i = 0; i < digest.size(); i++)
+		{
+			String lineDigest = digest.get(i);
+			String corLineDigest = positionDigest.get(i);
+			if (!lineDigest.equals(corLineDigest))
+				return String.format("GRD %s has the report-headings-line-digest #%d different:\n\t%s instead of \n\t%s", this.getName(), i, lineDigest, corLineDigest);
+		}
+		return null;
 	}
 	
 	protected String matches_trail_cells(GroupReportData grd)

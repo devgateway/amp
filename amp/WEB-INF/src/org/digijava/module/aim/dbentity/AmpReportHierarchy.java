@@ -71,4 +71,10 @@ public class AmpReportHierarchy implements Serializable, Comparable
 	        return super.hashCode();
 	    }
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("hiearchy on %s", column);
+	}
 }

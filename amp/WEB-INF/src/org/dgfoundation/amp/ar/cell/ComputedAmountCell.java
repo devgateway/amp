@@ -95,6 +95,7 @@ public class ComputedAmountCell extends CategAmountCell {
 		super();
 	}
 
+	@Override
 	public void merge(Cell c1, Cell c2) {
 		super.merge(c1, c2);
 		CategAmountCell categ1 = (CategAmountCell) c1;
@@ -102,6 +103,12 @@ public class ComputedAmountCell extends CategAmountCell {
 		categ1.getMetaData().addAll(categ2.getMetaData());
 	}
 
+//	@Override
+//	public void mergeWithCell(AmountCell anoth)
+//	{
+//		super.mergeWithCell(anoth);
+//	}
+	
 	@Override
 	public AmountCell merge(Cell c) {
 		AmountCell ret = (AmountCell) super.merge(c);

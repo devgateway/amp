@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -19,22 +20,13 @@
 
 <!-- generate report headings -->
 <logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
-	<%
-	int maxRowsp = 0;
-	%>
-    <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column" indexId="colIndexId">
-    <%
-	  	if(maxRowsp < column.getCurrentRowSpan()) maxRowsp = column.getCurrentRowSpan();
-    %>
-	</logic:iterate>
-
 
 <thead> 
-  <%int maxDepth = columnReport.getMaxColumnDepth();
+  <%
+  //int maxDepth = columnReport.getMaxColumnDepth();
   columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
   %>
-  <%for (int curDepth = 0; curDepth <= columnReport
-  .getMaxColumnDepth(); curDepth++, rowIdx++) {%>
+  <%for (int curDepth = 0; curDepth < columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr title="Report Headings">
   <%boolean first=true; %>
 
@@ -42,7 +34,7 @@
   <%
   if(curDepth == 0) {
   %>
-	<td class="report_inside" background="img_2/ins_bg_1.gif" style="border-color:#FFFFFF;" rowspan="<%=maxRowsp%>" width="20">
+	<td class="report_inside" background="img_2/ins_bg_1.gif" style="border-color:#FFFFFF;" rowspan="<%=columnReport.getMaxColumnDepth()%>" width="20">
 		&nbsp;
     </td>
   <%
@@ -50,8 +42,7 @@
   %>
     <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column" indexId="colIndexId">
      <%
-      column.setCurrentDepth(curDepth);
-      	int rowsp = column.getCurrentRowSpan();
+		column.setCurrentDepth(curDepth);
       	String token=null;
       	String total=null;
       	if (((org.dgfoundation.amp.ar.Column)column).getWorker()!=null){
@@ -71,6 +62,9 @@
 
 
       <logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
+      <%
+      	int rowsp = subColumn.getPositionInHeading().getRowSpan();
+      %>
         <c:set var="reportHeading">
           <%=subColumn.getName(reportMeta.getHideActivities())%>
         </c:set>

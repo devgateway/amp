@@ -8,6 +8,8 @@ package org.digijava.module.aim.action;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -223,7 +225,12 @@ public class CSVExportAction
 	        if (ccell != null) {
 	          if (ccell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
 	            s = Double.toString(ccell.getNumericCellValue());
-                if (asXml) {
+	            if (s.matches(".*[eE].*")) {
+	            	double value = Double.parseDouble(String.valueOf(ccell.getNumericCellValue()));
+	            	NumberFormat formatter = new DecimalFormat("#0.00");
+	            	s = formatter.format (value);
+	            }
+	            if (asXml) {
                     columnTag.addElement(FormatHelper.formatNumber(ccell.getNumericCellValue()));
                 }
               } else {

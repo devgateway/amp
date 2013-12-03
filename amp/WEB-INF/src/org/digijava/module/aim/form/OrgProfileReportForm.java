@@ -27,7 +27,31 @@ public class OrgProfileReportForm  extends ActionForm {
 	private List<AmpOrganisation> selectedOrganizations;
 	private HashMap<String, DonorReportHelper> map;
 	private String selectedColumnsList;
+	//ISSUE AMP-16507
+	private Long donorType;
+	private Long orgGroup;
+	private String actionFlag;
 	
+	
+	
+	public Long getOrgGroup() {
+		return orgGroup;
+	}
+	public void setOrgGroup(Long orgGroup) {
+		this.orgGroup = orgGroup;
+	}
+	public String getActionFlag() {
+		return actionFlag;
+	}
+	public void setActionFlag(String actionFlag) {
+		this.actionFlag = actionFlag;
+	}
+	public Long getDonorType() {
+		return donorType;
+	}
+	public void setDonorType(Long donorType) {
+		this.donorType = donorType;
+	}
 	public String getSelectedColumnsList() {
 		return selectedColumnsList;
 	}

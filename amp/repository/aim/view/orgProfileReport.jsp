@@ -20,6 +20,35 @@ function exportToExcel() {
 	document.aimOrgProfileReport.submit();
 	document.aimOrgProfileReport.action.value = "makeReport";
 }
+function optionChanged(flag) {
+	if (flag == 'orgType') {
+		var index1  = document.aimOrgProfileReport.selectedTypeId.selectedIndex;
+		
+		var val1    = document.aimOrgProfileReport.selectedTypeId.options[index1].value;
+		var donorType = document.aimOrgProfileReport.donorType.value;
+		if (val1 != donorType) {
+			document.aimOrgProfileReport.donorType.value=val1;
+			document.aimOrgProfileReport.action.value = "typeChange";
+			document.aimOrgProfileReport.actionFlag.value="orgType";
+			document.aimOrgProfileReport.submit();
+			document.aimOrgProfileReport.action.value = "makeReport";
+		}
+	}else{
+		if(flag == 'orgGroup') {
+			var index1  = document.aimOrgProfileReport.selectedOrgGropId.selectedIndex;
+			
+			var val1    = document.aimOrgProfileReport.selectedOrgGropId.options[index1].value;
+			var orgGroup = document.aimOrgProfileReport.orgGroup.value;
+			if (val1 != orgGroup) {
+				document.aimOrgProfileReport.orgGroup.value=val1;
+				document.aimOrgProfileReport.action.value = "typeChange";
+				document.aimOrgProfileReport.actionFlag.value="orgGroup";
+				document.aimOrgProfileReport.submit();
+				document.aimOrgProfileReport.action.value = "makeReport";
+			}
+		}
+	}
+}
 </script>
 
 <!-- MAIN CONTENT PART START -->
@@ -27,6 +56,10 @@ function exportToExcel() {
 <digi:context name="digiContext" property="context" />
 <digi:form action="/organizationReportWizard.do" method="post">
 <html:hidden property="action" value="makeReport"/>
+<html:hidden property="donorType" />
+<html:hidden property="orgGroup" />
+<html:hidden property="actionFlag" />
+
 	<table width="1000px" border="0" cellspacing="0" cellpadding="0"
 		align=center>
 
@@ -55,28 +88,29 @@ function exportToExcel() {
 
 							<td><a href="/aim/organizationReportWizard.do" class="l_sm"><b>« <dig:trn>Back to report generator</dig:trn></b></a></td>
 
-							<td align="right"><b><digi:trn>Organization</digi:trn></b> <html:select
+							<td align="right"><b><digi:trn>Donor type</digi:trn></b><html:select
+									property="selectedTypeId" styleClass="dropdwn_sm" style="width:100px" onchange="optionChanged('orgType');return false;">
+									<html:option value="-1" >
+										<digi:trn key="aim:all">All</digi:trn>
+									</html:option>
+									<html:optionsCollection name="aimOrgProfileReport"
+										property="orgTypes" value="ampOrgTypeId" label="orgType" />
+								</html:select><b><digi:trn>Donor group</digi:trn> </b><html:select
+									property="selectedOrgGropId" styleClass="dropdwn_sm" style="width:100px" onchange="optionChanged('orgGroup');">
+									<html:option value="-1">
+										<digi:trn key="aim:all">All</digi:trn>
+									</html:option>
+									<html:optionsCollection name="aimOrgProfileReport"
+										property="groups" value="ampOrgGrpId" label="orgGrpName" />
+								</html:select>
+								<b><digi:trn>Organization</digi:trn></b> <html:select
 									property="selectedOrgId" styleClass="dropdwn_sm" style="width:100px">
 									<html:option value="-1">
 										<digi:trn key="aim:all">All</digi:trn>
 									</html:option>
 									<html:optionsCollection name="aimOrgProfileReport"
 										property="organizations" value="ampOrgId" label="name" />
-								</html:select><b><digi:trn>Donor group</digi:trn> </b><html:select
-									property="selectedOrgGropId" styleClass="dropdwn_sm" style="width:100px">
-									<html:option value="-1">
-										<digi:trn key="aim:all">All</digi:trn>
-									</html:option>
-									<html:optionsCollection name="aimOrgProfileReport"
-										property="groups" value="ampOrgGrpId" label="orgGrpName" />
-								</html:select> <b><digi:trn>Donor type</digi:trn></b><html:select
-									property="selectedTypeId" styleClass="dropdwn_sm" style="width:100px">
-									<html:option value="-1">
-										<digi:trn key="aim:all">All</digi:trn>
-									</html:option>
-									<html:optionsCollection name="aimOrgProfileReport"
-										property="orgTypes" value="ampOrgTypeId" label="orgType" />
-								</html:select> <input type="submit" value="<digi:trn>Filter</digi:trn>" class="buttonx" /><table  border="0" cellspacing="0" cellpadding="0"  style="display: inline;">
+								</html:select>  <input type="submit" value="<digi:trn>Filter</digi:trn>" class="buttonx" /><table  border="0" cellspacing="0" cellpadding="0"  style="display: inline;">
 									<tr>
 										<td><span
 											style="font-size: 16px; font-weight: normal; display: block; margin-left: 10px; margin-right: 10px; color: #C6C6C6;">|</span></td>

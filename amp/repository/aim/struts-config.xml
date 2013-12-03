@@ -1929,6 +1929,7 @@
     <action name="aimOrgProfileReport" path="/aim/organizationReportWizard" scope="session" type="org.digijava.module.aim.action.OrganizationProfileReportGenerator"  parameter="action">
     	    <forward name="forward" path="/showLayout.do?layout=aim_orgProfileReportGenerator" />
     	    <forward name="showReport" path="/showLayout.do?layout=aim_orgProfileReport" />
+
     </action>
 	    
   </action-mappings>

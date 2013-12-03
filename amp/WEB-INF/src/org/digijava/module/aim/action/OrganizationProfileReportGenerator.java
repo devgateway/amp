@@ -104,9 +104,10 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 		}
 
 		List<AmpOrganisation> organizations = DbUtil.getAmpOrganisations();
-		orgProfileForm.setOrganizations(organizations);
-		orgProfileForm.setGroups(DbUtil.getAllOrganisationGroup());
 		orgProfileForm.setOrgTypes(DbUtil.getAllOrgTypes());
+		//For issue 
+		orgProfileForm.setGroups(DbUtil.getAllOrganisationGroup());
+		orgProfileForm.setOrganizations(organizations);
 		return mapping.findForward("forward");
 	}
 
@@ -355,5 +356,36 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 			}
 		}
 	}
-
+	//AMP-16507
+	public ActionForward typeChange(ActionMapping mapping, ActionForm form,
+			javax.servlet.http.HttpServletRequest request,
+			javax.servlet.http.HttpServletResponse response)
+			throws java.lang.Exception {
+		OrgProfileReportForm orgProfileForm = (OrgProfileReportForm) form;
+		//
+		if(orgProfileForm.getActionFlag()!=null && orgProfileForm.getActionFlag().equals("orgType")){
+			//We filter groups for the selected donnor type
+			if(orgProfileForm.getDonorType()!=-1){
+			orgProfileForm.setGroups(DbUtil.searchForOrganisationGroupByType(orgProfileForm.getDonorType()));
+			//we filter organizatios for the selected groupttype
+			orgProfileForm.setOrganizations(DbUtil.getAmpOrganisations(null, null, orgProfileForm.getDonorType()));
+			}else{
+				//if it was -1 everything gets seleted
+				orgProfileForm.setGroups(DbUtil.getAllOrganisationGroup());
+				orgProfileForm.setOrganizations(DbUtil.getAmpOrganisations());
+			}
+			
+		}
+		if(orgProfileForm.getActionFlag()!=null && orgProfileForm.getActionFlag().equals("orgGroup")){
+			if(orgProfileForm.getOrgGroup()!=-1){
+			//we filter organization for the selected group
+				orgProfileForm.setOrganizations(DbUtil.getAmpOrganisations(null, orgProfileForm.getOrgGroup(), null));
+			}else{
+				//if it was -1 then we get all organizations
+				orgProfileForm.setOrganizations(DbUtil.getAmpOrganisations());
+			}
+		}
+		
+		return mapping.findForward("showReport");
+	}
 }

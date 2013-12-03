@@ -1632,7 +1632,8 @@ public class AmpARFilter extends PropertyListable {
 				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
 				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
 				 */
-				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE draft<> true AND approval_status IN (" + Util.toCSString(AmpARFilter.activityStatus) +")";				
+				String hideDraftSQL = TeamUtil.hideDraft(loggedInTeamMember)?"draft<> true AND ":"";
+				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE "+hideDraftSQL+" approval_status IN (" + Util.toCSString(AmpARFilter.activityStatus) +")";				
 				queryAppend(allActivitiesInTheDatabaseQuery);
 				generatedFilterQuery += " OR amp_activity_id IN (" + TEAM_FILTER + ")";
 			}

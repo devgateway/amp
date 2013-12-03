@@ -61,7 +61,7 @@ donorfix="";
 //donorfix = "BID,BM,BCIE,ACDI,UE,USAID,UNDP/PNUD,AECID,GIZ,JICA";
 //Haiti
 //donorfix = "UE,USAID,Ambassade du Japon,AECID,AFD,BM-EXTFUND,ACDI,Ambassade de Norvege,BID,Ambassade du Venezuela";
-fixeddonorlist = donorfix.split(",");
+fixeddonorlist = donorf/ix.split(",");
 
 
 

@@ -110,7 +110,7 @@
 
 	function initScripts() {
 		//alert('initScripts');
-
+		applySectorFilter();
 		var msg = '\n<digi:trn key="rep:filter:filters">Filters</digi:trn>';
 		gisPanel.setHeader(msg);
 		gisPanel.setBody("<p>initScripts</p>");

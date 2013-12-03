@@ -524,8 +524,18 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		document.add(title);
 		document.add(updateDate);
 		document.add(imagesTable);
-        document.add(getRegionalFundingTable(filterResults));
+		if (request.getParameter("mapMode").equalsIgnoreCase("DevInfo")) {
 
+            GisFilterForm filterForm = GisUtil.parseFilterRequest (request);
+            String isRegSetStr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GIS_FUNDING_TYPE);
+            boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("donor"))?GisUtil.GIS_DONOR_FUNDINGS:GisUtil.GIS_REGIONAL_FUNDINGS;
+            boolean isPublic = request.getParameter("publicMode") == null?false:true;
+            if (!isPublic && request.getSession().getAttribute("currentMember") == null) {
+                isPublic = true;
+            }
+            filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional, isPublic);
+		}
+		document.add(getRegionalFundingTable(filterResults));
 		document.add(layoutTable1);
 
 		document.close();

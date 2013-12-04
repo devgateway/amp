@@ -22,7 +22,15 @@ if (!('indexOf' in Array.prototype)) {
 dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
 	
 	constructor: function(options) {
-
+		
+		if (typeof Object.create === 'undefined') {
+    	    Object.create = function (o) { 
+    	        function F() {} 
+    	        F.prototype = o; 
+    	        return new F(); 
+    	    };
+    	}
+		
 		this.expandedPointsLayers=new esri.layers.GraphicsLayer(options);
 		options.map.addLayer(this.expandedPointsLayers);
 
@@ -368,6 +376,12 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
         }
     },
 	
+    clean : function(){
+    	this.clear();
+    	this.expandedPointsLayers.clear();
+    	this._features = [];
+    },
+    
     resetCluster:function(){
     	dojo.forEach(this.expandedPointsLayers.graphics,function(item){
     		var point=item.geometry

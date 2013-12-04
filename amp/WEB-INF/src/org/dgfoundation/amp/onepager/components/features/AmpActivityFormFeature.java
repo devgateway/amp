@@ -553,8 +553,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     private void processAndUpdateForm(boolean notDraft, IModel<AmpActivityVersion> am, Form<?> form, final AjaxRequestTarget target, IndicatingAjaxButton button) {
         am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form,target);
-        // process the form for this request
-        form.process(button);
         //Force model change for components that are translatable
         form.visitChildren(AbstractTextComponent.class,
                 new IVisitor<Component, Object>() {
@@ -574,6 +572,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         }
                     }
                 });
+        // process the form for this request
         form.process(button);
     }
 

@@ -83,9 +83,10 @@ public class SearchUtil {
 					Constants.ACCESS_TYPE_MNGMT)) {
 				queryString = "select DISTINCT r from "
 						+ AmpReports.class.getName()
-						+ " r where r.drilldownTab=false AND (lower(" + reportNameHql + ") LIKE lower(:keyword) OR " + reportDescriptionHql + " LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
+						+ " r where r.drilldownTab=false AND (lower(" + reportNameHql + ") LIKE lower(:keyword) OR " 
+						+ reportDescriptionHql + " LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
 						+ AmpTeamReports.class.getName()
-						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by " + reportNameHql;
+						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
 				qry = session.createQuery(queryString);
 
 				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
@@ -149,7 +150,7 @@ public class SearchUtil {
 						+ AmpReports.class.getName()
 						+ " r where r.drilldownTab=true AND (lower(" + reportNameHql + ") LIKE lower(:keyword) OR " + reportDescriptionHql + " LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
 						+ AmpTeamReports.class.getName()
-						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by " + reportNameHql;
+						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
 				qry = session.createQuery(queryString);
 
 				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());

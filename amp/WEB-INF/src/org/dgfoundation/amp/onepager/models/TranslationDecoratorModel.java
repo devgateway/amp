@@ -1,11 +1,15 @@
 package org.dgfoundation.amp.onepager.models;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * @author aartimon@developmentgateway.org
@@ -119,5 +123,23 @@ public class TranslationDecoratorModel extends LocaleAwareProxyModel<String> {
 
     public void setAm(AmpActivityModel am) {
         this.am = am;
+    }
+
+    public HashSet<String> getLangForAvailableTrn(){
+        HashSet<String> ret = new HashSet<String>();
+        String currentLocale = getLangModel().getObject();
+        List<String> locales = TranslatorUtil.getLocaleCache();
+        for (String locale: locales){
+            String compareValue = null;
+            if (!locale.equals(Session.get().getLocale().getLanguage()))
+                compareValue = locale;
+
+            getLangModel().setObject(compareValue);
+            String trn = getObject();
+            if (trn != null && trn.length() > 0)
+                ret.add(locale);
+        }
+        getLangModel().setObject(currentLocale);//restore locale
+        return ret;
     }
 }

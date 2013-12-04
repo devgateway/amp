@@ -37,7 +37,7 @@ public class UpdateEventBehavior<T> extends Behavior {
 
     }
 
-    public static UpdateEventBehavior of(Class triggerEvent){
-        return new UpdateEventBehavior(triggerEvent);
+    public static <T> UpdateEventBehavior<T> of(Class<T> triggerEvent){
+        return new UpdateEventBehavior<T>(triggerEvent);
     }
 }

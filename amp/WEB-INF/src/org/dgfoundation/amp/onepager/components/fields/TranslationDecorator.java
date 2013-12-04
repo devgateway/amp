@@ -24,6 +24,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author aartimon@developmentgateway.org
@@ -53,16 +54,24 @@ public class TranslationDecorator extends Panel {
             tdm.setLangModel(langModel);
         }
 
+        final IModel<Set<String>> availableTrnLocales = new AbstractReadOnlyModel<Set<String>>() {
+            @Override
+            public Set<String> getObject() {
+                return tdm.getLangForAvailableTrn();
+            }
+        };
+
         ListView<String> list = new ListView<String>("languages", locales) {
             @Override
             protected void populateItem(final ListItem<String> item) {
+                final String language = item.getModelObject();
                 IndicatingAjaxLink link = new IndicatingAjaxLink("link") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        if (item.getModelObject().equals(getSession().getLocale().getLanguage()))
+                        if (language.equals(getSession().getLocale().getLanguage()))
                             langModel.setObject(null);
                         else
-                            langModel.setObject(item.getModelObject());
+                            langModel.setObject(language);
                         target.add(TranslationDecorator.this);
                         target.add(component);
                     }
@@ -71,13 +80,17 @@ public class TranslationDecorator extends Panel {
 
                 //Set the compareValue to null if the current language is the page language
                 String compareValue = null;
-                if (!item.getModelObject().equals(getSession().getLocale().getLanguage()))
-                    compareValue = item.getModelObject();
+                if (!language.equals(getSession().getLocale().getLanguage()))
+                    compareValue = language;
                 //set the css for the current selected tab
                 if ((langModel.getObject() == null && compareValue == null) || (langModel.getObject() != null && langModel.getObject().equals(compareValue)))
                     classValue += " selected";
+
+                String display = language;
+                if (availableTrnLocales.getObject().contains(language))
+                    display += " &#x2713;";
                 item.add(new AttributeModifier("class", classValue));
-                link.add(new Label("title", item.getModelObject()));
+                link.add(new Label("title", display).setEscapeModelStrings(false));
                 if (component instanceof AmpTextAreaFieldPanel){
                     AmpTextAreaFieldPanel area = (AmpTextAreaFieldPanel)component;
                     //if we have a wysiwyg editor we need to close it when switching between tabs

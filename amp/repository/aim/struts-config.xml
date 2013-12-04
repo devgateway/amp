@@ -1875,6 +1875,7 @@
      	<forward name="addOrEditContact" path="/showLayout.do?layout=addContact" />
      	<forward name="showAllContacts" path="/showLayout.do?layout=allContacts"/>
      	<forward name="printPreview" path="/showLayout.do?layout=contactsPrintPreview"/>
+     	<forward name="showAllContactsAfterSave" path="/aim/addressBook.do?actionType=viewAddressBook" redirect="true" />
    </action>
 
 

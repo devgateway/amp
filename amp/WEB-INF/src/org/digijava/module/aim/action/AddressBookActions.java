@@ -564,7 +564,8 @@ public class AddressBookActions extends DispatchAction {
 		//reset filter 
 		myForm.setResultsPerPage(10);
 		myForm.setKeyword(null);
-		return viewAddressBook(mapping,myForm,request,response);
+		return mapping.findForward("showAllContactsAfterSave");
+		//return viewAddressBook(mapping,myForm,request,response);
 	}
 	
 	public ActionForward addNewData (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {

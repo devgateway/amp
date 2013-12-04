@@ -7,6 +7,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -72,6 +73,12 @@ public class TranslationDecorator extends Panel {
                             langModel.setObject(null);
                         else
                             langModel.setObject(language);
+
+                        if (component instanceof FormComponent){
+                            FormComponent fc = (FormComponent) component;
+                            fc.clearInput();
+                        }
+
                         target.add(TranslationDecorator.this);
                         target.add(component);
                     }

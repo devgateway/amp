@@ -15,6 +15,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.ecs.xhtml.form;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -32,16 +33,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.AbstractChoice;
-import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
-import org.apache.wicket.markup.html.form.CheckGroup;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.HiddenField;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioChoice;
-import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -66,6 +58,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorFie
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
+import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
@@ -136,6 +129,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	 */
 	public void toggleSemanticValidation(final boolean enabled, Form<?> form,
 			final AjaxRequestTarget target) {
+
 		//Force preupdate of the percentage fields so that sum validators can evaluate
 		form.visitChildren(AmpPercentageTextField.class,
 				new IVisitor<AmpPercentageTextField, Void>() {
@@ -310,12 +304,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		final AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
-				am.setObject(am.getObject());
-				toggleSemanticValidation(true, form,target);
-				// process the form for this request
-				form.process(this.getButton());
-				
-				if(!form.hasError()){
+				processAndUpdateForm(true, am, form, target, this.getButton());
+                if(!form.hasError()){
                     HashMap<String, String> commitmentErrors = new HashMap<String, String>();
                     HashMap<String, String> expenditureErrors = new HashMap<String, String>();
                     boolean amountsOk = verifyAmounts(am, commitmentErrors, expenditureErrors);
@@ -339,7 +329,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				else
 					onError(target, form);
 			}
-			
+
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
@@ -413,13 +403,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				target.appendJavaScript("hideDraftPanel();");
-				am.setObject(am.getObject());
-				
-				toggleSemanticValidation(false, form,target);
+                target.appendJavaScript("hideDraftPanel();");
+                processAndUpdateForm(false, am, form, target, this.getButton());
 
-				// process the form for this request
-				form.process(this.getButton());
 				//only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
 				if(!form.hasError())  
 					saveMethod(target, am, feedbackPanel, true, redirected);
@@ -459,7 +445,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			// validation, and process the form
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				am.setObject(am.getObject());
+                am.setObject(am.getObject());
 				toggleSemanticValidation(false, activityForm, target);
 				// process the form for this request
 				activityForm.process(null);
@@ -563,6 +549,33 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		quickMenu(am, listModel);
 	}
+
+    private void processAndUpdateForm(boolean notDraft, IModel<AmpActivityVersion> am, Form<?> form, final AjaxRequestTarget target, IndicatingAjaxButton button) {
+        am.setObject(am.getObject());
+        toggleSemanticValidation(notDraft, form,target);
+        // process the form for this request
+        form.process(button);
+        //Force model change for components that are translatable
+        form.visitChildren(AbstractTextComponent.class,
+                new IVisitor<Component, Object>() {
+                    @Override
+                    public void component(Component component, IVisit<Object> objectIVisit) {
+                        IModel<?> model = component.getDefaultModel();
+                        if (model instanceof TranslationDecoratorModel){
+                            TranslationDecoratorModel tdm = (TranslationDecoratorModel) model;
+                            if (tdm.getLangModel().getObject() != null){
+                                tdm.getLangModel().setObject(null); //reset to current form language
+                                AbstractTextComponent atc = (AbstractTextComponent) component;
+                                atc.clearInput();
+                                target.add(component.getParent());
+                                String js = String.format("$('#%s').blur();", atc.getMarkupId());
+                                target.appendJavaScript(js);
+                            }
+                        }
+                    }
+                });
+        form.process(button);
+    }
 
 
     /**

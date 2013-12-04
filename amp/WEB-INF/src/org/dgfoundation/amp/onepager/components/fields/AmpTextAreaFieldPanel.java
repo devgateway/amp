@@ -44,7 +44,17 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 			model = (IModel<T>) new EditorWrapperModel((IModel<String>) model, id);
 		}
 		
-		textAreaContainer = new TextArea<T>("richText", TranslationDecorator.proxyModel((IModel<String>) model));
+		textAreaContainer = new TextArea<T>("richText", TranslationDecorator.proxyModel((IModel<String>) model)){
+            @Override
+            public String getValidatorKeyPrefix() {
+                return super.getValidatorKeyPrefix();    //To change body of overridden methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void validate() {
+                super.validate();    //To change body of overridden methods use File | Settings | File Templates.
+            }
+        };
 		textAreaContainer.setOutputMarkupId(true);
 		
 		final Label preview = (Label) new Label("previewText", model).setEscapeModelStrings(false);

@@ -1487,19 +1487,23 @@ public class EditActivity extends Action {
           }
 
           // calculate consumption and delivery rates
-		  if (calculations.getTotActualExp() != null && calculations.getTotActualExp().doubleValue() != 0
+          double consumptionRate = 0;
+          if (calculations.getTotActualExp() != null && calculations.getTotActualExp().doubleValue() != 0
 					&& calculations.getTotActualDisb() != null && calculations.getTotActualDisb().doubleValue() != 0) {
-			  double consumptionRate = calculations.getTotActualExp().doubleValue() / calculations.getTotActualDisb().doubleValue();
-			  NumberFormat formatter = DecimalFormat.getPercentInstance();
-			  eaForm.getFunding().setConsumptionRate(formatter.format(consumptionRate));
+			  consumptionRate = calculations.getTotActualExp().doubleValue() / calculations.getTotActualDisb().doubleValue();
 		  }
+          NumberFormat formatter = DecimalFormat.getPercentInstance();
+          eaForm.getFunding().setConsumptionRate(formatter.format(consumptionRate));
 
-		  if (calculations.getTotActualComm() != null && calculations.getTotActualComm().doubleValue() != 0
-				    && calculations.getTotActualDisb() != null && calculations.getTotActualDisb().doubleValue() !=0) {
-			  double deliveryRate = calculations.getTotActualDisb().doubleValue() / calculations.getTotActualComm().doubleValue();
-			  NumberFormat formatter = DecimalFormat.getPercentInstance();
-			  eaForm.getFunding().setDeliveryRate(formatter.format(deliveryRate));
-		  }		  
+
+          double deliveryRate = 0;
+          if (calculations.getTotActualComm() != null && calculations.getTotActualComm().doubleValue() != 0
+		    && calculations.getTotActualDisb() != null && calculations.getTotActualDisb().doubleValue() != 0) {
+		        deliveryRate = calculations.getTotActualDisb().doubleValue() / calculations.getTotActualComm().doubleValue();
+		  }
+          formatter = DecimalFormat.getPercentInstance();
+          eaForm.getFunding().setDeliveryRate(formatter.format(deliveryRate));
+
           
           
           

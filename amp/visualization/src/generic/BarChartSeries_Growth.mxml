@@ -289,9 +289,14 @@ OTHER DEALINGS IN THE SOFTWARE.
 				currentYear.dataProvider = currentYearCol;
 				
 				var cnt = 0;
-				for(var year:int = startYear; year < endYear; year++){
-					previousYearCol.addItem ({label: sliderLabels.split(",")[cnt++], data: ""+year});
+				if (startYear==endYear){
+					previousYearCol.addItem ({label: ""+(startYear-1), data: ""+(startYear-1)});
+				} else {
+					for(var year:int = startYear; year < endYear; year++){
+						previousYearCol.addItem ({label: sliderLabels.split(",")[cnt++], data: ""+year});
+					}	
 				}
+								
 				previousYear.dataProvider = previousYearCol;
 				previousYear.selectedIndex = previousYearCol.length-1;
 				currentYear.selectedIndex = currentYearCol.length-1;
@@ -377,8 +382,12 @@ OTHER DEALINGS IN THE SOFTWARE.
 				currentYear.dataProvider = currentYearCol;
 				
 				var cnt = 0;
-				for(var year:int = startYear; year < endYear; year++){
-					previousYearCol.addItem ({label: sliderLabels.split(",")[cnt++], data: ""+year});
+				if (startYear==endYear){
+					previousYearCol.addItem ({label: ""+(startYear-1), data: ""+(startYear-1)});
+				} else {
+					for(var year:int = startYear; year < endYear; year++){
+						previousYearCol.addItem ({label: sliderLabels.split(",")[cnt++], data: ""+year});
+					}	
 				}
 				previousYear.dataProvider = previousYearCol;
 				previousYear.selectedIndex = previousYearCol.length-1;

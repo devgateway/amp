@@ -153,6 +153,20 @@ public class ReportTestingUtils
 		throw new RuntimeException("no activity with the given id " + activityId + " exists");		
 	}
 	
+	public static AmpActivityVersion loadActivityByName(String actName)
+	{
+		try
+		{
+			String queryString = "select act from " + AmpActivityVersion.class.getName() + " act WHERE " + AmpActivityVersion.hqlStringForName("act") + "=:activityName";
+			AmpActivityVersion act = (AmpActivityVersion) PersistenceManager.getRequestDBSession().createQuery(queryString).setString("activityName", actName).list().get(0);
+			return act;
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+	
 	public static Long getActivityIdByName(String actName)
 	{
 		try

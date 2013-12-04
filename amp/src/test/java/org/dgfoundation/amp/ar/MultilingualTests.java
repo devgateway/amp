@@ -24,7 +24,7 @@ import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+import java.util.Arrays;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

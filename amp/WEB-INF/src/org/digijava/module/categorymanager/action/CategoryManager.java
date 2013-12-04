@@ -153,6 +153,9 @@ public class CategoryManager extends Action {
 							}*/
 							this.saveErrors(request, errors);
 							return mapping.findForward("createOrEditCategory");
+						}else{
+							//if the save process went ok, we should delete from the cache the given category
+							CategoryManagerUtil.removeAmpCategryBykey(myForm.getKeyName());
 						}
 					}
                 }

@@ -545,7 +545,13 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 * because the amp_categories table does not change during the runtime of AMP, we can safely cache them
 	 */
 	private static Map<String, AmpCategoryClass> categoryValuesByKey = Collections.synchronizedMap(new HashMap<String, AmpCategoryClass>());
-	
+	/**
+	 * 
+	 * @param categoryKey
+	 */
+	public static void removeAmpCategryBykey(String categoryKey){
+		categoryValuesByKey.remove(categoryKey);
+	}
 	/**
 	 *
 	 * @param categoryKey

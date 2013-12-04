@@ -1692,7 +1692,7 @@ public class DataExchangeUtils {
     
     public static List<String> getAllActivitiesStatus(String str){
     	Connection connection = null;
-        TreeMap<Long,String> result = new TreeMap<Long,String>();
+ //       TreeMap<Long,String> result = new TreeMap<Long,String>();
         List<String> result1 = new ArrayList<String>();
         try {
             connection = PersistenceManager.getJdbcConnection();

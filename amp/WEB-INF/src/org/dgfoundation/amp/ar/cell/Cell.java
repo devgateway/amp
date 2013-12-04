@@ -213,16 +213,28 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 	 * @return the resulting Cell
 	 */
 	public Cell filter(Cell metaCell,Set ids) {
-		try {
 		if(ids.contains(ownerId)) 
-			return (Cell) this.clone(); 
-		else return null;
-		} catch(CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-		return null;
+			return cloneYourself();
+		else
+			return null;
 	}
 
+	//public static java.util.Map<String, Long> cloneCalls = new java.util.TreeMap<String, Long>();
+	protected Cell cloneYourself()
+	{
+//		String className = this.getClass().getName();
+//		if (!cloneCalls.containsKey(className))
+//			cloneCalls.put(className, 0L);
+//		cloneCalls.put(className, cloneCalls.get(className) + 1);
+		try
+		{
+			return (Cell) this.clone();
+		}
+		catch(CloneNotSupportedException e)
+		{
+			throw new RuntimeException("error cloning cell of type "+ this.getClass().getName(), e);
+		}
+	}
 
 	/**
 	 * @return Returns the column.

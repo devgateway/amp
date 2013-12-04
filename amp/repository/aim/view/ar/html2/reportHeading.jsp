@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -28,13 +29,13 @@
 <logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
  <thead class="fixedHeader"> 
   <%
-	int maxDepth = columnReport.getMaxColumnDepth();
+	//int maxDepth = columnReport.getMaxColumnDepth();
 	columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
 	HashMap linkMap = new HashMap();
 	linkMap.put("reportContextId", ReportContextData.getCurrentReportContextId(request, true));
 	pageContext.setAttribute("linkMap", linkMap);
   %>
-  <%for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
+  <%for (int curDepth = 0; curDepth < columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr class="reportHeader" title='<digi:trn key="reports.ReportHeadings">Report Headings</digi:trn>'>
   <%boolean first=true;
   	if (curDepth == 0) {
@@ -70,9 +71,8 @@
   <% } %>
     <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
        
-      <%
-      column.setCurrentDepth(curDepth);
-      	int rowsp = column.getCurrentRowSpan();
+<%
+		column.setCurrentDepth(curDepth);
       	String token=null;
       	String total=null;
       	if (((org.dgfoundation.amp.ar.Column)column).getWorker()!=null){
@@ -82,12 +82,16 @@
         
       	if(first && (token!=null || total!=null)){%>
       	
-      	<c:set var="addFakeColumn" value="${true}" scope="request"></c:set>
-      	  <td style="background-color:#EAEAEA;padding-left: 2px; padding-right: 2px "> </td>	
-        <%}
+      		<c:set var="addFakeColumn" value="${true}" scope="request"></c:set>
+      	  		<td style="background-color:#EAEAEA;padding-left: 2px; padding-right: 2px "> </td>	
+        	<%}
         first=false;
-        %>
-		<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column" >
+%>
+	<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column" >
+		<!-- subcolumn name: ${subColumn.name}, width: ${subColumn.width}, columnDepth: ${subColumn.columnDepth}, columnSpan: ${subColumn.positionInHeading.colSpan}, newRowSpan: ${subColumn.positionInHeading.rowSpan} %> -->
+<%
+	int rowsp = subColumn.getPositionInHeading().getRowSpan();
+%>		
         <c:set var="reportHeading">
           <%=subColumn.getName(reportMeta.getHideActivities())%>
           <%= ("percentageOfTotalCommitments".equals (subColumn.getExpression())?"(%)":"")  %>
@@ -112,7 +116,7 @@
 	        		<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortBy", subColumn.getNamePath() ); %>
 	        	<logic:notEqual name="widget" scope="request" value="true">
 	        		<c:choose>
-	        			<c:when test="${subColumn.contentCategory!=categoryYear && subColumn.columnSpan == 0 }">
+	        			<c:when test="${subColumn.contentCategory!=categoryYear && subColumn.positionInHeading.colSpan == 0 }">
 			            	<html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" 
 			            			page="/viewNewAdvancedReport.do" name="linkMap">
 	              		      <digi:trn key="aim:reportBuilder:${reportHeading}">
@@ -167,31 +171,14 @@
           
         <logic:notEqual name="column" property="columnDepth" value="1">
         	<c:choose>
-        		<c:when test="${subColumn.width!=1 || subColumn.contentCategory==categoryYear || subColumn.columnSpan != 0 }">
+        		<c:when test="${subColumn.width!=1 || subColumn.contentCategory==categoryYear || subColumn.positionInHeading.colSpan != 0 }">
         		<%
         			if(subColumn.getName().length()<5){%>        			
-        				<td style="margin-left: 2px; margin-right: 2px;" class="reportHeader" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-        				        					
- 					<c:choose>
-						<c:when test="${empty column.contentCategory}">
-							<digi:trn>${reportHeading}</digi:trn>
-						</c:when>
-						<c:when test="${column.contentCategory eq 'Year'}">
-							<c:out value="${reportHeading}"/>
-						</c:when>
-						<c:when test="${column.contentCategory eq 'Quarter'}">
-							<digi:trn>${reportHeading}</digi:trn>
-						</c:when>
-						<c:otherwise>
-							<digi:trn>${reportHeading}</digi:trn>
-						</c:otherwise>
-					</c:choose>
-						
-							
+        				<td style="margin-left: 2px; margin-right: 2px;" class="reportHeader" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>        				        						
 					<%}else{%>
 						<td class="reportHeader" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-						<digi:trn>${reportHeading}</digi:trn>
           		<%}%>
+					<digi:trn>${reportHeading}</digi:trn>
           		</c:when>
           		<c:otherwise>
 	      			<td class="reportHeader" valign="bottom" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
@@ -235,14 +222,16 @@
 	     		</c:otherwise>
 	     		</c:choose>
 	     	 <%
-                              if (subColumn.getDescription()!=null){
-                              String text=subColumn.getDescription();
-                              if (text!=null){ %> 
+					if (subColumn.getDescription() != null)
+					{
+						String text = subColumn.getDescription();
+						if (text!=null){ %> 
                        			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
                     		 	<%}
-                     		  }%>
+                     		  }
+              %>
 	     	</td>	            
-        	</logic:notEqual>
+        </logic:notEqual>
     	
 	</logic:iterate>
    </logic:iterate>

@@ -675,16 +675,32 @@ public class ColumnReportData extends ReportData<Column> {
 		return parent.getCurrentView();
 	}
 
-	public int getMaxColumnDepth() {
+	/**
+	 * returns the rowspan of this CRD's header
+	 * @return
+	 */
+	public int calculateMaxColumnDepth() {
 		int ret = 0;
 		for(Column element:items) {
-			int c = element.getColumnSpan();
+			int c = element.calculateTotalRowSpan();
 			if (c > ret)
 				ret = c;
 		}
+		this.maxColumnDepth = ret;
 		return ret;
 	}
 
+	protected int maxColumnDepth = -1; 
+	
+	/**
+	 * returns the total rowspan of the CRD
+	 * @return
+	 */
+	public int getMaxColumnDepth()
+	{
+		return maxColumnDepth;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -698,24 +714,27 @@ public class ColumnReportData extends ReportData<Column> {
 		return ret;
 	}
 
-	public List getColumnsByDepth() {
-		List ret = new ArrayList();
-
-		return ret;
-	}
+//	public List getColumnsByDepth() {
+//		List ret = new ArrayList();
+//
+//		return ret;
+//	}
 
 	/**
 	 * Sets the rowspan for each column. This will be used only by viewers, 
 	 * to correctly render the heading of the column.
 	 */
 	public void prepareAspect() {
-		int maxDepth = getMaxColumnDepth();
-		for (Column element:items) {
-			element.setRowSpan(maxDepth + 1);
+		int maxRowSpan = calculateMaxColumnDepth();
+		int elapsedWidth = 0;
+		for (Column element:items)
+		{
+			element.setPositionInHeadingLayout(maxRowSpan, 0, elapsedWidth);
+			elapsedWidth += element.getWidth();
 		}
 	}
 
-	public void removeColumnsByName(String name) {
+	protected void removeColumnsByName(String name) {
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
@@ -726,14 +745,14 @@ public class ColumnReportData extends ReportData<Column> {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dgfoundation.amp.ar.ReportData#getSourceColsCount()
-	 */
-	public Integer getSourceColsCount() {
-		return parent.getSourceColsCount();
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see org.dgfoundation.amp.ar.ReportData#getSourceColsCount()
+//	 */
+//	public Integer getSourceColsCount() {
+//		return parent.getSourceColsCount();
+//	}
 
 	public String getSorterColumn() {
 		return parent.getSorterColumn();
@@ -860,5 +879,28 @@ public class ColumnReportData extends ReportData<Column> {
 		return d;
 	}
 
-	
+	@Override
+	public List<String> digestReportHeadingData()
+	{
+		int maxDepth = this.getMaxColumnDepth();
+		List<String> ret = new ArrayList<String>();
+		for(int curDepth = 0; curDepth < maxDepth; curDepth++)
+		{
+			StringBuffer lineDigest = new StringBuffer("(line " + curDepth + ":");
+			List<Column> columnsToDraw = new ArrayList<Column>();
+			for(Column column:this.getItems())
+			{
+				columnsToDraw.addAll(column.getSubColumns(curDepth));
+			}
+			for(int i = 0; i < columnsToDraw.size(); i++)
+			{
+				if (i > 0)
+					lineDigest.append(", ");
+				lineDigest.append(columnsToDraw.get(i).getPositionInHeading().toString());
+			}
+			lineDigest.append(")");
+			ret.add(lineDigest.toString());
+		}
+		return ret;
+	}
 }

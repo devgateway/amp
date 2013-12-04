@@ -8,16 +8,20 @@ package org.dgfoundation.amp.ar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.helper.ReportHeadingLayoutCell;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -59,79 +63,39 @@ public class GroupColumn extends Column<Column> {
 	}
     	
 	public int getWidth() {
-		int ret=0;
-		Iterator i=items.iterator();
-		while (i.hasNext()) {
-			Column element = (Column) i.next();
-			ret+=element.getWidth();
+		int ret = 0;
+		for(Column column:this.getItems()){			
+			ret += column.getWidth();
 		}
-		return ret;
-	}
+		return Math.max(1, ret); // at least the column title
+	}	
 	
-	public static Column verticalSplitByCategs(CellColumn src,
-            List<String> categories, boolean generateTotalCols,AmpReports reportMetadata) {
-		
-		
-		return verticalSplitByCategs(src, categories, null, generateTotalCols, reportMetadata);
-	}
-	
-	/**
-	 * Split a column holding CategAmountCellS into several subcolumns based on the categorized amount data and some
-	 * categories given as reference. The result will be a categorized column tree of GroupColumnS and CellColumnS as leafs. 
-	 * Each category will create another level on the tree while on the same level we will find several GroupColumnS that 
-	 * share the same metainfo category but not the same value.
-	 * @param src The source CellColumn to be categorized
-	 * @param categories the list of categories to be applied to the src column
-	 * @param generateTotalCols true when creating TotalAmountColumnS instead of CellColumnS 
-	 * @return a GroupColumn that holds the categorized data
-	 * @see MetaInfo, TotalAmountColumn, CategAmountCell
-	 */
-    private static Column verticalSplitByCategs(Column src,
-            List<String> categories, Set ids, boolean generateTotalCols, AmpReports reportMetadata) {
-        String cat = categories.remove(0);
-        if (categories.size() > 0)
-            return verticalSplitByCategs(verticalSplitByCateg(src, cat,ids,
-                    false,reportMetadata), categories, ids, generateTotalCols,reportMetadata);
-        else
-            return verticalSplitByCateg(src, cat, ids, generateTotalCols, reportMetadata);
-    }
-
-    /**
-     * Helper method that only uses one category to create a categorized tree. This method is internally used and should not
-     * be invoked by the developer directly.
-     * @param src The source column to be categorized
-     * @param category the category to categorize the data with
-     * @param generateTotalCols true when creating TotalAmountColumnS instead of CellColumnS
-     * @return a GroupColumn that holds the categorized Data
-     * @see verticalSplitByCategs
-     */
-    private static Column verticalSplitByCateg(Column src, 
-            String category, Set ids, boolean generateTotalCols, AmpReports reportMetadata) {    
-    	if (src instanceof CellColumn) 
-    		return verticalSplitByCateg((CellColumn)src, category, ids, generateTotalCols, reportMetadata);
-    	else {
-    		GroupColumn srcG=(GroupColumn) src;
-    		GroupColumn dest=null;
-   			dest=new GroupColumn(src);
-    		Iterator i=srcG.iterator();
-    		while (i.hasNext()) {
-				Column element = (Column) i.next();
+	@Override
+    public GroupColumn verticalSplitByCateg(String category, Set ids, boolean generateTotalCols, AmpReports reportMetadata) 
+    { 
+   		GroupColumn dest = null;
+		dest = new GroupColumn(this);
+		Iterator i = this.iterator();
+		while (i.hasNext())
+		{
+			Column element = (Column) i.next();
 				
-				if( ( category.equals(ArConstants.TERMS_OF_ASSISTANCE) || category.equals(ArConstants.MODE_OF_PAYMENT) ) 
-						&& element instanceof TotalCommitmentsAmountColumn){ 
-					continue;
-				}
-				
-				Column splitted=verticalSplitByCateg(element,category,ids,generateTotalCols,reportMetadata);
-				
-				if(splitted!=null) {
-					dest.addColumn(splitted);
-					splitted.setContentCategory(category);
-				}
-				else dest.addColumn(element);
+			if( ( category.equals(ArConstants.TERMS_OF_ASSISTANCE) || category.equals(ArConstants.MODE_OF_PAYMENT) ) 
+					&& element instanceof TotalCommitmentsAmountColumn){ 
+				continue;
 			}
-    		return dest;
-    	}
+				
+			Column splitted = element.verticalSplitByCateg(category, ids, generateTotalCols, reportMetadata);
+				
+			if(splitted != null)
+			{
+				dest.addColumn(splitted);
+				splitted.setContentCategory(category);
+			}
+			else
+				dest.addColumn(element);
+		}
+		return dest;
     }
     
     /**
@@ -141,20 +105,11 @@ public class GroupColumn extends Column<Column> {
      */
     public static boolean isRealDisbursement(Categorizable item)
     {
-    	boolean isActualDisbursement = false;
-    	boolean hasDestination = false;
-
-    	for(MetaInfo minfo:item.getMetaData())
-    	{
-    		if (minfo == null)
-    			continue; // shouldn't happen
-    		
-    		if (minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
-    			isActualDisbursement = minfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
-    		
-    		if (minfo.getCategory().equals(ArConstants.RECIPIENT_NAME))
-    			hasDestination = true;
-    	}
+    	MetaInfoSet metaData = item.getMetaData();
+    	MetaInfo fundingTypeMetaInfo = metaData.getMetaInfo(ArConstants.FUNDING_TYPE); 
+    	
+    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
+    	boolean hasDestination = metaData.hasMetaInfo(ArConstants.RECIPIENT_NAME);    	
     	   	
     	return isActualDisbursement && hasDestination;
     	
@@ -168,25 +123,14 @@ public class GroupColumn extends Column<Column> {
      */
     public static boolean isEstimatedDisbursement(Categorizable item)
     {
-    	boolean isActualDisbursement = false;
-    	boolean hasDonorSource = false;
-    	boolean hasSource = false;
+       	MetaInfoSet metaData = item.getMetaData();
+    	MetaInfo fundingTypeMetaInfo = metaData.getMetaInfo(ArConstants.FUNDING_TYPE);
+    	MetaInfo sourceRoleMetaInfo = metaData.getMetaInfo(ArConstants.SOURCE_ROLE_CODE);
+    	
+    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
+    	boolean hasSource = sourceRoleMetaInfo != null;
+    	boolean hasDonorSource = hasSource && (sourceRoleMetaInfo.getValue().toString().equals(Constants.ROLE_CODE_DONOR));
 
-    	for(MetaInfo minfo:item.getMetaData())
-    	{
-    		if (minfo == null)
-    			continue; // shouldn't happen
-    		
-    		if (minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
-    			isActualDisbursement = minfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
-    		
-    		if (minfo.getCategory().equals( ArConstants.SOURCE_ROLE_CODE))
-    		{
-    			hasSource = true;
-    			if (minfo.getValue().toString().equals(Constants.ROLE_CODE_DONOR))
-    				hasDonorSource = true;
-    		}
-    	}
     	return isActualDisbursement && ((!hasSource) || (hasSource && hasDonorSource));
     	
     	//return false;
@@ -240,24 +184,51 @@ public class GroupColumn extends Column<Column> {
     }
     
     /**
+     * detaches cell from their siblings (e.g. clones metadata in Actual-disbursements-bound-cells) and removes funding metadata from copies
+     */
+    public void detachCells()
+    {
+       	// postprocess Funding columns as to detach completely the ACTUAL DISBURSEMENTS and REAL DISBURSEMENTS columns
+       	List<Column> columns = this.getItems();
+       	for(Column column:columns)
+       	{
+       		//System.out.println("column = " + column);
+       		if (column.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS) || column.getName().equals(ArConstants.REAL_DISBURSEMENTS))
+       		{
+       			detachCells(column);
+       		}
+       	}
+       	// these cycles HAVE to be separated, as we can remove metadata from a cell only after it has been throughoutly detached
+       	for(Column column:columns)
+       		if (column.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS))
+       		{
+       			removeDirectFundingMetadata(column);
+       		}
+    }
+    
+    /**
      * Helper method that only uses one category to create a categorized tree. This method is internally used and should not
      * be invoked by the developer directly.
+     * <b>this function actually belongs in CellColumn, but leaving it here because it is big and it would screw svn diffs too much</b>
      * @param src the CellColumn source
      * @param category category the category to categorize the data with 
      * @param generateTotalCols true when creating TotalAmountColumnS instead of CellColumnS
      * @return a GroupColumn that holds the categorized Data
      */
-    private static Column verticalSplitByCateg(CellColumn<? extends CategAmountCell> src,
-    	String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
+    public static GroupColumn verticalSplitByCateg_internal(CellColumn src, String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
     	
+    	//logger.error(String.format("called with cat = %s,  generateTotalCalls = %s", category, generateTotalCols));
     	if (src instanceof TotalComputedMeasureColumn)
-    		return src;
+    		return null;
     	
     	HashMap<String,String> yearMapping = new HashMap<String, String>();
     	HashMap<String,String> monthMapping = new HashMap<String, String>();
     	    	    	
     	GroupColumn ret = new GroupColumn(src);
-        Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
+        SortedSet<MetaInfo> metaSet = new TreeSet<MetaInfo>(new java.util.Comparator<MetaInfo>(){
+			public int compare(MetaInfo a, MetaInfo b){
+				return ((Comparable)a.value).compareTo((Comparable) b.value);
+			}});
         Iterator<? extends CategAmountCell> i = src.iterator();
        
         AmpARFilter myFilters	= null;
@@ -273,26 +244,26 @@ public class GroupColumn extends Column<Column> {
     	  ARUtil.insertEmptyColumns(category, src, metaSet, myFilters);
        } 
         
+   		String unspecified = "";
+   		try {
+			unspecified = TranslatorWorker.translateText("Unspecified",reportMetadata.getLocale(),reportMetadata.getSiteId());
+		} catch (WorkerException e) {
+			e.printStackTrace();
+		}
         
         while (i.hasNext()) {
         	Categorizable element = (Categorizable) i.next();
             if(!element.isShow()) continue;
-            MetaInfo minfo = MetaInfo.getMetaInfo(element.getMetaData(),category);
+            MetaInfo minfo = element.getMetaData().getMetaInfo(category);
             if (minfo == null || minfo.getValue() == null) 
-            	return null;
+            	continue;
             	//if the year is not renderizable just not add it to minfo
            
             if (generateTotalCols || true/*element.isRenderizable()*/) { // eliminating "renderizable" elements is now a postprocessing step, this isRenderizable() function has been eliminated, so assuming it is true
         	    metaSet.add(minfo);
         	    
-            	String unspecified = "";
-            	try {
-					unspecified = TranslatorWorker.translateText("Unspecified",reportMetadata.getLocale(),reportMetadata.getSiteId());
-				} catch (WorkerException e) {
-					e.printStackTrace();
-				}
         	    if (category.equalsIgnoreCase(ArConstants.YEAR)){
-                	MetaInfo minfo2=MetaInfo.getMetaInfo(element.getMetaData(),ArConstants.FISCAL_Y);
+                	MetaInfo minfo2 = element.getMetaData().getMetaInfo(ArConstants.FISCAL_Y);
                 	
                 	//Replace the year in pledges report for unspecified dates funding
                 	if (reportMetadata.getType() == ArConstants.PLEDGES_TYPE){
@@ -300,7 +271,8 @@ public class GroupColumn extends Column<Column> {
 	                	String year = pledgesfakeyear.format(new Date(ArConstants.PLEDGE_FAKE_YEAR.getTime())).toString();
 
 	                	if (minfo.getValue().toString().equalsIgnoreCase(year)){
-	                			minfo2.setValue(unspecified);
+	                		element.getMetaData().replace(new MetaInfo(minfo2.getCategory(), unspecified));
+	                		//minfo2.setValue(unspecified);
 	                	}
                 	}
                 	
@@ -308,7 +280,7 @@ public class GroupColumn extends Column<Column> {
                 	
                }
         	    if (category.equalsIgnoreCase(ArConstants.MONTH)){
-                	MetaInfo minfo2=MetaInfo.getMetaInfo(element.getMetaData(),ArConstants.FISCAL_M);
+                	MetaInfo minfo2 = element.getMetaData().getMetaInfo(ArConstants.FISCAL_M);
                 	monthMapping.put(minfo.getValue().toString(), minfo2.getValue() == null ? unspecified : minfo2.getValue().toString());
                 	
                }
@@ -378,11 +350,8 @@ public class GroupColumn extends Column<Column> {
     	   while (ii.hasNext()) {
 	    		AmpReportMeasures ampReportMeasurement = ii.next();
 				AmpMeasures element = ampReportMeasurement.getMeasure();
-				if (element.getMeasureName().equals(
-						ArConstants.UNDISBURSED_BALANCE)
-						|| element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) 
-							|| element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) || (element.getExpression()!=null)
-					) continue;
+				if (!element.isSplittable())
+					continue;
 				
 				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(
 						ArConstants.FUNDING_TYPE, new FundingTypeSortedString(
@@ -506,31 +475,15 @@ public class GroupColumn extends Column<Column> {
         }
         
         if (category.equals(ArConstants.FUNDING_TYPE))
-        {
-        	// postprocess Funding columns as to detach completely the ACTUAL DISBURSEMENTS and REAL DISBURSEMENTS columns
-        	List<Column> columns = ret.getItems();
-        	for(Column column:columns)
-        	{
-        		//System.out.println("column = " + column);
-        		if (column.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS) || column.getName().equals(ArConstants.REAL_DISBURSEMENTS))
-        		{
-        			detachCells(column);
-        		}
-        	}
-        	// these cycles HAVE to be separated, as we can remove metadata from a cell only after it has been throughoutly detached
-        	for(Column column:columns)
-        		if (column.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS))
-        		{
-        			removeDirectFundingMetadata(column);
-        		}
-        }
+        	ret.detachCells();
         
         // Start AMP-2724
         if(category.equals(ArConstants.FUNDING_TYPE)) {
         	
         	int index=0;
         	List theItems = ret.getItems();
-			if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
+			if (reportMetadata.needsTotalCommitments())
+			{
 	
 				TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(
 						ArConstants.TOTAL_COMMITMENTS);
@@ -584,8 +537,16 @@ public class GroupColumn extends Column<Column> {
 			}
         }
         // End AMP-2724
+
+        if (ret.getItems().isEmpty() && category.equals(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE))
+        	return ret; // empty, drop everything else to the hell
         
-         
+//        if (ret.getItems().isEmpty() && category.equals(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE) && 
+//        	src.getContentCategory().equals(ArConstants.FUNDING_TYPE) && src.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS))
+//        {
+//        	return null; // nothing to do, keep initial column
+//        }
+        
         if(ret.getItems().size()==0) {
         	AmountCellColumn acc=new AmountCellColumn(ret);
         	Iterator<? extends CategAmountCell> ii = src.iterator();
@@ -624,7 +585,7 @@ public class GroupColumn extends Column<Column> {
     }
     
     
-    public GroupColumn() {
+    private GroupColumn() {
         super();
     }
     
@@ -674,6 +635,18 @@ public class GroupColumn extends Column<Column> {
         return null;
     }
 
+    /**
+     * returns a subcolumn with a matching name OR null, if none found
+     * @param name
+     * @return
+     */
+    public Column getColumnByName(String name)
+    {
+    	for(Column col:this.getItems())
+    		if (col.getName().equals(name))
+    			return col;
+    	return null;
+    }
     /**
      * Returns the Column occupying the specific position in the internal list of this GroupColumn 
      * @param idx the index of the requested column
@@ -738,54 +711,80 @@ public class GroupColumn extends Column<Column> {
     }
 
     
-    public List getHorizColumnList() {
-    	ArrayList ret=new ArrayList();
-    	for(int i=0;i<getColumnSpan();i++) {
-    		ret.add(getSubColumns(i));
-    	}
-    	return ret;
-    }
+//    public List getHorizColumnList() {
+//    	ArrayList ret=new ArrayList();
+//    	for(int i=0;i<getColumnSpan();i++) {
+//    		ret.add(getSubColumns(i));
+//    	}
+//    	return ret;
+//    }
     
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#getSubColumn(int)
 	 */
-	public List getSubColumns(int depth) {
-		ArrayList ret=new ArrayList();
-		if(getColumnSpan()<depth) return ret;
-		if(depth==0) {
+    @Override
+	public List<Column> getSubColumns(int depth) {
+		ArrayList<Column> ret=new ArrayList<Column>();
+		if (depth < this.positionInHeading.getStartRow())
+			return ret; // we are at a lower depth than this column - nothing starts here
+		if (depth == this.positionInHeading.getStartRow())
+		{
+			// this GroupColumn starts here -> add it
 			ret.add(this);
 			return ret;
-		} else
-		if(depth==1) {
-			ret.addAll(items);
-		} else {
-			Iterator i=items.iterator();
-			while (i.hasNext()) {
-				Column element = (Column) i.next();
-				ret.addAll(element.getSubColumns(depth-1));
-			}
+		}
+		// none of the previous applied, so one of the (direct/indirect) children might start at this depth -> search them 
+		for(Column subColumn:this.getItems())
+		{
+			ret.addAll(subColumn.getSubColumns(depth));
 		}
 		return ret;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.Column#getColumnDepth()
+	/**
+	 * gets the max of all the subcolumns' rowspans and then adds the self rowspan
+	 * only called once, when a CRD is initialized. After that, get the info from positionInHeading
 	 */
-	public int getColumnSpan() {
-		Column c=this.getColumn(0);
-		if(c==null) return 0; else;
-		return 1+c.getColumnSpan();
+    @Override
+	public int calculateTotalRowSpan()
+	{
+		if (this.getItems().isEmpty())
+		{
+			return 0;
+		}
+		int maxColSpan = 0;
+		for(Column c:this.getItems())
+		{
+			if (c != null)
+				maxColSpan = Math.max(maxColSpan, c.calculateTotalRowSpan());
+		}
+		return maxColSpan + getRowSpanInHeading_internal();
 	}
-
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.Column#getCurrentRowSpan()
-	 */
-	public int getCurrentRowSpan() {
-		rowSpan--;
-		spanCount++;
-		if(spanCount==this.getColumnSpan()+1) return rowSpan+1; else return 1;
+	
+	@Override
+	public int getRowSpanInHeading_internal()
+	{
+		if (this.getName().equals(ArConstants.COLUMN_CONTRIBUTION_TOTAL) ||
+				this.getName().equals(ArConstants.COLUMN_TOTAL))
+			return 2;
+		return 1;
 	}
-
+	
+	@Override
+	public void setPositionInHeadingLayout(int totalRowSpan, int startingDepth, int startColumn)
+	{
+		this.positionInHeading = new ReportHeadingLayoutCell(this, startingDepth, totalRowSpan, this.getRowSpanInHeading_internal(), startColumn, this.getWidth(), this.getName());
+		//super.setPositionInHeadingLayout(totalRowSpan, startingDepth);
+		if (this.getItems() == null)
+			return;
+		int startColumnSum = 0;
+		for(Column item:this.getItems())
+		{
+			item.setPositionInHeadingLayout(totalRowSpan - this.positionInHeading.getRowSpan(), startingDepth + this.positionInHeading.getRowSpan(), startColumn + startColumnSum);
+			startColumnSum += item.getWidth();
+		}
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#getOwnerIds()
 	 */

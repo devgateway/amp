@@ -18,17 +18,16 @@
 
 <!-- generate report headings -->
 
-<%int maxDepth = columnReport.getMaxColumnDepth();
-				columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
-				%>
-<%for (int curDepth = 0; curDepth <= columnReport
-						.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
+<%//int maxDepth = columnReport.getMaxColumnDepth();
+	columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
+%>
+<%for (int curDepth = 0; curDepth < columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
 <tr title="Report Headings">
 <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
 	<%column.setCurrentDepth(curDepth);%>
-	<%int rowsp = column.getCurrentRowSpan();
-						%>
 	<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
+	<%int rowsp = subColumn.getPositionInHeading().getRowSpan();
+						%>
 	<td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 	
 	<logic:equal name="column" property="columnDepth" value="1">

@@ -3,10 +3,10 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.module.aim.annotations.reports.Identificator;
 
-//seems that it's no longer used
-@Deprecated
+//but used in reports engine
 public class AmpMeasures  implements Serializable, Comparable
 {
 	@Identificator
@@ -65,7 +65,19 @@ public class AmpMeasures  implements Serializable, Comparable
 		AmpMeasures auxColumn=(AmpMeasures) o;
 		return this.getMeasureName().compareTo(auxColumn.getMeasureName());
 	}
-	
+
+	/**
+	 * can this column be split by hierarchies?
+	 * @return
+	 */
+	public boolean isSplittable()
+	{
+		boolean isNotSplittable = getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || 
+				getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || 
+				getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) ||
+				getExpression() != null;
+		return !isNotSplittable;
+	}
 
 	public String getExpression() {
 		return expression;
@@ -73,5 +85,11 @@ public class AmpMeasures  implements Serializable, Comparable
 
 	public void setExpression(String expression) {
 		this.expression = expression;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return this.measureName;
 	}
 }

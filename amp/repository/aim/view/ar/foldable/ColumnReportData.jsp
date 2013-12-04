@@ -26,7 +26,7 @@
 <bean:define id="bckColor" value="true" toScope="page"/>
 
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-<jsp:include page="../reportHeadings.jsp"/>
+<jsp:include page="reportHeadings.jsp"/>
 
 <c:set var="activityEditURL">
 	<field:display name="Add SSC Button" feature="Edit Activity">/wicket/onepager/ssc</field:display>

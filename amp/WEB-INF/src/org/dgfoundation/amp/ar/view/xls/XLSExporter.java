@@ -280,6 +280,40 @@ public abstract class XLSExporter extends Exporter {
 		return hierarchyOtherStyle;
 	}
 	
+	public void makeColSpanAndRowSpan(int colSpan, int rowSpan, Boolean border)
+	{
+	
+		Region r=new Region(rowId.intValue(), colId.shortValue(), rowId.intValue() + rowSpan - 1, (short) (colId.shortValue() + colSpan - 1));
+		try {
+			if (border){
+				HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
+				HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
+				HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
+				HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
+			}else{
+				HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
+				HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
+				HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
+				HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
+			}
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+		try{
+			sheet.addMergedRegion(r);
+		} catch(Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+		
+		sheet.autoSizeColumn(r.getColumnFrom());
+	
+//        if (this.autoSize) {
+//            sheet.autoSizeColumn(r.getColumnFrom());
+//        }
+		colId.inc(colSpan);
+	}	
 	
 	public void makeColSpan(int size, Boolean border) {
 		size--;

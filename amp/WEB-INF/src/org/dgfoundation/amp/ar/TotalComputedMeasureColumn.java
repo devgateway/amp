@@ -65,7 +65,7 @@ public class TotalComputedMeasureColumn extends TotalAmountColumn {
 		this.setExpression(source.getExpression());
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	/**
 	 * Overrides the method for adding cells, to make sure we add only UndisbursedAmountCellS
 	 * 

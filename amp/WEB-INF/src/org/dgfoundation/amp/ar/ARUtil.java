@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -227,6 +228,8 @@ public final class ARUtil {
 		if (r == null) {
 			Session session = PersistenceManager.getSession();
 			r = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+			if (r == null)
+				throw new RuntimeException("no report with ampReportId = " + ampReportId + " found!");
 		}
 		
 		r.setSiteId(siteId);
@@ -246,7 +249,7 @@ public final class ARUtil {
 	public static GroupReportData generateReport(AmpReports r, AmpARFilter filter, boolean regenerateFilterQuery, boolean cleanupMetadata)  {
 
 
-		CellColumn.calls = CellColumn.iterations = MetaInfo.calls = MetaInfo.iterations = 0;
+		CellColumn.calls = CellColumn.iterations = MetaInfoSet.calls = MetaInfoSet.iterations = 0;
 
 		HttpSession httpSession = TLSUtils.getRequest().getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
@@ -275,7 +278,7 @@ public final class ARUtil {
 		arg.setCleanupMetadata(cleanupMetadata);
 		arg.generate();
 		
-		logger.info(String.format("while generating report, had %d / %d CellColumn calls and %d / %d MetaInfo calls", CellColumn.iterations, CellColumn.calls, MetaInfo.iterations, MetaInfo.calls));
+		logger.info(String.format("while generating report, had %d / %d CellColumn calls (%.2f waste) and %d / %d MetaInfo calls (%.2fx waste)", CellColumn.iterations, CellColumn.calls, 1.0 * CellColumn.iterations / (0.001 + CellColumn.calls), MetaInfoSet.iterations, MetaInfoSet.calls, 1.0 * MetaInfoSet.iterations / (0.001 + MetaInfoSet.calls)));
 		GroupReportData result = arg.getReport();
 		
 		arg.setReport(null);
@@ -343,18 +346,27 @@ public final class ARUtil {
 		return false;
 	}
 	
-	public static boolean containsMeasure(String measureName, Set measures) {
+	public static boolean containsMeasure(String measureName, Collection<AmpReportMeasures> measures)
+	{
 		if (measureName == null)
 			return false;
-		Iterator i = measures.iterator();
-		while (i.hasNext()) {
-			AmpMeasures element = ((AmpReportMeasures) i.next()).getMeasure();
-			if (element.getMeasureName().indexOf(measureName) != -1)
+		
+		for(AmpReportMeasures measure:measures){
+			AmpMeasures element = measure.getMeasure();
+			if (element.getMeasureName().equals(measureName))
 				return true;
 		}
 		return false;
 	}
 	
+//	public static boolean containsMeasure(String measureName, Collection<AmpReportMeasures> measures)
+//	{
+//		boolean a = containsMeasureWhichContains(measureName, measures);
+//		boolean b = containsMeasureWithExact(measureName, measures);
+//		if (a != b)
+//			System.out.println("BOZO CE XUINEA!");
+//		return a;
+//	}
 	
 	public static boolean hasHeaderValue(AmpColumns column){
 		return (column.getTotalExpression()!=null )|| column.getColumnName().equalsIgnoreCase(ArConstants.COLUMN_FUNDING);
@@ -409,7 +421,7 @@ public final class ARUtil {
 		return orderedColumns;
 	}
 	
-	public static void insertEmptyColumns (String type, CellColumn src, Set<MetaInfo> destMetaSet, AmpARFilter filter) {
+	public static void insertEmptyColumns (String type, CellColumn src, SortedSet<MetaInfo> destMetaSet, AmpARFilter filter) {
 		Iterator iter									= src.iterator();
 		TreeSet<Comparable<? extends Object>>	periods	= new TreeSet<Comparable<? extends Object>>();
 		try{
@@ -417,11 +429,11 @@ public final class ARUtil {
 		
 			while ( iter.hasNext() ) {
 				Categorizable elem	= (Categorizable)iter.next();
-				MetaInfo minfo		= MetaInfo.getMetaInfo(elem.getMetaData(),type );
-				Comparable c 		= minfo.getValue();
+				MetaInfo minfo		= elem.getMetaData().getMetaInfo(type);
+				Comparable c 		= (Comparable) minfo.getValue();
 				if ( c.compareTo( periods.first() ) > 0 &&
 						c.compareTo( periods.last() ) < 0 && elem.isShow() )
-					periods.add( minfo.getValue() );
+					periods.add((Comparable) minfo.getValue() );
 			}
 	
 			if (periods!=null && periods.size()>0) {
@@ -450,9 +462,9 @@ public final class ARUtil {
 		catch (Exception e) {
 			logger.error( e.getMessage() );
 			e.printStackTrace();
-		}
-		
+		}		
 	}
+	
 	private static Comparable getFuturePeriod(String type, Object period, int step,  Object first, Object last) throws Exception{
 		if ( ArConstants.YEAR.equals( type ) ) {
 			Integer firstEl		= (Integer) first;

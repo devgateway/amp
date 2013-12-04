@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Class describing objects with purpose of wrapping metainformation. a
+ * <b> Immutable</b>class describing objects with purpose of wrapping metainformation. a
  * MetaObject is a normal Comparable object with some category text attached.
  * The category, is particularized as a String.
  * 
@@ -20,11 +20,16 @@ import java.util.Set;
  * @since Jun 15, 2006
  * 
  */
-public class MetaInfo<T extends Comparable<? super T>> implements Comparable<MetaInfo<T>> , Serializable, Cloneable  {
+public class MetaInfo<T> implements Serializable, Cloneable  {
 
-	protected String category;
+	/**
+	 * somewhat of an ugly hack, but null-valued metadata is only used as boolean anyway (or as a bug, in which case we want a crash)
+	 */
+	public final static Boolean NULL_PLACEHOLDER_VALUE = new Boolean(true);
+	
+	protected final String category;
 
-	protected T value;
+	protected final T value;
 
 	/**
 	 * @return Returns the category.
@@ -42,64 +47,29 @@ public class MetaInfo<T extends Comparable<? super T>> implements Comparable<Met
 
 	public MetaInfo(String category, T value) {
 		this.category = category;
+		if (value == null)
+			value = (T) NULL_PLACEHOLDER_VALUE;
 		this.value = value;
-	}
-
-	/**
-	 * MetaInfo objects are comparable only if the categories are equal. The
-	 * comparison is based on their values.
-	 * 
-	 * @param o
-	 *            the MetaInfo to be compared with
-	 * @return the compareTo of getValue for the objects
-	 */	
-	public int compareTo(MetaInfo<T> mo) {
-		if (getCategory().equals(mo.getCategory())) {
-			return getValue().compareTo(mo.getValue());
-		}
-		return getCategory().compareTo(mo.getCategory());
 	}
 	
 	public String toString() {
-		return category+": "+value;
-	}
-	
-	static long calls = 0;
-	static long iterations = 0;
-	
-	public static MetaInfo getMetaInfo(Set<MetaInfo> metaData, String category) {
-		Iterator<MetaInfo> i = metaData.iterator();
-		calls ++;
-		while (i.hasNext()) {
-			iterations ++;
-			MetaInfo element =  i.next();
-			if (element == null)
-				continue;
-			if (element.getCategory().equals(category))
-				return element;
-		}
-		return null;
-	}
-
-	public void setValue(T value) {
-		this.value = value;
-	}
+		return category + ": " + value;
+	}	
 	
 	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof MetaInfo){
+	public boolean equals(Object obj)
+	{
+		if (obj instanceof MetaInfo)
+		{
 			MetaInfo<?> theObj = (MetaInfo<?>) obj;
-			if (this.category != null && this.value != null)
-				return this.category.equals(theObj.category) && this.value.equals(theObj.value);
+			return this.category.equals(theObj.category) && this.value.equals(theObj.value);			
 		}
 		return false;
 	}
 
 	@Override
-	public int hashCode() {
-		if(this.category == null)
-			return 0;
-		return this.category.hashCode();
+	public int hashCode() {		
+		return this.category.hashCode() ^ (19 * this.value.hashCode());
 	}
 
 }

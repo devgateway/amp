@@ -1,7 +1,15 @@
 package org.dgfoundation.amp.testutils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.testmodels.GroupReportModel;
+import org.digijava.module.aim.dbentity.AmpReports;
+
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.um.exception.UMException;
 
@@ -33,8 +41,40 @@ public abstract class ReportsTestCase extends TestCase
 			throw new RuntimeException(e);
 		}
 		GroupReportData report = ReportTestingUtils.runReportOn(reportName, modifier, activities);
+		//System.out.println(ReportTestingUtils.describeReportInCode(report, 1, true));
+		checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(report);
 		String error = correctResult.matches(report);
 		assertNull(String.format("test %s, report %s: %s", testName, reportName, error), error);
+	}
+	
+	/**
+	 * all the CRDs of the report should have the same columns' structures, e.g. any column-removal should be done in such a way as to be reflected in all the CRD's of a report
+	 */
+	protected void checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(GroupReportData report)
+	{
+		ArrayList<ColumnReportData> crds = new ArrayList<ColumnReportData>();
+		collectAllCRD(report, crds);
+		
+		if (crds.isEmpty())
+			return;
+		
+		String first = crds.get(0).digestReportHeadingData().toString();
+		for(int i = 1; i < crds.size(); i++)
+		{
+			String checked = crds.get(i).digestReportHeadingData().toString();
+			assertTrue("CRD " + crds.get(i).getAbsoluteReportName() + " has a different layout digest than " + crds.get(0).getAbsoluteReportName(), first.equals(checked));
+		}
+	}
+	
+	protected void collectAllCRD(GroupReportData report, List<ColumnReportData> crds)
+	{
+		for(ReportData rd: report.getItems())
+		{
+			if (rd instanceof GroupReportData)
+				collectAllCRD((GroupReportData) rd, crds);
+			if (rd instanceof ColumnReportData)
+				crds.add((ColumnReportData) rd);
+		}
 	}
 	
 	/**
@@ -48,5 +88,14 @@ public abstract class ReportsTestCase extends TestCase
 	{
 		runReportTest(testName, reportName, activities, correctResult, null, null);
 	}
+
+	public final static AmpReportModifier makeTabReportModifier = new AmpReportModifier() {
+		
+		@Override
+		public void modifyAmpReportSettings(AmpReports report, AmpARFilter filter) {
+			filter.setWidget(true);
+			
+		}
+	};
 
 }

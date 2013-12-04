@@ -13,8 +13,8 @@ public class CapitalCellGenerator extends SyntheticCellGenerator {
 	}
 
 	@Override
-	public double computeAmount(double originalAmount, Set metaData) {
-		MetaInfo<Double> mi	= MetaInfo.getMetaInfo( metaData, this.getMetaDataName() );
+	public double computeAmount(double originalAmount, MetaInfoSet metaData) {
+		MetaInfo<Double> mi	= metaData.getMetaInfo(this.getMetaDataName());
 		Double capitalPercent	= 0.0;
 		if ( mi != null && mi.getValue() != null ) {
 			capitalPercent		= mi.getValue();

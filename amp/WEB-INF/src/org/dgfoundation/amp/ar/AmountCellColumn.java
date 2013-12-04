@@ -88,7 +88,7 @@ public class AmountCellColumn<K extends AmountCell> extends CellColumn<K> {
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
 			//logger.info("Merging cell for owner "+element.getOwnerId()+" containing "+element.getMergedCells().size()+" merged cells");
-			ac.merge(element,ac);			
+			ac.mergeWithCell(element);			
 		}
 		ac.setColumn(this);
 		ar.add(ac);

@@ -55,6 +55,7 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
@@ -201,7 +202,9 @@ public class DashboardUtil {
 			newFilter.setSelLocationIds(ids);
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType());
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-	        map.put(location, total);
+	        if(total.doubleValue()!=0d){
+	        	map.put(location, total);
+	        }
 		}
 		return sortByValue (map, null);
 	}	
@@ -1067,13 +1070,25 @@ public class DashboardUtil {
 		ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));
 		for (Iterator iterator = catList.iterator(); iterator.hasNext();) {
 			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
-			if (ampCategoryValue.getValue().equals("1")||ampCategoryValue.getValue().equals("2")||ampCategoryValue.getValue().equals("3"))
-			filter.getPeacebuilderMarkerList().add(ampCategoryValue);
+			if (ampCategoryValue.getValue().equals("1")||ampCategoryValue.getValue().equals("2")||ampCategoryValue.getValue().equals("3")){
+				ampCategoryValue.setValue(CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue));
+				filter.getPeacebuilderMarkerList().add(ampCategoryValue);
+			}
 		}
 		filter.setPeacebuildingList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACEBUILDING_GOALS_KEY)));
         
         filter.setShowAmountsInThousands(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))==0?1:Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
         filter.setShowAmountsInThousandsDefault(filter.getShowAmountsInThousands());
+	}
+	
+	public static TreeMap<Long, String> generateIdToNameForDashboards(Collection<AmpDashboard> dashboards) {
+		TreeMap<Long, String> dashboardNames	= new TreeMap<Long, String>();
+        if ( dashboards != null ) {
+        	for (AmpDashboard ampDashboard : dashboards) {
+        		dashboardNames.put(ampDashboard.getId(), ampDashboard.getName() );
+			}
+        }
+        return dashboardNames;
 	}
 
 }

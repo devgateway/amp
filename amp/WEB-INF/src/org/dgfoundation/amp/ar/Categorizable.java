@@ -15,7 +15,7 @@ import java.util.HashSet;
  *
  */
 public interface Categorizable {
-	public HashSet<MetaInfo> getMetaData();
+	public MetaInfoSet getMetaData();
 	
 	public boolean hasMetaInfo(MetaInfo m);
 	

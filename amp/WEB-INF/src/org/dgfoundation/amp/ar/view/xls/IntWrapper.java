@@ -58,4 +58,9 @@ public class IntWrapper {
 		value=amount;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return Integer.toString(this.value);
+	}
 }

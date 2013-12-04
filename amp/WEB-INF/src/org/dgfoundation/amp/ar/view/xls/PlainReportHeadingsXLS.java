@@ -50,57 +50,59 @@ public class PlainReportHeadingsXLS extends ReportHeadingsXLS {
 	}
 
 	@Override
-	protected void createHierarchyHeaderCell (int curDepth) {
+	protected void createHierarchyHeaderCell (int curDepth)
+	{
 		ColumnReportData columnReport = (ColumnReportData) item;
-		Integer rowSpan = columnReport.getMaxColumnDepth();
+		Integer rowSpan = columnReport.getMaxColumnDepth() - 1;
 			
-			if ( this.getMetadata().getHierarchies() != null &&
-					this.getMetadata().getHierarchies().size() > 0) {
-				boolean first = true;
-				for (AmpReportHierarchy arh: this.getMetadata().getHierarchies() ) {
-					String colName			= arh.getColumn().getColumnName();
-					
-					String translColName	= getColumnDisplayName(colName);
-					
-					if ( translColName != null && translColName.trim().length() > 0 ) {
-						if(first){
-							first = false;
-						}else{
-							colId.inc();
-						}
-						if (curDepth == 0) {
-							HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
-							cell1.setCellValue( translColName.trim() );
-							makeRowSpan(rowSpan, true);
-						}else{
-							HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
-							cell1.setCellValue("");
-						}
-					}					
-				}
-			}
+		if (this.getMetadata().getHierarchies() == null)
+			return; // nothing to do
 
+		for (AmpReportHierarchy arh: this.getMetadata().getHierarchies()) 
+		{
+			String colName = arh.getColumn().getColumnName();
+			String translColName = getColumnDisplayName(colName);
+			
+			if (translColName == null)
+				continue;
+			
+			translColName = translColName.trim();
+			if (translColName.isEmpty())
+				continue;
+			
+			if (curDepth == 0)
+			{
+				HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
+				cell1.setCellValue( translColName.trim() );
+				makeRowSpan(rowSpan, true);
+			}
+			else
+			{
+				HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
+				cell1.setCellValue("");
+			};
+			colId.inc();
+		}
 	}
 	
 	@Override
 	protected void createHeadingBorders (int curDepth) {		
 		ColumnReportData columnReport = (ColumnReportData) item;
-		if (curDepth == 0) {
+		if (curDepth == 0)
+		{
 			int maxRowSpan		= 1;
 			Boolean summaryReport		= this.getMetadata().getHideActivities();
-			if (  summaryReport == null  || !summaryReport ) {
+			if (  summaryReport == null  || !summaryReport ) 
+			{
 				Column tempCol			= (Column)columnReport.getItems().get(0);
-				maxRowSpan				= (tempCol.getRowSpan()>maxRowSpan)?tempCol.getRowSpan():maxRowSpan;
+				maxRowSpan				= (tempCol.getPositionInHeading().getRowSpan()>maxRowSpan)?tempCol.getPositionInHeading().getRowSpan():maxRowSpan;
                                     if(maxRowSpan>1) maxRowSpan-=1;
 			}
-			else {
-				Iterator<Column> colIter	= columnReport.getItems().iterator();
-				while ( colIter.hasNext() ) {
-					Column tempCol	= colIter.next();
-					maxRowSpan		= (tempCol.getCurrentRowSpan()>maxRowSpan)?tempCol.getCurrentRowSpan():maxRowSpan;
-				}
-				if ( maxRowSpan > 3 ) maxRowSpan = 3;
-                                    
+			else
+			{
+				maxRowSpan = columnReport.getMaxColumnDepth() - 1;
+//				if (maxRowSpan > 3)
+//					maxRowSpan = 3; // BOZO: why this?                                    
 			}
 			makeRowSpan(maxRowSpan,true);
 			sheet.setColumnWidth((short)colId.value, (short)5120);

@@ -1923,10 +1923,11 @@ public class DbUtil {
      */
     public static Set<Long> getAllAmpActivityIds(String usedQuery)
     {
+    	Connection conn = null;
     	try
     	{
     		Set<Long> ampActivityIds = new HashSet<Long>();
-    		Connection conn = PersistenceManager.getJdbcConnection();
+    		conn = PersistenceManager.getJdbcConnection();
     		Statement stmt = conn.createStatement();
 			ResultSet resultSet = stmt.executeQuery(usedQuery);
 			while (resultSet.next())
@@ -1941,6 +1942,10 @@ public class DbUtil {
     	{
        		ex.printStackTrace();
     		throw new RuntimeException(ex);
+    	}
+    	finally
+    	{
+    		closeConnection(conn);
     	}
     }
     

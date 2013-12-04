@@ -24,7 +24,7 @@ public class InternationalizedModelDescription {
 	
 	public final HashMap<String, InternationalizedPropertyDescription> properties = new HashMap<String, InternationalizedPropertyDescription>();
 	
-	public InternationalizedModelDescription(Class<?> modelClass)
+	private InternationalizedModelDescription(Class<?> modelClass)
 	{
 		this.className = modelClass.getName();
 		scanClass(modelClass);
@@ -87,13 +87,17 @@ public class InternationalizedModelDescription {
 	 * global repository for models - used for caching the results of scanning a class
 	 */
 	private final static Map<String, InternationalizedModelDescription> globalRepository = Collections.synchronizedMap(new HashMap<String, InternationalizedModelDescription>());
+	private final static Object imdLock = new Object();
 	
 	public static InternationalizedModelDescription getForClass(Class<?> clazz)
 	{
-		String className = clazz.getName();
-		if (!globalRepository.containsKey(className))
-			globalRepository.put(className, new InternationalizedModelDescription(clazz));
-		return globalRepository.get(className);
+		synchronized(imdLock)
+		{
+			String className = clazz.getName();
+			if (!globalRepository.containsKey(className))
+				globalRepository.put(className, new InternationalizedModelDescription(clazz));
+			return globalRepository.get(className);
+		}
 	}
 
 	public static InternationalizedPropertyDescription getForProperty(Class<?> clazz, String propertyName)

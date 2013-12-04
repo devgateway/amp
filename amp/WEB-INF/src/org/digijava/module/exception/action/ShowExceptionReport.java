@@ -60,7 +60,7 @@ public final class ShowExceptionReport
                                  HttpServletResponse response) throws Exception {
 
         DigiExceptionReportForm formReport = (DigiExceptionReportForm) form;
-
+        
         ExceptionInfo exceptionInfo;
         if (formReport.getReportId() != null) {
             exceptionInfo = ExceptionHelper.getTilesExceptioinInfo(request,
@@ -86,6 +86,19 @@ public final class ShowExceptionReport
         	ErrorReportingPlugin.handle(exceptionInfo.getException(), null, request);
         
         
+        if ( "exception".equalsIgnoreCase(exceptionInfo.getModuleName() ) ) {
+        	try{
+	    		String errorInfo	= "<html><strong>AMP has encountered an error. Please try to go back to the <a href='/aim'>homepage</a> " +
+	    				"<br />If the problem persists please contact the system administrator. We're sorry for the inconvenience ! </strong></html>";
+	    		response.getOutputStream().println( errorInfo );
+	    		logger.error("Double exception occured !");
+	    	}
+	    	catch(Exception e) {
+	    		e.printStackTrace();
+	    	}
+	    	return null;
+        }
+       
         //generate a unique sufix
         long rand = System.currentTimeMillis();
         //set the info for the ajax request in the session and store the unique suffix in the form

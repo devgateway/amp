@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ page import="org.digijava.module.aim.form.ReportsForm"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -25,8 +26,10 @@
 
 <!-- CSS -->
 <link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css" type="text/css" rel="stylesheet">
+<!-- Commenting this out as they have a wrong path anyway, missing / 
 <link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
 <link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'>
+-->
 <link href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css" type="text/css" rel="stylesheet">
 <link href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css" type="text/css" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">

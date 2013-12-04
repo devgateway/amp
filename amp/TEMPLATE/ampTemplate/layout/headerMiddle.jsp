@@ -179,10 +179,10 @@ ${fn:replace(message,quote,escapedQuote)}
 			                                </li>
 		                                </module:display>
 		                                <logic:present name="MENU_DASHBOARDS" scope="session">
-			                                <logic:iterate id="item" name="MENU_DASHBOARDS" scope="session" type="org.digijava.module.visualization.dbentity.AmpDashboard">
+			                                <logic:iterate id="item" name="MENU_DASHBOARDS" scope="session" type="java.util.Map.Entry">
 												<li class="yuiampmenuitem_drop">
-													<a class="yuiampmenuitemlabel" href='/visualization/launchDashboard.do?reset=true&publicView=true&id=<bean:write name="item" property="id"/>' onclick="return canExit()">
-														<digi:trn><bean:write name="item" property="name"/></digi:trn>
+													<a class="yuiampmenuitemlabel" href='/visualization/launchDashboard.do?reset=true&publicView=true&id=<bean:write name="item" property="key"/>' onclick="return canExit()">
+														<digi:trn><bean:write name="item" property="value"/></digi:trn>
 													</a>
 												</li>
 											</logic:iterate>

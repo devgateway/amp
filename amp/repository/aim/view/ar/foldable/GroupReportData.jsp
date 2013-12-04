@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -12,7 +13,7 @@
 	<c:if test="${(groupReport.name == groupReport.parent.name)}">
 		<logic:present name="groupReport" property="firstColumnReport" scope="page">
 			<bean:define id="viewable" name="groupReport" property="firstColumnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-			<jsp:include page="../reportHeadings.jsp"/>
+			<jsp:include page="reportHeadings.jsp"/>
 		</logic:present>
 	</c:if>
 		<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

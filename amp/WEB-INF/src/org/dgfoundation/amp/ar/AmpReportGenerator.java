@@ -557,25 +557,13 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	protected boolean buildFundingTypeCategoriesSubcolumns(AmountCellColumn<CategAmountCell> funding, GroupColumn newcol, boolean verticalSplitByTypeOfAssistence, boolean verticalSplitByModeOfPayment)
 	{
-		boolean totalActualCommitmentsLoaded = false;
-		boolean totalActualCommitmentsAdded = false;
-
 		Set<AmpReportMeasures> measures = reportMetadata.getMeasures();
-		List<AmpReportMeasures> measuresList = new ArrayList<AmpReportMeasures>(
-				measures);
+		List<AmpReportMeasures> measuresList = new ArrayList<AmpReportMeasures>(measures);
 		Collections.sort(measuresList);
-		//First pass to determine if Actual Commitments needs to be added
-		Iterator<AmpReportMeasures> ii = measuresList.iterator();
-		while (ii.hasNext()) {
-			AmpReportMeasures ampReportMeasurement = ii.next();
-			AmpMeasures element = ampReportMeasurement.getMeasure();
-			if(element.getMeasureName().equals(ArConstants.ACTUAL_COMMITMENTS))
-			{
-				totalActualCommitmentsLoaded = true;
-				break;
-			}
-		}
-		if(!totalActualCommitmentsLoaded) {
+
+		boolean totalActualCommitmentsAdded = false;
+		boolean totalActualCommitmentsLoaded = ARUtil.containsMeasure(ArConstants.ACTUAL_COMMITMENTS, measuresList);
+		if (!totalActualCommitmentsLoaded) {
 			AmpReportMeasures ampReportMeasurement = new AmpReportMeasures();
 			AmpMeasures element = new AmpMeasures();
 			element.setMeasureName(ArConstants.ACTUAL_COMMITMENTS);
@@ -584,26 +572,20 @@ public class AmpReportGenerator extends ReportGenerator {
 			totalActualCommitmentsAdded = true;
 		}
 		
-		ii = measuresList.iterator();
-		while (ii.hasNext()) {
-			AmpReportMeasures ampReportMeasurement = ii.next();
+		for(AmpReportMeasures ampReportMeasurement:measuresList)
+		{
 			AmpMeasures element = ampReportMeasurement.getMeasure();
 			
-			if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || 
-					element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || 
-					element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) ||
-					element.getExpression()!=null
-					)
-				continue;
-				
+			if (!element.isSplittable())
+				continue;				
 			
 			MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
-			AmountCellColumn cc = null;
+			AmountCellColumn<CategAmountCell> cc = null;
 			
 			if(verticalSplitByModeOfPayment || verticalSplitByTypeOfAssistence){
-				cc = new AmountCellColumn(metaInfo.getValue().toString());	
+				cc = new AmountCellColumn<CategAmountCell>(metaInfo.getValue().toString());	
 			}else{
-				cc = new TotalAmountColumn(metaInfo.getValue().toString(), true);
+				cc = new TotalAmountColumn<CategAmountCell>(metaInfo.getValue().toString(), true);
 			}
 			
 			newcol.getItems().add(cc);
@@ -625,10 +607,23 @@ public class AmpReportGenerator extends ReportGenerator {
 					
 					boolean shouldAddCellToColumn = shouldAddGenericFunding || shouldAddEstimatedDisbursement || shouldAddRealDisbursement; // ugly hack because the same data source (actual disbursements) should fill two columns: actual disbursements + real disbursements
 					
-					if (shouldAddCellToColumn)
-						cc.addCellRaw(item); //addCellRaw because we don't want TotalAmountCellColumn to merge everything in one huge cell
+					if (!shouldAddCellToColumn)
+						continue;
+					CategAmountCell cellToAdd = null;
+					try
+    				{
+						cellToAdd = (CategAmountCell)(item.clone());
+        				cellToAdd.cloneMetaData();
+    				}
+    				catch(Exception e)
+    				{
+    					throw new RuntimeException("while generating totals column DISBURSEMENTS, error cloning cell " + item.toString());
+    				}
+					
+					cc.addCellRaw(cellToAdd); //addCellRaw because we don't want TotalAmountCellColumn to merge everything in one huge cell
 				}
 			}
+			
 			
 			boolean shouldSplitTotalsByRealDisbursements = element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS);
 			if (funding != null && shouldSplitTotalsByRealDisbursements)
@@ -639,6 +634,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		}
 		
+		newcol.detachCells();
 		return !totalActualCommitmentsLoaded && totalActualCommitmentsAdded;
 	}
 	
@@ -652,29 +648,26 @@ public class AmpReportGenerator extends ReportGenerator {
 		//Calculate global totals for Computed Measures that require it
 		TotalAmountColumn removeableColumn = null;
 		BigDecimal total = new BigDecimal(0);
-		Iterator<Column> it = newcol.getItems().iterator();
-		while (it.hasNext())
+		for(Column el:newcol.getItems())
 		{
-			Column el = it.next();
-			if (el instanceof TotalAmountColumn){
-				TotalAmountColumn column = (TotalAmountColumn) el;
-				if(ArConstants.ACTUAL_COMMITMENTS.equalsIgnoreCase(column.getName())) {
-					Iterator<Cell> iit = column.iterator();
-					while(iit.hasNext())
-					{
-						Cell el2 = iit.next();
-						if (el2 instanceof CategAmountCell) {
-							CategAmountCell cac = (CategAmountCell) el2;
-							double dbl = cac.getAmount();
-							total = total.add(new BigDecimal(dbl));
-						}
-					}
-					if (removeActualCommitmentsSubcolumn){ //If it was added for calculation purposes, remove it
-						removeableColumn = column;
-					}
-					break;
-				}
+			if (!(el instanceof TotalAmountColumn))
+				continue;
+			if (!el.getName().equals(ArConstants.ACTUAL_COMMITMENTS))
+				continue;
+			TotalAmountColumn column = (TotalAmountColumn) el;
+
+			for(Cell el2:(List<Cell>)(column.getItems()))
+			{
+				if (!(el2 instanceof CategAmountCell))
+					continue;
+				CategAmountCell cac = (CategAmountCell) el2;
+				double dbl = cac.getAmount();
+				total = total.add(new BigDecimal(dbl));
 			}
+			if (removeActualCommitmentsSubcolumn){ //If it was added for calculation purposes, remove it
+				removeableColumn = column;
+			}
+			break; // we have found our TotalAmountColumn -> no more work to do
 		}
 		if(removeableColumn != null){
 			newcol.getItems().remove(removeableColumn);
@@ -705,7 +698,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		// get the funding column
 		AmountCellColumn funding = (AmountCellColumn) rawColumns.getColumn(ArConstants.COLUMN_FUNDING);
 						
-		GroupColumn newcol = new GroupColumn();
+		GroupColumn newcol = new GroupColumn(reportMetadata.getType().intValue() == 4 ? ArConstants.COLUMN_CONTRIBUTION_TOTAL: ArConstants.COLUMN_TOTAL);
+		
 		if (categorizeByFundingType) {
 			boolean removeActualCommitmentsSubcolumn = buildFundingTypeCategoriesSubcolumns(funding, newcol, verticalSplitByTypeOfAssistence, verticalSplitByModeOfPayment);
 			buildTotalActualCommitmentsSubcolumn(newcol, removeActualCommitmentsSubcolumn);
@@ -725,32 +719,14 @@ public class AmpReportGenerator extends ReportGenerator {
 		 * Iterare all measure and add a column for each computed measure
 		 */
 		Set<AmpReportMeasures> xmeasures = reportMetadata.getMeasures();
-		List<AmpReportMeasures> xmeasuresList = new ArrayList<AmpReportMeasures>(
-				xmeasures);
+		List<AmpReportMeasures> xmeasuresList = new ArrayList<AmpReportMeasures>(xmeasures);
 		Collections.sort(xmeasuresList);
-		Iterator<AmpReportMeasures> ii = xmeasuresList.iterator();
-		for (AmpReportMeasures ampReportMeasures : xmeasuresList) {
-			if (ampReportMeasures.getMeasure().getExpression()!=null){
+//		Iterator<AmpReportMeasures> ii = xmeasuresList.iterator();
+		for (AmpReportMeasures ampReportMeasures : xmeasuresList)
+		{
+			if (ampReportMeasures.getMeasure().getExpression() != null){
 				AmpMeasures m = ampReportMeasures.getMeasure();
-				TotalComputedMeasureColumn cTac=new TotalComputedMeasureColumn(m.getMeasureName());
-				cTac.setExpression(m.getExpression());
-				cTac.setDescription(m.getDescription());
-				Iterator i = funding.iterator();
-				while (i.hasNext()) {
-					AmountCell element = (AmountCell) i.next();
-					cTac.addCell(element);
-				}
-				
-				for (TotalComputedAmountColumn tcaCol: mtefCols ) {
-					Iterator <ComputedAmountCell>	iterCac = (Iterator<ComputedAmountCell>) (tcaCol.getItems().iterator());
-					while ( iterCac.hasNext() ) {
-						ComputedAmountCell cac	= iterCac.next();
-						cTac.addCell(cac);
-					}
-				}
-
-				newcol.getItems().add(cTac);
-//				cTac.setTotalVariables(total);
+				newcol.getItems().add(buildTotalComputedMeasure(m, funding, mtefCols));
 			}
 		}
 		
@@ -758,29 +734,20 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		// we create the total commitments column
 
-		if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
+		if (reportMetadata.needsTotalCommitments()) {
 			TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(ArConstants.TOTAL_COMMITMENTS);
-			Iterator i = funding.iterator();
-			while (i.hasNext()) {
-				AmountCell element = (AmountCell) i.next();
-				// we do not care here about filtering commitments, that is done
-				// at UndisbursedAmountCell level
-				tac.addCell(element);
-			}
-
+			tac.absorbColumn(funding);
 			newcol.getItems().add(tac);
 		}
 		
-		newcol.setName(reportMetadata.getType().intValue() == 4 ? ArConstants.COLUMN_CONTRIBUTION_TOTAL: ArConstants.COLUMN_TOTAL);
-
 		// make order to measurements
-		List<AmpReportMeasures> listMeasurement = new ArrayList<AmpReportMeasures>( reportMetadata.getMeasures());
-		Collections.sort(listMeasurement);
+//		List<AmpReportMeasures> listMeasurement = new ArrayList<AmpReportMeasures>( reportMetadata.getMeasures());
+//		Collections.sort(listMeasurement);
 
 		
 		
-		List<Column> columnlist = newcol.getItems();
-		List<Column> tmpColumnList = new ArrayList<Column>(columnlist.size());
+		//List<Column> columnlist = newcol.getItems();
+		List<Column> tmpColumnList = new ArrayList<Column>(newcol.getItems().size());
 		// add columns as measurements order
 
 		if (!categorizeByFundingType) {
@@ -793,14 +760,11 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		}
 
-		for (AmpReportMeasures measures : listMeasurement) {
-			for (Column column : columnlist) {
-				if (column.getName().equalsIgnoreCase(
-						measures.getMeasure().getMeasureName())) {
-					tmpColumnList.add(column);
-					break;
-				}
-			}
+		for (AmpReportMeasures measures : xmeasuresList) 
+		{
+			Column subcol = newcol.getColumnByName(measures.getMeasure().getMeasureName());
+			if (subcol != null)
+				tmpColumnList.add(subcol);
 		}
 
 		// replace items by ordered items
@@ -808,7 +772,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				
 		// add subcolumns for type of assistance
 		//split column for type of assistance ONLY when TOA is added as column	
-		if(verticalSplitByTypeOfAssistence) {			
+		if(verticalSplitByTypeOfAssistence) {
 			this.addTotalsVerticalSplit(newcol, ArConstants.TERMS_OF_ASSISTANCE/*, ArConstants.TERMS_OF_ASSISTANCE_TOTAL*/);
 		}
 		
@@ -819,20 +783,31 @@ public class AmpReportGenerator extends ReportGenerator {
 		rawColumns.addColumn(newcol);
 	}
 	
+	protected TotalComputedMeasureColumn buildTotalComputedMeasure(AmpMeasures m, AmountCellColumn funding, List<TotalComputedAmountColumn> mtefCols)
+	{
+		TotalComputedMeasureColumn cTac = new TotalComputedMeasureColumn(m.getMeasureName());
+		cTac.setExpression(m.getExpression());
+		cTac.setDescription(m.getDescription());
+		cTac.absorbColumn(funding);
+		
+		for (TotalComputedAmountColumn tcaCol: mtefCols ) {
+			cTac.absorbColumn(tcaCol);
+		}
+		return cTac;
+	}
+	
 	protected void addTotalsVerticalSplit(GroupColumn newcol, String splitterCol) {
 		//iterate each column in newcol
 		for (int i=0; i< newcol.getItems().size();i++){
 			Column nestedCol = (Column) newcol.getItems().get(i);
 			if(nestedCol instanceof GroupColumn || nestedCol instanceof TotalComputedMeasureColumn) continue;
 			
-			List<String> cat = new ArrayList<String>();
-			cat.add(splitterCol);
-			GroupColumn nestedCol2 = (GroupColumn) GroupColumn.verticalSplitByCategs((CellColumn)nestedCol, cat,
-					true, reportMetadata);
+//			List<String> cat = new ArrayList<String>();
+//			cat.add(splitterCol);
+			GroupColumn nestedCol2 = nestedCol.verticalSplitByCateg(splitterCol, true, reportMetadata);
 
 			if (nestedCol2 != null)
-				newcol.replaceColumn(nestedCol.getName(), nestedCol2);
-			
+				newcol.replaceColumn(nestedCol.getName(), nestedCol2);			
 		}
 		
 	}
@@ -861,34 +836,53 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	protected void removeUnusedRealDisbursementsFlowsFromReport(Set<String> fundingOrgHiers)
 	{
-		Map<String, Set<String>> flowsToRetain = new HashMap<String, Set<String>>();
-		flowsToRetain.put(ArConstants.ROLE_NAME_DONOR_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_DN_EXEC);}});
-		flowsToRetain.put(ArConstants.ROLE_NAME_EXECUTING_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_DN_EXEC);add(ArConstants.TRANSACTION_EXEC_IMPL);}});
-		flowsToRetain.put(ArConstants.ROLE_NAME_IMPLEMENTING_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_EXEC_IMPL);add(ArConstants.TRANSACTION_IMPL_BENF);}});
-		flowsToRetain.put(ArConstants.ROLE_NAME_BENEFICIARY_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_IMPL_BENF);}});
-
-		Set<String> allLegalFlows = new HashSet<String>(){{
-			add(ArConstants.TRANSACTION_DN_EXEC);
-			add(ArConstants.TRANSACTION_EXEC_IMPL);
-			add(ArConstants.TRANSACTION_IMPL_BENF);
-		}};
+		Map<String, String> hierNameToOrgRole = new HashMap<String, String>();
+		hierNameToOrgRole.put(ArConstants.ROLE_NAME_EXECUTING_AGENCY, Constants.EXECUTING_AGENCY);
+		hierNameToOrgRole.put(ArConstants.ROLE_NAME_IMPLEMENTING_AGENCY, Constants.IMPLEMENTING_AGENCY);
+		hierNameToOrgRole.put(ArConstants.ROLE_NAME_DONOR_AGENCY, Constants.FUNDING_AGENCY);
+		hierNameToOrgRole.put(ArConstants.ROLE_NAME_BENEFICIARY_AGENCY, Constants.BENEFICIARY_AGENCY);
 		
-		for(String hierColName:fundingOrgHiers)
+		Set<String> allMandatoryRoles = new HashSet<String>();
+		for(String hierRole:fundingOrgHiers)
 		{
-			if (!flowsToRetain.containsKey(hierColName))
+			String z = hierNameToOrgRole.get(hierRole);
+			if (z == null)
 			{
-				logger.warn("funding hierarchy not found in FLOWS_TO_RETAIN, ignoring");
-				continue;
+				logger.warn("no funding flows are legal. the report will come out with empty 'Real Disbursements' columns");
+				allMandatoryRoles.add("IMPOSSIBLE_ROLE");
 			}
-			allLegalFlows.retainAll(flowsToRetain.get(hierColName));
+			else
+				allMandatoryRoles.add(z);
 		}
-		if (allLegalFlows.isEmpty())
-		{
-			logger.warn("no funding flows are legal. Instead of removing the whole Real Disbursements column, will let it empty - Report Wizard shouldn't allow such reports to exist");
-			return;
-		}
+//		Map<String, Set<String>> flowsToRetain = new HashMap<String, Set<String>>();
+//		flowsToRetain.put(ArConstants.ROLE_NAME_DONOR_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_DN_EXEC);}});
+//		flowsToRetain.put(ArConstants.ROLE_NAME_EXECUTING_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_DN_EXEC);add(ArConstants.TRANSACTION_EXEC_IMPL);}});
+//		flowsToRetain.put(ArConstants.ROLE_NAME_IMPLEMENTING_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_EXEC_IMPL);add(ArConstants.TRANSACTION_IMPL_BENF);}});
+//		flowsToRetain.put(ArConstants.ROLE_NAME_BENEFICIARY_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_IMPL_BENF);}});
+//
+//		Set<String> allLegalFlows = new HashSet<String>(){{
+//			add(ArConstants.TRANSACTION_DN_EXEC);
+//			add(ArConstants.TRANSACTION_EXEC_IMPL);
+//			add(ArConstants.TRANSACTION_IMPL_BENF);
+//		}};
+//		
+//		for(String hierColName:fundingOrgHiers)
+//		{
+//			if (!flowsToRetain.containsKey(hierColName))
+//			{
+//				logger.warn("funding hierarchy not found in FLOWS_TO_RETAIN, ignoring");
+//				continue;
+//			}
+//			allLegalFlows.retainAll(flowsToRetain.get(hierColName));
+//		}
+//		if (allLegalFlows.isEmpty())
+//		{
+//			logger.warn("no funding flows are legal. Instead of removing the whole Real Disbursements column, will let it empty - Report Wizard shouldn't allow such reports to exist");
+//			return;
+//		}
 		
-		filterRealDisbursementsSubcolumns(report, allLegalFlows);
+		filterRealDisbursementsSubcolumns(rawColumns.getColumnByName("Funding"), allMandatoryRoles);
+		filterRealDisbursementsSubcolumns(rawColumns.getColumnByName(ArConstants.COLUMN_TOTAL), allMandatoryRoles);
 	}
 	
 	/**
@@ -896,13 +890,33 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param realDisbursementsCol
 	 * @param allLegalFlows
 	 */
-	protected void cleanupRealDisbursements(GroupColumn realDisbursementsCol, Set<String> allLegalFlows)
+	protected void cleanupRealDisbursements(GroupColumn realDisbursementsCol, Set<String> allMandatoryRoles)
 	{
 		Iterator<Column> cols = realDisbursementsCol.iterator();
+		Set<String> allMandatoryUserFriendlyRoles = new HashSet<String>();
+		for(String mandatoryRole:allMandatoryRoles)
+		{
+			String mandatoryRoleUserFriendly = ArConstants.userFriendlyNameOfRole(mandatoryRole);
+			allMandatoryUserFriendlyRoles.add(mandatoryRoleUserFriendly);
+		}		
 		while (cols.hasNext())
 		{
 			Column col = cols.next();
-			if (!allLegalFlows.contains(col.getName()))
+			// hacky -> deduct from the column name the roles it contains. We do the hack because columns do not have attached metadata
+			java.util.StringTokenizer colNameScanner = new java.util.StringTokenizer(col.getName(), "-");
+			if (colNameScanner.countTokens() != 2)
+				throw new RuntimeException("Real Disbursements should only have AAAA-BBBB type of subcolumns!"); // something fishy, shouldn't get here
+			String role1UserFriendlyName = colNameScanner.nextToken();
+			String role2UserFriendlyName = colNameScanner.nextToken();
+			// the column should have all of the roles mentioned in allMandatoryRoles in its buildup
+			boolean everythingOk = true;
+			for(String mandatoryRoleUserFriendly:allMandatoryUserFriendlyRoles)
+			{
+				everythingOk &= role1UserFriendlyName.equals(mandatoryRoleUserFriendly) || role2UserFriendlyName.equals(mandatoryRoleUserFriendly);
+				if (!everythingOk)
+					break;
+			}
+			if (!everythingOk)
 				cols.remove();
 		}
 	}
@@ -912,7 +926,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param col
 	 * @param allLegalFlows
 	 */
-	protected void filterRealDisbursementsSubcolumns(Column col, Set<String> allLegalFlows)
+	protected void filterRealDisbursementsSubcolumns(Column col, Set<String> allMandatoryRoles)
 	{
 		if (!(col instanceof GroupColumn))
 			return;
@@ -920,37 +934,37 @@ public class AmpReportGenerator extends ReportGenerator {
 		GroupColumn gc = (GroupColumn) col;
 		if (gc.getName().equals(ArConstants.REAL_DISBURSEMENTS))
 		{
-			cleanupRealDisbursements((GroupColumn) col, allLegalFlows);
+			cleanupRealDisbursements((GroupColumn) col, allMandatoryRoles);
 			return;
 		}
 		for(Column column:gc.getItems())
-			filterRealDisbursementsSubcolumns(column, allLegalFlows);
+			filterRealDisbursementsSubcolumns(column, allMandatoryRoles);
 	}
 	
-	/**
-	 * recursively goes all the way down to ColumnReportData and then through columns in order to clean up Real Disbursement's subcolumns of names NOT found in allLegalFlows
-	 * @param rd
-	 * @param allLegalFlows
-	 */
-	protected void filterRealDisbursementsSubcolumns(ReportData rd, Set<String> allLegalFlows)
-	{
-		if (rd instanceof GroupReportData)
-		{
-			GroupReportData grd = (GroupReportData) rd;
-			for(ReportData child_rd:grd.getItems())
-				filterRealDisbursementsSubcolumns(child_rd, allLegalFlows);
-			return;
-		}
-		if (rd instanceof ColumnReportData)
-		{
-			ColumnReportData crd = (ColumnReportData) rd;
-			for(Column col:crd.getItems())
-			{
-				filterRealDisbursementsSubcolumns(col, allLegalFlows);
-			}
-			return;
-		}
-	}
+//	/**
+//	 * recursively goes all the way down to ColumnReportData and then through columns in order to clean up Real Disbursement's subcolumns of names NOT found in allLegalFlows
+//	 * @param rd
+//	 * @param allLegalFlows
+//	 */
+//	protected void filterRealDisbursementsSubcolumns(ReportData rd, Set<String> allLegalFlows)
+//	{
+//		if (rd instanceof GroupReportData)
+//		{
+//			GroupReportData grd = (GroupReportData) rd;
+//			for(ReportData child_rd:grd.getItems())
+//				filterRealDisbursementsSubcolumns(child_rd, allLegalFlows);
+//			return;
+//		}
+//		if (rd instanceof ColumnReportData)
+//		{
+//			ColumnReportData crd = (ColumnReportData) rd;
+//			for(Column col:crd.getItems())
+//			{
+//				filterRealDisbursementsSubcolumns(col, allLegalFlows);
+//			}
+//			return;
+//		}
+//	}
 
 	protected void prepareData() {
 
@@ -980,6 +994,11 @@ public class AmpReportGenerator extends ReportGenerator {
 			categorizeData();
 		}
 
+		if (reportMetadata.getMeasureNames().contains(ArConstants.REAL_DISBURSEMENTS) && !fundingOrgHiers.isEmpty())
+		{
+			removeUnusedRealDisbursementsFlowsFromReport(fundingOrgHiers);
+		}
+		
 		/**
 		 * If we handle a normal report (not tab) and allowEmptyColumns is not set then we need to remove 
 		 * empty funding columns
@@ -995,7 +1014,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.setReportGenerator(this);
 		report.setReportMetadata(this.reportMetadata);
 		report.setReportGenerator(this);
-		report.setSourceColsCount(new Integer(extractableCount - 1));
+		//report.setSourceColsCount(new Integer(extractableCount - 1));
 		report.setColumnsToBeRemoved(columnsToBeRemoved);
 		// ensure acess to the report metadata from the raw columns. we should
 		// not need this but ...
@@ -1013,24 +1032,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		reportChild.addColumns(rawColumns.getItems());
 		report.addReport(reportChild);
 		
-		// if it's a tab reports just remove funding
-		if (arf.isWidget() || ("N".equals(reportMetadata.getOptions()))){
-			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);	
-		}else {
-			// perform removal of funding column when report has only Computed measures , or it a tab report
-			Set<AmpReportMeasures> ccmeasures = new HashSet<AmpReportMeasures>();
-			for (Iterator<AmpReportMeasures> iterator = reportMetadata.getMeasures().iterator(); iterator.hasNext();) {
-				AmpReportMeasures measure = iterator.next();
-				if (measure.getMeasure().getExpression() != null){
-					ccmeasures.add(measure);
-				}
-			}
-			if (ccmeasures != null && ccmeasures.size() > 0){
-				if (ccmeasures.size() == reportMetadata.getMeasures().size()){
-					reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
-				}
-			}
-		}
+		if (reportMetadata.shouldDeleteFunding(arf))
+			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
 
 		// find out if this is a hierarchical report or not:
 		if (reportMetadata.getHierarchies().size() != 0)
@@ -1052,11 +1055,6 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.removeEmptyChildren();
 		
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
-
-		if (reportMetadata.getMeasureNames().contains(ArConstants.REAL_DISBURSEMENTS) && !fundingOrgHiers.isEmpty())
-		{
-			removeUnusedRealDisbursementsFlowsFromReport(fundingOrgHiers);
-		}
 								
 		if (dateFilterHidesProjects && !reportMetadata.getDrilldownTab() && 
 				(this.getFilter().wasDateFilterUsed() || (reportMetadata.getHierarchies().size() > 0))
@@ -1078,6 +1076,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.getAllCells(listOfCells, true); //repeatedly fetch cells, as some might have been added in the meantime (postprocessing)
 		if (getCleanupMetadata())
 			deleteMetadata(listOfCells);
+		logger.error(report.prettyPrint());
 		System.out.format("AmpReportGenerator: AmountCell.getPercentage calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.getPercentageCalls, AmountCell.getPercentageIterations, 1.0 * AmountCell.getPercentageIterations / (0.01 + AmountCell.getPercentageCalls));
 		System.out.format("AmpReportGenerator: AmountCell.getAmountWithMergedCells calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.merged_cells_get_amount_calls, AmountCell.merged_cells_get_amount_iterations, 1.0 * AmountCell.merged_cells_get_amount_iterations / (0.01 + AmountCell.merged_cells_get_amount_calls));
 	}
@@ -1313,9 +1312,9 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * (categories).
 	 */
 	protected void categorizeData() {
-		Iterator<AmpReportColumn> i = reportMetadata.getOrderedColumns().iterator();
-		while (i.hasNext()) {
-			AmpColumns element = i.next().getColumn();
+		for(AmpReportColumn arc:reportMetadata.getOrderedColumns())
+		{
+			AmpColumns element = arc.getColumn();
 			String colName = element.getColumnName();
 			List<String> cats = getColumnSubCategories(element.getColumnName());
 			Column c = rawColumns.getColumn(colName);
@@ -1325,9 +1324,9 @@ public class AmpReportGenerator extends ReportGenerator {
 						  // categorizeData
 			CellColumn src = (CellColumn) c;
 			if (cats.size() != 0) {
-				Column newcol = GroupColumn.verticalSplitByCategs(src, cats,
-						true, reportMetadata);
-				rawColumns.replaceColumn(colName, newcol);
+				Column newcol = src.verticalSplitByCategs(cats, true, reportMetadata);
+				if (newcol != null)
+					rawColumns.replaceColumn(colName, newcol);
 			}
 		}
 	}
@@ -1428,7 +1427,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	
 	public static MetaTextCell generateFakeMetaTextCell(TextCell cell, Double percentage) {
 		MetaTextCell fakeC				= new MetaTextCell(cell);
-		Set<MetaInfo<Double>> metaSet	= new HashSet<MetaInfo<Double>>();
+		MetaInfoSet metaSet	= new MetaInfoSet();
 		metaSet.add( new MetaInfo<Double>(ArConstants.PERCENTAGE, percentage) );
 		fakeC.setMetaData(metaSet);
 		return fakeC;

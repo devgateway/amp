@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -40,21 +41,18 @@ public abstract class SyntheticCellGenerator {
 					try {
 						CategAmountCell newCell	= (CategAmountCell) categAmountCell.clone();
 						newCell.setAmount( this.computeAmount(newCell.getInitialAmount(), categAmountCell.getMetaData()) );
-						newCell.setMetaData(new HashSet<MetaInfo>() );
-						Iterator<MetaInfo> iter	= categAmountCell.getMetaData().iterator();
-						while ( iter.hasNext() ) {
-							MetaInfo tempMi	= iter.next();
-							if ( tempMi != null) {
-								if ( ArConstants.FUNDING_TYPE.equals(tempMi.getCategory()) ) {
+						newCell.setMetaData(new MetaInfoSet());
+						for(MetaInfo tempMi:categAmountCell.getMetaData())
+						{
+							if ( ArConstants.FUNDING_TYPE.equals(tempMi.getCategory()) ) {
 									MetaInfo<FundingTypeSortedString> newMi	= 
 										new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(measureName, order));
 									newCell.getMetaData().add(newMi);
 								}
 								else {
-									MetaInfo newMi	= new MetaInfo(tempMi.getCategory(),tempMi.getValue() );
+									MetaInfo newMi	= tempMi; // MetaInfo is immutable, so it is ok to just copy
 									newCell.getMetaData().add(newMi);
 								}
-							}
 						}
 						
 						
@@ -86,7 +84,7 @@ public abstract class SyntheticCellGenerator {
 		return false;
 	}
 	
-	public abstract double computeAmount (double originalAmount, Set metaData); 
+	public abstract double computeAmount (double originalAmount, MetaInfoSet metaData); 
 	
 	public abstract Collection<MetaInfo> syntheticMetaInfo ();
 	

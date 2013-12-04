@@ -9,12 +9,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Categorizable;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.MetaInfoSet;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
@@ -29,7 +31,7 @@ import java.util.Arrays;
  */
 public class CategAmountCell extends AmountCell implements Categorizable {
 
-	protected HashSet<MetaInfo> metaData;
+	protected MetaInfoSet metaData;
 
 	@Override
 	public AmountCell merge(Cell c) {
@@ -46,6 +48,18 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 		CategAmountCell categ1=(CategAmountCell) c1;
 		CategAmountCell categ2=(CategAmountCell) c2;
 		categ1.getMetaData().addAll(categ2.getMetaData());
+	}
+	
+	@Override
+	public void mergeWithCell(AmountCell anoth)
+	{
+		super.mergeWithCell(anoth);
+		CategAmountCell another = (CategAmountCell) anoth;
+		for(MetaInfo mi:another.getMetaData())
+		{
+			if (!this.hasMetaInfo(mi))
+				this.getMetaData().add(mi);
+		}
 	}
 	
 	/**
@@ -75,7 +89,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	/**
 	 * @return Returns the metaData.
 	 */
-	public HashSet<MetaInfo> getMetaData() {
+	public MetaInfoSet getMetaData() {
 		return metaData;
 	}
 
@@ -83,12 +97,14 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	 * @param metaData
 	 *            The metaData to set.
 	 */
-	public void setMetaData(HashSet<MetaInfo> metaData) {
+	public void setMetaData(MetaInfoSet metaData) {
 		this.metaData = metaData;
 	}
 
 	public String getMetaValueString(String category) {
-		MetaInfo mi = MetaInfo.getMetaInfo((Set) metaData,category);
+		if (metaData == null)
+			return null;
+		MetaInfo mi = metaData.getMetaInfo(category);
 		if (mi == null || mi.getValue()==null)
 			return null;
 		return  mi.getValue().toString();
@@ -96,8 +112,9 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 
 	
 	public boolean existsMetaString(String category) {
-		MetaInfo mi = MetaInfo.getMetaInfo((Set) metaData,category);
-		if(mi!=null) return true;
+		MetaInfo mi = metaData.getMetaInfo(category);
+		if (mi != null)
+			return true;
 		return false;
 		
 	}
@@ -105,7 +122,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 
 	public CategAmountCell() {
 		super();
-		metaData = new HashSet();
+		metaData = new MetaInfoSet();
 	}
 
 	public Class getWorker() {
@@ -119,7 +136,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	 */
 	public CategAmountCell(Long id) {
 		super(id);
-		metaData = new HashSet();
+		metaData = new MetaInfoSet();
 	}
 
 	public void setValue(Object o) {
@@ -160,7 +177,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 			MetaTextCell relatedHierarchyCell=(MetaTextCell) temp;
 			if ((relatedHierarchyCell != null) && (!disablePercentage)) 
 			{ 
-				MetaInfo percentMeta = MetaInfo.getMetaInfo(relatedHierarchyCell.getMetaData(), ArConstants.PERCENTAGE);
+				MetaInfo percentMeta = relatedHierarchyCell.getMetaData().getMetaInfo(ArConstants.PERCENTAGE);
 				if(percentMeta != null) {
 					Double percentage = (Double) percentMeta.getValue() ;
 					ret.setPercentage(percentage.doubleValue(), relatedHierarchyCell, hierarchyPurpose);			
@@ -197,7 +214,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	
 	public void cloneMetaData()
 	{
-		this.metaData = new HashSet(this.metaData); // do a distinct, unshared copy with other instances
+		this.metaData = new MetaInfoSet(this.metaData); // do a distinct, unshared copy with other instances
 		for(AmountCell amCell:mergedCells)
 			if (amCell instanceof CategAmountCell)
 				((CategAmountCell) amCell).cloneMetaData();		
@@ -205,15 +222,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	
 	public void removeDirectedFundingMetadata()
 	{		
-		Iterator<MetaInfo> mit = this.metaData.iterator();
-		while(mit.hasNext())
-		{
-			MetaInfo metaInfo = mit.next();
-			if (metaInfo.getCategory().equals(ArConstants.RECIPIENT_NAME) ||
-				metaInfo.getCategory().equals(ArConstants.RECIPIENT_ROLE_NAME) ||
-				metaInfo.getCategory().equals(ArConstants.RECIPIENT_ROLE_CODE))
-				mit.remove();
-		}
+		this.metaData.removeItemsByCategory(ArConstants.RECIPIENT_NAME, ArConstants.RECIPIENT_ROLE_NAME, ArConstants.RECIPIENT_ROLE_CODE, ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE, ArConstants.SOURCE_ROLE_CODE);
 		for(AmountCell amCell:mergedCells)
 			if (amCell instanceof CategAmountCell)
 				((CategAmountCell) amCell).removeDirectedFundingMetadata();
@@ -367,15 +376,16 @@ public Cell filter(Cell metaCell,Set ids) {
 	 * 
 	 * @see org.dgfoundation.amp.ar.Categorizable#hasMeta(org.dgfoundation.amp.ar.MetaInfo)
 	 */
-public boolean hasMetaInfo(MetaInfo m) {
-	MetaInfo internal = MetaInfo.getMetaInfo((Set) metaData, m.getCategory());
-	if (internal == null)
-		return false;
-	if (internal.equals(m))
-		return true;
-	else
-		return false;
-}
+	public boolean hasMetaInfo(MetaInfo m) 
+	{
+		MetaInfo internal = metaData.getMetaInfo(m.getCategory());
+		if (internal == null)
+			return false;
+		if (internal.equals(m))
+			return true;
+		else
+			return false;
+	}
 	
 
 	/**
@@ -398,7 +408,9 @@ public boolean hasMetaInfo(MetaInfo m) {
 	@Override
 	public String prettyPrint()
 	{
-		return String.format("%s %s %s on %s", this.getMetaValueString(ArConstants.ADJUSTMENT_TYPE), this.getMetaValueString(ArConstants.TRANSACTION_TYPE), this.toString(), this.getMetaValueString(ArConstants.QUARTER) + " " + this.getMetaValueString(ArConstants.YEAR));
+		String isRealTransaction = (this.metaData != null && this.metaData.hasMetaInfo(ArConstants.RECIPIENT_ROLE_CODE)) ? "Real " : "";
+		return String.format("%s%s %s %s on %s", isRealTransaction, this.getMetaValueString(ArConstants.ADJUSTMENT_TYPE), this.getMetaValueString(ArConstants.TRANSACTION_TYPE),  
+				this.toString(), this.getMetaValueString(ArConstants.QUARTER) + " " + this.getMetaValueString(ArConstants.YEAR));
 	}
 	
 }

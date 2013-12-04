@@ -28,23 +28,31 @@ public class TLSUtils {
 		
 		if (TLSUtils.forcedLangCode != null)
 			return TLSUtils.forcedLangCode;
-		
-        ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = sra.getRequest();
-        Locale lang = (Locale) request.getAttribute(Constants.NAVIGATION_LANGUAGE);
-        if (lang == null){
-            for (Cookie cookie: request.getCookies()){
-                if (cookie.getName().equals("digi_language")) {
-                    return cookie.getValue();
-                }
-            }
-            //no cookie found
-            logger.error("Barely missed an exception", new RuntimeException("please enable cookies!")); //we shouldn't get here :) - but we do EVERYTIME IN CHROME
-            return "en";
-        }
-        String code = lang.getCode();
-        //logger.error("Current language:" + code);
-        return code;
+
+		try
+		{
+			ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			HttpServletRequest request = sra.getRequest();
+			Locale lang = (Locale) request.getAttribute(Constants.NAVIGATION_LANGUAGE);
+			if (lang == null){
+				for (Cookie cookie: request.getCookies()){
+					if (cookie.getName().equals("digi_language")) {
+						return cookie.getValue();
+					}
+				}
+				//no cookie found
+				logger.error("Barely missed an exception", new RuntimeException("please enable cookies!")); //we shouldn't get here :) - but we do EVERYTIME IN CHROME
+				return "en";
+			}
+			String code = lang.getCode();
+			//logger.error("Current language:" + code);
+			return code;
+		}
+		catch(Exception e)
+		{
+			// logger.info("trying to get TLSLangCode threw an exception. THIS IS AN ERROR IF happened OUTSIDE A REQUEST", e);
+			return "en";
+		}
 	}
 	
 	public final static boolean equalValues(Object a, Object b)

@@ -1,18 +1,16 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import org.digijava.module.aim.dbentity.AmpReports;
+import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.dgfoundation.amp.Util;
 
 public class WorkspaceFilter 
 {
@@ -108,7 +106,7 @@ public class WorkspaceFilter
 					"amp_team_id IS NOT NULL ";
         if (ampTeams != null) {
         TEAM_FILTER += " AND amp_team_id IN ("
-				+ Util.toCSString(ampTeams)
+				+ Util.toCSStringForIN(ampTeams)
 				+ ") "; } }
 				// + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				//+ Util.toCSString(ampTeams) + ") ) AND draft<>true "; 
@@ -117,7 +115,7 @@ public class WorkspaceFilter
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL ";
 			        if (ampTeams != null) {
 			        TEAM_FILTER += " AND amp_team_id IN ("
-							+ Util.toCSString(ampTeams)
+							+ Util.toCSStringForIN(ampTeams)
 							+ ") "; }
 				//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				//+ Util.toCSString(ampTeams) + ") )" ;
@@ -125,7 +123,7 @@ public class WorkspaceFilter
 		//NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL ";
 		        if (ampTeams != null) {
 		        TEAM_FILTER += " AND amp_team_id IN ("
-						+ Util.toCSString(ampTeams)
+						+ Util.toCSStringForIN(ampTeams)
 						+ ") "; }
 			//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 			//+ Util.toCSString(ampTeams) + ") )" ;
@@ -142,10 +140,10 @@ public class WorkspaceFilter
 			if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
 				
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
-						+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
+						+ Util.toCSStringForIN(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
 						used_approval_status	+")  ) " + (hideDraft ? "AND draft<>true ":"");
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
-						+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
+						+ Util.toCSStringForIN(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
 						used_approval_status	+")  ) " + (hideDraft ? "AND draft<>true ":"");
 //				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 //					+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL )";
@@ -171,8 +169,10 @@ public class WorkspaceFilter
 		//return "1163, 2498, 1301";
 		//return "2498, 1301";
 		//return "101790, 101789";
-		//return "2"; // masha
-		//return "SELECT amp_activity_id from amp_activity WHERE (amp_activity_id >= 1)";
+		//return "2,14,18,20,21";
+		//return "18"; // masha
+		//return "20, 21";
+		//return "SELECT amp_activity_id from amp_activity WHERE (amp_activity_id >= 101789)";
 		return TEAM_FILTER;
 		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537', '8723851641', '8723851222')";
 		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537')";
@@ -259,11 +259,7 @@ public class WorkspaceFilter
 			 * Checks if the team is a computed workspace and in case it is
 			 * it checks if it should hide the draft activities
 			 */
-			if (tm.getComputation() != null && tm.getComputation() ) {
-				Workspace wrksp	= TeamUtil.getWorkspace( tm.getTeamId() );
-				if ( wrksp != null && wrksp.getHideDraftActivities() != null && wrksp.getHideDraftActivities() )
-					hideDraft = true;
-			}
+			hideDraft=TeamUtil.hideDraft(tm);
 			String accessType = tm.getTeamAccessType();
 			return generateWorkspaceFilterQuery(tm.getMemberId(), accessType, approved, hideDraft, publicView);
 		}

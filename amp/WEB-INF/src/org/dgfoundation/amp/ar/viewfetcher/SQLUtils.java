@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
+import org.digijava.kernel.exception.DgException;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.CriteriaQuery;

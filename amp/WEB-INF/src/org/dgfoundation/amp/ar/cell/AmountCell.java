@@ -454,7 +454,7 @@ public class AmountCell extends Cell {
 			AmountCell filtered = (AmountCell) element.filter(metaCell, ids);
 			if (filtered != null)
 			{
-				realRet.merge(realRet, filtered);
+				realRet.mergeWithCell(filtered);
 				mergedAnything = true;
 			}
 		}
@@ -619,7 +619,21 @@ public class AmountCell extends Cell {
 			else
 				this.getMergedCells().add(ac2);
 		}
-
+	}
+	
+	/**
+	 * a well-specified variant of {@link #merge(Cell, Cell)}, which is used inconsistently through AMP with regarding to who is the source and who is the destination
+	 * TODO in AMP 2.8, mergeCell(cell1, cell2) should be deleted altogether and replaced by uses of either this function or {@link #merge(Cell)} - too risky of a change to do in AMP 2.6
+	 * @param another
+	 */
+	public void mergeWithCell(AmountCell another)
+	{
+		if (this.getOwnerId() == null)
+			this.setOwnerId(another.getOwnerId());
+		if (another.getMergedCells().isEmpty())
+			this.getMergedCells().add(another);
+		else
+			this.getMergedCells().addAll(another.getMergedCells());
 	}
 
 	/**

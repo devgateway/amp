@@ -14,8 +14,10 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.helper.ReportHeadingLayoutCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
  * Wraps the items that can be displayed in a report column. A Column can hold
@@ -49,7 +51,12 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 
 	protected int maxNameDisplayLength=0;
 	
-	protected int spanCount = 0;
+	protected ReportHeadingLayoutCell positionInHeading;
+	
+//	/**
+//	 * the number of times "getRowSpan" was called on this instance - a proxy for "the row we are in now"
+//	 */
+//	protected int spanCount = 0;
 
 	protected List<K> items;
 
@@ -72,10 +79,24 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 	protected String contentCategory;
 	
 	protected int currentDepth = 0;
-
+	
 	protected String name;
 
-	public abstract int getCurrentRowSpan();
+	public ReportHeadingLayoutCell getPositionInHeading()
+	{
+		return this.positionInHeading;
+	}
+	
+//	public int getRowSpan()
+//	{
+//		return this.positionInHeading.getRowSpan();
+//	}
+	/**
+	 * only to be used internally during initialization of the layout. Real uses of the code should go to {@link #getPositionInHeading()}<br />
+	 * notice that the reports engine might decide for the column to have more rows than the one specified by this function (for filling the heading upto the bottom) - but never less 
+	 * @return
+	 */
+	protected abstract int getRowSpanInHeading_internal();
 
 	public String toString() {
 		return name + " (" + items.size() + " items)";
@@ -205,7 +226,12 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 	public void setWorker(ColumnWorker worker) {
 		this.worker = worker;
 	}
-
+	
+	/**
+	 * sets, recursively, the row span for this column and all of its subcolumns
+	 */
+	public abstract void setPositionInHeadingLayout(int totalRowSpan, int startingDepth, int startingColumn);
+	
 	/**
 	 * @return Returns the parent.
 	 */
@@ -268,21 +294,29 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 		this.parent = parent;
 	}
 
-	public abstract int getColumnSpan();
+	/**
+	 * the total <b>rowspan</b> of this column and all of this subcolumns in the report's heading<br />
+	 * for the rowspan of this column per se (the number of columns needed to display its title), please see {@link #getNewRowSpan()} <br />
+	 * only called once per item when initialized CRD
+	 * @return
+	 */
+	public abstract int calculateTotalRowSpan();
 
 	/**
-	 * returns a list of ColumnS that can be found at the specified depth level.
+	 * returns a list of ColumnS whose name is displayed starting at a given depth in the table header
 	 * 
 	 * @param depth
-	 *            the depth level from where we want subcolumns extracted. a
-	 *            CellColumn will always return itself regardless of the depth
-	 *            level specified (because it has no subcolumns). A depth of 0
-	 *            generally means the current column.
-	 * @return a list of ColumnS on the specified depth position
+	 *            the depth level from where we want subcolumns extracted.
+	 * @return a list of ColumnS which start on the specified depth position in the table header
 	 */
-	public abstract List getSubColumns(int depth);
+	public abstract List<Column> getSubColumns(int depth);
 
-	public List getSubColumnList() {
+	/**
+	 * equivalent to calling {@link #getSubColumns(this.currentDepth)} - this is done because one can't supply arguments when using a function from JSP<br />
+	 * <b>generally one should not use this function except frmo JSPs</b>
+	 * @return
+	 */
+	public List<Column> getSubColumnList() {
 		return getSubColumns(currentDepth);
 	}
 
@@ -294,29 +328,28 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 	}
 
 	/**
-	 * @param currentDepth
-	 *            The currentDepth to set.
+	 * @param currentDepth - the currently rendered row of the report's header. Done for the only reason that JSP does not support calling a function with arguments
+	 * 
 	 */
 	public void setCurrentDepth(int currentDepth) {
 		this.currentDepth = currentDepth;
-		//String z = TranslatorWorker.translateText(this.getName());
 	}
 
-	/**
-	 * @return Returns the rowSpan.
-	 */
-	public int getRowSpan() {
-		return rowSpan;
-	}
+//	/**
+//	 * @return Returns the rowSpan.
+//	 */
+//	public int getRowSpan() {
+//		return rowSpan;
+//	}
 
-	/**
-	 * @param rowSpan
-	 *            The rowSpan to set.
-	 */
-	public void setRowSpan(int rowSpan) {
-		spanCount = 0;
-		this.rowSpan = rowSpan;
-	}
+//	/**
+//	 * @param rowSpan
+//	 *            The rowSpan to set.
+//	 */
+//	public void setRowSpan(int rowSpan) {
+//		spanCount = 0;
+//		this.rowSpan = rowSpan;
+//	}
 
 	public abstract Set<Long> getOwnerIds();
 
@@ -340,7 +373,10 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 		return parent.getNearestReportData();
 	}
 	
-	
+	/**
+	 * the <b>colspan</b> of the column
+	 * @return
+	 */
 	public abstract int getColumnDepth();
 
 	/**
@@ -503,5 +539,58 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 		return res.toString();
 	}
 	
+    /**
+     * Helper method that only uses one category to create a categorized tree. Returns null if categorizing failed for some reasons
+     * @param src The source column to be categorized
+     * @param category the category to categorize the data with
+     * @param generateTotalCols true when creating TotalAmountColumnS instead of CellColumnS
+     * @return a GroupColumn that holds the categorized Data
+     * @see verticalSplitByCategs
+     */
+	public abstract GroupColumn verticalSplitByCateg(String category, Set<Long> ids, boolean generateTotalCols, AmpReports reportMetadata);
+	
+	public GroupColumn verticalSplitByCateg(String category, boolean generateTotalCols, AmpReports reportMetadata)
+	{
+		return verticalSplitByCateg(category, null, generateTotalCols, reportMetadata);
+	}
+	
+	/**
+	 * Split a column holding CategAmountCellS into several subcolumns based on the categorized amount data and some
+	 * categories given as reference. The result will be a categorized column tree of GroupColumnS and CellColumnS as leafs. 
+	 * Each category will create another level on the tree while on the same level we will find several GroupColumnS that 
+	 * share the same metainfo category but not the same value.
+	 * @param src The source CellColumn to be categorized
+	 * @param categories the list of categories to be applied to the src column
+	 * @param generateTotalCols true when creating TotalAmountColumnS instead of CellColumnS 
+	 * @return a GroupColumn that holds the categorized data
+	 * @see MetaInfo, TotalAmountColumn, CategAmountCell
+	 */
+    public Column verticalSplitByCategs(List<String> categories, Set<Long> ids, boolean generateTotalCols, AmpReports reportMetadata) 
+    {
+    	if (categories == null || categories.isEmpty())
+    		return null;
+    	Column curCol = this;
+    	int nrCategories = categories.size();
+    	for(int i = 0; i < nrCategories; i++)
+    	{
+    		String cat = categories.get(i);    		
+    		GroupColumn splitCol = curCol.verticalSplitByCateg(cat, ids, generateTotalCols && (i == nrCategories - 1), reportMetadata);
+    		if (splitCol != null)
+    			curCol = splitCol; // if column is not splittable by this category, just skip this category
+    	}
+    	return curCol;
+    }
+    
+    /**
+     * convenience method for not specifying ids
+     * @param categories
+     * @param generateTotalCols
+     * @param reportMetadata
+     * @return
+     */
+	public Column verticalSplitByCategs(List<String> categories, boolean generateTotalCols, AmpReports reportMetadata) 
+	{
+		return verticalSplitByCategs(categories, null, generateTotalCols, reportMetadata);
+	}
 }
 

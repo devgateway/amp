@@ -108,7 +108,7 @@ public class GroupReportData extends ReportData<ReportData> {
 		}
 	}
 	
-	protected Integer sourceColsCount;
+//	protected Integer sourceColsCount;
 
 	private BigDecimal totalac;
 
@@ -122,19 +122,19 @@ public class GroupReportData extends ReportData<ReportData> {
 		super(d.getName());
 		this.parent = d.getParent();
 		this.reportMetadata=d.getReportMetadata();
-		this.sourceColsCount = d.getSourceColsCount();
+		//this.sourceColsCount = d.getSourceColsCount();
 		this.globalHeadingsDisplayed=new Boolean(false);
 		this.columnsToBeRemoved=d.getColumnsToBeRemoved();
 		this.splitterCell	= d.getSplitterCell();
 	}
 
-	/**
-	 * @param sourceColsCount
-	 *            The sourceColsCount to set.
-	 */
-	public void setSourceColsCount(Integer sourceColsNumber) {
-		this.sourceColsCount = sourceColsNumber;
-	}
+//	/**
+//	 * @param sourceColsCount
+//	 *            The sourceColsCount to set.
+//	 */
+//	public void setSourceColsCount(Integer sourceColsNumber) {
+//		this.sourceColsCount = sourceColsNumber;
+//	}
 
 	public void addReport(ReportData rd) {
 		items.add(rd);
@@ -327,24 +327,22 @@ public class GroupReportData extends ReportData<ReportData> {
 	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getTotalDepth()
 	 */
-	public int getTotalDepth() {
-		if (items.size() == 0)
-			return -1;
-		ReportData rd = (ReportData) items.get(0);
-		return rd.getTotalDepth();
+	public int getTotalDepth()
+	{
+		return getFirstColumnReport().getTotalDepth();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dgfoundation.amp.ar.ReportData#getSourceColsCount()
-	 */
-	public Integer getSourceColsCount() {
-		if (parent == null)
-			return sourceColsCount;
-		else
-			return parent.getSourceColsCount();
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see org.dgfoundation.amp.ar.ReportData#getSourceColsCount()
+//	 */
+//	public Integer getSourceColsCount() {
+//		if (parent == null)
+//			return sourceColsCount;
+//		else
+//			return parent.getSourceColsCount();
+//	}
 
 	/*
 	 * (non-Javadoc)
@@ -387,6 +385,14 @@ public class GroupReportData extends ReportData<ReportData> {
 			this.sortAscending	= sortAscending;
 	}
 
+	@Override
+	public List<String> digestReportHeadingData()
+	{
+		ColumnReportData fcr = getFirstColumnReport();
+		if (fcr == null)
+			return new ArrayList<String>();
+		return fcr.digestReportHeadingData();
+	}
 	
 	/**
 	 * @return the first column report found in this tree
@@ -398,13 +404,13 @@ public class GroupReportData extends ReportData<ReportData> {
 		return (ColumnReportData) rd;
 	}
 
-	public void removeColumnsByName(String name) {
-		Iterator i=items.iterator();
-		while (i.hasNext()) {
-			ReportData element = (ReportData) i.next();
-			element.removeColumnsByName(name);
-		}
-	}
+//	public void removeColumnsByName(String name) {
+//		Iterator i=items.iterator();
+//		while (i.hasNext()) {
+//			ReportData element = (ReportData) i.next();
+//			element.removeColumnsByName(name);
+//		}
+//	}
 
 	public String getAbsoluteReportName() {
 		if (parent!=null){

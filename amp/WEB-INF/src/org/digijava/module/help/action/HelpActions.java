@@ -1,10 +1,16 @@
 package org.digijava.module.help.action;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -813,36 +819,66 @@ public class HelpActions extends DispatchAction {
 	
 	
 	public ActionForward export(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		ZipOutputStream outZip = null;
+		ServletOutputStream ouputStream = null;
 
-        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
-        Marshaller m = jc.createMarshaller();
-        //response.setContentType("text/xml");
-        response.setContentType("application/zip");
-		response.setHeader("content-disposition", "attachment; filename=exportHelp.zip");
-		ObjectFactory objFactory = new ObjectFactory();
-		AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
-		List <AmpHelpType> rsAux;
-        logger.info("loading helpData");
-        ServletOutputStream ouputStream = response.getOutputStream();
-        ZipOutputStream out = new ZipOutputStream(ouputStream);
-        rsAux= HelpUtil.getExportData(out);
+		// Create temp file for the zip (this way we can tell the user how big the file is).
+		String randomFileName = String.valueOf(Math.random()*1000000);
+		File tmpZipFile = File.createTempFile(randomFileName, ".tmp");
+		FileOutputStream fileOutputStream = new FileOutputStream(tmpZipFile);
+		outZip = new ZipOutputStream(fileOutputStream);
+		ouputStream = response.getOutputStream();
+		try{
+			// Create zip object with all the images.
+			JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxbi");
+			Marshaller m = jc.createMarshaller();					
+			ObjectFactory objFactory = new ObjectFactory();
+			AmpHelpRoot help_out = objFactory.createAmpHelpRoot();
+			List <AmpHelpType> rsAux;
+			logger.info("loading helpData");				
+			rsAux= HelpUtil.getExportData(outZip);
+			help_out.getAmpHelp().addAll(rsAux);
 
+			// Create xml structure to be saved too in the zip.
+			logger.info("Writing helpExport.xml to zip file.");
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			m.marshal(help_out,bos);						
+			outZip.putNextEntry(new ZipEntry("helpExport.xml"));
+			byte [] myArray= bos.toByteArray();
+			outZip.write(myArray, 0, myArray.length);
+			outZip.closeEntry();
+			outZip.flush();
+			outZip.close();
 
-        help_out.getAmpHelp().addAll(rsAux);
-        
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        
-        m.marshal(help_out,bos);
-        out.putNextEntry(new ZipEntry("helpExport.xml"));
-        byte [] myArray= bos.toByteArray();
-        out.write(myArray, 0, myArray.length);
-        // Complete the entry
-        out.closeEntry();        
-        // Complete the ZIP file     
-	    out.close();
-      
-        return null;
-
+			// Create an input stream to read the temp zip file.
+			logger.info("Setup response.");
+			FileInputStream fileInputStream = new FileInputStream(tmpZipFile);			
+			response.setContentType("application/zip");
+			response.setHeader("content-disposition", "attachment; filename=exportHelp.zip");
+			response.setHeader("Content-Length", String.valueOf(tmpZipFile.length()));
+			
+			// Write the zip stream into the response.
+			logger.info("Write from zip file stream to response output stream.");
+			byte[] outputByte = new byte[4096];
+			while(fileInputStream.read(outputByte,0, 4096) != -1){
+				ouputStream.write(outputByte, 0, 4096);
+			}
+			logger.info("Close fileInputStream.");
+			fileInputStream.close();
+		}catch(IOException  e){
+			e.printStackTrace();
+		}finally{
+			try{				
+				if(ouputStream != null) {
+					logger.info("Finally HelpActions.");
+					ouputStream.flush();
+					ouputStream.close();
+				}
+			}catch(IOException e2){
+				e2.printStackTrace();
+			}
+		}
+		return null;
 	}
 	
 	public ActionForward importing(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {

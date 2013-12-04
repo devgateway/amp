@@ -627,6 +627,18 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	{
 		this.reportGenerator = generator;
 	}
+
+    /**
+     * returns true iff the report has some column whose computation / display would require having a "Total Commitments" column in the report
+     * @return
+     */
+    public boolean needsTotalCommitments()
+    {
+        for(AmpReportMeasures meas:this.getMeasures())
+            if (meas.getMeasure().getMeasureName().contains(ArConstants.TOTAL_COMMITMENTS))
+                return true;
+        return false;
+    }
 	
 	public Set<String> getMeasureNames()
 	{
@@ -643,6 +655,30 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 			res.add(hier.getColumn().getColumnName());
 		return res;
 	}
+
+    /**
+     * returns true IFF report has only Computed measures, or it a tab report
+     * @param arf
+     * @return
+     */
+    public boolean shouldDeleteFunding(AmpARFilter arf)
+    {
+        // if it's a tab reports just remove funding
+        if (arf.isWidget() || ("N".equals(getOptions())))
+            return true;
+
+        int nrComputedMeasures = 0;
+        for (AmpReportMeasures measure:getMeasures())
+        {
+            if (measure.getMeasure().getExpression() != null)
+                nrComputedMeasures ++;
+        }
+
+        if (nrComputedMeasures > 0 && (nrComputedMeasures == getMeasures().size()))
+            return true;
+
+        return false;
+    }
 	
 	public boolean currencyIsSpecified()
 	{

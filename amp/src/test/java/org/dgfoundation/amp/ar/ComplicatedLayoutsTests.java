@@ -102,7 +102,7 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 								);
 		
 		runReportTest("flat tab Actual Disbursements + Real Disbursements Report", "aaa", 
-				new String[] {"AMP-15967-activity-1", "AMP-15967-activity-2", "Eth Water", "date-filters-activity", "Test MTEF directed"}, fddr_correct, makeTabReportModifier);
+				new String[] {"AMP-15967-activity-1", "AMP-15967-activity-2", "Eth Water", "date-filters-activity", "Test MTEF directed"}, fddr_correct, makeTabReportModifier, null);
 	}
 	
 	public void testMultipleDonorAgenciesTotalsOnlyFlat()
@@ -123,7 +123,7 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 								);
 		
 		runReportTest("flat Actual Disbursements + Actual Disbursements Report", "AMP-15967-test-mixed-activities-totals", 
-				new String[] {"AMP-15967-activity-1", "AMP-15967-activity-2", "Eth Water", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, fddr_correct, makeTabReportModifier);
+				new String[] {"AMP-15967-activity-1", "AMP-15967-activity-2", "Eth Water", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR"}, fddr_correct, makeTabReportModifier, null);
 	}	
 	
 	public void testMultipleDonorAgenciesByExecuting()

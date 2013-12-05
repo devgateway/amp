@@ -11,7 +11,9 @@
 	<!-- by default allow displaying of the flag -->
 	<http pattern="/aim/default/displayFlag.do**" security="none" />
 
-    <http pattern="/translation/switchLanguage.do**" security="none" />
+    <http pattern="/translation/switchLanguage.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
 
     <http pattern="/aim/confirmRegisteration.do**" security="none" />
 

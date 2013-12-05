@@ -361,8 +361,7 @@ public class DashboardUtil {
 				form.getSummaryInformation().setTotalCommitments(new BigDecimal(0));
 				form.getSummaryInformation().setTotalDisbursements(new BigDecimal(0));
 				form.getSummaryInformation().setAverageProjectSize(new BigDecimal(0));		
-			}
-			form.getSummaryInformation().setNumberOfProjects(activityList.size());
+			}			
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());
 			form.getSummaryInformation().setNumberOfRegions(regionList.size());
 			form.getSummaryInformation().setNumberOfOrganizations(agencyList.size());
@@ -392,10 +391,14 @@ public class DashboardUtil {
 		        	if (activityList==null || activityList.size()==0) {
 		        		form.getRanksInformation().setFullProjects(null);
 			        	form.getRanksInformation().setTopProjects(null);
+			        	form.getSummaryInformation().setNumberOfProjects(0);
 					} else {
 						form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
-			        	//form.getRanksInformation().setFullProjects(getRankActivities(activityListReduced, form.getFilter()));
-			        	form.getRanksInformation().setTopProjects(getTop(form.getRanksInformation().getFullProjects(),form.getFilter().getTopLists()));
+						// AMP-16528
+						form.getSummaryInformation().setNumberOfProjects(form.getRanksInformation().getFullProjects().size());
+			        	
+						//form.getRanksInformation().setFullProjects(getRankActivities(activityListReduced, form.getFilter()));
+			        	form.getRanksInformation().setTopProjects(getTop(form.getRanksInformation().getFullProjects(),form.getFilter().getTopLists()));			        	
 					}
 		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep7);

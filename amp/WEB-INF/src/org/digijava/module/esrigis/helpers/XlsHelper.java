@@ -274,7 +274,7 @@ public class XlsHelper {
 					values.add(calculations.getTotActualDisb().toString());
 					values.add(calculations.getTotalMtef().toString());
 					
-					for (int j = 0; j < columnNames.size()-1; j++) {
+					for (int j = 0; j < columnNames.size(); j++) {
 						HSSFCell cell = row.createCell(j);
 						str = new HSSFRichTextString(values.get(j));
 						cell.setCellValue(str);

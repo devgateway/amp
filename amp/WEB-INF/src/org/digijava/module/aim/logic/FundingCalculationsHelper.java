@@ -206,7 +206,7 @@ public class FundingCalculationsHelper {
 				fixedExchangeRate = null;
 			
 			double frmExRt;
-			if (fundDet.getFixedExchangeRate() == null){
+			if (fixedExchangeRate == null){
 				frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
 			}else{
 				frmExRt = fixedExchangeRate;

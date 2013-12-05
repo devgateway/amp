@@ -214,6 +214,9 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				aap.setProgram(choice);
 				aap.setProgramSetting(programSettings.getObject());
 				
+				if (!aap.getProgramSetting().isAllowMultiple() && list.size()>0) {
+					return;
+				}
 				if(list.size()>0)
 					aap.setProgramPercentage(0f);
 				else 

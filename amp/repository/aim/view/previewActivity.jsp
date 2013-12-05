@@ -1179,56 +1179,56 @@ function collapseAll() {
 		<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 		<module:display name="/Activity Form/Planning/Actual Approval Date" parentModule="/Activity Form/Planning">
 			<hr>
-				<digi:trn>Actual Approval Date</digi:trn>:&nbsp;1
+				<digi:trn>Actual Approval Date</digi:trn>:&nbsp;
 				<b>${aimEditActivityForm.planning.revisedAppDate}</b>
 		</module:display>
 
 		<module:display name="/Activity Form/Planning/Proposed Start Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Proposed Start Date</digi:trn>:&nbsp;2
+			<digi:trn>Proposed Start Date</digi:trn>:&nbsp;
 			<b>${aimEditActivityForm.planning.originalStartDate}</b>
 		</module:display>
 							
 		<module:display name="/Activity Form/Planning/Actual Start Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Actual Start Date </digi:trn>:&nbsp;3
+			<digi:trn>Actual Start Date </digi:trn>:&nbsp;
 			<b>${aimEditActivityForm.planning.revisedStartDate}</b>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Original Completion Date</digi:trn>:&nbsp;4
+			<digi:trn>Original Completion Date</digi:trn>:&nbsp;
 			<b>${aimEditActivityForm.planning.originalCompDate}</b>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Proposed Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Proposed Completion Date</digi:trn>:&nbsp;5
+			<digi:trn>Proposed Completion Date</digi:trn>:&nbsp;
 			<b>${aimEditActivityForm.planning.proposedCompDate}</b>
 		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Actual Completion Date</digi:trn>:&nbsp;6
+			<digi:trn>Actual Completion Date</digi:trn>:&nbsp;
 			<b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b>		
 		</module:display> 
 							
 		<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Final Date for Contracting</digi:trn>:&nbsp;7
+			<digi:trn>Final Date for Contracting</digi:trn>:&nbsp;
 			<b><c:out value="${aimEditActivityForm.planning.contractingDate}"/></b>
 		</module:display>
 					
 		<module:display name="/Activity Form/Planning/Final Date for Disbursements" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;8
+			<digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;
 			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>
 		</module:display>
 		
 		
 		<hr>
 		<field:display name="Duration of Project" feature="Planning"> 
-			<digi:trn>Duration of project</digi:trn>:&nbsp;9
+			<digi:trn>Duration of project</digi:trn>:&nbsp;
 			<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
 			    <b>${aimEditActivityForm.planning.projectPeriod}</b>&nbsp;<digi:trn>Months</digi:trn>
 			</c:if>

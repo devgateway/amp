@@ -38,7 +38,11 @@
 	<http pattern="/aim/csvExport.do**" security="none" />
 	
 	<http pattern="/aim/xlsExport.do**" security="none" />
-	
+
+    <http pattern="/aim/pdfExport.do**" security="none" />
+
+    <http pattern="/publicPortal" security="none" />
+
 	<http pattern="/aim/viewNewAdvancedReport.do**" security="none" />
 	
 	<http pattern="/exception/showExceptionReport.do**" security="none" />
@@ -89,6 +93,10 @@
     <http pattern="/visualization/launchDashboard.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
+    <http pattern="/calendar/showCalendarView.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+
 
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm">

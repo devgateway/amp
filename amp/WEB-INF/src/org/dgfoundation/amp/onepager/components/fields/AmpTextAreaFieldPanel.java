@@ -5,54 +5,56 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.models.EditorWrapperModel;
+import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
 
 /**
  * Wraps a {@link TextArea} container for displaying large text
  * @author mpostelnicu@dgateway.org
  * since Sep 24, 2010
  */
-public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
+public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 335388041997101521L;
     private final boolean wysiwyg;
-    protected TextArea<T> textAreaContainer;
+    protected TextArea<String> textAreaContainer;
+    private Component translationDecorator;
     private WebMarkupContainer closeLink;
 
-    public TextArea<T> getTextAreaContainer() {
+    public TextArea<String> getTextAreaContainer() {
 		return textAreaContainer;
 	}
 	
 	/**
 	 * @param id
 	 * @param fmName
-	 * @param wysiwyg if true, {@link TinyMceBehavior} will be added to the {@link TextArea}
+	 * @param wysiwyg if true, CKeditor will be added to the {@link TextArea}
 	 */
-	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine) {
+	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine) {
 		super(id, fmName, hideLabel, hideNewLine);
         this.wysiwyg = wysiwyg;
 		if (wysiwyg){
-			model = (IModel<T>) new EditorWrapperModel((IModel<String>) model, id);
+			model = (IModel<String>) new EditorWrapperModel((IModel<String>) model, id);
 		}
-		
-		textAreaContainer = new TextArea<T>("richText", TranslationDecorator.proxyModel((IModel<String>) model)){
+        final IModel<String> finalModel = model;
+		textAreaContainer = new TextArea<String>("richText", TranslationDecorator.proxyModel((IModel<String>) model)){
             @Override
-            public String getValidatorKeyPrefix() {
-                return super.getValidatorKeyPrefix();    //To change body of overridden methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void validate() {
-                super.validate();    //To change body of overridden methods use File | Settings | File Templates.
+            protected void onInitialize() {
+                //get validators and put them in the {@link TranslatableValidators}
+                TranslatableValidators.alter(finalModel, this);
+                super.onInitialize();
             }
         };
 		textAreaContainer.setOutputMarkupId(true);
@@ -92,16 +94,17 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 		}
 		add(preview);
 
-        add(TranslationDecorator.of("trnContainer", (IModel<String>) textAreaContainer.getModel(), (wysiwyg?this:textAreaContainer)));
+        translationDecorator = TranslationDecorator.of("trnContainer", (IModel<String>) textAreaContainer.getModel(), (wysiwyg ? this : textAreaContainer));
+        add(translationDecorator);
 		addFormComponent(textAreaContainer);
 	}
 
-	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg, AmpFMTypes fmType) {
+	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg, AmpFMTypes fmType) {
 		this(id, model, fmName, wysiwyg);
 		this.fmType = fmType;
 	}
 	
-	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg) {
+	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg) {
 		this(id, model, fmName, wysiwyg, false, false);
 	}
 
@@ -111,5 +114,10 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 
     public boolean isWysiwyg() {
         return wysiwyg;
+    }
+
+    @Override
+    protected void onAjaxOnError(AjaxRequestTarget target) {
+        TranslatableValidators.onError(target, formComponent, translationDecorator);
     }
 }

@@ -96,7 +96,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
 		name.getTextContainer().add(new AmpUniqueComponentTitleValidator(new PropertyModel<AmpActivityGroup>(activityModel, "ampActivityGroup")));
 		add(name);
 
-		AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel(componentModel, "description"), "Description", false, false, false);
+		AmpTextAreaFieldPanel description = new AmpTextAreaFieldPanel("description", new PropertyModel(componentModel, "description"), "Description", false, false, false);
 		add(description);
 
 	}

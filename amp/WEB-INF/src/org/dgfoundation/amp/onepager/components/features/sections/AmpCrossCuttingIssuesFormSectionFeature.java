@@ -21,15 +21,15 @@ public class AmpCrossCuttingIssuesFormSectionFeature extends
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		
-		add(new AmpTextAreaFieldPanel<String>("equalOpportunity",
+		add(new AmpTextAreaFieldPanel("equalOpportunity",
 				new PropertyModel<String>(am, "equalOpportunity"),
 				"Equal Opportunity", true));
 
-		add(new AmpTextAreaFieldPanel<String>("environment",
+		add(new AmpTextAreaFieldPanel("environment",
 				new PropertyModel<String>(am, "environment"),
 				"Environment", true));
 
-		add(new AmpTextAreaFieldPanel<String>("minorities",
+		add(new AmpTextAreaFieldPanel("minorities",
 				new PropertyModel<String>(am, "minorities"),
 				"Minorities", true));
 	}

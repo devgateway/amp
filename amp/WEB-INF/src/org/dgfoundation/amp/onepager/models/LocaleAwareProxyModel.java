@@ -43,4 +43,8 @@ public abstract class LocaleAwareProxyModel<T> implements IModel<T> {
     public void setLangModel(IModel<String> langModel) {
         this.langModel = langModel;
     }
+
+    public IModel<String> getOriginalModel(){
+        return model;
+    }
 }

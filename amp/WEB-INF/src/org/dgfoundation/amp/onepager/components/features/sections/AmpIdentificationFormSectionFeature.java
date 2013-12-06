@@ -40,6 +40,7 @@ import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.validators.AmpUniqueActivityTitleValidator;
+import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -66,7 +67,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 		return status;
 	}
 
-	public AmpTextAreaFieldPanel<String> getTitle() {
+	public AmpTextAreaFieldPanel getTitle() {
 		return title;
 	}
 
@@ -86,7 +87,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			//title = new AmpTextFieldPanel<String>(
 			//		"title", m, "Project Title", AmpFMTypes.MODULE);
 			//title.getTextContainer().add(new AmpRequiredFieldValidator<String>(title));
-			title.getTextAreaContainer().setRequired(true);
+			title.getTextAreaContainer().add(new StringRequiredValidator());
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));			
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
@@ -148,7 +149,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			status.getChoiceContainer().setRequired(true);
 			add(status);
 			
-			add(new AmpTextAreaFieldPanel<String>("statusReason",
+			add(new AmpTextAreaFieldPanel("statusReason",
 					new PropertyModel<String>(am, "statusReason"), "Status Reason", true, AmpFMTypes.MODULE));
 			
 			AmpTextFieldPanel<String> budgetCodeProjectId = new AmpTextFieldPanel<String>(
@@ -342,13 +343,13 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new PropertyModel<Boolean>(am, "humanitarianAid"), "Humanitarian Aid"));
 			
 		
-			add(new AmpTextAreaFieldPanel<String>("projectComments",
+			add(new AmpTextAreaFieldPanel("projectComments",
 					new PropertyModel<String>(am, "projectComments"),
 					"Project Comments", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel<String>("description",
+			add(new AmpTextAreaFieldPanel("description",
 					new PropertyModel<String>(am, "description"), "Description",
 					true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel<String>("objective",
+			add(new AmpTextAreaFieldPanel("objective",
 					new PropertyModel<String>(am, "objective"), "Objective", true, AmpFMTypes.MODULE));
 			
 			AmpAuthWebSession session = (AmpAuthWebSession) getSession();
@@ -372,7 +373,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			AmpCommentTabsFieldWrapper objTabs = new AmpCommentTabsFieldWrapper("objectiveTabs", "Objective Comments", objectiveTabs);
 			add(objTabs);
 			
-			add(new AmpTextAreaFieldPanel<String>("purpose",
+			add(new AmpTextAreaFieldPanel("purpose",
 					new PropertyModel<String>(am, "purpose"), "Purpose", true, AmpFMTypes.MODULE));
 			
 			List<ITab> tabs = new ArrayList<ITab>();
@@ -383,7 +384,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			AmpCommentTabsFieldWrapper purposeTabs = new AmpCommentTabsFieldWrapper("purposeTabs", "Purpose Comments", tabs);
 			add(purposeTabs);
 			
-			add(new AmpTextAreaFieldPanel<String>("results",
+			add(new AmpTextAreaFieldPanel("results",
 					new PropertyModel<String>(am, "results"), "Results", true, AmpFMTypes.MODULE));
 	
 			tabs = new ArrayList<ITab>();
@@ -393,21 +394,21 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			
 			AmpCommentTabsFieldWrapper resultsTabs = new AmpCommentTabsFieldWrapper("resultsTabs", "Results Comments", tabs);
 			add(resultsTabs);
-			add(new AmpTextAreaFieldPanel<String>("lessonsLearned",
+			add(new AmpTextAreaFieldPanel("lessonsLearned",
 					new PropertyModel<String>(am, "lessonsLearned"), "Lessons Learned", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel<String>("projectImpact",
+			add(new AmpTextAreaFieldPanel("projectImpact",
 					new PropertyModel<String>(am, "projectImpact"), "Project Impact", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel<String>("activitySummary",
+			add(new AmpTextAreaFieldPanel("activitySummary",
 					new PropertyModel<String>(am, "activitySummary"), "Activity Summary", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel<String>("contractingArrangements",
+			add(new AmpTextAreaFieldPanel("contractingArrangements",
 					new PropertyModel<String>(am, "contractingArrangements"), "Contracting Arrangements", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel<String>("linkedActivities",
+			add(new AmpTextAreaFieldPanel("linkedActivities",
 					new PropertyModel<String>(am, "linkedActivities"), "Linked Activities", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel<String>("conditionalitySequencing",
+			add(new AmpTextAreaFieldPanel("conditionalitySequencing",
 					new PropertyModel<String>(am, "condSeq"), "Conditionality and Sequencing", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel<String>("conditionalities",
+			add(new AmpTextAreaFieldPanel("conditionalities",
 					new PropertyModel<String>(am, "conditionality"), "Conditionalities", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel<String>("projectManagement",
+			add(new AmpTextAreaFieldPanel("projectManagement",
 					new PropertyModel<String>(am, "projectManagement"), "Project Management", true, AmpFMTypes.MODULE));
 	}
 

@@ -44,7 +44,7 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
 		date.getDate().setRequired(true);
 		add(date);
 		
-		AmpTextAreaFieldPanel<String> comments  = new AmpTextAreaFieldPanel<String>("comment", new PropertyModel<String>(model, "comment"), fieldPrefix + " Comments", false);
+		AmpTextAreaFieldPanel comments  = new AmpTextAreaFieldPanel("comment", new PropertyModel<String>(model, "comment"), fieldPrefix + " Comments", false);
 		add(comments);
 	}
 
@@ -63,7 +63,7 @@ public class AmpIndicatorGroupField extends AmpFieldPanel<AmpIndicatorValue>{
 			date.getDate().setRequired(true);
 		add(date);
 		
-		AmpTextAreaFieldPanel<String> comments = new AmpTextAreaFieldPanel<String>("comment", comment, fieldPrefix + " Comments", false);
+		AmpTextAreaFieldPanel comments = new AmpTextAreaFieldPanel("comment", comment, fieldPrefix + " Comments", false);
 		add(comments);
 	}
 }

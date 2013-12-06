@@ -60,8 +60,8 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle", new PropertyModel<String>(td, "title"), "Title",AmpFMTypes.MODULE,Boolean.TRUE);
 		name.setTextContainerDefaultMaxSize();
 		name.setOutputMarkupId(true);
-		AmpTextAreaFieldPanel<String> desc = new AmpTextAreaFieldPanel<String>("docDesc", new PropertyModel<String>(td, "description"), "Description", false, false, false);
-		AmpTextAreaFieldPanel<String> note = new AmpTextAreaFieldPanel<String>("docNote", new PropertyModel<String>(td, "note"), "Note", false, false, false);
+		AmpTextAreaFieldPanel desc = new AmpTextAreaFieldPanel("docDesc", new PropertyModel<String>(td, "description"), "Description", false, false, false);
+		AmpTextAreaFieldPanel note = new AmpTextAreaFieldPanel("docNote", new PropertyModel<String>(td, "note"), "Note", false, false, false);
 		AmpCategorySelectFieldPanel type = new AmpCategorySelectFieldPanel("docType", CategoryConstants.DOCUMENT_TYPE_KEY, new PropertyModel<AmpCategoryValue>(td, "type"), "Type", true, true);
 		//FileUploadField file = new FileUploadField("file", new AmpFileUploadModel(new PropertyModel<FileUpload>(td, "file")));
 		//file.setOutputMarkupId(true);

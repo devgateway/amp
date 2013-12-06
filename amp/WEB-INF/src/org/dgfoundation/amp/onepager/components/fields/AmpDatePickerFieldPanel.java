@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Date;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -50,8 +51,9 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 		add(dateWrapper);
 
 		
-		date = AmpDatePickerRegular.newDatePicker("date", model); 
-		
+		date = AmpDatePickerRegular.newDatePicker("date", model);
+        date.add(new AttributeModifier("disabled", "true"));
+
 		dateWrapper.add(date);
 		initFormComponent(date);
 		sameAsOtherDatePicker = new AmpAjaxCheckBoxFieldPanel(

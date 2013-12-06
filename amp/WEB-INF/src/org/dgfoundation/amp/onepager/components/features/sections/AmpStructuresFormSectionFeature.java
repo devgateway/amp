@@ -90,7 +90,7 @@ public class AmpStructuresFormSectionFeature extends
 				name.getTextContainer().setRequired(true);
 				item.add(name);
 				
-				final AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel<String>(structureModel, "description"),"Structure Description",false, true, true);
+				final AmpTextAreaFieldPanel description = new AmpTextAreaFieldPanel("description", new PropertyModel<String>(structureModel, "description"),"Structure Description",false, true, true);
 				description.setOutputMarkupId(true);
 
 				description.getTextAreaContainer().add(new AttributeModifier("cols", "20"));

@@ -80,8 +80,8 @@ public class Search extends Action {
 			if(tm != null){
 				Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
 				Collection<LoggerIdentifiable> resultActivities = new ArrayList<LoggerIdentifiable>();
-				Collection<LoggerIdentifiable> resultReports = new ArrayList<LoggerIdentifiable>();
-				Collection<LoggerIdentifiable> resultTabs = new ArrayList<LoggerIdentifiable>();
+				Collection<? extends LoggerIdentifiable> resultReports = new ArrayList<LoggerIdentifiable>();
+				Collection<? extends LoggerIdentifiable> resultTabs = new ArrayList<LoggerIdentifiable>();
 				Collection<LoggerIdentifiable> resultResources = new ArrayList<LoggerIdentifiable>();
 				Collection<LoggerIdentifiable> resultActivitiesWithRespOrgs = new ArrayList<LoggerIdentifiable>();
 				Collection<LoggerIdentifiable> resultActivitiesWithExeOrgs = new ArrayList<LoggerIdentifiable>();

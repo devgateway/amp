@@ -2092,7 +2092,7 @@ public class TeamUtil {
                    if (name != null) 
                    {
             	 	 	queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
-            	 	 	queryString +=  " order by " + reportNameHql;                   
+            	 	 //	queryString +=  " order by " + reportNameHql;                   
                    }
                    qry = session.createQuery(queryString);
                    qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
@@ -2124,7 +2124,7 @@ public class TeamUtil {
                   	 queryString += " and r.reportCategory=:repCat ";
                   }
 
-                queryString +=  " order by " + reportNameHql;
+              //  queryString +=  " order by " + reportNameHql;
                 qry = session.createQuery(queryString);
                 qry.setLong("teamId", teamId);
                 if ( getTabs!=null )
@@ -2160,7 +2160,7 @@ public class TeamUtil {
                if (name != null) 
                {
         	 	 	queryString += String.format(" and lower(%s) like lower(:name) ", reportNameHql);
-        	 	 	queryString +=  " order by " + reportNameHql;                   
+        	 	 	// queryString +=  " order by " + reportNameHql;                   
                }
          	  qry = session.createQuery(queryString); 
          	  qry.setLong("ampTeamMemId", memberId);
@@ -2187,6 +2187,8 @@ public class TeamUtil {
             logger.error("Exception from getAllTeamReports()", e);
             throw new RuntimeException(e);
         }
+        ArrayList<AmpReports> resultList	= new ArrayList<AmpReports>(col);
+        Collections.sort(resultList);
         return col;	
  	
  }

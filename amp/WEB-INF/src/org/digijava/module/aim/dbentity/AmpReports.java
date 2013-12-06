@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.ObjectUtils;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -29,13 +31,14 @@ import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.aim.util.ObjectUtil4Amp;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 @TranslatableClass (displayName = "Report")
-public class AmpReports implements Comparable, LoggerIdentifiable, Serializable, FilterDataSetInterface {
+public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, Serializable, FilterDataSetInterface {
 
 	private Long ampReportId;
 
@@ -244,14 +247,11 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 		this.members = members;
 	}
 
-	public int compareTo(Object o) {
-		if (!(o instanceof AmpReports))
-			throw new ClassCastException();
-
-		AmpReports rep = (AmpReports) o;
-		return (this.name.trim().toLowerCase().compareTo(rep.name.trim()
-				.toLowerCase()));
-
+	public int compareTo(AmpReports rep) {
+	
+		return 
+				ObjectUtil4Amp.nullSafeIgnoreCaseStringCompare(this.name, rep.getName(), true);
+		
 	}
 
 

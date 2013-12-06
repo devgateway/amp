@@ -2,11 +2,11 @@ package org.digijava.module.search.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -16,13 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
-import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -56,13 +53,12 @@ public class SearchUtil {
     public static final int EXECUTING_AGENCY = 5;
     public static final int IMPLEMENTING_AGENCY = 6;
 
-	public static Collection<LoggerIdentifiable> getReports(TeamMember tm,
+	public static Collection<? extends LoggerIdentifiable> getReports(TeamMember tm,
 			String string) {
 		// TODO: Unify this with getTabs()
 		string	= string.replace("*", "");	
 		
-		ArrayList<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
-		List<AmpReports> col = new ArrayList<AmpReports>();
+		List<AmpReports> col;
 
 		Session session = null;
 		try {
@@ -85,7 +81,7 @@ public class SearchUtil {
 						+ AmpReports.class.getName()
 						+ " r where r.drilldownTab=false AND (lower(" + reportNameHql + ") LIKE lower(:keyword) OR " + reportDescriptionHql + " LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
 						+ AmpTeamReports.class.getName()
-						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by " + reportNameHql;
+						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
 				qry = session.createQuery(queryString);
 
 				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
@@ -113,20 +109,18 @@ public class SearchUtil {
 			logger.error("Exception from getReports()", e);
 			throw new RuntimeException(e);
 		}
-
-		resultList.addAll(col);
-
+		ArrayList<AmpReports> resultList = new ArrayList<AmpReports>(col);
+		Collections.sort(resultList);
 		return resultList;
 
 	}
 
-	public static Collection<LoggerIdentifiable> getTabs(TeamMember tm,
+	public static Collection<? extends LoggerIdentifiable> getTabs(TeamMember tm,
 			String string) {
 		
 		string	= string.replace("*", "");	
-		ArrayList<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
 
-		List<AmpReports> col = new ArrayList<AmpReports>();
+		List<AmpReports> col;
 
 		Session session = null;
 		try {
@@ -149,7 +143,7 @@ public class SearchUtil {
 						+ AmpReports.class.getName()
 						+ " r where r.drilldownTab=true AND (lower(" + reportNameHql + ") LIKE lower(:keyword) OR " + reportDescriptionHql + " LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
 						+ AmpTeamReports.class.getName()
-						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by " + reportNameHql;
+						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
 				qry = session.createQuery(queryString);
 
 				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
@@ -178,7 +172,8 @@ public class SearchUtil {
 			throw new RuntimeException(e);
 		}
 
-		resultList.addAll(col);
+		ArrayList<AmpReports> resultList	= new ArrayList<AmpReports>(col);
+		Collections.sort(resultList);
 		return resultList;
 
 	}

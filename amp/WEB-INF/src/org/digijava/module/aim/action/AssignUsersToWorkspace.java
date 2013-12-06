@@ -70,13 +70,13 @@ public class AssignUsersToWorkspace extends Action {
 						return mapping.findForward(redirectWhere);
 	        }
 	        
-//	        AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(roleId);
-//			if (role != null) {
-//				AmpTeamMember newMember = new AmpTeamMember();
-//				newMember.setUser(user);
-//				newMember.setAmpTeam(ampTeam);
-//				newMember.setAmpMemberRole(role);
-//				
+	        AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(roleId);
+			if (role != null) {
+				AmpTeamMember newMember = new AmpTeamMember();
+				newMember.setUser(user);
+				newMember.setAmpTeam(ampTeam);
+				newMember.setAmpMemberRole(role);
+				
 //				// add the default application settings for the user  
 //				AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
 //				AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
@@ -89,13 +89,13 @@ public class AssignUsersToWorkspace extends Action {
 //				newAppSettings.setLanguage(ampAppSettings.getLanguage());
 //				newAppSettings.setUseDefault(new Boolean(true));
 //				newAppSettings.setValidation(ampAppSettings.getValidation());
-//				try{
-//					TeamUtil.addTeamMember(newMember,newAppSettings,site);
-//				}catch (Exception e){
-//						e.printStackTrace();
-//						logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "+ newMember.getAmpTeam().getName());
-//				}
-//			}
+				try{
+					TeamUtil.addTeamMember(newMember,site);
+				}catch (Exception e){
+						e.printStackTrace();
+						logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "+ newMember.getAmpTeam().getName());
+				}
+			}
 		}
 //		if (tmForm.getFromPage() != 1) {
 //			tmForm.setAmpRoles(null);

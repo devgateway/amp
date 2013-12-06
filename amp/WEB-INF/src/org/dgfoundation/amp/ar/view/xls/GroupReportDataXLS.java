@@ -106,9 +106,13 @@ public class GroupReportDataXLS extends XLSExporter {
 		//HSSFCell cell=this.getRegularCell(row);
 		//cell.setCellValue("xx");
 		//makeColSpan(grd.getTotalDepth());
-
-		this.createTrailCellsCase2();
-		
+		if(this instanceof PlainGroupReportDataXLS){
+			if(grd.getLevelDepth()==0){ 
+				this.createTrailCellsCase2();
+			}
+		}else{
+			this.createTrailCellsCase2();
+		}
 	}
 	
 	protected void invokeChildExporter( Viewable element) {

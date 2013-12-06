@@ -84,6 +84,9 @@ public class PlainTrailCellsXLS extends TrailCellsXLS {
 	
 	private GroupReportData getBaseReport(){
 		ReportData parent = ((ReportData) item).getParent();
+		if(parent==null){
+			return (GroupReportData) item;
+		}
 		while(true){
 			if (parent.getParent() != null){
 				parent = parent.getParent();
@@ -129,14 +132,17 @@ public class PlainTrailCellsXLS extends TrailCellsXLS {
 	protected void createAmountCells () {
 		ReportData grd = (ReportData) item;
 		Iterator i = grd.getTrailCells().iterator();
-		
+		int j=0;
 		//the first column will be under the hierarchy cell
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
 			if (element!=null ){
 				element.invokeExporter(this);
 			}else {
-				createCell("");
+				//only add the first cell if we have hierarchies on the report
+				if(j==0 && grd.getReportMetadata().getHierarchies().size()>0){
+					createCell("");
+				}
 			}
 		
 		}

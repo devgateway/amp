@@ -58,11 +58,11 @@ public class PlainGroupReportDataXLS extends GroupReportDataXLS {
 	@Override
 	protected void createTrailCellsCase2() {
 		GroupReportData grd = (GroupReportData) item;
-		if (grd.getParent() != null && ((GroupReportData)grd.getParent()).getLevelDepth() == 0){
+		//commented for issue AMP-16354 if (grd.getParent() != null && ((GroupReportData)grd.getParent()).getLevelDepth() == 0){
 			GroupReportData groupReport = (GroupReportData) item;
 			PlainTrailCellsXLS trails = new PlainTrailCellsXLS(this, groupReport);
 			trails.generate();
-		}
+		//}
 	}
 	@Override
 	protected void invokeChildExporter( Viewable element) {

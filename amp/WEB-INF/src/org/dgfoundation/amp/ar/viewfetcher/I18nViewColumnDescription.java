@@ -33,7 +33,12 @@ public class I18nViewColumnDescription
 			throw new RuntimeException("could not find a description for property " + propertyName + " of class " + clazz);		
 	}
 		
-	//constructs a calculated instance
+	/**
+	 * constructs a calculated instance
+	 * @param columnName
+	 * @param viewName
+	 * @param calculator
+	 */
 	public I18nViewColumnDescription(String columnName, String viewName, ColumnValueCalculator calculator)
 	{
 		this.columnName = columnName;
@@ -41,6 +46,19 @@ public class I18nViewColumnDescription
 		this.prop = new GeneratedPropertyDescription(viewName, columnName, calculator);
 	}	
 	
+	/**
+	 * constructs a DG_EDITOR-backed instance
+	 * @param columnName
+	 * @param viewName
+	 * @param property
+	 */
+	public I18nViewColumnDescription(String columnName, String viewName, String languageColumnName)
+	{
+		this.columnName = columnName;
+		this.indexColumnName = "amp_activity_id";
+		this.prop = new DgEditorPropertyDescription(viewName, columnName, languageColumnName);
+	}	
+
 	@Override
 	public String toString()
 	{

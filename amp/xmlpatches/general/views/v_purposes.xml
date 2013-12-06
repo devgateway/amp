@@ -20,7 +20,11 @@
 		<script>
 			<lang delimiter=";" type="postgres">
                     DROP VIEW IF EXISTS v_purposes;
-			    	CREATE OR REPLACE VIEW v_purposes AS SELECT a.amp_activity_id, e.body AS ebody FROM amp_activity_version a, dg_editor e WHERE ((a.purpose = (e.editor_key)::text) AND (btrim(e.body) != ''::text)) ORDER BY a.amp_activity_id;;;
+			    	CREATE OR REPLACE VIEW v_purposes AS 
+			    		SELECT a.amp_activity_id, btrim(e.body) AS ebody, e.language AS locale 
+						FROM amp_activity_version a, dg_editor e 
+						WHERE (a.purpose = (e.editor_key)::text) AND (btrim(e.body) != ''::text)
+						ORDER BY amp_activity_id;;;
         		</lang>
 		</script>
 	</apply>

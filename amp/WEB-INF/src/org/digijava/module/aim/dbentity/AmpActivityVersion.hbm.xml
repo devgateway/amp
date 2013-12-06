@@ -12,17 +12,17 @@
 		<property name="budgetprogram" column="budget_program" type="java.lang.Long"/>
 		<property name="budget" column="budget" type="java.lang.Integer" />
 		
-		<property name="description" column="description" type="text" />
-		<property name="lessonsLearned" column="lessons_learned" type="text" />
-		<property name="objective" column="objectives" type="text" />
-		<property name="results" column="results" type="text" />
-		<property name="purpose" column="purpose" type="text" />
+		<property name="description" column="description" type="text"  index="amp_activity_version_description_idx" />
+		<property name="lessonsLearned" column="lessons_learned" type="text"  index="amp_activity_version_lessons_learned_idx" />
+		<property name="objective" column="objectives" type="text" index="amp_activity_version_objectives_idx" />
+		<property name="results" column="results" type="text" index="amp_activity_version_results_idx" />
+		<property name="purpose" column="purpose" type="text" index="amp_activity_version_purpose_idx" />
 
-		<property name="projectComments" column="projectComments" type="text" />
+		<property name="projectComments" column="projectComments" type="text" index="amp_activity_version_project_comments_idx" />
 		
-		<property name="projectImpact" column="project_impact" type="text" />
-		<property name="activitySummary" column="activity_summary" type="text" />
-		<property name="contractingArrangements" column="contracting_arrangements" type="text" />
+		<property name="projectImpact" column="project_impact" type="text" index="amp_activity_version_project_impact_idx" />
+		<property name="activitySummary" column="activity_summary" type="text" index="amp_activity_version_activity_summary_idx" />
+		<property name="contractingArrangements" column="contracting_arrangements" type="text" index="amp_activity_version_contracting_arrangements_idx" />
 		<property name="condSeq" column="cond_seq" type="text" />
 		<property name="linkedActivities" column="linked_activities" type="text" />
 		<property name="conditionality" column="conditionality" type="text" />
@@ -61,8 +61,8 @@
 		<property name="contactName" column="contact_name" type="java.lang.String" /><!-- defunct -->
 
 
-		<property name="comments" column="comments" type="text" />
-		<property name="statusReason" column="status_reason" type="text" />
+		<property name="comments" column="comments" type="text" index="amp_activity_version_comments_idx" />
+		<property name="statusReason" column="status_reason" type="text" index="amp_activity_version_status_reason_idx" />
 
 		<property name="proposedStartDate" column="proposed_start_date" type="java.util.Date" />
 		<property name="actualStartDate" column="actual_start_date" type="java.util.Date" />
@@ -78,7 +78,7 @@
 		<property name="iatiLastUpdatedDate" column="iati_last_update_date" type="java.util.Date" />
 		
 		
-		<property name="programDescription" column="program_description" type="text" />
+		<property name="programDescription" column="program_description" type="text" index="amp_activity_version_program_description_idx" />
 		<property name="contractors" column="contractors" type="text" />
 
 		<property access="field" name="funAmount" column="proj_cost_amount" type="java.lang.Double" />

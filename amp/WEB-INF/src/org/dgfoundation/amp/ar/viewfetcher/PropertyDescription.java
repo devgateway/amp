@@ -11,7 +11,7 @@ import java.util.*;
 public interface PropertyDescription 
 {
 	/**
-	 * false - this is a regulat translated column. true - this is a row-by-row calculated column, it shouldn't be cached and can't be "generateValues()"'ed
+	 * false - this is a regular translated column. true - this is a row-by-row calculated column, it shouldn't be cached and can't be "generateValues()"'ed
 	 * @return
 	 */
 	public boolean isCalculated();

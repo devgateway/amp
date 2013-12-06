@@ -65,10 +65,11 @@ public class TextColWorker extends ColumnWorker {
 		}
 		}
 		
-		
+		boolean thirdColumnIsLanguage = (rsmd.getColumnCount() == 3) && rsmd.getColumnLabel(1).equals("amp_activity_id") && 
+				(rsmd.getColumnLabel(3).equals("locale") || rsmd.getColumnLabel(3).equals("language"));
 		
 		Long id = null;
-		if (rsmd.getColumnCount() > 2) {
+		if (rsmd.getColumnCount() > 2 && (!thirdColumnIsLanguage)) {
 			id = new Long(rs.getLong(3));
 		}
 		

@@ -503,7 +503,8 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
 				x = (Items) list.get(actId);
-				x.amp_id = rs.getString("amp_id");
+				if (x != null)				 
+					x.amp_id = rs.getString("amp_id");
 				isNext = rs.next();
 				//
 			}
@@ -516,8 +517,8 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
 				x = (Items) list.get(actId);
-				//you can't use this "trim(dg_editor.body)" as column name .... 
-				x.description = rs.getString("ebody");
+				if (x != null)				 
+					x.description = rs.getString("ebody");
 				isNext = rs.next();
 				//
 			}
@@ -529,9 +530,9 @@ public class LuceneUtil implements Serializable {
 			isNext = rs.first();
 			while (isNext){
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-				x = (Items) list.get(actId);
-				//you can't use "trim(dg_editor.body)" as column name .... 
-				x.objective = rs.getString("ebody");
+				x = (Items) list.get(actId);			
+				if (x != null)				 
+					x.objective = rs.getString("ebody");
 				isNext = rs.next();
 				//
 			}
@@ -560,7 +561,8 @@ public class LuceneUtil implements Serializable {
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
 				x = (Items) list.get(actId);
 				//you can't use "trim(dg_editor.body)" as column name .... 
-				x.results = rs.getString("ebody");
+				if (x != null)
+					x.results = rs.getString("ebody");
 				isNext = rs.next();
 				//
 			}
@@ -575,7 +577,8 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
 				x = (Items) list.get(actId);
-				x.numcont = rs.getString("numcont");
+				if (x != null)				 
+					x.numcont = rs.getString("numcont");
 				isNext = rs.next();
 				//
 			}
@@ -591,9 +594,10 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 		    	int currActId = rs.getInt("amp_activity_id");
 		    	x = (Items) list.get(currActId);
-		    	if (rs.getString("code")!=null){
-		    	    x.componentcode.add(rs.getString("code"));
-		    	}
+				if (x != null)				 
+					if (rs.getString("code")!=null){
+						x.componentcode.add(rs.getString("code"));
+					}
 				isNext = rs.next();
 			}
 			
@@ -607,7 +611,8 @@ public class LuceneUtil implements Serializable {
 				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
 				x = (Items) list.get(actId);
 				//you can't use "trim(dg_editor.body)" as column name .... 
-				x.contractingArr = rs.getString("body");
+				if (x != null)				 
+					x.contractingArr = rs.getString("body");
 				isNext = rs.next();
 			}
 			
@@ -620,7 +625,8 @@ public class LuceneUtil implements Serializable {
 			while (isNext){
 				int actId = Integer.parseInt(rs.getString("activity"));
 				x = (Items) list.get(actId);
-				x.newBudgetNumber = rs.getString("budget_codes");
+				if (x != null)				 
+					x.newBudgetNumber = rs.getString("budget_codes");
 				isNext = rs.next();
 			}
 			

@@ -113,7 +113,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 			{
 				//String className =prop.className;
 			
-				Set<Long> ids = usedIds.get(colNr);
+				Set<Long> ids = Collections.unmodifiableSet(usedIds.get(colNr));
 				Map<Long, String> values = prop.generateValues(connection, ids, locale);
 				cachers.get(prop).importValues(values);
 			}

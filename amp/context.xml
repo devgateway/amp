@@ -3,9 +3,29 @@
 allowLinking="true" antiJARLocking="" antiResourceLocking="" clearReferencesStopTimerThreads="true"
 clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTlds="false">
   <Environment name="hostname" value="" type="java.lang.String"/> 
-  <Resource defaultTransactionIsolation="READ_COMMITTED" driverClassName="com.mysql.jdbc.Driver" maxActive="500" maxIdle="30" maxWait="5000" 
-  name="ampDS" removeAbandoned="true" logAbandoned="true" type="javax.sql.DataSource" url="" username="" password=""
-  validationQuery="SELECT 1" testOnBorrow="true" testWhileIdle="true" timeBetweenEvictionRunsMillis="10000" />
+  <Resource 
+  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" 
+  defaultTransactionIsolation="READ_COMMITTED" 
+  driverClassName="com.mysql.jdbc.Driver" 
+  maxActive="500"
+  maxIdle="30"
+  maxWait="5000"
+  jmxEnabled="true"
+  name="ampDS" 
+  removeAbandoned="true" 
+  removeAbandonedTimeout="7200" 
+  suspectTimeout="3600" 
+  logAbandoned="true" 
+  type="javax.sql.DataSource" 
+  url="" 
+  username="" 
+  password="" 
+  validationQuery="SELECT 1" 
+  testOnBorrow="true" 
+  testWhileIdle="true" 
+  testOnReturn="true"
+  timeBetweenEvictionRunsMillis="20000" 
+  jdbcInterceptors="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer"/>
   <Manager className="org.apache.catalina.session.PersistentManager" debug="0" distributable="false" saveOnRestart="false">
   	<Store className="org.apache.catalina.session.FileStore"/>
   </Manager>

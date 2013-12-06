@@ -8,7 +8,7 @@
 	<name>Aid Management Platform</name>
 	<properties>
 		<wicketVersion>6.7.0</wicketVersion>
-		<tomcatVersion>7.0.37</tomcatVersion>
+		<tomcatVersion>7.0.47</tomcatVersion>
 		<springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
 		<springVersion>3.0.7.RELEASE</springVersion>		 
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -152,6 +152,13 @@
 			<artifactId>commons-collections</artifactId>
 			<version>3.1</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>${tomcatVersion}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>

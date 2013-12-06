@@ -219,7 +219,7 @@
 
     YAHOO.util.Event.addListener(window, "load", initWorkspaceManagerScript);
     function returnYesOrNo (boolStr) {
-	    if (boolStr == 'true')
+	    if (boolStr == 'true' || boolStr == 'yes')
 			return '<digi:trn jsFriendly="true">yes</digi:trn>';
 		return '<digi:trn jsFriendly="true">no</digi:trn>';
     }

@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
+import org.dgfoundation.amp.ar.moldovamigration.MoldovaTranslationsSplit;
 import org.dgfoundation.amp.esri    .EsriTestCases;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -24,6 +25,8 @@ public class AllTests_amp27 {
 	public static Test suite() {
 		
 		setUp();
+		new MoldovaTranslationsSplit().doMoldovaTranslations();
+		
 //		LiberiaFiller.fillInDatabase();
 		TestSuite suite = new TestSuite(AllTests_amp27.class.getName());
 		//$JUnit-BEGIN$
@@ -48,7 +51,8 @@ public class AllTests_amp27 {
 		try
 		{ 
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_27";
+			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_27";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";
     	
 			ResourceStreamHandlerFactory.installIfNeeded();
 

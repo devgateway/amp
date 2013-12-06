@@ -976,14 +976,13 @@ public class DelegResultSet implements ResultSet {
         }
     }
 
-	@Override
 	public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
-		return _res.getObject(columnIndex, type);
+		throw new UnsupportedOperationException("not implemented!");
+		//return _res.getObject(columnIndex, type);
 	}
 
-	@Override
-	public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
-		return _res.getObject(columnLabel, type);
+	public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {		
+		throw new UnsupportedOperationException("not implemented!");
 	}
 
 	@Override

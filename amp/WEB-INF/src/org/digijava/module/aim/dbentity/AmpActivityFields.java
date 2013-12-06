@@ -77,7 +77,8 @@ LoggerIdentifiable, Cloneable {
 	protected String ampId ;
 
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
-	@VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true) @TranslatableField
+	@VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
+	@TranslatableField
 	protected String name ;
 	@VersionableFieldTextEditor(fieldTitle = "Activity Description")
 	protected String description ;

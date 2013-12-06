@@ -25,7 +25,7 @@ public class TLSUtils {
 	private static String forcedLangCode = null;
 	
 	public static String getLangCode() {
-		
+		//if (System.currentTimeMillis() > 1) return "en";// BOZO DO NOT COMMIT THIS!
 		if (TLSUtils.forcedLangCode != null)
 			return TLSUtils.forcedLangCode;
 

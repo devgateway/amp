@@ -62,7 +62,7 @@ function printAllPreview (){
 	window.open("/help/helpActions.do?actionType=printPreviewForWholeHelp&mode="+mode);
 }
 
-function remove(){
+function removeTopic(){
 	var confirmMessage = "<digi:trn>Are you sure you want to remove this topic?</digi:trn>";
     if(confirm(confirmMessage) && validate(getKey())){
         var actUrl = "<%=removeTopic%>"+"~helpTopicId="+selectedTopicId+"~wizardStep=0~multi=false";
@@ -200,7 +200,7 @@ function GetXmlHttpObj()	{
 
                                     <a class="link" onclick="create();" title="${topicCreate}" > <digi:trn>Create Topic</digi:trn></a> |
 
-                                    <a class="link" onclick="remove();" title="${topicDelete}" ><digi:trn>Remove Topic</digi:trn></a> |
+                                    <a class="link" onclick="removeTopic();" title="${topicDelete}" ><digi:trn>Remove Topic</digi:trn></a> |
 
                                     <a class="link" onclick="saveTreeState();" title="${savetreeState}" ><digi:trn>Save Tree State</digi:trn></a>
                                  </digi:secure>

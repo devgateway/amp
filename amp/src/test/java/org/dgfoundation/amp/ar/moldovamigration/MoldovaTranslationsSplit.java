@@ -29,6 +29,7 @@ public class MoldovaTranslationsSplit
 		doWorkspaceNamesTranslations();
 		doProjectNamesTranslations();
 		doPurposesTranslations();
+		doProjectImpactTranslations();
 		doProjectDescriptionTranslations();
 		doProjectObjectivesTranslations();
 		doProjectResultsTranslations();
@@ -37,6 +38,16 @@ public class MoldovaTranslationsSplit
 		System.out.format("conversion done with %d warning messages\n", warningMessages.size());
 		for(int i = 0; i < warningMessages.size(); i++)
 			System.out.println(warningMessages.get(i).toString());
+		
+		try
+		{
+			PersistenceManager.getRequestDBSession().getTransaction().commit();
+			PersistenceManager.getRequestDBSession().close();
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
 		throw new RuntimeException("gata pe azi");
 	}
 	
@@ -55,7 +66,7 @@ public class MoldovaTranslationsSplit
 	}
 
 	/**
-	 * v_descriptions
+	 * v_description
 	 */
 	protected void doProjectDescriptionTranslations()
 	{
@@ -97,7 +108,21 @@ public class MoldovaTranslationsSplit
 	}	
 
 	/**
-	 * v_results
+	 * v_proj_impact  AKA Action Components
+	 */
+	protected void doProjectImpactTranslations()
+	{
+		List<TranslationsPack> translations = collectTranslations("project_impact", true, '/');
+		System.out.println("=== PROJECT IMPACT SUMMARIES ===");
+		for(TranslationsPack pack: translations)
+		{
+			System.out.println(pack);
+			saveDgEditorTranslation(pack);
+		}
+	}	
+	
+	/**
+	 * NO VIEW FOR THIS
 	 */
 	protected void doProjectActivitySummaryTranslations()
 	{
@@ -354,15 +379,26 @@ public class MoldovaTranslationsSplit
 				stringifyObject(usedEnglishTranslation), property.className, pack.id, property.propertyName);
 		executeQuery(updateEnglishTranslationQuery);
 		
-		String updateRomanianTranslationQuery = String.format("UPDATE amp_content_translation SET translation = %s WHERE object_class = '%s' AND object_id = %d AND field_name = '%s' and locale='ro'", 
-				stringifyObject(usedRomanianTranslation), property.className, pack.id, property.propertyName);
-		int numberAffected = executeQuery(updateRomanianTranslationQuery);
-		if (numberAffected < 1)
+		if (usedRomanianTranslation.equals(usedEnglishTranslation))
 		{
-			// update did nothing, e.g. there is no Romanian translation existing in the database
-			String createRomanianTranslationQuery = String.format("INSERT INTO amp_content_translation(id, object_class, object_id, field_name, locale, translation) VALUES(nextval('amp_content_translation_seq'), '%s', %d, '%s', 'ro', %s)", 
-					 property.className, pack.id, property.field, stringifyObject(usedRomanianTranslation));
-			executeQuery(createRomanianTranslationQuery);
+			// Romanian and English translations match -> delete any existing Romanian translation
+			String deleteRomanianTranslationQuery = String.format("DELETE FROM amp_content_translation WHERE object_class = '%s' AND object_id = %d AND field_name = '%s' and locale='ro'", 
+					property.className, pack.id, property.propertyName);
+			executeQuery(deleteRomanianTranslationQuery);
+		}
+		else
+		{
+			// Romanian and English translations do not match -> update / add Romanian translation
+			String updateRomanianTranslationQuery = String.format("UPDATE amp_content_translation SET translation = %s WHERE object_class = '%s' AND object_id = %d AND field_name = '%s' and locale='ro'", 
+				stringifyObject(usedRomanianTranslation), property.className, pack.id, property.propertyName);
+			int numberAffected = executeQuery(updateRomanianTranslationQuery);
+			if (numberAffected < 1)
+			{
+				// update did nothing, e.g. there is no Romanian translation existing in the database
+				String createRomanianTranslationQuery = String.format("INSERT INTO amp_content_translation(id, object_class, object_id, field_name, locale, translation) VALUES(nextval('amp_content_translation_seq'), '%s', %d, '%s', 'ro', %s)", 
+					 property.className, pack.id, property.propertyName, stringifyObject(usedRomanianTranslation));
+				executeQuery(createRomanianTranslationQuery);
+			}
 		}
 		
 	}

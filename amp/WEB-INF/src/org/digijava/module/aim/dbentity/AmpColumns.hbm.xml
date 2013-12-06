@@ -8,7 +8,7 @@
 				<param name="sequence">AMP_COLUMNS_seq</param>
 			</generator>
 		</id>
-		<property column="columnName" name="columnName" type="java.lang.String" />
+		<property column="columnName" name="columnName" type="java.lang.String" unique="true" />
 		<property column="aliasName" name="aliasName" type="java.lang.String" />
 		<property column="cellType" name="cellType" type="java.lang.String" />
 		<property column="extractorView" name="extractorView" type="java.lang.String" />

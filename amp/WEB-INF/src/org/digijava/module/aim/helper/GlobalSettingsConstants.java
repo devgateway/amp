@@ -136,5 +136,7 @@ public class GlobalSettingsConstants {
     public static final String ACTIVITY_TITLE_SIMILARITY_SENSITIVITY = "Activity Title Similarity Sensitivity";
     
     public static final String UNLINKED_FUNDING_IN_PLEDGES_REPORTS = "Unlinked commitments and disburesements in pledges reports";
+ 
+    public static  final String  READONLY_DATES= "Make Activity dates read only";
     
 }

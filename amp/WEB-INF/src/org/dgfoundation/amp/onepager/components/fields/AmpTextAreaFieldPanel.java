@@ -118,6 +118,17 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 
     @Override
     protected void onAjaxOnError(AjaxRequestTarget target) {
+        if (translationDecorator instanceof TranslationDecorator){
+            ((TranslationDecorator) translationDecorator).getSwitchingDisabled().setObject(Boolean.TRUE);
+        }
         TranslatableValidators.onError(target, formComponent, translationDecorator);
+    }
+
+    @Override
+    protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+        if (translationDecorator instanceof TranslationDecorator){
+            //clear switching disabled
+            ((TranslationDecorator) translationDecorator).getSwitchingDisabled().setObject(Boolean.FALSE);
+        }
     }
 }

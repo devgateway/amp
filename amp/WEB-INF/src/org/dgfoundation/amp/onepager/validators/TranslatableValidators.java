@@ -61,7 +61,8 @@ public class TranslatableValidators implements IValidator<String> {
                 //since the validation is only done for the current language
                 tdm.getLangModel().setObject(null);
                 formComponent.clearInput();
-                target.add(translationDecorator);
+                if (translationDecorator != null)
+                    target.add(translationDecorator);
             }
         }
     }

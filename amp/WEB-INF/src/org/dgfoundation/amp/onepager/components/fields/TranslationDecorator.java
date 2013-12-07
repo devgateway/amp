@@ -35,6 +35,8 @@ public class TranslationDecorator extends Panel {
     private TranslationDecoratorModel tdm;
     private Model<String> langModel;
 
+    private IModel<Boolean> switchingDisabled = new Model<Boolean>(Boolean.FALSE);
+
     private TranslationDecorator(String id, final IModel<?> model, final Component component) {
         super(id, model);
 
@@ -69,6 +71,8 @@ public class TranslationDecorator extends Panel {
                 IndicatingAjaxLink link = new IndicatingAjaxLink("link") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
+                        if (switchingDisabled.getObject())
+                            return; //error state or switching disabled
                         if (language.equals(getSession().getLocale().getLanguage()))
                             langModel.setObject(null);
                         else
@@ -159,5 +163,9 @@ public class TranslationDecorator extends Panel {
             }
         }
         return false;
+    }
+
+    public IModel<Boolean> getSwitchingDisabled() {
+        return switchingDisabled;
     }
 }

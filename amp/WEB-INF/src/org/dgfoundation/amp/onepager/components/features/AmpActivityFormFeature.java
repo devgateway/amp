@@ -55,11 +55,7 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
-import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -557,7 +553,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
     private void processAndUpdateForm(boolean notDraft, IModel<AmpActivityVersion> am, final Form<?> form, final AjaxRequestTarget target, IndicatingAjaxButton button) {
         am.setObject(am.getObject());
-        toggleSemanticValidation(notDraft, form,target);
+        toggleSemanticValidation(notDraft, form, target);
+        form.process(button);
         form.visitChildren(AbstractTextComponent.class,
                 new IVisitor<Component, Object>() {
                     @Override
@@ -566,11 +563,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                         AbstractTextComponent atc = (AbstractTextComponent) component;
                         boolean required = false;
                         List<IValidator> validators = atc.getValidators();
-                        for (IValidator validator: validators){
-                            if (validator instanceof ValidatorAdapter && ((ValidatorAdapter) validator).getValidator() instanceof TranslatableValidators){
-                                List<IValidator<? super String>> nestedValidators = ((TranslatableValidators)((ValidatorAdapter) validator).getValidator()).getValidators();
-                                for (IValidator nValidator: nestedValidators)
-                                    if (nValidator instanceof ValidatorAdapter && ((ValidatorAdapter) nValidator).getValidator() instanceof StringRequiredValidator){
+                        for (IValidator validator : validators) {
+                            if (validator instanceof ValidatorAdapter && ((ValidatorAdapter) validator).getValidator() instanceof TranslatableValidators) {
+                                List<IValidator<? super String>> nestedValidators = ((TranslatableValidators) ((ValidatorAdapter) validator).getValidator()).getValidators();
+                                for (IValidator nValidator : nestedValidators)
+                                    if (nValidator instanceof ValidatorAdapter && ((ValidatorAdapter) nValidator).getValidator() instanceof StringRequiredValidator) {
                                         required = true;
                                         break;
                                     }
@@ -581,39 +578,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                             TranslationDecoratorModel tdm = (TranslationDecoratorModel) model;
 
                             if (tdm.getOriginalModel().getObject() == null || tdm.getOriginalModel().getObject().trim().isEmpty()) {
-                                ((AbstractTextComponent) component).inputChanged();
-                                component.modelChanged();
                                 ((AbstractTextComponent) component).error(new ValidationError().addKey("Required"));
+                                TranslatableValidators.onError(target, atc, null);
                                 target.add(component.getParent());
-                                form.error("");
                             }
                         }
                     }
                 });
-        form.process(button);
 
-        /*//Force model change for components that are translatable
-        form.visitChildren(AbstractTextComponent.class,
-                new IVisitor<Component, Object>() {
-                    @Override
-                    public void component(Component component, IVisit<Object> objectIVisit) {
-                        IModel<?> model = component.getDefaultModel();
-                        if (model instanceof TranslationDecoratorModel){
-                            TranslationDecoratorModel tdm = (TranslationDecoratorModel) model;
-                            if (tdm.getLangModel().getObject() != null){
-                                tdm.getLangModel().setObject(null); //reset to current form language
-                                AbstractTextComponent atc = (AbstractTextComponent) component;
-                                atc.clearInput();
-                                target.add(component.getParent());
-                                target.add(component);
-                                String js = String.format("$('#%s').blur();", atc.getMarkupId());
-                                target.appendJavaScript(js);
-                                if (((AbstractTextComponent) component).isValid())
-                                    form.error(""); //signal there's an error in the form without reprocessing it
-                            }
-                        }
-                    }
-                });*/
     }
 
 

@@ -92,7 +92,7 @@ public class TranslationDecoratorModel extends LocaleAwareProxyModel<String> {
 
             if (act == null){
                 //either we're dealing with a new object or it hasn't got a translation yet
-                act = new AmpContentTranslation(className, objId, fieldName, localeOfLangModel(), "");
+                act = new AmpContentTranslation(className, objId, fieldName, localeOfLangModel(), null);
             }
             setToHash(className, objId, fieldName, localeOfLangModel(), act);
         }

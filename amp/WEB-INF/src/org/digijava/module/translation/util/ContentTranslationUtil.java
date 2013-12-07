@@ -171,7 +171,8 @@ public class ContentTranslationUtil {
                         Long revObjId = (objId == null ? System.identityHashCode(obj) : objId);
                         for (AmpContentTranslation ft: formTranslations){
                             if (ft.getObjectClass().equals(objClass) && ft.getObjectId().equals(revObjId) &&
-                                    ft.getFieldName().equals(fieldName)){
+                                    ft.getFieldName().equals(fieldName) && ft.getTranslation() != null){
+                                //we're not taking into consideration ACT's with the translation null, this haven't been filled
                                 if (formFieldTrns == null)
                                     formFieldTrns = new ArrayList<AmpContentTranslation>();
                                 formFieldTrns.add(ft);

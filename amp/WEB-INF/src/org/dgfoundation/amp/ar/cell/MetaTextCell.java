@@ -49,7 +49,7 @@ public class MetaTextCell extends TextCell {
 		if( !getDraftFlag() && "started".equals(getStatusFlag()) ) return "GREEN";
 		if( !getDraftFlag() && "edited".equals(getStatusFlag()) ) return "GREEN";
 		if( getDraftFlag()) return "RED";
-		if (!getDraftFlag() && "approved".equals(getStatusFlag())) return "#05528B";
+		if (!getDraftFlag() && ("approved".equals(getStatusFlag()) || "startedapproved".equals(getStatusFlag()))) return "#05528B";
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

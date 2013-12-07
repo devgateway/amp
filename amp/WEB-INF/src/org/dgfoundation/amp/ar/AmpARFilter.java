@@ -1176,7 +1176,7 @@ public class AmpARFilter extends PropertyListable {
 				case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
 					actStatusValue.append(" ( (approval_status='edited' or approval_status='approved') and draft is true ) ");break;
 				case 4://Validated Activities 
-					actStatusValue.append("(approval_status='approved' and draft<>true)");break;
+					actStatusValue.append(" (approval_status in ('approved', 'startedapproved') and draft<>true)");break;
 				default:actStatusValue.append("1=1 ");	break;
 				}
 				actStatusValue.append(" OR ");

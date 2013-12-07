@@ -286,8 +286,6 @@ public class DbUtil {
         				if (editor.getLanguage().equalsIgnoreCase(language) && !"".equalsIgnoreCase(editor.getBody())){
         					item = editor;
         					break;
-        				}else if (!"".equalsIgnoreCase(editor.getBody())){
-        					item= editor;
         				}
         			}
             }

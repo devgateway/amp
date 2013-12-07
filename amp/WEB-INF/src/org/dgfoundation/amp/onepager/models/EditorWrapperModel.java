@@ -100,6 +100,8 @@ public class EditorWrapperModel extends LocaleAwareProxyModel<String> {
             trnSet = new HashMap<String, String>();
             valuesMap.put(keyModel.getObject(), trnSet);
         }
+        if (object == null)
+            object = ""; //null would have toggle the getObject to retrieve it from the db
         trnSet.put(localeOfLangModel(), object);
 	}
 	

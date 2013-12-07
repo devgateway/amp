@@ -130,5 +130,6 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
             //clear switching disabled
             ((TranslationDecorator) translationDecorator).getSwitchingDisabled().setObject(Boolean.FALSE);
         }
+        target.add(translationDecorator);
     }
 }

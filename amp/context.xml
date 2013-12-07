@@ -13,8 +13,8 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   jmxEnabled="true"
   name="ampDS" 
   removeAbandoned="true" 
-  removeAbandonedTimeout="7200" 
-  suspectTimeout="3600" 
+  removeAbandonedTimeout="3600" 
+  suspectTimeout="1800" 
   logAbandoned="true" 
   type="javax.sql.DataSource" 
   url="" 
@@ -22,10 +22,9 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   password="" 
   validationQuery="SELECT 1" 
   testOnBorrow="true" 
-  testWhileIdle="true" 
-  testOnReturn="true"
+  testWhileIdle="false"
   timeBetweenEvictionRunsMillis="20000" 
-  jdbcInterceptors="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer"/>
+  jdbcInterceptors="ConnectionState;StatementFinalizer;ResetAbandonedTimer;SlowQueryReportJmx(threshold=60000)"/>
   <Manager className="org.apache.catalina.session.PersistentManager" debug="0" distributable="false" saveOnRestart="false">
   	<Store className="org.apache.catalina.session.FileStore"/>
   </Manager>

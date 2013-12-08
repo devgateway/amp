@@ -13,6 +13,17 @@
 					SET columnid = 
 						(SELECT max(columnid) FROM amp_columns col 
 							WHERE col.columnname = (SELECT columnname FROM amp_columns col2 where col2.columnid = arc.columnid ));
+							
+				UPDATE amp_columns_filters arc 
+					SET column_id = 
+						(SELECT max(columnid) FROM amp_columns col 
+							WHERE col.columnname = (SELECT columnname FROM amp_columns col2 where col2.columnid = arc.column_id ));
+
+				UPDATE amp_report_hierarchy arc 
+					SET columnid = 
+						(SELECT max(columnid) FROM amp_columns col 
+							WHERE col.columnname = (SELECT columnname FROM amp_columns col2 where col2.columnid = arc.columnid ));
+							
 				DELETE FROM amp_columns a WHERE (SELECT count(*) FROM amp_columns b WHERE a.columnname = b.columnname AND b.columnid &gt; a.columnid) &gt; 0;
 				ALTER TABLE amp_columns ADD CONSTRAINT unique_amp_column_name UNIQUE(columnname);
 			</lang>

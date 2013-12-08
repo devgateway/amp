@@ -103,4 +103,21 @@ public class ReportsUtil {
 		}
 		return null;
 	}	
+	
+	/**
+	 * throws an exception containing the error message if the database does not respect some kind of minimum sanity checks. Returns normally if everything is fine
+	 */
+	public static void checkDatabaseSanity() throws Exception
+	{
+		List<?> res = PersistenceManager.getRequestDBSession().createSQLQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE " + 
+				"(SELECT count(*) from amp_report_column arc2 WHERE arc2.amp_report_id = arc.amp_report_id AND arc2.columnid = arc.columnid) > 1").list();
+		if (!res.isEmpty())
+			throw new RuntimeException("The following reports have a column repeated at least twice each: amp_report_id IN (" + Util.toCSString(res) + ")");
+		
+		res = PersistenceManager.getRequestDBSession().createSQLQuery("select DISTINCT(columnname) from amp_columns col WHERE " + 
+				"(SELECT count(*) FROM amp_columns col2 WHERE col.columnname = col2.columnname) > 1").list();
+		
+		if (!res.isEmpty())
+			throw new RuntimeException("The following column(s) are defined at least twice in amp_columns: (" + Util.toCSString(res) + ")");
+	}
 }

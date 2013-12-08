@@ -6,16 +6,21 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
+import org.digijava.module.aim.annotations.reports.Identificator;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Session;
+import org.hibernate.annotations.Index;
 
 
 public class AmpReportColumn  implements Serializable, Comparable
 {
+//	@Identificator
+//	private Long id;
+	
 	private static Logger logger = Logger.getLogger(AmpReportColumn.class);
 	@ColumnLike
 	private AmpColumns column;
@@ -24,17 +29,17 @@ public class AmpReportColumn  implements Serializable, Comparable
 	@Level
 	private AmpCategoryValue level;
 	
-	private boolean generated;
+//	private boolean generated;
 	
 	private static AmpCategoryValue defaultLevel = null;
 	
 	public AmpReportColumn() {
 		
 		try {
-			Session dbSession = PersistenceManager.getRequestDBSession();
+//			Session dbSession = PersistenceManager.getRequestDBSession();
 			if ( defaultLevel==null )
 				defaultLevel=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
-		} catch (DgException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.error(e);

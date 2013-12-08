@@ -26,6 +26,7 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
@@ -298,11 +299,24 @@ public class AMPStartupListener extends HttpServlet implements
 			}
 			else 
 				logger.info("\t... JackRabbit startup failed!");
-				
+			
+			checkReportColumnsSanity();
 			
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
 			e.printStackTrace(System.out);
+		}
+	}
+	
+	protected void checkReportColumnsSanity()
+	{
+		try
+		{
+			ReportsUtil.checkDatabaseSanity();
+		}
+		catch(Exception e)
+		{
+			throw new Error("database does not conform to minimum sanity requirements, shutting down AMP", e);
 		}
 	}
 	

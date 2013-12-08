@@ -4,12 +4,17 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 
+@TranslatableClass(displayName = "Component Type")
 public class AmpComponentType implements ARDimensionable, Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	private Long type_id;
+	
+	@TranslatableField
 	private String name;
 	private String code;
 	private Boolean enable;

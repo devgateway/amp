@@ -11,6 +11,8 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -434,6 +436,16 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_zones").
 						addColumnDef(new I18nViewColumnDescription("location_name", "location_id", AmpCategoryValueLocations.class, "name")));
 				
+				
+				addViewDef(this, new I18nViewDescription("v_components").
+						addColumnDef(new I18nViewColumnDescription("title", "amp_component_id", AmpComponent.class, "title")));
+
+				addViewDef(this, new I18nViewDescription("v_component_description").
+						addColumnDef(new I18nViewColumnDescription("description", "amp_component_id", AmpComponent.class, "description")));
+
+				addViewDef(this, new I18nViewDescription("v_component_type").
+						addColumnDef(new I18nViewColumnDescription("component_type", "component_type_id", AmpComponentType.class, "name")));
+			
 //				addViewDef(this, new I18nViewDescription("v_activity_pledges_title").
 //						addColumnDef(new I18nViewColumnDescription("pledge_title", "pledge_id", AmpCategoryValue.class, "value")));
 				

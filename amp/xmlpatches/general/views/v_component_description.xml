@@ -19,8 +19,9 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_component_description AS 
-			    	SELECT aac.amp_activity_id, c.description AS title, c.amp_component_id AS amp_component_id
+				DROP VIEW IF EXISTS v_component_description;
+				CREATE OR REPLACE VIEW v_component_description AS 
+			    	SELECT aac.amp_activity_id, c.description AS description, c.amp_component_id AS amp_component_id
 							FROM amp_components c, amp_component_type ct, amp_activity_components aac
 							WHERE c.type = ct.type_id AND aac.amp_component_id = c.amp_component_id;
         		</lang>

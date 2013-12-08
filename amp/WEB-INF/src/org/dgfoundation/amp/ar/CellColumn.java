@@ -330,12 +330,8 @@ public class CellColumn<K extends Cell> extends Column<K> {
 		return ret;
 	}
 
-	/**
-	 * Trail Cells are by default TextCellS, in any CellColumn. Override this to
-	 * add a different behaviour...
-	 */
 	@Override
-	public List getTrailCells() {
+	public List<? extends AmountCell> getTrailCells() {
 		return null;
 	}
 

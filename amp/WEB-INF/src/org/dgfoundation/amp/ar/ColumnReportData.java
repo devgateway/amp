@@ -713,13 +713,7 @@ public class ColumnReportData extends ReportData<Column> {
 		}
 		return ret;
 	}
-
-//	public List getColumnsByDepth() {
-//		List ret = new ArrayList();
-//
-//		return ret;
-//	}
-
+	
 	/**
 	 * Sets the rowspan for each column. This will be used only by viewers, 
 	 * to correctly render the heading of the column.

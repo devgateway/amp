@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.helper.ReportHeadingLayoutCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
@@ -360,8 +361,8 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 	 * place to display totals. However, other types of behaviour can be
 	 * implemented, like error reporting for debugging purposes
 	 * @return the list of trail cells
-	 */
-	public abstract List getTrailCells();
+	 */	
+	public abstract List<? extends AmountCell> getTrailCells();
 
 	public abstract Column newInstance();
 	

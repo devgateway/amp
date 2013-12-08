@@ -922,6 +922,28 @@ public class AmpReportGenerator extends ReportGenerator {
 	}
 	
 	/**
+	 * replaces, recursively, all the empty GroupColumn's in a column's subcolumns' subtree with empty Column's 
+	 * @param col
+	 */
+	protected void fixEmptyGroupColumns(Column col)
+	{
+		if (!(col instanceof GroupColumn))
+			return;
+		GroupColumn gcol = (GroupColumn) col;
+		Iterator<Column> subcols = gcol.iterator();
+		while (subcols.hasNext())
+		{
+			Column subcol = subcols.next();
+			fixEmptyGroupColumns(subcol); // this will be a nop if this is a simple column
+			if ((subcol instanceof GroupColumn) && subcol.getItems().isEmpty())
+			{
+				// this is a GroupColumn and it is empty - replace it
+				gcol.replaceColumn(subcol.getColumnId(), new AmountCellColumn(subcol));
+			}
+		}
+	}
+	
+	/**
 	 * recursively goes all the way down in a hierarchy of columns in order to find & clean all the Real Disbursements GroupColumns it can find
 	 * @param col
 	 * @param allLegalFlows
@@ -998,6 +1020,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		{
 			removeUnusedRealDisbursementsFlowsFromReport(fundingOrgHiers);
 		}
+		
+		// do not allow empty GroupColumns; replace them with empty CellColumns
+		//fixEmptyGroupColumns(rawColumns.getColumnByName("Funding"));
+		fixEmptyGroupColumns(rawColumns.getColumnByName(ArConstants.COLUMN_TOTAL));
 		
 		/**
 		 * If we handle a normal report (not tab) and allowEmptyColumns is not set then we need to remove 

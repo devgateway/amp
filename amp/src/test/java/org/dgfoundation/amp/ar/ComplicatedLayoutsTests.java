@@ -40,6 +40,8 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 		suite.addTest(new ComplicatedLayoutsTests("testCrazyTypesOfRealDisbursementsFlat"));
 		suite.addTest(new ComplicatedLayoutsTests("testLotsOfActivitiesWithCrazyRealDisbursementsAndActualDisbursements"));
 		suite.addTest(new ComplicatedLayoutsTests("testLotsOfActivitiesWithCrazyRealDisbursementsAndActualDisbursementsByDonor"));
+		suite.addTest(new ComplicatedLayoutsTests("testReportWithRealDisbursementsColumnButWithoutRealDisbursements"));
+		suite.addTest(new ComplicatedLayoutsTests("testReportWithRealDisbursementsColumnButWithoutRealDisbursementsTotalsOnly"));
 		return suite;
 	}
 	
@@ -550,5 +552,51 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 		runReportTest("huge and hairy Real Disbursements and Actual Disbursements Report by donor", "AMP-15967-test-mixed-activities_20_21", 
 				new String[] {"Eth Water", "mtef activity 1", "mtef activity 2", "ptc activity 1", "ptc activity 2", "SSC Project 1", "SSC Project 2", "TAC_activity_1", "TAC_activity_2", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Pure MTEF Project", "Test MTEF directed", "AMP-15967-activity-2", "AMP-15967-activity-1"}, 
 				fddr_correct);	
+	}	
+	
+	public void testReportWithRealDisbursementsColumnButWithoutRealDisbursementsTotalsOnly()
+	{
+		GroupReportModel fddr_correct = 
+				GroupReportModel.withColumnReports("act-real-disb",
+						ColumnReportDataModel.withColumns("act-real-disb",
+							SimpleColumnModel.withContents("Project Title", "SSC Project 2", "SSC Project 2", "TAC_activity_1", "TAC_activity_1"), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Disbursements", "SSC Project 2", "131 845", "TAC_activity_1", "123 321"), 
+								SimpleColumnModel.withContents("Real Disbursements", MUST_BE_EMPTY)))
+						.withTrailCells(null, "255 166", "0"))
+					.withTrailCells(null, "255 166", "0")
+						.withPositionDigest(
+						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colSpan: 2))",
+						"(line 1:)",
+						"(line 2:RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1))");
+	
+		runReportTest("Tab with Actual Disb + Real Disb", "act-real-disb", 
+				new String[] {"SSC Project 2", "TAC_activity_1"}, fddr_correct, makeTabReportModifier);			
+	}
+	
+	public void testReportWithRealDisbursementsColumnButWithoutRealDisbursements()
+	{
+		GroupReportModel fddr_correct = 
+				GroupReportModel.withColumnReports("AMP-16525-no-real-disb-transactions",
+						ColumnReportDataModel.withColumns("AMP-16525-no-real-disb-transactions",
+							SimpleColumnModel.withContents("Project Title", "SSC Project 2", "SSC Project 2", "TAC_activity_1", "TAC_activity_1"), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2010",
+									SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_1", "123 321")), 
+								GroupColumnModel.withSubColumns("2013",
+									SimpleColumnModel.withContents("Actual Disbursements", "SSC Project 2", "131 845"))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Disbursements", "SSC Project 2", "131 845", "TAC_activity_1", "123 321"), 
+								SimpleColumnModel.withContents("Real Disbursements", MUST_BE_EMPTY)))
+						.withTrailCells(null, "123 321", "131 845", "255 166", "0"))
+					.withTrailCells(null, "123 321", "131 845", "255 166", "0")
+						.withPositionDigest(
+						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colSpan: 2), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colSpan: 2))",
+						"(line 1:RHLC 2010: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colSpan: 1), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colSpan: 1))",
+						"(line 2:RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1))");
+	
+		runReportTest("Tab with Actual Disb + Real Disb", "AMP-16525-no-real-disb-transactions", 
+				new String[] {"SSC Project 2", "TAC_activity_1"}, 
+				fddr_correct);			
 	}	
 }

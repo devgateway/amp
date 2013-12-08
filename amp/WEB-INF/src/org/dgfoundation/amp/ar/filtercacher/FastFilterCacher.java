@@ -73,7 +73,7 @@ public class FastFilterCacher extends FilterCacher {
 				return; //shouldn't happen, but let's guard against it
 			
 			Statement statement = conn.createStatement();
-			String stat = "DROP TABLE IF EXISTS" + tempTableName;
+			String stat = "DROP TABLE IF EXISTS " + tempTableName;
 			statement.executeQuery(stat);
 			statement.close();
 		}

@@ -663,6 +663,8 @@ public class GroupColumn extends Column<Column> {
      */
     public void replaceColumn(Object columnId, Column newColumn) {
         int idx = items.indexOf(getColumn(columnId));
+        if (idx < 0)
+        	throw new RuntimeException("column-to-be-replaced with id " + columnId + " not found in GroupColumn " + this.getName());
         getItems().remove(idx);
         getItems().add(idx, newColumn);
     }
@@ -817,15 +819,19 @@ public class GroupColumn extends Column<Column> {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#getTrailCells()
 	 */
-	public List getTrailCells() {
-		ArrayList ret=new ArrayList();
-		Iterator i=items.iterator();
+	public List<AmountCell> getTrailCells() {
+		ArrayList<AmountCell> ret = new ArrayList<AmountCell>();
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
 			boolean passesFilter = this.getName().equals(ArConstants.COLUMN_FUNDING) && fundingYearPassesFilter(element, this.getReportGenerator().getFilter());
 			passesFilter |= (!this.getName().equals(ArConstants.COLUMN_FUNDING));
 			if (passesFilter)
-				ret.addAll(element.getTrailCells());
+			{
+				List subTrailCells = element.getTrailCells();
+				if (subTrailCells != null)
+					ret.addAll(subTrailCells);
+			}
 		}
 		return ret;
 	}

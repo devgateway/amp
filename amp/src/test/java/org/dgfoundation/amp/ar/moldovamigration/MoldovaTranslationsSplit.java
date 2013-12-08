@@ -38,6 +38,8 @@ public class MoldovaTranslationsSplit
 		removeRomanianProjectTitleAsAColumn();
 		renameProjectTitleColumns();
 		disableContractingArrangements();
+		enableResultsColumnInReports();
+		
 		System.out.format("conversion done with %d warning messages\n", warningMessages.size());
 		for(int i = 0; i < warningMessages.size(); i++)
 			System.out.println(warningMessages.get(i).toString());
@@ -95,6 +97,13 @@ public class MoldovaTranslationsSplit
 		executeQuery("DELETE FROM amp_modules_templates WHERE module = " + CONTRACTING_ARRANGEMENTS_MODULE_VISIBILITY_ID);
 		executeQuery("DELETE FROM amp_fields_templates WHERE field = " + CONTRACTING_ARRANGEMENTS_FIELDS_VISIBILITY_ID);		
 		//"/Activity Form/Identification/Contracting Arrangements"
+	}
+	
+	protected void enableResultsColumnInReports()
+	{
+		int RESULTS_FIELDS_VISIBILITY_ID = 370;
+		executeQuery("DELETE FROM amp_fields_templates WHERE field = " + RESULTS_FIELDS_VISIBILITY_ID); // this is expected to do nothing
+		executeQuery("INSERT INTO amp_fields_templates (template, field) VALUES (1, " + RESULTS_FIELDS_VISIBILITY_ID + ")"); // this is expected to do nothing
 	}
 	
 	protected void removeRomanianProjectTitleAsAColumn()

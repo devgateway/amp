@@ -35,6 +35,9 @@ public class MoldovaTranslationsSplit
 		doProjectResultsTranslations();
 		doProjectActivitySummaryTranslations();
 		
+		removeRomanianProjectTitleAsAColumn();
+		renameProjectTitleColumns();
+		disableContractingArrangements();
 		System.out.format("conversion done with %d warning messages\n", warningMessages.size());
 		for(int i = 0; i < warningMessages.size(); i++)
 			System.out.println(warningMessages.get(i).toString());
@@ -49,6 +52,87 @@ public class MoldovaTranslationsSplit
 			throw new RuntimeException(e);
 		}
 		throw new RuntimeException("gata pe azi");
+	}
+	
+//	class ColumnData
+//	{
+//		final long columnid;
+//		final long orderid;
+//		
+//		public ColumnData(long columnid, long orderid)
+//		{
+//			this.columnid = columnid;
+//			this.orderid = orderid;
+//		}
+//		
+//		@Override
+//		public boolean equals(Object oth)
+//		{
+//			return columnid == ((ColumnData) oth).columnid;
+//		}
+//		
+//		@Override
+//		public int hashCode()
+//		{
+//			return (int) columnid;
+//		}
+//	}
+	
+	protected void renameProjectTitleColumns()
+	{
+		executeQuery("UPDATE dg_message SET message_utf8='Aranjamente Contractuale' WHERE message_utf8 = '" + "Titlul proiectului ( română )" + "'");
+		executeQuery("UPDATE dg_message SET message_utf8='Titlul proiectului'WHERE message_utf8 = '" + "Titlul proiectului ( engleză )" + "'");
+		
+		executeQuery("UPDATE dg_message SET message_utf8='Contracting Arrangements' WHERE message_utf8 = '" + "Romanian Project Title" + "'");
+		executeQuery("UPDATE dg_message SET message_utf8='Project Title' WHERE message_utf8 = '" + "Project Title (English)" + "'");
+	}
+	
+	protected void disableContractingArrangements()
+	{
+		int CONTRACTING_ARRANGEMENTS_MODULE_VISIBILITY_ID = 208;
+		int CONTRACTING_ARRANGEMENTS_FIELDS_VISIBILITY_ID = 718;
+		
+		executeQuery("DELETE FROM amp_modules_templates WHERE module = " + CONTRACTING_ARRANGEMENTS_MODULE_VISIBILITY_ID);
+		executeQuery("DELETE FROM amp_fields_templates WHERE field = " + CONTRACTING_ARRANGEMENTS_FIELDS_VISIBILITY_ID);		
+		//"/Activity Form/Identification/Contracting Arrangements"
+	}
+	
+	protected void removeRomanianProjectTitleAsAColumn()
+	{
+		System.out.println("replacing all references to column ROMANIAN_PROJECT_TITLE to references to PROJECT_TITLE");
+		
+		// ROMANIAN PROJECT TITLE: amp_column_id = 276
+		long ROMANIAN_PROJ_TITLE_COLUMN_ID = 276;
+		long PROJECT_TITLE_COLUMN_ID = 4;
+		
+		List<Object[]> cols = getResults("SELECT amp_report_id, columnid, order_id FROM amp_report_column");
+		Map<Long, SortedMap<Long, Long>> colsByReport = new HashMap<Long, SortedMap<Long, Long>>(); //Map<amp_report_id, Map<amp_column_id, order>>
+		for(Object[] col:cols)
+		{
+			long amp_report_id = getLong(col[0]);
+			long amp_column_id = getLong(col[1]);
+			long column_order = getLong(col[2]);
+			if (!colsByReport.containsKey(amp_report_id))
+				colsByReport.put(amp_report_id, new TreeMap<Long, Long>());
+			colsByReport.get(amp_report_id).put(amp_column_id, column_order);
+		}
+		for(Long amp_report_id:colsByReport.keySet())
+		{
+			SortedMap<Long, Long> reportCols = colsByReport.get(amp_report_id);
+			if (!reportCols.containsKey(ROMANIAN_PROJ_TITLE_COLUMN_ID))
+				continue;
+			System.out.println("redoing report with amp_report_id = " + amp_report_id + ", which has the column RO-PROJ-TITLE with order_id = " + reportCols.get(ROMANIAN_PROJ_TITLE_COLUMN_ID));
+			if (!reportCols.containsKey(PROJECT_TITLE_COLUMN_ID))
+			{
+				System.out.println("\tproject does not contain the PROJECT TITLE column, just replacing RO-PROJECT-TITLE with PROJECT-TITLE");
+				executeQuery("UPDATE amp_report_column set columnid = " + PROJECT_TITLE_COLUMN_ID + " WHERE amp_report_id = " + amp_report_id + " AND columnid = " + ROMANIAN_PROJ_TITLE_COLUMN_ID);
+				continue;
+			}
+			// remove ROMANIAN PROJECT TITLE and renumber the following columns
+			System.out.println("\tproject contains the PROJECT TITLE column, left-shifting all columns which appear after RO_PROJ_TITLE in the report");
+			executeQuery("DELETE FROM amp_report_column WHERE amp_report_id = " + amp_report_id + " AND columnid = " + ROMANIAN_PROJ_TITLE_COLUMN_ID);
+			executeQuery("UPDATE amp_report_column SET order_id = order_id - 1 WHERE amp_report_id = " + amp_report_id + " AND order_id > " + reportCols.get(ROMANIAN_PROJ_TITLE_COLUMN_ID));
+		}
 	}
 	
 	/**

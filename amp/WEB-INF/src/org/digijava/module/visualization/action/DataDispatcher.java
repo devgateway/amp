@@ -3544,12 +3544,19 @@ public class DataDispatcher extends DispatchAction {
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
         		if(id!=null && id!=-1){
 	            	map = DashboardUtil.getRankSubRegions(DbUtil.getSubRegions(id), filter, null, null);
-	            	if (map.size()==0)
+	            	if (map.size()==0) {
                 		map = visualizationForm.getRanksInformation().getFullRegions();
-	            }
-	            else
+	            	}
+	            	//AMP-16514: This is needed when region has been selected but it doesnt have sub-regions.
+	            	if(map == null) {
+	            		DashboardFilter newFilter = filter.getCopyFilterForFunding();
+	                	newFilter.setStartYear(startYear);
+	                	newFilter.setEndYear(endYear);
+	            		map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(newFilter), DbUtil.getRegions(newFilter), newFilter, true, request);
+	            	}
+	            } else {
 	        		map = visualizationForm.getRanksInformation().getFullRegions();
-	            	
+	        	}	            	
             }
         	else
         	{

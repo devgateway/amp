@@ -341,6 +341,10 @@ public class DbUtil {
 			if (filter.getSelLocationIds().length == 1) {
 				AmpCategoryValueLocations loc = LocationUtil.getAmpCategoryValueLocationById(filter.getSelLocationIds()[0]);
 				locations.addAll(loc.getChildLocations());
+				if(locations.size() == 0){
+					//AMP-16514: This is needed when region has been selected but it doesnt have sub-regions.
+					locations.add(loc);
+				}
 				return locations;
 			} else {
 				for (int i = 0; i < filter.getSelLocationIds().length; i++) {

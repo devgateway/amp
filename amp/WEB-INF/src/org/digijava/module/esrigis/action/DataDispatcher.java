@@ -615,28 +615,12 @@ public class DataDispatcher extends MultiAction {
 	protected Map<Long, String> getActivityNamesByIds(List<Long> activityIdList)
 	{
 		Map<Long, String> activityNamesByAmpIds = new TreeMap<Long, String>();
-		Connection conn = null;
-		ResultSet rs = null;
-		try
+		List<Object[]> rs = PersistenceManager.getSession().createSQLQuery("SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")").list();
+		for(Object[] entry:rs)
 		{
-			conn = PersistenceManager.getJdbcConnection();
-			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_activity_id IN (" + Util.toCSString(activityIdList) + ")");
-			while (rs.next())
-			{
-				Long actId = rs.getLong(1);
-				String actName = rs.getString(2);
-				
-				activityNamesByAmpIds.put(actId, actName);
-			}
-			rs.close();
-		}
-		catch(Exception e)
-		{
-			
-		}
-		finally
-		{
-			closeConnection(conn);
+			Long actId = PersistenceManager.getLong(entry[0]);
+			String actName = PersistenceManager.getString(entry[1]);
+			activityNamesByAmpIds.put(actId, actName);
 		}
 		return activityNamesByAmpIds;
 	}
@@ -649,31 +633,15 @@ public class DataDispatcher extends MultiAction {
 	protected Map<Long, Set<Long>> populateStructs(List<Long> activityIdList)
 	{
 		Map<Long, Set<Long>> structsByAmpIds = new TreeMap<Long, Set<Long>>();
-		Connection conn = null;
-		ResultSet rs = null;
-		try
+		List<Object[]> rs = PersistenceManager.getSession().createSQLQuery("SELECT amp_activity_id, amp_structure_id FROM amp_activity_structures WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")").list();
+		for(Object[] entry:rs)
 		{
-			conn = PersistenceManager.getJdbcConnection();
-			rs = conn.createStatement().executeQuery("SELECT amp_activity_id, amp_structure_id FROM amp_activity_structures WHERE amp_activity_id IN (" + Util.toCSString(activityIdList) + ")");
-			while (rs.next())
-			{
-				Long actId = rs.getLong(1);
-				Long strucId = rs.getLong(2);
+			Long actId = PersistenceManager.getLong(entry[0]);
+			Long strucId = PersistenceManager.getLong(entry[1]);
+			if (!structsByAmpIds.containsKey(actId))
+				structsByAmpIds.put(actId, new TreeSet<Long>());
 				
-				if (!structsByAmpIds.containsKey(actId))
-					structsByAmpIds.put(actId, new TreeSet<Long>());
-				
-				structsByAmpIds.get(actId).add(strucId);
-			}
-			rs.close();
-		}
-		catch(Exception e)
-		{
-			
-		}
-		finally
-		{
-			closeConnection(conn);
+			structsByAmpIds.get(actId).add(strucId);
 		}
 		return structsByAmpIds;
 	}
@@ -701,61 +669,44 @@ public class DataDispatcher extends MultiAction {
 	{
 		Map<Long, Structure> z = new TreeMap<Long, Structure>();
 		
-		Connection conn = null;
-		ResultSet rs = null;
-		try
+		// populate set of structures which have an image
+		Set<Long> strucImages = new HashSet<Long>();
+		List<Object> structureIds = PersistenceManager.getSession().createSQLQuery("SELECT DISTINCT(amp_structure_id) FROM amp_structure_img").list();
+		for(Object obj:structureIds)
+			strucImages.add(PersistenceManager.getLong(obj));
+			
+		//cache structure type names
+		Map<Long, String> typeNamesById = new HashMap<Long, String>();
+		List<Object[]> strucTypes = PersistenceManager.getSession().createSQLQuery("SELECT typeid, name FROM amp_structure_type").list();
+		for(Object[] strucType:strucTypes)
+			typeNamesById.put(PersistenceManager.getLong(strucType[0]), PersistenceManager.getString(strucType[1]));
+			
+		List<Object[]> structs = PersistenceManager.getSession().createSQLQuery("SELECT amp_structure_id, title, description, latitude, longitude, shape, type FROM amp_structure WHERE amp_structure_id IN (" + Util.toCSStringForIN(ids) + ")").list();
+		for(Object[] struct:structs)
 		{
-			conn = PersistenceManager.getJdbcConnection();
-			
-			// populate set of structures which have an image
-			Set<Long> strucImages = new HashSet<Long>();
-			rs = conn.createStatement().executeQuery("SELECT DISTINCT(amp_structure_id) FROM amp_structure_img");
-			while (rs.next())
-				strucImages.add(rs.getLong(1));
-			rs.close();
-			
-			// cache structure type names
-			Map<Long, String> typeNamesById = new HashMap<Long, String>();
-			rs = conn.createStatement().executeQuery("SELECT typeid, name FROM amp_structure_type");
-			while (rs.next())
-				typeNamesById.put(rs.getLong(1), rs.getString(2));
-			rs.close();
-			
-			rs = conn.createStatement().executeQuery("SELECT amp_structure_id, title, description, latitude, longitude, shape, type FROM amp_structure WHERE amp_structure_id IN (" + Util.toCSString(ids) + ")");
-			while (rs.next())
-			{
-				Long strucId = rs.getLong(1);
-				String title = rs.getString(2);
-				String description = rs.getString(3);
-				String latitude = rs.getString(4);
-				String longitude = rs.getString(5);
-				String shape = rs.getString(6);
+			Long strucId = PersistenceManager.getLong(struct[0]);			
+			String title = PersistenceManager.getString(struct[1]);
+			String description = PersistenceManager.getString(struct[2]);
+			String latitude = PersistenceManager.getString(struct[3]);
+			String longitude = PersistenceManager.getString(struct[4]);
+			String shape = PersistenceManager.getString(struct[5]);
 				
-				long typeId = rs.getLong(7); // guaranteed not null
-				String typeName = typeNamesById.get(typeId);
-				
-				Structure structureJSON = new Structure();
-				structureJSON.setId(strucId);
-				structureJSON.setDescription(description);
-				structureJSON.setLat(latitude);
-				structureJSON.setLon(longitude);
-				structureJSON.setName(title);
-				structureJSON.setShape(shape);
-				structureJSON.setType(typeName);
-				structureJSON.setTypeId(typeId);
-				structureJSON.setHasImage(strucImages.contains(strucId));
-				
-				z.put(strucId, structureJSON);
-			}
-			rs.close();
-		}
-		catch(Exception e)
-		{
+			long typeId = PersistenceManager.getLong(struct[6]); // guaranteed not null
 			
-		}
-		finally
-		{
-			closeConnection(conn);
+			String typeName = typeNamesById.get(typeId);
+				
+			Structure structureJSON = new Structure();
+			structureJSON.setId(strucId);
+			structureJSON.setDescription(description);
+			structureJSON.setLat(latitude);
+			structureJSON.setLon(longitude);
+			structureJSON.setName(title);
+			structureJSON.setShape(shape);
+			structureJSON.setType(typeName);
+			structureJSON.setTypeId(typeId);
+			structureJSON.setHasImage(strucImages.contains(strucId));
+				
+			z.put(strucId, structureJSON);
 		}
 		return z;
 	}
@@ -802,7 +753,7 @@ public class DataDispatcher extends MultiAction {
 		
 		long bbb = System.currentTimeMillis();
 		long gettingActivitiesTime = bbb - aaa;
-		System.out.println("fetching all activities took " + gettingActivitiesTime + " millies");
+		logger.info("fetching all activities took " + gettingActivitiesTime + " millies");
 		
 		Map<Long, Set<Long>> structsByAmpIds = populateStructs(activityIdList);
 		Map<Long, Structure> structsByIds = fetchStructs(collectIds(structsByAmpIds));

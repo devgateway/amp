@@ -42,7 +42,7 @@ public class PublicViewColumnsUtil
 			for(String viewName:views)
 			{
 				String cachedViewName = getPublicViewTable(viewName);
-				CachedTableState publicViewState = compareTableStructures(conn, viewName, cachedViewName);
+				CachedTableState publicViewState = compareTableStructures(viewName, cachedViewName);
 				result.put(viewName, publicViewState);
 			}
 			return result;
@@ -53,14 +53,14 @@ public class PublicViewColumnsUtil
 		}
 	}
 	
-	protected static CachedTableState compareTableStructures(java.sql.Connection conn, String viewName, String cachedViewName)
+	protected static CachedTableState compareTableStructures(String viewName, String cachedViewName)
 	{
-		if (!SQLUtils.tableExists(conn, viewName))
+		if (!SQLUtils.tableExists(viewName))
 			return CachedTableState.ORIGINAL_TABLE_MISSING;
-		if (!SQLUtils.tableExists(conn, cachedViewName))
+		if (!SQLUtils.tableExists(cachedViewName))
 			return CachedTableState.CACHED_TABLE_MISSING;
-		List<String> originalCols = new ArrayList<String>(SQLUtils.getTableColumns(conn, viewName));
-		List<String> cacheCols = new ArrayList<String>(SQLUtils.getTableColumns(conn, cachedViewName));
+		List<String> originalCols = new ArrayList<String>(SQLUtils.getTableColumns(viewName));
+		List<String> cacheCols = new ArrayList<String>(SQLUtils.getTableColumns(cachedViewName));
 		if (originalCols.size() != cacheCols.size())
 			return CachedTableState.CACHED_TABLE_DIFFERENT_STRUCTURE;
 		for(int i = 0; i < originalCols.size(); i ++)
@@ -91,7 +91,8 @@ public class PublicViewColumnsUtil
 		for(String viewName:viewsStates.keySet())
 		{
 			CachedTableState viewState = viewsStates.get(viewName);
-			logger.info(String.format("the view %s's cache has the schema state %s", viewName, viewState));
+			if (viewState != CachedTableState.CACHED_TABLE_OK)
+				logger.info(String.format("the view %s's cache has the schema state %s", viewName, viewState));
 			try
 			{
 				doColumnMaintenance(conn, viewName, viewState, updateData);
@@ -140,7 +141,7 @@ public class PublicViewColumnsUtil
 			{
 				if (!updateData)
 				{
-					logger.info("\t->not allowed to refresh table, skipping");
+					//logger.info("\t->not allowed to refresh table, skipping");
 					return;
 				}
 				String cachedView = getPublicViewTable(viewName);
@@ -160,7 +161,7 @@ public class PublicViewColumnsUtil
 	{
 		logger.info(String.format("\t->creating a cache named %s for view %s...", cacheName, viewName));
 		cacheName = cacheName.toLowerCase();
-		if (cacheName.equals("cached_amp_activity_group") && SQLUtils.tableExists(conn, cacheName))
+		if (cacheName.equals("cached_amp_activity_group") && SQLUtils.tableExists(cacheName))
 		{
 			SQLUtils.executeQuery(conn, String.format("TRUNCATE %s", cacheName));
 			SQLUtils.executeQuery(conn, String.format("INSERT INTO %s SELECT * FROM %s WHERE amp_activity_last_version_id IS NOT NULL", cacheName, viewName));
@@ -170,7 +171,7 @@ public class PublicViewColumnsUtil
 			SQLUtils.executeQuery(conn, String.format("DROP TABLE IF EXISTS %s", cacheName));
 			SQLUtils.executeQuery(conn, String.format("CREATE TABLE %s AS SELECT * FROM %s;", cacheName, viewName));
 		}
-		Collection<String> columns = SQLUtils.getTableColumns(conn, viewName);
+		Collection<String> columns = SQLUtils.getTableColumns(viewName);
 		for(String columnName:columns)
 			if (looksLikeIndexableColumn(viewName, columnName))
 			{

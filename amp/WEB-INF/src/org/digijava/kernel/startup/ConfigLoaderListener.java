@@ -246,7 +246,7 @@ public class ConfigLoaderListener
 		
 		logger.info("Database compatibility OK.");
 		
-		connection.close();
+		PersistenceManager.closeQuietly(connection);
     }
     
 	/**

@@ -155,22 +155,20 @@ public class AMPStartupListener extends HttpServlet implements
 	protected boolean isActivityCloserEnabled()
 	{
 		Connection connection = null;
-		 try {
-	            connection = PersistenceManager.getJdbcConnection();
-	            String statement = String.format("SELECT job_name from qrtz_job_details where job_class_name='%s'", "org.digijava.module.message.jobs.CloseExpiredActivitiesJob");
-	            ResultSet resultSet = connection.createStatement().executeQuery(statement);
-	            return resultSet.next();
-	        } catch (Exception ex) {
-	            throw new RuntimeException(ex);
-	        }
+		 try
+		 {
+			 connection = PersistenceManager.getJdbcConnection();
+			 String statement = String.format("SELECT job_name from qrtz_job_details where job_class_name='%s'", "org.digijava.module.message.jobs.CloseExpiredActivitiesJob");
+			 ResultSet resultSet = connection.createStatement().executeQuery(statement);
+			 return resultSet.next();
+		 }
+		 catch (Exception ex) {
+			 throw new RuntimeException(ex);
+		 }
 		 finally
 		 {
-			 if (connection != null)
-			 {
-				 try {connection.close();}
-				 catch(SQLException e){};
-			 }
-		 }		
+			 PersistenceManager.closeQuietly(connection);
+		 }
 	}
 	
 	/**
@@ -322,29 +320,24 @@ public class AMPStartupListener extends HttpServlet implements
 	
 	public void maintainMondrianCaches()
 	{
-//		org.hibernate.jdbc.Work mondrianMaintenanceWork = new org.hibernate.jdbc.Work()
-//		{
-//			@Override
-//			public void execute(Connection connection) throws SQLException
-//			{
-//				PublicViewColumnsUtil.maintainPublicViewCaches(connection, false);
-//			}
-//		};
-//		session.doWork(mondrianMaintenanceWork);		
+		java.sql.Connection connection = null;
 		try
 		{
-			java.sql.Connection connection = PersistenceManager.getJdbcConnection();		
+			connection = PersistenceManager.getJdbcConnection();		
 			connection.setAutoCommit(false);
 		
 			// make sure that, in case the following SQL stuff fails, at least the Java side executed correctly and committed its stuff
 			connection.setAutoCommit(true);
 			PublicViewColumnsUtil.maintainPublicViewCaches(connection, false); // let Java do all the repetitive work
 			connection.setAutoCommit(false); // this will commit any unfinished transaction started by PublicViewColumnsUtil
-			connection.close();
-		}
+		}		
 		catch(Exception e)
 		{
 			logger.error("some serious error happened while maintaining Mondrian caches", e);
+		}
+		finally
+		{
+			PersistenceManager.closeQuietly(connection);
 		}
 	}
 }

@@ -75,6 +75,7 @@ import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -1923,30 +1924,14 @@ public class DbUtil {
      */
     public static Set<Long> getAllAmpActivityIds(String usedQuery)
     {
-    	Connection conn = null;
-    	try
-    	{
-    		Set<Long> ampActivityIds = new HashSet<Long>();
-    		conn = PersistenceManager.getJdbcConnection();
-    		Statement stmt = conn.createStatement();
-			ResultSet resultSet = stmt.executeQuery(usedQuery);
-			while (resultSet.next())
-			{
-				Long ampActivityId = resultSet.getLong(1);
-				ampActivityIds.add(ampActivityId);
-			}
-			conn.close();
-			return ampActivityIds;
-    	}
-    	catch(SQLException ex)
-    	{
-       		ex.printStackTrace();
-    		throw new RuntimeException(ex);
-    	}
-    	finally
-    	{
-    		closeConnection(conn);
-    	}
+   		Set<Long> ampActivityIds = new HashSet<Long>();
+   		List<Object> res = PersistenceManager.getSession().createSQLQuery(usedQuery).list();
+   		for(Object aaa:res)
+		{
+			Long ampActivityId = PersistenceManager.getLong(aaa);
+			ampActivityIds.add(ampActivityId);
+		}
+		return ampActivityIds;
     }
     
     /**
@@ -2037,7 +2022,7 @@ public class DbUtil {
         SimpleDateFormat sdfOut = new SimpleDateFormat(AmpARFilter.SDF_OUT_FORMAT_STRING);
         
         String view_name = view_prefix + "v_donor_funding";
-        StringBuilder queryString = new StringBuilder("SELECT f.transaction_amount, f.transaction_type, f.adjustment_type, f.transaction_date, f.currency_code, f.amp_activity_id, f.fixed_exchange_rate FROM ").append(view_name).append(" f JOIN amp_funding af ON af.amp_funding_id = f.amp_funding_id WHERE ");
+        final StringBuilder queryString = new StringBuilder("SELECT f.transaction_amount, f.transaction_type, f.adjustment_type, f.transaction_date, f.currency_code, f.amp_activity_id, f.fixed_exchange_rate FROM ").append(view_name).append(" f JOIN amp_funding af ON af.amp_funding_id = f.amp_funding_id WHERE ");
         queryString.append("f.transaction_date >= '").append(sdfOut.format(startDate)).append("' AND f.transaction_date <= '").append(sdfOut.format(endDate)).append("'");
         queryString.append(" AND f.amp_activity_id IN ").append(activityWhereclause );
         queryString.append(" AND f.adjustment_type in (").append(actualCommitmentCatValId).append(",").append(getPlannedCategValueId()).append(") ");
@@ -2064,38 +2049,33 @@ public class DbUtil {
         	queryString.append(" AND af.type_of_assistance_category_va IN ");
         	queryString.append(typeOfAssistanceWhereclause);
         }
-        
-        Connection conn = null;
-        
-        try
-        {
-        	conn = PersistenceManager.getJdbcConnection();
-        	Statement stmt = conn.createStatement();
-        	ResultSet resultSet = stmt.executeQuery(queryString.toString());
+            
+        final List<Object[]> result = new ArrayList<Object[]>();
+		org.digijava.kernel.persistence.PersistenceManager.getSession().doWork(new org.hibernate.jdbc.Work()
+		{
+			public void execute(java.sql.Connection conn) throws SQLException
+			{
+				Statement stmt = conn.createStatement();
+				ResultSet resultSet = stmt.executeQuery(queryString.toString());
         	
-        	List<Object[]> result = new ArrayList<Object[]>();
-        	int nrColumns = resultSet.getMetaData().getColumnCount();
-        	if (nrColumns != 7)
-        		throw new RuntimeException("invalid Funding SQL query");
-        	while (resultSet.next())
-        	{
-        		Object[] item = new Object[nrColumns];
-        		item[0] = resultSet.getDouble(1);
-        		item[1] = resultSet.getInt(2);
-        		item[2] = resultSet.getLong(3);
-        		item[3] = resultSet.getDate(4);
-        		item[4] = resultSet.getString(5);
-        		item[5] = resultSet.getLong(6);
-        		item[6] = resultSet.getDouble(7);
-        		result.add(item);
-        	}
-        	return result;
-        }
-        finally
-        {
-        	if (conn != null)
-        		conn.close();
-        }
+				int nrColumns = resultSet.getMetaData().getColumnCount();
+				if (nrColumns != 7)
+					throw new RuntimeException("invalid Funding SQL query");
+				while (resultSet.next())
+				{
+					Object[] item = new Object[nrColumns];
+					item[0] = resultSet.getDouble(1);
+					item[1] = resultSet.getInt(2);
+					item[2] = resultSet.getLong(3);
+					item[3] = resultSet.getDate(4);
+					item[4] = resultSet.getString(5);
+					item[5] = resultSet.getLong(6);
+					item[6] = resultSet.getDouble(7);
+					result.add(item);
+				}
+			}
+		});
+		return result;
     }
     
     // NEW PART
@@ -2395,32 +2375,29 @@ public class DbUtil {
 
     public static Map<Long, Map<Long, Float>> getActivitySecondarySectorPercentages (Collection<Long> sectorsIds) {
         String sectorWhereclause = generateWhereclause(sectorsIds, new GenericIdGetter());
-        Connection conn = null;
-        try {
-        	conn = PersistenceManager.getJdbcConnection();
-        	StringBuilder queryStr = new StringBuilder("SELECT amp_activity_id, amp_sector_id, sector_percentage FROM v_secondary_sectors");
-            if (sectorWhereclause != null) {
-                queryStr.append(" WHERE amp_sector_id IN ");
-                queryStr.append(sectorWhereclause);
-            }
-            ResultSet resultSet = conn.createStatement().executeQuery(queryStr.toString());
-            Map<Long, Map<Long, Float>> retVal = new HashMap<Long, Map<Long, Float>>();
-            while (resultSet.next())
-            {
-            	long ampActivityId = resultSet.getLong(1);
-            	long ampSectorId = resultSet.getLong(2);
-            	float sectorPercentage = resultSet.getFloat(3);
-            	addPercentageToSubdivision(retVal, ampActivityId, ampSectorId, sectorPercentage);
-            }
-            return retVal;
-        } catch (SQLException ex) {
-          logger.error("Error getting activity sectors from database " + ex);
-          return null;
-        }
-        finally
-        {
-        	closeConnection(conn);
-        }
+        final Map<Long, Map<Long, Float>> retVal = new HashMap<Long, Map<Long, Float>>();
+       	final StringBuilder queryStr = new StringBuilder("SELECT amp_activity_id, amp_sector_id, sector_percentage FROM v_secondary_sectors");
+       	if (sectorWhereclause != null) {
+       		queryStr.append(" WHERE amp_sector_id IN ");
+       		queryStr.append(sectorWhereclause);
+       	}
+       	
+		org.digijava.kernel.persistence.PersistenceManager.getSession().doWork(new org.hibernate.jdbc.Work()
+		{
+			public void execute(java.sql.Connection conn) throws SQLException
+			{
+				ResultSet resultSet = conn.createStatement().executeQuery(queryStr.toString());
+				while (resultSet.next())
+				{
+					long ampActivityId = resultSet.getLong(1);
+					long ampSectorId = resultSet.getLong(2);
+					float sectorPercentage = resultSet.getFloat(3);
+					addPercentageToSubdivision(retVal, ampActivityId, ampSectorId, sectorPercentage);
+				}
+				resultSet.close();
+			}
+		});
+		return retVal;
     }
     
     /**
@@ -2776,22 +2753,27 @@ public class DbUtil {
         }
     }
 
-    public static String generateWhereclause (Collection objects, IdGetter getter) {
-        String retValStr = null;
-        if (objects != null) {
-            StringBuilder retVal = new StringBuilder("(");
-            Iterator it = objects.iterator();
-            while (it.hasNext()) {
-                Object obj = it.next();
-                Long id = getter.getId(obj);
-                retVal.append(id);
-                if (it.hasNext()) {
-                    retVal.append(",");
-                }
-            }
-            retVal.append(")");
-            retValStr = retVal.toString();
-        }
+    public static String generateWhereclause (Collection objects, IdGetter getter)
+    {
+    	String retValStr = null;
+    	if (objects != null)
+    	{
+    		StringBuilder retVal = new StringBuilder("(");
+    		Iterator it = objects.iterator();
+    		while (it.hasNext())
+    		{
+    			Object obj = it.next();
+    			Long id = getter.getId(obj);
+    			retVal.append(id);
+    			if (it.hasNext()) {
+    				retVal.append(",");
+    			}
+    		}
+    		if (objects.isEmpty())
+    			retVal.append("-999"); // do not generate invalid IN subquery
+    		retVal.append(")");
+    		retValStr = retVal.toString();
+    	}
         return retValStr;
     }
 

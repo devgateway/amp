@@ -821,29 +821,14 @@ public class DynLocationManagerUtil {
 	 */
 	private static Set<Long> getChildrenOfCategoryValueLocations(Collection<Long> inIds)
 	{
-		Set<Long> result = new HashSet<Long>();
+		final Set<Long> result = new HashSet<Long>();
 		if (inIds == null)
 			return result;
-		Connection conn = null;
-		try
-		{
-			conn = PersistenceManager.getJdbcConnection();
-			String query = "SELECT DISTINCT id FROM amp_category_value_location WHERE parent_location IN (" + Util.toCSStringForIN(inIds) + ")";
-			ResultSet rs = conn.createStatement().executeQuery(query);
-			while (rs.next())
-				result.add(rs.getLong(1));
-			rs.close();
-			return result;
-		}
-		catch(SQLException e)
-		{
-			throw new RuntimeException(e);
-		}
-		finally
-		{
-			try {conn.close();}
-			catch(Exception e){};
-		}
+		String query = "SELECT DISTINCT id FROM amp_category_value_location WHERE parent_location IN (" + Util.toCSStringForIN(inIds) + ")";
+		List<Object> ids = PersistenceManager.getSession().createSQLQuery(query).list();
+		for(Object longAsObj:ids)
+			result.add(PersistenceManager.getLong(longAsObj));
+		return result;
 	}
 	
 	public static void populateWithAscendants(Collection <AmpCategoryValueLocations> destCollection, 

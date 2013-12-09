@@ -34,7 +34,8 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	public void execute(JobExecutionContext arg0) throws JobExecutionException
+	{
 		
 		ServletContext ctx = null;
 		Connection connection = null;
@@ -92,20 +93,22 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 			e.printStackTrace();
 			return;
 		
-	} finally {
-		try {
-			connection.setAutoCommit(true);
-			connection.close();
-			
-		} catch (SQLException e) {
-			logger.error(e);
-			e.printStackTrace();
-			return;			
+		} finally {
+			try {
+				if (connection != null)
+					connection.setAutoCommit(true);
+				PersistenceManager.closeQuietly(connection);
+			}
+			catch (SQLException e) {
+				logger.error(e);
+				e.printStackTrace();
+				return;			
+			}
 		}
-	}
 		flushMondrianCache();
 		logger.info("Refresh Mondrian Cache Job Successful!");
 	}
+	
 	private void flushMondrianCache() {
 		java.util.Iterator<mondrian.rolap.RolapSchema> schemaIterator =  mondrian.rolap.RolapSchema.getRolapSchemas();
 		while(schemaIterator.hasNext()){

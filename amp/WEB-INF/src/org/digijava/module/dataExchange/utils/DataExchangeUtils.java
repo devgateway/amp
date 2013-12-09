@@ -1690,26 +1690,16 @@ public class DataExchangeUtils {
         return result1;
     }    
     
-    public static List<String> getAllActivitiesStatus(String str){
-    	Connection connection = null;
- //       TreeMap<Long,String> result = new TreeMap<Long,String>();
+    public static List<String> getAllActivitiesStatus(String str)
+    {
         List<String> result1 = new ArrayList<String>();
-        try {
-            connection = PersistenceManager.getJdbcConnection();
-            String queryString = "SELECT category_value, id FROM amp_category_value WHERE amp_category_class_id = (SELECT id from amp_category_class WHERE category_name='Activity Status') ORDER BY category_value ASC";
-            ResultSet resultSet = connection.createStatement().executeQuery(queryString);
-            while (resultSet.next())
-            {
-            	String name = resultSet.getString(1);
-            	Integer id = resultSet.getInt(2);
-               	result1.add(name + "(" + id + ")");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-        	try{connection.close();}
-        	catch(SQLException ex){}
+        String queryString = "SELECT category_value, id FROM amp_category_value WHERE amp_category_class_id = (SELECT id from amp_category_class WHERE category_name='Activity Status') ORDER BY category_value ASC";
+        List<Object[]> rows = PersistenceManager.getSession().createSQLQuery(queryString).list();
+        for(Object[] row:rows)
+        {
+        	String name = PersistenceManager.getString(row[0]);
+        	Long id = PersistenceManager.getLong(row[1]);
+        	result1.add(name + "(" + id + ")");
         }
         return result1;
     }

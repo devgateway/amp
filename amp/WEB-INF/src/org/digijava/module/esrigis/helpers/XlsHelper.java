@@ -169,7 +169,7 @@ public class XlsHelper {
 		
 		long startTS=System.currentTimeMillis();
 		long endTS=System.currentTimeMillis();
-		logger.info("getActivities in "+(endTS-startTS)/1000.0+" seconds. ");
+		logger.info("getActivities with " + activitylist.size() + " results in " + (endTS - startTS) / 1000.0 + " seconds");
 		logger.info("Iteration Starts");
 		
 		startTS=System.currentTimeMillis();

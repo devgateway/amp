@@ -41,8 +41,7 @@ public class DgEditorPropertyDescription implements PropertyDescription
 	{
 		try
 		{
-			java.sql.Connection conn = org.digijava.kernel.persistence.PersistenceManager.getJdbcConnection();
-			java.util.LinkedHashSet<String> columns = SQLUtils.getTableColumns(conn, viewName);
+			java.util.LinkedHashSet<String> columns = SQLUtils.getTableColumns(viewName);
 //			if (columns.size() < 3)
 //				throw new RuntimeException(String.format("error while configuring DG_EDITOR-backed translatable view %s: too little number of columns!", this.viewName));
 			

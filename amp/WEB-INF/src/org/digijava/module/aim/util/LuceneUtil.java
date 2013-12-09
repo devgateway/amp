@@ -198,20 +198,9 @@ public class LuceneUtil implements Serializable {
 		stamp.setIdxName(name);
 		stamp.setStamp(timestamp);
 		Session session = PersistenceManager.getRequestDBSession();
-		Transaction tx = null;
 		try {
-//beginTransaction();
 			session.save(stamp);
-			//tx.commit();
-		} catch (HibernateException e) {
-			if(tx!=null){
-				try {
-					tx.rollback();
-				} catch (HibernateException e1) {
-					logger.error(e1);
-					throw new DgException("Cannot rollback stamp creation for "+name,e1);
-				}
-			}
+		} catch (HibernateException e) {			
 			throw new DgException("Cannot create stamp for "+name, e);
 		}
 		

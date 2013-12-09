@@ -51,20 +51,7 @@ public abstract class FilterCacher {
 	
 	public void closeConnection()
 	{
-		if (connection == null)
-			return;
-		try
-		{
-			connection.close();
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			connection = null;
-		}
+		PersistenceManager.closeQuietly(this.connection);
 	}
 	
 	@Override

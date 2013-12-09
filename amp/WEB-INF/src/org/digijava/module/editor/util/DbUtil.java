@@ -548,79 +548,41 @@ public class DbUtil {
     }
 
     /**
-     * Retrieves editor body text. Gives priority to chosen language, else returns any
+     * Retrieves editor body text. Gives priority to chosen language, else returns English, else returns any, else returns null
      * @param siteId
      * @param editorKey
      * @param language
      * @return
      * @throws EditorException
      */
-    public static String getEditorBody(Site site, String editorKey, String language) throws EditorException {
-
-        Session session = null;
-        String body = null;
-        Connection conn = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            conn = PersistenceManager.getJdbcConnection();
-            String stat = String.format("SELECT body, language FROM dg_editor WHERE site_id = '%s' AND editor_key = '%s'", site.getSiteId(), editorKey);
-            ResultSet rs = conn.prepareStatement(stat).executeQuery();
-            while (rs.next())
-            {
-               	String editorBody = rs.getString(1);
-            	String editorLanguage = rs.getString(2);
-            	
-            	if ("".equals(editorBody))
-            		continue; // ignore this one
-            	
-            	if (editorLanguage.equalsIgnoreCase(language))
-            		return editorBody;
-            	else
-            		body = editorBody;
-            }
-
-//            Query q = session.createQuery(
-//                "select e.body, e.language from " + Editor.class.getName() + " e " +
-//            	" where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
-//                //" where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (lower(e.language) = :language)");
-//
-//          //  q.setCacheable(true);
-//            q.setString("siteId", site.getSiteId());
-//            q.setString("editorKey", editorKey);
-//            //q.setString("language", language.toLowerCase());
-//            //q.setString("language", language);
-//
-//            @SuppressWarnings("unchecked")
-//			List<Object[]> result = q.list();
-//            System.out.format("getEditorBody, HQL just gave me %d results\n", result.size());
-//            for (Object[] editorInfo:result) 
-//            {
-//            	String editorBody = (String) (editorInfo[0]);
-//            	String editorLanguage = (String) (editorInfo[1]);
-//            	
-//            	if ("".equals(editorBody))
-//            		continue; // ignore this one
-//            	
-//            	if (editorLanguage.equalsIgnoreCase(language))
-//            		return editorBody;
-//            	else
-//            		body = editorBody;
-//            }
-
-        }
-        catch (Exception ex) {
-            logger.debug("Unable to get editor from database", ex);
-            throw new EditorException("Unable to get editor from database", ex);
-        }
-        finally
+    public static String getEditorBody(Site site, String editorKey, String language) throws EditorException
+    {
+        String bodyEn = null; // translation in English
+        String bodyOther = null; // translation in any language which is not English and is not the requested one
+    
+        String stat = String.format("SELECT body, language FROM dg_editor WHERE site_id = '%s' AND editor_key = '%s'", site.getSiteId(), editorKey);
+        List<Object[]> res = PersistenceManager.getSession().createSQLQuery(stat).list();
+        for(Object[] entry:res)
         {
-        	try {conn.close();}
-        	catch(Exception e) {};
+        	String editorBody = PersistenceManager.getString(entry[0]);
+        	String editorLanguage = PersistenceManager.getString(entry[1]);
+            	
+        	if ("".equals(editorBody))
+        		continue; // ignore this one
+            	
+        	if (editorLanguage.equalsIgnoreCase(language))
+        		return editorBody;
+        	
+        	if (editorLanguage.equalsIgnoreCase("en"))
+        		bodyEn = editorBody;
+        	else
+        		bodyOther = editorBody;
         }
-
-        return body;
+        if (bodyEn != null)
+        	return bodyEn;
+        return bodyOther;
     }
+    
     /**
      * Retrieves editor body text.
      * @param siteId

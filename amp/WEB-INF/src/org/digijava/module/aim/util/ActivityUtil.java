@@ -5115,18 +5115,18 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		return retVal;		
 	}
 	
-	private static Connection createConnection()
-	{
-		try
-		{
-			return PersistenceManager.getJdbcConnection();
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}	
+//	private static Connection createConnection()
+//	{
+//		try
+//		{
+//			return PersistenceManager.getJdbcConnection();
+//		}
+//		catch(SQLException e)
+//		{
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}	
 	
 	/**
 	 * returns a subset of activities which can/should be validated by a team member

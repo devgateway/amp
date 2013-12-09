@@ -491,10 +491,10 @@ public class InternationalizedViewsRepository {
 	private static void addViewDef(HashMap<String, I18nViewDescription> map, I18nViewDescription viewDesc)
 	{
 		// sanity checks...
-		if (!SQLUtils.tableExists(InternationalizedModelDescription.connection, viewDesc.viewName))
+		if (!SQLUtils.tableExists(viewDesc.viewName))
 			throw new RuntimeException("trying to define an i18n description of a non-existing table/view: " + viewDesc.viewName);
 		
-		Set<String> columns = SQLUtils.getTableColumns(InternationalizedModelDescription.connection, viewDesc.viewName);
+		Set<String> columns = SQLUtils.getTableColumns(viewDesc.viewName);
 		for(I18nViewColumnDescription column:viewDesc.columns.values())
 		{
 			String columnName = column.columnName; // the translatable colum we are replacing
@@ -510,12 +510,12 @@ public class InternationalizedViewsRepository {
 			throw new RuntimeException("doubly-defined description of view " + viewDesc.viewName + ", please merge descriptions!");
 		
 		map.put(viewDesc.viewName, viewDesc);
-		if (SQLUtils.tableExists(InternationalizedModelDescription.connection, viewDesc.viewName + "_cached"))
+		if (SQLUtils.tableExists(viewDesc.viewName + "_cached"))
 		{
 			I18nViewDescription clonedView = viewDesc.cloneView(viewDesc.viewName + "_cached");
 			map.put(clonedView.viewName, clonedView);
 		}
-		if (SQLUtils.tableExists(InternationalizedModelDescription.connection, "cached_" + viewDesc.viewName))
+		if (SQLUtils.tableExists("cached_" + viewDesc.viewName))
 		{
 			I18nViewDescription clonedView = viewDesc.cloneView("cached_" + viewDesc.viewName);
 			map.put(clonedView.viewName, clonedView);

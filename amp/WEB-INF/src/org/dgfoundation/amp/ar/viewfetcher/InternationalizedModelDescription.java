@@ -30,19 +30,19 @@ public class InternationalizedModelDescription {
 		scanClass(modelClass);
 	}
 
-	public static java.sql.Connection connection = initConnection();
-	
-	private static java.sql.Connection initConnection()
-	{
-		try
-		{
-			return PersistenceManager.getJdbcConnection();
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException("Could not get RAW JDBC Connection", e);
-		}
-	}
+//	public static java.sql.Connection connection = initConnection();
+//	
+//	private static java.sql.Connection initConnection()
+//	{
+//		try
+//		{
+//			return PersistenceManager.getJdbcConnection();
+//		}
+//		catch(Exception e)
+//		{
+//			throw new RuntimeException("Could not get RAW JDBC Connection", e);
+//		}
+//	}
 	
 	protected void scanClass(Class<?> modelClass)
 	{
@@ -55,7 +55,7 @@ public class InternationalizedModelDescription {
 		Column keyColumn = (Column) (classMapping.getIdentifierProperty().getColumnIterator().next());
 		String keyColumnName = keyColumn.getName();
 		String modelTableName = classMapping.getTable().getName();
-		Set<String> existingColumns = SQLUtils.getTableColumns(connection, modelTableName);
+		Set<String> existingColumns = SQLUtils.getTableColumns(modelTableName);
 		boolean idColumnExists = existingColumns.contains(keyColumnName);
 				
 		if (!idColumnExists)

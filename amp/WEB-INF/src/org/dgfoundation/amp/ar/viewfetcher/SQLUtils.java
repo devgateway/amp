@@ -13,6 +13,7 @@ import java.util.Map;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.CriteriaQuery;
@@ -23,21 +24,41 @@ import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.engine.TypedValue;
 
 public class SQLUtils {
+//	/**
+//	 * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
+//	 * @param connection
+//	 * @param tableName
+//	 * @return
+//	 */
+//	private static LinkedHashSet<String> getTableColumns(Connection connection, String tableName)
+//	{
+//		String query = String.format("SELECT c.column_name FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
+//		return new LinkedHashSet<String>(SQLUtils.<String>fetchAsList(connection, query, 1));		
+//	}
+	
+//	private static boolean tableExists(Connection connection, String tableName)
+//	{
+//		return !getTableColumns(connection, tableName).isEmpty();
+//	}
+	
 	/**
-	 * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
-	 * @param connection
+	 * uses the current HibSession's JDBC connection
 	 * @param tableName
 	 * @return
 	 */
-	public static LinkedHashSet<String> getTableColumns(Connection connection, String tableName)
+	public static LinkedHashSet<String> getTableColumns(final String tableName)
 	{
+		LinkedHashSet<String> res = new LinkedHashSet<String>();
 		String query = String.format("SELECT c.column_name FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
-		return new LinkedHashSet<String>(SQLUtils.<String>fetchAsList(connection, query, 1));		
+		List<Object> colNames = org.digijava.kernel.persistence.PersistenceManager.getSession().createSQLQuery(query).list();
+		for(Object colName:colNames)
+			res.add(PersistenceManager.getString(colName));
+		return res;
 	}
 	
-	public static boolean tableExists(Connection connection, String tableName)
+	public static boolean tableExists(String tableName)
 	{
-		return !getTableColumns(connection, tableName).isEmpty();
+		return !getTableColumns(tableName).isEmpty();
 	}
 	
 	public static void executeQuery(Connection conn, String query)
@@ -92,15 +113,20 @@ public class SQLUtils {
 	 */
 	public static <T> List<T> fetchAsList(Connection connection, String query, int n)
 	{
+		ResultSet rs = null;
 		try
 		{
-			ResultSet rs = rawRunQuery(connection, query, null);
+			rs = rawRunQuery(connection, query, null);
 			return fetchAsList(rs, n, " with query " + query);
 		}
 		catch(SQLException e)
 		{
 			throw new RuntimeException("Error fetching list of values with query " + query, e);
 		}
+//		finally
+//		{
+//			PersistenceManager.closeQuietly(rs);
+//		}
 	}
 	
 	public static <T> List<T> fetchAsList(ResultSet rs, int n, String errMsgAdd)
@@ -187,24 +213,16 @@ public class SQLUtils {
 		 */
 		public static String rewriteQuery(String tableName, String tableAlias, Map<String, String> renames)
 		{
-			try
+			LinkedHashSet<String> columns = SQLUtils.getTableColumns(tableName);
+			ArrayList<String> outputs = new ArrayList<String>();
+			for(String column:columns)
 			{
-				Connection conn = org.digijava.kernel.persistence.PersistenceManager.getJdbcConnection();
-				LinkedHashSet<String> columns = SQLUtils.getTableColumns(conn, tableName);
-				ArrayList<String> outputs = new ArrayList<String>();
-				for(String column:columns)
-				{
-					if (renames.containsKey(column))
-						outputs.add(renames.get(column) + " AS " + column);
-					else
-						outputs.add(tableAlias + "." + column);
-				}
-    		
-				return Util.collectionAsString(outputs);
+				if (renames.containsKey(column))
+					outputs.add(renames.get(column) + " AS " + column);
+				else
+					outputs.add(tableAlias + "." + column);
 			}
-			catch(SQLException ex)
-			{
-				throw new RuntimeException(ex);
-			}
-		}	
+   		
+			return Util.collectionAsString(outputs);
+		}
 }

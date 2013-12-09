@@ -1854,28 +1854,11 @@ public class SectorUtil {
 	private static Set<Long> getChildrenOfSectors(Collection<Long> inIds)
 	{
 		Set<Long> result = new HashSet<Long>();
-		if (inIds == null)
-			return result;
-		Connection conn = null;
-		try
-		{
-			conn = PersistenceManager.getJdbcConnection();
-			String query = "SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN (" + org.dgfoundation.amp.Util.toCSStringForIN(inIds) + ")";
-			ResultSet rs = conn.createStatement().executeQuery(query);
-			while (rs.next())
-				result.add(rs.getLong(1));
-			rs.close();
-			return result;
-		}
-		catch(SQLException e)
-		{
-			throw new RuntimeException(e);
-		}
-		finally
-		{
-			try {conn.close();}
-			catch(Exception e){};
-		}
+		String query = "SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN (" + org.dgfoundation.amp.Util.toCSStringForIN(inIds) + ")";
+		List<Object> ids = PersistenceManager.getSession().createSQLQuery(query).list();
+		for(Object longAsObj:ids)
+			result.add(PersistenceManager.getLong(longAsObj));
+		return result;
 	}
 
 	public static List<AmpActivityVersion> getActivitiesForSector(Long id) {

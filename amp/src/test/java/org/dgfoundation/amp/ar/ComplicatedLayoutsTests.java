@@ -571,7 +571,7 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 						"(line 2:RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1))");
 	
 		runReportTest("Tab with Actual Disb + Real Disb", "act-real-disb", 
-				new String[] {"SSC Project 2", "TAC_activity_1"}, fddr_correct, makeTabReportModifier);			
+				new String[] {"SSC Project 2", "TAC_activity_1"}, fddr_correct, makeTabReportModifier, null);			
 	}
 	
 	public void testReportWithRealDisbursementsColumnButWithoutRealDisbursements()

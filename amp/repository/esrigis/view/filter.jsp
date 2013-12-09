@@ -7,6 +7,10 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
@@ -121,12 +125,14 @@ function initializeTranslations(){
 															</div>
 														</td>
 													</tr>
+													<feature:display name="Structures" module="Map Module">
 													<tr style="cursor: pointer;">
 														<td class="side_opt_sel" id="general_selector_8">
 															<div class="selector_type_cont" onclick="changeTab(8)">
 																<digi:trn>Structure Types</digi:trn>
 															</div></td>	
 													</tr>
+													</feature:display>
 												</table>
 											</div>
 										</div>
@@ -534,6 +540,7 @@ function initializeTranslations(){
 														<html:optionsCollection property="filter.years" label="key" value="value" />
 													</html:select>
 												</td>
+												<feature:display name="Peacebuilding Markers" module="Map Module">
 												<td>
 													<b><digi:trn>Peacebuilding Marker</digi:trn>:</b>
 												</td>	
@@ -542,6 +549,7 @@ function initializeTranslations(){
 														<html:optionsCollection property="filter.peacebuildingMarkers" label="value" value="id" />
 													</html:select>
 												</td>
+												</feature:display>
 											</tr>
 										</table>
 									</div>

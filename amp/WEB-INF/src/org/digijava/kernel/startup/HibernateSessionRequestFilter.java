@@ -15,6 +15,7 @@ import javax.servlet.ServletResponse;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
@@ -56,10 +57,16 @@ public class HibernateSessionRequestFilter implements Filter {
             chain.doFilter(request, response);
  
             // Commit and cleanup
-            log.debug("Committing the database transaction");
-            Transaction tx	= PersistenceManager.getCurrentSession().getTransaction();
-            	if (tx.isActive())
-            		tx.commit();
+			Transaction tx = PersistenceManager.getCurrentSession()
+					.getTransaction();
+			if (tx.isActive()) {
+				Session currentSession = PersistenceManager.getCurrentSession();
+				if (currentSession.isOpen() && currentSession.isConnected()
+						&& currentSession.isDirty()) {
+					log.debug("Committing the dirty database transaction session");
+					tx.commit();
+				}
+			}            		
             
             PersistenceManager.removeClosedSessionsFromMap();
             //PersistenceManager.checkClosedOrLongSessionsFromTraceMap();

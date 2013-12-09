@@ -757,7 +757,9 @@ public class PersistenceManager {
 
 	public static void rollbackCurrentSessionTx() {
 		try {
-			if (sf.getCurrentSession().getTransaction().isActive()) {
+			if (sf.getCurrentSession().getTransaction().isActive()
+					&& sf.getCurrentSession().isOpen()
+					&& sf.getCurrentSession().isConnected()) {
 				logger.info("Trying to rollback database transaction after exception");
 				sf.getCurrentSession().getTransaction().rollback();
 			}

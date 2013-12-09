@@ -102,6 +102,7 @@ public class PublicViewColumnsUtil
 				logger.error("error while doing maintenance on the view!", e);
 			}
 		}
+		createTableCache(conn, "amp_activity_group", "cached_amp_activity_group");// recreates "cached_amp_activity_group" table, which is not created by using a view, so it was missed at the refresh cached job
 	}
 	
 	private static void doColumnMaintenance(java.sql.Connection conn, String viewName, CachedTableState viewState, boolean updateData)

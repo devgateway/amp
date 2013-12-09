@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
-	
+
 <bean:define id="elements" toScope="page" scope="request" name="reqElements" />
 <bean:define id="propertyObj" toScope="page" scope="request" name="reqPropertyObj" />
 <bean:define id="searchManagerId" toScope="page" scope="request" name="reqSearchManagerId" />
@@ -57,7 +57,9 @@
 									<div class="selector_type_cont">
 										<span style="float:left;"><digi:trn>${element.name}</digi:trn></span>
 										<span style="float: right;">
-											(${element.rootHierarchyListable.countDescendants-1})
+                                            <c:if test="${'Date' ne element.fieldType}">
+											    (${element.rootHierarchyListable.countDescendants-1})
+                                            </c:if>
 											<button type="button" onclick="getRowSelectorInstance(this.parentNode, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
 											style="display: none;">Fake</button>
 										</span>

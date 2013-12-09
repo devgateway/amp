@@ -269,7 +269,7 @@ public class ReportsFilterPicker extends Action {
 				rootDate.setUniqueId("root" + baseFormProperty );
 				rootDate.setChildren(children);
 				GroupingElement<HierarchyListableImplementation> filterByDate	= 
-						new GroupingElement<HierarchyListableImplementation>(label, htmlDivId, rootDate, "");
+						new GroupingElement<HierarchyListableImplementation>(label, htmlDivId, rootDate, "", GroupingElement.GROUPING_ELEMENT_FIELD_TYPE_DATE);
 				
 				filterForm.getOtherCriteriaElements().add(filterByDate);
 			}

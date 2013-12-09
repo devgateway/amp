@@ -2,22 +2,37 @@ package org.digijava.module.aim.util.filters;
 
 import org.digijava.module.aim.util.HierarchyListable;
 
+
+
 public class GroupingElement <T extends HierarchyListable> {
+
+    /**
+     * Consider using enum here
+     */
+    public static final String GROUPING_ELEMENT_FIELD_TYPE_DATE = "Date";
+
+
 	private String name;
 	private String htmlDivId;
 	private T rootHierarchyListable;
 	private String actionFormProperty;
+    private String fieldType;
 	
 	public GroupingElement() {
-		;
+
 	}
 	
-	public GroupingElement(String name, String htmlDivId, T rootHierarchyLIstable, String actionFormProperty ) {
-		this.name					= name;
-		this.htmlDivId				= htmlDivId;
-		this.rootHierarchyListable	= rootHierarchyLIstable;
-		this.actionFormProperty		= actionFormProperty;
+	public GroupingElement(String name, String htmlDivId, T rootHierarchyLIstable, String actionFormProperty) {
+		this(name, htmlDivId, rootHierarchyLIstable, actionFormProperty, null);
 	}
+
+    public GroupingElement(String name, String htmlDivId, T rootHierarchyLIstable, String actionFormProperty, String fieldType) {
+        this.name					= name;
+        this.htmlDivId				= htmlDivId;
+        this.rootHierarchyListable	= rootHierarchyLIstable;
+        this.actionFormProperty		= actionFormProperty;
+        this.fieldType = fieldType;
+    }
 	/**
 	 * @return the name
 	 */
@@ -66,4 +81,20 @@ public class GroupingElement <T extends HierarchyListable> {
 	public void setActionFormProperty(String actionFormProperty) {
 		this.actionFormProperty = actionFormProperty;
 	}
+
+    /**
+     *
+     * @return
+     */
+    public String getFieldType() {
+        return fieldType;
+    }
+
+    /**
+     *
+     * @param fieldType
+     */
+    public void setFieldType(String fieldType) {
+        this.fieldType = fieldType;
+    }
 }

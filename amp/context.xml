@@ -24,6 +24,7 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   testOnBorrow="true" 
   testWhileIdle="false"
   timeBetweenEvictionRunsMillis="20000" 
+  useDisposableConnectionFacade="false"  
   jdbcInterceptors="ConnectionState;StatementFinalizer;ResetAbandonedTimer;SlowQueryReport(threshold=60000)"/>
   <Manager className="org.apache.catalina.session.PersistentManager" debug="0" distributable="false" saveOnRestart="false">
   	<Store className="org.apache.catalina.session.FileStore"/>

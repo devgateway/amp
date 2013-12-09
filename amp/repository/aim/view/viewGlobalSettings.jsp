@@ -378,7 +378,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
  				                                    	} else {
  				                                    %>
 			                                    
-			                                    <html:select   property="gsfValue" alt="prueba" style="max-width: 100%" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
+			                                    <html:select   property="gsfValue" alt="prueba" style="max-width: 750px;" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
 			                                      	<%
 			                                      		String key2 = "aim:globalSettings:"+ globalSett.getGlobalSettingsName()+ ":"+ global.getValue();

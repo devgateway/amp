@@ -854,7 +854,7 @@ public class PersistenceManager {
 	 * closes a JDBC connection, swallowing any exceptions which have appeared in the meantime
 	 * @param connection
 	 */
-	public static void closeQuietly(java.lang.AutoCloseable connection)
+	public static void closeQuietly(Connection connection)
 	{
 		if (connection == null)
 			return;

@@ -30,7 +30,8 @@ public class SelectSector extends Action {
 			throws java.lang.Exception {
 
 		SelectSectorForm ssForm = (SelectSectorForm) form;
-		
+		//Added for AMP-16578 not to validate sector when changing scheme
+		boolean validateSector=true;
 		if (request.getParameter("sectorReset") != null
 				&& request.getParameter("sectorReset").equals("false")) {
 			ssForm.setSectorReset(false);
@@ -40,6 +41,8 @@ public class SelectSector extends Action {
 		}
 		if(request.getParameter("sectorScheme") != null)
 		{
+			//
+			validateSector=false;
 			//Added for AMP-3943, to be able to select sectors from a specified scheme
 			ssForm.setSectorScheme(new Long(request.getParameter("sectorScheme")));
 			//If the sectorSchemes is specified, set it with the current Sector Scheme
@@ -153,8 +156,10 @@ public class SelectSector extends Action {
 		}
 		
 		if (request.getParameter("addButton") != null){
-			if (ssForm.getSector().equals(new Long(-1)))
-				request.setAttribute("errSector", "true");
+			if (validateSector && ssForm.getSector().equals(new Long(-1)))
+				if(validateSector){
+					request.setAttribute("errSector", "true");
+				}
 			else{
 				request.setAttribute("addButton", "true");
 				HttpSession session = request.getSession();

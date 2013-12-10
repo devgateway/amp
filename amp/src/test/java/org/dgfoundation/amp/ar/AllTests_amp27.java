@@ -25,7 +25,7 @@ public class AllTests_amp27 {
 	public static Test suite() {
 		
 		setUp();
-		new MoldovaTranslationsSplit().doMoldovaTranslations();
+		//new MoldovaTranslationsSplit().doMoldovaTranslations();
 		
 //		LiberiaFiller.fillInDatabase();
 		TestSuite suite = new TestSuite(AllTests_amp27.class.getName());
@@ -51,8 +51,8 @@ public class AllTests_amp27 {
 		try
 		{ 
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_27";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_27";
+			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";
     	
 			ResourceStreamHandlerFactory.installIfNeeded();
 

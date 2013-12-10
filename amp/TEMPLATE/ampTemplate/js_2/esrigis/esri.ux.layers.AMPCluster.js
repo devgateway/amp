@@ -72,8 +72,8 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
 
         //connects for cluster layer itself that handles the loading and mouse events on the graphics
         dojo.connect(this, 'onLoad', this.handleLayerLoaded);
-        dojo.connect(this, 'onMouseOver', this.handleMouseOver);
-        dojo.connect(this, 'onMouseOut', this.handleMouseOut);
+        //dojo.connect(this, 'onMouseOver', this.handleMouseOver);
+        //dojo.connect(this, 'onMouseOut', this.handleMouseOut);
 		dojo.connect(this, 'onClick', this.handleMouseClick);
 		dojo.connect(this, "onVisibilityChange", function(visible){
 			if(visible){

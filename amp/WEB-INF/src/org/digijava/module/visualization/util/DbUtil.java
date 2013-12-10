@@ -2829,12 +2829,11 @@ public class DbUtil {
         Session session = null;
         List<AmpDashboard> dashs = null;
         Iterator itr = null;
-		
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select d from "
                 + AmpDashboard.class.getName() + " d where (d.showInMenu='true')";
-            Query qry = session.createQuery(queryString);
+            Query qry;
             qry = session.createQuery(queryString);
 			dashs = qry.list();
         } catch (Exception ex) {

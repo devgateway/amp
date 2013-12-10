@@ -917,13 +917,11 @@ public class AmpMessageUtil {
 		return receivers;
 	}
 	
-	public static List<Long> loadReceiversIdsToGetEmails(){
+	public static List<Long> loadReceiversIdsToGetEmails(Session session){
 		List<Long> ids=null;
-		Session session=null;
 		String queryString =null;
 		Query query=null;
 		try {			
-			session=PersistenceManager.getRequestDBSession();
 			queryString="select rec.id from " + AmpEmailReceiver.class.getName() +" rec where rec.status not like '"+MessageConstants.SENT_STATUS+"'";
 			query=session.createQuery(queryString);
 			ids=query.list();

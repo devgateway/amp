@@ -439,7 +439,10 @@ function initializeGlobalVariables(){
 																<feature:display module="Funding" name="Expenditures">
 																	<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
 																</feature:display>
-																<html:option value="3"><digi:trn>MTEF Projections</digi:trn></html:option>
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"
+                                                            					parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+																	<html:option value="3"><digi:trn>MTEF Projections</digi:trn></html:option>
+																</module:display>
 															</html:select>
 														</td>
 													</tr>
@@ -1325,7 +1328,10 @@ function initializeGlobalVariables(){
 					<feature:display module="Funding" name="Expenditures">
 						<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
 					</feature:display>
-					<html:option value="3"><digi:trn>MTEF Projections</digi:trn></html:option>
+					<module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"
+                                    parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+						<html:option value="3"><digi:trn>MTEF Projections</digi:trn></html:option>
+					</module:display>
 				</html:select>
 		 	</td>
 		</tr>

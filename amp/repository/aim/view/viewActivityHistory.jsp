@@ -33,7 +33,8 @@
 					<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
 					</td>
 					<td>
-						${item.activityCreator.user.firstNames} ${item.activityCreator.user.lastName}
+						<%-- ${item.activityCreator.user.firstNames} ${item.activityCreator.user.lastName} --%>
+						<digi:trn>not available</digi:trn>
 						<c:if test="${empty item.activityCreator.user.firstNames}">
 						<digi:trn>Empty</digi:trn>
 						</c:if>
@@ -58,12 +59,12 @@
 						</c:if>
 					</td>
 				</c:if>
-				<c:if test="${item.modifiedBy ne null}">
+				<c:if test="${item.modifiedBy ne null}"> 
 					<td>
 					<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
 					</td>
 					<td>
-						${item.modifiedBy.user.firstNames} 
+						${item.modifiedBy.user.firstNames}  ${item.activityCreator.user.lastName}
 						<c:if test="${empty item.modifiedBy.user.firstNames}">
 						<digi:trn>Empty</digi:trn>
 						</c:if>

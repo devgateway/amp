@@ -67,7 +67,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 
         translationHashMap = new HashMap<String, AmpContentTranslation>();
 
-		Session ses = getHibernateSession();
+		Session ses = getHibernateSession(true);
 		ses.clear();
 	}
 	
@@ -79,9 +79,18 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	 * No {@link Transaction} nor {@link Session} references are kept in the model!
 	 * @return
 	 */
-	public static Session getHibernateSession() {
+    public static Session getHibernateSession(){
+        return getHibernateSession(false);
+    }
+
+	private static Session getHibernateSession(boolean reset) {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		Session hibernateSession = (Session) s.getHttpSession().getAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY);
+        if (reset && hibernateSession != null){
+            hibernateSession.clear();
+            hibernateSession.close();
+            hibernateSession = null;
+        }
 		if(hibernateSession==null || !hibernateSession.isOpen())  {
 			try {
 				hibernateSession = PersistenceManager.openNewSession();

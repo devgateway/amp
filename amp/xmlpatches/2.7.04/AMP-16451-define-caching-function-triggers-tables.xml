@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-16451</jira>
+	<keyword>reports - cache the result of getlocationidbyimplloc() over amp_location entries - since the locations tables rarely if ever changes on a database</keyword>
+	<author>Dolghier Constantin</author>
+	<description></description>
+	<apply>
+		<script>
+			<lang delimiter="@" type="postgres">
+
+CREATE TABLE amp_location_cache_regions
+	(amp_location_id bigint NOT NULL PRIMARY KEY, 
+	region_id bigint,
+	region_name character varying)@@@
+
+CREATE TABLE amp_location_cache_zones
+	(amp_location_id bigint NOT NULL PRIMARY KEY, 
+	zone_id bigint,
+	zone_name character varying)@@@
+
+CREATE TABLE amp_location_cache_districts
+	(amp_location_id bigint NOT NULL PRIMARY KEY, 
+	district_id bigint,
+	district_name character varying)@@@
+
+CREATE TABLE amp_location_cache_countries
+	(amp_location_id bigint NOT NULL PRIMARY KEY, 
+	country_id bigint,
+	country_name character varying)@@@
+
+CREATE OR REPLACE FUNCTION update_location_level_caches_internal()
+  RETURNS bigint AS
+$BODY$
+BEGIN
+	TRUNCATE amp_location_cache_regions;
+	TRUNCATE amp_location_cache_zones;
+	TRUNCATE amp_location_cache_districts;
+	TRUNCATE amp_location_cache_countries;
+
+	INSERT INTO amp_location_cache_regions 
+		SELECT l.amp_location_id, getlocationidbyimplloc(l.location_id, 'Region'::character varying) AS region_id, getlocationname(getlocationidbyimplloc(l.location_id, 'Region'::character varying)) as region_name
+ 		FROM amp_location l;
+
+	INSERT INTO amp_location_cache_zones 
+		SELECT l.amp_location_id, getlocationidbyimplloc(l.location_id, 'Zone'::character varying) AS zone_id, getlocationname(getlocationidbyimplloc(l.location_id, 'Zone'::character varying)) as zone_name
+ 		FROM amp_location l;
+
+	INSERT INTO amp_location_cache_districts 
+		SELECT l.amp_location_id, getlocationidbyimplloc(l.location_id, 'District'::character varying) AS district_id, getlocationname(getlocationidbyimplloc(l.location_id, 'District'::character varying)) as district_name
+ 		FROM amp_location l;
+
+	INSERT INTO amp_location_cache_countries 
+		SELECT l.amp_location_id, getlocationidbyimplloc(l.location_id, 'Country'::character varying) AS country_id, getlocationname(getlocationidbyimplloc(l.location_id, 'Country'::character varying)) as country_name
+ 		FROM amp_location l;
+
+	RETURN 1;
+end;
+$BODY$
+LANGUAGE plpgsql VOLATILE; @@@
+
+CREATE OR REPLACE FUNCTION update_location_level_caches()
+  RETURNS TRIGGER AS
+$BODY$
+declare	dummy bigint;
+BEGIN
+	SELECT into dummy update_location_level_caches_internal() FROM (select 1) AS dual;
+	RETURN NULL;
+end;
+$BODY$
+LANGUAGE plpgsql VOLATILE; @@@
+		
+ALTER FUNCTION getlocationidbyimplloc(bigint, character varying) STABLE @@@
+ALTER FUNCTION getlocationname(bigint) STABLE @@@
+
+CREATE TRIGGER update_location_level_caches_trg_location AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE ON amp_location
+    EXECUTE PROCEDURE update_location_level_caches() @@@
+
+CREATE TRIGGER update_location_level_caches_trg_catvallocation AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE ON amp_category_value_location
+    EXECUTE PROCEDURE update_location_level_caches() @@@
+
+CREATE TEMPORARY TABLE DUMMY_TABLE_YOU_SHOULD_NOT_SEE_IT_WE_ARE_TRYING_TO_MAKE_XML_PATCHER_HAPPY AS SELECT update_location_level_caches_internal() FROM (select 1) AS dual @@@
+DROP TABLE DUMMY_TABLE_YOU_SHOULD_NOT_SEE_IT_WE_ARE_TRYING_TO_MAKE_XML_PATCHER_HAPPY @@@
+
+UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart' @@@	
+
+	
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

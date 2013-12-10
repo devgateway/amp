@@ -19,7 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_countries AS SELECT ra.amp_activity_id, getlocationname(getlocationidbyimplloc(l.location_id, 'Country'::character varying)) AS location_name, getlocationidbyimplloc(l.location_id, 'Country'::character varying) AS location_id, sum(ra.location_percentage) AS location_percentage FROM amp_activity_location ra, amp_location l WHERE ((ra.amp_location_id = l.amp_location_id) AND (getlocationidbyimplloc(l.location_id, 'Country'::character varying) IS NOT NULL)) GROUP BY ra.amp_activity_id, getlocationidbyimplloc(l.location_id, 'Country'::character varying);;;
+				DROP VIEW IF EXISTS v_countries;
+				CREATE OR REPLACE VIEW v_countries AS 
+			    	SELECT ra.amp_activity_id, getlocationname(countries.country_id) AS location_name, countries.country_id AS location_id, sum(ra.location_percentage) AS location_percentage 
+						FROM amp_activity_location ra, amp_location_cache_countries countries
+						WHERE (ra.amp_location_id = countries.amp_location_id) AND (countries.country_id IS NOT NULL)
+						GROUP BY ra.amp_activity_id, countries.country_id;
         		</lang>
 		</script>
 	</apply>

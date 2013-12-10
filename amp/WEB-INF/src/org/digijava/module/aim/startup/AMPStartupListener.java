@@ -283,8 +283,15 @@ public class AMPStartupListener extends HttpServlet implements
 			for(String viewName:InternationalizedViewsRepository.i18Models.keySet())
 			{
 				String s = InternationalizedViewsRepository.i18Models.get(viewName).toString();
-				logger.info("loaded " + s);
+				//logger.info("loaded " + s);
 			}
+			
+			java.util.List<?> shouldBe1 = PersistenceManager.getSession().createSQLQuery("SELECT update_location_level_caches_internal() FROM (select 1) AS dual").list(); // force recreation of the location cached at each AMP startup
+			if (shouldBe1.size() != 1)
+				throw new Error("recreating AMP location caches failed");
+
+			if (PersistenceManager.getLong(shouldBe1.get(0)).longValue() != 1L)
+				throw new Error("recreating AMP location caches returned the wrong value: " + shouldBe1.get(0));
 			
 			PersistenceManager.getSession().getTransaction().commit();
 			
@@ -323,7 +330,7 @@ public class AMPStartupListener extends HttpServlet implements
 		java.sql.Connection connection = null;
 		try
 		{
-			connection = PersistenceManager.getJdbcConnection();		
+			connection = PersistenceManager.getJdbcConnection();	
 			connection.setAutoCommit(false);
 		
 			// make sure that, in case the following SQL stuff fails, at least the Java side executed correctly and committed its stuff

@@ -9,9 +9,8 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				insert into amp_columns values (nextval('amp_columns_seq'),'Budget Structure','budgetstructure','org.dgfoundation.amp.ar.cell.MetaTextCell',
-					'v_budget_structure',null,null,'org.digijava.module.aim.dbentity.AmpActivityBudgetStructure',
-					true,null,null);
+				INSERT INTO amp_columns (columnid, columnname, aliasname, celltype, extractorview, tokenexpression, totalexpression, relatedcontentpersisterclass, showrowcalculations, description) VALUES 
+				(nextval('amp_columns_seq'),'Budget Structure','budgetstructure','org.dgfoundation.amp.ar.cell.MetaTextCell', 'v_budget_structure',null,null,'org.digijava.module.aim.dbentity.AmpActivityBudgetStructure', null, 'Budget Structure');
 			</lang>
 		</script>
 	</apply>

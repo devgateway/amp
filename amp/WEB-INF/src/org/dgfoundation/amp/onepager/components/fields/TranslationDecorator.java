@@ -36,6 +36,7 @@ public class TranslationDecorator extends Panel {
     private Model<String> langModel;
 
     private IModel<Boolean> switchingDisabled = new Model<Boolean>(Boolean.FALSE);
+    private Component currentLabel;
 
     private TranslationDecorator(String id, final IModel<?> model, final Component component) {
         super(id, model);
@@ -93,15 +94,31 @@ public class TranslationDecorator extends Panel {
                 String compareValue = null;
                 if (!language.equals(getSession().getLocale().getLanguage()))
                     compareValue = language;
-                //set the css for the current selected tab
-                if ((langModel.getObject() == null && compareValue == null) || (langModel.getObject() != null && langModel.getObject().equals(compareValue)))
-                    classValue += " selected";
 
-                String display = language;
-                if (availableTrnLocales.getObject().contains(language))
-                    display += " &#x2713;";
-                item.add(new AttributeModifier("class", classValue));
-                link.add(new Label("title", display).setEscapeModelStrings(false));
+                Model<String> labelModel = new Model<String>(language) {
+                    @Override
+                    public String getObject() {
+                        String display = super.getObject();
+                        if (availableTrnLocales.getObject().contains(display))
+                            display += " &#x2713;";
+                        return display;
+                    }
+                };
+
+
+                Label label = new Label("title", labelModel);
+                label.setEscapeModelStrings(false);
+                label.setOutputMarkupId(true);
+
+                //set the css for the current selected tab
+                if ((langModel.getObject() == null && compareValue == null) || (langModel.getObject() != null && langModel.getObject().equals(compareValue))){
+                    currentLabel = label;
+                    classValue += " selected";
+                }
+
+
+
+                link.add(label);
                 if (component instanceof AmpTextAreaFieldPanel){
                     AmpTextAreaFieldPanel area = (AmpTextAreaFieldPanel)component;
                     //if we have a wysiwyg editor we need to close it when switching between tabs
@@ -109,6 +126,7 @@ public class TranslationDecorator extends Panel {
                         link.add(new AttributePrepender("onclick", Model.of("$('#" + area.getCloseLink().getMarkupId() + "').click();"), " "));
                     }
                 }
+                item.add(new AttributeModifier("class", classValue));
                 item.add(link);
 
             }
@@ -167,5 +185,9 @@ public class TranslationDecorator extends Panel {
 
     public IModel<Boolean> getSwitchingDisabled() {
         return switchingDisabled;
+    }
+
+    public Component getCurrentLabel() {
+        return currentLabel;
     }
 }

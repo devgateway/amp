@@ -361,12 +361,14 @@ function initializeGlobalVariables(){
 								</html:radio>
 							</li>
 						</feature:display>
-						<li>
+						<module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"
+                                        parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+                            <li>
 							<html:radio property="filter.transactionTypeFilter" styleId="transaction_type_3" value="3">
 								<digi:trn>MTEF Projections</digi:trn>
 							</html:radio>
-						</li>
-						
+							</li>
+						</module:display>
 					</ul>
 					</td></tr>
 					<tr><td><hr/></td></tr>

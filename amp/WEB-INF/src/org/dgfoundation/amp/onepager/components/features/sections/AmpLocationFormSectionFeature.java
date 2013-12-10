@@ -11,6 +11,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.SetModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpLocationFormTableFeature;
@@ -185,7 +186,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                         FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
 
                 if (target!=null){ //we're in an ajax context, and not in init
-                    locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational);
+                    locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational,true);
                     target.add(locationsTable);
                     target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
                 }

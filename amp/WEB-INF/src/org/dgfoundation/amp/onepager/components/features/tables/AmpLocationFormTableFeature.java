@@ -274,8 +274,12 @@ public class AmpLocationFormTableFeature extends
 		
 		add(searchLocations);
 	}
+	
+	public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational){
+		 locationSelected(choice, am, disablePercentagesForInternational,false);
+	}
 
-    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational){
+    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational, boolean isCountryNational){
         AmpActivityLocation activityLocation = new AmpActivityLocation();
 
         AmpLocation ampLoc = LocationUtil
@@ -324,6 +328,14 @@ public class AmpLocationFormTableFeature extends
             setModel.setObject(new HashSet<AmpActivityLocation>());
 
         Set<AmpActivityLocation> set = setModel.getObject();
+        if(isCountryNational){
+	        Iterator<AmpActivityLocation> it = set.iterator();
+	        while(it.hasNext()){
+	        	AmpActivityLocation loc = it.next();
+	        	if(loc.getLocation()!=null && loc.getLocation().getLocation()!=null && loc.getLocation().getLocation().getParentLocation()!=null && activityLocation.getLocation()!=null &&loc.getLocation().getLocation().getParentLocation().compareTo(activityLocation.getLocation().getLocation())==0)
+	        		return;
+	        }
+        }
         set.add(activityLocation);
     }
 }

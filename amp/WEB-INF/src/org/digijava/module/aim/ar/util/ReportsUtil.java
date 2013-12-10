@@ -1,5 +1,6 @@
 package org.digijava.module.aim.ar.util;
 
+import java.sql.Connection;
 import java.util.*;
 
 import org.apache.log4j.Logger;
@@ -109,14 +110,16 @@ public class ReportsUtil {
 	 */
 	public static void checkDatabaseSanity() throws Exception
 	{
-		List<?> res = PersistenceManager.getRequestDBSession().createSQLQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE " + 
+		Session session	= PersistenceManager.getRequestDBSession();
+		List<?> res = session.createSQLQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE " + 
 				"(SELECT count(*) from amp_report_column arc2 WHERE arc2.amp_report_id = arc.amp_report_id AND arc2.columnid = arc.columnid) > 1").list();
 		if (!res.isEmpty())
 			throw new RuntimeException("The following reports have a column repeated at least twice each: amp_report_id IN (" + Util.toCSString(res) + ")");
 		
-		res = PersistenceManager.getRequestDBSession().createSQLQuery("select DISTINCT(columnname) from amp_columns col WHERE " + 
+		res = session.createSQLQuery("select DISTINCT(columnname) from amp_columns col WHERE " + 
 				"(SELECT count(*) FROM amp_columns col2 WHERE col.columnname = col2.columnname) > 1").list();
-		
+		if ( session.getTransaction() != null && session.getTransaction().isActive() )
+			session.getTransaction().commit();
 		if (!res.isEmpty())
 			throw new RuntimeException("The following column(s) are defined at least twice in amp_columns: (" + Util.toCSString(res) + ")");
 	}

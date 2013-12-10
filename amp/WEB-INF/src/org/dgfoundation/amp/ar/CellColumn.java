@@ -257,7 +257,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 			ListCell lCell						= entry.getValue();
 			if ( lCell != null && lCell.size() > 0 ) {
 				if ( lCell.size() == 1 ) {
-					dest.addCell( lCell.getCell(0) );
+					dest.addCell( lCell.getFirstCell() );
 				}
 				else {
 					dest.addCell(lCell);
@@ -266,7 +266,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 		}
 
 		if (lc.size() == 1)
-			dest.addCell(lc.getCell(0));
+			dest.addCell(lc.getFirstCell());
 		if (lc.size() > 1)
 			dest.addCell(lc);
 

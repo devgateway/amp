@@ -71,9 +71,9 @@ public class TotalAmountColumn<K extends AmountCell> extends AmountCellColumn<K>
     	try {
     		List<AmountCell> tobeMergedCells	= new ArrayList<AmountCell>();
     		if ( c instanceof ListCell ) {
-    			Iterator<AmountCell> iter	= ((ListCell)c).iterator();
+    			Iterator<Cell> iter = ((ListCell)c).iterator();
     			while ( iter.hasNext() ) {
-    				tobeMergedCells.add(iter.next());
+    				tobeMergedCells.add((AmountCell) iter.next());
     			}
     		}
     		else

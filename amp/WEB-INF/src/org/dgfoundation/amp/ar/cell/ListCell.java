@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -32,7 +33,10 @@ public class ListCell extends Cell {
 		new MetaInfo(GenericViews.HTML,"ListCell.jsp")
 		};
 	
-	protected List<Cell> value;
+	/**
+	 * they must be kept in-order and unique
+	 */
+	protected SortedSet<Cell> value = new TreeSet<Cell>();
 	
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Cell#toString()
@@ -41,55 +45,55 @@ public class ListCell extends Cell {
 	
 	public ListCell() {
 		super();
-		value = new ArrayList();
 	}
 	
 
 	public ListCell(ListCell src) {
 		super();
-		value = new ArrayList();
 		value.addAll(src.getValue());
 	}
 	
 	
-	public Class getWorker() {
-		if (value.size()>0) return getCell(0).getWorker();
-		return null;
+	public Class getWorker()
+	{
+		Cell firstCell = getFirstCell();
+		if (firstCell == null)
+			return null;
+		return firstCell.getWorker();
 	}
 	
 	
-	public Cell getCell(int indexPos) {
-		if(indexPos>=value.size()) return null;
-		return (Cell)value.get(indexPos);
+	public Cell getFirstCell()
+	{
+		if (value == null)
+			return null;
+		if (value.isEmpty())
+			return null;
+		return value.first();
 	}
 	
-	public void addCell(Cell c) throws IncompatibleCellException {
-		if (ownerId==null) ownerId=c.getOwnerId();
-		if(c==null) return;
-		if(value.size()>0 && !getCell(0).getOwnerId().equals(c.getOwnerId())) 
+	public void addCell(Cell c) throws IncompatibleCellException
+	{
+		if(c==null)
+			return;
+		
+		if (ownerId == null)
+			ownerId = c.getOwnerId();
+		
+		if ((getFirstCell() != null) && (!getFirstCell().getOwnerId().equals(c.getOwnerId()))) 
 			throw new IncompatibleCellException("Group Cells must hold items with identical Ids!");
-		/**
-		 * @author dan
-		 * to avoid the lists with the same elements such as...."Japan Japan Japan"
-		 */
-		TreeSet<Cell> aux=new TreeSet<Cell>(/*new CellContentsComparator()*/);
-		aux.addAll(value);
-		aux.add(c);
-		value.clear();
-		value.addAll(aux);
-//		value.add(c);
+		
+		value.add(c);
 	}
 	
-	public Iterator iterator() {
-		return ((Collection)value).iterator();
+	public Iterator<Cell> iterator() {
+		return value.iterator();
 	}
 	
-	public void addCells(Collection cells) throws IncompatibleCellException {
-		Iterator i=cells.iterator();
-		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
-			addCell(element);
-		}
+	public void addCells(Collection<Cell> cells) throws IncompatibleCellException
+	{
+		for(Cell cell:cells)
+			addCell(cell);
 	}
 	
 	public ListCell(Long id) {
@@ -101,12 +105,8 @@ public class ListCell extends Cell {
 		return value.toString();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.Cell#getValue()
-	 */
 	@Override
-	public List<Cell> getValue() {
-		// TODO Auto-generated method stub
+	public Collection<Cell> getValue() {
 		return value;
 	}
 
@@ -168,7 +168,7 @@ public class ListCell extends Cell {
 
 
 	public Comparable comparableToken() {
-		return getCell(0).comparableToken();
+		return getFirstCell().comparableToken();
 	}
 
 
@@ -190,13 +190,12 @@ public class ListCell extends Cell {
 	 */
 	public Cell createSummaryElement()
 	{
-		if (this.getValue() == null)
+		Cell firstCell = getFirstCell();
+		
+		if (firstCell == null)
 			return new AmountCell(); // failsafe result, preserves old behaviour
-		
-		if (this.getValue().size() == 0)
-			return new AmountCell(); //failsafe result, preserves old behaviour
-		
-		Class childClass = this.getValue().get(0).getClass();
+				
+		Class childClass = firstCell.getClass();
 		try
 		{
 			return (Cell) (childClass.newInstance());

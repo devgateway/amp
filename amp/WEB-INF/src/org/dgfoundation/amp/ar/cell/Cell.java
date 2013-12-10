@@ -5,7 +5,9 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -91,15 +93,18 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 	 * @param b
 	 * @return
 	 */
-	protected int compareLists(Object a, Object b)
+	protected int compareLists(Collection<Comparable> a, Collection<Comparable> b)
 	{
-		List l1 = (List) a;
-		List l2 = (List) b;
-		if (l1.size() != l2.size())
-			return l1.size() - l2.size();
-		for(int i = 0; i < l1.size(); i++)
+		if (a.size() != b.size())
+			return a.size() - b.size();
+		int sz = a.size(); // sizes are equal
+		Iterator<Comparable> itA = a.iterator();
+		Iterator<Comparable> itB = b.iterator();
+		for(int i = 0; i < sz; i ++)
 		{
-			int z = (((Comparable) l1.get(i)).compareTo((Comparable) l2.get(i)));
+			Comparable elemA = itA.next();
+			Comparable elemB = itB.next();
+			int z = elemA.compareTo(elemB);
 			if (z != 0)
 				return z;
 		}
@@ -118,14 +123,14 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 			return 1;
 		
 		// got till here -> no nulls
-		if (this.getValue() instanceof List)
+		if (this.getValue() instanceof Collection)
 		{
-			if (o.getValue() instanceof List)
-				return compareLists(this.getValue(), o.getValue());
+			if (o.getValue() instanceof Collection)
+				return compareLists((Collection<Comparable>)this.getValue(), (Collection<Comparable>)o.getValue());
 			
 			return 1;
 		}
-		if (o.getValue() instanceof List)
+		if (o.getValue() instanceof Collection)
 		{
 			// the first one is not a list -> return -1
 			return -1;

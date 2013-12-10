@@ -138,6 +138,19 @@ public class AmpReportGenerator extends ReportGenerator {
 		return ret;
 	}
 
+	protected ArrayList<AmpReportColumn> removeDuplicateColumns(List<AmpReportColumn> in)
+	{
+		Set<String> alreadyExistingColumns = new HashSet<String>();
+		ArrayList<AmpReportColumn> out = new ArrayList<AmpReportColumn>();
+		for(AmpReportColumn col:in)
+		{
+			if (!alreadyExistingColumns.contains(col.getColumn().getColumnName()))
+				out.add(col);
+			alreadyExistingColumns.add(col.getColumn().getColumnName());
+		}
+		return out;
+	}
+	
 	/**
 	 * retrieves columns from the database. Only the columns that are specified
 	 * in the reportMetadata are going to be retrieved. Each column is retrieved
@@ -217,6 +230,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		this.setMtefExtractOnlyDonorData(fundingOrgHiers.isEmpty());
 		
+		extractable = removeDuplicateColumns(extractable);
 		if (extractable.size() > 0) {
 			createDataForColumns(extractable);
 		}

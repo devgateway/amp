@@ -109,7 +109,12 @@ public class LabelManagerAction extends MultiAction {
 		LabelManagerForm lmForm	= (LabelManagerForm) form;
 		LabelDAO labelDAO		= new LabelDAO(request, false);
 		RootLabel rootLabel			= labelDAO.getRootLabel();
-		
+		//we have to do an explicit call in orden to pre-populate the root with children, before 
+		//rendering the tree
+		List<Label> labels = rootLabel.getChildren();
+		for (Label label:labels) {
+			label.getChildren();
+		}
 		lmForm.setRootLabel(rootLabel);
 		
 		

@@ -88,6 +88,9 @@ public class PublicViewColumnsUtil
 	{
 		logger.info(String.format("doing maintenance on public view caches, updateData = %b", updateData));
 		Map<String, CachedTableState> viewsStates = getExtractorColumns(conn);
+		
+		// recreates "cached_amp_activity_group" table, which is not created by using a view, so it was missed at the refresh cached job
+		viewsStates.put("amp_activity_group", compareTableStructures("amp_activity_group", getPublicViewTable("amp_activity_group")) );
 		for(String viewName:viewsStates.keySet())
 		{
 			CachedTableState viewState = viewsStates.get(viewName);
@@ -102,7 +105,6 @@ public class PublicViewColumnsUtil
 				logger.error("error while doing maintenance on the view!", e);
 			}
 		}
-		createTableCache(conn, "amp_activity_group", "cached_amp_activity_group");// recreates "cached_amp_activity_group" table, which is not created by using a view, so it was missed at the refresh cached job
 	}
 	
 	private static void doColumnMaintenance(java.sql.Connection conn, String viewName, CachedTableState viewState, boolean updateData)

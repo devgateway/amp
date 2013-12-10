@@ -32,7 +32,6 @@ import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpChapter;
 import org.digijava.module.aim.dbentity.AmpComponentType;

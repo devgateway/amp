@@ -79,9 +79,9 @@ public class AmpFundingAmountComponent<T> extends Panel {
     public AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,
             String propertyAmount, String fmCurrency, String propertyCurrency,
             String fmDate, String propertyDate, boolean isMTEFProjection,String amountSize) {
-this(id, model, fmAmount, propertyAmount, fmCurrency, propertyCurrency, fmDate, propertyDate,
-isMTEFProjection, false,amountSize);
-}
+    	this(id, model, fmAmount, propertyAmount, fmCurrency, propertyCurrency, fmDate, propertyDate,
+    			isMTEFProjection, false,amountSize);
+    }
 
     
     protected AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,
@@ -110,7 +110,6 @@ isMTEFProjection, false,amountSize);
 						visit.dontGoDeeper();
 					}
 				});
-				onFundingDetailChanged(target);
 			}
 			
 			public IConverter getInternalConverter(java.lang.Class<?> type) {
@@ -123,10 +122,10 @@ isMTEFProjection, false,amountSize);
 			}
 		};
 		amount.getTextContainer().setRequired(true);
-		if(amountSize!=null)
-			amount.getTextContainer().add(new AttributeModifier("size", new Model<String>(amountSize)));
-		else
+		if(amountSize==null)
 			amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("9")));
+		else
+			amount.getTextContainer().add(new AttributeModifier("size", new Model<String>(amountSize)));
 		
 		add(amount);
 		
@@ -141,12 +140,7 @@ isMTEFProjection, false,amountSize);
 		currency = new AmpSelectFieldPanel<AmpCurrency>("currency",
 				new PropertyModel<AmpCurrency>(model, propertyCurrency),
 				currencyList,
-				fmCurrency, hideLabel, false, null, hideNewLine){
-			@Override
-			protected void onAjaxOnUpdate(AjaxRequestTarget target) {
-				onFundingDetailChanged(target);
-			}
-		};
+				fmCurrency, hideLabel, false, null, hideNewLine);
 		currency.getChoiceContainer().setRequired(true);
 		currency.getChoiceContainer().add(new AttributeModifier("class", "dropdwn_currency"));
 		add(currency);
@@ -166,12 +160,7 @@ isMTEFProjection, false,amountSize);
 //			date = datetmp;
 
 
-            AmpSelectFieldPanel<KeyValue> datetmp = new AmpSelectFieldPanel<KeyValue>("date", yearModel, mtefYearsChoices, fmDate, true, true, new ChoiceRenderer<KeyValue>("value", "key")){
-            	@Override
-            	protected void onAjaxOnUpdate(AjaxRequestTarget target) {
-            		onFundingDetailChanged(target);
-            	}
-            };
+            AmpSelectFieldPanel<KeyValue> datetmp = new AmpSelectFieldPanel<KeyValue>("date", yearModel, mtefYearsChoices, fmDate, true, true, new ChoiceRenderer<KeyValue>("value", "key"));
             date = datetmp;
 		}
 		add(date);
@@ -180,13 +169,6 @@ isMTEFProjection, false,amountSize);
         add(quarterInfo);
 
 		setRenderBodyOnly(true);
-	}
-
-    /**
-     * Method called when the amount field value has been changed
-     * @param target
-     */
-	protected void onFundingDetailChanged(AjaxRequestTarget target) {
 	}
 
 	public AmpTextFieldPanel<Double> getAmount() {

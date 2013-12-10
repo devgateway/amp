@@ -35,7 +35,6 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.EditActivityForm.Planning;
 import org.digijava.module.aim.form.EditActivityForm.Programs;
@@ -1512,15 +1511,7 @@ public class ExportActivityToWord extends Action {
 	
 	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Proposed Completion Date ", null, null,  true).
 	                                                        addRowData(DateConversion.ConvertDateToString(act.getFunDate())));
-	        
-	        Iterator<ProposedProjCost> it = myForm.getFunding().getProposedAnnualBudgets().iterator();
-			while(it.hasNext()){
-				ProposedProjCost ppc = it.next();
-				eshProjectCostTable.addRowData(new ExportSectionHelperRowData(ppc.getFunDate(), null, null,  true).
-	                    addRowData(FormatHelper.formatNumber(ppc.getFunAmountAsDouble())).
-	                    addRowData(ppc.getCurrencyCode()));
-			}
-	        
+	
 	
 	        retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
 		}

@@ -212,12 +212,6 @@
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityInternalId" />
 		</set>
-		
-		<set name="annualProjectBudgets" cascade="all-delete-orphan" inverse="true">
-			<cache usage="read-write" />
-			<key column="amp_activity_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpAnnualProjectBudget" />
-		</set>
 
 
 		<set name="funding" cascade="all-delete-orphan" inverse="true">

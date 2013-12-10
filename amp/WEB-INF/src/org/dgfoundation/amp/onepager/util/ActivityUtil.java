@@ -44,7 +44,6 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAgreement;
-import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -836,19 +835,6 @@ public class ActivityUtil {
 			}
 		}
 	}
-	
-	private static void saveAnnualProjectBudgets(AmpActivityVersion a, Session session) throws Exception {
-		if(a.getAmpActivityId() != null){
-			Iterator<AmpAnnualProjectBudget> it = a.getAnnualProjectBudgets().iterator();
-			while(it.hasNext()){
-				AmpAnnualProjectBudget annualBudget = it.next();
-				annualBudget.setActivity(a);
-				session.saveOrUpdate(annualBudget);
-			}
-			
-		}
-	}
-	
 	public static void saveContacts(AmpActivityVersion a, Session session,boolean checkForContactsRemoval) throws Exception {
 		Set<AmpActivityContact> activityContacts=a.getActivityContacts();
 	      // if activity contains contact,which is not in contact list, we should remove it

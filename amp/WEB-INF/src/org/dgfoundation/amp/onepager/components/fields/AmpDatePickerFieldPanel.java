@@ -55,7 +55,8 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 		
 		date = AmpDatePickerRegular.newDatePicker("date", model); 
 		String readonly = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.READONLY_DATES);
-	    date.add(new AttributeModifier("disabled",readonly));
+	    if (readonly != null && "TRUE".equals(readonly.toUpperCase()))
+            date.add(new AttributeModifier("readonly","readonly"));
 		dateWrapper.add(date);
 		initFormComponent(date);
 		sameAsOtherDatePicker = new AmpAjaxCheckBoxFieldPanel(

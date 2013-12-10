@@ -102,6 +102,10 @@ import org.digijava.module.aim.helper.GlobalSettings;
 public class ExportActivityToPDF extends Action {
 	
 	private static Logger logger = Logger.getLogger(ExportActivityToPDF.class);
+	
+	/**
+	 * font which supports Diacritics - for Romanian language support. The standard PDF fonts do not have diacritics, so we have to embed a TTF font into AMP
+	 */
 	public final static BaseFont basefont = getBaseFont();
 	
 	private static final com.lowagie.text.Font plainFont = new com.lowagie.text.Font(basefont, 11,Font.NORMAL);
@@ -1815,7 +1819,10 @@ public class ExportActivityToPDF extends Action {
     public final static String getLatinLettersEquivalent(String src)// returns text without diacritics should be called with a Printable Equivalent
     {
     	src = src.replace('ţ', 'ţ').replace("ț", "ţ").replace('Ţ', 'Ţ').replace('î', 'î').replace('ş', 'ş').replace('Ş', 'Ş').replace("ş", "ş").replace("î", "î").replace("ă", "ă").replace("ţ", "ţ");
-    	src = src.replace("ș", "ş").replace("ț", "ţ").replace('ă', 'ă').replace('Ț', 'Ţ');
+    	src = src.replace("ș", "ş").replace("ț", "ţ").replace('Ț', 'Ţ');
+    	
+    	// this is the "paranoid" line
+    	src = src.replace('ă', 'a').replace('ş', 's').replace('ţ', 't').replace('î', 'i').replace('Ş', 'S').replace('Ţ', 'T').replace('ă', 'a');
     	
     	return src;
     	

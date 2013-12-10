@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import static org.digijava.module.aim.action.ExportActivityToPDF.postprocessText;
+import static org.digijava.module.aim.action.ExportActivityToPDF.basefont;
+
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
@@ -59,11 +62,11 @@ public class ExportToPDF extends Action {
     public static final Color TITLECOLOR = new Color(34, 46, 93);
     public static final Color BORDERCOLOR = new Color(255, 255, 255);
     public static final Color CELLCOLOR = new Color(219, 229, 241);
-    public static final Font PLAINFONT = new Font(Font.TIMES_ROMAN, 10);
-    public static final Font HEADERFONT = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
-    public static final Font TITLEFONT = new Font(Font.TIMES_ROMAN, 24, Font.BOLD);
-    public static final Font SUBTITLEFONT = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
-    public static final Font HEADERFONTWHITE = new Font(Font.TIMES_ROMAN, 12, Font.BOLD, Color.WHITE);
+    public static final Font PLAINFONT = new Font(basefont, 10);
+    public static final Font HEADERFONT = new Font(basefont, 12, Font.BOLD);
+    public static final Font TITLEFONT = new Font(basefont, 24, Font.BOLD);
+    public static final Font SUBTITLEFONT = new Font(basefont, 18, Font.BOLD);
+    public static final Font HEADERFONTWHITE = new Font(basefont, 12, Font.BOLD, Color.WHITE);
 
     String orgInfoTrn = "";
     String orgGrpInfoTrn = "";
@@ -271,10 +274,10 @@ public class ExportToPDF extends Action {
             doc.open();
             Paragraph pageTitle;
             if(vForm.getDashboard()!=null){
-            	pageTitle = new Paragraph(vForm.getDashboard().getName().toUpperCase(), TITLEFONT);
+            	pageTitle = new Paragraph(postprocessText(vForm.getDashboard().getName()).toUpperCase(), TITLEFONT);
                 	
             } else {
-            	pageTitle = new Paragraph(dashboardTypeTrn.toUpperCase() + " " + dashboardTrn.toUpperCase(), TITLEFONT);
+            	pageTitle = new Paragraph(postprocessText(dashboardTypeTrn.toUpperCase() + " " + dashboardTrn).toUpperCase(), TITLEFONT);
             }
             pageTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(pageTitle);
@@ -290,7 +293,7 @@ public class ExportToPDF extends Action {
     			} else {
     				itemList = itemList + filtersAllTrn;
     			}
-            	Paragraph pageSubTitle = new Paragraph(itemList, SUBTITLEFONT);
+            	Paragraph pageSubTitle = new Paragraph(postprocessText(itemList), SUBTITLEFONT);
             	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
                 doc.add(pageSubTitle);
                 
@@ -303,7 +306,7 @@ public class ExportToPDF extends Action {
     			} else {
     				itemList = itemList + filtersAllTrn;
     			}
-                pageSubTitle = new Paragraph(itemList, SUBTITLEFONT);
+                pageSubTitle = new Paragraph(postprocessText(itemList), SUBTITLEFONT);
             	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
                 doc.add(pageSubTitle);
                 
@@ -330,11 +333,11 @@ public class ExportToPDF extends Action {
                 if (!hasSub) {
                 	itemList2 = itemList2 + filtersAllTrn;
 				}
-            	Paragraph pageSubTitle = new Paragraph(itemList, SUBTITLEFONT);
+            	Paragraph pageSubTitle = new Paragraph(postprocessText(itemList), SUBTITLEFONT);
             	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
                 doc.add(pageSubTitle);
                 
-                pageSubTitle = new Paragraph(itemList2, SUBTITLEFONT);
+                pageSubTitle = new Paragraph(postprocessText(itemList2), SUBTITLEFONT);
             	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
                 doc.add(pageSubTitle);
                 
@@ -362,11 +365,11 @@ public class ExportToPDF extends Action {
                 	itemList2 = itemList2 + filtersAllTrn;
 				}
             	
-                Paragraph pageSubTitle = new Paragraph(itemList, SUBTITLEFONT);
+                Paragraph pageSubTitle = new Paragraph(postprocessText(itemList), SUBTITLEFONT);
             	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
                 doc.add(pageSubTitle);
                 
-                pageSubTitle = new Paragraph(itemList2, SUBTITLEFONT);
+                pageSubTitle = new Paragraph(postprocessText(itemList2), SUBTITLEFONT);
             	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
                 doc.add(pageSubTitle);
                 
@@ -386,38 +389,38 @@ public class ExportToPDF extends Action {
             		PdfPTable orgInfoTbl = null;
             		orgInfoTbl = new PdfPTable(2);
             		orgInfoTbl.setWidthPercentage(100);
-                    PdfPCell orgInfoTitleCell = new PdfPCell(new Paragraph(orgInfoTrn, HEADERFONT));
+                    PdfPCell orgInfoTitleCell = new PdfPCell(new Paragraph(postprocessText(orgInfoTrn), HEADERFONT));
                     orgInfoTitleCell.setColspan(2);
                     orgInfoTbl.addCell(orgInfoTitleCell);
             		AmpContact contact=DbUtil.getPrimaryContactForOrganization(orgId);
         			if(contact!=null){
-        				PdfPCell contInfoTitleCell = new PdfPCell(new Paragraph(contactInfoTrn, HEADERFONT));
+        				PdfPCell contInfoTitleCell = new PdfPCell(new Paragraph(postprocessText(contactInfoTrn), HEADERFONT));
         				contInfoTitleCell.setColspan(2);
                         orgInfoTbl.addCell(contInfoTitleCell);
-                        cell = new PdfPCell(new Paragraph(titleTrn));
+                        cell = new PdfPCell(new Paragraph(postprocessText(titleTrn)));
                         orgInfoTbl.addCell(cell);
-                        cell = new PdfPCell(new Paragraph(contact.getTitle()!=null?contact.getTitle().getValue():""));
+                        cell = new PdfPCell(new Paragraph(postprocessText(contact.getTitle()!=null?contact.getTitle().getValue():"")));
                         orgInfoTbl.addCell(cell);
-                        cell = new PdfPCell(new Paragraph(nameTrn));
+                        cell = new PdfPCell(new Paragraph(postprocessText(nameTrn)));
                         orgInfoTbl.addCell(cell);
-                        cell = new PdfPCell(new Paragraph(contact.getName()+" "+contact.getLastname()));
+                        cell = new PdfPCell(new Paragraph(postprocessText(contact.getName()+" "+contact.getLastname())));
                         orgInfoTbl.addCell(cell);
                         if(contact.getProperties()!=null){
             				for (AmpContactProperty property : contact.getProperties()) {
             					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
-            						cell = new PdfPCell(new Paragraph(emailsTrn));
+            						cell = new PdfPCell(new Paragraph(postprocessText(emailsTrn)));
                                     orgInfoTbl.addCell(cell);
-                                    cell = new PdfPCell(new Paragraph(property.getValue()));
+                                    cell = new PdfPCell(new Paragraph(postprocessText(property.getValue())));
                                     orgInfoTbl.addCell(cell);
             					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
-            						cell = new PdfPCell(new Paragraph(phonesTrn));
+            						cell = new PdfPCell(new Paragraph(postprocessText(phonesTrn)));
                                     orgInfoTbl.addCell(cell);
-                                    cell = new PdfPCell(new Paragraph(property.getValueAsFormatedPhoneNum()));
+                                    cell = new PdfPCell(new Paragraph(postprocessText(property.getValueAsFormatedPhoneNum())));
                                     orgInfoTbl.addCell(cell);
             					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
-            						cell = new PdfPCell(new Paragraph(faxesTrn));
+            						cell = new PdfPCell(new Paragraph(postprocessText(faxesTrn)));
                                     orgInfoTbl.addCell(cell);
-                                    cell = new PdfPCell(new Paragraph(property.getValue()));
+                                    cell = new PdfPCell(new Paragraph(postprocessText(property.getValue())));
                                     orgInfoTbl.addCell(cell);
             					}
             				}
@@ -428,17 +431,17 @@ public class ExportToPDF extends Action {
         				PdfPCell addNotesTitleCell = new PdfPCell(new Paragraph(addNotesTrn, HEADERFONT));
         				addNotesTitleCell.setColspan(2);
                         orgInfoTbl.addCell(addNotesTitleCell);
-                        cell = new PdfPCell(new Paragraph(backOrgTrn));
+                        cell = new PdfPCell(new Paragraph(postprocessText(backOrgTrn)));
                         orgInfoTbl.addCell(cell);
-                        cell = new PdfPCell(new Paragraph(organization.getOrgBackground()));
+                        cell = new PdfPCell(new Paragraph(postprocessText(organization.getOrgBackground())));
                         orgInfoTbl.addCell(cell);
-                        cell = new PdfPCell(new Paragraph(descriptionTrn));
+                        cell = new PdfPCell(new Paragraph(postprocessText(descriptionTrn)));
                         orgInfoTbl.addCell(cell);
-                        cell = new PdfPCell(new Paragraph(organization.getOrgDescription()));
+                        cell = new PdfPCell(new Paragraph(postprocessText(organization.getOrgDescription())));
                         orgInfoTbl.addCell(cell);
-                        cell = new PdfPCell(new Paragraph(keyAreasTrn));
+                        cell = new PdfPCell(new Paragraph(postprocessText(keyAreasTrn)));
                         orgInfoTbl.addCell(cell);
-                        cell = new PdfPCell(new Paragraph(organization.getOrgKeyAreas()));
+                        cell = new PdfPCell(new Paragraph(postprocessText(organization.getOrgKeyAreas())));
                         orgInfoTbl.addCell(cell);
         			}
         		    doc.add(orgInfoTbl);
@@ -450,25 +453,25 @@ public class ExportToPDF extends Action {
                 		PdfPTable orgGrpInfoTbl = null;
                 		orgGrpInfoTbl = new PdfPTable(2);
                 		orgGrpInfoTbl.setWidthPercentage(100);
-                		PdfPCell orgInfoTitleCell = new PdfPCell(new Paragraph(orgGrpInfoTrn, HEADERFONT));
+                		PdfPCell orgInfoTitleCell = new PdfPCell(new Paragraph(postprocessText(orgGrpInfoTrn), HEADERFONT));
                         orgInfoTitleCell.setColspan(2);
                         orgGrpInfoTbl.addCell(orgInfoTitleCell);
             			AmpOrgGroup orgGrp=DbUtil.getOrgGroup(orgGrpId);
             			if(orgGrp!=null){
-            				PdfPCell addNotesTitleCell = new PdfPCell(new Paragraph(addNotesTrn, HEADERFONT));
+            				PdfPCell addNotesTitleCell = new PdfPCell(new Paragraph(postprocessText(addNotesTrn), HEADERFONT));
             				addNotesTitleCell.setColspan(2);
             				orgGrpInfoTbl.addCell(addNotesTitleCell);
-                            cell = new PdfPCell(new Paragraph(backOrgGrpTrn));
+                            cell = new PdfPCell(new Paragraph(postprocessText(backOrgGrpTrn)));
                             orgGrpInfoTbl.addCell(cell);
-                            cell = new PdfPCell(new Paragraph(orgGrp.getOrgGrpBackground()));
+                            cell = new PdfPCell(new Paragraph(postprocessText(orgGrp.getOrgGrpBackground())));
                             orgGrpInfoTbl.addCell(cell);
-                            cell = new PdfPCell(new Paragraph(descriptionTrn));
+                            cell = new PdfPCell(new Paragraph(postprocessText(descriptionTrn)));
                             orgGrpInfoTbl.addCell(cell);
-                            cell = new PdfPCell(new Paragraph(orgGrp.getOrgGrpDescription()));
+                            cell = new PdfPCell(new Paragraph(postprocessText(orgGrp.getOrgGrpDescription())));
                             orgGrpInfoTbl.addCell(cell);
-                            cell = new PdfPCell(new Paragraph(keyAreasTrn));
+                            cell = new PdfPCell(new Paragraph(postprocessText(keyAreasTrn)));
                             orgGrpInfoTbl.addCell(cell);
-                            cell = new PdfPCell(new Paragraph(orgGrp.getOrgGrpKeyAreas()));
+                            cell = new PdfPCell(new Paragraph(postprocessText(orgGrp.getOrgGrpKeyAreas())));
                             orgGrpInfoTbl.addCell(cell);
             			}
             			doc.add(orgGrpInfoTbl);
@@ -484,18 +487,18 @@ public class ExportToPDF extends Action {
             PdfPTable filtersTbl = null;
             filtersTbl = new PdfPTable(1);
             filtersTbl.setWidthPercentage(100);
-            PdfPCell filterTitleCell = new PdfPCell(new Paragraph(filtersTrn, HEADERFONT));
+            PdfPCell filterTitleCell = new PdfPCell(new Paragraph(postprocessText(filtersTrn), HEADERFONT));
             filterTitleCell.setColspan(1);
             filtersTbl.addCell(filterTitleCell);
             
             
-            cell = new PdfPCell(new Paragraph(filtersAmountsInTrn));
+            cell = new PdfPCell(new Paragraph(postprocessText(filtersAmountsInTrn)));
             filtersTbl.addCell(cell);
-            cell = new PdfPCell(new Paragraph(filtersCurrencyTypeTrn + ": " + vForm.getFilter().getCurrencyCode()));
+            cell = new PdfPCell(new Paragraph(postprocessText(filtersCurrencyTypeTrn + ": " + vForm.getFilter().getCurrencyCode())));
             filtersTbl.addCell(cell);
-            cell = new PdfPCell(new Paragraph(filtersStartYearTrn + ": " + vForm.getFilter().getStartYear()));
+            cell = new PdfPCell(new Paragraph(postprocessText(filtersStartYearTrn + ": " + vForm.getFilter().getStartYear())));
             filtersTbl.addCell(cell);
-            cell = new PdfPCell(new Paragraph(filtersEndYearTrn + ": " + vForm.getFilter().getEndYear()));
+            cell = new PdfPCell(new Paragraph(postprocessText(filtersEndYearTrn + ": " + vForm.getFilter().getEndYear())));
             filtersTbl.addCell(cell);
             String itemList = "";
             Long[] statusIds = vForm.getFilter().getSelStatusIds();
@@ -506,7 +509,7 @@ public class ExportToPDF extends Action {
 			} else {
 				itemList = filtersAllTrn;
 			}
-            cell = new PdfPCell(new Paragraph(filtersStatusTrn + ": " + itemList));
+            cell = new PdfPCell(new Paragraph(postprocessText(filtersStatusTrn + ": " + itemList)));
             filtersTbl.addCell(cell);
             itemList = "";
             
@@ -518,7 +521,7 @@ public class ExportToPDF extends Action {
 			} else {
 				itemList = filtersAllTrn;
 			}
-            cell = new PdfPCell(new Paragraph(filtersOrgGroupTrn + ": " + itemList));
+            cell = new PdfPCell(new Paragraph(postprocessText(filtersOrgGroupTrn + ": " + itemList)));
             filtersTbl.addCell(cell);
             
             itemList = "";
@@ -530,7 +533,7 @@ public class ExportToPDF extends Action {
 			} else {
 				itemList = filtersAllTrn;
 			}
-            cell = new PdfPCell(new Paragraph(filtersOrganizationsTrn + ": " + itemList));
+            cell = new PdfPCell(new Paragraph(postprocessText(filtersOrganizationsTrn + ": " + itemList)));
             filtersTbl.addCell(cell);
             itemList = "";
             Long[] sectorIds = vForm.getFilter().getSelSectorIds();
@@ -541,7 +544,7 @@ public class ExportToPDF extends Action {
 			} else {
 				itemList = filtersAllTrn;
 			}
-            cell = new PdfPCell(new Paragraph(filtersSectorsTrn + ": " + itemList));
+            cell = new PdfPCell(new Paragraph(postprocessText(filtersSectorsTrn + ": " + itemList)));
             filtersTbl.addCell(cell);
             itemList = "";
             Long[] locationIds = vForm.getFilter().getSelLocationIds();
@@ -552,7 +555,7 @@ public class ExportToPDF extends Action {
 			} else {
 				itemList = filtersAllTrn;
 			}
-            cell = new PdfPCell(new Paragraph(filtersLocationsTrn + ": " + itemList));
+            cell = new PdfPCell(new Paragraph(postprocessText(filtersLocationsTrn + ": " + itemList)));
             filtersTbl.addCell(cell);
             
 		    doc.add(filtersTbl);
@@ -564,34 +567,34 @@ public class ExportToPDF extends Action {
 				PdfPTable summaryTbl = null;
 	            summaryTbl = new PdfPTable(7);
 	            summaryTbl.setWidthPercentage(100);
-	            PdfPCell sumamaryTitleCell = new PdfPCell(new Paragraph(summaryTrn + amountsDescription, HEADERFONT));
+	            PdfPCell sumamaryTitleCell = new PdfPCell(new Paragraph(postprocessText(summaryTrn + amountsDescription), HEADERFONT));
 	            sumamaryTitleCell.setColspan(7);
 	            summaryTbl.addCell(sumamaryTitleCell);
-	            cell = new PdfPCell(new Paragraph(totalCommsTrn, HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(postprocessText(totalCommsTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
-	            cell = new PdfPCell(new Paragraph(totalDisbsTrn, HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(postprocessText(totalDisbsTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
-	            cell = new PdfPCell(new Paragraph(numberPrjTrn, HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(postprocessText(numberPrjTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
 	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
-	            	cell = new PdfPCell(new Paragraph(numberDonTrn, HEADERFONT));
+	            	cell = new PdfPCell(new Paragraph(postprocessText(numberDonTrn), HEADERFONT));
 	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
 				//}
 	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
-		            cell = new PdfPCell(new Paragraph(numberRegTrn, HEADERFONT));
+		            cell = new PdfPCell(new Paragraph(postprocessText(numberRegTrn), HEADERFONT));
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
 	            //}
 	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
-		            cell = new PdfPCell(new Paragraph(numberSecTrn, HEADERFONT));
+		            cell = new PdfPCell(new Paragraph(postprocessText(numberSecTrn), HEADERFONT));
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
 	            //}
-	            cell = new PdfPCell(new Paragraph(avgPrjZSizeTrn, HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(postprocessText(avgPrjZSizeTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
 	            
@@ -629,7 +632,7 @@ public class ExportToPDF extends Action {
             Paragraph subTitle = null;
           //Top projects table.
             if (vForm.getFilter().getShowProjectsRanking()==null || vForm.getFilter().getShowProjectsRanking()){
-            	 subTitle = new Paragraph(topPrjTrn +  amountsDescription, SUBTITLEFONT);
+            	 subTitle = new Paragraph(postprocessText(topPrjTrn +  amountsDescription), SUBTITLEFONT);
                  subTitle.setAlignment(Element.ALIGN_LEFT);
                  doc.add(subTitle);
                  doc.add(new Paragraph(" "));
@@ -639,10 +642,10 @@ public class ExportToPDF extends Action {
 	            //PdfPCell topPrjTitleCell = new PdfPCell(new Paragraph(topPrjTrn + " (" + currName + ")", HEADERFONT));
 	            //topPrjTitleCell.setColspan(2);
 	            //topPrjTbl.addCell(topPrjTitleCell);
-	            cell = new PdfPCell(new Paragraph(projectTrn, HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(postprocessText(projectTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            topPrjTbl.addCell(cell);
-	            cell = new PdfPCell(new Paragraph(fundTypeTrn, HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(postprocessText(fundTypeTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            topPrjTbl.addCell(cell);
 	            Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
@@ -650,7 +653,7 @@ public class ExportToPDF extends Action {
 		            list = new LinkedList(topProjects.entrySet());
 				    for (Iterator it = list.iterator(); it.hasNext();) {
 				        Map.Entry entry = (Map.Entry)it.next();
-				        cell = new PdfPCell(new Paragraph(entry.getKey().toString()));
+				        cell = new PdfPCell(new Paragraph(postprocessText(entry.getKey().toString())));
 				        topPrjTbl.addCell(cell);
 		            	cell = new PdfPCell(new Paragraph(getFormattedNumber((BigDecimal)entry.getValue())));
 		            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -718,7 +721,7 @@ public class ExportToPDF extends Action {
     	//Funding Table.
     	if (!fundingOpt.equals("0")){
 	    	doc.newPage();
-	    	Paragraph subTitle = new Paragraph(fundingTrn + amountDesc, SUBTITLEFONT);
+	    	Paragraph subTitle = new Paragraph(postprocessText(fundingTrn + amountDesc), SUBTITLEFONT);
 	        subTitle.setAlignment(Element.ALIGN_LEFT);
 	        doc.add(subTitle);
 	        doc.add(new Paragraph(" "));
@@ -730,12 +733,12 @@ public class ExportToPDF extends Action {
 		        int colspan = (fundingRows[1].split(">").length + 1)/2; 
 		        fundingTbl = new PdfPTable(colspan);
 		        fundingTbl.setWidthPercentage(100);
-		        PdfPCell cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		        PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(yearTrn), HEADERFONT));
 		        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		        fundingTbl.addCell(cell);
 		        String[] singleRow = fundingRows[1].split(">");
 		        for (int i = 1; i < singleRow.length; i=i+2) {
-		        	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+		        	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 		        	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		        	fundingTbl.addCell(cell);
 				}
@@ -747,7 +750,7 @@ public class ExportToPDF extends Action {
 		            		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 		            	}
 		            	else
-		            		cell = new PdfPCell(new Paragraph(singleRow[j]));
+		            		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 		            	
 		            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		            	fundingTbl.addCell(cell);
@@ -773,7 +776,7 @@ public class ExportToPDF extends Action {
     	//Aid Predictability Table.
 		if (!aidPredicOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(aidPredTrn + amountDesc, SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(postprocessText(aidPredTrn + amountDesc), SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -785,13 +788,13 @@ public class ExportToPDF extends Action {
 	            int colspan = (aidPredRows[1].split(">").length + 1)/2; 
 	            aidPredTbl = new PdfPTable(colspan);
 	            aidPredTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(yearTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidPredTbl.addCell(cell);
-	            cell = new PdfPCell(new Paragraph(plannedTrn, HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(postprocessText(plannedTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidPredTbl.addCell(cell);
-	            cell = new PdfPCell(new Paragraph(actualTrn, HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(postprocessText(actualTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidPredTbl.addCell(cell);
 	            for (int i = 1; i < aidPredRows.length; i++) {
@@ -802,7 +805,7 @@ public class ExportToPDF extends Action {
 	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 	                	}
 	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	aidPredTbl.addCell(cell);
 	    			}
@@ -827,7 +830,7 @@ public class ExportToPDF extends Action {
     	//Aid Type Table.
 		if (!aidTypeOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(aidTypeTrn + amountDesc, SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(postprocessText(aidTypeTrn + amountDesc), SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -839,12 +842,12 @@ public class ExportToPDF extends Action {
 	            int colspan = (aidTypeRows[1].split(">").length + 1)/2; 
 	            aidTypeTbl = new PdfPTable(colspan);
 	            aidTypeTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(yearTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidTypeTbl.addCell(cell);
 	            String[] singleRow = aidTypeRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	aidTypeTbl.addCell(cell);
 				}
@@ -856,7 +859,7 @@ public class ExportToPDF extends Action {
 	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 	                	}
 	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	aidTypeTbl.addCell(cell);
 	    			}
@@ -881,7 +884,7 @@ public class ExportToPDF extends Action {
     	//Financing Instrument Table.
 	    if (!financingInstOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(finInstTrn + amountDesc, SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(postprocessText(finInstTrn + amountDesc), SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -893,12 +896,12 @@ public class ExportToPDF extends Action {
 	            int colspan = (finInstRows[1].split(">").length + 1)/2; 
 	            finInstTbl = new PdfPTable(colspan);
 	            finInstTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(yearTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            finInstTbl.addCell(cell);
 	            String[] singleRow = finInstRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	finInstTbl.addCell(cell);
 				}
@@ -910,7 +913,7 @@ public class ExportToPDF extends Action {
 	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 	                	}
 	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	finInstTbl.addCell(cell);
 	    			}
@@ -935,7 +938,7 @@ public class ExportToPDF extends Action {
     	//Sector Profile Table.
         if (!sectorOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(sectorProfTrn + amountDesc, SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(postprocessText(sectorProfTrn + amountDesc), SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -947,12 +950,12 @@ public class ExportToPDF extends Action {
 	            int colspan = sectorProfRows[1].split(">").length; 
 	            sectorProfTbl = new PdfPTable(colspan);
 	            sectorProfTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(sectorTrn, HEADERFONT));
+	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(sectorTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            sectorProfTbl.addCell(cell);
 	            String[] singleRow = sectorProfRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	                sectorProfTbl.addCell(cell);
 				}
@@ -964,7 +967,7 @@ public class ExportToPDF extends Action {
 	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 	                	}
 	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	sectorProfTbl.addCell(cell);
 	    			}
@@ -989,7 +992,7 @@ public class ExportToPDF extends Action {
     	//Region Profile Table.
         if (!regionOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(regionProfTrn + amountDesc, SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(postprocessText(regionProfTrn + amountDesc), SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -1001,12 +1004,12 @@ public class ExportToPDF extends Action {
 	            int colspan = regionProfRows[1].split(">").length; 
 	            regionProfTbl = new PdfPTable(colspan);
 	            regionProfTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(regionTrn, HEADERFONT));
+	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(regionTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            regionProfTbl.addCell(cell);
 	            String[] singleRow = regionProfRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	regionProfTbl.addCell(cell);
 				}
@@ -1019,7 +1022,7 @@ public class ExportToPDF extends Action {
 	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 	                	}
 	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	regionProfTbl.addCell(cell);
 	    			}
@@ -1044,7 +1047,7 @@ public class ExportToPDF extends Action {
     	//Organization Profile Table.
         if (!organizationOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(organizationProfTrn + amountDesc, SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(postprocessText(organizationProfTrn + amountDesc), SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -1056,12 +1059,12 @@ public class ExportToPDF extends Action {
 	            int colspan = organizationProfRows[1].split(">").length; 
 	            organizationProfTbl = new PdfPTable(colspan);
 	            organizationProfTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(organizationTrn, HEADERFONT));
+	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(organizationTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            organizationProfTbl.addCell(cell);
 	            String[] singleRow = organizationProfRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	organizationProfTbl.addCell(cell);
 				}
@@ -1073,7 +1076,7 @@ public class ExportToPDF extends Action {
 	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 	                	}
 	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	organizationProfTbl.addCell(cell);
 	    			}
@@ -1098,7 +1101,7 @@ public class ExportToPDF extends Action {
 
 	if (!ODAGrowthOpt.equals("0")){
 	  		doc.newPage();
-	  		Paragraph subTitle = new Paragraph(ODAGrowthTrn + amountDesc, SUBTITLEFONT);
+	  		Paragraph subTitle = new Paragraph(postprocessText(ODAGrowthTrn + amountDesc), SUBTITLEFONT);
 	  		subTitle.setAlignment(Element.ALIGN_LEFT);
 	  		doc.add(subTitle);
 	  		doc.add(new Paragraph(" "));
@@ -1113,7 +1116,7 @@ public class ExportToPDF extends Action {
 		            ODAGrowthTbl.setWidthPercentage(100);
 		            String[] singleRow = ODAGrowthRows[1].split(">");
 		            for (int i = 0; i < singleRow.length; i++) {
-		            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+		            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            	ODAGrowthTbl.addCell(cell);
 					}
@@ -1125,7 +1128,7 @@ public class ExportToPDF extends Action {
 		                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 		                	}
 		                	else
-		                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+		                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 	//  	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
 		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		                	ODAGrowthTbl.addCell(cell);
@@ -1152,7 +1155,7 @@ public class ExportToPDF extends Action {
     	//NPO Profile Table.
 		if (!NPOOpt.equals("0")){
 			doc.newPage();
-			Paragraph subTitle = new Paragraph(NPOProfTrn + amountDesc, SUBTITLEFONT);
+			Paragraph subTitle = new Paragraph(postprocessText(NPOProfTrn + amountDesc), SUBTITLEFONT);
 		    subTitle.setAlignment(Element.ALIGN_LEFT);
 		    doc.add(subTitle);
 		    doc.add(new Paragraph(" "));
@@ -1164,12 +1167,12 @@ public class ExportToPDF extends Action {
 			    int colspan = NPOProfRows[1].split(">").length; 
 			    NPOProfTbl = new PdfPTable(colspan);
 			    NPOProfTbl.setWidthPercentage(100);
-			    PdfPCell cell = new PdfPCell(new Paragraph(NPOTrn, HEADERFONT));
+			    PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(NPOTrn), HEADERFONT));
 			    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			    NPOProfTbl.addCell(cell);
 			    String[] singleRow = NPOProfRows[1].split(">");
 			    for (int i = 1; i < singleRow.length; i++) {
-			    	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+			    	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 			    	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			    	NPOProfTbl.addCell(cell);
 				}
@@ -1181,7 +1184,7 @@ public class ExportToPDF extends Action {
 			        		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 			        	}
 			        	else
-			        		cell = new PdfPCell(new Paragraph(singleRow[j]));
+			        		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 			        	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			        	NPOProfTbl.addCell(cell);
 					}
@@ -1206,7 +1209,7 @@ public class ExportToPDF extends Action {
     	//Program Profile Table.
 		if (!programOpt.equals("0")){
 			doc.newPage();
-			Paragraph subTitle = new Paragraph(programProfTrn + amountDesc, SUBTITLEFONT);
+			Paragraph subTitle = new Paragraph(postprocessText(programProfTrn + amountDesc), SUBTITLEFONT);
 		    subTitle.setAlignment(Element.ALIGN_LEFT);
 		    doc.add(subTitle);
 		    doc.add(new Paragraph(" "));
@@ -1218,12 +1221,12 @@ public class ExportToPDF extends Action {
 			    int colspan = programProfRows[1].split(">").length; 
 			    programProfTbl = new PdfPTable(colspan);
 			    programProfTbl.setWidthPercentage(100);
-			    PdfPCell cell = new PdfPCell(new Paragraph(programTrn, HEADERFONT));
+			    PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(programTrn), HEADERFONT));
 			    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			    programProfTbl.addCell(cell);
 			    String[] singleRow = programProfRows[1].split(">");
 			    for (int i = 1; i < singleRow.length; i++) {
-			    	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+			    	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 			    	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			    	programProfTbl.addCell(cell);
 				}
@@ -1235,7 +1238,7 @@ public class ExportToPDF extends Action {
 			        		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 			        	}
 			        	else
-			        		cell = new PdfPCell(new Paragraph(singleRow[j]));
+			        		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 			        	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			        	programProfTbl.addCell(cell);
 					}
@@ -1260,7 +1263,7 @@ public class ExportToPDF extends Action {
     	//Secondary Program Profile Table.
 		if (!programOpt.equals("0")){
 			doc.newPage();
-			Paragraph subTitle = new Paragraph(secProgramProfTrn + amountDesc, SUBTITLEFONT);
+			Paragraph subTitle = new Paragraph(postprocessText(secProgramProfTrn + amountDesc), SUBTITLEFONT);
 		    subTitle.setAlignment(Element.ALIGN_LEFT);
 		    doc.add(subTitle);
 		    doc.add(new Paragraph(" "));
@@ -1272,12 +1275,12 @@ public class ExportToPDF extends Action {
 			    int colspan = programProfRows[1].split(">").length; 
 			    programProfTbl = new PdfPTable(colspan);
 			    programProfTbl.setWidthPercentage(100);
-			    PdfPCell cell = new PdfPCell(new Paragraph(programTrn, HEADERFONT));
+			    PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(programTrn), HEADERFONT));
 			    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			    programProfTbl.addCell(cell);
 			    String[] singleRow = programProfRows[1].split(">");
 			    for (int i = 1; i < singleRow.length; i++) {
-			    	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+			    	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 			    	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			    	programProfTbl.addCell(cell);
 				}
@@ -1289,7 +1292,7 @@ public class ExportToPDF extends Action {
 			        		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 			        	}
 			        	else
-			        		cell = new PdfPCell(new Paragraph(singleRow[j]));
+			        		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 			        	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			        	programProfTbl.addCell(cell);
 					}
@@ -1313,7 +1316,7 @@ public class ExportToPDF extends Action {
     private void getAidPredictabilityQuarterTable(String aidPredicQuarterOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
 		if (!aidPredicQuarterOpt.equals("0")){
 			doc.newPage();
-			Paragraph subTitle = new Paragraph(aidPredQuarterTrn + amountDesc, SUBTITLEFONT);
+			Paragraph subTitle = new Paragraph(postprocessText(aidPredQuarterTrn + amountDesc), SUBTITLEFONT);
 			subTitle.setAlignment(Element.ALIGN_LEFT);
 			doc.add(subTitle);
 			doc.add(new Paragraph(" "));
@@ -1325,24 +1328,24 @@ public class ExportToPDF extends Action {
 	            int colspan = (aidPredQuarterRows[1].split(">").length + 1)/2; 
 	            aidPredQuarterTbl = new PdfPTable(colspan);
 	            aidPredQuarterTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(yearTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidPredQuarterTbl.addCell(cell);
-	            cell = new PdfPCell(new Paragraph(plannedTrn, HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(postprocessText(plannedTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidPredQuarterTbl.addCell(cell);
-	            cell = new PdfPCell(new Paragraph(actualTrn, HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(postprocessText(actualTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            aidPredQuarterTbl.addCell(cell);
 	            for (int i = 1; i < aidPredQuarterRows.length; i++) {
 	            	String[] singleRow = aidPredQuarterRows[i].split(">");
 	            	for (int j = 0; j < singleRow.length; j=j+2) {
 	                	if(j > 0) { //Skip first and last column
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                	BigDecimal bd = new BigDecimal(postprocessText(singleRow[j]));
 	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 	                	}
 	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	aidPredQuarterTbl.addCell(cell);
 	    			}
@@ -1367,7 +1370,7 @@ public class ExportToPDF extends Action {
     	//Budget breakdown Table.
 		if (!budgetBreakdownOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(budgetBreakdownTrn + amountDesc, SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(postprocessText(budgetBreakdownTrn + amountDesc), SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -1379,12 +1382,12 @@ public class ExportToPDF extends Action {
 	            int colspan = (budgetBreakdownRows[1].split(">").length + 1)/2; 
 	            budgetBreakdownTbl = new PdfPTable(colspan);
 	            budgetBreakdownTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(yearTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            budgetBreakdownTbl.addCell(cell);
 	            String[] singleRow = budgetBreakdownRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	budgetBreakdownTbl.addCell(cell);
 				}
@@ -1396,7 +1399,7 @@ public class ExportToPDF extends Action {
 	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 	                	}
 	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	budgetBreakdownTbl.addCell(cell);
 	    			}
@@ -1421,7 +1424,7 @@ public class ExportToPDF extends Action {
     	//Beneficiary Agency Profile Table.
         if (!beneficiaryAgencyOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(beneficiaryAgencyProfTrn + amountDesc, SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(postprocessText(beneficiaryAgencyProfTrn + amountDesc), SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -1433,12 +1436,12 @@ public class ExportToPDF extends Action {
 	            int colspan = organizationProfRows[1].split(">").length; 
 	            organizationProfTbl = new PdfPTable(colspan);
 	            organizationProfTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(organizationTrn, HEADERFONT));
+	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(organizationTrn), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            organizationProfTbl.addCell(cell);
 	            String[] singleRow = organizationProfRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
 	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	organizationProfTbl.addCell(cell);
 				}
@@ -1450,7 +1453,7 @@ public class ExportToPDF extends Action {
 	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
 	                	}
 	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	organizationProfTbl.addCell(cell);
 	    			}

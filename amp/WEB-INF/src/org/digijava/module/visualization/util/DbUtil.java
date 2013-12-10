@@ -203,7 +203,7 @@ public class DbUtil {
 	            queryString.append(AmpActivitySector.class.getName());
 	            queryString.append(" actSec INNER JOIN actSec.classificationConfig cls INNER JOIN actSec.sectorId sec WHERE cls.id=:configId AND sec.ampSecSchemeId=cls.classification)) ");
 
-	            queryString.append(" AND sect.parentSectorId IS NULL ORDER BY sect.name ");
+	            queryString.append(" AND sect.parentSectorId IS NULL"); //ORDER BY " + AmpSector.hqlStringForName("sect") + " ");
 	            
 	            qry = session.createQuery(queryString.toString());
 				qry.setLong("configId", configId);
@@ -318,7 +318,7 @@ public class DbUtil {
         return totalPlannedPldges;
     }
 	public static Set<AmpCategoryValueLocations> getSubRegions(Long id){
-        List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
+       // List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
 
         if (id != null && id != -1) {
             AmpCategoryValueLocations region;
@@ -647,7 +647,7 @@ public class DbUtil {
          *
          */
         try {
-        	String oql = "select act.ampActivityId, act.ampId, act.name ";
+        	String oql = "select act.ampActivityId, act.ampId, " + AmpActivityVersion.hqlStringForName("act") + " ";
             oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, false, true);
             //oql += " order by act.name";
             Session session = PersistenceManager.getRequestDBSession();
@@ -798,9 +798,9 @@ public class DbUtil {
         boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
         
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
-        	oql = "select fp, act.ampId, act.name ";
+        	oql = "select fp, act.ampId, " + AmpActivityVersion.hqlStringForName("act") + " ";
         } else {
-        	oql = "select fd, act.ampId, act.name ";
+        	oql = "select fd, act.ampId, " + AmpActivityVersion.hqlStringForName("act") + " ";
         }
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
@@ -1239,9 +1239,9 @@ public class DbUtil {
         boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
         
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
-        	oql = "select fp, act.ampId, act.name ";
+        	oql = "select fp, act.ampId, " + AmpActivityVersion.hqlStringForName("act") + " ";
         } else {
-        	oql = "select fd, act.ampId, act.name ";
+        	oql = "select fd, act.ampId, " + AmpActivityVersion.hqlStringForName("act") + " ";
         }
         
         if (locationCondition)
@@ -1394,9 +1394,9 @@ public class DbUtil {
     			organizationRoleQuery = true;
     	
 		 if (filter.getTransactionType()==Constants.MTEFPROJECTION){
-		 	oql = "select fp, f.ampActivityId.ampActivityId, f.ampActivityId.name";
+		 	oql = "select fp, f.ampActivityId.ampActivityId, " + AmpActivityVersion.hqlStringForName("f.ampActivityId") + " ";
 		 } else {
-		 	oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name";
+		 	oql = "select fd, f.ampActivityId.ampActivityId, " + AmpActivityVersion.hqlStringForName("f.ampActivityId") + " ";
 		 }
         if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
         	oql += ", actProg.programPercentage ";
@@ -1516,14 +1516,14 @@ public class DbUtil {
         String oql = "";
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
         	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-            	oql = "select fp, roleOrg.ampOrgId, roleOrg.name";
+            	oql = "select fp, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
             else 
-            	oql = "select fp, f.ampDonorOrgId.ampOrgId, f.ampDonorOrgId.name";
+            	oql = "select fp, f.ampDonorOrgId.ampOrgId, " + AmpOrganisation.hqlStringForName("f.ampDonorOrgId");
 		} else {
 			if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-	        	oql = "select fd, roleOrg.ampOrgId, roleOrg.name";
+	        	oql = "select fd, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
 	        else 
-	        	oql = "select fd, f.ampDonorOrgId.ampOrgId, f.ampDonorOrgId.name";
+	        	oql = "select fd, f.ampDonorOrgId.ampOrgId, " + AmpOrganisation.hqlStringForName("f.ampDonorOrgId");
 		}
 		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
 			oql += ", orole.percentage ";
@@ -1630,9 +1630,9 @@ public class DbUtil {
         String oql = "";
 
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
-        	oql = "select fp, sec.ampSectorId, sec.name ";
+        	oql = "select fp, sec.ampSectorId, " + AmpSector.hqlStringForName("sec") + " ";
         } else {
-        	oql = "select fd, sec.ampSectorId, sec.name ";
+        	oql = "select fd, sec.ampSectorId, " + AmpSector.hqlStringForName("sec") + " ";
         }
         
         if (locationCondition)
@@ -1861,9 +1861,9 @@ public class DbUtil {
         String oql = "";
 
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
-        	oql = "select fp, loc.id, loc.name ";
+        	oql = "select fp, loc.id, " + AmpCategoryValueLocations.hqlStringForName("loc") + " ";
         } else {
-        	oql = "select fd, loc.id, loc.name ";
+        	oql = "select fd, loc.id, " + AmpCategoryValueLocations.hqlStringForName("loc") + " ";
         }
         oql += ", actloc.locationPercentage ";
         if (sectorCondition)        	
@@ -2099,9 +2099,9 @@ public class DbUtil {
         String oql = "";
 
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
-        	oql = "select fp, prog.ampThemeId, prog.name ";
+        	oql = "select fp, prog.ampThemeId, " + AmpTheme.hqlStringForName("prog") + " ";
         } else {
-        	oql = "select fd, prog.ampThemeId, prog.name ";
+        	oql = "select fd, prog.ampThemeId, " + AmpTheme.hqlStringForName("prog") + " ";
         }
         oql += ", actProg.programPercentage ";
         if (locationCondition)

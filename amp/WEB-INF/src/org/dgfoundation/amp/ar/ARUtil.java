@@ -612,15 +612,15 @@ public final class ARUtil {
 		/* Donor commitment date some times is a ListCell of DateCell 
 		 * in such case it should not not execute the clean */
 		boolean process = false;
-		for (Object o : (List)cell.getValue()) {
+		for (Object o : cell.getValue()) {
 		    if (o.getClass().equals(TextCell.class)){
 		    	process = true;
 		    }
 		}
 		if (process){
-			List<TextCell> listCells = (List)cell.getValue();
-			for (TextCell tCell : listCells) {
-				ARUtil.cleanTextCell(tCell);
+			//Collection<TextCell> listCells = (Collection)cell.getValue();
+			for (Cell tCell : cell.getValue()) {
+				ARUtil.cleanTextCell((TextCell) tCell);
 			}
 		}
 	}

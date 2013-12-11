@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -54,12 +55,12 @@ public class ListCellXLS extends XLSExporter {
 	 */
 	public void generate() {
 		ListCell lc=(ListCell) item;
-		List items=(List) lc.getValue();
+		//Collection<Cell> items = (Collection<Cell>) lc.getValue();
 		String res=" - ";
 		
-		Iterator i=items.iterator();		
+		Iterator<Cell> i = lc.iterator();		
 		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
+			Cell element = i.next();
 			res+=element.toString();
 			if(i.hasNext())res+="\n - ";
 		}

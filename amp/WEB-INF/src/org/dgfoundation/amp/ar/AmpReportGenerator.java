@@ -1113,6 +1113,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.removeChildrenWithoutActivities(); //postProcess might have left some more empty children
 		removeUnrenderizableData(report); // apply year range filter from settings and any other "non-displaying" filtering which SHOULD NOT affect the report except rendering
 		
+		// calculate report heading data - if there is anything to compute
+		if (report.getFirstColumnReport() != null)
+			report.getFirstColumnReport().prepareAspect();
+		
 		report.getAllCells(listOfCells, true); //repeatedly fetch cells, as some might have been added in the meantime (postprocessing)
 		if (getCleanupMetadata())
 			deleteMetadata(listOfCells);

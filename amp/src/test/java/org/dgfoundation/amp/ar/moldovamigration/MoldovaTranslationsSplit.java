@@ -1,15 +1,18 @@
 package org.dgfoundation.amp.ar.moldovamigration;
 
 import java.util.*;
-
 import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
+import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
@@ -40,6 +43,9 @@ public class MoldovaTranslationsSplit
 		disableContractingArrangements();
 		enableResultsColumnInReports();
 		
+		translateStructureTypes();
+		hardcodeSomeTranslations();
+		
 		System.out.format("conversion done with %d warning messages\n", warningMessages.size());
 		for(int i = 0; i < warningMessages.size(); i++)
 			System.out.println(warningMessages.get(i).toString());
@@ -55,30 +61,71 @@ public class MoldovaTranslationsSplit
 		}
 		throw new RuntimeException("gata pe azi");
 	}
+		
+	protected void translateAs(String englishTranslation, String translation, String locale)
+	{
+		try
+		{
+//			Message msg = new Message();
+//			msg.setSite(SiteCache.lookupById(3L));
+//			msg.setLocale(locale);
+//			msg.setMessage(translation);
+//			msg.setKeyWords(null);
+//			msg.setKey(TranslatorWorker.generateTrnKey(englishTranslation));
+			String msgKey = TranslatorWorker.generateTrnKey(englishTranslation);
+			executeQuery("DELETE FROM dg_message WHERE site_id = '3' AND lang_iso = '" + locale + "' AND message_key='" + msgKey + "'");
+			executeQuery("INSERT INTO dg_message(site_id, lang_iso, message_key, message_utf8) VALUES ('3', '" + locale + "', '" + msgKey + "', '" + translation + "')");
+			//TranslatorWorker.getInstance("").save(msg);
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
 	
-//	class ColumnData
-//	{
-//		final long columnid;
-//		final long orderid;
-//		
-//		public ColumnData(long columnid, long orderid)
-//		{
-//			this.columnid = columnid;
-//			this.orderid = orderid;
-//		}
-//		
-//		@Override
-//		public boolean equals(Object oth)
-//		{
-//			return columnid == ((ColumnData) oth).columnid;
-//		}
-//		
-//		@Override
-//		public int hashCode()
-//		{
-//			return (int) columnid;
-//		}
-//	}
+	protected void hardcodeSomeTranslations()
+	{
+		translateAs("and", "şi", "ro");
+		translateAs("Poverty", "Sărăcie", "ro");
+		translateAs("Population", "Populaţie", "ro");
+		translateAs("Showing commitments for region", "Angajamentele pentru raion / municipiu", "ro");
+		translateAs("Showing disbursements for region", "Debursările pentru raion / municipiu", "ro");
+		translateAs("Click here to see national projects", "Apăsaţi aici pentru a vedea proiectele de rang naţional", "ro");
+		translateAs("What data should the map show?", "Ce fel de date doriţi să fie afişate pe hartă?", "ro");
+		translateAs("Regions With Zones", "Raioane cu localităţi", "ro");
+		translateAs("Project Status", "Stadiu proiect", "ro");
+		translateAs("Currency Type", "Valută calcule", "ro");
+	}
+	
+	protected void translateStructureTypes()
+	{
+		List<TranslationsPack> translations = new ArrayList<TranslationsPack>();
+		translations.add(new TranslationsPack(1L,  "Agriculture, fishing, and forestry", "Agricultură, pescuit și silvicultură"));
+		translations.add(new TranslationsPack(2L,  "Energy and mining", "Energie și minerit"));
+		translations.add(new TranslationsPack(3L,  "Health and other social services", "Sănătate și alte servicii sociale"));
+		translations.add(new TranslationsPack(4L,  "Public administration, law and Justice", "Administrație publică, lege și justiție"));
+		translations.add(new TranslationsPack(5L,  "Water, sanitation and flood protection", "Apă, sistem sanitar și protecție la inundații"));
+		translations.add(new TranslationsPack(7L,  "Airport", "Aeroport"));
+		translations.add(new TranslationsPack(8L,  "Climate change", "Schimbări climatice"));
+		translations.add(new TranslationsPack(9L,  "Communications", "Comunicații"));
+		translations.add(new TranslationsPack(10L,  "Education", "Educaţie"));
+		translations.add(new TranslationsPack(11L,  "Employment", "Ocuparea forței de muncă"));
+		translations.add(new TranslationsPack(12L,  "Forestry", "Silvicultură"));
+		translations.add(new TranslationsPack(13L,  "Governance", "Administraţie"));
+		translations.add(new TranslationsPack(14L,  "Hospital", "Spital"));
+		translations.add(new TranslationsPack(15L,  "Housing", "Locuinţă"));
+		translations.add(new TranslationsPack(16L,  "Infant and Maternal Health", "Sănătatea mamei şi a copilului"));
+		translations.add(new TranslationsPack(17L,  "Infrastructure", "Infrastructură"));
+		translations.add(new TranslationsPack(18L,  "Local development", "Dezvoltare regională"));
+		translations.add(new TranslationsPack(19L,  "Police", "Poliţie"));
+		translations.add(new TranslationsPack(20L,  "Road", "Drum"));
+		translations.add(new TranslationsPack(21L,  "School", "Şcoală"));
+		
+		for(TranslationsPack pack:translations)
+		{
+			savePlain(pack, InternationalizedModelDescription.getForProperty(AmpStructureType.class, "name"));
+		}
+	}
 	
 	protected void renameProjectTitleColumns()
 	{

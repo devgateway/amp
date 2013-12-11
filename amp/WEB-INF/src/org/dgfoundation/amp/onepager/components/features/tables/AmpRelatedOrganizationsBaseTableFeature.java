@@ -92,6 +92,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
             donorFundingSection.getOrgRoleSelector().getOrgSelect().getModel().setObject(ampOrgRole.getOrganisation());
             donorFundingSection.getOrgRoleSelector().getRoleSelect().getModel().setObject(ampOrgRole.getRole());
             donorFundingSection.getList().addItem(ampOrgRole.getOrganisation());
+            target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
             target.add(donorFundingSection);
         }
     }
@@ -107,6 +108,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
                 }
             }
             donorFundingSection.updateFundingGroups(ampOrgRole.getOrganisation(), target);
+            target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
             target.add(donorFundingSection);
         }
     }

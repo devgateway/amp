@@ -426,7 +426,7 @@ public class ColumnReportData extends ReportData<Column> {
 
 		items = destCols;
 
-		prepareAspect();
+		//prepareAspect();
 
 		buildComputedTotals();
 		

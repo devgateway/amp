@@ -378,7 +378,7 @@ public class RequestProcessor
         }
         
         super.process(request, response);
-        DocumentManagerUtil.closeJCRSessions(request);
+       
     }
 
     @Override

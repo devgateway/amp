@@ -11,10 +11,12 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.hibernate.SessionFactory;
 import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
@@ -63,6 +65,8 @@ public class HibernateSessionRequestFilter implements Filter {
             
             PersistenceManager.removeClosedSessionsFromMap();
             //PersistenceManager.checkClosedOrLongSessionsFromTraceMap();
+            
+            DocumentManagerUtil.closeJCRSessions((HttpServletRequest)request);
  
         } catch (StaleObjectStateException staleEx) {
             log.error("This interceptor does not implement optimistic concurrency control!");

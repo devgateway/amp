@@ -51,7 +51,8 @@
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Public View Content" parentModule="ADMINISTRATIVE SECTION"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
@@ -68,6 +69,7 @@
 <module:display name="WIDGETS"></module:display> 
 <module:display name="Global Permission Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 

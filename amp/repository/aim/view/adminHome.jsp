@@ -248,6 +248,7 @@
   </tr>
   </module:display>
   <!-- NO MOUDULE TO CONTROL THIS SECTION -->
+  <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION">
   <tr>
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">
@@ -259,6 +260,7 @@
         </digi:link>
     </td>  
   </tr>
+  </module:display>
     <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION">
 	<tr>
 		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
@@ -445,11 +447,13 @@
   </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
+
   <tr>
     <td width=314 class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>Public view toolbox</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
+	<module:display name="Public View Content" parentModule="ADMINISTRATIVE SECTION">
    <tr>
 		 <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
 		 <td class="admin_box_label">
@@ -461,7 +465,7 @@
 			</digi:link>                      
 		 </td>
 	</tr>
-	
+	</module:display>
 	<module:display name="Public Filter Manager" parentModule="ADMINISTRATIVE SECTION">
       <tr>
     	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>

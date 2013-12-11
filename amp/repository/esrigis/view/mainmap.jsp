@@ -142,6 +142,9 @@
      			//$('#filterdiv').toggle();
      			//debugger;
      			showPopin();
+     			
+     			$('#Panel1_mask').css('z-index', '3');
+     			$('.yui-panel-container').css('z-index', '999');
 			}else{
 				alert('If you click filters, you will lose all your previus filter from reports - Filter is disable');
 			}

@@ -580,6 +580,9 @@ public class DbUtil {
         }
         if (bodyEn != null)
         	return bodyEn;
+        Transaction tx = PersistenceManager.getSession().getTransaction();
+        if ( tx != null && tx.isActive()  )
+        	tx.commit();
         return bodyOther;
     }
     

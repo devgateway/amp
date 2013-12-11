@@ -808,12 +808,19 @@ public class DashboardUtil {
 
 	 public static List<AmpCategoryValueLocations> getTopLevelLocationList(List<AmpCategoryValueLocations> list) {
 	    	List<AmpCategoryValueLocations> locs = new ArrayList<AmpCategoryValueLocations>();
+	    	String Iso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
 	    	for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 	    		AmpCategoryValueLocations ampLoc = (AmpCategoryValueLocations) iterator.next();
-	    		AmpCategoryValueLocations ampLocTopLevel = getTopLevelLocation(ampLoc);
-				if (!locs.contains(ampLocTopLevel)) {
-					locs.add(ampLocTopLevel);
-				}
+	    		if (ampLoc.getParentLocation() == null && ampLoc.getParentCategoryValue().getValue().equals("Country")){
+					if (ampLoc.getIso() != null && ampLoc.getIso().equals(Iso)) { // AMP-16629 - This is to skip those locations that are other countries (international), doesn't want to be show on dashboards.
+						locs.add(ampLoc);
+					}	
+	    		} else {
+	    			AmpCategoryValueLocations ampLocTopLevel = getTopLevelLocation(ampLoc);
+					if (!locs.contains(ampLocTopLevel)) {
+						locs.add(ampLocTopLevel);
+					}
+	    		}
 			}
 			return locs;
 		}

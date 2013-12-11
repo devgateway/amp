@@ -2038,26 +2038,33 @@ public class DbUtil {
             	}
             	Long id = (Long) item[1];
             	String name = (String) item[2];
-
+            	boolean isCountry = false;
             	if (natLoc != null && id.equals(new Long(natLoc.getId()))){
             		name = natLoc.getName();
             	} else if (!locationCondition) {
             		if(locationParentList.get(id) == null){
             			id = locationMap.get(id);
             		}
-            		name = locationParentList.get(id).getName();
-            		id = locationParentList.get(id).getId();
+            		if (locationParentList.get(id)==null){
+            			isCountry = true;
+            		} else {
+            			isCountry = false;
+            			name = locationParentList.get(id).getName();
+            			id = locationParentList.get(id).getId();
+            		}
             	}
-            	if(hm.containsKey(id)){
-            		ArrayList<AmpFundingDetail> afda = hm.get(id);
-            		afda.add(currentFd);
-            	}
-            	else
-            	{
-            		ArrayList<AmpFundingDetail> afda = new ArrayList<AmpFundingDetail>();
-            		afda.add(currentFd);
-            		hmName.put(id, name);
-            		hm.put(id, afda);
+            	if (!isCountry){// AMP-16629 - This is to skip those locations that are other countries (international), doesn't want to be show on dashboards.
+	            	if(hm.containsKey(id)){
+	            		ArrayList<AmpFundingDetail> afda = hm.get(id);
+	            		afda.add(currentFd);
+	            	}
+	            	else
+	            	{
+	            		ArrayList<AmpFundingDetail> afda = new ArrayList<AmpFundingDetail>();
+	            		afda.add(currentFd);
+	            		hmName.put(id, name);
+	            		hm.put(id, afda);
+	            	}
             	}
             }
 

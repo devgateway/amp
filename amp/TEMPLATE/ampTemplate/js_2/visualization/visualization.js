@@ -1105,6 +1105,10 @@ function applyFilterPopin(e){
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
 	document.getElementById("startYear").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
 	document.getElementById("endYear").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;
+	
+	document.getElementById("filterStartYear").textContent = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].text;	
+	document.getElementById("filterEndYear").textContent = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].text;
+	
 	//Copy the values of the start/end year from the Advanced to the quick
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;

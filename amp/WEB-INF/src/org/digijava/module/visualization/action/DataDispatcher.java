@@ -124,7 +124,7 @@ public class DataDispatcher extends DispatchAction {
 		if (request.getParameter("orgGroupIds")!=null && !request.getParameter("orgGroupIds").equals("null"))
 			visualizationForm.getFilter().setOrgGroupIds(getLongArrayFromParameter(request.getParameter("orgGroupIds")));
 		if (request.getParameter("orgIds")!=null && !request.getParameter("orgIds").equals("null"))
-			visualizationForm.getFilter().setSelOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	
+			visualizationForm.getFilter().setOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	
 		if (request.getParameter("regionIds")!=null && !request.getParameter("regionIds").equals("null"))
 			visualizationForm.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
 		if (request.getParameter("zoneIds")!=null && !request.getParameter("zoneIds").equals("null"))

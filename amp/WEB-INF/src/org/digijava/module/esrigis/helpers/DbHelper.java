@@ -1377,7 +1377,7 @@ public class DbHelper {
 		StringBuilder queryString = new StringBuilder(
 				"select structure_type from "
 						+ AmpStructureType.class.getName() + " structure_type ");
-		queryString.append("order by structure_type.name asc");
+		queryString.append("order by " + AmpStructureType.hqlStringForName("structure_type") + " asc");
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			q = session.createQuery(queryString.toString());
@@ -1395,7 +1395,7 @@ public class DbHelper {
 		ArrayList result;
 		StringBuilder queryString = new StringBuilder("select st from "
 				+ AmpStructureType.class.getName() + " st ");
-		queryString.append("where st.name=:name");
+		queryString.append("where " + AmpStructureType.hqlStringForName("st") + "=:name");
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			q = session.createQuery(queryString.toString());

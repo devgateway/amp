@@ -288,7 +288,7 @@
             value = "<digi:trn>Showing commitments for Region</digi:trn>";
             return value;
          }
-        if(text == "Showing commitments for Region") {
+        if(text == "Showing commitments for Zone") {
             value = "<digi:trn>Showing commitments for Zone</digi:trn>";
             return value;
          }

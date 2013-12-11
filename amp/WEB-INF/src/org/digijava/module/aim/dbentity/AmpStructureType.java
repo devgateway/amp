@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
@@ -86,4 +87,10 @@ public class AmpStructureType implements ARDimensionable, Serializable{
 	public String getIconFileContentType() {
 		return iconFileContentType;
 	}	
+	
+    public static String hqlStringForName(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(AmpStructureType.class, "name").getSQLFunctionCall(idSource + ".typeId");
+    }
+
 }

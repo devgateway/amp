@@ -192,7 +192,7 @@ public class ImportExportUtil {
 			}
 			Session dbSession = option.getDbSession();
 			List<Message> affected = option.getAffectedMessages();
-			
+
 			//TODO improve by defining interface and getting it from enumeration directly.
 			if (type.equals(ImportType.OVERWRITE)){
 				overwrite(message, existingMessage, dbSession, affected);
@@ -536,7 +536,11 @@ public class ImportExportUtil {
 					queue.put(message);
 				}
 				
-				if(targetDate!=null){
+				if(targetText != null && !targetText.trim().isEmpty() /*targetDate!=null*/){
+                    if (targetDate==null) {
+                        targetDate = new Date();
+                    }
+
 					Message targetMessage = new Message();
 					targetMessage.setKey(key);
 					targetMessage.setMessage(targetText);

@@ -21,6 +21,7 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   username="" 
   password="" 
   validationQuery="SELECT 1" 
+  validationInterval="10000" 
   testOnBorrow="true" 
   testWhileIdle="false"
   timeBetweenEvictionRunsMillis="20000" 

@@ -259,7 +259,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		} else if (this.request.getAttribute("logoOptions").equals("1")) {//enabled																		 	                	                
 			if (this.request.getAttribute("logoPositionOptions").equals("0")) {//header						
 				Image logo = null;
-				int end = this.request.getRequestURL().length() - "/aim/pdfExport.do".length();
+				int end = this.request.getRequestURL().length() - this.request.getServletPath().length();
 				String urlPrefix = this.request.getRequestURL().substring(0, end); 
 				try {
 					logo = Image.getInstance(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png");

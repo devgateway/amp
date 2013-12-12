@@ -75,9 +75,9 @@
 		column.setCurrentDepth(curDepth);
       	String token=null;
       	String total=null;
-      	if (((org.dgfoundation.amp.ar.Column)column).getWorker()!=null){
-      	 token=((org.dgfoundation.amp.ar.Column)column).getWorker().getRelatedColumn().getTokenExpression();
-      	 total=((org.dgfoundation.amp.ar.Column)column).getWorker().getRelatedColumn().getTotalExpression();
+      	if (column.getWorker()!=null){
+      	 token = column.getWorker().getRelatedColumn().getTokenExpression();
+      	 total = column.getWorker().getRelatedColumn().getTotalExpression();
       	}
         
       	if(first && (token!=null || total!=null)){%>
@@ -97,6 +97,17 @@
           <%= ("percentageOfTotalCommitments".equals (subColumn.getExpression())?"(%)":"")  %>
         </c:set>
         
+		<c:choose>
+			<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.namePath}">
+				<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortByAsc", ! filterBean.getSortByAsc() ); %>
+			</c:when>
+			<c:otherwise>
+				<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortByAsc", "true" ); %>
+			</c:otherwise>
+		</c:choose>	
+	    <% ((HashMap)pageContext.getAttribute("linkMap")).put("sortBy", subColumn.getNamePath() ); %>
+        
+        
         <logic:equal name="column" property="columnDepth" value="1">
         	
         	<td height="20px" nowrap="nowrap" align="center" class="reportHeader" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
@@ -105,73 +116,25 @@
 		           			${reportMeta.hierarchiesPath}<br/> 
 		           		</c:if>
 		           </logic:notEmpty>
+        		
 	        		<c:choose>
-	            		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.namePath}">
-	            			<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortByAsc", ! filterBean.getSortByAsc() ); %>
-	            		</c:when>
-	            		<c:otherwise>
-	            			<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortByAsc", "true" ); %>
-	            		</c:otherwise>
-	            	</c:choose>	
-	        		<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortBy", subColumn.getNamePath() ); %>
-	        	<logic:notEqual name="widget" scope="request" value="true">
-	        		<c:choose>
-	        			<c:when test="${subColumn.contentCategory!=categoryYear && subColumn.positionInHeading.colSpan == 0 }">
-			            	<html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" 
-			            			page="/viewNewAdvancedReport.do" name="linkMap">
-	              		      <digi:trn key="aim:reportBuilder:${reportHeading}">
-                              	<c:out value="${reportHeading}"/>
-                              </digi:trn>
-                              <%
-                              if (subColumn.getDescription()!=null){
-                              String text=subColumn.getDescription();
-                              if (text!=null){ %> 
-                       			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
-                    		 	<%}
-                     		  }%>
-	              			</html:link>
-			             </c:when>
-			             <c:otherwise>
-			             			<digi:trn key="aim:reportBuilder:${reportHeading}">
-		                              	<c:out value="${reportHeading}"/>
-		                            </digi:trn>
-		                              <%
-		                              if (subColumn.getDescription()!=null){
-		                              String text=subColumn.getDescription();
-		                              if (text!=null){ %> 
-		                       			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
-		                    		 	<%}
-		                     		  }%>
+	        			<c:when test="${subColumn.sortableBy}">
+			            	<html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" name="linkMap">
+								<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
+							</html:link>							
+						</c:when>
+						<c:otherwise>
+							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 			             </c:otherwise>
 	              	</c:choose>
-	            </logic:notEqual>
             	
-	            <c:if test="${column.namePath == columnReport.sorterColumn}">
-	            	<logic:equal name="columnReport" property="sortAscending" value="false">
-	                	<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
-	              	</logic:equal>
-	              	<logic:equal name="columnReport" property="sortAscending" value="true">
-	                	<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
-	              	</logic:equal>
-	            </c:if>
-	            <c:forEach items="${columnReport.levelSorterPaths}" var="sorterPath">
-	            	<c:if test="${subColumn.namePath == sorterPath.key}">
-	            		<c:choose>
-	            			<c:when test="${ sorterPath.value == 'ascending'}">
-	            				<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up_red.gif" align="absmiddle" border="0"/>
-	            			</c:when>
-	            			<c:otherwise>
-	            				<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down_red.gif" align="absmiddle" border="0"/>
-	            			</c:otherwise>
-	            		</c:choose>
-	            	</c:if>
-	            </c:forEach>
+	            <%@include file="columnSortingImages.jspf" %>
 	         </td>
           </logic:equal>
           
         <logic:notEqual name="column" property="columnDepth" value="1">
         	<c:choose>
-        		<c:when test="${subColumn.width!=1 || subColumn.contentCategory==categoryYear || subColumn.positionInHeading.colSpan != 0 }">
+        		<c:when test="${not subColumn.sortableBy}">
         		<%
         			if(subColumn.getName().length()<5){%>        			
         				<td style="margin-left: 2px; margin-right: 2px;" class="reportHeader" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>        				        						
@@ -181,57 +144,26 @@
 					<digi:trn>${reportHeading}</digi:trn>
           		</c:when>
           		<c:otherwise>
-	      			<td class="reportHeader" valign="bottom" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-	      			
-	      				<c:choose>
-		            		<c:when test="${filterBean.sortBy != null && filterBean.sortBy == subColumn.namePath}">
-		            			<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortByAsc", ! filterBean.getSortByAsc() ); %>
-		            		</c:when>
-		            		<c:otherwise>
-		            			<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortByAsc", "true" ); %>
-		            		</c:otherwise>
-		            	</c:choose>	
-	        			<% ((HashMap)pageContext.getAttribute("linkMap")).put("sortBy", subColumn.getNamePath() ); %>
+	      			<td class="reportHeader" valign="bottom" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>	      			
 	      				<html:link style="font-size: 11px;text-decoration: none; font-weight:bold; color: #000000" page="/viewNewAdvancedReport.do" name="linkMap">
 	        				<digi:trn key="aim:reportBuilder:${reportHeading}">
 	            				<c:out value="${reportHeading}"/>
 	            			</digi:trn>
 						</html:link>
-		  			  
-	          
-					<c:if test="${subColumn.namePath == columnReport.sorterColumn}">
-	        			<logic:equal name="columnReport" property="sortAscending" value="false">
-	                		<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
-	            		</logic:equal>
-	            		<logic:equal name="columnReport" property="sortAscending" value="true">
-	                		<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
-	            		</logic:equal>
-	       			</c:if>
-	       			 <c:forEach items="${columnReport.levelSorterPaths}" var="sorterPath" varStatus="status" >
-		            	<c:if test="${subColumn.namePath == sorterPath.key}">
-		            		<c:choose>
-		            			<c:when test="${ sorterPath.value == 'ascending'}">
-		            				<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up_red${status.count-1}.gif" align="absmiddle" border="0"/>
-		            			</c:when>
-		            			<c:otherwise>
-		            				<img src= "/TEMPLATE/ampTemplate/imagesSource/common/down_red${status.count-1}.gif" align="absmiddle" border="0"/>
-		            			</c:otherwise>
-		            		</c:choose>
-		            	</c:if>
-		            </c:forEach>
+		  			  	          
+					 <%@include file="columnSortingImages.jspf" %>
 	     		</c:otherwise>
 	     		</c:choose>
-	     	 <%
-					if (subColumn.getDescription() != null)
-					{
-						String text = subColumn.getDescription();
-						if (text!=null){ %> 
-                       			<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
-                    		 	<%}
-                     		  }
-              %>
 	     	</td>	            
         </logic:notEqual>
+		<%
+			if (subColumn.getDescription() != null)
+			{
+				String text=subColumn.getDescription();
+				if (text != null){ %> 
+					<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
+		    <%}
+		}%>
     	
 	</logic:iterate>
    </logic:iterate>

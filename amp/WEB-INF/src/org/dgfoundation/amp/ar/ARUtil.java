@@ -427,6 +427,8 @@ public final class ARUtil {
 		TreeSet<Comparable<? extends Object>>	periods	= new TreeSet<Comparable<? extends Object>>();
 		try{
 			ARUtil.initializePeriodValues(type, periods, filter);
+			if (periods.isEmpty())
+				return; //nothing to do
 		
 			while ( iter.hasNext() ) {
 				Categorizable elem	= (Categorizable)iter.next();

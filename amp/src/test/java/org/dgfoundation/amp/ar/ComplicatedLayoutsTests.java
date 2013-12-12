@@ -56,7 +56,8 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 						SimpleColumnModel.withContents("Project Title", "AMP-15967-activity-1", "AMP-15967-activity-1", "AMP-15967-activity-2", "AMP-15967-activity-2"),
 						GroupColumnModel.withSubColumns("Funding", 
 								GroupColumnModel.withSubColumns("2010", 
-									SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-2", "15 000")),
+									SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-2", "15 000"),
+									SimpleColumnModel.withContents("Real Disbursements", MUST_BE_EMPTY)),
 								
 								GroupColumnModel.withSubColumns("2011", 
 										SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-1", "44 444", "AMP-15967-activity-2", "50 000"),
@@ -72,11 +73,11 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 								SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-1", "100 110", "AMP-15967-activity-2", "97 000"),
 								GroupColumnModel.withSubColumns("Real Disbursements", 
 									SimpleColumnModel.withContents("DN-EXEC", "AMP-15967-activity-1", "66 888", "AMP-15967-activity-2", "32 000")))
-						)).withTrailCells(null, "15 000", "94 444", "11 222", "87 666", "87 666", "197 110", "98 888")
+						)).withTrailCells(null, "15 000", "0", "94 444", "11 222", "87 666", "87 666", "197 110", "98 888")
 						.withPositionDigest(
-								"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 4, totalRowSpan: 4, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colSpan: 5), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 4, colSpan: 2))",
-								"(line 1:RHLC 2010: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colSpan: 1), RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colSpan: 2), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colSpan: 2))",
-								"(line 2:RHLC Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 1))",
+								"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 4, totalRowSpan: 4, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colSpan: 6), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 4, colSpan: 2))",
+								"(line 1:RHLC 2010: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colSpan: 2), RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colSpan: 2), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colSpan: 2))",
+								"(line 2:RHLC Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 1))",
 								"(line 3:RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1))"
 								);
 		
@@ -585,18 +586,20 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 							SimpleColumnModel.withContents("Project Title", "SSC Project 2", "SSC Project 2", "TAC_activity_1", "TAC_activity_1"), 
 							GroupColumnModel.withSubColumns("Funding",
 								GroupColumnModel.withSubColumns("2010",
-									SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_1", "123 321")), 
+									SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_1", "123 321"),
+									SimpleColumnModel.withContents("Real Disbursements", MUST_BE_EMPTY)), 
 								GroupColumnModel.withSubColumns("2013",
-									SimpleColumnModel.withContents("Actual Disbursements", "SSC Project 2", "131 845"))), 
+									SimpleColumnModel.withContents("Actual Disbursements", "SSC Project 2", "131 845"),
+									SimpleColumnModel.withContents("Real Disbursements", MUST_BE_EMPTY))), 
 							GroupColumnModel.withSubColumns("Total Costs",
 								SimpleColumnModel.withContents("Actual Disbursements", "SSC Project 2", "131 845", "TAC_activity_1", "123 321"), 
 								SimpleColumnModel.withContents("Real Disbursements", MUST_BE_EMPTY)))
-						.withTrailCells(null, "123 321", "131 845", "255 166", "0"))
-					.withTrailCells(null, "123 321", "131 845", "255 166", "0")
+						.withTrailCells(null, "123 321", "0", "131 845", "0", "255 166", "0"))
+					.withTrailCells(null, "123 321", "0", "131 845", "0", "255 166", "0")
 						.withPositionDigest(
-						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colSpan: 2), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colSpan: 2))",
-						"(line 1:RHLC 2010: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colSpan: 1), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colSpan: 1))",
-						"(line 2:RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1))");
+						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colSpan: 4), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colSpan: 2))",
+						"(line 1:RHLC 2010: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colSpan: 2), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colSpan: 2))",
+						"(line 2:RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1))");
 	
 		runReportTest("Tab with Actual Disb + Real Disb", "AMP-16525-no-real-disb-transactions", 
 				new String[] {"SSC Project 2", "TAC_activity_1"}, 

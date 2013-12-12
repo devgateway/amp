@@ -108,6 +108,13 @@ public class GroupReportData extends ReportData<ReportData> {
 		}
 	}
 	
+	public void calculateReportHeadings()
+	{
+		// calculate report heading data - if there is anything to compute
+		if (this.getFirstColumnReport() != null)
+			this.getFirstColumnReport().prepareAspect();
+	}
+	
 //	protected Integer sourceColsCount;
 
 	private BigDecimal totalac;

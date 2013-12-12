@@ -501,5 +501,11 @@ public class CellColumn<K extends Cell> extends Column<K> {
 			return null; // only REAL DISBURSEMENTS columns can be split by real disbursements
 		return GroupColumn.verticalSplitByCateg_internal(this, category, ids, generateTotalCols, reportMetadata);
 	}
+	
+	@Override
+	public boolean isSortableBy()
+	{
+		return true;
+	}
 }
 

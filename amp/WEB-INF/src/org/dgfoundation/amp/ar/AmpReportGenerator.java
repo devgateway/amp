@@ -939,7 +939,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * replaces, recursively, all the empty GroupColumn's in a column's subcolumns' subtree with empty Column's 
 	 * @param col
 	 */
-	protected void fixEmptyGroupColumns(Column col)
+	protected void fixEmptyGroupColumns(Column col, String groupColumnName)
 	{
 		if (!(col instanceof GroupColumn))
 			return;
@@ -948,8 +948,9 @@ public class AmpReportGenerator extends ReportGenerator {
 		while (subcols.hasNext())
 		{
 			Column subcol = subcols.next();
-			fixEmptyGroupColumns(subcol); // this will be a nop if this is a simple column
-			if ((subcol instanceof GroupColumn) && subcol.getItems().isEmpty())
+			fixEmptyGroupColumns(subcol, groupColumnName); // this will be a nop if this is a simple column
+			boolean matchesGroupColumnFilter = (groupColumnName == null) || subcol.getName().equals(groupColumnName); 
+			if ((subcol instanceof GroupColumn) && subcol.getItems().isEmpty() && matchesGroupColumnFilter)
 			{
 				// this is a GroupColumn and it is empty - replace it
 				gcol.replaceColumn(subcol.getColumnId(), new AmountCellColumn(subcol));
@@ -1036,8 +1037,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		
 		// do not allow empty GroupColumns; replace them with empty CellColumns
-		//fixEmptyGroupColumns(rawColumns.getColumnByName("Funding"));
-		fixEmptyGroupColumns(rawColumns.getColumnByName(ArConstants.COLUMN_TOTAL));
+		fixEmptyGroupColumns(rawColumns.getColumnByName("Funding"), ArConstants.REAL_DISBURSEMENTS);
+		fixEmptyGroupColumns(rawColumns.getColumnByName(ArConstants.COLUMN_TOTAL), null);
 		
 		/**
 		 * If we handle a normal report (not tab) and allowEmptyColumns is not set then we need to remove 
@@ -1113,9 +1114,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.removeChildrenWithoutActivities(); //postProcess might have left some more empty children
 		removeUnrenderizableData(report); // apply year range filter from settings and any other "non-displaying" filtering which SHOULD NOT affect the report except rendering
 		
-		// calculate report heading data - if there is anything to compute
-		if (report.getFirstColumnReport() != null)
-			report.getFirstColumnReport().prepareAspect();
+		report.calculateReportHeadings();
 		
 		report.getAllCells(listOfCells, true); //repeatedly fetch cells, as some might have been added in the meantime (postprocessing)
 		if (getCleanupMetadata())

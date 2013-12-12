@@ -313,6 +313,11 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 	public abstract List<Column> getSubColumns(int depth);
 
 	/**
+	 * can this column be sorted by?
+	 * @return
+	 */
+	public abstract boolean isSortableBy();
+	/**
 	 * equivalent to calling {@link #getSubColumns(this.currentDepth)} - this is done because one can't supply arguments when using a function from JSP<br />
 	 * <b>generally one should not use this function except frmo JSPs</b>
 	 * @return

@@ -89,39 +89,6 @@ public class ViewNewAdvancedReport extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-//		String rewrittenColumns = SQLUtils.rewriteQuery("amp_organisation", "ao", 
-//				new HashMap<String, String>(){{
-//					put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall("ao.amp_org_id"));
-//					put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "description").getSQLFunctionCall("ao.amp_org_id"));
-//				}});
-//        String queryString = "select distinct " + rewrittenColumns + " from amp_organisation ao " +
-//						"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
-//						"inner join amp_role ar on ((ar.amp_role_id = aor.role) and (ar.role_code=:roleCode)) where (ao.deleted is null or ao.deleted = false) ";
-//        Query qry = PersistenceManager.getRequestDBSession().createSQLQuery(queryString).addEntity(AmpOrganisation.class);
-//        qry.setCacheable(true);
-//        List<AmpOrganisation>col = qry.setString("roleCode", "DN").list();
-//
-//        Collections.sort(col, new Comparator<AmpOrganisation>() {
-//            public int compare(AmpOrganisation o1, AmpOrganisation o2) {
-//                return o1.getName().trim().compareTo(o2.getName().trim());
-//            }
-//        });
-//        for(AmpOrganisation aorg:col)
-//        	System.out.println(aorg.getName());
-        
-//		{
-//			Session session = PersistenceManager.getRequestDBSession();
-////			String qString = "SELECT rep.ampReportId, translate_field('org.digijava.module.aim.dbentity.AmpReports', 'name', rep.ampReportId, 'amp_reports', 'name', 'amp_report_id', 'ru') FROM " + AmpReports.class.getName() + " rep ORDER BY rep.ampReportId";
-//			String qString = String.format("SELECT rep.ampReportId, %s FROM " + AmpReports.class.getName() + " rep order by %s",
-//				 InternationalizedModelDescription.getForProperty(AmpReports.class, "name").getSQLFunctionCall("rep.ampReportId"),
-//				 InternationalizedModelDescription.getForProperty(AmpReports.class, "name").getSQLFunctionCall("rep.ampReportId")
-//				 );
-//			List<Object[]> bbb = session.createQuery(qString).list();
-//			for(Object[] zz:bbb)
-//			{
-//				System.out.println(zz[0] + ": " + zz[1]);
-//			}
-//		}
 		String loadStatus = request.getParameter("loadstatus");
 
 		if (loadStatus != null){
@@ -339,6 +306,7 @@ public class ViewNewAdvancedReport extends Action {
 		
 		if (rd==null) return mapping.findForward("index"); //BOZO: why would rd = null here?
 		rd.setGlobalHeadingsDisplayed(new Boolean(false));
+		rd.calculateReportHeadings();
 		
 		String viewFormat=request.getParameter("viewFormat");
 		if(viewFormat==null) viewFormat=GenericViews.HTML2;

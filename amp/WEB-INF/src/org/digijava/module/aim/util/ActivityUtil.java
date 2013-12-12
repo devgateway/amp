@@ -4632,7 +4632,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     		try {
     			session=PersistenceManager.getRequestDBSession();                   
     			String activityName = AmpActivityVersion.hqlStringForName("gr.ampActivityLastVersion");
-    			queryString ="select " + activityName + ", gr.ampActivityLastVersion.ampActivityId from "+ AmpActivityGroup.class.getName()+" gr ";                    
+    			queryString ="select " + activityName + " from "+ AmpActivityGroup.class.getName()+" gr where gr.ampActivityLastVersion.ampActivityId = " + actId;                    
     			query=session.createQuery(queryString);    			
     			name=(String)query.uniqueResult();    			
     		}catch(Exception ex) { 

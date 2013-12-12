@@ -821,6 +821,16 @@ public class GroupColumn extends Column<Column> {
 	 */
 	public List<AmountCell> getTrailCells() {
 		ArrayList<AmountCell> ret = new ArrayList<AmountCell>();
+		if (this.items.isEmpty())
+		{
+			for(int i = 0; i < this.getWidth(); i++)
+			{
+				AmountCell ac = new AmountCell();
+				ac.setColumn(this);
+				ret.add(ac);
+			}
+			return ret;
+		}
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
@@ -955,6 +965,12 @@ public class GroupColumn extends Column<Column> {
 	{
 		for(Object columnObj:items)
 			((Column) columnObj).deleteByOwnerId(ownerId);
+	}
+	
+	@Override
+	public boolean isSortableBy()
+	{
+		return false;
 	}
 }
 

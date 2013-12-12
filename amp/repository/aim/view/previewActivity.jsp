@@ -3277,7 +3277,7 @@ function collapseAll() {
 		  	if($("#ashowmap").exists()){
 				showMapInTooltipDialog(ashowmap,true);
 		  	}
-		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv,div#referencesdiv,div#lineMinistryObsDiv").toggle(showOrHide);
+		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv,div#referencesdiv,div#lineMinistryObsDiv,div#structuresdiv").toggle(showOrHide);
 	});
 	
 	$("#collapseall_1").click(function() {

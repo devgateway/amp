@@ -492,7 +492,13 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 			return name;
 	}
 	
-	public abstract List<String> digestReportHeadingData();
+	/**
+	 * returns (for debugging/testcases reasons) a digest of the ReportHeadingData <br />
+	 * only call with total=true in non-legacy code
+	 * @param total whether to output a full description of the layout (including startingPositions)
+	 * @return
+	 */
+	public abstract List<String> digestReportHeadingData(boolean total);
 
 	@Override
 	public String prettyPrint()

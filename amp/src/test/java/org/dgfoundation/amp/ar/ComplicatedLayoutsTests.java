@@ -20,7 +20,6 @@ import org.hibernate.cfg.*;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -42,6 +41,10 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 		suite.addTest(new ComplicatedLayoutsTests("testLotsOfActivitiesWithCrazyRealDisbursementsAndActualDisbursementsByDonor"));
 		suite.addTest(new ComplicatedLayoutsTests("testReportWithRealDisbursementsColumnButWithoutRealDisbursements"));
 		suite.addTest(new ComplicatedLayoutsTests("testReportWithRealDisbursementsColumnButWithoutRealDisbursementsTotalsOnly"));
+		
+		suite.addTest(new ComplicatedLayoutsTests("testYearRangeNoFilter"));
+		suite.addTest(new ComplicatedLayoutsTests("testYearRangeTotalFilter"));
+		suite.addTest(new ComplicatedLayoutsTests("testYearRangeSingleYearFilter")); //testYearRangeSingleYearFilter
 		return suite;
 	}
 	
@@ -599,4 +602,127 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 				new String[] {"SSC Project 2", "TAC_activity_1"}, 
 				fddr_correct);			
 	}	
+	
+	public void testYearRangeNoFilter()
+	{
+		GroupReportModel fddr_correct = 
+				GroupReportModel.withColumnReports("AMP-15794",
+						ColumnReportDataModel.withColumns("AMP-15794",
+							SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water", "mtef activity 1", "mtef activity 1", "mtef activity 2", "mtef activity 2", "ptc activity 1", "ptc activity 1", "ptc activity 2", "ptc activity 2", "SSC Project 1", "SSC Project 1", "SSC Project 2", "SSC Project 2", "TAC_activity_1", "TAC_activity_1", "TAC_activity_2", "TAC_activity_2", "date-filters-activity", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 2 - EUR", "Pure MTEF Project", "Pure MTEF Project", "Test MTEF directed", "Test MTEF directed", "AMP-15967-activity-2", "AMP-15967-activity-2", "AMP-15967-activity-1", "AMP-15967-activity-1"), 
+							SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "33 888", "Test MTEF directed", "150 000", "mtef activity 1", "789 123"), 
+							SimpleColumnModel.withContents("MTEF 2013/2014", "mtef activity 2", "123 654"), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2009",
+									SimpleColumnModel.withContents("Actual Commitments", "date-filters-activity", "100 000"), 
+									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)), 
+								GroupColumnModel.withSubColumns("2010",
+									SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY), 
+									SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "143 777", "AMP-15967-activity-2", "15 000", "TAC_activity_1", "123 321", "TAC_activity_2", "453 213", "date-filters-activity", "60 000")), 
+								GroupColumnModel.withSubColumns("2011",
+									SimpleColumnModel.withContents("Actual Commitments", "TAC_activity_1", "213 231", "TAC_activity_2", "999 888"), 
+									SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-2", "50 000", "AMP-15967-activity-1", "44 444")), 
+								GroupColumnModel.withSubColumns("2012",
+									SimpleColumnModel.withContents("Actual Commitments", "date-filters-activity", "25 000"), 
+									SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-2", "32 000", "AMP-15967-activity-1", "55 666", "date-filters-activity", "12 000")), 
+								GroupColumnModel.withSubColumns("2013",
+									SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666 777", "ptc activity 2", "333 222", "SSC Project 1", "111 333", "SSC Project 2", "567 421"), 
+									SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545 000", "SSC Project 1", "555 111", "SSC Project 2", "131 845"))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666 777", "ptc activity 2", "333 222", "SSC Project 1", "111 333", "SSC Project 2", "567 421", "TAC_activity_1", "213 231", "TAC_activity_2", "999 888", "date-filters-activity", "125 000"), 
+								SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545 000", "Test MTEF directed", "143 777", "AMP-15967-activity-2", "97 000", "AMP-15967-activity-1", "100 110", "SSC Project 1", "555 111", "SSC Project 2", "131 845", "TAC_activity_1", "123 321", "TAC_activity_2", "453 213", "date-filters-activity", "72 000")))
+						.withTrailCells(null, "973 011", "123 654", "100 000", "0", "0", "795 311", "1 213 119", "94 444", "25 000", "99 666", "1 678 753", "1 231 956", "3 016 872", "2 221 377"))
+					.withTrailCells(null, "973 011", "123 654", "100 000", "0", "0", "795 311", "1 213 119", "94 444", "25 000", "99 666", "1 678 753", "1 231 956", "3 016 872", "2 221 377")
+						.withPositionDigest(true,
+						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC MTEF 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC MTEF 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 10), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 13, colSpan: 2))",
+						"(line 1:RHLC 2009: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2), RHLC 2010: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 2), RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 7, colSpan: 2), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 9, colSpan: 2), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 11, colSpan: 2))",
+						"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 9, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 10, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 11, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 12, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 13, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 14, colSpan: 1))");
+		
+		runReportTest("Simple Report without any year-range-settings", "AMP-15794", 
+				new String[] {"Eth Water", "mtef activity 1", "mtef activity 2", "ptc activity 1", "ptc activity 2", "SSC Project 1", "SSC Project 2", "TAC_activity_1", "TAC_activity_2", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Pure MTEF Project", "Test MTEF directed", "AMP-15967-activity-2", "AMP-15967-activity-1"}, 
+				fddr_correct);
+		
+		runReportTest("Simple Report withan any year-range-settings which does nothing (all projects pass)", "AMP-15794", 
+				new String[] {"Eth Water", "mtef activity 1", "mtef activity 2", "ptc activity 1", "ptc activity 2", "SSC Project 1", "SSC Project 2", "TAC_activity_1", "TAC_activity_2", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Pure MTEF Project", "Test MTEF directed", "AMP-15967-activity-2", "AMP-15967-activity-1"}, 
+				fddr_correct, new AmpReportModifier() {
+			
+					@Override
+					public void modifyAmpReportSettings(AmpReports report, AmpARFilter filter) {
+						filter.setRenderStartYear(1980);
+						filter.setRenderEndYear(2019);
+						filter.setGroupingseparator(",");
+						filter.setCustomusegroupings(true);
+					}
+				});	
+	}
+	
+	public void testYearRangeTotalFilter()
+	{
+		GroupReportModel fddr_correct = 
+				GroupReportModel.withColumnReports("AMP-15794",
+						ColumnReportDataModel.withColumns("AMP-15794",
+							SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water", "mtef activity 1", "mtef activity 1", "mtef activity 2", "mtef activity 2", "ptc activity 1", "ptc activity 1", "ptc activity 2", "ptc activity 2", "SSC Project 1", "SSC Project 1", "SSC Project 2", "SSC Project 2", "TAC_activity_1", "TAC_activity_1", "TAC_activity_2", "TAC_activity_2", "date-filters-activity", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 2 - EUR", "Pure MTEF Project", "Pure MTEF Project", "Test MTEF directed", "Test MTEF directed", "AMP-15967-activity-2", "AMP-15967-activity-2", "AMP-15967-activity-1", "AMP-15967-activity-1"), 
+							SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "33,888", "Test MTEF directed", "150,000", "mtef activity 1", "789,123"), 
+							SimpleColumnModel.withContents("MTEF 2013/2014", "mtef activity 2", "123,654"), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666,777", "ptc activity 2", "333,222", "SSC Project 1", "111,333", "SSC Project 2", "567,421", "TAC_activity_1", "213,231", "TAC_activity_2", "999,888", "date-filters-activity", "125,000"), 
+								SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545,000", "Test MTEF directed", "143,777", "AMP-15967-activity-2", "97,000", "AMP-15967-activity-1", "100,110", "SSC Project 1", "555,111", "SSC Project 2", "131,845", "TAC_activity_1", "123,321", "TAC_activity_2", "453,213", "date-filters-activity", "72,000")))
+						.withTrailCells(null, "973,011", "123,654", "3,016,872", "2,221,377"))
+					.withTrailCells(null, "973,011", "123,654", "3,016,872", "2,221,377")
+						.withPositionDigest(true,
+						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC MTEF 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC MTEF 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 3, colSpan: 2))",
+						"(line 1:)",
+						"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))");
+		
+		runReportTest("Simple Report without an year-range-settings which filters out all years", "AMP-15794", 
+				new String[] {"Eth Water", "mtef activity 1", "mtef activity 2", "ptc activity 1", "ptc activity 2", "SSC Project 1", "SSC Project 2", "TAC_activity_1", "TAC_activity_2", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Pure MTEF Project", "Test MTEF directed", "AMP-15967-activity-2", "AMP-15967-activity-1"}, 
+				fddr_correct, new AmpReportModifier() {
+					
+					@Override
+					public void modifyAmpReportSettings(AmpReports report, AmpARFilter filter) {
+						filter.setRenderStartYear(2015);
+						filter.setRenderEndYear(2017);
+						filter.setGroupingseparator(",");
+						filter.setCustomusegroupings(true);
+						filter.buildCustomFormat();
+					}
+				});	
+	}
+	
+	public void testYearRangeSingleYearFilter()
+	{
+		GroupReportModel fddr_correct = 
+				GroupReportModel.withColumnReports("AMP-15794",
+						ColumnReportDataModel.withColumns("AMP-15794",
+							SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water", "mtef activity 1", "mtef activity 1", "mtef activity 2", "mtef activity 2", "ptc activity 1", "ptc activity 1", "ptc activity 2", "ptc activity 2", "SSC Project 1", "SSC Project 1", "SSC Project 2", "SSC Project 2", "TAC_activity_1", "TAC_activity_1", "TAC_activity_2", "TAC_activity_2", "date-filters-activity", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Proposed Project Cost 2 - EUR", "Pure MTEF Project", "Pure MTEF Project", "Test MTEF directed", "Test MTEF directed", "AMP-15967-activity-2", "AMP-15967-activity-2", "AMP-15967-activity-1", "AMP-15967-activity-1"), 
+							SimpleColumnModel.withContents("MTEF 2011/2012", "Pure MTEF Project", "33,888", "Test MTEF directed", "150,000", "mtef activity 1", "789,123"), 
+							SimpleColumnModel.withContents("MTEF 2013/2014", "mtef activity 2", "123,654"), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2009",
+									SimpleColumnModel.withContents("Actual Commitments", "date-filters-activity", "100,000"), 
+									SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Commitments", "ptc activity 1", "666,777", "ptc activity 2", "333,222", "SSC Project 1", "111,333", "SSC Project 2", "567,421", "TAC_activity_1", "213,231", "TAC_activity_2", "999,888", "date-filters-activity", "125,000"), 
+								SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545,000", "Test MTEF directed", "143,777", "AMP-15967-activity-2", "97,000", "AMP-15967-activity-1", "100,110", "SSC Project 1", "555,111", "SSC Project 2", "131,845", "TAC_activity_1", "123,321", "TAC_activity_2", "453,213", "date-filters-activity", "72,000")))
+						.withTrailCells(null, "973,011", "123,654", "100,000", "0", "3,016,872", "2,221,377"))
+					.withTrailCells(null, "973,011", "123,654", "100,000", "0", "3,016,872", "2,221,377")
+						.withPositionDigest(true,
+						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC MTEF 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC MTEF 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 2), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 2))",
+						"(line 1:RHLC 2009: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2))",
+						"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1))");
+		
+		runReportTest("Simple Report without an year-range-settings which only selects a single year", "AMP-15794", 
+				new String[] {"Eth Water", "mtef activity 1", "mtef activity 2", "ptc activity 1", "ptc activity 2", "SSC Project 1", "SSC Project 2", "TAC_activity_1", "TAC_activity_2", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Pure MTEF Project", "Test MTEF directed", "AMP-15967-activity-2", "AMP-15967-activity-1"}, 
+				fddr_correct, new AmpReportModifier() {
+					
+					@Override
+					public void modifyAmpReportSettings(AmpReports report, AmpARFilter filter) {
+						filter.setRenderStartYear(1999);
+						filter.setRenderEndYear(2009);
+						filter.setGroupingseparator(",");
+						filter.setCustomusegroupings(true);
+						filter.buildCustomFormat();
+					}
+				});
+		
+	}
 }

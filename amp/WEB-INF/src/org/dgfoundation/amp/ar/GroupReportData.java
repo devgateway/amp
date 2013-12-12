@@ -386,12 +386,12 @@ public class GroupReportData extends ReportData<ReportData> {
 	}
 
 	@Override
-	public List<String> digestReportHeadingData()
+	public List<String> digestReportHeadingData(boolean total)
 	{
 		ColumnReportData fcr = getFirstColumnReport();
 		if (fcr == null)
 			return new ArrayList<String>();
-		return fcr.digestReportHeadingData();
+		return fcr.digestReportHeadingData(total);
 	}
 	
 	/**

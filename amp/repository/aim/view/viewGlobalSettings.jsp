@@ -76,6 +76,34 @@ function saveClicked() {
   document.aimGlobalSettingsForm.submit();
 
 }
+
+function validateChangeRangeDefaultValue(){
+	var startYear;
+	var startYearTranslated;
+	var endYearTranslated;;
+	var endYear;
+    for (i=0;i < document.aimGlobalSettingsForm.length -1;i++) {
+    	var form=document.aimGlobalSettingsForm[i];
+		if (form.globalId) {
+			//whe test 		
+			if(form.globalSettingsName.value=='Change Range Default Start Value'){
+				startYear=form.gsfValue.value;
+				startYearTranslated=form.globalSettingsNameTranslated.value;
+			}else{
+				if(form.globalSettingsName.value=='Change Range Default End Value'){
+					endYear=form.gsfValue.value;
+					endYearTranslated=form.globalSettingsNameTranslated.value;
+				}
+			}
+		}
+    }
+    if(endYear<startYear){
+    	alert(endYearTranslated +' <digi:trn key="aim:Global:validation">should be greater than</digi:trn> ' + startYearTranslated);
+    	return false;
+    }
+    return true;
+}
+
 function validateCustomFields(form) {	
 	if (typeof form.gsfValue != "undefined") {
  		if (form.gsfValue.value=='') {
@@ -214,6 +242,9 @@ function saveAllSettings(){
                 allvalues = allvalues + val;
         	}
     	}
+    }
+    if(!validateChangeRangeDefaultValue()){
+    	return false;
     }
     //alert(allvalues);
     document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].allValues.value=allvalues;

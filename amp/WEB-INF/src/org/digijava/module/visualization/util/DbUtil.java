@@ -234,6 +234,19 @@ public class DbUtil {
         return col;
 	}
 	
+	public static String buildYearsInStatement(int startYear, int endYear)
+	{
+		if (startYear > endYear)
+			return "-32768"; // avoid generating an "IN ()" substatement
+		StringBuilder years = new StringBuilder();
+		for (int i = startYear; i <= endYear; i++)
+		{
+			if(!years.equals(""))
+				years.append(", ");
+			years.append("'" + i + "'");
+		}		
+	    return years.toString();
+	}
 	/**
      * Returns pledge amount in selected currency
      * for selected organization and year
@@ -261,12 +274,8 @@ public class DbUtil {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         Integer startYear = Integer.valueOf(sdf.format(startDate));
         Integer endYear = Integer.valueOf(sdf.format(endDate));
-        String years = "";
-        for (int i = startYear; i <= endYear; i++) {
-			if(!years.equals(""))
-				years = years + ", ";
-			years = years + "'" + i + "'";
-		}
+       
+        String years = buildYearsInStatement(startYear, endYear);        
         
         String oql = "select fd ";
         oql += " from ";

@@ -333,7 +333,7 @@ public class DbHelper {
 
 			if (filter.isModeexport()) {
 				ArrayList<Long> filteractivities = getInActivities(filter.getReportfilterquery());
-				inactivities = Util.toCSString(filteractivities);
+				inactivities = Util.toCSStringForIN(filteractivities);
 				oql += " and act.ampActivityId in(" + inactivities + ")";
 			}
 			
@@ -384,9 +384,7 @@ public class DbHelper {
 		List<AmpActivityVersion> activities = null;
 		try {
 			List<Long> ids = getActivitiesIds(filter);
-			String activityIdsCSV = Util.toCSString(ids);
-			if (activityIdsCSV.trim().isEmpty())
-				activityIdsCSV = "-999";
+			String activityIdsCSV = Util.toCSStringForIN(ids);
 			String oql = "select distinct act from ";
 			oql += AmpActivityVersion.class.getName()
 					+ " act WHERE ampActivityId IN (" + activityIdsCSV + ")";
@@ -553,7 +551,7 @@ public class DbHelper {
 	            oql += String.format(" and act.team is not null AND (act.draft=false OR act.draft IS NULL) AND act.approvalStatus IN ('%s','%s') ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS);
 	            
 	            List<Long> workSpaceActivityList = filter.buildFilteredActivitiesList();
-	            String inactivities = Util.toCSString(workSpaceActivityList);	            
+	            String inactivities = Util.toCSStringForIN(workSpaceActivityList);	            
 	    		oql += " and act.ampActivityId in("+ inactivities +")";
 	            
 	            
@@ -641,7 +639,7 @@ public class DbHelper {
 	           
 	            if (filter.isModeexport()){
 					List<Long> filteractivities = getInActivities(filter.getReportfilterquery());
-					inactivities = Util.toCSString(filteractivities);
+					inactivities = Util.toCSStringForIN(filteractivities);
 					oql += " and act.ampActivityId in("+ inactivities +")";
 				}
 	            
@@ -1017,7 +1015,7 @@ public class DbHelper {
         }
 
         List<Long> workSpaceActivityList = filter.buildFilteredActivitiesList();
-        String inactivities= Util.toCSString(workSpaceActivityList);
+        String inactivities= Util.toCSStringForIN(workSpaceActivityList);
 		oql += " and act.ampActivityId in("+ inactivities +")";
 
 

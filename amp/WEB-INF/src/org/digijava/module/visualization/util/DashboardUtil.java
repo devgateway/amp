@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
@@ -49,6 +51,7 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -497,60 +500,44 @@ public class DashboardUtil {
 		
 	}
 	
-	public static String getInStatement(Long ids[]) {
-        StringBuffer oql = new StringBuffer();
-        for (int i = 0; i < ids.length; i++) {
-            oql.append(ids[i]);
-            if (i < ids.length - 1) {
-                oql.append(",");
-            }
-        }
-        return oql.toString();
+	public static String getInStatement(Object ids[])
+	{
+		return getInStatement(Arrays.asList(ids));
     }
 
-    public static String getInStatement(Object[] ids) {
-        StringBuffer oql = new StringBuffer();
-        for (int i = 0; i < ids.length; i++) {
-            oql.append(ids[i]);
-            if (i < ids.length - 1) {
-                oql.append(",");
-            }
-        }
-        return oql.toString();
+//    public static String getInStatement(Object[] ids) {
+//        StringBuffer oql = new StringBuffer();
+//        for (int i = 0; i < ids.length; i++) {
+//            oql.append(ids[i]);
+//            if (i < ids.length - 1) {
+//                oql.append(",");
+//            }
+//        }
+//        return oql.toString();
+//	}    
+
+    public static String getInStatement(ArrayList<?> ids) {
+        return Util.toCSStringForIN(ids);
 	}    
 
-    public static String getInStatement(ArrayList ids) {
-        StringBuffer oql = new StringBuffer();;
-        for (Object object : ids) {
-            if (oql.length()!=0) {
-                oql.append(",");
-            }
-            oql.append(object);
-        }
-        return oql.toString();
-	}    
-
-    public static String getInStatement(Collection objs) {
+    public static String getInStatement(Collection<?> objs) {
     	
     	if (objs.isEmpty())
     		return "-999"; // avoid generating statements like "loc.id in ()", as they trigger "org.hibernate.hql.ast.QuerySyntaxException: unexpected end of subtree"
     	
         StringBuffer oql = new StringBuffer();
-        for (Object obj : objs) {
-            if (oql.length()!=0) {
+        for (Object obj : objs)
+        {
+            if (oql.length() != 0) {
                 oql.append(",");
             }
-            if (obj instanceof AmpSector){
-            	AmpSector sec = (AmpSector)obj;
-            	oql.append(sec.getAmpSectorId());
+            
+            if (obj instanceof Identifiable){
+            	oql.append(((Identifiable) obj).getIdentifier());
             }
-            if (obj instanceof AmpCategoryValueLocations){
-            	AmpCategoryValueLocations loc = (AmpCategoryValueLocations)obj;
-            	oql.append(loc.getId());
-            }
-            if (obj instanceof AmpTheme){
-            	AmpTheme prog = (AmpTheme)obj;
-            	oql.append(prog.getAmpThemeId());
+            else
+            {
+            	oql.append(obj.toString());
             }
         }
         return oql.toString();

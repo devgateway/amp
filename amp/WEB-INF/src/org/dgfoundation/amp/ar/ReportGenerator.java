@@ -226,7 +226,7 @@ public abstract class ReportGenerator {
 	 */
 	public static String generateLayoutString(List<String> headingDigests, int depth)
 	{
-		StringBuffer res = new StringBuffer(String.format("%s.withPositionDigest(\n", prefixString(depth)));
+		StringBuffer res = new StringBuffer(String.format("%s.withPositionDigest(true,\n", prefixString(depth)));
 		
 		for(int i = 0; i < headingDigests.size(); i++)
 		{
@@ -266,7 +266,7 @@ public abstract class ReportGenerator {
 		//System.out.println("elements: " + describeElements(report.getItems(), depth + 1));
 		String withTrailCells = buildTrailCellsDescription(report.getTrailCells(), depth);
 		String functionName = containsGroupReports(report) ? "withGroupReports" : "withColumnReports";
-		String describeLayoutString = describeLayout ? String.format("\n%s%s", prefixString(depth), generateLayoutString(report.digestReportHeadingData(), depth)) : "";
+		String describeLayoutString = describeLayout ? String.format("\n%s%s", prefixString(depth), generateLayoutString(report.digestReportHeadingData(true), depth)) : "";
 		return String.format("%sGroupReportModel.%s(\"%s\",\n%s)\n%s%s", prefixString(depth) ,functionName, report.getName(), elements, withTrailCells, describeLayoutString);
 	}
 	

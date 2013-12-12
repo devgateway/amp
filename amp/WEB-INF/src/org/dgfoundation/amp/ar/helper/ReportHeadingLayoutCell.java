@@ -93,10 +93,19 @@ public class ReportHeadingLayoutCell {
 		this.colSpan = colSpan;
 		this.name = name;
 	}
-	
+		
 	@Override
 	public String toString()
 	{
+		return getStringDigest(false);
+	}
+	
+	public String getStringDigest(boolean total)
+	{
+		if (total)
+		{
+			return String.format("RHLC %s: (startRow: %d, rowSpan: %d, totalRowSpan: %d, colStart: %d, colSpan: %d)", this.getName(), this.startRow, this.rowSpan, this.totalRowSpan, this.startColumn, this.colSpan);
+		}
 		return String.format("RHLC %s: (startRow: %d, rowSpan: %d, totalRowSpan: %d, colSpan: %d)", this.getName(), this.startRow, this.rowSpan, this.totalRowSpan, this.colSpan);
 	}
 	

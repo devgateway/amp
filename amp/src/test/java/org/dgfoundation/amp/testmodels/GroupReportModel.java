@@ -16,6 +16,7 @@ public class GroupReportModel extends ReportModel
 	private ReportModel[] childModels;
 	private String[] trailCells;
 	private List<String> positionDigest;
+	protected boolean positionDigestIsTotal;
 	
 	private enum GRModelType {GROUP_REPORTS, COLUMN_REPORTS};
 	
@@ -43,11 +44,28 @@ public class GroupReportModel extends ReportModel
 		return new GroupReportModel(name, new ColumnReportDataModel[0], GRModelType.COLUMN_REPORTS);
 	}
 	
+	/**
+	 * equivalent to calling {@link #withPositionDigest(false, lines)}
+	 * @param lines
+	 * @return
+	 */
 	public GroupReportModel withPositionDigest(String... lines)
+	{
+		return withPositionDigest(false, lines);
+	}
+	
+	/**
+	 * sets the "correct" positionDigest for the GRD
+	 * @param total - whether the digest should be complete (including start positions). Only call with total = false for legacy code <br />
+	 * @param lines
+	 * @return
+	 */
+	public GroupReportModel withPositionDigest(boolean total, String... lines)
 	{
 		this.positionDigest = new ArrayList<String>();
 		for(String lineDigest:lines)
 			positionDigest.add(lineDigest);
+		this.positionDigestIsTotal = total;
 		return this;
 	}
 	
@@ -98,7 +116,7 @@ public class GroupReportModel extends ReportModel
 	
 	protected String matches_position_digest(GroupReportData grd)
 	{
-		List<String> digest = grd.digestReportHeadingData();
+		List<String> digest = grd.digestReportHeadingData(this.positionDigestIsTotal);
 		if (digest.size() != positionDigest.size())
 			return String.format("GRD %s has %d rows in report-headings, but should have %d", this.getName(), digest.size(), positionDigest.size());
 		

@@ -42,29 +42,42 @@ public abstract class ReportsTestCase extends TestCase
 		}
 		GroupReportData report = ReportTestingUtils.runReportOn(reportName, modifier, activities);
 		//System.out.println(ReportTestingUtils.describeReportInCode(report, 1, true));
-		checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(report);
+//		checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(report);
 		String error = correctResult.matches(report);
 		assertNull(String.format("test %s, report %s: %s", testName, reportName, error), error);
 	}
 	
 	/**
-	 * all the CRDs of the report should have the same columns' structures, e.g. any column-removal should be done in such a way as to be reflected in all the CRD's of a report
+	 * shorthand for {@link #runReportTest(String, String, String[], GroupReportModel, AmpReportModifier, null)}
+	 * @param testName
+	 * @param reportName
+	 * @param activities
+	 * @param correctResult
+	 * @param modifier
 	 */
-	protected void checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(GroupReportData report)
+	protected void runReportTest(String testName, String reportName, String[] activities, GroupReportModel correctResult, AmpReportModifier modifier)
 	{
-		ArrayList<ColumnReportData> crds = new ArrayList<ColumnReportData>();
-		collectAllCRD(report, crds);
-		
-		if (crds.isEmpty())
-			return;
-		
-		String first = crds.get(0).digestReportHeadingData().toString();
-		for(int i = 1; i < crds.size(); i++)
-		{
-			String checked = crds.get(i).digestReportHeadingData().toString();
-			assertTrue("CRD " + crds.get(i).getAbsoluteReportName() + " has a different layout digest than " + crds.get(0).getAbsoluteReportName(), first.equals(checked));
-		}
+		runReportTest(testName, reportName, activities, correctResult, modifier, null);
 	}
+	
+//	/**
+//	 * all the CRDs of the report should have the same columns' structures, e.g. any column-removal should be done in such a way as to be reflected in all the CRD's of a report
+//	 */
+//	protected void checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(GroupReportData report)
+//	{
+//		ArrayList<ColumnReportData> crds = new ArrayList<ColumnReportData>();
+//		collectAllCRD(report, crds);
+//		
+//		if (crds.isEmpty())
+//			return;
+//		
+//		String first = crds.get(0).digestReportHeadingData().toString();
+//		for(int i = 1; i < crds.size(); i++)
+//		{
+//			String checked = crds.get(i).digestReportHeadingData().toString();
+//			assertTrue("CRD " + crds.get(i).getAbsoluteReportName() + " has a different layout digest than " + crds.get(0).getAbsoluteReportName(), first.equals(checked));
+//		}
+//	}
 	
 	protected void collectAllCRD(GroupReportData report, List<ColumnReportData> crds)
 	{

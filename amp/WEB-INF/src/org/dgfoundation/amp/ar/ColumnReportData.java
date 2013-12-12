@@ -874,7 +874,7 @@ public class ColumnReportData extends ReportData<Column> {
 	}
 
 	@Override
-	public List<String> digestReportHeadingData()
+	public List<String> digestReportHeadingData(boolean total)
 	{
 		int maxDepth = this.getMaxColumnDepth();
 		List<String> ret = new ArrayList<String>();
@@ -890,7 +890,7 @@ public class ColumnReportData extends ReportData<Column> {
 			{
 				if (i > 0)
 					lineDigest.append(", ");
-				lineDigest.append(columnsToDraw.get(i).getPositionInHeading().toString());
+				lineDigest.append(columnsToDraw.get(i).getPositionInHeading().getStringDigest(total));
 			}
 			lineDigest.append(")");
 			ret.add(lineDigest.toString());

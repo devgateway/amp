@@ -170,8 +170,8 @@ public class WorkspaceFilter
 		//return "2498, 1301";
 		//return "101790, 101789";
 		//return "2,14,18,20,21";
-		//return "18"; // masha
-		//return "20, 21";
+		//return "20, 21"; // masha
+		//return "11, 12";
 		//return "SELECT amp_activity_id from amp_activity WHERE (amp_activity_id >= 101789)";
 		return TEAM_FILTER;
 		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537', '8723851641', '8723851222')";

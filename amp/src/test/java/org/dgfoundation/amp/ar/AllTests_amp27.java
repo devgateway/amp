@@ -33,11 +33,6 @@ public class AllTests_amp27 {
 
 		suite.addTest(DirectedDisbursementsTests_amp27.suite());
 		suite.addTest(MultilingualTests.suite());
-//		suite.addTest(MtefTests.suite());
-//		suite.addTest(ComputedMeasuresTests.suite());
-//		suite.addTest(MiscColumnsTests.suite());
-//		suite.addTest(EsriTestCases.suite());
-//		suite.addTest(FiltersTests.suite());
 		//$JUnit-END$
 		return suite;
 	}
@@ -51,8 +46,8 @@ public class AllTests_amp27 {
 		try
 		{ 
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_27";
-			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";
+			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_27";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";
     	
 			ResourceStreamHandlerFactory.installIfNeeded();
 

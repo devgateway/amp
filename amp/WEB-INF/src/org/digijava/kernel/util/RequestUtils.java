@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
@@ -228,7 +229,14 @@ public class RequestUtils {
      * @return navigation language for current request
      */
     public static Locale getNavigationLanguage(HttpServletRequest request) {
-        return (Locale) request.getAttribute(Constants.NAVIGATION_LANGUAGE);
+        Locale res = (Locale) request.getAttribute(Constants.NAVIGATION_LANGUAGE);
+        if (res == null)
+        {
+        	res = new Locale("en", "");
+        	String errMsg = "request does not have a locale, returned dummy 'en'. FIX THIS ERROR!";
+        	logger.error(errMsg, new RuntimeException(errMsg));
+        }
+        return res;
     }
 
     /**

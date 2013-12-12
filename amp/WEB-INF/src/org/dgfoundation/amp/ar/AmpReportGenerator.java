@@ -944,10 +944,12 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (!(col instanceof GroupColumn))
 			return;
 		GroupColumn gcol = (GroupColumn) col;
-		Iterator<Column> subcols = gcol.iterator();
-		while (subcols.hasNext())
+		//Iterator<Column> subcols = gcol.iterator(); //replaced for AMP-16665 due to ConcurrentModificationException
+		//while (subcols.hasNext())
+		for(int i=0;i<gcol.getItems().size();i++)
 		{
-			Column subcol = subcols.next();
+			//Column subcol = subcols.next();
+			Column subcol=gcol.getItem(i);
 			fixEmptyGroupColumns(subcol, groupColumnName); // this will be a nop if this is a simple column
 			boolean matchesGroupColumnFilter = (groupColumnName == null) || subcol.getName().equals(groupColumnName); 
 			if ((subcol instanceof GroupColumn) && subcol.getItems().isEmpty() && matchesGroupColumnFilter)

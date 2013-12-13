@@ -1630,6 +1630,25 @@ public class TeamUtil {
     	}
     	
     }
+    
+	
+    /**
+	 * Checks if the team is a computed workspace and in case it is it checks if
+	 * it should hide the draft activities
+	 *
+     * @param tm the team member
+     * @return true if draft activities should be hidden
+     */
+	public static boolean hideDraft(TeamMember tm) {
+		if (tm.getComputation() != null && tm.getComputation()) {
+			Workspace wrksp = TeamUtil.getWorkspace(tm.getTeamId());
+			if (wrksp != null && wrksp.getHideDraftActivities() != null
+					&& wrksp.getHideDraftActivities())
+				return true;
+		}
+		return false;
+	}
+    
         
   public static List<AmpActivity> getAllTeamAmpActivities(Long teamId, boolean includedraft, String keyword) {
 	Connection conn = null;

@@ -17,7 +17,14 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,6 +64,7 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.mondrian.query.MoConstants;
@@ -1562,7 +1570,8 @@ public class AmpARFilter extends PropertyListable {
 				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
 				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
 				 */
-				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE draft<> true AND approval_status IN (" + Util.toCSString(AmpARFilter.activityStatus) +")";				
+				String hideDraftSQL = TeamUtil.hideDraft(loggedInTeamMember)?"draft<> true AND ":"";
+				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE "+hideDraftSQL+" approval_status IN (" + Util.toCSString(AmpARFilter.activityStatus) +")";				
 				queryAppend(allActivitiesInTheDatabaseQuery);
 				generatedFilterQuery += " OR amp_activity_id IN (" + TEAM_FILTER + ")";
 			}

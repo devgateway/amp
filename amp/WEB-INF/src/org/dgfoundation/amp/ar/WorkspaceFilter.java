@@ -1,18 +1,16 @@
 package org.dgfoundation.amp.ar;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import org.digijava.module.aim.dbentity.AmpReports;
+import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.dgfoundation.amp.Util;
 
 public class WorkspaceFilter 
 {
@@ -255,11 +253,7 @@ public class WorkspaceFilter
 			 * Checks if the team is a computed workspace and in case it is
 			 * it checks if it should hide the draft activities
 			 */
-			if (tm.getComputation() != null && tm.getComputation() ) {
-				Workspace wrksp	= TeamUtil.getWorkspace( tm.getTeamId() );
-				if ( wrksp != null && wrksp.getHideDraftActivities() != null && wrksp.getHideDraftActivities() )
-					hideDraft = true;
-			}
+			hideDraft=TeamUtil.hideDraft(tm);
 			String accessType = tm.getTeamAccessType();
 			return generateWorkspaceFilterQuery(tm.getMemberId(), accessType, approved, hideDraft, publicView);
 		}

@@ -156,10 +156,11 @@ public class SelectSector extends Action {
 		}
 		
 		if (request.getParameter("addButton") != null){
-			if (validateSector && ssForm.getSector().equals(new Long(-1)))
+			if (validateSector && ssForm.getSector().equals(new Long(-1))) {
 				if(validateSector){
 					request.setAttribute("errSector", "true");
 				}
+			}
 			else{
 				request.setAttribute("addButton", "true");
 				HttpSession session = request.getSession();

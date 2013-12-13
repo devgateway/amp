@@ -17,6 +17,7 @@
 
 <!--<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>-->
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+
 <jsp:include page="addSectors.jsp"  />
 <jsp:include page="scripts/newCalendar.jsp"  />
 <% int indexFund = 0; 
@@ -31,7 +32,8 @@ PledgeForm pledgeForm = (PledgeForm) session.getAttribute("pledgeForm");
 var quitRnot1 = 0;
 
 function fnChk(frmContrl, f){
-	  <c:set var="errMsgAddSectorNumericValue">
+	
+	<c:set var="errMsgAddSectorNumericValue">
 	  <digi:trn key="aim:addSecorNumericValueErrorMessage">
 	  Please enter numeric value only
 	  </digi:trn>
@@ -43,31 +45,54 @@ function fnChk(frmContrl, f){
 	    //frmContrl.focus();
 	    return false;
 	  }  
-	  if (frmContrl.value > 100) {    
-	      if (f == "sector") {
-		     <c:set var="errMsgAddSumExceed">
-			  <digi:trn key="aim:addSecorSumExceedErrorMessage">
-			  Sector percentage can not exceed 100
-			  </digi:trn>
-			  </c:set>
-			  alert("${errMsgAddSumExceed}");
-		  } else if (f == "program") {
-		     <c:set var="errMsgAddSumExceed">
-			  <digi:trn key="aim:addProgramSumExceedErrorMessage">
-			  Program percentage can not exceed 100
-			  </digi:trn>
-			  </c:set>  
-			  alert("${errMsgAddSumExceed}");
-		  } else if (f == "region") {
-		      <c:set var="errMsgAddSumExceed">
+	  if (f == "sector") {
+		  var totalValue = 0;
+		  $('input[name^=pledgeSectors]').each(function(i, obj) {
+			    totalValue += parseFloat(obj.value);
+			});
+		  if (totalValue > 100) {
+			 <c:set var="errMsgAddSumExceed">
+			 <digi:trn key="aim:addSecorSumExceedErrorMessage">
+			 Sector percentage can not exceed 100
+			 </digi:trn>
+			 </c:set>
+			 alert("${errMsgAddSumExceed}"); 
+			 frmContrl.value = "";
+		    return false;  
+		  }
+			
+	  }
+	  else if (f == "region") {
+		  var totalValue = 0;
+		  $('input[name^=selectedLocs]').each(function(i, obj) {
+			    totalValue += parseFloat(obj.value);
+			});
+		  if (totalValue > 100) {
+			  <c:set var="errMsgAddSumExceed">
 			  <digi:trn key="aim:addRegionSumExceedErrorMessage">
 			  Region percentage can not exceed 100
 			  </digi:trn>
 			  </c:set> 
 			  alert("${errMsgAddSumExceed}");
-		  }
-	    frmContrl.value = "";
-	    return false;
+			 frmContrl.value = "";
+		    return false;  
+		  }  
+	  }
+	  else if (f == "program") {
+		  var totalValue = 0;
+		  $('input[name^=selectedProgs]').each(function(i, obj) {
+			    totalValue += parseFloat(obj.value);
+			});
+		  if (totalValue > 100) {
+			  <c:set var="errMsgAddSumExceed">
+			  <digi:trn key="aim:addProgramSumExceedErrorMessage">
+			  Program percentage can not exceed 100
+			  </digi:trn>
+			  </c:set>  
+			  alert("${errMsgAddSumExceed}");
+			 frmContrl.value = "";
+		    return false;  
+		  }  
 	  }
 	  return true;
 	}
@@ -632,7 +657,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	                                                            		<digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;
 																</td>
 																<td align="left" width="15%" nowrap="nowrap">
-	                                                            		<html:text name="selectedProgs" indexed="true" property="programpercentage" size="5"  onkeyup="fnChk(this, 'region')" styleClass="inp-text"/>
+	                                                            		<html:text name="selectedProgs" indexed="true" property="programpercentage" size="5"  onkeyup="fnChk(this, 'program')" styleClass="inp-text"/>
 	                                                            </td>
 	                                                          
 	                                                    </tr>

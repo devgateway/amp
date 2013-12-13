@@ -88,6 +88,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
     //clear all graphics when zoom starts
     handleMapZoomStart: function() {
         this.clear();
+        map.infoWindow.hide();
     },
 
     //re-cluster on extent change
@@ -173,13 +174,16 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 }
                 return;
             }
-        } else { //single marker or cluster flare mouse over
+        } else { 
             if (graphic.attributes.baseGraphic) { //cluster flare
                 if (graphic.attributes.id) {
+                	var spinner = '<img id="loadingImg" src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" style="position:absolute;left:50%;top:50%; z-index:200;" />';
+                	map.infoWindow.setContent(spinner);
+                	var graphicCenterSP = esri.geometry.toScreenGeometry(this._map.extent, this._map.width, this._map.height, graphic.geometry);
+                    map.infoWindow.show(graphicCenterSP, map.getInfoWindowAnchor(graphicCenterSP));
                     baseGraphic = graphic.attributes.baseGraphic;
                     var attr = getContent(graphic.attributes, baseGraphic);
                     graphic.setAttributes(attr);
-                    //graphic.attributes.baseGraphic.task.cancel();
                 }
             } else {
                 if (graphic.attributes.id) {
@@ -292,6 +296,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 this.removeFlareGraphics(g.clusterGraphics);
                 delete g.clusterGraphics;
                 g.attributes.clustered = false;
+                g.attributes.isExpanded = false;
             }, this, [graphic]);
             task.delay(0);
             graphic.task = task;
@@ -323,9 +328,9 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
     
     //shows info window for specified graphic
     showInfoWindow: function(graphic) {
-        if (map.infoWindow.isShowing) {
+        /*if (map.infoWindow.isShowing) {
             map.infoWindow.hide();
-        }
+        }*/
         map.infoWindow.setContent(graphic.getContent());
         map.infoWindow.setTitle(graphic.getTitle());
         map.infoWindow.resize(this._infoWindowWidth, this._infoWindowHeight);

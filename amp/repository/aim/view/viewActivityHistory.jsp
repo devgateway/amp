@@ -64,7 +64,7 @@
 					<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
 					</td>
 					<td>
-						${item.modifiedBy.user.firstNames}  ${item.activityCreator.user.lastName}
+						${item.modifiedBy.user.firstNames}  ${item.modifiedBy.user.lastName}
 						<c:if test="${empty item.modifiedBy.user.firstNames}">
 						<digi:trn>Empty</digi:trn>
 						</c:if>

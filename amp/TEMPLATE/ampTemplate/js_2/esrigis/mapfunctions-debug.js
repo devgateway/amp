@@ -18,7 +18,7 @@ dojo.require("dojo.dnd.Moveable");
 dojo.require("dojo.io.script");
 dojo.require("esri.dijit.Print");
 dojo.require("esri.tasks.query");
-
+dojo.require("esri.layers.osm");
 
 
 
@@ -51,6 +51,7 @@ var rangegraphicLayer;
 /*-----------------Indicators Layers------------*/
 var rooturl;
 var basemapUrl;
+var isOsm = false;
 var countrymapurl;
 var nationalborderurl;
 var COUNTY;
@@ -101,11 +102,12 @@ var MapConstants = {
 				"GEOLOCATOR_SERVICE" : 7,
 				"BASEMAPS_ROOT" : 8,
 				"NATIONAL_LAYER" : 9,
-				"INDICATOR_LAYER" : 10			   
-		   },
+				"INDICATOR_LAYER" : 10
+			},
 		   "MapSubType": {
 			   "BASE" : 1,
-			   "INDICATOR" : 2
+			   "INDICATOR" : 2,
+			   "OSM" : 3
 		   }
 		};
 function init() {
@@ -115,15 +117,15 @@ function init() {
 		sync : true,
 		load : function(jsonData) {
 			dojo.forEach(jsonData, function(map) {
-				if (map.mapSubType == MapConstants.MapSubType.INDICATOR)
-				{
+				if (map.mapSubType == MapConstants.MapSubType.INDICATOR){
 					indicatorLayerArray.push(map);
-				}
-				else
-				{
+				}else{
 					switch (map.mapType) {
 					case MapConstants.MapType.BASE_MAP:
 						basemapUrl = map.mapUrl;
+						if (map.mapSubType == MapConstants.MapSubType.OSM){
+							isOsm = true;
+						}
 						break;
 					case MapConstants.MapType.MAIN_MAP:
 						countrymapurl = map.mapUrl;
@@ -155,11 +157,14 @@ function init() {
 	var deferred = dojo.xhrGet(xhrArgs);
 
 	loading = dojo.byId("loadingImg");
-
-	basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {
-		id : 'base'
-	}); // Levels at which this layer will be visible);
-	countrymap = new esri.layers.ArcGISDynamicMapServiceLayer(countrymapurl, {opacity : 0.50,id : 'countrymap'});
+	
+	if (!isOsm){
+		basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id : 'base'}); // Levels at which this layer will be visible);
+	}else{
+		basemap = new esri.layers.OpenStreetMapLayer({id : 'base'});
+    }
+		
+		countrymap = new esri.layers.ArcGISDynamicMapServiceLayer(countrymapurl, {opacity : 0.50,id : 'countrymap'});
 	
 	/*
 	 povertyratesmap = new esri.layers.FeatureLayer(povertyratesurl, { mode:

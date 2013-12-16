@@ -18,6 +18,7 @@ public class MapConstants {
 	public final static class MapSubType {
 		public final static Integer BASE = 1;
 		public final static Integer INDICATOR = 2;
+		public final static Integer OSM = 3;
 	}	
 
 	public final static HashMap<Integer, String> mapTypeNames = new HashMap<Integer, String>();
@@ -36,6 +37,7 @@ public class MapConstants {
     static {
     	mapSubTypeNames.put(MapSubType.BASE, "Base Map");
     	mapSubTypeNames.put(MapSubType.INDICATOR, "Indicator Layer");
+    	mapSubTypeNames.put(MapSubType.OSM, "Open Street Map");
 	}
 
 }

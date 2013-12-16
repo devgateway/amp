@@ -358,9 +358,11 @@ function validateForm(){
 		alert("<digi:trn jsFriendly='true'>Please complete the following fields:</digi:trn>\n" + strError);
 		return false;
 	}
-	if(!validateUrl($("input[name=url]").val())){
-		alert("<digi:trn>Wrong format URL</digi:trn>\n");
-		return false;
+	if (!$("input[name=mapSubType]").val()==3){
+		if(!validateUrl($("input[name=url]").val())){
+			alert("<digi:trn>Wrong format URL</digi:trn>\n");
+			return false;
+		}
 	}
 	return true;
 }

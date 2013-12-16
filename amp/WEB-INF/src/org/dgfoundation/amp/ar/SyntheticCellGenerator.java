@@ -135,10 +135,6 @@ public abstract class SyntheticCellGenerator {
 	}
 
 
-
-
-
-
 	/**
 	 * @return the originalMeasureName
 	 */
@@ -147,16 +143,16 @@ public abstract class SyntheticCellGenerator {
 	}
 
 
-
-
-
-
 	/**
 	 * @param originalMeasureName the originalMeasureName to set
 	 */
 	public void setOriginalMeasureName(String originalMeasureName) {
 		this.originalMeasureName = originalMeasureName;
 	} 
-	
-	
+		
+	@Override
+	public String toString()
+	{
+		return String.format("SyntheticCellGenerator: %s[%s] -> %s", originalMeasureName, metaDataName, measureName);
+	}
 }

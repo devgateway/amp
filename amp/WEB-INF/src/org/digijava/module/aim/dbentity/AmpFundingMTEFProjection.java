@@ -169,6 +169,11 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 			return null;
 		}
 		
+		public Float getCapitalSpendingPercentage()
+		{
+			return null;
+		}
+		
 		@Override
 		public String toString()
 		{

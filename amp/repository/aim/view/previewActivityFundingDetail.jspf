@@ -37,6 +37,14 @@ second row (if any):
 		</c:otherwise>
 	</c:choose>	
 </tr>
+<logic:present name="fundingDetail" property="capitalPercent">
+	<tr>
+		<td colspan="1">&nbsp;</td>
+		<td colspan="3" align="right">
+			<digi:trn>Capital spending percentage</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="capitalPercent" /></b>%&nbsp;			
+		</td>
+	</tr>
+</logic:present>
 <logic:present name="fundingDetail" property="recipientOrganisation">
 	<tr>
 		<td colspan="1">&nbsp;</td>

@@ -347,7 +347,7 @@ public final class ArConstants {
 			new SyntheticColumnsMeta("Planned Disbursements - Capital", new CapitalCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Capital","Planned Disbursements")),
 			new SyntheticColumnsMeta("Planned Disbursements - Expenditure", new CapitalExpenditureCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Expenditure","Planned Disbursements")),
 			new SyntheticColumnsMeta("Planned Disbursements", new CapitalSplitTotalsCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements","Planned Disbursements")),
-			new SyntheticColumnsMeta("Actual Disbursements - Capital", new ActualDisbCapitalCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements - Capital","Actual Disbursements")),
+			new SyntheticColumnsMeta("Actual Disbursements - Capital", new CapitalCellGenerator(ArConstants.CAPITAL_PERCENT, "Actual Disbursements - Capital","Actual Disbursements")),
 			new SyntheticColumnsMeta("Actual Disbursements - Recurrent", new ActualDisbRecurrentCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements - Recurrent","Actual Disbursements")),
 			new SyntheticColumnsMeta("Actual Disbursements", new ActualDisbSplitCapRecTotalsCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements","Actual Disbursements"))
 	) ;
@@ -386,6 +386,12 @@ public final class ArConstants {
 		 */
 		public void setGenerator(SyntheticCellGenerator generator) {
 			this.generator = generator;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return String.format("%s -> %s", this.columnName, this.generator.toString());
 		}
 		
 	}

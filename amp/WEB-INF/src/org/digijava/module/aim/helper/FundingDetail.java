@@ -54,6 +54,16 @@ public class FundingDetail implements Serializable, Comparable
 		return recipientOrganisationRole;
 	}
 
+	public Float getCapitalPercent()
+	{
+		return this.capitalPercent;
+	}
+	
+	public void setCapitalPercent(Float capitalPercent)
+	{
+		this.capitalPercent = capitalPercent;
+	}
+	
 	private Date reportingDate;
 	private AmpCategoryValue adjustmentTypeName;
 	private String transactionDate;
@@ -77,6 +87,8 @@ public class FundingDetail implements Serializable, Comparable
     private Boolean disbursementOrderRejected;        
     private Long pledge;
     private AmpCategoryValue pledgename;
+    
+    private Float capitalPercent;
        
 	
     @Override

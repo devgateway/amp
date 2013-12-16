@@ -107,8 +107,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
                 };
                 item.add(enableFixedRate);
 
-
-				item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",
+                AmpSelectFieldPanel pledgePanel = new AmpSelectFieldPanel<FundingPledges>("pledge",
 						new PropertyModel<FundingPledges>(item.getModel(),
 								"pledgeid"), pledgesModel,
 								"Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
@@ -116,7 +115,9 @@ public class AmpDonorCommitmentsFormTableFeature extends
 					public Object getDisplayValue(FundingPledges arg0) {
 						return arg0.getTitle();
 					}
-				}, false));
+				}, false);
+                pledgePanel.add(new AttributeModifier("style", "margin-top: 80px;float: left;margin-left:-520px;"));
+                item.add(pledgePanel);
 				item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);

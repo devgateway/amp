@@ -142,6 +142,8 @@ public class Values extends HashMap<String, BigDecimal> {
 	 */
 	public void collectCellVariables(CategAmountCell cell) {
 
+		if (cell.getMergedCells().size() > 0)
+			System.out.println("BOZO BOZO BREAK POINT");
 		this.addValue(ArConstants.TOTAL_COMMITMENTS, TokenRepository.buildTotalCommitmentsLogicalToken().evaluate(cell));
 
 		this.addValue(ArConstants.ACTUAL_COMMITMENT, TokenRepository.buildActualCommitmentsLogicalToken().evaluate(cell));
@@ -178,7 +180,8 @@ public class Values extends HashMap<String, BigDecimal> {
 				if (cell.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
 					this.incrementValue(ArConstants.ACTUAL_COMMITMENT_COUNT);
 				}
-				if (cell.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT)) {
+				if (cell.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT) && cell.isEstimatedDisbursement())
+				{
 					this.incrementValue(ArConstants.ACTUAL_DISBURSEMENT_COUNT);
 				}
 

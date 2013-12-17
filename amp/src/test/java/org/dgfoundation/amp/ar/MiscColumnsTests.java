@@ -74,7 +74,7 @@ public class MiscColumnsTests extends ReportsTestCase
 						SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water", "mtef activity 2", "mtef activity 2", "SSC Project 1", "SSC Project 1"),
 						SimpleColumnModel.withContents("Mode of Payment", "Eth Water", "Mode of Payment Unallocated", "mtef activity 2", "Mode of Payment Unallocated", "SSC Project 1", "Mode of Payment Unallocated"),
 						GroupColumnModel.withSubColumns("Total Costs",
-								SimpleColumnModel.withContents("Undisbursed Balance", "Eth Water", "-660 000", "SSC Project 1", "-443 778")
+								SimpleColumnModel.withContents("Undisbursed Balance", "Eth Water", "-545 000", "SSC Project 1", "-443 778")
 								)
 						)
 				);

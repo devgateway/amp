@@ -14,12 +14,10 @@ import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.hibernate.Query;
-
 import org.hibernate.cfg.*;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -36,9 +34,123 @@ public class ComputedMeasuresTests extends ReportsTestCase
 		suite.addTest(new ComputedMeasuresTests("testPercentageOfTotalCommitments"));
 		suite.addTest(new ComputedMeasuresTests("testPercentageOfTotalCommitmentsSpuriousQColumns"));
 		suite.addTest(new ComputedMeasuresTests("testActualPlannedDisbursementsCapital"));
+		suite.addTest(new ComputedMeasuresTests("testDisbRatioWithRealDisbAndHier"));
 		return suite;
 	}
 	
+	public void testDisbRatioWithRealDisbAndHier()
+	{
+		GroupReportModel fddr_correct = 		
+		GroupReportModel.withGroupReports("AMP-16651-by-region-only-disb-ratio",
+				GroupReportModel.withColumnReports("AMP-16651-by-region-only-disb-ratio",
+					ColumnReportDataModel.withColumns("Region: Anenii Noi County",
+						SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water", "Test MTEF directed", "Test MTEF directed", "SSC Project 1", "SSC Project 1"), 
+						SimpleColumnModel.withContents("Primary Sector", "Eth Water", "110 - EDUCATION", "Test MTEF directed", "110 - EDUCATION", "SSC Project 1", "110 - EDUCATION"), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2010",
+								SimpleColumnModel.withContents("Actual Disbursements", "Test MTEF directed", "143 777")), 
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)), 
+							GroupColumnModel.withSubColumns("2012",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)), 
+							GroupColumnModel.withSubColumns("2013",
+								SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545 000", "SSC Project 1", "555 111"))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Disbursements", "Eth Water", "545 000", "Test MTEF directed", "143 777", "SSC Project 1", "555 111"), 
+							SimpleColumnModel.withContents("Disbursment Ratio", "Eth Water", "43,81", "Test MTEF directed", "11,56", "SSC Project 1", "44,63")))
+					.withTrailCells(null, null, "143 777", "0", "0", "1 100 111", "1 243 888", "100"),
+					ColumnReportDataModel.withColumns("Region: Balti County",
+						SimpleColumnModel.withContents("Project Title", "AMP-15967-activity-1", "AMP-15967-activity-1"), 
+						SimpleColumnModel.withContents("Primary Sector", "AMP-15967-activity-1", "110 - EDUCATION"), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2010",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)), 
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-1", "44 444")), 
+							GroupColumnModel.withSubColumns("2012",
+								SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-1", "55 666")), 
+							GroupColumnModel.withSubColumns("2013",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-1", "100 110"), 
+							SimpleColumnModel.withContents("Disbursment Ratio", "AMP-15967-activity-1", "100")))
+					.withTrailCells(null, null, "0", "44 444", "55 666", "0", "100 110", "100"),
+					ColumnReportDataModel.withColumns("Region: Cahul County",
+						SimpleColumnModel.withContents("Project Title", "AMP-15967-activity-2", "AMP-15967-activity-2", "AMP-16536-first", "AMP-16536-first"), 
+						SimpleColumnModel.withContents("Primary Sector", "AMP-15967-activity-2", "110 - EDUCATION", "AMP-16536-first", "110 - EDUCATION"), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2010",
+								SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-2", "15 000")), 
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-2", "50 000")), 
+							GroupColumnModel.withSubColumns("2012",
+								SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-2", "32 000", "AMP-16536-first", "9 000")), 
+							GroupColumnModel.withSubColumns("2013",
+								SimpleColumnModel.withContents("Actual Disbursements", "AMP-16536-first", "7 600"))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Disbursements", "AMP-15967-activity-2", "97 000", "AMP-16536-first", "16 600"), 
+							SimpleColumnModel.withContents("Disbursment Ratio", "AMP-15967-activity-2", "85,39", "AMP-16536-first", "14,61")))
+					.withTrailCells(null, null, "15 000", "50 000", "41 000", "7 600", "113 600", "100"),
+					ColumnReportDataModel.withColumns("Region: Dubasari County",
+						SimpleColumnModel.withContents("Project Title", "TAC_activity_1", "TAC_activity_1", "date-filters-activity", "date-filters-activity"), 
+						SimpleColumnModel.withContents("Primary Sector", "TAC_activity_1", "112 - BASIC EDUCATION", "date-filters-activity", "110 - EDUCATION"), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2010",
+								SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_1", "123 321", "date-filters-activity", "60 000")), 
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)), 
+							GroupColumnModel.withSubColumns("2012",
+								SimpleColumnModel.withContents("Actual Disbursements", "date-filters-activity", "12 000")), 
+							GroupColumnModel.withSubColumns("2013",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_1", "123 321", "date-filters-activity", "72 000"), 
+							SimpleColumnModel.withContents("Disbursment Ratio", "TAC_activity_1", "63,14", "date-filters-activity", "36,86")))
+					.withTrailCells(null, null, "183 321", "0", "12 000", "0", "195 321", "100"),
+					ColumnReportDataModel.withColumns("Region: Edinet County",
+						SimpleColumnModel.withContents("Project Title", "SSC Project 2", "SSC Project 2"), 
+						SimpleColumnModel.withContents("Primary Sector", "SSC Project 2", "112 - BASIC EDUCATION"), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2010",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)), 
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)), 
+							GroupColumnModel.withSubColumns("2012",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)), 
+							GroupColumnModel.withSubColumns("2013",
+								SimpleColumnModel.withContents("Actual Disbursements", "SSC Project 2", "131 845"))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Disbursements", "SSC Project 2", "131 845"), 
+							SimpleColumnModel.withContents("Disbursment Ratio", "SSC Project 2", "100")))
+					.withTrailCells(null, null, "0", "0", "0", "131 845", "131 845", "100"),
+					ColumnReportDataModel.withColumns("Region: Falesti County",
+						SimpleColumnModel.withContents("Project Title", "TAC_activity_2", "TAC_activity_2"), 
+						SimpleColumnModel.withContents("Primary Sector", "TAC_activity_2", "130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH"), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2010",
+								SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_2", "453 213")), 
+							GroupColumnModel.withSubColumns("2011",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)), 
+							GroupColumnModel.withSubColumns("2012",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY)), 
+							GroupColumnModel.withSubColumns("2013",
+								SimpleColumnModel.withContents("Actual Disbursements", MUST_BE_EMPTY))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Disbursements", "TAC_activity_2", "453 213"), 
+							SimpleColumnModel.withContents("Disbursment Ratio", "TAC_activity_2", "100")))
+					.withTrailCells(null, null, "453 213", "0", "0", "0", "453 213", "100"))
+				.withTrailCells(null, null, "795 311", "94 444", "108 666", "1 239 556", "2 237 977", "100"))
+			.withTrailCells(null, null, "795 311", "94 444", "108 666", "1 239 556", "2 237 977", "100")
+				.withPositionDigest(true,
+				"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Primary Sector: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 4), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 2))",
+				"(line 1:RHLC 2010: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1), RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 5, colSpan: 1))",
+				"(line 2:RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Disbursment Ratio: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))");
+
+		runReportTest("Disbursment Ratio with hierarchy and Real Disbursements", "AMP-16651-by-region-only-disb-ratio", 
+				new String[] {"Eth Water", "mtef activity 1", "mtef activity 2", "ptc activity 1", "ptc activity 2", "SSC Project 1", "SSC Project 2", "TAC_activity_1", "TAC_activity_2", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Pure MTEF Project", "Test MTEF directed", "AMP-15967-activity-2", "AMP-15967-activity-1", "AMP-16536-first"}, 
+				fddr_correct);	
+		
+	}
 	
 	public void testActualPlannedDisbursementsCapital()
 	{

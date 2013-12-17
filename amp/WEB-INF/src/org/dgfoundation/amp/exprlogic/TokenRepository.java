@@ -138,7 +138,7 @@ public class TokenRepository {
 	 * @param adjType
 	 * @return
 	 */
-	public static TokenExpression buildSimpleTransactionLogicalToken(String trType, String adjType)
+	public static TokenExpression buildSimpleTransactionLogicalToken(String trType, String adjType, LogicalToken finalAndLogicalToken)
 	{
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
 		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
@@ -149,6 +149,10 @@ public class TokenRepository {
 		ANDBinaryLogicalToken and2 = new ANDBinaryLogicalToken(seekedTrType, seekedAdjType, false);
 		ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
 		ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
+		
+		if (finalAndLogicalToken != null)
+			and4 = new ANDBinaryLogicalToken(and4, finalAndLogicalToken, false);
+		
 		TokenExpression te = new TokenExpression(new LogicalToken[] { and4 });
 
 		if (tokens == null)
@@ -159,20 +163,20 @@ public class TokenRepository {
 	
 	// PLANNED
 	public static TokenExpression buildPlannedCommitmentsLogicalToken() {
-		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.PLANNED);
+		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.PLANNED, null);
 		tokens.put(TokenNames.PLANED_COMMITMENTS, te);
 		return te;
 	}
 
 	public static TokenExpression buildPlannedDisbursementsLogicalToken() {
-		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.PLANNED);
+		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.PLANNED, null);
 		tokens.put(TokenNames.PLANED_DISBURSEMENT, te);
 		return te;
 	}
 
 	// ACTUAL
 	public static TokenExpression buildActualCommitmentsLogicalToken() {
-		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.ACTUAL);
+		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.ACTUAL, null);
 		tokens.put(TokenNames.ACTUAL_COMMITMENTS, te);
 		return te;
 		/**
@@ -182,7 +186,8 @@ public class TokenRepository {
 
 	public static TokenExpression buildActualDisbursementsLogicalToken() {
 
-		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.ACTUAL);
+		LogicalToken NOT_REAL_DISBURSEMENT = new EstimatedDisbursementLogicalToken(false);
+		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.ACTUAL, NOT_REAL_DISBURSEMENT);
 		tokens.put(TokenNames.ACTUAL_DISBURSEMENT, te);
 		return te;
 	}

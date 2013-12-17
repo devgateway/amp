@@ -38,14 +38,7 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
@@ -68,7 +61,9 @@ import org.digijava.module.esrigis.helpers.SimpleDonor;
 import org.digijava.module.esrigis.helpers.SimpleLocation;
 import org.digijava.module.esrigis.helpers.Structure;
 import org.digijava.module.esrigis.helpers.XlsHelper;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.visualization.util.DbUtil;
+import org.hibernate.Query;
 import org.hibernate.Session;
 public class DataDispatcher extends MultiAction {
 	private static Logger logger = Logger.getLogger(DataDispatcher.class);
@@ -612,16 +607,36 @@ public class DataDispatcher extends MultiAction {
 	 * @param activityIdList
 	 * @return
 	 */
-	protected Map<Long, String> getActivityNamesByIds(List<Long> activityIdList)
+	protected Map<Long, String> getActivityNamesByIds(List<Long> activityIdList, HttpServletRequest request)
 	{
 		Map<Long, String> activityNamesByAmpIds = new TreeMap<Long, String>();
-		List<Object[]> rs = PersistenceManager.getSession().createSQLQuery("SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")").list();
+        Session sess = PersistenceManager.getSession();
+        List<Object[]> rs = PersistenceManager.getSession().createSQLQuery("SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")").list();
 		for(Object[] entry:rs)
 		{
 			Long actId = PersistenceManager.getLong(entry[0]);
-			String actName = PersistenceManager.getString(entry[1]);
+            AmpContentTranslation trn =
+                    ContentTranslationUtil.loadCachedFieldTranslationsInLocale(AmpActivityVersion.class.getName(),
+                            actId, "name", RequestUtils.getNavigationLanguage(request).getCode());
+            String actName = (trn != null && !trn.getTranslation().trim().isEmpty()) ? trn.getTranslation():PersistenceManager.getString(entry[1]);
 			activityNamesByAmpIds.put(actId, actName);
 		}
+
+
+
+        /*
+        Session sess = PersistenceManager.getSession();
+        StringBuilder sb = new StringBuilder("from ").
+                append(AmpActivity.class.getName()).
+                append(" act where act.ampActivityId in (").
+                append(Util.toCSStringForIN(activityIdList)).append(")");
+
+        Query q = sess.createQuery(sb.toString());
+        List <AmpActivity> acts = q.list();
+        for (AmpActivity act : acts) {
+            activityNamesByAmpIds.put(act.getAmpActivityId(), act.getName());
+        } */
+
 		return activityNamesByAmpIds;
 	}
 	
@@ -665,7 +680,7 @@ public class DataDispatcher extends MultiAction {
 	 * @param ids
 	 * @return
 	 */
-	public final static Map<Long, Structure> fetchStructs(Set<Long> ids)
+	public final static Map<Long, Structure> fetchStructs(Set<Long> ids, HttpServletRequest request)
 	{
 		Map<Long, Structure> z = new TreeMap<Long, Structure>();
 		
@@ -684,9 +699,19 @@ public class DataDispatcher extends MultiAction {
 		List<Object[]> structs = PersistenceManager.getSession().createSQLQuery("SELECT amp_structure_id, title, description, latitude, longitude, shape, type FROM amp_structure WHERE amp_structure_id IN (" + Util.toCSStringForIN(ids) + ")").list();
 		for(Object[] struct:structs)
 		{
-			Long strucId = PersistenceManager.getLong(struct[0]);			
-			String title = PersistenceManager.getString(struct[1]);
-			String description = PersistenceManager.getString(struct[2]);
+			Long strucId = PersistenceManager.getLong(struct[0]);
+
+            AmpContentTranslation trnTitle =
+                    ContentTranslationUtil.loadCachedFieldTranslationsInLocale(AmpStructure.class.getName(),
+                            strucId, "title", RequestUtils.getNavigationLanguage(request).getCode());
+
+			String title = (trnTitle != null && !trnTitle.getTranslation().trim().isEmpty()) ? trnTitle.getTranslation() : PersistenceManager.getString(struct[1]);
+
+            AmpContentTranslation trnDescription =
+                    ContentTranslationUtil.loadCachedFieldTranslationsInLocale(AmpStructure.class.getName(),
+                            strucId, "description", RequestUtils.getNavigationLanguage(request).getCode());
+
+			String description = (trnDescription != null && !trnDescription.getTranslation().trim().isEmpty()) ? trnDescription.getTranslation() : PersistenceManager.getString(struct[2]);
 			String latitude = PersistenceManager.getString(struct[3]);
 			String longitude = PersistenceManager.getString(struct[4]);
 			String shape = PersistenceManager.getString(struct[5]);
@@ -756,8 +781,8 @@ public class DataDispatcher extends MultiAction {
 		logger.info("fetching all activities took " + gettingActivitiesTime + " millies");
 		
 		Map<Long, Set<Long>> structsByAmpIds = populateStructs(activityIdList);
-		Map<Long, Structure> structsByIds = fetchStructs(collectIds(structsByAmpIds));
-		Map<Long, String> activityNamesByIds = getActivityNamesByIds(activityIdList);
+		Map<Long, Structure> structsByIds = fetchStructs(collectIds(structsByAmpIds), request);
+		Map<Long, String> activityNamesByIds = getActivityNamesByIds(activityIdList, request);
 				   		 
    		for(Long activityId:structsByAmpIds.keySet())
    		{

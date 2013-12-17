@@ -98,44 +98,7 @@ public class GroupColumn extends Column<Column> {
 		return dest;
     }
     
-    /**
-     * returns true IFF an actual disbursement has a recipient specified 
-     * @param item
-     * @return
-     */
-    public static boolean isRealDisbursement(Categorizable item)
-    {
-    	MetaInfoSet metaData = item.getMetaData();
-    	MetaInfo fundingTypeMetaInfo = metaData.getMetaInfo(ArConstants.FUNDING_TYPE); 
-    	
-    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
-    	boolean hasDestination = metaData.hasMetaInfo(ArConstants.RECIPIENT_NAME);    	
-    	   	
-    	return isActualDisbursement && hasDestination;
-    	
-    	//return false;
-    }
-    
-    /**
-     * returns true iff an actual disbursement has the source not specified or specified as a donor (mirrors {@link org.digijava.module.aim.dbentity.AmpFunding#detachCells(Column)})
-     * @param item
-     * @return
-     */
-    public static boolean isEstimatedDisbursement(Categorizable item)
-    {
-       	MetaInfoSet metaData = item.getMetaData();
-    	MetaInfo fundingTypeMetaInfo = metaData.getMetaInfo(ArConstants.FUNDING_TYPE);
-    	MetaInfo sourceRoleMetaInfo = metaData.getMetaInfo(ArConstants.SOURCE_ROLE_CODE);
-    	
-    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
-    	boolean hasSource = sourceRoleMetaInfo != null;
-    	boolean hasDonorSource = hasSource && (sourceRoleMetaInfo.getValue().toString().equals(Constants.ROLE_CODE_DONOR));
-
-    	return isActualDisbursement && ((!hasSource) || (hasSource && hasDonorSource));
-    	
-    	//return false;
-    }    
-    /**
+   /**
      * clone all cells and detach them
      * @param column
      * @return
@@ -445,10 +408,10 @@ public class GroupColumn extends Column<Column> {
     			if (category.equals(ArConstants.FUNDING_TYPE) &&
     				element.getCategory().equals(ArConstants.FUNDING_TYPE) &&
     				(element.getValue().toString().equals(ArConstants.REAL_DISBURSEMENTS) || element.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS)) &&
-    				isRealDisbursement(item))
+    				item.isRealDisbursement())
     			{
     				//
-    				if (element.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS) && (!isEstimatedDisbursement(item)))
+    				if (element.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS) && (!item.isEstimatedDisbursement()))
     					continue;
     				try
     				{

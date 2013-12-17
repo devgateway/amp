@@ -628,25 +628,6 @@ public class MathExpressionRepository {
 		}
 	}
 	
-	/*
-	private static void buildPledgesGap() {
-		try {
-			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PLEDGED_TOTAL, ArConstants.ACTUAL_PLEDGE_COMMITMENT);
-			expresions.put(PLEDGES_COMMITMENT_GAP, m1);
-		} catch (Exception e) {
-			logger.error(e);
-		}
-	}
-
-	private static void buildTotalPledged() {
-		try {
-			MathExpression pledgedtotal = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.PLEDGES_TOTAL_PLEDGED, new BigDecimal(1));
-			expresions.put(PLEDGES_TOTAL, pledgedtotal);
-		} catch (Exception e) {
-			logger.error(e);
-		}
-	}*/
-	
 	/**
 	 * Get The expression by Key
 	 * 

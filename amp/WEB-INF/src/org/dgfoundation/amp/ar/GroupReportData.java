@@ -236,11 +236,13 @@ public class GroupReportData extends ReportData<ReportData> {
 			ReportData element = (ReportData) i.next();
 			element.postProcess();
 		}
-	
+			
 		// create trail cells
 		try {			
 			trailCells = new ArrayList<AmountCell>();
-			if (items.size() > 0) {
+			// firstly create the array, containing the trail cells of the first child - we basically only care about the array size and cell types here
+			if (items.size() > 0)
+			{
 				ReportData<? extends Viewable> data = items.get(0);
 				
 				//ReportData firstRd = (ReportData) items.get(0);
@@ -292,7 +294,7 @@ public class GroupReportData extends ReportData<ReportData> {
 			for(AmountCell cell:trailCells) {
 				if (cell instanceof ComputedAmountCell) {
 					String totalExpression=((ComputedAmountCell) cell).getColumn().getWorker().getRelatedColumn().getTotalExpression();
-					String rowExpression=((ComputedAmountCell) cell).getColumn().getWorker().getRelatedColumn().getTokenExpression();
+					//String rowExpression=((ComputedAmountCell) cell).getColumn().getWorker().getRelatedColumn().getTokenExpression();
 					ComputedAmountCell c0=(ComputedAmountCell) cell ;
 					c0.getValues().put(ArConstants.COUNT_PROJECTS, new BigDecimal(this.getTotalUniqueRows()));
 					if (totalExpression!=null){
@@ -318,8 +320,8 @@ public class GroupReportData extends ReportData<ReportData> {
 					if (math!=null){
 						values.put("COMPUTED_VALUE", math.result(values));
 					}
-					if (cell.getColumn().getName().equals("Percentage of Total Commitments"))
-						values.put("COMPUTED_VALUE", new BigDecimal(100));
+					if (HARDCODED_TOTALS_FOR_GRD.containsKey(cell.getColumn().getName()))
+						values.put("COMPUTED_VALUE", HARDCODED_TOTALS_FOR_GRD.get(cell.getColumn().getName()));
 				}
 				
 			}
@@ -329,6 +331,14 @@ public class GroupReportData extends ReportData<ReportData> {
 
 	}
 
+	public final static Map<String, BigDecimal> HARDCODED_TOTALS_FOR_GRD = new java.util.HashMap<String, BigDecimal>()
+			{{
+				put("Percentage of Total Commitments", new BigDecimal(100));
+				put("Disbursment Ratio", new BigDecimal(100));
+				put("Previous Month Disbursements", new BigDecimal(0));
+				put("Prior Actual Disbursements", new BigDecimal(0));
+				put("Consumption Rate", new BigDecimal(0));
+			}};
 	/*
 	 * (non-Javadoc)
 	 * 

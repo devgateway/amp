@@ -578,10 +578,10 @@ public class AmpReportGenerator extends ReportGenerator {
 				while (it.hasNext()) {
 					CategAmountCell item = (CategAmountCell) it.next();
 					boolean shouldAddRealDisbursement = element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS) &&
-		    				GroupColumn.isRealDisbursement(item); // add ACTUAL DISBURSEMENT items to the REAL DISBURSEMENTS column - as they have the same datasource (ACTUAL DISBURSEMENTS), they have the same metadata
+		    				item.isRealDisbursement(); // add ACTUAL DISBURSEMENT items to the REAL DISBURSEMENTS column - as they have the same datasource (ACTUAL DISBURSEMENTS), they have the same metadata
 					
 					boolean shouldAddEstimatedDisbursement = element.getMeasureName().equals(ArConstants.ACTUAL_DISBURSEMENTS) && 
-							GroupColumn.isEstimatedDisbursement(item);
+							item.isEstimatedDisbursement();
 					
 					boolean shouldAddGenericFunding = item.hasMetaInfo(metaInfo) && (!(element.getMeasureName().equals(ArConstants.ACTUAL_DISBURSEMENTS) || element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS)));
 					

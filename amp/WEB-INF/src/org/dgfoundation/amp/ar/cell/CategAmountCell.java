@@ -405,6 +405,40 @@ public Cell filter(Cell metaCell,Set ids) {
 		return 0;
 	}
 	
+    /**
+     * returns true IFF an actual disbursement has a recipient specified 
+     * @param item
+     * @return
+     */
+    public boolean isRealDisbursement()
+    {
+    	MetaInfoSet metaData = this.getMetaData();
+    	MetaInfo fundingTypeMetaInfo = metaData.getMetaInfo(ArConstants.FUNDING_TYPE); 
+    	
+    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
+    	boolean hasDestination = metaData.hasMetaInfo(ArConstants.RECIPIENT_NAME);    	
+    	   	
+    	return isActualDisbursement && hasDestination;
+    }
+
+    /**
+     * returns true iff an actual disbursement has the source not specified or specified as a donor (mirrors {@link org.digijava.module.aim.dbentity.AmpFunding#detachCells(Column)})
+     * @param item
+     * @return
+     */
+    public boolean isEstimatedDisbursement()
+    {
+       	MetaInfoSet metaData = this.getMetaData();
+    	MetaInfo fundingTypeMetaInfo = metaData.getMetaInfo(ArConstants.FUNDING_TYPE);
+    	MetaInfo sourceRoleMetaInfo = metaData.getMetaInfo(ArConstants.SOURCE_ROLE_CODE);
+    	
+    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
+    	boolean hasSource = sourceRoleMetaInfo != null;
+    	boolean hasDonorSource = hasSource && (sourceRoleMetaInfo.getValue().toString().equals(Constants.ROLE_CODE_DONOR));
+
+    	return isActualDisbursement && ((!hasSource) || (hasSource && hasDonorSource));
+    }    
+
 	@Override
 	public String prettyPrint()
 	{

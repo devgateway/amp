@@ -522,7 +522,9 @@ public class ImportExportUtil {
 						: hssfRow.getCell(0).getStringCellValue();
 				String englishText = (hssfRow.getCell(1) == null) ? ""
 						: hssfRow.getCell(1).getStringCellValue();
-				String targetText = (hssfRow.getCell(2) == null) ? ""
+				//for AMP-16681 when the cell content is #N/A on third column you are getting an erro if getStringCellValue is called
+				//so if its an error cell the target text is "" as if the cell would be empty
+				String targetText = (hssfRow.getCell(2) == null || hssfRow.getCell(2).getCellType()==HSSFCell.CELL_TYPE_ERROR) ? ""
 						: hssfRow.getCell(2).getStringCellValue();
 				Date englishDate=(hssfRow.getCell(3) == null) ? null: hssfRow.getCell(3).getDateCellValue();
 				Date targetDate=(hssfRow.getCell(4) == null) ? null: hssfRow.getCell(4).getDateCellValue();

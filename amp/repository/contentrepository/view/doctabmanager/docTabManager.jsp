@@ -84,7 +84,7 @@ var trnObj		= {
 		fPanel	= new FilterAsYouTypePanel("publicLabelButtonId", labelFilterCallbackObj, "publicLabels",trnObj);
 		fPanel.initLabelArray(false);
 		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj","publicFilterDivId",trnObj);
-		publicListObj.filterInfoDivId	= "publicFilterInfoDiv";
+		publicListObj.filterInfoDivId	= "publicFilterInfo";
 		publicListObj.sendRequest();
 	}
 	function showTitlePanel() {
@@ -229,7 +229,7 @@ var trnObj		= {
 										<div style="width:1000px;" class="yui-skin-sam" id="content"> 
 											<div id="demo" class="yui-navset">
 												<div class="yui-content" style="border-color: #d0d0d0">
-													<div id="publicFilterInfoDiv"  ></div>
+													<div id="publicFilterInfo"  ></div>
 													<div id="public_markup" align="left">
 													</div>
 												</div>

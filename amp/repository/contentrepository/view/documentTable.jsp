@@ -156,7 +156,7 @@
 										<div style="white-space: nowrap;margin-top:10px;">
 										<logic:iterate id="label" name="documentData" property="labels">
 											<c:set var="labelUUIDs">${labelUUIDs}'${label.uuid}',</c:set>
-												<div style="-moz-border-radius:3px;border-radius: 3px;padding:3px;background-color: ${label.backgroundColor}; color: ${label.color};">
+												<div style="-moz-border-radius:3px;border-radius: 3px;padding:3px;background-color: ${label.backgroundColor}; color: ${label.color};display: inline-block;">
 													${label.name}
 												</div>
 												<logic:equal name="documentData" property="hasVersioningRights" value="true">

@@ -14,12 +14,12 @@
 <logic:notEqual name="textCell"  property="translationKey" value="0">
 <div align="left" style="padding-left:<%=request.getAttribute("pading")%>" 
 title="${textCell.fullTextVersion}">
-	<%if (textCell.getShortTextVersion().length() > 39){ %>
+	<%if (textCell.getShortTextVersion().length() > 59){ %>
 		<logic:present name="starFlag" scope="request">
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 			<bean:define id="starFlag" value="" scope="page" toScope="request" />
 		</logic:present>
-		<%=textCell.getShortTextVersion().substring(0,39)%>...
+		<%=textCell.getShortTextVersion().substring(0,59)%>...
 	<%}else{ %>
 		<logic:present name="starFlag" scope="request">
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>

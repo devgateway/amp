@@ -22,7 +22,7 @@
 	<c:if test="${reportData.levelDepth == 2}">
 		<td rowspan="${reportData.rowSpan}" class="clsTableCellDataHtml firstLevel hierarchyCell" height="15px" title='<bean:write name="reportData" property="repName"/>' >
 			<span>
-				<%if(reportData.getRepName().length()<40){ %>
+				<%if(reportData.getRepName().length()<60){ %>
 					<% if (!("".equals(reportData.getRepName()))){ %>
 					<%-- *************************************************** 
 							WARNING:
@@ -32,7 +32,7 @@
 					<% 
 					} 
 				}else{%>
-					<%=reportData.getRepName().substring(0,39)%>...
+					<%=reportData.getRepName().substring(0,59)%>...
 				<%} %>	
 			</span>
 		</c:if>

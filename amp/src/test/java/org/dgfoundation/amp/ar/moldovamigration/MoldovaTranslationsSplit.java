@@ -12,6 +12,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.hibernate.Session;
@@ -29,26 +30,27 @@ public class MoldovaTranslationsSplit
 	
 	public void doMoldovaTranslations()
 	{
-		doWorkspaceNamesTranslations();
-		doProjectNamesTranslations();
-		doPurposesTranslations();
-		doProjectImpactTranslations();
-		doProjectDescriptionTranslations();
-		doProjectObjectivesTranslations();
-		doProjectResultsTranslations();
-		doProjectActivitySummaryTranslations();
-		
-		removeRomanianProjectTitleAsAColumn();
-		renameProjectTitleColumns();
-		disableContractingArrangements();
-		enableResultsColumnInReports();
-		
-		translateStructureTypes();
-		hardcodeSomeTranslations();
-		
-		System.out.format("conversion done with %d warning messages\n", warningMessages.size());
-		for(int i = 0; i < warningMessages.size(); i++)
-			System.out.println(warningMessages.get(i).toString());
+//		doWorkspaceNamesTranslations();
+//		doProjectNamesTranslations();
+//		doPurposesTranslations();
+//		doProjectImpactTranslations();
+//		doProjectDescriptionTranslations();
+//		doProjectObjectivesTranslations();
+//		doProjectResultsTranslations();
+//		doProjectActivitySummaryTranslations();
+//		
+//		removeRomanianProjectTitleAsAColumn();
+//		renameProjectTitleColumns();
+//		disableContractingArrangements();
+//		enableResultsColumnInReports();
+//		
+//		translateStructureTypes();
+//		hardcodeSomeTranslations();
+//		
+//		System.out.format("conversion done with %d warning messages\n", warningMessages.size());
+//		for(int i = 0; i < warningMessages.size(); i++)
+//			System.out.println(warningMessages.get(i).toString());
+		doOrganisationNamesTranslations();
 		
 		try
 		{
@@ -62,6 +64,109 @@ public class MoldovaTranslationsSplit
 		throw new RuntimeException("gata pe azi");
 	}
 		
+	protected void doOrganisationNamesTranslations()
+	{
+		TranslationsPack pack;
+		pack = new TranslationsPack(21192L, "ACADEMY OF SCIENCES","Academia de Științe");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21325L, "Argidius Foundation","Fundația Argidius");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20748L, "Republic of Austria","Republica Austria");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21421L, "Austrian Development Agency","Agenția de Dezvoltare a Austriei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21029L, "Bio Carbon Fund","Fondul BioCarbon");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21178L, "BMZ - Federal Ministry For Cooperation","BMZ - Ministerul Federal pentru Cooperare");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20677L, "Canada","Canada");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20563L, "People's Republic of China","Republica Populară Chineză");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21358L, "Council of Europe","Consiliul Europei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20703L, "Council of Europe Development Bank","Banca de Dezvoltare a Consiliului Europei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21729L, "Czech Development Agency","Agenția de Dezvoltare a Cehiei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20537L, "Czech Republic","Republica Cehă");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20598L, "Delegation Of The European Union to Moldova","Delegația Uniunii Europene în Moldova");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21522L, "Kingdom of Denmark","Regatul Danemarcei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20538L, "Department For International Development","Departamentul pentru Dezvoltare Internațională");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21337L, "Education, Audiovisual And Culture Executive Agency","Agenția Executivă pentru Educație, Audiovizual și Cultură");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20576L, "Embassy Of Japan In Moldova","Amabasada Japoniei în Moldova");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21604L, "ENPI CBC","ENPI POC");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21614L, "ENPI CBC BLACK SEA","ENPI POC Marea Neagră");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21600L, "ENPI CBC RO-UA-MD","ENPI POC RO-UA-MD");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21862L, "Estonia","Republica Estonia");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20656L, "European Bank For Reconstruction And Development","Banca Europeană pentru Reconstrucție și Dezvoltare");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21338L, "European Commission","Comisia Europeană");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20633L, "European Investment Bank","Banca Europeană de Investiții");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20999L, "European Union","Uniunea Europeană");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21863L, "Republic of Finland","Republica Finlanda");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21501L, "Food And Agriculture Organization","Organizația pentru Alimentație și Agricultură");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21864L, "French Republic","Republica Franceză");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20720L, "Federal Republic of Germany","Republica Federală Germană");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20870L, "GIZ - German Development Cooperation","Agentia de Cooperare Internationala a Germaniei ");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21764L, "Global Alliance for Vaccines and Immunisation","Alianța Globală pentru Vaccinuri și Imunizare");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21379L, "Global Environment Facility","Fondul Global de Mediu");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20675L, "Government of P.R. of China","Guvernul Republicii Populare Chineze");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21865L, "Hungary","Ungaria");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21486L, "Institute For Transuranium Elements","Institutul pentru Elemente Transuraniene");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21566L, "International Atomic Energy Agency","Agenția Internațională pentru Energie Atomică");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20539L, "International Development Agency","Agenția Internațională pentru Dezvoltare");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21362L, "International Foundation 'Liechtenstein Development Service'","Fundația Internațională \"Liechtenstein Development Service\"");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21063L, "International Fund For Agricultural Development","Fondul Internațional pentru dezvoltare agricole");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21059L, "International Labour Organization","Organizația Internațională a Muncii");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20824L, "International Monetary Fund","Fondul Monetar Internațional");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21505L, "International Organization For Migration","Organizația Internațională pentru Migrație");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20884L, "International Telecommunication Union","Uniunea Internațională a Telecomunicațiilor");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21056L, "Italian Republic","Republica Italiană");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21136L, "Japan","Japonia");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21563L, "Japanese International Cooperation Agency","Agenția Japoneză pentru Cooperare Internațională");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20556L, "Japan Social Investment Fund","Fondul de Investiții Sociale Japonez");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21552L, "Joint United Nations Programme on HIV/AIDS","Programul Comun al Națiunilor Unite privind HIV / SIDA");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20805L, "Reconstruction Credit Institute KFW","Institutul de Credit pentru Reconstrucție KFW");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20921L, "Konrad Adenauer Foundation","Fundația Konrad Adenauer");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21019L, "State of Kuwait","Statul Kuwait");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21739L, "Kuwait Fund for Economic Development","Fondul Kuwait pentru Dezvoltare Economică");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20615L, "Republic of Latvia ","Republica Letonia");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21149L, "Latvian State Chancellery","Cancelaria de Stat a Letoniei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21382L, "Principality of Liechtenstein","Principatul Liechtenstein");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21254L, "Republic of Lithuania","Republica Lituania");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21214L, "Millenium Challenge Corporation","Corporația Provocările Mileniului");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20631L, "Ministry of Environment","Ministerul Mediului");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21309L, "Ministry of Finance","Ministerul Finanțelor");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21488L, "Ministry of Internal Affairs","Ministerul Afacerilor Interne");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21513L, "Ministry Of Labour, Social Protection And Family","Ministerul Muncii, Protecției Sociale și Familiei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21537L, "Neighbourhood Investment Facility","Fondul de Investiţii în Vecinătate ");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20922L, "Kingdom of the Netherlands","Regatul Olandei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20523L, "Netherlands Ministry of Foreign Affairs","Ministerul Afacerilor Externe al Olandei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21577L, "Kingdom of Norway","Regatul Norvegiei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20698L, "Norwegian Agency For Development","Agenția Pentru Dezvoltare a Norvegiei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20847L, "Republic of Poland","Republica Polonia");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21230L, "Romania","România");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21523L, "Slovac Agency For International Cooperation In Development","Agenția slovacă pentru cooperare internațională în dezvoltare");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21866L, "Slovak Republic","Republica Slovacă");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21451L, "Kingdom of Sweden","Regatul Suediei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20904L, "Swedish Agency for Economic and Regional Growth","Agenția suedeză pentru dezvoltare economică și dezvoltare regională");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20715L, "Swedish International Development Authority","Autoritatea Suedeză pentru Dezvoltare Internațională");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20535L, "Swedish Radiation Safety Authority","Autoritatea Suedeză pentru Siguranța Radiațiilor");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21404L, "Swiss Agency For Development And Cooperation","Agenția Elvețiană pentru Dezvoltare și Cooperare");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21006L, "Swiss Confederation","Confederația Elvețiană");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21616L, "TACIS","TACIS");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21084L, "TEMPUS","TEMPUS");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21517L, "The Global Fund to Fight AIDS, Tuberculosis and Malaria","Fondul Global pentru Combaterea SIDA, Tuberculozei și Malariei");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21250L, "The United Nations High Commissioner for Refugees","Înaltul Comisariat al Națiunilor Unite pentru Refugiați");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21439L, "The United Nations Population Fund","Fondul Națiunilor Unite pentru Populație");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21461L, "Turkish International Cooperation Agency","Agenția Turcă de Cooperare Internațională");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20551L, "Turkey","Turcia");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20898L, "United Kingdom","Regatul Unit");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21091L, "United Nations","Organizația Națiunilor Unite");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21082L, "United Nations Children's Fund","Fondul Națiunilor Unite pentru Copii");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20752L, "United Nations Development Programme","Programul Națiunilor Unite pentru Dezvoltare");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20660L, "United Nations Environment Programme","Programul de Mediu al Națiunilor Unite");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20780L, "United Nations Institute For Training And Research","Institutul Națiunilor Unite pentru Formare și Cercetare");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21118L, "United Nations Office on Drugs and Crime","Biroul Națiunilor Unite pentru Droguri și Criminalitate");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20593L, "United States Agency For International Development","Agenția Statelor Unite pentru Dezvoltare Internațională");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20796L, "United States Department Of State","Departamentul de Stat al Statelor Unite");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20691L, "United States of America","Statele Unite ale Americii ");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20548L, "US Department Of Defence","Departamentul Apărării al Statelor Unite");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20873L, "US Department Of Energy","Departamentul Energetic al Statelor Unite");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(20627L, "US Nuclear Regulatory Commission","Comisia de Reglementare Nucleară a Statelor Unite");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21344L, "World Bank","Banca Mondială");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+		pack = new TranslationsPack(21482L, "World Health Organization","Organizația Mondială a Sănătății");savePlain(pack, InternationalizedModelDescription.getForProperty(AmpOrganisation.class,"name"));
+	}
+	
 	protected void translateAs(String englishTranslation, String translation, String locale)
 	{
 		try

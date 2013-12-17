@@ -154,17 +154,17 @@
 					 <%@include file="columnSortingImages.jspf" %>
 	     		</c:otherwise>
 	     		</c:choose>
-	     	</td>	            
-        </logic:notEqual>
-		<%
+	     				<%
 			if (subColumn.getDescription() != null)
 			{
 				String text=subColumn.getDescription();
 				if (text != null){ %> 
-					<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
+					&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn  key="aim:report:tip:${ampColumnFromTree.columnName}:${ampColumnFromTree.description}"><%=text%></digi:trn>">
 		    <%}
-		}%>
-    	
+			}%>
+	     		
+	     	</td>	            
+        </logic:notEqual>    	
 	</logic:iterate>
    </logic:iterate>
   </tr>

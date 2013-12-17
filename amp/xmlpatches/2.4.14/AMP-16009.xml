@@ -11,6 +11,7 @@
 			<lang delimiter=";" type="postgres">
 				delete from HELP_HELP_TOPICS t where t.helptopicid in 
 				(select max (t1.helptopicid) from HELP_HELP_TOPICS t1
+                where topic_type = 2
                 group by t1.topickey, t1.bodyeditkey, t1.siteid, t1.moduleinstance, t1.topic_type
                 having count(t1.helptopicid) > 1
                 order by max (t1.helptopicid));

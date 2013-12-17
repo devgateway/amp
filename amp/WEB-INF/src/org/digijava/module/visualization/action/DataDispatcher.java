@@ -1979,7 +1979,7 @@ public class DataDispatcher extends DispatchAction {
                 Map.Entry entry = (Map.Entry)it.next();
                 AmpOrganisation org = (AmpOrganisation) entry.getKey();
                 if (index <= 4){
-	                csvString.append(org.getName());
+	                csvString.append(org.getName().replace(",", ";"));
 	                csvString.append("#");
 		            csvString.append(org.getAmpOrgId());
 		            csvString.append(",");

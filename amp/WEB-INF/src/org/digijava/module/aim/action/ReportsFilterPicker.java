@@ -440,7 +440,7 @@ public class ReportsFilterPicker extends Action {
 		 filterForm.setAllgroupingseparators(groupseparators);
 			 
 			 
-		 if (filterForm.getCustomDecimalSymbol() == null) {
+		 if (filterForm.getCustomDecimalSymbol() != null) {
 			 filterForm.setCustomDecimalSymbol(selecteddecimalseparator);
 			 filterForm.setCustomDecimalPlaces(usedDecimalFormat.getMaximumFractionDigits());
 			 filterForm.setCustomGroupCharacter(selectedgroupingseparator);

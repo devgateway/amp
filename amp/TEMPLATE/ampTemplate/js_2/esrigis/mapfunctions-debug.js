@@ -254,8 +254,13 @@ function createMapAddLayers(myService1, myService2, feature) {
 			"force3DTransforms": true,
 			"navigationMode": "css-transforms"
 		});
+		
+		
 		dojo.connect(map, 'onLoad', function(map) {
-		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+			
+			
+		//dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+		
 		dojo.byId('map_zoom_slider').style.top = '95px';
 		getActivities(false);
 		getStructures(false);
@@ -2084,4 +2089,14 @@ function getContent(graphicAttributes, baseGraphic) {
 
 
 
+var resizeTimer;
+$(window).resize(function () {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout( function() {
+		$("#map").css("width","100%").css("height","100%");
+		map.resize();
+		map.reposition();
+		}, 500);   
+   
+});
 

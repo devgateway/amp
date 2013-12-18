@@ -505,12 +505,13 @@
 			</c:forEach>
         </span>
         
-        <div id="structuresdiv" class="legendContent" style="left:70px;top:80px;overflow-y:scroll;height: 500px;">
+        <div id="structuresdiv" class="legendContent" style="left:70px;top:80px;height: 500px;">
         	<div class='legendHeader'>
         		<digi:trn>Structures</digi:trn>
         		<br>
         		<hr>
         	</div>
+        	<div style="left:70px;top:80px;overflow-y:scroll;height: 475px;">
         	<table>
         		<c:forEach  var="structureType" items="${requestScope.structureTypesList}">
 	          	<tr>
@@ -523,6 +524,7 @@
 	         	</tr>
 	    		</c:forEach>
 	    	</table>
+	    	</div>
         </div>
         
         <div id="NationalDiv" class="legendContent" style="top:310px;left:74%;font-size: 10px;width: 170px;">
@@ -551,7 +553,7 @@
         <!-- Filter -->
         <div id="selectedfilter" class="legendContent" style="top:80px;left:100px;display:none;width: 35%;"> 
         	<div onclick="$('#selectedfilter').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
-        	<div class="legendHeader"><digi:trn>Selected Filters</digi:trn><br/><hr/></div>
+        	<div class="legendHeader"><digi:trn>Selected Filters</digi:trn>hola<br/><hr/></div>
         	<table width="90%" cellspacing="0" cellpadding="0" border="0">
         		<tbody>
 					<tr>

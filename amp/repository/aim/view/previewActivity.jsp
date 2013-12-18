@@ -602,7 +602,7 @@ function collapseAll() {
 				<digi:trn>Identification</digi:trn>
 			</span>		
 		</legend>
-		<div id="identificationdiv">	
+		<div id="identificationdiv" class="toggleDiv">	
 			<module:display name="/Activity Form/Identification/Project Title" parentModule="/Activity Form/Identification">
 				<digi:trn key="aim:projectTitle">Project title</digi:trn>:&nbsp;<br />
 				<b><c:out value="${aimEditActivityForm.identification.title}"/></b>
@@ -1154,7 +1154,7 @@ function collapseAll() {
 			<digi:trn>Planning</digi:trn>
 		</span>
 		</legend>
-	<div id="planningdiv">
+	<div id="planningdiv" class="toggleDiv">
 		<module:display name="/Activity Form/Planning/Line Ministry Rank" parentModule="/Activity Form/Planning">
 			<br>
 			<digi:trn>Line Ministry Rank</digi:trn>:&nbsp;
@@ -1245,7 +1245,7 @@ function collapseAll() {
 			<digi:trn>References</digi:trn>
 		</span>
 	</legend>
-	<div id="referencesdiv">
+	<div id="referencesdiv" class="toggleDiv">
 	<ul>
 		<logic:notEmpty name="aimEditActivityForm" property="documents.referenceDocs">
 			<logic:iterate name="aimEditActivityForm" property="documents.referenceDocs" id="doc">
@@ -1268,7 +1268,7 @@ function collapseAll() {
 		<span class=legend_label id="locationlink" style="cursor: pointer;">
 			<digi:trn>Location</digi:trn></span>	
 		</legend>
-		<div id="locationdiv">
+		<div id="locationdiv" class="toggleDiv">
 		<module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
 			<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
 					<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
@@ -1387,7 +1387,7 @@ function collapseAll() {
 		<span class=legend_label id="nationalplanlink" style="cursor: pointer;">
 			<digi:trn>National Plan</digi:trn></span>	
 		</legend>
-	<div id="nationalplandiv">
+	<div id="nationalplandiv" class="toggleDiv">
 		<c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 			<c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 				<c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
@@ -1414,7 +1414,7 @@ function collapseAll() {
 				<digi:trn>Program</digi:trn>
 			</span>		
 		</legend>
-		<div id="programdiv">
+		<div id="programdiv" class="toggleDiv">
 			<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
 			
 				<digi:trn>Primary Programs</digi:trn>
@@ -1479,7 +1479,7 @@ function collapseAll() {
 			<digi:trn>Sectors</digi:trn>
 		</span>	
 	</legend>
-	<div id="sectorsdiv">
+	<div id="sectorsdiv" class="toggleDiv">
 		<c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
 			<bean:define id="emptySector" value="Sector"/>
 			<module:display name="/Activity Form/Sectors/${config.name} Sectors" parentModule="/Activity Form/Sectors">
@@ -1557,7 +1557,7 @@ function collapseAll() {
 		<span class=legend_label id="proposedcostlink" style="cursor: pointer;">
 			<digi:trn>Proposed Project Cost</digi:trn>
 		</span>	</legend>
-	<div id="proposedcostdiv">
+	<div id="proposedcostdiv" class="toggleDiv">
 		<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
 			<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%" >
 				<tr bgcolor="#f0f0f0">
@@ -1601,7 +1601,7 @@ function collapseAll() {
 					<digi:trn>Funding</digi:trn>
 				</span>			
 			</legend>
-			<div id="fundingdiv">
+			<div id="fundingdiv" class="toggleDiv">
 				<bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>
 				<jsp:include page="previewActivityFunding.jsp"/>
 			</div>
@@ -1619,7 +1619,7 @@ function collapseAll() {
 			<digi:trn>Regional Funding</digi:trn>
 		</span>	
 	</legend>
-	<div id="regionalfundingdiv">
+	<div id="regionalfundingdiv" class="toggleDiv">
 	<c:if test="${!empty aimEditActivityForm.funding.regionalFundings}">
 	<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
 		<c:forEach var="regFunds" items="${aimEditActivityForm.funding.regionalFundings}">
@@ -1754,7 +1754,7 @@ function collapseAll() {
 			<digi:trn>Components</digi:trn>
 		</span>	
 	</legend>
-	<div id="componentdiv">
+	<div id="componentdiv" class="toggleDiv">
 <logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="false">
 		<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
 			<c:forEach var="comp" items="${aimEditActivityForm.components.selectedComponents}">
@@ -2073,7 +2073,7 @@ function collapseAll() {
 			<digi:trn>Issues</digi:trn> 
 		</span>	
 	</legend>
-	<div id="issuesdiv">
+	<div id="issuesdiv" class="toggleDiv">
 		<c:if test="${!empty aimEditActivityForm.issues.issues}">
 		<table width="100%" cellSpacing="2" cellPadding="2" border="0">
 			<c:forEach var="issue" items="${aimEditActivityForm.issues.issues}">
@@ -2125,7 +2125,7 @@ function collapseAll() {
 			<digi:trn>Related Documents</digi:trn>
 		</span>	
 	</legend>
-	<div id="documnetsdiv">
+	<div id="documnetsdiv" class="toggleDiv">
 	<c:if test="${ (!empty aimEditActivityForm.documents.documents) || (!empty aimEditActivityForm.documents.crDocuments)}">
 		<table width="100%" cellSpacing="0" cellPadding="0">
 			<logic:notEmpty name="aimEditActivityForm" property="documents.documents" >
@@ -2236,7 +2236,7 @@ function collapseAll() {
 			<digi:trn>Related Organizations</digi:trn>
 		</span>	
 	</legend>
-	<div id="relateorgdiv">
+	<div id="relateorgdiv" class="toggleDiv">
 		<module:display name="/Activity Form/Funding" parentModule="/Activity Form">
 			<digi:trn key="aim:donororganisation">Donor Organization</digi:trn>
 			<br/>
@@ -2502,7 +2502,7 @@ function collapseAll() {
 			<digi:trn>Contact Information</digi:trn>
 		</span>	
 	</legend>
-	<div id="contactdiv">
+	<div id="contactdiv" class="toggleDiv">
 		<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 			<digi:trn>Donor funding contact information</digi:trn>:&nbsp;
 			<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
@@ -2597,7 +2597,7 @@ function collapseAll() {
 			<digi:trn>Costing</digi:trn>
 		</span>	
 	</legend>
-	<div id=costingdiv>
+	<div id=costingdiv class="toggleDiv">
 		<table width="100%" style="font-size:11px;">
 			<tr>
 				<td>
@@ -2617,7 +2617,7 @@ function collapseAll() {
 			<digi:trn>IPA Contracting</digi:trn>
 		</span>	
 	</legend>
-	<div id="ipadiv">
+	<div id="ipadiv" class="toggleDiv">
 		<table width="100%">
 			<tr>
 				<td><!-- contents --> 
@@ -3081,7 +3081,7 @@ function collapseAll() {
 			<digi:trn>M&E</digi:trn>
 		</span>	
 	</legend>
-	<div id="midiv">
+	<div id="midiv" class="toggleDiv">
 		<%
 			if (actPerfChartUrl != null) {
 		%> 
@@ -3113,7 +3113,7 @@ function collapseAll() {
 			<digi:trn>Project Risk</digi:trn>
 		</span>	
 	</legend>
-	<div id="projectriskdiv">
+	<div id="projectriskdiv" class="toggleDiv">
 		<digi:trn key="aim:meActivityRisk" > Activity - Risk</digi:trn> <br />
 		<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>
 			<%
@@ -3277,7 +3277,8 @@ function collapseAll() {
 		  	if($("#ashowmap").exists()){
 				showMapInTooltipDialog(ashowmap,true);
 		  	}
-		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv,div#referencesdiv,div#lineMinistryObsDiv,div#structuresdiv").toggle(showOrHide);
+		  	$(".toggleDiv").toggle(showOrHide);
+		  
 	});
 	
 	$("#collapseall_1").click(function() {
@@ -3292,7 +3293,7 @@ function collapseAll() {
 			  		showOrHide=true;
 		  	  }
 			  showMapInTooltipDialog(ashowmap,true);
-			  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv,div#referencesdiv,div#lineMinistryObsDiv").toggle(showOrHide);
+			  $(".toggleDiv").toggle(showOrHide);
 			  document.body.scrollTop = document.documentElement.scrollTop = 0;
 	});
 	

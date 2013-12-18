@@ -14,7 +14,7 @@
         </span>
     </legend>
 		
-	<div id="lineMinistryObsDiv">
+	<div id="lineMinistryObsDiv" class="toggleDiv">
 		<c:if test="${not empty aimEditActivityForm.lineMinistryObservations.issues}">
 		<logic:iterate name="aimEditActivityForm" id="lineMinistryObs" property="lineMinistryObservations.issues">
 			<table style="width: 100%;">

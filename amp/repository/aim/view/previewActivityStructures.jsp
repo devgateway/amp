@@ -125,7 +125,7 @@ function moveDisplayedImages(structureId, imgCount, next){
 			</span>		
 		</legend>
 		
-		<div id="structuresdiv">
+		<div id="structuresdiv" class="toggleDiv">
 
 		<logic:iterate id="structure" name="aimEditActivityForm"
 			property="structures">

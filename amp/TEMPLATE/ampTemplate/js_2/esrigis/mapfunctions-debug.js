@@ -209,7 +209,11 @@ function init() {
 		var dnd = new dojo.dnd.Moveable(dojo.byId("indicator_legend_" + indicatorLayerArray[idx].id));
 //	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
-	var dnd = new dojo.dnd.Moveable(dojo.byId("structuresdiv"));
+	//var dnd = new dojo.dnd.Moveable(dojo.byId("structuresdiv"));
+	var pcm = new dojo.dnd.move.boxConstrainedMoveable(dojo.byId("structuresdiv"), {
+        box : dojo.window.getBox(),
+        within : true
+    });	
 	
 }
 

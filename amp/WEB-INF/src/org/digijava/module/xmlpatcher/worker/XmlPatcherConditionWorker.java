@@ -39,9 +39,11 @@ public class XmlPatcherConditionWorker extends
 		super(entity, parentEntity, log);
 	}
 
+	private static Interpreter it = new Interpreter();
+	
 	@Override
 	protected boolean process() throws XmlPatcherWorkerException {
-		Interpreter it = new Interpreter();
+		//Interpreter it = new Interpreter();
 		List<Serializable> scripts = getEntity().getContent();
 		try {
 			String test = null;
@@ -63,7 +65,10 @@ public class XmlPatcherConditionWorker extends
 				if (script.getReturnVar() != null)
 					it.set(script.getReturnVar(), worker.getReturnValue());
 			}
-			returnValue = it.eval(test);
+			synchronized(it)
+			{
+				returnValue = it.eval(test);
+			}
 			return true;
 		} catch (EvalError e) {
 			throw new XmlPatcherConditionWorkerException(e);

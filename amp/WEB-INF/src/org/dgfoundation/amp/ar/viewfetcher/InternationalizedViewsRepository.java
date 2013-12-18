@@ -489,12 +489,13 @@ public class InternationalizedViewsRepository {
 	 * @param viewDesc
 	 */
 	private static void addViewDef(HashMap<String, I18nViewDescription> map, I18nViewDescription viewDesc)
-	{
-		// sanity checks...
-		if (!SQLUtils.tableExists(viewDesc.viewName))
-			throw new RuntimeException("trying to define an i18n description of a non-existing table/view: " + viewDesc.viewName);
-		
+	{		
 		Set<String> columns = SQLUtils.getTableColumns(viewDesc.viewName);
+		
+		// sanity checks...
+		if (columns.isEmpty())
+			throw new RuntimeException("trying to define an i18n description of a non-existing table/view: " + viewDesc.viewName);
+
 		for(I18nViewColumnDescription column:viewDesc.columns.values())
 		{
 			String columnName = column.columnName; // the translatable colum we are replacing

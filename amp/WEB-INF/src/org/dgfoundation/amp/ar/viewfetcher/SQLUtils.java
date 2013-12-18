@@ -50,10 +50,15 @@ public class SQLUtils {
 	{
 		LinkedHashSet<String> res = new LinkedHashSet<String>();
 		String query = String.format("SELECT c.column_name FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
-		List<Object> colNames = org.digijava.kernel.persistence.PersistenceManager.getSession().createSQLQuery(query).list();
-		for(Object colName:colNames)
-			res.add(PersistenceManager.getString(colName));
+		for(Object obj: fetchAsList(org.digijava.kernel.persistence.PersistenceManager.getSession().connection(), query, 1))
+		{
+			res.add((String) obj);
+		}
 		return res;
+//		List<Object> colNames = org.digijava.kernel.persistence.PersistenceManager.getSession().createSQLQuery(query).list();
+//		for(Object colName:colNames)
+//			res.add(PersistenceManager.getString(colName));
+//		return res;
 	}
 	
 	public static boolean tableExists(String tableName)

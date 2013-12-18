@@ -55,12 +55,14 @@ public class PublicViewColumnsUtil
 	
 	protected static CachedTableState compareTableStructures(String viewName, String cachedViewName)
 	{
-		if (!SQLUtils.tableExists(viewName))
-			return CachedTableState.ORIGINAL_TABLE_MISSING;
-		if (!SQLUtils.tableExists(cachedViewName))
-			return CachedTableState.CACHED_TABLE_MISSING;
 		List<String> originalCols = new ArrayList<String>(SQLUtils.getTableColumns(viewName));
 		List<String> cacheCols = new ArrayList<String>(SQLUtils.getTableColumns(cachedViewName));
+		
+		if (originalCols.isEmpty())
+			return CachedTableState.ORIGINAL_TABLE_MISSING;
+		if (cacheCols.isEmpty())
+			return CachedTableState.CACHED_TABLE_MISSING;
+
 		if (originalCols.size() != cacheCols.size())
 			return CachedTableState.CACHED_TABLE_DIFFERENT_STRUCTURE;
 		for(int i = 0; i < originalCols.size(); i ++)

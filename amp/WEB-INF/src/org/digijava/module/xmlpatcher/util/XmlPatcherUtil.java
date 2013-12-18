@@ -17,14 +17,19 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.xml.sax.SAXException;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.helpers.DefaultValidationEventHandler;
 import javax.xml.bind.util.JAXBResult;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -206,7 +211,47 @@ public final class XmlPatcherUtil {
 		return ret;
 	}
 
+	static javax.xml.transform.TransformerFactory transFact = javax.xml.transform.TransformerFactory.newInstance( );
+	static javax.xml.transform.Transformer cached_transformer;
+	static String lastPathTransformerPath = null;
 	
+	static Unmarshaller cached_unmarshaller;
+	static String lastUnmarshallerPath = null;
+
+	static javax.xml.transform.Transformer getTransformer(String xslName) throws TransformerConfigurationException
+	{
+		//logger.error("requested Transformer for " + xslName);
+		// recreate transformer if a different one was requested or this is the first call
+		boolean needToRecreate = lastPathTransformerPath == null || (!lastPathTransformerPath.equals(xslName));
+		
+		//logger.error("needToRecreate = " + needToRecreate);
+		if (needToRecreate)
+			cached_transformer = transFact.newTransformer(new StreamSource(xslName));
+		
+		lastPathTransformerPath = xslName;
+		return cached_transformer;
+	}
+	
+	static Unmarshaller getUnmarshaller(String schemaURI) throws JAXBException, SAXException
+	{
+		boolean needToRecreate = lastUnmarshallerPath == null || (!lastUnmarshallerPath.equals(schemaURI));
+		
+		if (needToRecreate)
+		{
+			JAXBContext jc = JAXBContext.newInstance(XmlPatcherConstants.jaxbPackage);
+			cached_unmarshaller = jc.createUnmarshaller();
+
+			// initialize JAXB 2.0 validation
+			SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			Schema schema = sf.newSchema(new File(schemaURI));
+			cached_unmarshaller.setSchema(schema);
+			cached_unmarshaller.setEventHandler(new DefaultValidationEventHandler());
+		}
+		lastUnmarshallerPath = schemaURI;
+		return cached_unmarshaller;
+	}
+	
+	public static java.util.Map<AmpXmlPatch, Patch> loadedPatches = new HashMap<AmpXmlPatch, Patch>();
 	/**
 	 * Unmarshalls using JAXB the xml file that the AmpXmlPatch object points to
 	 * 
@@ -222,35 +267,27 @@ public final class XmlPatcherUtil {
 	 */
 	public static Patch getUnmarshalledPatch(ServiceContext serviceContext,
 			AmpXmlPatch p, AmpXmlPatchLog log) {
-		try {
-		
-
-			//perform XSLT transformation. See xmlpatcher.xsl
-			javax.xml.transform.TransformerFactory transFact = javax.xml.transform.TransformerFactory.newInstance( );
-			javax.xml.transform.Transformer trans = transFact.newTransformer(new StreamSource(serviceContext.getRealPath("/")+XmlPatcherConstants.xslLocation));
-
+		try 
+		{
+			if (!loadedPatches.containsKey(p))
+			{
+				//perform XSLT transformation. See xmlpatcher.xsl
+				javax.xml.transform.Transformer trans = getTransformer(serviceContext.getRealPath("/")+XmlPatcherConstants.xslLocation);
+				Unmarshaller um = getUnmarshaller(serviceContext.getRealPath("/") + XmlPatcherConstants.xsdLocation);
+				JAXBResult result = new JAXBResult(um);
+				
+				trans.transform(new StreamSource(getXmlPatchAbsoluteFileName(p, serviceContext)), result);
+				Object tree=result.getResult();
 			
-			JAXBContext jc = JAXBContext
-					.newInstance(XmlPatcherConstants.jaxbPackage);
-			Unmarshaller um = jc.createUnmarshaller();
-			JAXBResult result = new JAXBResult(um);
-
-			// initialize JAXB 2.0 validation
-			SchemaFactory sf = SchemaFactory
-					.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = sf.newSchema(new File(serviceContext
-					.getRealPath("/")
-					+ XmlPatcherConstants.xsdLocation));
-			um.setSchema(schema);
-			um.setEventHandler(new DefaultValidationEventHandler());
-
+				JAXBElement<Patch> enclosing = (JAXBElement<Patch>) tree;
+				Patch funcResult = enclosing.getValue();
 			
-			trans.transform(new StreamSource(getXmlPatchAbsoluteFileName(p, serviceContext)), result);
-			Object tree=result.getResult();
-			
-			JAXBElement<Patch> enclosing = (JAXBElement<Patch>) tree;
-			return enclosing.getValue();
-		} catch (Exception e) {
+				loadedPatches.put(p, funcResult);
+			}
+			return loadedPatches.get(p);
+		}
+		catch (Exception e)
+		{
 			logger.error(e);
 			if(log!=null) log.appendToLog(e);
 			return null;

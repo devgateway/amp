@@ -122,5 +122,20 @@ public class AmpXmlPatch implements Serializable, Comparable<AmpXmlPatch> {
 	{
 		return this.location + this.patchId + "(state:" + this.state + ")";
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		return (this.location + this.patchId).hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object oth)
+	{
+		if (!(oth instanceof AmpXmlPatch))
+			return false;
+		AmpXmlPatch other = (AmpXmlPatch) oth;
+		return this.location.equals(other.location) && (this.patchId.equals(other.patchId));
+	}
 
 }

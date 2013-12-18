@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
@@ -28,7 +29,7 @@ public class ViewLastVersions extends TilesAction {
 
 		HttpSession session = request.getSession();
 		
-		List<AmpActivityVersion> updatedAcitvities = ActivityUtil.getLastUpdatedActivities();
+		List<AmpActivityFake> updatedAcitvities = ActivityUtil.getLastUpdatedActivities();
 		session.setAttribute(Constants.MY_LAST_VERSIONS, updatedAcitvities);
 		return null;
 	}

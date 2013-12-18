@@ -3323,27 +3323,30 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		  return execRate;
   	}
 
-  	public static List<AmpActivityVersion> getLastUpdatedActivities() {
- 		String workspaceQuery = Util.toCSString(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
- 		if (workspaceQuery.equals(Util.toCSString(new HashSet<Long>())))
- 			workspaceQuery = "-999";
+  	public static List<AmpActivityFake> getLastUpdatedActivities() {
+ 		String workspaceQuery = Util.toCSStringForIN(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
   		
-		List col = null;
+ 		List<AmpActivityFake> res = new ArrayList<AmpActivityFake>();
 		Session session = null;
 		Query qry = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select distinct ampAct from "
+			String queryString = "select ampAct.ampActivityId, ampAct.ampId, " + AmpActivityVersion.hqlStringForName("ampAct") + " from "
 				+ AmpActivityVersion.class.getName()
-				+ " ampAct where ampAct.ampActivityId IN (" + workspaceQuery + ")"  // BOZO BOZO SHMOZO
-				+ " and ampAct.deleted = false or ampAct.deleted is null "
+				+ " ampAct where ampAct.ampActivityId IN (" + workspaceQuery + ")"
+				+ " AND (ampAct.deleted = false or ampAct.deleted is null) AND (ampAct.team.id IS NOT NULL) "
 				+ " order by ampAct.ampActivityId desc";
 			qry = session.createQuery(queryString).setMaxResults(5);
-			col = qry.list();
+			List<Object[]> results = qry.list();
+			for(Object[] activityInfo:results)
+			{
+				AmpActivityFake activityDigest = new AmpActivityFake(PersistenceManager.getString(activityInfo[2]), PersistenceManager.getString(activityInfo[1]), PersistenceManager.getLong(activityInfo[0]));
+				res.add(activityDigest);
+			}
 		} catch (Exception e1) {
 			logger.error("Could not retrieve the activities list from getLastUpdatedActivities", e1);
 		}
-		return col;
+		return res;
 	}
   
   /*

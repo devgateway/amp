@@ -18,7 +18,7 @@
 		<div class="right_menu_cont">
         <ul>
 			<logic:notEmpty name="lastVersions" scope="session">
-				<logic:iterate id="iter" scope="session" name="lastVersions" type="org.digijava.module.aim.dbentity.AmpActivityVersion">
+				<logic:iterate id="iter" scope="session" name="lastVersions">
 			        	<li class="tri"><a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="iter" property="ampActivityId"/>'><bean:write name='iter' property='name'/></a></li>
 				</logic:iterate>
 			</logic:notEmpty>

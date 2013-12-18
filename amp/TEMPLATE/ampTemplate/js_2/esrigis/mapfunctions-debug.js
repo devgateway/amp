@@ -61,7 +61,7 @@ donorfix="";
 //donorfix = "BID,BM,BCIE,ACDI,UE,USAID,UNDP/PNUD,AECID,GIZ,JICA";
 //Haiti
 //donorfix = "UE,USAID,Ambassade du Japon,AECID,AFD,BM-EXTFUND,ACDI,Ambassade de Norvege,BID,Ambassade du Venezuela";
-fixeddonorlist = donorf/ix.split(",");
+fixeddonorlist = donorfix.split(",");
 
 
 
@@ -242,8 +242,9 @@ function createMapAddLayers(myService1, myService2) {
 			"force3DTransforms": true,
 			"navigationMode": "css-transforms"
 		});
+		
 		dojo.connect(map, 'onLoad', function(map) {
-		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+		//dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
 		dojo.byId('map_zoom_slider').style.top = '95px';
 		getActivities(false);
 		getStructures(false);
@@ -433,7 +434,7 @@ function findbydistance(evt) {
  */
 function showStInfoWindow() {
 	searchactive = false;
-	//alert('Ion!');
+	alert('Ion!');
 	hideTooltip();
 	var content =
 	    "<table border='0' width='100%' cellpadding='0' cellspacing='0' style='border: 1px solid gray;font-size: 10px;'>"
@@ -576,6 +577,7 @@ function getActivities(clear) {
 		cL.clear();
 		
 	}
+
 	var xhrArgs = {
 		url : "/esrigis/datadispatcher.do?showactivities=true&rnd=" + new Date().getTime(),
 		handleAs : "json",
@@ -599,10 +601,6 @@ function getActivities(clear) {
 	}
 	// Call the asynchronous xhrGet
 	var deferred = dojo.xhrGet(xhrArgs);
-	closeHide("highlightLegend");
-	if (highlightson == true){
-		highlightson =false;
-	} 
 	
 }
 /**
@@ -952,15 +950,21 @@ function MapFindLocation(level) {
  * @param featureSet
  */
 function addResultsToMap(featureSet) {
-	var border = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([ 150,150, 150 ]), 1);
-	var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colorsOrange[0]);
+	var border = new esri.symbol.SimpleLineSymbol(
+			esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([ 150,
+					150, 150 ]), 1);
+	var symbol = new esri.symbol.SimpleFillSymbol(
+			esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([
+					150, 150, 150, 0.5 ]));
 	var colors = colorsOrange;
+	var numRanges = colors.length;
 	var localGraphicLayer = esri.layers.GraphicsLayer({
 		displayOnPan : true,
 		id : "highlightMap",
 		visible : true
 	});
-	var typeFundingValue = getCheckedValue(document.getElementsByName("filter.transactionType"));
+	var typeFundingValue = getCheckedValue(document
+			.getElementsByName("filter.transactionType"));
 	var typeFunding = "commitments";
 	switch (typeFundingValue) {
 	case "0":
@@ -973,26 +977,26 @@ function addResultsToMap(featureSet) {
 		typeFunding = "expenditures";
 		break;
 	}
-		
-	var breaks = null;
-	if (locations.length==1){
-		breaks = getGVF(locations,typeFunding,1);
-	}else if (locations.length<=5){
-		 breaks = getGVF(locations,typeFunding,locations.length-1);
-	}else{
-		 breaks = getGVF(locations,typeFunding,5);
-	}
-	
-	
+
+	// Using logarithmic scale
+	var maxLog = Math.log(getMaxValue(locations, typeFunding));
+	var minLog = Math.log(getMinValue(locations, typeFunding));
+
+	var max = getMaxValue(locations, typeFunding);
+	var min = getMinValue(locations, typeFunding);
+
+	var breaksLog = (maxLog - minLog) / numRanges;
+	var breaks = (max - min) / numRanges;
+
+	var rangeColors = new Array();
 	var renderer = new esri.renderer.ClassBreaksRenderer(symbol, COUNT);
-	for ( var int = 0; int < breaks.length; int++) {
-		if (int < breaks.length-2){
-			renderer.addBreak(breaks[int],breaks[int+1] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[int+1]));
-		}else{
-			renderer.addBreak(breaks[int],breaks[int+1] +10, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[int+1]));
-		}
+	for ( var i = 0; i < numRanges; i++) {
+		rangeColors.push([ parseFloat(min + (i * breaks)),
+				parseFloat(min + ((i + 1) * breaks)) ]);
+		renderer.addBreak(parseFloat(min + (i * breaks)), parseFloat(min
+				+ ((i+2) * breaks)), new esri.symbol.SimpleFillSymbol(
+				esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
 	}
-	
 
 	dojo.forEach(featureSet.features, function(feature) {
 		// Read current attributes and assign a new set
@@ -1030,7 +1034,7 @@ function addResultsToMap(featureSet) {
 	map.reorderLayer(map.getLayer("highlightMap"), 0);
 	map.setExtent(map.extent.expand(1.01));
 	hideLoading();
-	var currencyCode="";
+	var currencyCode;
 	for ( var j = 0; j < locations.length; j++) {
 		var currentLocation = locations[j];
 		if (currentLocation.amountsCurrencyCode != "") {
@@ -1039,7 +1043,7 @@ function addResultsToMap(featureSet) {
 		}
 	}
 
-	showLegend(breaks, colors, typeFunding, currencyCode);
+	showLegend(rangeColors, colors, typeFunding, currencyCode);
 	$('#hlight').bind('click', function() {
 		getHighlights(0);
 	});
@@ -1066,19 +1070,17 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode) {
 	var df = new DecimalFormat(currentFormat);
 	var currencyString = currencyCode;
 	//debugger;
-	var x = 0;
 	var htmlDiv = "";
 	htmlDiv += "<div onclick='closeHide(\"highlightLegend\")' style='color:white;float:right;cursor:pointer;'>X</div>";
 	htmlDiv += "<div class='legendHeader'>"+translate('Showing ' + typeFunding + ' for ' + currentLevel.name);
 	htmlDiv +=  "<br/><hr/></div>";
-	
-	for ( var i = 0; i <  rangeColors.length-1; i++) {	
+	for ( var i = 0; i < rangeColors.length; i++) {
 		htmlDiv += "<div class='legendContentContainer'>"
-				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i+1]) + "></div>" + "</div>"
+				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i]) + "></div>" + "</div>"
 				+ "<div class='legendContentLabel'>"
-				+ df.format(Math.ceil(rangeColors[i])) + " "
+				+ df.format(Math.ceil(rangeColors[i][0])) + " "
 				+ currencyString + " - "
-				+ df.format(Math.floor(rangeColors[i+1])) + " "
+				+ df.format(Math.floor(rangeColors[i][1])) + " "
 				+ currencyString + " </div><br/>";
 	}
 	htmlDiv += "<div class='legendContentContainer'>"
@@ -1128,14 +1130,15 @@ function updateLocationAttributes(graphicLayer, typeFunding) {
 function getStructures(clear) {
 	if (clear) {
 		try {
+			structureGraphicLayer = null;
 			structures = [];
 			structurespoint=[];
-			cLs.clean();
+			map.removeLayer(map.getLayer("structuresMap"));
 		} catch (e) {
 			console.log(e);
 		}
 	}
-	if (structureGraphicLayer && !clear) {
+	if (structureGraphicLayer) {
 		if (structureGraphicLayer.visible) {
 			structureGraphicLayer.hide();
 			cLs.hide();
@@ -1154,7 +1157,7 @@ function getStructures(clear) {
 			id : "structuresMap",
 			visible : structureVisible
 		});
-	
+		
 		structureson = true;
 		var xhrArgs = {
 			url : "/esrigis/datadispatcher.do?showstructures=true&rnd=" + new Date().getTime(),
@@ -1639,7 +1642,6 @@ function placemedia(){
 //Get info windows content
 
 function getContent(graphicAttributes, baseGraphic) {
-	showLoading();
     var attributes;
 
     var xhrArgs = {
@@ -1707,10 +1709,19 @@ function getContent(graphicAttributes, baseGraphic) {
 
     }
     var deferred = dojo.xhrGet(xhrArgs);
-    hideLoading();
     return attributes;
 }
 
 
 
 
+var resizeTimer;
+$(window).resize(function () {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout( function() {
+		$("#map").css("width","100%").css("height","100%");
+		map.resize();
+		map.reposition();
+		}, 500);   
+   
+});

@@ -36,14 +36,17 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
     public TextArea<String> getTextAreaContainer() {
 		return textAreaContainer;
 	}
-	
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param wysiwyg if true, CKeditor will be added to the {@link TextArea}
-	 */
-	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine) {
-		super(id, fmName, hideLabel, hideNewLine);
+
+    public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine) {
+        this(id, model, fmName, wysiwyg, hideLabel, hideNewLine, false);
+    }
+    /**
+     * @param id
+     * @param fmName
+     * @param wysiwyg if true, CKeditor will be added to the {@link TextArea}
+     */
+	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine, boolean showReqStar) {
+		super(id, model, fmName, hideLabel, hideNewLine, false, showReqStar);
         this.wysiwyg = wysiwyg;
 		if (wysiwyg){
 			model = (IModel<String>) new EditorWrapperModel((IModel<String>) model, id);

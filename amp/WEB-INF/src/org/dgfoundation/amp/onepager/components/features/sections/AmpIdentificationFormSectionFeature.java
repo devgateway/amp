@@ -83,18 +83,16 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			this.fmType = AmpFMTypes.MODULE;
 			
 			IModel<String> m = new PropertyModel<String>(am, "name");
-			title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false);
+			title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true);
 			//title = new AmpTextFieldPanel<String>(
 			//		"title", m, "Project Title", AmpFMTypes.MODULE);
 			//title.getTextContainer().add(new AmpRequiredFieldValidator<String>(title));
-			
 			title.getTextAreaContainer().add(new StringRequiredValidator());
-			title.getTextAreaContainer().setRequired(true);
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));			
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
 			title.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				
+
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {		
 					if(!titleSimilarityWarning.isVisible()) return;

@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.ehcache.hibernate.HibernateUtil;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -51,6 +52,7 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -1897,7 +1899,8 @@ public class EditActivity extends Action {
 
     TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
     eaForm.getFunding().fillFinancialBreakdowns(activityId, DbUtil.getAmpFunding(activityId), debug);
-    String validationOption = AmpARFilter.getEffectiveSettings().getValidation();
+    AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
+    String validationOption = appSettings != null ? appSettings.getValidation() : null;
 
     String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
     if(teamMember != null){

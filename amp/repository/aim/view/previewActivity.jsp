@@ -304,7 +304,7 @@ function collapseAll() {
 <c:if test="${aimEditActivityForm.activityExists=='no'}">
 	<div class="activity_preview_header" style="font-size: 12px;text-align: center;color:red">
 		<ul style="padding-top: 5px;font-size: 12px">
-			<li><digi:trn>Couldn't find activity! It may be no longer exists in the system. </digi:trn></li>
+			<li><digi:trn>Couldn't find activity! It may have been deleted from the system</digi:trn></li>
 		</ul>	
 	</div>
 </c:if>

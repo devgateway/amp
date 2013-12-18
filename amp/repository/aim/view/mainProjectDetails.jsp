@@ -823,7 +823,7 @@ ${aimMainProjectDetailsForm.activityExists}
 </c:when>
 <c:otherwise>
     <div style="font-size: 12px;text-align: center;color:red">
-<digi:trn>Couldn't find activity! It may be no longer exists in the system.</digi:trn>
+<digi:trn>Couldn't find activity! It may have been deleted from the system</digi:trn>
     </div>
 </c:otherwise>
 </c:choose>

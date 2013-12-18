@@ -2773,8 +2773,10 @@ function launchDashboard(){
 			document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
 		}
 	}
-	if (document.getElementById("transaction_type_3").checked == true) {
-		document.getElementById("transactionType").value = document.getElementById("transaction_type_3").value;
+	if (document.getElementById("transaction_type_3")!=null){
+		if (document.getElementById("transaction_type_3").checked == true) {
+			document.getElementById("transactionType").value = document.getElementById("transaction_type_3").value;
+		}
 	}
 	
 	var adTypes = document.getElementById("adjustment_type");

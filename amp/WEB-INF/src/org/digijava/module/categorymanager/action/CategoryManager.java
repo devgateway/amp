@@ -74,13 +74,13 @@ public class CategoryManager extends Action {
 		 * If the user wants to create a new category
 		 */
 		if (request.getParameter("new") != null) {
-			myForm.setNumOfPossibleValues(new Integer(0));
+			myForm.setNumOfPossibleValues(0);
 			myForm.setCategoryName(null);
 			myForm.setDescription(null);
 			myForm.setKeyName(null);
 			myForm.setIsMultiselect(false);
 			myForm.setIsOrdered(false);
-			List<PossibleValue> possibleVals = new ArrayList();
+			List<PossibleValue> possibleVals = new ArrayList<PossibleValue>();
 			for (int i = 0; i < 3; i++) {
 				possibleVals.add(new PossibleValue());
 			}
@@ -102,7 +102,7 @@ public class CategoryManager extends Action {
 			}
 			boolean flagEmptyField = false;
 			for (int i = 0; i<myForm.getPossibleVals().size();i++){
-				if( myForm.getPossibleVals().get(i).getValue().isEmpty() && myForm.getPossibleVals().get(i).isDisable() == false){
+				if( myForm.getPossibleVals().get(i).getValue().isEmpty() && myForm.getPossibleVals().get(i).isDisable()){
 					flagEmptyField = true;
 					break;
 				}
@@ -138,7 +138,7 @@ public class CategoryManager extends Action {
 					/**
 					 * Adding a new category to the database
 					 */
-					if (myForm.getSubmitPressed() != null && myForm.getSubmitPressed().booleanValue()) {
+					if (myForm.getSubmitPressed() != null && myForm.getSubmitPressed()) {
 						myForm.setSubmitPressed(false);
 						boolean saved	= this.saveCategoryToDatabase(myForm, errors);
 						if (!saved) {
@@ -184,6 +184,7 @@ public class CategoryManager extends Action {
 		this.saveErrors(request, errors);
 		return mapping.findForward("forward");
 	}
+
 	/**
 	 * 
 	 * @param ampCategoryClass
@@ -193,7 +194,7 @@ public class CategoryManager extends Action {
 		if (ampCategoryClass != null) {
 			myForm.setCategoryName( ampCategoryClass.getName() );
 			myForm.setDescription( ampCategoryClass.getDescription() );
-			myForm.setNumOfPossibleValues( new Integer(ampCategoryClass.getPossibleValues().size()) );
+			myForm.setNumOfPossibleValues(ampCategoryClass.getPossibleValues().size());
 			myForm.setEditedCategoryId( ampCategoryClass.getId() );	
 			myForm.setIsMultiselect( ampCategoryClass.isMultiselect() );
 			myForm.setIsOrdered( ampCategoryClass.isOrdered() );
@@ -237,10 +238,10 @@ public class CategoryManager extends Action {
 						if ( myForm.getPossibleValues()[i].length() > 0  )
 									count++;
 					}
-					myForm.setNumOfPossibleValues( new Integer(count) );
+					myForm.setNumOfPossibleValues(count);
 			}
 			else
-				myForm.setNumOfPossibleValues( new Integer(0) );
+				myForm.setNumOfPossibleValues(0);
 		}
 		
 	}
@@ -333,16 +334,14 @@ public class CategoryManager extends Action {
             }
         }
 	}
+
+
 	/**
 	 * 
 	 * @param myForm
 	 * @param errors
 	 * @throws Exception
 	 */
-
-
-		
-	
 	private boolean saveCategoryToDatabase(CategoryManagerForm myForm, ActionMessages errors) throws Exception {
 		
 		Session dbSession					= null;	
@@ -365,7 +364,7 @@ public class CategoryManager extends Action {
 			dbSession						= PersistenceManager.openNewSession();
 			tx								= dbSession.beginTransaction();
 			AmpCategoryClass dbCategory		= new AmpCategoryClass();
-			dbCategory.setPossibleValues( new Vector() );
+			dbCategory.setPossibleValues(new ArrayList<AmpCategoryValue>());
 			if (myForm.getEditedCategoryId() != null) {
 				String queryString	= "select c from " + AmpCategoryClass.class.getName() + " c where c.id=:id";
 				Query query			= dbSession.createQuery(queryString);
@@ -536,7 +535,7 @@ public class CategoryManager extends Action {
 		TreeSet<KeyValue> kvCategories	= new TreeSet<KeyValue>( KeyValue.valueComparator );
 		Iterator<AmpCategoryClass> iter		= categories.iterator();
 		while (iter.hasNext()) {
-			AmpCategoryClass cat 	= (AmpCategoryClass) iter.next();
+			AmpCategoryClass cat 	= iter.next();
 			String translatedName	= CategoryManagerUtil.translate( 
 							CategoryManagerUtil.getTranslationKeyForCategoryName(cat.getKeyName()), cat.getName()   );
 			

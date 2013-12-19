@@ -349,7 +349,7 @@ body {
 							</feature:display>
 					</div>
 					<div class="ft" align="right">
-						<button id="last_save_button" type="button" class="buttonx_dis" onclick="saveReportEngine.saveReport();" disabled="disabled">
+						<button id="last_save_button" type="button" class="buttonx_dis" onclick="$(this).attr('disabled',true);saveReportEngine.saveReport();" disabled="disabled">
 							${saveBtn}
 						</button>
 						&nbsp;&nbsp;&nbsp;

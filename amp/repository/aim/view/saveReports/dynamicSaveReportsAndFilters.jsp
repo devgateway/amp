@@ -73,7 +73,7 @@
 		<input type="hidden" id="saveOriginalReportName" value="${reportObject.name}" />
 		
 		<div align="center">
-			<button id="dynamic_save_button" type="button" class="buttonx" onclick="saveReportEngine.saveReport();">
+			<button id="dynamic_save_button" type="button" class="buttonx" onclick="$(this).attr('disabled',true);saveReportEngine.saveReport();">
 					${saveBtn}
 			</button>
 			&nbsp;&nbsp;&nbsp;

@@ -15,7 +15,7 @@
 		<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 		<bean:define id="starFlag" value="" scope="page" toScope="request" />
 	</logic:present>
-	<%=trnTextCell.getTrasnlatedValue(request)%>
+	<%=trnTextCell.getValue().toString()%>
 </div>
 
 

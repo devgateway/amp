@@ -12,13 +12,13 @@
 
 <div align="left" style="padding-left:<%=request.getAttribute("pading")%>">
 	<%
-		if (trnTextCell.getTrasnlatedValue(request).length() > 39){ 
+		if (trnTextCell.getValue().toString().length() > 39){ 
 	%>
 		<logic:present name="starFlag" scope="request">
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 			<bean:define id="starFlag" value="" scope="page" toScope="request" />
 		</logic:present>
-		<%=trnTextCell.getTrasnlatedValue(request).substring(0,39)%> ...
+		<%=trnTextCell.getValue().toString().substring(0,39)%> ...
 	<%
 	 }
 	 else
@@ -28,7 +28,7 @@
 			<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 			<bean:define id="starFlag" value="" scope="page" toScope="request" />
 		</logic:present>
-		<%=trnTextCell.getTrasnlatedValue(request)%>
+		<%=trnTextCell.getValue().toString() %>
 	<%
 	}
 	%>

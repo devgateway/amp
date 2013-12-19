@@ -27,6 +27,10 @@ public class TrnTextCell extends TextCell{
 	public Class getWorker() {
 		return TrnTextColWorker.class;
 	}
+	public Object getValue(){
+		return super.getValue();
+	}
+	
 	
 	public String getTrasnlatedValue(HttpServletRequest request){
 		Site site = RequestUtils.getSite(request);
@@ -59,6 +63,8 @@ public class TrnTextCell extends TextCell{
 			parent=parent.getParent();
 		}
 		//logger.debug(this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()));
-		return this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()) ;
+		//For AMP-16666 value is already translated so we are returning only value
+		//return this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()) ;
+		return this.getValue()!=null?this.getValue().toString():"";
 	}
 }

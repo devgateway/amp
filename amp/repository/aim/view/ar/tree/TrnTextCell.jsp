@@ -5,7 +5,7 @@
 
 <bean:define id="trnTextCell" name="viewable" type="org.dgfoundation.amp.ar.cell.TrnTextCell" scope="request" toScope="page" />
 <bean:define id="caller" name="caller" scope="request" toScope="page" />
-<div align="left"><%=trnTextCell.getTrasnlatedValue(request)%></div>
+<div align="left"><%=trnTextCell.getValue().toString()%></div>
 
 <logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">
 <logic:equal name="trnTextCell" property="hasLongVersion" value="true">

@@ -8,6 +8,9 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.cell.TrnTextCell;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.action.GetReports;
 
 public class TrnTextColWorker extends TextColWorker {
 
@@ -33,7 +36,12 @@ public class TrnTextColWorker extends TextColWorker {
 		
 		TrnTextCell ret=new TrnTextCell(ownerId);
 		ret.setId(id);
-		ret.setValue(value);
+		try {
+			ret.setValue(TranslatorWorker.translateText(value,generator.getReportMetadata().getLocale(),generator.getReportMetadata().getSiteId()));
+		} catch (WorkerException e) {
+			// TODO check if the Exception is correctly  handled
+			ret.setValue(value);
+		}
 		return ret;
 	}
 	

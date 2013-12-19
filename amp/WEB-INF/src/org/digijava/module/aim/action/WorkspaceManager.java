@@ -39,11 +39,13 @@ public class WorkspaceManager extends Action {
 		int NUM_RECORDS = 10000;
 		Collection<AmpTeam> workspaces = new ArrayList<AmpTeam>();
 		WorkspaceForm wsForm = (WorkspaceForm) form;
-		
+
+        boolean reloadWorkspaces = false;
 		if(request.getParameter("reset")!=null && request.getParameter("reset").equalsIgnoreCase("true")){
 			wsForm.setKeyword(null);
 			wsForm.setWorkspaceType("all");
 			wsForm.setNumPerPage(-1);
+            reloadWorkspaces = true;
 		}
                 if(session.getAttribute("fromPage")!=null){
                     wsForm.setCurrentPage((Integer)session.getAttribute("fromPage"));
@@ -75,7 +77,7 @@ public class WorkspaceManager extends Action {
 		}
 		
 		Collection<AmpTeam> ampWorkspaces = (Collection<AmpTeam>) session.getAttribute("ampWorkspaces");
-		if (ampWorkspaces == null) {
+		if (ampWorkspaces == null || reloadWorkspaces) {
 			ampWorkspaces = TeamUtil.getAllTeams();
 			session.setAttribute("ampWorkspaces", ampWorkspaces);
 		}

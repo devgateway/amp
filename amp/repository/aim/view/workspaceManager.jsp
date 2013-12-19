@@ -283,8 +283,8 @@
                     '</ul>'+
                     '</div>';
             };
-       
-            this.myDataSource = new YAHOO.util.DataSource("/aim/searchWorkspaces.do?");
+       			var searchWorkspacesURL = "/aim/searchWorkspaces.do?" + Date.now() + "&";
+            this.myDataSource = new YAHOO.util.DataSource(searchWorkspacesURL);
             this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
             this.myDataSource.connMethodPost = true;
             //this.myDataSource.connXhrMode = "queueRequests";

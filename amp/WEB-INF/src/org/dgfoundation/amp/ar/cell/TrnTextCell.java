@@ -26,45 +26,13 @@ public class TrnTextCell extends TextCell{
 	
 	public Class getWorker() {
 		return TrnTextColWorker.class;
-	}
-	public Object getValue(){
-		return super.getValue();
-	}
+	}		
 	
-	
-	public String getTrasnlatedValue(HttpServletRequest request){
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		Long siteId = site.getId();
-		String locale = navigationLanguage.getCode();
-		
-		return this.getTrasnlatedValue(siteId, locale);
-	}
-	
-	public String getTrasnlatedValue(Long siteId, String locale){
-		
-		String text;
-		try {
-			text = TranslatorWorker.translateText((String) super.getValue(),locale,siteId);
-			if (text == null || text.trim().compareTo("") == 0 || text.length() == 0)
-				return getValue()!=null?getValue().toString().replaceAll("\\<.*?>",""):"";
-			return text;
-		} catch (WorkerException e) {
-			e.printStackTrace();
-		}
-		return getValue()!=null?getValue().toString().replaceAll("\\<.*?>",""):"";
-	}
-	
-	@Override
-	public String toString() {
-		ReportData parent=(ReportData) this.getNearestReportData().getParent();
-		while (parent.getReportMetadata()==null)
-		{
-			parent=parent.getParent();
-		}
-		//logger.debug(this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()));
-		//For AMP-16666 value is already translated so we are returning only value
-		//return this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()) ;
-		return this.getValue()!=null?this.getValue().toString():"";
-	}
+	//For AMP-16666 value is already translated so the superclass toString() is ok
+//	@Override
+//	public String toString() {
+//		
+//		//return this.getTrasnlatedValue(parent.getReportMetadata().getSiteId(), parent.getReportMetadata().getLocale()) ;
+//		return this.getValue() != null ? this.getValue().toString() : "";
+//	}
 }

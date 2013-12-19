@@ -36,12 +36,7 @@ public class TrnTextColWorker extends TextColWorker {
 		
 		TrnTextCell ret=new TrnTextCell(ownerId);
 		ret.setId(id);
-		try {
-			ret.setValue(TranslatorWorker.translateText(value,generator.getReportMetadata().getLocale(),generator.getReportMetadata().getSiteId()));
-		} catch (WorkerException e) {
-			// TODO check if the Exception is correctly  handled
-			ret.setValue(value);
-		}
+		ret.setValue(TranslatorWorker.translateText(value));
 		return ret;
 	}
 	

@@ -161,7 +161,24 @@ div.fakefile2 input{
 					${translation1}
 				<%}%>
 				
-				<%//=template.isDefault()?"'in use":""%>
+				<logic:equal name="template" property="default" value="true">
+					in use (Default template)
+				</logic:equal>
+				
+				
+				<logic:notEqual name="template" property="default" value="true">
+					<logic:present name="template" property="usedByTeamsNames">
+						Assigned to
+							<logic:iterate name="template" property="usedByTeamsNames" id="team">
+								"<bean:write name="team"/>"&nbsp;
+							</logic:iterate>
+							workspace(s)
+					</logic:present>
+				</logic:notEqual>
+				
+				
+				
+				
 			</td>
 
 			<td width="30%" align="center" class="inside">
@@ -171,7 +188,7 @@ div.fakefile2 input{
 			<c:set var="translation">
 				<digi:trn key="aim:clickToDeleteTemplate">Click here to Delete Template</digi:trn>
 			</c:set>
-			<%if (!template.isDefault()){%>
+			<%if (!template.isDefault() && template.getUsedByTeamsNames() == null){%>
 					
 			[ <digi:link href="/visibilityManager.do" name="urlParams11"  
 				title="${translation}" onclick="return onDelete()"><digi:trn key="aim:featureManagerDeleteLink">Delete</digi:trn></digi:link> ]

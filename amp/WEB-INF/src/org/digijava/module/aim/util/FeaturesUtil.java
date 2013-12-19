@@ -23,18 +23,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpColumnsOrder;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpFeature;
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpSiteFlag;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.digijava.module.aim.dbentity.FeatureTemplates;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -86,6 +75,25 @@ public class FeaturesUtil {
 				return true;
 		return false;
 	}
+
+    public static List<String> getAssignedToTeams (Long templateId) {
+        List<String> retVal = null;
+        Session sess = PersistenceManager.getSession();
+        StringBuilder qs = new StringBuilder("select t.name from ").
+                append(AmpTeam.class.getName()).append(" t  where t.fmTemplate=:TEMPLATE_ID");
+        Query q = sess.createQuery(qs.toString());
+        q.setLong("TEMPLATE_ID", templateId);
+        List<String> tmpVal = q.list();
+        if (!tmpVal.isEmpty()) retVal = tmpVal;
+
+        return retVal;
+    }
+
+    public static void setUsedByTeamNames(Collection <AmpTemplatesVisibility> templates) {
+        for (AmpTemplatesVisibility tv : templates) {
+            tv.setUsedByTeamsNames(getAssignedToTeams(tv.getId()));
+        }
+    }
 	
 	/**
 	 * returns 1, 1000 or 1000000 depending on the code values: AmpARFilter.AMOUNT_OPTION_IN_XXXX

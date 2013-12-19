@@ -88,6 +88,7 @@ public class VisibilityManager extends MultiAction {
 		if(request.getParameter("importTreeVisibility")!=null) return modeImportTreeVisibility(mapping, form, request, response);
 		
 		Collection templates=FeaturesUtil.getAMPTemplatesVisibilityWithSession();
+        FeaturesUtil.setUsedByTeamNames(templates);
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		vForm.setTemplates(templates);
 		vForm.setMode("manageTemplates");

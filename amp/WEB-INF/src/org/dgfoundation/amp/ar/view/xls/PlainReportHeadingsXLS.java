@@ -86,27 +86,10 @@ public class PlainReportHeadingsXLS extends ReportHeadingsXLS {
 	}
 	
 	@Override
-	protected void createHeadingBorders (int curDepth) {		
-		ColumnReportData columnReport = (ColumnReportData) item;
-		if (curDepth == 0)
-		{
-			int maxRowSpan		= 1;
-			Boolean summaryReport		= this.getMetadata().getHideActivities();
-			if (  summaryReport == null  || !summaryReport ) 
-			{
-				Column tempCol			= (Column)columnReport.getItems().get(0);
-				maxRowSpan				= (tempCol.getPositionInHeading().getRowSpan()>maxRowSpan)?tempCol.getPositionInHeading().getRowSpan():maxRowSpan;
-                                    if(maxRowSpan>1) maxRowSpan-=1;
-			}
-			else
-			{
-				maxRowSpan = columnReport.getMaxColumnDepth() - 1;
-//				if (maxRowSpan > 3)
-//					maxRowSpan = 3; // BOZO: why this?                                    
-			}
-			makeRowSpan(maxRowSpan,true);
-			sheet.setColumnWidth((short)colId.value, (short)5120);
-		}
+	protected void createHeadingBorders (int curDepth)
+	{		
+		super.createHeadingBorders(curDepth);
+		colId.dec();
 	}
 
 }

@@ -195,7 +195,7 @@ public class XLSExportAction extends Action {
 			grdx.setMachineFriendlyColName(true);
 		}else{
 		//show title+desc+logo+statement
-			grdx.makeColSpan(numberOfColumns, false);	
+			grdx.makeColSpan(numberOfColumns + 3, false);	
 			rowId.inc();
 			
 			row = sheet.createRow(rowId.shortValue());
@@ -204,8 +204,7 @@ public class XLSExportAction extends Action {
 		}
 		
 		grdx.generate();
-		//AMP-14423
-		setColumnsWidth(sheet, numberOfColumns);
+
 
 		/*
 		 * 
@@ -295,16 +294,5 @@ public class XLSExportAction extends Action {
 		}
 
 		return null;
-	}
-	
-	private void setColumnsWidth(HSSFSheet sheet, int numberOfColumns){
-		int maxWidth = 55;
-		for(int i = 0; i <= numberOfColumns; i++){
-			sheet.autoSizeColumn(i);
-			if(sheet.getColumnWidth(i) > maxWidth * 256){
-				sheet.setColumnWidth(i, maxWidth * 256);
-			}
-		}
-
-	}
+	}	
 }

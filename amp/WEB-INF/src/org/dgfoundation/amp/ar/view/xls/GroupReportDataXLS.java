@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.TreeMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -48,8 +50,19 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * @since Aug 31, 2006
  * 
  */
-public class GroupReportDataXLS extends XLSExporter {
-	private boolean machineFriendlyColName = false;
+public class GroupReportDataXLS extends XLSExporter{
+	
+	/**
+	 * the maximum allowable width of a column in the Excel file, in characters 
+	 */
+	public final static int MAX_COLUMN_WIDTH = 55;
+
+	/**
+	 * the column widths computed while generating the report heading - in "1/256 of a char"
+	 */
+	protected TreeMap<Integer, Integer> columnWidths = new TreeMap<Integer, Integer>();
+	
+	private boolean machineFriendlyColName = false;	
 	/**
 	 * @param parent
 	 * @param item
@@ -94,21 +107,39 @@ public class GroupReportDataXLS extends XLSExporter {
 			this.invokeChildExporter(element);
 		}
 		
-		/*rowId.inc();
-		colId.reset();
-		
-		TrailCellsXLS trails=new TrailCellsXLS(this,grd);
-		trails.generate();
-		*/
-
-		// add an empty row
-		//HSSFRow row=sheet.createRow(rowId.shortValue());
-		//HSSFCell cell=this.getRegularCell(row);
-		//cell.setCellValue("xx");
-		//makeColSpan(grd.getTotalDepth());
-
 		this.createTrailCellsCase2();
 		
+		if (this.getParent() == null)
+			setColumnWidths();	
+	}
+	
+	/**
+	 * sets the column widths for all the columns; for the columns which do not have it set, makes an autosize
+	 */
+	protected void setColumnWidths()
+	{
+		int nrColumns = columnWidths.lastKey();
+		for(int i = 0; i <= nrColumns; i++)
+		{
+			try
+			{
+				if (columnWidths.containsKey(i))
+				{
+					sheet.setColumnWidth(i, Math.min(columnWidths.get(i), MAX_COLUMN_WIDTH * 256));
+				}
+				else
+				{
+					sheet.autoSizeColumn(i);
+					if (sheet.getColumnWidth(i) > MAX_COLUMN_WIDTH * 256)
+						sheet.setColumnWidth(i, MAX_COLUMN_WIDTH * 256);				
+				}
+			}
+			catch(Exception e)
+			{
+				logger.error(e);
+				// autoSizeColumn() or setColumnWidth() sometime fail
+			}
+		}		
 	}
 	
 	protected void invokeChildExporter( Viewable element) {
@@ -207,8 +238,8 @@ public class GroupReportDataXLS extends XLSExporter {
 		
 		HttpSession session 	=  request.getSession();
 		//for translation purposes
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+//		Site site = RequestUtils.getSite(request);
+//		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 						
 		GroupReportData rd = (GroupReportData) item;
 		AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
@@ -234,7 +265,7 @@ public class GroupReportDataXLS extends XLSExporter {
 			    }
 			}
 							
-			String translatedCurrency = TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrencyText());
+			String translatedCurrency = TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrencyName());
             translatedNotes = translatedNotes.replaceAll("\n", " ");
 			cell.setCellValue(translatedNotes+translatedCurrency/*+"\n"*/);
 			
@@ -254,7 +285,7 @@ public class GroupReportDataXLS extends XLSExporter {
 			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 			cs.setFont(font);		
 			cell.setCellStyle(cs);
-			
+			row.setHeightInPoints(30);
 			
 			this.makeColSpan(rd.getTotalDepth(),false);
 			

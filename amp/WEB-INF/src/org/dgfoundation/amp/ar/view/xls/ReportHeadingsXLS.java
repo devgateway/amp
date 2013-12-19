@@ -15,6 +15,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
@@ -28,6 +29,8 @@ import org.digijava.kernel.translator.TranslatorWorker;
  *
  */
 public class ReportHeadingsXLS extends XLSExporter {
+	
+	
 	private boolean machineFriendlyColName = false;
 	/**
 	 * @param parent
@@ -80,23 +83,18 @@ public class ReportHeadingsXLS extends XLSExporter {
 		colId.reset();			
 	}
 	
-	public static int getAverageLengthOfCells(Column col, int minLength)
+	/**
+	 * returns the maximum length of the contents of a column
+	 * @param col
+	 * @return
+	 */
+	protected int getMaxCellLength(CellColumn<?> col)
 	{
-		int medium = 0;
-		int count = 0;
-		for(Object o:col.getItems()) {
-			int length = o.toString().length();
-			if (length > minLength){ //we're only interested in cells that exceed our minimum cell length
-				medium += length;
-				count++;
-			}
-		}
-		//medium += element2.getName().length();
-		if (count > 0){
-			medium = medium/count;
-			medium += 5;	
-		}
-		return medium;
+		int max = 0;
+		for(Object obj:col.getItems())
+			if (obj != null)
+				max = Math.max(max, obj.toString().length());
+		return max;
 	}
 	
 	private void generate(ColumnReportData columnReport){
@@ -109,6 +107,8 @@ public class ReportHeadingsXLS extends XLSExporter {
 		// column headings:
 
 		rowId.inc();
+		
+//		java.util.Map<Integer, Integer> columnTitleLengths = new java.util.TreeMap<Integer, Integer>();
 		
 		columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
 		int maxColumnDepth = columnReport.getMaxColumnDepth();
@@ -131,26 +131,15 @@ public class ReportHeadingsXLS extends XLSExporter {
 					for(Column element2:columnsOnCurrentLine)
 					{
 						colId.set(colIdBaseValue + element2.getPositionInHeading().getStartColumn());
-						int medium = getAverageLengthOfCells(element2, 10);
+						//int medium = getAverageLengthOfCells(element2, 10);
 						
 						//if (!"-".equalsIgnoreCase(element2.getName(metadata.getHideActivities())))
 						{						
-							HSSFCell cell =  this.getCell(row,this.getHighlightedStyle());
+							HSSFCell cell =  this.getCell(row,this.getHighlightedStyle());							
 							HSSFCellStyle style = cell.getCellStyle();
 							style.setWrapText(true);
 							cell.setCellStyle(style);
 							String cellValue=element2.getName(metadata.getHideActivities());
-							//if (rowId.value == 8){
-							if (cellValue!=null && cellValue.length() > 0)
-							{
-								short val;
-								if ((short)(medium*256) < 2560)
-									val = 2560; //at least 10 chars
-								else
-									val = (short)(medium*256);
-								sheet.setColumnWidth((short)colId.value, val);
-
-							}
 							//this value should be translated
 							String translatedCellValue = getColumnDisplayName(cellValue);
 							//String prefix="aim:reportBuilder:";
@@ -159,8 +148,12 @@ public class ReportHeadingsXLS extends XLSExporter {
 							else 
 								cell.setCellValue(translatedCellValue);
 						
-							//int rowsp = element2.getPositionInHeading().getRowSpan();
 							makeColSpanAndRowSpan(element2.getPositionInHeading().getColSpan(), element2.getPositionInHeading().getRowSpan(), true);
+							
+							if (element2 instanceof CellColumn) // we are at the bottom of the columns hierarchy
+							{
+								calculateAndSetColumnWidth(colId.intValue(), (CellColumn) element2, translatedCellValue);
+							}
 						}
 
 					}		
@@ -169,6 +162,16 @@ public class ReportHeadingsXLS extends XLSExporter {
 			rowId.inc();
 		}
 		colId.reset();
+		sheet.getRow(rowId.intValue() - 1).setHeightInPoints(30); // when the function is ended, we are at the last-level row, which holds the column titles. Because column titles are usually longer than the contents they hosts ("Actual Disbursements" in a column which only has short numbers), we allocate 2 rows for it but lower the width by 33%
+	}
+	
+	protected void calculateAndSetColumnWidth(int sheetColumnNr, CellColumn<?> terminalColumn, String translatedColumnName)
+	{
+		double columnNameLength = 0.75 * translatedColumnName.length(); // we have a row-height of 2, so we can afford some slack
+		int contentLength = getMaxCellLength(terminalColumn);
+		
+		double usedColumnWidth = Math.max(columnNameLength, contentLength);
+		((GroupReportDataXLS) this.getParent()).columnWidths.put(sheetColumnNr, (int) (256 * usedColumnWidth)); 
 	}
 	
 	protected void createHierarchyHeaderCell (int curDepth) {
@@ -186,20 +189,21 @@ public class ReportHeadingsXLS extends XLSExporter {
 		}
 	}
 	
-	protected void createHeadingBorders (int curDepth) {
+	protected void createHeadingBorders (int curDepth)
+	{
 		ColumnReportData columnReport = (ColumnReportData) item;
-		if (curDepth == 0) {
+		if (curDepth == 0)
+		{
 			int maxRowSpan		= 1;
 			Boolean summaryReport		= this.getMetadata().getHideActivities();
 			if (  summaryReport == null  || !summaryReport )
 			{
-				Column tempCol			= (Column)columnReport.getItems().get(0);
+				Column tempCol			= (Column) columnReport.getItems().get(0);
 				maxRowSpan				= (tempCol.getPositionInHeading().getRowSpan()>maxRowSpan)?tempCol.getPositionInHeading().getRowSpan():maxRowSpan;
                 if (maxRowSpan>1) maxRowSpan -= 1;
 			}
 			else {
 				maxRowSpan = columnReport.getMaxColumnDepth() - 1;
-				//if ( maxRowSpan > 3 ) maxRowSpan = 3;                                    
 			}
 			makeRowSpan(maxRowSpan,true);
 			sheet.setColumnWidth((short)colId.value, (short)5120);

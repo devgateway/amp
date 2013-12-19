@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.contrib.HSSFRegionUtil;
+import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.Region;
 import org.dgfoundation.amp.ar.Exporter;
@@ -43,7 +44,7 @@ public abstract class XLSExporter extends Exporter {
 //        amountHierarchyOtherStyle=null;
 //	}
 	
-	private boolean autoSize = true;
+	//private boolean autoSize = true;
 	
 	
 	/********************************************************
@@ -283,35 +284,23 @@ public abstract class XLSExporter extends Exporter {
 	public void makeColSpanAndRowSpan(int colSpan, int rowSpan, Boolean border)
 	{
 	
-		Region r=new Region(rowId.intValue(), colId.shortValue(), rowId.intValue() + rowSpan - 1, (short) (colId.shortValue() + colSpan - 1));
-		try {
-			if (border){
-				HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-				HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-				HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-				HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_THIN,r,sheet,wb);
-			}else{
-				HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
-				HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
-				HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
-				HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_NONE,r,sheet,wb);
-			}
-		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-		try{
-			sheet.addMergedRegion(r);
-		} catch(Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-		
-		sheet.autoSizeColumn(r.getColumnFrom());
-	
-//        if (this.autoSize) {
-//            sheet.autoSizeColumn(r.getColumnFrom());
-//        }
+		if (colSpan == 1 && rowSpan == 1)
+			return;
+		CellRangeAddress r = new CellRangeAddress(rowId.intValue(), rowId.intValue() + rowSpan - 1, colId.intValue(), colId.intValue() + colSpan - 1);
+//		Region r=new Region(rowId.intValue(), colId.shortValue(), rowId.intValue() + rowSpan - 1, (short) (colId.shortValue() + colSpan - 1));
+		if (border){
+			HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
+			HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
+			HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
+			HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
+		}else{
+			HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_NONE, r, sheet, wb);
+			HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_NONE, r, sheet, wb);
+			HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_NONE, r, sheet, wb);
+			HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_NONE, r, sheet, wb);
+		}	
+		sheet.addMergedRegion(r);
+		sheet.autoSizeColumn(colId.intValue());
 		colId.inc(colSpan);
 	}	
 	
@@ -342,16 +331,16 @@ public abstract class XLSExporter extends Exporter {
 			logger.error(e);
 			e.printStackTrace();
 		}
-		try{
-			sheet.autoSizeColumn(r.getColumnFrom());
-		} catch(Exception e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
+//		try{
+//			sheet.autoSizeColumn(r.getColumnFrom());
+//		} catch(Exception e) {
+//			logger.error(e);
+//			e.printStackTrace();
+//		}
 	
-        if (this.autoSize) {
-            sheet.autoSizeColumn(r.getColumnFrom());
-        }
+//        if (this.autoSize) {
+//            sheet.autoSizeColumn(r.getColumnFrom());
+//        }
 		colId.inc(++size);
 	}
 
@@ -507,10 +496,21 @@ public abstract class XLSExporter extends Exporter {
 	public void setWb(HSSFWorkbook wb) {
 		this.wb = wb;
 	}
-    public boolean isAutoSize() {
-        return autoSize;
-}
-public void setAutoSize(boolean autoSize) {
-        this.autoSize = autoSize;
-}
+	
+	public boolean isAutoSize()
+	{
+		return false;
+	}
+	
+	public void setAutoSize(boolean autoSize)
+	{
+		// do nothing
+	}
+	
+//    public boolean isAutoSize() {
+//        return autoSize;
+//}
+//public void setAutoSize(boolean autoSize) {
+//        this.autoSize = autoSize;
+//}
 }

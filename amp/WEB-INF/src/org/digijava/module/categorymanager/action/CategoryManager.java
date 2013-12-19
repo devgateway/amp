@@ -407,6 +407,11 @@ public class CategoryManager extends Action {
 					dbCategory.getPossibleValues().add(i, newVal);
 				}
 			}
+
+            Hibernate.initialize(dbCategory.getUsedByCategories());
+            Hibernate.initialize(dbCategory.getUsedCategories());
+
+
 			/**
 			 * Save modifications to existing values only if we are in advanced mode
 			 */

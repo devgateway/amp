@@ -15,5 +15,11 @@ public interface ColumnValueCalculator {
 	 * @param resultSet  <b>NEVER EVER do anything except getLong() / getString() on the resultSet!</b>
 	 * @return
 	 */
-	public String calculateValue(ResultSet resultSet) throws SQLException;
+	public String calculateValue(ResultSet resultSet, java.sql.ResultSet rawCurrentLine) throws SQLException;
+	
+	/**
+	 * please see {@link PropertyDescription#getDeleteOriginal()} for contract - that call is straightforwarded here through the intermediary layers
+	 * @return
+	 */
+	public boolean getDeleteOriginal();
 }

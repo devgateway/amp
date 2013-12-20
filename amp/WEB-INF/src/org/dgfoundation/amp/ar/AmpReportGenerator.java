@@ -38,6 +38,7 @@ import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.filtercacher.FastFilterCacher;
 import org.dgfoundation.amp.ar.filtercacher.NopFilterCacher;
+import org.dgfoundation.amp.ar.viewfetcher.GeneratedPropertyDescription;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -158,26 +159,14 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * retrieved.
 	 * 
 	 */
-	protected void retrieveData() {
+	protected void retrieveData()
+	{
+		GeneratedPropertyDescription._generatedPropertyCached = GeneratedPropertyDescription._generatedPropertyCalls = 0;
+		
 		// divide the column set into those that can be extracted
 		// (extractorView!=null) and those that are to be generated
 
 		Set<String> extractableNames = new TreeSet<String>();
-
-//		try
-//		{
-//			long aaaa = System.currentTimeMillis();
-//			Session session = PersistenceManager.getRequestDBSession();
-//			List<AmpOrgGroup> allTypes = session.createQuery("select ot from " + AmpOrgGroup.class.getName() + " ot").list();
-//			for(AmpOrgGroup s:allTypes)
-//				System.out.println("\torgType: " + s.getOrgGrpName());
-//			long time = System.currentTimeMillis() - aaaa;
-//			System.out.format("fetching all orgTypes took " + time + " ms\n");
-//		}
-//		catch(DgException dge)
-//		{
-//			dge.printStackTrace();
-//		}
 		
 		extractable = new ArrayList<AmpReportColumn>();
 		List<AmpReportColumn> generated = new ArrayList<AmpReportColumn>();
@@ -243,6 +232,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			rawColumns.getItems().remove(rawColumns.getColumn(ArConstants.COSTING_GRAND_TOTAL));
 		}
 		
+		logger.info(String.format("generatedProperty calls: %d, out of which cached %d (%.2f percent)", GeneratedPropertyDescription._generatedPropertyCalls, GeneratedPropertyDescription._generatedPropertyCached, GeneratedPropertyDescription._generatedPropertyCached * 100.0 / (0.0001 + GeneratedPropertyDescription._generatedPropertyCalls)));
 	}
 	
 	/**

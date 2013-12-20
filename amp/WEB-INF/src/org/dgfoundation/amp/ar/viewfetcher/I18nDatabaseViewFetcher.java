@@ -67,6 +67,12 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 		for(int colNr:this.colNumberToColName.keySet())
 		{
 			I18nViewColumnDescription colDesc = viewDesc.getColumnDescription(colNumberToColName.get(colNr));
+			
+			// create cacher for the property. NOTICE: Calculated properties use them at their own discretion(s)
+			PropertyDescription propDescr = colDesc.prop;			
+			if (!cachers.containsKey(propDescr))
+				cachers.put(propDescr, new ColumnValuesCacher(propDescr));
+
 			if (!colDesc.isCalculated())
 			{
 				usedIds.put(colNr, new HashSet<Long>());
@@ -94,8 +100,6 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 			{
 				String columnName = this.colNumberToColName.get(colNr);
 				PropertyDescription propDescr = viewDesc.getColumnDescription(columnName).prop;
-				if (!cachers.containsKey(propDescr))
-					cachers.put(propDescr, new ColumnValuesCacher(propDescr));
 
 				Set<Long> existingIdsSet = usedIds.get(colNr);
 				Set<Long> alreadyExistingTranslations = cachers.get(propDescr).values.keySet();
@@ -137,13 +141,18 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 		{
 			number ++;
 			I18nViewColumnDescription colDesc = viewDesc.getColumnDescription(columnName);
-			if (colDesc == null)
-				columnStrings.add(columnName); // this is a raw column, it will be fetched via SELECT
+			if (colDesc == null || !colDesc.getDeleteOriginal())
+			{
+				// either a raw column OR one which needs the original fetched, it will be fetched via SELECT
+				columnStrings.add(columnName);
+			}
 			else
 			{
-				// this is a translated column - do not fetch it from the DB as it would be useless - save time, memory and bandwidth
+				// do not fetch it from the DB as it would be useless - save time, memory and bandwidth
 				columnStrings.add(String.format("'' as %s", columnName)); // instead, replace with a constant so as not to displace the column numbering
-			
+			}
+			if (colDesc != null)
+			{
 				colNameToColNumber.put(columnName, number);
 				colNumberToColName.put(number, columnName);
 			}
@@ -206,7 +215,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 			I18nViewColumnDescription colDesc = viewDesc.getColumnDescription(columnLabel);
 			if (colDesc.isCalculated())
 			{
-				return colDesc.prop.getValueFor(this);
+				return colDesc.prop.getValueFor(this, this.getDelegate(), cachers.get(colDesc.prop));
 			}
 			
 			Long idToTranslate = super.getDelegate().getLong(colDesc.indexColumnName);
@@ -221,10 +230,13 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 			return cachers.get(colDesc.prop).values.get(idToTranslate);
 		}
 		
+		/**
+		 * coordinate changes here with {@link DatabaseViewFetcher#isInternationalized(String, ResultSet)}
+		 */
 		@Override
 		public String toString()
 		{
-			return "Translating ResultSet delegating to " + super.toString();
+			return "Translating i18n ResultSet delegating to " + super.toString();
 		}
 		
 	}

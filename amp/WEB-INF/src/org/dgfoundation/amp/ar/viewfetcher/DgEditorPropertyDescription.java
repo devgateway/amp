@@ -148,7 +148,13 @@ public class DgEditorPropertyDescription implements PropertyDescription
 	}
 	
 	@Override
-	public String getValueFor(java.sql.ResultSet currentLine) // will only be called for cacheable
+	public boolean getDeleteOriginal()
+	{
+		return true;
+	}
+	
+	@Override
+	public String getValueFor(java.sql.ResultSet currentLine, java.sql.ResultSet rawCurrentLine, ColumnValuesCacher cacher) // will only be called for cacheable
 	{
 		throw new UnsupportedOperationException("cacheable properties do not get values one-by-one");
 	}

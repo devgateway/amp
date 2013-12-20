@@ -24,41 +24,34 @@ import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.engine.TypedValue;
 
 public class SQLUtils {
-//	/**
-//	 * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
-//	 * @param connection
-//	 * @param tableName
-//	 * @return
-//	 */
-//	private static LinkedHashSet<String> getTableColumns(Connection connection, String tableName)
-//	{
-//		String query = String.format("SELECT c.column_name FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
-//		return new LinkedHashSet<String>(SQLUtils.<String>fetchAsList(connection, query, 1));		
-//	}
-	
-//	private static boolean tableExists(Connection connection, String tableName)
-//	{
-//		return !getTableColumns(connection, tableName).isEmpty();
-//	}
 	
 	/**
-	 * uses the current HibSession's JDBC connection
-	 * @param tableName
+	 * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
+	 * @param tableName - the table / view whose columns to fetch
+	 * @param crashOnDuplicates - whether to throw exception in case the table/view has duplicate names
 	 * @return
 	 */
-	public static LinkedHashSet<String> getTableColumns(final String tableName)
+	public static LinkedHashSet<String> getTableColumns(final String tableName, boolean crashOnDuplicates)
 	{
 		LinkedHashSet<String> res = new LinkedHashSet<String>();
 		String query = String.format("SELECT c.column_name FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
 		for(Object obj: fetchAsList(org.digijava.kernel.persistence.PersistenceManager.getSession().connection(), query, 1))
 		{
+			if (crashOnDuplicates && res.contains((String) obj))
+				throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
 			res.add((String) obj);
 		}
 		return res;
-//		List<Object> colNames = org.digijava.kernel.persistence.PersistenceManager.getSession().createSQLQuery(query).list();
-//		for(Object colName:colNames)
-//			res.add(PersistenceManager.getString(colName));
-//		return res;
+	}
+	
+	/**
+	 * equivalent to calling {@link #getTableColumns(String, false)}
+	 * @param tableName
+	 * @return
+	 */
+	public static LinkedHashSet<String> getTableColumns(final String tableName)
+	{
+		return getTableColumns(tableName, false);
 	}
 	
 	public static boolean tableExists(String tableName)

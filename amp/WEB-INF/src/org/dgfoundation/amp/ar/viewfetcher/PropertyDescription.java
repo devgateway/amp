@@ -32,11 +32,17 @@ public interface PropertyDescription
 	 * @return
 	 * @throws SQLException
 	 */
-	public String getValueFor(java.sql.ResultSet currentLine) throws SQLException;
+	public String getValueFor(java.sql.ResultSet currentLine, java.sql.ResultSet rawCurrentLine, ColumnValuesCacher cacher) throws SQLException;
 	
 	/**
 	 * nice, human readable, description, for debugging
 	 * @return
 	 */
 	public String getNiceDescription();
+	
+	/**
+	 * should the SQL query rewriter delete the original column value (<'' AS columnName>) for bandwidth saving purposes?)
+	 * @return
+	 */
+	public boolean getDeleteOriginal();
 }

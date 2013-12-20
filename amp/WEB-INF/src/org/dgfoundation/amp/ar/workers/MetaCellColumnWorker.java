@@ -8,6 +8,7 @@ import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 
 public abstract class MetaCellColumnWorker extends ColumnWorker {
@@ -43,6 +44,11 @@ public abstract class MetaCellColumnWorker extends ColumnWorker {
 	
 	protected void addMetaIfExists(ResultSet rs, CategAmountCell acc, String columnName, String metaKeyName, String defaultValue, boolean retrieveDirectly) throws SQLException
 	{
+		addMetaIfExists(rs, acc, columnName, metaKeyName, defaultValue, retrieveDirectly, false);
+	}
+	
+	protected void addMetaIfExists(ResultSet rs, CategAmountCell acc, String columnName, String metaKeyName, String defaultValue, boolean retrieveDirectly, boolean translate) throws SQLException
+	{
 		if (columnsMetaData.containsKey(columnName)) {
 			
 			String fundingStatus = retrieveDirectly ? rs.getString(columnsMetaData.get(columnName) ) :
@@ -50,6 +56,9 @@ public abstract class MetaCellColumnWorker extends ColumnWorker {
 			
 			if (fundingStatus == null && defaultValue != null)
 				fundingStatus = defaultValue;
+			
+			if (fundingStatus != null && translate)
+				fundingStatus = TranslatorWorker.translateText(fundingStatus);
 			
 			if (fundingStatus != null) {
 				MetaInfo termsAssistMeta = this.getCachedMetaInfo(metaKeyName, fundingStatus);

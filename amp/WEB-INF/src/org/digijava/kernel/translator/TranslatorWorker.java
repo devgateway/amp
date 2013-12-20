@@ -233,7 +233,7 @@ public class TranslatorWorker {
     public static String translateText(String text, String keyWords, String locale, Long siteId) throws WorkerException
     {
     	if (text == null)
-    		text = "";
+    		return "";
     	
     	TranslatorWorker worker = getInstance("");
     	

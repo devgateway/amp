@@ -19,7 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_institutions AS SELECT acc.amp_activity_id, acv.category_value AS name FROM amp_activities_categoryvalues acc, amp_category_value acv, amp_category_class ac WHERE (((acv.id = acc.amp_categoryvalue_id) AND (ac.id = acv.amp_category_class_id)) AND ((ac.keyname)::text = 'institutions'::text));;;
+				DROP VIEW IF EXISTS v_institutions;
+				CREATE OR REPLACE VIEW v_institutions AS 
+					SELECT acc.amp_activity_id, acv.category_value AS name, acv.id AS id
+				FROM amp_activities_categoryvalues acc, amp_category_value acv, amp_category_class ac 
+				WHERE (((acv.id = acc.amp_categoryvalue_id) AND (ac.id = acv.amp_category_class_id)) AND ((ac.keyname)::text = 'institutions'::text));;;
         		</lang>
 		</script>
 	</apply>

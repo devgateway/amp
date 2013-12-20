@@ -92,7 +92,7 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 			// else fall through: the user specified "*", e.g. he wants all columns
 		}
 		
-		LinkedHashSet<String> ret = SQLUtils.getTableColumns(viewName);
+		LinkedHashSet<String> ret = SQLUtils.getTableColumns(viewName, true);
 		if ( ret.isEmpty() ) {
 			throw new RuntimeException("Table/view is empty:" + viewName);
 		}
@@ -132,6 +132,17 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 		}
 		logger.info("for view " + viewDesc.viewName + ", selected i18nFetcher");
 		return new I18nDatabaseViewFetcher(viewName, condition, locale, cachers, connection, columnNames);
+	}
+	
+	/**
+	 * coordinate any changes in this function with changes to {@link #getFetcherForView(String, String, String, java.util.Map, Connection, String...)} and {@link I18nDatabaseViewFetcher.TranslatingResultSet#toString()}
+	 * @param viewName
+	 * @param rs
+	 * @return
+	 */
+	public static boolean isInternationalized(String viewName, ResultSet rs)
+	{
+		return InternationalizedViewsRepository.i18Models.get(viewName) != null && (rs.toString().contains("i18n"));
 	}
 }
 

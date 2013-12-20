@@ -674,16 +674,7 @@ public class GroupColumn extends Column<Column> {
         }
         return dest;
     }
-
-    
-//    public List getHorizColumnList() {
-//    	ArrayList ret=new ArrayList();
-//    	for(int i=0;i<getColumnSpan();i++) {
-//    		ret.add(getSubColumns(i));
-//    	}
-//    	return ret;
-//    }
-    
+       
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#getSubColumn(int)
 	 */

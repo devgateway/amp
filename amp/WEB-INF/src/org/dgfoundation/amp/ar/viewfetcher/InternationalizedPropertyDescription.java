@@ -136,9 +136,15 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 	}
 	
 	@Override
-	public String getValueFor(java.sql.ResultSet currentLine) // will only be called for cacheable
+	public boolean getDeleteOriginal()
 	{
-		throw new UnsupportedOperationException("cacheable properties do not get values one-by-one");
+		return true;
+	}
+	
+	@Override
+	public String getValueFor(java.sql.ResultSet currentLine, java.sql.ResultSet rawCurrentLine, ColumnValuesCacher cacher) // will only be called for cacheable
+	{
+		throw new UnsupportedOperationException("non-calculated properties do not get values one-by-one");
 	}
 	
 	@Override

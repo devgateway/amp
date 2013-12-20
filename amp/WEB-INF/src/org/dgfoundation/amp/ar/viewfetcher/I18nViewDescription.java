@@ -12,17 +12,31 @@ import org.dgfoundation.amp.Util;
 public class I18nViewDescription {
 	
 	public final String viewName;
+	public final Set<String> viewColumns;
+	
 	protected final Map<String, I18nViewColumnDescription> columns = new HashMap<String, I18nViewColumnDescription>();
 	
 	public I18nViewDescription(String viewName)
 	{
 		this.viewName = viewName;
+		this.viewColumns = Collections.<String>unmodifiableSet(SQLUtils.getTableColumns(viewName));
 	}
 	
 	public I18nViewDescription addColumnDef(I18nViewColumnDescription column)
 	{
 		this.columns.put(column.columnName, column);
 		return this;
+	}
+	
+	public I18nViewDescription addTrnColDef(String columnName, String idColumnName)
+	{
+		if (!viewColumns.contains(columnName))
+			throw new RuntimeException(String.format("cannot add trn-backed translated column <%s> to view <%s>: column does not exist!", columnName, viewName));
+		
+		if ((idColumnName != null) && (!viewColumns.contains(idColumnName)))
+			throw new RuntimeException(String.format("cannot add trn-backed translated column <%s> indexed by <%s> to view <%s>: index column does not exist!", columnName, idColumnName, viewName));
+		
+		return addColumnDef(new I18nViewColumnDescription(columnName, viewName, idColumnName, new ColumnValueTranslator(columnName)));
 	}
 	
 	/**

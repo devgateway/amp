@@ -72,8 +72,14 @@ public class GeneratedPropertyDescription implements PropertyDescription
 		_generatedPropertyCalls ++;
 		
 		Long idValue = idColumn == null ? null : PersistenceManager.getLong(rawCurrentLine.getObject(idColumn));
-		if (idValue != null && (idValue.longValue() <= 0))
+		if (idValue != null && (idValue.longValue() < 0))
 			idValue = null;
+		
+		if (idValue == null && (idColumn != null))
+		{
+			_generatedPropertyCached ++;
+			return null;
+		}
 		boolean shouldTranslate = idValue == null || (!cacher.values.containsKey(idValue)); 
 		String translatedValue;
 		if (shouldTranslate)

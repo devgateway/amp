@@ -331,12 +331,12 @@ public class MultilingualTests extends TestCase
 	public void testAmpActivityMappedCorrectly() throws Exception
 	{
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
-		String ruVer = ReportTestingUtils.getActivityName(2L);
-		String ruVerView = ReportTestingUtils.getActivityName_notVersion(2L);
+		String ruVer = ReportTestingUtils.getActivityName(24L);
+		String ruVerView = ReportTestingUtils.getActivityName_notVersion(24L);
 		
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
-		String enVer = ReportTestingUtils.getActivityName(2L);
-		String enVerView = ReportTestingUtils.getActivityName_notVersion(2L);
+		String enVer = ReportTestingUtils.getActivityName(24L);
+		String enVerView = ReportTestingUtils.getActivityName_notVersion(24L);
 		
 		assertEquals("AMP-16257", "Вода Eth", ruVer);
 		assertEquals("AMP-16257", "Eth Water", enVer);

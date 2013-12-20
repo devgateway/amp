@@ -20,7 +20,8 @@ import junit.framework.TestSuite;
  * @author Dolghier Constantin
  *
  */
-public class AllTests_amp27 {
+public class AllTests_amp27
+{
 
 	public static Test suite() {
 		
@@ -33,6 +34,7 @@ public class AllTests_amp27 {
 
 		suite.addTest(DirectedDisbursementsTests_amp27.suite());
 		suite.addTest(MultilingualTests.suite());
+		suite.addTest(MultilingualThroughTrnTests.suite());
 		//$JUnit-END$
 		return suite;
 	}

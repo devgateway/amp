@@ -117,8 +117,17 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		};
 		uniqueCollectionValidationField.setIndicatorAppender(iValidator);
 		add(uniqueCollectionValidationField);
-
-        final AmpTreeCollectionValidatorField<AmpActivityProgram> treeCollectionValidatorField = new AmpTreeCollectionValidatorField<AmpActivityProgram>("treeValidator", listModel, "Tree Validator") {
+		final AmpMaxSizeCollectionValidationField <AmpActivityProgram> maxSizeCollectionValidationField = 
+				new  AmpMaxSizeCollectionValidationField<AmpActivityProgram>("maxSizeProgramValidator",listModel, "maxSizeProgramValidator");
+		maxSizeCollectionValidationField.setVisibilityAllowed(!programSettings.getObject().isAllowMultiple());
+		maxSizeCollectionValidationField.setOutputMarkupPlaceholderTag(true);
+       
+		maxSizeCollectionValidationField.setIndicatorAppender(iValidator);
+		add(maxSizeCollectionValidationField);
+		
+		
+		
+		final AmpTreeCollectionValidatorField<AmpActivityProgram> treeCollectionValidatorField = new AmpTreeCollectionValidatorField<AmpActivityProgram>("treeValidator", listModel, "Tree Validator") {
             @Override
             public AmpAutoCompleteDisplayable getItem(AmpActivityProgram t) {
                 return t.getProgram();
@@ -152,6 +161,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 						uniqueCollectionValidationField.reloadValidationField(target);
 						minSizeCollectionValidationField.reloadValidationField(target);
                         treeCollectionValidatorField.reloadValidationField(target);
+                        maxSizeCollectionValidationField.reloadValidationField(target);
 					}
 				};
 				item.add(delProgram);
@@ -215,6 +225,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				aap.setProgramSetting(programSettings.getObject());
 				
 				if (!aap.getProgramSetting().isAllowMultiple() && list.size()>0) {
+					maxSizeCollectionValidationField.reloadValidationField(target);
 					return;
 				}
 				if(list.size()>0)
@@ -232,6 +243,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				uniqueCollectionValidationField.reloadValidationField(target);
 				minSizeCollectionValidationField.reloadValidationField(target);
                 treeCollectionValidatorField.reloadValidationField(target);
+                
 			}
 
 			@Override

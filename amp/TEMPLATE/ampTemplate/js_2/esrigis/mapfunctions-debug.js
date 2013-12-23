@@ -1382,14 +1382,18 @@ function CluterStructures(){
 		+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
 		+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
 		+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>";
-
+	//if showImage is true we show the link of show image
+	var showImageStr="";
+	var showImageDiv="";
+	if(showImage==true){
+		showImageStr="<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Show Image</a>";
+		showImageDiv="<div id='strImage'>${Structure Image}</div>";
+	}
 	var tabTemplate = "<div id='infotabs'>"
-		
 		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>Show Info</a>"
-		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Show Image</a>"
-		
+		+ showImageStr 
 		+ "<div id='strInfo'>"+ infoTemplate +"</div>"
-		+ "<div id='strImage'>${Structure Image}</div>"
+		+ showImageDiv
 		+ "</div>";
 		
 	//debugger;

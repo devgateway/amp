@@ -44,7 +44,16 @@
       var djConfig = {
         parseOnLoad: true
       };
-    </script>
+      //for show image
+var showImage=false;
+  
+ </script>
+	<field:display  name="Show image" feature="Map Options">
+		<script type="text/javascript">
+ 			 showImage=true;
+ 		</script>   
+	</field:display>
+	 
     <!-- Map Scripts -->
     <script type="text/javascript"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
     <script type="text/javascript" src="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/?v=3.0"></script>

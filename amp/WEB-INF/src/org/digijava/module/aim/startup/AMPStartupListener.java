@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.jackrabbit.util.TransientFileFactory;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -285,6 +286,9 @@ public class AMPStartupListener extends HttpServlet implements
 				String s = InternationalizedViewsRepository.i18Models.get(viewName).toString();
 				//logger.info("loaded " + s);
 			}
+			
+			logger.info("loading the column ancestorship relationships and checking for consistency with the database...");
+			logger.info("loaded relationships for " + ARDimension.columnAncestors.size() + " columns"); // DO NOT DELETE THIS LINE! it has the sideeffect of checking database for consistency (else it will crash anyway at the first run report)
 			
 			java.util.List<?> shouldBe1 = PersistenceManager.getSession().createSQLQuery("SELECT update_location_level_caches_internal() FROM (select 1) AS dual").list(); // force recreation of the location cached at each AMP startup
 			if (shouldBe1.size() != 1)

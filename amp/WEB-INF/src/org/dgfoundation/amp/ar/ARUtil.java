@@ -699,29 +699,5 @@ public final class ARUtil {
 			return grd;
 		}
 	}
-	
-	
-	public static String getNameFromReportData(ReportData rd) {
 		
-		String name		= rd.getRepName() ;
-		
-		if ( rd.getSplitterCell() != null && rd.getSplitterCell().getColumn() != null 
-				&& rd.getSplitterCell().getColumn().getWorker() != null ) {
-			MappingEncoder enc		= rd.getSplitterCell().getColumn().getWorker().getEncoder();
-			if ( enc != null) { 
-				if ( enc.overwritesEverythingWithDefaultString() )
-					return enc.overwriterString();
-				else if	(name.toLowerCase().contains(ArConstants.UNALLOCATED.toLowerCase()) )
-					return enc.encode(name);
-				
-			}
-		}
-		
-		if( name.length() <40){ 
-			return name;
-		} 
-		else{
-			return name.substring(0,39);
-		}
-	}
 }

@@ -32,6 +32,7 @@ public class AllTests_amp27
 		TestSuite suite = new TestSuite(AllTests_amp27.class.getName());
 		//$JUnit-BEGIN$
 
+		suite.addTest(HierarchyTests27.suite());
 		suite.addTest(DirectedDisbursementsTests_amp27.suite());
 		suite.addTest(MultilingualTests.suite());
 		suite.addTest(MultilingualThroughTrnTests.suite());

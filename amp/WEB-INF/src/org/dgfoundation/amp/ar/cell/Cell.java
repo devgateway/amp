@@ -12,12 +12,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnIdentifiable;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.RowIdentifiable;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 
 /**
@@ -296,7 +299,22 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 		 return "nowrap=\"nowrap\"";
 	}
 	
-
+	/**
+	 * returns true IFF this cell "isunallocated"
+	 * <b>WARNING</b> implemented as an incredibly ugly hack (this is just old code moved around) - it can get ruined by a location or sector named "Unallocated" (or its translation thereof in the currently-used language).
+	 * TODO: fix as soon as some free time is found by redoing ColumnReportData#horizSplitByCateg 
+	 * @return
+	 */
+	public boolean isUnallocatedCell()
+	{
+		String text = TranslatorWorker.translateText(ArConstants.UNALLOCATED);
+	   	String translatedTextUnallocated = text;
+    	if (translatedTextUnallocated.compareTo("") == 0)
+    		translatedTextUnallocated = text;
+	    
+    	return getValue().toString().contains(translatedTextUnallocated) && (this.getId() == null || this.getId() < 1);
+	}
+	
 
 	/**
 	 * @return Returns the show.

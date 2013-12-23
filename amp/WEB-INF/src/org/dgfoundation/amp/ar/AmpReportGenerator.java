@@ -379,11 +379,8 @@ public class AmpReportGenerator extends ReportGenerator {
 							.forName(relatedContentPersisterClass));
 					// instantiate a relatedContentPersister bean to get the
 					// ARDimension and store it for later use
-					Constructor contentPersisterCons = ARUtil
-							.getConstrByParamNo(column
-									.getRelatedContentPersisterClass(), 0);
-					ARDimensionable cp = (ARDimensionable) contentPersisterCons
-							.newInstance();
+					Constructor contentPersisterCons = ARUtil.getConstrByParamNo(column.getRelatedContentPersisterClass(), 0);
+					ARDimensionable cp = (ARDimensionable) contentPersisterCons.newInstance();
 					column.setDimensionClass(cp.getDimensionClass());
 				}
 				//logger.info("Adding column " + column.getName());
@@ -1437,30 +1434,33 @@ public class AmpReportGenerator extends ReportGenerator {
 		attachFundingMeta();
 	}
 	
-	public static TextCell generateFakeCell (ColumnReportData rd, Long activityId, Column column) {
+	/**
+	 * generates a TextCell with the title "column.getName() Unallocated" (translated)
+	 * @param rd
+	 * @param activityId
+	 * @param column
+	 * @return
+	 */
+	public static TextCell generateFakeCell (ColumnReportData rd, Long activityId, Column column)
+	{
 		TextCell fakeC = new TextCell();
 		fakeC.setValue(ArConstants.UNALLOCATED);
 		fakeC.setOwnerId( activityId );
 		
-		// requirements for translation purposes
-		Long siteId = rd.getParent().getReportMetadata().getSiteId();
-		String locale = rd.getParent().getReportMetadata().getLocale();
 		String text = fakeC.getValue().toString();
-		String translatedText = null;
-		String translatedText2 = null;
-		//String prefix = "aim:reportGenerator:"; not used cos hash keys
-		try {
-			translatedText = TranslatorWorker.translateText(text, locale, siteId);
-			translatedText2 = TranslatorWorker.translateText(column.getName(), locale, siteId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+		String translatedText = TranslatorWorker.translateText(text);
+		String translatedText2 = TranslatorWorker.translateText(column.getName());
 		fakeC.setValue(translatedText2 + " " + translatedText);
 		return fakeC;
 	}
 	
-	public static MetaTextCell generateFakeMetaTextCell(TextCell cell, Double percentage) {
+	/**
+	 * generates a MetaTextCell which is a copy of the source TextCell, but without a PERCENTAGE metainfo added to it
+	 * @param cell
+	 * @param percentage
+	 * @return
+	 */
+	public static MetaTextCell generateMetaTextCell(TextCell cell, Double percentage) {
 		MetaTextCell fakeC				= new MetaTextCell(cell);
 		MetaInfoSet metaSet	= new MetaInfoSet();
 		metaSet.add( new MetaInfo<Double>(ArConstants.PERCENTAGE, percentage) );

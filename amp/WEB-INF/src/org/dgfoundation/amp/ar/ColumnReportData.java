@@ -183,7 +183,7 @@ public class ColumnReportData extends ReportData<Column> {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * @see org.dgfoundation.amp.ar.ReportData#horizSplitByCateg(java.lang.String)
 	 */
@@ -239,38 +239,57 @@ public class ColumnReportData extends ReportData<Column> {
 		dest.setSplitterCell(this.getSplitterCell());
 
 		// create set with unique values for the filtered col:
-		Column keyCol = getColumn(columnName);
+		Column rawKeyCol = getColumn(columnName);
 		
-		Cell fakeCell = AmpReportGenerator.generateFakeCell(this, null, keyCol);
+		TextCell fakeCell = AmpReportGenerator.generateFakeCell(this, null, rawKeyCol);
 
 		removeColumnsByName(columnName);
 
-		if (keyCol instanceof GroupColumn)
+		if (rawKeyCol instanceof GroupColumn)
 			throw new IncompatibleColumnException(
 					"GroupColumnS cannot be used as filter keys!");
-		if (keyCol == null)
+		if (rawKeyCol == null)
 			throw new UnidentifiedItemException(
 					"Cannot find a Column with Id " + columnName
 							+ " in this ReportData");
 		
+		CellColumn<Cell> keyCol = (CellColumn) rawKeyCol;
 		//SortedSet<Cell> cats = getCategories(keyCol);
 		TreeSet<Cell> cats = new TreeSet<Cell>();
-		Iterator i = keyCol.iterator();
-		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
+		//Iterator i = keyCol.iterator();
+		for(Cell element:keyCol.getItems())
+		{
 			if(!element.isShow()) continue;
 			cats.add(element);
 		}
+		
+		HashSet<Cell> allSplitterCells = new HashSet<Cell>();
+		this.appendAllSplitterCells(allSplitterCells);		
+		
+		/**
+		 * compute whether we are allowed to create "UNALLOCATED" subreports here - it is disallowed to create one when both of the following apply: <br />
+		 *  1) a higher-up hierarchy exists which is of a "supercolumn" type (e.g. Region is a supertype of District) <br />
+		 *  2) the said hierarchy's cell, now, is concrete (e.g. NOT unallocated) <br />
+		 *  (PLEASE SEE AMP-16695)
+		 */
+		boolean createUnallocatedSubreport = true;
+		for(Cell splitterCell:allSplitterCells)
+		{	
+			// if any of the "ancestor" hierarchies if a 'father' of this column, then only allow creating unallocated entries here in the respective parent is "unallocated"
+			if (ARDimension.isAncestor(splitterCell.getColumn(), keyCol) && !splitterCell.isUnallocatedCell())
+				createUnallocatedSubreport = false;				
+		}
+		
 		// TODO-Constantin: O(N^2) iteration in [categories x keys]
 		// we iterate each category from the set and search for matching rows
-		for (Cell cat:cats) {
-			if ( cat.compareTo(fakeCell) == 0 ) {
-				existsUnallocatedCateg = true;
-			}
-			
+		for (Cell cat:cats)
+		{
+			existsUnallocatedCateg |= (cat.compareTo(fakeCell) == 0);
+							
 			//we check the dimension of this cell. if this cell and the current report
 			
-			if(!ARDimension.isLinkedWith(this, cat)) continue;
+			if(!ARDimension.isLinkedWith(allSplitterCells, cat))
+				continue;
 			
 			//logger.info("Splitting by category: "+cat);
 			ColumnReportData crd = new ColumnReportData((String) cat.getColumnId() + ": " + cat.toString());
@@ -279,15 +298,15 @@ public class ColumnReportData extends ReportData<Column> {
 			dest.addReport(crd);
 
 			int locationLevel		= ArConstants.LOCATION_COLUMNS.indexOf(cat.getColumn().getName().trim() );
-			
-			
+						
 			// construct the Set of ids that match the filter:
 			Set<Long> ids = new TreeSet<Long>();
 			// TODO: we do not allow GroupColumnS for keyColumns
-			Iterator ii = keyCol.iterator();
-			while (ii.hasNext()) {
-				Cell element = (Cell) ii.next();
-				if (element.compareTo(cat) == 0){
+			//Iterator ii = keyCol.iterator();
+			for(Cell element:keyCol.getItems())
+			{
+				if (element.compareTo(cat) == 0)
+				{
 					Long id		= element.getOwnerId();
 					ids.add( id );
 
@@ -301,13 +320,14 @@ public class ColumnReportData extends ReportData<Column> {
 					AmpARFilter filterObj	= cat.getColumn().getWorker().getGenerator().getFilter();
 					if ( locationLevel >= 0 &&  
 							filterObj.getLocationSelected() == null &&  
-							element instanceof MetaTextCell && !summedValuesPerActivity.contains(element.getValue()) ) {
+							element instanceof MetaTextCell && !summedValuesPerActivity.contains(element.getValue()) )
+					{
 						try {
 							summedValuesPerActivity.add(element.getValue() );
 							
 							Double percentage 		= ARUtil.retrievePercentageFromCell( (MetaTextCell)element );
 							Double tempPerc			= percentagesMap.get(id);
-							percentagesMap.put(id, (tempPerc!=null?tempPerc:0.0) + percentage );
+							percentagesMap.put(id, (tempPerc != null ? tempPerc : 0.0) + percentage );
 						} catch (Exception e) {
 							// ROTTEN: swallowing exceptions thrown up by ARUtil.retrievePercentageFromCell on 0.0% cells masked as non-procented ones. See AmountCell::getAmount() for more comments of ways in which this is broken. AMP-13848
 							//logger.error(e);
@@ -322,13 +342,6 @@ public class ColumnReportData extends ReportData<Column> {
 			}
 			
 			catToIds.put(crd, ids);
-			// now we get each column and get the dest column by applying the
-			// filter
-			/*ii = this.getItems().iterator();
-			while (ii.hasNext()) {
-				Column col = (Column) ii.next();
-				crd.addColumn(col.filterCopy(cat, ids));
-			}*/
 		}
 		
 		/* Adding fake MetaTextCells for the percentages that don't add up to 100% */
@@ -337,18 +350,12 @@ public class ColumnReportData extends ReportData<Column> {
 			while ( iter.hasNext() ) {
 				Entry<Long, Double> e		= iter.next();
 				Double parentPercentage		= 100.0;
-//				if ( this.getSplitterCell() != null ) { // percentages are applied by multiplication further down the line , so no need to subtract - just multiple by remaining
-//					try {
-//						parentPercentage	= ARUtil.retrieveParentPercetage(e.getKey(), this.getSplitterCell() );
-//					} catch (Exception e1) {
-//						logger.warn (e1.getMessage() );
-//					}
-//				}
-				if ( e.getValue() < 100.0 ) {
-					fakeCell		= AmpReportGenerator.generateFakeCell(this, e.getKey(), keyCol);
-					fakeCell		= AmpReportGenerator.generateFakeMetaTextCell((TextCell)fakeCell, parentPercentage - e.getValue());
+				if (createUnallocatedSubreport && e.getValue() < 100.0 ) {
+					fakeCell = AmpReportGenerator.generateMetaTextCell(
+									AmpReportGenerator.generateFakeCell(this, e.getKey(), keyCol), 
+									parentPercentage - e.getValue());
 					metaFakeCell	= (MetaTextCell)fakeCell;
-					( (CellColumn)keyCol ).addCell(fakeCell);
+					keyCol.addCell(fakeCell);
 				}
 				else
 					iter.remove();
@@ -358,7 +365,7 @@ public class ColumnReportData extends ReportData<Column> {
 		for ( Long id: activitiesInColReport ){
 			logger.info("The following activity needs to be added to the Unallocated category: " + id );
 			fakeCell	= AmpReportGenerator.generateFakeCell(this, id, keyCol);
-			( (CellColumn)keyCol ).addCell(fakeCell);
+			keyCol.addCell(fakeCell);
 		}
 		/* If the unallocated category doesn't already exist we need to create it */
 		if ( (activitiesInColReport.size() > 0 || percentagesMap.size() > 0 ) 
@@ -400,6 +407,7 @@ public class ColumnReportData extends ReportData<Column> {
 		return dest;
 	}
 
+	
 	public void replaceColumn(String name, Column column) {
 		int idx = items.indexOf(getColumn(name));
 		items.remove(idx);

@@ -148,7 +148,7 @@ public abstract class Permissible implements Identifiable {
 		{
 			permMapCachedCalls ++;
 		}
-		if (permMapCalls % 100 == 0)
+		if (permMapCalls % 500 == 0)
 			logger.info(String.format("getPermissionMap(): called %d times, out of which cached %d (%.2f percent)", permMapCalls, permMapCachedCalls, 100.0 * permMapCachedCalls / permMapCalls));
 		return cachedPermissionMap;
 	}

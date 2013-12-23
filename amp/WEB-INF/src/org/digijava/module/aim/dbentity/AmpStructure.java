@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -212,4 +213,21 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 	public void setImages(Set<AmpStructureImg> images) {
 		this.images = images;
 	}
+
+    public static String hqlStringForTitle(String idSource) {
+        return InternationalizedModelDescription.getForProperty(AmpStructure.class, "title").getSQLFunctionCall(idSource + ".ampStructureId");
+    }
+
+    public static String sqlStringForTitle(String idSource)
+    {
+        return InternationalizedModelDescription.getForProperty(AmpStructure.class, "title").getSQLFunctionCall(idSource);
+    }
+
+    public static String hqlStringForDescription(String idSource) {
+        return InternationalizedModelDescription.getForProperty(AmpStructure.class, "description").getSQLFunctionCall(idSource + ".ampStructureId");
+    }
+
+    public static String sqlStringForDescription(String idSource) {
+        return InternationalizedModelDescription.getForProperty(AmpStructure.class, "description").getSQLFunctionCall(idSource);
+    }
 }

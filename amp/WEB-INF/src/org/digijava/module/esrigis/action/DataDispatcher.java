@@ -607,36 +607,26 @@ public class DataDispatcher extends MultiAction {
 	 * @param activityIdList
 	 * @return
 	 */
-	protected Map<Long, String> getActivityNamesByIds(List<Long> activityIdList, HttpServletRequest request)
+	protected Map<Long, String> getActivityNamesByIds(List<Long> activityIdList)
 	{
 		Map<Long, String> activityNamesByAmpIds = new TreeMap<Long, String>();
+
         Session sess = PersistenceManager.getSession();
-        List<Object[]> rs = PersistenceManager.getSession().createSQLQuery("SELECT amp_activity_id, name FROM amp_activity_version WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")").list();
+        String activityName = AmpActivityVersion.hqlStringForName("a.ampActivityId");
+        StringBuilder qs = new StringBuilder("select a.ampActivityId, ").
+                append(activityName).
+                append(" from ").
+                append(AmpActivityVersion.class.getName()).
+                append(" a where a.ampActivityId in (").
+                append(Util.toCSStringForIN(activityIdList)).append(")");
+
+        List<Object[]> rs = sess.createQuery(qs.toString()).list();
 		for(Object[] entry:rs)
 		{
 			Long actId = PersistenceManager.getLong(entry[0]);
-            AmpContentTranslation trn =
-                    ContentTranslationUtil.loadCachedFieldTranslationsInLocale(AmpActivityVersion.class.getName(),
-                            actId, "name", RequestUtils.getNavigationLanguage(request).getCode());
-            String actName = (trn != null && !trn.getTranslation().trim().isEmpty()) ? trn.getTranslation():PersistenceManager.getString(entry[1]);
-			activityNamesByAmpIds.put(actId, actName);
+            String name = PersistenceManager.getString(entry[1]);
+			activityNamesByAmpIds.put(actId, name);
 		}
-
-
-
-        /*
-        Session sess = PersistenceManager.getSession();
-        StringBuilder sb = new StringBuilder("from ").
-                append(AmpActivity.class.getName()).
-                append(" act where act.ampActivityId in (").
-                append(Util.toCSStringForIN(activityIdList)).append(")");
-
-        Query q = sess.createQuery(sb.toString());
-        List <AmpActivity> acts = q.list();
-        for (AmpActivity act : acts) {
-            activityNamesByAmpIds.put(act.getAmpActivityId(), act.getName());
-        } */
-
 		return activityNamesByAmpIds;
 	}
 	
@@ -680,7 +670,7 @@ public class DataDispatcher extends MultiAction {
 	 * @param ids
 	 * @return
 	 */
-	public final static Map<Long, Structure> fetchStructs(Set<Long> ids, HttpServletRequest request)
+	public final static Map<Long, Structure> fetchStructs(Set<Long> ids)
 	{
 		Map<Long, Structure> z = new TreeMap<Long, Structure>();
 		
@@ -695,23 +685,20 @@ public class DataDispatcher extends MultiAction {
 		List<Object[]> strucTypes = PersistenceManager.getSession().createSQLQuery("SELECT typeid, name FROM amp_structure_type").list();
 		for(Object[] strucType:strucTypes)
 			typeNamesById.put(PersistenceManager.getLong(strucType[0]), PersistenceManager.getString(strucType[1]));
-			
-		List<Object[]> structs = PersistenceManager.getSession().createSQLQuery("SELECT amp_structure_id, title, description, latitude, longitude, shape, type FROM amp_structure WHERE amp_structure_id IN (" + Util.toCSStringForIN(ids) + ")").list();
+
+        String structureTitle = AmpStructure.sqlStringForTitle("amp_structure_id");
+        String structureDescription = AmpStructure.sqlStringForDescription("amp_structure_id");
+		List<Object[]> structs = PersistenceManager.getSession().
+                createSQLQuery(new StringBuilder("SELECT amp_structure_id, ").append(structureTitle).
+                        append(" as title, ").
+                        append(structureDescription).
+                        append(" as description, latitude, longitude, shape, type FROM amp_structure WHERE amp_structure_id IN (").
+                        append(Util.toCSStringForIN(ids)).append(")").toString()).list();
 		for(Object[] struct:structs)
 		{
 			Long strucId = PersistenceManager.getLong(struct[0]);
-
-            AmpContentTranslation trnTitle =
-                    ContentTranslationUtil.loadCachedFieldTranslationsInLocale(AmpStructure.class.getName(),
-                            strucId, "title", RequestUtils.getNavigationLanguage(request).getCode());
-
-			String title = (trnTitle != null && !trnTitle.getTranslation().trim().isEmpty()) ? trnTitle.getTranslation() : PersistenceManager.getString(struct[1]);
-
-            AmpContentTranslation trnDescription =
-                    ContentTranslationUtil.loadCachedFieldTranslationsInLocale(AmpStructure.class.getName(),
-                            strucId, "description", RequestUtils.getNavigationLanguage(request).getCode());
-
-			String description = (trnDescription != null && !trnDescription.getTranslation().trim().isEmpty()) ? trnDescription.getTranslation() : PersistenceManager.getString(struct[2]);
+			String title = PersistenceManager.getString(struct[1]);
+			String description = PersistenceManager.getString(struct[2]);
 			String latitude = PersistenceManager.getString(struct[3]);
 			String longitude = PersistenceManager.getString(struct[4]);
 			String shape = PersistenceManager.getString(struct[5]);
@@ -781,8 +768,8 @@ public class DataDispatcher extends MultiAction {
 		logger.info("fetching all activities took " + gettingActivitiesTime + " millies");
 		
 		Map<Long, Set<Long>> structsByAmpIds = populateStructs(activityIdList);
-		Map<Long, Structure> structsByIds = fetchStructs(collectIds(structsByAmpIds), request);
-		Map<Long, String> activityNamesByIds = getActivityNamesByIds(activityIdList, request);
+		Map<Long, Structure> structsByIds = fetchStructs(collectIds(structsByAmpIds));
+		Map<Long, String> activityNamesByIds = getActivityNamesByIds(activityIdList);
 				   		 
    		for(Long activityId:structsByAmpIds.keySet())
    		{

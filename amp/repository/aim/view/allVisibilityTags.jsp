@@ -88,6 +88,7 @@
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Map Module"></module:display>
 
+<field:display  name="Show image" feature="Map Options"></field:display>
 <module:display name="Organization Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <feature:display name="Organization Manager Type" module="Organization Manager" ></feature:display>
  

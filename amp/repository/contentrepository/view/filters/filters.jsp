@@ -58,7 +58,7 @@
 			<tr>
 				<td><div class="t_sm"><b><digi:trn>Creator Team</digi:trn>:</b></div></td>
 				<td>
-					<select name="filterTeamIds" class="dropdwn_sm" style="width: 250px;">
+					<select name="filterTeamIds"  id="filterTeamIds" class="dropdwn_sm" style="width: 250px;">
 						<option value="-1"><digi:trn>Please select from below</digi:trn></option>
 						<c:forEach var="kvItem" items="${myFilterValues.possibleTeams}">
 							<option value="${kvItem.key}"><c:out value="${kvItem.value}"></c:out> </option>
@@ -83,7 +83,7 @@
 				<td><div class="t_sm"><b><digi:trn>From date</digi:trn>:</b></div></td>
 				<td>
 					<input id="filterFromDate" type="text" readonly="readonly" name="filterFromDate" class="dropdwn_sm"/>
-					<a id="date1" href='javascript:pickDateById("date1","filterFromDate")'>
+					<a id="date1" href='javascript:pickDateById2("filterTeamIds","filterFromDate",true,"tl")'>
 			        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>	
 			        </a>
 			        <a id="clear1" href="javascript:clearDate('filterFromDate')">
@@ -95,7 +95,7 @@
 				<td><div class="t_sm"><b><digi:trn>To date</digi:trn>:</b></div></td>
 				<td>
 					<input id="filterToDate" type="text" readonly="readonly" name="filterToDate" class="dropdwn_sm"/>
-					<a id="date2" href='javascript:pickDateById("date2","filterToDate")'>
+					<a id="date2" href='javascript:pickDateById2("filterTeamIds","filterToDate",true,"tl")'>
 			        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"/>	
 			        </a>
 			        <a id="clear2" href='javascript:clearDate("filterToDate")'>

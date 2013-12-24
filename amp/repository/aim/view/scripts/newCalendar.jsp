@@ -254,7 +254,7 @@
 		pickDateById2(buttonId, objectId, true);
 	}
 	
-	function pickDateById2(buttonId,objectId,calendarUp)
+	function pickDateById2(buttonId,objectId,calendarUp,overrideObjectCorner)
 	{
 		
 		var localCalendarUp	= true;
@@ -293,6 +293,9 @@
 			}else{
 				calendarCorner = "tl";
 				objectCorner = "br";
+			}
+			if (overrideObjectCorner) {
+				objectCorner = overrideObjectCorner;
 			}
 			dialog		= new YAHOO.widget.Dialog(dialogId, {
 		        visible:false,

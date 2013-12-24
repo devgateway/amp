@@ -247,7 +247,7 @@ public class DbHelper {
 			}
 			
 			List<Long> workSpaceactivityList = filter.buildFilteredActivitiesList(); 
-			String inactivities = Util.collectionAsString(workSpaceactivityList);
+			String inactivities = Util.toCSStringForIN(workSpaceactivityList);
 			oql += " and act.ampActivityId in("+ inactivities +")";
 			
 			//locations filter
@@ -342,7 +342,7 @@ public class DbHelper {
 			Query query = session.createQuery(oql);
 			query.setDate("startDate", startDate);
 			query.setDate("endDate", endDate);
-			if ((!useMtefProjections) && (filter.getTransactionType() != Constants.TRANSACTION_TYPE_COMMITMENTS_AND_DISBURSEMENTS)) { // the option comm&disb is
+			if ((!useMtefProjections) && (filter.getTransactionType() != Constants.TRANSACTION_TYPE_COMMITMENTS_AND_DISBURSEMENTS)) {
 				query.setLong("transactionType", filter.getTransactionType());
 			}
 			
@@ -551,7 +551,7 @@ public class DbHelper {
 	            oql += String.format(" and act.team is not null AND (act.draft=false OR act.draft IS NULL) AND act.approvalStatus IN ('%s','%s') ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS);
 	            
 	            List<Long> workSpaceActivityList = filter.buildFilteredActivitiesList();
-	            String inactivities = Util.toCSStringForIN(workSpaceActivityList);	            
+	            String inactivities = Util.toCSStringForIN(workSpaceActivityList);	 
 	    		oql += " and act.ampActivityId in("+ inactivities +")";
 	            
 	            

@@ -110,6 +110,7 @@ import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
 import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
 import org.hibernate.Hibernate;
@@ -2928,6 +2929,75 @@ public class DbUtil {
 		}
 		return isUsed;
 	}
+	
+	/**
+	 * returns a sorted-by-name list of @link {@link OrganizationSkeleton} instances selected by a HQL query <br />
+	 * the query should be of the for, "SELECT ampOrgId, ampOrgName ..."
+	 * @param query
+	 * @return
+	 */
+	public static List<OrganizationSkeleton> getOrgSkeletonsFromQuery(Query query)
+	{
+		ArrayList<OrganizationSkeleton> res = new ArrayList<OrganizationSkeleton>();
+		List<Object[]> lst = query.list();
+		for(Object[] item:lst)
+		{
+			OrganizationSkeleton skel = new OrganizationSkeleton();
+			skel.setAmpOrgId(PersistenceManager.getLong(item[0]));
+			skel.setName(PersistenceManager.getString(item[1]));
+			res.add(skel);
+		}
+		Collections.sort(res);
+		return res;
+	}
+	
+	/**
+	 * returns a representation of the organizations in the database (lightweight, composed of of @link {@link OrganizationSkeleton}).<br />
+	 * they are grouped by ampOrgGroup 
+	 * @return
+	 */
+	public static java.util.Map<Long, Set<OrganizationSkeleton>> getOrgSkeletonGroupedByGroupId()
+	{	
+		java.util.Map<Long, Set<OrganizationSkeleton>> res = new java.util.HashMap<Long, Set<OrganizationSkeleton>>();
+		
+		String queryString = "select org.orgGrpId.ampOrgGrpId, org.ampOrgId, " + AmpOrganisation.hqlStringForName("org") + " FROM " + AmpOrganisation.class.getName()
+				+ " org where (org.deleted is null or org.deleted = false)";
+		
+		Query q = PersistenceManager.getSession().createQuery(queryString);
+		
+		List<Object[]> lst = q.list();
+		for(Object[] item:lst)
+		{
+			OrganizationSkeleton skel = new OrganizationSkeleton();			
+			skel.setAmpOrgId(PersistenceManager.getLong(item[1]));
+			skel.setName(PersistenceManager.getString(item[2]));
+			
+			Long orgGrpId = PersistenceManager.getLong(item[0]);
+			if (!res.containsKey(orgGrpId))
+				res.put(orgGrpId, new java.util.TreeSet<OrganizationSkeleton>());
+			res.get(orgGrpId).add(skel);
+		}
+		return res;
+	}
+	
+	/**
+	 * returns a sorted-by-name list of @link {@link OrganizationSkeleton} 
+	 * @param orgGroupId - orgGroupId to filter by. If equals null -> no filtering
+	 * @return
+	 */
+	public static List<OrganizationSkeleton> getOrgSkeletonByGroupId(Long orgGroupId)
+	{
+		String orgGrpCondition = orgGroupId == null ? "1=1" : "org.orgGrpId=:orgGroupId";
+		
+		String queryString = "select org.ampOrgId, " + AmpOrganisation.hqlStringForName("org") + " FROM " + AmpOrganisation.class.getName()
+				+ " org where " + orgGrpCondition + " and (org.deleted is null or org.deleted = false)";
+		
+		Query q = PersistenceManager.getSession().createQuery(queryString);
+		if (orgGroupId != null)
+			q.setLong("orgGroupId", orgGroupId);
+		return getOrgSkeletonsFromQuery(q);	
+	}
+	
 
 	public static List<AmpOrganisation> getOrganisationByGroupId(Long orgGroupId) {
 		Session session = null;
@@ -2950,40 +3020,30 @@ public class DbUtil {
 		return organizations;
 	}
 
-	public static List<AmpOrganisation> getDonorOrganisationByGroupId(
-			Long orgGroupId, boolean publicView) {
-		Session session = null;
-		Query q = null;
-		List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
+	public static List<OrganizationSkeleton> getDonorOrganisationByGroupId(Long orgGroupId, boolean publicView)
+	{
+		List<OrganizationSkeleton> organizations = new ArrayList<OrganizationSkeleton>();
 		StringBuilder queryString = new StringBuilder(
-				"select distinct org from "
-						+ AmpOrgRole.class.getName()
-						+ " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
-		if (publicView) {
-			queryString
-					.append(" inner join orgRole.activity act  inner join act.team tm ");
-		}
-		queryString.append(" where  role.roleCode='DN' ");
+				"SELECT DISTINCT(orgRole.organisation.ampOrgId) FROM " + AmpOrgRole.class.getName() + " orgRole");
+		
+		queryString.append(" where orgRole.role.roleCode='DN' and (orgRole.activity.draft = false OR orgRole.activity.draft is null) ");
+		
 		if (orgGroupId != null && orgGroupId != -1) {
-			queryString.append(" and org.orgGrpId=:orgGroupId ");
+			queryString.append(" and orgRole.organisation.orgGrpId=:orgGroupId ");
 		}
+		
 		if (publicView) {
-			queryString.append(String.format(" and (act.draft=false OR act.draft is null) and act.approvalStatus in ('%s', '%s') and tm.parentTeamId is not null ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
+			queryString.append(String.format(" and orgRole.activity.approvalStatus in ('%s', '%s') and orgRole.activity.team.parentTeamId is not null ", Constants.APPROVED_STATUS, Constants.STARTED_APPROVED_STATUS));
 		}
 
-		queryString.append("order by org.name asc");
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			q = session.createQuery(queryString.toString());
-			if (orgGroupId != null && orgGroupId != -1) {
-				q.setLong("orgGroupId", orgGroupId);
-			}
-			organizations = q.list();
-		} catch (Exception ex) {
-			logger.error(
-					"Unable to get Amp organisation names  from database ", ex);
+		Query query = PersistenceManager.getSession().createQuery(queryString.toString());
+		if (orgGroupId != null && orgGroupId != -1) {
+			query.setLong("orgGroupId", orgGroupId);
 		}
-		return organizations;
+
+		String orgIds = Util.toCSStringForIN(query.list());
+		
+		return getOrgSkeletonsFromQuery(PersistenceManager.getSession().createQuery("SELECT org.ampOrgId, " + AmpOrganisation.hqlStringForName("org") + " FROM " + AmpOrganisation.class.getName() + " org WHERE org.ampOrgId IN (" + orgIds + ")"));
 	}
 
 	/**
@@ -4991,25 +5051,28 @@ public class DbUtil {
 		return col;
 	}
 
-//	public static Collection getAllOrgGrpBeeingUsed() {
-//		Session session = null;
-//		Collection col = new ArrayList();
-//
-//		try {
-//			session = PersistenceManager.getRequestDBSession();
-//			String queryString = "select distinct c.orgGrpId from "
-//					+ AmpOrganisation.class.getName()
-//					+ " c where (c.deleted is null or c.deleted = false)  order by c.orgGrpId.orgGrpName";
-//			Query qry = session.createQuery(queryString);
-//			col = qry.list();
-//		} catch (Exception e) {
-//			logger.error("Exception from getAllOrgGrpBeeingUsed()");
-//			logger.error(e.toString());
-//		}
-//		return col;
-//
-//	}
+	/**
+	 * gets the skeletons of all the OrgGroups in the database
+	 * @return
+	 */
+	public static List<OrgGroupSkeleton> getAllOrgGroupSkeletons()
+	{
+		List<OrgGroupSkeleton> col = new ArrayList<OrgGroupSkeleton>();
 
+		String orgGrpNameHql = AmpOrgGroup.hqlStringForName("c");
+		String queryString = "select c.ampOrgGrpId, " + orgGrpNameHql + " FROM " + AmpOrgGroup.class.getName() + " c";
+		Query qry = PersistenceManager.getSession().createQuery(queryString);
+		for(Object[] grpInfo:((List<Object[]>) qry.list()))
+		{
+			OrgGroupSkeleton skel = new OrgGroupSkeleton();
+			skel.setAmpOrgGrpId(PersistenceManager.getLong(grpInfo[0]));
+			skel.setOrgGrpName(PersistenceManager.getString(grpInfo[1]));
+			col.add(skel);
+		}
+		Collections.sort(col);
+		return col;
+	}
+	
 	public static Collection<AmpOrgGroup> getAllOrgGroups() {
 		Session session = null;
 		Collection col = new ArrayList();

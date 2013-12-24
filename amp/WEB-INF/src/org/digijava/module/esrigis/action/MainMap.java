@@ -51,6 +51,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -255,14 +256,7 @@ public class MainMap extends Action {
 		List<AmpOrgType> orgtypes = new ArrayList<AmpOrgType>(DbUtil.getAllOrgTypes());
 		filter.setOrganizationsType(orgtypes);
 		
-		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
-		filter.setOrgGroups(orgGroups);
-		List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupsWithOrgsList = new ArrayList<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>>();
-		for(AmpOrgGroup orgGroup:orgGroups){
-			List<AmpOrganisation> organizations=DbUtil.getOrganisationByGroupId(orgGroup.getAmpOrgGrpId());
-			orgGroupsWithOrgsList.add(new EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>(orgGroup,organizations));
-		}
-		filter.setOrgGroupWithOrgsList(orgGroupsWithOrgsList);
+		filter.buildOrganizationsByOrgGroup();
 		
 		if (filter.getRegions() == null) {
 			try {

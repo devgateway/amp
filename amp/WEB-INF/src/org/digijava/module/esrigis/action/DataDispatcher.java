@@ -34,9 +34,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -211,6 +214,55 @@ public class DataDispatcher extends MultiAction {
 		return null;
 	}
 
+	/**
+	 * calculates per-activity totals and percentages
+	 * @param activityPoints
+	 */
+	protected void fetchFundingInfo(Map<Long, ActivityPoint> activityPoints, String userCurrencyCode)
+	{
+		Set<Long> relevantAaids = new HashSet<Long>();
+		for(Long aaid:activityPoints.keySet())
+			if (!activityPoints.get(aaid).getLocations().isEmpty())
+				relevantAaids.add(aaid); // add the ids of the activities
+		
+		Map<Long, FundingCalculationsHelper> calculators = new HashMap<Long, FundingCalculationsHelper>();
+		for(Long aaid:relevantAaids)
+			calculators.put(aaid, new FundingCalculationsHelper());
+		
+		String activityIdsCondition = "WHERE af.ampActivityId.ampActivityId IN (" + Util.toCSStringForIN(relevantAaids) + ")";
+		List<Object[]> fundingInfo = PersistenceManager.getSession().createQuery("SELECT af.ampActivityId.ampActivityId, af FROM " + AmpFunding.class.getName() + " af " + activityIdsCondition).list();
+		
+		for(Object[] donor:fundingInfo)
+		{
+			Long actId = PersistenceManager.getLong(donor[0]);
+			AmpFunding funding = (AmpFunding) donor[1];
+			calculators.get(actId).doCalculations(funding, userCurrencyCode);
+		}
+		
+		double totalComm = 0, totalDisb = 0;
+		for(Long aaid:relevantAaids)
+		{
+			FundingCalculationsHelper calculator = calculators.get(aaid);
+			ActivityPoint ap = activityPoints.get(aaid);
+			
+			ap.setCommitments(calculator.getTotalCommitments().toString());
+			ap.setDisbursements(calculator.getTotActualDisb().toString());
+			
+			totalComm += calculator.getTotalCommitments().doubleValue();
+			totalDisb += calculator.getTotActualDisb().doubleValue();
+			
+			for(SimpleLocation sl:ap.getLocations())
+				if (sl.getPercentage() != null)
+				{
+					BigDecimal percentage = new BigDecimal(Double.parseDouble(sl.getPercentage()));
+					sl.setCommitments(QueryUtil.getPercentage(calculator.getTotalCommitments().getValue(), percentage));
+					sl.setDisbursements(QueryUtil.getPercentage(calculator.getTotActualDisb().getValue(), percentage));
+					sl.setExpenditures(QueryUtil.getPercentage(calculator.getTotActualExp().getValue(), percentage));
+				}
+		}
+		logger.info(String.format("showNational found %.2f comms and %.2f disbs\n", totalComm, totalDisb));	
+	}
+	
 	public ActionForward modeShowNational(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		DataDispatcherForm maphelperform = (DataDispatcherForm) form;
@@ -218,97 +270,41 @@ public class DataDispatcher extends MultiAction {
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		maphelperform.getFilter().setTeamMember(tm);
+		long startTS = System.currentTimeMillis();
 
 		JSONArray jsonArray = new JSONArray();
-		List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
-		list = DbHelper.getActivities(maphelperform.getFilter());
-		Boolean isaggregatable = true;
-		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
-			ActivityPoint ap = new ActivityPoint();
-			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
-			ap.setId(aA.getIdentifier().toString());
-			ap.setAmpactivityid(aA.getAmpId());
-			ap.setActivityname(aA.getName());
+		
+		// fetch activity names
+		List<Long> actIds = DbHelper.getActivitiesIds(maphelperform.getFilter());
+		String activityIdsCondition = "WHERE amp_activity_id IN (" + Util.toCSStringForIN(actIds) + ")";		
+		Map<Long, ActivityPoint> activityPoints = new HashMap<Long, ActivityPoint>();		
+		
+		fetchActivityIdentificationInfo(activityPoints, activityIdsCondition);
+		
+		long mda = System.currentTimeMillis();
+		fetchDonorInfo(activityPoints, activityIdsCondition);
+		logger.info("fetching donor info took " + (System.currentTimeMillis() - mda) / 1000.0 + " secs");
+				
+		mda = System.currentTimeMillis();
+		fetchLocationsInfo(activityPoints, maphelperform.getFilter().getSelLocationIds(), activityIdsCondition, true);
+		logger.info("fetching location info took " + (System.currentTimeMillis() - mda) / 1000.0 + " secs");
 
-			FundingCalculationsHelper calculations = new FundingCalculationsHelper();
-			Iterator fundItr = aA.getFunding().iterator();
-			ap.setDonors(new ArrayList<SimpleDonor>());
-			while (fundItr.hasNext()) {
-				AmpFunding ampFunding = (AmpFunding) fundItr.next();
-				calculations.doCalculations(ampFunding, maphelperform.getFilter().getCurrencyCode());
-				SimpleDonor donor = new SimpleDonor(); 
-				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
-				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
-				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
-				ap.getDonors().add(donor);
-			}
-			ap.setCommitments(calculations.getTotalCommitments().toString());
-			ap.setDisbursements(calculations.getTotActualDisb().toString());
-			//ap.setExpenditures(calculations.getTotPlannedExp().toString());
-			//ap.setSectors(SectorsToJson(aA));
-			//ap.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
-			ArrayList<SimpleLocation> sla = new ArrayList<SimpleLocation>();
-			for (Iterator iterator2 = aA.getLocations().iterator(); iterator2.hasNext();) {
-				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
-				boolean implocation = alocation.getLocation().getLocation().getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
-				ArrayList<Long> locationIds = new ArrayList<Long>(Arrays.asList(maphelperform.getFilter().getSelLocationIds()));
-				if (maphelperform.getFilter().getZoneIds()!= null && maphelperform.getFilter().getZoneIds().length>0){
-					locationIds.addAll(Arrays.asList(maphelperform.getFilter().getZoneIds()));
-				}
-				boolean isfiltered = locationIds != null && locationIds.size() > 0 && !locationIds.get(0).equals(-1l) ;
-				if (implocation) {
-					isaggregatable = true;
-					SimpleLocation sl = new SimpleLocation();
-					String lat = alocation.getLocation().getLocation().getGsLat();
-					String lon = alocation.getLocation().getLocation().getGsLong();
-					
-					if (alocation.getLatitude() != null && alocation.getLatitude() !=null 
-							&& !"".equalsIgnoreCase(alocation.getLatitude()) && !"".equalsIgnoreCase(alocation.getLongitude())){
-						sl.setExactlocation(true);
-						sl.setExactlocation_lat(alocation.getLatitude());
-						sl.setExactlocation_lon(alocation.getLongitude());
-					}else{
-						sl.setExactlocation(false);
-					}
-					
-					sl.setName(alocation.getLocation().getLocation().getName());
-					sl.setGeoId(alocation.getLocation().getLocation().getGeoCode());
-					sl.setLat(lat);
-					sl.setLon(lon);
-					if ("".equalsIgnoreCase(lat) && "".equalsIgnoreCase(lon)) {
-						sl.setIslocated(false);
-					} else {
-						sl.setIslocated(true);
-					}
-					if (alocation.getLocationPercentage()!=null){
-						sl.setPercentage(alocation.getLocationPercentage().toString());
-						sl.setCommitments(QueryUtil.getPercentage(calculations.getTotalCommitments().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-						sl.setDisbursements(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-						sl.setExpenditures(QueryUtil.getPercentage(calculations.getTotActualExp().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-					}
-					if (isfiltered){
-						if (locationIds.contains(alocation.getLocation().getLocation().getId())){
-							sla.add(sl);
-						}
-					}else{
-						sla.add(sl);
-					}
-					
-				} else {
-					isaggregatable = false;
-					break;
-				}
-			}
-			if (isaggregatable) {
-				ap.setLocations(sla);
-				jsonArray.add(ap);
-			}
+		mda = System.currentTimeMillis();
+		fetchFundingInfo(activityPoints, maphelperform.getFilter().getCurrencyCode());
+		for(ActivityPoint aP:activityPoints.values())
+		{
+			if (!aP.getLocations().isEmpty()) // only national projects are filtered out
+				jsonArray.add(aP);
 		}
 
 		PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());
 		pw.flush();
 		pw.close();
+
+		long endTS = System.currentTimeMillis();
+		logger.info("showNational returned " + jsonArray.size() + " elements in " + (endTS - startTS) / 1000.0 + " seconds");
+//		logger.info(String.format("showNational found %.2f comms and %.2f disbs\n", totalComm, totalDisb));		
 		return null;
 	}
 
@@ -451,9 +447,148 @@ public class DataDispatcher extends MultiAction {
 		return null;
 	}
 	
-	
-	public ActionForward modeShowActivities(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+	/**
+	 * fills activityPoints with entries, populating them with initial (identification) data
+	 * @param activityPoints
+	 * @param activityIdsCondition
+	 */
+	protected void fetchActivityIdentificationInfo(Map<Long, ActivityPoint> activityPoints, String activityIdsCondition)
+	{
+		long mda = System.currentTimeMillis();
+		Map<Long, String> activityNames = DatabaseViewFetcher.fetchInternationalizedView("v_titles", activityIdsCondition, "amp_activity_id", "name");
+		logger.info("fetching activity names took " + (System.currentTimeMillis() - mda) / 1000.0 + " secs");
 		
+		mda = System.currentTimeMillis();
+		// fetch all the id data, as it is faster to fetch all the ampIds from the database than it is to push huge lists of ampActIds to the PSQL parser. Use the activityNames as a aaid filter
+		List<Object[]> activityIdentification = PersistenceManager.getSession().createQuery("SELECT act.ampActivityId, act.ampId FROM " + AmpActivity.class.getName() + " act").list();
+		for(Object[] actId:activityIdentification)
+		{
+			Long aaId = PersistenceManager.getLong(actId[0]);
+			String ampId = PersistenceManager.getString(actId[1]);
+			if (activityNames.containsKey(aaId))
+			{
+				ActivityPoint aP = new ActivityPoint();
+				aP.setActivityname(activityNames.get(aaId));
+				aP.setId(Long.toString(aaId));
+				aP.setAmpactivityid(ampId);
+				aP.setDonors(new ArrayList<SimpleDonor>());
+				aP.setLocations(new ArrayList<SimpleLocation>());
+				activityPoints.put(aaId, aP);
+			}
+		}
+		logger.info("fetching ampIDs took " + (System.currentTimeMillis() - mda) / 1000.0 + " secs");
+	}
+	
+	/**
+	 * fills activityPoints with donor information
+	 * @param activityPoints
+	 * @param activityIdsCondition
+	 */
+	protected void fetchDonorInfo(Map<Long, ActivityPoint> activityPoints, String activityIdsCondition)
+	{
+		// donor info, step 1: make a list of all the existing donors, retaining for each of them the list of activities which "have" them
+		Map<Long, Set<Long>> donorIds = new HashMap<Long, Set<Long>>(); // Map<ampOrgId, Set<ampActivityId>>
+
+		List<Object[]> fundingDonors = PersistenceManager.getSession().createQuery("SELECT af.ampActivityId.ampActivityId, af.ampDonorOrgId.ampOrgId FROM " + AmpFunding.class.getName() + " af " + activityIdsCondition).list();
+		for(Object[] dInfo:fundingDonors)
+		{
+			Long aaid = PersistenceManager.getLong(dInfo[0]);
+			Long donorId = PersistenceManager.getLong(dInfo[1]);
+			if (!donorIds.containsKey(donorId))
+				donorIds.put(donorId, new HashSet<Long>());
+			donorIds.get(donorId).add(aaid);
+		}
+		
+		// donor info, step 2: fetch info regarding the donors and add it to the respective dIds
+		List<Object[]> donorsInfo = PersistenceManager.getSession().createQuery("SELECT org.ampOrgId, " + AmpOrganisation.hqlStringForName("org") + ", org.acronym FROM " + AmpOrganisation.class.getName() + " org WHERE org.ampOrgId IN (" + Util.toCSStringForIN(donorIds.keySet()) + ")").list();
+		for(Object[] dInfo:donorsInfo)
+		{
+			SimpleDonor donor = new SimpleDonor();
+			Long donorId = PersistenceManager.getLong(dInfo[0]);
+			donor.setDonorname(PersistenceManager.getString(dInfo[1]));
+			donor.setDonorCode(PersistenceManager.getString(dInfo[2]));
+			for(Long activityId:donorIds.get(donorId))
+			{
+				activityPoints.get(activityId).getDonors().add(donor);
+			}
+		}
+	}
+	
+	/**
+	 * fills activityPoints with locations info from the database
+	 * @param activityPoints
+	 * @param filterLocationIds
+	 * @param activityIdsCondition
+	 * @param nationalLevel - if true, only select national level projects (disobeying any location filters). if false, only select non-national levels (obeying location filters)
+	 */
+	protected void fetchLocationsInfo(Map<Long, ActivityPoint> activityPoints, Long[] filterLocationIds, String activityIdsCondition, boolean nationalLevel)
+	{
+		Set<Long> legalLocationIds = new HashSet<Long>(Arrays.asList(filterLocationIds));
+		boolean isFiltered = (!nationalLevel) // no filtering except for the implementation level for national projects 
+				&& 
+				(legalLocationIds.size() > 0 && !legalLocationIds.contains(-1L));
+		
+		Set<Long> aaidsToDelete = new HashSet<Long>(); // ampActivityIds to mark as deleted (done through a somewhat ugly hack - by deleting locations)
+		List<Object[]> locationsInfo = PersistenceManager.getSession().createQuery("SELECT aal.activity.ampActivityId, aal.location.location, aal.latitude, aal.longitude, aal.locationPercentage FROM " + AmpActivityLocation.class.getName() + " aal " + activityIdsCondition).list();		
+		for(Object[] locationInfo:locationsInfo)
+		{
+			Long ampActivityId = PersistenceManager.getLong(locationInfo[0]);
+			AmpCategoryValueLocations acvl = (AmpCategoryValueLocations) locationInfo[1];
+			String aalLatitude = PersistenceManager.getString(locationInfo[2]);
+			String aalLongitude = PersistenceManager.getString(locationInfo[3]);
+			Double aalPercentage = PersistenceManager.getDouble(locationInfo[4]);
+			
+			ActivityPoint ap = activityPoints.get(ampActivityId);
+			
+			boolean locationPassesFilter = isFiltered ? legalLocationIds.contains(acvl.getId()) : true;
+			if (!locationPassesFilter)
+				continue;
+			
+			boolean impLocationIsCountry = acvl.getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
+			if (nationalLevel ^ impLocationIsCountry)
+			{
+				if (nationalLevel)
+					aaidsToDelete.add(ampActivityId); // signal this location as deleted
+				continue;
+			}
+						
+			// got till here -> nationalLevel == impLocationIsCountry, e.g. processing goes on as normal
+			
+			SimpleLocation sl = new SimpleLocation();
+			String lat = acvl.getGsLat();
+			String lon = acvl.getGsLong();
+				
+			if (aalLatitude != null && aalLongitude !=null && !aalLatitude.isEmpty() && !aalLongitude.isEmpty())
+			{
+				sl.setExactlocation(true);
+				sl.setExactlocation_lat(aalLatitude);
+				sl.setExactlocation_lon(aalLongitude);
+			}else{
+				sl.setExactlocation(false);
+			}
+				
+			sl.setName(acvl.getName());
+			sl.setGeoId(acvl.getGeoCode());
+			sl.setLat(lat);
+			sl.setLon(lon);
+			if (aalPercentage != null)
+				sl.setPercentage(aalPercentage.toString());
+			
+			if ("".equalsIgnoreCase(lat) && "".equalsIgnoreCase(lon)) {
+				sl.setIslocated(false);
+			} else {
+				sl.setIslocated(true);
+			}
+				
+			ap.getLocations().add(sl);
+		}
+
+		for(Long aaidToDelete:aaidsToDelete)
+			activityPoints.get(aaidToDelete).getLocations().clear();
+	}
+	
+	public ActionForward modeShowActivities(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception
+	{	
 		DataDispatcherForm maphelperform = (DataDispatcherForm) form;
 
 		HttpSession session = request.getSession();
@@ -461,81 +596,32 @@ public class DataDispatcher extends MultiAction {
 		maphelperform.getFilter().setTeamMember(tm);
 
 		JSONArray jsonArray = new JSONArray();
-		List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
 		
-		long startTS=System.currentTimeMillis();
-		list = DbHelper.getActivities(maphelperform.getFilter());
-		long endTS=System.currentTimeMillis();
-		logger.info("getActivities in "+(endTS-startTS)/1000.0+" seconds. ");
 		logger.info("Iteration Starts");
-		startTS=System.currentTimeMillis();
+		long startTS = System.currentTimeMillis();
+
+		// fetch activity names
+		List<Long> actIds = DbHelper.getActivitiesIds(maphelperform.getFilter());
+		String activityIdsCondition = "WHERE amp_activity_id IN (" + Util.toCSStringForIN(actIds) + ")";		
+		Map<Long, ActivityPoint> activityPoints = new HashMap<Long, ActivityPoint>();		
 		
-		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
-			ActivityPoint ap = new ActivityPoint();
-			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
-			ap.setId(aA.getIdentifier().toString());
-			ap.setAmpactivityid(aA.getAmpId());
-			ap.setActivityname(aA.getName());
-			
-			Iterator fundItr = aA.getFunding().iterator();
-			ap.setDonors(new ArrayList<SimpleDonor>());
-			while (fundItr.hasNext()) {
-				AmpFunding ampFunding = (AmpFunding) fundItr.next();
-				//Collection fundDetails = ampFunding.getFundingDetails();
-				SimpleDonor donor = new SimpleDonor(); 
-				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
-				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
-				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
-				ap.getDonors().add(donor);
-			}
-			
-			ArrayList<SimpleLocation> sla = new ArrayList<SimpleLocation>();
-			for (Iterator iterator2 = aA.getLocations().iterator(); iterator2.hasNext();) {
-				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
-				boolean implocation = alocation.getLocation().getLocation().getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
-				ArrayList<Long> locationIds = new ArrayList<Long>(Arrays.asList(maphelperform.getFilter().getSelLocationIds()));
+		fetchActivityIdentificationInfo(activityPoints, activityIdsCondition);
 				
-				boolean isfiltered = locationIds != null && locationIds.size() > 0 && !locationIds.get(0).equals(-1l) ;
-				if (!implocation) {
-					SimpleLocation sl = new SimpleLocation();
-					String lat = alocation.getLocation().getLocation().getGsLat();
-					String lon = alocation.getLocation().getLocation().getGsLong();
-					
-					if (alocation.getLatitude() != null && alocation.getLatitude() !=null 
-							&& !"".equalsIgnoreCase(alocation.getLatitude()) && !"".equalsIgnoreCase(alocation.getLongitude())){
-						sl.setExactlocation(true);
-						sl.setExactlocation_lat(alocation.getLatitude());
-						sl.setExactlocation_lon(alocation.getLongitude());
-					}else{
-						sl.setExactlocation(false);
-					}
-					
-					sl.setName(alocation.getLocation().getLocation().getName());
-					sl.setGeoId(alocation.getLocation().getLocation().getGeoCode());
-					sl.setLat(lat);
-					sl.setLon(lon);
-					if ("".equalsIgnoreCase(lat) && "".equalsIgnoreCase(lon)) {
-						sl.setIslocated(false);
-					} else {
-						sl.setIslocated(true);
-					}
-					//add only locations which are in the filter list
-					if (isfiltered){
-						if (locationIds.contains(alocation.getLocation().getLocation().getId())){
-							sla.add(sl);
-						}
-					
-					}else{
-						sla.add(sl);
-					}
-				}
-			}
-			//Add simple locations array to the activity
-			ap.setLocations(sla);
-			jsonArray.add(ap);
+		long mda = System.currentTimeMillis();
+		fetchDonorInfo(activityPoints, activityIdsCondition);
+		logger.info("fetching donor info took " + (System.currentTimeMillis() - mda) / 1000.0 + " secs");
+
+		mda = System.currentTimeMillis();
+		fetchLocationsInfo(activityPoints, maphelperform.getFilter().getSelLocationIds(), activityIdsCondition, false);
+		logger.info("fetching location info took " + (System.currentTimeMillis() - mda) / 1000.0 + " secs");
+
+		for(ActivityPoint aP:activityPoints.values())
+		{
+			if (!aP.getLocations().isEmpty()) // only national projects are filtered out
+				jsonArray.add(aP);
 		}
 		
-		endTS=System.currentTimeMillis();
+		long endTS=System.currentTimeMillis();
 		logger.info("iteration done in "+(endTS-startTS)/1000.0+" seconds. ");
 		
 		

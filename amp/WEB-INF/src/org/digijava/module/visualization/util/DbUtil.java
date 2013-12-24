@@ -48,6 +48,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -117,6 +118,14 @@ public class DbUtil {
         }
         Collections.sort(organizations);
         return organizations;
+    }	
+	
+	/**
+	 * gets skeletons for all the organisations in the database
+	 * @return
+	 */
+	public static List<OrganizationSkeleton> getOrganisationSkeletons() {
+		return org.digijava.module.aim.util.DbUtil.getOrgSkeletonByGroupId(null);
     }	
 	
 	public static List<AmpOrganisation> getOrganisations() {

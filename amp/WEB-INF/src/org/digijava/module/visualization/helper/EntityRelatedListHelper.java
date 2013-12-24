@@ -15,4 +15,10 @@ public class EntityRelatedListHelper <T,S>  {
 		return subordinateEntityList;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return String.format("ERLH: %s -> %s", mainEntity, subordinateEntityList);
+	}
+	
 }

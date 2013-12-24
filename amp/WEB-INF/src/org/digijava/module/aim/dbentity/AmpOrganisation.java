@@ -21,7 +21,7 @@ import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @TranslatableClass (displayName = "Organisation")
-public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable, HierarchyListable
+public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiable, Serializable, ARDimensionable, HierarchyListable
 {
 	private Long ampOrgId;
 	@TranslatableField
@@ -35,6 +35,8 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	@TranslatableField
 	private String description ;
 	private String orgCode;
+	
+	@Deprecated
 	private String orgGroup;  // defunct
 	private AmpFiscalCalendar ampFiscalCalId;
 	private AmpSectorScheme ampSecSchemeId;
@@ -351,27 +353,20 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		orgTypeCode = string;
 	}
 	
-	public int compareTo(Object obj) {
-		
-		if (!(obj instanceof AmpOrganisation)) 
-			throw new ClassCastException();
-		
-		AmpOrganisation org = (AmpOrganisation) obj;
-		if (this.name != null) {
-			if (org.name != null) {
-				return (this.name.trim().toLowerCase().
-						compareTo(org.name.trim().toLowerCase()));
-			} else {
-				return (this.name.trim().toLowerCase().
-						compareTo(""));
-			}
-		} else {
-			if (org.name != null) {
-				return ("".compareTo(org.name.trim().toLowerCase()));
-			} else {
-				return 0;
-			}			
+	@Override
+	public int compareTo(AmpOrganisation org)
+	{
+		if (this.name == null)
+		{
+			if (org.name == null)
+				return 0; // null == null
+			return -1; // null < [anything]
 		}
+		
+		if (org.name == null)
+			return 1; // [anything] > null
+		
+		return this.name.trim().compareTo(org.name.trim());
 	}
 	
 	//do not implement equals, implement compareTo and use treeset!

@@ -460,7 +460,7 @@ public class InternationalizedViewsRepository {
 				}				
 
 				addViewDef(this, new I18nViewDescription("v_titles").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name")));
+						addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name"))); // if changing this line: ESRI GIS DataDispatcher references it, change it there too! 
 
 				addViewDef(this, new I18nViewDescription("v_zones").
 						addColumnDef(new I18nViewColumnDescription("location_name", "location_id", AmpCategoryValueLocations.class, "name")));

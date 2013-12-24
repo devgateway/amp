@@ -53,6 +53,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -882,7 +883,7 @@ public class DashboardUtil {
 			orgGroupsWithOrgsList.add(new EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>(orgGroup,organizations));
 		}
 		filter.setOrgGroupWithOrgsList(orgGroupsWithOrgsList);
-		List<AmpOrganisation> orgs = null;
+		List<OrganizationSkeleton> orgs = null;
 
 		if (filter.getOrgGroupId() == null
 				|| filter.getOrgGroupId() == -1) {
@@ -1059,9 +1060,9 @@ public class DashboardUtil {
 		adjustmentTypeList.add(CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
         filter.setAdjustmentTypeList(adjustmentTypeList);
         filter.setStatusList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY)));
-        filter.setOrganizations(DbUtil.getOrganisations());
-		filter.setImplementingAgencyList(DbUtil.getOrganisations());
-		filter.setBeneficiaryAgencyList(DbUtil.getOrganisations());
+        filter.setOrganizations(DbUtil.getOrganisationSkeletons());
+		filter.setImplementingAgencyList(DbUtil.getOrganisationSkeletons());
+		filter.setBeneficiaryAgencyList(DbUtil.getOrganisationSkeletons());
 		filter.setSecondaryProgramsList(DbUtil.getPrograms(2));
 		filter.setPeacebuilderMarkerList(new ArrayList<AmpCategoryValue>());
 		ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));

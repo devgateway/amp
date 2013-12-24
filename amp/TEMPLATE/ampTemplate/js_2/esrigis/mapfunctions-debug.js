@@ -660,13 +660,20 @@ nationalactive=false;
 function togglenational() {
 	var layer = map.getLayer('border');
 	var functionalayer = map.getLayer('countrymap');
-	if (layer.visible) {
-		layer.hide();
+	if (nationalactive) {
+		if (typeof layer != 'undefined')
+			layer.hide();
 		$('#NationalDiv').hide('slow');
 		functionalayer.show();
 		nationalactive = false;
 	} else if (!indicatoractive) {
-		layer.show();
+		if (typeof layer != 'undefined')
+			layer.show();
+		else
+		{
+			alert('no national border layer defined');
+			console.log('no national layer defined!');
+		}
 		$('#NationalDiv').show('slow');
 		functionalayer.hide();
 		nationalactive = true;
@@ -989,7 +996,7 @@ function getNationalActivities() {
 			error : function(error) {
 				console.log(error);
 			}
-		}
+		};
 		// Call the asynchronous xhrGet
 		var deferred = dojo.xhrGet(xhrArgs);
 	}else{

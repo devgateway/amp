@@ -25,6 +25,8 @@ import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.OrgGroupSkeleton;
+import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -37,7 +39,7 @@ public class MapFilter {
 	private Boolean workspaceOnly;
 	private TeamMember teamMember;
 	private List<AmpCurrency> currencies;
-	private List<AmpOrganisation> organizations;
+	private List<OrganizationSkeleton> organizations;
 	private List<AmpOrganisation> organizationsSelected;
 	private List<AmpOrgType> organizationsType;
 	private List<AmpStructureType> structureTypes;
@@ -64,7 +66,7 @@ public class MapFilter {
 	private Long endYear;
 	private Long defaultStartYear;
 	private Long defaultEndYear;
-	private List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> orgGroupWithOrgsList;
+	private List<EntityRelatedListHelper<OrgGroupSkeleton, OrganizationSkeleton>> orgGroupWithOrgsList;
 	private List<EntityRelatedListHelper<AmpCategoryValueLocations, AmpCategoryValueLocations>> regionWithZones;
 	private List<EntityRelatedListHelper<AmpClassificationConfiguration, EntityRelatedListHelper<AmpSector, AmpSector>>> configWithSectorAndSubSectors;
 	private Long selSectorConfigId;
@@ -334,12 +336,11 @@ public class MapFilter {
 		this.regionWithZones = regionWithZones;
 	}
 
-	public List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> getOrgGroupWithOrgsList() {
+	public List<EntityRelatedListHelper<OrgGroupSkeleton, OrganizationSkeleton>> getOrgGroupWithOrgsList() {
 		return orgGroupWithOrgsList;
 	}
 
-	public void setOrgGroupWithOrgsList(
-			List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> orgGroupWithOrgsList) {
+	public void setOrgGroupWithOrgsList(List<EntityRelatedListHelper<OrgGroupSkeleton, OrganizationSkeleton>> orgGroupWithOrgsList) {
 		this.orgGroupWithOrgsList = orgGroupWithOrgsList;
 	}
 
@@ -551,11 +552,11 @@ public class MapFilter {
 		this.currencyId = currency;
 	}
 
-	public List<AmpOrganisation> getOrganizations() {
+	public List<OrganizationSkeleton> getOrganizations() {
 		return organizations;
 	}
 
-	public void setOrganizations(List<AmpOrganisation> organizations) {
+	public void setOrganizations(List<OrganizationSkeleton> organizations) {
 		this.organizations = organizations;
 	}
 
@@ -932,7 +933,8 @@ public class MapFilter {
 	}
 	
 	/**
-	 * computes the list of activity Id's which should be displayed by a map which uses this filter's workspace setting. DOES NOT TAKE INTO ACCOUNT 
+	 * computes the list of activity Id's which should be displayed by a map which uses this filter's workspace setting.<br />
+	 * <b>DOES NOT TAKE INTO ACCOUNT the MapFilter settings per se</b> 
 	 * @return
 	 */
 	public List<Long> buildFilteredActivitiesList()
@@ -956,6 +958,25 @@ public class MapFilter {
 		}
 	}
 
+	/**
+	 * fills {@link #orgGroupWithOrgsList} corresponding to the database and filter state
+	 */
+	public void buildOrganizationsByOrgGroup()
+	{
+		Map<Long, java.util.Set<OrganizationSkeleton>> orgsByGroupId = DbUtil.getOrgSkeletonGroupedByGroupId();
+		List<OrgGroupSkeleton> orgGroups = new ArrayList<OrgGroupSkeleton>(DbUtil.getAllOrgGroupSkeletons());
+		List<EntityRelatedListHelper<OrgGroupSkeleton, OrganizationSkeleton>> orgGroupsWithOrgsList = new ArrayList<EntityRelatedListHelper<OrgGroupSkeleton, OrganizationSkeleton>>();
+		for(OrgGroupSkeleton orgGroup:orgGroups)
+		{
+			java.util.Set<OrganizationSkeleton> orgs = orgsByGroupId.get(orgGroup.getAmpOrgGrpId());
+			if (orgs != null)
+			{
+				orgGroupsWithOrgsList.add(new EntityRelatedListHelper<OrgGroupSkeleton, OrganizationSkeleton>(orgGroup, new ArrayList<OrganizationSkeleton>(orgs)));
+			}
+		}
+		this.setOrgGroupWithOrgsList(orgGroupsWithOrgsList);
+	}
+	
     public List<AmpCategoryValue> getPeacebuildingMarkers() {
         return peacebuildingMarkers;
     }

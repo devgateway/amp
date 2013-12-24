@@ -20,6 +20,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -42,7 +43,7 @@ public class DashboardFilter {
     private Boolean showMonochrome;
     private TeamMember teamMember;
     private List<AmpCurrency>currencies;
-    private List<AmpOrganisation>organizations;
+    private List<OrganizationSkeleton> organizations;
     private Long[] selOrgIds;
     private List<AmpOrgGroup> orgGroups;
     private List<AmpSector>sectors;
@@ -132,8 +133,8 @@ public class DashboardFilter {
     //fields for Deal Dashboard
     
     private List<AmpOrganisation> donorAgencyList;
-    private List<AmpOrganisation> implementingAgencyList;
-    private List<AmpOrganisation> beneficiaryAgencyList;
+    private List<OrganizationSkeleton> implementingAgencyList;
+    private List<OrganizationSkeleton> beneficiaryAgencyList;
     private List<AmpCategoryValue> peacebuilderMarkerList;
     private List<AmpCategoryValue> peacebuildingList;
     private List<AmpSector>secondarySectors;
@@ -438,11 +439,11 @@ public class DashboardFilter {
         return currencyIdQuickFilter;
     }
 
-    public List<AmpOrganisation> getOrganizations() {
+    public List<OrganizationSkeleton> getOrganizations() {
         return organizations;
     }
 
-    public void setOrganizations(List<AmpOrganisation> organizations) {
+    public void setOrganizations(List<OrganizationSkeleton> organizations) {
         this.organizations = organizations;
     }
 
@@ -1043,20 +1044,20 @@ public class DashboardFilter {
 		this.donorAgencyList = donorAgencyList;
 	}
 
-	public List<AmpOrganisation> getImplementingAgencyList() {
+	public List<OrganizationSkeleton> getImplementingAgencyList() {
 		return implementingAgencyList;
 	}
 
 	public void setImplementingAgencyList(
-			List<AmpOrganisation> implementingAgencyList) {
+			List<OrganizationSkeleton> implementingAgencyList) {
 		this.implementingAgencyList = implementingAgencyList;
 	}
 
-	public List<AmpOrganisation> getBeneficiaryAgencyList() {
+	public List<OrganizationSkeleton> getBeneficiaryAgencyList() {
 		return beneficiaryAgencyList;
 	}
 
-	public void setBeneficiaryAgencyList(List<AmpOrganisation> beneficiaryAgencyList) {
+	public void setBeneficiaryAgencyList(List<OrganizationSkeleton> beneficiaryAgencyList) {
 		this.beneficiaryAgencyList = beneficiaryAgencyList;
 	}
 

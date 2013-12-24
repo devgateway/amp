@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.digijava.module.aim.util.Output;
 
 /**
- * Connection between Activity and Sector.
+ * Connection between Activity and Location.
  * This class initially was added to add percentage for Bolivia. AMP-2250
  * @author Irakli Kobiashvili
  *

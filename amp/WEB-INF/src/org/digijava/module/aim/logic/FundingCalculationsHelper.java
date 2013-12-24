@@ -174,7 +174,7 @@ public class FundingCalculationsHelper {
 	}
 	
 	/**
-	 * extracts all the donor funding + MTEF funding from a source and adds them into a single source; then calculated the totals
+	 * extracts all the donor funding + MTEF funding from a source and adds them into a single source; then calculates the totals <br />
 	 * also resets the internal {@link #getFundDetailList()}
 	 * @param fundingSource
 	 * @param userCurrencyCode

@@ -39,6 +39,7 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -258,21 +259,11 @@ public class QueryUtil {
     }    
     
     public static MapFilter getNewFilter(HttpServletRequest request){
-    	String locale = RequestUtils.getNavigationLanguage(request).getCode();
-		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
     	MapFilter filter = new MapFilter();
     	//List<AmpOrgGroup> orgGroups = new ArrayList(DbUtil.getAllOrgGroups());
 		//filter.setOrgGroups(orgGroups);
-    	
-    	
-    	List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
-		filter.setOrgGroups(orgGroups);
-		List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupsWithOrgsList = new ArrayList<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>>();
-		for(AmpOrgGroup orgGroup:orgGroups){
-			List<AmpOrganisation> organizations=DbUtil.getOrganisationByGroupId(orgGroup.getAmpOrgGrpId());
-			orgGroupsWithOrgsList.add(new EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>(orgGroup,organizations));
-		}
-		filter.setOrgGroupWithOrgsList(orgGroupsWithOrgsList);
+    	    	
+    	filter.buildOrganizationsByOrgGroup();
 		
 		if (filter.getRegions() == null) {
 			try {
@@ -291,7 +282,7 @@ public class QueryUtil {
 			}
 		}
     	
-		List<AmpOrganisation> orgs = null;
+		List<OrganizationSkeleton> orgs = null;
 
 		if (filter.getOrgGroupId() == null || filter.getOrgGroupId() == -1) {
 			filter.setOrgGroupId(-1l);

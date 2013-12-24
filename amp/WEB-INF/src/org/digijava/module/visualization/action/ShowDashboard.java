@@ -39,6 +39,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
@@ -149,7 +150,7 @@ public class ShowDashboard extends Action {
 			orgGroupsWithOrgsList.add(new EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>(orgGroup,organizations));
 		}
 		filter.setOrgGroupWithOrgsList(orgGroupsWithOrgsList);
-		List<AmpOrganisation> orgs = null;
+		List<OrganizationSkeleton> orgs = null;
 
 		if (filter.getOrgGroupId() == null
 				|| filter.getOrgGroupId() == -1) {

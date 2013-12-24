@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -143,6 +145,34 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 	public static boolean isInternationalized(String viewName, ResultSet rs)
 	{
 		return InternationalizedViewsRepository.i18Models.get(viewName) != null && (rs.toString().contains("i18n"));
+	}
+	
+	/**
+	 * convenience method for fetching a view using the request's JDBC connection and locale and no inter-view caching and no FilterParams
+	 * @param viewName
+	 * @param condition
+	 * @param locale
+	 * @param columnNames
+	 * @return
+	 */
+	public static java.util.Map<Long, String> fetchInternationalizedView(final String viewName, final String condition, final String idColumnName, final String payloadColumnName)
+	{
+		final java.util.Map<Long, String> res = new java.util.HashMap<Long, String>();
+		PersistenceManager.getSession().doWork(new org.hibernate.jdbc.Work()
+		{
+			public void execute(Connection conn) throws SQLException
+			{
+				ViewFetcher fetcher = getFetcherForView(viewName, condition, TLSUtils.getEffectiveLangCode(), new java.util.HashMap<PropertyDescription, ColumnValuesCacher>(), conn, idColumnName, payloadColumnName);
+				ResultSet rs = fetcher.fetch(null);
+				while (rs.next())
+				{
+					Long id = rs.getLong(idColumnName);
+					String val = rs.getString(payloadColumnName);
+					res.put(id, val);
+				}
+			}
+		});
+		return res;
 	}
 }
 

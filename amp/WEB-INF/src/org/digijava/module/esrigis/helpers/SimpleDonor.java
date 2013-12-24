@@ -23,4 +23,10 @@ public class SimpleDonor {
 	public String getDonorCode() {
 		return donorCode;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("%s (%s)", this.donorname, this.donorCode);
+	}
 }

@@ -82,21 +82,15 @@ function validateChangeRangeDefaultValue(){
 	var startYearTranslated;
 	var endYearTranslated;;
 	var endYear;
-    for (i=0;i < document.aimGlobalSettingsForm.length -1;i++) {
-    	var form=document.aimGlobalSettingsForm[i];
-		if (form.globalId) {
-			//whe test 		
-			if(form.globalSettingsName.value=='Change Range Default Start Value'){
-				startYear=form.gsfValue.value;
-				startYearTranslated=form.globalSettingsNameTranslated.value;
-			}else{
-				if(form.globalSettingsName.value=='Change Range Default End Value'){
-					endYear=form.gsfValue.value;
-					endYearTranslated=form.globalSettingsNameTranslated.value;
-				}
-			}
-		}
-    }
+
+	var startYearFields = $("[name='globalSettingsName'][value='Change Range Default Start Value']");
+	var startYear = startYearFields.siblings("SELECT").val();
+	var startYearTranslated = startYearFields.siblings("[name='globalSettingsNameTranslated']").val();
+	
+	var endYearFields = $("[name='globalSettingsName'][value='Change Range Default End Value']");
+	var endYear = endYearFields.siblings("SELECT").val();
+	var endYearTranslated = endYearFields.siblings("[name='globalSettingsNameTranslated']").val();
+
     if(endYear<startYear){
     	alert(endYearTranslated +' <digi:trn key="aim:Global:validation">should be greater than</digi:trn> ' + startYearTranslated);
     	return false;

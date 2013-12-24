@@ -67,10 +67,10 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
         closeLink = new WebMarkupContainer("closeLink");
 		closeLink.setOutputMarkupId(true);
 		closeLink.add(new AttributeModifier("onclick",
-                "CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); " +
+                "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
                         "$('#" + preview.getMarkupId() + "').html($('#" + textAreaContainer.getMarkupId() + "').val()); " +
                         "$('#" + preview.getMarkupId() + "').show(); " +
-                        "CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy(); " +
+                        "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} " +
                         "$('#" + textAreaContainer.getMarkupId() + "').show();" +
                         "$('#" + textAreaContainer.getMarkupId() + "').focus();" +
                         "$('#" + textAreaContainer.getMarkupId() + "').blur();" +

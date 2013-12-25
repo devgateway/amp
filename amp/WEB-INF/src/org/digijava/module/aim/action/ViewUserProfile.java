@@ -62,7 +62,8 @@ public class ViewUserProfile
         if (httpSession.getAttribute("ampAdmin") == null || httpSession.getAttribute("ampAdmin").equals("no")) {
             
             if(user != null) member = TeamMemberUtil.getAmpTeamMember(user);
-            else if(userid != null) member = TeamMemberUtil.getAmpTeamMemberByUserId(userid); 
+            else if(userid != null) member = TeamMemberUtil.getAmpTeamMember(userid);
+
             
             if (member == null && request.getParameter("id") != null) {
                 if (userid.equals(teamMember.getMemberId())) {

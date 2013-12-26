@@ -30,11 +30,12 @@ function getGVF(featureSet, attribute, numClass) {
 	}
 	
 	var SDCM = 0.0;
+	var classStart;
 	for ( var x = 0, xl = numClass; x < xl; x++) {
 		if (breaks[x] == 0) {
-			var classStart = 0;
+			classStart = 0;
 		} else {
-			var classStart = dataList.findIndex(breaks[x]);
+			classStart = dataList.findIndex(breaks[x]);
 			classStart += 1;
 		}
 		var classEnd = dataList.findIndex(breaks[x + 1]);
@@ -47,7 +48,7 @@ function getGVF(featureSet, attribute, numClass) {
 		}
 		SDCM += preSDCM;
 	}
-	var varFit = (SDAM - SDCM) / SDAM;
+	//var varFit = (SDAM - SDCM) / SDAM;
 	//console.log("varianceFit:", varFit)
 	return breaks;
 }

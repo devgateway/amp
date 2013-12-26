@@ -282,10 +282,10 @@ public class XLSExportAction extends Action {
 			response.setContentType("text/html");
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
-    		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
+    		String url = "/";
     		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.");
-    		String script = "<script>opener.close();" 
-    			+ "alert('"+ alert +"');" 
+    		String script = "<script>opener.close();</script>" 
+    			+ "<script>alert('"+ alert +"');" 
     			+ "window.location=('"+ url +"');"
     			+ "</script>";
     		out.println(script);

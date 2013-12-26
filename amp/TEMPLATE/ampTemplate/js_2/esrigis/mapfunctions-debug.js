@@ -860,7 +860,7 @@ function getSelectedFilter() {
 			$("#sfilterid").append(" <i>| "+ translate('End Year')+"</i> : ");
 			$("#sfilterid").append(jsonData[0].endyear);
 			
-			$("#sfilterid").append(" <i>| "+ translate('Locations Fitler On')+"</i> : ");
+			$("#sfilterid").append(" <i>| "+ translate('Locations Filter On')+"</i> : ");
 			$("#sfilterid").append(translate(jsonData[0].locationfiltered));
 			
 			if (jsonData[0].projectstatus != '') {
@@ -1502,7 +1502,8 @@ function getStructures(clear) {
 		try {
 			structures = [];
 			structurespoint=[];
-			cLs.clean();
+			if (typeof cLs != 'undefined')
+				cLs.clean();
 			$("#clusterStructures").hide();
 		} catch (e) {
 			console.log(e);
@@ -1511,12 +1512,14 @@ function getStructures(clear) {
 	if (structureGraphicLayer && !clear) {
 		if (structureGraphicLayer.visible) {
 			structureGraphicLayer.hide();
-			cLs.hide();
+			if (typeof cLs != 'undefined')
+				cLs.hide();
 			$('#structuresdiv').hide('slow');
 			structureVisible=false;
 		} else {
 			structureGraphicLayer.show();
-			cLs.show();
+			if (typeof cLs != 'undefined')
+				cLs.show();
 			map.infoWindow.resize(400, 250);
 			$('#structuresdiv').show('slow');
 			structureVisible=true;

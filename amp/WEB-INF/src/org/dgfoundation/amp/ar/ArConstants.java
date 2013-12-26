@@ -322,6 +322,10 @@ public final class ArConstants {
 			new SyntheticColumnsMeta("Actual Disbursements - Recurrent", new ActualDisbRecurrentCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements - Recurrent","Actual Disbursements")),
 			new SyntheticColumnsMeta("Actual Disbursements", new ActualDisbSplitCapRecTotalsCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements","Actual Disbursements"))
 	) ;
+
+	public static final String COLUMN_ANY_PRIMARY_PROGRAM_LEVEL = "Primary Program Level";
+
+	public final static String COLUMN_ANY_SECONDARY_PROGRAM_LEVEL="Secondary Program Level";
 	
 	public static class SyntheticColumnsMeta {
 		String columnName;

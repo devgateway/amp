@@ -69,6 +69,11 @@ public class MetaTextColWorker extends TextColWorker {
 		}
 		else if ( ArConstants.COLUMN_ANY_RELATED_ORGS.contains(columnName.trim()) ) {
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
+		}else{
+			if(columnName.startsWith(ArConstants.COLUMN_ANY_PRIMARY_PROGRAM_LEVEL)|| columnName.startsWith(ArConstants.COLUMN_ANY_SECONDARY_PROGRAM_LEVEL )){
+				mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
+			}
+					
 		}
 		
 		MetaInfo percentageMeta = MetaInfo.getMetaInfo(mtc.getMetaData(), ArConstants.PERCENTAGE);

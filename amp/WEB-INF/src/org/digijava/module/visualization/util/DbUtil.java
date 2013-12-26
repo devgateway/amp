@@ -2512,50 +2512,8 @@ public class DbUtil {
     private static Long[] getAllDescendants(Long[] sectorIds) {
     	
     	Set<Long> ids = SectorUtil.getRecursiveChildrenOfSectors(Arrays.asList(sectorIds));
-    	return (Long[]) ids.toArray(new Long[0]);
-    	
-//    	//Go through the list to determine the children
-//    	Set<Long> tempSectorIds = new java.util.HashSet<Long>();
-//    	
-//    	for(Long i : sectorIds)
-//    	{
-//			tempSectorIds.add(i);
-//    		for(AmpSector as : allSectorList)
-//			{
-//    			if(as.getParentSectorId() != null && as.getParentSectorId().getAmpSectorId().equals(i))
-//    	    		tempSectorIds.add(as.getAmpSectorId());
-//    			if(as.getParentSectorId() != null && as.getParentSectorId().getParentSectorId() != null && as.getParentSectorId().getParentSectorId().getAmpSectorId().equals(i))
-//    	    		tempSectorIds.add(as.getAmpSectorId());    			
-//    		}
-//    	}
-//		return (Long[]) tempSectorIds.toArray(new Long[0]);
+    	return (Long[]) ids.toArray(new Long[0]);    	
 	}
-
-//	public static ArrayList<AmpCategoryValueLocations> getAmpLocations() {
-//		Session session = null;
-//		Query q = null;
-//		AmpCategoryValueLocations location = null;
-//		ArrayList<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();
-//		Iterator<AmpCategoryValueLocations> iter = null;
-//
-//		try {
-//			session = PersistenceManager.getSession();
-//			String queryString = " from " + AmpCategoryValueLocations.class.getName()+
-//            " vl where vl.parentLocation  is not null " ;
-//			q = session.createQuery(queryString);
-//			iter = q.list().iterator();
-//
-//			while (iter.hasNext()) {
-//				location = (AmpCategoryValueLocations) iter.next();
-//				locations.add(location);
-//			}
-//
-//		} catch (Exception ex) {
-//			logger.error("Unable to get Sector names  from database "
-//					+ ex.getMessage());
-//		}
-//		return locations;
-//	}
 
 	/**
 	 * filters all descendants and root location - e.g. complete subtree

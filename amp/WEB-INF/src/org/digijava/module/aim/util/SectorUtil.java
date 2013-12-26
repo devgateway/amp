@@ -1812,19 +1812,7 @@ public class SectorUtil {
 		
 		Set<Long> allOutputLocations = getRecursiveChildrenOfSectors(allInputLocations);
 		return allOutputLocations;
-	}
-	
-//	/**
-//	 * returns set of all (recursive) descendants of a given set of locations
-//	 * @param destCollection
-//	 * @param locations
-//	 */
-//	public static void populateWithDescendants(Set<AmpSector> destCollection, Collection<AmpSector> locations ) 
-//	{
-//		Set<Long> allOutputLocations = populateWithDescendantsIds(locations);
-//		for(Long outputId:allOutputLocations)
-//			destCollection.add(getAmpSector(outputId, false));
-//	}
+	}	
 	
 	/**
 	 * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm

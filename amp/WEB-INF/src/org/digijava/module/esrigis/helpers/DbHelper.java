@@ -410,25 +410,6 @@ public class DbHelper {
 		return result;
 	}
 	
-	public static AmpCategoryValueLocations getTopLevelLocation(
-			AmpCategoryValueLocations location) {
-		if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Country")) {
-			location = getTopLevelLocation(location.getParentLocation());
-		}
-		return location;
-	}
-	
-	public static List<AmpCategoryValueLocations> getTopLevelLocationList(List<AmpCategoryValueLocations> list) {
-    	List<AmpCategoryValueLocations> locs = new ArrayList<AmpCategoryValueLocations>();
-    	for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-    		AmpCategoryValueLocations ampLoc = (AmpCategoryValueLocations) iterator.next();
-    		AmpCategoryValueLocations ampLocTopLevel = getTopLevelLocation(ampLoc);
-			if (!locs.contains(ampLocTopLevel)) {
-				locs.add(ampLocTopLevel);
-			}
-		}
-		return locs;
-	}
 
 //	/**
 //	 * returns list of AmpCategoryValueLocations.id locations which have activities which are funded according to filter
@@ -678,7 +659,7 @@ public class DbHelper {
 	}
 	
 	/**
-	 * construct a Map<ACVL.id, Region/Zone-ACVL.id>
+	 * constructs a Map<ACVL.id, Region/Zone-ACVL.id>
 	 * @param allUsedAcvlIDs
 	 * @param impLevel
 	 * @return

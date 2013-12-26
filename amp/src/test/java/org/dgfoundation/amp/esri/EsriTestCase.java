@@ -2,12 +2,14 @@ package org.dgfoundation.amp.esri;
 
 import org.dgfoundation.amp.testutils.ActivityComparator;
 import org.dgfoundation.amp.testutils.ActivityDigest;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.esrigis.helpers.SimpleLocation;
 
 import java.util.*;
-
 
 import junit.framework.TestCase;
 
@@ -39,11 +41,25 @@ public class EsriTestCase extends TestCase{
 		return true;
 	}
 	
-	public boolean checkLocationsList(List<AmpCategoryValueLocations> locs, String... locations)
+	public boolean checkLocationsList(List<Long> locsIds, String... locations)
 	{
 		String[] sortedLocs = locations;
 		Arrays.sort(sortedLocs);
-		assertEquals("wrong number of locations in result", sortedLocs.length, locs.size());
+		assertEquals("wrong number of locations in result", sortedLocs.length, locsIds.size());
+		
+		List<AmpCategoryValueLocations> locs = new ArrayList<AmpCategoryValueLocations>();
+		for(Long locId:locsIds)
+		{
+			locs.add((AmpCategoryValueLocations) PersistenceManager.getSession().load(AmpCategoryValueLocations.class, locId));
+		}
+		Collections.sort(locs, new Comparator<AmpCategoryValueLocations>()
+				{
+					public int compare(AmpCategoryValueLocations loc1, AmpCategoryValueLocations loc2)
+					{
+						return loc1.getName().compareTo(loc2.getName());
+					}
+				});
+		
 		for(int i = 0; i < sortedLocs.length; i++)
 		{
 			String a = sortedLocs[i];
@@ -79,5 +95,11 @@ public class EsriTestCase extends TestCase{
 		for(ActivityDigest dig:activities)
 			out.add(dig);
 		return out;
+	}
+	
+	@Override
+	public void setUp()
+	{
+		TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
 	}
 }

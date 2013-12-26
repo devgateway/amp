@@ -50,13 +50,13 @@ public class EsriTestCases extends EsriTestCase
 		List<AmpActivityVersion> activities = DbHelper.getActivities(mapFilter);
 		checkActivitiesList(activities, activityDigestList(new ActivityDigest("mtef activity 1", "8721133"), new ActivityDigest("mtef activity 2", "8721134")));
 		
-		List<AmpCategoryValueLocations> locs = DbHelper.getLocations(mapFilter, "Region");
-		checkLocationsList(locs, "Anenii Noi County");
+//		List<Long> locs = DbHelper.getLocations(mapFilter, "Region");
+//		checkLocationsList(locs, "Anenii Noi County");
 		
-		List<SimpleLocation> fundings = DbHelper.getFundingByRegionList(locs, "Region", "USD", new Date(1980 - 1900, 0, 1),
+		List<SimpleLocation> fundings = DbHelper.getFundingByRegionList(null, "Region", "USD", new Date(1980 - 1900, 0, 1),
 	            new Date(2020 - 1900, 0, 1), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, 2, new BigDecimal(1), mapFilter);
 		
-		SimpleLocation[] bla = {new SimpleLocation("Anenii Noi County", "111333.00", "555111.00", "912777.00")};
+		SimpleLocation[] bla = {new SimpleLocation("Anenii Noi County", "111333.00", "555111.00", "123654.00")};
 		checkSimpleLocations(fundings, bla);
 		
 		System.out.println(fundings.size());
@@ -69,14 +69,14 @@ public class EsriTestCases extends EsriTestCase
 		List<AmpActivityVersion> activities = DbHelper.getActivities(mapFilter);
 		checkActivitiesList(activities, activityDigestList(new ActivityDigest("SSC Project 1", "8721137"), new ActivityDigest("SSC Project 2", "87211311")));
 		
-		List<AmpCategoryValueLocations> locs = DbHelper.getLocations(mapFilter, "Region");
-		checkLocationsList(locs, "Anenii Noi County", "Edinet County");
+//		List<Long> locs = DbHelper.getLocations(mapFilter, "Region");
+//		checkLocationsList(locs, "Anenii Noi County", "Edinet County");
 		
-		List<SimpleLocation> fundings = DbHelper.getFundingByRegionList(locs, "Region", "USD", new Date(1980 - 1900, 0, 1),
+		List<SimpleLocation> fundings = DbHelper.getFundingByRegionList(null, "Region", "USD", new Date(1980 - 1900, 0, 1),
 	            new Date(2020 - 1900, 0, 1), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, 2, new BigDecimal(1), mapFilter);
 		
 		SimpleLocation[] bla = {
-				new SimpleLocation("Anenii Noi County", "111333.00", "555111.00", "912777.00"), 
+				new SimpleLocation("Anenii Noi County", "111333.00", "555111.00", "123654.00"), 
 				new SimpleLocation("Edinet County", "567421.00", "131845.00", "0.00")};
 		checkSimpleLocations(fundings, bla);
 		
@@ -90,14 +90,14 @@ public class EsriTestCases extends EsriTestCase
 		List<AmpActivityVersion> activities = DbHelper.getActivities(mapFilter);
 		checkActivitiesList(activities, activityDigestList(new ActivityDigest("SSC Project 1", "8721137"), new ActivityDigest("SSC Project 2", "87211311")));
 		
-		List<AmpCategoryValueLocations> locs = DbHelper.getLocations(mapFilter, "Region");
-		checkLocationsList(locs, "Anenii Noi County", "Edinet County");
+//		List<Long> locs = DbHelper.getLocations(mapFilter, "Region");
+//		checkLocationsList(locs, "Anenii Noi County", "Edinet County");
 		
-		List<SimpleLocation> fundings = DbHelper.getFundingByRegionList(locs, "Region", "USD", new Date(1980 - 1900, 0, 1),
+		List<SimpleLocation> fundings = DbHelper.getFundingByRegionList(null, "Region", "USD", new Date(1980 - 1900, 0, 1),
 	            new Date(2020 - 1900, 0, 1), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, 2, new BigDecimal(1), mapFilter);
 		
 		SimpleLocation[] bla = {
-				new SimpleLocation("Anenii Noi County", "111333.00", "555111.00", "912777.00"), 
+				new SimpleLocation("Anenii Noi County", "111333.00", "555111.00", "123654.00"), 
 				new SimpleLocation("Edinet County", "567421.00", "131845.00", "0.00")};
 		checkSimpleLocations(fundings, bla);
 		

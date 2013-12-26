@@ -300,8 +300,8 @@
             value = "<digi:trn>Year Start</digi:trn>";
             return value;
          }
-        if(text == "Locations Fitler On") {
-            value = "<digi:trn>Locations Fitler On</digi:trn>";
+        if(text == "Locations Filter On") {
+            value = "<digi:trn>Locations Filter On</digi:trn>";
             return value;
          }
         if(text == "True") {

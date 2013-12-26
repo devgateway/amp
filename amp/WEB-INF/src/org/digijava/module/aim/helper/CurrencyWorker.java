@@ -110,27 +110,27 @@ public class CurrencyWorker {
 		return resultDbl;
 	}
 
-	public static DecimalWraper convertWrapper(double amt, double fromExchangeRate,
-			double toExchangeRate, Date date) {
+	public static DecimalWraper convertWrapper(double amt, double fromExchangeRate, double toExchangeRate, Date date)
+	{
 		DecimalWraper result = new DecimalWraper();
 		BigDecimal reference = new BigDecimal(1d);
 		BigDecimal amount = new BigDecimal(amt);
 		BigDecimal fromRate = new BigDecimal(fromExchangeRate);
-//		if (Math.abs(fromRate.doubleValue()) < 0.00001)
-//			System.out.println("BOZO HERE");
+
 		BigDecimal toRate = new BigDecimal(toExchangeRate);
 		BigDecimal inter = reference.divide(fromRate,30,java.math.RoundingMode.HALF_EVEN);
 		
 		if (fromExchangeRate != toExchangeRate) {
-			BigDecimal tmp;
-			tmp=amount.multiply(inter);
+			BigDecimal tmp = amount.multiply(inter);
 			result.setValue(tmp.multiply(toRate));
-			result.setCalculations(result.toString() + "= ((" + 1 + "/"
-					+ fromExchangeRate + ") * " + amount.toString() + " * " + toExchangeRate + ") " + date.toString());
+			
+			// calculations is only used for debugging reasons but it is one of the major bottlenecks in maps and dashboards
+			// do not enable it unless temporarily and *never* commit code with this ON
+			/*result.setCalculations(result.toString() + "= ((" + 1 + "/"
+					+ fromExchangeRate + ") * " + amount.toString() + " * " + toExchangeRate + ") " + date.toString());*/
 			} else {
 			result.setValue(amount);
-			result.setCalculations("No need it's due rate");
-
+			//result.setCalculations("No need it's due rate");
 		}
 		return result;
 	}

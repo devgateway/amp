@@ -52,8 +52,7 @@ public class DynLocationManagerUtil {
 	private static Logger logger = Logger
 			.getLogger(DynLocationManagerUtil.class);
 	
-	public static List<AmpCategoryValueLocations> regionsOfDefaultCountry = Collections.synchronizedList(
-	 			new ArrayList<AmpCategoryValueLocations>()   ); 
+	public static List<AmpCategoryValueLocations> regionsOfDefaultCountry = new ArrayList<AmpCategoryValueLocations>(); 
 
 	
 	public static void clearRegionsOfDefaultCountryCache() {
@@ -847,11 +846,12 @@ public class DynLocationManagerUtil {
 		
 	}
 	
-	public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException  {
-		
-		List<AmpCategoryValueLocations> ret	= null;
-		synchronized (DynLocationManagerUtil.regionsOfDefaultCountry) {
-			if ( DynLocationManagerUtil.regionsOfDefaultCountry.size() == 0 ) {
+	public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException 
+	{	
+		synchronized (DynLocationManagerUtil.regionsOfDefaultCountry)
+		{
+			if ( DynLocationManagerUtil.regionsOfDefaultCountry.isEmpty())
+			{
 		 	 	AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso( 
 		 	 	FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
 		 	 	if (country != null){
@@ -862,11 +862,8 @@ public class DynLocationManagerUtil {
 			 	 	DynLocationManagerUtil.regionsOfDefaultCountry.addAll(children);
 		 	 	}
 			}
-	 	 	
- 	 		ret	= new ArrayList<AmpCategoryValueLocations>( DynLocationManagerUtil.regionsOfDefaultCountry.size() );
- 	 		ret.addAll(DynLocationManagerUtil.regionsOfDefaultCountry);
+			return Collections.unmodifiableList(regionsOfDefaultCountry);
 		}
- 	 	return ret;
  	 }
 	
 	public static Set<AmpCategoryValueLocations> getLocationsOfTypeRegionOfDefCountry()

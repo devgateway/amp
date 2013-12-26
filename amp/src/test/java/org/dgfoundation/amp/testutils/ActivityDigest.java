@@ -4,6 +4,11 @@ import java.util.*;
 
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 
+/**
+ * short description of an AmpActivity, used for comparing outputs
+ * @author Dolghier Constantin
+ *
+ */
 public class ActivityDigest implements Comparable<ActivityDigest>  
 {
 	protected String activityName;

@@ -2,7 +2,9 @@ package org.digijava.module.esrigis.helpers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.OrgGroupSkeleton;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -933,12 +936,22 @@ public class MapFilter {
 	}
 	
 	/**
+	 * per-MapFilter cached list of activity Ids which pass the workspace filters. It is very expensive to compute - over 1 second and does not change on logout / login.
+	 * we cache it here at least per-request
+	 * TODO: Dolghier Constantin - cache this per-session in the future
+	 */
+	private transient List<Long> filteredActivities;
+	
+	/**
 	 * computes the list of activity Id's which should be displayed by a map which uses this filter's workspace setting.<br />
 	 * <b>DOES NOT TAKE INTO ACCOUNT the MapFilter settings per se</b> 
 	 * @return
 	 */
 	public List<Long> buildFilteredActivitiesList()
 	{
+		if (filteredActivities != null)
+			return filteredActivities;
+		
 		List<Long> workspaceActivityList = new ArrayList<Long>();
 		
 		try
@@ -950,7 +963,8 @@ public class MapFilter {
 				String workSpaceQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
 				workspaceActivityList = DbHelper.getInActivitiesLong(workSpaceQuery);
 			}
-			return workspaceActivityList;
+			filteredActivities = Collections.unmodifiableList(workspaceActivityList);
+			return filteredActivities;
 		}
 		catch(Exception e)
 		{
@@ -977,6 +991,22 @@ public class MapFilter {
 		this.setOrgGroupWithOrgsList(orgGroupsWithOrgsList);
 	}
 	
+	/**
+	 * builds a list of locations which should filter the activities.
+	 * returns "null" if no filtering should be performed
+	 * @return
+	 */
+	public List<Long> buildFilteredLocationIds()
+	{
+		if ((getSelLocationIds() == null) || (getSelLocationIds().length == 0))
+			return null;
+		java.util.Set<Long> selectedIds = new java.util.HashSet<Long>(Arrays.asList(getSelLocationIds()));
+		if (selectedIds.contains(-1L))
+			return null;
+		
+		return new ArrayList<Long>(DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(selectedIds));
+	}
+	
     public List<AmpCategoryValue> getPeacebuildingMarkers() {
         return peacebuildingMarkers;
     }
@@ -999,5 +1029,11 @@ public class MapFilter {
 
     public void setFilterByPeacebuildingMarker(boolean filterByPeacebuildingMarker) {
         this.filterByPeacebuildingMarker = filterByPeacebuildingMarker;
+    }
+    
+    public boolean hasSectorCondition()
+    {
+    	Long[] sectorIds = this.getSelSectorIds();
+    	return sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
     }
 }

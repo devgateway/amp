@@ -147,7 +147,7 @@ public class DataDispatcher extends MultiAction {
             implementationLevel = "Zone";
         }
         JSONArray jsonArray = new JSONArray();
-        List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel);
+        List<Long> locations = filter.buildFilteredLocationIds();
         ArrayList<SimpleLocation> mapregions = new ArrayList<SimpleLocation>();
 
 
@@ -653,16 +653,19 @@ public class DataDispatcher extends MultiAction {
 		} else {
 			implementationLevel = "Zone";
 		}
+				
 		JSONArray jsonArray = new JSONArray();
-		List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel);
+		List<Long> locations = filter.buildFilteredLocationIds();
 		ArrayList<SimpleLocation> mapregions = new ArrayList<SimpleLocation>();
 		
 		
-
+		long startTS = System.currentTimeMillis();
 		mapregions = DbHelper.getFundingByRegionList(locations, implementationLevel, filter.getCurrencyCode(), startDate, endDate, 
 				/*filter.getTransactionType(),*/ CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, 
 				new Integer(3), new BigDecimal(1), filter);
-
+		long delta = System.currentTimeMillis() - startTS;
+		logger.info("showHighlights took " + (delta / 1000.0) + " seconds");
+		
 		jsonArray.addAll(mapregions);
 		PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());

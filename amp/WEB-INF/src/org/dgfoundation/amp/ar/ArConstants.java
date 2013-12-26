@@ -189,6 +189,10 @@ public final class ArConstants {
 	public final static List<String> COLUMN_ANY_RELATED_ORGS=Arrays.asList("Beneficiary Agency","Contracting Agency",
 							"Executing Agency","Implementing Agency","Regional Group","Responsible Organization","Sector Group");
 	
+	public final static String COLUMN_ANY_PRIMARY_PROGRAM_LEVEL="Primary Program Level";
+	public final static String COLUMN_ANY_SECONDARY_PROGRAM_LEVEL="Secondary Program Level";
+
+	
 	public final static String COLUMN_COUNTRY="Country";
 	public final static String COLUMN_REGION="Region";
 	public final static String COLUMN_ZONE="Zone";

@@ -22,6 +22,7 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * @author aartimon@dginternational.org
@@ -64,7 +65,10 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 						AmpOrgRole ampOrgRole = (AmpOrgRole)item.getModelObject();
 						for (Iterator iterator = fundings.iterator(); iterator.hasNext();) {
 							AmpFunding ampFunding = (AmpFunding) iterator.next();
-							if (ampFunding.getAmpDonorOrgId().getAmpOrgId() == ampOrgRole.getOrganisation().getAmpOrgId()){
+							
+						  if (ampFunding.getAmpDonorOrgId().getAmpOrgId() == ampOrgRole.getOrganisation().getAmpOrgId() &&
+				        		  ((ampFunding.getSourceRole() == null && ampOrgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY))
+		                            ||(ampFunding.getSourceRole() != null && ampFunding.getSourceRole().getRoleCode().equals(ampOrgRole.getRole().getRoleCode())))){
 								String translatedMessage = TranslatorUtil.getTranslation("This organization has a funding related.");
 								target.appendJavaScript("alert ('"+translatedMessage+"')");
 								return;

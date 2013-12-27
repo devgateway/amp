@@ -419,4 +419,5 @@ public class Constants
      //Action type loggers
      public static final String LOGIN_ACTION="login";
      public static final String SENT_REMINDER="sentReminder";
+     public static final String UNASSIGNED_ACTIVITY_LIST="unassignedActivityList";
 }

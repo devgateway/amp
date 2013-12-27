@@ -181,6 +181,7 @@ public class SelectTeam extends Action {
 			session.removeAttribute(Constants.TEAM_ID);
             session.removeAttribute(Constants.MY_REPORTS_PER_PAGE);
             session.removeAttribute(Constants.LAST_VIEWED_REPORTS);
+            session.removeAttribute(Constants.UNASSIGNED_ACTIVITY_LIST);
 
             //See if current workspace has a FM Template attached to it
             AmpTeam currentTeam = member.getAmpTeam();

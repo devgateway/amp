@@ -201,6 +201,10 @@ public class DataDispatcher extends MultiAction {
 		
 		long startTS=System.currentTimeMillis();
 		list = DbHelper.getActivities(maphelperform.getFilter());
+		long endTS=System.currentTimeMillis();
+		logger.info("getActivities with " + list.size() + " results in " + (endTS - startTS)  + " ms");
+		
+		logger.info("Iteration Starts");
 	    OutputStream out = response.getOutputStream();
         XlsHelper Xls = new XlsHelper(); 
 		try {

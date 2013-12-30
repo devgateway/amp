@@ -3,8 +3,10 @@ package org.digijava.module.esrigis.helpers;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -167,34 +169,31 @@ public class XlsHelper {
 		int i = 1;
 		java.util.Date date = new java.util.Date();
 		
-		long startTS=System.currentTimeMillis();
-		long endTS=System.currentTimeMillis();
-		logger.info("getActivities with " + activitylist.size() + " results in " + (endTS - startTS) / 1000.0 + " seconds");
+
 		logger.info("Iteration Starts");
 		
-		startTS=System.currentTimeMillis();
+		long startTS=System.currentTimeMillis();
 		for (Iterator iterator = activitylist.iterator(); iterator.hasNext();) {
+
 			
 			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
 			
-			FundingCalculationsHelper calculations = getTotalsForActivity(aA, filter.getCurrencyCode());
-			String sectorstr = buildSectorsString(aA);
-			String donors = buildDonorsString(aA);			
+
+			FundingCalculationsHelper calculations = null;
+
+			String sectorstr = null;//buildSectorsString(aA);
+			String donors = null;//buildDonorsString(aA);			
 			
-			String body = getEditTagValue(request,aA.getDescription());
-			
-			Html2Text h2t = null;
-			if (body != null){
-				h2t = new Html2Text();
-				h2t.parse(body);
-			}
+
 			
 			if (aA.getStructures().size() >0){
-				
+				calculations=getTotalsForActivity(aA, filter.getCurrencyCode());
+
+				sectorstr = buildSectorsString(aA);
+				donors = buildDonorsString(aA);			
+
 				long startActivity=System.currentTimeMillis();	
 								
-				
-				long startactivity=System.currentTimeMillis();
 				for (Iterator iterator2 = aA.getStructures().iterator(); iterator2.hasNext();) {
 					AmpStructure st = (AmpStructure) iterator2.next();
 					row = sheet.createRow((short) (i));
@@ -231,16 +230,41 @@ public class XlsHelper {
 					
 				}
 				
-				long endTSActivity=System.currentTimeMillis();
-				logger.info("Actiuvity" + aA.getIdentifier() + " in "+(endTSActivity-startActivity)/1000.0+" seconds. Structures = " + aA.getStructures().size());
+				long endActivity=System.currentTimeMillis();
+				logger.info("Activity " + aA.getIdentifier() + " in "+(endActivity-startActivity)/1000.0+" seconds. Structures = " + aA.getStructures().size());
 				
 			}
-			
+
+			Map<String, String>bodyCache=new HashMap<String, String>();
 			for (Iterator iterator2 = aA.getLocations().iterator(); iterator2.hasNext();) {
+				
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
 				boolean implocation = alocation.getLocation().getLocation().getParentCategoryValue().getValue()
 						.equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
 				if (!implocation) {
+					if(sectorstr==null){
+						sectorstr = buildSectorsString(aA);
+					}
+					if(donors==null){
+						donors = buildDonorsString(aA);
+					}
+					if(calculations==null){
+						calculations=getTotalsForActivity(aA, filter.getCurrencyCode());
+					}
+					String body ;
+					if(bodyCache.get(aA.getDescription())==null){
+						body= getEditTagValue(request,aA.getDescription());
+						bodyCache.put(aA.getDescription(),body);
+					}else{
+						body=bodyCache.get(aA.getDescription());
+					}
+					
+					Html2Text h2t = null;
+					if (body != null){
+						h2t = new Html2Text();
+						h2t.parse(body);
+					}
+					
 					row = sheet.createRow((short) (i));
 					ArrayList<String> values = new ArrayList<String>();
 					values.add(date.toString());
@@ -284,7 +308,7 @@ public class XlsHelper {
 				}
 			}
 		}
-		endTS=System.currentTimeMillis();
+		long endTS=System.currentTimeMillis();
 		logger.info("iteration done in "+(endTS-startTS)/1000.0+" seconds. ");
 		return wb;
 	}
@@ -292,8 +316,10 @@ public class XlsHelper {
 	private String  getEditTagValue(HttpServletRequest request,String editKey) throws Exception{
 		Site site = RequestUtils.getSite(request);
         String editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site, editKey, RequestUtils.getNavigationLanguage(request).getCode());
+        
         if (editorBody == null) {
         	editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site, editKey, SiteUtils.getDefaultLanguages(site).getCode());
+
         }
         return editorBody;
 	}

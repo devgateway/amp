@@ -61,6 +61,7 @@ import org.digijava.kernel.config.moduleconfig.Security;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.exception.ExceptionHelper;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.security.ResourcePermission;
@@ -958,7 +959,10 @@ public class RequestProcessor
                 forward.getModule());
         }
 
-        super.processForwardConfig(request, response, newForwardConfig);
+        if (ExceptionHelper.checkForInfiniteRecursion(request, response))
+        	return;
+
+        super.processForwardConfig(request, response, newForwardConfig); //namnamu
 
     }
 

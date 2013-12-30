@@ -24,17 +24,22 @@ package org.digijava.kernel.exception;
 
 import java.io.CharArrayWriter;
 import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.AMPTaggedExceptions;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
+import org.apache.log4j.Logger;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import javax.servlet.http.HttpSession;
+
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.action.ActionForward;
 import org.digijava.kernel.util.DgUtil;
@@ -51,6 +56,8 @@ public class ExceptionHelper {
     public static final String EXCEPTION_INFO_MAP =
         "org.digijava.kernel.exception.exception_info_map";
 
+    private static Logger logger = Logger.getLogger(ExceptionHelper.class);
+    
     public static ExceptionInfo populateExceptionInfo(Integer code,
         Throwable cause, HttpServletRequest request) {
         ExceptionInfo exceptionInfo = new ExceptionInfo();
@@ -155,8 +162,124 @@ public class ExceptionHelper {
         return result;
     }
 
-    public static ActionForward processExceptionInfo(ExceptionInfo info, HttpServletRequest request) {
+    /**
+     * returns true IFF the current stacktrace looks like being an infinity loop with a depth of >= maxAllowed
+     * @param maxAllowed
+     * @return
+     */
+    public static boolean getExceptionDepth(int maxAllowed)
+    {
+    	int res = 0;
+    	StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+    	for (StackTraceElement elem:stackTrace)
+    	{
+    		boolean thisIsIt = elem.getClassName().contains("org.digijava.kernel.request.RequestProcessor") &&
+    				elem.getMethodName().equals("processForwardConfig");
+    		if (thisIsIt)
+    			res ++;
+    	}
+    	boolean ret = (res > maxAllowed) ||
+    			stackTrace.length >= 1020; // Java only keeps 1024 of them anyway
+    	if (ret)
+    		System.out.println("res = " + res + ", stackDepth = " + stackTrace.length + ", dying");
+    	return ret;
+    }
+    
+    /**
+     * outputs to a Logger the last <b>few</b> lines of the stacktrace
+     * @param logger
+     */
+    public static void printReducedStacktrace(org.apache.log4j.Logger logger)
+    {
+    	StringBuilder bld = new StringBuilder();
+    	StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+    	for(int i = 0; i < Math.min(10, stackTrace.length); i++)
+    		bld.append("\t" + stackTrace[i] + "\n");
+    	logger.error(bld.toString());
+    }
+    
+    protected static void printReducedStacktrace(HttpServletResponse response, String message)
+    {
+    	try
+    	{
+        	PrintWriter writer = response.getWriter();
+    		writer.write(message);
+    		//System.out.println(message);
+    		logger.error(message);
+    		StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
+    		for(int i = 0; i < 200; i++)
+    		{    		
+    			writer.write(stackTrace[i].toString() + "\n");
+    			logger.error(stackTrace[i].toString());
+    		}
+    		writer.write("\n....\n");
+    		System.out.println("\n....\n");
+    		for(int i = stackTrace.length - 200; i < stackTrace.length; i++)
+    		{
+    			writer.write(stackTrace[i].toString() + "\n");
+    			logger.error(stackTrace[i].toString());
+    		}
+    		writer.close();
+    	}
+    	catch(Exception e)
+    	{
+    		// swallow
+    	}
+    }
+
+    /**
+     * returns true IFF an infinite recursion was detected and an error message war written to the output file
+     * @param request
+     * @param response
+     * @return
+     */
+    public static boolean checkForInfiniteRecursion(HttpServletRequest request, HttpServletResponse response)
+    {
+        boolean deep = getExceptionDepth(20);
+        return deep;
+    }
+    
+    /**
+     * checks if a request, whose rendering has just generated an Exception, was generated while trying to report an another exception<br />
+     * returns true IFF the answer is "yes"
+     * @param request
+     * @return
+     */
+    public static boolean isRenderingAnException(HttpServletRequest request)
+    {
+    	String DOUBLE_EXCEPTION_MARKER_ATTR = "###doubleExceptionMarker###";
+    	Object b = request.getAttribute(DOUBLE_EXCEPTION_MARKER_ATTR);
+    	if (b != null)
+    	{
+    		return true;
+    	}
+    	request.setAttribute(DOUBLE_EXCEPTION_MARKER_ATTR, new Object());
+    	return false;
+    }
+    
+    /**
+     * called when an exception is on its way of being processed
+     * @param info
+     * @param request
+     * @param response
+     * @return
+     */
+    public static ActionForward processExceptionInfo(ExceptionInfo info, HttpServletRequest request, HttpServletResponse response) {
         ComponentContext context = ComponentContext.getContext(request);
+        
+        boolean isDoubleException = isRenderingAnException(request);
+        if (isDoubleException)
+        {
+    		printReducedStacktrace(response, "an exception was caught; moreover, an exception was generated while trying to generate the error page. Stopping\n");
+        	return null;
+        }
+        
+        if (checkForInfiniteRecursion(request, response))
+        {
+        	printReducedStacktrace(response, "looks like AMP went into an infinite jsp:include loop");
+        	return null;
+        }
+        
         if (context == null) {
             ExceptionHelper.storeExceptioinInfo(request, info);
             return new ActionForward("/exception/showExceptionReport.do");

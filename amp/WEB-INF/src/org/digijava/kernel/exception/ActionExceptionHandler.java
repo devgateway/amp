@@ -70,7 +70,7 @@ public final class ActionExceptionHandler
         ActionForm formInstance,
         HttpServletRequest request,
         HttpServletResponse response) throws ServletException {
-
+    	// namnamu
         //Special processing for security exceptions
         if (ex instanceof SecurityException) {
             throw new ServletException(ex);
@@ -79,7 +79,7 @@ public final class ActionExceptionHandler
         logger.debug("Error occured in Struts action", ex);
         ExceptionInfo info = ExceptionHelper.populateExceptionInfo(null, ex, request);
 
-        return ExceptionHelper.processExceptionInfo(info, request);
+        return ExceptionHelper.processExceptionInfo(info, request, response);
     }
 
     /**

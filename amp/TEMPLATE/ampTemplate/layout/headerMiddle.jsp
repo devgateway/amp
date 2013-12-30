@@ -160,7 +160,6 @@ ${fn:replace(message,quote,escapedQuote)}
 	                              		</feature:display>
 									</module:display>
 									
-																								
 									<module:display name="GIS DASHBOARD" >
 										<feature:display name="Show in public view" module="GIS DASHBOARD">
 			                            	<li class="yuiampmenuitem_drop">

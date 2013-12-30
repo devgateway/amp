@@ -85,7 +85,7 @@ public final class DigiExceptionHandler
             info.setErrorMessage(errorMsg + ";" + info.getErrorMessage());
         }
 
-        return ExceptionHelper.processExceptionInfo(info, request);
+        return ExceptionHelper.processExceptionInfo(info, request, response);
 
     }
 }

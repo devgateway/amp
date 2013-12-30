@@ -40,17 +40,18 @@ import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.exception.ExceptionHelper;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.helper.TeamMember;
 
 /**
- * This class containts user-related utillity functions. User must be
+ * This class contains user-related utility functions. User must be
  * <b>always</b> identified by User object
  */
 public class RequestUtils {
-    private static Logger logger = Logger.getLogger(UserUtils.class);
+    private static Logger logger = Logger.getLogger(RequestUtils.class);
     /**
      * Get attribute from request/tiles context. At first, method searches
      * attribute by key <code>attribute</code> in the tiles context (if it
@@ -234,7 +235,8 @@ public class RequestUtils {
         {
         	res = new Locale("en", "");
         	String errMsg = "request does not have a locale, returned dummy 'en'. FIX THIS ERROR!";
-        	logger.error(errMsg, new RuntimeException(errMsg));
+        	logger.error(errMsg);
+        	ExceptionHelper.printReducedStacktrace(logger);
         }
         return res;
     }

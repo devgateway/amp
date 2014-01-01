@@ -84,6 +84,7 @@ public class XlsHelper {
 				sectors.get(actId).append(" - ");
 			
 			sectors.get(actId).append(sector.getName());
+			outputSectors.get(actId).add(sector.getAmpSectorId());
 		}		
 		return sectors;
 	}

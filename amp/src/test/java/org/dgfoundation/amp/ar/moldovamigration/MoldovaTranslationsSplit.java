@@ -689,7 +689,7 @@ public class MoldovaTranslationsSplit
 	}
 	
 	/**
-	 * removed HTML formatting from a string
+	 * removes HTML formatting from a string
 	 * @param src
 	 * @param removeNewLines
 	 * @return

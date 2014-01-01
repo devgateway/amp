@@ -55,6 +55,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
+import org.digijava.module.esrigis.helpers.ActivityLocationDigest;
 import org.digijava.module.esrigis.helpers.ActivityPoint;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapFilter;
@@ -189,32 +190,36 @@ public class DataDispatcher extends MultiAction {
         pw.close();
         return null;
     }
+    
 	private ActionForward modeExportToCsv(ActionMapping mapping,ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+			HttpServletResponse response) throws Exception{
 		
-		StringBuffer line = new StringBuffer();
+		long bigStart = System.currentTimeMillis();
+//		StringBuffer line = new StringBuffer();
 	    DataDispatcherForm maphelperform = (DataDispatcherForm) form;
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		maphelperform.getFilter().setTeamMember(tm);
 		List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
 		
-		long startTS=System.currentTimeMillis();
-		list = DbHelper.getActivities(maphelperform.getFilter());
-		long endTS=System.currentTimeMillis();
-		logger.info("getActivities with " + list.size() + " results in " + (endTS - startTS)  + " ms");
+//		long startTS=System.currentTimeMillis();
+//		list = DbHelper.getActivities(maphelperform.getFilter());
+//		long endTS=System.currentTimeMillis();
+//		logger.info("getActivities with " + list.size() + " results in " + (endTS - startTS)  + " ms");
 		
 		logger.info("Iteration Starts");
 	    OutputStream out = response.getOutputStream();
         XlsHelper Xls = new XlsHelper(); 
 		try {
-			Xls.XlsMaker(list, request, response, maphelperform.getFilter()).write(out);
+			Xls.XlsMaker(request, response, maphelperform.getFilter()).write(out);
 			out.flush();
 			out.close();
-			return null;
 		}catch (Exception e) {
-			e.printStackTrace();
+			logger.error("error doing the XLS maps export", e);
 		}
+		long bigEnd = System.currentTimeMillis();
+		long bigDelta = bigEnd - bigStart;
+		logger.info("doing a CSV export took " + (bigDelta / 1000.0) + " seconds");
 		return null;
 	}
 
@@ -519,6 +524,28 @@ public class DataDispatcher extends MultiAction {
 	}
 	
 	/**
+	 * returns a mapping from ampActivityId to location digests
+	 * @param activityIdsCondition
+	 */
+	public static Map<Long, List<ActivityLocationDigest>> fetchLocationInfos(String activityIdsCondition)
+	{
+		Map<Long, List<ActivityLocationDigest>> res = new HashMap<Long, List<ActivityLocationDigest>>();
+		List<Object[]> locationsInfo = PersistenceManager.getSession().createQuery("SELECT aal.activity.ampActivityId, aal.location.location, aal.latitude, aal.longitude, aal.locationPercentage FROM " + AmpActivityLocation.class.getName() + " aal " + activityIdsCondition).list();		
+		for(Object[] locationInfo:locationsInfo)
+		{
+			Long ampActivityId = PersistenceManager.getLong(locationInfo[0]);
+			AmpCategoryValueLocations acvl = (AmpCategoryValueLocations) locationInfo[1];
+			String aalLatitude = PersistenceManager.getString(locationInfo[2]);
+			String aalLongitude = PersistenceManager.getString(locationInfo[3]);
+			Double aalPercentage = PersistenceManager.getDouble(locationInfo[4]);
+			if (!res.containsKey(ampActivityId))
+				res.put(ampActivityId, new ArrayList<ActivityLocationDigest>());
+			res.get(ampActivityId).add(new ActivityLocationDigest(ampActivityId, acvl, aalLatitude, aalLongitude, aalPercentage));
+		}
+		return res;
+	}
+
+	/**
 	 * fills activityPoints with locations info from the database
 	 * @param activityPoints
 	 * @param filterLocationIds
@@ -533,59 +560,55 @@ public class DataDispatcher extends MultiAction {
 				(legalLocationIds.size() > 0 && !legalLocationIds.contains(-1L));
 		
 		Set<Long> aaidsToDelete = new HashSet<Long>(); // ampActivityIds to mark as deleted (done through a somewhat ugly hack - by deleting locations)
-		List<Object[]> locationsInfo = PersistenceManager.getSession().createQuery("SELECT aal.activity.ampActivityId, aal.location.location, aal.latitude, aal.longitude, aal.locationPercentage FROM " + AmpActivityLocation.class.getName() + " aal " + activityIdsCondition).list();		
-		for(Object[] locationInfo:locationsInfo)
-		{
-			Long ampActivityId = PersistenceManager.getLong(locationInfo[0]);
-			AmpCategoryValueLocations acvl = (AmpCategoryValueLocations) locationInfo[1];
-			String aalLatitude = PersistenceManager.getString(locationInfo[2]);
-			String aalLongitude = PersistenceManager.getString(locationInfo[3]);
-			Double aalPercentage = PersistenceManager.getDouble(locationInfo[4]);
+		Map<Long, List<ActivityLocationDigest>> locationInfos = fetchLocationInfos(activityIdsCondition);
+		//List<Object[]> locationsInfo = PersistenceManager.getSession().createQuery("SELECT aal.activity.ampActivityId, aal.location.location, aal.latitude, aal.longitude, aal.locationPercentage FROM " + AmpActivityLocation.class.getName() + " aal " + activityIdsCondition).list();		
+		for(Long ampActivityId:locationInfos.keySet())
+			for(ActivityLocationDigest ald:locationInfos.get(ampActivityId))
+			{						
+				ActivityPoint ap = activityPoints.get(ampActivityId);
 			
-			ActivityPoint ap = activityPoints.get(ampActivityId);
+				boolean locationPassesFilter = isFiltered ? legalLocationIds.contains(ald.acvl.getId()) : true;
+				if (!locationPassesFilter)
+					continue;
 			
-			boolean locationPassesFilter = isFiltered ? legalLocationIds.contains(acvl.getId()) : true;
-			if (!locationPassesFilter)
-				continue;
-			
-			boolean impLocationIsCountry = acvl.getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
-			if (nationalLevel ^ impLocationIsCountry)
-			{
-				if (nationalLevel)
-					aaidsToDelete.add(ampActivityId); // signal this location as deleted
-				continue;
-			}
+				boolean impLocationIsCountry = ald.acvl.getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
+				if (nationalLevel ^ impLocationIsCountry)
+				{
+					if (nationalLevel)
+						aaidsToDelete.add(ampActivityId); // signal this location as deleted
+					continue;
+				}
 						
-			// got till here -> nationalLevel == impLocationIsCountry, e.g. processing goes on as normal
+				// got till here -> nationalLevel == impLocationIsCountry, e.g. processing goes on as normal
 			
-			SimpleLocation sl = new SimpleLocation();
-			String lat = acvl.getGsLat();
-			String lon = acvl.getGsLong();
+				SimpleLocation sl = new SimpleLocation();
+				String lat = ald.acvl.getGsLat();
+				String lon = ald.acvl.getGsLong();
 				
-			if (aalLatitude != null && aalLongitude !=null && !aalLatitude.isEmpty() && !aalLongitude.isEmpty())
-			{
-				sl.setExactlocation(true);
-				sl.setExactlocation_lat(aalLatitude);
-				sl.setExactlocation_lon(aalLongitude);
-			}else{
-				sl.setExactlocation(false);
-			}
+				if (ald.aalLatitude != null && ald.aalLongitude !=null && !ald.aalLatitude.isEmpty() && !ald.aalLongitude.isEmpty())
+				{
+					sl.setExactlocation(true);
+					sl.setExactlocation_lat(ald.aalLatitude);
+					sl.setExactlocation_lon(ald.aalLongitude);
+				}else{
+					sl.setExactlocation(false);
+				}
 				
-			sl.setName(acvl.getName());
-			sl.setGeoId(acvl.getGeoCode());
-			sl.setLat(lat);
-			sl.setLon(lon);
-			if (aalPercentage != null)
-				sl.setPercentage(aalPercentage.toString());
+				sl.setName(ald.acvl.getName());
+				sl.setGeoId(ald.acvl.getGeoCode());
+				sl.setLat(lat);
+				sl.setLon(lon);
+				if (ald.aalPercentage != null)
+					sl.setPercentage(ald.aalPercentage.toString());
 			
-			if ("".equalsIgnoreCase(lat) && "".equalsIgnoreCase(lon)) {
-				sl.setIslocated(false);
-			} else {
-				sl.setIslocated(true);
-			}
+				if ("".equalsIgnoreCase(lat) && "".equalsIgnoreCase(lon)) {
+					sl.setIslocated(false);
+				} else {
+					sl.setIslocated(true);
+				}
 				
-			ap.getLocations().add(sl);
-		}
+				ap.getLocations().add(sl);
+			}
 
 		for(Long aaidToDelete:aaidsToDelete)
 			activityPoints.get(aaidToDelete).getLocations().clear();
@@ -728,7 +751,7 @@ public class DataDispatcher extends MultiAction {
 	 * @param activityIdList
 	 * @return Map<ActivityId, Set<StructId>>
 	 */
-	protected Map<Long, Set<Long>> populateStructs(List<Long> activityIdList)
+	public static Map<Long, Set<Long>> populateStructs(List<Long> activityIdList)
 	{
 		Map<Long, Set<Long>> structsByAmpIds = new TreeMap<Long, Set<Long>>();
 		List<Object[]> rs = PersistenceManager.getSession().createSQLQuery("SELECT amp_activity_id, amp_structure_id FROM amp_activity_structures WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")").list();

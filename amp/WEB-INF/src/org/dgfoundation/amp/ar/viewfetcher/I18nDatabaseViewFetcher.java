@@ -225,7 +225,11 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 			
 			
 			if (!cachers.get(colDesc.prop).values.containsKey(idToTranslate))
-				throw new RuntimeException("error getting item with id " + idToTranslate + " from view " + viewName + ", column " + columnLabel);
+			{
+				logger.error("error getting item with id " + idToTranslate + " from view " + viewName + ". This is either a bug or an inconsistent database. Returning null");
+				return null;
+				//throw new RuntimeException("error getting item with id " + idToTranslate + " from view " + viewName + ", column " + columnLabel);
+			}
 			
 			return cachers.get(colDesc.prop).values.get(idToTranslate);
 		}

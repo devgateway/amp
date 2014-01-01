@@ -731,6 +731,11 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 		this.orgKeyAreas = orgKeyAreas;
 	}
 	
+	public static String sqlStringForName(String idSource)
+	{
+		return InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall(idSource);
+	}
+
 	public static String hqlStringForName(String idSource)
 	{
 		return InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall(idSource + ".ampOrgId");

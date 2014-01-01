@@ -481,7 +481,12 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 		}
 		return currentTheme;
 	}
-	
+
+    public static String sqlStringForName(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(AmpTheme.class, "name").getSQLFunctionCall(idSource);
+    }
+
     public static String hqlStringForName(String idSource)
     {
     	return InternationalizedModelDescription.getForProperty(AmpTheme.class, "name").getSQLFunctionCall(idSource + ".ampThemeId");

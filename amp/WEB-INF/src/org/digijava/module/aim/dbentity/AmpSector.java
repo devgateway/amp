@@ -352,7 +352,12 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	public String[] getSubHeaders() {
 		return null;
 	}
-    
+
+    public static String sqlStringForName(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(AmpSector.class, "name").getSQLFunctionCall(idSource);
+    }
+
     public static String hqlStringForName(String idSource)
     {
     	return InternationalizedModelDescription.getForProperty(AmpSector.class, "name").getSQLFunctionCall(idSource + ".ampSectorId");

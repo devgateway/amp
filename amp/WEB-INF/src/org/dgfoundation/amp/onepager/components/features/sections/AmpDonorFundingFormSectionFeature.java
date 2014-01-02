@@ -244,7 +244,7 @@ public class AmpDonorFundingFormSectionFeature extends
 				}
 
                 //check if donor role for this org has been added, if not then add it
-                boolean found = false;
+               /* boolean found = false;
                 Set<AmpOrgRole> orgRoles = roleModel.getObject();
                 for (AmpOrgRole role: orgRoles)
                     if (role.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY) && role.getOrganisation().getAmpOrgId().equals(org.getAmpOrgId())){
@@ -257,7 +257,7 @@ public class AmpDonorFundingFormSectionFeature extends
                     role.setActivity(am.getObject());
                     role.setRole(DbUtil.getAmpRole(Constants.FUNDING_AGENCY));
                     orgRoles.add(role);
-                }
+                }*/
 			}
 		};
 		wmc.add(list);

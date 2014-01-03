@@ -47,6 +47,8 @@ import org.digijava.kernel.util.DgUtil;
 public class SwitchLanguage
     extends Action {
 	private static final Logger logger = Logger.getLogger(SwitchLanguage.class);
+	private static final String ACT_FORM_PATH = "wicket/onepager/activity/";
+	private static final String ACT_SSC_FORM_PATH = "wicket/onepager/ssc/";
 
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm form,
@@ -72,12 +74,16 @@ public class SwitchLanguage
             referrerUrl = "";
 
         //are we going back to the activity form?
-        String actFormPath = "wicket/onepager/activity/"; //hardcoded :(
-        if (referrerUrl.contains(actFormPath)){ 
+       
+        if (referrerUrl.contains(ACT_FORM_PATH)){ 
         	//get activity id
-        	String actId = referrerUrl.substring(referrerUrl.indexOf(actFormPath) + actFormPath.length());
+        	String actId = referrerUrl.substring(referrerUrl.indexOf(ACT_FORM_PATH) + ACT_FORM_PATH.length());
         	//free lock
         	ActivityGatekeeper.pageModeChange(actId);
+        }
+        else if (referrerUrl.contains(ACT_SSC_FORM_PATH)) {
+        	String actId = referrerUrl.substring(referrerUrl.indexOf(ACT_SSC_FORM_PATH) + ACT_SSC_FORM_PATH.length());
+        	ActivityGatekeeper.pageModeChange(actId);	
         }
         
         //String localeKey=(String)request.getParameter("lang");

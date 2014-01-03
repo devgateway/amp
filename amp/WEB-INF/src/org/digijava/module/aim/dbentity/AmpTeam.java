@@ -393,4 +393,8 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 		this.activityList.add(newActivity);
 		return this;
 	}*/
+    
+    public static boolean isSSCWorkspace (AmpTeam ampTeam) {
+    	return ampTeam.getWorkspacePrefix() != null && "SSC_".equals(ampTeam.getWorkspacePrefix().getValue());
+    }
 }

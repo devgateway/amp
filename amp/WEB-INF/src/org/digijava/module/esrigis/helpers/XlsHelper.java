@@ -272,18 +272,18 @@ public class XlsHelper {
 		Map<Long, StringBuilder> sectorStrings = buildSectorsString(actIds); // Map<activityId, sector_string>
 		String translatedStructure = TranslatorWorker.translateText("Structure");
 		
-		// calculating set of activities which need their totals calculated
-		// calculating financial totals for an activity is a (very) expensive operation, so we are trying to minimize the activities we do it for to the bare minimum
-		Set<Long> activitiesWhichNeedTotals = new HashSet<Long>();
-		for(Long actId:structsByAmpIds.keySet())
-			if (!structsByAmpIds.get(actId).isEmpty())
-				activitiesWhichNeedTotals.add(actId);
-		
-		for(Long actId:locations.keySet())
-			if (!locations.get(actId).isEmpty())
-				activitiesWhichNeedTotals.add(actId);
-		
-		Map<Long, FundingCalculationsHelper> calculators = getActivitiesTotals("WHERE amp_activity_id IN (" + Util.toCSStringForIN(activitiesWhichNeedTotals) + ")", filter.getCurrencyCode());
+//		// calculating set of activities which need their totals calculated
+//		// calculating financial totals for an activity is a (very) expensive operation, so we are trying to minimize the activities we do it for to the bare minimum
+//		Set<Long> activitiesWhichNeedTotals = new HashSet<Long>();
+//		for(Long actId:structsByAmpIds.keySet())
+//			if (!structsByAmpIds.get(actId).isEmpty())
+//				activitiesWhichNeedTotals.add(actId);
+//		
+//		for(Long actId:locations.keySet())
+//			if (!locations.get(actId).isEmpty())
+//				activitiesWhichNeedTotals.add(actId);
+//		
+		Map<Long, FundingCalculationsHelper> calculators = getActivitiesTotals(activityIdsCondition, filter.getCurrencyCode());
 		
 		List<Object[]> activitiesInfo = PersistenceManager.getSession().createQuery("SELECT act.ampActivityId, act.ampId, " + AmpActivityVersion.hqlStringForName("act") + " AS actname, act.approvalDate FROM " + AmpActivityVersion.class.getName() + " act " + activityIdsCondition + " ORDER BY act.ampActivityId").list();
 		long startTS = System.currentTimeMillis();

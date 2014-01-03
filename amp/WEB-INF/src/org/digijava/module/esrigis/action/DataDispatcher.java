@@ -718,33 +718,33 @@ public class DataDispatcher extends MultiAction {
 		}
 	}
 	
-	/**
-	 * fetches a Map<ActivityId, ActivityName> of activities which have an id in a predetermined set
-	 * @param activityIdList
-	 * @return
-	 */
-	protected Map<Long, String> getActivityNamesByIds(List<Long> activityIdList)
-	{
-		Map<Long, String> activityNamesByAmpIds = new TreeMap<Long, String>();
-
-        Session sess = PersistenceManager.getSession();
-        String activityName = AmpActivityVersion.hqlStringForName("a.ampActivityId");
-        StringBuilder qs = new StringBuilder("select a.ampActivityId, ").
-                append(activityName).
-                append(" from ").
-                append(AmpActivityVersion.class.getName()).
-                append(" a where a.ampActivityId in (").
-                append(Util.toCSStringForIN(activityIdList)).append(")");
-
-        List<Object[]> rs = sess.createQuery(qs.toString()).list();
-		for(Object[] entry:rs)
-		{
-			Long actId = PersistenceManager.getLong(entry[0]);
-            String name = PersistenceManager.getString(entry[1]);
-			activityNamesByAmpIds.put(actId, name);
-		}
-		return activityNamesByAmpIds;
-	}
+//	/**
+//	 * fetches a Map<ActivityId, ActivityName> of activities which have an id in a predetermined set
+//	 * @param activityIdList
+//	 * @return
+//	 */
+//	protected Map<Long, String> getActivityNamesByIds(List<Long> activityIdList)
+//	{
+//		Map<Long, String> activityNamesByAmpIds = new TreeMap<Long, String>();
+//
+//        Session sess = PersistenceManager.getSession();
+//        String activityName = AmpActivityVersion.hqlStringForName("a.ampActivityId");
+//        StringBuilder qs = new StringBuilder("select a.ampActivityId, ").
+//                append(activityName).
+//                append(" from ").
+//                append(AmpActivityVersion.class.getName()).
+//                append(" a where a.ampActivityId in (").
+//                append(Util.toCSStringForIN(activityIdList)).append(")");
+//
+//        List<Object[]> rs = sess.createQuery(qs.toString()).list();
+//		for(Object[] entry:rs)
+//		{
+//			Long actId = PersistenceManager.getLong(entry[0]);
+//            String name = PersistenceManager.getString(entry[1]);
+//			activityNamesByAmpIds.put(actId, name);
+//		}
+//		return activityNamesByAmpIds;
+//	}
 	
 	/**
 	 * fetches structs attached to any of the ampActivityIds given in the input
@@ -885,7 +885,7 @@ public class DataDispatcher extends MultiAction {
 		
 		Map<Long, Set<Long>> structsByAmpIds = populateStructs(activityIdList);
 		Map<Long, Structure> structsByIds = fetchStructs(collectIds(structsByAmpIds));
-		Map<Long, String> activityNamesByIds = getActivityNamesByIds(activityIdList);
+		Map<Long, String> activityNamesByIds = DatabaseViewFetcher.fetchInternationalizedView("v_titles", "WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIdList) + ")", "amp_activity_id", "name");//getActivityNamesByIds(activityIdList);
 				   		 
    		for(Long activityId:structsByAmpIds.keySet())
    		{

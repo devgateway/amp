@@ -104,7 +104,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" style="text-align: center;">
+				<td colspan="2" style="text-align: center;padding-top: 30px;">
 					<button class="buttonx" type="button">
 						<digi:trn>Apply</digi:trn>
 					</button>

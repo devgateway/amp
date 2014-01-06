@@ -151,7 +151,7 @@
        display: none;
     }
      .visibleTable {
-       display: block;
+       display: table;
     }
 
 </style>
@@ -716,7 +716,7 @@
             }
             document.getElementById('footerMessage').innerHTML='<em style="font-size:11px;">* <digi:trn  jsFriendly="true">Workspace Manager</digi:trn></em>';
         } else {
-            html[j++] = '<tr><td colspan="2"><em><digi:trn  jsFriendly="true">No Member data</digi:trn><em></td></tr>';
+            html[j++] = '<tr><td colspan="2" class="inside"><em><digi:trn  jsFriendly="true">No Member data</digi:trn><em></td></tr>';
             document.getElementById('footerMessage').innerHTML='';
         }
         html[j] = "</tbody></table>";

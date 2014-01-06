@@ -222,18 +222,20 @@ public class UpdateTeamActivities extends Action {
 
 			Collection col = null;
 			if (session.getAttribute("unassignedActivityList") == null || (taForm.getKeyword()!=null && taForm.getKeyword().length()>0)|| (reset!=null && reset.equalsIgnoreCase("true"))) {
-				col = TeamUtil.getAllTeamAmpActivities(null,false,taForm.getKeyword());
-				List temp = (List) col;
-				for (AmpActivity activity : new ArrayList<AmpActivity>(temp))     
-				{
-					 if (((org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT.equals(activity.getActivityType()) 
-						        || activity.getActivityType() == null)
-						    	&& AmpTeam.isSSCWorkspace(ampTeam))  || 
-						    	(org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_SSC.equals(activity.getActivityType())  
-								    	&& 	!AmpTeam.isSSCWorkspace(ampTeam))) {
-						        temp.remove(activity);
-						    }
-				}
+				
+				
+				 List<AmpActivity> temp = new ArrayList<AmpActivity>();
+				 for(AmpActivity act:TeamUtil.getAllTeamAmpActivities(null,false,taForm.getKeyword()))
+				 {
+					 if (((org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT.equals(act.getActivityType()) 
+						        || act.getActivityType() == null)
+						    	&& !ampTeam.isSSCWorkspace(ampTeam))  || 
+						    	(org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_SSC.equals(act.getActivityType())  
+								    	&& 	ampTeam.isSSCWorkspace(ampTeam)))
+					 {
+				       temp.add(act);
+					 }
+				 }
 				Collections.sort(temp);
 				col = (Collection) temp;
 				session.setAttribute("unassignedActivityList", col);

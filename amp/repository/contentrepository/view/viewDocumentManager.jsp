@@ -467,8 +467,11 @@ border-right: 1px solid rgb(208, 208, 208);
         // reset search string
 		document.getElementById(objListStr+'SearchStr').value='';
 		var targetList = eval(objListStr +'ListObj');
+
         // reset filters and lables
         targetList.resetFilterData();
+        targetList.emptyLabels();
+
         // execute the request with empty data
         targetList.sendRequest();
 	}

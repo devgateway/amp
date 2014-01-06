@@ -184,34 +184,31 @@ AbstractDynamicList.prototype.sendResetRequest		= function (shouldRetrieveFilter
 };
 
 AbstractDynamicList.prototype.resetFilterData		= function (shouldRetrieveFilters) {
+
+    // clear filters
 	var panel = this.fPanel;
-	
-	var elems = panel.element.getElementsByTagName('select');
-		
-		//panel.getBody().getElementByTagName('select');
-	
-	for(var i=0; i < elems.length; i++)
-		{
-		var optList = elems[i];
-		
-		for(var optInd=0; optInd < optList.length; optInd++)
-		{
-		if(optInd==0)
-			{
-			optList[optInd].setAttribute("selected","true");
-			optList[optInd].selected=true;
-			}
-			
-		else
-			{
-			optList[optInd].removeAttribute("selected");
-			optList[optInd].selected=false;
-			}
-			
-		}
-	    
-		
-		}
+	if (panel) {
+        var elems = panel.element.getElementsByTagName('select');
+
+        for (var i = 0; i < elems.length; i++)	{
+            var optList = elems[i];
+
+            for (var optInd = 0; optInd < optList.length; optInd++) {
+                if (optInd == 0) {
+                    optList[optInd].setAttribute("selected","true");
+                    optList[optInd].selected=true;
+                } else {
+                    optList[optInd].removeAttribute("selected");
+                    optList[optInd].selected=false;
+                }
+            }
+        }
+	}
+
+	// clear labels
+	$("input[name='selectedLabel']").each( function () {
+        $(this).removeAttr('checked');
+    });
 	    
 	
 };

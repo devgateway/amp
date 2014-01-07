@@ -65,6 +65,8 @@ public class TranslationDecorator extends Panel {
             }
         };
 
+        add(new AttributeModifier("class", "trncontainer"));
+
         ListView<String> list = new ListView<String>("languages", locales) {
             @Override
             protected void populateItem(final ListItem<String> item) {

@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011
  */
@@ -60,9 +61,9 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 		final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle", new PropertyModel<String>(td, "title"), "Title",AmpFMTypes.MODULE,Boolean.TRUE);
 		name.setTextContainerDefaultMaxSize();
 		name.setOutputMarkupId(true);
-		AmpTextAreaFieldPanel desc = new AmpTextAreaFieldPanel("docDesc", new PropertyModel<String>(td, "description"), "Description", false, false, false);
-		AmpTextAreaFieldPanel note = new AmpTextAreaFieldPanel("docNote", new PropertyModel<String>(td, "note"), "Note", false, false, false);
-		AmpCategorySelectFieldPanel type = new AmpCategorySelectFieldPanel("docType", CategoryConstants.DOCUMENT_TYPE_KEY, new PropertyModel<AmpCategoryValue>(td, "type"), "Type", true, true);
+		final AmpTextAreaFieldPanel desc = new AmpTextAreaFieldPanel("docDesc", new PropertyModel<String>(td, "description"), "Description", false, false, false);
+		final AmpTextAreaFieldPanel note = new AmpTextAreaFieldPanel("docNote", new PropertyModel<String>(td, "note"), "Note", false, false, false);
+		final AmpCategorySelectFieldPanel type = new AmpCategorySelectFieldPanel("docType", CategoryConstants.DOCUMENT_TYPE_KEY, new PropertyModel<AmpCategoryValue>(td, "type"), "Type", true, true);
 		//FileUploadField file = new FileUploadField("file", new AmpFileUploadModel(new PropertyModel<FileUpload>(td, "file")));
 		//file.setOutputMarkupId(true);
 
@@ -132,10 +133,10 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 
 
             	}
-
-                //AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
+            	
                 //panel.setVisibilityAllowed(false);
             }
+            
         };
         //form.setMaxSize(Bytes.megabytes(1));
         add(form);
@@ -162,6 +163,10 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                 if (fileItemModel.getObject() != null)
                     tmp.setFile(new FileUpload(fileItemModel.getObject()));
                 target.add(name);
+                target.add(desc);
+                target.add(note);
+                target.add(type);
+                
                 target.add(resourcesList);
                 target.add(webLinkFeedbackContainer);
                 if (updateVisibility(td, resourceIsURL)){

@@ -74,6 +74,7 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 				return super.getConverter(type);
 			}
 		};
+		textContainer.setRequired(enableReqStar);
 		textContainer.setOutputMarkupId(true);
 		addFormComponent(textContainer);
 	}

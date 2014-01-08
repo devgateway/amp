@@ -36,7 +36,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
 		super(id, fmName);
 		
 		AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>("proposedAmount",
-				new PropertyModel<Double>(am, "funAmount"), "Amount",false) {
+				new PropertyModel<Double>(am, "funAmount"), "Amount",false,false,false,true) {
 			public IConverter getInternalConverter(java.lang.Class<?> type) {
 				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
 				NumberFormat formatter = FormatHelper.getDecimalFormat(true);
@@ -45,6 +45,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
 			}
 		};
 		amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
+
 		add(amount);
 		
 		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {
@@ -74,7 +75,8 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
 		add(currency);
         final PropertyModel<Date> funDateModel = new PropertyModel<Date>(
                 am, "funDate");
-        AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", funDateModel, null, "Signature Date");
+        AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", funDateModel, "Signature Date",null,false,false,true );
+
 		add(date);
 	}
 }

@@ -276,21 +276,29 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 				ampOrgRole.setOrganisation(choice);
 				ampOrgRole.setActivity(am.getObject());
 				ampOrgRole.setRole(specificRole);
+				//ampOrgRole.setAmpOrgRoleId(choice.getAmpOrgId());
 				if(list.getObject().size()>0)
 					ampOrgRole.setPercentage(0f);
 				else
 					ampOrgRole.setPercentage(100f);
 				if (setModel.getObject() == null)
                     setModel.setObject(new HashSet<AmpOrgRole>());
-                setModel.getObject().add(ampOrgRole);
-
+                
+				list.getObject().removeAll();
+				target.add(list.getObject().getParent());
+				
 				uniqueCollectionValidationField.reloadValidationField(target);
                 minSizeCollectionValidationField.reloadValidationField(target);
                 maxSizeCollectionValidationField.reloadValidationField(target);
-
-				list.getObject().removeAll();
-				target.add(list.getObject().getParent());
-				roleAdded(target, ampOrgRole);
+                
+				if(!existOrganization(setModel.getObject(), ampOrgRole)){
+					setModel.getObject().add(ampOrgRole);
+					roleAdded(target, ampOrgRole);
+				} else {
+					String translatedMessage = TranslatorUtil.getTranslation("Organization already selected.");
+	                target.appendJavaScript("alert ('"+translatedMessage+"')");
+	                return;
+				}										
 			}
 
 			@Override
@@ -303,6 +311,17 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 				"Search Organizations",   searchOrgs );
 		add(searchOrganization);
 
+	}
+	
+	private boolean existOrganization(Set<AmpOrgRole> set, AmpOrgRole ampOrgRole) {
+		boolean ret = false;
+		Iterator<AmpOrgRole> iter = set.iterator();
+		while(iter.hasNext()) {
+			if(iter.next().getOrganisation().getAmpOrgId().equals(ampOrgRole.getOrganisation().getAmpOrgId())) {
+				ret = true;
+			}
+		}
+		return ret;
 	}
 	
 	@Override

@@ -2264,9 +2264,15 @@ public class EditActivity extends Action {
     	org.digijava.kernel.persistence.PersistenceManager.releaseSession(hsession);
     }
 
-    String debugFM=request.getParameter("debugFM");
-    if(debugFM!=null && "true".compareTo(debugFM)==0)
+    String debugFM = request.getParameter("debugFM");
+    if (debugFM != null && "true".equals(debugFM)) {
     	return mapping.findForward("forwardDebugFM");
+    }
+
+    if ("true".equals(request.getParameter("popupView"))) {
+        return mapping.findForward("popupPreview");
+    }
+
     return mapping.findForward("forward");
   }
 

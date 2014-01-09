@@ -153,7 +153,7 @@ scheduler._unmark_year_date=function(G){
 
 scheduler._year_render_event=function(G){
 	var H=G.start_date;
-	while(H<G.end_date){
+	while(H<=G.end_date){
 		this._mark_year_date(H, G.type);
 		H=this.date.add(H,1,"day");
 	}

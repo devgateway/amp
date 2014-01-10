@@ -356,7 +356,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             protected void onClick(AjaxRequestTarget target) {
             }
         };
-		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();"));
+        
+        //disable onclick saveAsDraft
+        
+		//saveAsDraft.getButton().add(new AttributeModifier("onclick", disableButton+" showDraftPanel();"));
+        saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();"));
 		saveAsDraft.setVisible(true);
 		saveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         activityForm.add(saveAsDraft);
@@ -410,7 +414,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                target.appendJavaScript("hideDraftPanel();");
+				//reenable buttons
+                target.appendJavaScript("hideDraftPanel();enableDisableForm(true);");
                 processAndUpdateForm(false, am, form, target, this.getButton());
 
 				//only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
@@ -511,10 +516,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				//reenable buttons
+				target.appendJavaScript("enableDisableForm(true);");
 				if (am.getObject().getAmpActivityId() == null)
 					target.appendJavaScript("alert('" + TranslatorUtil.getTranslatedText("You need to save this activity before being able to preview it!") + "');");
 				else
 					target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
+
 			}
 			
 			@Override
@@ -523,6 +531,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				target.add(feedbackPanel);
 			}
 		};
+		//disable on click preview
+		preview.getButton().add(new AttributeModifier("onclick", disableButton));
 		preview.getButton().add(new AttributeModifier("class", new Model("sideMenuButtons")));
 		if (am.getObject().getAmpActivityId() == null)
 			preview.setVisible(false);
@@ -562,8 +572,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		enableBlock+="$('#" +saveAndSubmit.getButton().getMarkupId() +"').removeAttr('disabled');\n";
 		disableBlock+="$('#" +saveAndSubmit.getButton().getMarkupId() +"').attr('disabled', 'disabled');\n";
 		//ForSaveAsDraft
-		enableBlock+="$('#" +saveAsDraft.getButton().getMarkupId() +"').removeAttr('disabled');\n";
-		disableBlock+="$('#" +saveAsDraft.getButton().getMarkupId() +"').attr('disabled', 'disabled');\n";
+		enableBlock+="$('#" +saveAsDraftAction.getButton().getMarkupId() +"').removeAttr('disabled');\n";
+		disableBlock+="$('#" +saveAsDraftAction.getButton().getMarkupId() +"').attr('disabled', 'disabled');\n";
 		//forPreview
 		enableBlock+="$('#" +preview.getButton().getMarkupId() +"').removeAttr('disabled');\n";
 		disableBlock+="$('#" +preview.getButton().getMarkupId() +"').attr('disabled', 'disabled');\n";

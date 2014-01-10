@@ -229,9 +229,9 @@ public class UpdateTeamActivities extends Action {
 				 {
 					 if (((org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT.equals(act.getActivityType()) 
 						        || act.getActivityType() == null)
-						    	&& !ampTeam.isSSCWorkspace(ampTeam))  || 
+						    	&& !ampTeam.isSSCWorkspace())  || 
 						    	(org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_SSC.equals(act.getActivityType())  
-								    	&& 	ampTeam.isSSCWorkspace(ampTeam)))
+								    	&& 	ampTeam.isSSCWorkspace()))
 					 {
 				       temp.add(act);
 					 }

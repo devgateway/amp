@@ -1,0 +1,24 @@
+name = Views slideshow: DDblock
+description = Adds ddblock functionality to Views Slideshows.
+dependencies[] = views_slideshow
+dependencies[] = libraries
+package = Views
+core = 7.x
+
+files[] = views_slideshow_ddblock.module
+files[] = views_slideshow_ddblock.views_slideshow.inc
+files[] = theme/views_slideshow_ddblock.theme.inc
+
+; Information added by drupal.org packaging script on 2011-07-03
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "views_slideshow_ddblock"
+datestamp = "1309695783"
+
+
+; Information added by drupal.org packaging script on 2011-07-18
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "views_slideshow_ddblock"
+datestamp = "1310991992"
+

@@ -1,0 +1,7 @@
+name = Update scripts
+description = Update Scripts for continuous integration/micro-releases.
+core = 7.x
+
+package = Development
+
+configure = admin/config/development/update-scripts

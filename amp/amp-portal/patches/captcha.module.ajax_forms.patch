@@ -1,0 +1,75 @@
+### Eclipse Workspace Patch 1.0
+#P ampp
+Index: sites/all/modules/contrib/captcha/captcha.module
+===================================================================
+RCS file: /wwwroot/repository/drupal/ampp/sites/all/modules/contrib/captcha/captcha.module,v
+retrieving revision 1.2
+diff -u -r1.2 captcha.module
+--- sites/all/modules/contrib/captcha/captcha.module    20 Jan 2012 08:37:16 -0000  1.2
++++ sites/all/modules/contrib/captcha/captcha.module    24 Jul 2012 08:21:52 -0000
+@@ -221,11 +221,20 @@
+   );
+ 
+   // Additional one time CAPTCHA token: store in database and send with form.
+-  $captcha_token = md5(mt_rand());
+-  db_update('captcha_sessions')
+-    ->fields(array('token' => $captcha_token))
+-    ->condition('csid', $captcha_sid)
+-    ->execute();
++ $captcha_token = db_select('captcha_sessions', 'c')
++                      ->fields('c', array('token'))
++                      ->condition('csid', $captcha_sid)
++                      ->execute()
++                      ->fetchAssoc();
++  $captcha_token = $captcha_token['token'];
++  if (!isset($captcha_token) && !$form_state['submitted']) {
++       // Additional one time CAPTCHA token: store in database and send with form.
++   $captcha_token = md5(mt_rand());
++   db_update('captcha_sessions')
++         ->fields(array('token' => $captcha_token))
++         ->condition('csid', $captcha_sid)
++         ->execute();
++     }
+   $element['captcha_token'] = array(
+     '#type' => 'hidden',
+     '#value' => $captcha_token,
+@@ -352,6 +361,8 @@
+         $captcha_placement = _captcha_get_captcha_placement($form_id, $form);
+         _captcha_insert_captcha_element($form, $captcha_placement, $captcha_element);
+ 
++        // Add #submit functions to invalidate captcha
++        $form['#submit'][] = 'captcha_submit_invalidate_session';
+       }
+     }
+     elseif (user_access('administer CAPTCHA settings') && variable_get('captcha_administration_mode', FALSE)) {
+@@ -428,6 +439,19 @@
+   }
+ 
+ }
++/**
++ * Invalidate CAPTCHA token to avoid reuse.
++ * @param unknown_type $form
++ * @param unknown_type $form_state
++ */
++function captcha_submit_invalidate_session($form, $form_state) {
++   if (isset($form_state['captcha_info']['captcha_sid'])) {
++       db_update('captcha_sessions')
++           ->fields(array('token' => NULL))
++           ->condition('csid', $form_state['captcha_info']['captcha_sid'])
++           ->execute();
++   }
++}
+ 
+ /**
+  * CAPTCHA validation function to tests strict equality.
+@@ -535,10 +559,6 @@
+           // Invalidate the CAPTCHA session.
+           $posted_captcha_sid = NULL;
+         }
+-        // Invalidate CAPTCHA token to avoid reuse.
+-        db_update('captcha_sessions')
+-          ->fields(array('token' => NULL))
+-          ->condition('csid', $posted_captcha_sid);
+       }
+     }
+     else {

@@ -37,6 +37,8 @@
 	
 	<http pattern="/aim/csvExport.do**" security="none" />
 	
+	<http pattern="/viewNewAdvancedReport.do**" security="none" />
+	
 	<http pattern="/aim/xlsExport.do**" security="none" />
 
     <http pattern="/aim/pdfExport.do**" security="none" />
@@ -69,6 +71,8 @@
 
 	<!-- move this to the reports module -->
 	<http pattern="/reportsPublicView.do**" security="none" />
+	
+	
 
 
 

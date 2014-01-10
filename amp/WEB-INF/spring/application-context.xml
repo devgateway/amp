@@ -72,10 +72,10 @@
 	<!-- move this to the reports module -->
 	<http pattern="/reportsPublicView.do**" security="none" />
 	
+	<http pattern="/gis/showPublicGis.do**" security="none" />
+	<http pattern="/gis/getFoundingDetails.do**" security="none" />
+	<http pattern="/gis/showAdditionalGraphics.do**" security="none" />
 	
-
-
-
 	<!-- match images -->
 	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf)"
 		request-matcher="regex" security="none" />

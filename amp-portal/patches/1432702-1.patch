@@ -1,0 +1,17 @@
+diff --git a/date_popup/date_popup.module b/date_popup/date_popup.module
+index e3132d7..4b2ab2a 100644
+--- a/date_popup/date_popup.module
++++ b/date_popup/date_popup.module
+@@ -30,6 +30,12 @@ function date_popup_add() {
+     return;
+   }
+   drupal_add_library('system', 'ui.datepicker');
++
++  // Add i18n support
++  if ($GLOBALS['language']->language != 'en') {
++    // D7.x: https://jquery-ui.googlecode.com/svn/tags/1.8.7/ui/i18n/
++    drupal_add_js( drupal_get_path('module', 'jquery_update') . 'replace/ui/ui/i18n/jquery.ui.datepicker-' . $GLOBALS['language']->language . '.js' );
++  }
+   drupal_add_library('date_popup', 'timeentry');
+ 
+   // Add the wvega-timepicker library if it's available.

@@ -1,0 +1,18 @@
+### Eclipse Workspace Patch 1.0
+#P ampp
+Index: sites/all/modules/contrib/hierarchical_select/hierarchical_select.js
+===================================================================
+RCS file: /wwwroot/repository/drupal/ampp/sites/all/modules/contrib/hierarchical_select/hierarchical_select.js,v
+retrieving revision 1.1
+diff -u -r1.1 hierarchical_select.js
+--- sites/all/modules/contrib/hierarchical_select/hierarchical_select.js    11 Jul 2012 10:26:56 -0000  1.1
++++ sites/all/modules/contrib/hierarchical_select/hierarchical_select.js    18 Jul 2012 10:00:58 -0000
+@@ -471,7 +471,7 @@
+   switch (updateType) {
+     case 'update-hierarchical-select':
+       var value = $('#'+ settings.select_id).val();
+-      var lastUnchanged = parseInt(settings.select_id.replace(/^.*-hierarchical-select-selects-(\d+)$/, "$1")) + 1;
++      var lastUnchanged = parseInt(settings.select_id.replace(/^.*-hierarchical-select-selects-(\d+)$/, "$1")) ?  parseInt(settings.select_id.replace(/^.*-hierarchical-select-selects-(\d+)$/, "$1")) + 1 : 1;
+       var optionClass = $('#'+ settings.select_id).find('option[value='+ value +']').attr('class');
+ 
+       // Don't do anything (also no callback to the server!) when the selected

@@ -1,0 +1,120 @@
+/* $Id: about.css,v 1.1 2011/12/23 16:56:39 vamirbekyan Exp $ */
+
+/* Map Page.
+------------------------------------------------------------------------------*/
+#where-we-work-page .about-text-box {
+  position: relative;
+}
+
+#where-we-work-page .about-text-box h3 {
+  font-weight: 400;
+  margin-left: 0px;
+  white-space: pre;
+}
+
+#where-we-work-page div.world-map-image {
+  background: url("../images/sidebar-map.png") no-repeat scroll 0 0 transparent;
+  height: 105px;
+  left: 0;
+  position: absolute;
+  top: -30px;
+  width: 180px;
+}
+
+#where-we-work-page div.view-poi-map {
+  border: 1px solid #E4E4E4;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  padding: 5px;
+  position: relative;
+}
+
+#where-we-work-page .olMapViewport {
+  margin-top: 30px;
+}
+
+#where-we-work-page .olControlZoomPanel {
+  height: 15px;
+  left: 15px;
+  top: 15px;
+  width: 555px;
+}
+
+#where-we-work-page .olControlZoomPanel div {
+  background: url("../images/map-zoom-actions.png") no-repeat scroll 0 0 transparent;
+  clear: none;
+  float: left;
+  height: 15px;
+  margin-right: 5px;
+  position: static;
+  width: 15px;
+}
+
+#where-we-work-page .olControlZoomPanel .olControlZoomInItemInactive {
+  background-position: 0 0;
+}
+
+#where-we-work-page .olControlZoomPanel .olControlZoomToMaxExtentItemInactive {
+  background-position: -20px 0;
+  display: none;
+}
+
+#where-we-work-page .olControlZoomPanel .olControlZoomOutItemInactive {
+  background-position: -40px 0;
+}
+
+#where-we-work-page .olControlZoomPanel .olControlZoomInItemInactive:hover {
+  background-position: 0 -20px;
+}
+
+#where-we-work-page .olControlZoomPanel .olControlZoomToMaxExtentItemInactive:hover {
+  background-position: -20px -20px;
+}
+
+#where-we-work-page .olControlZoomPanel .olControlZoomOutItemInactive:hover {
+  background-position: -40px -20px;
+}
+
+#where-we-work-page .openlayers-tooltip {
+}
+
+#where-we-work-page .openlayers-tooltip-description {
+  width: 170px;
+}
+
+#where-we-work-page #block-openlayers_plus-blockswitcher {
+  border-bottom: 1px solid #E4E4E4;
+  top: -30px;
+  width: 100%;
+}
+#where-we-work-page #block-openlayers_plus-blockswitcher .openlayers-blockswitcher {
+  padding: 5px 15px;
+}
+
+#where-we-work-page #block-openlayers_plus-blockswitcher h2 {
+  display: none;
+}
+
+#where-we-work-page #block-openlayers_plus-blockswitcher h2.layers-title {
+  display: block;
+  float: left;
+  font-weight: normal;
+}
+
+#where-we-work-page #block-openlayers_plus-blockswitcher .layers-content {
+  float: left;
+}
+
+#where-we-work-page #block-openlayers_plus-blockswitcher div.form-item {
+  float: left;
+  margin: 0;
+  padding: 0 5px;
+}
+
+#where-we-work-page #block-openlayers_plus-blockswitcher span.key {
+  height: 16px;
+  margin: 2px 0 0;
+  width: 16px;
+}

@@ -1,0 +1,167 @@
+<?php
+
+/**
+ * @file
+ * Primarily Drupal hooks and global API functions to manipulate Update Scripts.
+ */
+
+
+define('UPDATE_SCRIPTS_FORM_PREFIX', 'update_scripts_');
+define('UPDATE_SCRIPTS_MENU_BASE_PATH', 'admin/config/development/update-scripts');
+
+define('UPDATE_SCRIPTS_HELPER_PATTERN', '*.inc');
+define('UPDATE_SCRIPTS_SCRIPT_PATTERN', 'update.[0-9][0-9][0-9][0-9].php');
+
+define('UPDATE_SCRIPTS_SCRIPT_START', '<?php');
+define('UPDATE_SCRIPTS_SCRIPT_END', '?>');
+
+/**
+ * Implements hook_init().
+ */
+function update_scripts_init() {
+  if (update_scripts_enable_functionality()) {
+    module_load_include('inc', 'update_scripts', 'update_scripts.main');
+
+    // Maps global script IDs to paths
+    global $_update_scripts_script_info;
+    $_update_scripts_script_info = array();
+
+    autodetect_helper_scripts();
+    autodetect_update_scripts();
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function update_scripts_theme() {
+  $items =  array();
+
+  $items['script_log_entry'] = array(
+    'template' => 'script-log-entry',
+    'arguments' => array(
+      'general_information' => NULL,
+      'queries' => NULL,
+      'errors' => NULL,
+    ),
+  );
+
+  $items['update_scripts_run_table'] = array(
+    'render element' => 'elements',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function update_scripts_permission() {
+  $permissions = array();
+
+  $permissions['manage update scripts'] = array(
+    'title' => t('Manage update scripts'),
+    'description' => t('Run update scripts for continuous integration/micro-releases.'),
+  );
+
+  return $permissions;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function update_scripts_menu() {
+  $items = array();
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH] = array(
+    'title' => 'Update Scripts',
+    'description' => 'Update Scripts for continuous integration/micro-releases.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('update_scripts_settings_form'),
+    'access arguments' => array('manage update scripts'),
+    'file' => 'update_scripts.admin.inc',
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/settings'] = array(
+    'title' => 'Settings',
+    'weight' => -10,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/run'] = array(
+    'title' => 'Run update scripts',
+    'description' => 'Run update scripts...',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('update_scripts_batch_run_form'),
+    'access arguments' => array('manage update scripts'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'update_scripts.admin.inc',
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/run/%'] = array(
+    'title' => 'Run update script',
+    'description' => 'Run a single script, which was already ran.',
+    'page callback' => 'update_scripts_run_single',
+    'page arguments' => array(5),
+    'access arguments' => array('manage update scripts'),
+    'type' => MENU_CALLBACK,
+    'file' => 'update_scripts.admin.inc',
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/logs'] = array(
+    'title' => 'Execution logs',
+    'description' => 'Update Scripts...',
+    'page callback' => 'update_scripts_view_logs',
+    'access arguments' => array('manage update scripts'),
+    'file' => 'update_scripts.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/logs/%'] = array(
+    'title' => 'Single log entry',
+    'page callback' => 'update_scripts_view_log',
+    'page arguments' => array(5),
+    'access arguments' => array('manage update scripts'),
+    'type' => MENU_CALLBACK,
+    'file' => 'update_scripts.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_watchdog().
+ */
+function update_scripts_watchdog(array $log_entry) {
+  global $_update_scripts_monitoring_errors, $_update_scripts_script_errors;
+
+  // Collect errors provoked by the script when running.
+  if ($log_entry['severity'] == WATCHDOG_ERROR && $_update_scripts_monitoring_errors) {
+    $_update_scripts_script_errors[] = $log_entry;
+  }
+}
+
+/**
+ * Check if we should scan the scripts.
+ */
+function update_scripts_enable_functionality() {
+  // Check if the current php instance has been summoned from command line.
+  if (update_scripts_php_from_command_line()) {
+    return TRUE;
+  }
+
+  // Check that we should scan the scripts for the current HTTP request.
+  if (strpos($_GET['q'], UPDATE_SCRIPTS_MENU_BASE_PATH) === 0) {
+    return TRUE;
+  }
+
+  return defined('MAINTENANCE_MODE');
+}
+
+/**
+ * Check if the current php instance has been summoned from command line.
+ */
+function update_scripts_php_from_command_line() {
+  return !isset($_SERVER['REQUEST_METHOD']);
+}
+

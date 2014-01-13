@@ -78,18 +78,14 @@ function saveClicked() {
 }
 
 function validateChangeRangeDefaultValue(){
-	var startYear;
-	var startYearTranslated;
-	var endYearTranslated;;
-	var endYear;
 
-	var startYearFields = $("[name='globalSettingsName'][value='Change Range Default Start Value']");
-	var startYear = startYearFields.siblings("SELECT").val();
-	var startYearTranslated = startYearFields.siblings("[name='globalSettingsNameTranslated']").val();
+	var startYear = $("#gfsv_Change_Range_Default_Start_Value").val();
+	var startYearTranslated = $("#gstv_Change_Range_Default_Start_Value").val();
+
 	
-	var endYearFields = $("[name='globalSettingsName'][value='Change Range Default End Value']");
-	var endYear = endYearFields.siblings("SELECT").val();
-	var endYearTranslated = endYearFields.siblings("[name='globalSettingsNameTranslated']").val();
+
+	var endYear = $("#gfsv_Change_Range_Default_End_Value").val();
+	var endYearTranslated = $("#gstv_Change_Range_Default_End_Value").val();
 
     if(endYear<startYear){
     	alert(endYearTranslated +' <digi:trn key="aim:Global:validation">should be greater than</digi:trn> ' + startYearTranslated);
@@ -101,12 +97,12 @@ function validateChangeRangeDefaultValue(){
 function validateCustomFields(form) {	
 	if (typeof form.gsfValue != "undefined") {
  		if (form.gsfValue.value=='') {
- 	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)        
+ 	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value);        
  	 		return false;
  		}
  	} else {
  	 	if (form.listOfValues.value=='') {
- 	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)        
+ 	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value);
 			return false;
 		}
 	}
@@ -347,8 +343,8 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 			                                <td width="50%" class="inside">
 			                                  <html:hidden property="globalId" name="globalSett"/>
 			                                  <html:hidden property="globalSettingsName" name="globalSett"/>
-											
-											 <input type="hidden" name="globalSettingsNameTranslated" value='<digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>'>
+											<%String gfId=globalSett.getGlobalSettingsName().replace(' ', '_'); %>
+											 <input type="hidden" id="gstv_<%=gfId%>" name="globalSettingsNameTranslated" value='<digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>'>
 										
 			                                  <%String possibleValues = "possibleValues("+ globalSett.getGlobalSettingsName()+ ")";
 												String gsType = globalSett.getGlobalSettingsPossibleValues();
@@ -577,8 +573,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                            											.parseInt(timeoutValue);
 				                                            									//g_range=timeout;
 				                                            %>
-				                                    		
-				                                    		<select styleClass="inp-text" name="gsfValue">
+				                                    		<select styleClass="inp-text" name="gsfValue" >
 				                                    			<%
 				                                    				int[] min_array = { 1, 2, 3, 4, 5,
 				                                    														6, 7, 8, 9, 10, 15, 20, 25,
@@ -605,7 +600,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    			int range = Integer.parseInt(dateValues);
 				                                    			g_range = range;
 				                                    		%>
-				                                    		<select styleClass="inp-text" name="gsfValue">
+				                                    		<select styleClass="inp-text" name="gsfValue" >
 				                                    			<%
 				                                    				for (int k = 10; k <= 100; k += 10) {
 				                                    				if (k == range) {
@@ -630,7 +625,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    													.parseInt(dateValues);
 				                                    											g_year = year;
 				                                    		%>
-				                                    		<select styleClass="inp-text" name="gsfValue">
+				                                    		<select styleClass="inp-text" name="gsfValue" >
 				                                    			<%
 				                                    				for (int k = 1980; k <= 2020; k++) {
 				                                    													if (k == year) {
@@ -658,8 +653,9 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    											int default_year = Integer
 				                                    													.parseInt(globalSett
 				                                    															.getGlobalSettingsValue());
+
 				                                    		%>
-				                                    		<select styleClass="inp-text" name="gsfValue">
+				                                    		<select styleClass="inp-text" name="gsfValue" id="gfsv_<%=gfId%>">
 				                                    		    <option value="-1"><digi:trn key="aim:globalSettings:Disabled">Disabled</digi:trn></option>
 				                                    			<%
 				                                    				for (int k = g_year; k <= g_year
@@ -684,7 +680,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                                    										int selected = Integer
 				                                    												.parseInt(peridiodvalues);
 				                                    	%>
-															<select styleClass="inp-text" name="gsfValue">
+															<select styleClass="inp-text" name="gsfValue" >
 															<option value="-1"><digi:trn key="aim:globalSettings:Disabled">Disabled</digi:trn></option>
 															<%
 																for (int k = 30; k <= 90; k += 30) {

@@ -1,0 +1,75 @@
+/* $Id: pane-layouts.css,v 1.7 2013/01/16 14:06:14 eabrahamyan Exp $ */
+
+/* Fix dghome pane layout in administration interface.
+------------------------------------------------------------------------------*/
+#panels-dnd-main .dghome-layout {
+  width: 980px;
+}
+
+#panels-dnd-main .dghome-layout .grid_12 {
+  width: 980px;
+}
+
+#panels-dnd-main .dghome-header .grid_4_plus,
+#panels-dnd-main .dghome-header .grid_8_minus_margin {
+  width: 350px;
+}
+
+#panels-dnd-main .dghome-news .grid_3_plus,
+#panels-dnd-main .dghome-news .grid_6_minus_margin {
+  width: 230px;
+}
+
+#panels-dnd-main .dghome-social .grid_6_plus,
+#panels-dnd-main .dghome-social .grid_6_minus_margin {
+  width: 350px;
+}
+
+/* Fix dgthree pane layout in administration interface.
+------------------------------------------------------------------------------*/
+#panels-dnd-main .dgthree-layout {
+  width: 980px;
+}
+
+#panels-dnd-main .dgthree-layout .grid_12 {
+  width: 980px;
+}
+
+#panels-dnd-main .dgthree-columns .grid_3 {
+  width: 240px;
+}
+
+#panels-dnd-main .dgthree-columns .grid_6 {
+  width: 460px;
+}
+
+/* Fix dgthree pane layout in administration interface.
+------------------------------------------------------------------------------*/
+#panels-dnd-main .dgtwo-layout {
+  width: 980px;
+}
+
+#panels-dnd-main .dgtwo-layout .grid_12 {
+  width: 980px;
+}
+
+#panels-dnd-main .dgtwo-columns .grid_3 {
+  width: 240px;
+}
+
+#panels-dnd-main .dgtwo-columns .grid_9 {
+  width: 720px;
+}
+
+/* grid_12 fixes */
+
+.grid_12 #panels-dnd-main #col1 {width: 67%}
+.grid_12 #panels-dnd-main #col2 {width: 32%}
+#panelizer-edit-content-form h2 {padding: 5px 0}
+#panels-dnd-main .ampphome-donor-container, #panels-dnd-main .ampphome-map-container {float: left; width: 50%; margin: 10px 0px;}
+
+/* dgone-layout */
+.page-node-panelizer .container_12 .grid_1 {width: 980px}
+.page-node-panelizer .container_12 .grid_12 {width: 980px}
+.page-node-panelizer .dgone-column .col1 {width: 980px}
+/* end of dgone-layout */

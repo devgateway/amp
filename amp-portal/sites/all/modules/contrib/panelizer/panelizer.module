@@ -1,0 +1,845 @@
+<?php
+/**
+ * @file
+ * The Panelizer module attaches panels to entities, providing default
+ * panels and allowing each panel to be configured independently by
+ * privileged users.
+ */
+
+// -----------------------------------------------------------------------
+// Drupal core hooks
+
+/**
+ * Implements hook_permission().
+ */
+function panelizer_permission() {
+  $items = array(
+    'administer panelizer' => array(
+      'title' => t('administer panelizer'),
+      'description' => t('Fully administer panelizer and all panelizer settings.'),
+    ),
+  );
+
+  // Delegate.
+  foreach (panelizer_get_plugins_with_hook('permission') as $handler) {
+    $handler->hook_permission($items);
+  }
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function panelizer_theme() {
+  $items = array();
+
+  $items['panelizer_settings_page_table'] = array(
+    'render element' => 'element',
+    'file' => 'includes/admin.inc',
+  );
+
+  // Delegate.
+  foreach (panelizer_get_plugins_with_hook('theme') as $handler) {
+    $handler->hook_theme($items);
+  }
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function panelizer_menu() {
+  $items = array();
+
+  // Delegate admin menu stuff to admin.inc
+  ctools_include('admin', 'panelizer');
+  panelizer_admin_hook_menu($items);
+
+  // Delegate.
+  foreach (panelizer_get_plugins_with_hook('menu') as $handler) {
+    $handler->hook_menu($items);
+  }
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function panelizer_menu_alter(&$items) {
+  // Delegate.
+  foreach (panelizer_get_plugins_with_hook('menu_alter') as $handler) {
+    $handler->hook_menu_alter($items);
+  }
+}
+
+/**
+ * Implements hook_admin_paths().
+ */
+function panelizer_admin_paths() {
+  $items = array();
+
+  // Delegate.
+  foreach (panelizer_get_plugins_with_hook('admin_paths') as $handler) {
+    $handler->hook_admin_paths($items);
+  }
+
+  return $items;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function panelizer_form_alter(&$form, &$form_state, $form_id) {
+  // Delegate.
+  foreach (panelizer_get_plugins_with_hook('form_alter') as $handler) {
+    $handler->hook_form_alter($form, $form_state, $form_id);
+  }
+}
+
+/**
+ * Implements hook_entity_load().
+ */
+function panelizer_entity_load(&$entities, $entity_type) {
+  // Delegate to the handler.
+  if ($handler = panelizer_entity_plugin_get_handler($entity_type)) {
+    $handler->hook_entity_load($entities);
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function panelizer_entity_update($entity, $entity_type) {
+  // Delegate to the handler.
+  if ($handler = panelizer_entity_plugin_get_handler($entity_type)) {
+    $handler->hook_entity_update($entity);
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function panelizer_entity_insert($entity, $entity_type) {
+  // Delegate to the handler.
+  if ($handler = panelizer_entity_plugin_get_handler($entity_type)) {
+    $handler->hook_entity_insert($entity);
+  }
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function panelizer_entity_delete($entity, $entity_type) {
+  // Delegate to the handler.
+  if ($handler = panelizer_entity_plugin_get_handler($entity_type)) {
+    $handler->hook_entity_delete($entity);
+  }
+}
+
+/**
+ * Implements hook_field_attach_delete_revision().
+ */
+function panelizer_field_attach_delete_revision($entity_type, $entity) {
+  // Delegate to the handler.
+  if ($handler = panelizer_entity_plugin_get_handler($entity_type)) {
+    $handler->hook_field_attach_delete_revision($entity);
+  }
+}
+
+function panelizer_field_attach_form($entity_type, $entity, &$form, &$form_state, $langcode) {
+  // Delegate to the handler.
+  if ($handler = panelizer_entity_plugin_get_handler($entity_type)) {
+    $handler->hook_field_attach_form($entity, $form, $form_state, $langcode);
+  }
+}
+
+function panelizer_field_attach_submit($entity_type, $entity, &$form, &$form_state) {
+  // Delegate to the handler.
+  if ($handler = panelizer_entity_plugin_get_handler($entity_type)) {
+    $handler->hook_field_attach_submit($entity, $form, $form_state);
+  }
+}
+
+// -----------------------------------------------------------------------
+// Panels and CTools hooks
+
+/**
+ * Implements hook_ctools_plugin_type()
+ */
+function panelizer_ctools_plugin_type() {
+  $items['entity'] = array(
+    'cache' => FALSE,
+    'process' => array(
+      'function' => 'panelizer_entity_plugin_process',
+    ),
+    'classes' => array('handler'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_ctools_plugin_directory()
+ */
+function panelizer_ctools_plugin_directory($module, $plugin) {
+  if (in_array($module, array('panelizer', 'ctools', 'page_manager'))) {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function panelizer_ctools_plugin_api($module, $api) {
+  if (($module == 'page_manager' && $api == 'pages_default') || $module == 'panelizer') {
+    return array(
+      'version' => 1,
+      'path' => drupal_get_path('module', 'panelizer') . '/includes',
+    );
+  }
+}
+
+/**
+ * Implementation of hook_views_api().
+ */
+function panelizer_views_api() {
+  return array(
+    'api' => 2.0,
+    'path' => drupal_get_path('module', 'panelizer') . '/plugins/views',
+  );
+}
+
+/**
+ * Implements hook_panelizer_defaults().
+ */
+function panelizer_panelizer_defaults() {
+  $items = array();
+  // Delegate.
+  foreach (panelizer_get_plugins_with_hook('panelizer_defaults') as $handler) {
+    $handler->hook_panelizer_defaults($items);
+  }
+
+  return $items;
+}
+
+/**
+ * Implements hook_default_page_manager_handlers().
+ */
+function panelizer_default_page_manager_handlers() {
+  $items = array();
+  // Delegate.
+  foreach (panelizer_get_plugins_with_hook('default_page_manager_handlers') as $handler) {
+    $handler->hook_default_page_manager_handlers($items);
+  }
+
+  return $items;
+}
+
+// -----------------------------------------------------------------------
+// CTools entity plugin support code
+
+/**
+ * CTools process callback for an entity plugin.
+ *
+ * This adds configuration data to the plugin so that we know what
+ * bundles it is enabled for.
+ */
+function panelizer_entity_plugin_process(&$plugin, $info) {
+  $entity_type = $plugin['name'];
+  $entity_info = entity_get_info($entity_type);
+  $plugin['bundles'] = array();
+  if ($entity_info) {
+    foreach ($entity_info['bundles'] as $bundle => $label) {
+      if ($settings = variable_get('panelizer_defaults_' . $entity_type . '_' . $bundle, array())) {
+        $plugin['bundles'][$bundle] = $settings;
+      }
+    }
+  }
+
+  drupal_alter('panelizer_entity_plugin_process', $plugin, $info);
+}
+
+/**
+ * Fetch a single entity plugin.
+ */
+function panelizer_get_entity_plugin($entity_type) {
+  ctools_include('plugins');
+  return ctools_get_plugins('panelizer', 'entity', $entity_type);
+}
+
+/**
+ * Fetch all entity plugin.
+ */
+function panelizer_get_entity_plugins() {
+  ctools_include('plugins');
+  return ctools_get_plugins('panelizer', 'entity');
+}
+
+/**
+ * Get the class to handle custom code for a given entity type plugin.
+ *
+ * If a plugin does not define a class at all, then the default class
+ *
+ * @return
+ *   Either the instantiated handler or FALSE if one could not be had.
+ */
+function panelizer_entity_plugin_get_handler($plugin) {
+  // The default plugin handler is abstract and cannot be loaded.
+  if ($plugin == 'default') {
+    return;
+  }
+
+  $cache = &drupal_static(__FUNCTION__, array());
+
+  // If a string was passed, turn it into a plugin.
+  if (is_string($plugin)) {
+    $plugin = panelizer_get_entity_plugin($plugin);
+    if (!$plugin) {
+      return FALSE;
+    }
+  }
+
+  // Get the class name from the 'handler' property if we have not already
+  // cached a handler.
+  if (is_object($plugin)) {
+    vpr_trace();
+    exit;
+  }
+  if (empty($cache[$plugin['name']]) && ($class = ctools_plugin_get_class($plugin, 'handler'))) {
+    // @todo is there a good reason to use ->init instead of __construct?
+    $cache[$plugin['name']] = new $class();
+    $cache[$plugin['name']]->init($plugin);
+  }
+  return !empty($cache[$plugin['name']]) ? $cache[$plugin['name']] : FALSE;
+}
+
+/**
+ * Load handler to get a plugin as a menu callback.
+ */
+function panelizer_handler_load($entity_type) {
+  return panelizer_entity_plugin_get_handler($entity_type);
+}
+
+/**
+ * Fetch handler objects for all plugins that implement the named hook.
+ *
+ * These plugins must set $plugin['hooks'][$hook] = TRUE in order to
+ * be instantiated.
+ *
+ * This is only called for system wide hooks such as hook_menu and
+ * hook_menu_alter; entity specific hooks will always be called.
+ */
+function panelizer_get_plugins_with_hook($hook) {
+  $objects = array();
+  $plugins = panelizer_get_entity_plugins();
+  foreach ($plugins as $entity_type => $plugin) {
+    if (!empty($plugin['hooks'][$hook])) {
+      if ($handler = panelizer_entity_plugin_get_handler($plugin)) {
+        $objects[$entity_type] = $handler;
+      }
+    }
+  }
+
+  return $objects;
+}
+
+/**
+ * Page callback for entity menu callbacks.
+ *
+ * This function is to be used as a menu callback for menu items that
+ * are to be handled by a method on the handler object. It loads the object
+ * defined in the plugin and hands it off to a method based upon the name
+ * of the operation in use.
+ *
+ * For example, if the 'op' is 'revision' then the callback method will be
+ * 'page_revisions', with all of the arguments *except* the $op and the
+ * plugin name.
+ */
+function panelizer_entity_plugin_switcher_page($entity_type, $op) {
+  $args = func_get_args();
+  $js = !empty($_REQUEST['js']);
+
+  // Load the $plugin information
+  if ($handler = panelizer_entity_plugin_get_handler($entity_type)) {
+    $method = 'page_' . $op;
+    if (method_exists($handler, $method)) {
+      // replace the first two arguments:
+      $args[0] = $js;
+      $args[1] = $_POST;
+      return call_user_func_array(array($handler, $method), $args);
+    }
+  }
+  else {
+    return t('Configuration error. No handler found.');
+  }
+}
+
+/**
+ * Callback used for switching callbacks into the proper plugin.
+ */
+function panelizer_entity_plugin_callback_switcher($entity_type, $switcher_type, $op) {
+  $args = func_get_args();
+  if (count($args) < 3) {
+    return FALSE;
+  }
+  $entity_type = array_shift($args);
+  $switcher_type = array_shift($args);
+  $op = array_shift($args);
+
+  // Load the $plugin information
+  if ($handler = panelizer_entity_plugin_get_handler($entity_type)) {
+    $method = $switcher_type . '_' . $op;
+    if (method_exists($handler, $method)) {
+      return call_user_func_array(array($handler, $method), $args);
+    }
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Specialized version of ctools_export_ui_switcher_page()
+ *
+ * This one is designed to set our entity handler and bundle on the
+ * object so we can refer to it later without having to override
+ * all of the entry points.
+ */
+function panelizer_export_ui_switcher_page($entity_handler, $bundle, $plugin_name, $op) {
+  $args = func_get_args();
+
+  // Remove the handler and the bundle.
+  array_shift($args);
+  array_shift($args);
+  $js = !empty($_REQUEST['js']);
+
+  // Load the $plugin information
+  $plugin = ctools_get_export_ui($plugin_name);
+  $handler = ctools_export_ui_get_handler($plugin);
+
+  if ($handler) {
+    $handler->entity_handler = $entity_handler;
+    $handler->entity_bundle = $bundle;
+    $handler->plugin['menu']['menu prefix'] = 'admin/config/content/panelizer/' . $entity_handler->entity_type;
+    $handler->plugin['menu']['menu item'] = $bundle;
+
+    $path = $handler->plugin['menu']['menu prefix'] . '/' . $handler->plugin['menu']['menu item'];
+
+    foreach ($handler->plugin['redirect'] as $key => $old_path) {
+      if ($key == 'add') {
+        $handler->plugin['redirect'][$key] = $path . '/list/%ctools_export_ui/settings';
+      }
+      else {
+        $handler->plugin['redirect'][$key] = $path . '/list';
+      }
+    }
+
+    $method = $op . '_page';
+    if (method_exists($handler, $method)) {
+      // replace the first two arguments:
+      $args[0] = $js;
+      $args[1] = $_POST;
+      return call_user_func_array(array($handler, $method), $args);
+    }
+  }
+  else {
+    return t('Configuration error. No handler found.');
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Menu callbacks
+
+/**
+ * Title callback to properly set the tile when editing panelizer defaults.
+ */
+function panelizer_default_title_callback($handler, $bundle) {
+  if (is_string($handler)) {
+    $handler = panelizer_entity_plugin_get_handler($handler);
+  }
+
+  if (!$handler) {
+    return '';
+  }
+
+  $title = $handler->get_bundle_title($bundle);
+  return $title;
+}
+
+/**
+ * Menu callback to determine if a type has a choice of defaults.
+ *
+ * We use this to make sure the right tabs appear.
+ */
+function panelizer_has_choice_callback($handler, $bundle, $name = NULL) {
+  if (!user_access('administer panelizer')) {
+    return FALSE;
+  }
+
+  if (is_string($handler)) {
+    $handler = panelizer_entity_plugin_get_handler($handler);
+  }
+
+  if (!$handler) {
+    return FALSE;
+  }
+
+  // Check to see if $name is valid
+  if ($name && !$handler->get_default_panelizer_object($bundle, $name)) {
+    return FALSE;
+  }
+
+  return $handler->has_panel_choice($bundle);
+}
+
+/**
+ * Menu callback to determine if a type has a choice of defaults.
+ *
+ * We use this to make sure the right tabs appear.
+ */
+function panelizer_has_no_choice_callback($handler, $bundle) {
+  if (!user_access('administer panelizer')) {
+    return FALSE;
+  }
+
+  if (is_string($handler)) {
+    $handler = panelizer_entity_plugin_get_handler($handler);
+  }
+
+  if (!$handler) {
+    return FALSE;
+  }
+
+  return $handler->has_default_panel($bundle) && !$handler->has_panel_choice($bundle);
+}
+
+// ---------------------------------------------------------------------------
+// export.inc callbacks to handle proper in/out of our defaults
+
+/**
+ * export.inc callback to properly save a panelizer default.
+ */
+function panelizer_export_save_callback(&$object) {
+  if (!empty($object->display)) {
+    // First write the display
+    panels_save_display($object->display);
+
+    // Make sure we have the did.
+    $object->did = $object->display->did;
+  }
+
+  // Then write the default
+  if ($object->export_type & EXPORT_IN_DATABASE) {
+    // Existing record.
+    $update = array('pnid');
+  }
+  else {
+    // New record.
+    $update = array();
+    $object->export_type = EXPORT_IN_DATABASE;
+  }
+
+  return drupal_write_record('panelizer_defaults', $object, $update);
+}
+
+/**
+ * export.inc callback to properly export a panelizer default.
+ */
+function panelizer_export_export_callback($object, $indent) {
+  $output = ctools_export_object('panelizer_defaults', $object, $indent);
+  $output .= panels_export_display($object->display, $indent);
+  $output .= $indent . '$panelizer->display = $display;' . "\n";
+
+  return $output;
+}
+
+/**
+ * export.inc callback to properly delete a panelizer default.
+ */
+function panelizer_export_delete_callback($object) {
+  if (!empty($object->did)) {
+    panels_delete_display($object->did);
+  }
+
+  db_delete('panelizer_defaults')
+    ->condition('name', $object->name)
+    ->execute();
+}
+
+/**
+ * export.inc callback to load sub records for an object.
+ */
+function panelizer_export_delete_callback_subrecords($objects) {
+  $dids = array();
+  foreach ($objects as $panelizer) {
+    $dids[$panelizer->did] = $panelizer->did;
+  }
+
+  if ($dids) {
+    $displays = panels_load_displays($dids);
+    foreach ($objects as $panelizer) {
+      if (!empty($displays[$panelizer->did])) {
+        $panelizer->display = $displays[$panelizer->did];
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Context cache callbacks -- this really needs a less lame system someday.
+
+/**
+ * Fetch the panelizer object from the object cache.
+ *
+ * CTools clumsy context editing system requires caching. This lets us
+ * do it reasonably.
+ *
+ * @param $entity_type
+ *   Can be something like 'node' or 'user' or 'default'.
+ * @param $key
+ *   Depends on the $entity_type. Can be a nid, a uid or a default key.
+ */
+function panelizer_context_cache_get($entity_type, $key) {
+  ctools_include('object-cache');
+  $cache = ctools_object_cache_get('panelizer_context_cache', $entity_type . ':' . $key);
+  if (!empty($cache)) {
+    $cache->cached = TRUE;
+    return $cache;
+  }
+
+  if ($entity_type == 'default') {
+    list($entity_type, $bundle, $name) = @explode(':', $key, 3);
+    $get_default = TRUE;
+  }
+
+  if ($handler = panelizer_entity_plugin_get_handler($entity_type)) {
+    if (!empty($get_default)) {
+      $panelizer = $handler->get_default_panelizer_object($bundle, $name);
+      $panelizer->base_contexts = $handler->get_base_contexts();
+      return $panelizer;
+    }
+    else {
+      $entities = entity_load($entity_type, array($key));
+      if ($entities[$key] && $entities[$key]->panelizer) {
+        $panelizer = $entities[$key]->panelizer;
+        $panelizer->base_contexts = $handler->get_base_contexts($entities[$key]);
+        return $panelizer;
+      }
+    }
+  }
+}
+
+/**
+ * Store the panelizer object in the object cache.
+ *
+ * CTools clumsy context editing system requires caching. This lets us
+ * do it reasonably.
+ *
+ * @param $entity_type
+ *   Can be something like 'node' or 'user' or 'default'.
+ * @param $key
+ *   Either the node type or the nid.
+ * @param $object
+ *   The cached object.
+ */
+function panelizer_context_cache_set($entity_type, $key, $object) {
+  ctools_include('object-cache');
+  ctools_object_cache_set('panelizer_context_cache', $entity_type . ':' . $key, $object);
+}
+
+/**
+ * Clear the panelizer object in the object cache.
+ *
+ * CTools clumsy context editing system requires caching. This lets us
+ * do it reasonably.
+ *
+ * @param $entity_type
+ *   Can be something like 'node' or 'user' or 'default'.
+ * @param $key
+ *   Either the node type or the nid.
+ */
+function panelizer_context_cache_clear($entity_type, $key) {
+  ctools_include('object-cache');
+  ctools_object_cache_clear('panelizer_context_cache', $entity_type . ':' . $key);
+}
+
+// --------------------------------------------------------------------------
+// Panels edit cache contexts.
+
+/**
+ * Get display edit cache for a panel being edited.
+ *
+ * The key is the second half of the key in this form:
+ * panelizer:TYPE:KEY;
+ */
+function panelizer_panels_cache_get($argument) {
+  ctools_include('object-cache');
+  list($entity_type, $key) = explode(':', $argument, 2);
+  $cache = ctools_object_cache_get('panelizer_display_cache', $entity_type . ':' . $key);
+
+  // Keep $type because $entity_type can be 'default' which is not actually an
+  // entity type in that case.
+  $type = $entity_type;
+  if ($entity_type == 'default') {
+    list($entity_type, $bundle, $name) = @explode(':', $key, 3);
+    $get_default = TRUE;
+  }
+
+  $handler = panelizer_entity_plugin_get_handler($entity_type);
+  if (!$handler) {
+    return;
+  }
+
+  // If it's already cached, we still need to restore our contexts.
+  if (!empty($cache)) {
+    $cache->cached = TRUE;
+    if (!empty($get_default)) {
+      $panelizer = $handler->get_default_panelizer_object($bundle, $name);
+      $cache->display->context = $handler->get_contexts($panelizer);
+    }
+    else {
+      $entities = entity_load($entity_type, array($key));
+      if ($entities[$key] && $entities[$key]->panelizer) {
+        $panelizer = $entities[$key]->panelizer;
+        $cache->display->context = $handler->get_contexts($panelizer, $entities[$key]);
+      }
+    }
+
+    return $cache;
+  }
+
+  $cache = new stdClass();
+
+  // If it wasn't cached, create a new cache.
+  if (!empty($get_default)) {
+    $panelizer = $handler->get_default_panelizer_object($bundle, $name);
+    $cache->display = $panelizer->display;
+    $cache->display->context = $handler->get_contexts($panelizer);
+  }
+  else {
+    $entities = entity_load($entity_type, array($key));
+    if (empty($entities[$key]) || empty($entities[$key]->panelizer)) {
+      return $cache;
+    }
+
+    list($entity_id, $revision_id, $bundle) = entity_extract_ids($entity_type, $entities[$key]);
+    $panelizer = $entities[$key]->panelizer;
+    $cache->display = $panelizer->display;
+    $cache->display->context = $handler->get_contexts($panelizer, $entities[$key]);
+  }
+
+  ctools_include('common', 'panels');
+  $cache->display->cache_key = "panelizer:$type:$key";
+  $cache->content_types = panels_common_get_allowed_types('panelizer_' . $type . ':' . $bundle, $cache->display->context);
+
+  return $cache;
+}
+
+/**
+ * Store a display edit in progress in the page cache.
+ */
+function panelizer_panels_cache_set($argument, $cache) {
+  list($type, $key) = explode(':', $argument, 2);
+  ctools_include('object-cache');
+  ctools_object_cache_set('panelizer_display_cache', $type . ':' . $key, $cache);
+}
+
+/**
+ * Save all changes made to a display using the Page Manager page cache.
+ */
+function panelizer_panels_cache_clear($argument, $cache) {
+  list($type, $key) = explode(':', $argument, 2);
+  ctools_include('object-cache');
+  ctools_object_cache_clear('panelizer_display_cache', $type . ':' . $key);
+}
+
+/**
+ * Save all changes made to a display using the Page Manager page cache.
+ */
+function panelizer_panels_cache_save($argument, $cache) {
+  list($entity_type, $key) = explode(':', $argument, 2);
+  $type = $entity_type;
+  if ($entity_type == 'default') {
+    list($entity_type, $bundle, $name) = @explode(':', $key, 3);
+    $get_default = TRUE;
+  }
+
+  $handler = panelizer_entity_plugin_get_handler($entity_type);
+  if (!$handler) {
+    return;
+  }
+
+  if ($get_default) {
+    $panelizer = $handler->get_default_panelizer_object($bundle, $name);
+    $panelizer->display = $cache->display;
+    ctools_include('export');
+    ctools_export_crud_save('panelizer_defaults', $panelizer);
+  }
+  else {
+    $entities = entity_load($entity_type, array($key));
+    if ($entities[$key] && $entities[$key]->panelizer) {
+      $entities[$key]->panelizer->display = $cache->display;
+      $entities[$key]->panelizer->display_is_modified = TRUE;
+      $handler->entity_save($entities[$key]);
+    }
+  }
+  panelizer_panels_cache_clear($argument, $cache);
+
+}
+
+// ---------------------------------------------------------------------------
+// Contrib module hooks to provide needed functionality.
+
+
+/**
+ * Implements hook_export_node_alter().
+ *
+ * Integrate with export.module for saving panel_nodes into code.
+ */
+function panelizer_export_node_alter(&$node, $original_node, $method) {
+  // @todo
+}
+
+/**
+ * Implements hook_panelizer_defaults_alter().
+ *
+ * Remove the panels node because there is no point to panelizing it.
+ */
+function panelizer_panelizer_default_types_alter(&$bundles, $entity_type) {
+  switch ($entity_type) {
+    case 'node':
+      // Disallow the panel node type, since it's already a panel.
+      if (module_exists('panels_node') && !empty($bundles['panel'])) {
+        unset($bundles['panel']);
+      }
+      break;
+    case 'user':
+  }
+}
+
+/**
+ * Implements hook_features_export_alter().
+ */
+function panelizer_features_export_alter(&$export, $module_name) {
+  if (!empty($export['features']['panelizer_defaults'])) {
+    foreach ($export['features']['panelizer_defaults'] as $machine_name) {
+      list ($entity_type, $bundle) = explode(':', $machine_name);
+
+      $variables = array(
+        'panelizer_defaults_' . $entity_type . '_' . $bundle,
+        'panelizer_' . $entity_type . ':' . $bundle . '_allowed_layouts',
+        'panelizer_' . $entity_type . ':' . $bundle . '_allowed_types',
+        'panelizer_' . $entity_type . ':' . $bundle . '_default'
+      );
+
+      foreach ($variables as $variable) {
+        $export['features']['variable'][$variable] = $variable;
+      }
+    }
+  }
+
+  return array();
+}

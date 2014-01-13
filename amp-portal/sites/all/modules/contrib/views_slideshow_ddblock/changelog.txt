@@ -1,0 +1,45 @@
+/*
+ * Change Log for views_slideshow_ddblock module
+ */
+
+18-JUL-2001
+#1214290 by ppblaauw Fix warning cycle plugin not installed
+
+09-JUL-2011
+#1214290 by mrfelton make possible to add not minified version of jquery cycle plugin
+#1214010 by SebCorbin fix bug in id in file views-slideshow-ddblock-main-frame.tpl.php
+#1214010 by ppblaauw fix bug 
+in call of css file.
+
+05-JUL-2011
+jcycle_plugin and easing plugin now added via libraries module
+Views_slideshow_ddblock now dependant on libraries module for jquery cycle plugin and easing plugin
+Change files[] in .info file
+Add nr_of_items and nr_of_pager_items functionality
+
+04-JUL-2011
+Update jcycle_plugin to version 2.99
+Removed custom template and custom template size options
+Fix wrong template call
+Add theme suggestion with delta for main_frame
+Add pager_toggle as theme_variable
+Add pagerDisableClick functionality
+Improve slidetext jquery effects
+fix wrong pager_toggle variable
+fix wrong delta variable
+Cleanup code 
+Add (function ($) wrapper to formoptions.js file
+Port drupal behaviours to drupal 7 with attach: in formoptions.js file
+Show/hide pager settings sections replaced by dependency in formoptions.js file
+Show/hide prev/next pager settings sections replaced by dependency in formoptions.js file
+Show/hide prev/next pager pager settings sections replaced by dependency in formoptions.js file
+Show/hide prev/next pager slide settings sections replaced by dependency in formoptions.js file
+Show/hide slide text settings sections replaced by dependency in formoptions.js file
+Show/hide jquery slide text settings sections replaced by dependency in formoptions.js file
+Fix template values in javascript for pager -10p to 10p etc.
+Add scrollable pager functionality
+
+
+
+
+

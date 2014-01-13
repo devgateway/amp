@@ -1,0 +1,124 @@
+<?php
+
+/**
+ * Implements hook_requirements().
+ */
+function feeds_excel_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break at install time
+  $t = get_t();
+
+  if (!module_exists('libraries')) {
+    $requirements['feeds_excel:libraries'] = array(
+      'title' => $t('Feeds Excel'),
+      'description' => $t('The Libraries API module is not enabled. Please make sure it is downloaded (from http://drupal.org/project/libraries) and enabled.'),
+      'severity' => REQUIREMENT_ERROR,
+      //'value' => '7.x-1.0',
+    );
+  }
+
+  if (module_exists('libraries')) {
+    $path = libraries_get_path('phpExcelReader');
+    if (empty($path)) {
+      $requirements['feeds_excel:libraries'] = array(
+        'title' => $t('phpExcelReader'),
+        'description' => $t('The phpExcelReader library is not present. It should be placed in a path supported by libraries API (e.g. sites/all/libraries/phpExcelReader)! You can download it from @link. For more information look in Feeds Excel\'s README.txt.', array('%path' => $path, '@link' => 'https://github.com/derhasi/phpExcelReader/zipball/interim2')),
+        'severity' => REQUIREMENT_ERROR,
+        //'value' => 'interim2',
+      );
+    }
+    // reader.php is on the wrong spot.
+    elseif (!file_exists($path . '/Excel/reader.php')) {
+      $reader_path = $path . '/Excel/reader.php';
+      $requirements['feeds_excel:libraries'] = array(
+        'title' => $t('phpExcelReader'),
+        'description' => $t('The phpExcelReader library\'s reader.php is not located at the correct spot. It should be placed at @path. For more information look in Feeds Excel\'s README.txt.', array('@path' => $reader_path, '@link' => 'https://github.com/derhasi/phpExcelReader/zipball/interim2')),
+        'severity' => REQUIREMENT_ERROR,
+        //'value' => 'interim2',
+      );
+    }
+  }
+
+  return $requirements;
+}
+
+
+/**
+ * Update feeds_excel config to new options and token replacement.
+ */
+function feeds_excel_update_6101() {
+
+  $res = db_query("SELECT * FROM {feeds_importer} WHERE config LIKE '%%%s%%'", 'ExcelParser');
+  while ($obj = db_fetch_object($res)) {
+    $config = unserialize($obj->config);
+    if ($config['parser']['plugin_key'] == 'ExcelParser') {
+      $offset = $config['parser']['config']['offset'];
+      if ($offset) {
+        $config['parser']['config']['fixed'] = "1:$offset";
+        $config['parser']['config']['iterative'] = ($offset + 1) .":10000";
+      }
+      else {
+        $config['parser']['config']['iterative'] = "1:10000";
+      }
+      if (is_array($config['processor']['config']['mappings'])) {
+        foreach ($config['processor']['config']['mappings'] as $i => $mapp) {
+          $replace = array(
+            'file:path' => '[excel-filepath]',
+            'parent:uid' => '[parent:author-uid]',
+            'user:uid' => '[user-id]',
+            'sheet:id' => '[sheet-id]',
+            'sheet:name' => '[sheet-name]',
+            'guid' => 'excel:[excel-filepath]-sheet:[sheet-id]-row:[row]',
+          );
+          $preg_replace = array(
+            '@cell-[0-9]+-[0-9]+@is' => '[sheet-\0]',
+            '@column-[0-9]+@is' => '[\0]',
+          );
+
+          $source = $mapp['source'];
+          $source = preg_replace(array_keys($preg_replace), array_values($preg_replace), $source);
+          $source = str_replace(array_keys($replace), array_values($replace), $source);
+          $config['processor']['config']['mappings'][$i]['source'] = $source;
+        }
+      }
+      $obj->config = $config;
+      drupal_write_record('feeds_importer', $obj, array('id'));
+      $ret[] = array(
+        'success' => TRUE,
+        'query' => t('Updated settings for importer %name to support new options.', array('%name' => $config['name'])),
+      );
+    }
+  }
+
+  if (!module_exists('token')) {
+    module_enable(array('token'));
+    $ret[] = array(
+      'success' => TRUE,
+      'query' => 'Enabled Token.module.',
+    );
+  }
+  return $ret;
+}
+
+
+/**
+ * Remind user to enable libraries and relocate the phpExcelReader library.
+ */
+function feeds_excel_update_6102() {
+  $return = array();
+  $t = get_t();
+  if (!module_exists('libraries')) {
+    $return[] = array(
+      'success' => FALSE,
+      'query' => $t('The libraries module has to be enabled.'),
+    );
+  }
+  $path = !module_exists('libraries') ? 'sites/all/libraries/phpExcelReader' : libraries_get_path('phpExcelReader');
+  if (!file_exists($path .'/Excel/reader.php')) {
+    $return[] = array(
+      'success' => FALSE,
+      'query' => $t('The phpExcelReader library has to be located or relocated at %path.', array('%path' => $path)),
+    );
+  }
+  return $return;
+}

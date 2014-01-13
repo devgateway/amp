@@ -1,0 +1,9 @@
+; $Id: ampp_feedback.info,v 1.2 2012/07/11 10:34:50 anush.martirosyan Exp $
+name = AMPP Feedback
+description = "Feedback module"
+package = Features
+core = 7.x
+dependencies[] = 'feedback'
+dependencies[] = 'captcha'
+dependencies[] = 'hierarchical_select'
+dependencies[] = 'hs_taxonomy'

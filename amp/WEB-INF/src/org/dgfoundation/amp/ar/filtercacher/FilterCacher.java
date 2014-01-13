@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.kernel.persistence.PersistenceManager;
 
 /**
@@ -21,7 +23,10 @@ public abstract class FilterCacher {
 	public FilterCacher(AmpARFilter filter)
 	{
 		this.filter = filter;
-		this.primaryKeyName = filter.isPledgeFilter() ? "pledge_id" : "amp_activity_id";
+		/*Changed the way how this verify if it's a pledge filter 
+		 * at this point the filter in not initialized yes so isPledgeFilter() will return always false 
+		*/
+		this.primaryKeyName = ReportContextData.getFromRequest().getReportMeta().getType() == ArConstants.PLEDGES_TYPE ? "id" : "amp_activity_id";
 		try
 		{
 			this.connection = PersistenceManager.getJdbcConnection();

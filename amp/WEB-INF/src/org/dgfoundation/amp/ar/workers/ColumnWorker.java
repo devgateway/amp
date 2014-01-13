@@ -144,9 +144,8 @@ public abstract class ColumnWorker {
 		
 		CellColumn cc = null;
 		
-		String query = "SELECT * FROM " + viewName + " WHERE amp_activity_id IN ("
-				+ filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition!=null ? internalCondition:"");
-		PreparedStatement ps;
+		String query = "";
+		
 	
 		if (debugMode){
 			//if debug override the query
@@ -154,8 +153,12 @@ public abstract class ColumnWorker {
 		}else if (pledgereport){
 			query = "SELECT * FROM " + viewName + " WHERE pledge_id IN ("
 			+ filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition!=null?internalCondition:"");
+		}else{
+			query = "SELECT * FROM " + viewName + " WHERE amp_activity_id IN ("
+					+ filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition!=null ? internalCondition:"");
 		}
 		
+		PreparedStatement ps;
 		try {
 			
 			ps = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

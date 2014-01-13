@@ -1,0 +1,23 @@
+<?php
+
+$databases['default']['default'] = array(
+        'driver' => 'mysql',
+        'database' => 'ampp',
+        'username' => 'root',
+        'password' => '12345',
+        'host' => 'localhost',
+        'prefix' => '',
+        'collation' => 'utf8_general_ci',
+);
+
+$conf['cache_class_cache_form'] = 'DrupalDatabaseCache';
+$conf['cache_backends'][] = 'sites\all\modules\contrib\memcache\memcache.inc';
+$conf['cache_default_class'] = 'MemCacheDrupal';
+$conf['memcache_key_prefix'] = 'ampp_';
+
+define('PROJECT_ENVIRONMENT','LOCAL');
+
+//error_reporting(E_ERROR | E_WARNING | E_PARSE);
+error_reporting(E_ALL);
+ini_set('display_errors', TRUE);
+ini_set('display_startup_errors', TRUE);

@@ -73,6 +73,12 @@ function validade(){
 	}else{
 		document.getElementById('setectedTMs').value=true;
 	}
+	var calendar = document.getElementsByName("fisCalendarId")[0];
+	if (calendar.options[calendar.options.selectedIndex].value == "") {
+		  alert("<digi:trn>You must select a fiscal calendar</digi:trn>");
+		  return false;
+		
+	}
 	
   	document.aimUpdateAppSettingsForm.save.value = "save";
   	document.aimUpdateAppSettingsForm.submit();

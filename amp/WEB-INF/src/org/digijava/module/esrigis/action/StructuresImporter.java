@@ -79,6 +79,9 @@ public class StructuresImporter extends Action {
                             }else{
                                 String errorline = ArrayUtils.toString(nextLine).replace("{", "");
                                 errorline = errorline.replace("}","");
+                                if (st.getType()==null) {
+                                    errorline += " (Reason: Wrong structure type)";
+                                }
                                 sform.getErrors().add(ArrayUtils.toString(errorline));
 							}
 							

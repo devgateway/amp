@@ -907,8 +907,8 @@ public class ExportToWord extends Action {
 	    			    aidPredTbl.addCell(cell);
 	    			}
 	            	count++;
-	            	doc.add(aidPredTbl);
 	            }
+            	doc.add(aidPredTbl);	            
             }
             doc.add(new Paragraph(" "));
         }

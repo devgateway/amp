@@ -102,6 +102,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	protected Form<AmpActivityVersion> activityForm;
 	private static final Integer GO_TO_DESKTOP=1;
 	private static final Integer STAY_ON_PAGE=2;
+	private boolean submited;
 	public Form<AmpActivityVersion> getActivityForm() {
 		return activityForm;
 	}
@@ -305,32 +306,36 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		final AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
-				processAndUpdateForm(true, am, form, target, this.getButton());
-                if(!form.hasError()){
-                    HashMap<String, String> commitmentErrors = new HashMap<String, String>();
-                    HashMap<String, String> expenditureErrors = new HashMap<String, String>();
-                    boolean amountsOk = verifyAmounts(am, commitmentErrors, expenditureErrors);
-                    if (!amountsOk){
-                        //set warning
-                        HashMap<String, HashMap<String,String>> tmpMap = new HashMap<String, HashMap<String, String>>();
-                        if (!commitmentErrors.isEmpty()) {
-                            tmpMap.put(DISBURSEMENTS_BIGGER_ERROR, commitmentErrors);
-                        }
-                        if (!expenditureErrors.isEmpty()) {
-                            tmpMap.put(EXPENDITURES_BIGGER_ERROR, expenditureErrors);
-                        }
-                        saveWarningsModel.setObject(tmpMap);
-                        //show warning window
-                        target.add(warningsWrapper);
-                        target.appendJavaScript("showWarningPanel();");
-                    }
-                    else
-                        saveMethod(target, am, feedbackPanel, false, redirected);
-                }
-				else
-					onError(target, form);
-                //reenable buttons 
-                target.appendJavaScript("enableDisableForm(true);");
+				if(!submited){
+					submited=true;
+					processAndUpdateForm(true, am, form, target, this.getButton());
+	                if(!form.hasError()){
+	                    HashMap<String, String> commitmentErrors = new HashMap<String, String>();
+	                    HashMap<String, String> expenditureErrors = new HashMap<String, String>();
+	                    boolean amountsOk = verifyAmounts(am, commitmentErrors, expenditureErrors);
+	                    if (!amountsOk){
+	                        //set warning
+	                        HashMap<String, HashMap<String,String>> tmpMap = new HashMap<String, HashMap<String, String>>();
+	                        if (!commitmentErrors.isEmpty()) {
+	                            tmpMap.put(DISBURSEMENTS_BIGGER_ERROR, commitmentErrors);
+	                        }
+	                        if (!expenditureErrors.isEmpty()) {
+	                            tmpMap.put(EXPENDITURES_BIGGER_ERROR, expenditureErrors);
+	                        }
+	                        saveWarningsModel.setObject(tmpMap);
+	                        //show warning window
+	                        target.add(warningsWrapper);
+	                        target.appendJavaScript("showWarningPanel();");
+	                    }
+	                    else
+	                        saveMethod(target, am, feedbackPanel, false, redirected);
+	                }
+					else
+						onError(target, form);
+	                //reenable buttons 
+	                target.appendJavaScript("enableDisableForm(true);");
+	                submited=false;
+				}
 			}
 
 			@Override
@@ -414,18 +419,22 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				//reenable buttons
-                target.appendJavaScript("hideDraftPanel();enableDisableForm(true);");
-                processAndUpdateForm(false, am, form, target, this.getButton());
-
-				//only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
-				if(!form.hasError())  
-					saveMethod(target, am, feedbackPanel, true, redirected);
-				else {
-                    target.add(this);
-                    target.add(cancelSaveAsDraft);
-                    onError(target, form);
-                }
+				if(!submited){
+					submited=true;
+					//reenable buttons
+	                target.appendJavaScript("hideDraftPanel();enableDisableForm(true);");
+	                processAndUpdateForm(false, am, form, target, this.getButton());
+	
+					//only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
+					if(!form.hasError())  
+						saveMethod(target, am, feedbackPanel, true, redirected);
+					else {
+	                    target.add(this);
+	                    target.add(cancelSaveAsDraft);
+	                    onError(target, form);
+	                }
+				submited=false;
+				}
 			}
 			
 			@Override
@@ -516,13 +525,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				//reenable buttons
-				target.appendJavaScript("enableDisableForm(true);");
-				if (am.getObject().getAmpActivityId() == null)
-					target.appendJavaScript("alert('" + TranslatorUtil.getTranslatedText("You need to save this activity before being able to preview it!") + "');");
-				else
-					target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
-
+				if(!submited){
+					submited=true;
+					//reenable buttons
+					target.appendJavaScript("enableDisableForm(true);");
+					if (am.getObject().getAmpActivityId() == null)
+						target.appendJavaScript("alert('" + TranslatorUtil.getTranslatedText("You need to save this activity before being able to preview it!") + "');");
+					else
+						target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
+				submited=false;
+				}
 			}
 			
 			@Override

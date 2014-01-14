@@ -7,8 +7,11 @@ class ampp_projects_handler_program_names extends views_handler_field {
   const  DELIMETER_SIGN = '||';
   
   function query() {  	
+    global $language;
+    
   	$this->ensure_my_table();
-    $this->field_alias = $this->query->add_field(NULL,"array_to_string(array_agg(amp_theme.name), '".self::DELIMETER_SIGN."')", $this->table_alias . '_' . $this->field);
+  	$translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', amp_theme.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')"; 
+    $this->field_alias = $this->query->add_field(NULL, "array_to_string(array_agg(" . $translate_field . "), '".self::DELIMETER_SIGN."')", $this->table_alias . '_' . $this->field);
   }
 
   function render($values) {

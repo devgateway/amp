@@ -79,9 +79,13 @@ function hs_select_locations_get_items($parent = 0) {
 		$op = '=';
 	}
 	
-	$query = db_select('amp_category_value_location', 'location')->fields('location', array('id', 'location_name'))
-	 		->condition('location.parent_location', $parent, $op)
-	 		->orderBy('location.location_name', 'ASC');
+	global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
+	
+	$query = db_select('amp_category_value_location', 'location')->fields('location', array('id'));
+	$query->addExpression($translate_field, 'location_name');
+	$query->condition('location.parent_location', $parent, $op);
+	$query->orderBy('location_name', 'ASC');
 	$result = $query->execute();
 	
  	foreach ($result as $record) {
@@ -131,11 +135,14 @@ function hs_select_locations_load_tree($parent = 0) {
 		$op = '=';
 	}
 
+	global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
 	
-	$query = db_select('amp_category_value_location', 'loc')->fields('loc', array('id', 'location_name', 'parent_location'));
+	$query = db_select('amp_category_value_location', 'loc')->fields('loc', array('id', 'parent_location'));
+	$query->addExpression($translate_field, 'location_name');
 	$query->condition('loc.parent_location', $parent, $op);
 	 		
-	$query->orderBy('loc.location_name', 'ASC');
+	$query->orderBy('location_name', 'ASC');
 	$result = $query->execute();
 	
 	if ($isTopParent) {
@@ -181,7 +188,12 @@ function hs_select_locations_hierarchical_select_implementation_info() {
 
 function hs_select_locations_get_item_name($id) {
 	db_set_active("amp_projects");
-	$query = db_select('amp_category_value_location', 'loc')->fields('loc', array('id', 'location_name'));
+	
+	global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
+	
+	$query = db_select('amp_category_value_location', 'loc')->fields('loc', array('id'));
+	$query->addExpression($translate_field, 'location_name');
 	$query->leftJoin('amp_location', 'aloc', 'aloc.location_id=loc.id');
 	$query->fields('aloc', array('amp_location_id'));
 	$query->condition('loc.id', $id, '=');

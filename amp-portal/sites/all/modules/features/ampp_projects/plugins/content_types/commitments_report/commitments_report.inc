@@ -80,7 +80,10 @@ function _amp_projects_get_commitments_report($number_of_days, $order_field, $or
 	       ->groupBy('org.name')
 	       ->addExpression('SUM(afd.transaction_amount / getexchange(cur.currency_code, afd.transaction_date ))', 'transaction_amount');
 	
-    $snippet = "activity.approval_status IN ('approved', 'startedapproved')";
+	$snippet  = "activity.amp_team_id is not null";
+	$query->where($snippet);
+	
+    $snippet  = "activity.approval_status IN ('approved', 'startedapproved')";
     $snippet .= " AND activity.draft <> true AND activity.deleted <> true AND activity.archived <> true"; 
     $snippet .= " AND activity.amp_team_id IN (select amp_team_id from amp_team where parent_team_id IN (select amp_team_id from amp_team where access_type = 'Management'))"; 
     $snippet .= " OR (";

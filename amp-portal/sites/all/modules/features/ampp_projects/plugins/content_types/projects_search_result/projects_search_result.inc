@@ -96,7 +96,7 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
 	
   $showregionalprojects = !empty($_GET["showregionalprojects"])? $_GET["showregionalprojects"] : "all";
     
-  if(isset($conf["allowxlsexport"]) && $conf["allowxlsexport"] == 1) {
+  if (isset($conf["allowxlsexport"]) && $conf["allowxlsexport"] == 1) {
     $block->content =  l(t('Export in XLS format'), 'searchexport/searchresult.xls', 
 	    					array('attributes' => array('class' => array('export-link')),
 	    						  'query' => array( 

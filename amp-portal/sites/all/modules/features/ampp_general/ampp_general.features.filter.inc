@@ -33,9 +33,9 @@ function ampp_general_filter_default_formats() {
       ),
       'filter_html' => array(
         'weight' => '-49',
-        'status' => '1',
+        'status' => '0',
         'settings' => array(
-          'allowed_html' => '<a> <img> <em> <strong> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <p> <br> <iframe>',
+          'allowed_html' => '<a> <img> <em> <strong> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <p> <br> <iframe> <table> <th> <tr> <td>',
           'filter_html_help' => 1,
           'filter_html_nofollow' => 1,
         ),

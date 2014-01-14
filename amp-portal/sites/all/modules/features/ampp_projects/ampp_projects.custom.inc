@@ -1,5 +1,5 @@
 <?php
-// $Id: ampp_projects.custom.inc,v 1.121 2013/12/23 21:17:18 vamirbekyan Exp $
+// $Id: ampp_projects.custom.inc,v 1.121.6.3 2014/01/09 02:20:07 vamirbekyan Exp $
 
 global $amp_db_exists; 
 $amp_db_exists = FALSE;
@@ -486,12 +486,17 @@ function ampp_get_sectors_from_url(){
   if($sectors_ids != 'all' and !empty($sectors_ids)){
     db_set_active("amp_projects");
     $items = array();
-    $query = db_select('amp_sector', 'sector')
-    ->fields('sector', array('amp_sector_id', 'name'))
-    ->condition('sector.amp_sector_id',explode(",",$sectors_ids),"IN");
+      
+    global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')"; 
+    
+    $query = db_select('amp_sector', 'sector');
+    $query->fields('sector', array('amp_sector_id'));
+    $query->addExpression($translate_field, 'name');
+    $query->condition('sector.amp_sector_id', explode(",", $sectors_ids), "IN");
     $result = $query->execute();    
     foreach ($result as $record) {
-      $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name'=>addslashes(check_plain($record->name))));
+      $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name))));
     }
     db_set_active();
   } 
@@ -511,12 +516,17 @@ function ampp_get_primarysectors_from_url(){
   if($sectors_ids != 'all' and !empty($sectors_ids)){
     db_set_active("amp_projects");
     $items = array();
-    $query = db_select('amp_sector', 'sector')
-    ->fields('sector', array('amp_sector_id', 'name'))
-    ->condition('sector.amp_sector_id',explode(",",$sectors_ids),"IN");
+    
+    global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')"; 
+    
+    $query = db_select('amp_sector', 'sector');
+    $query->fields('sector', array('amp_sector_id'));
+    $query->addExpression($translate_field, 'name');
+    $query->condition('sector.amp_sector_id', explode(",", $sectors_ids), "IN");
     $result = $query->execute();    
     foreach ($result as $record) {
-      $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name'=>addslashes(check_plain($record->name))));
+      $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name))));
     }
     db_set_active();
   } 
@@ -536,12 +546,17 @@ function ampp_get_secondarysectors_from_url(){
   if($sectors_ids != 'all' and !empty($sectors_ids)){
     db_set_active("amp_projects");
     $items = array();
-    $query = db_select('amp_sector', 'sector')
-    ->fields('sector', array('amp_sector_id', 'name'))
-    ->condition('sector.amp_sector_id',explode(",",$sectors_ids),"IN");
+    
+    global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')"; 
+    
+    $query = db_select('amp_sector', 'sector');
+    $query->fields('sector', array('amp_sector_id'));
+    $query->addExpression($translate_field, 'name');
+    $query->condition('sector.amp_sector_id',explode(",", $sectors_ids), "IN");
     $result = $query->execute();    
     foreach ($result as $record) {
-      $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name'=>addslashes(check_plain($record->name))));
+      $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name))));
     }
     db_set_active();
   } 
@@ -611,8 +626,14 @@ function ampp_get_donors_from_url(){
   db_set_active("amp_projects");
   $items = array();
   if($donors_ids != 'all' and !empty($donors_ids)){
+    
+    global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', orgs.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', '" . $language->language . "')"; 
+    
     $query = db_select('amp_organisation', 'donor');
-    $query->fields('donor', array('amp_org_id', 'name', 'acronym'));
+    $query->fields('donor', array('amp_org_id', 'acronym'));
+    $query->addExpression($translate_field, 'name');
+    
     $query->condition('donor.amp_org_id', explode(',', $donors_ids), 'IN');
     
     $or_statement = db_or()->condition('donor.deleted', 'true', '<>')->condition('donor.deleted', NULL, 'is');
@@ -644,9 +665,14 @@ function ampp_get_locations_from_url(){
   if($locations_ids != 'all' and !empty($locations_ids)){
     db_set_active("amp_projects");
     $items = array();
-    $query = db_select('amp_category_value_location', 'location')
-    ->fields('location', array('id', 'location_name'))
-    ->condition('location.id',explode(",",$locations_ids),"IN");
+    
+    global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
+
+    $query = db_select('amp_category_value_location', 'location');
+    $query->fields('location', array('id'));
+    $query->addExpression($translate_field, 'location_name');
+    $query->condition('location.id', explode(",", $locations_ids), "IN");
     $result = $query->execute();
     foreach ($result as $record) {
       $locations[] = drupal_json_encode(array('id'=>$record->id, 'name'=>check_plain($record->location_name)));
@@ -693,16 +719,13 @@ function ampp_get_onoffbudget_from_url($source_arg = TRUE){
  *
  */
 function ampp_get_regionalprojects_from_url($source_arg = TRUE){
-
-    $regionalprojects = $_GET["showregionalprojects"];
-	if(!$source_arg) {
-		$regionalprojects = 'all';
-	}
-	
-	if($regionalprojects == 'all')
-		return 0;
-		
-	return 1;
+  if (!$source_arg) {
+    $regionalprojects = 'all';
+  }
+  if (isset($_GET["showregionalprojects"]) && isset($_GET["regionalprojects"]) && $regionalprojects == 'all') {
+    return 0;
+  }	
+  return 1;
 }
 
 
@@ -745,7 +768,7 @@ function get_total_amount($type){
   }
 
   $sectors_ids = empty($_GET["secondarysectors"]) ? '' : $_GET["secondarysectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
+  if($sectors_ids != 'all' and !empty($sectors_ids)) {
   	$sectors_array = array_merge($sectors_array, explode(",",$sectors_ids));
   }
   
@@ -775,7 +798,10 @@ function get_total_amount($type){
   $query->addJoin('LEFT', 'cached_amp_activity', 'activity', 'activity.amp_activity_id = f.amp_activity_id');
   $query->addJoin('LEFT', 'amp_currency', 'cur', 'fd.amp_currency_id = cur.amp_currency_id');
   
-  $snippet = "activity.approval_status IN ('approved', 'startedapproved')";
+  $snippet  = "activity.amp_team_id is not null";
+  $query->where($snippet);
+  
+  $snippet  = "activity.approval_status IN ('approved', 'startedapproved')";
   $snippet .= " AND activity.draft <> true"; 
   $snippet .= " AND activity.amp_team_id IN (select amp_team_id from amp_team where parent_team_id IN (select amp_team_id from amp_team where access_type = 'Management'))"; 
   $snippet .= " OR (";
@@ -826,7 +852,7 @@ function get_total_amount($type){
   }
   
   if($keywords !== 'all' && !empty($keywords)) {
-  	$query->condition('activity.name', '%' . db_like($keywords) . '%', 'ILIKE');
+  	$query->condition('unaccent(activity.name)', 'unaccent(\'%' . db_like($keywords) . '%\')', 'ILIKE');
   }
 
   //condition for start and end date period
@@ -1108,7 +1134,7 @@ function ampp_search_result_count($JSON = true){
     $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
   }
 
-  watchdog('ampp_projects', 'ajax GET: ' . serialize($_GET));
+  //watchdog('ampp_projects', 'ajax GET: ' . serialize($_GET));
   
   if (empty($_GET["currentDonors"])) {
     $args[0] = !empty($_GET["donors"]) ? $_GET["donors"] : "all";
@@ -1155,7 +1181,7 @@ function ampp_search_result_count($JSON = true){
     if (empty($args[7])) $args[7] = "all";
   }
 
-  watchdog('ampp_projects', 'ajax ARGS: ' . serialize($args));
+  //watchdog('ampp_projects', 'ajax ARGS: ' . serialize($args));
 
   $view = views_get_view('projects_search_result');
   $tmpview = $view->clone_view();
@@ -1164,7 +1190,7 @@ function ampp_search_result_count($JSON = true){
   $tmpview->pre_execute();
   $tmpview->execute();
   
-  watchdog('ampp_projects', 'ajax TOTAL: ' . $tmpview->total_rows);
+  //watchdog('ampp_projects', 'ajax TOTAL: ' . $tmpview->total_rows);
   
   if ($JSON) {
     $response = array('count' => $tmpview->total_rows);
@@ -1339,7 +1365,7 @@ function ampp_search_result_count($JSON = true){
   }
   
   if($keywords !== 'all') {
-  		$query->condition('activity.name', '%' . db_like($keywords).'%', 'ILIKE');
+  		$query->condition('unaccent(activity.name)', 'unaccent(\'%' . db_like($keywords).'%\')', 'ILIKE');
   }
 
   $count = $query->execute()->rowCount();
@@ -1361,7 +1387,7 @@ function ampp_search_result_count($JSON = true){
 /**
  * Callback handler for sectors search
  */
-function ampp_search_sectors(){
+function ampp_search_sectors() {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -1369,16 +1395,21 @@ function ampp_search_sectors(){
   $string = $_POST['string'];
   $items = array();
   db_set_active("amp_projects");
-  $query = db_select('amp_sector', 's')
-    ->fields('s',array('amp_sector_id', 'name'))
-    ->condition('cc.name', 'Primary', '=')
-    ->condition('s.name', '%' . db_like($string) . '%', 'ILIKE');
-  $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 's.amp_sec_scheme_id = ss.amp_sec_scheme_id');
-  $query->addJoin('LEFT', 'amp_classification_config', 'cc', 'cc.classification_id = ss.amp_sec_scheme_id');
   
+  global $language;
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')"; 
+  
+  $query = db_select('amp_sector', 'sector');
+  $query->fields('sector', array('amp_sector_id'));
+  $query->addExpression($translate_field, 'name');
+  $query->condition('cc.name', 'Primary', '=');
+  $query->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')');
+  $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 'sector.amp_sec_scheme_id = ss.amp_sec_scheme_id');
+  $query->addJoin('LEFT', 'amp_classification_config', 'cc', 'cc.classification_id = ss.amp_sec_scheme_id');
+
   $result = $query->execute();  
   foreach ($result as $record) {
-    $items[] = array('id'=>$record->amp_sector_id, 'name'=>check_plain($record->name));
+    $items[] = array('id' => $record->amp_sector_id, 'name' => check_plain($record->name));
   }
   db_set_active();
   drupal_json_output($items);
@@ -1388,7 +1419,7 @@ function ampp_search_sectors(){
 /*
  *
  */
-function ampp_search_primarysectors(){
+function ampp_search_primarysectors() {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -1396,16 +1427,21 @@ function ampp_search_primarysectors(){
   $string = $_POST['string'];
   $items = array();
   db_set_active("amp_projects");
-  $query = db_select('amp_sector', 's')
-    ->fields('s',array('amp_sector_id', 'name'))
-    ->condition('cc.name', 'Primary', '=')
-    ->condition('s.name', '%' . db_like($string) . '%', 'ILIKE');
-  $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 's.amp_sec_scheme_id = ss.amp_sec_scheme_id');
+  
+  global $language;
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')"; 
+  
+  $query = db_select('amp_sector', 'sector');
+  $query->fields('sector', array('amp_sector_id'));
+  $query->addExpression($translate_field, 'name');
+  $query->condition('cc.name', 'Primary', '=');
+  $query->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')');
+  $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 'sector.amp_sec_scheme_id = ss.amp_sec_scheme_id');
   $query->addJoin('LEFT', 'amp_classification_config', 'cc', 'cc.classification_id = ss.amp_sec_scheme_id');
   
   $result = $query->execute();  
   foreach ($result as $record) {
-    $items[] = array('id'=>$record->amp_sector_id, 'name'=>check_plain($record->name));
+    $items[] = array('id' => $record->amp_sector_id, 'name' => check_plain($record->name));
   }
   db_set_active();
   drupal_json_output($items);
@@ -1415,7 +1451,7 @@ function ampp_search_primarysectors(){
 /*
  *
  */
-function ampp_search_secondarysectors(){
+function ampp_search_secondarysectors() {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -1423,16 +1459,21 @@ function ampp_search_secondarysectors(){
   $string = $_POST['string'];
   $items = array();
   db_set_active("amp_projects");
-  $query = db_select('amp_sector', 's')
-    ->fields('s',array('amp_sector_id', 'name'))
-    ->condition('cc.name', 'Secondary', '=')
-    ->condition('s.name', '%' . db_like($string) . '%', 'ILIKE');
-  $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 's.amp_sec_scheme_id = ss.amp_sec_scheme_id');
+  
+  global $language;
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')"; 
+  
+  $query = db_select('amp_sector', 'sector');
+  $query->fields('sector', array('amp_sector_id'));
+  $query->addExpression($translate_field, 'name');
+  $query->condition('cc.name', 'Secondary', '=');
+  $query->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')');
+  $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 'sector.amp_sec_scheme_id = ss.amp_sec_scheme_id');
   $query->addJoin('LEFT', 'amp_classification_config', 'cc', 'cc.classification_id = ss.amp_sec_scheme_id');
   
   $result = $query->execute();  
   foreach ($result as $record) {
-    $items[] = array('id'=>$record->amp_sector_id, 'name'=>check_plain($record->name));
+    $items[] = array('id' => $record->amp_sector_id, 'name' => check_plain($record->name));
   }
   db_set_active();
   drupal_json_output($items);
@@ -1451,8 +1492,12 @@ function ampp_search_programs() {
   $items = array();
   db_set_active("amp_projects");
   
+  global $language;
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')";    
+  
   $query = db_select('amp_theme', 'program');
-  $query->fields('program', array('amp_theme_id', 'name'));
+  $query->fields('program', array('amp_theme_id'));
+  $query->addExpression($translate_field, 'name');
   
   $root_pid = variable_get('amp_programs_root', 0);
   if ($root_pid) {
@@ -1465,8 +1510,8 @@ function ampp_search_programs() {
   if (variable_get('amp_limit_programs_to_activities', 1)) {
     $query->join('amp_activity_program', 'activity', 'activity.amp_program_id = program.amp_theme_id');
   }
-  $query->condition('program.name',  '%' . db_like($string) . '%', 'ILIKE');
-  $query->orderBy('program.name', 'ASC');
+  $query->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')');
+  $query->orderBy($translate_field, 'ASC');
   
   $result = $query->distinct()->execute()->fetchAll();
   foreach ($result as $record) {
@@ -1480,7 +1525,7 @@ function ampp_search_programs() {
 /**
  * Callback handler for donors search
  */
-function ampp_search_donors(){
+function ampp_search_donors() {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -1488,15 +1533,21 @@ function ampp_search_donors(){
   $string = $_POST['string'];
   $items = array();
   db_set_active("amp_projects");
-  $query = db_select('amp_organisation', 'd');
-  $query->fields('d', array('amp_org_id', 'name', 'acronym'));
-  $query->condition(db_or()->condition('d.name', '%' . db_like($string) . '%', 'ILIKE')->condition('d.acronym', '%' . db_like($string) . '%', 'ILIKE'));
-  $query->condition(db_or()->condition('d.deleted', 'true', '<>')->condition('d.deleted', NULL, 'is'));
-  $query->groupBy('d.amp_org_id');
-  $query->groupBy('d.name');
-  $query->groupBy('d.acronym');
   
+  global $language;
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', orgs.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', '" . $language->language . "')"; 
+  
+  $query = db_select('amp_organisation', 'orgs');
+  $query->fields('orgs', array('amp_org_id', 'acronym'));
+  $query->addExpression($translate_field, 'name');
+  $query->condition(db_or()->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')')->where('unaccent(orgs.acronym) ILIKE unaccent(\'%' . db_like($string) . '%\')'));
+  $query->condition(db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is'));
+  $query->groupBy('orgs.amp_org_id');
+  $query->groupBy($translate_field);
+  $query->groupBy('orgs.acronym');
+
   $result = $query->execute();
+  
   foreach ($result as $record) {
     $name = !empty($record->acronym) ? check_plain($record->name) . ' (' . check_plain($record->acronym) . ')' : check_plain($record->name);
     $items[] = array('id'=>$record->amp_org_id, 'name'=>$name);
@@ -1518,7 +1569,8 @@ function ampp_search_regions(){
   db_set_active("amp_projects");
   
   // We retrieve the country setting for the AMP installation
-  $query = db_select('amp_global_settings', 'setting')->fields('setting', array('settingsvalue'));
+  $query = db_select('amp_global_settings', 'setting');
+  $query->fields('setting', array('settingsvalue'));
   $query->condition('setting.settingsname', 'Default Country', '=');
   $defaultCountry = $query->execute()->fetchCol();
   if (!empty($defaultCountry)) {
@@ -1526,13 +1578,17 @@ function ampp_search_regions(){
   }
   
   $items = array();
-  if (empty($defaultCountry)) {
-  	$result = db_query("SELECT id, location_name FROM {amp_category_value_location} WHERE location_name ILIKE(:string)", array(':string' => "%" . $string . "%"));
+  
+  global $language;
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
+  
+  if (empty($defaultCountry)) {   
+  	$result = db_query("SELECT id, " . $translate_field . " as location_name FROM {amp_category_value_location} as loc WHERE unaccent(" . $translate_field . ") ILIKE unaccent(:string)", array(':string' => "%" . $string . "%"));
   } else {
   	// Include only subnational locations if the AMP installation has a Default Country set
-  	$result = db_query("SELECT id, location_name FROM {amp_category_value_location} WHERE location_name ILIKE(:string) AND parent_location IS NOT NULL",  array(':string' => "%" . $string . "%"));
+  	$result = db_query("SELECT id, " . $translate_field . " as location_name FROM {amp_category_value_location} as loc WHERE unaccent(" . $translate_field . ") ILIKE unaccent(:string) AND parent_location IS NOT NULL",  array(':string' => "%" . $string . "%"));
   }
-  
+
   foreach ($result as $record) {
     $items[] = array('id'=>$record->id, 'name'=>check_plain($record->location_name));
   }
@@ -1574,10 +1630,15 @@ function ampp_projects_views_pre_build(&$view) {
  */
 function ampp_projects_views_pre_execute(&$view){
 
+  global $language;
+
   if ( $view->name == 'projects_search_result' && $view->current_display != 'block_search_result_totall') {
+  
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion', 'name', cached_amp_activity.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', '" . $language->language . "')";
+  
     $view->build_info['query']
       ->groupBy('cached_amp_activity.amp_activity_id')
-      ->groupBy('cached_amp_activity.name')
+      ->groupBy($translate_field)
       ->groupBy('cached_amp_activity.actual_start_date')
       ->groupBy('cached_amp_activity.actual_completion_date')
       ->groupBy('cached_v_status.name');
@@ -1976,7 +2037,12 @@ function ampp_search_ajax_donors_form() {
  */
 function ampp_projects_get_donor($id) {
   db_set_active('amp_projects');
-  $query = db_select('amp_organisation', 'orgs')->fields('orgs', array('amp_org_id', 'name', 'acronym'));
+  
+  global $language;
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', orgs.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', '" . $language->language . "')"; 
+  
+  $query = db_select('amp_organisation', 'orgs')->fields('orgs', array('amp_org_id', 'acronym'));
+  $query->addExpression($translate_field, 'name');
   $query->condition('orgs.amp_org_id', intval($id), '=');
   
   $or_statement = db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is');
@@ -1998,13 +2064,17 @@ function ampp_projects_get_donor($id) {
  */
 function ampp_projects_get_donors() {
   db_set_active('amp_projects');
-  $query = db_select('amp_organisation', 'orgs')->fields('orgs', array('amp_org_id', 'name', 'acronym'));
+  
+  global $language;
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', orgs.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', '" . $language->language . "')"; 
+  
+  $query = db_select('amp_organisation', 'orgs')->fields('orgs', array('amp_org_id', 'acronym'));
+  $query->addExpression($translate_field, 'name');
   $hierarchy = array();
   
   $or_statement = db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is');
   $query->condition($or_statement);
-
-  $query->orderBy('orgs.name', 'ASC');
+  $query->orderBy('name', 'ASC');
 
   $result = $query->execute();
 	

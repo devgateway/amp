@@ -48,13 +48,13 @@ function _amp_projects_get_projects_as_of_records() {
 	$query = 'SELECT TO_TIMESTAMP(prev_fire_time/1000) as date FROM {qrtz_triggers}
 	           WHERE job_name = \'Refresh Mondrian Cache\'';
 		
-    $result = db_query($query);
+    $result = db_query($query); 
     foreach ($result as $record) {
       if ($record->date) {
         if (isValidTimeStamp($record->date)) {
           $date = format_date($record->date, 'short');
         } else {
-          $date = format_date(mktime($record->date), 'short');
+          $date = format_date(strtotime($record->date), 'short');
         }
       } else {
         $date = '';

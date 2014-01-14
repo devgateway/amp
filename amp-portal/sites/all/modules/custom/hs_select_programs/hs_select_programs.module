@@ -92,8 +92,13 @@ function hs_select_programs_get_items($parent = 0) {
 	db_set_active("amp_projects");
 	$items = array();
 	
+	global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')"; 
+	
 	$query = db_select('amp_theme', 'program');
-	$query->fields('program', array('amp_theme_id', 'name'));
+	$query->fields('program', array('amp_theme_id'));
+	$query->addExpression($translate_field, 'name');
+	
 	if (variable_get('amp_limit_programs_to_activities', 1)) {
       $query->join('amp_activity_program', 'activity', 'activity.amp_program_id = program.amp_theme_id');
     }
@@ -127,13 +132,18 @@ function hs_select_programs_load_tree($parent = 0) {
 		return $items;
 	}
 	
+	global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')"; 
+    
 	$query = db_select('amp_theme', 'program');
-	$query->fields('program', array('amp_theme_id', 'name'));
+	$query->fields('program', array('amp_theme_id'));
+	$query->addExpression($translate_field, 'name');
+	
 	if (variable_get('amp_limit_programs_to_activities', 1)) {
       $query->join('amp_activity_program', 'activity', 'activity.amp_program_id = program.amp_theme_id');
     }
 	$query->where('getprogramsettingid(program.amp_theme_id) = ' . variable_get('amp_programs_level', 2));
-	$query->orderBy('program.name', 'ASC');
+	$query->orderBy($translate_field, 'ASC');
 
 	if (empty($parent) || !is_numeric($parent)) {
 		$parent = 0;
@@ -205,16 +215,21 @@ function hs_select_programs_hierarchical_select_implementation_info() {
  *
  */
 function hs_select_programs_get_item_name($id) {
-  db_set_active("amp_projects");
-  $query = db_select('amp_theme', 'program')->fields('program', array('amp_theme_id', 'name'))
-	 		->condition('program.amp_theme_id', $id, '=');
+    db_set_active("amp_projects");
+  
+    global $language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')";    
+  
+    $query = db_select('amp_theme', 'program')->fields('program', array('amp_theme_id'));
+    $query->addExpression($translate_field, 'name');
+	$query->condition('program.amp_theme_id', $id, '=');
 	
-  $result = $query->execute(); 
-  $item = array();
-  foreach ($result as $record) {
-	$item[] = array('id' => $record->amp_theme_id, 'name' => check_plain($record->name));
-  }
+    $result = $query->execute(); 
+    $item = array();
+    foreach ($result as $record) {
+	   $item[] = array('id' => $record->amp_theme_id, 'name' => check_plain($record->name));
+    }
 
-  db_set_active();
-  return $item;
+    db_set_active();
+    return $item;
 }

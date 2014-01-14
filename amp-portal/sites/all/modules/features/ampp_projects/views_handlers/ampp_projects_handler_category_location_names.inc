@@ -7,8 +7,11 @@ class ampp_projects_handler_category_location_names extends views_handler_field 
   const  DELIMETER_SIGN = '||';
   
   function query() {  	
+    global $language;
+    
   	$this->ensure_my_table();
-  	$this->field_alias = $this->query->add_field(NULL,"array_to_string(array_agg(amp_category_value_location.location_name), '".self::DELIMETER_SIGN."')", $this->table_alias . '_' . $this->field);
+  	$translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', amp_category_value_location.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";
+  	$this->field_alias = $this->query->add_field(NULL, "array_to_string(array_agg(" . $translate_field . "), '".self::DELIMETER_SIGN."')", $this->table_alias . '_' . $this->field);
   }
 
   function render($values) {

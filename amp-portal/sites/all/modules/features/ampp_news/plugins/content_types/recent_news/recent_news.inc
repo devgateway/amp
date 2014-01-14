@@ -57,7 +57,7 @@ function ampp_news_recent_news_content_type_render($subtype, $conf, $panel_args,
   
   // more link
   $conf['more_text'] = trim($conf['more_text']);
-  if ( empty($conf['more_text']) || ($conf['more_show'] && $view->total_rows <= $conf['to_show']) ) {
+  if ( empty($conf['more_text']) || ($conf['more_show'] && (isset($view) && $view->total_rows <= $conf['to_show'])) ) {
     $vars['more'] = false;
   } else {
     $vars['more'] = true;

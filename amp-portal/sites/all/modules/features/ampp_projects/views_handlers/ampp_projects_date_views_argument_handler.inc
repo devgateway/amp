@@ -155,6 +155,8 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
    */
   function op_simple($field) {
     $this->value = array($this->argument);
-    $this->query->add_where($this->options['group'], $field, $this->value[0], $this->options['condition_operator']);  
+    $group = 0;
+    if (isset($this->options['group'])) $group = $this->options['group'];
+    $this->query->add_where($group, $field, $this->value[0], $this->options['condition_operator']);  
   }
 }

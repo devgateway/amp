@@ -46,7 +46,8 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
      * @param wysiwyg if true, CKeditor will be added to the {@link TextArea}
      */
 	public AmpTextAreaFieldPanel(String id,IModel<String> model, String fmName,boolean wysiwyg,boolean hideLabel, boolean hideNewLine, boolean showReqStar) {
-		super(id, model, fmName, hideLabel, hideNewLine, false, showReqStar);
+		//super(id, model, fmName, hideLabel, hideNewLine, false, showReqStar);
+		super(id, model, fmName, hideLabel, hideNewLine, showReqStar);
         this.wysiwyg = wysiwyg;
 		if (wysiwyg){
 			model = (IModel<String>) new EditorWrapperModel((IModel<String>) model, id);

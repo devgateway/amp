@@ -32,13 +32,19 @@ function ampp_projects_date_popup_process_alter(&$element, &$form_state, $contex
 */
 function ampp_projects_init() {
   
- global $language; 
-  
+ global $language;
+ $lang_def = variable_get('language_default', '');
+ if ($lang_def == '' || $lang_def->language == $language->language) {
+   $lang = '';  
+ } else {
+   $lang = $language->language;
+ }
+
  // cache_clear_all('module_implements', 'cache_bootstrap'); ///////////// ! Cache
   getOnOffBudgetIDs(); // Get the on/off budget projects ids
 
   drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/tokeninput/src/jquery.tokeninput.js');
-  drupal_add_js(array('ampp_projects' => array('lang' => $language->language)), 'setting');
+  drupal_add_js(array('ampp_projects' => array('lang' => $lang)), 'setting');
   drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/ampp_projects.js');  
   
   $ampp_projects_settings = array(

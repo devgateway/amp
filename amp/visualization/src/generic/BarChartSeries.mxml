@@ -211,7 +211,7 @@
 				formatter.precision = decimalsToShow;
 				var delayer:Delay = new Delay(captureSnapshot,4000,1); //capture snapshot
 
-				//Set the title and the rest of the parameters for legend
+				//Set the title and the rest of the parameters for legend  
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
 				currCode = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Currency')}"));
@@ -408,7 +408,26 @@
 				var isSprite:Boolean = (obj is AxiisSprite)
 				formatter.precision = decimalsToShow;
 				if(isSprite)
-					return "<b>" + String(ObjectUtils.getProperty(this, obj.data,childLabelField)) + "</b><br/>" + formatter.format(Number(obj.data.amount)) + " " + currCode;
+				{
+					var labelText:String = String(ObjectUtils.getProperty(this, obj.data,childLabelField))
+				    var maximunPerLine:int = 42
+				    var next:int = maximunPerLine
+				    if (labelText.length > maximunPerLine) {
+						var results:Array = labelText.split(/\s+/g);
+						if (results.length > 1) {
+							labelText = ""
+						    for(var index:int = 0 ; index <results.length; index++){
+							 labelText = labelText +" "+ results [index]
+						     if (labelText.length > next) {
+								 labelText = labelText + "<br>"
+							     next = next + maximunPerLine
+							 }
+							}
+								
+						}
+					}	
+					return "<b>" + labelText + "</b><br/>" + formatter.format(Number(obj.data.amount)) + " " + currCode;
+				}
 				if(!isNaN(Number(obj.amount)) && Number(obj.amount) > 0 ){ 
 					return formatter.format(Number(obj.amount));
 				}
@@ -517,19 +536,23 @@
 					}
 				}
 				return ret;
-			}
+			}  
+			
+			private function getShortText (text:String):String{
+			  return text.length>45? text.substr(0,42)+"..." : text;
+		    }   
 			
 			private function getLegendX(currentIndex:Number ,x:Number):Number{
 				return (currentIndex < 4) ? currentIndex*160 : (currentIndex < 8) ? (currentIndex-4)*160 : (currentIndex-8)*160;
 			}
 			
 			protected function service_faultHandler(event:FaultEvent):void
-			{
+			{  
 				dc.visible = false;
 				messagePanel.title = "Network Error.";
 				messagePanel.visible = true;
 				sizePanel(300, 200);
-			}
+			} 
 
 			protected function sliderYear_changeHandler(event:SliderEvent):void
 			{
@@ -827,7 +850,7 @@
 						id="legendText" 
 						y="{getLegendY(legendLayout.currentIndex,legendLayout.currentReference.y)}" 
 						x="{getLegendX(legendLayout.currentIndex,legendLayout.currentReference.x)}" 
-						text="{legendLayout.currentDatum['category']}"
+						text="{getShortText(legendLayout.currentDatum['category'])}"
 						fontFamily="{fontFamily}"
 						fontSize="{fontSize}"
 						fontWeight="{fontWeight}"

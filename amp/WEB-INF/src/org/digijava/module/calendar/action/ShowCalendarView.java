@@ -181,7 +181,12 @@ public class ShowCalendarView extends Action {
             return mapping.findForward("forward");
         }
         filter.setEventTypes(CategoryManagerUtil.getAmpEventColors());
-        
+        //add new event type, is added separetely because it only need to be showd here
+        AmpEventType newType = new AmpEventType();
+        newType.setColor("orange");
+        newType.setName("Overlapping");
+        newType.setId(-1L);
+        filter.getEventTypes().add(newType);
         
         Boolean resetEventTypes=calendarViewForm.getResetEventTypes();
         if(resetEventTypes!=null && resetEventTypes){

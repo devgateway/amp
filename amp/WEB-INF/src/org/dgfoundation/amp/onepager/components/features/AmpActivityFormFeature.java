@@ -511,6 +511,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpButtonField logframe = new AmpButtonField("logframe", "Logframe", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				System.out.println("hello");
 			}
 		};
 		if (am.getObject().getAmpActivityId() == null)
@@ -528,19 +529,26 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				if(!submited){
 					submited=true;
 					//reenable buttons
-					target.appendJavaScript("enableDisableForm(true);");
-					if (am.getObject().getAmpActivityId() == null)
+					if (am.getObject().getAmpActivityId() == null){
 						target.appendJavaScript("alert('" + TranslatorUtil.getTranslatedText("You need to save this activity before being able to preview it!") + "');");
-					else
+					}
+					else{
 						target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
-				submited=false;
+					}
+					target.appendJavaScript("enableDisableForm(true);");
+					submited=false;
 				}
 			}
 			
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
-				target.add(feedbackPanel);
+				if(!submited){
+					submited=true;
+					target.add(feedbackPanel);
+				}
+				submited=false;
+				target.appendJavaScript("enableDisableForm(true);");
 			}
 		};
 		//disable on click preview

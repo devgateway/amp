@@ -457,7 +457,7 @@ public class ExportActivityToWord extends Action {
 				}
 				
 
-                List<Table> relatedOrgsTables = getRelatedOrgsTables(request, ampContext, activity);
+                List<Table> relatedOrgsTables = getRelatedOrgsTables(request, ampContext, activity, myForm);
 				for (Table tbl : relatedOrgsTables) {
                     doc.add(tbl);
                 }
@@ -1611,80 +1611,94 @@ public class ExportActivityToWord extends Action {
      * Related org.s section
      */
 
-    private List<Table> getRelatedOrgsTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
-        List<Table> retVal = new ArrayList<Table>();
+	private List<Table> getRelatedOrgsTables (HttpServletRequest request, 
+			ServletContext ampContext, 
+			AmpActivityVersion act,
+			EditActivityForm form) throws BadElementException, WorkerException {
 
-        ExportSectionHelper eshTitle = new ExportSectionHelper("Related Organizations", true).setWidth(100f).setAlign("left");
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations", ampContext)){
-                	retVal.add(createSectionTable(eshTitle, request, ampContext));
- 
-                	if (act.getOrgrole() != null && !act.getOrgrole().isEmpty()) {
-                        Set<AmpOrgRole> orgRoles = act.getOrgrole();
+		List<Table> retVal = new ArrayList<Table>();
 
-                        Map <String, Set<AmpOrgRole>> roleGrouper = new HashMap<String, Set<AmpOrgRole>>();
-                        ExportSectionHelper eshRelatedOrgsTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                        for (AmpOrgRole orgRole : orgRoles) {
-                            if (!roleGrouper.containsKey(orgRole.getRole().getRoleCode())) {
-                                roleGrouper.put(orgRole.getRole().getRoleCode(), new HashSet<AmpOrgRole>());
-                            }
+		ExportSectionHelper eshTitle = new ExportSectionHelper("Related Organizations", true).setWidth(100f).setAlign("left");
+		ExportSectionHelper eshRelatedOrgsTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+		
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations", ampContext)){
+			retVal.add(createSectionTable(eshTitle, request, ampContext));
 
-                            roleGrouper.get(orgRole.getRole().getRoleCode()).add(orgRole);
+			if (act.getOrgrole() != null && !act.getOrgrole().isEmpty()) {
+				Set<AmpOrgRole> orgRoles = act.getOrgrole();
 
-                            //eshIssuesTable.addRowData(new ExportSectionHelperRowData(orgRile.getRole().getName(), false));
-                            //retVal.add(createSectionTable(eshIssuesTable, request));
-                        }
-                        
-                        for (String roleCode : roleGrouper.keySet()) {
-                        	Set<AmpOrgRole> groupedRoleSet = roleGrouper.get(roleCode);
-                        	
-                        	if (roleCode.equals(Constants.FUNDING_AGENCY) &&
-                        			FeaturesUtil.isVisibleModule("/Activity Form/Funding", ampContext)){
-                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Donor Agency",false);
-                        	}
-                        	
-                        	if (roleCode.equals(Constants.RESPONSIBLE_ORGANISATION) &&
-                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization", ampContext)){
-                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Responsible Organization");
-                        	}
-                        	
-                        	if (roleCode.equals(Constants.EXECUTING_AGENCY) &&
-                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency", ampContext)){
-                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Executing Agency");
-                        	}
-                        	
-                        	if (roleCode.equals(Constants.IMPLEMENTING_AGENCY) &&
-                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency", ampContext)){
-                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Implementing Agency");
-                        	}
-                        	
-                        	if (roleCode.equals(Constants.BENEFICIARY_AGENCY) &&
-                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency", ampContext)){
-                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Beneficiary Agency");
-                        	}
-                            
-                        	if (roleCode.equals(Constants.CONTRACTING_AGENCY) &&
-                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency", ampContext)){
-                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Contracting Agency");
-                        	}
-                        	
-                        	if (roleCode.equals(Constants.SECTOR_GROUP) &&
-                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Sector Group", ampContext)){
-                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Sector Group");
-                        	}
+				Map <String, Set<AmpOrgRole>> roleGrouper = new HashMap<String, Set<AmpOrgRole>>();				
+				for (AmpOrgRole orgRole : orgRoles) {
+					if (!roleGrouper.containsKey(orgRole.getRole().getRoleCode())) {
+						roleGrouper.put(orgRole.getRole().getRoleCode(), new HashSet<AmpOrgRole>());
+					}
 
-                        	if (roleCode.equals(Constants.REGIONAL_GROUP) &&
-                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Regional Group", ampContext)){
-                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Regional Group");
-                        	}
-                        	
-                        }
+					roleGrouper.get(orgRole.getRole().getRoleCode()).add(orgRole);
 
-                        retVal.add(createSectionTable(eshRelatedOrgsTable, request, ampContext));
-                    }
-                }
+					//eshIssuesTable.addRowData(new ExportSectionHelperRowData(orgRile.getRole().getName(), false));
+					//retVal.add(createSectionTable(eshIssuesTable, request));
+				}
 
-        return retVal;
-    }
+				for (String roleCode : roleGrouper.keySet()) {
+					Set<AmpOrgRole> groupedRoleSet = roleGrouper.get(roleCode);
+
+					if (roleCode.equals(Constants.FUNDING_AGENCY) &&
+							FeaturesUtil.isVisibleModule("/Activity Form/Funding", ampContext)){
+						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Donor Agency",false);
+					}
+
+					if (roleCode.equals(Constants.RESPONSIBLE_ORGANISATION) &&
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization", ampContext)){
+						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Responsible Organization");
+					}
+
+					if (roleCode.equals(Constants.EXECUTING_AGENCY) &&
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency", ampContext)){
+						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Executing Agency");
+					}
+
+					if (roleCode.equals(Constants.IMPLEMENTING_AGENCY) &&
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency", ampContext)){
+						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Implementing Agency");
+					}
+
+					if (roleCode.equals(Constants.BENEFICIARY_AGENCY) &&
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency", ampContext)){
+						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Beneficiary Agency");
+					}
+
+					if (roleCode.equals(Constants.CONTRACTING_AGENCY) &&
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency", ampContext)){
+						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Contracting Agency");
+					}
+
+					if (roleCode.equals(Constants.SECTOR_GROUP) &&
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Sector Group", ampContext)){
+						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Sector Group");
+					}
+
+					if (roleCode.equals(Constants.REGIONAL_GROUP) &&
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Regional Group", ampContext)){
+						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Regional Group");
+					}
+
+				}
+
+				retVal.add(createSectionTable(eshRelatedOrgsTable, request, ampContext));
+			} else {
+				// This section has been adapted from ExportActivityToPDF, someday all exports should be reviewed and merged.
+				if (form.getFunding().getFundingOrganizations() != null && form.getFunding().getFundingOrganizations().size() > 0) {					
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding", ampContext)) {
+						buildRoleOrgInfo(form.getFunding().getFundingOrganizations(), "Donor Agency", eshRelatedOrgsTable);
+					}
+					retVal.add(createSectionTable(eshRelatedOrgsTable, request, ampContext));
+				}
+			}
+		}
+
+		return retVal;
+	}
+    
     private void buildRoleOrgInfo(ExportSectionHelper eshRelatedOrgsTable, Set<AmpOrgRole> groupedRoleSet, String roleName){
     	 buildRoleOrgInfo( eshRelatedOrgsTable, groupedRoleSet, roleName,true);
     }
@@ -1702,6 +1716,17 @@ public class ExportActivityToWord extends Action {
 	            	eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).
 		                    addRowData(role.getOrganisation().getName()));
 	            }
+	        }
+	        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(null,null,null, false).setSeparator(true));
+    	}
+    }
+    
+    private void buildRoleOrgInfo(List<FundingOrganization> groupedRoleSet, String roleName, ExportSectionHelper eshRelatedOrgsTable){
+    	if(!groupedRoleSet.isEmpty()){
+	        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(roleName, null, null,  true));
+	        for (FundingOrganization role : groupedRoleSet) {	            
+	            	eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).addRowData(role.getOrgName()));
+
 	        }
 	        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(null,null,null, false).setSeparator(true));
     	}

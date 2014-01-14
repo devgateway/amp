@@ -246,7 +246,10 @@ function createMapAddLayers(myService1, myService2, feature) {
 	       {"level" : 8,"resolution" : 38.2185141425366,"scale" : 144447.638572}, 
 	       {"level" : 9,"resolution" : 19.1092570712683,"scale" : 72223.819286}, 
 	       {"level" : 10,"resolution" : 9.55462853563415,"scale" : 36111.909643}, 
-	       {"level" : 11,"resolution" : 4.77731426794937,"scale" : 18055.954822} ];
+	       {"level" : 11,"resolution" : 4.77731426794937,"scale" : 18055.954822}, 
+	       {"level": 12,"resolution": 2.388657133974685,"scale": 9027.977411},
+	       {"level": 13,"resolution": 1.1943285668550503,"scale": 4513.988705}
+	       ];
 		
 		map = new esri.Map("map",{
 			lods : customLods,

@@ -80,6 +80,7 @@ function hs_select_locations_get_items($parent = 0) {
 	}
 	
 	global $language;
+	global $user;
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
 	
 	$query = db_select('amp_category_value_location', 'location')->fields('location', array('id'));
@@ -88,7 +89,7 @@ function hs_select_locations_get_items($parent = 0) {
 	$query->orderBy('location_name', 'ASC');
 	$result = $query->execute();
 	
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_locations_get_items', dpq($query, 1));
+	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_locations_get_items', dpq($query, 1));
 	
  	foreach ($result as $record) {
       $items[$record->id] = check_plain($record->location_name);
@@ -138,6 +139,7 @@ function hs_select_locations_load_tree($parent = 0) {
 	}
 
 	global $language;
+	global $user;
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
 	
 	$query = db_select('amp_category_value_location', 'loc')->fields('loc', array('id', 'parent_location'));
@@ -147,7 +149,7 @@ function hs_select_locations_load_tree($parent = 0) {
 	$query->orderBy('location_name', 'ASC');
 	$result = $query->execute();
 	
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_locations_load_tree', dpq($query, 1));
+	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_locations_load_tree', dpq($query, 1));
 	
 	if ($isTopParent) {
 		$parent = 0;
@@ -194,6 +196,7 @@ function hs_select_locations_get_item_name($id) {
 	db_set_active("amp_projects");
 	
 	global $language;
+	global $user;
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
 	
 	$query = db_select('amp_category_value_location', 'loc')->fields('loc', array('id'));
@@ -202,7 +205,7 @@ function hs_select_locations_get_item_name($id) {
 	$query->fields('aloc', array('amp_location_id'));
 	$query->condition('loc.id', $id, '=');
 	
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_locations_get_item_name', dpq($query, 1));
+	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_locations_get_item_name', dpq($query, 1));
 	
 	$result = $query->execute();
 	$item = array();

@@ -73,6 +73,7 @@ function hs_select_sectors_get_items($parent = 0) {
 	$items = array();
 	
 	global $language;
+	global $user;
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')"; 
 	
 	$query = db_select('amp_sector', 'sector')->fields('sector', array('amp_sector_id'));
@@ -82,7 +83,7 @@ function hs_select_sectors_get_items($parent = 0) {
 	$or_statement = db_or()->condition('sector.deleted', 'true', '<>')->condition('sector.deleted', NULL, 'is');
     $query->condition($or_statement);
 	 		
-    if (variable_get('log_db_queries', 0)) watchdog('hs_select_sectors_get_items', dpq($query, 1));
+    if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_sectors_get_items', dpq($query, 1));
     
 	$result = $query->execute();
 	
@@ -110,6 +111,7 @@ function hs_select_sectors_load_tree($parent = 0) {
 	}
 	
 	global $language;
+	global $user;
 	$translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')";
 		
 	$query = db_select('amp_sector', 'sector')->fields('sector', array('amp_sector_id'));
@@ -121,7 +123,7 @@ function hs_select_sectors_load_tree($parent = 0) {
 	 		
 	$query->orderBy($translate_field, 'ASC');
 	
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_sectors_load_tree', dpq($query, 1));
+	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_sectors_load_tree', dpq($query, 1));
 	
 	$result = $query->execute();
 	/*if( count($result) == 0)
@@ -172,13 +174,14 @@ function hs_select_sectors_get_item_name($id) {
     db_set_active("amp_projects");
 
     global $language;
+    global $user;
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')"; 
    
     $query = db_select('amp_sector', 'sector')->fields('sector', array('amp_sector_id'));
     $query->addExpression($translate_field, 'name');
 	$query->condition('sector.amp_sector_id', $id, '=');
 
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_sectors_get_item_name', dpq($query, 1));
+	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_sectors_get_item_name', dpq($query, 1));
 	
     $result = $query->execute();
     $item = array();

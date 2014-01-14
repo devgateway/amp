@@ -1444,7 +1444,7 @@ function ampp_search_primarysectors() {
   $items = array();
   db_set_active("amp_projects");
   
-  global $language;
+  global $language; watchdog('LANG', $language);
   $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')"; 
   
   $query = db_select('amp_sector', 'sector');

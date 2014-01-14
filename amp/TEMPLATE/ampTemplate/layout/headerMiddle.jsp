@@ -15,6 +15,18 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
+<script type="text/javascript">
+    //'${msg}'
+    function canExit() {
+        if (typeof quitRnot1 == 'function') {
+            return quitRnot1('${msg}');
+        } else{
+            return true;
+        }
+
+    }
+</script>
+
 <!-- Core + Skin CSS -->
 <digi:ref href="/TEMPLATE/ampTemplate/css_2/menu.css" type="text/css" rel="stylesheet" />
 
@@ -91,7 +103,7 @@ ${fn:replace(message,quote,escapedQuote)}
              
             <module:display name="Public Documents" parentModule="PUBLIC VIEW">
             <li class="yuiampmenuitem" style="float:left;">
-                <a class="yuiampmenuitemlabel" href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return quitRnot()">			
+                <a class="yuiampmenuitemlabel" href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return canExit();">
                 	<digi:trn>Public Documents</digi:trn>
                 </a>
             </li>
@@ -339,17 +351,7 @@ function adminHelp(){
 <logic:present name="ampAdmin" scope="session">
 		<logic:equal name="ampAdmin" value="no">
 	
-<script language="JavaScript">
-	//'${msg}'
-	function canExit(){
-	    if(typeof quitRnot1 == 'function') {
-	        return quitRnot1('${msg}');
-	    }
-	    else{
-	        return true;
-	    }
-	
-	}	
+<script type="text/javascript">
 
 	function newAddActivity() {
 		selectedLevelId=0; 

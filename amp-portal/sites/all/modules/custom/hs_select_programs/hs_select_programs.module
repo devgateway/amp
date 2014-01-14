@@ -110,7 +110,7 @@ function hs_select_programs_get_items($parent = 0) {
 		$query->condition('program.parent_theme_id', $parent, '=');
 	}
 	
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_programs_get_items', dpq($query, 1));
+	if (variable_get('log_db_queries', 0) && !empty(dpq($query, 1))) watchdog('hs_select_programs_get_items', dpq($query, 1));
 	
 	$result = $query->distinct()->execute()->fetchAll();
 	
@@ -155,7 +155,7 @@ function hs_select_programs_load_tree($parent = 0) {
 	}
 	$result = $query->distinct()->execute()->fetchAll();
 
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_programs_load_tree', dpq($query, 1));
+	if (variable_get('log_db_queries', 0) && !empty(dpq($query, 1))) watchdog('hs_select_programs_load_tree', dpq($query, 1));
 	
 	foreach ($result as $record) {
 		$items[$parent][$record->amp_theme_id] = $record->name;
@@ -228,7 +228,7 @@ function hs_select_programs_get_item_name($id) {
     $query->addExpression($translate_field, 'name');
 	$query->condition('program.amp_theme_id', $id, '=');
 	
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_programs_get_item_name', dpq($query, 1));
+	if (variable_get('log_db_queries', 0) && !empty(dpq($query, 1))) watchdog('hs_select_programs_get_item_name', dpq($query, 1));
 	
     $result = $query->execute(); 
     $item = array();

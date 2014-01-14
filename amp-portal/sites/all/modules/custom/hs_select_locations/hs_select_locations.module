@@ -88,7 +88,7 @@ function hs_select_locations_get_items($parent = 0) {
 	$query->orderBy('location_name', 'ASC');
 	$result = $query->execute();
 	
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_locations_get_items', dpq($query, 1));
+	if (variable_get('log_db_queries', 0) && !empty(dpq($query, 1))) watchdog('hs_select_locations_get_items', dpq($query, 1));
 	
  	foreach ($result as $record) {
       $items[$record->id] = check_plain($record->location_name);
@@ -147,7 +147,7 @@ function hs_select_locations_load_tree($parent = 0) {
 	$query->orderBy('location_name', 'ASC');
 	$result = $query->execute();
 	
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_locations_load_tree', dpq($query, 1));
+	if (variable_get('log_db_queries', 0) && !empty(dpq($query, 1))) watchdog('hs_select_locations_load_tree', dpq($query, 1));
 	
 	if ($isTopParent) {
 		$parent = 0;
@@ -202,7 +202,7 @@ function hs_select_locations_get_item_name($id) {
 	$query->fields('aloc', array('amp_location_id'));
 	$query->condition('loc.id', $id, '=');
 	
-	if (variable_get('log_db_queries', 0)) watchdog('hs_select_locations_get_item_name', dpq($query, 1));
+	if (variable_get('log_db_queries', 0) && !empty(dpq($query, 1))) watchdog('hs_select_locations_get_item_name', dpq($query, 1));
 	
 	$result = $query->execute();
 	$item = array();

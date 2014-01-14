@@ -30,7 +30,7 @@
 	</b>
 </center>
 <hr>
-	<table width="400"  border="0" align="center" cellpadding="2" cellspacing="0" style="font-size:11px;"> 
+	<table width="100%"  border="0" align="center" cellpadding="2" cellspacing="0" style="font-size:11px;"> 
 		<tr>
 			<td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">
 				<digi:trn key="aim:formatPicket:decimalSymbol">Decimal Separator</digi:trn>&nbsp;
@@ -57,7 +57,7 @@
 				<digi:trn key="aim:formatPicket:maxFracDigits">Maximum Fraction Digits</digi:trn>
 		    	&nbsp;
 		    </td>
-    		<td>
+    		<td width="60%">
 	    		<html:select styleClass="dropdwn_sm" property="customDecimalPlaces" styleId="customDecimalPlaces" onchange="initFormatPopup();">
 		              <html:option value="-1">
 		              		<digi:trn key="aim:formatPicket:NoLimit">No Limit</digi:trn>

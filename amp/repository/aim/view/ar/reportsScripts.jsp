@@ -258,7 +258,7 @@ saveReportEngine	= null;
 		    draggable:true} );
 		    
 		    var myPanel4 = new YAHOO.widget.Panel("new4", {
-			width:"450px",
+			width:"480px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",

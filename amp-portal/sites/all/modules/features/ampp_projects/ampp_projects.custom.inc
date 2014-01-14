@@ -31,11 +31,15 @@ function ampp_projects_date_popup_process_alter(&$element, &$form_state, $contex
 * Implementation of hook_init().
 */
 function ampp_projects_init() {
+  
+ global $language; 
+  
  // cache_clear_all('module_implements', 'cache_bootstrap'); ///////////// ! Cache
   getOnOffBudgetIDs(); // Get the on/off budget projects ids
 
   drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/tokeninput/src/jquery.tokeninput.js');
-  drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/ampp_projects.js');
+  drupal_add_js(array('ampp_projects' => array('lang' => $language->language)), 'setting');
+  drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/ampp_projects.js');  
   
   $ampp_projects_settings = array(
   	'url' => url('ampp_search/hs-dropbox')
@@ -1444,7 +1448,7 @@ function ampp_search_primarysectors() {
   $items = array();
   db_set_active("amp_projects");
   
-  global $language; watchdog('LANG', serialize($language));
+  global $language;
   $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpSector', 'name', sector.amp_sector_id, 'amp_sector', 'name', 'amp_sector_id', '" . $language->language . "')"; 
   
   $query = db_select('amp_sector', 'sector');

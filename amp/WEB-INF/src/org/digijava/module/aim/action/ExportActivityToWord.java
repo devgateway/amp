@@ -1639,7 +1639,7 @@ public class ExportActivityToWord extends Action {
                         	
                         	if (roleCode.equals(Constants.FUNDING_AGENCY) &&
                         			FeaturesUtil.isVisibleModule("/Activity Form/Funding", ampContext)){
-                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Donor Agency",false);
+                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Donor Agency");
                         	}
                         	
                         	if (roleCode.equals(Constants.RESPONSIBLE_ORGANISATION) &&
@@ -1686,22 +1686,17 @@ public class ExportActivityToWord extends Action {
         return retVal;
     }
     private void buildRoleOrgInfo(ExportSectionHelper eshRelatedOrgsTable, Set<AmpOrgRole> groupedRoleSet, String roleName){
-    	 buildRoleOrgInfo( eshRelatedOrgsTable, groupedRoleSet, roleName,true);
-    }
-    private void buildRoleOrgInfo(ExportSectionHelper eshRelatedOrgsTable, Set<AmpOrgRole> groupedRoleSet, String roleName,boolean addPercentage){
     	if(!groupedRoleSet.isEmpty()){
 	        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(roleName, null, null,  true));
 	        for (AmpOrgRole role : groupedRoleSet) {
-	            Double orgPercentage = role.getPercentage() == null ? new Double(0) : role.getPercentage();
-	            if(addPercentage){
+	        	String percentage="";
+	        	if(role.getPercentage()!=null){
+	        		Double orgPercentage = role.getPercentage() == null ? new Double(0) : role.getPercentage();
+	        		percentage+=orgPercentage.toString()+"%";
+	        	}
 		            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).
 		                    addRowData(role.getOrganisation().getName())
-		                    .addRowData(orgPercentage.toString() + "%"));
-	            }
-	            else{
-	            	eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).
-		                    addRowData(role.getOrganisation().getName()));
-	            }
+		                    .addRowData(percentage));
 	        }
 	        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(null,null,null, false).setSeparator(true));
     	}

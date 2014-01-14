@@ -82,6 +82,8 @@ function hs_select_sectors_get_items($parent = 0) {
 	$or_statement = db_or()->condition('sector.deleted', 'true', '<>')->condition('sector.deleted', NULL, 'is');
     $query->condition($or_statement);
 	 		
+    if (variable_get('log_db_queries', 0)) watchdog('hs_select_sectors_get_items', dpq($query, 1));
+    
 	$result = $query->execute();
 	
  	foreach ($result as $record) {
@@ -118,6 +120,8 @@ function hs_select_sectors_load_tree($parent = 0) {
     $query->condition($or_statement);
 	 		
 	$query->orderBy($translate_field, 'ASC');
+	
+	if (variable_get('log_db_queries', 0)) watchdog('hs_select_sectors_load_tree', dpq($query, 1));
 	
 	$result = $query->execute();
 	/*if( count($result) == 0)
@@ -174,6 +178,8 @@ function hs_select_sectors_get_item_name($id) {
     $query->addExpression($translate_field, 'name');
 	$query->condition('sector.amp_sector_id', $id, '=');
 
+	if (variable_get('log_db_queries', 0)) watchdog('hs_select_sectors_get_item_name', dpq($query, 1));
+	
     $result = $query->execute();
     $item = array();
     foreach ($result as $record) {

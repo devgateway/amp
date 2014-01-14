@@ -31,11 +31,15 @@ function ampp_projects_date_popup_process_alter(&$element, &$form_state, $contex
 * Implementation of hook_init().
 */
 function ampp_projects_init() {
+  
+ global $language; 
+  
  // cache_clear_all('module_implements', 'cache_bootstrap'); ///////////// ! Cache
   getOnOffBudgetIDs(); // Get the on/off budget projects ids
 
   drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/tokeninput/src/jquery.tokeninput.js');
-  drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/ampp_projects.js');
+  drupal_add_js(array('ampp_projects' => array('lang' => $language->language)), 'setting');
+  drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/ampp_projects.js');  
   
   $ampp_projects_settings = array(
   	'url' => url('ampp_search/hs-dropbox')
@@ -494,6 +498,9 @@ function ampp_get_sectors_from_url(){
     $query->fields('sector', array('amp_sector_id'));
     $query->addExpression($translate_field, 'name');
     $query->condition('sector.amp_sector_id', explode(",", $sectors_ids), "IN");
+    
+    if (variable_get('log_db_queries', 0)) watchdog('ampp_get_sectors_from_url', dpq($query, 1));
+    
     $result = $query->execute();    
     foreach ($result as $record) {
       $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name))));
@@ -524,6 +531,9 @@ function ampp_get_primarysectors_from_url(){
     $query->fields('sector', array('amp_sector_id'));
     $query->addExpression($translate_field, 'name');
     $query->condition('sector.amp_sector_id', explode(",", $sectors_ids), "IN");
+    
+    if (variable_get('log_db_queries', 0)) watchdog('ampp_get_primarysectors_from_url', dpq($query, 1));
+    
     $result = $query->execute();    
     foreach ($result as $record) {
       $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name))));
@@ -554,6 +564,9 @@ function ampp_get_secondarysectors_from_url(){
     $query->fields('sector', array('amp_sector_id'));
     $query->addExpression($translate_field, 'name');
     $query->condition('sector.amp_sector_id',explode(",", $sectors_ids), "IN");
+    
+    if (variable_get('log_db_queries', 0)) watchdog('ampp_get_secondarysectors_from_url', dpq($query, 1));
+    
     $result = $query->execute();    
     foreach ($result as $record) {
       $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name))));
@@ -639,6 +652,8 @@ function ampp_get_donors_from_url(){
     $or_statement = db_or()->condition('donor.deleted', 'true', '<>')->condition('donor.deleted', NULL, 'is');
     $query->condition($or_statement);
 
+    if (variable_get('log_db_queries', 0)) watchdog('ampp_get_donors_from_url', dpq($query, 1));
+    
     $result = $query->execute();
     foreach ($result as $record) {
       $name = !empty($record->acronym) ? check_plain($record->name) . ' (' . check_plain($record->acronym) . ')' : check_plain($record->name);
@@ -673,6 +688,9 @@ function ampp_get_locations_from_url(){
     $query->fields('location', array('id'));
     $query->addExpression($translate_field, 'location_name');
     $query->condition('location.id', explode(",", $locations_ids), "IN");
+    
+    if (variable_get('log_db_queries', 0)) watchdog('ampp_get_locations_from_url', dpq($query, 1));
+    
     $result = $query->execute();
     foreach ($result as $record) {
       $locations[] = drupal_json_encode(array('id'=>$record->id, 'name'=>check_plain($record->location_name)));
@@ -1407,6 +1425,8 @@ function ampp_search_sectors() {
   $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 'sector.amp_sec_scheme_id = ss.amp_sec_scheme_id');
   $query->addJoin('LEFT', 'amp_classification_config', 'cc', 'cc.classification_id = ss.amp_sec_scheme_id');
 
+  if (variable_get('log_db_queries', 0)) watchdog('ampp_search_sectors', dpq($query, 1));
+  
   $result = $query->execute();  
   foreach ($result as $record) {
     $items[] = array('id' => $record->amp_sector_id, 'name' => check_plain($record->name));
@@ -1439,6 +1459,8 @@ function ampp_search_primarysectors() {
   $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 'sector.amp_sec_scheme_id = ss.amp_sec_scheme_id');
   $query->addJoin('LEFT', 'amp_classification_config', 'cc', 'cc.classification_id = ss.amp_sec_scheme_id');
   
+  if (variable_get('log_db_queries', 0)) watchdog('ampp_search_primarysectors', dpq($query, 1));
+  
   $result = $query->execute();  
   foreach ($result as $record) {
     $items[] = array('id' => $record->amp_sector_id, 'name' => check_plain($record->name));
@@ -1470,6 +1492,8 @@ function ampp_search_secondarysectors() {
   $query->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')');
   $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 'sector.amp_sec_scheme_id = ss.amp_sec_scheme_id');
   $query->addJoin('LEFT', 'amp_classification_config', 'cc', 'cc.classification_id = ss.amp_sec_scheme_id');
+  
+  if (variable_get('log_db_queries', 0)) watchdog('ampp_search_secondarysectors', dpq($query, 1));
   
   $result = $query->execute();  
   foreach ($result as $record) {
@@ -1513,6 +1537,8 @@ function ampp_search_programs() {
   $query->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')');
   $query->orderBy($translate_field, 'ASC');
   
+  if (variable_get('log_db_queries', 0)) watchdog('ampp_search_programs', dpq($query, 1));
+  
   $result = $query->distinct()->execute()->fetchAll();
   foreach ($result as $record) {
     $items[] = array('id'=>$record->amp_theme_id, 'name'=>check_plain($record->name));
@@ -1546,6 +1572,8 @@ function ampp_search_donors() {
   $query->groupBy($translate_field);
   $query->groupBy('orgs.acronym');
 
+  if (variable_get('log_db_queries', 0)) watchdog('ampp_search_donors', dpq($query, 1));
+  
   $result = $query->execute();
   
   foreach ($result as $record) {
@@ -1582,13 +1610,17 @@ function ampp_search_regions(){
   global $language;
   $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
   
-  if (empty($defaultCountry)) {   
-  	$result = db_query("SELECT id, " . $translate_field . " as location_name FROM {amp_category_value_location} as loc WHERE unaccent(" . $translate_field . ") ILIKE unaccent(:string)", array(':string' => "%" . $string . "%"));
+  if (empty($defaultCountry)) {  
+    $query =  "SELECT id, " . $translate_field . " as location_name FROM {amp_category_value_location} as loc WHERE unaccent(" . $translate_field . ") ILIKE unaccent(:string)";
+  	$result = db_query($query, array(':string' => "%" . $string . "%"));
   } else {
   	// Include only subnational locations if the AMP installation has a Default Country set
-  	$result = db_query("SELECT id, " . $translate_field . " as location_name FROM {amp_category_value_location} as loc WHERE unaccent(" . $translate_field . ") ILIKE unaccent(:string) AND parent_location IS NOT NULL",  array(':string' => "%" . $string . "%"));
+    $query = "SELECT id, " . $translate_field . " as location_name FROM {amp_category_value_location} as loc WHERE unaccent(" . $translate_field . ") ILIKE unaccent(:string) AND parent_location IS NOT NULL";
+  	$result = db_query($query,  array(':string' => "%" . $string . "%"));
   }
 
+  if (variable_get('log_db_queries', 0)) watchdog('ampp_search_regions', $query);
+  
   foreach ($result as $record) {
     $items[] = array('id'=>$record->id, 'name'=>check_plain($record->location_name));
   }
@@ -1659,6 +1691,7 @@ function ampp_projects_views_pre_execute(&$view){
     }
   }
   
+  if (variable_get('log_db_queries', 0)) watchdog('ampp_projects_views_pre_execute', dpq($view->build_info['query'], 1));  
   //dpq($view->build_info['query']);
 }
 
@@ -2048,6 +2081,8 @@ function ampp_projects_get_donor($id) {
   $or_statement = db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is');
   $query->condition($or_statement);
   
+  if (variable_get('log_db_queries', 0)) watchdog('ampp_projects_get_donor', dpq($query, 1));
+  
   $result = $query->execute();
   $info = array();
   foreach ($result as $record) {
@@ -2076,6 +2111,8 @@ function ampp_projects_get_donors() {
   $query->condition($or_statement);
   $query->orderBy('name', 'ASC');
 
+  if (variable_get('log_db_queries', 0)) watchdog('ampp_projects_get_donors', dpq($query, 1));
+  
   $result = $query->execute();
 	
   foreach ($result as $record) {

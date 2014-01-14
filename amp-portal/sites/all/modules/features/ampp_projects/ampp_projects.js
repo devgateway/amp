@@ -11,9 +11,13 @@ var selectedBudget = 'all';
 var selectedRegionalProjects = 0;
 
 (function ($) {
+	
 	$(document).ready(function() {
+		
+		var lang = Drupal.settings.ampp_projects.lang;
+		
 		if ( $("#edit-sector").length > 0 ) {
-		    $("#edit-sector").tokenInput("/ampp_search/sectors", {
+		    $("#edit-sector").tokenInput("/" + lang + "/ampp_search/sectors", {
 		    	theme: "facebook",
 		    	method: "POST",
 		        queryParam: "string",
@@ -23,7 +27,7 @@ var selectedRegionalProjects = 0;
 		    });
 		}
 		if ( $("#edit-primary-sector").length > 0 ) {
-		    $("#edit-primary-sector").tokenInput("/ampp_search/primarysectors", {
+		    $("#edit-primary-sector").tokenInput("/" + lang + "/ampp_search/primarysectors", {
 		    	theme: "facebook",
 		    	method: "POST",
 		        queryParam: "string",
@@ -33,7 +37,7 @@ var selectedRegionalProjects = 0;
 		    });
 		}
 		if ( $("#edit-secondary-sector").length > 0 ) {
-		    $("#edit-secondary-sector").tokenInput("/ampp_search/secondarysectors", {
+		    $("#edit-secondary-sector").tokenInput("/" + lang + "/ampp_search/secondarysectors", {
 		    	theme: "facebook",
 		    	method: "POST",
 		        queryParam: "string",
@@ -43,7 +47,7 @@ var selectedRegionalProjects = 0;
 		    });
 		}
 		if ( $("#edit-program").length > 0 ) {
-		    $("#edit-program").tokenInput("/ampp_search/programs", {
+		    $("#edit-program").tokenInput("/" + lang + "/ampp_search/programs", {
 		    	theme: "facebook",
 		    	method: "POST",
 		        queryParam: "string",
@@ -53,7 +57,7 @@ var selectedRegionalProjects = 0;
 		    });
 		}
 		if ( $("#edit-donor").length > 0 ) {
-		    $("#edit-donor").tokenInput("/ampp_search/donors", {
+		    $("#edit-donor").tokenInput("/" + lang + "/ampp_search/donors", {
 		    	theme: "facebook",
 		    	queryParam: "string",
 		        method: "POST",
@@ -63,7 +67,7 @@ var selectedRegionalProjects = 0;
 		    });
 	    }
 		if ( $("#edit-region").length > 0 ) {	    
-		    $("#edit-region").tokenInput("/ampp_search/regions", {
+		    $("#edit-region").tokenInput("/" + lang + "/ampp_search/regions", {
 		    	theme: "facebook",
 		    	method: "POST",
 		        queryParam: "string",

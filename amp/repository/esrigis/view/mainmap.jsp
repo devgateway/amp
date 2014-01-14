@@ -44,7 +44,15 @@
       var djConfig = {
         parseOnLoad: true
       };
+      var structureVisible=false;
     </script>
+    
+    <feature:display name="Structures On Load" module="Map Module">
+		<script type="text/javascript">
+			structureVisible = true
+		</script>
+	</feature:display>	
+    
     <!-- Map Scripts -->
     <script type="text/javascript"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
     <script type="text/javascript" src="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/?v=3.0"></script>
@@ -136,7 +144,7 @@
     </style>
     
    <script type="text/javascript">
-	$(function(){
+   $(function(){
   		$('#filterbtn').click(function(){
 			if (filterenable()){
      			//$('#filterdiv').toggle();
@@ -371,6 +379,7 @@
 		//ret = "<digi:trn>"+replaced+"</digi:trn>";
 		return replaced ;
 	}
+	
 </script>
 	<!-- Filter Styles -->
    	<digi:ref href="/TEMPLATE/ampTemplate/css_2/visualization_yui_tabs.css" type="text/css" rel="stylesheet" />
@@ -390,8 +399,6 @@
 		
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection.js"/>"></script> 
 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container.js"/>"></script> 
-	
-		
 	
  </head> 
   <body class="soria gisbody">
@@ -648,28 +655,7 @@
         	</table>
         </div>
         
-         <!-- Search text-->
-        <feature:display name="Media Search" module="Map Module">
-        <div id="mediasearchdiv" class="searchContent">
-        	<table>
-        		<tr>
-        			<td style="color: white;">
-        				<digi:trn>Text</digi:trn>
-        			</td>
-        			<td>
-        				<input type="text"  name="formInput" id="searchtext"></input>
-        				<!-- input type="text" id="textsearch" style="width: 100px;"/--> 
-        			</td>
-        			<td>
-        				<button type="submit" data-dojo-type="dijit.form.Button" id="mediago">Send it!</button>
-        			</td>
-        			
-        		</tr>
-        	</table>
-        </div>
-        </feature:display>	
-        
-	<div class="tooltip" style="position: absolute; display: block;z-index:100;" id="tooltipHolder"></div>
+    <div class="tooltip" style="position: absolute; display: block;z-index:100;" id="tooltipHolder"></div>
 	<digi:form action="/datadispatcher.do" method="post" styleId="datadispatcherform">
 		<html:hidden name="datadispatcherform" property="structures"  styleId="st"/>
 	</digi:form>

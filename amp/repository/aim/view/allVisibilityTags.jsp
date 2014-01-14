@@ -113,10 +113,10 @@
 <feature:display name="Search  Structures" module="Map Module"></feature:display>
 <feature:display name="Structures Column" module="Map Module"></feature:display>
 <feature:display name="Structures" module="Map Module"></feature:display>
+<feature:display name="Structures On Load" module="Map Module"></feature:display>
 <feature:display name="Show National" module="Map Module"></feature:display>
 <feature:display name="Highlight regions" module="Map Module"></feature:display>
 <feature:display name="Highlight Zones" module="Map Module"></feature:display>
-<feature:display name="Media Search" module="Map Module"></feature:display>
 <feature:display name="Show map in public view" module="Map Module"></feature:display>
 <feature:display name="USAID logo" module="Map Module"></feature:display>
 <field:display feature="Structures" name="Structures Column"></field:display>

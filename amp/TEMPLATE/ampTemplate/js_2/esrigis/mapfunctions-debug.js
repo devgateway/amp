@@ -41,7 +41,6 @@ var maxExtent;
 var basemap;
 var highlightson;
 var structureGraphicLayer;
-var structureVisible=false;
 /*---- Search  ----*/
 var searchactive = new Boolean();
 var searchdistance;
@@ -1980,39 +1979,6 @@ function showLegendClusterDonor(pointSymbolBank) {
 	$('#pointsLegend').html(htmlDiv);
 	$('#pointsLegend').show('slow');
 	var dnd = new dojo.dnd.Moveable(dojo.byId("pointsLegend"));
-}
-
-
-
-var results = new Array();
-function sendText(value){
-		var xhrArgs = {
-			url : "/esrigis/datadispatcher.do?getmedia=true&searchtext="+value,
-			handleAs : "json",
-			sync : true,
-			load : function(jsonData) {
-				dojo.forEach(jsonData.response.datalayer.locations, function(location) {
-					results.push(location);
-				});
-				placemedia();
-			},
-			error : function(error) {
-				console.log(error);
-			}
-		}
-		// Call the asynchronous xhrGet
-		var deferred = dojo.xhrGet(xhrArgs);
-}
-	
-function placemedia(){
-	for ( var int = 0; int < results.length; int++) {
-		var pt = new esri.geometry.Point(results[int].latitude,results[int].longitude,map.spatialReference);
-		var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([ 255, 0, 0, 0.5 ]));
-		var attr = {"Temp" : "Temporal Attribute"};
-		var infoTemplate = new esri.InfoTemplate("");
-		var pgraphic = new esri.Graphic(pt, sms, attr,infoTemplate);
-		map.graphics.add(pgraphic);
-	}
 }
 
 

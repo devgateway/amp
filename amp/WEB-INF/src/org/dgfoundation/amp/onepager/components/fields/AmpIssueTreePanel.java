@@ -52,11 +52,14 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 		
 		if (levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpIssues") == 0 || 
 			levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpRegionalObservation") == 0 || 
-			levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpLineMinistryObservation") == 0){
+			levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpLineMinistryObservation") == 0 ||
+			levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpMeasure") == 0 ){
 			final AmpDatePickerFieldPanel date;
 			
 			if (levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpIssues") == 0)
 				date = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(objModel,"issueDate"), "Date", true);
+			else if (levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpMeasure") == 0) 
+				date = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(objModel,"measureDate"), "Date", true);
 			else 
 				date = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(objModel,"observationDate"), "Date", true);
 					
@@ -98,6 +101,7 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 						m.setActors(new HashSet());
 						m.setIssue((AmpIssues) objModel.getObject());
 						m.setName("");
+						m.setMeasureDate(new Date());
 						list.addItem(m);
 					}
 					if (childClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpActor") == 0){

@@ -9,6 +9,7 @@
 			</generator>
 		</id>
 		<property column="name" name="name" type="text" />
+		<property column="measureDate" name="measureDate" type="java.util.Date" />
 		<many-to-one name="issue" column="amp_issue_id"
 			class="org.digijava.module.aim.dbentity.AmpIssues" cascade="none" />
 

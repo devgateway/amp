@@ -1488,7 +1488,7 @@ body {background:none;}
 									  </td>
 									</tr>
 									</module:display>
-								  111</logic:present>  
+								  </logic:present>  
                                     <feature:display name="Regional Funding" module="Funding">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">

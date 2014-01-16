@@ -179,34 +179,39 @@ function moveDisplayedImages(structureId, imgCount, next){
 					</tr>
 				</module:display>
 			
-
-			<tr bgcolor="#f0f0f0">
-				<td align="center"colspan="2">
-				<digi:trn key="trn:images">Images</digi:trn></td>
-			</tr>
-			<tr>
-				<td class="inside" colspan="2">
-					<div align="center" style="vertical-align: middle;">
-					<img id="aPrev${structure.ampStructureId}" 
-					onclick="moveDisplayedImages(${structure.ampStructureId},${fn:length(structure.images)}, false);" 
-					src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif" title="<digi:trn>Previous</digi:trn>" align="middle">
-					<img id="aNext${structure.ampStructureId}" 
-					onclick="moveDisplayedImages(${structure.ampStructureId},${fn:length(structure.images)}, true);" 
-					src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif" title="<digi:trn>Next</digi:trn>" align="middle">
-					</div>
-					<br />
-					<div align="center" style="vertical-align: middle;">
-					<logic:iterate id="image" name="structure" property="images" indexId="idx">
-								<a id="a${structure.ampStructureId}_${idx}" class="thumbnail" target="_blank" href="/aim/displayStructureImage.do?structureId=${structure.ampStructureId}&imgId=${image.id}">
-									<img id="${structure.ampStructureId}_${image.id}" width="75px" height="75px" border="0" />
-									<span><img id="zoomImg${structure.ampStructureId}_${image.id}" width="150px" height="150px"/>
-									<br /><digi:trn>View Image</digi:trn></span></a>
-
-					</logic:iterate>
-					</div>
+			<c:if test="${not empty structure.images}">
+				<tr bgcolor="#f0f0f0">
+					<td align="center"colspan="2">
 					
-				</td>
-			</tr>
+					
+	
+				
+					<digi:trn key="trn:images">Images</digi:trn></td>
+				</tr>
+				<tr>
+					<td class="inside" colspan="2">
+						<div align="center" style="vertical-align: middle;">
+						<img id="aPrev${structure.ampStructureId}" 
+						onclick="moveDisplayedImages(${structure.ampStructureId},${fn:length(structure.images)}, false);" 
+						src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif" title="<digi:trn>Previous</digi:trn>" align="middle">
+						<img id="aNext${structure.ampStructureId}" 
+						onclick="moveDisplayedImages(${structure.ampStructureId},${fn:length(structure.images)}, true);" 
+						src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif" title="<digi:trn>Next</digi:trn>" align="middle">
+						</div>
+						<br />
+						<div align="center" style="vertical-align: middle;">
+						<logic:iterate id="image" name="structure" property="images" indexId="idx">
+									<a id="a${structure.ampStructureId}_${idx}" class="thumbnail" target="_blank" href="/aim/displayStructureImage.do?structureId=${structure.ampStructureId}&imgId=${image.id}">
+										<img id="${structure.ampStructureId}_${image.id}" width="75px" height="75px" border="0" />
+										<span><img id="zoomImg${structure.ampStructureId}_${image.id}" width="150px" height="150px"/>
+										<br /><digi:trn>View Image</digi:trn></span></a>
+	
+						</logic:iterate>
+						</div>
+						
+					</td>
+				</tr>
+			</c:if>
 	
 	</table>
 	<br />

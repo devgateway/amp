@@ -50,7 +50,11 @@
 	<http pattern="/exception/showExceptionReport.do**" security="none" />
 
     <!--<http pattern="/aim/viewActivityPreview.do**" security="none"  />-->
-	
+    
+    <http pattern="/aim/exportActToPDF.do**" security="none"  />
+  
+	 <http pattern="/aim/exportActToWord.do**" security="none"  />
+  
 	<http pattern="/aim/default/previewActivity.do**" security="none" />
 	
 	<http pattern="/visualization/pdfExport.do**" security="none" />

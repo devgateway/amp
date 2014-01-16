@@ -15,6 +15,7 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Categorizable;
 import org.dgfoundation.amp.ar.CellColumn;
+import org.dgfoundation.amp.ar.FundingTypeSortedString;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.MetaInfoSet;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
@@ -381,7 +382,13 @@ public Cell filter(Cell metaCell,Set ids) {
 		MetaInfo internal = metaData.getMetaInfo(m.getCategory());
 		if (internal == null)
 			return false;
-		if (internal.equals(m))
+		//we translate Bilateral ssc commitments = actual commitments
+		// triangular ssc commitments = planned commitments
+		if (internal.equals(m) ||
+		  (((FundingTypeSortedString)internal.getValue()).string.equals("Bilateral SSC Commitments") &&
+		  ((FundingTypeSortedString)m.getValue()).string.equals("Actual Commitments")) ||
+		  (((FundingTypeSortedString)internal.getValue()).string.equals("Triangular SSC Commitments") &&
+				  ((FundingTypeSortedString)m.getValue()).string.equals("Planned Commitments")) )
 			return true;
 		else
 			return false;

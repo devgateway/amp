@@ -129,7 +129,8 @@ public class GlobalSettings extends Action {
 		for (AmpGlobalSettings ampGS:col)
 		{
 			//TODO: Add a new field to identify fields that need multiselect activated.
-	 	 	if(ampGS.getGlobalSettingsValue().indexOf(";") != -1) {
+	 	 	if ((ampGS.getGlobalSettingsValue() != null) && (ampGS.getGlobalSettingsValue().indexOf(";") != -1))
+	 	 	{
 	 	 		ampGS.setListOfValues(ampGS.getGlobalSettingsValue().split(";"));
 	 	 	}
 	 	 	

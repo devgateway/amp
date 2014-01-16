@@ -4,13 +4,11 @@
 	<jira>AMP-15923</jira>
 	<keyword>translate</keyword>
 	<author>mihai</author>
+	<description>Translator view not working for Ethiopia server.The old Digi permissions tables were empty. I took the permissions from an old 2009 MySQL backup.</description>
 	<trigger type="any">
 		<condition type="dbName">amp_ethiopia_production</condition>
 		<condition type="dbName">amp_ethiopia_staging</condition>
-	</trigger>
-	<description>Translator view not working for Ethiopia server. 
-	The old Digi permissions tables were empty. I took the permissions from an old 2009 MySQL backup.
-	</description>
+	</trigger>	
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">

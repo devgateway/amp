@@ -288,7 +288,7 @@ public final class XmlPatcherUtil {
 		}
 		catch (Exception e)
 		{
-			logger.error(e);
+			logger.error(String.format("erorr while processing patch %s: %s", p, e.getMessage()), e);
 			if(log!=null) log.appendToLog(e);
 			return null;
 		}

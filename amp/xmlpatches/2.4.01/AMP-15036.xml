@@ -2,8 +2,7 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMPOPS-712</jira>
-	<jira>AMP-15036</jira>
+	<jira>AMP-15036, AMPOPS-712</jira>
 	<keyword>migration</keyword>
 	<author>mpostelnicu</author>
 	<trigger type="any">

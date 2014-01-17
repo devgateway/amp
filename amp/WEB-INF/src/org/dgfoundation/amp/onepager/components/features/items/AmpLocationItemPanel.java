@@ -51,7 +51,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 		this.locationModel = model;
 		
 		PropertyModel<Double> percModel = new PropertyModel<Double>(model, "locationPercentage");
-		AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField){
+		AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField,true){
 			private static final long serialVersionUID = 1L;
 			@Override
 			protected void onBeforeRender() {

@@ -1224,8 +1224,11 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 	myForm.webLink.value		= '';
 	myForm.docType.disabled		= false;
 	myForm.yearOfPublication.disabled		= false;
-	if (isAUrl == null) 
+    myForm.docIndex.value = index ? index : '';
+    myForm.docCategory.value = category ? category : '';
+	if (isAUrl == null) {
 		isAUrl	= false;
+    }
 		
 	selectResourceType(isAUrl);
 	
@@ -1244,6 +1247,14 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 
 		myForm.yearOfPublication.style.backgroundColor	= "#eeeeee";
 		myForm.yearOfPublication.style.color			= "darkgray";
+
+        myForm.docIndex.readOnly                        = true;
+        myForm.docIndex.style.backgroundColor           = "#eeeeee";
+        myForm.docIndex.style.color                     = "darkgray";
+
+        myForm.docCategory.readOnly                     = true;
+        myForm.docCategory.style.backgroundColor        = "#eeeeee";
+        myForm.docCategory.style.color                  = "darkgray";
 
 	
 		setPanelHeader(0, "${translation_add_new_version}");
@@ -1287,6 +1298,14 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 		myForm.yearOfPublication.style.backgroundColor	= "";
 		myForm.yearOfPublication.style.color			= "";
 
+        myForm.docIndex.readOnly                = false;
+        myForm.docIndex.style.backgroundColor   = "";
+        myForm.docIndex.style.color             = "";
+
+        myForm.docCategory.readOnly              = false;
+        myForm.docCategory.style.backgroundColor = "";
+        myForm.docCategory.style.color           = "";
+
 		
 		setPanelHeader(0, "${translation_add_new_content}");
 	}
@@ -1303,7 +1322,7 @@ function selectResourceType(isUrl) {
 		elFile.style.display	= "none";
 		elUrl.style.display		= "";
 	}else{
-		alex					= 'ùù éè &é"\'(-è_çà';
+		alex					= 'ï¿½ï¿½ ï¿½ï¿½ &ï¿½"\'(-ï¿½_ï¿½ï¿½';
 		elFile.style.display	= "";
 		elUrl.style.display		= "none";
 	}
@@ -1324,8 +1343,8 @@ function setType(typeValue) {
 
 function validateAddDocument() {
 	// This code was commented. See https://jira.dgfoundation.org/browse/AMP-15171 for details
-	// var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
-	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü!@#$%^&' ()]+");
+	// var regexp	= new RegExp("[a-zA-Z0-9_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%&' ()]+");
+	var regexp	= new RegExp("[a-zA-Z0-9_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!@#$%^&' ()]+");
 	var urlFormat = new RegExp('(http|ftp|https)://[a-z0-9\-_]+(\.[a-z0-9\-_]+)+([a-z0-9\-\.,@\?^=%&;:/~\+#]*[a-z0-9\-@\?^=%&;/~\+#])?', 'i');
 	var msg	= '';	
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '') {

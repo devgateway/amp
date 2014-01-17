@@ -112,6 +112,16 @@ public class DataDispatcher extends DispatchAction {
 	    	//if((currentTeam.getComputation() != null && currentTeam.getComputation()) || "Management".equals(currentTeam.getAccessType())){
 	    		AmpARFilter filter = (AmpARFilter)session.getAttribute(ArConstants.TEAM_FILTER);
 	    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(filter.getFilterConditionOnly());
+	    		
+	    		// Explanation: There is an issue when "show only activities from this workspace" option is enabled AND the current workspace is of type
+	    		// ("Management" OR "Computed") AND the current workspace HAS NO VALID ACTIVITIES, in that case the user will see ALL activities (from
+	    		// child workspaces) like the "show only activities from this worskspaces" option wasnt enabled. To solve that in one place will add a fake
+	    		// activity so the user doesnt see wrong results.
+	    		if(activityList == null || activityList.size() == 0) {
+	    			activityList = new ArrayList<BigInteger>();
+	    			activityList.add(new BigInteger("-99999999999"));
+	    		}
+	    		
 	    		visualizationForm.getFilter().setActivityComputedList(activityList);
 			//}
 			visualizationForm.getFilter().setTeamMember(tm);

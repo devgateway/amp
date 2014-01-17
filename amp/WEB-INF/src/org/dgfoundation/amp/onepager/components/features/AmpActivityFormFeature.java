@@ -332,8 +332,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	                }
 					else
 						onError(target, form);
-	                //reenable buttons 
-	                target.appendJavaScript("enableDisableForm(true);");
 	                submited=false;
 				}
 			}
@@ -346,9 +344,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 		};
 		
-		String disableButton=" enableDisableForm(false);";
 		
-		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model<String>("window.onbeforeunload = null;"+ disableButton +" for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), "");
+		
+		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model<String>("window.onbeforeunload = null;  for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), "");
 		
 		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);
@@ -361,11 +359,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             protected void onClick(AjaxRequestTarget target) {
             }
         };
-        
-        //disable onclick saveAsDraft
-        
-		//saveAsDraft.getButton().add(new AttributeModifier("onclick", disableButton+" showDraftPanel();"));
-        saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();"));
+
 		saveAsDraft.setVisible(true);
 		saveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         activityForm.add(saveAsDraft);
@@ -422,7 +416,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				if(!submited){
 					submited=true;
 					//reenable buttons
-	                target.appendJavaScript("hideDraftPanel();enableDisableForm(true);");
+	                target.appendJavaScript("hideDraftPanel();");
 	                processAndUpdateForm(false, am, form, target, this.getButton());
 	
 					//only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
@@ -535,7 +529,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					else{
 						target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
 					}
-					target.appendJavaScript("enableDisableForm(true);");
 					submited=false;
 				}
 			}
@@ -548,11 +541,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					target.add(feedbackPanel);
 				}
 				submited=false;
-				target.appendJavaScript("enableDisableForm(true);");
 			}
 		};
 		//disable on click preview
-		preview.getButton().add(new AttributeModifier("onclick", disableButton));
 		preview.getButton().add(new AttributeModifier("class", new Model("sideMenuButtons")));
 		if (am.getObject().getAmpActivityId() == null)
 			preview.setVisible(false);
@@ -585,37 +576,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		activityForm.add(featureList);
 		
 		quickMenu(am, listModel);
-
-		String enableBlock="";
-		String disableBlock="";
-		//for saveAndSubmit
-		enableBlock+="$('#" +saveAndSubmit.getButton().getMarkupId() +"').removeAttr('disabled');\n";
-		disableBlock+="$('#" +saveAndSubmit.getButton().getMarkupId() +"').attr('disabled', 'disabled');\n";
-		//ForSaveAsDraft
-		enableBlock+="$('#" +saveAsDraftAction.getButton().getMarkupId() +"').removeAttr('disabled');\n";
-		disableBlock+="$('#" +saveAsDraftAction.getButton().getMarkupId() +"').attr('disabled', 'disabled');\n";
-		//forPreview
-		enableBlock+="$('#" +preview.getButton().getMarkupId() +"').removeAttr('disabled');\n";
-		disableBlock+="$('#" +preview.getButton().getMarkupId() +"').attr('disabled', 'disabled');\n";
-
-		 String funcionDehabilitarHabilitar1="function enableDisableForm(enable){\n"+
-		"if(enable){\n"+
-		enableBlock+"\n"+
-		"}\n"+
-				 "else{\n" +
-				 disableBlock+"\n"+
-				 "}\n" +
-		"}\n";
-		 final String funcionDehabilitarHabilitar=funcionDehabilitarHabilitar1;
-
-			activityForm.add(new Behavior(){
-			@Override
-			public void renderHead(Component component, IHeaderResponse response) {
-				super.renderHead(component, response);
-				response.render(JavaScriptHeaderItem.forScript(funcionDehabilitarHabilitar, "enableDisable"));
-				
-			}
-		});
 	}
 
     private void processAndUpdateForm(boolean notDraft, IModel<AmpActivityVersion> am, final Form<?> form, final AjaxRequestTarget target, IndicatingAjaxButton button) {

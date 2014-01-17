@@ -3,6 +3,7 @@
  */
 package org.digijava.module.contentrepository.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -62,17 +63,27 @@ public class LabelAction extends MultiAction {
 			Node docNode				= DocumentManagerUtil.getWriteNode(form.getDocUUID(), request);
 			NodeWrapper nw				= new NodeWrapper(docNode);
 			List<Label> existingLabels	= nw.getLabels();
+			//we will use labelsInForm to delete the ones that are not selected
+			List<Label >labelsInForm=new ArrayList<Label >();
 			for (int i=0; i<form.getLabelUUIDs().length; i++ ) {
 				Node labelNode	= DocumentManagerUtil.getWriteNode(form.getLabelUUIDs()[i], request);
 				Label label		= new Label(labelNode);
+				labelsInForm.add(label);
 				if ( existingLabels.contains(label) ){
-					if ( !"true".equals(applyClickAction) )
+					if ( !"true".equals(applyClickAction) ){
 						nw.removeLabel( labelNode.getUUID() );
+					}
 				}
-				else
+				else{
 					nw.addLabel(labelNode);
+				}
 			}
-			
+			for(Label l:existingLabels){
+				if(!labelsInForm.contains(l)){
+					nw.removeLabel(l.getNode().getUUID());
+				}
+				
+			}
 		}
 		DocumentManagerUtil.logoutJcrSessions(request);
 		

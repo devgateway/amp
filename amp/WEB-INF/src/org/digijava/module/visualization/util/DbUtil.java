@@ -907,7 +907,7 @@ public class DbUtil {
 		
 		
 		String oql = "";
-		//boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1);
+		boolean donorCondition = (filter.getSelOrgIds()!=null && filter.getSelOrgIds().length>0 && filter.getSelOrgIds()[0]!=-1);
         boolean implementingCondition = (filter.getSelImplementingAgencyIds()!=null && filter.getSelImplementingAgencyIds().length>0 && filter.getSelImplementingAgencyIds()[0]!=-1);
         boolean beneficiaryCondition = (filter.getSelBeneficiaryAgencyIds()!=null && filter.getSelBeneficiaryAgencyIds().length>0 && filter.getSelBeneficiaryAgencyIds()[0]!=-1);
         
@@ -1001,9 +1001,9 @@ public class DbUtil {
         
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (filter.getAgencyType()==0){
-//	        if (donorCondition) {
-//	        	oql += " and f.ampDonorOrgId in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
-//	        } 
+	        if (donorCondition) {
+	        	oql += " and f.ampDonorOrgId in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
+	        } 
 	        if (implementingCondition) {
 	        	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
 	        } 

@@ -2301,9 +2301,7 @@ body {background:none;}
 											
 											</logic:notEmpty><br/>
 											</module:display>
-
-
-											<module:display name="/Activity Form/Related Organizations/Sector Group" parentModule="/Activity Form/Related Organizations">
+											<module:display name="/Activity Form/Related Organizations/Regional Group" parentModule="/Activity Form/Related Organizations">
 											<field:display name="Sector Group" feature="Sector Group">
 											<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
@@ -2343,8 +2341,9 @@ body {background:none;}
 													</table>											
 											</logic:notEmpty><br/>
 											</field:display>
+											</module:display>
 		
-        									<module:display name="/Activity Form/Related Organizations/Regional Group" parentModule="/Activity Form/Related Organizations">
+        									<feature:display name="Regional Group" module="Organizations">
 											<field:display name="Regional Group" feature="Regional Group">
 											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">
@@ -2384,7 +2383,7 @@ body {background:none;}
 												</table>
 											</logic:notEmpty><br/>
 											</field:display>
-                                  	</module:display>
+                                  	</feature:display>
                                            </td>
 									</tr>								
 									</module:display>									 

@@ -42,7 +42,7 @@ function ampp_content_types_field_default_fields() {
     'field_instance' => array(
       'bundle' => 'donor_profile',
       'deleted' => '0',
-      'description' => 'If any of image dimensions larger than <b>320x165</b> pixels the image will be scales and cropped to exactly <b>320x165</b> pixels.',
+      'description' => 'If any of image dimensions larger than <b>320x165</b> pixels the image will be scaled and cropped to exactly <b>320x165</b> pixels.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -562,7 +562,7 @@ function ampp_content_types_field_default_fields() {
         ),
       ),
       'deleted' => '0',
-      'description' => 'Original image will be scales and cropped to fit slideshow area.',
+      'description' => 'Original image will be scaled and cropped to fit slideshow area.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -701,7 +701,7 @@ function ampp_content_types_field_default_fields() {
     'field_instance' => array(
       'bundle' => 'homepage_slideshow',
       'deleted' => '0',
-      'description' => 'If any of image dimensions larger than <b>1000x220</b> pixels the image will be scales and cropped to exactly <b>1000x220</b> pixels.',
+      'description' => 'If any of image dimensions larger than <b>1000x220</b> pixels the image will be scaled and cropped to exactly <b>1000x220</b> pixels.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -1323,7 +1323,7 @@ function ampp_content_types_field_default_fields() {
     'field_instance' => array(
       'bundle' => 'map',
       'deleted' => '0',
-      'description' => 'If any of image dimensions larger than <b>320x165</b> pixels the image will be scales and cropped to exactly <b>320x165</b> pixels.',
+      'description' => 'If any of image dimensions larger than <b>320x165</b> pixels the image will be scaled and cropped to exactly <b>320x165</b> pixels.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -1840,7 +1840,7 @@ function ampp_content_types_field_default_fields() {
         ),
       ),
       'deleted' => '0',
-      'description' => 'Original image will be scales and cropped to fit slideshow area.',
+      'description' => 'Original image will be scaled and cropped to fit slideshow area.',
       'display' => array(
         'default' => array(
           'label' => 'above',
@@ -2136,14 +2136,14 @@ function ampp_content_types_field_default_fields() {
 <strong>Note 1:</strong> <i>In order to have text next to the image in a paragraph, you need to select the image and align it to the left.</i><br />
 <strong>Note 2:</strong> <i>You can choose the original image size or any other preset and then resize it using you mouse to the exact dimensions you want.</i><br />
 <strong>Note 3:</strong> <i>Chrome browser does not support Wysiwyg inline image re-sizing. To re-size image in Chrome insert the image, then select it and click image icon. Enter dimension(s) into the popup form and submit.</i><br />');
-  t('If any of image dimensions larger than <b>1000x220</b> pixels the image will be scales and cropped to exactly <b>1000x220</b> pixels.');
-  t('If any of image dimensions larger than <b>320x165</b> pixels the image will be scales and cropped to exactly <b>320x165</b> pixels.');
+  t('If any of image dimensions larger than <b>1000x220</b> pixels the image will be scaled and cropped to exactly <b>1000x220</b> pixels.');
+  t('If any of image dimensions larger than <b>320x165</b> pixels the image will be scaled and cropped to exactly <b>320x165</b> pixels.');
   t('If selected the title shows up on the slideshow');
   t('Image');
   t('Inline files');
   t('Inline images');
   t('Link');
-  t('Original image will be scales and cropped to fit slideshow area.');
+  t('Original image will be scaled and cropped to fit slideshow area.');
   t('Show title in slideshow');
   t('Slideshow image');
   t('This can be external or internal URI. Link will open in a new browser window.');

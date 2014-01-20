@@ -1851,7 +1851,7 @@ public class TeamUtil {
         	String reportNameHql = AmpReports.hqlStringForName("r");
         	
             if(keyword != null && keyword.trim().length() > 0){
-            	queryString += " and (lower(" + reportNameHql + ") like lower(:keyword) ";
+            	queryString += " and (lower(" + reportNameHql + ") like lower(:keyword) )";
             }
 	                
             queryString += " order by " + reportNameHql;

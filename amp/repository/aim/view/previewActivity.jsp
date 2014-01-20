@@ -1338,7 +1338,7 @@ function collapseAll() {
 							</c:forEach>
 							</script>
 							<jsp:include page="previewmap.jsp">
-								<jsp:param name="esriapiurl" value="${aimEditActivityForm.esriapiurl}}" />
+								<jsp:param name="esriapiurl" value="${aimEditActivityForm.esriapiurl}" />
 							</jsp:include>
 						</td>
 					</tr>
@@ -2237,7 +2237,7 @@ function collapseAll() {
 		</span>	
 	</legend>
 	<div id="relateorgdiv" class="toggleDiv">
-		<module:display name="/Activity Form/Funding" parentModule="/Activity Form">
+		<module:display name="/Activity Form/Related Organizations/Donor Organization" parentModule="/Activity Form/Related Organizations">
 			<digi:trn key="aim:donororganisation">Donor Organization</digi:trn>
 			<br/>
 			<logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">

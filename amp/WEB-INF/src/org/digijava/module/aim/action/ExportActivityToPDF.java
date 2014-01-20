@@ -1181,7 +1181,7 @@ public class ExportActivityToPDF extends Action {
 				relOrgCell2.setBorder(0);
 				PdfPTable relatedOrgnested=new PdfPTable(1); //table that holds all related organisations			
 				//Donor Organizations
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Funding", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Donor Organization", ampContext)){
 					buildRelatedOrganisationsOutput(relatedOrgnested,"Donor Agency",null,myForm.getFunding().getFundingOrganizations(), myForm.getAgencies().getRespOrgPercentage(),ampContext);
 				}				
 				//Responsible Organizations

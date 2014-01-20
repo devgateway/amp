@@ -2228,7 +2228,7 @@ function collapseAll() {
 		</span>	
 	</legend>
 	<div id="relateorgdiv">
-		<module:display name="/Activity Form/Funding" parentModule="/Activity Form">
+			<module:display name="/Activity Form/Related Organizations/Donor Organization" parentModule="/Activity Form/Related Organizations">
 			<digi:trn key="aim:donororganisation">Donor Organization</digi:trn>
 			<br/>
 			<logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">

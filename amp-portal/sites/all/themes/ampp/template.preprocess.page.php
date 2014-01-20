@@ -188,7 +188,11 @@ function ampp_preprocess_page(&$vars) {
   if ($default_used) {
     $vars['header_logo'] = l(theme('image', array('path' => $logo_path, 'alt' => $vars['site_name'], 'title' => $vars['site_name'])), '<front>', array('html' => true, 'attributes' => array('id' => 'ampp_logo_anchor', 'title' => $vars['site_name'])));
   } else {
-    $vars['header_logo'] = l(theme('image_style', array('style_name' => 'logo', 'path' => $logo_path, 'alt' => $vars['site_name'], 'title' => $vars['site_name'])), '<front>', array('html' => true, 'attributes' => array('id' => 'ampp_logo_anchor', 'title' => $vars['site_name'])));
+    if (!empty($logo_path)) {
+      $vars['header_logo'] = l(theme('image_style', array('style_name' => 'logo', 'path' => $logo_path, 'alt' => $vars['site_name'], 'title' => $vars['site_name'])), '<front>', array('html' => true, 'attributes' => array('id' => 'ampp_logo_anchor', 'title' => $vars['site_name'])));
+    } else {
+      $vars['header_logo'] = '';
+    }
   }
   $vars['header_links'] = theme('header_links_menu');
   $vars['amp_links'] = theme_get_setting('toggle_amp_menu', 'ampp') ? theme('amp_links_menu') : '';
@@ -236,7 +240,11 @@ function ampp_preprocess_page(&$vars) {
   if ($default_used) {
     $vars['footer_logo'] = theme('image', array('path' => $footer_logo_path, 'alt' => $vars['site_name'], 'title' => $vars['site_name']));
   } else {
-    $vars['footer_logo'] = theme('image_style', array('style_name' => 'footer_logo', 'path' => $footer_logo_path, 'alt' => $vars['site_name'], 'title' => $vars['site_name']));
+    if (!empty($footer_logo_path)) {
+      $vars['footer_logo'] = theme('image_style', array('style_name' => 'footer_logo', 'path' => $footer_logo_path, 'alt' => $vars['site_name'], 'title' => $vars['site_name']));
+    } else {
+      $vars['footer_logo'] = '';
+    }
   } 
   
   // construct breadcrumb

@@ -370,7 +370,8 @@ function ampp_form_alter(&$form, $form_state, $form_id) {
       '#type' => 'textfield',
       '#title' => t('Full URI to AMP activity details page'),
       '#default_value' => variable_get('amp_activity_url', ''), 
-      '#description' => t('Use "%aid%" marker to be replaced with activity id. Example: https://liberia.ampdev.net/wicket/onepager/activity/%aid%'),
+      '#description' => t('Use "%aid%" marker to be replaced with activity id. Example: https://liberia.ampdev.net/wicket/onepager/activity/%aid%') . '<br>' .
+          t('Use "%lang_code%" placeholder for language code. Example: https://liberia.ampdev.net/wicket/onepager/activity/%aid%&language=%lang_code%'),
       '#size' => 60,   
     );
     

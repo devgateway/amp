@@ -93,6 +93,7 @@ function hs_select_programs_get_items($parent = 0) {
 	$items = array();
 	
 	global $language;
+	global $user;
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')"; 
 	
 	$query = db_select('amp_theme', 'program');
@@ -109,6 +110,8 @@ function hs_select_programs_get_items($parent = 0) {
 	} else {
 		$query->condition('program.parent_theme_id', $parent, '=');
 	}
+	
+	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_programs_get_items', dpq($query, 1));
 	
 	$result = $query->distinct()->execute()->fetchAll();
 	
@@ -133,6 +136,7 @@ function hs_select_programs_load_tree($parent = 0) {
 	}
 	
 	global $language;
+	global $user;
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')"; 
     
 	$query = db_select('amp_theme', 'program');
@@ -153,6 +157,8 @@ function hs_select_programs_load_tree($parent = 0) {
 	}
 	$result = $query->distinct()->execute()->fetchAll();
 
+	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_programs_load_tree', dpq($query, 1));
+	
 	foreach ($result as $record) {
 		$items[$parent][$record->amp_theme_id] = $record->name;
 		$sub_items = hs_select_programs_load_tree($record->amp_theme_id);
@@ -218,11 +224,14 @@ function hs_select_programs_get_item_name($id) {
     db_set_active("amp_projects");
   
     global $language;
+    global $user;
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')";    
   
     $query = db_select('amp_theme', 'program')->fields('program', array('amp_theme_id'));
     $query->addExpression($translate_field, 'name');
 	$query->condition('program.amp_theme_id', $id, '=');
+	
+	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_programs_get_item_name', dpq($query, 1));
 	
     $result = $query->execute(); 
     $item = array();

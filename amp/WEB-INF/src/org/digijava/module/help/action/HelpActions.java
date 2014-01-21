@@ -842,7 +842,7 @@ public class HelpActions extends DispatchAction {
 			// Create xml structure to be saved too in the zip.
 			logger.info("Writing helpExport.xml to zip file.");
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			m.marshal(help_out,bos);						
+			m.marshal(help_out,bos);	   					
 			outZip.putNextEntry(new ZipEntry("helpExport.xml"));
 			byte [] myArray= bos.toByteArray();
 			outZip.write(myArray, 0, myArray.length);

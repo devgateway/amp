@@ -19,7 +19,7 @@ function ampp_homepage_views_default_views() {
   $view->core = 7;
   $view->api_version = '3.0-alpha1';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  
+
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['access']['type'] = 'perm';
@@ -102,7 +102,7 @@ function ampp_homepage_views_default_views() {
   $handler->display->display_options['filters']['promote']['field'] = 'promote';
   $handler->display->display_options['filters']['promote']['value'] = '1';
   $handler->display->display_options['filters']['promote']['group'] = 1;
-  
+
   /* Display: Main slideshow */
   $handler = $view->new_display('panel_pane', 'Main slideshow', 'panel_pane_5');
   $handler->display->display_options['defaults']['title'] = FALSE;
@@ -432,7 +432,7 @@ function ampp_homepage_views_default_views() {
     'und' => 'und',
   );
   $handler->display->display_options['filters']['language_1']['group'] = 1;
-  
+
   /* Display: News slideshow block */
   $handler = $view->new_display('block', 'News slideshow block', 'block_1');
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
@@ -863,7 +863,7 @@ function ampp_homepage_views_default_views() {
   $handler->display->display_options['filters']['field_image_fid']['field'] = 'field_image_fid';
   $handler->display->display_options['filters']['field_image_fid']['operator'] = 'not empty';
   $handler->display->display_options['filters']['field_image_fid']['group'] = 1;
-  
+
   /* Display: Recent news block */
   $handler = $view->new_display('block', 'Recent news block', 'block_4');
   $handler->display->display_options['defaults']['title'] = FALSE;
@@ -1007,7 +1007,7 @@ function ampp_homepage_views_default_views() {
   $handler->display->display_options['filters']['in_queue']['field'] = 'in_queue';
   $handler->display->display_options['filters']['in_queue']['relationship'] = 'nodequeue_rel';
   $handler->display->display_options['filters']['in_queue']['value'] = '0';
-  
+
   /* Display: Left slideshow block */
   $handler = $view->new_display('block', 'Left slideshow block', 'block_2');
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
@@ -1361,7 +1361,7 @@ function ampp_homepage_views_default_views() {
     'und' => 'und',
   );
   $handler->display->display_options['filters']['language_1']['group'] = 1;
-  
+
   /* Display: Right slideshow block */
   $handler = $view->new_display('block', 'Right slideshow block', 'block_3');
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
@@ -1756,7 +1756,7 @@ function ampp_homepage_views_default_views() {
     t('_blank'),
     t('Right slideshow block'),
   );
-    $export['homepage_slideshow'] = $view;
+  $export['homepage_slideshow'] = $view;
 
   return $export;
 }

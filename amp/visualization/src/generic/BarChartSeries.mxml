@@ -360,8 +360,11 @@
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
 				var params:Object = {};
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+
 				params["format"] = "xml";
 				params["action"] = dataAction;
+				params["divide"] = divide;
 				
 				//Handle special parameter cases
 				if(idContainer == "AidType"){

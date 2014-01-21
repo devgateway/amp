@@ -418,7 +418,6 @@
 				
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
-
 				if (startYear == endYear)
 					showYearMessage();
 				else
@@ -451,9 +450,11 @@
 					strDomain = curUrl.split('/')[2];
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 				var params:Object = {
 					"linechart" : "true",
-					"action"	: dataAction
+					"action"	: dataAction,
+					"divide"    : divide
 				};
 				
 				//Handle special parameter cases

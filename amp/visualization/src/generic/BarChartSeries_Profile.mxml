@@ -329,12 +329,15 @@
 					strDomain = curUrl.split('/')[2];
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+
 				if(start == "true"){
 					var params:Object = {
 						"format" : "xml",
 						"typeofaid" : "true",
 						"itemId" : itemId,
-						"action": dataAction
+						"action": dataAction,
+						"divide": divide
 					};
 					service.send(params);
 				}

@@ -300,11 +300,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 				previousYear.dataProvider = previousYearCol;
 				previousYear.selectedIndex = previousYearCol.length-1;
 				currentYear.selectedIndex = currentYearCol.length-1;
-				
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+
 				var params:Object = {
 					"format" : "xml",
 					"typeofaid" : "true",
-					"action": dataAction
+					"action": dataAction,
+					"divide": divide
 				};
 				params["previousYear"] = previousYear.selectedItem.data;
 				params["currentYear"] = currentYear.selectedItem.data;

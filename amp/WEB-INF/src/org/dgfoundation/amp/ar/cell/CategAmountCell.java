@@ -384,14 +384,14 @@ public Cell filter(Cell metaCell,Set ids) {
 			return false;
 		//we translate Bilateral ssc commitments = actual commitments
 		// triangular ssc commitments = planned commitments
-		if (internal.equals(m) ||
+		if (internal.equals(m) || (m.getCategory().equals("Funding Type") && (
 		  (((FundingTypeSortedString)internal.getValue()).string.equals("Bilateral SSC Commitments") &&
 		  ((FundingTypeSortedString)m.getValue()).string.equals("Actual Commitments")) ||
 		  (((FundingTypeSortedString)internal.getValue()).string.equals("Triangular SSC Commitments") &&
-				  ((FundingTypeSortedString)m.getValue()).string.equals("Planned Commitments")) )
-			return true;
+				  ((FundingTypeSortedString)m.getValue()).string.equals("Planned Commitments")))))
+            return true;
 		else
-			return false;
+            return false;
 	}
 	
 

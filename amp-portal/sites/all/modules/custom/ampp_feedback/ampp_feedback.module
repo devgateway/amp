@@ -94,7 +94,7 @@ function ampp_feedback_form_alter(&$form, &$form_state, $form_id) {
         if (count(taxonomy_get_tree($vocabulary->vid))) {
           // hide term when empty
           $form['institutions'] =  array(
-            '#title' => $vocabulary->name,
+            '#title' => t($vocabulary->name),
             '#type' => 'hierarchical_select',
             '#required' => TRUE,
             '#size' => 3,

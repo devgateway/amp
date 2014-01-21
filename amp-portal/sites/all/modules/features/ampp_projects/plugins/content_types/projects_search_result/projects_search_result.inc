@@ -10,7 +10,7 @@ $plugin = array(
   'single' => TRUE,
   'title' => t('Projects Search Result'),
   'description' => t('Projects Search Result'),
-  'category' => array(t('Widgets')),
+  'category' => array(t('AMPP Widgets')),
   'defaults' => array('name_flag'=>1,
     'name_label' => t('Project title'),
     'amp_org_name_agg_flag'=>1,

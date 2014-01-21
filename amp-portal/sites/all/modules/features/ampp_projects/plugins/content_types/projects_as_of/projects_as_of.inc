@@ -7,7 +7,7 @@ $plugin = array(
   'single' => TRUE,
   'title' => t('Projects data is as of'),
   'description' => t('Returns date of projects data'),
-  'category' => array(t('Widgets')),
+  'category' => array(t('AMPP Widgets')),
   'hook theme' => 'ampp_projects_projects_as_of_content_type_theme',
 );
 

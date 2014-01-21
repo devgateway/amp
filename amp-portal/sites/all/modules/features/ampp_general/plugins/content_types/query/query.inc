@@ -2,7 +2,7 @@
 
 $plugin = array(
     'single' => TRUE,
-    'title' => t('Query'),
+    'title' => t('Custom query'),
     'description' => t('Allows constructing SELECT SQL queries of your choice. It is limited but still be very careful.'),
     'category' => array(t('AMPP Widgets')),
     'defaults' => array(

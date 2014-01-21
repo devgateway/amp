@@ -7,7 +7,7 @@ $plugin = array(
   'single' => TRUE,
   'title' => t('Search Result Totals'),
   'description' => t('Search Result Totals'),
-  'category' => array(t('Widgets')),
+  'category' => array(t('AMPP Widgets')),
 );
 
 

@@ -655,10 +655,12 @@ function ampp_get_donors_from_url(){
     
     $query = db_select('amp_organisation', 'donor');
     $query->fields('donor', array('amp_org_id', 'acronym'));
-    $query->addExpression($translate_field, 'name');
-    
-    $query->condition('donor.amp_org_id', explode(',', $donors_ids), 'IN');
-    
+    $query->addExpression($translate_field, 'name'); 
+    if (variable_get('amp_show_only_donors', 0)) {
+      $query->innerJoin('amp_funding', 'f', 'f.amp_donor_org_id = donor.amp_org_id');
+      $query->innerJoin('amp_activity', 'a', 'a.amp_activity_id = f.amp_activity_id');
+    }
+    $query->condition('donor.amp_org_id', explode(',', $donors_ids), 'IN');    
     $or_statement = db_or()->condition('donor.deleted', 'true', '<>')->condition('donor.deleted', NULL, 'is');
     $query->condition($or_statement);
 
@@ -1593,6 +1595,10 @@ function ampp_search_donors() {
   $query->fields('orgs', array('amp_org_id', 'acronym'));
   $query->addExpression($translate_field, 'name');
   $query->condition(db_or()->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')')->where('unaccent(orgs.acronym) ILIKE unaccent(\'%' . db_like($string) . '%\')'));
+  if (variable_get('amp_show_only_donors', 0)) {
+    $query->innerJoin('amp_funding', 'f', 'f.amp_donor_org_id = orgs.amp_org_id');
+    $query->innerJoin('amp_activity', 'a', 'a.amp_activity_id = f.amp_activity_id');
+  }
   $query->condition(db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is'));
   $query->groupBy('orgs.amp_org_id');
   $query->groupBy($translate_field);
@@ -2103,8 +2109,11 @@ function ampp_projects_get_donor($id) {
   
   $query = db_select('amp_organisation', 'orgs')->fields('orgs', array('amp_org_id', 'acronym'));
   $query->addExpression($translate_field, 'name');
+  if (variable_get('amp_show_only_donors', 0)) {
+    $query->innerJoin('amp_funding', 'f', 'f.amp_donor_org_id = orgs.amp_org_id');
+    $query->innerJoin('amp_activity', 'a', 'a.amp_activity_id = f.amp_activity_id');
+  }
   $query->condition('orgs.amp_org_id', intval($id), '=');
-  
   $or_statement = db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is');
   $query->condition($or_statement);
   
@@ -2131,10 +2140,13 @@ function ampp_projects_get_donors() {
   global $user;
   $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', orgs.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', '" . $language->language . "')"; 
   
-  $query = db_select('amp_organisation', 'orgs')->fields('orgs', array('amp_org_id', 'acronym'));
+  $query = db_select('amp_organisation', 'orgs');
+  $query->fields('orgs', array('amp_org_id', 'acronym'));
   $query->addExpression($translate_field, 'name');
-  $hierarchy = array();
-  
+  if (variable_get('amp_show_only_donors', 0)) {
+    $query->innerJoin('amp_funding', 'f', 'f.amp_donor_org_id = orgs.amp_org_id');
+    $query->innerJoin('amp_activity', 'a', 'a.amp_activity_id = f.amp_activity_id');
+  } 
   $or_statement = db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is');
   $query->condition($or_statement);
   $query->orderBy('name', 'ASC');
@@ -2142,7 +2154,8 @@ function ampp_projects_get_donors() {
   if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_projects_get_donors', dpq($query, 1));
   
   $result = $query->execute();
-	
+  
+  $hierarchy = array();
   foreach ($result as $record) {
 	$hierarchy[$record->amp_org_id] = array('label' => $record->name);
   }

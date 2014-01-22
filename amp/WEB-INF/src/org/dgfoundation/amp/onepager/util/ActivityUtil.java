@@ -58,10 +58,8 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.ActivityVersionUtil;
-import org.digijava.module.aim.util.ContactInfoUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
@@ -149,7 +147,10 @@ public class ActivityUtil {
 		a.setDraft(draft);
 
 		a.setDeleted(false);
-        ContentTranslationUtil.cloneTranslations(a, am.getTranslationHashMap().values());
+
+        if ("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+            ContentTranslationUtil.cloneTranslations(a, am.getTranslationHashMap().values());
+
 		//is versioning activated?
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
 		if (createNewVersion){

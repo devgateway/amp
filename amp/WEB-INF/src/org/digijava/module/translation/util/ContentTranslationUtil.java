@@ -14,6 +14,8 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.Versionable;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.Type;
@@ -144,6 +146,10 @@ public class ContentTranslationUtil {
      */
     @SuppressWarnings("unchecked")
     public static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations){
+        //check if multilingual is enabled
+        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+            return;
+
         Hibernate.initialize(obj);
         String objClass = getObjectClass(obj);
         String currentLocale = TLSUtils.getEffectiveLangCode();

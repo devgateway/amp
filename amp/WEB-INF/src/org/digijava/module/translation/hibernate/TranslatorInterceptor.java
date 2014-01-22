@@ -3,6 +3,8 @@ package org.digijava.module.translation.hibernate;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.FieldTranslationPack;
 import org.digijava.module.translation.util.TranslationStore;
@@ -27,7 +29,10 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
-    	//existing entities
+        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+            return false;
+
+        //existing entities
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
         	logger.debug("Current language in TLS Util:" + TLSUtils.getEffectiveLangCode());
             logger.debug("flushDirty versionable: " + entity);
@@ -46,6 +51,9 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+            return false;
+
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
         	logger.debug("Current language in TLS Util:" + TLSUtils.getEffectiveLangCode());
         	logger.debug("onLoad: " + entity);
@@ -61,6 +69,9 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public void postFlush(Iterator entities) {
+        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+            return;
+
     	// try here to update the translations
     	while (entities.hasNext()) {
 			Object entity = entities.next();
@@ -88,6 +99,9 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+            return;
+
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
             Long objectId = (Long) id;
             //delete translations
@@ -109,6 +123,9 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+            return false;
+
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
             boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, null, state, propertyNames);
             ContentTranslationUtil.evictEntityFromCache(entity);

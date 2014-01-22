@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.onepager.components.fields;
+    package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -22,6 +22,8 @@ import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -165,6 +167,9 @@ public class TranslationDecorator extends Panel {
     }
 
     private static boolean isTranslatable(IModel<?> model){
+        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+            return false; //Multilingual disabled
+
         if (model instanceof TranslationDecoratorModel)
             return true;
         if (model instanceof PropertyModel){

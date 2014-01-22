@@ -104,7 +104,11 @@ public class PublicViewColumnsUtil
 				logger.error("error while doing maintenance on the view!", e);
 			}
 		}
-		createTableCache(conn, "amp_activity_group", "cached_amp_activity_group");// recreates "cached_amp_activity_group" table, which is not created by using a view, so it was missed at the refresh cached job
+		createCachedAmpActivityGroupTable(conn); //recreates "cached_amp_activity_group" table, which is not created by using a view, so it was missed at the refresh cached job
+	}
+	
+	public static void createCachedAmpActivityGroupTable(java.sql.Connection conn) {
+		createTableCache(conn, "amp_activity_group", "cached_amp_activity_group");
 	}
 	
 	private static void doColumnMaintenance(java.sql.Connection conn, String viewName, CachedTableState viewState, boolean updateData)
@@ -166,7 +170,7 @@ public class PublicViewColumnsUtil
 		cacheName = cacheName.toLowerCase();
 		if (cacheName.equals("cached_amp_activity_group") && SQLUtils.tableExists(cacheName))
 		{
-			SQLUtils.executeQuery(conn, String.format("TRUNCATE %s", cacheName));
+			SQLUtils.executeQuery(conn, String.format("DELETE FROM %s", cacheName));
 			SQLUtils.executeQuery(conn, String.format("INSERT INTO %s SELECT * FROM %s WHERE amp_activity_last_version_id IS NOT NULL", cacheName, viewName));
 		}
 		else

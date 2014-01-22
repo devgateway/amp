@@ -2,6 +2,7 @@ package org.digijava.module.visualization.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -59,11 +61,14 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.mondrian.job.PublicViewColumnsUtil;
 import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.helper.EntityRelatedListHelper;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.GregorianChronology;
@@ -249,6 +254,44 @@ public class DashboardUtil {
 	    return result;
 	}
 	
+	/**
+	 * If amp_activity_group and cached_amp_activity_group doesnt have the same number of rows then recreate the cache table.
+	 */
+	private static void checkAmpActivityGroupCachedIntegrity() {		
+		java.sql.Connection connection = null;
+		boolean autoCommit = false;
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			Query query = session.createSQLQuery("SELECT COUNT(*) FROM amp_activity_group WHERE amp_activity_last_version_id IS NOT NULL");
+			List original = query.list();
+			query = session.createSQLQuery("SELECT COUNT(*) FROM cached_amp_activity_group");
+			List cached = query.list();
+			if(!original.get(0).equals(cached.get(0))) {
+				logger.warn("Updating cached_amp_activity_group");				
+				connection = PersistenceManager.getJdbcConnection();
+				autoCommit = connection.getAutoCommit();
+				connection.setAutoCommit(false);
+				connection.setAutoCommit(true);
+				PublicViewColumnsUtil.createCachedAmpActivityGroupTable(connection);
+				connection.setAutoCommit(false);
+			}							
+		} catch (Exception e) {
+			logger.error(
+					"Error updating table cached_amp_activity_group",
+					e);
+		} finally {
+			if(connection != null) {
+				try {
+					connection.setAutoCommit(autoCommit);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				PersistenceManager.closeQuietly(connection);
+			}
+		}
+	}
+	
 	public static void getSummaryAndRankInformation (VisualizationForm form, boolean donorFundingOnly, HttpServletRequest request) throws DgException{
 		String trnStep1, trnStep2, trnStep3, trnStep4, trnStep5, trnStep6, trnStep7, trnStep8, trnStep9;
 		trnStep1 = trnStep2 = trnStep3 = trnStep4 = trnStep5 = trnStep6 = trnStep7 = trnStep8 = trnStep9 = "";
@@ -267,6 +310,9 @@ public class DashboardUtil {
 			logger.error("Couldn't retrieve translation for progress steps");
 		}
 		
+		// AMP-16750 and AMP-16835: Sometimes table CACHED_AMP_ACTIVITY_GROUP(AmpActivityGroupCached) has out-of-date data, generating problems mostly with
+		// "Management" dashboards. Here we will update the table if needed before the first dashboard query.
+		checkAmpActivityGroupCachedIntegrity();
 		
 		DashboardFilter filter = form.getFilter();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();

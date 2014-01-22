@@ -4,7 +4,7 @@ $plugin = array(
     'single' => TRUE,
     'title' => t('News list'),
     'description' => t('News list'),
-    'category' => array(t('Widgets')),
+    'category' => array(t('AMPP Widgets')),
     'defaults' => array(),
     'render callback' => 'ampp_projects_news_list_render'
 );

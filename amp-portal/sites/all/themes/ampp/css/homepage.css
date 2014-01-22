@@ -810,12 +810,12 @@ div.token-input-dropdown,div.token-input-dropdown-facebook {max-height:300px;ove
 #ampp-search-form .form-type-checkbox {float: left; width: 100%; margin: 0 0 5px}
 #ampp-search-form .form-submit {margin-left: 0}
 .pane-ampp-projects-ampp-search-result-totals .total-amounts.view-projects-search-result, .pane-search-result-totals .total-amounts.view-projects-search-result {float: right; margin-top: 0}
-.pane-projects-as-of {position: absolute; right: 0; margin-top: -25px}
-
+.pane-projects-as-of {right: 0; margin-top: 0px}
+div.pane-search-result-totals, div.pane-projects-as-of {clear:both; float:right;}
 .view-top-activities-by-disbursment table th, .view-top-activities-by-disbursment table td {font-size: 10px; padding: 10px; vertical-align: top; background: #ffffff}
 .view-top-activities-by-disbursment table th {background: #dddddd}
 .view-top-activities-by-disbursment table {margin: 20px 0}
-
+.commitment-disbursement td.commitment, .commitment-disbursement td.disbursement {text-align:right;}
 .rounded-corner.pane .panel-pane.pane-projects-search-form .pane-content {padding: 0 0 20px 20px}
 .page-homepage #col2 .ampphome-news .pane-content {padding: 0 0 20px}
 .page-homepage #ampp-search-form ul li input[type=text] {border: 0; margin-left: 0px}
@@ -825,7 +825,7 @@ div.token-input-dropdown,div.token-input-dropdown-facebook {max-height:300px;ove
 
 .page-homepage .feedback-form .form-item-captcha-response {margin-left: 5px;}
 ul.token-input-list-facebook li input {background-color: white; border: 0 none; margin: 2px 0; padding: 3px 8px; width: 100px;}
-
+.dgone-column-inner div.panel-separator {clear:both; padding-top:10px;}
 li.token-input-token-facebook {background-color: #EFF2F7; border: 1px solid #CCD5E4; border-radius: 5px 5px 5px 5px; color: #000000; cursor: default; float: left; font-size: 11px; height: auto !important; margin: 3px; overflow: hidden; padding: 1px 3px; white-space: normal;}
 li.token-input-selected-token-facebook {background-color: #5670A6; border: 1px solid #3B5998; color: #FFFFFF;}
 div.token-input-dropdown-facebook {background-color: #FFFFFF; border-bottom: 1px solid #CCCCCC; border-left: 1px solid #CCCCCC; border-right: 1px solid #CCCCCC; cursor: default; font-family: Verdana; font-size: 11px; overflow: hidden; position: absolute; width: auto; z-index: 1;}

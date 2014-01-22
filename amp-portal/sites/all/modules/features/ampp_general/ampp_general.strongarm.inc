@@ -83,63 +83,6 @@ function ampp_general_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'language_negotiation_language';
-  $strongarm->value = array(
-    'locale-url' => array(
-      'callbacks' => array(
-        'language' => 'locale_language_from_url',
-        'switcher' => 'locale_language_switcher_url',
-        'url_rewrite' => 'locale_language_url_rewrite_url',
-      ),
-      'file' => 'includes/locale.inc',
-    ),
-    'language-default' => array(
-      'callbacks' => array(
-        'language' => 'language_from_default',
-      ),
-    ),
-  );
-  $export['language_negotiation_language'] = $strongarm;
-
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'language_negotiation_language_content';
-  $strongarm->value = array(
-    'locale-interface' => array(
-      'callbacks' => array(
-        'language' => 'locale_language_from_interface',
-      ),
-      'file' => 'includes/locale.inc',
-    ),
-  );
-  $export['language_negotiation_language_content'] = $strongarm;
-
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'language_negotiation_language_url';
-  $strongarm->value = array(
-    'locale-url' => array(
-      'callbacks' => array(
-        'language' => 'locale_language_from_url',
-        'switcher' => 'locale_language_switcher_url',
-        'url_rewrite' => 'locale_language_url_rewrite_url',
-      ),
-      'file' => 'includes/locale.inc',
-    ),
-    'locale-url-fallback' => array(
-      'callbacks' => array(
-        'language' => 'locale_language_url_fallback',
-      ),
-      'file' => 'includes/locale.inc',
-    ),
-  );
-  $export['language_negotiation_language_url'] = $strongarm;
-
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'nodequeue_autocomplete_limit';
   $strongarm->value = '10';
   $export['nodequeue_autocomplete_limit'] = $strongarm;
@@ -320,6 +263,8 @@ function ampp_general_strongarm() {
     'token-user:roles' => 0,
     'token-user:role-names' => 0,
     'token-user:role-ids' => 0,
+    'token-user:piwik-role-names' => 0,
+    'token-user:piwik-role-ids' => 0,
     'token-user:uid' => 0,
     'token-user:name' => 0,
     'token-user:mail' => 0,
@@ -388,6 +333,8 @@ function ampp_general_strongarm() {
     'token-date:custom' => 0,
     'token-date:since' => 0,
     'token-date:raw' => 0,
+    'token-date:ampp_cal' => 0,
+    'token-variable:piwik_site_id' => 0,
     'token-variable:site_name' => 0,
     'token-variable:site_mail' => 0,
     'token-variable:site_slogan' => 0,
@@ -425,6 +372,7 @@ function ampp_general_strongarm() {
     'views-news' => 0,
     'views-projects_search_result' => 0,
     'feedback-feedback' => 'feedback-feedback',
+    'query-query' => 'query-query',
     'news_list-news_list' => 'news_list-news_list',
     'recent_news-recent_news' => 'recent_news-recent_news',
     'top_activities_by_disbursement-top_activities_by_disbursement' => 'top_activities_by_disbursement-top_activities_by_disbursement',
@@ -888,138 +836,6 @@ user/*/*';
   $strongarm->name = 'site_404';
   $strongarm->value = 'customerror/404';
   $export['site_404'] = $strongarm;
-
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'theme_ampp_admin_settings';
-  $strongarm->value = array(
-    'toggle_logo' => 1,
-    'default_logo' => 1,
-    'logo_path' => 'public://honda_04.jpg',
-    'logo_upload' => '',
-    'default_footer_logo' => 0,
-    'footer_logo_path' => 'sites/default/files/honda_04.jpg',
-    'footer_logo_upload' => '',
-    'default_blocks_logo' => 0,
-    'blocks_logo_path' => 'sites/default/files/honda_04.jpg',
-    'blocks_logo_upload' => '',
-  );
-  $export['theme_ampp_admin_settings'] = $strongarm;
-
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
-  $strongarm->name = 'theme_ampp_settings';
-  $strongarm->value = array(
-    'toggle_logo' => 1,
-    'toggle_favicon' => 1,
-    'toggle_amp_menu' => 1,
-    'toggle_dg_footer' => 1,
-    'toggle_share_links' => 1,
-    'default_logo' => 1,
-    'logo_path' => '',
-    'logo_upload' => '',
-    'default_favicon' => 1,
-    'favicon_path' => '',
-    'favicon_upload' => '',
-    'default_footer_logo' => 1,
-    'footer_logo_path' => 'sites/all/themes/ampp/footer-logo.png',
-    'footer_logo_upload' => '',
-    'default_blocks_logo' => 1,
-    'blocks_logo_path' => 'sites/all/themes/ampp/blocks-logo.png',
-    'blocks_logo_upload' => '',
-    'no_bg_image' => 0,
-    'bg_image_path' => 'public://laos.jpg',
-    'bg_image_upload' => '',
-    'scheme' => 'default',
-    'palette' => array(
-      'site_title' => '#fefefe',
-      'site_slogan' => '#fefefd',
-      'top_header_bg' => '#4c6b7d',
-      'top_header_menu_font' => '#fefefc',
-      'amp_menu_font' => '#376093',
-      'amp_menu_bg' => '#f2f2f2',
-      'block_header_bg' => '#4c6b7c',
-      'link' => '#376092',
-      'form_bg' => '#f2f2f3',
-      'footer_bg' => '#8b8b8b',
-      'top_header_login_button_top' => '#ffe400',
-      'top_header_login_button_bottom' => '#ff8500',
-    ),
-    'theme' => 'ampp',
-    'info' => array(
-      'fields' => array(
-        'site_title' => 'Site name',
-        'site_slogan' => 'Site slogan',
-        'top_header_bg' => 'Top header background',
-        'top_header_login_button_top' => 'Top header Login button top color',
-        'top_header_login_button_bottom' => 'Top header Login button bottom color',
-        'top_header_menu_font' => 'Top header menu font',
-        'amp_menu_font' => 'AMP menu font',
-        'amp_menu_bg' => 'AMP menu background',
-        'block_header_bg' => 'Block header background',
-        'link' => 'Links',
-        'form_bg' => 'Search and Quick contact forms background',
-        'footer_bg' => 'Footer background',
-      ),
-      'schemes' => array(
-        'default' => array(
-          'title' => 'AMPP',
-          'colors' => array(
-            'site_title' => '#fefefe',
-            'site_slogan' => '#fefefd',
-            'top_header_bg' => '#4c6b7d',
-            'top_header_menu_font' => '#fefefc',
-            'top_header_login_button_top' => '#ffe400',
-            'top_header_login_button_bottom' => '#ff8500',
-            'amp_menu_font' => '#376093',
-            'amp_menu_bg' => '#f2f2f2',
-            'block_header_bg' => '#4c6b7c',
-            'link' => '#376092',
-            'form_bg' => '#f2f2f3',
-            'footer_bg' => '#8b8b8b',
-          ),
-        ),
-        'blue' => array(
-          'title' => 'AMPP Blue',
-          'colors' => array(
-            'site_title' => '#fefefe',
-            'site_slogan' => '#fefefd',
-            'top_header_bg' => '#00699d',
-            'top_header_menu_font' => '#fefefc',
-            'amp_menu_font' => '#376093',
-            'amp_menu_bg' => '#f2f2f2',
-            'block_header_bg' => '#263c65',
-            'link' => '#376092',
-            'form_bg' => '#f3f9fe',
-            'footer_bg' => '#0070a8',
-          ),
-        ),
-        '' => array(
-          'title' => 'Custom',
-          'colors' => array(),
-        ),
-      ),
-      'css' => array(
-        0 => 'css/color.css',
-      ),
-      'copy' => array(
-        0 => 'logo.png',
-      ),
-      'gradients' => array(
-        0 => array(),
-      ),
-      'fill' => array(),
-      'slices' => array(),
-      'blend_target' => '#ffffff',
-      'preview_css' => 'color/preview.css',
-      'preview_js' => 'color/preview.js',
-      'preview_html' => 'color/preview.html',
-      'base_image' => 'color/base.png',
-    ),
-  );
-  $export['theme_ampp_settings'] = $strongarm;
 
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

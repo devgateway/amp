@@ -1655,7 +1655,7 @@ function ampp_search_regions() {
   if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_regions', $query);
   
   foreach ($result as $record) { 
-    $parents_arr = get_immidiate_parent_Locations($record->id);
+    $parents_arr = get_immidiate_parent_locations($record->id);
     if (!empty($parents_arr)) {
       $name = $parents_arr[0]['name'] . ' -> ' . $record->location_name;
     } else {
@@ -1856,7 +1856,7 @@ function getParentLocationIds($childLocationId) {
 /*
  *
 */
-function get_immidiate_parent_Locations($childLocationId) {
+function get_immidiate_parent_locations($childLocationId) {
 
   global $amp_db_exists;
   global $language;
@@ -1868,11 +1868,12 @@ function get_immidiate_parent_Locations($childLocationId) {
 
   db_set_active("amp_projects");
 
-  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";
-    
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'parent_name', names.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";
+  
   $query = db_select('amp_category_value_location', 'loc');
   $query->fields('loc', array('parent_location'));
-  $query->addExpression($translate_field, 'name');
+  $query->addExpression($translate_field, 'parent_name');
+  $query->join('amp_category_value_location', 'names', 'names.id = loc.parent_location');
   $query->condition('loc.id', $childLocationId, '=');
   $query->isNotNull('loc.parent_location');
        
@@ -1880,8 +1881,8 @@ function get_immidiate_parent_Locations($childLocationId) {
     
   $result = $query->execute();
   $parents = array();
-  foreach ($result as $record) {
-    $parents[] = array('id' => $record->parent_location, 'name' => $record->name);
+  foreach ($result as $record) { watchdog('AAA', $childLocationId . ' -> ' . $record->parent_location);
+    $parents[] = array('id' => $record->parent_location, 'name' => $record->parent_name);
   }
      
   db_set_active();

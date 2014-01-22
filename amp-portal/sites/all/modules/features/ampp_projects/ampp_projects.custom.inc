@@ -787,17 +787,17 @@ function get_total_amount($type){
   $sectors_array = Array();
 		
   $sectors_ids = empty($_GET["sectors"]) ? '' : $_GET["sectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
+  if ($sectors_ids != 'all' and !empty($sectors_ids)){
 	$sectors_array = explode(",", $sectors_ids);
   }
 
   $sectors_ids = empty($_GET["primarysectors"]) ? '' : $_GET["primarysectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
+  if ($sectors_ids != 'all' and !empty($sectors_ids)){
 	$sectors_array = array_merge($sectors_array, explode(",",$sectors_ids));
   }
 
   $sectors_ids = empty($_GET["secondarysectors"]) ? '' : $_GET["secondarysectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)) {
+  if ($sectors_ids != 'all' and !empty($sectors_ids)) {
   	$sectors_array = array_merge($sectors_array, explode(",",$sectors_ids));
   }
   
@@ -820,7 +820,7 @@ function get_total_amount($type){
   $query = db_select('amp_funding_detail', 'fd');
   
   $query->condition('fd.transaction_type', $type, "=")->addExpression('SUM(fd.transaction_amount / getexchange(cur.currency_code, fd.transaction_date ))', 'transaction_amount');
-  if($donors_ids != 'all' and !empty($donor_ids_array[0])){
+  if ($donors_ids != 'all' and !empty($donor_ids_array[0])){
       $query->condition('f.amp_donor_org_id', $donor_ids_array, "IN");
   }
   $query->addJoin('LEFT', 'amp_funding', 'f', 'f.amp_funding_id = fd.amp_funding_id');
@@ -840,7 +840,7 @@ function get_total_amount($type){
       
   $query->where($snippet);
   
-  if($sectors_ids != 'all' and !empty($sector_ids_array[0])){
+  if ($sectors_ids != 'all' and !empty($sector_ids_array[0])){
     foreach ($sector_ids_array as $sector_id){
       $sector_ids_array = array_merge($sector_ids_array, getChildSectorsIds($sector_id));
     }
@@ -848,7 +848,7 @@ function get_total_amount($type){
     $query->condition('sector.amp_sector_id', $sector_ids_array, "IN");
   }
   
-  if($programs_ids != 'all' and !empty($program_ids_array[0])){
+  if ($programs_ids != 'all' and !empty($program_ids_array[0])){
     foreach ($program_ids_array as $program_id){
       $program_ids_array = array_merge($program_ids_array, getChildProgramsIds($program_id));
     }
@@ -857,7 +857,7 @@ function get_total_amount($type){
   }
   
   $regionalprojects = $_GET["showregionalprojects"];
-  if($regionalprojects == 1) {
+  if ($regionalprojects == 1) {
   	   if($locations_ids != 'all' && !empty($location_ids_array[0])){
   	   	   	$tmp_location_ids_array = $location_ids_array;
 		    foreach ($tmp_location_ids_array as $id){
@@ -866,7 +866,7 @@ function get_total_amount($type){
   	   }
   }
   
-  if($locations_ids != 'all' and !empty($location_ids_array[0])){
+  if ($locations_ids != 'all' and !empty($location_ids_array[0])){
     $query->addJoin('LEFT', 'amp_activity_location', 'al', 'al.amp_activity_id = activity.amp_activity_id');
     $query->addJoin('LEFT', 'amp_location', 'am_loc', 'am_loc.amp_location_id=al.amp_location_id');
     $query->condition('am_loc.location_id', $location_ids_array, "IN");
@@ -874,21 +874,21 @@ function get_total_amount($type){
   
   $budgetflag = $_GET["budget"];
 
-  if(!empty($budgetflag) && $budgetflag != "all" ) {	 
+  if (!empty($budgetflag) && $budgetflag != "all" ) {	 
 	$catvalue = intval( $budgetflag );
 	$query->addJoin('INNER', 'amp_activities_categoryvalues', 'acv', 'acv.amp_activity_id = activity.amp_activity_id');
 	$query->condition('acv.amp_categoryvalue_id', $catvalue, '=');
   }
   
-  if($keywords !== 'all' && !empty($keywords)) {
-  	$query->condition('unaccent(activity.name)', 'unaccent(\'%' . db_like($keywords) . '%\')', 'ILIKE');
+  if ($keywords !== 'all' && !empty($keywords)) {
+    $query->where('unaccent(activity.name) ILIKE unaccent(\'%' . db_like($string) . '%\')');
   }
 
   //condition for start and end date period
-  if(!empty($period_start) && $period_start != "all" ) {
+  if (!empty($period_start) && $period_start != "all" ) {
     $query->condition('activity.actual_start_date', $period_start, '>=');
   }
-  if(!empty($period_end) && $period_end != "all" ) {
+  if (!empty($period_end) && $period_end != "all" ) {
     $query->condition('activity.actual_completion_date', $period_end, '<=');
   }
   

@@ -177,8 +177,8 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
         '#weight' => 0,
   );
 
-  hide($form['override_title']);
-  hide($form['override_title_text']);
+  //hide($form['override_title']);
+  //hide($form['override_title_text']);
   hide($form['override_title_markup']);
   
   // Project title

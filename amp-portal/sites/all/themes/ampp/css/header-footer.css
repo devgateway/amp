@@ -736,10 +736,9 @@ noindex:-o-prefocus, .login a { /* Opera hack for rounded corners on*/
   border-radius: 10px 10px 10px 10px; 
 } 
 
-
 #top-nav {
-  float: right;
-  width: 500px;
+  //float: right;
+  //width: 500px;
 }
 
 h2.slogan {
@@ -779,10 +778,14 @@ h2.slogan {
   font-size: 11px;
 }
 
+div.logo-block {
+  width:440px;
+}
+
 .logo-block span {
   display: block;
   line-height: 1em;
-  width:430px;
+  //width:430px;
 }
 
 #ampp_logo_anchor {

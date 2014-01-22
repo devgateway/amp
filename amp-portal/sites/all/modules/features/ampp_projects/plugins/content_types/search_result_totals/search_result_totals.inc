@@ -7,7 +7,7 @@ $plugin = array(
   'single' => TRUE,
   'title' => t('Search Result Totals'),
   'description' => t('Search Result Totals'),
-  'category' => array(t('Widgets')),
+  'category' => array(t('AMPP Widgets')),
 );
 
 
@@ -30,15 +30,15 @@ function ampp_projects_search_result_totals_content_type_render($subtype, $conf,
 	    $amount_disbursement = empty($amount_disbursement) ? "0" : number_format(intval($amount_disbursement));
 	}
 	$html = '<div class="total-amounts view-projects-search-result">';
-	$html .= '<table class="views-table"><thead><tr>';
+	$html .= '<table class="views-table commitment-disbursement"><thead><tr>';
 	$html .= '<th class="views-field"></th>';
 	$html .= '<th  class="views-field">'.t('Commitment amount').' ('.variable_get('currency_code').")".'</th>';
 	$html .= '<th class="views-field">'.t('Disbursement amount').' ('.variable_get('currency_code').")".'</th>';
 	$html .= '</tr></thead>';
 
 	$html .= '<td>'.t("Total").':'.'</td>';
-	$html .= '<td class="views-field">'.$amount_commitment.'</td>';
-	$html .= '<td class="views-field">'.$amount_disbursement.'</td>';
+	$html .= '<td class="views-field commitment">' . $amount_commitment . '</td>';
+	$html .= '<td class="views-field disbursement">' . $amount_disbursement . '</td>';
 	$html .= '</tr></thead>';
 
 	$html .= '</table>';

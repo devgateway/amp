@@ -1881,7 +1881,7 @@ function get_immidiate_parent_locations($childLocationId) {
     
   $result = $query->execute();
   $parents = array();
-  foreach ($result as $record) { watchdog('AAA', $childLocationId . ' -> ' . $record->parent_location);
+  foreach ($result as $record) {
     $parents[] = array('id' => $record->parent_location, 'name' => $record->parent_name);
   }
      

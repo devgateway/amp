@@ -896,7 +896,7 @@ public class DashboardUtil {
 		return false;
 	}
 	
-	public static void initializeFilter(DashboardFilter filter, HttpServletRequest request) {
+	public static void initializeFilter(DashboardFilter filter, HttpServletRequest request, AmpDashboard dashboard) {
 		
 		String publicView = request.getParameter("publicView") != null ? (String) request.getParameter("publicView") : "false";
 		if (publicView.equals("true")) {
@@ -966,24 +966,52 @@ public class DashboardUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if (filter.getTransactionType() == -1 && filter.getTransactionTypeFilter() == -1 && filter.getTransactionTypeQuickFilter() == -1) {
+			if(dashboard.getTransactionTypeFilter() != null && dashboard.getTransactionTypeFilter() > -1) {
+				filter.setTransactionType(dashboard.getTransactionTypeFilter());
+				filter.setTransactionTypeFilter(dashboard.getTransactionTypeFilter());
+				filter.setTransactionTypeQuickFilter(dashboard.getTransactionTypeFilter());
+			} else {
+				filter.setTransactionType(1);
+				filter.setTransactionTypeFilter(1);
+				filter.setTransactionTypeQuickFilter(1);
+			}
+		}
 
 		if (filter.getStartYear() == null) {
 			Long year = null;
-			try {
-				year = Long.parseLong(FeaturesUtil
-						.getGlobalSettingValue("Current Fiscal Year"));
-			} catch (NumberFormatException ex) {
-				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
+			Long minYear = null;
+			if(dashboard.getMaxYearFilter() != null && dashboard.getMaxYearFilter() > 0 
+					&& dashboard.getMinYearFilter() != null && dashboard.getMinYearFilter() > 0){
+				filter.setDefaultStartYear(dashboard.getMinYearFilter().longValue());
+				filter.setStartYear(dashboard.getMinYearFilter().longValue());
+				filter.setStartYearQuickFilter(dashboard.getMinYearFilter().longValue());
+				filter.setStartYearFilter(dashboard.getMinYearFilter().longValue());
+				filter.setEndYear(dashboard.getMaxYearFilter().longValue());
+				filter.setDefaultEndYear(dashboard.getMaxYearFilter().longValue());
+				filter.setEndYearQuickFilter(dashboard.getMaxYearFilter().longValue());
+				filter.setEndYearFilter(dashboard.getMaxYearFilter().longValue());
+				filter.setYearToCompare(dashboard.getMaxYearFilter().longValue() - 1);
+			} else {
+				try {
+					year = Long.parseLong(FeaturesUtil
+							.getGlobalSettingValue("Current Fiscal Year"));
+					minYear = year - 3;
+				} catch (NumberFormatException ex) {
+					year = new Long(Calendar.getInstance().get(Calendar.YEAR));
+					minYear = year - 3;
+				}
+				filter.setDefaultStartYear(minYear);
+				filter.setStartYear(minYear);
+				filter.setStartYearQuickFilter(minYear);
+				filter.setStartYearFilter(minYear);
+				filter.setEndYear(year);
+				filter.setDefaultEndYear(year);
+				filter.setEndYearQuickFilter(year);
+				filter.setEndYearFilter(year);
+				filter.setYearToCompare(year-1);
 			}
-			filter.setDefaultStartYear(year-3);
-			filter.setStartYear(year-3);
-			filter.setStartYearQuickFilter(year-3);
-			filter.setStartYearFilter(year-3);
-			filter.setEndYear(year);
-			filter.setDefaultEndYear(year);
-			filter.setEndYearQuickFilter(year);
-			filter.setEndYearFilter(year);
-			filter.setYearToCompare(year-1);
 		}
 		filter.setYears(new TreeMap<String, Integer>());
 		int yearFrom = Integer.parseInt(FeaturesUtil

@@ -36,6 +36,9 @@ public class SaveDashboard extends Action {
 		dashboard.setBaseType(dForm.getBaseType());
 		dashboard.setPivot(dForm.getPivot());
 		dashboard.setShowInMenu(dForm.getShowInMenu());
+		dashboard.setMaxYearFilter(dForm.getMaxYearFilter());
+		dashboard.setMinYearFilter(dForm.getMinYearFilter());
+		dashboard.setTransactionTypeFilter(dForm.getTransactionTypeFilter());
 		String graphs = request.getParameter("graphs");
 		String grs[] = graphs.split("_");
 		dForm.setDashGraphList(new ArrayList<AmpDashboardGraph>());

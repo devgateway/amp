@@ -32,6 +32,9 @@ public class AddDashboard extends Action {
 			dForm.setBaseType(dashboard.getBaseType());
 			dForm.setPivot(dashboard.getPivot());
 			dForm.setShowInMenu(dashboard.getShowInMenu());
+			dForm.setMaxYearFilter(dashboard.getMaxYearFilter());
+			dForm.setMinYearFilter(dashboard.getMinYearFilter());
+			dForm.setTransactionTypeFilter(dashboard.getTransactionTypeFilter());
 		}
 		dForm.setGraphList(DbUtil.getAllGraphs());
 		return mapping.findForward("forward");
@@ -46,5 +49,7 @@ public class AddDashboard extends Action {
 		dForm.setGraphList(null);
 		dForm.setBaseType(0);
 		dForm.setPivot(0);
+		dForm.setMaxYearFilter(null);
+		dForm.setMinYearFilter(null);
 	}
 }

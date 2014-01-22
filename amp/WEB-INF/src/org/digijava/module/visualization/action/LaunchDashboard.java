@@ -83,7 +83,7 @@ public class LaunchDashboard extends Action {
 
 
 
-			DashboardUtil.initializeFilter(filter, request);
+			DashboardUtil.initializeFilter(filter, request, dashboard);
 			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 			if (tm==null) {
 				filter.setFromPublicView(true);

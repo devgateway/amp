@@ -237,6 +237,33 @@ function validateData(){
 					</td>
 				</tr>
 				<tr>
+					<td><b><digi:trn>Default Max Year Filter</digi:trn></b>
+						<html:text property="maxYearFilter"/>
+						<span><digi:trn>Both values must be set (and bigger than 0) to be used as default filter.</digi:trn></span>
+					</td>
+				</tr>
+				<tr>
+					<td><b><digi:trn>Default Min Year Filter</digi:trn></b>
+						<html:text property="minYearFilter" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<b><digi:trn>Default Type of Funding Filter</digi:trn></b>
+						<html:select property="transactionTypeFilter">
+							<html:option value="0"><digi:trn>Commitments</digi:trn></html:option>
+							<html:option value="1"><digi:trn>Disbursements</digi:trn></html:option>
+							<feature:display module="Funding" name="Expenditures">
+								<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
+							</feature:display>
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"
+		                                    parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+								<html:option value="3"><digi:trn>MTEF Projections</digi:trn></html:option>
+							</module:display>
+						</html:select>
+				 	</td>
+				</tr>
+				<tr>
 					<td colspan="2">
 						<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 							<tr>

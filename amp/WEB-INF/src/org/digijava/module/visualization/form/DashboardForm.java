@@ -26,6 +26,9 @@ public class DashboardForm extends ActionForm {
 	private int baseType;
 	private int pivot;
 	private Boolean showInMenu;
+	private Integer maxYearFilter;
+	private Integer minYearFilter;
+	private Integer transactionTypeFilter;
 	
 	public String getDashboardName() {
 		return dashboardName;
@@ -86,6 +89,24 @@ public class DashboardForm extends ActionForm {
 	}
 	public void setPivot(int pivot) {
 		this.pivot = pivot;
+	}
+	public Integer getMaxYearFilter() {
+		return maxYearFilter;
+	}
+	public void setMaxYearFilter(Integer maxYearFilter) {
+		this.maxYearFilter = maxYearFilter;
+	}
+	public Integer getMinYearFilter() {
+		return minYearFilter;
+	}
+	public void setMinYearFilter(Integer minYearFilter) {
+		this.minYearFilter = minYearFilter;
+	}
+	public Integer getTransactionTypeFilter() {
+		return transactionTypeFilter;
+	}
+	public void setTransactionTypeFilter(Integer transactionTypeFilter) {
+		this.transactionTypeFilter = transactionTypeFilter;
 	}
 	
 }

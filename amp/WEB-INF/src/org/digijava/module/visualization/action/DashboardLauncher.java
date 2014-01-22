@@ -57,7 +57,7 @@ public class DashboardLauncher extends Action {
 
 		VisualizationForm dForm = (VisualizationForm) form;
 		DashboardFilter filter = new DashboardFilter();
-		DashboardUtil.initializeFilter(filter, request);
+		DashboardUtil.initializeFilter(filter, request, null);
 		dForm.setFilter(filter);
 		HttpSession session = request.getSession();
 	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");

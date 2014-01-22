@@ -78,9 +78,9 @@ public class DashboardFilter {
     private List<AmpCategoryValueLocations> locationsSelected;
    
     private Map<String, Integer> years;
-    private int transactionType = 1;
-    private int transactionTypeQuickFilter = 1;
-    private int transactionTypeFilter = 1;
+    private int transactionType = -1;
+    private int transactionTypeQuickFilter = -1;
+    private int transactionTypeFilter = -1;
     private List<AmpFiscalCalendar> fiscalCalendars;
     private Long fiscalCalendarId;
     private Integer largestProjectNumber;

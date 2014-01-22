@@ -1870,11 +1870,11 @@ function get_immidiate_parent_Locations($childLocationId) {
 
   $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";
     
-  $query = db_select('amp_category_value_location', 'l');
+  $query = db_select('amp_category_value_location', 'loc');
   $query->fields('l', array('parent_location'));
   $query->addExpression($translate_field, 'name');
-  $query->condition('l.id', $childLocationId, '=');
-  $query->isNotNull('l.parent_location');
+  $query->condition('loc.id', $childLocationId, '=');
+  $query->isNotNull('loc.parent_location');
        
   if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_immidiate_parent_Locations', $query);
     

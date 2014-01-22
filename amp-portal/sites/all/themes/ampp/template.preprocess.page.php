@@ -4,10 +4,11 @@
 static $site_domain;
 
 
-function ampp_preprocess_html(&$vars) { 
+function ampp_preprocess_html(&$vars) {
   $vars['is_front'] = 0;
-  if (!isset($_GET['q']) || empty($_GET['q']) || $_GET['q'] == variable_get('site_frontpage', 'node')) {
+  if (drupal_is_front_page() || !isset($_GET['q']) || empty($_GET['q']) || $_GET['q'] == variable_get('site_frontpage', 'node')) {
     $vars['is_front'] = 1; 
+    $vars['classes_array'][] = 'page-homepage';
   }
 }
 

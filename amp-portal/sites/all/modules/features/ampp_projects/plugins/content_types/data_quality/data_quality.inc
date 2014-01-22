@@ -7,7 +7,7 @@ $plugin = array(
   'single' => TRUE,
   'title' => t('Data Quality'),
   'description' => t('Provides donors data quality table'),
-  'category' => array(t('Widgets')),
+  'category' => array(t('AMPP Widgets')),
   'hook theme' => 'ampp_projects_data_quality_content_type_theme',
 );
 

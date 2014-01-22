@@ -27,10 +27,3 @@ function ampp_homepage_views_api() {
     return array("version" => "3.0");
   }
 }
-
-function ampp_homepage_preprocess_html(&$variables) {
-  if(drupal_is_front_page())
-  {
-  	$variables['classes_array'][] = "page-homepage";
-  }
-}

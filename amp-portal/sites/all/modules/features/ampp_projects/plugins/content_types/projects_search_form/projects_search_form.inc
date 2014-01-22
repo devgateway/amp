@@ -9,7 +9,7 @@ $plugin = array(
     'single' => TRUE,
     'title' => t('Projects Search Form'),
     'description' => t('Projects Search Form'),
-    'category' => array(t('Widgets'), -9),
+    'category' => array(t('AMPP Widgets'), -9),
     'defaults' => array('search_path' => 'search',
     					'budget_flag' => 0,
 					    'country_level_projects_flag' => 0,

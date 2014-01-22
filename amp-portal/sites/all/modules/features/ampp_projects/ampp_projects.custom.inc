@@ -693,7 +693,7 @@ function ampp_get_locations_from_url(){
     
     global $language;
     global $user;
-    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', location.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";    
 
     $query = db_select('amp_category_value_location', 'location');
     $query->fields('location', array('id'));

@@ -1479,9 +1479,9 @@ function ampp_search_regions() {
   if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_regions', $query);
   
   foreach ($result as $record) { 
-    $parents_str = get_location_path($record->id);
-    if (!empty($parents_arr)) {
-      $name = $parents_str . ' -> ' . $record->location_name;
+    $parents = get_location_path($record->id);
+    if (!empty($parents)) {
+      $name = $parents . ' -> ' . $record->location_name;
     } else {
       $name = $record->location_name;
     }

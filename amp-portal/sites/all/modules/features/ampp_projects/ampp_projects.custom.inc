@@ -114,7 +114,7 @@ function getOnOffBudgetIDs() {
 /**
  * Implementation of hook_views_data
  */
-function ampp_projects_views_data(){
+function ampp_projects_views_data() {
 
   // ************* Activity  ****************** //
   
@@ -487,7 +487,7 @@ function ampp_projects_views_data(){
  * Sectors JSON array from URL
  * @return multitype:mixed
  */
-function ampp_get_sectors_from_url(){
+function ampp_get_sectors_from_url() {
   global $amp_db_exists;
   if (!$amp_db_exists) return;
 
@@ -521,7 +521,7 @@ function ampp_get_sectors_from_url(){
 /*
  *
  */
-function ampp_get_primarysectors_from_url(){
+function ampp_get_primarysectors_from_url() {
   global $amp_db_exists;
   if (!$amp_db_exists) return;
 
@@ -555,7 +555,7 @@ function ampp_get_primarysectors_from_url(){
 /*
  *
  */
-function ampp_get_secondarysectors_from_url(){
+function ampp_get_secondarysectors_from_url() {
   global $amp_db_exists;
   if (!$amp_db_exists) return;
 
@@ -589,7 +589,7 @@ function ampp_get_secondarysectors_from_url(){
 /*
  *
  */
-function ampp_get_programs_from_url(){
+function ampp_get_programs_from_url() {
   global $amp_db_exists;
   if (!$amp_db_exists) return;
 
@@ -637,7 +637,7 @@ function ampp_get_keywords_from_url($source_arg = TRUE) {
  * Donors JSON array from URL
  * @return multitype:mixed
  */
-function ampp_get_donors_from_url(){
+function ampp_get_donors_from_url() {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -682,7 +682,7 @@ function ampp_get_donors_from_url(){
 /**
  * Locations JSON array from URL
  */
-function ampp_get_locations_from_url(){
+function ampp_get_locations_from_url() {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -706,7 +706,13 @@ function ampp_get_locations_from_url(){
     
     $result = $query->execute();
     foreach ($result as $record) {
-      $locations[] = drupal_json_encode(array('id'=>$record->id, 'name'=>check_plain($record->location_name)));
+      $parents_str = get_location_path($record->id);
+      if (!empty($parents_arr)) {
+        $name = $parents_str . ' -> ' . $record->location_name;
+      } else {
+        $name = $record->location_name;
+      }
+      $locations[] = drupal_json_encode(array('id' => $record->id, 'name' => check_plain($name)));
     }
     db_set_active();
   }
@@ -717,7 +723,7 @@ function ampp_get_locations_from_url(){
 /**
  * Period JSON array from URL
  */
-function ampp_get_period_from_url(){
+function ampp_get_period_from_url() {
 
   if( isset($_GET["period_start"]) && isset($_GET["period_end"])) {
     $period_start = $_GET["period_start"];
@@ -731,7 +737,7 @@ function ampp_get_period_from_url(){
 /*
  *
  */
-function ampp_get_onoffbudget_from_url($source_arg = TRUE){
+function ampp_get_onoffbudget_from_url($source_arg = TRUE) {
 
   $budgetflags = isset($_GET["budget"]) ? $_GET["budget"] : 'all';
   
@@ -749,7 +755,7 @@ function ampp_get_onoffbudget_from_url($source_arg = TRUE){
 /*
  *
  */
-function ampp_get_regionalprojects_from_url($source_arg = TRUE){
+function ampp_get_regionalprojects_from_url($source_arg = TRUE) {
   if (!$source_arg) {
     $regionalprojects = 'all';
   }
@@ -763,7 +769,7 @@ function ampp_get_regionalprojects_from_url($source_arg = TRUE){
 /**
  * Get block content with total amounts
  */
-function total_block_content(){
+function total_block_content() {
   $amount_commitment = get_total_amount(0);
   $amount_disbursement = get_total_amount(1);
   return total_block_html($amount_commitment, $amount_disbursement);
@@ -775,7 +781,7 @@ function total_block_content(){
  * Use url as arguments.
  * TODO: Find a way to use views to get totals
  */
-function get_total_amount($type){
+function get_total_amount($type) {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -1655,9 +1661,9 @@ function ampp_search_regions() {
   if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_regions', $query);
   
   foreach ($result as $record) { 
-    $parents_arr = get_immidiate_parent_locations($record->id);
+    $parents_str = get_location_path($record->id);
     if (!empty($parents_arr)) {
-      $name = $parents_arr[0]['name'] . ' -> ' . $record->location_name;
+      $name = $parents_str . ' -> ' . $record->location_name;
     } else {
       $name = $record->location_name;
     }
@@ -1854,10 +1860,12 @@ function getParentLocationIds($childLocationId) {
 
 
 /*
- *
+ * 
 */
-function get_immidiate_parent_locations($childLocationId) {
+function get_location_path($childLocationId, $depth = 999) {
 
+  // we need to show the full hierarchy but not country
+  
   global $amp_db_exists;
   global $language;
   global $user;
@@ -1871,18 +1879,23 @@ function get_immidiate_parent_locations($childLocationId) {
   $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'parent_name', names.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";
   
   $query = db_select('amp_category_value_location', 'loc');
-  $query->fields('loc', array('parent_location'));
+  $query->fields('loc', array('parent_location', 'parent_category_value'));
   $query->addExpression($translate_field, 'parent_name');
   $query->join('amp_category_value_location', 'names', 'names.id = loc.parent_location');
+  $query->join('amp_category_value', 'cats', 'cats.id = loc.parent_category_value');
   $query->condition('loc.id', $childLocationId, '=');
+  $query->condition('cats.category_value', 'Country', '!=');
   $query->isNotNull('loc.parent_location');
        
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_immidiate_parent_Locations', $query);
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_location_path', $query);
     
   $result = $query->execute();
-  $parents = array();
+  $parents = '';
   foreach ($result as $record) {
-    $parents[] = array('id' => $record->parent_location, 'name' => $record->parent_name);
+    if ($depth != 0) {
+      $p = get_location_path($record->parent_location, $depth - 1) . '->' . $record->parent_name;
+    }
+    $parents = $record->parent_name;
   }
      
   db_set_active();

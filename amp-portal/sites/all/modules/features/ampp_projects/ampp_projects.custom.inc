@@ -1620,7 +1620,7 @@ function ampp_search_donors() {
 /**
  * Callback handler for region search
  */
-function ampp_search_regions(){
+function ampp_search_regions() {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -1654,8 +1654,14 @@ function ampp_search_regions(){
 
   if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_regions', $query);
   
-  foreach ($result as $record) {
-    $items[] = array('id'=>$record->id, 'name'=>check_plain($record->location_name));
+  foreach ($result as $record) { 
+    $parents_arr = get_immidiate_parent_Locations($record->id);
+    if (!empty($parents_arr)) {
+      $name = $parents_arr[0]['name'] . ' -> ' . $record->location_name;
+    } else {
+      $name = $record->location_name;
+    }
+    $items[] = array('id' => $record->id, 'name' => check_plain($name));
   }
   db_set_active();
   drupal_json_output($items);
@@ -1810,35 +1816,32 @@ function getChildProgramsIds($parentProgramId){
 /*
  *
  */
-function getParentLocationIds($childLocationId){
+function getParentLocationIds($childLocationId) {
   
   global $amp_db_exists;
+
   if (!$amp_db_exists) return;
   
   $allParentIds = array();
 
-  if(!empty($_GET["RegionalProjects"]))
-  {
- 	 $regionalinclude = $_GET["RegionalProjects"];
-  }
-  else
-  {
-  	  $regionalinclude = $_GET["showregionalprojects"];
+  if (!empty($_GET["RegionalProjects"])) {
+    $regionalinclude = $_GET["RegionalProjects"];
+  } else {
+    $regionalinclude = $_GET["showregionalprojects"];
   }
    
-  if($regionalinclude == '1')
-  {
+  if ($regionalinclude == '1') {
 	  db_set_active("amp_projects");
 
 	  $parentIds = db_select('amp_category_value_location', 'l')
-	  ->fields('l',array('parent_location'))
-	  ->condition('l.id', $childLocationId, '=')
-	  ->isNotNull('l.parent_location')
-	  ->execute()
-	  ->fetchAll(PDO::FETCH_COLUMN);
+	    ->fields('l', array('parent_location'))
+	    ->condition('l.id', $childLocationId, '=')
+	    ->isNotNull('l.parent_location')
+	    ->execute()
+	    ->fetchAll(PDO::FETCH_COLUMN);
 	  
-	  if(!empty($parentIds)){
-	    foreach ($parentIds as $parentId){
+	  if (!empty($parentIds)) {
+	    foreach ($parentIds as $parentId) {
 	      $allParentIds[] = $parentId;
 	      $allParentIds = array_merge($allParentIds, getParentLocationIds($parentId));
 	    }
@@ -1847,6 +1850,50 @@ function getParentLocationIds($childLocationId){
 	  db_set_active();
   }
   return $allParentIds;
+}
+
+
+/*
+ *
+*/
+function get_immidiate_parent_Locations($childLocationId) {
+
+  global $amp_db_exists;
+  global $language;
+  global $user;
+
+  if (!$amp_db_exists) return;
+
+  $allParentIds = array();
+
+  if (!empty($_GET["RegionalProjects"])) {
+    $regionalinclude = $_GET["RegionalProjects"];
+  } else {
+    $regionalinclude = $_GET["showregionalprojects"];
+  }
+   
+  if ($regionalinclude == '1') {
+    db_set_active("amp_projects");
+
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";
+    
+    $query = db_select('amp_category_value_location', 'l');
+    $query->fields('l', array('parent_location'));
+    $query->addExpression($translate_field, 'name');
+    $query->condition('l.id', $childLocationId, '=');
+    $query->isNotNull('l.parent_location');
+       
+    if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_immidiate_parent_Locations', $query);
+    
+    $result = $query->execute();
+    $parents = array();
+    foreach ($result as $record) {
+      $parents[] = array('id' => $record->parent_location, 'name' => $record->name);
+    }
+     
+    db_set_active();
+  }
+  return $parents;
 }
 
 

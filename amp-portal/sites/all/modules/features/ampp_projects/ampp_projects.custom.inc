@@ -32,15 +32,15 @@ function ampp_projects_date_popup_process_alter(&$element, &$form_state, $contex
 */
 function ampp_projects_init() {
   
- global $language;
- $lang_def = variable_get('language_default', '');
- if ($lang_def == '' || $lang_def->language == $language->language) {
-   $lang = '';  
- } else {
-   $lang = $language->language;
- }
-//echo 'lang ....' . $lang;
- // cache_clear_all('module_implements', 'cache_bootstrap'); ///////////// ! Cache
+  global $language;
+  $lang_def = variable_get('language_default', '');
+  if ($lang_def == '' || $lang_def->language == $language->language) {
+    $lang = '';  
+  } else {
+    $lang = $language->language;
+  }
+ 
+  // cache_clear_all('module_implements', 'cache_bootstrap'); ///////////// ! Cache
   getOnOffBudgetIDs(); // Get the on/off budget projects ids
 
   drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/tokeninput/src/jquery.tokeninput.js');
@@ -778,14 +778,19 @@ function get_total_amount($type){
   global $amp_db_exists;
   if (!$amp_db_exists) return;
   
-  $donors_ids = $_GET["donors"];
-  $donor_ids_array = explode(",", $donors_ids);
+  $donors_ids = array();
+  if (isset($_GET["donors"])) {
+    $donors_ids = $_GET["donors"];
+    $donor_ids_array = explode(",", $donors_ids);
+  }
   
-  $sectors_ids = $_GET["sectors"];
-  $sector_ids_array = explode(",", $sectors_ids);
+  $sectors_ids = array();
+  if (isset($_GET["sectors"])) {
+    $sectors_ids = $_GET["sectors"];
+    $sector_ids_array = explode(",", $sectors_ids);
+  }
   
-  $sectors_array = Array();
-		
+  $sectors_array = array();
   $sectors_ids = empty($_GET["sectors"]) ? '' : $_GET["sectors"];
   if ($sectors_ids != 'all' and !empty($sectors_ids)){
 	$sectors_array = explode(",", $sectors_ids);
@@ -803,16 +808,22 @@ function get_total_amount($type){
   
   $sector_ids_array = $sectors_array;
   
-  $programs_ids = $_GET["programs"];
-  $program_ids_array = explode(",", $programs_ids);
-  	  
-  $locations_ids = $_GET["locations"];
-  $location_ids_array = explode(",", $locations_ids);
+  $programs_ids = array();
+  if (isset($_GET["programs"])) {
+    $programs_ids = $_GET["programs"];
+    $program_ids_array = explode(",", $programs_ids);
+  }
 
-  $period_start = $_GET["period_start"];
-  $period_end = $_GET["period_end"];
+  $locations_ids = array();
+  if (isset($_GET["locations"])) {
+    $locations_ids = $_GET["locations"];
+    $location_ids_array = explode(",", $locations_ids);
+  }
   
-  $keywords = $_GET["keywords"];
+  $period_start = isset($_GET["period_start"]) ? $_GET["period_start"] : '';
+  $period_end = isset($_GET["period_end"]) ? $_GET["period_end"] : '';
+  
+  $keywords = isset($_GET["keywords"]) ? $_GET["keywords"] : '';
   
   db_set_active("amp_projects");
   
@@ -881,7 +892,7 @@ function get_total_amount($type){
   }
   
   if ($keywords !== 'all' && !empty($keywords)) {
-    $query->where('unaccent(activity.name) ILIKE unaccent(\'%' . db_like($string) . '%\')');
+    $query->where('unaccent(activity.name) ILIKE unaccent(\'%' . db_like($keywords) . '%\')');
   }
 
   //condition for start and end date period

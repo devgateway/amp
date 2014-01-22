@@ -867,7 +867,7 @@ function get_total_amount($type){
 	$query->condition('program.amp_program_id', $program_ids_array, "IN");
   }
   
-  $regionalprojects = $_GET["showregionalprojects"];
+  $regionalprojects = isset($_GET["showregionalprojects"]) ? $_GET["showregionalprojects"] : 0;
   if ($regionalprojects == 1) {
   	   if($locations_ids != 'all' && !empty($location_ids_array[0])){
   	   	   	$tmp_location_ids_array = $location_ids_array;
@@ -883,8 +883,7 @@ function get_total_amount($type){
     $query->condition('am_loc.location_id', $location_ids_array, "IN");
   }
   
-  $budgetflag = $_GET["budget"];
-
+  $budgetflag = isset($_GET["budget"]) ? $_GET["budget"] : '';
   if (!empty($budgetflag) && $budgetflag != "all" ) {	 
 	$catvalue = intval( $budgetflag );
 	$query->addJoin('INNER', 'amp_activities_categoryvalues', 'acv', 'acv.amp_activity_id = activity.amp_activity_id');

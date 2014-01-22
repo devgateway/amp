@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
@@ -54,6 +55,8 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 
 public class CloseExpiredActivitiesJob implements StatefulJob {
+	
+	private static Logger logger = Logger.getLogger(CloseExpiredActivitiesJob.class);
 	
 //	/**
 //	 * returns a map of "activity status by amp_activity_id"
@@ -173,7 +176,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     		Long closedCategoryValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
     		
     		String filterQuery = "SELECT amp_activity_last_version_id FROM amp_activity_group aag WHERE aag.autoclosedonexpiration = false AND " + 
-				" aag.amp_activity_last_version_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft IS NULL or draft=false) and approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") AND proposed_completion_date < now())" +
+				" aag.amp_activity_last_version_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft IS NULL or draft=false) and approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") AND actual_completion_date < now())" +
 				" AND aag.amp_activity_last_version_id IN (select amp_activity_id FROM v_status WHERE amp_status_id != " + closedCategoryValue + ")" +
 				"";
 		
@@ -194,15 +197,17 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     		{
         		String newStatus = ver.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS) ? Constants.STARTED_STATUS : Constants.EDITED_STATUS;
         		
-    			System.out.format("\tautoclosing activity %d, changing status ID from %d to %d and approvalStatus from <%s> to <%s>...", 
-    					ver.getAmpActivityId(), CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, ver.getCategories()).getId(), closedCategoryValue, 
-    					ver.getApprovalStatus(), newStatus);
+        		AmpCategoryValue oldActivityStatus = CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, ver.getCategories());
+        		
+    			logger.info(String.format("\tautoclosing activity %d, changing status ID from %s to %d and approvalStatus from <%s> to <%s>...", 
+    					ver.getAmpActivityId(), oldActivityStatus == null ?  "<null>" : Long.toString(oldActivityStatus.getId()), closedCategoryValue, 
+    					ver.getApprovalStatus(), newStatus));
     			
         		AmpTeamMember ampClosingMember = AmpBackgroundActivitiesCloser.createActivityCloserTeamMemberIfNeeded(ver.getTeam());
         		        		
     			AmpActivityVersion newVer = cloneActivity(session, ampClosingMember, ver, newStatus/*, projectStatusCategoryClass.getId()*/, closedCategoryValue);
 
-    			System.out.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId());
+    			logger.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
     		}
     		cleanupSession(session); // close transaction and reopen it, for the changes to become visible to the rest of AMP and the next code run in this thread to have an available session
     	}

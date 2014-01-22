@@ -1700,7 +1700,7 @@ function get_location_path($childLocationId, $depth = 999) {
   $query->fields('loc', array('parent_location', 'parent_category_value'));
   $query->addExpression($translate_field, 'parent_name');
   $query->join('amp_category_value_location', 'names', 'names.id = loc.parent_location');
-  $query->join('amp_category_value', 'cats', 'cats.id = loc.parent_category_value');
+  $query->join('amp_category_value', 'cats', 'cats.id = names.parent_category_value');
   $query->condition('loc.id', $childLocationId, '=');
   $query->condition('cats.category_value', 'Country', '!=');
   $query->isNotNull('loc.parent_location');

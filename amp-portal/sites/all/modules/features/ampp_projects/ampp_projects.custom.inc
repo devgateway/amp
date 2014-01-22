@@ -1866,33 +1866,26 @@ function get_immidiate_parent_Locations($childLocationId) {
 
   $allParentIds = array();
 
-  if (!empty($_GET["RegionalProjects"])) {
-    $regionalinclude = $_GET["RegionalProjects"];
-  } else {
-    $regionalinclude = $_GET["showregionalprojects"];
-  }
-   
-  if ($regionalinclude == '1') {
-    db_set_active("amp_projects");
+  db_set_active("amp_projects");
 
-    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'name', loc.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";
     
-    $query = db_select('amp_category_value_location', 'l');
-    $query->fields('l', array('parent_location'));
-    $query->addExpression($translate_field, 'name');
-    $query->condition('l.id', $childLocationId, '=');
-    $query->isNotNull('l.parent_location');
+  $query = db_select('amp_category_value_location', 'l');
+  $query->fields('l', array('parent_location'));
+  $query->addExpression($translate_field, 'name');
+  $query->condition('l.id', $childLocationId, '=');
+  $query->isNotNull('l.parent_location');
        
-    if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_immidiate_parent_Locations', $query);
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_immidiate_parent_Locations', $query);
     
-    $result = $query->execute();
-    $parents = array();
-    foreach ($result as $record) {
-      $parents[] = array('id' => $record->parent_location, 'name' => $record->name);
-    }
-     
-    db_set_active();
+  $result = $query->execute();
+  $parents = array();
+  foreach ($result as $record) {
+    $parents[] = array('id' => $record->parent_location, 'name' => $record->name);
   }
+     
+  db_set_active();
+  
   return $parents;
 }
 

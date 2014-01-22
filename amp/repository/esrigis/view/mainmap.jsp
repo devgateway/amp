@@ -361,7 +361,40 @@
             value = "<digi:trn>Select a point</digi:trn>";
             return value;
          }
-        return text;
+        if(text == "Name") {
+            value = "<digi:trn>Name</digi:trn>";
+            return value;
+         }        
+        if(text == "Type") {
+            value = "<digi:trn>Type</digi:trn>";
+            return value;
+         }
+        
+        if(text == "Description") {
+            value = "<digi:trn>Description</digi:trn>";
+            return value;
+         }
+        if(text == "Coordinates") {
+            value = "<digi:trn>Coordinates</digi:trn>";
+            return value;
+         }
+        if(text == "Show Image") {
+            value = "<digi:trn>Show Image</digi:trn>";
+            return value;
+         }
+        if(text == "Show Info") {
+            value = "<digi:trn>Show Info</digi:trn>";
+            return value;
+         }
+        if(text == "Structure Details") {
+            value = "<digi:trn>Structure Details</digi:trn>";
+            return value;
+         }        
+        
+        
+        return text;        
+
+        
     	}
 	
 

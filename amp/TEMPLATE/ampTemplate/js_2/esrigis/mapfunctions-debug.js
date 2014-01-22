@@ -1747,16 +1747,16 @@ function CluterStructures(){
 		cLs=null;
 	}
 	var infoTemplate =	"<table style='font-size: 11px;'>"
-		+ "<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>"
+		+ "<tr><td style='padding-right:20px;'><b>"+ translate('Name') +"<b></td><td><b>${Structure Name}</b></td></tr>"
 		+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
-		+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
-		+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
-		+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>";
+		+ "<tr><td nowrap style='padding-right:20px;'><b>"+ translate('Type')+"<b></td><td>${Structure Type}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>"+ translate('Description')+"<b></td><td>${Structure Description}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>"+ translate('Coordinates')+"<b></td><td>${Coordinates}</td></tr></table>";
 
 	var tabTemplate = "<div id='infotabs'>"
 		
-		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>Show Info</a>"
-		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Show Image</a>"
+		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>"+ translate('Show Info')+"</a>"
+		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>"+ translate('Show Image')+"</a>"
 		
 		+ "<div id='strInfo'>"+ infoTemplate +"</div>"
 		+ "<div id='strImage'>${Structure Image}</div>"
@@ -1779,7 +1779,7 @@ function CluterStructures(){
 				infoWindow :{
 					template :
 						 new esri.InfoTemplate(
-						"Structure Details",
+						translate('Structure Details'),
 						tabTemplate),
 					width : 250,
 					height : 250

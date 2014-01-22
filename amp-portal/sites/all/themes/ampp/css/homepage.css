@@ -825,7 +825,7 @@ div.pane-search-result-totals, div.pane-projects-as-of {clear:both; float:right;
 
 .page-homepage .feedback-form .form-item-captcha-response {margin-left: 5px;}
 ul.token-input-list-facebook li input {background-color: white; border: 0 none; margin: 2px 0; padding: 3px 8px; width: 100px;}
-
+.dgone-column-inner div.panel-separator {clear:both;}
 li.token-input-token-facebook {background-color: #EFF2F7; border: 1px solid #CCD5E4; border-radius: 5px 5px 5px 5px; color: #000000; cursor: default; float: left; font-size: 11px; height: auto !important; margin: 3px; overflow: hidden; padding: 1px 3px; white-space: normal;}
 li.token-input-selected-token-facebook {background-color: #5670A6; border: 1px solid #3B5998; color: #FFFFFF;}
 div.token-input-dropdown-facebook {background-color: #FFFFFF; border-bottom: 1px solid #CCCCCC; border-left: 1px solid #CCCCCC; border-right: 1px solid #CCCCCC; cursor: default; font-family: Verdana; font-size: 11px; overflow: hidden; position: absolute; width: auto; z-index: 1;}

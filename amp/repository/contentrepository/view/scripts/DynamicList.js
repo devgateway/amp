@@ -244,19 +244,11 @@ AbstractDynamicList.prototype.resetFilterData		= function (shouldRetrieveFilters
 	    
 		
 		}
-	
-	var unfiltered = document.getElementsByTagName("input"),
-        i = unfiltered.length,
-        input;
-    while(i--)
-    {
-        input = unfiltered[i];
-        if (!input.type || input.type === 'text')
-        {
-            input.value="";
-        }
-    }
-	
+	var filterFrom = document.getElementById('filterFromDate');
+	var filterTo = document.getElementById('filterToDate');
+	filterFrom.value="";
+	filterTo.value="";
+		
 	
 };
 

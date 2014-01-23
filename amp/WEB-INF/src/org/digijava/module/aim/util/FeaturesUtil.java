@@ -912,6 +912,11 @@ public class FeaturesUtil {
 		}
 	}
 
+	public static int getEsriMapsRegionsHighlightSelectedColourScheme()
+	{
+		return Integer.valueOf(getGlobalSettingValue(GlobalSettingsConstants.ESRI_REGIONS_HIGHLIGHT_COLOUR_SCHEME));
+	}
+	
 	public static String getGlobalSettingValue(String globalSettingName) {
 		if (globalSettingsCache == null)
 			buildGlobalSettingsCache(getGlobalSettings());

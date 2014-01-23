@@ -49,12 +49,29 @@ function closeHide(divId) {
 	}
 }
 
-var breaksColors = [ new dojo.Color([ 26, 150, 65, 0.9 ]),
-		new dojo.Color([ 166, 217, 106, 0.9 ]),
-		new dojo.Color([ 255, 242, 0, 0.9 ]),
-		new dojo.Color([ 255, 127, 39, 0.9 ]),
-		new dojo.Color([ 215, 25, 28, 0.9 ]),
-		new dojo.Color([ 195, 195, 195, 0.9 ]) ];
+var redGreenHighlightColors = [ new dojo.Color([ 26, 150, 65, 0.9 ]),  // Malawi / DRC colours
+                        		new dojo.Color([ 166, 217, 106, 0.9 ]),
+                        		new dojo.Color([ 255, 242, 0, 0.9 ]),
+                        		new dojo.Color([ 255, 127, 39, 0.9 ]),
+                        		new dojo.Color([ 215, 25, 28, 0.9 ]),
+                        		new dojo.Color([ 195, 195, 195, 0.9 ]) ];
+
+//var brownBlueHighlightColors = [new dojo.Color([109, 89, 74, 0.9]), // Moldova colours
+//                                new dojo.Color([202, 197, 176, 0.9]),
+//                                new dojo.Color([150, 163, 153, 0.9]),
+//                                new dojo.Color([184, 191, 198, 0.9]),
+//                                new dojo.Color([139, 164, 181, 0.9]),
+//                                new dojo.Color([200, 200, 230, 0.85]) ];
+
+var brownBlueHighlightColors = [new dojo.Color([139, 164, 181, 0.9]), // Moldova colours
+                                new dojo.Color([184, 191, 198, 0.9]),
+                                new dojo.Color([150, 163, 153, 0.9]),
+                                new dojo.Color([202, 197, 176, 0.9]),
+                                new dojo.Color([109, 89, 74, 0.9]),                                                                 
+                                new dojo.Color([235, 235, 255, 0.9]) ];
+
+var allHighlightColors = [redGreenHighlightColors, brownBlueHighlightColors];
+var breaksColors = allHighlightColors[highlightColorsSelectedOption]; // HIGHEST VALUE... LOWEST VALUE, NO_VALUE
 
 var colorsOrange = [ new dojo.Color([ 229, 252, 120, 0.8 ]),
 		new dojo.Color([ 224, 231, 102, 0.9 ]),
@@ -171,7 +188,7 @@ function filldatasourcetable() {
 				+ '"href="/aim/viewActivityPreview.do~pageId=2~activityId='
 				+ activitiesarray[int].id
 				+ '~isPreview=1" target="_blank" style="text-decoration:none;">'
-				+ trimmedPathname + '...</a>'
+				+ trimmedPathname + '...</a>';
 		cell.innerHTML = url;
 		cell.setAttribute("width", "60%");
 		cell0 = row.insertCell(1);
@@ -221,7 +238,7 @@ function filldatasourcetablenational() {
 				+ '"href="/aim/viewActivityPreview.do~pageId=2~activityId='
 				+ nationalactivitiesarray[int].id
 				+ '~isPreview=1" target="_blank" style="text-decoration:none;">'
-				+ trimmedPathname + '...</a>'
+				+ trimmedPathname + '...</a>';
 		cell.innerHTML = url;
 		cell.setAttribute("width", "350px");
 

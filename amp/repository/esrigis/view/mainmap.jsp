@@ -1,3 +1,4 @@
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -46,19 +47,14 @@
       };
       var structureVisible=false;
       var showexpanded=false;
+      var highlightColorsSelectedOption = <%= FeaturesUtil.getEsriMapsRegionsHighlightSelectedColourScheme()%>
     </script>
     
     <feature:display name="Structures On Load" module="Map Module">
 		<script type="text/javascript">
 			structureVisible = true;
-			
 		</script>
 	</feature:display>	
-	<field:display feature="Structures On Load" name="Structures Show Expanded">
-		<script type="text/javascript">
-			showexpanded= true;
-		</script>
-	</field:display>
     
     <!-- Map Scripts -->
     <script type="text/javascript"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
@@ -368,40 +364,7 @@
             value = "<digi:trn>Select a point</digi:trn>";
             return value;
          }
-        if(text == "Name") {
-            value = "<digi:trn>Name</digi:trn>";
-            return value;
-         }        
-        if(text == "Type") {
-            value = "<digi:trn>Type</digi:trn>";
-            return value;
-         }
-        
-        if(text == "Description") {
-            value = "<digi:trn>Description</digi:trn>";
-            return value;
-         }
-        if(text == "Coordinates") {
-            value = "<digi:trn>Coordinates</digi:trn>";
-            return value;
-         }
-        if(text == "Show Image") {
-            value = "<digi:trn>Show Image</digi:trn>";
-            return value;
-         }
-        if(text == "Show Info") {
-            value = "<digi:trn>Show Info</digi:trn>";
-            return value;
-         }
-        if(text == "Structure Details") {
-            value = "<digi:trn>Structure Details</digi:trn>";
-            return value;
-         }        
-        
-        
-        return text;        
-
-        
+        return text;
     	}
 	
 

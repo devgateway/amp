@@ -40,6 +40,8 @@ public class GlobalSettingsConstants {
     public static final String SITE_DOMAIN = "Site Domain";
     
     public static final String AMOUNTS_IN_THOUSANDS = "Amounts in Thousands";
+    
+    public static final String ESRI_REGIONS_HIGHLIGHT_COLOUR_SCHEME = "GIS region highlights colour scheme";
 
     public static final String SPLIT_BY_TYPE_OF_ASSISTANCE= "Enabled Split by Type Of Assistance";
     

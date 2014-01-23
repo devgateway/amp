@@ -1329,7 +1329,7 @@ function MapFindLocation(level) {
  */
 function addResultsToMap(featureSet) {
 	var border = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([ 150,150, 150 ]), 1);
-	var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, breaksColors[6]);
+	var symbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, breaksColors[breaksColors.length - 1]);
 	var colors = breaksColors;
 	var localGraphicLayer = esri.layers.GraphicsLayer({
 		displayOnPan : true,
@@ -1443,7 +1443,7 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode) {
 	htmlDiv +=  "<br/><hr/></div>";
 	for ( var i = 4; i >= 0 ; i--) {
 		htmlDiv += "<div class='legendContentContainer'>"
-				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i+1]) + "></div>" + "</div>"
+				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i]) + "></div>" + "</div>"
 				+ "<div class='legendContentLabel'>"
 				+ df.format(Math.ceil(rangeColors[x])) + " "
 				+ currencyString + " - "
@@ -1452,7 +1452,7 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode) {
 		x++;
 	}
 	htmlDiv += "<div class='legendContentContainer'>"
-			+ "<div class='legendContentValue' " + generate_colors_styling(new dojo.Color({r:201,g:195,b:197,a:0.8})) + "></div>"
+			+ "<div class='legendContentValue' " + generate_colors_styling(colors[colors.length - 1]) + "></div>"
 			+ "</div>" + "<div class='legendContentLabel'>No Data</div><br/>";
 
 	$('#highlightLegend').html(htmlDiv);

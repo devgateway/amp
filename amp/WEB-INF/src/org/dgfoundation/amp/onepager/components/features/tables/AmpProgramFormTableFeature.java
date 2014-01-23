@@ -65,7 +65,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 			setModel.setObject(new HashSet<AmpActivityProgram>());
 		
 		AmpActivityProgramSettings setting=ProgramUtil.getAmpActivityProgramSettings(programSettingsString);
-		final IModel<AmpActivityProgramSettings> programSettings = (setting!=null)?PersistentObjectModel.getModel(setting):null;
+		final IModel<AmpActivityProgramSettings> programSettings = (setting != null) ? PersistentObjectModel.getModel(setting):null;
 
 		AbstractReadOnlyModel<List<AmpActivityProgram>> listModel = new AbstractReadOnlyModel<List<AmpActivityProgram>>() {
 			private static final long serialVersionUID = 1L;
@@ -119,7 +119,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		add(uniqueCollectionValidationField);
 		final AmpMaxSizeCollectionValidationField <AmpActivityProgram> maxSizeCollectionValidationField = 
 				new  AmpMaxSizeCollectionValidationField<AmpActivityProgram>("maxSizeProgramValidator",listModel, "max Size Program Validator");
-		maxSizeCollectionValidationField.setVisibilityAllowed(!programSettings.getObject().isAllowMultiple());
+		boolean programAllowsMultiple = (programSettings != null) && (!programSettings.getObject().isAllowMultiple());
+		maxSizeCollectionValidationField.setVisibilityAllowed(programAllowsMultiple);
 		maxSizeCollectionValidationField.setOutputMarkupPlaceholderTag(true);
        add(maxSizeCollectionValidationField);
 		

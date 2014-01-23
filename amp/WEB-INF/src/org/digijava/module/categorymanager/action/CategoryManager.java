@@ -394,7 +394,7 @@ public class CategoryManager extends Action {
 			 */
 			Iterator<PossibleValue> iter			= possibleVals.iterator();
 			while ( iter.hasNext() ) {
-				if ( iter.next().getValue().equals("") )
+				if ("".equals(iter.next().getValue()))
 					iter.remove();
 			}
 			/**

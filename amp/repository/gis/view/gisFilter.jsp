@@ -574,7 +574,7 @@ li table{
 							<div class="clear"></div>
 							<div class="tabSubmit">
 								<input type="button" class="buttonx" 
-									value="<digi:trn>Apply Filters</digi:trn>" onclick="rechart();applySectorFilter(this);"/>
+									value="<digi:trn>Apply Filters</digi:trn>" onclick="applySectorFilter(this);"/>
 								<input type="button"
 									class="buttonx" value="<digi:trn>Reset and Start Over</digi:trn>" onclick="resetPIFilters();"/>
 							</div>

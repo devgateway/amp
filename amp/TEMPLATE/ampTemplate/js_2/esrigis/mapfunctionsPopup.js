@@ -14,6 +14,7 @@ dojo.require("esri.toolbars.edit");
 dojo.require("dijit.Menu");
 dojo.require("dijit.layout.BorderContainer");
 dojo.require("esri.dijit.BasemapGallery");
+dojo.require("esri.layers.osm");
 
 var map, navToolbar, tb;
 var loading;
@@ -22,6 +23,25 @@ var mapurl;
 var locatorurl;
 var rooturl;
 var stpoints = new Array();
+var isOsm = false;
+
+var MapConstants = {
+		   "MapType": {
+				"BASE_MAP" : 1,
+				"MAIN_MAP" : 2,
+				"GEOMETRY_SERVICE" : 4,
+				"ARCGIS_API" : 5,
+				"GEOLOCATOR_SERVICE" : 7,
+				"BASEMAPS_ROOT" : 8,
+				"NATIONAL_LAYER" : 9,
+				"INDICATOR_LAYER" : 10
+			},
+		   "MapSubType": {
+			   "BASE" : 1,
+			   "INDICATOR" : 2,
+			   "OSM" : 3
+		   }
+		};
 function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
@@ -35,16 +55,19 @@ function init() {
 			load: function(jsonData) {
 				   dojo.forEach(jsonData,function(map) {
 			        	switch (map.mapType) {
-						case 1:
+						case MapConstants.MapType.BASE_MAP:
 							basemapurl = map.mapUrl;
+							if (map.mapSubType == MapConstants.MapSubType.OSM){
+								isOsm = true;
+							}
 							break;
-						case 2:
+						case MapConstants.MapType.MAIN_MAP:
 							mapurl = map.mapUrl;
 							break;
-						case 7:
+						case MapConstants.MapType.GEOLOCATOR_SERVICE:
 							locatorurl = map.mapUrl;
 							break;
-						case 8:
+						case MapConstants.MapType.BASEMAPS_ROOT:
 							rooturl = map.mapUrl;
 							break;
 						default:
@@ -59,8 +82,11 @@ function init() {
 		// Call the asynchronous xhrGet
 		var deferred = dojo.xhrGet(xhrArgs);
 	
-	
-	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapurl, {opacity : 0.90}); // Levels at which this layer will be visible);
+	if (!isOsm){
+		basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id : 'base'}); // Levels at which this layer will be visible);
+	}else{
+		basemap = new esri.layers.OpenStreetMapLayer({id : 'base'});
+    }
 	var mainmap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90});
 	if (!locatorurl){
 		$("#address").attr("disabled","disabled");

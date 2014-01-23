@@ -573,8 +573,14 @@ li table{
 							
 							<div class="clear"></div>
 							<div class="tabSubmit">
-								<input type="button" class="buttonx" 
-									value="<digi:trn>Apply Filters</digi:trn>" onclick="applySectorFilter(this);"/>
+							<logic:present parameter="public">
+									<input type="button" class="buttonx" 
+										value="<digi:trn>Apply Filters</digi:trn>" onclick="applySectorFilter(this);"/>
+									</logic:present>
+									<Logic:notPresent parameter="public">
+										<input type="button" class="buttonx" 
+										value="<digi:trn>Apply Filters</digi:trn>" onclick="rechart();applySectorFilter(this);"/>									
+									</Logic:notPresent>
 								<input type="button"
 									class="buttonx" value="<digi:trn>Reset and Start Over</digi:trn>" onclick="resetPIFilters();"/>
 							</div>

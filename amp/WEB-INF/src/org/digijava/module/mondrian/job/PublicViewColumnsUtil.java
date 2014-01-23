@@ -105,6 +105,8 @@ public class PublicViewColumnsUtil
 			}
 		}
 		createCachedAmpActivityGroupTable(conn); //recreates "cached_amp_activity_group" table, which is not created by using a view, so it was missed at the refresh cached job
+		createTableCache(conn, "v_donor_funding", "cached_v_donor_funding");// recreates "cached_v_donor_funding" table, which is not in amp_columns table, so it was missed at the refresh cached job
+		 	
 	}
 	
 	public static void createCachedAmpActivityGroupTable(java.sql.Connection conn) {

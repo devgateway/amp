@@ -137,7 +137,8 @@ var D=[];
 scheduler._mark_year_date=function(G, XX){
 	var H=this._get_year_cell(G);
 	if (H!=null){
-		if ( (H.className||"").indexOf("event_") !=-1) {
+		if ( (H.className||"").indexOf("event_") !=-1 ||
+				H.className.indexOf('dhx_month_head dhx_year_event')!= -1) {
 			H.className="dhx_month_head dhx_year_event";
 	    }
 		else

@@ -45,13 +45,20 @@
         parseOnLoad: true
       };
       var structureVisible=false;
+      var showexpanded=false;
     </script>
     
     <feature:display name="Structures On Load" module="Map Module">
 		<script type="text/javascript">
-			structureVisible = true
+			structureVisible = true;
+			
 		</script>
 	</feature:display>	
+	<field:display feature="Structures On Load" name="Structures Show Expanded">
+		<script type="text/javascript">
+			showexpanded= true;
+		</script>
+	</field:display>
     
     <!-- Map Scripts -->
     <script type="text/javascript"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>

@@ -112,6 +112,7 @@
 <feature:display name="Search  Structures" module="Map Module"></feature:display>
 <feature:display name="Structures" module="Map Module"></feature:display>
 <feature:display name="Structures On Load" module="Map Module"></feature:display>
+<field:display feature="Structures On Load" name="Structures Show Expanded"></field:display>
 <feature:display name="Show National" module="Map Module"></feature:display>
 <feature:display name="Highlight regions" module="Map Module"></feature:display>
 <feature:display name="Highlight Zones" module="Map Module"></feature:display>

@@ -254,8 +254,7 @@ function createMapAddLayers(myService1, myService2, feature) {
 			lods : customLods,
 			extent : esri.geometry.geographicToWebMercator(myService2.fullExtent),
 			"fadeOnZoom": true,
-			"force3DTransforms": true,
-			"navigationMode": "css-transforms"
+			 zoom: 3
 		});
 		
 		
@@ -1785,7 +1784,9 @@ function CluterStructures(){
 					height : 250
 				},
 				flareLimit : 20,
-				flareDistanceFromCenter : 30
+				flareDistanceFromCenter : 30,
+				showexpanded : showexpanded
+				
 			});
 	map.addLayer(cLs);
 }

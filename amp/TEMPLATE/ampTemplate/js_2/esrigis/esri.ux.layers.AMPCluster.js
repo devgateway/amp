@@ -100,7 +100,9 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
 
         //info window height - Number
         this._infoWindowHeight = options.infoWindow.height || 100;
-
+        
+        this._showExpanded = options.showexpanded || false;
+        
         //following the basics of creating a custom layer
         this.loaded = true;
         this.onLoad(this);
@@ -472,7 +474,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
                     if (col) {
                         if ((colIndex >= minColIdx) & (colIndex <= maxColIdx)) {
                             var pointsToBeAdded = [];
-                            if (col.length > 2) { //clustered graphic
+                            if (col.length > 2 && !this._showExpanded) { //clustered graphic
 
                                 var tileCenterPoint = df.reduce(col, tileCenterPointF);
                                 var sym;

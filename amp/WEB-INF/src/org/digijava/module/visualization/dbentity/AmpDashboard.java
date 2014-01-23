@@ -7,7 +7,7 @@ import java.util.Set;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 
-@TranslatableClass (displayName = "Organisation")
+@TranslatableClass (displayName = "Dashboard")
 public class AmpDashboard implements Serializable {
 	
 	/**

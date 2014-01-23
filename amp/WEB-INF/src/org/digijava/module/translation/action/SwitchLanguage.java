@@ -23,6 +23,7 @@
 package org.digijava.module.translation.action;
 
 import java.net.URLDecoder;
+import java.util.Collection;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
@@ -34,6 +35,9 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.visualization.dbentity.AmpDashboard;
+import org.digijava.module.visualization.util.DashboardUtil;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -95,6 +99,10 @@ public class SwitchLanguage
         	referrerUrl = "/translation/showAdvancedTranslation.do";
         }
         
+        //Switch language of dashboars that is a session scope variable to solve AMP-16364
+        Collection<AmpDashboard> dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
+        request.getSession().setAttribute(Constants.MENU_DASHBOARDS, DashboardUtil.generateIdToNameForDashboards(dashboards));
+
         return new ActionForward(referrerUrl, true);
     }
 }

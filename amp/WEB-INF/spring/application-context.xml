@@ -80,7 +80,10 @@
 	<http pattern="/gis/getFoundingDetails.do**" security="none" />
 	<http pattern="/gis/showAdditionalGraphics.do**" security="none" />
 	
-	<http pattern="/esrigis/mainmap.do**" security="none" />
+	<http pattern="/esrigis/**" security="none" />
+	<!-- <http pattern="/esrigis/MapsConfiguration.do**" security="none" />
+	<http pattern="/esrigis/datadispatcher.do**" security="none" /> -->
+	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
 	
 	<!-- match images -->
 	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf)"

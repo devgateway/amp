@@ -347,6 +347,9 @@ h2.pane-title {
 #ampp-search-form .form-type-item {
   padding-bottom: 0px;
 }
+#ampp-search-form .form-item-period-start .description {
+  width:auto;
+}
 .page-homepage #ampp-search-form .form-type-item {
   padding-bottom: 25px;
 }

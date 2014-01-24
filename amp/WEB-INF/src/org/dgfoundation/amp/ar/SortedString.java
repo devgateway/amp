@@ -13,7 +13,7 @@ package org.dgfoundation.amp.ar;
  * Implements customized ordering for sortable Collections like TreeSetS.
  */
 public abstract class SortedString implements Comparable<SortedString> {
-	public String string;
+	protected String string;
 	
 	public SortedString(String string) {
 		this.string=string;

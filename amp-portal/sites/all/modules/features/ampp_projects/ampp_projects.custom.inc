@@ -647,7 +647,7 @@ function ampp_get_donors_from_url() {
   
   db_set_active("amp_projects");
   $items = array();
-  if($donors_ids != 'all' and !empty($donors_ids)){
+  if ($donors_ids != 'all' && !empty($donors_ids)) {
     
     global $language;
     global $user;
@@ -669,7 +669,7 @@ function ampp_get_donors_from_url() {
     $result = $query->execute();
     foreach ($result as $record) {
       $name = !empty($record->acronym) ? check_plain($record->name) . ' (' . check_plain($record->acronym) . ')' : check_plain($record->name);
-      $donors[] = drupal_json_encode(array('id'=>$record->amp_org_id, 'name'=>$name));
+      $donors[] = drupal_json_encode(array('id' => $record->amp_org_id, 'name' => $name));
     }
     
   }

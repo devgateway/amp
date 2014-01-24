@@ -47,9 +47,14 @@
       };
       var structureVisible=false;
       var showexpanded=false;
+      var stshowimage = "";
       var highlightColorsSelectedOption = <%= FeaturesUtil.getEsriMapsRegionsHighlightSelectedColourScheme()%>
     </script>
-    
+    <field:display feature="Structures" name="Show Image">
+    	<script type="text/javascript">
+    		stshowimage = "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>"+ translate('Show Image')+"</a>"
+    	</script>
+    </field:display>
     <feature:display name="Structures On Load" module="Map Module">
 		<script type="text/javascript">
 			structureVisible = true;

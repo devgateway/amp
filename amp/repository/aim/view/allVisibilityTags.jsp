@@ -112,6 +112,7 @@
 <feature:display name="Add activity" module="Map Module"></feature:display>
 <feature:display name="Search  Structures" module="Map Module"></feature:display>
 <feature:display name="Structures Column" module="Map Module"></feature:display>
+<field:display feature="Structures" name="Show Image"></field:display>
 <feature:display name="Structures" module="Map Module"></feature:display>
 <feature:display name="Structures On Load" module="Map Module"></feature:display>
 <field:display feature="Structures On Load" name="Structures Show Expanded"></field:display>

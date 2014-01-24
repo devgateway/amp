@@ -1755,7 +1755,7 @@ function CluterStructures(){
 	var tabTemplate = "<div id='infotabs'>"
 		
 		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>"+ translate('Show Info')+"</a>"
-		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>"+ translate('Show Image')+"</a>"
+		+ stshowimage
 		
 		+ "<div id='strInfo'>"+ infoTemplate +"</div>"
 		+ "<div id='strImage'>${Structure Image}</div>"

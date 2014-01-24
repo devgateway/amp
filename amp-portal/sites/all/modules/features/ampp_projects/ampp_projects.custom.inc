@@ -654,6 +654,7 @@ function ampp_get_donors_from_url() {
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', donor.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', '" . $language->language . "')"; 
     
     $query = db_select('amp_organisation', 'donor');
+    $query->distinct();
     $query->fields('donor', array('amp_org_id', 'acronym'));
     $query->addExpression($translate_field, 'name'); 
     if (variable_get('amp_show_only_donors', 0)) {

@@ -15,12 +15,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -52,19 +47,18 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -686,14 +680,57 @@ public class LuceneUtil implements Serializable {
 			doc.add(new Field(ID_FIELD, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
 			//all = all.concat(" " + actId);
 		}
-		if (projectId != null){
+
+
+        List<String> languages = TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite());
+        HashMap<String, HashMap<String, String>> trns = new HashMap<String, HashMap<String, String>>();
+
+        HashMap<String, String> regularFieldNames = new HashMap<String, String>();
+        regularFieldNames.put("ampId", projectId);
+        regularFieldNames.put("name", title);
+
+        Long id = Long.valueOf(actId);
+        String activityClassName = AmpActivityVersion.class.getName();
+
+        for (String field: regularFieldNames.keySet()){
+            String currentValue = regularFieldNames.get(field);
+            List<AmpContentTranslation> projectIdsList = ContentTranslationUtil.loadFieldTranslations(activityClassName,
+                    id, field);
+
+            String tempStr = "";
+
+            if (projectIdsList.size() == 0){
+                tempStr = currentValue;
+            } else {
+                //using tempHash so i can add the translations in the order specified by the languages list
+                HashMap<String, String> tempHash = new HashMap<String, String>();
+                for (AmpContentTranslation pId: projectIdsList){
+                    tempHash.put(pId.getLocale(), pId.getTranslation());
+                }
+                for (String lang: languages){
+                    String val = tempHash.get(lang);
+                    if (val != null)
+                        tempStr += val;
+                }
+            }
+
+            if ("name".equals(field)){
+                doc.add(new Field(field, tempStr, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
+            } else {
+                doc.add(new Field(field, tempStr, Field.Store.NO, Field.Index.TOKENIZED));
+            }
+            all = all.concat(" " + tempStr);
+        }
+
+/*
+        if (projectId != null){
 			doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + projectId);
 		}
 		if (title != null){
 			doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
 			all = all.concat(" " + title);
-		}
+		}*/
 		if (description != null && description.length()>0){
 			doc.add(new Field("description", description, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + description);

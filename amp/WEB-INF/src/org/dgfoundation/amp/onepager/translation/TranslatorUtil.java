@@ -60,6 +60,17 @@ public final class TranslatorUtil {
             try{
                 AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
                 Site site = session.getSite();
+                localeCache = getLocaleCache(site);
+            } finally {
+            }
+        }
+
+        return localeCache;
+    }
+
+    public static List<String> getLocaleCache(Site site){
+        if (localeCache == null){
+            try{
                 Set<Locale> list = site.getTranslationLanguages();
                 localeCache = new ArrayList<String>();
                 for (Locale loc: list){
@@ -72,5 +83,6 @@ public final class TranslatorUtil {
 
         return localeCache;
     }
+
 
 }

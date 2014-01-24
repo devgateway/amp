@@ -336,8 +336,7 @@ h2.pane-title {
 .page-homepage .rounded-corner .pane-projects-search-form .form-item-period-end-date input {
   width: 80px;
 }
-.page-homepage .rounded-corner .pane-projects-search-form .container-inline-date {
-  width:450px;  
+.page-homepage .rounded-corner .pane-projects-search-form .container-inline-date {  
   float: left;
   clear: none;
 }

@@ -54,6 +54,9 @@ $plugin = array(
  *   An object with at least title and content members.
  */
 function ampp_projects_projects_search_result_render($subtype, $conf, $args, $context) {
+  
+  global $user;
+  
   module_load_include('inc', 'node', 'node.pages');
     
   $_SESSION["projects_search_result_conf"] = serialize($conf);
@@ -137,7 +140,8 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
   $tmpview->set_arguments($args); 
   $tmpview->pre_execute();
   $tmpview->execute();
-  
+
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_projects_projects_search_result_render', dpq($tmpview->build_info['query'], 1));
   //watchdog('ampp_projects', 'results TOTAL: ' . $tmpview->total_rows);
   
   // optionally hide the first column

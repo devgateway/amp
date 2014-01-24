@@ -783,6 +783,7 @@ function total_block_content() {
  */
 function get_total_amount($type) {
 
+  global $user;
   global $amp_db_exists;
   if (!$amp_db_exists) return;
   
@@ -911,6 +912,8 @@ function get_total_amount($type) {
   }
   
   $result = $query->execute()->fetchAssoc();
+  
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_total_amount', dpq($query, 1));
   
   db_set_active();
   return $result['transaction_amount'] ;

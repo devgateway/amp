@@ -380,7 +380,7 @@ public Cell filter(Cell metaCell,Set ids) {
 	public boolean hasMetaInfo(MetaInfo m) 
 	{
 		MetaInfo internal = metaData.getMetaInfo(m.getCategory());
-		if (internal == null || !(internal.getValue() instanceof FundingTypeSortedString) || !(m.getValue() instanceof FundingTypeSortedString)) {
+		if (internal == null ) {
 			return false;
         }
 		//we translate Bilateral ssc commitments = actual commitments

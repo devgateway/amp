@@ -292,8 +292,7 @@
 													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue;"
 													onClick="shareDoc('<%=documentData.getUuid() %>','<%=documentData.getShareWith() %>','${tabTypeLocal}');" title="<digi:trn>Click here to Share this document</digi:trn>">
 													<digi:trn>Approve</digi:trn> </a>
-													
-													<span style="color: blue"><strong>|</strong></span>
+													<br />
 													<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:none; color: blue"
 													onClick="rejectDoc('<%=documentData.getUuid() %>','rejectShare','${tabTypeLocal}');" title="<digi:trn>Click here to Reject this document</digi:trn>">
 														<digi:trn>Reject</digi:trn> 

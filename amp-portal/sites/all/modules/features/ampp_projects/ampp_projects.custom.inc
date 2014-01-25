@@ -1473,7 +1473,7 @@ function ampp_projects_views_pre_execute(&$view){
     }
   }
   
-  dpq($view->build_info['query']);
+  //dpq($view->build_info['query']);
 }
 
 

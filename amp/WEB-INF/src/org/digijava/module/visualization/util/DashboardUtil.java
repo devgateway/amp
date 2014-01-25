@@ -254,43 +254,43 @@ public class DashboardUtil {
 	    return result;
 	}
 	
-	/**
-	 * If amp_activity_group and cached_amp_activity_group doesnt have the same number of rows then recreate the cache table.
-	 */
-	private static void checkAmpActivityGroupCachedIntegrity() {		
-		java.sql.Connection connection = null;
-		boolean autoCommit = false;
-		try {
-			Session session = PersistenceManager.getRequestDBSession();
-			Query query = session.createSQLQuery("SELECT COUNT(*) FROM amp_activity_group WHERE amp_activity_last_version_id IS NOT NULL");
-			List original = query.list();
-			query = session.createSQLQuery("SELECT COUNT(*) FROM cached_amp_activity_group");
-			List cached = query.list();
-			if(!original.get(0).equals(cached.get(0))) {
-				logger.warn("Updating cached_amp_activity_group");				
-				connection = PersistenceManager.getJdbcConnection();
-				autoCommit = connection.getAutoCommit();
-				connection.setAutoCommit(false);
-				connection.setAutoCommit(true);
-				PublicViewColumnsUtil.createCachedAmpActivityGroupTable(connection);
-				connection.setAutoCommit(false);
-			}							
-		} catch (Exception e) {
-			logger.error(
-					"Error updating table cached_amp_activity_group",
-					e);
-		} finally {
-			if(connection != null) {
-				try {
-					connection.setAutoCommit(autoCommit);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				PersistenceManager.closeQuietly(connection);
-			}
-		}
-	}
+//	/**
+//	 * If amp_activity_group and cached_amp_activity_group doesnt have the same number of rows then recreate the cache table.
+//	 */
+//	private static void checkAmpActivityGroupCachedIntegrity() {		
+//		java.sql.Connection connection = null;
+//		boolean autoCommit = false;
+//		try {
+//			Session session = PersistenceManager.getRequestDBSession();
+//			Query query = session.createSQLQuery("SELECT COUNT(*) FROM amp_activity_group WHERE amp_activity_last_version_id IS NOT NULL");
+//			List original = query.list();
+//			query = session.createSQLQuery("SELECT COUNT(*) FROM cached_amp_activity_group");
+//			List cached = query.list();
+//			if(!original.get(0).equals(cached.get(0))) {
+//				logger.warn("Updating cached_amp_activity_group");				
+//				connection = PersistenceManager.getJdbcConnection();
+//				autoCommit = connection.getAutoCommit();
+//				connection.setAutoCommit(false);
+//				connection.setAutoCommit(true);
+//				PublicViewColumnsUtil.createCachedAmpActivityGroupTable(connection);
+//				connection.setAutoCommit(false);
+//			}							
+//		} catch (Exception e) {
+//			logger.error(
+//					"Error updating table cached_amp_activity_group",
+//					e);
+//		} finally {
+//			if(connection != null) {
+//				try {
+//					connection.setAutoCommit(autoCommit);
+//				} catch (SQLException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				PersistenceManager.closeQuietly(connection);
+//			}
+//		}
+//	}
 	
 	public static void getSummaryAndRankInformation (VisualizationForm form, boolean donorFundingOnly, HttpServletRequest request) throws DgException{
 		String trnStep1, trnStep2, trnStep3, trnStep4, trnStep5, trnStep6, trnStep7, trnStep8, trnStep9;
@@ -312,7 +312,9 @@ public class DashboardUtil {
 		
 		// AMP-16750 and AMP-16835: Sometimes table CACHED_AMP_ACTIVITY_GROUP(AmpActivityGroupCached) has out-of-date data, generating problems mostly with
 		// "Management" dashboards. Here we will update the table if needed before the first dashboard query.
-		checkAmpActivityGroupCachedIntegrity();
+		//TODO: CACHED_AMP_ACTIVITY_GROUP is supposed to have out-of-date-data, because it is a snapshot of an older state of the database.
+		// TO BE FIXED REALLY SOON (c) (tm) (r)
+		//checkAmpActivityGroupCachedIntegrity();
 		
 		DashboardFilter filter = form.getFilter();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();

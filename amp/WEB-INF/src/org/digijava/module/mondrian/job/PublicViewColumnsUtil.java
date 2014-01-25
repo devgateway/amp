@@ -17,6 +17,12 @@ public class PublicViewColumnsUtil
 	protected static Logger logger = Logger.getLogger(PublicViewColumnsUtil.class);
 	
 	/**
+	 * the views/tables which should be cached for the public view even though they are not extractor columns
+	 */
+	protected static List<String> supplementalCachedViews = Arrays.<String>asList(new String[] 
+			{"amp_activity_group", "v_donor_funding", "v_component_funding", "v_contribution_funding", "v_pledges_funding", "v_regional_funding", "amp_activity", "amp_activity_version"});
+	
+	/**
 	 * only change this to false when you have REALLY good reasons for this and ONLY WHILE TESTING OTHER STUFF <br />
 	 * NEVER RUN ANY AMP 2.7+ PRODUCTION INSTANCE WITH THIS SET TO false !!! 
 	 * Злой маньяк Constantin is taking care that this rule is enforced!
@@ -39,6 +45,7 @@ public class PublicViewColumnsUtil
 		{
 			Map<String, CachedTableState> result = new TreeMap<String, CachedTableState>();
 			List<String> views = SQLUtils.<String>fetchAsList(conn, "SELECT DISTINCT(extractorview) FROM amp_columns WHERE extractorview IS NOT NULL ORDER BY extractorview", 1);
+			views.addAll(supplementalCachedViews);
 			for(String viewName:views)
 			{
 				String cachedViewName = getPublicViewTable(viewName);
@@ -104,13 +111,6 @@ public class PublicViewColumnsUtil
 				logger.error("error while doing maintenance on the view!", e);
 			}
 		}
-		createCachedAmpActivityGroupTable(conn); //recreates "cached_amp_activity_group" table, which is not created by using a view, so it was missed at the refresh cached job
-		createTableCache(conn, "v_donor_funding", "cached_v_donor_funding");// recreates "cached_v_donor_funding" table, which is not in amp_columns table, so it was missed at the refresh cached job
-		 	
-	}
-	
-	public static void createCachedAmpActivityGroupTable(java.sql.Connection conn) {
-		createTableCache(conn, "amp_activity_group", "cached_amp_activity_group");
 	}
 	
 	private static void doColumnMaintenance(java.sql.Connection conn, String viewName, CachedTableState viewState, boolean updateData)

@@ -68,7 +68,7 @@ function ampp_content_types_node_info() {
       'help' => '',
     ),
     'news' => array(
-      'name' => t('Actualités'),
+      'name' => t('News'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',

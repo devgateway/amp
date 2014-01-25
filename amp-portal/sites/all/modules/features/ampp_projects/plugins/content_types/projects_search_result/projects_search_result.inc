@@ -67,24 +67,19 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
   $tmpview->set_display('panel_pane_1');
   $block->title = t('Projects search');
 	
-  $sectors_array = Array();
-		
+  $sectors_array = array();	
   $sectors_ids = empty($_GET["sectors"]) ? '' : $_GET["sectors"];
   if($sectors_ids != 'all' and !empty($sectors_ids)){
     $sectors_array = explode(",", $sectors_ids);
   }
-
   $sectors_ids = empty($_GET["primarysectors"]) ? '' : $_GET["primarysectors"];
   if($sectors_ids != 'all' and !empty($sectors_ids)){
     $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
   }
-
   $sectors_ids = empty($_GET["secondarysectors"]) ? '' : $_GET["secondarysectors"];
   if($sectors_ids != 'all' and !empty($sectors_ids)){
     $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
-  }
-	
-  //watchdog('ampp_projects', 'results GET: ' . serialize($_GET));	
+  }	
 	
   $args[0] = !empty($_GET["donors"])? $_GET["donors"] : "all";
   $args[1] = (count($sectors_array) > 0) ? implode(',', $sectors_array) : "all";
@@ -94,8 +89,6 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
   $args[5] = !empty($_GET["programs"])? $_GET["programs"] : "all";
   $args[6] = !empty($_GET["period_start"])? $_GET["period_start"] : "all";
   $args[7] = !empty($_GET["period_end"])? $_GET["period_end"] : "all";
-	
-  //watchdog('ampp_projects', 'results ARGS: ' . serialize($args));
 	
   $showregionalprojects = !empty($_GET["showregionalprojects"])? $_GET["showregionalprojects"] : "all";
     
@@ -137,8 +130,8 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
     } 
   }
   
-  $tmpview->set_arguments($args); 
-  $tmpview->pre_execute();
+  $tmpview->set_arguments($args);  
+  $tmpview->pre_execute(); 
   $tmpview->execute();
 
   if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_projects_projects_search_result_render', dpq($tmpview->build_info['query'], 1));

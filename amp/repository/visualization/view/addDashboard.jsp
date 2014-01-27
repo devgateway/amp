@@ -123,7 +123,26 @@ function saveDashboard() {
 			alert ("${duplicatedGraph}")
 			return false;
 		}
-		
+		var maxYearValue = document.getElementById('maxYearFilter').value;
+		var minYearValue = document.getElementById('minYearFilter').value;
+		if (maxYearValue!="" || minYearValue!="") {
+			if (maxYearValue == "" || minYearValue == "") {
+				errorMsgMax='<digi:trn jsFriendly="true" >Both Default Max Year Filter and Default Min Year Filter values must be set to be used as default filter</digi:trn>';
+				alert(errorMsgMax);
+			    return false;
+				
+			}
+			if ( /^\d+$/.test(maxYearValue) == false  && maxYearValue != "") {
+				errorMsgMax='<digi:trn jsFriendly="true" >Default Max Year Filter value should be a number</digi:trn>';
+				alert(errorMsgMax);
+			    return false;
+			}
+			if (/^\d+$/.test(minYearValue) == false  && minYearValue != "") {
+				errorMsgMin='<digi:trn jsFriendly="true" >Default Min Year Filter value should be a number</digi:trn>';
+				alert(errorMsgMin);
+				return false;	
+			}
+		}
 		<digi:context name="save" property="/visualization/saveDashboard.do" />
   	 	document.dashboardform.action = "<%=save%>?graphs="+param;
   	  	document.dashboardform.target = "_self";
@@ -238,13 +257,13 @@ function validateData(){
 				</tr>
 				<tr>
 					<td><b><digi:trn>Default Max Year Filter</digi:trn></b>
-						<html:text property="maxYearFilter"/>
+						<html:text property="maxYearFilter" styleId="maxYearFilter"/>
 						<span><digi:trn>Both values must be set (and bigger than 0) to be used as default filter.</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
 					<td><b><digi:trn>Default Min Year Filter</digi:trn></b>
-						<html:text property="minYearFilter" />
+						<html:text property="minYearFilter" styleId="minYearFilter" />
 					</td>
 				</tr>
 				<tr>

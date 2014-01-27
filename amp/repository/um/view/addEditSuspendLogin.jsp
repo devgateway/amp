@@ -10,13 +10,25 @@
 <jsp:include page="/repository/aim/view/scripts/newCalendar.jsp"  />
 
 <digi:instance property="suspendLoginManagerForm"/>
+<script type="text/javascript">
+function validate () {
+	var name =document.getElementsByName('currentObj.name')[0].value;
+	if (name == ""){
+		errorMsg='<digi:trn jsFriendly="true" >Name field is blank</digi:trn>';
+		alert(errorMsg);
+		return;
 	
+	}
+	document.suspendLoginManagerForm.submit();
+  	
+}
+</script>	
 <digi:form action="/suspendLoginManager.do?action=save" method="post">
 	<html:hidden name="suspendLoginManagerForm" property="currentObj.id"/>
 	<digi:errors/>
 	<table>
 		<tr>
-			<td>Name</td>
+			<td>Name <font color="red">*</font></td>
 			<td><html:text name="suspendLoginManagerForm" property="currentObj.name"/></td>
 		</tr>
 		<tr>
@@ -41,7 +53,7 @@
 			<td><html:checkbox name="suspendLoginManagerForm" property="currentObj.active"/></td>
 		</tr>
 		<tr>
-			<td colspan="2"><html:submit value="Save"/></td>
+			<td colspan="2"><input type="button" value="Save" onclick="validate()"/></td>
 		</tr>
 	</table>
 </digi:form>

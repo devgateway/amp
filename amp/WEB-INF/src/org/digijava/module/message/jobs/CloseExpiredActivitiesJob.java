@@ -162,7 +162,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     		if (!autoClosingEnabled)
     			return; // feature disabled => nothing to do;
 
-    		System.out.println("Running the activity autocloser job...");
+    		logger.info("Running the activity autocloser job...");
     		
     		//no longer available: TLSUtils.forceLocaleUpdate(org.digijava.module.um.util.DbUtil.getLanguageByCode("en"));
     		TLSUtils.getThreadLocalInstance().site = SiteUtils.getDefaultSite();
@@ -176,7 +176,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     		Long closedCategoryValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
     		
     		String filterQuery = "SELECT amp_activity_last_version_id FROM amp_activity_group aag WHERE aag.autoclosedonexpiration = false AND " + 
-				" aag.amp_activity_last_version_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft IS NULL or draft=false) and approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") AND actual_completion_date < now())" +
+				" aag.amp_activity_last_version_id IN (SELECT amp_activity_id FROM amp_activity WHERE (amp_team_id IS NOT NULL) AND (draft IS NULL or draft=false) and approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") AND actual_completion_date < now())" +
 				" AND aag.amp_activity_last_version_id IN (select amp_activity_id FROM v_status WHERE amp_status_id != " + closedCategoryValue + ")" +
 				"";
 		

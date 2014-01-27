@@ -70,7 +70,9 @@ SaveReportEngine.prototype.showPanel		= function () {
 	this.panel.show();
 	document.getElementById("saveReportName").focus();
 };
-
+SaveReportEngine.prototype.closePanel		= function () {
+	this.panel.close();
+}
 SaveReportEngine.prototype.success		= function (o) {
 	this.panel.setFooter("");
 	if ( o.responseText.length > 2 ) {
@@ -104,9 +106,12 @@ SaveReportEngine.prototype.success		= function (o) {
 };
 
 function refresh(isTab){
-	if (isTab)
+	if (isTab){
 		document.forms[0].action = "/showDesktop.do";
-	document.forms[0].submit();
+		document.forms[0].submit();
+	}else{
+		location.reload();
+	}
 }
 
 SaveReportEngine.prototype.failure		= function (o) {

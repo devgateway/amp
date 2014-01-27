@@ -104,6 +104,7 @@ public class DataDispatcher extends DispatchAction {
 		AmpTeam currentTeam = null;
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if (tm!=null && tm.getTeamAccessType().equals("Management")) {
+			//TODO: Separate logic from "public view" and "Management ws" because ARE NOT THE SAME THING and it leads to data inconsistency.
 			visualizationForm.getFilter().setFromPublicView(true);// sets as public view when team is management, so it shows only approved activities
         } 
 		

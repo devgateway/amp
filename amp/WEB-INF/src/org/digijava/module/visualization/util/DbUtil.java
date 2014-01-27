@@ -919,8 +919,13 @@ public class DbUtil {
 			oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
 	        oql += "   inner join f.ampActivityId act ";
         } else {
-        	if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-        		oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        	if(filter.getFromPublicView() !=null && filter.getFromPublicView()) {
+        		if(tm !=null && tm.getTeamAccessType().equals("Management")) {
+        			//Do nothing because "management ws" and "public view" are not the same thing. (AMP-16750).
+        			oql += " from ";
+        		} else {
+        			oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        		}        		
         	} else { 
         		oql += " from ";
         	}
@@ -936,7 +941,8 @@ public class DbUtil {
         	oql += specialInner;
 
         //If it doesn't come from public view, then it joins to the regual amp_activity_group
-        if(!(filter.getFromPublicView() !=null&& filter.getFromPublicView()))
+        //Or is a Management ws.
+        if(!(filter.getFromPublicView() !=null && filter.getFromPublicView()) || (tm != null && tm.getTeamAccessType().equals("Management")))
         	oql += " inner join act.ampActivityGroup actGroup ";
         	
         //Join for locations filter
@@ -1074,9 +1080,13 @@ public class DbUtil {
         //If this comes from the public view, it gets the query for Management workspaces (since that's the information shown in Public View)
         //and links it to the cached version of amp_activity_group (since public view information should also come from cached views)
         //If it's not public view (the else) and links it to the non cached version of the amp_activity_group
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-            oql += DashboardUtil.getTeamQueryManagement();
-            oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
+        if(filter.getFromPublicView() !=null && filter.getFromPublicView()) {
+        	if(tm != null && tm.getTeamAccessType().equals("Management")) {
+        		//Do nothing.
+        	} else {
+        		oql += DashboardUtil.getTeamQueryManagement();
+        		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
+        	}
         }
         else
         {
@@ -1672,16 +1682,21 @@ public class DbUtil {
 			oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
 	        oql += "   inner join f.ampActivityId act ";
         } else {
-        	if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-        		oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        	if(filter.getFromPublicView() !=null && filter.getFromPublicView()) {
+        		if(tm !=null && tm.getTeamAccessType().equals("Management")) {
+        			//Do nothing because "management ws" and "public view" are not the same thing. (AMP-16750).
+        			oql += " from ";
+        		} else {
+        			oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        		}        		
         	} else { 
         		oql += " from ";
-        	}
+        	}        	
 			oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
 	        oql += "   inner join f.ampActivityId act ";
         }
     	
-    	if(!(filter.getFromPublicView() !=null&& filter.getFromPublicView()))
+        if(!(filter.getFromPublicView() !=null && filter.getFromPublicView()) || (tm != null && tm.getTeamAccessType().equals("Management")))
         	oql += " inner join act.ampActivityGroup actGroup ";
     	
     	if (donorCondition || implementingCondition || beneficiaryCondition)
@@ -1762,8 +1777,12 @@ public class DbUtil {
 			oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelStatusIds())+") ";
 		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-            oql += DashboardUtil.getTeamQueryManagement();
-            oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
+        	if(tm != null && tm.getTeamAccessType().equals("Management")) {
+        		//Do nothing.
+        	} else {
+        		oql += DashboardUtil.getTeamQueryManagement();
+        		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
+        	}
         }
         else
         {
@@ -1901,8 +1920,13 @@ public class DbUtil {
 			oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
 	        oql += "   inner join f.ampActivityId act ";
         } else {
-        	if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-        		oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        	if(filter.getFromPublicView() !=null && filter.getFromPublicView()) {
+        		if(tm !=null && tm.getTeamAccessType().equals("Management")) {
+        			//Do nothing because "management ws" and "public view" are not the same thing. (AMP-16750).
+        			oql += " from ";
+        		} else {
+        			oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        		}        		
         	} else { 
         		oql += " from ";
         	}
@@ -1910,7 +1934,7 @@ public class DbUtil {
 	        oql += "   inner join f.ampActivityId act ";
         }
         
-    	if(!(filter.getFromPublicView() !=null&& filter.getFromPublicView()))
+        if(!(filter.getFromPublicView() !=null && filter.getFromPublicView()) || (tm != null && tm.getTeamAccessType().equals("Management")))
         	oql += " inner join act.ampActivityGroup actGroup ";
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
@@ -1992,8 +2016,12 @@ public class DbUtil {
 			oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelStatusIds())+") ";
 		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-            oql += DashboardUtil.getTeamQueryManagement();
-            oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
+        	if(tm != null && tm.getTeamAccessType().equals("Management")) {
+        		//Do nothing.
+        	} else {
+        		oql += DashboardUtil.getTeamQueryManagement();
+        		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
+        	}
         }
         else
         {
@@ -2148,8 +2176,13 @@ public class DbUtil {
 			oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
 	        oql += "   inner join f.ampActivityId act ";
         } else {
-        	if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-        		oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        	if(filter.getFromPublicView() !=null && filter.getFromPublicView()) {
+        		if(tm !=null && tm.getTeamAccessType().equals("Management")) {
+        			//Do nothing because "management ws" and "public view" are not the same thing. (AMP-16750).
+        			oql += " from ";
+        		} else {
+        			oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        		}        		
         	} else { 
         		oql += " from ";
         	}
@@ -2160,7 +2193,7 @@ public class DbUtil {
         oql += " inner join act.actPrograms actProg ";
         oql += " inner join actProg.program prog ";
         
-    	if(!(filter.getFromPublicView() !=null&& filter.getFromPublicView()))
+        if(!(filter.getFromPublicView() !=null && filter.getFromPublicView()) || (tm != null && tm.getTeamAccessType().equals("Management")))
         	oql += " inner join act.ampActivityGroup actGroup ";
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
@@ -2239,8 +2272,12 @@ public class DbUtil {
 			oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelStatusIds())+") ";
 		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-            oql += DashboardUtil.getTeamQueryManagement();
-            oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
+        	if(tm != null && tm.getTeamAccessType().equals("Management")) {
+        		//Do nothing.
+        	} else {
+        		oql += DashboardUtil.getTeamQueryManagement();
+        		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
+        	}
         }
         else
         {

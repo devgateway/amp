@@ -117,11 +117,9 @@ public class GetWorkspace extends Action {
                         uwForm.setAddFlag(false);
                 } else {
                     // Clearing formbean properties before going to add a team
-                    if (uwForm.isAddFlag()) {
-                        uwForm.setReset(true);
-                        uwForm.reset(mapping, request);
+                    uwForm.setReset(true);
+                    uwForm.reset(mapping, request);
                         //uwForm.setAddFlag(true);
-                    }
                     uwForm.setActionEvent("add");
                     return mapping.findForward("showAddWorkspace");
                 }

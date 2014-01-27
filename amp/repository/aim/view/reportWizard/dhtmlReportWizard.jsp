@@ -207,7 +207,7 @@
 		var badGorupSize = '<digi:trn key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
 		var badYearRange = '<digi:trn key="rep:format:badYearRange">Year Range To should be greater than From</digi:trn>';
 
-		var filterPanelNameText = '${filterPanelName}' + ': ' + '${aimReportWizardForm.reportTitle}';
+		var filterPanelNameText = '${filterPanelName}' + ': ' + '${fn:escapeXml(aimReportWizardForm.reportTitle)}';
 		
 		repManagerParams	= {
 									desktopTab: ${myForm.desktopTab},

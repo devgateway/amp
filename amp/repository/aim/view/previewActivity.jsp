@@ -2078,7 +2078,7 @@ function collapseAll() {
 		<table width="100%" cellSpacing="2" cellPadding="2" border="0">
 			<c:forEach var="issue" items="${aimEditActivityForm.issues.issues}">
 				<tr>
-					<td valign="top">
+					<td valign="top" colspan="3">
 						<li class="level1"><b> 
 							<digi:trn key="aim:issuename:${issue.id}">
 							<c:out value="${issue.name}" />
@@ -2089,7 +2089,8 @@ function collapseAll() {
 					<c:if test="${!empty issue.measures}">
 						<c:forEach var="measure" items="${issue.measures}">
 							<tr>
-								<td>
+								<td></td>
+								<td colspan="2">
 									<li class="level2"><i> <digi:trn key="aim:${measure.nameTrimmed}">
 										<c:out value="${measure.name}" />
 										</digi:trn> </i>									</li>								</td>
@@ -2097,6 +2098,7 @@ function collapseAll() {
 								<c:if test="${!empty measure.actors}">
 									<c:forEach var="actor" items="${measure.actors}">
 										<tr>
+											<td></td><td></td>
 											<td>
 											<li class="level3">
 												<digi:trn key="aim:${actor.nameTrimmed}">

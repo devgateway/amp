@@ -60,6 +60,7 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -389,6 +390,23 @@ public class EditActivity extends Action {
       eaForm.getPrograms().setPrimaryPrograms(primaryPrograms);
       eaForm.getPrograms().setSecondaryPrograms(secondaryPrograms);
       eaForm.getPrograms().setTertiaryPrograms(tertiaryPrograms);
+      
+    //allComments
+	  ArrayList<AmpComments> colAux	= null;
+      Collection ampFields 			= DbUtil.getAmpFields();
+      HashMap allComments 			= new HashMap();
+      
+      if (ampFields!=null) {
+      	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
+              AmpField field = (AmpField) itAux.next();
+              	colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),
+                                                    activityId);
+              allComments.put(field.getFieldName(), colAux);
+            }
+      }
+      
+      eaForm.getComments().setAllComments(allComments);
+
 
       if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
           .getCurrencyId() != null) {

@@ -33,7 +33,8 @@ $plugin = array(
                         'programs_label' => 'Programs',
                         'donors_label' => 'Donors',
                         'locations_label' => 'Locations',
-                        'keywords_label' => 'Keywords'),
+                        'keywords_label' => 'Keywords',
+                        'preview_amount' => 0),
     'render callback' => 'ampp_projects_projects_search_form_render'
 );
 
@@ -119,14 +120,14 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   }
   
   if ($conf["programs_flag"] == 1) {  
-	  $form['program'] = array(
-	    '#type' => 'textfield',
-	    '#title' => (isset($conf['programs_label'])) ? t($conf['programs_label']) : t('Programs'),
-	    '#size' => 30,
-	    '#maxlength' => 64,
-	    '#description' => t('Start typing program name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
- 	 );
-     if (!isset($conf['programs_popup']) || $conf['programs_popup'] == 0) $form['program']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-programs', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-program', 'title' => t($conf['programs_label'] . ' selection')))) . '</span>';
+    $form['program'] = array(
+      '#type' => 'textfield',
+      '#title' => (isset($conf['programs_label'])) ? t($conf['programs_label']) : t('Programs'),
+      '#size' => 30,
+      '#maxlength' => 64,
+      '#description' => t('Start typing program name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
+    );
+    if (!isset($conf['programs_popup']) || $conf['programs_popup'] == 0) $form['program']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-programs', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-program', 'title' => t($conf['programs_label'] . ' selection')))) . '</span>';
   }
 
   if ($conf["donors_flag"] == 1) {  
@@ -141,175 +142,145 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   }
   
   if ($conf["locations_flag"] == 1) {  
-	  $form['region'] = array(
-	    '#type' => 'textfield',
-	    '#title' => (isset($conf['locations_label'])) ? t($conf['locations_label']) : t('Locations'),
-	    '#size' => 30,
-	    '#maxlength' => 64,
-	    '#description' => t('Start typing region then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-	  );
-     if (!isset($conf['locations_popup']) || $conf['locations_popup'] == 0) $form['locations_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-regions', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-region', 'title' => t($conf['locations_label'] . ' selection')))) . '</span>';
+    $form['region'] = array(
+      '#type' => 'textfield',
+      '#title' => (isset($conf['locations_label'])) ? t($conf['locations_label']) : t('Locations'),
+      '#size' => 30,
+      '#maxlength' => 64,
+      '#description' => t('Start typing region then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
+    );
+    if (!isset($conf['locations_popup']) || $conf['locations_popup'] == 0) $form['locations_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-regions', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-region', 'title' => t($conf['locations_label'] . ' selection')))) . '</span>';
   }
   
-  if ($conf["period_flag"] == 1) {
+  if ($conf["period_flag"] == 1) { 
+    $lang_arr = locale_get_localized_date_format($language->language);
+    $years_range_arr = activities_period_range();
+    $years_past = (date('Y') > $years_range_arr[0]) ? date('Y') - $years_range_arr[0] : 0;
+    $years_future = ($years_range_arr[1] > date('Y')) ? $years_range_arr[1] - date('Y') : 0; 
   
-      $lang_arr = locale_get_localized_date_format($language->language);
-      $years_range_arr = activities_period_range();
-      $years_past = (date('Y') > $years_range_arr[0]) ? date('Y') - $years_range_arr[0] : 0;
-      $years_future = ($years_range_arr[1] > date('Y')) ? $years_range_arr[1] - date('Y') : 0; 
-    
-      $form['period'] = array(
-        '#type' => 'item',
-        '#title' => t('Period from'),
-        'period_start' => array(
-          '#type' => 'date_popup',
-          '#title' => '',
-          '#default_value' => '',
-          '#date_type' => DATE_UNIX,
-          '#date_timezone' => date_default_timezone(),
-          '#date_format' => is_array($lang_arr['date_format_ampp_cal']) ? $lang_arr['date_format_ampp_cal']['format'] : $lang_arr['date_format_ampp_cal'],
-          '#date_year_range' => '-' . $years_past . ':+' . $years_future,
-          '#description' => t('Records with no value are ignored.'),
-        ),
-        'period_end' => array(
-          '#type' => 'date_popup',
-          '#title' => '',
-          '#default_value' => '',
-          '#date_type' => DATE_UNIX,
-          '#date_timezone' => date_default_timezone(),
-          '#date_format' => is_array($lang_arr['date_format_ampp_cal']) ? $lang_arr['date_format_ampp_cal']['format'] : $lang_arr['date_format_ampp_cal'],
-          '#date_year_range' => '-' . $years_past . ':+' . $years_future,
-        ),
-      );
-      
-      /* alternative way that does not have good enough popup
-      $form['finished_between'] = array(
-        '#type' => 'item',
-        '#title' => 'Finished between',
-        'finished_after' => array(
-            '#type' => 'textfield',
-            '#attributes' => array('class' => array('datepicker')),
-        ),
-        'finished_before' => array(
-            '#type' => 'textfield',
-            '#title' => 'and',
-            '#attributes' => array('class' => array('datepicker')),
-        ),
-      );
-      $form['#after_build'] = array('project_search_form_uidatepicker');
-      */
+    $form['period'] = array(
+      '#type' => 'item',
+      '#title' => t('Period from'),
+      'period_start' => array(
+        '#type' => 'date_popup',
+        '#title' => '',
+        '#default_value' => '',
+        '#date_type' => DATE_UNIX,
+        '#date_timezone' => date_default_timezone(),
+        '#date_format' => is_array($lang_arr['date_format_ampp_cal']) ? $lang_arr['date_format_ampp_cal']['format'] : $lang_arr['date_format_ampp_cal'],
+        '#date_year_range' => '-' . $years_past . ':+' . $years_future,
+        '#description' => t('Records with no value are ignored.'),
+      ),
+      'period_end' => array(
+        '#type' => 'date_popup',
+        '#title' => '',
+        '#default_value' => '',
+        '#date_type' => DATE_UNIX,
+        '#date_timezone' => date_default_timezone(),
+        '#date_format' => is_array($lang_arr['date_format_ampp_cal']) ? $lang_arr['date_format_ampp_cal']['format'] : $lang_arr['date_format_ampp_cal'],
+        '#date_year_range' => '-' . $years_past . ':+' . $years_future,
+      ),
+    );
   }
   
   if ($conf["keywords_flag"] == 1) {  
-	  $form['keyword'] = array(
-	  	'#type' => 'textfield',
-	  	'#title' => (isset($conf['keywords_label'])) ? t($conf['keywords_label']) : t('Keywords'),
-	  	'#size' => 30,
-	  	'#description' => t('Search in project titles'),
-	  );
+    $form['keyword'] = array(
+    	'#type' => 'textfield',
+    	'#title' => (isset($conf['keywords_label'])) ? t($conf['keywords_label']) : t('Keywords'),
+    	'#size' => 30,
+    	'#description' => t('Search in project titles'),
+    );
   }
   
-  if ($conf["budget_flag"] == 1) {
-      
-      $form['budget'] = array(
-        '#type' => 'radios',
-        '#title' => t('Show on-budget projects'),
-        '#options' => array('all' => t('Show both on and off budget projects'), OnOffBudgetIds::$onBudgetProjectsId => t('On-budget only'), OnOffBudgetIds::$offBudgetProjectsId => t('Off-budget only')),
-        '#default_value' => 'all',
-      );
-      
-      /*
-	  $form['onbudget'] = array(
-	    '#type' => 'checkbox',
-	    '#title' => t('Show on-budget projects'),
-	    //'#value' => 1,
-	  );
-	  
-	  $form['offbudget'] = array(
-	    '#type' => 'checkbox',
-	    '#title' => t('Show off-budget projects'),
-	    //'#value' => 1,
-	  );
-	  */
+  if ($conf["budget_flag"] == 1) {      
+    $form['budget'] = array(
+      '#type' => 'radios',
+      '#title' => t('Show on-budget projects'),
+      '#options' => array('all' => t('Show both on and off budget projects'), OnOffBudgetIds::$onBudgetProjectsId => t('On-budget only'), OnOffBudgetIds::$offBudgetProjectsId => t('Off-budget only')),
+      '#default_value' => 'all',
+    );
   }
   
   if ($conf["country_level_projects_flag"] == 1) {
-	  $form['country_level_projects'] = array(
-	    '#type' => 'checkbox',
-	    '#title' => t('Include higher geographical levels'),
-	    //'#value' => 1,
-	  );
+    $form['country_level_projects'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Include higher geographical levels'),
+      //'#value' => 1,
+    );
   }
 
-  global $amp_db_exists;
+  if ($conf["preview_amount"] == 1) {
+    $form['preview_amount'] = array(
+      '#type' => 'hidden',
+      '#value' => $conf["preview_amount"],
+      '#attributes' => array('id' => array('preview_amount')),
+    );
+  }
   
+  global $amp_db_exists;
+
   if ($amp_db_exists) {
     $form['submit'] = array('#type' => 'submit', '#value' => t('Show'));
-    $form['results_count'] = array('#markup' => t('projects to show is') . '&nbsp;' . '<div id="search_result_count">' . ampp_search_result_count(false) . '</div><span id="loading-count">' . t('loading') . '...</span>');
+    $form['results_count'] = array('#markup' => t('projects to show is') . '&nbsp;' . '<div id="search_result_count">' . ampp_search_result_count(false, isset($conf['preview_amount']) ? $conf['preview_amount'] : 0) . '</div><span id="loading-count">' . t('loading') . '...</span>');
   } else {
     $form['results_count'] = array('#markup' => '<div class="messages error"><ul><li>' . t('AMP database is not configured properly.') . '</li></ul><span><img id="close" src="/sites/all/themes/ampp/images/cancel_icon.gif"></span></div>');
   }
   
   // Fill search form textfields.
   // Form should be filled only on search result page
-  //if((arg(0) == 'node' && drupal_lookup_path('alias', "node/".arg(1)) == $conf["search_path"]) || (arg(0) == $conf["search_path"])){
-  if (1 == 1) {
-    $js_string  = '';
-    $arr = ampp_get_sectors_from_url();
-    if (is_array($arr)) $js_string .= 'var selectedSectors = new Array('.implode(",", $arr).');' . "\n";
-    $arr = ampp_get_primarysectors_from_url();
-    if (is_array($arr)) $js_string .= 'var selectedPrimarySectors = new Array('.implode(",", $arr).');' . "\n";
-    $arr = ampp_get_secondarysectors_from_url();
-    if (is_array($arr)) $js_string .= 'var selectedSecondarySectors = new Array('.implode(",", $arr).');' . "\n";
-    $arr = ampp_get_programs_from_url();
-    if (is_array($arr)) $js_string .= 'var selectedPrograms = new Array('.implode(",", $arr).');' . "\n";
-    $arr = ampp_get_donors_from_url();
-    if (is_array($arr)) $js_string .= 'var selectedDonors = new Array('.implode(",", $arr).');' . "\n";
-    $arr = ampp_get_locations_from_url();
-    if (is_array($arr)) $js_string .= 'var selectedLocations = new Array('.implode(",", $arr).');' . "\n";
-    $arr = ampp_get_period_from_url();
-    if (is_array($arr)) {
-      if (trim($arr[0]) != 'all')
-        $js_string .= "var selectedPeriodStart = '" . format_date(strtotime($arr[0]), 'ampp_cal') . "'\n";
-      if (trim($arr[1]) != 'all')
-        $js_string .= "var selectedPeriodEnd = '" . format_date(strtotime($arr[1]), 'ampp_cal') . "'\n";
-    }
-    
-    $arr = ampp_get_keywords_from_url();
-    if (is_array($arr)) {
-      $js_string .= 'var selectedKeywords = new Array("'. implode(",", $arr) .'");' . "\n";
-    }
-    
-    if ($conf["budget_flag"] == 1) {
-	    $arr = ampp_get_onoffbudget_from_url();
-	    if(is_array($arr)) {
-	    	$i = 0;
-	    	while ( $i < count($arr) ){
-	    		switch($arr[$i]) {   		
-	    			case OnOffBudgetIds::$offBudgetProjectsId:
-	    				$js_string .= "var selectedBudget = ".OnOffBudgetIds::$offBudgetProjectsId."; \n";
-	    				break;
-	    			case OnOffBudgetIds::$onBudgetProjectsId:
-	    				$js_string .= "var selectedBudget = ".OnOffBudgetIds::$onBudgetProjectsId."; \n";
-	    				break;	
-	    		}
-	    		$i++;
-	    	}
-	    }
-	    else {
-	    	$js_string .= "var selectedOffBudget = 'all'; \n";
-	    }
-    }
-    
-	if ($conf["country_level_projects_flag"] == 1) {
-		$regionalprojects = ampp_get_regionalprojects_from_url();
-		if($regionalprojects == 1) {
-			$js_string .= "var selectedRegionalProjects = 1; \n";
-		}
-    }
-
-    drupal_add_js($js_string,array('type' => 'inline', 'scope' => 'footer'));
+  $js_string  = '';
+  $arr = ampp_get_sectors_from_url();
+  if (is_array($arr)) $js_string .= 'var selectedSectors = new Array('.implode(",", $arr).');' . "\n";
+  $arr = ampp_get_primarysectors_from_url();
+  if (is_array($arr)) $js_string .= 'var selectedPrimarySectors = new Array('.implode(",", $arr).');' . "\n";
+  $arr = ampp_get_secondarysectors_from_url();
+  if (is_array($arr)) $js_string .= 'var selectedSecondarySectors = new Array('.implode(",", $arr).');' . "\n";
+  $arr = ampp_get_programs_from_url();
+  if (is_array($arr)) $js_string .= 'var selectedPrograms = new Array('.implode(",", $arr).');' . "\n";
+  $arr = ampp_get_donors_from_url();
+  if (is_array($arr)) $js_string .= 'var selectedDonors = new Array('.implode(",", $arr).');' . "\n";
+  $arr = ampp_get_locations_from_url();
+  if (is_array($arr)) $js_string .= 'var selectedLocations = new Array('.implode(",", $arr).');' . "\n";
+  $arr = ampp_get_period_from_url();
+  if (is_array($arr)) {
+    if (trim($arr[0]) != 'all')
+      $js_string .= "var selectedPeriodStart = '" . format_date(strtotime($arr[0]), 'ampp_cal') . "'\n";
+    if (trim($arr[1]) != 'all')
+      $js_string .= "var selectedPeriodEnd = '" . format_date(strtotime($arr[1]), 'ampp_cal') . "'\n";
   }
+    
+  $arr = ampp_get_keywords_from_url();
+  if (is_array($arr)) {
+    $js_string .= 'var selectedKeywords = new Array("'. implode(",", $arr) .'");' . "\n";
+  }
+    
+  if ($conf["budget_flag"] == 1) {
+    $arr = ampp_get_onoffbudget_from_url();
+    if(is_array($arr)) {
+  	  $i = 0;
+  	  while ($i < count($arr) ) {
+		switch($arr[$i]) {   		
+		  case OnOffBudgetIds::$offBudgetProjectsId:
+			$js_string .= "var selectedBudget = ".OnOffBudgetIds::$offBudgetProjectsId."; \n";
+			break;
+		  case OnOffBudgetIds::$onBudgetProjectsId:
+			$js_string .= "var selectedBudget = ".OnOffBudgetIds::$onBudgetProjectsId."; \n";
+			break;	
+		}
+		$i++;
+  	  }
+    } else {
+      $js_string .= "var selectedOffBudget = 'all'; \n";
+    }
+  }
+  if ($conf["country_level_projects_flag"] == 1) {
+    $regionalprojects = ampp_get_regionalprojects_from_url();
+    if($regionalprojects == 1) {
+      $js_string .= "var selectedRegionalProjects = 1; \n";
+    }
+  }
+
+  drupal_add_js($js_string,array('type' => 'inline', 'scope' => 'footer'));
   
   return $form;	
 }
@@ -322,8 +293,8 @@ function ampp_projects_projects_search_form_form_submit($form, &$form_state) {
   $conf	= $form_state['conf'];
   $submit_path = $conf['search_path'];
   
- //   print_r($form_state['values']);
- //  exit;
+  //  print_r($form_state['values']);
+  //  exit;
   
   $queryStrArr = Array();
   
@@ -579,6 +550,13 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
     '#title' => t('Include higher geographical levels flag'),
     '#description' => t('Include higher geographical levels flag'),
     '#default_value' => isset($conf['country_level_projects_flag']) ? intval($conf['country_level_projects_flag']) : $form_state['plugin']['defaults']['country_level_projects_flag'],
+  );
+  
+  $form['preview_amount'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Pre-calculate amount(s)'),
+      '#description' => t('Pre-calculate Commitment amount and show next to "project to show" number'),
+      '#default_value' => isset($conf['preview_amount']) ? intval($conf['preview_amount']) : $form_state['plugin']['defaults']['preview_amount'],
   );
   
   return $form;

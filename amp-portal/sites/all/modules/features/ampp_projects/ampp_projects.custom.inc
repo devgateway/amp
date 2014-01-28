@@ -114,7 +114,7 @@ function getOnOffBudgetIDs() {
 /**
  * Implementation of hook_views_data
  */
-function ampp_projects_views_data(){
+function ampp_projects_views_data() {
 
   // ************* Activity  ****************** //
   
@@ -487,7 +487,7 @@ function ampp_projects_views_data(){
  * Sectors JSON array from URL
  * @return multitype:mixed
  */
-function ampp_get_sectors_from_url(){
+function ampp_get_sectors_from_url() {
   global $amp_db_exists;
   if (!$amp_db_exists) return;
 
@@ -521,7 +521,7 @@ function ampp_get_sectors_from_url(){
 /*
  *
  */
-function ampp_get_primarysectors_from_url(){
+function ampp_get_primarysectors_from_url() {
   global $amp_db_exists;
   if (!$amp_db_exists) return;
 
@@ -555,7 +555,7 @@ function ampp_get_primarysectors_from_url(){
 /*
  *
  */
-function ampp_get_secondarysectors_from_url(){
+function ampp_get_secondarysectors_from_url() {
   global $amp_db_exists;
   if (!$amp_db_exists) return;
 
@@ -589,7 +589,7 @@ function ampp_get_secondarysectors_from_url(){
 /*
  *
  */
-function ampp_get_programs_from_url(){
+function ampp_get_programs_from_url() {
   global $amp_db_exists;
   if (!$amp_db_exists) return;
 
@@ -637,7 +637,7 @@ function ampp_get_keywords_from_url($source_arg = TRUE) {
  * Donors JSON array from URL
  * @return multitype:mixed
  */
-function ampp_get_donors_from_url(){
+function ampp_get_donors_from_url() {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -647,18 +647,21 @@ function ampp_get_donors_from_url(){
   
   db_set_active("amp_projects");
   $items = array();
-  if($donors_ids != 'all' and !empty($donors_ids)){
+  if ($donors_ids != 'all' && !empty($donors_ids)) {
     
     global $language;
     global $user;
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', donor.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', '" . $language->language . "')"; 
     
     $query = db_select('amp_organisation', 'donor');
+    $query->distinct();
     $query->fields('donor', array('amp_org_id', 'acronym'));
-    $query->addExpression($translate_field, 'name');
-    
-    $query->condition('donor.amp_org_id', explode(',', $donors_ids), 'IN');
-    
+    $query->addExpression($translate_field, 'name'); 
+    if (variable_get('amp_show_only_donors', 0)) {
+      $query->innerJoin('amp_funding', 'f', 'f.amp_donor_org_id = donor.amp_org_id');
+      $query->innerJoin('amp_activity', 'a', 'a.amp_activity_id = f.amp_activity_id');
+    }
+    $query->condition('donor.amp_org_id', explode(',', $donors_ids), 'IN');    
     $or_statement = db_or()->condition('donor.deleted', 'true', '<>')->condition('donor.deleted', NULL, 'is');
     $query->condition($or_statement);
 
@@ -667,7 +670,7 @@ function ampp_get_donors_from_url(){
     $result = $query->execute();
     foreach ($result as $record) {
       $name = !empty($record->acronym) ? check_plain($record->name) . ' (' . check_plain($record->acronym) . ')' : check_plain($record->name);
-      $donors[] = drupal_json_encode(array('id'=>$record->amp_org_id, 'name'=>$name));
+      $donors[] = drupal_json_encode(array('id' => $record->amp_org_id, 'name' => $name));
     }
     
   }
@@ -680,7 +683,7 @@ function ampp_get_donors_from_url(){
 /**
  * Locations JSON array from URL
  */
-function ampp_get_locations_from_url(){
+function ampp_get_locations_from_url() {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -704,7 +707,13 @@ function ampp_get_locations_from_url(){
     
     $result = $query->execute();
     foreach ($result as $record) {
-      $locations[] = drupal_json_encode(array('id'=>$record->id, 'name'=>check_plain($record->location_name)));
+      $parents = get_location_path($record->id);
+      if (!empty($parents)) {
+        $name = $parents . ' -> ' . $record->location_name;
+      } else {
+        $name = $record->location_name;
+      }
+      $locations[] = drupal_json_encode(array('id' => $record->id, 'name' => check_plain($name)));
     }
     db_set_active();
   }
@@ -715,7 +724,7 @@ function ampp_get_locations_from_url(){
 /**
  * Period JSON array from URL
  */
-function ampp_get_period_from_url(){
+function ampp_get_period_from_url() {
 
   if( isset($_GET["period_start"]) && isset($_GET["period_end"])) {
     $period_start = $_GET["period_start"];
@@ -729,7 +738,7 @@ function ampp_get_period_from_url(){
 /*
  *
  */
-function ampp_get_onoffbudget_from_url($source_arg = TRUE){
+function ampp_get_onoffbudget_from_url($source_arg = TRUE) {
 
   $budgetflags = isset($_GET["budget"]) ? $_GET["budget"] : 'all';
   
@@ -747,7 +756,7 @@ function ampp_get_onoffbudget_from_url($source_arg = TRUE){
 /*
  *
  */
-function ampp_get_regionalprojects_from_url($source_arg = TRUE){
+function ampp_get_regionalprojects_from_url($source_arg = TRUE) {
   if (!$source_arg) {
     $regionalprojects = 'all';
   }
@@ -761,151 +770,65 @@ function ampp_get_regionalprojects_from_url($source_arg = TRUE){
 /**
  * Get block content with total amounts
  */
-function total_block_content(){
+function total_block_content() {
   $amount_commitment = get_total_amount(0);
   $amount_disbursement = get_total_amount(1);
   return total_block_html($amount_commitment, $amount_disbursement);
 }
-
 
 /**
  * Get total amount of given type (1|0)
  * Use url as arguments.
  * TODO: Find a way to use views to get totals
  */
-function get_total_amount($type){
-
+function get_total_amount($type) {
+  global $user;
   global $amp_db_exists;
   if (!$amp_db_exists) return;
   
-  $donors_ids = array();
-  if (isset($_GET["donors"])) {
-    $donors_ids = $_GET["donors"];
-    $donor_ids_array = explode(",", $donors_ids);
-  }
-  
-  $sectors_ids = array();
-  if (isset($_GET["sectors"])) {
-    $sectors_ids = $_GET["sectors"];
-    $sector_ids_array = explode(",", $sectors_ids);
-  }
+  $block = new stdClass();
+  $view = views_get_view('projects_search_result');
+  $tmpview = $view->clone_view();
+  $tmpview->set_display('panel_pane_1');
+  $tmpview->get_total_amount_type = $type;
   
   $sectors_array = array();
   $sectors_ids = empty($_GET["sectors"]) ? '' : $_GET["sectors"];
-  if ($sectors_ids != 'all' and !empty($sectors_ids)){
-	$sectors_array = explode(",", $sectors_ids);
+  if($sectors_ids != 'all' and !empty($sectors_ids)){
+    $sectors_array = explode(",", $sectors_ids);
   }
-
   $sectors_ids = empty($_GET["primarysectors"]) ? '' : $_GET["primarysectors"];
-  if ($sectors_ids != 'all' and !empty($sectors_ids)){
-	$sectors_array = array_merge($sectors_array, explode(",",$sectors_ids));
+  if($sectors_ids != 'all' and !empty($sectors_ids)){
+    $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
   }
-
   $sectors_ids = empty($_GET["secondarysectors"]) ? '' : $_GET["secondarysectors"];
-  if ($sectors_ids != 'all' and !empty($sectors_ids)) {
-  	$sectors_array = array_merge($sectors_array, explode(",",$sectors_ids));
+  if($sectors_ids != 'all' and !empty($sectors_ids)){
+    $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
   }
   
-  $sector_ids_array = $sectors_array;
+  $args[0] = !empty($_GET["donors"])? $_GET["donors"] : "all";
+  $args[1] = (count($sectors_array) > 0) ? implode(',', $sectors_array) : "all";
+  $args[2] = !empty($_GET["locations"])? $_GET["locations"] : "all";
+  $args[3] = !empty($_GET["keywords"])? $_GET["keywords"] : "all";
+  $args[4] = !empty($_GET["budget"])? $_GET["budget"] : "all";
+  $args[5] = !empty($_GET["programs"])? $_GET["programs"] : "all";
+  $args[6] = !empty($_GET["period_start"])? $_GET["period_start"] : "all";
+  $args[7] = !empty($_GET["period_end"])? $_GET["period_end"] : "all";
   
-  $programs_ids = array();
-  if (isset($_GET["programs"])) {
-    $programs_ids = $_GET["programs"];
-    $program_ids_array = explode(",", $programs_ids);
-  }
+  $showregionalprojects = !empty($_GET["showregionalprojects"])? $_GET["showregionalprojects"] : "all";
+  
+  $tmpview->set_arguments($args);
+  $tmpview->pre_execute();
+  $tmpview->execute();
+  
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_total_amount', dpq($tmpview->build_info['query'], 1));
 
-  $locations_ids = array();
-  if (isset($_GET["locations"])) {
-    $locations_ids = $_GET["locations"];
-    $location_ids_array = explode(",", $locations_ids);
+  $sum = 0;
+  foreach ($tmpview->result as $row) {
+    $sum = $sum + $row->amount;
   }
   
-  $period_start = isset($_GET["period_start"]) ? $_GET["period_start"] : '';
-  $period_end = isset($_GET["period_end"]) ? $_GET["period_end"] : '';
-  
-  $keywords = isset($_GET["keywords"]) ? $_GET["keywords"] : '';
-  
-  db_set_active("amp_projects");
-  
-  // Start constructing the SQL query
-  $query = db_select('amp_funding_detail', 'fd');
-  
-  $query->condition('fd.transaction_type', $type, "=")->addExpression('SUM(fd.transaction_amount / getexchange(cur.currency_code, fd.transaction_date ))', 'transaction_amount');
-  if ($donors_ids != 'all' and !empty($donor_ids_array[0])){
-      $query->condition('f.amp_donor_org_id', $donor_ids_array, "IN");
-  }
-  $query->addJoin('LEFT', 'amp_funding', 'f', 'f.amp_funding_id = fd.amp_funding_id');
-  $query->addJoin('LEFT', 'cached_amp_activity', 'activity', 'activity.amp_activity_id = f.amp_activity_id');
-  $query->addJoin('LEFT', 'amp_currency', 'cur', 'fd.amp_currency_id = cur.amp_currency_id');
-  
-  $snippet  = "activity.amp_team_id is not null";
-  $query->where($snippet);
-  
-  $snippet  = "activity.approval_status IN ('approved', 'startedapproved')";
-  $snippet .= " AND activity.draft <> true"; 
-  $snippet .= " AND activity.amp_team_id IN (select amp_team_id from amp_team where parent_team_id IN (select amp_team_id from amp_team where access_type = 'Management'))"; 
-  $snippet .= " OR (";
-  $snippet .= "activity.approval_status IN ('approved', 'startedapproved')";
-  $snippet .= " AND activity.draft <> true";
-  $snippet .= " AND activity.amp_activity_id IN (select distinct(activity) from amp_org_role where organisation IN (select amp_org_id from amp_team_orgs where amp_team_id IN (select amp_team_id from amp_team where parent_team_id in (select amp_team_id from amp_team where access_type='Management')))))";
-      
-  $query->where($snippet);
-  
-  if ($sectors_ids != 'all' and !empty($sector_ids_array[0])){
-    foreach ($sector_ids_array as $sector_id){
-      $sector_ids_array = array_merge($sector_ids_array, getChildSectorsIds($sector_id));
-    }
-    $query->addJoin('LEFT', 'amp_activity_sector', 'sector', 'sector.amp_activity_id = activity.amp_activity_id');
-    $query->condition('sector.amp_sector_id', $sector_ids_array, "IN");
-  }
-  
-  if ($programs_ids != 'all' and !empty($program_ids_array[0])){
-    foreach ($program_ids_array as $program_id){
-      $program_ids_array = array_merge($program_ids_array, getChildProgramsIds($program_id));
-    }
-	$query->addJoin('LEFT', 'amp_activity_program', 'program', 'program.amp_activity_id = activity.amp_activity_id');
-	$query->condition('program.amp_program_id', $program_ids_array, "IN");
-  }
-  
-  $regionalprojects = isset($_GET["showregionalprojects"]) ? $_GET["showregionalprojects"] : 0;
-  if ($regionalprojects == 1) {
-  	   if($locations_ids != 'all' && !empty($location_ids_array[0])){
-  	   	   	$tmp_location_ids_array = $location_ids_array;
-		    foreach ($tmp_location_ids_array as $id){
-		      $location_ids_array = array_merge($location_ids_array, getParentLocationIds($id));
-		    }
-  	   }
-  }
-  
-  if ($locations_ids != 'all' and !empty($location_ids_array[0])){
-    $query->addJoin('LEFT', 'amp_activity_location', 'al', 'al.amp_activity_id = activity.amp_activity_id');
-    $query->addJoin('LEFT', 'amp_location', 'am_loc', 'am_loc.amp_location_id=al.amp_location_id');
-    $query->condition('am_loc.location_id', $location_ids_array, "IN");
-  }
-  
-  $budgetflag = isset($_GET["budget"]) ? $_GET["budget"] : '';
-  if (!empty($budgetflag) && $budgetflag != "all" ) {	 
-	$catvalue = intval( $budgetflag );
-	$query->addJoin('INNER', 'amp_activities_categoryvalues', 'acv', 'acv.amp_activity_id = activity.amp_activity_id');
-	$query->condition('acv.amp_categoryvalue_id', $catvalue, '=');
-  }
-  
-  if ($keywords !== 'all' && !empty($keywords)) {
-    $query->where('unaccent(activity.name) ILIKE unaccent(\'%' . db_like($keywords) . '%\')');
-  }
-
-  //condition for start and end date period
-  if (!empty($period_start) && $period_start != "all" ) {
-    $query->condition('activity.actual_start_date', $period_start, '>=');
-  }
-  if (!empty($period_end) && $period_end != "all" ) {
-    $query->condition('activity.actual_completion_date', $period_end, '<=');
-  }
-  
-  $result = $query->execute()->fetchAssoc();
-  
-  db_set_active();
-  return $result['transaction_amount'] ;
+  return $sum;
 }
 
 
@@ -1238,188 +1161,6 @@ function ampp_search_result_count($JSON = true){
   } else {
     return $tmpview->total_rows;
   }
-
-  /*
-  if(arg(0) != 'ampp_search'){ // Not on search page!
-		$donors_ids = empty($_GET["donors"]) ? '' : $_GET["donors"];
-		if($donors_ids != 'all' and !empty($donors_ids)){
-			$_GET['currentDonors'] = explode(",",$donors_ids);
-		}
-		
-		$sectors_array = Array();
-		
-		$sectors_ids = empty($_GET["sectors"]) ? '' : $_GET["sectors"];
-		if($sectors_ids != 'all' and !empty($sectors_ids)){
-			$sectors_array = explode(",",$sectors_ids);
-		}
-		
-		$sectors_ids = empty($_GET["primarysectors"]) ? '' : $_GET["primarysectors"];
-		if($sectors_ids != 'all' and !empty($sectors_ids)){
-			$sectors_array = array_merge($sectors_array,explode(",",$sectors_ids));
-		}
-		
-		$sectors_ids = empty($_GET["secondarysectors"]) ? '' : $_GET["secondarysectors"];
-		if($sectors_ids != 'all' and !empty($sectors_ids)){
-			$sectors_array = array_merge($sectors_array,explode(",",$sectors_ids));
-		}
-		
-		$_GET['currentSectors'] = $sectors_array;
-		$_GET['currentPrimarySectors'] = 'all';
-		$_GET['currentSecondarySectors'] = 'all';
-		
-		$locations_ids = empty($_GET["locations"]) ? '' : $_GET["locations"];
-		if($locations_ids != 'all' and !empty($locations_ids)){
-			$_GET['currentRegions'] = explode(",",$locations_ids);
-		}
-		
-		$programs_ids = empty($_GET["programs"]) ? '' : $_GET["programs"];
-		if($programs_ids != 'all' and !empty($programs_ids)){
-			$_GET['currentPrograms'] = explode(",",$programs_ids);
-		}
-		
-		$keywords = empty($_GET["keywords"]) ? '' : $_GET["keywords"];
-		if($keywords !== 'all' && !empty($keywords)) {
-			$_GET['currentKeywords'] = $keywords;
-		}
-		
-		$budget = empty($_GET["budget"]) ? '' : $_GET["budget"];
-		if(!empty($budget)) {
-			switch($budget) {
-				case 202:
-					$_GET['OffBudget'] = $budget;
-					break;
-				case 203:
-					$_GET['OnBudget'] = $budget;
-					break;
-			}
-		
-		}
-		$regionalprojects = empty($_GET["showregionalprojects"]) ? '' : $_GET["showregionalprojects"];
-		if(!empty($regionalprojects)) {
-			$_GET['RegionalProjects'] = $regionalprojects;
-		}
-  }
-
-  $donor_ids_array = isset($_GET['currentDonors']) ? $_GET['currentDonors'] : "all";  
-  $sector_ids_array = isset($_GET['currentSectors']) ? $_GET['currentSectors'] : "all";
-  $primarysector_ids_array = isset($_GET['currentPrimarySectors']) ? $_GET['currentPrimarySectors'] : "all";
-  $secondarysector_ids_array = isset($_GET['currentSecondarySectors']) ? $_GET['currentSecondarySectors'] : "all";
-  $program_ids_array = isset($_GET['currentPrograms']) ? $_GET['currentPrograms'] : "all";  
-
-  if($sector_ids_array != 'all' &&  !empty($sector_ids_array[0])) {
-  	  if($primarysector_ids_array != 'all'&& !empty($primarysector_ids_array[0])) {
-	  	  $sector_ids_array = array_merge($sector_ids_array,$primarysector_ids_array);
-	  }
-	  if($secondarysector_ids_array != 'all'&& !empty($secondarysector_ids_array[0])) {
-	  	  $sector_ids_array = array_merge($sector_ids_array,$secondarysector_ids_array);
-	  }
-  }
-  else {
-  	  if($primarysector_ids_array != 'all' && !empty($primarysector_ids_array[0])) {
-	  	  $sector_ids_array = $primarysector_ids_array;
-	  }
-	  if($secondarysector_ids_array != 'all' && !empty($secondarysector_ids_array[0])) {
-		  if($sector_ids_array != 'all' && !empty($sector_ids_array[0])) {
-			$sector_ids_array = array_merge($sector_ids_array,$secondarysector_ids_array);
-	  	  }
-	  	  else {
-	  	  	$sector_ids_array = $secondarysector_ids_array;
-	  	  }
-	  }
-  } 
-
-  $location_ids_array = isset($_GET['currentRegions']) ? $_GET['currentRegions'] : "all";
-  $keywords = isset($_GET['currentKeywords']) ? $_GET['currentKeywords'] : 'all';
-  $offbudget = isset($_GET['OffBudget']) ? $_GET['OffBudget'] : 0;
-  $onbudget = isset($_GET['OnBudget']) ? $_GET['OnBudget'] : 0;
-  $regionalprojects = isset($_GET['RegionalProjects']) ? $_GET['RegionalProjects'] : 0;
-  
-  if($offbudget != 0 && $onbudget != 0)
-  {
-  	  $onbudget = 0;
-  	  $offbudget = 0;
-  }
-  
-  db_set_active("amp_projects");
-  $amp_managment_query = db_select('amp_team', 'amp_team')->fields('amp_team', array('amp_team_id'))->condition('access_type', 'Management', '=');
-  
-  $or = db_or();
-  $amp_team_sub_query = db_select('amp_team', 'amp_team')->fields('amp_team', array('amp_team_id'))->condition('parent_team_id', $amp_managment_query, 'IN');
-  $amp_organisation_sub_query = db_select('amp_team_orgs', 'amp_team_orgs')->fields('amp_team_orgs', array('amp_org_id'))->condition('amp_team_id', $amp_team_sub_query, 'IN'); 
-  $amp_og_role_sub_query = db_select('amp_org_role', 'amp_org_role')->fields('amp_org_role', array('activity'))->condition('organisation', $amp_organisation_sub_query, 'IN')->distinct();
-  $or->condition('activity.amp_activity_id', $amp_og_role_sub_query, 'IN');
-  $amp_managment_sub_query = db_select('amp_team', 'amp_team')
-  							 ->fields('amp_team', array('amp_team_id'))
-  							 ->condition('parent_team_id', $amp_managment_query, 'IN');
- 
-  $query = db_select('cached_amp_activity', 'activity')
-    	->fields('activity',array('amp_activity_id'))
-    	->condition('activity.draft','true',"<>")
-    	->condition('activity.approval_status',array("approved", "startedapproved"), 'IN')
-    	->condition('activity.amp_team_id',$amp_managment_sub_query, 'IN')
-    	->condition($or)
-    	->groupBy('activity.amp_activity_id');
-  if($donor_ids_array != 'all' and !empty($donor_ids_array[0])){
-		$query->addJoin('LEFT', 'amp_funding', 'f', 'f.amp_activity_id = activity.amp_activity_id');
-		$query->condition('f.amp_donor_org_id', $donor_ids_array, "IN");
-  }
-  if($sector_ids_array != 'all' and !empty($sector_ids_array[0])){
-        foreach ($sector_ids_array as $sector_id){
-          $sector_ids_array = array_merge($sector_ids_array, getChildSectorsIds($sector_id));
-        }
-		$query->addJoin('LEFT', 'amp_activity_sector', 'sector', 'sector.amp_activity_id = activity.amp_activity_id');
-		$query->condition('sector.amp_sector_id', $sector_ids_array, "IN");
-  }
-  if($program_ids_array != 'all' and !empty($program_ids_array[0])){
-        foreach ($program_ids_array as $program_id){
-          $program_ids_array = array_merge($program_ids_array, getChildProgramsIds($program_id));
-        }
-        if (variable_get('amp_limit_programs_to_activities', 1)) {
-		  $query->addJoin('LEFT', 'amp_activity_program', 'program', 'program.amp_activity_id = activity.amp_activity_id');
-		}
-		$query->condition('program.amp_program_id', $program_ids_array, "IN");
-  }
-
-  if($regionalprojects == 1) 
-  {
-  	   if($location_ids_array != 'all' && !empty($location_ids_array[0])){
-  	   	   	$tmp_location_ids_array = $location_ids_array;
-		    foreach ($tmp_location_ids_array as $id){
-		      $location_ids_array = array_merge($location_ids_array, getParentLocationIds($id));
-		    }
-  	   }
-  }
-
-  if($location_ids_array != 'all' and !empty($location_ids_array[0])){
-		$query->addJoin('LEFT', 'amp_activity_location', 'al', 'al.amp_activity_id = activity.amp_activity_id');
-		$query->addJoin('LEFT', 'amp_location', 'al_loc', 'al_loc.amp_location_id = al.amp_location_id');
-		$query->condition('al_loc.location_id', $location_ids_array, "IN");
-  }
-
-  if($onbudget != 0 || $offbudget != 0 ) {
-  	 
-		$catvalue = ( $onbudget != 0 ) ? $onbudget : $offbudget;
-		$query->addJoin('INNER', 'amp_activities_categoryvalues', 'acv', 'acv.amp_activity_id = activity.amp_activity_id');
-		$query->condition('acv.amp_categoryvalue_id', $catvalue, '=');
-  }
-  
-  if($keywords !== 'all') {
-  		$query->condition('unaccent(activity.name)', 'unaccent(\'%' . db_like($keywords).'%\')', 'ILIKE');
-  }
-
-  $count = $query->execute()->rowCount();
-
-  db_set_active();
-  
-  if($JSON){
-		//$response = array('count'=>$count, 'query'=>$query->__toString()); //Debuging query
-		$response = array('count'=>$count);
-		drupal_json_output($response);
-		
-  } else {
-		return $count;
-  }
-  */
 }
 
 
@@ -1593,6 +1334,10 @@ function ampp_search_donors() {
   $query->fields('orgs', array('amp_org_id', 'acronym'));
   $query->addExpression($translate_field, 'name');
   $query->condition(db_or()->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')')->where('unaccent(orgs.acronym) ILIKE unaccent(\'%' . db_like($string) . '%\')'));
+  if (variable_get('amp_show_only_donors', 0)) {
+    $query->innerJoin('amp_funding', 'f', 'f.amp_donor_org_id = orgs.amp_org_id');
+    $query->innerJoin('amp_activity', 'a', 'a.amp_activity_id = f.amp_activity_id');
+  }
   $query->condition(db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is'));
   $query->groupBy('orgs.amp_org_id');
   $query->groupBy($translate_field);
@@ -1614,7 +1359,7 @@ function ampp_search_donors() {
 /**
  * Callback handler for region search
  */
-function ampp_search_regions(){
+function ampp_search_regions() {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -1648,8 +1393,14 @@ function ampp_search_regions(){
 
   if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_regions', $query);
   
-  foreach ($result as $record) {
-    $items[] = array('id'=>$record->id, 'name'=>check_plain($record->location_name));
+  foreach ($result as $record) { 
+    $parents = get_location_path($record->id);
+    if (!empty($parents)) {
+      $name = $parents . ' -> ' . $record->location_name;
+    } else {
+      $name = $record->location_name;
+    }
+    $items[] = array('id' => $record->id, 'name' => check_plain($name));
   }
   db_set_active();
   drupal_json_output($items);
@@ -1660,6 +1411,9 @@ function ampp_search_regions(){
  *
  */
 function ampp_projects_views_pre_build(&$view) {
+  
+  global $language;
+  
   if ( ($view->name == 'top_activities_by_disbursment') && ($view->current_display == 'default') ) {
     if (isset($_SESSION['top_activities_by_disbursement_conf'])) { 
       $conf = unserialize($_SESSION['top_activities_by_disbursement_conf']);
@@ -1680,7 +1434,7 @@ function ampp_projects_views_pre_build(&$view) {
         }
       }
     }
-  }  
+  }
 }
 
 
@@ -1691,22 +1445,23 @@ function ampp_projects_views_pre_execute(&$view){
 
   global $language;
 
-  if ( $view->name == 'projects_search_result' && $view->current_display != 'block_search_result_totall') {
-  
-    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion', 'name', cached_amp_activity.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', '" . $language->language . "')";
-  
+  if ($view->name == 'projects_search_result' && !isset($view->get_total_amount_type)) {   
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion', 'name', cached_amp_activity.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', '" . $language->language . "')";   
     $view->build_info['query']
       ->groupBy('cached_amp_activity.amp_activity_id')
       ->groupBy($translate_field)
       ->groupBy('cached_amp_activity.actual_start_date')
       ->groupBy('cached_amp_activity.actual_completion_date')
-      ->groupBy('cached_v_status.name');
-   
+      ->groupBy('cached_v_status.name');  
     $view->build_info['count_query']
       ->groupBy('cached_amp_activity.amp_activity_id')
       ->groupBy('cached_amp_activity.name')
       ->groupBy('cached_amp_activity.actual_start_date')
       ->groupBy('cached_amp_activity.actual_completion_date');
+  } else if ($view->name == 'projects_search_result' && isset($view->get_total_amount_type)) {
+    $view->build_info['query']
+      ->groupBy('cached_amp_activity.amp_activity_id')
+      ->groupBy('(fd.transaction_amount / getexchange(cur.currency_code, fd.transaction_date ))');
   }
   
   if ( $view->name == 'projects_search_result' && $view->current_display == 'feed_1') {  
@@ -1804,35 +1559,32 @@ function getChildProgramsIds($parentProgramId){
 /*
  *
  */
-function getParentLocationIds($childLocationId){
+function getParentLocationIds($childLocationId) {
   
   global $amp_db_exists;
+
   if (!$amp_db_exists) return;
   
   $allParentIds = array();
 
-  if(!empty($_GET["RegionalProjects"]))
-  {
- 	 $regionalinclude = $_GET["RegionalProjects"];
-  }
-  else
-  {
-  	  $regionalinclude = $_GET["showregionalprojects"];
+  if (!empty($_GET["RegionalProjects"])) {
+    $regionalinclude = $_GET["RegionalProjects"];
+  } else {
+    $regionalinclude = $_GET["showregionalprojects"];
   }
    
-  if($regionalinclude == '1')
-  {
+  if ($regionalinclude == '1') {
 	  db_set_active("amp_projects");
 
 	  $parentIds = db_select('amp_category_value_location', 'l')
-	  ->fields('l',array('parent_location'))
-	  ->condition('l.id', $childLocationId, '=')
-	  ->isNotNull('l.parent_location')
-	  ->execute()
-	  ->fetchAll(PDO::FETCH_COLUMN);
+	    ->fields('l', array('parent_location'))
+	    ->condition('l.id', $childLocationId, '=')
+	    ->isNotNull('l.parent_location')
+	    ->execute()
+	    ->fetchAll(PDO::FETCH_COLUMN);
 	  
-	  if(!empty($parentIds)){
-	    foreach ($parentIds as $parentId){
+	  if (!empty($parentIds)) {
+	    foreach ($parentIds as $parentId) {
 	      $allParentIds[] = $parentId;
 	      $allParentIds = array_merge($allParentIds, getParentLocationIds($parentId));
 	    }
@@ -1841,6 +1593,51 @@ function getParentLocationIds($childLocationId){
 	  db_set_active();
   }
   return $allParentIds;
+}
+
+
+/*
+ * 
+*/
+function get_location_path($childLocationId, $depth = 999) {
+
+  // we need to show the full hierarchy but not country
+  
+  global $amp_db_exists;
+  global $language;
+  global $user;
+
+  if (!$amp_db_exists) return;
+
+  $allParentIds = array();
+
+  db_set_active("amp_projects");
+
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpCategoryValueLocations', 'parent_name', names.id, 'amp_category_value_location', 'location_name', 'id', '" . $language->language . "')";
+  
+  $query = db_select('amp_category_value_location', 'loc');
+  $query->fields('loc', array('parent_location', 'parent_category_value'));
+  $query->addExpression($translate_field, 'parent_name');
+  $query->join('amp_category_value_location', 'names', 'names.id = loc.parent_location');
+  $query->join('amp_category_value', 'cats', 'cats.id = names.parent_category_value');
+  $query->condition('loc.id', $childLocationId, '=');
+  $query->condition('cats.category_value', 'Country', '!=');
+  $query->isNotNull('loc.parent_location');
+       
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_location_path', $query);
+    
+  $result = $query->execute();
+  $parents = '';
+  foreach ($result as $record) {
+    if ($depth != 0) {
+      $parents = get_location_path($record->parent_location, $depth - 1) . '->' . $record->parent_name;
+    }
+    $parents = $record->parent_name;
+  }
+     
+  db_set_active();
+  
+  return $parents;
 }
 
 
@@ -2103,8 +1900,11 @@ function ampp_projects_get_donor($id) {
   
   $query = db_select('amp_organisation', 'orgs')->fields('orgs', array('amp_org_id', 'acronym'));
   $query->addExpression($translate_field, 'name');
+  if (variable_get('amp_show_only_donors', 0)) {
+    $query->innerJoin('amp_funding', 'f', 'f.amp_donor_org_id = orgs.amp_org_id');
+    $query->innerJoin('amp_activity', 'a', 'a.amp_activity_id = f.amp_activity_id');
+  }
   $query->condition('orgs.amp_org_id', intval($id), '=');
-  
   $or_statement = db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is');
   $query->condition($or_statement);
   
@@ -2131,10 +1931,13 @@ function ampp_projects_get_donors() {
   global $user;
   $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', orgs.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', '" . $language->language . "')"; 
   
-  $query = db_select('amp_organisation', 'orgs')->fields('orgs', array('amp_org_id', 'acronym'));
+  $query = db_select('amp_organisation', 'orgs');
+  $query->fields('orgs', array('amp_org_id', 'acronym'));
   $query->addExpression($translate_field, 'name');
-  $hierarchy = array();
-  
+  if (variable_get('amp_show_only_donors', 0)) {
+    $query->innerJoin('amp_funding', 'f', 'f.amp_donor_org_id = orgs.amp_org_id');
+    $query->innerJoin('amp_activity', 'a', 'a.amp_activity_id = f.amp_activity_id');
+  } 
   $or_statement = db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is');
   $query->condition($or_statement);
   $query->orderBy('name', 'ASC');
@@ -2142,7 +1945,8 @@ function ampp_projects_get_donors() {
   if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_projects_get_donors', dpq($query, 1));
   
   $result = $query->execute();
-	
+  
+  $hierarchy = array();
   foreach ($result as $record) {
 	$hierarchy[$record->amp_org_id] = array('label' => $record->name);
   }
@@ -2157,14 +1961,92 @@ function ampp_projects_get_donors() {
  *
  */
 function ampp_projects_views_query_alter(&$view, &$query) {
-	if($view->name == 'projects_search_result' && $view->current_display != "block_search_result_totall") {
-		/*$query->where[0]['conditions'][] = array(
-			'field' => 'cached_amp_activity.amp_team_id',
-			'value' => 'select amp_team_id from amp_team where parent_team_id in (select amp_team_id from amp_team where access_type="Management")',
-			'operator' => 'in'
-		);*/
-		//dsm($query, 'f');
-	}
+  
+  global $language;
+  
+  if ($view->name == 'projects_search_result') {
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion', 'name', cached_amp_activity.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', '" . $language->language . "')";
+    foreach ($view->query->where as &$where) {
+      foreach ($where['conditions'] as $k => $v) {  
+        if ($v['field'] == 'cached_amp_activity.name' && $v['operator'] == 'ILIKE') { 
+          unset($where['conditions'][$k]);
+          $view->query->add_where_expression(0, 'unaccent(' . $translate_field . ') ILIKE unaccent(\'' . $v['value'] . '\')');
+        }
+      }
+    }
+  }
+  
+  if ($view->name == 'projects_search_result' && isset($view->get_total_amount_type)) { 
+    $view->query->fields = array();
+    $view->query->orderby = array();
+    $view->query->add_field(NULL, 'cached_amp_activity.amp_activity_id', 'amp_activity_id');
+    $view->query->add_field(NULL, '(fd.transaction_amount / getexchange(cur.currency_code, fd.transaction_date))', 'amount');
+    
+    // joining the 'amp_funding' table
+    $join = new views_join;
+    $join->table ='amp_funding';
+    $join->left_table = 'cached_amp_activity';
+    $join->left_field = 'amp_activity_id';
+    $join->field = 'amp_activity_id';
+    $join->type = "LEFT";
+    $join->adjusted = 'TRUE';
+    $view->query->table_queue['amp_funding'] = array(
+        'table' => 'amp_funding',
+        'num' => 1,
+        'alias' => 'f',
+        'join' => $join,
+        'relationship' => 'cached_amp_activity'
+    );
+    // add the table
+    $view->query->tables['amp_funding']['amp_activity_id'] = array(
+        'count' => 1,
+        'alias' => 'f'
+    );
+    
+    // joining the 'amp_funding_detail' table
+    $join = new views_join;
+    $join->table ='amp_funding_detail';
+    $join->left_table = 'amp_funding';
+    $join->left_field = 'amp_funding_id';
+    $join->field = 'amp_funding_id';
+    $join->type = "LEFT";
+    $join->adjusted = 'TRUE';
+    $view->query->table_queue['amp_funding_detail'] = array(
+        'table' => 'amp_funding_detail',
+        'num' => 1,
+        'alias' => 'fd',
+        'join' => $join,
+        'relationship' => 'amp_funding'
+    );
+    // add the table
+    $view->query->tables['amp_funding_detail']['amp_funding_id'] = array(
+        'count' => 1,
+        'alias' => 'fd'
+    );
+    
+    // joining the 'amp_currency' table
+    $join = new views_join;
+    $join->table ='amp_currency';
+    $join->left_table = 'amp_funding_detail';
+    $join->left_field = 'amp_currency_id';
+    $join->field = 'amp_currency_id';
+    $join->type = "LEFT";
+    $join->adjusted = 'TRUE';
+    $view->query->table_queue['amp_currency'] = array(
+        'table' => 'amp_currency',
+        'num' => 1,
+        'alias' => 'cur',
+        'join' => $join,
+        'relationship' => 'amp_funding_detail'
+    );
+    $view->query->tables['amp_currency']['amp_currency_id'] = array(
+        'count' => 1,
+        'alias' => 'cur'
+    );
+    $view->query->group_operator = 'AND';
+    $view->query->add_where(0, 'fd.transaction_type', $view->get_total_amount_type, '=');
+  }
+  //dpm($view->query);
 }
 
 

@@ -72,8 +72,7 @@ function project_search_form_uidatepicker($form, $form_state) {
 /**
  * Returns an edit form for the projects search
  */
-function ampp_projects_projects_search_form_form($form, &$form_state, $conf)
-{
+function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
 
   global $language;
  
@@ -86,73 +85,73 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf)
   unset($form['#attributes']['id']);
   $form['#attributes']['id'][] = 'ampp-search-form';
 
-  if($conf["sectors_flag"] == 1) {
+  if ($conf["sectors_flag"] == 1) {
 	  $form['sector'] = array(
 	    '#type' => 'textfield',
-	    '#title' => t($conf['sectors_label']),
+	    '#title' => (isset($conf['sectors_label'])) ? t($conf['sectors_label']) : t('Sectors'),
 	    '#size' => 30,
 	    '#maxlength' => 64,
 	    '#description' => t('Start typing sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.') 
 	  );
-	  if (!isset($conf['sectors_popup']) || $conf['sectors_popup'] == 0) $form['sector']['#suffix'] = '<span class="modal-list-more"> ' .l($icon, 'ampp_search/ajax-sectores', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-sector', 'title' => t($conf['sectors_label'] . ' selection')))) . '</span>';
+	  if (!isset($conf['sectors_popup']) || $conf['sectors_popup'] == 0) $form['sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-sectores', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-sector', 'title' => t($conf['sectors_label'] . ' selection')))) . '</span>';
   }
   
-  if($conf["primary_sectors_flag"] == 1) {  
+  if ($conf["primary_sectors_flag"] == 1) {  
 	  $form['primary_sector'] = array(
 	    '#type' => 'textfield',
-	    '#title' => t($conf['primary_sectors_label']),
+	    '#title' => (isset($conf['primary_sectors_label'])) ? t($conf['primary_sectors_label']) : t('Primary Sectors'),
 	    '#size' => 30,
 	    '#maxlength' => 64,
 	    '#description' => t('Start typing primary sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
  	 );
-     if (!isset($conf['primary_sectors_popup']) || $conf['primary_sectors_popup'] == 0) $form['primary_sector']['#suffix'] = '<span class="modal-list-more"> ' .l($icon, 'ampp_search/ajax-primarysectors', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-primary-sector', 'title' => t($conf['primary_sectors_label'] . ' selection')))) . '</span>';
+     if (!isset($conf['primary_sectors_popup']) || $conf['primary_sectors_popup'] == 0) $form['primary_sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-primarysectors', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-primary-sector', 'title' => t($conf['primary_sectors_label'] . ' selection')))) . '</span>';
   }
   
-  if($conf["secondary_sectors_flag"] == 1) {  
+  if ($conf["secondary_sectors_flag"] == 1) {  
 	  $form['secondary_sector'] = array(
 	    '#type' => 'textfield',
-	    '#title' => t($conf['secondary_sectors_label']),
+	    '#title' => (isset($conf['secondary_sectors_label'])) ? t($conf['secondary_sectors_label']) : t('Primary Sectors'),
 	    '#size' => 30,
 	    '#maxlength' => 64,
 	    '#description' => t('Start typing secondary sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
  	 );
-     if (!isset($conf['secondary_sectors_popup']) || $conf['secondary_sectors_popup'] == 0) $form['secondary_sector']['#suffix'] = '<span class="modal-list-more"> ' .l($icon, 'ampp_search/ajax-secondarysectors', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-secondary-sector', 'title' => t($conf['secondary_sectors_label'] . ' selection')))) . '</span>';
+     if (!isset($conf['secondary_sectors_popup']) || $conf['secondary_sectors_popup'] == 0) $form['secondary_sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-secondarysectors', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-secondary-sector', 'title' => t($conf['secondary_sectors_label'] . ' selection')))) . '</span>';
   }
   
-  if($conf["programs_flag"] == 1) {  
+  if ($conf["programs_flag"] == 1) {  
 	  $form['program'] = array(
 	    '#type' => 'textfield',
-	    '#title' => t($conf['programs_label']),
+	    '#title' => (isset($conf['programs_label'])) ? t($conf['programs_label']) : t('Programs'),
 	    '#size' => 30,
 	    '#maxlength' => 64,
 	    '#description' => t('Start typing program name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
  	 );
-     if (!isset($conf['programs_popup']) || $conf['programs_popup'] == 0) $form['program']['#suffix'] = '<span class="modal-list-more"> ' .l($icon, 'ampp_search/ajax-programs', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-program', 'title' => t($conf['programs_label'] . ' selection')))) . '</span>';
+     if (!isset($conf['programs_popup']) || $conf['programs_popup'] == 0) $form['program']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-programs', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-program', 'title' => t($conf['programs_label'] . ' selection')))) . '</span>';
   }
 
-  if($conf["donors_flag"] == 1) {  
+  if ($conf["donors_flag"] == 1) {  
 	  $form['donor'] = array(
 	    '#type' => 'textfield',
-	    '#title' => t($conf['donors_label']),
+	    '#title' => (isset($conf['donors_label'])) ? t($conf['donors_label']) : t('Donors'),
 	    '#size' => 30,
 	    '#maxlength' => 64,
 	    '#description' => t('Start typing donor name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
  	 );
-     if (!isset($conf['donors_popup']) || $conf['donors_popup'] == 0) $form['donors_flag']['#suffix'] = '<span class="modal-list-more"> ' .l($icon, 'ampp_search/ajax-donors', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-donor', 'title' => t($conf['donors_label'] . ' selection')))) . '</span>';
+     if (!isset($conf['donors_popup']) || $conf['donors_popup'] == 0) $form['donors_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-donors', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-donor', 'title' => t($conf['donors_label'] . ' selection')))) . '</span>';
   }
   
-  if($conf["locations_flag"] == 1) {  
+  if ($conf["locations_flag"] == 1) {  
 	  $form['region'] = array(
 	    '#type' => 'textfield',
-	    '#title' => t($conf['locations_label']),
+	    '#title' => (isset($conf['locations_label'])) ? t($conf['locations_label']) : t('Locations'),
 	    '#size' => 30,
 	    '#maxlength' => 64,
 	    '#description' => t('Start typing region then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
 	  );
-     if (!isset($conf['locations_popup']) || $conf['locations_popup'] == 0) $form['locations_flag']['#suffix'] = '<span class="modal-list-more"> ' .l($icon, 'ampp_search/ajax-regions', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-region', 'title' => t($conf['locations_label'] . ' selection')))) . '</span>';
+     if (!isset($conf['locations_popup']) || $conf['locations_popup'] == 0) $form['locations_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-regions', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-region', 'title' => t($conf['locations_label'] . ' selection')))) . '</span>';
   }
   
-  if($conf["period_flag"] == 1) {
+  if ($conf["period_flag"] == 1) {
   
       $lang_arr = locale_get_localized_date_format($language->language);
       $years_range_arr = activities_period_range();
@@ -201,16 +200,16 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf)
       */
   }
   
-  if($conf["keywords_flag"] == 1) {  
+  if ($conf["keywords_flag"] == 1) {  
 	  $form['keyword'] = array(
 	  	'#type' => 'textfield',
-	  	'#title' => t($conf['keywords_label']),
+	  	'#title' => (isset($conf['keywords_label'])) ? t($conf['keywords_label']) : t('Keywords'),
 	  	'#size' => 30,
 	  	'#description' => t('Search in project titles'),
 	  );
   }
   
-  if($conf["budget_flag"] == 1) {
+  if ($conf["budget_flag"] == 1) {
       
       $form['budget'] = array(
         '#type' => 'radios',
@@ -234,7 +233,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf)
 	  */
   }
   
-  if($conf["country_level_projects_flag"] == 1) {
+  if ($conf["country_level_projects_flag"] == 1) {
 	  $form['country_level_projects'] = array(
 	    '#type' => 'checkbox',
 	    '#title' => t('Include higher geographical levels'),

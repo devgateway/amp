@@ -390,61 +390,57 @@ function ampp_form_alter(&$form, $form_state, $form_id) {
       '#rows' => 5,   
     );
     
-    $form['site_information']['amp_programs_level'] = array(
+    $form['application_logic'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Application logic')
+    );
+    $form['application_logic']['amp_programs_level'] = array(
       '#type' => 'radios',
       '#title' => t('Choose programs level'),
       '#default_value' => variable_get('amp_programs_level', 2),
       '#options' => array(1 => 'National', 2 => 'Primary', 3 => 'Secondary'),  
-    );
-    
+    );    
     $programs = get_amp_programs();
     $programs = array('0' => t('None')) + $programs;
-    $form['site_information']['amp_programs_root'] = array(
+    $form['application_logic']['amp_programs_root'] = array(
       '#type' => 'select',
       '#title' => t('Root program'),
       '#default_value' => variable_get('amp_programs_root', 0),
       '#options' => $programs,
       '#description' => t('This will serve as an entry point programs selection interface. Please note that this and "Choose programs level" selection conditions are combined.'),  
-    );
-    
-    $form['site_information']['amp_limit_programs_to_activities'] = array(
+    );  
+    $form['application_logic']['amp_limit_programs_to_activities'] = array(
       '#type' => 'checkbox',
       '#title' => t('Limit programs to only those that are mapped to activities'),
       '#default_value' => variable_get('amp_limit_programs_to_activities', 1),  
     );
+    $form['application_logic']['amp_show_only_donors'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show only donors based on the last version of projects'),
+        '#default_value' => variable_get('amp_show_only_donors', 0),
+    );
     
     $form['front_page'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Front page'),
-      'site_frontpage' => array(
+      '#title' => t('Front page')
+    );
+    $form['front_page']['site_frontpage'] = array(
         '#type' => 'textfield',
         '#title' => t('Default front page'),
         '#default_value' =>  variable_get('site_frontpage', t('homepage')), 
         '#size' => 60,
-      ),
-      'site_frontpage_block_1_title' => array(
+    );
+    $form['front_page']['site_frontpage_block_1_title'] = array(
         '#type' => 'textfield',
         '#title' => t('Front second row left block title'),
         '#default_value' => variable_get('site_frontpage_block_1_title', t('Donor profile')), 
         '#size' => 60,
-      ),
-      'site_frontpage_block_2_title' => array(
+    );
+    $form['front_page']['site_frontpage_block_2_title'] = array(
         '#type' => 'textfield',
         '#title' => t('Front second row right block title'),
         '#default_value' => variable_get('site_frontpage_block_2_title', t('Map')), 
-        '#size' => 60,
-      ),
-      /*
-      'site_frontpage_news_teaser_records' => array(
-        '#type' => 'textfield',
-        '#title' => t('News records on the front page'),
-        '#default_value' => variable_get('site_frontpage_news_teaser_records', 6),
-        '#description' => t('Number of news records in the home page teaser'), 
-        '#size' => 2,
-        '#maxlength' => 2,
-        '#element_validate' => array('_news_records_validation'),
-      ),
-      */     
+        '#size' => 60,    
     );
     
     $default_dg_footer = '<a href="http://www.developmentgateway.org" target="_blank"><img src="/sites/all/themes/ampp/images/dgf_logo_bottom.gif"/></a><br/>1889 F Street, NW, Second Floor, Washington, D.C. 20006, USA<br/>info@developmentgateway.org, Tel: +1.202.572.9200, Fax: +1 202.572.9290';

@@ -295,9 +295,14 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			try {
 				dbSession				= PersistenceManager.getSession();
 				retVal					= (AmpCategoryValue) dbSession.get(AmpCategoryValue.class, valueId);
-				
-				if ( retVal != null && initializeTaggedValues )
-					retVal.getUsedByValues().size();
+
+                if (retVal != null) {
+                    // retVal.getAmpCategoryClass().getId();
+                    if (initializeTaggedValues) {
+                        // load the collection here to avoid lazy initialization later
+                        retVal.getUsedByValues().size();
+                    }
+                }
 
 			} catch (Exception ex) {
 				logger.error("Unable to get AmpCategoryValue: ", ex);
@@ -839,10 +844,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	}
 	
 	public static boolean equalsCategoryValue(AmpCategoryValue value, HardCodedCategoryValue hcValue){
-			if ( value != null && value.getAmpCategoryClass().getKeyName().equals( hcValue.getCategoryKey() ) && value.getValue().equals( hcValue.getValueKey() ) )
-				return true;
-			else 
-				return false;
+		return value != null && value.getAmpCategoryClass().getKeyName().equals( hcValue.getCategoryKey() ) && value.getValue().equals( hcValue.getValueKey() );
 	}
 	
 	

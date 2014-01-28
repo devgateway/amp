@@ -16,21 +16,29 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
+    function updateImplLevel() {
+        var implLevelSelect = document.getElementsByName("levelId")[0];
+        //if ( implLevelSelect.selectedIndex > 0 ) {
+            document.pledgeForm.action	= "/aim/selectPledgeLocation.do?edit=true";
+            document.pledgeForm.submit();
+        //}
+    }
+
 	function updateLocLevel(){
 		var locationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
-		if ( locationLevelSelect.selectedIndex > 0 ) {
+		//if ( locationLevelSelect.selectedIndex > 0 ) {
 			document.pledgeForm.action	= "/aim/selectPledgeLocation.do?edit=true";		
 			document.pledgeForm.submit();
-		}
+		//}
 	}
 	
 	function locationChanged( selectId ) {
 		var selectEl		= document.getElementById(selectId);
 		document.pledgeForm.parentLocId.value = selectEl.options[selectEl.selectedIndex].value;
-		if ( document.pledgeForm.parentLocId.value != "-1" ) {
+		//if ( document.pledgeForm.parentLocId.value != "-1" ) {
 			document.pledgeForm.action	= "/aim/selectPledgeLocation.do?edit=true";		
 			document.pledgeForm.submit();
-		}
+		//}
 	}
 
 	function submitForm() {
@@ -41,6 +49,10 @@
 	function closeWindow() {
 		window.close();
 	}
+
+    function goBack() {
+        document.location.href	= "/aim/selectPledgeLocation.do?edit=true";
+    }
 </script>
 
 <digi:instance property="pledgeForm" />
@@ -64,6 +76,30 @@
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
 								<table cellPadding=2 cellSpacing=2>
+
+
+                                    <tr>
+                                        <td>
+                                            <digi:trn key="aim:implementationLevel">
+                                                Implementation Level
+                                            </digi:trn>
+                                        </td>
+                                        <td>
+                                            <c:set var="translation">
+                                                <digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
+                                            </c:set>
+
+                                            <category:showoptions multiselect="false" firstLine="${translation}" name="pledgeForm" property="levelId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" styleClass="inp-text" />
+                                            <script language="Javascript">
+                                                var locationImplSelect = document.getElementsByName("levelId")[0];
+                                                locationImplSelect.onchange=function() {
+                                                    updateImplLevel();
+                                                }
+                                            </script>
+                                        </td>
+                                    </tr>
+
+
 									<tr>
 										<td>
 											<digi:trn key="aim:implementationLoc">
@@ -72,19 +108,29 @@
                                         </td>
 										<td vAlign="center" >
 				                      		<c:set var="translation">
-											<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
-											</c:set>					
-											<category:showoptions multiselect="false" firstLine="${translation}" name="pledgeForm" property="implemLocationLevel" tag="${pledgeForm.levelId}" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
-												                                             													                                             	                                              	
-				                         	<script language="Javascript">                                             	
-												var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
-												if(implemLocationLevelSelect!=null){
-				                            		implemLocationLevelSelect.onchange=function() {
-				                           			//removeAllLocations();
-				                          			updateLocLevel();
-				                              		}
-												}
-				                       		</script>
+                                                <digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
+                                             </c:set>
+
+                                             <c:choose>
+                                                 <c:when test="${pledgeForm.levelId <= 0}">
+                                                    <select class="inp-text" name="implemLocationLevel">
+                                                        <option selected="selected" value="0">${translation}</option>
+                                                    </select>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <category:showoptions multiselect="false" firstLine="${translation}" name="pledgeForm" property="implemLocationLevel" tag="${pledgeForm.levelId}" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+
+                                                    <script language="Javascript">
+                                                        var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
+                                                        if(implemLocationLevelSelect!=null){
+                                                            implemLocationLevelSelect.onchange = function() {
+                                                                //removeAllLocations();
+                                                                updateLocLevel();
+                                                            }
+                                                        }
+                                                    </script>
+                                                </c:otherwise>
+                                            </c:choose>
 										</td>
 									</tr>
 									<logic:notEmpty name="pledgeForm" property="locationByLayers">
@@ -92,7 +138,8 @@
 											<bean:define id="myCollection" type="java.util.Collection" name="entry" property="value" />
 											<% pageContext.setAttribute("colSize", myCollection.size() ) ;%>
 											<c:choose>
-												<c:when test="${entry.key==(pledgeForm.impLevelValue -1) }">
+                                                <c:when test="${colSize > 1}">
+												<%--c:when test="${entry.key==(pledgeForm.impLevelValue -1) }"--%>
 													<c:set var="sizeString">5</c:set>
 													<c:set var="multipleString">multiple="multiple"</c:set>
 													<c:set var="changeString"> </c:set>
@@ -102,12 +149,17 @@
 													<c:set var="sizeString">1</c:set>
 													<c:set var="multipleString"></c:set>
 													<c:set var="changeString">locationChanged('loc_${entry.key}')</c:set>
-													<c:set var="nameString"></c:set>
+                                                    <%-- Not sure why we do not set name (and than do not save) if this is a regular select box, not multiselect--%>
+                                                    <c:set var="nameString">name="userSelectedLocs"</c:set>
+													<%--c:set var="nameString"></c:set--%>
 												</c:otherwise>
 											</c:choose>
 											<tr>
 											<td>
+                                                <%-- this is really sensitive to the caching in CategoryManagerUtil
 												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="${entry.key}"/>
+                                                --%>
+                                                <digi:trn>${pledgeForm.implLocationValue.value}</digi:trn>
 											</td>
 											<td>
 												<select id="loc_${entry.key}" class="inp-text" size="${sizeString}" onchange="${changeString}" ${multipleString} ${nameString} >
@@ -160,6 +212,9 @@
 										<td>
 											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
 										</td>
+                                        <%--td>
+                                            <input type="button" value="<digi:trn key='btn:back'>Back</digi:trn>" class="dr-menu" onclick="goBack()">
+                                        </td--%>
 									</tr>
 								</table>
 							</td>

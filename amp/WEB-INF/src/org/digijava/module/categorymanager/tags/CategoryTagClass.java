@@ -104,7 +104,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		try{
 			Collection<AmpCategoryValue> ampCategoryValues;
 			AmpCategoryClass ampCategoryClass	= null;
-			
+
 			if ( categoryId != null )
 				ampCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollection(categoryId, ordered);
 			else {
@@ -117,13 +117,15 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 			if (ampCategoryValues != null && getTag() != null) {
 				Set<AmpCategoryValue> tagged = CategoryManagerUtil
 						.getTaggedCategoryValues(getTag(), keyName);
+                /* This is just a reminder that lines below should be commented in case the initialization problem occurs
+                ampCategoryValues = tagged;
+                */
 				if (tagged == null)
 					ampCategoryValues.clear();
 				else
 					ampCategoryValues.retainAll(tagged);
 			}
-			
-			
+
 			if (ampCategoryValues != null) {
 				boolean isMultiselect = false;
 				if(ampCategoryValues.size() > 0){

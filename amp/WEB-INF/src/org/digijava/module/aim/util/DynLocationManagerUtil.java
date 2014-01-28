@@ -597,15 +597,43 @@ public class DynLocationManagerUtil {
 
 	public static AmpCategoryValueLocations getLocationByIso(
 			String locationIso, HardCodedCategoryValue hcLocationLayer) {
-		try {
-			AmpCategoryValue layer = CategoryManagerUtil
-					.getAmpCategoryValueFromDB(hcLocationLayer);
-			return getLocationByIso(locationIso, layer);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		return getLocationByIso(locationIso, hcLocationLayer, true);
 	}
+
+    /**
+     * This method does not read the layer as a <code>HardCodedCategoryValue</code> value
+     * from the cache, instead reads it from the database
+     *
+     * We need this in cases when the default value is cached (say, implementation_location=Region)
+     * But we need to load (say, the defaultCountry, where implementation_location=Country)
+     * Otherwise we get null.
+     *
+     * @param locationIso
+     * @param hcLocationLayer
+     * @param readLayerFromCache
+     * @return
+     */
+    public static AmpCategoryValueLocations getLocationByIso(
+            String locationIso, HardCodedCategoryValue hcLocationLayer, boolean readLayerFromCache) {
+        try {
+            AmpCategoryValue layer = null;
+            if (readLayerFromCache) {
+                layer = CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);
+            } else {
+                AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(hcLocationLayer.getCategoryKey());
+                for (AmpCategoryValue categoryValue : categoryClass.getPossibleValues()) {
+                    if (hcLocationLayer.getValueKey().equals(categoryValue.getValue())) {
+                        layer = categoryValue;
+                        break;
+                    }
+                }
+            }
+            return getLocationByIso(locationIso, layer);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 	/**
 	 * 

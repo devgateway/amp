@@ -91,6 +91,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	/*Fields for Location*/
 	private boolean noMoreRecords=false;
 	private Long implemLocationLevel = null;
+    private AmpCategoryValue implLocationValue = null;
 	private Integer impLevelValue; // Implementation Level value
 	private Long levelId = null;
 	private Long parentLocId;
@@ -707,9 +708,23 @@ public class PledgeForm extends ActionForm implements Serializable{
 	/**
 	 * @return the implemLocationLevel
 	 */
-	public Long getImplemLocationLevel() {
-		return implemLocationLevel;
+	public AmpCategoryValue getImplLocationValue() {
+		return implLocationValue;
 	}
+
+    /**
+     * @return the implemLocationLevel
+     */
+    public void setImplLocationValue(AmpCategoryValue implLocationValue) {
+        this.implLocationValue = implLocationValue;
+    }
+
+    /**
+     * @return the implemLocationLevelValue
+     */
+    public Long getImplemLocationLevel() {
+        return implemLocationLevel;
+    }
 
 	/**
 	 * @param implemLocationLevel the implemLocationLevel to set

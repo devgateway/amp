@@ -73,7 +73,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
         final Model<FileItem> fileItemModel = new Model<FileItem>();
         FileUploadPanel fileUpload = new FileUploadPanel("file",activityId, fileItemModel);
 
-		AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink", new PropertyModel<String>(td, "webLink"), "Web Link", true, false);
+		final AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink", new PropertyModel<String>(td, "webLink"), "Web Link", true, false);
 		webLink.setTextContainerDefaultMaxSize();
 		webLink.setVisibilityAllowed(false);
 		webLink.setOutputMarkupId(true);
@@ -166,7 +166,7 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                 target.add(desc);
                 target.add(note);
                 target.add(type);
-                
+                target.add(webLink);
                 target.add(resourcesList);
                 target.add(webLinkFeedbackContainer);
                 if (updateVisibility(td, resourceIsURL)){

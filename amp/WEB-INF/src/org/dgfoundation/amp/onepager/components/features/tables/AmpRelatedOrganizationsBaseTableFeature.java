@@ -317,7 +317,9 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 		boolean ret = false;
 		Iterator<AmpOrgRole> iter = set.iterator();
 		while(iter.hasNext()) {
-			if(iter.next().getOrganisation().getAmpOrgId().equals(ampOrgRole.getOrganisation().getAmpOrgId())) {
+		AmpOrgRole org = iter.next();
+		if(org.getOrganisation().getAmpOrgId().equals(ampOrgRole.getOrganisation().getAmpOrgId()) &&
+              		org.getRole().getRoleCode().equals(ampOrgRole.getRole().getRoleCode())) {
 				ret = true;
 			}
 		}

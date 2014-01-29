@@ -6,6 +6,9 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -237,6 +241,21 @@ public final class ARUtil {
 		ReportContextData.getFromRequest().setReportMeta(r);
 		
 		return r;
+	}
+	
+	public static void getReportNotFoundMessage(HttpServletResponse response) throws IOException {
+		response.setContentType("text/html");	
+		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+		PrintWriter out = new PrintWriter(outputStream, true);
+		String url = "/";
+		String alert = TranslatorWorker.translateText("Cant find report, please check if it was deleted.");
+		String script = "<script>opener.close();" 
+			+ "alert('"+ alert +"');" 
+			+ "window.location=('"+ url +"');"
+			+ "</script>";
+		out.println(script);
+		out.close();	
+		outputStream.close();
 	}
 	
 	/**

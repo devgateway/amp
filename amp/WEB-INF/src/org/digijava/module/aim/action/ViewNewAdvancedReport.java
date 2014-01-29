@@ -182,18 +182,7 @@ public class ViewNewAdvancedReport extends Action {
 	    try {
 	    	report = ARUtil.getReferenceToReport();
 	    } catch (Exception e) {
-	    	response.setContentType("text/html");	
-    		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
-    		PrintWriter out = new PrintWriter(outputStream, true);
-    		String url = "/";
-    		String alert = TranslatorWorker.translateText("Cant find report, please check if it was deleted.");
-    		String script = "<script>" 
-    			+ "alert('"+ alert +"');" 
-    			+ "window.location=('"+ url +"');"
-    			+ "</script>";
-    		out.println(script);
-			out.close();	
-			outputStream.close();
+	    	ARUtil.getReportNotFoundMessage(response);
 			return null;
 	    }
 		

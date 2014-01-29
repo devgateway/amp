@@ -232,6 +232,14 @@ function ampp_form_system_theme_settings_alter(&$form, $form_state) {
     '#maxlength' => 40,
     '#description' => t("If you don't have direct file access to the server, use this field to upload your logo.")
   );
+  
+  // custom CSS
+  $form['custom_css']= array(
+      '#type' => 'textarea',
+      '#title' => t('Custom CSS'),
+      '#default_value' => theme_get_setting('custom_css', 'ampp'),
+      '#description' => t("You can add custom css styles that will be loaded last to overwrite others.")
+  );
 }
 
 

@@ -778,12 +778,15 @@ function total_block_content() {
 
 /**
  * Get total amount of given type (1|0)
- * Use url as arguments.
+ * 0 for commitments
+ * 1 for disbursments 
+ * Use url as arguments unless passed with args parameter
  * TODO: Find a way to use views to get totals
  */
-function get_total_amount($type) {
+function get_total_amount($type, $args = array()) {
   global $user;
   global $amp_db_exists;
+  
   if (!$amp_db_exists) return;
   
   $block = new stdClass();
@@ -806,16 +809,16 @@ function get_total_amount($type) {
     $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
   }
   
-  $args[0] = !empty($_GET["donors"])? $_GET["donors"] : "all";
-  $args[1] = (count($sectors_array) > 0) ? implode(',', $sectors_array) : "all";
-  $args[2] = !empty($_GET["locations"])? $_GET["locations"] : "all";
-  $args[3] = !empty($_GET["keywords"])? $_GET["keywords"] : "all";
-  $args[4] = !empty($_GET["budget"])? $_GET["budget"] : "all";
-  $args[5] = !empty($_GET["programs"])? $_GET["programs"] : "all";
-  $args[6] = !empty($_GET["period_start"])? $_GET["period_start"] : "all";
-  $args[7] = !empty($_GET["period_end"])? $_GET["period_end"] : "all";
-  
-  $showregionalprojects = !empty($_GET["showregionalprojects"])? $_GET["showregionalprojects"] : "all";
+  if (empty($args)) {
+    $args[0] = !empty($_GET["donors"])? $_GET["donors"] : "all";
+    $args[1] = (count($sectors_array) > 0) ? implode(',', $sectors_array) : "all";
+    $args[2] = !empty($_GET["locations"])? $_GET["locations"] : "all";
+    $args[3] = !empty($_GET["keywords"])? $_GET["keywords"] : "all";
+    $args[4] = !empty($_GET["budget"])? $_GET["budget"] : "all";
+    $args[5] = !empty($_GET["programs"])? $_GET["programs"] : "all";
+    $args[6] = !empty($_GET["period_start"])? $_GET["period_start"] : "all";
+    $args[7] = !empty($_GET["period_end"])? $_GET["period_end"] : "all";
+  }
   
   $tmpview->set_arguments($args);
   $tmpview->pre_execute();
@@ -1061,7 +1064,7 @@ function ampp_projects_menu() {
  * possible to use views totla count.
  * TODO: Find a way to use views to get count
  */
-function ampp_search_result_count($JSON = true){
+function ampp_search_result_count($JSON = true, $amount = false) {
 
   global $amp_db_exists;
   if (!$amp_db_exists) return;
@@ -1114,15 +1117,6 @@ function ampp_search_result_count($JSON = true){
     if (empty($args[2])) $args[2] = "all";
   }
   
-  if (empty($_GET["currentKeywords"])) {
-    $args[3] = !empty($_GET["keywords"]) ? $_GET["keywords"] : "all";
-  } else {
-    $args[3] = $_GET["currentKeywords"];
-    if (empty($args[3])) $args[3] = "all";
-  }
-  
-  $args[4] = !empty($_GET["budget"]) ? $_GET["budget"] : "all";
-  
   if (empty($_GET["currentPrograms"])) {
     $args[5] = !empty($_GET["programs"]) ? $_GET["programs"] : "all";
   } else {
@@ -1143,6 +1137,15 @@ function ampp_search_result_count($JSON = true){
     if (empty($args[7])) $args[7] = "all";
   }
 
+  if (empty($_GET["currentKeywords"])) {
+    $args[3] = !empty($_GET["keywords"]) ? $_GET["keywords"] : "all";
+  } else {
+    $args[3] = $_GET["currentKeywords"];
+    if (empty($args[3])) $args[3] = "all";
+  }
+  
+  $args[4] = !empty($_GET["budget"]) ? $_GET["budget"] : "all";
+  
   //watchdog('ampp_projects', 'ajax ARGS: ' . serialize($args));
 
   $view = views_get_view('projects_search_result');
@@ -1154,12 +1157,18 @@ function ampp_search_result_count($JSON = true){
   
   //watchdog('ampp_projects', 'ajax TOTAL: ' . $tmpview->total_rows);
   
+  $output = $tmpview->total_rows;
+  
+  if ($amount || ($JSON && isset($_GET["PreviewAmount"]) && $_GET["PreviewAmount"])) {
+    $output .= ' (' . t('Commitment amount') . ': '. format_number(get_total_amount(0, $args), 0) . ' ' . variable_get('currency_code') . ' )'; 
+  }
+  
   if ($JSON) {
-    $response = array('count' => $tmpview->total_rows);
+    $response = array('count' => $output);
     drupal_json_output($response);
     drupal_exit();  
   } else {
-    return $tmpview->total_rows;
+    return $output;
   }
 }
 

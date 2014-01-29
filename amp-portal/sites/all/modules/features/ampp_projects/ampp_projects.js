@@ -139,10 +139,11 @@ var selectedRegionalProjects = 0;
 		
 		Budget = $('input[name=budget]:checked').val();
 		RegionalProjects = ($('#edit-country-level-projects').length > 0 && $('#edit-country-level-projects').is(':checked')) ? 1 : 0;
+		PreviewAmount = ($('#preview_amount').length > 0) ? $('#preview_amount').val() : 0;
 		
 		$("#search_result_count").hide();
 		$("#loading-count").css('display','inline');
-		$.getJSON('/ampp_search/search_result_count', {'currentSectors[]' : currenSectorsIds, 'currentPrimarySectors[]' : currenPrimarySectorsIds,'currentSecondarySectors[]' : currenSecondarySectorsIds,'currentPrograms[]' : currenProgramsIds, 'currentDonors[]':currentDonorsIds, 'currentRegions[]':currentRegionsIds,'currentPeriodStart':currentPeriodStart,'currentPeriodEnd':currentPeriodEnd,'currentKeywords':currentKeywords,'budget':Budget,'RegionalProjects':RegionalProjects},  function(data) {
+		$.getJSON('/ampp_search/search_result_count', {'currentSectors[]' : currenSectorsIds, 'currentPrimarySectors[]' : currenPrimarySectorsIds,'currentSecondarySectors[]' : currenSecondarySectorsIds,'currentPrograms[]' : currenProgramsIds, 'currentDonors[]':currentDonorsIds, 'currentRegions[]':currentRegionsIds,'currentPeriodStart':currentPeriodStart,'currentPeriodEnd':currentPeriodEnd,'currentKeywords':currentKeywords,'budget':Budget,'RegionalProjects':RegionalProjects,'PreviewAmount':PreviewAmount},  function(data) {
 			$("#loading-count").css('display','none');
 			$("#search_result_count").show();
 			if(data['error'] != undefined && data['error'] !== null){

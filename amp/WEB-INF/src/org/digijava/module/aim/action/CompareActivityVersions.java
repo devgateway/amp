@@ -82,7 +82,7 @@ public class CompareActivityVersions extends DispatchAction {
 			java.util.Locale locale = new java.util.Locale(navigationLanguage.getCode());
 			LuceneUtil.addUpdateActivity(request.getSession().getServletContext().getRealPath("/"), true, site, locale, activity, prevVer);
 			
-			return new ActionForward(mapping.findForward("reload").getPath() + "?ampActivityId=" + activityId);
+			return new ActionForward(mapping.findForward("reload").getPath() + "?ampActivityId=" + activityId,true);
 		}
 
 		vForm.setOutputCollection(new ArrayList<CompareOutput>());

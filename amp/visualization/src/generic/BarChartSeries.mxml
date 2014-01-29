@@ -545,6 +545,10 @@
 			  return text.length>45? text.substr(0,42)+"..." : text;
 		    }   
 			
+			private function getShortText (text:String):String{
+				return text.length>45? text.substr(0,42)+"..." : text;
+			}
+			
 			private function getLegendX(currentIndex:Number ,x:Number):Number{
 				return (currentIndex < 4) ? currentIndex*160 : (currentIndex < 8) ? (currentIndex-4)*160 : (currentIndex-8)*160;
 			}

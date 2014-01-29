@@ -1240,8 +1240,11 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 	myForm.webLink.value		= '';
 	myForm.docType.disabled		= false;
 	myForm.yearOfPublication.disabled		= false;
-	if (isAUrl == null) 
+    myForm.docIndex.value = index ? index : '';
+    myForm.docCategory.value = category ? category : '';
+	if (isAUrl == null) {
 		isAUrl	= false;
+    }
 		
 	selectResourceType(isAUrl);
 	
@@ -1260,6 +1263,14 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 
 		myForm.yearOfPublication.style.backgroundColor	= "#eeeeee";
 		myForm.yearOfPublication.style.color			= "darkgray";
+
+        myForm.docIndex.readOnly                        = true;
+        myForm.docIndex.style.backgroundColor           = "#eeeeee";
+        myForm.docIndex.style.color                     = "darkgray";
+
+        myForm.docCategory.readOnly                     = true;
+        myForm.docCategory.style.backgroundColor        = "#eeeeee";
+        myForm.docCategory.style.color                  = "darkgray";
 
 	
 		setPanelHeader(0, "${translation_add_new_version}");
@@ -1303,6 +1314,13 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 		myForm.yearOfPublication.style.backgroundColor	= "";
 		myForm.yearOfPublication.style.color			= "";
 
+        myForm.docIndex.readOnly                = false;
+        myForm.docIndex.style.backgroundColor   = "";
+        myForm.docIndex.style.color             = "";
+
+        myForm.docCategory.readOnly              = false;
+        myForm.docCategory.style.backgroundColor = "";
+        myForm.docCategory.style.color           = "";
 		
 		setPanelHeader(0, "${translation_add_new_content}");
 	}

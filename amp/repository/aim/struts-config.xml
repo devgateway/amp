@@ -1204,6 +1204,7 @@
     </action>
     <action name="aimEditActivityForm" path="/aim/viewActivityPreview" scope="session" type="org.digijava.module.aim.action.EditActivity">
       <forward name="forward" path="/aim/previewActivity.do" />
+      <forward name="popupPreview" path="/showLayout.do?layout=popupActivityPreview" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
 	<action name="aimDisplayStructureImage" path="/aim/displayStructureImage" scope="request" type="org.digijava.module.aim.action.DisplayStructureImage" validate="false" />
@@ -1876,6 +1877,7 @@
      	<forward name="addOrEditContact" path="/showLayout.do?layout=addContact" />
      	<forward name="showAllContacts" path="/showLayout.do?layout=allContacts"/>
      	<forward name="printPreview" path="/showLayout.do?layout=contactsPrintPreview"/>
+     	<forward name="showAllContactsAfterSave" path="/aim/addressBook.do?actionType=viewAddressBook" redirect="true" />
    </action>
 
 

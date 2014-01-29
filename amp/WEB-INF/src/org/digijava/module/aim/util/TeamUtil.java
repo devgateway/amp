@@ -1772,7 +1772,7 @@ public class TeamUtil {
 			Query qry = null;
 			
 			String activityNameHql = AmpActivityVersion.hqlStringForName("act");	
-			queryString = "select new AmpActivityVersion(act.ampActivityId, " + activityNameHql + ", act.ampId) from "+ AmpActivity.class.getName()	+ " act  ";
+			queryString = "select new AmpActivityVersion(act.ampActivityId, " + activityNameHql + ", act.ampId,act.archived) from "+ AmpActivity.class.getName()	+ " act  ";
 			
 			if(teamId!=null){
 				queryString+="where act.team="+teamId;

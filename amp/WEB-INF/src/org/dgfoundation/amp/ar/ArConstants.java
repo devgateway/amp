@@ -355,6 +355,10 @@ public final class ArConstants {
 	public static final String ACTIVITY_ID = "ACTIVITY_ID";
 
 	public static final String ACTIVITY_PLEDGES_TITLE_NAME = "Activity Pledges Title";
+
+	public static final String COLUMN_ANY_PRIMARY_PROGRAM_LEVEL = "Primary Program Level";
+
+	public final static String COLUMN_ANY_SECONDARY_PROGRAM_LEVEL="Secondary Program Level";
 	
 	public static class SyntheticColumnsMeta {
 		String columnName;

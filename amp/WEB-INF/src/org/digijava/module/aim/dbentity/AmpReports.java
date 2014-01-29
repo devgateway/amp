@@ -151,6 +151,14 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		}
 		return result;
 	}
+	
+	public String getFormatedPublishedDate() {
+		String result = null;
+		if (this.publishedDate != null) {
+			result = DateTimeUtil.formatDate(this.publishedDate);
+		}
+		return result;
+	}
 
 	public AmpTeamMember getOwnerId() {
 		return ownerId;

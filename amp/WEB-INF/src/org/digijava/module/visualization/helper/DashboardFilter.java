@@ -44,7 +44,6 @@ public class DashboardFilter {
     private TeamMember teamMember;
     private List<AmpCurrency>currencies;
     private List<OrganizationSkeleton> organizations;
-    private Long[] selOrgIds;
     private List<AmpOrgGroup> orgGroups;
     private List<AmpSector>sectors;
     private List<AmpCategoryValueLocations> regions;
@@ -70,6 +69,7 @@ public class DashboardFilter {
     private Long[] selSectorIds;
     private Long[] selLocationIds;
     private Long[] selOrgGroupIds;
+    private Long[] selOrgIds;
     private Long selSectorConfigId;
 
 

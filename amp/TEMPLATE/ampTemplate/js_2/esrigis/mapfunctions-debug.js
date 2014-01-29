@@ -1758,7 +1758,7 @@ function CluterStructures(){
 		+ stshowimage
 		
 		+ "<div id='strInfo'>"+ infoTemplate +"</div>"
-		+ "<div id='strImage'>${Structure Image}</div>"
+		+ showImageDiv
 		+ "</div>";
 		
 	//debugger;

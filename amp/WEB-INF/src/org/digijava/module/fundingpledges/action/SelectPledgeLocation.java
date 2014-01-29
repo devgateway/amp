@@ -42,7 +42,7 @@ public class SelectPledgeLocation extends Action {
             pledgeForm.getSelectedLayers().clear();
 
             // this if for FundingPledgesLocation. Not sure why this is in this code
-            pledgeForm.setSelectedLocs(null);
+            //pledgeForm.setSelectedLocs(null);
             pledgeForm.setUserSelectedLocs(null);
 
             return mapping.findForward("forward");
@@ -58,14 +58,14 @@ public class SelectPledgeLocation extends Action {
             pledgeForm.getSelectedLayers().clear();
 
             // this if for FundingPledgesLocation. Not sure why this is in this code
-            pledgeForm.setSelectedLocs(null);
+            //pledgeForm.setSelectedLocs(null);
             pledgeForm.setUserSelectedLocs(null);
 
             return mapping.findForward("forward");
         }
 
 		String resetSelLocs = request.getParameter("resetSelLocs");
-		if (resetSelLocs!=null && resetSelLocs.equalsIgnoreCase("reset")) {
+		if (resetSelLocs != null && resetSelLocs.equalsIgnoreCase("reset")) {
 			pledgeForm.setSelectedLocs(null);
 		}
 
@@ -89,7 +89,7 @@ public class SelectPledgeLocation extends Action {
                 pledgeForm.getSelectedLayers().clear();
 
                 // this if for FundingPledgesLocation. Not sure why this is in this code
-                pledgeForm.setSelectedLocs(null);
+                // pledgeForm.setSelectedLocs(null);
                 pledgeForm.setUserSelectedLocs(null);
 
                 return mapping.findForward("forward");

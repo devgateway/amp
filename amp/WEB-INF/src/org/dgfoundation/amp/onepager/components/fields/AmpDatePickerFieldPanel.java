@@ -31,19 +31,15 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 	protected AmpDatePickerFieldPanel otherDatePicker;
 	protected AmpTextFieldPanel<String> comment;
 	protected WebMarkupContainer dateWrapper;
-	
-	public AmpDatePickerFieldPanel(String id,IModel<Date> model, String fmName,final AmpDatePickerFieldPanel otherDatePicker,
-			boolean hideLabel, boolean hideNewLine){
-		this(id,model, fmName,otherDatePicker,hideLabel, hideNewLine,false);
-	}
+
 	/**
 	 * @param id
 	 * @param fmName
 	 * @param hideLabel
 	 */
-	
-	public AmpDatePickerFieldPanel(String id,IModel<Date> model, String fmName,final AmpDatePickerFieldPanel otherDatePicker,
-			boolean hideLabel, boolean hideNewLine,boolean showReqStar) {
+	public AmpDatePickerFieldPanel(String id, 
+			IModel<Date> model, String fmName,final AmpDatePickerFieldPanel otherDatePicker,
+			boolean hideLabel, boolean hideNewLine) {
 		super(id, fmName, hideLabel, hideNewLine);
 		this.fmType = AmpFMTypes.MODULE;
 		
@@ -55,7 +51,7 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 
 		
 		date = AmpDatePickerRegular.newDatePicker("date", model); 
-		date.setRequired(showReqStar);
+		
 		dateWrapper.add(date);
 		initFormComponent(date);
 		sameAsOtherDatePicker = new AmpAjaxCheckBoxFieldPanel(

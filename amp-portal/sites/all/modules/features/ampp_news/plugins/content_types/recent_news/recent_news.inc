@@ -43,7 +43,7 @@ function ampp_news_recent_news_content_type_render($subtype, $conf, $panel_args,
     $view->execute(); 
   }
   if ($conf['show_only'] == 0) { 
-    $view->footer['area']->options['format'] = 'html';
+    // $view->footer['area']->options['format'] = 'html';
     $view->footer['area']->options['content'] = $footer_content;   
     $vars['content'] = $view->preview('block_1');
   }

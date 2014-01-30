@@ -13,13 +13,6 @@ function ampp_general_strongarm() {
   $strongarm = new stdClass;
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'admin_theme';
-  $strongarm->value = 'ampp_admin';
-  $export['admin_theme'] = $strongarm;
-
-  $strongarm = new stdClass;
-  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
-  $strongarm->api_version = 1;
   $strongarm->name = 'customerror_403';
   $strongarm->value = 'You are not authorized to access this page.';
   $export['customerror_403'] = $strongarm;

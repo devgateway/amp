@@ -4,13 +4,13 @@
   } else {
     print '<table class="query_plugin_table"><tr>';
     foreach ($vars['labels'] as $k => $v) {
-      print '<th>' . $v . '</th>';
+      print '<th class="heading-' . $v . '">' . $v . '</th>';
     }
     print '</tr>';
     foreach ($vars['values'] as $k => $v) {
       print '<tr>';
       foreach ($v as $kk => $vv) {
-        print '<td>' . $vv . '</td>';
+        print '<td class="col-' . $vv . '">' . $vv . '</td>';
       }
       print '</tr>';
     }

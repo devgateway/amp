@@ -45,6 +45,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
 			}
 		};
 		amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
+		amount.getTextContainer().setRequired(true);
 		add(amount);
 		
 		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {
@@ -75,6 +76,8 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
         final PropertyModel<Date> funDateModel = new PropertyModel<Date>(
                 am, "funDate");
         AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", funDateModel, null, "Date");
+
+        date.getDate().setRequired(true);
 		add(date);
 	}
 }

@@ -10,9 +10,9 @@
 function ampp_general_wysiwyg_default_profiles() {
   $profiles = array();
 
-  // Exported profile: plain_text
-  $profiles['plain_text'] = array(
-    'format' => 'plain_text',
+  // Exported profile: html
+  $profiles['html'] = array(
+    'format' => 'html',
     'editor' => 'tinymce',
     'settings' => array(
       'default' => 1,

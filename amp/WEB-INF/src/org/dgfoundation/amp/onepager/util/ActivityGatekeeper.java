@@ -5,7 +5,12 @@ import java.util.HashMap;
 import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.time.Duration;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.ShaCrypt;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class ActivityGatekeeper {
 	private static HashMap<String, String> timestamp = new HashMap<String, String>();
@@ -106,5 +111,49 @@ public class ActivityGatekeeper {
 	
 	public static String buildPermissionRedirectLink(String id){
 		return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editPermissionError=1";
+	}
+	
+	/**
+	 * THIS FUNCTION IS NOT AUTHORITATIVE (e.g. it filters out attempts to cheat the system, but does not check into account all the parameters)
+	 * TODO: move all the decision-making regarding editing permissions in a single place (like this function)
+	 * @param activityId
+	 * @return
+	 */
+	public static boolean allowedToEditActivity(String activityId)
+	{
+		try
+		{
+			TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+			if (teamMember == null)
+				return false;
+
+			if("Management".toLowerCase().equals(teamMember.getTeamAccessType().toLowerCase()))
+				return false;
+			
+			long ampActivityId = Long.parseLong(activityId);
+			
+			if (!WorkspaceFilter.isActivityWithinWorkspace(ampActivityId))
+				return false;
+						
+			return true;
+//			org.digijava.module.aim.dbentity.AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
+//			if (team == null)
+//				return false;
+//			
+//			Boolean addActivity = team.getAddActivity();
+//			if (addActivity == null)
+//				return false;
+//			
+//			return addActivity;
+		}
+		catch(NumberFormatException ex)
+		{
+			return true; // allowed to add new activity if the link was generated (a little bit fishy)
+		}
+		catch(Exception e)
+		{
+			logger.error("error while trying to decide whether allowed to edit activity", e);
+			return false;
+		}
 	}
 }

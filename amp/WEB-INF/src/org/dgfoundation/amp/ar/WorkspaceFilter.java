@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.Util;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -16,11 +18,11 @@ public class WorkspaceFilter
 {
 	private Long teamMemberId;
 	private Set teamAssignedOrgs = null;
-	private Set ampTeams = null;
+	private Set<AmpTeam> ampTeams = null;
 	private String accessType;
 	private boolean hideDraft;
 	private boolean approved;
-	private boolean publicView;
+	//private boolean publicView;
 	private long activitiesRejectedByFilter;
 	
 	/**
@@ -34,13 +36,13 @@ public class WorkspaceFilter
 	 * @param accessType
 	 * @param draft
 	 */
-	private WorkspaceFilter(Long teamMemberId, String accessType, boolean approved, boolean hideDraft, boolean publicView)
+	private WorkspaceFilter(Long teamMemberId, String accessType, boolean approved, boolean hideDraft)
 	{
 		this.teamMemberId = teamMemberId;
 		this.hideDraft = hideDraft;
 		this.approved = approved;
 		this.accessType = accessType;
-		this.publicView = publicView;
+		//this.publicView = publicView;
 		prepareTeams();
 	}
 
@@ -92,7 +94,7 @@ public class WorkspaceFilter
 		//new computed filter - after permissions #3167
 		//AMP-3726
 //		activityStatus.add(Constants.STARTED_STATUS);
-		String NO_MANAGEMENT_ACTIVITIES="";
+//		String NO_MANAGEMENT_ACTIVITIES="";
 		
 		String used_approval_status = "Management".equals(this.getAccessType()) ? 
 				Util.toCSString(AmpARFilter.validatedActivityStatus) :			// Management workspace: validated activities only
@@ -185,9 +187,9 @@ public class WorkspaceFilter
 	 * @param draft
 	 * @return
 	 */
-	private static String generateWorkspaceFilterQuery(Long teamMemberId, String accessType, boolean approved, boolean hideDraft, boolean publicView)
+	private static String generateWorkspaceFilterQuery(Long teamMemberId, String accessType, boolean approved, boolean hideDraft)
 	{
-		return new WorkspaceFilter(teamMemberId, accessType, approved, hideDraft, publicView).getGeneratedQuery();
+		return new WorkspaceFilter(teamMemberId, accessType, approved, hideDraft).getGeneratedQuery();
 	}
 	
 	/**
@@ -199,9 +201,9 @@ public class WorkspaceFilter
 	 * @param publicView
 	 * @return
 	 */
-	public static Set getAmpTeamsSet(Long teamMemberId, String accessType, boolean approved, boolean hideDraft, boolean publicView)
+	public static Set getAmpTeamsSet(Long teamMemberId, String accessType, boolean approved, boolean hideDraft)
 	{
-		return new WorkspaceFilter(teamMemberId, accessType, approved, hideDraft, publicView).getAmpTeams();
+		return new WorkspaceFilter(teamMemberId, accessType, approved, hideDraft).getAmpTeams();
 	}
 	
 	/**
@@ -213,9 +215,15 @@ public class WorkspaceFilter
 	{
 		 // (approval_status='approved' and draft<>true)
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		return generateWorkspaceFilterQuery(session, null, tm == null);
+		return generateWorkspaceFilterQuery(session, null);
 	}
 	
+	/**
+	 * user entry point for getting the filter query of the current workspace
+	 * gets the workspace filter query from the HttpSession. If none exists, regenerates it (but shouldn't happen)
+	 * @param session
+	 * @return a SQL query which generates a list of AmpActivityIds
+	 */
 	public static String getWorkspaceFilterQuery(HttpSession session)
 	{
 	   	AmpARFilter teamFilter = (AmpARFilter) session.getAttribute(ArConstants.TEAM_FILTER);
@@ -228,12 +236,25 @@ public class WorkspaceFilter
 	}
 	
 	/**
+	 * returns true IFF an activity is visible from within an workspace
+	 * @param ampActivityId
+	 * @return
+	 */
+	public static boolean isActivityWithinWorkspace(long ampActivityId)
+	{
+		String str = getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
+		String query = String.format("SELECT (%d IN (%s)) AS rs", ampActivityId, str);
+		java.util.List<?> res = PersistenceManager.getSession().createSQLQuery(query).list();
+		return (Boolean) res.get(0);
+	}
+	
+	/**
 	 * if forcedTeamMemberId == null, use the logged-in user (or public view). Else use the forcedTeamMember <b>which might have the special value TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES</b>
 	 * @param session
 	 * @param forcedTeamMemberId
 	 * @return
 	 */
-	public static String generateWorkspaceFilterQuery(HttpSession session, Long forcedTeamMemberId, boolean publicView)
+	public static String generateWorkspaceFilterQuery(HttpSession session, Long forcedTeamMemberId)
 	{
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if (forcedTeamMemberId != null && forcedTeamMemberId != AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES)
@@ -246,7 +267,7 @@ public class WorkspaceFilter
 			boolean hideDraft = true;
 			boolean approved = true;
 			String accessType = Constants.ACCESS_TYPE_MNGMT;
-			String onlineQuery = generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType, approved, hideDraft, publicView);
+			String onlineQuery = generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType, approved, hideDraft);
 			String offlineQuery = AmpARFilter.getOffLineQuery(onlineQuery);
 			return offlineQuery;
 		}
@@ -261,7 +282,7 @@ public class WorkspaceFilter
 			 */
 			hideDraft=TeamUtil.hideDraft(tm);
 			String accessType = tm.getTeamAccessType();
-			return generateWorkspaceFilterQuery(tm.getMemberId(), accessType, approved, hideDraft, publicView);
+			return generateWorkspaceFilterQuery(tm.getMemberId(), accessType, approved, hideDraft);
 		}
 	}
 	
@@ -273,11 +294,11 @@ public class WorkspaceFilter
 		this.teamAssignedOrgs = teamAssignedOrgs;
 	}
 	
-	public Set getAmpTeams() {
+	public Set<AmpTeam> getAmpTeams() {
 		return ampTeams;
 	}
 
-	public void setAmpTeams(Set ampTeams) {
+	public void setAmpTeams(Set<AmpTeam> ampTeams) {
 		this.ampTeams = ampTeams;
 	}
 	

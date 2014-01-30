@@ -125,23 +125,8 @@ function saveDashboard() {
 		}
 		var maxYearValue = document.getElementById('maxYearFilter').value;
 		var minYearValue = document.getElementById('minYearFilter').value;
-		if (maxYearValue!="" || minYearValue!="") {
-			if (maxYearValue == "" || minYearValue == "") {
-				errorMsgMax='<digi:trn jsFriendly="true" >Both Default Max Year Filter and Default Min Year Filter values must be set to be used as default filter</digi:trn>';
-				alert(errorMsgMax);
-			    return false;
-				
-			}
-			if ( /^\d+$/.test(maxYearValue) == false  && maxYearValue != "") {
-				errorMsgMax='<digi:trn jsFriendly="true" >Default Max Year Filter value should be a number</digi:trn>';
-				alert(errorMsgMax);
-			    return false;
-			}
-			if (/^\d+$/.test(minYearValue) == false  && minYearValue != "") {
-				errorMsgMin='<digi:trn jsFriendly="true" >Default Min Year Filter value should be a number</digi:trn>';
-				alert(errorMsgMin);
-				return false;	
-			}
+		if (checkYearFilters (minYearValue,maxYearValue) == false) {
+			return false;
 		}
 		<digi:context name="save" property="/visualization/saveDashboard.do" />
   	 	document.dashboardform.action = "<%=save%>?graphs="+param;
@@ -150,6 +135,32 @@ function saveDashboard() {
 	}
 }
 
+function checkYearFilters (minYearValue, maxYearValue) {
+	if (maxYearValue!="" || minYearValue!="") {
+		if (maxYearValue == "" || minYearValue == "") {
+			errorMsgMax='<digi:trn jsFriendly="true" >Both Default Max Year Filter and Default Min Year Filter values must be set to be used as default filter</digi:trn>';
+			alert(errorMsgMax);
+		    return false;
+		}
+		if ( /^\d+$/.test(maxYearValue) == false  && maxYearValue != "") {
+			errorMsgMax='<digi:trn jsFriendly="true" >Default Max Year Filter value should be a number</digi:trn>';
+			alert(errorMsgMax);
+		    return false;
+		}
+		if (/^\d+$/.test(minYearValue) == false  && minYearValue != "") {
+			errorMsgMin='<digi:trn jsFriendly="true" >Default Min Year Filter value should be a number</digi:trn>';
+			alert(errorMsgMin);
+			return false;	
+		}
+		if (parseInt (minYearValue) > parseInt(maxYearValue) ) {
+			errorMsgLower='<digi:trn jsFriendly="true" >Default Min Year Filter value should be lower than Default Max Year filter value</digi:trn>';
+			alert(errorMsgLower);
+			return false;	
+		}
+	}
+	return true;
+
+}
 function trim (str) {
     str = str.replace(/^\s+/, '');
     for (var i = str.length - 1; i >= 0; i--) {

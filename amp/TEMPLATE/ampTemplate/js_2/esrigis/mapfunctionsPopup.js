@@ -83,7 +83,7 @@ function init() {
 		var deferred = dojo.xhrGet(xhrArgs);
 	
 	if (!isOsm){
-		basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id : 'base'}); // Levels at which this layer will be visible);
+		basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapurl, {id : 'base'}); // Levels at which this layer will be visible);
 	}else{
 		basemap = new esri.layers.OpenStreetMapLayer({id : 'base'});
     }

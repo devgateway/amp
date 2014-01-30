@@ -951,18 +951,19 @@ public class MapFilter {
 	{
 		if (filteredActivities != null)
 			return filteredActivities;
-		
-		List<Long> workspaceActivityList = new ArrayList<Long>();
-		
+				
 		try
 		{
+			String workSpaceQuery;
 			if (this.getFromPublicView() != null && this.getFromPublicView() == true) {
-				String workSpaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(TLSUtils.getRequest().getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
-				workspaceActivityList = DbHelper.getInActivitiesLong(workSpaceQuery);
+				workSpaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(TLSUtils.getRequest().getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES);				
 			} else if(!this.isModeexport()){
-				String workSpaceQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
-				workspaceActivityList = DbHelper.getInActivitiesLong(workSpaceQuery);
+				workSpaceQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
 			}
+			else
+				workSpaceQuery = "SELECT amp_activity_id FROM amp_activity";
+			
+			List<Long> workspaceActivityList = DbHelper.getInActivitiesLong(workSpaceQuery);
 			filteredActivities = Collections.unmodifiableList(workspaceActivityList);
 			return filteredActivities;
 		}

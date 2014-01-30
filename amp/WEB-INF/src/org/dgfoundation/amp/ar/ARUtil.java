@@ -456,7 +456,7 @@ public final class ARUtil {
 						c.compareTo( periods.last() ) < 0 && elem.isShow() )
 					periods.add((Comparable) minfo.getValue() );
 			}
-	
+			
 			if (periods!=null && periods.size()>0) {
 				Object prevPeriod					= null;
 				Object first							= periods.first();

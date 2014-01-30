@@ -91,7 +91,7 @@ public class PublicViewColumnsUtil
 	 * </ul>
 	 * @param conn
 	 * @param updateSchemaIfDifferent
-	 * @param updateData
+	 * @param updateData if false, only check & update database scheme; if true - update data unconditionally
 	 */
 	public static void maintainPublicViewCaches(java.sql.Connection conn, boolean updateData)
 	{

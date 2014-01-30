@@ -40,6 +40,7 @@ import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.startup.HibernateSessionRequestFilter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DigiCacheManager;
@@ -638,8 +639,40 @@ public class PersistenceManager {
         return col;
     }
 
-	
-	
+    /**
+     * number of requests to skip
+     */
+	protected static int skips = 30;
+    protected static boolean letsRuinRequest()
+    {
+    	try
+    	{
+    		javax.servlet.http.HttpServletRequest res = TLSUtils.getRequest();
+    		if (res == null)
+    			return false;
+    		if (res.getAttribute("blabla") == null)
+    		{
+    			skips --;
+    			if (skips > 0)
+    				return false;
+    			java.util.Random random = new java.util.Random();
+    			int rnd = random.nextInt(10);
+    			boolean bool = rnd > 8;
+    			res.setAttribute("blabla", bool);
+    			if (bool)
+    				System.out.println("you are soon going to be ruined");
+    		}
+    		Boolean bool = (Boolean) res.getAttribute("blabla");
+    		if (bool)
+    			System.out.println("mde");
+    		return bool;
+    	}
+    	catch(Exception e)
+    	{
+    		return false;
+    	}
+    }
+    
 	/**
 	 * Managed by hibernate. Please do not use session.close nor transaction.commit over this session. 
 	 * This is transparently managed by Hibernate on each request thread
@@ -647,7 +680,11 @@ public class PersistenceManager {
 	 * @return Session object
 	 * @throws DgException
 	 */
-	public static Session getRequestDBSession() throws DgException {
+	public static Session getRequestDBSession() throws DgException
+	{
+//		if (letsRuinRequest())
+//			throw new RuntimeException("doing my best to ruin your life in Session");
+
 		return getRequestDBSession(true);
 	}
 

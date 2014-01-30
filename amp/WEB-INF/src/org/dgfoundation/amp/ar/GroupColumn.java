@@ -201,6 +201,18 @@ public class GroupColumn extends Column<Column> {
         catch (NullPointerException e) {
 			//logger.warn("Could not get filter object when type is: " + category);
 		}
+        
+        try
+        {
+        	if (System.currentTimeMillis() > 1)
+        		throw new RuntimeException();
+        }
+		catch (Exception e)
+		{
+			//logger.error( e.getMessage() );
+			//e.printStackTrace();
+		}
+
        if ( (reportMetadata.getAllowEmptyFundingColumns() != null && reportMetadata.getAllowEmptyFundingColumns()) && 
     		  ( category.equals(ArConstants.YEAR) || category.equals(ArConstants.QUARTER) 
     		   	|| category.equals(ArConstants.MONTH) ) ) {

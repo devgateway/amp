@@ -821,6 +821,7 @@ function get_total_amount($type, $args = array()) {
   }
   
   $tmpview->set_arguments($args);
+  $tmpview->set_items_per_page(0);
   $tmpview->pre_execute();
   $tmpview->execute();
   

@@ -1082,7 +1082,7 @@ public class DbUtil {
         //If it's not public view (the else) and links it to the non cached version of the amp_activity_group
         if(filter.getFromPublicView() !=null && filter.getFromPublicView()) {
         	if(tm != null && tm.getTeamAccessType().equals("Management")) {
-        		//Do nothing.
+        		oql += DashboardUtil.getTeamQueryManagement();
         	} else {
         		oql += DashboardUtil.getTeamQueryManagement();
         		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
@@ -1778,7 +1778,7 @@ public class DbUtil {
 		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
         	if(tm != null && tm.getTeamAccessType().equals("Management")) {
-        		//Do nothing.
+        		oql += DashboardUtil.getTeamQueryManagement();
         	} else {
         		oql += DashboardUtil.getTeamQueryManagement();
         		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
@@ -2017,7 +2017,7 @@ public class DbUtil {
 		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
         	if(tm != null && tm.getTeamAccessType().equals("Management")) {
-        		//Do nothing.
+        		oql += DashboardUtil.getTeamQueryManagement();
         	} else {
         		oql += DashboardUtil.getTeamQueryManagement();
         		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
@@ -2273,7 +2273,7 @@ public class DbUtil {
 		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
         	if(tm != null && tm.getTeamAccessType().equals("Management")) {
-        		//Do nothing.
+        		oql += DashboardUtil.getTeamQueryManagement();
         	} else {
         		oql += DashboardUtil.getTeamQueryManagement();
         		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";

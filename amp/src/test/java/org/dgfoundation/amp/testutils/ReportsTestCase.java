@@ -47,6 +47,26 @@ public abstract class ReportsTestCase extends TestCase
 		assertNull(String.format("test %s, report %s: %s", testName, reportName, error), error);
 	}
 	
+//	/**
+//	 * all the CRDs of the report should have the same columns' structures, e.g. any column-removal should be done in such a way as to be reflected in all the CRD's of a report
+//	 */
+//	protected void checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(GroupReportData report)
+//	{
+//		ArrayList<ColumnReportData> crds = new ArrayList<ColumnReportData>();
+//		collectAllCRD(report, crds);
+//		
+//		if (crds.isEmpty())
+//			return;
+//		
+//		String first = crds.get(0).digestReportHeadingData(true).toString();
+//		for(int i = 1; i < crds.size(); i++)
+//		{
+//			String checked = crds.get(i).digestReportHeadingData(true).toString();
+//			assertEquals(first, checked, 
+//					"CRD " + crds.get(i).getAbsoluteReportName() + " has a different layout digest than " + crds.get(0).getAbsoluteReportName());
+//		}
+//	}
+	
 	/**
 	 * shorthand for {@link #runReportTest(String, String, String[], GroupReportModel, AmpReportModifier, null)}
 	 * @param testName

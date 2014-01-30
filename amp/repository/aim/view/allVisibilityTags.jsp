@@ -159,7 +159,9 @@
 <feature:display module="Organizations" name="Executing Agency"></feature:display>
 <feature:display module="Organizations" name="Contracting Agency"></feature:display> 
 <feature:display module="Organizations" name="Implementing Agency"></feature:display> 
-<feature:display module="Organizations" name="Regional Group"></feature:display> 
+<feature:display module="Organizations" name="Regional Group"></feature:display>
+
+ 
 <feature:display module="Organizations" name="Responsible Organization"></feature:display> 
 <feature:display module="Organizations" name="Sector Group"></feature:display> 
 <feature:display module="Project ID and Planning" name="Identification"></feature:display> 

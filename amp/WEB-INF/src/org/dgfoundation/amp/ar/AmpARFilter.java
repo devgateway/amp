@@ -1615,7 +1615,7 @@ public class AmpARFilter extends PropertyListable {
 				(loggedInTeamMember.getComputation() != null) && (loggedInTeamMember.getComputation()) &&
 				(loggedInTeamMember.getUseFilters() != null) && (loggedInTeamMember.getUseFilters());
 
-		String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMemberId, this.isPublicView());
+		String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMemberId);
 
 		if (needsTeamFilter)
 		{

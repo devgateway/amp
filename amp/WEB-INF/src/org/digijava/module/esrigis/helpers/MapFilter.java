@@ -924,17 +924,17 @@ public class MapFilter {
 	 */
 	public List<Long> buildFilteredActivitiesList()
 	{
-		List<Long> workspaceActivityList = new ArrayList<Long>();
-		
 		try
 		{
+			String workSpaceQuery;
 			if (this.getFromPublicView() != null && this.getFromPublicView() == true) {
-				String workSpaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(TLSUtils.getRequest().getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
-				workspaceActivityList = DbHelper.getInActivitiesLong(workSpaceQuery);
+				workSpaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(TLSUtils.getRequest().getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES);
 			} else if(!this.isModeexport()){
-				String workSpaceQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
-				workspaceActivityList = DbHelper.getInActivitiesLong(workSpaceQuery);
+				workSpaceQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
 			}
+			else 
+				workSpaceQuery = "SELECT amp_activity_id FROM amp_activity"; // everything
+			List<Long> workspaceActivityList = DbHelper.getInActivitiesLong(workSpaceQuery);
 			return workspaceActivityList;
 		}
 		catch(Exception e)

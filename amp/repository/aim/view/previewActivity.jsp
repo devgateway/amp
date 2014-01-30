@@ -558,41 +558,7 @@ function collapseAll() {
 	<td width=15>&nbsp;</td>
     <td width=689 bgcolor="#F4F4F4" valign=top style="border:1px solid #DBDBDB">
 	<div style="padding:10px; font-size:12px;">
-	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td>
-    	<input type="button" value="<digi:trn>Collapse All</digi:trn>" class="buttonx_sm" id="collapseall">    
-    </td>
-    <td align=right>
-		<logic:present name="currentMember" scope="session">
-	    <c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		
-	    <input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/>
-	    <module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-			<feature:display name="Edit Activity" module="Previews">
-				<field:display feature="Edit Activity" name="Edit Activity Button">
-					<logic:equal name="aimEditActivityForm" property="buttonText" value="edit">
-						<c:set var="trn"><digi:trn>Edit</digi:trn></c:set>
-						<input type="button" class="buttonx_sm" onclick="javascript:editActivity()" value="${trn}"/>
-					</logic:equal>
-					<logic:equal name="aimEditActivityForm" property="buttonText" value="validate">
-						<c:set var="trn"><digi:trn>Validate</digi:trn></c:set>							
-						<input type="button" class="buttonx_sm" onclick="javascript:editActivity()" value="${trn}"/>
-					</logic:equal>
-				</field:display>
-			</feature:display>
-		</module:display>
-		</logic:present>    
-		</td>
-  </tr>
-  <tr>
-      <td colspan="2" style="color:red;text-align: center">
-          <c:forEach var="element" items="${aimEditActivityForm.warningMessges}">
-              <br />
-              <digi:trn>${element}</digi:trn>
-          </c:forEach>
-      </td>
-  </tr>
-</table>
+		<%@include file="activityPreviewButtons.jspf" %>
 		
 <!-- IDENTIFICATION SECTION -->
 <module:display name="/Activity Form/Identification" parentModule="/Activity Form">
@@ -3130,34 +3096,9 @@ function collapseAll() {
 <!-- END PROJECT RISK -->
 <%@include file="previewActivityStructures.jsp" %>
 <br/>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td>
-    	<input type="button" value="<digi:trn>Collapse All</digi:trn>" class="buttonx_sm" id="collapseall_1">    
-    </td>
-    <td align=right>
-		<logic:present name="currentMember" scope="session">
-    	<c:set var="trn"><digi:trn>Version History</digi:trn></c:set>		
-    	<input type="button" class="buttonx_sm" onclick="javascript:previewHistory(<%=request.getAttribute("actId")%>); return false;" value="${trn}"/> 
-   		<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-			<feature:display name="Edit Activity" module="Previews">
-				<field:display feature="Edit Activity" name="Edit Activity Button">
-					<logic:equal name="aimEditActivityForm" property="buttonText" value="edit">
-						<c:set var="trn"><digi:trn>Edit</digi:trn></c:set>
-						<input type="button" class="buttonx_sm" onclick="javascript:editActivity()" value="${trn}"/>
-					</logic:equal>
-					<logic:equal name="aimEditActivityForm" property="buttonText" value="validate">
-						<c:set var="trn"><digi:trn>Validate</digi:trn></c:set>							
-						<input type="button" class="buttonx_sm" onclick="javascript:editActivity()" value="${trn}"/>
-					</logic:equal>
-				</field:display>
-			</feature:display>
-		</module:display>   	
-		</logic:present>
-		</td>
-  </tr>
-</table>
-</div></td>
+<%@include file="activityPreviewButtons.jspf" %>
+</div>
+</td>
   </tr>
 </table>
 </c:if>

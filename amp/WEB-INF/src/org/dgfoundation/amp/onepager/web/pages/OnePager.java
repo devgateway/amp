@@ -127,7 +127,7 @@ public class OnePager extends AmpHeaderFooter {
 		}
 		return null;
 	}
-	
+		
 	public OnePager() {
 		super();
 		PageParameters parameters = decodePageParameters(getRequest());
@@ -177,6 +177,8 @@ public class OnePager extends AmpHeaderFooter {
                 throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId, currentUserId));
 				//return;
 			}
+			if (!ActivityGatekeeper.allowedToEditActivity(activityId))
+				throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));
 			
 			am = new AmpActivityModel(Long.valueOf(activityId), key);
 			

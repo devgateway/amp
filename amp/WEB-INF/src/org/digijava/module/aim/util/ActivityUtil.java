@@ -5346,6 +5346,13 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		}
 	}
 	
+	public static boolean shouldThisUserBeAbleToEdit(TeamMember tm, Long activityId)
+	{
+		if (tm == null)
+			return false;
+		return WorkspaceFilter.isActivityWithinWorkspace(activityId);
+	}
+	
 	public static boolean shouldThisUserValidate (TeamMember tm, Long activityId) {
 		if (tm.getTeamHead() )
 		//synchronized(lock) // cheaper to synchronize than to get a new connection every time

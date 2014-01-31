@@ -237,8 +237,8 @@ public class GroupReportData extends ReportData<ReportData> {
 			element.postProcess();
 		}
 	
-		if (this.getName().equals("AMP-16651"))
-			System.out.println("BOZO REMOVE ME I AM JUST A BREAKPOINT");
+//		if (this.getName().equals("AMP-16651"))
+//			System.out.println("BOZO REMOVE ME I AM JUST A BREAKPOINT");
 		
 		// create trail cells
 		try {			

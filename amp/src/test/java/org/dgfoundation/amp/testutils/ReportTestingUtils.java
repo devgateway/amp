@@ -114,24 +114,22 @@ public class ReportTestingUtils
 	{
 		Session session = null;
 		Query qry = null;
-		List<AmpActivityVersion> activities = new ArrayList<AmpActivityVersion>();
-		String locale = TLSUtils.getEffectiveLangCode();		
+		List<String> activities = new ArrayList<String>();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select r from " + AmpActivityVersion.class.getName()
+			String queryString = "select " + AmpActivityVersion.hqlStringForName("r") + "FROM " + AmpActivityVersion.class.getName()
 					+ " r WHERE r.ampActivityId=:activityId";
 			qry = session.createQuery(queryString);
 			qry.setLong("activityId", activityId);
-			activities = qry.list();
+			activities = qry.list();			
+			if (activities.size() >= 1)
+				return activities.get(0);			
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		
-		if (activities.size() >= 1)
-			return activities.get(0).getName();
-		throw new RuntimeException("no activity with the given id " + activityId + " exists");
-		
+		throw new RuntimeException("no activity with the given id " + activityId + " exists");		
 	}
 	
 	/**

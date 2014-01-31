@@ -178,14 +178,14 @@ public class HierarchyTests27 extends ReportsTestCase
 							.withTrailCells(null, "748 000", "748 000"),
 							GroupReportModel.withColumnReports("Region: Balti County",
 								ColumnReportDataModel.withColumns("Zone: Glodeni",
-									SimpleColumnModel.withContents("Project Title", "Activity With Zones and Percentages", "Activity With Zones and Percentages", "Activity with Zones", "Activity with Zones"), 
+									SimpleColumnModel.withContents("Project Title", "Activity With Zones and Percentages", "Activity With Zones and Percentages"), 
 									GroupColumnModel.withSubColumns("Funding",
 										GroupColumnModel.withSubColumns("2013",
-											SimpleColumnModel.withContents("Actual Commitments", "Activity With Zones and Percentages", "712 000", "Activity with Zones", "570 000"))), 
+											SimpleColumnModel.withContents("Actual Commitments", "Activity With Zones and Percentages", "712 000"))), 
 									GroupColumnModel.withSubColumns("Total Costs",
-										SimpleColumnModel.withContents("Actual Commitments", "Activity With Zones and Percentages", "712 000", "Activity with Zones", "570 000")))
-								.withTrailCells(null, "1 282 000", "1 282 000"))
-							.withTrailCells(null, "1 282 000", "1 282 000"))
+										SimpleColumnModel.withContents("Actual Commitments", "Activity With Zones and Percentages", "712 000")))
+								.withTrailCells(null, "712 000", "712 000"))
+							.withTrailCells(null, "712 000", "712 000"))
 						.withTrailCells(null, "1 460 000", "1 460 000"))
 					.withTrailCells(null, "1 460 000", "1 460 000")
 					.withPositionDigest(true,
@@ -203,16 +203,6 @@ public class HierarchyTests27 extends ReportsTestCase
 						GroupReportModel.withGroupReports("AMP-16695-1",
 							GroupReportModel.withColumnReports("Region: Anenii Noi County",
 								ColumnReportDataModel.withColumns("Zone: Bulboaca",
-									SimpleColumnModel.withContents("Project Title", "Activity with Zones", "Activity with Zones"), 
-									GroupColumnModel.withSubColumns("Funding",
-										GroupColumnModel.withSubColumns("2013",
-											SimpleColumnModel.withContents("Actual Commitments", "Activity with Zones", "570 000"))), 
-									GroupColumnModel.withSubColumns("Total Costs",
-										SimpleColumnModel.withContents("Actual Commitments", "Activity with Zones", "570 000")))
-								.withTrailCells(null, "570 000", "570 000"))
-							.withTrailCells(null, "570 000", "570 000"),
-							GroupReportModel.withColumnReports("Region: Balti County",
-								ColumnReportDataModel.withColumns("Zone: Glodeni",
 									SimpleColumnModel.withContents("Project Title", "Activity with Zones", "Activity with Zones"), 
 									GroupColumnModel.withSubColumns("Funding",
 										GroupColumnModel.withSubColumns("2013",

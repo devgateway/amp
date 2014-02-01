@@ -670,8 +670,10 @@ function removeOptionsDropdown(object){
 	for(var i = 1; i < obj.options.length; i++){
 		obj.options[i].remove;
 	}
+	//save the 'All' option text (in different languages it differs)
+	var allText = obj.options[0].text;
 	obj.options.length = 0;
-	obj.options[0] = new Option("All", -1);
+	obj.options[0] = new Option(allText, -1);
 }
 function removeOptions (obj){
 	var div = document.getElementById(obj);
@@ -2434,6 +2436,9 @@ function changeChart(e, chartType, container, useGeneric){
 	var groupSeparator = document.getElementById("groupSeparator").value;
 	var decimalsToShow = document.getElementById("decimalsToShow").value;
 	var currCode = document.getElementById("currencyCode").value;
+	var divide =  document.getElementById(container+"Divide").checked;
+	
+	
 	
 	var flashvars = { 
 			decimalSeparator: decimalSeparator, 
@@ -2442,7 +2447,8 @@ function changeChart(e, chartType, container, useGeneric){
 			currCode: currCode,
 			palette: palette, 
 			id: container,
-			start: (startMovie ? "true" : "false")
+			start: (startMovie ? "true" : "false"),
+			divide: "true"
 		};
 	var params = {
 			wmode: "transparent"
@@ -2492,6 +2498,7 @@ function changeChart(e, chartType, container, useGeneric){
 			break;
 	}
 	updateChartSettings(container, chartType);
+	//updateGraph (e,container);
 	return false;
 }
 

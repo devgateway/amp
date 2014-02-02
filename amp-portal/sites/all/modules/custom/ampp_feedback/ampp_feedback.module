@@ -76,71 +76,74 @@ function ampp_feedback_form_alter(&$form, &$form_state, $form_id) {
         '#title' => t('Name'),
         '#required' => TRUE,
         '#wysiwyg' => FALSE,
-        );
+      );
       $form['email'] = array(
         '#type' => 'textfield',
         '#title' => t('Email'),
         '#required' => TRUE,
         '#wysiwyg' => FALSE,
         '#element_validate' => array('validate_email_address'), 
-        );
-      // Load includes/common.inc from the hierarchical select module.
-      module_load_include('inc', 'hierarchical_select', 'includes/common');
+      );
       
-      if (!isset($form_state['build_info']['args'][0]['vocab']) || $form_state['build_info']['args'][0]['vocab'] == 0) {
-        // Load category based in vocabulary machine name
-        $voc = 'institutions';
-        $vocabulary = taxonomy_vocabulary_machine_name_load($voc);
-        if (count(taxonomy_get_tree($vocabulary->vid))) {
-          // hide term when empty
-          $form['institutions'] =  array (
-            '#title' => t($vocabulary->name),
-            '#type' => 'hierarchical_select',
-            '#required' => TRUE,
-            '#size' => 3,
-            '#config' => array(
-              'module' => 'hs_taxonomy',
-              'params' => array(
-                'vid' => (int) $vocabulary->vid,
-        	    'exclude_tid'                => NULL,
-                'root_term'                  => NULL,
-                'entity_count_for_node_type' => NULL,
-              ),
-              'save_lineage'    => 0,
-              'enforce_deepest' => 0,
-              'entity_count'    => 0,
-              'require_entity'  => 1,
-              'resizable'       => 1,
-              'level_labels' => array(
-                'status' => 0,
-                'labels' => array(),
-              ),
-              'dropbox' => array(
-                'status'   => 0,
-                'title'    => t('All selections'),
-                'limit'    => 0,
-                'reset_hs' => 1,
-              ),
-              'editability' => array(
-                'status'           => 0,
-                'item_types'       => array(),
-                'allowed_levels'   => array(),
-                'allow_new_levels' => 0,
-                'max_levels'       => 3,
-              ),
-              'animation_delay'    => variable_get('hierarchical_select_animation_delay', 400),
-              'special_items'      => array(),
-              'render_flat_select' => 0,
-             ),
-            '#default_value' => -1,
-          );
+      if (module_exists('hierarchical_select')) {
+        // Load includes/common.inc from the hierarchical select module.
+        module_load_include('inc', 'hierarchical_select', 'includes/common');
+      
+        if (!isset($form_state['build_info']['args'][0]['vocab']) || $form_state['build_info']['args'][0]['vocab'] == 0) {
+          // Load category based in vocabulary machine name
+          $voc = 'institutions';
+          $vocabulary = taxonomy_vocabulary_machine_name_load($voc);
+          if (count(taxonomy_get_tree($vocabulary->vid))) {
+            // hide term when empty
+            $form['institutions'] =  array (
+              '#title' => t($vocabulary->name),
+              '#type' => 'hierarchical_select',
+              '#required' => TRUE,
+              '#size' => 3,
+              '#config' => array(
+                'module' => 'hs_taxonomy',
+                'params' => array(
+                  'vid' => (int) $vocabulary->vid,
+          	    'exclude_tid'  => NULL,
+                  'root_term'  => NULL,
+                  'entity_count_for_node_type' => NULL,
+                ),
+                'save_lineage'    => 0,
+                'enforce_deepest' => 0,
+                'entity_count'    => 0,
+                'require_entity'  => 1,
+                'resizable'       => 1,
+                'level_labels' => array(
+                  'status' => 0,
+                  'labels' => array(),
+                ),
+                'dropbox' => array(
+                  'status'   => 0,
+                  'title'    => t('All selections'),
+                  'limit'    => 0,
+                  'reset_hs' => 1,
+                ),
+                'editability' => array(
+                  'status'           => 0,
+                  'item_types'       => array(),
+                  'allowed_levels'   => array(),
+                  'allow_new_levels' => 0,
+                  'max_levels'       => 3,
+                ),
+                'animation_delay'    => variable_get('hierarchical_select_animation_delay', 400),
+                'special_items'      => array(),
+                'render_flat_select' => 0,
+               ),
+              '#default_value' => -1,
+            );
+          }
+        
+          hierarchical_select_common_config_apply( $form['institutions'], "taxonomy-$vocabulary->vid");
+        
+          $element_info = element_info('hierarchical_select');
+          $form['institutions']['#process'] = array_merge($element_info['#process'], array('hs_taxonomy_widget_process'));
+          $form['institutions']['#weight'] = 4;
         }
-        
-        hierarchical_select_common_config_apply( $form['institutions'], "taxonomy-$vocabulary->vid");
-        
-        $element_info = element_info('hierarchical_select');
-        $form['institutions']['#process'] = array_merge($element_info['#process'], array('hs_taxonomy_widget_process'));
-        $form['institutions']['#weight'] = 4;
       }
         
       $form['message']['#weight'] = 5;

@@ -1,6 +1,7 @@
 package org.digijava.module.esrigis.action;
 
 import java.io.InputStreamReader;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,6 +75,7 @@ public class StructuresImporter extends Action {
                             st.setType(DbHelper.getStructureTypesByName(nextLine[4].trim()));
                             st.setActivities(DbHelper.getActivityByAmpId(nextLine[0].trim()));
                             st.setDescription(nextLine[5].trim());
+                            st.setCreationdate(new Timestamp(System.currentTimeMillis()));
 							if (!"".equalsIgnoreCase(st.getTitle()) && st.getType()!=null && st.getActivities().size()!=0){
 								DbHelper.saveStructure(st);
                             }else{

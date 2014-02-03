@@ -559,7 +559,9 @@ public class ReportsFilterPicker extends Action {
  	 	//long a = System.currentTimeMillis();
  	 	Collection<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	Collection<AmpOrgGroup> donorGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllOrgGroupsOfPortfolio();//);
- 	 	
+ 	 	//AMP-16996 I applied the sorting here because for some reason the methond invoked to bring the orggroups has been changed
+ 	 	Collections.sort((List)donorGroups, new DbUtil.HelperAmpOrgGroupNameComparator());
+
  	 	HierarchyListableUtil.changeTranslateable(donorTypes, false);
  	 	HierarchyListableUtil.changeTranslateable(donorGroups, false);
  	 	

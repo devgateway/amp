@@ -1266,7 +1266,10 @@ public class ExportActivityToPDF extends Action {
 			 */
 			if(FeaturesUtil.isVisibleField("Activity Created By", ampContext)){
 				columnName=TranslatorWorker.translateText("Activity created by");
-				createGeneralInfoRow(mainLayout,columnName,identification.getActAthFirstName()+" "+identification.getActAthLastName()+"-"+identification.getActAthEmail());				
+				String firstName = identification.getActAthFirstName() == null ? "":identification.getActAthFirstName();
+				String lastName = identification.getActAthLastName() == null ? "":identification.getActAthLastName();
+				String email = identification.getActAthEmail() == null ? "":identification.getActAthEmail();
+				createGeneralInfoRow(mainLayout,columnName,firstName+" "+lastName+"-"+email);				
 			}			
 			
 			/**

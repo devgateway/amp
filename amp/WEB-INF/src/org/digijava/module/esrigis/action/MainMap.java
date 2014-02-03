@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -242,8 +243,10 @@ public class MainMap extends Action {
 			for(AmpClassificationConfiguration config: filter.getSectorConfigs()){
 				List<AmpSector> currentConfigSectors = org.digijava.module.visualization.util.DbUtil.getParentSectorsFromConfig(config.getId());
 				List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorsWithSubSectors = new ArrayList<EntityRelatedListHelper<AmpSector,AmpSector>>();
+				Collections.sort((List)currentConfigSectors, new DbUtil.HelperAmpSectorNameComparator());
 				for(AmpSector sector:currentConfigSectors){;
 					List<AmpSector> sectorList=new ArrayList<AmpSector>(sector.getSectors());
+					Collections.sort((List)sectorList, new DbUtil.HelperAmpSectorNameComparator());
 					sectorsWithSubSectors.add(new EntityRelatedListHelper<AmpSector,AmpSector>(sector,sectorList));
 				}
 				filter.getConfigWithSectorAndSubSectors().add(new EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>(config,sectorsWithSubSectors));

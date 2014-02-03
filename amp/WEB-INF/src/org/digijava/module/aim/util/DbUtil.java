@@ -74,6 +74,7 @@ import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
@@ -6996,6 +6997,31 @@ public class DbUtil {
 		}
 	}
 
+	public static class HelperAmpSectorNameComparator implements
+		Comparator<AmpSector> {
+		Locale locale;
+		Collator collator;
+
+		public HelperAmpSectorNameComparator() {
+			this.locale = new Locale("en", "EN");
+		}
+		
+		public HelperAmpSectorNameComparator(String iso) {
+			this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+		}
+
+		@Override
+		public int compare(AmpSector o1, AmpSector o2) {
+			if (collator == null)
+			{
+				collator = Collator.getInstance(locale);
+				collator.setStrength(Collator.TERTIARY);
+			}
+			int result = collator.compare(o1.getName(), o2.getName());
+			return result;
+		}
+	}	
+	
 	/**
 	 * This class is used for sorting AmpOrgGroup by code.
 	 * 

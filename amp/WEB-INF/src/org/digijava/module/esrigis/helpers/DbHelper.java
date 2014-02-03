@@ -706,7 +706,6 @@ public class DbHelper {
 		// collect all the location Ids existant in the system
 		Set<Long> allUsedAcvlIDs = new HashSet<Long>();
 		for(Object[] obj:fundingDets){
-			System.out.print(((AmpFundingDetail)obj[0]).getAmpFundingId().getAmpActivityId().getAmpActivityId() +",");
 			allUsedAcvlIDs.add((Long) obj[1]);
 		}
 

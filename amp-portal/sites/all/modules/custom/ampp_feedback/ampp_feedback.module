@@ -104,7 +104,7 @@ function ampp_feedback_form_alter(&$form, &$form_state, $form_id) {
                 'module' => 'hs_taxonomy',
                 'params' => array(
                   'vid' => (int) $vocabulary->vid,
-          	    'exclude_tid'  => NULL,
+          	      'exclude_tid'  => NULL,
                   'root_term'  => NULL,
                   'entity_count_for_node_type' => NULL,
                 ),
@@ -136,9 +136,9 @@ function ampp_feedback_form_alter(&$form, &$form_state, $form_id) {
                ),
               '#default_value' => -1,
             );
+            
+            hierarchical_select_common_config_apply( $form['institutions'], "taxonomy-$vocabulary->vid");         
           }
-        
-          hierarchical_select_common_config_apply( $form['institutions'], "taxonomy-$vocabulary->vid");
         
           $element_info = element_info('hierarchical_select');
           $form['institutions']['#process'] = array_merge($element_info['#process'], array('hs_taxonomy_widget_process'));

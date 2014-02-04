@@ -7,7 +7,7 @@ $plugin = array(
   'single' => TRUE,
   'title' => t('Feedback'),
   'description' => t('Feedback'),
-  'category' => array(t('Widgets')),
+  'category' => array(t('AMPP Widgets')),
   'defaults' => array(
     'vocab' => 0
   ),

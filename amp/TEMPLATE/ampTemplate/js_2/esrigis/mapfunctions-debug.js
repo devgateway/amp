@@ -64,7 +64,7 @@ donorfix="";
 //Honduras
 //donorfix = "BID,BM,BCIE,ACDI,UE,USAID,UNDP/PNUD,AECID,GIZ,JICA";
 //Haiti
-//donorfix = "UE,USAID,Ambassade du Japon,AECID,AFD,BM-EXTFUND,ACDI,Ambassade de Norvege,BID,Ambassade du Venezuela";
+//donorfix = "MAECD,AECID,BID,BM,UE,AMBMexique,MRE";
 fixeddonorlist = donorfix.split(",");
 
 
@@ -686,7 +686,8 @@ function togglenational() {
 /**
  * show map on load
  */
-dojo.addOnLoad(init);
+//dojo.addOnLoad(init);
+dojo.ready(init);
 
 /**
  * 
@@ -2075,8 +2076,10 @@ $(window).resize(function () {
 		clearTimeout(resizeTimer);
 		resizeTimer = setTimeout( function() {
 		$("#map").css("width","100%").css("height","100%");
-		map.resize();
-		map.reposition();
+			if (map){
+				map.resize();
+				map.reposition();
+			}
 		}, 500);   
    
 });

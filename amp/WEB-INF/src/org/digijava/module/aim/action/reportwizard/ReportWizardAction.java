@@ -6,6 +6,7 @@ package org.digijava.module.aim.action.reportwizard;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -557,8 +558,12 @@ public class ReportWizardAction extends MultiAction {
 			
 		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
 		
+
 		modeReset(mapping, form, request, response);
-		
+		PrintWriter out = response.getWriter();
+		out.write("reportId="+		ampReport.getAmpReportId());
+		out.flush();
+		out.close();
 		return null;
 	}
 	

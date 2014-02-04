@@ -142,6 +142,13 @@ public class GlobalSettingsConstants {
     public static final String READONLY_DATES= "Make Activity dates read only";
 
     public static final String MULTILINGUAL= "Multilingual";
+    
+    public static final String ENABLE_SITE_TRACKING= "Enable AMP usage tracking";
+    
+    public static final String TRACKING_SITE_URL= "Tracker URL";
+    
+    public static final String TRACKING_SITE_ID= "Site ID for tracking";
+    
 
 
 }

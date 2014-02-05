@@ -13,7 +13,13 @@
 <script type="text/javascript">
 function validate () {
 	var name =document.getElementsByName('currentObj.name')[0].value;
-	if (name == ""){
+	//for IE 7 and lower
+	if(!String.prototype.trim){  
+		  String.prototype.trim = function(){  
+		    return this.replace(/^\s+|\s+$/g,'');  
+	};
+	}
+	if (name.trim() == ""){
 		errorMsg='<digi:trn jsFriendly="true" >Name field is blank</digi:trn>';
 		alert(errorMsg);
 		return;

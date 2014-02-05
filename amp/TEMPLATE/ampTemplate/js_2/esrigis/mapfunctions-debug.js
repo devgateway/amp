@@ -19,7 +19,11 @@ dojo.require("dojo.io.script");
 dojo.require("esri.dijit.Print");
 dojo.require("esri.tasks.query");
 dojo.require("esri.layers.osm");
-
+dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.functional.lambda");
+dojo.require("dojox.lang.functional.curry");
+dojo.require("dojox.lang.functional.fold");
+dojo.require("dijit.TooltipDialog");
 
 
 /*----variables---------*/
@@ -109,7 +113,38 @@ var MapConstants = {
 			   "OSM" : 3
 		   }
 		};
+
+function loadScript(src, f) {
+	  var head = document.getElementsByTagName("head")[0];
+	  var script = document.createElement("script");
+	  script.src = src;
+	  var done = false;
+	  script.onload = script.onreadystatechange = function() { 
+	    // attach to both events for cross browser finish detection:
+	    if ( !done && (!this.readyState ||
+	      this.readyState == "loaded" || this.readyState == "complete") ) {
+	      done = true;
+	      if (typeof f == 'function') f();
+	      // cleans up a little memory:
+	      script.onload = script.onreadystatechange = null;
+	      head.removeChild(script);
+	    }
+	  };
+	  head.appendChild(script);
+	}
+
 function init() {
+	
+	//Ensure scripts are loaded after dojo modules are loaded
+	loadScript('/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js', function() { 
+		   console.log('esri.ux.layers.ClusterLayer-debug loaded');
+		 });
+	
+	loadScript('/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.AMPCluster.js', function() { 
+		   console.log('esri.ux.layers.AMPCluster loaded');
+		 });
+	
+	
 	var xhrArgs = {
 		url : "/esrigis/datadispatcher.do?getconfig=true",
 		handleAs : "json",
@@ -156,6 +191,7 @@ function init() {
 	var deferred = dojo.xhrGet(xhrArgs);
 
 	loading = dojo.byId("loadingImg");
+	
 	
 	if (!isOsm){
 		basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id : 'base'}); // Levels at which this layer will be visible);

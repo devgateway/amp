@@ -1,8 +1,3 @@
-dojo.require("dojox.lang.functional");
-dojo.require("dojox.lang.functional.lambda");
-dojo.require("dojox.lang.functional.curry");
-dojo.require("dojox.lang.functional.fold");
-dojo.require("dijit.TooltipDialog");
 /*
  * Adding array IndexOf method on IE explorer 
  * */

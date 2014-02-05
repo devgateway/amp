@@ -3223,21 +3223,28 @@ function collapseAll() {
 		  	$(".toggleDiv").toggle(showOrHide);
 		  
 	});
-	
-	$("#collapseall_1").click(function() {
-		var showOrHide;  
+	//associating the click directly to the id was not working. So I associated it with the button
+	//and the check for the correct id.
+	$( "button, input[type='button']" ).click (function (event) {
+		if (event.target.id=='collapseall_1') {
+			var showOrHide;  
 			  if($("#collapseall_1").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
 			  		$("#collapseall_1").attr('value','<digi:trn>Expand All</digi:trn>');
 			  		$("#collapseall").attr('value','<digi:trn>Expand All</digi:trn>');
+			  		$(event.target).attr('value','<digi:trn>Expand All</digi:trn>');
 			  		showOrHide=false;
 		  	  }else{
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
+			  		$(event.target).attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		showOrHide=true;
 		  	  }
-			  showMapInTooltipDialog(ashowmap,true);
+			  if($("#ashowmap").exists()){
+				  showMapInTooltipDialog(ashowmap,true);
+			  }
 			  $(".toggleDiv").toggle(showOrHide);
-			  document.body.scrollTop = document.documentElement.scrollTop = 0;
+			  document.body.scrollTop = document.documentElement.scrollTop = 0;	
+		}
 	});
 	
 	//Change map URLs to popin

@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
@@ -15,8 +16,15 @@ public class AmpMeasure  implements Serializable, Cloneable
 	private String name ;
 	private AmpIssues issue;
 	private Set actors;
+	private Date measureDate;
 	
-
+	
+	public Date getMeasureDate() {
+		return measureDate;
+	}
+	public void setMeasureDate(Date measureDate) {
+		this.measureDate = measureDate;
+	}
 	public String getName() {
 		return name;
 	}

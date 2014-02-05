@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -89,7 +90,11 @@ public class DocumentManager extends Action {
 		showContentRepository(request, myForm, errors);
 		
 		this.saveErrors(request, errors);
-		
+		HttpSession	httpSession		= request.getSession();
+		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
+		boolean shareWithoutApprovalNeeded=((sett!=null && sett.getAllowAddTeamRes()!=null && sett.getAllowAddTeamRes().intValue()>=CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER) || teamMember.getTeamHead());
+		request.setAttribute("shareWithoutApprovalNeeded", shareWithoutApprovalNeeded);
 		return mapping.findForward("forward");
 	}
 	

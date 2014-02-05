@@ -1174,11 +1174,45 @@ public class TeamMemberUtil {
 		return retVal;
 	}
 	
+	/**
+	 * null is the smallest number
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static int nullCompare(Object a, Object b)
+	{
+		if (a == null)
+		{
+			if (b == null)
+				return 0; // null == null
+			return -1; // null < [non-null]
+		}
+		// gone till here -> a != null
+		if (b == null)
+			return 1; // [non-null] > null
+		
+		return 0; // [non-null] == [non-null]
+	}
+	
 	public static Comparator<AmpTeamMember> alphabeticalTeamComp		=
 		new Comparator<AmpTeamMember>() {
 			public int compare(AmpTeamMember o1,
 					AmpTeamMember o2) {
-				return o1.getAmpTeam().getName().compareTo(o2.getAmpTeam().getName());
+				
+				int delta = nullCompare(o1, o2);
+				if (delta != 0)
+					return delta;
+				
+				delta = nullCompare(o1.getAmpTeam(), o2.getAmpTeam());
+				if (delta != 0)
+					return delta;
+				
+				delta = nullCompare(o1.getAmpTeam().getName(), o2.getAmpTeam().getName());
+				if (delta != 0)
+					return delta;
+				
+				return o1.getAmpTeam().getName().toLowerCase().compareTo(o2.getAmpTeam().getName().toLowerCase());
 			}
 		};  
 

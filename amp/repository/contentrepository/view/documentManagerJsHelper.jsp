@@ -1407,7 +1407,11 @@ function setHeightOfDiv(divId, maxLimit, value ){
 function shareDoc(uuid,shareWith,tabType){
 	var callback	= new Object();
 	callback.success	= function(o) {
-							window.location.replace( window.location.href );
+		 					if ("${shareWithoutApprovalNeeded}" != "true") {
+							var successAlert='<digi:trn>Your document will be shared with team members and will be available under Team resources tab after workspace manager approval</digi:trn>';                                                 
+	 						alert(successAlert);
+		 					}
+	 	 					window.location.replace( window.location.href );
 						};
 	callback.failure	= function(o) {
 							alert('share failed');

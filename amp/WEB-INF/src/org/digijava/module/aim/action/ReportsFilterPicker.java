@@ -560,7 +560,9 @@ public class ReportsFilterPicker extends Action {
  	 	Collection<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	Collection<AmpOrgGroup> donorGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllOrgGroupsOfPortfolio();//);
         //AMP-16996 I applied the sorting here because for some reason the methond invoked to bring the orggroups has been changed
- 	 	Collections.sort((List)donorGroups, new DbUtil.HelperAmpOrgGroupNameComparator()); 	 	
+ 	 	Collections.sort((List)donorGroups, new DbUtil.HelperAmpOrgGroupNameComparator());
+ 	 	Collections.sort((List)donorTypes ,new  DbUtil.HelperAmpOrgTypeNameComparator());
+ 	 	
  	 	HierarchyListableUtil.changeTranslateable(donorTypes, false);
  	 	HierarchyListableUtil.changeTranslateable(donorGroups, false);
  	 	

@@ -380,22 +380,19 @@ public Cell filter(Cell metaCell,Set ids) {
 	public boolean hasMetaInfo(MetaInfo m) 
 	{
 		MetaInfo internal = metaData.getMetaInfo(m.getCategory());
-		if (internal == null) {
+		if (internal == null ) {
 			return false;
         }
-
-        // in case of years (annual reports) the value is of type integer
-        if (internal.getValue() instanceof Integer || m.getValue() instanceof Integer) {
-            return true;
-        }
-
 		//we translate Bilateral ssc commitments = actual commitments
 		// triangular ssc commitments = planned commitments
-        return internal.equals(m) || (m.getCategory().equals("Funding Type") &&
-                ((internal.getValue() instanceof FundingTypeSortedString && internal.getValue().toString().equals("Bilateral SSC Commitments") &&
-                        m.getValue().toString().equals("Actual Commitments")) ||
-                        (internal.getValue() instanceof FundingTypeSortedString && internal.getValue().toString().equals("Triangular SSC Commitments") &&
-                                m.getValue().toString().equals("Planned Commitments"))));
+		if (internal.equals(m) || (m.getCategory().equals("Funding Type") && (
+		  (internal.getValue() instanceof FundingTypeSortedString && ((FundingTypeSortedString)internal.getValue()).toString().equals("Bilateral SSC Commitments") &&
+		  ((FundingTypeSortedString)m.getValue()).toString().equals("Actual Commitments")) ||
+		  (internal.getValue() instanceof FundingTypeSortedString && ((FundingTypeSortedString)internal.getValue()).toString().equals("Triangular SSC Commitments") &&
+				  ((FundingTypeSortedString)m.getValue()).toString().equals("Planned Commitments")))))
+            return true;
+		else
+            return false;
 	}
 	
 

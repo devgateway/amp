@@ -137,6 +137,7 @@ function _ampp_menu_tree($menu_name = 'navigation', $depth = 0) {
  */
 function ampp_preprocess_page(&$vars) {
   global $base_path, $user;
+  
   $theme_path = path_to_theme();
   $vars['theme_path'] = $theme_path;
 
@@ -163,6 +164,12 @@ function ampp_preprocess_page(&$vars) {
   $vars['head'] .= '<!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="' . $theme_path . '/css/iex.css"><![endif]-->' . "\n";
   $vars['head'] .= '<!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="' . $theme_path . '/css/ie6.css"><![endif]-->' . "\n";
 
+  // add custom CSS if defined
+  $custom_css = theme_get_setting('custom_css', 'ampp');
+  if (!empty($custom_css)) {
+    drupal_add_css($custom_css, array('type' => 'inline', 'group' => CSS_THEME, 'weight' => 13));
+  }
+  
   // SEO optimization, avoid duplicate titles in search indexes for pager pages
   if (isset($_GET['page']) || isset($_GET['sort'])) {
     $vars['meta'] .= '<meta name="robots" content="noindex,follow" />'. "\n";

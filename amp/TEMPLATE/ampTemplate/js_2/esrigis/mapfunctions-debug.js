@@ -2120,3 +2120,9 @@ $(window).resize(function () {
    
 });
 
+//position indicator map legend
+$(document).ready(function() {
+	var wndHeight = $(window).height();
+	var topPos = (wndHeight - 177) + "px";
+	$("div[id^='indicator_legend_']").css("top", topPos);
+});

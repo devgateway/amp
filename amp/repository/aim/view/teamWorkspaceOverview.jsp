@@ -234,6 +234,11 @@ function trim(stringToTrim) {
 									<html:hidden name="aimUpdateWorkspaceForm" property="workspaceType"/>
 									<html:hidden name="aimUpdateWorkspaceForm" property="category"/>
 									<table  width="100%" cellpadding="0" cellspacing="0">
+										<tr>
+											<td colspan="2">
+												<digi:errors />
+											</td>
+										</tr>
 										<logic:equal name="aimUpdateWorkspaceForm" property="updateFlag" value="true">
 											<tr>
 												<td class="inside" colspan="2" align="center">

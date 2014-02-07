@@ -53,7 +53,7 @@ function updateChild(action) {
 
 		var id = document.aimUpdateWorkspaceForm.teamId.value;
 		<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
-		document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
+		document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id + "&subtab=2";
 		document.aimUpdateWorkspaceForm.target = "_self";
 		document.aimUpdateWorkspaceForm.submit();
 	
@@ -234,6 +234,15 @@ function trim(stringToTrim) {
 									<html:hidden name="aimUpdateWorkspaceForm" property="workspaceType"/>
 									<html:hidden name="aimUpdateWorkspaceForm" property="category"/>
 									<table  width="100%" cellpadding="0" cellspacing="0">
+										<logic:equal name="aimUpdateWorkspaceForm" property="updateFlag" value="true">
+											<tr>
+												<td class="inside" colspan="2" align="center">
+													<font color="blue"><b>
+														<digi:trn key="aim:updateToAMPComplete">Update to AMP Complete</digi:trn></b>
+													</font>
+												</td>	
+										</tr>
+										</logic:equal>
 										<tr>
 											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 												<b class="ins_title">

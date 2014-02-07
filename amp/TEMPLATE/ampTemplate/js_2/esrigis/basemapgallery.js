@@ -75,7 +75,7 @@ function createBasemapGallery() {
 	}, "basemapGallery");
 	basemapGallery.startup();
 	var domNode = $(basemapGallery.domNode);
-  $(document).bind("click", function(){
+  $(domNode).bind("click", function(){
 		domNode.hide();
 	});
 
@@ -95,7 +95,7 @@ function createBasemapGalleryEsri() {
 
     basemapGallery.startup();
     var domNode = $(basemapGallery.domNode);
-    $(document).bind("click", function(){
+    $(domNode).bind("click", function(){
 			domNode.hide();
 		});
 		

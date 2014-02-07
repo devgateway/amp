@@ -25,6 +25,7 @@ import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -69,7 +70,7 @@ public class UpdateWorkspace extends Action {
 		String event = request.getParameter("event");
 //		String dest = request.getParameter("dest");
 		String tId1 = request.getParameter("tId");
-
+		Workspace workspace = TeamUtil.getWorkspace(new Long(tId1));
 		ActionMessages errors = new ActionMessages();
 		if (uwForm.getWorkspaceType() != null
 				&& "Team".compareTo(uwForm.getWorkspaceType()) == 0) {
@@ -224,6 +225,8 @@ public class UpdateWorkspace extends Action {
 							ActionMessages.GLOBAL_MESSAGE,
 							new ActionMessage(
 									"error.aim.updateWorkspace.noManagementChildSelected"));
+					//here we must reload the child workspaces 
+					uwForm.setChildWorkspaces(workspace.getChildWorkspaces());
 					saveErrors(request, errors);
 					logger.debug("error.aim.updateWorkspace.noManagementChildSelected !!!!!");
 					return mapping.getInputForward();

@@ -612,6 +612,7 @@ function resetToDefaults(){
 	document.getElementById("currencyId").value = document.getElementById("currencyIdDefault").value;
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyIdDefault").value;
 	document.getElementById("currencyQuickFilter_dropdown").value = document.getElementById("currencyIdDefault").value;
+	document.getElementById("fiscalCalendar_dropdown_Id").value = document.getElementById("fiscalCalendarId").value;
 	
 	document.getElementById("showAmountsInThousands").value = document.getElementById("showAmountsInThousandsDefault").value;
 	document.getElementById("show_amounts_in_thousands").value = document.getElementById("showAmountsInThousandsDefault").value;

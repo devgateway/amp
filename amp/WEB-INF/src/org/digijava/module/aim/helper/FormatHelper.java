@@ -154,7 +154,7 @@ public class FormatHelper {
        DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();                                                                                
        decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));                                                                                  
        decSymbols.setGroupingSeparator(groupSeparator.charAt(0));                                                                                   
-       DecimalFormat formater = new DecimalFormat("", decSymbols);    	
+       DecimalFormat formater = new DecimalFormat("###,###.##", decSymbols);    	
        return formater;
 	   
    }

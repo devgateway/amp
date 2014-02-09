@@ -65,12 +65,13 @@
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
-			<put-item name="footer" layout="footerLayout"/>
+			<put-item name="footer" layout="footerNoAdminLayout"/>
 			<put-item name="body" layout="helpBodyLayout"/>
 		</layout>
 		
 		<layout name="helpAdminLayout" extends="default">
 			<put-item name="body" layout="helpBodyLayout"/>
+			<put-item name="footer" layout="footerLayout"/>
 		</layout>		
 		
 		<layout name="helpBodyLayout" file="helpBodyLayout.jsp">
@@ -158,6 +159,13 @@
 		    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
+			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
+		</layout>
+		
+		<layout name="footerNoAdminLayout" file="footerNoAdminLayout.jsp">
+			<put name="version">&ampVersion;</put>
+			<put name="build_version">&buildDate;</put>
+		    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
 		

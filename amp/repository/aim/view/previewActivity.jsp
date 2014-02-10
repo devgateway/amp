@@ -558,8 +558,10 @@ function collapseAll() {
 	<td width=15>&nbsp;</td>
     <td width=689 bgcolor="#F4F4F4" valign=top style="border:1px solid #DBDBDB">
 	<div style="padding:10px; font-size:12px;">
-		<%@include file="activityPreviewButtons.jspf" %>
-		
+    <%  if (! "true".equals(request.getParameter("popupView"))) {%>
+        <%@include file="activityPreviewButtons.jspf" %>
+    <%}%>
+
 <!-- IDENTIFICATION SECTION -->
 <module:display name="/Activity Form/Identification" parentModule="/Activity Form">
 	<fieldset>
@@ -3107,7 +3109,11 @@ function collapseAll() {
 <!-- END PROJECT RISK -->
 <%@include file="previewActivityStructures.jsp" %>
 <br/>
-<%@include file="activityPreviewButtons.jspf" %>
+
+<%  if (! "true".equals(request.getParameter("popupView"))) {%>
+    <%@include file="activityPreviewButtons.jspf" %>
+<%}%>
+
 </div>
 </td>
   </tr>

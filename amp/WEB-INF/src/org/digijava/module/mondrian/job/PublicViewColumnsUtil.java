@@ -1,5 +1,6 @@
 package org.digijava.module.mondrian.job;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import org.apache.log4j.Logger;
@@ -179,7 +180,20 @@ public class PublicViewColumnsUtil
 		{
 			SQLUtils.executeQuery(conn, String.format("DROP TABLE IF EXISTS %s", cacheName));
 			SQLUtils.executeQuery(conn, String.format("CREATE TABLE %s AS SELECT * FROM %s;", cacheName, viewName));
+
+			//Check if public portal user is created, if so give him privileges on cached_* tables (AMP-17052)
+				
+			try {
+				java.sql.ResultSet rs = SQLUtils.rawRunQuery(conn,"SELECT usename FROM pg_catalog.pg_user WHERE  usename='ampp'",null);
+				if (rs.last()){
+					SQLUtils.executeQuery(conn, String.format("GRANT SELECT ON " +cacheName+ " TO ampp"));	
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 		Collection<String> columns = SQLUtils.getTableColumns(viewName);
 		for(String columnName:columns)
 			if (looksLikeIndexableColumn(viewName, columnName))

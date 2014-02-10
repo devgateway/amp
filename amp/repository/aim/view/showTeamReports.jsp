@@ -413,7 +413,7 @@ $(document).ready(function() {
 																								test="${not empty aimTeamReportsForm.sortBy && aimTeamReportsForm.sortBy!=5}">
 																								<digi:link href="/viewTeamReports.do?sortBy=5">
 																									<digi:trn key="aim:reportCreationDate">
-															                                          Creation Date
+															                                          Update Date
 															                                      </digi:trn>
 																								</digi:link>
 																								<c:if test="${aimTeamReportsForm.sortBy==6}">
@@ -424,7 +424,7 @@ $(document).ready(function() {
 																								test="${empty aimTeamReportsForm.sortBy || aimTeamReportsForm.sortBy==5}">
 																								<digi:link href="/viewTeamReports.do?sortBy=6">
 																									<digi:trn key="aim:reportCreationDate">
-														                                            Creation Date
+														                                            Update Date
 														                                        </digi:trn>
 																								</digi:link>
 																								<img src="/TEMPLATE/ampTemplate/images/arrow_up.gif"

@@ -55,6 +55,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -6560,6 +6561,42 @@ public class DbUtil {
 
 		} catch (Exception ex) {
 			logger.debug("Unable to get survey indicator : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		return indc;
+	}
+	
+	public static Collection<AmpGPISurveyIndicator> getAllGPISurveyIndicators() {
+		Collection responses = new ArrayList();
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String qry = "select indc from "
+					+ AmpGPISurveyIndicator.class.getName()
+					+ " indc order by indicator_number asc";
+			responses = session.createQuery(qry).list();
+
+		} catch (Exception ex) {
+			logger.error("Unable to get survey indicators : ", ex);
+		}
+		return responses;
+	}
+
+	public static AmpGPISurveyIndicator getGPIIndicatorById(Long id) {
+		AmpGPISurveyIndicator indc = new AmpGPISurveyIndicator();
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String qry = "select indc from "
+					+ AmpGPISurveyIndicator.class.getName()
+					+ " indc where (indc.ampIndicatorId=:id)";
+			indc = (AmpGPISurveyIndicator) session.createQuery(qry)
+					.setParameter("id", id, Hibernate.LONG).list().get(0);
+
+		} catch (Exception ex) {
+			logger.debug("Unable to get GPI survey indicator : " + ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
 		return indc;

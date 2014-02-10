@@ -303,6 +303,9 @@ LoggerIdentifiable, Cloneable {
 	// Aid Harmonization Survey Set
 	@VersionableCollection(fieldTitle = "Surveys")
 	protected Set<AmpAhsurvey> survey;
+	
+	@VersionableCollection(fieldTitle = "GPI Surveys")
+	protected Set <AmpGPISurvey> gpiSurvey;
 
 	@VersionableFieldSimple(fieldTitle = "Line Ministry Rank")
 	protected Integer lineMinRank;
@@ -2046,5 +2049,13 @@ contactName = string;
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError(e.toString());
 		}
+	}
+
+	public Set <AmpGPISurvey> getGpiSurvey() {
+		return gpiSurvey;
+	}
+
+	public void setGpiSurvey(Set <AmpGPISurvey> gpiSurvey) {
+		this.gpiSurvey = gpiSurvey;
 	}
 }

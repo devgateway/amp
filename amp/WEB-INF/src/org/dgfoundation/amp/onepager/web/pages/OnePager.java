@@ -27,6 +27,7 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpContracting
 import org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttingIssuesFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpGPIFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIdsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature;
@@ -99,7 +100,8 @@ public class OnePager extends AmpHeaderFooter {
 		new OnepagerSection("Paris Indicators", AmpPIFormSectionFeature.class.getName(), 18, false),
 		new OnepagerSection("Related Documents", AmpResourcesFormSectionFeature.class.getName(), 19, false),
 		new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 20, false),
-		new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 21, false)
+		new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 21, false),
+		new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 22, false)
 		};
     public static final AtomicBoolean savedSections = new AtomicBoolean(false);
     public static final List<OnepagerSection> sectionsList = Collections.synchronizedList(loadPositions());

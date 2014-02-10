@@ -20,7 +20,7 @@
             	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_number, indicator_code, status)
             	VALUES(2,'Indicator 6',1,2,'6',null);
             	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_number, indicator_code, status)
-            	VALUES(3,'Indicator 9b',3,3,'9b',null);
+            	VALUES(3,'Indicator 9b',4,3,'9b',null);
             	
             	INSERT INTO amp_gpi_survey_question_type(amp_type_id, name, description)
             	VALUES(1, 'yes-no', 'for yes/no type question');

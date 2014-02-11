@@ -459,8 +459,8 @@ public class ReportsFilterPicker extends Action {
 			}
 		}
 			
-//		AmpCurrency defaultCurrency = AmpARFilter.getDefaultCurrency();
-//		filterForm.setDefaultCurrency(defaultCurrency.getAmpCurrencyId());
+		AmpCurrency defaultCurrency = AmpARFilter.getDefaultCurrency();
+		filterForm.setDefaultCurrency(defaultCurrency.getAmpCurrencyId());
 		
 		if (AmpCaching.getInstance().allFisCalendars == null)
 			AmpCaching.getInstance().allFisCalendars = DbUtil.getAllFisCalenders();

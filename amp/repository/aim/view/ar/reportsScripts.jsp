@@ -29,7 +29,7 @@
 		<bean:define id="reportObject" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page" />
 	</logic:notEmpty>
 </logic:present>
-
+<c:set var="maxFractionDigits"><%= org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits() %></c:set>
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
@@ -417,6 +417,8 @@ saveReportEngine	= null;
 	
 	function showFormat(){
 		YAHOO.amptab.init();
+		var maxFractionDigits=${maxFractionDigits};
+		ResetCustom(maxFractionDigits);
 		initFormatPopup();
 		var element = document.getElementById("customFormat");
 		element.style.display = "inline";

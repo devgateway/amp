@@ -550,6 +550,19 @@
 		</td>
     </tr>
     </feature:display>
+    <feature:display  name="Global Partnership Indicators Manager" module="Admin Home">
+    <tr>
+	    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    	<td class="admin_box_label">
+			<c:set var="translation">
+	        	<digi:trn key="aim:tipManagerGPI" invisibleLinks="true">Click here to setup GPI</digi:trn>
+	        </c:set>
+	       	<digi:link module="aim" href="/manageGPI.do" title="${translation}">
+	        	<digi:trn key="aim:gpiManager">Global Partnership Indicators Manager</digi:trn>
+	        </digi:link>
+		</td>
+    </tr>
+    </feature:display>
 </table>
 
 	</div></td>

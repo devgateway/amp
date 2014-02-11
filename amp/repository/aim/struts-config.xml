@@ -16,6 +16,8 @@
 	<form-bean name="aimWelcomePageForm" type="org.digijava.module.aim.form.WelcomePageForm" />
     <form-bean name="aimViewAhSurveisForm" type="org.digijava.module.aim.form.ViewAhSurveisForm" />
     <form-bean name="aimViewAhSurveyFormulasForm" type="org.digijava.module.aim.form.ViewAhSurveyFormulasForm" />
+    
+    <form-bean name="manageGPIForm" type="org.digijava.module.aim.form.ManageGPIForm" />
 
     <form-bean name="aimFieldPermissionsForm" type="org.digijava.module.aim.form.FieldPermissionsForm" />
     <form-bean name="aimEUActivityForm" type="org.digijava.module.aim.form.EUActivityForm" />
@@ -227,6 +229,10 @@
     </action>
     <action name="aimViewAhSurveyFormulasForm" path="/aim/viewAhSurveyFormulas" scope="session" type="org.digijava.module.aim.action.ViewAhSurveyFormulas" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewAhSurveyFormulas" />
+    </action>
+    
+    <action name="manageGPIForm" path="/aim/manageGPI" scope="session" type="org.digijava.module.aim.action.ManageGPI" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=manageGPI" />
     </action>
 
   	<action forward="/showLayout.do?layout=viewStatusDescription" path="/aim/getSatusDescription" />

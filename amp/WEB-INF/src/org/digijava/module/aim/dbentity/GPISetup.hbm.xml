@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.GPISetup" table="AMP_GPI_SETUP"
+		lazy="false">
+		<cache usage="read-write" />
+		<id name="gpiSetupId" column="gpiSetupId" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_GPI_SETUP_seq</param>
+			</generator>
+		</id>
+
+		<many-to-one name="indicator5aActualDisbursement" column="indicator5aActualDisbursement"
+			class="org.digijava.module.aim.dbentity.AmpMeasures" cascade="none" />
+		<many-to-one name="indicator5aPlannedDisbursement" column="indicator5aPlannedDisbursement"
+			class="org.digijava.module.aim.dbentity.AmpMeasures" cascade="none" />
+		<many-to-one name="indicator6ScheduledDisbursements"
+			column="indicator6ScheduledDisbursements" class="org.digijava.module.aim.dbentity.AmpMeasures"
+			cascade="none" />
+		<many-to-one name="indicator9bDisbursements" column="indicator9bDisbursements"
+			class="org.digijava.module.aim.dbentity.AmpMeasures" cascade="none" />
+			
+	</class>
+</hibernate-mapping>

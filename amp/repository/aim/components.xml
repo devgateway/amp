@@ -9,6 +9,8 @@
 	<page name="viewAhSurveyFormulas" title=" - View AhSurvey Formulas" />
 	<page name="viewAhSurveis" title=" - View AhSurveis " />
 	<page name="addSectorToIndicator" title="Add Sector" />
+	
+	<page name="manageGPI" title="Manage Global Partnership Indicators" />
 
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
 	<page name="addQuickLink" title="Add link" />

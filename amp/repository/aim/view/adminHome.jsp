@@ -557,7 +557,7 @@
 			<c:set var="translation">
 	        	<digi:trn key="aim:tipManagerGPI" invisibleLinks="true">Click here to setup GPI</digi:trn>
 	        </c:set>
-	       	<digi:link module="aim" href="/manageGPI.do" title="${translation}">
+	       	<digi:link module="aim" href="/manageGPI.do?actionType=show" title="${translation}">
 	        	<digi:trn key="aim:gpiManager">Global Partnership Indicators Manager</digi:trn>
 	        </digi:link>
 		</td>

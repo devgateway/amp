@@ -32,4 +32,10 @@ public class GPISetupUtil {
 		return setup;
 	}
 
+	public static void saveGPISetup(GPISetup setup) throws Exception {
+		Session session = null;
+		session = PersistenceManager.getRequestDBSession();
+		session.saveOrUpdate(setup);
+	}
+
 }

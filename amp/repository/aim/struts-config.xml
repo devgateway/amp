@@ -231,8 +231,9 @@
       <forward name="forward" path="/showLayout.do?layout=viewAhSurveyFormulas" />
     </action>
     
-    <action name="manageGPIForm" path="/aim/manageGPI" scope="session" type="org.digijava.module.aim.action.ManageGPI" validate="false">
+    <action name="manageGPIForm" path="/aim/manageGPI" parameter="actionType" scope="session" type="org.digijava.module.aim.action.ManageGPI" validate="false">
       <forward name="forward" path="/showLayout.do?layout=manageGPI" />
+      <forward name="save" path="/admin.do" />
     </action>
 
   	<action forward="/showLayout.do?layout=viewStatusDescription" path="/aim/getSatusDescription" />

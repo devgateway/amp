@@ -10,6 +10,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.GPISetup;
 import org.digijava.module.aim.form.ManageGPIForm;
@@ -18,13 +19,14 @@ import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.GPISetupUtil;
 
-public class ManageGPI extends Action {
+public class ManageGPI extends DispatchAction {
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+	public ActionForward show(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+
+		ManageGPIForm gpiForm = (ManageGPIForm) form;
 
 		// Look for the list of available measures.
 		Collection<AmpMeasures> list = AdvancedReportUtil.getMeasureList();
-		ManageGPIForm gpiForm = (ManageGPIForm) form;
 		gpiForm.setMeasures(new ArrayList<AmpMeasures>());
 		for (AmpMeasures am : list) {
 			if ("A".equals(am.getType())) {
@@ -44,5 +46,28 @@ public class ManageGPI extends Action {
 		}
 
 		return mapping.findForward("forward");
+	}
+
+	public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		ManageGPIForm gpiForm = (ManageGPIForm) form;
+		GPISetup setup = GPISetupUtil.getSetup();
+		if (setup == null) {
+			setup = new GPISetup();
+		}
+
+		if (!"".equals(request.getParameter("indicator5aActualDisbursement"))) {
+			setup.setIndicator5aActualDisbursement(GPISetupUtil.getMeasure(new Long(request.getParameter("indicator5aActualDisbursement"))));
+		}
+		if (!"".equals(request.getParameter("indicator5aPlannedDisbursement"))) {
+			setup.setIndicator5aPlannedDisbursement(GPISetupUtil.getMeasure(new Long(request.getParameter("indicator5aPlannedDisbursement"))));
+		}
+		if (!"".equals(request.getParameter("indicator6ScheduledDisbursements"))) {
+			setup.setIndicator6ScheduledDisbursements(GPISetupUtil.getMeasure(new Long(request.getParameter("indicator6ScheduledDisbursements"))));
+		}
+		if (!"".equals(request.getParameter("indicator9bDisbursements"))) {
+			setup.setIndicator9bDisbursements(GPISetupUtil.getMeasure(new Long(request.getParameter("indicator9bDisbursements"))));
+		}
+		GPISetupUtil.saveGPISetup(setup);
+		return mapping.findForward("save");
 	}
 }

@@ -15,7 +15,7 @@
 
 	<jsp:include page="teamPagesHeader.jsp" />
 
-	<digi:form action="/manageGPI.do" method="post">
+	<digi:form action="/manageGPI.do?actionType=save" method="post">
 
 		<table cellPadding=5 cellspacing="0" width="100%">
 			<tr>
@@ -71,7 +71,7 @@
 													</td>
 												</tr>
 												<tr>
-													<td><input type="button" name="saveChanges" id="saveChanges" value="<digi:trn key='buttonSaveGPIManager'>Save Changes</digi:trn>"></td>
+													<td><input type="submit" name="saveChanges" id="saveChanges" value="<digi:trn key='buttonSaveGPIManager'>Save Changes</digi:trn>"/></td>
 												</tr>
 											</table>
 										</td>

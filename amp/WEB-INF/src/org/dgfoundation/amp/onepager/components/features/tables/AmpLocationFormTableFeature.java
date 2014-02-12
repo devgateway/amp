@@ -332,7 +332,7 @@ public class AmpLocationFormTableFeature extends
 	        Iterator<AmpActivityLocation> it = set.iterator();
 	        while(it.hasNext()){
 	        	AmpActivityLocation loc = it.next();
-	        	if(loc.getLocation()!=null && loc.getLocation().getLocation()!=null && loc.getLocation().getLocation().getParentLocation()!=null && activityLocation.getLocation()!=null &&loc.getLocation().getLocation().getParentLocation().compareTo(activityLocation.getLocation().getLocation())==0)
+	        	if(loc.getLocation()!=null && loc.getLocation().getLocation()!=null && loc.getLocation().getLocation()!=null && activityLocation.getLocation()!=null &&loc.getLocation().getLocation().compareTo(activityLocation.getLocation().getLocation())==0)
 	        		return;
 	        }
         }

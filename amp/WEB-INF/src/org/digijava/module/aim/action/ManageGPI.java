@@ -55,17 +55,17 @@ public class ManageGPI extends DispatchAction {
 			setup = new GPISetup();
 		}
 
-		if (!"".equals(request.getParameter("indicator5aActualDisbursement"))) {
-			setup.setIndicator5aActualDisbursement(GPISetupUtil.getMeasure(new Long(request.getParameter("indicator5aActualDisbursement"))));
+		if (!"".equals(gpiForm.getIndicator5aActualDisbursement())) {
+			setup.setIndicator5aActualDisbursement(GPISetupUtil.getMeasure(new Long(gpiForm.getIndicator5aActualDisbursement())));
 		}
-		if (!"".equals(request.getParameter("indicator5aPlannedDisbursement"))) {
-			setup.setIndicator5aPlannedDisbursement(GPISetupUtil.getMeasure(new Long(request.getParameter("indicator5aPlannedDisbursement"))));
+		if (!"".equals(gpiForm.getIndicator5aPlannedDisbursement())) {
+			setup.setIndicator5aPlannedDisbursement(GPISetupUtil.getMeasure(new Long(gpiForm.getIndicator5aPlannedDisbursement())));
 		}
-		if (!"".equals(request.getParameter("indicator6ScheduledDisbursements"))) {
-			setup.setIndicator6ScheduledDisbursements(GPISetupUtil.getMeasure(new Long(request.getParameter("indicator6ScheduledDisbursements"))));
+		if (!"".equals(gpiForm.getIndicator6ScheduledDisbursements())) {
+			setup.setIndicator6ScheduledDisbursements(GPISetupUtil.getMeasure(new Long(gpiForm.getIndicator6ScheduledDisbursements())));
 		}
-		if (!"".equals(request.getParameter("indicator9bDisbursements"))) {
-			setup.setIndicator9bDisbursements(GPISetupUtil.getMeasure(new Long(request.getParameter("indicator9bDisbursements"))));
+		if (!"".equals(gpiForm.getIndicator9bDisbursements())) {
+			setup.setIndicator9bDisbursements(GPISetupUtil.getMeasure(new Long(gpiForm.getIndicator9bDisbursements())));
 		}
 		GPISetupUtil.saveGPISetup(setup);
 		return mapping.findForward("save");

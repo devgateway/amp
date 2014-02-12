@@ -70,7 +70,7 @@ public class UpdateWorkspace extends Action {
 		String event = request.getParameter("event");
 //		String dest = request.getParameter("dest");
 		String tId1 = request.getParameter("tId");
-		Workspace workspace = TeamUtil.getWorkspace(new Long(tId1));
+		
 		ActionMessages errors = new ActionMessages();
 		if (uwForm.getWorkspaceType() != null
 				&& "Team".compareTo(uwForm.getWorkspaceType()) == 0) {
@@ -225,7 +225,8 @@ public class UpdateWorkspace extends Action {
 							ActionMessages.GLOBAL_MESSAGE,
 							new ActionMessage(
 									"error.aim.updateWorkspace.noManagementChildSelected"));
-					//here we must reload the child workspaces 
+					//here we must reload the child workspaces
+					Workspace workspace = TeamUtil.getWorkspace(uwForm.getTeamId());
 					uwForm.setChildWorkspaces(workspace.getChildWorkspaces());
 					saveErrors(request, errors);
 					logger.debug("error.aim.updateWorkspace.noManagementChildSelected !!!!!");

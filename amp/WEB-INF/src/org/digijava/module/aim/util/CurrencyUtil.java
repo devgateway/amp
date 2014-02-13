@@ -728,21 +728,12 @@ public class CurrencyUtil {
 					+ " c where (c.currencyCode=:currCode)";
 			qry = session.createQuery(queryString);
 			qry.setParameter("currCode", currCode, Hibernate.STRING);
-			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				ampCurrency = (AmpCurrency) itr.next();
-			}
+			Iterator<AmpCurrency> itr = qry.list().iterator();
+			if (itr.hasNext())
+				ampCurrency = itr.next();
 		} catch (Exception e) {
 			logger.error("Unable to get currency");
 			logger.debug("Exceptiion " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
 		}
 		return ampCurrency;
 	}
@@ -1080,63 +1071,17 @@ public class CurrencyUtil {
 		} catch (AimException e) {
 			e.printStackTrace();
 			return 1.0;
-		}
-		
-		//if (logger.isDebugEnabled())
-			//logger.debug("getExchangeRate with currencyCode" + currencyCode);
-
-//		Session session = null;
-//		Query q = null;
-//		Collection c = null;
-//		Iterator iter = null;
-//		Double exchangeRate = null;
-//
-//		try {
-//			session = PersistenceManager.getSession();
-//			String queryString = new String();
-//			queryString = "select f.exchangeRate from "
-//					+ AmpCurrencyRate.class.getName()
-//					+ " f where (f.toCurrencyCode=:currencyCode) order by f.exchangeRateDate desc";
-//			q = session.createQuery(queryString);
-//			q.setParameter("currencyCode", currencyCode, Hibernate.STRING);
-//			c = q.list();
-//			if (c.size() != 0) {
-//				iter = c.iterator();
-//				if (iter.hasNext()) {
-//					exchangeRate = (Double) iter.next();
-//				}
-//			} else {
-//				if (logger.isDebugEnabled())
-//					logger
-//							.debug("Unable to get exchange rate for currency code :"
-//									+ currencyCode);
-//				exchangeRate = new Double(1.0);
-//			}
-//		} catch (Exception ex) {
-//			logger.debug("Unable to get exchange rate from database", ex);
-//		} finally {
-//			try {
-//				if (session != null) {
-//					PersistenceManager.releaseSession(session);
-//				}
-//			} catch (Exception ex) {
-//				logger.error("releaseSession() failed");
-//			}
-//		}
-///*		if (logger.isDebugEnabled())
-//			logger.debug("getExchangeRate() for currency code :" + currencyCode
-//					+ "returns " + exchangeRate); */
-//		return exchangeRate.doubleValue();
+		}		
 	}
 
 	/**
-	 * Returns true if currency have at leat one value added.
-	 * Used in addfunding.
+	 * Returns true iff currency has at least one active exchange rate against the base currency
 	 * @param currencyCode currency Code
 	 * @return boolean
 	 * @author Irakli Kobiashvili
 	 */
-	public static Boolean isRate(String currencyCode) {
+	public static Boolean isRate(String currencyCode)
+	{
 		if (AmpCaching.getInstance().currencyCache.currencyHasRate.containsKey(currencyCode))
 			return AmpCaching.getInstance().currencyCache.currencyHasRate.get(currencyCode);
 		
@@ -1150,35 +1095,18 @@ public class CurrencyUtil {
 			}
 
 			session = PersistenceManager.getRequestDBSession();
-//			AMP-4299			
-//			String queryString = "select f.exchangeRate from "
-//					+ AmpCurrencyRate.class.getName()
-//					+ " f where (f.toCurrencyCode=:currencyCode) and f.exchangeRateDate between :fromDate and :toDate order by f.exchangeRateDate desc";
 			
-			//commented by dare for  AMP-10504 
-//			String queryString = "select f.exchangeRate from " + AmpCurrencyRate.class.getName() +
-//					" f where f.toCurrencyCode=:currencyCode " +
-//					" order by f.exchangeRateDate desc";
-			
-			String queryString = "select f.exchangeRate from " + AmpCurrencyRate.class.getName() +
-			" f where f.toCurrencyCode=:currencyCode " +" and f.fromCurrencyCode=:baseCurrencyCode"+
-			" order by f.exchangeRateDate desc";
+			String queryString = "SELECT COUNT(*) FROM " + AmpCurrencyRate.class.getName() + " f " + 
+								"WHERE (f.fromCurrencyCode = :currencyCode AND f.toCurrencyCode = :baseCurrencyCode) " + 
+								"OR (f.fromCurrencyCode = :baseCurrencyCode AND f.toCurrencyCode = :currencyCode) AND f.exchangeRate IS NOT NULL";
 			
 			q = session.createQuery(queryString);
 			q.setString("currencyCode", currencyCode);
 			q.setString("baseCurrencyCode", baseCurrencyCode);
-//			AMP-4299			
-//			q.setParameter("fromDate",fromdate,Hibernate.DATE);
-//			q.setParameter("toDate",todate,Hibernate.DATE);
-			List rates = q.list();
-			boolean result = false;
-			for (Iterator iter = rates.iterator(); iter.hasNext();) {
-				Double element = (Double) iter.next();
-				if (element != null){
-					result = true;
-					break;
-				}
-			}
+			
+			List<Object> count = q.list();
+			long cnt = PersistenceManager.getLong(count.get(0));
+			boolean result = (cnt > 0);
 			AmpCaching.getInstance().currencyCache.currencyHasRate.put(currencyCode, result);
 			return result;
 		} catch (Exception ex) {

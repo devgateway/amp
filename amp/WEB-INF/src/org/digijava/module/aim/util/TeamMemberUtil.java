@@ -1185,7 +1185,7 @@ public class TeamMemberUtil {
 		if (a == null)
 		{
 			if (b == null)
-				return 0; // null == null
+				return -1; // null <= null (avoid crash)
 			return -1; // null < [non-null]
 		}
 		// gone till here -> a != null
@@ -1214,7 +1214,7 @@ public class TeamMemberUtil {
 				
 				return o1.getAmpTeam().getName().toLowerCase().compareTo(o2.getAmpTeam().getName().toLowerCase());
 			}
-		};  
+		};   
 
 	
 	public static Collection getTMTeamMembers(String email) {

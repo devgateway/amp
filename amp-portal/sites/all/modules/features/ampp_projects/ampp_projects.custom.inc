@@ -821,7 +821,7 @@ function get_total_amount($type, $args = array()) {
   }
   
   // we need to prepend all descendant locations
-  $args[2] = addDescendantLocations($args[2]);
+  $args[2] = implode(',', addDescendantLocations(explode(',', $args[2])));
   
   $tmpview->set_arguments($args);
   $tmpview->set_items_per_page(0);
@@ -1612,7 +1612,7 @@ function getParentLocationIds($childLocationId) {
 /*
  * 
  */
-function addDescendantLocations($locations) {
+function addDescendantLocations($locations = array()) {
   global $amp_db_exists;
   
   // to avoid infinit recursion
@@ -1623,10 +1623,8 @@ function addDescendantLocations($locations) {
   if (!$amp_db_exists) return;
   
   db_set_active("amp_projects");
-  
-  $allLocations = $locations;
 
-  foreach ($allLocations as $k => $v) {  
+  foreach ($locations as $k => $v) {  
     $childrenIds = db_select('amp_category_value_location', 'l')
     ->fields('l', array('id'))
     ->condition('l.parent_location', $v, '=')
@@ -1635,15 +1633,15 @@ function addDescendantLocations($locations) {
      
     if (!empty($childrenIds)) {
       foreach ($childrenIds as $childId) {
-        $allLocations[] = $childId;
-        $allLocations = array_merge($allLocations, getParentLocationIds($childId));
+        $locations[] = $childId;
+        $locations = array_merge($locations, getParentLocationIds(array($childId)));
       }
     }
   }
      
   db_set_active();
   
-  return $allLocations;
+  return $locations;
 }
 
 

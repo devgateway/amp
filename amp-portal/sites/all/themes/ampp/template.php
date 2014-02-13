@@ -467,7 +467,13 @@ function ampp_form_alter(&$form, $form_state, $form_id) {
         '#default_value' => variable_get('dg_footer_html', $default_dg_footer), 
         '#description' => t('HTML for DG footer. To toggle DG footer go !link', array ( '!link' => '<a href="/admin/appearance/settings/ampp">' . t('here') . '</a>')),
         '#rows' => 5,
-      ),    
+      ), 
+      'dg_footer_counter' => array(
+        '#type' => 'checkbox',
+        '#title' => t('Show counter'),
+        '#default_value' => variable_get('dg_footer_counter', 0), 
+        '#description' => t('Will be shown at the bottom of all pages. To customize the colors please go !link_colors. For the counter configuration please go !link_conf', array ( '!link_colors' => '<a href="/admin/appearance/settings/ampp">' . t('here') . '</a>', '!link_conf' => '<a href="/admin/config/counter">' . t('here') . '</a>')),
+      ), 
     );
     
     $form['error_page'] = array(

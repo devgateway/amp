@@ -207,6 +207,11 @@ function ampp_preprocess_page(&$vars) {
   $vars['footer_links'] = theme('footer_links_menu');
   $vars['footer_text'] = variable_get('site_footer_text', '');
   $vars['dg_footer'] = theme_get_setting('toggle_dg_footer', 'ampp') ? variable_get('dg_footer_html', '') : '';
+  $vars['counter_block'] = '';
+  if (variable_get('dg_footer_counter', 0)) {
+    $counter_block = module_invoke('counter', 'block_view', '');
+    $vars['counter_block'] = $counter_block['content'];
+  }
   
   $addthis_lable = trim(variable_get('site_share_label', ''));
   if (!empty($addthis_lable)) $addthis_lable = '<span id="addthis_lable">' . $addthis_lable . ': </span>';

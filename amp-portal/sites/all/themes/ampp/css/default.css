@@ -962,3 +962,9 @@ div.views-slideshow-ddblock-cycle-vsd-default div.slide-title-inner {padding:5px
 
 .pane-top-activities-by-disbursement div.top-text, 
 .pane-top-activities-by-disbursement div.bottom-text {padding: 5px 15px;font-size: 10px;}
+
+.counter-container {clear:both; margin: 0 auto; padding: 10px; text-align: center;}
+.counter-container #counter {background-color: #BBBBCC; display: inline-block; padding: 10px;}
+.counter-container #counter ul {display: inline-block; padding: 10px;}
+.counter-container #counter ul lable {padding-right: 10px;}
+.counter-container #counter ul strong {float: none;}

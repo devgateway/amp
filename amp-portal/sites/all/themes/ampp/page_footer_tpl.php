@@ -17,4 +17,7 @@
   <div class="dg-footer-container">
     <?php if ($dg_footer) : ?><?php print $dg_footer; ?><?php endif; ?>
   </div>
+  <div class="counter-container">
+    <?php if ($counter_block) : ?><?php print $counter_block; ?><?php endif; ?>
+  </div>
 </div>

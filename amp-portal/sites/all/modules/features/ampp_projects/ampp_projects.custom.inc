@@ -1116,6 +1116,8 @@ function ampp_search_result_count($JSON = true, $amount = false) {
   
   if (empty($_GET["currentRegions"])) {
     $args[2] = !empty($_GET["locations"]) ? $_GET["locations"] : "all";
+    // we need to prepend all descendant locations
+    $args[2] = implode(',', addDescendantLocations(explode(',', $args[2])));
   } else {
     $args[2] = implode(',', $_GET["currentRegions"]);
     if (empty($args[2])) $args[2] = "all";

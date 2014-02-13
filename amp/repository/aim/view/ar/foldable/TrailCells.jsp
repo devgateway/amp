@@ -44,7 +44,7 @@
          </c:if>
 	   	<div class="desktop_project_name">
            <%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%>
-            <b>(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;</b>
+            <b>&nbsp;(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;</b>
            	    
       	 </div>
 	<% } else { %>
@@ -58,7 +58,7 @@
             	<c:otherwise>
                 	<bean:write name="reportData" property="name"/>
             	</c:otherwise>
-        	</c:choose>(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;
+        	</c:choose>&nbsp;(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;
         </b>
     <% } %> 
 </td>

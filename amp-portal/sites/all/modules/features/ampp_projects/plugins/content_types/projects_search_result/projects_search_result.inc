@@ -91,7 +91,9 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
   $args[7] = !empty($_GET["period_end"])? $_GET["period_end"] : "all";
 	
   // we need to prepend all descendant locations
-  $args[2] = implode(',', addDescendantLocations(explode(',', $args[2])));
+  if ($args[2] !== "all") {
+    $args[2] = implode(',', addDescendantLocations(explode(',', $args[2])));
+  }
   
   $showregionalprojects = !empty($_GET["showregionalprojects"])? $_GET["showregionalprojects"] : "all";
     

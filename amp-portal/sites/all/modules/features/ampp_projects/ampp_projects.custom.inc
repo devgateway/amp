@@ -820,6 +820,9 @@ function get_total_amount($type, $args = array()) {
     $args[7] = !empty($_GET["period_end"])? $_GET["period_end"] : "all";
   }
   
+  // we need to prepend all descendant locations
+  $args[2] = addDescendantLocations($args[2]);
+  
   $tmpview->set_arguments($args);
   $tmpview->set_items_per_page(0);
   $tmpview->pre_execute();
@@ -1603,6 +1606,44 @@ function getParentLocationIds($childLocationId) {
 	  db_set_active();
   }
   return $allParentIds;
+}
+
+
+/*
+ * 
+ */
+function addDescendantLocations($locations) {
+  global $amp_db_exists;
+  
+  // to avoid infinit recursion
+  static $calls = 0;
+  $calls++;
+  if ($calls > 1000) return array();
+  
+  if (!$amp_db_exists) return;
+  
+  db_set_active("amp_projects");
+  
+  $allLocations = $locations;
+
+  foreach ($allLocations as $k => $v) {  
+    $childrenIds = db_select('amp_category_value_location', 'l')
+    ->fields('l', array('id'))
+    ->condition('l.parent_location', $v, '=')
+    ->execute()
+    ->fetchAll(PDO::FETCH_COLUMN);
+     
+    if (!empty($childrenIds)) {
+      foreach ($childrenIds as $childId) {
+        $allLocations[] = $childId;
+        $allLocations = array_merge($allLocations, getParentLocationIds($childId));
+      }
+    }
+  }
+     
+  db_set_active();
+  
+  return $allLocations;
 }
 
 

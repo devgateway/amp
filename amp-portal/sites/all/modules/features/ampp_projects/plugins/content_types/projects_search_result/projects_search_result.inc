@@ -90,6 +90,9 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
   $args[6] = !empty($_GET["period_start"])? $_GET["period_start"] : "all";
   $args[7] = !empty($_GET["period_end"])? $_GET["period_end"] : "all";
 	
+  // we need to prepend all descendant locations
+  $args[2] = addDescendantLocations($args[2]);
+  
   $showregionalprojects = !empty($_GET["showregionalprojects"])? $_GET["showregionalprojects"] : "all";
     
   if (isset($conf["allowxlsexport"]) && $conf["allowxlsexport"] == 1) {

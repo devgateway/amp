@@ -100,7 +100,7 @@ public class CurrencyRatesQuartzJob implements Job {
 					this.lastExcecution);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Could not get exchange rate, caused by: " + e.getMessage());
 		}
 		if(ampCurrencies!=null){
 			sendEmailToAdmin();

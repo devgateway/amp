@@ -19,6 +19,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -114,13 +115,28 @@ public class AmpLocationSearchModel extends
 					}
 
 
-				} else junction.add(getTextCriterion("name", input));
+				} else {
+                    Criterion crt = getTextCriterion("name", input);
+                    junction.add(crt);
+
+                }
 			}
-			criteria.add(junction);
+
 			criteria.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)
-				criteria.setMaxResults(maxResults);			
+				criteria.setMaxResults(maxResults);
+
+            criteria.add(junction);
 			List<AmpCategoryValueLocations> tempList = criteria.list();
+
+            //Quick fix for AMP-16960
+            Iterator<AmpCategoryValueLocations> tmpIt = tempList.iterator();
+            while (tmpIt.hasNext()) {
+                AmpCategoryValueLocations location = tmpIt.next();
+                if (!location.getParentCategoryValue().equals(cvLayer)) {
+                    tmpIt.remove();
+                }
+            }
 
             if (assignedRegion != null){
                 Iterator<AmpCategoryValueLocations> it = tempList.iterator();

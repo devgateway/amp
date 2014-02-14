@@ -7225,8 +7225,13 @@ public class DbUtil {
 			int result = 0;
 			// such long and complicated case is necessary because orgType maybe
 			// empty for organisation
-			AmpOrgType orgType1 = o1.getOrgGrpId().getOrgType();
-			AmpOrgType orgType2 = o2.getOrgGrpId().getOrgType();
+
+			AmpOrgGroup oo1=o1.getOrgGrpId();
+			AmpOrgGroup oo2=o2.getOrgGrpId();
+			if(oo1!=null && oo2!=null){
+			AmpOrgType orgType1 = oo1.getOrgType();
+			AmpOrgType orgType2 = oo2.getOrgType();
+			
 			if (orgType1 != null && orgType2 != null) {
 				result = new HelperAmpOrgTypeNameComparator().compare(orgType1,
 						orgType2);
@@ -7234,6 +7239,17 @@ public class DbUtil {
 				result = collator.compare(orgType1.getOrgType(), "");
 			} else if (orgType1 == null && orgType2 != null) {
 				result = collator.compare("", orgType2.getOrgType());
+			}
+			}else{
+				if(oo1==null && oo2!=null){
+					AmpOrgType orgType2 = oo2.getOrgType();
+					result = collator.compare("", orgType2.getOrgType());
+				}else{
+					if(oo2==null && oo1!=null){
+						AmpOrgType orgType1 = oo1.getOrgType();
+						result = collator.compare(orgType1.getOrgType(), "");
+					}
+				}
 			}
 			return result;
 

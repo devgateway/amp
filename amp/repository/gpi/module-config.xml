@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>gpi</name>
+	<security login-required="true" default="READ">
+		<action login-required="true" pattern="/gpi/gpi" />
+	</security>
+</module-config>

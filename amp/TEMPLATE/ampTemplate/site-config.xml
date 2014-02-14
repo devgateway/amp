@@ -11,6 +11,11 @@
 		  <put-item name="body" file="parisindicator_N.jsp"/>
 		</layout>
 		
+		<layout name="newGPILayout" extends="default" file="noLayout.jsp">
+		  <put name="title">Global Partnership Indicators</put>
+		  <put-item name="body" file="gpi_N.jsp"/>
+		</layout>
+		
 		<layout name="gisDashboardLayout" extends="default" file="gisDashboardlayout.jsp">
 			<put name="title">Results Matrix</put>
 <!--			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>-->

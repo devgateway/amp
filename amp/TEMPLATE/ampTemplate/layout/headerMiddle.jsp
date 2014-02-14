@@ -587,6 +587,13 @@ function adminHelp(){
 												</a>
                                            </li>
                                         </feature:display>
+                                        <feature:display name="Global Partnership Indicators" module="Portfolio">
+                                                <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:clickToViewGPI">Click here to view Global Partnership Indicators</digi:trn>'>
+                                                    <a class="yuiampmenuitemlabel" href="/gpi/gpi.do?reportId=1&reset=true&header=true"  onclick="return canExit()">
+                                                        <digi:trn>Global Partnership Indicators</digi:trn>
+                                                    </a>
+                                                </li>
+                                        </feature:display>
                                     </ul>
                                   </div>
                               </div>                    

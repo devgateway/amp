@@ -10,6 +10,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -51,13 +52,31 @@ public class ReportsUtil {
             			put("name", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "name").getSQLFunctionCall("ao.amp_org_id"));
             			put("description", InternationalizedModelDescription.getForProperty(AmpOrganisation.class, "description").getSQLFunctionCall("ao.amp_org_id"));
             		}});
-            		String queryString = "select distinct " + rewrittenColumns + " from amp_organisation ao " +
-            				"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
-            				"inner join amp_role ar on ((ar.amp_role_id = aor.role) and (ar.role_code=:roleCode)) where (ao.deleted is null or ao.deleted = false) ";
+            
+            String orgIdsSource;
+            boolean roleCodeNeededInQuery;
+            if (roleCode.equals(Constants.ROLE_CODE_DONOR))
+            {
+            	orgIdsSource = "select DISTINCT(amp_donor_org_id) FROM amp_funding";
+            	roleCodeNeededInQuery = false;
+            }
+            else
+            {
+            	roleCodeNeededInQuery = true;
+            	orgIdsSource = "select DISTINCT(organisation) FROM amp_org_role WHERE role = (SELECT amp_role_id FROM amp_role WHERE role_code=:roleCode)";
+            }
+            
+            String queryString = "select distinct " + rewrittenColumns + " from amp_organisation ao " +
+            		"WHERE ao.amp_org_id IN (" + orgIdsSource + ") AND " +
+            		"(ao.deleted is null or ao.deleted = false) ";
 
             Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
             qry.setCacheable(true);
-            col = qry.setString("roleCode", roleCode).list();
+            
+            if (roleCodeNeededInQuery)
+            	qry = qry.setString("roleCode", roleCode);
+            
+            col = qry.list();
 
             Collections.sort(col, new Comparator<AmpOrganisation>() {
                 public int compare(AmpOrganisation o1, AmpOrganisation o2) {

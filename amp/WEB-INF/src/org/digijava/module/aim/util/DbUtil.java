@@ -7218,21 +7218,39 @@ public class DbUtil {
 			collator = Collator.getInstance(locale);
 			collator.setStrength(Collator.TERTIARY);
 			int result = 0;
-			// such long and complicated case is necessary because orgGroup
-			// maybe empty for organisation
-			if (o1.getOrgGrpId() != null && o2.getOrgGrpId() != null) {
-				AmpOrgGroup orggrp1 = o1.getOrgGrpId();
-				AmpOrgGroup orggrp2 = o2.getOrgGrpId();
-				result = new HelperAmpOrgGroupNameComparator().compare(orggrp1,
-						orggrp2);
-			} else if (o2.getOrgGrpId() == null && o1.getOrgGrpId() != null) {
-				result = collator.compare(o1.getOrgGrpId().getOrgGrpName(), "");
-			} else if (o1.getOrgGrpId() == null && o2.getOrgGrpId() != null) {
-				result = collator.compare("", o2.getOrgGrpId().getOrgGrpName());
+			// such long and complicated case is necessary because orgType maybe
+			// empty for organisation
+
+			AmpOrgGroup oo1=o1.getOrgGrpId();
+			AmpOrgGroup oo2=o2.getOrgGrpId();
+			if(oo1!=null && oo2!=null){
+			AmpOrgType orgType1 = oo1.getOrgType();
+			AmpOrgType orgType2 = oo2.getOrgType();
+			
+			if (orgType1 != null && orgType2 != null) {
+				result = new HelperAmpOrgTypeNameComparator().compare(orgType1,
+						orgType2);
+			} else if (orgType2 == null && orgType1 != null) {
+				result = collator.compare(orgType1.getOrgType(), "");
+			} else if (orgType1 == null && orgType2 != null) {
+				result = collator.compare("", orgType2.getOrgType());
+			}
+			}else{
+				if(oo1==null && oo2!=null){
+					AmpOrgType orgType2 = oo2.getOrgType();
+					result = collator.compare("", orgType2.getOrgType());
+				}else{
+					if(oo2==null && oo1!=null){
+						AmpOrgType orgType1 = oo1.getOrgType();
+						result = collator.compare(orgType1.getOrgType(), "");
+					}
+				}
 			}
 			return result;
+
 		}
 	}
+
 
 	/**
 	 * This class is used for sorting organisation by Type. such long and

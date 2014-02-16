@@ -46,6 +46,10 @@ function resetFilter(){
         resetElement(aimReportsFilterPickerForm.planMinRanks);
         resetElement(aimReportsFilterPickerForm.selectedStatuses);
         resetElement(aimReportsFilterPickerForm.selectedFinancingInstruments);
+        resetElement (aimReportsFilterPickerForm.selectedContractingAgencyGroups);
+        resetElement (aimReportsFilterPickerForm.selectedContractingAgency);
+        aimReportsFilterPickerForm.justSearch.checked = false;
+        
         
         resetElement(aimReportsFilterPickerForm.selectedTypeOfAssistance);
         resetElement(aimReportsFilterPickerForm.selectedModeOfPayment);

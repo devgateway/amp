@@ -2059,7 +2059,8 @@ function collapseAll() {
 								<td colspan="2">
 									<li class="level2"><i> <digi:trn key="aim:${measure.nameTrimmed}">
 										<c:out value="${measure.name}" />
-										</digi:trn> </i>									</li>								</td>
+										</digi:trn> </i><b>&nbsp; &nbsp; 	<c:out value="${issue.issueDate}" />
+							</b></li></td>
 							</tr>
 								<c:if test="${!empty measure.actors}">
 									<c:forEach var="actor" items="${measure.actors}">

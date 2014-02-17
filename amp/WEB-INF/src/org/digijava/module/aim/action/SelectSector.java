@@ -172,7 +172,7 @@ public class SelectSector extends Action {
 
 				Collection newSectors = new ArrayList();
 
-
+				if(sector!=null && sector!=-1){
 				ActivitySector actSect = new ActivitySector();
 				actSect.setSectorId(sector);
                                 actSect.setConfigId(ssForm.getConfigId());
@@ -181,14 +181,8 @@ public class SelectSector extends Action {
 				actSect.setSubsectorLevel1Id(subsectorLevel1);
 				actSect.setSubsectorLevel2Id(subsectorLevel2);
                                 actSect.setSectorScheme(sec.getAmpSecSchemeId().getSecSchemeName());
-				/*
-				if (actSect.getSectorName().equalsIgnoreCase("MULTISECTOR/CROSS-CUTTING")) {
-					actSect.setSubsectorLevel1Id(null);
-					actSect.setSubsectorLevel2Id(null);
-				} else {
-					actSect.setSubsectorLevel1Id(subsectorLevel1);
-					actSect.setSubsectorLevel2Id(subsectorLevel2);
-				}*/
+				
+
 
 				if (subsectorLevel2 != null && (!subsectorLevel2.equals(new Long(-1)))) {
 					actSect.setId(subsectorLevel2);
@@ -219,6 +213,7 @@ public class SelectSector extends Action {
 
 				
 				session.setAttribute("sectorSelected", actSect);
+				}
 			}
 			
 		}

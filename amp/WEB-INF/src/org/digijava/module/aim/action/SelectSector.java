@@ -52,19 +52,7 @@ public class SelectSector extends Action {
 			ssForm.setSectorSchemes(secSchemes);
 			ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
 			Collection classConfigs = SectorUtil.getAllClassificationConfigs();
-			
-			
-			
-			// Comented for AMP-3971 to work
-//			for (Iterator<AmpClassificationConfiguration> it=classConfigs.iterator(); it.hasNext(); ) {
-//		        AmpClassificationConfiguration classConfig = it.next();
-//		        if(classConfig.getClassification().getAmpSecSchemeId().equals(defClassification.getAmpSecSchemeId())){
-//		        	ssForm.setConfigId(classConfig.getId());
-//		        }
-//		        
-//		    }
-			
-			
+
 		}
 		if (ssForm.getSectorScheme() == null
 				|| ssForm.getSectorScheme().equals(new Long(-1))) {
@@ -173,46 +161,46 @@ public class SelectSector extends Action {
 				Collection newSectors = new ArrayList();
 
 				if(sector!=null && sector!=-1){
-				ActivitySector actSect = new ActivitySector();
-				actSect.setSectorId(sector);
-                                actSect.setConfigId(ssForm.getConfigId());
-				AmpSector sec = SectorUtil.getAmpSector(actSect.getSectorId());
-				actSect.setSectorName(sec.getName());
-				actSect.setSubsectorLevel1Id(subsectorLevel1);
-				actSect.setSubsectorLevel2Id(subsectorLevel2);
-                                actSect.setSectorScheme(sec.getAmpSecSchemeId().getSecSchemeName());
-				
-
-
-				if (subsectorLevel2 != null && (!subsectorLevel2.equals(new Long(-1)))) {
-					actSect.setId(subsectorLevel2);
-				} else if (subsectorLevel1 != null
-						&& (!subsectorLevel1.equals(new Long(-1)))) {
-					actSect.setId(subsectorLevel1);
-				} else {
-					actSect.setId(sector);
-				}
-
-				boolean flag = false;
-
-				if (!flag && actSect.getSectorId() != null
-						&& (!(actSect.getSectorId().equals(new Long(-1))))) {
-					if (actSect.getSubsectorLevel1Id() != null
-							&& (!(actSect.getSubsectorLevel1Id().equals(new Long(-1))))) {
-						sec = SectorUtil.getAmpSector(actSect.getSubsectorLevel1Id());
-						actSect.setSubsectorLevel1Name(sec.getName());
+					ActivitySector actSect = new ActivitySector();
+					actSect.setSectorId(sector);
+	                                actSect.setConfigId(ssForm.getConfigId());
+					AmpSector sec = SectorUtil.getAmpSector(actSect.getSectorId());
+					actSect.setSectorName(sec.getName());
+					actSect.setSubsectorLevel1Id(subsectorLevel1);
+					actSect.setSubsectorLevel2Id(subsectorLevel2);
+	                                actSect.setSectorScheme(sec.getAmpSecSchemeId().getSecSchemeName());
+					
+	
+	
+					if (subsectorLevel2 != null && (!subsectorLevel2.equals(new Long(-1)))) {
+						actSect.setId(subsectorLevel2);
+					} else if (subsectorLevel1 != null
+							&& (!subsectorLevel1.equals(new Long(-1)))) {
+						actSect.setId(subsectorLevel1);
+					} else {
+						actSect.setId(sector);
 					}
-					if (actSect.getSubsectorLevel2Id() != null
-							&& (!(actSect.getSubsectorLevel2Id().equals(new Long(-1))))) {
-						sec = SectorUtil.getAmpSector(actSect.getSubsectorLevel2Id());
-						actSect.setSubsectorLevel2Name(sec.getName());
+	
+					boolean flag = false;
+	
+					if (!flag && actSect.getSectorId() != null
+							&& (!(actSect.getSectorId().equals(new Long(-1))))) {
+						if (actSect.getSubsectorLevel1Id() != null
+								&& (!(actSect.getSubsectorLevel1Id().equals(new Long(-1))))) {
+							sec = SectorUtil.getAmpSector(actSect.getSubsectorLevel1Id());
+							actSect.setSubsectorLevel1Name(sec.getName());
+						}
+						if (actSect.getSubsectorLevel2Id() != null
+								&& (!(actSect.getSubsectorLevel2Id().equals(new Long(-1))))) {
+							sec = SectorUtil.getAmpSector(actSect.getSubsectorLevel2Id());
+							actSect.setSubsectorLevel2Name(sec.getName());
+						}
+	
+						newSectors.add(actSect);
 					}
-
-					newSectors.add(actSect);
-				}
-
-				
-				session.setAttribute("sectorSelected", actSect);
+	
+					
+					session.setAttribute("sectorSelected", actSect);
 				}
 			}
 			

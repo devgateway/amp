@@ -180,18 +180,7 @@ public class PublicViewColumnsUtil
 		{
 			SQLUtils.executeQuery(conn, String.format("DROP TABLE IF EXISTS %s", cacheName));
 			SQLUtils.executeQuery(conn, String.format("CREATE TABLE %s AS SELECT * FROM %s;", cacheName, viewName));
-
-			//Check if public portal user is created, if so give him privileges on cached_* tables (AMP-17052)
-				
-			try {
-				java.sql.ResultSet rs = SQLUtils.rawRunQuery(conn,"SELECT usename FROM pg_catalog.pg_user WHERE  usename='ampp'",null);
-				if (rs.last()){
-					SQLUtils.executeQuery(conn, String.format("GRANT SELECT ON " +cacheName+ " TO ampp"));	
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			SQLUtils.executeQuery(conn, String.format("GRANT SELECT ON " + cacheName + " TO public")); // AMP-17052: cache tables should be world-visible
 		}
 		
 		Collection<String> columns = SQLUtils.getTableColumns(viewName);

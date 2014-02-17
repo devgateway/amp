@@ -4,14 +4,10 @@
 package org.digijava.module.categorymanager.action;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -33,7 +29,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.form.CategoryManagerForm;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryLabelsUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.PossibleValue;
@@ -42,6 +37,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.StandardBasicTypes;
 
 /**
  * @author Alex Gartner
@@ -74,13 +70,13 @@ public class CategoryManager extends Action {
 		 * If the user wants to create a new category
 		 */
 		if (request.getParameter("new") != null) {
-			myForm.setNumOfPossibleValues(new Integer(0));
+			myForm.setNumOfPossibleValues(0);
 			myForm.setCategoryName(null);
 			myForm.setDescription(null);
 			myForm.setKeyName(null);
 			myForm.setIsMultiselect(false);
 			myForm.setIsOrdered(false);
-			List<PossibleValue> possibleVals = new ArrayList();
+			List<PossibleValue> possibleVals = new ArrayList<PossibleValue>();
 			for (int i = 0; i < 3; i++) {
 				possibleVals.add(new PossibleValue());
 			}
@@ -102,7 +98,7 @@ public class CategoryManager extends Action {
 			}
 			boolean flagEmptyField = false;
 			for (int i = 0; i<myForm.getPossibleVals().size();i++){
-				if( myForm.getPossibleVals().get(i).getValue().isEmpty() && myForm.getPossibleVals().get(i).isDisable() == false){
+				if( myForm.getPossibleVals().get(i).getValue().isEmpty() && !myForm.getPossibleVals().get(i).isDisable()){
 					flagEmptyField = true;
 					break;
 				}
@@ -132,13 +128,13 @@ public class CategoryManager extends Action {
 			return mapping.findForward("createOrEditCategory");
 		}
 		if (request.getParameter("delete") != null ) {
-			this.deleteCategory(new Long( request.getParameter("delete") ));
+			this.deleteCategory(Long.parseLong(request.getParameter("delete")));
 		}
                 else{
 					/**
 					 * Adding a new category to the database
 					 */
-					if (myForm.getSubmitPressed() != null && myForm.getSubmitPressed().booleanValue()) {
+					if (myForm.getSubmitPressed() != null && myForm.getSubmitPressed()) {
 						myForm.setSubmitPressed(false);
 						boolean saved	= this.saveCategoryToDatabase(myForm, errors);
 						if (!saved) {
@@ -153,7 +149,7 @@ public class CategoryManager extends Action {
 							}*/
 							this.saveErrors(request, errors);
 							return mapping.findForward("createOrEditCategory");
-						}else{
+						} else {
 							//if the save process went ok, we should delete from the cache the given category
 							CategoryManagerUtil.removeAmpCategryBykey(myForm.getKeyName());
 						}
@@ -171,7 +167,7 @@ public class CategoryManager extends Action {
 				myForm.getAllCategoryValues().remove(null);
 				
 				if ( ampCategoryClass.getIsOrdered() && ampCategoryClass.getPossibleValues() != null ) {
-					TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator() );
+					TreeSet<AmpCategoryValue> treeSet = new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator() );
 					treeSet.addAll( ampCategoryClass.getPossibleValues() );
 					ampCategoryClass.setPossibleValues( new ArrayList<AmpCategoryValue>(treeSet) );
 				}
@@ -196,7 +192,7 @@ public class CategoryManager extends Action {
 		if (ampCategoryClass != null) {
 			myForm.setCategoryName( ampCategoryClass.getName() );
 			myForm.setDescription( ampCategoryClass.getDescription() );
-			myForm.setNumOfPossibleValues( new Integer(ampCategoryClass.getPossibleValues().size()) );
+			myForm.setNumOfPossibleValues(ampCategoryClass.getPossibleValues().size());
 			myForm.setEditedCategoryId( ampCategoryClass.getId() );	
 			myForm.setIsMultiselect( ampCategoryClass.isMultiselect() );
 			myForm.setIsOrdered( ampCategoryClass.isOrdered() );
@@ -217,7 +213,7 @@ public class CategoryManager extends Action {
 			
 			while (iterator.hasNext()) {
 				AmpCategoryValue ampCategoryValue	= (AmpCategoryValue) iterator.next();
-				if (ampCategoryValue!=null){
+				if (ampCategoryValue != null) {
 					//possibleValues[k++]					= ampCategoryValue.getValue();
 					PossibleValue value					= new PossibleValue();
 				
@@ -232,18 +228,18 @@ public class CategoryManager extends Action {
 			myForm.setPossibleVals(possibleVals);
 			
 			CategoryLabelsUtil.populateFormWithLabels(ampCategoryClass, myForm);
-		}
-		else{
-			if ( myForm.getPossibleValues() != null && myForm.getPossibleValues().length > 0 ) {
+		} else {
+			if (myForm.getPossibleValues() != null && myForm.getPossibleValues().length > 0) {
 					int count	= 0;
 					for (int i=0; i< myForm.getPossibleValues().length; i++) {
-						if ( myForm.getPossibleValues()[i].length() > 0  )
-									count++;
+						if (myForm.getPossibleValues()[i].length() > 0) {
+							count++;
+                        }
 					}
-					myForm.setNumOfPossibleValues( new Integer(count) );
-			}
-			else
-				myForm.setNumOfPossibleValues( new Integer(0) );
+					myForm.setNumOfPossibleValues(count);
+			} else {
+				myForm.setNumOfPossibleValues(0);
+            }
 		}
 		
 	}
@@ -256,30 +252,33 @@ public class CategoryManager extends Action {
 	private Collection<AmpCategoryClass> loadCategories(Long categoryId) {
 		logger.info("Getting category with id " + categoryId);
 		
-		Session dbSession			= null;
-		Collection<AmpCategoryClass> returnCollection	= null;
+		Session dbSession = null;
+		Collection<AmpCategoryClass> returnCollection = null;
 		try {
-			dbSession			= PersistenceManager.openNewSession();
+			dbSession = PersistenceManager.openNewSession();
+            dbSession.enableFilter("isDeletedFilter");
+
 			String queryString;
 			Query qry;
-			if ( categoryId != null ){
+			if (categoryId != null) {
 				queryString = "select c from "
 					+ AmpCategoryClass.class.getName()
-					+ " c where c.id=:id";
-				qry			= dbSession.createQuery(queryString);
-				qry.setParameter("id", categoryId, Hibernate.LONG);
+					+ " c where c.id=:id ";
+				qry	= dbSession.createQuery(queryString);
+				qry.setParameter("id", categoryId, StandardBasicTypes.LONG);
 			}
 			else {
 				queryString = "select c from "
 					+ AmpCategoryClass.class.getName()
 					+ " c ";
-				qry 		= dbSession.createQuery(queryString);
+				qry = dbSession.createQuery(queryString);
 			}
 			
-			returnCollection	= qry.list();
+			returnCollection = qry.list();
 			
 			Iterator<AmpCategoryClass> iter	= returnCollection.iterator();
 			while ( iter.hasNext() ) {
+                // initialize lazy loaded used categories
 				iter.next().getUsedCategories().size();
 			}
 			
@@ -288,6 +287,7 @@ public class CategoryManager extends Action {
 			ex.printStackTrace();
 		} finally {
 			try {
+                dbSession.disableFilter("isDeletedFilter");
 				dbSession.close();
 			} catch (Exception ex2) {
 				logger.error("releaseSession() failed :" + ex2);
@@ -295,26 +295,31 @@ public class CategoryManager extends Action {
 		}
 		return returnCollection;
 	}
-	private void deleteCategory (Long categoryId) {
+
+
+    /**
+     * Safely deletes the amp category class. Just marks it as deleted
+     * @param categoryId
+     */
+    private void deleteCategory (Long categoryId) {
 		Session dbSession			= null;
 		Transaction transaction		= null;
-		try{
-			dbSession		= PersistenceManager.openNewSession();
-//beginTransaction();
+		try {
+			dbSession = PersistenceManager.openNewSession();
+            //beginTransaction();
 			transaction = dbSession.beginTransaction();
+
 			dbSession.createQuery("delete from " + AmpLinkedCategoriesState.class.getName() +" s where s.mainCategory.id=:categoryId")
-			.setLong("categoryId", categoryId).executeUpdate();
-			//transaction.commit();
-			
-			String queryString 	= "select c from "	+ AmpCategoryClass.class.getName()+ " c where c.id=:id";
-			Query qry			= dbSession.createQuery(queryString);
-			qry.setParameter("id", categoryId, Hibernate.LONG);
-			dbSession.delete( qry.uniqueResult() );	
+			    .setLong("categoryId", categoryId)
+                .executeUpdate();
+
+            dbSession.createSQLQuery("update AMP_CATEGORY_CLASS set deleted = 't' where id=:categoryId")
+                    .setLong("categoryId", categoryId)
+                    .executeUpdate();
 			transaction.commit();
 			
-		} 
-		catch (Exception ex) {
-			ActionMessage error	= (ActionMessage) new ActionMessage("error.aim.categoryManager.cannotDeleteCategory");
+		} catch (Exception ex) {
+			ActionMessage error	= new ActionMessage("error.aim.categoryManager.cannotDeleteCategory");
 			errors.add("title", error);
 			logger.error("Unable to delete Category: " + ex.getMessage());
 			
@@ -336,16 +341,13 @@ public class CategoryManager extends Action {
             }
         }
 	}
+
 	/**
 	 * 
 	 * @param myForm
 	 * @param errors
 	 * @throws Exception
 	 */
-
-
-		
-	
 	private boolean saveCategoryToDatabase(CategoryManagerForm myForm, ActionMessages errors) throws Exception {
 		
 		Session dbSession					= null;	
@@ -368,7 +370,7 @@ public class CategoryManager extends Action {
 			dbSession						= PersistenceManager.openNewSession();
 			tx								= dbSession.beginTransaction();
 			AmpCategoryClass dbCategory		= new AmpCategoryClass();
-			dbCategory.setPossibleValues( new Vector() );
+			dbCategory.setPossibleValues(new ArrayList<AmpCategoryValue>());
 			if (myForm.getEditedCategoryId() != null) {
 				String queryString	= "select c from " + AmpCategoryClass.class.getName() + " c where c.id=:id";
 				Query query			= dbSession.createQuery(queryString);

@@ -5331,6 +5331,9 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String orgGrpName = AmpOrgGroup.hqlStringForName("org");
+            if (keyword.indexOf('\'')> - 1) {
+                keyword = keyword.replaceAll("'", "''");
+            }
 			String queryString = "select distinct org from "
 					+ AmpOrgGroup.class.getName() + " org "
 					+ " where lower(" + orgGrpName + ") like '%" + keyword

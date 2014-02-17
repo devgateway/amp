@@ -415,6 +415,7 @@ public class OnePager extends AmpHeaderFooter {
         Session session = null;
         try {
             session = PersistenceManager.openNewSession();
+            session.beginTransaction();
             Criteria c = session.createCriteria(OnepagerSection.class);
             c.setCacheable(true);
             List<OnepagerSection> results = c.list();
@@ -437,10 +438,11 @@ public class OnePager extends AmpHeaderFooter {
             checkOrder(returnList);
             saveOnce(session, returnList);
             sortSections(returnList);
-
+            session.getTransaction().commit();
             return returnList;
         } catch (Exception e) {
             logger.error("Can't load onepager section positions:", e);
+            session.getTransaction().rollback();
             return null;
         } finally {
             if (session != null)

@@ -49,7 +49,7 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
 <link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css" />
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
+<%-- <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>"> --%>
 
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/treeview.css" />
@@ -267,13 +267,13 @@
 	}
 	
 	
-	function resetPIFilters() {
+	function resetGPIFilters() {
 		 $("input[name='selectedDonors']:checked").attr('checked', false);
 		 $("input[name='selectedDonorGroups']:checked").attr('checked', false);
 		 $("input[name='selectedStatuses']:checked").attr('checked', false);
 		 $("input[name='selectedFinancingIstruments']:checked").attr('checked', false);
 		 $("input[name='selectedSectors']:checked").attr('checked', false);
-		  var filterForm = document.getElementsByName("parisIndicatorForm")[0]; 
+		  var filterForm = document.getElementsByName("gpiForm")[0]; 
 		  var selectedArray = new Array();
  			filterForm.selectedDonors.value= selectedArray;
  			filterForm.selectedDonorGroups.value= selectedArray;
@@ -299,7 +299,7 @@
 
 	function submitFilters() {
 		//alert('submitfilters');
-        var filterForm = document.getElementsByName("parisIndicatorForm")[0];
+        var filterForm = document.getElementsByName("gpiForm")[0];
         filterForm.selectedStartYear.value = document.getElementById("selectedStartYear").options[document.getElementById("selectedStartYear").selectedIndex].value;
         filterForm.selectedEndYear.value = document.getElementById("selectedEndYear").options[document.getElementById("selectedEndYear").selectedIndex].value;
         filterForm.selectedCalendar.value = document.getElementById("selectedCalendar").options[document.getElementById("selectedCalendar").selectedIndex].value;
@@ -425,9 +425,9 @@
 
 	function openPrinter() {
 		window.open('about:blank','Popup_Window','width=800,height=600,Resizable=yes,Menubar=yes,Scrollbars=yes');
-        document.parisIndicatorForm.target = 'Popup_Window';
-        document.parisIndicatorForm.printPreview.value = true;
-        document.parisIndicatorForm.submit();
+        document.gpiForm.target = 'Popup_Window';
+        document.gpiForm.printPreview.value = true;
+        document.gpiForm.submit();
     }
 
 	function exportPDFs() {
@@ -435,7 +435,7 @@
 			alert("<digi:trn jsFriendly='true'>No survey data found.</digi:trn>");
 		} else {
 	        document.getElementsByName('exportPDF')[0].value = true;
-	        document.getElementsByName('parisIndicatorForm')[0].submit();
+	        document.getElementsByName('gpiForm')[0].submit();
 		}
     }
 
@@ -443,16 +443,16 @@
 		if(document.getElementById("reportIsEmpty") != null) {
 			alert("<digi:trn jsFriendly='true'>No survey data found.</digi:trn>");
 		} else {
-			document.parisIndicatorForm.exportXLS.value = true;
-	        document.parisIndicatorForm.submit();
+			document.gpiForm.exportXLS.value = true;
+	        document.gpiForm.submit();
 		}
     }
 
     function resetExport() {
-    	document.parisIndicatorForm.exportPDF.value = false;
-    	document.parisIndicatorForm.exportXLS.value = false;
-    	document.parisIndicatorForm.printPreview.value = false;
-    	document.parisIndicatorForm.target = '_self';
+    	document.gpiForm.exportPDF.value = false;
+    	document.gpiForm.exportXLS.value = false;
+    	document.gpiForm.printPreview.value = false;
+    	document.gpiForm.target = '_self';
     }
 </script>
 

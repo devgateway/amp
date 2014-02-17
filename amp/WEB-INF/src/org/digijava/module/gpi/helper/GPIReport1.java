@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
@@ -45,8 +46,9 @@ public class GPIReport1 extends GPIAbstractReport {
 	}
 
 	@Override
-	public Collection<GPIReportAbstractRow> generateReport(Collection<AmpGPISurvey> commonData, Collection<AmpOrganisation> donors, Collection<AmpOrgGroup> donorGroups, int startYear, int endYear,
-			AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter, Collection<AmpCategoryValue> statusFilter, Collection<AmpCategoryValue> financingInstrumentFilter) {
+	public Collection<GPIReportAbstractRow> generateReport(Collection<AmpGPISurvey> commonData, Collection<AmpOrganisation> donorFilter, Collection<AmpOrgGroup> groupFilter, int startYear,
+			int endYear, AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter, Collection<AmpCategoryValue> statusFilter,
+			Collection<AmpCategoryValue> financingInstrumentFilter) {
 
 		// TODO: filter by donor and donor org (at funding level below).
 		Collection<GPIReportAbstractRow> list = new ArrayList<GPIReportAbstractRow>();
@@ -78,7 +80,17 @@ public class GPIReport1 extends GPIAbstractReport {
 						continue;
 					}
 
-					// TODO: FILTER BY DONORS AND DONOR GROUP.
+					// Filter by organization.
+					if (donorFilter != null && !GPIUtils.containOrganisations(donorFilter, role.getOrganisation())) {
+						// Ignore this AmpGPISurvey and continue with the next.
+						continue;
+					}
+
+					// Filter by organization group.
+					if (groupFilter != null && !GPIUtils.containOrgGrps(groupFilter, role.getOrganisation().getOrgGrpId())) {
+						// Ignore this AmpGPISurvey and continue with the next.
+						continue;
+					}
 
 					// Filter by years. Check if the project date
 					// falls into one of the date ranges.

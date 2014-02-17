@@ -37,7 +37,7 @@
 	<tr align="center">
 		<td>
 			<!-- CSS -->
-			<link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
+			<link href='css_2/amp.css' rel='stylesheet' type='text/css'>
 			<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 			<link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/yui_tabs.css">
 			
@@ -223,32 +223,16 @@
 										                    	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="1">
 																	<jsp:include page="gpi_1.jsp"></jsp:include>
 										                       	</logic:equal>
-										                       	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="4">
-									                            	<jsp:include page="gpi_4.jsp"></jsp:include>
-									                           	</logic:equal>
 									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="5a">
 									                            	<jsp:include page="gpi_5a.jsp"></jsp:include>
-									                           	</logic:equal>
-									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="5b">
-									                            	<jsp:include page="gpi_5b.jsp"></jsp:include>
 									                           	</logic:equal>
 									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="6">
 									                            	<jsp:include page="gpi_6.jsp"></jsp:include>
 									                           	</logic:equal>
-									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="7">
-									                               	<jsp:include page="gpi_7.jsp"></jsp:include>
+									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="9a">
+									                               	<jsp:include page="gpi_9a.jsp"></jsp:include>
 									                           	</logic:equal>
-									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="9">
-									                               	<jsp:include page="gpi_9.jsp"></jsp:include>
-									                           	</logic:equal>
-									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="10a">
-									                               	<jsp:include page="gpi_10a.jsp"></jsp:include>
-									                           	</logic:equal>
-									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="10b">
-									                               	<jsp:include page="gpi_10b.jsp"></jsp:include>
-									                           	</logic:equal>
-								                           </div>
-								                           
+								                           </div>							                           
 								                    	</td>
 								                	</tr>
 								           		</table>

@@ -46,15 +46,15 @@ public class GPIReport1Export extends GPIAbstractExport {
 				+ " "
 				+ TranslatorWorker.translateText("Report", this.getLangCode(), this.getSite().getId()));
 		parameters.put("GPI_COL1", TranslatorWorker.translateText("Donors", this.getLangCode(), this.getSite().getId()));
-		parameters.put("GPI_COL2", TranslatorWorker.translateText("Disbursement Year", this.getLangCode(), this
+		parameters.put("GPI_COL2", TranslatorWorker.translateText("Year", this.getLangCode(), this
 				.getSite().getId()));
 		parameters.put("GPI_COL3", TranslatorWorker.translateText(
-				"Aid flows to the government sector reported on the government's budget", this.getLangCode(), this
+				"Number of projects using country results framework", this.getLangCode(), this
 						.getSite().getId()));
-		parameters.put("GPI_COL4", TranslatorWorker.translateText("Total Aid flows disbursed to the government sector",
+		parameters.put("GPI_COL4", TranslatorWorker.translateText("Total number of projects",
 				this.getLangCode(), this.getSite().getId()));
 		parameters.put("GPI_COL5", TranslatorWorker.translateText(
-				"Proportion of aid flows to the government sector reported on government budget", this.getLangCode(),
+				"Indicator 1", this.getLangCode(),
 				this.getSite().getId()));
 		parameters.put("GPI_LAST_YEAR", new Integer(year).toString());
 		parameters.put("GPI_CURRENCY_MSG", TranslatorWorker.translateText("All the amounts are in thousands (000) ",

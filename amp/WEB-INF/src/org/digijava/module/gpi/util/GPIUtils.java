@@ -81,12 +81,14 @@ public class GPIUtils {
 
 	public final static boolean containOrganisations(Collection<AmpOrganisation> orgs1, AmpOrganisation org2) throws Exception {
 		boolean ret = false;
-		Iterator<AmpOrganisation> iter1 = orgs1.iterator();
-		while (iter1.hasNext()) {
-			AmpOrganisation aux1 = iter1.next();
-			if (aux1.getAmpOrgId().equals(org2.getAmpOrgId())) {
-				ret = true;
-				break;
+		if (org2 != null) {
+			Iterator<AmpOrganisation> iter1 = orgs1.iterator();
+			while (iter1.hasNext()) {
+				AmpOrganisation aux1 = iter1.next();
+				if (aux1.getAmpOrgId().equals(org2.getAmpOrgId())) {
+					ret = true;
+					break;
+				}
 			}
 		}
 		return ret;
@@ -216,14 +218,10 @@ public class GPIUtils {
 		// Set the number of columns for each report.
 		boolean[] columns = null;
 		if (GPIConstants.GPI_REPORT_1.equals(reportCode)) {
-			columns = new boolean[1];
-		} else if (GPIConstants.GPI_REPORT_5a.equals(reportCode)) {
-			columns = new boolean[6];
+			columns = new boolean[3];
 		} else if (GPIConstants.GPI_REPORT_6.equals(reportCode)) {
-			columns = new boolean[1];
+			columns = new boolean[3];
 		} else if (GPIConstants.GPI_REPORT_9b.equals(reportCode)) {
-			// I added one more column to avoid showing in the report surveys
-			// with all null values (created by ActivityForm but never taken).
 			columns = new boolean[3];
 		}
 
@@ -244,7 +242,10 @@ public class GPIUtils {
 		// Remember: answers[0] is the first question :D
 		if (GPIConstants.GPI_REPORT_1.equals(reportCode)) {
 			columns[0] = ("Yes".equalsIgnoreCase(answers[0]));
-		}/*
+			columns[1] = ("Yes".equalsIgnoreCase(answers[0]));
+			columns[2] = ("Yes".equalsIgnoreCase(answers[0]));
+		}
+		/*
 		 * else if (GPIConstants.PARIS_INDICATOR_REPORT_4.equals(reportCode)) {
 		 * columns[0] = ("Yes".equalsIgnoreCase(answers[2])); } else if
 		 * (GPIConstants.PARIS_INDICATOR_REPORT_5a.equals(reportCode)) {

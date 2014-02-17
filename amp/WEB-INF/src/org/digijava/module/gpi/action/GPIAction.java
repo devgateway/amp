@@ -22,35 +22,9 @@ public class GPIAction extends Action {
 		logger.debug("GPIAction begin");
 		GPIForm piForm = (GPIForm) form;
 		GPIUseCase useCase = new GPIUseCase();
-
-		// TODO: Create an object that will have all filters.
+		
 		// Reformat some data because how the arrays come from the page.
-		if (piForm.getSelectedDonors() != null && piForm.getSelectedDonors().length > 0 && !piForm.getSelectedDonors()[0].isEmpty() && !piForm.getSelectedDonors()[0].equals("0")) {
-			piForm.setSelectedDonors(piForm.getSelectedDonors()[0].split(","));
-		} else {
-			piForm.setSelectedDonors(null);
-		}
-		if (piForm.getSelectedDonorGroups() != null && piForm.getSelectedDonorGroups().length > 0 && !piForm.getSelectedDonorGroups()[0].isEmpty() && !piForm.getSelectedDonorGroups()[0].equals("0")) {
-			piForm.setSelectedDonorGroups(piForm.getSelectedDonorGroups()[0].split(","));
-		} else {
-			piForm.setSelectedDonorGroups(null);
-		}
-		if (piForm.getSelectedStatuses() != null && piForm.getSelectedStatuses().length > 0 && !piForm.getSelectedStatuses()[0].isEmpty() && !piForm.getSelectedStatuses()[0].equals("0")) {
-			piForm.setSelectedStatuses(piForm.getSelectedStatuses()[0].split(","));
-		} else {
-			piForm.setSelectedStatuses(null);
-		}
-		if (piForm.getSelectedSectors() != null && piForm.getSelectedSectors().length > 0 && !piForm.getSelectedSectors()[0].isEmpty() && !piForm.getSelectedSectors()[0].equals("0")) {
-			piForm.setSelectedSectors(piForm.getSelectedSectors()[0].split(","));
-		} else {
-			piForm.setSelectedSectors(null);
-		}
-		if (piForm.getSelectedFinancingIstruments() != null && piForm.getSelectedFinancingIstruments().length > 0 && !piForm.getSelectedFinancingIstruments()[0].isEmpty()
-				&& !piForm.getSelectedFinancingIstruments()[0].equals("0")) {
-			piForm.setSelectedFinancingIstruments(piForm.getSelectedFinancingIstruments()[0].split(","));
-		} else {
-			piForm.setSelectedFinancingIstruments(null);
-		}
+		piForm = formatFilters(piForm);
 
 		// Setup filters.
 		ServletContext ampContext = getServlet().getServletContext();
@@ -87,5 +61,36 @@ public class GPIAction extends Action {
 		} else {
 			return mapping.findForward("forward");
 		}
+	}
+
+	private GPIForm formatFilters(GPIForm piForm) {
+		// TODO: Create an object that will have all filters.
+		if (piForm.getSelectedDonors() != null && piForm.getSelectedDonors().length > 0 && !piForm.getSelectedDonors()[0].isEmpty() && !piForm.getSelectedDonors()[0].equals("0")) {
+			piForm.setSelectedDonors(piForm.getSelectedDonors()[0].split(","));
+		} else {
+			piForm.setSelectedDonors(null);
+		}
+		if (piForm.getSelectedDonorGroups() != null && piForm.getSelectedDonorGroups().length > 0 && !piForm.getSelectedDonorGroups()[0].isEmpty() && !piForm.getSelectedDonorGroups()[0].equals("0")) {
+			piForm.setSelectedDonorGroups(piForm.getSelectedDonorGroups()[0].split(","));
+		} else {
+			piForm.setSelectedDonorGroups(null);
+		}
+		if (piForm.getSelectedStatuses() != null && piForm.getSelectedStatuses().length > 0 && !piForm.getSelectedStatuses()[0].isEmpty() && !piForm.getSelectedStatuses()[0].equals("0")) {
+			piForm.setSelectedStatuses(piForm.getSelectedStatuses()[0].split(","));
+		} else {
+			piForm.setSelectedStatuses(null);
+		}
+		if (piForm.getSelectedSectors() != null && piForm.getSelectedSectors().length > 0 && !piForm.getSelectedSectors()[0].isEmpty() && !piForm.getSelectedSectors()[0].equals("0")) {
+			piForm.setSelectedSectors(piForm.getSelectedSectors()[0].split(","));
+		} else {
+			piForm.setSelectedSectors(null);
+		}
+		if (piForm.getSelectedFinancingIstruments() != null && piForm.getSelectedFinancingIstruments().length > 0 && !piForm.getSelectedFinancingIstruments()[0].isEmpty()
+				&& !piForm.getSelectedFinancingIstruments()[0].equals("0")) {
+			piForm.setSelectedFinancingIstruments(piForm.getSelectedFinancingIstruments()[0].split(","));
+		} else {
+			piForm.setSelectedFinancingIstruments(null);
+		}
+		return piForm;
 	}
 }

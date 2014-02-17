@@ -329,4 +329,10 @@ public class MessageGroup {
 	public Float getScore() {
 		return score;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("key = %s, messages = %s", this.key, this.messages);
+	}
 }

@@ -226,4 +226,9 @@ public class Message implements Serializable{
 		return originalMessage;
 	}
 
+	@Override
+	public String toString()
+	{
+		return String.format("dgMessage: (key, locale, message) = (%s, %s, %s)", this.key, this.locale, this.message);
+	}
 }

@@ -243,15 +243,15 @@ public final class ARUtil {
 		return r;
 	}
 	
-	public static void getReportNotFoundMessage(HttpServletResponse response) throws IOException {
+	public static void generateReportNotFoundPage(HttpServletResponse response) throws IOException {
 		response.setContentType("text/html");	
 		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
 		PrintWriter out = new PrintWriter(outputStream, true);
 		String url = "/";
-		String alert = TranslatorWorker.translateText("Cant find report, please check if it was deleted.");
-		String script = "<script>opener.close();" 
-			+ "alert('"+ alert +"');" 
-			+ "window.location=('"+ url +"');"
+		String alert = TranslatorWorker.translateText("Report with given id not found!");
+		String script = "<script>if ((typeof opener !== 'undefined') && (opener != null)) {opener.close();};\n" 
+			+ "alert('"+ alert +"');\n" 
+			+ "window.location=('"+ url +"');\n"
 			+ "</script>";
 		out.println(script);
 		out.close();	

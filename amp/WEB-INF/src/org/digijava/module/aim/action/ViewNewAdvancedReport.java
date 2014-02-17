@@ -182,7 +182,7 @@ public class ViewNewAdvancedReport extends Action {
 	    try {
 	    	report = ARUtil.getReferenceToReport();
 	    } catch (Exception e) {
-	    	ARUtil.getReportNotFoundMessage(response);
+	    	ARUtil.generateReportNotFoundPage(response);
 			return null;
 	    }
 		

@@ -127,7 +127,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    try {
 	    	report = ARUtil.getReferenceToReport();
 	    } catch (Exception e) {
-	    	ARUtil.getReportNotFoundMessage(response);
+	    	ARUtil.generateReportNotFoundPage(response);
 			return null;
 	    }
 	    report.validateColumnsAndHierarchies();

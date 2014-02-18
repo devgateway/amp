@@ -81,7 +81,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 8L;
+	private static final long serialVersionUID = 9L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -448,7 +448,7 @@ public class LuceneUtil implements Serializable {
 				String CRIS;
 				String budgetNumber;
 				String newBudgetNumber;
-				String contractingArr;
+				//String contractingArr;
 				ArrayList<String> componentcode=new ArrayList<String>();
 			};
 			
@@ -636,7 +636,7 @@ public class LuceneUtil implements Serializable {
 			while (it.hasNext()) {
 				Items el = (Items) it.next();
 				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, 
-						el.results,el.numcont, el.contractingArr, el.componentcode, el.CRIS, el.budgetNumber, el.newBudgetNumber);
+						el.results,el.numcont, null /*el.contractingArr*/, el.componentcode, el.CRIS, el.budgetNumber, el.newBudgetNumber);
 				if (doc != null)
 					indexWriter.addDocument(doc);
 			}
@@ -766,11 +766,12 @@ public class LuceneUtil implements Serializable {
 			doc.add(new Field("newBudgetNumber", newBudgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + newBudgetNumber);
 		}
-		if (contractingArr != null && contractingArr.length() > 0 ) {
-			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + contractingArr);
-			
-		}
+		
+//		if (contractingArr != null && contractingArr.length() > 0 ) {
+//			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.TOKENIZED));
+//			all = all.concat(" " + contractingArr);
+//			
+//		}
 		
 		int i =0;
 		if (componentcodes != null && componentcodes.size()>0){

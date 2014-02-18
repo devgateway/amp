@@ -584,20 +584,20 @@ public class LuceneUtil implements Serializable {
 				isNext = rs.next();
 			}
 			
-			// Moldova's romanian title
-			qryStr = "select * from v_contracting_arrangements where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " contracting arrangements!");
-			isNext = rs.first();
-			while (isNext){
-				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-				x = (Items) list.get(actId);
-				//you can't use "trim(dg_editor.body)" as column name .... 
-				if (x != null)				 
-					x.contractingArr = rs.getString("body");
-				isNext = rs.next();
-			}
+//			// Moldova's romanian title
+//			qryStr = "select * from v_contracting_arrangements where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
+//			rs = st.executeQuery(qryStr);
+//			rs.last();
+//			logger.info("Starting iteration of " + rs.getRow() + " contracting arrangements!");
+//			isNext = rs.first();
+//			while (isNext){
+//				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+//				x = (Items) list.get(actId);
+//				//you can't use "trim(dg_editor.body)" as column name .... 
+//				if (x != null)				 
+//					x.contractingArr = rs.getString("body");
+//				isNext = rs.next();
+//			}
 			
 			// new budget codes
 			qryStr = "select r.activity,string_agg(r.budget_code, ' ; ' ) as budget_codes from amp_org_role r, amp_activity a where a.amp_activity_id=r.activity and activity >= " + chunkStart + " and activity < " + chunkEnd + " group by activity";

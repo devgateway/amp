@@ -51,7 +51,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 	 */
 	public CategAmountColWorker(String condition, String viewName,
 			String columnName,ReportGenerator generator) {
-		super(condition, viewName, columnName,generator);
+		super(condition, viewName, columnName,generator);		
 	}
 
 	/**filter.getFromYear()!=null
@@ -173,7 +173,13 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		}
 
 		if (columnsMetaData.containsKey("adjustment_type_name")){
-		    	adj_type = rs.getString("adjustment_type_name");
+		    adj_type = rs.getString("adjustment_type_name");
+		    
+		    // AMP-16688, please delete for AMP 2.8
+		    if (adj_type.equals("Bilateral SSC"))
+		    	adj_type = "Actual";
+		    if (adj_type.equals("Triangular SSC"))
+		    	adj_type = "Planned";
 		}
 		
 		if(columnsMetaData.containsKey("donor_type_name"))

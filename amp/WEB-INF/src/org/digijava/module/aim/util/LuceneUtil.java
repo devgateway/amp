@@ -448,7 +448,7 @@ public class LuceneUtil implements Serializable {
 				String CRIS;
 				String budgetNumber;
 				String newBudgetNumber;
-				String contractingArr;
+				//String contractingArr;
 				ArrayList<String> componentcode=new ArrayList<String>();
 			};
 			
@@ -584,20 +584,20 @@ public class LuceneUtil implements Serializable {
 				isNext = rs.next();
 			}
 			
-			// Moldova's romanian title
-			qryStr = "select * from v_contracting_arrangements where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " contracting arrangements!");
-			isNext = rs.first();
-			while (isNext){
-				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-				x = (Items) list.get(actId);
-				//you can't use "trim(dg_editor.body)" as column name .... 
-				if (x != null)				 
-					x.contractingArr = rs.getString("body");
-				isNext = rs.next();
-			}
+//			// Moldova's romanian title
+//			qryStr = "select * from v_contracting_arrangements where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
+//			rs = st.executeQuery(qryStr);
+//			rs.last();
+//			logger.info("Starting iteration of " + rs.getRow() + " contracting arrangements!");
+//			isNext = rs.first();
+//			while (isNext){
+//				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+//				x = (Items) list.get(actId);
+//				//you can't use "trim(dg_editor.body)" as column name .... 
+//				if (x != null)				 
+//					x.contractingArr = rs.getString("body");
+//				isNext = rs.next();
+//			}
 			
 			// new budget codes
 			qryStr = "select r.activity,string_agg(r.budget_code, ' ; ' ) as budget_codes from amp_org_role r, amp_activity a where a.amp_activity_id=r.activity and activity >= " + chunkStart + " and activity < " + chunkEnd + " group by activity";
@@ -636,7 +636,7 @@ public class LuceneUtil implements Serializable {
 			while (it.hasNext()) {
 				Items el = (Items) it.next();
 				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, 
-						el.results,el.numcont, el.contractingArr, el.componentcode, el.CRIS, el.budgetNumber, el.newBudgetNumber);
+						el.results,el.numcont, null /*el.contractingArr*/, el.componentcode, el.CRIS, el.budgetNumber, el.newBudgetNumber);
 				if (doc != null)
 					indexWriter.addDocument(doc);
 			}
@@ -766,11 +766,12 @@ public class LuceneUtil implements Serializable {
 			doc.add(new Field("newBudgetNumber", newBudgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + newBudgetNumber);
 		}
-		if (contractingArr != null && contractingArr.length() > 0 ) {
-			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + contractingArr);
-			
-		}
+		
+//		if (contractingArr != null && contractingArr.length() > 0 ) {
+//			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.TOKENIZED));
+//			all = all.concat(" " + contractingArr);
+//			
+//		}
 		
 		int i =0;
 		if (componentcodes != null && componentcodes.size()>0){

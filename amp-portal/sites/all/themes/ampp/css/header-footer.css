@@ -33,10 +33,6 @@
   margin-right: 0px;
 }
 
-.section-header {
-  background: url(../images/top-menu-shadow.png) 100% 2px no-repeat;
-}
-
 .logo-container {
   background: url(../images/logo-separator.png) 218px 0 no-repeat;
   margin-top: 5px;
@@ -157,7 +153,7 @@ form.inline-form .form-item input.form-submit {
   -moz-border-radius: 4px 4px 4px 4px;
   -o-border-radius: 4px 4px 4px 4px;
   -webkit-border-radius: 4px 4px 4px 4px;
-  background: #025f94 url(../images/main-menu-sprite.png) 0 0 repeat-x;
+  background: #025f94 0 0 repeat-x;
   z-index: 9999;
   overflow: visible !important;
   position: relative;
@@ -172,7 +168,7 @@ form.inline-form .form-item input.form-submit {
   float: left;
 }
 .main-menu-container ul li a {
-  background: #025f94 url(../images/main-menu-sprite.png) 0 0 repeat-x;
+  background: #025f94 0 0 repeat-x;
   font: 900 13px/37px Tahoma,Arial,sans-serif;
   color: #fff;
   text-shadow: 1px 1px 0px #013e78;

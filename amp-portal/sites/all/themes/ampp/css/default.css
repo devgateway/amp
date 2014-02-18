@@ -521,7 +521,7 @@ hr.gentle {
 }
 
 .page-feedback #edit-submit {
-  background: url("../images/main-menu-sprite.png") repeat-x scroll 0 0 #025F94;
+  background: repeat-x scroll 0 0 #025F94;
   border: 1px solid #004E8F;
   color: #FFFFFF;
   cursor: pointer;

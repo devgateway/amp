@@ -74,9 +74,8 @@ function project_search_form_uidatepicker($form, $form_state) {
  * Returns an edit form for the projects search
  */
 function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
-
   global $language;
- 
+
   $theme_path = path_to_theme();
   $img_vars = array('path' => $theme_path.'/images/list.png');
   $icon = theme('image',$img_vars);
@@ -153,7 +152,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   }
   
   if ($conf["period_flag"] == 1) { 
-    $lang_arr = locale_get_localized_date_format($language->language);
+    $lang_arr = locale_get_localized_date_format(array($language->language));
     $years_range_arr = activities_period_range();
     $years_past = (date('Y') > $years_range_arr[0]) ? date('Y') - $years_range_arr[0] : 0;
     $years_future = ($years_range_arr[1] > date('Y')) ? $years_range_arr[1] - date('Y') : 0; 

@@ -65,6 +65,7 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -4882,8 +4883,9 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
             String activityName = AmpActivityVersion.hqlStringForName("f");
 			if(isSearchByName) {
 				queryString = "select f.ampActivityId, f.ampId, " + activityName + ",  ampTeam, ampGroup  from " + AmpActivity.class.getName()+
-							" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where upper(" + activityName + ") like upper(:name) and (deleted = false or deleted is null)";
-            }
+						" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where " +
+						"(upper(" + activityName + ") like upper(:name) or f.ampActivityId in (select t.objectId from "+AmpContentTranslation.class.getName()+" t where t.objectClass='"+AmpActivityVersion.class.getName()+"' and upper(t.translation) like upper(:translation) ) ) and (deleted = false or deleted is null)";
+			}
             else
             {
             	queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup from " + AmpActivity.class.getName()+  

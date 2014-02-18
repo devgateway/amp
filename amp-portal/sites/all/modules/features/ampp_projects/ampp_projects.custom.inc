@@ -932,17 +932,20 @@ function ampp_projects_block_save($delta = '', $edit = array()){
 /**
  * Implementation of hook_block_view
  */
-function ampp_projects_block_view($delta=''){
-  switch($delta) {
+function ampp_projects_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
     case 'ampp_search':
-     // $block['subject'] = t('Search Projects'); // Most forms don't have a subject 
-    //  $block['content'] = drupal_get_form('ampp_search_form');
-      
+      // $block['subject'] = t('Search Projects'); // Most forms don't have a subject
+      // $block['content'] = drupal_get_form('ampp_search_form');
       break;
+
     case 'ampp_search_result_totals':
       $block['content'] = total_block_content();
       break;
   }
+
   return $block;
 }
 

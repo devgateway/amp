@@ -89,12 +89,26 @@ function ampp_feedback_form_alter(&$form, &$form_state, $form_id) {
         // Load includes/common.inc from the hierarchical select module.
         module_load_include('inc', 'hierarchical_select', 'includes/common');
       
-        if (!isset($form_state['build_info']['args'][0]['vocab']) || $form_state['build_info']['args'][0]['vocab'] == 0) {
-          // Load category based in vocabulary machine name
-          $voc = 'institutions';
-          $vocabulary = taxonomy_vocabulary_machine_name_load($voc);
-          if (count(taxonomy_get_tree($vocabulary->vid))) {
-            // hide term when empty
+        if (empty($form_state['build_info']['args'][0]['vocab'])) {
+          $vocabulary_name = 'institutions';
+        }
+
+        $institutions_count = 0;
+        if ($vocabulary_name == 'institutions') {
+          $vocabulary = taxonomy_vocabulary_machine_name_load($vocabulary_name);
+
+          if ($vocabulary) {
+            // Get the number of institutions.
+            $institutions_count = db_select('taxonomy_term_data', 't')
+              ->condition('t.vid', $vocabulary->vid)
+              ->countQuery()
+              ->execute()
+              ->fetchField();
+          }
+        }
+
+        // Only show the form item when there institutions to choose from.
+        if (!empty($institutions_count)) {
             $form['institutions'] =  array (
               '#title' => t($vocabulary->name),
               '#type' => 'hierarchical_select',
@@ -104,45 +118,22 @@ function ampp_feedback_form_alter(&$form, &$form_state, $form_id) {
                 'module' => 'hs_taxonomy',
                 'params' => array(
                   'vid' => (int) $vocabulary->vid,
-          	      'exclude_tid'  => NULL,
+                  'exclude_tid'  => NULL,
                   'root_term'  => NULL,
                   'entity_count_for_node_type' => NULL,
                 ),
-                'save_lineage'    => 0,
-                'enforce_deepest' => 0,
-                'entity_count'    => 0,
                 'require_entity'  => 1,
-                'resizable'       => 1,
-                'level_labels' => array(
-                  'status' => 0,
-                  'labels' => array(),
-                ),
-                'dropbox' => array(
-                  'status'   => 0,
-                  'title'    => t('All selections'),
-                  'limit'    => 0,
-                  'reset_hs' => 1,
-                ),
-                'editability' => array(
-                  'status'           => 0,
-                  'item_types'       => array(),
-                  'allowed_levels'   => array(),
-                  'allow_new_levels' => 0,
-                  'max_levels'       => 3,
-                ),
-                'animation_delay'    => variable_get('hierarchical_select_animation_delay', 400),
-                'special_items'      => array(),
-                'render_flat_select' => 0,
                ),
               '#default_value' => -1,
+            '#weight' => 4,
             );
             
-            hierarchical_select_common_config_apply( $form['institutions'], "taxonomy-$vocabulary->vid");         
-          }
+          hierarchical_select_common_config_apply($form['institutions'], 'taxonomy-' . $vocabulary->vid);
         
-          $element_info = element_info('hierarchical_select');
-          $form['institutions']['#process'] = array_merge($element_info['#process'], array('hs_taxonomy_widget_process'));
-          $form['institutions']['#weight'] = 4;
+          $form['institutions']['#process'] = array(
+            'form_hierarchical_select_process',
+            'hs_taxonomy_widget_process',
+          );
         }
       }
         
@@ -333,10 +324,8 @@ function ampp_feedback_mail($key, &$message, $params) {
  *   A feedback object.
  */
 function ampp_feedback_format_info($entry) {
-  $info = json_decode($entry->info);
-  
   $message = '';
-  $message .= "browser: ";//l(truncate_utf8($entry->location, 32, FALSE, TRUE), $entry->url);
+  $message .= "browser: ";
   if (!empty($entry->useragent)) {
     if (module_exists('browscap')) {
       $browserinfo = browscap_get_browser($entry->useragent);
@@ -348,10 +337,14 @@ function ampp_feedback_format_info($entry) {
     }
   }
 
-  $message .= "<br>ip: " . $info->ip;
-  $message .= "<br>send method: " . $info->send_method;
-  $message .= "<br>captcha_response: " . (isset($info->form_values->captcha_response)? print_r($info->form_values->captcha_response, true): 'None');
-  
+  if (!empty($entry->info)) {
+    $info = json_decode($entry->info);
+
+    $message .= "<br>ip: " . (empty($info->ip) ? '' : $info->ip);
+    $message .= "<br>send method: " . (empty($info->send_method) ? '' : $info->send_method);
+    $message .= "<br>captcha_response: " . (isset($info->form_values->captcha_response)? print_r($info->form_values->captcha_response, true): 'None');
+  }
+
   return $message;
 }
 
@@ -362,13 +355,16 @@ function ampp_feedback_format_info($entry) {
  *   A feedback object.
  */
 function ampp_feedback_format_user($entry){
-  $info = json_decode($entry->info);
-  
   $message = '';
   $message .= check_plain($entry->author);
   $message .= "<br><br>uid: ". $entry->uid;
-  $message .= "<br>email: " . $info->form_values->email;
-  
+  if (!empty($entry->info)) {
+    $info = json_decode($entry->info);
+    if (!empty($info->form_values->email)) {
+      $message .= "<br>email: " . $info->form_values->email;
+    }
+  }
+
   return $message;
 }
 

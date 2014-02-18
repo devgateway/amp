@@ -13,9 +13,9 @@ function ampp_general_taxonomy_default_vocabularies() {
       'name' => 'Institutions',
       'machine_name' => 'institutions',
       'description' => 'Institutions',
-      'hierarchy' => '1',
+      'hierarchy' => 1,
       'module' => 'taxonomy',
-      'weight' => '0',
+      'weight' => 0,
     ),
   );
 }

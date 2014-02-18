@@ -7,12 +7,10 @@
 /**
  * Implements hook_ctools_plugin_api().
  */
-function ampp_general_ctools_plugin_api() {
-  list($module, $api) = func_get_args();
+function ampp_general_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "feeds" && $api == "feeds_importer_default") {
     return array("version" => "1");
   }
-  list($module, $api) = func_get_args();
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -26,21 +24,21 @@ function ampp_general_fe_nodequeue_export_fields() {
 
   // Exported nodequeues: donor_profiles
   $nodequeues['donor_profiles'] = array(
-    'qid' => '2',
+    'qid' => 2,
     'name' => 'donor_profiles',
     'title' => 'Homepage left slideshow',
     'subqueue_title' => '',
-    'size' => '0',
+    'size' => 0,
     'link' => '',
     'link_remove' => '',
     'owner' => 'nodequeue',
-    'show_in_ui' => '1',
-    'show_in_tab' => '1',
-    'show_in_links' => '0',
-    'reference' => '0',
-    'reverse' => '0',
-    'i18n' => '0',
-    'subqueues' => '1',
+    'show_in_ui' => 1,
+    'show_in_tab' => 1,
+    'show_in_links' => 0,
+    'reference' => 0,
+    'reverse' => 0,
+    'i18n' => 0,
+    'subqueues' => 1,
     'types' => array(
       0 => 'donor_profile',
     ),
@@ -50,21 +48,21 @@ function ampp_general_fe_nodequeue_export_fields() {
 
   // Exported nodequeues: homepage_slideshow
   $nodequeues['homepage_slideshow'] = array(
-    'qid' => '1',
+    'qid' => 1,
     'name' => 'homepage_slideshow',
     'title' => 'Homepage main slideshow',
     'subqueue_title' => '',
-    'size' => '0',
+    'size' => 0,
     'link' => '',
     'link_remove' => '',
     'owner' => 'nodequeue',
-    'show_in_ui' => '1',
-    'show_in_tab' => '1',
-    'show_in_links' => '0',
-    'reference' => '0',
-    'reverse' => '0',
-    'i18n' => '0',
-    'subqueues' => '1',
+    'show_in_ui' => 1,
+    'show_in_tab' => 1,
+    'show_in_links' => 0,
+    'reference' => 0,
+    'reverse' => 0,
+    'i18n' => 0,
+    'subqueues' => 1,
     'types' => array(
       0 => 'homepage_slideshow',
     ),
@@ -74,21 +72,21 @@ function ampp_general_fe_nodequeue_export_fields() {
 
   // Exported nodequeues: maps
   $nodequeues['maps'] = array(
-    'qid' => '3',
+    'qid' => 3,
     'name' => 'maps',
     'title' => 'Homepage right slideshow',
     'subqueue_title' => '',
-    'size' => '0',
+    'size' => 0,
     'link' => '',
     'link_remove' => '',
     'owner' => 'nodequeue',
-    'show_in_ui' => '1',
-    'show_in_tab' => '1',
-    'show_in_links' => '0',
-    'reference' => '0',
-    'reverse' => '0',
-    'i18n' => '0',
-    'subqueues' => '1',
+    'show_in_ui' => 1,
+    'show_in_tab' => 1,
+    'show_in_links' => 0,
+    'reference' => 0,
+    'reverse' => 0,
+    'i18n' => 0,
+    'subqueues' => 1,
     'types' => array(
       0 => 'map',
     ),
@@ -98,21 +96,21 @@ function ampp_general_fe_nodequeue_export_fields() {
 
   // Exported nodequeues: news_and_events
   $nodequeues['news_and_events'] = array(
-    'qid' => '4',
+    'qid' => 4,
     'name' => 'news_and_events',
     'title' => 'Homepage news and events slideshow',
     'subqueue_title' => '',
-    'size' => '0',
+    'size' => 0,
     'link' => '',
     'link_remove' => '',
     'owner' => 'nodequeue',
-    'show_in_ui' => '1',
-    'show_in_tab' => '1',
-    'show_in_links' => '0',
-    'reference' => '0',
-    'reverse' => '0',
-    'i18n' => '0',
-    'subqueues' => '1',
+    'show_in_ui' => 1,
+    'show_in_tab' => 1,
+    'show_in_links' => 0,
+    'reference' => 0,
+    'reverse' => 0,
+    'i18n' => 0,
+    'subqueues' => 1,
     'types' => array(
       0 => 'event',
       1 => 'imported_item',
@@ -131,7 +129,7 @@ function ampp_general_fe_nodequeue_export_fields() {
 function ampp_general_image_default_styles() {
   $styles = array();
 
-  // Exported image style: bg_image
+  // Exported image style: bg_image.
   $styles['bg_image'] = array(
     'name' => 'bg_image',
     'effects' => array(
@@ -145,16 +143,16 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale',
         'data' => array(
-          'width' => '200',
+          'width' => 200,
           'height' => '',
           'upscale' => 0,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
 
-  // Exported image style: blocks_logo
+  // Exported image style: blocks_logo.
   $styles['blocks_logo'] = array(
     'name' => 'blocks_logo',
     'effects' => array(
@@ -168,16 +166,16 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale',
         'data' => array(
-          'width' => '35',
-          'height' => '30',
+          'width' => 35,
+          'height' => 30,
           'upscale' => 0,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
 
-  // Exported image style: footer_logo
+  // Exported image style: footer_logo.
   $styles['footer_logo'] = array(
     'name' => 'footer_logo',
     'effects' => array(
@@ -191,16 +189,16 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale',
         'data' => array(
-          'width' => '150',
-          'height' => '25',
+          'width' => 150,
+          'height' => 25,
           'upscale' => 0,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
 
-  // Exported image style: homepage_left_slideshow
+  // Exported image style: homepage_left_slideshow.
   $styles['homepage_left_slideshow'] = array(
     'name' => 'homepage_left_slideshow',
     'effects' => array(
@@ -214,15 +212,15 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => '320',
-          'height' => '165',
+          'width' => 320,
+          'height' => 165,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
 
-  // Exported image style: homepage_main_slideshow
+  // Exported image style: homepage_main_slideshow.
   $styles['homepage_main_slideshow'] = array(
     'name' => 'homepage_main_slideshow',
     'effects' => array(
@@ -236,15 +234,15 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => '1000',
-          'height' => '220',
+          'width' => 1000,
+          'height' => 220,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
 
-  // Exported image style: homepage_news_slideshow
+  // Exported image style: homepage_news_slideshow.
   $styles['homepage_news_slideshow'] = array(
     'name' => 'homepage_news_slideshow',
     'effects' => array(
@@ -258,15 +256,15 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => '320',
-          'height' => '165',
+          'width' => 320,
+          'height' => 165,
         ),
-        'weight' => '2',
+        'weight' => 2,
       ),
     ),
   );
 
-  // Exported image style: homepage_news_teaser
+  // Exported image style: homepage_news_teaser.
   $styles['homepage_news_teaser'] = array(
     'name' => 'homepage_news_teaser',
     'effects' => array(
@@ -280,16 +278,16 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale',
         'data' => array(
-          'width' => '48',
-          'height' => '48',
+          'width' => 48,
+          'height' => 48,
           'upscale' => 0,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
 
-  // Exported image style: homepage_right_slideshow
+  // Exported image style: homepage_right_slideshow.
   $styles['homepage_right_slideshow'] = array(
     'name' => 'homepage_right_slideshow',
     'effects' => array(
@@ -303,15 +301,15 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => '320',
-          'height' => '165',
+          'width' => 320,
+          'height' => 165,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
 
-  // Exported image style: homepage_slideshow_pager
+  // Exported image style: homepage_slideshow_pager.
   $styles['homepage_slideshow_pager'] = array(
     'name' => 'homepage_slideshow_pager',
     'effects' => array(
@@ -325,15 +323,15 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_resize',
         'data' => array(
-          'width' => '25',
-          'height' => '25',
+          'width' => 25,
+          'height' => 25,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
 
-  // Exported image style: logo
+  // Exported image style: logo.
   $styles['logo'] = array(
     'name' => 'logo',
     'effects' => array(
@@ -347,16 +345,16 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale',
         'data' => array(
-          'width' => '150',
-          'height' => '35',
+          'width' => 150,
+          'height' => 35,
           'upscale' => 0,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
 
-  // Exported image style: news_list
+  // Exported image style: news_list.
   $styles['news_list'] = array(
     'name' => 'news_list',
     'effects' => array(
@@ -370,16 +368,16 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale',
         'data' => array(
-          'width' => '150',
-          'height' => '150',
+          'width' => 150,
+          'height' => 150,
           'upscale' => 0,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );
 
-  // Exported image style: news_single
+  // Exported image style: news_single.
   $styles['news_single'] = array(
     'name' => 'news_single',
     'effects' => array(
@@ -393,11 +391,11 @@ function ampp_general_image_default_styles() {
         'module' => 'image',
         'name' => 'image_scale',
         'data' => array(
-          'width' => '300',
-          'height' => '300',
+          'width' => 300,
+          'height' => 300,
           'upscale' => 0,
         ),
-        'weight' => '1',
+        'weight' => 1,
       ),
     ),
   );

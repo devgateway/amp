@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -29,7 +29,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
-import org.digijava.module.gpi.helper.row.GPIReport1Row;
+import org.digijava.module.gpi.helper.row.GPIReport5aRow;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.digijava.module.gpi.model.GPIFilter;
 import org.digijava.module.gpi.util.GPIConstants;
@@ -37,10 +37,10 @@ import org.digijava.module.gpi.util.GPIUtils;
 
 import java.util.Collections;
 
-public class GPIReport1 extends GPIAbstractReport {
+public class GPIReport5a extends GPIAbstractReport {
 
-	private static Logger logger = Logger.getLogger(GPIReport1.class);
-	private final String reportCode = GPIConstants.GPI_REPORT_1;
+	private static Logger logger = Logger.getLogger(GPIReport5a.class);
+	private final String reportCode = GPIConstants.GPI_REPORT_5a;
 
 	public String getReportCode() {
 		return this.reportCode;
@@ -51,10 +51,12 @@ public class GPIReport1 extends GPIAbstractReport {
 
 		// TODO: filter by donor and donor org (at funding level below).
 		Collection<GPIReportAbstractRow> list = new ArrayList<GPIReportAbstractRow>();
-		GPIReport1Row auxRow = null;
+		GPIReport5aRow auxRow = null;
 		int yearRange = filter.getEndYer() - filter.getStartYear() + 1;
 		Date[] startDates = new Date[yearRange];
 		Date[] endDates = new Date[yearRange];
+		double fromExchangeRate;
+		double toExchangeRate;
 
 		try {
 			// Setup year ranges according the selected calendar.
@@ -79,17 +81,7 @@ public class GPIReport1 extends GPIAbstractReport {
 						continue;
 					}
 
-					// Filter by organization.
-					if (filter.getDonors() != null && !GPIUtils.containOrganisations(filter.getDonors(), role.getOrganisation())) {
-						// Ignore this AmpGPISurvey and continue with the next.
-						continue;
-					}
-
-					// Filter by organization group.
-					if (filter.getDonorGroups() != null && !GPIUtils.containOrgGrps(filter.getDonorGroups(), role.getOrganisation().getOrgGrpId())) {
-						// Ignore this AmpGPISurvey and continue with the next.
-						continue;
-					}
+					// TODO: FILTER BY DONORS AND DONOR GROUP.
 
 					// Filter by years. Check if the project date
 					// falls into one of the date ranges.
@@ -116,23 +108,37 @@ public class GPIReport1 extends GPIAbstractReport {
 						continue;
 					}
 
-					auxRow = new GPIReport1Row();
+					Iterator<AmpFunding> iterFundings = auxActivity.getFunding().iterator();
+					while (iterFundings.hasNext()) {
+						AmpFunding auxFunding = iterFundings.next();
 
-					// Check survey answers for this
-					// AmpGPISurvey.
-					boolean[] showColumn = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_1, auxAmpGPISurvey);
+						// Iterate the collection of funding details.
+						Iterator<AmpFundingDetail> iterFundingDetails = auxFunding.getFundingDetails().iterator();
+						while (iterFundingDetails.hasNext()) {
+							AmpFundingDetail auxFundingDetail = iterFundingDetails.next();
 
-					if (showColumn[0]) {
-						auxRow.setColumn1(new Integer(1));
-					} else {
-						auxRow.setColumn1(new Integer(0));
+							auxRow = new GPIReport5aRow();
+
+							// Calculate exchange rates.
+							fromExchangeRate = Util.getExchange(auxFundingDetail.getAmpCurrencyId().getCurrencyCode(), new java.sql.Date(auxFundingDetail.getTransactionDate().getTime()));
+							toExchangeRate = 0;
+							if (filter.getCurrency() != null) {
+								toExchangeRate = Util.getExchange(filter.getCurrency().getCurrencyCode(), new java.sql.Date(auxFundingDetail.getTransactionDate().getTime()));
+							}
+							BigDecimal amount = new BigDecimal(CurrencyWorker.convert1(auxFundingDetail.getTransactionAmount(), fromExchangeRate, toExchangeRate));
+
+							// TODO: Identify the values set on admin for
+							// Indicator 5a. (ArConstants.ACTUAL_DISBURSEMENTS).
+							if (auxFundingDetail.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+
+							}
+
+							auxRow.setColumn3(0);
+							auxRow.setDonorGroup(role.getOrganisation().getOrgGrpId());
+							auxRow.setYear(year);
+							list.add(auxRow);
+						}
 					}
-					auxRow.setColumn2(new Integer(1));
-					auxRow.setColumn3(0);
-					auxRow.setDonorGroup(role.getOrganisation().getOrgGrpId());
-					auxRow.setYear(year);
-					list.add(auxRow);
-
 				}
 			}
 		} catch (Exception e) {
@@ -151,8 +157,8 @@ public class GPIReport1 extends GPIAbstractReport {
 		Comparator compareRows = new Comparator() {
 			@Override
 			public int compare(Object o1, Object o2) {
-				GPIReport1Row aux1 = (GPIReport1Row) o1;
-				GPIReport1Row aux2 = (GPIReport1Row) o2;
+				GPIReport5aRow aux1 = (GPIReport5aRow) o1;
+				GPIReport5aRow aux2 = (GPIReport5aRow) o2;
 				if (aux1 == null && aux2 == null) {
 					return 0;
 				} else if (aux1 == null) {
@@ -171,11 +177,11 @@ public class GPIReport1 extends GPIAbstractReport {
 		// Format the list grouping by donor grp and year.
 		AmpOrgGroup auxGroup = null;
 		Iterator iter = list.iterator();
-		Integer auxColumn1 = new Integer(0);
-		Integer auxColumn2 = new Integer(0);
+		BigDecimal auxColumn1 = new BigDecimal(0);
+		BigDecimal auxColumn2 = new BigDecimal(0);
 		int currentYear = 0;
 		while (iter.hasNext()) {
-			GPIReport1Row row = (GPIReport1Row) iter.next();
+			GPIReport5aRow row = (GPIReport5aRow) iter.next();
 
 			// Valid for the first row.
 			if (auxGroup == null) {
@@ -189,10 +195,10 @@ public class GPIReport1 extends GPIAbstractReport {
 				// then update the current year and save the amounts in the
 				// auxiliary variables.
 				if (row.getYear() == currentYear) {
-					auxColumn1 = auxColumn1 + row.getColumn1();
-					auxColumn2 = auxColumn2 + row.getColumn2();
+					auxColumn1 = auxColumn1.add(row.getColumn1());
+					auxColumn2 = auxColumn2.add(row.getColumn2());
 				} else {
-					GPIReport1Row newRow = new GPIReport1Row();
+					GPIReport5aRow newRow = new GPIReport5aRow();
 					newRow.setColumn1(auxColumn1);
 					newRow.setColumn2(auxColumn2);
 					newRow.setDonorGroup(row.getDonorGroup());
@@ -204,7 +210,7 @@ public class GPIReport1 extends GPIAbstractReport {
 					auxColumn2 = row.getColumn2();
 				}
 			} else {
-				GPIReport1Row newRow = new GPIReport1Row();
+				GPIReport5aRow newRow = new GPIReport5aRow();
 				newRow.setColumn1(auxColumn1);
 				newRow.setColumn2(auxColumn2);
 				newRow.setDonorGroup(auxGroup);
@@ -218,7 +224,7 @@ public class GPIReport1 extends GPIAbstractReport {
 			}
 			// If this is the last record then save it.
 			if (!iter.hasNext()) {
-				GPIReport1Row newRow = new GPIReport1Row();
+				GPIReport5aRow newRow = new GPIReport5aRow();
 				newRow.setColumn1(auxColumn1);
 				newRow.setColumn2(auxColumn2);
 				newRow.setDonorGroup(auxGroup);
@@ -241,34 +247,34 @@ public class GPIReport1 extends GPIAbstractReport {
 	private Collection<GPIReportAbstractRow> calculatePercentages(Collection<GPIReportAbstractRow> coll, int startYear, int endYear) throws Exception {
 
 		int range = endYear + 1 - startYear;
-		Integer[] sumCol1 = new Integer[range];
-		Integer[] sumCol2 = new Integer[range];
+		BigDecimal[] sumCol1 = new BigDecimal[range];
+		BigDecimal[] sumCol2 = new BigDecimal[range];
 		Iterator<GPIReportAbstractRow> iterColl = coll.iterator();
 		while (iterColl.hasNext()) {
 			// Calculate percentages.
-			GPIReport1Row auxRow = (GPIReport1Row) iterColl.next();
+			GPIReport5aRow auxRow = (GPIReport5aRow) iterColl.next();
 			if (auxRow.getColumn2().doubleValue() > 0) {
-				auxRow.setColumn3(new BigDecimal(auxRow.getColumn1()).multiply(new BigDecimal(100)).divide(new BigDecimal(auxRow.getColumn2()), RoundingMode.HALF_UP).floatValue());
+				auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2(), RoundingMode.HALF_UP).floatValue());
 			} else {
 				auxRow.setColumn3(0);
 			}
 
 			// Accumulate totals for each year.
 			if (sumCol1[auxRow.getYear() - startYear] == null) {
-				sumCol1[auxRow.getYear() - startYear] = new Integer(0);
+				sumCol1[auxRow.getYear() - startYear] = new BigDecimal(0);
 			}
 			if (sumCol2[auxRow.getYear() - startYear] == null) {
-				sumCol2[auxRow.getYear() - startYear] = new Integer(0);
+				sumCol2[auxRow.getYear() - startYear] = new BigDecimal(0);
 			}
-			sumCol1[auxRow.getYear() - startYear] = sumCol1[auxRow.getYear() - startYear] + (auxRow.getColumn1());
-			sumCol2[auxRow.getYear() - startYear] = sumCol2[auxRow.getYear() - startYear] + (auxRow.getColumn2());
+			sumCol1[auxRow.getYear() - startYear] = sumCol1[auxRow.getYear() - startYear].add(auxRow.getColumn1());
+			sumCol2[auxRow.getYear() - startYear] = sumCol2[auxRow.getYear() - startYear].add(auxRow.getColumn2());
 		}
 
 		// Add "All Donors" record at the beginning with the total amounts.
 		int currentYear = startYear;
 		ArrayList auxList = new ArrayList(coll);
 		for (int i = 0; i < endYear + 1 - startYear; i++) {
-			GPIReport1Row auxRow = new GPIReport1Row();
+			GPIReport5aRow auxRow = new GPIReport5aRow();
 			AmpOrgGroup auxDonorGroup = new AmpOrgGroup();
 			auxDonorGroup.setOrgGrpName(GPIConstants.ALL_DONORS);
 			auxDonorGroup.setAmpOrgGrpId(new Long(0));
@@ -277,7 +283,7 @@ public class GPIReport1 extends GPIAbstractReport {
 			auxRow.setColumn2(sumCol2[i]);
 			auxRow.setYear(startYear + i);
 			if (auxRow.getColumn2().doubleValue() > 0) {
-				auxRow.setColumn3(new BigDecimal(auxRow.getColumn1()).multiply(new BigDecimal(100)).divide(new BigDecimal(auxRow.getColumn2()), RoundingMode.HALF_UP).floatValue());
+				auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2(), RoundingMode.HALF_UP).floatValue());
 			} else {
 				auxRow.setColumn3(0);
 			}
@@ -292,16 +298,16 @@ public class GPIReport1 extends GPIAbstractReport {
 		int j = 0;
 		Iterator iter = coll.iterator();
 		while (iter.hasNext()) {
-			GPIReport1Row row = (GPIReport1Row) iter.next();
+			GPIReport5aRow row = (GPIReport5aRow) iter.next();
 			if (auxGroup == null) {
 				auxGroup = row.getDonorGroup();
 			}
 			if (j == 0 || !auxGroup.getAmpOrgGrpId().equals(row.getDonorGroup().getAmpOrgGrpId())) {
 				auxGroup = row.getDonorGroup();
 				for (int i = startYear; i < endYear + 1; i++) {
-					GPIReport1Row newRow = new GPIReport1Row();
-					newRow.setColumn1(new Integer(0));
-					newRow.setColumn2(new Integer(0));
+					GPIReport5aRow newRow = new GPIReport5aRow();
+					newRow.setColumn1(new BigDecimal(0));
+					newRow.setColumn2(new BigDecimal(0));
 					newRow.setDonorGroup(auxGroup);
 					newRow.setYear(i);
 					ret.add(newRow);
@@ -312,10 +318,10 @@ public class GPIReport1 extends GPIAbstractReport {
 
 		Iterator iterRet = ret.iterator();
 		while (iterRet.hasNext()) {
-			GPIReport1Row rowRet = (GPIReport1Row) iterRet.next();
+			GPIReport5aRow rowRet = (GPIReport5aRow) iterRet.next();
 			Iterator iterOrigen = coll.iterator();
 			while (iterOrigen.hasNext()) {
-				GPIReport1Row rowOrigen = (GPIReport1Row) iterOrigen.next();
+				GPIReport5aRow rowOrigen = (GPIReport5aRow) iterOrigen.next();
 				if (rowRet.getDonorGroup().getAmpOrgGrpId().equals(rowOrigen.getDonorGroup().getAmpOrgGrpId()) && rowRet.getYear() == rowOrigen.getYear()) {
 					rowRet.setColumn1(rowOrigen.getColumn1());
 					rowRet.setColumn2(rowOrigen.getColumn2());

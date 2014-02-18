@@ -11,12 +11,11 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
+import org.digijava.module.gpi.model.GPIFilter;
 
 public interface GPIOperations {
 
-	public abstract Collection<GPIReportAbstractRow> generateReport(Collection<AmpGPISurvey> commonData, Collection<AmpOrganisation> donors, Collection<AmpOrgGroup> donorGroups, int startYear,
-			int endYear, AmpFiscalCalendar calendar, AmpCurrency currency, Collection<AmpSector> sectorsFilter, Collection<AmpCategoryValue> statusFilter,
-			Collection<AmpCategoryValue> financingInstrumentFilter);
+	public abstract Collection<GPIReportAbstractRow> generateReport(Collection<AmpGPISurvey> commonData, GPIFilter filter);
 
 	public abstract Collection<GPIReportAbstractRow> reportPostProcess(Collection<GPIReportAbstractRow> baseReport, int startYear, int endYear) throws Exception;
 }

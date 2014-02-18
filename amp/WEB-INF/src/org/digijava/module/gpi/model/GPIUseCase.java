@@ -253,21 +253,24 @@ public class GPIUseCase {
 			report = new GPIReport5a();
 		}
 
-		// Get the common info from surveys and apply some filters.
+		// Setup common filters.
 		Collection<GPIReportAbstractRow> preMainReportRows = null;
-		AmpFiscalCalendar auxCalendar = DbUtil.getAmpFiscalCalendar(new Long(form.getSelectedCalendar()));
-		AmpCurrency auxCurrency = CurrencyUtil.getAmpcurrency(form.getSelectedCurrency());
-		Collection<AmpOrganisation> auxDonors = GPIUtils.getDonorsCollection(form.getSelectedDonors());
-		Collection<AmpOrgGroup> auxDonorGroups = GPIUtils.getDonorGroups(form.getSelectedDonorGroups());
-		Collection<AmpSector> auxSectors = GPIUtils.getSectors(form.getSelectedSectors());
-		Collection<AmpCategoryValue> auxStatuses = GPIUtils.getStatuses(form.getSelectedStatuses());
-		Collection<AmpCategoryValue> auxFinancingInstruments = GPIUtils.getFinancingInstruments(form.getSelectedFinancingIstruments());
+		GPIFilter filter = new GPIFilter();
+		filter.setCalendar(DbUtil.getAmpFiscalCalendar(new Long(form.getSelectedCalendar())));
+		filter.setCurrency(CurrencyUtil.getAmpcurrency(form.getSelectedCurrency()));
+		filter.setDonors(GPIUtils.getDonorsCollection(form.getSelectedDonors()));
+		filter.setDonorGroups(GPIUtils.getDonorGroups(form.getSelectedDonorGroups()));
+		filter.setSectors(GPIUtils.getSectors(form.getSelectedSectors()));
+		filter.setStatuses(GPIUtils.getStatuses(form.getSelectedStatuses()));
+		filter.setFinancingInstruments(GPIUtils.getFinancingInstruments(form.getSelectedFinancingIstruments()));
+		filter.setStartYear(form.getSelectedStartYear());
+		filter.setEndYer(form.getSelectedEndYear());
 
+		// Get all surveys.
 		Collection<AmpGPISurvey> commonData = getCommonSurveyData();
 
 		// Execute the logic for generating each report.
-		preMainReportRows = report.generateReport(commonData, auxDonors, auxDonorGroups, form.getSelectedStartYear(), form.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses,
-				auxFinancingInstruments);
+		preMainReportRows = report.generateReport(commonData, filter);
 
 		// Postprocess the report if needed.
 		Collection<GPIReportAbstractRow> postMainReportRows = report.reportPostProcess(preMainReportRows, form.getSelectedStartYear(), form.getSelectedEndYear());

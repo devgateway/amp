@@ -26,17 +26,17 @@
 	        </td>
 			<td width="27%" height="33" class="inside_header" >
 			  <div align="center">
-			      <strong><digi:trn>Number of projects using country results framework</digi:trn></strong>
+			      <strong><digi:trn>Actual Disbursements</digi:trn></strong>
 			  </div>
 			</td>
 			<td width="26%" height="33" class="inside_header" >
 			  <div align="center">
-			      <strong><digi:trn>Total number of projects</digi:trn></strong>
+			      <strong><digi:trn>Planned Disbursements</digi:trn></strong>
 			  </div>
 			</td>
 			<td width="27%" height="33" class="inside_header" >
 	            <div align="center">
-	                <strong><digi:trn>Indicator 1</digi:trn></strong>
+	                <strong><digi:trn>Indicator 5a</digi:trn></strong>
 	            </div>
 	        </td>
 		</tr>
@@ -53,7 +53,7 @@
 	    <logic:notEmpty name="gpiForm" property="mainTableRows">
 	       <%int counter = 0; %>
 	       <bean:define id="color" value="" type="String"/>
-	       <logic:iterate id="element" name="gpiForm" property="mainTableRows" indexId="index" type="org.digijava.module.gpi.helper.row.GPIReport1Row">
+	       <logic:iterate id="element" name="gpiForm" property="mainTableRows" indexId="index" type="org.digijava.module.gpi.helper.row.GPIReport5aRow">
 	           <logic:equal name="element" property="year" value="${gpiForm.selectedStartYear}">
                    <%/*counter++;*/counter=1;%>
                </logic:equal>
@@ -80,4 +80,10 @@
 	       </logic:iterate>
 	    </logic:notEmpty>
 	</table>
+	<br>
+	<font color="orange">&nbsp;*&nbsp;</font>
+  	<jsp:include page="/repository/aim/view/utils/amountUnitsUnformatted.jsp">
+    	<jsp:param value="" name="amount_prefix"/>
+  	</jsp:include>
+	<digi:trn><bean:write name="gpiForm" property="selectedCurrency"/></digi:trn>
 </digi:form>

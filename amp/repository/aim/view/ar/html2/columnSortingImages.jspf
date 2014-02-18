@@ -8,7 +8,7 @@
 </c:if>
 <c:if test="${subColumn.namePath != columnReport.sorterColumn}">
 	<c:forEach items="${columnReport.levelSorterPaths}" var="sorterPath" varStatus="status" >
-		<c:if test="${subColumn.namePath == sorterPath.key}">
+		<c:if test="${subColumn.namePath == sorterPath.key && !subColumn.namePath.contains('/')}">
 			<c:choose>
 				<c:when test="${ sorterPath.value == 'ascending'}">
 					<img src= "/TEMPLATE/ampTemplate/imagesSource/common/up_red${status.count-1}.gif" align="absmiddle" border="0"/>

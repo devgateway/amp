@@ -57,9 +57,11 @@ drupal_add_css(drupal_get_path('module', 'views_slideshow_ddblock') . '/css/view
              </div> <!-- slide-body-inner-->
             </div>  <!-- slide-body-->
            <?php endif; ?>
-           <div class="slide-read-more slide-read-more-<?php print $settings['slide_direction'] ?> clear-block border">
-            <p><?php print $slider_item['slide_read_more'] ?></p>
-	         </div><!-- slide-read-more-->
+           <?php if (!empty($slider_item['slide_read_more'])) :?>
+             <div class="slide-read-more slide-read-more-<?php print $settings['slide_direction'] ?> clear-block border">
+              <p><?php print $slider_item['slide_read_more'] ?></p>
+             </div><!-- slide-read-more-->
+           <?php endif; ?>
           </div> <!-- slide-text-inner-->
          </div>  <!-- slide-text-->
         </div> <!-- slide-inner-->

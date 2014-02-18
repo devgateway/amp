@@ -570,21 +570,21 @@ div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-n
 }
 
 div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-next-slide a.next {
-  background: url("/sites/all/themes/ampp/images/next50.png") no-repeat scroll 30px 90px transparent;
+  background: url("../images/next50.png") no-repeat scroll 30px 90px transparent;
   margin: 0;
 }
 
 div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-next-slide a.prev {
-  background: url("/sites/all/themes/ampp/images/prev50.png") no-repeat scroll 20px 90px transparent;
+  background: url("../images/prev50.png") no-repeat scroll 20px 90px transparent;
   margin: 0;
 }
 
 div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-next-slide a.next:hover {
-  background: url("/sites/all/themes/ampp/images/next.png") no-repeat scroll 30px 90px transparent;
+  background: url("../images/next.png") no-repeat scroll 30px 90px transparent;
 }
 
 div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-next-slide a.prev:hover {
-  background: url("/sites/all/themes/ampp/images/prev.png") no-repeat scroll 20px 90px transparent;
+  background: url("../images/prev.png") no-repeat scroll 20px 90px transparent;
 }
 
 .views-field-created .field-content {
@@ -863,7 +863,7 @@ span.more-locations {text-decoration:underline;color:#02578A}
   -moz-border-radius: 10px 10px 20px 20px; -o-border-radius: 10px 10px 20px 20px; -webkit-border-radius: 10px 10px 20px 20px; border-radius: 10px 10px 20px 20px;  
 }
 .page-search-all .ui-dialog-content #modal-sector-iframe {width:95%}
-.pane-projects-search-result a.export-link {float: right; margin-top: -20px; background: url(/sites/all/themes/ampp/images/excel.png) no-repeat 0 0 transparent; padding-left: 20px}
+.pane-projects-search-result a.export-link {float: right; margin-top: -20px; background: url("../images/excel.png") no-repeat 0 0 transparent; padding-left: 20px}
 .shorten-url {float: right; margin-top: -20px; padding-left: 20px}
 
 .pane-content .commitments_report {

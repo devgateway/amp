@@ -2,13 +2,14 @@
 /**
  * @file
  * ampp_homepage.pages_default.inc
+ *
+ * @TODO: Remove, homepages need to be customizable, so this default page hook is disabled.
  */
 
 /**
  * Implements hook_default_page_manager_pages().
  */
- /*
-function ampp_homepage_default_page_manager_pages() {
+function __DISABLED__ampp_homepage_default_page_manager_pages() {
   $page = new stdClass;
   $page->disabled = FALSE; // Edit this to true to make a default page disabled initially
   $page->api_version = 1;
@@ -25,7 +26,7 @@ function ampp_homepage_default_page_manager_pages() {
   );
   $page->default_handlers = array();
   $handler = new stdClass;
-  $handler->disabled = FALSE; // Edit this to true to make a default handler disabled initially 
+  $handler->disabled = FALSE; // Edit this to true to make a default handler disabled initially
   $handler->api_version = 1;
   $handler->name = 'page_homepage_panel_context';
   $handler->task = 'page';
@@ -238,7 +239,5 @@ function ampp_homepage_default_page_manager_pages() {
   $page->default_handlers[$handler->name] = $handler;
   $pages['homepage'] = $page;
 
- return $pages;
-
+  return $pages;
 }
-*/

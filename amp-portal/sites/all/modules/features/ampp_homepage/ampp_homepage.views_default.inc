@@ -652,7 +652,6 @@ function ampp_homepage_views_default_views() {
   $handler->display->display_options['fields']['field_image']['table'] = 'field_data_field_image';
   $handler->display->display_options['fields']['field_image']['field'] = 'field_image';
   $handler->display->display_options['fields']['field_image']['label'] = '';
-  $handler->display->display_options['fields']['field_image']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_image']['alter']['alter_text'] = 0;
   $handler->display->display_options['fields']['field_image']['alter']['make_link'] = 0;
   $handler->display->display_options['fields']['field_image']['alter']['absolute'] = 0;
@@ -665,14 +664,16 @@ function ampp_homepage_views_default_views() {
   $handler->display->display_options['fields']['field_image']['alter']['strip_tags'] = 0;
   $handler->display->display_options['fields']['field_image']['alter']['trim'] = 0;
   $handler->display->display_options['fields']['field_image']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_image']['element_type'] = 'div';
+  $handler->display->display_options['fields']['field_image']['element_class'] = 'slideshow-image';
   $handler->display->display_options['fields']['field_image']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_image']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_image']['element_default_classes'] = 0;
   $handler->display->display_options['fields']['field_image']['hide_empty'] = 0;
   $handler->display->display_options['fields']['field_image']['empty_zero'] = 0;
   $handler->display->display_options['fields']['field_image']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['field_image']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_image']['settings'] = array(
-    'image_style' => '',
+    'image_style' => 'homepage_news_slideshow',
     'image_link' => 'content',
   );
   $handler->display->display_options['fields']['field_image']['field_api_classes'] = 0;
@@ -717,15 +718,16 @@ function ampp_homepage_views_default_views() {
   $handler->display->display_options['fields']['field_slideshow_image']['alter']['strip_tags'] = 0;
   $handler->display->display_options['fields']['field_slideshow_image']['alter']['trim'] = 0;
   $handler->display->display_options['fields']['field_slideshow_image']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_slideshow_image']['element_type'] = 'div';
+  $handler->display->display_options['fields']['field_slideshow_image']['element_class'] = 'slideshow-image';
   $handler->display->display_options['fields']['field_slideshow_image']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_slideshow_image']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['field_slideshow_image']['empty'] = '<img src="no_slideshow_image">';
+  $handler->display->display_options['fields']['field_slideshow_image']['element_default_classes'] = 0;
   $handler->display->display_options['fields']['field_slideshow_image']['hide_empty'] = 0;
   $handler->display->display_options['fields']['field_slideshow_image']['empty_zero'] = 0;
   $handler->display->display_options['fields']['field_slideshow_image']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['field_slideshow_image']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_slideshow_image']['settings'] = array(
-    'image_style' => '',
+    'image_style' => 'homepage_news_slideshow',
     'image_link' => 'content',
   );
   $handler->display->display_options['fields']['field_slideshow_image']['field_api_classes'] = 0;
@@ -1744,7 +1746,6 @@ function ampp_homepage_views_default_views() {
     t('View panes'),
     t('News slideshow block'),
     t('some content...'),
-    t('<img src="no_slideshow_image">'),
     t('[path]'),
     t('<span class="slideshow_created">[created]</span>
   <span class="slideshow_title">[title]</span>'),

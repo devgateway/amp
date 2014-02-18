@@ -31,7 +31,6 @@ function ampp_projects_date_popup_process_alter(&$element, &$form_state, $contex
 * Implementation of hook_init().
 */
 function ampp_projects_init() {
-  
   global $language;
   $lang_def = variable_get('language_default', '');
   if ($lang_def == '' || $lang_def->language == $language->language) {

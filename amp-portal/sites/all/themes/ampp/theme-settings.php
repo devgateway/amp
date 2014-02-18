@@ -7,7 +7,6 @@
 */
 function ampp_form_system_theme_settings_alter(&$form, $form_state) {
   
-  //print_r($form);
   $form['theme_settings']['toggle_amp_menu'] = array(
     '#type' => 'checkbox',
     '#title' => t('AMP links menu'),
@@ -298,4 +297,3 @@ function ampp_settings_submit($form, &$form_state) {
     }
   }
 }
-?>

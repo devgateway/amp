@@ -148,17 +148,6 @@ function ampp_preprocess_page(&$vars) {
     $vars['simple_page'] = 'simple';
   }
 
-  if ($user) {
-    $user_can_view_tabs = (
-        $user->uid == 1 ||
-        arg(0) == 'admin' ||
-        array_intersect(array('editor', 'webmaster'), $user->roles)
-        );
-  }
-  else {
-    $user_can_view_tabs = FALSE;
-  }
-
   // Add IE CSS fix.
   if(!isset($vars['head'])) $vars['head'] = '';
   $vars['head'] .= '<!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="' . $theme_path . '/css/iex.css"><![endif]-->' . "\n";

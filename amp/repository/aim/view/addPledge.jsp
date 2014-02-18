@@ -1372,6 +1372,7 @@ function validateData(){
 	}
 	
 	var i = 0;
+	var j = 0;
 	var percent = 100;
 	while (document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0]!=null){
 		var temp = 0;
@@ -1386,10 +1387,10 @@ function validateData(){
 		percent = percent - temp;
 	}
 	if(percent!=0 && percent!=100){
-		while (document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0]!=null){
-			highligthObject(document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0],true);
+		while (document.getElementsByName("pledgeSectors["+j+"].sectorPercentage")[0]!=null){
+			highligthObject(document.getElementsByName("pledgeSectors["+j+"].sectorPercentage")[0],true);
 			errors = true;
-			i++;
+			j++;
 		}
 	}	
 
@@ -1408,10 +1409,11 @@ function validateData(){
 		percent = percent - temp;
 	}
 	if(percent!=0 && percent!=100){
-		while (document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0]!=null){
-			highligthObject(document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0],true);
+		j = 0;
+		while (document.getElementsByName("selectedLocs["+j+"].locationpercentage")[0]!=null){
+			highligthObject(document.getElementsByName("selectedLocs["+j+"].locationpercentage")[0],true);
 			errors = true;
-			i++;
+			j++;
 		}
 	}	
 
@@ -1430,10 +1432,11 @@ function validateData(){
 		percent = percent - temp;
 	}
 	if(percent!=0 && percent!=100){
-		while (document.getElementsByName("selectedProgs["+i+"].programpercentage")[0]!=null){
-			highligthObject(document.getElementsByName("selectedProgs["+i+"].programpercentage")[0],true);
+		j = 0;
+		while (document.getElementsByName("selectedProgs["+j+"].programpercentage")[0]!=null){
+			highligthObject(document.getElementsByName("selectedProgs["+j+"].programpercentage")[0],true);
 			errors = true;
-			i++;
+			j++;
 		}
 	}
 	

@@ -98,10 +98,13 @@ public class GroupReportData extends ReportData<ReportData> {
 		
 	protected String currentView;
 	
-	public void applyLevelSorter() {
-		if(getThisLevelSorter()!=null)
-		Collections.sort(items,new GroupReportDataComparator());
-		Iterator i=items.iterator();
+	public void applyLevelSorter()
+	{
+		if (getThisLevelSorter() != null)
+		{
+			Collections.sort(items, new GroupReportDataComparator());
+		}
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			ReportData element = (ReportData) i.next();
 			element.applyLevelSorter();

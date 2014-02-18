@@ -60,7 +60,7 @@ public class ReportContextData
 	//private String reportCurrencyCode;						// session["reportCurrencyCode"] - REMOVED as it was unused
 	private int progressValue;								// session["progressValue"]
 	private int progressTotalRows;							// session["progressTotalRows"]
-	private Map<Long, MetaInfo<String>> reportSorters;	// session["reportSorters"]
+	private Map<Long, MetaInfo<String>> reportSorters;		// session["reportSorters"]
 	//private GroupReportData generatedReport;				// session["report"];
 	private AmpReports reportMeta;							// session["reportMeta"]
 	private String sortBy;									// session["sortBy"]
@@ -340,6 +340,7 @@ public class ReportContextData
 		progressTotalRows = 0;
 		progressValue = 0;
 		selectedCurrency = null;
+		reportSorters = null;
 		if (this.getReportMeta() != null)
 			if (!this.getReportMeta().currencyIsSpecified())
 			{

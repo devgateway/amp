@@ -1,19 +1,22 @@
 <?php
 
 /**
- * @param $items
+ * @param $info - feature info array
  * @param $module_name
- * @return
+ * @return fully populated export array
  */
-function features_populate($items, $dependencies, $module_name) {
+function features_populate($info, $module_name) {
   // Sanitize items.
-  $items = array_filter($items);
-  $items['dependencies'] = drupal_map_assoc(array_filter($dependencies));
+  $items = !empty($info['features']) ? array_filter($info['features']) : array();
+  $items['dependencies'] = !empty($info['dependencies']) ? drupal_map_assoc(array_filter($info['dependencies'])) : array();
 
   // Populate stub
-  $stub = array('features' => array(), 'dependencies' => array(), 'conflicts' => array());
-  $export = _features_populate($items, $stub, $module_name);
+  $stub = array('features' => array(), 'dependencies' => array(), 'conflicts' => array()) + $info + array('features_exclude' => array());
+  $export = _features_populate($items, $stub, $module_name, TRUE);
 
+  // Add Features API version. Any module with this entry in the .info file
+  // will be treated as a Feature and included in the admin/build/features UI.
+  $export['features']['features_api']['api:' . FEATURES_API] = TRUE;
   // Allow other modules to alter the export.
   drupal_alter('features_export', $export, $module_name);
 
@@ -23,6 +26,7 @@ function features_populate($items, $dependencies, $module_name) {
   }
   ksort($export['features']);
   ksort($export['dependencies']);
+  ksort($export['features_exclude']);
 
   return $export;
 }
@@ -40,22 +44,67 @@ function features_populate($items, $dependencies, $module_name) {
  *
  * @return fully populated $export array.
  */
-function _features_populate($pipe, &$export, $module_name = '') {
+function _features_populate($pipe, &$export, $module_name = '', $reset = FALSE) {
+  static $processed = array();
   features_include();
+  if ($reset) {
+    $processed = array();
+  }
   foreach ($pipe as $component => $data) {
-    if ($function = features_hook($component, 'features_export')) {
+    // Convert already defined items to dependencies.
+//    _features_resolve_dependencies($data, $export, $module_name, $component);
+    // Remove any excluded items.
+    if (!empty($export['features_exclude'][$component])) {
+      $data = array_diff($data, $export['features_exclude'][$component]);
+      if ($component == 'dependencies' && !empty($export['dependencies'])) {
+        $export['dependencies'] = array_diff($export['dependencies'], $export['features_exclude'][$component]);
+      }
+    }
+    if (!empty($data) && $function = features_hook($component, 'features_export')) {
       // Pass module-specific data and export array.
       // We don't use features_invoke() here since we need to pass $export by reference.
       $more = $function($data, $export, $module_name, $component);
+      // Add the context information.
+      $export['component'] = $component;
+      $export['module_name'] = $module_name;
       // Allow other modules to manipulate the pipe to add in additional modules.
-      drupal_alter('features_pipe_' . $component, $more, $data, $export);
-      // Allow for export functions to request additional exports.
+      drupal_alter(array('features_pipe', 'features_pipe_' . $component), $more, $data, $export);
+      // Remove the component information.
+      unset($export['component']);
+      unset($export['module_name']);
+      // Allow for export functions to request additional exports, but avoid
+      // circular references on already processed components.
+      $processed[$component] = isset($processed[$component]) ? array_merge($processed[$component], $data) : $data;
+
       if (!empty($more)) {
-        _features_populate($more, $export, $module_name);
+        // Remove already processed components.
+        foreach ($more as $component_name => $component_data) {
+          if (isset($processed[$component_name])) {
+            $more[$component_name] = array_diff($component_data, $processed[$component_name]);
+          }
+        }
+        if ($more = array_filter($more)) {
+          _features_populate($more, $export, $module_name);
+        }
       }
     }
   }
   return $export;
+}
+
+/**
+ * Iterates over data and convert to dependencies if already defined elsewhere.
+ */
+function _features_resolve_dependencies(&$data, &$export, $module_name, $component) {
+  if ($map = features_get_default_map($component)) {
+    foreach ($data as $key => $item) {
+      // If this node type is provided by a different module, add it as a dependency
+      if (isset($map[$item]) && $map[$item] != $module_name) {
+        $export['dependencies'][$map[$item]] = $map[$item];
+        unset($data[$key]);
+      }
+    }
+  }
 }
 
 /**
@@ -121,17 +170,39 @@ function _features_export_maximize_dependencies($dependencies, $module_name = ''
 
 /**
  * Prepare a feature export array into a finalized info array.
+ * @param $export
+ *  An exported feature definition.
+ * @param $module_name
+ *  The name of the module to be exported.
+ * @param $reset
+ *  Boolean flag for resetting the module cache. Only set to true when
+ *  doing a final export for delivery.
  */
-function features_export_prepare($export, $module_name, $reset = FALSE) {
+function features_export_prepare($export, $module_name, $reset = FALSE, $add_deprecated = TRUE) {
   $existing = features_get_modules($module_name, $reset);
 
+  // copy certain exports directly into info
+  $copy_list = array('scripts', 'stylesheets');
+  foreach ($copy_list as $item) {
+    if(isset($export[$item])) {
+      $existing->info[$item] = $export[$item];
+    }
+  }
+
   // Prepare info string -- if module exists, merge into its existing info file
-  $defaults = $existing ? $existing->info : array('core' => '7.x', 'package' => 'Features');
+  $defaults = !empty($existing->info) ? $existing->info : array('core' => '7.x', 'package' => 'Features');
   $export = array_merge($defaults, $export);
 
+  $deprecated = features_get_deprecated();
   // Cleanup info array
   foreach ($export['features'] as $component => $data) {
-    $export['features'][$component] = array_keys($data);
+    // if performing the final export, do not export deprecated components
+    if (($reset || !$add_deprecated) && !empty($deprecated[$component])) {
+      unset($export['features'][$component]);
+    }
+    else {
+      $export['features'][$component] = array_keys($data);
+    }
   }
   if (isset($export['dependencies'])) {
     $export['dependencies'] = array_values($export['dependencies']);
@@ -139,8 +210,22 @@ function features_export_prepare($export, $module_name, $reset = FALSE) {
   if (isset($export['conflicts'])) {
     unset($export['conflicts']);
   }
+
+  // Order info array.
+  $standard_info = array();
+  foreach (array_merge(array('name', 'description', 'core', 'package', 'version', 'project', 'dependencies'), $copy_list) as $item) {
+    if (isset($export[$item])) {
+      $standard_info[$item] = $export[$item];
+    }
+  }
+  if (isset($export['php']) && ($export['php'] != DRUPAL_MINIMUM_PHP)) {
+    $standard_info['php'] = $export['php'];
+  }
+  unset($export['php']);
+
+  $export = features_array_diff_assoc_recursive($export, $standard_info);
   ksort($export);
-  return $export;
+  return array_merge($standard_info, $export);
 }
 
 /**
@@ -185,9 +270,14 @@ function features_export_render($export, $module_name, $reset = FALSE) {
   // Generate hook code
   $component_hooks = features_export_render_hooks($export, $module_name, $reset);
   $components = features_get_components();
+  $deprecated = features_get_deprecated($components);
 
   // Group component code into their respective files
   foreach ($component_hooks as $component => $hooks) {
+    if ($reset && !empty($deprecated[$component])) {
+      // skip deprecated components on final export
+      continue;
+    }
     $file = array('name' => 'features');
     if (isset($components[$component]['default_file'])) {
       switch ($components[$component]['default_file']) {
@@ -204,12 +294,16 @@ function features_export_render($export, $module_name, $reset = FALSE) {
       $code[$file['name']] = array();
     }
 
-    foreach ($hooks as $hook_name => $hook_code) {
-      $code[$file['name']][$hook_name] = features_export_render_defaults($module_name, $hook_name, $hook_code);
+    foreach ($hooks as $hook_name => $hook_info) {
+      $hook_code = is_array($hook_info) ? $hook_info['code'] : $hook_info;
+      $hook_args = is_array($hook_info) && !empty($hook_info['args']) ? $hook_info['args'] : '';
+      $hook_file = is_array($hook_info) && !empty($hook_info['file']) ? $hook_info['file'] : $file['name'];
+      $code[$hook_file][$hook_name] = features_export_render_defaults($module_name, $hook_name, $hook_code, $hook_args);
     }
   }
 
   // Finalize strings to be written to files
+  $code = array_filter($code);
   foreach ($code as $filename => $contents) {
     $code[$filename] = "<?php\n/**\n * @file\n * {$module_name}.{$filename}.inc\n */\n\n". implode("\n\n", $contents) ."\n";
   }
@@ -218,40 +312,71 @@ function features_export_render($export, $module_name, $reset = FALSE) {
   $export = features_export_prepare($export, $module_name, $reset);
   $code['info'] = features_export_info($export);
 
+  // Used to create or manipulate the generated .module for features.inc.
+  $modulefile_features_inc = "<?php\n/**\n * @file\n * Code for the {$export['name']} feature.\n */\n\ninclude_once '{$module_name}.features.inc';\n";
+  $modulefile_blank = "<?php\n/**\n * @file\n * Drupal needs this blank file.\n */\n";
+
   // Prepare the module
   // If module exists, let it be and include it in the files
   if ($existing = features_get_modules($module_name, TRUE)) {
     $code['module'] = file_get_contents($existing->filename);
 
     // If the current module file does not reference the features.inc include,
-    // set a warning message.
     // @TODO this way of checking does not account for the possibility of inclusion instruction being commented out.
     if (isset($code['features']) && strpos($code['module'], "{$module_name}.features.inc") === FALSE) {
-      features_log(t('@module does not appear to include the @include file.', array('@module' => "{$module_name}.module", '@include' => "{$module_name}.features.inc")), 'warning');
+      // If .module does not begin with <?php\n, just add a warning.
+      if (strpos($code['module'], "<?php\n") !== 0) {
+        features_log(t('@module does not appear to include the @include file.', array('@module' => "{$module_name}.module", '@include' => "{$module_name}.features.inc")), 'warning');
+      }
+      else {
+        // Remove the old message if it exists, else just remove the <?php
+        $length = strpos($code['module'], $modulefile_blank) === 0 ? strlen($modulefile_blank) : 6;
+        $code['module'] = $modulefile_features_inc . substr($code['module'], $length);
+      }
     }
 
-    // Deprecated files. Display a message for any of these files letting the
-    // user know that they may be removed.
-    $deprecated = array(
-      "{$module_name}.defaults",
-      "{$module_name}.features.views",
-      "{$module_name}.features.node"
-    );
-    foreach (file_scan_directory(drupal_get_path('module', $module_name), '/.*/') as $file) {
-      if (in_array($file->name, $deprecated, TRUE)) {
-        features_log(t('The file @filename has been deprecated and can be removed.', array('@filename' => $file->filename)), 'status');
+    if ($reset) {
+      // only check for deprecated files on final export
+
+      // Deprecated files. Display a message for any of these files letting the
+      // user know that they may be removed.
+      $deprecated_files = array(
+        "{$module_name}.defaults",
+        "{$module_name}.features.views",
+        "{$module_name}.features.node"
+      );
+      // add deprecated components
+      foreach ($deprecated as $component) {
+        $info = features_get_components($component);
+        $filename = isset($info['default_file']) && $info['default_file'] == FEATURES_DEFAULTS_CUSTOM ? $info['default_filename'] : "features.{$component}";
+        $deprecated_files[] = "{$module_name}.$filename";
       }
-      elseif ($file->name === "{$module_name}.features" && empty($code['features'])) {
-        $code['features'] = "<?php\n\n// This file is deprecated and can be removed.\n// Please remove include_once('{$module_name}.features.inc') in {$module_name}.module as well.\n";
+      foreach (file_scan_directory(drupal_get_path('module', $module_name), '/.*/') as $file) {
+        if (in_array($file->name, $deprecated_files, TRUE)) {
+          features_log(t('The file @filename has been deprecated and can be removed.', array('@filename' => $file->filename)), 'status');
+        }
+        elseif ($file->name === "{$module_name}.features" && empty($code['features'])) {
+          // Try and remove features.inc include.
+          if (strpos($code['module'], "{$module_name}.features.inc")) {
+            $code['module'] = str_replace($modulefile_features_inc, $modulefile_blank, $code['module']);
+          }
+          // If unable to remove the include, add a message to remove.
+          if (strpos($code['module'], "{$module_name}.features.inc")) {
+            $code['features'] = "<?php\n\n// This file is deprecated and can be removed.\n// Please remove include_once('{$module_name}.features.inc') in {$module_name}.module as well.\n";
+          }
+          else {
+            $code['features'] = "<?php\n\n// This file is deprecated and can be removed.\n";
+          }
+        }
       }
     }
   }
   // Add a stub module to include the defaults
   else if (!empty($code['features'])) {
-    $code['module'] = "<?php\n/**\n * @file\n * Code for the {$export['name']} feature.\n */\n\ninclude_once('{$module_name}.features.inc');\n";
+    $code['module'] = $modulefile_features_inc;
   }
   else {
-    $code['module'] = "<?php\n/**\n * @file\n */\n\n// Drupal needs this blank file.\n";
+    $code['module'] = $modulefile_blank;
   }
   return $code;
 }
@@ -266,8 +391,8 @@ function features_detect_overrides($module) {
   }
   if (!isset($cache[$module->name])) {
     // Rebuild feature from .info file description and prepare an export from current DB state.
-    $export = features_populate($module->info['features'], $module->info['dependencies'], $module->name);
-    $export = features_export_prepare($export, $module->name);
+    $export = features_populate($module->info, $module->name);
+    $export = features_export_prepare($export, $module->name, FALSE, FALSE);
 
     $overridden = array();
 
@@ -304,34 +429,28 @@ function features_detect_overrides($module) {
  * Gets the available default hooks keyed by components.
  */
 function features_get_default_hooks($component = NULL, $reset = FALSE) {
-  static $hooks;
-  if (!isset($hooks) || $reset) {
-    $hooks = array();
-    features_include();
-    foreach (module_implements('features_api') as $module) {
-      $info = module_invoke($module, 'features_api');
-      foreach ($info as $k => $v) {
-        if (isset($v['default_hook'])) {
-          $hooks[$k] = $v['default_hook'];
-        }
-      }
-    }
-  }
-  if (isset($component)) {
-    return isset($hooks[$component]) ? $hooks[$component] : FALSE;
-  }
-  return $hooks;
+  return features_get_components($component, 'default_hook', $reset);
+}
+
+/**
+ * Gets the available default hooks keyed by components.
+ */
+function features_get_default_alter_hook($component) {
+  $default_hook = features_get_components($component, 'default_hook');
+  $alter_hook = features_get_components($component, 'alter_hook');
+  $alter_type = features_get_components($component, 'alter_type');
+  return empty($alter_type) || $alter_type != 'none' ? ($alter_hook ? $alter_hook : $default_hook) : FALSE;
 }
 
 /**
  * Return a code string representing an implementation of a defaults module hook.
  */
-function features_export_render_defaults($module, $hook, $code) {
+function features_export_render_defaults($module, $hook, $code, $args = '') {
   $output = array();
   $output[] = "/**";
   $output[] = " * Implements hook_{$hook}().";
   $output[] = " */";
-  $output[] = "function {$module}_{$hook}() {";
+  $output[] = "function {$module}_{$hook}(" . $args . ") {";
   $output[] = $code;
   $output[] = "}";
   return implode("\n", $output);
@@ -362,7 +481,7 @@ function features_export_info($info, $parents = array()) {
     foreach ($parents as $key) {
       $line .= is_numeric($key) ? "[]" : "[{$key}]";
     }
-    $line .=  " = \"{$info}\"\n";
+    $line .=  " = {$info}\n";
     return $line;
   }
   return $output;
@@ -380,31 +499,50 @@ function features_export_info($info, $parents = array()) {
  *   A string of the tar file contents.
  */
 function features_tar_create($name, $contents) {
+  /* http://www.mkssoftware.com/docs/man4/tar.4.asp */
+  /* http://www.phpclasses.org/browse/file/21200.html */
   $tar = '';
-  $binary_data_first = pack("a100a8a8a8a12A12",
-    $name,
-    '100644 ', // File permissions
-    '   765 ', // UID,
-    '   765 ', // GID,
+  $bigheader = $header = '';
+  if (strlen($name) > 100) {
+    $bigheader = pack("a100a8a8a8a12a12a8a1a100a6a2a32a32a8a8a155a12",
+        '././@LongLink', '0000000', '0000000', '0000000',
+        sprintf("%011o", strlen($name)), '00000000000',
+        '        ', 'L', '', 'ustar ', '0',
+        '', '', '', '', '', '');
+
+    $bigheader .= str_pad($name, floor((strlen($name) + 512 - 1) / 512) * 512, "\0");
+
+    $checksum = 0;
+    for ($i = 0; $i < 512; $i++) {
+      $checksum += ord(substr($bigheader, $i, 1));
+    }
+    $bigheader = substr_replace($bigheader, sprintf("%06o", $checksum)."\0 ", 148, 8);
+  }
+ $header = pack("a100a8a8a8a12a12a8a1a100a6a2a32a32a8a8a155a12", // book the memorie area
+    substr($name,0,100),  //  0     100     File name
+    '100644 ',            // File permissions
+    '   765 ',            // UID,
+    '   765 ',            // GID,
     sprintf("%11s ", decoct(strlen($contents))), // Filesize,
-    sprintf("%11s", decoct(REQUEST_TIME)) // Creation time
-  );
-  $binary_data_last = pack("a1a100a6a2a32a32a8a8a155a12", '', '', '', '', '', '', '', '', '', '');
+    sprintf("%11s", decoct(REQUEST_TIME)),       // Creation time
+    '        ',        // 148     8         Check sum for header block
+    '',                // 156     1         Link indicator / ustar Type flag
+    '',                // 157     100     Name of linked file
+    'ustar ',          // 257     6         USTAR indicator "ustar"
+    ' ',               // 263     2         USTAR version "00"
+    '',                // 265     32         Owner user name
+    '',                // 297     32         Owner group name
+    '',                // 329     8         Device major number
+    '',                // 337     8         Device minor number
+    '',                // 345     155     Filename prefix
+    '');               // 500     12         ??
 
   $checksum = 0;
-  for ($i = 0; $i < 148; $i++) {
-    $checksum += ord(substr($binary_data_first, $i, 1));
+  for ($i = 0; $i < 512; $i++) {
+    $checksum += ord(substr($header, $i, 1));
   }
-  for ($i = 148; $i < 156; $i++) {
-    $checksum += ord(' ');
-  }
-  for ($i = 156, $j = 0; $i < 512; $i++, $j++) {
-    $checksum += ord(substr($binary_data_last, $j, 1));
-  }
-
-  $tar .= $binary_data_first;
-  $tar .= pack("a8", sprintf("%6s ", decoct($checksum)));
-  $tar .= $binary_data_last;
+  $header = substr_replace($header, sprintf("%06o", $checksum)."\0 ", 148, 8);
+  $tar = $bigheader.$header;
 
   $buffer = str_split($contents, 512);
   foreach ($buffer as $item) {
@@ -416,9 +554,14 @@ function features_tar_create($name, $contents) {
 /**
  * Export var function -- from Views.
  */
-function features_var_export($var, $prefix = '', $init = TRUE) {
+function features_var_export($var, $prefix = '', $init = TRUE, $count = 0) {
+  if ($count > 50) {
+    watchdog('features', 'Recursion depth reached in features_var_export', array());
+    return '';
+  }
+
   if (is_object($var)) {
-    $output = method_exists($var, 'export') ? $var->export() : features_var_export((array) $var);
+    $output = method_exists($var, 'export') ? $var->export() : features_var_export((array) $var, '', FALSE, $count+1);
   }
   else if (is_array($var)) {
     if (empty($var)) {
@@ -428,13 +571,28 @@ function features_var_export($var, $prefix = '', $init = TRUE) {
       $output = "array(\n";
       foreach ($var as $key => $value) {
         // Using normal var_export on the key to ensure correct quoting.
-        $output .= "  " . var_export($key, TRUE) . " => " . features_var_export($value, '  ', FALSE) . ",\n";
+        $output .= "  " . var_export($key, TRUE) . " => " . features_var_export($value, '  ', FALSE, $count+1) . ",\n";
       }
       $output .= ')';
     }
   }
   else if (is_bool($var)) {
     $output = $var ? 'TRUE' : 'FALSE';
+  }
+  else if (is_int($var)) {
+    $output = intval($var);
+  }
+  else if (is_numeric($var)) {
+    $floatval = floatval($var);
+    if (is_string($var) && ((string) $floatval !== $var)) {
+      // Do not convert a string to a number if the string
+      // representation of that number is not identical to the
+      // original value.
+      $output = var_export($var, TRUE);
+    }
+    else {
+      $output = $floatval;
+    }
   }
   else if (is_string($var) && strpos($var, "\n") !== FALSE) {
     // Replace line breaks in strings with a token for replacement
@@ -589,6 +747,7 @@ function features_get_normal($component, $module_name, $reset = FALSE) {
  */
 function features_get_default($component, $module_name = NULL, $alter = TRUE, $reset = FALSE) {
   static $cache = array();
+  $alter = !empty($alter); // ensure $alter is a true/false boolean
   features_include();
   features_include_defaults($component);
   $default_hook = features_get_default_hooks($component);
@@ -613,23 +772,31 @@ function features_get_default($component, $module_name = NULL, $alter = TRUE, $r
 
   // Collect and cache information for each specified module.
   foreach ($modules as $m) {
-    if (!isset($cache[$component][$m]) || $reset) {
+    if (!isset($cache[$component][$alter][$m]) || $reset) {
       // Special handling for dependencies component.
       if ($component === 'dependencies') {
         $module = features_get_features($m);
-        $cache[$component][$m] = isset($module->info['dependencies']) ? $module->info['dependencies'] : array();
+        $cache[$component][$alter][$m] = isset($module->info['dependencies']) ? $module->info['dependencies'] : array();
         unset($module);
       }
       // All other components
       else {
         if ($default_hook && module_hook($m, $default_hook)) {
-          $cache[$component][$m] = call_user_func("{$m}_{$default_hook}");
-          if ($alter) {
-            drupal_alter($default_hook, $cache[$component][$m]);
+          $cache[$component][$alter][$m] = call_user_func("{$m}_{$default_hook}");
+          if (is_array($cache[$component][$alter][$m])) {
+            $alter_type = features_get_components('alter_type', $component);
+            if ($alter && (!isset($alter_type) || $alter_type == FEATURES_ALTER_TYPE_NORMAL)) {
+              if ($alter_hook = features_get_default_alter_hook($component)) {
+                drupal_alter($alter_hook, $cache[$component][$alter][$m]);
+              }
+            }
+          }
+          else {
+            $cache[$component][$alter][$m] = FALSE;
           }
         }
         else {
-          $cache[$component][$m] = FALSE;
+          $cache[$component][$alter][$m] = FALSE;
         }
       }
     }
@@ -637,12 +804,12 @@ function features_get_default($component, $module_name = NULL, $alter = TRUE, $r
 
   // A specific module was specified. Retrieve only its components.
   if (isset($module_name)) {
-    return isset($cache[$component][$module_name]) ? $cache[$component][$module_name] : FALSE;
+    return isset($cache[$component][$alter][$module_name]) ? $cache[$component][$alter][$module_name] : FALSE;
   }
   // No module was specified. Retrieve all components.
   $all_defaults = array();
-  if (isset($cache[$component])) {
-    foreach (array_filter($cache[$component]) as $module_components) {
+  if (isset($cache[$component][$alter])) {
+    foreach (array_filter($cache[$component][$alter]) as $module_components) {
       $all_defaults = array_merge($all_defaults, $module_components);
     }
   }
@@ -654,6 +821,12 @@ function features_get_default($component, $module_name = NULL, $alter = TRUE, $r
  */
 function features_get_default_map($component, $attribute = NULL, $callback = NULL, $reset = FALSE) {
   static $map = array();
+
+  global $features_ignore_conflicts;
+  if ($features_ignore_conflicts) {
+    return FALSE;
+  }
+
   features_include();
   features_include_defaults($component);
   if ((!isset($map[$component]) || $reset) && $default_hook = features_get_default_hooks($component)) {
@@ -698,7 +871,8 @@ function features_get_component_states($features = array(), $rebuild_only = TRUE
     $cache = array();
   }
 
-  $features = !empty($features) ? $features : array_keys(features_get_features());
+  $all_features = features_get_features();
+  $features = !empty($features) ? $features : array_keys($all_features);
 
   // Retrieve only rebuildable components if requested.
   features_include();
@@ -713,8 +887,8 @@ function features_get_component_states($features = array(), $rebuild_only = TRUE
 
   foreach ($features as $feature) {
     $cache[$feature] = isset($cache[$feature]) ? $cache[$feature] : array();
-    if (module_exists($feature)) {
-      foreach ($components as $component) {
+    if (module_exists($feature) && !empty($all_features[$feature]->components)) {
+      foreach (array_intersect($all_features[$feature]->components, $components) as $component) {
         if (!isset($cache[$feature][$component])) {
           $normal = features_get_signature('normal', $feature, $component, $reset);
           $default = features_get_signature('default', $feature, $component, $reset);
@@ -751,7 +925,7 @@ function features_get_component_states($features = array(), $rebuild_only = TRUE
                   $cache[$feature][$component] = FEATURES_OVERRIDDEN;
                 }
                 // DB has no modifications to prior code state (or this is initial install).
-                else if ($codecache == $normal || empty($codecache)) {
+                else if (empty($codecache) || $codecache == $normal) {
                   $cache[$feature][$component] = FEATURES_REBUILDABLE;
                 }
                 // None of the states match. Requires user intervention.
@@ -806,8 +980,9 @@ function _features_linetrim($code) {
  */
 function _features_sanitize(&$array) {
   if (is_array($array)) {
-    if (_features_is_assoc($array)) {
-      ksort($array);
+    $is_assoc = _features_is_assoc($array);
+    if ($is_assoc) {
+      ksort($array, SORT_STRING);
       $array = array_filter($array);
     }
     else {
@@ -816,6 +991,9 @@ function _features_sanitize(&$array) {
     foreach ($array as $k => $v) {
       if (is_array($v)) {
         _features_sanitize($array[$k]);
+        if ($is_assoc && empty($array[$k])) {
+          unset($array[$k]);
+        }
       }
     }
   }

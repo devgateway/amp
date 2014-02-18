@@ -9,6 +9,7 @@ function image_features_api() {
       'name' => t('Image styles'),
       'feature_source' => TRUE,
       'default_hook' => 'image_default_styles',
+      'alter_hook' => 'image_styles',
     )
   );
 }
@@ -57,7 +58,7 @@ function image_features_export_render($module_name, $data, $export = NULL) {
       _image_features_style_sanitize($style);
       $style_export = features_var_export($style, '  ');
       $style_identifier = features_var_export($name);
-      $code[] = "  // Exported image style: {$name}";
+      $code[] = "  // Exported image style: {$name}.";
       $code[] = "  \$styles[{$style_identifier}] = {$style_export};";
       $code[] = "";
     }
@@ -71,10 +72,12 @@ function image_features_export_render($module_name, $data, $export = NULL) {
  * Implements hook_features_revert().
  */
 function image_features_revert($module) {
-  if ($default_styles = features_get_default('image')) {
+  if ($default_styles = features_get_default('image', $module)) {
     foreach (array_keys($default_styles) as $default_style) {
       if ($style = image_style_load($default_style)) {
-        image_style_delete($style);
+        if ($style['storage'] != IMAGE_STORAGE_DEFAULT) {
+          image_default_style_revert($style);
+        }
       }
     }
   }

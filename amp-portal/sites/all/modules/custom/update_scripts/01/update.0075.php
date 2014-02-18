@@ -16,7 +16,7 @@ foreach ($date_types as $date_type => $date_format) {
                         'is_new' => 1
                      );
     $dfid = 0;
-    if(!empty($existing_date_formats) && array_key_exists($date_format, $existing_date_formats)) {
+    if(!empty($existing_date_formats) && array_key_exists($date_format['format'], $existing_date_formats)) {
         $format['is_new'] = 0;
         $dfid = $existing_date_formats[$date_format]['dfid'];
     }
@@ -27,7 +27,7 @@ foreach ($date_types as $date_type => $date_format) {
 $existing_date_types = system_get_date_types();
 foreach ($date_types as $date_type => $format) {
     if(!empty($existing_date_types) && array_key_exists($format['machine_name'], $existing_date_types)) {
-          variable_set('date_format_' . $format['machine_name'], $format);
+          variable_set('date_format_' . $format['machine_name'], $format['format']);
           continue;
     }
     
@@ -39,5 +39,5 @@ foreach ($date_types as $date_type => $format) {
     $format_type['module'] = 'ampp_general';
     
     system_date_format_type_save($format_type);
-    variable_set('date_format_' . $format['machine_name'], $format); 
+    variable_set('date_format_' . $format['machine_name'], $format['format']); 
 }

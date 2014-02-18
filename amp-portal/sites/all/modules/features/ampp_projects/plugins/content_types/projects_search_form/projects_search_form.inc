@@ -166,7 +166,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
         '#default_value' => '',
         '#date_type' => DATE_UNIX,
         '#date_timezone' => date_default_timezone(),
-        '#date_format' => is_array($lang_arr['date_format_ampp_cal']) ? $lang_arr['date_format_ampp_cal']['format'] : $lang_arr['date_format_ampp_cal'],
+        '#date_format' => $lang_arr['date_format_ampp_cal'],
         '#date_year_range' => '-' . $years_past . ':+' . $years_future,
         '#description' => t('Records with no value are ignored.'),
       ),
@@ -176,7 +176,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
         '#default_value' => '',
         '#date_type' => DATE_UNIX,
         '#date_timezone' => date_default_timezone(),
-        '#date_format' => is_array($lang_arr['date_format_ampp_cal']) ? $lang_arr['date_format_ampp_cal']['format'] : $lang_arr['date_format_ampp_cal'],
+        '#date_format' => $lang_arr['date_format_ampp_cal'],
         '#date_year_range' => '-' . $years_past . ':+' . $years_future,
       ),
     );

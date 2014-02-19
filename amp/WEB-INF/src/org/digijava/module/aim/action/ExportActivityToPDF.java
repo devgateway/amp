@@ -279,38 +279,12 @@ public class ExportActivityToPDF extends Action {
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
 			}
 
-			/*
-			 *        eaForm.getIdentification().setSsc_component_title(activity.getSscComponentTitle());
-        eaForm.getIdentification().setSsc_component_description(activity.getSscComponentDescription());
-        
-        AmpCategoryValue modalities = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.MODALITIES_KEY, activity.getCategories());
-        eaForm.getIdentification().setSsc_modalities(modalities == null ? null : modalities.getLabel());
-        
-        AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
-        eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null :typeOfCooperation.getLabel());
-
-        AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
-        eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null :typeOfImplementation.getLabel());
-
-			 */
-			
-			//contract Number
-			if(FeaturesUtil.isVisibleField("Contract Number", ampContext)){
-				columnName=TranslatorWorker.translateText("Contract Number");
-				createGeneralInfoRow(mainLayout,columnName,activity.getConvenioNumcont());
-			}
-			//project comments
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments", ampContext)){
-				columnName=TranslatorWorker.translateText("Project Comments");
-				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectComments()));
-			}			
-			
 			//objective
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective", ampContext)){
 				columnName=TranslatorWorker.translateText("Objectives");
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getObjective()));
 			}
-			
+
 			//objective comments
 			HashMap allComments = new HashMap();
 			ArrayList<AmpComments> colAux	= null;
@@ -360,12 +334,36 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell objectiveCommentsCell2=new PdfPCell(objTable);
 				objectiveCommentsCell2.setBorder(0);
 				mainLayout.addCell(objectiveCommentsCell2);
-			}
+			}			
+
+			//
 			//Description cell
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Description", ampContext)){
 				columnName=TranslatorWorker.translateText("Description");				
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getDescription()));
 			}
+			
+			//project comments
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments", ampContext)){
+				columnName=TranslatorWorker.translateText("Project Comments");
+				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectComments()));
+			}						
+
+			//Lessons learned
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext)){
+				columnName=TranslatorWorker.translateText("Lessons Learned");
+				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getLessonsLearned()));
+			}			
+			
+			//contract Number
+			if(FeaturesUtil.isVisibleField("Contract Number", ampContext)){
+				columnName=TranslatorWorker.translateText("Contract Number");
+				createGeneralInfoRow(mainLayout,columnName,activity.getConvenioNumcont());
+			}
+
+			
+			
+
 
 			if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext)){
 				columnName=TranslatorWorker.translateText("NPD Clasification");
@@ -642,7 +640,7 @@ public class ExportActivityToPDF extends Action {
 				}
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
 			}
-			
+			//end identification
 			//Budget
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Budget", ampContext)){
 				String budget="";

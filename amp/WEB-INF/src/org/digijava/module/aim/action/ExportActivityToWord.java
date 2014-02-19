@@ -2094,16 +2094,16 @@ public class ExportActivityToWord extends Action {
             if (act.getFunding() != null && !act.getFunding().isEmpty()) {
                 for (AmpFunding fnd : (Set<AmpFunding>)act.getFunding()) {
                     ExportSectionHelper eshDonorInfo = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification", ampContext)){
+                    /*if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification", ampContext))*/{
                     if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id", ampContext)) {
                         eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Id", null, null, true)).addRowData(fnd.getFinancingId()));
                     }
 
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation", ampContext)) {
+                    /*if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation", ampContext)) */{
                         eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Name", null, null, true)).addRowData(fnd.getAmpDonorOrgId().getName()));
                     }
                     
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation", ampContext)) {
+                    /*if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation", ampContext)) */{
                         AmpRole orgRole = fnd.getSourceRole();
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Organization Role", null, null, true)).addRowData(orgRole != null ? orgRole.getName():""));
                     }
@@ -2253,7 +2253,7 @@ public class ExportActivityToWord extends Action {
 	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue());
 	                            }
 	                            
-	                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(subTotal).addRowData(subTotalValue + toCurrCode));
+	                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(subTotal).addRowData(subTotalValue + " " + toCurrCode));
                               	
 	                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
 	                        }
@@ -2311,7 +2311,7 @@ public class ExportActivityToWord extends Action {
 						&& myForm.getFunding().getTotalPlannedCommitments()
 								.length() > 0) {
 					totalsOutput = myForm.getFunding()
-							.getTotalPlannedCommitments() + currencyCode;
+							.getTotalPlannedCommitments() + " " + currencyCode;
 				}
 				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
 						totalAmountType).addRowData(totalsOutput));
@@ -2322,7 +2322,7 @@ public class ExportActivityToWord extends Action {
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalCommitments() != null
 						&& myForm.getFunding().getTotalCommitments().length() > 0) {
-					totalsOutput = myForm.getFunding().getTotalCommitments()
+					totalsOutput = myForm.getFunding().getTotalCommitments() + " "
 							+ currencyCode;
 				}
 				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
@@ -2338,7 +2338,7 @@ public class ExportActivityToWord extends Action {
 						&& myForm.getFunding().getTotalPlannedDisbursements()
 								.length() > 0) {
 					totalsOutput = myForm.getFunding()
-							.getTotalPlannedDisbursements() + currencyCode;
+							.getTotalPlannedDisbursements() + " " + currencyCode;
 				}
 				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
 						totalAmountType).addRowData(totalsOutput));
@@ -2349,7 +2349,7 @@ public class ExportActivityToWord extends Action {
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalDisbursements() != null
 						&& myForm.getFunding().getTotalDisbursements().length() > 0) {
-					totalsOutput = myForm.getFunding().getTotalDisbursements()
+					totalsOutput = myForm.getFunding().getTotalDisbursements() + " "
 							+ currencyCode;
 				}
 				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
@@ -2365,7 +2365,7 @@ public class ExportActivityToWord extends Action {
 						&& myForm.getFunding().getTotalPlannedExpenditures()
 								.length() > 0) {
 					totalsOutput = myForm.getFunding()
-							.getTotalPlannedExpenditures() + currencyCode;
+							.getTotalPlannedExpenditures() + " " + currencyCode;
 				}
 				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
 						totalAmountType).addRowData(totalsOutput));
@@ -2376,7 +2376,7 @@ public class ExportActivityToWord extends Action {
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalExpenditures() != null
 						&& myForm.getFunding().getTotalExpenditures().length() > 0) {
-					totalsOutput = myForm.getFunding().getTotalExpenditures()
+					totalsOutput = myForm.getFunding().getTotalExpenditures() + " "
 							+ currencyCode;
 				}
 				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
@@ -2392,7 +2392,7 @@ public class ExportActivityToWord extends Action {
                     && myForm.getFunding().getTotalPlannedReleaseOfFunds()
                     .length() > 0) {
                 totalsOutput = myForm.getFunding()
-                        .getTotalPlannedReleaseOfFunds() + currencyCode;
+                        .getTotalPlannedReleaseOfFunds() + " " + currencyCode;
             }
             fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
                     totalAmountType).addRowData(totalsOutput));
@@ -2403,7 +2403,7 @@ public class ExportActivityToWord extends Action {
             totalsOutput = "";
             if (myForm.getFunding().getTotalActualRoF() != null
                     && myForm.getFunding().getTotalActualRoF().length() > 0) {
-                totalsOutput = myForm.getFunding().getTotalActualRoF()
+                totalsOutput = myForm.getFunding().getTotalActualRoF() + " "
                         + currencyCode;
             }
             fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
@@ -2420,7 +2420,7 @@ public class ExportActivityToWord extends Action {
 						&& myForm.getFunding()
 								.getTotalActualDisbursementsOrders().length() > 0) {
 					totalsOutput = myForm.getFunding()
-							.getTotalActualDisbursementsOrders() + currencyCode;
+							.getTotalActualDisbursementsOrders() + " " + currencyCode;
 				}
 				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
 						totalAmountType).addRowData(totalsOutput));
@@ -2435,7 +2435,7 @@ public class ExportActivityToWord extends Action {
 						&& myForm.getFunding().getUnDisbursementsBalance()
 								.length() > 0) {
 					totalsOutput = myForm.getFunding()
-							.getUnDisbursementsBalance() + currencyCode;
+							.getUnDisbursementsBalance() + " " + currencyCode;
 				}
 				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
 						totalAmountType).addRowData(totalsOutput));

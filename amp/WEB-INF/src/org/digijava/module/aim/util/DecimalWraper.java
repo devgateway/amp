@@ -35,6 +35,16 @@ public class DecimalWraper {
 		this.value = value;
 	}
 
+	public void add(BigDecimal value)
+	{
+		this.setValue(this.getValue().add(value));
+	}
+	
+	public void add(DecimalWraper nr)
+	{
+		add(nr.getValue());
+	}
+	
 	public String getCalculations() {
 		return calculations;
 	}

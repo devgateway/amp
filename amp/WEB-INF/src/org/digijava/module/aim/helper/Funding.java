@@ -55,6 +55,10 @@ public class Funding implements Serializable
 	private String subtotalActualCommitments;
 	private String subtotalPlannedCommitments;
 	private String subtotalPipelineCommitments;
+	private String subtotalOfficialDevelopmentAidCommitments;
+	private String subtotalBilateralSscCommitments;
+	private String subtotalTriangularSscCommitments;
+	
 	private String subtotalPlannedDisbursements;
 	private String subtotalPipelineDisbursements;
 	private String subtotalDisbursements;
@@ -425,7 +429,7 @@ public class Funding implements Serializable
 		this.groupVersionedFunding = groupVersionedFunding;
 	}
 	
-	protected Collection<FundingDetail> filterFundings(int transactionType, String adjustmentType)
+	public Collection<FundingDetail> filterFundings(int transactionType, String adjustmentType)
 	{
 		if(fundingDetails != null){
 			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
@@ -468,6 +472,19 @@ public class Funding implements Serializable
 		return filterFundings(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey());
 	}
 
+	public Collection<FundingDetail> getOfficialDevelopmentAidCommitmentsDetails(){
+		return filterFundings(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC.getValueKey());
+	}
+	
+	public Collection<FundingDetail> getBilateralSscCommitmentsDetails(){
+		return filterFundings(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC.getValueKey());
+	}
+	
+	public Collection<FundingDetail> getTriangularSscCommitmentsDetails(){
+		return filterFundings(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.getValueKey());
+	}
+
+	
 	public Collection<FundingDetail> getPlannedDisbursementDetails() {
 		return filterFundings(Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey());
 	}	
@@ -793,6 +810,33 @@ public class Funding implements Serializable
 		  double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
 		  return amt;
 	  }
+
+	public String getSubtotalOfficialDevelopmentAidCommitments() {
+		return subtotalOfficialDevelopmentAidCommitments;
+	}
+
+	public void setSubtotalOfficialDevelopmentAidCommitments(
+			String subtotalOfficialDevelopmentAidCommitments) {
+		this.subtotalOfficialDevelopmentAidCommitments = subtotalOfficialDevelopmentAidCommitments;
+	}
+
+	public String getSubtotalBilateralSscCommitments() {
+		return subtotalBilateralSscCommitments;
+	}
+
+	public void setSubtotalBilateralSscCommitments(
+			String subtotalBilateralSscCommitments) {
+		this.subtotalBilateralSscCommitments = subtotalBilateralSscCommitments;
+	}
+
+	public String getSubtotalTriangularSscCommitments() {
+		return subtotalTriangularSscCommitments;
+	}
+
+	public void setSubtotalTriangularSscCommitments(
+			String subtotalTriangularSscCommitments) {
+		this.subtotalTriangularSscCommitments = subtotalTriangularSscCommitments;
+	}
 
 }
 

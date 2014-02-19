@@ -1255,27 +1255,12 @@ public class EditActivity extends Action {
 
 
 
-          try{
-        	  eaForm.getFunding().setShowActual(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL)==null?false:true);
-        	  eaForm.getFunding().setShowActual(true);
-          }
-          catch(Exception ex){
-        	  eaForm.getFunding().setShowActual(false);
-          }
-          try{
-        	  eaForm.getFunding().setShowPlanned(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PLANNED)==null?false:true);
-        	  eaForm.getFunding().setShowPlanned(true);
-          }
-          catch(Exception ex){
-        	  eaForm.getFunding().setShowPlanned(false);
-          }
-          try{
-        	  eaForm.getFunding().setShowPipeline(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE)==null?false:true);
-        	  eaForm.getFunding().setShowPipeline(true);
-          }
-          catch(Exception ex){
-        	  eaForm.getFunding().setShowPipeline(false);
-          }
+          eaForm.getFunding().setShowActual(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.existsInDatabase());
+          eaForm.getFunding().setShowPlanned(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.existsInDatabase());
+          eaForm.getFunding().setShowPipeline(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.existsInDatabase());
+          eaForm.getFunding().setShowOfficialDevelopmentAid(CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC.existsInDatabase());
+          eaForm.getFunding().setShowBilateralSsc(CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC.existsInDatabase());
+          eaForm.getFunding().setShowTriangularSsc(CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.existsInDatabase());
 
           String toCurrCode=null;
           if (tm != null)

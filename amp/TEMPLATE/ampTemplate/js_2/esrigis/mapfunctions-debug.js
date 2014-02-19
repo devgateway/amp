@@ -1782,10 +1782,11 @@ function CluterStructures(){
 		map.removeLayer(cLs);
 		cLs=null;
 	}
+	var structureType=translate('${Structure Type}');
 	var infoTemplate =	"<table style='font-size: 11px;'>"
 		+ "<tr><td style='padding-right:20px;'><b>"+ translate('Name') +"<b></td><td><b>${Structure Name}</b></td></tr>"
 		+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
-		+ "<tr><td nowrap style='padding-right:20px;'><b>"+ translate('Type')+"<b></td><td>${Structure Type}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>"+ translate('Type')+"<b></td><td>"+structureType+"</td></tr>"
 		+ "<tr><td nowrap style='padding-right:20px;'><b>"+ translate('Description')+"<b></td><td>${Structure Description}</td></tr>"
 		+ "<tr><td nowrap style='padding-right:20px;'><b>"+ translate('Coordinates')+"<b></td><td>${Coordinates}</td></tr></table>";
 

@@ -37,6 +37,7 @@ public class AllTests_amp27
 		suite.addTest(MultilingualTests.suite());
 		suite.addTest(MultilingualThroughTrnTests.suite());
 		suite.addTest(EsriTestCases.suite());
+		suite.addTest(SscTests27.suite());
 		//$JUnit-END$
 		return suite;
 	}

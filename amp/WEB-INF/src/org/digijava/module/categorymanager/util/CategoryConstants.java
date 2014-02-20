@@ -22,6 +22,8 @@ public class CategoryConstants {
 	public static final String ACTIVITY_STATUS_NAME		= "Activity Status";
 	public static final String ACTIVITY_STATUS_KEY			= "activity_status";
 	
+	public static final String SSC_ADJUSTMENT_TYPE_KEY = "SSC_adjustment_type";
+	
 	public static final String PROJECT_IMPLEMENTING_UNIT_NAME = "Project Implementing Unit";
     public static final String PROJECT_IMPLEMENTING_UNIT_KEY = "project_impl_unit";
 	
@@ -193,13 +195,13 @@ public class CategoryConstants {
 			 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Pipeline", false);
 	 
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_ODA_SSC = 
-			 new CategoryConstants.HardCodedCategoryValue("SSC_adjustment_type", "Official Development Aid", true);
+			 new CategoryConstants.HardCodedCategoryValue(SSC_ADJUSTMENT_TYPE_KEY, "Official Development Aid", true);
 	 
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_BILATERAL_SSC = 
-			 new CategoryConstants.HardCodedCategoryValue("SSC_adjustment_type", "Bilateral SSC", true);
+			 new CategoryConstants.HardCodedCategoryValue(SSC_ADJUSTMENT_TYPE_KEY, "Bilateral SSC", true);
 	 
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_TRIANGULAR_SSC = 
-			 new CategoryConstants.HardCodedCategoryValue("SSC_adjustment_type", "Triangular SSC", true);
+			 new CategoryConstants.HardCodedCategoryValue(SSC_ADJUSTMENT_TYPE_KEY, "Triangular SSC", true);
 	 
 	 public static final HardCodedCategoryValue MODE_OF_PAYMENT_SALARIES_WAGES = 
 			 new CategoryConstants.HardCodedCategoryValue("mode_of_payment", "Salaries and Wages", false);

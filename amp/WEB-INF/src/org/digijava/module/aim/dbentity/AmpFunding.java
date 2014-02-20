@@ -770,9 +770,26 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 		return super.clone();
 	}
 	
-	public boolean isDonorFunding()
+	/**
+	 * should the funding under this FundingItem be counted in an activity's totals
+	 * @return
+	 */
+	public boolean isCountedInTotals()
+	{
+		 return this.isDonorFunding() || this.isSscFunding();
+	}
+	
+	protected boolean isDonorFunding()
 	{
 		return (this.getSourceRole() == null) || ((this.getSourceRole() != null) && this.getSourceRole().getRoleCode().equals(Constants.ROLE_CODE_DONOR));
+	}
+	
+	protected boolean isSscFunding()
+	{
+		for(AmpFundingDetail afd:this.fundingDetails)
+			if (afd.isSscTransaction())
+				return true;
+		return false;
 	}
 		
 }

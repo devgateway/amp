@@ -196,7 +196,7 @@ public class FundingCalculationsHelper {
 		if (fundingSource.getMtefProjections() != null)
 			funding.addAll(fundingSource.getMtefProjections());
 		
-		boolean updateTotals = fundingSource.isDonorFunding(); 
+		boolean updateTotals = fundingSource.isCountedInTotals(); 
 		doCalculations(funding, userCurrencyCode, updateTotals);
 	}
 	

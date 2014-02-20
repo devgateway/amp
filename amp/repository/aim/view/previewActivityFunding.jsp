@@ -506,8 +506,7 @@
 			<!--  RELEASE OF FUNDS END -->
  
   			<!--  EDD START -->
-                       	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/EDD" 
-														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+                
 							<c:if test="${aimEditActivityForm.funding.showPlanned}">
 							<c:if test="${not empty aimEditActivityForm.funding.totalPlannedEDD}">
 	                        <tr>
@@ -612,8 +611,7 @@
 		                            </td>
 		                        </tr>
 	                        </field:display>
-                        </c:if> --%>
-                        </module:display>
+                        </c:if> --%>                      
 			<!--  EDD END -->
  
                       	

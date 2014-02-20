@@ -2326,7 +2326,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		try {
 			while (fundIt.hasNext()) {
 				AmpFunding fund = fundIt.next();
-				if (!fund.isDonorFunding())
+				if (!fund.isCountedInTotals())
 					continue;
 
 				Set<AmpFundingDetail> fundDetails = fund.getFundingDetails();

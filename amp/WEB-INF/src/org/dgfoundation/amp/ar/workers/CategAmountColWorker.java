@@ -175,11 +175,11 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		if (columnsMetaData.containsKey("adjustment_type_name")){
 		    adj_type = rs.getString("adjustment_type_name");
 		    
-		    // AMP-16688, please delete for AMP 2.8
-		    if (adj_type.equals("Bilateral SSC"))
-		    	adj_type = "Actual";
-		    if (adj_type.equals("Triangular SSC"))
-		    	adj_type = "Planned";
+//		    // AMP-16688, please delete for AMP 2.8
+//		    if (adj_type.equals("Bilateral SSC"))
+//		    	adj_type = "Actual";
+//		    if (adj_type.equals("Triangular SSC"))
+//		    	adj_type = "Planned";
 		}
 		
 		if(columnsMetaData.containsKey("donor_type_name"))
@@ -224,10 +224,20 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		addMetaIfExists(rs, acc, "agreement_title_code", ArConstants.AGREEMENT_TITLE_CODE, null, false);
 		addMetaIfExists(rs, acc, "component_type", ArConstants.COMPONENT_TYPE_S, null, true);
 		addMetaIfExists(rs, acc, "component_name", ArConstants.COMPONENT_NAME, null, true);
-		addMetaIfExists(rs, acc, "recipient_name", ArConstants.RECIPIENT_NAME, null, false);
-		addMetaIfExists(rs, acc, "recipient_role_name", ArConstants.RECIPIENT_ROLE_NAME, null, false);
-		addMetaIfExists(rs, acc, "recipient_role_code", ArConstants.RECIPIENT_ROLE_CODE, null, false);
-		addMetaIfExists(rs, acc, "source_role_code", ArConstants.SOURCE_ROLE_CODE, null, false);
+		
+		boolean isDirectedMetadataRelevant = (tr_type == Constants.DISBURSEMENT);
+		if (isDirectedMetadataRelevant)
+		{
+			/**
+			 * this way we cut off SSC directed metadata (Ben's specification says to ignore it for SSC, and all SSC are commitments)
+			 * also we only have directed disbursements IRL, it is / should be ignored for non-disbursements
+			 */
+			addMetaIfExists(rs, acc, "recipient_name", ArConstants.RECIPIENT_NAME, null, false);
+			addMetaIfExists(rs, acc, "recipient_role_name", ArConstants.RECIPIENT_ROLE_NAME, null, false);
+			addMetaIfExists(rs, acc, "recipient_role_code", ArConstants.RECIPIENT_ROLE_CODE, null, false);
+			addMetaIfExists(rs, acc, "source_role_code", ArConstants.SOURCE_ROLE_CODE, null, false);
+		}
+		
 		addMetaIfExists(rs, acc, "activity_pledges_title_name", ArConstants.ACTIVITY_PLEDGES_TITLE_NAME, null, false);
 		
 		MetaInfo headMeta=null;

@@ -17,14 +17,25 @@
 		</condition>
 	</trigger> 
 	<apply>
-		<script>
+		<script> <!-- v_donors: all donors which are mentioned in amp_funding with:
+		  - a src-role of DN 
+		     OR
+		  - containing amp_funding_details with an adjustment_type::category_class:key of "SSC_adjustment_type"   
+		   -->
 			<lang delimiter=";" type="postgres">
-			    CREATE OR REPLACE VIEW v_donors AS 
-			    	SELECT f.amp_activity_id, o.name, f.amp_donor_org_id, o.org_grp_id, gr.org_type AS org_type_id
-   					FROM amp_funding f, amp_organisation o LEFT JOIN amp_org_group gr ON o.org_grp_id = gr.amp_org_grp_id
-  					WHERE f.amp_donor_org_id = o.amp_org_id AND f.source_role_id = (SELECT amp_role_id FROM amp_role WHERE role_code = 'DN' )
-  					ORDER BY f.amp_activity_id, o.name;
-        		</lang>
+				CREATE OR REPLACE VIEW v_donors AS 
+					SELECT f.amp_activity_id, o.name, f.amp_donor_org_id, o.org_grp_id, gr.org_type AS org_type_id
+   					FROM amp_funding f, amp_organisation o
+   						LEFT JOIN amp_org_group gr ON o.org_grp_id = gr.amp_org_grp_id
+  						WHERE 
+  							f.amp_donor_org_id = o.amp_org_id AND 
+  							(
+  								f.source_role_id = (( SELECT amp_role.amp_role_id FROM amp_role WHERE amp_role.role_code::text = 'DN'::text)) 
+  								OR (f.amp_funding_id IN (
+  									SELECT DISTINCT(amp_funding_id) FROM amp_funding_detail det 
+  										WHERE det.adjustment_type IN (select id from amp_category_value 
+  											WHERE amp_category_class_id=(SELECT id FROM amp_category_class WHERE keyname='SSC_adjustment_type')))));;        		
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

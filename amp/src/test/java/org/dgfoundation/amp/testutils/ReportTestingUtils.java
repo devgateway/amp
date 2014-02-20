@@ -164,7 +164,7 @@ public class ReportTestingUtils
 	{
 		try
 		{
-			String queryString = "select act from " + AmpActivityVersion.class.getName() + " act WHERE " + AmpActivityVersion.hqlStringForName("act") + "=:activityName";
+			String queryString = "select act from " + AmpActivity.class.getName() + " act WHERE " + AmpActivityVersion.hqlStringForName("act") + "=:activityName";
 			AmpActivityVersion act = (AmpActivityVersion) PersistenceManager.getRequestDBSession().createQuery(queryString).setString("activityName", actName).list().get(0);
 			return act;
 		}

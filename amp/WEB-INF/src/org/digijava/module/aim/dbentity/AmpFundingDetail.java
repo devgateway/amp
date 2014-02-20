@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
@@ -538,4 +539,14 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 			return String.format("%s %s %s to %s", transText, this.getAbsoluteTransactionAmount(), currency, recipient);
 		}
 
+	public boolean isSscTransaction()
+	{
+		if (this.getAdjustmentType() == null)
+			return false;
+		
+		if (this.getAdjustmentType().getAmpCategoryClass() == null)
+			return false;
+		
+		return this.getAdjustmentType().getAmpCategoryClass().getKeyName().equals(CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY);
+	}
 }

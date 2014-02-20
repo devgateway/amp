@@ -60,6 +60,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 	public AmpProgramFormTableFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am, final String programSettingsString,boolean required) throws Exception {
 		super(id, am, fmName,false,required);
+		
 		final IModel<Set<AmpActivityProgram>> setModel=new PropertyModel<Set<AmpActivityProgram>>(am,"actPrograms");
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpActivityProgram>());
@@ -134,7 +135,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
         };
         treeCollectionValidatorField.setIndicatorAppender(iValidator);
         add(treeCollectionValidatorField);
-
+        AmpLabelFieldPanel l=new AmpLabelFieldPanel("progam",new Model(""),TranslatorUtil.getTranslatedText("Program"));
+        this.getTableHeading().add(l);
 		list = new ListView<AmpActivityProgram>("listProgs", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override

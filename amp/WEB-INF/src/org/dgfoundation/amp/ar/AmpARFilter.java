@@ -1040,7 +1040,7 @@ public class AmpARFilter extends PropertyListable {
         boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
         Set<AmpTeam> checkedWorkspaces = null;
 
-        if (loggedInTeamMember != null &&
+        if (loggedInTeamMember != null && loggedInTeamMember.getTeamAccessType() != null &&
                 loggedInTeamMember.getTeamAccessType().equals(Constants.ACCESS_TYPE_TEAM) &&
                 !showWorkspaceFilterInTeamWorkspace) {
             checkedWorkspaces = new HashSet<AmpTeam>();

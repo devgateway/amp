@@ -334,7 +334,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		
 		throw new Exception ("HardCodedCategoryValue not found in the database");
 	}
-	
+	 
 	
 	/**
 	 * 
@@ -529,8 +529,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		return treeSet;
 	}
 	/**
-	 * This is a wrapper function for getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered, HttpServletRequest). 
-	 * The function is called with ordered = false, request = nu=ll.
+	 * This is a wrapper function for getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered). 
+	 * The function is called with ordered = false
 	 * @param categoryKey
 	 * @return 
 	 */

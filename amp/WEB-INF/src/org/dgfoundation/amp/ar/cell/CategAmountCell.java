@@ -382,17 +382,8 @@ public Cell filter(Cell metaCell,Set ids) {
 		MetaInfo internal = metaData.getMetaInfo(m.getCategory());
 		if (internal == null ) {
 			return false;
-        }
-		//we translate Bilateral ssc commitments = actual commitments
-		// triangular ssc commitments = planned commitments
-		if (internal.equals(m) || (m.getCategory().equals("Funding Type") && (
-		  (internal.getValue() instanceof FundingTypeSortedString && ((FundingTypeSortedString)internal.getValue()).toString().equals("Bilateral SSC Commitments") &&
-		  ((FundingTypeSortedString)m.getValue()).toString().equals("Actual Commitments")) ||
-		  (internal.getValue() instanceof FundingTypeSortedString && ((FundingTypeSortedString)internal.getValue()).toString().equals("Triangular SSC Commitments") &&
-				  ((FundingTypeSortedString)m.getValue()).toString().equals("Planned Commitments")))))
-            return true;
-		else
-            return false;
+		}		
+		return internal.equals(m);
 	}
 	
 

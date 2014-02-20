@@ -25,7 +25,9 @@ import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -60,6 +62,11 @@ public class ActivityFundingDigest {
 	private String totalActualEDD;
 	
 	private String totalPipelineCommitments;
+	
+	private String totalOdaSscCommitments;
+	private String totalTriangularSscCommitments;
+	private String totalBilateralSscCommitments;
+	
 	private double totalCommitmentsDouble;
 	private String totalDisbursements;
 	private String totalExpenditures;
@@ -132,6 +139,10 @@ public class ActivityFundingDigest {
     private boolean showActual;
     private boolean showPlanned;
     private boolean showPipeline;
+    private boolean showOfficialDevelopmentAid;
+    private boolean showBilateralSsc;
+    private boolean showTriangularSsc;
+    
     
     public ActivityFundingDigest()
     {}
@@ -208,7 +219,11 @@ public class ActivityFundingDigest {
     					currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
     					currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
     					currFunding.setSubtotalPipelineCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue()));
-
+    					currFunding.setSubtotalOfficialDevelopmentAidCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotOdaSscComm().doubleValue()));
+    					currFunding.setSubtotalBilateralSscCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotBilateralSscComm().doubleValue()));
+    					currFunding.setSubtotalTriangularSscCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotTriangularSscComm().doubleValue()));
+    					
+    					
     					currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
     					currFunding.setSubtotalPipelineDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineDisb().doubleValue()));
     					currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
@@ -263,6 +278,7 @@ public class ActivityFundingDigest {
     		this.setTotalActualDisbursementsOrders(activityTotalCalculations.getTotActualDisbOrder().toString());
     		this.setTotalActualRoF(activityTotalCalculations.getTotalActualRoF().toString());
     		this.setTotalActualEDD(activityTotalCalculations.getTotalActualEDD().toString());
+    		
     		// planned
     		this.setTotalPlannedDisbursements(activityTotalCalculations.getTotPlanDisb().toString());
     		this.setTotalPlannedCommitments(activityTotalCalculations.getTotPlannedComm().toString());
@@ -274,6 +290,12 @@ public class ActivityFundingDigest {
     		this.setTotalMtefProjections(activityTotalCalculations.getTotalMtef().toString());
     		// pipeline
     		this.setTotalPipelineCommitments(activityTotalCalculations.getTotPipelineComm().toString());
+    		
+    		// ssc
+    		this.setTotalOdaSscCommitments(activityTotalCalculations.getTotOdaSscComm().toString());
+    		this.setTotalBilateralSscCommitments(activityTotalCalculations.getTotBilateralSscComm().toString());
+    		this.setTotalTriangularSscCommitments(activityTotalCalculations.getTotTriangularSscComm().toString());
+
         }
     	
     	// calculate consumption and delivery rates
@@ -325,7 +347,37 @@ public class ActivityFundingDigest {
 	public void setShowPlanned(boolean showPlanned) {
 		this.showPlanned = showPlanned;
 	}
+	
+    public void setShowOfficialDevelopmentAid(boolean showOfficialDevelopmentAid)
+    {
+    	this.showOfficialDevelopmentAid = showOfficialDevelopmentAid;
+    }
+    
+    public void setShowBilateralSsc(boolean showBilateralSsc)
+    {
+    	this.showBilateralSsc = showBilateralSsc;
+    }
+    
+    public void setShowTriangularSsc(boolean showTriangularSsc)
+    {
+    	this.showTriangularSsc = showTriangularSsc;
+    }
 
+    public boolean getShowOfficialDevelopmentAid()
+    {
+    	return showOfficialDevelopmentAid;
+    }
+    
+    public boolean getShowBilateralSsc()
+    {
+    	return showBilateralSsc;
+    }
+    
+    public boolean getShowTriangularSsc()
+    {
+    	return showTriangularSsc;
+    }
+    
 	public float getCapitalSpendingPercentage() {
         return capitalSpendingPercentage;
     }
@@ -712,8 +764,8 @@ public class ActivityFundingDigest {
 //
 //	private void setTotalDisbOrder(String totalDisbOrder) {
 //		this.totalDisbOrder = totalDisbOrder;
-//	}
-
+//	}	
+	
 	public String getTotalCommitments() {
 		return totalCommitments;
 	}
@@ -1161,6 +1213,32 @@ public class ActivityFundingDigest {
 	private void setTotalMtefProjections(String totalMtefProjections)
 	{
 		this.totalMtefProjections = totalMtefProjections;
+	}
+
+	public String getTotalOdaSscCommitments() {
+		return totalOdaSscCommitments;
+	}
+
+	public void setTotalOdaSscCommitments(String totalOdaSscCommitments) {
+		this.totalOdaSscCommitments = totalOdaSscCommitments;
+	}
+
+	public String getTotalTriangularSscCommitments() {
+		return totalTriangularSscCommitments;
+	}
+
+	public void setTotalTriangularSscCommitments(
+			String totalTriangularSscCommitments) {
+		this.totalTriangularSscCommitments = totalTriangularSscCommitments;
+	}
+
+	public String getTotalBilateralSscCommitments() {
+		return totalBilateralSscCommitments;
+	}
+
+	public void setTotalBilateralSscCommitments(
+			String totalBilateralSscCommitments) {
+		this.totalBilateralSscCommitments = totalBilateralSscCommitments;
 	}
 	
 }

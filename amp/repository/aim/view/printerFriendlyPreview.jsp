@@ -1100,17 +1100,21 @@ body {background:none;}
                                                                         <tr>
                                                                           <td>
                                                                             <table width="100%" border="0" cellpadding="1" bgcolor="#dddddd" cellspacing="1">
-                                                                            <field:display name="Funding Organization Id" feature="Funding Information">
-                                                                              <tr>
-                                                                                <td align="left" width="339">
-                                                                                  <a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">																																
-                                                                                  <digi:trn key="aim:fundingOrgId">
-                                                                                    Funding Organization Id</digi:trn></a>                                                                                </td>
-                                                                                <td width="10">:</td>
-                                                                                <td width="454" align="left">
-                                                                                <bean:write name="funding"	property="orgFundingId"/>                                                                                </td>
-                                                                              </tr>
-                                                                             </field:display>
+                                                                            <logic:notEmpty name="funding" property="orgFundingId">
+                                                                            	<field:display name="Funding Organization Id" feature="Funding Information">
+                                                                              		<tr>
+                                                                                		<td align="left" width="339">
+                                                                                  			<a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">																																
+                                                                                  				<digi:trn key="aim:fundingOrgId">Funding Organization Id</digi:trn>
+                                                                                    		</a>                                                                                
+                                                                                    	</td>
+                                                                                		<td width="10">:</td>
+                                                                                		<td width="454" align="left">
+                                                                                			<bean:write name="funding"	property="orgFundingId"/>                                                                                
+                                                                                		</td>
+                                                                              		</tr>
+                                                                             	</field:display>
+                                                                             </logic:notEmpty>
                                                                              <field:display name="Funding Organization Name" feature="Funding Information">
                                                                               <tr>
                                                                                 <td align="left" width="339">
@@ -1119,7 +1123,7 @@ body {background:none;}
                                                                                	  <digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>
                                                                                   </a>                                                                                </td>
                                                                                 <td width="10">:</td>
-                                                                                <td align="left">
+                                                                                <td align="left" width="454">
                                                                                   ${fundingOrganization.orgName}                                                                                </td>
                                                                               </tr>
                                                                              </field:display>
@@ -1136,61 +1140,51 @@ body {background:none;}
 																				</td>
 																			</tr>
 																		</logic:present>
-                                                                              <!-- type of assistance -->
-                                                                              <field:display name="Type Of Assistance" feature="Funding Information">
-                                                                              <tr>
-                                                                                <td align="left" width="339">
-                                                                                  <a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">
-                                                                                  <digi:trn key="aim:typeOfAssist">
-                                                                                    Type of Assistance </digi:trn>
-																				  </a>                                                                                </td>
-                                                                                <td width="10">:</td>
-                                                                                <td align="left">
-                                                                                  <logic:notEmpty name="funding" property="typeOfAssistance">
-                                                                                    <digi:trn>
-                                                                                    	<bean:write name="funding" property="typeOfAssistance.value"/>
-                                                                                    </digi:trn>
-                                                                                  </logic:notEmpty>                                                                                </td>
-                                                                              </tr>
-																			</field:display>
-																			<field:display name="Financing Instrument" feature="Funding Information">
-                                                                              <tr>
-                                                                                <td align="left" width="339">
-                                                                                  <a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
-                                                                               	  <digi:trn key="aim:financialInst">Financial Instrument</digi:trn>
-																				  </a></td>
-                                                                                <td width="10">:</td>
-                                                                                <td align="left">
-                                                                                  <logic:notEmpty name="funding" property="financingInstrument">
-                                                                                    <digi:trn>
-                                                                                    	<bean:write name="funding"	property="financingInstrument.value"/>
-                                                                                    </digi:trn>
-                                                                                  </logic:notEmpty>                                                                                </td>
-                                                                              </tr>
+																		<!-- type of assistance -->
+																		<field:display name="Type Of Assistance" feature="Funding Information">
+																			<logic:notEmpty name="funding" property="typeOfAssistance">
+																				<tr>
+                                                                                	<td align="left" width="339">
+                                                                                  		<a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">
+                                                                                  			<digi:trn key="aim:typeOfAssist">Type of Assistance </digi:trn>
+																				  		</a>                                                                                
+																					</td>
+                                                                                	<td width="10">:</td>
+                                                                                	<td align="left">
+                                                                                		<digi:trn><bean:write name="funding" property="typeOfAssistance.value"/></digi:trn>
+																					</td>
+                                                                              	</tr>
+                                                                              </logic:notEmpty>
+																		</field:display>
+																		<field:display name="Financing Instrument" feature="Funding Information">
+																			<logic:notEmpty name="funding" property="financingInstrument">
+																				<tr>
+                                                                                	<td align="left" width="339">
+                                                                                  		<a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
+                                                                               	  		<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>
+																				  		</a>
+																				  	</td>
+                                                                                	<td width="10">:</td>
+                                                                                	<td align="left">
+                                                                                		<digi:trn><bean:write name="funding" property="financingInstrument.value"/></digi:trn>
+                                                                                	</td>                                                                                  
+                                                                              	</tr>
+                                                                              </logic:notEmpty>
                                                                            <field:display name="Credit/Donation" feature="Planning">
-                                                                           <tr>
-                                                                                <td align="left" width="339">
-                                                                                  <a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
-                                                                                 	 <digi:trn key="aim:credit_donation">Credit/Donation</digi:trn>
-																				  </a>                                                                                </td>
-                                                                                <td width="10">:</td>
-                                                                                <td align="left">
-                                                                                    <c:if test="${not empty funding.financingInstrument}">
-                                                                                        <c:set var="creditTypeId">
-                                                                                            <bean:write name="funding"	property="financingInstrument.value"/>
-                                                                                        </c:set>
-                                                                                        <c:if test="${creditTypeId == 'Comercial' || creditTypeId == 'Concesional'}">
-                                                                                            <digi:trn key="aim:preview_credit">Credito</digi:trn>	                                        		 
-                                                                                        </c:if>
-                                                                                        <c:if test="${creditTypeId == 'Donación'}">
-                                                                                            <digi:trn key="aim:preview_donation">Donación</digi:trn>	                                        		
-                                                                                        </c:if>
-                                                                                            
-                                                                                    </c:if>
-                                                                                       
-										                                        	                                                                               </td>
-                                                                              </tr>
-                                                                              </field:display>
+																				<logic:notEmpty name="funding" property="financingInstrument">
+																					<tr>
+                                                                                		<td align="left" width="339">
+                                                                                  			<a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
+                                                                                 	 			<digi:trn key="aim:credit_donation">Credit/Donation</digi:trn>
+																				  			</a>
+																				  		</td>
+                                                                                		<td width="10">:</td>
+                                                                                		<td align="left">
+                                                                                       		<bean:write name="funding"	property="financingInstrument.value"/>
+                                                                                		</td>
+                                                                              		</tr>
+                                                                              	</logic:notEmpty>
+                                                                           	</field:display>
                                                                               
 																			</field:display>
 																			  <field:display name="Funding Status" feature="Funding Information">
@@ -1229,24 +1223,18 @@ body {background:none;}
 																			</field:display>
 																			<!-- here it goes Donor Objective  and Conditions ISSUE AMP-16421-->
 																			<field:display name="Conditions" feature="Funding Information">
-                                                                              <tr>
-                                                                                <td align="left" width="339">
-                                                                                  <a>
-                                                                                  	<digi:trn>Conditions</digi:trn>
-																				  </a>                                                                                
-																				 </td>
-                                                                                <td width="10">:</td>
-                                                                                <td align="left">
-                                                                                	<logic:notEmpty name="funding" property="modeOfPayment">
-                                                                                    	<digi:trn>
-	                                                                                    	<bean:write name="funding" property="conditions"/>
-    	                                                                                </digi:trn>
-                                                                                    </logic:notEmpty>
-                                                                                  </td>
-                                                                              </tr>
+																				<logic:notEmpty name="funding" property="conditions">
+                                                                              		<tr>
+                                                                                		<td align="left" width="339">
+                                                                                  			<a><digi:trn>Conditions</digi:trn></a>
+																				 		</td>
+                                                                                		<td width="10">:</td>
+                                                                                		<td align="left">
+                                                                                			<digi:trn><bean:write name="funding" property="conditions"/></digi:trn>
+                                                                                  		</td>
+                                                                              		</tr>
+																				</logic:notEmpty>                                                                              		
 																			</field:display>																			
-																			
-																			
 				                                                            </table>
                                                                            </td>
                                                                         </tr>
@@ -1309,109 +1297,86 @@ body {background:none;}
 
                         <table cellspacing="1" cellpadding="0" border="0" bordercolor="#FF0000" width="100%">
                         <feature:display name="Planned Commitments" module="Measures">
-	                        <tr>
-	                            <td bgcolor="#eeeeee"
-	                                style="border-top: 1px solid #000000; text-transform: uppercase;"><digi:trn
-	                                key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS </digi:trn>:
-	                            </td>
-	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-	                                style="border-top: 1px solid #000000">
-	                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
-		                                <bean:write
-		                                name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> <bean:write
-		                                name="aimEditActivityForm" property="currCode" />
-		                             </c:if>&nbsp;
-	                        </td>
-	                        </tr>
+                        	<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedCommitments">
+	                        	<tr>
+	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
+	                            		<digi:trn key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS</digi:trn>:
+	                            	</td>
+	                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+										<bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" />
+										<bean:write name="aimEditActivityForm" property="currCode" />
+		                            	 &nbsp;
+	                        		</td>
+	                        	</tr>
+							</logic:notEmpty>
                         </feature:display>
-                        <tr>
-                            <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-                                key='aim:totalactualcommittment'> TOTAL ACTUAL COMMITMENTS </digi:trn>:
-                            </td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000">
-                                 <c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
-	                                <bean:write
-	                                name="aimEditActivityForm" property="funding.totalCommitments" /> <bean:write
-	                                name="aimEditActivityForm" property="currCode" />
-	                              </c:if>&nbsp;
-	                         </td>
-                        </tr>
+                        	<logic:notEmpty name="aimEditActivityForm" property="funding.totalCommitments">
+                        		<tr>
+                            		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+                            			<digi:trn key='aim:totalactualcommittment'> TOTAL ACTUAL COMMITMENTS </digi:trn>:
+                            		</td>
+                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">                                 
+	                                	<bean:write name="aimEditActivityForm" property="funding.totalCommitments" />
+	                                	<bean:write name="aimEditActivityForm" property="currCode" />
+	                              		&nbsp;
+	                         		</td>
+                        		</tr>
+                        	</logic:notEmpty>
                         <field:display name="Pipeline" feature="Commitments">
-							<tr>
-	                            <td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn> TOTAL PIPELINE COMMITMENTS: </digi:trn>
-	                            </td>
-	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
-	                                <c:if test="${not empty aimEditActivityForm.funding.totalPipelineCommitments}">
-										<bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /> <bean:write name="aimEditActivityForm" property="currCode" />
-									</c:if>&nbsp;
-								</td>
-	                        </tr>
+                        	<logic:notEmpty name="aimEditActivityForm" property="funding.totalPipelineCommitments">
+								<tr>
+	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn> TOTAL PIPELINE COMMITMENTS: </digi:trn></td>
+	                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+										<bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /> 
+										<bean:write name="aimEditActivityForm" property="currCode" />
+										&nbsp;
+									</td>
+	                        	</tr>
+	                        </logic:notEmpty>
                         </field:display>
-                        <feature:display module="Funding"
-                            name="Disbursement">
-                        <tr>
-                            <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-                                key='aim:totalplanneddisbursement'>
-                                TOTAL PLANNED DISBURSEMENT	
-                                </digi:trn>:
-                            </td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000">
-                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
-		                                <bean:write
-		                                name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> <bean:write
-		                                name="aimEditActivityForm" property="currCode" />
-		                          </c:if>&nbsp;
-                            </td>
-                        </tr>
-                        <tr>
-                            <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000"><digi:trn
-                                key='aim:totalActualdisbursement'>
-                                                                                                        TOTAL ACTUAL DISBURSEMENT </digi:trn>:
-                            </td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000">
-                                 <c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
-		                                <bean:write
-		                                name="aimEditActivityForm" property="funding.totalDisbursements" /> <bean:write
-		                                name="aimEditActivityForm" property="currCode" />
-		                          </c:if>&nbsp;
-                           </td>
-                        </tr>
+                        <feature:display module="Funding" name="Disbursement">
+							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedDisbursements">
+                       			<tr>
+                            		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key='aim:totalplanneddisbursement'>TOTAL PLANNED DISBURSEMENT</digi:trn>:</td>
+                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> 
+		                                <bean:write name="aimEditActivityForm" property="currCode" />
+		                          		&nbsp;
+                            		</td>
+                        		</tr>
+                        	</logic:notEmpty>
+                        	<logic:notEmpty name="aimEditActivityForm" property="funding.totalDisbursements">
+                        		<tr>
+                            		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000"><digi:trn key='aim:totalActualdisbursement'>TOTAL ACTUAL DISBURSEMENT </digi:trn>:</td>
+                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+	                                	<bean:write name="aimEditActivityForm" property="funding.totalDisbursements" />
+	                                	<bean:write name="aimEditActivityForm" property="currCode" />
+		                          		&nbsp;
+                           			</td>
+                        		</tr>
+                        	</logic:notEmpty>
                         </feature:display>
                         <feature:display module="Funding" name="Expenditures">
-                        <tr>
-                            <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-                                key="aim:totalActualExpenditures">
-                                  TOTAL PLANNED EXPENDITURES             </digi:trn>:</td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000">
-                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
-			                                <bean:write
-			                                name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> <bean:write
-			                                name="aimEditActivityForm" property="currCode" />
-			                      </c:if>&nbsp;
-                            </td>
-                        </tr>
-                        <tr>
-                            <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-                                key="aim:totalplannedExpenditures">
-                                    TOTAL ACTUAL EXPENDITURES       	 	 </digi:trn>:</td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000">
-                                 <c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
-		                                <bean:write
-		                                name="aimEditActivityForm" property="funding.totalExpenditures" /> <bean:write
-		                                name="aimEditActivityForm" property="currCode" />
-		                          </c:if>&nbsp;
-		                    </td>
-                        </tr>
+							<logic:notEmpty name="aimEditActivityForm" property="funding.totalPlannedExpenditures">
+                        		<tr>
+                            		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalActualExpenditures">TOTAL PLANNED EXPENDITURES</digi:trn>:</td>
+                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" />
+		                                <bean:write name="aimEditActivityForm" property="currCode" />
+			                      		&nbsp;
+                            		</td>
+                        		</tr>
+                        	</logic:notEmpty>
+                        	<logic:notEmpty name="aimEditActivityForm" property="funding.totalExpenditures">
+                        		<tr>
+                            		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalplannedExpenditures">TOTAL ACTUAL EXPENDITURES</digi:trn>:</td>
+                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+	                                	<bean:write name="aimEditActivityForm" property="funding.totalExpenditures" />
+	                                	<bean:write name="aimEditActivityForm" property="currCode" />
+		                          		&nbsp;
+		                    		</td>
+                        		</tr>
+                        	</logic:notEmpty>
                         </feature:display>
                         <feature:display module="Funding" name="Disbursement Orders">
                         <tr>
@@ -1438,51 +1403,41 @@ body {background:none;}
                       	</tr>
                         </feature:display>
                         <feature:display module="Funding" name="Undisbursed Balance">
-                      	<tr>
-                            <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-                                key="aim:undisbursedBalance">
-                                  UNDISBURSED BALANCE 	             </digi:trn>:</td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000">
-                                 <c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
-		                                <bean:write
-		                                name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> <bean:write
-		                                name="aimEditActivityForm" property="currCode" />
-		                         </c:if>&nbsp;
-		                  </td>
-                        </tr>
+                        	<logic:notEmpty name="aimEditActivityForm" property="funding.unDisbursementsBalance">
+                      			<tr>
+                            		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:undisbursedBalance">UNDISBURSED BALANCE</digi:trn>:</td>
+                            		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">                                 
+		                                <bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> 
+		                                <bean:write name="aimEditActivityForm" property="currCode" />
+		                         		&nbsp;
+		                  			</td>
+                        		</tr>
+                        	</logic:notEmpty>
                         </feature:display>
                         
-                        
-                        <tr>
-                            <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000; text-transform: uppercase">
-                                <digi:trn key="aim:undisbursedBalance"> Consumption Rate</digi:trn>: </td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000">
-                            	 <c:if test="${not empty aimEditActivityForm.funding.consumptionRate}">
-                                	<b>${aimEditActivityForm.funding.consumptionRate}</b>
-                                </c:if>
-                                &nbsp;
-                            </td>
-                        </tr>
-                         <tr>
-                            <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000; text-transform: uppercase">
-                                <digi:trn>Delivery Rate</digi:trn>: </td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-                                style="border-top: 1px solid #000000">
-                                <c:if test="${not empty aimEditActivityForm.funding.deliveryRate}">
-                                <b>${aimEditActivityForm.funding.deliveryRate}</b>
-                                </c:if>
-                                &nbsp;
-                            </td>
-                        </tr>
-                        </table>
-                                                                </td></tr>
-													</logic:notEmpty>
-												  </table>														</td>
+                        <logic:notEmpty name="aimEditActivityForm" property="funding.consumptionRate">
+                        	<tr>
+                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:undisbursedBalance"> Consumption Rate</digi:trn>: </td>
+                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+									<b>${aimEditActivityForm.funding.consumptionRate}</b>
+                                	&nbsp;
+                            	</td>
+                        	</tr>
+                        </logic:notEmpty>
+                        <logic:notEmpty name="aimEditActivityForm" property="funding.deliveryRate">
+							<tr>
+                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn>Delivery Rate</digi:trn>: </td>
+								<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+                                	<b>${aimEditActivityForm.funding.deliveryRate}</b>
+                                	&nbsp;
+                            	</td>
+                        	</tr>
+                        </logic:notEmpty>
+					</table>
+				</td></tr>
+		</logic:notEmpty>
+	</table>														
+	</td>
 											  </tr>
 										  </table>
 									  </td>

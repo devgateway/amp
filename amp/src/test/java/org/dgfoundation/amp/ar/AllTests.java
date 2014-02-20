@@ -35,7 +35,7 @@ public class AllTests {
 		suite.addTest(ActivityPreviewTests.suite());
 		suite.addTest(ComputedMeasuresTests.suite());
 		suite.addTest(MiscColumnsTests.suite());
-		suite.addTest(EsriTestCases.suite());
+		//suite.addTest(EsriTestCases.suite());
 		suite.addTest(FiltersTests.suite());
 		suite.addTest(MiscReportsTests.suite());
 		//suite.addTest(new DirectedDisbursementsTests("testReports"));
@@ -52,7 +52,7 @@ public class AllTests {
 		try
 		{ 
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_26_amp27";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_26_amp28";
     	
 			ResourceStreamHandlerFactory.installIfNeeded();
 

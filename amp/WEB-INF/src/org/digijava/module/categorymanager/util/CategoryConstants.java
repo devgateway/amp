@@ -22,6 +22,8 @@ public class CategoryConstants {
 	public static final String ACTIVITY_STATUS_NAME		= "Activity Status";
 	public static final String ACTIVITY_STATUS_KEY			= "activity_status";
 	
+	public static final String SSC_ADJUSTMENT_TYPE_KEY = "SSC_adjustment_type";
+	
 	public static final String PROJECT_IMPLEMENTING_UNIT_NAME = "Project Implementing Unit";
     public static final String PROJECT_IMPLEMENTING_UNIT_KEY = "project_impl_unit";
 	
@@ -185,10 +187,21 @@ public class CategoryConstants {
 
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_ACTUAL = 
 		 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Actual", true);
+	 
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_PLANNED = 
 		 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Planned", true);
+	 
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_PIPELINE = 
 			 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Pipeline", false);
+	 
+	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_ODA_SSC = 
+			 new CategoryConstants.HardCodedCategoryValue(SSC_ADJUSTMENT_TYPE_KEY, "Official Development Aid", true);
+	 
+	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_BILATERAL_SSC = 
+			 new CategoryConstants.HardCodedCategoryValue(SSC_ADJUSTMENT_TYPE_KEY, "Bilateral SSC", true);
+	 
+	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_TRIANGULAR_SSC = 
+			 new CategoryConstants.HardCodedCategoryValue(SSC_ADJUSTMENT_TYPE_KEY, "Triangular SSC", true);
 	 
 	 public static final HardCodedCategoryValue MODE_OF_PAYMENT_SALARIES_WAGES = 
 			 new CategoryConstants.HardCodedCategoryValue("mode_of_payment", "Salaries and Wages", false);
@@ -220,10 +233,12 @@ public class CategoryConstants {
 	public static final String WORKSPACE_GROUP_KEY	= "workspace_group";
 
 	
-	public static class HardCodedCategoryValue {
+	public static class HardCodedCategoryValue
+	{
 		private String valueKey;
 		private String categoryKey;
 		private boolean protectOnDelete;
+		
 		public String getValueKey() {
 			return valueKey;
 		}
@@ -234,10 +249,24 @@ public class CategoryConstants {
 		public boolean isProtectOnDelete() {
 			return protectOnDelete;
 		}
+		
 		private HardCodedCategoryValue(String categoryKey, String valueKey, boolean protectOnDelete) {
 			this.categoryKey		= categoryKey;
 			this.valueKey			= valueKey;
 			this.protectOnDelete	= protectOnDelete;
+		}
+		
+		public boolean existsInDatabase()
+		{
+			try
+			{
+				boolean res = (CategoryManagerUtil.getAmpCategoryValueFromDB(this) != null);
+				return res;
+			}
+			catch(Exception e)
+			{
+				return false;
+			}
 		}
 	}
 }

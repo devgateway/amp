@@ -14,6 +14,10 @@ public class AmpMeasures  implements Serializable, Comparable
 	
 	private String measureName ;
 	private String aliasName;
+	
+	/**
+	 * not used
+	 */
 	private String type;
 	private Set reports;
 	private String expression;
@@ -25,12 +29,23 @@ public class AmpMeasures  implements Serializable, Comparable
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	/**
+	 * not used
+	 * @return
+	 */
 	public String getType() {
 		return type;
 	}
+	
+	/**
+	 * not used
+	 * @param type
+	 */
 	public void setType(String type) {
 		this.type = type;
 	}
+	
 	public String getAliasName() {
 		return aliasName;
 	}

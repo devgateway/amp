@@ -3966,7 +3966,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Programs programs;
 	private CrossCuttingIssues crossIssues;
 	private ActivityFundingDigest funding;
-	private ActivityFundingDigest oldFunding;
+	//private ActivityFundingDigest oldFunding;
 	private Documents documents = null;
 	private Agencies agencies;
 	
@@ -4065,7 +4065,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.getPrograms().setTertiaryPrograms(null);
 			this.crossIssues = null;
 			this.funding = null;
-			this.oldFunding = null;
+			//this.oldFunding = null;
 			this.survey = null;
 			this.surveys = null;
 			this.ampAhsurveys = null;
@@ -4076,7 +4076,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.indicatorME = null;
             this.fundingCurrCode=null;
             this.regFundingPageCurrCode=null;
-            this.funding=null;
+            //this.funding=null;
             this.issues=null;
             this.observations=null;
 			step = "1";
@@ -4285,12 +4285,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		return this.funding;
 	}
 	
-	public ActivityFundingDigest getOldFunding() {
-		if (this.oldFunding == null) {
-			this.oldFunding = new ActivityFundingDigest();
-		}
-		return this.oldFunding;
-	}
+//	public ActivityFundingDigest getOldFunding() {
+//		if (this.oldFunding == null) {
+//			this.oldFunding = new ActivityFundingDigest();
+//		}
+//		return this.oldFunding;
+//	}
 
 	public Documents getDocuments() {
 		if (this.documents == null) {
@@ -4396,7 +4396,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 				funding.getFundingDetails().add(new FundingDetail());
 			}
 		}
-		return (FundingDetail) funding.getFundingDetails().get(index);
+		return funding.getFundingDetails().get(index);
 	}
 
 //	public MTEFProjection getMtefProjection(int index) {

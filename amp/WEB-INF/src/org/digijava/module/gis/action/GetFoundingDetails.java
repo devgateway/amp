@@ -1499,7 +1499,7 @@ public class GetFoundingDetails extends Action {
             while (fundIt.hasNext()) {
                 AmpFunding fund = fundIt.next();
 
-                if (!fund.isDonorFunding())
+                if (!fund.isCountedInTotals())
                 	continue;
                 if (donorId == null || donorId < 0 || donorId.equals(fund.getAmpDonorOrgId().getAmpOrgId()))
                 {

@@ -35,6 +35,7 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.util.DashboardUtil;
@@ -88,6 +89,22 @@ public class SwitchLanguage
         else if (referrerUrl.contains(ACT_SSC_FORM_PATH)) {
         	String actId = referrerUrl.substring(referrerUrl.indexOf(ACT_SSC_FORM_PATH) + ACT_SSC_FORM_PATH.length());
         	ActivityGatekeeper.pageModeChange(actId);	
+        }
+        
+        
+        //for public user
+        if (RequestUtils.getUser(request) == null) {
+        	if (referrerUrl.indexOf("language=")!= -1) {
+        	referrerUrl = referrerUrl.substring(0,referrerUrl.length()-2);
+        	referrerUrl += localeKey;
+            }
+        	else {
+        		boolean hasParameters = referrerUrl.indexOf('?') != -1;
+        		referrerUrl += hasParameters?'&':'?';
+        	    referrerUrl += "language="+localeKey;
+        	}
+                
+        	return new ActionForward(referrerUrl, true);
         }
         
         //String localeKey=(String)request.getParameter("lang");

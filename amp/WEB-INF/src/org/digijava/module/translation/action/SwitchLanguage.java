@@ -97,7 +97,9 @@ public class SwitchLanguage
         	referrerUrl += localeKey;
             }
         	else {
-        		referrerUrl += "&language="+localeKey;
+        		boolean hasParameters = referrerUrl.indexOf('?') != -1;
+        		referrerUrl += hasParameters?'&':'?';
+        	    referrerUrl += "language="+localeKey;
         	}
                 
         	return new ActionForward(referrerUrl, true);

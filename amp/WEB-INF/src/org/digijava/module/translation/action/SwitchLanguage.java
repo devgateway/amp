@@ -35,6 +35,7 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.util.DashboardUtil;
@@ -90,6 +91,17 @@ public class SwitchLanguage
         	ActivityGatekeeper.pageModeChange(actId);	
         }
         
+        if (RequestUtils.getUser(request) == null) {
+        	if (referrerUrl.indexOf("language=")!= -1) {
+        	referrerUrl = referrerUrl.substring(0,referrerUrl.length()-2);
+        	referrerUrl += localeKey;
+            }
+        	else {
+        		referrerUrl += "&language="+localeKey;
+        	}
+                
+        	return new ActionForward(referrerUrl, true);
+        }
         //String localeKey=(String)request.getParameter("lang");
         Locale locale = new Locale();
         locale.setCode(localeKey);

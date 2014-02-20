@@ -807,8 +807,8 @@ function showStInfoWindow() {
 	var content =
 	    "<table border='0' width='100%' cellpadding='0' cellspacing='0' style='border: 1px solid gray;font-size: 10px;'>"
 		+ "<tr>"
-		+ "<td align='center' width='200px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>Name</b></td>"
-		+ "<td align='center' width='100px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>Type</b></td>"
+		+ "<td align='center' width='200px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>"+translate('Name')+"</b></td>"
+		+ "<td align='center' width='100px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>"+translate('Type')+"</b></td>"
 		+ "<td align='center' width='300px' style='border-bottom: 1px solid gray;padding: 4px;'><b>Activity</b></td>"
 		+ "</tr>";
 	if (map.infoWindow.isShowing) {
@@ -1598,16 +1598,16 @@ function MapFindStructure(activity, structureGraphicLayer) {
 	
 	
 	var noTabTemplate =	"<table style='font-size: 11px;'>"
-		+ "<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>"
+		+ "<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>$"+ translate('Structure Name') +"</b></td></tr>"
 		+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
-		+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
-		+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
-		+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>";
+		+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>"+ translate('Structure Type')+"</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>"+ translate('Structure Description')+"</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>"+ translate('Coordinates')+"</td></tr></table>";
 
 	var tabTemplate = "<div id='infotabs' class='infotab'>"
 
-		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>Show Info</a>"
-		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Show Image</a>"
+		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>"+ translate('Show Info')+"</a>"
+		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>"+ translate('Show Image')+"</a>"
 		
 		+ "<div id='strInfo' ><br /><br />"+ noTabTemplate +"</div>"
 		+ "<div id='strImage' align='center' style='display:none;' >${Structure Image}</div>"
@@ -1626,11 +1626,11 @@ var structureID=1;
 			//debugger;
 			if(structure.hasImage){
 				stinfoTemplate = new esri.InfoTemplate(
-						"Structure Details",
+						translate('Structure Details'),
 						tabTemplate);
 			}else{
 				stinfoTemplate = new esri.InfoTemplate(
-						"Structure Details",
+						translate('Structure Details'),
 						"<div class='infotab'>" + noTabTemplate + "</div>");
 			}
 			

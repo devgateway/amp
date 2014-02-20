@@ -40,6 +40,7 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -797,10 +798,10 @@ public class DataDispatcher extends MultiAction {
 			strucImages.add(PersistenceManager.getLong(obj));
 			
 		//cache structure type names
-		Map<Long, String> typeNamesById = new HashMap<Long, String>();
+		Map<Long, String> typeNames = new HashMap<Long, String>();
 		List<Object[]> strucTypes = PersistenceManager.getSession().createSQLQuery("SELECT typeid, name FROM amp_structure_type").list();
 		for(Object[] strucType:strucTypes)
-			typeNamesById.put(PersistenceManager.getLong(strucType[0]), PersistenceManager.getString(strucType[1]));
+			typeNames.put(PersistenceManager.getLong(strucType[0]), TranslatorWorker.translateText(PersistenceManager.getString(strucType[1])));
 
         String structureTitle = AmpStructure.sqlStringForTitle("amp_structure_id");
         String structureDescription = AmpStructure.sqlStringForDescription("amp_structure_id");
@@ -817,11 +818,10 @@ public class DataDispatcher extends MultiAction {
 			String description = PersistenceManager.getString(struct[2]);
 			String latitude = PersistenceManager.getString(struct[3]);
 			String longitude = PersistenceManager.getString(struct[4]);
-			String shape = PersistenceManager.getString(struct[5]);
+			String shape = PersistenceManager.getString(struct[5]);			
 				
-			long typeId = PersistenceManager.getLong(struct[6]); // guaranteed not null
-			
-			String typeName = typeNamesById.get(typeId);
+			long typeId = PersistenceManager.getLong(struct[6]); // guaranteed not null			
+			String typeName = PersistenceManager.getString(typeNames.get(typeId));
 				
 			Structure structureJSON = new Structure();
 			structureJSON.setId(strucId);

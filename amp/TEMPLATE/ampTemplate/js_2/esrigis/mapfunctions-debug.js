@@ -1312,6 +1312,17 @@ var implementationLevel = [ {
 } ];
 
 function getHighlights(level) {
+	for ( var int = 0; int < indicatorLayerArray.length; int++) {
+		if (map.getLayer("indicator_"+indicatorLayerArray[int].id).visible){
+			toggleindicatormap(indicatorLayerArray[int].id);
+		}
+	}
+	
+	if(nationalactive)
+	{
+		togglenational();
+	}
+	
 	if (highlightson){
 		closeHide("highlightLegend");
 		highlightson =false;
@@ -1390,13 +1401,18 @@ function addResultsToMap(featureSet) {
 		break;
 	}
 
-	var breaks = getGVF(locations,typeFunding,5);
+	var breaks;
+	if (locations.length>5){
+		breaks = getGVF(locations,typeFunding,5);
+	}else{
+		breaks = getGVF(locations,typeFunding,locations.length);
+	}
 	var renderer = new esri.renderer.ClassBreaksRenderer(symbol, COUNT);
-	renderer.addBreak(breaks[0],breaks[1] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[4]));
-	renderer.addBreak(breaks[1],breaks[2] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[3]));
-	renderer.addBreak(breaks[2],breaks[3] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[2]));
-	renderer.addBreak(breaks[3],breaks[4] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[1]));
-	renderer.addBreak(breaks[4],breaks[5] +10, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[0]));
+	renderer.addBreak(breaks[0]+1,breaks[1]+1 , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[4]));
+	renderer.addBreak(breaks[1]+1,breaks[2]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[3]));
+	renderer.addBreak(breaks[2]+1,breaks[3]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[2]));
+	renderer.addBreak(breaks[3]+1,breaks[4]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[1]));
+	renderer.addBreak(breaks[4]+1,breaks[5]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[0]));
 	
 
 	dojo.forEach(featureSet.features, function(feature) {
@@ -1479,13 +1495,15 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode) {
 	htmlDiv += "<div class='legendHeader'>"+translate('Showing ' + typeFunding + ' for ' + currentLevel.name);
 	htmlDiv +=  "<br/><hr/></div>";
 	for ( var i = 4; i >= 0 ; i--) {
-		htmlDiv += "<div class='legendContentContainer'>"
-				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i]) + "></div>" + "</div>"
-				+ "<div class='legendContentLabel'>"
-				+ df.format(Math.ceil(rangeColors[x])) + " "
-				+ currencyString + " - "
-				+ df.format(Math.floor(rangeColors[x+1])) + " "
-				+ currencyString + " </div><br/>";
+		if((!isNaN(Math.ceil(rangeColors[x])) && (!isNaN(Math.floor(rangeColors[x+1]))))){
+			htmlDiv += "<div class='legendContentContainer'>"
+					+ "<div class='legendContentValue' " + generate_colors_styling(colors[i]) + "></div>" + "</div>"
+					+ "<div class='legendContentLabel'>"
+					+ df.format(Math.ceil(rangeColors[x])) + " "
+					+ currencyString + " - "
+					+ df.format(Math.floor(rangeColors[x+1])) + " "
+					+ currencyString + " </div><br/>";
+		}
 		x++;
 	}
 	htmlDiv += "<div class='legendContentContainer'>"

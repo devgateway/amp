@@ -406,6 +406,10 @@ public class ReportContextData
 		Map<String, ReportContextData> map = (Map<String, ReportContextData>) request.getSession().getAttribute("reportContext");
 		if (map == null)
 		{
+            if (request.getParameter("projectId") != null ) { //Budget integration type report
+                createIfNotExists = true;
+            }
+
 			if (createIfNotExists)
 				return createWithId(request.getSession(), reportId, false);
 			else

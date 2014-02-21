@@ -118,27 +118,29 @@ public class GroupReportDataXLS extends XLSExporter{
 	 */
 	protected void setColumnWidths()
 	{
-		int nrColumns = columnWidths.lastKey();
-		for(int i = 0; i <= nrColumns; i++)
-		{
-			try
-			{
-				if (columnWidths.containsKey(i))
-				{
-					sheet.setColumnWidth(i, Math.min(columnWidths.get(i), MAX_COLUMN_WIDTH * 256));
-				}
-				else
-				{
-					sheet.autoSizeColumn(i);
-					if (sheet.getColumnWidth(i) > MAX_COLUMN_WIDTH * 256)
-						sheet.setColumnWidth(i, MAX_COLUMN_WIDTH * 256);				
-				}
-			}
-			catch(Exception e)
-			{
-				logger.error(e);
-				// autoSizeColumn() or setColumnWidth() sometime fail
-			}
+        if (columnWidths != null && !columnWidths.isEmpty()) {
+            int nrColumns = columnWidths.lastKey();
+            for(int i = 0; i <= nrColumns; i++)
+            {
+                try
+                {
+                    if (columnWidths.containsKey(i))
+                    {
+                        sheet.setColumnWidth(i, Math.min(columnWidths.get(i), MAX_COLUMN_WIDTH * 256));
+                    }
+                    else
+                    {
+                        sheet.autoSizeColumn(i);
+                        if (sheet.getColumnWidth(i) > MAX_COLUMN_WIDTH * 256)
+                            sheet.setColumnWidth(i, MAX_COLUMN_WIDTH * 256);
+                    }
+                }
+                catch(Exception e)
+                {
+                    logger.error(e);
+                    // autoSizeColumn() or setColumnWidth() sometime fail
+                }
+            }
 		}		
 	}
 	

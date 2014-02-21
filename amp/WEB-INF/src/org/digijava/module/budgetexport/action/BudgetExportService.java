@@ -1,24 +1,22 @@
 package org.digijava.module.budgetexport.action;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.services.publicview.conf.Configuration;
 import org.digijava.module.aim.services.publicview.conf.ConfigurationUtil;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -45,12 +43,28 @@ public class BudgetExportService extends Action {
                         URLConnection connection = xmlScr.openConnection();
                         connection.addRequestProperty("Referer",xmlScrUrl);
                         connection.connect();
-
                         InputStream in = connection.getInputStream();
                         ServletOutputStream out = response.getOutputStream();
                         TransformerFactory tFactory = TransformerFactory.newInstance();
                         try {
-                            Transformer transformer = tFactory.newTransformer(new StreamSource(conf.getWorkFileDir() + tbl.getXslFile()));
+                            StreamSource xslSrc = new StreamSource(conf.getWorkFileDir() + tbl.getXslFile());
+                            Transformer transformer = tFactory.newTransformer(xslSrc);
+                            transformer.setErrorListener(new ErrorListener() {
+                                @Override
+                                public void warning(TransformerException e) throws TransformerException {
+                                    e.printStackTrace();
+                                }
+
+                                @Override
+                                public void error(TransformerException e) throws TransformerException {
+                                    e.printStackTrace();
+                                }
+
+                                @Override
+                                public void fatalError(TransformerException e) throws TransformerException {
+                                    e.printStackTrace();
+                                }
+                            });
                             transformer.transform (new StreamSource (in), new StreamResult(out));
                         } catch (TransformerConfigurationException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

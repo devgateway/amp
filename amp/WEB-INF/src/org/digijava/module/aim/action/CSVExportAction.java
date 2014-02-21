@@ -6,12 +6,14 @@
  */
 package org.digijava.module.aim.action;
 
+import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Iterator;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -242,7 +244,11 @@ public class CSVExportAction
               } else {
 	            s = ccell.getStringCellValue();
                 if (asXml) {
-                    columnTag.addElement(ccell.getStringCellValue());
+                    String strVal = ccell.getStringCellValue();
+                    if (strVal.indexOf('&') > -1) {
+                        strVal = strVal.replaceAll("&", "&amp;");
+                    }
+                    columnTag.addElement(strVal);
                 }
               }
 	          sb.append("\"").append(s).append("\"");
@@ -262,8 +268,9 @@ public class CSVExportAction
             out.close();
         } else {
             reportXML.setCodeset("UTF-8");
-            reportXML.output(response.getOutputStream());
-            response.getOutputStream().close();
+            ServletOutputStream sos = response.getOutputStream();
+            reportXML.output(sos);
+            sos.close();
         }
 
 	}else{				

@@ -9,7 +9,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
@@ -410,44 +409,63 @@ public class ReportsFilterPicker extends Action {
         }
 
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
-			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
-			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
+			filterForm.getFromYears().add(new BeanWrapperImpl(i));
+			filterForm.getToYears().add(new BeanWrapperImpl(i));
 		}
- 	 	
-		ArrayList<String> decimalseparators = new ArrayList<String>();
-		DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
-		String selecteddecimalseparator  = String.valueOf((usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator()));
-			 
-		 if (!selecteddecimalseparator.equalsIgnoreCase(".") && !selecteddecimalseparator.equalsIgnoreCase(",") ){
-			 decimalseparators.add(selecteddecimalseparator);
-		 }
-			 
-		 decimalseparators.add(".");
-		 decimalseparators.add(",");
-		 //decimalseparators.add(TranslatorWorker.translateText("CUSTOM",request));
-		 filterForm.setAlldecimalSymbols(decimalseparators);
-		 
-		 ArrayList<String> groupseparators = new ArrayList<String>();
-		 String selectedgroupingseparator  = String.valueOf(usedDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator());
-		 
-		 if (!selectedgroupingseparator.equalsIgnoreCase(".") && !selectedgroupingseparator.equalsIgnoreCase(",") ){
-			 groupseparators.add(selectedgroupingseparator);
-		 }
-			 
-		 groupseparators.add(".");
-		 groupseparators.add(",");
-		 //groupseparators.add(TranslatorWorker.translateText("CUSTOM",request));
-		 filterForm.setAllgroupingseparators(groupseparators);
-			 
-			 
-		 if (filterForm.getCustomDecimalSymbol() != null) {
-			 filterForm.setCustomDecimalSymbol(selecteddecimalseparator);
-			 filterForm.setCustomDecimalPlaces(usedDecimalFormat.getMaximumFractionDigits());
-			 filterForm.setCustomGroupCharacter(selectedgroupingseparator);
-			 filterForm.setCustomUseGrouping(usedDecimalFormat.isGroupingUsed());
-			 filterForm.setCustomGroupSize(usedDecimalFormat.getGroupingSize());
-		 }
-		 
+
+        DecimalFormat defaultDecimalFormat = FormatHelper.getDecimalFormat();
+        ArrayList<String> decimalseparators = new ArrayList<String>();
+
+        String selectedDecimalSeparator = filterForm.getCustomDecimalSymbolTxt();
+
+        if (selectedDecimalSeparator == null) {
+            selectedDecimalSeparator  = String.valueOf((defaultDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator()));
+        }
+
+         if (!selectedDecimalSeparator.equalsIgnoreCase(".") && !selectedDecimalSeparator.equalsIgnoreCase(",") ){
+             decimalseparators.add(selectedDecimalSeparator);
+         }
+
+         decimalseparators.add(".");
+         decimalseparators.add(",");
+         //decimalseparators.add(TranslatorWorker.translateText("CUSTOM",request));
+         filterForm.setAlldecimalSymbols(decimalseparators);
+
+         ArrayList<String> groupseparators = new ArrayList<String>();
+
+         String selectedGroupingSeparator = filterForm.getCustomGroupCharacterTxt();
+         if (selectedGroupingSeparator == null) {
+            selectedGroupingSeparator = String.valueOf(defaultDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator());
+         }
+
+         if (!selectedGroupingSeparator.equalsIgnoreCase(".") && !selectedGroupingSeparator.equalsIgnoreCase(",") ){
+             groupseparators.add(selectedGroupingSeparator);
+         }
+
+         groupseparators.add(".");
+         groupseparators.add(",");
+         //groupseparators.add(TranslatorWorker.translateText("CUSTOM",request));
+         filterForm.setAllgroupingseparators(groupseparators);
+
+         Integer customDecimalPlaces = filterForm.getCustomDecimalPlaces();
+         if (customDecimalPlaces == null) {
+             customDecimalPlaces = defaultDecimalFormat.getMaximumFractionDigits();
+         }
+
+         Integer groupingSize = filterForm.getCustomGroupSize();
+         if (groupingSize == null) {
+             groupingSize = defaultDecimalFormat.getGroupingSize();
+         }
+
+         if (filterForm.getCustomDecimalSymbol() != null) {
+             filterForm.setCustomDecimalSymbol(selectedDecimalSeparator);
+             filterForm.setCustomDecimalPlaces(customDecimalPlaces);
+             filterForm.setCustomGroupCharacter(selectedGroupingSeparator);
+             //filterForm.setCustomUseGrouping(usedDecimalFormat.isGroupingUsed());
+             filterForm.setCustomGroupSize(groupingSize);
+         }
+
+
 		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
 		//Only currencies having exchanges rates AMP-2620
 		List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
@@ -486,7 +504,7 @@ public class ReportsFilterPicker extends Action {
 	 */
 	public static void modeRefreshDropdowns(ReportsFilterPickerForm filterForm, int subsection) throws DgException {
 		 	 	
-		if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0)
+		if (((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0))
 		{
 			fillSettingsFormDropdowns(filterForm);
 		}

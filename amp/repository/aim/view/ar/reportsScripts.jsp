@@ -197,7 +197,7 @@ saveReportEngine	= null;
 		
 		YAHOO.namespace("YAHOO.amptab");
 		YAHOO.amptab.init = function() {
-		    		var tabView = new YAHOO.widget.TabView('tabview_container');
+		    var tabView = new YAHOO.widget.TabView('tabview_container');
 		};
 
 		YAHOO.amptab.handleCloseAbout = function() {
@@ -416,17 +416,15 @@ saveReportEngine	= null;
 	}
 	
 	function showFormat(){
-		YAHOO.amptab.init();
-		var maxFractionDigits=${maxFractionDigits};
-		ResetCustom(maxFractionDigits);
-		initFormatPopup();
+		//YAHOO.amptab.init();
+		//var maxFractionDigits=${maxFractionDigits};
+		//ResetCustom(maxFractionDigits);
+		//initFormatPopup();
 		var element = document.getElementById("customFormat");
 		element.style.display = "inline";
 		myPanel4.setBody(element);
 		myPanel4.center();
 		myPanel4.show();
-		
-		
 	}
 	
 	function changeRange(){
@@ -558,40 +556,38 @@ function ResetCustom(maxFractionDigits) {
 }
 
 function initFormatPopup(){
-			
-			
-		var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
-		
-		if (decimalSymbol.toLowerCase()=="custom"){
-			document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled=false;
-		
-		}else{
-			document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value="";
-			document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled=true;
-		}
-	
-		var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
-		
-		if (customDecimalPlaces.toLowerCase()=="-2"){
-			document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled=false;
-		}else{
-			document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value="";
-			document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled=true;
-		}
+    var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
 
-	
-		var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
-	
-		if (!customUseGrouping){
-			document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=true;
-		}else{
-			document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=false;
-			}
-		var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
-		document.aimReportsFilterPickerForm3.customGroupSize.disabled=!customUseGrouping;
-		document.aimReportsFilterPickerForm3.customGroupCharacterTxt.disabled=((!customUseGrouping) || ("custom"!=customGroupCharacter.toLowerCase()));
-	
-		changeFormat();
+    if (decimalSymbol.toLowerCase()=="custom"){
+        document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled=false;
+
+    }else{
+        document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value="";
+        document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled=true;
+    }
+
+    var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
+
+    if (customDecimalPlaces.toLowerCase()=="-2"){
+        document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled=false;
+    }else{
+        document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value="";
+        document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled=true;
+    }
+
+
+    var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
+
+    if (!customUseGrouping){
+        document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=true;
+    }else{
+        document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=false;
+        }
+    var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
+    document.aimReportsFilterPickerForm3.customGroupSize.disabled=!customUseGrouping;
+    document.aimReportsFilterPickerForm3.customGroupCharacterTxt.disabled=((!customUseGrouping) || ("custom"!=customGroupCharacter.toLowerCase()));
+
+    changeFormat();
 }
 
 function changeFormat(){

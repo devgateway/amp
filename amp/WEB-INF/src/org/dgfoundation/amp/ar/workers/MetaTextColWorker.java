@@ -55,6 +55,8 @@ public class MetaTextColWorker extends TextColWorker {
 		if (thisViewHasPercentage)
 		{
 			Double percentage = rs.getDouble(4);
+			if (rs.getObject(4) == null)
+				percentage = null;
 			if (percentage != null)
 			{
 				if (percentage < 0.00001)

@@ -32,7 +32,62 @@ public class HierarchyTests27 extends ReportsTestCase
 		suite.addTest(new HierarchyTests27("testZonesSectorsPercentages"));
 		
 		suite.addTest(new HierarchyTests27("testRegionsUnderZonesWithPercentages"));
+		
+		suite.addTest(new HierarchyTests27("testRegionEntriesWithoutPercentagesFlat"));
+		suite.addTest(new HierarchyTests27("testRegionEntriesWithoutPercentagesByRegion"));
+		
 		return suite;
+	}
+	
+	public void testRegionEntriesWithoutPercentagesFlat()
+	{
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17081-flat",
+				ColumnReportDataModel.withColumns("AMP-17081-flat",
+						SimpleColumnModel.withContents("Project Title", "SubNational no percentages", "SubNational no percentages"), 
+						SimpleColumnModel.withContents("Region", "SubNational no percentages", "[Anenii Noi County, Balti County]"), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2014",
+								SimpleColumnModel.withContents("Actual Commitments", "SubNational no percentages", "75 000"))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", "SubNational no percentages", "75 000")))
+					.withTrailCells(null, null, "75 000", "75 000"))
+				.withTrailCells(null, null, "75 000", "75 000")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Region: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 3, colSpan: 1))",
+					"(line 1:RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))");
+		
+		runReportTest("activity with percentageless location, flat", "AMP-17081-flat", new String[] {"SubNational no percentages"}, fddr_correct);
+	}
+	
+	public void testRegionEntriesWithoutPercentagesByRegion()
+	{
+		GroupReportModel fddr_correct = GroupReportModel.withGroupReports("AMP-17081-by-region",
+				GroupReportModel.withColumnReports("AMP-17081-by-region",
+						ColumnReportDataModel.withColumns("Region: Anenii Noi County",
+							SimpleColumnModel.withContents("Project Title", "SubNational no percentages", "SubNational no percentages"), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2014",
+									SimpleColumnModel.withContents("Actual Commitments", "SubNational no percentages", "75 000"))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Commitments", "SubNational no percentages", "75 000")))
+						.withTrailCells(null, "75 000", "75 000"),
+						ColumnReportDataModel.withColumns("Region: Balti County",
+							SimpleColumnModel.withContents("Project Title", "SubNational no percentages", "SubNational no percentages"), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2014",
+									SimpleColumnModel.withContents("Actual Commitments", "SubNational no percentages", "75 000"))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Commitments", "SubNational no percentages", "75 000")))
+						.withTrailCells(null, "75 000", "75 000"))
+					.withTrailCells(null, "75 000", "75 000"))
+				.withTrailCells(null, "75 000", "75 000")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 2, colSpan: 1))",
+					"(line 1:RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1))");
+		
+		runReportTest("activity with percentageless location, by region", "AMP-17081-by-region", new String[] {"SubNational no percentages"}, fddr_correct);		
 	}
 	
 	public void testSectorZonesPercentages()

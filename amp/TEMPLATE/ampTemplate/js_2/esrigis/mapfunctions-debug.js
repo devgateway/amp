@@ -679,31 +679,6 @@ function createPeaceBuildingFeatureLayer() {
  */
 var indicatoractive = false;
 function toggleindicatormap(id) {
-	//modifications start
-	if (highlightson){
-		closeHide("highlightLegend");
-		highlightson =false;
-	}
-	if(nationalactive)
-	{
-		togglenational();
-	}
-	if(id==7 && map.getLayer("indicator_8").visible)
-	{
-		var functionalayer = map.getLayer('countrymap');
-		map.getLayer("indicator_8").hide();
-		$('#indicatorLegend > .legendContent').hide('slow');
-		functionalayer.show();
-		indicatoractive = false;
-	}
-	else if(id==8 && map.getLayer("indicator_7").visible){
-		var functionalayer = map.getLayer('countrymap');
-		map.getLayer("indicator_7").hide();
-		$('#indicatorLegend > .legendContent').hide('slow');
-		functionalayer.show();
-		indicatoractive = false;
-	}
-//modifications end	
 	var layer = map.getLayer("indicator_" + id);
 	var functionalayer = map.getLayer('countrymap');
 	if (layer.visible) {
@@ -1042,19 +1017,6 @@ function getActivities(clear) {
  */
 
 function getNationalActivities() {
-	//update starts here
-	if(map.getLayer("indicator_8").visible){
-		toggleindicatormap('8');
-	}
-	if(map.getLayer("indicator_7").visible){
-		toggleindicatormap('7');
-	}
-	
-	if (highlightson){
-		closeHide("highlightLegend");
-		highlightson =false;
-	}
-//and ends here	
 	if(!nationalactive){
 		showLoading();
 		var xhrArgs = {
@@ -1350,18 +1312,6 @@ var implementationLevel = [ {
 } ];
 
 function getHighlights(level) {
-	if(map.getLayer("indicator_8").visible){
-		toggleindicatormap('8');
-	}
-	if(map.getLayer("indicator_7").visible){
-		toggleindicatormap('7');
-	}
-	if(nationalactive)
-	{
-		togglenational();
-	}
-	
-//modifications end	
 	if (highlightson){
 		closeHide("highlightLegend");
 		highlightson =false;

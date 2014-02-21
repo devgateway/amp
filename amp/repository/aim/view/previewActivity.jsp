@@ -1023,9 +1023,8 @@ function collapseAll() {
 		</module:display>
 		<hr>	
 		<module:display name="/Activity Form/Identification/Budget Classification" parentModule="/Activity Form/Identification">
-			
-			<digi:trn>Budget Classification</digi:trn>:<br />
 			<c:if test="${!empty aimEditActivityForm.identification.selectedbudgedsector}">
+			<digi:trn>Budget Classification</digi:trn>:<br />
 				<c:forEach var="selectedsector" items="${aimEditActivityForm.identification.budgetsectors}">
 					<c:if test="${aimEditActivityForm.identification.selectedbudgedsector==selectedsector.idsector}">
 						<li style="margin-left: 10px">

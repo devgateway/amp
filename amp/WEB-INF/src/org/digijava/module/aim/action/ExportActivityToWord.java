@@ -2532,26 +2532,11 @@ public class ExportActivityToWord extends Action {
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
-		
-		
-		if (FeaturesUtil.isVisibleField("Contract Number", ampContext)) {
-			columnName = TranslatorWorker.translateText("Contract Number");
-			generateOverAllTableRows(identificationSubTable1, columnName,
-					identification.getConvenioNumcont(), null);
-		}
 
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments", ampContext)) {
-			columnName = TranslatorWorker.translateText("Project Comments");
-			generateOverAllTableRows(identificationSubTable1, columnName,
-					processEditTagValue(request, identification.getProjectComments()), null);
-		}
-
-		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective", ampContext)){
 			columnName=TranslatorWorker.translateText("Objectives");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getObjectives()),null);
 		}
-		
 		ArrayList<AmpComments> colAux	= null;
         Collection ampFields = DbUtil.getAmpFields();
         
@@ -2597,12 +2582,24 @@ public class ExportActivityToWord extends Action {
 	            generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Objective Comments"), objTable,null);
 			}
 		}
+		
+		if (FeaturesUtil.isVisibleField("Contract Number", ampContext)) {
+			columnName = TranslatorWorker.translateText("Contract Number");
+			generateOverAllTableRows(identificationSubTable1, columnName,
+					identification.getConvenioNumcont(), null);
+		}
 
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Description", ampContext)){
 			columnName=TranslatorWorker.translateText("Description");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getDescription()),null);
 		}
-		
+
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments", ampContext)) {
+			columnName = TranslatorWorker.translateText("Project Comments");
+			generateOverAllTableRows(identificationSubTable1, columnName,
+					processEditTagValue(request, identification.getProjectComments()), null);
+		}
+
 		if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext)){
 			columnName=TranslatorWorker.translateText("NPD Clasification");
 			generateOverAllTableRows(identificationSubTable1,columnName,identification.getClasiNPD(),null);
@@ -2887,7 +2884,7 @@ public class ExportActivityToWord extends Action {
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
-		
+		//end identification
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Budget", ampContext)){
 			columnName=TranslatorWorker.translateText("Budget");
 

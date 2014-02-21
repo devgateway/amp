@@ -71,13 +71,13 @@ body {background:none;}
                       <tr>
                         <td width="100%">
 								<table width="98%" cellspacing="1" cellPadding="2">
-								<field:display feature="Identification" name="Project Title">
+								<module:display name="/Activity Form/Identification/Project Title" parentModule="/Activity Form/Identification">
 									<tr>
 										<td class="head2-name" width="100%" align="center" bgcolor="#ffffff">
                                 			<c:if test="${aimEditActivityForm.identification.title!=null}">${aimEditActivityForm.identification.title}</c:if>
 										</td>
 									</tr>	
-								</field:display>
+								</module:display>
 						</table>							
                         </td>
                       </tr>
@@ -87,6 +87,7 @@ body {background:none;}
                             <tr>
                               <td align="center" vAlign="top">
 								<table width="98%" cellspacing="0" class="prnt_tbl" cellpadding=4 style="border-collapse: collapse; border-color:#CCCCCC;" border="1">
+									<!-- here starts identification -->
 									<tr bgcolor="#f4f4f2">
 										<td  align="center" colspan="2" bgcolor=#C7D4DB>
 											<b><digi:trn key="aim:activityDetail">Activity Details</digi:trn></b>										
@@ -108,9 +109,9 @@ body {background:none;}
 									</tr>
                                     </field:display>
                                     </feature:display>
-                                 <feature:display name="Identification" module="Project ID and Planning">
+                                 
 										
-										<field:display name="Status" feature="Identification">							
+										<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">							
                                             <tr>
                                             	  <td align="right" valign="top" nowrap="nowrap" >
                                                   	<b>
@@ -132,30 +133,44 @@ body {background:none;}
 													   	</td>
 												</tr>
 											</c:if>                                                       			
-										</field:display>									
-                                        </feature:display>   								
-								<feature:display name="Identification" module="Project ID and Planning">
+										</module:display>							
 
-									<field:display feature="Identification" name="Project Comments">
-                                    	
-                                    <tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap">
-											<b>
-											<digi:trn key="aim:projectcomments">
-										    Project Comments</digi:trn>
-											</b>
-										</td>
-										<td bgcolor="#ffffff">
-	                                          <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
-												<c:set var="objKey" value="${aimEditActivityForm.identification.projectComments}" />
-												<digi:edit key="${objKey}"></digi:edit>
-	                                         </c:if>										
-                                         </td>
-									</tr>    
-									</field:display>
-									
-									<field:display feature="Identification" name="Objective">
-                                    	
+								<module:display name="/Activity Form/Identification/Type of Cooperation" parentModule="/Activity Form/Identification">
+								<tr>
+									<td width="27%" align="right" valign="top" nowrap="nowrap">
+										<b>
+											<digi:trn>Type of Cooperation</digi:trn>
+										</b></td>
+									<td bgcolor="#ffffff">
+										<c:out value="${aimEditActivityForm.identification.ssc_typeOfCooperation}"/>
+									</td>
+								</tr>
+								</module:display>
+
+								<module:display name="/Activity Form/Identification/Type of Implementation" parentModule="/Activity Form/Identification">
+									<tr>
+									<td width="27%" align="right" valign="top" nowrap="nowrap">
+										<b><digi:trn>Type of Implementation</digi:trn></b>
+									</td>
+									<td bgcolor="#ffffff">
+									<c:out value="${aimEditActivityForm.identification.ssc_typeOfImplementation}"/>
+									</tr>
+								</module:display>
+								<module:display name="/Activity Form/Funding/Modalities" parentModule="/Activity Form/Funding">
+								<tr>
+									<td width="27%" align="right" valign="top" nowrap="nowrap">
+									<b><digi:trn>Modalities</digi:trn></b>
+								</td>
+								<td bgcolor="#ffffff">
+									<c:out value="${aimEditActivityForm.identification.ssc_modalities}"/>
+									</td>
+								</tr>
+								</module:display>
+						
+
+
+							
+                                 <module:display name="/Activity Form/Identification/Objective" parentModule="/Activity Form/Identification">   	
                                     <tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -170,7 +185,8 @@ body {background:none;}
                                          </c:if>										
                                          </td>
 									</tr> 
-									   	<field:display name="Objective Comments" feature="Identification">
+									</module:display>
+									   	<module:display name="/Activity Form/Identification/Objective Comments" parentModule="/Activity Form/Identification">
 											<logic:present name="currentMember" scope="session">
 											<tr>
 												<td width="27%" align="right" valign="top" nowrap="nowrap" >
@@ -203,9 +219,159 @@ body {background:none;}
 												</td>
 											</tr>
 											</logic:present>
-										</field:display>
-									</field:display>
-									 </feature:display>
+										</module:display>
+													
+									<module:display name="/Activity Form/Identification/Description" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+											<digi:trn key="aim:description">
+										    Description</digi:trn>		
+									  </b>								</td>
+									  <td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.description!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.description}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										</td>
+									</tr>
+									</module:display>
+
+								<module:display name="/Activity Form/Identification/Project Comments" parentModule="/Activity Form/Identification">    	
+                                    <tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:projectcomments">
+										    Project Comments</digi:trn>
+											</b>
+										</td>
+										<td bgcolor="#ffffff">
+	                                          <c:if test="${aimEditActivityForm.identification.projectComments!=null}">
+												<c:set var="objKey" value="${aimEditActivityForm.identification.projectComments}" />
+												<digi:edit key="${objKey}"></digi:edit>
+	                                         </c:if>										
+                                         </td>
+									</tr>    
+									</module:display>
+									<module:display name="/Activity Form/Identification/Lessons Learned" parentModule="/Activity Form/Identification">
+                                    <tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b><digi:trn>Lessons Learned</digi:trn></b>
+											</td>
+											<td bgcolor="#ffffff">
+												<c:if test="${not empty aimEditActivityForm.identification.lessonsLearned}">
+													<bean:define id="lessonsLearnedKey">
+														<c:out value="${aimEditActivityForm.identification.lessonsLearned}"/>
+													</bean:define>
+													<b><digi:edit key="${lessonsLearnedKey}"></digi:edit></b>
+												</c:if>
+											</td>
+										</tr>
+									</module:display>
+									
+									<module:display name="/Activity Form/Identification/Project Impact" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn key="aim:Project Impact">Project Impact</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.projectImpact!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.projectImpact}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</module:display>						
+									<module:display name="/Activity Form/Identification/Activity Summary" parentModule="/Activity Form/Identification">
+										<tr>
+											<td width="27%" align="right" valign="top" nowrap="nowrap" >
+												<b>
+													<digi:trn>Activity Summary:</digi:trn>
+										  		</b>								
+										  	</td>
+										  	<td bgcolor="#ffffff">
+	                                        <c:if test="${aimEditActivityForm.identification.activitySummary!=null}">
+												<c:set var="descKey" value="${aimEditActivityForm.identification.activitySummary}" />
+												<digi:edit key="${descKey}"></digi:edit>
+	                                        </c:if>										
+	                                        </td>
+										</tr>
+									</module:display>
+									<module:display name="/Activity Form/Identification/Contracting Arrangements" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn>Contracting Arrangements</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.contractingArrangements!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.contractingArrangements}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</module:display>
+									<module:display name="/Activity Form/Identification/Conditionality and Sequencing" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b><digi:trn>Conditionality and Sequencing</digi:trn></b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.condSeq!=null}">
+											<c:set var="condSeq" value="${aimEditActivityForm.identification.condSeq}" />
+											<digi:edit key="${condSeq}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</module:display>
+									
+									<module:display name="/Activity Form/Identification/Linked Activities" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b><digi:trn>Linked Activities</digi:trn></b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.condSeq!=null}">
+											<c:set var="linkedActivities" value="${aimEditActivityForm.identification.linkedActivities}" />
+											<digi:edit key="${linkedActivities}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</module:display>
+									
+									<module:display name="/Activity Form/Identification/Conditionalities" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn>Conditionalities</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.conditionality!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.conditionality}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</module:display>
+
+									<module:display name="/Activity Form/Identification/Project Management" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn>Project Management</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.projectManagement!=null}">
+											<c:set var="projectManagement" value="${aimEditActivityForm.identification.projectManagement}" />
+											<digi:edit key="${projectManagement}"></digi:edit>
+                                        </c:if>										
+                                        </td>
+									</tr>
+									</module:display>									 
                                        <feature:display name="Identification" module="Project ID and Planning">   
 									<field:display name="Contract Number" feature="Planning">
 									<tr>
@@ -220,42 +386,29 @@ body {background:none;}
 									</tr>
                                     </field:display>                                    
                                                                       
-									<field:display feature="Identification" name="Description">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-											<digi:trn key="aim:description">
-										    Description</digi:trn>		
-									  </b>								</td>
-									  <td bgcolor="#ffffff">
-                                        <c:if test="${aimEditActivityForm.identification.description!=null}">
-											<c:set var="descKey" value="${aimEditActivityForm.identification.description}" />
-											<digi:edit key="${descKey}"></digi:edit>
-                                        </c:if>										</td>
-									</tr>
-									</field:display>
-									<field:display feature="Identification" name="Purpose">
+									<module:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
 											<b>
 											<digi:trn key="aim:purpose">
 										    Purpose</digi:trn> 
 									  </b>										</td>
-		    <td bgcolor="#ffffff">
+		    							<td bgcolor="#ffffff">
                                           <c:if test="${aimEditActivityForm.identification.purpose!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.identification.purpose}" />
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										</td>
 									</tr>
+									</module:display>
+									
+									
 									<module:display name="/Activity Form/Identification/Purpose Comments" parentModule="/Activity Form/Identification">
 									<logic:present name="aimEditActivityForm" property="comments.allComments">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-											<digi:trn key="aim:purposeComments">
-										    Purpose Comments</digi:trn>		
-									  </b>								</td>
-				       <td bgcolor="#ffffff">
+											<b><digi:trn key="aim:purposeComments">Purpose Comments</digi:trn></b>
+									  </td>
+				       					<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 										 	<logic:equal name="comments" property="key" value="Purpose Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
@@ -281,77 +434,9 @@ body {background:none;}
 										</logic:iterate>										</td>
 									</tr>
 									</logic:present>
-									
 									</module:display>
-									</field:display>
 
-									
-									
-									<field:display name="Project Impact" feature="Identification">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-												<digi:trn key="aim:Project Impact">Project Impact</digi:trn>
-									  		</b>								
-									  	</td>
-									  	<td bgcolor="#ffffff">
-                                        <c:if test="${aimEditActivityForm.identification.projectImpact!=null}">
-											<c:set var="descKey" value="${aimEditActivityForm.identification.projectImpact}" />
-											<digi:edit key="${descKey}"></digi:edit>
-                                        </c:if>										
-                                        </td>
-									</tr>
-									</field:display>
-									<module:display name="/Activity Form/Identification/Activity Summary" parentModule="/Activity Form/Identification">
-										<field:display name="Activity Summary" feature="Identification">
-										<tr>
-											<td width="27%" align="right" valign="top" nowrap="nowrap" >
-												<b>
-													<digi:trn>Activity Summary:</digi:trn>
-										  		</b>								
-										  	</td>
-										  	<td bgcolor="#ffffff">
-	                                        <c:if test="${aimEditActivityForm.identification.activitySummary!=null}">
-												<c:set var="descKey" value="${aimEditActivityForm.identification.activitySummary}" />
-												<digi:edit key="${descKey}"></digi:edit>
-	                                        </c:if>										
-	                                        </td>
-										</tr>
-										</field:display> 
-									</module:display>
-									<field:display name="Contracting Arrangements" feature="Identification">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-												<digi:trn>Contracting Arrangements</digi:trn>
-									  		</b>								
-									  	</td>
-									  	<td bgcolor="#ffffff">
-                                        <c:if test="${aimEditActivityForm.identification.contractingArrangements!=null}">
-											<c:set var="descKey" value="${aimEditActivityForm.identification.contractingArrangements}" />
-											<digi:edit key="${descKey}"></digi:edit>
-                                        </c:if>										
-                                        </td>
-									</tr>
-									</field:display>
-
-									<field:display name="Conditionalities" feature="Identification">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-												<digi:trn>Conditionalities</digi:trn>
-									  		</b>								
-									  	</td>
-									  	<td bgcolor="#ffffff">
-                                        <c:if test="${aimEditActivityForm.identification.conditionality!=null}">
-											<c:set var="descKey" value="${aimEditActivityForm.identification.conditionality}" />
-											<digi:edit key="${descKey}"></digi:edit>
-                                        </c:if>										
-                                        </td>
-									</tr>
-									</field:display> 
-									
-									<field:display feature="Identification" name="Results">
+									<module:display name="/Activity Form/Identification/Results" parentModule="/Activity Form/Identification">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
 											<b>
@@ -364,7 +449,10 @@ body {background:none;}
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										</td>
 									</tr>
+									</module:display>
+									
 									<logic:present name="aimEditActivityForm" property="comments.allComments">
+									<module:display name="/Activity Form/Identification/Results Comments" parentModule="/Activity Form/Identification">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -396,22 +484,20 @@ body {background:none;}
                                         	</logic:equal>
 										</logic:iterate>										</td>
 									</tr>
+									</module:display>
 									</logic:present>
-									</field:display>
 									
-									<field:display name="Accession Instrument" feature="Identification">
+									<module:display name="/Activity Form/Identification/Accession Instrument" parentModule="/Activity Form/Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
 									  <digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>		</b>								</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.identification.accessionInstrument > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.accessionInstrument}"/>
-											</c:if>
-&nbsp;										</td>
+											</c:if>&nbsp;</td>
 									</tr>
-									</field:display>
-									
-									<field:display name="Project Implementing Unit" feature="Identification">
+									</module:display>
+									<module:display name="/Activity Form/Identification/Project Implementing Unit" parentModule="/Activity Form/Identification">
 										<tr>
 											<td width="30%" align="right" valign="top" nowrap="nowrap">
 												<b><digi:trn>Project Implementing Unit</digi:trn></b>
@@ -422,28 +508,103 @@ body {background:none;}
 												</c:if>&nbsp;
 											</td>
 										</tr>
-									</field:display>
-									
-									<field:display name="A.C. Chapter" feature="Identification">
+									</module:display>
+
+									<module:display name="/Activity Form/Identification/A.C. Chapter" parentModule="/Activity Form/Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>
 									  <digi:trn key="aim:acChapter"> A.C. Chapter</digi:trn>	</b>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.identification.acChapter > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/>
-											</c:if>
-&nbsp;										</td>
+											</c:if>&nbsp;</td>
 									</tr>
-									</field:display>
-									<field:display name="Cris Number" feature="Identification">
+									</module:display>
+
+									<module:display name="/Activity Form/Identification/Cris Number" parentModule="/Activity Form/Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>
-									  <digi:trn key="aim:crisNumber">Cris Number</digi:trn>	</b>										</td>
+									  <digi:trn key="aim:crisNumber">Cris Number</digi:trn>	</b></td>
 										<td bgcolor="#ffffff">
-										<c:out value="${aimEditActivityForm.identification.crisNumber}"/>
-&nbsp;										</td>
+										<c:out value="${aimEditActivityForm.identification.crisNumber}"/>&nbsp;</td>
+									</tr>
+									</module:display>
+
+									<module:display name="/Activity Form/Identification/Procurement System" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:ProcurementSystem">Procurement System</digi:trn></b></td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/>
+											</c:if>&nbsp;</td>
+									</tr>
+									</module:display>
+										<module:display name="/Activity Form/Identification/Reporting System" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:ReportingSystem">Reporting System</digi:trn></b></td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/>
+											</c:if>&nbsp;</td>
+									</tr>
+									</module:display>								
+
+									<module:display name="/Activity Form/Identification/Audit System" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:AuditSystem">Audit System</digi:trn></b></td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/>
+											</c:if>&nbsp;</td>
+									</tr>
+									</module:display>
+
+									<module:display name="/Activity Form/Identification/Institutions" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:Institutions">Institutions</digi:trn></b></td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.institutions > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/>
+											</c:if>&nbsp;</td>
+									</tr>
+									</module:display>
+
+									<module:display name="/Activity Form/Identification/Project Category" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
+									  <digi:trn key="aim:ProjectCategory">Project Category</digi:trn>		</b>								</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/>
+											</c:if>&nbsp;</td>
+									</tr>
+									</module:display>
+									<module:display name="/Activity Form/Identification/Government Agreement Number" parentModule="/Activity Form/Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
+									  <digi:trn key="aim:step1:GovernmentAgreementNumTitle">Government Agreement Number</digi:trn>		</b>								</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/>&nbsp;
+										</td>
+									</tr>
+									</module:display>
+<!-- end identification in the same order as previewActivity -->									
+									<field:display name="Contracting Arrangements" feature="Identification">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn>Contracting Arrangements</digi:trn>
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        <c:if test="${aimEditActivityForm.identification.contractingArrangements!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.contractingArrangements}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                        </c:if>										
+                                        </td>
 									</tr>
 									</field:display>
+
 									<feature:display name="Budget" module="Project ID and Planning">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
@@ -527,17 +688,6 @@ body {background:none;}
 									</tr>
 									</field:display>
 		</feature:display>
-									<field:display name="Government Agreement Number" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
-									  <digi:trn key="aim:step1:GovernmentAgreementNumTitle">Government Agreement Number</digi:trn>		</b>								</td>
-										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/>&nbsp;
-										</td>
-									</tr>
-									</field:display>
-									
-
                                      
 
 										<field:display name="Humanitarian Aid" feature="Identification">
@@ -555,47 +705,6 @@ body {background:none;}
 	&nbsp;										</td>
 											</tr>
 										</field:display>
-									<field:display name="Procurement System" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:ProcurementSystem">Procurement System</digi:trn></b></td>
-										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/>
-											</c:if>
-&nbsp;										</td>
-									</tr>
-									</field:display>
-									<field:display name="Reporting System" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:ReportingSystem">Reporting System</digi:trn></b></td>
-										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/>
-											</c:if>
-&nbsp;										</td>
-									</tr>
-									</field:display>
-									<field:display name="Audit System" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:AuditSystem">Audit System</digi:trn></b></td>
-										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/>
-											</c:if>
-&nbsp;										</td>
-									</tr>
-									</field:display>
-									<field:display name="Institutions" feature="Identification">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:Institutions">Institutions</digi:trn></b></td>
-										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.institutions > 0}">
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/>
-											</c:if>
-&nbsp;										</td>
-									</tr>
-									</field:display>
-									
 									
 								
 									<field:display feature="Identification" name="Organizations and Project ID">

@@ -86,7 +86,8 @@ public class ReportsFilterPicker extends Action {
             ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
         }
 
-        if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && !showWorkspaceFilterInTeamWorkspace) {
+        if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && 
+        		ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
             showWorkspaceFilter = false;
         }
         filterForm.setShowWorkspaceFilter(showWorkspaceFilter);

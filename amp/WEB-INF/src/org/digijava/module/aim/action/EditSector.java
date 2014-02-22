@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action ;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -180,6 +181,17 @@ public class EditSector extends Action {
 									Long sectorId = ampSector.getParentSectorId().getAmpSectorId();
 									Integer schemeID = new Integer(sectorId.intValue());
 									editSectorForm.setSubSectors(SectorUtil.getAllChildSectors(sectorId));
+									//DbUtil.update is not flushing the session. Also everywhere flush is commented
+									//so when retrieving sector again with SectorUtil.getAllChildSectors(sectorId)
+									//all data is present on the recently saved sector. We update the subSectors with the current values
+									ArrayList <AmpSector> sectorList = new ArrayList <AmpSector> (editSectorForm.getSubSectors());
+									for (int i = 0; i <sectorList.size();i++) {
+										if (ampSector.getAmpSectorId().longValue() == sectorList.get(i).getAmpSectorId().longValue()) {
+											sectorList.set(i, ampSector);
+										}
+									}
+									editSectorForm.setSubSectors(sectorList);
+		
 									editSectorForm.setSectorCode(ampSector.getParentSectorId().getSectorCode());
 									editSectorForm.setSectorCodeOfficial(ampSector.getParentSectorId().getSectorCodeOfficial());
 									editSectorForm.setSectorName(ampSector.getParentSectorId().getName());
@@ -252,6 +264,17 @@ public class EditSector extends Action {
 									Long sectorId = ampSector.getParentSectorId().getAmpSectorId();
 									Integer schemeID = new Integer(sectorId.intValue());
 									editSectorForm.setSubSectors(SectorUtil.getAllChildSectors(sectorId));
+									//DbUtil.update is not flushing the session. Also everywhere flush is commented
+									//so when retrieving sector again with SectorUtil.getAllChildSectors(sectorId)
+									//all data is present on the recently saved sector. We update the subSectors with the current values
+									ArrayList <AmpSector> sectorList = new ArrayList <AmpSector> (editSectorForm.getSubSectors());
+									for (int i = 0; i <sectorList.size();i++) {
+										if (ampSector.getAmpSectorId().longValue() == sectorList.get(i).getAmpSectorId().longValue()) {
+											sectorList.set(i, ampSector);
+										}
+									}
+									editSectorForm.setSubSectors(sectorList);
+		
 									editSectorForm.setSectorCode(ampSector.getParentSectorId().getSectorCode());
 									editSectorForm.setSectorCodeOfficial(ampSector.getParentSectorId().getSectorCodeOfficial());
 									editSectorForm.setSectorName(ampSector.getParentSectorId().getName());

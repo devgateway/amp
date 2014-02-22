@@ -56,8 +56,8 @@ public abstract class AmpContactAutocompleteFieldPanel extends
     protected AmpContact getSelectedChoice(Long objId) {
         if (objId.equals(-1L)){
             AmpContact newContact = new AmpContact();
-            newContact.setName(TranslatorUtil.getTranslation("Change Name"));
-            newContact.setLastname(TranslatorUtil.getTranslation("Change Lastname"));
+            //newContact.setName(TranslatorUtil.getTranslation("Change Name"));
+            //newContact.setLastname(TranslatorUtil.getTranslation("Change Lastname"));
             newContact.setTemporaryId("_"+new Date().getTime());
 
             return newContact;
@@ -90,7 +90,7 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 	}
 
 	public String getAdditionalDetails(AmpContact contact) {
-		if (contact.getId() == null)
+		if (contact.getId() == null || contact.getId().equals(-1L))
 			return "";
 		StringBuilder details = new StringBuilder();
 		String emails = "";

@@ -969,8 +969,8 @@ public class DashboardUtil {
 			e.printStackTrace();
 		}
 		
-		if (filter.getTransactionType() == -1 && filter.getTransactionTypeFilter() == -1 && filter.getTransactionTypeQuickFilter() == -1) {
-			if(dashboard != null && dashboard.getTransactionTypeFilter() != null && dashboard.getTransactionTypeFilter() > -1) {
+		if (dashboard!=null && filter.getTransactionType() == -1 && filter.getTransactionTypeFilter() == -1 && filter.getTransactionTypeQuickFilter() == -1) {
+			if(dashboard.getTransactionTypeFilter() != null && dashboard.getTransactionTypeFilter() > -1) {
 				filter.setTransactionType(dashboard.getTransactionTypeFilter());
 				filter.setTransactionTypeFilter(dashboard.getTransactionTypeFilter());
 				filter.setTransactionTypeQuickFilter(dashboard.getTransactionTypeFilter());

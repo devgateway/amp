@@ -969,7 +969,7 @@ public class DashboardUtil {
 			e.printStackTrace();
 		}
 		
-		if (filter.getTransactionType() == -1 && filter.getTransactionTypeFilter() == -1 && filter.getTransactionTypeQuickFilter() == -1) {
+		if (dashboard!=null && filter.getTransactionType() == -1 && filter.getTransactionTypeFilter() == -1 && filter.getTransactionTypeQuickFilter() == -1) {
 			if(dashboard.getTransactionTypeFilter() != null && dashboard.getTransactionTypeFilter() > -1) {
 				filter.setTransactionType(dashboard.getTransactionTypeFilter());
 				filter.setTransactionTypeFilter(dashboard.getTransactionTypeFilter());
@@ -984,7 +984,7 @@ public class DashboardUtil {
 		if (filter.getStartYear() == null) {
 			Long year = null;
 			Long minYear = null;
-			if(dashboard.getMaxYearFilter() != null && dashboard.getMaxYearFilter() > 0 
+			if(dashboard!=null && dashboard.getMaxYearFilter() != null && dashboard.getMaxYearFilter() > 0 
 					&& dashboard.getMinYearFilter() != null && dashboard.getMinYearFilter() > 0){
 				filter.setDefaultStartYear(dashboard.getMinYearFilter().longValue());
 				filter.setStartYear(dashboard.getMinYearFilter().longValue());

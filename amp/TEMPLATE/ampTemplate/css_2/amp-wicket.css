@@ -477,10 +477,8 @@ div.trnpanel div.trn-row a:hover {
 .wicketClearRight{
     clear: right;
 }
-.wicketPledgePanel {
-	margin-top: 80px;
-	float: left;
-	margin-left:-520px;
+.holderDiv {
+	clear:left;
 }
 
 tr.wicketFundingRowItem:nth-child(even) {}

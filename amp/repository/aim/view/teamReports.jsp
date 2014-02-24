@@ -537,8 +537,7 @@ function validate() {
 
 
 <script language="javascript">
-		$("#checkAll").bind("change", function (obj){
-		$("input[name=selReports]").attr("checked", $("#checkAll").attr("checked"));
-	}
-	);
+    $("#checkAll").bind("change", function (obj){
+        $("input[name=selReports]").attr("checked", $("#checkAll").is(":checked"));
+    });
 </script>

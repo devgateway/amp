@@ -105,12 +105,12 @@ SaveReportEngine.prototype.success		= function (o) {
 	}
 };
 
-function refresh(isTab){
-	if (isTab){
+function refresh(isTab) {
+	if (isTab) {
 		document.forms[0].action = "/showDesktop.do";
 		document.forms[0].submit();
-	}else{
-		location.reload();
+	} else {
+		this.close();
 	}
 }
 

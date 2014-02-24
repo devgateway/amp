@@ -49,7 +49,7 @@ function resetFilter(){
         resetElement (aimReportsFilterPickerForm.selectedContractingAgencyGroups);
         resetElement (aimReportsFilterPickerForm.selectedContractingAgency);
         aimReportsFilterPickerForm.justSearch.checked = false;
-        
+       
         
         resetElement(aimReportsFilterPickerForm.selectedTypeOfAssistance);
         resetElement(aimReportsFilterPickerForm.selectedModeOfPayment);

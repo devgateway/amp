@@ -19,7 +19,11 @@ dojo.require("dojo.io.script");
 dojo.require("esri.dijit.Print");
 dojo.require("esri.tasks.query");
 dojo.require("esri.layers.osm");
-
+dojo.require("dojox.lang.functional");
+dojo.require("dojox.lang.functional.lambda");
+dojo.require("dojox.lang.functional.curry");
+dojo.require("dojox.lang.functional.fold");
+dojo.require("dijit.TooltipDialog");
 
 
 /*----variables---------*/
@@ -64,7 +68,7 @@ donorfix="";
 //Honduras
 //donorfix = "BID,BM,BCIE,ACDI,UE,USAID,UNDP/PNUD,AECID,GIZ,JICA";
 //Haiti
-//donorfix = "UE,USAID,Ambassade du Japon,AECID,AFD,BM-EXTFUND,ACDI,Ambassade de Norvege,BID,Ambassade du Venezuela";
+//donorfix = "MAECD,AECID,BID,BM,UE,AMBMexique,MRE";
 fixeddonorlist = donorfix.split(",");
 
 
@@ -109,7 +113,38 @@ var MapConstants = {
 			   "OSM" : 3
 		   }
 		};
+
+function loadScript(src, f) {
+	  var head = document.getElementsByTagName("head")[0];
+	  var script = document.createElement("script");
+	  script.src = src;
+	  var done = false;
+	  script.onload = script.onreadystatechange = function() { 
+	    // attach to both events for cross browser finish detection:
+	    if ( !done && (!this.readyState ||
+	      this.readyState == "loaded" || this.readyState == "complete") ) {
+	      done = true;
+	      if (typeof f == 'function') f();
+	      // cleans up a little memory:
+	      script.onload = script.onreadystatechange = null;
+	      head.removeChild(script);
+	    }
+	  };
+	  head.appendChild(script);
+	}
+
 function init() {
+	
+	//Ensure scripts are loaded after dojo modules are loaded
+	loadScript('/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js', function() { 
+		   console.log('esri.ux.layers.ClusterLayer-debug loaded');
+		 });
+	
+	loadScript('/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.AMPCluster.js', function() { 
+		   console.log('esri.ux.layers.AMPCluster loaded');
+		 });
+	
+	
 	var xhrArgs = {
 		url : "/esrigis/datadispatcher.do?getconfig=true",
 		handleAs : "json",
@@ -156,6 +191,7 @@ function init() {
 	var deferred = dojo.xhrGet(xhrArgs);
 
 	loading = dojo.byId("loadingImg");
+	
 	
 	if (!isOsm){
 		basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id : 'base'}); // Levels at which this layer will be visible);
@@ -643,7 +679,6 @@ function createPeaceBuildingFeatureLayer() {
  */
 var indicatoractive = false;
 function toggleindicatormap(id) {
-
 	var layer = map.getLayer("indicator_" + id);
 	var functionalayer = map.getLayer('countrymap');
 	if (layer.visible) {
@@ -687,7 +722,8 @@ function togglenational() {
 /**
  * show map on load
  */
-dojo.addOnLoad(init);
+//dojo.addOnLoad(init);
+dojo.ready(init);
 
 /**
  * 
@@ -810,7 +846,7 @@ function showStInfoWindow() {
 		+ "<tr>"
 		+ "<td align='center' width='200px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>"+translate('Name')+"</b></td>"
 		+ "<td align='center' width='100px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>"+translate('Type')+"</b></td>"
-		+ "<td align='center' width='300px' style='border-bottom: 1px solid gray;padding: 4px;'><b>Activity</b></td>"
+		+ "<td align='center' width='300px' style='border-bottom: 1px solid gray;padding: 4px;'><b>"+translate('Activity')+"</b></td>"
 		+ "</tr>";
 	if (map.infoWindow.isShowing) {
 		map.infoWindow.hide();
@@ -981,7 +1017,6 @@ function getActivities(clear) {
  */
 
 function getNationalActivities() {
-
 	if(!nationalactive){
 		showLoading();
 		var xhrArgs = {
@@ -1277,7 +1312,17 @@ var implementationLevel = [ {
 } ];
 
 function getHighlights(level) {
-
+	for ( var int = 0; int < indicatorLayerArray.length; int++) {
+		if (map.getLayer("indicator_"+indicatorLayerArray[int].id).visible){
+			toggleindicatormap(indicatorLayerArray[int].id);
+		}
+	}
+	
+	if(nationalactive)
+	{
+		togglenational();
+	}
+	
 	if (highlightson){
 		closeHide("highlightLegend");
 		highlightson =false;
@@ -1356,13 +1401,18 @@ function addResultsToMap(featureSet) {
 		break;
 	}
 
-	var breaks = getGVF(locations,typeFunding,5);
+	var breaks;
+	if (locations.length>5){
+		breaks = getGVF(locations,typeFunding,5);
+	}else{
+		breaks = getGVF(locations,typeFunding,locations.length);
+	}
 	var renderer = new esri.renderer.ClassBreaksRenderer(symbol, COUNT);
-	renderer.addBreak(breaks[0],breaks[1] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[4]));
-	renderer.addBreak(breaks[1],breaks[2] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[3]));
-	renderer.addBreak(breaks[2],breaks[3] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[2]));
-	renderer.addBreak(breaks[3],breaks[4] , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[1]));
-	renderer.addBreak(breaks[4],breaks[5] +10, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[0]));
+	renderer.addBreak(breaks[0]+1,breaks[1]+1 , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[4]));
+	renderer.addBreak(breaks[1]+1,breaks[2]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[3]));
+	renderer.addBreak(breaks[2]+1,breaks[3]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[2]));
+	renderer.addBreak(breaks[3]+1,breaks[4]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[1]));
+	renderer.addBreak(breaks[4]+1,breaks[5]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[0]));
 	
 
 	dojo.forEach(featureSet.features, function(feature) {
@@ -1445,13 +1495,15 @@ function showLegend(rangeColors, colors, typeFunding, currencyCode) {
 	htmlDiv += "<div class='legendHeader'>"+translate('Showing ' + typeFunding + ' for ' + currentLevel.name);
 	htmlDiv +=  "<br/><hr/></div>";
 	for ( var i = 4; i >= 0 ; i--) {
-		htmlDiv += "<div class='legendContentContainer'>"
-				+ "<div class='legendContentValue' " + generate_colors_styling(colors[i]) + "></div>" + "</div>"
-				+ "<div class='legendContentLabel'>"
-				+ df.format(Math.ceil(rangeColors[x])) + " "
-				+ currencyString + " - "
-				+ df.format(Math.floor(rangeColors[x+1])) + " "
-				+ currencyString + " </div><br/>";
+		if((!isNaN(Math.ceil(rangeColors[x])) && (!isNaN(Math.floor(rangeColors[x+1]))))){
+			htmlDiv += "<div class='legendContentContainer'>"
+					+ "<div class='legendContentValue' " + generate_colors_styling(colors[i]) + "></div>" + "</div>"
+					+ "<div class='legendContentLabel'>"
+					+ df.format(Math.ceil(rangeColors[x])) + " "
+					+ currencyString + " - "
+					+ df.format(Math.floor(rangeColors[x+1])) + " "
+					+ currencyString + " </div><br/>";
+		}
 		x++;
 	}
 	htmlDiv += "<div class='legendContentContainer'>"
@@ -1601,16 +1653,16 @@ function MapFindStructure(activity, structureGraphicLayer) {
 	
 	
 	var noTabTemplate =	"<table style='font-size: 11px;'>"
-		+ "<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>$"+ translate('Structure Name') +"</b></td></tr>"
+		+ "<tr><td style='padding-right:20px;'><b>"+translate('Name')+"<b></td><td><b>${Structure Name}</b></td></tr>"
 		+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
-		+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>"+ translate('Structure Type')+"</td></tr>"
-		+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>"+ translate('Structure Description')+"</td></tr>"
-		+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>"+ translate('Coordinates')+"</td></tr></table>";
+		+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Type')+"<b></td><td>${Structure Type}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Description')+"<b></td><td>${Structure Description}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Coordinates')+"<b></td><td>${Coordinates}</td></tr></table>";
 
 	var tabTemplate = "<div id='infotabs' class='infotab'>"
 
-		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>"+ translate('Show Info')+"</a>"
-		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>"+ translate('Show Image')+"</a>"
+		+ "<a class='tab_vis_link' id='aStrInfo' href='#' onclick='changeTabStructureInfo(true);' style='display: none;'>Show Info</a>"
+		+ "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Show Image</a>"
 		
 		+ "<div id='strInfo' ><br /><br />"+ noTabTemplate +"</div>"
 		+ "<div id='strImage' align='center' style='display:none;' >${Structure Image}</div>"
@@ -1762,7 +1814,7 @@ function CluterStructures(){
 		+ stshowimage
 		
 		+ "<div id='strInfo'>"+ infoTemplate +"</div>"
-		+ showImageDiv
+		+ "<div id='strImage'>${Structure Image}</div>"
 		+ "</div>";
 		
 	//debugger;
@@ -2079,9 +2131,17 @@ $(window).resize(function () {
 		clearTimeout(resizeTimer);
 		resizeTimer = setTimeout( function() {
 		$("#map").css("width","100%").css("height","100%");
-		map.resize();
-		map.reposition();
+			if (map){
+				map.resize();
+				map.reposition();
+			}
 		}, 500);   
    
 });
 
+//position indicator map legend
+$(document).ready(function() {
+	var wndHeight = $(window).height();
+	var topPos = (wndHeight - 177) + "px";
+	$("div[id^='indicator_legend_']").css("top", topPos);
+});

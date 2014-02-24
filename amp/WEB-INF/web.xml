@@ -191,8 +191,7 @@
 				/repository/visualization/struts-config.xml,
 				/repository/xmlpatcher/struts-config.xml,
 				/repository/esrigis/struts-config.xml,
-				/repository/budgetexport/struts-config.xml,
-				/repository/gpi/struts-config.xml				
+				/repository/budgetexport/struts-config.xml				
 			</param-value>
 		</init-param>
 		<init-param>

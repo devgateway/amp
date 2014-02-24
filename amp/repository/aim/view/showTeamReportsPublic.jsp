@@ -513,7 +513,7 @@ function submitForm(action){
 												<tr>
 													<td style="font-size: 11px; font-family: Aria, sans-serif;">
 													<c:if test="${reportNumber != 0}">
-														<c:set target="${urlParamsPagination}" property="action" value="getPage" />
+														<c:set target="${urlParamsPagination}" property="action"value="getPage" />
 														 <c:if test="${aimTeamReportsForm.currentPage >0}">
 															<c:set target="${urlParamsFirst}" property="page" value="0" />
 															<c:set target="${urlParamsFirst}" property="action" value="getPage" />

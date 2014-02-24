@@ -49,18 +49,27 @@
       var showexpanded=false;
       var stshowimage = "";
       var highlightColorsSelectedOption = <%= FeaturesUtil.getEsriMapsRegionsHighlightSelectedColourScheme()%>
+      
+     
     </script>
     <field:display feature="Structures" name="Show Image">
     	<script type="text/javascript">
     		stshowimage = "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>"+ translate('Show Image')+"</a>"
     	</script>
     </field:display>
+    
     <feature:display name="Structures On Load" module="Map Module">
 		<script type="text/javascript">
 			structureVisible = true;
 		</script>
-	</feature:display>	
-    
+	</feature:display>
+	
+	<field:display feature="Structures On Load" name="Structures Show Expanded">
+			<script type="text/javascript">
+		showexpanded = true;
+		</script>
+	</field:display>
+	
     <!-- Map Scripts -->
     <script type="text/javascript"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
     <script type="text/javascript" src="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/?v=3.0"></script>
@@ -70,8 +79,7 @@
    	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-debug.js?versiondate=20130712"/>"></script>
    	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
    	
-   	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
-   	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.AMPCluster.js"/>"></script>
+   	
    	
 	<field:display   name="Html Printing" feature="Printing">
 		<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/map-printingfunctions-html.js"/>"></script>
@@ -369,14 +377,10 @@
             value = "<digi:trn>Select a point</digi:trn>";
             return value;
          }
-        if(text == "Name") {
-            value = "<digi:trn>Name</digi:trn>";
+        if(text == "Structure Details") {
+            value = "<digi:trn>Structure Details</digi:trn>";
             return value;
-         }        
-        if(text == "Type") {
-            value = "<digi:trn>Type</digi:trn>";
-            return value;
-         }       
+         }
         if(text == "Description") {
             value = "<digi:trn>Description</digi:trn>";
             return value;
@@ -385,28 +389,12 @@
             value = "<digi:trn>Coordinates</digi:trn>";
             return value;
          }
-        if(text == "Show Image") {
-            value = "<digi:trn>Show Image</digi:trn>";
+        if(text == "Name") {
+            value = "<digi:trn>Name</digi:trn>";
             return value;
          }
-        if(text == "Show Info") {
-            value = "<digi:trn>Show Info</digi:trn>";
-            return value;
-         }
-        if(text == "Structure Details") {
-            value = "<digi:trn>Structure Details</digi:trn>";
-            return value;
-         }
-        if(text == "Structure Name") {
-            value = "<digi:trn>Structure Name</digi:trn>";
-            return value;
-         }
-        if(text == "Structure Type") {
-            value = "<digi:trn>Structure Type</digi:trn>";
-            return value;
-         }
-        if(text == "Structure") {
-            value = "<digi:trn>Structure</digi:trn>";
+        if(text == "Type") {
+            value = "<digi:trn>Type</digi:trn>";
             return value;
          }
         return text;

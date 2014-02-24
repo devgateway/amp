@@ -47,8 +47,7 @@ function putLoading(){
 
 
 			
-			
-				<ul style="height: 29px;" class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+				<ul style="overflow: hidden" class="desktop_tab_base ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 						<c:if test="${selectedTab == '0'}">
 							<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
 								<a class="tab_link">
@@ -191,6 +190,7 @@ function putLoading(){
 					</c:if>
 					</field:display>
 				</ul>
+
 				
 				<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 				<!-- SubTabs -->

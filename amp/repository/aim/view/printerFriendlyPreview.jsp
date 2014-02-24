@@ -2407,7 +2407,7 @@ body {background:none;}
 											</field:display>
 											</module:display>
 		
-        									<module:display name="/Activity Form/Related Organizations/Regional Group" parentModule="/Activity Form/Related Organizations">
+        									<feature:display name="Regional Group" module="Organizations">
 											<field:display name="Regional Group" feature="Regional Group">
 											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">
@@ -2447,7 +2447,7 @@ body {background:none;}
 												</table>
 											</logic:notEmpty><br/>
 											</field:display>
-                                  	</module:display>
+                                  	</feature:display>
                                            </td>
 									</tr>								
 									</module:display>									 

@@ -71,10 +71,6 @@ donorfix="";
 //donorfix = "MAECD,AECID,BID,BM,UE,AMBMexique,MRE";
 fixeddonorlist = donorfix.split(",");
 
-
-
-
-
 /*
 function print(){
 	 var template = new esri.tasks.PrintTemplate();
@@ -679,6 +675,29 @@ function createPeaceBuildingFeatureLayer() {
  */
 var indicatoractive = false;
 function toggleindicatormap(id) {
+	if (highlightson){
+		closeHide("highlightLegend");
+		highlightson =false;
+	}
+	if(nationalactive)
+	{
+		togglenational();
+	}
+
+	var callFunctional=false;
+	for ( var int = 0; int < indicatorLayerArray.length; int++) {
+		if (map.getLayer("indicator_"+indicatorLayerArray[int].id).visible  && indicatorLayerArray[int].id!=id){
+			map.getLayer("indicator_"+indicatorLayerArray[int].id).hide();
+			callFunctional=true;
+		}
+	}
+	if(callFunctional){ //callit once if the previous code was executed
+		var functionalayer = map.getLayer('countrymap');
+		$('#indicatorLegend > .legendContent').hide('slow');
+		functionalayer.show();
+		indicatoractive = false;
+	}
+	
 	var layer = map.getLayer("indicator_" + id);
 	var functionalayer = map.getLayer('countrymap');
 	if (layer.visible) {
@@ -1015,8 +1034,22 @@ function getActivities(clear) {
 /**
  * 
  */
-
+function hideAllIndicator(){
+	for ( var int = 0; int < indicatorLayerArray.length; int++) {
+		  if (map.getLayer("indicator_"+indicatorLayerArray[int].id).visible){
+		   toggleindicatormap(indicatorLayerArray[int].id);
+		  }
+		 }	
+}
 function getNationalActivities() {
+
+	hideAllIndicator();
+	
+	if (highlightson){
+		closeHide("highlightLegend");
+		highlightson =false;
+	}
+		
 	if(!nationalactive){
 		showLoading();
 		var xhrArgs = {
@@ -1312,11 +1345,14 @@ var implementationLevel = [ {
 } ];
 
 function getHighlights(level) {
-	for ( var int = 0; int < indicatorLayerArray.length; int++) {
-		if (map.getLayer("indicator_"+indicatorLayerArray[int].id).visible){
-			toggleindicatormap(indicatorLayerArray[int].id);
+
+	hideAllIndicator();
+		if(nationalactive)
+		{
+			togglenational();
 		}
-	}
+	
+	hideAllIndicator();
 	
 	if(nationalactive)
 	{

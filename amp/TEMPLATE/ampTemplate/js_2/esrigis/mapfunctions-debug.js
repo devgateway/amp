@@ -752,7 +752,7 @@ function doBuffer(evt) {
 	map.infoWindow.hide();
 	if (searchactive && searchdistance) {
 		showLoading();
-		map.graphics.clear();
+		//map.graphics.clear();
 		var params = new esri.tasks.BufferParameters();
 		params.geometries = [ evt.mapPoint ];
 
@@ -830,9 +830,6 @@ function findbydistance(evt) {
 			distParams.distanceUnit = esri.tasks.GeometryService.UNIT_KILOMETER;
 			distParams.geometry1 = evt.mapPoint;
 			distParams.geometry2 = dojo.clone(structurespoint[int].geometry);
-
-            delete structurespoint[int].geometry.attributes;
-			//speed up request data removing not needed elements,Sebas
 			distParams.geometry2.attributes={};			
 			distParams.geodesic = true;
 

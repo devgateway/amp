@@ -500,7 +500,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
                                 //it should work fine for IE7, FF, Chrome
 								var clusterLabel=new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length).setOffset(0, -5),{baseGraphic:clusterGraphic})
 								clusterGraphic.attributes=dojo.mixin(clusterGraphic.attributes,{textSymbol:clusterLabel})
-								this.add(clusterGraphic)   
+								this.add(clusterGraphic);
 								this.add(clusterLabel);
 
                             } else { //single graphic

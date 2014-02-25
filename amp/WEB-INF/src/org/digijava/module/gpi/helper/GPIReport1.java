@@ -3,11 +3,13 @@ package org.digijava.module.gpi.helper;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -49,7 +51,6 @@ public class GPIReport1 extends GPIAbstractReport {
 	@Override
 	public Collection<GPIReportAbstractRow> generateReport(Collection<AmpGPISurvey> commonData, GPIFilter filter) {
 
-		// TODO: filter by donor and donor org (at funding level below).
 		Collection<GPIReportAbstractRow> list = new ArrayList<GPIReportAbstractRow>();
 		GPIReport1Row auxRow = null;
 		int yearRange = filter.getEndYer() - filter.getStartYear() + 1;
@@ -72,67 +73,78 @@ public class GPIReport1 extends GPIAbstractReport {
 				AmpGPISurvey auxAmpGPISurvey = iterCommonData.next();
 				AmpActivityVersion auxActivity = auxAmpGPISurvey.getAmpActivityId();
 
-				Iterator<AmpOrgRole> iDonors = auxActivity.getOrgrole().iterator();
-				while (iDonors.hasNext()) {
-					AmpOrgRole role = iDonors.next();
-					if (!"Donor".equals(role.getRole().getName())) {
-						continue;
-					}
+				// Filter by years. Check if the project date
+				// falls into one of the date ranges.
+				if (GPIUtils.getYear(auxActivity.getActualCompletionDate(), startDates, endDates, filter.getStartYear(), filter.getEndYer()) == 0) {
+					// Ignore this project.
+					continue;
+				}
+
+				// Filter by sectors.
+				if (filter.getSectors() != null && !GPIUtils.containSectors(filter.getSectors(), auxActivity.getSectors())) {
+					// Ignore this AmpGPISurvey and continue with the next.
+					continue;
+				}
+
+				// Filter by status.
+				if (filter.getStatuses() != null
+						&& !GPIUtils.containStatus(filter.getStatuses(), CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, auxActivity.getCategories()))) {
+					// Ignore this AmpGPISurvey and continue with the next.
+					continue;
+				}
+
+				// Create set of years (no duplicates) that will be used to
+				// populate the report.
+				// ie: if an activity has a funding with 3 funding details (each
+				// commitment/disbursement/expenditure) will add it ONLY ONE
+				// TIME per year.
+				Set<Integer> yearsFromFunding = new HashSet<Integer>();
+
+				Iterator<AmpFunding> iFunding = auxActivity.getFunding().iterator();
+				while (iFunding.hasNext()) {
+					AmpFunding auxFunding = iFunding.next();
 
 					// Filter by organization.
-					if (filter.getDonors() != null && !GPIUtils.containOrganisations(filter.getDonors(), role.getOrganisation())) {
+					if (filter.getDonors() != null && !GPIUtils.containOrganisations(filter.getDonors(), auxFunding.getAmpDonorOrgId())) {
 						// Ignore this AmpGPISurvey and continue with the next.
 						continue;
 					}
 
 					// Filter by organization group.
-					if (filter.getDonorGroups() != null && !GPIUtils.containOrgGrps(filter.getDonorGroups(), role.getOrganisation().getOrgGrpId())) {
+					if (filter.getDonorGroups() != null && !GPIUtils.containOrgGrps(filter.getDonorGroups(), auxFunding.getAmpDonorOrgId().getOrgGrpId())) {
 						// Ignore this AmpGPISurvey and continue with the next.
 						continue;
 					}
 
-					// Filter by years. Check if the project date
-					// falls into one of the date ranges.
-					int year = GPIUtils.getYear(auxActivity.getActualCompletionDate(), startDates, endDates, filter.getStartYear(), filter.getEndYer());
-					if (year == 0) {
-						// Ignore this project.
-						continue;
+					Iterator<AmpFundingDetail> iFD = auxFunding.getFundingDetails().iterator();
+					while (iFD.hasNext()) {
+						AmpFundingDetail auxFundingDetail = iFD.next();
+						Calendar calendar = Calendar.getInstance();
+						calendar.setTime(auxFundingDetail.getTransactionDate());
+						yearsFromFunding.add(calendar.get(Calendar.YEAR));
 					}
 
-					// Filter by sectors. If sectorsFilter is not null then
-					// filter
-					// by the sectors in that list.
-					if (filter.getSectors() != null && !GPIUtils.containSectors(filter.getSectors(), auxActivity.getSectors())) {
-						// Ignore this AmpGPISurvey and continue with the next.
-						continue;
+					Iterator<Integer> iYears = yearsFromFunding.iterator();
+					while (iYears.hasNext()) {
+						Integer auxYear = iYears.next();
+
+						auxRow = new GPIReport1Row();
+
+						// Check survey answers for this
+						// AmpGPISurvey.
+						boolean[] showColumn = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_1, auxAmpGPISurvey);
+
+						if (showColumn[0]) {
+							auxRow.setColumn1(new Integer(1));
+						} else {
+							auxRow.setColumn1(new Integer(0));
+						}
+						auxRow.setColumn2(new Integer(1));
+						auxRow.setColumn3(0);
+						auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
+						auxRow.setYear(auxYear);
+						list.add(auxRow);
 					}
-
-					// Filter by status. If statusFilter is not null then filter
-					// by
-					// the statuses in that list.
-					if (filter.getStatuses() != null
-							&& !GPIUtils.containStatus(filter.getStatuses(), CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, auxActivity.getCategories()))) {
-						// Ignore this AmpGPISurvey and continue with the next.
-						continue;
-					}
-
-					auxRow = new GPIReport1Row();
-
-					// Check survey answers for this
-					// AmpGPISurvey.
-					boolean[] showColumn = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_1, auxAmpGPISurvey);
-
-					if (showColumn[0]) {
-						auxRow.setColumn1(new Integer(1));
-					} else {
-						auxRow.setColumn1(new Integer(0));
-					}
-					auxRow.setColumn2(new Integer(1));
-					auxRow.setColumn3(0);
-					auxRow.setDonorGroup(role.getOrganisation().getOrgGrpId());
-					auxRow.setYear(year);
-					list.add(auxRow);
-
 				}
 			}
 		} catch (Exception e) {

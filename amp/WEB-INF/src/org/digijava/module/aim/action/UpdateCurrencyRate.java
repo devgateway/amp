@@ -260,7 +260,10 @@ public class UpdateCurrencyRate extends Action {
                         cRate.setToCurrencyCode(crForm.getUpdateCRateCode());
                         cRate.setFromCurrencyCode(baseCurrency);
                         cRate.setDataSource(CurrencyUtil.RATE_BY_HAND);
-                    	if (crForm.getDoAction().equals("validateRateExistance")) {
+                    	logger.info("Rate: "+cRate.getFromCurrencyCode()+" to " +
+                        	    cRate.getToCurrencyCode()+"-"+ cRate.getExchangeRateDate()+" value "+cRate.getExchangeRate());
+                        	
+                        if (crForm.getDoAction().equals("validateRateExistance")) {
                     		response.setHeader("Cache-Control","no-cache");
                     		PrintWriter out = response.getWriter();				
                     	
@@ -280,6 +283,7 @@ public class UpdateCurrencyRate extends Action {
                     	
                     	}
                     	else {
+                    		logger.info("Saving rate ");
                     		saveRate (cRate,crForm);
                     	}
                     }

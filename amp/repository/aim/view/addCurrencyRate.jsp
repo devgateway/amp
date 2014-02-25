@@ -183,7 +183,8 @@
 				console.log ('Success');
 				
 			},
-			failure: function() {
+			failure: function(error) {
+				//alert (error);
 				console.log('Error');
 			}
 			};

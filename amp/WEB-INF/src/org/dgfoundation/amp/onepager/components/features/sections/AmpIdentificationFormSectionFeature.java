@@ -98,7 +98,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));			
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
-			title.get("activityFormFeature:activityForm:featureList:0:featureItem:title:trnContainer");
+			
 		if ("true".equalsIgnoreCase(FeaturesUtil
 				.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL))) {
 			title.getTextAreaContainer().add(

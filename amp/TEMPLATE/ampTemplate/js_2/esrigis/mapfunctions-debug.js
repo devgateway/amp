@@ -1444,11 +1444,11 @@ function addResultsToMap(featureSet) {
 		breaks = getGVF(locations,typeFunding,locations.length);
 	}
 	var renderer = new esri.renderer.ClassBreaksRenderer(symbol, COUNT);
-	renderer.addBreak(breaks[0]+1,breaks[1]+1 , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[4]));
-	renderer.addBreak(breaks[1]+1,breaks[2]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[3]));
-	renderer.addBreak(breaks[2]+1,breaks[3]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[2]));
-	renderer.addBreak(breaks[3]+1,breaks[4]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[1]));
-	renderer.addBreak(breaks[4]+1,breaks[5]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[0]));
+	renderer.addBreak(breaks[0],breaks[1]+1 , new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[4]));
+	renderer.addBreak(breaks[1],breaks[2]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[3]));
+	renderer.addBreak(breaks[2],breaks[3]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[2]));
+	renderer.addBreak(breaks[3],breaks[4]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[1]));
+	renderer.addBreak(breaks[4],breaks[5]+1, new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[0]));
 	
 
 	dojo.forEach(featureSet.features, function(feature) {

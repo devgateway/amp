@@ -667,7 +667,7 @@ public class DbHelper {
 	protected static Map<Long, Long> getLocationRegions(Set<Long> allUsedAcvlIDs, String impLevel)
 	{
 		final String findLocationRegionsQuery = 
-				String.format("SELECT acvl.id, getlocationidbyimplloc(acvl.id, '%s'::character varying) AS region_id FROM amp_category_value_location acvl WHERE acvl.id IN (" + Util.toCSStringForIN(allUsedAcvlIDs) + ")",
+				String.format("SELECT acvl.id, getlocationidbyimpllocMap(acvl.id, '%s'::character varying) AS region_id FROM amp_category_value_location acvl WHERE acvl.id IN (" + Util.toCSStringForIN(allUsedAcvlIDs) + ")",
 						impLevel);		
 		final Map<Long, Long> locationToRegion = new HashMap<Long, Long>();
 		PersistenceManager.getSession().doWork(new Work()
@@ -705,8 +705,9 @@ public class DbHelper {
 	{
 		// collect all the location Ids existant in the system
 		Set<Long> allUsedAcvlIDs = new HashSet<Long>();
-		for(Object[] obj:fundingDets)
+		for(Object[] obj:fundingDets){
 			allUsedAcvlIDs.add((Long) obj[1]);
+		}
 
 		Map<Long, Long> locationToRegion = getLocationRegions(allUsedAcvlIDs, impLevel); // Map<acvl.id, region.id>
 		Map<Long, AmpCategoryValueLocations> regionLocations = getLocationsById(new HashSet<Long>(locationToRegion.values())); //Map<region.id, region>
@@ -746,9 +747,15 @@ public class DbHelper {
         while(it2.hasNext())
         {
             Long locId = it2.next();
-            Long regionId = locationToRegion.get(locId);
-            
-            if (regionId == null)
+            //Long regionId = locationToRegion.get(locId);
+            Long regionId = null;
+            for (Map.Entry<Long, Long> e : locationToRegion.entrySet()) {
+            	if (e.getValue()==locId){
+            		regionId = e.getKey();
+            		break;
+            	}
+            }
+            if (regionId!= 0L && regionId == null)
             	continue;
 
         	FundingCalculationsHelper cal = new FundingCalculationsHelper();
@@ -778,8 +785,8 @@ public class DbHelper {
             totalMtef = cal.getTotalMtef(); // no adjustment for MTEF
             
             SimpleLocation sl = new SimpleLocation();
-            sl.setName(regionLocations.get(regionId).getName());
-            sl.setGeoId(regionLocations.get(regionId).getGeoCode());
+            sl.setName(regionLocations.get(locId).getName());
+            sl.setGeoId(regionLocations.get(locId).getGeoCode());
             sl.setCommitments(totalcommitment.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP).toString());
             sl.setDisbursements(totaldisbursement.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP).toString());
             sl.setExpenditures(totalexpenditures.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP).toString());

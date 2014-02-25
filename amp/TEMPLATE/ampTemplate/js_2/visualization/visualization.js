@@ -613,7 +613,8 @@ function resetToDefaults(){
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyIdDefault").value;
 	document.getElementById("currencyQuickFilter_dropdown").value = document.getElementById("currencyIdDefault").value;
 	document.getElementById("fiscalCalendar_dropdown_Id").value = document.getElementById("fiscalCalendarId").value;
-	
+	callbackChildren.call(document.getElementById("fiscalCalendar_dropdown_Id"), null);	
+		
 	
 	document.getElementById("showAmountsInThousands").value = document.getElementById("showAmountsInThousandsDefault").value;
 	document.getElementById("show_amounts_in_thousands").value = document.getElementById("showAmountsInThousandsDefault").value;
@@ -2439,7 +2440,6 @@ function changeChart(e, chartType, container, useGeneric){
 	var decimalsToShow = document.getElementById("decimalsToShow").value;
 	var currCode = document.getElementById("currencyCode").value;
 	var divide =  document.getElementById(container+"Divide").checked;
-	
 	
 	
 	var flashvars = { 

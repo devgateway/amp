@@ -161,7 +161,7 @@
  </script>
 </head>
   
-  <body class="claro" style="font-family: Arial Unicode MS,Arial,sans-serif;">
+  <body>
    	<a id="ashowmap" onclick="showMapInTooltipDialog(this,false);" style="cursor: pointer;"><digi:trn>Show Map</digi:trn></a>
   </body>
 </html>

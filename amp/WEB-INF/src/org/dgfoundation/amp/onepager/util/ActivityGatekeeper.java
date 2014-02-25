@@ -72,7 +72,7 @@ public class ActivityGatekeeper {
             }
             else{
                 if ((keycode.get(id) == null && timestamp.get(id) == null && userEditing.get(id) == null) ||
-                    (keycode.get(id) != null && userEditing.get(id) == userId))
+                    (keycode.get(id) != null && userEditing.get(id).longValue() == userId.longValue()))
                     return REFRESH_LOCK_EXPIRED; //lock was cleared on purpose, page probably getting refreshed now
                 else
                     return REFRESH_LOCK_LOCKED;

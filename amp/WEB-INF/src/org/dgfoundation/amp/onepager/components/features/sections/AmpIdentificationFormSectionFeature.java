@@ -87,13 +87,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			
 			IModel<String> m = new PropertyModel<String>(am, "name");
 			title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true);
-			if ("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL))){
-				//we only disable the language switcher if we are in multilingual mode
-				TranslationDecorator titleDecorator=
-						(TranslationDecorator)title.get("trnContainer");
-						titleDecorator.getSwitchingDisabled().setObject(Boolean.TRUE);				
-			}
-			
+
 			title.getTextAreaContainer().add(new StringRequiredValidator());
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));			
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
@@ -101,6 +95,11 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			
 		if ("true".equalsIgnoreCase(FeaturesUtil
 				.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL))) {
+			
+			//we only disable the language switcher if we are in multilingual mode
+			TranslationDecorator titleDecorator=
+					(TranslationDecorator)title.get("trnContainer");
+					titleDecorator.getSwitchingDisabled().setObject(Boolean.TRUE);				
 			title.getTextAreaContainer().add(
 					new AjaxFormComponentUpdatingBehavior("onblur") {
 

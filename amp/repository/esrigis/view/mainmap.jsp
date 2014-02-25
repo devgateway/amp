@@ -212,6 +212,11 @@
 	$(function(){
   		$('#basemap').click(function(evt){
   			evt.stopPropagation();
+  			
+  			var mainMenuLeft = $('#mainGisMenu').position().left;
+  			var galleryWidth = $('#basemapGalleryesri').width();
+  			var newPos = mainMenuLeft - galleryWidth - 10 + "px";
+  			$('#basemapGalleryesri').css("left", newPos);
      		$('#basemapGalleryesri').toggle();
      	});
 	});
@@ -219,6 +224,13 @@
 	$(function(){
   		$('#basemaplocal').click(function(evt){
   			evt.stopPropagation();
+  			
+  			var mainMenuLeft = $('#mainGisMenu').position().left;
+  			var galleryWidth = $('#basemapGallery').width();
+  			var newPos = mainMenuLeft - galleryWidth - 30 + "px";
+  			$('#basemapGallery').css("left", newPos);
+
+  			
      		$('#basemapGallery').toggle();
      	});
 	});

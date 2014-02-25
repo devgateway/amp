@@ -213,10 +213,10 @@ div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/c
 	background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
 	z-index:100;
 	margin-top:5%;
-	margin-left:60%;
+	/*margin-left:60%;*/
 	font-size: 11px;
 	display:none;
-	width:375px;
+	width:377px;
 	overflow:auto;
 	height:310px;
 	padding:10px;

@@ -10,15 +10,14 @@
 			</generator>
 		</id>
 
-		<many-to-one name="indicator5aActualDisbursement" column="indicator5aActualDisbursement"
-			class="org.digijava.module.aim.dbentity.AmpMeasures" cascade="none" />
-		<many-to-one name="indicator5aPlannedDisbursement" column="indicator5aPlannedDisbursement"
-			class="org.digijava.module.aim.dbentity.AmpMeasures" cascade="none" />
-		<many-to-one name="indicator6ScheduledDisbursements"
-			column="indicator6ScheduledDisbursements" class="org.digijava.module.aim.dbentity.AmpMeasures"
-			cascade="none" />
-		<many-to-one name="indicator9bDisbursements" column="indicator9bDisbursements"
-			class="org.digijava.module.aim.dbentity.AmpMeasures" cascade="none" />
-			
+		<property name="indicator5aActualDisbursement" column="indicator5aActualDisbursement"
+			type="java.lang.String" />
+		<property name="indicator5aPlannedDisbursement" column="indicator5aPlannedDisbursement"
+			type="java.lang.String" />
+		<property name="indicator6ScheduledDisbursements" column="indicator6ScheduledDisbursements"
+			type="java.lang.String" />
+		<property name="indicator9bDisbursements" column="indicator9bDisbursements"
+			type="java.lang.String" />
+
 	</class>
 </hibernate-mapping>

@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,24 +26,18 @@ public class ManageGPI extends DispatchAction {
 
 		ManageGPIForm gpiForm = (ManageGPIForm) form;
 
-		// Look for the list of available measures.
-		Collection<AmpMeasures> list = AdvancedReportUtil.getMeasureList();
-		gpiForm.setMeasures(new ArrayList<AmpMeasures>());
-		for (AmpMeasures am : list) {
-			if ("A".equals(am.getType())) {
-				gpiForm.getMeasures().add(am);
-			}
-		}
+		Map<String, String> measures = GPISetup.getListOfValues();
+		gpiForm.setMeasures(measures);
 
 		// If there is a previous setup then populate the values in the form.
 		// Notice the table amp_gpi_setup should never have more than one
 		// record!!! (at least for now).
 		GPISetup setup = GPISetupUtil.getSetup();
 		if (setup != null) {
-			gpiForm.setIndicator5aActualDisbursement(setup.getIndicator5aActualDisbursement().getMeasureId());
-			gpiForm.setIndicator5aPlannedDisbursement(setup.getIndicator5aPlannedDisbursement().getMeasureId());
-			gpiForm.setIndicator6ScheduledDisbursements(setup.getIndicator6ScheduledDisbursements().getMeasureId());
-			gpiForm.setIndicator9bDisbursements(setup.getIndicator9bDisbursements().getMeasureId());
+			gpiForm.setIndicator5aActualDisbursement(setup.getIndicator5aActualDisbursement());
+			gpiForm.setIndicator5aPlannedDisbursement(setup.getIndicator5aPlannedDisbursement());
+			gpiForm.setIndicator6ScheduledDisbursements(setup.getIndicator6ScheduledDisbursements());
+			gpiForm.setIndicator9bDisbursements(setup.getIndicator9bDisbursements());
 		}
 
 		return mapping.findForward("forward");
@@ -56,16 +51,16 @@ public class ManageGPI extends DispatchAction {
 		}
 
 		if (!"".equals(gpiForm.getIndicator5aActualDisbursement())) {
-			setup.setIndicator5aActualDisbursement(GPISetupUtil.getMeasure(new Long(gpiForm.getIndicator5aActualDisbursement())));
+			setup.setIndicator5aActualDisbursement(gpiForm.getIndicator5aActualDisbursement());
 		}
 		if (!"".equals(gpiForm.getIndicator5aPlannedDisbursement())) {
-			setup.setIndicator5aPlannedDisbursement(GPISetupUtil.getMeasure(new Long(gpiForm.getIndicator5aPlannedDisbursement())));
+			setup.setIndicator5aPlannedDisbursement(gpiForm.getIndicator5aPlannedDisbursement());
 		}
 		if (!"".equals(gpiForm.getIndicator6ScheduledDisbursements())) {
-			setup.setIndicator6ScheduledDisbursements(GPISetupUtil.getMeasure(new Long(gpiForm.getIndicator6ScheduledDisbursements())));
+			setup.setIndicator6ScheduledDisbursements(gpiForm.getIndicator6ScheduledDisbursements());
 		}
 		if (!"".equals(gpiForm.getIndicator9bDisbursements())) {
-			setup.setIndicator9bDisbursements(GPISetupUtil.getMeasure(new Long(gpiForm.getIndicator9bDisbursements())));
+			setup.setIndicator9bDisbursements(gpiForm.getIndicator9bDisbursements());
 		}
 		GPISetupUtil.saveGPISetup(setup);
 		return mapping.findForward("save");

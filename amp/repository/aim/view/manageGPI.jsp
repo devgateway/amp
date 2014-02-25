@@ -15,7 +15,7 @@
 
 	<jsp:include page="teamPagesHeader.jsp" />
 
-	<digi:form action="/manageGPI.do?actionType=save" method="post">
+	<digi:form action="/manageGPI.do?actionType=save" method="post" name="gpiForm">
 
 		<table cellPadding=5 cellspacing="0" width="100%">
 			<tr>
@@ -38,16 +38,17 @@
 														<h3>Indicator 5a: Development Cooperation is more predictable.</h3>
 														<p>This indicator is calculated by dividing the sum of actual disbursements for a given year by the sum of scheduled disbursements.</p> 
 														<label>Field to Use for Actual Disbursements:</label> 
+														<!-- TODO: Translates the content -->
 														<html:select property="indicator5aActualDisbursement">
-															<html:optionsCollection property="measures" value="measureId" label="measureName" />
-														</html:select>
+															<html:optionsCollection property="measures" value="key" label="value" />
+														</html:select>														
 													</td>
 												</tr>
 												<tr>
 													<td>	
 														<label>Field to Use for Planned Disbursements:</label>
 														<html:select property="indicator5aPlannedDisbursement">
-															<html:optionsCollection property="measures" value="measureId" label="measureName" />
+															<html:optionsCollection property="measures" value="key" label="value" />
 														</html:select>
 													</td>
 												</tr>
@@ -56,7 +57,7 @@
 														<h3>Indicator 6: Aid is on budgets which are subject to parliamentary scrutiny.</h3>
 														<p>This indicator is calculated using the scheduled disbursements for a given year.</p> <label>Field to Use for Scheduled Disbursements:</label> 
 														<html:select property="indicator6ScheduledDisbursements">
-															<html:optionsCollection property="measures" value="measureId" label="measureName" />
+															<html:optionsCollection property="measures" value="key" label="value" />
 														</html:select>
 													</td>
 												</tr>
@@ -66,7 +67,7 @@
 														<p>This indicator is calculated by comparing disbursements which use country systems with total disbursements.</p> <label>Field to Use for
 															Disbursements:</label> 
 														<html:select property="indicator9bDisbursements">
-															<html:optionsCollection property="measures" value="measureId" label="measureName" />
+															<html:optionsCollection property="measures" value="key" label="value" />
 														</html:select>
 													</td>
 												</tr>

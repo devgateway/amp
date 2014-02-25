@@ -715,7 +715,7 @@ public class DashboardUtil {
         }
         //qr += " and act.draft=false and act.approvalStatus ='approved' ";
         qr += " and act.team is not null and (act.team in (select at.ampTeamId from " 
-		+ AmpTeam.class.getName() + " at where parentTeamId is not null) ";
+		+ AmpTeam.class.getName() + " at) ";
         if (relatedOrgs.length() > 1) {
             relatedOrgs = relatedOrgs.substring(0, relatedOrgs.length() - 1);
             qr += " or f.ampDonorOrgId in(" + relatedOrgs + ")";

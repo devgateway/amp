@@ -239,6 +239,7 @@ public class MainMap extends Action {
 			filter.setConfigWithSectorAndSubSectors(new ArrayList<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>>());
 			List<AmpSector> sectors = org.digijava.module.visualization.util.DbUtil
 						.getParentSectorsFromConfig(filter.getSelSectorConfigId());
+			
 			filter.setSectors(sectors);
 			for(AmpClassificationConfiguration config: filter.getSectorConfigs()){
 				List<AmpSector> currentConfigSectors = org.digijava.module.visualization.util.DbUtil.getParentSectorsFromConfig(config.getId());
@@ -246,9 +247,13 @@ public class MainMap extends Action {
 				Collections.sort((List)currentConfigSectors, new DbUtil.HelperAmpSectorNameComparator());
 				for(AmpSector sector:currentConfigSectors){;
 					List<AmpSector> sectorList=new ArrayList<AmpSector>(sector.getSectors());
+					
 					Collections.sort((List)sectorList, new DbUtil.HelperAmpSectorNameComparator());
+					
 					sectorsWithSubSectors.add(new EntityRelatedListHelper<AmpSector,AmpSector>(sector,sectorList));
 				}
+				//Collections.sort((List)sectorsWithSubSectors, new DbUtil.HelperAmpSectorNameComparator());
+				
 				filter.getConfigWithSectorAndSubSectors().add(new EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>(config,sectorsWithSubSectors));
 				}
 			} catch (DgException e) {

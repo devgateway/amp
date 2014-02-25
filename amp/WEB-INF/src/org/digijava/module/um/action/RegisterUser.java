@@ -193,6 +193,8 @@ public class RegisterUser extends Action {
 		}
 		if(userRegisterForm.isAddWorkspace()){
 			userRegisterForm.setAssignedWorskpaces(null);
+			userRegisterForm.addError("error.aim.addUser.success", TranslatorWorker.translateText("User registered successfully"));
+			//in this case the registration went ok so we will add the message to the user
 			return mapping.findForward("forward");
 		}
 		else{

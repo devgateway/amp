@@ -984,7 +984,7 @@ public class DashboardUtil {
 		if (filter.getStartYear() == null) {
 			Long year = null;
 			Long minYear = null;
-			if(dashboard!=null && dashboard.getMaxYearFilter() != null && dashboard.getMaxYearFilter() > 0 
+			if(dashboard != null && dashboard.getMaxYearFilter() != null && dashboard.getMaxYearFilter() > 0
 					&& dashboard.getMinYearFilter() != null && dashboard.getMinYearFilter() > 0){
 				filter.setDefaultStartYear(dashboard.getMinYearFilter().longValue());
 				filter.setStartYear(dashboard.getMinYearFilter().longValue());

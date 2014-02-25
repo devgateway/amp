@@ -951,7 +951,7 @@ public class MapFilter {
 	{
 		if (filteredActivities != null)
 			return filteredActivities;
-		
+				
 		try
 		{
 			String workSpaceQuery;

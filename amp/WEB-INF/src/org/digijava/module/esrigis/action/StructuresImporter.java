@@ -76,7 +76,7 @@ public class StructuresImporter extends Action {
                             st.setActivities(DbHelper.getActivityByAmpId(nextLine[0].trim()));
                             st.setDescription(nextLine[5].trim());
                             st.setCreationdate(new Timestamp(System.currentTimeMillis()));
-    						if (!"".equalsIgnoreCase(st.getTitle()) && st.getType()!=null && st.getActivities().size()!=0){
+							if (!"".equalsIgnoreCase(st.getTitle()) && st.getType()!=null && st.getActivities().size()!=0){
 								DbHelper.saveStructure(st);
                             }else{
                                 String errorline = ArrayUtils.toString(nextLine).replace("{", "");

@@ -704,20 +704,10 @@ public class DbUtil {
         Long[] orgIds= filter.getSelOrgIds();
         if (orgGroupIds!=null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
 			if (orgGroupIds.length == 1) {
-				//in the quick filter, all organizations are selected for a given group (orgIds[0]==-1) 
-				if (orgIds!=null && orgIds[0]== -1) {
 				List<AmpOrganisation> donorsByGrp = org.digijava.module.aim.util.DbUtil.getOrganisationByGroupId(orgGroupIds[0]);
 				agencies.addAll(donorsByGrp);
 				return agencies;
-				}
-				//if only one organization is selected for a given group
-				else {
-					AmpOrganisation organisation = org.digijava.module.aim.util.DbUtil.getOrganisation(orgIds[0]);
-					List <AmpOrganisation> listOrganisation = new ArrayList<AmpOrganisation>();
-					listOrganisation.add(organisation);
-					return listOrganisation;
-				}
-			}  else {
+			} else {
 				for (int i = 0; i < orgGroupIds.length; i++) {
 					List<AmpOrganisation> donorsByGrp = org.digijava.module.aim.util.DbUtil.getOrganisationByGroupId(orgGroupIds[i]);
 					agencies.addAll(donorsByGrp);
@@ -1092,7 +1082,7 @@ public class DbUtil {
         //If it's not public view (the else) and links it to the non cached version of the amp_activity_group
         if(filter.getFromPublicView() !=null && filter.getFromPublicView()) {
         	if(tm != null && tm.getTeamAccessType().equals("Management")) {
-        		//Do nothing.
+        		oql += DashboardUtil.getTeamQueryManagement();
         	} else {
         		oql += DashboardUtil.getTeamQueryManagement();
         		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
@@ -1788,7 +1778,7 @@ public class DbUtil {
 		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
         	if(tm != null && tm.getTeamAccessType().equals("Management")) {
-        		//Do nothing.
+        		oql += DashboardUtil.getTeamQueryManagement();
         	} else {
         		oql += DashboardUtil.getTeamQueryManagement();
         		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
@@ -2027,7 +2017,7 @@ public class DbUtil {
 		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
         	if(tm != null && tm.getTeamAccessType().equals("Management")) {
-        		//Do nothing.
+        		oql += DashboardUtil.getTeamQueryManagement();
         	} else {
         		oql += DashboardUtil.getTeamQueryManagement();
         		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
@@ -2283,7 +2273,7 @@ public class DbUtil {
 		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
         	if(tm != null && tm.getTeamAccessType().equals("Management")) {
-        		//Do nothing.
+        		oql += DashboardUtil.getTeamQueryManagement();
         	} else {
         		oql += DashboardUtil.getTeamQueryManagement();
         		oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";

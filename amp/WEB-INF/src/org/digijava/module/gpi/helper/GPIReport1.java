@@ -73,13 +73,6 @@ public class GPIReport1 extends GPIAbstractReport {
 				AmpGPISurvey auxAmpGPISurvey = iterCommonData.next();
 				AmpActivityVersion auxActivity = auxAmpGPISurvey.getAmpActivityId();
 
-				// Filter by years. Check if the project date
-				// falls into one of the date ranges.
-				if (GPIUtils.getYear(auxActivity.getActualCompletionDate(), startDates, endDates, filter.getStartYear(), filter.getEndYer()) == 0) {
-					// Ignore this project.
-					continue;
-				}
-
 				// Filter by sectors.
 				if (filter.getSectors() != null && !GPIUtils.containSectors(filter.getSectors(), auxActivity.getSectors())) {
 					// Ignore this AmpGPISurvey and continue with the next.
@@ -119,6 +112,14 @@ public class GPIReport1 extends GPIAbstractReport {
 					Iterator<AmpFundingDetail> iFD = auxFunding.getFundingDetails().iterator();
 					while (iFD.hasNext()) {
 						AmpFundingDetail auxFundingDetail = iFD.next();
+
+						// Filter by years. Check if the funding detail date
+						// falls into one of the date ranges.
+						if (GPIUtils.getYear(auxFundingDetail.getTransactionDate(), startDates, endDates, filter.getStartYear(), filter.getEndYer()) == 0) {
+							// Ignore this project.
+							continue;
+						}
+
 						Calendar calendar = Calendar.getInstance();
 						calendar.setTime(auxFundingDetail.getTransactionDate());
 						yearsFromFunding.add(calendar.get(Calendar.YEAR));

@@ -36,6 +36,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCommentTabsFieldWrappe
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpWarningComponentPanel;
+import org.dgfoundation.amp.onepager.components.fields.TranslationDecorator;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -46,6 +47,8 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -84,15 +87,47 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			
 			IModel<String> m = new PropertyModel<String>(am, "name");
 			title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true);
-			//title = new AmpTextFieldPanel<String>(
-			//		"title", m, "Project Title", AmpFMTypes.MODULE);
-			//title.getTextContainer().add(new AmpRequiredFieldValidator<String>(title));
+
 			title.getTextAreaContainer().add(new StringRequiredValidator());
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));			
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
-			title.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+			
+		if ("true".equalsIgnoreCase(FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL))) {
+			
+			//we only disable the language switcher if we are in multilingual mode
+			TranslationDecorator titleDecorator=
+					(TranslationDecorator)title.get("trnContainer");
+					titleDecorator.getSwitchingDisabled().setObject(Boolean.TRUE);				
+			title.getTextAreaContainer().add(
+					new AjaxFormComponentUpdatingBehavior("onblur") {
 
+						@Override
+						protected void onUpdate(AjaxRequestTarget target) {
+
+							// we only enable/disable the langage switcher if we
+							// are in multilingual mode
+							// if the switching is disabled and the title is
+							// empty or null we prevent from
+							// switching to other language.
+							// title.getTextAreaContainer().checkRequired()
+							// title.getTextAreaContainer().valid()
+
+							TranslationDecorator titleDecorator = (TranslationDecorator) title
+									.get("trnContainer");
+							if(title.getModel().getObject()==null || title.getModel().getObject().equals("")){
+							
+							titleDecorator.getSwitchingDisabled().setObject(
+									Boolean.TRUE);
+							}
+						}
+
+					});
+		}
+			title.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+			
+				
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {		
 					if(!titleSimilarityWarning.isVisible()) return;

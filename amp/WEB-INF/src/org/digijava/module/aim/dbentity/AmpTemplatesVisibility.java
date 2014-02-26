@@ -24,6 +24,9 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	private Set<AmpFeaturesVisibility> features;
 	private Set<AmpFieldsVisibility> fields;
 	private String visible;
+
+    //Non persistent
+    private List<String> usedByTeamsNames;
 	
 	public Set<AmpFeaturesVisibility> getFeatures() {
 		return features;
@@ -168,5 +171,13 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
         n.setItems(tmp);
 
         return n;
+    }
+
+    public List<String> getUsedByTeamsNames() {
+        return usedByTeamsNames;
+    }
+
+    public void setUsedByTeamsNames(List<String> usedByTeamsNames) {
+        this.usedByTeamsNames = usedByTeamsNames;
     }
 }

@@ -2240,8 +2240,8 @@ body {background:none;}
 											</module:display>
 
 											<module:display name="/Activity Form/Related Organizations/Implementing Agency" parentModule="/Activity Form/Related Organizations">
-											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies">
+											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.impAgencies"
@@ -2365,10 +2365,10 @@ body {background:none;}
 											
 											</logic:notEmpty><br/>
 											</module:display>
-											<module:display name="/Activity Form/Related Organizations/Regional Group" parentModule="/Activity Form/Related Organizations">
+											<module:display name="/Activity Form/Related Organizations/Sector Group" parentModule="/Activity Form/Related Organizations">
+											<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
 											<field:display name="Sector Group" feature="Sector Group">
 											<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="agencies.sectGroups"
@@ -2403,14 +2403,14 @@ body {background:none;}
 														</logic:iterate>
 														</td></tr>
 													</table>											
-											</logic:notEmpty><br/>
+											<br/>
 											</field:display>
+											</logic:notEmpty>
 											</module:display>
 		
-        									<feature:display name="Regional Group" module="Organizations">
-											<field:display name="Regional Group" feature="Regional Group">
-											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
+											<module:display name="/Activity Form/Related Organizations/Regional Group" parentModule="/Activity Form/Related Organizations">
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">
+											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
 											<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="agencies.regGroups"
@@ -2446,8 +2446,7 @@ body {background:none;}
 													</td></tr>
 												</table>
 											</logic:notEmpty><br/>
-											</field:display>
-                                  	</feature:display>
+											</module:display>
                                            </td>
 									</tr>								
 									</module:display>									 

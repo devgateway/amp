@@ -693,7 +693,7 @@ public class ExportActivityToPDF extends Action {
 			
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras", ampContext)){
 				//AMP-16421
-				if(identification.getBudgetCV()==identification.getBudgetCVOn()){				
+				if(identification.getBudgetCV().equals(identification.getBudgetCVOn())){				
 					if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY", ampContext)){
 						columnName=TranslatorWorker.translateText("FY");
 						createGeneralInfoRow(mainLayout,columnName,identification.getFY());
@@ -968,14 +968,51 @@ public class ExportActivityToPDF extends Action {
     			sectorCell1.setBackgroundColor(new Color(244,244,242));
     			sectorCell1.setBorder(0);
     			mainLayout.addCell(sectorCell1);
-    			
-    			
-    			String primary="Primary Sectors: ";
-    			String secondary= "Secondary Sectors: "; 
-    			
+
+    			String sectorsToAdd="";
     			List<AmpClassificationConfiguration> classificationConfigs=SectorUtil.getAllClassificationConfigs();
     			for (AmpClassificationConfiguration configuration : classificationConfigs) {
-    				if(myForm.getSectors().getActivitySectors()!=null){
+    				
+					boolean hasSectors = false;
+					
+					
+					if (myForm.getSectors().getActivitySectors() != null) {
+						for (ActivitySector actSect : myForm.getSectors().getActivitySectors()) {
+							if (actSect.getConfigId().equals(configuration.getId())) {
+								hasSectors = true;
+							}
+						}
+					}
+					if (hasSectors) {
+						
+						sectorsToAdd+=TranslatorWorker.translateText(configuration.getName()  +" Sector")
+								.toUpperCase()+":\n ";
+
+					}
+					if (myForm.getSectors().getActivitySectors() != null) {
+						for (ActivitySector actSect : myForm.getSectors().getActivitySectors()) {
+							if (actSect.getConfigId().equals(configuration.getId())) {
+
+								columnVal = actSect.getSectorScheme();
+								if (actSect.getSectorName() != null) {
+									columnVal += " - "
+											+ actSect.getSectorName();
+								}
+								if (actSect.getSubsectorLevel1Name() != null) {
+									columnVal += " - "
+											+ actSect.getSubsectorLevel1Name();
+								}
+								if (actSect.getSubsectorLevel2Name() != null) {
+									columnVal += " - "
+											+ actSect.getSubsectorLevel2Name();
+								}
+								columnVal += " " + actSect.getSectorPercentage() + " %";
+								sectorsToAdd +=columnVal +"\n";
+							}
+						}
+					}
+    				
+    				/*if(myForm.getSectors().getActivitySectors()!=null){
     					for (ActivitySector actSect : myForm.getSectors().getActivitySectors()) {
     						String val="";
     						if(FeaturesUtil.isVisibleField(configuration.getName()+" Sector", ampContext)){
@@ -1000,9 +1037,9 @@ public class ExportActivityToPDF extends Action {
     							}
     						}
     					}
-    				}				
+    				}	*/			
     			}
-    			if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/Primary Sectors", ampContext)){
+    			/*if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/Primary Sectors", ampContext)){
     				output+=primary+"\n";
     			}
     			if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/Secondary Sectors", ampContext)){
@@ -1013,6 +1050,12 @@ public class ExportActivityToPDF extends Action {
     			sectorCell2.addElement(p1);
     			sectorCell2.setBorder(0);
     			mainLayout.addCell(sectorCell2);
+    			*/
+    			PdfPCell sectorCell2=new PdfPCell();
+    			p1=new Paragraph(postprocessText(sectorsToAdd),plainFont);
+    			sectorCell2.addElement(p1);
+    			sectorCell2.setBorder(0);
+    			mainLayout.addCell(sectorCell2);    			
         	}
         	
 			//Components

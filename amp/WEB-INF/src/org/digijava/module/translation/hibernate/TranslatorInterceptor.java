@@ -1,14 +1,19 @@
 package org.digijava.module.translation.hibernate;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.FieldTranslationPack;
 import org.digijava.module.translation.util.TranslationStore;
 import org.hibernate.EmptyInterceptor;
+import org.hibernate.Hibernate;
 import org.hibernate.type.Type;
 
 import java.io.Serializable;
@@ -22,7 +27,7 @@ import java.util.List;
 public class TranslatorInterceptor extends EmptyInterceptor{
     private static Logger logger = Logger.getLogger(TranslatorInterceptor.class);
 
-
+    
     /**
      * Prepare the current object to be saved by Hibernate and it's field translations to be updated
      * @see org.hibernate.Interceptor onFlushDirty
@@ -34,11 +39,22 @@ public class TranslatorInterceptor extends EmptyInterceptor{
 
         //existing entities
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
+//        	printEntityData("onFlushDirty, previousState, before stuff", entity, id, previousState, propertyNames);
+//        	printEntityData("onFlushDirty, currentState, before stuff", entity, id, currentState, propertyNames);
+//        	Object[] oldPreviousState = previousState.clone();
         	logger.debug("Current language in TLS Util:" + TLSUtils.getEffectiveLangCode());
             logger.debug("flushDirty versionable: " + entity);
             boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, previousState, currentState, propertyNames);
+//            if (entity instanceof AmpStructure)
+//            {
+//            	logger.info("\tOVERRIDING EVERYTHING");
+//            	for(int i = 0; i < oldPreviousState.length; i++)
+//            		previousState[i] = oldPreviousState[i];
+//            }
             ContentTranslationUtil.evictEntityFromCache(entity);
             logger.debug("flushDirty returning: " + ret);
+//        	printEntityData("onFlushDirty, previousState, after stuff", entity, id, previousState, propertyNames);
+//        	printEntityData("onFlushDirty, currentState, after stuff", entity, id, currentState, propertyNames);
             return ret;
         }
         
@@ -127,11 +143,32 @@ public class TranslatorInterceptor extends EmptyInterceptor{
             return false;
 
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
+//        	printEntityData("onSave,  before stuff", entity, id, state, propertyNames);
             boolean ret = ContentTranslationUtil.prepareTranslations(entity, id, null, state, propertyNames);
             ContentTranslationUtil.evictEntityFromCache(entity);
+//            printEntityData("onSave,  after stuff", entity, id, state, propertyNames);
             return ret;
         }
         return false;
+    }
+    
+    void printEntityData(String prefix, Object entity, Serializable id, Object[] state, String[] propertyNames)
+    {
+    	Class clazz = Hibernate.getClass(entity);
+    	InternationalizedModelDescription entityDescription = InternationalizedModelDescription.getForClass(clazz);
+    	StringBuilder bld = new StringBuilder();
+    	bld.append(prefix + ": type <" + AmpContentTranslation.compressClassName(entity.getClass().getName()) + ">, id = " + id);
+    	int i = -1;
+    	for(String propertyName:propertyNames)
+    	{
+    		i ++;
+        	InternationalizedPropertyDescription propertyDescription = entityDescription.properties.get(propertyName);
+        	if (propertyDescription == null)
+        		continue; // field not translated -> nothing to do
+        	String propValue = (String) state[i];
+        	bld.append("\n\tproperty " + propertyName + " has value " + propValue);
+    	}
+    	logger.error(bld.toString());
     }
 }
 

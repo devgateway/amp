@@ -139,7 +139,7 @@ public class ContentTranslationUtil {
 
     /**
      * Method that will clone the translations for all the translatable fields
-     * in the current object
+     * in the current object; see [// item #00000001] for the place where the id's are used
      *
      * @param obj Object that needs translation cloning
      * @param formTranslations the list of translations that were modified using the activity form
@@ -264,14 +264,15 @@ public class ContentTranslationUtil {
             	if (propertyDescription == null)
             		continue; // field not translated -> nothing to do
             	Field field = propertyDescription.field;
-
+            	
+            	// all translateable fields are of type String, so comparing currentState[i].previousState[i] is ok  (they are both String instances)  
                 if ((previousState == null || (currentState[i] != null && !currentState[i].equals(previousState[i])))){
                 	// "field.getAnnotation(TranslatableField.class) != null" deleted from "if", as InternationalizedModelDescription only contains translateable fields
                 	FieldTranslationPack ftp;
                     Long ftpId;
                 	if (isVersionable){ //if versionable we already cloned the translations
                 		//FTP already generated, just prepare it for save
-                		ftpId = Long.parseLong((String)currentState[i]);
+                		ftpId = Long.parseLong((String)currentState[i]); // item #00000001
                 	}
                 	else{ //not versionable entity => we don't alter the other translations
                 		//create FTP
@@ -313,8 +314,25 @@ public class ContentTranslationUtil {
                     logger.debug("Updated base translation with: " + baseTranslation + " (currentlocale =" + TLSUtils.getLangCode() + ")");
                     if (previousState != null && previousState[i] != null){
                         //since we changed the object on load, we need to change the previous state to the db state
-                        Object prevState = loadFieldFromDb(clazz, objectId, fieldName);
-                        previousState[i] = prevState;
+                    	/**
+                    	 * AMP-17055: the Hibernate javadoc for onFlushDirty() says: It is strongly recommended that the interceptor not modify the previousState.
+                    	 * on the other hand, the commit for AMP-16296 specifically introduces these lines of code. 
+                    	 * The value written to previousState[] is, at some point in time, written by Hibernate to the database and then overwritten with a fresh value
+                    	 * AMP-17055 is happening because, when creating a new translateable entity from scratch inside a transaction:
+                    	 *  - a null value is written by this code into previousState[]
+                    	 *  - Hibernate fails to write the said null value to the database, but it fails because of a NotNull constraint on the column
+                    	 *  - it doesn't matter that Hibernate intends to overwrite the null value with a correct one afterwards - the INSERT fails, 
+                    	 *  so the whole transaction fails
+                    	 *  
+                    	 *  The Hibernate documentation is very fishy regarding why previousState[] shouldn't be modified; also I wasn't able to find any specification regarding the valid cases when it should
+                    	 *  fixing through a half-baked hack: will only write values IF THEY ALREADY EXIST IN THE DATABASE in the understanding/hope that:
+                    	 *   > they will be overwritten anyway
+                    	 *   > they will obey to any kind of constraints the column might have (probably not-null-only, as only strings are translateable and I can't imagine strings being used as FK's)
+                    	 *   > not writing a simple "if null" hack because other constraints might theorethically be used in the future (MAX-LENGTH etc)
+                    	 */
+                        List<Object> prevState = loadFieldFromDbList(clazz, objectId, fieldName);
+                        if ((prevState != null) && (prevState.size() == 1))
+                        	previousState[i] = prevState; // AMP-17055: only overwrite value if it really existed in the database
                     }
 
                 }
@@ -458,6 +476,28 @@ public class ContentTranslationUtil {
         if (clazz == null || id == null || fieldName == null)
             return null;
 
+    	List<Object> results = loadFieldFromDbList(clazz, id, fieldName);
+    	if (results != null && (results.size() == 1))
+    		return results.get(0);
+    	
+        return null;
+    }
+
+    /**
+     * Loads the value of the specified field straight from the database avoiding
+     * the Hibernate sessions and caches
+     * (uses stateless session)
+     * returns empty list of entity does not exist in the database
+     *
+     * @param clazz object class
+     * @param id object id
+     * @param fieldName name of the field
+     * @return database value for the field
+     */
+    public static List<Object> loadFieldFromDbList(Class clazz, Long id, String fieldName){
+        if (clazz == null || id == null || fieldName == null)
+            return null;
+
     	StatelessSession session = null;
     	try{
         	SessionFactory sf = PersistenceManager.getRequestDBSession().getSessionFactory();
@@ -473,7 +513,7 @@ public class ContentTranslationUtil {
             query.append("=:id");
 			Query qry = session.createQuery(query.toString());
 			qry.setLong("id", id);
-            return qry.uniqueResult();
+            return qry.list();
         } catch (Exception e) {
             logger.error("can't load object from database", e);
         } finally {
@@ -482,7 +522,7 @@ public class ContentTranslationUtil {
         }
         return null;
     }
-
+    
     private static Session session = PersistenceManager.openNewSession();
     private static Object sessionLock = new Object();
     

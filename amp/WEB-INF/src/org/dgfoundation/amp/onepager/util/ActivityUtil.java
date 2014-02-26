@@ -91,7 +91,7 @@ public class ActivityUtil {
 	 * @param am
 	 */
 	public static void saveActivity(AmpActivityModel am, boolean draft){
-		Session session = AmpActivityModel.getHibernateSession();	
+		Session session = AmpActivityModel.getHibernateSession();
 		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
 			logger.error("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");

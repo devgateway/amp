@@ -72,4 +72,22 @@ public class AmpContentTranslation {
     public void setTranslation(String translation) {
         this.translation = translation;
     }
+    
+    @Override
+    public String toString()
+    {
+    	return String.format("%s[%d, %s].%s = %s; id = %s", compressClassName(objectClass), objectId, locale, fieldName, this.translation, id);
+    }
+    
+    public static String compressClassName(String className)
+    {
+    	if (className == null)
+    		return className;
+    	
+    	int pos = className.lastIndexOf('.');
+    	if (pos == -1)
+    		return className;
+    	
+    	return className.substring(pos + 1);
+    }
 }

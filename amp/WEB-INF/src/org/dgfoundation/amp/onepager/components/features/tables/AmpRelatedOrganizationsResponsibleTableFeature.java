@@ -19,7 +19,11 @@ import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author aartimon@dginternational.org
@@ -37,6 +41,12 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 	public AmpRelatedOrganizationsResponsibleTableFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am, final String roleName,AmpDonorFundingFormSectionFeature donorFundingSection) throws Exception {
 		super(id, fmName, am, roleName, donorFundingSection);
+		Long value = Long.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_ORG_GROUP));
+		if (value.longValue()!=-1) {
+		setDefaultOrgGroup(DbUtil.getAmpOrgGroup(value));
+		}
+		
+		
 		setTitleHeaderColSpan(5);
 		list.setObject(new ListView<AmpOrgRole>("list", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;

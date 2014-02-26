@@ -10,7 +10,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				insert into amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) values(nextval('amp_global_settings_seq'), 'Enable AMP usage tracking','false','t_Boolean','Enable Piwik site tracking','general');
-        		insert into amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) values(nextval('amp_global_settings_seq'), 'Tracker URL',"http://stats.ampsite.net/",null,'Defines Piwik tracker url','general');
+        		insert into amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) values(nextval('amp_global_settings_seq'), 'Tracker URL','http://stats.ampsite.net/',null,'Defines Piwik tracker url','general');
         		insert into amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) values(nextval('amp_global_settings_seq'), 'Site ID for tracking',-1,'t_Integer','Defines the Website ID being tracked','general');
         	</lang>
 		</script>

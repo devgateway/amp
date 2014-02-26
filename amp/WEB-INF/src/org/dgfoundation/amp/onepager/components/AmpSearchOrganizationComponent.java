@@ -51,7 +51,7 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 			    return orgGroup.getOrgGrpName();
 			}
 		};
-		IModel<List<? extends AmpOrgGroup>> orgGroupsModel = Model.ofList((List<AmpOrgGroup>) DbUtil.getAllOrgGroups());
+		IModel<List<? extends AmpOrgGroup>> orgGroupsModel = orgGroupsModel = Model.ofList((List<AmpOrgGroup>) DbUtil.getAllOrgGroups());
 		orgGroupPanel = new AmpSelectFieldPanel<AmpOrgGroup>("selectOrgType", new Model<AmpOrgGroup>(),  orgGroupsModel, "Select Organization Type", true, true, cr, true);
 		orgGroupPanel.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			private static final long serialVersionUID = 1L;
@@ -82,6 +82,12 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 	public void onSelectionChanged() {
 		Long id =  ((AmpOrgGroup)orgGroupPanel.getChoiceContainer().getModelObject()).getAmpOrgGrpId();
 		autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER,id);
+	}
+	
+	public void setDefaultOrgGroup (AmpOrgGroup value) {
+		orgGroupPanel.getChoiceContainer().setDefaultModelObject(value);
+		autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER,value);
+
 	}
 
 }

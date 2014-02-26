@@ -47,6 +47,7 @@ import org.digijava.module.gpi.form.GPIForm;
 import org.digijava.module.gpi.helper.GPIAbstractReport;
 import org.digijava.module.gpi.helper.GPIReport1;
 import org.digijava.module.gpi.helper.GPIReport5a;
+import org.digijava.module.gpi.helper.GPIReport9b;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.digijava.module.gpi.util.GPIConstants;
 import org.digijava.module.gpi.util.GPIUtils;
@@ -251,6 +252,8 @@ public class GPIUseCase {
 			report = new GPIReport1();
 		} else if (form.getGPIReport().getIndicatorCode().equals(GPIConstants.GPI_REPORT_5a)) {
 			report = new GPIReport5a();
+		} else if (form.getGPIReport().getIndicatorCode().equals(GPIConstants.GPI_REPORT_9b)) {
+			report = new GPIReport9b();
 		}
 
 		// Setup common filters.

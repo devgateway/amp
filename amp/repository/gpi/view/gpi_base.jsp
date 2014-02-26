@@ -229,8 +229,8 @@
 									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="6">
 									                            	<jsp:include page="gpi_6.jsp"></jsp:include>
 									                           	</logic:equal>
-									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="9a">
-									                               	<jsp:include page="gpi_9a.jsp"></jsp:include>
+									                           	<logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="9b">
+									                               	<jsp:include page="gpi_9b.jsp"></jsp:include>
 									                           	</logic:equal>
 								                           </div>							                           
 								                    	</td>

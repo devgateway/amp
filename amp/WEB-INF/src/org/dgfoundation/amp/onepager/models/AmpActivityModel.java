@@ -132,32 +132,42 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	 * Ends a conversation (multi step/request dialogue). Ensures to retrieve the Hibernate session and to commit the current transaction + flush it
 	 * Then in a finally block we close the session.
 	 */
-	public static void endConversation() {		
+	public static void endConversation()
+	{		
 			AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 			Session hibernateSession = (Session) s.getHttpSession().getAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY);
 			s.getHttpSession().setAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY,null);
 			if(hibernateSession==null) throw new RuntimeException("Attempted to close an unexisting Hibernate session!");
 			if(!hibernateSession.isOpen()) throw new RuntimeException("Attempted to close an already closed session!");
+			Throwable exceptionToThrow = null;
 			try {
 				hibernateSession.getTransaction().commit();
 				hibernateSession.flush();
 				hibernateSession.setFlushMode(FlushMode.AUTO);
-			} catch (Throwable t) {
-			try {
-				logger.error("Error while flushing session:", t);
-				if (hibernateSession.getTransaction().isActive()) {
-					logger.info("Trying to rollback database transaction after exception");
-					hibernateSession.getTransaction().rollback();
-				}
-				else
-					logger.error("Can't rollback transaction because transaction not active");
-			} catch (Throwable rbEx) {
-				logger.error("Could not rollback transaction after exception!",
-						rbEx);
 			}
-		} finally { 
-			hibernateSession.close(); 
-		}
+			catch (Throwable t)
+			{
+				exceptionToThrow = t;
+				try
+				{
+					logger.error("Error while flushing session:", t);
+					if (hibernateSession.getTransaction().isActive()) {
+						logger.info("Trying to rollback database transaction after exception");
+						hibernateSession.getTransaction().rollback();
+					}
+					else
+						logger.error("Can't rollback transaction because transaction not active");
+				}
+				catch (Throwable rbEx)
+				{
+					logger.error("Could not rollback transaction after exception!", rbEx);
+				}
+			}
+			finally { 
+				hibernateSession.close(); 
+			}
+			if (exceptionToThrow != null)
+				throw new RuntimeException("error while ending database conversation", exceptionToThrow);
 	}
 
 	public String getEditingKey() {

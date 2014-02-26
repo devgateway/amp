@@ -214,6 +214,12 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 		this.images = images;
 	}
 
+	@Override
+	public String toString()
+	{
+		return String.format("AmpStructure[id=%s], title = %s, description = %s", this.ampStructureId, this.title, this.description);
+	}
+	
     public static String hqlStringForTitle(String idSource) {
         return InternationalizedModelDescription.getForProperty(AmpStructure.class, "title").getSQLFunctionCall(idSource + ".ampStructureId");
     }

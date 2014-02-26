@@ -142,6 +142,8 @@ public class GlobalSettingsConstants {
     public static final String READONLY_DATES= "Make Activity dates read only";
 
     public static final String MULTILINGUAL= "Multilingual";
-
+    
+    public static final String DEFAULT_ORG_GROUP= "Responsible Organization Default Organization Group";
+    
 
 }

@@ -68,7 +68,11 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
     private AmpSearchOrganizationComponent<String> searchOrganization;
 	
 	
-	/**
+    public void setDefaultOrgGroup(AmpOrgGroup orgGroup) {
+    searchOrganization.setDefaultOrgGroup(orgGroup);
+    }
+	
+    /**
 	 * Override to notify of newly added roles, if you need to refresh/change other sections of the form
 	 * @param target 
 	 * @param ampOrgRole

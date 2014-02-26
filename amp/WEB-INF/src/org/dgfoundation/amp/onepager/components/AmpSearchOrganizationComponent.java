@@ -83,5 +83,10 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 		Long id =  ((AmpOrgGroup)orgGroupPanel.getChoiceContainer().getModelObject()).getAmpOrgGrpId();
 		autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER,id);
 	}
+	
+	public void setDefaultOrgGroup (AmpOrgGroup value) {
+        orgGroupPanel.getChoiceContainer().setDefaultModelObject(value);
+        autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER,value);
+    }
 
 }

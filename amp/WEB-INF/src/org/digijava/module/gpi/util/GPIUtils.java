@@ -220,7 +220,7 @@ public class GPIUtils {
 		if (GPIConstants.GPI_REPORT_1.equals(reportCode)) {
 			columns = new boolean[3];
 		} else if (GPIConstants.GPI_REPORT_6.equals(reportCode)) {
-			columns = new boolean[3];
+			columns = new boolean[1];
 		} else if (GPIConstants.GPI_REPORT_9b.equals(reportCode)) {
 			columns = new boolean[4];
 		}
@@ -245,11 +245,13 @@ public class GPIUtils {
 			columns[1] = ("Yes".equalsIgnoreCase(answers[0]));
 			columns[2] = ("Yes".equalsIgnoreCase(answers[0]));
 		} else if (GPIConstants.GPI_REPORT_9b.equals(reportCode)) {
-			//In this case "columns" means "answers" :)
+			// In this case "columns" means "answers" :)
 			columns[0] = ("Yes".equalsIgnoreCase(answers[0]));
 			columns[1] = ("Yes".equalsIgnoreCase(answers[1]));
 			columns[2] = ("Yes".equalsIgnoreCase(answers[2]));
 			columns[3] = ("Yes".equalsIgnoreCase(answers[3]));
+		} else if (GPIConstants.GPI_REPORT_6.equals(reportCode)) {
+			columns[0] = ("Yes".equalsIgnoreCase(answers[0]));
 		}
 		/*
 		 * else if (GPIConstants.PARIS_INDICATOR_REPORT_4.equals(reportCode)) {

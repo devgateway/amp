@@ -954,7 +954,7 @@ function collapseAll() {
 	
 	
 	<module:display name="/Activity Form/Identification/Activity Budget" parentModule="/Activity Form/Identification">
-		<b><digi:trn>Budget</digi:trn></b>:<br/>
+		<b><digi:trn>Budget</digi:trn></b><br/>
 		<c:choose>
 			<c:when test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
 				<digi:trn>Activity is On Budget</digi:trn><br />
@@ -1466,7 +1466,7 @@ function collapseAll() {
 				<c:forEach var="sectors" items="${aimEditActivityForm.sectors.activitySectors}">
 					<c:if test="${sectors.configId==config.id}">
 						<module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
-							<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:10px;">
+							<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:10px;" >
 							  <tr>
 								 <td width=85%>
 								  	<b><c:out value="${sectors.sectorScheme}" /></b>
@@ -2226,8 +2226,8 @@ function collapseAll() {
 					</table>	
 				</div>
 			</logic:notEmpty>				
-		</module:display>					
 		<hr />	
+		</module:display>					
 		<module:display name="/Activity Form/Related Organizations/Responsible Organization" parentModule="/Activity Form/Related Organizations">
 			<digi:trn key="aim:responsibleorganisation">Responsible Organization</digi:trn>
 			<br/>
@@ -2258,10 +2258,9 @@ function collapseAll() {
 				</table>
 				</div>
 			</logic:notEmpty>
+		<hr />
 		</module:display>
 		<!-- Executing Agency not found in the new activity form-->
-		<hr />	
-		
 		<module:display name="/Activity Form/Related Organizations/Executing Agency" parentModule="/Activity Form/Related Organizations">		
 		<digi:trn key="aim:executingAgency">Executing Agency</digi:trn>
 		<br/>
@@ -2296,9 +2295,9 @@ function collapseAll() {
 		<hr/>
 		</module:display> 			
 		<module:display name="/Activity Form/Related Organizations/Implementing Agency" parentModule="/Activity Form/Related Organizations">
-			<digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn>
-			<br/>
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies" >
+			<digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn>
+			<br/>			
 			<div id="act_implementing_agency" style="display: block;">
 				<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 					<tr>
@@ -2326,8 +2325,8 @@ function collapseAll() {
 				</table>
 			</div>
 			</logic:notEmpty>
+		<hr />
 		</module:display> 
-		<hr />			
 		<module:display name="/Activity Form/Related Organizations/Beneficiary Agency" parentModule="/Activity Form/Related Organizations">
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.benAgencies">
 			<digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn>

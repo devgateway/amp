@@ -300,7 +300,7 @@ public class ExportActivityToWord extends Action {
 	 	            
 	 	            if(sectors.getClassificationConfigs() != null){
 	 	            	for (AmpClassificationConfiguration config : (List<AmpClassificationConfiguration>)sectors.getClassificationConfigs()) {
-	 	            		if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/"+config.getName()+" Sectors", ampContext)){
+	 	            		//if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/"+config.getName()+" Sectors", ampContext)){
 	 	            			boolean hasSectors=false;
 	 	            			if (sectors.getActivitySectors() != null) {
 		 	            			for (ActivitySector actSect : sectors.getActivitySectors()) {
@@ -312,7 +312,7 @@ public class ExportActivityToWord extends Action {
 	 	            			if(hasSectors){
 									cell = new RtfCell();
 									cell.setBorder(0);
-									cell.add(new Paragraph(config.getName()+TranslatorWorker.translateText(" Sector").toUpperCase(), PLAINFONT));						
+									cell.add(new Paragraph(TranslatorWorker.translateText(config.getName()+" Sector").toUpperCase(), PLAINFONT));						
 									sectorsTbl.addCell(cell);
 									sectorsTbl.addCell(new RtfCell());
 								}
@@ -338,7 +338,7 @@ public class ExportActivityToWord extends Action {
 									}
 								}
 								applyEmptyCell(sectorsTbl, 1);
-	 	            		}
+	 	            		//}
 						}
 	 	            }
 	 	           doc.add(sectorsTbl);
@@ -2927,7 +2927,7 @@ public class ExportActivityToWord extends Action {
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras", ampContext)){
 			//AMP-16421
-			if(identification.getBudgetCV()==identification.getBudgetCVOn()){
+			if(identification.getBudgetCV().equals(identification.getBudgetCVOn())){
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY", ampContext)){
 				//	
 					columnName=TranslatorWorker.translateText("FY");

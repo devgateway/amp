@@ -332,7 +332,7 @@ public class ContentTranslationUtil {
                     	 */
                         List<Object> prevState = loadFieldFromDbList(clazz, objectId, fieldName);
                         if ((prevState != null) && (prevState.size() == 1))
-                        	previousState[i] = prevState; // AMP-17055: only overwrite value if it really existed in the database
+                        	previousState[i] = prevState.get(0); // AMP-17055: only overwrite value if it really existed in the database
                     }
 
                 }

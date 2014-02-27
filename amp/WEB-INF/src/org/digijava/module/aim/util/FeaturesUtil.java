@@ -96,7 +96,6 @@ public class FeaturesUtil {
         }
     }
 
-    }
 
 	/**
 	 * returns 1, 1000 or 1000000 depending on the code values: AmpARFilter.AMOUNT_OPTION_IN_XXXX

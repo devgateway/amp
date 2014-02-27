@@ -2,28 +2,14 @@ package org.digijava.module.aim.form.helpers;
 
 import java.util.*;
 
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FilterParams;
-import org.digijava.module.aim.helper.FinancingBreakdown;
-import org.digijava.module.aim.helper.FinancingBreakdownWorker;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.Funding;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -216,6 +202,57 @@ public class ActivityFundingDigest {
     				try
     				{
     					calculationsSubtotal.doCalculations(currFunding.getAmpRawFunding(), toCurrCode, true);
+                        //AMP-16788
+                        for (FundingInformationItem fd : currFunding.getAmpRawFunding()) {
+                            List tmp = new ArrayList<FundingInformationItem>();
+
+
+                            java.sql.Date dt = new java.sql.Date(fd.getTransactionDate().getTime());
+
+                            Double fixedExchangeRate = fd.getFixedExchangeRate();
+                            if (fixedExchangeRate != null && (Math.abs(fixedExchangeRate.doubleValue()) < 1e-15))
+                                fixedExchangeRate = null;
+
+                            double frmExRt;
+                            if ( fixedExchangeRate == null){
+                                frmExRt = Util.getExchange(fd.getAmpCurrencyId().getCurrencyCode(), dt);
+                            }else{
+                                frmExRt = fixedExchangeRate;
+                            }
+
+                            double toExRt;
+
+                            if (fd.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(toCurrCode)){
+                                toExRt=frmExRt;
+                            }else{
+                                toExRt = Util.getExchange(toCurrCode, dt);
+                            }
+                            DecimalWraper amt = CurrencyWorker.convertWrapper(fd.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
+
+
+
+                            tmp.add(fd);
+
+
+                            Long fdId = null;
+                            if (fd instanceof AmpFundingDetail) {
+                                fdId = ((AmpFundingDetail)fd).getAmpFundDetailId();
+                            } else if (fd instanceof AmpFundingMTEFProjection) {
+                                fdId = ((AmpFundingMTEFProjection)fd).getAmpFundingMTEFProjectionId();
+                            }
+
+                            for (FundingDetail afd : currFunding.getFundingDetails()) {
+                                if (afd.getFundDetId().equals(fdId)) {
+                                    afd.setTransactionAmount(FormatHelper.formatNumber(amt.doubleValue()));
+                                    afd.setCurrencyCode(toCurrCode);
+                                    break;
+                                }
+
+                            }
+
+                        }
+
+
     					currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
     					currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
     					currFunding.setSubtotalPipelineCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue()));

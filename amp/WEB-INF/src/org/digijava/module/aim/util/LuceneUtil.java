@@ -665,136 +665,7 @@ public class LuceneUtil implements Serializable {
 		return new Integer(1);
 	}
 	
-	/**
-	 * Add an activity to the index
-	 * 
-	 * @param request is used to retreive curent site and navigation language
-	 * @param act the activity that will be added
-	 */
-    public static Document activity2Document(String actId, String projectId, String title, String description,
-			String objective, String purpose, String results, String numcont, String contractingArr, ArrayList<String> componentcodes,
-			String CRIS, String budgetNumber, String newBudgetNumber) {
-		Document doc = new Document();
-		String all = new String("");
-		if (actId != null){
-			doc.add(new Field(ID_FIELD, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
-			//all = all.concat(" " + actId);
-		}
-
-
-        List<String> languages = TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite());
-        HashMap<String, HashMap<String, String>> trns = new HashMap<String, HashMap<String, String>>();
-
-        HashMap<String, String> regularFieldNames = new HashMap<String, String>();
-        regularFieldNames.put("ampId", projectId);
-        regularFieldNames.put("name", title);
-
-        Long id = Long.valueOf(actId);
-        String activityClassName = AmpActivityVersion.class.getName();
-
-        for (String field: regularFieldNames.keySet()){
-            String currentValue = regularFieldNames.get(field);
-            List<AmpContentTranslation> projectIdsList = ContentTranslationUtil.loadFieldTranslations(activityClassName,
-                    id, field);
-
-            String tempStr = "";
-
-            if (projectIdsList.size() == 0){
-                tempStr = currentValue;
-            } else {
-                //using tempHash so i can add the translations in the order specified by the languages list
-                HashMap<String, String> tempHash = new HashMap<String, String>();
-                for (AmpContentTranslation pId: projectIdsList){
-                    tempHash.put(pId.getLocale(), pId.getTranslation());
-                }
-                for (String lang: languages){
-                    String val = tempHash.get(lang);
-                    if (val != null)
-                        tempStr += val;
-                }
-            }
-
-            if ("name".equals(field)){
-                doc.add(new Field(field, tempStr, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
-            } else {
-                doc.add(new Field(field, tempStr, Field.Store.NO, Field.Index.TOKENIZED));
-            }
-            all = all.concat(" " + tempStr);
-        }
-
-/*
-        if (projectId != null){
-			doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + projectId);
-		}
-		if (title != null){
-			doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
-			all = all.concat(" " + title);
-		}*/
-		if (description != null && description.length()>0){
-			doc.add(new Field("description", description, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + description);
-		}
-		if (objective != null && objective.length()>0){
-			doc.add(new Field("objective", objective, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + objective);
-		}
-		if (purpose != null && purpose.length()>0){
-			doc.add(new Field("purpose", purpose, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + purpose);
-		}
-		if (results != null && results.length()>0){
-			doc.add(new Field("results", results, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + results);
-		}
-		
-		//
-		if (numcont != null && numcont.length()>0){
-			doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + numcont);
-		}
-		
-		if (CRIS != null && CRIS.length() > 0) {
-			doc.add(new Field("CRIS", CRIS, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + CRIS);
-		}
-		if (budgetNumber != null && budgetNumber.length() > 0) {
-			doc.add(new Field("budgetNumber", budgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + budgetNumber);
-		}
-		if (newBudgetNumber != null && newBudgetNumber.length() > 0 ) {
-			doc.add(new Field("newBudgetNumber", newBudgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
-			all = all.concat(" " + newBudgetNumber);
-		}
-		
-//		if (contractingArr != null && contractingArr.length() > 0 ) {
-//			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.TOKENIZED));
-//			all = all.concat(" " + contractingArr);
-//			
-//		}
-		
-		int i =0;
-		if (componentcodes != null && componentcodes.size()>0){
-				
-        		for (String value : componentcodes) {
-        			if (value!=null){
-        			doc.add(new Field("componentcode_"+String.valueOf(i), value, Field.Store.NO, Field.Index.TOKENIZED));
-        			all = all.concat(" " + value);
-        			}
-        			i++;
-        		}
-			
-		
-		}
-		
-		if (all.length() == 0)
-			return null;
-		
-		doc.add(new Field("all", all, Field.Store.NO, Field.Index.TOKENIZED));
-		return doc;
-	}
-	
-    public static void deleteActivity(String idx, String field, String search){
+	public static void deleteActivity(String idx, String field, String search){
 		Term term = new Term(field, search);
 		IndexReader indexReader;
 		try {
@@ -810,7 +681,136 @@ public class LuceneUtil implements Serializable {
     	deleteActivity(rootRealPath + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
     }
 	    
-    public static void addUpdateActivity(String rootRealPath, boolean update, Site site, java.util.Locale navigationLanguage, AmpActivityVersion newActivity, AmpActivityVersion previousActivity){
+    /**
+		 * Add an activity to the index
+		 * 
+		 * @param request is used to retreive curent site and navigation language
+		 * @param act the activity that will be added
+		 */
+	    public static Document activity2Document(String actId, String projectId, String title, String description,
+				String objective, String purpose, String results, String numcont, String contractingArr, ArrayList<String> componentcodes,
+				String CRIS, String budgetNumber, String newBudgetNumber) {
+			Document doc = new Document();
+			String all = new String("");
+			if (actId != null){
+				doc.add(new Field(ID_FIELD, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
+				//all = all.concat(" " + actId);
+			}
+	
+	
+	        List<String> languages = TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite());
+	        HashMap<String, HashMap<String, String>> trns = new HashMap<String, HashMap<String, String>>();
+	
+	        HashMap<String, String> regularFieldNames = new HashMap<String, String>();
+	        regularFieldNames.put("ampId", projectId);
+	        regularFieldNames.put("name", title);
+	
+	        Long id = Long.valueOf(actId);
+	        String activityClassName = AmpActivityVersion.class.getName();
+	
+	        for (String field: regularFieldNames.keySet()){
+	            String currentValue = regularFieldNames.get(field);
+	            List<AmpContentTranslation> projectIdsList = ContentTranslationUtil.loadFieldTranslations(activityClassName,
+	                    id, field);
+	
+	            String tempStr = "";
+	
+	            if (projectIdsList.size() == 0){
+	                tempStr = currentValue;
+	            } else {
+	                //using tempHash so i can add the translations in the order specified by the languages list
+	                HashMap<String, String> tempHash = new HashMap<String, String>();
+	                for (AmpContentTranslation pId: projectIdsList){
+	                    tempHash.put(pId.getLocale(), pId.getTranslation());
+	                }
+	                for (String lang: languages){
+	                    String val = tempHash.get(lang);
+	                    if (val != null)
+	                        tempStr += val;
+	                }
+	            }
+	
+	            if ("name".equals(field)){
+	                doc.add(new Field(field, tempStr, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
+	            } else {
+	                doc.add(new Field(field, tempStr, Field.Store.NO, Field.Index.TOKENIZED));
+	            }
+	            all = all.concat(" " + tempStr);
+	        }
+	
+	/*
+	        if (projectId != null){
+				doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.TOKENIZED));
+				all = all.concat(" " + projectId);
+			}
+			if (title != null){
+				doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
+				all = all.concat(" " + title);
+			}*/
+			if (description != null && description.length()>0){
+				doc.add(new Field("description", description, Field.Store.NO, Field.Index.TOKENIZED));
+				all = all.concat(" " + description);
+			}
+			if (objective != null && objective.length()>0){
+				doc.add(new Field("objective", objective, Field.Store.NO, Field.Index.TOKENIZED));
+				all = all.concat(" " + objective);
+			}
+			if (purpose != null && purpose.length()>0){
+				doc.add(new Field("purpose", purpose, Field.Store.NO, Field.Index.TOKENIZED));
+				all = all.concat(" " + purpose);
+			}
+			if (results != null && results.length()>0){
+				doc.add(new Field("results", results, Field.Store.NO, Field.Index.TOKENIZED));
+				all = all.concat(" " + results);
+			}
+			
+			//
+			if (numcont != null && numcont.length()>0){
+				doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.TOKENIZED));
+				all = all.concat(" " + numcont);
+			}
+			
+			if (CRIS != null && CRIS.length() > 0) {
+				doc.add(new Field("CRIS", CRIS, Field.Store.NO, Field.Index.TOKENIZED));
+				all = all.concat(" " + CRIS);
+			}
+			if (budgetNumber != null && budgetNumber.length() > 0) {
+				doc.add(new Field("budgetNumber", budgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
+				all = all.concat(" " + budgetNumber);
+			}
+			if (newBudgetNumber != null && newBudgetNumber.length() > 0 ) {
+				doc.add(new Field("newBudgetNumber", newBudgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
+				all = all.concat(" " + newBudgetNumber);
+			}
+			
+	//		if (contractingArr != null && contractingArr.length() > 0 ) {
+	//			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.TOKENIZED));
+	//			all = all.concat(" " + contractingArr);
+	//			
+	//		}
+			
+			int i =0;
+			if (componentcodes != null && componentcodes.size()>0){
+					
+	        		for (String value : componentcodes) {
+	        			if (value!=null){
+	        			doc.add(new Field("componentcode_"+String.valueOf(i), value, Field.Store.NO, Field.Index.TOKENIZED));
+	        			all = all.concat(" " + value);
+	        			}
+	        			i++;
+	        		}
+				
+			
+			}
+			
+			if (all.length() == 0)
+				return null;
+			
+			doc.add(new Field("all", all, Field.Store.NO, Field.Index.TOKENIZED));
+			return doc;
+		}
+
+	public static void addUpdateActivity(String rootRealPath, boolean update, Site site, java.util.Locale navigationLanguage, AmpActivityVersion newActivity, AmpActivityVersion previousActivity){
     	logger.info("Updating activity!");
 		try {
 			if (update) {
@@ -929,7 +929,7 @@ public class LuceneUtil implements Serializable {
 			mlt.setMinTermFreq(1);
 			
 				
-			mlt.setFieldNames(new String[] { "title" });
+			mlt.setFieldNames(new String[] { "name" });
 			mlt.setAnalyzer(analyzer);
 			//System.out.println("mlt.describeparams="+mlt.describeParams());
 		
@@ -952,7 +952,7 @@ public class LuceneUtil implements Serializable {
 				Document doc = indexSearcher.doc(scoreDoc.doc);
 
 				// Get the title of the activity
-				String str = doc.get("title");
+				String str = doc.get("name");
 				titles.add(str);
 			}
 

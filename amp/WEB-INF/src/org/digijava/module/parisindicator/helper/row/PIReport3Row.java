@@ -9,7 +9,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
  * 
  * @author gabriel
  */
-public class PIReport3Row extends PIReportAbstractRow {
+public class PIReport3Row extends PIReportAbstractRow implements Comparable {
 
 	private AmpOrgGroup donorGroup;
 	private int year;
@@ -100,5 +100,20 @@ public class PIReport3Row extends PIReportAbstractRow {
 		if (year != other.year)
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		PIReport3Row aux1 = this;
+		PIReport3Row aux2 = (PIReport3Row) arg0;
+		if (aux1 == null && aux2 == null) {
+			return 0;
+		} else if (aux1 == null) {
+			return 1;
+		} else if (aux2 == null) {
+			return -1;
+		} else {
+			return (aux1.getDonorGroup().getOrgGrpName() + aux1.getYear()).compareTo(aux2.getDonorGroup().getOrgGrpName() + aux2.getYear());
+		}
 	}
 }

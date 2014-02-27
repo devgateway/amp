@@ -3,8 +3,10 @@ package org.digijava.module.parisindicator.model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -73,26 +75,16 @@ public class PIUseCase {
 	private static Logger logger = Logger.getLogger(PIUseCase.class);
 
 	/*
-	 * Receives the form and populates the collections used in the filters.
-	 * TODO: Replace the form variable for all collections to decouple the
-	 * Action from the UseCase, so this method can be used from elsewhere.
+	 * Receives the form and populates the collections used in the filters. TODO: Replace the form variable for all collections to decouple the Action from the UseCase, so this method can be used from
+	 * elsewhere.
 	 */
-	public PIForm setupFiltersData(PIForm form, HttpServletRequest request,ServletContext ampContext) {
-		/*if (form.getStatuses() == null || form.getStatuses().isEmpty()) {
-			form.setStatuses(DbUtil.getAmpStatusFromCM(request));
-		}
-		if (form.getDonors() == null || form.getDonors().isEmpty()) {
-			form.setDonors(DbUtil.getAllDonorOrgs());
-		}
-		if (form.getSectors() == null || form.getSectors().isEmpty()) {
-			form.setSectors(SectorUtil.getAmpSectors());
-		}
-		if (form.getDonorGroups() == null || form.getDonorGroups().isEmpty()) {
-			form.setDonorGroups(DbUtil.getAllOrgGroups());
-		}
-		if (form.getFinancingInstruments() == null || form.getFinancingInstruments().isEmpty()) {
-		form.setFinancingInstruments(DbUtil.getAllFinancingInstruments());
-		}*/
+	public PIForm setupFiltersData(PIForm form, HttpServletRequest request, ServletContext ampContext) {
+		/*
+		 * if (form.getStatuses() == null || form.getStatuses().isEmpty()) { form.setStatuses(DbUtil.getAmpStatusFromCM(request)); } if (form.getDonors() == null || form.getDonors().isEmpty()) {
+		 * form.setDonors(DbUtil.getAllDonorOrgs()); } if (form.getSectors() == null || form.getSectors().isEmpty()) { form.setSectors(SectorUtil.getAmpSectors()); } if (form.getDonorGroups() == null
+		 * || form.getDonorGroups().isEmpty()) { form.setDonorGroups(DbUtil.getAllOrgGroups()); } if (form.getFinancingInstruments() == null || form.getFinancingInstruments().isEmpty()) {
+		 * form.setFinancingInstruments(DbUtil.getAllFinancingInstruments()); }
+		 */
 		if (form.getCalendars() == null || form.getCalendars().isEmpty()) {
 			form.setCalendars(DbUtil.getAllFisCalenders());
 		}
@@ -100,101 +92,98 @@ public class PIUseCase {
 			form.setCurrencyTypes(CurrencyUtil.getAllCurrencies(CurrencyUtil.ALL_ACTIVE));
 		}
 		if (form.getFinancingInstrumentsElements() == null || form.getFinancingInstrumentsElements().isEmpty()) {
-			form.setFinancingInstrumentsElements( new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
-			Collection<AmpCategoryValue> finInstrValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);	
-			HierarchyListableImplementation rootFinancingInstrument	= new HierarchyListableImplementation();
+			form.setFinancingInstrumentsElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
+			Collection<AmpCategoryValue> finInstrValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+			HierarchyListableImplementation rootFinancingInstrument = new HierarchyListableImplementation();
 			rootFinancingInstrument.setLabel("All Financing Instrument Values");
 			rootFinancingInstrument.setUniqueId("0");
-			rootFinancingInstrument.setChildren( finInstrValues );
-			GroupingElement<HierarchyListableImplementation> finInstrElement	=
-					new GroupingElement<HierarchyListableImplementation>("Financing Instrument", "filter_financing_instr_div", 
-							rootFinancingInstrument, "selectedFinancingIstruments");
+			rootFinancingInstrument.setChildren(finInstrValues);
+			GroupingElement<HierarchyListableImplementation> finInstrElement = new GroupingElement<HierarchyListableImplementation>("Financing Instrument", "filter_financing_instr_div",
+					rootFinancingInstrument, "selectedFinancingIstruments");
 			form.getFinancingInstrumentsElements().add(finInstrElement);
 		}
-		if(form.getDonorElements()==null||form.getDonorElements().isEmpty()){
+		if (form.getDonorElements() == null || form.getDonorElements().isEmpty()) {
 			Collection<AmpOrgGroup> donorGroups = DbUtil.getAllOrgGroups();
-	 	 	form.setDonorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
+			form.setDonorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
 			HierarchyListableImplementation rootOrgGroup = new HierarchyListableImplementation();
-	 	 	rootOrgGroup.setLabel("All Donor Groups");
-	 	 	rootOrgGroup.setUniqueId("0");
-	 	 	rootOrgGroup.setChildren( donorGroups );
-	 	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
-	 	 	form.getDonorElements().add(donorGroupElement);
-	 	 	HierarchyListableUtil.changeTranslateable(donorGroupElement.getRootHierarchyListable(), false);
-	 	 	
-	 	 	Collection<AmpOrganisation> donors = DbUtil.getAllDonorOrgs();
-	 	 	HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
-	 	 	rootDonors.setLabel("All Donors");
-	 	 	rootDonors.setUniqueId("0");
-	 	 	rootDonors.setChildren( donors );
-	 	 	GroupingElement<HierarchyListableImplementation> donorsElement  = new GroupingElement<HierarchyListableImplementation>("Donor Agencies", "filter_donor_agencies_div", rootDonors, "selectedDonors");
-	 	 	form.getDonorElements().add(donorsElement);
-	 	 	HierarchyListableUtil.changeTranslateable(donorsElement.getRootHierarchyListable(), false);
+			rootOrgGroup.setLabel("All Donor Groups");
+			rootOrgGroup.setUniqueId("0");
+			rootOrgGroup.setChildren(donorGroups);
+			GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup,
+					"selectedDonorGroups");
+			form.getDonorElements().add(donorGroupElement);
+			HierarchyListableUtil.changeTranslateable(donorGroupElement.getRootHierarchyListable(), false);
+
+			Collection<AmpOrganisation> donors = DbUtil.getAllDonorOrgs();
+			HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
+			rootDonors.setLabel("All Donors");
+			rootDonors.setUniqueId("0");
+			rootDonors.setChildren(donors);
+			GroupingElement<HierarchyListableImplementation> donorsElement = new GroupingElement<HierarchyListableImplementation>("Donor Agencies", "filter_donor_agencies_div", rootDonors,
+					"selectedDonors");
+			form.getDonorElements().add(donorsElement);
+			HierarchyListableUtil.changeTranslateable(donorsElement.getRootHierarchyListable(), false);
 		}
-		if (form.getSectorStatusesElements()==null||form.getSectorStatusesElements().isEmpty()) { 
+		if (form.getSectorStatusesElements() == null || form.getSectorStatusesElements().isEmpty()) {
 			form.setSectorStatusesElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
-			Collection<AmpCategoryValue> activityStatusValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);	
-			HierarchyListableImplementation rootActivityStatus	= new HierarchyListableImplementation();
+			Collection<AmpCategoryValue> activityStatusValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
+			HierarchyListableImplementation rootActivityStatus = new HierarchyListableImplementation();
 			rootActivityStatus.setLabel("All");
 			rootActivityStatus.setUniqueId("0");
-			rootActivityStatus.setChildren( activityStatusValues );
-			GroupingElement<HierarchyListableImplementation> activityStatusElement	=
-					new GroupingElement<HierarchyListableImplementation>("Status", "filter_activity_status_div", 
-							rootActivityStatus, "selectedStatuses");
+			rootActivityStatus.setChildren(activityStatusValues);
+			GroupingElement<HierarchyListableImplementation> activityStatusElement = new GroupingElement<HierarchyListableImplementation>("Status", "filter_activity_status_div", rootActivityStatus,
+					"selectedStatuses");
 			form.getSectorStatusesElements().add(activityStatusElement);
-		
-			
-			if (FeaturesUtil.isVisibleField("Sector", ampContext)){                
-		 	 	HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
-		 	 	rootAmpSectors.setLabel("Primary Sectors");
-		 	 	rootAmpSectors.setUniqueId(0 + "");
-		 		List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);
-		 	 	rootAmpSectors.setChildren(ampSectors);
-		 	 	GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>("Primary Sectors", "filter_sectors_div", rootAmpSectors, "selectedSectors");
-		 	 	form.getSectorStatusesElements().add(sectorsElement);
-		 	 	HierarchyListableUtil.changeTranslateable(sectorsElement.getRootHierarchyListable(), false);
-		 	 	}
-		 	 	
-		 	 	if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)){
-		 	 		HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
-		 	 		rootSecondaryAmpSectors.setLabel("Secondary Sectors");
-		 	 		rootSecondaryAmpSectors.setUniqueId("0");
-		 	 		List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
-		 	 		rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
-		 	 		GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div", rootSecondaryAmpSectors, "selectedSectors");
-		 	 		form.getSectorStatusesElements().add(secondarySectorsElement);
-		 	 		HierarchyListableUtil.changeTranslateable(secondarySectorsElement.getRootHierarchyListable(), false);
-		 	 	}
 
-		        if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext)){
-		 	 		HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
-		 	 		rootTertiaryAmpSectors.setLabel("Tertiary Sector");
-		 	 		rootTertiaryAmpSectors.setUniqueId("0");
-		 	 		List<AmpSector> tertiaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME);
-		 	 		rootTertiaryAmpSectors.setChildren(tertiaryAmpSectors);
-		 	 		GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div", rootTertiaryAmpSectors, "selectedSectors");
-		 	 		form.getSectorStatusesElements().add(tertiarySectorsElement);
-		 	 		HierarchyListableUtil.changeTranslateable(tertiarySectorsElement.getRootHierarchyListable(), false);
-		 	 	}
-		        
+			if (FeaturesUtil.isVisibleField("Sector", ampContext)) {
+				HierarchyListableImplementation rootAmpSectors = new HierarchyListableImplementation();
+				rootAmpSectors.setLabel("Primary Sectors");
+				rootAmpSectors.setUniqueId(0 + "");
+				List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);
+				rootAmpSectors.setChildren(ampSectors);
+				GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>("Primary Sectors", "filter_sectors_div", rootAmpSectors,
+						"selectedSectors");
+				form.getSectorStatusesElements().add(sectorsElement);
+				HierarchyListableUtil.changeTranslateable(sectorsElement.getRootHierarchyListable(), false);
+			}
+
+			if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)) {
+				HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
+				rootSecondaryAmpSectors.setLabel("Secondary Sectors");
+				rootSecondaryAmpSectors.setUniqueId("0");
+				List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
+				rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
+				GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div",
+						rootSecondaryAmpSectors, "selectedSectors");
+				form.getSectorStatusesElements().add(secondarySectorsElement);
+				HierarchyListableUtil.changeTranslateable(secondarySectorsElement.getRootHierarchyListable(), false);
+			}
+
+			if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext)) {
+				HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
+				rootTertiaryAmpSectors.setLabel("Tertiary Sector");
+				rootTertiaryAmpSectors.setUniqueId("0");
+				List<AmpSector> tertiaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME);
+				rootTertiaryAmpSectors.setChildren(tertiaryAmpSectors);
+				GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div",
+						rootTertiaryAmpSectors, "selectedSectors");
+				form.getSectorStatusesElements().add(tertiarySectorsElement);
+				HierarchyListableUtil.changeTranslateable(tertiarySectorsElement.getRootHierarchyListable(), false);
+			}
+
 		}
 		return form;
 	}
 
 	/*
-	 * Resets all filters to their base values, some values must be null as
-	 * default and other needs always a value like the calendar, currency, etc.
+	 * Resets all filters to their base values, some values must be null as default and other needs always a value like the calendar, currency, etc.
 	 */
 	public void resetFilterSelections(PIForm form, ApplicationSettings appSettings) {
 
 		if (appSettings.getFisCalId() != null) {
-			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(appSettings.getFisCalId()).getAmpFiscalCalId()
-					.toString());
+			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(appSettings.getFisCalId()).getAmpFiscalCalId().toString());
 		} else {
-			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(DbUtil.getBaseFiscalCalendar()).getAmpFiscalCalId()
-					.toString());
+			form.setSelectedCalendar(DbUtil.getAmpFiscalCalendar(DbUtil.getBaseFiscalCalendar()).getAmpFiscalCalId().toString());
 		}
 		form.setDefaultCalendar(form.getSelectedCalendar());
 		form.setSelectedCurrency(CurrencyUtil.getAmpcurrency(appSettings.getCurrencyId()).getCurrencyCode());
@@ -219,8 +208,7 @@ public class PIUseCase {
 	}
 
 	/*
-	 * Gets the collection of PI reports from the DB and filters any report if
-	 * necessary.
+	 * Gets the collection of PI reports from the DB and filters any report if necessary.
 	 */
 	public Collection<AmpAhsurveyIndicator> setupAvailablePIReports() {
 		Collection<AmpAhsurveyIndicator> list = new ArrayList<AmpAhsurveyIndicator>();
@@ -241,23 +229,16 @@ public class PIUseCase {
 	public String checkReportName(String name) {
 		String ret = null;
 		if (name == null) {
-		} else if (name.equals(PIConstants.PARIS_INDICATOR_REPORT_3)
-				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_4)
-				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_5a)
-				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_5b)
-				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_6)
-				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_7)
-				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_9)
-				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_10a)
-				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_10b)) {
+		} else if (name.equals(PIConstants.PARIS_INDICATOR_REPORT_3) || name.equals(PIConstants.PARIS_INDICATOR_REPORT_4) || name.equals(PIConstants.PARIS_INDICATOR_REPORT_5a)
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_5b) || name.equals(PIConstants.PARIS_INDICATOR_REPORT_6) || name.equals(PIConstants.PARIS_INDICATOR_REPORT_7)
+				|| name.equals(PIConstants.PARIS_INDICATOR_REPORT_9) || name.equals(PIConstants.PARIS_INDICATOR_REPORT_10a) || name.equals(PIConstants.PARIS_INDICATOR_REPORT_10b)) {
 			ret = name;
 		}
 		return ret;
 	}
 
 	/*
-	 * Returns an indicator object from the list of available reports given the
-	 * report code.
+	 * Returns an indicator object from the list of available reports given the report code.
 	 */
 	public AmpAhsurveyIndicator getPIReport(String code) {
 		AmpAhsurveyIndicator ret = null;
@@ -273,8 +254,7 @@ public class PIUseCase {
 	}
 
 	/*
-	 * Executes part of the common logic for all reports and then creates the
-	 * concrete report.
+	 * Executes part of the common logic for all reports and then creates the concrete report.
 	 */
 	public PIAbstractReport createReport(PIForm form, HttpServletRequest request) throws Exception {
 		// Create the report.
@@ -307,47 +287,46 @@ public class PIUseCase {
 		Collection<AmpOrgGroup> auxDonorGroups = PIUtils.getDonorGroups(form.getSelectedDonorGroups());
 		Collection<AmpSector> auxSectors = PIUtils.getSectors(form.getSelectedSectors());
 		Collection<AmpCategoryValue> auxStatuses = PIUtils.getStatuses(form.getSelectedStatuses());
-		Collection<AmpCategoryValue> auxFinancingInstruments = PIUtils.getFinancingInstruments(form
-				.getSelectedFinancingIstruments());
-		if (!report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a)
-				&& !report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10b)) {
+		Collection<AmpCategoryValue> auxFinancingInstruments = PIUtils.getFinancingInstruments(form.getSelectedFinancingIstruments());
+
+		long currentDate = Calendar.getInstance().getTimeInMillis();
+		if (!report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a) && !report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10b)) {
 			Collection<AmpAhsurvey> commonData = getCommonSurveyData(auxDonors, auxDonorGroups);
+			logger.warn("PI Time 1: " + (Calendar.getInstance().getTimeInMillis() - currentDate));			
 
 			// Execute the logic for generating each report.
-			preMainReportRows = report.generateReport(commonData, form.getSelectedStartYear(), form
-					.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses, auxFinancingInstruments);
+			currentDate = Calendar.getInstance().getTimeInMillis();
+			preMainReportRows = report.generateReport(commonData, form.getSelectedStartYear(), form.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses, auxFinancingInstruments);
+			logger.warn("PI Time 2: " + (Calendar.getInstance().getTimeInMillis() - currentDate));			
 		} else {
 			if (report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10a)) {
 				Collection<AmpOrganisation> commonData10a = getCommonSurveyDataForPI10a(auxDonors, auxDonorGroups);
 
 				// Execute the logic for generating each report.
-				preMainReportRows = report.generateReport10a(commonData10a, form.getSelectedStartYear(), form
-						.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses,
+				preMainReportRows = report.generateReport10a(commonData10a, form.getSelectedStartYear(), form.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses,
 						auxFinancingInstruments);
 			}
 			if (report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_10b)) {
 				Collection<NodeWrapper> commonData10b = getCommonSurveyDataForPI10b(auxDonors, auxDonorGroups, request);
 
 				// Execute the logic for generating each report.
-				preMainReportRows = report.generateReport10b(commonData10b, form.getSelectedStartYear(), form
-						.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses,
+				preMainReportRows = report.generateReport10b(commonData10b, form.getSelectedStartYear(), form.getSelectedEndYear(), auxCalendar, auxCurrency, auxSectors, auxStatuses,
 						auxFinancingInstruments);
 			}
 		}
 
 		// Postprocess the report if needed.
-		Collection<PIReportAbstractRow> postMainReportRows = report.reportPostProcess(preMainReportRows, form
-				.getSelectedStartYear(), form.getSelectedEndYear());
+		currentDate = Calendar.getInstance().getTimeInMillis();
+		Collection<PIReportAbstractRow> postMainReportRows = report.reportPostProcess(preMainReportRows, form.getSelectedStartYear(), form.getSelectedEndYear());
+		logger.warn("PI Time 3: " + (Calendar.getInstance().getTimeInMillis() - currentDate));
 
 		if (report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_5a)) {
 			PIReport5a auxReport = new PIReport5a();
-			int[][] miniTable = auxReport.createMiniTable(postMainReportRows, form.getSelectedStartYear(), form
-					.getSelectedEndYear());
+			int[][] miniTable = auxReport.createMiniTable(postMainReportRows, form.getSelectedStartYear(), form.getSelectedEndYear());
 			report.setMiniTable(miniTable);
 		} else if (report.getReportCode().equals(PIConstants.PARIS_INDICATOR_REPORT_5b)) {
 			PIReport5b auxReport = new PIReport5b();
-			int[][] miniTable = auxReport.createMiniTable(postMainReportRows, form.getSelectedStartYear(), form
-					.getSelectedEndYear());
+			int[][] miniTable = auxReport.createMiniTable(postMainReportRows, form.getSelectedStartYear(), form.getSelectedEndYear());
 			report.setMiniTable(miniTable);
 		}
 
@@ -357,54 +336,57 @@ public class PIUseCase {
 	}
 
 	/*
-	 * Returns a collection of AmpAhSurvey objects filtered by donor and donor
-	 * group.
+	 * Returns a collection of AmpAhSurvey objects filtered by donor and donor group.
 	 */
-	private Collection<AmpAhsurvey> getCommonSurveyData(Collection<AmpOrganisation> filterDonors,
-			Collection<AmpOrgGroup> filterDonorGroups) {
+	private Collection<AmpAhsurvey> getCommonSurveyData(Collection<AmpOrganisation> filterDonors, Collection<AmpOrgGroup> filterDonorGroups) {
 
 		Collection<AmpAhsurvey> commonData = null;
+		Collection<AmpAhsurvey> commonDataUnique = null;
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// Set the query to return AmpAhSurvey objects.
-			Criteria criteria = session.createCriteria(AmpAhsurvey.class);
-			criteria.setFetchMode("ampActivityId.funding", FetchMode.JOIN)		
-			.setFetchMode("ampActivityId.funding.fundingDetails", FetchMode.JOIN);
-			
-			//criteria.setMaxResults(500);
-			
-			// Link to amp_activity view to use only the last version of an activity.
-			//criteria.createAlias("ampActivityId", "activityTable");
-			
-			DetachedCriteria liveActivityVersions = DetachedCriteria.forClass(AmpActivity.class).setProjection(Projections.property("ampActivityId"));				    
-			criteria.add(Property.forName("ampActivityId").in(liveActivityVersions));
-			
-					
-			//TODO: we need Hibernate 4 to use Criteria Queries for this (needs nested subqueries with multiple params)
+
+			// TODO: we need Hibernate 4 to use Criteria Queries for this (needs
+			// nested subqueries with multiple params)
 			SQLQuery latestSurveysOnlySQL = session.createSQLQuery("SELECT s.amp_ahsurvey_id AS survey_ids FROM "
 					+ "(select max(survey_date) AS max_date,amp_activity_id from amp_ahsurvey group by amp_activity_id) AS r "
-					+ "INNER JOIN amp_ahsurvey s ON s.amp_activity_id=r.amp_activity_id AND s.survey_date=r.max_date"
-					+ " UNION "
+					+ "INNER JOIN amp_ahsurvey s ON s.amp_activity_id=r.amp_activity_id AND s.survey_date=r.max_date" + " UNION "
 					+ "select amp_ahsurvey_id AS survey_ids from amp_ahsurvey where survey_date is null and amp_activity_id "
 					+ "not in (select amp_activity_id from amp_ahsurvey where survey_date is not null);");
-			latestSurveysOnlySQL.addScalar("survey_ids",LongType.INSTANCE);
-			
+			latestSurveysOnlySQL.addScalar("survey_ids", LongType.INSTANCE);
+
 			List<Long> latestSurveysOnlyList = latestSurveysOnlySQL.list();
-			
+
+			// Set the query to return AmpAhSurvey objects.
+			Criteria criteria = session.createCriteria(AmpAhsurvey.class);
+
+			// IMPORTANT NOTICE: ".setFetchMode("responses", FetchMode.JOIN)" will force the query to join each survey with its responses, resulting in 2 things:
+			// 1) Something we want: to retrieve all responses right now with one query and avoid thousands of selects (AMP-16944).
+			// 2) Something we dont want: the list will have duplicated all the surveys, something we will correct later with "commonDataUnique = new HashSet<AmpAhsurvey>(commonData)"
+			criteria.setFetchMode("ampActivityId.funding", FetchMode.JOIN).setFetchMode("ampActivityId.funding.fundingDetails", FetchMode.JOIN).setFetchMode("responses", FetchMode.JOIN);
+
+			// Link to amp_activity view to use only the last version of an
+			// activity.
+			// criteria.createAlias("ampActivityId", "activityTable");
+
+			DetachedCriteria liveActivityVersions = DetachedCriteria.forClass(AmpActivity.class).setProjection(Projections.property("ampActivityId"));
+			criteria.add(Property.forName("ampActivityId").in(liveActivityVersions));
+
 			criteria.add(Property.forName("ampAHSurveyId").in(latestSurveysOnlyList));
 
 			criteria.createAlias("pointOfDeliveryDonor", "podd1");
-			// Explanation: Hibernate will automatically detect prior alias 'podd1' to amp_organisation 
-			// and use it to link with amp_org_group to create alias 'podd2', then using the same logic
-			// will link 'podd2' to create 'podd3', and thats the alias I can use to access amp_org_type.
+			// Explanation: Hibernate will automatically detect prior alias
+			// 'podd1' to amp_organisation
+			// and use it to link with amp_org_group to create alias 'podd2',
+			// then using the same logic
+			// will link 'podd2' to create 'podd3', and thats the alias I can
+			// use to access amp_org_type.
 			// Trying to use podd2 to access amp_org_type fields will fail!!!
 			criteria.createAlias("pointOfDeliveryDonor.orgGrpId", "podd2");
 			criteria.createAlias("pointOfDeliveryDonor.orgGrpId.orgType", "podd3");
-			
+
 			// Set the filter for Multilateral and Bilateral PoDDs.
-			criteria.add(Restrictions.in("podd3.orgTypeCode", new String[] { PIConstants.ORG_GRP_MULTILATERAL,
-					PIConstants.ORG_GRP_BILATERAL }));
+			criteria.add(Restrictions.in("podd3.orgTypeCode", new String[] { PIConstants.ORG_GRP_MULTILATERAL, PIConstants.ORG_GRP_BILATERAL }));
 			// If needed, filter for organizations.
 			if (filterDonors != null) {
 				criteria.add(Restrictions.in("pointOfDeliveryDonor", filterDonors));
@@ -413,16 +395,19 @@ public class PIUseCase {
 			if (filterDonorGroups != null) {
 				criteria.add(Restrictions.in("podd1.orgGrpId", filterDonorGroups));
 			}
+
 			commonData = criteria.list();
+
+			// As explained above here we convert a list with duplicated surveys into a Set with no duplicates.
+			commonDataUnique = new LinkedHashSet<AmpAhsurvey>(commonData);
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
 		}
-		return commonData;
+		return commonDataUnique;
 	}
 
-	private Collection<AmpOrganisation> getCommonSurveyDataForPI10a(Collection<AmpOrganisation> filterDonors,
-			Collection<AmpOrgGroup> filterDonorGroups) {
+	private Collection<AmpOrganisation> getCommonSurveyDataForPI10a(Collection<AmpOrganisation> filterDonors, Collection<AmpOrgGroup> filterDonorGroups) {
 
 		Collection<AmpOrganisation> commonData = new HashSet<AmpOrganisation>();
 		Session session = null;
@@ -441,8 +426,7 @@ public class PIUseCase {
 						AmpOrganisation auxOrganisation = iterOrganisations.next();
 						AmpOrgGroup auxOrgGrp = auxOrganisation.getOrgGrpId();
 						// Filter for Multilateral and Bilateral PoDDs.
-						if (auxOrgGrp.getOrgType().getOrgTypeCode().equals(PIConstants.ORG_GRP_BILATERAL)
-								|| auxOrgGrp.getOrgType().getOrgTypeCode().equals(PIConstants.ORG_GRP_MULTILATERAL)) {
+						if (auxOrgGrp.getOrgType().getOrgTypeCode().equals(PIConstants.ORG_GRP_BILATERAL) || auxOrgGrp.getOrgType().getOrgTypeCode().equals(PIConstants.ORG_GRP_MULTILATERAL)) {
 							boolean add = true;
 							// If needed, filter for organizations.
 							if (filterDonors != null) {
@@ -469,8 +453,7 @@ public class PIUseCase {
 		return commonData;
 	}
 
-	private Collection<NodeWrapper> getCommonSurveyDataForPI10b(Collection<AmpOrganisation> filterDonors,
-			Collection<AmpOrgGroup> filterDonorGroups, HttpServletRequest request) {
+	private Collection<NodeWrapper> getCommonSurveyDataForPI10b(Collection<AmpOrganisation> filterDonors, Collection<AmpOrgGroup> filterDonorGroups, HttpServletRequest request) {
 
 		Collection<NodeWrapper> commonData = new HashSet<NodeWrapper>();
 		try {
@@ -499,25 +482,19 @@ public class PIUseCase {
 					NodeWrapper nextWrapper = new NodeWrapper(nextNode);
 
 					// Check document type.
-					AmpCategoryValue docType = CategoryManagerUtil.getAmpCategoryValueFromDb(nextWrapper
-							.getCmDocTypeId(), true);
+					AmpCategoryValue docType = CategoryManagerUtil.getAmpCategoryValueFromDb(nextWrapper.getCmDocTypeId(), true);
 					if (docType != null) {
-						if (docType.getValue().equalsIgnoreCase(
-								TranslatorWorker.translateText(
-										CategoryConstants.RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY))) {
+						if (docType.getValue().equalsIgnoreCase(TranslatorWorker.translateText(CategoryConstants.RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY))) {
 
 							// Only add documents that have at least 1 donor.
-							Collection<AmpOrganisation> auxOrganizations = DocToOrgDAO.getOrgsObjByUuid(nextWrapper
-									.getUuid());
+							Collection<AmpOrganisation> auxOrganizations = DocToOrgDAO.getOrgsObjByUuid(nextWrapper.getUuid());
 							Iterator<AmpOrganisation> iterOrgs = auxOrganizations.iterator();
 							while (iterOrgs.hasNext()) {
 								AmpOrganisation auxOrganisation = iterOrgs.next();
 								boolean add = true;
 								// Filter by donor type.
-								if (!auxOrganisation.getOrgGrpId().getOrgType().getOrgTypeCode().equals(
-										PIConstants.ORG_GRP_BILATERAL)
-										&& !auxOrganisation.getOrgGrpId().getOrgType().getOrgTypeCode().equals(
-												PIConstants.ORG_GRP_MULTILATERAL)) {
+								if (!auxOrganisation.getOrgGrpId().getOrgType().getOrgTypeCode().equals(PIConstants.ORG_GRP_BILATERAL)
+										&& !auxOrganisation.getOrgGrpId().getOrgType().getOrgTypeCode().equals(PIConstants.ORG_GRP_MULTILATERAL)) {
 									add = false;
 								}
 

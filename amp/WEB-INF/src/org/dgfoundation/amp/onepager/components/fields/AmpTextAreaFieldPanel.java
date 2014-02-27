@@ -74,7 +74,10 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
                         "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} " +
                         "$('#" + textAreaContainer.getMarkupId() + "').show();" +
                         "$('#" + textAreaContainer.getMarkupId() + "').focus();" +
-                        "$('#" + textAreaContainer.getMarkupId() + "').blur();" +
+
+                        // we do not need to blur on element (especially after the focus)
+                        // blur behavior is different on different browsers
+                        //"$('#" + textAreaContainer.getMarkupId() + "').blur();" +
                         "$('#" + textAreaContainer.getMarkupId() + "').hide(); " +
                         "$('#" + closeLink.getMarkupId() + "').hide(); " +
                         "return false;"));

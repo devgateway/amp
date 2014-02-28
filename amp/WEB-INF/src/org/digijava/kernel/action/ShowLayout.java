@@ -67,10 +67,11 @@ public class ShowLayout
     layout = request.getParameter("layout") == null? "default" : request.getParameter("layout");
 		// dirty fix sorry, Mikheil :(
 		if (layout.equals("login")
-				&& FeaturesUtil
-						.getGlobalSettingValueBoolean(GlobalSettingsConstants.PUBLIC_PORTAL)) {
+				&& FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.PUBLIC_PORTAL)) {
 			layout = "publicPortalLoginLayout";
-		}
+            String publicPortalUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PUBLIC_PORTAL_URL);
+            request.setAttribute("publicPortalUrl", publicPortalUrl);
+        }
     // Get tiles context or create new one if it does not exist
     ComponentContext context = ComponentContext.getContext(request);
     if (context == null) {

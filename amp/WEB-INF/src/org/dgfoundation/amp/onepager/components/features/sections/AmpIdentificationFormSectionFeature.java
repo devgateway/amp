@@ -97,9 +97,13 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 				.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL))) {
 			
 			//we only disable the language switcher if we are in multilingual mode
-			TranslationDecorator titleDecorator=
-					(TranslationDecorator)title.get("trnContainer");
-					titleDecorator.getSwitchingDisabled().setObject(Boolean.TRUE);				
+
+			//we only disable if the object in the default languaje is null or empty
+			if(title.getModel().getObject()==null || title.getModel().getObject().equals("")){
+				TranslationDecorator titleDecorator=
+						(TranslationDecorator)title.get("trnContainer");
+						titleDecorator.getSwitchingDisabled().setObject(Boolean.TRUE);				
+			}
 			title.getTextAreaContainer().add(
 					new AjaxFormComponentUpdatingBehavior("onblur") {
 

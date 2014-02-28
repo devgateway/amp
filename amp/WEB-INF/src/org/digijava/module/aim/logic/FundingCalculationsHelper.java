@@ -9,6 +9,7 @@ import org.apache.commons.lang.ObjectUtils.Null;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.FundingInformationItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
@@ -237,6 +238,11 @@ public class FundingCalculationsHelper {
 			}	
 			FundingDetail fundingDetail = new FundingDetail();
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
+            if (fundDet instanceof AmpFundingDetail) {
+                fundingDetail.setFundDetId(((AmpFundingDetail)fundDet).getAmpFundDetailId());
+            } else if (fundDet instanceof AmpFundingMTEFProjection) {
+                fundingDetail.setFundDetId(((AmpFundingMTEFProjection)fundDet).getAmpFundingMTEFProjectionId());
+            }
 //			String baseCurrCode		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
 			
 			if (fundDet.getFixedExchangeRate() != null && fundDet.getFixedExchangeRate().doubleValue() != 1) {

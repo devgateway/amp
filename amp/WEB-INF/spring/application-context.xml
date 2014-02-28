@@ -43,8 +43,6 @@
 
     <http pattern="/aim/pdfExport.do**" security="none" />
 
-    <http pattern="/publicPortal" security="none" />
-
 	<http pattern="/aim/viewNewAdvancedReport.do**" security="none" />
 	
 	<http pattern="/exception/showExceptionReport.do**" security="none" />

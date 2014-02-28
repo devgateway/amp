@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -34,7 +35,11 @@ var loginFailed = function(data, status) {
 	<center>
 			<div class="header">
 				<div class="login_nav">
-					<div id="toplnk"><a href="/publicPortal"><digi:trn>Access AMP as Public User</digi:trn>&nbsp;&raquo;</a></div>
+					<div id="toplnk">
+                        <c:if test="${empty fn:trim(publicPortalUrl)}">
+                            <c:url var="publicPortalUrl" value="/"/>
+                        </c:if>
+                        <a href="${publicPortalUrl}"><digi:trn>Access AMP as Public User</digi:trn>&nbsp;&raquo;</a></div>
 				</div>
 				<div class="logo">
 					<table width="480" border="0" cellspacing="0" cellpadding="0">

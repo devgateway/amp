@@ -43,6 +43,7 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
+import org.dgfoundation.amp.exprlogic.Values;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -994,6 +995,9 @@ public class AmpReportGenerator extends ReportGenerator {
 
 	protected void prepareData() {
 
+		Values.nr_CTV_called = 0;
+		Values.cumulative_CTV_sizes = 0;
+		
 		try {
 			
 			applyPercentagesToFilterColumns();
@@ -1109,8 +1113,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (getCleanupMetadata())
 			deleteMetadata(listOfCells);
 		//logger.error(report.prettyPrint());
-		System.out.format("AmpReportGenerator: AmountCell.getPercentage calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.getPercentageCalls, AmountCell.getPercentageIterations, 1.0 * AmountCell.getPercentageIterations / (0.01 + AmountCell.getPercentageCalls));
-		System.out.format("AmpReportGenerator: AmountCell.getAmountWithMergedCells calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.merged_cells_get_amount_calls, AmountCell.merged_cells_get_amount_iterations, 1.0 * AmountCell.merged_cells_get_amount_iterations / (0.01 + AmountCell.merged_cells_get_amount_calls));
+		logger.info(String.format("AmpReportGenerator: AmountCell.getPercentage calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.getPercentageCalls, AmountCell.getPercentageIterations, 1.0 * AmountCell.getPercentageIterations / (0.01 + AmountCell.getPercentageCalls)));
+		logger.info(String.format("AmpReportGenerator: AmountCell.getAmountWithMergedCells calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.merged_cells_get_amount_calls, AmountCell.merged_cells_get_amount_iterations, 1.0 * AmountCell.merged_cells_get_amount_iterations / (0.01 + AmountCell.merged_cells_get_amount_calls)));
+		logger.info(String.format("AmpReportGenerator: Values.nr_CTV_called = %dK", Values.nr_CTV_called / 1000));
+		logger.info(String.format("AmpReportGenerator: Values.ctv_values_per_call = %.2f", Values.cumulative_CTV_sizes / (Values.nr_CTV_called + 0.0001)));
 	}
 
 	protected void applyYearRangeSettings(GroupReportData report)

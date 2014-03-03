@@ -5,6 +5,7 @@ package org.dgfoundation.amp.ar.dyn;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -61,44 +62,37 @@ public class DynamicColumnsUtil {
 	}
 	
 	
-	public static List<AmpColumns> getMtefColumns() {
-		ArrayList<AmpColumns> retList	= new ArrayList<AmpColumns>();
-		if ( DynamicColumnsUtil.cachedMtefColumnList != null && DynamicColumnsUtil.cachedMtefColumnList.size() > 0 ) {
-			retList.addAll(cachedMtefColumnList);
-		}
-		else {
+	public static List<AmpColumns> getMtefColumns()
+	{
+		if (DynamicColumnsUtil.cachedMtefColumnList == null)
+		{
+			List<AmpColumns> z = new ArrayList<AmpColumns>();
 			Collection<AmpColumns> allCols	= AdvancedReportUtil.getColumnList();
-			if ( allCols != null ) {
-				for ( AmpColumns col: allCols )  {
-					if ( col.getColumnName().contains("MTEF") ) {
-						retList.add(col);
-					}
-				}
+			for ( AmpColumns col: allCols ) 
+			{
+				if ( col.getColumnName().contains("MTEF") )
+					z.add(col);
 			}
-			DynamicColumnsUtil.cachedMtefColumnList	= new ArrayList<AmpColumns>();
-			DynamicColumnsUtil.cachedMtefColumnList.addAll(retList);
+			DynamicColumnsUtil.cachedMtefColumnList	= new ArrayList<AmpColumns>(z);
 		}
-		return retList;
+		return Collections.unmodifiableList(DynamicColumnsUtil.cachedMtefColumnList);
 	}
 	
-	public static List<AmpMeasures> getMtefMeasures() {
-		ArrayList<AmpMeasures> retList	= new ArrayList<AmpMeasures>();
-		if ( DynamicColumnsUtil.cachedMtefMeasureList != null && DynamicColumnsUtil.cachedMtefMeasureList.size() > 0 ) {
-			retList.addAll(cachedMtefMeasureList);
-		}
-		else {
-			Collection<AmpMeasures> allCols	= AdvancedReportUtil.getMeasureList();
-			if ( allCols != null ) {
-				for ( AmpMeasures mes: allCols )  {
-					if ( mes.getMeasureName().contains("MTEF") ) {
-						retList.add(mes);
-					}
-				}
+	
+	public static List<AmpMeasures> getMtefMeasures()
+	{
+		if (DynamicColumnsUtil.cachedMtefMeasureList == null)
+		{
+			List<AmpMeasures> z = new ArrayList<AmpMeasures>();
+			List<AmpMeasures> allCols = AdvancedReportUtil.getMeasureList();
+			for (AmpMeasures mes: allCols) 
+			{
+				if (mes.getMeasureName().contains("MTEF"))
+					z.add(mes);
 			}
-			DynamicColumnsUtil.cachedMtefMeasureList	= new ArrayList<AmpMeasures>();
-			DynamicColumnsUtil.cachedMtefMeasureList.addAll(retList);
+			DynamicColumnsUtil.cachedMtefMeasureList = new ArrayList<AmpMeasures>(z);
 		}
-		return retList;
+		return Collections.unmodifiableList(DynamicColumnsUtil.cachedMtefMeasureList);
 	}
 	
 	public static List<Integer> showInexistentMtefYears() {

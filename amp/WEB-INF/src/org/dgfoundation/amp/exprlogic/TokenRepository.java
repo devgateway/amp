@@ -1,45 +1,42 @@
 package org.dgfoundation.amp.exprlogic;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.dgfoundation.amp.ar.ArConstants;
 
 public class TokenRepository {
 
-	public static final class TokenNames {
-		public static final String TOTAL_COMMITMENTS = "totalCommitmentsLogicalToken";
-		public static final String UNDISBURSED = "undisbursedLogicalToken";
-		public static final String UNCOMMITTED = "uncommittedLogicalToken";
-
-		public static final String COSTING_GRAND_TOTAL = "grandTotalToken";
-		public static final String MTEF = "mtefToken";
-
-		public static final String PLANED_COMMITMENTS = "plannedCommitmentsLogicalToken";
-		public static final String ACTUAL_COMMITMENTS = "actualCommitmentsLogicalToken";
-
-		public static final String PLANED_DISBURSEMENT = "plannedDisbusementLogicalToken";
-		public static final String ACTUAL_DISBURSEMENT = "actualDisbursementLogicalToken";
-		
-		/*
-		public static final String PLEDGES_COMMITMENTS = "pledgeCommitmentsLogicalToken";
-		*/
-		public static final String PLEDGES_TOTAL = "pledgeTotalLogicalToken";
-		public static final String TOTAL_PLEDGE_ACTIVITY_ACTUAL_COMMITMENT = "totalPledgeActivityActualCommitmentLogicalToken";
-	};
-
-	// internally thread safe repository for tokens:
-	public static Hashtable<String, TokenExpression> tokens;
-
-	public static TokenExpression totalCommitmentsLogicalToken = buildTotalCommitmentsLogicalToken();
-	public static TokenExpression undisbursedLogicalToken = buildUndisbursedLogicalToken();
-	public static TokenExpression uncommittedLogicalToken = buildUncommittedLogicalToken();
-	public static TokenExpression actualCommitmentsLogicalToken = buildActualCommitmentsLogicalToken();
+//	// internally thread safe repository for tokens:
+	public static Map<String, TokenExpression> tokens = Collections.unmodifiableMap(new HashMap<String, TokenExpression>()
+		{{
+			this.put(TokenNames.TOTAL_COMMITMENTS, buildTotalCommitmentsLogicalToken());
+			this.put(TokenNames.PLEDGES_TOTAL, buildTotalPledgedLogicalToken());
+			this.put(TokenNames.TOTAL_PLEDGE_ACTIVITY_ACTUAL_COMMITMENT, buildTotalPledgeActivityCommitmentsLogicalToken());
+			this.put(TokenNames.PLANED_COMMITMENTS, buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.PLANNED, null));
+			this.put(TokenNames.PLANED_DISBURSEMENT, buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.PLANNED, null));
+			this.put(TokenNames.ACTUAL_COMMITMENTS, buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.ACTUAL, null));
+				
+			LogicalToken NOT_REAL_DISBURSEMENT = new EstimatedDisbursementLogicalToken(false);
+			this.put(TokenNames.ACTUAL_DISBURSEMENT, buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.ACTUAL, NOT_REAL_DISBURSEMENT));
+			this.put(TokenNames.UNCOMMITTED, buildUncommittedLogicalToken());
+			this.put(TokenNames.COSTING_GRAND_TOTAL, 
+					new TokenExpression(new LogicalToken[] { new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, false)}));
+			
+			this.put(TokenNames.CUMULATED_DISBURSEMENTS, buildCumulatedDisursementsLogicalToken());
+			this.put(TokenNames.SELECTED_YEAR_PLANNED_DISBURSEMENTS, buildSelectedYearPlannedDisbursementsLogicalToken());
+			this.put(TokenNames.PRIOR_ACTUAL_DISBURSEMENTS, buildPriorActualDisbursementsLogicalToken());
+			this.put(TokenNames.CLOSED_MONTH_ACTUAL_DISBURSEMENTS, buildClosedMonthActualDisbursementsLogicalToken());
+		}});
 
 	// TOTAL Commitment
-	public static TokenExpression buildTotalCommitmentsLogicalToken() {
+	private static TokenExpression buildTotalCommitmentsLogicalToken()
+	{
 		// Injected funding
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
 		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
@@ -61,63 +58,23 @@ public class TokenRepository {
 		ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(and2, proposedCost, false);
 		ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, grandTotaldCost, false);
 		TokenExpression te = new TokenExpression(new LogicalToken[] { and4 });
-
-		if (tokens == null)
-			tokens = new Hashtable<String, TokenExpression>();
-		tokens.put(TokenNames.TOTAL_COMMITMENTS, te);
 		return te;
 	}
-	
-	// Pledge Total Commitment 
-	/*
-	public static TokenExpression buildPledgesCommitmentsLogicalToken() {
-		// Injected funding
-		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
-		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
-		PresentLogicalToken pledgetotal = new PresentLogicalToken(ArConstants.PLEDGED_TOTAL, false);
-		// Filter no Commitments funding
-		EqualsLogicalToken NotCommitments = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, true);
-		EqualsLogicalToken NotDisbursementTrType = new EqualsLogicalToken(ArConstants.DISBURSEMENT, ArConstants.TRANSACTION_TYPE, true);
-		EqualsLogicalToken NotExpenditureTrType = new EqualsLogicalToken(ArConstants.EXPENDITURE, ArConstants.TRANSACTION_TYPE, true);
-		EqualsLogicalToken NotDisbursedOrderTrType = new EqualsLogicalToken(ArConstants.DISBURSEMENT_ORDERS, ArConstants.TRANSACTION_TYPE, true);
-
-		// Only Actual
-		EqualsLogicalToken NotPlannedAdjType = new EqualsLogicalToken(ArConstants.PLANNED, ArConstants.ADJUSTMENT_TYPE, true);
-		EqualsLogicalToken actualAdjType = new EqualsLogicalToken(ArConstants.ACTUAL, ArConstants.ADJUSTMENT_TYPE, false);
-
-		ANDBinaryLogicalToken and0 = new ANDBinaryLogicalToken(NotDisbursementTrType, NotExpenditureTrType, false);
-		ANDBinaryLogicalToken and1 = new ANDBinaryLogicalToken(and0, NotDisbursedOrderTrType, false);
-		ANDBinaryLogicalToken and2 = new ANDBinaryLogicalToken(and1, NotCommitments, false);
 		
-		ORBinaryLogicalToken or1 = new ORBinaryLogicalToken(actualAdjType, NotPlannedAdjType, false);
-		ANDBinaryLogicalToken and3 = new ANDBinaryLogicalToken(or1, and2, false);
-		ANDBinaryLogicalToken and4 = new ANDBinaryLogicalToken(and3, proposedCost, false);
-		ANDBinaryLogicalToken and5 = new ANDBinaryLogicalToken(and4, grandTotaldCost, false);
-		ANDBinaryLogicalToken and6 = new ANDBinaryLogicalToken(and5, pledgetotal, false);
-		TokenExpression te = new TokenExpression(new LogicalToken[] { and6 });
-
-		if (tokens == null)
-			tokens = new Hashtable<String, TokenExpression>();
-		tokens.put(TokenNames.PLEDGES_COMMITMENTS, te);
-		return te;
-	}
-	*/
-	
 	// Pledged Total
-	public static TokenExpression buildTotalPledgedLogicalToken() {
+	private static TokenExpression buildTotalPledgedLogicalToken()
+	{
 		PresentLogicalToken totalpledged = new PresentLogicalToken(ArConstants.PLEDGED_TOTAL, false);
 
 		EqualsLogicalToken pledgeCommitmentTrType = new EqualsLogicalToken(ArConstants.PLEDGE, ArConstants.TRANSACTION_TYPE, false);
 		
 		TokenExpression te = new TokenExpression(new LogicalToken[] { totalpledged, pledgeCommitmentTrType });
-		if (tokens == null)
-			tokens = new Hashtable<String, TokenExpression>();
-		tokens.put(TokenNames.PLEDGES_TOTAL, te);
 		return te;
 	}
 	
 	//Pledge total activity commitments
-	public static TokenExpression buildTotalPledgeActivityCommitmentsLogicalToken() {
+	private static TokenExpression buildTotalPledgeActivityCommitmentsLogicalToken()
+	{
 		PresentLogicalToken totalpledgeactcommitments = new PresentLogicalToken(ArConstants.TOTAL_PLEDGE_ACTIVITY_ACTUAL_COMMITMENT, false);
 
 		EqualsLogicalToken pledgeCommitmentTrType = new EqualsLogicalToken(ArConstants.PLEDGES_COMMITMENT, ArConstants.TRANSACTION_TYPE, false);
@@ -126,9 +83,6 @@ public class TokenRepository {
 		ANDBinaryLogicalToken and0 = new ANDBinaryLogicalToken(pledgeCommitmentTrType, actualAdjType, false);
 		
 		TokenExpression te = new TokenExpression(new LogicalToken[] { totalpledgeactcommitments, and0 });
-		if (tokens == null)
-			tokens = new Hashtable<String, TokenExpression>();
-		tokens.put(TokenNames.TOTAL_PLEDGE_ACTIVITY_ACTUAL_COMMITMENT, te);
 		return te;
 	}
 	
@@ -138,7 +92,7 @@ public class TokenRepository {
 	 * @param adjType
 	 * @return
 	 */
-	public static TokenExpression buildSimpleTransactionLogicalToken(String trType, String adjType, LogicalToken finalAndLogicalToken)
+	private static TokenExpression buildSimpleTransactionLogicalToken(String trType, String adjType, LogicalToken finalAndLogicalToken)
 	{
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
 		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
@@ -154,64 +108,61 @@ public class TokenRepository {
 			and4 = new ANDBinaryLogicalToken(and4, finalAndLogicalToken, false);
 		
 		TokenExpression te = new TokenExpression(new LogicalToken[] { and4 });
-
-		if (tokens == null)
-			tokens = new Hashtable<String, TokenExpression>();
 		
 		return te;
 	}
 	
-	// PLANNED
-	public static TokenExpression buildPlannedCommitmentsLogicalToken() {
-		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.PLANNED, null);
-		tokens.put(TokenNames.PLANED_COMMITMENTS, te);
-		return te;
-	}
+//	// PLANNED
+//	private static TokenExpression buildPlannedCommitmentsLogicalToken() {
+//		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.PLANNED, null);
+//		tokens.put(TokenNames.PLANED_COMMITMENTS, te);
+//		return te;
+//	}
+//
+//	private static TokenExpression buildPlannedDisbursementsLogicalToken() {
+//		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.PLANNED, null);
+//		tokens.put(TokenNames.PLANED_DISBURSEMENT, te);
+//		return te;
+//	}
 
-	public static TokenExpression buildPlannedDisbursementsLogicalToken() {
-		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.PLANNED, null);
-		tokens.put(TokenNames.PLANED_DISBURSEMENT, te);
-		return te;
-	}
+//	// ACTUAL
+//	private static TokenExpression buildActualCommitmentsLogicalToken() {
+//		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.ACTUAL, null);
+//		tokens.put(TokenNames.ACTUAL_COMMITMENTS, te);
+//		return te;
+//		/**
+//		 *  [[[[[[Adjustment Type EQUALS Actual] OR NOT [Adjustment Type EQUALS Planned]] AND [[[NOT [Transaction Type EQUALS Disbursements] AND NOT [Transaction Type EQUALS Expenditures]] AND NOT [Transaction Type EQUALS Disbursement Orders]] AND NOT [Transaction Type EQUALS Pledge]]] AND NOT [HASMETA Proposed Cost]] AND NOT [HASMETA Grand Total]]]
+//		 */
+//	}
+//
+//	private static TokenExpression buildActualDisbursementsLogicalToken() {
+//
+//		LogicalToken NOT_REAL_DISBURSEMENT = new EstimatedDisbursementLogicalToken(false);
+//		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.ACTUAL, NOT_REAL_DISBURSEMENT);
+//		tokens.put(TokenNames.ACTUAL_DISBURSEMENT, te);
+//		return te;
+//	}
 
-	// ACTUAL
-	public static TokenExpression buildActualCommitmentsLogicalToken() {
-		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.ACTUAL, null);
-		tokens.put(TokenNames.ACTUAL_COMMITMENTS, te);
-		return te;
-		/**
-		 *  [[[[[[Adjustment Type EQUALS Actual] OR NOT [Adjustment Type EQUALS Planned]] AND [[[NOT [Transaction Type EQUALS Disbursements] AND NOT [Transaction Type EQUALS Expenditures]] AND NOT [Transaction Type EQUALS Disbursement Orders]] AND NOT [Transaction Type EQUALS Pledge]]] AND NOT [HASMETA Proposed Cost]] AND NOT [HASMETA Grand Total]]]
-		 */
-	}
-
-	public static TokenExpression buildActualDisbursementsLogicalToken() {
-
-		LogicalToken NOT_REAL_DISBURSEMENT = new EstimatedDisbursementLogicalToken(false);
-		TokenExpression te = buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.ACTUAL, NOT_REAL_DISBURSEMENT);
-		tokens.put(TokenNames.ACTUAL_DISBURSEMENT, te);
-		return te;
-	}
-
-	// Undisbursed
-	public static TokenExpression buildUndisbursedLogicalToken() {
-
-		EqualsLogicalToken commitmentTrType = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, false);
-
-		EqualsLogicalToken disbursement = new EqualsLogicalToken(ArConstants.DISBURSEMENT, ArConstants.TRANSACTION_TYPE, false);
-		EqualsLogicalToken actualAdjType = new EqualsLogicalToken(ArConstants.ACTUAL, ArConstants.ADJUSTMENT_TYPE, false);
-		ANDBinaryLogicalToken and1 = new ANDBinaryLogicalToken(disbursement, actualAdjType, false);
-		and1.setSign(-1);
-		TokenExpression te = new TokenExpression(new LogicalToken[] { commitmentTrType, and1 });
-
-		if (tokens == null)
-			tokens = new Hashtable<String, TokenExpression>();
-		tokens.put(TokenNames.UNDISBURSED, te);
-
-		return te;
-	}
+//	// Undisbursed
+//	public static TokenExpression buildUndisbursedLogicalToken() {
+//
+//		EqualsLogicalToken commitmentTrType = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, false);
+//
+//		EqualsLogicalToken disbursement = new EqualsLogicalToken(ArConstants.DISBURSEMENT, ArConstants.TRANSACTION_TYPE, false);
+//		EqualsLogicalToken actualAdjType = new EqualsLogicalToken(ArConstants.ACTUAL, ArConstants.ADJUSTMENT_TYPE, false);
+//		ANDBinaryLogicalToken and1 = new ANDBinaryLogicalToken(disbursement, actualAdjType, false);
+//		and1.setSign(-1);
+//		TokenExpression te = new TokenExpression(new LogicalToken[] { commitmentTrType, and1 });
+//
+//		if (tokens == null)
+//			tokens = new Hashtable<String, TokenExpression>();
+//		tokens.put(TokenNames.UNDISBURSED, te);
+//
+//		return te;
+//	}
 
 	// Uncommitted
-	public static TokenExpression buildUncommittedLogicalToken() {
+	private static TokenExpression buildUncommittedLogicalToken() {
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, false);
 
 		EqualsLogicalToken commitmentTrType = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, false);
@@ -220,9 +171,6 @@ public class TokenRepository {
 		ANDBinaryLogicalToken and1 = new ANDBinaryLogicalToken(commitmentTrType, actualAdjType, false);
 		and1.setSign(-1);
 		TokenExpression te = new TokenExpression(new LogicalToken[] { proposedCost, and1 });
-		if (tokens == null)
-			tokens = new Hashtable<String, TokenExpression>();
-		tokens.put(TokenNames.UNCOMMITTED, te);
 		return te;
 	}
 
@@ -249,23 +197,10 @@ public class TokenRepository {
 		ANDBinaryLogicalToken andLogicalToken	= new ANDBinaryLogicalToken(mtefPresentToken, drLogicalToken, false);
 		
 		TokenExpression te = new TokenExpression(new LogicalToken[] { andLogicalToken });
-		if (tokens == null)
-			tokens = new Hashtable<String, TokenExpression>();
-		tokens.put(TokenNames.MTEF, te);
 		return te;
 	}
 	
-	public static TokenExpression buildCostingGrandTotalToken() {
-		PresentLogicalToken grandTotal = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, false);
-		TokenExpression te = new TokenExpression(new LogicalToken[] { grandTotal });
-		if (tokens == null)
-			tokens = new Hashtable<String, TokenExpression>();
-		tokens.put(TokenNames.COSTING_GRAND_TOTAL, te);
-		return te;
-	}
-	
-	
-	public static TokenExpression buildCumulatedDisursementsLogicalToken() {
+	private static TokenExpression buildCumulatedDisursementsLogicalToken() {
 
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
 		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
@@ -306,7 +241,7 @@ public class TokenRepository {
 		return te;
 	}
 
-	public static TokenExpression buildSelectedYearPlannedDisbursementsLogicalToken() {
+	private static TokenExpression buildSelectedYearPlannedDisbursementsLogicalToken() {
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
 		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
 
@@ -340,7 +275,7 @@ public class TokenRepository {
 	 * Current month should be understood as the current month that has been already close.
 	 * @return
 	 */
-	public static TokenExpression buildPriorActualDisbursementsLogicalToken() {
+	private static TokenExpression buildPriorActualDisbursementsLogicalToken() {
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
 		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);
 		EqualsLogicalToken NotCommitments = new EqualsLogicalToken(ArConstants.COMMITMENT, ArConstants.TRANSACTION_TYPE, true);
@@ -391,7 +326,7 @@ public class TokenRepository {
 	 * Last Closed Month
 	 * @return
 	 */
-	public static TokenExpression buildColsedMonthActualDisbursementsLogicalToken() {
+	private static TokenExpression buildClosedMonthActualDisbursementsLogicalToken() {
 
 		PresentLogicalToken proposedCost = new PresentLogicalToken(ArConstants.PROPOSED_COST, true);
 		PresentLogicalToken grandTotaldCost = new PresentLogicalToken(ArConstants.COSTING_GRAND_TOTAL, true);

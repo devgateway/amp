@@ -12,7 +12,8 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpMeasures;
+
+import static org.dgfoundation.amp.exprlogic.TokenRepository.tokens;
 
 public class Values extends HashMap<String, BigDecimal> {
 
@@ -37,14 +38,14 @@ public class Values extends HashMap<String, BigDecimal> {
 	}
 
 	
-	public void addValue(String key, BigDecimal value) {
-		if (value != null) {
-			if (this.containsKey(key) && this.get(key) != null) {
-				this.put(key, this.get(key).add(value));
-			} else {
-				this.put(key, value);
-			}
-		}
+	public void addValue(String key, BigDecimal value)
+	{
+		if (value == null)
+			return;
+
+		BigDecimal oldValue = this.get(key);
+		BigDecimal newValue = oldValue == null ? value : oldValue.add(value);
+		this.put(key, newValue);
 	}
 
 	
@@ -72,12 +73,16 @@ public class Values extends HashMap<String, BigDecimal> {
 				new BigDecimal(crd.retrieveSubReportDataValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT)));
 	}
 	
+	public static long nr_CTV_called = 0;
+	public static long cumulative_CTV_sizes = 0;
 	
 	/**
 	 * 
 	 * @param values
 	 */
-	public void collectTrailVariables(Values values) {
+	public void collectTrailVariables(Values values)
+	{
+		nr_CTV_called ++;
 
 		// keep the original cell values for futures uses
 
@@ -127,6 +132,8 @@ public class Values extends HashMap<String, BigDecimal> {
 		this.setIfLessThan(ArConstants.MIN_PLANNED_COMMITMENT, pc);
 		this.setIfLessThan(ArConstants.MIN_PLANNED_DISBURSEMENT, pd);
 
+		cumulative_CTV_sizes += this.size();
+		
 		// make a list of counted variables to eliminante duplicate counting
 		Values countValues = new Values(values.ownerId);
 		countValues.put(ArConstants.ACTUAL_COMMITMENT_COUNT, values.get(ArConstants.ACTUAL_COMMITMENT_COUNT));
@@ -144,35 +151,35 @@ public class Values extends HashMap<String, BigDecimal> {
 
 		if (cell.getMergedCells().size() > 0)
 			System.out.println("BOZO BOZO BREAK POINT");
-		this.addValue(ArConstants.TOTAL_COMMITMENTS, TokenRepository.buildTotalCommitmentsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.TOTAL_COMMITMENTS, tokens.get(TokenNames.TOTAL_COMMITMENTS).evaluate(cell));
 
-		this.addValue(ArConstants.ACTUAL_COMMITMENT, TokenRepository.buildActualCommitmentsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.ACTUAL_DISBURSEMENT, TokenRepository.buildActualDisbursementsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.ACTUAL_COMMITMENT, tokens.get(TokenNames.ACTUAL_COMMITMENTS).evaluate(cell));
+		this.addValue(ArConstants.ACTUAL_DISBURSEMENT, tokens.get(TokenNames.ACTUAL_DISBURSEMENT).evaluate(cell));
 
-		this.addValue(ArConstants.PLANNED_COMMITMENT, (TokenRepository.buildPlannedCommitmentsLogicalToken().evaluate(cell)));
-		this.addValue(ArConstants.PLANNED_DISBURSEMENT, TokenRepository.buildPlannedDisbursementsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.PLANNED_COMMITMENT, tokens.get(TokenNames.PLANED_COMMITMENTS).evaluate(cell));
+		this.addValue(ArConstants.PLANNED_DISBURSEMENT, tokens.get(TokenNames.PLANED_DISBURSEMENT).evaluate(cell));
 
-		this.addValue(ArConstants.TOTAL_ACTUAL_COMMITMENT, TokenRepository.buildActualCommitmentsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT, TokenRepository.buildActualDisbursementsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.TOTAL_ACTUAL_COMMITMENT, tokens.get(TokenNames.ACTUAL_COMMITMENTS).evaluate(cell));
+		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT, tokens.get(TokenNames.ACTUAL_DISBURSEMENT).evaluate(cell));
 
-		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, TokenRepository.buildPlannedCommitmentsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, TokenRepository.buildPlannedDisbursementsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, tokens.get(TokenNames.PLANED_COMMITMENTS).evaluate(cell));
+		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, tokens.get(TokenNames.PLANED_DISBURSEMENT).evaluate(cell));
 		//this.addValue(ArConstants.ACTUAL_PLEDGE_COMMITMENT, TokenRepository.buildPledgesCommitmentsLogicalToken().evaluateOriginalvalue(cell));
 		
 		// no filtered, affected by %
-		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildSelectedYearPlannedDisbursementsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.CUMULATED_DISBURSEMENT_SELECTED_YEAR, TokenRepository.buildCumulatedDisursementsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH, TokenRepository.buildColsedMonthActualDisbursementsLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, TokenRepository.buildPriorActualDisbursementsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR, tokens.get(TokenNames.SELECTED_YEAR_PLANNED_DISBURSEMENTS).evaluate(cell));
+		this.addValue(ArConstants.CUMULATED_DISBURSEMENT_SELECTED_YEAR, tokens.get(TokenNames.CUMULATED_DISBURSEMENTS).evaluate(cell));
+		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT_LAST_CLOSED_MONTH, tokens.get(TokenNames.CLOSED_MONTH_ACTUAL_DISBURSEMENTS).evaluate(cell));
+		this.addValue(ArConstants.TOTAL_PRIOR_ACTUAL_DISBURSEMENT, tokens.get(TokenNames.PRIOR_ACTUAL_DISBURSEMENTS).evaluate(cell));
 
-		this.addValue(ArConstants.PLEDGED_TOTAL, TokenRepository.buildTotalPledgedLogicalToken().evaluate(cell));
-		this.addValue(ArConstants.TOTAL_PLEDGE_ACTIVITY_ACTUAL_COMMITMENT, TokenRepository.buildTotalPledgeActivityCommitmentsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.PLEDGED_TOTAL, tokens.get(TokenNames.PLEDGES_TOTAL).evaluate(cell));
+		this.addValue(ArConstants.TOTAL_PLEDGE_ACTIVITY_ACTUAL_COMMITMENT, tokens.get(TokenNames.TOTAL_PLEDGE_ACTIVITY_ACTUAL_COMMITMENT).evaluate(cell));
 		
 		if (cell.isShow()) {
-			this.addValue(ArConstants.ACTUAL_COMMITMENT_FILTERED, TokenRepository.buildActualCommitmentsLogicalToken().evaluate(cell));
-			this.addValue(ArConstants.ACTUAL_DISBURSEMENT_FILTERED, TokenRepository.buildActualDisbursementsLogicalToken().evaluate(cell));
-			this.addValue(ArConstants.PLANNED_COMMITMENT_FILTERED, TokenRepository.buildPlannedCommitmentsLogicalToken().evaluate(cell));
-			this.addValue(ArConstants.PLANNED_DISBURSEMENT_FILTERED, TokenRepository.buildPlannedDisbursementsLogicalToken().evaluate(cell));
+			this.addValue(ArConstants.ACTUAL_COMMITMENT_FILTERED, tokens.get(TokenNames.ACTUAL_COMMITMENTS).evaluate(cell));
+			this.addValue(ArConstants.ACTUAL_DISBURSEMENT_FILTERED, tokens.get(TokenNames.ACTUAL_DISBURSEMENT).evaluate(cell));
+			this.addValue(ArConstants.PLANNED_COMMITMENT_FILTERED, tokens.get(TokenNames.PLANED_COMMITMENTS).evaluate(cell));
+			this.addValue(ArConstants.PLANNED_DISBURSEMENT_FILTERED, tokens.get(TokenNames.PLANED_DISBURSEMENT).evaluate(cell));
 		}
 
 		if (cell.getMetaValueString(ArConstants.ADJUSTMENT_TYPE) != null) {
@@ -196,9 +203,9 @@ public class Values extends HashMap<String, BigDecimal> {
 				}
 			}
 		} else if (cell.existsMetaString(ArConstants.PROPOSED_COST)) {
-			this.addValue(ArConstants.PROPOSED_COST, TokenRepository.buildUncommittedLogicalToken().evaluate(cell));
+			this.addValue(ArConstants.PROPOSED_COST, tokens.get(TokenNames.UNCOMMITTED).evaluate(cell)); // what? why was "buildUncommitted()" here?
 		} else if (cell.existsMetaString(ArConstants.COSTING_GRAND_TOTAL)) {
-			this.addValue(ArConstants.COSTING_GRAND_TOTAL, TokenRepository.buildCostingGrandTotalToken().evaluate(cell));
+			this.addValue(ArConstants.COSTING_GRAND_TOTAL, tokens.get(TokenNames.COSTING_GRAND_TOTAL).evaluate(cell));
 		}
 		
 		//this.addValue(ArConstants.MTEF_COLUMN, TokenRepository.buildMtefColumnToken().evaluate(cell));

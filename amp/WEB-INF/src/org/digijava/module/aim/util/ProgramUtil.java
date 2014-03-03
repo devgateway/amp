@@ -281,6 +281,12 @@ public class ProgramUtil {
                 }
                 qry = session.createQuery(queryString);
                 themes = qry.list();
+                Collections.sort(themes, new Comparator<AmpTheme>() {
+                	public int compare(AmpTheme a, AmpTheme b)
+                	{
+                		return a.getName().compareTo(b.getName());
+                	}
+				});
             }
             catch (Exception e) {
             	throw new DgException("Cannot load themes hierarchy",e);

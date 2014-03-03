@@ -519,8 +519,9 @@ public class ReportsFilterPicker extends Action {
  	 	        
  	 	
         StopWatch.next("Filters", true, "before programs");
-        if ( FeaturesUtil.isVisibleModule("National Planning Dashboard") ) {
-	        Collection<AmpTheme> allPrograms	= ProgramUtil.getAllThemes(true);
+        if ( FeaturesUtil.isVisibleModule("National Planning Dashboard") )
+        {
+	        List<AmpTheme> allPrograms	= ProgramUtil.getAllThemes(true);
 	        HashMap<Long, AmpTheme> progMap		= ProgramUtil.prepareStructure(allPrograms);
 	        
 			AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
@@ -533,7 +534,7 @@ public class ReportsFilterPicker extends Action {
 				GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
 				filterForm.getProgramElements().add(primaryProgElement);
 			}
-			
+			StopWatch.next("Filters", true, "After Primary Programs");
 			AmpTheme secondaryProg = null;
 	 	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
 //	 	 	List<AmpTheme> secondaryPrograms;		
@@ -544,7 +545,8 @@ public class ReportsFilterPicker extends Action {
 				GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
 				filterForm.getProgramElements().add(secondaryProgElement);
 			}	 	
-	 	 	
+			StopWatch.next("Filters", true, "After Secondary Programs");
+			
 			AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
 	 	 	
 			//List<AmpTheme> nationalPlanningObjectives;
@@ -555,14 +557,15 @@ public class ReportsFilterPicker extends Action {
 	 	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
 	 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
 			}
+	 	 	StopWatch.next("Filters", true, "After NPO");
         }
  	 	StopWatch.next("Filters", true, "After Programs");
  	 	//long a = System.currentTimeMillis();
- 	 	Collection<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
- 	 	Collection<AmpOrgGroup> donorGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllOrgGroupsOfPortfolio();//);
-        //AMP-16996 I applied the sorting here because for some reason the methond invoked to bring the orggroups has been changed
- 	 	Collections.sort((List)donorGroups, new DbUtil.HelperAmpOrgGroupNameComparator());
- 	 	Collections.sort((List)donorTypes ,new  DbUtil.HelperAmpOrgTypeNameComparator());
+ 	 	List<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
+ 	 	List<AmpOrgGroup> donorGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllOrgGroupsOfPortfolio();
+
+ 	 	Collections.sort(donorGroups, new DbUtil.HelperAmpOrgGroupNameComparator());
+ 	 	Collections.sort(donorTypes, new DbUtil.HelperAmpOrgTypeNameComparator());
  	 	
  	 	HierarchyListableUtil.changeTranslateable(donorTypes, false);
  	 	HierarchyListableUtil.changeTranslateable(donorGroups, false);

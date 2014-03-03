@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -38,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
@@ -54,6 +56,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
+import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.translation.util.DbUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -252,21 +255,9 @@ public class ProgramUtil {
 		 * @throws DgException
 		 */
 		@SuppressWarnings("unchecked")
-		public static List<AmpTheme> getAllThemes() throws DgException{
-			Session session = null;
-			Query qry = null;
-			List<AmpTheme> themes = new ArrayList<AmpTheme>();
-
-			try {
-				session = PersistenceManager.getRequestDBSession();
-				String queryString = " from " + AmpTheme.class.getName()
-						+ " t where t.parentThemeId is null";
-				qry = session.createQuery(queryString);
-				themes = qry.list();
-			} catch (Exception e) {
-				throw new DgException("Cannot retrive all themes from db",e);
-			}
-			return themes;
+		public static List<AmpTheme> getAllThemes() throws DgException
+		{
+			return getAllThemes(false);
 		}
 
 		/**
@@ -276,10 +267,11 @@ public class ProgramUtil {
 		 * @throws DgException
 		 */
         @SuppressWarnings("unchecked")
-		public static Collection<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException{
+		public static List<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException
+		{
             Session session = null;
             Query qry = null;
-            Collection<AmpTheme> themes = new ArrayList<AmpTheme>();
+            List<AmpTheme> themes = new ArrayList<AmpTheme>();
 
             try {
                 session = PersistenceManager.getRequestDBSession();
@@ -289,80 +281,18 @@ public class ProgramUtil {
                 }
                 qry = session.createQuery(queryString);
                 themes = qry.list();
+                Collections.sort(themes, new Comparator<AmpTheme>() {
+                	public int compare(AmpTheme a, AmpTheme b)
+                	{
+                		return a.getName().compareTo(b.getName());
+                	}
+				});
             }
             catch (Exception e) {
             	throw new DgException("Cannot load themes hierarchy",e);
             }
             return themes;
         }
-
-//        public static Collection searchForindicators(String keyword,String sectorname) {
-//    		Session session = null;
-//    		Collection col = null;
-//
-//    		try {
-//    			session = PersistenceManager.getRequestDBSession();
-//    			String queryString = "select t from "
-//    					+ AmpThemeIndicators.class.getName() + " t "
-//    					+ "where t.ampThemeIndId in (select t1.themeIndicatorId from " +
-//    					AmpIndicatorSector.class.getName() + " t1 join t1.sectorId si "+
-//    					"where si.name = '"+sectorname+"')" +
-//    					"and t.name like '%" + keyword + "%'";
-//    			Query qry = session.createQuery(queryString);
-//    			col = qry.list();
-//    		} catch (Exception ex) {
-//    			logger.debug("Unable to search " + ex);
-//    			}
-//    		return col;
-//    	}
-
-
-        public static Collection searchForindicator(String sectorname) {
-    		Session session = null;
-    		Collection col = null;
-
-    		try {
-    			session = PersistenceManager.getRequestDBSession();
-    			String queryString = "select t from "
-    					+ AmpThemeIndicators.class.getName() + " t "
-    					+ "where t.ampThemeIndId in (select t1.themeIndicatorId from " +
-    					AmpIndicatorSector.class.getName() + " t1 join t1.ampSectorId si "+
-    					  "where upper(si.name) like '"+sectorname.toUpperCase()+"')";
-    			Query qry = session.createQuery(queryString);
-    			col = qry.list();
-    		} catch (Exception ex) {
-    			logger.debug("Unable to search " + ex);
-    			}
-    		return col;
-    	}
-
-        @Deprecated
-        public static ArrayList getAmpThemeIndicators() {
-    		Session session = null;
-    		Query q = null;
-    		AmpThemeIndicators ampThemeIndicators = null;
-    		ArrayList themeIndicators = new ArrayList();
-    		String queryString = null;
-    		Iterator iter = null;
-
-    		try {
-    			session = PersistenceManager.getRequestDBSession();
-    			queryString = " select t from " + AmpThemeIndicators.class.getName()
-    					+ " t order by t.name";
-    			q = session.createQuery(queryString);
-    			iter = q.list().iterator();
-
-    			while (iter.hasNext()) {
-    				ampThemeIndicators = (AmpThemeIndicators) iter.next();
-    				themeIndicators.add(ampThemeIndicators);
-    			}
-
-    		} catch (Exception ex) {
-    			logger.error("Unable to get Amp indicators names  from database "
-    					+ ex.getMessage());
-    			}
-    		return themeIndicators;
-    	}
 
         /**
          * Returns list of years for drop-down list.
@@ -510,46 +440,6 @@ public class ProgramUtil {
         	}
         	return colPrg;
         }
-
-        @Deprecated
-        public static Collection getAllProgramIndicators()
-        {
-        	Session session = null;
-        	Query qry = null;
-        	Collection colInd = null;
-        	try
-        	{
-        		session = PersistenceManager.getRequestDBSession();
-        		String queryString = " from "
-        							+ AmpThemeIndicators.class.getName() + " thInd";
-        		qry = session.createQuery(queryString);
-        		colInd = qry.list();
-        	}
-        	catch(Exception ex)
-        	{
-        		logger.error("Unable to get all the Indicators of Themes");
-    			logger.debug("Exception " + ex);
-        	}
-        	return colInd;
-        }
-
-	    public static ArrayList getThemesByIds(ArrayList ampThemeIds) {
-	        Session session = null;
-	        Query qry = null;
-
-	        try {
-	            session = PersistenceManager.getRequestDBSession();
-	            String qryStr = "select t from " + AmpTheme.class.getName()
-	                + " t where t.ampThemeId in (:ids)";
-	            qry = session.createQuery(qryStr);
-	            qry.setParameterList("ids", ampThemeIds);
-	            return (ArrayList) qry.list();
-	        } catch(Exception e) {
-	            logger.error("Unable to get all themes" + e);
-	            e.printStackTrace(System.out);
-	        }
-	        return null;
-		}
 
 		public static AmpTheme getThemeObject(Long ampThemeId) {
 			Session session = null;
@@ -1452,116 +1342,8 @@ public class ProgramUtil {
 			logger.error("Unable to delete the themes");
 			logger.debug("Exception : "+e);
 		}
-	}
-		
-		/**
-		 * Deletes indicator with its values
-		 * @param indId db ID of the indicator
-		 * @throws AimException if any error with DB
-		 * @deprecated
-		 */
-		@Deprecated
-		public static void deletePrgIndicator(Long indId) throws AimException
-		{
-//			Session session = null;
-//			Transaction tx = null;
-//			try
-//			{
-//				//deletePrgIndicatorValue(indId);
-//				session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-//				AmpIndicator tempThemeInd = (AmpIndicator) session.load(AmpIndicator.class,indId);
-//                Iterator itr=tempThemeInd.getThemes().iterator();
-//                while(itr.hasNext()){
-//                    AmpTheme tm=(AmpTheme)itr.next();
-//                    Iterator indItr=tm.getIndicators().iterator();
-//                    while(indItr.hasNext()){
-//                        AmpIndicator tmInd=(AmpIndicator)indItr.next();
-//                        if(tmInd.getIndicatorId().equals(indId)){
-//                            indItr.remove();
-//                            //please read http://www.hibernate.org/hib_docs/reference/en/html/example-parentchild.html
-//                            session.delete(tmInd);
-//                            tempThemeInd.getThemes().remove(tm);
-//                            
-//                        }
-//                    }
-//                    session.update(tempThemeInd);
-//                }
-//				//tx.commit();
-//session.flush();
-//			}
-//			catch(Exception e1)
-//			{
-//				logger.error("The theme indicators were not deleted");
-//				logger.debug("Exception : "+e1);
-//				throw new AimException(e1);
-//			}
-		}
+	}		
 
-		@Deprecated
-		public static void deletePrgIndicatorValue(Long themeIndicatorId)
-		{
-			Session session = null;
-			Query qry = null;
-			Transaction tx = null;
-			Collection indValues = new ArrayList();
-			try
-			{
-				session = PersistenceManager.getRequestDBSession();
-				String queryString = "from " + AmpThemeIndicatorValue.class.getName() +
-			       " indVal where indVal.themeIndicatorId=:themeIndicatorId";
-				qry = session.createQuery(queryString);
-				qry.setParameter("themeIndicatorId",themeIndicatorId);
-				indValues = qry.list();
-//beginTransaction();
-				Iterator indValuesItr = indValues.iterator();
-				while(indValuesItr.hasNext())
-				{
-					AmpThemeIndicatorValue ampThIndValue = (AmpThemeIndicatorValue) indValuesItr.next();
-					session.delete(ampThIndValue);
-				}
-				//tx.commit();
-//session.flush();
-			}
-			catch(Exception e1){
-				logger.error("The theme indicator values were not deleted");
-				logger.debug("Exception : "+e1);
-			}
-		}
-
-		@Deprecated
-        public static void deletePrgIndicatorValueById(Long themeIndicatorId,Long themeIndicatorValueId)
-        {
-            Session session = null;
-            Query qry = null;
-            Transaction tx = null;
-            Collection indValues = new ArrayList();
-            try
-            {
-                session = PersistenceManager.getRequestDBSession();
-                String queryString = "from " + AmpThemeIndicatorValue.class.getName() +
-                   " indVal where indVal.indicatorId=:indicatorId";
-                qry = session.createQuery(queryString);
-                qry.setParameter("indicatorId",themeIndicatorId);
-                indValues = qry.list();
-//beginTransaction();
-                Iterator indValuesItr = indValues.iterator();
-                while(indValuesItr.hasNext()){
-                    AmpThemeIndicatorValue ampThIndValue = (AmpThemeIndicatorValue) indValuesItr.next();
-                    if(ampThIndValue.getAmpThemeIndValId().equals(themeIndicatorValueId)){
-                        session.delete(ampThIndValue);
-                    }
-                }
-                //tx.commit();
-//session.flush();
-            }
-            catch(Exception e1){
-                logger.error("The theme indicator values were not deleted");
-                logger.debug("Exception : "+e1);
-            }
-		}
-
-	
 		public static void updateTheme(AmpTheme editeTheme)
 		{
 			Session session = null;

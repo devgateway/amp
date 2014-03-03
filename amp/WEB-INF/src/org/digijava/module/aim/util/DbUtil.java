@@ -5112,21 +5112,28 @@ public class DbUtil {
 	
 	public static Collection<AmpOrgGroup> getAllContractingAgencyGroupsOfPortfolio()
 	{
+		if (AmpCaching.getInstance().allContractingAgencyGroupsOfPortfolio != null)
+			return new ArrayList<AmpOrgGroup>(AmpCaching.getInstance().allContractingAgencyGroupsOfPortfolio);
+		
 		Session session = null;
-		Collection<AmpOrgGroup> col = new ArrayList();
+		List<AmpOrgGroup> col = new ArrayList();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String orgGrpNameSql = InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall();
-			String queryString = String.format("select distinct amp_org_grp_id, %s AS name from v_contracting_agency_groups order by %s", orgGrpNameSql, orgGrpNameSql);
+			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_group", "aog", 
+					new HashMap<String, String>(){{
+						put("org_grp_name", InternationalizedModelDescription.getForProperty(AmpOrgGroup.class, "orgGrpName").getSQLFunctionCall("aog.amp_org_grp_id"));
+					}});
+			String idsQueryString = String.format("SELECT DISTINCT amp_org_grp_id FROM v_contracting_agency_groups");
+			String queryString = "SELECT " + rewrittenColumns + " FROM amp_org_group aog WHERE aog.amp_org_grp_id IN (" + idsQueryString + ")";
 
 			Query qry = session.createSQLQuery(queryString).addEntity(
 					AmpOrgGroup.class);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.error("Exception from getAllOrgGroupsOfPortfolio()");
-			logger.error(e.toString());
+			logger.error("Exception from getAllContractingAgencyGroupsOfPortfolio()", e);
 		}
-		return col;		
+		AmpCaching.getInstance().allContractingAgencyGroupsOfPortfolio = new ArrayList<AmpOrgGroup>(col);
+		return col;
 	}
 
 	/**
@@ -5153,8 +5160,7 @@ public class DbUtil {
 					AmpOrgGroup.class);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.error("Exception from getAllOrgGroupsOfPortfolio()");
-			logger.error(e.toString());
+			logger.error("Got exception from getAllOrgGroupsOfPortfolio()", e);
 		}
 		AmpCaching.getInstance().allOrgGroupsOfPortfolio = new ArrayList<AmpOrgGroup>(col);
 		return col;
@@ -5182,8 +5188,7 @@ public class DbUtil {
 					AmpOrgType.class);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.error("Exception from getAllOrgTypesOfPortfolio()");
-			logger.error(e.toString());
+			logger.error("Exception from getAllOrgTypesOfPortfolio()", e);
 		}
 		AmpCaching.getInstance().allOrgTypesOfPortfolio = new ArrayList<AmpOrgType>(col);
 		return col;

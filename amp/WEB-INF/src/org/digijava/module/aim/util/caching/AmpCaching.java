@@ -23,7 +23,7 @@ public class AmpCaching {
 	public Map<String, List<AmpOrganisation>> allOrgByRoleOfPortfolio = new HashMap<String, List<AmpOrganisation>>();
 	public List<AmpOrgType> allOrgTypesOfPortfolio;
 	public List<AmpOrgGroup> allOrgGroupsOfPortfolio;
-	
+	public List<AmpOrgGroup> allContractingAgencyGroupsOfPortfolio; 
 	
 	public AmpApplicationSettings applicationSettings;
 	public boolean applicationSettingsRetrieved;

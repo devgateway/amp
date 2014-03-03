@@ -46,7 +46,6 @@
 	function initSectorScript() {
 		var msg='\n<digi:trn key="aim:addSector">Add Sectors</digi:trn>';
 		myPanel.setHeader(msg);
-		myPanel.setBody("");
 		myPanel.beforeHideEvent.subscribe(function() {
 			panelStart=1;
 		}); 

@@ -47,9 +47,6 @@ public class SelectSector extends Action {
 			ssForm.setSectorScheme(new Long(request.getParameter("sectorScheme")));
 			//If the sectorSchemes is specified, set it with the current Sector Scheme
 			AmpSectorScheme defClassification=SectorUtil.getAmpSectorScheme(ssForm.getSectorScheme());
-			Collection secSchemes = new ArrayList() ;
-                        secSchemes.add(defClassification);
-			ssForm.setSectorSchemes(secSchemes);
 			ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
 			Collection classConfigs = SectorUtil.getAllClassificationConfigs();
 		}

@@ -51,7 +51,7 @@ public class QueryEngine extends Action{
 		reportMeta.setHierarchies( new HashSet<AmpReportHierarchy>() );
 		reportMeta.setMeasures( new HashSet<AmpReportMeasures>() );
 		
-		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnListWithDbSession();
+		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
 		Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();
 		AmpCategoryValue level1		= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
 		

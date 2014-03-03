@@ -173,11 +173,26 @@ public class ComputedAmountCell extends CategAmountCell {
 		this.values = values;
 	}
 
-	public String toString() {
-		if ((this.getAmount() == 0d) && (this.getColumn().getWorker().getRelatedColumn().getTotalExpression() != null)) {
-			return "";
+//	@Override
+//	public String toString() {
+//		if ((this.getAmount() == 0d) && (this.getColumn().getWorker().getRelatedColumn().getTotalExpression() != null)) {
+//			return "";
+//		}
+//
+//		return ReportContextData.formatNumberUsingCustomFormat(getAmount());
+//	}
+	
+	@Override
+	public int clearMetaData()
+	{
+		int sp = super.clearMetaData();
+		if (values != null)
+		{
+			sp += values.size();
+			values.clear();
+			values = null;
 		}
-
-		return ReportContextData.formatNumberUsingCustomFormat(getAmount());
+		return sp;
 	}
+	
 }

@@ -263,77 +263,23 @@ public final class AdvancedReportUtil {
 			logger.error(e);
 			throw new RuntimeException("cound not fetch columns list", e);
 		}		
-	}
-	
-	public static Collection getColumnListWithDbSession()
-	{
-		Session session = null;
-		String sqlQuery = "";
-		boolean flag =false;
-		Iterator iter = null;
-		Collection coll = new ArrayList();
-		Query query = null;
-		AmpColumns ampColumns = new AmpColumns();
-		try
-		{
-			session = PersistenceManager.getRequestDBSession();
-			sqlQuery = "select c from "+ AmpColumns.class.getName() + " c order by columnName asc";
-			query = session.createQuery(sqlQuery);
-			if (query != null) 
-			{
-				iter = query.list().iterator();
-				while (iter.hasNext()) 
-				{
-					ampColumns = (AmpColumns) iter.next();
-					coll.add(ampColumns);
-				}
-				flag = true;
-			}
-			return coll;
-		}
-		catch(Exception e)
-		{
-			logger.error(e);
-			////System.out.println(" Error in getColumnList()  :  " + e);
-		}
-		return coll;
-			
-	}
+	}	
 
-	public static Collection getMeasureList()
+	public static List<AmpMeasures> getMeasureList()
 	{
 		Session session = null;
-		String sqlQuery = "";
-		boolean flag =false;
-		Iterator iter = null;
-		Collection coll = new ArrayList();
-		Query query = null;
 		AmpMeasures ampMeasures = new AmpMeasures();
 		try
 		{
 			session = PersistenceManager.getSession();
-			sqlQuery = "select c from "+ AmpMeasures.class.getName() + " c";
-			query = session.createQuery(sqlQuery);
-			if (query != null) 
-			{
-				iter = query.list().iterator();
-				while (iter.hasNext()) 
-				{
-					ampMeasures = (AmpMeasures) iter.next();
-					coll.add(ampMeasures);
-				}
-				flag = true;
-			}
-			return coll;
+			String sqlQuery = "select c from "+ AmpMeasures.class.getName() + " c";
+			Query query = session.createQuery(sqlQuery);
+			return new ArrayList<AmpMeasures>(query.list());
 		}
 		catch(Exception e)
 		{
-			logger.error(e);
-			////System.out.println(" Error in getMeasureList()  :  " + e);
-		} finally {
-			PersistenceManager.releaseSession(session);			
+			throw new RuntimeException(e); 
 		}
-		return coll;
 	}
 	
 	

@@ -1027,3 +1027,20 @@ table.component-funding-table tr
 {
 	border-top: 1px solid black;
 }
+
+/* TABLE GLOBAL */
+.tableEven {
+	background-color:#EEF5F9;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+
+.Hovered {
+	background-color:#a5bcf2;
+}

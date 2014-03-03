@@ -6,38 +6,66 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<style>
+    /* TODO. I know these code smells. Need to move these styles out of this jsp page to global stylesheet.
+    All tables in admin use individual styles now */
+    #dataTable thead tr td {
+        vertical-align: middle;
+        background-color: #C7D4DB;
+        text-align: center;
+        height: 22px;
+        font-weight: bold;
+        border: 1px solid #b8b7b7;
+    }
+</style>
 
 <digi:instance property="suspendLoginManagerForm"/>
 
+<script type="text/javascript">
+    function removeSuspendRecord(id){
+        <c:set var="confirmDelete">
+            <digi:trn jsFriendly="true">
+                Are you sure to remove the suspend record?
+            </digi:trn>
+        </c:set>
+        if (confirm("${confirmDelete}")){
+            document.location.href = '/um/suspendLoginManager.do~action=delete~objId=' + id;
+        }
+    }
+</script>
 
-<table width="100%" border="0" cellpadding="0">
+
+<table width="100%" cellpadding="0">
 	<tr>
 		<td align="center">	
 	
-			<table border="0" width="800"  class="inside">
-				<tr style="background-color:#c7d4db">
-					<td nowrap="nowrap" class="inside">
-						name
-					</td>
-					<td nowrap="nowrap" class="inside">
-						text
-					</td>
-					<td nowrap="nowrap" class="inside">
-						active
-					</td>
-					<td nowrap="nowrap" class="inside">
-						expires
-					</td>
-					<td nowrap="nowrap" class="inside">
-						date
-					</td>
-					<td nowrap="nowrap" class="inside">
-						actions
-					</td>
-				</tr>
+			<table id="dataTable" class="inside" width="100%">
+                <thead>
+                    <tr>
+                        <td>
+                            <digi:trn>Name</digi:trn>
+                        </td>
+                        <td>
+                            <digi:trn>Text</digi:trn>
+                        </td>
+                        <td>
+                            <digi:trn>Active</digi:trn>
+                        </td>
+                        <td>
+                            <digi:trn>Expires</digi:trn>
+                        </td>
+                        <td>
+                            <digi:trn>Date</digi:trn>
+                        </td>
+                        <td>
+                            <digi:trn>Actions</digi:trn>
+                        </td>
+                    </tr>
+                </thead>
 				<logic:iterate name="suspendLoginManagerForm" property="suspendLoginObjects" id="suspendLoginObject">
+                    <c:set var="currentId"><bean:write name="suspendLoginObject" property="id"/></c:set>
 					<tr>
 						<td nowrap="nowrap" class="inside">
 							<bean:write name="suspendLoginObject" property="name"/>
@@ -55,9 +83,16 @@
 							<bean:write name="suspendLoginObject" property="formatedDate"/>
 						</td>
 						<td nowrap="nowrap" class="inside">
-							<a href="/um/suspendLoginManager.do~action=users~objId=<bean:write name="suspendLoginObject" property="id"/>">Users</a>&nbsp;|&nbsp;
-							<a href="/um/suspendLoginManager.do~action=edit~objId=<bean:write name="suspendLoginObject" property="id"/>">Edit</a>&nbsp;|&nbsp;
-							<a href="/um/suspendLoginManager.do~action=delete~objId=<bean:write name="suspendLoginObject" property="id"/>">Delete</a>
+							<a href="/um/suspendLoginManager.do~action=users~objId=${currentId}">
+                                <digi:trn>Users</digi:trn>
+                            </a>&nbsp;|&nbsp;
+
+                            <a href="/um/suspendLoginManager.do~action=edit~objId=${currentId}">
+                                <img border="0" src="../ampTemplate/images/application_edit.png" />
+                            </a>&nbsp;|&nbsp;
+							<a href="javascript:removeSuspendRecord('${currentId}')">
+                                <img border="0" src="../ampTemplate/images/trash_12.gif"/>
+                            </a>
 						</td>
 					</tr>
 				</logic:iterate>
@@ -122,3 +157,46 @@
 			</tr>
 	</table>
 	</td>
+
+<%--
+        TODO
+        There's a number of methods setStripsTable, setHoveredTable
+        scattered all through the project. Need to do a refactoring and move these methods to one place
+--%>
+<script language="javascript">
+    setStripsTable("dataTable", "tableEven", "tableOdd");
+    setHoveredTable("dataTable", true);
+
+    function setStripsTable(tableId, classOdd, classEven) {
+        var tableElement = document.getElementById(tableId);
+        rows = tableElement.getElementsByTagName('tr');
+        for(var i = 0, n = rows.length; i < n; ++i) {
+            if(i%2 == 0)
+            rows[i].className = classEven;
+            else
+            rows[i].className = classOdd;
+        }
+        rows = null;
+    }
+
+    function setHoveredTable(tableId, hasHeaders) {
+
+        var tableElement = document.getElementById(tableId);
+        if(tableElement) {
+            var className = 'Hovered',
+            pattern = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+            rows = tableElement.getElementsByTagName('tr');
+
+            for (var i = 0, n = rows.length; i < n; ++i) {
+                rows[i].onmouseover = function() {
+                    this.className += ' ' + className;
+                };
+
+                rows[i].onmouseout = function() {
+                    this.className = this.className.replace(pattern, ' ');
+                };
+            }
+        }
+        rows = null;
+    }
+</script>

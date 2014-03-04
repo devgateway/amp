@@ -25,16 +25,16 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class CellColumnPDF extends PDFExporter {
 
-	public CellColumnPDF(Exporter parent,Viewable item) {
-		super(parent,item);
+	public CellColumnPDF(Exporter parent, Viewable item) {
+		super(parent, item);
 	}
 	
 	/**
 	 * @param table
 	 * @param item
 	 */
-	public CellColumnPDF(PdfPTable table, Viewable item,Long ownerId) {
-		super(table, item,ownerId);
+	public CellColumnPDF(PdfPTable table, Viewable item, Long ownerId) {
+		super(table, item, ownerId);
 		// TODO Auto-generated constructor stub
 	}
 

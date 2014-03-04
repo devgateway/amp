@@ -137,8 +137,8 @@ public class TrailCellsPDF extends PDFExporter {
 				PdfPCell pdfc2 = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(result+" ("+grd.getTotalUniqueRows()+")"),totalFont));
 				pdfc2.setColspan(grd.getTotalDepth());
 				table.addCell(pdfc2);
-				currentBackColor=new  Color(235,235,235);
-				pdfc2.setBackgroundColor(currentBackColor);
+				getExportState().currentBackColor = new Color(235,235,235);
+				pdfc2.setBackgroundColor(getExportState().currentBackColor);
 			}else{
                 pdfc = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(result+" ("+grd.getTotalUniqueRows()+")"),totalFont));
 //				Integer sourceColsCount=grd.getSourceColsCount();
@@ -149,8 +149,8 @@ public class TrailCellsPDF extends PDFExporter {
 //						pdfc.setColspan(span);
 //					}
 //				}
-				currentBackColor=new  Color(235,235,235);
-				pdfc.setBackgroundColor(currentBackColor);
+                getExportState().currentBackColor = new Color(235,235,235);
+				pdfc.setBackgroundColor(getExportState().currentBackColor);
 				table.addCell(pdfc);
 			}
 			
@@ -167,7 +167,7 @@ public class TrailCellsPDF extends PDFExporter {
 				if (element == null)
 				{						
 					PdfPCell emptyCell = new PdfPCell(new Paragraph(" ", totalFont));
-					emptyCell.setBackgroundColor(currentBackColor);
+					emptyCell.setBackgroundColor(getExportState().currentBackColor);
 					table.addCell(emptyCell);
 				}
 				else
@@ -177,7 +177,7 @@ public class TrailCellsPDF extends PDFExporter {
 				}
 			}
 			
-			currentBackColor=null;
+			getExportState().currentBackColor = null;
 		}
 	
 

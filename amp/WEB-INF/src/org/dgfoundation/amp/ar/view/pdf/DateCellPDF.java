@@ -27,8 +27,9 @@ public class DateCellPDF extends PDFExporter {
 	/**
 	 * @param parent
 	 */
-	public DateCellPDF(Exporter parent,Viewable item) {
-		super(parent,item);
+	public DateCellPDF(Exporter parent, Viewable item)
+	{
+		super(parent, item);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -37,7 +38,8 @@ public class DateCellPDF extends PDFExporter {
 	 * @param item
 	 * @param ownerId
 	 */
-	public DateCellPDF(PdfPTable table, Viewable item, Long ownerId) {
+	public DateCellPDF(PdfPTable table, Viewable item, Long ownerId)
+	{
 		super(table, item, ownerId);
 		// TODO Auto-generated constructor stub
 	}

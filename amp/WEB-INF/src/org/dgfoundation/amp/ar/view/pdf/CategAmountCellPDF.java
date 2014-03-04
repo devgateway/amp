@@ -19,8 +19,8 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class CategAmountCellPDF extends AmountCellPDF {
 
-	public CategAmountCellPDF(Exporter parent,Viewable item) {
-		super(parent,item);
+	public CategAmountCellPDF(Exporter parent, Viewable item) {
+		super(parent, item);
 	}
 	
 	

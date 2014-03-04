@@ -49,7 +49,8 @@ public class ColumnReportDataPDF extends PDFExporter {
 	 * @param item
 	 * @param ownerId
 	 */
-	public ColumnReportDataPDF(PdfPTable table, Viewable item, Long ownerId) {
+	public ColumnReportDataPDF(PdfPTable table, Viewable item, Long ownerId)
+	{
 		super(table, item, ownerId);
 		// TODO Auto-generated constructor stub
 	}
@@ -129,7 +130,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 		font.setColor(new Color(255,255,255));
 		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) 
 		{
-			PDFExporter.headingCells = new ArrayList<PdfPCell>();
+			getExportState().headingCells = new ArrayList<PdfPCell>();
 			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
 			int maxColumnDepth = columnReport.getMaxColumnDepth();
 			
@@ -182,10 +183,10 @@ public class ColumnReportDataPDF extends PDFExporter {
 						pdfc.setRowspan(rowsp);
 						pdfc.setBackgroundColor(new Color(51,102,153));
 						//table.addCell(pdfc);
-						headingCells.add(pdfc);
+						getExportState().headingCells.add(pdfc);
 					}
 				}
-				headingCells.add(new MyPdfPCell(new Paragraph(PDFExporter.FORCE_NEW_LINE)));
+				getExportState().headingCells.add(new MyPdfPCell(new Paragraph(PDFExporter.FORCE_NEW_LINE)));
 //				if (!anyCellsOnThisRow)
 //				{
 //					PdfPCell pdfc = new MyPdfPCell(new Paragraph(PDFExporter.FORCE_NEW_LINE));

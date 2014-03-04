@@ -363,14 +363,14 @@ public class ColumnReportData extends ReportData<Column> {
 		}
 		/* We create fake cells for all activities that would otherwise just disappear in the newly create GroupReportData */
 		for ( Long id: activitiesInColReport ){
-			logger.info("The following activity needs to be added to the Unallocated category: " + id );
+			//logger.info("The following activity needs to be added to the Unallocated category: " + id );
 			fakeCell	= AmpReportGenerator.generateFakeCell(this, id, keyCol);
 			keyCol.addCell(fakeCell);
 		}
 		/* If the unallocated category doesn't already exist we need to create it */
 		if ( (activitiesInColReport.size() > 0 || percentagesMap.size() > 0 ) 
 				&& !existsUnallocatedCateg  ) {
-			logger.info("Unallocated category was not created for " + keyCol.getColumnId() + ". Adding it now.");
+			//logger.info("Unallocated category was not created for " + keyCol.getColumnId() + ". Adding it now.");
 			ColumnReportData crd	= new ColumnReportData( (String) keyCol.getColumnId() + ": " + fakeCell.toString() );
 			//fakeCell.setValue(fakeCell.getValue() + keyCol.getName());
 			crd.setSplitterCell(fakeCell);

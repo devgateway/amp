@@ -34,6 +34,7 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
 import org.dgfoundation.amp.ar.view.pdf.PDFExporter;
+import org.dgfoundation.amp.ar.view.pdf.ReportPdfExportState;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -66,53 +67,106 @@ import com.lowagie.text.pdf.PdfWriter;
  * @since Aug 28, 2006
  * 
  */
-public class PDFExportAction extends Action implements PdfPageEvent{
-    	
-   	
+public class PDFExportAction extends Action implements PdfPageEvent
+{   	   	
 	protected static Logger logger = Logger.getLogger(PDFExportAction.class);
-	private  HttpSession session=null;
-	private  String locale=null;
-	private  Site site =null;
-	private GroupReportData rd=null;
-	private AmpARFilter arf=null;
-	private AmpReports r=null;
+	
+	private HttpSession session;
+	private String locale;
+//	private Site site;
+	private GroupReportData rd;
+	private AmpARFilter arf;
+	private AmpReports report;
 	private PdfPTable contenTable;
-	private HttpServletResponse response;
+	private GroupReportDataPDF rootReportExporter;
 	private HttpServletRequest request;
-
-	public PDFExportAction(HttpSession session,
-                           String locale,
-                           Site site,
-                           GroupReportData rd,
-                           AmpARFilter arf,
-                           AmpReports r,
-                           HttpServletResponse response,
-                           HttpServletRequest request) {
-	    this.session=session;
-	    this.locale=locale;
-	    this.site=site;
-	    this.arf=arf;
-	    this.rd=rd;
-	    this.r=r;
-	    this.response=response;
-	    this.request=request;
-    }
 
 	public PDFExportAction() {
 
     }
+	
+	float[] buildWidths()
+	{
+		float[] widths = new float[rd.getTotalDepth()];		
+		for (int k = 0; k < widths.length; k++)
+		{
+			if ( k < rd.getTotalDepth())
+				widths[k] = 0.120f;
+		}
+	
+		for (int k = widths.length; k < rd.getTotalDepth() ; k++)
+			widths[k] = 0.08f;
+		return widths;
+	}
+	
+	public void doPdfExport(HttpServletResponse response) throws Exception
+	{
+		// This a temporary fix to avoid stack overflow error in large reports AMP-5324
+		// temporary my a$$
+		Rectangle page = new Rectangle(new Float("1500"), new Float("1500"));
+		Document document = new Document(page.rotate(),5, 5, 15, 50);				
+			
+		//
+		response.setContentType("application/pdf");
+		response.setHeader("Content-Disposition","attachment; filename=" + report.getName().replaceAll("[ ,;]","_") + ".pdf");
+        //
+		PdfWriter writer = PdfWriter.getInstance(document,response.getOutputStream());		
+		//
+		writer.setPageEvent(this);
+		// noteFromSession=AmpReports.getNote(request.getSession());    
+		Map<Long, MetaInfo<String>> sorters = ReportContextData.getFromRequest().getReportSorters();
+			
+		String sortBy = ReportContextData.getFromRequest().getSortBy();		
+		if(sortBy != null)
+		{
+			rd.setSorterColumn(sortBy);
+			rd.setSortAscending(ReportContextData.getFromRequest().getSortAscending());
+		}
+			
+		float[] widths = buildWidths();
+		contenTable = new PdfPTable(widths);
+		contenTable.setWidthPercentage(100);
+			
+		if ( sorters != null && sorters.size() > 0 )
+		{
+			rd.importLevelSorters(sorters, report.getHierarchies().size());
+			rd.applyLevelSorter();
+		}
+		rootReportExporter = new GroupReportDataPDF(contenTable,(Viewable) rd, null);
+		this.rootReportExporter.state = new ReportPdfExportState(widths);
+        
+		//it is for not to show first group it is always the report title;
+        //in a few grdp.setVisible(false);
+		rootReportExporter.setMetadata(report);
+		rootReportExporter.generate();
+		// open document
+		document.open();
+		// add content
+		document.add(contenTable);
+		// document.add(grdp.getTable());
+		document.close();	
+	}
 	
 	@SuppressWarnings("unchecked")
         public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 		
-		Site siteInExec = RequestUtils.getSite(request);
-		HttpSession sessionInExec = request.getSession();
-		String localeInExec = RequestUtils.getNavigationLanguage(request).getCode();
+		//Site siteInExec = RequestUtils.getSite(request);
+		this.request = request;
+		this.session = request.getSession();
+		this.locale = RequestUtils.getNavigationLanguage(request).getCode();
 		
+		AdvancedReportForm reportForm = (AdvancedReportForm) form;
+		request.setAttribute("statementPositionOptions", reportForm.getStatementPositionOptions());
+		request.setAttribute("logoPositionOptions", reportForm.getLogoPositionOptions());
+		request.setAttribute("statementOptions", reportForm.getStatementOptions());
+		request.setAttribute("logoOptions", reportForm.getLogoOptions());
+		request.setAttribute("dateOptions", reportForm.getDateOptions());
+
+
 		boolean initFromDB = false;
-	    TeamMember tm = (TeamMember) sessionInExec.getAttribute("currentMember");
+	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if (tm == null || tm.getTeamId() == null )
 			tm = null;
 		
@@ -123,7 +177,6 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    
 	    logger.info("reportContextId: " + ReportContextData.getFromRequest(true).getContextId()); // DO NOT DELETE THIS CALL - it ensures that a ReportContextMap exists
 	    
-	    AmpReports report = null;
 	    try {
 	    	report = ARUtil.getReferenceToReport();
 	    } catch (Exception e) {
@@ -132,99 +185,37 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    }
 	    report.validateColumnsAndHierarchies();
 	    
-	    AmpARFilter arf = ReportContextData.getFromRequest().loadOrCreateFilter(initFromDB, report);
+	    this.arf = ReportContextData.getFromRequest().loadOrCreateFilter(initFromDB, report);
 	    
 		if (tm == null){
 			arf.setPublicView(true);
 			}
 	 
-		GroupReportData rd = ARUtil.generateReport(report, arf, true, false);
+		this.rd = ARUtil.generateReport(report, arf, true, false);
 		
 		ARUtil.cleanReportOfHtmlCodes(rd);
 		
 		rd.setCurrentView(GenericViews.PDF);
 		
-		AmpReports r =  ReportContextData.getFromRequest().getReportMeta();
+		//AmpReports r =  ReportContextData.getFromRequest().getReportMeta();
 		/*
 		 * this should not be used anymore as the page size has been included in the ARFilters.
 		 * String pageSize=formBean.getPdfPageSize();
 		 */
 		//use the session to get the existing filters
-		if (sessionInExec.getAttribute("currentMember") != null || arf.isPublicView()) {
-
-			//This a temporal fix to avoid stack overflow error in large reports AMP-5324
-			Rectangle page = new Rectangle(new Float("1500"), new Float("1500"));
-
-			//the pagesize is not initialized in the filters
-			/*
-			if(pageSize==null)
-				page=PageSize.TABLOID;
-			else{
-				if(pageSize.equals("A0")) page=PageSize.A0;
-				if(pageSize.equals("A1")) page=PageSize.A1;
-				if(pageSize.equals("A2")) page=PageSize.A2;
-				if(pageSize.equals("A3")) page=PageSize.A3;
-					if(pageSize.equals("A4")) page=PageSize.A4;
-			}*/
-			AdvancedReportForm reportForm = (AdvancedReportForm) form;
-
-			request.setAttribute("statementPositionOptions", reportForm.getStatementPositionOptions());
-			request.setAttribute("logoPositionOptions", reportForm.getLogoPositionOptions());
-			request.setAttribute("statementOptions", reportForm.getStatementOptions());
-			request.setAttribute("logoOptions", reportForm.getLogoOptions());
-			request.setAttribute("dateOptions", reportForm.getDateOptions());
-	        //	        			
-			
-				Document document = new Document(page.rotate(),5, 5, 15, 50);				
-				PDFExporter.headingCells=null;								
-				
-				//
-                response.setContentType("application/pdf");
-                response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll("[ ,;]","_") + ".pdf");
-                //
-				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());		
-                //
-                writer.setPageEvent(new PDFExportAction(sessionInExec,localeInExec,siteInExec,rd,arf,r,response,request));
-				//noteFromSession=AmpReports.getNote(request.getSession());    
-				Map<Long, MetaInfo<String>> sorters = ReportContextData.getFromRequest().getReportSorters();
-				
-				String sortBy = ReportContextData.getFromRequest().getSortBy();		
-				if(sortBy != null) {
-					rd.setSorterColumn(sortBy);
-					rd.setSortAscending(ReportContextData.getFromRequest().getSortAscending());
-				}
-				
-				PDFExporter.widths=new float[rd.getTotalDepth()];		
-				for (int k = 0; k < PDFExporter.widths.length; k++) {
-					if (k<rd.getTotalDepth()){
-						PDFExporter.widths[k]=0.120f;
-					}
-				}
-			
-				for (int k = PDFExporter.widths.length; k<rd.getTotalDepth() ; k++) {
-					PDFExporter.widths[k]=0.08f;
-				}
-				contenTable = new PdfPTable(PDFExporter.widths);
-				contenTable.setWidthPercentage(100);
-				
-				if ( sorters != null && sorters.size() > 0 ) {
-					rd.importLevelSorters(sorters, r.getHierarchies().size());
-					rd.applyLevelSorter();
-				}
-                GroupReportDataPDF grdp=new GroupReportDataPDF(contenTable,(Viewable) rd,null);
-                //it is for not to show first group it is always the report title;
-                //in a few grdp.setVisible(false);
-                grdp.setMetadata(r);
-                grdp.generate();
-                //open document
-                document.open();
-                //add content
-                document.add(contenTable);
-                //document.add(grdp.getTable());
-                document.close();
-                return null;
+		if (session.getAttribute("currentMember") != null || arf.isPublicView())
+		{
+			try
+			{
+				doPdfExport(response);
+			}
+			catch(Exception e)
+			{
+				logger.error("error while generating PDF", e);
+			}
+			return null;
 		}else{
-			sessionInExec.setAttribute("sessionExpired", true);
+			session.setAttribute("sessionExpired", true);
 			response.setContentType("text/html");	
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
@@ -246,11 +237,13 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		
 	}
 
+	@Override
 	public void onStartPage(PdfWriter writer, Document arg1) {
-	  	if(PDFExporter.headingCells==null) return;
+	  	if (rootReportExporter.state.headingCells == null)
+	  		return;
 		PdfContentByte cb = writer.getDirectContent();
 		cb.saveState();
-		PdfPTable table = new PdfPTable(PDFExporter.widths);
+		PdfPTable table = new PdfPTable(rootReportExporter.state.widths);
 
 		table.setWidthPercentage(100);
 
@@ -334,8 +327,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		table.addCell(pdfc);		
 
 
-		if(!"".equalsIgnoreCase(r.getReportDescription())){
-			pdfc = new PdfPCell(new Paragraph(translatedReportDescription+" "+r.getReportDescription()));
+		if(!"".equalsIgnoreCase(report.getReportDescription())){
+			pdfc = new PdfPCell(new Paragraph(translatedReportDescription+" " + report.getReportDescription()));
 			pdfc.setColspan(rd.getTotalDepth());
 			table.addCell(pdfc);
 		}
@@ -380,7 +373,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		try {
 			table.completeRow();
 			//adding the table to the document before adding cells avoid stack overflow error, we can flush the memory and send the content to the client
-			for(PdfPCell element:PDFExporter.headingCells)
+			for(PdfPCell element:rootReportExporter.state.headingCells)
 			{
 				if (element.getPhrase() != null && element.getPhrase().getContent().equals(PDFExporter.FORCE_NEW_LINE))
 					table.completeRow(); // workaround for lowagie's inability to render AxB merged cells when both A and B are > 1 (text is rendered and positioned correctly, but internal borders are drawn and calculations are screwed)
@@ -402,8 +395,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    PdfContentByte cb = writer.getDirectContent();
 	    //cb.saveState();
 	    
-	    	Long siteId = site.getId();
-    	    AmpReports r =  ReportContextData.getFromRequest().getReportMeta();;
+	    	Long siteId = RequestUtils.getSite(request).getId();
+    	    AmpReports r =  ReportContextData.getFromRequest().getReportMeta();
     	    r.setSiteId(siteId);
     	    r.setLocale(locale);
     	    BaseFont font = BaseFont.createFont(BaseFont.COURIER,BaseFont.CP1250,false);

@@ -24,31 +24,24 @@ import com.lowagie.text.pdf.PdfPTable;
 public abstract class PDFExporter extends Exporter {
 	
 	/**
-	 * lowagie has a big in cells with rowspan X colspan cells - so forcing a newline after each line so that failures do not propagate
+	 * lowagie has a bug in cells with rowspan X colspan cells - so forcing a newline after each line so that failures do not propagate
 	 */
 	public final static String FORCE_NEW_LINE = "FORCE_NEW_LINE_DUMMY_CELL_NAME";
-	/**
-	 * this static array will hold the heading cells that need to be displayed on the start of each page.
-	 * it will get initialized only once and then used by onStartPage
-	 */
-	public static ArrayList<PdfPCell> headingCells=null;
-	
-	public static float[] widths;
 	
 	protected PdfPTable table;
-	protected Long ownerId; 
-	
-	protected static Color currentBackColor=null;
-	
+	protected Long ownerId;
+		
 	public PDFExporter(Exporter parent,Viewable item) {
-		super(parent,item);
+		super(parent, item);
+		//this.state = state;
 		PDFExporter pdfParent=(PDFExporter) parent;
 		this.table=pdfParent.getTable();
 		this.ownerId=pdfParent.getOwnerId();
 
 	}
 	
-	public PDFExporter(PdfPTable table, Viewable item,Long ownerId) {
+	public PDFExporter(PdfPTable table, Viewable item, Long ownerId)
+	{
 		this.table=table;
 		this.item=item;
 		this.ownerId=ownerId;
@@ -95,7 +88,12 @@ public abstract class PDFExporter extends Exporter {
 	public void setTable(PdfPTable table) {
 		this.table = table;
 	}
-
 	
-
+	private ReportPdfExportState _cachedExportState;
+	public ReportPdfExportState getExportState()
+	{
+		if (_cachedExportState == null)
+			_cachedExportState = ((PDFExporter) parent).getExportState();
+		return _cachedExportState;
+	}
 }

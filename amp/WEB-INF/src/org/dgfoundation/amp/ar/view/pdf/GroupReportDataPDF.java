@@ -25,12 +25,15 @@ import com.lowagie.text.pdf.PdfPTable;
  * @since Aug 29, 2006
  *
  */
-public class GroupReportDataPDF extends PDFExporter {
+public class GroupReportDataPDF extends PDFExporter
+{
 
-    	private static Color alternateColorA=new Color(185,219,243);
-    	private static Color alternateColorB=new Color(0,156,205);
-    	private static Color lastedUsedColor=null;
-    	/**
+	public ReportPdfExportState state;
+	
+   	private static Color alternateColorA = new Color(185,219,243);
+   	private static Color alternateColorB = new Color(0,156,205);
+   	
+   	/**
 	 * @param parent
 	 */
 	public GroupReportDataPDF(Exporter parent,Viewable item) {
@@ -42,7 +45,8 @@ public class GroupReportDataPDF extends PDFExporter {
 	 * @param item
 	 * @param ownerId
 	 */
-	public GroupReportDataPDF(PdfPTable table, Viewable item, Long ownerId) {
+	public GroupReportDataPDF(PdfPTable table, Viewable item, Long ownerId)
+	{
 		super(table, item, ownerId);
 	}
 
@@ -59,9 +63,9 @@ public class GroupReportDataPDF extends PDFExporter {
 			pdfc.setColspan(grd.getTotalDepth());
 			pdfc.setPaddingTop(2);
 			pdfc.setPaddingBottom(2);
-			if (lastedUsedColor!=alternateColorA){
+			if (state.lastedUsedColor != alternateColorA){
 			    pdfc.setBackgroundColor(alternateColorA);
-			    lastedUsedColor=alternateColorA;
+			    state.lastedUsedColor = alternateColorA;
 			}else{
 			    pdfc.setBackgroundColor(alternateColorB);    
 			}	
@@ -84,5 +88,14 @@ public class GroupReportDataPDF extends PDFExporter {
 		table.addCell(pdfc2);
 	}
 
+	@Override
+	public ReportPdfExportState getExportState()
+	{
+		if (this.parent != null)
+			return super.getExportState();
+		if (this.state == null)
+			throw new RuntimeException("Root GRD-PDF does not have a State object!");
+		return this.state;
+	}
 	
 }

@@ -27,31 +27,30 @@ public class AmountCellPDF extends PDFExporter {
 
 	
 	public AmountCellPDF(Exporter parent,Viewable item) {
-		super(parent,item);
+		super(parent, item);
 	}
 	
 	/**
 	 * @param table
 	 * @param item
 	 */
-	public AmountCellPDF(PdfPTable table, Viewable item,Long ownerId) {
-		super(table, item,ownerId);
+	public AmountCellPDF(PdfPTable table, Viewable item, Long ownerId) {
+		super(table, item, ownerId);
 		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
  	 */
-	public void generate() {
-
-		
-		
-		AmountCell ac=(AmountCell) item;
+	public void generate()
+	{
+		AmountCell ac = (AmountCell) item;
 		PdfPCell pdfc = new PdfPCell(new Paragraph(ac.toString(),new Font(ExportActivityToPDF.basefont, 9, Font.NORMAL)));
 		pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
 		pdfc.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		if (currentBackColor!=null){
-		    pdfc.setBackgroundColor(currentBackColor);
+		if (getExportState().currentBackColor != null)
+		{
+			pdfc.setBackgroundColor(getExportState().currentBackColor);
 		}
 		table.addCell(pdfc);
 	}

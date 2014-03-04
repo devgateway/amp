@@ -803,7 +803,7 @@ div.token-input-dropdown,div.token-input-dropdown-facebook {max-height:300px;ove
 .hierarchical-select-wrapper .hierarchical-select option.has-children {padding-right: 20px}
 .dropbox table td {padding:3px}
 
-.page-search #ampp-search-form .form-item-sector, .page-search #ampp-search-form .form-item-donor, .page-search #ampp-search-form .form-item-region, .page-search #ampp-search-form .form-item-keyword {width:96%}
+.page-search #ampp-search-form .form-item-sector, .page-search #ampp-search-form .form-item-donor, .page-search #ampp-search-form .form-item-agency, .page-search #ampp-search-form .form-item-region, .page-search #ampp-search-form .form-item-keyword {width:96%}
 .page-search ul.token-input-list, .page-search ul.token-input-list-facebook {width:84%; float: left; background: #ffffff}
 .page-search .form-item .form-text, .page-search .form-item .form-text {width:83%;padding:2px 7px 2px 16px}
 

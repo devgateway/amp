@@ -3,6 +3,7 @@ var selectedPrimarySectors = new Array();
 var selectedSecondarySectors = new Array();
 var selectedPrograms = new Array();
 var selectedDonors = new Array();
+var selectedAgencies = new Array();
 var selectedLocations = new Array();
 var selectedPeriodStart = '';
 var selectedPeriodEnd = '';
@@ -63,6 +64,16 @@ var selectedRegionalProjects = 0;
 		    	queryParam: "string",
 		        method: "POST",
 		        prePopulate: selectedDonors,
+		        onAdd: getResultCount,
+		        onDelete:  getResultCount
+		    });
+	    }
+		if ( $("#edit-agency").length > 0 ) {
+		    $("#edit-agency").tokenInput(lang + "/ampp_search/agencies", {
+		    	theme: "facebook",
+		    	queryParam: "string",
+		        method: "POST",
+		        prePopulate: selectedAgencies,
 		        onAdd: getResultCount,
 		        onDelete:  getResultCount
 		    });
@@ -132,6 +143,7 @@ var selectedRegionalProjects = 0;
 		currenProgramsIds = ($("#edit-program").length > 0) ? getItemsIds($("#edit-program").tokenInput("get")) : "";
 		
 		currentDonorsIds = ($("#edit-donor").length > 0) ? getItemsIds($("#edit-donor").tokenInput("get")) : "";
+		currentAgenciesIds = ($("#edit-agency").length > 0) ? getItemsIds($("#edit-agency").tokenInput("get")) : "";
 		currentRegionsIds = ($("#edit-region").length > 0) ? getItemsIds($("#edit-region").tokenInput("get")) : "";
 		currentPeriodStart = ($("#edit-period-start-datepicker-popup-0").length > 0) ? $("#edit-period-start-datepicker-popup-0").val() : "";
 		currentPeriodEnd = ($("#edit-period-end-datepicker-popup-0").length > 0) ? $("#edit-period-end-datepicker-popup-0").val() : "";
@@ -143,7 +155,7 @@ var selectedRegionalProjects = 0;
 		
 		$("#search_result_count").hide();
 		$("#loading-count").css('display','inline');
-		$.getJSON('/ampp_search/search_result_count', {'currentSectors[]' : currenSectorsIds, 'currentPrimarySectors[]' : currenPrimarySectorsIds,'currentSecondarySectors[]' : currenSecondarySectorsIds,'currentPrograms[]' : currenProgramsIds, 'currentDonors[]':currentDonorsIds, 'currentRegions[]':currentRegionsIds,'currentPeriodStart':currentPeriodStart,'currentPeriodEnd':currentPeriodEnd,'currentKeywords':currentKeywords,'budget':Budget,'RegionalProjects':RegionalProjects,'PreviewAmount':PreviewAmount},  function(data) {
+		$.getJSON('/ampp_search/search_result_count', {'currentSectors[]' : currenSectorsIds, 'currentPrimarySectors[]' : currenPrimarySectorsIds,'currentSecondarySectors[]' : currenSecondarySectorsIds,'currentPrograms[]' : currenProgramsIds, 'currentDonors[]':currentDonorsIds, 'currentAgencies[]':currentAgenciesIds, 'currentRegions[]':currentRegionsIds,'currentPeriodStart':currentPeriodStart,'currentPeriodEnd':currentPeriodEnd,'currentKeywords':currentKeywords,'budget':Budget,'RegionalProjects':RegionalProjects,'PreviewAmount':PreviewAmount},  function(data) {
 			$("#loading-count").css('display','none');
 			$("#search_result_count").show();
 			if(data['error'] != undefined && data['error'] !== null){

@@ -116,93 +116,122 @@ public class CreateEditSourceActions extends DispatchAction {
 		CreateSourceForm myForm = (CreateSourceForm) form;
 		
 		myForm.getListComponents();
-		for(int i=0; i<myForm.getListComponents().size();i++){
-			myForm.getListComponents().get(i).setImportComp(Boolean.parseBoolean(myForm.getModuleImport()[i]));
-			if(Boolean.parseBoolean(myForm.getModuleImport()[i]))
-				myForm.getListComponents().get(i).setAutoOverwrite(Boolean.parseBoolean(myForm.getModuleAOW()[i]));
-			else
-				myForm.getListComponents().get(i).setAutoOverwrite(false);
-		}
 		DESourceSetting srcSetting	= null;
-		if(myForm.getSourceId() !=null && ! myForm.getSourceId().equals(new Long(-1))){
-			srcSetting	= new SourceSettingDAO().getSourceSettingById(myForm.getSourceId());
-		}else{
-			srcSetting	= new DESourceSetting();
+		if(myForm.isDisplaySource()){
+			System.out.println(myForm.getConfigurationId());
+			System.out.println(myForm.getConfigurations().size());
 		}
-		DESourceSetting nameTest = new SourceSettingDAO().getSourceSettingByName(myForm.getName());
-		if (nameTest!=null){
-			if(myForm.getSourceId()==-1){
-				myForm.setErrorName(true);
-				return mapping.findForward("forward");
-			}
-			if(myForm.getSourceId()!=-1 && srcSetting.getName().compareToIgnoreCase(nameTest.getName())!=0){
-				myForm.setErrorName(true);
-				return mapping.findForward("forward");
+		if(!myForm.isDisplaySource()){
+			for(int i=0; i<myForm.getListComponents().size();i++){
+				myForm.getListComponents().get(i).setImportComp(Boolean.parseBoolean(myForm.getModuleImport()[i]));
+				if(Boolean.parseBoolean(myForm.getModuleImport()[i]))
+					myForm.getListComponents().get(i).setAutoOverwrite(Boolean.parseBoolean(myForm.getModuleAOW()[i]));
+				else
+					myForm.getListComponents().get(i).setAutoOverwrite(false);
 			}
 			
-		}
-		
-		srcSetting.setName(myForm.getName() );
-		srcSetting.setSource( myForm.getSource() );
-		//srcSetting.setFields(  CreateSourceUtil.getFieldNames(myForm.getActivityTree(), null) );
-		List<String> importModules = new ArrayList<String>();
-		for(int i=0; i<myForm.getListComponents().size();i++){
-			importModules.add(myForm.getListComponents().get(i).getIatiName()+"|||"+myForm.getListComponents().get(i).isImportComp()+"|||"+myForm.getListComponents().get(i).isAutoOverwrite());
-		}
-		srcSetting.setFields( importModules );
-		srcSetting.setImportStrategy( myForm.getImportStrategy() );
-		srcSetting.setUniqueIdentifier( myForm.getUniqueIdentifier() );
-		srcSetting.setApprovalStatus( myForm.getApprovalStatus() );
-		
-		if ( myForm.getTeamValues() != null ) {
-			for (AmpTeam selTeam: myForm.getTeamValues() ) {
-				if ( selTeam.getAmpTeamId().equals(myForm.getTeamId() )) {
-					srcSetting.setImportWorkspace( selTeam );
+			if(myForm.getSourceId() !=null && ! myForm.getSourceId().equals(new Long(-1))){
+				srcSetting	= new SourceSettingDAO().getSourceSettingById(myForm.getSourceId());
+			}else{
+				srcSetting	= new DESourceSetting();
+			}
+			DESourceSetting nameTest = new SourceSettingDAO().getSourceSettingByName(myForm.getName());
+			if (nameTest!=null){
+				if(myForm.getSourceId()==-1){
+					myForm.setErrorName(true);
+					return mapping.findForward("forward");
+				}
+				if(myForm.getSourceId()!=-1 && srcSetting.getName().compareToIgnoreCase(nameTest.getName())!=0){
+					myForm.setErrorName(true);
+					return mapping.findForward("forward");
+				}
+				
+			}
+			
+			srcSetting.setName(myForm.getName() );
+			srcSetting.setSource( myForm.getSource() );
+			//srcSetting.setFields(  CreateSourceUtil.getFieldNames(myForm.getActivityTree(), null) );
+			List<String> importModules = new ArrayList<String>();
+			for(int i=0; i<myForm.getListComponents().size();i++){
+				importModules.add(myForm.getListComponents().get(i).getIatiName()+"|||"+myForm.getListComponents().get(i).isImportComp()+"|||"+myForm.getListComponents().get(i).isAutoOverwrite());
+			}
+			srcSetting.setFields( importModules );
+			srcSetting.setImportStrategy( myForm.getImportStrategy() );
+			srcSetting.setUniqueIdentifier( myForm.getUniqueIdentifier() );
+			srcSetting.setApprovalStatus( myForm.getApprovalStatus() );
+			
+			if ( myForm.getTeamValues() != null ) {
+				for (AmpTeam selTeam: myForm.getTeamValues() ) {
+					if ( selTeam.getAmpTeamId().equals(myForm.getTeamId() )) {
+						srcSetting.setImportWorkspace( selTeam );
+						break;
+					}
+				}
+			}
+			if ( myForm.getSelectedLanguages() != null && myForm.getSelectedLanguages().length > 0 ) {
+				srcSetting.setLanguageId("");
+				for (String lang: myForm.getSelectedLanguages() ) {
+					srcSetting.setLanguageId( srcSetting.getLanguageId() + lang + "|" );
+				}
+				srcSetting.setLanguageId( srcSetting.getLanguageId().substring(0, srcSetting.getLanguageId().length()-1 ) );
+			}
+		}else{
+			DESourceSetting configuration = null;
+			for(int i=0;i<myForm.getConfigurations().size();i++){
+				if(myForm.getConfigurations().get(i).getId().compareTo(myForm.getConfigurationId())==0){
+					configuration = myForm.getConfigurations().get(i);
 					break;
 				}
 			}
+			srcSetting	= new DESourceSetting();
+			
+			srcSetting.setName(myForm.getName());
+			srcSetting.setSource(configuration.getSource());
+			srcSetting.setImportStrategy( configuration.getImportStrategy() );
+			srcSetting.setUniqueIdentifier( configuration.getUniqueIdentifier() );
+			srcSetting.setApprovalStatus( configuration.getApprovalStatus() );
+			srcSetting.setImportWorkspace( configuration.getImportWorkspace() );
+			srcSetting.setLanguageId(configuration.getLanguageId());
+			
 		}
-		if ( myForm.getSelectedLanguages() != null && myForm.getSelectedLanguages().length > 0 ) {
-			srcSetting.setLanguageId("");
-			for (String lang: myForm.getSelectedLanguages() ) {
-				srcSetting.setLanguageId( srcSetting.getLanguageId() + lang + "|" );
-			}
-			srcSetting.setLanguageId( srcSetting.getLanguageId().substring(0, srcSetting.getLanguageId().length()-1 ) );
-		}
-		
 		//attach doc
 		Sdm oldDoc = null;
-		if(myForm.getSdmDocument() == null){
-			oldDoc = srcSetting.getAttachedFile();
-		}
-		
 		Sdm oldPrevDoc = null;
-		if(myForm.getSdmDocument() == null){
-			oldPrevDoc = srcSetting.getPreviousAttachedFile();
-		}
-		
-		
-		if(myForm.getUploadedFile() != null && myForm.getUploadedFile().getFileSize() >0){
-			attachFile(myForm);
-		}
-		
-		try {
-			//save attached files
-        	Sdm document=myForm.getSdmDocument();
-        	Sdm doc=null;
-        	if(document!=null){
-        		document.setName(srcSetting.getName());
-        		doc=DbUtil.saveOrUpdateDocument(document);        		
-        	}
-        	srcSetting.setAttachedFile(doc);
-        	srcSetting.setPreviousAttachedFile(oldDoc);
-			
-			new SourceSettingDAO().saveObject(srcSetting);
-			
-			if(oldPrevDoc!=null){
-				DbUtil.deleteDocument(oldPrevDoc);
+		if(myForm.isDisplaySource()){
+			if(myForm.getSdmDocument() == null){
+				oldDoc = srcSetting.getAttachedFile();
 			}
 			
+			
+			if(myForm.getSdmDocument() == null){
+				oldPrevDoc = srcSetting.getPreviousAttachedFile();
+			}
+			
+			
+			if(myForm.getUploadedFile() != null && myForm.getUploadedFile().getFileSize() >0){
+				attachFile(myForm);
+			}
+		
+		}
+		try {
+			//save attached files
+			if(myForm.isDisplaySource()){
+	        	Sdm document=myForm.getSdmDocument();
+	        	Sdm doc=null;
+	        	if(document!=null){
+	        		document.setName(srcSetting.getName());
+	        		doc=DbUtil.saveOrUpdateDocument(document);        		
+	        	}
+	        	srcSetting.setAttachedFile(doc);
+	        	srcSetting.setPreviousAttachedFile(oldDoc);
+			}
+			new SourceSettingDAO().saveObject(srcSetting);
+			
+			if(myForm.isDisplaySource()){
+				if(oldPrevDoc!=null){
+					DbUtil.deleteDocument(oldPrevDoc);
+				}
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -237,7 +266,7 @@ public class CreateEditSourceActions extends DispatchAction {
     	return mapping.findForward("forward");
 	}
 	
-	private void fillForm (CreateSourceForm myform, HttpServletRequest request){
+	private void fillForm (CreateSourceForm myform, HttpServletRequest request) throws Exception{
 		String[] langArray = {"1","2","3"};
 		if(myform.getLanguages() == null || myform.getLanguages().length < 1) myform.setLanguages(langArray);
 		
@@ -259,6 +288,16 @@ public class CreateEditSourceActions extends DispatchAction {
 		approvalStatusValues.add(new KeyValue(Constants.EDITED_STATUS, "Edited but not validated") );
 		approvalStatusValues.add(new KeyValue(Constants.APPROVED_STATUS, "Edited and validated") );
 		myform.setApprovalStatusValues(approvalStatusValues);
+		if(myform.isDisplaySource()){
+			//get sources
+			List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(0, "name");
+			List<DESourceSetting> viewSources = new ArrayList<DESourceSetting>();
+				for(int i=0;i<sources.size();i++){
+					if(sources.get(i).getAttachedFile()==null)
+						viewSources.add(sources.get(i));
+				}
+				myform.setConfigurations(viewSources);
+		}
 		
 		Collection<AmpTeam> teams	= TeamUtil.getAllTeams();
 		myform.setTeamValues(teams);

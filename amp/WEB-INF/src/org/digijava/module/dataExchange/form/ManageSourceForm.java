@@ -43,6 +43,7 @@ public class ManageSourceForm extends ActionForm {
 	private int page = 0;
 	private int lastPage ;
 	private String sort = null;
+	private boolean showResources = false;
 
 	/**
 	 * @return the selectedSourceId
@@ -264,6 +265,14 @@ public class ManageSourceForm extends ActionForm {
 
 	public void setCurrentPage(Integer currentPage) {
 		this.currentPage = currentPage;
+	}
+
+	public boolean isShowResources() {
+		return showResources;
+	}
+
+	public void setShowResources(boolean showResources) {
+		this.showResources = showResources;
 	}	
 		
 }

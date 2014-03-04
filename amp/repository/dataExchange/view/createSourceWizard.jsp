@@ -178,10 +178,15 @@ function trim1 (str) {
  function importActivities(sourceId){
 	 var nameS = document.createSourceForm.name;
 	 var msg = '<digi:trn>Please insert name</digi:trn>';
-	 if(trim1(nameS.value).length==0){
-		alert(msg);
-		return true;
-		}
+	 if(document.createSourceForm.fileUploaded == null){
+		 if(trim1(nameS.value).length==0){
+				alert(msg);
+				return true;
+				}
+	 }else{
+		 nameS = document.createSourceForm.fileUploaded.value;
+		 document.createSourceForm.name.value = nameS;
+	 }
 	 var importCK = document.getElementsByName("moduleImport");
 	 var importCK1 = document.getElementsByName("moduleAOW");
 	 var params="";
@@ -193,7 +198,15 @@ function trim1 (str) {
 			 var opts = importCK1[i];
 			 params+="&moduleAOW="+opts.checked;
 		 }
-	 if(checkAttachment()){
+	 	
+	 var form = document.getElementById('form');
+	  form.action = "/dataExchange/createEditSource.do?action=saveSource"+params;
+     if(sourceId != -1){
+   	  form.action +="&sourceId="+sourceId;
+     }
+     form.target="_self";
+     form.submit();
+	/*  if(checkAttachment()){
 		 var form = document.getElementById('form');
 //	      form.action = "/dataExchange/createSource.do?saveImport=true";
 //	      if(sourceId != -1){
@@ -205,7 +218,7 @@ function trim1 (str) {
 	      }
 	      form.target="_self";
 	      form.submit();
-	 }
+	 } */
      
 }
  function removeAttachment (attachmentOrder) {
@@ -263,6 +276,7 @@ function trim1 (str) {
 				<table width="100%" border="0" cellspacing="0" cellpadding="0">
 					<tr>
 					    <td width=49% valign="top" class="inside" style="border: none;">
+					    <c:if test="${createSourceForm.displaySource==false}">
 					    	<fieldset>
 								<legend><span class=legend_label><digi:trn>General Details</digi:trn></span></legend>								
 								<b><digi:trn>Name</digi:trn>:</b> 
@@ -307,6 +321,7 @@ function trim1 (str) {
                     			</logic:iterate>
 							</fieldset>
 							<br />
+							</c:if>
 							<%-- <fieldset>
 								<legend><span class=legend_label><digi:trn>Filter and Identifier</digi:trn></span></legend>
 								<b><digi:trn>Type unique identifier</digi:trn> (<digi:trn>Title</digi:trn>, <digi:trn>Id</digi:trn>,<digi:trn>Amp Id</digi:trn>,<digi:trn>PTIP code</digi:trn>) <digi:trn>separated by</digi:trn> '|' </b>:
@@ -317,7 +332,8 @@ function trim1 (str) {
 		                    		<html:radio property="approvalStatus" value="${appStatus.key}"><digi:trn>${appStatus.value}</digi:trn></html:radio> <br />
                     			</logic:iterate>								
 							</fieldset>
-							<br /> --%>							
+							<br /> --%>
+							<c:if test="${createSourceForm.displaySource==true}">							
 							<fieldset>
 								<legend><span class=legend_label><digi:trn>Upload a file</digi:trn></span></legend>
 								<c:if test="${not empty createSourceForm.sdmDocument}">
@@ -340,14 +356,29 @@ function trim1 (str) {
 									<!-- CSS content must be put in a separated file and a class must be generated -->
 									<input id="fileUploaded" name="uploadedFile" type="file" class="inputx"  style="margin-top:7px;">
 								</div>
-								<%--
-								<input name="uploadedFile" type="file" style="margin-top:7px;" class="inputx" id="uploadedFile">
-								 --%>
 								
-							</fieldset>														
+								<!-- <input name="uploadedFile" type="file" style="margin-top:7px;" class="inputx" id="uploadedFile">
+								 -->
+								
+							</fieldset>	
+						</c:if>													
+						</td>
+						<td>
+							<c:if test="${createSourceForm.displaySource==true}">
+							<html:hidden property="name" styleClass="inputx" style="width:95%;" />							
+							<fieldset>
+								<legend><span class=legend_label><digi:trn>Upload a file</digi:trn></span></legend>
+								<b><digi:trn>Please choose the configuration that will be used</digi:trn>:</b><br />
+								<html:select property="configurationId" styleClass="inputx" style="margin-top:5px;width:500px">
+        								<html:optionsCollection property="configurations" label="name" value="id"/>
+        							</html:select>
+        							<br /><br />
+							</fieldset>
+							</c:if>	
 						</td>
 						<td width=2%>&nbsp;</td>
 				    	<td width=49% valign="top">
+				    	<c:if test="${createSourceForm.displaySource==false}">
 				    		<fieldset>
 								<legend><span class=legend_label><digi:trn>Field Selection</digi:trn></span></legend>
 								<%-- <a href=# class="t_sm" id="expand"><b><digi:trn>Expand all</digi:trn></b></a>&nbsp; | &nbsp;
@@ -386,6 +417,7 @@ function trim1 (str) {
 									</logic:iterate>
 								</table>
 							</fieldset>
+							</c:if>
 						</td>
 					</tr>
 				</table>

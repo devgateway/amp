@@ -99,13 +99,26 @@ public class ManageSourceAction extends MultiAction {
 		
 		
 		int startIndex = 0;
+		//msForm.setShowResources(msForm.isShowResources());
 		if (msForm.getPage() != 0 ) {
 			startIndex = Constants.RECORDS_AMOUNT_PER_PAGE *( msForm.getPage()-1);
 		}
 		
 		//get sources
 		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(startIndex, msForm.getSort());
-		msForm.setPagedSources(sources);
+		List<DESourceSetting> viewSources = new ArrayList<DESourceSetting>();
+		if(msForm.isShowResources()){
+			for(int i=0;i<sources.size();i++){
+				if(sources.get(i).getAttachedFile()!=null)
+					viewSources.add(sources.get(i));
+			}
+		}else{
+			for(int i=0;i<sources.size();i++){
+				if(sources.get(i).getAttachedFile()==null)
+					viewSources.add(sources.get(i));
+			}
+		}
+		msForm.setPagedSources(viewSources);
 		
 		if(msForm.getPage() == 0){
 			msForm.setCurrentPage(1);

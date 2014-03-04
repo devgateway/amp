@@ -10,6 +10,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.sdm.dbentity.Sdm;
 
@@ -37,6 +38,8 @@ public class CreateSourceForm extends ActionForm {
 	private List<KeyValue> approvalStatusValues;
 	private Collection<AmpTeam> teamValues;
 	private AmpColumnEntry activityTree = null;
+	private List <DESourceSetting> configurations;
+	private Long configurationId;
 	
 	private FormFile uploadedFile;
 	private String[] selectedLanguages;
@@ -51,6 +54,8 @@ public class CreateSourceForm extends ActionForm {
 	private Long sourceId;
 	
 	private boolean errorName = false;
+	
+	private boolean displaySource = false;
 	
 	//holds attached files	
 	private Sdm sdmDocument;
@@ -391,6 +396,30 @@ public class CreateSourceForm extends ActionForm {
 
 	public void setErrorName(boolean errorName) {
 		this.errorName = errorName;
+	}
+
+	public boolean isDisplaySource() {
+		return displaySource;
+	}
+
+	public void setDisplaySource(boolean displaySource) {
+		this.displaySource = displaySource;
+	}
+
+	public List <DESourceSetting> getConfigurations() {
+		return configurations;
+	}
+
+	public void setConfigurations(List <DESourceSetting> configurations) {
+		this.configurations = configurations;
+	}
+
+	public Long getConfigurationId() {
+		return configurationId;
+	}
+
+	public void setConfigurationId(Long configurationId) {
+		this.configurationId = configurationId;
 	}
 	
 }

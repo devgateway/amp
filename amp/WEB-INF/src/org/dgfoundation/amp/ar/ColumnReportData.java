@@ -719,8 +719,12 @@ public class ColumnReportData extends ReportData<Column> {
 		for (Column element:items) {
 			ret += element.getColumnDepth();
 		}
+		if (this.getReportMetadata().isSummaryReportNoHierachies()) {
+			ret++;
+		}
 		return ret;
 	}
+	
 	
 	/**
 	 * Sets the rowspan for each column. This will be used only by viewers, 

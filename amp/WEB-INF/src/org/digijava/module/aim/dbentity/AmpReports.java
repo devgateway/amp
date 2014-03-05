@@ -151,7 +151,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		}
 		return result;
 	}
-
+	
 	public AmpTeamMember getOwnerId() {
 		return ownerId;
 	}
@@ -733,6 +733,11 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	public static String hqlStringForDescription(String idSource)
 	{
 		return InternationalizedModelDescription.getForProperty(AmpReports.class, "reportDescription").getSQLFunctionCall(idSource + ".ampReportId");
+	}
+	
+	//non hierachical summary report. 
+	public boolean isSummaryReportNoHierachies () {
+		return (this.getHideActivities() && this.getHierarchies().size()==0);
 	}
 }
 

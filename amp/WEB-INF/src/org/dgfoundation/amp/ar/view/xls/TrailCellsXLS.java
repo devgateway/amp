@@ -72,13 +72,16 @@ public class TrailCellsXLS extends XLSExporter {
 //			rowId.inc();
 //			colId.reset();
 			row=sheet.createRow(rowId.shortValue());
-		
 			HSSFCellStyle hierarchyStyle;
 			if(grd.getLevelDepth()==2) 
 				hierarchyStyle = this.getHierarchyLevel1Style();
 			else hierarchyStyle=this.getHierarchyOtherStyle();
 			
-			
+			if (grd.getReportMetadata().isSummaryReportNoHierachies()) {
+				HSSFCell cell = this.getCell(hierarchyStyle);
+				cell.setCellValue(" ");
+				colId.inc();			
+			}
 			HSSFCell cell = this.getCell(hierarchyStyle);
 			
 			String modifiedName = (grd.getName()==null)?"":grd.getName();
@@ -90,7 +93,6 @@ public class TrailCellsXLS extends XLSExporter {
 			
 			if (grd.getParent().getParent() == null)
 				modifiedName = "TOTAL";
-			
 			if (grd.getReportMetadata().isHideActivities()!=null && !(grd.getReportMetadata().getType() == ArConstants.PLEDGES_TYPE)){
 				if (grd.getReportMetadata()!=null && grd.getReportMetadata().isHideActivities())
 					//cell.setCellValue(indent + modified);

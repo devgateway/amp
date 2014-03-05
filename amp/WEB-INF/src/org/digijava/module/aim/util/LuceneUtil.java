@@ -701,7 +701,7 @@ public class LuceneUtil implements Serializable {
 		IndexReader indexReader;
 		try {
 			indexReader = IndexReader.open(idx);
-			listDocuments(indexReader);
+			//listDocuments(indexReader);
 			int ret = indexReader.deleteDocuments(term);
 			indexReader.close();
 			return ret;
@@ -970,7 +970,7 @@ public class LuceneUtil implements Serializable {
 
 		try {
 			ir = IndexReader.open(index);
-			listDocuments(ir);
+			//listDocuments(ir);
 			logger.info("Lucene index reader has " + ir.numDocs()
 					+ " docs in it");
 			indexSearcher = new IndexSearcher(index);

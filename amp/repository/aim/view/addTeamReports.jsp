@@ -419,7 +419,7 @@
 </tr></td></table></div>
 <script language="javascript">
 		$("#checkAll").bind("change", function (obj){
-		$("input[name=selReports]").attr("checked", $("#checkAll").attr("checked"));
+		$("input[name=selReports]").attr("checked", $("#checkAll").is(":checked"));
 	}
 	);
 </script>

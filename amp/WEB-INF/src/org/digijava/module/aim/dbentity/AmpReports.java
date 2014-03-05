@@ -742,5 +742,10 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	{
 		return InternationalizedModelDescription.getForProperty(AmpReports.class, "reportDescription").getSQLFunctionCall(idSource + ".ampReportId");
 	}
+	
+	//non hierachical summary report. 
+	public boolean isSummaryReportNoHierachies () {
+		return (this.getHideActivities() && this.getHierarchies().size()==0);
+	}
 }
 

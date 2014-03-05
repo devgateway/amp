@@ -78,7 +78,12 @@ public class TrailCellsXLS extends XLSExporter {
 				hierarchyStyle = this.getHierarchyLevel1Style();
 			else hierarchyStyle=this.getHierarchyOtherStyle();
 			
-			
+    		
+			if (grd.getReportMetadata().isSummaryReportNoHierachies()) {
+			  HSSFCell cell = this.getCell(hierarchyStyle);
+			  cell.setCellValue(" ");
+			  colId.inc();                    
+            }
 			HSSFCell cell = this.getCell(hierarchyStyle);
 			
 			String modifiedName = (grd.getName()==null)?"":grd.getName();

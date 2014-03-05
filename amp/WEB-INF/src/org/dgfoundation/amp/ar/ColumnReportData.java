@@ -719,6 +719,9 @@ public class ColumnReportData extends ReportData<Column> {
 		for (Column element:items) {
 			ret += element.getColumnDepth();
 		}
+		 if (this.getReportMetadata().isSummaryReportNoHierachies()) {
+            ret++;
+        }
 		return ret;
 	}
 	

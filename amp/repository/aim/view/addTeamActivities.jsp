@@ -333,7 +333,7 @@ function checkSelActivities() {
 
 <script language="javascript">
 		$("#checkAll").bind("change", function (obj){
-		$("input[name=selActivities]").attr("checked", $("#checkAll").attr("checked"));
+		$("input[name=selActivities]").attr("checked", $("#checkAll").is(":checked"));
 	}
 	);
 </script>

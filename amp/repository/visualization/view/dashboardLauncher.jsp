@@ -863,6 +863,7 @@ function initializeGlobalVariables(){
 <html:hidden property="filter.transactionType" styleId="transactionType" />
 <html:hidden property="filter.currencyId" styleId="currencyId" />
 <html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
+<html:hidden property="filter.defaultFiscalCalendarId" styleId="defaultFiscalCalendarId" />
 <html:hidden property="filter.groupSeparator" styleId="groupSeparator" />
 <html:hidden property="filter.decimalSeparator" styleId="decimalSeparator" />
 <html:hidden property="filter.fromPublicView" styleId="fromPublicView" />

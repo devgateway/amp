@@ -921,6 +921,8 @@ public class DashboardUtil {
 		if (value != null) {
 			Long fisCalId = Long.parseLong(value);
 			filter.setFiscalCalendarId(fisCalId);
+			filter.setDefaultFiscalCalendarId(fisCalId);
+			
 		}
 
 		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(org.digijava.module.aim.util.DbUtil.getAllOrgGroups());

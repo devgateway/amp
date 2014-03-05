@@ -83,6 +83,7 @@ public class DashboardFilter {
     private int transactionTypeFilter = -1;
     private List<AmpFiscalCalendar> fiscalCalendars;
     private Long fiscalCalendarId;
+    private Long defaultFiscalCalendarId;
     private Integer largestProjectNumber;
     private Boolean divideThousands;
     private Integer divideThousandsDecimalPlaces;
@@ -1262,5 +1263,14 @@ public class DashboardFilter {
 	public void setAgencyTypeDefault(int agencyTypeDefault) {
 		this.agencyTypeDefault = agencyTypeDefault;
 	}
+
+    public Long getDefaultFiscalCalendarId() {
+		return defaultFiscalCalendarId;
+	}
+
+	public void setDefaultFiscalCalendarId(Long defaultFiscalCalendarId) {
+		this.defaultFiscalCalendarId = defaultFiscalCalendarId;
+	}
+		
 	
 }

@@ -28,6 +28,7 @@
 <html:hidden property="filter.agencyTypeDefault" styleId="agencyTypeDefault" />
 <html:hidden property="filter.currencyIdDefault" styleId="currencyIdDefault" />
 <html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
+<html:hidden property="filter.defaultFiscalCalendarId" styleId="defaultFiscalCalendarId" />
 <html:hidden property="filter.groupSeparator" styleId="groupSeparator" />
 <html:hidden property="filter.decimalSeparator" styleId="decimalSeparator" />
 <html:hidden property="filter.fromPublicView" styleId="fromPublicView" />

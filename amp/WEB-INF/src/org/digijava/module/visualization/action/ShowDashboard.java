@@ -141,6 +141,8 @@ public class ShowDashboard extends Action {
 		if (value != null) {
 			Long fisCalId = Long.parseLong(value);
 			filter.setFiscalCalendarId(fisCalId);
+			filter.setDefaultFiscalCalendarId(fisCalId);
+			
 		}
 		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
 		filter.setOrgGroups(orgGroups);

@@ -608,13 +608,13 @@ function resetToDefaults(){
 		document.getElementById("agencyType_dropdown").value = document.getElementById("agencyTypeDefault").value;
 		document.getElementById("agencyTypeQuickFilter_dropdown").value = document.getElementById("agencyTypeDefault").value;
 	}
-	
+	document.getElementById("fiscalCalendar_dropdown_Id").value = document.getElementById("defaultFiscalCalendarId").value;
+	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
+	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
+	callbackChildren.call(document.getElementById("fiscalCalendar_dropdown_Id"), null);	
 	document.getElementById("currencyId").value = document.getElementById("currencyIdDefault").value;
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyIdDefault").value;
 	document.getElementById("currencyQuickFilter_dropdown").value = document.getElementById("currencyIdDefault").value;
-	document.getElementById("fiscalCalendar_dropdown_Id").value = document.getElementById("fiscalCalendarId").value;
-	callbackChildren.call(document.getElementById("fiscalCalendar_dropdown_Id"), null);	
-	
 	document.getElementById("showAmountsInThousands").value = document.getElementById("showAmountsInThousandsDefault").value;
 	document.getElementById("show_amounts_in_thousands").value = document.getElementById("showAmountsInThousandsDefault").value;
 	
@@ -658,11 +658,10 @@ function resetToDefaults(){
 	document.getElementById("filterZones").innerHTML = trnAll;
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
-	//setSelectedValue("show_amounts_in_thousands", 2); // Show amounts in millions
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
-	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
-	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
+	
+	//setSelectedValue("show_amounts_in_thousands", 2); // Show amounts in millions
 	//document.getElementById("SectorProfileItemId").value = -1;
 	applyFilterPopin();
 }

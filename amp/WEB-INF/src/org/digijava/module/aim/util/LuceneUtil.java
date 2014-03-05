@@ -81,7 +81,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 9L;
+	private static final long serialVersionUID = 10L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -665,26 +665,97 @@ public class LuceneUtil implements Serializable {
 		return new Integer(1);
 	}
 	
-	public static void deleteActivity(String idx, String field, String search){
+    static Map<String, String> digestDocument(Document doc)
+    {
+    	Map<String, String> res = new LinkedHashMap<String, String>();
+    	List<Field> fields = doc.getFields();
+    	for(Field field:fields)
+    	{
+    		res.put(field.name(), field.stringValue());
+    		if (field.name().equals("id") && field.stringValue().equals("4892"))
+    			System.out.println("this is a breakpoint and I am gonna hit it");
+    	}
+    	return res;
+    }
+    
+    static void listDocuments(IndexReader indexReader)
+    {
+    	try
+    	{
+    		int nrDocs = indexReader.numDocs();
+    		for(int i = 0; i < nrDocs; i++)
+    		{
+    			Document doc = indexReader.document(i);
+    			Map<String, String> document = digestDocument(doc);
+    			System.out.format("Document #%d has fields: %s\n", i, document.toString());
+    		}
+    	}
+    	catch(Exception e)
+    	{
+    		logger.error("error listing Lucene documents", e);
+    	}
+    }
+    
+	public static int deleteActivity(String idx, String field, String search){
 		Term term = new Term(field, search);
 		IndexReader indexReader;
 		try {
 			indexReader = IndexReader.open(idx);
-			indexReader.deleteDocuments(term);
+			//listDocuments(indexReader);
+			int ret = indexReader.deleteDocuments(term);
 			indexReader.close();
+			return ret;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("error deleting activity from Lucene index", e);
+			return 0;
 		}
 	}
     
-    public static void deleteActivity(String rootRealPath, Long activityId){
-    	deleteActivity(rootRealPath + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
+    public static int deleteActivity(String rootRealPath, Long activityId){
+    	return deleteActivity(rootRealPath + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
     }
-	    
+	 
+    static String activityClassName = AmpActivityVersion.class.getName();
+
+    /**
+     * concatenates the values translated in all the languages
+     * returns NULL if no translations present
+     * @param id
+     * @param fieldName
+     * @return
+     */
+    protected static String buildLuceneValueForField(long id, String fieldName)
+    {
+        List<String> languages = TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite());
+
+        List<AmpContentTranslation> valueTranslationsList = ContentTranslationUtil.loadFieldTranslations(activityClassName, id, fieldName);
+    	
+        StringBuilder result = new StringBuilder();
+
+        if (valueTranslationsList.isEmpty())
+        	return null; // no translations in the DB: this is an old untranslated entity
+        
+        HashMap<String, String> tempHash = new HashMap<String, String>();
+        for (AmpContentTranslation pId: valueTranslationsList)
+        {
+        	tempHash.put(pId.getLocale(), pId.getTranslation());
+        }
+        
+        for (String lang: languages)
+        	if (tempHash.get(lang) != null)
+        	{
+        		if (result.length() != 0)
+        			result.append(" ");
+        		result.append(tempHash.get(lang));
+        	}
+        
+        return result.toString();
+    }
+    
     /**
 		 * Add an activity to the index
 		 * 
-		 * @param request is used to retreive curent site and navigation language
+		 * @param request is used to retrieve curent site and navigation language
 		 * @param act the activity that will be added
 		 */
 	    public static Document activity2Document(String actId, String projectId, String title, String description,
@@ -695,52 +766,31 @@ public class LuceneUtil implements Serializable {
 			if (actId != null){
 				doc.add(new Field(ID_FIELD, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
 				//all = all.concat(" " + actId);
-			}
-	
-	
-	        List<String> languages = TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite());
-	        HashMap<String, HashMap<String, String>> trns = new HashMap<String, HashMap<String, String>>();
+			}		
 	
 	        HashMap<String, String> regularFieldNames = new HashMap<String, String>();
 	        regularFieldNames.put("ampId", projectId);
 	        regularFieldNames.put("name", title);
 	
 	        Long id = Long.valueOf(actId);
-	        String activityClassName = AmpActivityVersion.class.getName();
 	
-	        for (String field: regularFieldNames.keySet()){
-	            String currentValue = regularFieldNames.get(field);
-	            List<AmpContentTranslation> projectIdsList = ContentTranslationUtil.loadFieldTranslations(activityClassName,
-	                    id, field);
-	
-	            String tempStr = "";
-	
-	            if (projectIdsList.size() == 0){
-	                tempStr = currentValue;
-	            } else {
-	                //using tempHash so i can add the translations in the order specified by the languages list
-	                HashMap<String, String> tempHash = new HashMap<String, String>();
-	                for (AmpContentTranslation pId: projectIdsList){
-	                    tempHash.put(pId.getLocale(), pId.getTranslation());
-	                }
-	                for (String lang: languages){
-	                    String val = tempHash.get(lang);
-	                    if (val != null)
-	                        tempStr += val;
-	                }
-	            }
+	        for (String field: regularFieldNames.keySet())
+	        {
+	            String luceneValue = buildLuceneValueForField(id, field);
+	            if (luceneValue == null)
+	            	luceneValue = regularFieldNames.get(field);
 	
 	            if ("name".equals(field)){
-	                doc.add(new Field(field, tempStr, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
+	                doc.add(new Field(field, luceneValue, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
 	            } else {
-	                doc.add(new Field(field, tempStr, Field.Store.NO, Field.Index.TOKENIZED));
+	                doc.add(new Field(field, luceneValue, Field.Store.NO, Field.Index.ANALYZED));
 	            }
-	            all = all.concat(" " + tempStr);
+	            all = all.concat(" " + luceneValue);
 	        }
 	
 	/*
 	        if (projectId != null){
-				doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.TOKENIZED));
+				doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.ANALYZED));
 				all = all.concat(" " + projectId);
 			}
 			if (title != null){
@@ -748,43 +798,43 @@ public class LuceneUtil implements Serializable {
 				all = all.concat(" " + title);
 			}*/
 			if (description != null && description.length()>0){
-				doc.add(new Field("description", description, Field.Store.NO, Field.Index.TOKENIZED));
+				doc.add(new Field("description", description, Field.Store.NO, Field.Index.ANALYZED));
 				all = all.concat(" " + description);
 			}
 			if (objective != null && objective.length()>0){
-				doc.add(new Field("objective", objective, Field.Store.NO, Field.Index.TOKENIZED));
+				doc.add(new Field("objective", objective, Field.Store.NO, Field.Index.ANALYZED));
 				all = all.concat(" " + objective);
 			}
 			if (purpose != null && purpose.length()>0){
-				doc.add(new Field("purpose", purpose, Field.Store.NO, Field.Index.TOKENIZED));
+				doc.add(new Field("purpose", purpose, Field.Store.NO, Field.Index.ANALYZED));
 				all = all.concat(" " + purpose);
 			}
 			if (results != null && results.length()>0){
-				doc.add(new Field("results", results, Field.Store.NO, Field.Index.TOKENIZED));
+				doc.add(new Field("results", results, Field.Store.NO, Field.Index.ANALYZED));
 				all = all.concat(" " + results);
 			}
 			
 			//
 			if (numcont != null && numcont.length()>0){
-				doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.TOKENIZED));
+				doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.ANALYZED));
 				all = all.concat(" " + numcont);
 			}
 			
 			if (CRIS != null && CRIS.length() > 0) {
-				doc.add(new Field("CRIS", CRIS, Field.Store.NO, Field.Index.TOKENIZED));
+				doc.add(new Field("CRIS", CRIS, Field.Store.NO, Field.Index.ANALYZED));
 				all = all.concat(" " + CRIS);
 			}
 			if (budgetNumber != null && budgetNumber.length() > 0) {
-				doc.add(new Field("budgetNumber", budgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
+				doc.add(new Field("budgetNumber", budgetNumber, Field.Store.NO, Field.Index.ANALYZED));
 				all = all.concat(" " + budgetNumber);
 			}
 			if (newBudgetNumber != null && newBudgetNumber.length() > 0 ) {
-				doc.add(new Field("newBudgetNumber", newBudgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
+				doc.add(new Field("newBudgetNumber", newBudgetNumber, Field.Store.NO, Field.Index.ANALYZED));
 				all = all.concat(" " + newBudgetNumber);
 			}
 			
 	//		if (contractingArr != null && contractingArr.length() > 0 ) {
-	//			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.TOKENIZED));
+	//			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.ANALYZED));
 	//			all = all.concat(" " + contractingArr);
 	//			
 	//		}
@@ -794,7 +844,7 @@ public class LuceneUtil implements Serializable {
 					
 	        		for (String value : componentcodes) {
 	        			if (value!=null){
-	        			doc.add(new Field("componentcode_"+String.valueOf(i), value, Field.Store.NO, Field.Index.TOKENIZED));
+	        			doc.add(new Field("componentcode_"+String.valueOf(i), value, Field.Store.NO, Field.Index.ANALYZED));
 	        			all = all.concat(" " + value);
 	        			}
 	        			i++;
@@ -806,15 +856,17 @@ public class LuceneUtil implements Serializable {
 			if (all.length() == 0)
 				return null;
 			
-			doc.add(new Field("all", all, Field.Store.NO, Field.Index.TOKENIZED));
+			doc.add(new Field("all", all, Field.Store.NO, Field.Index.ANALYZED));
 			return doc;
 		}
 
 	public static void addUpdateActivity(String rootRealPath, boolean update, Site site, java.util.Locale navigationLanguage, AmpActivityVersion newActivity, AmpActivityVersion previousActivity){
     	logger.info("Updating activity!");
 		try {
-			if (update) {
-				deleteActivity(rootRealPath, previousActivity.getAmpActivityId());
+			if (update/* && false*/) {
+				int nrDeleted = deleteActivity(rootRealPath, previousActivity.getAmpActivityId());
+				if (nrDeleted != 1)
+					logger.warn("Lucene.addUpdateActivity(): deleted " + nrDeleted + " activities from index, normal value would be: 1");
 			}
 			IndexWriter indexWriter = null;
 			indexWriter = new IndexWriter(rootRealPath + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
@@ -918,6 +970,7 @@ public class LuceneUtil implements Serializable {
 
 		try {
 			ir = IndexReader.open(index);
+			//listDocuments(ir);
 			logger.info("Lucene index reader has " + ir.numDocs()
 					+ " docs in it");
 			indexSearcher = new IndexSearcher(index);
@@ -992,6 +1045,7 @@ public class LuceneUtil implements Serializable {
 		Searcher indexSearcher = null;
 		try {
 			indexSearcher = new IndexSearcher(index);
+
 			String searchString = origSearchString.trim();
 			if (searchString.charAt(0) == '*')
 				searchString = searchString.substring(1);
@@ -1221,10 +1275,10 @@ public class LuceneUtil implements Serializable {
     public static Document createHelpDocument(String article, String title,String titTrnKey,String lang){
 
     	Document document = new Document();
-    	document.add(new Field("title",title,Field.Store.YES,Field.Index.TOKENIZED));
-    	document.add(new Field("titletrnKey",titTrnKey,Field.Store.YES,Field.Index.TOKENIZED));
-    	document.add(new Field("article",article,Field.Store.YES,Field.Index.TOKENIZED));
-    	document.add(new Field("lang",lang,Field.Store.YES,Field.Index.TOKENIZED));
+    	document.add(new Field("title",title,Field.Store.YES,Field.Index.ANALYZED));
+    	document.add(new Field("titletrnKey",titTrnKey,Field.Store.YES,Field.Index.ANALYZED));
+    	document.add(new Field("article",article,Field.Store.YES,Field.Index.ANALYZED));
+    	document.add(new Field("lang",lang,Field.Store.YES,Field.Index.ANALYZED));
     	return document;
 
     }

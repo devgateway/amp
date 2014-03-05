@@ -68,17 +68,22 @@ public final class TranslatorUtil {
         return localeCache;
     }
 
-    public static List<String> getLocaleCache(Site site){
-        if (localeCache == null){
-            try{
-                Set<Locale> list = site.getTranslationLanguages();
-                localeCache = new ArrayList<String>();
-                for (Locale loc: list){
-                    localeCache.add(loc.getCode());
-                }
-                Collections.sort(localeCache);
-            } finally {
-            }
+    /**
+     * fast, caches the result of the first call
+     * @param site
+     * @return
+     */
+    public static List<String> getLocaleCache(Site site)
+    {
+        if (localeCache == null)
+        {
+        	Set<Locale> list = site.getTranslationLanguages();
+        	localeCache = new ArrayList<String>();
+        	for (Locale loc: list)
+        	{
+        		localeCache.add(loc.getCode());
+        	}
+        	Collections.sort(localeCache);
         }
 
         return localeCache;

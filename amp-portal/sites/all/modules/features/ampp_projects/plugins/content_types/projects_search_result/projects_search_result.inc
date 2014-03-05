@@ -214,6 +214,24 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#size' => 30, 
     '#default_value' => isset($conf['amp_org_name_agg_label']) &&  !empty($conf['amp_org_name_agg_label']) ? $conf['amp_org_name_agg_label'] : $form_state['plugin']['defaults']['amp_org_name_agg_label'],
   );
+  // Agencies
+  $form['amp_agencies_name_agg_fieldset'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Agencies'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+  );
+  $form['amp_agencies_name_agg_fieldset']['amp_agencies_name_agg_flag'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show Agencies column'),
+      '#default_value' => isset($conf['amp_agencies_name_agg_flag']) ? intval($conf['amp_agencies_name_agg_flag']) : $form_state['plugin']['defaults']['amp_agencies_name_agg_flag'],
+  );
+  $form['amp_agencies_name_agg_fieldset']['amp_agencies_name_agg_label'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Label'),
+      '#size' => 30,
+      '#default_value' => isset($conf['amp_agencies_name_agg_label']) &&  !empty($conf['amp_agencies_name_agg_label']) ? $conf['amp_agencies_name_agg_label'] : $form_state['plugin']['defaults']['amp_agencies_name_agg_label'],
+  );
    // Sectors
   $form['amp_sector_name_agg_fieldset'] = array(
     '#type' => 'fieldset',

@@ -18,6 +18,7 @@ $plugin = array(
 						'secondary_sectors_flag' => 0,
 						'programs_flag' => 0,
 						'donors_flag' => 1,
+                        'agencies_flag' => 1,
 						'locations_flag' => 1,
 						'period_flag' => 0,
 						'keywords_flag' => 1,
@@ -26,12 +27,14 @@ $plugin = array(
                         'secondary_sectors_popup' => 0,
                         'programs_popup' => 0,
                         'donors_popup' => 0,
+                        'agencies_popup' => 0,
                         'locations_popup' => 0,
                         'sectors_label' => 'Sectors',
                         'primary_sectors_label' => 'Primary Sectors',
                         'secondary_sectors_label' => 'Secondary Sectors',
                         'programs_label' => 'Programs',
                         'donors_label' => 'Donors',
+                        'agencies_label' => 'Agency',
                         'locations_label' => 'Locations',
                         'keywords_label' => 'Keywords',
                         'preview_amount' => 0),
@@ -141,6 +144,17 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
      if (!isset($conf['donors_popup']) || $conf['donors_popup'] == 0) $form['donors_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-donors', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-donor', 'title' => t($conf['donors_label'] . ' selection')))) . '</span>';
   }
   
+  if ($conf["agencies_flag"] == 1) {
+    $form['agency'] = array(
+        '#type' => 'textfield',
+        '#title' => (isset($conf['agencies_label'])) ? t($conf['agencies_label']) : t('Agencies'),
+        '#size' => 30,
+        '#maxlength' => 64,
+        '#description' => t('Start typing agency name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
+    );
+    if (!isset($conf['agencies_popup']) || $conf['agencies_popup'] == 0) $form['agencies_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-agencies', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-agency', 'title' => t($conf['agencies_label'] . ' selection')))) . '</span>';
+  }
+  
   if ($conf["locations_flag"] == 1) {  
     $form['region'] = array(
       '#type' => 'textfield',
@@ -239,6 +253,8 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   if (is_array($arr)) $js_string .= 'var selectedPrograms = new Array('.implode(",", $arr).');' . "\n";
   $arr = ampp_get_donors_from_url();
   if (is_array($arr)) $js_string .= 'var selectedDonors = new Array('.implode(",", $arr).');' . "\n";
+  $arr = ampp_get_agencies_from_url();
+  if (is_array($arr)) $js_string .= 'var selectedAgencies = new Array('.implode(",", $arr).');' . "\n";
   $arr = ampp_get_locations_from_url();
   if (is_array($arr)) $js_string .= 'var selectedLocations = new Array('.implode(",", $arr).');' . "\n";
   $arr = ampp_get_period_from_url();
@@ -303,6 +319,7 @@ function ampp_projects_projects_search_form_form_submit($form, &$form_state) {
   $secondarysectors = empty($form_state['values']['secondary_sector']) ? 'all' : $form_state['values']['secondary_sector'];
   $programs = empty($form_state['values']['program']) ? 'all' : $form_state['values']['program'];
   $donors =  empty($form_state['values']['donor']) ? 'all' : $form_state['values']['donor'];
+  $agencies =  empty($form_state['values']['agency']) ? 'all' : $form_state['values']['agency'];
   $regions = empty($form_state['values']['region']) ? 'all' : $form_state['values']['region'];
   $period_start = empty($form_state['values']['period_start']) ? 'all' : $form_state['values']['period_start'];
   $period_end = empty($form_state['values']['period_end']) ? 'all' : $form_state['values']['period_end'];
@@ -324,6 +341,9 @@ function ampp_projects_projects_search_form_form_submit($form, &$form_state) {
   
   if($conf['donors_flag'] == 1) {
   	$queryStrArr['donors'] = $donors;
+  }
+  if($conf['agencies_flag'] == 1) {
+    $queryStrArr['agencies'] = $agencies;
   }
   if($conf['sectors_flag'] == 1) {
   	$queryStrArr['sectors'] = $sectors;
@@ -491,6 +511,28 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
     '#default_value' => isset($conf['donors_label']) ? t($conf['donors_label']) : t($form_state['plugin']['defaults']['donors_label']),
     '#dependency' => array('donors_flag' => array(1)),
     '#dependency_type' => 'disable',
+  );
+  
+  $form['agencies_flag'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show Agencies search field'),
+      '#description' => t('Show agencies search field'),
+      '#default_value' => isset($conf['agencies_flag']) ? intval($conf['agencies_flag']) : $form_state['plugin']['defaults']['agencies_flag'],
+      '#id' => 'agencies_flag',
+  );
+  $form['agencies_popup'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Disable Agencies popup select'),
+      '#default_value' => isset($conf['agencies_popup']) ? intval($conf['agencies_popup']) : $form_state['plugin']['defaults']['agencies_popup'],
+      '#dependency' => array('agencies_flag' => array(1)),
+      '#dependency_type' => 'disable',
+  );
+  $form['agencies_label'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Agencies label'),
+      '#default_value' => isset($conf['agencies_label']) ? t($conf['agencies_label']) : t($form_state['plugin']['defaults']['agencies_label']),
+      '#dependency' => array('agencies_flag' => array(1)),
+      '#dependency_type' => 'disable',
   );
   
   $form['locations_flag'] = array(

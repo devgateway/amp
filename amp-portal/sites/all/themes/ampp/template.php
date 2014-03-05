@@ -419,6 +419,11 @@ function ampp_form_alter(&$form, $form_state, $form_id) {
         '#title' => t('Show only donors based on the last version of projects'),
         '#default_value' => variable_get('amp_show_only_donors', 0),
     );
+    $form['application_logic']['amp_show_only_beneficiary'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show only Beneficiary agencies'),
+        '#default_value' => variable_get('amp_show_only_beneficiary', 0),
+    );
     
     $form['front_page'] = array(
       '#type' => 'fieldset',

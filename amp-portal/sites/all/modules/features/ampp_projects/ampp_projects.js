@@ -3,6 +3,7 @@ var selectedPrimarySectors = new Array();
 var selectedSecondarySectors = new Array();
 var selectedPrograms = new Array();
 var selectedDonors = new Array();
+var selectedAgencies = new Array();
 var selectedLocations = new Array();
 var selectedPeriodStart = '';
 var selectedPeriodEnd = '';
@@ -63,6 +64,16 @@ var selectedRegionalProjects = 0;
 		    	queryParam: "string",
 		        method: "POST",
 		        prePopulate: selectedDonors,
+		        onAdd: getResultCount,
+		        onDelete:  getResultCount
+		    });
+	    }
+		if ( $("#edit-agency").length > 0 ) {
+		    $("#edit-agency").tokenInput(lang + "/ampp_search/agencies", {
+		    	theme: "facebook",
+		    	queryParam: "string",
+		        method: "POST",
+		        prePopulate: selectedAgencies,
 		        onAdd: getResultCount,
 		        onDelete:  getResultCount
 		    });

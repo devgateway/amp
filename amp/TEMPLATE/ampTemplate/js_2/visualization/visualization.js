@@ -608,10 +608,6 @@ function resetToDefaults(){
 		document.getElementById("agencyType_dropdown").value = document.getElementById("agencyTypeDefault").value;
 		document.getElementById("agencyTypeQuickFilter_dropdown").value = document.getElementById("agencyTypeDefault").value;
 	}
-	document.getElementById("fiscalCalendar_dropdown_Id").value = document.getElementById("defaultFiscalCalendarId").value;
-	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
-	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
-	callbackChildren.call(document.getElementById("fiscalCalendar_dropdown_Id"), null);	
 	document.getElementById("currencyId").value = document.getElementById("currencyIdDefault").value;
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyIdDefault").value;
 	document.getElementById("currencyQuickFilter_dropdown").value = document.getElementById("currencyIdDefault").value;
@@ -658,12 +654,18 @@ function resetToDefaults(){
 	document.getElementById("filterZones").innerHTML = trnAll;
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
-	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
-	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
 	
 	//setSelectedValue("show_amounts_in_thousands", 2); // Show amounts in millions
 	//document.getElementById("SectorProfileItemId").value = -1;
-	applyFilterPopin();
+	document.getElementById("fiscalCalendar_dropdown_Id").value = document.getElementById("defaultFiscalCalendarId").value;
+	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
+	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
+	
+	//after the calendar values are obtained we need to apply filters, because reset to defaults was clicked
+	callbackChildrenCall.argument.callApply = true;
+	callbackChildren.call(document.getElementById("fiscalCalendar_dropdown_Id"), null);	
+	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
+	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
 }
 
 function removeOptionsDropdown(object){
@@ -868,16 +870,24 @@ var callbackChildrenCall = {
 			    			endYearQuickFilterDropdown.selectedIndex = endYearSelectedIndex;
 			    		startYearDropdown.selectedIndex = startYearSelectedIndex;
 			    		endYearDropdown.selectedIndex = endYearSelectedIndex;
+			    		//if we are resetting filters to default (by click on 'reset to defaults'), then
+			    		//after the response from the calendar is obtained then we need to apply filters
+			    		if (o.argument.callApply == true) {
+						    	applyFilterPopin();
+						    	o.argument.callApply = false;
+						 }
 			    		break;
 			    		
 			    }
+			   
 			}
 			catch (e) {
 			    alert("Invalid respose.");
 			}
 	  },
 	  failure: function(o) {//Fail silently
-		  }
+		  },
+	argument: {callApply: false}	  
 	};
 
 function callbackChildren(e) {

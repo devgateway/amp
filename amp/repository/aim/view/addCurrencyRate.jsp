@@ -288,7 +288,7 @@ function saveRate() {
 	}
 	return valid;
 }
-function reload() {
+function reload() { 
 	document.aimCurrencyRateForm.submit();
 }
 

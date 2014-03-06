@@ -181,11 +181,15 @@
 			var callbackImpl	= {
 			success: function (o) {
 				console.log ('Success');
+				myclose();
+				reload();
 				
 			},
 			failure: function(error) {
 				//alert (error);
 				console.log('Error');
+				myclose();
+			
 			}
 			};
 				
@@ -263,8 +267,11 @@ function saveRate() {
 			if (response =!null && response.indexOf("true")!=-1) {
 				 myConfirm ();
 			}
-			myclose();
-			reload();
+			else {
+				myclose();
+				reload();
+				
+			}
 			
 		},
 		failure: function() {

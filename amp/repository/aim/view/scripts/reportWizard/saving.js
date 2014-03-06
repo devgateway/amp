@@ -128,49 +128,37 @@ SaveReportEngine.prototype.checkEnter		= function (e) {
 	}
 	return true;
 };
-SaveReportEngine.prototype.openReport=function( reportId){
 
-	var href='/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true&ampReportId='+reportId;
-	var windowname='popup'+new Date().getTime();
-	
-	var openedWindow = window.open('', windowname, 'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
-	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
-		var referLink = document.createElement('a');
-		referLink.href = href;
-		referLink.target = windowname;
-		document.body.appendChild(referLink);
-		referLink.click();
-	}
-	else
-	{
-		openedWindow.location = href;
-	}
-	
+SaveReportEngine.prototype.openReport = function(reportId)
+{
+	globalOpenPopup(null, '/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true&ampReportId=' + reportId);
 };
+
 SaveReportEngine.prototype.success		= function (o) {
-	var response='';
+	var response = '';
 	if ( o.responseText.length > 2 ) {
-		response=o.responseText;
+		response = o.responseText;
 	}
-	if (!/reportId/i.test(response) && response.length>2){
-		//in case its not reportid the response is because we have an errror
-		this.divEl.innerHTML	= o.responseText;
-		if ( o.responseText.indexOf("duplicateName") >= 0 ) {
+	var shouldOpenReport = (response.length > 2) && (/openReportId/i.test(response));
+	var shouldShowError = (response.length > 2) && (!shouldOpenReport);
+	if (shouldShowError)
+	{
+		this.divEl.innerHTML = response;
+		if (response.indexOf("duplicateName") >= 0 ) {
 			getReportTitleEl().value	= "";
 		}
+		return;
 	}
-	else{
-		//if its reportId then
-		if ( getDesktopTab()=="true" ){
-			window.location.replace("/aim/viewTeamReports.do?tabs=true");
-		}
-		else{
-			//if it's not a tab we do open it
-			var arr = response.split('=');
-			this.openReport(arr[1]);
-			window.location.replace("/aim/viewTeamReports.do?tabs=false");
-		}
+	
+	// got till here -> no error
+	if (shouldOpenReport && getDesktopTab()=="false")
+	{
+		//if it's not a tab we do open it
+		var arr = response.split('=');
+		this.openReport(arr[1]); // open report in a new browser tab/window
 	}
+	
+	window.location.replace("/aim/viewTeamReports.do?tabs=" + getDesktopTab()); // open tabs/reports list in current window
 };
 
 SaveReportEngine.prototype.failure			= function(o) {
@@ -202,7 +190,18 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 	this.titlePanel.show();
 	getReportTitleEl().focus();
 };
-SaveReportEngine.prototype.saveReport	= function () {	
+
+SaveReportEngine.prototype.saveReport = function()
+{
+	this.saveAndOrOpenReport(false);
+};
+
+SaveReportEngine.prototype.saveAndOpenReport = function()
+{
+	this.saveAndOrOpenReport(true);
+};
+
+SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {	
 	//debugger;
 	var title = getReportTitle();
 	if (title.indexOf('<')!=-1 && title.indexOf('>')!=-1 && title.indexOf('<')<title.indexOf('>')){
@@ -223,6 +222,7 @@ SaveReportEngine.prototype.saveReport	= function () {
 						"&workspaceLinked="+getWorkspaceLinked() +
 						"&hideActivities="+getHideActivities() +
 						"&useFilters="+getUseFilters()+
+						"&openReport=" + openReport + 
 						//"&reportContextId="+getReportContextId()+
 						"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
 						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");

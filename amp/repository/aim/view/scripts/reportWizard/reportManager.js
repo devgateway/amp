@@ -219,7 +219,8 @@ NormalReportManager.prototype.enableTab		= function (tabIndex) {
 	var btnid		= "step" + (tabIndex-1) + "_next_button";
 	var btn 		= document.getElementById(btnid);
 	this.enableToolbarButton(btn);
-}
+};
+
 NormalReportManager.prototype.disableTab	= function (tabIndex) {
 	if ( tabIndex < YAHOO.amp.reportwizard.numOfSteps ) {
 		var tab			= YAHOO.amp.reportwizard.tabView.getTab(tabIndex);
@@ -242,21 +243,21 @@ NormalReportManager.prototype.disableTab	= function (tabIndex) {
 	if ( tabIndex == YAHOO.amp.reportwizard.numOfSteps-1 ) {
 		this.disableSave();
 	}
-}
+};
 
 NormalReportManager.prototype.enableSave	= function () {
 	btns	= document.getElementsByName("save");
 	for ( var i=0; i<btns.length; i++ ) {
 		this.enableToolbarButton( btns[i] );
 	}
-}
+};
 
 NormalReportManager.prototype.disableSave	= function () {
 	btns	= document.getElementsByName("save");
 	for ( var i=0; i<btns.length; i++ ) {
 		this.disableToolbarButton( btns[i] );
 	}
-}
+};
 
 NormalReportManager.prototype.enableToolbarButton	= function (btn) {
 	if ( btn.disabled ) {
@@ -267,7 +268,7 @@ NormalReportManager.prototype.enableToolbarButton	= function (btn) {
 		btn.disabled	= false;
 		( new YAHOO.util.Element(btn) ).replaceClass('buttonx_dis', 'buttonx');
 	}
-}
+};
 
 NormalReportManager.prototype.disableToolbarButton	= function (btn) {
 	if ( btn != null ) {
@@ -280,7 +281,7 @@ NormalReportManager.prototype.disableToolbarButton	= function (btn) {
 			( new YAHOO.util.Element(btn) ).replaceClass('buttonx', 'buttonx_dis');
 		}
 	}
-}
+};
 
 NormalReportManager.prototype.checkSteps	= function () {
 	createPreview();
@@ -294,12 +295,12 @@ NormalReportManager.prototype.checkSteps	= function () {
 	
 	// If any of the checks above fails the save should be disabled
 	this.disableSave();
-}
+};
 
 
 NormalReportManager.prototype.callbackRepType = function (type) {
 	var transaction = YAHOO.util.Connect.asyncRequest('GET', "/aim/reportWizard.do?action=getJSONrepType&repType=" + type, callbackRepTypeCall, null);
-}
+};
 
 
 var callbackRepTypeCall = {
@@ -361,7 +362,7 @@ NormalReportManager.prototype.checkReportDetails	= function () {
 	this.enableTab(1);
 	return true;
 
-}
+};
 
 NormalReportManager.prototype.checkMeasures	= function () {
 	var ulEl			= document.getElementById("dest_measures_ul") ;
@@ -378,7 +379,7 @@ NormalReportManager.prototype.checkMeasures	= function () {
 		this.disableSave();
 		return false;
 	}
-}
+};
 
 NormalReportManager.prototype.checkHierarchies	= function () {
 	var ulEl			= document.getElementById("dest_hierarchies_ul") ;
@@ -441,7 +442,7 @@ NormalReportManager.prototype.checkHierarchies	= function () {
 		return false;
 	}
 	
-}
+};
 
 NormalReportManager.prototype.checkColumns	= function () {
 	var ulEl			= document.getElementById("dest_col_ul") ;
@@ -458,31 +459,52 @@ NormalReportManager.prototype.checkColumns	= function () {
 		this.disableTab(2);
 		return false;
 	}
-}
+};
 
 NormalReportManager.prototype.checkReportName	= function () { 
-	var btn 	= document.getElementById("last_save_button");
-	var btnY	= new YAHOO.util.Element(btn);
+	var saveBtn = document.getElementById("last_save_button");
+	var saveBtnY = new YAHOO.util.Element(saveBtn);
+	
+	var saveAndOpenBtnY = null;		
+	var saveAndOpenBtn = document.getElementById("last_save_and_open_button");
+	if (saveAndOpenBtn != null)
+		saveAndOpenBtnY = new YAHOO.util.Element(saveAndOpenBtn);
+	
 	var strTitle	= getReportTitle();
 	strTitle		= strTitle.replace(/\s*/, "");
 	if ( strTitle == "" ) {
-		btn.disabled		= true;
+		saveBtn.disabled = true;
+		saveBtnY.removeClass("buttonx");
+		saveBtnY.addClass("buttonx_dis");
 		//btnY.setStyle("color", "lightgrey");
-		btnY.removeClass("buttonx");
-		btnY.addClass("buttonx_dis");
+		
+		if (saveAndOpenBtn != null)
+		{
+			saveAndOpenBtn.disabled = true;
+			saveAndOpenBtnY.removeClass("buttonx");
+			saveAndOpenBtnY.addClass("buttonx_dis");
+		}
 		return false;
 	}
-	else {
-		btn.disabled		= false;
+	else
+	{
+		saveBtn.disabled = false;
+		saveBtnY.removeClass("buttonx_dis");
+		saveBtnY.addClass("buttonx");
 		//btnY.setStyle("color", "");
-		btnY.removeClass("buttonx_dis");
-		btnY.addClass("buttonx");
+
+		if (saveAndOpenBtn != null)
+		{
+			saveAndOpenBtn.disabled = false;
+			saveAndOpenBtnY.removeClass("buttonx_dis");
+			saveAndOpenBtnY.addClass("buttonx");
+		}
 		return true;
 	}
-}
+};
 
 NormalReportManager.prototype.isAnyChecked		= function ( inputs ) {
-	for (i=0; i<inputs.length; i++) {
+	for (var i=0; i<inputs.length; i++) {
 		if (inputs[i].checked)
 			return true;
 	}

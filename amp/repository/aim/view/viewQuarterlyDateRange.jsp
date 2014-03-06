@@ -10,19 +10,14 @@
 <!--
 
 	function popup_pdf() {
-		openResisableWindow(800, 600);		
 		<digi:context name="pdf" property="context/module/moduleinstance/quarterlyDateRangePdf.do" />
-		document.aimCommitmentbyDonorForm.action = "<%= pdf %>";
-		document.aimCommitmentbyDonorForm.target = popupPointer.name;
-		document.aimCommitmentbyDonorForm.submit();
+		openResizableWindowWithURL(800, 600, "<%= pdf %>", document.aimCommitmentbyDonorForm);
 	}
 
-	function popup_xls() {
-		openResisableWindow(800, 600);
+	function popup_xls()
+	{
 		<digi:context name="xls" property="context/module/moduleinstance/quarterlyDateRangeXls.do" />
-		document.aimCommitmentbyDonorForm.action = "<%= xls%>";
-		document.aimCommitmentbyDonorForm.target = popupPointer.name;
-		document.aimCommitmentbyDonorForm.submit();
+		openResizableWindowWithURL(800, 600, "<%= xls %>", document.aimCommitmentbyDonorForm);
 	}
 
 	function popup_warn() {

@@ -11,11 +11,8 @@
 <!--
 	function openPage()
 	{
-	 	openResisableWindow(1000, 768);
 		<digi:context name="clearVal" property="context/module/moduleinstance/htmlCommitmentbyModality.do" />
-		document.aimCommitmentbyDonorForm.action = "<%= clearVal %>";
-		document.aimCommitmentbyDonorForm.target = popupPointer.name;
-		document.aimCommitmentbyDonorForm.submit();
+		openResizableWindowWithURL(1000, 768, "<%= clearVal %>");
 	}
 
 	function clearFilter()
@@ -26,31 +23,25 @@
 		document.aimCommitmentbyDonorForm.submit();
 	}
 
-	function popup_pdf() {
-		openResisableWindow(800, 600);
+	function popup_pdf()
+	{
 		<digi:context name="pdf" property="context/module/moduleinstance/commitmentByModalityPdf.do" />
-		document.aimCommitmentbyDonorForm.action = "<%= pdf %>";
-		document.aimCommitmentbyDonorForm.target = popupPointer.name;
-		document.aimCommitmentbyDonorForm.submit();
+		openResizableWindowWithURL(800, 600, "<%= pdf %>", document.aimCommitmentbyDonorForm);
 	}
 
 	/* CSV function start  */
 
-		function popup_csv() {
-		openResisableWindow(800, 600);
+	function popup_csv()
+	{
 		<digi:context name="csv" property="context/module/moduleinstance/commitmentByModalityXls.do?docType=csv" />
-		document.aimCommitmentbyDonorForm.action = "<%= csv %>";
-		document.aimCommitmentbyDonorForm.target = popupPointer.name;
-		document.aimCommitmentbyDonorForm.submit();
+		openResizableWindowWithURL(800, 600, "<%= csv %>", document.aimCommitmentbyDonorForm);
 	}
 	/* CSV function end  */
 
-	function popup_xls() {
-		openResisableWindow(800, 600);
+	function popup_xls()
+	{
 		<digi:context name="xls" property="context/module/moduleinstance/commitmentByModalityXls.do?docType=xls" />
-		document.aimCommitmentbyDonorForm.action = "<%= xls %>";
-		document.aimCommitmentbyDonorForm.target = popupPointer.name;
-		document.aimCommitmentbyDonorForm.submit();
+		openResizableWindowWithURL(800, 600, "<%= xls %>", document.aimCommitmentbyDonorForm);
 	}
 
    function popup_warn() {

@@ -256,7 +256,7 @@ function initializeGlobalVariables(){
 </script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/visualization/visualization.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/flash/swfobject.js"></script>
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/amp/common.js"></script>
+<script type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
 
 <digi:instance property="visualizationform"/>

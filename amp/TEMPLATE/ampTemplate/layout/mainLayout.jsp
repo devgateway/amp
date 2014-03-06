@@ -62,7 +62,7 @@
 	
 	<!-- Scripts  -->
 	
-	<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/common.js"/>"></script>
+	<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
 	 <digi:ref href="css/ampPrint.css" type="text/css" rel="stylesheet" media="print" />
 </head>
 

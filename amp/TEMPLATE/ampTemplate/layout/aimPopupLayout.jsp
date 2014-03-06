@@ -36,7 +36,7 @@
 		</TITLE>
 	
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="js_2/amp/common.js"/>"></script>
+		<script type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>

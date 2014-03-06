@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="js_2/amp/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery.class.min.js"/>" ></script>
 

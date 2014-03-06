@@ -9,7 +9,7 @@
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="js_2/amp/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>

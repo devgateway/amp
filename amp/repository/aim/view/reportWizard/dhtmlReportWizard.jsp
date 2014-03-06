@@ -25,7 +25,6 @@
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
-
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
@@ -157,6 +156,9 @@
 	<c:set var="saveBtn">
 		<digi:trn key="btn:saveReport">Save Report</digi:trn>
 	</c:set>
+	<c:set var="saveAndOpenBtn">
+		<digi:trn key="btn:saveAndOpenReport">Save and Open Report</digi:trn>
+	</c:set>	
 	<c:set var="plsEnterTitle">
 		<digi:trn key="rep:wizard:enterTitleForReport">Please enter a title for this report: </digi:trn>
 	</c:set>
@@ -378,7 +380,7 @@ body {
 			<tr><td>
 				<div id="titlePanel" class="invisible-item-hidden">
 					<div class="hd" style="font-size: 8pt">
-						CCC ${plsEnterTitle} DDD
+						${plsEnterTitle}
 					</div>
 					<div class="bd" id="titlePanelBody">
 						<html:text onkeyup="repManager.checkSteps();" onkeypress="return saveReportEngine.checkEnter(event);" property="reportTitle" styleClass="inp-text" 
@@ -396,8 +398,13 @@ body {
 					<div class="ft" align="right">
 						<button id="last_save_button" type="button" class="buttonx_dis" onclick="$(this).attr('disabled',true);saveReportEngine.saveReport();" disabled="disabled">
 							${saveBtn}
-						</button>
+						</button>						
 						&nbsp;&nbsp;&nbsp;
+						<c:if test="${not empty saveAndOpenBtn}">
+							<button id="last_save_and_open_button" type="button" class="buttonx_dis" onclick="$(this).attr('disabled',true);saveReportEngine.saveAndOpenReport();" disabled="disabled">
+								${saveAndOpenBtn}
+							</button>
+						</c:if>
 					</div>
 				</div>
 			</td></tr>

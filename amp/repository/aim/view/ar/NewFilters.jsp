@@ -112,7 +112,6 @@
       
         </table>
     </tr>
-	
 	<script language="JavaScript">
 	function submitFilter()
 	{
@@ -135,27 +134,18 @@
 
 
 	function popup_pdf() {
-		openResisableWindow(800, 600);
 		<digi:context name="pdf" property="context/module/moduleinstance/advancedReportPdf.do?docType=pdf" />
-		document.getElementsByName("aimAdvancedReportForm")[1].action = "<%= pdf %>";
-		document.getElementsByName("aimAdvancedReportForm")[1].target = popupPointer.name;
-		document.getElementsByName("aimAdvancedReportForm")[1].submit();
+		openResizableWindowWithURL(800, 600, "<%= pdf %>", document.getElementsByName('aimAdvancedReportForm')[1]);
 	}
 
 	function popup_xls() {
-		openResisableWindow(800, 600);
 		<digi:context name="xls" property="context/module/moduleinstance/advancedReportPdf.do?docType=excel" />
-		document.getElementsByName("aimAdvancedReportForm")[1].action = "<%= xls %>";
-		document.getElementsByName("aimAdvancedReportForm")[1].target = popupPointer.name;
-		document.getElementsByName("aimAdvancedReportForm")[1].submit();
+		openResizableWindowWithURL(800, 600, "<%= xls %>", document.getElementsByName('aimAdvancedReportForm')[1]);
 	}
 
 	function popup_csv() {
-		openResisableWindow(800, 600);
 		<digi:context name="csv" property="context/module/moduleinstance/advancedReportPdf.do?docType=csv" />
-		document.getElementsByName("aimAdvancedReportForm")[1].action = "<%= csv %>";
-		document.getElementsByName("aimAdvancedReportForm")[1].target = popupPointer.name;
-		document.getElementsByName("aimAdvancedReportForm")[1].submit();
+		openResizableWindowWithURL(800, 600, "<%= csv %>", document.getElementsByName('aimAdvancedReportForm')[1]);
 	}
 
 	function popup_warn() {

@@ -558,12 +558,15 @@ public class ReportWizardAction extends MultiAction {
 			
 		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
 		
-
 		modeReset(mapping, form, request, response);
-		PrintWriter out = response.getWriter();
-		out.write("reportId="+		ampReport.getAmpReportId());
-		out.flush();
-		out.close();
+		
+		if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true"))
+		{
+			PrintWriter out = response.getWriter();
+			out.write("openReportId=" + ampReport.getAmpReportId());
+			out.flush();
+			out.close();
+		}
 		return null;
 	}
 	

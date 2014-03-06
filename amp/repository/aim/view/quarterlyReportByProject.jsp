@@ -29,31 +29,24 @@
 	}
 
 	function popup_pdf() {
-		openResisableWindow(800, 600);
 		<digi:context name="pdf" property="context/module/moduleinstance/quarterlyReportByProjectPdf.do" />
-		document.aimMulitlateralbyDonorForm.action = "<%= pdf %>";
-		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
-		document.aimMulitlateralbyDonorForm.submit();
+		openResizableWindowWithURL(800, 600, "<%= pdf %>", document.aimMulitlateralbyDonorForm);
 	}
 
 	/* CSV function start  */
 
-		function popup_csv() {
-		openResisableWindow(800, 600);
+	function popup_csv()
+	{
 		<digi:context name="csv" property="context/module/moduleinstance/quarterlyReportByProjectXls.do?docType=csv" />
-		document.aimMulitlateralbyDonorForm.action = "<%= csv %>";
-		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
-		document.aimMulitlateralbyDonorForm.submit();
+		openResizableWindowWithURL(800, 600, "<%= csv %>", document.aimMulitlateralbyDonorForm);
 	}
 	/* CSV function end  */
 
 
-	function popup_xls() {
-		openResisableWindow(800, 600);
+	function popup_xls()
+	{
 		<digi:context name="xls" property="context/module/moduleinstance/quarterlyReportByProjectXls.do?docType=xls" />
-		document.aimMulitlateralbyDonorForm.action = "<%= xls %>";
-		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
-		document.aimMulitlateralbyDonorForm.submit();
+		openResizableWindowWithURL(800, 600, "<%= xls %>", document.aimMulitlateralbyDonorForm);
 	}
 
 	function popup_warn() {

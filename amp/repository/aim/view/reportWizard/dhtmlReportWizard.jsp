@@ -15,6 +15,8 @@
    
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
+<%-- This JSP is used for rendering the ReportWizard, both one-pager and 4-pager --%>
+
 <!-- CSS -->
 <%--<link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
 <link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'> --%>
@@ -26,7 +28,8 @@
 
 <!-- Individual YUI JS files --> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>   
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" ></script>
@@ -134,6 +137,9 @@
 	<c:set var="summary" scope="request">
 		<digi:trn key="aim:summaryTab">Summary Tab</digi:trn>
 	</c:set>
+	<c:set var="typeAndDescription" scope="request"> 
+		<digi:trn key="rep:wizard:dhtmlTab:tabTypeAndDescription">Select Tab Type and Add Description </digi:trn> 
+	</c:set>
 </c:if>
 <c:if test="${!myForm.desktopTab}">
 	<c:set var="pageTitle">
@@ -172,6 +178,9 @@
 	<c:set var="PledgesFunding" scope="request">
 		<digi:trn key="aim:pledgesfunding">Pledges Report</digi:trn>
 	</c:set>
+	<c:set var="typeAndDescription" scope="request"> 
+		<digi:trn key="rep:wizard:dhtmlReport:reportTypeAndDescription">Select Report Type and Add Description </digi:trn> 
+	</c:set>
 </c:if>
 <c:set var="disableFundingType">false</c:set>
 <c:if test="${!empty aimReportWizardForm.reportId}">
@@ -192,14 +201,19 @@
 	selectedHiers						= new Array();
 	selectedMeas						= new Array();
 		
-		if ( "true" == "${myForm.budgetExporter}" )	
-			NormalReportManager.prototype.maxHierarchies	= 5;
+	if ( "true" == "${myForm.budgetExporter}" )	
+		NormalReportManager.prototype.maxHierarchies = 5;
+	
 	function initializeDragAndDrop() {
 		var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
 		//alert( YAHOO.util.Dom.getDocumentHeight() );
 		//alert( document.body.clientHeight );
 		var rd				= document.getElementsByName("reportDescription")[0];
-		rd.style.height		= (rd.parentNode.offsetHeight - 40) + "px";
+		
+		<c:if test="${not param.isOnePager}">
+			rd.style.height		= (rd.parentNode.offsetHeight - 40) + "px";
+		</c:if>
+		
 		//validation messages
 	    var equalSymbolMsg = '<digi:trn key="rep:format:equalsSymbol">Decimal Symbol and group symbol must be diferents</digi:trn>';
 		var badSymbolEmptyMsg ='<digi:trn key="rep:format:badSymbolEmpty">Symbols can not be a empty, you can use the space character</digi:trn>';
@@ -229,9 +243,14 @@
 									monthNames:["${january}","${february}","${march}","${april}","${may}","${june}","${july}","${august}","${september}","${october}","${november}","${december}"],
 									validationMsgs:[equalSymbolMsg, badSymbolEmptyMsg, badSymbolNumberMsg, badGorupSize, badYearRange]
 								};
-		
-		YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');
-		YAHOO.amp.reportwizard.tabView.addListener("contentReady", continueInitialization, repManagerParams);
+
+		<c:if test="${param.isOnePager}">
+			continueInitialization(null, repManagerParams );
+		</c:if>
+		<c:if test="${not param.isOnePager}">		
+			YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');
+			YAHOO.amp.reportwizard.tabView.addListener("contentReady", continueInitialization, repManagerParams);
+		</c:if>
 	}
 
 	
@@ -251,7 +270,7 @@ body {
 
 </style>
 
-<!-- BREADCRUMP START -->
+<!-- BREADCRUMB START -->
 
 <div class="breadcrump">
 	<div class="centering">
@@ -260,19 +279,7 @@ body {
 		</div>
 	</div>
 </div>
-<!-- BREADCRUMP END --> 
-
-<!-- BREADCRUMP START -->
-<!--<div class="breadcrump">-->
-<!--	<div class="centering">-->
-<!--		<div class="breadcrump_cont">-->
-<!--			<span class="sec_name">Report details</span>-->
-<!--			<span class="breadcrump_sep">|</span><a href=# class="l_sm">Report Generator</a>-->
-<!--			<span class="breadcrump_sep"><b>»</b></span><span class="bread_sel">Reprort details</span>-->
-<!--		</div>-->
-<!--	</div>-->
-<!--</div>-->
-<!-- BREADCRUMP END -->
+<!-- BREADCRUMB END --> 
 
 <!-- MAIN CONTENT PART START -->
 <digi:form action="/reportWizard.do" method="post">
@@ -296,67 +303,89 @@ body {
 	<html:hidden name="aimReportWizardForm" property="desktopTab"/>
 	<bean:define id="member" name="currentMember" scope="session" toScope="request" />
 	
-	<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv"></div>
+	<div id="savingReportDiv" style="color: red; text-align: center;<c:if test='${not param.isOnePager}'>visibility: hidden</c:if> ">
+	</div>
 	
 	<div id="wizard_container" class="yui-navset-right" style="padding-right: 0em;" >
 		<table width="1000" border="0" cellspacing="0" cellpadding="0" >
 			<tr>
-				<td width="768">
-					<div class="step_head_lng">
-						<div id="rgTitle" class="step_head_cont">${pageTitle}: ${aimReportWizardForm.reportTitle}</div>
-					</div>
-				</td>
-				<td width="232">&nbsp;</td>
+				<c:if test="${param.isOnePager}">
+					<td width="1000">
+						<div class="step_head_lng">
+							<div id="rgTitle" class="step_head_cont">${pageTitle}</div>
+						</div>
+					</td>
+				</c:if>
+				<c:if test="${not param.isOnePager}">
+					<td width="768">
+						<div class="step_head_lng">
+							<div id="rgTitle" class="step_head_cont">${pageTitle}: ${aimReportWizardForm.reportTitle}</div>
+						</div>
+					</td>
+					<td width="232">&nbsp;</td>
+				</c:if>
 			</tr>
 		  	<tr valign="top">
 				<td class="main_side">
 					<div class="yui-content">
+						<c:if test="${param.isOnePager}">
+							<c:set var="topBottomPadding" scope="request">padding-bottom: 0px; padding-top:0px;</c:set>
+							<c:set var="hierarchiesVisibility" scope="request">display: none;</c:set>
+						</c:if>
 						<jsp:include page="dhtmlReportWizard_step1.jsp"></jsp:include>
 						<jsp:include page="dhtmlReportWizard_step2.jsp"></jsp:include>
+						<c:if test="${param.isOnePager}">
+							<fieldset id="hierarchiesInfoFieldset" style="margin-left: 10px;margin-right: 10px;background-color: #F6F6F6;">
+								<legend><digi:trn>Hierarchies</digi:trn></legend>
+								<div><digi:trn>Hierarchies will appear here when available</digi:trn>....</div>
+							</fieldset>
+						</c:if>
 						<jsp:include page="dhtmlReportWizard_step3.jsp"></jsp:include>
 						<jsp:include page="dhtmlReportWizard_step4.jsp"></jsp:include>
 					</div>
 				</td>
-				<td style="padding-top:35px;">
-					<ul class="yui-nav" style="width: 70%; position: static;">
-						<div class="tab selected" id="rtab">
-							<div class="tab_cont">
-								<span class="step_num">1</span>
-								<a href="#type_step_div" ><c:out value="${detailsStepName}"/></a>
+				<c:if test="${not param.isOnePager}">
+					<td style="padding-top:35px;">
+						<ul class="yui-nav" style="width: 70%; position: static;">
+							<div class="tab selected" id="rtab">
+								<div class="tab_cont">
+									<span class="step_num">1</span>
+									<a href="#type_step_div" ><c:out value="${detailsStepName}"/></a>
+								</div>
 							</div>
-						</div>
-						<div class="tab" id="rtab">
-							<div class="tab_cont">
-								<span class="step_num">2</span>
-								<a href="#columns_step_div" ><digi:trn>Columns</digi:trn></a>
+							<div class="tab" id="rtab">
+								<div class="tab_cont">
+									<span class="step_num">2</span>
+									<a href="#columns_step_div" ><digi:trn>Columns</digi:trn></a>
+								</div>
 							</div>
-						</div>
-						<div class="tab" id="rtab">
-							<div class="tab_cont">
-								<span class="step_num">3</span>
-								<a href="#hierarchies_step_div" ><digi:trn>Hierarchies</digi:trn></a>
+							<div class="tab" id="rtab">
+								<div class="tab_cont">
+									<span class="step_num">3</span>
+									<a href="#hierarchies_step_div" ><digi:trn>Hierarchies</digi:trn></a>
+								</div>
 							</div>
-						</div>
-						<div class="tab" id="rtab">
-							<div class="tab_cont">
-								<span class="step_num">4</span>
-								<a href="#measures_step_div" ><digi:trn>Measures</digi:trn></a>
+							<div class="tab" id="rtab">
+								<div class="tab_cont">
+									<span class="step_num">4</span>
+									<a href="#measures_step_div" ><digi:trn>Measures</digi:trn></a>
+								</div>
 							</div>
-						</div>
-					</ul>
-				</td>
+						</ul>
+					</td>
+				</c:if>
 			</tr>
-			<tr>
+			<tr><td>
 				<div id="titlePanel" class="invisible-item-hidden">
 					<div class="hd" style="font-size: 8pt">
-						${plsEnterTitle}
+						CCC ${plsEnterTitle} DDD
 					</div>
 					<div class="bd" id="titlePanelBody">
 						<html:text onkeyup="repManager.checkSteps();" onkeypress="return saveReportEngine.checkEnter(event);" property="reportTitle" styleClass="inp-text" 
 							style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
 						<feature:display name="Reports classification"  module="Report Generator">
 							<c:if test="${aimReportWizardForm.desktopTab ==false }">
-								<br><br>
+								<br /><br />
 								<c:set var="translation">
 									<digi:trn>Please select a category from below</digi:trn>
 								</c:set>
@@ -370,8 +399,8 @@ body {
 						</button>
 						&nbsp;&nbsp;&nbsp;
 					</div>
-				</div>	</
-			</tr>
+				</div>
+			</td></tr>
 		</table>
 	</div>
 	<div id="myHiddenDiv" style="display: none;"></div>

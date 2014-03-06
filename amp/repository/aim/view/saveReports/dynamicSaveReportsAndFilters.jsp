@@ -10,6 +10,7 @@
 	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
 %>
 
+<%-- This JSP is used when "Save Report" is pressed from within an opened report/tab --%>
 <logic:notEmpty name="reportCD" property="reportMeta">
 
 <bean:define id="reportObject" name="reportCD" property="reportMeta" toScope="page" />
@@ -63,7 +64,7 @@
  
 <div id="saveTitlePanel" style="display:none">
 	<div class="hd" style="font-size: 8pt">
-		${plsEnterTitle}
+		EEE ${plsEnterTitle} FFF
 	</div>
 	<div class="bd" id="titlePanelBody" style="padding: 10px 5px">
 		<input type="text" id="saveReportName" 

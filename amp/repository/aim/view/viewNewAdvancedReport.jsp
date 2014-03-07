@@ -163,6 +163,7 @@ function toggleSettings(){
 	<td>
 <logic:notEqual name="widget" scope="request" value="true">
 	<logic:notEqual name="viewFormat" scope="request" value="print">
+		<bean:define id="viewable" name="generatedReport" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 		<jsp:include page="/repository/aim/view/ar/toolBar.jsp" />
 		
 		<c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>

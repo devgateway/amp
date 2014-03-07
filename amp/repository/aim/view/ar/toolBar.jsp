@@ -236,22 +236,37 @@ addLoadEvent(addpanel);
 			<a href="javascript:window.location.reload();"><digi:trn key="rep:tool:ReloadReport">Reload Report</digi:trn></a></td>				
 		-->
 
-		<td noWrap align=left valign="center">		
-			<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;" title="<digi:trn>Download as PDF</digi:trn>">
-				<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
-			</a>
+		<td noWrap align=left valign="center">	
+			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">	
+				<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;" title="<digi:trn>Download as PDF</digi:trn>">
+					<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
+				</a>
+			</logic:notEqual>
+			<logic:equal name="viewable" property="totalUniqueRows" value="0">	
+					<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon_gray.gif" border="0" alt="Report is empty. Nothing to export" />
+			</logic:equal>
+		</td>
+
+		<td noWrap align=left valign="center">
+			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">			
+				<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;" title="<digi:trn>Download as XLS</digi:trn>">
+					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
+				</a>
+			</logic:notEqual>
+			<logic:equal name="viewable" property="totalUniqueRows" value="0">			
+					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon_gray.gif" border="0" alt="Report is empty. Nothing to export" />
+			</logic:equal>
 		</td>
 
 		<td noWrap align=left valign="center">		
-			<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;" title="<digi:trn>Download as XLS</digi:trn>">
-				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
-			</a>
-		</td>
-
-		<td noWrap align=left valign="center">		
-			<a href="#" target="_blank" onclick="toggleActionForm('plainXls'); return false;" title="<digi:trn>Download as Plain XLS</digi:trn>">
-				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon.jpg" border="0" alt="Export to Excel as Plain Report" />
-			</a>
+			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">	
+				<a href="#" target="_blank" onclick="toggleActionForm('plainXls'); return false;" title="<digi:trn>Download as Plain XLS</digi:trn>">
+					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon.jpg" border="0" alt="Export to Excel as Plain Report" />
+				</a>
+			</logic:notEqual>
+			<logic:equal name="viewable" property="totalUniqueRows" value="0">		
+					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon_gray.gif" border="0" alt="Report is empty. Nothing to export" />
+			</logic:equal>
 		</td>
 		
 		<c:set var="downloadAsCsv">

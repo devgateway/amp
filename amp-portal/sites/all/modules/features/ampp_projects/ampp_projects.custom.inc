@@ -993,8 +993,7 @@ function ampp_projects_block_view($delta = '') {
 
 
 /**
- * Implementation of hook__menu
- *
+ * Implementation of hook_menu().
  */
 function ampp_projects_menu() {
   $items['search_form'] = array(
@@ -1006,39 +1005,11 @@ function ampp_projects_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
 
-  $items['ampp_search/sectors'] = array(
-    'page callback' => 'ampp_search_sectors',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['ampp_search/primarysectors'] = array(
-    'page callback' => 'ampp_search_primarysectors',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['ampp_search/secondarysectors'] = array(
-    'page callback' => 'ampp_search_secondarysectors',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['ampp_search/programs'] = array(
-    'page callback' => 'ampp_search_programs',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['ampp_search/donors'] = array(
-    'page callback' => 'ampp_search_donors',
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['ampp_search/regions'] = array(
-    'page callback' => 'ampp_search_regions',
-    'access callback' => TRUE,
+  // @TODO: Switch autocomplete calls to GET.
+  $items['ampp_search/%'] = array(
+    'page callback' => 'ampp_search_autocomplete_callback',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
 
@@ -1227,15 +1198,48 @@ function ampp_search_result_count($JSON = true, $amount = false) {
   }
 }
 
+/**
+ * Callback handler for project search form autocomplete widgets.
+ *
+ * @TODO: Remove old url mapping.
+ */
+function ampp_search_autocomplete_callback($type = NULL) {
+  global $amp_db_exists;
+  $items = array();
+
+  if (!$amp_db_exists) {
+    // Go away if the AMP database is not initialized.
+    drupal_json_output($items);
+    exit;
+  }
+
+  $old_menu_url_mapping = array(
+    'sectors' => 'ampp_search_sectors',
+    'primarysectors' => 'ampp_search_primarysectors',
+    'secondarysectors' => 'ampp_search_secondarysectors',
+    'programs' => 'ampp_search_programs',
+    'donors' => 'ampp_search_donors',
+    'regions' => 'ampp_search_regions',
+  );
+
+  if (empty($type) || empty($old_menu_url_mapping[$type])) {
+    drupal_json_output($items);
+    exit;
+  }
+
+  if (function_exists($old_menu_url_mapping[$type])) {
+    $items = $old_menu_url_mapping[$type]();
+  }
+
+  drupal_json_output($items);
+  exit;
+}
+
 
 /**
- * Callback handler for sectors search
+ * Autocomplete callback handler for sectors search
  */
 function ampp_search_sectors() {
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $string = $_POST['string'];
   $items = array();
   db_set_active("amp_projects");
@@ -1259,18 +1263,15 @@ function ampp_search_sectors() {
     $items[] = array('id' => $record->amp_sector_id, 'name' => check_plain($record->name));
   }
   db_set_active();
-  drupal_json_output($items);
+
+  return $items;
 }
 
 
-/*
- *
+/**
+ * Autocomplete callback handler for primarysectors search
  */
 function ampp_search_primarysectors() {
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $string = $_POST['string'];
   $items = array();
   db_set_active("amp_projects");
@@ -1294,18 +1295,15 @@ function ampp_search_primarysectors() {
     $items[] = array('id' => $record->amp_sector_id, 'name' => check_plain($record->name));
   }
   db_set_active();
-  drupal_json_output($items);
+
+  return $items;
 }
 
 
-/*
- *
+/**
+ * Autocomplete callback handler for secondarysectors search
  */
 function ampp_search_secondarysectors() {
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $string = $_POST['string'];
   $items = array();
   db_set_active("amp_projects");
@@ -1329,18 +1327,15 @@ function ampp_search_secondarysectors() {
     $items[] = array('id' => $record->amp_sector_id, 'name' => check_plain($record->name));
   }
   db_set_active();
-  drupal_json_output($items);
+
+  return $items;
 }
 
 
-/*
- *
+/**
+ * Autocomplete callback handler for programs search
  */
 function ampp_search_programs() {
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $string = $_POST['string'];
   $items = array();
   db_set_active("amp_projects");
@@ -1374,18 +1369,15 @@ function ampp_search_programs() {
     $items[] = array('id'=>$record->amp_theme_id, 'name'=>check_plain($record->name));
   }
   db_set_active();
-  drupal_json_output($items);
+
+  return $items;
 }
 
 
 /**
- * Callback handler for donors search
+ * Autocomplete callback handler for donors search
  */
 function ampp_search_donors() {
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $string = $_POST['string'];
   $items = array();
   db_set_active("amp_projects");
@@ -1416,18 +1408,14 @@ function ampp_search_donors() {
     $items[] = array('id'=>$record->amp_org_id, 'name'=>$name);
   }
   db_set_active();
-  drupal_json_output($items);
+
+  return $items;
 }
 
-
 /**
- * Callback handler for region search
+ * Autocomplete callback handler for region search
  */
 function ampp_search_regions() {
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $string = $_POST['string'];
   db_set_active("amp_projects");
 
@@ -1467,7 +1455,8 @@ function ampp_search_regions() {
     $items[] = array('id' => $record->id, 'name' => check_plain($name));
   }
   db_set_active();
-  drupal_json_output($items);
+
+  return $items;
 }
 
 

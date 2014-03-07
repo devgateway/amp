@@ -59,6 +59,10 @@ $plugin = array(
 function ampp_projects_projects_search_form_render($subtype, $conf, $args, $context) {
     module_load_include('inc', 'node', 'node.pages');
 
+  // Merge in plugin defaults, prevents not defined warnings on existing panels.
+  $plugin_definition = ctools_get_plugins('ctools', 'content_types', $subtype);
+  $conf += $plugin_definition['defaults'];
+  
   $block = new stdClass();
   $block->title = t('Projects search');
   $block->content = drupal_get_form('ampp_projects_projects_search_form_form', $conf);

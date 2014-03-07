@@ -1130,6 +1130,13 @@ function ampp_search_result_count($JSON = true, $amount = false) {
     if (empty($args[0])) $args[0] = "all";
   }
 
+  if (empty($_GET["currentAgencies"])) {
+    $args[0] = !empty($_GET["agencies"]) ? $_GET["agencies"] : "all";
+  } else {
+    $args[0] = implode(',', $_GET["currentAgencies"]);
+    if (empty($args[0])) $args[0] = "all";
+  }
+
   $args[1] = (count($sectors_array) > 0) ? implode(',', $sectors_array) : "all";
 
   if (empty($_GET["currentRegions"])) {

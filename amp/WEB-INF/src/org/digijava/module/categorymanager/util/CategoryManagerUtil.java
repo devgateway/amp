@@ -538,7 +538,11 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		try {
 			return getAmpCategoryValueCollectionByKey(categoryKey, false);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			/**
+			 * It should actually never get here
+			 */
+			return null;
 		}
 	}
 	
@@ -693,10 +697,10 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		return loadAmpCategoryClassByKey(key, false);
 	}
 	 
-	public static AmpCategoryClass loadAmpCategoryClassByKey(String key, boolean closeSession)
+	public static AmpCategoryClass loadAmpCategoryClassByKey(String key, boolean closeSession) throws NoCategoryClassException
 	{
 		Session dbSession			= null;
-		List<AmpCategoryClass> col;
+		Collection col=new ArrayList();
 		try {
 			if (closeSession)
 				dbSession = PersistenceManager.openNewSession();
@@ -707,15 +711,10 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				Query query			= dbSession.createQuery(queryString);
 				query.setParameter("key", key, Hibernate.STRING);
 				query.setCacheable(true);
-				col = query.list();
-				if (col.isEmpty())
-					return null;
-				if (col.size() > 1)
-					throw new RuntimeException("multiple category classes found with the same key: " + col.size());
-				return col.get(0);
-		} catch (Exception ex) {			
+				 col		= query.list();
+
+		} catch (Exception ex) {
 			logger.error("Error retrieving AmpCategoryClass with key '" + key + "': " + ex);
-			throw new RuntimeException(ex);
 		} finally {
 			if (closeSession){
 				try {
@@ -724,6 +723,17 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 					logger.error("releaseSession() failed :" + ex2);
 				}
 			}
+		}
+
+		if(!col.isEmpty())
+		{
+			Iterator it=col.iterator();
+
+			AmpCategoryClass x=(AmpCategoryClass) it.next();
+			return x;
+		}
+		else{
+			throw new NoCategoryClassException("No AmpCategoryClass found with key '" + key + "'");
 		}
 	}
 

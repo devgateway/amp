@@ -712,13 +712,13 @@ function ampp_get_agencies_from_url() {
     $result = $query->execute();
     foreach ($result as $record) {
       $name = !empty($record->acronym) ? check_plain($record->name) . ' (' . check_plain($record->acronym) . ')' : check_plain($record->name);
-      $donors[] = drupal_json_encode(array('id' => $record->amp_org_id, 'name' => $name));
+      $agencies[] = drupal_json_encode(array('id' => $record->amp_org_id, 'name' => $name));
     }
 
   }
 
   db_set_active();
-  return $donors;
+  return $agencies;
 }
 
 

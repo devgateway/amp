@@ -28,6 +28,9 @@ import com.lowagie.text.pdf.PdfPTable;
 public class GroupReportDataPDF extends PDFExporter
 {
 
+	/**
+	 * CAN and WILL be null for non-root GRD's. Do not reference directly unless setting it!
+	 */
 	public ReportPdfExportState state;
 	
    	private static Color alternateColorA = new Color(185,219,243);
@@ -63,9 +66,9 @@ public class GroupReportDataPDF extends PDFExporter
 			pdfc.setColspan(grd.getTotalDepth());
 			pdfc.setPaddingTop(2);
 			pdfc.setPaddingBottom(2);
-			if (state.lastedUsedColor != alternateColorA){
+			if (getExportState().lastedUsedColor != alternateColorA){
 			    pdfc.setBackgroundColor(alternateColorA);
-			    state.lastedUsedColor = alternateColorA;
+			    getExportState().lastedUsedColor = alternateColorA;
 			}else{
 			    pdfc.setBackgroundColor(alternateColorB);    
 			}	

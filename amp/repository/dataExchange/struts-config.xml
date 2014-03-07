@@ -39,7 +39,7 @@
 			<forward name="showLogItemDetails" path="/showLayout.do?layout=de_showLogItemDetails" />
 			<forward name="viewExecutionLog" path="/showLayout.do?layout=de_viewExecutionLog" />
 		</action> 
-		<action path="/dataExchange/mapFields" scope="session" type="org.digijava.module.dataExchange.action.MapFieldsAction" name="mapFieldsForm" validate="false">
+		<action path="/dataExchange/mapFields" scope="session" type="org.digijava.module.dataExchange.action.MapFieldsAction" name="mapFieldsForm" validate="false" parameter="action">
 			<forward name="forward" path="/showLayout.do?layout=de_mapFields"/>
 			<forward name="mapFields" path="/showLayout.do?layout=de_mapFields" />
 		</action> 

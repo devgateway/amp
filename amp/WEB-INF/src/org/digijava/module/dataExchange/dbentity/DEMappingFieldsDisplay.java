@@ -76,7 +76,9 @@ public class DEMappingFieldsDisplay {
 		super();
 		this.ampField = f;
 		this.labels = new HashMap<Long,String> ();
-		this.labels.putAll(c);
+        if (c != null) {
+		    this.labels.putAll(c);
+        }
 
 //		if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(f.getIatiPath())==0){
 //			for (Iterator<AmpOrgType> it = c.iterator(); it.hasNext();) {

@@ -3,37 +3,26 @@
  */
 package org.digijava.module.dataExchange.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.io.PrintWriter;
+import java.util.*;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -41,29 +30,27 @@ import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DEMappingFieldsDisplay;
 import org.digijava.module.dataExchange.form.MapFieldsForm;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
-import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
-import org.digijava.module.message.form.AmpMessageForm;
+import org.digijava.module.dataExchange.utils.ValueComparator;
+
+
 
 /**
  * @author Dan Mihaila
  *
  */
-public class MapFieldsAction extends MultiAction {
+public class MapFieldsAction extends DispatchAction {
+    public static final String IATI_LABELS_SORTED = "IATI_LABELS_SORTED";
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.utils.MultiAction#modePrepare(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
-	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-		return modeSelect(mapping, form, request, response);
-	}
 
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.utils.MultiAction#modeSelect(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
+
+    public ActionForward unspecified(ActionMapping mapping, ActionForm form,
+                                     HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+        return modeSelect(mapping, form, request, response);
+    }
+
+
 	public ActionForward modeSelect(ActionMapping mapping, ActionForm form,	HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		MapFieldsForm mForm = (MapFieldsForm) form;
@@ -129,10 +116,22 @@ public class MapFieldsAction extends MultiAction {
 		ArrayList<DEMappingFieldsDisplay> fieldDisplayList = new ArrayList<DEMappingFieldsDisplay>();
 		
 		DataExchangeUtils.getAmpClassesFromDb(ampClasses);
-		populateCollections(allAmpDEMappingFields, fieldDisplayList, ampClassTypeSelected);
+		populateCollections(allAmpDEMappingFields, fieldDisplayList, ampClassTypeSelected, false);
+
+        TreeMap<Long, String> allEntities = getAllAmpEntitiesByClass(ampClassTypeSelected);
+        mForm.setAllEntities(allEntities);
+
+        ValueComparator bvc =  new ValueComparator(allEntities);
+        TreeMap<Long, String> sortedLabels = new TreeMap<Long,String>(bvc);
+        sortedLabels.putAll(allEntities);
+        mForm.setAllEntitiesSorted(sortedLabels);
+        request.getSession().setAttribute(IATI_LABELS_SORTED, sortedLabels);
+
 		
 		mForm.setMappedFields(fieldDisplayList);
 		mForm.setAmpClasses(ampClasses);
+
+
 		
 		
         mForm.setAllSelectedAmpValues(null);
@@ -258,13 +257,21 @@ public class MapFieldsAction extends MultiAction {
 	}
 	
 	private void populateCollections(Collection<DEMappingFields> allAmpDEMappingFields, ArrayList<DEMappingFieldsDisplay> fieldDisplayList, String ampClassTypeSelected)	throws DgException {
-		TreeMap<Long, String> allEntities 	=	getAllAmpEntitiesByClass(ampClassTypeSelected);
-		
-		for (Iterator<DEMappingFields> it = allAmpDEMappingFields.iterator(); it.hasNext();) {
-			DEMappingFields f = (DEMappingFields) it.next();
-			fieldDisplayList.add(new DEMappingFieldsDisplay(f,allEntities));
-		}
+        populateCollections(allAmpDEMappingFields, fieldDisplayList, ampClassTypeSelected, true);
 	}
+
+    private void populateCollections(Collection<DEMappingFields> allAmpDEMappingFields, ArrayList<DEMappingFieldsDisplay> fieldDisplayList, String ampClassTypeSelected, boolean addAllEntities)	throws DgException {
+        TreeMap<Long, String> allEntities 	= null;
+        if (addAllEntities) {
+            allEntities = getAllAmpEntitiesByClass(ampClassTypeSelected);
+        }
+
+        for (Iterator<DEMappingFields> it = allAmpDEMappingFields.iterator(); it.hasNext();) {
+            DEMappingFields f = (DEMappingFields) it.next();
+
+            fieldDisplayList.add(new DEMappingFieldsDisplay(f,allEntities));
+        }
+    }
 	
 	private TreeMap<Long, String> getAllAmpEntitiesByClass(String ampClassTypeSelected) {
 		// TODO Auto-generated method stub
@@ -321,5 +328,36 @@ public class MapFieldsAction extends MultiAction {
 			throws Exception {
 		
 	}
+
+    public ActionForward getOptionsAjaxAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+        String maxResultCountStr = request.getParameter("maxResultCount");
+        String searchStr = request.getParameter("searchStr");
+        int maxResultCount = Integer.parseInt(maxResultCountStr);
+
+        Map<Long, String> sortedLabels = (Map<Long,String>) request.getSession().getAttribute(IATI_LABELS_SORTED);;
+        JSONArray objArray = new JSONArray();
+        JSONObject retObj = new JSONObject();
+
+        JSONObject itemObj = new JSONObject();
+        itemObj.accumulate("id", "-1");
+        itemObj.accumulate("val", "Add new");
+        objArray.add(itemObj);
+
+        for (java.util.Map.Entry<Long, String> item : sortedLabels.entrySet()) {
+            if (searchStr == null || searchStr.trim().isEmpty() || (item.getValue() != null && item.getValue().toLowerCase().contains(searchStr.toLowerCase()))) {
+
+                objArray.add(new JSONObject().accumulate("id", item.getKey()).accumulate("val", item.getValue()));
+            }
+            if (maxResultCount > 0 && objArray.size() >= maxResultCount) break;
+        }
+
+        retObj.accumulate("totalCount", sortedLabels.size());
+        retObj.accumulate("criteriaCount", objArray.size());
+        retObj.accumulate("objects", objArray);
+        PrintWriter out = response.getWriter();
+        retObj.write(out);
+        out.close();
+        return null;
+    }
 
 }

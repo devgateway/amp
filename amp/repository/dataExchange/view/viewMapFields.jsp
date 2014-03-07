@@ -107,6 +107,66 @@ div.fakefile2 {
 div.fakefile2 input{
 	width: 83px;
 }
+
+
+.autocompleteDropdownText {
+	border: 1px solid silver;
+	font-size: 11px !important;
+	font-family: Arial,Helvetica,sans-serif;
+	cursor:pointer;
+	
+}
+
+.autocompleteDropdownText:hover {
+	background-color:#feff90;
+}
+
+div.optionsContainer {
+	width:500px;
+	height:200px;
+	position:absolute;
+	background-color:white;
+	border:1px solid black;
+	display:none;
+}
+
+table.optionsContainerTable {
+	width:498px;
+	height:190px;
+	position:absolute;
+}
+
+div.flowContainer {
+	overflow-y:auto;
+	overflow-x:hidden;
+	width:495px;
+	height:180px;
+	
+}
+
+td.infoWnd {
+	border: 1px solid black;	
+}
+
+td.optionItem {
+	padding:2px;
+	border: 1px solid transparent;
+	cursor:pointer;
+}
+
+td.optionItem:hover {
+	border: 1px solid #bfc8d6;
+	background-color: #dfe5ee;
+}
+
+td.optionItem:active {
+	border: 1px solid #0e2342;
+	background-color: #2b4b7a;
+	color: white;
+}
+
+
+
 -->
 </style>
 
@@ -115,7 +175,8 @@ function saveRecord(id) {
 	var loadingImgDiv = document.getElementById("loadingImg");
 	loadingImgDiv.style.display="block";
 		 var el = document.getElementById("ampValues["+id+"]");
-		 var txt = el.options[el.selectedIndex].innerHTML;
+		 //var txt = el.options[el.selectedIndex].innerHTML;
+		 var txt = $(el).parent().find(".autocompleteDropdownText").val();
 		 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
 		 url = "<%= saveRecord %>?actionType=saveRecord&id="+id+"&ampId="+el.value+"&mappedValue="+txt;
 		 mapFieldsForm.action =url;
@@ -355,6 +416,21 @@ span.extContactDropdownEmail {
 		<!-- BREADCRUMP END -->
 		<!-- MAIN CONTENT PART START -->
   		<table width="1000px" border="0" cellspacing="0" cellpadding="0" align="center">
+  		<tr><td>
+  			<div id="optionsDiv" class="optionsContainer">
+  				<table class="optionsContainerTable">
+  					<tr>
+  						<td>
+  							<div id="content" class="flowContainer">
+  							</div>
+  						</td>
+  					</tr><tr>
+  						<td id="info" height="12" class="infoWnd">Total
+  						</td>
+  					</tr>
+  				</table>
+  			</div>
+  		</td></tr>
 			<tr>
 			    <td class="main_side_1">
 				    <table class="inside" width="980px" border=0 cellpadding="0" cellspacing="0" style="margin:10px;" id="tableRecords">
@@ -421,6 +497,7 @@ span.extContactDropdownEmail {
 								<td width="50" background="images/ins_bg.gif" class="inside" align="center"><b class="ins_title"><digi:trn>Actions</digi:trn></b></td>
 							--%>
 						</tr>
+						
 						<logic:notEmpty name="mapFieldsForm" property="mappedFields">
 							<logic:iterate id="field" name="mapFieldsForm" property="mappedFields">
 								<tr id="Amp${field.ampField.shortAmpClass}_${field.ampField.id}">
@@ -458,60 +535,26 @@ span.extContactDropdownEmail {
 								    	</div>
 								    </td>
 								    <td bgcolor="#FFFFFF" class="inside ampvalues" style="width:40%;">
+	
+	<%--
 								    	<html:select  name="mapFieldsForm"  property="allSelectedAmpValues" styleClass="dropdwn_sm" styleId="ampValues[${field.ampField.id}]">
 								  			<html:option value="-1" ><digi:trn>Add new</digi:trn></html:option>
-        									<logic:iterate id="cls" name="field" property="sortedLabels" >
-												<html:option value="${cls.key}">
-												${cls.value}
-												</html:option>
-											</logic:iterate>
+								  			
+  
+        									<logic:iterate id="cls" name="mapFieldsForm" property="allEntitiesSorted" >
+  
+														<html:option value="${cls.key}">
+															${cls.value}
+														</html:option>
+													</logic:iterate>
         								</html:select>
-								    	<%-- <div>
-								        <div style="width:100%;" class="">
-								            <html:text name="mapFieldsForm"  property="allSelectedAmpValues" style="width:100%;"  styleId="statesinput[${field.ampField.id}]"></html:text>
-								            <div id="statesautocomplete[${field.ampField.id}]"></div>
-								        </div>
-								      </div>
-								      <script type="text/javascript">
-										var relatedActDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", ";"]);
-										
-										var selectedFilterBy = document.getElementById("filterAmpClass").value;
-										var actionTypeString = get_action_type(selectedFilterBy);
-										//debugger;										
-										//define your itemSelect handler function:
-										itemSelectHandler = function(sType, aArgs) {
-											//debugger;
-											YAHOO.log(sType); // this is a string representing the event;
-				      						// e.g., "itemSelectEvent"
-											var oMyAcInstance = aArgs[0]; // your AutoComplete instance
-											var elListItem = aArgs[1]; // the <li> element selected in the suggestion
-	   					       				// container
-											var oData = String(aArgs[2]); // object literal of data for the result
-											var ampId = oData.substring (oData.lastIndexOf('(') + 1, oData.lastIndexOf(')')).trim();
-											var value = oData.substring (0, oData.lastIndexOf('(')).trim();
-											var loadingImgDiv = document.getElementById("loadingImg");
-											loadingImgDiv.style.display="block";
-		 									var el = document.getElementById("ampValues["+${field.ampField.id}+"]");
-		 									<digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
-		 									url = "<%= saveRecord %>?actionType=saveRecord&id="+${field.ampField.id}+"&ampId="+ampId+"&mappedValue="+value;
-		 									mapFieldsForm.action =url;
-		 									mapFieldsForm.submit();
-		 									return true;
-										};
-
-										relatedActDataSource.scriptQueryAppend = "actionType=" + actionTypeString;;
-										relatedActDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
-										relatedActDataSource.queryMatchContains = true;
-										relatedActDataSource.scriptQueryParam  = "srchStr";
-										var relatedActAutoComp = new YAHOO.widget.AutoComplete("statesinput[${field.ampField.id}]","statesautocomplete[${field.ampField.id}]", relatedActDataSource);
-										relatedActAutoComp.forceSelection = true;
-										relatedActAutoComp.queryDelay = 0.5;
-										$("#statesinput").css("position", "static");
-
-										//subscribe your handler to the event, assuming
-										//you have an AutoComplete instance myAC:
-										relatedActAutoComp.itemSelectEvent.subscribe(itemSelectHandler);
-									 </script> --%>
+      --%>  								
+        								
+        								<div style="width: 500px;">
+        									<html:hidden  name="mapFieldsForm"  property="allSelectedAmpValues" styleId="ampValues[${field.ampField.id}]"/>
+        									<input class="autocompleteDropdownText" type="text" style="width: 500px;">
+        								</div>
+								    	
 								  	</td>
 								  	
 								    	<td bgcolor="#FFFFFF" class="inside" align="center">
@@ -521,12 +564,7 @@ span.extContactDropdownEmail {
 								</tr>
 							</logic:iterate>
 						</logic:notEmpty>
-						<%-- 
-							<tr>
-								<td colspan="6" bgcolor="#FFFFFF" class="inside">&nbsp;</td>
-								<td bgcolor="#FFFFFF" class="inside" align="center"><input type="button" value="<digi:trn>Save All</digi:trn>" class="buttonx_sm" onclick="saveAll()"/></td>
-							</tr>
-						--%>
+
 					</table>
 					<div class="paging" style="font-size:11px;margin:10px;">
 						<b class="ins_title"><digi:trn>Pages :</digi:trn></b>
@@ -551,4 +589,106 @@ span.extContactDropdownEmail {
 
 <br /><br />
 <!-- MAIN CONTENT PART END -->
+
+<script language="javascript">
+	$("input.autocompleteDropdownText").click(function(e) {
+		var originatorObj = $(e.target);
+		curEvtObj = originatorObj;
+		var originatorObjAbsPos = originatorObj.position();
+		var optionsContainerDiv = $("#optionsDiv");
+		optionsContainerDiv.css("display", "block");
+		optionsContainerDiv.css("left", originatorObjAbsPos.left + "px");
+		optionsContainerDiv.css("top", originatorObjAbsPos.top+20 + "px");
+		
+		var hiddenInput = originatorObj.parent().find("input[type='hidden'][name='allSelectedAmpValues']");
+		if (hiddenInput.val()=="" || hiddenInput.val()==-1) {
+			originatorObj.val("").css("color", "black");
+		}
+		
+		
+		getAutosuggestOptionValues(originatorObj.val(), 100);
+	});
+	
+	var timeoutObj = null;
+	var curEvtObj = null;
+	$("input.autocompleteDropdownText").keyup(function(e) {
+		
+		if (timeoutObj != null) {
+			window.clearTimeout (timeoutObj);
+		}
+		timeoutObj = window.setTimeout("getAutosuggestOptionValues(curEvtObj.val(), 100)", 300);
+		
+	});
+	
+	var getAutosuggestOptionValues = function (queryStr, maxNumber) {
+		var url = "../../dataExchange/mapFields.do?action=getOptionsAjaxAction";
+		$.ajax({
+		  type: 'POST',
+		  url: url,
+		  data:{searchStr:queryStr , maxResultCount:maxNumber},
+		  success: autocompleteRequestSuccess,
+		  dataType: "json"
+		});
+	}
+	
+	var autocompleteRequestSuccess = function (data, textStatus, jqXHR) {
+		var optionsContainer = $("#optionsDiv #content");
+		var infoWnd = $("#optionsDiv .infoWnd");
+		
+		var optionsMarkup = [];
+		optionsMarkup.push("<table width='100%'>");
+		$(data.objects).each(function(index, element) {
+    	optionsMarkup.push("<tr>");
+    	optionsMarkup.push("<td nowrap class='optionItem'>");
+    	if (element.val != null) {
+    		optionsMarkup.push(element.val);
+    	} else {
+    		optionsMarkup.push("EMPTY VALUE");
+    	}
+    	optionsMarkup.push("<input class='objId' type='hidden' value='");
+    	optionsMarkup.push(element.id);
+    	optionsMarkup.push("'>");
+    	optionsMarkup.push("<input class='objCaption' type='hidden' value='");
+    	optionsMarkup.push(element.val);
+    	optionsMarkup.push("'>");
+    	optionsMarkup.push("</td>");
+    	optionsMarkup.push("</tr>");
+    	
+		});
+		optionsMarkup.push("</table>");
+		optionsContainer.html(optionsMarkup.join(''));
+		infoWnd.html("Total object count/Showing: " +  data.totalCount + "/" +  data.objects.length);
+		
+		$("td.optionItem").click(function (e) {
+			var originatorObj = $(e.target);
+			
+			
+			
+			$("#optionsDiv").css("display", "none");
+			
+
+			var newVal = originatorObj.find(".objCaption").val();
+			if (newVal.trim() == "") newVal = "EMPTY VALUE";
+			curEvtObj.val(newVal);
+			curEvtObj.parent().find("input[type='hidden'][name='allSelectedAmpValues']").val(originatorObj.find(".objId").val())
+			checkForDefaultValues();
+		});
+	}
+	
+	var checkForDefaultValues = function() {
+		$("input[type='hidden'][name='allSelectedAmpValues']").each(function(index, element) {
+			var elementObj = $(element);
+			if (elementObj.val() == null || elementObj.val()=="" || elementObj.val()==-1) {
+				elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val("Add new");
+			}
+		});
+	}
+	
+	checkForDefaultValues();
+	
+	
+	
+	
+		
+</script>
 </body>

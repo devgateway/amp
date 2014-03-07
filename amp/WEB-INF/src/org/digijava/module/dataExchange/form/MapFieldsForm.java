@@ -5,6 +5,7 @@ package org.digijava.module.dataExchange.form;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,12 +40,32 @@ public class MapFieldsForm extends ActionForm {
 	
 	private String sort;
 	private String sortOrder;
-	
-	public Integer getCurrentPage() {
+
+    TreeMap<Long, String> allEntities;
+
+    TreeMap<Long, String> allEntitiesSorted;
+
+    public TreeMap<Long, String> getAllEntities() {
+        return allEntities;
+    }
+
+    public void setAllEntities(TreeMap<Long, String> allEntities) {
+        this.allEntities = allEntities;
+    }
+
+    public Integer getCurrentPage() {
 		return currentPage;
 	}
 
-	public void setCurrentPage(Integer currentPage) {
+    public TreeMap<Long, String> getAllEntitiesSorted() {
+        return allEntitiesSorted;
+    }
+
+    public void setAllEntitiesSorted(TreeMap<Long, String> allEntitiesSorted) {
+        this.allEntitiesSorted = allEntitiesSorted;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
 		this.currentPage = currentPage;
 	}
 

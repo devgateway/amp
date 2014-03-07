@@ -680,6 +680,49 @@ function ampp_get_donors_from_url() {
 
 
 /**
+ * Agencies JSON array from URL
+ * @return multitype:mixed
+ */
+function ampp_get_agencies_from_url() {
+
+  global $amp_db_exists;
+  if (!$amp_db_exists) return;
+
+  $agencies = array();
+  $agencies_ids = isset($_GET["agencies"]) ? $_GET["agencies"] : 'all';
+
+  db_set_active("amp_projects");
+  $items = array();
+  if ($agencies_ids != 'all' && !empty($agencies_ids)) {
+
+    global $language;
+    global $user;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', agency.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', '" . $language->language . "')";
+
+    $query = db_select('amp_organisation', 'agency');
+    $query->distinct();
+    $query->fields('agency', array('amp_org_id', 'acronym'));
+    $query->addExpression($translate_field, 'name');
+    $query->condition('agency.amp_org_id', explode(',', $agencies_ids), 'IN');
+    $or_statement = db_or()->condition('agency.deleted', 'true', '<>')->condition('agency.deleted', NULL, 'is');
+    $query->condition($or_statement);
+
+    if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_get_agencies_from_url', dpq($query, 1));
+
+    $result = $query->execute();
+    foreach ($result as $record) {
+      $name = !empty($record->acronym) ? check_plain($record->name) . ' (' . check_plain($record->acronym) . ')' : check_plain($record->name);
+      $donors[] = drupal_json_encode(array('id' => $record->amp_org_id, 'name' => $name));
+    }
+
+  }
+
+  db_set_active();
+  return $donors;
+}
+
+
+/**
  * Locations JSON array from URL
  */
 function ampp_get_locations_from_url() {

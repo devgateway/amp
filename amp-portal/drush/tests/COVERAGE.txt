@@ -1,64 +1,79 @@
-COMMANDS (perhaps keep these notes in $command definition?)
+COMMANDS
 ------------
 pm-download: GOOD.
+  need test for `pm-download --select` (hard to test; depends on state of project releases on d.o.)
 pm-updatecode: GOOD.
-pm-update
+pm-update: FAIR. Implicitly tested by pm-updatecode but updatedb not yet tested.
 pm-releasenotes
 pm-releases
 pm-enable: GOOD. testEnDisUnList().
 pm-disable: GOOD. testEnDisUnList().
 pm-uninstall: GOOD. testEnDisUnList().
 pm-list: GOOD. testEnDisUnList().
-pm-info:
-pm-refresh
+pm-info: GOOD. testEnDisUnList().
+pm-refresh:
 version-control: FAIR. See updatecode. To be deprecated all git workflow after git.drupal.org?
 package-hander:
 
 sql-cli:
 sql-connect:
-sql-query:
-sql-dump: FAIR. Implicitly tested by siteUpgradeTest.
-sql-sync: FAIR. Implicitly tested by siteUpgradeTest.
-sql-drop:
+sql-query: FAIR. Implicit by site-install, sql-sync
+sql-dump: GOOD. tested by sqlDumpTest.
+sql-sync: GOOD. testLocalSqlSync().
+  need test: %dump, %dump-dir, --dump, --dump-dir, --source-dump, --target-dump, --source-dump-dir and --target-dump-dir and permutations of same used together.
+sql-drop: FAIR. Implicit by site-install
+sql-sanitize: FAIR. Implicit by testLocalSqlSync()
 
 
-updatedb: GOOD. Implicitly tested siteUpgradeTest.
+updatedb: NONE. Used to be implicitly tested by siteUpgradeTest.
 archive-dump: GOOD
-archive-restore: 
+archive-restore: GOOD. Has own test and implicitly tested by environment cache in Unish framework.
 help
-version: Good. Implicit by testStandaloneScript()
-self-update
-php-eval: GOOD. Implicitly tested by many tests (e.g. siteUpgradeTest).
+version: GOOD. Implicit by testStandaloneScript()
+php-eval: GOOD. Implicitly tested by many tests (e.g. completeTest).
 php-script: GOOD.
 drupal-directory: GOOD
-core-cli: FAIR
-cache-clear
+cache-get: GOOD
+cache-set: GOOD
+cache-clear: GOOD
+core-config: NONE
 core-cron
 core-status: FAIR: Implicit test by contextTest.
 docs
-image
 core-rsync
+core-quick-drupal: GOOD
+image: GOOD
+queue-*: GOOD
+runserver
 search-*
+shellalias: GOOD
+  need test: shell alias with site alias
 site-install: FAIR. Implicit test by setUpDrupal().
-site-upgrade: GOOD.
+ssh: GOOD
 test-*
 topic
-variable-*: GOOD.
-watchdog-*
+usage-*
+variable-*: GOOD
+watchdog-*: GOOD
 
 user-*: GOOD.
 
 field-*: GOOD.
 
+make: GOOD
+
 INCLUDES
 ------------
 backend: GOOD
-batch: FAIR. Implicit by siteUpgradeTest.
+  need test: --pipe with remote alias and --pipe with list of aliases
+batch: GOOD
+bootstrap:
 command: FAIR
-context: FAIR
+complete: GOOD
+context: FAIR. Many functions implicitly tested. Option merging (config, include, alias-path) not tested.
 drush: NONE.
 environment
-sitealias. FAIR. Explicit test for alias lists. Single aliases implicitly tested by contextTest.
+sitealias. FAIR. Explicit test for alias lists. Single aliases implicitly tested by contextTest.  Option propagation tested by backendTest.  Option recovery for @self alias tested by sqlDumpTest.
 dbtng: Good. Implicit by variable-*.
 drupal
 exec: GOOD: Implicitly tested all over.
@@ -68,6 +83,8 @@ output
 
 ROOT
 -------------
-drush
+drush:
+  need test: drush.ini
 drush.php
-drush.bat
+drush.bat: N/A
+drush.complete.sh: N/A

@@ -12,14 +12,19 @@
  *
  * We need to set the type for those modules that are not already in the system table.
  *
+ * @param $include_hidden
+ *   Boolean to indicate whether hidden modules should be excluded or not.
  * @return
  *   An array containing module info for all available modules.
  */
-function drush_get_modules() {
+function drush_get_modules($include_hidden = TRUE) {
   $modules = module_rebuild_cache();
-  foreach ($modules as $module) {
+  foreach ($modules as $key => $module) {
     if (!isset($module->type)) {
       $module->type = 'module';
+    }
+    if ((!$include_hidden) && isset($module->info['hidden']) && ($module->info['hidden'])) {
+      unset($modules[$key]);
     }
   }
 
@@ -88,6 +93,34 @@ function drush_module_dependents($modules, $module_info) {
 }
 
 /**
+ * Returns a list of enabled modules.
+ *
+ * This is a simplified version of module_list().
+ */
+function drush_module_list() {
+  $enabled = array();
+  $rsc = drush_db_select('system', 'name', 'type=:type AND status=:status', array(':type' => 'module', ':status' => 1));
+  while ($row = drush_db_result($rsc)) {
+    $enabled[$row] = $row;
+  }
+
+  return $enabled;
+}
+
+/**
+ * Return a list of extensions from a list of named extensions.
+ * Both enabled and disabled/uninstalled extensions are returned.
+ */
+function drush_get_named_extensions_list($extensions) {
+  $result = array();
+  $rsc = drush_db_select('system', array('name', 'status'), 'name IN (:extensions)', array(':extensions' => $extensions));
+  while ($row = drush_db_fetch_object($rsc)) {
+    $result[$row->name] = $row;
+  }
+  return $result;
+}
+
+/**
  * Enable a list of modules. It is assumed the list contains all the dependencies not already enabled.
  *
  * @param $modules
@@ -99,6 +132,7 @@ function drush_module_enable($modules) {
     _drupal_install_module($module);
   }
   module_enable($modules);
+  drush_system_modules_form_submit();
 }
 
 /**
@@ -109,6 +143,7 @@ function drush_module_enable($modules) {
  */
 function drush_module_disable($modules) {
   module_disable($modules, FALSE);
+  drush_system_modules_form_submit();
 }
 
 /**
@@ -118,7 +153,7 @@ function drush_module_disable($modules) {
  *   Array of module names
  */
 function drush_module_uninstall($modules) {
-  require_once drush_get_context('DRUSH_DRUPAL_ROOT') . '/includes/install.inc';
+  require_once DRUSH_DRUPAL_CORE . '/includes/install.inc';
   foreach ($modules as $module) {
     drupal_uninstall_module($module);
   }
@@ -131,7 +166,13 @@ function drush_module_uninstall($modules) {
  * function. Calling this function just makes sure any activities triggered by
  * the form submit (such as admin_role) are completed.
  */
-function drush_system_modules_form_submit($active_modules) {
+function drush_system_modules_form_submit() {
+  $active_modules = array();
+  foreach (drush_get_modules(FALSE) as $key => $module) {
+    if ($module->status == 1) {
+      $active_modules[$key] = $key;
+    }
+  }
   module_load_include('inc', 'system', 'system.admin');
   $form_state = array('values' => array('status' => $active_modules));
   drupal_execute('system_modules', $form_state);
@@ -142,14 +183,19 @@ function drush_system_modules_form_submit($active_modules) {
  *
  * We need to set the type for those themes that are not already in the system table.
  *
+ * @param $include_hidden
+ *   Boolean to indicate whether hidden themes should be excluded or not.
  * @return
  *   An array containing theme info for all available themes.
  */
-function drush_get_themes() {
+function drush_get_themes($include_hidden = TRUE) {
   $themes = system_theme_data();
-  foreach ($themes as $theme) {
+  foreach ($themes as $key => $theme) {
     if (!isset($theme->type)) {
       $theme->type = 'theme';
+    }
+    if ((!$include_hidden) && isset($theme->info['hidden']) && ($theme->info['hidden'])) {
+      unset($themes[$key]);
     }
   }
 

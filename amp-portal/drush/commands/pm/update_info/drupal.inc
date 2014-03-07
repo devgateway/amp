@@ -5,7 +5,8 @@ function pm_update_filter(&$project) {
   switch($project['status']) {
     case UPDATE_CURRENT:
       $status = dt('Up to date');
-      $project['candidate_version'] = $project['recommended'];
+      pm_release_recommended($project);
+      $project['updateable'] = FALSE;
       break;
     case UPDATE_NOT_CURRENT:
       $status = dt('Update available');
@@ -33,6 +34,7 @@ function pm_update_filter(&$project) {
   return $status;
 }
 
+// @todo This moved to state() in D8.
 function pm_update_last_check() {
   return variable_get('update_last_check', 0);
 }
@@ -94,6 +96,9 @@ function _pm_get_update_info($projects) {
   batch_set($batch);
   drush_backend_batch_process();
 
+  // Clear any error set by a failed update fetch task. This avoid rollbacks.
+  drush_clear_error();
+
   // Calculate update status data.
   $available = _update_get_cached_available_releases();
   $data = update_calculate_project_data($available);
@@ -103,17 +108,25 @@ function _pm_get_update_info($projects) {
       unset($data[$project_name]);
       continue;
     }
+    // Discard projects with unknown installation path.
+    if ($project_name != 'drupal' && !isset($projects[$project_name]['path'])) {
+      unset($data[$project_name]);
+      continue;
+    }
     // Allow to update disabled projects.
     if (in_array($project['project_type'], array('module-disabled', 'theme-disabled'))) {
       $data[$project_name]['project_type'] = substr($project['project_type'], 0, strpos($project['project_type'], '-'));
     }
-    // Set 'includes' key to all extensions. By default it only contain enabled
-    // extensions and _pm_get_project_path() needs all of them.
-    $data[$project_name]['includes'] = drupal_map_assoc($projects[$project_name]['extensions']);
+    // Add some info from the project to $data.
+    $data[$project_name] += array(
+      'path'  => isset($projects[$project_name]['path']) ? $projects[$project_name]['path'] : '',
+      'label' => $projects[$project_name]['label'],
+    );
     // Store all releases, not just the ones selected by update.module.
-    $data[$project_name]['releases'] = $available[$project_name]['releases'];
+    if (isset($available[$project_name]['releases'])) {
+      $data[$project_name]['releases'] = $available[$project_name]['releases'];
+    }
   }
-  $data = _pm_get_project_path($data, 'includes');
 
   return $data;
 }

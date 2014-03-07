@@ -7,13 +7,14 @@
  *   To run this *fun* command, execute `drush --include=./examples xkcd`
  *   from within your drush directory.
  *
- *   See `drush topic docs-commands` for more information about command authoring. 
+ *   See `drush topic docs-commands` for more information about command authoring.
  *
  *   You can copy this file to any of the following
  *     1. A .drush folder in your HOME folder.
  *     2. Anywhere in a folder tree below an active module on your site.
  *     3. /usr/share/drush/commands (configurable)
  *     4. In an arbitrary folder specified with the --include option.
+ *     5. Drupal's /drush or /sites/all/drush folders.
  */
 
 /**
@@ -103,10 +104,7 @@ access a web site (5) with awesome geek humor.\n
  * If for some reason you do not want your hook function to be named
  * after your command, you may define a 'callback' item in your command
  * object that specifies the exact name of the function that should be
- * called.  However, the specified callback function must still begin
- * with "drush_commandfile_" (e.g. 'callback' => "drush_example_foo_execute")
- * if you want that all hook functions are still called (e.g.
- * drush_example_pre_foo_execute, and so on).
+ * called.
  *
  * In this function, all of Drupal's API is (usually) available, including
  * any functions you have added in your own modules/themes.
@@ -131,7 +129,7 @@ function drush_xkcd_fetch($search = '') {
     }
   }
   else {
-    // This uses an API key with a limited number of searches per 
+    // This uses an API key with a limited number of searches per
     $search_response = @json_decode(file_get_contents('https://www.googleapis.com/customsearch/v1?key=' . drush_get_option('google-custom-search-api-key', 'AIzaSyDpE01VDNNT73s6CEeJRdSg5jukoG244ek') . '&cx=012652707207066138651:zudjtuwe28q&q=' . $search));
     if (!empty($search_response->items)) {
       foreach ($search_response->items as $item) {
@@ -158,7 +156,7 @@ function drush_xkcd_display($url) {
     $data['date'] = $data['year'] . '/' . $data['month'] . '/' . $data['day'];
     unset($data['safe_title'], $data['news'], $data['link'], $data['year'], $data['month'], $data['day']);
     drush_print_table(drush_key_value_to_array_table($data));
-    $img = realpath(_drush_download_file($data['img']));
+    $img = drush_download_file($data['img']);
     drush_register_file_for_deletion($img);
     drush_shell_exec(drush_get_option('image-viewer', 'display') . ' ' . $img);
   }

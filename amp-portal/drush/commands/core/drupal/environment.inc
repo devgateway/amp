@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Specific functions for a drupal 7 environment.
+ *   Specific functions for a drupal 8 environment.
  *   drush_include_engine() magically includes either this file
  *   or environment_X.inc depending on which version of drupal drush
  *   is called from.
@@ -10,11 +10,25 @@
 /**
  * Get complete information for all available modules.
  *
+ * @param $include_hidden
+ *   Boolean to indicate whether hidden modules should be excluded or not.
  * @return
  *   An array containing module info for all available modules.
  */
-function drush_get_modules() {
-  return system_rebuild_module_data();
+function drush_get_modules($include_hidden = TRUE) {
+  $modules = system_rebuild_module_data();
+
+  foreach ($modules as $key => $module) {
+    $module->type = 'module';
+    if ((!$include_hidden) && (isset($module->info['hidden']))) {
+      unset($modules[$key]);
+    }
+    else {
+      $module->schema_version = drupal_get_installed_schema_version($key);
+    }
+  }
+
+  return $modules;
 }
 
 /**
@@ -55,6 +69,7 @@ function drush_check_module_dependencies($modules, $module_info) {
       // check for version incompatibility
       foreach ($dependencies as $dependency_name => $v) {
         $current_version = $module_info[$dependency_name]->info['version'];
+        $current_version = str_replace(DRUPAL_CORE_COMPATIBILITY . '-', '', $current_version);
         $incompatibility = drupal_check_incompatibility($v, $current_version);
         if (!is_null($incompatibility)) {
           $status[$key]['error'] = array(
@@ -91,6 +106,36 @@ function drush_module_dependents($modules, $module_info) {
 }
 
 /**
+ * Returns a list of enabled modules.
+ *
+ * This is a wrapper for module_list().
+ */
+function drush_module_list() {
+  return module_list('module_enabled');
+}
+
+/**
+ * Return a list of modules from a list of named modules.
+ * Both enabled and disabled/uninstalled modules are returned.
+ */
+function drush_get_named_extensions_list($extensions) {
+  $result = array();
+  $modules = drush_get_modules();
+  foreach($modules as $name => $module) {
+    if (in_array($name, $extensions)) {
+      $result[$name] = $module;
+    }
+  }
+  $themes = drush_get_themes();
+  foreach($themes as $name => $theme) {
+    if (in_array($name, $extensions)) {
+      $result[$name] = $theme;
+    }
+  }
+  return $result;
+}
+
+/**
  * Enable a list of modules. It is assumed the list contains all the dependencies not already enabled.
  *
  * @param $modules
@@ -101,6 +146,8 @@ function drush_module_enable($modules) {
   // be in the correct order. Still pass $enable_dependencies = TRUE so that
   // Drupal will enable the modules in the correct order.
   module_enable($modules);
+  // Flush all caches.
+  drupal_flush_all_caches();
 }
 
 /**
@@ -114,6 +161,8 @@ function drush_module_disable($modules) {
   // be in the correct order. Still pass $enable_dependencies = TRUE so that
   // Drupal will enable the modules in the correct order.
   module_disable($modules);
+  // Flush all caches.
+  drupal_flush_all_caches();
 }
 
 /**
@@ -123,35 +172,36 @@ function drush_module_disable($modules) {
  *   Array of module names
  */
 function drush_module_uninstall($modules) {
-  require_once drush_get_context('DRUSH_DRUPAL_ROOT') . '/includes/install.inc';
-  drupal_uninstall_modules($modules);
-}
-
-/**
- * Submit the system modules form.
- *
- * The modules should already be fully enabled/disabled before calling this
- * function. Calling this function just makes sure any activities triggered by
- * the form submit (such as admin_role) are completed.
- */
-function drush_system_modules_form_submit($active_modules) {
-  module_load_include('inc', 'system', 'system.admin');
-  $form_state = array('values' => array('status' => $active_modules));
-  drupal_form_submit('system_modules', $form_state);
-  // Because normally system_modules_submit would call this function if modules
-  // had been changed, in this case we are submitting the module form without
-  // any changes, so we need to clear caches manually.
-  drupal_flush_all_caches();
+  require_once DRUSH_DRUPAL_CORE . '/includes/install.inc';
+  // Break off 8.x functionality when we get another change.
+  if (drush_drupal_major_version() >= 8) {
+    module_uninstall($modules);
+  }
+  else {
+    drupal_uninstall_modules($modules);
+  }
 }
 
 /**
  * Get complete information for all available themes.
  *
+ * @param $include_hidden
+ *   Boolean to indicate whether hidden themes should be excluded or not.
  * @return
  *   An array containing theme info for all available themes.
  */
-function drush_get_themes() {
-  return system_rebuild_theme_data();
+function drush_get_themes($include_hidden = TRUE) {
+  $themes = system_rebuild_theme_data();
+  foreach ($themes as $key => $theme) {
+    $theme->type = 'theme';
+    if (!$include_hidden) {
+      if (isset($theme->info['hidden'])) {
+        unset($themes[$key]);
+      }
+    }
+  }
+
+  return $themes;
 }
 
 /**

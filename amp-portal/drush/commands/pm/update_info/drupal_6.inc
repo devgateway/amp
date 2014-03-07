@@ -61,8 +61,10 @@ function _pm_get_update_info($projects) {
 
   // Force to invalidate some update_status caches that are only cleared
   // when visiting update status report page.
-  _update_cache_clear('update_project_data');
-  _update_cache_clear('update_project_projects');
+  if (function_exists('_update_cache_clear')) {
+    _update_cache_clear('update_project_data');
+    _update_cache_clear('update_project_projects');
+  }
 
   $data = update_calculate_project_data($info);
   foreach ($data as $project_name => $project) {
@@ -71,12 +73,21 @@ function _pm_get_update_info($projects) {
       unset($data[$project_name]);
       continue;
     }
+    // Discard projects with unknown installation path.
+    if ($project_name != 'drupal' && !isset($projects[$project_name]['path'])) {
+      unset($data[$project_name]);
+      continue;
+    }
+    // Allow to update disabled projects.
     if (in_array($project['project_type'], array('disabled-module', 'disabled-theme'))) {
       $data[$project_name]['project_type'] = substr($project['project_type'], strpos($project['project_type'], '-') + 1);
     }
-    $data[$project_name]['includes'] = drupal_map_assoc($projects[$project_name]['extensions']);
+    // Add some info from the project to $data.
+    $data[$project_name] += array(
+      'path'  => isset($projects[$project_name]['path']) ? $projects[$project_name]['path'] : '',
+      'label' => $projects[$project_name]['label'],
+    );
   }
-  $data = _pm_get_project_path($data, 'includes');
 
   return $data;
 }

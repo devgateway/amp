@@ -1,15 +1,68 @@
 <?php
 
-/*
+/**
  * @file
  *   Tests for core commands.
+ *
+ * @group commands
  */
-class coreCase extends Drush_TestCase {
+class coreCase extends Drush_CommandTestCase {
+  /**
+   * Test to see if rsync @site:%files calculates the %files path correctly.
+   * This tests the non-optimized code path in drush_sitealias_resolve_path_references.
+   */
+  function testRsyncPercentFiles() {
+    $this->setUpDrupal(1, TRUE);
+    $root = $this->webroot();
+    $site = key($this->sites);
+    $options = array(
+      'root' => $root,
+      'uri' => key($this->sites),
+      'simulate' => NULL,
+      'include-conf' => NULL,
+      'include-vcs' => NULL,
+      'yes' => NULL,
+    );
+    $this->drush('core-rsync', array("@$site:%files", "/tmp"), $options, NULL, NULL, self::EXIT_SUCCESS, '2>&1;');
+    $output = $this->getOutput();
+    $level = $this->log_level();
+    $pattern = in_array($level, array('verbose', 'debug')) ? "Calling system(rsync -e 'ssh ' -akzv --stats --progress --yes %s /tmp);" : "Calling system(rsync -e 'ssh ' -akz --yes %s /tmp);";
+    $expected = sprintf($pattern, UNISH_SANDBOX . "/web/sites/$site/files");
+    $this->assertEquals($expected, $output);
+  }
 
-  /*
+  /**
+   * Test to see if the optimized code path in drush_sitealias_resolve_path_references
+   * that avoids a call to backend invoke when evaluating %files works.
+   */
+  function testPercentFilesOptimization() {
+    $this->setUpDrupal(1, TRUE);
+    $root = $this->webroot();
+    $site = key($this->sites);
+    $options = array(
+      'root' => $root,
+      'uri' => key($this->sites),
+      'simulate' => NULL,
+      'include-conf' => NULL,
+      'include-vcs' => NULL,
+      'yes' => NULL,
+      'strict' => 0, // invoke from script: do not verify options
+    );
+    $php = '$a=drush_sitealias_get_record("@' . $site . '"); drush_sitealias_resolve_path_references($a, "%files"); print_r($a["path-aliases"]["%files"]);';
+    $this->drush('ev', array($php), $options);
+    $output = $this->getOutput();
+    $expected = "sites/dev/files";
+    $this->assertEquals($expected, $output);
+  }
+
+  /**
    * Test standalone php-script scripts. Assure that script args and options work.
    */
   public function testStandaloneScript() {
+    if ($this->is_windows()) {
+      $this->markTestSkipped('Standalone scripts not currently available on Windows.');
+    }
+
     $this->drush('version', array('drush_version'), array('pipe' => NULL));
     $standard = $this->getOutput();
 
@@ -31,20 +84,23 @@ drush_invoke("version", $arg);
   }
 
   function testDrupalDirectory() {
-    $this->setUpDrupal('dev', TRUE);
-    $root = $this->sites['dev']['root'];
+    $this->setUpDrupal(1, TRUE);
+    $root = $this->webroot();
+    $sitewide = $this->drupalSitewideDirectory();
     $options = array(
       'root' => $root,
-      'uri' => 'dev',
-      'verbose' => NULL,
+      'uri' => key($this->sites),
       'yes' => NULL,
+      'skip' => NULL,
+      'cache' => NULL,
+      'strict' => 0, // invoke from script: do not verify options
     );
-    $this->drush('pm-download', array('devel-7.x-1.0'), $options);
-    $this->drush('pm-enable', array('menu', 'devel'), $options);
+    $this->drush('pm-download', array('devel'), $options);
+    $this->drush('pm-enable', array('devel', 'menu'), $options);
 
     $this->drush('drupal-directory', array('devel'), $options);
     $output = $this->getOutput();
-    $this->assertEquals($root . '/sites/all/modules/devel', $output);
+    $this->assertEquals($root . '/' . $sitewide . '/modules/devel', $output);
 
     $this->drush('drupal-directory', array('%files'), $options);
     $output = $this->getOutput();
@@ -52,64 +108,38 @@ drush_invoke("version", $arg);
 
     $this->drush('drupal-directory', array('%modules'), $options);
     $output = $this->getOutput();
-    $this->assertEquals($root . '/sites/all/modules', $output);
+    $this->assertEquals($root .  '/' . $sitewide . '/modules', $output);
   }
 
-  function testCoreCLI() {
-    /*
-     * @todo
-     *   - BASHRC_PATH. Same file cleanup woes as contextTest.
-     *   - DRUSH_CLI
-     *   - INITIAL_SITE
-     *   - PS1. Hard to test in non interactive session?
-     *   - on
-     *   - use
-     *   - cd, cdd, lsd
-     *   - override, contextual
-     */
-
-    // Exercise core-cli's interactive mode.
-    // Include unit.drush.inc commandfile.
+  function testCoreRequirements() {
+    $this->setUpDrupal(1, TRUE);
+    $root = $this->webroot();
     $options = array(
-      'include' => dirname(__FILE__),
+      'root' => $root,
+      'uri' => key($this->sites),
+      'pipe' => NULL,
+      'ignore' => 'cron,http requests,update_core', // no network access when running in tests, so ignore these
+      'strict' => 0, // invoke from script: do not verify options
     );
-    // These commands will throw a failure if they return non-zero exit code.
-    // Assure that we create a bash function for command names.
-    $options['unit-extra'] = 'core-status;exit';
-    $this->drush('core-cli', array(), $options);
-    // Assure that we create a bash function for command aliases.
-    $options['unit-extra'] = 'st;exit';
-    $this->drush('core-cli', array(), $options);
+    // Verify that there are no severity 2 items in the status report
+    $this->drush('core-requirements', array(), $options + array('severity' => '2'));
+    $output = $this->getOutput();
+    $this->assertEquals('', $output);
 
-    // Assure that we create a bash alias for site aliases.
-    // First, write an alias file to the sandbox.
-    $path = UNISH_SANDBOX . '/aliases.drushrc.php';
-    $aliases['cliAlias'] = array(
-      'root' => $this->sites['dev']['root'],
-      'uri' => 'dev',
+    $this->drush('core-requirements', array(), $options);
+    $loaded = $this->getOutputFromJSON();
+    // Pick a subset that are valid for D6/D7/D8.
+    $expected = array(
+      // 'install_profile' => -1,
+      // 'node_access' => -1,
+      'php' => -1,
+      // 'php_extensions' => -1,
+      'php_memory_limit' => -1,
+      'php_register_globals' => -1,
+      'settings.php' => -1,
     );
-    $contents = $this->file_aliases($aliases);
-    $return = file_put_contents($path, $contents);
-    // Append a bash command which starts with alias name (i.e. @cliAlias).
-    $options['unit-extra'] = sprintf('@cliAlias core-status --alias-path=%s;exit', UNISH_SANDBOX);
-    $options['alias-path'] = UNISH_SANDBOX;
-    $this->drush('core-cli', array(), $options);
-
-    // $this->markTestIncomplete('In progress below.');
-    // Exercise core-cli's non-interactive mode.
-    // We spawn our own bash session using the --pipe feature of core-cli.
-    //$options = array(
-    //  'pipe' => NULL,
-    //  'alias-path' => UNISH_SANDBOX,
-    //);
-    //$this->drush('core-cli', array(), $options);
-    //$bashrc_data = $this->getOutput();
-    //$bashrc_file = UNISH_SANDBOX . '/.bashrc';
-    //$extra = 'cd @cliAlias;exit;';
-    //$return = file_put_contents($bashrc_file, $bashrc_data . $extra);
-    //$this->setUpDrupal('dev', FALSE);
-    //$this->execute('bash --rcfile ' . $bashrc_file);
-    //$output = $this->getOutput();
-    //$this->assertContains('????', $output);
+    foreach ($expected as $key => $value) {
+      $this->assertEquals($value, $loaded->$key->sid);
+    }
   }
 }

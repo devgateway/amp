@@ -4,118 +4,11 @@
  * @file
  * Functions used by drush to query the environment and
  * setting the current configuration.
+ *
+ * Bootstrapping now occurs in bootstrap.inc.
+ *
+ * @see includes/bootstrap.inc
  */
-
-/**
- * The indicator for a Drupal installation folder.
- */
-define('DRUSH_DRUPAL_BOOTSTRAP', 'includes/bootstrap.inc');
-
-/**
- * @name Drush bootstrap phases
- * @{
- * Sequential Drush bootstrapping phases.
- */
-
-/**
- * No bootstrap.
- *
- * This constant is only used to indicate that the bootstrap process has
- * not started yet.  It is not possible to have no bootstrap.
- */
-define('DRUSH_BOOTSTRAP_NONE', -1);
-
-/**
- * Use drush_bootstrap_max instead of drush_bootstrap_to_phase
- *
- * This constant is only usable as the value of the 'bootstrap'
- * item of a command object, or as the parameter to
- * drush_bootstrap_to_phase.  It is not a real bootstrap state.
- */
-define('DRUSH_BOOTSTRAP_MAX', -2);
-
-/**
- * Only bootstrap Drush, without any Drupal specific code.
- *
- * Any code that operates on the Drush installation, and not specifically
- * any Drupal directory, should bootstrap to this phase.
- */
-define('DRUSH_BOOTSTRAP_DRUSH', 0);
-
-/**
- * Set up and test for a valid drupal root, either through the -r/--root options,
- * or evaluated based on the current working directory.
- *
- * Any code that interacts with an entire Drupal installation, and not a specific
- * site on the Drupal installation should use this bootstrap phase.
- */
-define('DRUSH_BOOTSTRAP_DRUPAL_ROOT',  1);
-
-/**
- * Set up a Drupal site directory and the correct environment variables to
- * allow Drupal to find the configuration file.
- *
- * If no site is specified with the -l / --uri options, Drush will assume the
- * site is 'default', which mimics Drupal's behaviour.
- *
- * If you want to avoid this behaviour, it is recommended that you use the
- * DRUSH_BOOTSTRAP_DRUPAL_ROOT bootstrap phase instead.
- *
- * Any code that needs to modify or interact with a specific Drupal site's
- * settings.php file should bootstrap to this phase.
- */
-define('DRUSH_BOOTSTRAP_DRUPAL_SITE', 2);
-
-/**
- * Load the settings from the Drupal sites directory.
- *
- * This phase is analagous to the DRUPAL_BOOTSTRAP_CONFIGURATION bootstrap phase in Drupal
- * itself, and this is also the first step where Drupal specific code is included.
- *
- * This phase is commonly used for code that interacts with the Drupal install API,
- * as both install.php and update.php start at this phase.
- */
-define('DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION', 3);
-
-/**
- * Connect to the Drupal database using the database credentials loaded
- * during the previous bootstrap phase.
- *
- * This phase is analogous to the DRUPAL_BOOTSTRAP_DATABASE bootstrap phase in
- * Drupal.
- *
- * Any code that needs to interact with the Drupal database API needs to
- * be bootstrapped to at least this phase.
- */
-define('DRUSH_BOOTSTRAP_DRUPAL_DATABASE', 4);
-
-/**
- * Fully initialize Drupal.
- *
- * This is the default bootstrap phase all commands will try to reach,
- * unless otherwise specified.
- * This is analogous to the DRUPAL_BOOTSTRAP_FULL bootstrap phase in
- * Drupal.
- *
- * Any code that interacts with the general Drupal API should be
- * bootstrapped to this phase.
- */
-define('DRUSH_BOOTSTRAP_DRUPAL_FULL', 5);
-
-/**
- * Log in to the initialiased Drupal site.
- *
- * This bootstrap phase is used after the site has been
- * fully bootstrapped.
- *
- * This phase will log you in to the drupal site with the username
- * or user ID specified by the --user/ -u option.
- *
- * Use this bootstrap phase for your command if you need to have access
- * to information for a specific user, such as listing nodes that might
- * be different based on who is logged in.
- */
-define('DRUSH_BOOTSTRAP_DRUPAL_LOGIN', 6);
 
 /**
  * Supported version of Console Table. This is displayed in the manual install help.
@@ -123,278 +16,24 @@ define('DRUSH_BOOTSTRAP_DRUPAL_LOGIN', 6);
 define('DRUSH_TABLE_VERSION', '1.1.3');
 
 /**
- * URL for automatic file download for supported version of Console Table.
+ * Base URL for automatic file download of PEAR packages.
  */
-define('DRUSH_TABLE_URL', 'http://svn.php.net/viewvc/pear/packages/Console_Table/trunk/Table.php?revision=267580&view=co');
-
-/**
- * Helper function listing phases.
- *
- * For commands that need to iterate through the phases, such as help
- */
-function _drush_bootstrap_phases($function_names = FALSE, $init_phases_only = FALSE) {
-  static $functions = array(
-    DRUSH_BOOTSTRAP_DRUSH                  => '_drush_bootstrap_drush',
-    DRUSH_BOOTSTRAP_DRUPAL_ROOT            => '_drush_bootstrap_drupal_root',
-    DRUSH_BOOTSTRAP_DRUPAL_SITE            => '_drush_bootstrap_drupal_site',
-    DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION   => '_drush_bootstrap_drupal_configuration',
-    DRUSH_BOOTSTRAP_DRUPAL_DATABASE        => '_drush_bootstrap_drupal_database',
-    DRUSH_BOOTSTRAP_DRUPAL_FULL            => '_drush_bootstrap_drupal_full',
-    DRUSH_BOOTSTRAP_DRUPAL_LOGIN           => '_drush_bootstrap_drupal_login');
-
-  $result = array();
-  if ($init_phases_only) {
-    foreach (array(DRUSH_BOOTSTRAP_DRUSH, DRUSH_BOOTSTRAP_DRUPAL_FULL) as $phase) {
-      $result[$phase] = $functions[$phase];
-    }
-  }
-  else {
-    $result = $functions;
-  }
-  if (!$function_names) {
-    $result = array_keys($result);
-  }
-  return $result;
-}
-
-/**
- * @} End of Drush bootstrap phases.
- */
-
-/**
- * Bootstrap Drush to the desired phase.
- *
- * This function will sequentially bootstrap each
- * lower phase up to the phase that has been requested.
- *
- * @param phase
- *   The bootstrap phase to bootstrap to.
- *   Any of the following constants :
- *     DRUSH_BOOTSTRAP_DRUSH                = Only Drush.
- *     DRUSH_BOOTSTRAP_DRUPAL_ROOT          = Find a valid Drupal root.
- *     DRUSH_BOOTSTRAP_DRUPAL_SITE          = Find a valid Drupal site.
- *     DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION = Load the site's settings.
- *     DRUSH_BOOTSTRAP_DRUPAL_DATABASE      = Initialize the database.
- *     DRUSH_BOOTSTRAP_DRUPAL_FULL          = Initialize Drupal fully.
- *     DRUSH_BOOTSTRAP_DRUPAL_LOGIN         = Log into Drupal with a valid user.
- */
-function drush_bootstrap($phase, $phase_max = FALSE) {
-  static $phases;
-  if (!$phases) {
-    $phases = _drush_bootstrap_phases(TRUE);
-  }
-  static $phase_index = 0;
-
-  drush_set_context('DRUSH_BOOTSTRAPPING', TRUE);
-  while ($phase >= $phase_index && isset($phases[$phase_index])) {
-    if (drush_bootstrap_validate($phase_index)) {
-      $current_phase = $phases[$phase_index];
-      if (function_exists($current_phase) && !drush_get_error()) {
-        drush_log(dt("Drush bootstrap phase : !function()", array('!function' => $current_phase)), 'bootstrap');
-        $current_phase();
-
-        // Find any command files that are available during this bootstrap phase.
-        _drush_find_commandfiles($phase_index, $phase_max);
-      }
-      drush_set_context('DRUSH_BOOTSTRAP_PHASE', $phase_index);
-    }
-    else {
-      $errors = drush_get_context('DRUSH_BOOTSTRAP_ERRORS', array());
-      foreach ($errors as $code => $message) {
-        drush_set_error($code, $message);
-      }
-    }
-    unset($phases[$phase_index++]);
-  }
-  drush_set_context('DRUSH_BOOTSTRAPPING', FALSE);
-
-  return !drush_get_error();
-}
-
-/**
- * Determine whether a given bootstrap phase has been completed
- *
- * @param phase
- *   The bootstrap phase to test
- *
- * @returns
- *   TRUE if the specified bootstrap phase has completed.
- */
-function drush_has_boostrapped($phase) {
-  $phase_index = drush_get_context('DRUSH_BOOTSTRAP_PHASE');
-
-  return isset($phase_index) && ($phase_index >= $phase);
-}
-
-/**
- * Validate whether a bootstrap phases can be reached.
- *
- * This function will validate the settings that will be used
- * during the actual bootstrap process, and allow commands to
- * progressively bootstrap to the highest level that can be reached.
- *
- * This function will only run the validation function once, and
- * store the result from that execution in a local static. This avoids
- * validating phases multiple times.
- *
- * @param phase
- *   The bootstrap phase to validate to.
- *   Any of the following constants :
- *     DRUSH_BOOTSTRAP_DRUSH                = Only Drush.
- *     DRUSH_BOOTSTRAP_DRUPAL_ROOT          = Find a valid Drupal root.
- *     DRUSH_BOOTSTRAP_DRUPAL_SITE          = Find a valid Drupal site.
- *     DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION = Load the site's settings.
- *     DRUSH_BOOTSTRAP_DRUPAL_DATABASE      = Initialize the database.
- *     DRUSH_BOOTSTRAP_DRUPAL_FULL          = Initialize Drupal fully.
- *     DRUSH_BOOTSTRAP_DRUPAL_LOGIN         = Log into Drupal with a valid user.
- *
- * @return
- *   True if bootstrap is possible, False if the validation failed.
- *
- */
-function drush_bootstrap_validate($phase) {
-  static $phases;
-  static $result_cache = array();
-  if (!$phases) {
-    $phases = _drush_bootstrap_phases(TRUE);
-  }
-  static $phase_index = 0;
-  if (!array_key_exists($phase, $result_cache)) {
-    drush_set_context('DRUSH_BOOTSTRAP_ERRORS', array());
-    drush_set_context('DRUSH_BOOTSTRAP_VALUES', array());
-
-    while ($phase >= $phase_index && isset($phases[$phase_index])) {
-      $current_phase = $phases[$phase_index] . '_validate';
-      if (function_exists($current_phase)) {
-        $result_cache[$phase_index] = $current_phase();
-      }
-      else {
-        $result_cache[$phase_index] = TRUE;
-      }
-      drush_set_context('DRUSH_BOOTSTRAP_VALIDATION_PHASE', $phase_index);
-      unset($phases[$phase_index++]);
-    }
-  }
-  return $result_cache[$phase];
-}
-
-/**
- * Bootstrap to the specified phase.
- *
- * @param $max_phase_index
- *   Only attempt bootstrap to the specified level.
- */
-function drush_bootstrap_to_phase($max_phase_index) {
-  // If $max_phase_index is DRUSH_BOOTSTRAP_MAX, then
-  // we will bootstrap as far as we can.  drush_bootstrap_max
-  // is different than drush_bootstrap_to_phase in that
-  // it is not an error if DRUSH_BOOTSTRAP_LOGIN is not reached.
-  if ($max_phase_index == DRUSH_BOOTSTRAP_MAX) {
-    drush_bootstrap_max();
-    return TRUE;
-  }
-
-  drush_log(dt("Bootstrap to phase !phase.", array('!phase' => $max_phase_index)), 'bootstrap');
-  $phases = _drush_bootstrap_phases();
-  $result = TRUE;
-
-  // Try to bootstrap to the maximum possible level, without generating errors
-  foreach ($phases as $phase_index) {
-    if ($phase_index > $max_phase_index) {
-      // Stop trying, since we achieved what was specified.
-      break;
-    }
-
-    if (drush_bootstrap_validate($phase_index)) {
-      if ($phase_index > drush_get_context('DRUSH_BOOTSTRAP_PHASE')) {
-        $result = drush_bootstrap($phase_index, $max_phase_index);
-      }
-    }
-    else {
-      break;
-    }
-  }
-
-  return $result;
-}
-
-/**
- * Bootstrap to the highest level possible, without triggering any errors.
- *
- * @param $max_phase_index
- *   Only attempt bootstrap to the specified level.
- */
-function drush_bootstrap_max($max_phase_index = FALSE) {
-  $phases = _drush_bootstrap_phases();
-  $phase_index = DRUSH_BOOTSTRAP_DRUSH;
-  if (!$max_phase_index) {
-    $max_phase_index = count($phases);
-  }
-
-  // Try to bootstrap to the maximum possible level, without generating errors
-  foreach ($phases as $phase_index) {
-    if ($phase_index > $max_phase_index) {
-      // Stop trying, since we achieved what was specified.
-      break;
-    }
-
-    if (drush_bootstrap_validate($phase_index)) {
-      if ($phase_index > drush_get_context('DRUSH_BOOTSTRAP_PHASE')) {
-        drush_bootstrap($phase_index, $max_phase_index);
-      }
-    }
-    else {
-      break;
-    }
-  }
-
-  return drush_get_context('DRUSH_BOOTSTRAP_PHASE');
-}
-
-/**
- * Bootstrap the specified site alias.  The site alias must
- * be a valid alias to a local site.
- *
- * @param $site_record
- *   The alias record for the given site alias.
- *   @see drush_sitealias_get_record().
- * @param $max_phase_index
- *   Only attempt bootstrap to the specified level.
- * @returns TRUE if attempted to bootstrap, or FALSE
- *   if no bootstrap attempt was made.
- */
-function drush_bootstrap_max_to_sitealias($site_record, $max_phase_index = NULL) {
-  if ((array_key_exists('root', $site_record) && !array_key_exists('remote-host', $site_record))) {
-    drush_sitealias_set_alias_context($site_record);
-    drush_bootstrap_max($max_phase_index);
-    return TRUE;
-  }
-  return FALSE;
-}
-
-/**
- * Helper function to collect any errors that occur during the bootstrap process.
- * Always returns FALSE, for convenience.
- */
-function drush_bootstrap_error($code, $message = null) {
-  $errors = drush_get_context('DRUSH_BOOTSTRAP_ERRORS');
-  $errors[$code] = $message;
-  drush_set_context('DRUSH_BOOTSTRAP_ERRORS', $errors);
-  return FALSE;
-}
+define('DRUSH_PEAR_BASE_URL', 'http://download.pear.php.net/package/');
 
 /**
  * Log PHP errors to the Drush log. This is in effect until Drupal's error
  * handler takes over.
  */
 function drush_error_handler($errno, $message, $filename, $line, $context) {
-  // If the @ error suppression operator was used, error_reporting will have
-  // been temporarily set to 0.
-  if (error_reporting() == 0) {
-    return;
+  // E_DEPRECATED was added in PHP 5.3. Drupal 6 will not fix all the
+  // deprecated errors, but suppresses them. So we suppress them as well.
+  if (defined('E_DEPRECATED')) {
+    $errno = $errno & ~E_DEPRECATED;
   }
 
-  if ($errno & (E_ALL)) {
+  // "error_reporting" is usually set in php.ini, but may be changed by
+  // drush_errors_on() and drush_errors_off().
+  if ($errno & error_reporting()) {
     // By default we log notices.
     $type = drush_get_option('php-notices', 'notice');
 
@@ -417,23 +56,6 @@ function drush_error_handler($errno, $message, $filename, $line, $context) {
 }
 
 /**
- * Helper function to store any context settings that are being validated.
- */
-function drush_bootstrap_value($context, $value = null) {
-  $values =& drush_get_context('DRUSH_BOOTSTRAP_VALUES', array());
-
-  if (!is_null($value)) {
-    $values[$context] = $value;
-  }
-
-  if (array_key_exists($context, $values)) {
-    return $values[$context];
-  }
-
-  return null;
-}
-
-/*
  * Returns a localizable message about php.ini that
  * varies depending on whether the php_ini_loaded_file()
  * is available or not.
@@ -474,7 +96,7 @@ function _drush_environment_check_php_ini() {
     $ini_value = ini_get($prohibited_mode);
     $invalid_value = FALSE;
     if (empty($disallowed_value)) {
-      $invalid_value = !empty($ini_value);
+      $invalid_value = !empty($ini_value) && (strcasecmp($ini_value, 'off') != 0);
     }
     else {
       foreach ($disallowed_value as $test_value) {
@@ -495,514 +117,47 @@ function _drush_environment_check_php_ini() {
 }
 
 /**
- * Validate that Drush is running in a suitable environment.
+ * Check for the existence of the specified lib directory, and create if needed.
  */
-function _drush_bootstrap_drush_validate() {
-  // @todo _drush_environment_php_ini_checks() always returns TRUE.
-  $return = _drush_environment_check_php_ini();
-  if ($return !== TRUE) {
-    return $return;
-  }
-
-  if (drush_environment_table_inc() === FALSE) {
+function drush_environment_lib() {
+  $lib = drush_get_option('lib', DRUSH_BASE_PATH . '/lib');
+  // We tell drush_mkdir that $lib is not required, because otherwise it
+  // will throw an error if the folder exists but is not writable.  It
+  // is okay with us if the $lib dir is not writable by the current
+  // user, as it may have already been set up by the user who installed Drush.
+  drush_mkdir($lib, FALSE);
+  if (!is_dir($lib)) {
     return FALSE;
   }
-
-  return TRUE;
 }
 
-/*
- * To disable the warning about Windows support, set $options['check_os'] = FALSE
- * in drushrc.php. See examples/example.drushrc.php.
- */
-function drush_environment_check_os() {
-  if (substr(PHP_OS, 0, 3) == 'WIN' && (drush_get_option('check_os', TRUE) !== 'i-want-4.x')) {
-    $msg = 'Drush 4.x has significant limitations on Windows; it is not advisable to use on that platform. Substantial progress has been made towards supporing Windows on the 5.x branch; please upgrade. See http://drupal.org/project/drush for more information.';
-    drush_log(dt($msg), 'warning');
-  }
-}
-
-function drush_environment_table_inc() {
-  // try using the PEAR installed version of Console_Table
+function drush_environment_table_lib() {
+  // Try using the PEAR installed version of Console_Table.
   $tablefile = 'Console/Table.php';
   if (@file_get_contents($tablefile, FILE_USE_INCLUDE_PATH) === FALSE) {
-    $tablefile = DRUSH_BASE_PATH . '/includes/table.inc';
-
-    // Attempt to download Console Table, via various methods.
+    $lib = drush_get_option('lib', DRUSH_BASE_PATH . '/lib');
+    $tablefile = $lib . '/Console_Table-' . DRUSH_TABLE_VERSION . '/Table.php';
+    // If it is not already present, download Console Table.
     if (!drush_file_not_empty($tablefile)) {
-      $targetpath = dirname($tablefile);
-      // not point continuing if we can't write to the target path
-      if (!is_writable($targetpath)) {
-        return drush_bootstrap_error('DRUSH_TABLES_INC', dt("Drush needs a copy of the PEAR Console_Table library in order to function, and the attempt to download this file automatically failed because you do not have permission to write files in !path. To continue you will need to download the !version package from http://pear.php.net/package/Console_Table, extract it, and copy the Table.php file into Drush's directory as !tablefile.", array('!path' => $targetpath, '!version' => DRUSH_TABLE_VERSION ,'!tablefile' => $tablefile)));
+      // Attempt to remove the old Console Table file, from the legacy location.
+      // TODO: Remove this (and associated .git.ignore) in Drush 6.x.
+      $tablefile_legacy = DRUSH_BASE_PATH . '/includes/table.inc';
+      if (drush_file_not_empty($tablefile_legacy)) {
+        drush_op('unlink', $tablefile_legacy);
       }
 
-      if ($file = @file_get_contents(DRUSH_TABLE_URL)) {
-        @file_put_contents($tablefile, $file);
+      // Download and extract Console_Table, and confirm success.
+      if (drush_lib_fetch(DRUSH_PEAR_BASE_URL . 'Console_Table-' . DRUSH_TABLE_VERSION . '.tgz')) {
+        // Remove unneccessary package.xml file which ends up in /lib.
+        drush_op('unlink', $lib . '/package.xml');
       }
-      if (!file_exists($tablefile)) {
-        drush_shell_exec("wget -q --timeout=30 -O $tablefile " . DRUSH_TABLE_URL);
-        // wget creates an empty file on timeout. We remove it here.
-        if (file_exists($tablefile) && !drush_file_not_empty($tablefile)) {
-          unlink($tablefile);
-        }
-        if (!file_exists($tablefile)) {
-          drush_shell_exec("curl -s  --connect-timeout 30 -o $tablefile " . DRUSH_TABLE_URL);
-          if (!file_exists($tablefile)) {
-            return drush_bootstrap_error('DRUSH_TABLES_INC', dt("Drush needs a copy of the PEAR Console_Table library in order to function, and the attempt to download this file automatically failed. To continue you will need to download the !version package from http://pear.php.net/package/Console_Table, extract it, and copy the Table.php file into Drush's directory as !tablefile.", array('!version' => DRUSH_TABLE_VERSION ,'!tablefile' => $tablefile)));
-          }
-        }
+      if (!drush_file_not_empty($tablefile)) {
+        return drush_bootstrap_error('DRUSH_TABLES_LIB_NOT_FOUND', dt("Drush needs a copy of the PEAR Console_Table library in order to function, and the attempt to download this file automatically failed. To continue you will need to download the !version package from http://pear.php.net/package/Console_Table, extract it into !lib directory, such that Table.php exists at !tablefile.", array('!version' => DRUSH_TABLE_VERSION, '!tablefile' => $tablefile, '!lib' => $lib)));
       }
     }
   }
   require_once $tablefile;
 }
-
-/**
- * Initial Drush bootstrap phase.
- *
- * During the initialization of Drush,
- * this is the first step where all we are
- * aware of is Drush itself.
- *
- * In this step we will register the shutdown function,
- * parse the command line arguments and store them in their
- * related contexts.
- *
- * Configuration files (drushrc.php) that are
- *   a) Specified on the command line
- *   b) Stored in the root directory of drush.php
- *   c) Stored in the home directory of the system user.
- *
- * Additionally the DRUSH_QUIET and DRUSH_BACKEND contexts,
- * will be evaluated now, as they need to be set very early in
- * the execution flow to be able to take affect/
- */
-function _drush_bootstrap_drush() {
-  // Set the terminal width, used for wrapping table output.
-  // Normally this is exported using tput in the drush script.
-  // If this is not present we do an additional check using stty here.
-  if (!($columns = getenv('COLUMNS'))) {
-    exec('stty size 2>&1', $stty_output, $stty_status);
-    if (!$stty_status) $columns = preg_replace('/\d+\s(\d+)/', '$1', $stty_output[0], -1, $stty_count);
-    // If stty failed, or we couldn't parse it's output, we assume 80 columns.
-    if ($stty_status || !$stty_count) $columns = 80;
-  }
-  // If a caller wants to reserve some room to add additional
-  // information to the drush output via post-processing, the
-  // --reserve-margin flag can be used to declare how much
-  // space to leave out.  This only affects drush functions
-  // such as drush_print_table that wrap the output.
-  $columns -= drush_get_option('reserve-margin', 0);
-  drush_set_context('DRUSH_COLUMNS', $columns);
-
-  // Statically define a way to call drush again.
-  define('DRUSH_COMMAND', drush_find_drush());
-
-  $drush_info = drush_read_drush_info();
-  define('DRUSH_VERSION', $drush_info['drush_version']);
-
-  // prime the CWD cache
-  drush_cwd();
-
-  /* Copy ETC_PREFIX and SHARE_PREFIX from environment variables if available.
-   * This alters where we check for server-wide config and alias files.
-   * Used by unit test suite to provide a clean environment.
-   */
-  if (getenv('ETC_PREFIX')) drush_set_context('ETC_PREFIX', getenv('ETC_PREFIX'));
-  if (getenv('SHARE_PREFIX')) drush_set_context('SHARE_PREFIX', getenv('SHARE_PREFIX'));
-
-  drush_set_context('DOC_PREFIX', DRUSH_BASE_PATH);
-  if (!file_exists(DRUSH_BASE_PATH . '/README.txt') && file_exists(drush_get_context('SHARE_PREFIX', '/usr') . '/share/doc/drush') . '/README.txt') {
-    drush_set_context('DOC_PREFIX', drush_get_context('SHARE_PREFIX', '/usr') . '/share/doc/drush');
-  }
-
-  // Load a drushrc.php file in the drush.php's directory.
-  drush_load_config('drush');
-
-  // Load a drushrc.php file in the $ETC_PREFIX/etc/drush directory.
-  drush_load_config('system');
-
-  // Load a drushrc.php file at ~/.drushrc.php.
-  drush_load_config('user');
-
-  // Load a drushrc.php file in the ~/.drush directory.
-  drush_load_config('home.drush');
-
-  // Load a custom config specified with the --config option.
-  drush_load_config('custom');
-
-  // Process the site alias that specifies which instance
-  // of drush (local or remote) this command will operate on.
-  // We must do this after we load our config files (so that
-  // site aliases are available), but before the rest
-  // of the drush and drupal root bootstrap phases are
-  // done, since site aliases may set option values that
-  // affect these phases.
-  // TODO: Note that this function will call drush_locate_root
-  // (from within _drush_sitealias_find_record_for_local_site),
-  // and drush_locate_root will be called again when bootstrapping
-  // the drupal root below.  Is there a good way to refactor this
-  // so that we do not need to search for the root twice?
-  drush_sitealias_check_arg();
-
-  $backend = drush_set_context('DRUSH_BACKEND', drush_get_option(array('b', 'backend')));
-
-  if ($backend) {
-    // Load options passed as a JSON encoded string through STDIN.
-    $stdin_options = _drush_backend_get_stdin();
-    if (is_array($stdin_options)) {
-      drush_set_context('stdin', $stdin_options);
-    }
-  }
-
-  // Pipe implies quiet.
-  $quiet = drush_set_context('DRUSH_QUIET', drush_get_option(array('q', 'quiet', 'p', 'pipe')));
-
-  drush_set_context('DRUSH_PIPE', drush_get_option(array('p', 'pipe')));
-
-  // When running in backend mode, all output is buffered, and returned
-  // as a property of a JSON encoded associative array.
-  if ($backend || $quiet) {
-    ob_start();
-  }
-
-  _drush_bootstrap_global_options();
-}
-
-function _drush_bootstrap_global_options() {
-  // Debug implies verbose
-  drush_set_context('DRUSH_VERBOSE',     drush_get_option(array('v', 'verbose', 'd', 'debug'), FALSE));
-  drush_set_context('DRUSH_DEBUG', drush_get_option(array('d', 'debug')));
-
-  // Backend implies affirmative unless negative is explicitly specified
-  drush_set_context('DRUSH_NEGATIVE',    drush_get_option(array('n', 'no'), FALSE));
-  drush_set_context('DRUSH_AFFIRMATIVE', drush_get_option(array('y', 'yes'), FALSE) || (drush_get_context('DRUSH_BACKEND') && !drush_get_context('DRUSH_NEGATIVE')));
-  drush_set_context('DRUSH_SIMULATE',    drush_get_option(array('s', 'simulate'), FALSE));
-
-  // Suppress colored logging if --nocolor option is explicitly given or if
-  // terminal does not support it.
-  $nocolor = (drush_get_option(array('nocolor'), FALSE));
-  if (!$nocolor) {
-    // Check for colorless terminal.  If there is no terminal, then
-    // 'tput colors 2>&1' will return "tput: No value for $TERM and no -T specified",
-    // which is not numeric and therefore will put us in no-color mode.
-    $colors = exec('tput colors 2>&1');
-    $nocolor = !($colors === FALSE || (is_numeric($colors) && $colors >= 3));
-  }
-  drush_set_context('DRUSH_NOCOLOR', $nocolor);
-}
-
-/**
- * Validate the DRUSH_BOOTSTRAP_DRUPAL_ROOT phase.
- *
- * In this function, we will check if a valid Drupal directory is available.
- * We also determine the value that will be stored in the DRUSH_DRUPAL_ROOT
- * context and DRUPAL_ROOT constant if it is considered a valid option.
- */
-function _drush_bootstrap_drupal_root_validate() {
-  $drupal_root = drush_get_option(array('r', 'root'), drush_locate_root());
-
-  if (empty($drupal_root)) {
-    return drush_bootstrap_error('DRUSH_NO_DRUPAL_ROOT', dt("A Drupal installation directory could not be found"));
-  }
-  if (!drush_valid_drupal_root($drupal_root)) {
-    return drush_bootstrap_error('DRUSH_INVALID_DRUPAL_ROOT', dt("The directory !drupal_root does not contain a valid Drupal installation", array('!drupal_root' => $drupal_root)));
-  }
-
-  drush_bootstrap_value('drupal_root', $drupal_root);
-
-  return TRUE;
-}
-
-/**
- * Bootstrap Drush with a valid Drupal Directory.
- *
- * In this function, the pwd will be moved to the root
- * of the Drupal installation.
- *
- * The DRUSH_DRUPAL_ROOT context and the DRUPAL_ROOT constant are
- * populated from the value that we determined during the validation phase.
- *
- * We also now load the drushrc.php for this specific platform.
- * We can now include files from the Drupal Tree, and figure
- * out more context about the platform, such as the version of Drupal.
- */
-function _drush_bootstrap_drupal_root() {
-  $drupal_root = drush_set_context('DRUSH_DRUPAL_ROOT', drush_bootstrap_value('drupal_root'));
-  define('DRUPAL_ROOT', $drupal_root);
-
-  chdir($drupal_root);
-  drush_load_config('drupal');
-  require_once DRUPAL_ROOT . '/' . DRUSH_DRUPAL_BOOTSTRAP;
-  $version = drush_set_context('DRUSH_DRUPAL_VERSION', drush_drupal_version());
-  $major_version = drush_set_context('DRUSH_DRUPAL_MAJOR_VERSION', drush_drupal_major_version());
-
-  _drush_bootstrap_global_options();
-
-  drush_log(dt("Initialized Drupal !version root directory at !drupal_root", array("!version" => $version, '!drupal_root' => $drupal_root)));
-}
-
-/**
- * VALIDATE the DRUSH_BOOTSTRAP_DRUPAL_SITE phase.
- *
- * In this function we determine the URL used for the command,
- * and check for a valid settings.php file.
- *
- * To do this, we need to set up the $_SERVER environment variable,
- * to allow us to use conf_path to determine what Drupal will load
- * as a configuration file.
- */
-function _drush_bootstrap_drupal_site_validate() {
-  $site_path = drush_site_path();
-  $elements = explode('/', $site_path);
-  $current = array_pop($elements);
-  if (!$current) {
-    $current = 'default';
-  }
-  $uri = 'http://'. $current;
-
-  $drush_uri = drush_bootstrap_value('drush_uri', drush_get_option(array('l', 'uri'), $uri));
-
-  // Fake the necessary HTTP headers that Drupal needs:
-  if ($drush_uri) {
-    $drupal_base_url = parse_url($drush_uri);
-    // If there's no url scheme set, add http:// and re-parse the url
-    // so the host and path values are set accurately.
-    if (!array_key_exists('scheme', $drupal_base_url)) {
-      $drush_uri = 'http://' . $drush_uri;
-      $drupal_base_url = parse_url($drush_uri);
-    }
-    // Fill in defaults.
-    $drupal_base_url += array(
-      'path' => NULL,
-      'host' => NULL,
-      'port' => NULL,
-    );
-    $_SERVER['HTTP_HOST'] = $drupal_base_url['host'];
-
-    if ($drupal_base_url['port']) {
-      $_SERVER['HTTP_HOST'] .= ':' . $drupal_base_url['port'];
-    }
-    $_SERVER['SERVER_PORT'] = $drupal_base_url['port'];
-
-    if (array_key_exists('path', $drupal_base_url)) {
-      $_SERVER['PHP_SELF'] = $drupal_base_url['path'] . '/index.php';
-    }
-    else {
-      $_SERVER['PHP_SELF'] = '/index.php';
-    }
-  }
-  else {
-    $_SERVER['HTTP_HOST'] = 'default';
-    $_SERVER['PHP_SELF'] = '/index.php';
-  }
-
-  $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'] = $_SERVER['PHP_SELF'];
-  $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-  $_SERVER['REQUEST_METHOD']  = NULL;
-
-  $_SERVER['SERVER_SOFTWARE'] = NULL;
-  $_SERVER['HTTP_USER_AGENT'] = NULL;
-
-  $site = drush_bootstrap_value('site', $_SERVER['HTTP_HOST']);
-
-  $conf_path = drush_bootstrap_value('conf_path', conf_path(TRUE, TRUE));
-  $conf_file = "./$conf_path/settings.php";
-  if (!file_exists($conf_file)) {
-    return drush_bootstrap_error('DRUPAL_SITE_SETTINGS_NOT_FOUND', dt("Could not find a Drupal settings.php file at !file.",
-       array('!file' => $conf_file)));
-  }
-
-  return TRUE;
-}
-
-/**
- * Called by _drush_bootstrap_drupal_site to do the main work
- * of the drush drupal site bootstrap.
- */
-function _drush_bootstrap_do_drupal_site() {
-  $drush_uri = drush_set_context('DRUSH_URI', drush_bootstrap_value('drush_uri'));
-  $site = drush_set_context('DRUSH_DRUPAL_SITE', drush_bootstrap_value('site'));
-  $conf_path = drush_set_context('DRUSH_DRUPAL_SITE_ROOT', drush_bootstrap_value('conf_path'));
-
-  // Create an alias '@self'
-  _drush_sitealias_cache_alias('self', array('root' => drush_get_context('DRUSH_DRUPAL_ROOT'), 'uri' => $drush_uri));
-
-  drush_log(dt("Initialized Drupal site !site at !site_root", array('!site' => $site, '!site_root' => $conf_path)));
-  drush_load_config('site');
-
-  _drush_bootstrap_global_options();
-}
-
-/**
- * Initialize a site on the Drupal root.
- *
- * We now set various contexts that we determined and confirmed to be valid.
- * Additionally we load an optional drushrc.php file in the site directory.
- */
-function _drush_bootstrap_drupal_site() {
-  _drush_bootstrap_do_drupal_site();
-  _drush_bootstrap_redo_drupal_site();
-}
-
-/**
- * Re-do the drupal site bootstrap (and possibly the
- * drupal root bootstrap) if a site alias was processed
- * after the site bootstrap phase completed.  This will
- * happen when processing "drush sitealias command" for
- * a site alias defined in a drushrc.php file in the
- * default site's drush configuration directory.
- */
-function _drush_bootstrap_redo_drupal_site() {
-  // If drush_load_config defined a site alias that did not
-  // exist before, then sitealias check arg might now match
-  // against one of those aliases.
-  if (drush_sitealias_check_arg() === TRUE) {
-    $remote_host = drush_get_option('remote-host');
-    if (!isset($remote_host)) {
-      // Check to see if the drupal root changed.
-      // If it has, we will set remote-host to cause
-      // this command to be executed via the backend invoke
-      // process.
-      $sitealias_drupal_root = drush_get_option(array('r', 'root'));
-      if (($sitealias_drupal_root != null) && (DRUPAL_ROOT != $sitealias_drupal_root)) {
-        drush_set_option('remote-host', 'localhost');
-      }
-      else {
-        // If we set an alias, then we need to bootstrap the
-        // drupal site once again.  It is possible to re-bootstrap
-        // the site at this point because settings.php has not
-        // been included yet.
-        drush_log(dt("Re-bootstrap drupal site."));
-        _drush_bootstrap_drupal_site_validate();
-        _drush_bootstrap_do_drupal_site();
-      }
-    }
-  }
-}
-
-/**
- * Initialize and load the Drupal configuration files.
- *
- * We process and store a normalized set of database credentials
- * from the loaded configuration file, so we can validate them
- * and access them easily in the future.
- */
-function _drush_bootstrap_drupal_configuration() {
-  global $conf, $drush_conf_override;
-
-  drupal_bootstrap(DRUPAL_BOOTSTRAP_CONFIGURATION);
-
-  // Unset drupal error handler and restore drush's one.
-  if (drush_drupal_major_version() >= 7) {
-    restore_error_handler();
-  }
-
-  // Overriding the $conf array from drupal CONFIGURATION bootstrap with the
-  // Overrides we collected on the loaded config files on DRUSH_BOOTSTRAP_DRUSH
-  $conf = is_array($conf) && is_array($drush_conf_override) ? array_merge($conf, $drush_conf_override) : $conf;
-
-  // Populate the DRUSH_DB_CREDENTIALS with the fields loaded from the configuration.
-  $creds = array();
-  switch (drush_drupal_major_version()) {
-     case 5:
-     case 6:
-       if (!empty($GLOBALS['db_url'])) {
-         $url = $GLOBALS['db_url'];
-         if (is_array($url)) {
-           $url = $url['default'];
-         }
-         $parts = parse_url($url);
-         $parts += array('pass' => '', 'port' => '');
-         $creds['driver'] = $parts['scheme'];
-         $creds['user'] = urldecode($parts['user']);
-         $creds['host'] = $parts['host'];
-         $creds['port'] = $parts['port'];
-         $creds['pass'] = urldecode($parts['pass']);
-         $creds['name'] = trim($parts['path'], '/');
-       }
-       break;
-     case 7:
-     default:
-       if (!empty($GLOBALS['databases']['default']['default'])) {
-         $conn = $GLOBALS['databases']['default']['default'];
-         // Fill in defaults to prevent notices.
-         $conn += array(
-           'username' => NULL,
-           'host' => NULL,
-           'port' => NULL,
-           'password' => NULL,
-           'database' => NULL,
-         );
-         $creds['driver'] = $conn['driver'];
-         $creds['user'] = $conn['username'];
-         $creds['host'] = $conn['host'];
-         $creds['port'] = $conn['port'];
-         $creds['name'] = $conn['database'];
-         $creds['pass'] = $conn['password'];
-       }
-       break;
-  }
-
-  drush_set_context('DRUSH_DB_CREDENTIALS', $creds);
-}
-
-/**
- * Validate the DRUSH_BOOTSTRAP_DRUPAL_DATABASE phase
- *
- * Attempt to making a working database connection using the
- * database credentials that were loaded during the previous
- * phase.
- */
-function _drush_bootstrap_drupal_database_validate() {
-  if (!drush_valid_db_credentials()) {
-    return drush_bootstrap_error('DRUSH_DRUPAL_DB_ERROR');
-  }
-  return TRUE;
-}
-
-/**
- * Boostrap the Drupal database.
- */
-function _drush_bootstrap_drupal_database() {
-  drush_log(dt("Successfully connected to the Drupal database."), 'bootstrap');
-  drupal_bootstrap(DRUPAL_BOOTSTRAP_DATABASE);
-}
-
-/**
- * Attempt to load the full Drupal system.
- */
-function _drush_bootstrap_drupal_full() {
-  ob_start();
-  drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
-  ob_end_clean();
-
-  // Unset drupal error handler and restore drush's one.
-  if (drush_drupal_major_version() == 6) {
-    restore_error_handler();
-  }
-
-  // If needed, prod module_implements() to recognize our system_watchdog() implementation.
-  $dogs = module_implements('watchdog');
-  if (!in_array('system', $dogs)) {
-    // Note that this resets module_implements cache.
-    module_implements('watchdog', FALSE, TRUE);
-  }
-
-  _drush_log_drupal_messages();
-}
-
-/**
- * Log into the bootstrapped Drupal site with a specific
- * username or user id.
- */
-function _drush_bootstrap_drupal_login() {
-  $drush_user = drush_set_context('DRUSH_USER', drush_get_option(array('u', 'user'), 0));
-
-  drush_drupal_login($drush_user);
-  _drush_log_drupal_messages();
-}
-
 
 /**
  * Returns the current working directory.
@@ -1066,7 +221,9 @@ function _drush_shift_path_up($path) {
  * Like Drupal conf_path, but searching from beneath.
  * Allows proper site uri detection in site sub-directories.
  *
- * Essentially looks for a settings.php file.
+ * Essentially looks for a settings.php file.  Drush uses this
+ * function to find a usable site based on the user's current
+ * working directory.
  *
  * @param string
  *   Search starting path. Defaults to current working directory.
@@ -1075,48 +232,102 @@ function _drush_shift_path_up($path) {
  *   Current site path (folder containing settings.php) or FALSE if not found.
  */
 function drush_site_path($path = NULL) {
-  static $site_path;
+  $site_path = FALSE;
 
-  if (!isset($site_path)) {
-    $site_path = FALSE;
-
-    $path = empty($path) ? drush_cwd() : $path;
-    // Check the current path.
-    if (file_exists($path . '/settings.php')) {
-      $site_path = $path;
-    }
-    else {
-      // Move up dir by dir and check each.
-      while ($path = _drush_shift_path_up($path)) {
-        if (file_exists($path . '/settings.php')) {
-          $site_path = $path;
-          break;
-        }
+  $path = empty($path) ? drush_cwd() : $path;
+  // Check the current path.
+  if (file_exists($path . '/settings.php')) {
+    $site_path = $path;
+  }
+  else {
+    // Move up dir by dir and check each.
+    while ($path = _drush_shift_path_up($path)) {
+      if (file_exists($path . '/settings.php')) {
+        $site_path = $path;
+        break;
       }
     }
+  }
 
-    $site_root = drush_locate_root();
-    if (file_exists($site_root . '/sites/sites.php')) {
-      $sites = array();
-      // This will overwrite $sites with the desired mappings.
-      include($site_root . '/sites/sites.php');
-      // We do a reverse lookup here to determine the URL given the site key.
-      if ($match = array_search($site_path, $sites)) {
-        $site_path = $match;
-      }
+  $site_root = drush_get_context('DRUSH_SELECTED_DRUPAL_ROOT');
+  if (file_exists($site_root . '/sites/sites.php')) {
+    $sites = array();
+    // This will overwrite $sites with the desired mappings.
+    include($site_root . '/sites/sites.php');
+    // We do a reverse lookup here to determine the URL given the site key.
+    if ($match = array_search($site_path, $sites)) {
+      $site_path = $match;
     }
+  }
 
-    // Last resort: try from site root
-    if (!$site_path) {
-      if ($site_root) {
-        if (file_exists($site_root . '/sites/default/settings.php')) {
-          $site_path = $site_root . '/sites/default';
-        }
+  // Last resort: try from site root
+  if (!$site_path) {
+    if ($site_root) {
+      if (file_exists($site_root . '/sites/default/settings.php')) {
+        $site_path = $site_root . '/sites/default';
       }
     }
   }
 
   return $site_path;
+}
+
+/**
+ * This is a copy of Drupal's conf_path function, taken from D7 and
+ * adjusted slightly to search from the selected Drupal Root.
+ *
+ * Drush uses this routine to find a usable site based on a URI
+ * passed in via a site alias record or the --uri commandline option.
+ *
+ * Drush uses Drupal itself (specifically, the Drupal conf_path function)
+ * to bootstrap the site itself.  If the implementation of conf_path
+ * changes, the site should still bootstrap correctly; the only consequence
+ * of this routine not working is that drush configuration files
+ * (drushrc.php) stored with the site's settimight not be found.
+ */
+function drush_conf_path($server_uri, $require_settings = TRUE) {
+  $drupal_root = drush_get_context('DRUSH_SELECTED_DRUPAL_ROOT');
+  if(empty($drupal_root) || empty($server_uri)) {
+    return NULL;
+  }
+  $parsed_uri = parse_url($server_uri);
+  if (is_array($parsed_uri) && !array_key_exists('scheme', $parsed_uri)) {
+    $parsed_uri = parse_url('http://' . $server_uri);
+  }
+  if (!is_array($parsed_uri)) {
+    return NULL;
+  }
+  $server_host = $parsed_uri['host'];
+  if (array_key_exists('path', $parsed_uri)) {
+    $server_uri = $parsed_uri['path'] . '/index.php';
+  }
+  else {
+    $server_uri = "/index.php";
+  }
+  $confdir = 'sites';
+
+  $sites = array();
+  if (file_exists($drupal_root . '/' . $confdir . '/sites.php')) {
+    // This will overwrite $sites with the desired mappings.
+    include($drupal_root . '/' . $confdir . '/sites.php');
+  }
+
+  $uri = explode('/', $server_uri);
+  $server = explode('.', implode('.', array_reverse(explode(':', rtrim($server_host, '.')))));
+  for ($i = count($uri) - 1; $i > 0; $i--) {
+    for ($j = count($server); $j > 0; $j--) {
+      $dir = implode('.', array_slice($server, -$j)) . implode('.', array_slice($uri, 0, $i));
+      if (isset($sites[$dir]) && file_exists($drupal_root . '/' . $confdir . '/' . $sites[$dir])) {
+        $dir = $sites[$dir];
+      }
+      if (file_exists($drupal_root . '/' . $confdir . '/' . $dir . '/settings.php') || (!$require_settings && file_exists(DRUPAL_ROOT . '/' . $confdir . '/' . $dir))) {
+        $conf = "$confdir/$dir";
+        return $conf;
+      }
+    }
+  }
+  $conf = "$confdir/default";
+  return $conf;
 }
 
 /**
@@ -1165,11 +376,26 @@ function drush_locate_root($start_path = NULL) {
  * @param string
  *   Path to check.
  *
- * @return boolean
- *   True if given path seems to be a Drupal root, otherwise FALSE.
+ * @return string
+ *   The relative path to common.inc (varies by Drupal version), or FALSE if not
+ *   a Drupal root.
  */
 function drush_valid_drupal_root($path) {
-  return !empty($path) && is_dir($path) && file_exists($path . '/' . DRUSH_DRUPAL_BOOTSTRAP);
+  if (!empty($path) && is_dir($path) && file_exists($path . '/index.php')) {
+    // Drupal 8 root. Additional check for the presence of core/composer.json to
+    // grant it is not a Drupal 7 site with a base folder named "core".
+    $candidate = 'core/includes/common.inc';
+    if (file_exists($path . '/' . $candidate) && file_exists($path . '/core/misc/drupal.js') && file_exists($path . '/composer.json')) {
+      return $candidate;
+    }
+    // Drupal 7 root. Additional check for the absence of core/composer.json to
+    // grant $path is not core/ of a Drupal 8 root.
+    $candidate = 'includes/common.inc';
+    if (file_exists($path . '/' . $candidate) && file_exists($path . '/misc/drupal.js') && ((basename($path) != 'core') || !file_exists($path . '/../composer.json'))) {
+      return $candidate;
+    }
+  }
+  return FALSE;
 }
 
 /**
@@ -1182,8 +408,8 @@ function drush_valid_db_credentials() {
     return FALSE;
   }
   $type = $creds['driver'];
+
   switch (drush_drupal_major_version()) {
-    case 5:
     case 6:
       // Check availability of db extension in PHP and also Drupal support.
       if (file_exists('./includes/install.'. $type .'.inc')) {
@@ -1195,7 +421,7 @@ function drush_valid_db_credentials() {
         }
       }
       else {
-        drush_log('!type database type is unsupported.', array('!type' => $type), 'bootstrap');
+        drush_log(dt('!type database type is unsupported.', array('!type' => $type)), 'bootstrap');
         return FALSE;
       }
       // Verify connection settings.
@@ -1225,24 +451,29 @@ function drush_valid_db_credentials() {
           // pg_last_error() does not return a useful error message for database
           // connection errors. We must turn on error tracking to get at a good error
           // message, which will be stored in $php_errormsg.
+          $php_errormsg = '';
           $track_errors_previous = ini_get('track_errors');
           ini_set('track_errors', 1);
           $connection = @pg_connect($conn_string);
-          if (!$connection) {
-            require_once './includes/unicode.inc';
-            drush_log(decode_entities($php_errormsg), 'bootstrap');
-            // Restore error tracking setting
-            ini_set('track_errors', $track_errors_previous);
-            return FALSE;
-          }
           // Restore error tracking setting
           ini_set('track_errors', $track_errors_previous);
+          if (!$connection) {
+            if (empty($php_errormsg)) {
+              drush_log(dt("Unknown error connecting to pgsql database via !constr", array('!constr' => $conn_string)), 'bootstrap');
+            }
+            else {
+              require_once './includes/unicode.inc';
+              drush_log(decode_entities($php_errormsg), 'bootstrap');
+            }
+            return FALSE;
+          }
           break;
       }
       break;
     case 7:
     default:
-      // Drupal >=7 requires PDO and drush requires php 5.2, that ships with PDO
+      $type = ( $type=='oracle' ? 'oci' : $type); // fix PDO driver name, should go away in Drupal 8
+      // Drupal >=7 requires PDO and drush requires php 5.3 which ships with PDO
       // but it may be compiled with --disable-pdo.
       if (!class_exists('PDO')) {
         drush_log(dt('PDO support is required.'), 'bootstrap');
@@ -1257,14 +488,39 @@ function drush_valid_db_credentials() {
       if ($type === 'sqlite') {
         $constr = 'sqlite:' . $creds['name'];
       }
-      else {
-        $constr = sprintf("%s:dbname=%s;host=%s", $type, $creds['name'], $creds['host']);
+      elseif ($type === 'sqlsrv') {
+        $server = $creds['host'];
         if (!empty($creds['port'])) {
-          $constr .= sprintf(";port=%d", $creds['port']);
+          $server .= ", " . $creds['port'];
+        }
+        $constr = sprintf("%s:database=%s;server=%s", $type, $creds['name'], $server);
+      }
+      elseif ($type === 'oci') {
+
+        if (empty($creds['port']))
+          $creds['port'] = 1521;
+
+        if ($creds['host'] == 'USETNS')
+          $constr = 'oci:dbname=' . $creds['database'] . ';charset=AL32UTF8';
+        else
+          $constr = 'oci:dbname=//' . $creds['host'] . ':' . $creds['port'] . '/' . $creds['database'] . ';charset=AL32UTF8';
+
+      }
+      else {
+        $constr = sprintf("%s:dbname=%s", $type, $creds['name']);
+        // Use unix_socket if set instead of host:port.
+        if (!empty($creds['unix_socket'])) {
+          $constr .= sprintf(";unix_socket=%s", $creds['unix_socket']);
+        }
+        else {
+          $constr .= sprintf(";host=%s", $creds['host']);
+          if (!empty($creds['port'])) {
+            $constr .= sprintf(";port=%d", $creds['port']);
+          }
         }
       }
       try {
-        $db = new PDO($constr, $creds['user'], $creds['pass']);
+        $db = new PDO($constr, $creds['user'], $creds['pass'], $creds['pdo']);
         $db = null;
       }
       catch (PDOException $e) {
@@ -1294,24 +550,183 @@ function drush_valid_db_credentials() {
  * Note that the $_ global is defined only in bash and therefore cannot
  * be relied upon.
  *
- * We will therefore assume PHP is available in the path and is named
- * "php" for execute ourselves. That is, the #!/usr/bin/env php is
- * working and valid, unless a PHP constant is defined, which can be
- * done by the shell wrapper.
- *
  * The DRUSH_COMMAND constant is initialised to the value of this
  * function when environment.inc is loaded.
  *
  * @see DRUSH_COMMAND
  */
 function drush_find_drush() {
- $php = drush_get_option('php');
- if (isset($php)) {
-    $drush = $php . " " . realpath($_SERVER['argv'][0]) . " --php='$php'";
-  } else {
-    $drush = realpath($_SERVER['argv']['0']);
-  }
+  $drush = realpath($_SERVER['argv']['0']);
+  // TODO: On Windows, if we leave $drush as-is, then callbacks will
+  // be done just as we were called by the batch file:  php.exe C:\path\drush.php
+  // We could also convert drush.php to drush.bat to run the batch file again,
+  // but this works just as well.
   return $drush;
+}
+
+/**
+ * Verify that we are running PHP through the command line interface.
+ *
+ * This function is useful for making sure that code cannot be run via the web server,
+ * such as a function that needs to write files to which the web server should not have
+ * access to.
+ *
+ * @return
+ *   A boolean value that is true when PHP is being run through the command line,
+ *   and false if being run through cgi or mod_php.
+ */
+function drush_verify_cli() {
+  return (php_sapi_name() == 'cli' || (is_numeric($_SERVER['argc']) && $_SERVER['argc'] > 0));
+}
+
+/**
+ * Build a drush command suitable for use for drush to call itself
+ * e.g. in backend_invoke.
+ */
+function drush_build_drush_command($drush_path = NULL, $php = NULL, $os = NULL, $remote_command = FALSE) {
+  $os = _drush_get_os($os);
+  $additional_options = '';
+  if (is_null($drush_path)) {
+    if (!$remote_command) {
+      $drush_path = DRUSH_COMMAND;
+    }
+    else {
+      $drush_path = drush_is_windows($os) ? 'drush.bat' : 'drush';
+    }
+  }
+  // If the path to drush points to drush.php, then we will need to
+  // run it via php rather than direct execution.  By default, we
+  // will use 'php' unless something more specific was passed in
+  // via the --php flag.
+  if (substr($drush_path, -4) == ".php") {
+    if (!isset($php)) {
+      $php = drush_get_option('php');
+      if (!isset($php)) {
+        $php = 'php';
+      }
+    }
+    if (isset($php) && ($php != "php")) {
+      $additional_options .= ' --php=' . drush_escapeshellarg($php, $os);
+    }
+    // We will also add in the php options from --php-options
+    $php = drush_escapeshellarg($php, $os) . ' ';
+    $php_options = drush_get_option('php-options','');
+    if (!empty($php_options)) {
+      $php .= $php_options . ' ';
+      $additional_options .= ' --php-options=' . drush_escapeshellarg($php_options, $os);
+    }
+  }
+  elseif ($php && drush_has_bash($os)) {
+    $php = 'DRUSH_PHP=' . drush_escapeshellarg($php, $os) . ' ';
+  }
+
+  return $php . drush_escapeshellarg($drush_path, $os) . $additional_options;
+}
+
+/**
+ * Check if the operating system is Windows.
+ * This will return TRUE under DOS, Powershell
+ * Cygwin and MSYSGIT shells, so test for the
+ * Windows variant FIRST if you care.
+ */
+function drush_is_windows($os = NULL) {
+  return _drush_test_os($os, array("WIN","CYGWIN","CWRSYNC","MINGW"));
+}
+
+/**
+ * Check if the operating system is Winodws
+ * running some variant of cygwin -- either
+ * Cygwin or the MSYSGIT shell.  If you care
+ * which is which, test mingw first.
+ */
+function drush_is_cygwin($os = NULL) {
+  return _drush_test_os($os, array("CYGWIN","CWRSYNC","MINGW"));
+}
+
+function drush_is_mingw($os = NULL) {
+  return _drush_test_os($os, array("MINGW"));
+}
+
+/**
+ * Return tar executable name specific for the current OS
+ */
+function drush_get_tar_executable() {
+  return drush_is_windows() ? (drush_is_mingw() ? "tar.exe" : "bsdtar.exe") : "tar";
+}
+
+/**
+ * Check if the operating system is OS X.
+ * This will return TRUE for Mac OS X (Darwin).
+ */
+function drush_is_osx($os = NULL) {
+  return _drush_test_os($os, array("DARWIN"));
+}
+
+/**
+ * Checks if the operating system has bash.
+ *
+ * MinGW has bash, but PHP isn't part of MinGW and hence doesn't run in bash.
+ */
+function drush_has_bash($os = NULL) {
+  return (drush_is_cygwin($os) && !drush_is_mingw($os)) || !drush_is_windows($os);
+}
+
+/**
+ * Checks operating system and returns
+ * supported bit bucket folder.
+ */
+function drush_bit_bucket() {
+  if (drush_has_bash()) {
+    return '/dev/null';
+  }
+  else {
+    return 'nul';
+  }
+}
+
+/**
+ * Return the OS we are running under.
+ *
+ * @return string
+ *   Linux
+ *   WIN* (e.g. WINNT)
+ *   CYGWIN
+ *   MINGW* (e.g. MINGW32)
+ */
+function _drush_get_os($os = NULL) {
+  // The special os "CWRSYNC" can be used to indicate that we are testing
+  // a path that will be passed as an argument to cwRsync, which requires
+  // that the path be converted to /cygdrive/c/path, even on DOS or Powershell.
+  // The special os "RSYNC" can be used to indicate that we want to assume
+  // "CWRSYNC" when cwrsync is installed, or default to the local OS otherwise.
+  if (strtoupper($os) == "RSYNC") {
+    $os = _drush_get_os("LOCAL");
+    // For now we assume that cwrsync is always installed on Windows, and never installed son any other platform.
+    return drush_is_windows($os) ? "CWRSYNC" : $os;
+  }
+  // We allow "LOCAL" to document, in instances where some parameters are being escaped
+  // for use on a remote machine, that one particular parameter will always be used on
+  // the local machine (c.f. drush_backend_invoke).
+  if (isset($os) && ($os != "LOCAL")) {
+    return $os;
+  }
+  if (_drush_test_os(getenv("MSYSTEM"), array("MINGW"))) {
+    return getenv("MSYSTEM");
+  }
+  // QUESTION: Can we differentiate between DOS and POWERSHELL? They appear to have the same environment.
+  // At the moment, it does not seem to matter; they behave the same from PHP.
+  // At this point we will just return PHP_OS.
+  return PHP_OS;
+}
+
+function _drush_test_os($os, $os_list_to_check) {
+  $os = _drush_get_os($os);
+  foreach ($os_list_to_check as $test) {
+    if (strtoupper(substr($os, 0, strlen($test))) == strtoupper($test)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
 }
 
 /**
@@ -1340,15 +755,22 @@ function drush_is_local_host($host) {
     return TRUE;
   }
 
-  // If uname -n returns an fqdn (that is, uname -n == hostname -f),
-  // then we will require that it exactly match the host in order
-  // to be considered local.  However, the usual convention is for
-  // uname -n to return only the node name (that is, uname -n == hostname -a).
-  // When this is the case, we will consider $host to be local if the
-  // machine portion of it (everything up to the first dot) matches the
-  // current value of uname -n.  We prefer uname -n to hostname as
-  // the output of uname is more regular than hostname.
+  // We'll start out by asking for uname -n via php_uname, since
+  // that is most portable.  On Linux, uname -n returns the contents of
+  // /etc/hostname, which, according to `man hostname`, should never
+  // contain the fqdn.  We will therefore also try `hostname -f`, and
+  // see if we can get the fqdn from that.
   $uname = php_uname('n');
+  if ((strpos($uname,'.') === FALSE) && (!drush_is_windows())) {
+    $hostname = exec('hostname -f');
+    if (!empty($hostname)) {
+      $uname = $hostname;
+    }
+  }
+  // We will require an exact match if we have the fqdn for this
+  // host; if we only have the short name, then we will consider it
+  // to be a match if it matches the first part of the remote-host
+  // item (up to the first dot).
   return (strpos($uname,'.') !== FALSE) ? ($host == $uname) : substr($host . '.',0,strlen($uname)+1) == $uname . '.';
 }
 
@@ -1356,16 +778,73 @@ function drush_is_local_host($host) {
  * Return the user's home directory.
  */
 function drush_server_home() {
-  $home = NULL;
-  // $_SERVER['HOME'] isn't set on windows and generates a Notice.
-  if (!empty($_SERVER['HOME'])) {
-    $home = $_SERVER['HOME'];
+  // Cannot use $_SERVER superglobal since that's empty during Drush_UnitTestCase
+  // getenv('HOME') isn't set on windows and generates a Notice.
+  $home = getenv('HOME');
+  if (empty($home)) {
+    if (!empty($_SERVER['HOMEDRIVE']) && !empty($_SERVER['HOMEPATH'])) {
+      // home on windows
+      $home = $_SERVER['HOMEDRIVE'] . $_SERVER['HOMEPATH'];
+    }
   }
-  elseif (!empty($_SERVER['HOMEDRIVE']) && !empty($_SERVER['HOMEPATH'])) {
-    // home on windows
-    $home = $_SERVER['HOMEDRIVE'] . $_SERVER['HOMEPATH'];
+  return empty($home) ? NULL : $home;
+}
+
+/**
+ * Return the name of the user running drush.
+ */
+function drush_get_username() {
+  $name = NULL;
+  if (!$name = getenv("username")) { // Windows
+    if (!$name = getenv("USER")) {
+      // If USER not defined, use posix
+      if (function_exists('posix_getpwuid')) {
+        $processUser = posix_getpwuid(posix_geteuid());
+        $name = $processUser['name'];
+      }
+    }
   }
-  return $home;
+  return $name;
+}
+
+/**
+ * The path to the global cache directory.
+ *
+ * @param subdir
+ *   Return the specified subdirectory inside the global
+ *   cache directory instead.  The subdirectory is created.
+ */
+function drush_directory_cache($subdir = '') {
+  $cache_locations = array();
+  if (getenv('CACHE_PREFIX')) {
+    $cache_locations[getenv('CACHE_PREFIX')] = 'cache';
+  }
+  $home = drush_server_home();
+  if ($home) {
+    $cache_locations[$home] = '.drush/cache';
+  }
+  $cache_locations[drush_find_tmp()] = 'drush-' . drush_get_username() . '/cache';
+  foreach ($cache_locations as $base => $dir) {
+    if (!empty($base) && is_writable($base)) {
+      $cache_dir = $base . '/' . $dir;
+      if (!empty($subdir)) {
+        $cache_dir .= '/' . $subdir;
+      }
+      if (drush_mkdir($cache_dir)) {
+        return $cache_dir;
+      }
+      else {
+        // If the base directory is writable, but the cache directory
+        // is not, then we will get an error. The error will be displayed,
+        // but we will still call drush_clear_error so that we can go
+        // on and try the next location to see if we can find a cache
+        // directory somewhere.
+        drush_clear_error();
+      }
+    }
+  }
+  return drush_set_error('DRUSH_NO_WRITABLE_CACHE', dt('Drush must have a writable cache directory; please insure that one of the following locations is writable: @locations',
+    array('@locations' => implode(',', array_keys($cache_locations)))));
 }
 
 /**
@@ -1374,9 +853,38 @@ function drush_server_home() {
  * @return
  *   An array containing info for all available extensions.
  */
-function drush_get_extensions() {
+function drush_get_extensions($include_hidden = TRUE) {
   drush_include_engine('drupal', 'environment');
-  return array_merge(drush_get_modules(), drush_get_themes());
+  $extensions = array_merge(drush_get_modules($include_hidden), drush_get_themes($include_hidden));
+  foreach ($extensions as $name => $extension) {
+    if (isset($extension->info['name'])) {
+      $extensions[$name]->label = $extension->info['name'].' ('.$extension->name.')';
+    }
+    else {
+      drush_log(dt("Extension !name provides no human-readable name in .info file.", array('!name' => $name), 'debug'));
+      $extensions[$name]->label = $name.' ('.$extension->name.')';
+    }
+    if (empty($extension->info['package'])) {
+      $extensions[$name]->info['package'] = dt('Other');
+    }
+  }
+  return $extensions;
+}
+
+/**
+ * Test compatibility of a extension with version of drupal core and php.
+ *
+ * @param $file Extension object as returned by system_rebuild_module_data().
+ * @return FALSE if the extension is compatible.
+ */
+function drush_extension_check_incompatibility($file) {
+  if (!isset($file->info['core']) || $file->info['core'] != DRUPAL_CORE_COMPATIBILITY) {
+    return 'Drupal';
+  }
+  if (version_compare(phpversion(), $file->info['php']) < 0) {
+    return 'PHP';
+  }
+  return FALSE;
 }
 
 /**
@@ -1405,4 +913,14 @@ function drush_theme_get_default() {
  */
 function drush_theme_get_admin() {
   return variable_get('admin_theme', drush_theme_get_default());
+}
+
+/**
+ * Returns the sitewide Drupal directory for extensions.
+ */
+function drush_drupal_sitewide_directory($major_version = NULL) {
+  if (!$major_version) {
+    $major_version = drush_drupal_major_version();
+  }
+  return ($major_version < 8) ? 'sites/all' : '';
 }

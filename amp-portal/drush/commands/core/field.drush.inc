@@ -29,6 +29,7 @@ function field_drush_command() {
       'bundle' => 'Content type (for nodes). Name of bundle to attach fields to. Required.',
       'field_spec' => 'Comma delimited triple in the form: field_name,field_type,widget_name. If widget_name is omitted, the default widget will be used. Separate multiple fields by space. If omitted, a wizard will prompt you.'
     ),
+    'required-arguments' => 1,
     'options' => array(
       'entity_type' => 'Type of entity (e.g. node, user, comment). Defaults to node.',
     ),
@@ -83,14 +84,82 @@ function field_drush_command() {
     'arguments' => array(
       'type' => 'Recognized values: fields, types. If omitted, a choice list appears.',
     ),
-    'options' => array(
-      'pipe' => 'Return field information table as CSV.',
-    ),
     'examples' => array(
       'field-info types' => 'Show a table which lists all field types and their available widgets',
     ),
+    'outputformat' => array(
+      'default' => 'table',
+      'pipe-format' => 'csv',
+      'field-labels' => array(
+        'field-name' => 'Field name',
+        'type' => 'Field type',
+        'bundle' => 'Field bundle',
+        'type-name' => 'Type name',
+        'widget' => 'Default widget',
+        'widgets' => 'Widgets',
+      ),
+      'table-metadata' => array(
+        'process-cell' => '_drush_field_info_process_cell',
+      ),
+      'output-data-type' => 'format-table',
+    ),
   );
   return $items;
+}
+
+/**
+ * Command argument complete callback.
+ */
+function field_field_create_complete() {
+  if (drush_bootstrap_max(DRUSH_BOOTSTRAP_DRUPAL_FULL)) {
+    $all = array();
+    $info = field_info_bundles();
+    foreach ($info as $entity_type => $bundles) {
+      $all = array_merge($all, array_keys($bundles));
+    }
+    return array('values' => array_unique($bundles));
+  }
+}
+
+/**
+ * Command argument complete callback.
+ */
+function field_field_update_complete() {
+  return field_field_complete_field_names();
+}
+
+/**
+ * Command argument complete callback.
+ */
+function field_field_delete_complete() {
+  return field_field_complete_field_names();
+}
+
+/**
+ * Command argument complete callback.
+ */
+function field_field_clone_complete() {
+  return field_field_complete_field_names();
+}
+
+/**
+ * Command argument complete callback.
+ */
+function field_field_info_complete() {
+  return array('values' => array('fields', 'types'));
+}
+
+/**
+ * List field names for completion.
+ *
+ * @return
+ *  Array of available site aliases.
+ */
+function field_field_complete_field_names() {
+  if (drush_bootstrap_max(DRUSH_BOOTSTRAP_DRUPAL_FULL)) {
+    $info = field_info_fields();
+    return array('values' => array_keys($info));
+  }
 }
 
 function drush_field_create($bundle) {
@@ -167,7 +236,7 @@ function drush_field_delete($field_name) {
       $confirm = FALSE;
     }
     else {
-      if (!drush_confirm(dt('Do you want to delete the %field_name field?', array('%field_name' => $field_name)))) {
+      if (!drush_confirm(dt('Do you want to delete the !field_name field?', array('!field_name' => $field_name)))) {
         return drush_user_abort();
       }
     }
@@ -196,7 +265,7 @@ function drush_field_delete($field_name) {
 
 function drush_field_clone($source_field_name, $target_field_name) {
    if (!$info = field_info_field($source_field_name)) {
-     return drush_set_error(dt('%source not found in field list.', array('%source' => $source_field_name)));
+     return drush_set_error(dt('!source not found in field list.', array('!source' => $source_field_name)));
    }
 
    unset($info['id']);
@@ -219,56 +288,71 @@ function drush_field_clone($source_field_name, $target_field_name) {
 
 function drush_field_info($type = NULL) {
   if (is_null($type)) {
-    $type = drush_choice(drupal_map_assoc(array('types', 'fields')), dt('Which information do you wish to see?'));
+    // Don't ask in 'pipe' mode -- just default to 'fields'.
+    if (drush_get_context('DRUSH_PIPE')) {
+      $type = 'fields';
+    }
+    else {
+      $type = drush_choice(drupal_map_assoc(array('types', 'fields')), dt('Which information do you wish to see?'));
+    }
   }
 
+  $result = array();
   switch ($type) {
     case 'fields':
-      $rows[] = array(
-        dt('Field name'),
-        dt('Field type'),
-        dt('Bundles'),
-      );
+      drush_hide_output_fields(array('type-name', 'widget', 'widgets'));
       $info = field_info_fields();
       foreach ($info as $field_name => $field) {
         $bundle_strs = array();
         foreach ($field['bundles'] as $entity_type => $bundles) {
-          $bundle_strs[] = implode(',', $bundles);
+          $bundle_strs += $bundles;
         }
-        $row = array(
-          $field_name,
-          $field['type'],
-          implode(' ', $bundle_strs),
+        $result[$field_name] = array(
+          'field-name' => $field_name,
+          'type' => $field['type'],
+          'bundle' => $bundle_strs,
         );
-        $rows[] = $row;
-        $pipe[] = implode(',', $row);
       }
       break;
     case 'types':
-      $rows[] = array(
-        dt('Field type'),
-        dt('Default widget'),
-        dt('Widgets'),
-      );
+      drush_hide_output_fields(array('field-name', 'type', 'bundle'));
       $info = field_info_field_types();
       module_load_include('inc', 'field_ui', 'field_ui.admin');
       $widgets = field_info_widget_types();
       foreach ($info as $type_name => $type) {
         $widgets = field_ui_widget_type_options($type_name);
-        $row = array(
-          $type_name,
-          $type['default_widget'],
-          implode(', ', array_keys($widgets)),
+        $result[$type_name] = array(
+          'type-name' => $type_name,
+          'widget' => $type['default_widget'],
+          'widgets' => $widgets,
         );
-        $rows[] = $row;
-        $pipe[] = implode(',', $row);
       }
       break;
+    default:
+      return drush_set_error('DRUSH_FIELD_INVALID_SELECTION', dt("Argument for drush field-info must be 'fields' or 'types'"));
   }
 
-  drush_print_table($rows, TRUE);
-  drush_print_pipe($pipe);
-  return $rows;
+  return $result;
+}
+
+/**
+ * We need to handle the formatting of cells in table-format
+ * output specially.  In 'types' output, the output data is a simple
+ * associative array of machine names => human-readable names.
+ * We choose to show the machine names.  In 'fields' output, the
+ * output data is a list of entity types, each of which contains a list
+ * of bundles.  We comma-separate the bundles, and space-separate
+ * the entities.
+ */
+function _drush_field_info_process_cell($data, $metadata) {
+  $first = reset($data);
+  if (is_array($first)) {
+    foreach($data as $entity => $bundles) {
+      $list[] = drush_format($bundles, array(), 'csv');
+    }
+    return drush_format($list, array(), 'list');
+  }
+  return drush_format(array_keys($data), array(), 'csv');
 }
 
 /**

@@ -12,7 +12,7 @@
  *
  * While the original API does offer a 'non progressive' mode which simply
  * calls each operation in sequence within the current process, in most
- * implementations (Drupal 5 and 6), it would still attempt to redirect
+ * implementations (D6), it would still attempt to redirect
  * unless very specific conditions were met.
  *
  * When operating in 'non progressive' mode, Drush would experience the problems
@@ -22,9 +22,28 @@
  * Each major release of Drupal has also had slightly different implementations
  * of the batch API, and this provides a uniform interface to all of these
  * implementations.
- *
  */
 
+/**
+ * Class extending ArrayObject to allow the batch API to perform logging when
+ * some keys of the array change.
+ *
+ * It is used to wrap batch's $context array and set log messages when values
+ * are assigned to keys 'message' or 'error_message'.
+ *
+ * @see _drush_batch_worker().
+ */
+class DrushBatchContext extends ArrayObject {
+  function offsetSet($name, $value) {
+    if ($name == 'message') {
+      drush_log(strip_tags($value), 'ok');
+    }
+    elseif ($name == 'error_message') {
+      drush_set_error('DRUSH_BATCH_ERROR', strip_tags($value));
+    }
+    parent::offsetSet($name, $value);
+  }
+}
 
 /**
  * Process a Drupal batch by spawning multiple Drush processes.
@@ -48,9 +67,15 @@
  *   use their own command.
  *
  */
-function drush_backend_batch_process($command = 'batch-process') {
+function drush_backend_batch_process($command = 'batch-process', $args = array(), $options = array()) {
+  // Command line options to pass to the command.
+  global $user;
+  if ($user->uid) {
+    $options['u'] = $user->uid;
+  }
+
   drush_include_engine('drupal', 'batch', drush_drupal_major_version());
-  _drush_backend_batch_process($command);
+  _drush_backend_batch_process($command, $args, $options);
 }
 
 /**
@@ -63,7 +88,7 @@ function drush_backend_batch_process($command = 'batch-process') {
  * requirements have been taken care of.
  */
 function drush_batch_command($id) {
-  include_once('includes/batch.inc');
+  include_once(DRUSH_DRUPAL_CORE . '/includes/batch.inc');
   drush_include_engine('drupal', 'batch', drush_drupal_major_version());
   _drush_batch_command($id);
 }

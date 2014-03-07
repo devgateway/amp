@@ -20,17 +20,26 @@ function sitealias_drush_command() {
     'description' => 'Print site alias records for all known site aliases and local sites.',
     'bootstrap' => DRUSH_BOOTSTRAP_DRUSH,
     'arguments' => array(
-      'site' => 'Site specification alias to print',
+      'site' => 'Site specification to print',
     ),
     'options' => array(
-      'full' => 'Print the full alias record for each site.  Default when aliases are specified on the command line.',
-      'component' => 'Print only the specified element from the full alias record.',
-      'short' => 'Print only the site alias name.  Default when not command line arguments are specified.',
-      'pipe' => 'Print the long-form site specification for each site.',
       'with-db' => 'Include the databases structure in the full alias record.',
       'with-db-url' => 'Include the short-form db-url in the full alias record.',
       'no-db' => 'Do not include the database record in the full alias record (default).',
       'with-optional' => 'Include optional default items.',
+      'alias-name' => 'For a single alias, set the name to use in the output.',
+      'local' => 'Only display sites that are available on the local system (remote-site not set, and Drupal root exists).',
+    ),
+    'outputformat' => array(
+      'default' => 'config',
+      'pipe-format' => 'var_export',
+      'variable-name' => 'aliases',
+      'hide-empty-fields' => TRUE,
+      'private-fields' => 'password',
+      'field-labels' => array('#name' => 'Name', 'root' => 'Root', 'uri' => 'URI', 'remote-host' => 'Host', 'remote-user' => 'User', 'remote-port' => 'Port', 'os' => 'OS', 'ssh-options' => 'SSH options', 'php' => 'PHP'),
+      'fields-default' => array('#name', 'root', 'uri', 'remote-host', 'remote-user'),
+      'field-mappings' => array('name' => '#name'),
+      'output-data-type' => 'format-table',
     ),
     'aliases' => array('sa'),
     'examples' => array(
@@ -39,7 +48,50 @@ function sitealias_drush_command() {
     ),
     'topics' => array('docs-aliases'),
   );
+  $items['site-set'] = array(
+    'description' => 'Set a site alias to work on that will persist for the current session.',
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUSH,
+    'handle-remote-commands' => TRUE,
+    'arguments' => array(
+      'site' => 'Site specification to use, or "-" for previous site. Omit this argument to "unset"',
+    ),
+    'aliases' => array('use'),
+    'examples' => array(
+      'drush site-set @dev' => 'Set the current session to use the @dev alias.',
+      'drush site-set user@server/path/to/drupal#sitename' => 'Set the current session to use a site specification.',
+      'drush site-set -' => 'Go back to the previously-set site (like `cd -`).',
+      'drush site-set' => 'Without an argument, any existing site becomes unset.',
+    ),
+  );
+  // @deprecated and hidden as of 6.0.1. Use site-set without an argument.
+  $items['site-reset'] = array(
+    'description' => 'Reset a persistently set site.',
+    'bootstrap' => DRUSH_BOOTSTRAP_DRUSH,
+    'handle-remote-commands' => TRUE,
+    'aliases' => array('unuse'),
+    'hidden' => TRUE,
+  );
   return $items;
+}
+
+/**
+ * Command argument complete callback.
+ *
+ * @return
+ *  Array of available site aliases.
+ */
+function sitealias_sitealias_print_complete() {
+  return array('values' => array_keys(_drush_sitealias_all_list()));
+}
+
+/**
+ * Command argument complete callback.
+ *
+ * @return
+ *  Array of available site aliases.
+ */
+function sitealias_site_set_complete() {
+  return array('values' => array_keys(_drush_sitealias_all_list()));
 }
 
 /**
@@ -60,13 +112,16 @@ function _drush_sitealias_alias_list() {
  */
 function _drush_sitealias_site_list() {
   $site_list = array();
-  $base_path = drush_get_context('DRUSH_DRUPAL_ROOT') . '/sites';
-  $files = drush_scan_directory($base_path, '/settings\.php/', array('.', '..', 'CVS', 'all'));
-  foreach ($files as $filename => $info) {
-    if ($info->basename == 'settings.php') {
-      $alias_record = drush_sitealias_build_record_from_settings_file($filename);
-      if (!empty($alias_record)) {
-        $site_list[drush_sitealias_uri_to_site_dir($alias_record['uri'])] = $alias_record;
+  $base_path = drush_get_context('DRUSH_DRUPAL_ROOT');
+  if ($base_path) {
+    $base_path .= '/sites';
+    $files = drush_scan_directory($base_path, '/settings\.php/', array('.', '..', 'CVS', 'all'));
+    foreach ($files as $filename => $info) {
+      if ($info->basename == 'settings.php') {
+        $alias_record = drush_sitealias_build_record_from_settings_file($filename);
+        if (!empty($alias_record)) {
+          $site_list[drush_sitealias_uri_to_site_dir($alias_record['uri'])] = $alias_record;
+        }
       }
     }
   }
@@ -82,7 +137,7 @@ function _drush_sitealias_all_list() {
 }
 
 /**
- * Return the list of sites (aliases or local) that the
+ * Return the list of site aliases (remote or local) that the
  * user specified on the command line.  If none were specified,
  * then all are returned.
  */
@@ -90,71 +145,60 @@ function _drush_sitealias_user_specified_list() {
   $command = drush_get_command();
   $specifications = $command['arguments'];
   $site_list = array();
-  
-  // Did the user specify --short or --full output?
-  $specified_output_style = drush_get_option(array('full', 'short'), FALSE);
-  
+
   // Iterate over the arguments and convert them to alias records
   if (!empty($specifications)) {
-    $site_list = drush_sitealias_resolve_sitespecs($specifications);
-    if (!$specified_output_style) {
-      drush_set_option('full', TRUE);
+    list($site_list, $not_found) = drush_sitealias_resolve_sitespecs($specifications);
+    if (!empty($not_found)) {
+      return drush_set_error('DRUSH_ALIAS_NOT_FOUND', dt("Not found: @list", array("@list" => implode(', ', $not_found))));
     }
   }
   // If the user provided no args, then we will return everything.
   else {
+    drush_set_default_outputformat('list');
     $site_list = _drush_sitealias_all_list();
-    
+
     // Filter out the hidden items
     foreach ($site_list as $site_name => $one_site) {
       if (array_key_exists('#hidden', $one_site)) {
-        unset($site_list[$site_name]); 
+        unset($site_list[$site_name]);
       }
     }
   }
 
+  // Filter for only local sites if specified.
+  if (drush_get_option('local', FALSE)) {
+    foreach ($site_list as $site_name => $one_site) {
+      if ( (array_key_exists('remote-site', $one_site)) ||
+           (!array_key_exists('root', $one_site)) ||
+           (!is_dir($one_site['root']))
+         ) {
+        unset($site_list[$site_name]);
+      }
+    }
+  }
   return $site_list;
 }
 
 /**
- * Print out the specified site aliases using the format
+ * Print out the specified site aliases (or else all) using the format
  * specified.
  */
 function drush_sitealias_print() {
-  // Call bootstrap max, unless the caller requested short output
-  if (!drush_get_option('short', FALSE)) {
-    drush_bootstrap_max();
-  }
-  
   $site_list = _drush_sitealias_user_specified_list();
-  $full_output = drush_get_option('full');
-  $long_output = drush_get_option('long');
-  $with_db = (drush_get_option('with-db') != null) || (drush_get_option('with-db-url') != null);
+  if ($site_list === FALSE) {
+    return FALSE;
+  }
+  ksort($site_list);
+  $with_db = (drush_get_option('with-db') != NULL) || (drush_get_option('with-db-url') != NULL);
 
   $site_specs = array();
   foreach ($site_list as $site => $alias_record) {
-    if (!array_key_exists('site-list', $alias_record)) {
-      $site_specs[] = drush_sitealias_alias_record_to_spec($alias_record, $with_db);
-    }
-    if (isset($full_output)) {
-      $component = drush_get_option('component');
-      if ($component) {
-        if (array_key_exists($component, $alias_record)) {
-	  drush_print($alias_record[$component]);
-	}
-	else {
-	  drush_set_error('DRUSH_NO_SUCH_ELEMENT', dt('The element @component was not found in the alias record for @site.', array('@component' => $component, '@site' => $site)));
-	}
-      }
-      else {
-        _drush_sitealias_print_record($alias_record, $site);
-      }
-    }
-    else {
-      drush_print($site);
-    }
+    list($alias_name, $result_record) = _drush_sitealias_prepare_record($alias_record, $site);
+    $site_specs[$alias_name] = $result_record;
   }
-  drush_print_pipe(array_unique($site_specs));
+  ksort($site_specs);
+  return $site_specs;
 }
 
 /**
@@ -164,14 +208,14 @@ function drush_sitealias_print() {
  * @param alias_record
  *   The name of the site alias to print
  */
-function _drush_sitealias_print_record($alias_record, $site_alias = '') {
+function _drush_sitealias_prepare_record($alias_record, $site_alias = '') {
   $output_db = drush_get_option('with-db');
   $output_db_url = drush_get_option('with-db-url');
   $output_optional_items = drush_get_option('with-optional');
 
   // Make sure that the default items have been added for all aliases
   _drush_sitealias_add_static_defaults($alias_record);
-    
+
   // Include the optional items, if requested
   if ($output_optional_items) {
     _drush_sitealias_add_transient_defaults($alias_record);
@@ -215,8 +259,8 @@ function _drush_sitealias_print_record($alias_record, $site_alias = '') {
     }
   }
 
-  // We don't want the name to go into the output
-  unset($alias_record['#name']);
+  // We don't want certain fields to go into the output
+  unset($alias_record['#group']);
   unset($alias_record['#hidden']);
 
   // We only want to output the 'root' item; don't output the '%root' path alias
@@ -227,18 +271,19 @@ function _drush_sitealias_print_record($alias_record, $site_alias = '') {
       unset($alias_record['path-aliases']);
     }
   }
-  
+
   // Alias names contain an '@' when referenced, but do
   // not contain an '@' when defined.
   if (substr($alias_name,0,1) == '@') {
     $alias_name = substr($alias_name,1);
   }
 
-  if (!drush_get_option('show-passwords', FALSE)) {
-    drush_unset_recursive($alias_record, 'password');
-  }
+  return array($alias_name, $alias_record);
+}
 
-  $exported_alias = var_export($alias_record, TRUE);
+function _drush_sitealias_print_record($alias_record, $site_alias = '') {
+  list($alias_name, $result_record) = _drush_sitealias_prepare_record($alias_record, $site_alias);
+  $exported_alias = var_export($result_record, TRUE);
   drush_print('$aliases[\'' . $alias_name . '\'] = ' . $exported_alias . ';');
 }
 
@@ -282,4 +327,61 @@ function _drush_sitealias_site_dir_to_uri($site_dir) {
   $uri = preg_replace("/([0-9]+)_([0-9]+)_([0-9]+)_([0-9]+)/", "$1.$2.$3.$4", $site_dir);
 
   return 'http://' . $uri;
+}
+
+/**
+ * Validation callback for drush site-set.
+ */
+function drush_sitealias_site_set_validate() {
+  if (!function_exists('posix_getppid')) {
+    $args = array('!command' => 'site-set', '!dependencies' => 'POSIX');
+    return drush_set_error('DRUSH_COMMAND_PHP_DEPENDENCY_ERROR', dt('Command !command needs the following PHP extensions installed/enabled to run: !dependencies.', $args));
+  }
+}
+
+/**
+ * Set the DRUPAL_SITE variable by writing it out to a temporary file that we
+ * then source for persistent site switching.
+ *
+ * @param site
+ *  A valid site specification.
+ */
+function drush_sitealias_site_set($site = '@none') {
+  if ($filename = drush_sitealias_get_envar_filename()) {
+    $last_site_filename = drush_sitealias_get_envar_filename('drush-drupal-prev-site-');
+    if ($site == '-') {
+      if (file_exists($last_site_filename)) {
+        $site = file_get_contents($last_site_filename);
+      }
+      else {
+        $site = '@none';
+      }
+    }
+    if (_drush_sitealias_set_context_by_name($site)) {
+      if (file_exists($filename)) {
+        @unlink($last_site_filename);
+        @rename($filename, $last_site_filename);
+      }
+      if ($site == '@none') {
+        drush_delete_dir($filename);
+      }
+      else {
+        file_put_contents($filename, $site);
+      }
+      drush_print(dt("Site set to !site", array('!site' => $site)));
+    }
+    else {
+      drush_set_error('DRUPAL_SITE_NOT_FOUND', dt("Could not find a site definition for !site.", array('!site' => $site)));
+    }
+  }
+}
+
+/**
+ * Deletes the file that stores the DRUPAL_SITE variable for persistent
+ * site switching.
+ */
+function drush_sitealias_site_reset() {
+  if (($filename = drush_sitealias_get_envar_filename()) && file_exists($filename)) {
+    drush_delete_dir($filename);
+  }
 }

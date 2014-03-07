@@ -129,8 +129,8 @@ function update_fix_compatibility() {
   while ($result = db_fetch_object($query)) {
     if (update_check_incompatibility($result->name, $result->type)) {
       $incompatible[] = $result->name;
-      drush_log(dt("%type %name is incompatible with this release of Drupal, and will be disabled.",
-        array("%type" => $result->type, '%name' => $result->name)), "warning");
+      drush_log(dt("!type !name is incompatible with this release of Drupal, and will be disabled.",
+        array("!type" => $result->type, '!name' => $result->name)), "warning");
     }
   }
   if (!empty($incompatible)) {
@@ -218,7 +218,7 @@ function update_fix_d6_requirements() {
       'primary key' => array('cid'),
     );
     db_create_table($ret, 'cache_block', $schema['cache_block']);
-    
+
     // Create the semaphore table now -- the menu system after 6.15 depends on
     // this table, and menu code runs in updates prior to the table being
     // created in its original update function, system_update_6054().
@@ -306,7 +306,10 @@ function update_main_prepare() {
 
   require_once './includes/bootstrap.inc';
   // Minimum load of components.
-  drush_bootstrap(DRUSH_BOOTSTRAP_DRUPAL_CONFIGURATION);
+  // This differs from the Drupal 6 update.php workflow for compatbility with
+  // the Drupal 6 backport of module_implements() caching.
+  // @see http://drupal.org/node/557542
+  drush_bootstrap(DRUSH_BOOTSTRAP_DRUPAL_DATABASE);
   require_once './includes/install.inc';
   require_once './includes/file.inc';
   require_once './modules/system/system.install';
@@ -316,6 +319,8 @@ function update_main_prepare() {
   $module_list['system']['filename'] = 'modules/system/system.module';
   $module_list['filter']['filename'] = 'modules/filter/filter.module';
   module_list(TRUE, FALSE, FALSE, $module_list);
+  module_implements('', FALSE, TRUE);
+
   drupal_load('module', 'system');
   drupal_load('module', 'filter');
 
@@ -349,10 +354,10 @@ function update_main_prepare() {
 
   // Must unset $theme->status in order to safely rescan and repopulate
   // the system table to ensure we have a full picture of the platform.
-  // This is needed because $theme->status is set to 0 in a call to 
+  // This is needed because $theme->status is set to 0 in a call to
   // list_themes() done by drupal_maintenance_theme().
-  // It is a issue with _system_theme_data() that returns its own cache 
-  // variable and can be modififed by others. When this is fixed in 
+  // It is a issue with _system_theme_data() that returns its own cache
+  // variable and can be modififed by others. When this is fixed in
   // drupal core we can remove this unset.
   // For reference see: http://drupal.org/node/762754
   $themes = _system_theme_data();
@@ -371,61 +376,13 @@ function update_main_prepare() {
 function update_main() {
   update_main_prepare();
 
-  $start = array();
-  $has_updates = FALSE;
-  $modules = drupal_get_installed_schema_version(NULL, FALSE, TRUE);
-  foreach ($modules as $module => $schema_version) {
-    $updates = drupal_get_schema_versions($module);
-    // Skip incompatible module updates completely, otherwise test schema versions.
-    if (!update_check_incompatibility($module) && $updates !== FALSE && $schema_version >= 0) {
-      // module_invoke returns NULL for nonexisting hooks, so if no updates
-      // are removed, it will == 0.
-      $last_removed = module_invoke($module, 'update_last_removed');
-      if ($schema_version < $last_removed) {
-        drush_set_error('PROVISION_DRUPAL_UPDATE_FAILED', dt( $module .' module can not be updated. Its schema version is '. $schema_version .'. Updates up to and including '. $last_removed .' have been removed in this release. In order to update '. $module .' module, you will first <a href="http://drupal.org/upgrade">need to upgrade</a> to the last version in which these updates were available.'));
-        continue;
-      }
-
-      $updates = drupal_map_assoc($updates);
-      foreach (array_keys($updates) as $update) {
-        if ($update > $schema_version) {
-          $start[$module] = $update;
-          break;
-        }
-      }
-
-      // Record any pending updates. Used for confirmation prompt.
-      foreach (array_keys($updates) as $update) {
-        if ($update > $schema_version) {
-          if (class_exists('ReflectionFunction')) {
-            // The description for an update comes from its Doxygen.
-            $func = new ReflectionFunction($module. '_update_'. $update);
-            $description = str_replace(array("\n", '*', '/'), '', $func->getDocComment());
-          }
-          if (empty($description)) {
-            $description = dt('description not available');
-          }
-
-          $pending[$module][] = array("$update - ". trim($description));
-          $has_updates = TRUE;
-        }
-      }
-
-    }
-  }
-
+  list($pending, $start) = updatedb_status();
 
   // Print a list of pending updates for this module and get confirmation.
-  if ($has_updates) {
-    drush_print(dt('The following updates are pending:'));
-    drush_print();
-    foreach ($pending as $module => $updates) {
-      if (sizeof($updates)) {
-        array_unshift($updates, array($module . ' module'));
-        drush_print_table($updates, TRUE);
-        drush_print();
-      }
-    }
+  if ($pending) {
+    // @todo get table header working
+    // array_unshift($pending, array(dt('Module'), dt('ID'), dt('Description')));
+    drush_print_table($pending, FALSE);
     if (!drush_confirm(dt('Do you wish to run all pending updates?'))) {
       return drush_user_abort();
     }
@@ -502,3 +459,58 @@ function _update_batch_command($id) {
   drush_batch_command($id);
 }
 
+/**
+ * Return a 2 item array with
+ *  - an array where each item is a 3 item associative array describing a pending update.
+ *  - an array listing the first update to run, keyed by module.
+ */
+function updatedb_status() {
+  $return = array();
+
+  $modules = drupal_get_installed_schema_version(NULL, FALSE, TRUE);
+  foreach ($modules as $module => $schema_version) {
+    $updates = drupal_get_schema_versions($module);
+    // Skip incompatible module updates completely, otherwise test schema versions.
+    if (!update_check_incompatibility($module) && $updates !== FALSE && $schema_version >= 0) {
+      // module_invoke returns NULL for nonexisting hooks, so if no updates
+      // are removed, it will == 0.
+      $last_removed = module_invoke($module, 'update_last_removed');
+      if ($schema_version < $last_removed) {
+        drush_set_error('PROVISION_DRUPAL_UPDATE_FAILED', dt( $module .' module can not be updated. Its schema version is '. $schema_version .'. Updates up to and including '. $last_removed .' have been removed in this release. In order to update '. $module .' module, you will first <a href="http://drupal.org/upgrade">need to upgrade</a> to the last version in which these updates were available.'));
+        continue;
+      }
+
+      $updates = drupal_map_assoc($updates);
+
+      // Record the starting update number for each module.
+      foreach (array_keys($updates) as $update) {
+        if ($update > $schema_version) {
+          $start[$module] = $update;
+          break;
+        }
+      }
+      if (isset($start['system'])) {
+        // Ensure system module's updates run first.
+        $start = array('system' => $start['system']) + $start;
+      }
+
+      // Record any pending updates. Used for confirmation prompt.
+      foreach (array_keys($updates) as $update) {
+        if ($update > $schema_version) {
+          if (class_exists('ReflectionFunction')) {
+            // The description for an update comes from its Doxygen.
+            $func = new ReflectionFunction($module. '_update_'. $update);
+            $description = trim(str_replace(array("\n", '*', '/'), '', $func->getDocComment()));
+          }
+          if (empty($description)) {
+            $description = dt('description not available');
+          }
+
+          $return[] = array('module' => ucfirst($module), 'update_id' => $update, 'description' => $description);
+        }
+      }
+    }
+  }
+
+  return array($return, $start);
+}

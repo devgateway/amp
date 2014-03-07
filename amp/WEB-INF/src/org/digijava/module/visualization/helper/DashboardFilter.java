@@ -41,6 +41,7 @@ public class DashboardFilter {
     private Boolean workspaceOnly;
     private Boolean workspaceOnlyQuickFilter;
     private Boolean showMonochrome;
+    private Boolean showAcronymForOrgNames;
     private TeamMember teamMember;
     private List<AmpCurrency>currencies;
     private List<OrganizationSkeleton> organizations;
@@ -204,6 +205,7 @@ public class DashboardFilter {
     	newFilter.setPeacebuildingId(this.getPeacebuildingId());
     	newFilter.setEndYear(this.getEndYear());
     	newFilter.setStartYear(this.getStartYear());
+    	newFilter.setShowAcronymForOrgNames(this.getShowAcronymForOrgNames());
     	return newFilter;
     }
 	
@@ -1270,6 +1272,14 @@ public class DashboardFilter {
 
 	public void setDefaultFiscalCalendarId(Long defaultFiscalCalendarId) {
 		this.defaultFiscalCalendarId = defaultFiscalCalendarId;
+	}
+
+	public Boolean getShowAcronymForOrgNames() {
+		return showAcronymForOrgNames;
+	}
+
+	public void setShowAcronymForOrgNames(Boolean showAcronymForOrgNames) {
+		this.showAcronymForOrgNames = showAcronymForOrgNames;
 	}
 		
 	

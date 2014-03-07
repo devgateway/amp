@@ -964,6 +964,10 @@ public class DbUtil {
         if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) || peaceMarkerCondition || peacebuildingCondition ) {
         	oql += " inner join act.categories categ ";
 		}
+        
+        if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
+        	oql += " inner join f.ampDonorOrgId as dn ";
+        }
 
         //Join for the Sectors (actsec) and the sector scheme (config)
         if (sectorCondition) {
@@ -1546,15 +1550,23 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
-        	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-            	oql = "select fp, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
-            else 
-            	oql = "select fp, f.ampDonorOrgId.ampOrgId, " + AmpOrganisation.hqlStringForName("f.ampDonorOrgId");
+        	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)            	
+           		oql = "select fp, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
+            else
+            	if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
+            		oql = "select fp, f.ampDonorOrgId.ampOrgId, dn.acronym ";            		
+            	} else {
+            		oql = "select fp, f.ampDonorOrgId.ampOrgId, " + AmpOrganisation.hqlStringForName("f.ampDonorOrgId");
+            	}
 		} else {
 			if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-	        	oql = "select fd, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
-	        else 
-	        	oql = "select fd, f.ampDonorOrgId.ampOrgId, " + AmpOrganisation.hqlStringForName("f.ampDonorOrgId");
+				oql = "select fd, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
+	        else
+	        	if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
+	        		oql = "select fd, f.ampDonorOrgId.ampOrgId, dn.acronym ";
+	        	} else {
+	        		oql = "select fd, f.ampDonorOrgId.ampOrgId, " + AmpOrganisation.hqlStringForName("f.ampDonorOrgId");	        		
+            	}
 		}
 		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
 			oql += ", orole.percentage ";
@@ -1566,7 +1578,7 @@ public class DbUtil {
         String specialInner = null;
     	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     		specialInner = " inner join act.orgrole orole inner join orole.role role inner join orole.organisation roleOrg ";
-    
+    	  
     	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, null, true);
     	
 

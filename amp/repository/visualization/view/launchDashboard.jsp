@@ -1018,6 +1018,7 @@ function initializeGlobalVariables(){
 		<digi:trn>Show all charts in grayscale for print purposes</digi:trn>
 	</c:set>
 	<html:checkbox  property="filter.showMonochrome" styleId="show_monochrome" onclick="reloadGraphs();"><digi:trn>Show Monochrome</digi:trn></html:checkbox> <img title="${translation}" src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
+	<html:checkbox  property="filter.showAcronymForOrgNames" styleId="show_acronym_for_org_names"><digi:trn>Show Acronyms for Organization Names</digi:trn></html:checkbox><br />
 	<hr />
 	<table cellspacing="0" cellpadding="0" width="100%">
 		<c:if test="${!visualizationform.filter.fromPublicView}">

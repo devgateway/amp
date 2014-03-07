@@ -103,6 +103,7 @@ function saveDashboard() {
 	  </digi:trn>
 	</c:set>
 	document.getElementById("showInMenu2").value = document.getElementById("show_in_menu").checked;
+	document.getElementById("showAcronymForOrgNames2").value = document.getElementById("show_acronym_for_org_names").checked;
 	if (validateData()){
 		var i = 0;
 		var param = "";
@@ -267,6 +268,12 @@ function validateData(){
 					</td>
 				</tr>
 				<tr>
+					<td><b><digi:trn>Show Acronym for Organization names on graphics</digi:trn></b>
+						<input type="checkbox" id="show_acronym_for_org_names"/>
+						<html:hidden property="showAcronymForOrgNames" styleId="showAcronymForOrgNames2" />
+					</td>
+				</tr>
+				<tr>
 					<td><b><digi:trn>Default Max Year Filter</digi:trn></b>
 						<html:text property="maxYearFilter" styleId="maxYearFilter"/>
 						<span><digi:trn>Both values must be set (and bigger than 0) to be used as default filter.</digi:trn></span>
@@ -412,6 +419,11 @@ function init(){
 		document.getElementById("show_in_menu").checked = true;
 	} else {
 		document.getElementById("show_in_menu").checked = false;
+	}
+	if (document.getElementById("showAcronymForOrgNames2").value=='true') {
+		document.getElementById("show_acronym_for_org_names").checked = true;
+	} else {
+		document.getElementById("show_acronym_for_org_names").checked = false;
 	}
 	numGraphs = <%=idx%>;
 	tempGraphs = <%=idx%>;

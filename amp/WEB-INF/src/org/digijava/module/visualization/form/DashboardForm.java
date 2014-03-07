@@ -26,6 +26,7 @@ public class DashboardForm extends ActionForm {
 	private int baseType;
 	private int pivot;
 	private Boolean showInMenu;
+	private Boolean showAcronymForOrgNames;
 	private Integer maxYearFilter;
 	private Integer minYearFilter;
 	private Integer transactionTypeFilter;
@@ -107,6 +108,12 @@ public class DashboardForm extends ActionForm {
 	}
 	public void setTransactionTypeFilter(Integer transactionTypeFilter) {
 		this.transactionTypeFilter = transactionTypeFilter;
+	}
+	public Boolean getShowAcronymForOrgNames() {
+		return showAcronymForOrgNames;
+	}
+	public void setShowAcronymForOrgNames(Boolean showAcronymForOrgNames) {
+		this.showAcronymForOrgNames = showAcronymForOrgNames;
 	}
 	
 }

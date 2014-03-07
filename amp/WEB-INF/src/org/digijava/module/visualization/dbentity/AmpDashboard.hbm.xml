@@ -12,6 +12,7 @@
 		<property name="baseType" column="base_type" type="java.lang.Integer" />
 		<property name="pivot" column="pivot" type="java.lang.Integer" />
 		<property name="showInMenu" column="show_in_menu" type="java.lang.Boolean" />
+		<property name="showAcronymForOrgNames" column="show_acronym_for_org_names" type="java.lang.Boolean" />
 		<property name="maxYearFilter" column="max_year_filter" type="java.lang.Integer" not-null="false"/>
 		<property name="minYearFilter" column="min_year_filter" type="java.lang.Integer" not-null="false"/>
 		<property name="transactionTypeFilter" column="transaction_type_filter" type="java.lang.Integer" not-null="false"/>

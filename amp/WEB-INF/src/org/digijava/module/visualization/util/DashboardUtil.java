@@ -915,6 +915,7 @@ public class DashboardUtil {
 		filter.setShowRegionsRanking(false);
 		filter.setShowSectorsRanking(false);
 		filter.setShowProjectsRanking(false);
+		filter.setShowAcronymForOrgNames(false);
 		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
@@ -1155,6 +1156,10 @@ public class DashboardUtil {
         
         filter.setShowAmountsInThousands(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))==0?1:Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
         filter.setShowAmountsInThousandsDefault(filter.getShowAmountsInThousands());
+        
+        if(dashboard != null && dashboard.getShowAcronymForOrgNames()!= null && dashboard.getShowAcronymForOrgNames().booleanValue() == true) {
+        	filter.setShowAcronymForOrgNames(true);
+        }
 	}
 	
 	public static TreeMap<Long, String> generateIdToNameForDashboards(Collection<AmpDashboard> dashboards) {

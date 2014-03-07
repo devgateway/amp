@@ -6,41 +6,41 @@
  *
  */
 $plugin = array(
-    'single' => TRUE,
-    'title' => t('Projects Search Form'),
-    'description' => t('Projects Search Form'),
-    'category' => array(t('AMPP Widgets'), -9),
-    'defaults' => array(
-      'search_path' => 'search',
-      'budget_flag' => 0,
-      'country_level_projects_flag' => 0,
-      'sectors_flag' => 1,
-      'primary_sectors_flag' => 0,
-      'secondary_sectors_flag' => 0,
-      'programs_flag' => 0,
-      'donors_flag' => 1,
-      'agencies_flag' => 1,
-      'locations_flag' => 1,
-      'period_flag' => 0,
-      'keywords_flag' => 1,
-      'sectors_popup' => 0,
-      'primary_sectors_popup' => 0,
-      'secondary_sectors_popup' => 0,
-      'programs_popup' => 0,
-      'donors_popup' => 0,
-      'agencies_popup' => 0,
-      'locations_popup' => 0,
-      'sectors_label' => 'Sectors',
-      'primary_sectors_label' => 'Primary Sectors',
-      'secondary_sectors_label' => 'Secondary Sectors',
-      'programs_label' => 'Programs',
-      'donors_label' => 'Donors',
-      'agencies_label' => 'Agency',
-      'locations_label' => 'Locations',
-      'keywords_label' => 'Keywords',
-      'preview_amount' => 0,
-    ),
-    'render callback' => 'ampp_projects_projects_search_form_render'
+  'single' => TRUE,
+  'title' => t('Projects Search Form'),
+  'description' => t('Projects Search Form'),
+  'category' => array(t('AMPP Widgets'), -9),
+  'defaults' => array(
+    'search_path' => 'search',
+    'budget_flag' => 0,
+    'country_level_projects_flag' => 0,
+    'sectors_flag' => 1,
+    'primary_sectors_flag' => 0,
+    'secondary_sectors_flag' => 0,
+    'programs_flag' => 0,
+    'donors_flag' => 1,
+    'agencies_flag' => 1,
+    'locations_flag' => 1,
+    'period_flag' => 0,
+    'keywords_flag' => 1,
+    'sectors_popup' => 0,
+    'primary_sectors_popup' => 0,
+    'secondary_sectors_popup' => 0,
+    'programs_popup' => 0,
+    'donors_popup' => 0,
+    'agencies_popup' => 0,
+    'locations_popup' => 0,
+    'sectors_label' => 'Sectors',
+    'primary_sectors_label' => 'Primary Sectors',
+    'secondary_sectors_label' => 'Secondary Sectors',
+    'programs_label' => 'Programs',
+    'donors_label' => 'Donors',
+    'agencies_label' => 'Agency',
+    'locations_label' => 'Locations',
+    'keywords_label' => 'Keywords',
+    'preview_amount' => 0,
+  ),
+  'render callback' => 'ampp_projects_projects_search_form_render'
 );
 
 /**
@@ -57,7 +57,11 @@ $plugin = array(
  *   An object with at least title and content members.
  */
 function ampp_projects_projects_search_form_render($subtype, $conf, $args, $context) {
-    module_load_include('inc', 'node', 'node.pages');
+  module_load_include('inc', 'node', 'node.pages');
+
+  // Merge in plugin defaults, prevents not defined warnings on existing panels.
+  $plugin_definition = ctools_get_plugins('ctools', 'content_types', $subtype);
+  $conf += $plugin_definition['defaults'];
 
   $block = new stdClass();
   $block->title = t('Projects search');

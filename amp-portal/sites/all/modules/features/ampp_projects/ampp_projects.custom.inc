@@ -1219,6 +1219,7 @@ function ampp_search_autocomplete_callback($type = NULL) {
     'secondarysectors' => 'ampp_search_secondarysectors',
     'programs' => 'ampp_search_programs',
     'donors' => 'ampp_search_donors',
+    'agencies' => 'ampp_search_agencies',
     'regions' => 'ampp_search_regions',
   );
 
@@ -1400,6 +1401,54 @@ function ampp_search_donors() {
   $query->groupBy('orgs.acronym');
 
   if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_donors', dpq($query, 1));
+
+  $result = $query->execute();
+
+  foreach ($result as $record) {
+    $name = !empty($record->acronym) ? check_plain($record->name) . ' (' . check_plain($record->acronym) . ')' : check_plain($record->name);
+    $items[] = array('id'=>$record->amp_org_id, 'name'=>$name);
+  }
+  db_set_active();
+
+  return $items;
+}
+
+/**
+ * Autocomplete callback handler for agencies search
+ */
+function ampp_search_agencies() {
+  $string = $_POST['string'];
+  $items = array();
+  db_set_active("amp_projects");
+
+  global $language;
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', agency.amp_org_id, 'amp_organisation', 'name', 'amp_org_id', '" . $language->language . "')";
+
+  // Get the role ID for the "Beneficiary Agency" role.
+  // SELECT amp_role_id FROM amp_role WHERE role_code = 'BA';
+  $ba_role_id = db_select('amp_role', 'ar')
+    ->condition('ar.role_code', 'BA', '=')
+    ->fields('ar', array('amp_role_id'))
+    ->execute()
+    ->fetchField();
+
+  // Get the list of organizations with the "Beneficiary Agency" role.
+  // SELECT DISTINCT amp_org_id, name,role FROM amp_organisation orgs LEFT JOIN amp_org_role aor ON aor.organisation = orgs.amp_org_id WHERE aor.role = 5;
+  $query = db_select('amp_organisation', 'agency');
+  $query->leftJoin('amp_org_role', 'aor', 'aor.organisation = agency.amp_org_id');
+  $query->distinct();
+  $query->fields('agency', array('amp_org_id', 'acronym'));
+  $query->fields('aor', array('role'));
+  $query->addExpression($translate_field, 'name');
+  $query->condition('aor.role', $ba_role_id, '=');
+
+  // Search for the provided string.
+  $query_or = db_or();
+  $query_or->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')');
+  $query_or->where('unaccent(agency.acronym) ILIKE unaccent(\'%' . db_like($string) . '%\')');
+  $query->condition($query_or);
+
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_agencies', dpq($query, 1));
 
   $result = $query->execute();
 

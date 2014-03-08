@@ -5,6 +5,7 @@
 package org.digijava.module.aim.action;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -113,7 +114,7 @@ public class UpdateCurrencyRate extends Action {
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
-		if (crForm.getDoAction().equals("")) {
+		if ("".equals(crForm.getDoAction())) {
 			crForm = populateFromRequest (crForm,request);
 		}
 		CurrencyRates currencyRates = null;
@@ -261,23 +262,17 @@ public class UpdateCurrencyRate extends Action {
                         cRate.setFromCurrencyCode(baseCurrency);
                         cRate.setDataSource(CurrencyUtil.RATE_BY_HAND);
                     	if (crForm.getDoAction().equals("validateRateExistance")) {
-                    		response.setHeader("Cache-Control","no-cache");
-                    		PrintWriter out = response.getWriter();				
-                    	
-                    		if (!CurrencyUtil.isCurrencyRateExist(cRate)) {
+                    		
+                    		if (!CurrencyUtil.isCurrencyRateInDatabase(cRate)) {
                     			crForm.setDoAction("saveRate");
                         		saveRate (cRate,crForm);
-                        		out.println("false");
+                        		writeNonCacheAbleResponse (response,"false");
                             	
                     		}
                     		else {
-                    			out.println("true");
-                    		}
-                    		out.flush();
-                    		out.close();
+                    			writeNonCacheAbleResponse (response,"true");
+                        	}
                     		return null;
-                    
-                    	
                     	}
                     	else {
                     		saveRate (cRate,crForm);
@@ -310,6 +305,15 @@ public class UpdateCurrencyRate extends Action {
 		form.setUpdateCRateAmount(request.getParameter("updateCRateAmount"));
 		form.setUpdateCRateDate(request.getParameter("updateCRateDate"));
 		return form;
+	}
+	
+	private void writeNonCacheAbleResponse (HttpServletResponse response, String responseBody) throws IOException {
+		response.setHeader("Cache-Control","no-cache");
+		PrintWriter out = response.getWriter();		
+		out.println(responseBody);
+    	out.flush();
+		out.close();
+		
 	}
 	
 

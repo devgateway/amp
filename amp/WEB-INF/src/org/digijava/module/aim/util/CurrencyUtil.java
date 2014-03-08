@@ -335,42 +335,31 @@ public class CurrencyUtil {
 		return col;
 	}
 	
-	public static boolean isCurrencyRateExist (AmpCurrencyRate cRate) {
-//		Session session = null;
-//		Query qry = null;
-//		String qryStr = null;
-//		try {
-//			session = PersistenceManager.getSession();
-//        	qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
-//					"where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
-//					"(cRate.exchangeRateDate=:date)";
-//			qry = session.createQuery(qryStr);
-//			qry.setParameter("code",cRate.getToCurrencyCode(),Hibernate.STRING);
-//			qry.setParameter("fromCode",cRate.getFromCurrencyCode(),Hibernate.STRING);
-//			qry.setParameter("date",cRate.getExchangeRateDate(),Hibernate.DATE);
-//
-//			Iterator itr = qry.list().iterator();
-//			if (itr.hasNext()) {
-//				// if the currency rate already exist
-//				return true;
-//			} else {
-//				return false;
-//			}
-//
-//		} catch (Exception e) {
-//			logger.error("Exception from isCurrencyRateExist");
-//			e.printStackTrace(System.out);
-//		
-//		} finally {
-//			if (session != null) {
-//				try {
-//					PersistenceManager.releaseSession(session);
-//				} catch (Exception rsf) {
-//					logger.error("Release session failed");
-//				}
-//			}	
-//		}
-		return false;
+	public static boolean isCurrencyRateInDatabase (AmpCurrencyRate cRate) {
+		Session session = null;
+		Query qry = null;
+		String qryStr = null;
+		try {
+			session = PersistenceManager.getSession();
+        	qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
+					"where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
+					"(cRate.exchangeRateDate=:date)";
+			qry = session.createQuery(qryStr);
+			qry.setString("code",cRate.getToCurrencyCode());
+			qry.setString("fromCode",cRate.getFromCurrencyCode());
+			qry.setDate("date",cRate.getExchangeRateDate());
+
+			if (!qry.list().isEmpty())
+			{
+				return true;
+			} else {
+				return false;
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception from isCurrencyRateExist");
+			throw new RuntimeException(e);
+		} 
     }
 	
 

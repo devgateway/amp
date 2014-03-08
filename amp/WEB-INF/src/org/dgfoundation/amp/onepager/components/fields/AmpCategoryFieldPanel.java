@@ -128,7 +128,9 @@ public abstract class AmpCategoryFieldPanel extends
 
     public static String getAlternateKey(Session s, final String categKey) {
         AmpAuthWebSession session = (AmpAuthWebSession) s;
-        if (session.getCurrentMember().getWorkspacePrefix() != null){
+        
+        if (session.getCurrentMember().getWorkspacePrefix() != null &&( !categKey.equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LEVEL_KEY) &&
+    			!categKey.equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_KEY) ) ){
             String tmpKey = session.getCurrentMember().getWorkspacePrefix().getValue() + categKey;
             try {
                 CategoryManagerUtil.loadAmpCategoryClassByKey(tmpKey);

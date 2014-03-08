@@ -1555,16 +1555,6 @@ function collapseAll() {
 						</td>
 					</c:if>	
 				</tr>
-                <c:if test="${aimEditActivityForm.identification.fundingSourcesNumber != null}">
-                    <tr bgcolor="#f0f0f0">
-                        <td>
-                            <digi:trn>Total Number of Funding Sources</digi:trn>
-                        </td>
-                        <td>
-                            <b>${aimEditActivityForm.identification.fundingSourcesNumber}</b>
-                        </td>
-                    </tr>
-                </c:if>
 			</table>
 		</c:if>
 	</div>

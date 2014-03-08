@@ -850,7 +850,10 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	
 	public static boolean isCategoryKeyInUse(String key) {
 		try {
-			CategoryManagerUtil.loadAmpCategoryClassByKey(key);
+			if(
+			CategoryManagerUtil.loadAmpCategoryClassByKey(key)==null){
+				return false;
+			}
 			return true;
 		} catch (NoCategoryClassException e) {
 			// TODO Auto-generated catch block

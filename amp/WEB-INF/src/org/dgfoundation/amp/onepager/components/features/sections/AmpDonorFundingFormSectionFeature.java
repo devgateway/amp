@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.event.Broadcast;
@@ -21,7 +20,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
@@ -29,7 +27,10 @@ import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
@@ -168,15 +169,6 @@ public class AmpDonorFundingFormSectionFeature extends
 		//group fields in FM under "Proposed Project Cost"
 		AmpProposedProjectCost propProjectCost = new AmpProposedProjectCost("propProjCost", "Proposed Project Cost", am);
 		add(propProjectCost);
-
-        RangeValidator<Integer> rangeValidator = new RangeValidator<Integer>(1, 10);
-        AttributeModifier attributeModifier = new AttributeModifier("size", new Model(1));
-        AmpTextFieldPanel<Integer> fundingSourcesNumberPanel = new AmpTextFieldPanel<Integer>(
-                "fundingSourcesNumber", new PropertyModel<Integer>(am, "fundingSourcesNumber"),
-                CategoryConstants.FUNDING_SOURCES_NUMBER_NAME, AmpFMTypes.MODULE);
-        fundingSourcesNumberPanel.getTextContainer().add(rangeValidator);
-        fundingSourcesNumberPanel.getTextContainer().add(attributeModifier);
-        add(fundingSourcesNumberPanel);
 
         AmpCategorySelectFieldPanel typeOfCooperation = new AmpCategorySelectFieldPanel(
                 "typeOfCooperation", CategoryConstants.TYPE_OF_COOPERATION_KEY,

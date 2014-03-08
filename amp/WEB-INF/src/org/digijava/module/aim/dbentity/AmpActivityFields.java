@@ -3,8 +3,10 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
+import org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistryObservationsFormSectionFeature;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -16,7 +18,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 
@@ -416,9 +417,6 @@ LoggerIdentifiable, Cloneable {
 	protected Boolean mergedActivity;
 	protected AmpActivityVersion mergeSource1;
 	protected AmpActivityVersion mergeSource2;
-
-    @VersionableFieldSimple(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME)
-    protected Integer fundingSourcesNumber;
 
 	/**
 	 * whether this is a PROJECT or a South-South Cooperation
@@ -2042,14 +2040,6 @@ contactName = string;
 
     public void setActivityType(Long activityType) {
         this.activityType = activityType;
-    }
-
-    public Integer getFundingSourcesNumber() {
-        return fundingSourcesNumber;
-    }
-
-    public void setFundingSourcesNumber(Integer fundingSourcesNumber) {
-        this.fundingSourcesNumber = fundingSourcesNumber;
     }
 
     @Override

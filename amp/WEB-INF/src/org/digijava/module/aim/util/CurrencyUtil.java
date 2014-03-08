@@ -339,6 +339,7 @@ public class CurrencyUtil {
 		Session session = null;
 		Query qry = null;
 		String qryStr = null;
+		boolean exists = false;
 		try {
 			session = PersistenceManager.getSession();
         	qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
@@ -348,18 +349,11 @@ public class CurrencyUtil {
 			qry.setString("code",cRate.getToCurrencyCode());
 			qry.setString("fromCode",cRate.getFromCurrencyCode());
 			qry.setDate("date",cRate.getExchangeRateDate());
-
-			if (!qry.list().isEmpty())
-			{
-				return true;
-			} else {
-				return false;
-			}
-
+			exists =  !qry.list().isEmpty();
 		} catch (Exception e) {
-			logger.error("Exception from isCurrencyRateExist");
-			throw new RuntimeException(e);
+			logger.error("Exception while trying to check if a currency rate exists in database",e);
 		} 
+		return exists;
     }
 	
 	

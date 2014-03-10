@@ -803,6 +803,7 @@ public class EditActivity extends Action {
         AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
         eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null :typeOfImplementation.getLabel());
 
+        eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());
 
         //eaForm.getIdentification().setSsc_typeOfCooperation(activity.)
 

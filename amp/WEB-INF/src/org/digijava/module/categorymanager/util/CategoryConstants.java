@@ -95,6 +95,9 @@ public class CategoryConstants {
     public static final String WORKSPACE_PREFIX_NAME		= "Workspace Prefix";
     public static final String WORKSPACE_PREFIX_KEY		    = "workspace_prefix";
     //categ for SSC
+    public static final String FUNDING_SOURCES_NUMBER_NAME = "Total Number of Funding Sources";
+    public static final String FUNDING_SOURCES_NUMBER_KEY = "total_number_of_funding_sources";
+    //categ for SSC
     public static final String MODALITIES_NAME		        = "Modalities";
     public static final String MODALITIES_KEY		        = "modalities";
     //categ for SSC

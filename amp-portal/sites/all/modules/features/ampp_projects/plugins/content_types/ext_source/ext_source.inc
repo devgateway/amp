@@ -22,7 +22,7 @@ $plugin = array(
 function ampp_projects_ext_source_content_type_render($subtype, $conf, $panel_args, $context) {
 
   $block = new stdClass();
-  
+
   $block->content = '<iframe src="' . $conf['source'] . '" width="' . $conf['width'] . '" height="' . $conf['height'] . '" frameborder="0"></iframe>';
 
   return $block;
@@ -34,14 +34,14 @@ function ampp_projects_ext_source_content_type_render($subtype, $conf, $panel_ar
  */
 function ampp_projects_ext_source_content_type_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
-  
+
   $form['override_title_markup']['#access'] = false;
 
   $form['source'] = array(
     '#title' => t('Source'),
     '#type' => 'textfield',
     '#size' => 60,
-    '#maxlength' => 255, 
+    '#maxlength' => 255,
     '#title' => t("Absolute url to the external source"),
     '#default_value' => $conf['source'] ? $conf['source'] : $form_state['plugin']['defaults']['source'],
   );
@@ -50,17 +50,17 @@ function ampp_projects_ext_source_content_type_edit_form($form, &$form_state) {
     '#title' => t('Width'),
     '#type' => 'textfield',
     '#size' => 4,
-    '#maxlength' => 4, 
+    '#maxlength' => 4,
     '#description' => t("Width of the iframe in pixels"),
     '#default_value' => $conf['width'] ? $conf['width'] : $form_state['plugin']['defaults']['width'],
     '#element_validate' => array('_width_height_validate'),
   );
-  
+
   $form['height'] = array(
     '#title' => t('Height'),
     '#type' => 'textfield',
     '#size' => 4,
-    '#maxlength' => 4, 
+    '#maxlength' => 4,
     '#description' => t("Height of the iframe in pixels"),
     '#default_value' => $conf['height'] ? $conf['height'] : $form_state['plugin']['defaults']['height'],
     '#element_validate' => array('_width_height_validate'),

@@ -6,20 +6,20 @@ function init(&$view, &$options) {
   }
 
   function option_definition() {
-  	$options = parent::option_definition();
-  	$options['use_like'] = array('default' => FALSE);
-  	
+    $options = parent::option_definition();
+    $options['use_like'] = array('default' => FALSE);
+
     return $options;
   }
 
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
     $form['use_like'] = array(
-    	'#type' => 'checkbox',
-    	'#title' => t('Contains string'),
-    	'#description' => t('Uses sql like insted of equals.'),
-    	'#default_value' => $this->options['use_like'],
-    	'#fieldset' => 'more',
+      '#type' => 'checkbox',
+      '#title' => t('Contains string'),
+      '#description' => t('Uses sql like insted of equals.'),
+      '#default_value' => $this->options['use_like'],
+      '#fieldset' => 'more',
     );
   }
 
@@ -128,11 +128,11 @@ function init(&$view, &$options) {
       $this->query->add_where_expression(0, $field, $placeholders);
     }
     else {
-    	if($this->options['use_like']) {
-    		$this->query->add_where(0, $field, '%' . db_like($argument) . '%', 'ILIKE');
-    	} else {
-      		$this->query->add_where(0, $field, $argument, $operator);
-    	}
+      if($this->options['use_like']) {
+        $this->query->add_where(0, $field, '%' . db_like($argument) . '%', 'ILIKE');
+      } else {
+          $this->query->add_where(0, $field, $argument, $operator);
+      }
     }
   }
 

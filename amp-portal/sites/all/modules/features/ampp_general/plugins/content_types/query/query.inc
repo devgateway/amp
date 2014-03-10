@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 $plugin = array(
     'single' => TRUE,
@@ -24,25 +24,25 @@ $plugin = array(
  */
 function ampp_general_query_render($subtype, $conf, $args, $context) {
   $block = new stdClass();
-  
+
   $labels = trim($conf['labels']);
   $labels = trim($labels, ',');
   $labels = trim($labels);
   $labels_arr = explode(',', $labels);
   foreach ($labels_arr as $k => $v) $labels_arr[$k] = t($labels_arr[$k]);
   $vars['labels'] = $labels_arr;
-  
+
   $query = build_query($conf);
   $active = db_set_active($conf['database']);
-  try {   
+  try {
     $result = db_query($query)->fetchAll();
     db_set_active($active);
     $vars['success'] = 1;
   } catch (Exception $e) {
     $vars['success'] = 0;
-    db_set_active($active);   
+    db_set_active($active);
   }
-  
+
   foreach ($result as $record) {
     $vars['values'][] = (array) $record;
   }
@@ -59,61 +59,61 @@ function ampp_general_query_render($subtype, $conf, $args, $context) {
  */
 function ampp_general_query_content_type_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
-  
+
   //$form['override_title']['#access'] = false;
   //$form['override_title_text']['#access'] = false;
   $form['override_title_markup']['#access'] = false;
-  
+
   global $databases;
   foreach ($databases as $k => $v) {
     $dbs[$k] = $k;
   }
-  
+
   $form['database'] = array(
     '#type' => 'select',
     '#title' => t('Database'),
     '#options' => $dbs,
-    '#default_value' => $conf['database'] ? $conf['database'] : '',  
+    '#default_value' => $conf['database'] ? $conf['database'] : '',
   );
-  
+
   $form['columns'] = array(
     '#type' => 'textfield',
     '#title' => t('Column names'),
-    '#default_value' => $conf['columns'] ? $conf['columns'] : '', 
+    '#default_value' => $conf['columns'] ? $conf['columns'] : '',
     '#description' => t('Comma delimited. Aggregate functions like SUM can be used.'),
-    '#element_validate' => array('columns_validate'), 
+    '#element_validate' => array('columns_validate'),
   );
-    
+
   $form['labels'] = array(
     '#type' => 'textfield',
     '#title' => t('Column labels'),
-    '#default_value' => $conf['labels'] ? $conf['labels'] : '', 
-    '#description' => t('Comma delimited.'), 
+    '#default_value' => $conf['labels'] ? $conf['labels'] : '',
+    '#description' => t('Comma delimited.'),
     '#element_validate' => array('labels_validate'),
   );
-  
+
   $form['table'] = array(
     '#type' => 'textfield',
     '#title' => t('Table name(s)'),
-    '#default_value' => $conf['table'] ? $conf['table'] : '', 
+    '#default_value' => $conf['table'] ? $conf['table'] : '',
     '#description' => t('Valid SQL syntax should be used.'),
-    '#element_validate' => array('table_validate'), 
+    '#element_validate' => array('table_validate'),
   );
-  
+
   $form['where'] = array(
     '#type' => 'textfield',
     '#title' => t('Where clause'),
-    '#default_value' => $conf['where'] ? $conf['where'] : '', 
+    '#default_value' => $conf['where'] ? $conf['where'] : '',
     '#description' => t('Valid SQL syntax should be used. Use "!iso2" marker for user navigatoin language value.'),
-    '#element_validate' => array('where_validate'), 
+    '#element_validate' => array('where_validate'),
   );
 
   $form['sortable'] = array(
     '#type' => 'textfield',
     '#title' => t('Sort by clause'),
-    '#default_value' => $conf['sortable'] ? $conf['sortable'] : '', 
+    '#default_value' => $conf['sortable'] ? $conf['sortable'] : '',
     '#description' => t('Valid SQL syntax should be used.'),
-    '#element_validate' => array('sortable_validate'), 
+    '#element_validate' => array('sortable_validate'),
   );
 
   $form['limit'] = array(
@@ -121,13 +121,13 @@ function ampp_general_query_content_type_edit_form($form, &$form_state) {
     '#size' => 3,
     '#maxlength' => 3,
     '#title' => t('Limit'),
-    '#default_value' => $conf['limit'] ? $conf['limit'] : '', 
+    '#default_value' => $conf['limit'] ? $conf['limit'] : '',
     '#description' => t('Numeric values only. If left blank default value 10 will be used.'),
-    '#element_validate' => array('limit_validate'), 
+    '#element_validate' => array('limit_validate'),
   );
 
   $form['#validate'][] = 'query_form_validate';
-  
+
   return $form;
 }
 
@@ -146,11 +146,11 @@ function ampp_general_query_content_type_edit_form_submit(&$form, &$form_state) 
  *
  */
 function query_form_validate($form, &$form_state) {
-  
+
   $active = db_set_active($form_state['values']['database']);
 
   $query = build_query($form_state['values']);
-  try {   
+  try {
     $result = db_query($query);
     db_set_active($active);
   } catch (Exception $e) {
@@ -170,34 +170,34 @@ function build_query($conf) {
   $columns = trim($conf['columns']);
   $columns = trim($columns, ',');
   $columns = trim($columns);
-  $columns_arr = explode(',', $columns); 
-  
+  $columns_arr = explode(',', $columns);
+
   $labels = trim($conf['labels']);
   $labels = trim($labels, ',');
   $labels = trim($labels);
-  $labels_arr = explode(',', $labels); 
-  
+  $labels_arr = explode(',', $labels);
+
   foreach ($columns_arr as $k => $v) {
-    $columns_labels_arr[] = $v . ' as ' . $labels_arr[$k]; 
+    $columns_labels_arr[] = $v . ' as ' . $labels_arr[$k];
   }
-  
+
   $query = 'SELECT ' . implode(',', $columns_labels_arr) . ' FROM ' . $conf['table'];
 
   if (!empty($conf['where'])) {
     $query .= ' WHERE ' . $conf['where'];
     $query = format_string($query, array('!iso2' => $language->language));
   }
-  
+
   if (!empty($conf['sortable'])) {
     $query .= ' ORDER BY ' . $conf['sortable'];
   }
-  
+
   if (!empty($conf['limit'])) {
     $query .= ' LIMIT ' . intval($conf['limit']);
   } else {
     $query .= ' LIMIT 10';
   }
-  
+
   return $query;
 }
 
@@ -224,12 +224,12 @@ function labels_validate($element, &$form_state, $form) {
   $element['#value'] = trim($element['#value'], ',');
   $element['#value'] = trim($element['#value']);
   $labels_arr = explode(',', $element['#value']);
-  
+
   $columns = trim($form_state['values']['columns']);
   $columns = trim($columns, ',');
   $columns = trim($columns);
   $columns_arr = explode(',', $columns);
-  
+
   if (count($labels_arr) != count($columns_arr)) {
      form_error($element, t('Column name and label counts should be equal.'));
   }

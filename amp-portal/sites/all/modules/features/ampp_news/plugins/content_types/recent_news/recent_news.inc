@@ -21,40 +21,40 @@ $plugin = array(
 * Plugin output function
 */
 function ampp_news_recent_news_content_type_render($subtype, $conf, $panel_args, $context) {
-  
+
   $block = new stdClass();
-  
-  $vars = array(); 
-  
+
+  $vars = array();
+
   if (!isset($conf['show_only'])) $conf['show_only'] = 0;
-  
+
   if ($conf['show_only'] == 0 || $conf['show_only'] == 2) {
-    $footer_view = views_get_view('homepage_slideshow'); 
+    $footer_view = views_get_view('homepage_slideshow');
     $footer_view->set_items_per_page($conf['to_show']);
     $footer_view->set_display('block_4');
     $footer_view->pre_execute();
-    $footer_view->execute(); 
+    $footer_view->execute();
     $footer_content = $footer_view->preview('block_4');
   }
-  if ($conf['show_only'] == 0 || $conf['show_only'] == 1) {   
-    $view = views_get_view('homepage_slideshow'); 
+  if ($conf['show_only'] == 0 || $conf['show_only'] == 1) {
+    $view = views_get_view('homepage_slideshow');
     $view->set_display('block_1');
     $view->pre_execute();
-    $view->execute(); 
+    $view->execute();
   }
-  if ($conf['show_only'] == 0) { 
+  if ($conf['show_only'] == 0) {
     // $view->footer['area']->options['format'] = 'html';
-    $view->footer['area']->options['content'] = $footer_content;   
+    $view->footer['area']->options['content'] = $footer_content;
     $vars['content'] = $view->preview('block_1');
   }
-  if ($conf['show_only'] == 1) { 
+  if ($conf['show_only'] == 1) {
     $view->footer['area']->options['content'] = '';
     $vars['content'] = $view->preview('block_1');
-  } 
-  if ($conf['show_only'] == 2) {  
+  }
+  if ($conf['show_only'] == 2) {
     $vars['content'] = $footer_content;
   }
-  
+
   // more link
   $conf['more_text'] = trim($conf['more_text']);
   if ( empty($conf['more_text']) || ($conf['more_show'] && (isset($view) && $view->total_rows <= $conf['to_show'])) ) {
@@ -64,9 +64,9 @@ function ampp_news_recent_news_content_type_render($subtype, $conf, $panel_args,
     $vars['more_text'] = $conf['more_text'];
     $vars['more_url'] = $conf['more_url'];
   }
-  
+
   $block->content = theme('ampp_news_recent_news', array('vars' => $vars));
-  
+
   return $block;
 }
 
@@ -76,17 +76,17 @@ function ampp_news_recent_news_content_type_render($subtype, $conf, $panel_args,
  */
 function ampp_news_recent_news_content_type_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
-  
+
   $form['show_only'] = array(
     '#type' => 'select',
     '#title' => t("Show"),
     '#options' => array (0 => t('Both slideshow and news listing'), 1 => t('Slideshow only'), 2 => t('News listing only')),
     '#default_value' => isset($conf['show_only']) ? $conf['show_only'] : $form_state['plugin']['defaults']['show_only'],
-  ); 
+  );
   $form['to_show'] = array(
     '#type' => 'textfield',
     '#size' => 2,
-    '#maxlength' => 2, 
+    '#maxlength' => 2,
     '#required' => TRUE,
     '#element_validate' => array('recent_news_to_show_validate'),
     '#title' => t('Count'),
@@ -96,7 +96,7 @@ function ampp_news_recent_news_content_type_edit_form($form, &$form_state) {
   $form['more_text'] = array(
     '#type' => 'textfield',
     '#size' => 20,
-    '#maxlength' => 255, 
+    '#maxlength' => 255,
     '#title' => t("Text for 'more' link"),
     '#description' => t('Leave blank to hide the link'),
     '#default_value' => isset($conf['more_show']) ? $conf['more_text'] : $form_state['plugin']['defaults']['more_text'],
@@ -104,7 +104,7 @@ function ampp_news_recent_news_content_type_edit_form($form, &$form_state) {
   $form['more_url'] = array(
     '#type' => 'textfield',
     '#size' => 20,
-    '#maxlength' => 255, 
+    '#maxlength' => 255,
     '#title' => t("Relative URL for 'more' link"),
     '#description' => t('Do not use forward slash for relative URLs'),
     '#default_value' => $conf['more_url'] ? $conf['more_url'] : $form_state['plugin']['defaults']['more_url'],

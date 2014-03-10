@@ -1,4 +1,4 @@
-<?php 
+<?php
   if ($vars['success'] == 0) {
     print '<table class="query_plugin_table"><tr><td>' . $vars['error_msg'] . '</td></tr></table>';
   } else {

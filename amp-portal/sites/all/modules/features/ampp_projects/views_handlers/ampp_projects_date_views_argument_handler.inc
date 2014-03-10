@@ -5,15 +5,15 @@
 */
 //class ampp_projects_date_views_argument_handler extends views_handler_filter {
 class ampp_projects_date_views_argument_handler extends views_handler_argument {
-  
+
   /*
    *
    */
   function init(&$view, &$options) {
     parent::init($view, $options);
   }
-  
-  
+
+
   /*
    *
    */
@@ -22,8 +22,8 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
     $options['condition_operator'] = array('default' => '=');
     return $options;
   }
-  
-  
+
+
   /*
    *
    */
@@ -70,8 +70,8 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
 
     return $operators;
   }
-  
-  
+
+
   /*
    *
    */
@@ -82,8 +82,8 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
     }
     return $options;
   }
-  
-  
+
+
   /*
    *
    */
@@ -98,10 +98,10 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
         '#default_value' => $this->options['condition_operator'],
         '#options' => $options,
       );
-    }  
+    }
   }
-  
-  
+
+
   /*
    *
    */
@@ -115,8 +115,8 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
 
     return $options;
   }
-  
-  
+
+
   /*
    *
    */
@@ -134,8 +134,8 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
     }
     return $output;
   }
-  
-  
+
+
   /*
    *
    */
@@ -148,8 +148,8 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
       $this->{$info[$this->options['condition_operator']]['method']}($field);
     }
   }
-  
-  
+
+
   /*
    *
    */
@@ -157,6 +157,6 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
     $this->value = array($this->argument);
     $group = 0;
     if (isset($this->options['group'])) $group = $this->options['group'];
-    $this->query->add_where($group, $field, $this->value[0], $this->options['condition_operator']);  
+    $this->query->add_where($group, $field, $this->value[0], $this->options['condition_operator']);
   }
 }

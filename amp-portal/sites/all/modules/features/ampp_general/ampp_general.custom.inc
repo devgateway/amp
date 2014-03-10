@@ -19,7 +19,7 @@ function ampp_general_menu_alter(&$items) {
   unset($items['node/%node/panelizer/settings']);
   unset($items['node/%node/panelizer/context']);
   $items['node/%node/panelizer/content']['type'] = MENU_DEFAULT_LOCAL_TASK;
-  
+
   unset($items['admin/appearance/install']);
 }
 
@@ -28,7 +28,7 @@ function ampp_general_menu_alter(&$items) {
  * Implements hook_views_pre_view.
  */
 /*
-function ampp_general_views_pre_view(&$view, &$display_id, &$args){  
+function ampp_general_views_pre_view(&$view, &$display_id, &$args){
   // Make sure this is only for the specific view you want to modified
   if ($view->name == "homepage_slideshow" && $display_id == 'block_4') {
     $view->set_items_per_page(variable_get('site_frontpage_news_teaser_records', 6));
@@ -48,7 +48,7 @@ function ampp_general_form_alter(&$form, &$form_state, $form_id) {
     $form['contexts']['#access'] = 0;
     $form['legend']['#access'] = 0;
   }
-  
+
   // adding a new flag to menu items
   if ($form_id == 'menu_edit_item') {
     $form['external'] = array (

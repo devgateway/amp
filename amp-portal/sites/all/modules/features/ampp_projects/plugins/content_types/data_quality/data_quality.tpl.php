@@ -1,5 +1,5 @@
 <?php if(!empty($quality_records)): ?>
-<div class="data-quality"> 
+<div class="data-quality">
   <div class="data-quality-header">
     <div class="data-quality-column-1"><?php print t('Donor');?></div>
     <div class="data-quality-column-2"><?php print t('Last update');?></div>
@@ -14,5 +14,5 @@
   <?php $index++;?>
   <?php endforeach;?>
 </table>
- 
+
 <?php endif;?>

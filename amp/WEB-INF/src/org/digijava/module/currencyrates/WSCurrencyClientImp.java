@@ -1,6 +1,6 @@
 package org.digijava.module.currencyrates;
 
-import java.net.NoRouteToHostException;
+
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +17,7 @@ import org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorSo
  * 
  */
 public class WSCurrencyClientImp implements WSCurrencyClient {
+	
 	private CurrencyConvertorSoap currencyConvertor;
 
 	public WSCurrencyClientImp() {
@@ -28,7 +29,7 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 			e.printStackTrace();
 		}
 	}
-	public WSCurrencyClientImp(int minutes) {
+	public WSCurrencyClientImp(Integer minutes) {
 		this.currencyConvertor = null;
 		try {
 			this.currencyConvertor = new MyCurrencyConvertorLocator()
@@ -66,6 +67,7 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 					rate = 1.0;
 				}else{
 					rate = this.currencyConvertor.conversionRate(base, c);
+					System.out.println(this.currencyConvertor.conversionRate(c,base ));
 				}
 			} catch (IllegalArgumentException e) {
 				rate = WSCurrencyClient.INVALID_CURRENCY_CODE;
@@ -97,9 +99,14 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 		}
 		return rate;
 	}
-
-	public List getSupportedCurrencies() {
+	@Override
+	public void setUsername(String pUsername) {
 		// TODO Auto-generated method stub
-		return null;
+		
+	}
+	@Override
+	public void setPassword(String pPassword) {
+		// TODO Auto-generated method stub
+		
 	}
 }

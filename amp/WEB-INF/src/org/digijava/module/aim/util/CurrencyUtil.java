@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.management.RuntimeErrorException;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -252,7 +254,6 @@ public class CurrencyUtil {
 		}
 
 		try {
-			//session = PersistenceManager.getSession();
             session = PersistenceManager.getCurrentSession();
             tx = session.beginTransaction();
 
@@ -260,38 +261,38 @@ public class CurrencyUtil {
 					"where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
 					"(cRate.exchangeRateDate=:date)";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("code",cRate.getToCurrencyCode(),Hibernate.STRING);
-			qry.setParameter("fromCode",cRate.getFromCurrencyCode(),Hibernate.STRING);
-			qry.setParameter("date",cRate.getExchangeRateDate(),Hibernate.DATE);
+			qry.setString("code", cRate.getToCurrencyCode());
+			qry.setString("fromCode",cRate.getFromCurrencyCode());
+			qry.setDate("date",cRate.getExchangeRateDate());
 
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				// if the currency rate already exist update the rate
 				AmpCurrencyRate actRate = (AmpCurrencyRate) itr.next();
 				actRate.setExchangeRate(cRate.getExchangeRate());
-				//System.out.println("updating......................");
 				session.update(actRate);
 			} else {
 				// add the currency rate object if it does not exist
-				//System.out.println("saving......................");
 				session.save(cRate);
 			}
 
 			tx.commit();
 		} catch (Exception e) {
-			logger.error("Exception from saveCurrencyRate");
-			e.printStackTrace(System.out);
+			
 			if (tx != null) {
 				try {
 					tx.rollback();
+					//we throw a runtime exception when we cannot rolbac
+					
 				} catch (Exception rbf) {
 					logger.error("Rollback failed");
 				}
 			}
+			logger.error("Couldnt save Exchangerates ",e);
+			throw new RuntimeException(e);
 		} finally {
 			if (session != null) {
 				try {
-					//PersistenceManager.releaseSession(session);
                     if(session.isOpen()) session.close();
 				} catch (Exception rsf) {
 					logger.error("Release session failed");

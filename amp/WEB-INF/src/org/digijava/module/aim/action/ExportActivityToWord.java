@@ -3218,6 +3218,7 @@ public class ExportActivityToWord extends Action {
 		overAllTable.addCell(additionalInfoCell);
 		
 		//3rd cell is for currency
+        /*
 		RtfCell currencyInfoCell=new RtfCell();	            
 		currencyInfoCell.setBorder(0);
 		Table currencyInfoSubTable = new Table(1);
@@ -3230,7 +3231,7 @@ public class ExportActivityToWord extends Action {
 		currencyInfoSubTable.addCell(mycell);
 		
 		currencyInfoCell.add(currencyInfoSubTable);	            
-		overAllTable.addCell(currencyInfoCell);
+		overAllTable.addCell(currencyInfoCell); */
 		return overAllTable;
 	}
 	

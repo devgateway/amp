@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 
 
 <c:set var="reportStatement">
@@ -243,18 +244,18 @@ addLoadEvent(addpanel);
 				</a>
 			</logic:notEqual>
 			<logic:equal name="viewable" property="totalUniqueRows" value="0">	
-					<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon_gray.gif" border="0" alt="Report is empty. Nothing to export" />
+					<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon_gray.gif" border="0" title="Report is empty. Nothing to export" />
 			</logic:equal>
 		</td>
 
 		<td noWrap align=left valign="center">
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">			
 				<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;" title="<digi:trn>Download as XLS</digi:trn>">
-					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
+					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" title="Export to Excel" />
 				</a>
 			</logic:notEqual>
 			<logic:equal name="viewable" property="totalUniqueRows" value="0">			
-					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon_gray.gif" border="0" alt="Report is empty. Nothing to export" />
+					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon_gray.gif" border="0" title="Report is empty. Nothing to export" />
 			</logic:equal>
 		</td>
 
@@ -265,7 +266,7 @@ addLoadEvent(addpanel);
 				</a>
 			</logic:notEqual>
 			<logic:equal name="viewable" property="totalUniqueRows" value="0">		
-					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon_gray.gif" border="0" alt="Report is empty. Nothing to export" />
+					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon_gray.gif" border="0" title="Report is empty. Nothing to export" />
 			</logic:equal>
 		</td>
 		
@@ -286,24 +287,39 @@ addLoadEvent(addpanel);
 		</c:set>
 								
 		<td noWrap align=left valign="center">
-			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank" title="${downloadAsCsv}">
-				<digi:img styleClass="imagecsv" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="${exportToCsv}" />
-			</digi:link>
+			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">
+				<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank" title="${downloadAsCsv}">
+					<digi:img styleClass="imagecsv" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="${exportToCsv}" />
+				</digi:link>
+			</logic:notEqual>
+			<logic:equal name="viewable" property="totalUniqueRows" value="0">
+					<digi:img styleClass="imagecsv" hspace="2" vspace="2" src="module/aim/images/csv_icon_gray.png" border="0" title="Report is empty. Nothing to export"/>
+			</logic:equal>
 		</td>
 		
 		<feature:display name="Show Printer Friendly option" module="Public Reports">
 			<td noWrap align=left valign="center">
-				<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;" title="${printTrn}">
-					<digi:img width="17" height="20" hspace="2" vspace="2" src="img_2/ico-print.png" border="0" alt="${printerFriendly}" />
-				</digi:link>
+				<logic:notEqual name="viewable" property="totalUniqueRows" value="0">
+					<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;" title="${printTrn}">
+						<digi:img width="17" height="20" hspace="2" vspace="2" src="img_2/ico-print.png" border="0" alt="${printerFriendly}" />
+					</digi:link>
+				</logic:notEqual>
+				<logic:equal name="viewable" property="totalUniqueRows" value="0">
+					<digi:img width="17" height="20" hspace="2" vspace="2" src="img_2/ico-print_gray.png" border="0" title="Report is empty. Nothing to export"/>
+				</logic:equal>
 			</td>
 		</feature:display>
 					
 		<module:display name="Map Module">
 			<td noWrap align=left valign="center">
-				<a href="/esrigis/mainmap.do?exportreport=true&ampReportId=${ampReportId}" target="_blank" title="<digi:trn>Export to Map</digi:trn>">
-					<img alt="Export to Map" src="module/aim/images/globe-icon_2.png" hspace="2" vspace="2" border="0">
-				</a>
+				<logic:notEqual name="viewable" property="totalUniqueRows" value="0">
+					<a href="/esrigis/mainmap.do?exportreport=true&ampReportId=${ampReportId}" target="_blank" title="<digi:trn>Export to Map</digi:trn>">
+						<img alt="Export to Map" src="module/aim/images/globe-icon_2.png" hspace="2" vspace="2" border="0">
+					</a>
+				</logic:notEqual>
+				<logic:equal name="viewable" property="totalUniqueRows" value="0">
+					<img alt="Export to Map" src="module/aim/images/globe-icon_2_gray.png" hspace="2" vspace="2" border="0" title="Report is empty. Nothing to export">
+				</logic:equal>
 			</td>
 		</module:display>
 	</tr>

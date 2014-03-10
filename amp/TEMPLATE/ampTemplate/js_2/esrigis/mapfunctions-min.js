@@ -37,6 +37,7 @@ function getSelectedFilter(){$("#sfilterid").html("");var xhrArgs={url:"/esrigis
 if(jsonData[0].sector!=''){$("#sfilterid").append(" <i>| "+translate('Primary Sector')+"</i> : ");$("#sfilterid").append(jsonData[0].sector);}
 if(jsonData[0].natplanobj!=''){$("#sfilterid").append(" <i>| "+translate('National Program')+"</i> : ");$("#sfilterid").append(jsonData[0].natplanobj);}
 if(jsonData[0].primaryprograms!=''){$("#sfilterid").append(" <i>| "+translate('Primary Program')+"</i> : ");$("#sfilterid").append(jsonData[0].primaryprograms);}
+if(jsonData[0].secondaryprograms!=''){$("#sfilterid").append(" <i>| "+translate('Secondary Program')+"</i> : ");$("#sfilterid").append(jsonData[0].secondaryprograms);}
 if(jsonData[0].financinginstrument!=''){$("#sfilterid").append(" <i>| "+translate('Financing Instrument')+"</i> : ");$("#sfilterid").append(jsonData[0].financinginstrument);}
 if(jsonData[0].typeofassistance!=''){$("#sfilterid").append(" <i>| "+translate('Type of Assistance')+"</i> : ");$("#sfilterid").append(jsonData[0].typeofassistance);}
 if(jsonData[0].onbudget==true){$("#sfilterid").append(" <i>| "+translate('Only on budget projects')+"</i> : True");}

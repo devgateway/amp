@@ -940,6 +940,11 @@ function getSelectedFilter() {
 				$("#sfilterid").append(translate(jsonData[0].primaryprograms));
 
 			}
+			if (jsonData[0].secondaryprograms != '') {
+				$("#sfilterid").append(" <i>| "+ translate('Secondary Program')+"</i> : ");
+				$("#sfilterid").append(translate(jsonData[0].secondaryprograms));
+
+			}
 			if (jsonData[0].financinginstrument != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Financing Instrument')+"</i> : ");
 				dojo.forEach(jsonData[0].financinginstrument, function(financinginstrument) {

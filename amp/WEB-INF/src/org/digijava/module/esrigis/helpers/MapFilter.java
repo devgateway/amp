@@ -290,7 +290,14 @@ public class MapFilter {
 				}
 			
 		}
-		
+		selectedfilter.setSecondaryprograms(new ArrayList<String>());
+		if (selectedSecondaryPrograms != null && selectedSecondaryPrograms.length > 0) {
+			AmpTheme parent = programElements.get("selectedSecondaryPrograms");
+			if (ArrayUtils.contains(selectedSecondaryPrograms, parent.getAmpThemeId())) {
+					selectedfilter.getSecondaryprograms().add(parent.getName());
+				}
+			
+		}		
 		if (this.getSelLocationIds()[0] != -1) {
 			selectedfilter.setLocationfiltered("True");
 		} else {

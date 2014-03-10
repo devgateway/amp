@@ -3,16 +3,8 @@
 /**
 * Custom filter handler for views, that handles DATETIME
 */
-//class ampp_projects_date_views_argument_handler extends views_handler_filter {
+
 class ampp_projects_date_views_argument_handler extends views_handler_argument {
-
-  /*
-   *
-   */
-  function init(&$view, &$options) {
-    parent::init($view, $options);
-  }
-
 
   /*
    *
@@ -124,15 +116,11 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
     if (!empty($this->options['exposed'])) {
       return t('exposed');
     }
+
     $options = $this->operator_options('short');
-    $output = check_plain($options[$this->options['condition_operator']]);
-    if (in_array($this->condition_operator, $this->operator_values(2))) {
-      $output .= ' ' . t('@min and @max', array('@min' => $this->value['min'], '@max' => $this->value['max']));
-    }
-    elseif (in_array($this->condition_operator, $this->operator_values(1))) {
-      $output .= ' ' . check_plain($this->options['condition_operator']);
-    }
-    return $output;
+    $operator = $options[$this->options['condition_operator']];
+
+    return t('@op argument', array('@op' => $operator));
   }
 
 

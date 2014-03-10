@@ -41,6 +41,7 @@ public class CurrencyRatesService extends AbstractServiceImpl {
 		String ampm = hourminampm[1];
 		DailyCurrencyRateSingleton dcrf = DailyCurrencyRateSingleton
 				.getInstance();
+		
 		dcrf.setTimeout(Integer.parseInt(timeout));
 		dcrf.start(Integer.parseInt(hour), Integer.parseInt(min), ampm);
 	}

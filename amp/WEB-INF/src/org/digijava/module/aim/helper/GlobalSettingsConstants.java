@@ -147,5 +147,11 @@ public class GlobalSettingsConstants {
     
     public static final String DEFAULT_ORG_GROUP= "Responsible Organization Default Organization Group";
     
+    public static final String CURRENCY_WS_USERNAME="Currency exchange rate webservice username";
+    
+    public static final String CURRENCY_WS_PASSWORD="Currency exchange rate webservice password";
+
+	public static final String CURRENCY_WS_CLASS = "Currency exchange rate webservice implementation";
+    
 
 }

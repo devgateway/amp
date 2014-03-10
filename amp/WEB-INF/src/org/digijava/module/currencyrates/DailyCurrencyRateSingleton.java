@@ -1,5 +1,6 @@
 package org.digijava.module.currencyrates;
 
+import java.lang.reflect.Constructor;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -28,10 +29,12 @@ public final class DailyCurrencyRateSingleton {
 	private WSCurrencyClient myWSCurrencyClient;
 	//private String baseCurrency; 
 	private Date lastExcecution;
-	private int minutesTimeout=4;
+	private Integer minutesTimeout=4000;
 
 	private DailyCurrencyRateSingleton() {
-		myWSCurrencyClient = new WSCurrencyClientImp();
+		//check why is instanciated here, i should be instanciated on settimot
+		//myWSCurrencyClient = new FxtopWSCurrencyClientImpl();
+		//myWSCurrencyClient = new WSCurrencyClientImp();
 	}
 
 	public static synchronized DailyCurrencyRateSingleton getInstance() {
@@ -45,11 +48,26 @@ public final class DailyCurrencyRateSingleton {
 	public void setTimeout(int minutes){
 		if(minutesTimeout!=minutes){//to avoid creating a new object
 			minutesTimeout = minutes;
-			this.myWSCurrencyClient = new WSCurrencyClientImp(minutes);	
+			//dynamically invoke implementation of webserviceclient
+			createWebserviceImplementationInstance();
+			//
 			logger.info("Daily Currency Rate Update Timout changed to "+ minutes + "minutes");
 		}
 	}
+	public void createWebserviceImplementationInstance(){
+		String className=
+		FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CURRENCY_WS_CLASS);
 
+		try{
+			Constructor<?> c = Class.forName(className).getDeclaredConstructor(minutesTimeout.getClass());
+			c.setAccessible(true);
+			this.myWSCurrencyClient=(WSCurrencyClient)c.newInstance(new Object[] {minutesTimeout});
+		}catch(Exception e){
+			//if cannot instantiate the one that comes as parameter we do instantiate the one we have purchase suscription
+			this.myWSCurrencyClient = new FxtopWSCurrencyClientImpl(minutesTimeout);	
+		}
+
+	}
 	public void start(int hour, int min, String ampm, int hour_repeat,
 			int min_repeat) {
 		int ampmVal = (ampm.compareToIgnoreCase(DailyCurrencyRateSingleton.PM) == 0) ? 12
@@ -112,6 +130,7 @@ public final class DailyCurrencyRateSingleton {
 	}
 
 	public WSCurrencyClient getMyWSCurrencyClient() {
+		//check if they have changed the configuration on global settings
 		return myWSCurrencyClient;
 	}
 

@@ -752,7 +752,7 @@ public class ShowActivityPrintPreview
                       role = ActivityUtil.getAmpRole(activity.getAmpActivityId(), orgRole.getAmpOrgRoleId());
                       organisation = ActivityUtil.getAmpOrganisation(activity.getAmpActivityId(), orgRole.getAmpOrgRoleId());
 
-                      if (role.getRoleCode() == null) {
+                      if (role == null || role.getRoleCode() == null) {
                           continue;
                       }
 

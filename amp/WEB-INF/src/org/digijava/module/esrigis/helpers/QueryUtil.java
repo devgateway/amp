@@ -8,8 +8,10 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -17,9 +19,11 @@ import static org.digijava.module.aim.helper.Constants.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -29,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -38,11 +43,14 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.HierarchyListableUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.esrigis.action.MainMap;
 import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.digijava.module.visualization.util.Constants;
 import org.joda.time.DateTime;
@@ -51,6 +59,8 @@ import org.joda.time.chrono.GregorianChronology;
 
 public class QueryUtil {
 	 public static final BigDecimal ONEHUNDERT = new BigDecimal(100);
+	 private static Logger logger = Logger.getLogger(QueryUtil.class);
+
 	 
 	public static Date getStartDate(Long fiscalCalendarId, int year) {
 		Date startDate = null;
@@ -410,6 +420,13 @@ public class QueryUtil {
                 !filter.getPeacebuildingMarkers().isEmpty()) {
             filter.setSelectedPeacebuildingMarkerId(filter.getPeacebuildingMarkers().get(0).getId());
         }
+        if (filter.getProgramElements() == null) {
+        	try {
+				filter.setProgramElements(initializePrograms());
+			} catch (DgException e) {
+				logger.error ("Exception trying to get a new filter",e);
+			}
+        }
 
         filter.setIsinitialized(true);
 		return filter;
@@ -425,5 +442,38 @@ public class QueryUtil {
     	}
     	return false;
     }
+    
+    public static Map<String,AmpTheme> initializePrograms () throws DgException {
+	    Map<String,AmpTheme> programLevelMap = new HashMap <String,AmpTheme> ();
+	    List<AmpTheme> allPrograms	= ProgramUtil.getAllThemes(true);
+        HashMap<Long, AmpTheme> progMap		= ProgramUtil.prepareStructure(allPrograms);
+        
+		AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
+		AmpTheme primaryProg = null;
+		if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {
+			primaryProg = progMap.get(primaryPrgSetting.getDefaultHierarchyId() );
+			HierarchyListableUtil.changeTranslateable(primaryProg, false);
+			programLevelMap.put("selectedPrimaryPrograms", primaryProg);
+		}
+		AmpTheme secondaryProg = null;
+ 	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
+		if (secondaryPrg!=null && secondaryPrg.getDefaultHierarchy() != null) {
+			secondaryProg	= progMap.get(secondaryPrg.getDefaultHierarchyId() );
+			HierarchyListableUtil.changeTranslateable(secondaryProg, false);
+			programLevelMap.put("selectedSecondaryPrograms", secondaryProg);
+					
+		}	 	
+		AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
+ 	 	if (natPlanSetting != null && natPlanSetting.getDefaultHierarchy() != null) {
+ 	 		AmpTheme nationalPlanningProg	= progMap.get(natPlanSetting.getDefaultHierarchyId() );
+ 	 		HierarchyListableUtil.changeTranslateable(nationalPlanningProg, false);
+ 	 		programLevelMap.put("selectedNatPlanObj", nationalPlanningProg);
+ 			
+				
+		}
+ 	 	return programLevelMap;
+	
+}
+
 
 }

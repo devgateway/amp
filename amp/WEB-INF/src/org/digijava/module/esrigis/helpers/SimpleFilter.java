@@ -19,6 +19,9 @@ public class SimpleFilter {
 	private String implementingagency; 
 	private ArrayList<String> organizationtype;
 	private ArrayList<String> sector;
+	private ArrayList <String> natplanobj;
+	private ArrayList <String> primaryprograms;
+	private ArrayList <String> secondaryprograms;
 	private String locationfiltered;
     private Long selectedPeacebuildingMarkerId;
 	
@@ -157,4 +160,31 @@ public class SimpleFilter {
     public void setSelectedPeacebuildingMarkerId(Long selectedPeacebuildingMarkerId) {
         this.selectedPeacebuildingMarkerId = selectedPeacebuildingMarkerId;
     }
+    
+  
+	public ArrayList<String> getNatplanobj() {
+		return natplanobj;
+	}
+
+	public void setNatplanobj(ArrayList<String> natplanobj) {
+		this.natplanobj = natplanobj;
+	}
+
+	public ArrayList<String> getPrimaryprograms() {
+		return primaryprograms;
+	}
+
+	public void setPrimaryprograms(ArrayList<String> primaryprograms) {
+		this.primaryprograms = primaryprograms;
+	}
+
+	public ArrayList<String> getSecondaryprograms() {
+		return secondaryprograms;
+	}
+
+	public void setSecondaryprograms(ArrayList<String> secondaryprograms) {
+		this.secondaryprograms = secondaryprograms;
+	}
+
+
 }

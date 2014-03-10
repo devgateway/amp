@@ -930,7 +930,16 @@ function getSelectedFilter() {
 					$("#sfilterid").append(sector + filterListDelimiter);
 				});
 			}
+			if (jsonData[0].natplanobj != '') {
+				$("#sfilterid").append(" <i>| "+ translate('National Program')+"</i> : ");
+				$("#sfilterid").append(translate(jsonData[0].natplanobj));
+			}
 
+			if (jsonData[0].primaryprograms != '') {
+				$("#sfilterid").append(" <i>| "+ translate('Primary Program')+"</i> : ");
+				$("#sfilterid").append(translate(jsonData[0].primaryprograms));
+
+			}
 			if (jsonData[0].financinginstrument != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Financing Instrument')+"</i> : ");
 				dojo.forEach(jsonData[0].financinginstrument, function(financinginstrument) {

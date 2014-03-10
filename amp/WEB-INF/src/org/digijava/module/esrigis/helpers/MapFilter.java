@@ -24,12 +24,14 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructureType;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.OrgGroupSkeleton;
 import org.digijava.module.aim.util.OrganizationSkeleton;
+import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -126,7 +128,12 @@ public class MapFilter {
     private List <AmpCategoryValue> peacebuildingMarkers;
     private Long selectedPeacebuildingMarkerId;
     private boolean filterByPeacebuildingMarker;
+	private Map<String,AmpTheme> programElements;
+	private Long[] selectedNatPlanObj;
+	private Long[] selectedPrimaryPrograms;
+	private Long[] selectedSecondaryPrograms;
 
+    
 	public MapFilter getCopyFilterForFunding() {
 		MapFilter newFilter = new MapFilter();
 
@@ -266,7 +273,24 @@ public class MapFilter {
 				}
 			}
 		}
-
+		
+		selectedfilter.setNatplanobj(new ArrayList<String>());
+		if (selectedNatPlanObj != null && selectedNatPlanObj.length > 0) {
+			AmpTheme parent = programElements.get("selectedNatPlanObj");
+			if (ArrayUtils.contains(selectedNatPlanObj, parent.getAmpThemeId())) {
+					selectedfilter.getNatplanobj().add(parent.getName());
+				}
+			
+		}
+		selectedfilter.setPrimaryprograms(new ArrayList<String>());
+		if (selectedPrimaryPrograms != null && selectedPrimaryPrograms.length > 0) {
+			AmpTheme parent = programElements.get("selectedPrimaryPrograms");
+			if (ArrayUtils.contains(selectedPrimaryPrograms, parent.getAmpThemeId())) {
+					selectedfilter.getPrimaryprograms().add(parent.getName());
+				}
+			
+		}
+		
 		if (this.getSelLocationIds()[0] != -1) {
 			selectedfilter.setLocationfiltered("True");
 		} else {
@@ -1037,4 +1061,36 @@ public class MapFilter {
     	Long[] sectorIds = this.getSelSectorIds();
     	return sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
     }
+
+	public Map<String,AmpTheme> getProgramElements() {
+		return programElements;
+	}
+
+	public void setProgramElements(Map<String,AmpTheme> programElements) {
+		this.programElements = programElements;
+	}
+
+	public Long[] getSelectedNatPlanObj() {
+		return selectedNatPlanObj;
+	}
+
+	public void setSelectedNatPlanObj(Long[] selectedNatPlanObj) {
+		this.selectedNatPlanObj = selectedNatPlanObj;
+	}
+
+	public Long[] getSelectedPrimaryPrograms() {
+		return selectedPrimaryPrograms;
+	}
+
+	public void setSelectedPrimaryPrograms(Long[] selectedPrimaryPrograms) {
+		this.selectedPrimaryPrograms = selectedPrimaryPrograms;
+	}
+
+	public Long[] getSelectedSecondaryPrograms() {
+		return selectedSecondaryPrograms;
+	}
+
+	public void setSelectedSecondaryPrograms(Long[] selectedSecondaryPrograms) {
+		this.selectedSecondaryPrograms = selectedSecondaryPrograms;
+	}
 }

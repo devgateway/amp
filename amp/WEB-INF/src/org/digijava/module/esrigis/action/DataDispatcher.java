@@ -1073,6 +1073,9 @@ public class DataDispatcher extends MultiAction {
 		datadispatcherform.getFilter().setSeltypeofassistence(getLongArrayFromParameter(request.getParameter("typeofassissIds")));
 		datadispatcherform.getFilter().setSelprojectstatus(getLongArrayFromParameter(request.getParameter("projectstIds")));
 		datadispatcherform.getFilter().setSelorganizationsTypes(getLongArrayFromParameter(request.getParameter("orgtypesIds")));
+		datadispatcherform.getFilter().setSelectedNatPlanObj(getLongArrayFromParameter(request.getParameter("selectedNatPlanObj")));
+		datadispatcherform.getFilter().setSelectedPrimaryPrograms(getLongArrayFromParameter(request.getParameter("selectedPrimaryPrograms")));
+		datadispatcherform.getFilter().setSelectedSecondaryPrograms(getLongArrayFromParameter(request.getParameter("selectedSecondaryPrograms")));
 		
 		
 		

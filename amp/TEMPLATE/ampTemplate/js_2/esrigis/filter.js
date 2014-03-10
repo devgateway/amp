@@ -175,6 +175,9 @@ function resetToDefaults(){
 	unCheckOptions("typeofassis_check");
 	unCheckOptions("projectst_check");
 	unCheckOptions("orgtypes_check");
+	unCheckOptions("selectedNatPlanObj");
+	unCheckOptions("selectedPrimaryPrograms");
+	unCheckOptions("selectedSecondaryPrograms");
 	
 	
 	if (document.getElementById("workspace_only")!=null){
@@ -215,7 +218,7 @@ function unCheckOptions (obj){
 }
 
 function changeTab (selected){
-	for(var i=0;i<8;i++){
+	for(var i=0;i<9;i++){
 		if(i!=selected){
 			$("#general_selector_"+i).removeClass("side_opt_sel");	
 		}
@@ -232,7 +235,7 @@ function changeTab (selected){
 	$("#typeofassisDivContent").css("display","none");
 	$("#projectstatusDivContent").css("display","none");
 	$("#orgtypeDivContent").css("display","none");
-	
+	$("#programDivContent").css("display","none");
 	if(selected!=0){
 		clearAllLocalSearchResults();
 	}
@@ -254,7 +257,7 @@ function changeTab (selected){
 	case 4:
 		$("#orgtypeDivContent").css("display","block");
 		break;
-	case 8:
+	case 9:
 		$("#structuresDivContent").css("display","block");
 		break;
 	case 5:
@@ -265,6 +268,9 @@ function changeTab (selected){
 		break;
 	case 7:
 		$("#projectstatusDivContent").css("display","block");
+		break;
+	case 8:
+		$("#programDivContent").css("display","block");
 		break;
 	default:
 		break;
@@ -510,6 +516,10 @@ function callbackApplyFilter(e){
 	params = params + "&selSectorConfigId=" + getQueryParameter("selSectorConfigId");
 	params = params + "&sectorIds=" + getQueryParameter("sectorIds");
 	params = params + "&subSectorIds=" + getQueryParameter("subSectorIds");
+	params = params + "&selectedNatPlanObj=" + getQueryParameter("selectedNatPlanObj");
+	params = params + "&selectedPrimaryPrograms=" + getQueryParameter("selectedPrimaryPrograms");
+	params = params + "&selectedSecondaryPrograms=" + getQueryParameter("selectedSecondaryPrograms");
+
 
 	loadingPanel.show();
 
@@ -619,7 +629,10 @@ function applyFilterPopin(e){
 	params = params + "&typeofassissIds=" + getSelectionsFromElement("typeofassis_check",false);
 	params = params + "&projectstIds=" + getSelectionsFromElement("projectst_check",false);
 	params = params + "&orgtypesIds=" + getSelectionsFromElement("orgtypes_check",false);
-	
+	params = params + "&selectedNatPlanObj=" + getSelectionsFromElement("selectedNatPlanObj",false);
+	params = params + "&selectedPrimaryPrograms=" + getSelectionsFromElement("selectedPrimaryPrograms",false);
+	params = params + "&selectedSecondaryPrograms=" + getSelectionsFromElement("selectedSecondaryPrograms",false);
+
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
 		return;
@@ -734,6 +747,17 @@ function manageSectorEntities(option,configId,sectorId){
 		else{
 			options.removeAttr('checked');
 		}
+	}
+	
+}
+
+function toggleRelatedLike (option,name) {
+	var options=$("input[class^='"+name+"']");
+	if(option.checked){
+		options.attr('checked','checked');
+	}
+	else{
+		options.removeAttr('checked');
 	}
 	
 }

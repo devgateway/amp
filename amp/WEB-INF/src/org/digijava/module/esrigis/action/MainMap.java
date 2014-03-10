@@ -6,10 +6,8 @@ package org.digijava.module.esrigis.action;
  */
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
@@ -20,8 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.ecs.storage.Array;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -29,22 +25,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructureType;
-import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -52,22 +42,18 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
-import org.digijava.module.esrigis.form.MainMapForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.esrigis.helpers.MapFilter;
-import org.digijava.module.visualization.helper.DashboardFilter;
+import org.digijava.module.esrigis.helpers.QueryUtil;
 import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.digijava.module.visualization.util.Constants;
-import org.digijava.module.visualization.util.DashboardUtil;
-import org.springframework.beans.BeanWrapperImpl;
 
 public class MainMap extends Action {
 	private static Logger logger = Logger.getLogger(MainMap.class);
@@ -388,8 +374,16 @@ public class MainMap extends Action {
                 !filter.getPeacebuildingMarkers().isEmpty()) {
             filter.setSelectedPeacebuildingMarkerId(filter.getPeacebuildingMarkers().get(0).getId());
         }
+        //DO WE NEED TO FILTER OUT THIS BASED ON FEATURE MANAGER?	
+    	try {
+			filter.setProgramElements(QueryUtil.initializePrograms());
+		} catch (DgException e) {
+			logger.error("Exception while initializing AmpThemes for GIS",e);
+		}
+        
 	}
-
+	
+	
 	public ActionForward displayIcon(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {

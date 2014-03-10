@@ -127,12 +127,18 @@ function initializeTranslations(){
 													</tr>
 													<feature:display name="Structures" module="Map Module">
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_8">
-															<div class="selector_type_cont" onclick="changeTab(8)">
+														<td class="side_opt_sel" id="general_selector_9">
+															<div class="selector_type_cont" onclick="changeTab(9)">
 																<digi:trn>Structure Types</digi:trn>
 															</div></td>	
 													</tr>
 													</feature:display>
+													<tr style="cursor: pointer;">
+														<td class="side_opt_sel" id="general_selector_8">
+															<div class="selector_type_cont" onclick="changeTab(8)">
+																<digi:trn>Programs</digi:trn>
+															</div></td>	
+													</tr>
 												</table>
 											</div>
 										</div>
@@ -314,6 +320,29 @@ function initializeTranslations(){
 												</div>
 											</div>
 										<div>
+											<div class="member_selector_wrapper" id="programDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+												<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+													<div class="inside" style="float: left">
+														&nbsp;<b class="ins_header"> <digi:trn>Member Selector</digi:trn></b>
+													</div>
+													<div class="inside" style="float: right">
+														<input onkeypress="clearSearch('programDivList')" id="programDivList_search" type="text" class="inputx" />
+														<input type="button" class="buttonx" onclick="findPrev('programDivList')" value='&lt;&lt;' />
+														<input type="button" onclick="findNext('programDivList')" class="buttonx" value="&gt;&gt;" />
+													</div>
+												</div>
+												<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
+													id="programDivList">
+													<ul style="list-style-type: none;margin-left: 0px;">
+														<c:forEach items="${datadispatcherform.filter.programElements}" var="item">
+														<c:set var="item" scope="request" value="${item}" />
+														<jsp:include page="programPopinHelper.jsp" />
+														</c:forEach>
+													</ul>
+												</div>
+											</div>
+										<div>
+							
 										<div class="member_selector_wrapper" id="structuresDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
 											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">

@@ -129,6 +129,9 @@ public class DbHelper {
 		Long[] implOrgGroupIds = filter.getImplOrgGroupIds();
 
 		Long[] orgtypeids = filter.getOrgtypeIds();
+		Long [] natPlanObjIds = filter.getSelectedNatPlanObj();
+		Long [] primaryProgramsIds = filter.getSelectedPrimaryPrograms();
+		Long [] secondaryProgramsIds = filter.getSelectedSecondaryPrograms();
 		
 		boolean useMtefProjections = filter.getTransactionType() == Constants.MTEFPROJECTION;
 		
@@ -145,7 +148,7 @@ public class DbHelper {
 		Long[] sectorIds = filter.getSelSectorIds();
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !QueryUtil.inArray(-1l,filter.getSelStructureTypes() );
-		
+		boolean programCondition = (natPlanObjIds!= null && natPlanObjIds.length>0) || (primaryProgramsIds!= null && primaryProgramsIds.length>0) || (secondaryProgramsIds!= null && secondaryProgramsIds.length>0);
 		AmpCategoryValue budgetOn = null;
 		AmpCategoryValue budgetOff = null;
 		try {
@@ -182,6 +185,10 @@ public class DbHelper {
 
 			if (sectorCondition) {
 				oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+			}
+			if (programCondition) {
+				oql += " inner join act.actPrograms actPrograms ";
+				
 			}
 			
 				oql += " inner join act.orgrole role  ";
@@ -275,6 +282,20 @@ public class DbHelper {
 			if (sectorCondition) {
 				oql += " and sec.id in (" + QueryUtil.getInStatement(sectorIds)
 						+ ") ";
+			}
+			if (programCondition) {
+				if (natPlanObjIds!=null && natPlanObjIds.length > 0) {
+				oql += " and (actPrograms.program.ampThemeId in  (" + QueryUtil.getInStatement(natPlanObjIds)
+						+ ") and actPrograms.programSetting.name='National Plan Objective') ";
+				}
+				if (primaryProgramsIds!=null && primaryProgramsIds.length > 0) {
+					oql += " and (actPrograms.program.ampThemeId in  (" + QueryUtil.getInStatement(primaryProgramsIds)
+							+ ") and actPrograms.programSetting.name='Primary Program') ";
+					}
+				if (secondaryProgramsIds!=null && secondaryProgramsIds.length > 0) {
+					oql += " and (actPrograms.program.ampThemeId in  (" + QueryUtil.getInStatement(secondaryProgramsIds)
+							+ ") and actPrograms.programSetting.name='Secondary Program') ";
+					}
 			}
 
 			// Organization Type

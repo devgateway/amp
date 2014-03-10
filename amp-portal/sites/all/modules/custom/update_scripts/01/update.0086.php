@@ -1,7 +1,7 @@
 <?php
 
 // Prepare an array of modules to be enabled.
-$module_list = array(  
+$module_list = array(
   'piwik',
 );
 

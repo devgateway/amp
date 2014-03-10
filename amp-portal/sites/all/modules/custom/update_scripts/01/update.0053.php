@@ -1,5 +1,5 @@
 <?php
-// $Id: 
+// $Id:
 
 $module_list = array('hs_select_locations', 'hs_select_sectors');
 

@@ -8,8 +8,8 @@
  */
 Drupal.behaviors.ampp_feedback_form = {
   attach: function (context) {
-	// delete feedback default behaviors
-	delete Drupal.behaviors.feedbackForm;
+  // delete feedback default behaviors
+  delete Drupal.behaviors.feedbackForm;
     delete Drupal.behaviors.feedbackFormToggle;
     delete Drupal.behaviors.feedbackFormSubmit;
 
@@ -19,7 +19,7 @@ Drupal.behaviors.ampp_feedback_form = {
     $('.fieldset-description', captcha).remove();
     $('.form-item-captcha-response > label').remove();
     $('.form-item-captcha-response > .description').remove();
-    
+
   }
 };
 

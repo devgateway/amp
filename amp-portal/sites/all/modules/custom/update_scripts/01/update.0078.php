@@ -2,7 +2,7 @@
 // $Id: update.0078.php,v 1.2 2013/08/24 15:19:37 vamirbekyan Exp $
 
 // Prepare an array of modules to be enabled.
-$module_list = array(  
+$module_list = array(
   'extlink',
 );
 

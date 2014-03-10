@@ -1,5 +1,5 @@
 <?php
-// $Id: 
+// $Id:
 
 _us_install_features(array('ampp_general'));
 

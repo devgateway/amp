@@ -4,7 +4,7 @@
 
 
 $role = user_role_load_by_name('editor');
-$permissions = array(   
+$permissions = array(
     'access administration menu'
 );
 user_role_grant_permissions($role->rid, $permissions);

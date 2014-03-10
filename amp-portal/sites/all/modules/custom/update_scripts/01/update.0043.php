@@ -4,7 +4,7 @@
 
 
 $role = user_role_load_by_name('editor');
-$permissions = array(   
+$permissions = array(
     'create imported_item content'
 );
 user_role_revoke_permissions($role->rid, $permissions);

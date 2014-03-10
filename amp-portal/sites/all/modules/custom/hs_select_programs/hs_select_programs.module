@@ -7,7 +7,7 @@
 function hs_select_programs_hierarchical_select_params() {
   $params = array(
     'id',
-  	'separator'
+    'separator'
   );
   return $params;
 }
@@ -25,12 +25,12 @@ function hs_select_programs_hierarchical_select_root_level($params) { //echo dpm
     $level[$key] = $hierarchy[$key]['label'];
   }
 
-  return $level; 
+  return $level;
 }
 
 
 /**
- * 
+ *
  */
 function hs_select_programs_hierarchical_select_lineage($item, $params) {
   $parts = explode($params['separator'], $item);
@@ -49,9 +49,9 @@ function hs_select_programs_hierarchical_select_children($parent, $params) {
   $hierarchy = hs_select_programs_load_tree($parent);
   return $hierarchy[$parent];
   $hierarchy = hs_select_programs_build_tree($parent);
-  
+
   $items = $hierarchy['root'][$parent]['children'];
-  
+
   return $items;
 }
 
@@ -60,17 +60,17 @@ function hs_select_programs_hierarchical_select_children($parent, $params) {
  * Implementation of hook_hierarchical_select_valid_item().
  */
 function hs_select_programs_hierarchical_select_valid_item($item, $params) {
-	
-	return (is_numeric($item) && $item > 0);
-	
+
+  return (is_numeric($item) && $item > 0);
+
   $hierarchy = hs_select_programs_load_tree($item);
   /* check is it in root */
   if(array_key_exists($item, $hierarchy[0])) {
-  		return $hierarchy[0][$item];
+      return $hierarchy[0][$item];
   }
-  
+
   if(array_key_exists($item, $hierarchy))
-  	return $hierarchy[$item];
+    return $hierarchy[$item];
   return -1;
 }
 
@@ -80,7 +80,7 @@ function hs_select_programs_hierarchical_select_valid_item($item, $params) {
  */
 function hs_select_programs_hierarchical_select_item_get_label($item, $params) {
   $hierarchy = hs_select_programs_load_tree($params['pid']);
-  
+
   return $hierarchy[$item]['label'];
 }
 
@@ -89,38 +89,38 @@ function hs_select_programs_hierarchical_select_item_get_label($item, $params) {
  *
  */
 function hs_select_programs_get_items($parent = 0) {
-	db_set_active("amp_projects");
-	$items = array();
-	
-	global $language;
-	global $user;
-    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')"; 
-	
-	$query = db_select('amp_theme', 'program');
-	$query->fields('program', array('amp_theme_id'));
-	$query->addExpression($translate_field, 'name');
-	
-	if (variable_get('amp_limit_programs_to_activities', 1)) {
+  db_set_active("amp_projects");
+  $items = array();
+
+  global $language;
+  global $user;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')";
+
+  $query = db_select('amp_theme', 'program');
+  $query->fields('program', array('amp_theme_id'));
+  $query->addExpression($translate_field, 'name');
+
+  if (variable_get('amp_limit_programs_to_activities', 1)) {
       $query->join('amp_activity_program', 'activity', 'activity.amp_program_id = program.amp_theme_id');
     }
-	$query->where('getprogramsettingid(program.amp_theme_id) = ' . variable_get('amp_programs_level', 2));
-	 		
-	if (empty($parent) || !is_numeric($parent)) {
-		$query->isNull('program.parent_theme_id');
-	} else {
-		$query->condition('program.parent_theme_id', $parent, '=');
-	}
-	
-	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_programs_get_items', dpq($query, 1));
-	
-	$result = $query->distinct()->execute()->fetchAll();
-	
-	foreach ($result as $record) {
-		$items[$record->amp_theme_id] = $record->name;
-	}
-	db_set_active();
+  $query->where('getprogramsettingid(program.amp_theme_id) = ' . variable_get('amp_programs_level', 2));
 
-	return $items;
+  if (empty($parent) || !is_numeric($parent)) {
+    $query->isNull('program.parent_theme_id');
+  } else {
+    $query->condition('program.parent_theme_id', $parent, '=');
+  }
+
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_programs_get_items', dpq($query, 1));
+
+  $result = $query->distinct()->execute()->fetchAll();
+
+  foreach ($result as $record) {
+    $items[$record->amp_theme_id] = $record->name;
+  }
+  db_set_active();
+
+  return $items;
 }
 
 
@@ -128,47 +128,47 @@ function hs_select_programs_get_items($parent = 0) {
  *
  */
 function hs_select_programs_load_tree($parent = 0) {
-	db_set_active("amp_projects");
-	$items = array();	
-	
-	if (!is_numeric($parent)) {
-		return $items;
-	}
-	
-	global $language;
-	global $user;
-    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')"; 
-    
-	$query = db_select('amp_theme', 'program');
-	$query->fields('program', array('amp_theme_id'));
-	$query->addExpression($translate_field, 'name');
-	
-	if (variable_get('amp_limit_programs_to_activities', 1)) {
+  db_set_active("amp_projects");
+  $items = array();
+
+  if (!is_numeric($parent)) {
+    return $items;
+  }
+
+  global $language;
+  global $user;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')";
+
+  $query = db_select('amp_theme', 'program');
+  $query->fields('program', array('amp_theme_id'));
+  $query->addExpression($translate_field, 'name');
+
+  if (variable_get('amp_limit_programs_to_activities', 1)) {
       $query->join('amp_activity_program', 'activity', 'activity.amp_program_id = program.amp_theme_id');
     }
-	$query->where('getprogramsettingid(program.amp_theme_id) = ' . variable_get('amp_programs_level', 2));
-	$query->orderBy($translate_field, 'ASC');
+  $query->where('getprogramsettingid(program.amp_theme_id) = ' . variable_get('amp_programs_level', 2));
+  $query->orderBy($translate_field, 'ASC');
 
-	if (empty($parent) || !is_numeric($parent)) {
-		$parent = 0;
-		$query->isNull('program.parent_theme_id');
-	} else {
-		$query->condition('program.parent_theme_id', $parent, '=');
-	}
-	$result = $query->distinct()->execute()->fetchAll();
+  if (empty($parent) || !is_numeric($parent)) {
+    $parent = 0;
+    $query->isNull('program.parent_theme_id');
+  } else {
+    $query->condition('program.parent_theme_id', $parent, '=');
+  }
+  $result = $query->distinct()->execute()->fetchAll();
 
-	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_programs_load_tree', dpq($query, 1));
-	
-	foreach ($result as $record) {
-		$items[$parent][$record->amp_theme_id] = $record->name;
-		$sub_items = hs_select_programs_load_tree($record->amp_theme_id);
-		if(!empty($sub_items)) {
-			$items +=  $sub_items;
-		}
-	}
-    
-	db_set_active();
-	return $items;
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_programs_load_tree', dpq($query, 1));
+
+  foreach ($result as $record) {
+    $items[$parent][$record->amp_theme_id] = $record->name;
+    $sub_items = hs_select_programs_load_tree($record->amp_theme_id);
+    if(!empty($sub_items)) {
+      $items +=  $sub_items;
+    }
+  }
+
+  db_set_active();
+  return $items;
 }
 
 
@@ -178,7 +178,7 @@ function hs_select_programs_load_tree($parent = 0) {
 function hs_select_programs_rootline($parent = 0) {
   $items =  array();
   $tree = hs_select_programs_load_tree($parent);
-  foreach ($tree as $k => $v) { 
+  foreach ($tree as $k => $v) {
     $items[] = $k;
   }
   return $items;
@@ -189,20 +189,20 @@ function hs_select_programs_rootline($parent = 0) {
  *
  */
 function hs_select_programs_build_tree($parent, $heirarchy = array()) {
-	$original_tree =  hs_select_programs_load_tree($parent);
-	$tree = array();
+  $original_tree =  hs_select_programs_load_tree($parent);
+  $tree = array();
 
-	foreach ($original_tree[$parent] as $key => $value) {
-		$tree['root']['children'][$key] = $key;
-		$tree[$key]['label'] = $value;
-		if(!empty($original_tree[$key])) {
-			foreach ($original_tree[$key] as $child_key => $child_value) {
-				$tree[$key]['children'][$child_key] = $child_key;
-				$tree[$child_key]['label'] = $child_value;
-			}
-		}
-	}
-	return $tree;
+  foreach ($original_tree[$parent] as $key => $value) {
+    $tree['root']['children'][$key] = $key;
+    $tree[$key]['label'] = $value;
+    if(!empty($original_tree[$key])) {
+      foreach ($original_tree[$key] as $child_key => $child_value) {
+        $tree[$key]['children'][$child_key] = $child_key;
+        $tree[$child_key]['label'] = $child_value;
+      }
+    }
+  }
+  return $tree;
 }
 
 
@@ -222,21 +222,21 @@ function hs_select_programs_hierarchical_select_implementation_info() {
  */
 function hs_select_programs_get_item_name($id) {
     db_set_active("amp_projects");
-  
+
     global $language;
     global $user;
-    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')";    
-  
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpTheme', 'name', program.amp_theme_id, 'amp_theme', 'name', 'amp_theme_id', '" . $language->language . "')";
+
     $query = db_select('amp_theme', 'program')->fields('program', array('amp_theme_id'));
     $query->addExpression($translate_field, 'name');
-	$query->condition('program.amp_theme_id', $id, '=');
-	
-	if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_programs_get_item_name', dpq($query, 1));
-	
-    $result = $query->execute(); 
+  $query->condition('program.amp_theme_id', $id, '=');
+
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('hs_select_programs_get_item_name', dpq($query, 1));
+
+    $result = $query->execute();
     $item = array();
     foreach ($result as $record) {
-	   $item[] = array('id' => $record->amp_theme_id, 'name' => check_plain($record->name));
+     $item[] = array('id' => $record->amp_theme_id, 'name' => check_plain($record->name));
     }
 
     db_set_active();

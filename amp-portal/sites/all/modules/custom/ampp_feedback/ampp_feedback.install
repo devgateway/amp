@@ -61,14 +61,14 @@
 function ampp_feedback_install() {
   db_add_field('feedback', 'author', array('type' => 'text', 'not null' => FALSE,
         'description' => t('The name of feedback author.')));
-  
+
   db_add_field('feedback', 'info', array('type' => 'text', 'not null' => FALSE,
         'description' => t('Additional info.')));
 
   db_add_field('feedback', 'other', array('type' => 'text', 'not null' => FALSE,
         'description' => t('Taxonomy info.')));
-  
-  db_insert("captcha_points") 
+
+  db_insert("captcha_points")
   ->fields(array(
   'form_id' => 'feedback_form',
   'module' => 'image_captcha',
@@ -84,11 +84,11 @@ function ampp_feedback_uninstall() {
   db_delete("captcha_points")
   ->condition("form_id", "feedback_form")
   ->execute();
-  
+
   db_drop_field('feedback', 'author');
   db_drop_field('feedback', 'info');
   db_drop_field('feedback', 'other');
-  
+
   db_delete("variable")
   ->condition('name', 'ampp_feedback_%%', 'LIKE')
   ->execute();

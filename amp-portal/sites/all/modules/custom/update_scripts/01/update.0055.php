@@ -1,3 +1,3 @@
 <?php
-// $Id: 
+// $Id:
 _us_revert_feature('ampp_projects');

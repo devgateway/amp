@@ -11,7 +11,7 @@
 function _us_install_modules($module_names, $action = 'install') {
   // Make sure the install API is available.
   include_once DRUPAL_ROOT . '/includes/install.inc';
-  
+
   $results = array();
 
   if (empty($module_names)) {

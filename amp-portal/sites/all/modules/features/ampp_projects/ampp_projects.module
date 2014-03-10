@@ -6,4 +6,4 @@
 
 include_once('ampp_projects.features.inc');
 include_once('ampp_projects.custom.inc');
-//include_once('ampp_projects.views.inc');
+include_once('ampp_projects.views_hooks.inc');

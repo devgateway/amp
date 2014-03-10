@@ -509,8 +509,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
         private String FY;
 
-        private String FY;
-		
 		private List<LabelValueBean> yearsRange;
 		private String[] selectedFYs;
 		private Boolean resetselectedFYs;
@@ -1296,15 +1294,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.ssc_modalities = ssc_modalities;
 		}
 
-        public Integer getFundingSourcesNumber() {
-            return fundingSourcesNumber;
-        }
-
-        public void setFundingSourcesNumber(Integer fundingSourcesNumber) {
-            this.fundingSourcesNumber = fundingSourcesNumber;
-        }
-
-        public Integer getFundingSourcesNumber() {
+		public Integer getFundingSourcesNumber() {
             return fundingSourcesNumber;
         }
 

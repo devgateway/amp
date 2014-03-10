@@ -496,8 +496,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String ssc_typeOfCooperation;
 		private String ssc_typeOfImplementation;
 		private String ssc_modalities;
-		
-		private String FY;
+        private Integer fundingSourcesNumber;
+
+        private String FY;
 		
 		private List<LabelValueBean> yearsRange;
 		private String[] selectedFYs;
@@ -1283,6 +1284,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setSsc_modalities(String ssc_modalities) {
 			this.ssc_modalities = ssc_modalities;
 		}
+
+        public Integer getFundingSourcesNumber() {
+            return fundingSourcesNumber;
+        }
+
+        public void setFundingSourcesNumber(Integer fundingSourcesNumber) {
+            this.fundingSourcesNumber = fundingSourcesNumber;
+        }
 
 	}
 

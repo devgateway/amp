@@ -29,7 +29,7 @@ public final class DailyCurrencyRateSingleton {
 	private WSCurrencyClient myWSCurrencyClient;
 	//private String baseCurrency; 
 	private Date lastExcecution;
-	private Integer minutesTimeout=4000;
+	private Integer minutesTimeout=4;
 
 	private DailyCurrencyRateSingleton() {
 		//check why is instanciated here, i should be instanciated on settimot
@@ -63,7 +63,7 @@ public final class DailyCurrencyRateSingleton {
 			c.setAccessible(true);
 			this.myWSCurrencyClient=(WSCurrencyClient)c.newInstance(new Object[] {minutesTimeout});
 		}catch(Exception e){
-			//if cannot instantiate the one that comes as parameter we do instantiate the one we have purchase suscription
+			//If we are not able to instantiate the one that comes as Gobal Setting we instantiate the new one we have purchase subscription.
 			this.myWSCurrencyClient = new FxtopWSCurrencyClientImpl(minutesTimeout);	
 		}
 
@@ -126,7 +126,6 @@ public final class DailyCurrencyRateSingleton {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//System.out.println(DailyCurrencyRateSingleton.getInstance().getLastExcecution());
 	}
 
 	public WSCurrencyClient getMyWSCurrencyClient() {

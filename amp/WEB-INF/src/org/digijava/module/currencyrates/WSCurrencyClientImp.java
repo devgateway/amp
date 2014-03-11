@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
+import org.apache.log4j.Logger;
 import org.digijava.module.currencyrates.NET.webserviceX.www.Currency;
 import org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorLocator;
 import org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorSoap;
@@ -17,7 +18,8 @@ import org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorSo
  * 
  */
 public class WSCurrencyClientImp implements WSCurrencyClient {
-	
+	private static Logger logger = Logger
+			.getLogger(WSCurrencyClientImp.class);
 	private CurrencyConvertorSoap currencyConvertor;
 
 	public WSCurrencyClientImp() {
@@ -26,7 +28,7 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 			this.currencyConvertor = new CurrencyConvertorLocator()
 					.getCurrencyConvertorSoap();
 		} catch (ServiceException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 	public WSCurrencyClientImp(Integer minutes) {
@@ -35,7 +37,8 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 			this.currencyConvertor = new MyCurrencyConvertorLocator()
 					.getCurrencyConvertorSoap(minutes);
 		} catch (ServiceException e) {
-			e.printStackTrace();
+			logger.error("Can't instantiate webservice stub",e);
+			throw new RuntimeException(e);
 		}
 	}
 	public HashMap<String, Double> getCRatesBasedUSD(String[] currencyCode) {
@@ -43,8 +46,7 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 		try {
 			values = getCurrencyRates(currencyCode, "USD");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return values;
 
@@ -67,17 +69,18 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 					rate = 1.0;
 				}else{
 					rate = this.currencyConvertor.conversionRate(base, c);
-					System.out.println(this.currencyConvertor.conversionRate(c,base ));
+					logger.debug(this.currencyConvertor.conversionRate(c,base ));
 				}
 			} catch (IllegalArgumentException e) {
 				rate = WSCurrencyClient.INVALID_CURRENCY_CODE;
-				e.getStackTrace();			
+				logger.error(e);
+		
 			} catch ( org.apache.axis.AxisFault af) {
-				System.out.println( "fault reason: " + af.getFaultReason() );
+				logger.error( "fault reason: " + af.getFaultReason() ,af);
 				rate = WSCurrencyClient.CONNECTION_ERROR;
 			} catch (RemoteException e) {
 				rate = WSCurrencyClient.CONNECTION_ERROR;
-				e.printStackTrace();
+				logger.error(e);
 			}
 			
 			values.put(currencyCode[i], rate);
@@ -92,10 +95,10 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 			rate = this.currencyConvertor.conversionRate(Currency.USD, c);
 		} catch (IllegalArgumentException e) {
 			rate = WSCurrencyClient.INVALID_CURRENCY_CODE;
-			e.getStackTrace();
+			logger.error(e);
 		} catch (RemoteException e) {
 			rate = WSCurrencyClient.CONNECTION_ERROR;
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return rate;
 	}

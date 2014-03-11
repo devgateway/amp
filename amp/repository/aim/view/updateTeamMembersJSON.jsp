@@ -42,7 +42,7 @@
 												<table border=0 cellPadding=5 cellSpacing=1 class=box-border width="100%">
 													<tr>
 														<td align="left" width="40%" style="font-weight:bold;">
-															<digi:trn key="aim:memberName">Name &nbsp;&nbsp; &nbsp;</digi:trn>
+															<digi:trn key="aim:memberName">Name</digi:trn> &nbsp;&nbsp; &nbsp;
 														</td>
 														<td align="left" width="60%">
 															<bean:write name="aimTeamMemberForm" property="name" />
@@ -51,7 +51,7 @@
 													</tr>
 													<tr>
 														<td align="left" width="40%" style="font-weight:bold;">
-															<digi:trn key="aim:memberRole">Role&nbsp;&nbsp; &nbsp;&nbsp;</digi:trn>	
+															<digi:trn key="aim:memberRole">Role</digi:trn>&nbsp;&nbsp; &nbsp;&nbsp;	
 														</td>
 														<td align="left" width="60%">
 															<html:select property="role">

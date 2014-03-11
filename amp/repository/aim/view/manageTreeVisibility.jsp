@@ -106,7 +106,7 @@ function showDescriptionToolbox(id){
 		<td style="white-space:normal;">
 <form name="searchBoxForm" onsubmit="searchFunction();return false;">
 <div id="searchBox" style="background-color:#F2F2F2;  font-size:12px; padding:10px;">
-<digi:trn key="fm:search:searchTitle"><b>Search</b></digi:trn> 
+<b><digi:trn key="fm:search:searchTitle">Search</digi:trn></b> 
 <input type="Text" id="searchCriteria"/> 
 <input type="submit" class="buttonx" value="<digi:trn key="fm:search:search">Search</digi:trn>" />
 <input type="button" class="buttonx" onclick="resetSearch()" value="<digi:trn key="fm:search:reset">Reset</digi:trn>" />

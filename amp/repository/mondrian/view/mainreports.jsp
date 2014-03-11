@@ -267,7 +267,7 @@
                                 <td align="center" class="inside_report">
                             		<c:if test="${!empty report.ownerId}">
 	                         			<p style="white-space: nowrap">
-	                         				<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>">
+	                         				<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report</digi:trn>&nbsp;">
 	                            			<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" /></a>
 	                            		</p>
 	                            	</c:if>
@@ -394,7 +394,7 @@
                                 <td align="center" class="inside_report">
                             		<c:if test="${!empty report.ownerId}">
 	                         			<p style="white-space: nowrap">
-	                         				<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>">
+	                         				<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report</digi:trn>&nbsp;">
 	                            			<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" /></a>
 	                            		</p>
 	                            	</c:if>
@@ -506,7 +506,7 @@
                                 <td align="center">
                             		<c:if test="${!empty report.ownerId}">
 	                         			<p style="white-space: nowrap">
-	                         				<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>">
+	                         				<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report</digi:trn>&nbsp;">
 	                            			<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" /></a>
 	                            		</p>
 	                            	</c:if>

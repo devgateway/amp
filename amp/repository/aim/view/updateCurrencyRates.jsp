@@ -203,8 +203,8 @@ function closePopup() {
 				</tr>
 				<tr>
 					<td>&nbsp;&nbsp;
-						<digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B><BIG>*</BIG>
-						</B></FONT> are required.</digi:trn>
+						  <digi:trn>All fields marked with an </digi:trn><FONT color=red><B><BIG>*</BIG></B></FONT><digi:trn> are required. </digi:trn>
+       
 					</td>
 				</tr>
 			</table>

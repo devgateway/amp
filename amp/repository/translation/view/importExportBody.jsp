@@ -260,7 +260,7 @@ function checkSelectedLanguages(){
 						<digi:link href="/admin.do" title="${translation}" module="aim">
 						<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:translationManager"><span style="color:#000000">Translation Manager</span></digi:trn>
+						<span style="color:#000000"><digi:trn key="aim:translationManager">Translation Manager</digi:trn></span>
 					</td>
 					<td style="vertical-align: top;" width=300 rowspan="7">
 				<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">

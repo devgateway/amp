@@ -148,7 +148,7 @@ div.fakefile2 input {
                           </tr>
                           <tr>
                             <td width="3%">&nbsp;</td>
-                            <td align=center class=title noWrap colspan="2"><digi:trn> All fields marked with an <FONT color=red><B><BIG>*</BIG> </B></FONT> are required. </digi:trn>
+                            <td align=center class=title noWrap colspan="2"><digi:trn>All fields marked with an</digi:trn><FONT color=red><B> * </B></FONT><digi:trn>are required.</digi:trn>
                             </td>
                           </tr>
                           <tr>

@@ -428,9 +428,8 @@ function unload() {
                                       <td width="30%" align="right"></td>
                                       <td width="70%" align="left">
 
-                                        <digi:trn key="aim:allMarkedRequiredField">
-                                          All fields marked with an <FONT color=red><B><BIG>*</BIG>
-</B></FONT> are required.</digi:trn>
+                                         <digi:trn>All fields marked with an</digi:trn><FONT color=red><B><BIG> * </BIG></B></FONT><digi:trn>are required.</digi:trn>
+       
                                       </td>
 
                                     </tr>

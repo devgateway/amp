@@ -33,8 +33,7 @@
 														<tr bgColor=#dddddb>
 															<!-- header -->
 															<td bgColor=#c7d4db height="20" align="center" colspan="5"><B>
-																<digi:trn key="aim:orgTypeList"><b style="font-size:12px;">List
-                                                                of Organization Types</b></digi:trn>						
+																<b style="font-size:12px;"><digi:trn  key="aim:orgTypeList">List of Organization Types</digi:trn></b>						
                                                               </b>						
 															</td>
 															<!-- end header -->

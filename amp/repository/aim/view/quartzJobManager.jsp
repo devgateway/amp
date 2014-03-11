@@ -254,7 +254,10 @@
 						
 						<table width="100" cellspacing="0" cellpadding="0">
 														<tbody><tr>
-															<td bgcolor="#c9c9c7" class="box-title"><digi:trn><b style="font-size:12px; color:#000000; padding-left:5px;">Other links</b></digi:trn></td>
+															<td bgcolor="#c9c9c7" class="box-title">
+															<b style="font-size:12px; color:#000000; padding-left:5px;">
+															<digi:trn>Other links</digi:trn>
+															</b></td>
 															<td width="17" height="17" background="module/aim/images/corner-r.gif">&nbsp;</td>
 														</tr>
 													</tbody></table>

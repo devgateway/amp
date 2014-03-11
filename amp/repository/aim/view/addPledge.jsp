@@ -384,7 +384,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#C7D4DB">
 							<!--<tr>
-							<td colspan=4 align=center><digi:trn key="pledgeInformation"><b>Pledge Information</b></digi:trn></td>
+							<td colspan=4 align=center><b><digi:trn  key="pledgeInformation">Pledge Information</digi:trn></b></td>
 							</tr>-->
 							<tr><td bgColor=#ffffff align="center" vAlign="top">
 								<!-- contents -->
@@ -402,7 +402,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<td colspan="2" align="left" valign="middle">
 													<FONT color=red>*</FONT>
 													
-												<digi:trn key="pledgeTitle"><b>Pledge Title</b></digi:trn>												</td>
+												<b><digi:trn key="pledgeTitle">Pledge Title</digi:trn></b>												</td>
 											</tr>
 											<tr>
 												<td colspan="2">
@@ -467,7 +467,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<tr bgcolor="#ffffff">											
 													<td align="left" valign="middle">
 														
-														<digi:trn key="whoHasAuthorizedPledge"><b>Who Has Authorized Pledge?</b></digi:trn>																										</td>
+														<b><digi:trn key="whoHasAuthorizedPledge">Who Has Authorized Pledge?</digi:trn></b>																										</td>
 												</tr>
 												<tr>
 												<td><html:text property="whoAuthorizedPledge" style="text-align:left; width:400px" styleClass="inp-text"/></td>
@@ -477,7 +477,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<tr bgcolor="#ffffff">											
 													<td align="left" valign="middle">
 														
-														<digi:trn key="pleaseIndicateFurtherApprovalNeeded"><b>Please Indicate any Further Approval Needed</b></digi:trn>																												</td>
+														<b><digi:trn key="pleaseIndicateFurtherApprovalNeeded">Please Indicate any Further Approval Needed</digi:trn></b>																												</td>
 												</tr>
 												<tr bgcolor="#ffffff">
 												  <td align="left" valign="middle"><html:text property="furtherApprovalNedded" style="text-align:left; width:400px" styleClass="inp-text"/></td>
@@ -904,12 +904,12 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<field:display name="Pledge Contact 1 - Organization" feature="Pledge Contact 1">											
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactOrganization"><b>Organization</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactOrganization">Organization</digi:trn></b>																										</td>
 													</field:display>
 												<field:display name="Pledge Contact 1 - Ministry" feature="Pledge Contact 1">
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactMinistry"><b>Ministry</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactMinistry">Ministry</digi:trn></b>																										</td>
 													</field:display>							
 											</tr>
 											<tr>
@@ -925,12 +925,12 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<field:display name="Pledge Contact 1 - Address" feature="Pledge Contact 1">									
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactAddress"><b>Address</b></digi:trn>																																								</td>
+															<b><digi:trn key="pointContactAddress">Address</digi:trn></b>																																								</td>
 												</field:display>
 												<field:display name="Pledge Contact 1 - Telephone" feature="Pledge Contact 1">
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactTelephone"><b>Telephone</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactTelephone">Telephone</digi:trn></b>																										</td>
 												</field:display>								
 											</tr>
 											<tr>
@@ -941,12 +941,12 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<field:display name="Pledge Contact 1 - Email" feature="Pledge Contact 1">											
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactEmail"><b>Email</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactEmail">Email</digi:trn></b>																										</td>
 												</field:display>
 												<field:display name="Pledge Contact 1 - Fax" feature="Pledge Contact 1">
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactFax"><b>Fax</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactFax">Fax</digi:trn></b>																										</td>
 												</field:display>									
 											</tr>
 											<tr>
@@ -965,7 +965,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 													<b><digi:trn key="pointContactName">Name</digi:trn></b>												</td>
 													<td width="50%" align="left" valign="middle">
 														
-															<digi:trn key="pointContactTelephone"><b>Telephone</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactTelephone">Telephone</digi:trn></b>																										</td>
 												</tr>
 												<tr>
 												<td><html:text property="contactAlternate1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
@@ -974,7 +974,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<tr bgcolor="#ffffff">											
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactEmail"><b>Email</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactEmail">Email</digi:trn></b>																										</td>
 													<td align="left" valign="middle">																										</td>
 												</tr>
 													<tr>
@@ -1014,7 +1014,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<field:display name="Pledge Contact 2 - Title" feature="Pledge Contact 2">
 													<td width="50%" align="left" valign="middle">
 														
-															<digi:trn key="pointContactTitle"><b>Title</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactTitle">Title</digi:trn></b>																										</td>
 												</field:display>									
 											</tr>
 											<tr>
@@ -1025,12 +1025,12 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<field:display name="Pledge Contact 2 - Organization" feature="Pledge Contact 2">										
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactOrganization"><b>Organization</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactOrganization">Organization</digi:trn></b>																										</td>
 												</field:display>
 												<field:display name="Pledge Contact 2 - Ministry" feature="Pledge Contact 2">
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactMinistry"><b>Ministry</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactMinistry">Ministry</digi:trn></b>																										</td>
 												</field:display>							
 											</tr>
 											<tr>
@@ -1045,12 +1045,12 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<field:display name="Pledge Contact 2 - Address" feature="Pledge Contact 2">											
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactAddress"><b>Address</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactAddress">Address</digi:trn></b>																										</td>
 												</field:display>
 												<field:display name="Pledge Contact 2 - Telephone" feature="Pledge Contact 2">
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactTelephone"><b>Telephone</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactTelephone">Telephone</digi:trn></b>																										</td>
 												</field:display>									
 											</tr>
 											<tr>
@@ -1061,12 +1061,12 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<field:display name="Pledge Contact 2 - Email" feature="Pledge Contact 2">
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactEmail"><b>Email</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactEmail">Email</digi:trn></b>																										</td>
 												</field:display>
 												<field:display name="Pledge Contact 2 - Fax" feature="Pledge Contact 2">
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactFax"><b>Fax</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactFax">Fax</digi:trn></b>																										</td>
 												</field:display>									
 											</tr>
 											<tr>
@@ -1085,7 +1085,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 													</td>
 													<td width="50%" align="left" valign="middle">
 														
-															<digi:trn key="pointContactTelephone"><b>Telephone</b></digi:trn>																										</td>
+															<b><digi:trn key="pointContactTelephone">Telephone</digi:trn></b>																										</td>
 												</tr>
 												<tr>
 												<td><html:text property="contactAlternate2Name" size="40" styleClass="inp-text"/></td>
@@ -1094,7 +1094,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<tr bgcolor="#ffffff">											
 													<td align="left" valign="middle">
 														
-															<digi:trn key="pointContactEmail"><b>Email</b></digi:trn>																																									</td>
+															<b><digi:trn key="pointContactEmail">Email</digi:trn></b>																																									</td>
 													<td align="left" valign="middle">																										</td>
 												</tr>
 												<tr bgcolor="#ffffff">

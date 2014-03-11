@@ -21,9 +21,8 @@
           <TD class=title align=left colSpan=2>Account information / about
           you</TD></TR>
         <TR>
-          <TD class=text align=left colSpan=2>All fields marked with an <FONT
-            color=red><B><BIG>*</BIG></B></FONT> are required. Please use a
-            valid e-mail address.</TD></TR>
+          <TD class=text align=left colSpan=2><digi:trn>All fields marked with an</digi:trn><FONT color=red><B><BIG> * </BIG></B></FONT><digi:trn>are required.</digi:trn>
+           <digi:trn key="um:userValidEmail"> Please use a valid e-mail address.</digi:trn></TD></TR>
         <TR>
           <TD colSpan=2 td>
             <TABLE cellspacing="1" cellPadding=2 width="95%" border="0">

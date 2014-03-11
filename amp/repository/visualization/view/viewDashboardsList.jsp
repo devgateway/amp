@@ -157,11 +157,11 @@ function setHoveredRow(rowId) {
 								<td align="center" class="inside">
 									<c:out value="${dashboard.name}"/></td>
 								<td width="6%" align="center" class="inside">
-									<a href="javascript:editDashboard('${dashboard.id}');" title="<digi:trn>Click on this icon to edit the dashboard&nbsp;</digi:trn>">
+									<a href="javascript:editDashboard('${dashboard.id}');" title="<digi:trn>Click on this icon to edit the dashboard</digi:trn>&nbsp;">
 	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0">									
 	                                </a>
 	                                &nbsp;&nbsp;								
-									<a href="javascript:removeDashboard('${dashboard.id}');" title="<digi:trn>Click on this icon to delete the dashboard&nbsp;</digi:trn>">
+									<a href="javascript:removeDashboard('${dashboard.id}');" title="<digi:trn>Click on this icon to delete the dashboard</digi:trn>&nbsp;">
 	                                   	<img src= "../ampTemplate/images/trash_12.gif" border="0">									
 	                                </a>								
 	                            </td>

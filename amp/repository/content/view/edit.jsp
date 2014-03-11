@@ -241,7 +241,7 @@ div.fakefile2 input {
                           <tr>
                             <td width="3%">&nbsp;</td>
                             <td align=center class=title noWrap colspan="2">
-								<digi:trn>All fields marked with an</digi:trn><span style='color: red; font-weight: bold; font-size: larger;'>*</span> <digi:trn>are required</digi:trn>
+								<digi:trn>All fields marked with an</digi:trn><span style='color: red; font-weight: bold; font-size: larger;'> * </span> <digi:trn>are required.</digi:trn>
                             </td>
                           </tr>
                           <tr>

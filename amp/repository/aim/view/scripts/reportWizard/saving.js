@@ -34,6 +34,15 @@ function getReportTitle() {
 	return getReportTitleEl().value;
 }
 
+/**
+ * returns a ready-to-be-appended-to-URI list
+ * somewhat ugly hack, should be rewritten to use jQuery / YUI ajax functionality
+ */
+function getReportTitles()
+{
+	return '&' + multilingual_serialize('AmpReports_name');
+}
+
 function getReportCategory() {
 	var categoryEl 	= document.getElementById("repCat");
 	if (categoryEl != null ) {
@@ -165,11 +174,13 @@ SaveReportEngine.prototype.failure			= function(o) {
 	this.divEl.innerHTML			= this.failureMessage;
 };
 
-SaveReportEngine.prototype.decideToShowTitlePanel	= function () {	
-	if ( getReportTitle() == "" )
-			this.showTitlePanel();
-	else
-			this.saveReport( aimReportWizardForm);
+SaveReportEngine.prototype.decideToShowTitlePanel	= function ()
+{
+	this.showTitlePanel(); // always show title panel
+//	if ( getReportTitle() == "" )
+//			this.showTitlePanel();
+//	else
+//			this.saveReport( aimReportWizardForm);
 };
 
 SaveReportEngine.prototype.showTitlePanel	= function () {
@@ -223,6 +234,7 @@ SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {
 						"&hideActivities="+getHideActivities() +
 						"&useFilters="+getUseFilters()+
 						"&openReport=" + openReport + 
+						getReportTitles() + 
 						//"&reportContextId="+getReportContextId()+
 						"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
 						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");

@@ -144,8 +144,7 @@ public class RequestUtils {
      * @return current site
      */
     public static Site getSite(HttpServletRequest request) {
-        SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.
-            CURRENT_SITE);
+        SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
 
         if (siteDomain == null) {
             return null;
@@ -160,8 +159,7 @@ public class RequestUtils {
      * @return current SiteDomain object
      */
     public static SiteDomain getSiteDomain(HttpServletRequest request) {
-        return (SiteDomain) request.getAttribute(Constants.
-            CURRENT_SITE);
+        return (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
     }
 
     /**

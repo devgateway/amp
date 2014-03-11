@@ -232,13 +232,13 @@ public class PersistenceManager {
 	}
 	
 
-	/**
-	 * initialize PersistenceManager
-	 * @deprecated use initialize(boolean) instead
-	 */
-	public static void initialize() {
-		initialize(true, null);
-	}
+//	/**
+//	 * initialize PersistenceManager
+//	 * @deprecated use initialize(boolean) instead
+//	 */
+//	public static void initialize() {
+//		initialize(true, null);
+//	}
 
 	/**
 	 * initialize PersistenceManager
@@ -483,25 +483,6 @@ public class PersistenceManager {
 	 * @deprecated
 	 */
 	public static void releaseSession(Session session){
-
-//		if(session.isOpen())
-//		session.beginTransaction().commit();
-//		
-//		if (DigiConfigManager.getConfig().isTrackSessions()) {
-//			String stack = (String)sessionInstMap.get(session);
-//			logger.debug("Releasing session: " + stack);
-//			sessionInstMap.remove(session);
-//		} else {
-//			logger.debug("Releasing session");
-//		}
-//
-//		try {
-//			if(session.isOpen()) session.close();
-//		}
-//		catch (HibernateException ex) {
-//			logger.error("Failed to close session", ex);
-//			throw ex;
-//		}
 	}
 
 	private PersistenceManager() {
@@ -532,7 +513,6 @@ public class PersistenceManager {
 	 * @throws DgException If error occurs during update
 	 */
 	public static void updateObject(Object object) throws DgException {
-		Transaction tx = null;
 		Session session = null;
 
 		try {
@@ -542,26 +522,9 @@ public class PersistenceManager {
 			//tx.commit();
 		}
 		catch (Exception ex) {
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (Throwable cause) {
-					logger.warn("rollback() failed ", cause);
-				}
-			}
 			throw new DgException(
 					"Unable to update object into database", ex);
 		}
-		finally {
-			try {
-				releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
-
 	}
 
 	/**
@@ -571,7 +534,6 @@ public class PersistenceManager {
 	 * @throws DgException If error occurs during update
 	 */
 	public static void createObject(Object object) throws DgException {
-		Transaction tx = null;
 		Session session = null;
 
 		try {
@@ -581,26 +543,9 @@ public class PersistenceManager {
 			//tx.commit();
 		}
 		catch (Exception ex) {
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (Throwable cause) {
-					logger.warn("rollback() failed ", cause);
-				}
-			}
 			throw new DgException(
 					"Unable to save object into database", ex);
 		}
-		finally {
-			try {
-				releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
-
 	}
 
     /**
@@ -745,7 +690,7 @@ public class PersistenceManager {
 	
 	/**
 	 * @see #getRequestDBSession()
-	 * @param createNew
+	 * @param createNew <b>ignored</b>
 	 * @return
 	 */
 	public static Session getRequestDBSession(boolean createNew) {
@@ -798,22 +743,6 @@ public class PersistenceManager {
 	 * @deprecated
 	 */
 	public static void closeRequestDBSessionIfNeeded() throws DgException {
-//		logger.debug("closeRequestDBSessionIfNeeded() called");
-//		Map resMap = (Map) requestSession.get();
-//
-//		if (resMap != null) {
-//			Session sess = (Session) resMap.get(Constants.REQUEST_DB_SESSION);
-//			if (sess != null) {
-//				try {
-//					logger.debug("releasing RequestDBSession");
-//					releaseSession(sess);
-//				}
-//				catch (Exception ex) {
-//					throw new DgException("Exception closing session", ex);
-//				}
-//			}
-//			resMap.remove(Constants.REQUEST_DB_SESSION);
-//		}
 	}
 
 	/**

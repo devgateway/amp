@@ -39,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPledge;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.AddOrgForm;
@@ -65,11 +66,13 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.JDBCException;
 
 public class EditOrganisation extends DispatchAction {
 
   private static Logger logger = Logger.getLogger(EditOrganisation.class);
+  public final static String MULTILINGUAL_ORG_PREFIX = "multilingual_organisation";
   
   private boolean sessionChk(HttpServletRequest request) {
       HttpSession session = request.getSession();
@@ -113,7 +116,8 @@ public class EditOrganisation extends DispatchAction {
       AddOrgForm editForm = (AddOrgForm) form;
       if(request.getParameter("skipReset")==null){
     	  clean(editForm);
-      }      
+      }
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.buildMultilingualNameInputInstance());
       this.putDocumentsInSession(request, new AmpOrganisation());
       return mapping.findForward("forward");
   }
@@ -126,6 +130,8 @@ public class EditOrganisation extends DispatchAction {
       Long orgId = editForm.getAmpOrgId();
       clean(editForm);
       editForm.setAmpOrgId(orgId);
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.buildMultilingualNameInputInstance());
+
       AmpOrganisation organization = DbUtil.getOrganisation(orgId);
       editForm.setName(organization.getName());
       editForm.setAcronym(organization.getAcronym());
@@ -474,7 +480,8 @@ public class EditOrganisation extends DispatchAction {
       editForm.setTypeOfStaff(null);
       editForm.setStaffInfoIndex(-1);
       HttpSession session = request.getSession();
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
+      TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if (tm!=null&&tm.getTeamHead()) {
 			return mapping.findForward("forwardWI");
 		} else {
@@ -510,6 +517,7 @@ public class EditOrganisation extends DispatchAction {
       editForm.setSelectedStaff(null);
       editForm.setStaff(staff);
       editForm.setSelectedStaffId(null);
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if (tm!=null&&tm.getTeamHead()) {
@@ -519,7 +527,8 @@ public class EditOrganisation extends DispatchAction {
 		}
   
   }
-  public ActionForward editStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
+  
+  	public ActionForward editStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
       if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
@@ -528,6 +537,7 @@ public class EditOrganisation extends DispatchAction {
       editForm.setSelectedYear(staff.getYear().toString());
       editForm.setTypeOfStaff(staff.getType().getId());
       editForm.setNumberOfStaff(staff.getStaffNumber().toString());
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
   	HttpSession session = request.getSession();
 	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 	if (tm!=null&&tm.getTeamHead()) {
@@ -577,6 +587,7 @@ public class EditOrganisation extends DispatchAction {
       editForm.setBudgetOrgs(null);
       editForm.setOrgInfoIndex(-1);
       editForm.setActionFlag("reload");
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
       return mapping.findForward("forward");
   }
 
@@ -609,8 +620,10 @@ public class EditOrganisation extends DispatchAction {
       editForm.setOrgInfos(orgInfos);
       editForm.setSelectedOrgInfoId(null);
       editForm.setSelectedOrgInfoIds(null);
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
       return mapping.findForward("forward");
   }
+  
    public ActionForward editOrgInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
       if (sessionChk(request)) {
           return mapping.findForward("index");
@@ -626,6 +639,7 @@ public class EditOrganisation extends DispatchAction {
           orgs.addAll(orgBudgetInfo.getOrganizations());
           editForm.setBudgetOrgs(orgs);
       }
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
       return mapping.findForward("forward");
   }
 
@@ -654,6 +668,7 @@ public class EditOrganisation extends DispatchAction {
       session.removeAttribute("add");
       session.removeAttribute("sectorSelected");
 	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
 	if (tm!=null&&tm.getTeamHead()) {
 		return mapping.findForward("forwardWI");
 	} else {
@@ -697,6 +712,7 @@ public class EditOrganisation extends DispatchAction {
       editForm.setSectors(newSectors);
   	HttpSession session = request.getSession();
 	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
 	if (tm!=null&&tm.getTeamHead()) {
 		return mapping.findForward("forwardWI");
 	} else {
@@ -727,6 +743,7 @@ public class EditOrganisation extends DispatchAction {
       
       editForm.setRecipients(recipients);
       editForm.setSelRecipients(null);
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
       return mapping.findForward("forward");
   }
 
@@ -752,6 +769,7 @@ public class EditOrganisation extends DispatchAction {
 
       editForm.setBudgetOrgs(orgs);
       editForm.setSelBudgetOrg(null);
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
       return mapping.findForward("forward");
   }
 
@@ -779,7 +797,7 @@ public class EditOrganisation extends DispatchAction {
           editForm.setSelectedLocs(oldLocs);
           editForm.setSelLocs(null);
       }
-     
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
       return mapping.findForward("forward");
   }
   
@@ -834,30 +852,34 @@ public class EditOrganisation extends DispatchAction {
           editForm.setLineMinRegNumber(null);
           editForm.setOperFuncApprDate(null);
       }
+      request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
       return mapping.findForward("forward");
 
   }
 
-  public ActionForward reload(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
+  public ActionForward reload(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception 
+  {
 	  AddOrgForm editForm = (AddOrgForm) form;
 	  HttpSession session = request.getSession();
 	  TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 	  String forwardWhere=(tm!=null&&tm.getTeamHead())?"forwardWI":"forward";
-  	  String asynchCall=request.getParameter("asynchCall");
-  	  if(asynchCall!=null && asynchCall.equals("true")){
-  		  forwardWhere = null;
-  	  }else{
-         // AddOrgForm editForm = (AddOrgForm) form;
-         if(editForm.getRecipients()!=null){
-        	  Collections.sort(editForm.getRecipients(), new DbUtil.HelperAmpOrgRecipientByOrgName());
-          }
-  	  }
+	  String asynchCall=request.getParameter("asynchCall");
+	  if(asynchCall!=null && asynchCall.equals("true")){
+		  forwardWhere = null;
+	  }else{
+		  // AddOrgForm editForm = (AddOrgForm) form;
+		  if (editForm.getRecipients()!=null)
+		  {
+			  Collections.sort(editForm.getRecipients(), new DbUtil.HelperAmpOrgRecipientByOrgName());
+		  }
+	  }
   	
-  	  if (request.getSession().getAttribute("locations") != null) {
-          Collection<Location> locs = (Collection<Location>) request.getSession().getAttribute("locations");
-          if (editForm.getSelectedLocs() == null) {
-              editForm.setSelectedLocs(new ArrayList<Location>());
-          }
+	  if (request.getSession().getAttribute("locations") != null)
+	  {
+		  Collection<Location> locs = (Collection<Location>) request.getSession().getAttribute("locations");
+		  if (editForm.getSelectedLocs() == null) {
+			  editForm.setSelectedLocs(new ArrayList<Location>());
+		  }
           Collection<Location> selectedLocs = editForm.getSelectedLocs();
           for (Location location : locs) {
               if (!selectedLocs.contains(location)) {
@@ -868,7 +890,8 @@ public class EditOrganisation extends DispatchAction {
 
           request.getSession().removeAttribute("locations");
       }
-  	return mapping.findForward(forwardWhere);
+	  request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
+	  return mapping.findForward(forwardWhere);
   }
 
   public ActionForward save(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -1263,13 +1286,10 @@ public class EditOrganisation extends DispatchAction {
       }         
          
       this.saveDocuments(request, organization);
-      DbUtil.saveOrg(organization);        
+      DbUtil.saveOrg(organization);
+      MultilingualInputFieldValues.serialize(organization, "name", null, null, request);
       return mapping.findForward("added");
-
   }
-
-
-  
   
   public ActionForward deleteContact(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 	  if (sessionChkForWInfo(request)) {

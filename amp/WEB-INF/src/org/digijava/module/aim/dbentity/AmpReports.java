@@ -71,7 +71,10 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	// private AmpReportsOptions ampReportsOptions;
 	private String description;
 
-	private Set members;
+	/**
+	 * team reports oslt
+	 */
+	private Set<AmpTeamMember> members;
 
 	private Set<AmpReportColumn> columns;
 
@@ -81,7 +84,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 
 	private Set<AmpReportMeasures> measures;
 
-	private Set reportMeasures;
+	private Set<AmpMeasures> reportMeasures;
 
 	private AmpTeamMember ownerId; // the member that created the report
 
@@ -221,7 +224,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	 * ampReportsOptions; }
 	 */
 
-	public Set getMembers() {
+	public Set<AmpTeamMember> getMembers() {
 		return members;
 	}
 
@@ -251,7 +254,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	 * this.ampReportsOptions = ampReportsOptions; }
 	 */
 
-	public void setMembers(Set members) {
+	public void setMembers(Set<AmpTeamMember> members) {
 		this.members = members;
 	}
 
@@ -471,11 +474,11 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		this.nameTrn = nameTrn;
 	}
 
-	public Set getReportMeasures() {
+	public Set<AmpMeasures> getReportMeasures() {
 		return reportMeasures;
 	}
 
-	public void setReportMeasures(Set reportMeasures) {
+	public void setReportMeasures(Set<AmpMeasures> reportMeasures) {
 		this.reportMeasures = reportMeasures;
 	}
 
@@ -743,9 +746,18 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		return InternationalizedModelDescription.getForProperty(AmpReports.class, "reportDescription").getSQLFunctionCall(idSource + ".ampReportId");
 	}
 	
-	//non hierachical summary report. 
+	/**
+	 * is non hierarchical summary report?
+	 * @return
+	 */
 	public boolean isSummaryReportNoHierachies () {
 		return (this.getHideActivities() && this.getHierarchies().size()==0);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("AmpReports: " + this.getName());
 	}
 }
 

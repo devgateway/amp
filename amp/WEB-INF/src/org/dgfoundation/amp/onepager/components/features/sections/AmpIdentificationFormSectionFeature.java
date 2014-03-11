@@ -98,7 +98,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			
 			//we only disable the language switcher if we are in multilingual mode
 
-			//we only disable if the object in the default languaje is null or empty
+			//we only disable if the object in the default language is null or empty
 			if(title.getModel().getObject()==null || title.getModel().getObject().equals("")){
 				TranslationDecorator titleDecorator=
 						(TranslationDecorator)title.get("trnContainer");

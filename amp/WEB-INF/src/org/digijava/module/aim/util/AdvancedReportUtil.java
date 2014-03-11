@@ -54,24 +54,15 @@ public final class AdvancedReportUtil {
 	public static void saveReport(AmpReports ampReports,Long ampTeamId,Long ampMemberId,boolean teamLead)
 	{
 		Session session = null;
-		Transaction tx = null;
-		String queryString=null;
-		Query query=null;
-		Iterator iter=null;
-		Set pageFilters = new HashSet();
-		try {
+		try
+		{
 			session = PersistenceManager.getSession();
-//beginTransaction();
-			//session.save(ampReports);
 			session.saveOrUpdate(ampReports);
-			//ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
-			//session.update(ampReports);
 			
-			if (ampReports.getMembers()==null){
-				ampReports.setMembers(new HashSet());
+			if (ampReports.getMembers() == null){
+				ampReports.setMembers(new HashSet<AmpTeamMember>());
 			}
-				
-			
+							
 			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
 			
 			String tempQry = "select teamRep from "
@@ -79,10 +70,10 @@ public final class AdvancedReportUtil {
 				+ " teamRep where (teamRep.team=:tId) and "
 				+ " (teamRep.report=:rId)";
 			Query tmpQry = session.createQuery(tempQry);
-			tmpQry.setParameter("tId",ampTeamId,Hibernate.LONG);
-			tmpQry.setParameter("rId",ampReports.getAmpReportId(),Hibernate.LONG);
-			Iterator tmpItr = tmpQry.list().iterator();
-			if (!tmpItr.hasNext()) {
+			tmpQry.setLong("tId", ampTeamId);
+			tmpQry.setLong("rId", ampReports.getAmpReportId());
+			if (tmpQry.list().isEmpty())
+			{
 				AmpTeamReports tr = new AmpTeamReports();
 				tr.setTeam(ampTeam);
 				tr.setReport(ampReports);
@@ -90,138 +81,21 @@ public final class AdvancedReportUtil {
 				session.save(tr);
 			}
 			
-			//amp-3304
-			/*
-			if(teamLead == true&&(ampReports.getOwnerId()==null||(ampReports.getOwnerId().getAmpTeam().getTeamLead()!=null && 
-					ampReports.getOwnerId().getAmpTeamMemId().equals(ampReports.getOwnerId().getAmpTeam().getTeamLead().getAmpTeamMemId())))
-					)
+			AmpTeamMember ampTeamMember = null;
+			if (ampReports.getOwnerId() != null)
 			{
-				//logger.info(teamMember.getMemberName() + " is Team Leader ");
-
-				//Check if this assignment was already done.
-				AmpTeamReports teamReports = TeamUtil.getAmpTeamReport(ampTeam.getAmpTeamId(), ampReports.getAmpReportId());
-				if(teamReports == null)
-				{
-					AmpTeamReports ampTeamReports = new AmpTeamReports();
-					
-					ampTeamReports.setTeamView(true);				
-					ampTeamReports.setTeam(ampTeam);
-					ampTeamReports.setReport(ampReports);
-					session.save(ampTeamReports);
-				}
+				ampTeamMember=(AmpTeamMember) session.get(AmpTeamMember.class, ampReports.getOwnerId().getAmpTeamMemId());	
 			}
-			*/
-//			else
-//			{
-				//logger.info(teamMember.getMemberName() + " is Team Memeber ");
-				//Long lg = teamMember.getMemberId();
-				AmpTeamMember ampTeamMember =null;
-				if(ampReports.getOwnerId()!=null){
-					ampTeamMember=(AmpTeamMember) session.get(AmpTeamMember.class, ampReports.getOwnerId().getAmpTeamMemId());	
-				}else {
-					ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);	
-				}					
-				Set reportSet = ampTeamMember.getReports();
-				
-				//reportSet.add(ampReports);  // Not needed because it is set from ampReports object
-				
-				
-				ampReports.getMembers().add(ampTeamMember);
-				session.saveOrUpdate(ampTeamMember);
-				//session.save(ampTeamMember);
-//			}
-
-//			queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
-//			//logger.info( " Filter Query...:: " + queryString);
-//			query = session.createQuery(queryString);
-//			if(query!=null)
-//			{
-//				iter = query.list().iterator();
-//				while(iter.hasNext())
-//				{
-//					AmpFilters filt = (AmpFilters) iter.next();
-//					if(filt.getFilterName().compareTo("Region") != 0 && 
-//						filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
-//						filt.getFilterName().compareTo("Planned/Actual") != 0 )  
-//					{
-//						//logger.info("Insertd : " + filt.getFilterName());
-//						pageFilters.add(filt);
-//					}
-//				}
-//			}
-//
-//			AmpPages ampPages = new AmpPages();
-//			ampPages.setFilters(pageFilters);
-//			ampPages.setPageName(ampReports.getName());
-//			//logger.info(" Page Name  : " + ampPages.getPageName());
-//				
-//			String pageCode = "" + ampReports.getName().trim().charAt(0);
-//			for(int j=0; j <ampReports.getName().length(); j++)
-//			{
-//				if(ampReports.getName().charAt(j) == ' ')
-//						pageCode = pageCode + ampReports.getName().charAt(j+1);
-//			}
-//			ampPages.setPageCode(pageCode);
-//			ampPages.setAmpTeamId(ampTeamId);
-//			session.save(ampPages);
-//			
-//			
-//			pageFilters = ampPages.getFilters();
-//			Iterator itr = pageFilters.iterator();
-//			while (itr.hasNext()) {
-//				AmpFilters filt = (AmpFilters) itr.next();
-//				AmpTeamPageFilters tpf = new AmpTeamPageFilters();
-//				tpf.setFilter(filt);
-//				tpf.setTeam(ampTeam);
-//				tpf.setPage(ampPages);
-//				session.save(tpf);
-//			
-//			}
-//			
-//			ampReports.setAmpPage(ampPages);
-//			
-//			queryString = "select t from " + AmpTeam.class.getName() + " t " +
-//					"where t.accessType = 'Management'";
-//			query = session.createQuery(queryString);
-//			itr = query.list().iterator();
-//			while (itr.hasNext()) {
-//				AmpTeam t = (AmpTeam) itr.next();
-//				pageFilters = ampPages.getFilters();
-//				Iterator itr1 = pageFilters.iterator();
-//				while (itr1.hasNext()) {
-//					AmpFilters filt = (AmpFilters) itr1.next();
-//					AmpTeamPageFilters tpf = new AmpTeamPageFilters();
-//					tpf.setFilter(filt);
-//					tpf.setTeam(t);
-//					tpf.setPage(ampPages);
-//					session.save(tpf);
-//			
-//				}
-//			}
+			else
+			{
+				ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);	
+			}				
 			
-			//tx.commit(); 
-
+			ampReports.getMembers().add(ampTeamMember);
+			session.saveOrUpdate(ampTeamMember);
 		}
 		catch (Exception ex) {
-			logger.error("Exception from saveReport()  " + ex.getMessage()); 
-			ex.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-					logger.debug("Transaction Rollbacked");
-				}
-				catch (HibernateException e) {
-					logger.error("Rollback failed :" + e);
-				}
-			}			
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception e) {
-					logger.error("Release session faliled :" + e);
-				}
-			}
+			logger.error("Exception from saveReport()  ", ex); 
 		}
 	}
 
@@ -268,7 +142,6 @@ public final class AdvancedReportUtil {
 	public static List<AmpMeasures> getMeasureList()
 	{
 		Session session = null;
-		AmpMeasures ampMeasures = new AmpMeasures();
 		try
 		{
 			session = PersistenceManager.getSession();
@@ -283,91 +156,29 @@ public final class AdvancedReportUtil {
 	}
 	
 	
-	public static Collection getMeasureListbyType(String type)
+	public static List<AmpMeasures> getMeasureListbyType(String type)
 	{
 		Session session = null;
-		String sqlQuery = "";
-		boolean flag =false;
-		Iterator iter = null;
-		Collection coll = new ArrayList();
 		Query query = null;
-		AmpMeasures ampMeasures = new AmpMeasures();
 		try
 		{
 			session = PersistenceManager.getSession();
-			sqlQuery = "select c from "+ AmpMeasures.class.getName() + " c where c.type=:type";
+			String sqlQuery = "select c from "+ AmpMeasures.class.getName() + " c where c.type=:type";
 			query = session.createQuery(sqlQuery);
 			query.setString("type", type);
-			if (query != null) 
-			{
-				iter = query.list().iterator();
-				while (iter.hasNext()) 
-				{
-					ampMeasures = (AmpMeasures) iter.next();
-					coll.add(ampMeasures);
-				}
-				flag = true;
-			}
-			return coll;
+			return new ArrayList<AmpMeasures>(query.list());
 		}
 		catch(Exception e)
 		{
-			logger.error(e);
-			////System.out.println(" Error in getMeasureList()  :  " + e);
-		} finally {
-			PersistenceManager.releaseSession(session);
+			throw new RuntimeException(e);
 		}
-		return coll;
 	}
-	@Deprecated
-	public static AmpTeamMember checkDuplicateReportName(String reportTitle){
-		AmpTeamMember teamMember=null;
+	        
+	public static boolean checkDuplicateReportName(String reportTitle, Long ownerId, Long dbReportId, Boolean drilldownTab) throws Exception
+	{
 		Session session = null;
 		Query query = null;
-		Iterator iter=null;
-		String queryString;
-		try {
-			session = PersistenceManager.getSession();
-			queryString = "select report from " + AmpReports.class.getName() + " report ";
-			//logger.info( " Query :" + queryString);
-			query = session.createQuery(queryString);
-	//		iter = query.list().iterator();
-			
-			if(query!=null)
-			{
-				iter = query.list().iterator();
-				//logger.info("............Query is not null............");
-				while(iter.hasNext())
-				{
-					AmpReports r = (AmpReports) iter.next();
-					if( reportTitle.trim().equals(r.getName()) )
-					{
-						teamMember=r.getOwnerId();
-						break;
-					}
-						
-				}
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get checkDupilcateReportName()", ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
-		return teamMember;
-	}
-        
-        public static boolean checkDuplicateReportName(String reportTitle, Long ownerId, Long dbReportId, Boolean drilldownTab) throws Exception{
-		boolean exist=false;
-		Session session = null;
-		Query query = null;
-		Iterator iter=null;
+		//Iterator iter=null;
 		String queryString;
 		try {
 			session = PersistenceManager.getRequestDBSession();
@@ -378,22 +189,21 @@ public final class AdvancedReportUtil {
 				queryString+=" and report.ampReportId!=:dbReportId";
 			}
 			query = session.createQuery(queryString);
-                        query.setLong("ownerId", ownerId);
-                        query.setString("name", reportTitle.trim());
-                        query.setBoolean("drilldownTab", drilldownTab);
-                         if(dbReportId!=null){
-                            query.setLong("dbReportId", dbReportId);
-                        }
-                       if(query.list()!=null&&query.list().size()>0){
-                           exist=true;
-                       }			
-
-		} catch (Exception ex) {
-			logger.error("Unable to get checkDupilcateReportName()", ex);
-                        throw ex;
+			query.setLong("ownerId", ownerId);
+			query.setString("name", reportTitle.trim());
+			query.setBoolean("drilldownTab", drilldownTab);
+			if (dbReportId != null)
+			{
+				query.setLong("dbReportId", dbReportId);
+			}
+			boolean exists = !query.list().isEmpty();
+			return exists;
 		} 
-		
-		return exist;
+		catch (Exception ex)
+		{
+			logger.error("Unable to get checkDupilcateReportName()", ex);
+			throw ex;
+		}
 	}
         
 	/**
@@ -411,6 +221,7 @@ public final class AdvancedReportUtil {
     public static enum SortOrder{
         ASC,DESC;
     }
+    
 	public static class AmpReportTitleComparator implements Comparator<AmpReports>{
         private SortOrder sortOrder;
         private Collator collator;
@@ -427,6 +238,7 @@ public final class AdvancedReportUtil {
             return compare;
 		}
 	}
+	
 	public static class AmpReportOwnerComparator implements Comparator<AmpReports>{
         private SortOrder sortOrder;
         private Collator collator;
@@ -469,90 +281,54 @@ public final class AdvancedReportUtil {
 	        session = PersistenceManager.getRequestDBSession();
 	        AmpReports ampReports = null;
 	        // loading the 3 tables from where the deletion has to be done
-	        try {
-	            logger.info(" this is the utils's qid " + qid);
-	            ampReports = (AmpReports) session.load(AmpReports.class, qid);
-	            AmpTeamReports ampTeamReports = null;
-	            queryString = "select tr from " + AmpTeamReports.class.getName() + " tr " + "where tr.report=:qid ";
-	            qry = session.createQuery(queryString);
-	            qry.setParameter("qid", qid, Hibernate.LONG);
-	            List lst	= qry.list();
-	            Iterator itr = lst.iterator();
-	            Collection col = new ArrayList(); 
-	            while (itr.hasNext()) {
-	                ampTeamReports = (AmpTeamReports) itr.next();
-	                ampTeamReports.setReport(null);
-	                session.delete(ampTeamReports);
-	            }
-	            
-	           /**
-	             * Removing link between reports and AmpTeamMember entity
-	             */
-	            if ( ampReports.getMembers() != null ) {
-		            for ( Object tm: ampReports.getMembers() ) {
-		            	AmpTeamMember atm		= (AmpTeamMember) tm;
-		            	if ( atm.getReports() != null ) {
-			            	Iterator<AmpReports> itr2	= atm.getReports().iterator();
-			            	while (itr2.hasNext()) {
-			            		if ( qid.equals( itr2.next().getAmpReportId() ) ){
-			            			//System.out.println("removing relation to ampTeamMember");
-			            			itr2.remove();
-			            		}
-							}
-		            	}
-		            }
-	            }
-	            ampReports.getMembers().clear();
-	            
-	            for (AmpDesktopTabSelection adts : ampReports.getDesktopTabSelections()) {
-	            	adts.getOwner().getDesktopTabSelections().remove(adts);
-	            	adts.setOwner(null);
-	            	adts.setReport(null);
-				}
-	            ampReports.getDesktopTabSelections().clear();
-	            session.delete(ampReports);
+           // logger.info(" this is the utils's qid " + qid);
+            ampReports = (AmpReports) session.load(AmpReports.class, qid);
 
-	            //logger.info("SESSION HAS BEEN FLUSHED OUT !!!!!!!!!!!!!!!!!!");
-	            return true;
-	        } catch (org.hibernate.ObjectNotFoundException onfe) {
-	            logger.error("Exception from deleteQuestion() :", onfe);
-	        }
+            queryString = "select tr from " + AmpTeamReports.class.getName() + " tr " + "where tr.report=:qid ";
+            qry = session.createQuery(queryString);
+            qry.setLong("qid", qid);
+            for(AmpTeamReports ampTeamReports: (List<AmpTeamReports>) qry.list())
+            {
+                ampTeamReports.setReport(null);
+                session.delete(ampTeamReports);
+            }
+	            
+           /**
+             * Removing link between reports and AmpTeamMember entity
+             */
+            if ( ampReports.getMembers() != null )
+            {
+	            for (AmpTeamMember atm: ampReports.getMembers() )
+	            {
+	            	if ( atm.getReports() != null ) {
+		            	Iterator<AmpReports> itr2	= atm.getReports().iterator();
+		            	while (itr2.hasNext()) {
+		            		if ( qid.equals( itr2.next().getAmpReportId() ) ){
+		            			//System.out.println("removing relation to ampTeamMember");
+		            			itr2.remove();
+		            		}
+						}
+	            	}
+	            }
+            }
+            ampReports.getMembers().clear();
+            
+            for (AmpDesktopTabSelection adts : ampReports.getDesktopTabSelections()) {
+            	adts.getOwner().getDesktopTabSelections().remove(adts);
+            	adts.setOwner(null);
+            	adts.setReport(null);
+			}
+            ampReports.getDesktopTabSelections().clear();
+            session.delete(ampReports);
+
+            //logger.info("SESSION HAS BEEN FLUSHED OUT !!!!!!!!!!!!!!!!!!");
+            return true;
 	    } catch (Exception e) {
 	        logger.error("Exception from deleteQuestion() :", e);
+	        return false;
 	    }
-	    return false;
 	}
 
-
-
-	public static boolean deleteReportsForOwner(Long qid) {
-	    Session session = null;
-	    Transaction tx = null;
-	    String queryString = null;
-	    Query qry = null;
-	    Collection col = null;
-	    try {
-	        session = PersistenceManager.getRequestDBSession();
-	        try {
-	            queryString = "select rep from " + AmpReports.class.getName() + " rep " +
-	                "where rep.ownerId=:oId ";
-	            qry = session.createQuery(queryString);
-	            qry.setParameter("oId", qid, Hibernate.LONG);
-	            Iterator itr = qry.list().iterator();
-	            col = new ArrayList();
-	            while (itr.hasNext()) {
-	                AmpReports rep = (AmpReports) itr.next();
-	                session.delete(rep);
-	            }
-	            return true;
-	        } catch (org.hibernate.ObjectNotFoundException onfe) {
-	            logger.error("Exception from deleteQuestion() :", onfe);
-	        }
-	    } catch (Exception e) {
-	        logger.error("Exception from deleteQuestion() :", e);
-	    }
-	    return false;
-	}
 	
 	/**
 	 * Return true if the column colName is already in the columns list.
@@ -560,7 +336,7 @@ public final class AdvancedReportUtil {
 	 * @param colName
 	 * @return
 	 */
-	public static boolean isColumnAdded (Set <AmpReportColumn> columns, String colName){
+	public static boolean isColumnAdded(Set<AmpReportColumn> columns, String colName){
 		
 		for ( AmpReportColumn tempCol: columns ) {
 			if ( colName.equals(tempCol.getColumn().getColumnName()) ) {
@@ -595,16 +371,16 @@ public final class AdvancedReportUtil {
 	public static void removeDuplicatedColumns(AmpReports ampReport){
 		Set<AmpReportColumn> cols1 = ampReport.getColumns();
 		Set<AmpReportColumn> cols2 = ampReport.getColumns();
-		for (Iterator iterator = cols1.iterator(); iterator.hasNext();) {
-			AmpReportColumn ampReportColumn1 = (AmpReportColumn) iterator.next();
+		for (Iterator<AmpReportColumn> iterator = cols1.iterator(); iterator.hasNext();) {
+			AmpReportColumn ampReportColumn1 = iterator.next();
 			int cont = 0;
-			for (Iterator iterator2 = cols2.iterator(); iterator2.hasNext();) {
-				AmpReportColumn ampReportColumn2 = (AmpReportColumn) iterator2.next();
+			for (AmpReportColumn ampReportColumn2:cols2)
+			{
 				if (ampReportColumn1.getColumn().getColumnName().equals(ampReportColumn2.getColumn().getColumnName())) {
 					cont++;
 				}
 			}
-			if (cont>1) {
+			if (cont > 1) {
 				iterator.remove();
 			}
 		}

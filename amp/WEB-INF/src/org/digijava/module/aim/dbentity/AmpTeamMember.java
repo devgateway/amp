@@ -22,7 +22,7 @@ public class AmpTeamMember implements Serializable/*, Versionable*/ {
 	private AmpTeam ampTeam;
 	private AmpTeamMemberRoles ampMemberRole;
 	private Set<AmpActivityVersion> activities;
-	private Set reports;
+	private Set<AmpReports> reports;
 	private Set links;
 	private Set logs;
 	private Set<AmpMessageState> messages;
@@ -33,12 +33,12 @@ public class AmpTeamMember implements Serializable/*, Versionable*/ {
 
 	private Set<AmpDesktopTabSelection> desktopTabSelections;
 
-	public void setReports(Set reports) {
+	public void setReports(Set<AmpReports> reports) {
 		this.reports = reports;
 	}
 
-	public Set getReports() {
-			  return this.reports;
+	public Set<AmpReports> getReports() {
+		return this.reports;
 	}
 
 	/**

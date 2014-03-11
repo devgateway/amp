@@ -12,8 +12,13 @@
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
-<%@page import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%><script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<%@page import="org.digijava.module.aim.dbentity.AmpOrganisationDocument"%>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
     <jsp:include page="scripts/calendar.js.jsp"  />
@@ -130,25 +135,29 @@ div.charcounter-progress-bar {
     function refreshPage(){
         <digi:context name="reload" property="context/module/moduleinstance/editOrganisation.do" />
         document.aimAddOrgForm.action = "${reload}";
-        document.aimAddOrgForm.actionFlag.value='reload'
+        document.aimAddOrgForm.actionFlag.value='reload';
         document.aimAddOrgForm.submit();
     }
 
-    function addOrganizations2Contact(){
+    function addOrganizations2Contact()
+    {
         var params=getContactParams();
-    <digi:context name="addCont" property="context/addAmpContactInfo.do?action=addOrganizations"/>;
-            checkAndClose=true;
-            var url="${addCont}"+"&"+params;
-            YAHOO.util.Connect.asyncRequest("POST", url, callback1);
+		<digi:context name="addCont" property="context/addAmpContactInfo.do?action=addOrganizations"/>;
+		checkAndClose = true;
+		var url="${addCont}"+"&"+params;
+		YAHOO.util.Connect.asyncRequest("POST", url, callback1);
     }
   
-    function orgTypeChanged(){
-    <digi:context name="typeChanged" property="context/module/moduleinstance/editOrganisation.do" />
-            document.aimAddOrgForm.actionFlag.value="typeChanged";
-            document.aimAddOrgForm.action = "${typeChanged}";
-            document.aimAddOrgForm.target = "_self";
-            document.aimAddOrgForm.submit();
-        }
+    function orgTypeChanged()
+	{
+    	<digi:context name="typeChanged" property="context/module/moduleinstance/editOrganisation.do" />
+        document.aimAddOrgForm.actionFlag.value="typeChanged";
+        document.aimAddOrgForm.action = "${typeChanged}";
+        document.aimAddOrgForm.target = "_self";
+        document.aimAddOrgForm.submit();
+		//YAHOO.util.Connect.asyncRequest("POST", "/aim/editOrganisation.do", this, postString);
+	}
+    
         function addStaff(){
             var year=document.aimAddOrgForm.selectedYear;
             var type=document.aimAddOrgForm.typeOfStaff;
@@ -452,10 +461,12 @@ div.charcounter-progress-bar {
         function check() {
 
             var type=document.aimAddOrgForm.type;
-            var name = document.aimAddOrgForm.name.value;
-            if ( name == null||name.length == 0) {
+            var nameEntered = check_multilingual_value_entered('AmpOrganisation_name');
+            if (!nameEntered) {
+// 			var name = document.aimAddOrgForm.name.value;
+//            if ( name == null||name.length == 0) {            	
                 alert('<digi:trn  jsFriendly="true">Please enter name for this Organization.</digi:trn>');
-                document.aimAddOrgForm.name.focus();
+                //document.aimAddOrgForm.name.focus();
                 return false;
             }
             var acronym = document.aimAddOrgForm.acronym.value;
@@ -1066,7 +1077,11 @@ border-right: 1px solid rgb(208, 208, 208);
                                                     <font size="2" color="#FF0000">*</font>
                                                 </td>
                                                 <td align="left">
-                                                    <html:text name="aimAddOrgForm" property="name" size="54" styleId="orgName"/>
+                                                	<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+														<jsp:param name="attr_name" value="multilingual_organisation_name" />
+													</jsp:include>                                              
+                                                    <%--<html:text name="aimAddOrgForm" property="name" size="54" styleId="orgName"/>
+                                                     --%>
                                                 </td>
                                                 <td style="text-align:left; " class="tdBoldClass" nowrap>
                                                     <digi:trn>Organization Acronym</digi:trn>

@@ -15,7 +15,7 @@ import org.digijava.module.um.exception.UMException;
 
 import junit.framework.TestCase;
 
-public abstract class ReportsTestCase extends TestCase
+public abstract class ReportsTestCase extends AmpTestCase
 {
 	public ReportsTestCase(String name) {
 		super(name);

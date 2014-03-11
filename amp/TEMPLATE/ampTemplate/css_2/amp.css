@@ -1044,3 +1044,36 @@ table.component-funding-table tr
 .Hovered {
 	background-color:#a5bcf2;
 }
+
+
+
+
+
+/* 
+	AMP-specific changes to the SAM YUI skin START
+	we do not want to change the YUI css files for obvious reasons, so instead we'll be using this file included right after the sam css
+*/
+
+.yui-skin-sam.smallish .yui-navset .yui-nav .selected a em
+{
+	padding: .17em .37em !important; /* smaller padding for tab headers */
+}
+
+.yui-skin-sam.smallish .yui-navset .yui-nav a em, .yui-skin-sam.smallish .yui-navset .yui-navset-top .yui-nav a em
+{
+	padding: .17em .37em !important; /* smaller padding for tab headers */
+}
+
+.yui-skin-sam.smallish input
+{
+	width: 85% !important;
+	padding: 0.05em !important;
+	margin: 0.4em 0.12em !important;
+	border: 1px solid gray !important;
+	border-radius: 4px !important;
+}
+
+/* 
+	AMP-specific changes to the SAM YUI skin END
+	we do not want to change the YUI css files for obvious reasons, so instead we'll be using this file included right after the sam css
+*/

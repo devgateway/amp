@@ -27,6 +27,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *
  * @author aartimon@developmentgateway.org
@@ -138,6 +140,51 @@ public class ContentTranslationUtil {
     }
 
     /**
+     * gets a property of an object
+     * @param obj
+     * @param propertyName
+     * @return
+     */
+	public static Object getProperty(Object obj, String propertyName)
+	{
+		try
+		{
+			Method methGetField = obj.getClass().getMethod("get" + Strings.capitalize(propertyName));
+			Object fieldValue = methGetField.invoke(obj);
+			return fieldValue;
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+	
+    /**
+     * set a property of an object
+     * @param obj
+     * @param propertyName
+     * @param propertyValue
+     * @return
+     */
+	public static void setProperty(Object obj, String propertyName, Object propertyValue)
+	{
+		try
+		{
+			Method methGetField = obj.getClass().getMethod("set" + Strings.capitalize(propertyName), String.class);
+			methGetField.invoke(obj, propertyValue);			
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static boolean multilingualIsEnabled()
+	{
+		return "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL));
+	}
+	
+    /**
      * Method that will clone the translations for all the translatable fields
      * in the current object; see [// item #00000001] for the place where the id's are used
      *
@@ -145,10 +192,11 @@ public class ContentTranslationUtil {
      * @param formTranslations the list of translations that were modified using the activity form
      */
     @SuppressWarnings("unchecked")
-    public static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations){
+    public static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations)
+    {
         //check if multilingual is enabled
-        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
-            return;
+        if (!multilingualIsEnabled())
+        	return;
 
         Hibernate.initialize(obj);
         String objClass = getObjectClass(obj);
@@ -169,8 +217,7 @@ public class ContentTranslationUtil {
                 if (field.getAnnotation(TranslatableField.class) != null) {
                     //retrieve updated translation in the current locale
                     String fieldName = field.getName();
-                    Method methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
-                    String fieldTrnCurrentLocale = (String) methGetField.invoke(obj);
+                    String fieldTrnCurrentLocale = (String) getProperty(obj, fieldName);
                     //create a list with translations from the activity form
                     List<AmpContentTranslation> formFieldTrns = null;
                     if (formTranslations != null){//if request is coming from the activity form save
@@ -178,7 +225,7 @@ public class ContentTranslationUtil {
                         for (AmpContentTranslation ft: formTranslations){
                             if (ft.getObjectClass().equals(objClass) && ft.getObjectId().equals(revObjId) &&
                                     ft.getFieldName().equals(fieldName) && ft.getTranslation() != null){
-                                //we're not taking into consideration ACT's with the translation null, this haven't been filled
+                                //we're not taking into consideration ACT's with the translation null, these haven't been filled
                                 if (formFieldTrns == null)
                                     formFieldTrns = new ArrayList<AmpContentTranslation>();
                                 formFieldTrns.add(ft);
@@ -722,7 +769,7 @@ public class ContentTranslationUtil {
     /**
      * @return the base language for the application
      */
-    private static String getBaseLanguage(){
+    public static String getBaseLanguage(){
         //TODO:
         //TODO: move to category Manager
         //TODO:
@@ -736,10 +783,9 @@ public class ContentTranslationUtil {
     public static Long getObjectId(Object obj){
         try{
             Session session = PersistenceManager.getRequestDBSession();
-            Class clazz = Hibernate.getClass(obj);// obj.getClass();
+            Class<?> clazz = Hibernate.getClass(obj);// obj.getClass();
             String objIdField = getObjectIdField(clazz, session.getSessionFactory());
-            Method methGetId = clazz.getMethod("get" + Strings.capitalize(objIdField));
-            return (Long) methGetId.invoke(obj);
+            return (Long) getProperty(obj, objIdField);
         } catch (Exception e){
             logger.error("Can't get object id:", e);
         }
@@ -780,17 +826,16 @@ public class ContentTranslationUtil {
 //        return null;
 //    }
 
-    public static void saveOrUpdateContentTrns(Set <AmpContentTranslation> objectsForDb) {
+    public static void saveOrUpdateContentTrns(Collection <AmpContentTranslation> objectsForDb) {
         try {
             Session session = PersistenceManager.getRequestDBSession();
             for (AmpContentTranslation trn : objectsForDb) {
                 session.saveOrUpdate(trn);
             }
         } catch (DgException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            logger.error("error saving trns!", e);
         }
 
     }
-
 
 }

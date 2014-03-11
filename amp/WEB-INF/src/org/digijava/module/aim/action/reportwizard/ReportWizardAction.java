@@ -14,6 +14,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -59,6 +60,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 
 /**
@@ -67,10 +69,8 @@ import org.hibernate.Session;
  */
 public class ReportWizardAction extends MultiAction {
 	
-	//public static final String SESSION_FILTER					= "reportWizardFilter";
-	//public static final String EXISTING_SESSION_FILTER			= "existingReportWizardFilter";
-	//public static final String REPORT_WIZARD_INIT_ON_FILTERS	= "rep_wiz_init";
-	
+	public static final String MULTILINGUAL_REPORT_PREFIX = "multilingual_report";
+				
 	private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 	
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, 
@@ -241,6 +241,7 @@ public class ReportWizardAction extends MultiAction {
 		}
 		
 		request.getSession().setAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE, Boolean.toString(typereport == ArConstants.PLEDGES_TYPE)); //WARNING: When merging with 2.4, using ReportContextData attribute instead of storing in the session		
+		request.setAttribute(MULTILINGUAL_REPORT_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class, myForm.getReportId(), "name", null, null));
 		
 		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(),typereport,request.getSession()));
 		if (typereport==ArConstants.PLEDGES_TYPE || myForm.getReportType().equalsIgnoreCase("pledge")){
@@ -288,8 +289,8 @@ public class ReportWizardAction extends MultiAction {
 			repForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("A") );
 		}
 	    
-	    for (Iterator iterator = repForm.getAmpMeasures().iterator(); iterator.hasNext();) {
-			AmpMeasures measure = (AmpMeasures) iterator.next();
+	    for (AmpMeasures measure: repForm.getAmpMeasures())
+	    {
 			JSONObject child = new JSONObject();
 			child.put("ID", measure.getMeasureName());
 			child.put("name", measure.getMeasureId());
@@ -555,8 +556,30 @@ public class ReportWizardAction extends MultiAction {
 		else
 			if ( ampReport.getAmpReportId()!=null )
 				AmpFilterData.deleteOldFilterData( ampReport.getAmpReportId() );
-			
+		
+		return serializeReportAndOpen(ampReport, teamMember, mapping, myForm, true, request, response);
+	}
+
+	/**
+	 * serializes report to the database. If multilingual is enabled, also saves multilingual translations
+	 * @param ampReport
+	 * @param teamMember
+	 * @param mapping passed to {@link #modeReset(ActionMapping, ActionForm, HttpServletRequest, HttpServletResponse)}
+	 * @param form passed to {@link #modeReset(ActionMapping, ActionForm, HttpServletRequest, HttpServletResponse)}
+	 * @param resetForm if true, the ActionForm will be reset
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	protected ActionForward serializeReportAndOpen(AmpReports ampReport, TeamMember teamMember,
+			ActionMapping mapping, ReportWizardForm form, boolean resetForm, 
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
 		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
+
+		//public static void serialize(Object obj, String prefix, String propertyName, Session session, HttpServletRequest request)
+		MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);
 		
 		modeReset(mapping, form, request, response);
 		
@@ -567,7 +590,7 @@ public class ReportWizardAction extends MultiAction {
 			out.flush();
 			out.close();
 		}
-		return null;
+		return null;		
 	}
 	
 	/**
@@ -635,11 +658,7 @@ public class ReportWizardAction extends MultiAction {
 		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
 		ampReport.setFilterDataSet( AmpFilterData.createFilterDataSet(ampReport, filter) );
 		
-		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
-		
-		//modeReset(mapping, form, request, response);
-		
-		return null;
+		return serializeReportAndOpen(ampReport, teamMember, mapping, myForm, false, request, response);
 	}
 	
 	private void addFields (Long [] sourceVector, Collection availableFields, Collection container, 
@@ -870,7 +889,7 @@ public class ReportWizardAction extends MultiAction {
 			HashSet<AmpReportMeasures> measures	= new HashSet<AmpReportMeasures>();
 			measures.addAll( ampReport.getMeasures() );
 			
-			HashSet reportMeasures	= new HashSet();
+			HashSet<AmpMeasures> reportMeasures	= new HashSet<AmpMeasures>();
 			
 			if ( ampReport.getReportMeasures() != null )
 				reportMeasures.addAll( ampReport.getReportMeasures() );

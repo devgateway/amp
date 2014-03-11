@@ -23,11 +23,14 @@
 <link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 
 <!-- Individual YUI CSS files --> 
-<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css"> 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css" />
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/button.css" />
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
 <!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/button/button-min.js"></script>
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script>   
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/myDragAndDropObjects.js'/>" ></script>
@@ -48,142 +51,20 @@
 
 <!-- MORE CSS -->
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
+<link re="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/amp_extra_sam.css" />
 
 <!-- DEFINITIONS AND VARIABLES -->
 <digi:instance property="aimReportWizardForm" />
 <bean:define name="aimReportWizardForm" id="myForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm" toScope="request"/>
-<c:set var="failureMessage">
-	<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>
-</c:set>
-<c:set var="filterProblemsMessage">
-	<digi:trn key="aim:reportwizard:filterProblems">Apparently there are some problems displaying filters pop-up. Please try again.</digi:trn>
-</c:set>
-<c:set var="loadingDataMessage">
-	<digi:trn key="aim:reportwizard:loadingData">Loading data. Please wait.</digi:trn>
-</c:set>
-<c:set var="savingDataMessage">
-	<digi:trn key="aim:reportwizard:savingData">Saving data. Please wait.</digi:trn>
-</c:set>
-<c:set var="filterPanelName">
-	<digi:trn key="rep:filter:filters">Filters</digi:trn>
-</c:set>
-<c:set var="settingsPanelName">
-	<digi:trn key="rep:filter:filters">Settings</digi:trn>
-</c:set>
-<c:set var="cannotSaveFiltersMessage">
-	<digi:trn key="aim:reportwizard:cannotSaveFilters">There was a problem saving the filters. Please try again.</digi:trn>
-</c:set>
-<c:set var="previewFundingTrn">
-	<digi:trn>Funding</digi:trn>
-</c:set>
-<c:set var="previewTotalCostTrn">
-	<digi:trn>Total Cost</digi:trn>
-</c:set>
-<c:set var="previewReportTotalsTrn">
-	<digi:trn>Report Totals</digi:trn>
-</c:set>
-<c:set var="previewUnselectedMeasureTrn">
-	<digi:trn>UNSELECTED MEASURE</digi:trn>
-</c:set>
-<c:set var="january"><digi:trn>January</digi:trn></c:set>
-<c:set var="february"><digi:trn>February</digi:trn></c:set>
-<c:set var="march"><digi:trn>March</digi:trn></c:set>
-<c:set var="april"><digi:trn>April</digi:trn></c:set>
-<c:set var="may"><digi:trn>May</digi:trn></c:set>
-<c:set var="june"><digi:trn>June</digi:trn></c:set>
-<c:set var="july"><digi:trn>July</digi:trn></c:set>
-<c:set var="august"><digi:trn>August</digi:trn></c:set>
-<c:set var="september"><digi:trn>September</digi:trn></c:set>
-<c:set var="october"><digi:trn>October</digi:trn></c:set>
-<c:set var="november"><digi:trn>November</digi:trn></c:set>
-<c:set var="december"><digi:trn>December</digi:trn></c:set>
+
+<%@ include file="reportWizardMessages.jspf"  %>
+
 <c:set var="reportUsesFilters">false</c:set>
 <c:if test="${myForm.useFilters!=null && myForm.useFilters}">
 	<c:set var="reportUsesFilters">true</c:set>
 </c:if> 
 
-<c:if test="${myForm.desktopTab}">
-	<c:set var="pageTitle">
-		<digi:trn key="aim:reportwizard:tabgenerator">Tab Generator</digi:trn>
-	</c:set>
-	<c:set var="detailsStepName">
-		<digi:trn key="rep:wizard:dhtmlTab:tabDetails">Tab Details</digi:trn>
-	</c:set>
-	<c:set var="descriptionName" scope="request">
-		<digi:trn key="aim:reportBuilder:TabDescription">Tab Description</digi:trn>
-	</c:set>
-	<c:set var="savingMessage">
-		<digi:trn key="aim:reportwizard:savingTab">Saving tab</digi:trn>
-	</c:set>
-	<c:set var="saveBtn">
-		<digi:trn key="btn:saveTab">Save Tab</digi:trn>
-	</c:set>
-	<c:set var="plsEnterTitle">
-		<digi:trn key="rep:wizard:enterTitleForTab">Please enter a title for this tab: </digi:trn>
-	</c:set>
-	<c:set var="donorFunding" scope="request">
-		<digi:trn key="aim:donorTab">Donor Tab (Donor Funding)</digi:trn>
-	</c:set>
-	<c:set var="regionalFunding" scope="request">
-		<digi:trn key="aim:regionalTab">Regional Tab (Regional Funding)</digi:trn>
-	</c:set>
-	<c:set var="componentFunding" scope="request">
-		<digi:trn key="aim:componentTab">Component Tab (Component Funding)</digi:trn>
-	</c:set>
-	<c:set var="activityContributions" scope="request">
-		<digi:trn key="aim:contributionTab">Contribution Tab (Activity Contributions)</digi:trn>
-	</c:set>
-	<c:set var="summary" scope="request">
-		<digi:trn key="aim:summaryTab">Summary Tab</digi:trn>
-	</c:set>
-	<c:set var="typeAndDescription" scope="request"> 
-		<digi:trn key="rep:wizard:dhtmlTab:tabTypeAndDescription">Select Tab Type and Add Description </digi:trn> 
-	</c:set>
-</c:if>
-<c:if test="${!myForm.desktopTab}">
-	<c:set var="pageTitle">
-		<digi:trn key="aim:reportwizard:reportgenerator">Report Generator</digi:trn>
-	</c:set>
-	<c:set var="detailsStepName">
-		<digi:trn key="rep:wizard:dhtmlTab:reportDetails">Report Details</digi:trn>
-	</c:set>
-	<c:set var="descriptionName" scope="request">
-		<digi:trn key="aim:reportBuilder:ReportDescription">Report Description</digi:trn>
-	</c:set>
-	<c:set var="savingMessage">
-		<digi:trn key="aim:reportwizard:savingReport">Saving report</digi:trn>
-	</c:set>
-	<c:set var="saveBtn">
-		<digi:trn key="btn:saveReport">Save Report</digi:trn>
-	</c:set>
-	<c:set var="saveAndOpenBtn">
-		<digi:trn key="btn:saveAndOpenReport">Save and Open Report</digi:trn>
-	</c:set>	
-	<c:set var="plsEnterTitle">
-		<digi:trn key="rep:wizard:enterTitleForReport">Please enter a title for this report: </digi:trn>
-	</c:set>
-	<c:set var="donorFunding" scope="request">
-		<digi:trn key="aim:donorReport">Donor Report (Donor Funding)</digi:trn>
-	</c:set>
-	<c:set var="regionalFunding" scope="request">
-		<digi:trn key="aim:regionalReport">Regional Report (Regional Funding)</digi:trn>
-	</c:set>
-	<c:set var="componentFunding" scope="request">
-		<digi:trn key="aim:componentReport">Component Report (Component Funding)</digi:trn>
-	</c:set>
-	<c:set var="activityContributions" scope="request">
-		<digi:trn key="aim:contributionReport">Contribution Report (Activity Contributions)</digi:trn>
-	</c:set>
-	<c:set var="summary" scope="request">
-		<digi:trn key="aim:summaryReport">Summary Report</digi:trn>
-	</c:set>
-	<c:set var="PledgesFunding" scope="request">
-		<digi:trn key="aim:pledgesfunding">Pledges Report</digi:trn>
-	</c:set>
-	<c:set var="typeAndDescription" scope="request"> 
-		<digi:trn key="rep:wizard:dhtmlReport:reportTypeAndDescription">Select Report Type and Add Description </digi:trn> 
-	</c:set>
-</c:if>
+
 <c:set var="disableFundingType">false</c:set>
 <c:if test="${!empty aimReportWizardForm.reportId}">
 	<c:set var="disableFundingType">true</c:set>
@@ -207,7 +88,7 @@
 		NormalReportManager.prototype.maxHierarchies = 5;
 	
 	function initializeDragAndDrop() {
-		var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
+		//var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
 		//alert( YAHOO.util.Dom.getDocumentHeight() );
 		//alert( document.body.clientHeight );
 		var rd				= document.getElementsByName("reportDescription")[0];
@@ -378,13 +259,17 @@ body {
 				</c:if>
 			</tr>
 			<tr><td>
-				<div id="titlePanel" class="invisible-item-hidden">
+				<div id="titlePanel" class="invisible-item-hidden yui-skin-sam">
 					<div class="hd" style="font-size: 8pt">
 						${plsEnterTitle}
 					</div>
 					<div class="bd" id="titlePanelBody">
-						<html:text onkeyup="repManager.checkSteps();" onkeypress="return saveReportEngine.checkEnter(event);" property="reportTitle" styleClass="inp-text" 
-							style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
+						<%-- <%@ include file="/repository/aim/view/multilingual/multilingualFieldEntry.jsp" %>  --%>
+						<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+							<jsp:param name="attr_name" value="multilingual_report_title" />
+							<jsp:param name="onkeyup" value="repManager.checkSteps();" />
+							<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />
+						</jsp:include>
 						<feature:display name="Reports classification"  module="Report Generator">
 							<c:if test="${aimReportWizardForm.desktopTab ==false }">
 								<br /><br />
@@ -396,7 +281,7 @@ body {
 						</feature:display>
 					</div>
 					<div class="ft" align="right">
-						<button id="last_save_button" type="button" class="buttonx_dis" onclick="$(this).attr('disabled',true);saveReportEngine.saveReport();" disabled="disabled">
+						<button id="last_save_button" type="button" class="buttonx_dis yui-button" onclick="$(this).attr('disabled',true);saveReportEngine.saveReport();" disabled="disabled">
 							${saveBtn}
 						</button>						
 						&nbsp;&nbsp;&nbsp;

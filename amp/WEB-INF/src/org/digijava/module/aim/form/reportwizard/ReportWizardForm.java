@@ -7,6 +7,7 @@ import java.util.*;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 /**
@@ -19,7 +20,7 @@ public class ReportWizardForm extends ActionForm {
 	private AmpTeamMember ampTeamMember	= null;
 	
 	private Map<String, List<AmpColumns>> ampTreeColumns;
-	private Collection ampMeasures		= null;
+	private Collection<AmpMeasures> ampMeasures		= null;
 	private String reportType 			= "donor";
 	private Boolean desktopTab   		= false;
 	
@@ -82,11 +83,11 @@ public class ReportWizardForm extends ActionForm {
 	}
 
 	
-	public Collection getAmpMeasures() {
+	public Collection<AmpMeasures> getAmpMeasures() {
 		return ampMeasures;
 	}
 
-	public void setAmpMeasures(Collection ampMeasures) {
+	public void setAmpMeasures(Collection<AmpMeasures> ampMeasures) {
 		this.ampMeasures = ampMeasures;
 	}
 

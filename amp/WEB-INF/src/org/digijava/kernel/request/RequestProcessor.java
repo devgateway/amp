@@ -56,6 +56,7 @@ import org.apache.struts.config.ForwardConfig;
 import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.TilesRequestProcessor;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.config.moduleconfig.Security;
 import org.digijava.kernel.entity.Locale;
@@ -77,6 +78,7 @@ import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -387,6 +389,7 @@ public class RequestProcessor
     {
     	TLSUtils.populate(request);
     	DocumentManagerUtil.initJCRSessions(request);
+    	//TranslatorUtil.insertAvailableLanguages(request);
     	return true;
     }
         

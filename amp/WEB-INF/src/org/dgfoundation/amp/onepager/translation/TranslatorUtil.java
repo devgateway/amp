@@ -12,14 +12,11 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -55,6 +52,10 @@ public final class TranslatorUtil {
 		return translatedValue;
 	}
 
+	/**
+	 * only works if called from within Wicket
+	 * @return
+	 */
     public static List<String> getLocaleCache(){
         if (localeCache == null){
             try{
@@ -89,5 +90,10 @@ public final class TranslatorUtil {
         return localeCache;
     }
 
+
+    public static void insertAvailableLanguages(javax.servlet.http.HttpServletRequest request)
+    {
+    	request.setAttribute("all_locales", getLocaleCache(RequestUtils.getSite(request)));
+    }
 
 }

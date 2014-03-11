@@ -19,7 +19,8 @@ import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Pledge;
 import org.digijava.module.budget.dbentity.AmpDepartments;
-import org.digijava.module.budget.dbentity.AmpBudgetSector;;
+import org.digijava.module.budget.dbentity.AmpBudgetSector;
+import org.digijava.module.translation.util.MultilingualInputFieldValues;
 
 public class AddOrgForm extends ActionForm {
 
@@ -894,5 +895,18 @@ public class AddOrgForm extends ActionForm {
 
 	public void setBudgetOrgs(Set<AmpOrganisation> budgetOrgs) {
 		this.budgetOrgs = budgetOrgs;
-	}	
+	}
+	
+	public MultilingualInputFieldValues buildMultilingualNameInputInstance()
+	{
+		return new MultilingualInputFieldValues(AmpOrganisation.class, this.getAmpOrgId(), "name", null, null);
+	}
+	
+	public MultilingualInputFieldValues restoreMultilingualNameInputInstance(HttpServletRequest request)
+	{
+		MultilingualInputFieldValues result = buildMultilingualNameInputInstance();
+		result.populateTranslations(request);
+		return result;
+	}
+	
 }

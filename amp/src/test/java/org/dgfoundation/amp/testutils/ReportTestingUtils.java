@@ -92,7 +92,7 @@ public class ReportTestingUtils
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select r from " + AmpReports.class.getName()
-					+ " r WHERE r.name=:reportname";
+					+ " r WHERE " + AmpReports.hqlStringForName("r") + "=:reportname";
 			qry = session.createQuery(queryString);
 			qry.setString("reportname", reportName);
 			reports = qry.list();

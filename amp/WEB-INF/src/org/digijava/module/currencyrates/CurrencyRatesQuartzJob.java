@@ -138,35 +138,34 @@ public class CurrencyRatesQuartzJob implements Job {
 	private void save(String[] currencies,
 			HashMap<String, Double> wsCurrencyValues) {
 		for (int i=0; i<currencies.length; i++) {
-			AmpCurrencyRate currRate = new AmpCurrencyRate();
-			//currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
-			double value = wsCurrencyValues.get(currencies[i]);
-			if (value == WSCurrencyClient.INVALID_CURRENCY_CODE) {
-				logger.info(currencies[i]
-						+ " Not Supported...");
-				continue;
-			} else if (value == WSCurrencyClient.CONNECTION_ERROR) {
-				logger.info("Connection Error trying to get "
-						+ currencies[i]);
-				continue;
+			if(baseCurrency!=null && currencies[i]!=null && currencies[i].equals(baseCurrency)){
+				AmpCurrencyRate currRate = new AmpCurrencyRate();
+				//currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
+				Double value = wsCurrencyValues.get(currencies[i]);
+				if (value!=null && value .equals(WSCurrencyClient.INVALID_CURRENCY_CODE)) {
+					logger.info(currencies[i]+ " Not Supported...");
+					continue;
+				} else if (value == WSCurrencyClient.CONNECTION_ERROR) {
+					logger.info("Connection Error trying to get "+ currencies[i]);
+					continue;
+				}
+				
+				currRate.setExchangeRate(value);
+				Date aDate=new Date();
+				try {
+					String sDate = DateTimeUtil.formatDate(aDate);
+					aDate = DateTimeUtil.parseDate(sDate);
+				} catch (Exception e) {
+					//this should never get here
+					logger.error(e);
+				}
+				
+				currRate.setExchangeRateDate(aDate);
+				currRate.setToCurrencyCode(currencies[i]);
+				currRate.setFromCurrencyCode(baseCurrency);
+				currRate.setDataSource(CurrencyUtil.RATE_FROM_WEB_SERVICE);
+				CurrencyUtil.saveCurrencyRate(currRate, true);
 			}
-			currRate.setExchangeRate(value);
-			
-			
-			Date aDate=new Date();
-			try {
-				String sDate = DateTimeUtil.formatDate(aDate);
-				aDate = DateTimeUtil.parseDate(sDate);
-			} catch (Exception e) {
-				//this should never get here
-				logger.error(e);
-			}
-			
-			currRate.setExchangeRateDate(aDate);
-			currRate.setToCurrencyCode(currencies[i]);
-			currRate.setFromCurrencyCode(baseCurrency);
-			currRate.setDataSource(CurrencyUtil.RATE_FROM_WEB_SERVICE);
-			CurrencyUtil.saveCurrencyRate(currRate, true);
 		}
 	}
 

@@ -282,13 +282,13 @@ public class CurrencyUtil {
 			if (tx != null) {
 				try {
 					tx.rollback();
-					//we throw a runtime exception when we cannot rolbac
+					//we throw a runtime exception when we cannot rolback
 					
 				} catch (Exception rbf) {
 					logger.error("Rollback failed");
 				}
 			}
-			logger.error("Couldnt save Exchangerates ",e);
+			logger.error("Couldn't save Exchange Rates ",e);
 			throw new RuntimeException(e);
 		} finally {
 			if (session != null) {

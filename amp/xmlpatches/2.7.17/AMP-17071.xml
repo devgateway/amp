@@ -9,9 +9,17 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				insert into amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) values(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice username','free',null,'Username for webservice exchangerate subscription','general');
-				insert into amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) values(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice password','free',null,'Username for webservice exchangerate subscription','general');
-				insert into amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) values(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice implementation','org.digijava.module.currencyrates.FxtopWSCurrencyClientImpl',null,'Username for webservice exchangerate subscription','general');
+				INSERT INTO util_global_settings_possible_(setting_name,value_id,value_shown) VALUES('Currency WS implementation','org.digijava.module.currencyrates.WSCurrencyClientImp','org.digijava.module.currencyrates.WSCurrencyClientImp');
+				INSERT INTO util_global_settings_possible_(setting_name,value_id,value_shown) VALUES('Currency WS implementation','org.digijava.module.currencyrates.FxtopWSCurrencyClientImpl','org.digijava.module.currencyrates.FxtopWSCurrencyClientImpl');
+				CREATE OR REPLACE VIEW v_g_settings_ws_currency_impl AS 
+ 					SELECT util_global_settings_possible_.value_id AS id, 
+    				util_global_settings_possible_.value_shown AS value
+   					FROM util_global_settings_possible_
+  					WHERE util_global_settings_possible_.setting_name::text = 'Currency WS implementation'::text;
+  				
+				INSERT INTO amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) VALUES(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice username','free',null,'Username for webservice exchangerate subscription','general');
+				INSERT INTO amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) VALUES(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice password','free',null,'password for webservice exchangerate subscription','general');
+				INSERT INTO amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) VALUES(nextval('amp_global_settings_seq'), 'Currency exchange rate webservice implementation','org.digijava.module.currencyrates.FxtopWSCurrencyClientImpl','v_g_settings_ws_currency_impl','Username for webservice exchangerate subscription','general');
         	</lang>
 		</script>
 	</apply>

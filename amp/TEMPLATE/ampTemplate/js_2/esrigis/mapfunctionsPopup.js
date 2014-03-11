@@ -259,7 +259,7 @@ function createGraphicsMenu() {
 
   ctxMenuForGraphics = new dijit.Menu({});
   ctxMenuForGraphics.addChild(new dijit.MenuItem({ 
-	    label: "Select this structure",
+	    label: trnSelectThisStructure,
 	    onClick: function(evt) {
 	    	selectLocationCallerShape(selected);
 	    }

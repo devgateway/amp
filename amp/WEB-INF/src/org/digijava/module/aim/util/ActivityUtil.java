@@ -4871,31 +4871,24 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	}
 	
 	
-    public static ArrayList<AmpActivityFake> getAllActivitiesAdmin(String actName) {
-        Session session = null;
-        Query qry = null;
-        ArrayList<AmpActivityFake> result = new  ArrayList<AmpActivityFake>();
+    public static ArrayList<AmpActivityFake> getAllActivitiesAdmin(String searchTerm) {
         try {
-            session = PersistenceManager.getSession();
-            String queryString = "";
+            Session session = PersistenceManager.getSession();
             
-            boolean isSearchByName = actName!=null && "".compareTo(actName.trim())!=0;
+            boolean isSearchByName = searchTerm != null && (!searchTerm.trim().isEmpty());
             String activityName = AmpActivityVersion.hqlStringForName("f");
-			if(isSearchByName) {
-				queryString = "select f.ampActivityId, f.ampId, " + activityName + ",  ampTeam, ampGroup  from " + AmpActivity.class.getName()+
-						" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where " +
-						"(upper(" + activityName + ") like upper(:name) or f.ampActivityId in (select t.objectId from "+AmpContentTranslation.class.getName()+" t where t.objectClass='"+AmpActivityVersion.class.getName()+"' and upper(t.translation) like upper(:translation) ) ) and (deleted = false or deleted is null)";
-			}
-            else
-            {
-            	queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup from " + AmpActivity.class.getName()+  
-            	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where deleted = false or deleted is null";
-            }
-            qry = session.createQuery(queryString);
+            String nameSearchQuery = isSearchByName ? " (f.ampActivityId IN (SELECT t.objectId FROM " + AmpContentTranslation.class.getName() + " t WHERE t.objectClass = '" + AmpActivityVersion.class.getName() + "' AND upper(t.translation) like upper(:searchTerm))) AND " :
+            	"";
+            
+            String queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup FROM " + AmpActivity.class.getName() +  
+            	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup WHERE " + nameSearchQuery + " ((f.deleted = false) or (f.deleted is null))";
+            
+            Query qry = session.createQuery(queryString);
             if(isSearchByName) {
-            	qry.setString("name", "%" + actName + "%");
+            	qry.setString("searchTerm", "%" + searchTerm + "%");
             }
             Iterator iter = qry.list().iterator();
+            ArrayList<AmpActivityFake> result = new  ArrayList<AmpActivityFake>();
             while (iter.hasNext()) {
                 Object[] item = (Object[])iter.next();
                 Long ampActivityId = (Long) item[0];
@@ -4906,13 +4899,10 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                 AmpActivityFake activity = new AmpActivityFake(name,team,ampId,ampActivityId,ampActGroup);
                 result.add(activity);
             }
-
+            return result;
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-           PersistenceManager.releaseSession(session);            
+            throw new RuntimeException(e);
         }
-        return result;
     }
 
     public static void deleteAmpActivityWithVersions(Long ampActId){

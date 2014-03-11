@@ -405,24 +405,33 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<digi:trn key="pledgeTitle"><b>Pledge Title</b></digi:trn>												</td>
 											</tr>
 											<tr>
-											<td colspan="2"><select id="pledgeTitleDropDown" name="pledgeTitleDropDown" class="inp-text" onchange="changeTitle();" style="width:400px">
-														<option selected="selected" value="-1"><digi:trn key="selectTitle">---Select title---</digi:trn></option>
-														<c:forEach var="titles" items="${pledgeForm.pledgeNames}">
-															<c:if test="${pledgeForm.pledgeTitleId == titles.id}">
-																<option selected="selected" value="${titles.id}"/>															</c:if>
-															<c:if test="${pledgeForm.pledgeTitleId != titles.id}">
-																<option value="${titles.id}"/>															</c:if>
-															<c:out value="${titles.value}" />
-															</option>
-														</c:forEach>
-													</select></td>
+												<td colspan="2">
+													<field:display name="Use Free Text" feature="Pledges Names">
+														<!--Allow user to enter free text if it's configured in the FM AMP-16005-->
+														<html:text property="titleFreeText" styleId="titleFreeText" styleClass="inp-text" style="width:400px"/>
+													</field:display>
+													<field:display name="Use Category Manager" feature="Pledges Names">
+														<select id="pledgeTitleDropDown" name="pledgeTitleDropDown" class="inp-text" onchange="changeTitle();" style="width:400px">
+															<option selected="selected" value="-1"><digi:trn key="selectTitle">---Select title---</digi:trn></option>
+															<c:forEach var="titles" items="${pledgeForm.pledgeNames}">
+																<c:if test="${pledgeForm.pledgeTitleId == titles.id}">
+																	<option selected="selected" value="${titles.id}"/>															</c:if>
+																<c:if test="${pledgeForm.pledgeTitleId != titles.id}">
+																	<option value="${titles.id}"/>															</c:if>
+																<c:out value="${titles.value}" />
+																</option>
+															</c:forEach>
+														</select>
+													</field:display>
+												</td>
 											</tr>
 											<tr bgcolor="#ffffff">
 												<td valign="middle" align="left" width="30%">												</td>
 												<td align="left" width="70%">
 													 <div id="newTitle" class="invisible-item">											
 													    <html:text property="pledgeTitleId" styleId="myTitle" styleClass="inp-text" style="width:400px"></html:text>	
-													</div>												</td>	
+													</div>												
+												</td>	
 											</tr>
 										</table>
 									</td></tr>
@@ -1357,11 +1366,16 @@ function highligthObject(object,on){
 function validateData(){
 	var errors = false;
 	setFocus = null;
-	if (document.getElementsByName("pledgeTitleId")[0]==null || document.getElementsByName("pledgeTitleId")[0].value==-1 || document.getElementsByName("pledgeTitleId")[0].value==0){
+	if ((document.getElementsByName("pledgeTitleId")[0]==null || document.getElementsByName("pledgeTitleId")[0].value==-1 || 
+			document.getElementsByName("pledgeTitleId")[0].value==0)&& (document.getElementsByName("titleFreeText")[0].value==null)){
 		highligthObject(document.getElementById("pledgeTitleDropDown"),true);
 		errors = true;
 	} else {
-		highligthObject(document.getElementById("pledgeTitleDropDown"),false);
+		if (document.getElementById("pledgeTitleDropDown")){
+			highligthObject(document.getElementById("pledgeTitleDropDown"),false);
+		}else {
+			highligthObject(document.getElementById("titleFreeText"),false);
+		}
 	}
 
 	if (document.getElementById("org_grp_dropdown_id")==null || document.getElementById("org_grp_dropdown_id").value==-1){

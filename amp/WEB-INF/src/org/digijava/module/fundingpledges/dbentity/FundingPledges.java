@@ -21,6 +21,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable{
 	
 	private Long id;
 	private AmpCategoryValue title;
+	private String titleFreeText;
 	private String additionalInformation;
 	private String whoAuthorizedPledge;
 	private String furtherApprovalNedded;
@@ -61,6 +62,13 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable{
 	private Double totalAmount;
 	private TreeSet<String> yearsList;
 	
+
+	public String getTitleFreeText() {
+		return titleFreeText;
+	}
+	public void setTitleFreeText(String titleFreeText) {
+		this.titleFreeText = titleFreeText;
+	}
 	public String getContactName() {
 		return contactName;
 	}

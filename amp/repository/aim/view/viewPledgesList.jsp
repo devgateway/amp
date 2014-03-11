@@ -155,16 +155,10 @@ function setHoveredRow(rowId) {
 						</tr>
 					</table>
 				</td></tr>
-				<tr><td>
-					<!-- <table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
-						<tr>
-							<td height=50 vAlign="middle" width="100%" align=center><span class=subtitle-blue>
-								<digi:trn key="aim:pledgesList"><b style="font-size:12px;">Pledges List</b></digi:trn>
-								<hr />
-							</td>
-						</tr>
-					</table>-->
-				</td></tr>
+				<tr>
+					<td>
+					</td>
+				</tr>
 				<tr><td>
 					</td>
 				</tr>
@@ -200,11 +194,19 @@ function setHoveredRow(rowId) {
 						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
 							<tr style="height: 25px">
 								<td width="25%" align="center" class="inside">
-									<bean:write name="allFundingPledges" property="key.title" />								</td>
+									<field:display name="Use Free Text" feature="Pledges Names">
+										<bean:write name="allFundingPledges" property="key.titleFreeText" />
+									</field:display>								
+									<field:display name="Use Category Manager" feature="Pledges Names">
+										<bean:write name="allFundingPledges" property="key.title" />
+									</field:display>
+								</td>
 								<td width="25%" align="center" class="inside">
-									<bean:write name="allFundingPledges" property="key.organizationGroup.orgGrpName" />								</td>
+									<bean:write name="allFundingPledges" property="key.organizationGroup.orgGrpName" />								
+								</td>
 								<td width="25%" align="center" class="inside">
-									<aim:formatNumber value="${allFundingPledges.key.totalAmount}" />							</td>
+									<aim:formatNumber value="${allFundingPledges.key.totalAmount}" />							
+								</td>
 								<td width="19%" align="center" class="inside">
 									<c:forEach var="year" items="${allFundingPledges.key.yearsList}" varStatus="index">
 										<li> <digi:trn>${year}</digi:trn>&nbsp;</li>
@@ -215,7 +217,9 @@ function setHoveredRow(rowId) {
 										<bean:write name="allFundingPledges" property="key.id" />
 									</c:set>
 									<a class="itr" href="javascript:editPledge('${pledgeId}');" title="<digi:trn key="aim:ClickToEditPledge">Click on this icon to edit pledge&nbsp;</digi:trn>">
-	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0">									</a>								</td>
+	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0">									
+	                                 </a>								
+	                             </td>
 								<td width="3%" align="center" class="inside">
 									<c:set var="pledgeId">
 										<bean:write name="allFundingPledges" property="key.id" />
@@ -224,7 +228,9 @@ function setHoveredRow(rowId) {
 										<bean:write name="allFundingPledges" property="value" />
 									</c:set>
 									<a class="itr" href="javascript:removePledge('${pledgeId}','${pledgeUsed}');" title="<digi:trn key="aim:ClickToDeletePledge">Click on this icon to delete pledge&nbsp;</digi:trn>">
-	                                   	<img src= "../ampTemplate/images/trash_12.gif" border="0">									</a>								</td>
+	                                   	<img src= "../ampTemplate/images/trash_12.gif" border="0">									
+	                                </a>								
+	                             </td>
 							</tr>
 						</c:forEach>
                         </tbody>

@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -41,8 +42,11 @@ public class SavePledge extends Action {
 			}
     		
     		pledge.setId(plForm.getPledgeId());
-    		//pledge.setTitle(plForm.getPledgeTitle());
-    		pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));
+    		if (FeaturesUtil.isVisibleField("Use Free Text")){
+    			pledge.setTitleFreeText(plForm.getTitleFreeText());
+    		}else{
+    			pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));
+    		}
     		pledge.setOrganizationGroup(PledgesEntityHelper.getOrgGroupById(Long.parseLong(plForm.getSelectedOrgGrpId())));
     		pledge.setAdditionalInformation(plForm.getAdditionalInformation());
     		pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
@@ -88,8 +92,7 @@ public class SavePledge extends Action {
 					fps.setId(actSector.getId());
 					pledgessector.add(fps);
 				}
-	    		//pledge.setSectorlist((Set<FundingPledgesSector>) fpsl);
-    		}
+	    	}
     		String fundings = request.getParameter("fundings");
     		String funds[] = fundings.split(";");
     		plForm.setFundingPledgesDetails(new ArrayList<FundingPledgesDetails>());
@@ -116,64 +119,13 @@ public class SavePledge extends Action {
     			}
 			}
     		
-    		/*
-    		if(plForm.getSelectedLocs()!=null && plForm.getSelectedLocs().size()>0){
-	    		Set<FundingPledgesLocation> pledgesloc = new HashSet<FundingPledgesLocation>();
-	    		Collection<FundingPledgesLocation> fplc = plForm.getSelectedLocs();
-	    		Iterator<FundingPledgesLocation> itl = fplc.iterator();
-	    		while (itl.hasNext()) {
-	    			FundingPledgesLocation fpl = (FundingPledgesLocation) itl.next();
-	    			pledgesloc.add(fpl);
-				}
-	    		//pledge.setLocationlist((Set<FundingPledgesLocation>) pledgesloc);
-    		}*/
-    		/*
-    		if(plForm.getFundingPledgesDetails()!=null && plForm.getFundingPledgesDetails().size()>0){
-	    		Set<FundingPledgesDetails> fundingdetails = new HashSet<FundingPledgesDetails>();
-	    		Collection<FundingPledgesDetails> fpdc = plForm.getFundingPledgesDetails();
-	    		Iterator<FundingPledgesDetails> itf = fpdc.iterator();
-	    		while (itf.hasNext()) {
-	    			FundingPledgesDetails fpd = (FundingPledgesDetails) itf.next();
-	    			fpd.setPledgeid(pledge);
-	    			fundingdetails.add(fpd);
-	    		}
-	    		//pledge.setFundingPledgesDetails((Set<FundingPledgesDetails>) fpdl);
-    		}*/
-    		
-    		
-    		
     		if (plForm.getPledgeId()!=null && plForm.getPledgeId()!=0) {
-    			/*if (!PledgesEntityHelper.getPledgesById(plForm.getPledgeId()).getTitle().equals(plForm.getPledgeTitle()) ||
-    					PledgesEntityHelper.getPledgesById(plForm.getPledgeId()).getOrganization().getAmpOrgId() != Long.parseLong(plForm.getSelectedOrgId())) {
-    				if (isTitleDuplicated(mapping,request,plForm)) {
-    					return mapping.findForward("success");
-    				}
-				}*/
     			PledgesEntityHelper.updatePledge(pledge,pledgessector,plForm);
 			} else {
-				/*if (isTitleDuplicated(mapping,request,plForm)) {
-					return mapping.findForward("success");
-				}*/
 				PledgesEntityHelper.savePledge(pledge,pledgessector,plForm);
 			}
     		
     		
     		return mapping.findForward("forward");
 		}
-
-
-	/*private boolean isTitleDuplicated(ActionMapping mapping, HttpServletRequest request, PledgeForm plForm){
-		ArrayList<FundingPledges> fpByNameAndOrg = PledgesEntityHelper.getPledgesByDonorAndTitle(Long.valueOf(plForm.getSelectedOrgId()), plForm.getPledgeTitle());
-		if (fpByNameAndOrg != null) {
-			if (fpByNameAndOrg.size()!=0) {
-				ActionMessages errors=new ActionMessages();
-				errors.add("incorrectTitle", new ActionMessage("error.aim.pledges.duplicatedTitle"));
-				saveErrors(request, errors);
-				request.getSession().setAttribute("duplicatedTitleError", errors);
-        		//return mapping.findForward("success");
-				return true;
-			}
-		}
-		return false;
-	}*/
 }

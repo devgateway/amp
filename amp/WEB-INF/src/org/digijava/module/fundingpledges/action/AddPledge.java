@@ -101,11 +101,15 @@ public class AddPledge extends Action {
 				FundingPledges fp = PledgesEntityHelper.getPledgesById(Long.valueOf(request.getParameter("pledgeId")));
 				resetForm(plForm);
 	        	plForm.setFundingPledges(fp);
-				plForm.setPledgeId(fp.getId());
-				plForm.setPledgeTitle(fp.getTitle());
-				if (fp.getTitle() != null) {
-					plForm.setPledgeTitleId(fp.getTitle().getId());
-				}
+	        	plForm.setPledgeId(fp.getId());
+	        	if (FeaturesUtil.isVisibleField("Use Free Text")){
+	        		plForm.setTitleFreeText(fp.getTitleFreeText());
+	        	}else{
+	        		plForm.setPledgeTitle(fp.getTitle());
+	        		if (fp.getTitle() != null) {
+	        			plForm.setPledgeTitleId(fp.getTitle().getId());
+	        		}
+	        	}
 				plForm.setSelectedOrgGrpId(fp.getOrganizationGroup().getAmpOrgGrpId().toString());
 	        	plForm.setAdditionalInformation(fp.getAdditionalInformation());
 	        	plForm.setWhoAuthorizedPledge(fp.getWhoAuthorizedPledge());
@@ -115,8 +119,6 @@ public class AddPledge extends Action {
 	        	plForm.setContact1Fax(fp.getContactFax());
 	        	plForm.setContact1Ministry(fp.getContactMinistry());
 	        	plForm.setContact1Name(fp.getContactName());
-	        	//plForm.setContact1OrgId(String.valueOf(fp.getContactOrganization().getAmpOrgId()));
-	        	//plForm.setContact1OrgName(fp.getContactOrganization().getName());
 	        	if (fp.getContactOrganization()!=null){
 		        	AmpOrganisation cont1Org =	PledgesEntityHelper.getOrganizationById(fp.getContactOrganization().getAmpOrgId());
 					plForm.setContact1OrgId(cont1Org.getAmpOrgId().toString());
@@ -132,8 +134,7 @@ public class AddPledge extends Action {
 	        	plForm.setContact2Fax(fp.getContactFax_1());
 	        	plForm.setContact2Ministry(fp.getContactMinistry_1());
 	        	plForm.setContact2Name(fp.getContactName_1());
-	        	//plForm.setContact2OrgId(String.valueOf(fp.getContactOrganization_1().getAmpOrgId()));
-	        	//plForm.setContact2OrgName(fp.getContactOrganization_1().getName());
+	        	
 	        	if (fp.getContactOrganization_1()!=null){
 		        	AmpOrganisation cont2Org =	PledgesEntityHelper.getOrganizationById(fp.getContactOrganization_1().getAmpOrgId());
 		        	plForm.setContact2OrgId(cont2Org.getAmpOrgId().toString());
@@ -146,7 +147,6 @@ public class AddPledge extends Action {
 	        	plForm.setContactAlternate2Telephone(fp.getContactAlternativeTelephone_1());
 	        	plForm.setFundingPledgesDetails(fp.getFundingPledgesDetails());
 	        	Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(fp.getId());
-	        	//Collection<FundingPledgesSector> fpsl = fp.getSectorlist();
 	        	Collection<ActivitySector> asl = new ArrayList<ActivitySector>();
 	        	Iterator it = fpsl.iterator();
 	        	while (it.hasNext()) {
@@ -200,6 +200,7 @@ public class AddPledge extends Action {
     }
     
     private void resetForm(PledgeForm plForm){
+    	plForm.setTitleFreeText(null);
     	plForm.setPledgeId(null);
 		plForm.setPledgeTitle(null);
 		plForm.setPledgeTitleId(null);

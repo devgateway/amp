@@ -45,6 +45,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Collection<AmpOrgGroup> orgGroups;
 	private String selectedOrgName;
 	private AmpCategoryValue pledgeTitle;
+	private String titleFreeText;
 	private Collection<AmpCurrency> validcurrencies;
 	private String currencyCode;
 	private String contact1Name;
@@ -108,6 +109,14 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Collection<FundingPledgesProgram> selectedProgs = null;
 	private AmpActivityProgramSettings nationalSetting;
 	
+	public String getTitleFreeText() {
+		return titleFreeText;
+	}
+
+	public void setTitleFreeText(String titleFreeText) {
+		this.titleFreeText = titleFreeText;
+	}
+
 	public Collection<String> getYears() {
 		return years;
 	}

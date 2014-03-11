@@ -1049,6 +1049,9 @@ deleted 6 fields, do not reinsert
 
 <field:display name="Who Authorized Pledge" feature="Pledge Donor Information"></field:display>
 <field:display name="Further Approval Needed" feature="Pledge Donor Information"></field:display>
+<feature:display name="Pledges Names" module="Pledges"></feature:display>
+<field:display name="Use Category Manager" feature="Pledges Names"></field:display>
+<field:display name="Use Free Text" feature="Pledges Names"></field:display>
 
 <field:display name="Pledge Location" feature="Pledge Sector and Location"></field:display>
 <field:display name="Add Pledge Location Button" feature="Pledge Sector and Location"></field:display>

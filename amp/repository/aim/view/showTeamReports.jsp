@@ -708,10 +708,10 @@ $(document).ready(function() {
 						                                								<logic:equal name="teamLeadFlag" scope="session" value="true"> 
 					                                      									<c:set var="translation">
 						                                      									<c:if test="${aimTeamReportsForm.showTabs}">
-							                                        								<digi:trn key="aim:ClickEditTab">Click on this icon to edit tab&nbsp;</digi:trn>
+							                                        								<digi:trn >Click on this icon to edit tab</digi:trn>&nbsp;
 						                                      									</c:if>
 						                                      									<c:if test="${!aimTeamReportsForm.showTabs}">
-						    	                                    								<digi:trn key="aim:ClickEditReport">Click on this icon to edit report&nbsp;</digi:trn>
+						    	                                    								<digi:trn>Click on this icon to edit report</digi:trn>&nbsp;
 						                                      									</c:if>
 					                                        								</c:set>
 					                                        								<c:choose>
@@ -729,11 +729,11 @@ $(document).ready(function() {
 					                                      									&nbsp;
 					                                      									<c:set var="translation">
 					                                      										<c:if test="${aimTeamReportsForm.showTabs}">
-						                                        									<digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab&nbsp;</digi:trn>
+						                                        									<digi:trn  key="aim:ClickDeleteTab">Click on this icon to delete tab</digi:trn>&nbsp;
 																									<c:set target="${urlParams}" property="isTab" value="1" />
 					                                      										</c:if>
 					                                      										<c:if test="${!aimTeamReportsForm.showTabs}">
-						                                        									<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>
+						                                        									<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report</digi:trn>&nbsp;
 																									<c:set target="${urlParams}" property="isTab" value="0" />
 					                                      										</c:if>
 					                                       									</c:set>
@@ -746,10 +746,10 @@ $(document).ready(function() {
 						                                    									<logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
 						                                        									<c:set var="translation">
 						                                      											<c:if test="${aimTeamReportsForm.showTabs}">
-							                                       											<digi:trn key="aim:ClickEditTab">Click on this icon to edit tab&nbsp;</digi:trn>
+							                                       											<digi:trn key="aim:ClickEditTab">Click on this icon to edit tab</digi:trn>&nbsp;
 						                                      											</c:if>
 						                                      											<c:if test="${!aimTeamReportsForm.showTabs}">
-						    	                                    										<digi:trn key="aim:ClickEditReport">Click on this icon to edit report&nbsp;</digi:trn>
+						    	                                    										<digi:trn key="aim:ClickEditReport">Click on this icon to edit report</digi:trn>&nbsp;
 						                                      											</c:if>
 					                                        										</c:set>
 						                                    										<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
@@ -757,11 +757,11 @@ $(document).ready(function() {
 						                                    										</digi:link>
 							                                    									<c:set var="translation">
 						                                      											<c:if test="${aimTeamReportsForm.showTabs}">
-							                                        										<digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab&nbsp;</digi:trn>
+							                                        										<digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab</digi:trn>&nbsp;
 																											<c:set target="${urlParams}" property="isTab" value="1" />
 						                                      											</c:if>
 						                                      											<c:if test="${!aimTeamReportsForm.showTabs}">
-							                                        										<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>
+							                                        										<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report</digi:trn>&nbsp;
 																											<c:set target="${urlParams}" property="isTab" value="0" />
 						                                      											</c:if>
 						                                       										</c:set>

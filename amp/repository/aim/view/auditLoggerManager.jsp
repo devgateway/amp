@@ -456,9 +456,10 @@ function toggleSettings(){
 								<digi:trn key="aim:previouspage">Previous Page</digi:trn>
 							</c:set>|
 							<digi:link href="/auditLoggerManager.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
+								<span style="font-size: 8pt; font-family: Tahoma;">
 								<digi:trn key="aim:previous">
-									<span style="font-size: 8pt; font-family: Tahoma;">Previous</span>
-								</digi:trn>&nbsp;	
+									Previous
+								</digi:trn></span>&nbsp;	
 							</digi:link>|
 						</c:if>
 					<c:set var="length" value="${aimAuditLoggerManagerForm.pagesToShow}"></c:set>
@@ -489,7 +490,7 @@ function toggleSettings(){
 							<c:set target="${urlParamsNext}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
 							<c:set var="translation"> <digi:trn key="aim:nextpage">Next Page</digi:trn></c:set>
 							<digi:link  href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsNext" title="${translation}">
-								<digi:trn key="aim:next"><span style="font-size: 8pt; font-family: Tahoma;">Next</span></digi:trn>
+								<span style="font-size: 8pt; font-family: Tahoma;"><digi:trn key="aim:next">Next</digi:trn></span>
 							</digi:link>
 							<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap" />|
 							
@@ -510,9 +511,8 @@ function toggleSettings(){
 						</digi:link>
 					</c:if>
 					<c:out value="${aimAuditLoggerManagerForm.currentPage}"/>&nbsp; 
-					<digi:trn key="aim:of">
-						<span style="font-size: 8pt; font-family: Tahoma;">of</span>
-					</digi:trn>&nbsp;
+					<span style="font-size: 8pt; font-family: Tahoma;">
+					<digi:trn key="aim:of">of</digi:trn></span>&nbsp;
 					<span style="font-size: 8pt; font-family: Tahoma;">
 						<c:out value="${aimAuditLoggerManagerForm.pagesSize}"/>
 					</span>					

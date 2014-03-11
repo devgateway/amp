@@ -303,7 +303,7 @@
                                             <tr>
                                             	<td colspan="3"bgcolor="#C7D4DB" align="center" style="background-color: #F0F0F0;">
                                                 <digi:trn key="um:userAccountInformation">User Account information</digi:trn>
-                                                <digi:trn>All fields marked with an</digi:trn><span style='color: red; font-weight: bold; font-size: larger;'>*</span> <digi:trn>are required</digi:trn> 
+                                                <digi:trn>All fields marked with an</digi:trn><span style='color: red; font-weight: bold; font-size: larger;'> * </span> <digi:trn>are required.</digi:trn> 
 	 												<digi:trn key="um:userValidEmail"> Please use a valid e-mail address.</digi:trn><br/><br/>
                                                 </td>
                                             </tr>

@@ -340,7 +340,7 @@ function closeWindow(){
 		<table width=100% cellpadding="1" cellspacing="1" valign="top" align=left bgcolor="#ffffff" border="0" style="font-size:12px;">
 				<tr>
 					 <td bgColor="#c7d4db" class="box-title" height="25" align="center">
-                                             <digi:trn key="aim:manageindicators"><b>Manage Indicators</b></digi:trn><b>:<c:out value="${aimThemeForm.themeName}"/> </b>
+                                             <b><digi:trn key="aim:manageindicators">Manage Indicators</digi:trn></b><b>:<c:out value="${aimThemeForm.themeName}"/> </b>
 					 </td>
 				 </tr>
 					 <tr>

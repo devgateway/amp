@@ -34,10 +34,10 @@
 	var lastPg='<digi:trn>click here to go to last page</digi:trn>';
 	var referenceURL='<digi:trn>Reference URL</digi:trn>';
 	var attachmedFiles='<digi:trn>Attached Files</digi:trn>';
-    var forwardClick='<digi:trn> Click on this icon to forward message&nbsp;</digi:trn>';
-    var editClick='<digi:trn> Click on this icon to edit message&nbsp;</digi:trn>';
-    var replyClick='<digi:trn> Click on this icon to reply message&nbsp;</digi:trn>';
-    var deleteClick='<digi:trn> Click on this icon to delete message&nbsp;</digi:trn>';
+    var forwardClick='<digi:trn> Click on this icon to forward message</digi:trn>&nbsp;';
+    var editClick='<digi:trn> Click on this icon to edit message</digi:trn>&nbsp;';
+    var replyClick='<digi:trn> Click on this icon to reply message</digi:trn>&nbsp;';
+    var deleteClick='<digi:trn> Click on this icon to delete message</digi:trn>&nbsp;';
     var viewMessage='<digi:trn> Click here to view the message</digi:trn>';
     var viewDetails='<digi:trn>Click here to view details</digi:trn>';
     

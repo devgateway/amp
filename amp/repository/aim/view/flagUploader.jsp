@@ -362,9 +362,9 @@ function deleteFlag(id) {
 
                   <td vAlign="center" width="100%" align="center" class="textalb" height="20" bgcolor="#c7d4db">
 
+				<b style="font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#000000;">
                     <digi:trn key="aim:uploadFlag">
-
-                      <b style="font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#000000;">Upload Flag</b></digi:trn>
+                      Upload Flag</digi:trn></b>
 
                   </td>
 
@@ -390,7 +390,7 @@ function deleteFlag(id) {
 
                         <td>
 
-                          <digi:trn key="aim:country"><b>Country</b></digi:trn>
+                          <b><digi:trn  key="aim:country">Country</digi:trn></b>
 
                         </td>
 
@@ -422,7 +422,7 @@ function deleteFlag(id) {
 
                         <td>
 
-                          <digi:trn key="aim:flag"><b>Flag</b></digi:trn>
+                          <b><digi:trn  key="aim:flag">Flag</digi:trn></b>
 
                         </td>
 

@@ -296,8 +296,8 @@ function fnSubmit() {
                                         <td vAlign="middle" align="center">
 										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file needs to be CSV type and should have 3 columns: the first column contains currency codes 
 										  (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).
-										  </digi:trn><digi:trn>Default Decimal Separator is: <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.DECIMAL_SEPARATOR) %> &nbsp;&nbsp;and Default Exchange Rate Separator is: <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.EXCHANGE_RATE_SEPARATOR) %>
-										  </digi:trn>"/></td>                                   
+										  </digi:trn><digi:trn>Default Decimal Separator is:</digi:trn> <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.DECIMAL_SEPARATOR) %>
+										 &nbsp;&nbsp;<digi:trn>and Default Exchange Rate Separator is:</digi:trn> <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.EXCHANGE_RATE_SEPARATOR)%>"/></td>                                   
                                         
                                         <td vAlign="left" align="left">
                                         <!-- <html:file name="aimCurrencyRateForm" property="currRateFile" size="50" styleClass="dr-menu"/> -->
@@ -514,10 +514,9 @@ function fnSubmit() {
 													<td><!-- Other Links -->
 													<table cellpadding="0" cellspacing="0" width="120" style="font-size:12px; margin-top:10px;">
 														<tr>
-															<td bgColor=#c9c9c7 class=box-title><digi:trn
-																key="aim:otherLinks">
-															<b style="padding-left:5px;">Other links</b>
-															</digi:trn></td>
+															<td bgColor=#c9c9c7 class=box-title>
+															<b style="padding-left:5px;"><digi:trn
+																key="aim:otherLinks">Other links</digi:trn></b></td>
 															<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 														</tr>
 													</table>

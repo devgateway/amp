@@ -214,7 +214,7 @@ function setHoveredRow(rowId) {
 									<c:set var="pledgeId">
 										<bean:write name="allFundingPledges" property="key.id" />
 									</c:set>
-									<a class="itr" href="javascript:editPledge('${pledgeId}');" title="<digi:trn key="aim:ClickToEditPledge">Click on this icon to edit pledge&nbsp;</digi:trn>">
+									<a class="itr" href="javascript:editPledge('${pledgeId}');" title="<digi:trn key="aim:ClickToEditPledge">Click on this icon to edit pledge</digi:trn>&nbsp;">
 	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0">									</a>								</td>
 								<td width="3%" align="center" class="inside">
 									<c:set var="pledgeId">
@@ -223,7 +223,7 @@ function setHoveredRow(rowId) {
 									<c:set var="pledgeUsed">
 										<bean:write name="allFundingPledges" property="value" />
 									</c:set>
-									<a class="itr" href="javascript:removePledge('${pledgeId}','${pledgeUsed}');" title="<digi:trn key="aim:ClickToDeletePledge">Click on this icon to delete pledge&nbsp;</digi:trn>">
+									<a class="itr" href="javascript:removePledge('${pledgeId}','${pledgeUsed}');" title="<digi:trn key="aim:ClickToDeletePledge">Click on this icon to delete pledge</digi:trn>&nbsp;">
 	                                   	<img src= "../ampTemplate/images/trash_12.gif" border="0">									</a>								</td>
 							</tr>
 						</c:forEach>

@@ -115,7 +115,7 @@ function validate(){
 												<table border="0" cellPadding=5 cellspacing="1" class=box-border width="100%">
 	<tr>
 		<td align="right" width="50%">
-			<digi:trn key="aim:memberName">Name &nbsp;&nbsp; &nbsp;</digi:trn>
+			<digi:trn key="aim:memberName">Name</digi:trn>&nbsp;&nbsp; &nbsp;
 		</td>
 		<td align="left" width="50%">
 			<bean:write name="aimTeamMemberForm" property="name" />
@@ -123,7 +123,7 @@ function validate(){
 	</tr>
 	<tr>
 		<td align="right" width="50%">
-			<digi:trn key="aim:memberRole">Role&nbsp;&nbsp; &nbsp;&nbsp;</digi:trn>	
+			<digi:trn key="aim:memberRole">Role</digi:trn>&nbsp;&nbsp; &nbsp;&nbsp;	
 		</td>
 		<td align="left" width="50%">
 			<html:select property="role">

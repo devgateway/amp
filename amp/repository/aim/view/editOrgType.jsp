@@ -146,7 +146,7 @@
 																	</tr>
 																	<tr>
 																		<td width="100" align="let">
-																        <digi:trn key="aim:orgTypeCode">Type Code<font size="2" color="#FF0000">*</font></digi:trn></td>
+																        <digi:trn key="aim:orgTypeCode">Type Code</digi:trn><font size="2" color="#FF0000">*</font></td>
 																		<td width="400">
 																           <html:text property="orgTypeCode" size="60" style="border:1px solid #CCCCCC;" />																		</td>
 																	</tr>

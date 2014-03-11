@@ -21,8 +21,8 @@
         <TR>
           <TD class=title align=left colSpan=2><digi:trn key="um:accountInfoAboutYou">Account information / about you</digi:trn></TD></TR>
         <TR>
-          <TD class=text align=left colSpan=2><digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT
-            color=red><B><BIG>*</BIG></B></FONT> are required.</digi:trn> <digi:trn key="um:userValidEmail"> Please use a
+          <TD class=text align=left colSpan=2><digi:trn>All fields marked with an</digi:trn><FONT color=red><B><BIG> * </BIG></B></FONT><digi:trn>are required.</digi:trn>
+           <digi:trn key="um:userValidEmail"> Please use a
             valid e-mail address.</digi:trn></TD></TR>
         <TR>
           <TD colSpan=2 td>

@@ -251,7 +251,7 @@
             </logic:notEmpty>
 
             <tr>
-              <td align=left class=title noWrap colspan="5"><digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B>*</B></FONT> are required. </digi:trn>
+              <td align=left class=title noWrap colspan="5"><digi:trn>All fields marked with an</digi:trn><FONT color=red><B> * </B></FONT><digi:trn>are required.</digi:trn>
                 <digi:trn key="um:userValidEmail"> Please use a valid e-mail address.</digi:trn>              </td>
             </tr>
 			<tr>

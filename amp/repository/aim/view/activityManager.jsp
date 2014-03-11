@@ -246,10 +246,9 @@
 
 										<tr>
 											<td bgColor=#c7d4db height="25"
-												align="center"><!-- Table title --> <digi:trn
-												key="aim:activityList">
-												<b style="font-size:12px; font-family:Arial; color:#000000;">Activity List</b>
-											</digi:trn> <!-- end table title --></td>
+												align="center"><!-- Table title -->
+												<b style="font-size:12px; font-family:Arial; color:#000000;">
+												<digi:trn key="aim:activityList">Activity List</digi:trn></b> <!-- end table title --></td>
 										</tr>
 										<tr>
 										

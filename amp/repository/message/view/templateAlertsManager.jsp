@@ -198,9 +198,8 @@ div.fakefile2 input{
 									<table cellPadding="0" cellSpacing="0" width="100" style="font-size:12px;">
 										<tr>
 											<td bgColor="#c9c9c7" class="box-title">
-												<digi:trn key="aim:otherLinks">
-												<b style="padding-left:5px;">Other links</b>
-												</digi:trn>
+												<b style="padding-left:5px;">
+												<digi:trn key="aim:otherLinks">Other links</digi:trn></b>
 											</td>
 											<td background="module/aim/images/corner-r.gif" height="17" width="17"></td>
 										</tr>

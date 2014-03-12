@@ -16,6 +16,7 @@
 
 		<property name="financingId" column="financing_id" type="java.lang.String" />
 		<property name="fundingTermsCode" column="funding_terms_code" type="java.lang.String" />
+		<property name="fundingClassificationDate" column="funding_classification_date" type="java.util.Date" />
 
 		<property name="plannedStartDate" column="planned_start_date" type="java.util.Date" />
 		<property name="plannedCompletionDate" column="planned_completion_date"

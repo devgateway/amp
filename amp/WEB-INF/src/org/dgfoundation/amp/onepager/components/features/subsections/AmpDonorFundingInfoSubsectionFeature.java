@@ -4,6 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
+import java.util.Date;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.AttributeModifier;
@@ -12,6 +14,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.ValueToSetModel;
@@ -133,6 +136,12 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				"Funding Organization Id");
 //		financingId.getNewLine().setVisible(false);
 		add(financingId);
+		
+		 final PropertyModel<Date> funClassificationDateModel = new PropertyModel<Date>(
+	                model, "fundingClassificationDate");
+	        AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("fundingClassificationDate", funClassificationDateModel, null, "Funding Classification Date");
+	        //date.getDate().setRequired(true);
+			add(date);
 
 		if (model != null && model.getObject() != null && 
 			model.getObject().getFundingDetails() != null &&

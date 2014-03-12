@@ -61,6 +61,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
     private AmpAgreement agreement;
     
     private AmpRole sourceRole;
+    private Date fundingClassificationDate;
     
     
     
@@ -478,37 +479,38 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	@Override
 	public Object getValue() {
 		// Compare fields from AmpFunding.
-		String ret = "";
-		ret = ret + "-Type of Assistance:" + (this.typeOfAssistance != null ? this.typeOfAssistance.getEncodedValue() : "");
-		ret = ret + "-Financing Instrument:" + (this.financingInstrument != null ? this.financingInstrument.getEncodedValue() : "");
-		ret = ret + "-Conditions:" + (this.conditions == null ? "" : this.conditions.trim());
-		ret = ret + "-Donor Objective:" + (this.donorObjective == null ? "" : this.donorObjective.trim());
-		ret = ret + "-Active:" + this.active;
-		ret = ret + "-Delegated Cooperation:" + this.delegatedCooperation;
-		ret = ret + "-Delegated Partner:" + this.delegatedPartner;
-		ret = ret + "-Mode Of Payment:" + (this.modeOfPayment != null ? this.modeOfPayment.getEncodedValue() : "");
-		ret = ret + "-Funding Status:" + (this.fundingStatus != null ? this.fundingStatus.getEncodedValue() : "");
-		ret = ret + "-Funding Status:" + (this.financingId != null ? this.financingId : "");
+		StringBuffer ret = new StringBuffer();
+		ret.append("-Type of Assistance:" + (this.typeOfAssistance != null ? this.typeOfAssistance.getEncodedValue() : ""));
+		ret.append("-Financing Instrument:" + (this.financingInstrument != null ? this.financingInstrument.getEncodedValue() : ""));
+		ret.append("-Funding classification date:" + (this.financingInstrument != null ? this.financingInstrument.getEncodedValue() : ""));
+		ret.append("-Conditions:" + (this.conditions == null ? "" : this.conditions.trim()));
+		ret.append("-Donor Objective:" + (this.donorObjective == null ? "" : this.donorObjective.trim()));
+		ret.append("-Active:" + this.active);
+		ret.append("-Delegated Cooperation:" + this.delegatedCooperation);
+		ret.append("-Delegated Partner:" + this.delegatedPartner);
+		ret.append("-Mode Of Payment:" + (this.modeOfPayment != null ? this.modeOfPayment.getEncodedValue() : ""));
+		ret.append("-Funding Status:" + (this.fundingStatus != null ? this.fundingStatus.getEncodedValue() : ""));
+		ret.append("-Funding Status:" + (this.financingId != null ? this.financingId : ""));
 		
 		// Compare fields from AmpFundingDetail.
-		List<AmpFundingDetail> auxDetails = new ArrayList(this.fundingDetails);
+		List<AmpFundingDetail> auxDetails = new ArrayList<AmpFundingDetail>(this.fundingDetails);
 		Collections.sort(auxDetails, fundingDetailsComparator);
 		Iterator<AmpFundingDetail> iter = auxDetails.iterator();
 		while (iter.hasNext()) {
 			AmpFundingDetail auxDetail = iter.next();
-			ret = ret + auxDetail.getTransactionType() + "-" + auxDetail.getTransactionAmount() + "-"
-					+ auxDetail.getAmpCurrencyId() + "-" + auxDetail.getTransactionDate();
+			ret.append(auxDetail.getTransactionType() + "-" + auxDetail.getTransactionAmount() + "-"
+					+ auxDetail.getAmpCurrencyId() + "-" + auxDetail.getTransactionDate());
 			if (auxDetail.getPledgeid() != null)
-				ret += "-" + auxDetail.getPledgeid().getId();
-			ret += "-" + auxDetail.getDisbOrderId();
+				ret.append(auxDetail.getPledgeid().getId());
+			ret.append( "-" + auxDetail.getDisbOrderId());
 			if (auxDetail.getContract() != null)
-				ret += "-" + auxDetail.getContract().getId();
-			ret += "-" + auxDetail.getExpCategory();
-			ret += "-" + auxDetail.getDisbursementOrderRejected();
+				ret.append("-" + auxDetail.getContract().getId());
+			ret.append("-" + auxDetail.getExpCategory());
+			ret.append( "-" + auxDetail.getDisbursementOrderRejected());
 			if (auxDetail.getRecipientOrg() != null)
-				ret += "- recipient " + auxDetail.getRecipientOrg().getAmpOrgId() + " with role of " + auxDetail.getRecipientRole().getAmpRoleId();
+				ret.append( "- recipient " + auxDetail.getRecipientOrg().getAmpOrgId() + " with role of " + auxDetail.getRecipientRole().getAmpRoleId());
 		}
-		return ret;
+		return ret.toString();
 	}
 
 	// Compare by transaction type, then amount, then date.
@@ -790,6 +792,14 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			if (afd.isSscTransaction())
 				return true;
 		return false;
+	}
+
+	public Date getFundingClassificationDate() {
+		return fundingClassificationDate;
+	}
+
+	public void setFundingClassificationDate(Date fundingClassificationDate) {
+		this.fundingClassificationDate = fundingClassificationDate;
 	}
 		
 }

@@ -293,9 +293,9 @@ function loadShareRules(){
 									<c:if test="${aimUpdateAppSettingsForm.validation=='allEdits'}">
 										<bean:define id="allEdits" value="selected"/>
 									</c:if>
-															<c:if test="${aimUpdateAppSettingsForm.validation=='validationOff'}">
-																<bean:define id="validationOff" value="selected"/>
-															</c:if>
+									<c:if test="${aimUpdateAppSettingsForm.validation=='validationOff'}">
+										<bean:define id="validationOff" value="selected"/>
+									</c:if>
 									<html:select property="validation" styleClass="inputx insidex">
 										<option value="newOnly" <c:out  value="${newOnly}"></c:out> ><digi:trn key="aim:defValidationNewOnly">Validate New Only</digi:trn></option>
 										<option value="allEdits" <c:out  value="${allEdits }"></c:out> ><digi:trn key="aim:defValidationAll">Validate All</digi:trn></option>

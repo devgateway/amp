@@ -118,6 +118,12 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 		AmpCommentSimpleWrapper acsw2 = new AmpCommentSimpleWrapper("revisedComplDateTabs", "current completion date", actModel);
 		acsw2.setOutputMarkupId(true);
 		add(acsw2);
+		
+		AmpTextFieldPanel<Integer> proposedProjectLife = new AmpTextFieldPanel<Integer>("proposedProjectLife", new PropertyModel<Integer>(actModel, "proposedProjectLife"),
+				"Proposed Project Life (in days)", AmpFMTypes.MODULE);
+		RangeValidator<Integer> proposedProjectLifeValidator = new RangeValidator<Integer>(0, 9999);
+		proposedProjectLife.getTextContainer().add(proposedProjectLifeValidator);
+		add(proposedProjectLife);
 	}
 
 }

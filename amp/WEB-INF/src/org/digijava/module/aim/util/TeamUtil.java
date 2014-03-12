@@ -51,7 +51,9 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.Constants.GlobalSettings;
 import org.digijava.module.aim.helper.DonorTeam;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
@@ -390,8 +392,12 @@ public class TeamUtil {
     		ampAppSettings.setDefaultRecordsPerPage(new Integer(10));
     		ampAppSettings.setCurrency(curr);
     		ampAppSettings.setFiscalCalendar(fiscal);
-    		ampAppSettings.setLanguage("English");
-    		ampAppSettings.setValidation("validationOff");
+    		ampAppSettings.setLanguage("en");
+    		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION).equalsIgnoreCase("off")){
+    			ampAppSettings.setValidation("validationOff");
+    		}else{
+    			ampAppSettings.setValidation("allEdits");
+    		}
     		session.save(ampAppSettings);
 
     		// update all child workspaces parent team

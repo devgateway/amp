@@ -632,6 +632,7 @@ function applyFilterPopin(e){
 	params = params + "&selectedNatPlanObj=" + getSelectionsFromElement("selectedNatPlanObj",false);
 	params = params + "&selectedPrimaryPrograms=" + getSelectionsFromElement("selectedPrimaryPrograms",false);
 	params = params + "&selectedSecondaryPrograms=" + getSelectionsFromElement("selectedSecondaryPrograms",false);
+	params = params + "&nationalProjectsToo=" + getSelectionsFromElement("national_region_check",false);
 
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	

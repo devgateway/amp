@@ -554,6 +554,11 @@ function initializeGlobalVariables(){
 											<div class="dashboards_left_container" id="regionDivList">
 												<ul class="root_list">
 													<li style="margin-left: -15px">
+														<input type="checkbox" id="region_national"
+															name="national_region_check" value="-1"/>
+														<span><digi:trn>National</digi:trn>
+													</span></li>
+													<li style="margin-left: -15px">
 														<input type="checkbox" id="region_check_all"
 															name="region_check" value="-1"
 															onClick="allOptionChecked(this,'region_check','zone_check')" />

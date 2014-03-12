@@ -931,6 +931,7 @@ public class DashboardUtil {
 		filter.setShowSectorsRanking(false);
 		filter.setShowProjectsRanking(false);
 		filter.setShowAcronymForOrgNames(false);
+		filter.setNationalProjectsToo(false);
 		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);

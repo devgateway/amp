@@ -156,6 +156,8 @@ public class DataDispatcher extends DispatchAction {
 			visualizationForm.getFilter().setShowAcronymForOrgNames(new Boolean(request.getParameter("showAcronymForOrgNames")));
 		if (request.getParameter("showOnlyNationalProjects")!=null && !request.getParameter("showOnlyNationalProjects").equals("null"))
 			visualizationForm.getFilter().setShowOnlyNationalProjects(new Boolean(request.getParameter("showOnlyNationalProjects")));
+		if (request.getParameter("nationalProjectsToo")!=null && !request.getParameter("nationalProjectsToo").equals("null"))
+			visualizationForm.getFilter().setNationalProjectsToo(new Boolean(request.getParameter("nationalProjectsToo")));
 		
 		// The organization groups can either be only one selected, or many, from either the Quick Filter or the Advanced Filter
 		// This checks that Filter.getSelOrgGroupsIds always has the correct list of organizationGroup/s (either one or many)

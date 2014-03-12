@@ -43,6 +43,7 @@ public class DashboardFilter {
     private Boolean showMonochrome;
     private Boolean showAcronymForOrgNames;
     private Boolean showOnlyNationalProjects;
+    private Boolean nationalProjectsToo;
     private TeamMember teamMember;
     private List<AmpCurrency>currencies;
     private List<OrganizationSkeleton> organizations;
@@ -208,6 +209,7 @@ public class DashboardFilter {
     	newFilter.setStartYear(this.getStartYear());
     	newFilter.setShowAcronymForOrgNames(this.getShowAcronymForOrgNames());
     	newFilter.setShowOnlyNationalProjects(this.getShowOnlyNationalProjects());
+    	newFilter.setNationalProjectsToo(this.getNationalProjectsToo());
     	return newFilter;
     }
 	
@@ -1286,6 +1288,14 @@ public class DashboardFilter {
 
 	public void setShowOnlyNationalProjects(Boolean showOnlyNationalProjects) {
 		this.showOnlyNationalProjects = showOnlyNationalProjects;
+	}
+
+	public Boolean getNationalProjectsToo() {
+		return nationalProjectsToo;
+	}
+
+	public void setNationalProjectsToo(Boolean nationalProjectsToo) {
+		this.nationalProjectsToo = nationalProjectsToo;
 	}
 		
 	

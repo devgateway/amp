@@ -1032,13 +1032,31 @@ public class DbUtil {
 		}
         
         //Filter for locations. If there's a location selected, it adds that location as well as all child locations. Null is used for unallocated locations on the Activities.
+        String oqlLocations = "";
         if (locationCondition && locationIds != null && locationIds.length > 0) {
         	if (locationIds[0].equals(0l)) {
-        		oql += " and actloc is NULL "; //Unallocated condition
+        		oqlLocations += " actloc is NULL "; //Unallocated condition
 			} else {
 				locationIds = getAllDescendantsLocation(locationIds);
-	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+				oqlLocations += " loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
 			}
+        }
+        //Filter for National projects too (not excluding regional projects).
+        String oqlNational = "";
+        if (filter.getNationalProjectsToo()) {
+	    	oqlNational += " act.ampActivityId IN (" + DashboardUtil.getInStatement(DashboardUtil.getNationalActivityList());
+	    }
+        
+        if(oqlNational.equals("")) {
+        	if(!oqlLocations.equals("")) {
+        		oql += " AND " + oqlLocations;
+        	}
+        } else {
+        	if(oqlLocations.equals("")) {
+        		oql += " AND " + oqlNational;
+        	} else {
+        		oql += (" AND (" + oqlNational + " OR " + oqlLocations + ")");
+        	}
         }
 
         //Filter for sectors. If there's a sector selected, it adds that sector as well as all children.
@@ -1116,7 +1134,7 @@ public class DbUtil {
     	  oql += " AND act.ampActivityId IN (" + DashboardUtil.getInStatement(DashboardUtil.getNationalActivityList()) + ")";
       }
       logger.warn(oql);  
-		return oql;
+      return oql;
 	}
 	
 //private static String getHQLQueryForDD(DashboardFilter filter) {

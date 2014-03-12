@@ -1157,6 +1157,7 @@ function callbackApplyFilter(e){
 	params = params + "&implementingAgencyIds=" + getQueryParameter("implementingAgencyIds");
 	params = params + "&secondaryProgramIds=" + getQueryParameter("secondaryProgramIds");
 	params = params + "&showAcronymForOrgNames=" + document.getElementById("show_acronym_for_org_names").checked;
+	params = params + "&showOnlyNationalProjects=" + document.getElementById("show_only_national_projects").checked;
 
 	loadingPanel.show();
 
@@ -1278,6 +1279,7 @@ function applyFilterPopin(e){
 	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	document.getElementById("showAcronymForOrgNames").value = document.getElementById("show_acronym_for_org_names").checked;
+	document.getElementById("showOnlyNationalProjects").value = document.getElementById("show_only_national_projects").checked;
 	
 	document.getElementById("transactionType").value = document.getElementById("transaction_type").options[document.getElementById("transaction_type").selectedIndex].value;
 	document.getElementById("transactionType_dropdown").value = document.getElementById("transactionType").value;

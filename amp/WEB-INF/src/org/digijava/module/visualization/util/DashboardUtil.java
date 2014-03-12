@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -77,6 +78,20 @@ public class DashboardUtil {
 	
 	private static Logger logger = Logger.getLogger(DashboardUtil.class);
 	public static final String VISUALIZATION_PROGRESS_SESSION = "visualizationProgressSession";
+	
+	public static Collection<Long> getNationalActivityList() {
+		Collection<Long> ret = new HashSet<Long>();
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			Long id = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL).getId();
+			Query query = session.createSQLQuery("SELECT amp_activity_id FROM amp_activities_categoryvalues WHERE amp_categoryvalue_id = ?");
+			query.setLong(0, id);
+			ret = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
 
 	public static Map<AmpOrganisation, BigDecimal> getRankAgenciesByKey(Collection<Long> orgList,  DashboardFilter filter) throws DgException{
 		Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();

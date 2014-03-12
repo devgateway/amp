@@ -42,6 +42,7 @@ public class DashboardFilter {
     private Boolean workspaceOnlyQuickFilter;
     private Boolean showMonochrome;
     private Boolean showAcronymForOrgNames;
+    private Boolean showOnlyNationalProjects;
     private TeamMember teamMember;
     private List<AmpCurrency>currencies;
     private List<OrganizationSkeleton> organizations;
@@ -206,6 +207,7 @@ public class DashboardFilter {
     	newFilter.setEndYear(this.getEndYear());
     	newFilter.setStartYear(this.getStartYear());
     	newFilter.setShowAcronymForOrgNames(this.getShowAcronymForOrgNames());
+    	newFilter.setShowOnlyNationalProjects(this.getShowOnlyNationalProjects());
     	return newFilter;
     }
 	
@@ -683,10 +685,6 @@ public class DashboardFilter {
 		return teamMember;
 	}
 	
-    public Long[] getSetLocationIds() {
-        return selLocationIds;
-    }
-
     public void setSelLocationIds(Long[] locationIds) {
         this.selLocationIds = locationIds;
     }
@@ -1280,6 +1278,14 @@ public class DashboardFilter {
 
 	public void setShowAcronymForOrgNames(Boolean showAcronymForOrgNames) {
 		this.showAcronymForOrgNames = showAcronymForOrgNames;
+	}
+
+	public Boolean getShowOnlyNationalProjects() {
+		return showOnlyNationalProjects;
+	}
+
+	public void setShowOnlyNationalProjects(Boolean showOnlyNationalProjects) {
+		this.showOnlyNationalProjects = showOnlyNationalProjects;
 	}
 		
 	

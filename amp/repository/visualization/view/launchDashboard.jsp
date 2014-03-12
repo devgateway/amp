@@ -1019,6 +1019,7 @@ function initializeGlobalVariables(){
 	</c:set>
 	<html:checkbox  property="filter.showMonochrome" styleId="show_monochrome" onclick="reloadGraphs();"><digi:trn>Show Monochrome</digi:trn></html:checkbox> <img title="${translation}" src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 	<html:checkbox  property="filter.showAcronymForOrgNames" styleId="show_acronym_for_org_names"><digi:trn>Show Acronyms for Organization Names</digi:trn></html:checkbox><br />
+	<html:checkbox  property="filter.showOnlyNationalProjects" styleId="show_only_national_projects"><digi:trn>Show Only National Projects</digi:trn></html:checkbox><br />
 	<hr />
 	<table cellspacing="0" cellpadding="0" width="100%">
 		<c:if test="${!visualizationform.filter.fromPublicView}">
@@ -1113,7 +1114,7 @@ function initializeGlobalVariables(){
 					   <div id="org_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 					</td>
 				</tr>
-			</c:if>
+			</c:if>			
 			<c:if test="${visualizationform.filter.dashboardType eq '2' }">
 			  <tr>
 				<td><b><digi:trn>Region</digi:trn>:</b></td>

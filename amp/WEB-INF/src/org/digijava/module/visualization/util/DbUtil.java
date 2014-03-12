@@ -931,7 +931,8 @@ public class DbUtil {
         	}
 			oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
 	        oql += "   inner join f.ampActivityId act ";
-        }
+        }        
+        
         //Join  for Organization/Organization Groups and their role
         if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
@@ -1110,6 +1111,11 @@ public class DbUtil {
         oql += " and (act.draft=false OR act.draft is null) and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
         oql += " and (act.deleted = false or act.deleted is null)";
         
+      //If Filtering only National projects.
+      if (filter.getShowOnlyNationalProjects()) {
+    	  oql += " AND act.ampActivityId IN (" + DashboardUtil.getInStatement(DashboardUtil.getNationalActivityList()) + ")";
+      }
+      logger.warn(oql);  
 		return oql;
 	}
 	

@@ -861,14 +861,10 @@ public class EditActivity extends Action {
           eaForm.getIdentification().setCreatedBy(activity.getActivityCreator());
           eaForm.getIdentification().setModifiedBy(activity.getModifiedBy());
          // eaForm.getIdentification().setBudget(activity.getBudget());
-          AmpCategoryValue budgetOff =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_OFF);
-          eaForm.getIdentification().setBudgetCVOff(
-        		  (budgetOff==null)?0:budgetOff.getId()
-        		  );
-          AmpCategoryValue budgetOn =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
-          eaForm.getIdentification().setBudgetCVOn(
-        		  (budgetOn==null)?1:budgetOn.getId()
-        		  );
+          AmpCategoryValue budgetOff =  CategoryConstants.ACTIVITY_BUDGET_OFF.getAmpCategoryValueFromDB();
+          eaForm.getIdentification().setBudgetCVOff((budgetOff == null) ? 0 : budgetOff.getId());
+          AmpCategoryValue budgetOn = CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB();
+          eaForm.getIdentification().setBudgetCVOn(budgetOn == null ? 1 : budgetOn.getId());
 
           eaForm.getIdentification().setHumanitarianAid(activity.getHumanitarianAid());
           eaForm.getIdentification().setGovAgreementNumber(activity.getGovAgreementNumber());
@@ -1136,8 +1132,8 @@ public class EditActivity extends Action {
             boolean setFullPercForDefaultCountry    = false;
             if ( !"true".equals( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES ) ) &&
             		implLevel!=null && implLocValue!=null &&
-            		CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
-            		CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY)
+            				CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
+            				CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue)
             ) {
             	setFullPercForDefaultCountry            = true;
             }
@@ -1220,8 +1216,7 @@ public class EditActivity extends Action {
                 }
 
                 if ( setFullPercForDefaultCountry && actLoc.getLocationPercentage() == 0.0 &&
-                		CategoryManagerUtil.equalsCategoryValue(loc.getLocation().getParentCategoryValue(),
-                				CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) &&
+                		CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getLocation().getParentCategoryValue()) &&
                 				loc.getLocation().getId() != defCountry.getId() )
                 {
                 	location.setPercentageBlocked(true);

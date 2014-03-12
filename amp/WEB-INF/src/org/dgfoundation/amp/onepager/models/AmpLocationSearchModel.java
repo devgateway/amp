@@ -65,10 +65,8 @@ public class AmpLocationSearchModel extends
 		AmpCategoryValue cvLayer = layerModel.getObject().iterator().next();
 		AmpCategoryValue cvLevel= levelModel.getObject().iterator().next();
 
-		if (!CategoryManagerUtil.equalsCategoryValue(cvLevel,
-				CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL)
-				&& CategoryManagerUtil.equalsCategoryValue(cvLayer,
-						CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY)) {
+		if (!CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(cvLevel)
+				&& CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(cvLayer)) {
 			// then we can only return the current default country of the system
 			try {
 				AmpCategoryValueLocations defCountry = DynLocationManagerUtil

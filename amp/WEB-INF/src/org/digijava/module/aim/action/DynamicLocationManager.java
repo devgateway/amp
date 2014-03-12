@@ -117,8 +117,7 @@ public class DynamicLocationManager extends MultiAction {
 		int largestLayerIndex											= 0;
 		int countryLayerIndex											= 0;
 		try {
-			AmpCategoryValue countryLayer									= 
-				CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+			AmpCategoryValue countryLayer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
 			countryLayerIndex											= countryLayer.getIndex();
 		} catch (Exception e) {
 			e.printStackTrace();

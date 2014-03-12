@@ -104,10 +104,11 @@ public class SelectPledgeLocation extends Action {
 		
 		AmpCategoryValue implLevel = CategoryManagerUtil.getAmpCategoryValueFromDb( pledgeForm.getLevelId() );
 		if (implLevel != null &&
-				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
-				CategoryManagerUtil.equalsCategoryValue(implLocLevelValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) )  {
+				CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
+				CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocLevelValue) )
+		{
 			Collection<AmpCategoryValueLocations> countries =
-				DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+			DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
 			if (countries != null) {
 				Integer countryIndex = null;
 				ArrayList<KeyValue> countriesKV = new ArrayList<KeyValue>();
@@ -134,7 +135,7 @@ public class SelectPledgeLocation extends Action {
         		parentLocId			= defCountry.getId();
         	}
         }*/
-        if (CategoryManagerUtil.equalsCategoryValue(pledgeForm.getImplLocationValue(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY)) {
+        if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(pledgeForm.getImplLocationValue())) {
             locationByLayers.clear();
         	AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryManagerUtil.getAmpCategoryValueFromDb(impLocLevel));
 

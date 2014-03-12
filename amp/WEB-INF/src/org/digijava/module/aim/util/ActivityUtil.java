@@ -4141,8 +4141,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
         getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY,act.getCategories());
 
     if (act != null && statusValue != null) {
-      if (CategoryManagerUtil.equalsCategoryValue(statusValue, CategoryConstants.ACTIVITY_STATUS_PROPOSED) &&
-          act.getFunAmount() != null) {
+      if (CategoryConstants.ACTIVITY_STATUS_PROPOSED.equalsCategoryValue(statusValue) && act.getFunAmount() != null) {
         String currencyCode = act.getCurrencyCode();
         //AMP-1403 assume USD if no code is specified
         if (currencyCode == null || currencyCode.trim().equals("")) {

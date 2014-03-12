@@ -126,15 +126,20 @@ public abstract class AmpCategoryFieldPanel extends
 		
 	}
 
+	/**
+	 * looks up for an alternate category based on the workspace prefix
+	 * @param s
+	 * @param categKey
+	 * @return
+	 */
     public static String getAlternateKey(Session s, final String categKey) {
         AmpAuthWebSession session = (AmpAuthWebSession) s;
-        if (session.getCurrentMember().getWorkspacePrefix() != null){
+        if (session.getCurrentMember().getWorkspacePrefix() != null)
+        {
             String tmpKey = session.getCurrentMember().getWorkspacePrefix().getValue() + categKey;
-            try {
-                CategoryManagerUtil.loadAmpCategoryClassByKey(tmpKey);
-                return tmpKey;
-            } catch (NoCategoryClassException e){
-                //then we don't alter the categoryKey
+            if (CategoryManagerUtil.loadAmpCategoryClassByKey(tmpKey) != null)
+            {
+                return tmpKey; // a prefixed category exists -> return its key
             }
         }
         return categKey;

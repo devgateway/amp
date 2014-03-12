@@ -70,7 +70,7 @@ public class SelectLocation extends Action {
 		
 		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getLocation().getImplemLocationLevel() );
 		if ( implLocValue == null )
-			implLocValue				= CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+			implLocValue = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
 		if (implLocValue != null) {
 			impLevelValue	= new Integer ( implLocValue.getIndex() + 1 );
 		}
@@ -95,8 +95,8 @@ public class SelectLocation extends Action {
 		
 		AmpCategoryValue implLevel              = CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getLocation().getLevelId() );
 		if ( implLevel!=null &&
-				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
-				CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) )  {
+				CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
+				CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue) )  {
 			Collection<AmpCategoryValueLocations> countries =
 				DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
 			if ( countries != null ) {

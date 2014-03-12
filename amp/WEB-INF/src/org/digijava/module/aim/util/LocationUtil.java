@@ -847,7 +847,7 @@ public class LocationUtil {
         	
         	/*  country check for duplicate iso and iso3 codes */
         	boolean isCountry	=  
-        		CategoryManagerUtil.equalsCategoryValue( loc.getParentCategoryValue(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+        			CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue( loc.getParentCategoryValue());
         	if ( isCountry ) {
         		AmpCategoryValueLocations tempLoc	= 
         			DynLocationManagerUtil.getLocationByIso(loc.getIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );

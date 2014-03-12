@@ -507,7 +507,7 @@ public class CategoryManager extends Action {
             try {
                 dbSession.close();
             } catch (Exception ex2) {
-                logger.error("close hibernate session failed in saveCategoryToDatabase :" + ex2);
+                logger.error("close hibernate session failed in saveCategoryToDatabase :", ex2);
             }
         }
         return retValue;

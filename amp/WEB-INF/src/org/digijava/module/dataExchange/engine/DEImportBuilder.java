@@ -406,14 +406,10 @@ public class DEImportBuilder {
 					activity.setProjectCode(aft.getValue().substring(8, 11));
 				}
 				//Senegal add
-				if( isEqualStringsNWS(aft.getField(), "onBudget") ){
-					try{
-						AmpCategoryValue onCV	= CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
-						CategoryManagerUtil.addCategoryToSet(onCV.getId(), activity.getCategories());
-					}
-					catch (Exception e) {
-						e.printStackTrace();
-					}
+				if( isEqualStringsNWS(aft.getField(), "onBudget") )
+				{
+					AmpCategoryValue onCV = CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB();
+					CategoryManagerUtil.addCategoryToSet(onCV.getId(), activity.getCategories());
 				}
 			}
 		}
@@ -854,9 +850,9 @@ public class DEImportBuilder {
 			
 			try {
 			if( Constants.IDML_PLAN.equals(fdt.getType()) ) 
-				ampRegFund.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(  CategoryConstants.ADJUSTMENT_TYPE_PLANNED));
+				ampRegFund.setAdjustmentType(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getAmpCategoryValueFromDB());
 			if( Constants.IDML_ACTUAL.equals(fdt.getType()) ) 
-				ampRegFund.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL));
+				ampRegFund.setAdjustmentType(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB());
 			}catch(Exception ex)
 			{
 				logger.error("", ex); 
@@ -1715,9 +1711,9 @@ public class DEImportBuilder {
 			
 		try{
 		if( Constants.IDML_PLAN.equals(fundingDetailType.getType()) ) 
-			acf.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(  CategoryConstants.ADJUSTMENT_TYPE_PLANNED));
+			acf.setAdjustmentType(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getAmpCategoryValueFromDB());
 		if( Constants.IDML_ACTUAL.equals(fundingDetailType.getType()) ) 
-			acf.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL));
+			acf.setAdjustmentType(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB());
 		} catch(Exception ex) {
 			
 			logger.error("", ex);

@@ -212,15 +212,10 @@ public class FundingCalculationsHelper {
 		fundDetailList = new ArrayList<FundingDetail>();
 		int indexId = 0;
 		String toCurrCode = Constants.DEFAULT_CURRENCY;
-		AmpCategoryValue actualAdjustmentType = null;
-		
-		try
+		AmpCategoryValue actualAdjustmentType = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
+		if (actualAdjustmentType == null)
 		{
-			actualAdjustmentType = CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-		}
-		catch(Exception e)
-		{
-			throw new RuntimeException(e);
+			throw new RuntimeException("ACTUAL adjustment type not found in the database");
 		}
 		
 		String decimalSeparatorStr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR); 

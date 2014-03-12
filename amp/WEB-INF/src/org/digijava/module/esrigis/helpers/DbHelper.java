@@ -149,8 +149,8 @@ public class DbHelper {
 		AmpCategoryValue budgetOn = null;
 		AmpCategoryValue budgetOff = null;
 		try {
-			budgetOn = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
-			budgetOff = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_OFF);
+			budgetOn = CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB();
+			budgetOff = CategoryConstants.ACTIVITY_BUDGET_OFF.getAmpCategoryValueFromDB();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -198,9 +198,7 @@ public class DbHelper {
 			
 			if (!useMtefProjections)
 			{
-				oql += " AND fd.adjustmentType = "
-					+ CategoryManagerUtil.getAmpCategoryValueFromDB(
-							CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId();
+				oql += " AND fd.adjustmentType = " + CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
 			}
 			
 			switch(filter.getTransactionType())

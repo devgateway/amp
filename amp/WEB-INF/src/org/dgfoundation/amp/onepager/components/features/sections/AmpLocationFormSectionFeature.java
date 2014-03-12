@@ -139,8 +139,8 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                 implLocValue = tmp.iterator().next();
         }
 
-        boolean defaultCountryCheck = CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
-                CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+        boolean defaultCountryCheck = CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
+        		CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue);
         return defaultCountryCheck;
     }
 
@@ -159,8 +159,8 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                 implLocValue = tmp.iterator().next();
         }
 
-        boolean defaultCountryCheck = (CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL) || CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL)) &&
-                CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+        boolean defaultCountryCheck = (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.equalsCategoryValue(implLevel) || CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel)) &&
+        		CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue);
         return defaultCountryCheck;
     }
 

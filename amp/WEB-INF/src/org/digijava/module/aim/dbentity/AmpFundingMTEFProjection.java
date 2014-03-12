@@ -136,12 +136,7 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		
 		public AmpCategoryValue getAdjustmentType()
 		{
-			try {
-				return CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-			} catch (Exception e) {				
-				e.printStackTrace();
-				return null;
-			}
+			return CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
 		}
 		
 		public String getDisbOrderId()

@@ -270,12 +270,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 				
 				private void updateBudget(){
 					AmpCategoryValue obj = (AmpCategoryValue) activityBudget.getChoiceContainer().getModelObject();
-					AmpCategoryValue budgetOn = null;
-					try {
-						budgetOn = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
-					} catch (Exception e) {
-						logger.error(e);
-					}	
+					AmpCategoryValue budgetOn = CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB();
 				    long budgetOnId = (budgetOn==null)?1:budgetOn.getId();
 					if (obj != null && obj.getId() == budgetOnId) // "On" was selected
 						toggleExtraFields(true);

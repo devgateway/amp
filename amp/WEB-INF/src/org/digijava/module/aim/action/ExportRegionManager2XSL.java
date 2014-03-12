@@ -86,8 +86,7 @@ public class ExportRegionManager2XSL extends Action {
 				.loadAmpCategoryClassByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY);
 		Collection<AmpCategoryValue> values = CategoryManagerUtil
 				.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY);
-		AmpCategoryValue countryLayer									= 
-			CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+		AmpCategoryValue countryLayer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
 		int countryLayerIndex	= countryLayer.getIndex();
 		int size = values.size();
 		HSSFRow titleRow = sheet.createRow(rowIndex++);

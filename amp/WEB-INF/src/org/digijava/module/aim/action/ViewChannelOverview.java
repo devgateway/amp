@@ -134,10 +134,8 @@ public class ViewChannelOverview extends TilesAction {
 			if ( implLocationLevels != null){
 				try{
 					formBean.setNumImplLocationLevels( implLocationLevels.size() );
-					AmpCategoryValue country		= 
-						CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-					formBean.setCountryIndex( country.getIndex() );
-					
+					AmpCategoryValue country = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
+					formBean.setCountryIndex( country.getIndex() );					
 					formBean.setNumOfLocationsPerLayer(new ArrayList<Integer>(formBean.getNumImplLocationLevels()) );
 					for (int i=0; i<formBean.getNumImplLocationLevels(); i++) {
 						Integer numOfLocations	= DynLocationManagerUtil.getNumOfLocations(i);

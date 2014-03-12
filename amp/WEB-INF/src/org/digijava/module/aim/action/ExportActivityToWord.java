@@ -1500,11 +1500,15 @@ public class ExportActivityToWord extends Action {
 	
 	//        FundingCalculationsHelper fch = new FundingCalculationsHelper();
 	//        fch.doCalculations(allComponents, currencyCode);
+
+            ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+
+
+            eshProjectCostTable.addRowData(new ExportSectionHelperRowData(TranslatorWorker.translateText
+                    ("Total Number of Funding Sources"), null, null,  true).
+                    addRowData(String.valueOf(act.getFundingSourcesNumber())));
 	
-	
-	
-	
-	        ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+
 	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
 	                                                addRowData(FormatHelper.formatNumber(act.getFunAmount())).
 	                                                addRowData(translatedCurrency));

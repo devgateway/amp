@@ -866,7 +866,7 @@ public class ProjectFicheExport extends Action {
 		while (i.hasNext()) {
 			ActivityIndicator element = (ActivityIndicator) i.next();
 			if(element.getIndicatorsCategory()==null || element.getIndicatorsCategory().getValue()==null ||
-					CategoryManagerUtil.equalsCategoryValue(element.getIndicatorsCategory(), hcValue) )
+					hcValue.equalsCategoryValue(element.getIndicatorsCategory()) )
 						continue;
 			c.addElement(new Paragraph(element.getIndicatorName()));
 		}

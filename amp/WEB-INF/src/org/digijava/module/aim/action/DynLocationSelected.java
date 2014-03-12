@@ -50,8 +50,8 @@ public class DynLocationSelected extends Action {
 		String gsAllowPercentages	=  FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES );
 		if ( !"true".equals( gsAllowPercentages ) &&
 				implLevel!=null && implLocValue!=null &&
-				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
-				CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY)
+						CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
+						CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocValue)
 		) {
 			setFullPercForDefaultCountry            = true;
 		}
@@ -90,8 +90,7 @@ public class DynLocationSelected extends Action {
 				location.setPercent("0");
 				
 				if ( setFullPercForDefaultCountry ) {
-					if ( CategoryManagerUtil.equalsCategoryValue(ampCVLocation.getParentCategoryValue(),
-							CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY) ) {
+					if ( CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(ampCVLocation.getParentCategoryValue()) ) {
 						
 						if ( ampCVLocation.getId().longValue() == defCountry.getId().longValue() ) {
 							location.setPercent("100");

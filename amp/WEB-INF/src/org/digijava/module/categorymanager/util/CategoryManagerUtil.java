@@ -318,22 +318,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		else
 			logger.debug("[getAmpCategoryValueFromDb] valueId is null");
 		return null;
-	}
-	
-	public static AmpCategoryValue getAmpCategoryValueFromDB(HardCodedCategoryValue hcValue) throws Exception {
-		Collection<AmpCategoryValue> c 	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(hcValue.getCategoryKey());
-		if (c != null) {
-			Iterator<AmpCategoryValue> tempItr = c.iterator();
-			while (tempItr.hasNext()) {
-				AmpCategoryValue categoryValue = (AmpCategoryValue) tempItr.next();
-				if (categoryValue!=null && categoryValue.getValue().equalsIgnoreCase( hcValue.getValueKey() )) {
-					return categoryValue;
-				}
-			}
-		}
-		
-		throw new Exception ("HardCodedCategoryValue not found in the database");
-	}
+	}	
 	 
 	
 	/**
@@ -569,16 +554,9 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			ampCategoryClass = categoryValuesByKey.get(categoryKey);
 		else
 		{		
-			ampCategoryClass = null;
-			try {
-				ampCategoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(categoryKey);
-			} catch (NoCategoryClassException e) {
-				e.printStackTrace();
-			}
-			
+			ampCategoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(categoryKey);			
 			if (ampCategoryClass == null)
-				return null;
-			 
+				return null;			 
 			categoryValuesByKey.put(categoryKey, ampCategoryClass);
 		}
 
@@ -689,7 +667,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 * @param key The key of the AmpCategoryClass object. (A key can be attributed when creating a new category)
 	 * @return The AmpCategoryClass object with the specified key. If not found returns null.
 	 */
-	public static AmpCategoryClass loadAmpCategoryClassByKey(String key) throws NoCategoryClassException{
+	public static AmpCategoryClass loadAmpCategoryClassByKey(String key){
 		return loadAmpCategoryClassByKey(key, false);
 	}
 	 
@@ -705,7 +683,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			//AmpCategoryClass dbCategory		= new AmpCategoryClass();
 				String queryString	= "select c from " + AmpCategoryClass.class.getName() + " c where c.keyName=:key";
 				Query query			= dbSession.createQuery(queryString);
-				query.setParameter("key", key, Hibernate.STRING);
+				query.setString("key", key);
 				query.setCacheable(true);
 				col = query.list();
 				if (col.isEmpty())
@@ -721,7 +699,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				try {
 					dbSession.close();
 				} catch (Exception ex2) {
-					logger.error("releaseSession() failed :" + ex2);
+					logger.error("dbSession.close() failed :", ex2);
 				}
 			}
 		}
@@ -831,20 +809,13 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			}
 		}
 		return false;
-	}
-	
-	public static boolean equalsCategoryValue(AmpCategoryValue value, HardCodedCategoryValue hcValue){
-		return value != null && value.getAmpCategoryClass().getKeyName().equals( hcValue.getCategoryKey() ) && value.getValue().equals( hcValue.getValueKey() );
-	}
-	
+	}	
 	
 	public static boolean isCategoryKeyInUse(String key) {
 		try {
-			CategoryManagerUtil.loadAmpCategoryClassByKey(key);
-			return true;
-		} catch (NoCategoryClassException e) {
-			// TODO Auto-generated catch block
-			logger.info("Category key '" + key + "' was not found in database.");
+			return CategoryManagerUtil.loadAmpCategoryClassByKey(key) != null;
+		} catch (Exception e) {
+			//logger.info("Category key '" + key + "' was not found in database.");
 			return false;
 		}
 	}
@@ -873,30 +844,10 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			String errorString			= "The following values were not found: ";
 			String separator			= "";
 			
-			AmpCategoryValue country;
-			try {
-				country = getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-			} catch (Exception e) {
-				country = null;
-			}
-			AmpCategoryValue region;
-			try {
-				region 	= getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-			} catch (Exception e) {
-				region	= null;
-			}
-			AmpCategoryValue zone;
-			try {
-				zone = getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_ZONE);
-			} catch (Exception e) {
-				zone = null;
-			}
-			AmpCategoryValue district;
-			try {
-				district = getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT);
-			} catch (Exception e) {
-				district = null;
-			}
+			AmpCategoryValue country = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
+			AmpCategoryValue region = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getAmpCategoryValueFromDB();
+			AmpCategoryValue zone = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.getAmpCategoryValueFromDB();
+			AmpCategoryValue district = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT.getAmpCategoryValueFromDB();
 			
 			if ( country == null ) {
 				errorString 			+= "Country";

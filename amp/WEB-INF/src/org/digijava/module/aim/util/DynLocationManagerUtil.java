@@ -341,8 +341,7 @@ public class DynLocationManagerUtil {
 				}
 			}
 
-			AmpCategoryValue layer = CategoryManagerUtil
-					.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+			AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
 			if (layer == null) {
 				logger
 						.error("No Country value found in category Implementation Location. Please correct this.");
@@ -431,19 +430,6 @@ public class DynLocationManagerUtil {
 		}
 	}
 
-	@Deprecated
-	public static AmpCategoryValueLocations getLocationByName(
-			String locationName, HardCodedCategoryValue hcLocationLayer) {
-		try {
-			AmpCategoryValue layer = CategoryManagerUtil
-					.getAmpCategoryValueFromDB(hcLocationLayer);
-			return getLocationByName(locationName, layer);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	/**
 	 * 
 	 * @param locationName
@@ -489,8 +475,7 @@ public class DynLocationManagerUtil {
 	public static AmpCategoryValueLocations getLocationByIso3(
 			String locationIso3, HardCodedCategoryValue hcLocationLayer) {
 		try {
-			AmpCategoryValue layer = CategoryManagerUtil
-					.getAmpCategoryValueFromDB(hcLocationLayer);
+			AmpCategoryValue layer = hcLocationLayer.getAmpCategoryValueFromDB();
 			return getLocationByIso3(locationIso3, layer);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -536,20 +521,6 @@ public class DynLocationManagerUtil {
 			}
 		}
 		return null;
-	}
-
-	public static AmpCategoryValueLocations getLocationByName(
-			String locationName, HardCodedCategoryValue hcLocationLayer,
-			AmpCategoryValueLocations parentLocation)
-			throws NullPointerException {
-		try {
-			AmpCategoryValue layer = CategoryManagerUtil
-					.getAmpCategoryValueFromDB(hcLocationLayer);
-			return getLocationByName(locationName, layer, parentLocation);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
 	}
 
 	public static AmpCategoryValueLocations getLocationByName(
@@ -607,6 +578,8 @@ public class DynLocationManagerUtil {
      * We need this in cases when the default value is cached (say, implementation_location=Region)
      * But we need to load (say, the defaultCountry, where implementation_location=Country)
      * Otherwise we get null.
+     * 
+     * !! CONSTANTIN: on 12/03/2014, the code branches under if (readLayerFromCache) {} else {} are both reimplementations of the same thing. Rewriting to ignore the parameter !!
      *
      * @param locationIso
      * @param hcLocationLayer
@@ -616,18 +589,7 @@ public class DynLocationManagerUtil {
     public static AmpCategoryValueLocations getLocationByIso(
             String locationIso, HardCodedCategoryValue hcLocationLayer, boolean readLayerFromCache) {
         try {
-            AmpCategoryValue layer = null;
-            if (readLayerFromCache) {
-                layer = CategoryManagerUtil.getAmpCategoryValueFromDB(hcLocationLayer);
-            } else {
-                AmpCategoryClass categoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(hcLocationLayer.getCategoryKey());
-                for (AmpCategoryValue categoryValue : categoryClass.getPossibleValues()) {
-                    if (hcLocationLayer.getValueKey().equals(categoryValue.getValue())) {
-                        layer = categoryValue;
-                        break;
-                    }
-                }
-            }
+            AmpCategoryValue layer = hcLocationLayer.getAmpCategoryValueFromDB();
             return getLocationByIso(locationIso, layer);
         } catch (Exception e) {
             e.printStackTrace();
@@ -696,8 +658,7 @@ public class DynLocationManagerUtil {
 	public static AmpCategoryValueLocations getLocationByCode(
 			String locationCode, HardCodedCategoryValue hcLocationLayer) {
 		try {
-			AmpCategoryValue layer = CategoryManagerUtil
-					.getAmpCategoryValueFromDB(hcLocationLayer);
+			AmpCategoryValue layer = hcLocationLayer.getAmpCategoryValueFromDB();
 			return getLocationByCode(locationCode, layer);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -925,8 +886,7 @@ public class DynLocationManagerUtil {
 	public static Set<AmpCategoryValueLocations> getLocationsByLayer(
 			HardCodedCategoryValue hcLayer) {
 		try {
-			AmpCategoryValue layer = CategoryManagerUtil
-					.getAmpCategoryValueFromDB(hcLayer);
+			AmpCategoryValue layer = hcLayer.getAmpCategoryValueFromDB();
 			return getLocationsByLayer(layer);
 
 		} catch (Exception e) {

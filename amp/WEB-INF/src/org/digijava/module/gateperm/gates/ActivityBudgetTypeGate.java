@@ -65,13 +65,10 @@ public class ActivityBudgetTypeGate extends Gate {
 
     	String string = parameters.poll();
     	
-		if("true".equalsIgnoreCase(string) || "1".equals(string)) 
-			return CategoryManagerUtil.equalsCategoryValue(ampCategoryValue,
-			        CategoryConstants.ACTIVITY_BUDGET_ON);		
-
-		else return CategoryManagerUtil.equalsCategoryValue(ampCategoryValue,
-		        CategoryConstants.ACTIVITY_BUDGET_OFF);
-		
+		if("true".equalsIgnoreCase(string) || "1".equals(string))
+			return CategoryConstants.ACTIVITY_BUDGET_ON.equalsCategoryValue(ampCategoryValue);
+		else
+			return CategoryConstants.ACTIVITY_BUDGET_OFF.equalsCategoryValue(ampCategoryValue);		
 	}
 
 	/*

@@ -76,7 +76,7 @@ public class QuarterlyInfoWorker {
 				
 				AmpCategoryValue type		= (AmpCategoryValue) row[3];
 				
-				if ( CategoryManagerUtil.equalsCategoryValue(type, CategoryConstants.MTEF_PROJECTION_PROJECTION) ) {
+				if ( CategoryConstants.MTEF_PROJECTION_PROJECTION.equalsCategoryValue(type) ) {
 				
 					Double transactionAmount 	= (Double) row[0];
 					

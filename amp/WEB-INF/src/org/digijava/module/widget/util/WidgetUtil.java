@@ -620,20 +620,8 @@ public class WidgetUtil {
     	long aaa = System.currentTimeMillis();
     	
     	AmpCategoryClass catClass = null;
-    	Long actualCommitmentCatValId = null;
+    	Long actualCommitmentCatValId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
         String activityWhereclause = DbUtil.generateWhereclause(allActivityIdsSet, new GenericIdGetter());
-
-          try {
-              catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
-              for (AmpCategoryValue val : catClass.getPossibleValues()) {
-                  if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                      actualCommitmentCatValId = val.getId();
-                      break;
-                  }
-              }
-          } catch (NoCategoryClassException e) {
-              e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-          }
 
           Session session = PersistenceManager.getRequestDBSession();
 //          StringBuilder lastVersionsQry = new StringBuilder("select actGroup.ampActivityLastVersion.ampActivityId from ");
@@ -766,20 +754,8 @@ public class WidgetUtil {
     @SuppressWarnings("unchecked")
     public static void getFunding(Collection<ActivitySectorDonorFunding> activityFundngObjs, Date fromDate, Date toDate, Long[] sectorIDs) throws DgException 
     {
-        AmpCategoryClass catClass = null;
-        Long actualCommitmentCatValId = null;
-        try {
-            catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
-            for (AmpCategoryValue val : catClass.getPossibleValues()) {
-                if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                    actualCommitmentCatValId = val.getId();
-                    break;
-                }
-            }
-        } catch (NoCategoryClassException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
+        Long actualCommitmentCatValId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
+        
         //Set<Long> activityIds = new HashSet<Long>();
         Map<Long, ActivitySectorDonorFunding> fundingsItems = new HashMap<Long, ActivitySectorDonorFunding>(); // Map<activityId, funding_item>
         //Set<Long> donorIds = new HashSet<Long>();
@@ -883,21 +859,9 @@ public class WidgetUtil {
     }
 
     @SuppressWarnings("unchecked")
-	public static List<TopDonorGroupHelper> getTopTenDonorGroups(Integer fromYear,Integer toYear) throws DgException {
-        AmpCategoryClass catClass = null;
-        Long actualCommitmentCatValId = null;
-        try {
-            catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
-            for (AmpCategoryValue val : catClass.getPossibleValues()) {
-                if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                    actualCommitmentCatValId = val.getId();
-                    break;
-                }
-            }
-        } catch (NoCategoryClassException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
+	public static List<TopDonorGroupHelper> getTopTenDonorGroups(Integer fromYear,Integer toYear) throws DgException 
+	{
+        Long actualCommitmentCatValId = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
         List<TopDonorGroupHelper> donorGroups = new ArrayList<TopDonorGroupHelper>();
         Date fromDate = null;
 		Date toDate = null;

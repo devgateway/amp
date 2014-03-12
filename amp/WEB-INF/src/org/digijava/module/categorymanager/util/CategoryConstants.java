@@ -1,5 +1,8 @@
 package org.digijava.module.categorymanager.util;
 
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
 
 public class CategoryConstants {
 	public static final String ACCHAPTER_NAME	= "A.C. Chapter";
@@ -253,7 +256,7 @@ public class CategoryConstants {
 			return protectOnDelete;
 		}
 		
-		private HardCodedCategoryValue(String categoryKey, String valueKey, boolean protectOnDelete) {
+		public HardCodedCategoryValue(String categoryKey, String valueKey, boolean protectOnDelete) {
 			this.categoryKey		= categoryKey;
 			this.valueKey			= valueKey;
 			this.protectOnDelete	= protectOnDelete;
@@ -261,16 +264,42 @@ public class CategoryConstants {
 		
 		public boolean existsInDatabase()
 		{
-			try
-			{
-				boolean res = (CategoryManagerUtil.getAmpCategoryValueFromDB(this) != null);
-				return res;
-			}
-			catch(Exception e)
-			{
-				return false;
-			}
+			return getAmpCategoryValueFromDB() != null;
 		}
+		
+		/**
+		 * returns null if does not exist in database
+		 * @return
+		 */
+		public Long getIdInDatabase()
+		{
+			AmpCategoryValue val = getAmpCategoryValueFromDB();
+			return val == null ? null : val.getId();
+		}
+
+		/**
+		 * returns the database equivalent of a hardcoded value
+		 * @return null if none found
+		 */
+		public AmpCategoryValue getAmpCategoryValueFromDB()
+		{
+			AmpCategoryClass c = CategoryManagerUtil.loadAmpCategoryClassByKey(this.getCategoryKey());
+			if (c == null)
+				return null;
+			for(AmpCategoryValue categoryValue : c.getPossibleValues())
+			{
+				if (categoryValue.getValue().equalsIgnoreCase(this.getValueKey())) {
+					return categoryValue;
+				}
+			}			
+			return null;
+		}
+		
+		public boolean equalsCategoryValue(AmpCategoryValue value)
+		{
+			return value != null && value.getAmpCategoryClass().getKeyName().equals(this.getCategoryKey()) && value.getValue().equals(this.getValueKey());
+		}
+
 	}
 }
 

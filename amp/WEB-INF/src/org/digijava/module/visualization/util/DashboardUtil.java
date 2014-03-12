@@ -83,7 +83,7 @@ public class DashboardUtil {
 		Collection<Long> ret = new HashSet<Long>();
 		try {
 			Session session = PersistenceManager.getRequestDBSession();
-			Long id = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL).getId();
+			Long id = CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.getIdInDatabase();
 			Query query = session.createSQLQuery("SELECT amp_activity_id FROM amp_activities_categoryvalues WHERE amp_categoryvalue_id = ?");
 			query.setLong(0, id);
 			ret = query.list();

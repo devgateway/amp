@@ -51,8 +51,8 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 		String newschema = "";
 		newschema = schema.replaceAll("(?:@donorquery)+", getQueryText());
 		try {
-			newschema = newschema.replaceAll("(?:@Actual)+", CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId().toString());
-			newschema = newschema.replaceAll("(?:@Planned)+", CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PLANNED).getId().toString());
+			newschema = newschema.replaceAll("(?:@Actual)+", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase().toString());
+			newschema = newschema.replaceAll("(?:@Planned)+", CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase().toString());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

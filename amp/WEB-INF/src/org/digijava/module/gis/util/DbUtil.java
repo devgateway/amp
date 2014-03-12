@@ -1962,41 +1962,7 @@ public class DbUtil {
    		Set<Long> legalAmpActivityIds = getAllLegalAmpActivityIds();
    		allActivityIdsSet.retainAll(legalAmpActivityIds);   	
     }
-    
-    public static Long getActualCommitmentCategValueId()
-    {
-    	AmpCategoryClass catClass = null;
-        Long actualCommitmentCatValId = null;
-        try {
-            catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
-            for (AmpCategoryValue val : catClass.getPossibleValues()) {
-                if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                    return val.getId();
-                }
-            }
-        } catch (NoCategoryClassException e) {
-            e.printStackTrace();
-        }
-        throw new RuntimeException("could not get an ActualCommitment category value from the database");
-    }
-
-    public static Long getPlannedCategValueId()
-        {
-        	AmpCategoryClass catClass = null;
-            Long actualCommitmentCatValId = null;
-            try {
-                catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getCategoryKey());
-                for (AmpCategoryValue val : catClass.getPossibleValues()) {
-                    if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                        return val.getId();
-                    }
-                }
-            } catch (NoCategoryClassException e) {
-                e.printStackTrace();
-            }
-            throw new RuntimeException("could not get Planned category value from the database");
-        }
-    
+        
     /**
      * fetches list of all activities which match a set of ampActivityIds <br />
      * the returns Object[] elements have the following elements:<br />
@@ -2017,15 +1983,15 @@ public class DbUtil {
     {
         String activityWhereclause = generateWhereclause(allActivityIdsSet, new GenericIdGetter());        
 
-        Long actualCommitmentCatValId = getActualCommitmentCategValueId();
-
         SimpleDateFormat sdfOut = new SimpleDateFormat(AmpARFilter.SDF_OUT_FORMAT_STRING);
         
         String view_name = view_prefix + "v_donor_funding";
         final StringBuilder queryString = new StringBuilder("SELECT f.transaction_amount, f.transaction_type, f.adjustment_type, f.transaction_date, f.currency_code, f.amp_activity_id, f.fixed_exchange_rate FROM ").append(view_name).append(" f JOIN amp_funding af ON af.amp_funding_id = f.amp_funding_id WHERE ");
         queryString.append("f.transaction_date >= '").append(sdfOut.format(startDate)).append("' AND f.transaction_date <= '").append(sdfOut.format(endDate)).append("'");
         queryString.append(" AND f.amp_activity_id IN ").append(activityWhereclause );
-        queryString.append(" AND f.adjustment_type in (").append(actualCommitmentCatValId).append(",").append(getPlannedCategValueId()).append(") ");
+        queryString.append(" AND f.adjustment_type in (")
+        		.append(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase()).append(",")
+        		.append(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()).append(") ");
         
         if (donorIdsWhereclause != null) {
         	queryString.append(" AND f.org_id IN ");

@@ -2672,7 +2672,30 @@ public class ExportActivityToPDF extends Action {
 			boolean visibleModuleEDD = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements", ampContext);
 			boolean visibleModuleDisbOrders = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders", ampContext);
             boolean visibleModuleMTEFProjections = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections", ampContext);
-			
+
+            if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Total Number of Funding Sources", ampContext)) {
+                PdfPCell foIdCell1 = new PdfPCell();
+                foIdCell1.setBackgroundColor(new Color(221,221,221));
+                foIdCell1.setBorder(0);
+                foIdCell1.setColspan(2);
+                p1 = new Paragraph(TranslatorWorker.translateText("Total Number of Funding Sources")+":", plainFont);
+                foIdCell1.addElement(p1);
+                fundingTable.addCell(foIdCell1);
+
+                PdfPCell foIdCell3 = new PdfPCell(new Paragraph(String.valueOf(myForm.getIdentification().getFundingSourcesNumber())));
+                foIdCell3.setBorder(0);
+                foIdCell3.setColspan(2);
+                foIdCell3.setBackgroundColor(new Color(221,221,221));
+                fundingTable.addCell(foIdCell3);
+
+                //empty cell
+                PdfPCell empty = new PdfPCell(new Paragraph("\n\n"));
+                empty.setBorder(0);
+                empty.setBackgroundColor(new Color(255,255,255));
+                empty.setColspan(4);
+                fundingTable.addCell(empty);
+            }
+
 			for (FundingOrganization fundingOrganisation : myForm.getFunding().getFundingOrganizations()) {
 				if(fundingOrganisation.getFundings()!=null){
 					drawTotals=true;

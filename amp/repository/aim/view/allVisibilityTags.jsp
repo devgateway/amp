@@ -682,7 +682,8 @@ deleted 6 fields, do not reinsert
 <field:display name="External Financing" feature="Admin NPD"></field:display> 
 <field:display name="FY" feature="Budget"></field:display> 
 <field:display name="Final Date for Contracting" feature="Planning"></field:display> 
-<field:display name="Final Date for Disbursements" feature="Planning"></field:display> 
+<field:display name="Final Date for Disbursements" feature="Planning"></field:display>
+<field:display name="Proposed Project Life" feature="Planning"></field:display> 
 <field:display name="Financial Instrument" feature="Budget"></field:display> 
 <field:display name="Financing Instrument" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization Id" feature="Funding Information"></field:display> 

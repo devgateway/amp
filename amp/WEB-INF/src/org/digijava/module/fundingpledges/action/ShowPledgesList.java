@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -32,13 +33,8 @@ public class ShowPledgesList extends Action {
         	
 		ViewPledgesForm plForm = (ViewPledgesForm) form;
 		
-		ArrayList<FundingPledges> pledges = PledgesEntityHelper.getPledges();
-		Collections.sort(pledges, new Comparator<FundingPledges>(){
-			public int compare(FundingPledges a1, FundingPledges a2) 
-			{				
-				return a1.compareTo(a2);
-			}
-		});
+		List<FundingPledges> pledges = PledgesEntityHelper.getPledges();
+		Collections.sort(pledges);
 		TreeMap<FundingPledges, Boolean> map = new TreeMap<FundingPledges, Boolean>();
 		
 		for (Iterator iterator = pledges.iterator(); iterator.hasNext();) {
@@ -59,7 +55,7 @@ public class ShowPledgesList extends Action {
 				
 				}
 			}
-			ArrayList<AmpFundingDetail> fundsRelated = PledgesEntityHelper.getFundingRelatedToPledges(pledge);
+			List<AmpFundingDetail> fundsRelated = PledgesEntityHelper.getFundingRelatedToPledges(pledge);
 			if (fundsRelated == null || fundsRelated.size()==0) {
 				map.put(pledge, false);
 			} else {

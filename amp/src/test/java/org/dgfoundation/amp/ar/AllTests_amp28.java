@@ -31,6 +31,7 @@ public class AllTests_amp28
 		//$JUnit-BEGIN$
 
 		suite.addTest(MultilingualTests28.suite());
+		suite.addTest(PledgesFormTests.suite());
 		//$JUnit-END$
 		return suite;
 	}

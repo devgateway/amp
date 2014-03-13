@@ -26,7 +26,9 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable{
 	private String whoAuthorizedPledge;
 	private String furtherApprovalNedded;
 	
+	@Deprecated
 	private AmpOrganisation organization;
+	
 	private AmpOrgGroup organizationGroup;
 	private Set<FundingPledgesSector> sectorlist;
 	private Set<FundingPledgesLocation> locationlist;
@@ -179,9 +181,17 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable{
 	public void setTitle(AmpCategoryValue title) {
 		this.title = title;
 	}
+	
+	/**
+	 * ALWAYS RETURNS NULL!
+	 * @return
+	 */
+	@Deprecated
 	public AmpOrganisation getOrganization() {
 		return organization;
 	}
+	
+	@Deprecated
 	public void setOrganization(AmpOrganisation organization) {
 		this.organization = organization;
 	}

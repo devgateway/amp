@@ -35,4 +35,10 @@ public class KeyValue implements Serializable {
 									return o1.value.compareTo(o2.value);
 								}
 						};
+						
+	@Override
+	public String toString()
+	{
+		return String.format("KeyValue: (%s, %s)", this.key, this.value);
+	}
 }

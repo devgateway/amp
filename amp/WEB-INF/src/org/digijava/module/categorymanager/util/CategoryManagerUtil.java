@@ -287,37 +287,22 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 * property before closing the hibernate session
 	 * @return Extracts the AmpCategoryValue with id=valueId from the database. Return null if not found.
 	 */
-	public static AmpCategoryValue getAmpCategoryValueFromDb(Long valueId, boolean initializeTaggedValues) {
-		AmpCategoryValue retVal			= null;
-		if(valueId!=null)
+	public static AmpCategoryValue getAmpCategoryValueFromDb(Long valueId, boolean initializeTaggedValues)
+	{
+		if (valueId == null)
+			return null;
+		try
 		{
-			Session dbSession			= null;
-			try {
-				dbSession				= PersistenceManager.getSession();
-				retVal					= (AmpCategoryValue) dbSession.get(AmpCategoryValue.class, valueId);
-
-                if (retVal != null) {
-                    // retVal.getAmpCategoryClass().getId();
-                    if (initializeTaggedValues) {
-                        // load the collection here to avoid lazy initialization later
-                        retVal.getUsedByValues().size();
-                    }
-                }
-
-			} catch (Exception ex) {
-				logger.error("Unable to get AmpCategoryValue: ", ex);
-			} finally {
-				try {
-					PersistenceManager.releaseSession(dbSession);
-				} catch (Exception ex2) {
-					logger.error("releaseSession() failed :" + ex2);
-				}
-			}
+			Session dbSession = PersistenceManager.getSession();
+			AmpCategoryValue retVal = (AmpCategoryValue) dbSession.get(AmpCategoryValue.class, valueId);
+			if (retVal != null && initializeTaggedValues)
+				retVal.getUsedByValues().size(); // eager load
 			return retVal;
 		}
-		else
-			logger.debug("[getAmpCategoryValueFromDb] valueId is null");
-		return null;
+		catch(Exception e)
+		{
+			return null;
+		}
 	}	
 	 
 	

@@ -170,7 +170,7 @@ public class ContentTranslationUtil {
 	{
 		try
 		{
-			Method methGetField = obj.getClass().getMethod("set" + Strings.capitalize(propertyName), String.class);
+			Method methGetField = obj.getClass().getMethod("set" + Strings.capitalize(propertyName), propertyValue.getClass());
 			methGetField.invoke(obj, propertyValue);			
 		}
 		catch(Exception e)

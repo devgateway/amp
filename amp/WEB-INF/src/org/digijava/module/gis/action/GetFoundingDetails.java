@@ -1356,6 +1356,17 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
+    /**
+     * SCHEDULED TO BE REMOVED
+     * @param pledgeSectorList
+     * @param level
+     * @param start
+     * @param end
+     * @param donorId
+     * @return
+     * @throws Exception
+     */
+    @Deprecated
     public static Object[] getPledgesByLocations(List <FundingPledgesSector> pledgeSectorList, int level, Date start, Date end, Long donorId) throws
             Exception {
 
@@ -1537,6 +1548,15 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
+    /**
+     * SCHEDULED TO BE REMOVED - will always crash now
+     * @param pledge
+     * @param start
+     * @param end
+     * @param donorId
+     * @return
+     */
+    @Deprecated
     public static FundingData getActivityTotalFundingInBaseCurrencyForPledge(FundingPledges pledge,
                                                                              Date start, Date end, Long donorId) {
         FundingData retVal = null;

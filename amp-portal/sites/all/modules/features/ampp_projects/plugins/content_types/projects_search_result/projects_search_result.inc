@@ -11,9 +11,10 @@ $plugin = array(
   'title' => t('Projects Search Result'),
   'description' => t('Projects Search Result'),
   'category' => array(t('AMPP Widgets')),
-  'defaults' => array('name_flag'=>1,
+  'defaults' => array(
+    'name_flag' => 1,
     'name_label' => t('Project title'),
-    'amp_org_name_agg_flag'=>1,
+    'amp_org_name_agg_flag' => 1,
     'amp_org_name_agg_label' => t('Donors'),
     'amp_sector_name_agg_flag' => 1,
     'amp_sector_name_agg_label' => t('Sectors'),
@@ -69,69 +70,71 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
 
   $sectors_array = array();
   $sectors_ids = empty($_GET["sectors"]) ? '' : $_GET["sectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
+  if ($sectors_ids != 'all' and !empty($sectors_ids)) {
     $sectors_array = explode(",", $sectors_ids);
   }
   $sectors_ids = empty($_GET["primarysectors"]) ? '' : $_GET["primarysectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
+  if ($sectors_ids != 'all' and !empty($sectors_ids)) {
     $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
   }
   $sectors_ids = empty($_GET["secondarysectors"]) ? '' : $_GET["secondarysectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
+  if ($sectors_ids != 'all' and !empty($sectors_ids)) {
     $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
   }
 
-  $args[0] = !empty($_GET["donors"])? $_GET["donors"] : "all";
+  $args[0] = !empty($_GET["donors"]) ? $_GET["donors"] : "all";
   $args[1] = (count($sectors_array) > 0) ? implode(',', $sectors_array) : "all";
-  $args[2] = !empty($_GET["locations"])? $_GET["locations"] : "all";
-  $args[3] = !empty($_GET["keywords"])? $_GET["keywords"] : "all";
-  $args[4] = !empty($_GET["budget"])? $_GET["budget"] : "all";
-  $args[5] = !empty($_GET["programs"])? $_GET["programs"] : "all";
-  $args[6] = !empty($_GET["period_start"])? $_GET["period_start"] : "all";
-  $args[7] = !empty($_GET["period_end"])? $_GET["period_end"] : "all";
+  $args[2] = !empty($_GET["locations"]) ? $_GET["locations"] : "all";
+  $args[3] = !empty($_GET["keywords"]) ? $_GET["keywords"] : "all";
+  $args[4] = !empty($_GET["budget"]) ? $_GET["budget"] : "all";
+  $args[5] = !empty($_GET["programs"]) ? $_GET["programs"] : "all";
+  $args[6] = !empty($_GET["period_start"]) ? $_GET["period_start"] : "all";
+  $args[7] = !empty($_GET["period_end"]) ? $_GET["period_end"] : "all";
 
   // we need to prepend all descendant locations
   if ($args[2] !== "all") {
     $args[2] = implode(',', addDescendantLocations(explode(',', $args[2])));
   }
 
-  $showregionalprojects = !empty($_GET["showregionalprojects"])? $_GET["showregionalprojects"] : "all";
+  $showregionalprojects = !empty($_GET["showregionalprojects"]) ? $_GET["showregionalprojects"] : "all";
 
   if (isset($conf["allowxlsexport"]) && $conf["allowxlsexport"] == 1) {
-    $block->content =  l(t('Export in XLS format'), 'searchexport/searchresult.xls',
-                array('attributes' => array('class' => array('export-link')),
-                    'query' => array(
-                       'donors' => $args[0],
-                                     'sectors' => $args[1],
-                                     'programs' => $args[5],
-                                     'locations' => $args[2],
-                                     'period_start' => $args[6],
-                                     'period_end' => $args[7],
-                                     'keywords' => $args[3],
-                                     'budget' => $args[4],
-                                     'showregionalprojects' => $showregionalprojects,
-                                     'hide_first_column' => (isset($conf['hide_first_column']) && $conf['hide_first_column']) ? 1 : 0,
-                     'show_status_column' => (!isset($conf['show_status_column']) || $conf['show_status_column'] == 0) ? 0 : 1,
-                      )));
+    $block->content = l(t('Export in XLS format'), 'searchexport/searchresult.xls', array(
+        'attributes' => array('class' => array('export-link')),
+        'query' => array(
+          'donors' => $args[0],
+          'sectors' => $args[1],
+          'programs' => $args[5],
+          'locations' => $args[2],
+          'period_start' => $args[6],
+          'period_end' => $args[7],
+          'keywords' => $args[3],
+          'budget' => $args[4],
+          'showregionalprojects' => $showregionalprojects,
+          'hide_first_column' => (isset($conf['hide_first_column']) && $conf['hide_first_column']) ? 1 : 0,
+          'show_status_column' => (!isset($conf['show_status_column']) || $conf['show_status_column'] == 0) ? 0 : 1,
+        )
+      ));
 
     global $base_root;
-    $export_url = url('searchexport/searchresult.xls',
-          array('attributes' => array('class' => array('export-link')),
-              'query' => array(
-                 'donors' => $args[0],
-                               'sectors' => $args[1],
-                               'programs' => $args[5],
-                               'locations' => $args[2],
-                               'period_start' => $args[6],
-                               'period_end' => $args[7],
-                               'keywords' => $args[3],
-                               'budget' => $args[4],
-                               'showregionalprojects' => $showregionalprojects,
-                               'hide_first_column' => (isset($conf['hide_first_column']) && $conf['hide_first_column']) ? 1 : 0,
-               'show_status_column' => (!isset($conf['show_status_column']) || $conf['show_status_column'] == 0) ? 0 : 1,
-          )));
-  if (module_exists('shorten')) {
-      $block->content .=  '<br><a class="shorten-url" href="http://' . shorten_url($base_root . $export_url) . '"><b>' . t('Permanent link') . '</b> </a><br>';
+    $export_url = url('searchexport/searchresult.xls', array(
+        'attributes' => array('class' => array('export-link')),
+        'query' => array(
+          'donors' => $args[0],
+          'sectors' => $args[1],
+          'programs' => $args[5],
+          'locations' => $args[2],
+          'period_start' => $args[6],
+          'period_end' => $args[7],
+          'keywords' => $args[3],
+          'budget' => $args[4],
+          'showregionalprojects' => $showregionalprojects,
+          'hide_first_column' => (isset($conf['hide_first_column']) && $conf['hide_first_column']) ? 1 : 0,
+          'show_status_column' => (!isset($conf['show_status_column']) || $conf['show_status_column'] == 0) ? 0 : 1,
+        )
+      ));
+    if (module_exists('shorten')) {
+      $block->content .= '<br><a class="shorten-url" href="http://' . shorten_url($base_root . $export_url) . '"><b>' . t('Permanent link') . '</b> </a><br>';
     }
   }
 
@@ -139,7 +142,9 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
   $tmpview->pre_execute();
   $tmpview->execute();
 
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_projects_projects_search_result_render', dpq($tmpview->build_info['query'], 1));
+  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) {
+    watchdog('ampp_projects_projects_search_result_render', dpq($tmpview->build_info['query'], 1));
+  }
   //watchdog('ampp_projects', 'results TOTAL: ' . $tmpview->total_rows);
 
   // optionally hide the first column
@@ -154,29 +159,28 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
 
   //return text message if no result
   $block->content .= ($tmpview->total_rows) ? $tmpview->preview('panel_pane_1') : t(variable_get('amp_no_search_results_text', 'No results found'));
+
   return $block;
 }
 
-
-/*
+/**
  *
  */
 function ampp_projects_preprocess_html(&$variables) {
-    $variables['classes_array'][] = "page-search";
+  $variables['classes_array'][] = "page-search";
 }
 
-
-/*
+/**
  *
  */
 function ampp_projects_projects_search_result_content_type_edit_form($form, &$form_state) {
   $conf = $form_state['conf'];
 
   $form['note_show_columns'] = array(
-        '#type' => 'item',
-        '#markup' => '<div><b>' . t('Show columns') . '</b></div>',
-        '#description' => t('At least one column should be selected.'),
-        '#weight' => 0,
+    '#type' => 'item',
+    '#markup' => '<div><b>' . t('Show columns') . '</b></div>',
+    '#description' => t('At least one column should be selected.'),
+    '#weight' => 0,
   );
 
   //hide($form['override_title']);
@@ -199,7 +203,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['name_label']) &&  !empty($conf['name_label']) ? $conf['name_label'] : $form_state['plugin']['defaults']['name_label'],
+    '#default_value' => isset($conf['name_label']) && !empty($conf['name_label']) ? $conf['name_label'] : $form_state['plugin']['defaults']['name_label'],
   );
   // Donors
   $form['amp_org_name_agg_fieldset'] = array(
@@ -217,27 +221,27 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['amp_org_name_agg_label']) &&  !empty($conf['amp_org_name_agg_label']) ? $conf['amp_org_name_agg_label'] : $form_state['plugin']['defaults']['amp_org_name_agg_label'],
+    '#default_value' => isset($conf['amp_org_name_agg_label']) && !empty($conf['amp_org_name_agg_label']) ? $conf['amp_org_name_agg_label'] : $form_state['plugin']['defaults']['amp_org_name_agg_label'],
   );
   // Agencies
   $form['amp_agencies_name_agg_fieldset'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Agencies'),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
+    '#type' => 'fieldset',
+    '#title' => t('Agencies'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
   $form['amp_agencies_name_agg_fieldset']['amp_agencies_name_agg_flag'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Show Agencies column'),
-      '#default_value' => isset($conf['amp_agencies_name_agg_flag']) ? intval($conf['amp_agencies_name_agg_flag']) : $form_state['plugin']['defaults']['amp_agencies_name_agg_flag'],
+    '#type' => 'checkbox',
+    '#title' => t('Show Agencies column'),
+    '#default_value' => isset($conf['amp_agencies_name_agg_flag']) ? intval($conf['amp_agencies_name_agg_flag']) : $form_state['plugin']['defaults']['amp_agencies_name_agg_flag'],
   );
   $form['amp_agencies_name_agg_fieldset']['amp_agencies_name_agg_label'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Label'),
-      '#size' => 30,
-      '#default_value' => isset($conf['amp_agencies_name_agg_label']) &&  !empty($conf['amp_agencies_name_agg_label']) ? $conf['amp_agencies_name_agg_label'] : $form_state['plugin']['defaults']['amp_agencies_name_agg_label'],
+    '#type' => 'textfield',
+    '#title' => t('Label'),
+    '#size' => 30,
+    '#default_value' => isset($conf['amp_agencies_name_agg_label']) && !empty($conf['amp_agencies_name_agg_label']) ? $conf['amp_agencies_name_agg_label'] : $form_state['plugin']['defaults']['amp_agencies_name_agg_label'],
   );
-   // Sectors
+  // Sectors
   $form['amp_sector_name_agg_fieldset'] = array(
     '#type' => 'fieldset',
     '#title' => t('Sectors'),
@@ -253,7 +257,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['amp_sector_name_agg_label']) &&  !empty($conf['amp_sector_name_agg_label']) ? $conf['amp_sector_name_agg_label'] : $form_state['plugin']['defaults']['amp_sector_name_agg_label'],
+    '#default_value' => isset($conf['amp_sector_name_agg_label']) && !empty($conf['amp_sector_name_agg_label']) ? $conf['amp_sector_name_agg_label'] : $form_state['plugin']['defaults']['amp_sector_name_agg_label'],
   );
   // Primary Sectors
   $form['amp_primarysector_name_agg_fieldset'] = array(
@@ -271,7 +275,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['amp_primarysector_name_agg_label']) &&  !empty($conf['amp_primarysector_name_agg_label']) ? $conf['amp_primarysector_name_agg_label'] : $form_state['plugin']['defaults']['amp_primarysector_name_agg_label'],
+    '#default_value' => isset($conf['amp_primarysector_name_agg_label']) && !empty($conf['amp_primarysector_name_agg_label']) ? $conf['amp_primarysector_name_agg_label'] : $form_state['plugin']['defaults']['amp_primarysector_name_agg_label'],
   );
   // Secondary Sectors
   $form['amp_secondarysector_name_agg_fieldset'] = array(
@@ -289,7 +293,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['amp_secondarysector_name_agg_label']) &&  !empty($conf['amp_secondarysector_name_agg_label']) ? $conf['amp_secondarysector_name_agg_label'] : $form_state['plugin']['defaults']['amp_secondarysector_name_agg_label'],
+    '#default_value' => isset($conf['amp_secondarysector_name_agg_label']) && !empty($conf['amp_secondarysector_name_agg_label']) ? $conf['amp_secondarysector_name_agg_label'] : $form_state['plugin']['defaults']['amp_secondarysector_name_agg_label'],
   );
   // Programs
   $form['amp_theme_name_agg_fieldset'] = array(
@@ -307,7 +311,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['amp_theme_name_agg_label']) &&  !empty($conf['amp_theme_name_agg_label']) ? $conf['amp_theme_name_agg_label'] : $form_state['plugin']['defaults']['amp_theme_name_agg_label'],
+    '#default_value' => isset($conf['amp_theme_name_agg_label']) && !empty($conf['amp_theme_name_agg_label']) ? $conf['amp_theme_name_agg_label'] : $form_state['plugin']['defaults']['amp_theme_name_agg_label'],
   );
   // Locations
   $form['category_location_name_agg_fieldset'] = array(
@@ -325,7 +329,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['category_location_name_agg_label']) &&  !empty($conf['category_location_name_agg_label']) ? $conf['category_location_name_agg_label'] : $form_state['plugin']['defaults']['category_location_name_agg_label'],
+    '#default_value' => isset($conf['category_location_name_agg_label']) && !empty($conf['category_location_name_agg_label']) ? $conf['category_location_name_agg_label'] : $form_state['plugin']['defaults']['category_location_name_agg_label'],
   );
   // Start Date
   $form['actual_start_date_fieldset'] = array(
@@ -343,7 +347,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['actual_start_date_label']) &&  !empty($conf['actual_start_date_label']) ? $conf['actual_start_date_label'] : $form_state['plugin']['defaults']['actual_start_date_label'],
+    '#default_value' => isset($conf['actual_start_date_label']) && !empty($conf['actual_start_date_label']) ? $conf['actual_start_date_label'] : $form_state['plugin']['defaults']['actual_start_date_label'],
   );
   // End Date
   $form['actual_completion_date_fieldset'] = array(
@@ -361,7 +365,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['actual_completion_date_label']) &&  !empty($conf['actual_completion_date_label']) ? $conf['actual_completion_date_label'] : $form_state['plugin']['defaults']['actual_completion_date_label'],
+    '#default_value' => isset($conf['actual_completion_date_label']) && !empty($conf['actual_completion_date_label']) ? $conf['actual_completion_date_label'] : $form_state['plugin']['defaults']['actual_completion_date_label'],
   );
   // Commitment amount
   $form['commitment_amount_fieldset'] = array(
@@ -379,7 +383,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['commitment_amount_label']) &&  !empty($conf['commitment_amount_label']) ? $conf['commitment_amount_label'] : $form_state['plugin']['defaults']['commitment_amount_label'],
+    '#default_value' => isset($conf['commitment_amount_label']) && !empty($conf['commitment_amount_label']) ? $conf['commitment_amount_label'] : $form_state['plugin']['defaults']['commitment_amount_label'],
   );
   // Disbursement amount
   $form['disbursement_amount_fieldset'] = array(
@@ -397,7 +401,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'textfield',
     '#title' => t('Label'),
     '#size' => 30,
-    '#default_value' => isset($conf['disbursement_amount_label']) &&  !empty($conf['disbursement_amount_label']) ? $conf['disbursement_amount_label'] : $form_state['plugin']['defaults']['disbursement_amount_label'],
+    '#default_value' => isset($conf['disbursement_amount_label']) && !empty($conf['disbursement_amount_label']) ? $conf['disbursement_amount_label'] : $form_state['plugin']['defaults']['disbursement_amount_label'],
   );
   $form['hide_first_column'] = array(
     '#type' => 'checkbox',
@@ -418,8 +422,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
   return $form;
 }
 
-
-/*
+/**
  * handles edit for submit
  */
 function ampp_projects_projects_search_result_content_type_edit_form_submit(&$form, &$form_state) {

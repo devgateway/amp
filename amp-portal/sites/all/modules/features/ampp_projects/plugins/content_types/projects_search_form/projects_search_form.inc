@@ -66,16 +66,21 @@ function ampp_projects_projects_search_form_render($subtype, $conf, $args, $cont
   $block = new stdClass();
   $block->title = t('Projects search');
   $block->content = drupal_get_form('ampp_projects_projects_search_form_form', $conf);
+
   return $block;
 }
-
 
 /**
  *
  */
 function project_search_form_uidatepicker($form, $form_state) {
   drupal_add_library('system', 'ui.datepicker');
-  drupal_add_js("(function ($) { $('.datepicker').datepicker(); })(jQuery);", array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+  drupal_add_js("(function ($) { $('.datepicker').datepicker(); })(jQuery);", array(
+    'type' => 'inline',
+    'scope' => 'footer',
+    'weight' => 5
+  ));
+
   return $form;
 }
 
@@ -87,8 +92,8 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   global $language;
 
   $theme_path = path_to_theme();
-  $img_vars = array('path' => $theme_path.'/images/list.png');
-  $icon = theme('image',$img_vars);
+  $img_vars = array('path' => $theme_path . '/images/list.png');
+  $icon = theme('image', $img_vars);
 
   $form_state['conf'] = $conf;
 
@@ -103,7 +108,17 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
       '#maxlength' => 64,
       '#description' => t('Start typing sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
     );
-    if (!isset($conf['sectors_popup']) || $conf['sectors_popup'] == 0) $form['sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-sectores', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-sector', 'title' => t($conf['sectors_label'] . ' selection')))) . '</span>';
+    if (!isset($conf['sectors_popup']) || $conf['sectors_popup'] == 0) {
+      $form['sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-sectores', array(
+          'html' => TRUE,
+          'query' => array('format' => 'simple'),
+          'attributes' => array(
+            'class' => 'modal-selection',
+            'rel' => 'edit-sector',
+            'title' => t($conf['sectors_label'] . ' selection')
+          )
+        )) . '</span>';
+    }
   }
 
   if ($conf["primary_sectors_flag"] == 1) {
@@ -113,8 +128,18 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
       '#size' => 30,
       '#maxlength' => 64,
       '#description' => t('Start typing primary sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-   );
-     if (!isset($conf['primary_sectors_popup']) || $conf['primary_sectors_popup'] == 0) $form['primary_sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-primarysectors', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-primary-sector', 'title' => t($conf['primary_sectors_label'] . ' selection')))) . '</span>';
+    );
+    if (!isset($conf['primary_sectors_popup']) || $conf['primary_sectors_popup'] == 0) {
+      $form['primary_sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-primarysectors', array(
+          'html' => TRUE,
+          'query' => array('format' => 'simple'),
+          'attributes' => array(
+            'class' => 'modal-selection',
+            'rel' => 'edit-primary-sector',
+            'title' => t($conf['primary_sectors_label'] . ' selection')
+          )
+        )) . '</span>';
+    }
   }
 
   if ($conf["secondary_sectors_flag"] == 1) {
@@ -124,8 +149,18 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
       '#size' => 30,
       '#maxlength' => 64,
       '#description' => t('Start typing secondary sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-   );
-     if (!isset($conf['secondary_sectors_popup']) || $conf['secondary_sectors_popup'] == 0) $form['secondary_sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-secondarysectors', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-secondary-sector', 'title' => t($conf['secondary_sectors_label'] . ' selection')))) . '</span>';
+    );
+    if (!isset($conf['secondary_sectors_popup']) || $conf['secondary_sectors_popup'] == 0) {
+      $form['secondary_sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-secondarysectors', array(
+          'html' => TRUE,
+          'query' => array('format' => 'simple'),
+          'attributes' => array(
+            'class' => 'modal-selection',
+            'rel' => 'edit-secondary-sector',
+            'title' => t($conf['secondary_sectors_label'] . ' selection')
+          )
+        )) . '</span>';
+    }
   }
 
   if ($conf["programs_flag"] == 1) {
@@ -136,7 +171,17 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
       '#maxlength' => 64,
       '#description' => t('Start typing program name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
     );
-    if (!isset($conf['programs_popup']) || $conf['programs_popup'] == 0) $form['program']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-programs', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-program', 'title' => t($conf['programs_label'] . ' selection')))) . '</span>';
+    if (!isset($conf['programs_popup']) || $conf['programs_popup'] == 0) {
+      $form['program']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-programs', array(
+          'html' => TRUE,
+          'query' => array('format' => 'simple'),
+          'attributes' => array(
+            'class' => 'modal-selection',
+            'rel' => 'edit-program',
+            'title' => t($conf['programs_label'] . ' selection')
+          )
+        )) . '</span>';
+    }
   }
 
   if ($conf["donors_flag"] == 1) {
@@ -146,19 +191,39 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
       '#size' => 30,
       '#maxlength' => 64,
       '#description' => t('Start typing donor name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-   );
-     if (!isset($conf['donors_popup']) || $conf['donors_popup'] == 0) $form['donors_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-donors', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-donor', 'title' => t($conf['donors_label'] . ' selection')))) . '</span>';
+    );
+    if (!isset($conf['donors_popup']) || $conf['donors_popup'] == 0) {
+      $form['donors_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-donors', array(
+          'html' => TRUE,
+          'query' => array('format' => 'simple'),
+          'attributes' => array(
+            'class' => 'modal-selection',
+            'rel' => 'edit-donor',
+            'title' => t($conf['donors_label'] . ' selection')
+          )
+        )) . '</span>';
+    }
   }
 
   if ($conf["agencies_flag"] == 1) {
     $form['agency'] = array(
-        '#type' => 'textfield',
-        '#title' => (isset($conf['agencies_label'])) ? t($conf['agencies_label']) : t('Agencies'),
-        '#size' => 30,
-        '#maxlength' => 64,
-        '#description' => t('Start typing agency name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
+      '#type' => 'textfield',
+      '#title' => (isset($conf['agencies_label'])) ? t($conf['agencies_label']) : t('Agencies'),
+      '#size' => 30,
+      '#maxlength' => 64,
+      '#description' => t('Start typing agency name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
     );
-    if (!isset($conf['agencies_popup']) || $conf['agencies_popup'] == 0) $form['agencies_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-agencies', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-agency', 'title' => t($conf['agencies_label'] . ' selection')))) . '</span>';
+    if (!isset($conf['agencies_popup']) || $conf['agencies_popup'] == 0) {
+      $form['agencies_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-agencies', array(
+          'html' => TRUE,
+          'query' => array('format' => 'simple'),
+          'attributes' => array(
+            'class' => 'modal-selection',
+            'rel' => 'edit-agency',
+            'title' => t($conf['agencies_label'] . ' selection')
+          )
+        )) . '</span>';
+    }
   }
 
   if ($conf["locations_flag"] == 1) {
@@ -169,7 +234,17 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
       '#maxlength' => 64,
       '#description' => t('Start typing region then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
     );
-    if (!isset($conf['locations_popup']) || $conf['locations_popup'] == 0) $form['locations_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-regions', array('html' => TRUE, 'query' => array('format' => 'simple'), 'attributes'=> array('class' => 'modal-selection', 'rel' => 'edit-region', 'title' => t($conf['locations_label'] . ' selection')))) . '</span>';
+    if (!isset($conf['locations_popup']) || $conf['locations_popup'] == 0) {
+      $form['locations_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-regions', array(
+          'html' => TRUE,
+          'query' => array('format' => 'simple'),
+          'attributes' => array(
+            'class' => 'modal-selection',
+            'rel' => 'edit-region',
+            'title' => t($conf['locations_label'] . ' selection')
+          )
+        )) . '</span>';
+    }
   }
 
   if ($conf["period_flag"] == 1) {
@@ -216,7 +291,11 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
     $form['budget'] = array(
       '#type' => 'radios',
       '#title' => t('Show on-budget projects'),
-      '#options' => array('all' => t('Show both on and off budget projects'), OnOffBudgetIds::$onBudgetProjectsId => t('On-budget only'), OnOffBudgetIds::$offBudgetProjectsId => t('Off-budget only')),
+      '#options' => array(
+        'all' => t('Show both on and off budget projects'),
+        OnOffBudgetIds::$onBudgetProjectsId => t('On-budget only'),
+        OnOffBudgetIds::$offBudgetProjectsId => t('Off-budget only')
+      ),
       '#default_value' => 'all',
     );
   }
@@ -241,72 +320,89 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
 
   if ($amp_db_exists) {
     $form['submit'] = array('#type' => 'submit', '#value' => t('Show'));
-    $form['results_count'] = array('#markup' => t('projects to show is') . '&nbsp;' . '<div id="search_result_count">' . ampp_search_result_count(false, isset($conf['preview_amount']) ? $conf['preview_amount'] : 0) . '</div><span id="loading-count">' . t('loading') . '...</span>');
-  } else {
+    $form['results_count'] = array('#markup' => t('projects to show is') . '&nbsp;' . '<div id="search_result_count">' . ampp_search_result_count(FALSE, isset($conf['preview_amount']) ? $conf['preview_amount'] : 0) . '</div><span id="loading-count">' . t('loading') . '...</span>');
+  }
+  else {
     $form['results_count'] = array('#markup' => '<div class="messages error"><ul><li>' . t('AMP database is not configured properly.') . '</li></ul><span><img id="close" src="/sites/all/themes/ampp/images/cancel_icon.gif"></span></div>');
   }
 
   // Fill search form textfields.
   // Form should be filled only on search result page
-  $js_string  = '';
+  $js_string = '';
   $arr = ampp_get_sectors_from_url();
-  if (is_array($arr)) $js_string .= 'var selectedSectors = new Array('.implode(",", $arr).');' . "\n";
+  if (is_array($arr)) {
+    $js_string .= 'var selectedSectors = new Array(' . implode(",", $arr) . ');' . "\n";
+  }
   $arr = ampp_get_primarysectors_from_url();
-  if (is_array($arr)) $js_string .= 'var selectedPrimarySectors = new Array('.implode(",", $arr).');' . "\n";
+  if (is_array($arr)) {
+    $js_string .= 'var selectedPrimarySectors = new Array(' . implode(",", $arr) . ');' . "\n";
+  }
   $arr = ampp_get_secondarysectors_from_url();
-  if (is_array($arr)) $js_string .= 'var selectedSecondarySectors = new Array('.implode(",", $arr).');' . "\n";
+  if (is_array($arr)) {
+    $js_string .= 'var selectedSecondarySectors = new Array(' . implode(",", $arr) . ');' . "\n";
+  }
   $arr = ampp_get_programs_from_url();
-  if (is_array($arr)) $js_string .= 'var selectedPrograms = new Array('.implode(",", $arr).');' . "\n";
+  if (is_array($arr)) {
+    $js_string .= 'var selectedPrograms = new Array(' . implode(",", $arr) . ');' . "\n";
+  }
   $arr = ampp_get_donors_from_url();
-  if (is_array($arr)) $js_string .= 'var selectedDonors = new Array('.implode(",", $arr).');' . "\n";
+  if (is_array($arr)) {
+    $js_string .= 'var selectedDonors = new Array(' . implode(",", $arr) . ');' . "\n";
+  }
   $arr = ampp_get_agencies_from_url();
-  if (is_array($arr)) $js_string .= 'var selectedAgencies = new Array('.implode(",", $arr).');' . "\n";
+  if (is_array($arr)) {
+    $js_string .= 'var selectedAgencies = new Array(' . implode(",", $arr) . ');' . "\n";
+  }
   $arr = ampp_get_locations_from_url();
-  if (is_array($arr)) $js_string .= 'var selectedLocations = new Array('.implode(",", $arr).');' . "\n";
+  if (is_array($arr)) {
+    $js_string .= 'var selectedLocations = new Array(' . implode(",", $arr) . ');' . "\n";
+  }
   $arr = ampp_get_period_from_url();
   if (is_array($arr)) {
-    if (trim($arr[0]) != 'all')
+    if (trim($arr[0]) != 'all') {
       $js_string .= "var selectedPeriodStart = '" . format_date(strtotime($arr[0]), 'ampp_cal') . "'\n";
-    if (trim($arr[1]) != 'all')
+    }
+    if (trim($arr[1]) != 'all') {
       $js_string .= "var selectedPeriodEnd = '" . format_date(strtotime($arr[1]), 'ampp_cal') . "'\n";
+    }
   }
 
   $arr = ampp_get_keywords_from_url();
   if (is_array($arr)) {
-    $js_string .= 'var selectedKeywords = new Array("'. implode(",", $arr) .'");' . "\n";
+    $js_string .= 'var selectedKeywords = new Array("' . implode(",", $arr) . '");' . "\n";
   }
 
   if ($conf["budget_flag"] == 1) {
     $arr = ampp_get_onoffbudget_from_url();
-    if(is_array($arr)) {
+    if (is_array($arr)) {
       $i = 0;
-      while ($i < count($arr) ) {
-    switch($arr[$i]) {
-      case OnOffBudgetIds::$offBudgetProjectsId:
-      $js_string .= "var selectedBudget = ".OnOffBudgetIds::$offBudgetProjectsId."; \n";
-      break;
-      case OnOffBudgetIds::$onBudgetProjectsId:
-      $js_string .= "var selectedBudget = ".OnOffBudgetIds::$onBudgetProjectsId."; \n";
-      break;
-    }
-    $i++;
+      while ($i < count($arr)) {
+        switch ($arr[$i]) {
+          case OnOffBudgetIds::$offBudgetProjectsId:
+            $js_string .= "var selectedBudget = " . OnOffBudgetIds::$offBudgetProjectsId . "; \n";
+            break;
+          case OnOffBudgetIds::$onBudgetProjectsId:
+            $js_string .= "var selectedBudget = " . OnOffBudgetIds::$onBudgetProjectsId . "; \n";
+            break;
+        }
+        $i++;
       }
-    } else {
+    }
+    else {
       $js_string .= "var selectedOffBudget = 'all'; \n";
     }
   }
   if ($conf["country_level_projects_flag"] == 1) {
     $regionalprojects = ampp_get_regionalprojects_from_url();
-    if($regionalprojects == 1) {
+    if ($regionalprojects == 1) {
       $js_string .= "var selectedRegionalProjects = 1; \n";
     }
   }
 
-  drupal_add_js($js_string,array('type' => 'inline', 'scope' => 'footer'));
+  drupal_add_js($js_string, array('type' => 'inline', 'scope' => 'footer'));
 
   return $form;
 }
-
 
 /*
  *
@@ -324,8 +420,8 @@ function ampp_projects_projects_search_form_form_submit($form, &$form_state) {
   $primarysectors = empty($form_state['values']['primary_sector']) ? 'all' : $form_state['values']['primary_sector'];
   $secondarysectors = empty($form_state['values']['secondary_sector']) ? 'all' : $form_state['values']['secondary_sector'];
   $programs = empty($form_state['values']['program']) ? 'all' : $form_state['values']['program'];
-  $donors =  empty($form_state['values']['donor']) ? 'all' : $form_state['values']['donor'];
-  $agencies =  empty($form_state['values']['agency']) ? 'all' : $form_state['values']['agency'];
+  $donors = empty($form_state['values']['donor']) ? 'all' : $form_state['values']['donor'];
+  $agencies = empty($form_state['values']['agency']) ? 'all' : $form_state['values']['agency'];
   $regions = empty($form_state['values']['region']) ? 'all' : $form_state['values']['region'];
   $period_start = empty($form_state['values']['period_start']) ? 'all' : $form_state['values']['period_start'];
   $period_end = empty($form_state['values']['period_end']) ? 'all' : $form_state['values']['period_end'];
@@ -333,56 +429,55 @@ function ampp_projects_projects_search_form_form_submit($form, &$form_state) {
 
   $budgetfilter = "";
   $budgetfilterArr = Array();
-  if(!empty($form_state['values']['budget'])) {
-    array_push($budgetfilterArr,$form_state['values']['budget']);
+  if (!empty($form_state['values']['budget'])) {
+    array_push($budgetfilterArr, $form_state['values']['budget']);
   }
 
-  $budgetfilter = implode( ",", $budgetfilterArr );
+  $budgetfilter = implode(",", $budgetfilterArr);
 
-  if(trim($budgetfilter) == "")  {
-      $budgetfilter = "all";
+  if (trim($budgetfilter) == "") {
+    $budgetfilter = "all";
   }
 
-  $countrylevelprojectsfilter = (!empty($form_state['values']['country_level_projects'])) ? $form_state['values']['country_level_projects'] : "all" ;
+  $countrylevelprojectsfilter = (!empty($form_state['values']['country_level_projects'])) ? $form_state['values']['country_level_projects'] : "all";
 
-  if($conf['donors_flag'] == 1) {
+  if ($conf['donors_flag'] == 1) {
     $queryStrArr['donors'] = $donors;
   }
-  if($conf['agencies_flag'] == 1) {
+  if ($conf['agencies_flag'] == 1) {
     $queryStrArr['agencies'] = $agencies;
   }
-  if($conf['sectors_flag'] == 1) {
+  if ($conf['sectors_flag'] == 1) {
     $queryStrArr['sectors'] = $sectors;
   }
-  if($conf['primary_sectors_flag'] == 1) {
+  if ($conf['primary_sectors_flag'] == 1) {
     $queryStrArr['primarysectors'] = $primarysectors;
   }
-  if($conf['secondary_sectors_flag'] == 1) {
+  if ($conf['secondary_sectors_flag'] == 1) {
     $queryStrArr['secondarysectors'] = $secondarysectors;
   }
-  if($conf['programs_flag'] == 1) {
+  if ($conf['programs_flag'] == 1) {
     $queryStrArr['programs'] = $programs;
   }
-  if($conf['locations_flag'] == 1) {
+  if ($conf['locations_flag'] == 1) {
     $queryStrArr['locations'] = $regions;
   }
-  if($conf['period_flag'] == 1) {
+  if ($conf['period_flag'] == 1) {
     $queryStrArr['period_start'] = $period_start;
     $queryStrArr['period_end'] = $period_end;
   }
-  if($conf['keywords_flag'] == 1) {
+  if ($conf['keywords_flag'] == 1) {
     $queryStrArr['keywords'] = $keyword;
   }
-  if($conf['budget_flag'] == 1) {
+  if ($conf['budget_flag'] == 1) {
     $queryStrArr['budget'] = $budgetfilter;
   }
-  if($conf['country_level_projects_flag'] == 1) {
+  if ($conf['country_level_projects_flag'] == 1) {
     $queryStrArr['showregionalprojects'] = $countrylevelprojectsfilter;
   }
 
   drupal_goto($submit_path, array('query' => $queryStrArr));
 }
-
 
 /*
  *
@@ -391,9 +486,9 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
   $conf = $form_state['conf'];
 
   $form['note_at_least_one'] = array(
-        '#type' => 'item',
-        '#markup' => '<div><b>At least one control should be selected.</b></div>',
-        '#weight' => 0,
+    '#type' => 'item',
+    '#markup' => '<div><b>At least one control should be selected.</b></div>',
+    '#weight' => 0,
   );
 
   // hide($form['override_title']);
@@ -520,25 +615,25 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
   );
 
   $form['agencies_flag'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Show Agencies search field'),
-      '#description' => t('Show agencies search field'),
-      '#default_value' => isset($conf['agencies_flag']) ? intval($conf['agencies_flag']) : $form_state['plugin']['defaults']['agencies_flag'],
-      '#id' => 'agencies_flag',
+    '#type' => 'checkbox',
+    '#title' => t('Show Agencies search field'),
+    '#description' => t('Show agencies search field'),
+    '#default_value' => isset($conf['agencies_flag']) ? intval($conf['agencies_flag']) : $form_state['plugin']['defaults']['agencies_flag'],
+    '#id' => 'agencies_flag',
   );
   $form['agencies_popup'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Disable Agencies popup select'),
-      '#default_value' => isset($conf['agencies_popup']) ? intval($conf['agencies_popup']) : $form_state['plugin']['defaults']['agencies_popup'],
-      '#dependency' => array('agencies_flag' => array(1)),
-      '#dependency_type' => 'disable',
+    '#type' => 'checkbox',
+    '#title' => t('Disable Agencies popup select'),
+    '#default_value' => isset($conf['agencies_popup']) ? intval($conf['agencies_popup']) : $form_state['plugin']['defaults']['agencies_popup'],
+    '#dependency' => array('agencies_flag' => array(1)),
+    '#dependency_type' => 'disable',
   );
   $form['agencies_label'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Agencies label'),
-      '#default_value' => isset($conf['agencies_label']) ? t($conf['agencies_label']) : t($form_state['plugin']['defaults']['agencies_label']),
-      '#dependency' => array('agencies_flag' => array(1)),
-      '#dependency_type' => 'disable',
+    '#type' => 'textfield',
+    '#title' => t('Agencies label'),
+    '#default_value' => isset($conf['agencies_label']) ? t($conf['agencies_label']) : t($form_state['plugin']['defaults']['agencies_label']),
+    '#dependency' => array('agencies_flag' => array(1)),
+    '#dependency_type' => 'disable',
   );
 
   $form['locations_flag'] = array(
@@ -610,12 +705,11 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
   return $form;
 }
 
-
 /*
  * handles edit for submit
  */
 function ampp_projects_projects_search_form_content_type_edit_form_submit(&$form, &$form_state) {
-   foreach (array_keys($form_state['plugin']['defaults']) as $key) {
+  foreach (array_keys($form_state['plugin']['defaults']) as $key) {
     $form_state['conf'][$key] = $form_state['values'][$key];
   }
 }

@@ -9,19 +9,19 @@
  */
 function ampp_projects_views_data() {
   // TABLE: cached_amp_activity
-  $data['cached_amp_activity']['table']['group'] = t('AMP Projects');
+  $data['cached_amp_activity']['table']['group'] = t('AMP Activity');
   $data['cached_amp_activity']['table']['base'] = array(
     'field' => 'amp_activity_id',
-    'title' => t('AMP Projects'),
-    'help' => t('Table help description'),
+    'title' => t('Cached AMP Activity'),
+    'help' => t('Contains information related to AMP Activities (projects).'),
     'database' => 'amp_projects'
   );
 
   $data['cached_amp_activity']['amp_activity_id'] = array(
-    'title' => t('Id'),
-    'help' => t('Id for the project'),
-    'field' => array('handler' => 'ampp_projects_handler_activity_id'),
+    'title' => t('ID'),
+    'help' => t('The Activity ID '),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
+    'field' => array('handler' => 'ampp_projects_handler_activity_id'),
     'filter' => array('handler' => 'views_handler_filter_amp_activity_id'),
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );
@@ -29,12 +29,11 @@ function ampp_projects_views_data() {
   $data['cached_amp_activity']['name'] = array(
     'title' => t('Project title'),
     'help' => t('Title for the project'),
+    'argument' => array('handler' => 'amp_projects_handler_argument_string'),
     'field' => array(
       'handler' => 'ampp_projects_handler_activity_name',
       'click sortable' => TRUE
     ),
-    // 'argument' => array('handler' => 'views_handler_argument_string'),
-    'argument' => array('handler' => 'amp_projects_handler_argument_string'),
     'filter' => array('handler' => 'views_handler_filter_string'),
     'sort' => array('handler' => 'views_handler_sort_string')
   );
@@ -42,11 +41,11 @@ function ampp_projects_views_data() {
   $data['cached_amp_activity']['actual_start_date'] = array(
     'title' => t('Start date'),
     'help' => t('Date of the start of project'),
+    'argument' => array('handler' => 'ampp_projects_date_views_argument_handler'),
     'field' => array(
       'handler' => 'ampp_projects_handler_postgre_timestamp',
       'click sortable' => TRUE
     ),
-    'argument' => array('handler' => 'ampp_projects_date_views_argument_handler'),
     'filter' => array('handler' => 'views_handler_filter_date'),
     'sort' => array('handler' => 'views_handler_sort_date')
   );
@@ -54,11 +53,11 @@ function ampp_projects_views_data() {
   $data['cached_amp_activity']['actual_completion_date'] = array(
     'title' => t('End date'),
     'help' => t('Date of the actual completion'),
+    'argument' => array('handler' => 'ampp_projects_date_views_argument_handler'),
     'field' => array(
       'handler' => 'ampp_projects_handler_postgre_timestamp',
       'click sortable' => TRUE
     ),
-    'argument' => array('handler' => 'ampp_projects_date_views_argument_handler'),
     'filter' => array('handler' => 'views_handler_filter_date'),
     'sort' => array('handler' => 'views_handler_sort_date')
   );
@@ -88,11 +87,11 @@ function ampp_projects_views_data() {
   $data['cached_amp_activity']['commitment_amount'] = array(
     'title' => t('Commitment amount'),
     'help' => t('Transaction Commitment amount'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
     'field' => array(
       'handler' => 'views_handler_field_amount_commitment',
       'float' => TRUE,
     ),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );
@@ -101,11 +100,11 @@ function ampp_projects_views_data() {
   $data['cached_amp_activity']['disbursement_amount'] = array(
     'title' => t('Disbursement amount'),
     'help' => t('Transaction Disbursement amount'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
     'field' => array(
       'handler' => 'views_handler_field_amount_disbursement',
       'float' => TRUE,
     ),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );
@@ -185,9 +184,8 @@ function ampp_projects_views_data() {
     'group' => t('AMP Projects'),
     'title' => t('AMP Sector Id'),
     'help' => t('Sectors id of AMP project'),
-    'field' => array('handler' => 'views_handler_field'),
     'argument' => array('handler' => 'views_handler_argument_sector_id'),
-    //'filter' => array('handler' => 'views_handler_filter_sector_id'),
+    'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );
@@ -249,9 +247,8 @@ function ampp_projects_views_data() {
     'group' => t('AMP Projects'),
     'title' => t('AMP Program Id'),
     'help' => t('Program id of AMP project'),
-    'field' => array('handler' => 'views_handler_field'),
     'argument' => array('handler' => 'views_handler_argument_program_id'),
-    //'filter' => array('handler' => 'views_handler_filter_sector_id'),
+    'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );
@@ -294,9 +291,8 @@ function ampp_projects_views_data() {
   $data['amp_location']['amp_location_id'] = array(
     'title' => t('Location Id'),
     'help' => t('Id of the location'),
-    'field' => array('handler' => 'views_handler_field'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
-    //ampp_projects_handler_argument_location
+    'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );
@@ -304,8 +300,8 @@ function ampp_projects_views_data() {
   $data['amp_location']['location_id'] = array(
     'title' => t('Locations Ids'),
     'help' => t('List of locations'),
-    'field' => array('handler' => 'views_handler_field'),
     'argument' => array('handler' => 'views_handler_argument_location_id'),
+    'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );
@@ -324,8 +320,8 @@ function ampp_projects_views_data() {
     'group' => t('AMP Projects'),
     'title' => t('AMP Category value locations id'),
     'help' => t('AMP Category value locations id'),
-    'field' => array('handler' => 'views_handler_field'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
+    'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );
@@ -376,8 +372,8 @@ function ampp_projects_views_data() {
   $data['amp_organisation']['amp_org_id'] = array(
     'title' => t('Organization Id'),
     'help' => t('Id of the Organization'),
-    'field' => array('handler' => 'views_handler_field'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
+    'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );
@@ -396,8 +392,8 @@ function ampp_projects_views_data() {
     'group' => t('AMP Projects'),
     'title' => t('AMP Projects Budget'),
     'help' => t('Budget type'),
-    'field' => array('handler' => 'views_handler_field'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
+    'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );

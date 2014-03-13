@@ -452,14 +452,14 @@
                         <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds"
 								parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 							<c:if test="${aimEditActivityForm.funding.showPlanned}">
-							<c:if test="${not empty aimEditActivityForm.funding.totalPlannedReleaseOfFunds}">
+							<c:if test="${not empty aimEditActivityForm.funding.totalPlannedRoF}">
                                 <tr>
                                     <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase;">
                                         <digi:trn>Total Planned Release of Funds</digi:trn>:
                                     </td>
                                     <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                         
 										<b>
-											<bean:write name="aimEditActivityForm" property="funding.totalPlannedReleaseOfFunds" />
+											<bean:write name="aimEditActivityForm" property="funding.totalPlannedRoF" />
 											<bean:write name="aimEditActivityForm" property="currCode" />
 										</b>
                                          &nbsp;

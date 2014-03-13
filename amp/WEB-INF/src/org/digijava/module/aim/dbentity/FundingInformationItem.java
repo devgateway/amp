@@ -8,7 +8,7 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 /**
  * an item which holds information regarding a funding detail (e.g. currently AmpFundingDetail or AmpFundingMTEFProjection)
  * it fixes the fact that MTEFProjection are not kept as funding items in AMP - hence this interface tries to unify them
- * @author simple
+ * @author Dolghier Constantin
  *
  */
 public interface FundingInformationItem {

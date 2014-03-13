@@ -28,9 +28,6 @@ public class RemovePledge extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
         	
-    		PledgeForm plForm = (PledgeForm) form;
-    		HttpSession session = request.getSession();
-    		
     		if (request.getParameter("pledgeId") != null && Long.valueOf(request.getParameter("pledgeId")) > 0){
 				FundingPledges fp = PledgesEntityHelper.getPledgesById(Long.valueOf(request.getParameter("pledgeId")));
 				PledgesEntityHelper.removePledge(fp);

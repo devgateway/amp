@@ -2392,11 +2392,11 @@ public class ExportActivityToWord extends Action {
             totalAmountType = TranslatorWorker.translateText(
                     "Total Planned Release of Funds").toUpperCase() + ":";
             totalsOutput = "";
-            if (myForm.getFunding().getTotalPlannedReleaseOfFunds() != null
-                    && myForm.getFunding().getTotalPlannedReleaseOfFunds()
+            if (myForm.getFunding().getTotalPlannedRoF() != null
+                    && myForm.getFunding().getTotalPlannedRoF()
                     .length() > 0) {
                 totalsOutput = myForm.getFunding()
-                        .getTotalPlannedReleaseOfFunds() + " " + currencyCode;
+                        .getTotalPlannedRoF() + " " + currencyCode;
             }
             fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(
                     totalAmountType).addRowData(totalsOutput));

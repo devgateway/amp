@@ -2994,7 +2994,7 @@ public class ExportActivityToPDF extends Action {
 						
 						//UNDISBURSED BALANCE
 						if(FeaturesUtil.isVisibleFeature("Undisbursed Balance", ampContext)){
-							output=(funding.getUnDisbursementBalance()!=null && funding.getUnDisbursementBalance().length()>0)?	funding.getUnDisbursementBalance()+currencyCode : "";
+							output=(funding.getUndisbursementbalance() != null && funding.getUndisbursementbalance().length() > 0)?	funding.getUndisbursementbalance() + currencyCode : "";
 							PdfPCell undisbursedBalanceCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("UNDISBURSED BALANCE:")+" \t\t         "+ output+"\n\n",plainFont));
 							undisbursedBalanceCell1.setBorder(0);
 							undisbursedBalanceCell1.setBackgroundColor(new Color(255,255,204));

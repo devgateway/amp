@@ -13,13 +13,13 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <digi:instance property="aimEditActivityForm" />
 
-<c:if test="${not empty funding.unDisbursementBalance}">
+<c:if test="${not empty funding.undisbursementbalance}">
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
 			<digi:trn key="aim:undisbursedBalance">Undisbursed Balance</digi:trn>:
 		</td>
 		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
-			<b>${funding.unDisbursementBalance} ${aimEditActivityForm.currCode}</b>
+			<b>${funding.undisbursementbalance} ${aimEditActivityForm.currCode}</b>
 			&nbsp;
 		</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>

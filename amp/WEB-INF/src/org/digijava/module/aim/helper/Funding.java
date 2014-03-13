@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import lombok.Data;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -24,6 +26,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * funding digest for an AmpFunding instance
  *
  */
+@Data
 public class Funding implements Serializable 
 {
 	private static Logger logger		= Logger.getLogger(Funding.class);
@@ -85,266 +88,12 @@ public class Funding implements Serializable
 
     private Float capitalSpendingPercentage;
 
-    public Float getCapitalSpendingPercentage() {
-        return capitalSpendingPercentage;
-    }
-
-    public void setCapitalSpendingPercentage(Float capitalSpendingPercentage) {
-        this.capitalSpendingPercentage = capitalSpendingPercentage;
-    }
-
-	public AmpCategoryValue getTypeOfAssistance() {
-		return typeOfAssistance;
-	}
-
-	public void setTypeOfAssistance(AmpCategoryValue typeOfAssistance) {
-		this.typeOfAssistance = typeOfAssistance;
-	}
-
-	/**
-	 * Funding Organization Id
-	 * @return
-	 */
-	public String getOrgFundingId() {
-		return orgFundingId;
-	}
-
-	/**
-	 * Funding Organization Id
-	 * @return
-	 */
-	public void setOrgFundingId(String orgFundingId) {
-		this.orgFundingId = orgFundingId;
-	}
-	
-	public String getSignatureDate() {
-		return signatureDate;
-	}
-	
-	public void setSignatureDate(String signatureDate) {
-		this.signatureDate = signatureDate;
-	}
-    public List<FundingDetail> getFundingDetails() {
-        return fundingDetails;
-    }
-    public void setFundingDetails(List<FundingDetail> fundingDetails) {
-        this.fundingDetails = fundingDetails;
-    }
-    public long getFundingId() {
-        return fundingId;
-    }
-    public void setFundingId(long fundingId) {
-        this.fundingId = fundingId;
-    }
- 
-    public String getCurrentFunding() {
-        return currentFunding;
-    }
-    
-    public void setCurrentFunding(String currentFunding) {
-        this.currentFunding = currentFunding;
-    }
-	/**
-	 * @return Returns the actCloseDate.
-	 */
-	public String getActCloseDate() {
-		return actCloseDate;
-	}
-	/**
-	 * @param actCloseDate The actCloseDate to set.
-	 */
-	public void setActCloseDate(String actCloseDate) {
-		this.actCloseDate = actCloseDate;
-	}
-	/**
-	 * @return Returns the actStartDate.
-	 */
-	public String getActStartDate() {
-		return actStartDate;
-	}
-	/**
-	 * @param actStartDate The actStartDate to set.
-	 */
-	public void setActStartDate(String actStartDate) {
-		this.actStartDate = actStartDate;
-	}
-	/**
-	 * @return Returns the propCloseDate.
-	 */
-	public String getPropCloseDate() {
-		return propCloseDate;
-	}
-	/**
-	 * @param propCloseDate The propCloseDate to set.
-	 */
-	public void setPropCloseDate(String propCloseDate) {
-		this.propCloseDate = propCloseDate;
-	}
-	/**
-	 * @return Returns the propStartDate.
-	 */
-	public String getPropStartDate() {
-		return propStartDate;
-	}
-	/**
-	 * @param propStartDate The propStartDate to set.
-	 */
-	public void setPropStartDate(String propStartDate) {
-		this.propStartDate = propStartDate;
-	}
-	/**
-	 * @return Returns the conditions.
-	 */
-	public String getConditions() {
-		return conditions;
-	}
-	/**
-	 * @param conditions The conditions to set.
-	 */
-	public void setConditions(String conditions) {
-		this.conditions = conditions;
-	}
-	/**
-	 * @return Returns the reportingDate.
-	 */
-	public String getReportingDate() {
-		return reportingDate;
-	}
-	/**
-	 * @param reportingDate The reportingDate to set.
-	 */
-	public void setReportingDate(String reportingDate) {
-		this.reportingDate = reportingDate;
-	}
-	
-		
-	public AmpCategoryValue getFinancingInstrument() {
-		return financingInstrument;
-	}
-
-	public void setFinancingInstrument(AmpCategoryValue financingInstrument) {
-		this.financingInstrument = financingInstrument;
-	}
-
 	public boolean equals(Object e) {
 		if (e instanceof Funding) {
 			Funding tmp = (Funding) e;
 			return fundingId == tmp.fundingId;
 		}
-		logger.error( "Received an object of class " + e.getClass().getName() + " instead of class Funding");
-		throw new ClassCastException();
-	}
-
-//	public Collection<MTEFProjection> getMtefProjections() {
-//		return mtefProjections;
-//	}
-//
-//	public void setMtefProjections(Collection<MTEFProjection> mtefProjections) {
-//		this.mtefProjections = mtefProjections;
-//	}
-	
-	public String getSubtotalActualCommitments(){
-		
-		return this.subtotalActualCommitments;
-	}
-	public void setSubtotalActualCommitments(String s){
-		
-		this.subtotalActualCommitments = s;
-	}
-	public String getSubtotalPlannedCommitments(){
-		
-		return this.subtotalPlannedCommitments;
-	}
-	public void setSubtotalPlannedCommitments(String s){
-		
-		this.subtotalPlannedCommitments = s;
-	}
-	
-	public String getSubtotalPlannedDisbursements(){
-		
-		return this.subtotalPlannedDisbursements;
-	}
-	public void setSubtotalPlannedDisbursements(String s){
-		
-		this.subtotalPlannedDisbursements = s;
-	}
-	public String getSubtotalDisbursements(){
-		
-		return this.subtotalDisbursements;
-	}
-	public void setSubtotalDisbursements(String s){
-		
-		this.subtotalDisbursements = s;
-	}
-	public String getSubtotalPlannedExpenditures(){
-		
-		return this.subtotalPlannedExpenditures;
-	}
-	public void setSubtotalPlannedExpenditures(String s){
-		
-		this.subtotalPlannedExpenditures = s;
-	}
-	public String getSubtotalExpenditures(){
-		
-		return this.subtotalExpenditures;
-	}
-	public void setSubtotalExpenditures(String s){
-		
-		this.subtotalExpenditures = s;
-	}
-	
-	public String getSubtotalMTEFs()
-	{
-		return this.subtotalMTEFs;
-	}
-	
-	public void setSubtotalMTEFs(String s)
-	{
-		this.subtotalMTEFs = s;
-	}
-
-	public void setSubtotalActualDisbursementsOrders(
-			String s) {
-		this.subtotalActualDisbursementsOrders = s;
-	}
-
-	public String getSubtotalActualDisbursementsOrders() {
-		return this.subtotalActualDisbursementsOrders;
-	}
-
-	public String getSubtotalPlannedDisbursementsOrders() {
-		return subtotalPlannedDisbursementsOrders;
-	}
-
-	public void setSubtotalPlannedDisbursementsOrders(
-			String subtotalPlannedDisbursementsOrders) {
-		this.subtotalPlannedDisbursementsOrders = subtotalPlannedDisbursementsOrders;
-	}
-
-	public String getSubtotalPipelineDisbursementsOrders() {
-		return subtotalPipelineDisbursementsOrders;
-	}
-
-	public void setSubtotalPipelineDisbursementsOrders(
-			String subtotalPipelineDisbursementsOrders) {
-		this.subtotalPipelineDisbursementsOrders = subtotalPipelineDisbursementsOrders;
-	}
-
-	public String getSubtotalPipelineDisbursements() {
-		return subtotalPipelineDisbursements;
-	}
-
-	public void setSubtotalPipelineDisbursements(
-			String subtotalPipelineDisbursements) {
-		this.subtotalPipelineDisbursements = subtotalPipelineDisbursements;
-	}
-
-	public String getSubtotalPipelineExpenditures() {
-		return subtotalPipelineExpenditures;
-	}
-
-	public void setSubtotalPipelineExpenditures(String subtotalPipelineExpenditures) {
-		this.subtotalPipelineExpenditures = subtotalPipelineExpenditures;
+		throw new ClassCastException("cannot compare a " + this.getClass().getName() + " instance with a " + e.getClass().getName() + " instance");
 	}
 
 	public void populateAmpRawFunding(AmpFunding fundingSource) 
@@ -359,76 +108,12 @@ public class Funding implements Serializable
 		
 		this.ampRawFunding = funding;
 	}
-
-	public void cleanAmpRawFunding()
-	{
-		this.ampRawFunding = null;
-	}
 	
-	public List<FundingInformationItem> getAmpRawFunding() {
-		return this.ampRawFunding;
-	}
-
-	public void setUnDisbursementBalance(String formatNumber) {
-		this.undisbursementbalance = formatNumber;
-		
-	}
-	public String getUnDisbursementBalance(){
-		return this.undisbursementbalance;
-	}
-
-	/**
-	 * @return the donorObjective
-	 */
-	public String getDonorObjective() {
-		return this.donorObjective;
-	}
-
-	/**
-	 * @param donorObjective the donorObjective to set
-	 */
-	public void setDonorObjective(String donorObjective) {
-		this.donorObjective = donorObjective;
-	}
-
-	public AmpCategoryValue getFundingStatus() {
-		return fundingStatus;
-	}
-
-	public void setFundingStatus(AmpCategoryValue fundingStatus) {
-		this.fundingStatus = fundingStatus;
-	}
-
-	public String getSubtotalPipelineCommitments() {
-		return subtotalPipelineCommitments;
-	}
-
-	public void setSubtotalPipelineCommitments(String subtotalPipelineCommitments) {
-		this.subtotalPipelineCommitments = subtotalPipelineCommitments;
-	}
-
-	/**
-	 * @return the modeOfPayment
-	 */
-	public AmpCategoryValue getModeOfPayment() {
-		return modeOfPayment;
-	}
-
-	/**
-	 * @param modeOfPayment the modeOfPayment to set
-	 */
-	public void setModeOfPayment(AmpCategoryValue modeOfPayment) {
-		this.modeOfPayment = modeOfPayment;
-	}
-	
-	public Long getGroupVersionedFunding() {
-		return groupVersionedFunding;
-	}
-
-	public void setGroupVersionedFunding(Long groupVersionedFunding) {
-		this.groupVersionedFunding = groupVersionedFunding;
-	}
-	
+    public void cleanAmpRawFunding()
+    {
+            this.ampRawFunding = null;
+    }
+    
 	public Collection<FundingDetail> filterFundings(int transactionType, String adjustmentType)
 	{
 		if(fundingDetails != null){
@@ -557,120 +242,6 @@ public class Funding implements Serializable
 	public Collection<FundingDetail> getEDDDetails() {
 		return filterFundings(Constants.ESTIMATED_DONOR_DISBURSEMENT);
 	}
-	
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	/**
-	 * @return the orgRole
-	 */
-	public String getSourceRole() {
-		return sourceRole;
-	}
-
-	/**
-	 * @param orgRole the orgRole to set
-	 */
-	public void setSourceRole(String orgRole) {
-		this.sourceRole = orgRole;
-	}
-	
-	// RoF start
-	public String getSubtotalPlannedRoF(){
-		
-		return this.subtotalPlannedRoF;
-	}
-	
-	public void setSubtotalPlannedRoF(String s){
-		
-		this.subtotalPlannedRoF = s;
-	}
-	
-	public String getSubtotalRoF(){
-		
-		return this.subtotalRoF;
-	}
-	
-	public void setSubtotalRoF(String s){
-		
-		this.subtotalRoF = s;
-	}
-	
-	public String getSubtotalActualRoF(){
-		
-		return this.subtotalActualRoF;
-	}
-	
-	public void setSubtotalActualRoF(String s){
-		
-		this.subtotalActualRoF = s;
-	}
-	
-	public String getSubtotalPipelineRoF(){
-		
-		return this.subtotalPipelineRoF;
-	}
-	
-	public void setSubtotalPipelineRoF(String s){
-		
-		this.subtotalPipelineRoF = s;
-	}
-	
-	// RoF end
-	
-	// EDD start
-	public String getSubtotalPlannedEDD(){
-		
-		return this.subtotalPlannedEDD;
-	}
-	
-	public void setSubtotalPlannedEDD(String s){
-		
-		this.subtotalPlannedEDD = s;
-	}
-	
-	public String getSubtotalEDD(){
-		
-		return this.subtotalEDD;
-	}
-	
-	public void setSubtotalEDD(String s){
-		
-		this.subtotalEDD = s;
-	}
-	
-	public String getSubtotalActualEDD(){
-		
-		return this.subtotalActualEDD;
-	}
-	
-	public void setSubtotalActualEDD(String s){
-		
-		this.subtotalActualEDD = s;
-	}
-	
-	public String getSubtotalPipelineEDD(){
-		
-		return this.subtotalPipelineEDD;
-	}
-	
-	public void setSubtotalPipelineEDD(String s){
-		
-		this.subtotalPipelineEDD = s;
-	}	
 	
 	  /**
 	   * returns a funding item built and with all its' currency Codes overwritten to a single one
@@ -810,34 +381,6 @@ public class Funding implements Serializable
 		  double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
 		  return amt;
 	  }
-
-	public String getSubtotalOfficialDevelopmentAidCommitments() {
-		return subtotalOfficialDevelopmentAidCommitments;
-	}
-
-	public void setSubtotalOfficialDevelopmentAidCommitments(
-			String subtotalOfficialDevelopmentAidCommitments) {
-		this.subtotalOfficialDevelopmentAidCommitments = subtotalOfficialDevelopmentAidCommitments;
-	}
-
-	public String getSubtotalBilateralSscCommitments() {
-		return subtotalBilateralSscCommitments;
-	}
-
-	public void setSubtotalBilateralSscCommitments(
-			String subtotalBilateralSscCommitments) {
-		this.subtotalBilateralSscCommitments = subtotalBilateralSscCommitments;
-	}
-
-	public String getSubtotalTriangularSscCommitments() {
-		return subtotalTriangularSscCommitments;
-	}
-
-	public void setSubtotalTriangularSscCommitments(
-			String subtotalTriangularSscCommitments) {
-		this.subtotalTriangularSscCommitments = subtotalTriangularSscCommitments;
-	}
-
 }
 
 

@@ -8,10 +8,15 @@ package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
 
+import lombok.Data;
+
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.util.SectorUtil;
 
 
-public class ActivitySector implements Comparable<ActivitySector>, Serializable{
-
+@Data
+public class ActivitySector implements Comparable<ActivitySector>, Serializable
+{
 	private Long id;
 
 	private Long sectorId;
@@ -31,18 +36,8 @@ public class ActivitySector implements Comparable<ActivitySector>, Serializable{
 	private String view;
 	
 	private int count;
-        private String sectorScheme;
-        private Long configId;
-
-        public Long getConfigId() {
-            return configId;
-        }
-
-        public void setConfigId(Long configId) {
-            this.configId = configId;
-        }
-
-  
+	private String sectorScheme;
+	private Long configId; 
 
 	public ActivitySector() {
 		id = new Long(-1);
@@ -222,5 +217,5 @@ public class ActivitySector implements Comparable<ActivitySector>, Serializable{
 			
 			return (completeSectorPathCurrent.compareTo(completeSectorPathObject));
 		
-		}
+		}		
 }

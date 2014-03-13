@@ -4,12 +4,16 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
-import org.digijava.module.aim.util.FeaturesUtil;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.orgProfile.util.OrgProfileUtil;
 
+@Getter @Setter
 public class AmpFundingDetail implements Serializable, Cloneable, FundingInformationItem {
 	
 	public static class FundingDetailComparator implements Comparator<AmpFundingDetail>, Serializable {
@@ -57,23 +61,6 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	
 	private AmpCategoryValue adjustmentType ;
 
-	public AmpOrganisation getRecipientOrg() {
-		return recipientOrg;
-	}
-
-	public void setRecipientOrg(AmpOrganisation recipientOrg) {
-		this.recipientOrg = recipientOrg;
-	}
-
-	public AmpRole getRecipientRole() {
-		return recipientRole;
-	}
-
-	public void setRecipientRole(AmpRole recipientRole) {
-		this.recipientRole = recipientRole;
-	}
-
-
 	private Date transactionDate ;
 	private Date transactionDate2 ;
 	private Date reportingDate;
@@ -95,27 +82,9 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	private AmpOrganisation recipientOrg;
 	private AmpRole recipientRole;
     
-    public Float getCapitalSpendingPercentage() {
-        return capitalSpendingPercentage;
-    }
-
-    public void setCapitalSpendingPercentage(Float capitalSpendingPercentage) {
-        this.capitalSpendingPercentage = capitalSpendingPercentage;
-    }
-
-    public FundingPledges getPledgeid() {
-		return pledgeid;
-	}
-
-
-	public void setPledgeid(FundingPledges pledgeid) {
-		this.pledgeid = pledgeid;
-	}
-
-
 	private String expCategory;
-        private String disbOrderId;
-        private IPAContract contract;
+    private String disbOrderId;
+    private IPAContract contract;
         
         
         public AmpFundingDetail(){}
@@ -199,304 +168,6 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
             this.fixedExchangeRate=fixedExchangeRate;
             
         }
-        
-
-		public IPAContract getContract() {
-            return contract;
-        }
-
-        public void setContract(IPAContract contract) {
-            this.contract = contract;
-        }
-
-        /**
-		 * @return
-		 */
-		public AmpCategoryValue getAdjustmentType() {
-			
-			return adjustmentType;
-		}
-
-		/**
-		 * @return
-		 */
-		public Long getAmpFundDetailId() {
-			return ampFundDetailId;
-		}
-
-/*		public Long getAmpFundingId() {
-			return ampFundingId;
-		}*/
-
-		/**
-		 * @return
-		 */
-		public Integer getFiscalQuarter() {
-			return fiscalQuarter;
-		}
-
-		/**
-		 * @return
-		 */
-		public Integer getFiscalYear() {
-			return fiscalYear;
-		}
-
-		/**
-		 * @return
-		 */
-		public String getOrgRoleCode() {
-			return orgRoleCode;
-		}
-
-		/**
-		 * @return
-		 */
-		public Date getReportingDate() {
-			return reportingDate;
-		}
-
-		/**
-		 * @return
-		 */
-		public Double getTransactionAmount() {
-			return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
-		}
-
-		/**
-		 * @return
-		 */
-		public Double getAbsoluteTransactionAmount() {
-			return transactionAmount;
-		}
-
-		/**
-		 * @return
-		 */
-		public Date getTransactionDate() {
-			return transactionDate;
-		}
-
-		/**
-		 * @return
-		 */
-		public Integer getTransactionType() {
-			return transactionType;
-		}
-
-		/**
-		 * @param i
-		 */
-		public void setAdjustmentType(AmpCategoryValue i) {
-			adjustmentType = i;
-		}
-
-		/**
-		 * @param long1
-		 */
-		public void setAmpFundDetailId(Long long1) {
-			ampFundDetailId = long1;
-		}
-
-/*		public void setAmpFundingId(Long long1) {
-			ampFundingId = long1;
-		}*/
-
-		/**
-		 * @param string
-		 */
-		public void setFiscalQuarter(Integer i) {
-			fiscalQuarter = i;
-		}
-
-		/**
-		 * @param i
-		 */
-		public void setFiscalYear(Integer i) {
-			fiscalYear = i;
-		}
-
-		/**
-		 * @param string
-		 */
-		public void setOrgRoleCode(String string) {
-			orgRoleCode = string;
-		}
-
-		/**
-		 * @param date
-		 */
-		public void setReportingDate(Date date) {
-			reportingDate = date;
-		}
-
-		/**
-		 * @param d
-		 */
-		public void setTransactionAmount(Double d) {
-			transactionAmount =FeaturesUtil.applyThousandsForEntry(d);
-		}
-
-		/**
-		 * @param date
-		 */
-		public void setTransactionDate(Date date) {
-			transactionDate = date;
-		}
-
-		/**
-		 * @param i
-		 */
-		public void setTransactionType(Integer i) {
-			transactionType = i;
-		}
-
-	public String getLanguage() {
-		return language;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-
-	public void setLanguage(String string) {
-		language = string;
-	}
-
-	public void setVersion(String string) {
-		version = string;
-	}
-
-
-	/**reportingOrgId
-	 * @return
-	 */
-	public AmpCurrency getAmpCurrencyId() {
-		return ampCurrencyId;
-	}
-
-	/**
-	 * @param long1
-	 */
-	public void setAmpCurrencyId(AmpCurrency ampCurrencyId) {
-		this.ampCurrencyId = ampCurrencyId;
-	}
-
-	public AmpOrganisation getReportingOrgId() {
-		return reportingOrgId;
-	}
-
-	/**
-	 * @param long1
-	 */
-	public void setReportingOrgId(AmpOrganisation reportingOrgId) {
-		this.reportingOrgId = reportingOrgId;
-	}
-
-	public AmpFunding getAmpFundingId() {
-		return ampFundingId;
-	}
-
-	public void setAmpFundingId(AmpFunding f ) {
-		this.ampFundingId = f;
-	}
-
-
-	/**
-	 * @return
-	 */
-	public Date getTransactionDate2() {
-		return transactionDate2;
-	}
-
-	/**
-	 * @param date
-	 */
-	public void setTransactionDate2(Date date) {
-		transactionDate2 = date;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getCalType() {
-		return calType;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setCalType(String string) {
-		calType = string;
-	}
-
-	/**
-	 * @return Returns the expCategory.
-	 */
-	public String getExpCategory() {
-		return expCategory;
-	}
-	/**
-	 * @param expCategory The expCategory to set.
-	 */
-	public void setExpCategory(String expCategory) {
-		this.expCategory = expCategory;
-	}
-
-	public Double getFixedExchangeRate() {
-		return fixedExchangeRate;
-	}
-
-
-        public String getDisbOrderId() {
-                return disbOrderId;
-        }
-
-        public void setFixedExchangeRate(Double fixedExchangeRate) {
-		this.fixedExchangeRate = fixedExchangeRate;
-	}
-
-
-        public void setDisbOrderId(String disbOrderId) {
-                this.disbOrderId = disbOrderId;
-        }
-
-		public Double getThousandsTransactionAmount() {
-			return thousandsTransactionAmount;
-		}
-
-		public void setThousandsTransactionAmount(Double thousandsTransactionAmount) {
-			this.thousandsTransactionAmount = thousandsTransactionAmount;
-		}
-
-
-		public void setDisbursementOrderRejected(
-				Boolean disbursementOrderRejected) {
-			this.disbursementOrderRejected = disbursementOrderRejected;
-		}
-
-
-		public Boolean getDisbursementOrderRejected() {
-			return disbursementOrderRejected;
-		}
-
-
-		/**
-		 * @return the fixedRateBaseCurrency
-		 */
-		public AmpCurrency getFixedRateBaseCurrency() {
-			return fixedRateBaseCurrency;
-		}
-
-
-		/**
-		 * @param fixedRateBaseCurrency the fixedRateBaseCurrency to set
-		 */
-		public void setFixedRateBaseCurrency(AmpCurrency fixedRateBaseCurrency) {
-			this.fixedRateBaseCurrency = fixedRateBaseCurrency;
-		}
-
 
 		@Override
 		public Object clone() throws CloneNotSupportedException {
@@ -504,6 +175,9 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 			return super.clone();
 		}
 
+		public Double getAbsoluteTransactionAmount() {
+			return transactionAmount;
+		}
 
 		@Override
 		public String toString()

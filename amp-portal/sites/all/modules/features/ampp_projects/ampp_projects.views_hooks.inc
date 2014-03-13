@@ -398,6 +398,30 @@ function ampp_projects_views_data() {
     'sort' => array('handler' => 'views_handler_sort_numeric')
   );
 
+  // TABLE: amp_org_role
+  $data['amp_org_role']['table']['group'] = t('Organization Role');
+  $data['amp_org_role']['table']['join'] = array(
+    'cached_amp_activity' => array(
+      'left_field' => 'amp_activity_id',
+      'field' => 'activity',
+    )
+  );
+
+  $data['amp_org_role']['organisation_role'] = array(
+    'title' => t('Organisation having Role'),
+    'help' => t('Filter by Organizations that have a specific role'),
+    'real field' => 'organisation',
+    'argument' => array(
+      'handler' => 'ampp_projects_views_handler_argument_organisation_role',
+      'options callback' => '_ampp_projects_get_amp_roles',
+      'options arguments' => array('role_code'),
+    ),
+    'numeric' => TRUE,
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+  );
+
   return $data;
 }
 
@@ -567,7 +591,7 @@ function ampp_projects_views_pre_render(&$view) {
         case 'feed_1':
           if (isset($_SESSION['projects_search_result_conf'])) {
             $conf = unserialize($_SESSION['projects_search_result_conf']);
-            $fields_to_remove = ampp_projects_views_get_field_names($view->name, $view->current_display);
+            $fields_to_remove = _ampp_projects_get_view_field_names($view->name, $view->current_display);
 
             foreach ($fields_to_remove as $field_name) {
 
@@ -609,7 +633,7 @@ function ampp_projects_views_pre_render(&$view) {
 /**
  * Helper function for ampp_projects_views_pre_render().
  */
-function ampp_projects_views_get_field_names($view, $display_id) {
+function _ampp_projects_get_view_field_names($view, $display_id) {
   $result = array();
   if (!empty($view->display[$display_id]->display_options['fields'])) {
     foreach ($view->display[$display_id]->display_options['fields'] as $field) {
@@ -618,4 +642,31 @@ function ampp_projects_views_get_field_names($view, $display_id) {
   }
 
   return $result;
+}
+
+/**
+ * Returns a list of options for amp_role filters and arguments.
+ *
+ * @TODO: Add caching!
+ */
+function _ampp_projects_get_amp_roles($key = NULL) {
+  $items = array();
+
+  if (!empty($key) && !in_array($key, array('role_code', 'amp_role_id'))) {
+    return $items;
+  }
+
+  db_set_active('amp_projects');
+  $query = db_select('amp_role', 'ar')->fields('ar');
+  foreach ($query->execute()->fetchAll(PDO::FETCH_OBJ) as $role) {
+    if (isset($key)) {
+      $items[$role->$key] = $role->name;
+    }
+    else {
+      $items[$role->role_code] = $role;
+    }
+  }
+  db_set_active();
+
+  return $items;
 }

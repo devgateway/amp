@@ -159,9 +159,9 @@
 <feature:display module="Organizations" name="Executing Agency"></feature:display>
 <feature:display module="Organizations" name="Contracting Agency"></feature:display> 
 <feature:display module="Organizations" name="Implementing Agency"></feature:display> 
-<feature:display module="Organizations" name="Regional Group"></feature:display>
+<feature:display module="Organizations" name="Regional Group"></feature:display> 
 
- 
+
 <feature:display module="Organizations" name="Responsible Organization"></feature:display> 
 <feature:display module="Organizations" name="Sector Group"></feature:display> 
 <feature:display module="Project ID and Planning" name="Identification"></feature:display> 
@@ -337,6 +337,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Funding Information" name="Agreement Effective Date"></field:display>
 <field:display feature="Funding Information" name="Agreement Signature Date"></field:display>
 <field:display feature="Funding Information" name="Agreement Close Date"></field:display>
+<field:display feature="Funding Information" name="Funding Classification Date"></field:display>
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 

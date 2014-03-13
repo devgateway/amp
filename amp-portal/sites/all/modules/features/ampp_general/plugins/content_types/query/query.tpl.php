@@ -1,6 +1,6 @@
 <?php
   if ($vars['success'] == 0) {
-    print '<table class="query_plugin_table"><tr><td>' . $vars['error_msg'] . '</td></tr></table>';
+    print '<table class="query_plugin_table"><tr><td>' . (isset($vars['error_msg'])) ? $vars['error_msg'] : '' . '</td></tr></table>';
   } else {
     print '<table class="query_plugin_table"><tr>';
     foreach ($vars['labels'] as $k => $v) {

@@ -43,10 +43,12 @@ function ampp_general_query_render($subtype, $conf, $args, $context) {
     db_set_active($active);
   }
 
-  foreach ($result as $record) {
-    $vars['values'][] = (array) $record;
+  if (!empty($result)) {
+    foreach ($result as $record) {
+      $vars['values'][] = (array) $record;
+    }
+    $vars['values'] = $result;
   }
-  $vars['values'] = $result;
   $block->content = theme('ampp_general_query', array('vars' => $vars));
   $vars['error_msg'] = t('Error...');
 

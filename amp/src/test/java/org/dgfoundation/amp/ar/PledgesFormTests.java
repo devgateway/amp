@@ -1,57 +1,19 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
-import org.apache.struts.mock.MockHttpServletRequest;
-import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.dgfoundation.amp.testutils.ReportTestingUtils;
-import org.dgfoundation.amp.testutils.AmpRunnable;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.admin.helper.AmpActivityFake;
-import org.digijava.module.aim.ar.util.ReportsUtil;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ComponentsUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
-import org.digijava.module.message.jobs.CloseExpiredActivitiesJob;
-import org.digijava.module.translation.util.MultilingualInputFieldValues;
-import org.hibernate.Session;
-
-import java.util.Arrays;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**

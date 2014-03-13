@@ -72,7 +72,7 @@ xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.
                         update dg_message set message_utf8='source de financement du gouvernement',orig_message='source de financement du gouvernement' where message_key ='-1358963668' and lang_iso='en';
                         update dg_message set message_utf8='Name:',orig_message='Name:' where message_key ='-363816269' and lang_iso='en';
                         update dg_message set message_utf8='Name',orig_message='Name' where message_key ='1336015399' and lang_iso='en';
-						delete from dg_message where message_key='1192528612'; --this is just an space (nbsp;), should be deleted
+						delete from dg_message where message_key='1192528612'; --this is just an space (nbsp) should be deleted
                         update dg_message set message_utf8='IPA Contracting activity category (edit activity form page 13)',orig_message='IPA Contracting activity category (edit activity form page 13)' where message_key ='1893460718' and lang_iso='en';
                         update dg_message set message_utf8='Click on this icon to edit pledge' where message_key ='1152458204' and lang_iso='en';
 						update dg_message set message_utf8='Cliquez sur cette icône pour modifier promesse' where message_key ='1152458204' and lang_iso='fr';

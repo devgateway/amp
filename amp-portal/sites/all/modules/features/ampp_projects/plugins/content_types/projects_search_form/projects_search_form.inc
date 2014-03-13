@@ -19,7 +19,7 @@ $plugin = array(
     'secondary_sectors_flag' => 0,
     'programs_flag' => 0,
     'donors_flag' => 1,
-    'agencies_flag' => 1,
+    'agencies_flag' => 0,
     'locations_flag' => 1,
     'period_flag' => 0,
     'keywords_flag' => 1,
@@ -88,6 +88,12 @@ function project_search_form_uidatepicker($form, $form_state) {
  * Returns an edit form for the projects search
  */
 function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
+  global $amp_db_exists;
+  if (!$amp_db_exists) {
+    return array(
+      '#markup' => t('Could not connect to the database. Please try again later. If the problem persists contact the site administrator.'),
+    );
+  }
 
   global $language;
 
@@ -328,78 +334,56 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
 
   // Fill search form textfields.
   // Form should be filled only on search result page
-  $js_string = '';
-  $arr = ampp_get_sectors_from_url();
-  if (is_array($arr)) {
-    $js_string .= 'var selectedSectors = new Array(' . implode(",", $arr) . ');' . "\n";
+  // @TODO: Cleanup!!!
+  $form_settings = array();
+  $form_settings['selectedSectors'] = ampp_get_sectors_from_url();
+  $form_settings['selectedPrimarySectors'] = ampp_get_primarysectors_from_url();
+  $form_settings['selectedSecondarySectors'] = ampp_get_secondarysectors_from_url();
+  $form_settings['selectedPrograms'] = ampp_get_programs_from_url();
+  $form_settings['selectedDonors'] = ampp_get_donors_from_url();
+  $form_settings['selectedAgencies'] = ampp_get_agencies_from_url();
+  $form_settings['selectedLocations'] = ampp_get_locations_from_url();
+
+  $period = ampp_get_period_from_url();
+  if ($period['period_start'] != 'all') {
+    $form_settings['selectedPeriodStart'] = format_date(strtotime($period['period_start']), 'ampp_cal');
   }
-  $arr = ampp_get_primarysectors_from_url();
-  if (is_array($arr)) {
-    $js_string .= 'var selectedPrimarySectors = new Array(' . implode(",", $arr) . ');' . "\n";
-  }
-  $arr = ampp_get_secondarysectors_from_url();
-  if (is_array($arr)) {
-    $js_string .= 'var selectedSecondarySectors = new Array(' . implode(",", $arr) . ');' . "\n";
-  }
-  $arr = ampp_get_programs_from_url();
-  if (is_array($arr)) {
-    $js_string .= 'var selectedPrograms = new Array(' . implode(",", $arr) . ');' . "\n";
-  }
-  $arr = ampp_get_donors_from_url();
-  if (is_array($arr)) {
-    $js_string .= 'var selectedDonors = new Array(' . implode(",", $arr) . ');' . "\n";
-  }
-  $arr = ampp_get_agencies_from_url();
-  if (is_array($arr)) {
-    $js_string .= 'var selectedAgencies = new Array(' . implode(",", $arr) . ');' . "\n";
-  }
-  $arr = ampp_get_locations_from_url();
-  if (is_array($arr)) {
-    $js_string .= 'var selectedLocations = new Array(' . implode(",", $arr) . ');' . "\n";
-  }
-  $arr = ampp_get_period_from_url();
-  if (is_array($arr)) {
-    if (trim($arr[0]) != 'all') {
-      $js_string .= "var selectedPeriodStart = '" . format_date(strtotime($arr[0]), 'ampp_cal') . "'\n";
-    }
-    if (trim($arr[1]) != 'all') {
-      $js_string .= "var selectedPeriodEnd = '" . format_date(strtotime($arr[1]), 'ampp_cal') . "'\n";
-    }
+  if ($period['period_end'] != 'all') {
+    $form_settings['selectedPeriodEnd'] = format_date(strtotime($period['period_end']), 'ampp_cal');
   }
 
-  $arr = ampp_get_keywords_from_url();
-  if (is_array($arr)) {
-    $js_string .= 'var selectedKeywords = new Array("' . implode(",", $arr) . '");' . "\n";
-  }
+  $form_settings['selectedKeywords'] = ampp_get_keywords_from_url();
 
-  if ($conf["budget_flag"] == 1) {
+  if ($conf['budget_flag'] == 1) {
     $arr = ampp_get_onoffbudget_from_url();
     if (is_array($arr)) {
       $i = 0;
       while ($i < count($arr)) {
         switch ($arr[$i]) {
           case OnOffBudgetIds::$offBudgetProjectsId:
-            $js_string .= "var selectedBudget = " . OnOffBudgetIds::$offBudgetProjectsId . "; \n";
+            $form_settings['selectedBudget'] = OnOffBudgetIds::$offBudgetProjectsId;
             break;
           case OnOffBudgetIds::$onBudgetProjectsId:
-            $js_string .= "var selectedBudget = " . OnOffBudgetIds::$onBudgetProjectsId . "; \n";
+            $form_settings['selectedBudget'] = OnOffBudgetIds::$onBudgetProjectsId;
             break;
         }
         $i++;
       }
     }
     else {
-      $js_string .= "var selectedOffBudget = 'all'; \n";
+      $form_settings['selectedOffBudget'] = 'all';
     }
   }
   if ($conf["country_level_projects_flag"] == 1) {
     $regionalprojects = ampp_get_regionalprojects_from_url();
     if ($regionalprojects == 1) {
-      $js_string .= "var selectedRegionalProjects = 1; \n";
+      $form_settings['selectedRegionalProjects'] = 1;
     }
   }
 
-  drupal_add_js($js_string, array('type' => 'inline', 'scope' => 'footer'));
+  $settings = array();
+  $settings['ampp_projects']['form_settings'] = $form_settings;
+  drupal_add_js($settings, 'setting');
 
   return $form;
 }
@@ -414,7 +398,7 @@ function ampp_projects_projects_search_form_form_submit($form, &$form_state) {
   //  print_r($form_state['values']);
   //  exit;
 
-  $queryStrArr = Array();
+  $queryStrArr = array();
 
   $sectors = empty($form_state['values']['sector']) ? 'all' : $form_state['values']['sector'];
   $primarysectors = empty($form_state['values']['primary_sector']) ? 'all' : $form_state['values']['primary_sector'];

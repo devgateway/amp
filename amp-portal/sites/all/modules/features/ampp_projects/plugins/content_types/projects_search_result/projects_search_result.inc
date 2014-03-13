@@ -63,76 +63,31 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
   $_SESSION["projects_search_result_conf"] = serialize($conf);
 
   $block = new stdClass();
+  $block->title = t('Projects search');
+
   $view = views_get_view('projects_search_result');
   $tmpview = $view->clone_view();
   $tmpview->set_display('panel_pane_1');
-  $block->title = t('Projects search');
 
-  $sectors_array = array();
-  $sectors_ids = empty($_GET["sectors"]) ? '' : $_GET["sectors"];
-  if ($sectors_ids != 'all' and !empty($sectors_ids)) {
-    $sectors_array = explode(",", $sectors_ids);
-  }
-  $sectors_ids = empty($_GET["primarysectors"]) ? '' : $_GET["primarysectors"];
-  if ($sectors_ids != 'all' and !empty($sectors_ids)) {
-    $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
-  }
-  $sectors_ids = empty($_GET["secondarysectors"]) ? '' : $_GET["secondarysectors"];
-  if ($sectors_ids != 'all' and !empty($sectors_ids)) {
-    $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
-  }
-
-  $args[0] = !empty($_GET["donors"]) ? $_GET["donors"] : "all";
-  $args[1] = (count($sectors_array) > 0) ? implode(',', $sectors_array) : "all";
-  $args[2] = !empty($_GET["locations"]) ? $_GET["locations"] : "all";
-  $args[3] = !empty($_GET["keywords"]) ? $_GET["keywords"] : "all";
-  $args[4] = !empty($_GET["budget"]) ? $_GET["budget"] : "all";
-  $args[5] = !empty($_GET["programs"]) ? $_GET["programs"] : "all";
-  $args[6] = !empty($_GET["period_start"]) ? $_GET["period_start"] : "all";
-  $args[7] = !empty($_GET["period_end"]) ? $_GET["period_end"] : "all";
-
-  // we need to prepend all descendant locations
-  if ($args[2] !== "all") {
-    $args[2] = implode(',', addDescendantLocations(explode(',', $args[2])));
-  }
+  $args = _ampp_get_search_arguments(TRUE);
 
   $showregionalprojects = !empty($_GET["showregionalprojects"]) ? $_GET["showregionalprojects"] : "all";
 
   if (isset($conf["allowxlsexport"]) && $conf["allowxlsexport"] == 1) {
-    $block->content = l(t('Export in XLS format'), 'searchexport/searchresult.xls', array(
-        'attributes' => array('class' => array('export-link')),
-        'query' => array(
-          'donors' => $args[0],
-          'sectors' => $args[1],
-          'programs' => $args[5],
-          'locations' => $args[2],
-          'period_start' => $args[6],
-          'period_end' => $args[7],
-          'keywords' => $args[3],
-          'budget' => $args[4],
-          'showregionalprojects' => $showregionalprojects,
-          'hide_first_column' => (isset($conf['hide_first_column']) && $conf['hide_first_column']) ? 1 : 0,
-          'show_status_column' => (!isset($conf['show_status_column']) || $conf['show_status_column'] == 0) ? 0 : 1,
-        )
-      ));
+    $export_xls_query_args = _ampp_get_search_arguments();
+    $export_xls_query_args['showregionalprojects'] = $showregionalprojects;
+    $export_xls_query_args['hide_first_column'] = (isset($conf['hide_first_column']) && $conf['hide_first_column']) ? 1 : 0;
+    $export_xls_query_args['show_status_column'] = (!isset($conf['show_status_column']) || $conf['show_status_column'] == 0) ? 0 : 1;
+
+    $export_xls_args = array(
+      'attributes' => array('class' => array('export-link')),
+      'query' => $export_xls_query_args,
+    );
+    $block->content = l(t('Export in XLS format'), 'searchexport/searchresult.xls', $export_xls_args);
 
     global $base_root;
-    $export_url = url('searchexport/searchresult.xls', array(
-        'attributes' => array('class' => array('export-link')),
-        'query' => array(
-          'donors' => $args[0],
-          'sectors' => $args[1],
-          'programs' => $args[5],
-          'locations' => $args[2],
-          'period_start' => $args[6],
-          'period_end' => $args[7],
-          'keywords' => $args[3],
-          'budget' => $args[4],
-          'showregionalprojects' => $showregionalprojects,
-          'hide_first_column' => (isset($conf['hide_first_column']) && $conf['hide_first_column']) ? 1 : 0,
-          'show_status_column' => (!isset($conf['show_status_column']) || $conf['show_status_column'] == 0) ? 0 : 1,
-        )
-      ));
+    $export_url = url('searchexport/searchresult.xls', array('query' => $export_xls_args));
+
     if (module_exists('shorten')) {
       $block->content .= '<br><a class="shorten-url" href="http://' . shorten_url($base_root . $export_url) . '"><b>' . t('Permanent link') . '</b> </a><br>';
     }
@@ -141,11 +96,6 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $args, $co
   $tmpview->set_arguments($args);
   $tmpview->pre_execute();
   $tmpview->execute();
-
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) {
-    watchdog('ampp_projects_projects_search_result_render', dpq($tmpview->build_info['query'], 1));
-  }
-  //watchdog('ampp_projects', 'results TOTAL: ' . $tmpview->total_rows);
 
   // optionally hide the first column
   if (isset($conf['hide_first_column']) && $conf['hide_first_column']) {

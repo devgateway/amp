@@ -730,3 +730,198 @@ function _ampp_projects_get_amp_roles($key = NULL) {
 
   return $items;
 }
+
+/**
+ * Returns all arguments required for the projects_search_result view.
+ *
+ * @TODO: Switch from using arguments to exposed filters.
+ */
+function _ampp_get_search_arguments($for_views = FALSE) {
+  $processed_arguments = array();
+  // Untill we use exposed filters instead of arguments, we need to send them to views in the right order.
+  $arguments_list = array(
+    '0' => 'donors',
+    '1' => 'sectors',
+    '2' => 'locations',
+    '3' => 'keywords',
+    '4' => 'budget',
+    '5' => 'programs',
+    '6' => 'period_start',
+    '7' => 'period_end',
+    '8' => 'agencies',
+  );
+
+  foreach ($arguments_list as $key => $name) {
+    switch ($name) {
+      case 'sectors':
+        // Get an array of sectors.
+        $sectors_array = array();
+
+        $sectors_ids = empty($_GET['sectors']) ? '' : $_GET['sectors'];
+        if ($sectors_ids != 'all' && !empty($sectors_ids)) {
+          $sectors_array += explode(',', $sectors_ids);
+        }
+
+        $primarysectors_ids = empty($_GET['primarysectors']) ? '' : $_GET['primarysectors'];
+        if ($primarysectors_ids != 'all' && !empty($primarysectors_ids)) {
+          $sectors_array += explode(',', $primarysectors_ids);
+        }
+
+        $secondarysectors_ids = empty($_GET['secondarysectors']) ? '' : $_GET['secondarysectors'];
+        if ($secondarysectors_ids != 'all' && !empty($secondarysectors_ids)) {
+          $sectors_array += explode(',', $secondarysectors_ids);
+        }
+
+        if (empty($sectors_array)) {
+          if ($for_views) {
+            $processed_arguments[$key] = 'all';
+          }
+          else {
+            $processed_arguments[$name] = 'all';
+          }
+        }
+        else {
+          if ($for_views) {
+            $processed_arguments[$key] = implode(',', $sectors_array);
+          }
+          else {
+            $processed_arguments[$name] = $sectors_array;
+          }
+        }
+        break;
+
+      case 'locations':
+        // We need to add all descendant locations.
+        $locations = empty($_GET['locations']) ? array() : $_GET['locations'];
+        if ($locations != 'all' && !empty($locations) && !is_array($locations)) {
+          $locations = addDescendantLocations(explode(',', $locations));
+        }
+
+        if (empty($locations)) {
+          if ($for_views) {
+            $processed_arguments[$key] = 'all';
+          }
+          else {
+            $processed_arguments[$name] = 'all';
+          }
+        }
+        else if (is_array($_GET[$name])) {
+          if ($for_views) {
+            $processed_arguments[$key] = implode(',', $locations);
+          }
+          else {
+            $processed_arguments[$name] = $locations;
+          }
+        }
+        else {
+          if ($for_views) {
+            $processed_arguments[$key] = $locations;
+          }
+          else {
+            $processed_arguments[$name] = explode(',', $locations);
+          }
+        }
+        break;
+
+      default:
+        if (empty($_GET[$name])) {
+          if ($for_views) {
+            $processed_arguments[$key] = 'all';
+          }
+          else {
+            $processed_arguments[$name] = 'all';
+          }
+        }
+        else if (is_array($_GET[$name])) {
+          if ($for_views) {
+            $processed_arguments[$key] = implode(',', $_GET[$name]);
+          }
+          else {
+            $processed_arguments[$name] = $_GET[$name];
+          }
+        }
+        else {
+          if ($for_views) {
+            $processed_arguments[$key] = $_GET[$name];
+          }
+          else {
+            $processed_arguments[$name] = explode(',', $_GET[$name]);
+          }
+        }
+        break;
+    }
+  }
+
+  return $processed_arguments;
+}
+
+/**
+ *
+ */
+function addDescendantLocations($locations = array()) {
+  global $amp_db_exists;
+
+  // to avoid infinit recursion
+  static $calls = 0;
+  $calls++;
+  if ($calls > 1000) return array();
+
+  if (!$amp_db_exists) return;
+
+  db_set_active("amp_projects");
+
+  foreach ($locations as $location_id) {
+    $query = db_select('amp_category_value_location', 'l')
+    ->fields('l', array('id'))
+    ->condition('l.parent_location', $location_id, '=');
+
+
+    foreach ($query->execute()->fetchAll(PDO::FETCH_COLUMN) as $child_id) {
+      $locations[] = $child_id;
+      $locations = array_merge($locations, getParentLocationIds(array($child_id)));
+    }
+  }
+
+  db_set_active();
+
+  return $locations;
+}
+
+/**
+ *
+ */
+function getParentLocationIds($childLocationId) {
+  global $amp_db_exists;
+
+  if (!$amp_db_exists) return;
+
+  $allParentIds = array();
+
+  if (!empty($_GET["RegionalProjects"])) {
+    $regionalinclude = $_GET["RegionalProjects"];
+  } else {
+    $regionalinclude = $_GET["showregionalprojects"];
+  }
+
+  if ($regionalinclude == '1') {
+    db_set_active("amp_projects");
+
+    $parentIds = db_select('amp_category_value_location', 'l')
+      ->fields('l', array('parent_location'))
+      ->condition('l.id', $childLocationId, '=')
+      ->isNotNull('l.parent_location')
+      ->execute()
+      ->fetchAll(PDO::FETCH_COLUMN);
+
+    if (!empty($parentIds)) {
+      foreach ($parentIds as $parentId) {
+        $allParentIds[] = $parentId;
+        $allParentIds = array_merge($allParentIds, getParentLocationIds($parentId));
+      }
+    }
+
+    db_set_active();
+  }
+
+  return $allParentIds;
+}

@@ -33,40 +33,45 @@ function ampp_projects_date_popup_process_alter(&$element, &$form_state, $contex
 function ampp_projects_init() {
   global $language;
   $lang_def = variable_get('language_default', '');
-  if ($lang_def == '' || $lang_def->language == $language->language) {
-    $lang = '';
+  if (empty($lang_def) || $lang_def->language == $language->language) {
+    $amp_language = '';
   } else {
-    $lang = $language->language;
+    $amp_language = $language->language;
   }
 
-  // cache_clear_all('module_implements', 'cache_bootstrap'); ///////////// ! Cache
-  getOnOffBudgetIDs(); // Get the on/off budget projects ids
-
-  drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/tokeninput/src/jquery.tokeninput.js');
-  drupal_add_js(array('ampp_projects' => array('lang' => $lang)), 'setting');
-  drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/ampp_projects.js');
+  // Get the on/off budget projects ids
+  getOnOffBudgetIDs();
 
   $ampp_projects_settings = array(
-    'url' => url('ampp_search/hs-dropbox')
+    'url' => url('ampp_search/hs-dropbox'),
+    'lang' => $amp_language,
   );
-
   drupal_add_js(array('ampp_projects' => $ampp_projects_settings), 'setting');
+
+  drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/tokeninput/src/jquery.tokeninput.js');
+  drupal_add_js(drupal_get_path('module', 'ampp_projects') . '/ampp_projects.js');
+
   drupal_add_css("div.hidden-locations, #loading-count {display:none;} span.more-locations {cursor: pointer;}",array('type' => 'inline'));
   drupal_add_library('system', 'ui.dialog');
+
   //Let's check if AMP database is configured and if not throw a worning message and also do not try to connect to it later
   amp_db_exists();
-  variable_set('currency_code', ampp_projects_get_currency_code());
+  ampp_projects_check_currency_code();
 }
 
 
 /**
  * Checking if AMP database is configured
+ *
+ * @TODO: Switch to drupal_static() and check if the DB connection actually works.
  */
 function amp_db_exists() {
   global $amp_db_exists;
 
   global $databases;
-  if (isset($databases['amp_projects']) && is_array($databases['amp_projects'])) $amp_db_exists = TRUE;
+  if (isset($databases['amp_projects']) && is_array($databases['amp_projects'])) {
+    $amp_db_exists = TRUE;
+  }
 }
 
 
@@ -115,12 +120,10 @@ function getOnOffBudgetIDs() {
  * @return multitype:mixed
  */
 function ampp_get_sectors_from_url() {
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $sectors = array();
+
   $sectors_ids = isset($_GET["sectors"]) ? $_GET["sectors"] : 'all';
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
+  if ($sectors_ids != 'all' and !empty($sectors_ids)){
     db_set_active("amp_projects");
     $items = array();
 
@@ -137,10 +140,11 @@ function ampp_get_sectors_from_url() {
 
     $result = $query->execute();
     foreach ($result as $record) {
-      $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name))));
+      $sectors[] = array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name)));
     }
     db_set_active();
   }
+
   return $sectors;
 }
 
@@ -149,9 +153,6 @@ function ampp_get_sectors_from_url() {
  *
  */
 function ampp_get_primarysectors_from_url() {
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $sectors = array();
   $sectors_ids = isset($_GET["primarysectors"]) ? $_GET["primarysectors"] : 'all';
   if($sectors_ids != 'all' and !empty($sectors_ids)){
@@ -171,7 +172,7 @@ function ampp_get_primarysectors_from_url() {
 
     $result = $query->execute();
     foreach ($result as $record) {
-      $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name))));
+      $sectors[] = array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name)));
     }
     db_set_active();
   }
@@ -183,9 +184,6 @@ function ampp_get_primarysectors_from_url() {
  *
  */
 function ampp_get_secondarysectors_from_url() {
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $sectors = array();
   $sectors_ids = isset($_GET["secondarysectors"]) ? $_GET["secondarysectors"] : 'all';
   if($sectors_ids != 'all' and !empty($sectors_ids)){
@@ -205,7 +203,7 @@ function ampp_get_secondarysectors_from_url() {
 
     $result = $query->execute();
     foreach ($result as $record) {
-      $sectors[] = drupal_json_encode(array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name))));
+      $sectors[] = array('id'=>$record->amp_sector_id, 'name' => addslashes(check_plain($record->name)));
     }
     db_set_active();
   }
@@ -217,9 +215,6 @@ function ampp_get_secondarysectors_from_url() {
  *
  */
 function ampp_get_programs_from_url() {
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $programs = array();
   $programs_ids = isset($_GET["programs"]) ? $_GET["programs"] : 'all';
   if($programs_ids != 'all' and !empty($programs_ids)){
@@ -236,7 +231,7 @@ function ampp_get_programs_from_url() {
 
     $result = $query->distinct()->execute()->fetchAll();
     foreach ($result as $record) {
-      $programs[] = drupal_json_encode(array('id'=>$record->amp_theme_id, 'name'=>addslashes(check_plain($record->name))));
+      $programs[] = array('id'=>$record->amp_theme_id, 'name'=>addslashes(check_plain($record->name)));
     }
     db_set_active();
   }
@@ -248,15 +243,13 @@ function ampp_get_programs_from_url() {
  *
  */
 function ampp_get_keywords_from_url($source_arg = TRUE) {
-  $keywords = isset($_GET["keywords"]) ? $_GET["keywords"] : 'all';
-  if(!$source_arg) {
-    $keywords = 'all';
+  $keywords = isset($_GET["keywords"]) ? $_GET["keywords"] : array();
+
+  if (!is_array($keywords)) {
+    $keywords = array($keywords);
   }
 
-  if($keywords == 'all')
-    return '';
-
-  return array("$keywords");
+  return $keywords;
 }
 
 
@@ -265,10 +258,6 @@ function ampp_get_keywords_from_url($source_arg = TRUE) {
  * @return multitype:mixed
  */
 function ampp_get_donors_from_url() {
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $donors = array();
   $donors_ids = isset($_GET["donors"]) ? $_GET["donors"] : 'all';
 
@@ -297,7 +286,7 @@ function ampp_get_donors_from_url() {
     $result = $query->execute();
     foreach ($result as $record) {
       $name = !empty($record->acronym) ? check_plain($record->name) . ' (' . check_plain($record->acronym) . ')' : check_plain($record->name);
-      $donors[] = drupal_json_encode(array('id' => $record->amp_org_id, 'name' => $name));
+      $donors[] = array('id' => $record->amp_org_id, 'name' => $name);
     }
 
   }
@@ -312,10 +301,6 @@ function ampp_get_donors_from_url() {
  * @return multitype:mixed
  */
 function ampp_get_agencies_from_url() {
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $agencies = array();
   $agencies_ids = isset($_GET["agencies"]) ? $_GET["agencies"] : 'all';
 
@@ -335,12 +320,10 @@ function ampp_get_agencies_from_url() {
     $or_statement = db_or()->condition('agency.deleted', 'true', '<>')->condition('agency.deleted', NULL, 'is');
     $query->condition($or_statement);
 
-    if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_get_agencies_from_url', dpq($query, 1));
-
     $result = $query->execute();
     foreach ($result as $record) {
       $name = !empty($record->acronym) ? check_plain($record->name) . ' (' . check_plain($record->acronym) . ')' : check_plain($record->name);
-      $agencies[] = drupal_json_encode(array('id' => $record->amp_org_id, 'name' => $name));
+      $agencies[] = array('id' => $record->amp_org_id, 'name' => $name);
     }
 
   }
@@ -354,10 +337,6 @@ function ampp_get_agencies_from_url() {
  * Locations JSON array from URL
  */
 function ampp_get_locations_from_url() {
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
   $locations = array();
   $locations_ids = isset($_GET["locations"]) ? $_GET["locations"] : 'all';
   if($locations_ids != 'all' and !empty($locations_ids)){
@@ -373,8 +352,6 @@ function ampp_get_locations_from_url() {
     $query->addExpression($translate_field, 'location_name');
     $query->condition('location.id', explode(",", $locations_ids), "IN");
 
-    if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_get_locations_from_url', dpq($query, 1));
-
     $result = $query->execute();
     foreach ($result as $record) {
       $parents = get_location_path($record->id);
@@ -383,7 +360,7 @@ function ampp_get_locations_from_url() {
       } else {
         $name = $record->location_name;
       }
-      $locations[] = drupal_json_encode(array('id' => $record->id, 'name' => check_plain($name)));
+      $locations[] = array('id' => $record->id, 'name' => check_plain($name));
     }
     db_set_active();
   }
@@ -395,13 +372,19 @@ function ampp_get_locations_from_url() {
  * Period JSON array from URL
  */
 function ampp_get_period_from_url() {
+  $period = array();
 
-  if( isset($_GET["period_start"]) && isset($_GET["period_end"])) {
-    $period_start = $_GET["period_start"];
-    $period_end = $_GET["period_end"];
-    return array($period_start, $period_end);
+  $period['period_start'] = 'all';
+  if (isset($_GET['period_start'])) {
+    $period['period_start'] = $_GET['period_start'];
   }
-  return '';
+
+  $period['period_end'] = 'all';
+  if (isset($_GET['period_end'])) {
+    $period['period_end'] = $_GET['period_end'];
+  }
+
+  return $period;
 }
 
 
@@ -465,42 +448,14 @@ function get_total_amount($type, $args = array()) {
   $tmpview->set_display('panel_pane_1');
   $tmpview->get_total_amount_type = $type;
 
-  $sectors_array = array();
-  $sectors_ids = empty($_GET["sectors"]) ? '' : $_GET["sectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
-    $sectors_array = explode(",", $sectors_ids);
-  }
-  $sectors_ids = empty($_GET["primarysectors"]) ? '' : $_GET["primarysectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
-    $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
-  }
-  $sectors_ids = empty($_GET["secondarysectors"]) ? '' : $_GET["secondarysectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
-    $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
-  }
-
   if (empty($args)) {
-    $args[0] = !empty($_GET["donors"])? $_GET["donors"] : "all";
-    $args[1] = (count($sectors_array) > 0) ? implode(',', $sectors_array) : "all";
-    $args[2] = !empty($_GET["locations"])? $_GET["locations"] : "all";
-    $args[3] = !empty($_GET["keywords"])? $_GET["keywords"] : "all";
-    $args[4] = !empty($_GET["budget"])? $_GET["budget"] : "all";
-    $args[5] = !empty($_GET["programs"])? $_GET["programs"] : "all";
-    $args[6] = !empty($_GET["period_start"])? $_GET["period_start"] : "all";
-    $args[7] = !empty($_GET["period_end"])? $_GET["period_end"] : "all";
-  }
-
-  // we need to prepend all descendant locations
-  if ($args[2] !== "all") {
-    $args[2] = implode(',', addDescendantLocations(explode(',', $args[2])));
+    $args = _ampp_get_search_arguments(TRUE);
   }
 
   $tmpview->set_arguments($args);
   $tmpview->set_items_per_page(0);
   $tmpview->pre_execute();
   $tmpview->execute();
-
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_total_amount', dpq($tmpview->build_info['query'], 1));
 
   $sum = 0;
   foreach ($tmpview->result as $row) {
@@ -715,99 +670,15 @@ function ampp_projects_menu() {
  * TODO: Find a way to use views to get count
  */
 function ampp_search_result_count($JSON = true, $amount = false) {
-
   global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
-
-  $sectors_array = array();
-  if (empty($_GET["currentSectors"])) {
-    $sectors_ids = !empty($_GET["sectors"]) ? $_GET["sectors"] : "all";
-  } else {
-    $sectors_ids = implode(',', $_GET["currentSectors"]);
-    if (empty($sectors_ids)) $sectors_ids = "all";
-  }
-  if($sectors_ids != 'all' && !empty($sectors_ids)){
-    $sectors_array = explode(",", $sectors_ids);
-  }
-  if (empty($_GET["currentPrimarySectors"])) {
-    $sectors_ids = !empty($_GET["primarysectors"]) ? $_GET["primarysectors"] : "all";
-  } else {
-    $sectors_ids = implode(',', $_GET["currentPrimarySectors"]);
-    if (empty($sectors_ids)) $sectors_ids = "all";
-  }
-  if($sectors_ids != 'all' && !empty($sectors_ids)){
-    $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
-  }
-  if (empty($_GET["currentSecondarySectors"])) {
-    $sectors_ids = !empty($_GET["secondarysectors"]) ? $_GET["secondarysectors"] : "all";
-  } else {
-    $sectors_ids = implode(',', $_GET["currentSecondarySectors"]);
-    if (empty($sectors_ids)) $sectors_ids = "all";
-  }
-  if($sectors_ids != 'all' && !empty($sectors_ids)){
-    $sectors_array = array_merge($sectors_array, explode(",", $sectors_ids));
+  if (!$amp_db_exists) {
+    return;
   }
 
-  //watchdog('ampp_projects', 'ajax GET: ' . serialize($_GET));
-
-  if (empty($_GET["currentDonors"])) {
-    $args[0] = !empty($_GET["donors"]) ? $_GET["donors"] : "all";
-  } else {
-    $args[0] = implode(',', $_GET["currentDonors"]);
-    if (empty($args[0])) $args[0] = "all";
-  }
-
-  if (empty($_GET["currentAgencies"])) {
-    $args[0] = !empty($_GET["agencies"]) ? $_GET["agencies"] : "all";
-  } else {
-    $args[0] = implode(',', $_GET["currentAgencies"]);
-    if (empty($args[0])) $args[0] = "all";
-  }
-
-  $args[1] = (count($sectors_array) > 0) ? implode(',', $sectors_array) : "all";
-
-  if (empty($_GET["currentRegions"])) {
-    $args[2] = !empty($_GET["locations"]) ? $_GET["locations"] : "all";
-    // we need to prepend all descendant locations
-    if ($args[2] !== "all") {
-      $args[2] = implode(',', addDescendantLocations(explode(',', $args[2])));
-    }
-  } else {
-    $args[2] = implode(',', $_GET["currentRegions"]);
-    if (empty($args[2])) $args[2] = "all";
-  }
-
-  if (empty($_GET["currentPrograms"])) {
-    $args[5] = !empty($_GET["programs"]) ? $_GET["programs"] : "all";
-  } else {
-    $args[5] = implode(',', $_GET["currentPrograms"]);
-    if (empty($args[5])) $args[5] = "all";
-  }
-
-  if (empty($_GET["currentPeriodStart"])) {
-    $args[6] = !empty($_GET["period_start"]) ? $_GET["period_start"] : "all";
-  } else {
-    $args[6] = $_GET["currentPeriodStart"];
-    if (empty($args[6])) $args[6] = "all";
-  }
-  if (empty($_GET["currentPeriodEnd"])) {
-    $args[7] = !empty($_GET["period_end"]) ? $_GET["period_end"] : "all";
-  } else {
-    $args[7] = $_GET["currentPeriodEnd"];
-    if (empty($args[7])) $args[7] = "all";
-  }
-
-  if (empty($_GET["currentKeywords"])) {
-    $args[3] = !empty($_GET["keywords"]) ? $_GET["keywords"] : "all";
-  } else {
-    $args[3] = $_GET["currentKeywords"];
-    if (empty($args[3])) $args[3] = "all";
-  }
-
-  $args[4] = !empty($_GET["budget"]) ? $_GET["budget"] : "all";
-
-  //watchdog('ampp_projects', 'ajax ARGS: ' . serialize($args));
+  $args = _ampp_get_search_arguments(TRUE);
+  // Debug functions:
+  // watchdog('ampp_projects', 'ajax GET: ' . serialize($_GET));
+  // watchdog('ampp_projects', 'ajax ARGS: ' . serialize($args));
 
   $view = views_get_view('projects_search_result');
   $tmpview = $view->clone_view();
@@ -816,7 +687,7 @@ function ampp_search_result_count($JSON = true, $amount = false) {
   $tmpview->pre_execute();
   $tmpview->execute();
 
-  //watchdog('ampp_projects', 'ajax TOTAL: ' . $tmpview->total_rows);
+  // watchdog('ampp_projects', 'ajax TOTAL: ' . $tmpview->total_rows);
 
   $output = $tmpview->total_rows;
 
@@ -892,8 +763,6 @@ function ampp_search_sectors() {
   $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 'sector.amp_sec_scheme_id = ss.amp_sec_scheme_id');
   $query->addJoin('LEFT', 'amp_classification_config', 'cc', 'cc.classification_id = ss.amp_sec_scheme_id');
 
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_sectors', dpq($query, 1));
-
   $result = $query->execute();
   foreach ($result as $record) {
     $items[] = array('id' => $record->amp_sector_id, 'name' => check_plain($record->name));
@@ -924,8 +793,6 @@ function ampp_search_primarysectors() {
   $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 'sector.amp_sec_scheme_id = ss.amp_sec_scheme_id');
   $query->addJoin('LEFT', 'amp_classification_config', 'cc', 'cc.classification_id = ss.amp_sec_scheme_id');
 
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_primarysectors', dpq($query, 1));
-
   $result = $query->execute();
   foreach ($result as $record) {
     $items[] = array('id' => $record->amp_sector_id, 'name' => check_plain($record->name));
@@ -955,8 +822,6 @@ function ampp_search_secondarysectors() {
   $query->where('unaccent(' . $translate_field . ') ILIKE unaccent(\'%' . db_like($string) . '%\')');
   $query->addJoin('LEFT', 'amp_sector_scheme', 'ss', 'sector.amp_sec_scheme_id = ss.amp_sec_scheme_id');
   $query->addJoin('LEFT', 'amp_classification_config', 'cc', 'cc.classification_id = ss.amp_sec_scheme_id');
-
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_secondarysectors', dpq($query, 1));
 
   $result = $query->execute();
   foreach ($result as $record) {
@@ -1035,8 +900,6 @@ function ampp_search_donors() {
   $query->groupBy($translate_field);
   $query->groupBy('orgs.acronym');
 
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_donors', dpq($query, 1));
-
   $result = $query->execute();
 
   foreach ($result as $record) {
@@ -1083,8 +946,6 @@ function ampp_search_agencies() {
   $query_or->where('unaccent(agency.acronym) ILIKE unaccent(\'%' . db_like($string) . '%\')');
   $query->condition($query_or);
 
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_agencies', dpq($query, 1));
-
   $result = $query->execute();
 
   foreach ($result as $record) {
@@ -1127,8 +988,6 @@ function ampp_search_regions() {
     $result = db_query($query,  array(':string' => "%" . $string . "%"));
   }
 
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_search_regions', $query);
-
   foreach ($result as $record) {
     $parents = get_location_path($record->id);
     if (!empty($parents)) {
@@ -1147,19 +1006,22 @@ function ampp_search_regions() {
 /*
  * Get currency code
  */
-function ampp_projects_get_currency_code(){
-
+function ampp_projects_check_currency_code() {
   global $amp_db_exists;
   if (!$amp_db_exists) return;
 
-  db_set_active("amp_projects");
+  db_set_active('amp_projects');
   $currency_code = db_select('amp_global_settings', 'settings')
-                ->condition('settings.settingsname', 'Base Currency', "=")
-                ->fields('settings',array('settingsvalue'))
-                ->execute()
-                ->fetchField();
+    ->condition('settings.settingsname', 'Base Currency', "=")
+    ->fields('settings',array('settingsvalue'))
+    ->execute()
+    ->fetchField();
   db_set_active();
-  return $currency_code;
+
+  $current_code = variable_get('currency_code', NULL);
+  if ($current_code != $currency_code) {
+    variable_set('currency_code', $currency_code);
+  }
 }
 
 
@@ -1222,86 +1084,9 @@ function getChildProgramsIds($parentProgramId){
   return $allChildIds;
 }
 
-
-/*
+/**
  *
  */
-function getParentLocationIds($childLocationId) {
-
-  global $amp_db_exists;
-
-  if (!$amp_db_exists) return;
-
-  $allParentIds = array();
-
-  if (!empty($_GET["RegionalProjects"])) {
-    $regionalinclude = $_GET["RegionalProjects"];
-  } else {
-    $regionalinclude = $_GET["showregionalprojects"];
-  }
-
-  if ($regionalinclude == '1') {
-    db_set_active("amp_projects");
-
-    $parentIds = db_select('amp_category_value_location', 'l')
-      ->fields('l', array('parent_location'))
-      ->condition('l.id', $childLocationId, '=')
-      ->isNotNull('l.parent_location')
-      ->execute()
-      ->fetchAll(PDO::FETCH_COLUMN);
-
-    if (!empty($parentIds)) {
-      foreach ($parentIds as $parentId) {
-        $allParentIds[] = $parentId;
-        $allParentIds = array_merge($allParentIds, getParentLocationIds($parentId));
-      }
-    }
-
-    db_set_active();
-  }
-  return $allParentIds;
-}
-
-
-/*
- *
- */
-function addDescendantLocations($locations = array()) {
-  global $amp_db_exists;
-
-  // to avoid infinit recursion
-  static $calls = 0;
-  $calls++;
-  if ($calls > 1000) return array();
-
-  if (!$amp_db_exists) return;
-
-  db_set_active("amp_projects");
-
-  foreach ($locations as $k => $v) {
-    $childrenIds = db_select('amp_category_value_location', 'l')
-    ->fields('l', array('id'))
-    ->condition('l.parent_location', $v, '=')
-    ->execute()
-    ->fetchAll(PDO::FETCH_COLUMN);
-
-    if (!empty($childrenIds)) {
-      foreach ($childrenIds as $childId) {
-        $locations[] = $childId;
-        $locations = array_merge($locations, getParentLocationIds(array($childId)));
-      }
-    }
-  }
-
-  db_set_active();
-
-  return $locations;
-}
-
-
-/*
- *
-*/
 function get_location_path($childLocationId, $depth = 999) {
 
   // we need to show the full hierarchy but not country
@@ -1326,8 +1111,6 @@ function get_location_path($childLocationId, $depth = 999) {
   $query->condition('loc.id', $childLocationId, '=');
   $query->condition('cats.category_value', 'Country', '!=');
   $query->isNotNull('loc.parent_location');
-
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('get_location_path', $query);
 
   $result = $query->execute();
   $parents = '';
@@ -1611,8 +1394,6 @@ function ampp_projects_get_donor($id) {
   $or_statement = db_or()->condition('orgs.deleted', 'true', '<>')->condition('orgs.deleted', NULL, 'is');
   $query->condition($or_statement);
 
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_projects_get_donor', dpq($query, 1));
-
   $result = $query->execute();
   $info = array();
   foreach ($result as $record) {
@@ -1645,8 +1426,6 @@ function ampp_projects_get_donors() {
   $query->condition($or_statement);
   $query->orderBy('name', 'ASC');
 
-  if (isset($user) && $user->uid == 1 && variable_get('log_db_queries', 0)) watchdog('ampp_projects_get_donors', dpq($query, 1));
-
   $result = $query->execute();
 
   $hierarchy = array();
@@ -1660,8 +1439,10 @@ function ampp_projects_get_donors() {
 }
 
 
-/*
+/**
+ * Menu callback: searchexport/searchresult.xls
  *
+ * @TOOD: Set proper content headers.
  */
 function ampp_search_result_export() {
 
@@ -1669,31 +1450,9 @@ function ampp_search_result_export() {
   $tmpview = $view->clone_view();
   $tmpview->set_display('feed_1');
 
-  $sectors_array = Array();
+  $args = _ampp_get_search_arguments(TRUE);
 
-  $sectors_ids = empty($_GET["sectors"]) ? '' : $_GET["sectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
-  $sectors_array = explode(",",$sectors_ids);
-  }
-
-   $sectors_ids = empty($_GET["primarysectors"]) ? '' : $_GET["primarysectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
-  $sectors_array = array_merge($sectors_array,explode(",",$sectors_ids));
-  }
-
-  $sectors_ids = empty($_GET["secondarysectors"]) ? '' : $_GET["secondarysectors"];
-  if($sectors_ids != 'all' and !empty($sectors_ids)){
-  $sectors_array = array_merge($sectors_array,explode(",",$sectors_ids));
-  }
-
-  $args[0] = !empty($_GET["donors"])? $_GET["donors"] : "all";
-  $args[1] = (count($sectors_array) > 0) ? implode(',',$sectors_array) : "all";
-  $args[2] = !empty($_GET["locations"])? $_GET["locations"] : "all";
-  $args[3] = !empty($_GET["keywords"])? $_GET["keywords"] : "all";
-  $args[4] = !empty($_GET["budget"])? $_GET["budget"] : "all";
-  $args[5] = !empty($_GET["programs"])? $_GET["programs"] : "all";
-
-  echo $tmpview->preview('feed_1',$args);
+  echo $tmpview->preview('feed_1', $args);
 }
 
 
@@ -1720,3 +1479,4 @@ function activities_period_range() {
 
   return array(date('Y', strtotime($min[0])), date('Y', strtotime($max[0])));
 }
+

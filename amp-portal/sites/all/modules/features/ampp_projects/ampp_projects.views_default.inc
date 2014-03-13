@@ -120,7 +120,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = FALSE;
-  /* Field: AMP Projects: Id */
+  /* Field: AMP Activity: ID */
   $handler->display->display_options['fields']['amp_activity_id']['id'] = 'amp_activity_id';
   $handler->display->display_options['fields']['amp_activity_id']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['amp_activity_id']['field'] = 'amp_activity_id';
@@ -142,7 +142,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['amp_activity_id']['hide_empty'] = 0;
   $handler->display->display_options['fields']['amp_activity_id']['empty_zero'] = 0;
   $handler->display->display_options['fields']['amp_activity_id']['hide_alter_empty'] = 0;
-  /* Field: AMP Projects: Project title */
+  /* Field: AMP Activity: Project title */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['name']['field'] = 'name';
@@ -273,7 +273,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['category_location_name_agg']['hide_empty'] = 0;
   $handler->display->display_options['fields']['category_location_name_agg']['empty_zero'] = 0;
   $handler->display->display_options['fields']['category_location_name_agg']['hide_alter_empty'] = 0;
-  /* Field: AMP Projects: Start date */
+  /* Field: AMP Activity: Start date */
   $handler->display->display_options['fields']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['fields']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['actual_start_date']['field'] = 'actual_start_date';
@@ -295,7 +295,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_start_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['date_format'] = 'short';
-  /* Field: AMP Projects: End date */
+  /* Field: AMP Activity: End date */
   $handler->display->display_options['fields']['actual_completion_date']['id'] = 'actual_completion_date';
   $handler->display->display_options['fields']['actual_completion_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['actual_completion_date']['field'] = 'actual_completion_date';
@@ -317,7 +317,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_completion_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_completion_date']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['actual_completion_date']['date_format'] = 'short';
-  /* Field: AMP Projects: Commitment amount */
+  /* Field: AMP Activity: Commitment amount */
   $handler->display->display_options['fields']['commitment_amount']['id'] = 'commitment_amount';
   $handler->display->display_options['fields']['commitment_amount']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['commitment_amount']['field'] = 'commitment_amount';
@@ -338,7 +338,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['commitment_amount']['hide_empty'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['empty_zero'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['hide_alter_empty'] = 0;
-  /* Field: AMP Projects: Disbursement amount */
+  /* Field: AMP Activity: Disbursement amount */
   $handler->display->display_options['fields']['disbursement_amount']['id'] = 'disbursement_amount';
   $handler->display->display_options['fields']['disbursement_amount']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['disbursement_amount']['field'] = 'disbursement_amount';
@@ -367,7 +367,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['amp_theme_name_agg_1']['id'] = 'amp_theme_name_agg_1';
   $handler->display->display_options['fields']['amp_theme_name_agg_1']['table'] = 'amp_theme';
   $handler->display->display_options['fields']['amp_theme_name_agg_1']['field'] = 'amp_theme_name_agg';
-  /* Sort criterion: AMP Projects: Start date */
+  /* Sort criterion: AMP Activity: Start date */
   $handler->display->display_options['sorts']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['sorts']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['sorts']['actual_start_date']['field'] = 'actual_start_date';
@@ -404,7 +404,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['location_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['location_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['location_id']['not'] = 0;
-  /* Contextual filter: AMP Projects: Project title */
+  /* Contextual filter: AMP Activity: Project title */
   $handler->display->display_options['arguments']['name']['id'] = 'name';
   $handler->display->display_options['arguments']['name']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['name']['field'] = 'name';
@@ -440,13 +440,13 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['amp_theme_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['amp_theme_id']['break_phrase'] = 0;
   $handler->display->display_options['arguments']['amp_theme_id']['not'] = 0;
-  /* Contextual filter: AMP Projects: End date */
+  /* Contextual filter: AMP Activity: End date */
   $handler->display->display_options['arguments']['actual_completion_date']['id'] = 'actual_completion_date';
   $handler->display->display_options['arguments']['actual_completion_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['actual_completion_date']['field'] = 'actual_completion_date';
   $handler->display->display_options['arguments']['actual_completion_date']['default_argument_type'] = 'fixed';
   $handler->display->display_options['arguments']['actual_completion_date']['summary']['format'] = 'default_summary';
-  /* Contextual filter: AMP Projects: Start date */
+  /* Contextual filter: AMP Activity: Start date */
   $handler->display->display_options['arguments']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['arguments']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['actual_start_date']['field'] = 'actual_start_date';
@@ -457,7 +457,7 @@ function ampp_projects_views_default_views() {
     0 => 'AND',
     1 => 'AND',
   );
-  /* Filter criterion: AMP Projects: Id */
+  /* Filter criterion: AMP Activity: ID */
   $handler->display->display_options['filters']['amp_activity_id']['id'] = 'amp_activity_id';
   $handler->display->display_options['filters']['amp_activity_id']['table'] = 'cached_amp_activity';
   $handler->display->display_options['filters']['amp_activity_id']['field'] = 'amp_activity_id';
@@ -476,7 +476,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['empty']['area']['format'] = 'plain_text';
   $handler->display->display_options['empty']['area']['tokenize'] = 0;
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: AMP Projects: Id */
+  /* Field: AMP Activity: ID */
   $handler->display->display_options['fields']['amp_activity_id']['id'] = 'amp_activity_id';
   $handler->display->display_options['fields']['amp_activity_id']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['amp_activity_id']['field'] = 'amp_activity_id';
@@ -498,7 +498,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['amp_activity_id']['hide_empty'] = 0;
   $handler->display->display_options['fields']['amp_activity_id']['empty_zero'] = 0;
   $handler->display->display_options['fields']['amp_activity_id']['hide_alter_empty'] = 0;
-  /* Field: AMP Projects: Project title */
+  /* Field: AMP Activity: Project title */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['name']['field'] = 'name';
@@ -671,7 +671,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['name_1']['hide_empty'] = 0;
   $handler->display->display_options['fields']['name_1']['empty_zero'] = 0;
   $handler->display->display_options['fields']['name_1']['hide_alter_empty'] = 0;
-  /* Field: AMP Projects: Start date */
+  /* Field: AMP Activity: Start date */
   $handler->display->display_options['fields']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['fields']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['actual_start_date']['field'] = 'actual_start_date';
@@ -693,7 +693,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_start_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['date_format'] = 'short';
-  /* Field: AMP Projects: End date */
+  /* Field: AMP Activity: End date */
   $handler->display->display_options['fields']['actual_completion_date']['id'] = 'actual_completion_date';
   $handler->display->display_options['fields']['actual_completion_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['actual_completion_date']['field'] = 'actual_completion_date';
@@ -715,7 +715,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_completion_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_completion_date']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['actual_completion_date']['date_format'] = 'short';
-  /* Field: AMP Projects: Commitment amount */
+  /* Field: AMP Activity: Commitment amount */
   $handler->display->display_options['fields']['commitment_amount']['id'] = 'commitment_amount';
   $handler->display->display_options['fields']['commitment_amount']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['commitment_amount']['field'] = 'commitment_amount';
@@ -736,7 +736,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['commitment_amount']['hide_empty'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['empty_zero'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['hide_alter_empty'] = 0;
-  /* Field: AMP Projects: Disbursement amount */
+  /* Field: AMP Activity: Disbursement amount */
   $handler->display->display_options['fields']['disbursement_amount']['id'] = 'disbursement_amount';
   $handler->display->display_options['fields']['disbursement_amount']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['disbursement_amount']['field'] = 'disbursement_amount';
@@ -792,7 +792,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['location_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['location_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['location_id']['not'] = 0;
-  /* Contextual filter: AMP Projects: Project title */
+  /* Contextual filter: AMP Activity: Project title */
   $handler->display->display_options['arguments']['name']['id'] = 'name';
   $handler->display->display_options['arguments']['name']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['name']['field'] = 'name';
@@ -828,7 +828,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['amp_theme_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['amp_theme_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['amp_theme_id']['not'] = 0;
-  /* Contextual filter: AMP Projects: Start date */
+  /* Contextual filter: AMP Activity: Start date */
   $handler->display->display_options['arguments']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['arguments']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['actual_start_date']['field'] = 'actual_start_date';
@@ -838,7 +838,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['actual_start_date']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['actual_start_date']['summary_options']['override'] = TRUE;
   $handler->display->display_options['arguments']['actual_start_date']['condition_operator'] = '>=';
-  /* Contextual filter: AMP Projects: End date */
+  /* Contextual filter: AMP Activity: End date */
   $handler->display->display_options['arguments']['actual_completion_date']['id'] = 'actual_completion_date';
   $handler->display->display_options['arguments']['actual_completion_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['actual_completion_date']['field'] = 'actual_completion_date';
@@ -848,6 +848,19 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['actual_completion_date']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['actual_completion_date']['summary_options']['override'] = TRUE;
   $handler->display->display_options['arguments']['actual_completion_date']['condition_operator'] = '<=';
+  /* Contextual filter: Organization Role: Organisation having Role */
+  $handler->display->display_options['arguments']['organisation_role']['id'] = 'organisation_role';
+  $handler->display->display_options['arguments']['organisation_role']['table'] = 'amp_org_role';
+  $handler->display->display_options['arguments']['organisation_role']['field'] = 'organisation_role';
+  $handler->display->display_options['arguments']['organisation_role']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['organisation_role']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['organisation_role']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['organisation_role']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['organisation_role']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['organisation_role']['not'] = 0;
+  $handler->display->display_options['arguments']['organisation_role']['role_value'] = array(
+    'BA' => 'BA',
+  );
   $handler->display->display_options['pane_title'] = 'Projects search result pane view';
   $handler->display->display_options['argument_input'] = array(
     'amp_org_id' => array(
@@ -892,7 +905,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'xls';
   $handler->display->display_options['defaults']['fields'] = FALSE;
-  /* Field: AMP Projects: Id */
+  /* Field: AMP Activity: ID */
   $handler->display->display_options['fields']['amp_activity_id']['id'] = 'amp_activity_id';
   $handler->display->display_options['fields']['amp_activity_id']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['amp_activity_id']['field'] = 'amp_activity_id';
@@ -914,7 +927,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['amp_activity_id']['hide_empty'] = 0;
   $handler->display->display_options['fields']['amp_activity_id']['empty_zero'] = 0;
   $handler->display->display_options['fields']['amp_activity_id']['hide_alter_empty'] = 0;
-  /* Field: AMP Projects: Project title */
+  /* Field: AMP Activity: Project title */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['name']['field'] = 'name';
@@ -1070,7 +1083,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['name_1']['hide_empty'] = 0;
   $handler->display->display_options['fields']['name_1']['empty_zero'] = 0;
   $handler->display->display_options['fields']['name_1']['hide_alter_empty'] = 0;
-  /* Field: AMP Projects: Start date */
+  /* Field: AMP Activity: Start date */
   $handler->display->display_options['fields']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['fields']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['actual_start_date']['field'] = 'actual_start_date';
@@ -1092,7 +1105,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_start_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['date_format'] = 'short';
-  /* Field: AMP Projects: End date */
+  /* Field: AMP Activity: End date */
   $handler->display->display_options['fields']['actual_completion_date']['id'] = 'actual_completion_date';
   $handler->display->display_options['fields']['actual_completion_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['actual_completion_date']['field'] = 'actual_completion_date';
@@ -1114,7 +1127,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_completion_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_completion_date']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['actual_completion_date']['date_format'] = 'short';
-  /* Field: AMP Projects: Commitment amount */
+  /* Field: AMP Activity: Commitment amount */
   $handler->display->display_options['fields']['commitment_amount']['id'] = 'commitment_amount';
   $handler->display->display_options['fields']['commitment_amount']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['commitment_amount']['field'] = 'commitment_amount';
@@ -1135,7 +1148,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['commitment_amount']['hide_empty'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['empty_zero'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['hide_alter_empty'] = 0;
-  /* Field: AMP Projects: Disbursement amount */
+  /* Field: AMP Activity: Disbursement amount */
   $handler->display->display_options['fields']['disbursement_amount']['id'] = 'disbursement_amount';
   $handler->display->display_options['fields']['disbursement_amount']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['disbursement_amount']['field'] = 'disbursement_amount';
@@ -1190,7 +1203,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['location_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['location_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['location_id']['not'] = 0;
-  /* Contextual filter: AMP Projects: Project title */
+  /* Contextual filter: AMP Activity: Project title */
   $handler->display->display_options['arguments']['name']['id'] = 'name';
   $handler->display->display_options['arguments']['name']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['name']['field'] = 'name';
@@ -1226,7 +1239,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['amp_theme_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['amp_theme_id']['break_phrase'] = 0;
   $handler->display->display_options['arguments']['amp_theme_id']['not'] = 0;
-  /* Contextual filter: AMP Projects: Start date */
+  /* Contextual filter: AMP Activity: Start date */
   $handler->display->display_options['arguments']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['arguments']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['actual_start_date']['field'] = 'actual_start_date';
@@ -1236,7 +1249,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['actual_start_date']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['actual_start_date']['summary_options']['override'] = TRUE;
   $handler->display->display_options['arguments']['actual_start_date']['condition_operator'] = '>=';
-  /* Contextual filter: AMP Projects: End date */
+  /* Contextual filter: AMP Activity: End date */
   $handler->display->display_options['arguments']['actual_completion_date']['id'] = 'actual_completion_date';
   $handler->display->display_options['arguments']['actual_completion_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['actual_completion_date']['field'] = 'actual_completion_date';
@@ -1244,6 +1257,19 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['actual_completion_date']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['actual_completion_date']['summary_options']['override'] = TRUE;
   $handler->display->display_options['arguments']['actual_completion_date']['condition_operator'] = '<=';
+  /* Contextual filter: Organization Role: Organisation having Role */
+  $handler->display->display_options['arguments']['organisation_role']['id'] = 'organisation_role';
+  $handler->display->display_options['arguments']['organisation_role']['table'] = 'amp_org_role';
+  $handler->display->display_options['arguments']['organisation_role']['field'] = 'organisation_role';
+  $handler->display->display_options['arguments']['organisation_role']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['organisation_role']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['organisation_role']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['organisation_role']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['organisation_role']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['organisation_role']['not'] = 0;
+  $handler->display->display_options['arguments']['organisation_role']['role_value'] = array(
+    'BA' => 'BA',
+  );
   $handler->display->display_options['path'] = 'searchxls/searchresult.xls';
   $translatables['projects_search_result'] = array(
     t('Master'),

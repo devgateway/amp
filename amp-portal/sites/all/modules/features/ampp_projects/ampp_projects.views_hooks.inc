@@ -407,6 +407,17 @@ function ampp_projects_views_data() {
     )
   );
 
+  $data['amp_org_role']['role'] = array(
+    'title' => t('Role'),
+    'help' => t('Get information related to the organization roles.'),
+    'relationship' => array(
+      'handler' => 'views_handler_relationship',
+      'base' => 'amp_role',
+      'field' => 'amp_role_id',
+      'label' => t('role'),
+    ),
+  );
+
   $data['amp_org_role']['organisation_role'] = array(
     'title' => t('Organisation having Role'),
     'help' => t('Filter by Organizations that have a specific role'),
@@ -420,6 +431,55 @@ function ampp_projects_views_data() {
     'filter' => array(
       'handler' => 'views_handler_filter_numeric',
     ),
+  );
+
+  // TABLE: amp_role
+  $data['amp_role']['table']['group'] = t('Organization Role');
+  $data['amp_role']['table']['base'] = array(
+    'field' => 'amp_role_id',
+    'title' => t('AMP Role'),
+    'help' => t('Contains information related to AMP Roles.'),
+    'database' => 'amp_projects'
+  );
+
+  $data['amp_role']['amp_role_id'] = array(
+    'title' => t('Role ID'),
+    'help' => t('The node ID.'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'sort' => array('handler' => 'views_handler_sort_numeric')
+  );
+
+  $data['amp_role']['name'] = array(
+    'title' => t('Name'),
+    'help' => t('The name of the role.'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'sort' => array('handler' => 'views_handler_sort')
+  );
+
+  $data['amp_role']['role_code'] = array(
+    'title' => t('Role Code'),
+    'help' => t('The code of the role.'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_in_operator',
+      'options callback' => '_ampp_projects_get_amp_roles',
+      'options arguments' => array('role_code'),
+    ),
+    'sort' => array('handler' => 'views_handler_sort')
   );
 
   return $data;

@@ -11,8 +11,7 @@
 			<lang delimiter=";" type="postgres">
 				INSERT INTO amp_columns(columnid,columnName,aliasname, cellType, extractorview)  
  				values(nextval('amp_columns_seq'),'Funding Classification Date','fundingClassificationDate', 'org.dgfoundation.amp.ar.cell.DateCell','v_funding_classification_date');
- 				CREATE OR REPLACE VIEW v_funding_classification_date AS SELECT f.amp_activity_id,f.funding_classification_date FROM (amp_funding f JOIN amp_activity a ON ((f.amp_activity_id = a.amp_activity_id))) ORDER BY f.amp_activity_id;
-			</lang>
+ 			</lang>
 		</script>
 	</apply>
 </tns:patch>

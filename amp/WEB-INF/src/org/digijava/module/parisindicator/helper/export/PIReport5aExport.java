@@ -40,8 +40,8 @@ public class PIReport5aExport extends PIAbstractExport implements PIExportExtraO
 			auxRow.setColumn3(FormatHelper.getDecimalFormat().format(row.getColumn3()));
 			auxRow.setColumn4(FormatHelper.getDecimalFormat().format(row.getColumn4()));
 			auxRow.setColumn5(FormatHelper.getDecimalFormat().format(row.getColumn5()));
-			auxRow.setColumn6(new Integer(new Float(row.getColumn6()).intValue()).toString() + "%");
-			auxRow.setColumn7(new Integer(new Float(row.getColumn7()).intValue()).toString() + "%");
+            auxRow.setColumn6(FormatHelper.getDecimalFormat().format(row.getColumn6()) + "%");
+            auxRow.setColumn7(FormatHelper.getDecimalFormat().format(row.getColumn7()) + "%");
 			list.add(auxRow);
 		}
 		return list;

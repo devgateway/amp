@@ -30,7 +30,7 @@ public class PIReport10bExport extends PIAbstractExport {
 			auxRow.setYear(new Integer(row.getYear()).toString());
 			auxRow.setColumn1(FormatHelper.getDecimalFormat().format(row.getColumn1()));
 			auxRow.setColumn2(FormatHelper.getDecimalFormat().format(row.getColumn2()));
-			auxRow.setColumn3(new Integer(new Float(row.getColumn3()).intValue()).toString() + "%");
+			auxRow.setColumn3(FormatHelper.getDecimalFormat().format(row.getColumn3()) + "%");
 			list.add(auxRow);
 		}
 		return list;

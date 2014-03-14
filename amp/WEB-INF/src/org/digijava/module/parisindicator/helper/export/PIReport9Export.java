@@ -31,7 +31,7 @@ public class PIReport9Export extends PIAbstractExport {
 			auxRow.setColumn1(FormatHelper.getDecimalFormat().format(row.getColumn1()));
 			auxRow.setColumn2(FormatHelper.getDecimalFormat().format(row.getColumn2()));
 			auxRow.setColumn3(FormatHelper.getDecimalFormat().format(row.getColumn3()));
-			auxRow.setColumn4(new Integer(new Float(row.getColumn4()).intValue()).toString() + "%");
+			auxRow.setColumn4(FormatHelper.getDecimalFormat().format(row.getColumn4()) + "%");
 			list.add(auxRow);
 		}
 		return list;

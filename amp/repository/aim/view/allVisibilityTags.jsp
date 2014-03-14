@@ -1030,6 +1030,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Activity Count" feature="Computed Fields"></field:display>
 <field:display name="Percentage of Disbursement" feature="Computed Fields"></field:display>
 <field:display name="Commitment Gap" feature="Computed Fields"></field:display>
+<field:display name="Calculated Project Life" feature="Computed Fields"></field:display>
 
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>

@@ -16,7 +16,7 @@ public class MathExpression {
 	 * @author Sebastian Dimunzio Apr 27, 2009
 	 */
 	public enum Operation {
-		ADD, SUBTRACT, DIVIDE, DIVIDE_ROUND_TWO_DECIMALS, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP, DATE_MONTH_DIFF, SUM;
+		ADD, SUBTRACT, DIVIDE, DIVIDE_ROUND_TWO_DECIMALS, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP, DATE_MONTH_DIFF, DATE_DAY_DIFF, SUM;
 	}
 
 	private Operation operation = null;
@@ -151,6 +151,8 @@ public class MathExpression {
 				return oper1.multiply(oper2);
 			case DATE_MONTH_DIFF:
 				return getMonthDifference(oper1, oper2);
+			case DATE_DAY_DIFF:
+				return getDayDifference(oper1, oper2);
 			}
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -191,6 +193,25 @@ public class MathExpression {
 		return new BigDecimal(count * ((negaitveResult) ? -1 : 1));
 	}
 
+	public static BigDecimal getDayDifference(BigDecimal date1, BigDecimal date2) {
+		int count = 0;
+		GregorianCalendar fromCalendar = new GregorianCalendar(), toCalendar = new GregorianCalendar();
+		fromCalendar.setTimeInMillis(date2.longValue());
+		toCalendar.setTimeInMillis(date1.longValue());
+
+		boolean negativeResult = false;
+		if (fromCalendar.after(toCalendar)) {
+			negativeResult = true;
+			fromCalendar.setTimeInMillis(date1.longValue());
+			toCalendar.setTimeInMillis(date2.longValue());
+		}
+		for (fromCalendar.add(Calendar.DAY_OF_MONTH, 1); fromCalendar.compareTo(toCalendar) <= 0; fromCalendar.add(Calendar.DAY_OF_MONTH, 1)) {
+			count++;
+		}
+
+		return new BigDecimal(count * ((negativeResult) ? -1 : 1));
+	}
+	
 	public boolean constainsVariable(String var) {
 		if (oper1 instanceof String) {
 			if (var.equalsIgnoreCase((String) oper1)) {

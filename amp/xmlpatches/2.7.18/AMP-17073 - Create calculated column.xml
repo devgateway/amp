@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-17073</jira>
+	<keyword></keyword>
+	<author>ginchauspe</author>
+	<description>Add calculated column</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO amp_columns(columnid, columnName, aliasname, tokenexpression, cellType, extractorview, description)
+				VALUES (nextval('amp_columns_seq'),'Calculated Project Life','calculatedProjectLife', 'calculatedProjectLife',  'org.dgfoundation.amp.ar.cell.ComputedDateCell','v_computed_dates','Difference in days between Planned Start Date and Actual Completion Date');
+
+				CREATE OR REPLACE VIEW v_computed_dates AS
+				SELECT amp_activity.amp_activity_id, 
+				amp_activity.activity_close_date,
+				amp_activity.actual_start_date, 
+				amp_activity.actual_approval_date,
+				amp_activity.activity_approval_date,
+				amp_activity.proposed_start_date,
+				amp_activity.actual_completion_date,
+				amp_activity.proposed_completion_date,
+				amp_activity.original_comp_date
+				FROM amp_activity
+				ORDER BY amp_activity.amp_activity_id;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

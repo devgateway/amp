@@ -23,6 +23,7 @@
 	<ul style="list-style-type: none">
 		<logic:iterate id="entity" name="entityList" scope="page">
 			<c:set var="checked" value="" scope="page" />
+			<c:set var="parentId" value="" scope="page" />
 			<logic:notEmpty name="reqBeanSetterObject" property="${selectedEntityIds}">
 				<c:forEach var="elInArray"  items="${beanSetterArray}">
 					<c:if test="${elInArray==entity.uniqueId}">
@@ -30,10 +31,13 @@
 					</c:if>
 				</c:forEach>
 			</logic:notEmpty>
+			<logic:present name="element" property="rootHierarchyListable.parentMapping">
+				<c:set var="parentId" scope="page" >parentId='${element.rootHierarchyListable.parentMapping[entity.uniqueId]}'</c:set>
+			</logic:present>
 			<li style="margin-left: -20px; ">
 				<table>
 					<tr>
-						<td valign="top"><input onclick="toggleCheckChildren(this);if(typeof buildLabels == 'function') buildLabels();" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}" ${checked}/></td>
+						<td valign="top"><input onclick="toggleCheckChildren(this);if(typeof buildLabels == 'function') buildLabels();" type="checkbox" value="${entity.uniqueId}" name="${selectedEntityIds}"  ${parentId}  ${checked}/></td>
 						<td>
 							<span style="font-family: Arial; font-size: 12px;">
 								<c:if test="${entity.translateable}">
@@ -41,6 +45,7 @@
 								</c:if>
 								<c:if test="${!entity.translateable}">
 									<c:out value="${entity.label}"/> 
+									
 								</c:if>
 							</span>
 							<div style="display:none" class="additionalSearchStringMarker">

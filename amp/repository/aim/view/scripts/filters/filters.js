@@ -156,7 +156,6 @@ YAHOO.amptab.initDisplayOfMemberSelectors       = function(bigDivId) {
 	};
 
 function toggleCheckChildren(checkboxEl) {
-	
 	var parentTdEl				= checkboxEl.parentNode;
 	for (var i=0; i<=5; i++) {
 		if (parentTdEl.nodeName.toLowerCase()=="li") break;
@@ -165,7 +164,19 @@ function toggleCheckChildren(checkboxEl) {
 	var descendantCheckboxes	= parentTdEl.getElementsByTagName('input');
 	for (var i=0; i<descendantCheckboxes.length; i++ ) {
 		descendantCheckboxes[i].checked	= checkboxEl.checked ;
+		toggleByParent (descendantCheckboxes[i].value,checkboxEl.checked);
+		//necessary for related donor groups
+		//root is selected we need to showall groups. Checked or unchecked
+		if (checkboxEl.className=='root_checkbox') {
+			toggleRelatedGroups (descendantCheckboxes[i].name,true);
+		}
+		else {
+			//we need to hide the non related and show related
+			toggleRelatedGroups (checkboxEl.name);
+		}
 	}
+	//if not donor type is selected show all donor groups
+	refreshRelatedGroups();
 	
 	if ( ! checkboxEl.checked ) {
 		var tempParent				= parentTdEl.parentNode;
@@ -190,6 +201,75 @@ function toggleCheckChildren(checkboxEl) {
 	}
 }
 
+function getParentLi (object) {
+var parent = null;
+for (var k=0; k<=5; k++) {
+	if (object.nodeName.toLowerCase()=="li") {
+		{
+			parent = object;
+	    	break;
+		}
+	}
+	object	= object.parentNode;
+}
+return parent;
+
+}
+function refreshRelatedGroups() {
+	var inputs=  document.getElementsByName("selectedDonorTypes");
+	var isOneSelected = false;
+	for(var i = 0; i < inputs.length; i++) {
+		if (inputs[i].type == "checkbox" && inputs[i].checked == true) {
+			isOneSelected = true;
+			break;
+		}
+	}
+	//if non donor type is selected show them all
+	if (isOneSelected == false) {
+		var typeInputs = document.getElementsByName("selectedDonorGroups");
+		for (var j=0;j<typeInputs.length;j++) {
+			var parentLiElement=typeInputs[j];
+			var liElement = getParentLi (parentLiElement);
+			if (liElement!=null) {
+				liElement.style.display = 'block';	
+			}
+	    
+		}
+	}
+	
+}
+
+
+function toggleRelatedGroups (name,forceShow) {
+	if (name !='selectedDonorTypes') {
+		return;
+	}
+	var inputs = document.getElementsByName("selectedDonorGroups");
+	for(var i = 0; i < inputs.length; i++) {
+	    if(inputs[i].type == "checkbox" && inputs[i].attributes['parentid']) {
+	    	//we go to the parent li and hide the entire element
+	    	var parentLiElement=inputs[i];
+	    	var liElement = getParentLi (parentLiElement);
+			if (liElement!=null) {
+				if (inputs[i].checked == true || true == forceShow)
+					liElement.style.display = 'block';
+    			else 
+    				liElement.style.display = 'none';
+			}
+	    }
+	}
+
+	
+}
+function toggleByParent (id,check) {
+	var inputs = document.getElementsByTagName("input");
+	for(var i = 0; i < inputs.length; i++) {
+	    if(inputs[i].type == "checkbox" && inputs[i].attributes['parentid'] &&
+	    		inputs[i].attributes['parentid'].nodeValue == id) {
+	         inputs[i].checked = check;
+	    }  
+	}
+}
 	 
 function DivManager(divId, propertyObj) {
 	 	this.divEl                      = document.getElementById(divId);

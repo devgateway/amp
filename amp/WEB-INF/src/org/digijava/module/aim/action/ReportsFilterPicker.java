@@ -88,7 +88,7 @@ public class ReportsFilterPicker extends Action {
 
         if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && 
         		ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
-            showWorkspaceFilter = false;
+           showWorkspaceFilter = false;
         }
         filterForm.setShowWorkspaceFilter(showWorkspaceFilter);
 
@@ -411,11 +411,10 @@ public class ReportsFilterPicker extends Action {
         }
 
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
-			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
+        	filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
 			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
 		}
- 	 	
-		ArrayList<String> decimalseparators = new ArrayList<String>();
+        ArrayList<String> decimalseparators = new ArrayList<String>();
 		DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
 		String selecteddecimalseparator  = String.valueOf((usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator()));
 			 
@@ -448,7 +447,7 @@ public class ReportsFilterPicker extends Action {
 			 filterForm.setCustomUseGrouping(usedDecimalFormat.isGroupingUsed());
 			 filterForm.setCustomGroupSize(usedDecimalFormat.getGroupingSize());
 		 }
-		 
+		
 		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
 		//Only currencies having exchanges rates AMP-2620
 		List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
@@ -561,7 +560,7 @@ public class ReportsFilterPicker extends Action {
         }
  	 	StopWatch.next("Filters", true, "After Programs");
  	 	//long a = System.currentTimeMillis();
- 	 	List<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
+ 		List<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	List<AmpOrgGroup> donorGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllOrgGroupsOfPortfolio();
 
  	 	Collections.sort(donorGroups, new DbUtil.HelperAmpOrgGroupNameComparator());
@@ -584,6 +583,9 @@ public class ReportsFilterPicker extends Action {
  	 	rootOrgGroup.setUniqueId("0");
  	 	rootOrgGroup.setChildren(donorGroups);
  	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
+ 	 	for (AmpOrgGroup group:donorGroups) {
+ 	 		rootOrgGroup.getParentMapping().put(group.getAmpOrgGrpId().toString(),group.getOrgType().getAmpOrgTypeId().toString());
+ 	 	}
  	 	filterForm.getDonorElements().add(donorGroupElement);
  	 	
  	 	Collection<AmpOrganisation> donors = ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_DONOR);

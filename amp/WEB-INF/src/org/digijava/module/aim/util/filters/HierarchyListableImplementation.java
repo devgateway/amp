@@ -1,6 +1,8 @@
 package org.digijava.module.aim.util.filters;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.digijava.module.aim.util.HierarchyListable;
 
@@ -14,7 +16,18 @@ public class HierarchyListableImplementation implements HierarchyListable {
     private String additionalSearchableString;
 	private String uniqueId;
 	private Collection<? extends HierarchyListable> children;
+	//children id-parent id mapping for all children
+	private Map <String,String> parentMapping= new HashMap<String,String>(); 
 	
+	public Map<String, String> getParentMapping() {
+		return parentMapping;
+	}
+
+	public void setParentMapping(Map<String, String> parentMapping) {
+		this.parentMapping = parentMapping;
+	}
+
+
 	private boolean translateable	= true;
 
 

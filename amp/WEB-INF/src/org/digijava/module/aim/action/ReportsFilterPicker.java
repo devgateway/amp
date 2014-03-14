@@ -600,6 +600,9 @@ public class ReportsFilterPicker extends Action {
  	 	rootOrgGroup.setUniqueId("0");
  	 	rootOrgGroup.setChildren(donorGroups);
  	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
+ 	 	for (AmpOrgGroup group:donorGroups) {
+ 	 		rootOrgGroup.getParentMapping().put(group.getAmpOrgGrpId().toString(),group.getOrgType().getAmpOrgTypeId().toString());
+ 	 	}
  	 	filterForm.getDonorElements().add(donorGroupElement);
  	 	
  	 	Collection<AmpOrganisation> donors = ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_DONOR);

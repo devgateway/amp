@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -26,41 +27,51 @@ public class SelectPledgeLocation extends Action {
 	private static Logger logger = Logger.getLogger(SelectPledgeLocation.class);
 
 
+	/**
+	 * imports locations from a collection into a form. If collection is null, imports nothing
+	 * @param pledgeForm
+	 * @param locs
+	 */
+	protected void importLocationsIntoForm(PledgeForm pledgeForm, Collection<AmpCategoryValueLocations> locs)
+	{
+		if (locs != null)
+		{		
+			for (AmpCategoryValueLocations loc : locs)
+				pledgeForm.importLocationForLocationsForm(loc);
+		}
+	}
+	
+	protected void filterDisplayedLocations(PledgeForm pledgeForm, Set<Long> forbiddenLocations)
+	{
+		for(int layer:pledgeForm.getLocationByLayers().keySet())
+		{
+			java.util.List<KeyValue> ids = pledgeForm.getLocationByLayers().get(layer);
+			Iterator<KeyValue> idIt = ids.iterator(); // remove from the possible values the ones which are forbidden
+			while (idIt.hasNext())
+			{
+				long acvl = Long.valueOf(idIt.next().getKey());
+				if (forbiddenLocations.contains(acvl))
+					idIt.remove();
+			}
+		}
+	}
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,javax.servlet.http.HttpServletRequest request,javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
 		PledgeForm pledgeForm = (PledgeForm) form;
+		
 		pledgeForm.setNoMoreRecords(false);
-
 
         /* New Region Manager changes */
         if ( !"true".equals( request.getParameter("edit") ) ) {
-            pledgeForm.setImplemLocationLevel(-1l);
-            pledgeForm.setLevelId(-1l);
-            pledgeForm.setParentLocId(null);
-            pledgeForm.getLocationByLayers().clear();
-            pledgeForm.getSelectedLayers().clear();
-
-            // this if for FundingPledgesLocation. Not sure why this is in this code
-            //pledgeForm.setSelectedLocs(null);
-            pledgeForm.setUserSelectedLocs(null);
-
+        	pledgeForm.cleanLocationData(true);
             return mapping.findForward("forward");
         }
 
         if (pledgeForm.getLevelId() <= 0) {
             CategoryManagerUtil.removeAmpCategryBykey("implementation_level");
-
-            pledgeForm.setImplemLocationLevel(-1l);
-            pledgeForm.setLevelId(-1l);
-            pledgeForm.setParentLocId(null);
-            pledgeForm.getLocationByLayers().clear();
-            pledgeForm.getSelectedLayers().clear();
-
-            // this if for FundingPledgesLocation. Not sure why this is in this code
-            //pledgeForm.setSelectedLocs(null);
-            pledgeForm.setUserSelectedLocs(null);
-
+            pledgeForm.cleanLocationData(true);
             return mapping.findForward("forward");
         }
 
@@ -68,156 +79,55 @@ public class SelectPledgeLocation extends Action {
 		if (resetSelLocs != null && resetSelLocs.equalsIgnoreCase("reset")) {
 			pledgeForm.setSelectedLocs(null);
 		}
-
-		Integer impLevelValue = null;
+	       
 		Long impLocLevel = null;
 
-
-        AmpCategoryValue implLocLevelValue = CategoryManagerUtil.getAmpCategoryValueFromDb(pledgeForm.getLevelId());
-
-		if (request.getParameter("implemLocationLevel") != null) {
-
-            CategoryManagerUtil.removeAmpCategryBykey("implementation_location");
-
-			impLocLevel = Long.parseLong(request.getParameter("implemLocationLevel"));
-            if (impLocLevel > 0) {
-                pledgeForm.setImplemLocationLevel(impLocLevel);
-                pledgeForm.setImplLocationValue(CategoryManagerUtil.getAmpCategoryValueFromDb(impLocLevel));
-            } else {
-                pledgeForm.setParentLocId(null);
-                pledgeForm.getLocationByLayers().clear();
-                pledgeForm.getSelectedLayers().clear();
-
-                // this if for FundingPledgesLocation. Not sure why this is in this code
-                // pledgeForm.setSelectedLocs(null);
-                pledgeForm.setUserSelectedLocs(null);
-
-                return mapping.findForward("forward");
-            }
+		AmpCategoryValue implLocLevelValue = CategoryManagerUtil.getAmpCategoryValueFromDb(pledgeForm.getLevelId());      
+        String selectedImplemLocationLevel = request.getParameter("implemLocationLevel");
+        
+        if (selectedImplemLocationLevel != null) // implementation level selected
+		{
+			CategoryManagerUtil.removeAmpCategryBykey("implementation_location"); // hack: reset category manager cache for this key
+			impLocLevel = Long.parseLong(selectedImplemLocationLevel);
+			if (impLocLevel <= 0)
+			{
+            	pledgeForm.cleanLocationData(false); // reset selected
+            	return mapping.findForward("forward");
+			}
+			pledgeForm.setImplemLocationLevel(impLocLevel);
+			pledgeForm.setImplLocationValue(CategoryManagerUtil.getAmpCategoryValueFromDb(impLocLevel));
 		}
-
-		pledgeForm.setImpLevelValue( impLevelValue );
-		
+				
 		String defaultCountryIso = FeaturesUtil.getDefaultCountryIso();
 		
-		Map<Integer, Collection<KeyValue>> locationByLayers	= pledgeForm.getLocationByLayers();
-		
+		//Map<Integer, Collection<KeyValue>> locationByLayers	= pledgeForm.getLocationByLayers();
+        pledgeForm.getLocationByLayers().clear();
+        
 		AmpCategoryValue implLevel = CategoryManagerUtil.getAmpCategoryValueFromDb( pledgeForm.getLevelId() );
 		if (implLevel != null &&
 				CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
 				CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocLevelValue) )
 		{
-			Collection<AmpCategoryValueLocations> countries =
-			DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-			if (countries != null) {
-				Integer countryIndex = null;
-				ArrayList<KeyValue> countriesKV = new ArrayList<KeyValue>();
-				for (AmpCategoryValueLocations country : countries) {
-					countryIndex = (countryIndex == null) ? country.getParentCategoryValue().getIndex() : countryIndex;
-					KeyValue countryKV = new KeyValue(country.getId().toString(), country.getName());
-					countriesKV.add(countryKV);
-				}
-				locationByLayers.put(countryIndex, countriesKV);
-			}
+			// international level selected: show list of all countries in the DB			
+			importLocationsIntoForm(pledgeForm, DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY));
 			return mapping.findForward("forward");
 		}
-	
-		 /*
-        if(defaultCountryIso!=null && (parentLocId == null || parentLocId == 0)) { // Setting up the country
-        	pledgeForm.setDefaultCountryIsSet(true);
-        	AmpCategoryValueLocations defCountry		= DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-        	Integer countryLayerIndex						= defCountry.getParentCategoryValue().getIndex();
-        	KeyValue countryKV							= new KeyValue(defCountry.getId().toString() , defCountry.getName() );
-        	ArrayList<KeyValue> countries				= new ArrayList<KeyValue>();
-        	countries.add(countryKV);
-        	locationByLayers.put(countryLayerIndex, countries);
-        	if ( countryLayerIndex < implLocValue.getIndex() ) {
-        		parentLocId			= defCountry.getId();
-        	}
-        }*/
-        if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(pledgeForm.getImplLocationValue())) {
-            locationByLayers.clear();
-        	AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryManagerUtil.getAmpCategoryValueFromDb(impLocLevel));
 
+        if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(pledgeForm.getImplLocationValue()))
+        {
             // This case add only one country. Set all countries should be implemented as a separate case
             // Please add the condition here that loads either one country or all countries
             pledgeForm.setDefaultCountryIsSet(true);
-            Integer countryLayerIndex = defCountry.getParentCategoryValue().getIndex();
-            KeyValue countryKV = new KeyValue(defCountry.getId().toString() , defCountry.getName() );
-            ArrayList<KeyValue> countries = new ArrayList<KeyValue>();
-            countries.add(countryKV);
-            locationByLayers.put(countryLayerIndex, countries);
-
-        } else { //it is region
-            locationByLayers.clear();
+            pledgeForm.importLocationForLocationsForm(DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryManagerUtil.getAmpCategoryValueFromDb(impLocLevel)));
+        } else { // it is regional, e.g. region or below
             // again, this is a default country. Add logic that does the same for selected country
-
-            // These lines won't work here because the location in CategoryManagerUtil.categoryValuesByKey is already set to "REGION"
-            // AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryManagerUtil.getAmpCategoryValueFromDb(76l));
-            // AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-            AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY, false);
-
-            Long parentLocId = defCountry.getId();
-            int lastLayer = 0;
-
-            while (parentLocId != null && parentLocId > 0) {
-                AmpCategoryValueLocations parentLoc	= DynLocationManagerUtil.getLocation(parentLocId, true);
-                pledgeForm.getSelectedLayers().put(parentLoc.getParentCategoryValue().getIndex(), parentLoc.getId() );
-
-                Iterator<Entry<Integer, Collection<KeyValue>>> entryIter = locationByLayers.entrySet().iterator();
-                while ( entryIter.hasNext() ) {
-                    /**
-                     * In case the user changes a higher layer location all layers below need to be cleared.
-                     */
-                    if ( entryIter.next().getKey() > parentLoc.getParentCategoryValue().getIndex() ) {
-                        entryIter.remove();
-                    }
-                }
-
-                parentLocId	= null;
-                Collection<AmpCategoryValueLocations> childrenLocs 	= parentLoc.getChildLocations();
-                if ( childrenLocs != null && childrenLocs.size() > 0 ) {
-                    Integer currentLayer = (parentLoc.getParentCategoryValue().getIndex()) + 1;
-                        //((AmpCategoryValueLocations)childrenLocs.toArray()[0]).getParentCategoryValue().getIndex();
-
-                    // this is actually why municipalities are not loaded
-                    if ( /*currentLayer <= implLocLevelValue.getIndex() */true) {
-                        ArrayList<KeyValue> childrenKV					= new ArrayList<KeyValue>(childrenLocs.size());
-                        for ( AmpCategoryValueLocations child : childrenLocs ) {
-                            boolean addLocationAllowed		= true;
-                            /**
-                             * If we are on the last layer that needs to be shown, we have to
-                             * hide locations that are already selected
-                             */
-                            if ( currentLayer == implLocLevelValue.getIndex() && pledgeForm.getSelectedLocs() != null ) {
-                                for ( FundingPledgesLocation l: pledgeForm.getSelectedLocs() ) {
-                                    if ( child.equals(l.getLocation()) ) {
-                                        addLocationAllowed	= false;
-                                        break;
-                                    }
-                                }
-                            }
-                            if ( addLocationAllowed ) {
-                                childrenKV.add(new KeyValue(child.getId().toString(), child.getName()));
-                            }
-                        }
-
-                        lastLayer = currentLayer;
-                        locationByLayers.put(currentLayer, childrenKV);
-
-                        if ( childrenLocs.size() == 1 ) {
-                            AmpCategoryValueLocations newParent	= (AmpCategoryValueLocations)childrenLocs.toArray()[0];
-                            parentLocId	= newParent.getId();
-                        }
-                    }
-
-                } else {
-                    if (lastLayer < implLocLevelValue.getIndex()) {
-                        pledgeForm.setNoMoreRecords(true);
-                    }
-                }
-
-            }
+            //AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY, false);           
+            Set<Long> forbiddenLocations = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(pledgeForm.getAllSelectedLocations()); // any selected locations and any of their descendants or ascendats are forbidden
+            forbiddenLocations.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(pledgeForm.getAllSelectedLocations()));
+            
+            Collection<AmpCategoryValueLocations> levelLocations = DynLocationManagerUtil.getLocationsByLayer(pledgeForm.getImplLocationValue());
+            importLocationsIntoForm(pledgeForm, levelLocations);
+            filterDisplayedLocations(pledgeForm, forbiddenLocations);
         } //it is region
 
         //pledgeForm.setImplemLocationLevel(null);

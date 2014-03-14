@@ -3,13 +3,16 @@ package org.digijava.module.fundingpledges.form;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 
 import lombok.Data;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -84,14 +87,21 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private boolean noMoreRecords;
 	private Long implemLocationLevel;
     private AmpCategoryValue implLocationValue;
-	private Integer impLevelValue; // Implementation Level value
 	private Long levelId = null;
 	private Long parentLocId;
 	private boolean defaultCountryIsSet;
 	private Collection<FundingPledgesLocation> selectedLocs;
 	private Long [] userSelectedLocs;
-	private TreeMap<Integer, Collection<KeyValue>> locationByLayers;
-	private TreeMap<Integer, Long> selectedLayers ;
+	
+	/**
+	 * Map<Level, List<KeyValue<acvl.id.toString(), acvl.value()>>>
+	 */
+	private TreeMap<Integer, List<KeyValue>> locationByLayers = new TreeMap<>();
+	
+	/**
+	 * Map<Layer-Number, ACVL.id>
+	 */
+	private TreeMap<Integer, Long> selectedLayers = new TreeMap<>();
 	
 	/*Fields for program*/
 	private int programType;
@@ -144,8 +154,13 @@ public class PledgeForm extends ActionForm implements Serializable{
     	this.setPledgeSectors(null);
     	this.setSelectedLocs(null);
     	this.setSelectedProgs(null);
+    	this.cleanLocationData(true);
     }
     
+    /**
+     * imports a FundingPledges instance into this form instance
+     * @param fp
+     */
     public void importPledgeData(FundingPledges fp)
     {
     	this.setFundingPledges(fp);
@@ -207,4 +222,48 @@ public class PledgeForm extends ActionForm implements Serializable{
     	this.setSelectedProgs(PledgesEntityHelper.getPledgesPrograms(fp.getId()));
     	this.setFundingPledgesDetails(PledgesEntityHelper.getPledgesDetails(fp.getId()));
     }
+    
+    public void cleanLocationData(boolean cleanLevelData)
+    {
+    	if (cleanLevelData)
+    	{
+    		this.setImplemLocationLevel(-1l);
+    		this.setLevelId(-1l);
+    	}
+        this.setParentLocId(null);
+        this.getLocationByLayers().clear();
+        this.getSelectedLayers().clear();
+        // this if for FundingPledgesLocation. Not sure why this is in this code
+        //pledgeForm.setSelectedLocs(null);
+        this.setUserSelectedLocs(null);
+    }
+
+    /**
+     * adds a location into {@link #locationByLayers}
+     * @param acvl
+     */
+    public void importLocationForLocationsForm(AmpCategoryValueLocations acvl)
+    {
+    	if (acvl == null)
+    		return;
+		Integer layerNumber = acvl.getParentCategoryValue().getIndex();
+		if (!locationByLayers.containsKey(layerNumber))
+			locationByLayers.put(layerNumber, new ArrayList<KeyValue>());
+
+		KeyValue countryKV = new KeyValue(acvl.getId().toString(), acvl.getName());
+		locationByLayers.get(layerNumber).add(countryKV);
+    }
+    
+    /**
+     * returns set of all the selected locations
+     * @return Set<ACVL.id>
+     */
+    public Set<Long> getAllSelectedLocations()
+    {
+    	Set<Long> res = new HashSet<Long>();
+    	for(FundingPledgesLocation fpl:this.getSelectedLocs())
+    		res.add(fpl.getLocation().getId());
+    	return res;
+    }
 }
+

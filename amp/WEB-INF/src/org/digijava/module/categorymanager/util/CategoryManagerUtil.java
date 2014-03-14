@@ -541,11 +541,13 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		{		
 			ampCategoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(categoryKey);			
 			if (ampCategoryClass == null)
-				return null;			 
+				return null;
 			categoryValuesByKey.put(categoryKey, ampCategoryClass);
 		}
 
 		List<AmpCategoryValue> ampCategoryValues = ampCategoryClass.getPossibleValues();
+		
+		PersistenceManager.getSession().evict(ampCategoryClass); // else funny things will happen if someone tries to delete()
 		
 		boolean shouldOrderAlphabetically = ordered == null ? ampCategoryClass.getIsOrdered() : ordered;
 		if ( !shouldOrderAlphabetically )
@@ -553,8 +555,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		
 		TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator() );
 		treeSet.addAll(ampCategoryValues);
-
-
+		
 		return treeSet;
 	}
 	/**

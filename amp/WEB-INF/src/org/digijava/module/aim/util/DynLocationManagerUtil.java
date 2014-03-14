@@ -430,48 +430,6 @@ public class DynLocationManagerUtil {
 		}
 	}
 
-	/**
-	 * 
-	 * @param locationName
-	 * @param cvLocationLayer
-	 *            the AmpCategoryValue specifying the layer (level) of the
-	 *            location...like Country or Region
-	 * @return
-	 */
-	@Deprecated
-	public static AmpCategoryValueLocations getLocationByName(
-			String locationName, AmpCategoryValue cvLocationLayer) {
-		Session dbSession = null;
-
-		try {
-			dbSession = PersistenceManager.getSession();
-			String locationNameHql = AmpCategoryValueLocations.hqlStringForName("loc");
-			String queryString = "select loc from "
-					+ AmpCategoryValueLocations.class.getName()
-					+ " loc where (" + locationNameHql + "=:name)";
-			if (cvLocationLayer != null) {
-				queryString += " AND (loc.parentCategoryValue=:cvId) ";
-			}
-			Query qry = dbSession.createQuery(queryString);
-			if (cvLocationLayer != null) {
-				qry.setLong("cvId", cvLocationLayer.getId());
-			}
-			qry.setString("name", locationName);
-			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) qry
-					.uniqueResult();
-			return loc;
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
-		return null;
-	}
-
 	public static AmpCategoryValueLocations getLocationByIso3(
 			String locationIso3, HardCodedCategoryValue hcLocationLayer) {
 		try {
@@ -784,6 +742,43 @@ public class DynLocationManagerUtil {
 	}
 	
 	/**
+	 * recursively get all ancestors (parents) of a set of AmpCategoryValueLocations, by a wave algorithm
+	 * @param inIds
+	 * @return
+	 */
+	public static Set<Long> getRecursiveAscendantsOfCategoryValueLocations(Collection<Long> inIds)
+	{
+		Set<Long> result = new HashSet<Long>();
+		if (inIds == null)
+			return result;
+		Set<Long> currentWave = new HashSet<Long>();
+		currentWave.addAll(inIds);
+		while (currentWave.size() > 0)
+		{
+			result.addAll(currentWave);
+			currentWave = getParentsOfCategoryValueLocations(currentWave);
+			currentWave.removeAll(result); // in case there is a cycle somewhere in the DB, do not cycle forever
+		}
+		return result;
+	}
+	
+	/*
+	 * returns the list of all the parents of all the AmpCategoryValueLocations given by ids
+	 * NON-RECURSIVE
+	 */
+	private static Set<Long> getParentsOfCategoryValueLocations(Collection<Long> inIds)
+	{
+		final Set<Long> result = new HashSet<Long>();
+		if (inIds == null)
+			return result;
+		String query = "SELECT DISTINCT(parent_location) FROM amp_category_value_location WHERE (parent_location IS NOT NULL) AND (id IN (" + Util.toCSStringForIN(inIds) + "))";
+		List<Object> ids = PersistenceManager.getSession().createSQLQuery(query).list();
+		for(Object longAsObj:ids)
+			result.add(PersistenceManager.getLong(longAsObj));
+		return result;
+	}
+	
+	/**
 	 * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
 	 * @param inIds
 	 * @return
@@ -793,7 +788,8 @@ public class DynLocationManagerUtil {
 		Set<Long> result = new HashSet<Long>();
 		if (inIds == null)
 			return result;
-		Set<Long> currentWave = new HashSet<Long>();currentWave.addAll(inIds);
+		Set<Long> currentWave = new HashSet<Long>();
+		currentWave.addAll(inIds);
 		while (currentWave.size() > 0)
 		{
 			result.addAll(currentWave);
@@ -831,8 +827,7 @@ public class DynLocationManagerUtil {
 					destCollection.add(loc);
 				}
 			}
-		}
-		
+		}		
 	}
 	
 	public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException 

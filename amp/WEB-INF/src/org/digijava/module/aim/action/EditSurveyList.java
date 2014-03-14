@@ -49,9 +49,9 @@ public class EditSurveyList extends Action {
         logger.debug("In edit survey list action");
 
         EditActivityForm svForm = (EditActivityForm) form;
-        logger.debug("step[before] : " + svForm.getStep());
-        svForm.setStep("17"); // for indicators tab in donor-view
-        logger.debug("step[after] : " + svForm.getStep());
+//        logger.debug("step[before] : " + svForm.getStep());
+//        svForm.setStep("17"); // for indicators tab in donor-view
+//        logger.debug("step[after] : " + svForm.getStep());
         
         //this is needed to acknowledge that we are still under EDIT ACTIVITY mode:
         request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);

@@ -76,7 +76,6 @@ public class RemoveSelLocations extends Action {
         eaForm.getLocation().setSelLocs(null);
         eaForm.getLocation().setCols(null);
         eaForm.getLocation().setNumResults(0);
-        eaForm.setStep("2");
 
         return mapping.findForward("forward");
     }

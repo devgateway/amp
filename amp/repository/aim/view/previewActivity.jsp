@@ -258,7 +258,7 @@ function collapseAll() {
 
 <digi:context name="digiContext" property="context" />
 <digi:form action="/saveActivity.do" method="post">
-	<html:hidden property="step" />
+<%-- 	<html:hidden property="step" /> --%>
 	<html:hidden property="editAct" />
 	<html:hidden property="identification.approvalStatus" styleId="approvalStatus" />
 	<html:hidden property="workingTeamLeadFlag" styleId="workingTeamLeadFlag"/>

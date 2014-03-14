@@ -18,7 +18,6 @@ public class RemoveSelOrganisations extends Action {
 
 		Long selOrgs[] = eaForm.getIdentification().getSelOrgs();
 		if (selOrgs == null) {
-			eaForm.setStep("1");
 			return mapping.findForward("forward");
 		}
 		
@@ -48,7 +47,6 @@ public class RemoveSelOrganisations extends Action {
 		
 		eaForm.getIdentification().setSelectedOrganizations(currOrgs);
 		eaForm.getIdentification().setSelOrgs(null);
-		eaForm.setStep("1");
 		return mapping.findForward("forward");
 	}
 }

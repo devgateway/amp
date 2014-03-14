@@ -68,7 +68,6 @@ public class RemProgram extends Action
              eaform.getPrograms().setSelectedSPrograms(null);
              break;
          }
-        eaform.setStep("2");
         return mapping.findForward("forward");
     }
 

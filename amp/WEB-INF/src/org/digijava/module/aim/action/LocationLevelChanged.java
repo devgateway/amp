@@ -30,7 +30,6 @@ public class LocationLevelChanged extends Action {
 		eaForm.getLocation().setCols(null);
 		eaForm.getLocation().setNumResults(0);
 		
-		eaForm.setStep("2");
 		return mapping.findForward("forward");
     }
 }

@@ -436,23 +436,6 @@ public class EditActivity extends Action {
       }
       }
 
-      /*List prLst = new ArrayList();
-      if (eaForm.getActPrograms() == null) {
-        eaForm.setActPrograms(prLst);
-      }
-      else {
-        prLst = eaForm.getActPrograms();
-        prLst.clear();
-        eaForm.setActPrograms(prLst);
-      }*/
-
-
-       if(eaForm.getSteps()==null){
-            List steps = ActivityUtil.getSteps();
-            eaForm.setSteps(steps);
-       }
-
-
       // checking its the activity is already opened for editing...
       if (activityMap != null && activityMap.containsValue(activityId)) {
         //logger.info("activity is in activityMap " + activityId);
@@ -605,15 +588,6 @@ public class EditActivity extends Action {
                 session.removeAttribute("nextActivity");
             }
         }
-      }
-
-
-      logger.debug("step [before IF] : " + eaForm.getStep());
-
-      if (step != null) {
-    	  eaForm.setStep(step);
-      }	else{
-    	  eaForm.setStep("1");
       }
 
       eaForm.setReset(false);

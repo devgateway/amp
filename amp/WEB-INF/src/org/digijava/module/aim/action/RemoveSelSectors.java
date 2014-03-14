@@ -44,7 +44,6 @@ public class RemoveSelSectors extends Action {
 		}
 
 		eaForm.getSectors().setActivitySectors(newSectors);
-		eaForm.setStep("2");
 		return mapping.findForward("forward");
 	}
 }

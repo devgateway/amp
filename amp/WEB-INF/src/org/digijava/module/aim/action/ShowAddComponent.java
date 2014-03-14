@@ -118,7 +118,6 @@ public class ShowAddComponent extends Action {
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-		eaForm.setStep("5");
 		
 		ArrayList<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = null;
 		ArrayList<AmpComponentType> ampComponentTypes = null;
@@ -172,7 +171,6 @@ public class ShowAddComponent extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 		List<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>();
-		eaForm.setStep("5");
 		ArrayList<AmpComponentType> ampComponentTypes = null;
 		ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
 		eaForm.getComponents().setAllCompsType(ampComponentTypes);
@@ -244,7 +242,6 @@ public class ShowAddComponent extends Action {
 		try {
 
 			List<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>();
-			eaForm.setStep("5");
 			
 			String name 							= eaForm.getComponents().getNewCompoenentName();
 			String description 							= eaForm.getComponents().getComponentDesc();

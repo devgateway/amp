@@ -204,6 +204,19 @@
 																		</td>
 																	</tr>
 																</module:display>
+																<logic:present name="funding" property="fundingClassificationDate">
+																<tr>
+																	<td align="left" width="150">
+																		<a title='<digi:trn>Funding Classification Date</digi:trn>'>
+																			<digi:trn>Funding Classification Date</digi:trn>
+																		</a>
+																	</td>
+																	<td width="1">:</td>
+																	<td align="left">
+																			<b><digi:trn><bean:write name="funding" property="fundingClassificationDate"/></digi:trn></b>
+																	</td>
+																</tr>
+																</logic:present>																
 															</table>
 															</td>
 														</tr>

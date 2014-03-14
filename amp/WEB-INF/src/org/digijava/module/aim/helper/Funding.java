@@ -81,8 +81,17 @@ public class Funding implements Serializable
 	private String subtotalEDD;
 	private String subtotalMTEFs;
 	private String undisbursementbalance;
+	/**
+	 * misnomer: agreementTitle. To be renamed in the future!
+	 */
 	private String title;
+	
+	/**
+	 * misnomer: agreementCode. To be renamed in the future!
+	 */
 	private String code;
+	
+	private String fundingClassificationDate;
 	
 	private Long groupVersionedFunding;
 
@@ -277,6 +286,7 @@ public class Funding implements Serializable
 		  this.setConditions(ampFunding.getConditions());
 		  this.setDonorObjective(ampFunding.getDonorObjective());
 		  this.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
+		  this.setFundingClassificationDate(DateConversion.ConvertDateToString(ampFunding.getFundingClassificationDate()));
 		  if(ampFunding.getAgreement() != null){
 			  this.setTitle(ampFunding.getAgreement().getTitle());
 			  this.setCode(ampFunding.getAgreement().getCode());
@@ -285,37 +295,6 @@ public class Funding implements Serializable
 			  this.setCode("");
 			  this.setTitle("");
 		  }
-
-//		  /* Get MTEF Projections */
-//		  ArrayList<MTEFProjection> mtefProjections = new ArrayList<MTEFProjection>();
-//		  if (ampFunding.getMtefProjections() != null)
-//		  {
-//			  Iterator<AmpFundingMTEFProjection> iterMtef	= ampFunding.getMtefProjections().iterator();
-//			  while ( iterMtef.hasNext() )
-//			  {
-//				  AmpFundingMTEFProjection ampProjection		= iterMtef.next();
-//				  MTEFProjection	projection					= new MTEFProjection();
-//
-//				  projection.setAmount( FormatHelper.formatNumber(ampProjection.getAmount()) + "" );
-//				  if ( ampProjection.getProjected() != null )
-//					  projection.setProjected( ampProjection.getProjected().getId() );
-//				  else
-//					  logger.error("Projection with date " + ampProjection.getProjectionDate() + " has no type (neither projection nor pipeline) !!!!");
-//
-//				  projection.setCurrencyCode( ampProjection.getAmpCurrency().getCurrencyCode() );
-//				  projection.setCurrencyName( ampProjection.getAmpCurrency().getCurrencyName() );
-//				  if (ampProjection.getProjectionDate() != null) {
-//					  projection.setProjectionDate(DateConversion.ConvertDateToString(ampProjection.getProjectionDate()));
-//					  // projection.setIndex();
-//					  projection.setAmpFunding( ampProjection.getAmpFunding() );
-//					  mtefProjections.add(projection);
-//				  }
-//			  }
-//		  }
-//
-//		  Collections.sort(mtefProjections);
-//		  this.setMtefProjections(mtefProjections);
-//		  /* END - Get MTEF Projections */
 
 		  //Collection<AmpFundingDetail> fundDetails = ampFunding.getFundingDetails();
 

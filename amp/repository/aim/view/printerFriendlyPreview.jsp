@@ -1314,22 +1314,29 @@ body {background:none;}
                                                                               </tr>
 																			</field:display>
 																			<field:display name="Mode of Payment" feature="Funding Information">
-                                                                              <tr>
-                                                                                <td align="left" width="339">
-                                                                                  <a>
-                                                                                  	<digi:trn>Mode of Payment</digi:trn>
-																				  </a>                                                                                
-																				 </td>
-                                                                                <td width="10">:</td>
-                                                                                <td align="left">
-                                                                                  <logic:notEmpty name="funding" property="modeOfPayment">
-                                                                                    <digi:trn>
-                                                                                    	<bean:write name="funding" property="modeOfPayment.value"/>
-                                                                                    </digi:trn>
+																				<logic:notEmpty name="funding" property="modeOfPayment">																			
+                                                                              		<tr>
+                                                                                		<td align="left" width="339">
+                                                                                  			<a><digi:trn>Mode of Payment</digi:trn></a>                                                                                
+																				 		</td>
+                                                                                		<td width="10">:</td>
+                                                                                		<td align="left">
+                                                                                    		<digi:trn><bean:write name="funding" property="modeOfPayment.value"/></digi:trn>
+																						</td>
+																					</tr>
                                                                                   </logic:notEmpty>                                                                                
-                                                                                  </td>
-                                                                              </tr>
 																			</field:display>
+																				<logic:notEmpty name="funding" property="fundingClassificationDate">																			
+                                                                              		<tr>
+                                                                                		<td align="left" width="339">
+                                                                                  			<a><digi:trn>Funding Classification Date</digi:trn></a>                                                                                
+																				 		</td>
+                                                                                		<td width="10">:</td>
+                                                                                		<td align="left">
+                                                                                    		<digi:trn><bean:write name="funding" property="fundingClassificationDate"/></digi:trn>
+																						</td>
+																					</tr>
+                                                                                  </logic:notEmpty>																			
 																			<!-- here it goes Donor Objective  and Conditions ISSUE AMP-16421-->
 																			<field:display name="Conditions" feature="Funding Information">
 																				<logic:notEmpty name="funding" property="conditions">

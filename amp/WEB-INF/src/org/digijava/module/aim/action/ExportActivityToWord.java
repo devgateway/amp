@@ -1397,6 +1397,12 @@ public class ExportActivityToWord extends Action {
 			columnName=TranslatorWorker.translateText("Actual Start Date") +": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedStartDate(),null);
 		}
+
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life", ampContext)) {
+            columnName = TranslatorWorker.translateText("Proposed Project Life") + ": ";
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedProjectLife() == null ? ""
+                    : String.valueOf(planning.getProposedProjectLife()), null);
+        }
 			
         if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext)) {
             columnName = TranslatorWorker.translateText("Original Completion Date")+": ";

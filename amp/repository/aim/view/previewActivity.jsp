@@ -1161,6 +1161,12 @@ function collapseAll() {
 			<digi:trn>Actual Start Date </digi:trn>:&nbsp;
 			<b>${aimEditActivityForm.planning.revisedStartDate}</b>
 		</module:display>
+
+        <module:display name="/Activity Form/Planning/Proposed Project Life" parentModule="/Activity Form/Planning">
+            <hr>
+            <digi:trn>Proposed Project Life</digi:trn>:&nbsp;
+            <b>${aimEditActivityForm.planning.proposedProjectLife}</b>
+        </module:display>
 		
 		<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 			<hr>

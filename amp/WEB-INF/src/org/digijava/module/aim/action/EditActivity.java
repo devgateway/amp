@@ -1026,24 +1026,26 @@ public class EditActivity extends Action {
           }
           eaForm.getIdentification().setAmpId(activity.getAmpId());
           Editor reason=org.digijava.module.editor.util.DbUtil.getEditor(activity.getStatusReason(),langCode);
-          if(reason!=null){
-            eaForm.getIdentification().setStatusReason(reason.getBody());
+          if (reason != null) {
+              eaForm.getIdentification().setStatusReason(reason.getBody());
           }
 
-          if (null != activity.getLineMinRank())
-            eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().
-                                  toString());
-          else
-            eaForm.getPlanning().setLineMinRank("-1");
-          if (null != activity.getPlanMinRank())
-            eaForm.getPlanning().setPlanMinRank(activity.getPlanMinRank().
-                                  toString());
-          else
-            eaForm.getPlanning().setPlanMinRank("-1");
+          if (null != activity.getLineMinRank()) {
+              eaForm.getPlanning().setLineMinRank(activity.getLineMinRank().toString());
+          } else {
+              eaForm.getPlanning().setLineMinRank("-1");
+          }
+          if (null != activity.getPlanMinRank()) {
+              eaForm.getPlanning().setPlanMinRank(activity.getPlanMinRank().toString());
+          } else {
+              eaForm.getPlanning().setPlanMinRank("-1");
+          }
+
+          eaForm.getPlanning().setProposedProjectLife(activity.getProposedProjectLife());
 
           eaForm.getPlanning().setActRankCollection(new ArrayList());
           for(int i = 1; i < 6; i++) {
-            eaForm.getPlanning().getActRankCollection().add(new Integer(i));
+              eaForm.getPlanning().getActRankCollection().add(i);
           }
 
           eaForm.getIdentification().setCreatedDate(DateConversion

@@ -1312,6 +1312,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String revisedCompDate;
 		private Collection activityCloseDates;
 		private Long creditTypeId;
+        private Integer proposedProjectLife;
 		
 		public BigDecimal getProjectPeriod(){
 			BigDecimal projectPeriod=null;
@@ -1454,6 +1455,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setCreditTypeId(Long creditTypeId) {
 			this.creditTypeId = creditTypeId;
 		}
+
+        public Integer getProposedProjectLife() {
+            return proposedProjectLife;
+        }
+
+        public void setProposedProjectLife(Integer proposedProjectLife) {
+            this.proposedProjectLife = proposedProjectLife;
+        }
 
 	}
 

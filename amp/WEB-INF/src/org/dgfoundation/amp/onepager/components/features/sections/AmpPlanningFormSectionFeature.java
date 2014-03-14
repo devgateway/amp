@@ -118,9 +118,13 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 		AmpCommentSimpleWrapper acsw2 = new AmpCommentSimpleWrapper("revisedComplDateTabs", "current completion date", actModel);
 		acsw2.setOutputMarkupId(true);
 		add(acsw2);
-		
+
+        /*
+        * Removed 'in days' from 'Proposed Project Life (in days)' because it appears in Global FM in this way,
+        * and wen doing a check FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")
+        * */
 		AmpTextFieldPanel<Integer> proposedProjectLife = new AmpTextFieldPanel<Integer>("proposedProjectLife", new PropertyModel<Integer>(actModel, "proposedProjectLife"),
-				"Proposed Project Life (in days)", AmpFMTypes.MODULE);
+				"Proposed Project Life", AmpFMTypes.MODULE);
 		RangeValidator<Integer> proposedProjectLifeValidator = new RangeValidator<Integer>(0, 9999);
 		proposedProjectLife.getTextContainer().add(proposedProjectLifeValidator);
 		add(proposedProjectLife);

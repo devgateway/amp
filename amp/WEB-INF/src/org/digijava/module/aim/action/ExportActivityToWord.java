@@ -1503,12 +1503,13 @@ public class ExportActivityToWord extends Action {
 
             ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
 
-
-            eshProjectCostTable.addRowData(new ExportSectionHelperRowData(TranslatorWorker.translateText
-                    ("Total Number of Funding Sources"), null, null,  true).
-                    addRowData(String.valueOf(act.getFundingSourcesNumber())));
+            if (act.getFundingSourcesNumber() != null)
+            {
+            	eshProjectCostTable
+            		.addRowData(new ExportSectionHelperRowData(TranslatorWorker.translateText("Total Number of Funding Sources"), null, null,  true)
+            		.addRowData(String.valueOf(act.getFundingSourcesNumber())));
+            }
 	
-
 	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
 	                                                addRowData(FormatHelper.formatNumber(act.getFunAmount())).
 	                                                addRowData(translatedCurrency));
@@ -2150,6 +2151,8 @@ public class ExportActivityToWord extends Action {
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Agreement Code", null, null, true))
 										.addRowData(agreementCode));
 					}
+					eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Classification Date", null, null, true)
+										.addRowData(DateConversion.ConvertDateToString(fnd.getFundingClassificationDate())));
                     
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
                     retVal.add(createSectionTable(eshDonorInfo, request, ampContext));

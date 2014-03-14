@@ -1011,33 +1011,7 @@ public class ExportActivityToPDF extends Action {
 							}
 						}
 					}
-    				
-    				/*if(myForm.getSectors().getActivitySectors()!=null){
-    					for (ActivitySector actSect : myForm.getSectors().getActivitySectors()) {
-    						String val="";
-    						if(FeaturesUtil.isVisibleField(configuration.getName()+" Sector", ampContext)){
-    							if(actSect.getSectorName()!=null && actSect.getSectorName().length()>0){
-        							val+=actSect.getSectorName();
-        						}
-        						if(actSect.getSubsectorLevel1Name()!=null && actSect.getSubsectorLevel1Name().length()>0){
-        							val+="["+actSect.getSubsectorLevel1Name()+"]";
-        						}
-        						if(actSect.getSubsectorLevel2Name()!=null && actSect.getSubsectorLevel2Name().length()>0){
-        							val+="["+actSect.getSubsectorLevel2Name()+"]";
-        						}
-        						val+="  ("+actSect.getSectorPercentage()+")% \n";
-    						}
     						
-    						//is primary or secondary sector
-    						if(actSect.getConfigId().equals(configuration.getId())){
-    							if(configuration.isPrimary()){							
-    								primary+=val;
-    							}else{
-    								secondary+=val;
-    							}
-    						}
-    					}
-    				}	*/			
     			}
     			/*if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/Primary Sectors", ampContext)){
     				output+=primary+"\n";
@@ -2543,6 +2517,7 @@ public class ExportActivityToPDF extends Action {
 						compNestedCell.setBackgroundColor(new Color(255,255,255));
 						compNestedCell.setBorder(0);
 						componentsNestedTable.addCell(compNestedCell);
+						
 						//finance of the comp
 						PdfPCell financeCompNestedCell=new PdfPCell();
 						financeCompNestedCell.setBackgroundColor(new Color(244,244,242));
@@ -2649,6 +2624,52 @@ public class ExportActivityToPDF extends Action {
 		createSubtotalRow(fundingTable, "SUBTOTAL " + fundingRegionName + ":", subtotal, currencyCode);
 	}
 		
+	/**
+	 * adds a (name, value) cell if value != null. If value == null, adds nothing
+	 * @param cellName
+	 * @param cellContents
+	 */
+	private void addNewInfoCell(PdfPTable fundingTable, String cellName, String cellContents)
+	{
+		if (cellContents == null || cellContents.isEmpty())
+			return;
+		
+		PdfPCell foIdCell1=new PdfPCell();
+		foIdCell1.setBackgroundColor(new Color(221,221,221));
+		foIdCell1.setBorder(0);
+		foIdCell1.setColspan(2);
+		Paragraph p1 = new Paragraph(postprocessText(TranslatorWorker.translateText(cellName)) + ":", plainFont);
+		foIdCell1.addElement(p1);
+		fundingTable.addCell(foIdCell1);							
+		//meaning
+		PdfPCell foIdCell3=new PdfPCell(new Paragraph(postprocessText(cellContents), plainFont));
+		foIdCell3.setBorder(0);
+		foIdCell3.setColspan(2);
+		foIdCell3.setBackgroundColor(new Color(221,221,221));
+		fundingTable.addCell(foIdCell3);
+	}
+	
+	/**
+	 * convenience method for accessing {@link #addNewInfoCell(PdfPTable, String, String)}. Translates ACV if not null, else passes null
+	 * @param fundingTable
+	 * @param cellName
+	 * @param cellContents
+	 */
+	private void addNewInfoCell(PdfPTable fundingTable, String cellName, AmpCategoryValue cellContents)
+	{
+		String value = cellContents == null ? null : TranslatorWorker.translateText(cellContents.getValue());
+		addNewInfoCell(fundingTable, cellName, value);
+	}
+	
+	private void addTotalsOutput(PdfPTable fundingTable, String title, String value, String currencyCode)
+	{
+		if (value == null || value.isEmpty())
+			return;
+		String totalAmountType = postprocessText(TranslatorWorker.translateText(title)) + ":";
+		String output = value + " " + currencyCode;
+		addTotalAmountsCellsToFundingTable(fundingTable, totalAmountType, output);
+	}
+	
 	private void buildFundingInformationPart(EditActivityForm myForm,PdfPTable mainLayout,ServletContext ampContext) throws WorkerException, DocumentException {
 		Paragraph p1;
 		PdfPCell fundingCell1=new PdfPCell();
@@ -2702,191 +2723,50 @@ public class ExportActivityToPDF extends Action {
 					for (Funding funding : (Collection<Funding>)fundingOrganisation.getFundings()) {
 						String output="";				
 						//general info rows
-						/*if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification", ampContext))*/{
+						/*if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification", ampContext))*/
+						{
 							//funding org id
-							if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id", ampContext)){								 
-								PdfPCell foIdCell1=new PdfPCell();
-								foIdCell1.setBackgroundColor(new Color(221,221,221));
-								foIdCell1.setBorder(0);
-								foIdCell1.setColspan(2);
-								p1=new Paragraph(TranslatorWorker.translateText("Funding Organization Id")+":",plainFont);
-								foIdCell1.addElement(p1);
-								fundingTable.addCell(foIdCell1);							
-								//meaning
-								PdfPCell foIdCell3=new PdfPCell(new Paragraph(funding.getOrgFundingId(),plainFont));
-								foIdCell3.setBorder(0);
-								foIdCell3.setColspan(2);
-								foIdCell3.setBackgroundColor(new Color(221,221,221));
-								fundingTable.addCell(foIdCell3);
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id", ampContext))
+							{
+								addNewInfoCell(fundingTable, "Funding Organization Id", funding.getOrgFundingId());
 							}
 							
-							//funding org. name
-							/*if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation", ampContext))*/{								
-								PdfPCell foNameCell1=new PdfPCell();
-								foNameCell1.setBackgroundColor(new Color(221,221,221));
-								foNameCell1.setBorder(0);
-								foNameCell1.setColspan(2);
-								p1=new Paragraph(TranslatorWorker.translateText("Funding Organization Name")+":",plainFont);
-								foNameCell1.addElement(p1);
-								fundingTable.addCell(foNameCell1);							
-								//meaning
-								PdfPCell foNameCell3=new PdfPCell(new Paragraph(postprocessText(fundingOrganisation.getOrgName()),plainFont));
-								foNameCell3.setBorder(0);
-								foNameCell3.setColspan(2);
-								foNameCell3.setBackgroundColor(new Color(221,221,221));
-								fundingTable.addCell(foNameCell3);							
-							}
-							
-							//funding org role
-							/*if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation", ampContext))*/{								
-								PdfPCell foAssitanceCell1=new PdfPCell();
-								foAssitanceCell1.setBackgroundColor(new Color(221,221,221));
-								foAssitanceCell1.setBorder(0);
-								foAssitanceCell1.setColspan(2);
-								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Organization Role"))+":",plainFont);
-								foAssitanceCell1.addElement(p1);
-								fundingTable.addCell(foAssitanceCell1);							
-								//meaning
-								PdfPCell foAssistanceCell2=new PdfPCell(new Paragraph(funding.getSourceRole()!=null?TranslatorWorker.translateText(funding.getSourceRole()):" ",plainFont));
-								foAssistanceCell2.setBorder(0);
-								foAssistanceCell2.setColspan(2);
-								foAssistanceCell2.setBackgroundColor(new Color(221,221,221));
-								fundingTable.addCell(foAssistanceCell2);
-							}
-							
-							//funding org Assistance
-							/*if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", ampContext))*/{								
-								PdfPCell foAssitanceCell1=new PdfPCell();
-								foAssitanceCell1.setBackgroundColor(new Color(221,221,221));
-								foAssitanceCell1.setBorder(0);
-								foAssitanceCell1.setColspan(2);
-								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Type of Assistance"))+":",plainFont);
-								foAssitanceCell1.addElement(p1);
-								fundingTable.addCell(foAssitanceCell1);							
-								//meaning
-								PdfPCell foAssistanceCell2=new PdfPCell(new Paragraph(funding.getTypeOfAssistance()!=null?funding.getTypeOfAssistance().getValue():" ",plainFont));
-								foAssistanceCell2.setBorder(0);
-								foAssistanceCell2.setColspan(2);
-								foAssistanceCell2.setBackgroundColor(new Color(221,221,221));
-								fundingTable.addCell(foAssistanceCell2);
-							}
-							
-							//Financial Instrument
-							/*if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", ampContext))*/{								
-								PdfPCell foInstrumentCell1=new PdfPCell();
-								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
-								foInstrumentCell1.setBorder(0);
-								foInstrumentCell1.setColspan(2);
-								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Financial Instrument"))+":",plainFont);
-								foInstrumentCell1.addElement(p1);
-								fundingTable.addCell(foInstrumentCell1);							
-								//meaning
-								PdfPCell foInstrumentCell2=new PdfPCell(new Paragraph(funding.getFinancingInstrument()!=null?funding.getFinancingInstrument().getValue():" ",plainFont));
-								foInstrumentCell2.setBorder(0);
-								foInstrumentCell2.setColspan(2);
-								foInstrumentCell2.setBackgroundColor(new Color(221,221,221));
-								fundingTable.addCell(foInstrumentCell2);
-							}
+							addNewInfoCell(fundingTable, "Funding Organization Name", fundingOrganisation.getOrgName());
+							addNewInfoCell(fundingTable, "Organization Role", TranslatorWorker.translateText(funding.getSourceRole()));
+							addNewInfoCell(fundingTable, "Type of Assistance", funding.getTypeOfAssistance());
+							addNewInfoCell(fundingTable, "Financial Instrument", funding.getFinancingInstrument());							
 							
 							//Funding status
-							if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", ampContext)){
-								PdfPCell foInstrumentCell1=new PdfPCell();
-								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
-								foInstrumentCell1.setBorder(0);
-								foInstrumentCell1.setColspan(2);
-								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Funding Status"))+":",plainFont);
-								foInstrumentCell1.addElement(p1);
-								fundingTable.addCell(foInstrumentCell1);							
-								//meaning
-								PdfPCell foInstrumentCell2=new PdfPCell(new Paragraph(postprocessText(funding.getFundingStatus()!=null?funding.getFundingStatus().getValue():" "),plainFont));
-								foInstrumentCell2.setBorder(0);
-								foInstrumentCell2.setColspan(2);
-								foInstrumentCell2.setBackgroundColor(new Color(221,221,221));
-								fundingTable.addCell(foInstrumentCell2);
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", ampContext))
+							{
+								addNewInfoCell(fundingTable, "Funding Status", funding.getFundingStatus());
 							}
 							
 							//Mode of Payment
-							if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment", ampContext)){
-								PdfPCell foInstrumentCell1=new PdfPCell();
-								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
-								foInstrumentCell1.setBorder(0);
-								foInstrumentCell1.setColspan(2);
-								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Mode of Payment"))+":",plainFont);
-								foInstrumentCell1.addElement(p1);
-								fundingTable.addCell(foInstrumentCell1);							
-								//meaning
-								PdfPCell foInstrumentCell2=new PdfPCell(new Paragraph(postprocessText(funding.getModeOfPayment()!=null?funding.getModeOfPayment().getValue():" "),plainFont));
-								foInstrumentCell2.setBorder(0);
-								foInstrumentCell2.setColspan(2);
-								foInstrumentCell2.setBackgroundColor(new Color(221,221,221));
-								fundingTable.addCell(foInstrumentCell2);
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment", ampContext))
+							{
+								addNewInfoCell(fundingTable, "Mode of Payment", funding.getModeOfPayment());
+							}
+							
+							//always display FundingClassification Date, if it has been entered
+							{
+								addNewInfoCell(fundingTable, "Funding Classification Date", funding.getFundingClassificationDate());
 							}
 						}
 						//Donor objective
-						if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective", ampContext)){								
-							PdfPCell donorObjCell1=new PdfPCell();
-							donorObjCell1.setBackgroundColor(new Color(221,221,221));
-							donorObjCell1.setBorder(0);
-							donorObjCell1.setColspan(2);
-							p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Donor Objective")+":"),plainFont);
-							donorObjCell1.addElement(p1);
-							fundingTable.addCell(donorObjCell1);
-							//meaning
-							PdfPCell donorObjCell2=new PdfPCell();
-							p1=new Paragraph(postprocessText(funding.getDonorObjective()),plainFont);						
-							donorObjCell2.addElement(p1);
-							donorObjCell2.setBorder(0);
-							donorObjCell2.setColspan(2);
-							donorObjCell2.setBackgroundColor(new Color(221,221,221));
-							fundingTable.addCell(donorObjCell2);
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective", ampContext))
+						{			
+							addNewInfoCell(fundingTable, "Donor Objective", funding.getDonorObjective());
 						}
 						//Funding conditions
 						if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions", ampContext)){
-							PdfPCell condCell1 = new PdfPCell();
-							condCell1.setBackgroundColor(new Color(221,221,221));
-							condCell1.setBorder(0);
-                            condCell1.setColspan(2);
-							p1 = new Paragraph(TranslatorWorker.translateText("Conditions")+":", plainFont);
-							condCell1.addElement(p1);
-							fundingTable.addCell(condCell1);
-							//meaning
-							PdfPCell condCell2 = new PdfPCell();
-							p1 = new Paragraph(funding.getConditions(), plainFont);
-							condCell2.addElement(p1);
-							condCell2.setBorder(0);
-							condCell2.setColspan(2);
-							condCell2.setBackgroundColor(new Color(221,221,221));
-							fundingTable.addCell(condCell2);
+							addNewInfoCell(fundingTable, "Conditions", funding.getConditions());
 						}
 						//Agreement
-						if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext)){
-							PdfPCell agreementCell1=new PdfPCell();
-							agreementCell1.setBackgroundColor(new Color(221,221,221));
-							agreementCell1.setBorder(0);
-							agreementCell1.setColspan(2);
-							p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Agreement Title")+":"),plainFont);
-							agreementCell1.addElement(p1);
-							fundingTable.addCell(agreementCell1);							
-							//meaning
-							PdfPCell agreementCell2=new PdfPCell(new Paragraph(postprocessText(funding.getTitle()),plainFont));
-							agreementCell2.setBorder(0);
-							agreementCell2.setColspan(2);
-							agreementCell2.setBackgroundColor(new Color(221,221,221));
-							fundingTable.addCell(agreementCell2);
-
-							agreementCell1=new PdfPCell();
-							agreementCell1.setBackgroundColor(new Color(221,221,221));
-							agreementCell1.setBorder(0);
-							agreementCell1.setColspan(2);
-							p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Agreement Code")+":"),plainFont);
-							agreementCell1.addElement(p1);
-							fundingTable.addCell(agreementCell1);							
-							//meaning
-							agreementCell2=new PdfPCell(new Paragraph(funding.getCode(),plainFont));
-							agreementCell2.setBorder(0);
-							agreementCell2.setColspan(2);
-							agreementCell2.setBackgroundColor(new Color(221,221,221));
-							fundingTable.addCell(agreementCell2);
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext))
+						{
+							addNewInfoCell(fundingTable, "Agreement Title", funding.getTitle());
+							addNewInfoCell(fundingTable, "Agreement Code", funding.getCode());							
 						}
 											
 						if (visibleModuleCommitments)
@@ -3041,101 +2921,48 @@ public class ExportActivityToPDF extends Action {
 				empty.setBorder(0);
 				empty.setBackgroundColor(new Color(255,255,255));
 				empty.setColspan(4);
-				fundingTable.addCell(empty);							
-				if(visibleModuleCommitments){
-					//TOTAL PLANNED COMMITMENTS
-					totalAmountType=TranslatorWorker.translateText("TOTAL PLANNED COMMITMENTS")+":";
-					if(myForm.getFunding().getTotalPlannedCommitments()!=null && myForm.getFunding().getTotalPlannedCommitments().length()>0){
-						totalsOutput=myForm.getFunding().getTotalPlannedCommitments()+currencyCode;
-					}					
-					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);
+				fundingTable.addCell(empty);
 				
-			    	//TOTAL ACTUAL COMMITMENTS
-					totalAmountType=TranslatorWorker.translateText("TOTAL ACTUAL COMMITMENTS")+":";
-					totalsOutput="";
-					if(myForm.getFunding().getTotalCommitments()!=null && myForm.getFunding().getTotalCommitments().length()>0){
-						totalsOutput=myForm.getFunding().getTotalCommitments()+currencyCode;
-					} 
-					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);
+				if(visibleModuleCommitments)
+				{
+					addTotalsOutput(fundingTable, "TOTAL PLANNED COMMITMENTS", myForm.getFunding().getTotalPlannedCommitments(), currencyCode);
+					addTotalsOutput(fundingTable, "TOTAL ACTUAL COMMITMENTS", myForm.getFunding().getTotalCommitments(), currencyCode);
 				}
 
-				//TOTAL PLANNED DISBURSEMENT
-				if(visibleModuleDisbursements){
-					totalAmountType=TranslatorWorker.translateText("TOTAL PLANNED DISBURSEMENT")+":";
-					totalsOutput="";
-					if(myForm.getFunding().getTotalPlannedDisbursements()!=null && myForm.getFunding().getTotalPlannedDisbursements().length()>0){
-						totalsOutput=myForm.getFunding().getTotalPlannedDisbursements()+currencyCode;
-					} 
-					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);
-					
-					//TOTAL ACTUAL DISBURSEMENT
-					totalAmountType=TranslatorWorker.translateText("TOTAL ACTUAL DISBURSEMENT")+":";
-					totalsOutput="";
-					if(myForm.getFunding().getTotalDisbursements()!=null && myForm.getFunding().getTotalDisbursements().length()>0){
-						totalsOutput=myForm.getFunding().getTotalDisbursements()+currencyCode;
-					} 
-					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);				
-					
+				if(visibleModuleDisbursements)
+				{
+					addTotalsOutput(fundingTable, "TOTAL PLANNED DISBURSEMENT", myForm.getFunding().getTotalPlannedDisbursements(), currencyCode);
+					addTotalsOutput(fundingTable, "TOTAL ACTUAL DISBURSEMENT", myForm.getFunding().getTotalDisbursements(), currencyCode);					
 				}				
 				
 				//TOTAL PLANNED EXPENDITURES
-				if(visibleModuleExpenditures){
-					totalAmountType=TranslatorWorker.translateText("TOTAL PLANNED EXPENDITURES")+":";
-					totalsOutput="";
-					if(myForm.getFunding().getTotalPlannedExpenditures()!=null && myForm.getFunding().getTotalPlannedExpenditures().length()>0){
-						totalsOutput=myForm.getFunding().getTotalPlannedExpenditures()+currencyCode;
-					} 
-					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
-					
-					//TOTAL ACTUAL EXPENDITURES
-					totalAmountType=TranslatorWorker.translateText("TOTAL ACTUAL EXPENDITURES")+":";
-					totalsOutput="";
-					if(myForm.getFunding().getTotalExpenditures()!=null && myForm.getFunding().getTotalExpenditures().length()>0){
-						totalsOutput=myForm.getFunding().getTotalExpenditures()+currencyCode;
-					} 
-					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);
+				if(visibleModuleExpenditures)
+				{
+					addTotalsOutput(fundingTable, "TOTAL PLANNED EXPENDITURES", myForm.getFunding().getTotalPlannedExpenditures(), currencyCode);
+					addTotalsOutput(fundingTable, "TOTAL ACTUAL EXPENDITURES", myForm.getFunding().getTotalExpenditures(), currencyCode);
 				}
 				
 				//TOTAL ACTUAL DISBURSeMENT ORDERS:
 				if(visibleModuleDisbOrders){
-					totalAmountType=TranslatorWorker.translateText("TOTAL ACTUAL DISBURSeMENT ORDERS")+":";
-					totalsOutput="";
-					if(myForm.getFunding().getTotalActualDisbursementsOrders()!=null && myForm.getFunding().getTotalActualDisbursementsOrders().length()>0){
-						totalsOutput=myForm.getFunding().getTotalActualDisbursementsOrders()+currencyCode;
-					} 
-					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
+					addTotalsOutput(fundingTable, "TOTAL ACTUAL DISBURSEMENT ORDERS", myForm.getFunding().getTotalActualDisbursementsOrders(), currencyCode);
 				}
 				
 				//UNDISBURSED BALANCE
-				if(FeaturesUtil.isVisibleFeature("Undisbursed Balance", ampContext)){
-					totalAmountType=TranslatorWorker.translateText("UNDISBURSED BALANCE")+":";
-					totalsOutput="";
-					if(myForm.getFunding().getUnDisbursementsBalance()!=null && myForm.getFunding().getUnDisbursementsBalance().length()>0){
-						totalsOutput=myForm.getFunding().getUnDisbursementsBalance()+currencyCode;
-					} 
-					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
+				if(FeaturesUtil.isVisibleFeature("Undisbursed Balance", ampContext))
+				{
+					addTotalsOutput(fundingTable, "UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
 				}
 				
 				//Consumption Rate
 				/*if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext))*/
 				{
-					totalAmountType=TranslatorWorker.translateText("Consumption Rate")+":";
-					totalsOutput="";
-					if(myForm.getFunding().getConsumptionRate()!=null && myForm.getFunding().getConsumptionRate().length()>0){
-						totalsOutput=myForm.getFunding().getConsumptionRate();
-					} 
-					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
+					addTotalsOutput(fundingTable, "Consumption Rate", myForm.getFunding().getConsumptionRate(), currencyCode);
 				}
 				
 				// Delivery Rate
 				/*if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext))*/
 				{
-					totalAmountType=TranslatorWorker.translateText("Delivery Rate")+":";
-					totalsOutput="";
-					if(myForm.getFunding().getDeliveryRate()!=null && myForm.getFunding().getDeliveryRate().length()>0){
-						totalsOutput=myForm.getFunding().getDeliveryRate();
-					} 
-					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
+					addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), currencyCode);
 				}	
 
 				
@@ -3168,7 +2995,8 @@ public class ExportActivityToPDF extends Action {
 		subTotal.setBorderWidthRight(0);
 		fundingTable.addCell(subTotal);
 	}
-	private void addTotalAmountsCellsToFundingTable(PdfPTable fundingTable,String totalAmountType, String totalsOutput) throws WorkerException {
+	
+	private void addTotalAmountsCellsToFundingTable(PdfPTable fundingTable,String totalAmountType, String totalsOutput){
 		Paragraph p1;
 		PdfPCell totalPC=new PdfPCell(new Paragraph(postprocessText(totalAmountType),plainFont));
 		totalPC.setColspan(2);

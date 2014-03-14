@@ -78,8 +78,17 @@ public class Funding implements Serializable
 	private String subtotalEDD;
 	private String subtotalMTEFs;
 	private String undisbursementbalance;
+	
+	/**
+	 * misnomer: agreementTitle. To be renamed in the future!
+	 */
 	private String title;
+	
+	/**
+	 * misnomer: agreementCode. To be renamed in the future!
+	 */
 	private String code;
+	private String fundingClassificationDate;
 	
 	private Long groupVersionedFunding;
 
@@ -706,6 +715,7 @@ public class Funding implements Serializable
 		  this.setConditions(ampFunding.getConditions());
 		  this.setDonorObjective(ampFunding.getDonorObjective());
 		  this.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
+		  this.setFundingClassificationDate(DateConversion.ConvertDateToString(ampFunding.getFundingClassificationDate()));
 		  if(ampFunding.getAgreement() != null){
 			  this.setTitle(ampFunding.getAgreement().getTitle());
 			  this.setCode(ampFunding.getAgreement().getCode());
@@ -836,6 +846,17 @@ public class Funding implements Serializable
 	public void setSubtotalTriangularSscCommitments(
 			String subtotalTriangularSscCommitments) {
 		this.subtotalTriangularSscCommitments = subtotalTriangularSscCommitments;
+	}
+	
+	// trash getter/setters below: do not commit into AMP 2.8+
+	public String getFundingClassificationDate()
+	{
+		return this.fundingClassificationDate;
+	}
+	
+	public void setFundingClassificationDate(String fundingClassificationDate)
+	{
+		this.fundingClassificationDate = fundingClassificationDate;
 	}
 
 }

@@ -39,6 +39,7 @@ public class AllTests_amp27
 		suite.addTest(EsriTestCases.suite());
 		suite.addTest(SscTests27.suite());
 		suite.addTest(CategoryManagerTests.suite());
+		suite.addTest(MiscColumnsTests27.suite());
 		//$JUnit-END$
 		return suite;
 	}

@@ -138,7 +138,7 @@ public class CurrencyRatesQuartzJob implements Job {
 	private void save(String[] currencies,
 			HashMap<String, Double> wsCurrencyValues) {
 		for (int i=0; i<currencies.length; i++) {
-			if(baseCurrency!=null && currencies[i]!=null && currencies[i].equals(baseCurrency)){
+			if(baseCurrency!=null && currencies[i]!=null && !currencies[i].equals(baseCurrency)){
 				AmpCurrencyRate currRate = new AmpCurrencyRate();
 				//currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
 				Double value = wsCurrencyValues.get(currencies[i]);

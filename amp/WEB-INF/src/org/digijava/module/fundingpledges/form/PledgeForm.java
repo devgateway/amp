@@ -57,32 +57,9 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private String titleFreeText;
 	private Collection<AmpCurrency> validcurrencies;
 	private String currencyCode;
-	private String contact1Name;
-	private String contact1Title;
-	private String contact1OrgName;
-	private String contact1OrgId;
-	private String contact1Ministry;
-	private String contact1Address;
-	private String contact1Telephone;
-	private String contact1Email;
-	private String contact1Fax;
-	private String contactAlternate1Name;
-	private String contactAlternate1Email;
-	private String contactAlternate1Telephone;
 	
-	private String contact2Name;
-	private String Contact2Title;
-	private String contact2OrgName;
-	private String contact2OrgId;
-	private String contact2Ministry;
-	private String contact2Address;
-	private String contact2Telephone;
-	private String contact2Email;
-	private String contact2Fax;
-	
-	private String contactAlternate2Name;
-	private String contactAlternate2Email;
-	private String contactAlternate2Telephone;
+	private PledgeFormContact contact1 = new PledgeFormContact();
+	private PledgeFormContact contact2 = new PledgeFormContact();
 	
 	private String additionalInformation;
 	private String whoAuthorizedPledge;
@@ -134,30 +111,8 @@ public class PledgeForm extends ActionForm implements Serializable{
     	this.setAdditionalInformation(null);
     	this.setWhoAuthorizedPledge(null);
     	this.setFurtherApprovalNedded(null);
-    	this.setContact1Address(null);
-    	this.setContact1Email(null);
-    	this.setContact1Fax(null);
-    	this.setContact1Ministry(null);
-    	this.setContact1Name(null);
-    	this.setContact1OrgId(null);
-    	this.setContact1OrgName(null);
-    	this.setContact1Telephone(null);
-    	this.setContact1Title(null);
-    	this.setContactAlternate1Email(null);
-    	this.setContactAlternate1Name(null);
-    	this.setContactAlternate1Telephone(null);
-    	this.setContact2Address(null);
-    	this.setContact2Email(null);
-    	this.setContact2Fax(null);
-    	this.setContact2Ministry(null);
-    	this.setContact2Name(null);
-    	this.setContact2OrgId(null);
-    	this.setContact2OrgName(null);
-    	this.setContact2Telephone(null);
-    	this.setContact2Title(null);
-    	this.setContactAlternate2Email(null);
-    	this.setContactAlternate2Name(null);
-    	this.setContactAlternate2Telephone(null);
+    	this.contact1.reset();
+    	this.contact2.reset();
     	this.setFundingPledgesDetails(null);
     	this.setPledgeSectors(null);
     	this.selectedLocs.clear();
@@ -185,37 +140,39 @@ public class PledgeForm extends ActionForm implements Serializable{
     	this.setAdditionalInformation(fp.getAdditionalInformation());
     	this.setWhoAuthorizedPledge(fp.getWhoAuthorizedPledge());
     	this.setFurtherApprovalNedded(fp.getFurtherApprovalNedded());
-    	this.setContact1Address(fp.getContactAddress());
-    	this.setContact1Email(fp.getContactEmail());
-    	this.setContact1Fax(fp.getContactFax());
-    	this.setContact1Ministry(fp.getContactMinistry());
-    	this.setContact1Name(fp.getContactName());
+    	
+    	this.contact1.setAddress(fp.getContactAddress());
+    	this.contact1.setEmail(fp.getContactEmail());
+    	this.contact1.setFax(fp.getContactFax());
+    	this.contact1.setMinistry(fp.getContactMinistry());
+    	this.contact1.setName(fp.getContactName());
     	if (fp.getContactOrganization()!=null){
         	AmpOrganisation cont1Org =	PledgesEntityHelper.getOrganizationById(fp.getContactOrganization().getAmpOrgId());
-			this.setContact1OrgId(cont1Org.getAmpOrgId().toString());
-        	this.setContact1OrgName(cont1Org.getAcronym());
+			this.contact1.setOrgId(cont1Org.getAmpOrgId().toString());
+        	this.contact1.setOrgName(cont1Org.getAcronym());
     	}
-    	this.setContact1Telephone(fp.getContactTelephone());
-    	this.setContact1Title(fp.getContactTitle());
-    	this.setContactAlternate1Email(fp.getContactAlternativeEmail());
-    	this.setContactAlternate1Name(fp.getContactAlternativeName());
-    	this.setContactAlternate1Telephone(fp.getContactAlternativeTelephone());
-    	this.setContact2Address(fp.getContactAddress_1());
-    	this.setContact2Email(fp.getContactEmail_1());
-    	this.setContact2Fax(fp.getContactFax_1());
-    	this.setContact2Ministry(fp.getContactMinistry_1());
-    	this.setContact2Name(fp.getContactName_1());
+    	this.contact1.setTelephone(fp.getContactTelephone());
+    	this.contact1.setTitle(fp.getContactTitle());
+    	this.contact1.setAlternateEmail(fp.getContactAlternativeEmail());
+    	this.contact1.setAlternateName(fp.getContactAlternativeName());
+    	this.contact1.setAlternateTelephone(fp.getContactAlternativeTelephone());
     	
+    	this.contact2.setAddress(fp.getContactAddress_1());
+    	this.contact2.setEmail(fp.getContactEmail_1());
+    	this.contact2.setFax(fp.getContactFax_1());
+    	this.contact2.setMinistry(fp.getContactMinistry_1());
+    	this.contact2.setName(fp.getContactName_1());
     	if (fp.getContactOrganization_1()!=null){
-        	AmpOrganisation cont2Org =	PledgesEntityHelper.getOrganizationById(fp.getContactOrganization_1().getAmpOrgId());
-        	this.setContact2OrgId(cont2Org.getAmpOrgId().toString());
-        	this.setContact2OrgName(cont2Org.getAcronym());
+        	AmpOrganisation cont1Org =	PledgesEntityHelper.getOrganizationById(fp.getContactOrganization_1().getAmpOrgId());
+			this.contact2.setOrgId(cont1Org.getAmpOrgId().toString());
+        	this.contact2.setOrgName(cont1Org.getAcronym());
     	}
-    	this.setContact2Telephone(fp.getContactTelephone_1());
-    	this.setContact2Title(fp.getContactTitle_1());
-    	this.setContactAlternate2Email(fp.getContactAlternativeEmail_1());
-    	this.setContactAlternate2Name(fp.getContactAlternativeName_1());
-    	this.setContactAlternate2Telephone(fp.getContactAlternativeTelephone_1());
+    	this.contact2.setTelephone(fp.getContactTelephone_1());
+    	this.contact2.setTitle(fp.getContactTitle_1());
+    	this.contact2.setAlternateEmail(fp.getContactAlternativeEmail_1());
+    	this.contact2.setAlternateName(fp.getContactAlternativeName_1());
+    	this.contact2.setAlternateTelephone(fp.getContactAlternativeTelephone_1());
+    	
     	this.setFundingPledgesDetails(fp.getFundingPledgesDetails());
     	Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(fp.getId());
     	Collection<ActivitySector> asl = new ArrayList<ActivitySector>();

@@ -80,14 +80,6 @@ function fnChk(frmContrl, f){
 	  return true;
 	}
 
-function addLocation() {
-	  openNewWindow(600, 300);
-	  <digi:context name="selectLoc" property="context/module/moduleinstance/selectPledgeLocation.do?edit=false" />
-	  document.pledgeForm.action = "<%= selectLoc %>";
-	  document.pledgeForm.target = popupPointer.name;
-	  document.pledgeForm.submit();
-	}
-
 function addProgram(programType) {
 
 	openNewRsWindow(750, 550);
@@ -191,62 +183,6 @@ function changeTitle(){
 	
 }
 
-function setSameContact(){
-	if(document.getElementById("sameContact").checked==true){
-		document.getElementsByName("contact2Name")[0].value = document.getElementsByName("contact1Name")[0].value;
-		//document.getElementsByName("contact2Name")[0].disabled = true;
-		document.getElementsByName("contact2Title")[0].value = document.getElementsByName("contact1Title")[0].value;
-		//document.getElementsByName("contact2Title")[0].disabled = true;
-		document.getElementsByName("contact2OrgName")[0].value = document.getElementsByName("contact1OrgName")[0].value;
-		//document.getElementsByName("contact2OrgName")[0].disabled = true;
-		document.getElementsByName("contact2OrgId")[0].value = document.getElementsByName("contact1OrgId")[0].value;
-		//document.getElementsByName("contact2OrgId")[0].disabled = true;
-		document.getElementsByName("contact2Ministry")[0].value = document.getElementsByName("contact1Ministry")[0].value;
-		//document.getElementsByName("contact2Ministry")[0].disabled = true;
-		document.getElementsByName("contact2Address")[0].value = document.getElementsByName("contact1Address")[0].value;
-		//document.getElementsByName("contact2Address")[0].disabled = true;
-		document.getElementsByName("contact2Telephone")[0].value = document.getElementsByName("contact1Telephone")[0].value;
-		//document.getElementsByName("contact2Telephone")[0].disabled = true;
-		document.getElementsByName("contact2Email")[0].value = document.getElementsByName("contact1Email")[0].value;
-		//document.getElementsByName("contact2Email")[0].disabled = true;
-		document.getElementsByName("contactAlternate2Email")[0].value = document.getElementsByName("contactAlternate1Email")[0].value;
-		//document.getElementsByName("contactAlternate2Email")[0].disabled = true;
-		document.getElementsByName("contact2Fax")[0].value = document.getElementsByName("contact1Fax")[0].value;
-		//document.getElementsByName("contact2Fax")[0].disabled = true;
-		document.getElementsByName("contactAlternate2Name")[0].value = document.getElementsByName("contactAlternate1Name")[0].value;
-		//document.getElementsByName("contactAlternate2Name")[0].disabled = true;
-		document.getElementsByName("contactAlternate2Telephone")[0].value = document.getElementsByName("contactAlternate1Telephone")[0].value;
-		//document.getElementsByName("contactAlternate2Telephone")[0].disabled = true;
-		
-	} else {
-		document.getElementsByName("contact2Name")[0].value = "";
-		document.getElementsByName("contact2Name")[0].disabled = false;
-		document.getElementsByName("contact2Title")[0].value = "";
-		document.getElementsByName("contact2Title")[0].disabled = false;
-		document.getElementsByName("contact2OrgName")[0].value = "";
-		document.getElementsByName("contact2OrgName")[0].disabled = false;
-		document.getElementsByName("contact2OrgId")[0].value = "";
-		document.getElementsByName("contact2OrgId")[0].disabled = false;
-		document.getElementsByName("contact2Ministry")[0].value = "";
-		document.getElementsByName("contact2Ministry")[0].disabled = false;
-		document.getElementsByName("contact2Address")[0].value = "";
-		document.getElementsByName("contact2Address")[0].disabled = false;
-		document.getElementsByName("contact2Telephone")[0].value = "";
-		document.getElementsByName("contact2Telephone")[0].disabled = false;
-		document.getElementsByName("contact2Email")[0].value = "";
-		document.getElementsByName("contact2Email")[0].disabled = false;
-		document.getElementsByName("contactAlternate2Email")[0].value = "";
-		document.getElementsByName("contactAlternate2Email")[0].disabled = false;
-		document.getElementsByName("contact2Fax")[0].value = "";
-		document.getElementsByName("contact2Fax")[0].disabled = false;
-		document.getElementsByName("contactAlternate2Name")[0].value = "";
-		document.getElementsByName("contactAlternate2Name")[0].disabled = false;
-		document.getElementsByName("contactAlternate2Telephone")[0].value = "";
-		document.getElementsByName("contactAlternate2Telephone")[0].disabled = false;
-		
-	}
-}
-
 document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
 --></script>
@@ -306,34 +242,6 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	<tr>
 		<td align=left valign="top">
 			<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
-				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
-						<tr>
-							<td>
-								<span class=crumb>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" >
-										<digi:trn key="aim:desktop">Desktop</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/viewPledgesList.do" styleClass="comment" >
-										<digi:trn key="aim:pledges">Pledges</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:trn key="aim:addPledge">Add Pledge</digi:trn>
-								
-								</span>
-							</td>
-						</tr>
-					</table>
-				</td></tr>
-				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
-						<!--<tr>
-							<td height="50" vAlign="middle" width="100%"><span class=subtitle-blue>
-								<digi:trn key="aim:addNewPledge">Add New Pledge</digi:trn>
-								
-							</td>
-						</tr>-->
-					</table>
-				</td></tr>
 				<tr><td>
 					<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
@@ -546,30 +454,6 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										</tr>
 										<tr>
 											<td>
-										    <%-- <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
-	                                             	<tr><td>
-	                                             	BLABLA REMOVED PLEDGES SHOWING
-													</td></tr>
-													<tr>
-														<td colspan="2"> &nbsp;
-															<field:display name="Add Pledge Location Button" feature="Pledge Sector and Location">
-	                                                           <html:button styleClass="dr-menu"  
-	                                                                         property="submitButton" onclick="addLocation();">
-	                                                                <digi:trn key="btn:addLocation">Add Location</digi:trn>
-	                                                            </html:button>
-															</field:display>
-															<field:display name="Remove Pledge Location Button" feature="Pledge Sector and Location">
-																 &nbsp;
-		                                                 		<logic:notEmpty name="pledgeForm" property="selectedLocs">
-																	<html:button styleClass="dr-menu" property="submitButton" onclick="return removeLocation()">
-		                                                            <digi:trn key="btn:removeLocation">Remove Location</digi:trn>
-		                                                        	</html:button>
-																</logic:notEmpty>
-															</field:display>
-		                                                </td>
-		                                            </tr>
-		                                        </table>
-										     --%>
 										     <iframe src="/aim/selectPledgeLocation.do?edit=false" width="100%" scrolling="no" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" name="pledges_locations_name"></iframe> 										   
 										    </td>
 										</tr>
@@ -815,239 +699,6 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										</tr>
 									</table>
 									<br /><br />
-								</feature:display>
-								<feature:display name="Pledge Contact 1" module="Pledges">
-								<table width="100%" border="0" cellpadding="0" cellspacing="0">
-									<tr><td bgcolor="#C7D4DB" align=center height=25>
-										<b><digi:trn key="aim:pointContactDonorsConferenceMarch31st">Point of Contact at Donors Conference on March 31st</digi:trn></b>
-
-									</td></tr>
-									<tr><td>&nbsp;</td></tr>
-									
-									<tr><td>
-									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
-											<tr bgcolor="#ffffff">			
-												<field:display name="Pledge Contact 1 - Name" feature="Pledge Contact 1">								
-													<td width="50%" align="left" valign="middle">														
-														<b><digi:trn key="pointContactName">Name</digi:trn></b>												
-													</td>
-												</field:display>
-												<field:display name="Pledge Contact 1 - Title" feature="Pledge Contact 1">
-													<td width="50%" align="left" valign="middle">														
-														<b><digi:trn key="pointContactTitle">Title</digi:trn></b>																																								
-													</td>
-												</field:display>								
-											</tr>
-											<tr>
-											<td><html:text property="contact1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
-											<td><html:text property="contact1Title" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
-											</tr>
-																						<tr bgcolor="#ffffff">
-												<field:display name="Pledge Contact 1 - Organization" feature="Pledge Contact 1">											
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactOrganization">Organization</digi:trn></b>																										</td>
-													</field:display>
-												<field:display name="Pledge Contact 1 - Ministry" feature="Pledge Contact 1">
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactMinistry">Ministry</digi:trn></b>																										</td>
-													</field:display>							
-											</tr>
-											<tr>
-											<td>
-															<c:set var="valueId1"> contact1OrgId </c:set>
-								                              <c:set var="nameId1"> contact1OrgName </c:set>
-								                              <input name="contact1OrgId" type="hidden" id="${valueId1}" style="text-align:left" value='${pledgeForm.contact1OrgId}' size="4"/>
-								                              <input name="contact1OrgName" type="text" id="${nameId1}" value='${pledgeForm.contact1OrgName}' size="33" style="background-color:#FFFFFF; text-align:left" onKeyDown="return false" class="inp-text" onchange="setSameContact()"/>
-								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton></td>
-											<td><html:text property="contact1Ministry" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
-											</tr>
-											<tr bgcolor="#ffffff">		
-												<field:display name="Pledge Contact 1 - Address" feature="Pledge Contact 1">									
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactAddress">Address</digi:trn></b>																																								</td>
-												</field:display>
-												<field:display name="Pledge Contact 1 - Telephone" feature="Pledge Contact 1">
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactTelephone">Telephone</digi:trn></b>																										</td>
-												</field:display>								
-											</tr>
-											<tr>
-											<td><html:text property="contact1Address" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
-											<td><html:text property="contact1Telephone" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
-											</tr>
-											<tr bgcolor="#ffffff">
-												<field:display name="Pledge Contact 1 - Email" feature="Pledge Contact 1">											
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactEmail">Email</digi:trn></b>																										</td>
-												</field:display>
-												<field:display name="Pledge Contact 1 - Fax" feature="Pledge Contact 1">
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactFax">Fax</digi:trn></b>																										</td>
-												</field:display>									
-											</tr>
-											<tr>
-											<td><html:text property="contact1Email" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
-											<td><html:text property="contact1Fax" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
-											</tr>
-										</table>
-										<tr><td>&nbsp;</td></tr>
-									<field:display name="Pledge Contact 1 - Alternate Contact" feature="Pledge Contact 1">
-										<tr><td align=center><b><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></b><hr /></td></tr>
-										<tr><td>
-										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
-												<tr bgcolor="#ffffff">											
-													<td width="50%" align="left" valign="middle">
-														
-													<b><digi:trn key="pointContactName">Name</digi:trn></b>												</td>
-													<td width="50%" align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactTelephone">Telephone</digi:trn></b>																										</td>
-												</tr>
-												<tr>
-												<td><html:text property="contactAlternate1Name" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
-												<td><html:text property="contactAlternate1Telephone" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
-												</tr>
-												<tr bgcolor="#ffffff">											
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactEmail">Email</digi:trn></b>																										</td>
-													<td align="left" valign="middle">																										</td>
-												</tr>
-													<tr>
-												<td><html:text property="contactAlternate1Email" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
-												<td>&nbsp;</td>
-												</tr>
-											</table>
-										</td></tr>
-									</field:display>
-								</table>
-								<br /><br />
-								</feature:display>
-								<feature:display name="Pledge Contact 2" module="Pledges">
-								<table width="100%" border="0" cellpadding="0" cellspacing="0">
-									<tr><td bgcolor="#C7D4DB" align="center" height=25>
-										
-										<b><digi:trn key="aim:pointContactFollowUp">Point of Contact for Follow Up</digi:trn></b>
-
-									</td></tr>
-									<tr><td>&nbsp;</td></tr>
-									
-									<tr><td>
-									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
-											<tr>
-												<td valign="middle" align="center" width="15%" colspan="2">
-													
-														<digi:trn key="sameAsOriginalPointOfContact">Same As Original Point Of Contact</digi:trn>
-													
-													<input type="checkbox" id="sameContact" onclick="setSameContact()">												</td>
-											</tr>
-											<tr bgcolor="#ffffff">
-												<field:display name="Pledge Contact 2 - Name" feature="Pledge Contact 2">											
-													<td width="50%" align="left" valign="middle">														
-														<b><digi:trn key="pointContactName">Name</digi:trn></b>												
-													</td>
-												</field:display>
-												<field:display name="Pledge Contact 2 - Title" feature="Pledge Contact 2">
-													<td width="50%" align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactTitle">Title</digi:trn></b>																										</td>
-												</field:display>									
-											</tr>
-											<tr>
-											<td><html:text property="contact2Name" size="40" styleClass="inp-text"/></td>
-											<td><html:text property="contact2Title" size="40" styleClass="inp-text"/></td>
-											</tr>
-											<tr bgcolor="#ffffff">	
-												<field:display name="Pledge Contact 2 - Organization" feature="Pledge Contact 2">										
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactOrganization">Organization</digi:trn></b>																										</td>
-												</field:display>
-												<field:display name="Pledge Contact 2 - Ministry" feature="Pledge Contact 2">
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactMinistry">Ministry</digi:trn></b>																										</td>
-												</field:display>							
-											</tr>
-											<tr>
-											<td><c:set var="valueId2"> contact2OrgId </c:set>
-								                              <c:set var="nameId2"> contact2OrgName </c:set>
-								                              <input name="contact2OrgId" type="hidden" id="${valueId2}" style="text-align:left" value='${pledgeForm.contact2OrgId}' size="4"/>
-								                              <input name="contact2OrgName" type='text' id="${nameId2}" value='${pledgeForm.contact2OrgName}' size="33" style="background-color:#FFFFFF;text-align:left" onKeyDown="return false" class="inp-text"/>
-								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId2}" htmlNameHolder="${nameId2}" >...</aim:addOrganizationButton></td>
-											<td><html:text property="contact2Ministry" size="40" styleClass="inp-text"/></td>
-											</tr>
-											<tr bgcolor="#ffffff">
-												<field:display name="Pledge Contact 2 - Address" feature="Pledge Contact 2">											
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactAddress">Address</digi:trn></b>																										</td>
-												</field:display>
-												<field:display name="Pledge Contact 2 - Telephone" feature="Pledge Contact 2">
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactTelephone">Telephone</digi:trn></b>																										</td>
-												</field:display>									
-											</tr>
-											<tr>
-											<td><html:text property="contact2Address" size="40" styleClass="inp-text"/></td>
-											<td><html:text property="contact2Telephone" size="40" styleClass="inp-text"/></td>
-											</tr>
-											<tr bgcolor="#ffffff">											
-												<field:display name="Pledge Contact 2 - Email" feature="Pledge Contact 2">
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactEmail">Email</digi:trn></b>																										</td>
-												</field:display>
-												<field:display name="Pledge Contact 2 - Fax" feature="Pledge Contact 2">
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactFax">Fax</digi:trn></b>																										</td>
-												</field:display>									
-											</tr>
-											<tr>
-											<td><html:text property="contact2Email" size="40" styleClass="inp-text"/></td>
-											<td><html:text property="contact2Fax" size="40" styleClass="inp-text"/></td>
-											</tr>
-										</table>
-										<tr><td>&nbsp;</td></tr>
-									<field:display name="Pledge Contact 2 - Alternate Contact" feature="Pledge Contact 2">
-										<tr><td align=center><b><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></b><hr /></td></tr>
-										<tr><td>
-										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
-												<tr bgcolor="#ffffff">											
-													<td width="50%" align="left" valign="middle">														
-														<b><digi:trn key="pointContactName">Name</digi:trn></b>																										
-													</td>
-													<td width="50%" align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactTelephone">Telephone</digi:trn></b>																										</td>
-												</tr>
-												<tr>
-												<td><html:text property="contactAlternate2Name" size="40" styleClass="inp-text"/></td>
-												<td><html:text property="contactAlternate2Telephone" size="40" styleClass="inp-text"/></td>
-												</tr>
-												<tr bgcolor="#ffffff">											
-													<td align="left" valign="middle">
-														
-															<b><digi:trn key="pointContactEmail">Email</digi:trn></b>																																									</td>
-													<td align="left" valign="middle">																										</td>
-												</tr>
-												<tr bgcolor="#ffffff">
-												  <td align="left" valign="middle"><html:text property="contactAlternate2Email" size="40" styleClass="inp-text"/></td>
-												  <td align="left" valign="middle"></td>
-										    </tr>
-											</table>
-										</td></tr>
-									</field:display>
-								</table>
-								<br /><br />
 								</feature:display>
 								
 								<feature:display name="Pledge Additional Information" module="Pledges">
@@ -1432,83 +1083,7 @@ function validateData(){
 		i++;
 	}
 	
-	if (document.getElementsByName("contact1Email")[0]!=null && document.getElementsByName("contact1Email")[0].value.length>0 && !verifyEmail(document.getElementsByName("contact1Email")[0].value)){
-		highligthObject(document.getElementsByName("contact1Email")[0],true);
-		errors = true;
-	} else {
-		highligthObject(document.getElementsByName("contact1Email")[0],false);
-	}
-	
-	if (document.getElementsByName("contactAlternate1Email")[0]!=null && document.getElementsByName("contactAlternate1Email")[0].value.length>0 && !verifyEmail(document.getElementsByName("contactAlternate1Email")[0].value)){
-		highligthObject(document.getElementsByName("contactAlternate1Email")[0],true);
-		errors = true;
-	} else {
-		highligthObject(document.getElementsByName("contactAlternate1Email")[0],false);
-	}
 
-	if (document.getElementsByName("contact2Email")[0]!=null && document.getElementsByName("contact2Email")[0].value.length>0 && !verifyEmail(document.getElementsByName("contact2Email")[0].value)){
-		highligthObject(document.getElementsByName("contact2Email")[0],true);
-		errors = true;
-	} else {
-		highligthObject(document.getElementsByName("contact2Email")[0],false);
-	}
-	
-	if (document.getElementsByName("contactAlternate2Email")[0]!=null && document.getElementsByName("contactAlternate2Email")[0].value.length>0 && !verifyEmail(document.getElementsByName("contactAlternate2Email")[0].value)){
-		highligthObject(document.getElementsByName("contactAlternate2Email")[0],true);
-		errors = true;
-	} else {
-		highligthObject(document.getElementsByName("contactAlternate2Email")[0],false);
-	}
-
-	var tmp = replaceAll(replaceAll(document.getElementsByName("contact1Telephone")[0].value, "-", ""), " ", "");
-	if (document.getElementsByName("contact1Telephone")[0]!=null && document.getElementsByName("contact1Telephone")[0].value.length>0 && isNaN(tmp)){
-		highligthObject(document.getElementsByName("contact1Telephone")[0],true);
-		errors = true;
-	} else {
-		highligthObject(document.getElementsByName("contact1Telephone")[0],false);
-	}
-
-	tmp = replaceAll(replaceAll(document.getElementsByName("contact1Fax")[0].value, "-", ""), " ", "");
-	if (document.getElementsByName("contact1Fax")[0]!=null && document.getElementsByName("contact1Fax")[0].value.length>0 && isNaN(tmp)){
-		highligthObject(document.getElementsByName("contact1Fax")[0],true);
-		errors = true;
-	} else {
-		highligthObject(document.getElementsByName("contact1Fax")[0],false);
-	}
-
-	tmp = replaceAll(replaceAll(document.getElementsByName("contactAlternate1Telephone")[0].value, "-", ""), " ", "");
-	if (document.getElementsByName("contactAlternate1Telephone")[0]!=null && document.getElementsByName("contactAlternate1Telephone")[0].value.length>0 && isNaN(tmp)){
-		highligthObject(document.getElementsByName("contactAlternate1Telephone")[0],true);
-		errors = true;
-	} else {
-		highligthObject(document.getElementsByName("contactAlternate1Telephone")[0],false);
-	}
-
-	tmp = replaceAll(replaceAll(document.getElementsByName("contact2Telephone")[0].value, "-", ""), " ", "");
-	if (document.getElementsByName("contact2Telephone")[0]!=null && document.getElementsByName("contact2Telephone")[0].value.length>0 && isNaN(tmp)){
-		highligthObject(document.getElementsByName("contact2Telephone")[0],true);
-		errors = true;
-	} else {
-		highligthObject(document.getElementsByName("contact2Telephone")[0],false);
-	}
-
-	tmp = replaceAll(replaceAll(document.getElementsByName("contact2Fax")[0].value, "-", ""), " ", "");
-	if (document.getElementsByName("contact2Fax")[0]!=null && document.getElementsByName("contact2Fax")[0].value.length>0 && isNaN(tmp)){
-		highligthObject(document.getElementsByName("contact2Fax")[0],true);
-		errors = true;
-	} else {
-		highligthObject(document.getElementsByName("contact2Fax")[0],false);
-	}
-
-	tmp = replaceAll(replaceAll(document.getElementsByName("contactAlternate2Telephone")[0].value, "-", ""), " ", "");
-	if (document.getElementsByName("contactAlternate2Telephone")[0]!=null && document.getElementsByName("contactAlternate2Telephone")[0].value.length>0 && isNaN(tmp)){
-		highligthObject(document.getElementsByName("contactAlternate2Telephone")[0],true);
-		errors = true;
-	} else {
-		highligthObject(document.getElementsByName("contactAlternate2Telephone")[0],false);
-	}
-
-	
 	<c:set var="checkErrors">
 	  <digi:trn>
 	  	Please, check values highlighted in red.
@@ -1527,14 +1102,6 @@ function replaceAll(str, find, replace){
 	      str = str.toString().replace(find,replace);
 	  return str;
 	}
-
-function verifyEmail(email) {
-	var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	if (!filter.test(email)) {
-		return false;
-	}
-	return true;
-}
 
 
 </script>

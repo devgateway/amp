@@ -52,33 +52,33 @@ public class SavePledge extends Action {
     		pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
     		pledge.setFurtherApprovalNedded(plForm.getFurtherApprovalNedded());
     		
-    		pledge.setContactName(plForm.getContact1Name());
-    		pledge.setContactTitle(plForm.getContact1Title());
-    		if (plForm.getContact1OrgId()!=null && plForm.getContact1OrgId().length()!=0) {
-    			pledge.setContactOrganization(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getContact1OrgId())));
+    		pledge.setContactName(plForm.getContact1().getName());
+    		pledge.setContactTitle(plForm.getContact1().getTitle());
+    		if (plForm.getContact1().getOrgId()!=null && plForm.getContact1().getOrgId().length()!=0) {
+    			pledge.setContactOrganization(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getContact1().getOrgId())));
 			}
-    		pledge.setContactMinistry(plForm.getContact1Ministry());
-    		pledge.setContactAddress(plForm.getContact1Address());
-    		pledge.setContactTelephone(plForm.getContact1Telephone());
-    		pledge.setContactFax(plForm.getContact1Fax());
-    		pledge.setContactEmail(plForm.getContact1Email());
-    		pledge.setContactAlternativeName(plForm.getContactAlternate1Name());
-    		pledge.setContactAlternativeEmail(plForm.getContactAlternate1Email());
-    		pledge.setContactAlternativeTelephone(plForm.getContactAlternate1Telephone());
+    		pledge.setContactMinistry(plForm.getContact1().getMinistry());
+    		pledge.setContactAddress(plForm.getContact1().getAddress());
+    		pledge.setContactTelephone(plForm.getContact1().getTelephone());
+    		pledge.setContactFax(plForm.getContact1().getFax());
+    		pledge.setContactEmail(plForm.getContact1().getEmail());
+    		pledge.setContactAlternativeName(plForm.getContact1().getAlternateName());
+    		pledge.setContactAlternativeEmail(plForm.getContact1().getAlternateEmail());
+    		pledge.setContactAlternativeTelephone(plForm.getContact1().getAlternateTelephone());
     		
-    		pledge.setContactName_1(plForm.getContact2Name());
-    		pledge.setContactTitle_1(plForm.getContact2Title());
-    		if (plForm.getContact2OrgId()!=null && plForm.getContact2OrgId().length()!=0) {
-    			pledge.setContactOrganization_1(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getContact2OrgId())));
+    		pledge.setContactName_1(plForm.getContact2().getName());
+    		pledge.setContactTitle_1(plForm.getContact2().getTitle());
+    		if (plForm.getContact2().getOrgId()!=null && plForm.getContact2().getOrgId().length()!=0) {
+    			pledge.setContactOrganization_1(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getContact2().getOrgId())));
     		}
-    		pledge.setContactMinistry_1(plForm.getContact2Ministry());
-    		pledge.setContactAddress_1(plForm.getContact2Address());
-    		pledge.setContactTelephone_1(plForm.getContact2Telephone());
-    		pledge.setContactFax_1(plForm.getContact2Fax());
-    		pledge.setContactEmail_1(plForm.getContact2Email());
-    		pledge.setContactAlternativeName_1(plForm.getContactAlternate2Name());
-    		pledge.setContactAlternativeEmail_1(plForm.getContactAlternate2Email());
-    		pledge.setContactAlternativeTelephone_1(plForm.getContactAlternate2Telephone());
+    		pledge.setContactMinistry_1(plForm.getContact2().getMinistry());
+    		pledge.setContactAddress_1(plForm.getContact2().getAddress());
+    		pledge.setContactTelephone_1(plForm.getContact2().getTelephone());
+    		pledge.setContactFax_1(plForm.getContact2().getFax());
+    		pledge.setContactEmail_1(plForm.getContact2().getEmail());
+    		pledge.setContactAlternativeName_1(plForm.getContact2().getAlternateName());
+    		pledge.setContactAlternativeEmail_1(plForm.getContact2().getAlternateEmail());
+    		pledge.setContactAlternativeTelephone_1(plForm.getContact2().getAlternateTelephone());
     		
     		Set<FundingPledgesSector> pledgessector = new HashSet<FundingPledgesSector>();
     		if(plForm.getPledgeSectors()!=null && plForm.getPledgeSectors().size()>0){

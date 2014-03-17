@@ -48,6 +48,3 @@
 <script type="text/javascript">
 	on_element_loaded();
 </script>
-
-<!-- </form>  -->
-<%--</div>  --%>

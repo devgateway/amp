@@ -68,10 +68,7 @@ public class AmpLocationSearchModel extends
 				&& CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(cvLayer)) {
 			// then we can only return the current default country of the system
 			try {
-				AmpCategoryValueLocations defCountry = DynLocationManagerUtil
-						.getLocationByIso(
-								FeaturesUtil.getDefaultCountryIso(),
-								CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+				AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
 				ret = new ArrayList<AmpCategoryValueLocations>();
 				ret.add(defCountry);
 				return ret;

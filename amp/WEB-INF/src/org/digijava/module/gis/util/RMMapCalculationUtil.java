@@ -62,13 +62,7 @@ public class RMMapCalculationUtil {
         Collection<Long> donnorAgencyIds = longArrayToColl(filter.getSelectedDonnorAgency());
         Collection<Long> programsIds = longArrayToColl(filter.getSelectedNatPlanObj());
 
-        String defaultCountryISO = null;
-
-        try {
-        defaultCountryISO = FeaturesUtil.getDefaultCountryIso();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        String defaultCountryISO = FeaturesUtil.getDefaultCountryIso();
         Collection <AmpCategoryValueLocations> locations = DbUtil.getSelectedLocations(defaultCountryISO, new Integer(filter.getMapLevel()));
 
         Calendar fStartDate = Calendar.getInstance();
@@ -180,13 +174,7 @@ public class RMMapCalculationUtil {
         Collection<Long> programsIds = longArrayToColl(filter.getSelectedNatPlanObj());
         Collection<Long> typeOfAssistanceIds = longArrayToColl(filter.getSelectedTypeOfAssistance());
 
-        String defaultCountryISO = null;
-
-        try {
-        defaultCountryISO = FeaturesUtil.getDefaultCountryIso();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        String defaultCountryISO = FeaturesUtil.getDefaultCountryIso();
         //Collection <AmpCategoryValueLocations> locations = DbUtil.getSelectedLocations(defaultCountryISO, new Integer(filter.getMapLevel()));
 
         Collection <AmpCategoryValueLocations> locations = new ArrayList <AmpCategoryValueLocations>();

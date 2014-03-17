@@ -103,6 +103,34 @@ function pledges_hide_add_location()
 	$('#add_location_button').show();
 }
 
+function pledges_submit_add_locations()
+{
+	var location_ids = [];
+	$('#location_id_select option:selected').each(function ()
+		{
+			if (($(this).attr('value') != '0') && ($(this).attr('value') != '-1'))
+				location_ids.push($(this).attr('value'));
+		});
+	if (location_ids.length == 0)
+	{
+		// nothing selected -> just hide the area
+		pledges_hide_add_location();
+		return;
+	}
+	$.post("/selectPledgeLocation.do",{
+		locs: location_ids.join(','),
+		extraAction: "add_locations"
+	},
+	function(data) {
+		if (data.trim() == 'ok'){
+			pledges_hide_add_location();
+			pledge_locations_refresh_table();
+		} else {
+			show_error_message('Error adding locations', data);
+		}
+	});
+}
+
 /**
  * should be called on every new ajax addition
  */

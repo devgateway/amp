@@ -259,6 +259,18 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 		return id.compareTo(o.getId());
 	}
 	
+	/**
+	 * computes the name of the ACVL in the form [Country][Region]...[Location]
+	 * @return
+	 */
+	public String getHierarchicalName()
+	{
+		String myName = "[" + this.getName() + "]";
+		if (this.getParentLocation() == null)
+			return myName;
+		return getParentLocation().getHierarchicalName() + myName;
+	}
+	
 	public static String hqlStringForName(String idSource)
 	{
 		return InternationalizedModelDescription.getForProperty(AmpCategoryValueLocations.class, "name").getSQLFunctionCall(idSource + ".id");

@@ -41,4 +41,20 @@ public class KeyValue implements Serializable {
 	{
 		return String.format("KeyValue: (%s, %s)", this.key, this.value);
 	}
+	
+	/**
+	 * returns key parsed as Long. Throws exception if key not present or non-parseable
+	 * @return
+	 */
+	public Long getKeyAsLong()
+	{
+		try
+		{
+			return Long.parseLong(this.key);
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
 }

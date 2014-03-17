@@ -539,43 +539,43 @@ public class LocationUtil {
 		}
 		return ampRegions;
 	}
-        /**
-         * 
-         * @deprecated use DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry() instead
-         */
-       @Deprecated
-        public static List getAllDefCountryArRegions() {
-		ArrayList ampRegions = new ArrayList();
-		Session session = null;
-                Query q=null;
-		Iterator <AmpRegion> iter = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select reg  from " +AmpRegion.class.getName()
-                                +" reg  inner join reg.country country where country.iso=:iso order by reg.name";
-                       
-			q=session.createQuery(queryString);
-                        q.setString("iso",  FeaturesUtil.getDefaultCountryIso());
-                        List regions=q.list();
-                        if(regions!=null){
-                         iter=regions.iterator();
-                         while(iter.hasNext()){
-                            AmpRegion reg=iter.next();
-                            AmpARVRegions region=new AmpARVRegions();
-                            region.setRegionId(reg.getAmpRegionId());
-                            region.setRegion(reg.getName());
-                            ampRegions.add(region);
-                         }
-                        }
-                       
-
-
-		
-		} catch (Exception ex) {
-			logger.error("Unable to get amp Regions :" + ex.getMessage());
-		} 
-		return ampRegions;
-	}
+//        /**
+//         * 
+//         * @deprecated use DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry() instead
+//         */
+//       @Deprecated
+//        public static List getAllDefCountryArRegions() {
+//		ArrayList ampRegions = new ArrayList();
+//		Session session = null;
+//                Query q=null;
+//		Iterator <AmpRegion> iter = null;
+//		try {
+//			session = PersistenceManager.getRequestDBSession();
+//			String queryString = "select reg  from " +AmpRegion.class.getName()
+//                                +" reg  inner join reg.country country where country.iso=:iso order by reg.name";
+//                       
+//			q=session.createQuery(queryString);
+//                        q.setString("iso",  FeaturesUtil.getDefaultCountryIso());
+//                        List regions=q.list();
+//                        if(regions!=null){
+//                         iter=regions.iterator();
+//                         while(iter.hasNext()){
+//                            AmpRegion reg=iter.next();
+//                            AmpARVRegions region=new AmpARVRegions();
+//                            region.setRegionId(reg.getAmpRegionId());
+//                            region.setRegion(reg.getName());
+//                            ampRegions.add(region);
+//                         }
+//                        }
+//                       
+//
+//
+//		
+//		} catch (Exception ex) {
+//			logger.error("Unable to get amp Regions :" + ex.getMessage());
+//		} 
+//		return ampRegions;
+//	}
 
 
 	public static AmpLocation getAmpLocation(Long id) {

@@ -243,19 +243,36 @@ public final class ARUtil {
 		return r;
 	}
 	
-	public static void generateReportNotFoundPage(HttpServletResponse response) throws IOException {
-		response.setContentType("text/html");	
-		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
-		PrintWriter out = new PrintWriter(outputStream, true);
+	/**
+	 * writes a plain text response. rethrows any exception
+	 * @param response
+	 * @param msg
+	 */
+	public static void writeResponse(HttpServletResponse response, String msg)
+	{
+		try
+		{
+			response.setContentType("text/html");	
+			OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+			PrintWriter out = new PrintWriter(outputStream, true);
+			out.println(msg);
+			out.close();	
+			outputStream.close();
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static void generateReportNotFoundPage(HttpServletResponse response){
 		String url = "/";
 		String alert = TranslatorWorker.translateText("Report with given id not found!");
 		String script = "<script>if ((typeof opener !== 'undefined') && (opener != null)) {opener.close();};\n" 
 			+ "alert('"+ alert +"');\n" 
 			+ "window.location=('"+ url +"');\n"
 			+ "</script>";
-		out.println(script);
-		out.close();	
-		outputStream.close();
+		writeResponse(response, script);
 	}
 
 	

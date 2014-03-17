@@ -41,8 +41,7 @@ public class DynLocationSelected extends Action {
 		
 	    AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getLocation().getImplemLocationLevel() );
 		AmpCategoryValue implLevel		= CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getLocation().getLevelId() );
-		String cIso						= FeaturesUtil.getDefaultCountryIso();
-		AmpCategoryValueLocations defCountry	= DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+		AmpCategoryValueLocations defCountry	= DynLocationManagerUtil.getDefaultCountry();
 		boolean defCountryInSelection   = false;
 		ArrayList<AmpCategoryValueLocations>    userSelectedLocsColl = new ArrayList<AmpCategoryValueLocations>();
 		boolean setFullPercForDefaultCountry    					= false;

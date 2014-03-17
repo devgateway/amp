@@ -16,6 +16,10 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 
 
+/**
+ * NOT USED ANYMORE
+ *
+ */
 public class PledgeLocationSelected extends Action {
 	private static Logger logger = Logger.getLogger(PledgeLocationSelected.class);
 
@@ -23,38 +27,7 @@ public class PledgeLocationSelected extends Action {
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response) throws Exception {
 		
-		PledgeForm plForm = (PledgeForm) form;
-		Long[] userSelectedLocs = plForm.getUserSelectedLocs();
-		if (userSelectedLocs != null) {
-            List<Long> locsIds = getSelectedLocIds(plForm);
-            for (Long userSelectedLoc : userSelectedLocs) {
-                if (! locsIds.contains(userSelectedLoc)) {
-                    AmpCategoryValueLocations ampCVLocation = DynLocationManagerUtil.getLocation(userSelectedLoc, false);
-                    FundingPledgesLocation fpl = new FundingPledgesLocation();
-                    fpl.setLocation(ampCVLocation);
-                    if (plForm.getSelectedLocs() == null) {
-                        plForm.setSelectedLocs(new ArrayList<FundingPledgesLocation>());
-                    }
-                    if (plForm.getSelectedLocs().size() == 0) {
-                        fpl.setLocationpercentage(100f);
-                    } else {
-                        fpl.setLocationpercentage(0f);
-                    }
-                    plForm.getSelectedLocs().add(fpl);
-                }
-            }
-		}
-		
+		// NOT USED ANYMORE
 		return mapping.findForward("forward");
 	}
-
-    private List<Long> getSelectedLocIds(PledgeForm plForm) {
-        List<Long> selectedLocs = new ArrayList<Long>();
-        if (plForm.getSelectedLocs() != null) {
-            for (FundingPledgesLocation location : plForm.getSelectedLocs()) {
-                selectedLocs.add(location.getLocation().getId());
-            }
-        }
-        return selectedLocs;
-    }
 }

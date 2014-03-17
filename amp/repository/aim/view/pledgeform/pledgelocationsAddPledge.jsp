@@ -13,14 +13,14 @@
 
 <div class="container-fluid" id="pledge_add_location_area">
 	<div class="row">
-		<div class="col-xs-5 text-right"><h5>Implementation level</h5></div>
+		<div class="col-xs-5 text-right"><h5><digi:trn>Implementation level</digi:trn></h5></div>
 		<div class="col-xs-7">	
 			<c:set var="translation"><digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn></c:set>
 			<category:showoptions multiselect="false" styleId="impl_level_select" firstLine="${translation}" name="pledgeForm" property="levelId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" />
   		</div>
 	</div>
 	<div class="row">
-		<div class="col-xs-5 text-right"><h5>Implementation location</h5></div> <%--getAllValidImplementationLocationChoices --%>
+		<div class="col-xs-5 text-right"><h5><digi:trn>Implementation location</digi:trn></h5></div> <%--getAllValidImplementationLocationChoices --%>
 		<div class="col-xs-7">
 			<html:select styleId="impl_location_select" property="implemLocationLevel">
 				<c:forEach var="ch" items="${pledgeForm.allValidImplementationLocationChoices}">
@@ -30,7 +30,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xs-5 text-right"><h5>Region</h5></div>
+		<div class="col-xs-5 text-right"><h5><digi:trn>Location</digi:trn></h5></div>
 		<div class="col-xs-7">
 			<select id="location_id_select" multiple="multiple" size="5">
 				<c:forEach var="ch" items="${pledgeForm.allValidLocations}">
@@ -42,7 +42,7 @@
 				</c:forEach>
 	</select></div>
 </div>
-<div class="text-center"><button type="button" class="btn btn-success btn-sm" onclick='pledges_hide_add_location()'>Submit</button></div>
+<div class="text-center"><button type="button" class="btn btn-success btn-sm" id='pledges_submit_locations_button' onclick='pledges_submit_add_locations()'>Submit</button></div>
 </div>
 </digi:form>
 <script type="text/javascript">

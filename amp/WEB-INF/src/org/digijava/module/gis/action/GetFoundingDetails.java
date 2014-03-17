@@ -403,17 +403,17 @@ public class GetFoundingDetails extends Action {
                     	programs.addAll(secondaryPrograms);
                     }
             		
-            		TeamMember tm = null;
-
-                    boolean includeNatProjects = request.getParameter("natProjects") != null &&
-                            request.getParameter("natProjects").equalsIgnoreCase("true") ? true : false;
+//            		TeamMember tm = null;
+//
+//                    boolean includeNatProjects = request.getParameter("natProjects") != null &&
+//                            request.getParameter("natProjects").equalsIgnoreCase("true") ? true : false;
                     
                     int mapMode =  (request.getParameter("mapMode") != null && request.getParameter("mapMode").
                             equalsIgnoreCase("pledgesData")) ? DbUtil.MAP_MODE_PLEDGES : DbUtil.MAP_MODE_ACTIVITIES;
                     
                     
-                    String defaultCountryISO = FeaturesUtil.getDefaultCountryIso();
-                    Collection <AmpCategoryValueLocations> locations = DbUtil.getSelectedLocations(defaultCountryISO, Integer.parseInt(mapLevel));
+                    //String defaultCountryISO = FeaturesUtil.getDefaultCountryIso();
+                    //Collection <AmpCategoryValueLocations> locations = DbUtil.getSelectedLocations(defaultCountryISO, Integer.parseInt(mapLevel));
 
 
                     List segmentDataList = new ArrayList();

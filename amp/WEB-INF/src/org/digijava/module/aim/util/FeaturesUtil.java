@@ -2840,27 +2840,12 @@ public class FeaturesUtil {
 		return col;
 	}
 
-	public static String getDefaultCountryIso() throws DgException {
-		String defaultCountryIso = null;
-		Session session = null;
-		Query qry = null;
-		String qryStr = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			qryStr = "select gs.globalSettingsValue from " +
-			AmpGlobalSettings.class.getName() +
-			" gs where gs.globalSettingsName = 'Default Country' ";
-			qry = session.createQuery(qryStr);
-			Object defIso = qry.uniqueResult();
-			if(defIso!=null){
-				defaultCountryIso = (String) defIso;
-			}
-		}
-		catch (DgException ex) {
-			logger.error("Exception : " + ex.getMessage());
-			throw ex;
-		}
+	public static String getDefaultCountryIso()
+	{
+		String qryStr = "select gs.globalSettingsValue from " + AmpGlobalSettings.class.getName() +
+					" gs where gs.globalSettingsName = 'Default Country' ";
+		Query qry = PersistenceManager.getSession().createQuery(qryStr); 
+		String defaultCountryIso = (String) qry.uniqueResult();
 		return defaultCountryIso;
 	}
 

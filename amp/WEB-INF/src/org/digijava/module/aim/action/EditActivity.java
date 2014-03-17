@@ -1096,8 +1096,7 @@ public class EditActivity extends Action {
             Iterator locIter = ampLocs.iterator();
             boolean maxLevel = false;
 
-            String cIso                                                         = FeaturesUtil.getDefaultCountryIso();
-            AmpCategoryValueLocations defCountry    = DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+            AmpCategoryValueLocations defCountry    = DynLocationManagerUtil.getDefaultCountry();
             AmpCategoryValue implLevel                              = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             		CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
             AmpCategoryValue implLocValue                   = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
@@ -1137,7 +1136,8 @@ public class EditActivity extends Action {
                 location.setLat(loc.getLocation().getGsLat());
                 location.setLon(loc.getLocation().getGsLong());
 
-                logger.info(" this is the settings Value" + cIso);
+                String cIso = FeaturesUtil.getDefaultCountryIso();
+                //logger.info(" this is the settings Value" + cIso);
                 Country cntry = DbUtil.getDgCountry(cIso);
                 location.setCountryId(cntry.getCountryId());
                 location.setCountry(cntry.getCountryName());

@@ -23,6 +23,7 @@ import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -32,7 +33,16 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 @Data
+/**
+ * session form holding the current state of the Add/Edit Pledge Form
+ * @author Constantin Dolghier
+ *
+ */
 public class PledgeForm extends ActionForm implements Serializable{
 
 	public final static String SELECT_BOX_DROP_DOWN_NAME = "Please select from below";
@@ -89,14 +99,17 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private String year;
 	
 	/*Fields for Location*/
-	private Long implemLocationLevel;
-    private AmpCategoryValue implLocationValue;
-	private Long levelId = null;
-	//private Long parentLocId;
-	//private boolean defaultCountryIsSet;
-	private Collection<FundingPledgesLocation> selectedLocs;
-	private Long [] userSelectedLocs;
 	
+	/**
+	 * implementation location ACV.id
+	 */
+	private Long implemLocationLevel;
+    
+    /**
+     * implementation level ACV.id
+     */
+	private Long levelId = null;
+	private List<FundingPledgesLocation> selectedLocs = new ArrayList<>();	
 	
 	/*Fields for program*/
 	private int programType;
@@ -147,7 +160,7 @@ public class PledgeForm extends ActionForm implements Serializable{
     	this.setContactAlternate2Telephone(null);
     	this.setFundingPledgesDetails(null);
     	this.setPledgeSectors(null);
-    	this.setSelectedLocs(null);
+    	this.selectedLocs.clear();
     	this.setSelectedProgs(null);
     	this.cleanLocationData(true);
     }
@@ -228,7 +241,7 @@ public class PledgeForm extends ActionForm implements Serializable{
         //this.setParentLocId(null);
         // this if for FundingPledgesLocation. Not sure why this is in this code
         //pledgeForm.setSelectedLocs(null);
-        this.setUserSelectedLocs(null);
+        //this.setUserSelectedLocs(null);
     }
     
     /**
@@ -244,12 +257,32 @@ public class PledgeForm extends ActionForm implements Serializable{
     }
     
     /**
+     * gets <strong>from the db</strong> the ACV corresponding to {@link #getLevelId()}
+     * DO NOT CACHE ITS RESULT - it is used cross-requests
+     * @return
+     */
+    public AmpCategoryValue getImplementationLevel()
+    {
+    	return CategoryManagerUtil.getAmpCategoryValueFromDb(getLevelId());
+    }
+    
+    /**
+     * gets <strong>from the db</db> the ACV corresponding to {@link #getImplemLocationLevel()}
+     * DO NOT CACHE ITS RESULT - it is used cross-requests
+     * @return
+     */
+    public AmpCategoryValue getImplLocationValue()
+    {
+    	return CategoryManagerUtil.getAmpCategoryValueFromDb(getImplemLocationLevel());
+    }
+    
+    /**
      * computes list of acceptable values - called by the JSP
      * @return
      */
     public List<KeyValue> getAllValidImplementationLocationChoices()
     {
-    	final AmpCategoryValue implLevel = CategoryManagerUtil.getAmpCategoryValueFromDb(getLevelId());
+    	final AmpCategoryValue implLevel = getImplementationLevel(); 
        	java.util.List<AmpCategoryValue> validChoices = 
     			CategoryManagerUtil.getAllAcceptableValuesForACVClass("implementation_location", new ArrayList<AmpCategoryValue>(){{this.add(implLevel);}});
        	List<KeyValue> res = new ArrayList<KeyValue>();
@@ -259,28 +292,70 @@ public class PledgeForm extends ActionForm implements Serializable{
        		for(AmpCategoryValue acvl:validChoices)
        			res.add(new KeyValue(acvl.getId().toString(), TranslatorWorker.translateText(acvl.getValue())));
        	}
+       	if ((res.size() == 2) && (res.get(0).getKeyAsLong() <= 0))
+       	{
+       		// a single option is available besides "PLEASE SELECT" -> remove "please select"
+       		res.remove(0);
+       		this.setImplemLocationLevel(res.get(0).getKeyAsLong()); // mark this as selected
+       	}
        	return res;
     }
     
     /**
-     * computed list of acceptale locations - called by the JSP
+     * removes all the redundant options in case a single one is valid
+     * @param res
+     * @return
+     */
+    public List<DisableableKeyValue> selectSingleAvailableOption(List<DisableableKeyValue> res)
+    {
+    	List<DisableableKeyValue> realOptions = Lists.newArrayList(Iterables.filter(res, new Predicate<DisableableKeyValue>(){
+    			public boolean apply(DisableableKeyValue dkv){return dkv.isEnabled() && dkv.getKeyAsLong() > 0;};
+    		}));
+    	if (realOptions.size() == 1)
+    		return realOptions;
+    	return res;
+    }
+    
+    /**
+     * computes list of acceptable locations - called by the JSP
      * @return
      */
     public List<DisableableKeyValue> getAllValidLocations()
     {
     	List<DisableableKeyValue> res = new ArrayList<DisableableKeyValue>();
-    	res.add(new DisableableKeyValue(new KeyValue("0", TranslatorWorker.translateText(SELECT_BOX_DROP_DOWN_NAME)), true));
-    	if (getImplLocationValue() != null)
+    	//res.add(new DisableableKeyValue(new KeyValue("0", TranslatorWorker.translateText(SELECT_BOX_DROP_DOWN_NAME)), true)); no need for this if we are using multiselect. REENABLE if going from multiselect to simple-select
+    	AmpCategoryValue implLocationValue = getImplLocationValue();
+    	if (implLocationValue != null)
     	{
-    		// something selected -> so need to fetch'em'all
+        	AmpCategoryValue implLevel = getImplementationLevel(); // guaranteed to be non-null or we have a bug
+        	
+    		// something selected -> so need to build list of forbidden locations so that they are disabled in the multiselect
             Set<Long> forbiddenLocations = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(getAllSelectedLocations()); // any selected locations and any of their descendants or ascendats are forbidden
             forbiddenLocations.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(getAllSelectedLocations()));
+        	
+        	if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.equalsCategoryValue(implLevel) &&
+        			CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocationValue))
+        	{
+        		// Implementation Level: NATIONAL, Implementation Location: Country: only the default country is available
+        		AmpCategoryValueLocations country = DynLocationManagerUtil.getDefaultCountry(); 
+        		res.add(new DisableableKeyValue(new KeyValue(country.getId().toString(), country.getName()), !forbiddenLocations.contains(country.getId())));
+        		return selectSingleAvailableOption(res);
+        	}
                 
-            Collection<AmpCategoryValueLocations> levelLocations = DynLocationManagerUtil.getLocationsByLayer(getImplLocationValue());
+            Collection<AmpCategoryValueLocations> levelLocations = DynLocationManagerUtil.getLocationsByLayer(implLocationValue);
             for(AmpCategoryValueLocations loc:levelLocations)
             	res.add(new DisableableKeyValue(new KeyValue(loc.getId().toString(), loc.getName()), !forbiddenLocations.contains(loc.getId())));
     	}
-    	return res;
+    	return selectSingleAvailableOption(res);
+    }
+    
+    public void addSelectedLocation(long locId)
+    {
+
+    	FundingPledgesLocation fpl = new FundingPledgesLocation();
+    	fpl.setLocation(DynLocationManagerUtil.getLocation(locId, false));
+    	fpl.setLocationpercentage(0f);
+    	selectedLocs.add(fpl);
     }
 }
 

@@ -181,17 +181,12 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
         if (nationalCountryCheck){
             AmpCategoryValueLocations defaultCountry = null;
-            try {
-                defaultCountry = DynLocationManagerUtil.getLocationByIso(
-                        FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+            defaultCountry = DynLocationManagerUtil.getDefaultCountry();
 
-                if (target!=null){ //we're in an ajax context, and not in init
-                    locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational,true);
-                    target.add(locationsTable);
-                    target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
-                }
-            } catch (DgException e) {
-                logger.error("Can't get default country:", e);
+            if (target!=null){ //we're in an ajax context, and not in init
+            	locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational,true);
+            	target.add(locationsTable);
+            	target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
             }
         }
 

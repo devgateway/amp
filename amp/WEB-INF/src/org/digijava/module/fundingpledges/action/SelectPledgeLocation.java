@@ -12,6 +12,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -26,7 +27,7 @@ public class SelectPledgeLocation extends Action {
 
 	private static Logger logger = Logger.getLogger(SelectPledgeLocation.class);
 	
-	public ActionForward execute(ActionMapping mapping, ActionForm form,javax.servlet.http.HttpServletRequest request,javax.servlet.http.HttpServletResponse response)
+	public ActionForward execute(ActionMapping mapping, ActionForm form, javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
 		PledgeForm pledgeForm = (PledgeForm) form;
@@ -34,9 +35,14 @@ public class SelectPledgeLocation extends Action {
 		String extraAction = request.getParameter("extraAction");
 		if (extraAction != null)
 		{
-			// NEW ajax calls + dummy "please display form fragment" calls
-			if (extraAction.equals("render_locations_list") || extraAction.equals("render_locations_add"))
-				return mapping.findForward("forward");
+			if (extraAction.equals("add_locations"))
+			{
+				addLocations(request, response, pledgeForm);
+				return null;
+			}
+//			// NEW ajax calls + dummy "please display form fragment" calls
+//			if (extraAction.equals("render_locations_list") || extraAction.equals("render_locations_add"))
+			return mapping.findForward("forward");		
 		}
 		
 
@@ -60,7 +66,7 @@ public class SelectPledgeLocation extends Action {
 	       
 		Long impLocLevel = null;
 
-		AmpCategoryValue implLocLevelValue = CategoryManagerUtil.getAmpCategoryValueFromDb(pledgeForm.getLevelId());      
+//		AmpCategoryValue implLocLevelValue = pledgeForm.getImplementationLevel();      
         String selectedImplemLocationLevel = request.getParameter("implemLocationLevel");
         
         if (selectedImplemLocationLevel != null) // implementation level selected
@@ -73,30 +79,26 @@ public class SelectPledgeLocation extends Action {
             	return mapping.findForward("forward");
 			}
 			pledgeForm.setImplemLocationLevel(impLocLevel);
-			pledgeForm.setImplLocationValue(CategoryManagerUtil.getAmpCategoryValueFromDb(impLocLevel));
 		}
-				
-		//String defaultCountryIso = FeaturesUtil.getDefaultCountryIso();
-		        
-		final AmpCategoryValue implLevel = CategoryManagerUtil.getAmpCategoryValueFromDb( pledgeForm.getLevelId() );
-		if (implLevel != null &&
-				CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
-				CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocLevelValue) )
-		{
-			// international level selected: show list of all countries in the DB			
-			//importLocationsIntoForm(pledgeForm, DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY));
-			return mapping.findForward("forward");
-		}
-
-        if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(pledgeForm.getImplLocationValue()))
-        {
-            // This case add only one country. Set all countries should be implemented as a separate case
-            // Please add the condition here that loads either one country or all countries
-            //pledgeForm.setDefaultCountryIsSet(true);
-           // pledgeForm.importLocationForLocationsForm(DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryManagerUtil.getAmpCategoryValueFromDb(impLocLevel)));
-            return mapping.findForward("forward");
-        } 
-        
+				        
         return mapping.findForward("forward");
+	}
+	
+	public void addLocations(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, PledgeForm pledgeForm)
+	{
+		try
+		{
+			String[] ids = request.getParameter("locs").split(",");
+			for(String id:ids)
+			{
+				Long lid = Long.parseLong(id);
+				pledgeForm.addSelectedLocation(lid);
+			}
+			ARUtil.writeResponse(response, "ok");
+		}
+		catch(Exception e)
+		{
+			ARUtil.writeResponse(response, e.getMessage());
+		}
 	}
 }

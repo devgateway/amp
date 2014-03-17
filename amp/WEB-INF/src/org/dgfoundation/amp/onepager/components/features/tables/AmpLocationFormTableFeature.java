@@ -303,13 +303,7 @@ public class AmpLocationFormTableFeature extends
         }
         activityLocation.setLocation(ampLoc);
         if (disablePercentagesForInternational.getObject()){
-            String cIso = null;
-            try {
-                cIso = FeaturesUtil.getDefaultCountryIso();
-            } catch (Exception e) {
-                logger.error(e);
-            }
-            AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+            AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
             if (choice.getId().longValue() == defCountry.getId().longValue())
                 activityLocation.setLocationPercentage(100f);
             else

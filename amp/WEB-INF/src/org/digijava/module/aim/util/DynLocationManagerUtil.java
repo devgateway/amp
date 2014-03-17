@@ -830,14 +830,23 @@ public class DynLocationManagerUtil {
 		}		
 	}
 	
+	/**
+	 * returns the ACVL of the country the current AMP installation is running on
+	 * @return
+	 */
+	public static AmpCategoryValueLocations getDefaultCountry()
+	{
+		AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso(FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+		return country;
+	}
+	
 	public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException 
 	{	
 		synchronized (DynLocationManagerUtil.regionsOfDefaultCountry)
 		{
 			if ( DynLocationManagerUtil.regionsOfDefaultCountry.isEmpty())
 			{
-		 	 	AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso( 
-		 	 	FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
+		 	 	AmpCategoryValueLocations country = DynLocationManagerUtil.getDefaultCountry();
 		 	 	if (country != null){
 			 	 	country = getLocationOpenedSession( country.getId() );
 			 	 	

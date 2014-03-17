@@ -25,7 +25,7 @@
 		<c:forEach var="selectedLocs" items="${pledgeForm.selectedLocs}" varStatus="index">
 			<c:set var="indexLoc" value="${indexLoc+1}"/>
 			<tr>
-				<td class="col-xs-8 text-right">[${selectedLocs.location.name}]</td>
+				<td class="col-xs-8 text-right">${selectedLocs.location.hierarchicalName}</td>
 				<td class="col-xs-3">
 					<%--<input class="form-control input-sm" type="text" name="locationpercentage" placeholder="Location percentage" size="5" value="25%"/> --%>
 					<html:text name="selectedLocs" indexed="true" property="locationpercentage" size="5"  onblur="return pledges_form_check_percentage(this, 'input-pledges-locations', '${numeric_value_only_msg}', '${sum_cannot_exceed_100_msg}')" styleClass="form-control input-sm input-pledges-locations" />

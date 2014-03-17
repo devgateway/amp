@@ -126,8 +126,7 @@ public class IndicatorSectorManager extends DispatchAction {
                 regions.add(DynLocationManagerUtil.getLocation(indSecForm.getSelRegionId(),false));
             } else {
                 //National means no region, zone, district are selected
-                String iso= FeaturesUtil.getDefaultCountryIso();
-                AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(iso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+                AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
                 locNational = LocationUtil.getAmpLocationByCVLocation(defCountry.getId());
                 if (locNational == null) {
                     locNational = new AmpLocation();

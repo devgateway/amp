@@ -395,72 +395,46 @@ function ampp_projects_projects_search_form_form_submit($form, &$form_state) {
   $conf = $form_state['conf'];
   $submit_path = $conf['search_path'];
 
-  //  print_r($form_state['values']);
-  //  exit;
+  // Get a list of arguments for the search view.
+  $arguments = _ampp_get_search_arguments(FALSE);
+  $arguments = array_filter($arguments);
 
-  $queryStrArr = array();
+  $flags_list = array(
+    'agencies_flag' => 'agencies',
+    'budget_flag' => 'budget',
+    'donors_flag' => 'donors',
+    'keywords_flag' => 'keywords',
+    'locations_flag' => 'locations',
+    'period_flag' => '',
+    'primary_sectors_flag' => 'primarysectors',
+    'programs_flag' => 'programs',
+    'secondary_sectors_flag' => 'secondarysectors',
+    'sectors_flag' => 'sectors',
+  );
 
-  $sectors = empty($form_state['values']['sector']) ? 'all' : $form_state['values']['sector'];
-  $primarysectors = empty($form_state['values']['primary_sector']) ? 'all' : $form_state['values']['primary_sector'];
-  $secondarysectors = empty($form_state['values']['secondary_sector']) ? 'all' : $form_state['values']['secondary_sector'];
-  $programs = empty($form_state['values']['program']) ? 'all' : $form_state['values']['program'];
-  $donors = empty($form_state['values']['donor']) ? 'all' : $form_state['values']['donor'];
-  $agencies = empty($form_state['values']['agency']) ? 'all' : $form_state['values']['agency'];
-  $regions = empty($form_state['values']['region']) ? 'all' : $form_state['values']['region'];
-  $period_start = empty($form_state['values']['period_start']) ? 'all' : $form_state['values']['period_start'];
-  $period_end = empty($form_state['values']['period_end']) ? 'all' : $form_state['values']['period_end'];
-  $keyword = empty($form_state['values']['keyword']) ? 'all' : $form_state['values']['keyword'];
+  // Filter out fields that are not enabled, makes the URL shorter.
+  foreach ($flags_list as $flag_name => $arg_name) {
+    if (!empty($conf[$flag_name])) {
+      continue;
+    }
 
-  $budgetfilter = "";
-  $budgetfilterArr = Array();
-  if (!empty($form_state['values']['budget'])) {
-    array_push($budgetfilterArr, $form_state['values']['budget']);
-  }
+    switch ($flag_name) {
+      case 'period_flag':
+        unset($arguments['period_start']);
+        unset($arguments['period_end']);
+        break;
 
-  $budgetfilter = implode(",", $budgetfilterArr);
-
-  if (trim($budgetfilter) == "") {
-    $budgetfilter = "all";
+      default:
+        unset($arguments[$arg_name]);
+        break;
+    }
   }
 
-  $countrylevelprojectsfilter = (!empty($form_state['values']['country_level_projects'])) ? $form_state['values']['country_level_projects'] : "all";
-
-  if ($conf['donors_flag'] == 1) {
-    $queryStrArr['donors'] = $donors;
-  }
-  if ($conf['agencies_flag'] == 1) {
-    $queryStrArr['agencies'] = $agencies;
-  }
-  if ($conf['sectors_flag'] == 1) {
-    $queryStrArr['sectors'] = $sectors;
-  }
-  if ($conf['primary_sectors_flag'] == 1) {
-    $queryStrArr['primarysectors'] = $primarysectors;
-  }
-  if ($conf['secondary_sectors_flag'] == 1) {
-    $queryStrArr['secondarysectors'] = $secondarysectors;
-  }
-  if ($conf['programs_flag'] == 1) {
-    $queryStrArr['programs'] = $programs;
-  }
-  if ($conf['locations_flag'] == 1) {
-    $queryStrArr['locations'] = $regions;
-  }
-  if ($conf['period_flag'] == 1) {
-    $queryStrArr['period_start'] = $period_start;
-    $queryStrArr['period_end'] = $period_end;
-  }
-  if ($conf['keywords_flag'] == 1) {
-    $queryStrArr['keywords'] = $keyword;
-  }
-  if ($conf['budget_flag'] == 1) {
-    $queryStrArr['budget'] = $budgetfilter;
-  }
   if ($conf['country_level_projects_flag'] == 1) {
-    $queryStrArr['showregionalprojects'] = $countrylevelprojectsfilter;
+    $arguments['showregionalprojects'] = empty($form_state['values']['country_level_projects']) ? 'all' : $form_state['values']['country_level_projects'];
   }
 
-  drupal_goto($submit_path, array('query' => $queryStrArr));
+  drupal_goto($submit_path, array('query' => $arguments));
 }
 
 /*

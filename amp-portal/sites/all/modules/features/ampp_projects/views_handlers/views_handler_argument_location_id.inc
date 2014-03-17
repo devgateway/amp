@@ -31,7 +31,7 @@ class views_handler_argument_location_id extends views_handler_argument_numeric{
 
   private function addAllParentLocationsIds(){
     foreach ($this->value as $id){
-      $this->value = array_merge($this->value, getParentLocationIds($id));
+      $this->value = array_merge($this->value, _ampp_get_search_argument_location_parents($id));
     }
   }
 

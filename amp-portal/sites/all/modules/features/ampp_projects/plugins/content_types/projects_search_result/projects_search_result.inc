@@ -43,56 +43,46 @@ $plugin = array(
 
 /**
  * Run-time rendering of the body of the block.
- *
- * @param $subtype
- * @param $conf
- *   Configuration as done at admin time.
- * @param $args
- * @param $context
- *   Context - in this case we don't have any.
- *
- * @return
- *   An object with at least title and content members.
  */
-function ampp_projects_projects_search_result_render($subtype, $conf, $args, $context) {
-
-  global $user;
-
-  module_load_include('inc', 'node', 'node.pages');
-
-  $_SESSION["projects_search_result_conf"] = serialize($conf);
+function ampp_projects_projects_search_result_render($subtype, $conf, $panel_args, $context) {
+  // @TODO: Remove or find a different to pas information to views_pre_render.
+  $_SESSION['projects_search_result_conf'] = serialize($conf);
 
   $block = new stdClass();
   $block->title = t('Projects search');
+  $block->content = '';
 
   $view = views_get_view('projects_search_result');
   $tmpview = $view->clone_view();
   $tmpview->set_display('panel_pane_1');
 
-  $args = _ampp_get_search_arguments(TRUE);
 
-  $showregionalprojects = !empty($_GET["showregionalprojects"]) ? $_GET["showregionalprojects"] : "all";
+  if (isset($conf['allowxlsexport']) && $conf['allowxlsexport'] == 1) {
+    $url_query_args = _ampp_get_search_arguments(FALSE);
+    $url_query_args = array_filter($url_query_args);
 
-  if (isset($conf["allowxlsexport"]) && $conf["allowxlsexport"] == 1) {
-    $export_xls_query_args = _ampp_get_search_arguments();
-    $export_xls_query_args['showregionalprojects'] = $showregionalprojects;
-    $export_xls_query_args['hide_first_column'] = (isset($conf['hide_first_column']) && $conf['hide_first_column']) ? 1 : 0;
-    $export_xls_query_args['show_status_column'] = (!isset($conf['show_status_column']) || $conf['show_status_column'] == 0) ? 0 : 1;
+    $url_query_args['hide_first_column'] = empty($conf['hide_first_column']) ? 0 : 1;
+    $url_query_args['show_status_column'] = empty($conf['show_status_column']) ? 0 : 1;
+    $url_query_args['showregionalprojects'] = empty($_GET['showregionalprojects']) ? 'all' : $_GET['showregionalprojects'];
 
-    $export_xls_args = array(
+    $url_args = array(
       'attributes' => array('class' => array('export-link')),
-      'query' => $export_xls_query_args,
+      'query' => $url_query_args,
     );
-    $block->content = l(t('Export in XLS format'), 'searchexport/searchresult.xls', $export_xls_args);
+    $block->content .= l(t('Export in XLS format'), 'searchexport/searchresult.xls', $url_args);
 
-    global $base_root;
-    $export_url = url('searchexport/searchresult.xls', array('query' => $export_xls_args));
+    if (module_exists('shorten') && variable_get('ampp_generate_short_urls', TRUE)) {
+      $short_url_args = array(
+        'absolute' => TRUE,
+        'query' => $url_query_args,
+      );
+      $short_url = shorten_url(url('searchexport/searchresult.xls', $short_url_args));
 
-    if (module_exists('shorten')) {
-      $block->content .= '<br><a class="shorten-url" href="http://' . shorten_url($base_root . $export_url) . '"><b>' . t('Permanent link') . '</b> </a><br>';
+      $block->content .= '<br><a class="shorten-url" href="http://' . $short_url . '"><b>' . t('Permanent link') . '</b> </a><br>';
     }
   }
 
+  $args = _ampp_get_search_arguments(TRUE);
   $tmpview->set_arguments($args);
   $tmpview->pre_execute();
   $tmpview->execute();

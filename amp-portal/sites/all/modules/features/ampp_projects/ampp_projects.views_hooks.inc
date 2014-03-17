@@ -751,103 +751,33 @@ function _ampp_get_search_arguments($for_views = FALSE) {
     '8' => 'agencies',
   );
 
-  foreach ($arguments_list as $key => $name) {
+  foreach ($arguments_list as $delta => $name) {
+    $argkey = ($for_views) ? $delta: $name;
+
+    // In some situations args migth end up in the request under a different name.
+    // @TODO: Cleanup projects_search_form content type.
+    $name = _ampp_get_search_argument_query_translation($name);
+
     switch ($name) {
       case 'sectors':
-        // Get an array of sectors.
-        $sectors_array = array();
-
-        $sectors_ids = empty($_GET['sectors']) ? '' : $_GET['sectors'];
-        if ($sectors_ids != 'all' && !empty($sectors_ids)) {
-          $sectors_array += explode(',', $sectors_ids);
-        }
-
-        $primarysectors_ids = empty($_GET['primarysectors']) ? '' : $_GET['primarysectors'];
-        if ($primarysectors_ids != 'all' && !empty($primarysectors_ids)) {
-          $sectors_array += explode(',', $primarysectors_ids);
-        }
-
-        $secondarysectors_ids = empty($_GET['secondarysectors']) ? '' : $_GET['secondarysectors'];
-        if ($secondarysectors_ids != 'all' && !empty($secondarysectors_ids)) {
-          $sectors_array += explode(',', $secondarysectors_ids);
-        }
-
-        if (empty($sectors_array)) {
-          if ($for_views) {
-            $processed_arguments[$key] = 'all';
-          }
-          else {
-            $processed_arguments[$name] = 'all';
-          }
+        // Returns an aggregated list of sector IDs for views or as sepparate keys for each:
+        // 'sectors', 'primarysectors', 'secondarysectors'
+        $values = _ampp_get_search_argument_sectors($name, $for_views);
+        if ($for_views) {
+          $processed_arguments[$argkey] = $values;
         }
         else {
-          if ($for_views) {
-            $processed_arguments[$key] = implode(',', $sectors_array);
-          }
-          else {
-            $processed_arguments[$name] = $sectors_array;
-          }
+          $processed_arguments += $values;
         }
+
         break;
 
       case 'locations':
-        // We need to add all descendant locations.
-        $locations = empty($_GET['locations']) ? array() : $_GET['locations'];
-        if ($locations != 'all' && !empty($locations) && !is_array($locations)) {
-          $locations = addDescendantLocations(explode(',', $locations));
-        }
-
-        if (empty($locations)) {
-          if ($for_views) {
-            $processed_arguments[$key] = 'all';
-          }
-          else {
-            $processed_arguments[$name] = 'all';
-          }
-        }
-        else if (is_array($_GET[$name])) {
-          if ($for_views) {
-            $processed_arguments[$key] = implode(',', $locations);
-          }
-          else {
-            $processed_arguments[$name] = $locations;
-          }
-        }
-        else {
-          if ($for_views) {
-            $processed_arguments[$key] = $locations;
-          }
-          else {
-            $processed_arguments[$name] = explode(',', $locations);
-          }
-        }
+        $processed_arguments[$argkey] = _ampp_get_search_argument_location($name, $for_views);
         break;
 
       default:
-        if (empty($_GET[$name])) {
-          if ($for_views) {
-            $processed_arguments[$key] = 'all';
-          }
-          else {
-            $processed_arguments[$name] = 'all';
-          }
-        }
-        else if (is_array($_GET[$name])) {
-          if ($for_views) {
-            $processed_arguments[$key] = implode(',', $_GET[$name]);
-          }
-          else {
-            $processed_arguments[$name] = $_GET[$name];
-          }
-        }
-        else {
-          if ($for_views) {
-            $processed_arguments[$key] = $_GET[$name];
-          }
-          else {
-            $processed_arguments[$name] = explode(',', $_GET[$name]);
-          }
-        }
+        $processed_arguments[$argkey] = _ampp_get_search_argument_value($name, $for_views);
         break;
     }
   }
@@ -856,17 +786,119 @@ function _ampp_get_search_arguments($for_views = FALSE) {
 }
 
 /**
+ * Helper function for _ampp_get_search_arguments()
  *
+ * This function make sure the arguments get to views in all cases.
  */
-function addDescendantLocations($locations = array()) {
-  global $amp_db_exists;
+function _ampp_get_search_argument_query_translation($name) {
+  $arg_mapping = array(
+    'agencies' => 'agency',
+    'donors' => 'donor',
+    'keywords' => 'keyword',
+    'locations' => 'region',
+    'primary_sectors' => 'primary_sector',
+    'programs' => 'program',
+    'secondary_sectors' => 'secondary_sector',
+    'sectors' => 'sector',
+  );
 
+  if (isset($arg_mapping[$name])) {
+    $new_name = $arg_mapping[$name];
+    if (isset($_REQUEST[$new_name])) {
+      return $new_name;
+    }
+  }
+
+  return $name;
+}
+
+/**
+ * Helper function for _ampp_get_search_arguments()
+ */
+function _ampp_get_search_argument_value($name, $for_views) {
+  if (empty($_REQUEST[$name]) || $_REQUEST[$name] === 'all') {
+    return ($for_views) ? 'all' : '';
+  }
+
+  $value = $_REQUEST[$name];
+  if (is_array($value)) {
+    return implode(',', $value);
+  }
+
+  return urldecode($value);
+}
+
+/**
+ * Helper function for _ampp_get_search_arguments()
+ */
+function _ampp_get_search_argument_location($name, $for_views) {
+  if (empty($_REQUEST[$name]) || $_REQUEST[$name] === 'all') {
+    return ($for_views) ? 'all' : '';
+  }
+
+  // We need to add all descendant locations.
+  $locations = $_REQUEST[$name];
+  if (is_string($locations)) {
+    $locations = explode(',', urldecode($locations));
+  }
+  $locations = _ampp_get_search_argument_location_descendants($locations);
+
+  return implode(',', $locations);
+}
+
+/**
+ * Helper function for _ampp_get_search_arguments()
+ *
+ * Returns either an array of sectors keyed by sector type or an aggregated array of all sectors.
+ */
+function _ampp_get_search_argument_sectors($name, $for_views) {
+  $list = array();
+
+  $arg_name = _ampp_get_search_argument_query_translation('sectors');
+  $list['sectors'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
+  $arg_name = _ampp_get_search_argument_query_translation('primarysectors');
+  $list['primarysectors'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
+  $arg_name = _ampp_get_search_argument_query_translation('secondarysectors');
+  $list['secondarysectors'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
+
+  if (empty($list['sectors']) && empty($list['primarysectors']) && empty($list['secondarysectors'])) {
+    return ($for_views) ? 'all' : $list;
+  }
+
+  if ($list['sectors'] === 'all' && $list['primarysectors'] === 'all' && $list['secondarysectors'] === 'all') {
+    return ($for_views) ? 'all' : array('sectors' => '', 'primarysectors' => '', 'secondarysectors' => '');
+  }
+
+  // Get an aggregated list of sectors.
+  $aggregated_list = array();
+  foreach ($list as $key => $value) {
+    // Strip out arguments that don't have any influence.
+    if ($value === 'all') {
+      $list[$key] = '';
+      break;
+    }
+
+    if (is_string($value)) {
+      $value = explode(',', urldecode($value));
+    }
+    $aggregated_list += $value;
+  }
+
+  if ($for_views) {
+    return implode(',', $aggregated_list);
+  }
+
+  return $list;
+}
+
+/**
+ * @TODO: FIX "infinit recursion"?!?!!
+ */
+function _ampp_get_search_argument_location_descendants($locations) {
   // to avoid infinit recursion
   static $calls = 0;
   $calls++;
   if ($calls > 1000) return array();
-
-  if (!$amp_db_exists) return;
 
   db_set_active("amp_projects");
 
@@ -875,10 +907,9 @@ function addDescendantLocations($locations = array()) {
     ->fields('l', array('id'))
     ->condition('l.parent_location', $location_id, '=');
 
-
     foreach ($query->execute()->fetchAll(PDO::FETCH_COLUMN) as $child_id) {
       $locations[] = $child_id;
-      $locations = array_merge($locations, getParentLocationIds(array($child_id)));
+      $locations = array_merge($locations, _ampp_get_search_argument_location_parents(array($child_id)));
     }
   }
 
@@ -890,7 +921,7 @@ function addDescendantLocations($locations = array()) {
 /**
  *
  */
-function getParentLocationIds($childLocationId) {
+function _ampp_get_search_argument_location_parents($childLocationId) {
   global $amp_db_exists;
 
   if (!$amp_db_exists) return;
@@ -916,7 +947,7 @@ function getParentLocationIds($childLocationId) {
     if (!empty($parentIds)) {
       foreach ($parentIds as $parentId) {
         $allParentIds[] = $parentId;
-        $allParentIds = array_merge($allParentIds, getParentLocationIds($parentId));
+        $allParentIds = array_merge($allParentIds, _ampp_get_search_argument_location_parents($parentId));
       }
     }
 

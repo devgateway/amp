@@ -56,6 +56,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
@@ -134,17 +135,9 @@ public class ExportActivityToPDF extends Action {
 	{
 		try
 		{
-			//return BaseFont.createFont("mybasefont", "UTF-8", true);
-			//return BaseFont.createFont("LiberationSans", "WinAnsi", false);
-			//org.apache.commons.io.CopyUtils.copy(byte[], Baos);
-			//Object obj = new Object();
-			//InputStream inputStream = obj.getClass().getResourceAsStream()
-			//String pdfExportFontFileName = "/home/simple/Desktop/Arial.ttf";
-			//InputStream inputStream = new FileInputStream(pdfExportFontFileName);
 			InputStream inputStream = ExportActivityToPDF.class.getResourceAsStream("Arial.ttf");
 			byte[] fontFile = IOUtils.toByteArray(inputStream);
 			
-			//BaseFont result = BaseFont.createFont(pdfExportFontFileName, BaseFont.IDENTITY_H, true);
 			BaseFont result = BaseFont.createFont("Arial.ttf", BaseFont.IDENTITY_H, true, true, fontFile, null);
 			IOUtils.closeQuietly(inputStream);
 			
@@ -1089,6 +1082,17 @@ public class ExportActivityToPDF extends Action {
 				//PdfPTable fundingTable = buildFundingInformationPart(myForm,mainLayout);
 				buildFundingInformationPart(myForm,mainLayout,ampContext);
 			}			
+			/*
+			 * AidEffectiveness
+			 */
+			if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes", ampContext)){
+				
+				String aidEffectivenesToAdd=AdvancedReportUtil.getAidEffectivenesForExport(ampContext, activity);
+				if(aidEffectivenesToAdd!=null && aidEffectivenesToAdd.length()>0){
+					buildAidEffectivenessInformationPart(mainLayout,aidEffectivenesToAdd);
+				}
+			}			
+			
 			
 			/**
 			 * Regional Funding
@@ -1513,6 +1517,12 @@ public class ExportActivityToPDF extends Action {
 		return null;
 	}
 	
+	private void buildAidEffectivenessInformationPart(PdfPTable mainLayout, String aidEffectivenesToAdd) throws WorkerException {
+		String columnName="";		
+		columnName=TranslatorWorker.translateText("Aid Effectivenes");
+		createGeneralInfoRow(mainLayout,columnName,aidEffectivenesToAdd);
+	}
+
 	/**
 	 * create Contacting Inner table rows 
 	 * @param ipaInnerTable

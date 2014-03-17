@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import lombok.Data;
@@ -30,9 +31,12 @@ import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpChapter;
@@ -64,9 +68,13 @@ import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.util.CustomFieldsUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Step;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.springframework.beans.BeanWrapperImpl;
@@ -785,6 +793,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 
 	private Identification identification;
+	private AidEffectivenes aidEffectivenes;
 	private Planning planning;
 	private Location location;
 	private Sector sectors;
@@ -907,6 +916,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		this.messages.clear();
 	}
 
+	public AidEffectivenes getAidEffectivenes(){
+		if (this.aidEffectivenes==null){
+			this.aidEffectivenes=new AidEffectivenes();
+		}
+		return this.aidEffectivenes;
+	}
 	public Identification getIdentification() {
 		if (this.identification == null) {
 			this.identification = new Identification();
@@ -1098,6 +1113,107 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		return this.contactInformation;
 	}	
+
+
+	public class AidEffectivenes {
+		private String projectImplementationUnit;
+		private String projectImplementationMode;
+		private String imacApproved;
+		private String nationalOversight;
+		private String onBudget;
+		private String onParliament;
+		private String onTreasury;
+		private String nationalFinancialManagement;
+		private String nationalProcurement;
+		private String nationalAudit;
+
+		public AidEffectivenes() {
+
+		}
+
+		public String getProjectImplementationMode() {
+			return projectImplementationMode;
+		}
+
+		public void setProjectImplementationMode(String projectImplementationMode) {
+			this.projectImplementationMode = projectImplementationMode;
+		}
+
+		public String getProjectImplementationUnit() {
+			return projectImplementationUnit;
+		}
+
+		public void setProjectImplementationUnit(
+				String projectImplementationUnit) {
+			this.projectImplementationUnit = projectImplementationUnit;
+		}
+
+		public String getImacApproved() {
+			return imacApproved;
+		}
+
+		public void setImacApproved(String imacApproved) {
+			this.imacApproved = imacApproved;
+		}
+
+		public String getNationalOversight() {
+			return nationalOversight;
+		}
+
+		public void setNationalOversight(String nationalOversight) {
+			this.nationalOversight = nationalOversight;
+		}
+
+		public String getOnBudget() {
+			return onBudget;
+		}
+
+		public void setOnBudget(String onBudget) {
+			this.onBudget = onBudget;
+		}
+
+		public String getOnParliament() {
+			return onParliament;
+		}
+
+		public void setOnParliament(String onParliament) {
+			this.onParliament = onParliament;
+		}
+
+		public String getOnTreasury() {
+			return onTreasury;
+		}
+
+		public void setOnTreasury(String onTreasury) {
+			this.onTreasury = onTreasury;
+		}
+
+		public String getNationalFinancialManagement() {
+			return nationalFinancialManagement;
+		}
+
+		public void setNationalFinancialManagement(
+				String nationalFinancialManagement) {
+			this.nationalFinancialManagement = nationalFinancialManagement;
+		}
+
+		public String getNationalProcurement() {
+			return nationalProcurement;
+		}
+
+		public void setNationalProcurement(String nationalProcurement) {
+			this.nationalProcurement = nationalProcurement;
+		}
+
+		public String getNationalAudit() {
+			return nationalAudit;
+		}
+
+		public void setNationalAudit(String nationalAudit) {
+			this.nationalAudit = nationalAudit;
+		}
+	}
+
 }
 
 

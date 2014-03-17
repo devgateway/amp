@@ -16,6 +16,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpFilters;
@@ -35,8 +37,13 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import java.text.Collator;
+
+import javax.servlet.ServletContext;
 
 /**
  * AdvancedReportUtil.java
@@ -385,6 +392,107 @@ public final class AdvancedReportUtil {
 			}
 		}
 		ampReport.setColumns(cols1);
+	}
+	public static String getAidEffectivenesForExport(ServletContext ampContext,
+			AmpActivityVersion activity) {
+		String aidEffectivenesToAdd = "";
+
+		if (FeaturesUtil
+				.isVisibleModule(
+						"/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit",
+						ampContext)) {
+			aidEffectivenesToAdd += TranslatorWorker
+					.translateText("Project uses parallel project implementation unit")
+					+ ":\n";
+			aidEffectivenesToAdd += activity.getProjectImplementationUnit()
+					+ ":\n";
+		}
+		AmpCategoryValue ampCategoryValue = CategoryManagerUtil
+				.getAmpCategoryValueFromListByKey(
+						CategoryConstants.PROJECT_IMPLEMENTATION_MODE_NAME,
+						activity.getCategories());
+
+		if (FeaturesUtil.isVisibleModule(
+				"/Activity Form/Aid Effectivenes/Project Implementation Mode",
+				ampContext)
+				&& ampCategoryValue != null) {
+			aidEffectivenesToAdd += TranslatorWorker
+					.translateText("Project Implementation Mode") + ":\n";
+			aidEffectivenesToAdd += ampCategoryValue.getValue() + "\n";
+
+		}
+		if (FeaturesUtil
+				.isVisibleModule(
+						"/Activity Form/Aid Effectivenes/Project has been approved by IMAC",
+						ampContext)) {
+			aidEffectivenesToAdd += TranslatorWorker
+					.translateText("Project has been approved by IMAC") + ":\n";
+			aidEffectivenesToAdd += activity.getImacApproved() + "\n";
+
+		}
+		if (FeaturesUtil
+				.isVisibleModule(
+						"/Activity Form/Aid Effectivenes/Government is meber of project steering committee",
+						ampContext)) {
+			aidEffectivenesToAdd += TranslatorWorker
+					.translateText("Government is meber of project steering committee")
+					+ ":\n";
+			aidEffectivenesToAdd += activity.getNationalOversight() + "\n";
+		}
+		if (FeaturesUtil
+				.isVisibleModule(
+						"/Activity Form/Aid Effectivenes/Aid Effectivenes/Project is on budget",
+						ampContext)) {
+			aidEffectivenesToAdd += TranslatorWorker
+					.translateText("Project is on budget") + ":\n";
+			aidEffectivenesToAdd += activity.getOnBudget() + "\n";
+		}
+		if (FeaturesUtil.isVisibleModule(
+				"/Activity Form/Aid Effectivenes/Project is on parliament",
+				ampContext)) {
+			aidEffectivenesToAdd += TranslatorWorker
+					.translateText("Project is on parliament") + ":\n";
+			aidEffectivenesToAdd += activity.getOnParliament() + "\n";
+		}
+		if (FeaturesUtil
+				.isVisibleModule(
+						"/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account",
+						ampContext)) {
+			aidEffectivenesToAdd += TranslatorWorker
+					.translateText("Project disburses directly into the Goverment single treasury account")
+					+ ":\n";
+			aidEffectivenesToAdd += activity.getOnTreasury() + "\n";
+		}
+		if (FeaturesUtil
+				.isVisibleModule(
+						"/Activity Form/Aid Effectivenes/Project uses national financial management systems",
+						ampContext)) {
+			aidEffectivenesToAdd += TranslatorWorker
+					.translateText("Project uses national financial management systems")
+					+ ":\n";
+			aidEffectivenesToAdd += activity.getNationalFinancialManagement()
+					+ "\n";
+		}
+		if (FeaturesUtil
+				.isVisibleModule(
+						"/Activity Form/Aid Effectivenes/Project uses national procurement systems",
+						ampContext)) {
+			aidEffectivenesToAdd += TranslatorWorker
+					.translateText("Project uses national procurement systems")
+					+ ":\n";
+			aidEffectivenesToAdd += activity.getNationalProcurement() + "\n";
+		}
+		if (FeaturesUtil
+				.isVisibleModule(
+						"/Activity Form/Aid Effectivenes/Project uses national audit systems",
+						ampContext)) {
+			aidEffectivenesToAdd += TranslatorWorker
+					.translateText("Project uses national audit systems")
+					+ ":\n";
+			aidEffectivenesToAdd += activity.getNationalAudit() + "\n";
+
+		}
+		return aidEffectivenesToAdd;
 	}
 	
 }

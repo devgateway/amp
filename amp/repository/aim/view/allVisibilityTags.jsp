@@ -13,7 +13,7 @@
 
 <module:display name="ADMIN" parentModule="Messaging System"></module:display> 
 <module:display name="ADMINISTRATIVE SECTION"></module:display> 
-<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
@@ -89,6 +89,21 @@
 <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Map Module"></module:display>
+
+<module:display name="Aid Effectiveness" parentModule="PROJECT MANAGEMENT"></module:display>
+
+<feature:display name="Aid Effectiveness" module="Aid Effectiveness"></feature:display>
+<field:display name="Project uses parallel project implementation unit" feature="Aid Effectiveness"></field:display>
+<field:display name="Project Implementation Mode" feature="Aid Effectiveness"></field:display>
+<field:display name="Project has been approved by IMAC" feature="Aid Effectiveness"></field:display>
+<field:display name="Government is member of project steering committee" feature="Aid Effectiveness"></field:display>
+<field:display name="Project is on budget" feature="Aid Effectiveness"></field:display>
+<field:display name="Project is on parliament" feature="Aid Effectiveness"></field:display>
+<field:display name="Project disburses directly into the Government single treasury account" feature="Aid Effectiveness"></field:display>
+<field:display name="Project uses national financial management systems" feature="Aid Effectiveness"></field:display>
+<field:display name="Project uses national procurement systems" feature="Aid Effectiveness"></field:display>
+<field:display name="Project uses national audit systems" feature="Aid Effectiveness"></field:display>
+ 
 
 <field:display  name="Show image" feature="Map Options"></field:display>
 <module:display name="Organization Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>

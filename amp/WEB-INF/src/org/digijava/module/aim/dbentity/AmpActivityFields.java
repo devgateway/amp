@@ -317,8 +317,100 @@ LoggerIdentifiable, Cloneable {
 
 	@VersionableFieldSimple(fieldTitle = "Deleted")
 	protected Boolean deleted;
+	//for AMP-14784
+	@VersionableFieldSimple(fieldTitle = "Project Implementation Unit")
+	protected String projectImplementationUnit;
+	@VersionableFieldSimple(fieldTitle = "IMAC Approved")	
+	protected String imacApproved;
+	@VersionableFieldSimple(fieldTitle = "National Oversight")	
+	protected String nationalOversight;
+	@VersionableFieldSimple(fieldTitle = "On Budget")	
+	protected String onBudget;
+	@VersionableFieldSimple(fieldTitle = "On Parliament")	
+	protected String onParliament;
+	@VersionableFieldSimple(fieldTitle = "On Treasury")	
+	protected String onTreasury;
+	@VersionableFieldSimple(fieldTitle = "National Financial Management")	
+	protected String nationalFinancialManagement;
+	@VersionableFieldSimple(fieldTitle = "National Procurement")	
+	protected String nationalProcurement;
+	@VersionableFieldSimple(fieldTitle = "National Audit")	
+	protected String nationalAudit;
+	
+	
+    public String getProjectImplementationUnit() {
+		return projectImplementationUnit;
+	}
 
-    public Boolean getDeleted() {
+	public void setProjectImplementationUnit(String projectImplementationUnit) {
+		this.projectImplementationUnit = projectImplementationUnit;
+	}
+
+	public String getImacApproved() {
+		return imacApproved;
+	}
+
+	public void setImacApproved(String imacApproved) {
+		this.imacApproved = imacApproved;
+	}
+
+	public String getNationalOversight() {
+		return nationalOversight;
+	}
+
+	public void setNationalOversight(String nationalOversight) {
+		this.nationalOversight = nationalOversight;
+	}
+
+	public String getOnBudget() {
+		return onBudget;
+	}
+
+	public void setOnBudget(String onBudget) {
+		this.onBudget = onBudget;
+	}
+
+	public String getOnParliament() {
+		return onParliament;
+	}
+
+	public void setOnParliament(String onParliament) {
+		this.onParliament = onParliament;
+	}
+
+	public String getOnTreasury() {
+		return onTreasury;
+	}
+
+	public void setOnTreasury(String onTreasury) {
+		this.onTreasury = onTreasury;
+	}
+
+	public String getNationalFinancialManagement() {
+		return nationalFinancialManagement;
+	}
+
+	public void setNationalFinancialManagement(String nationalFinancialManagement) {
+		this.nationalFinancialManagement = nationalFinancialManagement;
+	}
+
+	public String getNationalProcurement() {
+		return nationalProcurement;
+	}
+
+	public void setNationalProcurement(String nationalProcurement) {
+		this.nationalProcurement = nationalProcurement;
+	}
+
+	public String getNationalAudit() {
+		return nationalAudit;
+	}
+
+	public void setNationalAudit(String nationalAudit) {
+		this.nationalAudit = nationalAudit;
+	}
+
+	public Boolean getDeleted() {
 		return deleted;
 	}
 

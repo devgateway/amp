@@ -238,6 +238,8 @@ public class CategoryConstants {
 
 	public static final String WORKSPACE_GROUP_KEY	= "workspace_group";
 
+	public static final String PROJECT_IMPLEMENTATION_MODE_NAME		= "Project Implementation Mode";
+	public static final String PROJECT_IMPLEMENTATION_MODE_KEY			= "project_implementation_mode";
 	
 	public static class HardCodedCategoryValue
 	{

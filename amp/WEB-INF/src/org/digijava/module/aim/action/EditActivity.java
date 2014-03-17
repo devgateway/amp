@@ -436,9 +436,9 @@ public class EditActivity extends Action {
       }
       }
 
+
       // checking its the activity is already opened for editing...
       if (activityMap != null && activityMap.containsValue(activityId)) {
-        //logger.info("activity is in activityMap " + activityId);
         // The activity is already opened for editing
         synchronized (ampContext) {
           HashMap tsaMap = (HashMap) ampContext
@@ -608,8 +608,9 @@ public class EditActivity extends Action {
 
     	  eaForm.getIdentification().setCrisNumber(null);
         /* Insert Categories */
+    	  Set<AmpCategoryValue> categories=activity.getCategories();
         AmpCategoryValue ampCategoryValue = CategoryManagerUtil.
-            getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME, activity.getCategories());
+            getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME, categories);
 
         if (ampCategoryValue != null)
         	eaForm.getIdentification().setAcChapter(new Long(ampCategoryValue.getId()));
@@ -808,32 +809,30 @@ public class EditActivity extends Action {
                        eaForm.getPrograms().setTertiarySetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.TERTIARY_PROGRAM));
             }
 
-
-         /* try {
-            List actPrgs = new ArrayList();
-            Set prgSet = activity.getActivityPrograms();
-            if (prgSet != null) {
-              Iterator prgItr = prgSet.iterator();
-              while (prgItr.hasNext()) {
-                AmpTheme prg = (AmpTheme) prgItr.next();
-                String newName = ProgramUtil.getHierarchyName(prg);
-                prg.setProgramviewname(newName);
-                actPrgs.add(prg);
-                 }
-            }
-
-            eaForm.setActPrograms(actPrgs);
+          //aid Effectiveness Section
+          eaForm.getAidEffectivenes().setProjectImplementationUnit(activity.getProjectImplementationUnit());
+          AmpCategoryValue catProjectImplementationMode= CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.PROJECT_IMPLEMENTATION_MODE_NAME, categories);
+          
+          if(catProjectImplementationMode!=null){
+        	  eaForm.getAidEffectivenes().setProjectImplementationMode(catProjectImplementationMode.getValue());
           }
-
-          catch (Exception ex) {
-            ex.printStackTrace();
-          }
-          */
+          eaForm.getAidEffectivenes().setImacApproved(activity.getImacApproved());
+          eaForm.getAidEffectivenes().setNationalOversight(activity.getNationalOversight());
+          eaForm.getAidEffectivenes().setOnBudget(activity.getOnBudget());
+          eaForm.getAidEffectivenes().setOnParliament(activity.getOnParliament());
+          eaForm.getAidEffectivenes().setOnTreasury(activity.getOnTreasury());
+          eaForm.getAidEffectivenes().setNationalFinancialManagement(activity.getNationalFinancialManagement());
+          eaForm.getAidEffectivenes().setNationalProcurement(activity.getNationalProcurement());
+          eaForm.getAidEffectivenes().setNationalAudit(activity.getNationalAudit());
+          
           eaForm.getIdentification().setTitle(activity.getName().trim());
           eaForm.getCosting().setCosts(new ArrayList(activity.getCosts()));
           eaForm.getIdentification().setTeam(activity.getTeam());
           eaForm.getIdentification().setCreatedBy(activity.getActivityCreator());
           eaForm.getIdentification().setModifiedBy(activity.getModifiedBy());
+          
+          
+
          // eaForm.getIdentification().setBudget(activity.getBudget());
           AmpCategoryValue budgetOff =  CategoryConstants.ACTIVITY_BUDGET_OFF.getAmpCategoryValueFromDB();
           eaForm.getIdentification().setBudgetCVOff((budgetOff == null) ? 0 : budgetOff.getId());

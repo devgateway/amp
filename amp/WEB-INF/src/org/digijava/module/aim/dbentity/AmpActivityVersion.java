@@ -22,7 +22,7 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
 	 *    All new fields should be added in {@link AmpActivityFields}
 	 *    
 	 */
-	
+
 	public AmpActivityVersion() {
 	}
 

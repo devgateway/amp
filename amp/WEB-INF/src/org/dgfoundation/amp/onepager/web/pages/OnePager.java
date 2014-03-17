@@ -20,6 +20,7 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpBudgetStructureFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpContactsFormSectionFeature;
@@ -101,7 +102,9 @@ public class OnePager extends AmpHeaderFooter {
 		new OnepagerSection("Related Documents", AmpResourcesFormSectionFeature.class.getName(), 19, false),
 		new OnepagerSection("Line Ministry Observations", AmpLineMinistryObservationsFormSectionFeature.class.getName(), 20, false),
 		new OnepagerSection("Budget Structure", AmpBudgetStructureFormSectionFeature.class.getName(), 21, false),
-		new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 22, false)
+		new OnepagerSection("GPI", AmpGPIFormSectionFeature.class.getName(), 22, false),
+		new OnepagerSection("Aid Effectivenes", AmpAidEffectivenessFormSectionFeature.class.getName(), 23, false)
+		
 		};
     public static final AtomicBoolean savedSections = new AtomicBoolean(false);
     public static final List<OnepagerSection> sectionsList = Collections.synchronizedList(loadPositions());

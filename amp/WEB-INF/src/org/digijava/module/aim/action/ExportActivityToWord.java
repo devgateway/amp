@@ -24,6 +24,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.ServletContextWriter;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.persistence.WorkerException;
@@ -41,6 +42,7 @@ import org.digijava.module.aim.form.EditActivityForm.Programs;
 import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -63,6 +65,7 @@ import org.jfree.chart.renderer.category.CategoryItemRenderer;
 
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
+import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.Image;
@@ -435,6 +438,17 @@ public class ExportActivityToWord extends Action {
 	                }
 				}
 				
+				//AiddEffectiveness
+	            if(FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes", ampContext)){
+	            	String aidEffectivenesToAdd=AdvancedReportUtil.getAidEffectivenesForExport(ampContext, activity);
+	            	if(aidEffectivenesToAdd!=null&&aidEffectivenesToAdd.length()>0){
+	            		addEffectivenessTable( doc,aidEffectivenesToAdd);
+	            	}
+	            }
+
+	            	
+	            	
+				
                 List<Table> regioanlFundingTables = getRegioanlFundingTables(request, ampContext, activity);
 				for (Table tbl : regioanlFundingTables) {
                     doc.add(tbl);
@@ -519,6 +533,25 @@ public class ExportActivityToWord extends Action {
 	
 
 	
+	private void addEffectivenessTable(com.lowagie.text.Document doc,String aidEffectivenesToAdd) throws DocumentException {
+        Table addEffectiveness= new Table(1);
+        addEffectiveness.setWidth(100);
+        RtfCell aidTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Aid Effectivenes").toUpperCase(), HEADERFONT));
+        aidTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        aidTitleCell.setBackgroundColor(CELLCOLORGRAY);
+        addEffectiveness.addCell(aidTitleCell);
+        addEffectiveness.addCell(new RtfCell());
+
+        RtfCell cell = new RtfCell();
+		cell.setBorder(0);
+		cell.add(new Paragraph(aidEffectivenesToAdd,PLAINFONT));
+		addEffectiveness.addCell(cell);
+		applyEmptyCell(addEffectiveness,1);
+		doc.add(addEffectiveness);
+	}
+
+
+
 	private void handleExportException(String message, Exception e) {
 		logger.error(message, e);
 	}

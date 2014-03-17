@@ -242,7 +242,7 @@ public final class XmlPatcherUtil {
 			cached_unmarshaller = jc.createUnmarshaller();
 
 			// initialize JAXB 2.0 validation
-			SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 			Schema schema = sf.newSchema(new File(schemaURI));
 			cached_unmarshaller.setSchema(schema);
 			cached_unmarshaller.setEventHandler(new DefaultValidationEventHandler());

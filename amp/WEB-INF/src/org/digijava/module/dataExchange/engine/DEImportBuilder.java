@@ -1762,7 +1762,7 @@ public class DEImportBuilder {
 	        
 	        	if(xsdValidate){
 	                // create a SchemaFactory that conforms to W3C XML Schema
-	                 SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	                 SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 
 	                 // parse the purchase order schema
 	                 Schema schema = sf.newSchema(new File(path+Constants.IDML_SCHEMA_LOCATION));
@@ -2403,7 +2403,7 @@ public class DEImportBuilder {
 	        
 	        	if(xsdValidate){
 	                // create a SchemaFactory that conforms to W3C XML Schema
-	                 SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	                 SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 
 	                 // parse the purchase order schema
 	                 Schema schema = sf.newSchema(new File(path+Constants.IATI_SCHEMA_LOCATION));

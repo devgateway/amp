@@ -1363,7 +1363,7 @@ body {background:none;}
                                                                             toScope="request"
                                                                             type="org.digijava.module.aim.helper.Funding"></bean:define>
                                                                         <jsp:include page="previewActivityFundingCommitments.jsp" />
-                                                                        
+																			
                                                                         <feature:display module="Funding" name="Disbursement">
                                                                         	<jsp:include page="previewActivityFundingDisbursement.jsp" />
                                                                         </feature:display>
@@ -1385,6 +1385,7 @@ body {background:none;}
                                                                         <feature:display module="Funding" name="Disbursement Orders">
                                                                         	<jsp:include page="previewActivityFundingDisbursementOrders.jsp" />
                                                                         </feature:display>
+
 
                                                                         <feature:display module="Funding" name="Undisbursed Balance">
                                                                         	<jsp:include page="previewActivityFundingUndisbursedBalance.jsp" />
@@ -1560,6 +1561,95 @@ body {background:none;}
 									</tr>
 									</module:display>
 								  </logic:present>  
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+											<b><digi:trn>Aid Effectiveness</digi:trn></a></td>
+											<td bgcolor="#ffffff"><table width="100%" cellSpacing="0" cellPadding="0"> 
+											<module:display name="/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit"
+											parentModule="/Activity Form/Aid Effectivenes">
+											<tr><td width="100%">
+											<digi:trn key="aim:prjUsesParallel">Project uses parallel project implementation unit</digi:trn>:&nbsp;<br />
+											<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getProjectImplementationUnit()}" /></b>
+											</td></tr>
+											</module:display>
+												<module:display name="/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit"
+											parentModule="/Activity Form/Aid Effectivenes">
+											<tr><td width="100%">
+											<digi:trn key="aim:projectImplementationMode">Project Implementation Mode </digi:trn>:&nbsp;<br />
+											<b><c:out
+													value="${aimEditActivityForm.getAidEffectivenes().getProjectImplementationMode()}" /></b>
+											</td></tr>
+										</module:display>
+										<module:display name="/Activity Form/Aid Effectivenes/Project has been approved by IMAC"
+											parentModule="/Activity Form/Aid Effectivenes">
+											<tr><td width="100%">
+											<digi:trn key="aim:projectImacApproved">Project has been approved by IMAC</digi:trn>:&nbsp;<br />
+											<b><c:out
+													value="${aimEditActivityForm.getAidEffectivenes().getImacApproved()}" /></b>
+											</td></tr>
+										</module:display>										
+										<module:display name="/Activity Form/Aid Effectivenes/Government is meber of project steering committee"
+											parentModule="/Activity Form/Aid Effectivenes">
+											<tr><td width="100%">
+											<digi:trn key="aim:nationalOversight">Government is meber of project steering committee</digi:trn>:&nbsp;<br />
+											<b><c:out
+													value="${aimEditActivityForm.getAidEffectivenes().getNationalOversight()}" /></b>
+											</td></tr>
+										</module:display>
+										
+										<module:display name="/Activity Form/Aid Effectivenes/Project is on budget"
+											parentModule="/Activity Form/Aid Effectivenes">
+											<tr><td width="100%">
+											<digi:trn key="aim:onBudget">Project is on budget</digi:trn>:&nbsp;<br />
+											<b><c:out
+													value="${aimEditActivityForm.getAidEffectivenes().getOnBudget()}" /></b>
+											</td></tr>
+										</module:display>
+										<module:display name="/Activity Form/Aid Effectivenes/Project is on parliament"
+											parentModule="/Activity Form/Aid Effectivenes">
+											<tr><td width="100%">
+											<digi:trn key="aim:onParliament">Project is on parliament</digi:trn>:&nbsp;<br />
+											<b><c:out
+													value="${aimEditActivityForm.getAidEffectivenes().getOnParliament()}" /></b>
+											</td></tr>
+										</module:display>
+										<module:display name="/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account"
+											parentModule="/Activity Form/Aid Effectivenes">
+											<tr><td width="100%">
+											<digi:trn key="aim:onTreasury">Project disburses directly into the Goverment single treasury account</digi:trn>:&nbsp;<br />
+											<b><c:out
+													value="${aimEditActivityForm.getAidEffectivenes().getOnTreasury()}" /></b>
+											</td></tr>
+										</module:display>																														
+										<module:display name="/Activity Form/Aid Effectivenes/Project uses national financial management systems"
+											parentModule="/Activity Form/Aid Effectivenes">
+											<tr><td width="100%">
+											<digi:trn key="aim:nationalFinancialManagement">Project uses national financial management systems</digi:trn>:&nbsp;<br />
+											<b><c:out
+													value="${aimEditActivityForm.getAidEffectivenes().getNationalFinancialManagement()}" /></b>
+											</td></tr>
+										</module:display>			
+										<module:display name="/Activity Form/Aid Effectivenes/Project uses national procurement systems"
+											parentModule="/Activity Form/Aid Effectivenes">
+											<tr><td width="100%">
+											<digi:trn key="aim:nationalProcurement">Project uses national procurement systems</digi:trn>:&nbsp;<br />
+											<b><c:out
+													value="${aimEditActivityForm.getAidEffectivenes().getNationalProcurement()}" /></b>
+											</td></tr>
+										</module:display>										
+										<module:display name="/Activity Form/Aid Effectivenes/Project uses national audit systems"
+											parentModule="/Activity Form/Aid Effectivenes">
+											<tr><td width="100%">
+											<digi:trn key="aim:nationalAudit">Project uses national audit systems</digi:trn>:&nbsp;<br />
+											<b><c:out
+													value="${aimEditActivityForm.getAidEffectivenes().getNationalAudit()}" /></b>
+											</td></tr>
+										</module:display>					
+										
+											</table>
+											
+											</td></tr>
                                     <feature:display name="Regional Funding" module="Funding">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
@@ -2457,6 +2547,10 @@ body {background:none;}
                                            </td>
 									</tr>								
 									</module:display>									 
+									
+									
+									
+									
 									
                                     <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
 									<feature:display name="Donor Contact Information" module="Contact Information">

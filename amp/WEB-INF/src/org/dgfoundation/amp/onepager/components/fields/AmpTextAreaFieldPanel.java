@@ -68,21 +68,23 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
         closeLink = new WebMarkupContainer("closeLink");
 		closeLink.setOutputMarkupId(true);
 		closeLink.add(new AttributeModifier("onclick",
-                        "try {\n" +
+                        "window.setTimeout(function () {\n" +
                         "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
                         "$('#" + preview.getMarkupId() + "').html($('#" + textAreaContainer.getMarkupId() + "').val()); \n" +
                         "$('#" + preview.getMarkupId() + "').show(); \n" +
                         "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} \n" +
                         "$('#" + textAreaContainer.getMarkupId() + "').show();\n" +
-                        "$('#" + textAreaContainer.getMarkupId() + "').focus();\n" +
+
+                        // we are already focusing the element
+                        // "$('#" + textAreaContainer.getMarkupId() + "').focus();\n" +
 
                         // we do not need to blur on element (especially after the focus)
                         // blur behavior is different on different browsers
                         //"$('#" + textAreaContainer.getMarkupId() + "').blur();" +
                         "$('#" + textAreaContainer.getMarkupId() + "').hide();  \n " +
                         "$('#" + closeLink.getMarkupId() + "').hide();\n " +
-                        " } \n" +
-                        " finally {return false;}"));
+                        " },10); \n" +
+                        " return false;"));
 		add(closeLink);
 		
 		preview.setVisible(false);

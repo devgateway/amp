@@ -18,13 +18,10 @@
 <% String display=reportData.getLevelDepth()>2?"display:none":"";%>
 
 <!-- generate total row -->
-<c:set var="depthRelatVar">
-	<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>
-</c:set>
 <c:set var="reportDataNameVar">
     <bean:write name="reportData" property="name"/>
 </c:set>
-<tr id='<bean:write name="reportData" property="absoluteReportNameMD5"/>' class="row_data_header" title="${depthRelatVar}" style="<%=display%>;" title='${reportDataNameVar}' <%-- onmouseout="this.title='${depthRelatVar}'" --%> >
+<tr id='<bean:write name="reportData" property="absoluteReportNameMD5"/>' class="row_data_header" style="<%=display%>;" title='${reportDataNameVar}' <%-- onmouseout="this.title='${depthRelatVar}'" --%> >
 	<td class="report_inside" width="25">&nbsp;</td>
 	<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
 	<% if(reportData.getName().indexOf(':')!=-1) { %>
@@ -37,7 +34,7 @@
                 <img id="toggleImage" 
                 name="<bean:write name="reportData" property="absoluteReportNameMD5"/>"
                 style="cursor:pointer" src="img_2/ico_plus.gif" alt='hidden' 
-             	onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportNameMD5"/>&quot;).title='${depthRelatVar}';toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportNameMD5"/>&quot;)" 
+             	onclick="document.getElementById(&quot;<bean:write name="reportData" property="absoluteReportNameMD5"/>&quot;);toggleRows(this,&quot;<bean:write name="reportData" property="absoluteReportNameMD5"/>&quot;)" 
                 title='<digi:trn key="aim:report:expandcollapse">Expand/Collapse</digi:trn>' 
                border="0"/>
           	</div>

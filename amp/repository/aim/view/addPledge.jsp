@@ -1,4 +1,5 @@
 <%@page import="org.digijava.kernel.translator.TranslatorWorker"%>
+<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm, org.digijava.module.categorymanager.dbentity.AmpCategoryValue, java.util.*, org.digijava.module.aim.dbentity.*, org.springframework.beans.BeanWrapperImpl" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -12,8 +13,6 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-<%@ page import="org.digijava.module.fundingpledges.form.PledgeForm, org.digijava.module.categorymanager.dbentity.AmpCategoryValue, java.util.*, org.digijava.module.aim.dbentity.*, org.springframework.beans.BeanWrapperImpl" %>
-<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <!--<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>-->
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -25,10 +24,10 @@ PledgeForm pledgeForm = (PledgeForm) session.getAttribute("pledgeForm");
 %>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
-
-
+<script src="/repository/bootstrap/hacks.js"></script>
 <script language="JavaScript" type="text/javascript"><!--
 
+alert('this module is a work-in-progress and is pending (almost) full rewrite in this week. Do not bugfix or add features to it, because everything will be deleted anyway');
 var quitRnot1 = 0;
 
 function fnChk(frmContrl, f){
@@ -62,22 +61,6 @@ function fnChk(frmContrl, f){
 		  }
 			
 	  }
-	  else if (f == "region") {
-		  var totalValue = 0;
-		  $('input[name^=selectedLocs]').each(function(i, obj) {
-			    totalValue += parseFloat(obj.value);
-			});
-		  if (totalValue > 100) {
-			  <c:set var="errMsgAddSumExceed">
-			  <digi:trn key="aim:addRegionSumExceedErrorMessage">
-			  Region percentage can not exceed 100
-			  </digi:trn>
-			  </c:set> 
-			  alert("${errMsgAddSumExceed}");
-			 frmContrl.value = "";
-		    return false;  
-		  }  
-	  }
 	  else if (f == "program") {
 		  var totalValue = 0;
 		  $('input[name^=selectedProgs]').each(function(i, obj) {
@@ -105,30 +88,6 @@ function addLocation() {
 	  document.pledgeForm.submit();
 	}
 
-function removeLocation() {
-	<c:set var="confirmDelete">
-	  <digi:trn>Remove selected locations?</digi:trn>
-	</c:set>
-	<c:set var="selectlocmsg">
-	  <digi:trn>Please, select a location first.</digi:trn>
-	</c:set>
-	var i = 1;
-	var delStr = "deleteLocs=";
-	while (document.getElementById("checkLoc"+i)!=null){
-		if(document.getElementById("checkLoc"+i).checked==true){
-			delStr = delStr + "_" + i;
-		}
-		i++;
-	}
-	
-	if (delStr.length < 13){
-		alert ("${selectlocmsg}");
-	} else if (confirm("${confirmDelete}")){
-		document.pledgeForm.target = "_self";
-		document.pledgeForm.action="/removePledgeLocation.do?"+delStr;
-		document.pledgeForm.submit();
-		}
-}
 function addProgram(programType) {
 
 	openNewRsWindow(750, 550);
@@ -587,27 +546,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										</tr>
 										<tr>
 											<td>
-										       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
+										    <%-- <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 	                                             	<tr><td>
-													<c:forEach var="selectedLocs" items="${pledgeForm.selectedLocs}" varStatus="index">
-	                                                  <tr>
-	                                                      <c:set var="indexLoc" value="${indexLoc+1}"/>
-									                            <td align="center" width="3%">
-																	<input type="checkbox" id="checkLoc${indexLoc}"  >
-																</td>
-																<td align="left" width="67%">
-		                                                            [${selectedLocs.location.name}] 
-	                                                            </td>
-	                                                            <td align="right" width="15%" nowrap="nowrap">
-	                                                            <FONT color="red">*</FONT>
-	                                                            		<digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;
-																</td>
-																<td align="left" width="15%" nowrap="nowrap">
-	                                                            		<html:text name="selectedLocs" indexed="true" property="locationpercentage" size="5"  onkeyup="fnChk(this, 'region')" styleClass="inp-text"/>
-	                                                            </td>
-	                                                          
-	                                                    </tr>
-	                                                  </c:forEach>
+	                                             	BLABLA REMOVED PLEDGES SHOWING
 													</td></tr>
 													<tr>
 														<td colspan="2"> &nbsp;
@@ -628,7 +569,8 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 		                                                </td>
 		                                            </tr>
 		                                        </table>
-										     
+										     --%>
+										     <iframe src="/aim/selectPledgeLocation.do?edit=false" width="100%" scrolling="no" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" name="pledges_locations_name"></iframe> 										   
 										    </td>
 										</tr>
 										</field:display>
@@ -697,7 +639,6 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										</field:display>
 
 									</table>
-									<!-- <iframe   --> 
 								</feature:display>
 								<feature:display name="Pledge Funding" module="Pledges">
 									<table width="95%" bgcolor="#dbdbdb" border=0>

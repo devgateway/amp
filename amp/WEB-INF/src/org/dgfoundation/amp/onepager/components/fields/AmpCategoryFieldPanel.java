@@ -100,27 +100,15 @@ public abstract class AmpCategoryFieldPanel extends
 		choices = new AbstractReadOnlyModel<List<? extends AmpCategoryValue>>() {
 			@Override
 			public List<AmpCategoryValue> getObject() {
-				List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
-				try {
-					collectionByKey.addAll(CategoryManagerUtil
-							.getAmpCategoryValueCollectionByKey(categoryKey));
-					if (relatedChoicesModel != null) {
-						Set<AmpCategoryValue> relatedReunion = new TreeSet<AmpCategoryValue>();
-						Collection<AmpCategoryValue> collection = relatedChoicesModel
-								.getObject();
-						for (AmpCategoryValue ampCategoryValue : collection) {
-							relatedReunion.addAll(CategoryManagerUtil
-									.getAmpCategoryValueFromDb(ampCategoryValue.getId(),
-											true).getUsedByValues());
-						}
-						collectionByKey.retainAll(relatedReunion);
-					}
+				try
+				{
+					List<AmpCategoryValue> collectionByKey = CategoryManagerUtil.getAllAcceptableValuesForACVClass(categoryKey, relatedChoicesModel == null ? null : relatedChoicesModel.getObject());
+					return collectionByKey;
 				} catch (Exception e) {
 					logger.error(e);
 					e.printStackTrace();
 					throw new RuntimeException(e);
 				}
-				return collectionByKey;
 			}
 		};
 		

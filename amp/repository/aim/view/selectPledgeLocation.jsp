@@ -6,11 +6,72 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
-<%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<c:set var="act">${param.extraAction}</c:set>
+<c:set var="rll_ajax">render_locations_list</c:set>
+<%
+	if ("render_locations_list".equals(request.getParameter("extraAction"))) // ajax?
+	{
+		%><jsp:include page="/repository/aim/view/pledgeform/pledgelocationslist.jsp"></jsp:include><%  
+	} else if ("render_locations_add".equals(request.getParameter("extraAction")))
+	{
+		%><jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include><%
+    } else 
+    { // not ajax: render the full bootstrap iframe 
+%>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- IFRAME SEAMLESS !!! -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Pledges Location Bootstrap 3</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/united/bootstrap.min.css">
+    <!-- Bootstrap-select http://silviomoreto.github.io/bootstrap-select/ -->
+    <link href="/repository/bootstrap/bootstrap-select.min.css" rel="stylesheet" type="text/css">
+    <link href="/repository/bootstrap/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="/repository/bootstrap/jquery.pnotify.default.icons.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="/repository/bootstrap/bootstrap-dialog-min.css" rel="stylesheet" type="text/css" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  <style>
+	.label-near-input input {max-width: 55% !important; display: inline-block;}
+	.label-near-input label {margin-right: 3em; max-width: 25%;}
+	.initially-hidden {display: none;}
+  </style>
+  </head>
+  <body style="min-height: 350px">
+	<jsp:include page="/repository/aim/view/pledgeform/pledgelocationslist.jsp"></jsp:include>
+	<div class="text-center"><button type="button"class="btn btn-success btn-sm" id='add_location_button'>Add Location</button></div>
+	<jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="/repository/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="/repository/bootstrap/jquery.pnotify.min.js" type="text/javascript"></script>
+    <script src="/repository/bootstrap/bootstrap-dialog.min.js" type="text/javascript"></script>
+    <script src="/repository/bootstrap/hacks.js" type="text/javascript"></script>
+    <script src="/repository/bootstrap/bootstrap-utils.js" type="text/javascript"></script>
+    <script src="/repository/aim/view/pledgeform/pfscripts.js" type="text/javascript"></script>
+
+  </body>
+</html>
+<%
+    } // the big "otherwise"
+%>
+
+<%--
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -42,7 +103,7 @@
 	}
 
 	function submitForm() {
-		document.pledgeForm.target = window.opener.name;
+		document.pledgeForm.target = window.parentWindow;
     	document.pledgeForm.submit();
 	 	window.close();
 	}
@@ -139,7 +200,6 @@
 											<% pageContext.setAttribute("colSize", myCollection.size() ) ;%>
 											<c:choose>
                                                 <c:when test="${colSize > 1}">
-												<%--c:when test="${entry.key==(pledgeForm.impLevelValue -1) }"--%>
 													<c:set var="sizeString">5</c:set>
 													<c:set var="multipleString">multiple="multiple"</c:set>
 													<c:set var="changeString"> </c:set>
@@ -149,16 +209,15 @@
 													<c:set var="sizeString">1</c:set>
 													<c:set var="multipleString"></c:set>
 													<c:set var="changeString">locationChanged('loc_${entry.key}')</c:set>
-                                                    <%-- Not sure why we do not set name (and than do not save) if this is a regular select box, not multiselect--%>
+                                                    <!-- Not sure why we do not set name (and than do not save) if this is a regular select box, not multiselect--!>
                                                     <c:set var="nameString">name="userSelectedLocs"</c:set>
-													<%--c:set var="nameString"></c:set--%>
 												</c:otherwise>
 											</c:choose>
 											<tr>
 											<td>
-                                                <%-- this is really sensitive to the caching in CategoryManagerUtil
+                                                <!-- this is really sensitive to the caching in CategoryManagerUtil
 												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="${entry.key}"/>
-                                                --%>
+                                                --!>
                                                 <digi:trn>${pledgeForm.implLocationValue.value}</digi:trn>
 											</td>
 											<td>
@@ -212,9 +271,6 @@
 										<td>
 											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
 										</td>
-                                        <%--td>
-                                            <input type="button" value="<digi:trn key='btn:back'>Back</digi:trn>" class="dr-menu" onclick="goBack()">
-                                        </td--%>
 									</tr>
 								</table>
 							</td>
@@ -228,3 +284,4 @@
 </table>
 
 </digi:form>
+--%>

@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import lombok.Data;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -19,8 +20,11 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
@@ -31,6 +35,7 @@ import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 @Data
 public class PledgeForm extends ActionForm implements Serializable{
 
+	public final static String SELECT_BOX_DROP_DOWN_NAME = "Please select from below";
 	private static final long serialVersionUID = 1L;
 	private Long pledgeId;
 	private FundingPledges fundingPledges;
@@ -84,24 +89,14 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private String year;
 	
 	/*Fields for Location*/
-	private boolean noMoreRecords;
 	private Long implemLocationLevel;
     private AmpCategoryValue implLocationValue;
 	private Long levelId = null;
-	private Long parentLocId;
-	private boolean defaultCountryIsSet;
+	//private Long parentLocId;
+	//private boolean defaultCountryIsSet;
 	private Collection<FundingPledgesLocation> selectedLocs;
 	private Long [] userSelectedLocs;
 	
-	/**
-	 * Map<Level, List<KeyValue<acvl.id.toString(), acvl.value()>>>
-	 */
-	private TreeMap<Integer, List<KeyValue>> locationByLayers = new TreeMap<>();
-	
-	/**
-	 * Map<Layer-Number, ACVL.id>
-	 */
-	private TreeMap<Integer, Long> selectedLayers = new TreeMap<>();
 	
 	/*Fields for program*/
 	private int programType;
@@ -112,7 +107,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	
 	private String fundingEvent;
     private Long selectedFunding[];
-    
+        
     public void reset()
     {
     	this.setTitleFreeText(null);
@@ -230,28 +225,10 @@ public class PledgeForm extends ActionForm implements Serializable{
     		this.setImplemLocationLevel(-1l);
     		this.setLevelId(-1l);
     	}
-        this.setParentLocId(null);
-        this.getLocationByLayers().clear();
-        this.getSelectedLayers().clear();
+        //this.setParentLocId(null);
         // this if for FundingPledgesLocation. Not sure why this is in this code
         //pledgeForm.setSelectedLocs(null);
         this.setUserSelectedLocs(null);
-    }
-
-    /**
-     * adds a location into {@link #locationByLayers}
-     * @param acvl
-     */
-    public void importLocationForLocationsForm(AmpCategoryValueLocations acvl)
-    {
-    	if (acvl == null)
-    		return;
-		Integer layerNumber = acvl.getParentCategoryValue().getIndex();
-		if (!locationByLayers.containsKey(layerNumber))
-			locationByLayers.put(layerNumber, new ArrayList<KeyValue>());
-
-		KeyValue countryKV = new KeyValue(acvl.getId().toString(), acvl.getName());
-		locationByLayers.get(layerNumber).add(countryKV);
     }
     
     /**
@@ -263,6 +240,46 @@ public class PledgeForm extends ActionForm implements Serializable{
     	Set<Long> res = new HashSet<Long>();
     	for(FundingPledgesLocation fpl:this.getSelectedLocs())
     		res.add(fpl.getLocation().getId());
+    	return res;
+    }
+    
+    /**
+     * computes list of acceptable values - called by the JSP
+     * @return
+     */
+    public List<KeyValue> getAllValidImplementationLocationChoices()
+    {
+    	final AmpCategoryValue implLevel = CategoryManagerUtil.getAmpCategoryValueFromDb(getLevelId());
+       	java.util.List<AmpCategoryValue> validChoices = 
+    			CategoryManagerUtil.getAllAcceptableValuesForACVClass("implementation_location", new ArrayList<AmpCategoryValue>(){{this.add(implLevel);}});
+       	List<KeyValue> res = new ArrayList<KeyValue>();
+       	res.add(new KeyValue("0", TranslatorWorker.translateText(SELECT_BOX_DROP_DOWN_NAME)));
+       	if (validChoices != null)
+       	{
+       		for(AmpCategoryValue acvl:validChoices)
+       			res.add(new KeyValue(acvl.getId().toString(), TranslatorWorker.translateText(acvl.getValue())));
+       	}
+       	return res;
+    }
+    
+    /**
+     * computed list of acceptale locations - called by the JSP
+     * @return
+     */
+    public List<DisableableKeyValue> getAllValidLocations()
+    {
+    	List<DisableableKeyValue> res = new ArrayList<DisableableKeyValue>();
+    	res.add(new DisableableKeyValue(new KeyValue("0", TranslatorWorker.translateText(SELECT_BOX_DROP_DOWN_NAME)), true));
+    	if (getImplLocationValue() != null)
+    	{
+    		// something selected -> so need to fetch'em'all
+            Set<Long> forbiddenLocations = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(getAllSelectedLocations()); // any selected locations and any of their descendants or ascendats are forbidden
+            forbiddenLocations.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(getAllSelectedLocations()));
+                
+            Collection<AmpCategoryValueLocations> levelLocations = DynLocationManagerUtil.getLocationsByLayer(getImplLocationValue());
+            for(AmpCategoryValueLocations loc:levelLocations)
+            	res.add(new DisableableKeyValue(new KeyValue(loc.getId().toString(), loc.getName()), !forbiddenLocations.contains(loc.getId())));
+    	}
     	return res;
     }
 }

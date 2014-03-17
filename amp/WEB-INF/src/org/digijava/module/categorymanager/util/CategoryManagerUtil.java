@@ -889,7 +889,27 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 					return true;
 			return false;
 		}
-	}
+	}	
 
+	/**
+	 * calculates list of available choices when someone has selected a category key 
+	 * @return
+	 */
+	public static List<AmpCategoryValue> getAllAcceptableValuesForACVClass(String categoryKey, Collection<AmpCategoryValue> relatedCollection)
+	{
+		List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
+		collectionByKey.addAll(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey));
+		if (relatedCollection != null)
+		{
+			Set<AmpCategoryValue> relatedReunion = new TreeSet<AmpCategoryValue>();
+			for (AmpCategoryValue ampCategoryValue : relatedCollection)
+				if (ampCategoryValue != null)
+				{
+					relatedReunion.addAll(CategoryManagerUtil.getAmpCategoryValueFromDb(ampCategoryValue.getId(), true).getUsedByValues());
+				}
+			collectionByKey.retainAll(relatedReunion);
+		}
+		return collectionByKey;
+	}
 }
 

@@ -25,58 +25,36 @@ import org.digijava.module.fundingpledges.form.PledgeForm;
 public class SelectPledgeLocation extends Action {
 
 	private static Logger logger = Logger.getLogger(SelectPledgeLocation.class);
-
-
-	/**
-	 * imports locations from a collection into a form. If collection is null, imports nothing
-	 * @param pledgeForm
-	 * @param locs
-	 */
-	protected void importLocationsIntoForm(PledgeForm pledgeForm, Collection<AmpCategoryValueLocations> locs)
-	{
-		if (locs != null)
-		{		
-			for (AmpCategoryValueLocations loc : locs)
-				pledgeForm.importLocationForLocationsForm(loc);
-		}
-	}
-	
-	protected void filterDisplayedLocations(PledgeForm pledgeForm, Set<Long> forbiddenLocations)
-	{
-		for(int layer:pledgeForm.getLocationByLayers().keySet())
-		{
-			java.util.List<KeyValue> ids = pledgeForm.getLocationByLayers().get(layer);
-			Iterator<KeyValue> idIt = ids.iterator(); // remove from the possible values the ones which are forbidden
-			while (idIt.hasNext())
-			{
-				long acvl = Long.valueOf(idIt.next().getKey());
-				if (forbiddenLocations.contains(acvl))
-					idIt.remove();
-			}
-		}
-	}
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,javax.servlet.http.HttpServletRequest request,javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
 		PledgeForm pledgeForm = (PledgeForm) form;
 		
-		pledgeForm.setNoMoreRecords(false);
+		String extraAction = request.getParameter("extraAction");
+		if (extraAction != null)
+		{
+			// NEW ajax calls + dummy "please display form fragment" calls
+			if (extraAction.equals("render_locations_list") || extraAction.equals("render_locations_add"))
+				return mapping.findForward("forward");
+		}
+		
 
-        /* New Region Manager changes */
-        if ( !"true".equals( request.getParameter("edit") ) ) {
+        if ( !"true".equals( request.getParameter("edit") ) ) { // no "edit" mentioned and not an "display form fragment" call -> this is a simple page load -> reset valid locations
         	pledgeForm.cleanLocationData(true);
             return mapping.findForward("forward");
         }
 
+        // gone till here -> "edit=true" but NOT a "display something please" call": let's see what we have to do
         if (pledgeForm.getLevelId() <= 0) {
+        	// implementation level changed to "not selected"
             CategoryManagerUtil.removeAmpCategryBykey("implementation_level");
             pledgeForm.cleanLocationData(true);
             return mapping.findForward("forward");
         }
 
 		String resetSelLocs = request.getParameter("resetSelLocs");
-		if (resetSelLocs != null && resetSelLocs.equalsIgnoreCase("reset")) {
+		if (resetSelLocs != null && resetSelLocs.equalsIgnoreCase("reset")) { // asked to reset locations?
 			pledgeForm.setSelectedLocs(null);
 		}
 	       
@@ -87,8 +65,8 @@ public class SelectPledgeLocation extends Action {
         
         if (selectedImplemLocationLevel != null) // implementation level selected
 		{
-			CategoryManagerUtil.removeAmpCategryBykey("implementation_location"); // hack: reset category manager cache for this key
 			impLocLevel = Long.parseLong(selectedImplemLocationLevel);
+			CategoryManagerUtil.removeAmpCategryBykey("implementation_location"); // hack: reset category manager cache for this key
 			if (impLocLevel <= 0)
 			{
             	pledgeForm.cleanLocationData(false); // reset selected
@@ -98,18 +76,15 @@ public class SelectPledgeLocation extends Action {
 			pledgeForm.setImplLocationValue(CategoryManagerUtil.getAmpCategoryValueFromDb(impLocLevel));
 		}
 				
-		String defaultCountryIso = FeaturesUtil.getDefaultCountryIso();
-		
-		//Map<Integer, Collection<KeyValue>> locationByLayers	= pledgeForm.getLocationByLayers();
-        pledgeForm.getLocationByLayers().clear();
-        
-		AmpCategoryValue implLevel = CategoryManagerUtil.getAmpCategoryValueFromDb( pledgeForm.getLevelId() );
+		//String defaultCountryIso = FeaturesUtil.getDefaultCountryIso();
+		        
+		final AmpCategoryValue implLevel = CategoryManagerUtil.getAmpCategoryValueFromDb( pledgeForm.getLevelId() );
 		if (implLevel != null &&
 				CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.equalsCategoryValue(implLevel) &&
 				CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocLevelValue) )
 		{
 			// international level selected: show list of all countries in the DB			
-			importLocationsIntoForm(pledgeForm, DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY));
+			//importLocationsIntoForm(pledgeForm, DynLocationManagerUtil.getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY));
 			return mapping.findForward("forward");
 		}
 
@@ -117,20 +92,11 @@ public class SelectPledgeLocation extends Action {
         {
             // This case add only one country. Set all countries should be implemented as a separate case
             // Please add the condition here that loads either one country or all countries
-            pledgeForm.setDefaultCountryIsSet(true);
-            pledgeForm.importLocationForLocationsForm(DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryManagerUtil.getAmpCategoryValueFromDb(impLocLevel)));
-        } else { // it is regional, e.g. region or below
-            // again, this is a default country. Add logic that does the same for selected country
-            //AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY, false);           
-            Set<Long> forbiddenLocations = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(pledgeForm.getAllSelectedLocations()); // any selected locations and any of their descendants or ascendats are forbidden
-            forbiddenLocations.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(pledgeForm.getAllSelectedLocations()));
-            
-            Collection<AmpCategoryValueLocations> levelLocations = DynLocationManagerUtil.getLocationsByLayer(pledgeForm.getImplLocationValue());
-            importLocationsIntoForm(pledgeForm, levelLocations);
-            filterDisplayedLocations(pledgeForm, forbiddenLocations);
-        } //it is region
-
-        //pledgeForm.setImplemLocationLevel(null);
+            //pledgeForm.setDefaultCountryIsSet(true);
+           // pledgeForm.importLocationForLocationsForm(DynLocationManagerUtil.getLocationByIso(defaultCountryIso, CategoryManagerUtil.getAmpCategoryValueFromDb(impLocLevel)));
+            return mapping.findForward("forward");
+        } 
+        
         return mapping.findForward("forward");
 	}
 }

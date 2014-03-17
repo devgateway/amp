@@ -68,19 +68,21 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
         closeLink = new WebMarkupContainer("closeLink");
 		closeLink.setOutputMarkupId(true);
 		closeLink.add(new AttributeModifier("onclick",
-                "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
-                        "$('#" + preview.getMarkupId() + "').html($('#" + textAreaContainer.getMarkupId() + "').val()); " +
-                        "$('#" + preview.getMarkupId() + "').show(); " +
-                        "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} " +
-                        "$('#" + textAreaContainer.getMarkupId() + "').show();" +
-                        "$('#" + textAreaContainer.getMarkupId() + "').focus();" +
+                        "try {\n" +
+                        "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
+                        "$('#" + preview.getMarkupId() + "').html($('#" + textAreaContainer.getMarkupId() + "').val()); \n" +
+                        "$('#" + preview.getMarkupId() + "').show(); \n" +
+                        "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} \n" +
+                        "$('#" + textAreaContainer.getMarkupId() + "').show();\n" +
+                        "$('#" + textAreaContainer.getMarkupId() + "').focus();\n" +
 
                         // we do not need to blur on element (especially after the focus)
                         // blur behavior is different on different browsers
                         //"$('#" + textAreaContainer.getMarkupId() + "').blur();" +
-                        "$('#" + textAreaContainer.getMarkupId() + "').hide(); " +
-                        "$('#" + closeLink.getMarkupId() + "').hide(); " +
-                        "return false;"));
+                        "$('#" + textAreaContainer.getMarkupId() + "').hide();  \n " +
+                        "$('#" + closeLink.getMarkupId() + "').hide();\n " +
+                        " } \n" +
+                        " finally {return false;}"));
 		add(closeLink);
 		
 		preview.setVisible(false);

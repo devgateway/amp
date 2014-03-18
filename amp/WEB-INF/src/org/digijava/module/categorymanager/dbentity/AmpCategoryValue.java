@@ -28,15 +28,15 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	//private Long fieldType;
 	
 	private Set<AmpCategoryValue> usedValues;
-	private Set<AmpCategoryValue> usedByValues;
+	private Set<AmpCategoryValue> usedByValues;	
 
-	/*use for only category with category key "implementation_location" 
-         to show which field is used for country  */
-	
-	
 	private boolean translateable	= true;
 
-	//Created because of an error with some strings with french simbols as ID.
+	/**
+	 * LAME way of html-escaping
+	 * TODO: review, rewrite
+	 * @return
+	 */
 	public String getEncodedValue(){
 		String value = "";
 		for(int i=0;i<this.value.length();i++) {

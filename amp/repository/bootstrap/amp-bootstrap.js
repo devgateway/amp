@@ -8,14 +8,21 @@ function fix_aim_button(elem)
 	elem.addClass("input-sm").css("float", "right");
 }
 
-$(document).on('change', '.aim-button-to-fix input', function() // change the "Implementation Level" select
-{
-	fix_aim_button($(this));
-});
+//$(document).on('change', '.aim-button-to-fix input', function() // change the "Implementation Level" select
+//{
+//	fix_aim_button($(this));
+//});
 
 $(document).ready(function()
 {
 	$('.aim-button-to-fix input').each(function(){fix_aim_button($(this));});
+	$('.auto-placeholder input[id]').each(function() // automatically set the "placeholder" attribute of inputs contained in this
+			{
+				var id = $(this).attr('id');
+				var label = $('label[for="' + id + '"]');
+				$(this).attr('placeholder', label.html()); //copy the insides of the label to the "placeholder" attribute of the input
+			});
+
 });
 
 

@@ -9,6 +9,7 @@
 <c:set var="numeric_value_only_msg"><digi:trn jsFriendly='true' key="aim:addSecorNumericValueErrorMessage">Please enter numeric value only</digi:trn></c:set>
 <c:set var="sum_cannot_exceed_100_msg"><digi:trn jsFriendly='true'>Sum of percentages can not exceed 100</digi:trn></c:set>
 <div id='pledge_locations_table'>
+	<div class="highlight text-center h5 bold"><digi:trn key="aim:Location">Location</digi:trn></div>
 	<c:if test="${empty pledgeForm.selectedLocs}">
 		<div class="text-center"><h3><digi:trn>No Locations</digi:trn></h3></div>
 	</c:if>

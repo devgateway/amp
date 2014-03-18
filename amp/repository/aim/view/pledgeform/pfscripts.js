@@ -89,7 +89,7 @@ $(document).ready(function()
 		} else{ // checkbox just unchecked: clear everything in contact2 area
 			$('#pledge_contact_2 input[name]').each(function(){
 				var elem = $(this);
-				if (!elem.hasClass('do_not_copy')) elem.val('');
+				if (!elem.hasClass('do_not_copy')) elem.val(''); // clear all elements
 			});
 		}});
 	
@@ -201,7 +201,7 @@ function on_element_loaded()
 		//alert('called');
 		$('select').addClass('text-left');
 		$('select').selectpicker({
-			style: 'btn-primary btn-sm',
+			style: 'btn-primary btn-xs',
 			'data-style': 'btn-primary',
 			//size: 5
 		});

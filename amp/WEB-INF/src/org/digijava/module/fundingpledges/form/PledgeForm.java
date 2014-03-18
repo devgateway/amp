@@ -23,6 +23,7 @@ import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
@@ -49,11 +50,8 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private Long pledgeId;
 	private FundingPledges fundingPledges;
-	private String selectedOrgId;
-	private String selectedOrgGrpId;
-	private Collection<AmpOrgGroup> orgGroups;
-	private String selectedOrgName;
-	private AmpCategoryValue pledgeTitle;
+	private Long selectedOrgId;
+	private Long selectedOrgGrpId;
 	private String titleFreeText;
 	private Collection<AmpCurrency> validcurrencies;
 	private String currencyCode;
@@ -70,7 +68,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	private Collection<AmpCategoryValue> assistanceTypeCategory;
 	private Collection<AmpCategoryValue> aidModalityCategory;
 	private String defaultCurrency;
-	private Collection<AmpCategoryValue> pledgeNames;
+
 	private Long pledgeTitleId;
 	private Collection<String> years;
 	private String year;
@@ -102,12 +100,10 @@ public class PledgeForm extends ActionForm implements Serializable{
     {
     	this.setTitleFreeText(null);
     	this.setPledgeId(null);
-		this.setPledgeTitle(null);
 		this.setPledgeTitleId(null);
 		this.setFundingPledges(null);
 		this.setSelectedOrgId(null);
 		this.setSelectedOrgGrpId(null);
-    	this.setSelectedOrgName(null);
     	this.setAdditionalInformation(null);
     	this.setWhoAuthorizedPledge(null);
     	this.setFurtherApprovalNedded(null);
@@ -128,15 +124,9 @@ public class PledgeForm extends ActionForm implements Serializable{
     {
     	this.setFundingPledges(fp);
     	this.setPledgeId(fp.getId());
-    	if (FeaturesUtil.isVisibleField("Use Free Text")){
-    		this.setTitleFreeText(fp.getTitleFreeText());
-    	}else{
-    		this.setPledgeTitle(fp.getTitle());
-    		if (fp.getTitle() != null) {
-    			this.setPledgeTitleId(fp.getTitle().getId());
-    		}
-    	}
-		this.setSelectedOrgGrpId(fp.getOrganizationGroup().getAmpOrgGrpId().toString());
+    	this.setTitleFreeText(fp.getTitleFreeText());
+   		this.setPledgeTitleId(fp.getTitle() == null ? null : fp.getTitle().getId());
+		this.setSelectedOrgGrpId(fp.getOrganizationGroup().getAmpOrgGrpId());
     	this.setAdditionalInformation(fp.getAdditionalInformation());
     	this.setWhoAuthorizedPledge(fp.getWhoAuthorizedPledge());
     	this.setFurtherApprovalNedded(fp.getFurtherApprovalNedded());
@@ -313,6 +303,33 @@ public class PledgeForm extends ActionForm implements Serializable{
     	fpl.setLocation(DynLocationManagerUtil.getLocation(locId, false));
     	fpl.setLocationpercentage(0f);
     	selectedLocs.add(fpl);
+    }
+    
+    /**
+     * returns list of pledge names available for selection - called by the JSP
+     */
+    public List<IdWithValueShim> getPledgeNames()
+    {
+    	List<IdWithValueShim> res = new ArrayList<>();
+    	if (this.getPledgeTitleId() == null)
+    		res.add(new IdWithValueShim(-1l, TranslatorWorker.translateText("Please select")));
+    	for(AmpCategoryValue acv:CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_NAMES_KEY))
+    		res.add(new IdWithValueShim(acv));
+    	return res;
+    }
+    
+    /**
+     * returns list of AmpOrgGroup's in the DB - called by the JSP
+     * @return
+     */
+    public List<IdWithValueShim> getOrgGroups()
+    {
+    	List<IdWithValueShim> res = new ArrayList<>();
+    	if (this.getSelectedOrgGrpId() == null)
+    		res.add(new IdWithValueShim(-1l, TranslatorWorker.translateText("Please select")));
+    	for(AmpOrgGroup acv:org.digijava.module.aim.util.DbUtil.getAllOrgGroups())
+    		res.add(new IdWithValueShim(acv));
+    	return res;    	
     }
 }
 

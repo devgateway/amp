@@ -505,11 +505,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 * @return 
 	 */
 	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKey(String categoryKey){
-		try {
-			return getAmpCategoryValueCollectionByKey(categoryKey, false);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return getAmpCategoryValueCollectionByKey(categoryKey, false);		
 	}
 	
 	/**

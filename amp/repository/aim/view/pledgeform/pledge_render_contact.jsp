@@ -34,19 +34,17 @@
 				</div>
 			</c:if>
 			<div class="container-fluid">
-				<div class="col-xs-6 form-group">
-					<field:display name="${feature_name} - Name" feature="${feature_name}">
-						<label for="${contact_var}.name"><digi:trn key="pointContactName">Name</digi:trn></label>
-						<html:text property="${contact_var}.name" styleClass="form-control input-sm" />
-					</field:display>
-				</div>
-				<div class="col-xs-6 form-group">
-					<field:display name="${feature_name} - Title" feature="${feature_name}">
-						<label for="${contact_var}.title"><digi:trn key="pointContactTitle">Title</digi:trn></label>
-						<html:text property="${contact_var}.title" styleClass="form-control input-sm" />
-					</field:display>
-				</div>					
-				<div class="col-xs-6 form-group">
+				<jsp:include page="renderConditionedInput.jsp">
+					<jsp:param name="field_name" value="Name" /><jsp:param name="field" value="name" />
+					<jsp:param name="text" value="Name" />
+				</jsp:include>
+
+				<jsp:include page="renderConditionedInput.jsp">
+					<jsp:param name="field_name" value="Title" /><jsp:param name="field" value="title" />
+					<jsp:param name="text" value="Title" />
+				</jsp:include>
+								
+				<div class="col-xs-6">
 					<field:display name="${feature_name} - Organization" feature="${feature_name}">
 						<label for="${contact_var}.orgName"><digi:trn key="pointContactOrganization">Organization</digi:trn></label>
 						<html:hidden property="${contact_var}.orgId" styleId="${contact_var}.orgId" />  <!-- leftover from old pledges: why do we duplicate ID and acronym? -->
@@ -56,59 +54,52 @@
 						</span>												
 					</field:display>
 				</div>
-				<div class="col-xs-6 form-group">
-					<field:display name="${feature_name} - Ministry" feature="${feature_name}">
-						<label for="${contact_var}.ministry"><digi:trn key="pointContactMinistry">Ministry</digi:trn></label>
-						<html:text property="${contact_var}.ministry" styleClass="form-control input-sm" />
-					</field:display>
-				</div>					
-
-				<div class="col-xs-6 form-group">
-					<field:display name="${feature_name} - Address" feature="${feature_name}">
-						<label for="${contact_var}.address"><digi:trn key="pointContactAddress">Address</digi:trn></label>
-						<html:text property="${contact_var}.address" styleClass="form-control input-sm" />
-					</field:display>
-				</div>
-
-				<div class="col-xs-6 form-group">
-					<field:display name="${feature_name} - Telephone" feature="${feature_name}">
-						<label for="${contact_var}.telephone"><digi:trn key="pointContactTelephone">Telephone</digi:trn></label>
-						<html:text property="${contact_var}.telephone" styleClass="form-control input-sm phone-number" />
-					</field:display>
-				</div>
-
-				<div class="col-xs-6 form-group">
-					<field:display name="${feature_name} - Email" feature="${feature_name}">
-						<label for="${contact_var}.email"><digi:trn key="pointContactEmail">Email</digi:trn></label>
-						<html:text property="${contact_var}.email" styleClass="form-control input-sm email-address" />
-					</field:display>
-				</div>
-
-				<div class="col-xs-6 form-group">
-					<field:display name="${feature_name} - Fax" feature="${feature_name}">
-						<label for="${contact_var}.fax"><digi:trn key="pointContactFax">Fax</digi:trn></label>
-						<html:text property="${contact_var}.fax" styleClass="form-control input-sm phone-number email-address" />
-					</field:display>
-				</div>
 				
+				<jsp:include page="renderConditionedInput.jsp">
+					<jsp:param name="field_name" value="Ministry" /><jsp:param name="field" value="ministry" />
+					<jsp:param name="text" value="Ministry" /> <jsp:param name="classes" value="" />
+				</jsp:include>
+
+				<jsp:include page="renderConditionedInput.jsp">
+					<jsp:param name="field_name" value="Address" /><jsp:param name="field" value="address" />
+					<jsp:param name="text" value="Address" /> <jsp:param name="classes" value="" />
+				</jsp:include>
+				
+				<jsp:include page="renderConditionedInput.jsp">
+					<jsp:param name="field_name" value="Telephone" /><jsp:param name="field" value="telephone" />
+					<jsp:param name="text" value="Telephone" /> <jsp:param name="classes" value="phone-number" />
+				</jsp:include>
+				
+				<jsp:include page="renderConditionedInput.jsp">
+					<jsp:param name="field_name" value="Email" /><jsp:param name="field" value="email" />
+					<jsp:param name="text" value="Email" /> <jsp:param name="classes" value="email-address" />
+				</jsp:include>
+				
+				<jsp:include page="renderConditionedInput.jsp">
+					<jsp:param name="field_name" value="Fax" /><jsp:param name="field" value="fax" />
+					<jsp:param name="text" value="Fax" /> <jsp:param name="classes" value="phone-number" />
+				</jsp:include>
+												
 				<div class="clearfix">&nbsp</div>
 				<div class="underlined text-center h6 bold"><digi:trn key="alternateContactPerson">Alternate Contact Person</digi:trn></div>
 
 				<field:display name="${feature_name} - Alternate Contact" feature="${feature_name}">
-					<div class="col-xs-6 form-group">
-						<label for="${contact_var}.alternateName"><digi:trn key="pointContactName">Name</digi:trn></label>
-						<html:text property="${contact_var}.alternateName" styleClass="form-control input-sm" />
-					</div>
-
-					<div class="col-xs-6 form-group">
-						<label for="${contact_var}.alternateTelephone"><digi:trn key="pointContactTelephone">Telephone</digi:trn></label>
-						<html:text property="${contact_var}.alternateTelephone" styleClass="form-control input-sm phone-number" />
-					</div>
+				
+					<jsp:include page="renderConditionedInput.jsp">
+						<jsp:param name="field_name" value="" /><jsp:param name="field" value="alternateName" />
+						<jsp:param name="text" value="Name" /> <jsp:param name="classes" value="" />
+					</jsp:include>
 					
-					<div class="col-xs-6 form-group">
-						<label for="${contact_var}.alternateEmail"><digi:trn key="pointContactEmail">Email</digi:trn></label>
-						<html:text property="${contact_var}.alternateEmail" styleClass="form-control input-sm email-address" />
-					</div>									
+					<jsp:include page="renderConditionedInput.jsp">
+						<jsp:param name="field_name" value="" /><jsp:param name="field" value="alternateTelephone" />
+						<jsp:param name="text" value="Telephone" /> <jsp:param name="classes" value="phone-number" />
+					</jsp:include>
+					
+					<jsp:include page="renderConditionedInput.jsp">
+						<jsp:param name="field_name" value="" /><jsp:param name="field" value="alternateEmail" />
+						<jsp:param name="text" value="Email" /> <jsp:param name="classes" value="email-address" />
+					</jsp:include>
+													
 				</field:display>
 		</div>
 	</div>

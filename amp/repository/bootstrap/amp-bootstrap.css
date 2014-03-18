@@ -15,6 +15,16 @@
 	font-weight: bold;
 }
 
+.red
+{
+	color: red;	
+}
+
+div.form-control
+{
+	
+}
+
 .label-near-input input {max-width: 55% !important; display: inline-block;}
 .label-near-input label {margin-right: 3em; max-width: 25%;}
 .initially-hidden {display: none;}

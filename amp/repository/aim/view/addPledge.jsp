@@ -255,105 +255,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 							</tr>-->
 							<tr><td bgColor=#ffffff align="center" vAlign="top">
 								<!-- contents -->
-								
-								<table width="100%" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
-									<tr><td align=center bgcolor="#C7D4DB" height=25>
-										<b><digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn></b>
-
-									</td></tr>
-									<tr><td>&nbsp;</td></tr>
-									
-									<tr><td>
-									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
-											<tr bgcolor="#ffffff">											
-												<td colspan="2" align="left" valign="middle">
-													<FONT color=red>*</FONT>
-													
-												<b><digi:trn key="pledgeTitle">Pledge Title</digi:trn></b>												</td>
-											</tr>
-											<tr>
-												<td colspan="2">
-													<field:display name="Use Free Text" feature="Pledges Names">
-														<!--Allow user to enter free text if it's configured in the FM AMP-16005-->
-														<html:text property="titleFreeText" styleId="titleFreeText" styleClass="inp-text" style="width:400px"/>
-													</field:display>
-													<field:display name="Use Category Manager" feature="Pledges Names">
-														<select id="pledgeTitleDropDown" name="pledgeTitleDropDown" class="inp-text" onchange="changeTitle();" style="width:400px">
-															<option selected="selected" value="-1"><digi:trn key="selectTitle">---Select title---</digi:trn></option>
-															<c:forEach var="titles" items="${pledgeForm.pledgeNames}">
-																<c:if test="${pledgeForm.pledgeTitleId == titles.id}">
-																	<option selected="selected" value="${titles.id}"/>															</c:if>
-																<c:if test="${pledgeForm.pledgeTitleId != titles.id}">
-																	<option value="${titles.id}"/>															</c:if>
-																<c:out value="${titles.value}" />
-																</option>
-															</c:forEach>
-														</select>
-													</field:display>
-												</td>
-											</tr>
-											<tr bgcolor="#ffffff">
-												<td valign="middle" align="left" width="30%">												</td>
-												<td align="left" width="70%">
-													 <div id="newTitle" class="invisible-item">											
-													    <html:text property="pledgeTitleId" styleId="myTitle" styleClass="inp-text" style="width:400px"></html:text>	
-													</div>												
-												</td>	
-											</tr>
-										</table>
-									</td></tr>
-								</table>
-							
-								<br /><br />
-								
-								<table width="100%" border="0" cellpadding="0" cellspacing="0">
-									<tr><td align=center bgcolor="#C7D4DB" height=25>
-									
-										<b><digi:trn key="aim:donorInformation">Donor Information</digi:trn></b>
-
-									</td></tr>
-									
-									<tr><td>
-									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
-											<tr bgcolor="#ffffff">											
-												<td align="left" valign="middle">
-													<FONT color=red><b>*</b></FONT>
-													
-													<b>
-													<digi:trn>Organization Group</digi:trn>
-													</b>																								</td>
-											</tr>
-											<tr>
-												<td><html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id" styleClass="inp-text" >
-													<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
-													<html:optionsCollection property="orgGroups" value="ampOrgGrpId" label="orgGrpName" />
-												</html:select></td>
-											</tr>
-											
-											<field:display name="Who Authorized Pledge" feature="Pledge Donor Information">
-												<tr bgcolor="#ffffff">											
-													<td align="left" valign="middle">
-														
-														<b><digi:trn key="whoHasAuthorizedPledge">Who Has Authorized Pledge?</digi:trn></b>																										</td>
-												</tr>
-												<tr>
-												<td><html:text property="whoAuthorizedPledge" style="text-align:left; width:400px" styleClass="inp-text"/></td>
-												</tr>
-											</field:display>
-											<field:display name="Further Approval Needed" feature="Pledge Donor Information">
-												<tr bgcolor="#ffffff">											
-													<td align="left" valign="middle">
-														
-														<b><digi:trn key="pleaseIndicateFurtherApprovalNeeded">Please Indicate any Further Approval Needed</digi:trn></b>																												</td>
-												</tr>
-												<tr bgcolor="#ffffff">
-												  <td align="left" valign="middle"><html:text property="furtherApprovalNedded" style="text-align:left; width:400px" styleClass="inp-text"/></td>
-											  </tr>
-											</field:display>
-										</table>
-									</td></tr>
-								</table>
-<br /><br />								
+																					
 <feature:display name="Pledge Sector and Location" module="Pledges">
 									<table width="95%" bgcolor="#dbdbdb" border=0>
 										<tr>
@@ -436,28 +338,11 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										    </td>
 										</tr>
 										</field:display>
-										<field:display name="Pledge Location" feature="Pledge Sector and Location">
 										<tr>
-							                <td>
-							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#f2f2f2">
-							                    	<tr>
-							                            <td align=center height=25>
-							                                <b>
-							                                    <digi:trn key="aim:Location">
-							                                        Location
-							                                    </digi:trn>
-							                                </b>
-							                            </td>
-							                        </tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
-											<td>
+											<td> <!-- bootstrap part of form -->
 										     <iframe src="/aim/selectPledgeLocation.do?edit=false" width="100%" scrolling="no" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" name="pledges_locations_name"></iframe> 										   
 										    </td>
 										</tr>
-										</field:display>
 										<field:display name="Pledge Program" feature="Pledge Sector and Location">
 										<tr>
 							                <td>
@@ -701,30 +586,6 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<br /><br />
 								</feature:display>
 								
-								<feature:display name="Pledge Additional Information" module="Pledges">
-								<table width="100%" border="0" cellpadding="0" cellspacing="0">
-									<tr><td align="center" bgcolor="#C7D4DB" height=25>
-										
-										<b><digi:trn key="aim:additionalInformation">Additional Information</digi:trn></b>
-
-									</td></tr>
-									<tr><td>&nbsp;</td></tr>
-									
-									<tr><td>
-									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
-											<tr bgcolor="#ffffff">											
-												<td valign="middle" align="center" width="90%">
-													<a>
-														<html:textarea property="additionalInformation" rows="6" cols="80" styleClass="inp-text"/>
-                            						</a>
-												</td>											
-											</tr>
-										</table>
-									</td></tr>
-									<tr><td>&nbsp;</td></tr>
-									<tr><td>&nbsp;</td></tr>
-								</table>
-								</feature:display>
 								<table width="95%" border="0">
 									<tr>
 										<td align="right" width="50%">

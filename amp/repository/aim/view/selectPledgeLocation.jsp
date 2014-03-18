@@ -54,10 +54,15 @@
     <![endif]-->
   </head>
   <body style="min-height: 350px">
-	<jsp:include page="/repository/aim/view/pledgeform/pledgelocationslist.jsp"></jsp:include>
-	<div class="text-center"><button type="button"class="btn btn-success btn-sm" id='add_location_button'>Add Location</button></div>
-	<jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include>
+  	<jsp:include page="/repository/aim/view/pledgeform/pledgeIdentification.jsp"></jsp:include>
+  	<field:display name="Pledge Location" feature="Pledge Sector and Location">
+		<jsp:include page="/repository/aim/view/pledgeform/pledgelocationslist.jsp"></jsp:include>
+		<div class="text-center"><button type="button"class="btn btn-success btn-sm" id='add_location_button'>Add Location</button></div>
+		<jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include>
+	</field:display>
+	
 	<jsp:include page="/repository/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>
+	<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogue.jsp"></jsp:include>
 	
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>

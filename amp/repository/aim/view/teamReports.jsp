@@ -79,7 +79,7 @@
 													<tr>
 														<td nowrap="nowrap">
 															<digi:trn>Keyword</digi:trn>&nbsp;
-															<html:text property="keyword" styleClass="inp-text" />
+															<html:text property="keyword" styleClass="inp-text" onkeypress="doSearchWhenEnter(event)" />
 														</td>
 														<td nowrap="nowrap" >
 															<digi:trn>Results</digi:trn>&nbsp;ss
@@ -396,14 +396,22 @@
 									
 									<br>
 									<div class="buttons" align="center">
-										<html:submit  styleClass="buttonx_sm btn" property="removeReports"  onclick="return confirmDelete() ">
-											<c:if test="${aimTeamReportsForm.showReportList == true}">
-												<digi:trn key="btn:removeSelectedReports">Remove selected reports</digi:trn>
-											</c:if>
-											<c:if test="${aimTeamReportsForm.showReportList == false}">
+									<c:if test="${aimTeamReportsForm.showReportList == true}">
+										<c:set var="removeReportsText">
+											<digi:trn key="btn:removeSelectedReports">Remove selected reports</digi:trn>
+										</c:set>
+										<html:hidden property="removeReports" value="${removeReportsText}"/>
+										<input type="text"  class="buttonx_sm btn" value="${removeReportsText} " onclick="return confirmDelete() "/>
+										</c:if>
+										<c:if test="${aimTeamReportsForm.showReportList == false}">
+											<c:set var="removeReportsText">
 												<digi:trn key="btn:removeSelectedTabs">Remove selected tabs</digi:trn>
-											</c:if>																			
-										</html:submit>
+											</c:set>
+											<html:hidden property="removeReports" value="${removeReportsText}"/>
+											<input type="text"  class="buttonx_sm btn" value="${removeReportsText} " onclick="return confirmDelete() "/>
+										
+										</c:if>																			
+									
 									</div>
 							
 										
@@ -421,10 +429,12 @@
 
 <script type="text/javascript">
 
+
 function listReports()
 {
 	document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
 	document.aimTeamReportsForm.action="/updateTeamReports.do?reset=true";
+	$('[name="removeReports"]').attr('disabled','disabled');
 	document.aimTeamReportsForm.submit();
 }
 
@@ -487,7 +497,11 @@ function validate() {
 		if(flag == false)
 		  return false;
 		else
+			{
+			$('[name="removeReports"]').removeAttr('disabled');
+			document.aimTeamReportsForm.submit();
 			return true;
+			}
 	} else {
 		return false;
 	}
@@ -502,6 +516,13 @@ function validate() {
 		}
 	}
 
+    function doSearchWhenEnter (event) {
+    	var key = (document.all) ? event.keyCode : event.which;
+    	  if (key==13) {
+    		  searchActivity ('${aimTeamReportsForm.teamId }');
+    	  }
+    	
+    }
 	function searchActivity(teamId) {    		
 		var showReports = document.getElementById("showReportList").value;    		
 		if(showReports == "true"){

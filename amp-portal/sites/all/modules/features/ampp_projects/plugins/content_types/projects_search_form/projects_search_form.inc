@@ -109,7 +109,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   if ($conf["sectors_flag"] == 1) {
     $form['sector'] = array(
       '#type' => 'textfield',
-      '#title' => (isset($conf['sectors_label'])) ? t($conf['sectors_label']) : t('Sectors'),
+      '#title' => t($conf['sectors_label']),
       '#size' => 30,
       '#maxlength' => 64,
       '#description' => t('Start typing sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
@@ -130,7 +130,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   if ($conf["primary_sectors_flag"] == 1) {
     $form['primary_sector'] = array(
       '#type' => 'textfield',
-      '#title' => (isset($conf['primary_sectors_label'])) ? t($conf['primary_sectors_label']) : t('Primary Sectors'),
+      '#title' => t($conf['primary_sectors_label']),
       '#size' => 30,
       '#maxlength' => 64,
       '#description' => t('Start typing primary sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
@@ -151,7 +151,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   if ($conf["secondary_sectors_flag"] == 1) {
     $form['secondary_sector'] = array(
       '#type' => 'textfield',
-      '#title' => (isset($conf['secondary_sectors_label'])) ? t($conf['secondary_sectors_label']) : t('Primary Sectors'),
+      '#title' => t($conf['secondary_sectors_label']),
       '#size' => 30,
       '#maxlength' => 64,
       '#description' => t('Start typing secondary sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
@@ -172,7 +172,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   if ($conf["programs_flag"] == 1) {
     $form['program'] = array(
       '#type' => 'textfield',
-      '#title' => (isset($conf['programs_label'])) ? t($conf['programs_label']) : t('Programs'),
+      '#title' => t($conf['programs_label']),
       '#size' => 30,
       '#maxlength' => 64,
       '#description' => t('Start typing program name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
@@ -193,7 +193,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   if ($conf["donors_flag"] == 1) {
     $form['donor'] = array(
       '#type' => 'textfield',
-      '#title' => (isset($conf['donors_label'])) ? t($conf['donors_label']) : t('Donors'),
+      '#title' => t($conf['donors_label']),
       '#size' => 30,
       '#maxlength' => 64,
       '#description' => t('Start typing donor name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
@@ -214,7 +214,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   if ($conf["agencies_flag"] == 1) {
     $form['agency'] = array(
       '#type' => 'textfield',
-      '#title' => (isset($conf['agencies_label'])) ? t($conf['agencies_label']) : t('Agencies'),
+      '#title' => t($conf['agencies_label']),
       '#size' => 30,
       '#maxlength' => 64,
       '#description' => t('Start typing agency name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
@@ -235,7 +235,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   if ($conf["locations_flag"] == 1) {
     $form['region'] = array(
       '#type' => 'textfield',
-      '#title' => (isset($conf['locations_label'])) ? t($conf['locations_label']) : t('Locations'),
+      '#title' => t($conf['locations_label']),
       '#size' => 30,
       '#maxlength' => 64,
       '#description' => t('Start typing region then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
@@ -287,7 +287,7 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
   if ($conf["keywords_flag"] == 1) {
     $form['keyword'] = array(
       '#type' => 'textfield',
-      '#title' => (isset($conf['keywords_label'])) ? t($conf['keywords_label']) : t('Keywords'),
+      '#title' => t($conf['keywords_label']),
       '#size' => 30,
       '#description' => t('Search in project titles'),
     );
@@ -574,8 +574,8 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
 
   $form['agencies_flag'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Show Agencies search field'),
-    '#description' => t('Show agencies search field'),
+    '#title' => t('Show "Beneficiary Agencies" search field'),
+    '#description' => t('Show "Beneficiary Agencies" search field'),
     '#default_value' => isset($conf['agencies_flag']) ? intval($conf['agencies_flag']) : $form_state['plugin']['defaults']['agencies_flag'],
     '#id' => 'agencies_flag',
   );

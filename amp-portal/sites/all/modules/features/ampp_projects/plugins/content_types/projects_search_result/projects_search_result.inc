@@ -166,13 +166,13 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
   // Agencies
   $form['amp_agencies_name_agg_fieldset'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Agencies'),
+    '#title' => t('Beneficiary Agencies'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
   $form['amp_agencies_name_agg_fieldset']['amp_agencies_name_agg_flag'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Show Agencies column'),
+    '#title' => t('Show "Beneficiary Agencies" column'),
     '#default_value' => isset($conf['amp_agencies_name_agg_flag']) ? intval($conf['amp_agencies_name_agg_flag']) : $form_state['plugin']['defaults']['amp_agencies_name_agg_flag'],
   );
   $form['amp_agencies_name_agg_fieldset']['amp_agencies_name_agg_label'] = array(

@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.ar;
+package org.dgfoundation.amp.ar.amp28;
 
 import java.util.Collection;
 import java.util.HashMap;

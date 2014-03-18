@@ -1,6 +1,9 @@
 package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
+import org.dgfoundation.amp.ar.amp28.MiscTests28;
+import org.dgfoundation.amp.ar.amp28.MultilingualTests28;
+import org.dgfoundation.amp.ar.amp28.PledgesFormTests;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -32,6 +35,7 @@ public class AllTests_amp28
 
 		suite.addTest(MultilingualTests28.suite());
 		suite.addTest(PledgesFormTests.suite());
+		suite.addTest(MiscTests28.suite());
 		//$JUnit-END$
 		return suite;
 	}

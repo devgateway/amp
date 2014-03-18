@@ -17,12 +17,6 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
     
     	
 	private static final long serialVersionUID = 1255296454545642749L;
-
-
-	public int compareTo(Object arg0) {
-		AmpFieldsVisibility x=(AmpFieldsVisibility) arg0;
-		return this.getId().compareTo(x.getId());	
-	}
 	
 	public String getVisible() {
 		return templates.contains(parent.getParent().getParent())?"true":"false";

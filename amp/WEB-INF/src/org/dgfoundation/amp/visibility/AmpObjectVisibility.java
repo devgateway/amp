@@ -20,7 +20,7 @@ import org.digijava.module.gateperm.core.Permissible;
  * @author dan
  *
  */
-public abstract class AmpObjectVisibility  extends Permissible implements Serializable, Comparable,ClusterIdentifiable {
+public abstract class AmpObjectVisibility  extends Permissible implements Serializable, Comparable, ClusterIdentifiable {
      private final static String [] IMPLEMENTED_ACTIONS=new String[] { GatePermConst.Actions.EDIT, GatePermConst.Actions.VIEW } ;
 
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
@@ -129,7 +129,7 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 		return this.name+" - id="+super.toString();
 	}
 
-
+	@Override
 	public Object getIdentifier() {
 	    return id; 
 	}
@@ -162,5 +162,39 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	   return  IMPLEMENTED_ACTIONS.clone();
 	}
 	
+    @Override
+    public int compareTo(Object other)
+    {
+    	AmpObjectVisibility oth = (AmpObjectVisibility) other;
+    	int cmpClass = this.getClass().getName().compareTo(oth.getClass().getName());
+    	if (cmpClass != 0)
+    		return cmpClass; // normally we shouldn't be getting entries of different classes
+    	
+    	Long id1 = this.getId();
+    	Long id2 = oth.getId();
+    	
+    	if (id1 == null)
+    	{
+    		if (id2 == null) return 0;
+    		return 1; // nulls go to the end
+    	}
+    	if (id2 == null)
+    		return -1; //nulls go to the end
+    	
+    	return id1.compareTo(id2);
+    }
 		
+    @Override
+    public boolean equals(Object other)
+    {
+    	return this.compareTo(other) == 0;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+    	if (this.getId() == null)
+    		return this.getClass().hashCode();
+    	return this.getId().hashCode();
+    }
 }

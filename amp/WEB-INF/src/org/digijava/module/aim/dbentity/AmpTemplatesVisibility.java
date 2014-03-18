@@ -51,14 +51,6 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 		//if(getVisible()) return this;
  		return this;
 	}
-	
-	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
-		AmpTemplatesVisibility obj=(AmpTemplatesVisibility) arg0;
-		
-		return this.getId().compareTo(obj.getId());
-		//return 0;
-	}
 
 	public String getVisible() {
 			return visible;

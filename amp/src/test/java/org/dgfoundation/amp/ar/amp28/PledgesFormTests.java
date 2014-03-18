@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.ar;
+package org.dgfoundation.amp.ar.amp28;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 /**
- * multilingual editor tests
+ * Pledges Form tests
  * @author Dolghier Constantin
  *
  */
@@ -31,7 +31,7 @@ public class PledgesFormTests extends AmpTestCase
 	
 	public static Test suite()
 	{
-		TestSuite suite = new TestSuite(MultilingualTests28.class.getName());
+		TestSuite suite = new TestSuite(PledgesFormTests.class.getName());
 		suite.addTest(new PledgesFormTests("testPledgesEntityHelperSanity"));
 		suite.addTest(new PledgesFormTests("testFetchEntities"));
 		//suite.addTest(new MultilingualTests28("testSerializationAllLanguagesFilled"));

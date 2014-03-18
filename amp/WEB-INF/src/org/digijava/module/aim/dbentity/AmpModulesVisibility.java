@@ -34,15 +34,6 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	}
 
 	/**
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(Object arg0) {
-		AmpObjectVisibility x = (AmpObjectVisibility) arg0;
-		return this.getId().compareTo(x.getId());
-
-	}
-
-	/**
 	 * @see org.dgfoundation.amp.visibility.AmpObjectVisibility#getVisible()
 	 */
 	public String getVisible() {

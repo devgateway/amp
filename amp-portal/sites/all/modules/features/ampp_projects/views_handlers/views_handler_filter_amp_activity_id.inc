@@ -38,21 +38,35 @@ class views_handler_filter_amp_activity_id extends views_handler_filter {
 
 
   /**
-   *
+   * Override the default query.
+   * @TODO: Add descriptions, split into several filters!
    */
   function query() {
+    $this->query->set_group_operator('AND', 0);
 
-  $snippet  = "cached_amp_activity.amp_team_id is not null";
-  $this->query->add_where_expression(0, $snippet);
+    $group = 0;
+    $this->query->set_where_group('AND', $group);
+    $snippets[$group][] = "cached_amp_activity.approval_status IN ('approved', 'startedapproved')";
+    $snippets[$group][] = "cached_amp_activity.draft <> TRUE";
+    $snippets[$group][] = "cached_amp_activity.amp_team_id IS NOT NULL";
 
-  $snippet  = "cached_amp_activity.approval_status IN ('approved', 'startedapproved')";
-    $snippet .= " AND cached_amp_activity.draft <> true";
-    $snippet .= " AND cached_amp_activity.amp_team_id IN (select amp_team_id from amp_team where parent_team_id IN (select amp_team_id from amp_team where access_type = 'Management'))";
-    $snippet .= " OR (";
-    $snippet .= "cached_amp_activity.approval_status IN ('approved', 'startedapproved')";
-    $snippet .= " AND cached_amp_activity.draft <> true";
-    $snippet .= " AND cached_amp_activity.amp_activity_id IN (select distinct(activity) from amp_org_role where organisation IN (select amp_org_id from amp_team_orgs where amp_team_id IN (select amp_team_id from amp_team where parent_team_id in (select amp_team_id from amp_team where access_type='Management')))))";
+    $group = 1;
+    $this->query->set_where_group('OR', $group);
 
-  $this->query->add_where_expression(0, $snippet);
+    // Get Activities which have one parent of type "Management"? I guess!?!
+    $case_one_sub = "SELECT amp_team_id FROM amp_team WHERE access_type = 'Management'";
+    $case_one = "SELECT amp_team_id FROM amp_team WHERE parent_team_id IN ($case_one_sub)";
+    $snippets[$group][] = "( cached_amp_activity.amp_team_id IN ($case_one) )";
+
+    // It sure does something... but I don't know what to name it.
+    $case_two_sub = "SELECT amp_org_id FROM amp_team_orgs WHERE amp_team_id IN ($case_one)";
+    $case_two = "SELECT DISTINCT(activity) FROM amp_org_role WHERE organisation IN ($case_two_sub)";
+    $snippets[$group][] = "( cached_amp_activity.amp_activity_id IN ($case_two) )";
+
+    foreach ($snippets as $group => $expressions) {
+      foreach ($expressions as $expression) {
+        $this->query->add_where_expression($group, $expression);
+      }
+    }
   }
 }

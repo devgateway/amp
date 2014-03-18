@@ -12,6 +12,7 @@
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>			
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <script type="text/javascript">
 <!--
 	function validate() {
@@ -35,6 +36,7 @@
 				return false;					  
 			}				  
 		}
+		document.aimTeamReportsForm.submit();
 		return true;			  
 	}
 
@@ -58,6 +60,15 @@
 		     document.aimTeamReportsForm.submit();
 			 return true;
 	}
+	
+	function doSearchWhenEnter (event) {
+    	var key = (document.all) ? event.keyCode : event.which;
+    	  if (key==13) {
+    		  $('#goButtonAdd').trigger( "click" );
+    		  return false;
+    	  }
+    	
+    }
 
 -->
 
@@ -142,7 +153,7 @@
 													<tr>
 														<td nowrap="nowrap">
 															<digi:trn>Keyword</digi:trn>&nbsp;
-															<html:text property="keyword" styleClass="inp-text" />
+															<html:text property="keyword" styleClass="inp-text" onkeypress="doSearchWhenEnter(event);" />
 														</td>
 														<td nowrap="nowrap">
 															<digi:trn>Results</digi:trn>&nbsp;
@@ -166,7 +177,7 @@
 															<c:set var="trnGoBtn">
 																<digi:trn> GO </digi:trn>
 															</c:set>
-															<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamReportsForm.teamId }')">
+															<input type="button" id="goButtonAdd" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamReportsForm.teamId }')">
 														</td>
 													</tr>
 												</table>
@@ -389,15 +400,21 @@
 															<table cellspacing="5">
 																<tr>
 																	<td>
+										
 										<c:if test="${aimTeamReportsForm.showReportList == true}">
-											<html:submit  styleClass="buttonx_sm btn" property="assignReports"  onclick="return validate()">
-												<digi:trn key="btn:addReportsToTheWorkspace">Add Reports to the Workspace</digi:trn> 
-											</html:submit>
+										<c:set var="assignReportsText">
+											<digi:trn key="btn:addReportsToTheWorkspace">Add Reports to the Workspace</digi:trn>
+										</c:set>
+										<html:hidden property="assignReports" value="${assignReportsText}"/>
+										<input type="button"  class="buttonx_sm btn" onclick="return validate()" value="${assignReportsText}"/>
 										</c:if>
+									
 										<c:if test="${aimTeamReportsForm.showReportList == false}">
-											<html:submit  styleClass="buttonx_sm btn" property="assignReports"  onclick="return validate()">
+											<c:set var="assignReportsText">
 												<digi:trn key="btn:addTabsToTheWorkspace">Add Tabs to the Workspace</digi:trn> 
-											</html:submit>
+											</c:set>
+											<html:hidden property="assignReports" value="${assignReportsText}"/>
+											<input type="button"  class="buttonx_sm btn"  value="${assignReportsText}" onclick="return validate()"/>
 										</c:if>
 										</td></tr></table>
 									</div>										
@@ -418,8 +435,8 @@
 </digi:form>
 </tr></td></table></div>
 <script language="javascript">
-		$("#checkAll").bind("change", function (obj){
-		$("input[name=selReports]").attr("checked", $("#checkAll").is(":checked"));
-	}
-	);
+$("#checkAll").bind("change", function (obj){
+$("input[name=selReports]").attr("checked", $("#checkAll").is(":checked"));
+}
+);
 </script>

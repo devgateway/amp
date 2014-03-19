@@ -77,6 +77,11 @@ public class EditorWrapperModel extends LocaleAwareProxyModel<String> {
                 langModel.setObject(lang);
                 setObject(getObject());
             }
+            //after the loop the langModel's object will always be the last value of languages ArrayList
+            //we need to set it to the current language
+            if (languages.contains(TLSUtils.getLangCode())) {
+            	langModel.setObject(TLSUtils.getLangCode());
+            }
         }
 	}
 	

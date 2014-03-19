@@ -9,17 +9,17 @@
  */
 function ampp_projects_views_data() {
   // TABLE: cached_amp_activity
-  $data['cached_amp_activity']['table']['group'] = t('AMP Activity');
+  $data['cached_amp_activity']['table']['group'] = t('Activity');
   $data['cached_amp_activity']['table']['base'] = array(
     'field' => 'amp_activity_id',
-    'title' => t('Cached AMP Activity'),
+    'title' => t('Cached AMP Activities'),
     'help' => t('Contains information related to AMP Activities (projects).'),
     'database' => 'amp_projects'
   );
 
   $data['cached_amp_activity']['amp_activity_id'] = array(
     'title' => t('ID'),
-    'help' => t('The Activity ID '),
+    'help' => t('The Activity ID'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
     'field' => array('handler' => 'ampp_projects_handler_activity_id'),
     'filter' => array('handler' => 'views_handler_filter_amp_activity_id'),
@@ -27,7 +27,7 @@ function ampp_projects_views_data() {
   );
 
   $data['cached_amp_activity']['name'] = array(
-    'title' => t('Project title'),
+    'title' => t('Activity Name'),
     'help' => t('Title for the project'),
     'argument' => array('handler' => 'amp_projects_handler_argument_string'),
     'field' => array(
@@ -78,8 +78,8 @@ function ampp_projects_views_data() {
   );
 
   $data['cached_amp_activity']['amp_team_id'] = array(
-    'title' => t('Amp team id Filter'),
-    'help' => t('Amp team id Filter'),
+    'title' => t('Team ID Filter'),
+    'help' => t('Team ID Filter'),
     'filter' => array('handler' => 'views_handler_filter_amp_team_id')
   );
 
@@ -110,7 +110,7 @@ function ampp_projects_views_data() {
   );
 
   // TABLE: cached_v_status
-  $data['cached_v_status']['table']['group'] = t('AMP Projects');
+  $data['cached_v_status']['table']['group'] = t('Activity Status');
   $data['cached_v_status']['table']['join'] = array(
     'cached_amp_activity' => array(
       'left_field' => 'amp_activity_id',
@@ -119,9 +119,8 @@ function ampp_projects_views_data() {
   );
 
   $data['cached_v_status']['name'] = array(
-    'group' => t('AMP Projects'),
     'title' => t('Status'),
-    'help' => t('Status name of AMP projects'),
+    'help' => t('The status of the activity, human readable.'),
     'field' => array(
       'handler' => 'views_handler_field_status',
       'click sortable' => TRUE
@@ -130,7 +129,7 @@ function ampp_projects_views_data() {
   );
 
   // TABLE: amp_activity_program
-  $data['amp_activity_program']['table']['group'] = t('AMP Projects');
+  $data['amp_activity_program']['table']['group'] = t('Activity Program');
   $data['amp_activity_program']['table']['join'] = array(
     // Directly links to amp_activity table.
     'cached_amp_activity' => array(
@@ -140,14 +139,13 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_activity_program']['amp_program_id_agg'] = array(
-    'group' => t('AMP Projects'),
-    'title' => t('Program Ids'),
-    'help' => t('Program Ids of AMP projects'),
+    'title' => t('Program IDs'),
+    'help' => t('Program IDs of the Activity'),
     'field' => array('handler' => 'ampp_projects_handler_program_ids'),
   );
 
   // TABLE: amp_activity_sector
-  $data['amp_activity_sector']['table']['group'] = t('AMP Projects');
+  $data['amp_activity_sector']['table']['group'] = t('Activity Sector');
   $data['amp_activity_sector']['table']['join'] = array(
     // Directly links to amp_activity table.
     'cached_amp_activity' => array(
@@ -157,14 +155,13 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_activity_sector']['amp_sector_id_agg'] = array(
-    'group' => t('AMP Projects'),
-    'title' => t('Sector Ids'),
-    'help' => t('Sectors Ids of AMP projects'),
+    'title' => t('Sector IDs'),
+    'help' => t('Sectors IDs of Activity'),
     'field' => array('handler' => 'ampp_projects_handler_sector_ids'),
   );
 
   // TABLE: amp_sector
-  $data['amp_sector']['table']['group'] = t('AMP Projects');
+  $data['amp_sector']['table']['group'] = t('Sector');
   $data['amp_sector']['table']['join'] = array(
     'cached_amp_activity' => array(
       'left_table' => 'amp_activity_sector',
@@ -174,16 +171,14 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_sector']['amp_sector_name_agg'] = array(
-    'group' => t('AMP Projects'),
     'title' => t('Sector Names'),
-    'help' => t('Sectors names of AMP projects'),
+    'help' => t('Sectors names of the Activity'),
     'field' => array('handler' => 'ampp_projects_handler_sector_names'),
   );
 
   $data['amp_sector']['amp_sector_id'] = array(
-    'group' => t('AMP Projects'),
-    'title' => t('AMP Sector Id'),
-    'help' => t('Sectors id of AMP project'),
+    'title' => t('Sector ID'),
+    'help' => t('Sectors ID of the Activity'),
     'argument' => array('handler' => 'views_handler_argument_sector_id'),
     'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
@@ -191,6 +186,7 @@ function ampp_projects_views_data() {
   );
 
   // TABLE: amp_primarysector
+  $data['amp_primarysector']['table']['group'] = t('Primary Sector');
   $data['amp_primarysector']['table']['join'] = array(
     'cached_amp_activity' => array(
       'table' => 'amp_sector',
@@ -202,13 +198,13 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_primarysector']['amp_primarysector_name_agg'] = array(
-    'group' => t('AMP Projects'),
     'title' => t('Primary Sector Names'),
-    'help' => t('Primary Sectors names of AMP projects'),
+    'help' => t('Primary Sectors names of the Activity'),
     'field' => array('handler' => 'ampp_projects_handler_primarysector_names'),
   );
 
   // TABLE: amp_secondarysector
+  $data['amp_secondarysector']['table']['group'] = t('Secondary Sector');
   $data['amp_secondarysector']['table']['join'] = array(
     'cached_amp_activity' => array(
       'table' => 'amp_sector',
@@ -220,14 +216,13 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_secondarysector']['amp_secondarysector_name_agg'] = array(
-    'group' => t('AMP Projects'),
     'title' => t('Secondary Sector Names'),
-    'help' => t('Secondary Sectors names of AMP projects'),
+    'help' => t('Secondary Sectors names of the Activity'),
     'field' => array('handler' => 'ampp_projects_handler_secondarysector_names'),
   );
 
   // TABLE: amp_theme
-  $data['amp_theme']['table']['group'] = t('AMP Projects');
+  $data['amp_theme']['table']['group'] = t('AMP Theme');
   $data['amp_theme']['table']['join'] = array(
     'cached_amp_activity' => array(
       'left_table' => 'amp_activity_program',
@@ -237,16 +232,14 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_theme']['amp_theme_name_agg'] = array(
-    'group' => t('AMP Projects'),
     'title' => t('Program Names'),
-    'help' => t('Program names of AMP projects'),
+    'help' => t('Program names of the Activity'),
     'field' => array('handler' => 'ampp_projects_handler_program_names'),
   );
 
   $data['amp_theme']['amp_theme_id'] = array(
-    'group' => t('AMP Projects'),
-    'title' => t('AMP Program Id'),
-    'help' => t('Program id of AMP project'),
+    'title' => t('AMP Program ID'),
+    'help' => t('Program ID of the Activity'),
     'argument' => array('handler' => 'views_handler_argument_program_id'),
     'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
@@ -254,7 +247,7 @@ function ampp_projects_views_data() {
   );
 
   // TABLE: amp_activity_location
-  $data['amp_activity_location']['table']['group'] = t('AMP Projects');
+  $data['amp_activity_location']['table']['group'] = t('Activity Location');
   $data['amp_activity_location']['table']['join'] = array(
     // Directly links to amp_activity table.
     'cached_amp_activity' => array(
@@ -263,16 +256,15 @@ function ampp_projects_views_data() {
     ),
   );
   $data['amp_activity_location']['amp_location_id_agg'] = array(
-    'group' => t('AMP Projects'),
-    'title' => t('AMP Location Ids'),
-    'help' => t('Location Ids of AMP projects'),
+    'title' => t('AMP Location IDs'),
+    'help' => t('Location IDs of the Activity'),
     'field' => array(
       'handler' => 'ampp_projects_handler_location_ids',
     ),
   );
 
   // TABLE: amp_location
-  $data['amp_location']['table']['group'] = t('AMP Projects');
+  $data['amp_location']['table']['group'] = t('Location');
   $data['amp_location']['table']['join'] = array(
     'cached_amp_activity' => array(
       'left_table' => 'amp_activity_location',
@@ -282,15 +274,14 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_location']['amp_location_region_agg'] = array(
-    'group' => t('AMP Projects'),
     'title' => t('AMP Locations Names'),
-    'help' => t('Locations name of AMP projects'),
+    'help' => t('Locations name of the Activity'),
     'field' => array('handler' => 'ampp_projects_handler_location_names'),
   );
 
   $data['amp_location']['amp_location_id'] = array(
-    'title' => t('Location Id'),
-    'help' => t('Id of the location'),
+    'title' => t('Location ID'),
+    'help' => t('ID of the location'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
     'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
@@ -298,7 +289,7 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_location']['location_id'] = array(
-    'title' => t('Locations Ids'),
+    'title' => t('Locations IDs'),
     'help' => t('List of locations'),
     'argument' => array('handler' => 'views_handler_argument_location_id'),
     'field' => array('handler' => 'views_handler_field'),
@@ -307,7 +298,7 @@ function ampp_projects_views_data() {
   );
 
   // TABLE: amp_category_value_location
-  $data['amp_category_value_location']['table']['group'] = t('AMP Projects');
+  $data['amp_category_value_location']['table']['group'] = t('Category Value Location');
   $data['amp_category_value_location']['table']['join'] = array(
     'cached_amp_activity' => array(
       'left_table' => 'amp_location',
@@ -317,9 +308,8 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_category_value_location']['id'] = array(
-    'group' => t('AMP Projects'),
-    'title' => t('AMP Category value locations id'),
-    'help' => t('AMP Category value locations id'),
+    'title' => t('AMP Category value locations ID'),
+    'help' => t('AMP Category value locations ID'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
     'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
@@ -327,14 +317,13 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_category_value_location']['category_location_name_agg'] = array(
-    'group' => t('AMP Projects'),
     'title' => t('AMP Category Locations Names'),
     'help' => t('AMP Projects category Locations  names'),
     'field' => array('handler' => 'ampp_projects_handler_category_location_names'),
   );
 
   // TABLE: amp_funding
-  $data['amp_funding']['table']['group'] = t('AMP Projects');
+  $data['amp_funding']['table']['group'] = t('Funding');
   $data['amp_funding']['table']['join'] = array(
     // Directly links to amp_activity table.
     'cached_amp_activity' => array(
@@ -344,16 +333,15 @@ function ampp_projects_views_data() {
     ),
   );
   $data['amp_funding']['amp_org_id_agg'] = array(
-    'group' => t('AMP Projects'),
-    'title' => t('AMP Organizations Ids'),
-    'help' => t('Organizations Ids of AMP projects'),
+    'title' => t('AMP Organizations IDs'),
+    'help' => t('Organizations IDs of the Activity'),
     'field' => array(
       'handler' => 'ampp_projects_handler_org_ids',
     ),
   );
 
   // TABLE: amp_organisation
-  $data['amp_organisation']['table']['group'] = t('AMP Projects');
+  $data['amp_organisation']['table']['group'] = t('Organization');
   $data['amp_organisation']['table']['join'] = array(
     'cached_amp_activity' => array(
       'left_table' => 'amp_funding',
@@ -363,15 +351,14 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_organisation']['amp_org_name_agg'] = array(
-    'group' => t('AMP Projects'),
     'title' => t('AMP Organizations Names'),
-    'help' => t('Locations name of AMP projects'),
+    'help' => t('Locations name of the Activity'),
     'field' => array('handler' => 'ampp_projects_handler_org_names'),
   );
 
   $data['amp_organisation']['amp_org_id'] = array(
-    'title' => t('Organization Id'),
-    'help' => t('Id of the Organization'),
+    'title' => t('Organization ID'),
+    'help' => t('ID of the Organization'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
     'field' => array('handler' => 'views_handler_field'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
@@ -379,7 +366,7 @@ function ampp_projects_views_data() {
   );
 
   // TABLE: amp_activities_categoryvalues
-  $data['amp_activities_categoryvalues']['table']['group'] = t('AMP Projects');
+  $data['amp_activities_categoryvalues']['table']['group'] = t('Activities Category Values');
   $data['amp_activities_categoryvalues']['table']['join'] = array(
     'cached_amp_activity' => array(
       'left_field' => 'amp_activity_id',
@@ -389,7 +376,6 @@ function ampp_projects_views_data() {
   );
 
   $data['amp_activities_categoryvalues']['amp_categoryvalue_id'] = array(
-    'group' => t('AMP Projects'),
     'title' => t('AMP Projects Budget'),
     'help' => t('Budget type'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),

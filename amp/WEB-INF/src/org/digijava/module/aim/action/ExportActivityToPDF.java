@@ -349,21 +349,11 @@ public class ExportActivityToPDF extends Action {
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectComments()));
 			}						
 
-			//Lessons learned
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext)){
-				columnName=TranslatorWorker.translateText("Lessons Learned");
-				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getLessonsLearned()));
-			}			
-			
 			//contract Number
 			if(FeaturesUtil.isVisibleField("Contract Number", ampContext)){
 				columnName=TranslatorWorker.translateText("Contract Number");
 				createGeneralInfoRow(mainLayout,columnName,activity.getConvenioNumcont());
 			}
-
-			
-			
-
 
 			if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext)){
 				columnName=TranslatorWorker.translateText("NPD Clasification");

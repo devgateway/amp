@@ -2642,12 +2642,12 @@ public class ExportActivityToWord extends Action {
 
 		if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext)){
 			columnName=TranslatorWorker.translateText("NPD Clasification");
-			generateOverAllTableRows(identificationSubTable1,columnName,identification.getClasiNPD(),null);
+			generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification.getClasiNPD()), null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext)){
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext)) {
 			columnName=TranslatorWorker.translateText("Lessons Learned");
-			generateOverAllTableRows(identificationSubTable1,columnName,identification.getLessonsLearned(),null);
+			generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification.getLessonsLearned()), null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Impact", ampContext)){

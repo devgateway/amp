@@ -47,7 +47,7 @@ public class DocToOrgDAO {
 			if (org.getName() != null)
 				names.add(org.getName().trim());
 			else
-				logger.error("acronym of organisation " + org.getName() + " is null!");
+				logger.error("name of organisation " + org.getName() + " is null!");
 		}
 		
 		StringBuilder buf = new StringBuilder();

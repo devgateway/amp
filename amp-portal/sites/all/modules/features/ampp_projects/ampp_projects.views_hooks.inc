@@ -27,7 +27,7 @@ function ampp_projects_views_data() {
   );
 
   $data['cached_amp_activity']['name'] = array(
-    'title' => t('Activity Name'),
+    'title' => t('Name'),
     'help' => t('Title for the project'),
     'argument' => array('handler' => 'amp_projects_handler_argument_string'),
     'field' => array(
@@ -329,7 +329,6 @@ function ampp_projects_views_data() {
     'cached_amp_activity' => array(
       'left_field' => 'amp_activity_id',
       'field' => 'amp_activity_id',
-
     ),
   );
   $data['amp_funding']['amp_org_id_agg'] = array(
@@ -341,28 +340,33 @@ function ampp_projects_views_data() {
   );
 
   // TABLE: amp_organisation
-  $data['amp_organisation']['table']['group'] = t('Organization');
-  $data['amp_organisation']['table']['join'] = array(
-    'cached_amp_activity' => array(
-      'left_table' => 'amp_funding',
-      'left_field' => 'amp_donor_org_id',
-      'field' => 'amp_org_id'
-    )
-  );
-
-  $data['amp_organisation']['amp_org_name_agg'] = array(
-    'title' => t('AMP Organizations Names'),
-    'help' => t('Locations name of the Activity'),
-    'field' => array('handler' => 'ampp_projects_handler_org_names'),
+  $data['amp_organisation']['table']['group'] = t('Organizations');
+  $data['amp_organisation']['table']['base'] = array(
+    'field' => 'amp_org_id',
+    'title' => t('AMP Organization'),
+    'help' => t('Contains information related to AMP Organizations.'),
+    'database' => 'amp_projects'
   );
 
   $data['amp_organisation']['amp_org_id'] = array(
     'title' => t('Organization ID'),
     'help' => t('ID of the Organization'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
-    'field' => array('handler' => 'views_handler_field'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
+    'sort' => array('handler' => 'views_handler_sort_numeric'),
+  );
+
+  $data['amp_organisation']['name'] = array(
+    'title' => t('Name'),
+    'help' => t('Provides the name of the organization.'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
   );
 
   // TABLE: amp_activities_categoryvalues
@@ -393,6 +397,17 @@ function ampp_projects_views_data() {
     )
   );
 
+  $data['amp_org_role']['organisation'] = array(
+    'title' => t('Organisation'),
+    'help' => t('Get information related to the organization.'),
+    'relationship' => array(
+      'handler' => 'views_handler_relationship',
+      'base' => 'amp_organisation',
+      'field' => 'amp_org_id',
+      'label' => t('org'),
+    ),
+  );
+
   $data['amp_org_role']['role'] = array(
     'title' => t('Role'),
     'help' => t('Get information related to the organization roles.'),
@@ -401,26 +416,29 @@ function ampp_projects_views_data() {
       'base' => 'amp_role',
       'field' => 'amp_role_id',
       'label' => t('role'),
+      'join' => array(),
     ),
   );
 
   $data['amp_org_role']['organisation_role'] = array(
     'title' => t('Organisation having Role'),
-    'help' => t('Filter by Organizations that have a specific role'),
     'real field' => 'organisation',
     'argument' => array(
+      'help' => t('Filter by Organizations that have a specific role'),
       'handler' => 'ampp_projects_views_handler_argument_organisation_role',
       'options callback' => '_ampp_projects_get_amp_roles',
       'options arguments' => array('role_code'),
     ),
-    'numeric' => TRUE,
-    'filter' => array(
-      'handler' => 'views_handler_filter_numeric',
+    'field' => array(
+      'help' => t('Show Organizations that have a specific role.'),
+      'handler' => 'ampp_projects_views_handler_field_organisation_role',
+      'options callback' => '_ampp_projects_get_amp_roles',
+      'options arguments' => array('role_code'),
     ),
   );
 
   // TABLE: amp_role
-  $data['amp_role']['table']['group'] = t('Organization Role');
+  $data['amp_role']['table']['group'] = t('Role');
   $data['amp_role']['table']['base'] = array(
     'field' => 'amp_role_id',
     'title' => t('AMP Role'),
@@ -506,17 +524,25 @@ function ampp_projects_views_pre_build(&$view) {
 function ampp_projects_views_pre_execute(&$view) {
   global $language;
 
+  if ($view->name == 'projects_search') {
+    $view->build_info['query']->groupBy('cached_amp_activity.amp_activity_id');
+  }
+
   if ($view->name == 'projects_search_result' && !isset($view->get_total_amount_type)) {
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion', 'name', cached_amp_activity.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', '" . $language->language . "')";
-    $view->build_info['query']->groupBy('cached_amp_activity.amp_activity_id')
+    $view->build_info['query']
+      ->groupBy('cached_amp_activity.amp_activity_id')
       ->groupBy($translate_field)
+      ->groupBy('amp_org_role.activity')
       ->groupBy('cached_amp_activity.actual_start_date')
       ->groupBy('cached_amp_activity.actual_completion_date')
       ->groupBy('cached_v_status.name');
-    $view->build_info['count_query']->groupBy('cached_amp_activity.amp_activity_id')
-      ->groupBy('cached_amp_activity.name')
+    $view->build_info['count_query']
+      ->groupBy('cached_amp_activity.amp_activity_id')
+      ->groupBy('amp_org_role.activity')
       ->groupBy('cached_amp_activity.actual_start_date')
-      ->groupBy('cached_amp_activity.actual_completion_date');
+      ->groupBy('cached_amp_activity.actual_completion_date')
+      ->groupBy('cached_v_status.name');
   }
   else {
     if ($view->name == 'projects_search_result' && isset($view->get_total_amount_type)) {

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Can be used to filter by Organizations that have a specific Role.
+ * Can be used to show Organizations that have a specific Role.
  */
-class ampp_projects_views_handler_argument_organisation_role extends views_handler_argument_numeric {
+class ampp_projects_views_handler_field_organisation_role extends views_handler_field {
   var $value_form_type = 'checkboxes';
 
   function init(&$view, &$options) {
@@ -218,70 +218,49 @@ class ampp_projects_views_handler_argument_organisation_role extends views_handl
   }
 
   /**
-   * Override ensure_my_table so we can control how this joins in.
+   * Provides a unique placeholders for the role_code field.
    */
-  function ensure_my_table() {
-    // Alter the table queue. This is required for the field to work when table relation already exists.
-    $table_queue = $this->query->table_queue;
+  function _get_role_placeholder() {
+    static $count;
 
-    if (!empty($this->options['break_phrase'])) {
-      views_break_phrase($this->argument, $this);
+    if (empty($count)) {
+      $count = 1;
+      return ':' . $this->table_alias . '__org_role_ids';
     }
     else {
-      $this->value = array($this->argument);
+      $count++;
+      return ':' . $this->table_alias . '__org_role_ids_' . $count;
     }
+  }
 
-    // Filter by Organization ID.
-    if (count($this->value) > 1) {
-      $value_operator = empty($this->options['not']) ? 'IN' : 'NOT IN';
-    }
-    else if (count($this->value) == 1) {
-      $value_operator = empty($this->options['not']) ? '=' : '!=';
-    }
+  /**
+   * Alter the field query to only display organisations with certain roles.
+   */
+  function query($group_by = FALSE) {
+    $this->ensure_my_table();
 
-    if (!empty($this->value)) {
-      $extra['org_id'] = array(
-        'field' => $this->real_field,
-        'operator' => $value_operator,
-        'value' => $this->value,
-      );
+    // Add the field.
+    $params = $this->options['group_type'] != 'group' ? array('function' => $this->options['group_type']) : array();
+    $langcode = $GLOBALS['language']->language;
+    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', amp_org_role.organisation, 'amp_organisation', 'name', 'amp_org_id', '${langcode}')";
 
-      $table_queue[$this->table]['join']->type = 'INNER';
-    }
 
     // Translate the Role Codes to Role IDs.
     $role_value_ids = $this->_get_role_value_ids();
+    $role_placeholder = $this->_get_role_placeholder();
+    $params['placeholders'][$role_placeholder] = $role_value_ids;
 
     // Filter by Role ID.
     if (count($role_value_ids) > 1) {
       $role_operator = ($this->role_operator == 'in') ? 'IN' : 'NOT IN';
+      $condition = "amp_org_role.role $role_operator ($role_placeholder)";
     }
     else if (count($role_value_ids) == 1) {
       $role_operator = ($this->role_operator == 'in') ? '=' : '!=';
+      $condition = "amp_org_role.role $role_operator $role_placeholder";
     }
 
-    $extra['role_id'] = array(
-      'field' => 'role',
-      'operator' => $role_operator,
-      'value' => $role_value_ids,
-    );
-
-    // Alter the table queue. This is required for the field to work when table relation already exists.
-    if (isset($table_queue[$this->table]['join']->extra) && is_array($table_queue[$this->table]['join']->extra)) {
-      $table_queue[$this->table]['join']->extra += $extra;
-    }
-    else {
-      $table_queue[$this->table]['join']->extra = $extra;
-    }
-
-    $this->table_alias = $table_queue[$this->table]['alias'];
-    return $this->table_alias;
-  }
-
-  /**
-   * Set up the query for this argument.
-   */
-  function query($group_by = FALSE) {
-    $this->ensure_my_table();
+    $fieldsql = "array_to_string(array_agg(CASE WHEN ${condition} THEN ${translate_field} END), ', ')";
+    $this->field_alias = $this->query->add_field(NULL, $fieldsql, 'organisation_name', $params);
   }
 }

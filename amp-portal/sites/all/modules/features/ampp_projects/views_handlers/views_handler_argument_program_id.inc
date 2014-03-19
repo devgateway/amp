@@ -14,7 +14,6 @@ class views_handler_argument_program_id extends views_handler_argument_numeric {
     else {
       $this->value = array($this->argument);
     }
-    watchdog('ampp_projects', 'PROGRAMS:' . $this->argument);
     $this->addParentProgramsIds();
 
     $placeholder = $this->placeholder();

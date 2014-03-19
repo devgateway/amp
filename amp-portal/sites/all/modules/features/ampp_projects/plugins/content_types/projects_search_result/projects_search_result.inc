@@ -56,7 +56,6 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $panel_arg
   $tmpview = $view->clone_view();
   $tmpview->set_display('panel_pane_1');
 
-
   if (isset($conf['allowxlsexport']) && $conf['allowxlsexport'] == 1) {
     $url_query_args = _ampp_get_search_arguments(FALSE);
     $url_query_args = array_filter($url_query_args);

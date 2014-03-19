@@ -58,6 +58,7 @@ files[] = views_handlers/ampp_projects_handler_secondarysector_names.inc
 files[] = views_handlers/ampp_projects_handler_sector_ids.inc
 files[] = views_handlers/ampp_projects_handler_sector_names.inc
 files[] = views_handlers/ampp_projects_views_handler_argument_organisation_role.inc
+files[] = views_handlers/ampp_projects_views_handler_field_organisation_role.inc
 files[] = views_handlers/views_handler_argument_location_id.inc
 files[] = views_handlers/views_handler_argument_program_id.inc
 files[] = views_handlers/views_handler_argument_sector_id.inc

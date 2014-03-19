@@ -79,6 +79,14 @@ $(document).ready(function()
 	{
 		$('#add_location_button').hide();
 		$('#pledge_add_location_area').show();
+		//$('#myModal').modal('show');
+		//$('#pledge_add_location_area').modal('show');
+	});
+	$('#pledge_add_program_area').hide();
+	$('#add_program_button').click(function() //click on "Add Program"
+	{
+		$(this).hide();
+		$('#pledge_add_program_area').show();
 	});
 	
 	$('#sameContactCheckBox').change(function(){
@@ -167,6 +175,25 @@ function pledges_submit_add_locations()
 	});
 }
 
+function pledges_hide_add_program()
+{
+	$('#pledge_add_program_area').hide();
+	$('#add_program_button').show();
+}
+
+// called when users clicks "cancel" in the Add Program area
+function pledges_add_programs_cancel()
+{
+	pledges_hide_add_program();
+}
+
+/**
+ * validates an input with a generic function and highlights any found error
+ * @param inputItem
+ * @param validation_function
+ * @param error_message
+ * @returns {Boolean}
+ */
 function pledges_form_simple_validation(inputItem, validation_function, error_message)
 {
 	if ((inputItem.value.length > 0) && (!validation_function(inputItem.value)))

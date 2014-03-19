@@ -27,7 +27,7 @@ PledgeForm pledgeForm = (PledgeForm) session.getAttribute("pledgeForm");
 <script src="/repository/bootstrap/hacks.js"></script>
 <script language="JavaScript" type="text/javascript"><!--
 
-alert('this module is a work-in-progress and is pending (almost) full rewrite in this week. Do not bugfix or add features to it, because everything will be deleted anyway');
+//alert('this module is a work-in-progress and is pending (almost) full rewrite in this week. Do not bugfix or add features to it, because everything will be deleted anyway');
 var quitRnot1 = 0;
 
 function fnChk(frmContrl, f){
@@ -362,27 +362,6 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr>
 											<td>
 										       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
-	                                             	<tr><td>
-													<c:forEach var="selectedProgs" items="${pledgeForm.selectedProgs}" varStatus="index">
-	                                                  <tr>
-	                                                      		<c:set var="indexProg" value="${indexProg+1}"/>
-									                            <td align="center" width="3%">
-																	<input type="checkbox" id="checkProg${indexProg}"  >
-																</td>
-	                                                            <td align="left" width="67%">
-		                                                            [${selectedProgs.program.name}] 
-	                                                            </td>
-	                                                            <td align="right" width="15%" nowrap="nowrap">
-	                                                            <FONT color="red">*</FONT>
-	                                                            		<digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;
-																</td>
-																<td align="left" width="15%" nowrap="nowrap">
-	                                                            		<html:text name="selectedProgs" indexed="true" property="programpercentage" size="5"  onkeyup="fnChk(this, 'program')" styleClass="inp-text"/>
-	                                                            </td>
-	                                                          
-	                                                    </tr>
-	                                                  </c:forEach>
-													</td></tr>
 													<tr>
 														<td colspan="2"> &nbsp;
 															<field:display name="Add Pledge Program Button" feature="Pledge Sector and Location">
@@ -390,14 +369,6 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 	                                                                         property="submitButton" onclick="addProgram(1);">
 	                                                                <digi:trn key="btn:addProgram">Add Program</digi:trn>
 	                                                            </html:button>
-															</field:display>
-															<field:display name="Remove Pledge Program Button" feature="Pledge Sector and Location">
-																 &nbsp;
-		                                                 		<logic:notEmpty name="pledgeForm" property="selectedProgs">
-																	<html:button styleClass="dr-menu" property="submitButton" onclick="return removeProgram()">
-		                                                            <digi:trn key="btn:removeProgram">Remove Program</digi:trn>
-		                                                        	</html:button>
-																</logic:notEmpty>
 															</field:display>
 		                                                </td>
 		                                            </tr>

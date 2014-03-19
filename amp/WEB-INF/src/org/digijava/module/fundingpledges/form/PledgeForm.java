@@ -18,6 +18,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -88,7 +89,7 @@ public class PledgeForm extends ActionForm implements Serializable{
 	
 	/*Fields for program*/
 	private int programType;
-	private List programLevels;
+	private List<List<AmpTheme>> programLevels;
 	private Long selPrograms[];
 	private Collection<FundingPledgesProgram> selectedProgs;
 	private AmpActivityProgramSettings nationalSetting;

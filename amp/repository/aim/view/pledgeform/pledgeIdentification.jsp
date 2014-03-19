@@ -39,7 +39,7 @@
 <div class="highlight text-center h5 bold"><digi:trn key="aim:donorInformation">Donor Information</digi:trn></div>
 <div class="container-fluid">
 	<div class="col-xs-9 form-group">
-		<span class="red h4 bold">*</span><label for="org_grp_dropdown_id" class="h6 bold"><digi:trn>Organization Group</digi:trn></label>
+		<span class="red h4 bold">*</span><label for="org_grp_dropdown_id" class="h6 bold near-select"><digi:trn>Organization Group</digi:trn></label>
 		<html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id">
 			<c:forEach var="orgGroup" items="${pledgeForm.orgGroups}">
 				<option value="${orgGroup.id}"<c:if test="${pledgeForm.selectedOrgGrpId == orgGroup.id}">selected="selected"</c:if> >

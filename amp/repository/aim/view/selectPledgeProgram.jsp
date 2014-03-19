@@ -154,12 +154,4 @@
 			</td>
 		</tr>
 	</table>
-	<script language="JavaScript" type="text/javascript">
-var sels=document.getElementById("tblSlo");
-if((sels.clientWidth)>document.body.clientWidth){
-	window.moveTo(0,screen.height/2-document.body.clientHeight/2)
-  	window.resizeTo(sels.clientWidth+150,650);
-}
-window.moveTo(screen.width/2-document.body.clientWidth/2,screen.height/2-document.body.clientHeight/2)
-</script>
 </digi:form>

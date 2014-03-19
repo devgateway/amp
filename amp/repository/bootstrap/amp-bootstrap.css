@@ -46,3 +46,7 @@ div.form-control
 	padding-bottom: 7px;
 	border-bottom: 1px solid #DDDDDD;
 }
+
+label.near-select {   /* uglyish hack probably. How to vert-align a label with its corresponding enhanced <select>? */
+	margin-top: 4px;
+}

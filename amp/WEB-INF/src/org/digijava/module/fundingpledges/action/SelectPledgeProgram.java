@@ -46,8 +46,8 @@ public class SelectPledgeProgram extends Action {
 			throws java.lang.Exception {
 
 		PledgeForm pledgeform = (PledgeForm) form;
-	    List prl = getParents();
-	    List prLevels = new ArrayList();
+	    List<AmpTheme> prl = getParents();
+	    List<List<AmpTheme>> prLevels = new ArrayList<>();
 	    String selectedThemeId = request.getParameter("themeid");
 	    String opStatus = request.getParameter("op");
 	    String strLevel = request.getParameter("selPrgLevel");
@@ -59,7 +59,7 @@ public class SelectPledgeProgram extends Action {
 	        prLevels.add(prl);
 	      }
 	      else {
-	        Collection defaultHierarchy = ProgramUtil.getSubThemes(parent.getDefaultHierarchyId());
+	        List<AmpTheme> defaultHierarchy = ProgramUtil.getSubThemes(parent.getDefaultHierarchyId());
 	        prLevels.add(defaultHierarchy);
 	      }
 	      pledgeform.setProgramLevels(prLevels);

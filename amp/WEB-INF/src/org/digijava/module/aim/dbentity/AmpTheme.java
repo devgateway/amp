@@ -15,7 +15,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
 import java.util.TreeSet;
 @TranslatableClass (displayName = "Theme")
 public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable
@@ -482,6 +484,14 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 		return currentTheme;
 	}
 
+	public String getHierarchicalName()
+	{
+		String selfName = "[" + this.getName() + "]";
+		if (this.getParentThemeId() == null)
+			return selfName;
+		return this.getParentThemeId().getHierarchicalName() + selfName;
+	}
+	
     public static String sqlStringForName(String idSource)
     {
     	return InternationalizedModelDescription.getForProperty(AmpTheme.class, "name").getSQLFunctionCall(idSource);

@@ -8,8 +8,7 @@
 				<param name="sequence">AMP_THEME_seq</param>
 			</generator>
 		</id>
-		<many-to-one name="parentThemeId" column="parent_theme_id"
-			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" />
+		<many-to-one name="parentThemeId" column="parent_theme_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" lazy="false" />
 		<property name="themeCode" column="theme_code" type="java.lang.String" />
 		<property name="budgetProgramCode" column="budget_program_code" type="java.lang.String" />
 		<property name="name" column="name" type="java.lang.String" />

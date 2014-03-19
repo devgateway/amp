@@ -797,21 +797,18 @@ public class ProgramUtil {
 		 * @param parentThemeId
 		 * @return
 		 */
-		public static Collection<AmpTheme> getSubThemes(Long parentThemeId) throws DgException {
-			
-			Session session = session = PersistenceManager.getRequestDBSession();
-			Query qry = null;
-			Collection<AmpTheme> subThemes = null;
+		public static List<AmpTheme> getSubThemes(Long parentThemeId) throws DgException
+		{			
 			try {
 			    String queryString = "from " + AmpTheme.class.getName() +
 			        " subT where subT.parentThemeId.ampThemeId=:parentThemeId";
-			    qry = session.createQuery(queryString);
+			    Query qry = PersistenceManager.getRequestDBSession().createQuery(queryString);
 			    qry.setParameter("parentThemeId",parentThemeId);
-			    subThemes = qry.list();
+			    List<AmpTheme> subThemes = qry.list();
+			    return subThemes;
 			} catch(Exception e1) {
-				throw new DgException("Cannot seacr sub themes for theme with id="+parentThemeId,e1);
+				throw new DgException("Cannot search sub themes for theme with id="+parentThemeId,e1);
 			}
-			return subThemes;
 		}
 
 		/**

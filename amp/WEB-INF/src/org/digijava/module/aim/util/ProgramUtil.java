@@ -233,20 +233,18 @@ public class ProgramUtil {
          * @throws DgException
          */
 		@SuppressWarnings("unchecked")
-		public static Collection<AmpTheme> getParentThemes() throws DgException{
-			Session session = PersistenceManager.getRequestDBSession();
-			Query qry = null;
-			Collection<AmpTheme> themes = new ArrayList<AmpTheme>();
-
-			try {
+		public static List<AmpTheme> getParentThemes()
+		{
+			try
+			{
 				String queryString = "select t from " + AmpTheme.class.getName()
 						+ " t where t.parentThemeId is null";
-				qry = session.createQuery(queryString);
-				themes = qry.list();
+				Query qry = PersistenceManager.getRequestDBSession().createQuery(queryString);
+				List<AmpTheme> themes = qry.list();
+				return themes;
 			} catch (Exception e) {
-				throw new DgException("Cannot search parent themes",e);
+				throw new RuntimeException("Cannot search parent themes", e);
 			}
-			return themes;
 		}
 
 		/**

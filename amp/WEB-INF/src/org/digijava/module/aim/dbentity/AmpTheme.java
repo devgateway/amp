@@ -223,6 +223,7 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
         this.activityId = activityId;
     }
 
+	@Override
     public boolean equals(Object obj) {
     	if(!(obj instanceof AmpTheme)) return false;
         if (obj == null)
@@ -235,6 +236,11 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
         return (theme.getAmpThemeId().equals(ampThemeId));
 	}
 
+	@Override
+	public int hashCode()
+	{
+		return this.ampThemeId == null ? null : this.ampThemeId.hashCode();
+	}
 
     public void setLeadAgency (String leadAgency) {
 		this.leadAgency	= leadAgency;
@@ -491,7 +497,7 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 			return selfName;
 		return this.getParentThemeId().getHierarchicalName() + selfName;
 	}
-	
+		
     public static String sqlStringForName(String idSource)
     {
     	return InternationalizedModelDescription.getForProperty(AmpTheme.class, "name").getSQLFunctionCall(idSource);

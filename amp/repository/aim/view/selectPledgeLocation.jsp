@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <c:set var="act">${param.extraAction}</c:set>
-<c:set var="rll_ajax">render_locations_list</c:set>
+<%--<c:set var="rll_ajax">render_locations_list</c:set>  --%>
 <%
 	if ("render_locations_list".equals(request.getParameter("extraAction"))) // ajax?
 	{

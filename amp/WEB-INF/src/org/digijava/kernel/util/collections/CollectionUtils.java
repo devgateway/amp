@@ -43,62 +43,7 @@ public class CollectionUtils {
     private static final HierarchyMemberFactory defaultHierarchyMemberFactory =
         new DefaultHierarchyMemberFactory();
 
-    /**
-     * Makes synchronization of two sets. Synchronization means that the result
-     * set will contain all items which exist in destination and not in
-     * source. Items, which exist in source, will be processed according rules,
-     * defined by object, passed in synchronizer parameter.
-     * @param source Set
-     * @param destination Set
-     * @param synchronizer CollectionSynchronizer
-     * @return Set
-     */
-    public static Set synchronizeSets(Set source, Set destination, CollectionSynchronizer synchronizer) {
-        TreeSet result = new TreeSet(synchronizer);
-
-        TreeMap destMap = new TreeMap(synchronizer);
-        Iterator destIter = destination.iterator();
-        while (destIter.hasNext()) {
-            Object item = (Object) destIter.next();
-            destMap.put(item, item);
-        }
-
-        Iterator sourceIter = source.iterator();
-        while (sourceIter.hasNext()) {
-            Object item = sourceIter.next();
-            Object newItem = destMap.get(item);
-            if (newItem == null) {
-                /*
-                 If removeEvent returns false, it may mean that item was
-                 modified by the method somehow and, thus, remove operation will
-                 be done extermanlly. So, let's include it in the result
-                 */
-                if (!synchronizer.removeEvent(item)) {
-                    result.add(item);
-                }
-            } else {
-                /*
-                 If synchronizeEvent returns true, it means, item was modified
-                 by the metod. So, lets, add it. IF it returns false - add a new
-                 one
-                 */
-                if (synchronizer.synchronizeEvent(item, newItem)) {
-                    result.add(item);
-                } else {
-                    result.add(newItem);
-                }
-            }
-        }
-
-        destIter = destination.iterator();
-        while (destIter.hasNext()) {
-            Object item = (Object) destIter.next();
-            if (!result.contains(item)) {
-                result.add(item);
-            }
-        }
-        return result;
-    }
+ 
 
     /**
      * Generate object's hierarchy within the collection and returns collection
@@ -160,20 +105,6 @@ public class CollectionUtils {
             hierarchyMember.setMember(object);
         }
         return hierarchyMember;
-    }
-
-    /**
-     * Create flat hierarchy of objects, passed by source attribute.
-     * @param source Source collection
-     * @param definition HierarchyDefinition object, which defines hierarchy of
-     * objects, passed by source collection
-     * @param comparator Comparator used for sorting of values at the same level.
-     * If null, the original order is preserved
-     * @return Collection of objects, sorted by hierarchy and additional comparator
-     * (if any)
-     */
-    public static Collection getFlatHierarchy(Collection source, HierarchyDefinition definition, Comparator comparator) {
-        return getFlatHierarchy(source, false, definition, comparator, null);
     }
 
     public static Collection getFlatHierarchy(Collection source, boolean expandObjects, HierarchyDefinition definition, Comparator comparator) {

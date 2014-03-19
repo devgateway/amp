@@ -1,157 +1,28 @@
-<%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
-<%@ taglib uri="/taglib/struts-html" prefix="html"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-
-<script language="JavaScript">
-	<!--
-    function addProgram() {
-      <digi:context name="selPrg" property="context/module/moduleinstance/selectPledgeProgram.do?edit=true"/>
-      var prgSels=document.getElementsByName("selPrograms");
-      var urlParams;
-      var flag=false;
-
-      if(prgSels!=null){
-        if(prgSels[prgSels.length-1].value==-1){
-          var i=0;
-          for(i=prgSels.length-1;i>-1;i--){
-             if(prgSels[i].value!=-1){
-               urlParams="<%=selPrg%>&themeid="+prgSels[i].value+"&op=add";
-               flag=true;
-               break;
-             }
-          }
-          if(!flag){
-            return false;
-          }
-        }else{
-          urlParams="<%=selPrg%>&themeid="+prgSels[prgSels.length-1].value+"&op=add";
-        }
-      }
-
-      document.pledgeForm.action = urlParams;
-      document.pledgeForm.target=window.opener.name;
-      document.pledgeForm.submit();
-      window.close();
-      return true;
-    }
-
-    function reloadProgram(selectedProgram) {
-       	<digi:context name="selProgram" property="context/module/moduleinstance/selectPledgeProgram.do?edit=true"/>
-
-        var prgSels=document.getElementsByName("selPrograms");
-        var flag=false;
-        var i=0;
-        //alert(selectedProgram.value);
-        if(selectedProgram.value==-1){
-          for(i=0;i<prgSels.length;i++){
-            if(prgSels[i].value==-1){
-              urlParams="<%=selProgram%>&themeid="+prgSels[i].value+"&selPrgLevel="+(i+1);
-              flag=true
-              break;
-            }
-          }
-        }
-
-        if(!flag){
-          var urlParams="<%=selProgram%>&themeid="+selectedProgram.value;
-        }
-
-        document.pledgeForm.action = urlParams;
-        document.pledgeForm.submit();
-
-      }
-
-    function resetResults(){
-        <digi:context name="resetPrg" property="context/module/moduleinstance/selectPledgeProgram.do?edit=true"/>
-        var urlParams="<%=resetPrg%>";
-	    document.pledgeForm.action = urlParams;
-  		document.pledgeForm.submit();
-    }
-
-    function closeWindow(){
-      window.close();
-    }
-	-->
-</script>
-
-<digi:instance property="pledgeForm" />
-<digi:form action="/selectPledgeProgram.do" method="post">
-	<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
-		<tr>
-			<td vAlign="top">
-			<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%"
-				class=box-border-nopadding>
-				<tr>
-					<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%"
-						class=box-border-nopadding id="tblSlo">
-						<tr bgcolor="#006699">
-							<td vAlign="center" width="100%" align="center" class="textalb"
-								height="20"><digi:trn key="aim:selectProgram">Select Program</digi:trn>
-							</td>
-						</tr>
-						<tr>
-							<td align="center" bgcolor=#ECF3FD>
-							<table cellSpacing=2 cellPadding=2>
-								<c:if test="${!empty pledgeForm.programLevels}">
-									<c:forEach var="prgLevels" varStatus="varSt"
-										items="${pledgeForm.programLevels}">
-										<tr>
-											<td width="120" align="right"><c:if
-												test="${varSt.count==1}">
-												<digi:trn key="aim:programScheme">Program scheme</digi:trn>
-											</c:if> <c:if test="${varSt.count!=1}">
-												<digi:trn key="aim:subProgramLevel">Sub program level </digi:trn>${varSt.count-1}
-                            </c:if></td>
-											<td id="slo${varSt.count}"><html:select
-												property="selPrograms" onchange="reloadProgram(this)"
-												styleClass="inp-text">
-												<option value="-1"><digi:trn
-													key="aim:selectProgramOpt">-Select Program-</digi:trn></option>
-												<html:optionsCollection name="prgLevels" value="ampThemeId"
-													label="name" />
-											</html:select></td>
-										</tr>
-									</c:forEach>
-								</c:if>
-								<tr>
-									<td align="center" colspan=2>
-									<table cellPadding=5>
-										<tr>
-											<td><html:button styleClass="dr-menu"
-												property="submitButton" onclick="addProgram()">
-												<digi:trn key="btn:add">Add</digi:trn>
-											</html:button></td>
-											<td><html:button styleClass="dr-menu"
-												property="submitButton" onclick="resetResults()">
-												<digi:trn key="btn:reset">Reset</digi:trn>
-											</html:button></td>
-											<td><html:button styleClass="dr-menu"
-												property="submitButton" onclick="closeWindow()">
-												<digi:trn key="btn:close">Close</digi:trn>
-											</html:button></td>
-										</tr>
-									</table>
-									</td>
-								</tr>
-							</table>
-							</td>
-						</tr>
-					</table>
-					</td>
-				</tr>
-			</table>
-			</td>
-		</tr>
-	</table>
-</digi:form>
+<c:set var="act">${param.extraAction}</c:set>
+<%--<c:set var="rll_ajax">render_locations_list</c:set>  --%>
+<%
+	if ("render_programs_list".equals(request.getParameter("extraAction"))) // ajax?
+	{
+		%><jsp:include page="/repository/aim/view/pledgeform/pledgePrograms.jsp"></jsp:include><%  
+	} else if ("render_locations_add".equals(request.getParameter("extraAction")))
+	{
+		%><jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include><%
+    } else 
+    { // not ajax: render the full bootstrap iframe 
+%>
+unrecognized action!
+<%
+    } // the big "otherwise"
+%>

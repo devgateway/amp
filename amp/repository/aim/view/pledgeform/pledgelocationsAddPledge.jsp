@@ -34,15 +34,10 @@
 		<div class="row">
 			<div class="col-xs-5 text-right"><label class="h5 near-select" for="location_id_select"><digi:trn>Location</digi:trn></label></div>
 			<div class="col-xs-7">
-				<select id="location_id_select" multiple="multiple" size="5" data-live-search="true">
-					<c:forEach var="ch" items="${pledgeForm.allValidLocations}">
-						<option value="${ch.keyValue.key}"
-							<c:if test="${not ch.enabled}">disabled="disabled"</c:if>
-						>
-							<c:out value="${ch.keyValue.value}" />
-						</option> <%-- c:out does automatic escaping, unlike ${} --%>
-					</c:forEach>
-				</select>
+					<c:set var="select_id">location_id_select</c:set>
+					<c:set var="select_multiple">multiple</c:set>
+					<c:set var="select_values" value="${pledgeForm.allValidLocations}" />
+					<%@include file="select_disableable_items.jspf" %>
 			</div>
 		</div>
 		<div class="text-center"><button type="button" class="btn btn-success btn-sm" id='pledges_submit_locations_button' onclick='pledges_submit_add_locations()'>Submit</button></div>

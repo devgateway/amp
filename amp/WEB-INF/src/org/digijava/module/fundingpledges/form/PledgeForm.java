@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -23,6 +24,7 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -35,9 +37,12 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
+import static org.digijava.module.fundingpledges.form.AmpCollections.*;
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 @Data
 /**
@@ -45,9 +50,12 @@ import com.google.common.collect.Lists;
  * @author Constantin Dolghier
  *
  */
-public class PledgeForm extends ActionForm implements Serializable{
-
+public class PledgeForm extends ActionForm implements Serializable
+{
 	public final static String SELECT_BOX_DROP_DOWN_NAME = "Please select from below";
+	public final static List<DisableableKeyValue> DISABLEABLE_KV_PLEASE_SELECT = new ArrayList<DisableableKeyValue>(){{add(new DisableableKeyValue(-1l, SELECT_BOX_DROP_DOWN_NAME, true));}};
+	public final static List<KeyValue> KV_PLEASE_SELECT = new ArrayList<KeyValue>(){{add(new KeyValue(-1l, SELECT_BOX_DROP_DOWN_NAME));}};
+	
 	private static final long serialVersionUID = 1L;
 	private Long pledgeId;
 	private FundingPledges fundingPledges;
@@ -86,13 +94,7 @@ public class PledgeForm extends ActionForm implements Serializable{
      */
 	private Long levelId = null;
 	private List<FundingPledgesLocation> selectedLocs = new ArrayList<>();	
-	
-	/*Fields for program*/
-	private int programType;
-	private List<List<AmpTheme>> programLevels;
-	private Long selPrograms[];
-	private Collection<FundingPledgesProgram> selectedProgs;
-	private AmpActivityProgramSettings nationalSetting;
+	private List<FundingPledgesProgram> selectedProgs = new ArrayList<>();
 	
 	private String fundingEvent;
     private Long selectedFunding[];
@@ -113,7 +115,7 @@ public class PledgeForm extends ActionForm implements Serializable{
     	this.setFundingPledgesDetails(null);
     	this.setPledgeSectors(null);
     	this.selectedLocs.clear();
-    	this.setSelectedProgs(null);
+    	this.selectedProgs.clear();
     	this.cleanLocationData(true);
     }
     
@@ -299,11 +301,18 @@ public class PledgeForm extends ActionForm implements Serializable{
     
     public void addSelectedLocation(long locId)
     {
-
     	FundingPledgesLocation fpl = new FundingPledgesLocation();
     	fpl.setLocation(DynLocationManagerUtil.getLocation(locId, false));
     	fpl.setLocationpercentage(0f);
     	selectedLocs.add(fpl);
+    }
+    
+    public void addSelectedProgram(long themeId)
+    {
+		FundingPledgesProgram fpp = new FundingPledgesProgram();
+		fpp.setProgram(ProgramUtil.getThemeObject(themeId));
+		fpp.setProgrampercentage(0f);
+		selectedProgs.add(fpp);
     }
     
     /**
@@ -332,5 +341,37 @@ public class PledgeForm extends ActionForm implements Serializable{
     		res.add(new IdWithValueShim(acv));
     	return res;    	
     }
+    
+    /**
+	 * Map<AmpTheme, List<FundingPledgesProgram>>
+	 */
+	public Map<AmpTheme, List<FundingPledgesProgram>> getProgsByScheme()
+	{
+		return distribute(selectedProgs, new Function<FundingPledgesProgram, AmpTheme>(){
+			public AmpTheme apply(FundingPledgesProgram from) {
+			    return from.getProgram().getRootTheme();
+			  }
+		});
+	}
+	
+	/**
+	 * all root programs used by this activity
+	 * @return
+	 */
+	public Collection<AmpTheme> getAllUsedRootProgs()
+	{
+		return getProgsByScheme().keySet();
+	}
+	
+	/**
+	 * returns list of all the existant root programs in the system
+	 * @return
+	 */
+	public List<DisableableKeyValue> getAllRootPrograms()
+	{
+		return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(ProgramUtil.getParentThemes(), new Function<AmpTheme, DisableableKeyValue>() {
+			public DisableableKeyValue apply(AmpTheme theme) {return new DisableableKeyValue(theme.getAmpThemeId(), theme.getName(), true);};
+		}));
+	}
 }
 

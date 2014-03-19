@@ -19,6 +19,16 @@ public class DisableableKeyValue
 		this.enabled = enabled;
 	}
 	
+	public DisableableKeyValue(String key, String value, boolean enabled)
+	{
+		this(new KeyValue(key, value), enabled);
+	}
+	
+	public DisableableKeyValue(Long key, String value, boolean enabled)
+	{
+		this(new KeyValue(key, value), enabled);
+	}	
+	
 	public KeyValue getKeyValue()
 	{
 		return keyValue;

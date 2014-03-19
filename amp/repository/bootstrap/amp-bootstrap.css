@@ -50,3 +50,25 @@ div.form-control
 label.near-select {   /* uglyish hack probably. How to vert-align a label with its corresponding enhanced <select>? */
 	margin-top: 4px;
 }
+
+/* 
+	div.amp-subgroup is a big subgroup within a bigger one: like programs belonging to the same rootProgram
+*/
+div.amp-subgroup {
+	border-radius: 7px;
+	border: 1px dotted #F8F8F8;
+	margin-left: 70px;
+	margin-right: 30px;
+	margin-bottom: 15px;
+	padding: 7px;
+}
+
+div.amp-subgroup:hover {
+	background-color: #FAFAFF;
+	border-color: black;
+}
+
+.disabled-div, .disabled-div:hover, .disabled-div *, .disabled-div *:hover
+{
+	background-color: #EEEEEE !important;
+}

@@ -3,6 +3,18 @@
  * @author Dolghier Constantin
  */
 
+$.fn.disable = function() { // disable a div in its entirety
+	$(this).addClass("disabled-div");
+	$(this).find("input,textarea,button,a").addClass("disabled-by-me").attr("disabled", "disabled");
+    return true;
+};
+
+$.fn.enable = function() { // redo the actions of "disable" from above
+	$(this).removeClass("disabled-div");
+	$(this).find("input.disabled-by-me, textarea.disabled-by-me, button.disabled-by-me, a.disabled-by-me").removeAttr("disabled").removeClass("disabled-by-me");
+	return true;
+};
+
 function fix_aim_button(elem)
 {
 	elem.addClass("input-sm").css("float", "right");

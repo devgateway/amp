@@ -10,7 +10,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.translation.entity.ContentTrnClassFieldPair;
 import org.digijava.module.translation.form.ContentTrnImportExportForm;
@@ -20,6 +23,7 @@ import org.digijava.module.translation.util.ContentTrnObjectType;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -221,20 +225,21 @@ public class ContentTrnImportExport extends DispatchAction {
 
         Set <AmpContentTranslation> objectsForDb = new HashSet<AmpContentTranslation>();
         List<AmpContentTranslation> allTrns = ContentTranslationUtil.getContentTranslationsByTypes();
-
+        Set<String> allowedLocales = new HashSet<String>(TranslatorUtil.getLocaleCache(RequestUtils.getSite(TLSUtils.getRequest())));
         for (int rowIdx = 1; rowIdx < RowCount; rowIdx ++) {
             HSSFRow contentRow = sheet.getRow(rowIdx);
             for (int trnColumnIdx = PERMAMENT_HEADER_ITEMS.length; trnColumnIdx < contentRow.getLastCellNum(); trnColumnIdx ++) {
-                String trn = contentRow.getCell(trnColumnIdx).getStringCellValue();
-                if (!trn.trim().isEmpty()) {
+                String trn = contentRow.getCell(trnColumnIdx).getStringCellValue().trim();
+                if (!trn.isEmpty()) {
                     String objectClass = contentRow.getCell(0).getStringCellValue();
                     Long objectId = new Double(contentRow.getCell(1).getNumericCellValue()).longValue();
                     String fieldName = contentRow.getCell(2).getStringCellValue();
                     String locale = headerCols.get(trnColumnIdx);
 
-                    AmpContentTranslation trnItem = ContentTranslationUtil.getByTypeObjidFieldLocale(allTrns,
-                            objectClass, objectId, fieldName, locale);
-
+                    AmpContentTranslation trnItem = ContentTranslationUtil.getByTypeObjidFieldLocale(allTrns, objectClass, objectId, fieldName, locale);
+                    locale = locale.trim();
+                    if (!allowedLocales.contains(locale))
+                    	throw new RuntimeException("disallowed locale: " + locale);
                     //If new item
                     if (trnItem == null) {
                         trnItem = new AmpContentTranslation();

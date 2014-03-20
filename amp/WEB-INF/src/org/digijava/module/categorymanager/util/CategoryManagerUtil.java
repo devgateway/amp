@@ -161,7 +161,7 @@ public class CategoryManagerUtil {
 		}
 		
 		for(AmpCategoryValue ampCategoryValue:values) {
-			if ( ampCategoryValue.getAmpCategoryClass().getName().equals(categoryName) ) {
+			if ( ampCategoryValue.getAmpCategoryClass().getName().equalsIgnoreCase(categoryName) ) {
 				return ampCategoryValue;
 			}
 		}

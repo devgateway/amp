@@ -12,7 +12,7 @@
             UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
             
              insert into amp_category_class(id,category_name,keyname,is_multiselect,is_ordered)
-             values (setval('"amp_category_class_seq"'::regclass, (select coalesce(max(id),0)+1 FROM "amp_category_class")),'Project implementation mode','project_implementation_mode',false,false);
+             values (setval('"amp_category_class_seq"'::regclass, (select coalesce(max(id),0)+1 FROM "amp_category_class")),'Project Implementation Mode','project_implementation_mode',false,false);
 
 			insert into amp_category_value (id,category_value,amp_category_class_id,index_column)
 			values(setval('"amp_category_value_seq"'::regclass, (select coalesce(max(id),0)+1 FROM "amp_category_value")),'Direct implementation through non-gov''t entity',

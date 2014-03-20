@@ -229,8 +229,8 @@ public class ContentTrnImportExport extends DispatchAction {
         for (int rowIdx = 1; rowIdx < RowCount; rowIdx ++) {
             HSSFRow contentRow = sheet.getRow(rowIdx);
             for (int trnColumnIdx = PERMAMENT_HEADER_ITEMS.length; trnColumnIdx < contentRow.getLastCellNum(); trnColumnIdx ++) {
-                String trn = contentRow.getCell(trnColumnIdx).getStringCellValue();
-                if (!trn.trim().isEmpty()) {
+                String trn = contentRow.getCell(trnColumnIdx).getStringCellValue().trim();
+                if (!trn.isEmpty()) {
                     String objectClass = contentRow.getCell(0).getStringCellValue();
                     Long objectId = new Double(contentRow.getCell(1).getNumericCellValue()).longValue();
                     String fieldName = contentRow.getCell(2).getStringCellValue();

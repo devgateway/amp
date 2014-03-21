@@ -5,6 +5,20 @@
 */
 
 /**
+ * throws Exception if any of the arguments references a non-existant div
+ */
+function checkExistence()
+{
+	for (var i = 0; i < arguments.length; i++) {
+	    var elem = $(arguments[i]);
+	    if (elem.size() != 1){
+	    	alert("Generic AJAX form error: element " + arguments[i] + " does not exist");
+	    	throw "error";
+	    }
+	}
+}
+
+/**
  * constructs an instance with the structure:
  * <div id="$masterDivId>
  * 		<div id="masterDivId_data">
@@ -30,7 +44,8 @@ function InteractiveFormArea(masterDivId, ajaxPage, submitAttrName, actionName, 
 	_self.masterDivId = masterDivId;
 	_self.dataDivId = _self.masterDivId + "_data";		// the <div> which holds the data per se - ajax refreshed
 	_self.changeDivId = _self.masterDivId + "_change";	// the <div> which holds the dropdowns / buttons which change data - ajax refreshed
-	_self.addItemsButtonId = _self.dataDivId + "_add";		// the "Add Program / Sector / Location" button which triggers showing the larger modify area 	
+	_self.addItemsButtonId = _self.dataDivId + "_add";		// the "Add Program / Sector / Location" button which triggers showing the larger modify area
+	checkExistence(_self.masterDivId, _self.dataDivId, _self.changeDivId, _self.addItemsButtonId);
 	_self.ajaxPage = ajaxPage;						// the AJAX page to call for all the interactive stuff
 	_self.submitAttrName = submitAttrName;			// on submit will do an ajax post of the form {extraAction=submitActionName,  submitAttrName: ids.join(,)}
 	_self.actionName = actionName;					// base name for the "submit", "show_data" and "show_add"
@@ -67,7 +82,7 @@ InteractiveFormArea.prototype.makePost = function(id, callback)
 	}
 	attrname = select.attr;
 	postConfig = {};
-	postConfig['extraAction'] = select.action;
+	postConfig['extraAction'] =  _self.actionName + '_' + select.action;
 	postConfig[attrname] = _self.getIdsOf(select, -1); 
 
 	$.post(_self.ajaxPage,
@@ -95,57 +110,55 @@ InteractiveFormArea.prototype.getIdsOf = function(selectConfig, defaultValue)
 	return selectedIds.length > 0 ? selectedIds.join(',') : defaultValue;
 };
 
+InteractiveFormArea.prototype.selectChanged = function(elem){
+	this.makePost($(elem).attr('id'), null);
+};
+
+InteractiveFormArea.prototype.cancelClicked = function(elem){
+	this.hideAddArea();
+};
+
+InteractiveFormArea.prototype.submitClicked = function(elem) {
+	_self = this;
+	this.hideAddArea();
+	var selectedIds = this.getIdsOf(this.selects.last());		
+	if (selectedIds == '')
+	{
+		// nothing selected -> get outta here
+		return;
+	}
+	// we have data to POST -> now post it and refresh
+	var zzz = {};
+	zzz[this.submitAttrName] = selectedIds;
+	zzz['extraAction'] = this.submitActionName;
+
+	$.post(this.ajaxPage, 
+			zzz,
+			function(data) {
+				if (data.trim() == 'ok'){
+					_self.refreshDataArea();
+				} else {
+					show_error_message('Error adding locations', data);
+				}
+		});	
+};
+
+InteractiveFormArea.prototype.showAdditionArea = function(elem){
+	_self = this;
+	_self.refreshAddArea(function(){ // ajax-refresh the area, then show it
+		$(_self.addItemsButtonId).hide();
+		$(_self.dataDivId).disable();
+		$(_self.changeDivId).show();
+	});
+};
+
 InteractiveFormArea.prototype.registerJsEvents = function() {
 	_self = this;
-	// register change listeners for Select's
-	for(var i = 0; i < _self.selects.length; i++)
-	{
-		$(_self.masterDivId).on('change', '#' + _self.selects[i].id, function() {_self.makePost($(this).attr('id'), null);});
-	}
-	
-	$(_self.masterDivId).on('click', _self.changeDivId + '_cancel', function() //click on "Cancel" under "Add Program / Sector / Location"
-	{
-		_self.hideAddArea();			
-	});
-
-	$(_self.masterDivId).on('click', _self.changeDivId + '_submit', function() //click on "Submit" under "Add Program / Sector / Location"
-	{
-		_self.hideAddArea();
-		var selectedIds = _self.getIdsOf(_self.selects.last());		
-		if (selectedIds == '')
-		{
-			// nothing selected -> get outta here
-			return;
-		}
-		// we have data to POST -> now post it and refresh
-		var zzz = {};
-		zzz[_self.submitAttrName] = selectedIds;
-		zzz['extraAction'] = _self.submitActionName;
- 
-		$.post(_self.ajaxPage, 
-				zzz,
-		function(data) {
-			if (data.trim() == 'ok'){
-				_self.refreshDataArea();
-			} else {
-				show_error_message('Error adding locations', data);
-			}
-		});
-	});	
-
-	$(document).ready(function(){
 		
-		$(_self.changeDivId).hide();
-		
-		$(_self.addItemsButtonId).click(function() //click on "Add Program/Sector/Location"
-		{
-			_self.refreshAddArea(function(){ // ajax-refresh the area, then show it
-				$(_self.addItemsButtonId).hide();
-				$(_self.dataDivId).disable();
-				$(_self.changeDivId).show();
-			});
-		});	
-	});
+	var documentReadyFunction = function(id) {
+		return function() {
+			$(id).hide();};}(_self.changeDivId);
+	documentReadyFunction();
 };
 
 /**

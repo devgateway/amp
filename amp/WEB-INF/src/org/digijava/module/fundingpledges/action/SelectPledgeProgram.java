@@ -53,22 +53,24 @@ public class SelectPledgeProgram extends Action {
 		if (extraAction != null)
 		{
 			// {id: 'program_id_select', action: 'rootThemeChanged', attr: 'rootThemeId'},
-			if (extraAction.equals("rootThemeChanged"))
-			{				
+			if (extraAction.equals("pledge_program_rootThemeChanged"))
+			{
 				pledgeForm.setSelectedRootProgram(Long.parseLong(request.getParameter("rootThemeId")));
 				return null;
 			}
 						
 			if (extraAction.equals("pledge_program_submit"))
 			{
-				pledgeForm.addSelectedProgram(Long.parseLong(request.getParameter("selected_program")));
+				String[] ids = request.getParameter("selected_program").split(",");
+				for(String id: ids){
+					Long lid = Long.parseLong(id);
+					pledgeForm.addSelectedProgram(lid);
+				}
 				ARUtil.writeResponse(response, "ok");
 				return null;
 			}
 			
 			// {id: 'program_item_select', action: 'themeSelected', attr: 'themeId'} - ignored
-
-			return mapping.findForward("forward");
 		}
 	    return mapping.findForward("forward");
 	}

@@ -40,6 +40,9 @@ public class SelectLocation extends Action {
         }
 		
 		// TODO NEEDS REFACTORING TO SUPPORT NOT ONLY ACTIVITY FORM, BUT ORG.MANAGER TOO
+		
+		// YES SIR - 5 YEARS GOING STRONG AND NO REFACTORING IN SIGHT!
+		
 		String resetSelLocs=request.getParameter("resetSelLocs"); //Org.Manager Side -quick fix
 		if(resetSelLocs!=null && resetSelLocs.equalsIgnoreCase("reset")){
 			location.setSelectedLocs(null);

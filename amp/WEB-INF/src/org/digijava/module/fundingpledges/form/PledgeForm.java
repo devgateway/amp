@@ -101,6 +101,8 @@ public class PledgeForm extends ActionForm implements Serializable
 	private Collection<String> years;
 	private String year;
 	
+	private boolean locationsMultiselect = false;
+	
 	/*Fields for Location*/
 	
 	/**
@@ -299,7 +301,8 @@ public class PledgeForm extends ActionForm implements Serializable
     public List<DisableableKeyValue> getAllValidLocations()
     {
     	List<DisableableKeyValue> res = new ArrayList<DisableableKeyValue>();
-    	//res.add(new DisableableKeyValue(new KeyValue("0", TranslatorWorker.translateText(SELECT_BOX_DROP_DOWN_NAME)), true)); no need for this if we are using multiselect. REENABLE if going from multiselect to simple-select
+    	if (!locationsMultiselect)
+    		res.add(new DisableableKeyValue(new KeyValue("0", TranslatorWorker.translateText(SELECT_BOX_DROP_DOWN_NAME)), true)); // no need for this if we are using multiselect. REENABLE if going from multiselect to simple-select
     	AmpCategoryValue implLocationValue = getImplLocationValue();
     	if (implLocationValue != null)
     	{

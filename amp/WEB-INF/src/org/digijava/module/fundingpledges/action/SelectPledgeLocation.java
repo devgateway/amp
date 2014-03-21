@@ -35,52 +35,40 @@ public class SelectPledgeLocation extends Action {
 		String extraAction = request.getParameter("extraAction");
 		if (extraAction != null)
 		{
-			if (extraAction.equals("add_locations"))
+			if (extraAction.equals("add_locations_submit"))
 			{
 				addLocations(request, response, pledgeForm);
 				return null;
 			}
-//			// NEW ajax calls + dummy "please display form fragment" calls
-//			if (extraAction.equals("render_locations_list") || extraAction.equals("render_locations_add"))
-			return mapping.findForward("forward");		
+			
+			if (extraAction.equals("add_locations_implLevelChanged"))
+			{
+				pledgeForm.setLevelId(Long.parseLong(request.getParameter("implLevelId")));
+				if (pledgeForm.getLevelId() <= 0) {
+					//implementation level changed to "not selected"
+					CategoryManagerUtil.removeAmpCategryBykey("implementation_level"); // hack: reset category manager cache for this key
+					pledgeForm.cleanLocationData(true);
+				}
+				return null;
+			}
+			
+			if (extraAction.equals("add_locations_implLocationChanged"))
+			{
+				pledgeForm.setImplemLocationLevel(Long.parseLong(request.getParameter("implLocationId")));
+				if (pledgeForm.getImplemLocationLevel() <= 0)
+				{
+					//implementation location changed to "not selected"
+					CategoryManagerUtil.removeAmpCategryBykey("implementation_location"); // hack: reset category manager cache for this key
+	            	pledgeForm.cleanLocationData(false); // reset selected		
+				}
+				return null;
+			}
+			if (extraAction.equals("add_locations_locations_selected"))
+				return null; //ignore
 		}
 		
-
-        if ( !"true".equals( request.getParameter("edit") ) ) { // no "edit" mentioned and not an "display form fragment" call -> this is a simple page load -> reset valid locations
-        	pledgeForm.cleanLocationData(true);
-            return mapping.findForward("forward");
-        }
-
-        // gone till here -> "edit=true" but NOT a "display something please" call": let's see what we have to do
-        if (pledgeForm.getLevelId() <= 0) {
-        	// implementation level changed to "not selected"
-            CategoryManagerUtil.removeAmpCategryBykey("implementation_level");
-            pledgeForm.cleanLocationData(true);
-            return mapping.findForward("forward");
-        }
-
-		String resetSelLocs = request.getParameter("resetSelLocs");
-		if (resetSelLocs != null && resetSelLocs.equalsIgnoreCase("reset")) { // asked to reset locations?
-			pledgeForm.setSelectedLocs(null);
-		}
-	       
-		Long impLocLevel = null;
-
-//		AmpCategoryValue implLocLevelValue = pledgeForm.getImplementationLevel();      
-        String selectedImplemLocationLevel = request.getParameter("implemLocationLevel");
-        
-        if (selectedImplemLocationLevel != null) // implementation level selected
-		{
-			impLocLevel = Long.parseLong(selectedImplemLocationLevel);
-			CategoryManagerUtil.removeAmpCategryBykey("implementation_location"); // hack: reset category manager cache for this key
-			if (impLocLevel <= 0)
-			{
-            	pledgeForm.cleanLocationData(false); // reset selected
-            	return mapping.findForward("forward");
-			}
-			pledgeForm.setImplemLocationLevel(impLocLevel);
-		}
-				        
+        // gone till here -> render some page
+ 
         return mapping.findForward("forward");
 	}
 	
@@ -88,7 +76,7 @@ public class SelectPledgeLocation extends Action {
 	{
 		try
 		{
-			String[] ids = request.getParameter("locs").split(",");
+			String[] ids = request.getParameter("selected_loc").split(",");
 			for(String id:ids)
 			{
 				Long lid = Long.parseLong(id);

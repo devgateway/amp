@@ -46,12 +46,22 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 	String firstLine	= null;
 	String styleId = null;
 	
+	String onchange = null;
+	
 	private Long tag			= null;
 	
 	StringBuffer outerDynamicAttributes	= new StringBuffer(" ");
 	StringBuffer innerDynamicAttributes	= new StringBuffer(" ");
 	
 	int size			= 3;
+	
+	public String getOnchange(){
+		return onchange;
+	}
+	
+	public void setOnchange(String onchange){
+		this.onchange = onchange;
+	}
 	
 	public int getSize() {
 		return size;
@@ -230,11 +240,15 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		String styleIdProperty = "";
 		
 		String firstLineSelectedProperty	= "";
+		String onChangeProperty = "";
 		
 		if (styleClass != null)
 			classProperty	= " class='"+ styleClass + "'";
 		if (isMultiselect) 
 			multiselectProperty	= " multiple='multiple' size='"+size+"'";
+		
+		if (onchange != null)
+			onChangeProperty = "onChange = " + onchange;
 		
 		if (styleId != null) {
 			styleIdProperty = " id='" + styleId + "'";
@@ -243,7 +257,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		
 		Iterator iterator			= ampCategoryValues.iterator();
 		String nameField			= (property!=null)?property:name;
-		out.println("<select name='"+nameField+"' "+classProperty+multiselectProperty+outerDynamicAttributes+styleIdProperty+">");
+		out.println("<select name='" + nameField + "' " + onChangeProperty + classProperty + multiselectProperty + outerDynamicAttributes + styleIdProperty + ">");
 		
 		if ( (valueId != null && valueId.longValue() == 0) || 
 				( valueIdsColl != null && valueIdsColl.contains(new Long(0)) ) )

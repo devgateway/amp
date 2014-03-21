@@ -13,10 +13,10 @@
 <c:set var="act">${param.extraAction}</c:set>
 <%--<c:set var="rll_ajax">render_locations_list</c:set>  --%>
 <%
-	if ("render_locations_list".equals(request.getParameter("extraAction"))) // ajax?
+	if ("add_locations_refresh_data".equals(request.getParameter("extraAction"))) // ajax?
 	{
 		%><jsp:include page="/repository/aim/view/pledgeform/pledgelocationslist.jsp"></jsp:include><%  
-	} else if ("render_locations_add".equals(request.getParameter("extraAction")))
+	} else if ("add_locations_refresh_add".equals(request.getParameter("extraAction")))
 	{
 		%><jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include><%
     } else 
@@ -59,22 +59,34 @@
 	<jsp:include page="/repository/aim/view/pledgeform/pledgeIdentification.jsp"></jsp:include>
 	
  	<field:display name="Pledge Location" feature="Pledge Sector and Location">
-		<jsp:include page="/repository/aim/view/pledgeform/pledgelocationslist.jsp"></jsp:include>
-		<div class="text-center"><button type="button"class="btn btn-success btn-sm" id='add_location_button'><digi:trn>Add Location</digi:trn></button></div>
-		<jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include> 
+ 		<div id="pledge_form_locations">
+			<jsp:include page="/repository/aim/view/pledgeform/pledgelocationslist.jsp"></jsp:include>
+			<div class="text-center"><button type="button" onclick="locationsController.showAdditionArea(this);" class="btn btn-success btn-sm" id='pledge_form_locations_data_add'><digi:trn>Add Location</digi:trn></button></div>
+			<jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include>
+		</div> 		
+		<script type="text/javascript">
+			var locationsController = new InteractiveFormArea('#pledge_form_locations', '/selectPledgeLocation.do', 'selected_loc', 'add_locations', 
+				[
+				 	{id: 'location_impl_level_select', action: 'implLevelChanged', attr: 'implLevelId'},
+				 	{id: 'location_impl_location_select', action: 'implLocationChanged', attr: 'implLocationId'},
+				 	{id: 'location_location_select', action: 'locationSelected', attr: 'locationId'}
+				]);
+		</script>
 	</field:display>
 	
 	<field:display name="Pledge Program" feature="Pledge Sector and Location">
 		<div id="pledge_form_programs">
 			<jsp:include page="/repository/aim/view/pledgeform/pledgePrograms.jsp"></jsp:include>
-			<div class="text-center"><button type="button"class="btn btn-success btn-sm" id='pledge_form_programs_data_add'><digi:trn>Add Program</digi:trn></button></div>
+			<div class="text-center"><button type="button" onclick="programsController.showAdditionArea(this);" class="btn btn-success btn-sm" id='pledge_form_programs_data_add'><digi:trn>Add Program</digi:trn></button></div>
 			<jsp:include page="/repository/aim/view/pledgeform/pledgeProgramsAddProgram.jsp"></jsp:include>
 		</div>
-		<script type="text/javascript">var programsController = new InteractiveFormArea('#pledge_form_programs', '/selectPledgeProgram.do', 'selected_program', 'pledge_program', 
+		<script type="text/javascript">
+			var programsController = new InteractiveFormArea('#pledge_form_programs', '/selectPledgeProgram.do', 'selected_program', 'pledge_program', 
 				[
 				 	{id: 'program_id_select', action: 'rootThemeChanged', attr: 'rootThemeId'},
 				 	{id: 'program_item_select', action: 'themeSelected', attr: 'themeId'}
-				]); </script>
+				]);
+		</script>
 	</field:display>
 	
 	<jsp:include page="/repository/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>

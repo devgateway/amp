@@ -27,42 +27,6 @@ function pledges_form_check_percentage(inputItem, itemsClass, error_message_nume
 	return true;
 }
 
-function pledges_form_update_area(url, action, replaceId)
-{
-	$.post(url,
-			{extraAction: action},
-			function(data)
-			{
-				$('#' + replaceId).html(data);
-			});
-}
-
-/**
- * refreshes the table holding the currently-selected locations and their percentages
- */
-function pledge_locations_refresh_table()
-{
-	pledges_form_update_area('/selectPledgeLocation.do', 'render_locations_list', 'pledge_locations_table');
-}
-
-/**
- * refreshes the area holding the "implementation level / implementation location / region" area
- */
-function pledge_locations_refresh_add_area()
-{
-	pledges_form_update_area('/selectPledgeLocation.do', 'render_locations_add', 'pledge_add_location_area');
-}
-
-//function pledge_programs_refresh_table()
-//{
-//	pledges_form_update_area('/selectPledgeProgram.do', 'render_programs_list', 'pledge_programs_list');
-//}
-//
-//function pledge_programs_refresh_add_area()
-//{
-//	pledges_form_update_area('/selectPledgeProgram.do', 'render_programs_add', 'pledge_programs_list');
-//}
-
 function pledges_form_delete_location(nr)
 {
 	$.post('/removePledgeLocation.do', 
@@ -83,23 +47,7 @@ function copy_from_contact_1_to_contact_2(input_elem)
 }
 
 $(document).ready(function()
-{
-	$('#pledge_add_location_area').hide(); // only on init load - the ones loaded through ajax should stay the same
-	$('#add_location_button').click(function() // click on "Add Location"
-	{
-		$('#add_location_button').hide();
-		$('#pledge_add_location_area').show();
-		//$('#myModal').modal('show');
-		//$('#pledge_add_location_area').modal('show');
-	});
-	//$('#pledge_add_program_area').hide();
-//	$('#add_program_button').click(function() //click on "Add Program"
-//	{
-//		$(this).hide();
-//		$('#pledge_programs_list').disable();
-//		$('#pledge_add_program_area').show();
-//	});
-	
+{	
 	$('#sameContactCheckBox').change(function(){
 		var is_checked = $(this).is(":checked");
 		if (is_checked){ 
@@ -126,79 +74,6 @@ $(document).ready(function()
 	});
 });
 	
-$(document).on('change', '#impl_level_select', function() // change the "Implementation Level" select
-{
-	var elem = this;
-	$.post("/selectPledgeLocation.do",
-		{
-			levelId: $(elem).val(),
-			edit: true
-		},
-		function(data){
-			pledge_locations_refresh_add_area();
-		});
-});
-			
-$(document).on('change', '#impl_location_select', function() // change the "Implementation Location" select
-{
-	var elem = this;
-	$.post("/selectPledgeLocation.do",
-		{
-			implemLocationLevel: $(elem).val(),
-			edit: true
-		},
-		function (data) {
-			pledge_locations_refresh_add_area();
-		});
-});
-			
-function pledges_hide_add_location()
-{
-	$('#pledge_add_location_area').hide();
-	$('#add_location_button').show();
-}
-
-function pledges_submit_add_locations()
-{
-	var location_ids = [];
-	$('#location_id_select option:selected').each(function ()
-		{
-			if (($(this).attr('value') != '0') && ($(this).attr('value') != '-1'))
-				location_ids.push($(this).attr('value'));
-		});
-	if (location_ids.length == 0)
-	{
-		// nothing selected -> just hide the area
-		pledges_hide_add_location();
-		return;
-	}
-	$.post("/selectPledgeLocation.do",{
-		locs: location_ids.join(','),
-		extraAction: "add_locations"
-	},
-	function(data) {
-		if (data.trim() == 'ok'){
-			pledges_hide_add_location();
-			pledge_locations_refresh_table();
-		} else {
-			show_error_message('Error adding locations', data);
-		}
-	});
-}
-
-//$(document).on('change', '#program_id_select', function() // change the "Implementation Location" select
-//		{
-//			var elem = this;
-//			$.post("/selectPledgeProgram.do",
-//				{
-//					extraAction: 'add_program',
-//					rootThemeId: $(elem).val()
-//				},
-//				function (data) {
-//					pledge_programs_refresh_table();
-//				});
-//		});
-
 /**
  * validates an input with a generic function and highlights any found error
  * @param inputItem

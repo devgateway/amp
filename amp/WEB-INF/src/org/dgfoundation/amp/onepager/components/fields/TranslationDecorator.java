@@ -128,7 +128,10 @@ public class TranslationDecorator extends Panel {
                     //if we have a wysiwyg editor we need to close it when switching between tabs
                     if (area.isWysiwyg()){
                         link.add(new AttributePrepender("onclick", Model.of("$('#" + area.getCloseLink().getMarkupId() + "').click();"), " "));
+                        link.add(new AttributeAppender("onclick", Model.of("return false;"), " "));
                     }
+                } else if (component.getClass().getEnclosingClass() != null && component.getClass().getEnclosingClass().isAssignableFrom(AmpTextFieldPanel.class)) {
+                    link.add(new AttributeAppender("onclick", Model.of("return false;"), " "));
                 }
                 item.add(new AttributeModifier("class", classValue));
                 item.add(link);

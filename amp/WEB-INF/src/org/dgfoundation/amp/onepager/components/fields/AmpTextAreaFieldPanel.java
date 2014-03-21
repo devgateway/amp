@@ -78,9 +78,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
                         // we are already focusing the element
                         "$('#" + textAreaContainer.getMarkupId() + "').focus();\n" +
 
-                        // we do not need to blur on element (especially after the focus)
-                        // blur behavior is different on different browsers
-                        //"$('#" + textAreaContainer.getMarkupId() + "').blur();" +
+                        "$('#" + textAreaContainer.getMarkupId() + "').blur();" +
                         "$('#" + textAreaContainer.getMarkupId() + "').hide();  \n " +
                         "$('#" + closeLink.getMarkupId() + "').hide();\n " +
                         " }, 50); \n" +

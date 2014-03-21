@@ -30,132 +30,6 @@ PledgeForm pledgeForm = (PledgeForm) session.getAttribute("pledgeForm");
 //alert('this module is a work-in-progress and is pending (almost) full rewrite in this week. Do not bugfix or add features to it, because everything will be deleted anyway');
 var quitRnot1 = 0;
 
-function fnChk(frmContrl, f){
-	
-	<c:set var="errMsgAddSectorNumericValue">
-	  <digi:trn key="aim:addSecorNumericValueErrorMessage">
-	  Please enter numeric value only
-	  </digi:trn>
-	  </c:set>
-	  
-	  if (isNaN(frmContrl.value)) {
-	    alert("${errMsgAddSectorNumericValue}");
-	    frmContrl.value = "";
-	    //frmContrl.focus();
-	    return false;
-	  }  
-	  if (f == "sector") {
-		  var totalValue = 0;
-		  $('input[name^=pledgeSectors]').each(function(i, obj) {
-			    totalValue += parseFloat(obj.value);
-			});
-		  if (totalValue > 100) {
-			 <c:set var="errMsgAddSumExceed">
-			 <digi:trn key="aim:addSecorSumExceedErrorMessage">
-			 Sector percentage can not exceed 100
-			 </digi:trn>
-			 </c:set>
-			 alert("${errMsgAddSumExceed}"); 
-			 frmContrl.value = "";
-		    return false;  
-		  }
-			
-	  }
-	  else if (f == "program") {
-		  var totalValue = 0;
-		  $('input[name^=selectedProgs]').each(function(i, obj) {
-			    totalValue += parseFloat(obj.value);
-			});
-		  if (totalValue > 100) {
-			  <c:set var="errMsgAddSumExceed">
-			  <digi:trn key="aim:addProgramSumExceedErrorMessage">
-			  Program percentage can not exceed 100
-			  </digi:trn>
-			  </c:set>  
-			  alert("${errMsgAddSumExceed}");
-			 frmContrl.value = "";
-		    return false;  
-		  }  
-	  }
-	  return true;
-	}
-
-function addProgram(programType) {
-
-	openNewRsWindow(750, 550);
-	<digi:context name="taddProgram" property="context/module/moduleinstance/selectPledgeProgram.do?edit=true"/>
-	var url="<%= taddProgram %>&programType="+programType;
-     //       alert(programType + " "+url);
-  	document.pledgeForm.action =url ;
-	document.pledgeForm.target = popupPointer.name;
-	document.pledgeForm.submit();
-}
-function removeProgram() {
-	<c:set var="confirmDelete">
-	  <digi:trn >Remove selected programs?</digi:trn>
-	</c:set>
-	<c:set var="selectprogram">
-	  <digi:trn >Please, select a program first.</digi:trn>
-	</c:set>
-	var i = 1;
-	var delStr = "deleteProgs=";
-	while (document.getElementById("checkProg"+i)!=null){
-		if(document.getElementById("checkProg"+i).checked==true){
-			delStr = delStr + "_" + i;
-		}
-		i++;
-	}
-	if (delStr.length < 14){
-		alert ("${selectprogram}");
-	} else if (confirm("${confirmDelete}")){
-		document.pledgeForm.target = "_self";
-		document.pledgeForm.action="/removePledgeProgram.do?"+delStr;
-		document.pledgeForm.submit();
-	}
-}			
-
-function addSectors(editAct,configId) {
-/*  openNewWindow(600, 450);
-  document.aimEditActivityForm.action = "/selectSectors.do?edit=true&configId="+configId;
-  document.aimEditActivityForm.target = popupPointer.name;
-  document.aimEditActivityForm.submit();
-*/ 	
-	initSectorScript();
-	 myAddSectors("edit=true&configId=-1");
-}
-
-function addSector(param)
-{
-    
-    <digi:context name="addSec" property="context/addPledge.do?addSector=true&edit=param" />
-    document.pledgeForm.action = "<%= addSec %>";
-    document.pledgeForm.target = "_self";
-    document.pledgeForm.submit();
-}
-
-function removeSector() {
-	<c:set var="confirmDelete">
-	  <digi:trn>Remove selected sectors?</digi:trn>
-	</c:set>
-	<c:set var="selectsectorfirst">
-	  <digi:trn>Please, select a sector first.</digi:trn>
-	</c:set>
-	var i = 1;
-	var delStr = "deleteSect=";
-	while (document.getElementById("checkSect"+i)!=null){
-		if(document.getElementById("checkSect"+i).checked==true){
-			delStr = delStr + "_" + i;
-		}
-		i++;
-	}
-	if (delStr.length < 13){
-		alert ("${selectsectorfirst}");
-	} else if (confirm("${confirmDelete}")){
-		document.pledgeForm.target = "_self";
-		document.pledgeForm.action="/removePledgeSector.do?"+delStr;
-		document.pledgeForm.submit();
-	}	
-}
 
 function cancel(){
 	<digi:context name="cancel" property="/savePledge.do" />
@@ -165,23 +39,6 @@ function cancel(){
 	document.pledgeForm.submit();
 }
 
-function changeTitle(){
-	var title = document.getElementById("pledgeTitleDropDown").value;
-			document.getElementById("myTitle").value = title;
-	//if (title=="-2"){
-	//	document.getElementById("newTitle").style.display = "block";
-	//	document.getElementById("myTitle").value = "";
-	//} else {
-	//	if (title!="-1"){
-	//		document.getElementById("newTitle").style.display = "none";
-	//		document.getElementById("myTitle").value = title;
-	//	} else {
-	//		document.getElementById("newTitle").style.display = "none";
-	//		document.getElementById("myTitle").value = "";
-	//	}
-	//}
-	
-}
 
 document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
@@ -343,41 +200,6 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										     <iframe src="/aim/selectPledgeLocation.do?edit=false" width="100%" scrolling="no" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" name="pledges_locations_name"></iframe> 										   
 										    </td>
 										</tr>
-										<field:display name="Pledge Program" feature="Pledge Sector and Location">
-										<tr>
-							                <td>
-							                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#f2f2f2">
-							                    	<tr>
-							                            <td align=center height=25>
-							                                <b>
-							                                    <digi:trn key="aim:Program">
-							                                        Program
-							                                    </digi:trn>
-							                                </b>
-							                            </td>
-							                        </tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
-											<td>
-										       <table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
-													<tr>
-														<td colspan="2"> &nbsp;
-															<field:display name="Add Pledge Program Button" feature="Pledge Sector and Location">
-	                                                           <html:button styleClass="dr-menu"  
-	                                                                         property="submitButton" onclick="addProgram(1);">
-	                                                                <digi:trn key="btn:addProgram">Add Program</digi:trn>
-	                                                            </html:button>
-															</field:display>
-		                                                </td>
-		                                            </tr>
-		                                        </table>
-										     
-										    </td>
-										</tr>
-										</field:display>
-
 									</table>
 								</feature:display>
 								<feature:display name="Pledge Funding" module="Pledges">

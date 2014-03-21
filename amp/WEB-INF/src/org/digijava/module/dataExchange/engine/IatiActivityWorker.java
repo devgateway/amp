@@ -77,8 +77,26 @@ import org.digijava.module.editor.exception.EditorException;
  *
  */
 public class IatiActivityWorker {
+    private boolean saveObjects = true;
+    private Set<DEMappingFields> accumulate = new HashSet<DEMappingFields>();
 
-	/**
+    public Set<DEMappingFields> getAccumulate() {
+        return accumulate;
+    }
+
+    public void setAccumulate(Set<DEMappingFields> accumulate) {
+        this.accumulate = accumulate;
+    }
+
+    public boolean isSaveObjects() {
+        return saveObjects;
+    }
+
+    public void setSaveObjects(boolean saveObjects) {
+        this.saveObjects = saveObjects;
+    }
+
+    /**
 	 * 
 	 */
 	private IatiActivity iActivity;
@@ -193,7 +211,9 @@ public class IatiActivityWorker {
 				JAXBElement i = (JAXBElement)contentItem;
 				if(i.getName().equals(new QName("title"))){
 					JAXBElement<TextType> item = (JAXBElement<TextType>)i;
-					title += printTextType(item);
+                    if (item.getValue().getLang().equals(this.getLang())) {
+    					title += printTextType(item);
+                    }
 				}
 			}
 			if(contentItem instanceof IatiIdentifier){
@@ -226,81 +246,83 @@ public class IatiActivityWorker {
 					//title
 					if(i.getName().equals(new QName("title"))){
 						JAXBElement<TextType> item = (JAXBElement<TextType>)i;
-						System.out.println("Activity "+noAct+":" + printTextType(item)+"#");
-						this.title += printTextType(item);
+                        if (item.getValue().getLang() == null || item.getValue().getLang().equals(this.getLang())) {
+                            System.out.println("Activity "+noAct+":" + printTextType(item)+"#");
+                            this.title += printTextType(item);
+                        }
 					}
 					//status
-					if(i.getName().equals(new QName("activity-status"))){
+					else if(i.getName().equals(new QName("activity-status"))){
 						JAXBElement<CodeType> item = (JAXBElement<CodeType>)i;
 						AmpMappedField existStatusCode = checkStatusCode(item);
 						if(existStatusCode!=null) logs.add(existStatusCode);
 					}
 	
 					//default-finance-type == type of assistance
-					if(i.getName().equals(new QName("default-finance-type"))){
+                    else if(i.getName().equals(new QName("default-finance-type"))){
 						JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 						AmpMappedField existFinanceType = checkFinanceType(item);
 						if(existFinanceType!=null) logs.add(existFinanceType);
 					}
 	
 					//default-aid-type == financing instrument
-					if(i.getName().equals(new QName("default-aid-type"))){
+                    else if(i.getName().equals(new QName("default-aid-type"))){
 						JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
 						AmpMappedField existAidType = checkAidType(item);
 						if(existAidType!=null) logs.add(existAidType);
 					}
 					
 					//implementation-level
-					if(i.getName().equals(new QName("implementation-level"))){
+                    else if(i.getName().equals(new QName("implementation-level"))){
 						JAXBElement<CodeType> item = (JAXBElement<CodeType>)i;
 						AmpMappedField existAidType = checkLevelType(item);
 						if(existAidType!=null) logs.add(existAidType);
 					}
 					
 				}
-	
-				if(contentItem instanceof IatiIdentifier){
+
+                else if(contentItem instanceof IatiIdentifier){
 					IatiIdentifier item = (IatiIdentifier)contentItem;
 					this.iatiID += item.getContent();
 				}
-				
-				if(contentItem instanceof ReportingOrg){
+
+                else if(contentItem instanceof ReportingOrg){
 					ReportingOrg item = (ReportingOrg)contentItem;
 					AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
 					AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
 					if(existOrganization!=null) logs.add(existOrganization);
 					if(existOrganizationType!=null) logs.add(existOrganizationType);
 				}
-				
-				if(contentItem instanceof ParticipatingOrg){
+
+                else if(contentItem instanceof ParticipatingOrg){
 					ParticipatingOrg item = (ParticipatingOrg)contentItem;
 					AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
 					AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
 					if(existOrganization!=null) logs.add(existOrganization);
 					if(existOrganizationType!=null) logs.add(existOrganizationType);
 				}
-				
-				if(contentItem instanceof OtherIdentifier){
+
+                else if(contentItem instanceof OtherIdentifier){
 					OtherIdentifier item = (OtherIdentifier)contentItem;
 					AmpMappedField existOrganization	  = checkOrganization(item.getOwnerName(),this.getLang(), item.getOwnerRef());
 					if(existOrganization!=null) logs.add(existOrganization);
 				}
-				
-				if(contentItem instanceof Location){
+
+                else if(contentItem instanceof Location){
 					Location item = (Location)contentItem;
 					AmpMappedField existLocation	  = checkLocation(item);
 					if(existLocation!=null) logs.add(existLocation);
 				}
-				
-				if(contentItem instanceof Sector){
+
+                else if(contentItem instanceof Sector){
 					Sector item = (Sector)contentItem;
 					AmpMappedField existVocabularyCode = checkVocabularyCode(item);
 					AmpMappedField existSector			= checkSector(item);
 					if(existVocabularyCode!=null) logs.add(existVocabularyCode);
 					if(existSector!=null) logs.add(existSector);
 				}
-				
-				if(contentItem instanceof Transaction){
+
+                else if(contentItem instanceof Transaction){
 					Transaction item = (Transaction)contentItem;
 					boolean ok 		 = false;
 					ok 				 = checkIATITransaction(item,logs);
@@ -356,10 +378,9 @@ public class IatiActivityWorker {
 				
 		
 		
-		if(this.getiActivity().getLang()!=null || "".compareTo(this.getiActivity().getLang().trim()) == 0)
-			{
-				this.lang = this.getiActivity().getLang();
-			}
+		if(this.getiActivity().getLang()!=null && !this.getiActivity().getLang().trim().isEmpty()){
+            this.lang = this.getiActivity().getLang();
+        }
 		
 		
 		String iatiDefaultCurrency = "USD";
@@ -400,8 +421,17 @@ public class IatiActivityWorker {
 	private void processTitle(AmpActivityVersion a, ArrayList<JAXBElement<TextType>> iatiTitleList) {
 		// TODO Auto-generated method stub
 		if(iatiTitleList.isEmpty()) return;
-		JAXBElement<TextType> title = iatiTitleList.iterator().next();
-		a.setName(printList(title.getValue().getContent()));
+
+        JAXBElement<TextType> title = null;
+        for (Iterator <JAXBElement<TextType>> it = iatiTitleList.iterator(); it.hasNext();) {
+            JAXBElement<TextType> itVal = it.next();
+            if (itVal.getValue().getLang() == null || itVal.getValue().getLang().equals(this.getLang())) {
+                title = itVal;
+            }
+        }
+
+        // limit to english temporary
+        a.setName(printList(title.getValue().getContent()));
 		this.setTitle(a.getName());
 	}
 
@@ -1896,7 +1926,11 @@ public class IatiActivityWorker {
 			Long sourceId, String feedFileName, String status) {
 		DEMappingFields mf = new DEMappingFields(iatiPath, iatiItems, iatiValues, iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);
 		mf.setCreationDate(new Timestamp(System.currentTimeMillis()));
-		DataExchangeUtils.insertDEMappingField(mf);
+        if (saveObjects) {
+		    DataExchangeUtils.insertDEMappingField(mf);
+        } else {
+            accumulate.add(mf);
+        }
 		return mf;
 	}
 	

@@ -118,7 +118,7 @@ public class MapFieldsAction extends DispatchAction {
 		DataExchangeUtils.getAmpClassesFromDb(ampClasses);
 		populateCollections(allAmpDEMappingFields, fieldDisplayList, ampClassTypeSelected, false);
 
-        TreeMap<Long, String> allEntities = getAllAmpEntitiesByClass(ampClassTypeSelected);
+        TreeMap<Long, String> allEntities = DataExchangeUtils.getAllAmpEntitiesByClass(ampClassTypeSelected);
         mForm.setAllEntities(allEntities);
 
         ValueComparator bvc =  new ValueComparator(allEntities);
@@ -263,7 +263,7 @@ public class MapFieldsAction extends DispatchAction {
     private void populateCollections(Collection<DEMappingFields> allAmpDEMappingFields, ArrayList<DEMappingFieldsDisplay> fieldDisplayList, String ampClassTypeSelected, boolean addAllEntities)	throws DgException {
         TreeMap<Long, String> allEntities 	= null;
         if (addAllEntities) {
-            allEntities = getAllAmpEntitiesByClass(ampClassTypeSelected);
+            allEntities = DataExchangeUtils.getAllAmpEntitiesByClass(ampClassTypeSelected);
         }
 
         for (Iterator<DEMappingFields> it = allAmpDEMappingFields.iterator(); it.hasNext();) {
@@ -273,51 +273,7 @@ public class MapFieldsAction extends DispatchAction {
         }
     }
 	
-	private TreeMap<Long, String> getAllAmpEntitiesByClass(String ampClassTypeSelected) {
-		// TODO Auto-generated method stub
-		TreeMap<Long, String> allEntities 	=	null;
-		if(DataExchangeConstants.IATI_ACTIVITY.compareTo(ampClassTypeSelected) ==0 )
-			allEntities 	=	DataExchangeUtils.getNameGroupAllActivities();
-		if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(ampClassTypeSelected)==0){
-			String orgTypeNameHql = AmpOrgType.hqlStringForName("f");
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select %s, f.ampOrgTypeId from " + AmpOrgType.class.getName()+ " f order by %s asc", orgTypeNameHql, orgTypeNameHql));
-		}
-		if(DataExchangeConstants.IATI_ORGANIZATION.compareTo(ampClassTypeSelected)==0){
-			String orgNameHql = AmpOrganisation.hqlStringForName("f");
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select %s, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f where (f.deleted is null or f.deleted = false) order by %s asc", orgNameHql, orgNameHql));
-		}
-		if(DataExchangeConstants.IATI_LOCATION.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllLocations();
-		}
-		if(CategoryConstants.ACTIVITY_STATUS_NAME.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.ACTIVITY_STATUS_KEY);
-		}
-		if(DataExchangeConstants.AMP_VOCABULARY_CODE.compareTo(ampClassTypeSelected)==0){
-			String secSchemeNameHql = AmpSectorScheme.hqlStringForName("f");
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select %s, f.ampSecSchemeId from " + AmpSectorScheme.class.getName()+ " f", secSchemeNameHql));
-		}
-		if(DataExchangeConstants.IATI_SECTOR.compareTo(ampClassTypeSelected)==0){
-			String sectorNameHql = AmpSector.hqlStringForName("f");
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select concat(f.sectorCodeOfficial,concat(' - ',%s)) as sname, f.ampSectorId  from " + AmpSector.class.getName()+ " f  where (f.deleted is null or f.deleted = false) order by sname", sectorNameHql));
-		}
-		//type of assistance
-		if(CategoryConstants.TYPE_OF_ASSISTENCE_NAME.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
-		}
-		//financing instrument
-		if(CategoryConstants.FINANCING_INSTRUMENT_NAME.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.FINANCING_INSTRUMENT_KEY);
-		}
-		//mode of payment
-		if(CategoryConstants.MODE_OF_PAYMENT_NAME.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.MODE_OF_PAYMENT_KEY);
-		}
-		
-		if(CategoryConstants.IMPLEMENTATION_LEVEL_NAME.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.IMPLEMENTATION_LEVEL_KEY);
-		}
-		return allEntities;
-	}
+
 
 	private boolean isValidString(String s ){
 		if(s != null && "".compareTo(s.trim())!=0 )

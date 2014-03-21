@@ -19,5 +19,14 @@
 		<property name="feedFileName" column="feed_file_name" type="java.lang.String" />
 		<property name="status" column="status" type="java.lang.String" />
 		<property name="creationDate" type="java.sql.Timestamp" column="creation_date" generated="always" />
+        <!--
+        <many-to-one name="uploadSession" column="upload_session" class="org.digijava.module.dataExchange.dbentity.AmpDEUploadSession" cascade="none"/>
+        -->
+
+        <set name="uploadSessionsLinked" cascade="save-update" table="de_mapping_fields_up_sessions">
+            <key column="id"/>
+            <many-to-many column="sess_id" class="org.digijava.module.dataExchange.dbentity.AmpDEUploadSession"/>
+        </set>
+
 	</class>
 </hibernate-mapping>

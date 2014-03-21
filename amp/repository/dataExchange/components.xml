@@ -14,6 +14,8 @@
 		<page name="de_showSourceDetails" page="showSourceDetails" title="" />
 		<page name="de_showSources" page="showSources" title="List Of Sources" />
 		<page name="de_showLogItemDetails" page="showLogItemDetails" title="" />
+		<page name="uploadMultiactionNew" title="" />
+
 	</secondary-pages>
 	<module>
 	</module>

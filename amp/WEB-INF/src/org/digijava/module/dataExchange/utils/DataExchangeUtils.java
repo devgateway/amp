@@ -38,27 +38,13 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
@@ -1819,6 +1805,52 @@ public class DataExchangeUtils {
 		}
 		return result;
 	}
+
+    public static TreeMap<Long, String> getAllAmpEntitiesByClass(String ampClassTypeSelected) {
+        // TODO Auto-generated method stub
+        TreeMap<Long, String> allEntities 	=	null;
+        if(DataExchangeConstants.IATI_ACTIVITY.compareTo(ampClassTypeSelected) ==0 )
+            allEntities 	=	DataExchangeUtils.getNameGroupAllActivities();
+        if(DataExchangeConstants.IATI_ORGANIZATION_TYPE.compareTo(ampClassTypeSelected)==0){
+            String orgTypeNameHql = AmpOrgType.hqlStringForName("f");
+            allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select %s, f.ampOrgTypeId from " + AmpOrgType.class.getName()+ " f order by %s asc", orgTypeNameHql, orgTypeNameHql));
+        }
+        if(DataExchangeConstants.IATI_ORGANIZATION.compareTo(ampClassTypeSelected)==0){
+            String orgNameHql = AmpOrganisation.hqlStringForName("f");
+            allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select %s, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f where (f.deleted is null or f.deleted = false) order by %s asc", orgNameHql, orgNameHql));
+        }
+        if(DataExchangeConstants.IATI_LOCATION.compareTo(ampClassTypeSelected)==0){
+            allEntities 	=	DataExchangeUtils.getNameIdAllLocations();
+        }
+        if(CategoryConstants.ACTIVITY_STATUS_NAME.compareTo(ampClassTypeSelected)==0){
+            allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.ACTIVITY_STATUS_KEY);
+        }
+        if(DataExchangeConstants.AMP_VOCABULARY_CODE.compareTo(ampClassTypeSelected)==0){
+            String secSchemeNameHql = AmpSectorScheme.hqlStringForName("f");
+            allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select %s, f.ampSecSchemeId from " + AmpSectorScheme.class.getName()+ " f", secSchemeNameHql));
+        }
+        if(DataExchangeConstants.IATI_SECTOR.compareTo(ampClassTypeSelected)==0){
+            String sectorNameHql = AmpSector.hqlStringForName("f");
+            allEntities 	=	DataExchangeUtils.getNameIdAllEntities(String.format("select concat(f.sectorCodeOfficial,concat(' - ',%s)) as sname, f.ampSectorId  from " + AmpSector.class.getName()+ " f  where (f.deleted is null or f.deleted = false) order by sname", sectorNameHql));
+        }
+        //type of assistance
+        if(CategoryConstants.TYPE_OF_ASSISTENCE_NAME.compareTo(ampClassTypeSelected)==0){
+            allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+        }
+        //financing instrument
+        if(CategoryConstants.FINANCING_INSTRUMENT_NAME.compareTo(ampClassTypeSelected)==0){
+            allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+        }
+        //mode of payment
+        if(CategoryConstants.MODE_OF_PAYMENT_NAME.compareTo(ampClassTypeSelected)==0){
+            allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.MODE_OF_PAYMENT_KEY);
+        }
+
+        if(CategoryConstants.IMPLEMENTATION_LEVEL_NAME.compareTo(ampClassTypeSelected)==0){
+            allEntities 	=	DataExchangeUtils.getNameIdAllEntitiesFromACVC(CategoryConstants.IMPLEMENTATION_LEVEL_KEY);
+        }
+        return allEntities;
+    }
 	
 }
 

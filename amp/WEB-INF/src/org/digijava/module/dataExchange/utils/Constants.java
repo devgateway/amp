@@ -57,10 +57,12 @@ public class Constants {
 	public static final String SYNERGY_IATI_IDML_XSL = "/doc/iati/xslt/synergyIati2idml.xslt";
 	public static final String CATEG_VALUE_ACTIVITY_EXPORT_OPTIONS = "activity_export_filter_options";
 	public static final String IDML_SCHEMA_LOCATION = "/doc/iati/schemas/IDML2.0.xsd";
-	public static final String IATI_SCHEMA_LOCATION = "/doc/dataExchange/iati-activities-schema.xsd";
+	//public static final String IATI_SCHEMA_LOCATION = "/doc/dataExchange/iati-activities-schema.xsd";
+    public static final String IATI_SCHEMA_LOCATION = "/doc/dataExchange/iati-activities-schema-1_03.xsd";
 
-	
-	public static final String FIELD_ACTIVITY="activity";
+
+
+    public static final String FIELD_ACTIVITY="activity";
 	public static final String FIELD_ACTIVITY_STATUS="activity.status";
 	public static final String FIELD_ACTIVITY_DESCRIPTION="activity.description";
 	

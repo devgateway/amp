@@ -24,6 +24,7 @@ package org.digijava.module.dataExchange.dbentity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -35,9 +36,7 @@ import org.apache.log4j.Logger;
 
 
 public class DEMappingFields implements Serializable {
-
     private static Logger logger = Logger.getLogger(DEMappingFields.class);
-
     private Long id;
     private String iatiPath;
     private String iatiItems;
@@ -45,7 +44,44 @@ public class DEMappingFields implements Serializable {
     private String iatiLang;
     private Long ampId;  
     private String ampValues;
-    
+    private Set<AmpDEUploadSession> uploadSessionsLinked;
+
+    private int tmpId;
+    private boolean dirty; //Modified and unsaved
+
+
+    public Set<AmpDEUploadSession> getUploadSessionsLinked() {
+        return uploadSessionsLinked;
+    }
+
+    public void setUploadSessionsLinked(Set<AmpDEUploadSession> uploadSessionsLinked) {
+        this.uploadSessionsLinked = uploadSessionsLinked;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
+    }
+
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static void setLogger(Logger logger) {
+        DEMappingFields.logger = logger;
+    }
+
+    public int getTmpId() {
+        return tmpId;
+    }
+
+    public void setTmpId(int tmpId) {
+        this.tmpId = tmpId;
+    }
+
     public String getAmpValues() {
 		return ampValues;
 	}
@@ -100,7 +136,7 @@ public class DEMappingFields implements Serializable {
 			this.getIatiPath().compareTo(o.getIatiPath()) == 0 && 
 			this.getIatiItems().compareTo(o.getIatiItems()) == 0 && 
 			this.getIatiValues().compareTo(o.getIatiValues())==0 && 
-			this.getIatiLang().compareTo(lang)==0 &&
+			this.getIatiLangSafe().compareTo(lang)==0 &&
 			this.getAmpClass().compareTo(o.getAmpClass())==0
 			;
 		}catch (Exception e){
@@ -196,6 +232,9 @@ public class DEMappingFields implements Serializable {
 	public void setCreationDate(Timestamp creationDate) {
 		this.creationDate = creationDate;
 	}
-    
+
+    public String getIatiLangSafe() {
+     return getIatiLang()==null?"en":getIatiLang();
+    }
 	   
 }

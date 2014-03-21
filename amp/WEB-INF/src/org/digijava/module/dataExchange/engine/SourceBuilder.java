@@ -10,8 +10,17 @@ public abstract class SourceBuilder {
 	protected String inputString;
 	protected String inputStringPrevious;
 	protected String previousInputStream;
+    private InputStream rawStream;
 
-	public String getPreviousInputStream() {
+    public InputStream getRawStream() {
+        return rawStream;
+    }
+
+    public void setRawStream(InputStream rawStream) {
+        this.rawStream = rawStream;
+    }
+
+    public String getPreviousInputStream() {
 		return previousInputStream;
 	}
 

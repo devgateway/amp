@@ -13,6 +13,7 @@
 		<hibernate-class>org.digijava.module.dataExchange.dbentity.DESourceSetting</hibernate-class>
 		<hibernate-class>org.digijava.module.dataExchange.dbentity.DELogPerExecution</hibernate-class>
 		<hibernate-class>org.digijava.module.dataExchange.dbentity.DELogPerItem</hibernate-class>
+		<hibernate-class>org.digijava.module.dataExchange.dbentity.AmpDEUploadSession</hibernate-class>
 	</hibernate-classes>
 	<!-- highlights classes End-->
 </module-config>

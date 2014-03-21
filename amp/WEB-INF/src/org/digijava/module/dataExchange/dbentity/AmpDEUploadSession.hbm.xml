@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.dataExchange.dbentity.AmpDEUploadSession" table="de_upload_session">
+        <cache usage="read-write" />
+        <id name="id" column="sess_id" type="java.lang.Long">
+            <generator class="native">
+                <param name="sequence">DE_upload_session_seq</param>
+            </generator>
+        </id>
+        <property name="fileSrc" column="file_src" type="text" />
+        <property name="fileName" column="file_name" type="java.lang.String" />
+        <property name="uploadDate" column="upload_date" type="java.util.Date" />
+        <property name="lastEditDate" column="last_edit" type="java.util.Date" />
+        <property name="selCountryFilters" column="sel_country_filter" type="java.lang.String" />
+
+
+        <many-to-one name="settingsAssigned" column="de_source_setting_id" lazy="proxy"
+                     class="org.digijava.module.dataExchange.dbentity.DESourceSetting" cascade="none" />
+
+
+        <set name="mappedFields" lazy="true" table="de_mapping_fields_up_sessions" cascade="all-delete-orphan">
+            <key column="sess_id" />
+            <many-to-many column="id" class="org.digijava.module.dataExchange.dbentity.DEMappingFields"/>
+        </set>
+
+        <list name="logItems" lazy="true" cascade="all-delete-orphan">
+            <key column="sess_id" />
+            <index column="index_column" />
+            <one-to-many class="org.digijava.module.dataExchange.dbentity.DELogPerItem" />
+        </list>
+
+
+    </class>
+</hibernate-mapping>

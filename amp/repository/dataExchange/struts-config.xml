@@ -9,6 +9,8 @@
 		<form-bean name="mapFieldsForm" type="org.digijava.module.dataExchange.form.MapFieldsForm"/>
 		<form-bean name="createSourceForm" type="org.digijava.module.dataExchange.form.CreateSourceForm"/>
 		<form-bean name="manageSourceForm" type="org.digijava.module.dataExchange.form.ManageSourceForm"/>
+		<form-bean name="importFormNew" type="org.digijava.module.dataExchange.form.ImportFormNew"/>
+
 	</form-beans>
 	<action-mappings>
 		<!-- Export routine -->
@@ -55,6 +57,20 @@
 			<forward name="showSources" redirect="true" path="/dataExchange/manageSource.do" />
 		</action>
 		
+
+
+
+
+		<action  name="importFormNew" path="/dataExchange/importActionNew" scope="session" type="org.digijava.module.dataExchange.action.ImportActionNew" validate="false" parameter="action">
+			<forward name="forward" path="/showLayout.do?layout=uploadMultiactionNew" />
+			<forward name="logs" path="/dataExchange/importActionNew.do?action=showLogs" redirect="true"/>
+			<forward name="map" path="/dataExchange/importActionNew.do?action=showMapping" redirect="true"/>
+			<forward name="filters" path="/dataExchange/importActionNew.do?action=showFilters" redirect="true"/>
+			<forward name="sessions" path="/dataExchange/importActionNew.do?action=listUploadSessions" redirect="true"/>
+			<forward name="sources" path="/dataExchange/manageSource.do"/>
+
+		</action>
+
 		
 	</action-mappings>
 </struts-config>

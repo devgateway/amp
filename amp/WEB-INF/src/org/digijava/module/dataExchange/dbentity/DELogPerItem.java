@@ -2,6 +2,7 @@ package org.digijava.module.dataExchange.dbentity;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.digijava.module.dataExchange.util.WrapperLogPerItem;
 import org.digijava.module.dataExchange.util.XmlWrappable;
@@ -18,6 +19,8 @@ public class DELogPerItem implements XmlWrappable{
 	
 	private Long id;
 	private DELogPerExecution deLogPerExecution;
+    private AmpDEUploadSession sess;
+
 	private String logType;
 
 	private String name;
@@ -26,8 +29,11 @@ public class DELogPerItem implements XmlWrappable{
 	
 	private Timestamp executionTime;
 
-	
-	
+    private Date importDoneOn;
+
+    private int tmpId;
+
+
 	/**
 	 * @return the id
 	 */
@@ -42,9 +48,31 @@ public class DELogPerItem implements XmlWrappable{
 		this.id = id;
 	}
 
+    public Date getImportDoneOn() {
+        return importDoneOn;
+    }
 
+    public void setImportDoneOn(Date importDoneOn) {
+        this.importDoneOn = importDoneOn;
+    }
 
-	/**
+    public int getTmpId() {
+        return tmpId;
+    }
+
+    public void setTmpId(int tmpId) {
+        this.tmpId = tmpId;
+    }
+
+    public AmpDEUploadSession getSess() {
+        return sess;
+    }
+
+    public void setSess(AmpDEUploadSession sess) {
+        this.sess = sess;
+    }
+
+    /**
 	 * @return the deLogPerExecution
 	 */
 	public DELogPerExecution getDeLogPerExecution() {
@@ -166,6 +194,12 @@ public class DELogPerItem implements XmlWrappable{
 		return new WrapperLogPerItem(this);
 	}
 	
-	
+	public void update (DELogPerItem item) {
+        this.logType = item.getLogType();
+        this.name = item.getName();
+        this.itemType = item.getItemType();
+        this.description = item.getDescription();
+        this.executionTime = item.getExecutionTime();
+    }
 	
 }

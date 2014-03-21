@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.naming.directory.InvalidAttributeIdentifierException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
@@ -2234,7 +2235,18 @@ public class DEImportBuilder {
 			iLog.saveObject(log.getDeSourceSetting());
 	}
 
-	private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId) {
+    public Map <IatiActivity, Set<DEMappingFields>> processIATIFeedReturnItems(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId) {
+        Map <IatiActivity, Set<DEMappingFields>> retVal = new HashMap<IatiActivity, Set<DEMappingFields>>();
+        processIATIFeed(request, log, iLog, actionType, itemId, retVal);
+
+        return retVal;
+    }
+
+    private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId) {
+        processIATIFeed(request, log, iLog, actionType, itemId, null);
+    }
+
+	private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId, Map <IatiActivity, Set<DEMappingFields>> retVal) {
 		logger.info("SYSOUT: processing iati activities");
 		
 			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
@@ -2248,6 +2260,10 @@ public class DEImportBuilder {
 				String iatiID = "";
 				String ampID = null;
 				IatiActivityWorker iWorker= new IatiActivityWorker(iAct, logAct);
+
+                //Only need to get structure
+                if (retVal != null) iWorker.setSaveObjects(false);
+
 				noAct ++;
 				ArrayList<AmpMappedField> activityLogs = null;
 				if( "check".compareTo(actionType) ==0 )
@@ -2255,7 +2271,17 @@ public class DEImportBuilder {
 					{
 						logger.info(".......Starting processing activity "+noAct);
 						//System.out.println(".......Starting processing activity "+noAct);
+
 						activityLogs	=	iWorker.checkContent(noAct, this.getHierarchies());
+
+                        if (retVal != null) {
+                            retVal.put(iAct, iWorker.getAccumulate());
+                            for (AmpMappedField ampMF : activityLogs) {
+                                if (ampMF.getItem() != null && ampMF.getItem().getId() != null) {    //Add serialized ones
+                                    retVal.get(iAct).add(ampMF.getItem());
+                                }
+                            }
+                        }
 						logger.info("..................End processing activity "+noAct);
 						//System.out.println("..................End processing activity "+noAct);
 					}
@@ -2279,7 +2305,7 @@ public class DEImportBuilder {
 								DEMappingFields item = checkedActivity.getItem();
 								item.setAmpId(ampActivity.getAmpActivityGroup().getAmpActivityGroupId());//getAmpActivityId());
 								item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(),iWorker.getIatiID()));
-								DataExchangeUtils.addObjectoToAmp(item);
+							    DataExchangeUtils.addObjectoToAmp(item);
 								logger.info("..................End importing activity "+noAct);
 								//System.out.println("..................End importing activity "+noAct);
 							}
@@ -2287,13 +2313,17 @@ public class DEImportBuilder {
 						}
 				//process log
 				if(activityLogs == null) continue;
-				processLog(log, iLog, iWorker, activityLogs, actionType);
+
+                processLog(log, iLog, iWorker, activityLogs, actionType, (retVal == null));
 			}
-			iLog.saveObject(log.getDeSourceSetting());
+        if (retVal == null) iLog.saveObject(log.getDeSourceSetting());
 	}
 
+    private void processLog(DELogPerExecution log, SourceSettingDAO iLog, IatiActivityWorker iWorker, ArrayList<AmpMappedField> activityLogs, String actionType) {
+        processLog(log, iLog, iWorker, activityLogs, actionType, false);
+    }
 
-	private void processLog(DELogPerExecution log, SourceSettingDAO iLog, IatiActivityWorker iWorker, ArrayList<AmpMappedField> activityLogs, String actionType) {
+	private void processLog(DELogPerExecution log, SourceSettingDAO iLog, IatiActivityWorker iWorker, ArrayList<AmpMappedField> activityLogs, String actionType, boolean saveLogs) {
 		String title;
 		String iatiID;
 		String ampID	= null;
@@ -2324,7 +2354,7 @@ public class DEImportBuilder {
 			item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 			//iLog.saveObject(item);
 			log.getLogItems().add(item);
-			iLog.saveObject(log.getDeSourceSetting());
+			if (saveLogs) iLog.saveObject(log.getDeSourceSetting());
 			return;
 		}
 		item.setLogType(DELogPerItem.LOG_TYPE_OK);
@@ -2383,8 +2413,12 @@ public class DEImportBuilder {
 		}
 		return res;
 	}
+
+    public boolean checkIATIInputString(String inputLog) {
+        return checkIATIInputString(inputLog, false);
+    }
 	
-	public boolean checkIATIInputString(String inputLog){
+	public boolean checkIATIInputString(String inputLog, boolean readFromRawStream){
 		boolean isOk = true;
 		IatiActivities iActs = null;
 		IatiActivities iActsPrevious = null;
@@ -2412,7 +2446,17 @@ public class DEImportBuilder {
 	                 m.setEventHandler(log);
 	                
 	                 //iActs = (IatiActivities) m.unmarshal(new FileInputStream(path+"doc/dataExchange/iati.xml")) ;
-	                 iActs = (IatiActivities) m.unmarshal(this.getAmpImportItem().getInputStream()) ;
+
+                    InputStream is = null;
+
+                    if (!readFromRawStream) {
+                        is = this.getAmpImportItem().getInputStream();
+                    } else {
+                        is = this.getAmpImportItem().getRawStream();
+                    }
+
+                    iActs = (IatiActivities) m.unmarshal(is) ;
+
 	                 if(this.getAmpImportItem().getPreviousInputStream() !=null &&  this.getAmpImportItem().getPreviousInputStream().available()>0)
 	                	 iActsPrevious = (IatiActivities) m.unmarshal(this.getAmpImportItem().getPreviousInputStream()) ;
 	                 

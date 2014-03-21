@@ -13,11 +13,15 @@
 		<property name="itemType" column="item_type" type="java.lang.String" />				
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="executionTime" column="execution_time" type="java.sql.Timestamp" />
+        <property name="importDoneOn" column="IMPORT_DONE_ON" type="java.util.Date" />
 		
 		
 		<many-to-one name="deLogPerExecution" column="de_log_per_execution_id" lazy="false"
 			class="org.digijava.module.dataExchange.dbentity.DELogPerExecution" cascade="none" />
-		
+
+        <many-to-one name="sess" column="upload_session" lazy="false"
+                     class="org.digijava.module.dataExchange.dbentity.AmpDEUploadSession" cascade="none" />
+
 		
 		
 	</class>

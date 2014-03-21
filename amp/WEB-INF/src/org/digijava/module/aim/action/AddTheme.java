@@ -128,7 +128,7 @@ public class AddTheme extends Action {
 		ThemeForm themeForm = (ThemeForm) form;
 		String event = request.getParameter("event");
 		Long id = Long.parseLong(request.getParameter("themeId"));
-		AmpTheme ampTheme = ProgramUtil.getThemeObject(id);
+		AmpTheme ampTheme = ProgramUtil.getThemeById(id);
 		fillForm(themeForm, ampTheme);
 		themeForm.setEvent("saveEdit");
 		return mapping.findForward("addEditForm");
@@ -227,7 +227,7 @@ public class AddTheme extends Action {
 
 		themeForm.setParentId(id);
 		
-		AmpTheme parent= ProgramUtil.getThemeObject(themeForm.getParentId());
+		AmpTheme parent= ProgramUtil.getThemeById(themeForm.getParentId());
 		themeForm.setParentProgram(parent.getName());
 		
 		themeForm.setPrgLevel(indlevel);
@@ -281,7 +281,7 @@ public class AddTheme extends Action {
 		String event = request.getParameter("event");
 		Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 		Long rootid = new Long(Long.parseLong(request.getParameter("rootId")));
-		AmpTheme ampTheme = ProgramUtil.getThemeObject(id);
+		AmpTheme ampTheme = ProgramUtil.getThemeById(id);
 		themeForm.setRootId(rootid);
 		themeForm.setEvent("saveEditSubProgram");
 		fillForm(themeForm, ampTheme);
@@ -325,7 +325,7 @@ public class AddTheme extends Action {
         ampTheme.setShowInRMFilters(themeForm.getShowInRMFilters());
 
 		if (themeForm.getParentId() != null && themeForm.getParentId().longValue()!=0 ) {
-			ampTheme.setParentThemeId(ProgramUtil.getThemeObject(themeForm.getParentId()));
+			ampTheme.setParentThemeId(ProgramUtil.getThemeById(themeForm.getParentId()));
 			int indlevel = themeForm.getPrgLevel();
 			int level = indlevel + 1;
 			ampTheme.setIndlevel(new Integer(level));

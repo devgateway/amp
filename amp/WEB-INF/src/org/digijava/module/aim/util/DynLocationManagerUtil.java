@@ -28,6 +28,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -748,36 +750,10 @@ public class DynLocationManagerUtil {
 	 */
 	public static Set<Long> getRecursiveAscendantsOfCategoryValueLocations(Collection<Long> inIds)
 	{
-		Set<Long> result = new HashSet<Long>();
-		if (inIds == null)
-			return result;
-		Set<Long> currentWave = new HashSet<Long>();
-		currentWave.addAll(inIds);
-		while (currentWave.size() > 0)
-		{
-			result.addAll(currentWave);
-			currentWave = getParentsOfCategoryValueLocations(currentWave);
-			currentWave.removeAll(result); // in case there is a cycle somewhere in the DB, do not cycle forever
-		}
-		return result;
+		return AlgoUtils.runWave(inIds, 
+				new DatabaseWaver("SELECT DISTINCT(parent_location) FROM amp_category_value_location WHERE (parent_location IS NOT NULL) AND (id IN ($))"));
 	}
-	
-	/*
-	 * returns the list of all the parents of all the AmpCategoryValueLocations given by ids
-	 * NON-RECURSIVE
-	 */
-	private static Set<Long> getParentsOfCategoryValueLocations(Collection<Long> inIds)
-	{
-		final Set<Long> result = new HashSet<Long>();
-		if (inIds == null)
-			return result;
-		String query = "SELECT DISTINCT(parent_location) FROM amp_category_value_location WHERE (parent_location IS NOT NULL) AND (id IN (" + Util.toCSStringForIN(inIds) + "))";
-		List<Object> ids = PersistenceManager.getSession().createSQLQuery(query).list();
-		for(Object longAsObj:ids)
-			result.add(PersistenceManager.getLong(longAsObj));
-		return result;
-	}
-	
+		
 	/**
 	 * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
 	 * @param inIds
@@ -785,34 +761,8 @@ public class DynLocationManagerUtil {
 	 */
 	public static Set<Long> getRecursiveChildrenOfCategoryValueLocations(Collection<Long> inIds)
 	{
-		Set<Long> result = new HashSet<Long>();
-		if (inIds == null)
-			return result;
-		Set<Long> currentWave = new HashSet<Long>();
-		currentWave.addAll(inIds);
-		while (currentWave.size() > 0)
-		{
-			result.addAll(currentWave);
-			currentWave = getChildrenOfCategoryValueLocations(currentWave);
-			currentWave.removeAll(result); // in case there is a cycle somewhere in the DB, do not cycle forever
-		}
-		return result;
-	}
-	
-	/*
-	 * returns the list of all the children of all the AmpCategoryValueLocations given by ids
-	 * NON-RECURSIVE
-	 */
-	private static Set<Long> getChildrenOfCategoryValueLocations(Collection<Long> inIds)
-	{
-		final Set<Long> result = new HashSet<Long>();
-		if (inIds == null)
-			return result;
-		String query = "SELECT DISTINCT id FROM amp_category_value_location WHERE parent_location IN (" + Util.toCSStringForIN(inIds) + ")";
-		List<Object> ids = PersistenceManager.getSession().createSQLQuery(query).list();
-		for(Object longAsObj:ids)
-			result.add(PersistenceManager.getLong(longAsObj));
-		return result;
+		return AlgoUtils.runWave(inIds, 
+				new DatabaseWaver("SELECT DISTINCT id FROM amp_category_value_location WHERE parent_location IN ($)"));
 	}
 	
 	public static void populateWithAscendants(Collection <AmpCategoryValueLocations> destCollection, 

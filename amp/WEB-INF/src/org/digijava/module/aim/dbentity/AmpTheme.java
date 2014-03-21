@@ -39,6 +39,10 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 	private String description ;
 	private String language ;
 	private String version ;
+	
+	/**
+	 * don't be fooled by the name - it gets the children
+	 */
 	private Set<AmpTheme> siblings;
 	private boolean transientBoolean;
 
@@ -451,6 +455,9 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 		}
 
 		@Override
+		/**
+		 * don't be fooled by the name - it gets the children
+		 */
 		public Collection<AmpTheme> getSiblings() {
 			return siblings;
 		}

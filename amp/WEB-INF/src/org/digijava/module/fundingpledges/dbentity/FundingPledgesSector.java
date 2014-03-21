@@ -14,6 +14,10 @@ public class FundingPledgesSector
 	private AmpSector sector;
 	private Float sectorpercentage;
 	
+	/**
+	 * TODO: THIS CODE NEEDS REWRITTEN
+	 * @return
+	 */
 	public ActivitySector createActivitySector()
 	{
 		ActivitySector res = new ActivitySector();

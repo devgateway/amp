@@ -14,6 +14,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -51,15 +52,22 @@ public class SelectPledgeProgram extends Action {
 		String extraAction = request.getParameter("extraAction");
 		if (extraAction != null)
 		{
-			if (extraAction.equals("add_program"))
-			{
-				pledgeForm.addSelectedProgram(Long.parseLong(request.getParameter("themeId")));
+			// {id: 'program_id_select', action: 'rootThemeChanged', attr: 'rootThemeId'},
+			if (extraAction.equals("rootThemeChanged"))
+			{				
+				pledgeForm.setSelectedRootProgram(Long.parseLong(request.getParameter("rootThemeId")));
 				return null;
 			}
-			if (extraAction.equals("render_programs_list"))
+						
+			if (extraAction.equals("pledge_program_submit"))
 			{
-				// do nothing just placeholder
+				pledgeForm.addSelectedProgram(Long.parseLong(request.getParameter("selected_program")));
+				ARUtil.writeResponse(response, "ok");
+				return null;
 			}
+			
+			// {id: 'program_item_select', action: 'themeSelected', attr: 'themeId'} - ignored
+
 			return mapping.findForward("forward");
 		}
 	    return mapping.findForward("forward");

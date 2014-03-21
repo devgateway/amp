@@ -37,6 +37,7 @@
 					<c:set var="select_id">location_id_select</c:set>
 					<c:set var="select_multiple">multiple</c:set>
 					<c:set var="select_values" value="${pledgeForm.allValidLocations}" />
+					<c:set var="select_init_value" value="-2" />
 					<%@include file="select_disableable_items.jspf" %>
 			</div>
 		</div>

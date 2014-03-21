@@ -37,7 +37,8 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
-import static org.digijava.module.fundingpledges.form.AmpCollections.*;
+import static org.dgfoundation.amp.algo.AmpCollections.*;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -58,7 +59,7 @@ public class PledgeForm extends ActionForm implements Serializable
 	
 	private static final long serialVersionUID = 1L;
 	private Long pledgeId;
-	private FundingPledges fundingPledges;
+	//private FundingPledges fundingPledges;
 	private Long selectedOrgId;
 	private Long selectedOrgGrpId;
 	private String titleFreeText;
@@ -94,7 +95,10 @@ public class PledgeForm extends ActionForm implements Serializable
      */
 	private Long levelId = null;
 	private List<FundingPledgesLocation> selectedLocs = new ArrayList<>();	
-	private List<FundingPledgesProgram> selectedProgs = new ArrayList<>();
+	
+	/* Fields for Programs */
+	private Long selectedRootProgram;
+	private List<IdNamePercentage> selectedProgs = new ArrayList<>();
 	
 	private String fundingEvent;
     private Long selectedFunding[];
@@ -104,7 +108,7 @@ public class PledgeForm extends ActionForm implements Serializable
     	this.setTitleFreeText(null);
     	this.setPledgeId(null);
 		this.setPledgeTitleId(null);
-		this.setFundingPledges(null);
+		//this.setFundingPledges(null);
 		this.setSelectedOrgId(null);
 		this.setSelectedOrgGrpId(null);
     	this.setAdditionalInformation(null);
@@ -117,6 +121,7 @@ public class PledgeForm extends ActionForm implements Serializable
     	this.selectedLocs.clear();
     	this.selectedProgs.clear();
     	this.cleanLocationData(true);
+    	this.selectedRootProgram = null;
     }
     
     /**
@@ -125,7 +130,7 @@ public class PledgeForm extends ActionForm implements Serializable
      */
     public void importPledgeData(FundingPledges fp)
     {
-    	this.setFundingPledges(fp);
+    	//this.setFundingPledges(fp);
     	this.setPledgeId(fp.getId());
     	this.setTitleFreeText(fp.getTitleFreeText());
    		this.setPledgeTitleId(fp.getTitle() == null ? null : fp.getTitle().getId());
@@ -177,7 +182,10 @@ public class PledgeForm extends ActionForm implements Serializable
     	
     	this.setPledgeSectors(asl);
     	this.setSelectedLocs(PledgesEntityHelper.getPledgesLocations(fp.getId()));
-    	this.setSelectedProgs(PledgesEntityHelper.getPledgesPrograms(fp.getId()));
+    	//System.out.println(PledgesEntityHelper.getPledgesPrograms(fp.getId()).size());
+    	//this.setSelectedProgs(IdNamePercentage.fromList(PledgesEntityHelper.getPledgesPrograms(fp.getId())));
+    	System.out.println(fp.getProgramlist().size());
+    	this.setSelectedProgs(IdNamePercentage.fromList(fp.getProgramlist()));
     	this.setFundingPledgesDetails(PledgesEntityHelper.getPledgesDetails(fp.getId()));
     }
     
@@ -280,8 +288,8 @@ public class PledgeForm extends ActionForm implements Serializable
         	AmpCategoryValue implLevel = getImplementationLevel(); // guaranteed to be non-null or we have a bug
         	
     		// something selected -> so need to build list of forbidden locations so that they are disabled in the multiselect
-            Set<Long> forbiddenLocations = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(getAllSelectedLocations()); // any selected locations and any of their descendants or ascendats are forbidden
-            forbiddenLocations.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(getAllSelectedLocations()));
+            Set<Long> forbiddenLocations = DynLocationManagerUtil.getRecursiveChildrenOfCategoryValueLocations(getAllSelectedLocations());
+            forbiddenLocations.addAll(DynLocationManagerUtil.getRecursiveAscendantsOfCategoryValueLocations(getAllSelectedLocations())); // any selected locations and any of their descendants or ascendants are forbidden
         	
         	if (CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL.equalsCategoryValue(implLevel) &&
         			CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(implLocationValue))
@@ -309,9 +317,8 @@ public class PledgeForm extends ActionForm implements Serializable
     
     public void addSelectedProgram(long themeId)
     {
-		FundingPledgesProgram fpp = new FundingPledgesProgram();
-		fpp.setProgram(ProgramUtil.getThemeObject(themeId));
-		fpp.setProgrampercentage(0f);
+    	AmpTheme theme = ProgramUtil.getThemeById(themeId);
+		IdNamePercentage fpp = new IdNamePercentage(theme.getAmpThemeId(), theme.getRootTheme().getAmpThemeId(), theme.getName(), theme.getHierarchicalName());
 		selectedProgs.add(fpp);
     }
     
@@ -343,13 +350,14 @@ public class PledgeForm extends ActionForm implements Serializable
     }
     
     /**
-	 * Map<AmpTheme, List<FundingPledgesProgram>>
-	 */
-	public Map<AmpTheme, List<FundingPledgesProgram>> getProgsByScheme()
+     * Map<AmpTheme, List<Program_Shim>>
+     * @return
+     */
+	public Map<KeyValue, List<IdNamePercentage>> getProgsByScheme()
 	{
-		return distribute(selectedProgs, new Function<FundingPledgesProgram, AmpTheme>(){
-			public AmpTheme apply(FundingPledgesProgram from) {
-			    return from.getProgram().getRootTheme();
+		return distribute(selectedProgs, new Function<IdNamePercentage, KeyValue>(){
+			public KeyValue apply(IdNamePercentage from) {
+			    return new KeyValue(from.getRootId(), from.getRootName());
 			  }
 		});
 	}
@@ -358,7 +366,7 @@ public class PledgeForm extends ActionForm implements Serializable
 	 * all root programs used by this activity
 	 * @return
 	 */
-	public Collection<AmpTheme> getAllUsedRootProgs()
+	public Collection<KeyValue> getAllUsedRootProgs()
 	{
 		return getProgsByScheme().keySet();
 	}
@@ -373,5 +381,45 @@ public class PledgeForm extends ActionForm implements Serializable
 			public DisableableKeyValue apply(AmpTheme theme) {return new DisableableKeyValue(theme.getAmpThemeId(), theme.getName(), true);};
 		}));
 	}
+	
+	   /**
+     * returns set of ids all the selected programs
+     * @return Set<ACVL.id>
+     */
+    public Set<Long> getAllPrograms()
+    {
+    	Set<Long> res = new HashSet<Long>();
+    	for(IdNamePercentage fpl:this.getSelectedProgs())
+    		res.add(fpl.getId());
+    	return res;
+    }
+    
+    void findRecursively(List<DisableableKeyValue> res, Long themeId, Set<Long> forbidden, Set<Long> selected, String prefix)
+    {
+    	if (themeId == null || themeId <= 0)
+    		return;
+    	
+    	AmpTheme theme = ProgramUtil.getThemeById(themeId);
+    	res.add(new DisableableKeyValue(theme.getAmpThemeId(), prefix + theme.getName(), !forbidden.contains(themeId)));
+    	if (selected.contains(themeId))
+    		return; // stop iterating when we're down to something selected
+    	
+    	for(AmpTheme subTheme:theme.getSiblings())
+    		findRecursively(res, subTheme.getAmpThemeId(), forbidden, selected, prefix + "» ");
+    }
+    
+    /**
+     * computes list of programs to be disabled on the JSP page
+     * @return
+     */
+	public List<DisableableKeyValue> getAllLegalPrograms()
+	{
+		Set<Long> selectedProgIds = getAllPrograms();
+        Set<Long> forbiddenPrograms = ProgramUtil.getRecursiveChildrenOfPrograms(selectedProgIds);
+        forbiddenPrograms.addAll(ProgramUtil.getRecursiveAscendantsOfPrograms(selectedProgIds));
+        List<DisableableKeyValue> res = new ArrayList<>();
+        findRecursively(res, this.selectedRootProgram, forbiddenPrograms, selectedProgIds, "");
+        return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, res);
+	};
 }
 

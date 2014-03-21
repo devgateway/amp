@@ -33,7 +33,7 @@ public class ViewNpdGrid extends Action {
 		NpdForm npdForm = (NpdForm) form;
 		if (npdForm.getProgramId() != null) {
 			//load theme
-			AmpTheme mainProg = ProgramUtil.getThemeObject(npdForm.getProgramId());
+			AmpTheme mainProg = ProgramUtil.getThemeById(npdForm.getProgramId());
 			//Retrieve theme indicators, and if second param true then all sub indicators.
 			Set<IndicatorTheme> indicators = IndicatorUtil.getIndicators(mainProg, npdForm.getRecursive());
 			//if there are indicators.

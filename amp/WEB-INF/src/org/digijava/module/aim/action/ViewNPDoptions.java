@@ -30,7 +30,7 @@ public class ViewNPDoptions extends Action {
 		NpdForm npdForm=(NpdForm)form;
 		Long pid=npdForm.getProgramId();
 		//get theme with id from form
-		AmpTheme prog = ProgramUtil.getThemeObject(pid);
+		AmpTheme prog = ProgramUtil.getThemeById(pid);
 		//get indicators of the theme
 		Set<IndicatorTheme> indicators=prog.getIndicators();
 		//if there are indicators

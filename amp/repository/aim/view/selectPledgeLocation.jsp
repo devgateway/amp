@@ -47,7 +47,7 @@
 	<script src="/repository/bootstrap/amp-bootstrap.js" type="text/javascript"></script>    
 	<script src="/repository/bootstrap/hacks.js" type="text/javascript"></script>    
     <script src="/repository/aim/view/pledgeform/pfscripts.js" type="text/javascript"></script>
-	    
+	<script src="/repository/aim/view/bootstrap/forms.js" type="text/javascript"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -58,16 +58,23 @@
   <body style="min-height: 350px">
 	<jsp:include page="/repository/aim/view/pledgeform/pledgeIdentification.jsp"></jsp:include>
 	
-  	<field:display name="Pledge Location" feature="Pledge Sector and Location">
+ 	<field:display name="Pledge Location" feature="Pledge Sector and Location">
 		<jsp:include page="/repository/aim/view/pledgeform/pledgelocationslist.jsp"></jsp:include>
 		<div class="text-center"><button type="button"class="btn btn-success btn-sm" id='add_location_button'><digi:trn>Add Location</digi:trn></button></div>
-		<jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include>
+		<jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include> 
 	</field:display>
 	
 	<field:display name="Pledge Program" feature="Pledge Sector and Location">
-		<jsp:include page="/repository/aim/view/pledgeform/pledgePrograms.jsp"></jsp:include>
-		<div class="text-center"><button type="button"class="btn btn-success btn-sm" id='add_program_button'><digi:trn>Add Program</digi:trn></button></div>
-		<jsp:include page="/repository/aim/view/pledgeform/pledgeProgramsAddProgram.jsp"></jsp:include>
+		<div id="pledge_form_programs">
+			<jsp:include page="/repository/aim/view/pledgeform/pledgePrograms.jsp"></jsp:include>
+			<div class="text-center"><button type="button"class="btn btn-success btn-sm" id='pledge_form_programs_data_add'><digi:trn>Add Program</digi:trn></button></div>
+			<jsp:include page="/repository/aim/view/pledgeform/pledgeProgramsAddProgram.jsp"></jsp:include>
+		</div>
+		<script type="text/javascript">var programsController = new InteractiveFormArea('#pledge_form_programs', '/selectPledgeProgram.do', 'selected_program', 'pledge_program', 
+				[
+				 	{id: 'program_id_select', action: 'rootThemeChanged', attr: 'rootThemeId'},
+				 	{id: 'program_item_select', action: 'themeSelected', attr: 'themeId'}
+				]); </script>
 	</field:display>
 	
 	<jsp:include page="/repository/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>

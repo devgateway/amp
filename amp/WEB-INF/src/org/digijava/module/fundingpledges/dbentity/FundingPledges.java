@@ -35,6 +35,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable{
 	private AmpOrgGroup organizationGroup;
 	private Set<FundingPledgesSector> sectorlist;
 	private Set<FundingPledgesLocation> locationlist;
+	private Set<FundingPledgesProgram> programlist;
 	private Set<FundingPledgesDetails> fundingPledgesDetails;
 	
 	// "Point of Contact at Donors Conference on March 31st"

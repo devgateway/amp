@@ -53,7 +53,7 @@ public class ExportIndicators2XSLAction extends Action {
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-disposition", "inline; filename=AMPIndicatorsExport.xls");
 
-		AmpTheme mainProg = ProgramUtil.getThemeObject(npdForm.getProgramId());
+		AmpTheme mainProg = ProgramUtil.getThemeById(npdForm.getProgramId());
 		Collection<IndicatorGridRow> rows = getGridRows(mainProg, npdForm.getRecursive(), npdForm
 				.getSelYears(), npdForm.getSelIndicators());
 
@@ -225,7 +225,7 @@ public class ExportIndicators2XSLAction extends Action {
 
             CategoryDataset dataset = null;
             if (currentThemeId != null && currentThemeId.longValue() > 0) {
-                AmpTheme currentTheme = ProgramUtil.getThemeObject(currentThemeId);
+                AmpTheme currentTheme = ProgramUtil.getThemeById(currentThemeId);
 
 
                 dataset = getNPDgraphObj.createPercentsDataset(currentTheme, selIndicators, selYears,request);

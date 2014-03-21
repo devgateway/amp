@@ -11,7 +11,7 @@
 
 <digi:instance property="pledgeForm" />
 
-<div id='pledge_programs_list'>
+<div id='pledge_form_programs_data'>
 	<div class="highlight text-center h5 bold"><digi:trn key="aim:Program">Program</digi:trn></div>
 		<c:if test="${empty pledgeForm.allUsedRootProgs}">
 			<div class="text-center"><h3><digi:trn>No Programs</digi:trn></h3></div>
@@ -31,11 +31,11 @@
 				<tbody>	
 					<c:forEach var="prog" items="${pledgeForm.selectedProgs}" varStatus="index">
 						<c:set var="indexLoc" value="${indexLoc+1}" />
-						<c:if test="${prog.program.rootTheme eq rootTheme}">
+						<c:if test="${prog.rootId eq rootTheme.keyAsLong}">
 							<tr>
-								<td class="col-xs-8 text-right"><c:out value="${prog.program.hierarchicalName}" /></td>
+								<td class="col-xs-8 text-right"><c:out value="${prog.hierarchicalName}" /></td>
 								<td class="col-xs-3">
-									<html:text name="prog" indexed="true" property="programpercentage" size="5"  onblur="return pledges_form_check_percentage(this, 'input-pledges-programs', '${numeric_value_only_msg}', '${sum_cannot_exceed_100_msg}')" styleClass="form-control input-sm input-pledges-programs" />
+									<html:text name="prog" indexed="true" property="percentage" size="5"  onblur="return pledges_form_check_percentage(this, 'input-pledges-programs', '${numeric_value_only_msg}', '${sum_cannot_exceed_100_msg}')" styleClass="form-control input-sm input-pledges-programs" />
 								</td>
 								<td class="col-xs-1"><button type="button" onclick="pledges_form_delete_program(${indexLoc});" class="btn btn-danger btn-xs">Delete</button></td>
 							</tr>
@@ -46,6 +46,4 @@
 			</div>
 		</c:forEach>
 	</c:if>
-</div>
-<div id='pledge_add_programs'>
 </div>

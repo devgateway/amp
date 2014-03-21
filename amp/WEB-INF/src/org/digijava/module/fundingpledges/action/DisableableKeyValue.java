@@ -8,7 +8,7 @@ import org.digijava.module.aim.helper.KeyValue;
  * @author Dolghier Constantin
  *
  */
-public class DisableableKeyValue
+public class DisableableKeyValue implements Comparable<DisableableKeyValue>
 {
 	private boolean enabled;
 	private KeyValue keyValue;
@@ -42,6 +42,24 @@ public class DisableableKeyValue
 	public Long getKeyAsLong()
 	{
 		return keyValue == null ? null : keyValue.getKeyAsLong();
+	}
+	
+	@Override
+	public int compareTo(DisableableKeyValue oth){
+		int res = this.keyValue.compareTo(oth.keyValue);
+		if (res == 0)
+			return Boolean.valueOf(this.enabled).compareTo(Boolean.valueOf(oth.enabled));
+		return res;
+	}
+	
+	@Override
+	public boolean equals(Object oth){
+		return this.compareTo((DisableableKeyValue) oth) == 0;
+	}
+	
+	@Override public int hashCode()
+	{
+		return this.keyValue.hashCode() * 3 + Boolean.valueOf(this.enabled).hashCode();
 	}
 	
 	@Override

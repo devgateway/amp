@@ -255,6 +255,8 @@ public class PledgesEntityHelper {
 	
 	public static void updatePledge(FundingPledges pledge, Set<FundingPledgesSector> sectors, PledgeForm plf) throws DgException
 	{	
+		if (System.currentTimeMillis() > 1)
+			throw new RuntimeException("not implemented!");
 		try {
 			Session session = PersistenceManager.getSession();
 
@@ -267,7 +269,7 @@ public class PledgesEntityHelper {
 			updatePledgeItemsAccordingToForm(session, pledge, sectors, fpsl);
 			updatePledgeItemsAccordingToForm(session, pledge, plf.getFundingPledgesDetails(), fpdl);
 			updatePledgeItemsAccordingToForm(session, pledge, plf.getSelectedLocs(), fpll);
-			updatePledgeItemsAccordingToForm(session, pledge, plf.getSelectedProgs(), fppl);
+			//updatePledgeItemsAccordingToForm(session, pledge, plf.getSelectedProgs(), fppl);
 
 		} catch (HibernateException e) {
 			logger.error("Error saving pledge", e);

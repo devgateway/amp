@@ -1,7 +1,8 @@
-package org.digijava.module.fundingpledges.form;
+package org.dgfoundation.amp.algo;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,24 @@ public class AmpCollections {
 	public static<V> List<V> mergeLists(Iterable<V>... lists)
 	{
 		return Lists.newArrayList(Iterables.concat(lists));
+	}
+	
+	/**
+	 * returns null if both are null, else non-null < null, else a.compareTo(b)
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static Integer nullCompare(Comparable a, Comparable b)
+	{
+		if (a == null && b == null)
+			return null;
+		if (a == null)
+			return 1;
+		if (b == null)
+			return -1;
+		
+		return a.compareTo(b);
 	}
 	
 }

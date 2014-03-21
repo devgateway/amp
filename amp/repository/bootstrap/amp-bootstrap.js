@@ -15,6 +15,12 @@ $.fn.enable = function() { // redo the actions of "disable" from above
 	return true;
 };
 
+if(!Array.prototype.last) {
+    Array.prototype.last = function() {
+        return this[this.length - 1];
+    };
+}
+
 function fix_aim_button(elem)
 {
 	elem.addClass("input-sm").css("float", "right");

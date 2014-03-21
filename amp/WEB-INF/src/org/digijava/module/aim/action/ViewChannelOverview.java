@@ -566,13 +566,8 @@ public class ViewChannelOverview extends TilesAction {
 						formBean.setBudgetdepartment(dep.getCode()+ " - " + dep.getName());
 					}
 					if (activity.getBudgetprogram()!=null && !activity.getBudgetprogram().equals(0L)){
-						AmpTheme prog;
-						try {
-							prog = ProgramUtil.getThemeById(activity.getBudgetprogram());
-							formBean.setBudgetprogram(prog.getThemeCode()+ " - " + prog.getName());
-						} catch (DgException e) {
-							e.printStackTrace();
-						}
+						AmpTheme prog = ProgramUtil.getThemeById(activity.getBudgetprogram());
+						formBean.setBudgetprogram(prog.getThemeCode()+ " - " + prog.getName());
 					}
 					
 					

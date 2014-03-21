@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
+import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.entity.Message;
@@ -91,7 +93,7 @@ public class ProgramUtil {
 					long t = 1;
 					for (Iterator iter = programs.iterator(); iter.hasNext();) {
 						AmpTheme OldProg = (AmpTheme) iter.next();
-						AmpTheme prog= getThemeObject(OldProg.getAmpThemeId());
+						AmpTheme prog= getThemeById(OldProg.getAmpThemeId());
 						Set indicators = prog.getIndicators();
 						if (indicators!=null && indicators.size()>0){
 							for (Iterator indicIter = indicators.iterator(); indicIter.hasNext();) {
@@ -200,19 +202,14 @@ public class ProgramUtil {
 		 * @return
 		 * @throws DgException
 		 */
-        public static AmpTheme getThemeById(Long ampThemeId) throws DgException {
-			Session session = PersistenceManager.getRequestDBSession();
-			AmpTheme theme = null;
-	
+        public static AmpTheme getThemeById(Long ampThemeId)
+        {	
 			try {
-				theme = (AmpTheme) session.load(AmpTheme.class, ampThemeId);
-			} catch (ObjectNotFoundException e) {
-				logger.debug("AmpTheme with id " + ampThemeId + " not found");
-			} catch (Exception e) {
-				throw new DgException("Cannot load AmpTheme with id " + ampThemeId,
-						e);
+				return (AmpTheme) PersistenceManager.getRequestDBSession().load(AmpTheme.class, ampThemeId);
+			} 
+			catch (Exception e) {
+				throw new RuntimeException("Cannot load AmpTheme with id " + ampThemeId, e);
 			}
-			return theme;
 		}
         
         public static Collection<AmpTheme> getAncestorThemes(AmpTheme theme) throws DgException {
@@ -438,27 +435,6 @@ public class ProgramUtil {
         	}
         	return colPrg;
         }
-
-		public static AmpTheme getThemeObject(Long ampThemeId) {
-			Session session = null;
-	        AmpTheme ampTheme = null;
-	        Query qry = null;
-	        try {
-	        	session = PersistenceManager.getRequestDBSession();
-//	            ampTheme = (AmpTheme) session.load(AmpTheme.class, ampThemeId);
-	        	String qryStr = "select t from " + AmpTheme.class.getName()
-                + " t where t.ampThemeId=:id";
-	            qry = session.createQuery(qryStr);
-	            qry.setParameter("id", ampThemeId);
-	            ArrayList a=(ArrayList) qry.list();
-	            ampTheme = (AmpTheme)a.iterator().next();
-	        }
-	        catch (Exception e) {
-	            throw new RuntimeException(e);
-	        }
-	        return ampTheme;
-		}
-
 
 		public static AmpTheme getAmpThemesAndSubThemesHierarchy(AmpTheme parent) {
 			
@@ -1394,7 +1370,7 @@ public class ProgramUtil {
 		public static Collection getRelatedThemes(Long id) throws DgException
 		{
 			AmpTheme ampThemetemp = new AmpTheme();
-			ampThemetemp = getThemeObject(id);
+			ampThemetemp = getThemeById(id);
 			Collection<AmpTheme> themeCol = getSubThemes(id);
 			Collection tempPrg = new ArrayList();
 			tempPrg.add(ampThemetemp);
@@ -1854,92 +1830,29 @@ public class ProgramUtil {
 
         }
 
-        /**
-         * Added by Govind
-         *
-         * @deprecated Use Category Manager functions instead
-         */
-
-        /*public static Collection getProgramTypes() {
-    		Session session = null;
-    		Collection col = null;
-    		try {
-    			session = PersistenceManager.getSession();
-    			String qryStr = "select name from " + AmpProgramType.class.getName()
-    					+ " name ";
-    			Query qry = session.createQuery(qryStr);
-    			col=qry.list();
-    		} catch (Exception e) {
-    			logger.error("Exception from getTheme()");
-    			logger.error(e.getMessage());
-    		} finally {
-    			if (session != null) {
-    				try {
-    					PersistenceManager.releaseSession(session);
-    				} catch (Exception rsf) {
-    					logger.error("Release session failed");
-    				}
-    			}
-    		}
-    		return col;
+    	/**
+    	 * recursively get all ancestors (parents) of a set of AmpCategoryValueLocations, by a wave algorithm
+    	 * @param inIds
+    	 * @return
+    	 */
+    	public static Set<Long> getRecursiveAscendantsOfPrograms(Collection<Long> inIds)
+    	{
+    		return AlgoUtils.runWave(inIds, 
+    				new DatabaseWaver("SELECT DISTINCT(parent_theme_id) FROM amp_theme WHERE (parent_theme_id IS NOT NULL) AND (amp_theme_id IN ($))"));
     	}
-*/
-        /**
-         * to save New Program Types
-         * AmpProgramType no longer used. Use Category Manager instead
-         */
-        /*public static void saveNewProgramType(AmpProgramType prg) {
-        	DbUtil.add(prg);
+    		
+    	/**
+    	 * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
+    	 * @param inIds
+    	 * @return
+    	 */
+    	public static Set<Long> getRecursiveChildrenOfPrograms(Collection<Long> inIds)
+    	{
+    		return AlgoUtils.runWave(inIds, 
+    				new DatabaseWaver("SELECT DISTINCT amp_theme_id FROM amp_theme WHERE parent_theme_id IN ($)"));
+    	}
 
-    	}*/
-        /**
-         * update a Program
-         * AmpProgramType no longer used. Use Category Manager instead
-         */
-        /*public static void updateProgramType(AmpProgramType prg) {
-        	DbUtil.update(prg);
-
-    	}*/
-        /**
-         * to get the Program Type for Editing
-         * AmpProgramType no longer used. Use Category Manager instead
-         */
-        /*public static Collection getProgramTypeForEdititng(Long Id) {
-    		Session session = null;
-    		Collection col = null;
-    		try {
-    			session = PersistenceManager.getSession();
-    			String qryStr = "select name from " + AmpProgramType.class.getName()
-    					+ " name where name.ampProgramId=:Id ";
-
-    			Query qry = session.createQuery(qryStr);
-				qry.setParameter("Id",Id);
-    			col=qry.list();
-    		} catch (Exception e) {
-    			logger.error("Exception from getTheme()");
-    			logger.error(e.getMessage());
-    		} finally {
-    			if (session != null) {
-    				try {
-    					PersistenceManager.releaseSession(session);
-    				} catch (Exception rsf) {
-    					logger.error("Release session failed");
-    				}
-    			}
-    		}
-    		return col;
-    	}*/
-        /**
-         * @deprecated AmpProgramType no longer used. Use Category Manager instead
-         */
-        /*public static void deleteProgramType(AmpProgramType prg) {
-        	try {
-				DbUtil.delete(prg);
-			} catch (JDBCException e) {
-				logger.error(e);
-			}
-
-    	}*/
+ 
     	 /**
          * Used to sort indicators by name
          */

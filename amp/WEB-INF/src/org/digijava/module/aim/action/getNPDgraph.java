@@ -73,7 +73,7 @@ public class getNPDgraph extends Action {
 
             CategoryDataset dataset = null;
             if (currentThemeId != null && currentThemeId.longValue() > 0) {
-                AmpTheme currentTheme = ProgramUtil.getThemeObject(currentThemeId);
+                AmpTheme currentTheme = ProgramUtil.getThemeById(currentThemeId);
 
 
                 dataset = createPercentsDataset(currentTheme, selIndicators, selYears,request);

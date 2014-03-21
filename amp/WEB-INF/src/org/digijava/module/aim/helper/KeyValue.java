@@ -3,7 +3,9 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 import java.util.Comparator;
 
-public class KeyValue implements Serializable {
+import org.dgfoundation.amp.algo.AmpCollections;
+
+public class KeyValue implements Serializable, Comparable<KeyValue> {
 	String key;
 	String value;
 	
@@ -30,6 +32,20 @@ public class KeyValue implements Serializable {
 	
 	public void setValue(String value) {
 		this.value = value;
+	}
+	
+	/**
+	 * convenience for JSPs
+	 * @return
+	 */
+	public String getName()
+	{
+		return getValue();
+	}
+	
+	public String getId()
+	{
+		return getKey();
 	}
 	
 	public final static Comparator<KeyValue> keyComparator		= new Comparator<KeyValue>() {
@@ -63,5 +79,22 @@ public class KeyValue implements Serializable {
 		{
 			throw new RuntimeException(e);
 		}
+	}
+	
+	@Override public int compareTo(KeyValue oth)
+	{
+		Long a = this.getKeyAsLong(), b = oth.getKeyAsLong();
+		Integer comp = AmpCollections.nullCompare(a, b);
+		if (comp != null)
+			return comp;
+		return 0;
+	}
+	
+	@Override public boolean equals(Object oth){
+		return this.compareTo((KeyValue) oth) == 0;
+	}
+	
+	@Override public int hashCode(){
+		return (this.key.hashCode() * 17) ^ this.value.hashCode();
 	}
 }

@@ -37,15 +37,21 @@ public class AddPledge extends Action {
     		PledgeForm plForm = (PledgeForm) form;
     		HttpSession session = request.getSession();
     		
-    		// Add sectors
-    		if (request.getParameter("addSector") != null) {
-    			request.getSession().getServletContext().removeAttribute("addSector");
-    			return addSector(mapping, session, plForm);
-    		}else if (request.getParameter("remSectors") != null) {
-    			//return removeSector(mapping, request, session, plForm);
-    	    }
-    	    //
+//    		FundingPledges fp2 = PledgesEntityHelper.getPledgesById(3l);
+//    		plForm.reset();
+//    		plForm.importPledgeData(fp2);
+//    		if (System.currentTimeMillis() > 1)
+//    			return null;
     		
+//    		// Add sectors
+//    		if (request.getParameter("addSector") != null) {
+//    			request.getSession().getServletContext().removeAttribute("addSector");
+//    			return addSector(mapping, session, plForm);
+//    		}else if (request.getParameter("remSectors") != null) {
+//    			//return removeSector(mapping, request, session, plForm);
+//    	    }
+//    	    //
+//    		
     		plForm.setPledgeTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_TYPES_KEY));
     		
     		//plForm.setPledgeNames(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_NAMES_KEY));
@@ -113,181 +119,181 @@ public class AddPledge extends Action {
             
     }
     
-    private ActionForward addSector(ActionMapping mapping, HttpSession session,
-    		PledgeForm plForm) {
-    	Object searchedsector = session.getAttribute("add");
-
-    	if (searchedsector != null && searchedsector.equals("true")) {
-    		Collection selectedSecto = (Collection) session
-    				.getAttribute("sectorSelected");
-    		Collection<ActivitySector> prevSelSectors = plForm.getPledgeSectors();
-
-    		if (selectedSecto != null) {
-    			Iterator<ActivitySector> itre = selectedSecto.iterator();
-    			while (itre.hasNext()) {
-    				ActivitySector selectedSector = (ActivitySector) itre
-    						.next();
-
-    				boolean addSector = true;
-    				if (prevSelSectors != null) {
-    					Iterator<ActivitySector> itr = prevSelSectors
-    							.iterator();
-    					while (itr.hasNext()) {
-    						ActivitySector asec = (ActivitySector) itr
-    								.next();
-
-    						if (asec.getSectorName().equals(selectedSector.getSectorName())) {
-    							if (selectedSector.getSubsectorLevel1Name() == null) {
-    								addSector = false;
-    								break;
-    							}
-    							if (asec.getSubsectorLevel1Name() != null) {
-    								if (asec.getSubsectorLevel1Name().equals(selectedSector.getSubsectorLevel1Name())) {
-    									if (selectedSector.getSubsectorLevel2Name() == null) {
-    										addSector = false;
-    										break;
-    									}
-    									if (asec.getSubsectorLevel2Name() != null) {
-    										if (asec.getSubsectorLevel2Name().equals(selectedSector.getSubsectorLevel2Name())) {
-    											addSector = false;
-    											break;
-    										}
-    									} else {
-    										addSector = true;
-    										break;
-    									}
-    								}
-    							} else {
-    								addSector = true;
-    								break;
-    							}
-    						}
-    					}
-    				}
-
-    				if (addSector) {
-    					if (prevSelSectors != null) {
-    	                    Iterator iter = prevSelSectors.iterator();
-    	                    boolean firstSecForConfig = true;
-                            while (iter.hasNext()) {
-                                ActivitySector actSect = (ActivitySector) iter
-                                    .next();
-                                if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
-                                	if(actSect.getSectorPercentage() != null && actSect.getSectorPercentage()==100f){
-                                		actSect.setSectorPercentage(0f);
-                                	}	
-                                		
-                                    firstSecForConfig = false;
-                                    break;
-                                }
-
-                            }
-                            if (firstSecForConfig) {
-    	                        selectedSector.setSectorPercentage(100f);
-    	                    }
-    	                    prevSelSectors.add(selectedSector);
-    	                } else {
-    	                    selectedSector.setSectorPercentage(new Float(
-    	                        100));
-    	                    prevSelSectors = new ArrayList<ActivitySector> ();
-    	                    prevSelSectors.add(selectedSector);
-    	                }
-    				}
-
-    				plForm.setPledgeSectors (prevSelSectors);
-    			}
-
-    		}
-    		session.removeAttribute("sectorSelected");
-    		session.removeAttribute("add");
-    		session.removeAttribute("addSector");
-    	    return mapping.findForward("added");
-
-    	} else {
-    		ActivitySector selectedSector = (ActivitySector) session
-    				.getAttribute("sectorSelected");
-    		Collection<ActivitySector> prevSelSectors = plForm.getPledgeSectors();
-
-    		boolean addSector = true;
-    		if (prevSelSectors != null) {
-    			Iterator<ActivitySector> itr = prevSelSectors.iterator();
-    			while (itr.hasNext()) {
-    				ActivitySector asec = (ActivitySector) itr.next();
-    				if (asec.getSectorName().equals(
-    						selectedSector.getSectorName())) {
-    					if (selectedSector.getSubsectorLevel1Name() == null) {
-    						addSector = false;
-    						break;
-    					}
-    					if (asec.getSubsectorLevel1Name() != null) {
-    						if (asec
-    								.getSubsectorLevel1Name()
-    								.equals(
-    										selectedSector
-    												.getSubsectorLevel1Name())) {
-    							if (selectedSector.getSubsectorLevel2Name() == null) {
-    								addSector = false;
-    								break;
-    							}
-    							if (asec.getSubsectorLevel2Name() != null) {
-    								if (asec
-    										.getSubsectorLevel2Name()
-    										.equals(
-    												selectedSector
-    														.getSubsectorLevel2Name())) {
-    									addSector = false;
-    									break;
-    								}
-    							} else {
-    								addSector = false;
-    								break;
-    							}
-    						}
-    					} else {
-    						addSector = false;
-    						break;
-    					}
-    				}
-    			}
-    		}
-
-    	    if (addSector) {
-    	        // if an activity already has one or more sectors,than after
-    	        // adding new one
-    	        // the percentages must equal blanks and user should fill
-    	        // them
-    	        if (prevSelSectors != null) {
-    	            Iterator iter = prevSelSectors.iterator();
-    	            boolean firstSecForConfig = true;
-    	            while (iter.hasNext()) {
-    	                ActivitySector actSect = (ActivitySector) iter
-    	                    .next();
-    	                if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
-    	                	if(actSect.getSectorPercentage()==100f){
-    	                		actSect.setSectorPercentage(0.0f);
-    	                	}                            	
-    	                    firstSecForConfig = false;
-    	                    break;
-    	                }
-
-    	            }
-    	            if (firstSecForConfig) {
-    	                selectedSector.setSectorPercentage(100f);
-    	            }
-    	            prevSelSectors.add(selectedSector);
-    	        } else {
-    	            selectedSector.setSectorPercentage(new Float(
-    	                100));
-    	            prevSelSectors = new ArrayList<ActivitySector> ();
-    	            prevSelSectors.add(selectedSector);
-    	        }
-    	    }
-    		plForm.setPledgeSectors(prevSelSectors);
-    		session.removeAttribute("sectorSelected");
-    		session.removeAttribute("addSector");
-    	    return mapping.findForward("added");
-    	}
-    }
+//    private ActionForward addSector(ActionMapping mapping, HttpSession session,
+//    		PledgeForm plForm) {
+//    	Object searchedsector = session.getAttribute("add");
+//
+//    	if (searchedsector != null && searchedsector.equals("true")) {
+//    		Collection selectedSecto = (Collection) session
+//    				.getAttribute("sectorSelected");
+//    		Collection<ActivitySector> prevSelSectors = plForm.getPledgeSectors();
+//
+//    		if (selectedSecto != null) {
+//    			Iterator<ActivitySector> itre = selectedSecto.iterator();
+//    			while (itre.hasNext()) {
+//    				ActivitySector selectedSector = (ActivitySector) itre
+//    						.next();
+//
+//    				boolean addSector = true;
+//    				if (prevSelSectors != null) {
+//    					Iterator<ActivitySector> itr = prevSelSectors
+//    							.iterator();
+//    					while (itr.hasNext()) {
+//    						ActivitySector asec = (ActivitySector) itr
+//    								.next();
+//
+//    						if (asec.getSectorName().equals(selectedSector.getSectorName())) {
+//    							if (selectedSector.getSubsectorLevel1Name() == null) {
+//    								addSector = false;
+//    								break;
+//    							}
+//    							if (asec.getSubsectorLevel1Name() != null) {
+//    								if (asec.getSubsectorLevel1Name().equals(selectedSector.getSubsectorLevel1Name())) {
+//    									if (selectedSector.getSubsectorLevel2Name() == null) {
+//    										addSector = false;
+//    										break;
+//    									}
+//    									if (asec.getSubsectorLevel2Name() != null) {
+//    										if (asec.getSubsectorLevel2Name().equals(selectedSector.getSubsectorLevel2Name())) {
+//    											addSector = false;
+//    											break;
+//    										}
+//    									} else {
+//    										addSector = true;
+//    										break;
+//    									}
+//    								}
+//    							} else {
+//    								addSector = true;
+//    								break;
+//    							}
+//    						}
+//    					}
+//    				}
+//
+//    				if (addSector) {
+//    					if (prevSelSectors != null) {
+//    	                    Iterator iter = prevSelSectors.iterator();
+//    	                    boolean firstSecForConfig = true;
+//                            while (iter.hasNext()) {
+//                                ActivitySector actSect = (ActivitySector) iter
+//                                    .next();
+//                                if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
+//                                	if(actSect.getSectorPercentage() != null && actSect.getSectorPercentage()==100f){
+//                                		actSect.setSectorPercentage(0f);
+//                                	}	
+//                                		
+//                                    firstSecForConfig = false;
+//                                    break;
+//                                }
+//
+//                            }
+//                            if (firstSecForConfig) {
+//    	                        selectedSector.setSectorPercentage(100f);
+//    	                    }
+//    	                    prevSelSectors.add(selectedSector);
+//    	                } else {
+//    	                    selectedSector.setSectorPercentage(new Float(
+//    	                        100));
+//    	                    prevSelSectors = new ArrayList<ActivitySector> ();
+//    	                    prevSelSectors.add(selectedSector);
+//    	                }
+//    				}
+//
+//    				plForm.setPledgeSectors (prevSelSectors);
+//    			}
+//
+//    		}
+//    		session.removeAttribute("sectorSelected");
+//    		session.removeAttribute("add");
+//    		session.removeAttribute("addSector");
+//    	    return mapping.findForward("added");
+//
+//    	} else {
+//    		ActivitySector selectedSector = (ActivitySector) session
+//    				.getAttribute("sectorSelected");
+//    		Collection<ActivitySector> prevSelSectors = plForm.getPledgeSectors();
+//
+//    		boolean addSector = true;
+//    		if (prevSelSectors != null) {
+//    			Iterator<ActivitySector> itr = prevSelSectors.iterator();
+//    			while (itr.hasNext()) {
+//    				ActivitySector asec = (ActivitySector) itr.next();
+//    				if (asec.getSectorName().equals(
+//    						selectedSector.getSectorName())) {
+//    					if (selectedSector.getSubsectorLevel1Name() == null) {
+//    						addSector = false;
+//    						break;
+//    					}
+//    					if (asec.getSubsectorLevel1Name() != null) {
+//    						if (asec
+//    								.getSubsectorLevel1Name()
+//    								.equals(
+//    										selectedSector
+//    												.getSubsectorLevel1Name())) {
+//    							if (selectedSector.getSubsectorLevel2Name() == null) {
+//    								addSector = false;
+//    								break;
+//    							}
+//    							if (asec.getSubsectorLevel2Name() != null) {
+//    								if (asec
+//    										.getSubsectorLevel2Name()
+//    										.equals(
+//    												selectedSector
+//    														.getSubsectorLevel2Name())) {
+//    									addSector = false;
+//    									break;
+//    								}
+//    							} else {
+//    								addSector = false;
+//    								break;
+//    							}
+//    						}
+//    					} else {
+//    						addSector = false;
+//    						break;
+//    					}
+//    				}
+//    			}
+//    		}
+//
+//    	    if (addSector) {
+//    	        // if an activity already has one or more sectors,than after
+//    	        // adding new one
+//    	        // the percentages must equal blanks and user should fill
+//    	        // them
+//    	        if (prevSelSectors != null) {
+//    	            Iterator iter = prevSelSectors.iterator();
+//    	            boolean firstSecForConfig = true;
+//    	            while (iter.hasNext()) {
+//    	                ActivitySector actSect = (ActivitySector) iter
+//    	                    .next();
+//    	                if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
+//    	                	if(actSect.getSectorPercentage()==100f){
+//    	                		actSect.setSectorPercentage(0.0f);
+//    	                	}                            	
+//    	                    firstSecForConfig = false;
+//    	                    break;
+//    	                }
+//
+//    	            }
+//    	            if (firstSecForConfig) {
+//    	                selectedSector.setSectorPercentage(100f);
+//    	            }
+//    	            prevSelSectors.add(selectedSector);
+//    	        } else {
+//    	            selectedSector.setSectorPercentage(new Float(
+//    	                100));
+//    	            prevSelSectors = new ArrayList<ActivitySector> ();
+//    	            prevSelSectors.add(selectedSector);
+//    	        }
+//    	    }
+//    		plForm.setPledgeSectors(prevSelSectors);
+//    		session.removeAttribute("sectorSelected");
+//    		session.removeAttribute("addSector");
+//    	    return mapping.findForward("added");
+//    	}
+//    }
    
 }
 

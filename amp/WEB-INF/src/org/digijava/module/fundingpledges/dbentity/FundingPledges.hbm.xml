@@ -41,6 +41,12 @@
 		<many-to-one name="organizationGroup" column="amp_org_grp_id" class="org.digijava.module.aim.dbentity.AmpOrgGroup" cascade="none" lazy="false"/>
 		<many-to-one name="contactOrganization" column="contactOrganization" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
 		<many-to-one name="contactOrganization_1" column="contactOrganization_1" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
+	
+		<set name="programlist" lazy="true" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write"/>
+			<key column="pledge_id"/>
+			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram" />
+		</set>
 		  
 		<set name="locationlist" lazy="true" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write"/>

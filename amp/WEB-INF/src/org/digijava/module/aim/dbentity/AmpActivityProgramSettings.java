@@ -53,12 +53,7 @@ public class AmpActivityProgramSettings implements Serializable {
 
         public void setDefaultHierarchyId(Long id) {
                 if (id != null && id != new Long( -1)) {
-                        try {
-							this.defaultHierarchy = ProgramUtil.getThemeById(id);
-						} catch (DgException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+                        this.defaultHierarchy = ProgramUtil.getThemeById(id);						
                 }
                 else {
                         this.defaultHierarchy = null;

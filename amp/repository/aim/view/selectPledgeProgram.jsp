@@ -13,12 +13,12 @@
 <c:set var="act">${param.extraAction}</c:set>
 <%--<c:set var="rll_ajax">render_locations_list</c:set>  --%>
 <%
-	if ("render_programs_list".equals(request.getParameter("extraAction"))) // ajax?
+	if ("pledge_program_refresh_data".equals(request.getParameter("extraAction"))) // ajax?
 	{
 		%><jsp:include page="/repository/aim/view/pledgeform/pledgePrograms.jsp"></jsp:include><%  
-	} else if ("render_locations_add".equals(request.getParameter("extraAction")))
+	} else if ("pledge_program_refresh_add".equals(request.getParameter("extraAction")))
 	{
-		%><jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include><%
+		%><jsp:include page="/repository/aim/view/pledgeform/pledgeProgramsAddProgram.jsp"></jsp:include><%
     } else 
     { // not ajax: render the full bootstrap iframe 
 %>

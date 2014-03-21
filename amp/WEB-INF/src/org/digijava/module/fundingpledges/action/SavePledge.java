@@ -35,11 +35,11 @@ public class SavePledge extends Action {
 			}
     		
     		FundingPledges pledge = null;
-    		if (plForm.getFundingPledges()==null) {
-    			pledge = new FundingPledges();
-			} else {
-				pledge = plForm.getFundingPledges();
-			}
+//    		if (plForm.getFundingPledges()==null) {
+//    			pledge = new FundingPledges();
+//			} else {
+//				pledge = plForm.getFundingPledges();
+//			}
     		
     		pledge.setId(plForm.getPledgeId());
     		if (FeaturesUtil.isVisibleField("Use Free Text")){

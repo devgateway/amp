@@ -53,15 +53,15 @@ function pledge_locations_refresh_add_area()
 	pledges_form_update_area('/selectPledgeLocation.do', 'render_locations_add', 'pledge_add_location_area');
 }
 
-function pledge_programs_refresh_table()
-{
-	pledges_form_update_area('/selectPledgeProgram.do', 'render_programs_list', 'pledge_programs_list');
-}
-
-function pledge_programs_refresh_add_area()
-{
-	pledges_form_update_area('/selectPledgeProgram.do', 'render_programs_add', 'pledge_programs_list');
-}
+//function pledge_programs_refresh_table()
+//{
+//	pledges_form_update_area('/selectPledgeProgram.do', 'render_programs_list', 'pledge_programs_list');
+//}
+//
+//function pledge_programs_refresh_add_area()
+//{
+//	pledges_form_update_area('/selectPledgeProgram.do', 'render_programs_add', 'pledge_programs_list');
+//}
 
 function pledges_form_delete_location(nr)
 {
@@ -92,13 +92,13 @@ $(document).ready(function()
 		//$('#myModal').modal('show');
 		//$('#pledge_add_location_area').modal('show');
 	});
-	$('#pledge_add_program_area').hide();
-	$('#add_program_button').click(function() //click on "Add Program"
-	{
-		$(this).hide();
-		$('#pledge_programs_list').disable();
-		$('#pledge_add_program_area').show();
-	});
+	//$('#pledge_add_program_area').hide();
+//	$('#add_program_button').click(function() //click on "Add Program"
+//	{
+//		$(this).hide();
+//		$('#pledge_programs_list').disable();
+//		$('#pledge_add_program_area').show();
+//	});
 	
 	$('#sameContactCheckBox').change(function(){
 		var is_checked = $(this).is(":checked");
@@ -186,31 +186,18 @@ function pledges_submit_add_locations()
 	});
 }
 
-function pledges_hide_add_program()
-{
-	$('#pledge_add_program_area').hide();
-	$('#add_program_button').show();
-	$('#pledge_programs_list').enable();
-}
-
-// called when users clicks "cancel" in the Add Program area
-function pledges_add_programs_cancel()
-{
-	pledges_hide_add_program();
-}
-
-$(document).on('change', '#program_id_select', function() // change the "Implementation Location" select
-		{
-			var elem = this;
-			$.post("/selectPledgeProgram.do",
-				{
-					extraAction: 'add_program',
-					rootThemeId: $(elem).val()
-				},
-				function (data) {
-					pledge_programs_refresh_table();
-				});
-		});
+//$(document).on('change', '#program_id_select', function() // change the "Implementation Location" select
+//		{
+//			var elem = this;
+//			$.post("/selectPledgeProgram.do",
+//				{
+//					extraAction: 'add_program',
+//					rootThemeId: $(elem).val()
+//				},
+//				function (data) {
+//					pledge_programs_refresh_table();
+//				});
+//		});
 
 /**
  * validates an input with a generic function and highlights any found error

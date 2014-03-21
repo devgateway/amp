@@ -1,14 +1,8 @@
 package org.digijava.module.fundingpledges.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import lombok.Data;
-
 import org.dgfoundation.amp.algo.AmpCollections;
-import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
-import org.digijava.module.fundingpledges.dbentity.ValueWithPercentage;
 
 /**
  * a value with an id, a name and a percentage
@@ -17,44 +11,29 @@ import org.digijava.module.fundingpledges.dbentity.ValueWithPercentage;
  */
 @Data
 public class IdNamePercentage implements Comparable<IdNamePercentage>{
-	public Long id;
-	public String name;
+	public final Long id;
+	public final String name;
 	
-	public Long rootId;
-	public String rootName;
+	public final Long rootId;
+	public final String rootName;
 	
-	public String hierarchicalName;
+	public final String hierarchicalName;
 	public Float percentage;
-	
-	public IdNamePercentage(ValueWithPercentage val)
-	{
-		//this.dbId = val.getDbId();
-		this.id = val.getInternalId();
-		this.name = val.getName();
 		
-		this.rootId = val.getRootId();
-		this.rootName = val.getRootName();
-		
-		this.hierarchicalName = val.getHierarchicalName();
-		this.percentage = val.getPercentage();
-	}
-	
-	public IdNamePercentage(Long id, Long rootId, String name, String hierarchicalName)
+	public IdNamePercentage(Long id, String name, Long rootId, String rootName, String hierarchicalName)
 	{
 		this.id = id;
-		this.rootId = rootId;
 		this.name = name;
+		this.rootId = rootId;
+		this.rootName = rootName;
 		this.hierarchicalName = hierarchicalName;
 	}
 	
-	public static List<IdNamePercentage> fromList(Collection<? extends ValueWithPercentage> vals)
+	public IdNamePercentage(Long id, String name, String hierarchicalName)
 	{
-		List<IdNamePercentage> res = new ArrayList<>();
-		for(ValueWithPercentage val:vals)
-			res.add(new IdNamePercentage(val));
-		return res;
+		this(id, name, id, name, hierarchicalName);
 	}
-	
+		
 	@Override
 	public int compareTo(IdNamePercentage oth)
 	{
@@ -65,5 +44,8 @@ public class IdNamePercentage implements Comparable<IdNamePercentage>{
 		return a == null ? 0 : a.intValue();
 	}
 	
-	
+	public IdNamePercentage setPercentage(Float perc){
+		this.percentage = perc;
+		return this;
+	}
 }

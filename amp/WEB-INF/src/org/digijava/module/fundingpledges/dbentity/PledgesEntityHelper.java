@@ -268,7 +268,7 @@ public class PledgesEntityHelper {
 			
 			updatePledgeItemsAccordingToForm(session, pledge, sectors, fpsl);
 			updatePledgeItemsAccordingToForm(session, pledge, plf.getFundingPledgesDetails(), fpdl);
-			updatePledgeItemsAccordingToForm(session, pledge, plf.getSelectedLocs(), fpll);
+			//updatePledgeItemsAccordingToForm(session, pledge, plf.getSelectedLocs(), fpll);
 			//updatePledgeItemsAccordingToForm(session, pledge, plf.getSelectedProgs(), fppl);
 
 		} catch (HibernateException e) {

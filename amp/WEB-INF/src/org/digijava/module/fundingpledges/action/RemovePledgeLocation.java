@@ -24,31 +24,32 @@ public class RemovePledgeLocation extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		HttpSession session = request.getSession();
-		PledgeForm plForm = (PledgeForm) form;
-		
-		if (plForm.getSelectedLocs() != null) {
-			selectedLocs = new ArrayList<FundingPledgesLocation>(plForm.getSelectedLocs());
-			String deleteList[] = request.getParameter("deleteLocs").split("_");
-			Iterator <FundingPledgesLocation> iter=selectedLocs.iterator();
-			ArrayList<FundingPledgesLocation> locationsToDelete = new ArrayList<FundingPledgesLocation>();
-			Integer i = 1;
-			while(iter.hasNext()){
-				FundingPledgesLocation del = iter.next();
-            	for (int j = 0; j < deleteList.length; j++) {
-					if (deleteList[j].equals(i.toString())){
-						locationsToDelete.add(del);
-					}
-				}	
-            	i++;
-            }
-			if (locationsToDelete.size()!=0) {
-				selectedLocs.removeAll(locationsToDelete);
-			}
-			plForm.setSelectedLocs(selectedLocs);
-		}
-		
-		request.getSession().removeAttribute("deleteLocs");
+		// TODO: NOT USED, TO DELETE
+//		HttpSession session = request.getSession();
+//		PledgeForm plForm = (PledgeForm) form;
+//		
+//		if (plForm.getSelectedLocs() != null) {
+//			selectedLocs = new ArrayList<FundingPledgesLocation>(plForm.getSelectedLocs());
+//			String deleteList[] = request.getParameter("deleteLocs").split("_");
+//			Iterator <FundingPledgesLocation> iter=selectedLocs.iterator();
+//			ArrayList<FundingPledgesLocation> locationsToDelete = new ArrayList<FundingPledgesLocation>();
+//			Integer i = 1;
+//			while(iter.hasNext()){
+//				FundingPledgesLocation del = iter.next();
+//            	for (int j = 0; j < deleteList.length; j++) {
+//					if (deleteList[j].equals(i.toString())){
+//						locationsToDelete.add(del);
+//					}
+//				}	
+//            	i++;
+//            }
+//			if (locationsToDelete.size()!=0) {
+//				selectedLocs.removeAll(locationsToDelete);
+//			}
+//			plForm.setSelectedLocs(selectedLocs);
+//		}
+//		
+//		request.getSession().removeAttribute("deleteLocs");
 		return mapping.findForward("forward");
 	}
 }

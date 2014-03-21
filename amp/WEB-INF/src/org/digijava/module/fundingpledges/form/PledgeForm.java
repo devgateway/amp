@@ -57,6 +57,24 @@ public class PledgeForm extends ActionForm implements Serializable
 	public final static List<DisableableKeyValue> DISABLEABLE_KV_PLEASE_SELECT = new ArrayList<DisableableKeyValue>(){{add(new DisableableKeyValue(-1l, SELECT_BOX_DROP_DOWN_NAME, true));}};
 	public final static List<KeyValue> KV_PLEASE_SELECT = new ArrayList<KeyValue>(){{add(new KeyValue(-1l, SELECT_BOX_DROP_DOWN_NAME));}};
 	
+	/**
+	 * extract IdNamePercentage from a FPL entry
+	 */
+	public final static Function<AmpCategoryValueLocations, IdNamePercentage> PLEDGE_LOCATION_EXTRACTOR = new Function<AmpCategoryValueLocations, IdNamePercentage>() {
+		public IdNamePercentage apply(AmpCategoryValueLocations acvl){
+			return new IdNamePercentage(acvl.getId(), acvl.getName(), acvl.getHierarchicalName());
+		}
+	};
+
+	/**
+	 * extract IdNamePercentage from a FPL entry
+	 */
+	public final static Function<AmpTheme, IdNamePercentage> PLEDGE_PROGRAM_EXTRACTOR = new Function<AmpTheme, IdNamePercentage>() {
+		public IdNamePercentage apply(AmpTheme theme){			
+			return new IdNamePercentage(theme.getAmpThemeId(), theme.getName(), theme.getRootTheme().getAmpThemeId(), theme.getRootTheme().getName(), theme.getHierarchicalName());
+		}
+	};
+
 	private static final long serialVersionUID = 1L;
 	private Long pledgeId;
 	//private FundingPledges fundingPledges;
@@ -94,7 +112,7 @@ public class PledgeForm extends ActionForm implements Serializable
      * implementation level ACV.id
      */
 	private Long levelId = null;
-	private List<FundingPledgesLocation> selectedLocs = new ArrayList<>();	
+	private List<IdNamePercentage> selectedLocs = new ArrayList<>();	
 	
 	/* Fields for Programs */
 	private Long selectedRootProgram;
@@ -181,11 +199,15 @@ public class PledgeForm extends ActionForm implements Serializable
 		}
     	
     	this.setPledgeSectors(asl);
-    	this.setSelectedLocs(PledgesEntityHelper.getPledgesLocations(fp.getId()));
-    	//System.out.println(PledgesEntityHelper.getPledgesPrograms(fp.getId()).size());
-    	//this.setSelectedProgs(IdNamePercentage.fromList(PledgesEntityHelper.getPledgesPrograms(fp.getId())));
-    	System.out.println(fp.getProgramlist().size());
-    	this.setSelectedProgs(IdNamePercentage.fromList(fp.getProgramlist()));
+    	
+    	this.setSelectedLocs(new ArrayList<IdNamePercentage>());    	
+    	for(FundingPledgesLocation loc:fp.getLocationlist())
+    		selectedLocs.add(PLEDGE_LOCATION_EXTRACTOR.apply(loc.getLocation()).setPercentage(loc.getLocationpercentage()));
+
+    	this.setSelectedProgs(new ArrayList<IdNamePercentage>());
+    	for(FundingPledgesProgram prog:fp.getProgramlist())
+    		selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(prog.getProgram()).setPercentage(prog.getProgrampercentage()));
+
     	this.setFundingPledgesDetails(PledgesEntityHelper.getPledgesDetails(fp.getId()));
     }
     
@@ -206,12 +228,8 @@ public class PledgeForm extends ActionForm implements Serializable
      * returns set of all the selected locations
      * @return Set<ACVL.id>
      */
-    public Set<Long> getAllSelectedLocations()
-    {
-    	Set<Long> res = new HashSet<Long>();
-    	for(FundingPledgesLocation fpl:this.getSelectedLocs())
-    		res.add(fpl.getLocation().getId());
-    	return res;
+    public Set<Long> getAllSelectedLocations(){
+    	return collectIds(this.getSelectedLocs());
     }
     
     /**
@@ -307,19 +325,14 @@ public class PledgeForm extends ActionForm implements Serializable
     	return selectSingleAvailableOption(res);
     }
     
-    public void addSelectedLocation(long locId)
-    {
-    	FundingPledgesLocation fpl = new FundingPledgesLocation();
-    	fpl.setLocation(DynLocationManagerUtil.getLocation(locId, false));
-    	fpl.setLocationpercentage(0f);
-    	selectedLocs.add(fpl);
+    public void addSelectedLocation(long locId){
+    	AmpCategoryValueLocations acvl = DynLocationManagerUtil.getLocation(locId, false);
+    	selectedLocs.add(PLEDGE_LOCATION_EXTRACTOR.apply(acvl).setPercentage(0f));
     }
     
-    public void addSelectedProgram(long themeId)
-    {
+    public void addSelectedProgram(long themeId){
     	AmpTheme theme = ProgramUtil.getThemeById(themeId);
-		IdNamePercentage fpp = new IdNamePercentage(theme.getAmpThemeId(), theme.getRootTheme().getAmpThemeId(), theme.getName(), theme.getHierarchicalName());
-		selectedProgs.add(fpp);
+		selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(theme).setPercentage(0f));
     }
     
     /**
@@ -357,9 +370,8 @@ public class PledgeForm extends ActionForm implements Serializable
 	{
 		return distribute(selectedProgs, new Function<IdNamePercentage, KeyValue>(){
 			public KeyValue apply(IdNamePercentage from) {
-			    return new KeyValue(from.getRootId(), from.getRootName());
-			  }
-		});
+				return new KeyValue(from.getRootId(), from.getRootName());}
+			});
 	}
 	
 	/**
@@ -382,16 +394,20 @@ public class PledgeForm extends ActionForm implements Serializable
 		}));
 	}
 	
-	   /**
+	public Set<Long> collectIds(Collection<IdNamePercentage> in){
+    	Set<Long> res = new HashSet<Long>();
+    	for(IdNamePercentage fpl:in)
+    		res.add(fpl.getId());
+    	return res;
+	}
+	
+	/**
      * returns set of ids all the selected programs
      * @return Set<ACVL.id>
      */
     public Set<Long> getAllPrograms()
     {
-    	Set<Long> res = new HashSet<Long>();
-    	for(IdNamePercentage fpl:this.getSelectedProgs())
-    		res.add(fpl.getId());
-    	return res;
+    	return collectIds(this.getSelectedProgs());
     }
     
     void findRecursively(List<DisableableKeyValue> res, Long themeId, Set<Long> forbidden, Set<Long> selected, String prefix)

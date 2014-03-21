@@ -130,7 +130,9 @@ public class TranslationDecorator extends Panel {
                         link.add(new AttributePrepender("onclick", Model.of("$('#" + area.getCloseLink().getMarkupId() + "').click();"), " "));
                         link.add(new AttributeAppender("onclick", Model.of("return false;"), " "));
                     }
-                } else if (component.getClass().getEnclosingClass() != null && component.getClass().getEnclosingClass().isAssignableFrom(AmpTextFieldPanel.class)) {
+                } else if (component.getClass().getEnclosingClass() != null &&
+                        (component.getClass().getEnclosingClass().isAssignableFrom(AmpTextFieldPanel.class) ||
+                         component.getClass().getEnclosingClass().isAssignableFrom(AmpTextAreaFieldPanel.class))) {
                     link.add(new AttributeAppender("onclick", Model.of("return false;"), " "));
                 }
                 item.add(new AttributeModifier("class", classValue));

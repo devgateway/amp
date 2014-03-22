@@ -27,15 +27,6 @@ function pledges_form_check_percentage(inputItem, itemsClass, error_message_nume
 	return true;
 }
 
-function pledges_form_delete_location(nr)
-{
-	$.post('/removePledgeLocation.do', 
-			{ deleteLocs: nr },
-			function(data)
-			{
-				pledge_locations_refresh_table();
-			});
-}
 
 function copy_from_contact_1_to_contact_2(input_elem)
 {
@@ -116,7 +107,7 @@ function on_element_loaded()
 		$('select').addClass('text-left');
 		$('select').selectpicker({
 			style: 'btn-primary btn-xs',
-			'data-style': 'btn-primary',
+			'data-style': 'btn-primary btn-xs',
 			//size: 5
 		});
 	});
@@ -151,6 +142,13 @@ $(document).ready(function() // enable javascript-backed ajax forms
 		 	{id: 'program_item_select', action: 'themeSelected', attr: 'themeId'}
 		]);
 	};
+	
+	if ($('#pledge_form_funding').size() > 0)
+	{
+		window.fundingsController = new InteractiveFormArea('#pledge_form_funding', '/selectPledgeProgram.do', 'selected_funding', 'pledge_funding',
+			[] // no select's - that area is empty
+		);
+	}
 	
 });
 

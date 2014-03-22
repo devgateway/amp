@@ -9,13 +9,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class FundingPledgesDetailsShim {
+public class FundingPledgesDetailsShim implements UniquelyIdentifiable{
 	private Long pledgeTypeId;
 	private Long typeOfAssistanceId;
 	private Long aidModalityId;	
 	private Double amount;
 	private Long currencyId;
 	private Long fundingYear;
+	
+	private long uniqueId = PledgeForm.uniqueIds.getAndIncrement();
 	
 	public FundingPledgesDetailsShim(FundingPledgesDetails fpd)
 	{
@@ -39,5 +41,5 @@ public class FundingPledgesDetailsShim {
 			return Long.parseLong(z);
 		}
 		catch(Exception e) {return null;}
-	}
+	}	
 }

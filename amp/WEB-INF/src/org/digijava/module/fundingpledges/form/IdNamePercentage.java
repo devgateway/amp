@@ -2,6 +2,7 @@ package org.digijava.module.fundingpledges.form;
 
 
 import lombok.Data;
+
 import org.dgfoundation.amp.algo.AmpCollections;
 
 /**
@@ -10,7 +11,7 @@ import org.dgfoundation.amp.algo.AmpCollections;
  *
  */
 @Data
-public class IdNamePercentage implements Comparable<IdNamePercentage>{
+public class IdNamePercentage implements Comparable<IdNamePercentage>, UniquelyIdentifiable{
 	public final Long id;
 	public final String name;
 	
@@ -19,6 +20,8 @@ public class IdNamePercentage implements Comparable<IdNamePercentage>{
 	
 	public final String hierarchicalName;
 	public Float percentage;
+	
+	private long uniqueId = PledgeForm.uniqueIds.getAndIncrement();
 		
 	public IdNamePercentage(Long id, String name, Long rootId, String rootName, String hierarchicalName)
 	{

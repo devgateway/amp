@@ -71,6 +71,11 @@ public class SelectPledgeProgram extends Action {
 				return null;
 			}
 			
+			if (extraAction.equals("pledge_program_delete")){
+				pledgeForm.deleteUniquelyIdentifiable(pledgeForm.getSelectedProgs(), Long.parseLong(request.getParameter("id")));
+				return null;
+			}
+		
 			if (extraAction.equals("pledge_sector_rootSectorChanged"))
 			{
 				pledgeForm.setSelectedRootSector(Long.parseLong(request.getParameter("rootSectorId")));
@@ -85,6 +90,16 @@ public class SelectPledgeProgram extends Action {
 					pledgeForm.addSelectedSector(sid);
 				}
 				ARUtil.writeResponse(response, "ok");
+				return null;
+			}
+			
+			if (extraAction.equals("pledge_sector_delete")){
+				pledgeForm.deleteUniquelyIdentifiable(pledgeForm.getSelectedSectors(), Long.parseLong(request.getParameter("id")));
+				return null;
+			}
+
+			if (extraAction.equals("pledge_funding_delete")){
+				pledgeForm.deleteUniquelyIdentifiable(pledgeForm.getSelectedFunding(), Long.parseLong(request.getParameter("id")));
 				return null;
 			}
 			

@@ -96,6 +96,8 @@
 	<feature:display name="Pledge Funding" module="Pledges">
 		<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
 			<jsp:include page="pledgeFunding.jsp"></jsp:include>
+			<div class="text-center"><button type="button" onclick="fundingsController.addNewItem(this);" class="btn btn-success btn-sm" id="pledge_form_funding_data_add"><digi:trn>Add Pledge Funding</digi:trn></button></div>
+			<div id="pledge_form_funding_change">&nbsp; <!-- our super-duper controller checks for this div to exist --></div>
 		</aim:renderFormSubsection>
 	</feature:display>
 	

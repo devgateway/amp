@@ -41,6 +41,12 @@ public class SelectPledgeLocation extends Action {
 				return null;
 			}
 			
+			if (extraAction.equals("add_locations_delete")){
+				pledgeForm.deleteUniquelyIdentifiable(pledgeForm.getSelectedLocs(), Long.parseLong(request.getParameter("id")));
+				return null;
+			}
+				
+			
 			if (extraAction.equals("add_locations_implLevelChanged"))
 			{
 				pledgeForm.setLevelId(Long.parseLong(request.getParameter("implLevelId")));

@@ -32,12 +32,12 @@
 					<c:forEach var="prog" items="${pledgeForm.selectedProgs}" varStatus="index">
 						<c:set var="indexLoc" value="${indexLoc+1}" />
 						<c:if test="${prog.rootId eq rootTheme.keyAsLong}">
-							<tr>
+							<tr id="pledge_form_row_forprog_${prog.uniqueId}">
 								<td class="text-right"><c:out value="${prog.hierarchicalName}" /></td>
 								<td>
 									<html:text name="prog" indexed="true" property="percentage" size="5"  onblur="programsController.onPercentageBlur(this);" styleClass="form-control input-sm input-pledges-programs" />
 								</td>
-								<td class="text-center"><button type="button" onclick="programsController.onDelete(this);" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
+								<td class="text-center"><button type="button" onclick="programsController.onDelete(${prog.uniqueId});" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
 							</tr>
 						</c:if>
 					</c:forEach>

@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import lombok.Data;
 
@@ -58,6 +60,7 @@ import com.google.common.collect.Maps;
  */
 public class PledgeForm extends ActionForm implements Serializable
 {
+	public final static AtomicLong uniqueIds = new AtomicLong(1l);
 	public final static String SELECT_BOX_DROP_DOWN_NAME = "Please select from below";
 	public final static List<DisableableKeyValue> DISABLEABLE_KV_PLEASE_SELECT = new ArrayList<DisableableKeyValue>(){{add(new DisableableKeyValue(-1l, SELECT_BOX_DROP_DOWN_NAME, true));}};
 	public final static List<KeyValue> KV_PLEASE_SELECT = new ArrayList<KeyValue>(){{add(new KeyValue(-1l, SELECT_BOX_DROP_DOWN_NAME));}};
@@ -563,6 +566,19 @@ public class PledgeForm extends ActionForm implements Serializable
     public boolean getFundingShowAidModality() {
     	//<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
     	return FeaturesUtil.isVisibleField("Pledge Funding - Aid Modality");
+    }
+    
+    public int deleteUniquelyIdentifiable(Collection<? extends UniquelyIdentifiable> col, long id){
+    	int res = 0;
+    	Iterator<? extends UniquelyIdentifiable> it = col.iterator();
+    	while(it.hasNext()){
+    		UniquelyIdentifiable elem = it.next();
+    		if (elem.getUniqueId() == id){
+    			res ++;
+    			it.remove();
+    		}
+    	}
+    	return res;
     }
 }
 

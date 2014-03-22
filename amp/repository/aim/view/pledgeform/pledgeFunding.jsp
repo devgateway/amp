@@ -27,7 +27,7 @@
 				<tbody>	
 					<c:forEach var="fund" items="${pledgeForm.selectedFunding}" varStatus="index">
 						<c:set var="indexLoc" value="${indexLoc+1}" />
-						<tr>
+						<tr id="pledge_form_row_for_funding_${fund.uniqueId}">
 							<td class="text-center">
 								<c:set var="select_id" value="pledgeTypeDropDown_${indexLoc}" /><c:set var="extra_tags">data-width="100%"</c:set>
 								<c:set var="select_values" value="${pledgeForm.pledgeTypes}" />
@@ -58,10 +58,14 @@
 							<td class="text-center">
 								<input type="text" id="pledgeFundingYear_${indexLoc}" class="form-control input-sm" value="<c:out value='${fund.fundingYear}' /> "/> 
 							</td>
-							<td class="text-center"><button type="button" onclick="programsController.onDelete(this);" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
+							<td class="text-center"><button type="button" onclick="fundingsController.onDelete(${fund.uniqueId});" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 	</c:if>
 </div>
+
+<script type="text/javascript">
+	on_element_loaded();
+</script>

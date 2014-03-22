@@ -57,6 +57,16 @@ function InteractiveFormArea(masterDivId, ajaxPage, submitAttrName, actionName, 
 	_self.registerJsEvents();
 }
 
+InteractiveFormArea.prototype.onDelete = function(element_id){
+	var _self = this;
+	$.post(_self.ajaxPage,
+			{extraAction: _self.actionName + "_delete",
+			'id': element_id},
+			function(data){
+				_self.refreshDataArea();
+			});
+};
+
 /**
  * click on dropdown change
  * @param id
@@ -118,14 +128,23 @@ InteractiveFormArea.prototype.cancelClicked = function(elem){
 	this.hideAddArea();
 };
 
-InteractiveFormArea.prototype.submitClicked = function(elem) {
+InteractiveFormArea.prototype.addNewItem = function(elem){ // called when 
+	this.submitClicked(elem, true);
+};
+
+InteractiveFormArea.prototype.submitClicked = function(elem, noIds) {
 	_self = this;
-	this.hideAddArea();
-	var selectedIds = this.getIdsOf(this.selects.last());		
-	if (selectedIds == '')
+	
+	var selectedIds = '';
+	if (!noIds)
 	{
-		// nothing selected -> get outta here
-		return;
+		this.hideAddArea();
+		selectedIds = this.getIdsOf(this.selects.last());		
+		if (selectedIds == '')
+		{
+			// nothing selected -> get outta here
+			return;
+		}
 	}
 	// we have data to POST -> now post it and refresh
 	var zzz = {};

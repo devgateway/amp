@@ -16,10 +16,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -52,7 +51,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
 
 /**
  * Identification section in activity form. This is also an AMP feature
@@ -62,18 +61,10 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePanel {
 
 	private static final long serialVersionUID = 8568986144567957699L;
-	private AmpTextAreaFieldPanel title;
-	private AmpCategorySelectFieldPanel status;
 	private AmpWarningComponentPanel<String> titleSimilarityWarning;
+	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 
-	public AmpCategorySelectFieldPanel getStatus() {
-		return status;
-	}
-
-	public AmpTextAreaFieldPanel getTitle() {
-		return title;
-	}
-
+	
 	/**
 	 * @param id
 	 * @param fmName
@@ -86,13 +77,13 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			this.fmType = AmpFMTypes.MODULE;
 			
 			IModel<String> m = new PropertyModel<String>(am, "name");
-			title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true);
+			final AmpTextAreaFieldPanel title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true);
 
 			title.getTextAreaContainer().add(new StringRequiredValidator());
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));			
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
-			
+			title.getTextAreaContainer().setRequired(true);
 		if ("true".equalsIgnoreCase(FeaturesUtil
 				.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL))) {
 			
@@ -179,7 +170,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			titleSimilarityWarning.setOutputMarkupId(true);
 			add(titleSimilarityWarning);
 			
-			status = new AmpCategorySelectFieldPanel(
+			 AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(
 					"status", CategoryConstants.ACTIVITY_STATUS_KEY,
 					new AmpCategoryValueByKeyModel(
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
@@ -290,6 +281,8 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
                     super.onConfigure();
                     if (this.isVisible()){
                         activityBudget.getChoiceContainer().setRequired(true);
+                        requiredFormComponents.add(activityBudget.getChoiceContainer());
+            			
                     }
                 }
             });
@@ -444,6 +437,10 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					new PropertyModel<String>(am, "conditionality"), "Conditionalities", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel("projectManagement",
 					new PropertyModel<String>(am, "projectManagement"), "Project Management", true, AmpFMTypes.MODULE));
+	}
+
+	public List<FormComponent<?>> getRequiredFormComponents() {
+		return requiredFormComponents;
 	}
 
 }

@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -31,6 +32,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
 
 	private static final long serialVersionUID = 3042844165981373432L;
 	protected IndicatingAjaxLink button;
+	private List <FormComponent<?>> requiredFormComponents = new ArrayList <FormComponent<?>> ();
 
 	public AmpProposedProjectCost(String id, String fmName, IModel<AmpActivityVersion> am) {
 		super(id, fmName);
@@ -46,6 +48,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
 		};
 		amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 		amount.getTextContainer().setRequired(true);
+		requiredFormComponents.add(amount.getTextContainer());
 		add(amount);
 		
 		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {
@@ -78,6 +81,15 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
         AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", funDateModel, null, "Date");
 
         date.getDate().setRequired(true);
-		add(date);
+    	requiredFormComponents.add(date.getDate());
+    	add(date);
+	}
+
+	/**
+	 * Return a list of FormComponent that are marked as required for this panel
+	 * @return List<FormComponent<?>> with the FormComponent
+	 */
+	public List<FormComponent<?>> getRequiredFormComponents() {
+		return requiredFormComponents;
 	}
 }

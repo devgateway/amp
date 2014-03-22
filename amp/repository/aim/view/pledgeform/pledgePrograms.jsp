@@ -18,8 +18,8 @@
 	</c:if>
 	<c:if test="${not empty pledgeForm.allUsedRootProgs}">
 		<c:forEach var="rootTheme" items="${pledgeForm.allUsedRootProgs}">
-			<div class="amp-subgroup">
-			<div class="highlight text-center h6 bold"><c:out value="${rootTheme.name}" /></div>
+			<div class="amp-subsection">
+			<div class="amp-subsection-title"><c:out value="${rootTheme.name}" /></div>
 			<table class="table table-striped table-bordered table-hover table-condensed">
 				<thead>
 					<tr>

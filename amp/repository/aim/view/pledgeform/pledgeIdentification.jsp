@@ -32,7 +32,7 @@
 	</div>		
 </div>
 
-<div class="highlight text-center h5 bold"><digi:trn key="aim:donorInformation">Donor Information</digi:trn></div>
+<%--<div class="highlight text-center h5 bold"><digi:trn key="aim:donorInformation">Donor Information</digi:trn></div>  --%>
 
 <div class="container-fluid">
 	<div class="col-xs-4 h6 bold">

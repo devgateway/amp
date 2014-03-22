@@ -33,7 +33,7 @@
 								<c:set var="select_values" value="${pledgeForm.pledgeTypes}" />
 								<c:set var="select_init_value" value="${fund.pledgeTypeId}" />
 								<%@include file="renderShimList.jspf" %>
-							</dh>
+							</td>
 							<c:if test="${pledgeForm.fundingShowTypeOfAssistance}"><td class="text-center">
 								<c:set var="select_id" value="pledgeTypeOfAssistanceDropDown_${indexLoc}" /><c:set var="extra_tags">data-width="100%"</c:set>
 								<c:set var="select_values" value="${pledgeForm.typesOfAssistance}" />

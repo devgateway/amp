@@ -2,10 +2,10 @@
 // http://stackoverflow.com/questions/9975810/make-iframe-automatically-adjust-height-according-to-the-contents-without-using
 function resizeIframe(obj)
 {
-	console.log("changing size of iframe from " + obj.style.height + " to " + obj.contentWindow.document.body.scrollHeight);
-	var iWantHeight = $(obj.contentWindow.document).find('#iframe-hack-end-marker').offset();
+	//console.log("changing size of iframe from " + obj.style.height + " to " + obj.contentWindow.document.body.scrollHeight);
+	//var iWantHeight = $(obj.contentWindow.document).find('#iframe-hack-end-marker').offset();
 	//console.log("let's try " + iWantHeight.top);
-	obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+	obj.style.height = obj.contentWindow.document.body.scrollHeight + 50 + 'px'; // +50 added for Firefox; TODO in the future: better hack or browser detection
 };
 
 function resizeIframeCallback(iframewnd, ignored, newHeight)

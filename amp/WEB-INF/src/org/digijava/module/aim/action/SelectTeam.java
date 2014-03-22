@@ -126,18 +126,10 @@ public class SelectTeam extends Action {
             	appSettings.setCurrencyId(baseCurr.getAmpCurrencyId());
             }
             	
-            if (ampAppSettings.getFiscalCalendar() == null) {
-                logger.info("AmpAppSettings.getFisCal is null");
-            } else {
-                logger.info("AmpAppSettings.getFisCal is not null");
-                if (ampAppSettings.getFiscalCalendar().getAmpFiscalCalId() == null) {
-                    logger.info("AmpAppSettings.getFisCal.id is null");
-                } else {
-                    logger.info("AmpAppSettings.getFisCal.id is not null");
-                }
-            }
-            appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
-                    .getAmpFiscalCalId());
+            
+            if (ampAppSettings.getFiscalCalendar() != null && ampAppSettings.getFiscalCalendar().getAmpFiscalCalId() != null) {
+            	appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
+            }	
             appSettings.setLanguage(ampAppSettings.getLanguage());
             appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
             appSettings.setValidation(ampAppSettings.getValidation());

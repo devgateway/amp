@@ -296,19 +296,7 @@ public class ShowDashboard extends Action {
 
 		}
 		filter.setZones(zones);
-		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
-        List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-        filter.setCurrencies(validcurrencies);
-        //Only currencies which have exchanges rates
-        for (AmpCurrency element:currency) {
-            try {
-				if (CurrencyUtil.isRate(element.getCurrencyCode()) == true) {
-					filter.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-        }
+        filter.setCurrencies(CurrencyUtil.getUsableCurrencies());
         HttpSession httpSession = request.getSession();
         TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");
         AmpApplicationSettings tempSettings = null;

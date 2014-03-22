@@ -47,6 +47,7 @@ public class SelectPledgeProgram extends Action {
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception 
 	{
+		// entry point for sectors and programs AJAX
 		PledgeForm pledgeForm = (PledgeForm) form;
 		
 		String extraAction = request.getParameter("extraAction");
@@ -70,7 +71,25 @@ public class SelectPledgeProgram extends Action {
 				return null;
 			}
 			
+			if (extraAction.equals("pledge_sector_rootSectorChanged"))
+			{
+				pledgeForm.setSelectedRootSector(Long.parseLong(request.getParameter("rootSectorId")));
+				return null;
+			}
+			
+			if (extraAction.equals("pledge_sector_submit"))
+			{
+				String[] ids = request.getParameter("selected_sector").split(",");
+				for(String id: ids) {
+					Long sid = Long.parseLong(id);
+					pledgeForm.addSelectedSector(sid);
+				}
+				ARUtil.writeResponse(response, "ok");
+				return null;
+			}
+			
 			// {id: 'program_item_select', action: 'themeSelected', attr: 'themeId'} - ignored
+			// {id: 'sector_item_select', action: 'sectorSelected', attr: 'sectorId'} - ignored
 		}
 	    return mapping.findForward("forward");
 	}

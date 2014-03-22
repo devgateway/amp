@@ -105,19 +105,10 @@ public class ShowGisDashboard extends Action {
 				allDonors.add(donorComboItem);
 			}
 			
-			gisForm.setAllDonorOrgs(allDonors);
-         
-       
-        //currency
-        Collection<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
-	    //Only currencies havening exchanges rates AMP-2620
-	    Collection<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-	    gisForm.setCurrencies(validcurrencies);
-	    for (AmpCurrency element:currency) {
-			if( CurrencyUtil.isRate(element.getCurrencyCode())== true){
-				gisForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-			}
-	    }	    	    
+		gisForm.setAllDonorOrgs(allDonors);
+
+	    gisForm.setCurrencies(CurrencyUtil.getUsableCurrencies());
+	    
 	    //calendars 
 	    Collection<AmpFiscalCalendar> allFisCalenders = org.digijava.module.aim.util.DbUtil.getAllFisCalenders();
 	    gisForm.setCalendars(allFisCalenders);

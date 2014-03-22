@@ -1,6 +1,7 @@
 <%--
 	renders the "Identification" & "Donor Information" parts of the Pledge Form
 --%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
@@ -25,13 +26,10 @@
 			<html:text property="titleFreeText" styleId="titleFreeText" styleClass="form-control input-sm" style="width:400px"/>
 		</field:display>
 		<field:display name="Use Category Manager" feature="Pledges Names">
-			<html:select styleId="pledgeTitleDropDown" property="pledgeTitleId">
-				<c:forEach var="titles" items="${pledgeForm.pledgeNames}">
-					<option value="${titles.id}"<c:if test="${pledgeForm.pledgeTitleId == titles.id}">selected="selected"</c:if> >
-						<c:out value="${titles.value}" />
-					</option>
-				</c:forEach>
-			</html:select>
+			<c:set var="select_id" value="pledgeTitleDropDown" /><c:set var="extra_tags">name="pledgeTitleId" data-live-search="true"</c:set>
+			<c:set var="select_values" value="${pledgeForm.pledgeNames}" />
+			<c:set var="select_init_value" value="${pledgeForm.pledgeTitleId}" />
+			<%@include file="renderShimList.jspf" %>
 		</field:display>		
 	</div>		
 </div>

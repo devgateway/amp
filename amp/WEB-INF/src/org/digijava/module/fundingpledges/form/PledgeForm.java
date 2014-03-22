@@ -12,19 +12,24 @@ import java.util.TreeMap;
 import lombok.Data;
 
 import org.apache.struts.action.ActionForm;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.action.FeatureManager;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -67,7 +72,7 @@ public class PledgeForm extends ActionForm implements Serializable
 	};
 
 	/**
-	 * extract IdNamePercentage from a FPL entry
+	 * extract IdNamePercentage from a FPP entry
 	 */
 	public final static Function<AmpTheme, IdNamePercentage> PLEDGE_PROGRAM_EXTRACTOR = new Function<AmpTheme, IdNamePercentage>() {
 		public IdNamePercentage apply(AmpTheme theme){			
@@ -75,14 +80,31 @@ public class PledgeForm extends ActionForm implements Serializable
 		}
 	};
 
+	/**
+	 * extract IdNamePercentage from a FPS entry
+	 */
+	public final static Function<AmpSector, IdNamePercentage> PLEDGE_SECTOR_EXTRACTOR = new Function<AmpSector, IdNamePercentage>() {
+		public IdNamePercentage apply(AmpSector sector){
+			return new IdNamePercentage(sector.getAmpSectorId(), sector.getName(), 
+					sector.getAmpSecSchemeId().getAmpSecSchemeId(), sector.getAmpSecSchemeId().getSecSchemeName(), sector.getHierarchicalName());
+		}
+	};
+
+	public final static Function<IdNamePercentage, KeyValue> BY_ROOT_DISTRIBUTION = new Function<IdNamePercentage, KeyValue>(){
+		public KeyValue apply(IdNamePercentage from) {
+			return new KeyValue(from.getRootId(), from.getRootName());}};
+
+	public final static Function<AmpCurrency, IdWithValueShim> AMP_CURRENCY_TO_ID_WITH_SHIM = new Function<AmpCurrency, IdWithValueShim>(){
+		public IdWithValueShim apply(AmpCurrency curr){return new IdWithValueShim(curr.getAmpCurrencyId(), curr.getCurrencyName());};};
+		
 	private static final long serialVersionUID = 1L;
 	private Long pledgeId;
 	//private FundingPledges fundingPledges;
 	private Long selectedOrgId;
 	private Long selectedOrgGrpId;
 	private String titleFreeText;
-	private Collection<AmpCurrency> validcurrencies;
-	private String currencyCode;
+	//private Collection<AmpCurrency> validcurrencies;
+	//private String currencyCode;
 	
 	private PledgeFormContact contact1 = new PledgeFormContact();
 	private PledgeFormContact contact2 = new PledgeFormContact();
@@ -90,11 +112,10 @@ public class PledgeForm extends ActionForm implements Serializable
 	private String additionalInformation;
 	private String whoAuthorizedPledge;
 	private String furtherApprovalNedded;
-	private Collection<ActivitySector> pledgeSectors;
-	private Collection<FundingPledgesDetails> fundingPledgesDetails;
-	private Collection<AmpCategoryValue> pledgeTypeCategory;
-	private Collection<AmpCategoryValue> assistanceTypeCategory;
-	private Collection<AmpCategoryValue> aidModalityCategory;
+
+//	private Collection<AmpCategoryValue> pledgeTypeCategory;
+//	private Collection<AmpCategoryValue> assistanceTypeCategory;
+//	private Collection<AmpCategoryValue> aidModalityCategory;
 	private String defaultCurrency;
 
 	private Long pledgeTitleId;
@@ -120,8 +141,17 @@ public class PledgeForm extends ActionForm implements Serializable
 	private Long selectedRootProgram;
 	private List<IdNamePercentage> selectedProgs = new ArrayList<>();
 	
-	private String fundingEvent;
-    private Long selectedFunding[];
+	/* Fields for Sectors */
+	/**
+	 * AmpSectorScheme.id
+	 */
+	private Long selectedRootSector;
+	private List<IdNamePercentage> selectedSectors = new ArrayList<>();
+	    
+	/**
+	 * funding
+	 */
+	private List<FundingPledgesDetailsShim> selectedFunding = new ArrayList<>();
         
     public void reset()
     {
@@ -136,12 +166,15 @@ public class PledgeForm extends ActionForm implements Serializable
     	this.setFurtherApprovalNedded(null);
     	this.contact1.reset();
     	this.contact2.reset();
-    	this.setFundingPledgesDetails(null);
-    	this.setPledgeSectors(null);
+    	this.selectedFunding.clear();
+    	this.selectedSectors.clear();
     	this.selectedLocs.clear();
     	this.selectedProgs.clear();
     	this.cleanLocationData(true);
     	this.selectedRootProgram = null;
+    	this.selectedRootSector = null;
+    	this.implemLocationLevel = null;
+    	this.levelId = null;
     }
     
     /**
@@ -191,16 +224,11 @@ public class PledgeForm extends ActionForm implements Serializable
     	this.contact2.setAlternateName(fp.getContactAlternativeName_1());
     	this.contact2.setAlternateTelephone(fp.getContactAlternativeTelephone_1());
     	
-    	this.setFundingPledgesDetails(fp.getFundingPledgesDetails());
-    	Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(fp.getId());
-    	Collection<ActivitySector> asl = new ArrayList<ActivitySector>();
-    	for (FundingPledgesSector fps:fpsl)
-    	{			
-			ActivitySector actSec = fps.createActivitySector();
-			asl.add(actSec);
-		}
+    	//this.setFundingPledgesDetails(fp.getFundingPledgesDetails());
     	
-    	this.setPledgeSectors(asl);
+    	this.setSelectedSectors(new ArrayList<IdNamePercentage>());
+    	for(FundingPledgesSector sec:fp.getSectorlist())
+    		selectedSectors.add(PLEDGE_SECTOR_EXTRACTOR.apply(sec.getSector()).setPercentage(sec.getSectorpercentage()));
     	
     	this.setSelectedLocs(new ArrayList<IdNamePercentage>());    	
     	for(FundingPledgesLocation loc:fp.getLocationlist())
@@ -210,20 +238,18 @@ public class PledgeForm extends ActionForm implements Serializable
     	for(FundingPledgesProgram prog:fp.getProgramlist())
     		selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(prog.getProgram()).setPercentage(prog.getProgrampercentage()));
 
-    	this.setFundingPledgesDetails(PledgesEntityHelper.getPledgesDetails(fp.getId()));
+    	this.setSelectedFunding(new ArrayList<FundingPledgesDetailsShim>());
+    	for(FundingPledgesDetails fpd:fp.getFundingPledgesDetails())
+    		this.selectedFunding.add(new FundingPledgesDetailsShim(fpd));
     }
     
-    public void cleanLocationData(boolean cleanLevelData)
-    {
+    
+    public void cleanLocationData(boolean cleanLevelData){
     	if (cleanLevelData)
     	{
     		this.setImplemLocationLevel(-1l);
     		this.setLevelId(-1l);
     	}
-        //this.setParentLocId(null);
-        // this if for FundingPledgesLocation. Not sure why this is in this code
-        //pledgeForm.setSelectedLocs(null);
-        //this.setUserSelectedLocs(null);
     }
     
     /**
@@ -338,17 +364,38 @@ public class PledgeForm extends ActionForm implements Serializable
 		selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(theme).setPercentage(0f));
     }
     
+    public void addSelectedSector(long sectorId){
+    	AmpSector sector = SectorUtil.getAmpSector(sectorId);
+    	selectedSectors.add(PLEDGE_SECTOR_EXTRACTOR.apply(sector).setPercentage(0f));
+    }
+    
+    public List<IdWithValueShim> getShimsForCategoryClass(String categoryClassKey, Long selectedValue)
+    {
+    	List<IdWithValueShim> res = new ArrayList<>();
+    	if (selectedValue == null)
+    		res.add(new IdWithValueShim(-1l, TranslatorWorker.translateText("Please select")));
+    	for(AmpCategoryValue acv:CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryClassKey))
+    		res.add(new IdWithValueShim(acv));
+    	return res;
+    }
+    
     /**
      * returns list of pledge names available for selection - called by the JSP
      */
-    public List<IdWithValueShim> getPledgeNames()
-    {
-    	List<IdWithValueShim> res = new ArrayList<>();
-    	if (this.getPledgeTitleId() == null)
-    		res.add(new IdWithValueShim(-1l, TranslatorWorker.translateText("Please select")));
-    	for(AmpCategoryValue acv:CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_NAMES_KEY))
-    		res.add(new IdWithValueShim(acv));
-    	return res;
+    public List<IdWithValueShim> getPledgeNames(){
+    	return getShimsForCategoryClass(CategoryConstants.PLEDGES_NAMES_KEY, this.getPledgeTitleId());
+    }
+    
+    public List<IdWithValueShim> getPledgeTypes(){
+    	return getShimsForCategoryClass(CategoryConstants.PLEDGES_TYPES_KEY, null);
+    }
+
+    public List<IdWithValueShim> getTypesOfAssistance(){
+    	return getShimsForCategoryClass(CategoryConstants.TYPE_OF_ASSISTENCE_KEY, null);
+    }
+    
+    public List<IdWithValueShim> getAidModalities(){
+    	return getShimsForCategoryClass(CategoryConstants.MODALITIES_KEY, null);
     }
     
     /**
@@ -369,20 +416,15 @@ public class PledgeForm extends ActionForm implements Serializable
      * Map<AmpTheme, List<Program_Shim>>
      * @return
      */
-	public Map<KeyValue, List<IdNamePercentage>> getProgsByScheme()
-	{
-		return distribute(selectedProgs, new Function<IdNamePercentage, KeyValue>(){
-			public KeyValue apply(IdNamePercentage from) {
-				return new KeyValue(from.getRootId(), from.getRootName());}
-			});
+	public Map<KeyValue, List<IdNamePercentage>> getProgsByScheme(){
+		return distribute(selectedProgs, BY_ROOT_DISTRIBUTION);
 	}
 	
 	/**
 	 * all root programs used by this activity
 	 * @return
 	 */
-	public Collection<KeyValue> getAllUsedRootProgs()
-	{
+	public Collection<KeyValue> getAllUsedRootProgs(){
 		return getProgsByScheme().keySet();
 	}
 	
@@ -396,36 +438,15 @@ public class PledgeForm extends ActionForm implements Serializable
 			public DisableableKeyValue apply(AmpTheme theme) {return new DisableableKeyValue(theme.getAmpThemeId(), theme.getName(), true);};
 		}));
 	}
-	
-	public Set<Long> collectIds(Collection<IdNamePercentage> in){
-    	Set<Long> res = new HashSet<Long>();
-    	for(IdNamePercentage fpl:in)
-    		res.add(fpl.getId());
-    	return res;
-	}
-	
+		
 	/**
      * returns set of ids all the selected programs
      * @return Set<ACVL.id>
      */
-    public Set<Long> getAllPrograms()
-    {
+    public Set<Long> getAllPrograms(){
     	return collectIds(this.getSelectedProgs());
     }
     
-    void findRecursively(List<DisableableKeyValue> res, Long themeId, Set<Long> forbidden, Set<Long> selected, String prefix)
-    {
-    	if (themeId == null || themeId <= 0)
-    		return;
-    	
-    	AmpTheme theme = ProgramUtil.getThemeById(themeId);
-    	res.add(new DisableableKeyValue(theme.getAmpThemeId(), prefix + theme.getName(), !forbidden.contains(themeId)));
-    	if (selected.contains(themeId))
-    		return; // stop iterating when we're down to something selected
-    	
-    	for(AmpTheme subTheme:theme.getSiblings())
-    		findRecursively(res, subTheme.getAmpThemeId(), forbidden, selected, prefix + "» ");
-    }
     
     /**
      * computes list of programs to be disabled on the JSP page
@@ -437,8 +458,111 @@ public class PledgeForm extends ActionForm implements Serializable
         Set<Long> forbiddenPrograms = ProgramUtil.getRecursiveChildrenOfPrograms(selectedProgIds);
         forbiddenPrograms.addAll(ProgramUtil.getRecursiveAscendantsOfPrograms(selectedProgIds));
         List<DisableableKeyValue> res = new ArrayList<>();
-        findRecursively(res, this.selectedRootProgram, forbiddenPrograms, selectedProgIds, "");
+        findProgramsRecursively(res, this.selectedRootProgram, forbiddenPrograms, selectedProgIds, "");
         return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, res);
 	};
+	
+	
+    /**
+     * Map<AmpTheme, List<Program_Shim>>
+     * @return
+     */
+	public Map<KeyValue, List<IdNamePercentage>> getSectorsByScheme()
+	{
+		return distribute(selectedSectors, BY_ROOT_DISTRIBUTION);
+	}
+	
+	/**
+	 * all root programs used by this activity
+	 * @return
+	 */
+	public Collection<KeyValue> getAllUsedRootSectors(){
+		return getSectorsByScheme().keySet();
+	}
+	
+	/**
+	 * returns list of all the existant root programs in the system
+	 * @return
+	 */
+	public List<DisableableKeyValue> getAllRootSectors()
+	{
+		return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(SectorUtil.getAllSectorSchemes() , new Function<AmpSectorScheme, DisableableKeyValue>() {
+			public DisableableKeyValue apply(AmpSectorScheme theme) {return new DisableableKeyValue(theme.getAmpSecSchemeId(), theme.getSecSchemeName(), true);};
+		}));
+	}
+		
+	/**
+     * returns set of ids all the selected programs
+     * @return Set<ACVL.id>
+     */
+    public Set<Long> getAllSectors(){
+    	return collectIds(this.getSelectedSectors());
+    }
+    
+    
+    /**
+     * computes list of sectors to be displayed / disabled on the JSP page
+     * @return
+     */
+	public List<DisableableKeyValue> getAllLegalSectors()
+	{
+		Set<Long> selectedSectorIds = getAllSectors();
+        Set<Long> forbiddenSectors = SectorUtil.getRecursiveChildrenOfSectors(selectedSectorIds);
+        forbiddenSectors.addAll(SectorUtil.getRecursiveAscendantsOfSectors(selectedSectorIds));
+        List<DisableableKeyValue> res = new ArrayList<>();
+        List<AmpSector> rootSectors = SectorUtil.getAllParentSectors(this.selectedRootSector);
+        for(AmpSector rootSector:rootSectors)
+        	findSectorsRecursively(res, rootSector.getAmpSectorId(), forbiddenSectors, selectedSectorIds, "");
+        return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, res);
+	};
+
+	public Set<Long> collectIds(Collection<IdNamePercentage> in){
+    	Set<Long> res = new HashSet<Long>();
+    	for(IdNamePercentage fpl:in)
+    		res.add(fpl.getId());
+    	return res;
+	}
+
+    void findProgramsRecursively(List<DisableableKeyValue> res, Long themeId, Set<Long> forbidden, Set<Long> selected, String prefix)
+    {
+    	if (themeId == null || themeId <= 0)
+    		return;
+    	
+    	AmpTheme theme = ProgramUtil.getThemeById(themeId);
+    	res.add(new DisableableKeyValue(theme.getAmpThemeId(), prefix + theme.getName(), !forbidden.contains(themeId)));
+    	if (selected.contains(themeId))
+    		return; // stop iterating when we're down to something selected
+    	
+    	for(AmpTheme subTheme:theme.getSiblings())
+    		findProgramsRecursively(res, subTheme.getAmpThemeId(), forbidden, selected, prefix + "» ");
+    }
+    
+    void findSectorsRecursively(List<DisableableKeyValue> res, Long sectorId, Set<Long> forbidden, Set<Long> selected, String prefix)
+    {
+    	if (sectorId == null || sectorId <= 0)
+    		return;
+    	
+    	AmpSector sector = SectorUtil.getAmpSector(sectorId);
+    	res.add(new DisableableKeyValue(sector.getAmpSectorId(), prefix + sector.getName(), !forbidden.contains(sectorId)));
+    	if (selected.contains(sectorId))
+    		return; // stop iterating when we're down to something selected
+    	
+    	for(AmpSector subSector:sector.getSiblings())
+    		findSectorsRecursively(res, subSector.getAmpSectorId(), forbidden, selected, prefix + "» ");
+    }
+    
+    public List<IdWithValueShim> getValidCurrencies(){
+   		return Lists.transform(CurrencyUtil.getUsableCurrencies(), AMP_CURRENCY_TO_ID_WITH_SHIM);
+    }
+   		
+    public boolean getFundingShowTypeOfAssistance(){
+    	//<field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding">
+    	return FeaturesUtil.isVisibleField("Pledge Funding - Type Of Assistance");
+    }
+    
+    public boolean getFundingShowAidModality() {
+    	//<field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding">
+    	return FeaturesUtil.isVisibleField("Pledge Funding - Aid Modality");
+    }
 }
 

@@ -162,7 +162,7 @@ public class PledgesEntityHelper {
 			session.save(pledge);
 			
 			setPledgesAndSave(session, sectors, pledge);
-			setPledgesAndSave(session, plf.getFundingPledgesDetails(), pledge);
+			//setPledgesAndSave(session, plf.getFundingPledgesDetails(), pledge);
 			setPledgesAndSave(session, plf.getSelectedLocs(), pledge);
 			setPledgesAndSave(session, plf.getSelectedProgs(), pledge);
 		} catch (HibernateException e) {
@@ -267,7 +267,7 @@ public class PledgesEntityHelper {
 			Collection<FundingPledgesDetails> fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
 			
 			updatePledgeItemsAccordingToForm(session, pledge, sectors, fpsl);
-			updatePledgeItemsAccordingToForm(session, pledge, plf.getFundingPledgesDetails(), fpdl);
+			//updatePledgeItemsAccordingToForm(session, pledge, plf.getFundingPledgesDetails(), fpdl);
 			//updatePledgeItemsAccordingToForm(session, pledge, plf.getSelectedLocs(), fpll);
 			//updatePledgeItemsAccordingToForm(session, pledge, plf.getSelectedProgs(), fppl);
 

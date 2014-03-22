@@ -122,6 +122,38 @@ function on_element_loaded()
 	});
 }
 
+$(document).ready(function() // enable javascript-backed ajax forms
+{
+	if ($('#pledge_form_sectors').size() > 0)
+	{
+		window.sectorsController = new InteractiveFormArea('#pledge_form_sectors', '/selectPledgeProgram.do', 'selected_sector', 'pledge_sector', // using the programs AJAX page for this too
+		[
+		 	{id: 'sector_id_select', action: 'rootSectorChanged', attr: 'rootSectorId'},
+		 	{id: 'sector_item_select', action: 'sectorSelected', attr: 'sectorId'}
+		]);
+	};
+
+	if ($('#pledge_form_locations').size() > 0)
+	{
+		window.locationsController = new InteractiveFormArea('#pledge_form_locations', '/selectPledgeLocation.do', 'selected_loc', 'add_locations', 
+		[
+		 	{id: 'location_impl_level_select', action: 'implLevelChanged', attr: 'implLevelId'},
+		 	{id: 'location_impl_location_select', action: 'implLocationChanged', attr: 'implLocationId'},
+		 	{id: 'location_location_select', action: 'locationSelected', attr: 'locationId'}
+		]);
+	};
+	
+	if ($('#pledge_form_programs').size() > 0)
+	{
+		window.programsController = new InteractiveFormArea('#pledge_form_programs', '/selectPledgeProgram.do', 'selected_program', 'pledge_program', 
+		[
+		 	{id: 'program_id_select', action: 'rootThemeChanged', attr: 'rootThemeId'},
+		 	{id: 'program_item_select', action: 'themeSelected', attr: 'themeId'}
+		]);
+	};
+	
+});
+
 on_element_loaded();
 bootstrap_iframe(); // init iframe hacks
 

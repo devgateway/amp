@@ -1,5 +1,6 @@
 <%-- renders a table of the list of locations for the currently-in-form-pledge --%>
 <%-- the HTML is ready to be included in the page per se, so no css/javascript includes here! --%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
@@ -11,6 +12,7 @@
 <digi:instance property="pledgeForm" />
 
 <div id="pledge_form_locations_change">
+<c:if test="${not param.DISABLE_AJAX_BODIES}">	
 	<digi:form action="/pledgeLocationSelected.do">
 
 	<div class="container-fluid">
@@ -30,7 +32,7 @@
 					</c:forEach>
 				</html:select>
 			</div>
-		</div>
+		</div>	
 		<div class="row">
 			<div class="col-xs-5 text-right"><label class="h5 near-select" for="location_id_select"><digi:trn>Location</digi:trn></label></div>
 			<div class="col-xs-7">
@@ -41,9 +43,10 @@
 					<%@include file="select_disableable_items.jspf" %>
 			</div>
 		</div>
-		<div class="text-center"><button type="button" onclick="locationsController.submitClicked(this);" class="btn btn-success btn-sm" id='pledge_form_locations_change_submit'>Submit</button></div>
+		<div class="text-center"><button type="button" onclick="locationsController.submitClicked(this);" class="btn btn-success btn-sm" id='pledge_form_locations_change_submit'>Submit</button></div>		
 	</div>
 	</digi:form>
+</c:if>	
 </div>
 <script type="text/javascript">
 	on_element_loaded();

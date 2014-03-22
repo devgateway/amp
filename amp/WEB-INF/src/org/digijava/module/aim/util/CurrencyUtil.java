@@ -197,47 +197,6 @@ public class CurrencyUtil {
 		logger.info("returning a collection of size...get active rates... " + col.size());
 		return col;
 	}
-//	/**
-//	 * AMP-2805
-//	 * @deprecated use Util.getExchange(currency, currencyDate)
-//	 * @param currCode
-//	 * @param date
-//	 * @return
-//	 */
-//	public static Double getExchangeRate(String currCode,Date date) {
-//		Double exchRate = null;
-//		Session session = null;
-//		Query qry = null;
-//		String qryStr = null;
-//
-//		try {
-//			session = PersistenceManager.getSession();
-//			qryStr = "select cr.exchangeRate from " + AmpCurrencyRate.class.getName() + "" +
-//					" cr where (cr.toCurrencyCode=:code) and " +
-//					"(cr.exchangeRateDate=:date)";
-//			qry = session.createQuery(qryStr);
-//			qry.setParameter("code",currCode,Hibernate.STRING);
-//			qry.setParameter("date",date,Hibernate.DATE);
-//
-//			Iterator itr = qry.list().iterator();
-//			if (itr.hasNext()) {
-//				exchRate = (Double) itr.next();
-//			}
-//		} catch (Exception e) {
-//			logger.error("Exception from getExchangeRate()");
-//			e.printStackTrace(System.out);
-//		} finally {
-//			if (session != null) {
-//				try {
-//					PersistenceManager.releaseSession(session);
-//				} catch (Exception rsf) {
-//					logger.error("Release session failed");
-//				}
-//			}
-//		}
-//
-//		return exchRate;
-//	}
 
 	/**
 	 * Saves an AmpCurrencyRate object to the database
@@ -1059,46 +1018,21 @@ public class CurrencyUtil {
 			return 1.0;
 		}		
 	}
-
+	
 	/**
-	 * Returns true iff currency has at least one active exchange rate against the base currency
-	 * @param currencyCode currency Code
-	 * @return boolean
-	 * @author Irakli Kobiashvili
+	 * returns list of all "usable" currencies in AMP: all configured currencies which have an exchange rate + base currency
+	 * @return
 	 */
-	public static Boolean isRate(String currencyCode)
+	public static List<AmpCurrency> getUsableCurrencies()
 	{
-		if (AmpCaching.getInstance().currencyCache.currencyHasRate.containsKey(currencyCode))
-			return AmpCaching.getInstance().currencyCache.currencyHasRate.get(currencyCode);
-		
-		Session session = null;
-		Query q = null;
-
-		try {
-			String baseCurrencyCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-			if (currencyCode.equalsIgnoreCase(baseCurrencyCode)){
-				return true;
+		//Only currencies having exchanges rates AMP-2620
+		List<AmpCurrency> usableCurrencies = new ArrayList<AmpCurrency>();		
+	
+		for (AmpCurrency currency:getActiveAmpCurrencyByName())
+			if (currency.isRate()){
+				usableCurrencies.add(currency);
 			}
-
-			session = PersistenceManager.getRequestDBSession();
-			
-			String queryString = "SELECT COUNT(*) FROM " + AmpCurrencyRate.class.getName() + " f " + 
-								"WHERE (f.fromCurrencyCode = :currencyCode AND f.toCurrencyCode = :baseCurrencyCode) " + 
-								"OR (f.fromCurrencyCode = :baseCurrencyCode AND f.toCurrencyCode = :currencyCode) AND f.exchangeRate IS NOT NULL";
-			
-			q = session.createQuery(queryString);
-			q.setString("currencyCode", currencyCode);
-			q.setString("baseCurrencyCode", baseCurrencyCode);
-			
-			List<Object> count = q.list();
-			long cnt = PersistenceManager.getLong(count.get(0));
-			boolean result = (cnt > 0);
-			AmpCaching.getInstance().currencyCache.currencyHasRate.put(currencyCode, result);
-			return result;
-		} catch (Exception ex) {
-			logger.debug("Unable to get exchange rate from database", ex);
-			throw new RuntimeException("Error retriving currency exchange rate for "+ currencyCode,ex);
-		}
+		return usableCurrencies;
 	}
 
 	/**

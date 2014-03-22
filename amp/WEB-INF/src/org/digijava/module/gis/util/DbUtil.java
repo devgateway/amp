@@ -1837,28 +1837,10 @@ public class DbUtil {
             Query q = session.createQuery(qStr.toString());
 
             retVal = q.list();
-            /*
-            Iterator <FundingPledgesSector> psi = retVal.iterator();
-            while (psi.hasNext()) {
-                FundingPledgesSector fps = psi.next();
-                fps.getPledgeid().getOrganization();
-            }
-            */
 
 		} catch (Exception e) {
 			logger.error("Error getting pledges, " + e);
 		}
-        /*
-        finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
-        */
 
         return retVal;
     }

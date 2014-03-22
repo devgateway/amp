@@ -1129,16 +1129,7 @@ public class DashboardUtil {
 
 		}
 		filter.setZones(zones);
-		Collection currency = CurrencyUtil.getActiveAmpCurrencyByName();
-        List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-        filter.setCurrencies(validcurrencies);
-        //Only currencies which have exchanges rates
-        for (Iterator iter = currency.iterator(); iter.hasNext();) {
-            AmpCurrency element = (AmpCurrency) iter.next();
-            if (CurrencyUtil.isRate(element.getCurrencyCode()) == true) {
-                filter.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-            }
-        }
+        filter.setCurrencies(CurrencyUtil.getUsableCurrencies());
         HttpSession httpSession = request.getSession();
         TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");
 		AmpApplicationSettings tempSettings = null;

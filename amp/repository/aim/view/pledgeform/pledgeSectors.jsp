@@ -1,6 +1,5 @@
 <%-- renders the programs part of the Pledge Form --%>
 <%-- the HTML is ready to be included in the page per se, so no css/javascript includes here! --%>
-<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
@@ -12,33 +11,33 @@
 
 <digi:instance property="pledgeForm" />
 
-<div id='pledge_form_programs_data'>
-	<div class="highlight text-center h5 bold"><digi:trn key="aim:Program">Program</digi:trn></div>
-		<c:if test="${empty pledgeForm.allUsedRootProgs}">
-			<div class="text-center"><h3><digi:trn>No Programs</digi:trn></h3></div>
+<div id='pledge_form_sectors_data'>
+	<div class="highlight text-center h5 bold"><digi:trn key="aim:sector">Sector</digi:trn></div>
+		<c:if test="${empty pledgeForm.allUsedRootSectors}">
+			<div class="text-center"><h3><digi:trn>No Sectors</digi:trn></h3></div>
 		</c:if>
-	<c:if test="${not empty pledgeForm.allUsedRootProgs}">
-		<c:forEach var="rootTheme" items="${pledgeForm.allUsedRootProgs}">
+	<c:if test="${not empty pledgeForm.allUsedRootSectors}">
+		<c:forEach var="rootTheme" items="${pledgeForm.allUsedRootSectors}">
 			<div class="amp-subgroup">
 			<div class="highlight text-center h6 bold"><c:out value="${rootTheme.name}" /></div>
 			<table class="table table-striped table-bordered table-hover table-condensed">
 				<thead>
 					<tr>
-						<th class="col-xs-8 text-right"><digi:trn>Program Name</digi:trn></th>
+						<th class="col-xs-8 text-right"><digi:trn>Sector Name</digi:trn></th>
 						<th class="col-xs-3 text-center"><digi:trn>Percentage</digi:trn></th>
 						<th class="col-xs-1 text-center"><digi:trn>Delete</digi:trn></th>
 					</tr>
 				</thead>
 				<tbody>	
-					<c:forEach var="prog" items="${pledgeForm.selectedProgs}" varStatus="index">
+					<c:forEach var="prog" items="${pledgeForm.selectedSectors}" varStatus="index">
 						<c:set var="indexLoc" value="${indexLoc+1}" />
 						<c:if test="${prog.rootId eq rootTheme.keyAsLong}">
 							<tr>
 								<td class="col-xs-8 text-right"><c:out value="${prog.hierarchicalName}" /></td>
 								<td class="col-xs-3">
-									<html:text name="prog" indexed="true" property="percentage" size="5"  onblur="programsController.onPercentageBlur(this);" styleClass="form-control input-sm input-pledges-programs" />
+									<html:text name="prog" indexed="true" property="percentage" size="5"  onblur="sectorsController.onPercentageBlur(this)" styleClass="form-control input-sm input-pledges-sectors" />
 								</td>
-								<td class="col-xs-1"><button type="button" onclick="programsController.onDelete(this);" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
+								<td class="col-xs-1"><button type="button" onclick="sectorsController.onDelete(this);" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
 							</tr>
 						</c:if>
 					</c:forEach>

@@ -24,31 +24,32 @@ public class RemovePledgeSector extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		HttpSession session = request.getSession();
-		PledgeForm plForm = (PledgeForm) form;
+		//TODO: REMOVE
+//		HttpSession session = request.getSession();
+//		PledgeForm plForm = (PledgeForm) form;
 		
-		if (plForm.getPledgeSectors() != null) {
-			selectedSectors = new ArrayList<ActivitySector>(plForm.getPledgeSectors());
-			String deleteList[] = request.getParameter("deleteSect").split("_");
-			Iterator <ActivitySector> iter=selectedSectors.iterator();
-			ArrayList<ActivitySector> sectorsToDelete = new ArrayList<ActivitySector>();
-			Integer i = 1;
-			while(iter.hasNext()){
-				ActivitySector del = iter.next();
-            	for (int j = 0; j < deleteList.length; j++) {
-					if (deleteList[j].equals(i.toString())){
-						sectorsToDelete.add(del);
-					}
-				}	
-            	i++;
-            }
-			if (sectorsToDelete.size()!=0) {
-				selectedSectors.removeAll(sectorsToDelete);
-			}
-			plForm.setPledgeSectors(selectedSectors);
-		}
-		
-		request.getSession().removeAttribute("deleteSect");
+//		if (plForm.getPledgeSectors() != null) {
+//			selectedSectors = new ArrayList<ActivitySector>(plForm.getPledgeSectors());
+//			String deleteList[] = request.getParameter("deleteSect").split("_");
+//			Iterator <ActivitySector> iter=selectedSectors.iterator();
+//			ArrayList<ActivitySector> sectorsToDelete = new ArrayList<ActivitySector>();
+//			Integer i = 1;
+//			while(iter.hasNext()){
+//				ActivitySector del = iter.next();
+//            	for (int j = 0; j < deleteList.length; j++) {
+//					if (deleteList[j].equals(i.toString())){
+//						sectorsToDelete.add(del);
+//					}
+//				}	
+//            	i++;
+//            }
+//			if (sectorsToDelete.size()!=0) {
+//				selectedSectors.removeAll(sectorsToDelete);
+//			}
+//			plForm.setPledgeSectors(selectedSectors);
+//		}
+//		
+//		request.getSession().removeAttribute("deleteSect");
 		return mapping.findForward("forward");
 	}
 }

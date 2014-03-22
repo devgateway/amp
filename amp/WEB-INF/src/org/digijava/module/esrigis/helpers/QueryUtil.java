@@ -400,21 +400,7 @@ public class QueryUtil {
 
 		}
 		filter.setZones(zones);
-		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
-        List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-        filter.setCurrencies(validcurrencies);
-        //Only currencies which have exchanges rates
-        for(AmpCurrency element:currency) {
-            try {
-				if (CurrencyUtil.isRate(element.getCurrencyCode()) == true) {
-					filter.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        }
-
+        filter.setCurrencies(CurrencyUtil.getUsableCurrencies());
         filter.setPeacebuildingMarkers(DbHelper.getPeacebuildingMarkers());
         if (filter.getPeacebuildingMarkers() != null &&
                 !filter.getPeacebuildingMarkers().isEmpty()) {

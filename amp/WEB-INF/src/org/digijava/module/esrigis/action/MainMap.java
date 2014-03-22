@@ -278,21 +278,7 @@ public class MainMap extends Action {
 			filter.setDefaultEndYear(year);
 		}
 		
-		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
-        List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-        filter.setCurrencies(validcurrencies);
-        
-        //Only currencies which have exchanges rates
-        for (AmpCurrency element:currency) {
-            try {
-				if (CurrencyUtil.isRate(element.getCurrencyCode()) == true) {
-					filter.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-        }
-		
+        filter.setCurrencies(CurrencyUtil.getUsableCurrencies());        	
 		filter.setYears(new TreeMap<Integer, Integer>());
 		int yearFrom = Integer
 				.parseInt(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));

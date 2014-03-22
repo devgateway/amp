@@ -11,6 +11,12 @@
 	} else if ("pledge_program_refresh_add".equals(request.getParameter("extraAction")))
 	{
 		%><jsp:include page="/repository/aim/view/pledgeform/pledgeProgramsAddProgram.jsp"></jsp:include><%
+	} else if ("pledge_sector_refresh_add".equals(request.getParameter("extraAction")))
+	{
+		%><jsp:include page="/repository/aim/view/pledgeform/pledgeSectorsAddSector.jsp"></jsp:include><%
+	} else if ("pledge_sector_refresh_data".equals(request.getParameter("extraAction")))
+	{
+		%><jsp:include page="/repository/aim/view/pledgeform/pledgeSectors.jsp"></jsp:include><%
     } else 
     { // not ajax: render the full bootstrap iframe 
 %>

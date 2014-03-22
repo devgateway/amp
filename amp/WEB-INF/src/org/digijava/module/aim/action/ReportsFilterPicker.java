@@ -448,17 +448,7 @@ public class ReportsFilterPicker extends Action {
 			 filterForm.setCustomGroupSize(usedDecimalFormat.getGroupingSize());
 		 }
 		
-		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
-		//Only currencies having exchanges rates AMP-2620
-		List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-		filterForm.setCurrencies(validcurrencies);
-		for (AmpCurrency element:currency) {
-			if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
-			{
-		    	filterForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-			}
-		}
-			
+		filterForm.setCurrencies(CurrencyUtil.getUsableCurrencies());			
 		AmpCurrency defaultCurrency = AmpARFilter.getDefaultCurrency();
 		filterForm.setDefaultCurrency(defaultCurrency.getAmpCurrencyId());
 		

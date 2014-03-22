@@ -13,6 +13,7 @@ import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
+
 import java.util.Arrays;
 
 
@@ -66,13 +67,6 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	public Set getAidlist() {
 		return aidlist;
 	}
-
-	/**
-	 * @return
-	 */
-	/*
-	 * public Long getAmpDacSectorId() { return ampDacSectorId; }
-	 */
 
 	/**
 	 * @return
@@ -137,16 +131,6 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 		aidlist = set;
 	}
 
-	/**
-	 * @param long1
-	 */
-	/*
-	 * public void setAmpDacSectorId(Long long1) { ampDacSectorId = long1; }
-	 */
-
-	/**
-	 * @param long1
-	 */
 	public void setParentSectorId(AmpSector sec) {
 		this.parentSectorId = sec;
 	}
@@ -311,7 +295,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	}
 
 	@Override
-	public Collection getSiblings() {
+	public Collection<AmpSector> getSiblings() {
 		return sectors;
 	}
 
@@ -325,6 +309,15 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 		// TODO Auto-generated method stub
 		return super.clone();
 	}
+	
+	public String getHierarchicalName()
+	{
+		String selfName = "[" + this.getName() + "]";
+		if (this.getParentSectorId() == null)
+			return selfName;
+		return this.getParentSectorId().getHierarchicalName() + selfName;
+	}
+
 	
 	public String getSectorPathString(){
 		String ret = "[" + name + "]";

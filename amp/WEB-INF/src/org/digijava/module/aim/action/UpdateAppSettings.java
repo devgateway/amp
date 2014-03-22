@@ -185,16 +185,7 @@ public class UpdateAppSettings extends Action {
 				);
 			
 			uForm.setReports(reports);
-			Collection currencies = CurrencyUtil.getAllCurrencies(CurrencyUtil.ALL_ACTIVE);
-			Collection validCurrencies =  new ArrayList<AmpCurrency>();
-			for (Iterator iter = currencies.iterator(); iter.hasNext();) {
-				AmpCurrency element = (AmpCurrency) iter.next();
-				if( CurrencyUtil.isRate(element.getCurrencyCode())== true)	{
-					 validCurrencies.add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-				}
-			}
-			
-			uForm.setCurrencies(validCurrencies);
+			uForm.setCurrencies(CurrencyUtil.getUsableCurrencies());
 			uForm.setFisCalendars(DbUtil.getAllFisCalenders());
 
 			// set Navigation languages

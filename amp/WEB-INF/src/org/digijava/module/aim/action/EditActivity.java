@@ -1839,18 +1839,7 @@ public class EditActivity extends Action {
       // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 
-      //Only currencies havening exchanges rates AMP-2620
-      ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-      eaForm.getFunding().setValidcurrencies(validcurrencies);
-      for (Iterator iter = eaForm.getCurrencies().iterator(); iter.hasNext();) {
-		AmpCurrency element = (AmpCurrency) iter.next();
-		 if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
-				{
-			 		if(element!=null && element.getCurrencyCode()!=null)
-			 			eaForm.getFunding().getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-				}
-		}
-
+      eaForm.getFunding().setValidcurrencies(CurrencyUtil.getUsableCurrencies());
 
       //load the possible projection values
       eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));

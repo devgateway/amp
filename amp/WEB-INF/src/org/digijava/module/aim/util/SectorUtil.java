@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -210,63 +212,37 @@ public class SectorUtil {
 //
 //	}
 
-	public static Collection<AmpSectorScheme> getAllSectorSchemes() {
-		Session session = null;
-		Collection<AmpSectorScheme> col = null;
-
+	public static List<AmpSectorScheme> getAllSectorSchemes() {
 		try {
-			session = PersistenceManager.getSession();
 			String sectorSchemeNameHql = AmpSectorScheme.hqlStringForName("ss");
 			String queryString = "select ss from "
 					+ AmpSectorScheme.class.getName() + " ss "
 					+ "order by " + sectorSchemeNameHql;
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
+			Query qry = PersistenceManager.getSession().createQuery(queryString);
+			List<AmpSectorScheme> col = new ArrayList<>(qry.list());
+			return col;
 		} catch (Exception ex) {
-			logger.error("Unable to get all sector schemes, " + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		return col;
+			throw new RuntimeException(ex);
+		} 
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Collection<AmpSector> getAllParentSectors(Long secSchemeId) {
-		Session session = null;
-		Collection<AmpSector> col = null;
-		
-
-		try {
-			session = PersistenceManager.getSession();// TODO why not use thread
-														// session?
+	public static List<AmpSector> getAllParentSectors(Long secSchemeId){
+		try
+		{ 
 			String queryString = "select s from " + AmpSector.class.getName()
 					+ " s " + "where amp_sec_scheme_id = " + secSchemeId
 					+ " and parent_sector_id is null and (s.deleted is null or s.deleted = false)  " + "order by " + AmpSector.hqlStringForName("s");
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-
+			List<AmpSector> sectors = new ArrayList<>(PersistenceManager.getSession().createQuery(queryString).list());
+			return sectors;
 		} catch (Exception e) {
-			logger.error("Cannot get parent sectors, " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
+			throw new RuntimeException(e);
 		}
-		return col;
 	}
 
-	public static Collection getAllParentSectors() {
+	public static List<AmpSector> getAllParentSectors() {
 		Session session = null;
-		Collection col = null;
+		List<AmpSector> col = null;
 
 		try {
 			session = PersistenceManager.getSession();
@@ -289,14 +265,6 @@ public class SectorUtil {
 
 		} catch (Exception e) {
 			logger.error("Cannot get parent sectors, " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
 		}
 		return col;
 	}
@@ -497,34 +465,34 @@ public class SectorUtil {
 		return sec;
 	}
 
-	public static AmpIndicatorSector getIndIcatorSector(Long indicatorId) {
-
-		Session session = null;
-		Query qry = null;
-		AmpIndicatorSector indSectorId = null;
-		Iterator itr = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = new String();
-			queryString = "select s from " + AmpIndicatorSector.class.getName()
-					+ " s where (s.themeIndicatorId=:themeIndicatorId)";
-
-			qry = session.createQuery(queryString);
-			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
-			itr = qry.list().iterator();
-
-			if (itr.hasNext()) {
-				indSectorId = (AmpIndicatorSector) itr.next();
-			}
-
-		} catch (Exception e) {
-			logger.error("Unable to get sector");
-			logger.debug("Exceptiion " + e);
-		}
-
-		return indSectorId;
-	}
+//	public static AmpIndicatorSector getIndIcatorSector(Long indicatorId) {
+//
+//		Session session = null;
+//		Query qry = null;
+//		AmpIndicatorSector indSectorId = null;
+//		Iterator itr = null;
+//
+//		try {
+//			session = PersistenceManager.getRequestDBSession();
+//			String queryString = new String();
+//			queryString = "select s from " + AmpIndicatorSector.class.getName()
+//					+ " s where (s.themeIndicatorId=:themeIndicatorId)";
+//
+//			qry = session.createQuery(queryString);
+//			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
+//			itr = qry.list().iterator();
+//
+//			if (itr.hasNext()) {
+//				indSectorId = (AmpIndicatorSector) itr.next();
+//			}
+//
+//		} catch (Exception e) {
+//			logger.error("Unable to get sector");
+//			logger.debug("Exceptiion " + e);
+//		}
+//
+//		return indSectorId;
+//	}
 
 	public static boolean getIndIcatorSector(Long indicatorId, Long sectorId) {
 
@@ -556,34 +524,18 @@ public class SectorUtil {
 		return exist;
 	}
 
-	public static AmpSector getAmpSector(Long id) {
-
-		Session session = null;
-		Query qry = null;
-		Iterator itr = null;
-		AmpSector ampSector = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = new String();
-			queryString = "select s from " + AmpSector.class.getName()
-					+ " s where (s.ampSectorId=:ampSectorId) and (s.deleted is null or s.deleted = false) ";
-
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampSectorId", id, Hibernate.LONG);
-			itr = qry.list().iterator();
-
-			if (itr.hasNext()) {
-				ampSector = (AmpSector) itr.next();
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get amp_sector info");
-			logger.debug("Exceptiion " + ex);
+	public static AmpSector getAmpSector(Long id)
+	{
+		try
+		{
+			AmpSector s = (AmpSector) PersistenceManager.getRequestDBSession().load(AmpSector.class, id);
+			//if ((s.getDeleted()) != null && (s.getDeleted()))
+				return s;
+			//return null; // deleted
 		}
-		// session.flush();
-		return ampSector;
-
+		catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	public static AmpSectorScheme getAmpSectorScheme(Long id) {
@@ -1773,22 +1725,6 @@ public class SectorUtil {
 		return generatedSectors;
 	}
 
-	/*
-	 * this is to delete a sector
-	 * 
-	 * public static void deleteSector(Long schemeId) {
-	 * logger.info(" deleting the scheme"); Session session = null; Transaction
-	 * tx = null; try { session = PersistenceManager.getSession(); AmpSector
-	 * scheme = (AmpSector) session.load( AmpSectorScheme.class,schemeId);
-	 * //beginTransaction(); session.delete(scheme); //tx.commit(); } catch
-	 * (Exception e) { logger.error("Exception from deleteQuestion() :" +
-	 * e.getMessage()); e.printStackTrace(System.out); if (tx != null) { try {
-	 * tx.rollback(); } catch (Exception trbf) {
-	 * logger.error("Transaction roll back failed ");
-	 * e.printStackTrace(System.out); } } } finally { if (session != null) { try
-	 * { PersistenceManager.releaseSession(session); } catch (Exception rsf) {
-	 * logger.error("Failed to release session :" + rsf.getMessage()); } } } }
-	 */
 	// This recursive method helps the generateLevelHierarchy method.
 	public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
 		if (topLevelSector.getParentSectorId() != null) {
@@ -1799,20 +1735,26 @@ public class SectorUtil {
 	}
 
 	/**
-	 * returns set of all (recursive) descendants' ids of a given set of locations
+	 * returns set of all (recursive) descendants' ids of a given set of sectors
 	 * @param locations
 	 * @return
 	 */
 	public static Set<Long> populateWithDescendantsIds(Collection<AmpSector> sectors)
 	{
-		Set<Long> allInputLocations = new HashSet<Long>();
-		
-		for(AmpSector acvl:sectors)
-			allInputLocations.add(acvl.getAmpSectorId());
-		
-		Set<Long> allOutputLocations = getRecursiveChildrenOfSectors(allInputLocations);
+		Set<Long> allOutputLocations = getRecursiveChildrenOfSectors(AlgoUtils.collectIds(new HashSet<Long>(), sectors));
 		return allOutputLocations;
 	}	
+	
+	/**
+	 * recursively get all children of a set of AmpSectors, by a wave algorithm
+	 * @param inIds
+	 * @return
+	 */
+	public static Set<Long> getRecursiveAscendantsOfSectors(Collection<Long> inIds)
+	{
+		return AlgoUtils.runWave(inIds, 
+			new DatabaseWaver("SELECT DISTINCT (parent_sector_id) FROM amp_sector WHERE (parent_sector_id IS NOT NULL) AND (amp_sector_id IN ($))"));
+	}
 	
 	/**
 	 * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
@@ -1821,32 +1763,8 @@ public class SectorUtil {
 	 */
 	public static Set<Long> getRecursiveChildrenOfSectors(Collection<Long> inIds)
 	{
-		Set<Long> result = new HashSet<Long>();
-		if (inIds == null)
-			return result;
-		Set<Long> currentWave = new HashSet<Long>();
-		currentWave.addAll(inIds);
-		while (currentWave.size() > 0)
-		{
-			result.addAll(currentWave);
-			currentWave = getChildrenOfSectors(currentWave);
-			currentWave.removeAll(result); // in case there is a cycle somewhere in the DB, do not cycle forever
-		}
-		return result;
-	}
-	
-	/*
-	 * returns the list of all the children of all the AmpSector given by ids
-	 * NON-RECURSIVE
-	 */
-	private static Set<Long> getChildrenOfSectors(Collection<Long> inIds)
-	{
-		Set<Long> result = new HashSet<Long>();
-		String query = "SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN (" + org.dgfoundation.amp.Util.toCSStringForIN(inIds) + ")";
-		List<Object> ids = PersistenceManager.getSession().createSQLQuery(query).list();
-		for(Object longAsObj:ids)
-			result.add(PersistenceManager.getLong(longAsObj));
-		return result;
+		return AlgoUtils.runWave(inIds, 
+				new DatabaseWaver("SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN ($)"));
 	}
 
 	public static List<AmpActivityVersion> getActivitiesForSector(Long id) {

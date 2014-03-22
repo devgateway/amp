@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -55,40 +56,43 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body style="min-height: 350px">
-	<jsp:include page="/repository/aim/view/pledgeform/pledgeIdentification.jsp"></jsp:include>
+  <body>
+	<jsp:include page="pledgeIdentification.jsp"></jsp:include>
+	
+	<field:display name="Pledge Sector" feature="Pledge Sector and Location">
+		<div id="pledge_form_sectors">
+			<jsp:include page="pledgeSectors.jsp"></jsp:include>
+			<div class="text-center"><button type="button" onclick="sectorsController.showAdditionArea(this);" class="btn btn-success btn-sm" id='pledge_form_sectors_data_add'><digi:trn>Add Sector</digi:trn></button></div>
+			<jsp:include page="pledgeSectorsAddSector.jsp">
+				<jsp:param name="DISABLE_AJAX_BODIES" value="true" />
+			</jsp:include>
+		</div>
+	</field:display>
 	
  	<field:display name="Pledge Location" feature="Pledge Sector and Location">
  		<div id="pledge_form_locations">
-			<jsp:include page="/repository/aim/view/pledgeform/pledgelocationslist.jsp"></jsp:include>
+			<jsp:include page="pledgelocationslist.jsp"></jsp:include>
 			<div class="text-center"><button type="button" onclick="locationsController.showAdditionArea(this);" class="btn btn-success btn-sm" id='pledge_form_locations_data_add'><digi:trn>Add Location</digi:trn></button></div>
-			<jsp:include page="/repository/aim/view/pledgeform/pledgelocationsAddPledge.jsp"></jsp:include>
+			<jsp:include page="pledgelocationsAddPledge.jsp">
+				<jsp:param name="DISABLE_AJAX_BODIES" value="true" />
+			</jsp:include>
 		</div> 		
-		<script type="text/javascript">
-			var locationsController = new InteractiveFormArea('#pledge_form_locations', '/selectPledgeLocation.do', 'selected_loc', 'add_locations', 
-				[
-				 	{id: 'location_impl_level_select', action: 'implLevelChanged', attr: 'implLevelId'},
-				 	{id: 'location_impl_location_select', action: 'implLocationChanged', attr: 'implLocationId'},
-				 	{id: 'location_location_select', action: 'locationSelected', attr: 'locationId'}
-				]);
-		</script>
 	</field:display>
 	
 	<field:display name="Pledge Program" feature="Pledge Sector and Location">
 		<div id="pledge_form_programs">
-			<jsp:include page="/repository/aim/view/pledgeform/pledgePrograms.jsp"></jsp:include>
+			<jsp:include page="pledgePrograms.jsp"></jsp:include>
 			<div class="text-center"><button type="button" onclick="programsController.showAdditionArea(this);" class="btn btn-success btn-sm" id='pledge_form_programs_data_add'><digi:trn>Add Program</digi:trn></button></div>
-			<jsp:include page="/repository/aim/view/pledgeform/pledgeProgramsAddProgram.jsp"></jsp:include>
+			<jsp:include page="pledgeProgramsAddProgram.jsp">
+				<jsp:param name="DISABLE_AJAX_BODIES" value="true" />			
+			</jsp:include>
 		</div>
-		<script type="text/javascript">
-			var programsController = new InteractiveFormArea('#pledge_form_programs', '/selectPledgeProgram.do', 'selected_program', 'pledge_program', 
-				[
-				 	{id: 'program_id_select', action: 'rootThemeChanged', attr: 'rootThemeId'},
-				 	{id: 'program_item_select', action: 'themeSelected', attr: 'themeId'}
-				]);
-		</script>
 	</field:display>
-	
+	<feature:display name="Pledge Funding" module="Pledges">
+		<div id="pledge_form_funding">
+			<jsp:include page="pledgeFunding.jsp"></jsp:include>
+		</div>
+	</feature:display>
 	<jsp:include page="/repository/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>
 	<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogue.jsp"></jsp:include>
 	

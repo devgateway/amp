@@ -2,6 +2,11 @@
 	AMP-Bootstrap styles
 	include this AFTER all the stock css files - this overrides some of them!
 */
+
+body {
+	font-size: 12px;
+}
+
 .highlight {
 	padding: 9px 14px;
 	margin-bottom: 14px;
@@ -10,18 +15,15 @@
 	border-radius: 4px;
 }
 
-.bold
-{
+.bold{
 	font-weight: bold;
 }
 
-.red
-{
+.red{
 	color: red;	
 }
 
-div.form-control
-{
+div.form-control{
 	
 }
 
@@ -72,3 +74,9 @@ div.amp-subgroup:hover {
 {
 	background-color: #EEEEEE !important;
 }
+
+.bootstrap-select:not([class*="span"]):not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+	/* width: 220px; */
+	max-width: 200px !important;
+}
+

@@ -80,50 +80,50 @@ public class SavePledge extends Action {
     		pledge.setContactAlternativeEmail_1(plForm.getContact2().getAlternateEmail());
     		pledge.setContactAlternativeTelephone_1(plForm.getContact2().getAlternateTelephone());
     		
-    		Set<FundingPledgesSector> pledgessector = new HashSet<FundingPledgesSector>();
-    		if(plForm.getPledgeSectors()!=null && plForm.getPledgeSectors().size()>0){
-	    		for (Iterator sectorIt = plForm.getPledgeSectors().iterator(); sectorIt.hasNext();) {
-	       		 	ActivitySector actSector = (ActivitySector) sectorIt.next();
-					AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
-					sector.setAmpSectorId(actSector.getSectorId());
-					FundingPledgesSector fps = new FundingPledgesSector();
-					fps.setSector(sector);
-					fps.setSectorpercentage(actSector.getSectorPercentage());
-					fps.setId(actSector.getId());
-					pledgessector.add(fps);
-				}
-	    	}
-    		String fundings = request.getParameter("fundings");
-    		String funds[] = fundings.split(";");
-    		plForm.setFundingPledgesDetails(new ArrayList<FundingPledgesDetails>());
+//    		Set<FundingPledgesSector> pledgessector = new HashSet<FundingPledgesSector>();
+//    		if(plForm.getPledgeSectors()!=null && plForm.getPledgeSectors().size()>0){
+//	    		for (Iterator sectorIt = plForm.getPledgeSectors().iterator(); sectorIt.hasNext();) {
+//	       		 	ActivitySector actSector = (ActivitySector) sectorIt.next();
+//					AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
+//					sector.setAmpSectorId(actSector.getSectorId());
+//					FundingPledgesSector fps = new FundingPledgesSector();
+//					fps.setSector(sector);
+//					fps.setSectorpercentage(actSector.getSectorPercentage());
+//					fps.setId(actSector.getId());
+//					pledgessector.add(fps);
+//				}
+//	    	}
+ //   		String fundings = request.getParameter("fundings");
+  //  		String funds[] = fundings.split(";");
+    		//plForm.setFundingPledgesDetails(new ArrayList<FundingPledgesDetails>());
 
-    		for (int i = 0; i < funds.length; i++) {
-    			if (funds[i].length()>1){
-	    			String token[] = funds[i].split("_");
-	     			FundingPledgesDetails fpd = new FundingPledgesDetails();
-	     			if (token[0].length()>0){
-	     				fpd.setId(Long.parseLong(token[0]));
-	     			}
-	    			fpd.setPledgetypeid(Long.parseLong(token[1]));
-	    			fpd.setTypeOfAssistanceid(Long.parseLong(token[2]));
-	    			fpd.setAmount((FormatHelper.parseDouble(token[3])));
-	    			fpd.setCurrencycode(token[4]);
-	    			//TODO find another way to do it this is not very elegant
-	    			if (token[5].equalsIgnoreCase("unspecified")){
-	    				fpd.setFundingYear(null);
-	    			}else{
-	    				fpd.setFundingYear(token[5]);
-	    			}
-	    			fpd.setAidmodalityid(Long.parseLong(token[6]));
-	    			plForm.getFundingPledgesDetails().add(fpd);
-    			}
-			}
+//    		for (int i = 0; i < funds.length; i++) {
+//    			if (funds[i].length()>1){
+//	    			String token[] = funds[i].split("_");
+//	     			FundingPledgesDetails fpd = new FundingPledgesDetails();
+//	     			if (token[0].length()>0){
+//	     				fpd.setId(Long.parseLong(token[0]));
+//	     			}
+//	    			fpd.setPledgetypeid(Long.parseLong(token[1]));
+//	    			fpd.setTypeOfAssistanceid(Long.parseLong(token[2]));
+//	    			fpd.setAmount((FormatHelper.parseDouble(token[3])));
+//	    			fpd.setCurrencycode(token[4]);
+//	    			//TODO find another way to do it this is not very elegant
+//	    			if (token[5].equalsIgnoreCase("unspecified")){
+//	    				fpd.setFundingYear(null);
+//	    			}else{
+//	    				fpd.setFundingYear(token[5]);
+//	    			}
+//	    			fpd.setAidmodalityid(Long.parseLong(token[6]));
+//	    			//plForm.getFundingPledgesDetails().add(fpd);
+//    			}
+//			}
     		
-    		if (plForm.getPledgeId()!=null && plForm.getPledgeId()!=0) {
-    			PledgesEntityHelper.updatePledge(pledge,pledgessector,plForm);
-			} else {
-				PledgesEntityHelper.savePledge(pledge,pledgessector,plForm);
-			}
+//    		if (plForm.getPledgeId()!=null && plForm.getPledgeId()!=0) {
+//    			PledgesEntityHelper.updatePledge(pledge,pledgessector,plForm);
+//			} else {
+//				PledgesEntityHelper.savePledge(pledge,pledgessector,plForm);
+//			}
     		
     		
     		return mapping.findForward("forward");

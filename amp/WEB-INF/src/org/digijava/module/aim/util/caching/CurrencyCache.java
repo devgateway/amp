@@ -11,14 +11,14 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
  */
 public class CurrencyCache 
 {
-	public Map<String, Boolean> currencyHasRate;
+//	public Map<String, Boolean> currencyHasRate;
 	public List<AmpCurrency> activeCurrencies;
 	
 	public CurrencyCache() {reset();}
 	
 	public void reset()
 	{
-		currencyHasRate = new HashMap<String, Boolean>();
+//		currencyHasRate = new HashMap<String, Boolean>();
 		activeCurrencies = null;
 	}
 }

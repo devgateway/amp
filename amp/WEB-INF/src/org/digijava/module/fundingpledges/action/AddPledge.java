@@ -52,13 +52,13 @@ public class AddPledge extends Action {
 //    	    }
 //    	    //
 //    		
-    		plForm.setPledgeTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_TYPES_KEY));
+    		//plForm.setPledgeTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_TYPES_KEY));
     		
     		//plForm.setPledgeNames(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PLEDGES_NAMES_KEY));
     		
-    		plForm.setAssistanceTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY));
+    		//plForm.setAssistanceTypeCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY));
 
-    		plForm.setAidModalityCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY));
+    		//plForm.setAidModalityCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY));
     		
     		String yearToSpecify = TranslatorWorker.translateText("unspecified");
             
@@ -77,19 +77,7 @@ public class AddPledge extends Action {
 //            List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
 //            plForm.setOrgGroups(orgGroups);
             
-    		Collection currencies = CurrencyUtil.getActiveAmpCurrencyByName();
-    		ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-	    	plForm.setValidcurrencies(validcurrencies);
-	        if(currencies!=null && currencies.size()>0){
-	      	  for (Iterator iter = currencies.iterator(); iter.hasNext();) {
-	      			AmpCurrency element = (AmpCurrency) iter.next();
-	      			 if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
-	      					{
-	      				 		plForm.getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-	      					}
-	      			}
-	        }
-	        if (request.getParameter("reset") != null && request.getParameter("reset").equalsIgnoreCase("true")) {
+ 	        if (request.getParameter("reset") != null && request.getParameter("reset").equalsIgnoreCase("true")) {
 	        	plForm.reset();
 	        	request.getSession().removeAttribute("reset");
 			} else if (request.getParameter("pledgeId") != null && Long.valueOf(request.getParameter("pledgeId")) > 0){

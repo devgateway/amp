@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.digijava.module.aim.util.Identifiable;
+
 
 /**
  * various algorithmical utils
@@ -31,6 +33,19 @@ public class AlgoUtils {
 			currentWave.removeAll(result); // in case there is a cycle somewhere in the DB, do not cycle forever
 		}
 		return result;
+	}
+	
+	/**
+	 * collects all the ids in a set
+	 * @param set
+	 * @param input
+	 * @return
+	 */
+	public static Set<Long> collectIds(Set<Long> set, Collection<? extends Identifiable> input)
+	{
+		for(Identifiable elem:input)
+			set.add((Long) elem.getIdentifier());
+		return set;
 	}
 	 
 }

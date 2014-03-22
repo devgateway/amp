@@ -721,12 +721,7 @@ public class DynLocationManagerUtil {
 	 */
 	public static Set<Long> populateWithDescendantsIds(Collection<AmpCategoryValueLocations> locations)
 	{
-		Set<Long> allInputLocations = new HashSet<Long>();
-		
-		for(AmpCategoryValueLocations acvl:locations)
-			allInputLocations.add(acvl.getId());
-		
-		Set<Long> allOutputLocations = getRecursiveChildrenOfCategoryValueLocations(allInputLocations);
+		Set<Long> allOutputLocations = getRecursiveChildrenOfCategoryValueLocations(AlgoUtils.collectIds(new HashSet<Long>(), locations));
 		return allOutputLocations;
 	}
 	

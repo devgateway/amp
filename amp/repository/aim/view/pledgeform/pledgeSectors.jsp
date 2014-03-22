@@ -12,7 +12,7 @@
 <digi:instance property="pledgeForm" />
 
 <div id='pledge_form_sectors_data'>
-	<div class="highlight text-center h5 bold"><digi:trn key="aim:sector">Sector</digi:trn></div>
+<%--<div class="highlight text-center h5 bold"><digi:trn key="aim:sector">Sector</digi:trn></div> --%>
 		<c:if test="${empty pledgeForm.allUsedRootSectors}">
 			<div class="text-center"><h3><digi:trn>No Sectors</digi:trn></h3></div>
 		</c:if>
@@ -25,7 +25,7 @@
 					<tr>
 						<th class="col-xs-8 text-right"><digi:trn>Sector Name</digi:trn></th>
 						<th class="col-xs-3 text-center"><digi:trn>Percentage</digi:trn></th>
-						<th class="col-xs-1 text-center"><digi:trn>Delete</digi:trn></th>
+						<th class="col-xs-1 text-center"><%--<digi:trn>Delete</digi:trn> --%></th>
 					</tr>
 				</thead>
 				<tbody>	
@@ -33,11 +33,11 @@
 						<c:set var="indexLoc" value="${indexLoc+1}" />
 						<c:if test="${prog.rootId eq rootTheme.keyAsLong}">
 							<tr>
-								<td class="col-xs-8 text-right"><c:out value="${prog.hierarchicalName}" /></td>
-								<td class="col-xs-3">
+								<td class="text-right"><c:out value="${prog.hierarchicalName}" /></td>
+								<td>
 									<html:text name="prog" indexed="true" property="percentage" size="5"  onblur="sectorsController.onPercentageBlur(this)" styleClass="form-control input-sm input-pledges-sectors" />
 								</td>
-								<td class="col-xs-1"><button type="button" onclick="sectorsController.onDelete(this);" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
+								<td class="text-center"><button type="button" onclick="sectorsController.onDelete(this);" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
 							</tr>
 						</c:if>
 					</c:forEach>

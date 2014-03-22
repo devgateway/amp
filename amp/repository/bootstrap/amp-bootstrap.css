@@ -80,3 +80,31 @@ div.amp-subgroup:hover {
 	max-width: 200px !important;
 }
 
+/* copy-paste from amp.css below - we don't want to include that file (full of mess) */
+.main_side {background-color:#EFEFEF; border-left:1px solid #BDBCB5; border-right:1px solid #BDBCB5; border-bottom:1px solid #BDBCB5;}
+
+ .fields_group {  /* copypasted off "fieldset" */
+	background-color: #FFFFFF;
+	border-top: 1px solid #DADAD6;
+	border-left: 1px solid #DADAD6;
+	border-right: 2px solid #C2C1BA;
+	border-bottom: 2px solid #C2C1BA;
+	padding: 10px;
+	padding-top: 0px;
+	margin-left: 10px;
+	margin-right: 7px;
+	margin-top: 2em;
+ }
+
+.fields_group .fields_group_title {
+	background-color: #4A687A;
+	color: #FFFFFF;
+	font-size: 1.1em;
+	font-weight: bold;
+	padding-left: 5px;
+	padding-right: 5px;
+	display: inline-block;
+	line-height: 1.8em;
+	position: relative;
+	top: -0.9em;	
+}

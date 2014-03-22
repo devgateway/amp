@@ -40,7 +40,11 @@ $(document).ready(function()
 				var label = $('label[for="' + id + '"]');
 				$(this).attr('placeholder', label.html()); //copy the insides of the label to the "placeholder" attribute of the input
 			});
-
+	$('.fields_group_title').click(function()
+	{
+		$(this).siblings('.fields_group_contents').slideToggle();
+		return false;
+	});
 });
 
 

@@ -13,8 +13,6 @@
 
 <digi:instance property="pledgeForm" />
 
-<div class="highlight text-center h5 bold"><digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn></div>
-
 <div class="container-fluid">
 	<div class="col-xs-4 h6 bold">
 		<span class="red">*</span> <digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn>
@@ -35,9 +33,13 @@
 </div>
 
 <div class="highlight text-center h5 bold"><digi:trn key="aim:donorInformation">Donor Information</digi:trn></div>
+
 <div class="container-fluid">
-	<div class="col-xs-9 form-group">
-		<span class="red h4 bold">*</span><label for="org_grp_dropdown_id" class="h6 bold near-select"><digi:trn>Organization Group</digi:trn></label>
+	<div class="col-xs-4 h6 bold">
+		<span class="red">*</span> <digi:trn>Organization Group</digi:trn>
+	</div>
+	
+	<div class="col-xs-6 col-xs-offset-1">
 		<html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id">
 			<c:forEach var="orgGroup" items="${pledgeForm.orgGroups}">
 				<option value="${orgGroup.id}"<c:if test="${pledgeForm.selectedOrgGrpId == orgGroup.id}">selected="selected"</c:if> >

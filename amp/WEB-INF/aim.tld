@@ -248,6 +248,35 @@
 	</tag>
 
 	<tag>
+		<name>renderFormSubsection</name>
+		<tagclass>
+			org.digijava.module.aim.uicomponents.RenderFormSubsectionTag
+		</tagclass>
+		<info>renders a collapsible form subsection</info>
+		<attribute>
+			<name>title</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>the title</description>
+		</attribute>
+		
+		<attribute>
+			<name>styleId</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>id</description>
+		</attribute>
+		
+		<attribute>
+			<name>styleClass</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>styleClass</description>
+		</attribute>
+		<bodycontent>JSP</bodycontent>
+	</tag>
+
+	<tag>
             <name>editContactLink</name>
             <tagclass>
 			org.digijava.module.aim.uicomponents.EditContactLink

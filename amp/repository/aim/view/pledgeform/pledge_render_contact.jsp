@@ -19,12 +19,9 @@
 <c:set var="feature_name">Pledge Contact ${ct_nr}</c:set>
 <c:set var="contact_var">contact${ct_nr}</c:set>
 <digi:instance property="pledgeForm" />
-
 <feature:display name="${feature_name}" module="Pledges">
+	<aim:renderFormSubsection title="${param.sectiontitle}" styleId="pledge_form_contact_${ct_nr}">
 		<div id="pledge_contact_${ct_nr}">
-			<div class="highlight text-center h5 bold">
-				<digi:trn key="aim:pointContactDonorsConferenceMarch31st">${param.sectiontitle}</digi:trn>
-			</div>
 			<c:if test="${not empty param.checkboxtext}">
 				<div class="checkbox col-xs-5 col-xs-offset-7">
 					<label>
@@ -103,4 +100,5 @@
 				</field:display>
 		</div>
 	</div>
+	</aim:renderFormSubsection>
 </feature:display>

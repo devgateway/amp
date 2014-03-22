@@ -48,55 +48,6 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
 <iframe src="/aim/selectPledgeLocation.do?edit=false" width="100%" scrolling="no" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" name="pledges_locations_name"></iframe>
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" vAlign="top" align="center" border="0">
-	
-	<tr>
-		<td align=left valign="top">
-			<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
-				<tr><td>
-					<span style="font-family: Tahoma;font-size: 11px;"><digi:errors/></span>
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border="0">
-						<tr><td width="75%" vAlign="top">
-						<table cellpadding="0" cellspacing="0" width="100%" border="0">
-							<tr><td width="100%" bgcolor="#FF0000" style="background-color:#F5F5F5; border:1px solid #CCCCCC; padding:15px;">
-
-							<table width="100%"vAlign="top" align="left" bgcolor="#C7D4DB">
-
-							<tr><td bgColor=#ffffff align="center" vAlign="top">
-								<!-- contents -->
-								<!-- bootstrap part of form -->
-<%--								<iframe src="/aim/selectPledgeLocation.do?edit=false" width="100%" scrolling="no" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" name="pledges_locations_name"></iframe>  --%> 										   
-								</td>																					
-								<table width="95%" border="0">
-									<tr>
-										<td align="right" width="50%">
-											<html:button styleClass="dr-menu" property="submitButton" onclick="return savePledge()">
-		                                         <digi:trn key="btn:savePlegde">Save Pledge</digi:trn>
-											</html:button>
-										</td>
-										<td align="left" width="50%">
-											<html:button styleClass="dr-menu" property="submitButton" onclick="return cancel()">
-		                                         <digi:trn key="btn:cancel">Cancel</digi:trn>
-											</html:button>
-										</td>
-									</tr>
-									<tr><td>&nbsp;</td></tr>
-									<tr><td>&nbsp;</td></tr>
-								</table>
-								<!-- end contents -->
-							</td></tr>
-							</table>
-
-							</td></tr>
-						</table>
-						</td>
-					</tr>	
-					</table>
-				</td></tr>
-			</table>
-		</td>
-	</tr>
-</table>
 <script type="text/javascript">
 
 

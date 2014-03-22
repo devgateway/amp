@@ -319,7 +319,7 @@ function collapseAll() {
 			<div class="l_sm">
 			 	<font color="red">
 			 		<jsp:include page="utils/amountUnitsUnformatted.jsp">
-						<jsp:param value="" name="amount_prefix"/>
+						<jsp:param value="* " name="amount_prefix"/>
 					</jsp:include>
 				</font>
 	    	</div>
@@ -554,12 +554,16 @@ function collapseAll() {
 	
 	</div>
 </fieldset>	
-	</div>	</td>
+	</div>	
+	</td>
 	<td width=15>&nbsp;</td>
     <td width=689 bgcolor="#F4F4F4" valign=top style="border:1px solid #DBDBDB">
 	<div style="padding:10px; font-size:12px;">
     <%  if (! "true".equals(request.getParameter("popupView"))) {%>
-        <%@include file="activityPreviewButtons.jspf" %>
+    	<jsp:include page="activityPreviewButtons.jsp">
+    		<jsp:param name="messages_on" value="true"  />
+    	</jsp:include>  
+        
     <%}%>
 
 <!-- IDENTIFICATION SECTION -->
@@ -3125,7 +3129,7 @@ function collapseAll() {
 <br/>
 
 <%  if (! "true".equals(request.getParameter("popupView"))) {%>
-    <%@include file="activityPreviewButtons.jspf" %>
+    <jsp:include page="activityPreviewButtons.jsp"/>
 <%}%>
 
 </div>

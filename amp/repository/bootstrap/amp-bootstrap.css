@@ -142,6 +142,10 @@ div.amp-subgroup:hover {
 	margin-bottom: 0;
 }
 
+.amp-btn-delete-subsection{
+	float: right;
+	margin-right: 0.4em;
+}
 
 /* HACK: forcing small size on autocomplete on select-search */
 .bootstrap-select-searchbox input

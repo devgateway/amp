@@ -98,6 +98,11 @@ public class SelectPledgeProgram extends Action {
 				return null;
 			}
 
+			if (extraAction.equals("pledge_funding_submit")){
+				pledgeForm.addNewPledgeFundingEntry();
+				ARUtil.writeResponse(response, "ok");
+				return null;
+			}
 			if (extraAction.equals("pledge_funding_delete")){
 				pledgeForm.deleteUniquelyIdentifiable(pledgeForm.getSelectedFunding(), Long.parseLong(request.getParameter("id")));
 				return null;

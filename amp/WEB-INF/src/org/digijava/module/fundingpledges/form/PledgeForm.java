@@ -580,5 +580,10 @@ public class PledgeForm extends ActionForm implements Serializable
     	}
     	return res;
     }
+    
+    public void addNewPledgeFundingEntry()
+    {
+    	this.selectedFunding.add(new FundingPledgesDetailsShim(CurrencyUtil.getDefaultCurrency()));
+    }
 }
 

@@ -1,5 +1,6 @@
 package org.digijava.module.fundingpledges.form;
 
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
@@ -18,6 +19,12 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable{
 	private Long fundingYear;
 	
 	private long uniqueId = PledgeForm.uniqueIds.getAndIncrement();
+	
+	public FundingPledgesDetailsShim(AmpCurrency currency)
+	{
+		this.amount = 0d;
+		this.currencyId = currency.getAmpCurrencyId();
+	}
 	
 	public FundingPledgesDetailsShim(FundingPledgesDetails fpd)
 	{

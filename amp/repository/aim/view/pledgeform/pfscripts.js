@@ -3,30 +3,6 @@
  * @author Dolghier Constantin
  */
 
-function pledges_form_check_percentage(inputItem, itemsClass, error_message_numeric, error_message_sum_100)
-{
-	if (isNaN(inputItem.value))
-	{
-		show_error_message(error_message_numeric);
-		setValidationStatus($(inputItem), 'has-error');
-		$(inputItem).focus();
-		return false;
-	}
-	setValidationStatus($('.' + itemsClass), 'has-success'); // ok
-	clean_all_error_messages();
-	var totalValue = 0;
-	$('.' + itemsClass).each(function(i, obj) {
-		totalValue += parseFloat(obj.value);
-	});
-	if (totalValue > 100) {
-		show_error_message(error_message_sum_100);
-		setValidationStatus($('.' + itemsClass), 'has-warning'); // ok
-		$(inputItem).focus();
-		return false;  
-	}
-	return true;
-}
-
 
 function copy_from_contact_1_to_contact_2(input_elem)
 {

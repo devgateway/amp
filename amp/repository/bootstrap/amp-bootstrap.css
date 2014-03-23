@@ -147,6 +147,14 @@ div.amp-subgroup:hover {
 	margin-right: 0.4em;
 }
 
+.has-warning .form-control{
+	background-color: #FAFADD !important;
+}
+
+.has-error .form-control {
+	background-color: #FFAAAA;
+}
+
 /* HACK: forcing small size on autocomplete on select-search */
 .bootstrap-select-searchbox input
 {

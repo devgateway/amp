@@ -18,6 +18,53 @@ function checkExistence()
 	}
 }
 
+//function checkPercentValidation(rootElem)
+//{
+//	$(rootElem + "[class*=validate-percentage-").each(function(){
+//		if (!$(this).hasAttr('percentage-group'))
+//			alert("Generic AJAX form error: element " + $(this) + " has validate-percentage, but no percentage-group attr");
+//	});
+//}
+
+function is_valid_percentage(str)
+{
+	return !(isNaN(str) || (str < 0) || (str > 100) || (str.length == 0));
+}
+
+function floatEquals(flt, val){
+	return Math.abs(flt - val) < 0.0001;
+}
+
+function floatDiffers(flt, val){ return !floatEquals(flt, val);}
+
+function amp_bootstrap_forms_check_percentage(inputItem, itemsClass)
+{
+	if (!is_valid_percentage(inputItem.value))
+	{
+		show_error_message("Not a valid percentage");
+		setValidationStatus($(inputItem), 'has-error');
+		//$(inputItem).focus();
+		return false;
+	}
+	setValidationStatus($('.' + itemsClass), 'has-success'); // ok
+	clean_all_error_messages();
+	var totalValue = 0;
+	var foundError = false;
+	$('.' + itemsClass).each(function(i, obj) {
+		if (is_valid_percentage(obj.value))
+			totalValue += parseFloat(obj.value);
+		else
+			foundError = true;
+	});
+	if (foundError || (floatDiffers(totalValue, 0) && floatDiffers(totalValue, 100))) {
+		show_error_message("Sum of percentages should be either 0 or 100");
+		setValidationStatus($('.' + itemsClass), 'has-warning'); // ok
+		//$(inputItem).focus();
+		return false;  
+	}
+	return true;
+}
+
 /**
  * returns an Array of (name, value) (good for jquery post) of all elements under a selector
  * @param selector
@@ -57,6 +104,7 @@ function InteractiveFormArea(masterDivId, ajaxPage, submitAttrName, actionName, 
 	_self.changeDivId = _self.masterDivId + "_change";	// the <div> which holds the dropdowns / buttons which change data - ajax refreshed
 	_self.addItemsButtonId = _self.dataDivId + "_add";		// the "Add Program / Sector / Location" button which triggers showing the larger modify area
 	checkExistence(_self.masterDivId, _self.dataDivId, _self.changeDivId, _self.addItemsButtonId);
+	//checkPercentageValidation(_self.masterDivId);
 	_self.ajaxPage = ajaxPage;						// the AJAX page to call for all the interactive stuff
 	_self.submitAttrName = submitAttrName;			// on submit will do an ajax post of the form {extraAction=submitActionName,  submitAttrName: ids.join(,)}
 	_self.actionName = actionName;					// base name for the "submit", "show_data" and "show_add"
@@ -134,6 +182,27 @@ InteractiveFormArea.prototype.getIdsOf = function(selectConfig, defaultValue)
 	return selectedIds.length > 0 ? selectedIds.join(',') : defaultValue;
 };
 
+/**
+ * called when validating percentages
+ * @param elem
+ * @returns
+ */
+InteractiveFormArea.prototype.onBlur = function(elem){
+	var jElem = $(elem);
+	var classList = jElem.attr('class').split(/\s+/); // generate a list of the classes the element has
+	for(var i = 0; i < classList.length; i++){
+		var className = classList[i];
+		if (className.indexOf("validate-percentage-") == 0){
+			return amp_bootstrap_forms_check_percentage(elem, className);	
+		}
+	};
+	
+};
+
+/**
+ * process a <select> controlled by the controller - e.g. update the "addition" area
+ * @param elem
+ */
 InteractiveFormArea.prototype.selectChanged = function(elem){
 	this.makePost($(elem).attr('id'), null);
 };
@@ -142,7 +211,11 @@ InteractiveFormArea.prototype.cancelClicked = function(elem){
 	this.hideAddArea();
 };
 
-InteractiveFormArea.prototype.addNewItem = function(elem){ // called when 
+/**
+ * call this one to trigger "add new item"
+ * @param elem the element triggering the event
+ */
+InteractiveFormArea.prototype.addNewItem = function(elem){ 
 	this.submitClicked(elem, true);
 };
 
@@ -176,6 +249,10 @@ InteractiveFormArea.prototype.submitClicked = function(elem, noIds) {
 		});	
 };
 
+/**
+ * shows the "Add Program / Sector / Location / Percentage" area
+ * @param elem the element the click on which triggered the event. Ignored
+ */
 InteractiveFormArea.prototype.showAdditionArea = function(elem){
 	_self = this;
 	_self.refreshAddArea(function(){ // ajax-refresh the area, then show it
@@ -185,6 +262,9 @@ InteractiveFormArea.prototype.showAdditionArea = function(elem){
 	});
 };
 
+/**
+ * events to trigger when starting up an instance. Now only hides the "addition" area
+ */
 InteractiveFormArea.prototype.registerJsEvents = function() {
 	_self = this;
 		
@@ -195,7 +275,7 @@ InteractiveFormArea.prototype.registerJsEvents = function() {
 };
 
 /**
- * hides the "Add" area (submit/cancel buttons + select's)
+ * hides the "addition" area (submit/cancel buttons + select's)
  */
 InteractiveFormArea.prototype.hideAddArea = function() {
 	_self = this;
@@ -212,6 +292,10 @@ InteractiveFormArea.prototype.refreshDataArea = function() {
 	amp_bootstrap_form_update_area(_self.ajaxPage, _self.refreshDataActionName, _self.dataDivId);
 };
 
+/**
+ * refreshes the "addition" area
+ * @param callback a callback to call on success. Might be null
+ */
 InteractiveFormArea.prototype.refreshAddArea = function(callback) {
 	_self = this;
 	amp_bootstrap_form_update_area(_self.ajaxPage, _self.refreshAddActionName, _self.changeDivId, callback);

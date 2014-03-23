@@ -24,6 +24,10 @@
     } else 
     { // not ajax: render the full bootstrap iframe 
 %>
+<%--
+	<c:set var="numeric_value_only_msg"><digi:trn jsFriendly='true' key="aim:addSecorNumericValueErrorMessage">Please enter numeric value only</digi:trn></c:set>
+	<c:set var="sum_cannot_exceed_100_msg"><digi:trn jsFriendly='true'>Sum of percentages can not exceed 100</digi:trn></c:set>
+ --%>
 <!DOCTYPE html>
 <html lang="en">
   <head>

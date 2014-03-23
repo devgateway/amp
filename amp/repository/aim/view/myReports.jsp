@@ -81,7 +81,7 @@ function popup(mylink, windowname)
 			<bean:size id="repCount" name="lastViewedReports" scope="session" />
                    <div style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom: 7px" title="<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>">
                   
-                    	 <digi:link href="/viewTeamReports.do?tabs=false&reset=true&onlyFavourites=true">
+                    	 <digi:link href="/viewTeamReports.do?tabs=false&reset=true&onlyFavourites=false">
                             <digi:trn key="aim:moreReports">More Reports...</digi:trn>
                         </digi:link>
                     </div>

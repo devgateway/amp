@@ -29,15 +29,15 @@
 					</tr>
 				</thead>
 				<tbody>	
-					<c:forEach var="prog" items="${pledgeForm.selectedSectors}" varStatus="index">
+					<c:forEach var="selectedSectors" items="${pledgeForm.selectedSectorsList}" varStatus="index">
 						<c:set var="indexLoc" value="${indexLoc+1}" />
-						<c:if test="${prog.rootId eq rootTheme.keyAsLong}">
-							<tr id="pledge_form_row_for_sector_${prog.uniqueId}">
-								<td class="text-right"><c:out value="${prog.hierarchicalName}" /></td>
+						<c:if test="${selectedSectors.rootId eq rootTheme.keyAsLong}">
+							<tr id="pledge_form_row_for_sector_${selectedSectors.uniqueId}">
+								<td class="text-right"><c:out value="${selectedSectors.hierarchicalName}" /></td>
 								<td>
-									<html:text name="prog" indexed="true" property="percentage" size="5"  onblur="sectorsController.onPercentageBlur(this)" styleClass="form-control input-sm input-pledges-sectors" />
+									<html:text name="selectedSectors" indexed="true" property="percentage" size="5"  onblur="sectorsController.onPercentageBlur(this)" styleClass="form-control input-sm input-pledges-sectors" />
 								</td>
-								<td class="text-center"><button type="button" onclick="sectorsController.onDelete(${prog.uniqueId});" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
+								<td class="text-center"><button type="button" onclick="sectorsController.onDelete(${selectedSectors.uniqueId});" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
 							</tr>
 						</c:if>
 					</c:forEach>

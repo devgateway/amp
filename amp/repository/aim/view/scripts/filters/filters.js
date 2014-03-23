@@ -282,7 +282,7 @@ DivManager.prototype.onSelect           = function () {
 	 	this.divEl.style.display                = "block";
 	 	this.propertyObj.lastShownDiv   = this.divEl;
 	 	var parentDiv                                   = this.divEl;
-	 	var found                                               = false;
+	 	var found                                       = false;
 	 	for (var i=0; i<4; i++) { //should be more than 5 steps aways
 		 	parentDiv       = parentDiv.parentNode;
 		 	if ( parentDiv.nodeName.toLowerCase() == "div" && parentDiv.id.indexOf("Tab") > 0  ){

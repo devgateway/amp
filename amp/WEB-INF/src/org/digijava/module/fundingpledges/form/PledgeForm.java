@@ -231,15 +231,15 @@ public class PledgeForm extends ActionForm implements Serializable
     	
     	this.setSelectedSectors(new ArrayList<IdNamePercentage>());
     	for(FundingPledgesSector sec:fp.getSectorlist())
-    		selectedSectors.add(PLEDGE_SECTOR_EXTRACTOR.apply(sec.getSector()).setPercentage(sec.getSectorpercentage()));
+    		selectedSectors.add(PLEDGE_SECTOR_EXTRACTOR.apply(sec.getSector()).setPercentageChained(sec.getSectorpercentage()));
     	
     	this.setSelectedLocs(new ArrayList<IdNamePercentage>());    	
     	for(FundingPledgesLocation loc:fp.getLocationlist())
-    		selectedLocs.add(PLEDGE_LOCATION_EXTRACTOR.apply(loc.getLocation()).setPercentage(loc.getLocationpercentage()));
+    		selectedLocs.add(PLEDGE_LOCATION_EXTRACTOR.apply(loc.getLocation()).setPercentageChained(loc.getLocationpercentage()));
 
     	this.setSelectedProgs(new ArrayList<IdNamePercentage>());
     	for(FundingPledgesProgram prog:fp.getProgramlist())
-    		selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(prog.getProgram()).setPercentage(prog.getProgrampercentage()));
+    		selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(prog.getProgram()).setPercentageChained(prog.getProgrampercentage()));
 
     	this.setSelectedFunding(new ArrayList<FundingPledgesDetailsShim>());
     	for(FundingPledgesDetails fpd:fp.getFundingPledgesDetails())
@@ -359,17 +359,17 @@ public class PledgeForm extends ActionForm implements Serializable
     
     public void addSelectedLocation(long locId){
     	AmpCategoryValueLocations acvl = DynLocationManagerUtil.getLocation(locId, false);
-    	selectedLocs.add(PLEDGE_LOCATION_EXTRACTOR.apply(acvl).setPercentage(0f));
+    	selectedLocs.add(PLEDGE_LOCATION_EXTRACTOR.apply(acvl).setPercentageChained(0f));
     }
     
     public void addSelectedProgram(long themeId){
     	AmpTheme theme = ProgramUtil.getThemeById(themeId);
-		selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(theme).setPercentage(0f));
+		selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(theme).setPercentageChained(0f));
     }
     
     public void addSelectedSector(long sectorId){
     	AmpSector sector = SectorUtil.getAmpSector(sectorId);
-    	selectedSectors.add(PLEDGE_SECTOR_EXTRACTOR.apply(sector).setPercentage(0f));
+    	selectedSectors.add(PLEDGE_SECTOR_EXTRACTOR.apply(sector).setPercentageChained(0f));
     }
     
     public List<IdWithValueShim> getShimsForCategoryClass(String categoryClassKey, Long selectedValue)
@@ -585,5 +585,30 @@ public class PledgeForm extends ActionForm implements Serializable
     {
     	this.selectedFunding.add(new FundingPledgesDetailsShim(CurrencyUtil.getDefaultCurrency()));
     }
+    
+    /**
+     * stupid block to make Struts happy for indexed properties. 
+     * Please see http://www.coderanch.com/t/508028/Struts/Struts-queryString-indexed-properties-parsed
+     */
+    public IdNamePercentage getSelectedLocs(int index){return selectedLocs.get(index);}
+    public void setSelectedLocs(int index, IdNamePercentage entry) {this.selectedLocs.set(index, entry);}
+    public List<IdNamePercentage> getSelectedLocsList(){return selectedLocs;}
+    public void setSelectedLocsList(List<IdNamePercentage> selectedLocs){this.selectedLocs = selectedLocs;}
+    
+    public IdNamePercentage getSelectedProgs(int index){return selectedProgs.get(index);}
+    public void setSelectedProgs(int index, IdNamePercentage entry) {this.selectedProgs.set(index, entry);}
+    public List<IdNamePercentage> getSelectedProgsList(){return selectedProgs;}
+    public void setSelectedProgsList(List<IdNamePercentage> selectedProgs){this.selectedProgs = selectedProgs;}
+
+    public IdNamePercentage getSelectedSectors(int index){return selectedSectors.get(index);}
+    public void setSelectedSectors(int index, IdNamePercentage entry) {this.selectedSectors.set(index, entry);}
+    public List<IdNamePercentage> getSelectedSectorsList(){return selectedSectors;}
+    public void setSelectedSectorsList(List<IdNamePercentage> selectedSectors){this.selectedSectors = selectedSectors;}
+
+    public FundingPledgesDetailsShim getSelectedFunding(int index){return selectedFunding.get(index);}
+    public void setSelectedSectors(int index, FundingPledgesDetailsShim entry) {this.selectedFunding.set(index, entry);}
+    public List<FundingPledgesDetailsShim> getSelectedFundingList(){return selectedFunding;}
+    public void setSelectedFundingList(List<FundingPledgesDetailsShim> selectedFunding){this.selectedFunding = selectedFunding;}
+
 }
 

@@ -19,6 +19,17 @@ function checkExistence()
 }
 
 /**
+ * returns an Array of (name, value) (good for jquery post) of all elements under a selector
+ * @param selector
+ * @returns
+ */
+function getFormData(selector)
+{
+	var relevantElems = selector + " input, " + selector + " select, " + selector + " textarea";
+	return $(relevantElems).serializeArray();
+}
+
+/**
  * constructs an instance with the structure:
  * <div id="$masterDivId>
  * 		<div id="masterDivId_data">
@@ -59,9 +70,11 @@ function InteractiveFormArea(masterDivId, ajaxPage, submitAttrName, actionName, 
 
 InteractiveFormArea.prototype.onDelete = function(element_id){
 	var _self = this;
+	var zzz = getFormData(_self.dataDivId);
+	zzz.push({name: 'extraAction', value: _self.actionName + "_delete"});
+	zzz.push({name: 'id', value: element_id});
 	$.post(_self.ajaxPage,
-			{extraAction: _self.actionName + "_delete",
-			'id': element_id},
+			zzz,
 			function(data){
 				_self.refreshDataArea();
 			});
@@ -91,9 +104,10 @@ InteractiveFormArea.prototype.makePost = function(id, callback)
 		return;
 	}
 	attrname = select.attr;
-	postConfig = {};
-	postConfig['extraAction'] =  _self.actionName + '_' + select.action;
-	postConfig[attrname] = _self.getIdsOf(select, -1); 
+	
+	var postConfig = getFormData(_self.dataDivId);
+	postConfig.push({name: 'extraAction', value: _self.actionName + '_' + select.action});
+	postConfig.push({name: attrname, value: _self.getIdsOf(select, -1)});
 
 	$.post(_self.ajaxPage,
 			postConfig,
@@ -147,9 +161,9 @@ InteractiveFormArea.prototype.submitClicked = function(elem, noIds) {
 		}
 	}
 	// we have data to POST -> now post it and refresh
-	var zzz = {};
-	zzz[this.submitAttrName] = selectedIds;
-	zzz['extraAction'] = this.submitActionName;
+	var zzz = getFormData(_self.dataDivId);
+	zzz.push({name: this.submitAttrName, value: selectedIds});
+	zzz.push({name: 'extraAction', value: _self.submitActionName});
 
 	$.post(this.ajaxPage, 
 			zzz,

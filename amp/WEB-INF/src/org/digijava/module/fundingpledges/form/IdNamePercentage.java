@@ -47,7 +47,7 @@ public class IdNamePercentage implements Comparable<IdNamePercentage>, UniquelyI
 		return a == null ? 0 : a.intValue();
 	}
 	
-	public IdNamePercentage setPercentage(Float perc){
+	public IdNamePercentage setPercentageChained(Float perc){
 		this.percentage = perc;
 		return this;
 	}

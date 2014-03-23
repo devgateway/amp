@@ -9,10 +9,10 @@
 <c:set var="numeric_value_only_msg"><digi:trn jsFriendly='true' key="aim:addSecorNumericValueErrorMessage">Please enter numeric value only</digi:trn></c:set>
 <c:set var="sum_cannot_exceed_100_msg"><digi:trn jsFriendly='true'>Sum of percentages can not exceed 100</digi:trn></c:set>
 <div id='pledge_form_locations_data'>
-	<c:if test="${empty pledgeForm.selectedLocs}">
+	<c:if test="${empty pledgeForm.selectedLocsList}">
 		<div class="text-center"><h3><digi:trn>No Locations</digi:trn></h3></div>
 	</c:if>
-	<c:if test="${not empty pledgeForm.selectedLocs}">
+	<c:if test="${not empty pledgeForm.selectedLocsList}">
 	<table class="table table-striped table-bordered table-hover table-condensed">
 		<thead>
 			<tr>
@@ -22,7 +22,7 @@
 			</tr>
 		</thead>
 		<tbody>	
-		<c:forEach var="selectedLocs" items="${pledgeForm.selectedLocs}" varStatus="index">
+		<c:forEach var="selectedLocs" items="${pledgeForm.selectedLocsList}" varStatus="index">
 			<c:set var="indexLoc" value="${indexLoc+1}"/>
 			<tr id="pledge_form_row_for_location_${selectedLocs.uniqueId}">
 				<td class="text-right">${selectedLocs.hierarchicalName}</td>

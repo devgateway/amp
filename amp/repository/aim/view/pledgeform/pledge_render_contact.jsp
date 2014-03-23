@@ -64,17 +64,17 @@
 				
 				<jsp:include page="renderConditionedInput.jsp">
 					<jsp:param name="field_name" value="Telephone" /><jsp:param name="field" value="telephone" />
-					<jsp:param name="text" value="Telephone" /> <jsp:param name="classes" value="phone-number" />
+					<jsp:param name="text" value="Telephone" /> <jsp:param name="classes" value="validate-phone-number" />
 				</jsp:include>
 				
 				<jsp:include page="renderConditionedInput.jsp">
 					<jsp:param name="field_name" value="Email" /><jsp:param name="field" value="email" />
-					<jsp:param name="text" value="Email" /> <jsp:param name="classes" value="email-address" />
+					<jsp:param name="text" value="Email" /> <jsp:param name="classes" value="validate-email-address" />
 				</jsp:include>
 				
 				<jsp:include page="renderConditionedInput.jsp">
 					<jsp:param name="field_name" value="Fax" /><jsp:param name="field" value="fax" />
-					<jsp:param name="text" value="Fax" /> <jsp:param name="classes" value="phone-number" />
+					<jsp:param name="text" value="Fax" /> <jsp:param name="classes" value="validate-phone-number" />
 				</jsp:include>
 												
 				<div class="clearfix">&nbsp</div>
@@ -89,12 +89,12 @@
 					
 					<jsp:include page="renderConditionedInput.jsp">
 						<jsp:param name="field_name" value="" /><jsp:param name="field" value="alternateTelephone" />
-						<jsp:param name="text" value="Telephone" /> <jsp:param name="classes" value="phone-number" />
+						<jsp:param name="text" value="Telephone" /> <jsp:param name="classes" value="validate-phone-number" />
 					</jsp:include>
 					
 					<jsp:include page="renderConditionedInput.jsp">
 						<jsp:param name="field_name" value="" /><jsp:param name="field" value="alternateEmail" />
-						<jsp:param name="text" value="Email" /> <jsp:param name="classes" value="email-address" />
+						<jsp:param name="text" value="Email" /> <jsp:param name="classes" value="validate-email-address" />
 					</jsp:include>
 													
 				</field:display>

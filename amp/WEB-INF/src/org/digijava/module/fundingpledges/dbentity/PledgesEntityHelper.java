@@ -208,75 +208,7 @@ public class PledgesEntityHelper {
 			throw new DgException("error deleting pledge");
 		}
 	}
-	
-	/**
-	 * synchronizes the in-database variant of a pledge's elements to the in-form ones
-	 * @param session
-	 * @param pledge
-	 * @param formElements
-	 * @param entityElements
-	 */
-	public static <T> void updatePledgeItemsAccordingToForm(Session session, FundingPledges pledge, Collection<T> formElements, Collection<T> entityElements)
-	{
-		if(formElements != null && (!formElements.isEmpty()))
-		{
-			// is anything on the list?
-			for(T obj:formElements)
-			{
-				if (entityElements.contains(obj)) // preexisting -> just update with (new?) pledgeId
-				{
-					ContentTranslationUtil.setProperty(obj, "pledgeid", pledge);
-					session.update(obj);
-				} else
-				{
-					// not preexisting -> add form entities to database and link with Pledge instance
-					ContentTranslationUtil.setProperty(obj, "pledgeid", pledge);
-					session.save(obj);
-					entityElements.add(obj);
-				}
-			}
-		} else {
-			for (T obj: entityElements){
-				session.delete(obj);
-			}
-			entityElements = null; // hackish: lose reference to collection so that the iteration below does not clear it up
-		}
-		
-		if (entityElements != null && (!entityElements.isEmpty()))
-		{
-			for (T obj:entityElements) {
-				if (!formElements.contains(obj)) {
-					session.delete(obj);
-				}
-			}
-		}
-	
-	}
-	
-	public static void updatePledge(FundingPledges pledge, Set<FundingPledgesSector> sectors, PledgeForm plf) throws DgException
-	{	
-		if (System.currentTimeMillis() > 1)
-			throw new RuntimeException("not implemented!");
-		try {
-			Session session = PersistenceManager.getSession();
-
-			session.update(pledge);
-			Collection<FundingPledgesSector> fpsl = PledgesEntityHelper.getPledgesSectors(pledge.getId());
-			Collection<FundingPledgesLocation> fpll = PledgesEntityHelper.getPledgesLocations(pledge.getId());
-			Collection<FundingPledgesProgram> fppl = PledgesEntityHelper.getPledgesPrograms(pledge.getId());
-			Collection<FundingPledgesDetails> fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
 			
-			updatePledgeItemsAccordingToForm(session, pledge, sectors, fpsl);
-			//updatePledgeItemsAccordingToForm(session, pledge, plf.getFundingPledgesDetails(), fpdl);
-			//updatePledgeItemsAccordingToForm(session, pledge, plf.getSelectedLocs(), fpll);
-			//updatePledgeItemsAccordingToForm(session, pledge, plf.getSelectedProgs(), fppl);
-
-		} catch (HibernateException e) {
-			logger.error("Error saving pledge", e);
-			throw new DgException(e);
-		} 
-	}
-	
 	public static AmpOrganisation getOrganizationById(Long id)
 	{
 		return (AmpOrganisation) PersistenceManager.getSession().load(AmpOrganisation.class, id);

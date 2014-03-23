@@ -27,7 +27,8 @@ public class PledgeLocationSelected extends Action {
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response) throws Exception {
 		
-		// NOT USED ANYMORE
+		// TODO: DELETE, NOT USED ANYMORE
+
 		return mapping.findForward("forward");
 	}
 }

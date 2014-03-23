@@ -31,49 +31,11 @@ $(document).ready(function()
 		if ($('#sameContactCheckBox').is(":checked")) // copy values from contact1 to contact2 as they are typed, IFF the corresponding checkbox is checked
 			copy_from_contact_1_to_contact_2(this);
 		});
-	
-	$('.phone-number').blur(function(){
-		return pledges_form_check_phone_number(this, please_enter_phone_number_message);
-	});
-	
-	$('.email-address').blur(function(){
-		return pledges_form_check_email(this, please_enter_email_message);
-	});
 });
-	
-/**
- * validates an input with a generic function and highlights any found error
- * @param inputItem
- * @param validation_function
- * @param error_message
- * @returns {Boolean}
- */
-function pledges_form_simple_validation(inputItem, validation_function, error_message)
-{
-	if ((inputItem.value.length > 0) && (!validation_function(inputItem.value)))
-	{
-		show_error_message(error_message);
-		setValidationStatus($(inputItem), 'has-error');
-		$(inputItem).focus();
-		return false;
-	}
-	setValidationStatus($(inputItem), 'has-success'); // ok
-	clean_all_error_messages();
-	return true;
-}
-
-function pledges_form_check_email(inputItem, error_message)
-{
-	return pledges_form_simple_validation(inputItem, looksLikeEmail, error_message);
-}
-
-function pledges_form_check_phone_number(inputItem, error_message)
-{
-	return pledges_form_simple_validation(inputItem, looksLikePhoneNumber, error_message);
-}
 
 /**
- * should be called on every new ajax addition
+ * should be called on every new ajax addition, or all functionality dependent on $(document).ready() will not work
+ * TODO: maybe change verything to $(document).on(...);
  */
 function on_element_loaded()
 {
@@ -86,6 +48,7 @@ function on_element_loaded()
 			'data-style': 'btn-primary btn-xs',
 			//size: 5
 		});
+		init_validation();
 	});
 }
 
@@ -127,6 +90,43 @@ $(document).ready(function() // enable javascript-backed ajax forms
 	}
 	
 });
+
+/**
+ * returns true IFF all elements have "validation ok" after onblur being fired on them all
+ * @param bigDivSelector
+ * @returns {Boolean}
+ */
+function pledge_form_validate(bigDivSelector){
+	var validation_ok = amp_bootstrap_form_validate(bigDivSelector);
+	if (validation_ok)
+		show_error_message("Validation Result", "Everything ok!", "success");
+	else
+		show_error_message("Validation Result", "Found errors. Please check areas in red");
+	return validation_ok;
+}
+
+function pledge_form_submit(bigDivSelector){
+	var validated = pledge_form_validate(bigDivSelector);
+	if (!validated)
+		return;
+	var data = getFormData('#pledge_form_big_div');
+	$.post("/savePledge.do",
+			data,
+			function(data){
+				if (data.trim() != 'ok')
+					show_error_message('Error Submitting', 'Error submitting form: ' + data.trim());
+				else
+					go_to_pledge_list();
+		});
+}
+
+function go_to_pledge_list(){
+	parent.window.location = '/viewPledgesList.do';
+}
+
+function pledge_form_cancel(bigDivSelector){
+	go_to_pledge_list();
+}
 
 on_element_loaded();
 bootstrap_iframe(); // init iframe hacks

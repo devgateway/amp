@@ -116,13 +116,10 @@ public class PledgeForm extends ActionForm implements Serializable
 	private String whoAuthorizedPledge;
 	private String furtherApprovalNedded;
 
-//	private Collection<AmpCategoryValue> pledgeTypeCategory;
-//	private Collection<AmpCategoryValue> assistanceTypeCategory;
-//	private Collection<AmpCategoryValue> aidModalityCategory;
-	private String defaultCurrency;
+	//private String defaultCurrency;
 
 	private Long pledgeTitleId;
-	private Collection<String> years;
+	//private Collection<String> years;
 	private String year;
 	
 	private boolean locationsMultiselect = false;

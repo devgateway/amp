@@ -37,11 +37,95 @@ function floatEquals(flt, val){
 
 function floatDiffers(flt, val){ return !floatEquals(flt, val);}
 
+/**
+ * GENERIC, e.g. non-controller-related, validation
+ */
+
+/**
+ * validates an input with a generic function and highlights any found error
+ * @param inputItem
+ * @param validation_function
+ * @param error_message
+ * @returns {Boolean}
+ */
+function amp_bootstrap_form_simple_validation(inputItem, validation_function, error_message)
+{
+	if ((inputItem.value.length > 0) && (!validation_function(inputItem.value)))
+	{
+		show_error_message("Error", error_message);
+		setValidationStatus($(inputItem), 'has-error');
+		//$(inputItem).focus();
+		return false;
+	}
+	setValidationStatus($(inputItem), 'has-success'); // ok
+	clean_all_error_messages();
+	return true;
+}
+
+function amp_bootstrap_form_check_email(inputItem, error_message)
+{
+	return amp_bootstrap_form_simple_validation(inputItem, looksLikeEmail, error_message);
+}
+
+function amp_bootstrap_form_check_phone_number(inputItem, error_message)
+{
+	return amp_bootstrap_form_simple_validation(inputItem, looksLikePhoneNumber, error_message);
+}
+
+/**
+ * returns true IFF all elements have "validation ok" after onblur being fired on them all
+ * @param bigDivSelector
+ * @returns {Boolean}
+ */
+function amp_bootstrap_form_validate(bigDivSelector){
+	try{
+		forced_pnotify_stack = {"dir1": "down", "dir2": "left"}; // stack all errors	
+		global_disable_cleaning_error_messages = true; // make a big queue
+		
+		var inputItemsSelector =  bigDivSelector + " input, " + bigDivSelector + " select, " + bigDivSelector + " textarea";
+		var elem_to_focus_on = $('#pledgeForm_validate');
+	
+		setValidationStatus($(inputItemsSelector), "dummy_class"); // remove all validation statuses
+		$(inputItemsSelector).each(function(){
+			var elem = this;
+			if (!hasValidationError($(elem)))
+			{
+				elem_to_focus_on.focus();
+				elem.focus();
+				elem_to_focus_on.focus();
+			}
+		});
+		var found_with_errors = false;
+		$(inputItemsSelector).each(function(){
+			found_with_errors |= hasValidationError($(this));});
+		return !found_with_errors;
+	}
+	catch(e){forced_pnotify_stack = null; console.log(e);show_error_message("Validation", "error validating!");}
+	finally{
+		forced_pnotify_stack = null;
+		global_disable_cleaning_error_messages = null;
+	}
+	return false;
+}
+
+
+function init_validation()
+{
+	$('.validate-phone-number').blur(function(){
+		return amp_bootstrap_form_check_phone_number(this, please_enter_phone_number_message);
+	});
+
+	$('.validate-email-address').blur(function(){
+		return amp_bootstrap_form_check_email(this, please_enter_email_message);
+	});
+}
+
+
 function amp_bootstrap_forms_check_percentage(inputItem, itemsClass)
 {
 	if (!is_valid_percentage(inputItem.value))
 	{
-		show_error_message("Not a valid percentage");
+		show_error_message("Error", "Not a valid percentage");
 		setValidationStatus($(inputItem), 'has-error');
 		//$(inputItem).focus();
 		return false;
@@ -57,7 +141,7 @@ function amp_bootstrap_forms_check_percentage(inputItem, itemsClass)
 			foundError = true;
 	});
 	if (foundError || (floatDiffers(totalValue, 0) && floatDiffers(totalValue, 100))) {
-		show_error_message("Sum of percentages should be either 0 or 100");
+		show_error_message("Error", "Sum of percentages should be either 0 or 100");
 		setValidationStatus($('.' + itemsClass), 'has-warning'); // ok
 		//$(inputItem).focus();
 		return false;  

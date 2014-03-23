@@ -24,31 +24,7 @@ public class RemovePledgeProgram extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		HttpSession session = request.getSession();
-		PledgeForm plForm = (PledgeForm) form;
-		
-//		if (plForm.getSelectedProgs() != null) {
-//			selectedProgs = new ArrayList<FundingPledgesProgram>(plForm.getSelectedProgs());
-//			String deleteList[] = request.getParameter("deleteProgs").split("_");
-//			Iterator <FundingPledgesProgram> iter=selectedProgs.iterator();
-//			ArrayList<FundingPledgesProgram> progsToDelete = new ArrayList<FundingPledgesProgram>();
-//			Integer i = 1;
-//			while(iter.hasNext()){
-//				FundingPledgesProgram del = iter.next();
-//            	for (int j = 0; j < deleteList.length; j++) {
-//					if (deleteList[j].equals(i.toString())){
-//						progsToDelete.add(del);
-//					}
-//				}	
-//            	i++;
-//            }
-//			if (progsToDelete.size()!=0) {
-//				selectedProgs.removeAll(progsToDelete);
-//			}
-//			plForm.setSelectedProgs(selectedProgs);
-//		}
-//		
-//		request.getSession().removeAttribute("deleteProgs");
+// TODO: DELETE, NOT USED ANYMORE
 		return mapping.findForward("forward");
 	}
 }

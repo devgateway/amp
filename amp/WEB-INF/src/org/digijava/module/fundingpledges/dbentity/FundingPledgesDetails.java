@@ -30,4 +30,10 @@ public class FundingPledgesDetails {
         Timestamp retVal = Timestamp.valueOf(new StringBuffer(getFundingYear()).append("-01-01 00:00:00").toString());
         return retVal;
 	}
+	
+	public int hashCode(){return System.identityHashCode(this);}
+	public boolean equals(Object oth){
+		return this == oth;
+	}
+
 }

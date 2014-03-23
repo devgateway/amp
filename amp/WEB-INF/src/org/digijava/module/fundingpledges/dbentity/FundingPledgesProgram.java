@@ -13,4 +13,9 @@ public class FundingPledgesProgram{
 	private AmpTheme program;
 	private Float programpercentage;	
 
+	public int hashCode(){return program.getAmpThemeId().hashCode();}
+	public boolean equals(Object oth){
+		return program.getAmpThemeId().equals(((FundingPledgesProgram) oth).program.getAmpThemeId());
+	}
+
 }

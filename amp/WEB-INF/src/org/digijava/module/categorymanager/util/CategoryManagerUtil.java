@@ -907,5 +907,15 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		}
 		return collectionByKey;
 	}
+	
+	/**
+	 * null-guards the result
+	 * @param id
+	 * @return
+	 */
+	public static AmpCategoryValue loadAcvOrNull(Long id)
+	{
+		return id == null ? null : getAmpCategoryValueFromDb(id);
+	}
 }
 

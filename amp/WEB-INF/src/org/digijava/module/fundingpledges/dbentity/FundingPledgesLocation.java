@@ -13,4 +13,10 @@ public class FundingPledgesLocation
 	private FundingPledges pledgeid;
 	private AmpCategoryValueLocations location;
 	private Float locationpercentage;
+	
+	public int hashCode(){return location.getId().hashCode();}
+	public boolean equals(Object oth){
+		return location.getId().equals(((FundingPledgesLocation) oth).location.getId());
+	}
+
 }

@@ -13,4 +13,9 @@ public class FundingPledgesSector
 	private FundingPledges pledgeid;
 	private AmpSector sector;
 	private Float sectorpercentage;
+	
+	public int hashCode(){return sector.getAmpSectorId().hashCode();}
+	public boolean equals(Object oth){
+		return sector.getAmpSectorId().equals(((FundingPledgesSector) oth).sector.getAmpSectorId());
+	}
 }

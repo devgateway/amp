@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE page [
-<!ENTITY ampVersion "2.8.3">
-<!ENTITY buildDate "28.02.2014">
+<!ENTITY ampVersion "2.8.4">
+<!ENTITY buildDate "23.03.2014">
 ]>
 <site-config>
 	<site-layout>

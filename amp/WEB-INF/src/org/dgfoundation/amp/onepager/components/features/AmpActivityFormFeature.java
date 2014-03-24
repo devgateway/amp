@@ -15,16 +15,12 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Hex;
-import org.apache.ecs.xhtml.form;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
-import org.apache.wicket.ajax.AjaxChannel;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -33,7 +29,16 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.AbstractTextComponent;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.CheckGroup;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.HiddenField;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioChoice;
+import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -54,8 +59,13 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -82,7 +92,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
@@ -161,24 +170,40 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					}
 				});
 
-		// put status to not required
 		form.visitChildren(AmpIdentificationFormSectionFeature.class,
 				new IVisitor<AmpIdentificationFormSectionFeature, Void>() {
 					@Override
 					public void component(
 							AmpIdentificationFormSectionFeature ifs,
 							IVisit<Void> visit) {
-						AbstractChoice<?, AmpCategoryValue> statusField = ifs
-								.getStatus().getChoiceContainer();
+						List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
+						for (FormComponent<?> component : requiredComponents) {
 						String js = String.format("$('#%s').blur();",
-								statusField.getMarkupId());
-						statusField.setRequired(enabled);
+								component.getMarkupId());
+						component.setRequired(enabled);
 						target.appendJavaScript(js);
-						target.add(ifs.getStatus());
+						target.add(component);
+						}
 						visit.stop();
 					}
 				});
-		
+		form.visitChildren(AmpDonorFundingFormSectionFeature.class,
+				new IVisitor<AmpDonorFundingFormSectionFeature, Void>() {
+					@Override
+					public void component(
+							AmpDonorFundingFormSectionFeature ifs,
+							IVisit<Void> visit) {
+						List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
+						for (FormComponent<?> component : requiredComponents) {
+						String js = String.format("$('#%s').blur();",
+								component.getMarkupId());
+						component.setRequired(enabled);
+						target.appendJavaScript(js);
+						target.add(component);
+						}
+						visit.stop();
+					}
+				});
 	}
 
 	private ListView<AmpComponentPanel> featureList;

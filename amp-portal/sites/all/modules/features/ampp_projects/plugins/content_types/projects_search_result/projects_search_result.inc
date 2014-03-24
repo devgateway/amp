@@ -103,9 +103,15 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $panel_arg
     $url_query_args['showregionalprojects'] = empty($_GET['showregionalprojects']) ? 'all' : $_GET['showregionalprojects'];
 
     $url_args = array(
-      'attributes' => array('class' => array('export-link')),
+      'attributes' => array(
+        'class' => array(
+          'export-link',
+          'with-icon',
+        ),
+      ),
       'query' => $url_query_args,
     );
+    $block->content .= '<div class="export-link-wrapper">';
     $block->content .= l(t('Export in XLS format'), 'searchexport/searchresult.xls', $url_args);
 
     if (module_exists('shorten') && variable_get('ampp_generate_short_urls', TRUE)) {
@@ -115,10 +121,9 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $panel_arg
       );
       $short_url = shorten_url(url('searchexport/searchresult.xls', $short_url_args));
 
-      $block->content .= '<div>';
-      $block->content .= '<a class="shorten-url" href="http://' . $short_url . '"><b>' . t('Permanent link') . '</b></a>';
-      $block->content .= '</div>';
+      $block->content .= '<br ><a class="export-link short" href="http://' . $short_url . '"><b>' . t('Permanent link') . '</b></a>';
     }
+    $block->content .= '</div>';
   }
 
   // optionally hide the first column.
@@ -164,9 +169,8 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#weight' => 0,
   );
 
-  //hide($form['override_title']);
-  //hide($form['override_title_text']);
-  hide($form['override_title_markup']);
+  // Hide the override_title description text.
+  unset($form['override_title_markup']);
 
   $form['show_info_column'] = array(
     '#type' => 'checkbox',

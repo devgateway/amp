@@ -289,7 +289,7 @@ body.page-mobile {
 /* */
 
 .website-switch-menu {
-  float: right; 
+  float: right;
   margin-right: 10px;
 }
 
@@ -371,15 +371,15 @@ body.page-mobile {
   border-radius: 5px 5px 5px 5px;
   -moz-border-radius: 5px 5px 5px 5px;
   -o-border-radius: 5px 5px 5px 5px;
-  -webkit-border-radius: 5px 5px 5px 5px; 
-  box-shadow: 2px 2px 6px #CCC; 
+  -webkit-border-radius: 5px 5px 5px 5px;
+  box-shadow: 2px 2px 6px #CCC;
   -moz-box-shadow: 2px 2px 6px #CCC;
   -o-box-shadow: 2px 2px 6px #CCC;
   -webkit-box-shadow: 2px 2px 6px #CCC;
 }
 
 .views-field-field-flag-fid img {
-  box-shadow: 3px 3px 3px #CCC; 
+  box-shadow: 3px 3px 3px #CCC;
   -moz-box-shadow: 3px 3px 3px #CCC;
   -o-box-shadow: 3px 3px 3px #CCC;
   -webkit-box-shadow: 3px 3px 3px #CCC;
@@ -403,7 +403,7 @@ body.page-mobile {
 .openlayers-map .olLayerDiv svg image {
   cursor: pointer;
   cursor: hand;
-}	
+}
 
 .news-featured-box .field-featured-title-value .field-content a,
 .news-featured-box .field-featured-title-value .field-content a:hover,
@@ -432,10 +432,6 @@ body.page-mobile {
 .field-featured-abstract-value {
   display: inline;
 }
-
-;#admin-menu ul {
-;  position: relative;  
-;}
 
 #admin-menu, #admin-menu ul {
   z-index: 9999;
@@ -498,8 +494,8 @@ hr.gentle {
   border: 1px solid #025F94;
 }
 
-.page-feedback .form-item input.error, 
-.page-feedback .form-item textarea.error, 
+.page-feedback .form-item input.error,
+.page-feedback .form-item textarea.error,
 .page-feedback .form-item select.error {
   border: 1px solid #ff0000;
 }
@@ -543,7 +539,7 @@ hr.gentle {
   width:100px;
 }
 
-span img#close, 
+span img#close,
 span img#feedback-close {
   width: auto;
 }
@@ -608,11 +604,11 @@ div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-n
 .page-news .views-field-body a,
 .page-news .views-field-body a:hover {
   text-decoration: none;
-  color: #000000;   
+  color: #000000;
 }
 
 .page-news .view-news .views-row {
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px dotted #bebebe;
   float: left;
@@ -672,7 +668,7 @@ div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-n
 .node-type-news .views-field-body a:hover,
 .node-type-events .views-field-body a:hover {
   text-decoration: none;
-  color: #000000;   
+  color: #000000;
 }
 
 .node-type-imported-item .views-field-body,
@@ -690,8 +686,8 @@ div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-n
 .node-type-imported-item .views-field-title,
 .node-type-news .views-field-title,
 .node-type-events .views-field-title {
-  margin: 0 15px 10px 0; 
-  font-size: 16px; 
+  margin: 0 15px 10px 0;
+  font-size: 16px;
   text-decoration: none;
   float: left;
   width: 80%;
@@ -699,12 +695,12 @@ div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-n
 
 .node-type-imported-item .views-field-created,
 .node-type-news .views-field-created,
-.node-type-events .views-field-created { 
+.node-type-events .views-field-created {
   margin-top: 0px;
 }
 
 .views-field-field-link {
-  margin-top: 10px; 
+  margin-top: 10px;
   font-size: 11px;
 }
 
@@ -732,14 +728,14 @@ h1.title {
 
 .page-homepage .rounded-corner.pane .panel-pane {
   padding: 0px;
-} 
+}
 
 .dgtwo-columns-inner .panel-pane h2.pane-title,
 .dgtwo-footer .panel-pane h2.pane-title,
-.rounded-corner.region .rounded-corner.pane .panel-pane .pane-title {  
-  color: #ffffff;    
-  padding-left: 40px;   
-  margin: 0;   
+.rounded-corner.region .rounded-corner.pane .panel-pane .pane-title {
+  color: #ffffff;
+  padding-left: 40px;
+  margin: 0;
   padding-top: 4px;
 }
 
@@ -771,7 +767,7 @@ h1.title {
 }
 
 .views_slideshow_cycle_main .views-field-title {
-  margin: 0pt; 
+  margin: 0pt;
   background: url("../images/transparent_bg.png") repeat scroll 0pt 0pt transparent !important;
   width: 311px;
   padding: 1px 5px;
@@ -796,12 +792,12 @@ div.views-slideshow-ddblock-cycle-vsd-default div.slide-text-inner {
 }
 
 .views_slideshow_cycle_main .views-field-title span a {
-  color: #ffffff;  
+  color: #ffffff;
   font-weight: bold;
 }
 
 .views_slideshow_cycle_main .views-field-title span a:hover {
-  color: #ffffff;  
+  color: #ffffff;
   text-decoration: none;
 }
 
@@ -816,7 +812,7 @@ div.views-slideshow-ddblock-cycle-vsd-default div.slide-text-inner {
 .page-search .view-projects-search-result table tr.even td {background:#f2f2f2;padding:1px 5px}
 .view-footer .view-projects-search-result .view-content {margin:10px 0}
 .view-footer .view-projects-search-result tr,.view-footer .view-projects-search-result td {border:0}
-.view-footer .view-projects-search-result table td {border:0;border-right:1px solid #cccccc} 
+.view-footer .view-projects-search-result table td {border:0;border-right:1px solid #cccccc}
 .view-footer .view-projects-search-result table td.views-field-transaction-amount-disbursement {border:0}
 .page-search .item-list {float:left}
 .page-search .view-footer {float:right;padding:10px;font-weight:bold}
@@ -839,7 +835,7 @@ span.more-locations {text-decoration:underline;color:#02578A}
 #feedback-admin-view-form .feedback-messages td {vertical-align:top;padding:5px}
 
 .data-quality-column-1 {display:inline-block;vertical-align:top;width:200px;padding:5px;margin-top:5px}
-.data-quality-column-2 {display:inline-block;padding:5px;margin-top:5px} 
+.data-quality-column-2 {display:inline-block;padding:5px;margin-top:5px}
 .data-quality-header {font-weight:bold;border-bottom:1px solid #8B8B8B;border-top:1px solid #bbbbbb}
 .data-quality .data-quality-row-odd {background:#efefef}
 .data-quality .data-quality-row-even {background:#ffffff}
@@ -860,11 +856,24 @@ span.more-locations {text-decoration:underline;color:#02578A}
 .page-search-all-all .dgone-footer .pane-projects-as-of {float:right;margin-right:10px;margin-top:10px;color:#999999}
 
 .ampphome-search .rounded-corner.pane, .ampphome-contact-social .rounded-corner.pane {
-  -moz-border-radius: 10px 10px 20px 20px; -o-border-radius: 10px 10px 20px 20px; -webkit-border-radius: 10px 10px 20px 20px; border-radius: 10px 10px 20px 20px;  
+  -moz-border-radius: 10px 10px 20px 20px; -o-border-radius: 10px 10px 20px 20px; -webkit-border-radius: 10px 10px 20px 20px; border-radius: 10px 10px 20px 20px;
 }
 .page-search-all .ui-dialog-content #modal-sector-iframe {width:95%}
-.pane-projects-search-result a.export-link {float: right; margin-top: -20px; background: url("../images/excel.png") no-repeat 0 0 transparent; padding-left: 20px}
-.shorten-url {float: right; margin-top: -20px; padding-left: 20px}
+
+.pane-projects-search-result .export-link-wrapper {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.pane-projects-search-result .export-link {
+  padding: 2px 0px;
+}
+
+.pane-projects-search-result .export-link.with-icon {
+  background: url("../images/excel.png") no-repeat 0 0 transparent;
+  padding-left: 20px;
+}
+
 
 .pane-content .commitments_report {
 	width: 100%;
@@ -886,7 +895,7 @@ span.more-locations {text-decoration:underline;color:#02578A}
 
 .pane-content .commitments_report .commitments_report-header .commitments_report-column-1
 .pane-content .commitments_report .commitments_report-header .commitments_report-column-2 {
-		border: 1px solid #ffffff; 
+		border: 1px solid #ffffff;
 }
 
 .pane-content .commitments_report .commitments_report-row-even,
@@ -918,8 +927,8 @@ span.more-locations {text-decoration:underline;color:#02578A}
 #ampp-search-form #edit-period .container-inline-date {float: left; clear: none;}
 #ampp-search-form #edit-period .container-inline-date #edit-period-start-datepicker-popup-0 {width: 140px}
 #ampp-search-form #edit-period .container-inline-date .description {margin-left: 0px}
-#ampp-search-form #edit-period .container-inline-date #edit-period-end-datepicker-popup-0 {width: 140px} 
-#ampp-search-form #edit-period .container-inline-date label[for=edit-period-end-datepicker-popup-0] {width: auto; margin-right: 10px} 
+#ampp-search-form #edit-period .container-inline-date #edit-period-end-datepicker-popup-0 {width: 140px}
+#ampp-search-form #edit-period .container-inline-date label[for=edit-period-end-datepicker-popup-0] {width: auto; margin-right: 10px}
 #ampp-search-form #edit-period .container-inline-date .date-padding {padding: 0}
 
 #ampp-search-form .form-item-budget label[for=edit-budget] {width: auto; font-weight: bold; }
@@ -930,24 +939,24 @@ span.more-locations {text-decoration:underline;color:#02578A}
 #ampp-search-form .form-item-country-level-projects {margin-bottom: 20px}
 #ampp-search-form .form-item-country-level-projects #edit-country-level-projects {margin-top: 3px; margin-left: 0}
 
-#ampp-search-form .form-item-sector, 
+#ampp-search-form .form-item-sector,
 #ampp-search-form .form-item-primary-sector,
 #ampp-search-form .form-item-secondary-sector,
 #ampp-search-form .form-item-program,
 #ampp-search-form .form-item-donor,
-#ampp-search-form .form-item-region, 
+#ampp-search-form .form-item-region,
 #ampp-search-form .form-type-item {float: left; clear: none; margin: 10px 0 0}
 #ampp-search-form div span.modal-list-more {margin: 10px 5px}
 
-.page-search #ampp-search-form .form-item-sector, 
-.page-search #ampp-search-form .form-item-primary-sector, 
-.page-search #ampp-search-form .form-item-secondary-sector, 
-.page-search #ampp-search-form .form-item-program, 
-.page-search #ampp-search-form .form-item-donor, 
+.page-search #ampp-search-form .form-item-sector,
+.page-search #ampp-search-form .form-item-primary-sector,
+.page-search #ampp-search-form .form-item-secondary-sector,
+.page-search #ampp-search-form .form-item-program,
+.page-search #ampp-search-form .form-item-donor,
 .page-search #ampp-search-form .form-item-region {width: 96%}
 
 #edit-site-information .form-item-amp-no-search-results-text textarea {width: 383px}
-#edit-site-information .form-item-amp-no-search-results-text .grippie {width: 383px} 
+#edit-site-information .form-item-amp-no-search-results-text .grippie {width: 383px}
 #edit-footer .form-item-site-share-label input.form-text {width: 378px}
 #edit-footer .form-item-site-footer-text input.form-text {width: 378px}
 #edit-footer .form-item-dg-footer-html textarea {width: 383px}
@@ -960,7 +969,7 @@ span.more-locations {text-decoration:underline;color:#02578A}
 
 div.views-slideshow-ddblock-cycle-vsd-default div.slide-title-inner {padding:5px 0px;}
 
-.pane-top-activities-by-disbursement div.top-text, 
+.pane-top-activities-by-disbursement div.top-text,
 .pane-top-activities-by-disbursement div.bottom-text {padding: 5px 15px;font-size: 10px;}
 
 .counter-container {clear:both; margin: 0 auto; padding: 10px; text-align: center;}

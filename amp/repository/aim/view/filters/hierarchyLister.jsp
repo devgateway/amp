@@ -1,5 +1,7 @@
 
+<%@page import="org.digijava.module.aim.util.HierarchyListable"%>
 <%@ page pageEncoding="UTF-8"%>
+<%@page import="java.lang.*" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
@@ -31,8 +33,15 @@
 					</c:if>
 				</c:forEach>
 			</logic:notEmpty>
+			<%
+			Long uniqueId;
+			if (pageContext.getAttribute("entity")!=null) {
+				uniqueId = new Long (((HierarchyListable)pageContext.getAttribute("entity")).getUniqueId());
+				pageContext.setAttribute("uniqueId", uniqueId);
+				}
+			%>
 			<logic:present name="element" property="rootHierarchyListable.parentMapping">
-				<c:set var="parentId" scope="page" >parentId='${element.rootHierarchyListable.parentMapping[entity.uniqueId]}'</c:set>
+				<c:set var="parentId" scope="page" >parentId='${element.rootHierarchyListable.parentMapping[uniqueId]}'</c:set>
 			</logic:present>
 			<li style="margin-left: -20px; ">
 				<table>

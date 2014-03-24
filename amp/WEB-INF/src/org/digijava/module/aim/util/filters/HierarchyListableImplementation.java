@@ -17,17 +17,7 @@ public class HierarchyListableImplementation implements HierarchyListable {
 	private String uniqueId;
 	private Collection<? extends HierarchyListable> children;
 	//children id-parent id mapping for all children
-	private Map <String,String> parentMapping= new HashMap<String,String>(); 
-	
-	public Map<String, String> getParentMapping() {
-		return parentMapping;
-	}
-
-	public void setParentMapping(Map<String, String> parentMapping) {
-		this.parentMapping = parentMapping;
-	}
-
-
+	private Map <Long,Long> parentMapping= new HashMap<Long,Long>(); 
 	private boolean translateable	= true;
 
 
@@ -113,4 +103,15 @@ public class HierarchyListableImplementation implements HierarchyListable {
     public String getAdditionalSearchString() {
         return this.additionalSearchableString;
     }
+    
+
+	public Map<Long, Long> getParentMapping() {
+		return parentMapping;
+	}
+
+	public void setParentMapping(Map<Long, Long> parentMapping) {
+		this.parentMapping = parentMapping;
+	}
+
+
 }

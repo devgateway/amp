@@ -7,21 +7,21 @@ static $site_domain;
 function ampp_preprocess_html(&$vars) {
   $vars['is_front'] = 0;
   if (drupal_is_front_page() || !isset($_GET['q']) || empty($_GET['q']) || $_GET['q'] == variable_get('site_frontpage', 'node')) {
-    $vars['is_front'] = 1; 
+    $vars['is_front'] = 1;
     $vars['classes_array'][] = 'page-homepage';
   }
 }
 
 
-/* 
+/*
  * Returns a breadcrumb array for a given groupnode.
  */
-function ampp_breadcrumb($node = NULL) { 
+function ampp_breadcrumb($node = NULL) {
   // on the home page
   if (!isset($_GET['q']) || empty($_GET['q']) || $_GET['q'] == variable_get('site_frontpage', 'node')) return array();
 
   $bc[] = l(t('Home'), '<front>');
-  
+
   // News page
   if (isset($args[0]) && $args[0] == 'news') {
     $bc[] = t('News');
@@ -37,7 +37,7 @@ function ampp_breadcrumb($node = NULL) {
         $bc[] = l(t('News'), 'news');
         $bc[] = t($node->title);
     }
-  } 
+  }
   return $bc;
 }
 
@@ -137,7 +137,7 @@ function _ampp_menu_tree($menu_name = 'navigation', $depth = 0) {
  */
 function ampp_preprocess_page(&$vars) {
   global $base_path, $user;
-  
+
   $theme_path = path_to_theme();
   $vars['theme_path'] = $theme_path;
 
@@ -158,9 +158,12 @@ function ampp_preprocess_page(&$vars) {
   if (!empty($custom_css)) {
     drupal_add_css($custom_css, array('type' => 'inline', 'group' => CSS_THEME, 'weight' => 13));
   }
-  
+
   // SEO optimization, avoid duplicate titles in search indexes for pager pages
   if (isset($_GET['page']) || isset($_GET['sort'])) {
+    if (!isset($vars['meta'])) {
+      $vars['meta'] = '';
+    }
     $vars['meta'] .= '<meta name="robots" content="noindex,follow" />'. "\n";
   }
 
@@ -179,9 +182,9 @@ function ampp_preprocess_page(&$vars) {
       $logo_path = file_uri_target($logo_path);
     }
   }
-  
+
   $vars['site_name'] = variable_get('site_name', '');
-  
+
   if ($default_used) {
     $vars['header_logo'] = l(theme('image', array('path' => $logo_path, 'alt' => $vars['site_name'], 'title' => $vars['site_name'])), '<front>', array('html' => true, 'attributes' => array('id' => 'ampp_logo_anchor', 'title' => $vars['site_name'])));
   } else {
@@ -201,21 +204,21 @@ function ampp_preprocess_page(&$vars) {
     $counter_block = module_invoke('counter', 'block_view', '');
     $vars['counter_block'] = $counter_block['content'];
   }
-  
+
   $addthis_lable = trim(variable_get('site_share_label', ''));
   if (!empty($addthis_lable)) $addthis_lable = '<span id="addthis_lable">' . $addthis_lable . ': </span>';
-  
+
   // we need to check if we are running over SSL first
   if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']) {
     $protocol = 'https';
   } else {
     $protocol = 'http';
   }
-  
+
   $addthis = $addthis_lable . '<div class="addthis_toolbox addthis_default_style "><a class="addthis_button_preferred_1"></a><a class="addthis_button_preferred_2"></a>
     <a class="addthis_button_preferred_3"></a></div><script type="text/javascript" src="' . $protocol . '://s7.addthis.com/js/250/addthis_widget.js#pubid=vamirbekyan"></script>';
   $vars['share_links'] = theme_get_setting('toggle_share_links', 'ampp') ? $addthis : '';
-  
+
   // Create navigation bar.
   $menu_name = variable_get('menu_main_links_source', 'main-links');
   $vars['main_links_menu'] = _ampp_menu_tree($menu_name, 2);
@@ -224,7 +227,7 @@ function ampp_preprocess_page(&$vars) {
   if (isset($vars['node']->type) && ($vars['node']->type != 'page') && arg(2) == '') {
     $vars['title'] = '';
   }
-  
+
   // footer logo
   $default_used = false;
   if (theme_get_setting('default_footer_logo', 'ampp')) {
@@ -236,7 +239,7 @@ function ampp_preprocess_page(&$vars) {
     $footer_logo_path = theme_get_setting('footer_logo_path', 'ampp');
     if (file_uri_scheme($footer_logo_path) == 'public') {
       $footer_logo_path = file_uri_target($footer_logo_path);
-    } 
+    }
     // $footer_logo_path = variable_get('file_public_path', 'sites/default/files') . '/' . $footer_logo_path;
   }
   if ($default_used) {
@@ -247,12 +250,12 @@ function ampp_preprocess_page(&$vars) {
     } else {
       $vars['footer_logo'] = '';
     }
-  } 
-  
+  }
+
   // construct breadcrumb
   $bc = isset($vars['node']) ? ampp_breadcrumb($vars['node']) : null;
   $vars['breadcrumb'] = !is_null($bc) ? theme_breadcrumb(array('breadcrumb' => $bc)) : '';
-  
+
   // Hide page title and breadcrumb for the homepage
   if ($vars['is_front']) {
     $vars['title'] = '';
@@ -281,7 +284,7 @@ function ampp_process_page(&$vars) {
   if (!empty($vars['title'])) {
     $translation = t($vars['title']);
     if (!empty($translation)) {
-      $vars['title'] = $translation;     
+      $vars['title'] = $translation;
     }
   }
 }

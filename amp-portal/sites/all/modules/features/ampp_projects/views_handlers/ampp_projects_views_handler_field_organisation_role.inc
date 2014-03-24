@@ -259,7 +259,11 @@ class ampp_projects_views_handler_field_organisation_role extends views_handler_
       $condition = "amp_org_role.role $role_operator $role_placeholder";
     }
 
-    $fieldsql = "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT(CASE WHEN ${condition} THEN ${translate_field} END)), ', ')";
+    $activity_table = $this->query->fields['amp_activity_id']['table'];
+    $activity_field_alias = $this->query->fields['amp_activity_id']['alias'];
+    $extra_condition = "amp_org_role.activity = $activity_table.$activity_field_alias";
+
+    $fieldsql = "(SELECT ARRAY_TO_STRING(ARRAY_AGG(${translate_field}), ', ') FROM amp_org_role WHERE ${condition} AND ${extra_condition})";
     $this->field_alias = $this->query->add_field(NULL, $fieldsql, 'organisation_name', $params);
   }
 }

@@ -42,7 +42,7 @@ class ampp_projects_views_handler_argument_organisation_role extends views_handl
    * Simple submit handler
    */
   function options_submit(&$form, &$form_state) {
-    $options = parent::options_submit();
+    parent::options_submit();
 
     // Drupal's FAPI system automatically puts '0' in for any checkbox that
     // was not set, and the key to the checkbox if it is set.

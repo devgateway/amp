@@ -61,7 +61,7 @@ function ampp_projects_projects_search_form_render($subtype, $conf, $args, $cont
 
   // Merge in plugin defaults, prevents not defined warnings on existing panels.
   $plugin_definition = ctools_get_plugins('ctools', 'content_types', $subtype);
-  $conf += $plugin_definition['defaults'];
+  $conf = drupal_array_merge_deep($plugin_definition['defaults'], $conf);
 
   $block = new stdClass();
   $block->title = t('Projects search');

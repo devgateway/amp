@@ -118,7 +118,8 @@ function ampp_projects_views_data() {
     )
   );
 
-  $data['cached_v_status']['name'] = array(
+  $data['cached_v_status']['status_name'] = array(
+    'real field' => 'name',
     'title' => t('Status'),
     'help' => t('The status of the activity, human readable.'),
     'field' => array(
@@ -655,65 +656,53 @@ function ampp_projects_views_query_alter(&$view, &$query) {
  * Implements hook_views_pre_render().
  */
 function ampp_projects_views_pre_render(&$view) {
-  switch ($view->name) {
-    case 'projects_search_result':
-      switch ($view->current_display) {
-        case 'default':
-        case 'panel_pane_1':
-        case 'feed_1':
-          if (isset($_SESSION['projects_search_result_conf'])) {
-            $conf = unserialize($_SESSION['projects_search_result_conf']);
-            $fields_to_remove = _ampp_projects_get_view_field_names($view->name, $view->current_display);
-
-            foreach ($fields_to_remove as $field_name) {
-
-              if (isset($conf[$field_name . '_label']) && $conf[$field_name . '_label'] != '') {
-                $view->field[$field_name]->options['label'] = t($conf[$field_name . '_label']);
-              }
-              if (isset($conf[$field_name . '_flag']) && $conf[$field_name . '_flag'] != 1) {
-                unset($view->field[$field_name]);
-                unset($view->display_handler->handlers['field'][$field_name]);
-              }
-            }
-          }
+  if ($view->name == 'projects_search_result') {
+    switch ($view->current_display) {
+      case 'default':
+      case 'panel_pane_1':
+      case 'feed_1':
+        // Get the 'projects_search_result' pane configuration form session.
+        if (!isset($_SESSION['projects_search_result_conf'])) {
           break;
-      }
-      break;
+        }
+        $pane_conf = unserialize($_SESSION['projects_search_result_conf']);
 
-    case 'top_activities_by_disbursment':
-      if ($view->current_display == 'default') {
-        if (isset($_SESSION['top_activities_by_disbursement_conf'])) {
-          $conf = unserialize($_SESSION['top_activities_by_disbursement_conf']);
+        foreach ($view->display_handler->handlers['field'] as $field_name => $field_def) {
+          if (!isset($pane_conf[$field_name])) {
+            continue;
+          }
 
-          foreach ($view->field as &$field) {
-            $name = (substr($field->field, 0, 6) == 'field_') ? substr($field->field, 6) : $field->field;
-            if (isset($conf['heading_' . $name]) && !empty($conf['heading_' . $name])) {
-              $field->options['label'] = t($conf['heading_' . $name]);
-            }
+          // Manually hide the field.
+          // @TODO: Find a way to remove the field before runing the query.
+          if (empty($pane_conf[$field_name]['show'])) {
+            unset($view->field[$field_name]);
+            unset($view->display_handler->handlers['field'][$field_name]);
+            continue;
+          }
+
+          // Set the field column label.
+          if (!empty($pane_conf[$field_name]['label'])) {
+            $view->field[$field_name]->options['label'] = t($pane_conf[$field_name]['label']);
           }
         }
-      }
-      break;
-  }
-
-  if ($view->current_display == 'panel_pane_1' || $view->current_display == 'default' || $view->current_display == 'feed_1') {
-
-  }
-
-}
-
-/**
- * Helper function for ampp_projects_views_pre_render().
- */
-function _ampp_projects_get_view_field_names($view, $display_id) {
-  $result = array();
-  if (!empty($view->display[$display_id]->display_options['fields'])) {
-    foreach ($view->display[$display_id]->display_options['fields'] as $field) {
-      $result[] = $field['field'];
+        break;
     }
   }
 
-  return $result;
+  if ($view->name == 'top_activities_by_disbursment') {
+    if ($view->current_display == 'default') {
+      if (isset($_SESSION['top_activities_by_disbursement_conf'])) {
+        $conf = unserialize($_SESSION['top_activities_by_disbursement_conf']);
+
+        foreach ($view->field as &$field) {
+          $name = (substr($field->field, 0, 6) == 'field_') ? substr($field->field, 6) : $field->field;
+          if (isset($conf['heading_' . $name]) && !empty($conf['heading_' . $name])) {
+            $field->options['label'] = t($conf['heading_' . $name]);
+          }
+        }
+      }
+    }
+  }
 }
 
 /**

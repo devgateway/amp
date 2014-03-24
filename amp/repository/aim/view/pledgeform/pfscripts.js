@@ -125,7 +125,8 @@ function go_to_pledge_list(){
 }
 
 function pledge_form_cancel(bigDivSelector){
-	go_to_pledge_list();
+	//BootstrapDialog.alert("I want banana!");
+	//go_to_pledge_list();
 }
 
 on_element_loaded();

@@ -62,3 +62,18 @@ function looksLikePhoneNumber(nr)
 	var isnum = /^\d+$/.test(nr);
 	return isnum && nr.length < 20;
 }
+
+function looksLikeNumber(nr){
+	if (nr.length == 0)
+		return true;
+	
+	if (isNaN(nr))
+		return false;
+	
+	var number = parseInt(nr);
+	return number > 0;
+}
+
+function isYearValidator(nr){
+	return looksLikeNumber(nr) && (parseInt(nr) > 1900) && (parseInt(nr) < 2100);
+}

@@ -62,16 +62,6 @@ function amp_bootstrap_form_simple_validation(inputItem, validation_function, er
 	return true;
 }
 
-function amp_bootstrap_form_check_email(inputItem, error_message)
-{
-	return amp_bootstrap_form_simple_validation(inputItem, looksLikeEmail, error_message);
-}
-
-function amp_bootstrap_form_check_phone_number(inputItem, error_message)
-{
-	return amp_bootstrap_form_simple_validation(inputItem, looksLikePhoneNumber, error_message);
-}
-
 /**
  * returns true IFF all elements have "validation ok" after onblur being fired on them all
  * @param bigDivSelector
@@ -93,12 +83,15 @@ function amp_bootstrap_form_validate(bigDivSelector){
 				elem_to_focus_on.focus();
 				elem.focus();
 				elem_to_focus_on.focus();
+				$(elem).trigger('change');
 			}
 		});
-		var found_with_errors = false;
+		var faultyElements = [];
 		$(inputItemsSelector).each(function(){
-			found_with_errors |= hasValidationError($(this));});
-		return !found_with_errors;
+			if (hasValidationError($(this)))
+				faultyElements.push(this);
+			});
+		return faultyElements.length == 0;
 	}
 	catch(e){forced_pnotify_stack = null; console.log(e);show_error_message("Validation", "error validating!");}
 	finally{
@@ -108,15 +101,71 @@ function amp_bootstrap_form_validate(bigDivSelector){
 	return false;
 }
 
+function selectHasValue(selectVal){
+	if (typeof(selectVal) == 'undefined')
+		return false;
+	if (selectVal == null)
+		return false;
+	if (selectVal == '')
+		return false;
+	if (isNaN(selectVal))
+		return false;
+	return parseInt(selectVal) > 0;
+}
 
 function init_validation()
 {
 	$('.validate-phone-number').blur(function(){
-		return amp_bootstrap_form_check_phone_number(this, please_enter_phone_number_message);
+		return amp_bootstrap_form_simple_validation(this, looksLikePhoneNumber, please_enter_phone_number_message);
 	});
 
 	$('.validate-email-address').blur(function(){
-		return amp_bootstrap_form_check_email(this, please_enter_email_message);
+		return amp_bootstrap_form_simple_validation(this, looksLikeEmail, please_enter_email_message);
+	});
+	
+	$('.validate-mandatory-number').blur(function(){
+		var inputItem = this;
+		if ((inputItem.value.length == 0) || (!looksLikeNumber(inputItem.value)))
+		{
+			show_error_message("Error", please_enter_number_message);
+			setValidationStatus($(inputItem), 'has-error');
+			return false;
+		}
+		setValidationStatus($(inputItem), 'has-success'); // ok
+		clean_all_error_messages();
+		return true;
+	});
+
+	$('select.validate-mandatory').change(function(){
+		return amp_bootstrap_form_simple_validation(this, selectHasValue, please_enter_something_message); 
+	});
+	
+	$('input.validate-mandatory, textarea.validate-mandatory').blur(function(){
+		var elem = $(this);
+		var error = false;
+		// <input>
+		// validate-min-length-5
+		var classList = elem.attr('class').split(/\s+/); // generate a list of the classes the element has
+		var validate_min_length = 1;
+		for(var i = 0; i < classList.length; i++){
+			var className = classList[i];
+			if (className.indexOf("validate-min-length-") == 0){
+				validate_min_length = parseInt(className.substring("validate-min-length-".length));
+			};
+		}
+		error = elem.val().length < validate_min_length;
+		if (error){
+			show_error_message("Error", please_enter_something_message);
+			setValidationStatus(elem, 'has-error');
+			return false;
+		}
+		setValidationStatus(elem, 'has-success'); // ok
+		clean_all_error_messages();
+		return true;
+	});
+	
+	$('.validate-year').blur(function(){
+		return amp_bootstrap_form_simple_validation(this, isYearValidator, please_enter_year_message);
 	});
 }
 

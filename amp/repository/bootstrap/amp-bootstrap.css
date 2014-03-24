@@ -151,8 +151,18 @@ div.amp-subgroup:hover {
 	background-color: #FAFADD !important;
 }
 
+.has-warning .bootstrap-select{  /* because bootstrap-select hides the SELECT */
+	border: 5px solid #FAFADD !important;
+	border-radius: 9px !important;
+}
+
 .has-error .form-control {
 	background-color: #FFAAAA;
+}
+
+.has-error .bootstrap-select{  /* because bootstrap-select hides the SELECT */
+	border: 5px solid #FFAAAA !important;
+	border-radius: 9px !important;
 }
 
 /* HACK: forcing small size on autocomplete on select-search */

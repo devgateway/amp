@@ -32,9 +32,9 @@
 				<div class="col-xs-6">
 					<div class="form-inline" >
 						<label for="pledgeAmount_${indexLoc}"><digi:trn key="aim:amount">Amount</digi:trn></label> <br />
-						<input name="selectedFunding[${indexLoc}].amount" type="text" id="pledgeAmount_${indexLoc}" class="form-control input-sm" value="${selectedFunding.amount}"/>
+						<input name="selectedFunding[${indexLoc}].amount" type="text" id="pledgeAmount_${indexLoc}" class="form-control input-sm validate-mandatory-number" value="${selectedFunding.amount}"/>
 					
-						<c:set var="select_id" value="pledgeCurrencyDropDown_${indexLoc}" /><c:set var="extra_tags">name="selectedFunding[${indexLoc}].currencyId"</c:set>
+						<c:set var="select_id" value="pledgeCurrencyDropDown_${indexLoc}" /><c:set var="extra_tags">name="selectedFunding[${indexLoc}].currencyId" class="validate-mandatory"</c:set>
 						<c:set var="select_values" value="${pledgeForm.validCurrencies}" />
 						<c:set var="select_init_value" value="${selectedFunding.currencyId}" />
 						<%@include file="renderShimList.jspf" %>
@@ -42,7 +42,7 @@
 				</div>
 				<div class="col-xs-6">
 					<label for="pledgeFundingYear_${indexLoc}"><digi:trn key="aim:year">Year</digi:trn></label>
-					<input name="selectedFunding[${indexLoc}].fundingYear" type="text" id="pledgeFundingYear_${indexLoc}" class="form-control input-sm" value="${selectedFunding.fundingYear}"/> 					
+					<input name="selectedFunding[${indexLoc}].fundingYear" type="text" id="pledgeFundingYear_${indexLoc}" class="form-control input-sm validate-year" value="${selectedFunding.fundingYear}"/> 					
 				</div>
 				<c:if test="${pledgeForm.fundingShowTypeOfAssistance}">
 					<div class="col-xs-6">

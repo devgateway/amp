@@ -10,10 +10,6 @@
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 
 <digi:instance property="pledgeForm" />
-<script type="text/javascript">
-	var please_enter_phone_number_message = '<digi:trn jsFriendly="true">Please enter phone</digi:trn>';
-	var please_enter_email_message = '<digi:trn jsFriendly="true">Please enter email</digi:trn>';
-</script>
 <div id='pledge_contacts_area'>
 	<jsp:include page="pledge_render_contact.jsp">
 		<jsp:param name="ct_nr" value="1" />

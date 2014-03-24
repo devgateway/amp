@@ -11,23 +11,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
-
-<c:set var="act">${param.extraAction}</c:set>
-<%--<c:set var="rll_ajax">render_locations_list</c:set>  --%>
-<%
-	if ("add_locations_refresh_data".equals(request.getParameter("extraAction"))) // ajax?
-	{
-		%><jsp:include page="pledgelocationslist.jsp"></jsp:include><%  
-	} else if ("add_locations_refresh_add".equals(request.getParameter("extraAction")))
-	{
-		%><jsp:include page="pledgelocationsAddPledge.jsp"></jsp:include><%
-    } else 
-    { // not ajax: render the full bootstrap iframe 
-%>
-<%--
-	<c:set var="numeric_value_only_msg"><digi:trn jsFriendly='true' key="aim:addSecorNumericValueErrorMessage">Please enter numeric value only</digi:trn></c:set>
-	<c:set var="sum_cannot_exceed_100_msg"><digi:trn jsFriendly='true'>Sum of percentages can not exceed 100</digi:trn></c:set>
- --%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -44,7 +27,7 @@
     <link href="/repository/bootstrap/jquery.pnotify.default.css" media="all" rel="stylesheet" type="text/css" />
     <link href="/repository/bootstrap/jquery.pnotify.default.icons.css" media="all" rel="stylesheet" type="text/css" />
 <!-- <link href="/repository/bootstrap/lightbox/ekko-lightbox.min.css" media="all" rel="stylesheet" type="text/css" />  -->        
-    <!-- <link href="/repository/bootstrap/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />  -->
+    <link href="/repository/bootstrap/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
     <link href="/repository/bootstrap/amp-bootstrap.css" rel="stylesheet" type="text/css" /> <!-- this should always be included last -->
     
     <!-- THESE 4 FILES SHOULD ALWAYS BE THE FIRST INCLUDED JS, IN THIS ORDER -->
@@ -60,6 +43,13 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+	<script type="text/javascript">
+		var please_enter_phone_number_message = '<digi:trn jsFriendly="true">Please enter phone</digi:trn>';
+		var please_enter_email_message = '<digi:trn jsFriendly="true">Please enter email</digi:trn>';
+		var please_enter_something_message = '<digi:trn jsFriendly="true">Please enter something</digi:trn>';
+		var please_enter_number_message = '<digi:trn jsFriendly="true">Please enter number</digi:trn>';
+		var please_enter_year_message = '<digi:trn jsFriendly="true">Please enter an year</digi:trn>';
+	</script>    
   </head>
   <body class="main_side">
  	<div id="pledge_form_big_div"> 
@@ -124,6 +114,3 @@
 	<div id="iframe-hack-end-marker"></div>
   </body>
 </html>
-<%
-    } // the big "otherwise"
-%>

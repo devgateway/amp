@@ -14,21 +14,23 @@
 <digi:instance property="pledgeForm" />
 
 <div class="container-fluid">
+	<div>
 	<div class="col-xs-4 h6 bold">
 		<span class="red">*</span> <digi:trn key="aim:pledgeIdentification">Pledge Identification</digi:trn>
 	</div>
 	<div class="col-xs-6 col-xs-offset-1">
 		<%--  normally just one of these will be enabled, no need for <c:if> --%>
-		<field:display name="Use Free Text" feature="Pledges Names">			
+		<field:display name="Use Free Text" feature="Pledges Names">
 			<!--Allow user to enter free text if it's configured in the FM AMP-16005-->
-			<html:text property="titleFreeText" styleId="titleFreeText" styleClass="form-control input-sm" style="width:400px"/>
+			<html:text property="titleFreeText" styleId="titleFreeText" styleClass="form-control input-sm validate-mandatory validate-min-length-5"/>
 		</field:display>
 		<field:display name="Use Category Manager" feature="Pledges Names">
-			<c:set var="select_id" value="pledgeTitleDropDown" /><c:set var="extra_tags">name="pledgeTitleId" data-live-search="true"</c:set>
+			<c:set var="select_id" value="pledgeTitleDropDown" /><c:set var="extra_tags">name="pledgeTitleId" data-live-search="true" class="validate-mandatory form-control"</c:set>
 			<c:set var="select_values" value="${pledgeForm.pledgeNames}" />
 			<c:set var="select_init_value" value="${pledgeForm.pledgeTitleId}" />
 			<%@include file="renderShimList.jspf" %>
-		</field:display>		
+		</field:display>
+		</div>		
 	</div>		
 </div>
 
@@ -40,7 +42,7 @@
 	</div>
 	
 	<div class="col-xs-6 col-xs-offset-1">
-		<html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id">
+		<html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id" styleClass="validate-mandatory">
 			<c:forEach var="orgGroup" items="${pledgeForm.orgGroups}">
 				<option value="${orgGroup.id}"<c:if test="${pledgeForm.selectedOrgGrpId == orgGroup.id}">selected="selected"</c:if> >
 					<c:out value="${orgGroup.value}" />

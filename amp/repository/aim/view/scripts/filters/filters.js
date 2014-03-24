@@ -164,19 +164,26 @@ function toggleCheckChildren(checkboxEl) {
 	var descendantCheckboxes	= parentTdEl.getElementsByTagName('input');
 	for (var i=0; i<descendantCheckboxes.length; i++ ) {
 		descendantCheckboxes[i].checked	= checkboxEl.checked ;
-		toggleByParent (descendantCheckboxes[i].value,checkboxEl.checked);
-		//necessary for related donor groups
-		//root is selected we need to showall groups. Checked or unchecked
+		toggleByParent (getRelatedTab(descendantCheckboxes[i].name),descendantCheckboxes[i].value,checkboxEl.checked);
+		//necessary for related donor groups and agencies
+		//root is selected we need to show all groups/agencies. Checked or unchecked
 		if ( $(checkboxEl).hasClass("root_checkbox")) {
-			toggleRelatedGroups (descendantCheckboxes[i].name,true);
+			toggleRelatedGroups (getRelatedTab(descendantCheckboxes[i].name),true);
 		}
 		else {
 			//we need to hide the non related and show related
-			toggleRelatedGroups (checkboxEl.name);
+			toggleRelatedGroups (getRelatedTab(checkboxEl.name));
 		}
 	}
-	//if not donor type is selected show all donor groups
-	refreshRelatedGroups();
+	if (isTopHierarchy(checkboxEl.name)) {
+	var childrenTab = getRelatedTab(checkboxEl.name);
+	refreshRelatedGroups(childrenTab,getRelatedTab(childrenTab));
+	refreshRelatedGroups(checkboxEl.name,childrenTab);
+	
+	}
+	else {
+		refreshRelatedGroups(checkboxEl.name,getRelatedTab(checkboxEl.name));
+	}
 	
 	if ( ! checkboxEl.checked ) {
 		var tempParent				= parentTdEl.parentNode;
@@ -201,20 +208,32 @@ function toggleCheckChildren(checkboxEl) {
 	}
 }
 
-function refreshRelatedGroups() {
-	var isOneSelected = $('input:checkbox[name="selectedDonorTypes"]:checked').size() > 0;
+function isTopHierarchy (name) {
+	return (name=='selectedDonorTypes');
+		
+}
+function refreshRelatedGroups(parent,children) {
+	if (children == null) 
+		return;
+	var isOneSelected = $('input:checkbox[name="'+parent+'"]:checked').size() > 0;
     if (isOneSelected == false) 
       {
-    	$('input:checkbox[name="selectedDonorGroups"]').closest("li").show();
+    	$('input:checkbox[name="'+children+'"]').closest("li").show();
       }
+    else {
+    	$('input:checkbox[name="'+children+'"]:not(:checked)').each(function() {
+    	$(this).closest("li").hide();
+    	});
+    }
+    
 }
 
 
 function toggleRelatedGroups (name,forceShow) {
-	if (name !='selectedDonorTypes') {
-		return;
+	if (name == null) {
+		return
 	}
-$('input:checkbox[name="selectedDonorGroups"][parentid]').each(function() {
+$('input:checkbox[name="'+name+'"][parentid]').each(function() {
 		var liElement =  $(this).closest("li");
 		if (liElement!=null) {
 			if ($(this).is(':checked') == true || true == forceShow)
@@ -224,9 +243,24 @@ $('input:checkbox[name="selectedDonorGroups"][parentid]').each(function() {
 		}
 	});
 }
-function toggleByParent (id,check) {
-	 $("input[type='checkbox'][parentid="+id+"]").attr('checked', check);
+
+function getRelatedTab (name) {
+	if (name =='selectedDonorTypes') {
+		return  'selectedDonorGroups';
+	}
+	else if (name == 'selectedDonorGroups') {
+	return 'selectedDonnorAgency';	
+	}
+	else {
+		return null;
+	}
 	
+}
+function toggleByParent (name,id,check) {
+	if (name==null) {
+		return;
+	}
+	$("input[name="+name+"][type='checkbox'][parentid="+id+"]").trigger( "click" );
 }
 	 
 function DivManager(divId, propertyObj) {

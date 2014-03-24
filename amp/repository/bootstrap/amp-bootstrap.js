@@ -21,6 +21,12 @@ if(!Array.prototype.last) {
     };
 }
 
+if (typeof String.prototype.trim != 'function') {
+	  String.prototype.trim = function (){
+	    return this.replace(/^\s+|\s+$/gm,'');
+	  };
+	}
+
 function fix_aim_button(elem)
 {
 	elem.addClass("input-sm").css("float", "right");
@@ -59,7 +65,7 @@ function looksLikeEmail(email) {
 function looksLikePhoneNumber(input)
 {
 	var nr = input.replace('+', '').replace('-', '').replace(' ', '');
-	var isnum = /^\d+$/.test(nr);
+	var isnum = /^\d*$/.test(nr);
 	return isnum && nr.length < 20;
 }
 

@@ -35,7 +35,7 @@
 							<tr id="pledge_form_row_forprog_${selectedProgs.uniqueId}">
 								<td class="text-right"><c:out value="${selectedProgs.hierarchicalName}" /></td>
 								<td>
-									<html:text name="selectedProgs" indexed="true" property="percentage" size="5" onblur="locationsController.onBlur(this);" styleClass="form-control input-sm validate-percentage-input-pledges-programs-${rootTheme.keyAsLong}" />
+									<html:text name="selectedProgs" indexed="true" property="percentage" size="5" styleClass="form-control input-sm validate-percentage validate-percentage-input-pledges-programs-${rootTheme.keyAsLong}" />
 								</td>
 								<td class="text-center"><button type="button" onclick="programsController.onDelete(${selectedProgs.uniqueId});" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
 							</tr>

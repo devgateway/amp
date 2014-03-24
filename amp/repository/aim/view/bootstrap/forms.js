@@ -41,26 +41,6 @@ function floatDiffers(flt, val){ return !floatEquals(flt, val);}
  * GENERIC, e.g. non-controller-related, validation
  */
 
-/**
- * validates an input with a generic function and highlights any found error
- * @param inputItem
- * @param validation_function
- * @param error_message
- * @returns {Boolean}
- */
-function amp_bootstrap_form_simple_validation(inputItem, validation_function, error_message)
-{
-	if ((inputItem.value.length > 0) && (!validation_function(inputItem.value)))
-	{
-		show_error_message("Error", error_message);
-		setValidationStatus($(inputItem), 'has-error');
-		//$(inputItem).focus();
-		return false;
-	}
-	setValidationStatus($(inputItem), 'has-success'); // ok
-	clean_all_error_messages();
-	return true;
-}
 
 /**
  * returns true IFF all elements have "validation ok" after onblur being fired on them all
@@ -69,147 +49,30 @@ function amp_bootstrap_form_simple_validation(inputItem, validation_function, er
  */
 function amp_bootstrap_form_validate(bigDivSelector){
 	try{
-		debugger;
-		forced_pnotify_stack = {"dir1": "down", "dir2": "left"}; // stack all errors	
 		global_disable_cleaning_error_messages = true; // make a big queue
 		
 		var inputItemsSelector =  bigDivSelector + " input, " + bigDivSelector + " select, " + bigDivSelector + " textarea";
-		var elem_to_focus_on = $('#pledgeForm_validate');
-	
 		setValidationStatus($(inputItemsSelector), "dummy_class"); // remove all validation statuses
-		$(inputItemsSelector).each(function(){
-			var elem = this;
-			if (!hasValidationError($(elem)))
-			{
-				if ($(elem).is('select'))
-				{
-					var oldval = $(elem).val();
-					$(elem).trigger('change');
-					if ($(elem).val() != oldval)
-						$(elem).val(oldval);
-				}
-				else
-				{
-					elem_to_focus_on.focus();
-					elem.focus();
-					elem_to_focus_on.focus();
-				}			
-				
-			}
-		});
 		var faultyElements = [];
 		$(inputItemsSelector).each(function(){
-			if (hasValidationError($(this)))
-				faultyElements.push(this);
-			});
+			var elem = this;
+			var validator = get_validator_for_element(elem);
+			if (validator)
+			{
+				var val_result = validator.validateAndHighlight(elem);
+				if (!val_result)
+					faultyElements.push(elem);
+			}
+		});
 		return faultyElements.length == 0;
 	}
-	catch(e){forced_pnotify_stack = null; console.log(e);show_error_message("Validation", "error validating!");}
+	catch(e){alert(e);/*console.log(e);*/show_error_message("Validation", "error validating!");}
 	finally{
-		forced_pnotify_stack = null;
 		global_disable_cleaning_error_messages = null;
 	}
 	return false;
 }
 
-function selectHasValue(selectVal){
-	if (typeof(selectVal) == 'undefined')
-		return false;
-	if (selectVal == null)
-		return false;
-	if (selectVal == '')
-		return false;
-	if (isNaN(selectVal))
-		return false;
-	return parseInt(selectVal) > 0;
-}
-
-function init_validation(divId)
-{
-$(document).ready(function(){
-	$(divId + ' .validate-phone-number').blur(function(){
-		return amp_bootstrap_form_simple_validation(this, looksLikePhoneNumber, please_enter_phone_number_message);
-	});
-
-	$(divId + '.validate-email-address').blur(function(){
-		return amp_bootstrap_form_simple_validation(this, looksLikeEmail, please_enter_email_message);
-	});
-	
-	$(divId + '.validate-mandatory-number').blur(function(){
-		var inputItem = this;
-		if ((inputItem.value.length == 0) || (!looksLikeNumber(inputItem.value)))
-		{
-			show_error_message("Error", please_enter_number_message);
-			setValidationStatus($(inputItem), 'has-error');
-			return false;
-		}
-		setValidationStatus($(inputItem), 'has-success'); // ok
-		clean_all_error_messages();
-		return true;
-	});
-
-	$(divId + 'select.validate-mandatory').change(function(){
-		return amp_bootstrap_form_simple_validation(this, selectHasValue, please_enter_something_message); 
-	});
-	
-	$(divId + 'input.validate-mandatory, ' + divId + ' textarea.validate-mandatory').blur(function(){
-		var elem = $(this);
-		var error = false;
-		// <input>
-		// validate-min-length-5
-		var classList = elem.attr('class').split(/\s+/); // generate a list of the classes the element has
-		var validate_min_length = 1;
-		for(var i = 0; i < classList.length; i++){
-			var className = classList[i];
-			if (className.indexOf("validate-min-length-") == 0){
-				validate_min_length = parseInt(className.substring("validate-min-length-".length));
-			};
-		}
-		error = elem.val().length < validate_min_length;
-		if (error){
-			show_error_message("Error", please_enter_something_message);
-			setValidationStatus(elem, 'has-error');
-			return false;
-		}
-		setValidationStatus(elem, 'has-success'); // ok
-		clean_all_error_messages();
-		return true;
-	});
-	
-	$(divId + '.validate-year').blur(function(){
-		return amp_bootstrap_form_simple_validation(this, isYearValidator, please_enter_year_message);
-	});
-});
-}
-
-
-function amp_bootstrap_forms_check_percentage(inputItem, itemsClass)
-{
-	if (!is_valid_percentage(inputItem.value))
-	{
-		show_error_message("Error", "Not a valid percentage");
-		setValidationStatus($(inputItem), 'has-error');
-		//$(inputItem).focus();
-		return false;
-	}
-	setValidationStatus($('.' + itemsClass), 'has-success'); // ok
-	clean_all_error_messages();
-	var totalValue = 0;
-	var foundError = false;
-	$('.' + itemsClass).each(function(i, obj) {
-		if (is_valid_percentage(obj.value))
-			totalValue += parseFloat(obj.value);
-		else
-			foundError = true;
-	});
-	if (foundError || (floatDiffers(totalValue, 0) && floatDiffers(totalValue, 100))) {
-		show_error_message("Error", "Sum of percentages should be either 0 or 100");
-		setValidationStatus($('.' + itemsClass), 'has-warning'); // ok
-		//$(inputItem).focus();
-		return false;  
-	}
-	return true;
-}
 
 /**
  * returns an Array of (name, value) (good for jquery post) of all elements under a selector
@@ -329,22 +192,16 @@ InteractiveFormArea.prototype.getIdsOf = function(selectConfig, defaultValue)
 	return selectedIds.length > 0 ? selectedIds.join(',') : defaultValue;
 };
 
-/**
- * called when validating percentages
- * @param elem
- * @returns
- */
-InteractiveFormArea.prototype.onBlur = function(elem){
-	var jElem = $(elem);
-	var classList = jElem.attr('class').split(/\s+/); // generate a list of the classes the element has
-	for(var i = 0; i < classList.length; i++){
-		var className = classList[i];
-		if (className.indexOf("validate-percentage-") == 0){
-			return amp_bootstrap_forms_check_percentage(elem, className);	
-		}
-	};
-	
-};
+///**
+// * called when validating percentages
+// * @param elem
+// * @returns
+// */
+//InteractiveFormArea.prototype.onBlur = function(elem){
+//	var validator = get_validator_for_element(elem);
+//	if (validator)
+//		return validator.validateAndHighlight(elem);
+//};
 
 /**
  * process a <select> controlled by the controller - e.g. update the "addition" area

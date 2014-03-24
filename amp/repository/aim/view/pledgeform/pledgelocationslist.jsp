@@ -26,7 +26,7 @@
 				<td class="text-right">${selectedLocs.hierarchicalName}</td>
 				<td>
 					<%--<input class="form-control input-sm" type="text" name="locationpercentage" placeholder="Location percentage" size="5" value="25%"/> --%>
-					<html:text name="selectedLocs" indexed="true" property="percentage" size="5" onblur="locationsController.onBlur(this);" styleClass="form-control input-sm validate-percentage-input-pledges-locations" />
+					<html:text name="selectedLocs" indexed="true" property="percentage" size="5" styleClass="form-control input-sm validate-percentage validate-percentage-input-pledges-locations" />
 				</td>
 				<td class="text-center"><button type="button" onclick="locationsController.onDelete(${selectedLocs.uniqueId});" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
 			</tr>

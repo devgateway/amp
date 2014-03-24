@@ -4,7 +4,6 @@
  * 
  */ 
 
-var forced_pnotify_stack = null;
 var global_disable_cleaning_error_messages = null;
 
 $(document).ready(function()
@@ -13,7 +12,7 @@ $(document).ready(function()
 	$.pnotify.defaults.history = false;
 });
 
-var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"}; // where the validation errors are shown
+//var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"}; // where the validation errors are shown
 
 /**
  * removes all validation-statuses from elements given by a jQuery entity and adds the given one

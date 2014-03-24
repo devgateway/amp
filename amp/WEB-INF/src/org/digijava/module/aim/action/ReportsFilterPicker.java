@@ -574,7 +574,7 @@ public class ReportsFilterPicker extends Action {
  	 	rootOrgGroup.setChildren(donorGroups);
  	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
  	 	for (AmpOrgGroup group:donorGroups) {
- 	 		rootOrgGroup.getParentMapping().put(group.getAmpOrgGrpId().toString(),group.getOrgType().getAmpOrgTypeId().toString());
+ 	 		rootOrgGroup.getParentMapping().put(group.getAmpOrgGrpId(),group.getOrgType().getAmpOrgTypeId());
  	 	}
  	 	filterForm.getDonorElements().add(donorGroupElement);
  	 	

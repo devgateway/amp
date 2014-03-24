@@ -244,7 +244,6 @@ class ampp_projects_views_handler_field_organisation_role extends views_handler_
     $langcode = $GLOBALS['language']->language;
     $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpOrganisation', 'name', amp_org_role.organisation, 'amp_organisation', 'name', 'amp_org_id', '${langcode}')";
 
-
     // Translate the Role Codes to Role IDs.
     $role_value_ids = $this->_get_role_value_ids();
     $role_placeholder = $this->_get_role_placeholder();
@@ -260,7 +259,7 @@ class ampp_projects_views_handler_field_organisation_role extends views_handler_
       $condition = "amp_org_role.role $role_operator $role_placeholder";
     }
 
-    $fieldsql = "array_to_string(array_agg(CASE WHEN ${condition} THEN ${translate_field} END), ', ')";
+    $fieldsql = "ARRAY_TO_STRING(ARRAY_AGG(DISTINCT(CASE WHEN ${condition} THEN ${translate_field} END)), ', ')";
     $this->field_alias = $this->query->add_field(NULL, $fieldsql, 'organisation_name', $params);
   }
 }

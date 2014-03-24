@@ -33,8 +33,7 @@
     <!-- THESE 4 FILES SHOULD ALWAYS BE THE FIRST INCLUDED JS, IN THIS ORDER -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script src="/repository/bootstrap/amp-bootstrap.js" type="text/javascript"></script>    
-	<script src="/repository/bootstrap/hacks.js" type="text/javascript"></script>    
+	<script src="/repository/bootstrap/amp-bootstrap.js" type="text/javascript"></script>       
     <script src="/repository/aim/view/pledgeform/pfscripts.js" type="text/javascript"></script>
 	<script src="/repository/aim/view/bootstrap/forms.js" type="text/javascript"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -51,7 +50,7 @@
 		var please_enter_year_message = '<digi:trn jsFriendly="true">Please enter an year</digi:trn>';
 	</script>    
   </head>
-  <body class="main_side">
+  <body class="main_side" id="bootstrap-iframe">
  	<div id="pledge_form_big_div"> 
 		<aim:renderFormSubsection title="Pledge Identification">
 			<jsp:include page="pledgeIdentification.jsp"></jsp:include>

@@ -69,6 +69,7 @@ function amp_bootstrap_form_simple_validation(inputItem, validation_function, er
  */
 function amp_bootstrap_form_validate(bigDivSelector){
 	try{
+		debugger;
 		forced_pnotify_stack = {"dir1": "down", "dir2": "left"}; // stack all errors	
 		global_disable_cleaning_error_messages = true; // make a big queue
 		
@@ -80,10 +81,20 @@ function amp_bootstrap_form_validate(bigDivSelector){
 			var elem = this;
 			if (!hasValidationError($(elem)))
 			{
-				elem_to_focus_on.focus();
-				elem.focus();
-				elem_to_focus_on.focus();
-				$(elem).trigger('change');
+				if ($(elem).is('select'))
+				{
+					var oldval = $(elem).val();
+					$(elem).trigger('change');
+					if ($(elem).val() != oldval)
+						$(elem).val(oldval);
+				}
+				else
+				{
+					elem_to_focus_on.focus();
+					elem.focus();
+					elem_to_focus_on.focus();
+				}			
+				
 			}
 		});
 		var faultyElements = [];
@@ -113,17 +124,18 @@ function selectHasValue(selectVal){
 	return parseInt(selectVal) > 0;
 }
 
-function init_validation()
+function init_validation(divId)
 {
-	$('.validate-phone-number').blur(function(){
+$(document).ready(function(){
+	$(divId + ' .validate-phone-number').blur(function(){
 		return amp_bootstrap_form_simple_validation(this, looksLikePhoneNumber, please_enter_phone_number_message);
 	});
 
-	$('.validate-email-address').blur(function(){
+	$(divId + '.validate-email-address').blur(function(){
 		return amp_bootstrap_form_simple_validation(this, looksLikeEmail, please_enter_email_message);
 	});
 	
-	$('.validate-mandatory-number').blur(function(){
+	$(divId + '.validate-mandatory-number').blur(function(){
 		var inputItem = this;
 		if ((inputItem.value.length == 0) || (!looksLikeNumber(inputItem.value)))
 		{
@@ -136,11 +148,11 @@ function init_validation()
 		return true;
 	});
 
-	$('select.validate-mandatory').change(function(){
+	$(divId + 'select.validate-mandatory').change(function(){
 		return amp_bootstrap_form_simple_validation(this, selectHasValue, please_enter_something_message); 
 	});
 	
-	$('input.validate-mandatory, textarea.validate-mandatory').blur(function(){
+	$(divId + 'input.validate-mandatory, ' + divId + ' textarea.validate-mandatory').blur(function(){
 		var elem = $(this);
 		var error = false;
 		// <input>
@@ -164,9 +176,10 @@ function init_validation()
 		return true;
 	});
 	
-	$('.validate-year').blur(function(){
+	$(divId + '.validate-year').blur(function(){
 		return amp_bootstrap_form_simple_validation(this, isYearValidator, please_enter_year_message);
 	});
+});
 }
 
 
@@ -227,8 +240,9 @@ function getFormData(selector)
  */
 function InteractiveFormArea(masterDivId, ajaxPage, submitAttrName, actionName, selects){
 	var _self = this;
-	if (masterDivId[0] != '#')
+	if (masterDivId.charAt(0) != '#')
 	{
+		debugger;
 		alert('ERROR! please prefix masterDivId with #');
 		return;
 	}
@@ -436,14 +450,19 @@ InteractiveFormArea.prototype.refreshAddArea = function(callback) {
 
 function amp_bootstrap_form_update_area(url, action, replaceId, callback)
 {
-	if (replaceId[0] == '#')
-		replaceId = replaceId.substring(1);
-	$.post(url,
+	if (replaceId.charAt(0) != '#')
+		replaceId = '#' + replaceId;
+	/*$.post(url,
 			{extraAction: action},
 			function(data)
 			{
 				$('#' + replaceId).html(data);
 				if (callback != null)
 					callback();
-			});
+			});*/
+	$(replaceId).load(url, {extraAction: action}, function(data){
+		init_amp_magic(replaceId);
+		if (callback != null)
+			callback();
+	});
 }

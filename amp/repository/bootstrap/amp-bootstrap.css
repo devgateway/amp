@@ -7,6 +7,11 @@ body {
 	font-size: 12px;
 }
 
+#bootstrap-iframe{
+	width: 1000px;
+	margin: 0 auto;
+}
+
 label
 {
 	margin-bottom: 1px;

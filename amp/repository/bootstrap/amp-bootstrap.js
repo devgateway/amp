@@ -56,9 +56,9 @@ function looksLikeEmail(email) {
 	return true;
 }
 
-function looksLikePhoneNumber(nr)
+function looksLikePhoneNumber(input)
 {
-	nr = nr.replace('+', '').replace('-', '').replace(' ', '');
+	var nr = input.replace('+', '').replace('-', '').replace(' ', '');
 	var isnum = /^\d+$/.test(nr);
 	return isnum && nr.length < 20;
 }
@@ -74,6 +74,34 @@ function looksLikeNumber(nr){
 	return number > 0;
 }
 
-function isYearValidator(nr){
+function isYearValidator(input){
+	var nr = input;
 	return looksLikeNumber(nr) && (parseInt(nr) > 1900) && (parseInt(nr) < 2100);
+}
+
+
+/**
+ * should be called on every new ajax addition, or all functionality dependent on $(document).ready() will not work
+ * TODO: maybe change everything to $(document).on(...);
+ */
+function init_custom_looks(divId)
+{
+	//alert('called');
+	$(divId + ' select').addClass('text-left');
+	$(divId + ' select').selectpicker({
+		style: 'btn-primary btn-xs',
+		'data-style': 'btn-primary btn-xs',
+		//size: 5
+	});
+	$(divId + ' select.live-search').attr('data-live-search', 'true'); // Struts is stupid and does not allow to inject custom attributes 
+}
+
+function init_amp_magic(divIdInput){
+	var divId = divIdInput;
+	$(document).ready(function(){
+		if (divId.charAt(0) != '#')
+			divId = '#' + divId;
+		init_custom_looks(divId);
+		init_validation(divId);
+	});
 }

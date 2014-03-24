@@ -27,7 +27,7 @@
 		<div class="col-xs-5 text-right"><label class="h5 near-select" for="sector_item_select"><digi:trn>Select Sector</digi:trn></label></div>
 		<div class="col-xs-7">
 			<c:set var="select_id">sector_item_select</c:set>
-			<c:set var="extra_tags">onchange="sectorsController.selectChanged(this);"</c:set>
+			<c:set var="extra_tags">onchange="sectorsController.selectChanged(this);" class="live-search"</c:set>
 			<c:set var="select_values" value="${pledgeForm.allLegalSectors}" />
 			<c:set var="select_init_value" value="-2" />
  			<%@include file="select_disableable_items.jspf" %>
@@ -37,12 +37,6 @@
 	<div class="col-xs-4 col-xs-offset-0 text-left"><button type="button" class="btn btn-success btn-sm" id='pledge_form_sectors_change_cancel' onclick="sectorsController.cancelClicked(this);" ><digi:trn>Cancel</digi:trn></button></div>
 </c:if>	
 </div>
-
-<script type="text/javascript">
-	on_element_loaded();
-	$(document).ready(function(){
-		$('#pledge_form_sectors_change select').attr('data-live-search', 'true');
-	}); // Struts is stupid and does not allow to inject custom attributes
 </script>
 
 

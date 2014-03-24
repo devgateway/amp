@@ -47,18 +47,18 @@ function show_error_message(title, text, the_type)
 {
 	if (!the_type)
 		the_type = 'error';
-	var the_stack = null;
-	var the_before_open = function(pnotify) {
-        					// Position this notice relative to the mouse cursor
-        					pnotify.css(build_notification_position(pnotify));
-    					};    					
-	if (forced_pnotify_stack)
-	{
-		the_stack = forced_pnotify_stack;
-		the_before_open = undefined;
-	}
-	else
-		the_stack = {"dir1": "down", "dir2": "left"}; // detach from other notices - if we are in iframe
+//	var the_stack = null;
+//	var the_before_open = function(pnotify) {
+//        					// Position this notice relative to the mouse cursor
+//        					pnotify.css(build_notification_position(pnotify));
+//    					};    					
+//	if (forced_pnotify_stack)
+//	{
+//		the_stack = forced_pnotify_stack;
+//		the_before_open = undefined;
+//	}
+//	else
+//		the_stack = {"dir1": "down", "dir2": "left"}; // detach from other notices - if we are in iframe
 	$.pnotify({
 	    'title': title,
 	    'text': text,
@@ -69,9 +69,9 @@ function show_error_message(title, text, the_type)
 	    'delay': 2000,
 	    maxonscreen: 5,
 	    mouse_reset: false,
-	    width: '250px',
-	    stack: the_stack,
-	    before_open: the_before_open
+	    width: '250px'//,
+//	    stack: the_stack,
+//	    before_open: the_before_open
 	});
 }
 

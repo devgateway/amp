@@ -34,6 +34,7 @@ public class AddPledge extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
         	
+    		request.setAttribute("bootstrap_insert", true);
     		PledgeForm plForm = (PledgeForm) form;   		
     		
     		String yearToSpecify = TranslatorWorker.translateText("unspecified");

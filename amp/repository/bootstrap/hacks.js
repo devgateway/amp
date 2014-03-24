@@ -1,41 +1,40 @@
-// including-page-side hacks area
-// http://stackoverflow.com/questions/9975810/make-iframe-automatically-adjust-height-according-to-the-contents-without-using
-function resizeIframe(obj)
-{
-	//console.log("changing size of iframe from " + obj.style.height + " to " + obj.contentWindow.document.body.scrollHeight);
-	//var iWantHeight = $(obj.contentWindow.document).find('#iframe-hack-end-marker').offset();
-	//console.log("let's try " + iWantHeight.top);
-	obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px'; // +50 added for Firefox; TODO in the future: better hack or browser detection
-};
-
-function resizeIframeCallback(iframewnd, ignored, newHeight)
-{
-	$('iframe').each(function()
-	{
-		resizeIframe(this); // somewhat ugly - we resize all iframes when one changes size
-	});
-}
-
-// iframe-side hacks area
-var bootstrap_iframe_last_height = -1;
-function bootstrap_parent_resizer()
-{
-	if (window.document.body.scrollHeight != bootstrap_iframe_last_height)
-	{
-		bootstrap_iframe_last_height = window.document.body.scrollHeight + 50;
-		window.parent.resizeIframeCallback(window, null /*$('#bootstrap_hack_iframe_id').val()*/, bootstrap_iframe_last_height);
+/**
+ * hacks related to loading bootstrap within an iframe
+ * include this file in the INCLUDING page (old AMP) if not using bootstrap layout only
+ * @param elem
+ * @returns
+ */
+	function pageY(elem) {
+	    return elem.offsetParent ? (elem.offsetTop + pageY(elem.offsetParent)) : elem.offsetTop;
 	}
-}
 
-function bootstrap_iframe()
-{
-	setInterval(bootstrap_parent_resizer, 50);
-}
+	function get_number(nr)
+	{
+		if (typeof(nr) == 'undefined')
+			return 0;
+		if (nr == null)
+			return 0;
+		if (isNaN(nr))
+			return 0;
+		return parseInt(nr);
+	}
+	
+	function window_resized(){
+		var buffer = 20;
+	    var height = Math.max(get_number($(window).height()), 
+	    		get_number(window.innerHeight)); //document.documentElement.clientHeight; // was: clientHeight
+	    height -= pageY(document.getElementById('bootstrap_iframe'))+ buffer ;
+	    height = (height < 0) ? 0 : height;
+	    //outerDocument.getElementById('bootstrap_iframe').style.height = (height - 0) + 'px';
 
-$(document).ready(function()
-{
-		$(document).find('iframe').ready(function()
-		{
-			console.log('iframe ready!');
-		});
-});
+		$('#bootstrap_iframe').height(height);
+	}
+	
+	$(document).ready(function(){
+		window_resized();
+	});
+	
+	window.onresize = function(){
+		window_resized();
+	};
+	

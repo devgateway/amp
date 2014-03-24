@@ -92,19 +92,21 @@
 		
 	</div>
 
-<div class="breadcrump_1">&nbsp;</div>	
-			<div style="width:1000px;margin:0 auto;">
-	<table width="100%" id="homelayout">
-		<tr>
-			<td >
+<logic:notPresent name="bootstrap_insert" scope="request">
+	<div class="breadcrump_1">&nbsp;</div>
+	<div style="width:1000px;margin:0 auto;">
+		<table width="100%" id="homelayout">
+			<tr><td>		
 				<digi:insert attribute="body"/>
-			</td>
-		</tr>
-	
-	</table>
+			</td></tr>
+		</table>
     </div>
     <div class="footerText" >
-    <digi:insert attribute="footer"/>
-    </div>
+    	<digi:insert attribute="footer"/>
+    </div>    
+</logic:notPresent>
+<logic:present name="bootstrap_insert" scope="request">
+	<digi:insert attribute="body"/>
+</logic:present>
 </body>
 </html>

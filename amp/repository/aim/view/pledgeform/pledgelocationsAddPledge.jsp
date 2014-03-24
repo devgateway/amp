@@ -48,6 +48,3 @@
 	</digi:form>
 </c:if>	
 </div>
-<script type="text/javascript">
-	on_element_loaded();
-</script>

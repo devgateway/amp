@@ -33,24 +33,6 @@ $(document).ready(function()
 		});
 });
 
-/**
- * should be called on every new ajax addition, or all functionality dependent on $(document).ready() will not work
- * TODO: maybe change verything to $(document).on(...);
- */
-function on_element_loaded()
-{
-	$(document).ready(function()
-	{
-		//alert('called');
-		$('select').addClass('text-left');
-		$('select').selectpicker({
-			style: 'btn-primary btn-xs',
-			'data-style': 'btn-primary btn-xs',
-			//size: 5
-		});
-		init_validation();
-	});
-}
 
 $(document).ready(function() // enable javascript-backed ajax forms
 {
@@ -125,10 +107,10 @@ function go_to_pledge_list(){
 }
 
 function pledge_form_cancel(bigDivSelector){
-	//BootstrapDialog.alert("I want banana!");
+	BootstrapDialog.alert("I want banana!");
 	//go_to_pledge_list();
 }
 
-on_element_loaded();
-bootstrap_iframe(); // init iframe hacks
+init_amp_magic('pledge_form_big_div');
+
 

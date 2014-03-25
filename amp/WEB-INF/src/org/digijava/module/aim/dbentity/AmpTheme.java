@@ -80,7 +80,7 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
     }
 
     private String programviewname;
-        private Set programSettings;
+    private Set<AmpActivityProgramSettings> programSettings;
 
 	public Set getActivities() {
 		return activities;
@@ -322,7 +322,7 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 		return encodeName;
 	}
 
-        public Set getProgramSettings() {
+        public Set<AmpActivityProgramSettings> getProgramSettings() {
                 return programSettings;
         }
 
@@ -330,7 +330,7 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 		this.encodeName = encodeName;
 	}
 
-        public void setProgramSettings(Set programSettings) {
+        public void setProgramSettings(Set<AmpActivityProgramSettings> programSettings) {
                 this.programSettings = programSettings;
         }
 

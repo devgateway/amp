@@ -10,8 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+
 import org.apache.struts.action.ActionForm;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -36,7 +39,9 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
+
 import static org.dgfoundation.amp.algo.AmpCollections.*;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -78,7 +83,13 @@ public class PledgeForm extends ActionForm implements Serializable {
 	public static final Function<AmpTheme, IdNamePercentage> PLEDGE_PROGRAM_EXTRACTOR = new Function<AmpTheme, IdNamePercentage>(){
 		
 		public IdNamePercentage apply(AmpTheme theme) {
-			return new IdNamePercentage(theme.getAmpThemeId(), theme.getName(), theme.getRootTheme().getAmpThemeId(), theme.getRootTheme().getName(), theme.getHierarchicalName());
+			AmpTheme rootTheme = theme.getRootTheme();
+			AmpActivityProgramSettings sett = null;
+			if ((rootTheme.getProgramSettings() != null) && (!rootTheme.getProgramSettings().isEmpty()))
+				sett = rootTheme.getProgramSettings().iterator().next(); // normally shouldn't have >1 theme: that would be a huge bug somewhere else
+			long settId = sett == null ? -1 : sett.getAmpProgramSettingsId();
+			String settName = sett == null ? "" : sett.getName();
+			return new IdNamePercentage(theme.getAmpThemeId(), theme.getName(), settId, settName, theme.getHierarchicalName());
 		}
 	};
 	
@@ -396,7 +407,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 	 * @return
 	 */
 	public List<DisableableKeyValue> getAllRootPrograms() {
-		return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(ProgramUtil.getParentThemes(), new Function<AmpTheme, DisableableKeyValue>(){
+		return mergeLists(DISABLEABLE_KV_PLEASE_SELECT, Lists.transform(ProgramUtil.getConfiguredParentThemes(), new Function<AmpTheme, DisableableKeyValue>(){
 			
 			public DisableableKeyValue apply(AmpTheme theme) {
 				return new DisableableKeyValue(theme.getAmpThemeId(), theme.getName(), true);

@@ -243,6 +243,23 @@ public class ProgramUtil {
 				throw new RuntimeException("Cannot search parent themes", e);
 			}
 		}
+		
+		/**
+		 * returns list of of all parent themes which are configured
+		 * @return
+		 */
+		@SuppressWarnings("unchecked")
+		public static List<AmpTheme> getConfiguredParentThemes(){
+			try{
+				String queryString = "select aaps.defaultHierarchy from " + AmpActivityProgramSettings.class.getName() + " aaps WHERE aaps.defaultHierarchy IS NOT NULL"; 
+				Query qry = PersistenceManager.getRequestDBSession().createQuery(queryString);
+				List<AmpTheme> themes = qry.list();
+				return themes;
+			}
+			catch(Exception e){
+				throw new RuntimeException(e);
+			}
+		}
 
 		/**
 		 * Retrieves all themes from db.

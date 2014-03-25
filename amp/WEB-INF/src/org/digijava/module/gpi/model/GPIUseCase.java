@@ -57,6 +57,7 @@ import org.hibernate.FetchMode;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
@@ -300,6 +301,7 @@ public class GPIUseCase {
 			// Set the query to return AmpGPISurvey objects.
 			Criteria criteria = session.createCriteria(AmpGPISurvey.class);
 			criteria.setFetchMode("ampActivityId.funding", FetchMode.JOIN).setFetchMode("ampActivityId.funding.fundingDetails", FetchMode.JOIN);
+			criteria.addOrder(Order.asc("ampGPISurveyId"));
 
 			// criteria.setMaxResults(500);
 

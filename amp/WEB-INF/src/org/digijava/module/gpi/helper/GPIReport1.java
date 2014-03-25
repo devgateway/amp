@@ -86,15 +86,15 @@ public class GPIReport1 extends GPIAbstractReport {
 					continue;
 				}
 
-				// Create set of years (no duplicates) that will be used to
-				// populate the report.
-				// ie: if an activity has a funding with 3 funding details (each
-				// commitment/disbursement/expenditure) will add it ONLY ONE
-				// TIME per year.
-				Set<Integer> yearsFromFunding = new HashSet<Integer>();
-
 				Iterator<AmpFunding> iFunding = auxActivity.getFunding().iterator();
 				while (iFunding.hasNext()) {
+					// Create set of years (no duplicates) that will be used to
+					// populate the report.
+					// ie: if an activity has a funding with 3 funding details (each
+					// commitment/disbursement/expenditure) will add it ONLY ONE
+					// TIME per year.
+					Set<Integer> yearsFromFunding = new HashSet<Integer>();
+
 					AmpFunding auxFunding = iFunding.next();
 
 					// Filter by organization.

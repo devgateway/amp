@@ -83,12 +83,12 @@
     		textTD.innerHTML='<digi:trn>You have a new Message</digi:trn>'; 
     	}
       $('#msgDiv').show("slow");
-      window.setTimeout("hideMessage()",4000,"JavaScript");
+      window.setTimeout("hideMessage()",4000);
     }
 
     function hideMessage(){
 		$('#msgDiv').hide("slow");
-    	id=window.setTimeout("checkForNewMessages()",getInterval(),"JavaScript");
+    	id=window.setTimeout("checkForNewMessages()",getInterval());
     }
 
 var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">Click here to view Message</digi:trn>';
@@ -97,7 +97,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
 
     //setting timer to check for new messages after specified time
     if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
-      id=window.setTimeout("checkForNewMessages()",getInterval(),"JavaScript");
+      id=window.setTimeout("checkForNewMessages()",getInterval());
     }
 
     function checkForNewMessages(){
@@ -109,7 +109,7 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
         showMessage(false);
         prevCount=newCount;
       }else{
-        id=window.setTimeout("checkForNewMessages()",getInterval(),"JavaScript");
+        id=window.setTimeout("checkForNewMessages()",getInterval());
       }
     }
 

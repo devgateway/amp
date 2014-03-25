@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -2180,6 +2181,15 @@ public class TeamMemberUtil {
 			logger.error("unable to save tab", e);
 			//tr.rollback();
 		}
+	}
+	
+	/**
+	 * TODO: find all 104 reimplementations of the same thing in AMP and change them to calls of this function
+	 * @return
+	 */
+	public static TeamMember getLoggedInTeamMember(){
+		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+		return tm;
 	}
 
     

@@ -52,6 +52,14 @@
 	</script>    
   </head>
   <body class="main_side" id="bootstrap-iframe">
+  	<logic:present name="PNOTIFY_ERROR_MESSAGE" scope="request">
+  		<script type="text/javascript">
+  			$(document).ready(function(){
+  				show_error_message("Not allowed to edit pledge", '<c:out value="${PNOTIFY_ERROR_MESSAGE}" />');
+  			});
+  		 </script>
+  	</logic:present>
+<logic:notPresent name="PNOTIFY_ERROR_MESSAGE" scope="request">
  	<div id="pledge_form_big_div"> 
 		<aim:renderFormSubsection title="Pledge Identification">
 			<jsp:include page="pledgeIdentification.jsp"></jsp:include>
@@ -104,6 +112,12 @@
 			<button type="button" onclick="pledge_form_cancel('#pledge_form_big_div');" class="btn btn-warning" id='pledgeForm_cancel'><digi:trn>Cancel</digi:trn></button>		
 		</div>
 	</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+  			register_heart_beat();
+  		});
+	</script>
+</logic:notPresent>	
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/repository/bootstrap/bootstrap.min.js"></script>
     <script src="/repository/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>

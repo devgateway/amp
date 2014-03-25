@@ -194,7 +194,8 @@ function setHoveredRow(rowId) {
 						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
 							<tr style="height: 25px">
 								<td width="25%" align="center" class="inside">
-									<bean:write name="allFundingPledges" property="key.title" />								</td>
+									<c:out value="${allFundingPledges.key.effectiveName }" />
+								</td>
 								<td width="25%" align="center" class="inside">
 									<bean:write name="allFundingPledges" property="key.organizationGroup.orgGrpName" />								</td>
 								<td width="25%" align="center" class="inside">

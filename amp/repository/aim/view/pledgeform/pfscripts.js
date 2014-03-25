@@ -14,7 +14,7 @@ function copy_from_contact_1_to_contact_2(input_elem)
 }
 
 $(document).ready(function()
-{	
+{
 	$('#sameContactCheckBox').change(function(){
 		var is_checked = $(this).is(":checked");
 		if (is_checked){ 
@@ -96,7 +96,11 @@ function pledge_form_submit(bigDivSelector){
 			data,
 			function(data){
 				if (data.trim() != 'ok')
-					show_error_message('Error Submitting', 'Error submitting form: ' + data.trim());
+				{
+					var errs = $.parseJSON(data.trim()); //org.dgfoundation.amp.forms.ValidationError instances
+					for(var i = 0; i < errs.length; i++)
+						show_error_message('Error Submitting', 'Error submitting form: ' + errs[i].errMsg);
+				}
 				else
 					go_to_pledge_list();
 		});
@@ -113,4 +117,10 @@ function pledge_form_cancel(bigDivSelector){
 
 init_amp_magic('pledge_form_big_div');
 
+function register_heart_beat(){
+	//setInterval(do_heart_beat, 1300);
+}
 
+function do_heart_beat(){
+	$.post("/addPledge.do?heartBeat=true", {}, function(data) {/* do nothing*/});
+}

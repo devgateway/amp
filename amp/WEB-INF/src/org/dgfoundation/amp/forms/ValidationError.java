@@ -7,4 +7,9 @@ public class ValidationError {
 	{
 		this.errMsg = errMsg;
 	}
+	
+	@Override
+	public String toString(){
+		return this.errMsg;
+	}
 }

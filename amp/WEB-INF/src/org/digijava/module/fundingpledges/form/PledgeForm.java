@@ -9,13 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
 import org.apache.struts.action.ActionForm;
-import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.action.FeatureManager;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -23,7 +19,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -46,7 +41,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * session form holding the current state of the Add/Edit Pledge Form
@@ -603,6 +597,17 @@ public class PledgeForm extends ActionForm implements Serializable {
 		this.selectedFunding = selectedFunding;
 	}
 	
+	public boolean getUseFreeText(){
+		return PledgesEntityHelper.useFreeText();
+	}
+	
+	public boolean isNewPledge(){
+		return this.pledgeId == null;
+	}
+	
+	
+	
+	// TRASH GETTERS AND SETTERS BELOW
 	@java.lang.SuppressWarnings("all")
 	public PledgeForm() {
 	}

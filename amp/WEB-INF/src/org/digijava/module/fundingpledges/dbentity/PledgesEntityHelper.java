@@ -12,6 +12,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Hibernate;
@@ -109,6 +110,11 @@ public class PledgesEntityHelper {
 		return fp.size() == 0 ? null : fp.get(0);
 	}
 	
+	public static FundingPledges getPledgesByFreeTextName(String name){
+		List<FundingPledges> fp = fetchEntities(FundingPledges.class, "titleFreeText", name);
+		return fp.size() == 0 ? null : fp.get(0);
+	};
+	
 	public static List<FundingPledgesDetails> getPledgesDetails(Long pledgeid)
 	{
 		return fetchEntities(FundingPledgesDetails.class, "pledgeid", pledgeid);
@@ -129,47 +135,9 @@ public class PledgesEntityHelper {
 		return fetchEntities(FundingPledgesSector.class, "pledgeid", pledgeid);
 	}
 	
-	/**
-	 * sets the property "pledgeid" of all the objects enclosed in a collection to a value
-	 * @param col the collection to iterate. Might be null, in which case it will be treated as an empty collection
-	 * @param pledge - obj.setPledgeid(pledge) will be called with this one as an argument
-	 */
-	public static void setPledgesAndSave(Session session, Collection<?> col, FundingPledges pledge)
-	{
-		if (col == null)
-			return;
-		for(Object obj:col)
-		{
-			ContentTranslationUtil.setProperty(obj, "pledgeid", pledge);
-			session.save(obj);
-		}
-	}
-	
-	/**
-	 * introspectively calls {@link org.digijava.module.fundingpledges.dbentity.FundingPledgesSector#setPledgeid(FundingPledges)}, 
-	 * {@link org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails#setPledgeid(FundingPledges)},
-	 * {@link org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation#setPledgeid(FundingPledges)},
-	 * {@link org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram#setPledgeid(FundingPledges)},
-	 * @param pledge
-	 * @param sectors
-	 * @param plf
-	 * @throws DgException
-	 */
-	public static void savePledge(FundingPledges pledge, Set<FundingPledgesSector> sectors, PledgeForm plf) throws DgException
-	{		
-		try {
-			Session session = PersistenceManager.getSession();
-			session.save(pledge);
-			
-			setPledgesAndSave(session, sectors, pledge);
-			//setPledgesAndSave(session, plf.getFundingPledgesDetails(), pledge);
-			setPledgesAndSave(session, plf.getSelectedLocs(), pledge);
-			setPledgesAndSave(session, plf.getSelectedProgs(), pledge);
-		} catch (HibernateException e) {
-			logger.error("Error saving pledge", e);
-			throw new DgException("Cannot save Pledge!",e);
-		}
-	}
+	public static boolean useFreeText(){
+		return FeaturesUtil.isVisibleField("Use Free Text");
+	};
 	
 	/**
 	 * iterates a Collection and removed everything in it

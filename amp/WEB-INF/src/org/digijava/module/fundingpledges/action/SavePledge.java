@@ -14,9 +14,12 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.wicket.validation.ValidationError;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.forms.ValidationError;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -49,7 +52,12 @@ public class SavePledge extends Action {
     				ARUtil.writeResponse(response, "ok");
     				return null;
     			}
-    			ARUtil.writeResponse(response, errors.toString());
+    			JSONArray arr = new JSONArray();
+    			String[] fields = new String[] {"errMsg"};
+    			for(ValidationError err:errors)
+    				arr.put(new JSONObject(err, fields));
+    			String errs = arr.toString();
+    			ARUtil.writeResponse(response, errs);
     			return null;
     		}
     		catch(Exception e)
@@ -60,21 +68,44 @@ public class SavePledge extends Action {
     		}
     }
     
+    /**
+     * returns true IFF we are allowed to save a pledge with a given name
+     * @param plForm
+     * @param pledges - the pledges instance which will take the load
+     * @return
+     */
+    protected boolean checkNameUniqueness(PledgeForm plForm){
+    	FundingPledges preexistingPledgeWithSameName = PledgesEntityHelper.getPledgesByFreeTextName(plForm.getTitleFreeText());
+    	if (preexistingPledgeWithSameName == null)
+    		return true; //nothing to do
+    	
+    	// same name existing, let's see whether we are overriding it (allowed) or creating a new one
+    	if (plForm.isNewPledge())
+    		return false; // not allowed to create a new pledge with preexisting name
+    	
+    	return plForm.getPledgeId() == preexistingPledgeWithSameName.getId();
+    }
+    
     protected List<ValidationError> do_save(PledgeForm plForm) throws Exception // it might die, ALWAYS check for exceptions and forward cleanly by AJAX
     {    	
     	Session session = PersistenceManager.getRequestDBSession(false);
     	
-    	FundingPledges pledge;
     	List<ValidationError> res = new ArrayList<>();
     	
-    	if (plForm.getPledgeId() == null)
-    	{
+		if (plForm.getUseFreeText() && (!checkNameUniqueness(plForm)))
+		{
+			res.add(new org.dgfoundation.amp.forms.ValidationError(TranslatorWorker.translateText("A different pledge with the same name exists")));
+			return res;
+		}
+		
+    	FundingPledges pledge;
+    	if (plForm.isNewPledge()){
     		pledge = new FundingPledges();
-    		pledge.setId(plForm.getPledgeId());
     	} else{
     		pledge = PledgesEntityHelper.getPledgesById(plForm.getPledgeId());
-    	}	
-    	session.saveOrUpdate(pledge);	
+    	}
+
+    	session.saveOrUpdate(pledge);
     	//if (FeaturesUtil.isVisibleField("Use Free Text")){
   		pledge.setTitleFreeText(plForm.getTitleFreeText());  // copy both - one of them will be null and that's it
 //   		}else{
@@ -93,15 +124,8 @@ public class SavePledge extends Action {
     	res.addAll(do_save_funding(session, pledge, plForm.getSelectedFunding()));
     	session.saveOrUpdate(pledge);
     		
-//    		if (plForm.getPledgeId()!=null && plForm.getPledgeId()!=0) {
-//    			PledgesEntityHelper.updatePledge(pledge,pledgessector,plForm);
-//			} else {
-//				PledgesEntityHelper.savePledge(pledge,pledgessector,plForm);
-//			}
-    		
-    		
-    		return res;
-		}
+    	return res;
+	}
     
     protected List<ValidationError> do_save_contact1(FundingPledges pledge, PledgeFormContact contact1) throws Exception
     {

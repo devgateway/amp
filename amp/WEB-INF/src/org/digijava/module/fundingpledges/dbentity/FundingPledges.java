@@ -68,6 +68,19 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 		return (int)(this.getId() - o.getId());
 	}
 	
+	/**
+	 * computes the effectively-displayed name of the pledge
+	 * @return
+	 */
+	public String getEffectiveName(){
+		if (PledgesEntityHelper.useFreeText())
+			return this.titleFreeText;
+		else 
+			return this.getTitle() == null ? "(null)" : this.getTitle().getValue();
+	}
+	
+	// trash getters / setters below
+	
 	@java.lang.SuppressWarnings("all")
 	public Long getId() {
 		return this.id;

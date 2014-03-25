@@ -9,7 +9,6 @@ public class AmpGPISurveyIndicator implements Serializable {
 	private Long ampIndicatorId;
 	private String name;
 	private Integer totalQuestions;
-	private Integer indicatorNumber;
 	private String indicatorCode;
 	private String status;
 	private Set<AmpGPISurveyQuestion> questions;
@@ -21,8 +20,8 @@ public class AmpGPISurveyIndicator implements Serializable {
 
 		@Override
 		public int compare(AmpGPISurveyIndicator arg0, AmpGPISurveyIndicator arg1) {
-			if (arg0.getIndicatorNumber() != null && arg1.getIndicatorNumber() != null) {
-				return arg0.getIndicatorNumber().compareTo(arg1.getIndicatorNumber());
+			if (arg0.getIndicatorCode() != null && arg1.getIndicatorCode() != null) {
+				return arg0.getIndicatorCode().compareTo(arg1.getIndicatorCode());
 			}
 			return arg0.hashCode() - arg1.hashCode();
 		}
@@ -70,14 +69,6 @@ public class AmpGPISurveyIndicator implements Serializable {
 
 	public void setTotalQuestions(Integer totalQuestions) {
 		this.totalQuestions = totalQuestions;
-	}
-
-	public Integer getIndicatorNumber() {
-		return indicatorNumber;
-	}
-
-	public void setIndicatorNumber(Integer indicatorNumber) {
-		this.indicatorNumber = indicatorNumber;
 	}
 
 	public Set<AmpGPISurveyQuestion> getQuestions() {

@@ -13,7 +13,6 @@
 
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="totalQuestions" column="total_question" type="java.lang.Integer" />
-		<property name="indicatorNumber" column="indicator_number" type="java.lang.Integer" />
 		<property name="indicatorCode" column="indicator_code" type="java.lang.String" />
 		<property name="status" column="status" type="java.lang.String" />
 

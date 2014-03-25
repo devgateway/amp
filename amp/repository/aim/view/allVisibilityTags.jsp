@@ -1057,6 +1057,8 @@ deleted 6 fields, do not reinsert
 <field:display feature="Pledges Columns" name="Pledges Districts"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Programs"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Secondary Sectors"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Tertiary Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Type Of Assistance"></field:display>
 <field:display feature="Pledges Columns" name="Related Projects"></field:display>
 <field:display feature="Pledges Columns" name="Alternate Contact"></field:display>

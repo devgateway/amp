@@ -9,17 +9,6 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW v_pledges_titles;
-				CREATE OR REPLACE VIEW v_pledges_titles AS 
-  				SELECT (-1) AS pledge_id, 'No Pledge'::character varying AS title, (-1) AS title_id
-				UNION 
-        			( SELECT p.id AS pledge_id, val.category_value AS title, val.id AS title_id
-           			FROM amp_funding_pledges p
-      				JOIN amp_category_value val ON p.title = val.id
-     				ORDER BY p.id)
-			UNION
-				(SELECT p.id AS pledge_id, p.titlefreetext,null 
-           		FROM amp_funding_pledges p);
 			</lang>
 		</script>
 	</apply>

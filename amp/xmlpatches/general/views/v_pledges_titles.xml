@@ -19,8 +19,15 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_pledges_titles;;;
-				CREATE OR REPLACE VIEW v_pledges_titles AS SELECT -1 as pledge_id,'No Pledge' as title,-1 as title_id UNION (SELECT p.id AS pledge_id, val.category_value AS title, val.id AS title_id FROM (amp_funding_pledges p JOIN amp_category_value val ON ((p.title = val.id))) ORDER BY p.id);;;
+				DROP VIEW IF EXISTS v_pledges_titles;
+				CREATE OR REPLACE VIEW v_pledges_titles AS 
+        			(( SELECT p.id AS pledge_id, val.category_value AS title, val.id AS title_id
+           				FROM amp_funding_pledges p
+      					JOIN amp_category_value val ON p.title = val.id
+     				)
+					UNION
+						(SELECT p.id AS pledge_id, p.titlefreetext, null 
+           				FROM amp_funding_pledges p WHERE (p.titlefreetext IS NOT NULL) AND (NOT p.titlefreetext = ''))) ORDER BY pledge_id, title_id; <!-- free text comes last -->
 			</lang>
 		</script>
 	</apply>

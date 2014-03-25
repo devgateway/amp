@@ -27,6 +27,46 @@
     }
 </script>
 
+<style>
+	.yuiampmenuitemlabel{
+		cursor: pointer;
+		vertical-align: middle;
+		display: inline-block;
+		float: left;
+	}
+
+	.yuiampmenuitem{
+		float: left
+	}
+	
+	.yuiampmenuitem a{
+		cursor: pointer;
+		text-decoration: none;
+		float: left;
+		border: 0px;
+		padding: 0px;
+	}
+	
+	.yuiampmenuitem_drop {
+		border: 0px !important;
+		padding-top: 4px !important;
+	}
+	
+	li.yuiampmenuitem_drop{
+		border: 0px !important;
+		padding-top: 2px !important;
+		padding-bottom: 2px !important;	
+		margin-top: 5px !important;
+		clear: both;
+	}
+	
+	.yuiampmenuitem a img{
+		border: 0px;
+		padding: 0px;
+		}
+</style>
+
+
 <!-- Core + Skin CSS -->
 <digi:ref href="/TEMPLATE/ampTemplate/css_2/menu.css" type="text/css" rel="stylesheet" />
 
@@ -64,12 +104,6 @@ ${fn:replace(message,quote,escapedQuote)}
 
 <logic:notPresent name="currentMember">
 
-<style>
-.yuiampmenuitemlabel
-{
-	cursor:pointer;
-}
-</style>
 <div class="menucontainer">
 <div class="yuiamp-skin-amp" style="clear:both;" >
     <div id="mainmenuHeader" class="yuiampmenu">
@@ -91,7 +125,7 @@ ${fn:replace(message,quote,escapedQuote)}
             </module:display>
             
             <module:display name="Public Site" parentModule="PUBLIC VIEW">
-               <li class="yuiampmenuitem" style="float:left;">
+               <li class="yuiampmenuitem">
                 <c:set var="message">
                 <digi:trn>WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                 </c:set>
@@ -102,7 +136,7 @@ ${fn:replace(message,quote,escapedQuote)}
             </module:display>
              
             <module:display name="Public Documents" parentModule="PUBLIC VIEW">
-            <li class="yuiampmenuitem" style="float:left;">
+            <li class="yuiampmenuitem">
                 <a class="yuiampmenuitemlabel" href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onclick="return canExit();">
                 	<digi:trn>Public Documents</digi:trn>
                 </a>
@@ -110,13 +144,13 @@ ${fn:replace(message,quote,escapedQuote)}
             </module:display>
             
             <module:display name="Public Reports" parentModule="PUBLIC VIEW">
-			<li class="yuiampmenuitem" style="float:left;">
-				<span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
+			<li class="yuiampmenuitem">
+				<span class="yuiampmenuitemlabel" href="#">
                     <digi:trn>Reports</digi:trn>
                 </span>
             
-                	<a style="text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                		<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                	<a>
+                		<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png"/><br />
 					</a>
 	                <div id="reports" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
 	                	<div class="bd bd_drop">
@@ -142,8 +176,8 @@ ${fn:replace(message,quote,escapedQuote)}
            	
            	<module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
 	           	<module:display name="Public Calendar" parentModule="PUBLIC VIEW">
-                <li class="yuiampmenuitem" style="float:left;">
-                	<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none&filterInUse=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
+                <li class="yuiampmenuitem">
+                	<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none&filterInUse=false" onclick="return canExit()">
                        <digi:trn>Calendar</digi:trn>
                     </a>
                 </li>
@@ -151,12 +185,12 @@ ${fn:replace(message,quote,escapedQuote)}
             </module:display>
             
 	           	<module:display name="Public Dashboards" parentModule="PUBLIC VIEW">
-	                <li class="yuiampmenuitem" style="float:left;">
-	                	<span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
+	                <li class="yuiampmenuitem">
+	                	<span class="yuiampmenuitemlabel" href="#">
 	                		<digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
 	                    </span>
-	                    <a  style="text-decoration:none; padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-	                    	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br/>
+	                    <a>
+	                    	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br/>
 	                    </a>
 	                  	<div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
 	                    	<div class="bd bd_drop">                    
@@ -207,12 +241,12 @@ ${fn:replace(message,quote,escapedQuote)}
 			
            	<module:display name="Public Language Switch" parentModule="PUBLIC VIEW">
            	<feature:display name="Language Option" module="Tools">
-		              <li class="yuiampmenuitem" style="float:left;margin:0px 0px 0px 0px;_margin:0px;">
-		                <span class="yuiampmenuitemlabel" href="#" style="float:left;position:relative;top:0px;_top:1px;border-right:0px none;">
+		              <li class="yuiampmenuitem">
+		                <span class="yuiampmenuitemlabel" href="#">
 		                	<digi:trn>Language</digi:trn>
 		                </span>
-		                 <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-		                   <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+		                 <a>
+		                   <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
 		                </a>               
 		                <div id="language" class="yuiampmenu">
 		                    <div class="bd bd_drop">                    
@@ -256,11 +290,11 @@ function adminHelp(){
                         </li>
                     <module:display name="Tools" parentModule="PROJECT MANAGEMENT">
                           <li class="yuiampmenuitem">
-                              <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                              <span class="yuiampmenuitemlabel" href="#">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
-                              <a   style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a>
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">                    
@@ -291,11 +325,11 @@ function adminHelp(){
                           </module:display>
                           <module:display name="HELP">
                           <li class="yuiampmenuitem">
-                              <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                              <span class="yuiampmenuitemlabel" href="#">
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
-                              <a   style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a>
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop" style="border: 1px solid transparent; width:100px;">                    
@@ -404,12 +438,12 @@ function adminHelp(){
                   <div class="bd bd_drop">   
                       <ul class="first-of-type">
                       	<module:display name="My Desktop" parentModule="PROJECT MANAGEMENT">
-                    	 <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()" >
+                    	 <li class="yuiampmenuitem" >
+                              <a class="yuiampmenuitemlabel" onclick="return canExit()" >
                                  <digi:trn>Desktop</digi:trn>
                               </a>
-                              <a  style="text-decoration:none;padding: 4px 8px 5px 0px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a>
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png"/><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">
@@ -431,16 +465,6 @@ function adminHelp(){
                                                     	<digi:trn key="btn:addActivity">Add Activity</digi:trn>
                                                     </a>
 												</li>
-												<!-- OLD Add activity
-		                                        <li class="yuiampmenuitem_drop">
-                                                    <c:set var="trnClickToAddNewActivit">
-                                                    <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
-                                                    </c:set>
-                                                    <a class="yuiampmenuitemlabel" href="javascript:addActivity()" onclick="return canExit()" title="${trnClickToAddNewActivit}">
-                                                    	<digi:trn key="btn:addActivity">Add Activity</digi:trn>
-                                                    </a>
-												</li>
-												 -->
 												</field:display>
                                             </c:if>
                                         <field:display name="Add SSC Button" feature="Edit Activity">
@@ -521,12 +545,12 @@ function adminHelp(){
                           </li>
                           </module:display>
 						<module:display name="REPORTING">
-                          <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px"  onclick="return canExit()">
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel" onclick="return canExit()">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
-                              <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a>
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">                    
@@ -600,18 +624,18 @@ function adminHelp(){
                           </li>
                           </module:display>
 						  <module:display name="Content Repository" parentModule="Resources">
-                          	<li class="yuiampmenuitem" style="float:left;">
-                                <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                          	<li class="yuiampmenuitem">
+                                <a class="yuiampmenuitemlabel" >
                                  <digi:trn key="aim:resources">Resources</digi:trn>
                               </a>
-                              <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a>
 	                          	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
 	                          </a>
                              <div id="Resources" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
                            	 	<div class="bd bd_drop">
                                 	<ul class="first-of-type">
                                 		<li class="yuiampmenuitem_drop">
-                              				<a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="cursor:pointer;"  onclick="return canExit()">
+                              				<a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" onclick="return canExit()">
                                  				<digi:trn>View Resources</digi:trn>
                               				</a>
                               			</li>
@@ -652,12 +676,12 @@ function adminHelp(){
 							  		<c:when test="${not empty linkDaily}">${linkDaily}</c:when>
 							  	</c:choose>
 							  </c:set>
-							  <li class="yuiampmenuitem" style="float:left;">
-	                              <a class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+							  <li class="yuiampmenuitem">
+	                              <a class="yuiampmenuitemlabel">
 	                                  <digi:trn>Calendar</digi:trn>
 	                              </a>
-	                              <a  style="text-decoration:none;padding: 4px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-	                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+	                              <a>
+	                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png"/><br />
 	                              </a>
 						  		 <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
                             	   <div class="bd bd_drop">
@@ -703,12 +727,12 @@ function adminHelp(){
 						  							  	
 						%>
 						<%if (showDashboard) {%>
-                          <li class="yuiampmenuitem" style="float:left;">
-                              <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
+                          <li class="yuiampmenuitem">
+                              <span class="yuiampmenuitemlabel" href="#">
                                   <digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
                               </span>
-                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a>
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
                                   <div class="bd bd_drop">                    
@@ -716,14 +740,14 @@ function adminHelp(){
                                        <feature:display name="NPD Dashboard" module="National Planning Dashboard">
                                         <li class="yuiampmenuitem_drop">
                                             <a class="yuiampmenuitemlabel" href="/nationalPlaningDashboard.do"  onclick="return canExit()">
-                                            <digi:trn key="aim:npd">NPD</digi:trn>
+                                            	<digi:trn key="aim:npd">NPD</digi:trn>
                                             </a>
                                         </li>
                                        </feature:display>
                                         <module:display name="GIS DASHBOARD">
                                         <li class="yuiampmenuitem_drop">
                                             <a class="yuiampmenuitemlabel" href="javascript:openGIS()"  onclick="return canExit()">
-                                            <digi:trn key="aim:gis">GIS</digi:trn>
+                                            	<digi:trn key="aim:gis">GIS</digi:trn>
                                             </a>
                                         </li>
                                         </module:display>
@@ -766,12 +790,12 @@ function adminHelp(){
                               <feature:display name="Message tab" module="Messages">1</feature:display>
                           </c:set>
 						  <module:display name="Messages" parentModule="Messaging System">
-                          <li class="yuiampmenuitem" style="float:left;">
-                          		<a class="yuiampmenuitemlabel"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                          <li class="yuiampmenuitem">
+                          		<a class="yuiampmenuitemlabel">
                           			<digi:trn key="fm:messages">Messages</digi:trn>
                               	</a> 
-                          		<a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                          		<a>
+                                 	<img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               	</a>
                              <div id="messages" class="yuiampmenu" style="opacity:0.9;">
 	                             <div class="bd bd_drop">                    
@@ -807,12 +831,12 @@ function adminHelp(){
 	                      </li>
                           </module:display>
                           <module:display name="Tools" parentModule="PROJECT MANAGEMENT">
-                          <li class="yuiampmenuitem" style="float:left;">
-                              <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
+                          <li class="yuiampmenuitem">
+                              <span class="yuiampmenuitemlabel" href="#">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </span>
-                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a>
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;z-index:9999;">
                                   <div class="bd bd_drop" >                    
@@ -878,12 +902,12 @@ function adminHelp(){
                           </li>
                           </module:display>
                           <module:display name="HELP">
-                          <li class="yuiampmenuitem" style="float:left;">
-                              <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;">
+                          <li class="yuiampmenuitem">
+                              <span class="yuiampmenuitemlabel" href="#">
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </span>
-                              <a  style="text-decoration:none;padding: 5px 8px 5px 0;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
-                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              <a >
+                                 <img src="/TEMPLATE/ampTemplate/css/menubaritem_submenuindicator_disabled.png" /><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">                    

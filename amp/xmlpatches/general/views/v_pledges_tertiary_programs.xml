@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-14167</jira>
+	<jira>AMP-17153</jira>
 	<keyword>Views</keyword>
-	<author>Alexandru Artimon</author>
+	<author>Dolghier Constantin</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -19,8 +19,14 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_primaryprogram AS 
-			    	SELECT a.amp_activity_id, t.name, ap.amp_program_id, ap.program_percentage FROM ((amp_activity a JOIN amp_activity_program ap ON (((a.amp_activity_id = ap.amp_activity_id) AND (ap.program_setting = 2)))) JOIN amp_theme t ON ((t.amp_theme_id = ap.amp_program_id))) ORDER BY a.amp_activity_id, t.name;;;
+			    	CREATE OR REPLACE VIEW v_pledges_tertiary_programs AS 
+			    		SELECT p.id AS pledge_id, t.name, fp.amp_program_id, fp.program_percentage 
+			    		FROM 
+			    			amp_funding_pledges p JOIN amp_funding_pledges_program fp ON ((p.id = fp.pledge_id)) 
+			    			JOIN amp_theme t ON (t.amp_theme_id = fp.amp_program_id),
+			    			amp_program_settings f
+			    		WHERE (f.name='Tertiary Program') AND (f.amp_program_settings_id = getprogramsettingid(t.amp_theme_id))
+			    		ORDER BY p.id, t.name;;;
         		</lang>
 		</script>
 	</apply>

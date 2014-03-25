@@ -302,6 +302,15 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_pledges_programs").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 
+				addViewDef(this, new I18nViewDescription("v_pledges_secondary_programs").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_pledges_tertiary_programs").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_pledges_npd_objectives").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+
 				addViewDef(this, new I18nViewDescription("v_pledges_projects").
 						addColumnDef(new I18nViewColumnDescription("title", "amp_activity_id", AmpActivityVersion.class, "name")));
 				

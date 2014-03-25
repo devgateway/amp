@@ -1056,6 +1056,9 @@ deleted 6 fields, do not reinsert
 <field:display feature="Pledges Columns" name="Pledges Zones"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Districts"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Programs"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Secondary Programs"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Tertiary Programs"></field:display>
+<field:display feature="Pledges Columns" name="Pledges National Plan Objectives"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Secondary Sectors"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Tertiary Sectors"></field:display>

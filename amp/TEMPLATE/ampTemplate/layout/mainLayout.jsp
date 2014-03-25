@@ -5,12 +5,13 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<!DOCTYPE html>
 <html>
+	<head>
 	<%-- request.setAttribute("compatibility_shim", String) - use it to overwrite specific pages' X-UA-Compatible meta tags --%>
 	<c:choose>
     	<c:when test="${empty compatibility_shim}">
-			<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=8">
+			<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=edge">
 		</c:when>
     	<c:otherwise>
         	<meta http-equiv="X-UA-Compatible" content="<c:out value="${compatibility_shim}" />">
@@ -36,8 +37,6 @@
     }  	
 	-->  
     </script>
-
-<head>
 	<%
 		String title=(String)((org.apache.struts.tiles.ComponentContext) request.getAttribute("org.apache.struts.taglib.tiles.CompContext")).getAttribute("title");
 		String key=(title.replaceAll(" ",""));

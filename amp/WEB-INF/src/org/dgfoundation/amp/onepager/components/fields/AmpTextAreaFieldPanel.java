@@ -68,21 +68,16 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
         closeLink = new WebMarkupContainer("closeLink");
 		closeLink.setOutputMarkupId(true);
 		closeLink.add(new AttributeModifier("onclick",
-                        "window.setTimeout(function () {\n" +
-                        "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
-                        "$('#" + preview.getMarkupId() + "').html($('#" + textAreaContainer.getMarkupId() + "').val()); \n" +
-                        "$('#" + preview.getMarkupId() + "').show(); \n" +
-                        "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} \n" +
-                        "$('#" + textAreaContainer.getMarkupId() + "').show();\n" +
-
-                        // we are already focusing the element
-                        "$('#" + textAreaContainer.getMarkupId() + "').focus();\n" +
-
-                        "$('#" + textAreaContainer.getMarkupId() + "').blur();" +
-                        "$('#" + textAreaContainer.getMarkupId() + "').hide();  \n " +
-                        "$('#" + closeLink.getMarkupId() + "').hide();\n " +
-                        " }, 50); \n" +
-                        " return false;"));
+                "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
+                        "$('#" + preview.getMarkupId() + "').html($('#" + textAreaContainer.getMarkupId() + "').val()); " +
+                        "$('#" + preview.getMarkupId() + "').show(); " +
+                        "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} " +
+                        "$('#" + textAreaContainer.getMarkupId() + "').show();" +
+                        "$('#" + textAreaContainer.getMarkupId() + "').focus();" +
+                        "$('#" + textAreaContainer.getMarkupId() + "').blur();" + // take care when removing this. See reopen message + attached video to AMP-16896 
+                        "$('#" + textAreaContainer.getMarkupId() + "').hide(); " +
+                        "$('#" + closeLink.getMarkupId() + "').hide(); " +
+                        "return false;"));
 		add(closeLink);
 		
 		preview.setVisible(false);

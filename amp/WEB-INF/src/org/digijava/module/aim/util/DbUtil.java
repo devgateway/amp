@@ -6583,7 +6583,7 @@ public class DbUtil {
 			session = PersistenceManager.getRequestDBSession();
 			String qry = "select indc from "
 					+ AmpGPISurveyIndicator.class.getName()
-					+ " indc order by indicator_code asc";
+					+ " indc where total_question > 0 order by indicator_code asc";
 			responses = session.createQuery(qry).list();
 
 		} catch (Exception ex) {

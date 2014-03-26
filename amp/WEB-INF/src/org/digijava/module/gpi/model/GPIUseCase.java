@@ -203,7 +203,7 @@ public class GPIUseCase {
 	 */
 	public Collection<AmpGPISurveyIndicator> setupAvailableGPIReports() {
 		Collection<AmpGPISurveyIndicator> list = new ArrayList<AmpGPISurveyIndicator>();
-		list = DbUtil.getAllGPISurveyIndicators();
+		list = DbUtil.getAllGPISurveyIndicators(false);
 		Iterator<AmpGPISurveyIndicator> iter = list.iterator();
 		while (iter.hasNext()) {
 			AmpGPISurveyIndicator aux = iter.next();

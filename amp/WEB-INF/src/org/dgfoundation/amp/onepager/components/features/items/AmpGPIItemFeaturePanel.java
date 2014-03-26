@@ -45,7 +45,7 @@ public class AmpGPIItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey> {
 
 			@Override
 			public List<AmpGPISurveyIndicator> getObject() {
-				ArrayList<AmpGPISurveyIndicator> list = new ArrayList<AmpGPISurveyIndicator>(DbUtil.getAllGPISurveyIndicators());
+				ArrayList<AmpGPISurveyIndicator> list = new ArrayList<AmpGPISurveyIndicator>(DbUtil.getAllGPISurveyIndicators(true));
 				Collections.sort(list, new AmpGPISurveyIndicator.GPISurveyIndicatorComparator());
 				return list;
 			}

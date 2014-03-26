@@ -6575,15 +6575,17 @@ public class DbUtil {
 		return indc;
 	}
 	
-	public static Collection<AmpGPISurveyIndicator> getAllGPISurveyIndicators() {
+	public static Collection<AmpGPISurveyIndicator> getAllGPISurveyIndicators(boolean onlyWithQuestions) {
 		Collection responses = new ArrayList();
 		Session session = null;
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String qry = "select indc from "
-					+ AmpGPISurveyIndicator.class.getName()
-					+ " indc where total_question > 0 order by indicator_code asc";
+			String qry = "select indc from " + AmpGPISurveyIndicator.class.getName() + " indc ";
+			if(onlyWithQuestions) {
+				qry += " where total_question > 0 ";
+			}
+			qry += " order by indicator_code asc";
 			responses = session.createQuery(qry).list();
 
 		} catch (Exception ex) {

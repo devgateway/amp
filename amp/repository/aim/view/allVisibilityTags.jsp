@@ -108,6 +108,10 @@
 <field:display  name="Show image" feature="Map Options"></field:display>
 <module:display name="Organization Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <feature:display name="Organization Manager Type" module="Organization Manager" ></feature:display>
+
+<module:display name="Workspace Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<feature:display name="FM Template" module="Workspace Manager" ></feature:display>
+<feature:display name="Workspace Prefix" module="Workspace Manager" ></feature:display>
  
 <module:display name="PUBLIC VIEW"></module:display> 
 <module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>

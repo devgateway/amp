@@ -112,7 +112,8 @@
 	<div class="admin_landing_page_box_cont">
 	<div class="admin_landing_page_box_title"><digi:trn>User management</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
-	  <tr>
+	  <module:display name="Workspace Manager" parentModule="ADMINISTRATIVE SECTION">
+  	  <tr>
 	    <td>
 	    	<img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif">
 	   	</td>
@@ -125,6 +126,7 @@
 	       </digi:link>
 	    </td>
 	  </tr>
+	  </module:display>
       <module:display name="User Manager" parentModule="ADMINISTRATIVE SECTION">
       <tr>
 	  	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>

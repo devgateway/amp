@@ -8,6 +8,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <%	
 	ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, false);
@@ -703,7 +705,7 @@ function cancel()
 														</td>
 														</c:if>
 													</tr>
-
+													<feature:display name="FM Template" module="Workspace Manager" >   
                                                     <tr>
                                                         <td width="150" align="right" bgcolor="#f4f4f2">
                                                             <digi:trn>FM Template</digi:trn>
@@ -738,7 +740,8 @@ function cancel()
                                                             </logic:equal>
                                                         </td>
                                                     </tr>
-
+                                                    </feature:display>
+												<feature:display name="Workspace Prefix" module="Workspace Manager" >   
                                                     <tr>
                                                         <td width="150" align="right" bgcolor="#FFFFFF">
                                                             <digi:trn key="aim:workspacePrefix">Workspace Prefix</digi:trn>
@@ -761,6 +764,7 @@ function cancel()
                                                             </logic:equal>
                                                         </td>
                                                     </tr>
+                                                    </feature:display>
 
                                                     <tr>
 														<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">

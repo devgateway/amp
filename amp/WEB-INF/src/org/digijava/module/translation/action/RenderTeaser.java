@@ -56,10 +56,7 @@ public class RenderTeaser
             generateRoots = Boolean.valueOf(rootPathesParam).booleanValue();
         }
 
-        Collection<AmpDashboard> dashboards 	= org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
-       
-		request.getSession().setAttribute(Constants.MENU_DASHBOARDS, DashboardUtil.generateIdToNameForDashboards(dashboards));
-        
+      
 		TranslationManager.generateLanguages(generateRoots, request, formBean);
 
         return null;

@@ -4,6 +4,7 @@
 package org.digijava.kernel.startup;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,10 +15,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-import org.hibernate.SessionFactory;
 import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
 
@@ -60,8 +59,13 @@ public class HibernateSessionRequestFilter implements Filter {
             // Commit and cleanup
             log.debug("Committing the database transaction");
             Transaction tx	= PersistenceManager.getCurrentSession().getTransaction();
-            	if (tx.isActive())
-            		tx.commit();
+			if (tx.isActive())
+				try {
+					tx.commit();
+				} catch (Exception e) {
+					log.error(e);
+					e.printStackTrace();
+				}
             
             PersistenceManager.removeClosedSessionsFromMap();
             //PersistenceManager.checkClosedOrLongSessionsFromTraceMap();

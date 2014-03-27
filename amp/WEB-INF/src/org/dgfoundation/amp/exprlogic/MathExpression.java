@@ -6,6 +6,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 /**
  * @author Sebastian Dimunzio Apr 15, 2009
  */
@@ -194,22 +197,20 @@ public class MathExpression {
 	}
 
 	public static BigDecimal getDayDifference(BigDecimal date1, BigDecimal date2) {
-		int count = 0;
-		GregorianCalendar fromCalendar = new GregorianCalendar(), toCalendar = new GregorianCalendar();
-		fromCalendar.setTimeInMillis(date2.longValue());
-		toCalendar.setTimeInMillis(date1.longValue());
-
-		boolean negativeResult = false;
-		if (fromCalendar.after(toCalendar)) {
-			negativeResult = true;
-			fromCalendar.setTimeInMillis(date1.longValue());
-			toCalendar.setTimeInMillis(date2.longValue());
+		/*
+		 * long fromMillis = date2.longValue(); long toMillis = date1.longValue(); int negative = 1; if (fromMillis > toMillis) { negative = -1; } long diffMillis = toMillis - fromMillis; return new
+		 * BigDecimal(negative * (diffMillis / 1000 / 60 / 60 / 24));
+		 */
+		DateTime start = new DateTime(date2.longValue());
+		DateTime end = new DateTime(date1.longValue());
+		Days d = null;
+		if (start.isBefore(end) || start.isEqual(end)) {
+			d = Days.daysBetween(start, end);
+		} else {
+			d = Days.daysBetween(end, start);
 		}
-		for (fromCalendar.add(Calendar.DAY_OF_MONTH, 1); fromCalendar.compareTo(toCalendar) <= 0; fromCalendar.add(Calendar.DAY_OF_MONTH, 1)) {
-			count++;
-		}
-
-		return new BigDecimal(count * ((negativeResult) ? -1 : 1));
+		int days = d.getDays();
+		return new BigDecimal(days);
 	}
 	
 	public boolean constainsVariable(String var) {

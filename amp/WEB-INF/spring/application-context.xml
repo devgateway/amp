@@ -73,6 +73,9 @@
 
 	<!-- move this to the reports module -->
 	<http pattern="/reportsPublicView.do**" security="none" />
+	<http pattern="/aim/default/reportsPublicView.do**" security="none" />
+	
+	
 	
 	<http pattern="/gis/showPublicGis.do**" security="none" />
 	<http pattern="/gis/getFoundingDetails.do**" security="none" />

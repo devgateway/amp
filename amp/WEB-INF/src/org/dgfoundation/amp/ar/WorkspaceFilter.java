@@ -172,7 +172,7 @@ public class WorkspaceFilter
 		//return "2498, 1301";
 		//return /*"33"; */"36";
 		//return "2,14,18,20,21";
-		//return "13770, 13810"; // masha
+		//return "3642"; // masha
 		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id >= 37";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Activity with Zones')";
 		return TEAM_FILTER;

@@ -297,7 +297,7 @@ public class ActivityManager extends Action {
 		String advancedAdminDelete = request.getParameter("advancedAdminDelete");
 		List<Long> topicsIds=getActsIds(tIds.trim());
 		for (Long ampActId : topicsIds) {
-			AmpActivityVersion activity = ActivityUtil.loadActivity(ampActId);
+			AmpActivityVersion activity = ActivityUtil.loadAmpActivity(ampActId);
 			AuditLoggerUtil.logObject(session, request, activity, "delete");
 			//ActivityUtil.deleteActivity(ampActId);
 			if(advancedAdminDelete!=null && "true".compareTo(advancedAdminDelete)==0 )

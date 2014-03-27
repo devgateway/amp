@@ -67,6 +67,8 @@ import org.digijava.module.esrigis.helpers.SimpleLocation;
 import org.digijava.module.esrigis.helpers.Structure;
 import org.digijava.module.esrigis.helpers.XlsHelper;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.visualization.dbentity.AmpDashboard;
+import org.digijava.module.visualization.util.Constants;
 import org.digijava.module.visualization.util.DbUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -183,6 +185,21 @@ public class DataDispatcher extends MultiAction {
         //withGeoIdMapping.add(mapregions);
         withGeoIdMapping.add(indicatorValueMap);
         withGeoIdMapping.add(allRegs);
+                
+        //Select regional dashboard if exists or another if there is no other option.
+        AmpDashboard dashboard = null;
+        List<AmpDashboard> allDashboards = DbUtil.getAllDashboards();
+        Iterator<AmpDashboard> iDashboards = allDashboards.iterator();
+        while(iDashboards.hasNext()) {
+        	dashboard = iDashboards.next();
+        	if(dashboard.getBaseType() == Constants.DashboardType.REGION) {
+        		break;
+        	}
+        }        
+        //Added another element to the array that holds extra info (ie: dashboard id).
+        List extraInfo = new ArrayList();
+        extraInfo.add(dashboard);
+        withGeoIdMapping.add(extraInfo);
 
         jsonArray.addAll(withGeoIdMapping);
         PrintWriter pw = response.getWriter();

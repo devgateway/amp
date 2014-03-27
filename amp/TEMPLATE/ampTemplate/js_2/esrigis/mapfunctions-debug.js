@@ -378,7 +378,7 @@ function createPeaceBuildingFeatureLayer() {
 				new dojo.Color([255,255,255,0]), 1), new dojo.Color([125,125,125,0]));
 	
 	
-			
+	var dashboardId = 0;		
 			var xhrArgs = {
 	      url: "/esrigis/datadispatcher.do?getPeaceBuildingValues=true&level=Region",
 	      //postData: "&geoIds=" + geoIdsDelimetedStr,
@@ -387,6 +387,8 @@ function createPeaceBuildingFeatureLayer() {
 	      	
 	      	var jsonDataFunding = jsonData[0];
 	      	var jsonDataMapping = jsonData[1];
+	      	var jsonDataExtraInfo = jsonData[2];
+	      	dashboardId = jsonDataExtraInfo[0].id;
 	      	
 	      	
 	      	var locationMapping = [];
@@ -590,7 +592,7 @@ function createPeaceBuildingFeatureLayer() {
 								
 									
 									
-									infoTemplateContent +=  "</td></tr><tr><td colspan='2'><a href='/visualization/launchDashboard.do?fromMap=true&reset=true&id=4&filter.regionId=${DB_ID}' target='_new'>Dashboard</a>"
+									infoTemplateContent +=  "</td></tr><tr><td colspan='2'><a href='/visualization/launchDashboard.do?fromMap=true&reset=true&id=" + dashboardId + "&filter.regionId=${DB_ID}' target='_new'>Dashboard</a>"
 									+ "</td></tr></table>";
 								
 								feature.setInfoTemplate(new esri.InfoTemplate(translate('Funding'),infoTemplateContent));

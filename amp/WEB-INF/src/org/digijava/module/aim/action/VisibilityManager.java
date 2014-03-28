@@ -262,7 +262,8 @@ public class VisibilityManager extends MultiAction {
 		AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),hbsession);
 		ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 		ampContext=this.getServlet().getServletContext();
-		ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+		FeaturesUtil.setAmpTreeVisibility(ampContext, request.getSession(), ampTreeVisibility);
+
 
 		//refresh the collection from the view...
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
@@ -325,7 +326,7 @@ public class VisibilityManager extends MultiAction {
 		ampTreeVisibility.buildAmpTreeVisibility(templateVisibility);
 		String existSubmodules;
 		//ampContext=this.getServlet().getServletContext();
-		//ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+
 		if( ampTreeVisibilityAux.buildAmpTreeVisibilityMultiLevel(templateVisibility) )
 			existSubmodules="true";
 		else existSubmodules="false";
@@ -394,7 +395,7 @@ public class VisibilityManager extends MultiAction {
 		if(request.getParameter("fieldId")!=null) FeaturesUtil.deleteFieldVisibility(new Long(Long.parseLong(request.getParameter("fieldId"))),hbsession);//delete field
 		if(request.getParameter("featureId")!=null) FeaturesUtil.deleteFeatureVisibility(new Long(Long.parseLong(request.getParameter("featureId"))),hbsession);//delete feature
 		if(request.getParameter("moduleId")!=null) FeaturesUtil.deleteModuleVisibility(new Long(Long.parseLong(request.getParameter("moduleId"))),hbsession);//delete module
-		this.updateAmpContext(new AmpTreeVisibility(), hbsession);
+		this.updateAmpContext(new AmpTreeVisibility(), hbsession,request.getSession());
 		return modeViewFields(mapping, form, request, response);
 	}
 
@@ -444,7 +445,7 @@ public class VisibilityManager extends MultiAction {
 			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 
 			ampContext=this.getServlet().getServletContext();
-			ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+			FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
 		}
 
 		return modeEditTemplate(mapping,form,request,response);
@@ -562,13 +563,13 @@ public class VisibilityManager extends MultiAction {
 				return 1;
 	}
 	
-	private void updateAmpContext(AmpTreeVisibility ampTreeVisibility, Session hbsession) throws HibernateException{
+	private void updateAmpContext(AmpTreeVisibility ampTreeVisibility, Session hbsession,HttpSession session) throws HibernateException{
 		
 		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),hbsession);
 		ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 
 		ampContext=this.getServlet().getServletContext();
-		ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+		FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
 		
 	}
 

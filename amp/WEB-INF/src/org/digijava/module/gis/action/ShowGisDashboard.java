@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -53,7 +54,8 @@ public class ShowGisDashboard extends Action {
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
-        GisDashboardForm gisForm = (GisDashboardForm) form;
+        HttpSession session=request.getSession();
+    	GisDashboardForm gisForm = (GisDashboardForm) form;
 
         
         String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
@@ -131,7 +133,7 @@ public class ShowGisDashboard extends Action {
         gisForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
         gisForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
  	 	
- 	 	if (FeaturesUtil.isVisibleField("Sector", ampContext)){                
+ 	 	if (FeaturesUtil.isVisibleField("Sector", ampContext,session)){                
 	 	 	HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
 	 	 	rootAmpSectors.setLabel("Primary Sectors");
 	 	 	rootAmpSectors.setUniqueId(0 + "");
@@ -141,7 +143,7 @@ public class ShowGisDashboard extends Action {
 	 	 	HierarchyListableUtil.changeTranslateable(sectorsElement.getRootHierarchyListable(), false);
  	 	}
  	 	
- 	 	if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)){
+ 	 	if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext,session)){
  	 		HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
  	 		rootSecondaryAmpSectors.setLabel("Secondary Sectors");
  	 		rootSecondaryAmpSectors.setUniqueId("0");
@@ -151,7 +153,7 @@ public class ShowGisDashboard extends Action {
  	 		HierarchyListableUtil.changeTranslateable(secondarySectorsElement.getRootHierarchyListable(), false);
  	 	}
 
-        if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext)){
+        if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext,session)){
  	 		HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
  	 		rootTertiaryAmpSectors.setLabel("Tertiary Sector");
  	 		rootTertiaryAmpSectors.setUniqueId("0");

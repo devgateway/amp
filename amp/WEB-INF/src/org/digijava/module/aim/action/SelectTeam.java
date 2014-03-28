@@ -185,7 +185,7 @@ public class SelectTeam extends Action {
             }
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-            request.getServletContext().setAttribute("ampTreeVisibility", ampTreeVisibility);
+            FeaturesUtil.setAmpTreeVisibility(request.getServletContext(), session,ampTreeVisibility);
 
         } catch (Exception e) {
             e.printStackTrace(System.out);

@@ -1382,7 +1382,7 @@ public class DeprecatedAdvancedReport extends Action {
 			ArrayList ampColumnsVisibles=new ArrayList();
 			ServletContext ampContext;
 			ampContext=this.getServlet().getServletContext();
-			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+			
 			Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
 			Collection allAmpColumns=formColumns;
 			TreeSet ampThemes=new TreeSet();
@@ -1429,7 +1429,7 @@ public class DeprecatedAdvancedReport extends Action {
 			ArrayList ampColumnsVisibles=new ArrayList();
 			ServletContext ampContext;
 			ampContext=this.getServlet().getServletContext();
-			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+			
 			Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
 			Collection allAmpColumns=formColumns;
 			TreeSet ampThemes=new TreeSet();

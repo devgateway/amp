@@ -1151,7 +1151,7 @@ public class GetFoundingDetails extends Action {
                             equalsIgnoreCase("pledgesData")) ? DbUtil.SECTORS_FOR_PLEDGES : DbUtil.SECTORS_FOR_ACTIVITIES;
 
                     ServletContext ampContext = getServlet().getServletContext();
-                    AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+                    AmpTreeVisibility ampTreeVisibility =FeaturesUtil.getAmpTreeVisibility(ampContext, request.getSession()); 
 
                     boolean showSecondaryScheme = FeaturesUtil.getFieldVisibility("Secondary Sector").isFieldActive(ampTreeVisibility);
 

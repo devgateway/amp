@@ -42,6 +42,8 @@ import org.springframework.beans.BeanWrapperImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -76,7 +78,7 @@ public class ReportsFilterPicker extends Action {
 	
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		//filterForm.setAmpReportId(ReportContextData.getFromRequest().getAmp);
-
+		HttpSession httpSession =request.getSession();
         boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
         boolean showWorkspaceFilter = true;
         TeamMember teamMember = (TeamMember) request.getSession().getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
@@ -114,7 +116,7 @@ public class ReportsFilterPicker extends Action {
 			filterForm.setSourceIsReportWizard(true);
 			if ( request.getParameter("doreset") != null ) {
 				FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);
-				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS,httpSession);
 				return mapping.findForward("forward");
 			}
 		}
@@ -150,7 +152,7 @@ public class ReportsFilterPicker extends Action {
 		if (request.getParameter("init") != null)
 		{
 			FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);
-			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
+			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS,httpSession);
 			return null;
 		}
 
@@ -174,7 +176,7 @@ public class ReportsFilterPicker extends Action {
 				if (!applyFormatValue.equals("Apply Format"))
 					logger.warn("unknown applyformat setting, assuming it is 'Apply Format': " + applyFormatValue);
 				// apply tab/report settings
-				AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
+				AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS,httpSession);
 				return decideNextForward(mapping, filterForm, request, arf);
 			}				
 		}
@@ -189,14 +191,14 @@ public class ReportsFilterPicker extends Action {
 		if (request.getParameter("apply") != null)
 		{
 			// apply Filters form
-			AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+			AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS,httpSession);
 			return decideNextForward(mapping, filterForm, request, arf);
 		}
 
 		FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);
 		try
 		{
-			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL);
+			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL,httpSession);
 		}
 		catch(Exception e)
 		{
@@ -218,8 +220,8 @@ public class ReportsFilterPicker extends Action {
      * @param htmlDivId
      */
     private static void addDateFilter(ReportsFilterPickerForm filterForm, String fmField, String baseFormProperty, String label,
-    									DynamicDateFilter dynamicDateFilterObj, String htmlDivId) {
-    		if (fmField == null || FeaturesUtil.isVisibleField(fmField) ) {
+    									DynamicDateFilter dynamicDateFilterObj, String htmlDivId,HttpSession session) {
+    		if (fmField == null || FeaturesUtil.isVisibleField(fmField,session) ) {
 			
 				Collection<DateListableImplementation> children		= 
 						new ArrayList<DateListableImplementation>();
@@ -281,14 +283,14 @@ public class ReportsFilterPicker extends Action {
 	 * @param roleCode - the role code, from Constants.ROLE_CODE_XXXXX_AGENCY
 	 * @param ampContext
 	 */
-	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode)
+	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode,HttpSession session)
 	{
 		if (!Character.isUpperCase(featureName.charAt(0)))
 			throw new RuntimeException("invalid feature name: must be a single term beginning with an upper case" + featureName);
 		if (featureName.contains("Agenc"))
 			throw new RuntimeException("invalid feature name: should not contain the word 'Agency' or derivated' " + featureName);
 
-		addAgencyFilter(filterForm, featureName + " Agency", roleCode, featureName + " Agencies", "filter_" + featureName.toLowerCase() + "_agencies_div", "selected" + featureName + "Agency");
+		addAgencyFilter(filterForm, featureName + " Agency", roleCode, featureName + " Agencies", "filter_" + featureName.toLowerCase() + "_agencies_div", "selected" + featureName + "Agency",session);
 	}
 
 	/**
@@ -301,9 +303,9 @@ public class ReportsFilterPicker extends Action {
 	 * @param selectId - the id of the generated select
 	 * @param ampContext
 	 */
-	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId)
+	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId,HttpSession session)
 	{		
-	 	if (FeaturesUtil.isVisibleFeature(featureName) ) {
+	 	if (FeaturesUtil.isVisibleFeature(featureName,session) ) {
  	 		Collection<AmpOrganisation> relevantAgencies = (ReportsUtil.getAllOrgByRoleOfPortfolio(roleCode));
  	 		HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
  	 		HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation();
@@ -325,9 +327,9 @@ public class ReportsFilterPicker extends Action {
 	 * @param selectId
 	 * @param ampContext
 	 */
-	private static void addSectorElement(ReportsFilterPickerForm filterForm, String fieldName, String sectorName, String rootLabel, String filterDiv, String selectId)
+	private static void addSectorElement(ReportsFilterPickerForm filterForm, String fieldName, String sectorName, String rootLabel, String filterDiv, String selectId,HttpSession session)
 	{
-	 	if (FeaturesUtil.isVisibleField(fieldName)){
+	 	if (FeaturesUtil.isVisibleField(fieldName,session)){
 	 		List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(sectorName);
 	 		HierarchyListableUtil.changeTranslateable(ampSectors, false);
 	 		
@@ -353,10 +355,10 @@ public class ReportsFilterPicker extends Action {
 	 * @param ampContext
 	 * @throws Exception
 	 */
-	private static void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId)
+	private static void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId,HttpSession session)
 	{
 		boolean enabled = (fieldName == null) ||
-				((fieldName != null) && (FeaturesUtil.isVisibleField(fieldName)));
+				((fieldName != null) && (FeaturesUtil.isVisibleField(fieldName,session)));
 		
 		if (enabled) { 
 			Collection<AmpCategoryValue> modeOfPaymentValues	=
@@ -502,7 +504,7 @@ public class ReportsFilterPicker extends Action {
 	 * @param filterForm the form to populate
 	 * @throws Exception
 	 */
-	public static void modeRefreshDropdowns(ReportsFilterPickerForm filterForm, int subsection) throws DgException {
+	public static void modeRefreshDropdowns(ReportsFilterPickerForm filterForm, int subsection,HttpSession session) throws DgException {
 		 	 	
 		if (((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0))
 		{
@@ -529,14 +531,14 @@ public class ReportsFilterPicker extends Action {
 
  	 	StopWatch.next("Filters", true, "before sectors");
 // 		private void addSectorElement(ReportsFilterPickerForm filterForm, String featureName, String sectorName, String rootLabel, String filterDiv, String selectId, ServletContext ampContext)
- 	 	addSectorElement(filterForm, "Sector", AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME, "Primary Sectors", "filter_sectors_div", "selectedSectors");
- 	 	addSectorElement(filterForm, "Secondary Sector", AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, "Secondary Sectors", "filter_secondary_sectors_div", "selectedSecondarySectors");
- 	 	addSectorElement(filterForm, "Tertiary Sector",  AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,  "Tertiary Sectors",  "filter_tertiary_sectors_div",  "selectedTertiarySectors");
- 	 	addSectorElement(filterForm, "Sector Tag",      AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,  "Tag Sector",              "filter_tag_sectors_div",       "selectedTagSectors");
+ 	 	addSectorElement(filterForm, "Sector", AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME, "Primary Sectors", "filter_sectors_div", "selectedSectors",session);
+ 	 	addSectorElement(filterForm, "Secondary Sector", AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, "Secondary Sectors", "filter_secondary_sectors_div", "selectedSecondarySectors",session);
+ 	 	addSectorElement(filterForm, "Tertiary Sector",  AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,  "Tertiary Sectors",  "filter_tertiary_sectors_div",  "selectedTertiarySectors",session);
+ 	 	addSectorElement(filterForm, "Sector Tag",      AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,  "Tag Sector",              "filter_tag_sectors_div",       "selectedTagSectors",session);
  	 	        
  	 	
         StopWatch.next("Filters", true, "before programs");
-        if ( FeaturesUtil.isVisibleModule("National Planning Dashboard") )
+        if ( FeaturesUtil.isVisibleModule("National Planning Dashboard",session) )
         {
 	        List<AmpTheme> allPrograms	= ProgramUtil.getAllThemes(true);
 	        HashMap<Long, AmpTheme> progMap		= ProgramUtil.prepareStructure(allPrograms);
@@ -621,25 +623,25 @@ public class ReportsFilterPicker extends Action {
  	 	
 		StopWatch.next("Filters", true, "Donor stuff");
  	 	// 	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filderDivId, String selectId, ServletContext ampContext)
- 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency")){
- 	 		addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY);
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency",session)){
+ 	 		addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY,session);
  	 	}
- 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency")){
- 	 		addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY);
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency",session)){
+ 	 		addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY,session);
  	 	}
- 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency")){
- 	 		addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY);
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency",session)){
+ 	 		addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY,session);
  	 	}
- 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization")){
-			addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg");
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization",session)){
+			addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg",session);
  	 	}
- 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency")){
-			addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY);
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency",session)){
+			addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY,session);
  	 	}
 
 		// Contracting Agency Groups, based off Donor Groups
 		// stimate domnule GARTNER, ce face filterDonorGroups in afara de a exclude grupurile cu "guv" si "gouv" in nume din lista? E nevoie de ei aici? 
-        if(FeaturesUtil.isVisibleField("Contracting Agency Groups")){
+        if(FeaturesUtil.isVisibleField("Contracting Agency Groups",session)){
             Collection<AmpOrgGroup> contractingAgencyGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllContractingAgencyGroupsOfPortfolio()/*)*/;
             HierarchyListableUtil.changeTranslateable(contractingAgencyGroups, false);
     
@@ -655,18 +657,18 @@ public class ReportsFilterPicker extends Action {
 		StopWatch.next("Filters", true, "Agency stuff");
 		
 		//private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
-		addFinancingLocationElement(filterForm, null, "All Financing Instrument Values", CategoryConstants.FINANCING_INSTRUMENT_KEY, "Financing Instrument", "filter_financing_instr_div", "selectedFinancingInstruments");
-		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance");
-		if (FeaturesUtil.isVisibleField("Mode of Payment") && isFalse(filterForm.getPledged())) {
-			addFinancingLocationElement(filterForm, "Mode of Payment", "All Mode of Payment Values", CategoryConstants.MODE_OF_PAYMENT_KEY, "Mode of Payment", "filter_mode_of_payment_div", "selectedModeOfPayment");
+		addFinancingLocationElement(filterForm, null, "All Financing Instrument Values", CategoryConstants.FINANCING_INSTRUMENT_KEY, "Financing Instrument", "filter_financing_instr_div", "selectedFinancingInstruments",session);
+		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance",session);
+		if (FeaturesUtil.isVisibleField("Mode of Payment",session) && isFalse(filterForm.getPledged())) {
+			addFinancingLocationElement(filterForm, "Mode of Payment", "All Mode of Payment Values", CategoryConstants.MODE_OF_PAYMENT_KEY, "Mode of Payment", "filter_mode_of_payment_div", "selectedModeOfPayment",session);
 		}else{
 			removeElementByName(filterForm.getFinancingLocationElements(), "Mode of Payment");
 		}
-		if (FeaturesUtil.isVisibleField("Project Category")) {
-			addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory");
+		if (FeaturesUtil.isVisibleField("Project Category",session)) {
+			addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory",session);
 		}
 		
-		addFinancingLocationElement(filterForm, "Activity Pledges Title", "All pledges", CategoryConstants.PLEDGES_NAMES_KEY, "Pledges titles", "filter_activity_peldges_title_div", "selectedActivityPledgesTitle");
+		addFinancingLocationElement(filterForm, "Activity Pledges Title", "All pledges", CategoryConstants.PLEDGES_NAMES_KEY, "Pledges titles", "filter_activity_peldges_title_div", "selectedActivityPledgesTitle",session);
 						
 		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
@@ -711,7 +713,7 @@ public class ReportsFilterPicker extends Action {
 							rootCreators, "selectedWorkspaces");
 			filterForm.getOtherCriteriaElements().add(activityStatusElement);
 		}
-		if(FeaturesUtil.isVisibleField("Project Implementing Unit")){			
+		if(FeaturesUtil.isVisibleField("Project Implementing Unit",session)){			
 			Collection<AmpCategoryValue> projectImplementingUnits	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, true);
 			HierarchyListableImplementation rootProjectImplementingUnit	= new HierarchyListableImplementation();
 			rootProjectImplementingUnit.setLabel("All Project Implementing Units");
@@ -724,7 +726,7 @@ public class ReportsFilterPicker extends Action {
 		}
 		StopWatch.next("Filters", true, "AFTER CATEGORY VALUES");
 		
-		if (FeaturesUtil.isVisibleFeature("Disbursement Orders")) { 
+		if (FeaturesUtil.isVisibleFeature("Disbursement Orders",session)) { 
 			Collection<HierarchyListableImplementation> children	= new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation rootDisbursementOrders	= new HierarchyListableImplementation();
 			rootDisbursementOrders.setLabel("All");
@@ -788,21 +790,21 @@ public class ReportsFilterPicker extends Action {
 			filterForm.getFinancingLocationElements().add(regionsElement);
 			StopWatch.next("Filters", true, "end rendering regions");
 		}
-		if( FeaturesUtil.isVisibleField("Joint Criteria") && 
-				FeaturesUtil.isVisibleField("Government Approval Procedures") ) { 
+		if( FeaturesUtil.isVisibleField("Joint Criteria",session) && 
+				FeaturesUtil.isVisibleField("Government Approval Procedures",session) ) { 
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation activitySettings	= new HierarchyListableImplementation();
 			activitySettings.setLabel("Both Settings");
 			activitySettings.setUniqueId("-1");
 			activitySettings.setChildren( children );
-			if ( FeaturesUtil.isVisibleField("Joint Criteria") ) {
+			if ( FeaturesUtil.isVisibleField("Joint Criteria",session) ) {
 				HierarchyListableImplementation jointCriteriaDO	= new HierarchyListableImplementation();
 				jointCriteriaDO.setLabel("Only Projects Under Joint Criteria");
 				jointCriteriaDO.setUniqueId(ONLY_JOINT_CRITERIA);
 				children.add(jointCriteriaDO);
 			}
-			if ( FeaturesUtil.isVisibleField("Government Approval Procedures") ) {
+			if ( FeaturesUtil.isVisibleField("Government Approval Procedures",session) ) {
 				HierarchyListableImplementation govProceduresDO	= new HierarchyListableImplementation();
 				govProceduresDO.setLabel("Only Projects Having Government Approval Procedures");
 				govProceduresDO.setUniqueId(ONLY_GOV_PROCEDURES);
@@ -850,7 +852,7 @@ public class ReportsFilterPicker extends Action {
 			}
 		}
 		
-		if ( FeaturesUtil.isVisibleField("Line Ministry Rank")) {
+		if ( FeaturesUtil.isVisibleField("Line Ministry Rank",session)) {
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation rootLineMinRank	= new HierarchyListableImplementation();
@@ -868,7 +870,7 @@ public class ReportsFilterPicker extends Action {
 							rootLineMinRank, "lineMinRanks");
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
-		if ( FeaturesUtil.isVisibleField("Ministry of Planning Rank")) {
+		if ( FeaturesUtil.isVisibleField("Ministry of Planning Rank",session)) {
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation rootplanMinRank	= new HierarchyListableImplementation();
@@ -886,7 +888,7 @@ public class ReportsFilterPicker extends Action {
 							rootplanMinRank, "planMinRanks");
 			filterForm.getOtherCriteriaElements().add(planMinRankElement);
 		}
-		if (FeaturesUtil.isVisibleFeature("Archived")) {
+		if (FeaturesUtil.isVisibleFeature("Archived",session)) {
 			if(teamMember!=null){
 				Collection<HierarchyListableImplementation> children	= 
 					new ArrayList<HierarchyListableImplementation>();
@@ -908,7 +910,7 @@ public class ReportsFilterPicker extends Action {
 				filterForm.getOtherCriteriaElements().add(archivedElement);
 			}
 		}
-		if ( FeaturesUtil.isVisibleFeature("Multi Donor")) {
+		if ( FeaturesUtil.isVisibleFeature("Multi Donor",session)) {
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation rootMultiDonor	= new HierarchyListableImplementation();
@@ -932,19 +934,19 @@ public class ReportsFilterPicker extends Action {
 		}
 		
 		addDateFilter(filterForm, "Actual Start Date", "ActivityStart", "Actual Start Date", 
-				filterForm.getDynamicActivityStartFilter(), "filter_activity_start_date_div");
+				filterForm.getDynamicActivityStartFilter(), "filter_activity_start_date_div",session);
 		
 		addDateFilter(filterForm, "Current Completion Date", "ActivityActualCompletion", 
-				"Current Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), "filter_activity_actual_completion_date_div");
+				"Current Completion Date", filterForm.getDynamicActivityActualCompletionFilter(), "filter_activity_actual_completion_date_div",session);
 		
 		addDateFilter(filterForm, "Final Date for Contracting", "ActivityFinalContracting", 
-				"Final Date for Contracting", filterForm.getDynamicActivityFinalContractingFilter(), "filter_activity_final_contracting_date_div");
+				"Final Date for Contracting", filterForm.getDynamicActivityFinalContractingFilter(), "filter_activity_final_contracting_date_div",session);
 		
 		addDateFilter(filterForm, "Proposed Approval Date", "ProposedApproval", 
-				"Proposed Approval Date", filterForm.getDynamicProposedApprovalFilter(), "filter_proposed_approval_date_div");
+				"Proposed Approval Date", filterForm.getDynamicProposedApprovalFilter(), "filter_proposed_approval_date_div",session);
 		
 		//Finance date filter
-		addDateFilter(filterForm, null, "", "Date Filter", filterForm.getDynamicDateFilter(), "filter_date_div");
+		addDateFilter(filterForm, null, "", "Date Filter", filterForm.getDynamicDateFilter(), "filter_date_div",session);
 		
 		
 		Collection<AmpIndicatorRiskRatings> meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
@@ -1094,15 +1096,15 @@ public class ReportsFilterPicker extends Action {
 	 * @return reference to either the created or edited AmpARFilter instance. (it can be found in RCD.getFilter() anyway)
 	 * @throws DgException - exceptions from deep inside AMP's bowels
 	 */
-	public static AmpARFilter createOrFillFilter(ReportsFilterPickerForm filterForm, int subsection) throws DgException
+	public static AmpARFilter createOrFillFilter(ReportsFilterPickerForm filterForm, int subsection,HttpSession session) throws DgException
 	{
 		AmpARFilter arf = getOrCreateFilter(filterForm);
 
 		if ((subsection & AmpARFilter.FILTER_SECTION_FILTERS) > 0)			
-			fillFilterFromFilterForm(arf, filterForm);
+			fillFilterFromFilterForm(arf, filterForm,session);
 		
 		if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0)
-			fillFilterFromSettingsForm(arf, filterForm);
+			fillFilterFromSettingsForm(arf, filterForm,session);
 
 		arf.signalSettingsHaveBeenApplied();
 		return arf;
@@ -1127,7 +1129,7 @@ public class ReportsFilterPicker extends Action {
 	 * @param filterForm
 	 * @see #fillFilterFromFilterForm(AmpARFilter, ReportsFilterPickerForm) for copying the settings part
 	 */
-	public static void fillFilterFromSettingsForm(AmpARFilter arf, ReportsFilterPickerForm filterForm)
+	public static void fillFilterFromSettingsForm(AmpARFilter arf, ReportsFilterPickerForm filterForm,HttpSession session)
 	{
 		//DecimalFormat custom = new DecimalFormat();
 		//DecimalFormatSymbols ds = new DecimalFormatSymbols();
@@ -1222,7 +1224,7 @@ public class ReportsFilterPicker extends Action {
 	 * @param filterForm
 	 * @see #fillFilterFromSettingsForm(AmpARFilter, ReportsFilterPickerForm) for copying the settings part
 	 */
-	public static void fillFilterFromFilterForm(AmpARFilter arf, ReportsFilterPickerForm filterForm) throws DgException
+	public static void fillFilterFromFilterForm(AmpARFilter arf, ReportsFilterPickerForm filterForm,HttpSession httpSession) throws DgException
 	{
 		Session session = PersistenceManager.getSession();
 		arf.readRequestData(TLSUtils.getRequest(), AmpARFilter.FILTER_SECTION_FILTERS, null);
@@ -1305,7 +1307,7 @@ public class ReportsFilterPicker extends Action {
 		if (filterForm.getComputedYear()!=-1){
 			arf.setComputedYear(filterForm.getComputedYear());
 		}else{
-			if (FeaturesUtil.isVisibleFeature("Computed Columns Filters"))
+			if (FeaturesUtil.isVisibleFeature("Computed Columns Filters",httpSession))
 				arf.setComputedYear(curYear);
 			else
 				arf.setComputedYear(null);

@@ -24,6 +24,7 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ViewSelectActivityTabs extends Action {
 
@@ -69,8 +70,7 @@ public class ViewSelectActivityTabs extends Action {
 		}
 		synchronized (ampContext) {
 			//
-			AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext
-					.getAttribute("ampTreeVisibility");
+			AmpTreeVisibility ampTreeVisibility =FeaturesUtil.getAmpTreeVisibility(ampContext, session); 
 			//
 			String type = "";
 			String name = "";

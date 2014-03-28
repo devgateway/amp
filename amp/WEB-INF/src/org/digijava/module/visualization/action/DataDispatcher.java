@@ -3042,7 +3042,7 @@ public class DataDispatcher extends DispatchAction {
 		VisualizationForm visualizationForm = (VisualizationForm) form;
 
 		DashboardFilter filter = visualizationForm.getFilter();
-		
+		HttpSession session=request.getSession();
 		String format = request.getParameter("format");
 		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
 		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
@@ -3088,8 +3088,8 @@ public class DataDispatcher extends DispatchAction {
 		totalCommitments = totalDisbursements = totalExpenditures = new BigDecimal(0);
 		
 		ServletContext ampContext = getServlet().getServletContext();
-		boolean expendituresVisible = FeaturesUtil.isVisibleFeature("Expenditures", ampContext);
-		boolean pledgesVisible = FeaturesUtil.isVisibleModule("Pledges", ampContext);
+		boolean expendituresVisible = FeaturesUtil.isVisibleFeature("Expenditures", ampContext,session);
+		boolean pledgesVisible = FeaturesUtil.isVisibleModule("Pledges", ampContext,session);
 
 		StringBuffer csvString = new StringBuffer();
         String text = TranslatorWorker.translateText("Year");

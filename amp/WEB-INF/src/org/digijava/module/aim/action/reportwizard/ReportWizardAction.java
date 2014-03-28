@@ -682,7 +682,8 @@ public class ReportWizardAction extends MultiAction {
 		ArrayList<AmpColumnsVisibility> ampColumnsVisibles = new ArrayList<AmpColumnsVisibility>();
 		ServletContext ampContext;
 		ampContext = getServlet().getServletContext();
-		AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		AmpTreeVisibility ampTreeVisibility =FeaturesUtil.getAmpTreeVisibility(ampContext, httpSession); 
+
 		Collection<AmpFieldsVisibility> ampAllFields = FeaturesUtil.getAMPFieldsVisibility();
 		Collection<AmpColumns> allAmpColumns = formColumns;
 

@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -3059,48 +3060,65 @@ public class FeaturesUtil {
 		return ComponentsUtil.getComponentTypeById(Long.parseLong(defaultComponentTypeIdStr));
 	}
 
-	public static boolean isVisibleSectors(String type, ServletContext ampContext){
-		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	public static boolean isVisibleSectors(String type, ServletContext ampContext,HttpSession session){
+		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
+
 		AmpFieldsVisibility fieldToTest=ampTreeVisibility.getFieldByNameFromRoot(type+" Sector");
 		if(fieldToTest!=null)
 			return fieldToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;
 	}
 
-	public static boolean isVisibleField(String fieldName){
-		return isVisibleField(fieldName, TLSUtils.getRequest().getSession().getServletContext());
+	public static boolean isVisibleField(String fieldName,HttpSession session){
+		return isVisibleField(fieldName, TLSUtils.getRequest().getSession().getServletContext(),session);
 	}
 	
-	public static boolean isVisibleField(String fieldName, ServletContext ampContext){
-		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	public static boolean isVisibleField(String fieldName, ServletContext ampContext,HttpSession session){
+		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
 		AmpFieldsVisibility fieldToTest=ampTreeVisibility.getFieldByNameFromRoot(fieldName);
 		if(fieldToTest!=null)
 			return fieldToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;
 	}
 	
-	public static boolean isVisibleFeature(String featureName)
+	public static boolean isVisibleFeature(String featureName,HttpSession session)
 	{
-		return isVisibleFeature(featureName, TLSUtils.getRequest().getSession().getServletContext());
+		return isVisibleFeature(featureName, TLSUtils.getRequest().getSession().getServletContext(),session);
 	}
 	
-	public static boolean isVisibleFeature(String featureName, ServletContext ampContext){
-		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	public static boolean isVisibleFeature(String featureName, ServletContext ampContext,HttpSession session){
+		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
 		AmpFeaturesVisibility featureToTest=ampTreeVisibility.getFeatureByNameFromRoot(featureName);
 		if(featureToTest!=null)
 			return featureToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;
 	}
 
-	public static boolean isVisibleModule(String moduleName, ServletContext ampContext){
-		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	public static boolean isVisibleModule(String moduleName, ServletContext ampContext,HttpSession session){
+		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
 		AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot(moduleName);
 		if(moduleToTest!=null)
 			return moduleToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;
 	}
 	
-	public static boolean isVisibleModule(String moduleName){
-		return isVisibleModule(moduleName, TLSUtils.getRequest().getSession().getServletContext());
+	public static boolean isVisibleModule(String moduleName,HttpSession session){
+		return isVisibleModule(moduleName, TLSUtils.getRequest().getSession().getServletContext(),session);
+	}
+	public static AmpTreeVisibility getAmpTreeVisibility(ServletContext ampContext,HttpSession session){
+		if(session !=null && session.getAttribute("ampTreeVisibility")!=null){
+			return (AmpTreeVisibility)session.getAttribute("ampTreeVisibility");
+		}else{
+			return (AmpTreeVisibility)ampContext.getAttribute("ampTreeVisibility");
+		}
+	}
+
+	public static void setAmpTreeVisibility(ServletContext ampContext,
+			HttpSession session, AmpTreeVisibility ampTreeVisibility) {
+		ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+		if (session != null && session != null) {
+			session.setAttribute("ampTreeVisibility", ampTreeVisibility);
+		}
+
 	}
 }

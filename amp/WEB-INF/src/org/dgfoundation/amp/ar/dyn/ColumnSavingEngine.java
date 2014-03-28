@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.ar.dyn;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 
 import org.apache.log4j.Logger;
@@ -64,10 +65,11 @@ public class ColumnSavingEngine {
 		return false;
 	}
 	
-	public boolean saveField() {
+	public boolean saveField(HttpSession session) {
 		boolean ret = false;
 		try{
-			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) this.sCtx.getAttribute("ampTreeVisibility");
+			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility)FeaturesUtil.getAmpTreeVisibility(this.sCtx,session); 
+
 
 			if(ampTreeVisibility!=null)
 				if(!existFieldinDB(ampTreeVisibility)){
@@ -88,7 +90,7 @@ public class ColumnSavingEngine {
 
 									AmpTemplatesVisibility  currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 									ampTreeVisibility. buildAmpTreeVisibility(currentTemplate);
-									this.sCtx.setAttribute("ampTreeVisibility", ampTreeVisibility);
+									FeaturesUtil.setAmpTreeVisibility(this.sCtx, session, ampTreeVisibility);
 									ret	= true;
 								} catch (DgException ex) {
 									ex.printStackTrace();
@@ -101,13 +103,13 @@ public class ColumnSavingEngine {
 						}
 					}
 				}
-			ampTreeVisibility=(AmpTreeVisibility) this.sCtx.getAttribute("ampTreeVisibility");
+			ampTreeVisibility=(AmpTreeVisibility) FeaturesUtil.getAmpTreeVisibility(this.sCtx, session);
 			if(ampTreeVisibility!=null)
 				if(!isFeatureTheParent(ampTreeVisibility)){
 					FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(featureName).getId(),newColumn.getColumnName());
 					AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 					ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-					this.sCtx.setAttribute("ampTreeVisibility", ampTreeVisibility);
+					FeaturesUtil.setAmpTreeVisibility(this.sCtx, session, ampTreeVisibility);
 
 				} 
 			//			   }
@@ -143,8 +145,8 @@ public class ColumnSavingEngine {
 		}
 	}
 	
-	public void startSavingProcess() {
-		boolean fieldSaved	= this.saveField();
+	public void startSavingProcess(HttpSession session) {
+		boolean fieldSaved	= this.saveField(session);
 		
 		if ( fieldSaved ) 
 			this.saveColumn();

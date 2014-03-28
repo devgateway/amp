@@ -51,7 +51,9 @@ public final class FMUtil {
 		//if (!fmRootChecked){
 			fmRootChecked = true;
 			ServletContext context   = ((WebApplication)Application.get()).getServletContext();
-			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
+			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+			AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(context, session.getHttpSession());
+
 			if(ampTreeVisibility!=null){
 				if (!existInVisibilityTree(ampTreeVisibility, root, AmpFMTypes.MODULE)){
 					logger.info("Activity Form FM Root Node doesn't exist, attempting to create!");
@@ -81,8 +83,8 @@ public final class FMUtil {
 			}
 			
 			ServletContext context   = ((WebApplication)Application.get()).getServletContext();
-			
-			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
+			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+			AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(context, session.getHttpSession());
 			boolean result;
 			if(ampTreeVisibility!=null && fmParentPathString.length()>0){
 				if (!existInVisibilityTree(ampTreeVisibility, fmParentPathString, AmpFMTypes.MODULE)){
@@ -161,10 +163,11 @@ public final class FMUtil {
 
 			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 			//for admin user fields will be visible
-			if( fmPathString.compareTo("Permission Manager") ==0 && "yes".compareTo(session.getIsAdmin()) ==0 ) 
+			if( fmPathString.compareTo("Permission Manager") ==0 && "yes".compareTo(session.getIsAdmin()) ==0 ) {
 				return true;
+			}
 			
-			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
+			AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(context, session.getHttpSession());
 			if(ampTreeVisibility!=null){
 //				if (!existInVisibilityTree(ampTreeVisibility, fmPathString, fmc.getFMType())){
 					//Feature is disabled on purpose we should show it
@@ -276,7 +279,7 @@ public final class FMUtil {
 	public static synchronized void addFeatureFM(ServletContext context, AmpTreeVisibility ampTreeVisibility, String componentPath, String componentParentPath) throws Exception{
 		if(FeaturesUtil.getFeatureVisibility(componentPath)==null){
 			AmpModulesVisibility moduleByNameFromRoot = getModuleByNameFromRoot(ampTreeVisibility.getItems().values(), componentParentPath); //ampTreeVisibility.getModuleByNameFromRoot(componentParentPath);
-			
+			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 			Long id=null;
 			if(moduleByNameFromRoot!=null){
 				id = moduleByNameFromRoot.getId();
@@ -290,7 +293,7 @@ public final class FMUtil {
 					logger.info("Inserting feature in FM Tree: " + componentPath);
 					AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 					ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-					context.setAttribute("ampTreeVisibility",ampTreeVisibility);
+					FeaturesUtil.setAmpTreeVisibility(context, session.getHttpSession(),ampTreeVisibility);
 				}
 				catch (Exception e) {
 					throw new Exception("Error while adding feature:", e);
@@ -381,7 +384,8 @@ public final class FMUtil {
 			logger.info("Inserting module in FM Tree: " + component);
 			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-			context.setAttribute("ampTreeVisibility", ampTreeVisibility);
+			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+			FeaturesUtil.setAmpTreeVisibility(context, session.getHttpSession(),ampTreeVisibility);
 		}
 	}
 
@@ -417,7 +421,9 @@ public final class FMUtil {
 			throw new RuntimeException("We shouldn't have components that are not MODULES or FEATURES!");
 		
 		ServletContext context   = ((WebApplication)Application.get()).getServletContext();
-		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
+		AmpAuthWebSession sessionW = (AmpAuthWebSession) org.apache.wicket.Session.get();
+		
+		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(context, sessionW.getHttpSession());
 
 		AmpTemplatesVisibility ft;
 		Session session = null;
@@ -459,7 +465,8 @@ public final class FMUtil {
 
 			AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-			context.setAttribute("ampTreeVisibility",ampTreeVisibility);
+			
+			FeaturesUtil.setAmpTreeVisibility(context, sessionW.getHttpSession(), ampTreeVisibility);
 			logger.info("Changed FM visible status of "+fmc.getFMName()+ " to "+visible);
 		}
 		catch (Exception ex) {

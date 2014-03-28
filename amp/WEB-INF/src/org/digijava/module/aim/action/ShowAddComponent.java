@@ -136,7 +136,7 @@ public class ShowAddComponent extends Action {
         }
         setFundingTotals(eaForm,session);
 
-		if(!isComponentTypeEnabled()){
+		if(!isComponentTypeEnabled(session)){
 			AmpComponentType defaultComponentType = FeaturesUtil.getDefaultComponentType();
 			eaForm.getComponents().setSelectedType(defaultComponentType.getType_id());
 			return switchType(mapping, form, request, response);
@@ -146,10 +146,10 @@ public class ShowAddComponent extends Action {
 
 	}
 	
-	public boolean isComponentTypeEnabled(){
+	public boolean isComponentTypeEnabled(HttpSession session){
  	   ServletContext ampContext = getServlet().getServletContext();
  	   
-	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	   AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
  	   
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 		if(currentTemplate!=null)

@@ -304,13 +304,13 @@ public class DocumentManager extends Action {
 				if (myForm.getType() == null || myForm.getType().equals("")) {
 					ServletContext ampContext = null;					
 					ampContext = getServlet().getServletContext();					
-					if(FeaturesUtil.isVisibleFeature("My Resources", ampContext)){
+					if(FeaturesUtil.isVisibleFeature("My Resources", ampContext,httpSession)){
 						myForm.setType("private");
-					}else if (FeaturesUtil.isVisibleFeature("Team Resources", ampContext)){
+					}else if (FeaturesUtil.isVisibleFeature("Team Resources", ampContext,httpSession)){
 						myForm.setType("team");
-					}else if (FeaturesUtil.isVisibleFeature("Shared Resources", ampContext) && myForm.getSharedDocsTabVisible()){
+					}else if (FeaturesUtil.isVisibleFeature("Shared Resources", ampContext,httpSession) && myForm.getSharedDocsTabVisible()){
 						myForm.setType("shared");
-					}else if (FeaturesUtil.isVisibleFeature("Public Resources", ampContext) && myForm.getPublicDocsTabVisible()){
+					}else if (FeaturesUtil.isVisibleFeature("Public Resources", ampContext,httpSession) && myForm.getPublicDocsTabVisible()){
 						myForm.setType("public");
 					}
 					

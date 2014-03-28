@@ -555,7 +555,7 @@ public class AddAmpActivity extends Action {
 //      	  }else{
 //      		  synchronized (ampContext) {
 //      			  //ampContext=this.getServlet().getServletContext();
-//	        	  AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+//	        	  
 //	        	 // AmpModulesVisibility moduleToTest=FeaturesUtil.getModuleVisibility("Activity Approval Process");
 //	        	  AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot("Activity Approval Process");
 //	        	  if(moduleToTest!=null)
@@ -1929,7 +1929,7 @@ private ActionForward addComponente(ActionMapping mapping, HttpSession session,
 //
 //  private boolean isPrimarySectorEnabled() {
 // 	    ServletContext ampContext = getServlet().getServletContext();
-//	    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");		
+//	    		
 //		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 //		if(currentTemplate!=null)
 //			return currentTemplate.fieldExists("Primary Sector");

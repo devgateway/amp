@@ -76,7 +76,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		// TODO Auto-generated method stub
 		
 		ServletContext ampContext=pageContext.getServletContext();
-		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		HttpSession session=pageContext.getSession();
+		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
 		try
 		{
 			String cache=(String) ampContext.getAttribute("FMcache");
@@ -100,7 +101,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 										logger.debug("Inserting module: " + this.getName());
 										AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 										ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-										ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+										FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
+										
 									}
 								}
 							}
@@ -133,7 +135,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 										}
 										AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 										ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-										ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+										FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
 								}
 							}
 					}
@@ -156,7 +158,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
     	   
     	   ServletContext ampContext=pageContext.getServletContext();
     	   HttpSession session=pageContext.getSession();
-    	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+    	   AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
     	   
     	   /* name, feature, enable
     	    * 

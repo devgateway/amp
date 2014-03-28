@@ -1030,7 +1030,7 @@ public class ExportActivityToPDF extends Action {
 			if(FeaturesUtil.isVisibleFeature("NPD Programs", ampContext)){
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective", ampContext)){
 					//National Plan Objective
-					if(myForm.getPrograms().getNationalPlanObjectivePrograms()!=null){
+					if (hasContents(myForm.getPrograms().getNationalPlanObjectivePrograms())){
 						columnName=TranslatorWorker.translateText("National Plan Objective");
 						String result= buildProgramsOutput(myForm.getPrograms().getNationalPlanObjectivePrograms());
 						createGeneralInfoRow(mainLayout,columnName,result);
@@ -1039,7 +1039,7 @@ public class ExportActivityToPDF extends Action {
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs", ampContext)){
 					//Primary Programs
-					if(myForm.getPrograms().getPrimaryPrograms()!=null){
+					if (hasContents(myForm.getPrograms().getPrimaryPrograms())){
 						columnName=TranslatorWorker.translateText("Primary Programs");
 						String result= buildProgramsOutput(myForm.getPrograms().getPrimaryPrograms());
 						createGeneralInfoRow(mainLayout,columnName,result);						
@@ -1048,7 +1048,7 @@ public class ExportActivityToPDF extends Action {
 
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs", ampContext)){
 					//secondary Programs
-					if(myForm.getPrograms().getSecondaryPrograms()!=null){
+					if (hasContents(myForm.getPrograms().getSecondaryPrograms())){
 						columnName=TranslatorWorker.translateText("Secondary Programs");
 						String result= buildProgramsOutput(myForm.getPrograms().getSecondaryPrograms());
 						createGeneralInfoRow(mainLayout,columnName,result);
@@ -1057,7 +1057,7 @@ public class ExportActivityToPDF extends Action {
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs", ampContext)){
 					//tertiary Programs
-					if(myForm.getPrograms().getTertiaryPrograms()!=null){
+					if (hasContents(myForm.getPrograms().getTertiaryPrograms())){
 						columnName=TranslatorWorker.translateText("Tertiary Programs");
 						String result= buildProgramsOutput(myForm.getPrograms().getTertiaryPrograms());
 						createGeneralInfoRow(mainLayout,columnName,result);
@@ -1602,6 +1602,8 @@ public class ExportActivityToPDF extends Action {
 		
 	
 	private void buildIssuesPart(EditActivityForm myForm, PdfPTable mainLayout,ServletContext ampContext)	throws WorkerException {
+		if (myForm.getIssues().getIssues()==null || myForm.getIssues().getIssues().isEmpty())
+			return;
 		Paragraph p1;
 		PdfPCell issuesCell1=new PdfPCell();
 		issuesCell1.setBackgroundColor(new Color(244,244,242));
@@ -3030,6 +3032,8 @@ public class ExportActivityToPDF extends Action {
 	 * @param value
 	 */
 	private void createGeneralInfoRow(PdfPTable mainLayout,String columnName,String value){
+		if (value == null || value.isEmpty())
+			return;
 		PdfPCell cell1=new PdfPCell();
 		Paragraph p1=new Paragraph(postprocessText(columnName),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
@@ -3132,6 +3136,10 @@ public class ExportActivityToPDF extends Action {
 	 * builds donor,MOFED,Sec.Ministry and Proj.Coord. Contacts info output	
 	 */
 	private void buildContactInfoOutput(PdfPTable mainLayout,String contactType, Collection<AmpActivityContact> contacts,ServletContext ampContext) throws WorkerException{
+		
+		if (!hasContents(contacts))
+			return;
+		
 		PdfPCell cell1=new PdfPCell();
 		cell1.setBorder(0);
 		cell1.setBackgroundColor(new Color(244,244,242));
@@ -3353,6 +3361,10 @@ public class ExportActivityToPDF extends Action {
 			result+=pr.getHierarchyNames()+" "+pr.getProgramPercentage()+"% \n";
 		}
 		return result;
+	}
+	
+	private boolean hasContents(Collection<?> obj){
+		return (obj != null) && (!obj.isEmpty());
 	}
 	
 	public class PdfPTableEvents implements PdfPTableEvent {

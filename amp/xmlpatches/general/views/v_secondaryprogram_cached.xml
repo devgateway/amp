@@ -19,8 +19,16 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_secondaryprogram_cached AS SELECT a.amp_activity_id, CASE ap.program_setting WHEN 3 THEN t.name ELSE NULL::character varying END AS name, ap.amp_program_id, ap.program_percentage, ap.program_setting FROM ((amp_activity a LEFT JOIN amp_activity_program ap ON ((a.amp_activity_id = ap.amp_activity_id))) LEFT JOIN amp_theme t ON ((t.amp_theme_id = ap.amp_program_id))) ORDER BY a.amp_activity_id, t.name;;;
-        		</lang>
+				CREATE OR REPLACE VIEW v_secondaryprogram_cached AS
+			    	SELECT a.amp_activity_id, 
+			    	CASE ap.program_setting 
+			    		WHEN 3 THEN t.name ELSE NULL::character varying END 
+			    	AS name, ap.amp_program_id, ap.program_percentage, ap.program_setting
+			    	FROM
+			    		(amp_activity a LEFT JOIN amp_activity_program ap ON a.amp_activity_id = ap.amp_activity_id) 
+			    		LEFT JOIN amp_theme t ON t.amp_theme_id = ap.amp_program_id
+			    	ORDER BY a.amp_activity_id, t.name;;;
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

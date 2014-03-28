@@ -20,6 +20,10 @@ public class FundingPledgesSector {
 		return sector.getAmpSectorId().equals(((FundingPledgesSector)oth).sector.getAmpSectorId());
 	}
 	
+	public String toString(){
+		return String.format("sector name = %s, sectorPercentage = %.2f", sector.getName(), sectorpercentage);
+	}
+	
 	@java.lang.SuppressWarnings("all")
 	public Long getId() {
 		return this.id;

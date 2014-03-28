@@ -1346,95 +1346,29 @@ function collapseAll() {
 	</div>
 </fieldset>
 </module:display>
+
 <!-- LOCATIONS SECTION -->
-<!-- NATIONAL PLAN SECTION -->
 <module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
-<fieldset>
-	<legend>
-		<span class=legend_label id="nationalplanlink" style="cursor: pointer;">
-			<digi:trn>National Plan</digi:trn></span>	
-		</legend>
-	<div id="nationalplandiv" class="toggleDiv">
-		<c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
-			<c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
-				<c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
-				<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
-					  <tr>
- 						   <td width=85%><b>${nationalPlanObjectivePrograms.hierarchyNames}</b></td>
-  					   	  	<td width=15% align=right valign=top><b>${nationalPlanObjectivePrograms.programPercentage}%</b></td>
-					  </tr>
-				</table>
-				<hr />
-			</c:forEach>
-		</c:if>
-	</div>
-</fieldset>
+	<c:set var="programs_list" value="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}" />
+	<c:set var="programs_name"><digi:trn>National Plan</digi:trn></c:set>
+	<%@include file="activitypreview/programs.jspf" %>
 </module:display>
-<!-- END NATIONAL PLAN SECTION -->
 
 <!-- PROGRAM SECTION -->
 <module:display name="/Activity Form/Program" parentModule="/Activity Form">
-<c:if test="${not empty aimEditActivityForm.programs.primaryPrograms}">
-	<fieldset>
-		<legend>
-			<span class=legend_label id="programlink" style="cursor: pointer;">
-				<digi:trn>Program</digi:trn>
-			</span>		
-		</legend>
-		<div id="programdiv" class="toggleDiv">
-			<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
-			
-				<digi:trn>Primary Programs</digi:trn>
-				 <hr/>
-				<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
-					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
-				 		<tr>
-					  		<td width=85%>
-								<b><c:out value="${program.hierarchyNames}"/></b>					
-					 		</td>
-							<td width=15% align=right>
-							<b>
-								<c:out value="${program.programPercentage}"/>%
-							</b>					
-							</td>
-						</tr>
-					</table>
-					<hr>
-				</c:forEach>	
-			</module:display>
-			<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
-				<digi:trn>Secondary Programs</digi:trn><br/>
-				<c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
-					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
-				  		<tr>
-					  	<td width=85%>
-					  		<b><c:out value="${program.hierarchyNames}"/></b>
-					  	</td>
-						<td width="15%" align=right valign=top>
-							<b><c:out value="${program.programPercentage}"/>%</b>
-						</td>
-					</tr>
-					</table>
-				</c:forEach>
-			</module:display>
-			<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
-				<digi:trn>Tertiary Programs</digi:trn><br/>
-				<c:forEach var="program" items="${aimEditActivityForm.programs.tertiaryPrograms}">
-					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
-				  		<tr>
-					  	<td width=85%>
-					  		<b><c:out value="${program.hierarchyNames}"/></b>
-					  	</td>
-						<td width="15%" align=right valign=top>
-							<b><c:out value="${program.programPercentage}"/>%</b>
-						</td>
-					</tr>
-					</table>
-				</c:forEach>
-			</module:display>
-		</div>
-	</fieldset>
-	</c:if>
+	<c:set var="programs_list" value="${aimEditActivityForm.programs.primaryPrograms}" />
+	<c:set var="programs_name"><digi:trn>Program</digi:trn></c:set>
+	<%@include file="activitypreview/programs.jspf" %>
+</module:display>
+<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
+	<c:set var="programs_list" value="${aimEditActivityForm.programs.secondaryPrograms}" />
+	<c:set var="programs_name"><digi:trn>Secondary Programs</digi:trn></c:set>
+	<%@include file="activitypreview/programs.jspf" %>
+</module:display>
+<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
+	<c:set var="programs_list" value="${aimEditActivityForm.programs.tertiaryPrograms}" />
+	<c:set var="programs_name"><digi:trn>Tertiary Programs</digi:trn></c:set>
+	<%@include file="activitypreview/programs.jspf" %>
 </module:display>
 <!-- END PROGRAM SECTION -->
 
@@ -1580,7 +1514,7 @@ function collapseAll() {
 			</legend>
 			<div id="fundingdiv" class="toggleDiv">
 				<bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>
-				<jsp:include page="previewActivityFunding.jsp"/>
+				<jsp:include page="activitypreview/previewActivityFunding.jsp"/>
 			</div>
 		</fieldset>
 	</module:display>
@@ -3216,89 +3150,10 @@ function collapseAll() {
 <script language="JavaScript">
 	$(document).ready(function(){
 		expandAll();
+		$('fieldset legend span.legend_label').click(function(){
+			$(this).parent().siblings('.toggleDiv').toggle('slow');
+		});
 	});
-	$("#identificationlink").click(function() {
-		  $("div#identificationdiv").toggle('slow', function() {
-		   //$("#toggleidentification").removeClass("toogle_open").addClass("toogle_close");
-		  });
-	});
-	$("#planninglink").click(function() {
-		  $("div#planningdiv").toggle('slow', function() {
-		  });
-	});
-	$("#locationlink").click(function() {
-		  $("div#locationdiv").toggle('slow', function() {
-		  });
-	});
-	$("#programlink").click(function() {
-		  $("div#programdiv").toggle('slow', function() {
-		  });
-	});
-	$("#sectorslink").click(function() {
-		  $("div#sectorsdiv").toggle('slow', function() {
-		  });
-	});
-	$("#fundinglink").click(function() {
-		  $("div#fundingdiv").toggle('slow', function() {
-		  });
-	});
-	$("#nationalplanlink").click(function() {
-		  $("div#nationalplandiv").toggle('slow', function() {
-		  });
-	});
-	$("#regionalfundinglink").click(function() {
-		  $("div#regionalfundingdiv").toggle('slow', function() {
-		  });
-	});
-	$("#componentlink").click(function() {
-		  $("div#componentdiv").toggle('slow', function() {
-		  });
-	});
-	$("#issueslink").click(function() {
-		  $("div#issuesdiv").toggle('slow', function() {
-		  });
-	});
-	
-	$("#documentslink").click(function() {
-		  $("div#documnetsdiv").toggle('slow', function() {
-		  });
-	});
-	$("#relatedorglink").click(function() {
-		  $("div#relateorgdiv").toggle('slow', function() {
-		  });
-	});
-	$("#contactlink").click(function() {
-		  $("div#contactdiv").toggle('slow', function() {
-		  });
-	});
-	$("#milink").click(function() {
-		  $("div#midiv").toggle('slow', function() {
-		  });
-	});
-	$("#projectrisklink").click(function() {
-		  $("div#projectriskdiv").toggle('slow', function() {
-		  });
-	});
-	$("#proposedcostlink").click(function() {
-		  $("div#proposedcostdiv").toggle('slow', function() {
-		  });
-	});
-	$("#costinglink").click(function() {
-		  $("div#costingdiv").toggle('slow', function() {
-		  });
-	});
-	$("#ipalink").click(function() {
-		  $("div#ipadiv").toggle('slow', function() {
-		  });
-	});
-    $("#lineMinistryObsLink").click(function() {
-          $("div#lineMinistryObsDiv").toggle('slow', function() {
-          });
-    });
-    $("#referenceslink").click(function() {
-          $("div#referencesdiv").toggle('slow', function() {
-          });
-    });
 
 	jQuery.fn.exists = function(){return this.length>0;}
 	$("#collapseall").click(function() {

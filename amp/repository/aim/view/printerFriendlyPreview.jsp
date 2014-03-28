@@ -1362,17 +1362,17 @@ body {background:none;}
                                                                         <bean:define id="funding" name="funding" scope="page"
                                                                             toScope="request"
                                                                             type="org.digijava.module.aim.helper.Funding"></bean:define>
-                                                                        <jsp:include page="previewActivityFundingCommitments.jsp" />
+                                                                        <jsp:include page="activitypreview/previewActivityFundingCommitments.jsp" />
 																			
                                                                         <feature:display module="Funding" name="Disbursement">
-                                                                        	<jsp:include page="previewActivityFundingDisbursement.jsp" />
+                                                                        	<jsp:include page="activitypreview/previewActivityFundingDisbursement.jsp" />
                                                                         </feature:display>
                                                                         
                                                                         <feature:display module="Funding" name="Expenditures">
-                                                                        	<jsp:include page="previewActivityFundingExpenditures.jsp" />
+                                                                        	<jsp:include page="activitypreview/previewActivityFundingExpenditures.jsp" />
                                                                         </feature:display>
                                                                         
-																		<jsp:include page="previewMtefProjections.jsp" />
+																		<jsp:include page="activitypreview/previewMtefProjections.jsp" />
 
 <%--                                                                        <feature:display module="Funding" name="Expenditures">
                                                                         	<jsp:include page="previewActivityFundingExpenditures.jsp" />
@@ -1383,12 +1383,12 @@ body {background:none;}
                                                                         </feature:display>
      --%>                                                                   
                                                                         <feature:display module="Funding" name="Disbursement Orders">
-                                                                        	<jsp:include page="previewActivityFundingDisbursementOrders.jsp" />
+                                                                        	<jsp:include page="activitypreview/previewActivityFundingDisbursementOrders.jsp" />
                                                                         </feature:display>
 
 
                                                                         <feature:display module="Funding" name="Undisbursed Balance">
-                                                                        	<jsp:include page="previewActivityFundingUndisbursedBalance.jsp" />
+                                                                        	<jsp:include page="activitypreview/previewActivityFundingUndisbursedBalance.jsp" />
                                                                         </feature:display>
                                                                     </table> 
                                                                     </td>

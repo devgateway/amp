@@ -45,15 +45,16 @@ public class PledgesFormTests extends AmpTestCase
 		assertEquals(1, pledges.size());
 		FundingPledges pledge = pledges.get(0);
 		assertEquals("Test pledge 1", pledge.getTitleFreeText());
-		assertNull(pledge.getTitle());
+		assertNotNull(pledge.getTitle());
+		assertEquals("ACVL Pledge Name 1", pledge.getTitle().getValue());
 		assertEquals("European", pledge.getOrganizationGroup().getOrgGrpName());
 		
-		assertEquals(1, pledge.getSectorlist().size());
-		FundingPledgesSector fps = pledge.getSectorlist().iterator().next();
-		assertEquals("3 NATIONAL COMPETITIVENESS", fps.getSector().getName());
-		assertEquals(Float.valueOf(100.0f), fps.getSectorpercentage());
+		assertEquals(4, pledge.getSectorlist().size());
+//		FundingPledgesSector fps = pledge.getSectorlist().iterator().next();
+////		assertEquals("3 NATIONAL COMPETITIVENESS", fps.getSector().getName());
+//		assertEquals(Float.valueOf(100.0f), fps.getSectorpercentage());
 		
-		assertEquals(2, pledge.getLocationlist().size());
+		assertEquals(3, pledge.getLocationlist().size());
 		List<FundingPledgesLocation> locs = new ArrayList<>(pledge.getLocationlist());
 		Collections.sort(locs, new Comparator<FundingPledgesLocation>(){
 					@Override public int compare(FundingPledgesLocation loc1, FundingPledgesLocation loc2)
@@ -62,7 +63,7 @@ public class PledgesFormTests extends AmpTestCase
 					}});
 		assertEquals("Balti County", locs.get(0).getLocation().getName());
 		assertEquals("Cahul County", locs.get(1).getLocation().getName());
-		
+		assertEquals("Tiraspol", locs.get(2).getLocation().getName());
 		
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
 		pledges = PledgesEntityHelper.fetchEntities(FundingPledges.class, "id", 3L);
@@ -70,7 +71,8 @@ public class PledgesFormTests extends AmpTestCase
 		assertEquals(1, pledges.size());
 		pledge = pledges.get(0);
 		assertEquals("Test pledge 1", pledge.getTitleFreeText());
-		assertNull(pledge.getTitle());
+		assertNotNull(pledge.getTitle());
+		assertEquals("ACVL Pledge Name 1", pledge.getTitle().getValue());
 		assertEquals("Европейская", pledge.getOrganizationGroup().getOrgGrpName());
 		
 		AmpOrganisation org = (AmpOrganisation) PledgesEntityHelper.fetchEntities(AmpOrganisation.class, "ampOrgId", 21698L, "name", "Finland").get(0);
@@ -91,10 +93,10 @@ public class PledgesFormTests extends AmpTestCase
 		assertEquals(0, PledgesEntityHelper.getPledgesByDonorAndTitle(21696L, "Test pledge 1").size());
 		assertEquals(0, PledgesEntityHelper.getPledgesByDonorAndTitle(2L, "Test pledge 1").size());
 		assertEquals(0, PledgesEntityHelper.getPledgesByDonorAndTitle(21696L, "Test pledge 321").size());
-		assertEquals(0, PledgesEntityHelper.getPledgesDetails(3L).size());
-		assertEquals(2, PledgesEntityHelper.getPledgesLocations(3L).size());
-		assertEquals(0, PledgesEntityHelper.getPledgesPrograms(3L).size());
-		assertEquals(1, PledgesEntityHelper.getPledgesSectors(3L).size());
+		assertEquals(3, PledgesEntityHelper.getPledgesDetails(3L).size());
+		assertEquals(3, PledgesEntityHelper.getPledgesLocations(3L).size());
+		assertEquals(2, PledgesEntityHelper.getPledgesPrograms(3L).size());
+		assertEquals(4, PledgesEntityHelper.getPledgesSectors(3L).size());
 		
 		// non-existant pledge id		
 		assertEquals(0, PledgesEntityHelper.getPledgesDetails(3333333L).size());

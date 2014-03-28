@@ -131,12 +131,12 @@ table tr td {font-size:11px;}
 				<td>
 					<logic:present name="currentMember" scope="session">
 	            		<a href="/aim" style="text-decoration: none">
-	            		<div class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
+	            		<span class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></span>
 	            		</a>
 	            	</logic:present>
 	            	<logic:notPresent name="currentMember" scope="session">
 		            		<a href="/" style="text-decoration: none">
-		            		<div class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
+		            		<span class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></span>
 		            		</a>
 	            	</logic:notPresent>
 				</td>

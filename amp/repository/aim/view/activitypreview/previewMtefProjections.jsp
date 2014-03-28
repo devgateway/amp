@@ -1,0 +1,57 @@
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fmt" prefix="fmt"%>
+<%@ taglib uri="/taglib/category" prefix="category"%>
+
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+
+<!-- mtefs -->
+<digi:instance property="aimEditActivityForm" />
+
+<c:if test="${!empty funding.mtefDetails}">
+	<tr bgcolor="#FFFFCC">
+		<td colspan="3" style="text-transform: uppercase">
+			<a title='<digi:trn>Medium-Term Expenditure Framework Projections</digi:trn>'>
+				<digi:trn>MTEF Projections</digi:trn>:
+			</a>
+		</td>
+		<td height="20" bgcolor="#FFFFCC" align="center">
+			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
+				<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
+			</c:if>
+		</td>		
+	</tr>
+	<c:if test="${!empty funding.fundingDetails}">
+	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+		<logic:equal name="fundingDetail" property="transactionType" value="3">
+				<%@include file="previewActivityFundingDetail.jspf" %>
+			</logic:equal>
+		<%-- </logic:equal> --%>
+	</logic:iterate>
+	</c:if>
+	<tr>
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+			<digi:trn>Subtotal MTEFs</digi:trn>:
+		</td>
+		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+			<c:if test="${not empty funding.subtotalMTEFs}">
+ 				<b>${funding.subtotalMTEFs} ${aimEditActivityForm.currCode}</b>
+ 			</c:if> &nbsp;
+           </td>
+		<%-- <td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td> --%>
+	</tr>
+</c:if> 
+<%--	</c:if>--%>
+	<tr>
+		<td colspan="5" height="7px"></td>
+	</tr>
+
+<!-- MTEFs end -->
+

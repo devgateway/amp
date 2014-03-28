@@ -256,23 +256,6 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("donor_type_name", "org_type_id", AmpOrgType.class, "orgType")).
 						addTrnColDef("terms_assist_name", "terms_assist_id").
 						addTrnColDef("financing_instrument_name", "financing_instrument_id"));
-
-				addViewDef(this, new I18nViewDescription("v_nationalobjectives_all_level").
-						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
-						);
-
-				for(int i = 0; i <= 8; i++)
-				{
-					addViewDef(this, new I18nViewDescription("v_nationalobjectives_level_" + i).
-						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
-				}
 				
 				addViewDef(this, new I18nViewDescription("v_pledges_districts").
 						addColumnDef(new I18nViewColumnDescription("location_name", "location_id", AmpCategoryValueLocations.class, "name")));
@@ -334,27 +317,7 @@ public class InternationalizedViewsRepository {
 
 				addViewDef(this, new I18nViewDescription("v_pledges_zones").
 						addColumnDef(new I18nViewColumnDescription("location_name", "location_id", AmpCategoryValueLocations.class, "name")));
-				
-				addViewDef(this, new I18nViewDescription("v_primaryprogram").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
-
-				addViewDef(this, new I18nViewDescription("v_primaryprogram_all_level").
-						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
-						);
-				
-				for(int i = 0; i <= 8; i++)
-				{
-					addViewDef(this, new I18nViewDescription("v_primaryprogram_level_" + i).
-						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
-				}
-				
+								
 				addViewDef(this, new I18nViewDescription("v_procurement_system").
 						addTrnColDef("name", "id"));
 								
@@ -386,26 +349,6 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_secondary_sub_sub_sectors").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));
 				
-				addViewDef(this, new I18nViewDescription("v_secondaryprogram").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
-
-				addViewDef(this, new I18nViewDescription("v_secondaryprogram_all_level").
-						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
-						);
-				
-				for(int i = 0; i <= 8; i++)
-				{
-					addViewDef(this, new I18nViewDescription("v_secondaryprogram_level_" + i).
-						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
-				}				
-
 				addViewDef(this, new I18nViewDescription("v_sect_min_cont_org").
 						addColumnDef(new I18nViewColumnDescription("org", "amp_org_id", AmpOrganisation.class, "name")));
 
@@ -458,26 +401,6 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_tertiary_sub_sub_sectors").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));
 				
-				addViewDef(this, new I18nViewDescription("v_tertiaryprogram").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
-
-				addViewDef(this, new I18nViewDescription("v_tertiaryprogram_all_level").
-						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
-						);
-				
-				for(int i = 0; i <= 8; i++)
-				{
-					addViewDef(this, new I18nViewDescription("v_tertiaryprogram_level_" + i).
-						addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
-				}				
-
 				addViewDef(this, new I18nViewDescription("v_titles").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name"))); // if changing this line: ESRI GIS DataDispatcher references it, change it there too! 
 
@@ -529,7 +452,91 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_contracting_arrangements").
 						addColumnDef(new I18nViewColumnDescription("body", "v_contracting_arrangements", "locale")));
 
-			}});
+				buildProgramsMultilingualData();
+			}
+			
+			private void buildProgramsMultilingualData(){
+				addViewDef(this, new I18nViewDescription("v_primaryprogram").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_theme_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_secondaryprogram").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_theme_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_tertiaryprogram").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_theme_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_nationalobjectives").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_theme_id", AmpTheme.class, "name")));
+
+				addViewDef(this, new I18nViewDescription("v_primaryprogram_all_level").
+						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
+						);
+
+				for(int i = 0; i <= 8; i++)
+				{
+					addViewDef(this, new I18nViewDescription("v_primaryprogram_level_" + i).
+							addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+				}
+
+				addViewDef(this, new I18nViewDescription("v_secondaryprogram_all_level").
+						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
+						);
+
+				for(int i = 0; i <= 8; i++)
+				{
+					addViewDef(this, new I18nViewDescription("v_secondaryprogram_level_" + i).
+							addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+				}				
+
+				addViewDef(this, new I18nViewDescription("v_tertiaryprogram_all_level").
+						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
+						);
+
+				for(int i = 0; i <= 8; i++)
+				{
+					addViewDef(this, new I18nViewDescription("v_tertiaryprogram_level_" + i).
+							addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+				}
+
+				addViewDef(this, new I18nViewDescription("v_nationalobjectives_all_level").
+						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
+						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
+						);
+
+				for(int i = 0; i <= 8; i++)
+				{
+					addViewDef(this, new I18nViewDescription("v_nationalobjectives_level_" + i).
+							addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
+				}
+			}
+			});
 	
 	/**
 	 * adds to a Map<view_name, view_description> the description of a view's mapped columns. Does sanity checks while doing so and fails hard in case it doesn't.

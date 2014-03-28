@@ -584,7 +584,8 @@
 <field:display name="NPD Clasification" feature="Identification"></field:display> 
 <field:display name="NPD Program Description" feature="Program"></field:display> 
 <field:display name="Name" feature="Admin - Component Type"></field:display> 
-<field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives" feature="NPD Programs"></field:display>
+<field:display name="National Planning Objectives Detail" feature="NPD Programs"></field:display>  
 <field:display name="National Plan Objective" feature="Program"></field:display> 
 <field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="Objective Comments" feature="Identification"></field:display> 
@@ -602,7 +603,10 @@
 <field:display name="Physical progress description" feature="Physical Progress"></field:display> 
 <field:display name="Physical progress title" feature="Physical Progress"></field:display> 
 <field:display name="Planned Disbursement Preview" feature="Disbursement"></field:display> 
-<field:display name="Primary Program" feature="NPD Programs"></field:display> 
+<field:display name="Primary Program" feature="NPD Programs"></field:display>
+<field:display name="Primary Program Detail" feature="NPD Programs"></field:display>
+<field:display name="Secondary Program Detail" feature="NPD Programs"></field:display>
+<field:display name="Tertiary Program Detail" feature="NPD Programs"></field:display> 
 <field:display name="Primary Sector Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display> 

@@ -106,7 +106,7 @@
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogue.jsp"></jsp:include>
 	
-		<div class="text-center">
+		<div class="big-form-buttons">
 			<button type="button" onclick="pledge_form_submit('#pledge_form_big_div');" class="btn btn-primary" id='pledgeForm_submit'><digi:trn>Submit</digi:trn></button>
 			<button type="button" onclick="pledge_form_validate('#pledge_form_big_div');" class="btn btn-info" id='pledgeForm_validate'><digi:trn>Validate</digi:trn></button>
 			<button type="button" onclick="pledge_form_cancel('#pledge_form_big_div');" class="btn btn-warning" id='pledgeForm_cancel'><digi:trn>Cancel</digi:trn></button>		

@@ -39,6 +39,17 @@ div.form-control{
 	
 }
 
+.big-form-buttons{
+	/*position: fixed;
+	top: 23px;
+	left: 1462px;
+	background-color: white;
+	padding: 50px;
+	border-radius: 30px;
+	border: 1px solid gray;*/
+	text-align: center;
+}
+
 .label-near-input input {max-width: 55% !important; display: inline-block;}
 .label-near-input label {margin-right: 3em; max-width: 25%;}
 .initially-hidden {display: none;}

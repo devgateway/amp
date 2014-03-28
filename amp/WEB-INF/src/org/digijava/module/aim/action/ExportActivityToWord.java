@@ -100,6 +100,9 @@ public class ExportActivityToWord extends Action {
     org.digijava.module.aim.form.EditActivityForm.Sector sectors = null;
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat();
 
+	public boolean hasContent(Collection<?> col){
+		return col != null && !col.isEmpty();
+	}
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		EditActivityForm myForm=(EditActivityForm)form;
@@ -363,7 +366,7 @@ public class ExportActivityToWord extends Action {
 		            programsTbl.addCell(new RtfCell());
 		            
 		            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective", ampContext)){		           
-			            if(programs.getNationalPlanObjectivePrograms()!=null){
+			            if (hasContent(programs.getNationalPlanObjectivePrograms())){
 							cell = new RtfCell();
 							cell.setBorder(0);
 							cell.add(new Paragraph(TranslatorWorker.translateText("National Plan Objective").toUpperCase(), BOLDFONT));						
@@ -380,7 +383,7 @@ public class ExportActivityToWord extends Action {
 		            if(FeaturesUtil.isVisibleModule("/Activity Form/Program", ampContext)){
 		            	
 		            	if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs", ampContext)){		           
-				            if(programs.getNationalPlanObjectivePrograms()!=null){
+				            if (hasContent(programs.getPrimaryPrograms())){
 								cell = new RtfCell();
 								cell.setBorder(0);
 								cell.add(new Paragraph(TranslatorWorker.translateText("Primary Programs").toUpperCase(), BOLDFONT));						
@@ -398,7 +401,7 @@ public class ExportActivityToWord extends Action {
 		            	
 		            	
 			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs", ampContext)){		           
-				            if(programs.getNationalPlanObjectivePrograms()!=null){
+				            if (hasContent(programs.getSecondaryPrograms())){
 								cell = new RtfCell();
 								cell.setBorder(0);
 								cell.add(new Paragraph(TranslatorWorker.translateText("Secondary Programs").toUpperCase(), BOLDFONT));						
@@ -412,7 +415,7 @@ public class ExportActivityToWord extends Action {
 							}
 			            }
 			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs", ampContext)){		           
-				            if(programs.getNationalPlanObjectivePrograms()!=null){
+				            if (hasContent(programs.getTertiaryPrograms())){
 								cell = new RtfCell();
 								cell.setBorder(0);
 								cell.add(new Paragraph(TranslatorWorker.translateText("Tertiary Programs").toUpperCase(), BOLDFONT));						

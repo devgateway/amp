@@ -59,14 +59,15 @@ public class HibernateSessionRequestFilter implements Filter {
             // Commit and cleanup
             log.debug("Committing the database transaction");
             Transaction tx	= PersistenceManager.getCurrentSession().getTransaction();
-			if (tx.isActive())
+			if (tx!=null && tx.isActive())
 				try {
 					tx.commit();
-				} catch (Exception e) {
-					log.error(e);
-					e.printStackTrace();
+				} catch (RuntimeException e) {
+					tx.rollback();
+					log.error("Transaction has been rolled back after exception during commit "
+							+ e);
 				}
-            
+
             PersistenceManager.removeClosedSessionsFromMap();
             //PersistenceManager.checkClosedOrLongSessionsFromTraceMap();
             if ( request instanceof HttpServletRequest )

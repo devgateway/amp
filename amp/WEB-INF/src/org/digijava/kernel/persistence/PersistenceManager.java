@@ -49,8 +49,10 @@ import org.hibernate.EntityMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.SessionFactoryImplementor;
@@ -694,32 +696,25 @@ public class PersistenceManager {
 	 * @return
 	 */
 	public static Session getRequestDBSession(boolean createNew) {
-//		Map resMap = (Map) requestSession.get();
-//		if (resMap == null) {
-//			resMap = new HashMap();
-//			requestSession.set(resMap);
-//		}
-//		Session sess = (Session) resMap.get(Constants.REQUEST_DB_SESSION);
-//
-//		if (sess == null || !sess.isOpen()) {
-//			logger.debug("RequestDBSession was not found or is closed in the current thread");
-//			if (createNew) {
-//				logger.debug("Creating new RequestDBSession");
-//				try {
-//					sess = getSession();
-//				}
-//				catch (Exception ex) {
-//					throw new DgException("Ecxeption getting DB session", ex);
-//				}
-//				resMap.put(Constants.REQUEST_DB_SESSION, sess);
-//			}
-//		}
-//		else {
-//			logger.debug("Reusing old RequestDBSession");
-//		}
-
 		org.hibernate.classic.Session sess = PersistenceManager.sf.getCurrentSession();
-		if(sess.getTransaction()==null || !sess.getTransaction().isActive()) sess.beginTransaction();
+		
+		Transaction transaction=sess.getTransaction();
+		if(transaction!=null && transaction.isActive()) {
+			try {
+				SQLQuery testQuery = sess.createSQLQuery("SELECT 1");
+				testQuery.uniqueResult();				
+			} catch (RuntimeException e) {
+				transaction.rollback();				
+				logger.error("Transaction has been rolled back after exception "+ e);
+				sess = PersistenceManager.sf.getCurrentSession();
+				sess.beginTransaction(); 
+			}
+			
+			
+		}
+	
+		if(transaction==null || !transaction.isActive()) sess.beginTransaction(); 
+
 		addSessionToStackTraceMap(sess);
 		
 		return sess;
@@ -864,4 +859,13 @@ public class PersistenceManager {
 			return Double.parseDouble((String) obj);
 		throw new RuntimeException("cannot convert object of class " + obj.getClass().getName() + " to double");
 	}
+	
+	public static StatelessSession openNewStatelessSession() {
+		return sf.openStatelessSession();
+	}
+	
+	public static SessionFactory sf() {
+		return sf;
+	}
+	
 }

@@ -1,11 +1,26 @@
 package org.digijava.module.translation.util;
 
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.string.Strings;
-import org.digijava.kernel.exception.DgException;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.digijava.kernel.cache.AbstractCache;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DigiCacheManager;
@@ -16,18 +31,13 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.hibernate.*;
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.type.Type;
-
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -546,15 +556,14 @@ public class ContentTranslationUtil {
             return null;
 
     	StatelessSession session = null;
-    	try{
-        	SessionFactory sf = PersistenceManager.getRequestDBSession().getSessionFactory();
-        	session = sf.openStatelessSession(); //this does the trick, doesn't work when entity contains collections
+    	try{        
+        	session =PersistenceManager.openNewStatelessSession(); //this does the trick, doesn't work when entity contains collections
         	StringBuilder query = new StringBuilder();
 			query.append("select c.");
             query.append(fieldName);
             query.append(" from ");
 			query.append(clazz.getName());
-			String objIdField = getObjectIdField(clazz, sf);
+			String objIdField = getObjectIdField(clazz, PersistenceManager.sf());
 			query.append(" c where c.");
             query.append(objIdField);
             query.append("=:id");
@@ -627,8 +636,11 @@ public class ContentTranslationUtil {
                 session.save(act);
             }
             session.flush();
-        } catch (Exception e) {
+        } catch (Exception e) {        	
             logger.error("can't save field translations", e);
+            if(e.getCause()!=null && e.getCause() instanceof SQLException && 
+            		((SQLException)e.getCause()).getNextException()!=null) 
+            	logger.error("Next exception: "+((SQLException)e.getCause()).getNextException());
         } finally {
             if (session != null)
         	    session.close();

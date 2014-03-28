@@ -436,7 +436,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['organisation_role']['default_argument_skip_url'] = 0;
   $handler->display->display_options['arguments']['organisation_role']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['organisation_role']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['organisation_role']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['organisation_role']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['organisation_role']['not'] = 0;
   $handler->display->display_options['arguments']['organisation_role']['role_value'] = array(
     'DN' => 'DN',
@@ -450,7 +450,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['amp_sector_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['amp_sector_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['amp_sector_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['amp_sector_id']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['amp_sector_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['amp_sector_id']['not'] = 0;
   /* Contextual filter: Location: Activity Locations */
   $handler->display->display_options['arguments']['location_id']['id'] = 'location_id';
@@ -461,7 +461,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['location_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['location_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['location_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['location_id']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['location_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['location_id']['not'] = 0;
   /* Contextual filter: Activity: Name */
   $handler->display->display_options['arguments']['name']['id'] = 'name';
@@ -476,7 +476,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['name']['limit'] = '0';
   $handler->display->display_options['arguments']['name']['transform_dash'] = 0;
   $handler->display->display_options['arguments']['name']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['name']['use_like'] = 0;
+  $handler->display->display_options['arguments']['name']['use_like'] = 1;
   /* Contextual filter: Category Values: Activities Projects Budget */
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['id'] = 'amp_categoryvalue_id';
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['table'] = 'amp_activities_categoryvalues';
@@ -486,7 +486,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['not'] = 0;
   /* Contextual filter: Program: Activity Programs */
   $handler->display->display_options['arguments']['amp_program_id']['id'] = 'amp_program_id';
@@ -497,7 +497,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['amp_program_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['amp_program_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['amp_program_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['amp_program_id']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['amp_program_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['amp_program_id']['not'] = 0;
   /* Contextual filter: Activity: Start date */
   $handler->display->display_options['arguments']['actual_start_date']['id'] = 'actual_start_date';
@@ -523,7 +523,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['organisation_role_1']['default_argument_skip_url'] = 0;
   $handler->display->display_options['arguments']['organisation_role_1']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['organisation_role_1']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['organisation_role_1']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['organisation_role_1']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['organisation_role_1']['not'] = 0;
   $handler->display->display_options['arguments']['organisation_role_1']['role_value'] = array(
     'BA' => 'BA',

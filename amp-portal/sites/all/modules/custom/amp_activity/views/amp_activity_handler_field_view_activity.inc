@@ -12,7 +12,7 @@ class amp_activity_handler_field_view_activity extends views_handler_field {
 
     // Get the icon path.
     $theme_path = drupal_get_path('theme', 'ampp');
-    $icon_path = url($theme_path . '/images/magnifier_icon.png');
+    $icon_path = base_path() . $theme_path . '/images/magnifier_icon.png';
 
     // Get the activity URL.
     $amp_activity_url = variable_get('amp_activity_url', '/aim/viewActivityPreview.do~public=true~pageId=2~activityId=%aid%');

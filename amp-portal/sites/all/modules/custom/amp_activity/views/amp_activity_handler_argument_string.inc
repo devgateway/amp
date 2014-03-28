@@ -1,10 +1,11 @@
 <?php
-class amp_projects_handler_argument_string extends views_handler_argument_string {
 
-function init(&$view, &$options) {
-    parent::init($view, $options);
-  }
-
+/**
+ * AMP specific argument handler that filter by translated dbentity names.
+ *
+ * @TODO: Cleanup and update this filter to use the amp_i18n module.
+ */
+class amp_activity_handler_argument_string extends views_handler_argument_string {
   function option_definition() {
     $options = parent::option_definition();
     $options['use_like'] = array('default' => FALSE);
@@ -54,6 +55,7 @@ function init(&$view, &$options) {
     }
 
     $this->summary_name_field();
+
     return $this->summary_basics(FALSE);
   }
 
@@ -92,6 +94,7 @@ function init(&$view, &$options) {
 
       $this->helper->placeholders = array($this->placeholder_length => intval($this->options['limit']));
       $this->helper->add_filter();
+
       return;
     }
 
@@ -108,7 +111,8 @@ function init(&$view, &$options) {
     if (count($this->value) > 1) {
       $operator = 'IN';
       $argument = $this->value;
-    } else {
+    }
+    else {
       $operator = '=';
     }
 
@@ -128,10 +132,11 @@ function init(&$view, &$options) {
       $this->query->add_where_expression(0, $field, $placeholders);
     }
     else {
-      if($this->options['use_like']) {
+      if ($this->options['use_like']) {
         $this->query->add_where(0, $field, '%' . db_like($argument) . '%', 'ILIKE');
-      } else {
-          $this->query->add_where(0, $field, $argument, $operator);
+      }
+      else {
+        $this->query->add_where(0, $field, $argument, $operator);
       }
     }
   }
@@ -141,6 +146,7 @@ function init(&$view, &$options) {
     if (!empty($this->options['transform_dash'])) {
       $value = strtr($value, ' ', '-');
     }
+
     return $value;
   }
 
@@ -159,7 +165,8 @@ function init(&$view, &$options) {
       case 'ucwords':
         if ($multibyte == UNICODE_MULTIBYTE) {
           return mb_convert_case($string, MB_CASE_TITLE);
-        } else {
+        }
+        else {
           return ucwords($string);
         }
     }
@@ -204,4 +211,4 @@ function init(&$view, &$options) {
   function summary_name($data) {
     return $this->case_transform(parent::summary_name($data), 'case');
   }
- }
+}

@@ -26,6 +26,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['access']['type'] = 'none';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['disable_sql_rewrite'] = TRUE;
   $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
@@ -35,15 +36,16 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['pager']['options']['expose']['items_per_page_options_all'] = 0;
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
-    'amp_activity_id' => 'amp_activity_id',
+    'view_link' => 'view_link',
     'name' => 'name',
-    'amp_org_name_agg' => 'amp_org_name_agg',
-    'amp_sector_name_agg' => 'amp_sector_name_agg',
-    'amp_primarysector_name_agg' => 'amp_primarysector_name_agg',
-    'amp_secondarysector_name_agg' => 'amp_secondarysector_name_agg',
-    'amp_theme_name_agg' => 'amp_theme_name_agg',
-    'category_location_name_agg' => 'category_location_name_agg',
-    'name_1' => 'name_1',
+    'organisation_names' => 'organisation_names',
+    'organisation_names_1' => 'organisation_names_1',
+    'sector_names' => 'sector_names',
+    'sector_names_1' => 'sector_names_1',
+    'sector_names_2' => 'sector_names_2',
+    'program_names' => 'program_names',
+    'location_names' => 'location_names',
+    'status_name' => 'status_name',
     'actual_start_date' => 'actual_start_date',
     'actual_completion_date' => 'actual_completion_date',
     'commitment_amount' => 'commitment_amount',
@@ -51,42 +53,44 @@ function ampp_projects_views_default_views() {
   );
   $handler->display->display_options['style_options']['default'] = 'actual_start_date';
   $handler->display->display_options['style_options']['info'] = array(
-    'amp_activity_id' => array(
+    'view_link' => array(
       'align' => '',
       'separator' => '',
     ),
     'name' => array(
-      'sortable' => 1,
-      'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
     ),
-    'amp_org_name_agg' => array(
+    'organisation_names' => array(
       'align' => '',
       'separator' => '',
     ),
-    'amp_sector_name_agg' => array(
+    'organisation_names_1' => array(
       'align' => '',
       'separator' => '',
     ),
-    'amp_primarysector_name_agg' => array(
+    'sector_names' => array(
       'align' => '',
       'separator' => '',
     ),
-    'amp_secondarysector_name_agg' => array(
+    'sector_names_1' => array(
       'align' => '',
       'separator' => '',
     ),
-    'amp_theme_name_agg' => array(
+    'sector_names_2' => array(
       'align' => '',
       'separator' => '',
     ),
-    'category_location_name_agg' => array(
+    'program_names' => array(
       'align' => '',
       'separator' => '',
     ),
-    'name_1' => array(
-      'sortable' => 1,
+    'location_names' => array(
+      'align' => '',
+      'separator' => '',
+    ),
+    'status_name' => array(
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
@@ -120,33 +124,28 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['empty']['area']['table'] = 'views';
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['empty'] = FALSE;
-  /* Relationship: Organization Role: Organisation */
-  $handler->display->display_options['relationships']['organisation']['id'] = 'organisation';
-  $handler->display->display_options['relationships']['organisation']['table'] = 'amp_org_role';
-  $handler->display->display_options['relationships']['organisation']['field'] = 'organisation';
-  $handler->display->display_options['relationships']['organisation']['required'] = 0;
-  /* Field: Activity: ID */
-  $handler->display->display_options['fields']['amp_activity_id']['id'] = 'amp_activity_id';
-  $handler->display->display_options['fields']['amp_activity_id']['table'] = 'cached_amp_activity';
-  $handler->display->display_options['fields']['amp_activity_id']['field'] = 'amp_activity_id';
-  $handler->display->display_options['fields']['amp_activity_id']['label'] = '';
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['amp_activity_id']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['amp_activity_id']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['amp_activity_id']['hide_alter_empty'] = 0;
+  /* Field: Activity: View Link */
+  $handler->display->display_options['fields']['view_link']['id'] = 'view_link';
+  $handler->display->display_options['fields']['view_link']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['view_link']['field'] = 'view_link';
+  $handler->display->display_options['fields']['view_link']['label'] = '';
+  $handler->display->display_options['fields']['view_link']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['view_link']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['view_link']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['view_link']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['view_link']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['view_link']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['view_link']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['view_link']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['view_link']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['view_link']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['view_link']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['view_link']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['view_link']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['view_link']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['view_link']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['view_link']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['view_link']['hide_alter_empty'] = 0;
   /* Field: Activity: Name */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'cached_amp_activity';
@@ -168,168 +167,157 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['name']['hide_empty'] = 0;
   $handler->display->display_options['fields']['name']['empty_zero'] = 0;
   $handler->display->display_options['fields']['name']['hide_alter_empty'] = 0;
-  /* Field: Organization Role: Organisation having Role */
-  $handler->display->display_options['fields']['organisation_role']['id'] = 'organisation_role';
-  $handler->display->display_options['fields']['organisation_role']['table'] = 'amp_org_role';
-  $handler->display->display_options['fields']['organisation_role']['field'] = 'organisation_role';
-  $handler->display->display_options['fields']['organisation_role']['label'] = 'Donors';
-  $handler->display->display_options['fields']['organisation_role']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['organisation_role']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['organisation_role']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['organisation_role']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['organisation_role']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['hide_alter_empty'] = 0;
-  $handler->display->display_options['fields']['organisation_role']['role_value'] = array(
+  /* Field: Activity: Organisations having Role */
+  $handler->display->display_options['fields']['organisation_names']['id'] = 'organisation_names';
+  $handler->display->display_options['fields']['organisation_names']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['organisation_names']['field'] = 'organisation_names';
+  $handler->display->display_options['fields']['organisation_names']['label'] = 'Donors';
+  $handler->display->display_options['fields']['organisation_names']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['organisation_names']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['organisation_names']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['organisation_names']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['organisation_names']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['organisation_names']['metadata_value'] = array(
     'DN' => 'DN',
   );
-  /* Field: Organization Role: Organisation having Role */
-  $handler->display->display_options['fields']['organisation_role_1']['id'] = 'organisation_role_1';
-  $handler->display->display_options['fields']['organisation_role_1']['table'] = 'amp_org_role';
-  $handler->display->display_options['fields']['organisation_role_1']['field'] = 'organisation_role';
-  $handler->display->display_options['fields']['organisation_role_1']['label'] = ' Beneficiary Agencies';
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['organisation_role_1']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['organisation_role_1']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['hide_alter_empty'] = 0;
-  $handler->display->display_options['fields']['organisation_role_1']['role_value'] = array(
+  /* Field: Activity: Organisations having Role */
+  $handler->display->display_options['fields']['organisation_names_1']['id'] = 'organisation_names_1';
+  $handler->display->display_options['fields']['organisation_names_1']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['organisation_names_1']['field'] = 'organisation_names';
+  $handler->display->display_options['fields']['organisation_names_1']['label'] = 'Beneficiary Agencies';
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['organisation_names_1']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['organisation_names_1']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['organisation_names_1']['metadata_value'] = array(
     'BA' => 'BA',
   );
-  /* Field: Sector: Sector Names */
-  $handler->display->display_options['fields']['amp_sector_name_agg']['id'] = 'amp_sector_name_agg';
-  $handler->display->display_options['fields']['amp_sector_name_agg']['table'] = 'amp_sector';
-  $handler->display->display_options['fields']['amp_sector_name_agg']['field'] = 'amp_sector_name_agg';
-  $handler->display->display_options['fields']['amp_sector_name_agg']['label'] = 'Sectors';
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['amp_sector_name_agg']['hide_alter_empty'] = 0;
-  /* Field: Primary Sector: Primary Sector Names */
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['id'] = 'amp_primarysector_name_agg';
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['table'] = 'amp_primarysector';
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['field'] = 'amp_primarysector_name_agg';
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['label'] = 'Primary Sector';
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['amp_primarysector_name_agg']['hide_alter_empty'] = 0;
-  /* Field: Secondary Sector: Secondary Sector Names */
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['id'] = 'amp_secondarysector_name_agg';
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['table'] = 'amp_secondarysector';
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['field'] = 'amp_secondarysector_name_agg';
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['label'] = 'Secondary Sector';
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['amp_secondarysector_name_agg']['hide_alter_empty'] = 0;
-  /* Field: AMP Theme: Program Names */
-  $handler->display->display_options['fields']['amp_theme_name_agg']['id'] = 'amp_theme_name_agg';
-  $handler->display->display_options['fields']['amp_theme_name_agg']['table'] = 'amp_theme';
-  $handler->display->display_options['fields']['amp_theme_name_agg']['field'] = 'amp_theme_name_agg';
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['amp_theme_name_agg']['hide_alter_empty'] = 0;
-  /* Field: Category Value Location: AMP Category Locations Names */
-  $handler->display->display_options['fields']['category_location_name_agg']['id'] = 'category_location_name_agg';
-  $handler->display->display_options['fields']['category_location_name_agg']['table'] = 'amp_category_value_location';
-  $handler->display->display_options['fields']['category_location_name_agg']['field'] = 'category_location_name_agg';
-  $handler->display->display_options['fields']['category_location_name_agg']['label'] = 'Locations';
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['make_link'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['absolute'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['external'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['replace_spaces'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['trim_whitespace'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['nl2br'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['word_boundary'] = 1;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['ellipsis'] = 1;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['strip_tags'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['trim'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['alter']['html'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['element_label_colon'] = 1;
-  $handler->display->display_options['fields']['category_location_name_agg']['element_default_classes'] = 1;
-  $handler->display->display_options['fields']['category_location_name_agg']['hide_empty'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['empty_zero'] = 0;
-  $handler->display->display_options['fields']['category_location_name_agg']['hide_alter_empty'] = 0;
-  /* Field: Activity Status: Status */
+  /* Field: Activity: Sectors by classification */
+  $handler->display->display_options['fields']['sector_names']['id'] = 'sector_names';
+  $handler->display->display_options['fields']['sector_names']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['sector_names']['field'] = 'sector_names';
+  $handler->display->display_options['fields']['sector_names']['label'] = 'Sectors';
+  $handler->display->display_options['fields']['sector_names']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['sector_names']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['sector_names']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['sector_names']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['sector_names']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['sector_names']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['sector_names']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['sector_names']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['sector_names']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['sector_names']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['sector_names']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['sector_names']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['sector_names']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['sector_names']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['sector_names']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['sector_names']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['sector_names']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['sector_names']['metadata_operator'] = 'any';
+  /* Field: Activity: Sectors by classification */
+  $handler->display->display_options['fields']['sector_names_1']['id'] = 'sector_names_1';
+  $handler->display->display_options['fields']['sector_names_1']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['sector_names_1']['field'] = 'sector_names';
+  $handler->display->display_options['fields']['sector_names_1']['label'] = 'Primary Sectors';
+  $handler->display->display_options['fields']['sector_names_1']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['sector_names_1']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['sector_names_1']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['sector_names_1']['metadata_value'] = array(
+    'Primary' => 'Primary',
+  );
+  /* Field: Activity: Sectors by classification */
+  $handler->display->display_options['fields']['sector_names_2']['id'] = 'sector_names_2';
+  $handler->display->display_options['fields']['sector_names_2']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['sector_names_2']['field'] = 'sector_names';
+  $handler->display->display_options['fields']['sector_names_2']['label'] = 'Secondary Sectors';
+  $handler->display->display_options['fields']['sector_names_2']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['sector_names_2']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['sector_names_2']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['sector_names_2']['metadata_value'] = array(
+    'Secondary' => 'Secondary',
+  );
+  /* Field: Activity: Program Names */
+  $handler->display->display_options['fields']['program_names']['id'] = 'program_names';
+  $handler->display->display_options['fields']['program_names']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['program_names']['field'] = 'program_names';
+  /* Field: Activity: Location Names */
+  $handler->display->display_options['fields']['location_names']['id'] = 'location_names';
+  $handler->display->display_options['fields']['location_names']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['location_names']['field'] = 'location_names';
+  $handler->display->display_options['fields']['location_names']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['location_names']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['location_names']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['location_names']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['location_names']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['location_names']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['location_names']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['location_names']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['location_names']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['location_names']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['location_names']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['location_names']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['location_names']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['location_names']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['location_names']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['location_names']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['location_names']['hide_alter_empty'] = 0;
+  /* Field: Activity: Status */
   $handler->display->display_options['fields']['status_name']['id'] = 'status_name';
-  $handler->display->display_options['fields']['status_name']['table'] = 'cached_v_status';
+  $handler->display->display_options['fields']['status_name']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['status_name']['field'] = 'status_name';
   $handler->display->display_options['fields']['status_name']['alter']['alter_text'] = 0;
   $handler->display->display_options['fields']['status_name']['alter']['make_link'] = 0;
@@ -396,6 +384,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['commitment_amount']['id'] = 'commitment_amount';
   $handler->display->display_options['fields']['commitment_amount']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['commitment_amount']['field'] = 'commitment_amount';
+  $handler->display->display_options['fields']['commitment_amount']['label'] = 'Commitment amount (EUR)';
   $handler->display->display_options['fields']['commitment_amount']['alter']['alter_text'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['alter']['make_link'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['alter']['absolute'] = 0;
@@ -417,6 +406,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['disbursement_amount']['id'] = 'disbursement_amount';
   $handler->display->display_options['fields']['disbursement_amount']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['disbursement_amount']['field'] = 'disbursement_amount';
+  $handler->display->display_options['fields']['disbursement_amount']['label'] = 'Disbursement amount (EUR)';
   $handler->display->display_options['fields']['disbursement_amount']['alter']['alter_text'] = 0;
   $handler->display->display_options['fields']['disbursement_amount']['alter']['make_link'] = 0;
   $handler->display->display_options['fields']['disbursement_amount']['alter']['absolute'] = 0;
@@ -438,30 +428,31 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['sorts']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['sorts']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['sorts']['actual_start_date']['field'] = 'actual_start_date';
-  /* Contextual filter: Organizations: Organization ID */
-  $handler->display->display_options['arguments']['amp_org_id']['id'] = 'amp_org_id';
-  $handler->display->display_options['arguments']['amp_org_id']['table'] = 'amp_organisation';
-  $handler->display->display_options['arguments']['amp_org_id']['field'] = 'amp_org_id';
-  $handler->display->display_options['arguments']['amp_org_id']['relationship'] = 'organisation';
-  $handler->display->display_options['arguments']['amp_org_id']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['amp_org_id']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['amp_org_id']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['amp_org_id']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['amp_org_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['amp_org_id']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['amp_org_id']['not'] = 0;
-  /* Contextual filter: Sector: Sector ID */
+  /* Contextual filter: Organization Role: Organisation having Role */
+  $handler->display->display_options['arguments']['organisation_role']['id'] = 'organisation_role';
+  $handler->display->display_options['arguments']['organisation_role']['table'] = 'amp_org_role';
+  $handler->display->display_options['arguments']['organisation_role']['field'] = 'organisation_role';
+  $handler->display->display_options['arguments']['organisation_role']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['organisation_role']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['organisation_role']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['organisation_role']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['organisation_role']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['organisation_role']['not'] = 0;
+  $handler->display->display_options['arguments']['organisation_role']['role_value'] = array(
+    'DN' => 'DN',
+  );
+  /* Contextual filter: Sector: Activity Sectors */
   $handler->display->display_options['arguments']['amp_sector_id']['id'] = 'amp_sector_id';
-  $handler->display->display_options['arguments']['amp_sector_id']['table'] = 'amp_sector';
+  $handler->display->display_options['arguments']['amp_sector_id']['table'] = 'amp_activity_sector';
   $handler->display->display_options['arguments']['amp_sector_id']['field'] = 'amp_sector_id';
   $handler->display->display_options['arguments']['amp_sector_id']['default_argument_type'] = 'fixed';
   $handler->display->display_options['arguments']['amp_sector_id']['default_argument_skip_url'] = 0;
   $handler->display->display_options['arguments']['amp_sector_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['amp_sector_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['amp_sector_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['amp_sector_id']['break_phrase'] = 1;
+  $handler->display->display_options['arguments']['amp_sector_id']['break_phrase'] = 0;
   $handler->display->display_options['arguments']['amp_sector_id']['not'] = 0;
-  /* Contextual filter: Location: Locations IDs */
+  /* Contextual filter: Location: Activity Locations */
   $handler->display->display_options['arguments']['location_id']['id'] = 'location_id';
   $handler->display->display_options['arguments']['location_id']['table'] = 'amp_location';
   $handler->display->display_options['arguments']['location_id']['field'] = 'location_id';
@@ -470,7 +461,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['location_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['location_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['location_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['location_id']['break_phrase'] = 1;
+  $handler->display->display_options['arguments']['location_id']['break_phrase'] = 0;
   $handler->display->display_options['arguments']['location_id']['not'] = 0;
   /* Contextual filter: Activity: Name */
   $handler->display->display_options['arguments']['name']['id'] = 'name';
@@ -485,8 +476,8 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['name']['limit'] = '0';
   $handler->display->display_options['arguments']['name']['transform_dash'] = 0;
   $handler->display->display_options['arguments']['name']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['name']['use_like'] = 1;
-  /* Contextual filter: Activities Category Values: AMP Projects Budget */
+  $handler->display->display_options['arguments']['name']['use_like'] = 0;
+  /* Contextual filter: Category Values: Activities Projects Budget */
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['id'] = 'amp_categoryvalue_id';
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['table'] = 'amp_activities_categoryvalues';
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['field'] = 'amp_categoryvalue_id';
@@ -495,26 +486,24 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['break_phrase'] = 1;
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['break_phrase'] = 0;
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['not'] = 0;
-  /* Contextual filter: AMP Theme: AMP Program ID */
-  $handler->display->display_options['arguments']['amp_theme_id']['id'] = 'amp_theme_id';
-  $handler->display->display_options['arguments']['amp_theme_id']['table'] = 'amp_theme';
-  $handler->display->display_options['arguments']['amp_theme_id']['field'] = 'amp_theme_id';
-  $handler->display->display_options['arguments']['amp_theme_id']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['amp_theme_id']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['amp_theme_id']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['amp_theme_id']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['amp_theme_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['amp_theme_id']['break_phrase'] = 1;
-  $handler->display->display_options['arguments']['amp_theme_id']['not'] = 0;
+  /* Contextual filter: Program: Activity Programs */
+  $handler->display->display_options['arguments']['amp_program_id']['id'] = 'amp_program_id';
+  $handler->display->display_options['arguments']['amp_program_id']['table'] = 'amp_activity_program';
+  $handler->display->display_options['arguments']['amp_program_id']['field'] = 'amp_program_id';
+  $handler->display->display_options['arguments']['amp_program_id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['amp_program_id']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['amp_program_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['amp_program_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['amp_program_id']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['amp_program_id']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['amp_program_id']['not'] = 0;
   /* Contextual filter: Activity: Start date */
   $handler->display->display_options['arguments']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['arguments']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['actual_start_date']['field'] = 'actual_start_date';
   $handler->display->display_options['arguments']['actual_start_date']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['actual_start_date']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['actual_start_date']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['actual_start_date']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['actual_start_date']['summary_options']['override'] = TRUE;
   $handler->display->display_options['arguments']['actual_start_date']['condition_operator'] = '>=';
@@ -523,27 +512,26 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['actual_completion_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['actual_completion_date']['field'] = 'actual_completion_date';
   $handler->display->display_options['arguments']['actual_completion_date']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['actual_completion_date']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['actual_completion_date']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['actual_completion_date']['summary_options']['override'] = TRUE;
   $handler->display->display_options['arguments']['actual_completion_date']['condition_operator'] = '<=';
   /* Contextual filter: Organization Role: Organisation having Role */
-  $handler->display->display_options['arguments']['organisation_role']['id'] = 'organisation_role';
-  $handler->display->display_options['arguments']['organisation_role']['table'] = 'amp_org_role';
-  $handler->display->display_options['arguments']['organisation_role']['field'] = 'organisation_role';
-  $handler->display->display_options['arguments']['organisation_role']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['organisation_role']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['organisation_role']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['organisation_role']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['organisation_role']['break_phrase'] = 1;
-  $handler->display->display_options['arguments']['organisation_role']['not'] = 0;
-  $handler->display->display_options['arguments']['organisation_role']['role_value'] = array(
+  $handler->display->display_options['arguments']['organisation_role_1']['id'] = 'organisation_role_1';
+  $handler->display->display_options['arguments']['organisation_role_1']['table'] = 'amp_org_role';
+  $handler->display->display_options['arguments']['organisation_role_1']['field'] = 'organisation_role';
+  $handler->display->display_options['arguments']['organisation_role_1']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['organisation_role_1']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['organisation_role_1']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['organisation_role_1']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['organisation_role_1']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['organisation_role_1']['not'] = 0;
+  $handler->display->display_options['arguments']['organisation_role_1']['role_value'] = array(
     'BA' => 'BA',
   );
-  /* Filter criterion: Activity: ID */
-  $handler->display->display_options['filters']['amp_activity_id']['id'] = 'amp_activity_id';
-  $handler->display->display_options['filters']['amp_activity_id']['table'] = 'cached_amp_activity';
-  $handler->display->display_options['filters']['amp_activity_id']['field'] = 'amp_activity_id';
+  /* Filter criterion: Activity: Filter Public */
+  $handler->display->display_options['filters']['filter_public']['id'] = 'filter_public';
+  $handler->display->display_options['filters']['filter_public']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['filters']['filter_public']['field'] = 'filter_public';
 
   /* Display: Content pane */
   $handler = $view->new_display('panel_pane', 'Content pane', 'panel_pane_1');
@@ -613,20 +601,19 @@ function ampp_projects_views_default_views() {
     t('Items per page'),
     t('- All -'),
     t('Offset'),
-    t('org'),
     t('Name'),
     t('Donors'),
-    t(' Beneficiary Agencies'),
+    t('Beneficiary Agencies'),
     t('Sectors'),
-    t('Primary Sector'),
-    t('Secondary Sector'),
+    t('Primary Sectors'),
+    t('Secondary Sectors'),
     t('Program Names'),
-    t('Locations'),
+    t('Location Names'),
     t('Status'),
     t('Start date'),
     t('End date'),
-    t('Commitment amount'),
-    t('Disbursement amount'),
+    t('Commitment amount (EUR)'),
+    t('Disbursement amount (EUR)'),
     t('All'),
     t('Content pane'),
     t('No results found'),

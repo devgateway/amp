@@ -1,47 +1,41 @@
 <?php
 
-
-class views_handler_filter_amp_activity_id extends views_handler_filter {
-
+/**
+ * Filters out Activities that are not public.
+ *
+ * @TODO: Add descriptions, split into several filters!
+ */
+class amp_activity_handler_filter_activity_filter_public extends views_handler_filter {
   /**
-   * Determine if a filter can be exposed.
+   * Hide the administrative summary.
    */
-  function option_definition() {
-    $options = parent::option_definition();
-
-    $options['operator'] = array('default' => '');
-    $options['value'] = array('default' => '');
-    $options['group'] = array('default' => '0');
-    $options['exposed'] = array('default' => FALSE);
-    $options['expose'] = array(
-      'contains' => array(
-        'operator_id' => array('default' => FALSE),
-        'label' => array('default' => '', 'translatable' => TRUE),
-        'use_operator' => array('default' => 0),
-        'operator' => array('default' => ''),
-        'identifier' => array('default' => ''),
-        'required' => array('default' => 0),
-        'remember' => array('default' => 0),
-        'multiple' => array('default' => 0),
-      ),
-    );
-    return $options;
+  function admin_summary() {
+    return NULL;
   }
 
-
   /**
-   * Determine if a filter can be exposed.
+   * This is not a configurable filter.
    */
   function can_expose() {
     return FALSE;
   }
 
-
   /**
-   * Override the default query.
-   * @TODO: Add descriptions, split into several filters!
+   * Create a custom filter query.
    */
   function query() {
+    // This is a hackish attempt to optimize the query.
+    $use_statically_cached_ids = TRUE;
+    if ($use_statically_cached_ids) {
+      // Get an array of 'public' activities.
+      $items = amp_activity_get_amp_activities();
+
+      $placeholder = ':db_filter_public_placeholder';
+      $this->query->add_where_expression(0, "$this->table.$this->real_field IN ($placeholder)", array($placeholder => $items));
+
+      return;
+    }
+
     $this->query->set_group_operator('AND', 0);
 
     $group = 0;

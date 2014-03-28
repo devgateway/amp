@@ -1,22 +1,51 @@
 <?php
 
 /**
-* Custom filter handler for views, that handles DATETIME
-*/
-
-class ampp_projects_date_views_argument_handler extends views_handler_argument {
-
-  /*
+ * Custom filter handler for views, that handles DATETIME
+ *
+ * @TODO: CLEANUP AND FIX!
+ */
+class amp_activity_handler_argument_date extends views_handler_argument {
+  /**
    *
    */
   function option_definition() {
     $options = parent::option_definition();
     $options['condition_operator'] = array('default' => '=');
+
     return $options;
   }
 
+  /**
+   *
+   */
+  function options_form(&$form, &$form_state) {
+    //parent::options_form($form, $form_state);
 
-  /*
+    $options = $this->operator_options();
+    if (!empty($options)) {
+      $form['condition_operator'] = array(
+        '#type' => count($options) < 10 ? 'radios' : 'select',
+        '#title' => t('Operator'),
+        '#default_value' => $this->options['condition_operator'],
+        '#options' => $options,
+      );
+    }
+  }
+
+  /**
+   *
+   */
+  function operator_options($which = 'title') {
+    $options = array();
+    foreach ($this->operators() as $id => $info) {
+      $options[$id] = $info[$which];
+    }
+
+    return $options;
+  }
+
+  /**
    *
    */
   function operators() {
@@ -63,38 +92,7 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
     return $operators;
   }
 
-
-  /*
-   *
-   */
-  function operator_options($which = 'title') {
-    $options = array();
-    foreach ($this->operators() as $id => $info) {
-      $options[$id] = $info[$which];
-    }
-    return $options;
-  }
-
-
-  /*
-   *
-   */
-  function options_form(&$form, &$form_state) {
-    //parent::options_form($form, $form_state);
-
-    $options = $this->operator_options();
-    if (!empty($options)) {
-      $form['condition_operator'] = array(
-        '#type' => count($options) < 10 ? 'radios' : 'select',
-        '#title' => t('Operator'),
-        '#default_value' => $this->options['condition_operator'],
-        '#options' => $options,
-      );
-    }
-  }
-
-
-  /*
+  /**
    *
    */
   function operator_values($values = 1) {
@@ -108,8 +106,7 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
     return $options;
   }
 
-
-  /*
+  /**
    *
    */
   function admin_summary() {
@@ -123,8 +120,7 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
     return t('@op argument', array('@op' => $operator));
   }
 
-
-  /*
+  /**
    *
    */
   function query($group_by = FALSE) {
@@ -137,14 +133,15 @@ class ampp_projects_date_views_argument_handler extends views_handler_argument {
     }
   }
 
-
-  /*
+  /**
    *
    */
   function op_simple($field) {
     $this->value = array($this->argument);
     $group = 0;
-    if (isset($this->options['group'])) $group = $this->options['group'];
+    if (isset($this->options['group'])) {
+      $group = $this->options['group'];
+    }
     $this->query->add_where($group, $field, $this->value[0], $this->options['condition_operator']);
   }
 }

@@ -2,328 +2,35 @@
 /**
  * @file
  * Define views stuff.
+ *
+ * @TODO: Move to amp_activity.module.
  */
 
 /**
- * Implements hook_views_data().
+ * Implements hook_views_data_alter().
  */
-function ampp_projects_views_data() {
+function ampp_projects_views_data_alter(&$data) {
   // TABLE: cached_amp_activity
-  $data['cached_amp_activity']['table']['group'] = t('Activity');
-  $data['cached_amp_activity']['table']['base'] = array(
-    'field' => 'amp_activity_id',
-    'title' => t('Cached AMP Activities'),
-    'help' => t('Contains information related to AMP Activities (projects).'),
-    'database' => 'amp_projects'
-  );
-
-  $data['cached_amp_activity']['amp_activity_id'] = array(
-    'title' => t('ID'),
-    'help' => t('The Activity ID'),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
-    'field' => array('handler' => 'ampp_projects_handler_activity_id'),
-    'filter' => array('handler' => 'views_handler_filter_amp_activity_id'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
-  );
-
-  $data['cached_amp_activity']['name'] = array(
-    'title' => t('Name'),
-    'help' => t('Title for the project'),
-    'argument' => array('handler' => 'amp_projects_handler_argument_string'),
-    'field' => array(
-      'handler' => 'ampp_projects_handler_activity_name',
-      'click sortable' => TRUE
-    ),
-    'filter' => array('handler' => 'views_handler_filter_string'),
-    'sort' => array('handler' => 'views_handler_sort_string')
-  );
-
-  $data['cached_amp_activity']['actual_start_date'] = array(
-    'title' => t('Start date'),
-    'help' => t('Date of the start of project'),
-    'argument' => array('handler' => 'ampp_projects_date_views_argument_handler'),
-    'field' => array(
-      'handler' => 'ampp_projects_handler_postgre_timestamp',
-      'click sortable' => TRUE
-    ),
-    'filter' => array('handler' => 'views_handler_filter_date'),
-    'sort' => array('handler' => 'views_handler_sort_date')
-  );
-
-  $data['cached_amp_activity']['actual_completion_date'] = array(
-    'title' => t('End date'),
-    'help' => t('Date of the actual completion'),
-    'argument' => array('handler' => 'ampp_projects_date_views_argument_handler'),
-    'field' => array(
-      'handler' => 'ampp_projects_handler_postgre_timestamp',
-      'click sortable' => TRUE
-    ),
-    'filter' => array('handler' => 'views_handler_filter_date'),
-    'sort' => array('handler' => 'views_handler_sort_date')
-  );
-
-  $data['cached_amp_activity']['draft'] = array(
-    'title' => t('Draft project'),
-    'help' => t('Is it draft project'),
-    'filter' => array(
-      'handler' => 'views_handler_filter_boolean_operator',
-      'use equal' => FALSE,
-    ),
-  );
-
-  $data['cached_amp_activity']['approval_status'] = array(
-    'title' => t('Approval Status'),
-    'help' => t('Activity approval status'),
-    'filter' => array('handler' => 'views_handler_filter_approval_status_in_operator')
-  );
-
-  $data['cached_amp_activity']['amp_team_id'] = array(
-    'title' => t('Team ID Filter'),
-    'help' => t('Team ID Filter'),
-    'filter' => array('handler' => 'views_handler_filter_amp_team_id')
-  );
-
-  // Commitment Amount
   $data['cached_amp_activity']['commitment_amount'] = array(
     'title' => t('Commitment amount'),
     'help' => t('Transaction Commitment amount'),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
     'field' => array(
       'handler' => 'views_handler_field_amount_commitment',
       'float' => TRUE,
     ),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
   );
 
-  // Disbursement amount
   $data['cached_amp_activity']['disbursement_amount'] = array(
     'title' => t('Disbursement amount'),
     'help' => t('Transaction Disbursement amount'),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
     'field' => array(
       'handler' => 'views_handler_field_amount_disbursement',
       'float' => TRUE,
     ),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
-  );
-
-  // TABLE: cached_v_status
-  $data['cached_v_status']['table']['group'] = t('Activity Status');
-  $data['cached_v_status']['table']['join'] = array(
-    'cached_amp_activity' => array(
-      'left_field' => 'amp_activity_id',
-      'field' => 'amp_activity_id'
-    )
-  );
-
-  $data['cached_v_status']['status_name'] = array(
-    'real field' => 'name',
-    'title' => t('Status'),
-    'help' => t('The status of the activity, human readable.'),
-    'field' => array(
-      'handler' => 'views_handler_field_status',
-      'click sortable' => TRUE
-    ),
-    'sort' => array('handler' => 'views_handler_sort'),
-  );
-
-  // TABLE: amp_activity_program
-  $data['amp_activity_program']['table']['group'] = t('Activity Program');
-  $data['amp_activity_program']['table']['join'] = array(
-    // Directly links to amp_activity table.
-    'cached_amp_activity' => array(
-      'left_field' => 'amp_activity_id',
-      'field' => 'amp_activity_id',
-    ),
-  );
-
-  $data['amp_activity_program']['amp_program_id_agg'] = array(
-    'title' => t('Program IDs'),
-    'help' => t('Program IDs of the Activity'),
-    'field' => array('handler' => 'ampp_projects_handler_program_ids'),
-  );
-
-  // TABLE: amp_activity_sector
-  $data['amp_activity_sector']['table']['group'] = t('Activity Sector');
-  $data['amp_activity_sector']['table']['join'] = array(
-    // Directly links to amp_activity table.
-    'cached_amp_activity' => array(
-      'left_field' => 'amp_activity_id',
-      'field' => 'amp_activity_id',
-    ),
-  );
-
-  $data['amp_activity_sector']['amp_sector_id_agg'] = array(
-    'title' => t('Sector IDs'),
-    'help' => t('Sectors IDs of Activity'),
-    'field' => array('handler' => 'ampp_projects_handler_sector_ids'),
-  );
-
-  // TABLE: amp_sector
-  $data['amp_sector']['table']['group'] = t('Sector');
-  $data['amp_sector']['table']['join'] = array(
-    'cached_amp_activity' => array(
-      'left_table' => 'amp_activity_sector',
-      'left_field' => 'amp_sector_id',
-      'field' => 'amp_sector_id'
-    )
-  );
-
-  $data['amp_sector']['amp_sector_name_agg'] = array(
-    'title' => t('Sector Names'),
-    'help' => t('Sectors names of the Activity'),
-    'field' => array('handler' => 'ampp_projects_handler_sector_names'),
-  );
-
-  $data['amp_sector']['amp_sector_id'] = array(
-    'title' => t('Sector ID'),
-    'help' => t('Sectors ID of the Activity'),
-    'argument' => array('handler' => 'views_handler_argument_sector_id'),
-    'field' => array('handler' => 'views_handler_field'),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
-  );
-
-  // TABLE: amp_primarysector
-  $data['amp_primarysector']['table']['group'] = t('Primary Sector');
-  $data['amp_primarysector']['table']['join'] = array(
-    'cached_amp_activity' => array(
-      'table' => 'amp_sector',
-      'left_table' => 'amp_activity_sector',
-      'left_field' => 'amp_sector_id',
-      'field' => 'amp_sector_id',
-      'extra' => 'amp_activity_sector.classification_config_id=1'
-    )
-  );
-
-  $data['amp_primarysector']['amp_primarysector_name_agg'] = array(
-    'title' => t('Primary Sector Names'),
-    'help' => t('Primary Sectors names of the Activity'),
-    'field' => array('handler' => 'ampp_projects_handler_primarysector_names'),
-  );
-
-  // TABLE: amp_secondarysector
-  $data['amp_secondarysector']['table']['group'] = t('Secondary Sector');
-  $data['amp_secondarysector']['table']['join'] = array(
-    'cached_amp_activity' => array(
-      'table' => 'amp_sector',
-      'left_table' => 'amp_activity_sector',
-      'left_field' => 'amp_sector_id',
-      'field' => 'amp_sector_id',
-      'extra' => 'amp_activity_sector.classification_config_id=2'
-    )
-  );
-
-  $data['amp_secondarysector']['amp_secondarysector_name_agg'] = array(
-    'title' => t('Secondary Sector Names'),
-    'help' => t('Secondary Sectors names of the Activity'),
-    'field' => array('handler' => 'ampp_projects_handler_secondarysector_names'),
-  );
-
-  // TABLE: amp_theme
-  $data['amp_theme']['table']['group'] = t('AMP Theme');
-  $data['amp_theme']['table']['join'] = array(
-    'cached_amp_activity' => array(
-      'left_table' => 'amp_activity_program',
-      'left_field' => 'amp_program_id',
-      'field' => 'amp_theme_id'
-    )
-  );
-
-  $data['amp_theme']['amp_theme_name_agg'] = array(
-    'title' => t('Program Names'),
-    'help' => t('Program names of the Activity'),
-    'field' => array('handler' => 'ampp_projects_handler_program_names'),
-  );
-
-  $data['amp_theme']['amp_theme_id'] = array(
-    'title' => t('AMP Program ID'),
-    'help' => t('Program ID of the Activity'),
-    'argument' => array('handler' => 'views_handler_argument_program_id'),
-    'field' => array('handler' => 'views_handler_field'),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
-  );
-
-  // TABLE: amp_activity_location
-  $data['amp_activity_location']['table']['group'] = t('Activity Location');
-  $data['amp_activity_location']['table']['join'] = array(
-    // Directly links to amp_activity table.
-    'cached_amp_activity' => array(
-      'left_field' => 'amp_activity_id',
-      'field' => 'amp_activity_id',
-    ),
-  );
-  $data['amp_activity_location']['amp_location_id_agg'] = array(
-    'title' => t('AMP Location IDs'),
-    'help' => t('Location IDs of the Activity'),
-    'field' => array(
-      'handler' => 'ampp_projects_handler_location_ids',
-    ),
-  );
-
-  // TABLE: amp_location
-  $data['amp_location']['table']['group'] = t('Location');
-  $data['amp_location']['table']['join'] = array(
-    'cached_amp_activity' => array(
-      'left_table' => 'amp_activity_location',
-      'left_field' => 'amp_location_id',
-      'field' => 'amp_location_id'
-    )
-  );
-
-  $data['amp_location']['amp_location_region_agg'] = array(
-    'title' => t('AMP Locations Names'),
-    'help' => t('Locations name of the Activity'),
-    'field' => array('handler' => 'ampp_projects_handler_location_names'),
-  );
-
-  $data['amp_location']['amp_location_id'] = array(
-    'title' => t('Location ID'),
-    'help' => t('ID of the location'),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
-    'field' => array('handler' => 'views_handler_field'),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
-  );
-
-  $data['amp_location']['location_id'] = array(
-    'title' => t('Locations IDs'),
-    'help' => t('List of locations'),
-    'argument' => array('handler' => 'views_handler_argument_location_id'),
-    'field' => array('handler' => 'views_handler_field'),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
-  );
-
-  // TABLE: amp_category_value_location
-  $data['amp_category_value_location']['table']['group'] = t('Category Value Location');
-  $data['amp_category_value_location']['table']['join'] = array(
-    'cached_amp_activity' => array(
-      'left_table' => 'amp_location',
-      'left_field' => 'location_id',
-      'field' => 'id'
-    ),
-  );
-
-  $data['amp_category_value_location']['id'] = array(
-    'title' => t('AMP Category value locations ID'),
-    'help' => t('AMP Category value locations ID'),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
-    'field' => array('handler' => 'views_handler_field'),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
-  );
-
-  $data['amp_category_value_location']['category_location_name_agg'] = array(
-    'title' => t('AMP Category Locations Names'),
-    'help' => t('AMP Projects category Locations  names'),
-    'field' => array('handler' => 'ampp_projects_handler_category_location_names'),
   );
 
   // TABLE: amp_funding
+  // Required for commitment_amount and disbursement_amount.
   $data['amp_funding']['table']['group'] = t('Funding');
   $data['amp_funding']['table']['join'] = array(
     // Directly links to amp_activity table.
@@ -332,162 +39,6 @@ function ampp_projects_views_data() {
       'field' => 'amp_activity_id',
     ),
   );
-  $data['amp_funding']['amp_org_id_agg'] = array(
-    'title' => t('AMP Organizations IDs'),
-    'help' => t('Organizations IDs of the Activity'),
-    'field' => array(
-      'handler' => 'ampp_projects_handler_org_ids',
-    ),
-  );
-
-  // TABLE: amp_organisation
-  $data['amp_organisation']['table']['group'] = t('Organizations');
-  $data['amp_organisation']['table']['base'] = array(
-    'field' => 'amp_org_id',
-    'title' => t('AMP Organization'),
-    'help' => t('Contains information related to AMP Organizations.'),
-    'database' => 'amp_projects'
-  );
-
-  $data['amp_organisation']['amp_org_id'] = array(
-    'title' => t('Organization ID'),
-    'help' => t('ID of the Organization'),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
-    'field' => array(
-      'handler' => 'views_handler_field',
-      'click sortable' => TRUE,
-    ),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric'),
-  );
-
-  $data['amp_organisation']['name'] = array(
-    'title' => t('Name'),
-    'help' => t('Provides the name of the organization.'),
-    'field' => array(
-      'handler' => 'views_handler_field',
-      'click sortable' => TRUE,
-    ),
-  );
-
-  // TABLE: amp_activities_categoryvalues
-  $data['amp_activities_categoryvalues']['table']['group'] = t('Activities Category Values');
-  $data['amp_activities_categoryvalues']['table']['join'] = array(
-    'cached_amp_activity' => array(
-      'left_field' => 'amp_activity_id',
-      'field' => 'amp_activity_id',
-      'type' => 'INNER',
-    )
-  );
-
-  $data['amp_activities_categoryvalues']['amp_categoryvalue_id'] = array(
-    'title' => t('AMP Projects Budget'),
-    'help' => t('Budget type'),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
-    'field' => array('handler' => 'views_handler_field'),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
-  );
-
-  // TABLE: amp_org_role
-  $data['amp_org_role']['table']['group'] = t('Organization Role');
-  $data['amp_org_role']['table']['join'] = array(
-    'cached_amp_activity' => array(
-      'left_field' => 'amp_activity_id',
-      'field' => 'activity',
-    )
-  );
-
-  $data['amp_org_role']['organisation'] = array(
-    'title' => t('Organisation'),
-    'help' => t('Get information related to the organization.'),
-    'relationship' => array(
-      'handler' => 'views_handler_relationship',
-      'base' => 'amp_organisation',
-      'field' => 'amp_org_id',
-      'label' => t('org'),
-    ),
-  );
-
-  $data['amp_org_role']['role'] = array(
-    'title' => t('Role'),
-    'help' => t('Get information related to the organization roles.'),
-    'relationship' => array(
-      'handler' => 'views_handler_relationship',
-      'base' => 'amp_role',
-      'field' => 'amp_role_id',
-      'label' => t('role'),
-      'join' => array(),
-    ),
-  );
-
-  $data['amp_org_role']['organisation_role'] = array(
-    'title' => t('Organisation having Role'),
-    'real field' => 'organisation',
-    'argument' => array(
-      'help' => t('Filter by Organizations that have a specific role'),
-      'handler' => 'ampp_projects_views_handler_argument_organisation_role',
-      'options callback' => '_ampp_projects_get_amp_roles',
-      'options arguments' => array('role_code'),
-    ),
-    'field' => array(
-      'help' => t('Show Organizations that have a specific role.'),
-      'handler' => 'ampp_projects_views_handler_field_organisation_role',
-      'options callback' => '_ampp_projects_get_amp_roles',
-      'options arguments' => array('role_code'),
-    ),
-  );
-
-  // TABLE: amp_role
-  $data['amp_role']['table']['group'] = t('Role');
-  $data['amp_role']['table']['base'] = array(
-    'field' => 'amp_role_id',
-    'title' => t('AMP Role'),
-    'help' => t('Contains information related to AMP Roles.'),
-    'database' => 'amp_projects'
-  );
-
-  $data['amp_role']['amp_role_id'] = array(
-    'title' => t('Role ID'),
-    'help' => t('The node ID.'),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
-    'field' => array(
-      'handler' => 'views_handler_field',
-      'click sortable' => TRUE,
-    ),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'sort' => array('handler' => 'views_handler_sort_numeric')
-  );
-
-  $data['amp_role']['name'] = array(
-    'title' => t('Name'),
-    'help' => t('The name of the role.'),
-    'argument' => array('handler' => 'views_handler_argument_string'),
-    'field' => array(
-      'handler' => 'views_handler_field',
-      'click sortable' => TRUE,
-    ),
-    'filter' => array('handler' => 'views_handler_filter_string'),
-    'sort' => array('handler' => 'views_handler_sort')
-  );
-
-  $data['amp_role']['role_code'] = array(
-    'title' => t('Role Code'),
-    'help' => t('The code of the role.'),
-    'argument' => array('handler' => 'views_handler_argument_string'),
-    'field' => array(
-      'handler' => 'views_handler_field',
-      'click sortable' => TRUE,
-    ),
-    'filter' => array(
-      'handler' => 'views_handler_filter_in_operator',
-      'options callback' => '_ampp_projects_get_amp_roles',
-      'options arguments' => array('role_code'),
-    ),
-    'sort' => array('handler' => 'views_handler_sort')
-  );
-
-  return $data;
 }
 
 /**
@@ -515,49 +66,6 @@ function ampp_projects_views_pre_build(&$view) {
           $view->sort[$conf['default_sort']]->options['order'] = $conf['default_order'];
         }
       }
-    }
-  }
-}
-
-/**
- * Implements hook_views_pre_execute().
- */
-function ampp_projects_views_pre_execute(&$view) {
-  global $language;
-
-  if ($view->name == 'projects_search') {
-    $view->build_info['query']->groupBy('cached_amp_activity.amp_activity_id');
-  }
-
-  if ($view->name == 'projects_search_result' && !isset($view->get_total_amount_type)) {
-    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion', 'name', cached_amp_activity.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', '" . $language->language . "')";
-    $view->build_info['query']
-      ->groupBy('cached_amp_activity.amp_activity_id')
-      ->groupBy($translate_field)
-      ->groupBy('amp_org_role.activity')
-      ->groupBy('cached_amp_activity.actual_start_date')
-      ->groupBy('cached_amp_activity.actual_completion_date')
-      ->groupBy('cached_v_status.name');
-    $view->build_info['count_query']
-      ->groupBy('cached_amp_activity.amp_activity_id')
-      ->groupBy('amp_org_role.activity')
-      ->groupBy('cached_amp_activity.actual_start_date')
-      ->groupBy('cached_amp_activity.actual_completion_date')
-      ->groupBy('cached_v_status.name');
-  }
-  else {
-    if ($view->name == 'projects_search_result' && isset($view->get_total_amount_type)) {
-      $view->build_info['query']->groupBy('cached_amp_activity.amp_activity_id')
-        ->groupBy('(fd.transaction_amount / getexchange(cur.currency_code, fd.transaction_date ))');
-    }
-  }
-
-  if ($view->name == 'projects_search_result' && $view->current_display == 'feed_1') {
-    unset($view->field['amp_activity_id']);
-
-    // optionally show the Status column
-    if (!isset($_GET['show_status_column']) || $_GET['show_status_column'] == 0) {
-      unset($view->field['name_1']);
     }
   }
 }
@@ -656,80 +164,22 @@ function ampp_projects_views_query_alter(&$view, &$query) {
  * Implements hook_views_pre_render().
  */
 function ampp_projects_views_pre_render(&$view) {
-  if ($view->name == 'projects_search_result') {
-    switch ($view->current_display) {
-      case 'default':
-      case 'panel_pane_1':
-      case 'feed_1':
-        // Get the 'projects_search_result' pane configuration form session.
-        if (!isset($_SESSION['projects_search_result_conf'])) {
-          break;
-        }
-        $pane_conf = unserialize($_SESSION['projects_search_result_conf']);
-
-        foreach ($view->display_handler->handlers['field'] as $field_name => $field_def) {
-          if (!isset($pane_conf[$field_name])) {
-            continue;
-          }
-
-          // Manually hide the field.
-          // @TODO: Find a way to remove the field before runing the query.
-          if (empty($pane_conf[$field_name]['show'])) {
-            unset($view->field[$field_name]);
-            unset($view->display_handler->handlers['field'][$field_name]);
-            continue;
-          }
-
-          // Set the field column label.
-          if (!empty($pane_conf[$field_name]['label'])) {
-            $view->field[$field_name]->options['label'] = t($pane_conf[$field_name]['label']);
-          }
-        }
-        break;
-    }
+  if ($view->name != 'top_activities_by_disbursment') {
+    return;
   }
 
-  if ($view->name == 'top_activities_by_disbursment') {
-    if ($view->current_display == 'default') {
-      if (isset($_SESSION['top_activities_by_disbursement_conf'])) {
-        $conf = unserialize($_SESSION['top_activities_by_disbursement_conf']);
+  if ($view->current_display == 'default') {
+    if (isset($_SESSION['top_activities_by_disbursement_conf'])) {
+      $conf = unserialize($_SESSION['top_activities_by_disbursement_conf']);
 
-        foreach ($view->field as &$field) {
-          $name = (substr($field->field, 0, 6) == 'field_') ? substr($field->field, 6) : $field->field;
-          if (isset($conf['heading_' . $name]) && !empty($conf['heading_' . $name])) {
-            $field->options['label'] = t($conf['heading_' . $name]);
-          }
+      foreach ($view->field as &$field) {
+        $name = (substr($field->field, 0, 6) == 'field_') ? substr($field->field, 6) : $field->field;
+        if (isset($conf['heading_' . $name]) && !empty($conf['heading_' . $name])) {
+          $field->options['label'] = t($conf['heading_' . $name]);
         }
       }
     }
   }
-}
-
-/**
- * Returns a list of options for amp_role filters and arguments.
- *
- * @TODO: Add caching!
- */
-function _ampp_projects_get_amp_roles($key = NULL) {
-  $items = array();
-
-  if (!empty($key) && !in_array($key, array('role_code', 'amp_role_id'))) {
-    return $items;
-  }
-
-  db_set_active('amp_projects');
-  $query = db_select('amp_role', 'ar')->fields('ar');
-  foreach ($query->execute()->fetchAll(PDO::FETCH_OBJ) as $role) {
-    if (isset($key)) {
-      $items[$role->$key] = $role->name;
-    }
-    else {
-      $items[$role->role_code] = $role;
-    }
-  }
-  db_set_active();
-
-  return $items;
 }
 
 /**
@@ -910,50 +360,11 @@ function _ampp_get_search_argument_location_descendants($locations) {
 
     foreach ($query->execute()->fetchAll(PDO::FETCH_COLUMN) as $child_id) {
       $locations[] = $child_id;
-      $locations = array_merge($locations, _ampp_get_search_argument_location_parents(array($child_id)));
+      $locations = array_merge($locations, _amp_activity_get_location_parent_ids(array($child_id)));
     }
   }
 
   db_set_active();
 
   return $locations;
-}
-
-/**
- *
- */
-function _ampp_get_search_argument_location_parents($childLocationId) {
-  global $amp_db_exists;
-
-  if (!$amp_db_exists) return;
-
-  $allParentIds = array();
-
-  if (!empty($_GET["RegionalProjects"])) {
-    $regionalinclude = $_GET["RegionalProjects"];
-  } else {
-    $regionalinclude = $_GET["showregionalprojects"];
-  }
-
-  if ($regionalinclude == '1') {
-    db_set_active("amp_projects");
-
-    $parentIds = db_select('amp_category_value_location', 'l')
-      ->fields('l', array('parent_location'))
-      ->condition('l.id', $childLocationId, '=')
-      ->isNotNull('l.parent_location')
-      ->execute()
-      ->fetchAll(PDO::FETCH_COLUMN);
-
-    if (!empty($parentIds)) {
-      foreach ($parentIds as $parentId) {
-        $allParentIds[] = $parentId;
-        $allParentIds = array_merge($allParentIds, _ampp_get_search_argument_location_parents($parentId));
-      }
-    }
-
-    db_set_active();
-  }
-
-  return $allParentIds;
 }

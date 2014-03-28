@@ -1024,66 +1024,6 @@ function ampp_projects_check_currency_code() {
   }
 }
 
-
-/*
- * Get sectors children ids
- * @param integer $parentSectorId
- * @return Ambigous <multitype:, multitype:unknown >
- */
-function getChildSectorsIds($parentSectorId){
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
-  $allChildIds = array();
-  db_set_active("amp_projects");
-
-  $childIds = db_select('amp_sector', 's')
-  ->fields('s',array('amp_sector_id'))
-  ->condition('s.parent_sector_id', $parentSectorId, '=')
-  ->execute()
-  ->fetchAll(PDO::FETCH_COLUMN);
-
-  if(!empty($childIds)){
-    foreach ($childIds as $childId){
-      $allChildIds[] = $childId;
-      $allChildIds = array_merge($allChildIds, getChildSectorsIds($childId));
-    }
-  }
-
-  db_set_active();
-  return $allChildIds;
-}
-
-
-/*
- *
- */
-function getChildProgramsIds($parentProgramId){
-
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
-  $allChildIds = array();
-  db_set_active("amp_projects");
-
-  $childIds = db_select('amp_team', 't')
-  ->fields('t',array('amp_team_id'))
-  ->condition('t.parent_team_id', $parentProgramId, '=')
-  ->execute()
-  ->fetchAll(PDO::FETCH_COLUMN);
-
-  if(!empty($childIds)){
-    foreach ($childIds as $childId){
-      $allChildIds[] = $childId;
-      $allChildIds = array_merge($allChildIds, getChildProgramsIds($childId));
-    }
-  }
-
-  db_set_active();
-  return $allChildIds;
-}
-
 /**
  *
  */

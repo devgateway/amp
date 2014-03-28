@@ -3,7 +3,7 @@
 /**
  * Can be used to filter by Organizations that have a specific Role.
  */
-class ampp_projects_views_handler_argument_organisation_role extends views_handler_argument_numeric {
+class amp_activity_handler_argument_organisation_role extends views_handler_argument_numeric {
   var $value_form_type = 'checkboxes';
 
   function init(&$view, &$options) {
@@ -29,8 +29,36 @@ class ampp_projects_views_handler_argument_organisation_role extends views_handl
     $form['clear_markup_start'] = array(
       '#markup' => '<div class="clearfix">',
     );
-    $this->show_role_operator_form($form, $form_state);
-    $this->show_role_value_form($form, $form_state);
+
+    $options = $this->role_operator_options();
+    $form['role_operator'] = array(
+      '#type' => count($options) < 10 ? 'radios' : 'select',
+      '#title' => t('Operator'),
+      '#default_value' => $this->role_operator,
+      '#options' => $options,
+      '#prefix' => '<div class="views-group-box views-left-30">',
+      '#suffix' => '</div>',
+    );
+
+    $this->get_role_value_options();
+    $options = $this->role_value_options;
+    $default_value = (array) $this->role_value;
+
+    $form['role_value'] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Role'),
+      '#options' => $options,
+      '#default_value' => $default_value,
+      // These are only valid for 'select' type, but do no harm to checkboxes.
+      '#multiple' => TRUE,
+      '#size' => count($options) > 8 ? 8 : count($options),
+      '#prefix' => '<div class="views-group-box views-right-70"><div id="edit-options-value-wrapper">',
+      '#suffix' => '</div></div>',
+      '#dependency' => array(
+        'radio:options[role_operator]' => array('in', 'not in'),
+      ),
+    );
+
     $form['clear_markup_end'] = array(
       '#markup' => '</div>',
     );
@@ -56,23 +84,6 @@ class ampp_projects_views_handler_argument_organisation_role extends views_handl
     $form_state['values']['options']['role_value'] = $form['role_value']['#value'];
   }
 
-  /**
-   * Shortcut to display the operator form.
-   */
-  function show_role_operator_form(&$form, &$form_state) {
-    $options = $this->role_operator_options();
-
-    $form['role_operator'] = array(
-      '#type' => count($options) < 10 ? 'radios' : 'select',
-      '#title' => t('Operator'),
-      '#default_value' => $this->role_operator,
-      '#options' => $options,
-    );
-
-    $form['role_operator']['#prefix'] = '<div class="views-group-box views-left-30">';
-    $form['role_operator']['#suffix'] = '</div>';
-  }
-
   function role_operators() {
     $operators = array(
       'in' => array(
@@ -85,6 +96,11 @@ class ampp_projects_views_handler_argument_organisation_role extends views_handl
         'title' => t('Is not one of'),
         'short' => t('not in'),
         'short_single' => t('<>'),
+        'values' => 1,
+      ),
+      'any' => array(
+        'title' => t('Is any value'),
+        'short' => t('any'),
         'values' => 1,
       ),
     );
@@ -123,55 +139,35 @@ class ampp_projects_views_handler_argument_organisation_role extends views_handl
       }
     }
     // Choose different kind of ouput for 0, a single and multiple values.
-    if (count($this->role_value) == 0) {
+    if (count($this->role_value) == 0 && $operator != 'any') {
       $values = t('Unknown');
     }
-    else if (count($this->role_value) == 1) {
-      // If any, use the 'single' short name of the operator instead.
-      if (isset($info[$this->role_operator]['short_single'])) {
-        $operator = check_plain($info[$this->role_operator]['short_single']);
-      }
-
-      $keys = $this->role_value;
-      $value = array_shift($keys);
-      $values = check_plain($this->role_value_options[$value]);
-    }
     else {
-      foreach ($this->role_value as $value) {
-        if ($values !== '') {
-          $values .= ', ';
+      if (count($this->role_value) == 1) {
+        // If any, use the 'single' short name of the operator instead.
+        if (isset($info[$this->role_operator]['short_single'])) {
+          $operator = check_plain($info[$this->role_operator]['short_single']);
         }
-        if (drupal_strlen($values) > 8) {
-          $values .= '...';
-          break;
+
+        $keys = $this->role_value;
+        $value = array_shift($keys);
+        $values = check_plain($this->role_value_options[$value]);
+      }
+      else {
+        foreach ($this->role_value as $value) {
+          if ($values !== '') {
+            $values .= ', ';
+          }
+          if (drupal_strlen($values) > 8) {
+            $values .= '...';
+            break;
+          }
+          $values .= check_plain($this->role_value_options[$value]);
         }
-        $values .= check_plain($this->role_value_options[$value]);
       }
     }
 
     return $operator . (($values !== '') ? ' ' . $values : '');
-  }
-
-  /**
-   * Shortcut to display the value form.
-   */
-  function show_role_value_form(&$form, &$form_state) {
-    $this->get_role_value_options();
-    $options = $this->role_value_options;
-    $default_value = (array) $this->role_value;
-
-    $form['role_value'] = array(
-      '#type' => 'checkboxes',
-      '#title' => t('Role'),
-      '#options' => $options,
-      '#default_value' => $default_value,
-      // These are only valid for 'select' type, but do no harm to checkboxes.
-      '#multiple' => TRUE,
-      '#size' => count($options) > 8 ? 8 : count($options),
-    );
-
-    $form['role_value']['#prefix'] = '<div class="views-group-box views-right-70"><div id="edit-options-value-wrapper">';
-    $form['role_value']['#suffix'] = '</div></div>';
   }
 
   /**
@@ -207,74 +203,42 @@ class ampp_projects_views_handler_argument_organisation_role extends views_handl
     }
 
     // Get a list of roles keyed by role_code.
-    $roles = _ampp_projects_get_amp_roles();
+    $roles = $this->definition['options callback']();
 
     foreach ($this->role_value as $role_code) {
       if (!empty($roles[$role_code])) {
-        $items[] = $roles[$role_code]->amp_role_id;
+        $items[] = $roles[$role_code];
       }
     }
+
     return $items;
   }
 
   /**
-   * Override ensure_my_table so we can control how this joins in.
+   * Provides a unique placeholders for handlers.
+   */
+  function role_placeholder() {
+    return $this->query->placeholder($this->options['table'] . '_role_' . $this->options['field']);
+  }
+
+  /**
+   * Ensure the main table for this handler is in the query. This is used
+   * a lot.
    */
   function ensure_my_table() {
-    // Alter the table queue. This is required for the field to work when table relation already exists.
-    $table_queue = $this->query->table_queue;
+    if (!isset($this->table_alias)) {
+      if (!method_exists($this->query, 'ensure_table')) {
+        vpr(t('Ensure my table called but query has no ensure_table method.'));
 
-    if (!empty($this->options['break_phrase'])) {
-      views_break_phrase($this->argument, $this);
-    }
-    else {
-      $this->value = array($this->argument);
-    }
+        return;
+      }
+      // $this->table_alias = $this->query->ensure_table($this->table, $this->relationship);
 
-    // Filter by Organization ID.
-    if (count($this->value) > 1) {
-      $value_operator = empty($this->options['not']) ? 'IN' : 'NOT IN';
-    }
-    else if (count($this->value) == 1) {
-      $value_operator = empty($this->options['not']) ? '=' : '!=';
+      $this->table_alias = $this->query->add_table($this->table, $this->relationship);
+      // $this->table_alias = $this->query->add_table($this->table, $this->relationship, $join);
+
     }
 
-    if (!empty($this->value)) {
-      $extra['org_id'] = array(
-        'field' => $this->real_field,
-        'operator' => $value_operator,
-        'value' => $this->value,
-      );
-
-      $table_queue[$this->table]['join']->type = 'INNER';
-    }
-
-    // Translate the Role Codes to Role IDs.
-    $role_value_ids = $this->_get_role_value_ids();
-
-    // Filter by Role ID.
-    if (count($role_value_ids) > 1) {
-      $role_operator = ($this->role_operator == 'in') ? 'IN' : 'NOT IN';
-    }
-    else if (count($role_value_ids) == 1) {
-      $role_operator = ($this->role_operator == 'in') ? '=' : '!=';
-    }
-
-    $extra['role_id'] = array(
-      'field' => 'role',
-      'operator' => $role_operator,
-      'value' => $role_value_ids,
-    );
-
-    // Alter the table queue. This is required for the field to work when table relation already exists.
-    if (isset($table_queue[$this->table]['join']->extra) && is_array($table_queue[$this->table]['join']->extra)) {
-      $table_queue[$this->table]['join']->extra += $extra;
-    }
-    else {
-      $table_queue[$this->table]['join']->extra = $extra;
-    }
-
-    $this->table_alias = $table_queue[$this->table]['alias'];
     return $this->table_alias;
   }
 
@@ -282,6 +246,48 @@ class ampp_projects_views_handler_argument_organisation_role extends views_handl
    * Set up the query for this argument.
    */
   function query($group_by = FALSE) {
+    if (!empty($this->options['break_phrase'])) {
+      views_break_phrase($this->argument, $this);
+    }
+    else {
+      $this->value = array($this->argument);
+    }
+
+    if (count($this->value) == 0) {
+      return;
+    }
+
     $this->ensure_my_table();
+    $where_group = 0;
+
+    // Filter by Organization ID.
+    $placeholder = $this->placeholder();
+    if (count($this->value) > 1) {
+      $value_operator = empty($this->options['not']) ? 'IN' : 'NOT IN';
+      $this->query->add_where_expression($where_group, "$this->table_alias.$this->real_field $value_operator ($placeholder)", array($placeholder => $this->value));
+    }
+    else {
+      if (count($this->value) == 1) {
+        $value_operator = empty($this->options['not']) ? '=' : '!=';
+        $this->query->add_where_expression($where_group, "$this->table_alias.$this->real_field $value_operator $placeholder", array($placeholder => $this->value));
+      }
+    }
+
+    // Translate the Role Codes to Role IDs.
+    $role_value_ids = $this->_get_role_value_ids();
+
+    // Filter by Role ID.
+    $role_placeholder = $this->role_placeholder();
+    if (count($role_value_ids) > 1) {
+      $role_operator = ($this->role_operator == 'in') ? 'IN' : 'NOT IN';
+      $this->query->add_where_expression($where_group, "$this->table_alias.role $role_operator ($role_placeholder)", array($role_placeholder => $role_value_ids));
+    }
+    else {
+      if (count($role_value_ids) == 1) {
+        $role_operator = ($this->role_operator == 'in') ? '=' : '!=';
+        $this->query->add_where_expression($where_group, "$this->table_alias.role $role_operator $role_placeholder", array($role_placeholder => $role_value_ids));
+      }
+    }
+
   }
 }

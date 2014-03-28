@@ -1,0 +1,152 @@
+<?php
+
+/**
+ * @file
+ * Exposes cached_amp_activity table to Drupal.
+ */
+
+/**
+ * The DB key for the AMP database.
+ */
+define('AMP_DATABASE', 'amp_projects');
+
+/**
+ * Implements hook_views_api().
+ */
+function amp_activity_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'amp_activity') . '/views',
+  );
+}
+
+/**
+ * Returns...
+ *
+ * @TODO: Add more cache The cached_amp_activity table is updated rarely
+ */
+function amp_activity_get_amp_activities() {
+  $activities_list = & drupal_static(__FUNCTION__, NULL);
+
+  if (isset($activities_list)) {
+    return $activities_list;
+  }
+
+  db_set_active(AMP_DATABASE);
+  $query = db_select('cached_amp_activity', 'cached_amp_activity');
+  $query->addField('cached_amp_activity', 'amp_activity_id');
+
+  $query->where('cached_amp_activity.draft <> TRUE');
+  $query->where('cached_amp_activity.amp_team_id IS NOT NULL');
+  $query->where('cached_amp_activity.approval_status IN (\'approved\', \'startedapproved\')');
+
+  // Get Activities which have one parent of type "Management"? I guess!?!
+  $case_one_sub = "SELECT amp_team_id FROM amp_team WHERE access_type = 'Management'";
+  $case_one = "SELECT amp_team_id FROM amp_team WHERE parent_team_id IN ($case_one_sub)";
+  $snippets[] = $case_one;
+
+  // It sure does something... but I don't know what to name it.
+  $case_two_sub = "SELECT amp_org_id FROM amp_team_orgs WHERE amp_team_id IN ($case_one)";
+  $case_two = "SELECT DISTINCT(activity) FROM amp_org_role WHERE organisation IN ($case_two_sub)";
+  $snippets[] = $case_two;
+
+  $db_or = db_or();
+  foreach ($snippets as $case) {
+    $db_or->where("cached_amp_activity.amp_activity_id IN (${case})");
+  }
+
+  $results = $query->execute()->fetchCol();
+  db_set_active();
+
+  if (!empty($results) && is_array($results)) {
+    $activities_list = $results;
+  }
+
+  return $activities_list;
+}
+
+/**
+ * Returns the children of a sector ID.
+ */
+function _amp_activity_get_child_sector_ids($parent_sector_id) {
+  $child_sector_ids = array();
+
+  db_set_active('amp_projects');
+  $child_ids = db_select('amp_sector', 'amps')
+    ->fields('amps', array('amp_sector_id'))
+    ->condition('amps.parent_sector_id', $parent_sector_id, '=')->execute()
+    ->fetchAll(PDO::FETCH_COLUMN);
+  db_set_active();
+
+  if (!empty($child_ids)) {
+    foreach ($child_ids as $child_id) {
+      $child_sector_ids[] = $child_id;
+      $child_sector_ids = array_merge($child_sector_ids, _amp_activity_get_child_sector_ids($child_id));
+    }
+  }
+
+  return $child_sector_ids;
+}
+
+/**
+ * Returns the parents of a location ID.
+ */
+function _amp_activity_get_location_parent_ids($location_id) {
+  $parent_location_ids = array();
+
+  if (!empty($_GET['RegionalProjects'])) {
+    $include_regional = $_GET['RegionalProjects'];
+  }
+  else {
+    if (!empty($_GET['showregionalprojects'])) {
+      $include_regional = $_GET['showregionalprojects'];
+    }
+  }
+
+  if (empty($include_regional)) {
+    return $parent_location_ids;
+  }
+
+  db_set_active('amp_projects');
+  $parent_ids = db_select('amp_category_value_location', 'acvl')
+    ->fields('acvl', array('parent_location'))
+    ->condition('acvl.id', $location_id, '=')
+    ->isNotNull('acvl.parent_location')
+    ->execute()
+    ->fetchAll(PDO::FETCH_COLUMN);
+  db_set_active();
+
+  if (!empty($parent_ids)) {
+    foreach ($parent_ids as $parent_id) {
+      $parent_location_ids[] = $parent_id;
+      $parent_location_ids = array_merge($parent_location_ids, _amp_activity_get_location_parent_ids($parent_id));
+    }
+  }
+
+  return $parent_location_ids;
+}
+
+/**
+ * Returns the children of a program ID.
+ */
+function _amp_activity_get_child_program_ids($program_id) {
+  $child_program_ids = array();
+  db_set_active('amp_projects');
+
+  $child_ids = db_select('amp_team', 'amp_team')
+    ->fields('amp_team', array('amp_team_id'))
+    ->condition('amp_team.parent_team_id', $program_id, '=')
+    ->execute()
+    ->fetchAll(PDO::FETCH_COLUMN);
+
+  if (!empty($child_ids)) {
+    foreach ($child_ids as $child_id) {
+      $child_program_ids[] = $child_id;
+      $child_program_ids = array_merge($child_program_ids, _amp_activity_get_child_program_ids($child_id));
+    }
+  }
+
+  db_set_active();
+
+  return $child_program_ids;
+}

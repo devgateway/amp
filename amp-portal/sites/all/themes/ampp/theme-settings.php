@@ -6,25 +6,25 @@
 * Implementation of hook_settings() for themes.
 */
 function ampp_form_system_theme_settings_alter(&$form, $form_state) {
-  
+
   $form['theme_settings']['toggle_amp_menu'] = array(
     '#type' => 'checkbox',
     '#title' => t('AMP links menu'),
     '#default_value' => theme_get_setting('toggle_amp_menu', 'ampp'),
   );
-  
+
   $form['theme_settings']['toggle_dg_footer'] = array(
     '#type' => 'checkbox',
     '#title' => t('DG footer'),
     '#default_value' => theme_get_setting('toggle_dg_footer', 'ampp'),
   );
-  
+
   $form['theme_settings']['toggle_share_links'] = array(
     '#type' => 'checkbox',
     '#title' => t('Share links'),
     '#default_value' => theme_get_setting('toggle_share_links', 'ampp'),
   );
-  
+
   // *****
   // Adding image preview for LOGO image
   $default_used = false;
@@ -49,7 +49,7 @@ function ampp_form_system_theme_settings_alter(&$form, $form_state) {
   // overwrite description for logo
   $form['logo']['#description'] = t('The following image is being used.');
   $form['logo']['settings']['logo_path']['#description'] = t('The path to the file you would like to use as your logo file instead of the default logo.') . '<br>' . t('The image will be re-sized to fit 150x35 pixels block.');
-  
+
   // *****
   // Adding image preview for FAVICON image
   if (strpos(theme_get_setting('favicon', 'ampp'), drupal_get_path('theme', 'ampp'))) {
@@ -70,7 +70,7 @@ function ampp_form_system_theme_settings_alter(&$form, $form_state) {
     );
   }
   $form['favicon']['settings']['favicon_path']['#description'] = t('The path to the image file you would like to use as your custom shortcut icon.') . '<br>' . t('The image file should be 16x16 pixels and have .ico extension.');
- 
+
   // *****
   // Custom FOOTER LOGO
   $form['footer_logo'] = array(
@@ -78,7 +78,7 @@ function ampp_form_system_theme_settings_alter(&$form, $form_state) {
     '#title' => t('Footer logo image settings'),
     '#description' => t('The following logo is being used.'),
   );
-  
+
   $default_used = false;
   if (theme_get_setting('default_footer_logo', 'ampp')) {
     // default footer logo is used
@@ -113,7 +113,7 @@ function ampp_form_system_theme_settings_alter(&$form, $form_state) {
       'input[name="default_footer_logo"]' => array('checked' => TRUE),
       ),
     ),
-  ); 
+  );
   $form['footer_logo']['settings']['footer_logo_path'] = array(
     '#type' => 'textfield',
     '#title' => t('Path to custom logo'),
@@ -231,7 +231,7 @@ function ampp_form_system_theme_settings_alter(&$form, $form_state) {
     '#maxlength' => 40,
     '#description' => t("If you don't have direct file access to the server, use this field to upload your logo.")
   );
-  
+
   // custom CSS
   $form['custom_css']= array(
       '#type' => 'textarea',
@@ -254,8 +254,8 @@ function ampp_settings_submit($form, &$form_state) {
   if ($file = file_save_upload('footer_logo_upload')) {
     $parts = pathinfo($file->filename);
     $destination = 'public://' . $parts['basename'];
-    $file->status = FILE_STATUS_PERMANENT;  
-  
+    $file->status = FILE_STATUS_PERMANENT;
+
     if (file_copy($file, $destination, FILE_EXISTS_REPLACE)) {
       $_POST['footer_logo_path'] = $form_state['values']['footer_logo_path'] = $destination;
       // If new file has a different name than the old one, delete the old
@@ -264,14 +264,14 @@ function ampp_settings_submit($form, &$form_state) {
       }
     }
   }
-  
+
   $previous_destination = 'public://' . $form['blocks_logo']['settings']['blocks_logo_path']['#default_value'];
   // Check for a new uploaded blocks_logo file, and use that if available.
   if ($file = file_save_upload('blocks_logo_upload')) {
     $parts = pathinfo($file->filename);
     $destination = 'public://' . $parts['basename'];
-    $file->status = FILE_STATUS_PERMANENT;  
-  
+    $file->status = FILE_STATUS_PERMANENT;
+
     if (file_copy($file, $destination, FILE_EXISTS_REPLACE)) {
       $_POST['blocks_logo_path'] = $form_state['values']['blocks_logo_path'] = $destination;
       // If new file has a different name than the old one, delete the old
@@ -280,14 +280,14 @@ function ampp_settings_submit($form, &$form_state) {
       }
     }
   }
-  
+
   $previous_destination = 'public://' . $form['bg_image']['settings']['bg_image_path']['#default_value'];
   // Check for a new uploaded blocks_logo file, and use that if available.
   if ($file = file_save_upload('bg_image_upload')) {
     $parts = pathinfo($file->filename);
     $destination = 'public://' . $parts['basename'];
     $file->status = FILE_STATUS_PERMANENT;
-  
+
     if (file_copy($file, $destination, FILE_EXISTS_REPLACE)) {
       $_POST['bg_image_path'] = $form_state['values']['bg_image_path'] = $destination;
       // If new file has a different name than the old one, delete the old

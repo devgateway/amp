@@ -25,7 +25,7 @@ function ampp_system_themes_page_alter(&$themes) {
  */
 function ampp_page_alter(&$page) {
  if(isset($_GET['format']) && $_GET['format'] == 'simple') {
-  	unset($page['page_top']['toolbar']);  	
+  	unset($page['page_top']['toolbar']);
   }
 }
 
@@ -33,14 +33,14 @@ function ampp_page_alter(&$page) {
 /**
  * Implementation of hook_menu_alter().
  */
-function ampp_menu_alter(&$items) { 
+function ampp_menu_alter(&$items) {
   unset($items['admin/appearance/settings/global']);
   unset($items['admin/appearance/settings/ampp_admin']);
-  
+
   $items['admin/appearance/settings/ampp']['page callback'] = 'drupal_get_form';
   $items['admin/appearance/settings/ampp']['weight'] = 20;
   $items['admin/appearance/settings'] = $items['admin/appearance/settings/ampp'];
-  
+
   $items['node/%node/panelizer']['title'] = t('Layout / Content');
 }
 
@@ -50,7 +50,7 @@ function ampp_menu_alter(&$items) {
  */
 function ampp_theme() {
   $items = array();
-  
+
   $items['header_links_menu'] = array(
     'arguments' => array(),
   );
@@ -58,11 +58,11 @@ function ampp_theme() {
   $items['amp_links_menu'] = array(
     'arguments' => array(),
   );
-  
+
   $items['footer_links_menu'] = array(
     'arguments' => array(),
   );
-  
+
   $items['status_messages'] = array(
     'arguments' => array('display'),
   );
@@ -70,19 +70,19 @@ function ampp_theme() {
   $items['links'] = array(
     'arguments' => array(),
   );
-  
+
   $items['panels_rounded_corners_region'] = array(
     'arguments' => array('content' => NULL),
     'path' => drupal_get_path('theme', 'ampp') . '/panel_templates',
     'template' => 'panels-rounded-corners-region--ampp',
   );
-  
+
   $items['panels_rounded_corners_pane'] = array(
     'arguments' => array('content' => NULL),
     'path' => drupal_get_path('theme', 'ampp') . '/panel_templates',
     'template' => 'panels-rounded-corners-pane--ampp',
   );
-  
+
   $items['panels_pane_withlogo__ampp'] = array(
     'arguments' => array('content' => NULL),
     'path' => drupal_get_path('theme', 'ampp') . '/panel_templates',
@@ -124,17 +124,17 @@ function ampp_status_messages($vars, $show_close_icon = TRUE) {
   if(isset($_SESSION['feedback_messages'])) {
     $_SESSION['messages']['error'] = array_diff($_SESSION['messages']['error'], $_SESSION['feedback_messages']);
   }
-  
+
   // Call drupal_get_messages clears queue by default,
-  // and as it is being called in template_preprocess_page 
+  // and as it is being called in template_preprocess_page
   // messages array is not availabe in preprocess hooks.
-  // We will need this $_SESSION['temp_messages'] variable when 
+  // We will need this $_SESSION['temp_messages'] variable when
   // we have to process messages using preprocess hooks.
   $m = $_SESSION['temp_messages'] = drupal_get_messages($display);
-  
+
   $status_heading = array(
-    'status' => t('Status message'), 
-    'error' => t('Error message'), 
+    'status' => t('Status message'),
+    'error' => t('Error message'),
     'warning' => t('Warning message'),
   );
   foreach ($m as $type => $messages) {
@@ -184,7 +184,7 @@ function ampp_links($variables) {
         // is a string.
         $heading = array(
           'text' => $heading,
-          // Set the default level of the heading. 
+          // Set the default level of the heading.
           'level' => 'h2',
         );
       }
@@ -201,13 +201,13 @@ function ampp_links($variables) {
     foreach ($links as $key => $link) {
       $class = array($key);
       $separator_html = '';
-      
+
       // Add first, last and active classes to the list of links to help out themers.
       if ($i == 1) {
         $class[] = 'first';
       }
       if ($i == $num_links) {
-        $class[] = 'last';       
+        $class[] = 'last';
       } else {
         if (isset($variables['separator'])) $separator_html = '<span class="links_separator">' . $variables['separator'] . '</span>';
       }
@@ -218,7 +218,7 @@ function ampp_links($variables) {
       $output .= '<li' . drupal_attributes(array('class' => $class)) . '>';
 
       if (isset($link['href'])) {
-        if (variable_get('menu_edit_item_' . $key, 0)) $link['attributes']['target'] = '_blank';        
+        if (variable_get('menu_edit_item_' . $key, 0)) $link['attributes']['target'] = '_blank';
         // Pass in $link as $options, they share the same keys.
         $output .= l($link['title'], $link['href'], $link);
       }
@@ -271,22 +271,22 @@ function ampp_footer_links_menu(&$vars) {
  * Custom langauge switch
  */
 function ampp_lang_switch() {
-  
+
   // return if only one langauge is enabled
   if (!drupal_multilingual()) {
     return '';
   }
-  
+
   global $language;
 
   $path = drupal_is_front_page() ? '<front>' : $_GET['q'];
-  
+
   // we get the query string
   $query_arr = array();
   parse_str($_SERVER['QUERY_STRING'], $query_arr);
 
   $type = variable_get('translation_language_type', LANGUAGE_TYPE_INTERFACE);
-  
+
   $languages_links = language_negotiation_get_switch_links($type, $path);
 
   $element = array();
@@ -294,7 +294,7 @@ function ampp_lang_switch() {
     'id' => 'langauge_select',
     'onchange' => 'javascript: window.location = this.options[selectedIndex].value;',
   );
-  
+
   foreach ($languages_links->links as $key => $lang) {
     // if href is not set then this language version is not available and we fall over to the default language version
     // to be able to do this though we need to compose /node/# form with language prefix.
@@ -319,8 +319,8 @@ function ampp_lang_switch() {
  */
 function get_amp_programs() {
   db_set_active("amp_projects");
-  $items = array();   
-  
+  $items = array();
+
   $sub_query = db_select('amp_theme')->fields('amp_theme', array('parent_theme_id'));
   $query = db_select('amp_theme', 'program');
   $query->fields('program', array('amp_theme_id', 'name'));
@@ -331,7 +331,7 @@ function get_amp_programs() {
   foreach ($result as $record) {
     $items[$record->amp_theme_id] = $record->name;
   }
-    
+
   db_set_active();
   return $items;
 }
@@ -341,55 +341,55 @@ function get_amp_programs() {
  * Custom site information form
  */
 function ampp_form_alter(&$form, $form_state, $form_id) {
-  
+
   // hiding adnministration form settings
   if ($form_id == 'system_themes_admin_form') {
     $form = array();
   }
-  
+
   if ($form_id == 'system_site_information_settings') {
-    
+
     $form['site_information']['amp_login_text'] = array(
       '#type' => 'textfield',
       '#title' => t('AMP login text'),
-      '#default_value' => variable_get('amp_login_text', 'Login Here'), 
+      '#default_value' => variable_get('amp_login_text', 'Login Here'),
       '#description' => t('Max 30 characters. Leave blank to hide the button.'),
-      '#size' => 60,   
+      '#size' => 60,
       '#maxlength' => 30,
     );
-    
+
     $form['site_information']['amp_login_url'] = array(
       '#type' => 'textfield',
       '#title' => t('AMP login url'),
-      '#default_value' => variable_get('amp_login_url', ''), 
+      '#default_value' => variable_get('amp_login_url', ''),
       '#description' => t('Use "%lang_code%" placeholder for language code. Example: http://amis.mof.gov.np/login?language=%lang_code%'),
-      '#size' => 60,   
+      '#size' => 60,
     );
-    
+
     $form['site_information']['amp_activity_url'] = array(
       '#type' => 'textfield',
       '#title' => t('Full URI to AMP activity details page'),
-      '#default_value' => variable_get('amp_activity_url', ''), 
+      '#default_value' => variable_get('amp_activity_url', ''),
       '#description' => t('Use "%aid%" marker to be replaced with activity id. Example: https://liberia.ampdev.net/wicket/onepager/activity/%aid%') . '<br>' .
           t('Use "%lang_code%" placeholder for language code. Example: https://liberia.ampdev.net/wicket/onepager/activity/%aid%&language=%lang_code%'),
-      '#size' => 60,   
+      '#size' => 60,
     );
-    
+
     $form['site_information']['amp_activity_popup_str'] = array(
       '#type' => 'textfield',
       '#title' => t('AMP activity details page popup specs'),
-      '#default_value' => variable_get('amp_activity_popup_str', ''), 
+      '#default_value' => variable_get('amp_activity_popup_str', ''),
       '#description' => t('window.open(URL,name,specs,replace) function "specs" parameter\'s string value.'),
-      '#size' => 60,   
+      '#size' => 60,
     );
-    
+
     $form['site_information']['amp_no_search_results_text'] = array(
       '#type' => 'textarea',
       '#title' => t('No search results text'),
-      '#default_value' => variable_get('amp_no_search_results_text', ''), 
-      '#rows' => 5,   
+      '#default_value' => variable_get('amp_no_search_results_text', ''),
+      '#rows' => 5,
     );
-    
+
     $form['application_logic'] = array(
         '#type' => 'fieldset',
         '#title' => t('Application logic')
@@ -398,8 +398,8 @@ function ampp_form_alter(&$form, $form_state, $form_id) {
       '#type' => 'radios',
       '#title' => t('Choose programs level'),
       '#default_value' => variable_get('amp_programs_level', 2),
-      '#options' => array(1 => 'National', 2 => 'Primary', 3 => 'Secondary'),  
-    );    
+      '#options' => array(1 => 'National', 2 => 'Primary', 3 => 'Secondary'),
+    );
     $programs = get_amp_programs();
     $programs = array('0' => t('None')) + $programs;
     $form['application_logic']['amp_programs_root'] = array(
@@ -407,12 +407,12 @@ function ampp_form_alter(&$form, $form_state, $form_id) {
       '#title' => t('Root program'),
       '#default_value' => variable_get('amp_programs_root', 0),
       '#options' => $programs,
-      '#description' => t('This will serve as an entry point programs selection interface. Please note that this and "Choose programs level" selection conditions are combined.'),  
-    );  
+      '#description' => t('This will serve as an entry point programs selection interface. Please note that this and "Choose programs level" selection conditions are combined.'),
+    );
     $form['application_logic']['amp_limit_programs_to_activities'] = array(
       '#type' => 'checkbox',
       '#title' => t('Limit programs to only those that are mapped to activities'),
-      '#default_value' => variable_get('amp_limit_programs_to_activities', 1),  
+      '#default_value' => variable_get('amp_limit_programs_to_activities', 1),
     );
     $form['application_logic']['amp_show_only_donors'] = array(
         '#type' => 'checkbox',
@@ -424,7 +424,7 @@ function ampp_form_alter(&$form, $form_state, $form_id) {
         '#title' => t('Show only Beneficiary agencies'),
         '#default_value' => variable_get('amp_show_only_beneficiary', 0),
     );
-    
+
     $form['front_page'] = array(
       '#type' => 'fieldset',
       '#title' => t('Front page')
@@ -432,22 +432,22 @@ function ampp_form_alter(&$form, $form_state, $form_id) {
     $form['front_page']['site_frontpage'] = array(
         '#type' => 'textfield',
         '#title' => t('Default front page'),
-        '#default_value' =>  variable_get('site_frontpage', t('homepage')), 
+        '#default_value' =>  variable_get('site_frontpage', t('homepage')),
         '#size' => 60,
     );
     $form['front_page']['site_frontpage_block_1_title'] = array(
         '#type' => 'textfield',
         '#title' => t('Front second row left block title'),
-        '#default_value' => variable_get('site_frontpage_block_1_title', t('Donor profile')), 
+        '#default_value' => variable_get('site_frontpage_block_1_title', t('Donor profile')),
         '#size' => 60,
     );
     $form['front_page']['site_frontpage_block_2_title'] = array(
         '#type' => 'textfield',
         '#title' => t('Front second row right block title'),
-        '#default_value' => variable_get('site_frontpage_block_2_title', t('Map')), 
-        '#size' => 60,    
+        '#default_value' => variable_get('site_frontpage_block_2_title', t('Map')),
+        '#size' => 60,
     );
-    
+
     $default_dg_footer = '<a href="http://www.developmentgateway.org" target="_blank"><img src="/sites/all/themes/ampp/images/dgf_logo_bottom.gif"/></a><br/>1889 F Street, NW, Second Floor, Washington, D.C. 20006, USA<br/>info@developmentgateway.org, Tel: +1.202.572.9200, Fax: +1 202.572.9290';
     $form['footer'] = array(
       '#type' => 'fieldset',
@@ -455,32 +455,32 @@ function ampp_form_alter(&$form, $form_state, $form_id) {
       'site_share_label' => array(
         '#type' => 'textfield',
         '#title' => t('Social sharing icons lable'),
-        '#default_value' => variable_get('site_share_label', ''), 
+        '#default_value' => variable_get('site_share_label', ''),
         '#size' => 50,
         '#maxlength' => 50,
       ),
       'site_footer_text' => array(
         '#type' => 'textfield',
         '#title' => t('Footer text'),
-        '#default_value' => variable_get('site_footer_text', ''), 
+        '#default_value' => variable_get('site_footer_text', ''),
         '#size' => 150,
         '#maxlength' => 1000,
       ),
       'dg_footer_html' => array(
         '#type' => 'textarea',
         '#title' => t('DG footer html'),
-        '#default_value' => variable_get('dg_footer_html', $default_dg_footer), 
+        '#default_value' => variable_get('dg_footer_html', $default_dg_footer),
         '#description' => t('HTML for DG footer. To toggle DG footer go !link', array ( '!link' => '<a href="/admin/appearance/settings/ampp">' . t('here') . '</a>')),
         '#rows' => 5,
-      ), 
+      ),
       'dg_footer_counter' => array(
         '#type' => 'checkbox',
         '#title' => t('Show counter'),
-        '#default_value' => variable_get('dg_footer_counter', 0), 
+        '#default_value' => variable_get('dg_footer_counter', 0),
         '#description' => t('Will be shown at the bottom of all pages. To customize the colors please go !link_colors. For the counter configuration please go !link_conf', array ( '!link_colors' => '<a href="/admin/appearance/settings/ampp">' . t('here') . '</a>', '!link_conf' => '<a href="/admin/config/counter">' . t('here') . '</a>')),
-      ), 
+      ),
     );
-    
+
     $form['error_page'] = array(
       '#type' => 'hidden',
       '#title' => t('Error pages'),
@@ -507,7 +507,7 @@ function ampp_form_alter(&$form, $form_state, $form_id) {
  * Validation callback function
  */
 function _news_records_validation($element, &$form_state) {
-  if (!is_numeric($element['#value']) || !intval($element['#value'])) { 
+  if (!is_numeric($element['#value']) || !intval($element['#value'])) {
     form_error($element, t('The "!name" value should be numeric and greater than zero.', array ('!name' => t($element['#title']))));
   }
 }
@@ -529,7 +529,7 @@ function ampp_preprocess_panels_pane(&$vars) {
         break;
     }
   }
-  
+
   // configurable titles
   if (isset($vars['pane']->panel)) {
     switch ($vars['pane']->panel) {
@@ -541,7 +541,7 @@ function ampp_preprocess_panels_pane(&$vars) {
         break;
     }
   }
-  
+
   // blocks logo
   $default_used = false;
   if (theme_get_setting('default_blocks_logo', 'ampp')) {
@@ -559,9 +559,9 @@ function ampp_preprocess_panels_pane(&$vars) {
   if ($default_used) {
     $vars['blocks_logo_url'] = '/' . $blocks_logo_path;
   } elseif (!empty($blocks_logo_path)) {
-    $vars['blocks_logo_url'] = image_style_url('blocks_logo', $blocks_logo_path); 
+    $vars['blocks_logo_url'] = image_style_url('blocks_logo', $blocks_logo_path);
   }
-  
+
   return $vars;
 }
 
@@ -572,7 +572,7 @@ function ampp_preprocess_panels_pane(&$vars) {
  * @ingroup themeable
  */
 function ampp_panels_rounded_corners_style_render_region($vars) {
-  $display = $vars['display']; 
+  $display = $vars['display'];
   $region_id = $vars['region_id'];
   $panes = $vars['panes'];
   $settings = $vars['settings'];

@@ -17,7 +17,7 @@ body.page-admin #node-admin-buttons {
 }
 
 body.page-admin fieldset {
-  border: 1px solid #666666 !important; 
+  border: 1px solid #666666 !important;
   margin: 20px 0 !important;
   padding: 10px;
 }
@@ -94,7 +94,7 @@ div.error, tr.error {
 .feedback-form .messages.error {
   width: 87%;
   background: url(../images/error.gif) no-repeat scroll 10px 10px #ffffff;
-} 
+}
 
 /* messages for feedback form */
 
@@ -148,7 +148,7 @@ div.error, tr.error {
   position: relative;
 }
 
-span img#close, 
+span img#close,
 span img#feedback-close {
   cursor: pointer;
   cursor: hand;

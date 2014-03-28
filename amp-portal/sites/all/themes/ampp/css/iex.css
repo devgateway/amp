@@ -129,7 +129,7 @@
 .styled-pane h1 {
   margin-top: 0;
   margin-bottom: 0;
-} 
+}
 
 .item-list ul li {
   list-style-type: none;
@@ -162,7 +162,7 @@
   float: left;
 }
 
-.donors-container .view-left-partners .views-row, 
+.donors-container .view-left-partners .views-row,
 .donors-container .view-right-partners .views-row {
   width: 60px;
 }

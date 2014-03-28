@@ -49,7 +49,7 @@
       <?php print $attachment_before; ?>
     </div>
   <?php endif; ?>
-  
+
   <?php if ($rows): ?>
     <div class="view-content">
       <?php print $rows; ?>
@@ -73,7 +73,7 @@
   <div class="read_all_news">
     <?php print l(t('Read all news and events'), 'news'); ?>
   </div>
-  
+
   <?php if ($footer): ?>
     <div class="view-footer">
       <?php print $footer; ?>

@@ -15,12 +15,12 @@ global $language;
     </div>
   </div>
   <div id="top-nav">
-    <?php 
+    <?php
       $amp_login_text = trim(variable_get('amp_login_text', 'Login Here'));
-      if (!empty($amp_login_text)) : 
+      if (!empty($amp_login_text)) :
     ?>
       <div class="login"><a href="<?php print str_replace ( '%lang_code%' , $language->language , variable_get('amp_login_url', ''));?>"><?php print t(variable_get('amp_login_text', 'Login Here'));?></a></div>
-    <?php endif; ?>   
+    <?php endif; ?>
     <div class="header-links"><?php print $header_links; ?></div>
   </div>
 </div>

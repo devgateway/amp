@@ -6,15 +6,15 @@
   background: #006595 url(../images/website-switch-background.png) 50% 100% repeat-y;
 }
 .website-switch-menu {
-  float: right; 
+  float: right;
   margin-right: 10px;
 }
 
 .website-switch-menu li a {
   float: left;
   line-height: 27px;
-  margin: 0 3px; 
-  padding: 4px 4px; 
+  margin: 0 3px;
+  padding: 4px 4px;
   color: #fff;
   text-shadow: 1px 1px 0 #003e6a;
 }
@@ -44,7 +44,7 @@
 }
 
 .print_version_header .dgone-layout {
-  border-top: 1px solid rgb(198, 198, 196); 
+  border-top: 1px solid rgb(198, 198, 196);
   margin-top: 5px;
 }
 
@@ -441,7 +441,7 @@ form.inline-form .form-item input.form-submit {
 }
 
 .footer-resources ul.horizontal {
-  float: left; 
+  float: left;
   margin-right: 3px;
 }
 
@@ -531,9 +531,9 @@ background-position: -53px -3px;
   width: 690px;
 }
 
-.donors-and-supporters .views-row a, 
-.donors-and-supporters .views-row a:visited, 
-.donors-and-supporters .views-row a:hover, 
+.donors-and-supporters .views-row a,
+.donors-and-supporters .views-row a:visited,
+.donors-and-supporters .views-row a:hover,
 .donors-and-supporters .views-row a:active {
   color: #444444;
   text-decoration: none;
@@ -579,7 +579,7 @@ background-position: -53px -3px;
 }
 h2.logo {
   float: left;
-  margin-top: 7px; 
+  margin-top: 7px;
 }
 
 .login {
@@ -690,15 +690,15 @@ h2.social-links {
 }
 
 #langauge_select {
-  font-weight: bold; 
-  margin-left: 10px; 
-  font-family: Tahoma; 
+  font-weight: bold;
+  margin-left: 10px;
+  font-family: Tahoma;
   font-size: 12px;
 }
 
 h2.site_name {
-  float: left; 
-  margin-top: 10px; 
+  float: left;
+  margin-top: 10px;
   font-size: 15px;
 }
 
@@ -712,8 +712,8 @@ h2.site_name a:hover {
   padding: 0;
   -moz-border-radius: 10px 10px 10px 10px;
   -o-border-radius: 10px 10px 10px 10px;
-  -webkit-border-radius: 10px 10px 10px 10px; 
-  border-radius: 10px 10px 10px 10px; 
+  -webkit-border-radius: 10px 10px 10px 10px;
+  border-radius: 10px 10px 10px 10px;
   margin-top: 7px;
   overflow: hidden;
 }
@@ -729,8 +729,8 @@ h2.site_name a:hover {
 
 noindex:-o-prefocus, .login a { /* Opera hack for rounded corners on*/
   color:#fff;
-  border-radius: 10px 10px 10px 10px; 
-} 
+  border-radius: 10px 10px 10px 10px;
+}
 
 #top-nav {
   //float: right;

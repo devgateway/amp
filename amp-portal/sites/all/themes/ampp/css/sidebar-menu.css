@@ -30,7 +30,7 @@
 }
 
 .sidebar-menu-links h2.first {
-  margin: 20px 0 0; 
+  margin: 20px 0 0;
   padding: 0 10px;
 }
 
@@ -54,7 +54,7 @@
   display: block;
   padding: 0 10px;
   text-decoration: none !important;
-  font: 100 15px/24px Tahoma,Arial,sans-serif; 
+  font: 100 15px/24px Tahoma,Arial,sans-serif;
   background: url(../images/left-menu-li-background-hover.png) 0 -1000px no-repeat;
 }
 
@@ -142,15 +142,15 @@
 
 .pane-sidebar-menu ul.menu li.expanded span.menu_switch a {
   background: url("../images/left-menu-expanded.png") no-repeat scroll 5px 0% transparent;
-  width: 30px; 
-  height: 20px; 
+  width: 30px;
+  height: 20px;
   margin: 5px 0 5px 15px;
 }
 
 .pane-sidebar-menu ul.menu li.collapsed span.menu_switch a {
   background: url("../images/left-menu-collapsed.png") no-repeat scroll 5px 0% transparent;
-  width: 30px; 
-  height: 20px; 
+  width: 30px;
+  height: 20px;
   margin: 5px 0 5px 15px;
 }
 

@@ -119,12 +119,12 @@
           <img src="/sites/all/themes/corporate/images/footer-illustration-top-pf.png">
           <div class="ie-multiple-border-1"></div>
           <div class="ie-multiple-border-2"></div>
-          <div class="footer-illustration-bottom">         
+          <div class="footer-illustration-bottom">
             <div class="footer-right-column">
               <div class="footer-copyright-notice">Copyright © 2011 Development Gateway
                 1889 F Street, NW, Second Floor
                 Washington, DC 20006 USA</div>
-          </div> 
+          </div>
         </div>
         <div class="clear"></div>
       </div>  <!-- END .section-footer -->

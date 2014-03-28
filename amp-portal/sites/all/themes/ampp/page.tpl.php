@@ -78,16 +78,16 @@ if (isset($simple_page)) {
 <div class="container-gradient-top">
   <div class="container-gradient-bottom">
     <div class="master-container">
-      
+
       <div class="master-container-gradient">&nbsp;</div>
-      
+
       <div class="container_12">
-  
+
         <div class="section-header">
           <div class="grid_12"><?php include_once 'page_header_tpl.php'; ?></div>
           <div class="clear"></div>
         </div>  <!-- END .section-header -->
-  
+
         <div id="section-tools">
             <div class="grid_12">
               <?php if ($breadcrumb): ?>
@@ -101,26 +101,26 @@ if (isset($simple_page)) {
             </div>
             <div class="clear"></div>
         </div>
-  
+
         <div id="section-content">
           <?php if ($page['content_top']): ?>
-            <div class="grid_12 content_top"><?php print render($page['content_top']); ?></div> 
-          <?php endif; ?> 
-                 
-          <div class="grid_12"><?php print render($page['content']); ?></div>
-          
-          <?php if ($page['content_bottom']): ?>
-            <div class="grid_12 content_bottom"><?php print render($page['content_bottom']); ?></div> 
+            <div class="grid_12 content_top"><?php print render($page['content_top']); ?></div>
           <?php endif; ?>
-          
+
+          <div class="grid_12"><?php print render($page['content']); ?></div>
+
+          <?php if ($page['content_bottom']): ?>
+            <div class="grid_12 content_bottom"><?php print render($page['content_bottom']); ?></div>
+          <?php endif; ?>
+
           <div class="clear"></div>
         </div>
-  
+
       </div>  <!-- END .container_12 -->
         <div class="section-footer">
           <div class="grid_12"><?php include_once 'page_footer_tpl.php'; ?></div>
           <div class="clear"></div>
-        </div>  <!-- END .section-footer -->      
+        </div>  <!-- END .section-footer -->
     </div>  <!-- END .master-container -->
   </div>
 </div>

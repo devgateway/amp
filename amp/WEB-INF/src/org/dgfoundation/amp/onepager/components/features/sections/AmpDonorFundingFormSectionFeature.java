@@ -27,6 +27,7 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
+import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListItem;
@@ -54,7 +55,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * @author mpostelnicu@dgateway.org since Nov 3, 2010
  */
 public class AmpDonorFundingFormSectionFeature extends
-		AmpFormSectionFeaturePanel {
+		AmpFormSectionFeaturePanel implements AmpRequiredComponentContainer {
 	private static final long serialVersionUID = 1L;
 	private TreeMap<AmpOrganisation, AmpFundingGroupFeaturePanel> listItems = new TreeMap<AmpOrganisation, AmpFundingGroupFeaturePanel>();
 	protected ListEditor<AmpOrganisation> list;

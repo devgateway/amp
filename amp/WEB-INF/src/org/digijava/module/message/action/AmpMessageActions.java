@@ -1101,7 +1101,7 @@ public class AmpMessageActions extends DispatchAction {
                 String act=messageForm.getSelectedAct();
                 String activityId=act.substring(act.lastIndexOf("(")+1,act.lastIndexOf("")-1);
                 Long actId = new Long(activityId);
-                AmpActivityVersion testAct = ActivityUtil.getAmpActivity(actId);
+                AmpActivityVersion testAct = ActivityUtil.loadActivity(actId);
                 if (testAct == null) {
                     if (errors == null) {
                         errors=new ActionErrors();

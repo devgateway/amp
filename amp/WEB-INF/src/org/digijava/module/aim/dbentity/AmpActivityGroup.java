@@ -3,7 +3,9 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
-public class AmpActivityGroup implements Serializable{
+import org.digijava.module.aim.util.Identifiable;
+
+public class AmpActivityGroup implements Serializable, Identifiable{
 	private static final long serialVersionUID = 1L;
 
 	private Long ampActivityGroupId;
@@ -45,5 +47,9 @@ public class AmpActivityGroup implements Serializable{
 	public boolean getAutoClosedOnExpiration()
 	{
 		return autoClosedOnExpiration;
+	}
+	
+	@Override public Object getIdentifier() {
+		return this.getAmpActivityGroupId();
 	}
 }

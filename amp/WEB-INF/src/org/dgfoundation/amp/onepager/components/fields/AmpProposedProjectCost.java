@@ -18,6 +18,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -28,7 +29,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
  * @author aartimon@dginternational.org
  * @since Jan 11, 2012
  */
-public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
+public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements AmpRequiredComponentContainer{
 
 	private static final long serialVersionUID = 3042844165981373432L;
 	protected IndicatingAjaxLink button;

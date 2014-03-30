@@ -24,6 +24,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpBudgetClassificationField;
@@ -58,7 +59,8 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author mpostelnicu@dgateway.org since Oct 3, 2010
  * @see OnePager
  */
-public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePanel {
+public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePanel
+implements AmpRequiredComponentContainer{
 
 	private static final long serialVersionUID = 8568986144567957699L;
 	private AmpWarningComponentPanel<String> titleSimilarityWarning;

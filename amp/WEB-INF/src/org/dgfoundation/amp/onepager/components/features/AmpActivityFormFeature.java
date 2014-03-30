@@ -61,6 +61,7 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
@@ -192,6 +193,23 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					@Override
 					public void component(
 							AmpDonorFundingFormSectionFeature ifs,
+							IVisit<Void> visit) {
+						List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
+						for (FormComponent<?> component : requiredComponents) {
+						String js = String.format("$('#%s').blur();",
+								component.getMarkupId());
+						component.setRequired(enabled);
+						target.appendJavaScript(js);
+						target.add(component);
+						}
+						visit.stop();
+					}
+				});
+		visitChildren(AmpActivityBudgetExtrasPanel.class,
+				new IVisitor<AmpActivityBudgetExtrasPanel, Void>() {
+					@Override
+					public void component(
+							AmpActivityBudgetExtrasPanel ifs,
 							IVisit<Void> visit) {
 						List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
 						for (FormComponent<?> component : requiredComponents) {

@@ -526,7 +526,7 @@ function initializeGlobalVariables(){
 													<c:forEach items="${visualizationform.filter.statusList}" var="item">
 														<li>
 														<input type="checkbox" id="status_check_${item.id}" name="status_check" title="<c:out value='${item.value}'/>" value="${item.id}" /> 
-														<span><c:out value="${item.value}"/></span>
+														<span><digi:trn><c:out value="${item.value}"/></digi:trn></span>
 														</li>
 													</c:forEach>
 													</ul>

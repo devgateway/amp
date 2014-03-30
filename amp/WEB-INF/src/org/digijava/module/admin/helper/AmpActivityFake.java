@@ -22,6 +22,8 @@ public class AmpActivityFake implements LoggerIdentifiable{
 	private AmpTeam team;
 	private String ampId;
 	private Long ampActivityId;
+	private String status;
+	private boolean draft;
 	
 	public AmpActivityFake(String name, String ampId, Long ampActivityId) {
 		super();
@@ -114,6 +116,22 @@ public class AmpActivityFake implements LoggerIdentifiable{
         public String getObjectFilteredName() {
 		return DbUtil.filter(getObjectName());
 	}
+
+		public String getStatus() {
+			return status;
+		}
+
+		public void setStatus(String status) {
+			this.status = status;
+		}
+
+		public boolean isDraft() {
+			return draft;
+		}
+
+		public void setDraft(boolean draft) {
+			this.draft = draft;
+		}
 
 
 }

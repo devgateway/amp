@@ -190,8 +190,31 @@
 								 ${resultFound} <span class="button_green"><digi:trn>Activities</digi:trn></span>
 									<ul>
 										<c:forEach items="${resultActivities}" var="activity">
-											<li><digi:link module="aim"
-												href="/viewActivityPreview.do?pageId=2&activityId=${activity.ampActivityId}">${activity.objectFilteredName}</digi:link>
+											<li>
+											<c:set var="star" scope="page" value=""/> 
+											<digi:link module="aim"
+												href="/viewActivityPreview.do?pageId=2&activityId=${activity.ampActivityId}">
+											<c:choose>
+											<c:when test="${activity.draft == true}">
+            									<font color="RED">
+            										<c:if test="${activity.status.contains('started') || activity.status.equals('startedapproved') }">
+													<c:set var="star" scope="page" value="*"/> 
+													</c:if>
+											</c:when>
+											<c:otherwise>
+												<c:if test="${activity.status.equals('started')}">
+													<c:set var="star" scope="page" value="*"/> 
+													<font color="GREEN">
+												</c:if>
+												<c:if test="${activity.status.equals('edited')}">
+													<font color="GREEN">
+												</c:if>
+											</c:otherwise>
+											</c:choose>
+												${star} ${activity.objectFilteredName}</font>
+											</digi:link>
+											</li>
+											
 										</c:forEach>
 									</ul>
 								</div>

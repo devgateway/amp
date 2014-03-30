@@ -203,10 +203,12 @@ public class SearchUtil {
 			session = PersistenceManager.getRequestDBSession();
 
 			//not a very nice solution, but I kept the old code and idea and just added some speed
-			String newQueryString = "SELECT f.amp_activity_id, f.amp_id, " + AmpActivityVersion.sqlStringForName("f.amp_activity_id") + " AS name FROM amp_activity f WHERE f.amp_activity_id in ("+filter.getGeneratedFilterQuery()+")";
-			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", org.hibernate.Hibernate.LONG);
-			newQuery		  = newQuery.addScalar("amp_id", org.hibernate.Hibernate.STRING);
-			newQuery		  = newQuery.addScalar("name", org.hibernate.Hibernate.STRING);
+			String newQueryString = "SELECT f.amp_activity_id, f.amp_id, " + AmpActivityVersion.sqlStringForName("f.amp_activity_id") + " AS name, f.approval_status,f.draft FROM amp_activity f WHERE f.amp_activity_id in ("+filter.getGeneratedFilterQuery()+")";
+			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", org.hibernate.type.StandardBasicTypes.LONG);
+			newQuery		  = newQuery.addScalar("amp_id", org.hibernate.type.StandardBasicTypes.STRING);
+			newQuery		  = newQuery.addScalar("name", org.hibernate.type.StandardBasicTypes.STRING);
+			newQuery = newQuery.addScalar("approval_status",org.hibernate.type.StandardBasicTypes.STRING);
+			newQuery = newQuery.addScalar("draft",org.hibernate.type.StandardBasicTypes.BOOLEAN);
 			
 //			StopWatch.next("Search", true,"mycomment 2");
 			Iterator iter = newQuery.list().iterator();
@@ -215,7 +217,11 @@ public class SearchUtil {
                 Long ampActivityId = (Long) item[0];
                 String ampId = (String) item[1];
                 String name = (String) item[2];
+                String status = (String) item[3];
+                boolean draft = (Boolean) item[4];
                 AmpActivityFake activity = new AmpActivityFake(name,ampId,ampActivityId);
+                activity.setDraft(draft);
+                activity.setStatus(status);
                 resultList.add(activity);
             }
 //			StopWatch.next("Search", true,"mycomment 3");

@@ -58,6 +58,7 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
@@ -177,33 +178,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					public void component(
 							AmpIdentificationFormSectionFeature ifs,
 							IVisit<Void> visit) {
-						List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
-						for (FormComponent<?> component : requiredComponents) {
-						String js = String.format("$('#%s').blur();",
-								component.getMarkupId());
-						component.setRequired(enabled);
-						target.appendJavaScript(js);
-						target.add(component);
-						}
-						visit.stop();
-					}
-				});
+						toggleFormComponent (enabled,target,ifs,visit);					}
+					});
 		form.visitChildren(AmpDonorFundingFormSectionFeature.class,
 				new IVisitor<AmpDonorFundingFormSectionFeature, Void>() {
 					@Override
 					public void component(
 							AmpDonorFundingFormSectionFeature ifs,
 							IVisit<Void> visit) {
-						List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
-						for (FormComponent<?> component : requiredComponents) {
-						String js = String.format("$('#%s').blur();",
-								component.getMarkupId());
-						component.setRequired(enabled);
-						target.appendJavaScript(js);
-						target.add(component);
-						}
-						visit.stop();
-					}
+						toggleFormComponent (enabled,target,ifs,visit);					}
 				});
 		visitChildren(AmpActivityBudgetExtrasPanel.class,
 				new IVisitor<AmpActivityBudgetExtrasPanel, Void>() {
@@ -211,17 +194,22 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					public void component(
 							AmpActivityBudgetExtrasPanel ifs,
 							IVisit<Void> visit) {
-						List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
-						for (FormComponent<?> component : requiredComponents) {
-						String js = String.format("$('#%s').blur();",
-								component.getMarkupId());
-						component.setRequired(enabled);
-						target.appendJavaScript(js);
-						target.add(component);
-						}
-						visit.stop();
+						toggleFormComponent (enabled,target,ifs,visit);
 					}
 				});
+
+	}
+	private void toggleFormComponent (boolean enabled, final AjaxRequestTarget target,
+			AmpRequiredComponentContainer ifs, IVisit<Void> visit) {
+		List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();
+		for (FormComponent<?> component : requiredComponents) {
+		String js = String.format("$('#%s').blur();",
+				component.getMarkupId());
+		component.setRequired(enabled);
+		target.appendJavaScript(js);
+		target.add(component);
+		}
+		visit.stop();
 	}
 
 	private ListView<AmpComponentPanel> featureList;

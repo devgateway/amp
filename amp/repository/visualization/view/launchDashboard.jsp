@@ -468,7 +468,7 @@ function initializeGlobalVariables(){
 												<br />
 												<c:forEach items="${visualizationform.filter.statusList}" var="item">
 												<input type="checkbox" id="status_check_${item.id}" name="status_check" title="<c:out value='${item.value}'/>" value="${item.id}" /> 
-													<span><c:out value="${item.value}"/></span>
+													<span><digi:trn><c:out value="${item.value}"/></digi:trn></span>
 												<br />
 												</c:forEach>
 												<br />
@@ -1347,7 +1347,9 @@ function initializeGlobalVariables(){
 		 	</td>
 			<td align="right">
 				<html:select property="filter.adjustmentTypeQuickFilter" styleId="adjustment_type_quick" styleClass="dropdwn_sm" style="width:145px;" onchange="callbackApplyFilter()">
-					<html:optionsCollection property="filter.adjustmentTypeList" value="valueKey" label="valueKey" />
+					<c:forEach items="${visualizationform.filter.adjustmentTypeList}" var="item">
+						<html:option value="${item.valueKey}"><digi:trn>${item.valueKey}</digi:trn></html:option>
+					</c:forEach>
 				</html:select>
 			</td>
 		</tr>	

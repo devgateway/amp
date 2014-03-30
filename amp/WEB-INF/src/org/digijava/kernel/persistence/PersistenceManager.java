@@ -699,19 +699,17 @@ public class PersistenceManager {
 		org.hibernate.classic.Session sess = PersistenceManager.sf.getCurrentSession();
 		
 		Transaction transaction=sess.getTransaction();
-		if(transaction!=null && transaction.isActive()) {
-			try {
-				SQLQuery testQuery = sess.createSQLQuery("SELECT 1");
-				testQuery.uniqueResult();				
-			} catch (RuntimeException e) {
-				transaction.rollback();				
-				logger.error("Transaction has been rolled back after exception "+ e);
-				sess = PersistenceManager.sf.getCurrentSession();
-				sess.beginTransaction(); 
-			}
-			
-			
-		}
+//		if(transaction!=null && transaction.isActive()) {
+//			try {
+//				SQLQuery testQuery = sess.createSQLQuery("SELECT 1");
+//				testQuery.uniqueResult();				
+//			} catch (RuntimeException e) {
+//				transaction.rollback();				
+//				logger.error("Transaction has been rolled back after exception "+ e);
+//				sess = PersistenceManager.sf.getCurrentSession();
+//				sess.beginTransaction(); 
+//			}
+//		}
 	
 		if(transaction==null || !transaction.isActive()) sess.beginTransaction(); 
 

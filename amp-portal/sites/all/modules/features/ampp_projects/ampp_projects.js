@@ -9,12 +9,14 @@ Drupal.behaviors.ampp_projects = {
     // Determine the URL prefix for requests.
     var lang_code = settings.ampp_projects.lang;
     if (lang_code != '') {
-      lang_prefix = settings.basePath + lang_code;
+      lang_prefix = settings.basePath + lang_code + '/';
     }
     else {
       lang_prefix = settings.basePath;
     }
 
+    // TODO: Move autocomplete settings to the form field definition so it works
+    //       more like Drupal's autocomplete.
     if ( $("#edit-sector").length > 0 ) {
       $("#edit-sector").tokenInput(lang_prefix + "ampp_search/sectors", {
         theme: "facebook",

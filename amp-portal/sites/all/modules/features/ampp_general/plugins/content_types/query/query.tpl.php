@@ -1,19 +1,24 @@
-<?php
-  if ($vars['success'] == 0) {
-    print '<table class="query_plugin_table"><tr><td>' . (isset($vars['error_msg'])) ? $vars['error_msg'] : '' . '</td></tr></table>';
-  } else {
-    print '<table class="query_plugin_table"><tr>';
-    foreach ($vars['labels'] as $k => $v) {
-      print '<th class="heading-' . $v . '">' . $v . '</th>';
-    }
-    print '</tr>';
-    foreach ($vars['values'] as $k => $v) {
-      print '<tr>';
-      foreach ($v as $kk => $vv) {
-        print '<td class="col-' . $vv . '">' . $vv . '</td>';
-      }
-      print '</tr>';
-    }
-    print '</table>';
- }
-?>
+
+<?php if ($message): ?>
+  <table class="query_plugin_table">
+    <tr><td>
+      <?php print $message; ?>
+    </td></tr>
+  </table>
+<?php else: ?>
+  <table class="query_plugin_table">
+    <tr>
+      <?php foreach ($labels as $label): ?>
+        <th><?php print $label; ?></th>
+      <?php endforeach; ?>
+    </tr>
+
+    <?php foreach ($rows as $row): ?>
+      <tr>
+        <?php foreach ($row as $value): ?>
+          <td><?php print $value; ?></td>
+        <?php endforeach; ?>
+      </tr>
+    <?php endforeach; ?>
+  </table>
+<?php endif; ?>

@@ -76,19 +76,23 @@ function ampp_projects_views_pre_build(&$view) {
 function ampp_projects_views_query_alter(&$view, &$query) {
   global $language;
 
-  if ($view->name == 'projects_search_result') {
-    $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion', 'name', cached_amp_activity.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', '" . $language->language . "')";
-    foreach ($view->query->where as &$where) {
-      foreach ($where['conditions'] as $k => $v) {
-        if ($v['field'] == 'cached_amp_activity.name' && $v['operator'] == 'ILIKE') {
-          unset($where['conditions'][$k]);
-          $view->query->add_where_expression(0, 'unaccent(' . $translate_field . ') ILIKE unaccent(\'' . $v['value'] . '\')');
-        }
+  if ($view->name != 'projects_search_result') {
+    return;
+  }
+
+  // @TODO: Move this to amp_activity_handler_argument_string
+  $translate_field = "translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion', 'name', cached_amp_activity.amp_activity_id, 'amp_activity_version', 'name', 'amp_activity_id', '" . $language->language . "')";
+  foreach ($view->query->where as &$where) {
+    foreach ($where['conditions'] as $k => $v) {
+      if ($v['field'] == 'cached_amp_activity.name' && $v['operator'] == 'ILIKE') {
+        unset($where['conditions'][$k]);
+        $view->query->add_where_expression(0, 'unaccent(' . $translate_field . ') ILIKE unaccent(\'' . $v['value'] . '\')');
       }
     }
   }
 
-  if ($view->name == 'projects_search_result' && isset($view->get_total_amount_type)) {
+  // @TODO: Cleanup, move to a field handler.
+  if (isset($view->get_total_amount_type)) {
     $view->query->fields = array();
     $view->query->orderby = array();
     $view->query->add_field(NULL, 'cached_amp_activity.amp_activity_id', 'amp_activity_id');
@@ -224,7 +228,13 @@ function _ampp_get_search_arguments($for_views = FALSE) {
         break;
 
       case 'locations':
-        $processed_arguments[$argkey] = _ampp_get_search_argument_location($name, $for_views);
+        // Expand location argument for views.
+        if ($for_views) {
+          $processed_arguments[$argkey] = _ampp_get_search_argument_location($name, $for_views);
+        }
+        else {
+          $processed_arguments[$argkey] = _ampp_get_search_argument_value($name, $for_views);
+        }
         break;
 
       default:
@@ -343,28 +353,28 @@ function _ampp_get_search_argument_sectors($name, $for_views) {
 }
 
 /**
- * @TODO: FIX "infinit recursion"?!?!!
+ * Returns the children of an array location IDs.
  */
-function _ampp_get_search_argument_location_descendants($locations) {
-  // to avoid infinit recursion
-  static $calls = 0;
-  $calls++;
-  if ($calls > 1000) return array();
+function _ampp_get_search_argument_location_descendants($location_ids) {
+  $child_location_ids = array();
 
-  db_set_active("amp_projects");
-
-  foreach ($locations as $location_id) {
-    $query = db_select('amp_category_value_location', 'l')
-    ->fields('l', array('id'))
-    ->condition('l.parent_location', $location_id, '=');
-
-    foreach ($query->execute()->fetchAll(PDO::FETCH_COLUMN) as $child_id) {
-      $locations[] = $child_id;
-      $locations = array_merge($locations, _amp_activity_get_location_parent_ids(array($child_id)));
-    }
+  if (is_numeric($location_ids)) {
+    $location_ids = array($location_ids);
   }
 
+  db_set_active('amp_projects');
+  foreach ($location_ids as $lid) {
+    $child_ids = db_select('amp_category_value_location', 'acvl')
+      ->fields('acvl', array('id'))
+      ->condition('acvl.parent_location', $lid, '=')
+      ->execute()
+      ->fetchCol();
+
+    foreach ($child_ids as $child_id) {
+      $child_location_ids[] = $child_id;
+    }
+  }
   db_set_active();
 
-  return $locations;
+  return array_merge($location_ids, $child_location_ids);
 }

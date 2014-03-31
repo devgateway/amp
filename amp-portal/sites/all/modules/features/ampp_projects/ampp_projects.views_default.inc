@@ -588,7 +588,8 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['pager']['options']['items_per_page'] = '0';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'xls';
-  $handler->display->display_options['path'] = 'searchxls/searchresult.xls';
+  $handler->display->display_options['style_options']['filename'] = 'search-results';
+  $handler->display->display_options['path'] = 'admin/search-xls-feed-dummy-path.xls';
   $translatables['projects_search_result'] = array(
     t('Master'),
     t('Projects search'),

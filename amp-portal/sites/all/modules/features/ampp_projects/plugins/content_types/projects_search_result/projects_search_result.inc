@@ -20,31 +20,31 @@ $plugin = array(
       'show' => TRUE,
       'label' => t('Project title'),
     ),
-    'organisation_role' => array(
+    'organisation_names' => array(
       'show' => TRUE,
       'label' => t('Donors'),
     ),
-    'organisation_role_1' => array(
+    'organisation_names_1' => array(
       'show' => TRUE,
       'label' => t('Beneficiary Agencies'),
     ),
-    'amp_sector_name_agg' => array(
+    'sector_names' => array(
       'show' => TRUE,
       'label' => t('Sectors'),
     ),
-    'amp_primarysector_name_agg' => array(
+    'sector_names_1' => array(
       'show' => FALSE,
       'label' => t('Primary sectors'),
     ),
-    'amp_secondarysector_name_agg' => array(
+    'sector_names_2' => array(
       'show' => FALSE,
       'label' => t('Secondary sectors'),
     ),
-    'amp_theme_name_agg' => array(
+    'program_names' => array(
       'show' => FALSE,
       'label' => t('Programs'),
     ),
-    'category_location_name_agg' => array(
+    'location_names' => array(
       'show' => TRUE,
       'label' => t('Locations'),
     ),

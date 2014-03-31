@@ -7,8 +7,60 @@
 ctools_include('export');
 ctools_include('plugins');
 
-// Get plugin defaults.
-$plugin_definition = ctools_get_plugins('ctools', 'content_types', 'projects_search_result');
+// Plugin definition might have changed before this script was ran.
+$plugin_definition_defaults = array(
+  'show_info_column' => TRUE,
+  'show_status_column' => FALSE,
+  'show_export_links' => FALSE,
+  'name' => array(
+    'show' => TRUE,
+    'label' => t('Project title'),
+  ),
+  'organisation_role' => array(
+    'show' => TRUE,
+    'label' => t('Donors'),
+  ),
+  'organisation_role_1' => array(
+    'show' => TRUE,
+    'label' => t('Beneficiary Agencies'),
+  ),
+  'amp_sector_name_agg' => array(
+    'show' => TRUE,
+    'label' => t('Sectors'),
+  ),
+  'amp_primarysector_name_agg' => array(
+    'show' => FALSE,
+    'label' => t('Primary sectors'),
+  ),
+  'amp_secondarysector_name_agg' => array(
+    'show' => FALSE,
+    'label' => t('Secondary sectors'),
+  ),
+  'amp_theme_name_agg' => array(
+    'show' => FALSE,
+    'label' => t('Programs'),
+  ),
+  'category_location_name_agg' => array(
+    'show' => TRUE,
+    'label' => t('Locations'),
+  ),
+  'actual_start_date' => array(
+    'show' => TRUE,
+    'label' => t('Start date'),
+  ),
+  'actual_completion_date' => array(
+    'show' => TRUE,
+    'label' => t('End date'),
+  ),
+  'commitment_amount' => array(
+    'show' => TRUE,
+    'label' => t('Commitment amount'),
+  ),
+  'disbursement_amount' => array(
+    'show' => TRUE,
+    'label' => t('Commitment amount'),
+  ),
+);
 
 // An array of old view fields with the new field as key.
 $views_field_map = array(
@@ -40,7 +92,7 @@ foreach ($results as $row) {
       $pane->configuration['show_info_column'] = $old_conf['show_info_column'];
     }
     else {
-      $pane->configuration['show_info_column'] = $plugin_definition['defaults']['show_info_column'];
+      $pane->configuration['show_info_column'] = $plugin_definition_defaults['show_info_column'];
     }
     unset($old_conf['show_info_column']);
   }
@@ -60,7 +112,7 @@ foreach ($results as $row) {
       $pane->configuration['show_export_links'] = $old_conf['show_export_links'];
     }
     else {
-      $pane->configuration['show_export_links'] = $plugin_definition['defaults']['show_export_links'];
+      $pane->configuration['show_export_links'] = $plugin_definition_defaults['show_export_links'];
     }
     unset($old_conf['show_export_links']);
   }
@@ -76,47 +128,47 @@ foreach ($results as $row) {
     unset($old_conf['show_status_column']);
   }
   else {
-    $pane->configuration['show_export_links'] = $plugin_definition['defaults']['show_export_links'];
+    $pane->configuration['show_export_links'] = $plugin_definition_defaults['show_export_links'];
     unset($old_conf['show_export_links']);
   }
 
   // Migrate array settings.
-  foreach ($plugin_definition['defaults'] as $key => $value) {
+  foreach ($plugin_definition_defaults as $current_key => $value) {
     if (!is_array($value)) {
       continue;
     }
 
-    $from_key = $key;
-    if (array_key_exists($key, $views_field_map)) {
-      $from_key = $views_field_map[$key];
+    $old_key = $current_key;
+    if (array_key_exists($current_key, $views_field_map)) {
+      $old_key = $views_field_map[$current_key];
     }
 
     // Move flag.
-    if (isset($old_conf[$from_key . '_flag'])) {
-      $pane->configuration[$key]['show'] = (int) $old_conf[$from_key . '_flag'];
+    if (isset($old_conf[$old_key . '_flag'])) {
+      $pane->configuration[$current_key]['show'] = (int) $old_conf[$old_key . '_flag'];
     }
-    else if (isset($old_conf[$key]) && is_array($old_conf[$key])) {
-      $pane->configuration[$key]['show'] = $old_conf[$key]['show'];
+    else if (isset($old_conf[$current_key]) && is_array($old_conf[$current_key])) {
+      $pane->configuration[$current_key]['show'] = $old_conf[$current_key]['show'];
     }
     else {
-      $pane->configuration[$key]['show'] = $value['show'];
+      $pane->configuration[$current_key]['show'] = $value['show'];
     }
 
     // Move label.
-    if (isset($old_conf[$from_key . '_label'])) {
-      $pane->configuration[$key]['label'] = $old_conf[$from_key . '_label'];
+    if (isset($old_conf[$old_key . '_label'])) {
+      $pane->configuration[$current_key]['label'] = $old_conf[$old_key . '_label'];
     }
-    else if (isset($old_conf[$key]) && is_array($old_conf[$key])) {
-      $pane->configuration[$key]['label'] = $old_conf[$key]['label'];
+    else if (isset($old_conf[$current_key]) && is_array($old_conf[$current_key])) {
+      $pane->configuration[$current_key]['label'] = $old_conf[$current_key]['label'];
     }
     else {
-      $pane->configuration[$key]['label'] = $value['label'];
+      $pane->configuration[$current_key]['label'] = $value['label'];
     }
 
-    unset($old_conf[$from_key . '_flag']);
-    unset($old_conf[$from_key . '_label']);
-    unset($old_conf[$from_key]);
-    unset($old_conf[$key]);
+    unset($old_conf[$old_key . '_flag']);
+    unset($old_conf[$old_key . '_label']);
+    unset($old_conf[$old_key]);
+    unset($old_conf[$current_key]);
   }
 
   // Move old configuration that is not for the search view.

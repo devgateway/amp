@@ -31,23 +31,15 @@ class amp_activity_handler_field_translation extends views_handler_field {
   }
 
   /**
-   * For now disable click sorting.
-   */
-  function click_sortable() {
-    return FALSE;
-  }
-
-  /**
    * Called to determine what to tell the clicksorter.
    */
   function click_sort($order) {
-    // if (isset($this->field_translation_alias)) {
-    //   $params = $this->options['group_type'] != 'group' ? array('function' => $this->options['group_type']) : array();
-
-    //   $i18n_info = amp_i18n_get_translate_expression($this->amp_entity_type, NULL, FALSE, $this->field_alias);
-
-    //   $params = drupal_array_merge_deep($params, $i18n_info['args']);
-    // }
+    if (isset($this->field_translation_alias)) {
+      $params = $this->options['group_type'] != 'group' ? array('function' => $this->options['group_type']) : array();
+      $i18n_info = amp_i18n_get_translate_expression($this->amp_entity_type, NULL, $this->table, $this->real_field);
+      $params['placeholders'] = $i18n_info['args'];
+      $this->query->add_orderby(NULL, $i18n_info['expression'], $order, $this->field_translation_alias, $params);
+    }
   }
 
   /**

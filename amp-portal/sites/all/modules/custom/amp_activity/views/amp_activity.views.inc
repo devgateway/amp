@@ -52,7 +52,7 @@ function amp_activity_views_data_alter(&$data) {
       'handler' => 'amp_activity_handler_field_translation',
       'real field' => 'amp_activity_id',
       'amp entity type' => 'activity_name',
-      'click sortable' => TRUE, // @TODO: Doesn't really work yet.
+      'click sortable' => TRUE,
     ),
   );
 
@@ -64,7 +64,7 @@ function amp_activity_views_data_alter(&$data) {
     ),
     'field' => array(
       'handler' => 'amp_activity_handler_field_date_convert',
-      'click sortable' => TRUE,
+      'click sortable' => TRUE, // @TODO: Doesn't really work yet.
     ),
     'sort' => array(
       'handler' => 'views_handler_sort_date',
@@ -79,7 +79,7 @@ function amp_activity_views_data_alter(&$data) {
     ),
     'field' => array(
       'handler' => 'amp_activity_handler_field_date_convert',
-      'click sortable' => TRUE
+      'click sortable' => TRUE // @TODO: Doesn't really work yet.
     ),
     'sort' => array(
       'handler' => 'views_handler_sort_date',

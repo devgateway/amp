@@ -187,7 +187,11 @@ class PanelizerEntityNode extends PanelizerEntityDefault {
     $handler->subtask = '';
     $handler->handler = 'panelizer_node';
     $handler->weight = -100;
-    $handler->conf = array();
+    $handler->conf = array(
+      'title' => t('Node panelizer'),
+      'context' => 'argument_entity_id:node_1',
+      'access' => array(),
+    );
     $handlers['node_view_panelizer'] = $handler;
 
     return $handlers;

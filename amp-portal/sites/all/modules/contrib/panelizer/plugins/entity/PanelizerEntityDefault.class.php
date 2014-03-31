@@ -240,7 +240,7 @@ abstract class PanelizerEntityDefault implements PanelizerEntityInterface {
       // Configure entity editing pages
       $base = array(
         'access callback' => 'panelizer_entity_plugin_callback_switcher',
-        'access arguments' => array($this->entity_type, 'access', 'admin', $position),
+        'access arguments' => array($this->entity_type, 'access', 'admin', $position, 'settings'),
         'type' => MENU_LOCAL_TASK,
       );
 
@@ -477,7 +477,7 @@ abstract class PanelizerEntityDefault implements PanelizerEntityInterface {
         $update = array();
       }
       else {
-        $update = array('entity_type');
+        $update = array('entity_type', 'entity_id');
       }
     }
 
@@ -572,6 +572,10 @@ abstract class PanelizerEntityDefault implements PanelizerEntityInterface {
       ),
       '#weight' => -10,
       '#tree' => TRUE,
+      // Put these here because submit does not get a real entity with
+      // the actual *(&)ing panelizer.
+      '#revision_id' => isset($entity->panelizer->revision_id) ? $entity->panelizer->revision_id : NULL,
+      '#entity_id' => isset($entity->panelizer->entity_id) ? $entity->panelizer->entity_id : NULL,
     );
 
     $panelizers = $this->get_default_panelizer_objects($bundle);
@@ -612,6 +616,10 @@ abstract class PanelizerEntityDefault implements PanelizerEntityInterface {
       // Guarantee we overwrite any previous settings or non-settings.
       $entity->panelizer = $this->get_default_panelizer_object($bundle, $form_state['values']['panelizer']['name']);
       $entity->panelizer->did = NULL;
+
+      // Ensure original values are maintained:
+      $entity->panelizer->entity_id = $form['panelizer']['#entity_id'];
+      $entity->panelizer->revision_id = $form['panelizer']['#revision_id'];
     }
   }
 
@@ -663,7 +671,7 @@ abstract class PanelizerEntityDefault implements PanelizerEntityInterface {
     // If there is an $op, this must actually be panelized in order to pass.
     // If there is no op, then the settings page can provide us a "panelize it!"
     // page even if there is no panel.
-    if ($op && empty($entity->panelizer)) {
+    if ($op && $op != 'settings' && empty($entity->panelizer)) {
       return FALSE;
     }
 
@@ -928,10 +936,20 @@ abstract class PanelizerEntityDefault implements PanelizerEntityInterface {
    * default actually have one.
    */
   public function hook_panelizer_defaults(&$panelizers) {
+    // For features integration, if they have modified a default and put
+    // it into the database, we do not want to show one as a default.
+    // Otherwise, features can't latch onto it.
+    $default_names = &drupal_static('panelizer_defaults_in_database', NULL);
+    if (!isset($default_names)) {
+      $default_names = drupal_map_assoc(db_query("SELECT name FROM {panelizer_defaults} WHERE name LIKE '%:default'")->fetchCol());
+    }
+
     foreach ($this->plugin['bundles'] as $bundle => $info) {
       if (!empty($info['status']) && !empty($info['default'])) {
         $panelizer = $this->get_internal_default_panelizer($bundle);
-        $panelizers[$panelizer->name] = $panelizer;
+        if (empty($default_names[$panelizer->name])) {
+          $panelizers[$panelizer->name] = $panelizer;
+        }
       }
     }
   }

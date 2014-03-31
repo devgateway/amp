@@ -84,7 +84,11 @@ class PanelizerEntityUser extends PanelizerEntityDefault {
     $handler->subtask = '';
     $handler->handler = 'panelizer_node';
     $handler->weight = -100;
-    $handler->conf = array();
+    $handler->conf = array(
+      'title' => t('User panelizer'),
+      'context' => 'argument_entity_id:user_1',
+      'access' => array(),
+    );
     $handlers['user_view_panelizer'] = $handler;
 
     return $handlers;

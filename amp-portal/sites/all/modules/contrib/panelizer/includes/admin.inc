@@ -316,7 +316,7 @@ function panelizer_default_layout_page($handler, $bundle, $name, $step = NULL, $
     $path = 'admin/config/content/panelizer/' . $handler->entity_type . '/' . $bundle;
   }
   else {
-    $path = 'admin/config/content/panelizer/' . $handler->entity_type . '/' . $bundle . '/' . $name;
+    $path = 'admin/config/content/panelizer/' . $handler->entity_type . '/' . $bundle . '/list/' . $name ;
   }
 
   $form_state = array(

@@ -425,18 +425,24 @@ function ampp_get_regionalprojects_from_url($source_arg = TRUE) {
  *  - AMP_TRANSACTION_TYPE_DISBURSEMENT for disbursments
  */
 function amp_get_transactions_amount($transaction_type) {
-  $cache_id = __FUNCTION__ . ':noargs:' . $transaction_type;
   $args = _ampp_get_search_arguments(TRUE);
 
-  // Use cache in no arguments were provided.
-  $use_cache = TRUE;
+  // Determine if any arguments were provided.
+  $arguments_count = 0;
   foreach ($args as $value) {
     if ($value != 'all') {
-      $use_cache = FALSE;
+      $arguments_count++;
     }
   }
 
-  if ($use_cache && $cache = cache_get($cache_id)) {
+  // Cache total transactions amount in order to speed up the views pager.
+  $cache_id = __FUNCTION__ . ":noargs:$transaction_type";
+  if ($arguments_count > 0) {
+    $md5sum = md5(serialize($args));
+    $cache_id = __FUNCTION__ . ":$md5sum:$transaction_type";
+  }
+
+  if ($cache = cache_get($cache_id)) {
     return $cache->data;
   }
 
@@ -445,7 +451,7 @@ function amp_get_transactions_amount($transaction_type) {
   $tmpview->set_display('panel_pane_1');
   $tmpview->set_arguments($args);
 
-  // Change the views query to get the ammounts for $transaction_type.
+  // Change the views query to get the total amounts for $transaction_type.
   $tmpview->get_total_amount_type = $transaction_type;
 
   // Load all rows, this makes the query very slow!
@@ -454,17 +460,15 @@ function amp_get_transactions_amount($transaction_type) {
   $tmpview->pre_execute();
   $tmpview->execute();
 
-  $sum = 0;
+  $total_amount = 0;
   foreach ($tmpview->result as $row) {
-    $sum = $sum + $row->amount;
+    $total_amount = $total_amount + $row->amount;
   }
 
-  // Store the results in cache so things go faster next time!
-  if ($use_cache) {
-    cache_set($cache_id, $sum, 'cache', CACHE_TEMPORARY);
-  }
+  // Store the total amount in cache.
+  cache_set($cache_id, $total_amount, 'cache', CACHE_TEMPORARY);
 
-  return $sum;
+  return $total_amount;
 }
 
 /**
@@ -570,7 +574,6 @@ function ampp_search_result_count($JSON = TRUE, $display_amount = FALSE) {
   if ($JSON && !empty($_GET['preview_amount'])) {
     $display_amount = TRUE;
   }
-
 
   $view = views_get_view('projects_search_result');
   $tmpview = $view->clone_view();

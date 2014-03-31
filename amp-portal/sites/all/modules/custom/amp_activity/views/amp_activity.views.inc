@@ -330,14 +330,18 @@ function amp_activity_views_pre_execute(&$view) {
   foreach (array('query', 'count_query') as $query_name) {
     // Required for fields.
     $view->build_info[$query_name]->groupBy('cached_amp_activity.amp_activity_id');
-    $view->build_info[$query_name]->groupBy('cached_amp_activity.actual_start_date');
-    $view->build_info[$query_name]->groupBy('cached_amp_activity.actual_completion_date');
-  }
 
-  if (isset($view->get_total_amount_type)) {
-    $view->build_info['query']->groupBy('fd.transaction_amount');
-    $view->build_info['query']->groupBy('cur.currency_code');
-    $view->build_info['query']->groupBy('fd.transaction_date');
+    if (isset($view->get_total_amount_type)) {
+      // We don't need a count query.
+      $view->get_total_rows = FALSE;
+
+      $expression = '(fd.transaction_amount / getexchange(cur.currency_code, fd.transaction_date ))';
+      $view->build_info[$query_name]->groupBy($expression);
+    }
+    else {
+      $view->build_info[$query_name]->groupBy('cached_amp_activity.actual_start_date');
+      $view->build_info[$query_name]->groupBy('cached_amp_activity.actual_completion_date');
+    }
   }
 
   // Alter the XLS export.

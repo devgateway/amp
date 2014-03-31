@@ -4,6 +4,19 @@
  *
  */
 class views_handler_field_amount extends views_handler_field {
+  /**
+   * Add currency_code to the end of the label.
+   */
+  function label() {
+    $suffix = '';
+
+    $currency_code = variable_get('currency_code', '');
+    if (!empty($currency_code)) {
+      $suffix = " ($currency_code)";
+    }
+
+    return parent::label() . $suffix;
+  }
 
   /**
    * Get totall amount of activity with given id of given type
@@ -59,14 +72,5 @@ class views_handler_field_amount extends views_handler_field {
     else {
       return $result['transaction_amount'];
     }
-  }
-
-  /**
-   * Add currnect code to the end of amount label
-   *
-   * @see views_handler_field::label()
-   */
-  function label() {
-    return parent::label() . ' (' . variable_get('currency_code') . ")";
   }
 }

@@ -384,7 +384,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['commitment_amount']['id'] = 'commitment_amount';
   $handler->display->display_options['fields']['commitment_amount']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['commitment_amount']['field'] = 'commitment_amount';
-  $handler->display->display_options['fields']['commitment_amount']['label'] = 'Commitment amount (EUR)';
+  $handler->display->display_options['fields']['commitment_amount']['label'] = 'Commitment amount';
   $handler->display->display_options['fields']['commitment_amount']['alter']['alter_text'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['alter']['make_link'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['alter']['absolute'] = 0;
@@ -406,7 +406,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['disbursement_amount']['id'] = 'disbursement_amount';
   $handler->display->display_options['fields']['disbursement_amount']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['disbursement_amount']['field'] = 'disbursement_amount';
-  $handler->display->display_options['fields']['disbursement_amount']['label'] = 'Disbursement amount (EUR)';
+  $handler->display->display_options['fields']['disbursement_amount']['label'] = 'Disbursement amount';
   $handler->display->display_options['fields']['disbursement_amount']['alter']['alter_text'] = 0;
   $handler->display->display_options['fields']['disbursement_amount']['alter']['make_link'] = 0;
   $handler->display->display_options['fields']['disbursement_amount']['alter']['absolute'] = 0;
@@ -613,8 +613,8 @@ function ampp_projects_views_default_views() {
     t('Status'),
     t('Start date'),
     t('End date'),
-    t('Commitment amount (EUR)'),
-    t('Disbursement amount (EUR)'),
+    t('Commitment amount'),
+    t('Disbursement amount'),
     t('All'),
     t('Content pane'),
     t('No results found'),

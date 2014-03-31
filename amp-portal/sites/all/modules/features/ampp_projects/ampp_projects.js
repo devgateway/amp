@@ -168,7 +168,7 @@ function getResultCount(){
     'keywords': currentKeywords,
     'budget': Budget,
     'RegionalProjects': RegionalProjects,
-    'PreviewAmount': PreviewAmount
+    'preview_amount': PreviewAmount
   },  function(data) {
     $("#loading-count").css('display','none');
     $("#search_result_count").show();

@@ -326,7 +326,18 @@ function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
 
   if ($amp_db_exists) {
     $form['submit'] = array('#type' => 'submit', '#value' => t('Show'));
-    $form['results_count'] = array('#markup' => t('projects to show is') . '&nbsp;' . '<div id="search_result_count">' . ampp_search_result_count(FALSE, isset($conf['preview_amount']) ? $conf['preview_amount'] : 0) . '</div><span id="loading-count">' . t('loading') . '...</span>');
+
+    $preview_amount = isset($conf['preview_amount']) ? (bool) $conf['preview_amount'] : FALSE;
+
+    $html_markup = t('projects to show is') . '&nbsp;';
+    $html_markup .= '<div id="search_result_count">';
+    $html_markup .= ampp_search_result_count(FALSE, $preview_amount);
+    $html_markup .= '</div>';
+    $html_markup .= '<span id="loading-count">' . t('loading') . '...</span>';
+
+    $form['results_count'] = array(
+      '#markup' =>  $html_markup,
+    );
   }
   else {
     $form['results_count'] = array('#markup' => '<div class="messages error"><ul><li>' . t('AMP database is not configured properly.') . '</li></ul><span><img id="close" src="/sites/all/themes/ampp/images/cancel_icon.gif"></span></div>');

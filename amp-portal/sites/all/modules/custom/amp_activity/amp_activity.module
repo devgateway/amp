@@ -11,6 +11,13 @@
 define('AMP_DATABASE', 'amp_projects');
 
 /**
+ * Define some of the AMP trasaction type constants.
+ */
+define('AMP_TRANSACTION_TYPE_COMMITMENT', 0); // Commitment.
+define('AMP_TRANSACTION_TYPE_DISBURSEMENT', 1); // Disbursement.
+define('AMP_TRANSACTION_TYPE_EXPENDITURE', 2); // Expenditure.
+
+/**
  * Implements hook_views_api().
  */
 function amp_activity_views_api() {

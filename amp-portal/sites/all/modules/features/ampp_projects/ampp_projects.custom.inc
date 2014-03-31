@@ -419,41 +419,38 @@ function ampp_get_regionalprojects_from_url($source_arg = TRUE) {
   return 1;
 }
 
-
 /**
- * Get block content with total amounts
+ * Get the total amount for given type of transactions:
+ *  - AMP_TRANSACTION_TYPE_COMMITMENT for commitments
+ *  - AMP_TRANSACTION_TYPE_DISBURSEMENT for disbursments
  */
-function total_block_content() {
-  $amount_commitment = get_total_amount(0);
-  $amount_disbursement = get_total_amount(1);
-  return total_block_html($amount_commitment, $amount_disbursement);
-}
+function amp_get_transactions_amount($transaction_type) {
+  $cache_id = __FUNCTION__ . ':noargs:' . $transaction_type;
+  $args = _ampp_get_search_arguments(TRUE);
 
-/**
- * Get total amount of given type (1|0)
- * 0 for commitments
- * 1 for disbursments
- * Use url as arguments unless passed with args parameter
- * TODO: Find a way to use views to get totals
- */
-function get_total_amount($type, $args = array()) {
-  global $user;
-  global $amp_db_exists;
+  // Use cache in no arguments were provided.
+  $use_cache = TRUE;
+  foreach ($args as $value) {
+    if ($value != 'all') {
+      $use_cache = FALSE;
+    }
+  }
 
-  if (!$amp_db_exists) return;
+  if ($use_cache && $cache = cache_get($cache_id)) {
+    return $cache->data;
+  }
 
-  $block = new stdClass();
   $view = views_get_view('projects_search_result');
   $tmpview = $view->clone_view();
   $tmpview->set_display('panel_pane_1');
-  $tmpview->get_total_amount_type = $type;
-
-  if (empty($args)) {
-    $args = _ampp_get_search_arguments(TRUE);
-  }
-
   $tmpview->set_arguments($args);
+
+  // Change the views query to get the ammounts for $transaction_type.
+  $tmpview->get_total_amount_type = $transaction_type;
+
+  // Load all rows, this makes the query very slow!
   $tmpview->set_items_per_page(0);
+
   $tmpview->pre_execute();
   $tmpview->execute();
 
@@ -462,118 +459,13 @@ function get_total_amount($type, $args = array()) {
     $sum = $sum + $row->amount;
   }
 
+  // Store the results in cache so things go faster next time!
+  if ($use_cache) {
+    cache_set($cache_id, $sum, 'cache', CACHE_TEMPORARY);
+  }
+
   return $sum;
 }
-
-
-/**
- * HTML of totals block
- */
-function total_block_html($amount_commitment, $amount_disbursement){
-  if (module_exists('format_number')) {
-    $amount_commitment = empty($amount_commitment) ? "0" : format_number($amount_commitment, 0);
-    $amount_disbursement = empty($amount_disbursement) ? "0" : format_number($amount_disbursement, 0);
-  } else {
-    $amount_commitment = empty($amount_commitment) ? "0" : number_format(intval($amount_commitment));
-    $amount_disbursement = empty($amount_disbursement) ? "0" : number_format(intval($amount_disbursement));
-  }
-  $html = '<div class="total-amounts view-projects-search-result">';
-  $html .= '<table class="views-table"><thead><tr>';
-  $html .= '<th class="views-field"></th>';
-  $html .= '<th  class="views-field">'.t('Commitment amount').' ('.variable_get('currency_code').")".'</th>';
-  $html .= '<th class="views-field">'.t('Disbursement amount').' ('.variable_get('currency_code').")".'</th>';
-  $html .= '</tr></thead>';
-
-  $html .= '<td>'.t("Total").':'.'</td>';
-  $html .= '<td class="views-field">'.$amount_commitment.'</td>';
-  $html .= '<td class="views-field">'.$amount_disbursement.'</td>';
-  $html .= '</tr></thead>';
-
-  $html .= '</table>';
-  $html .= '</div>';
-  return $html;
-}
-
-
-/**
- * Implementation of hook_block_info
- */
-/*
-function ampp_projects_block_info() {
-  $blocks['ampp_search'] = array(
-    'info' => t('Search AMP Projects'),
-  );
-
-  $blocks['ampp_search_result_totals'] = array(
-      'info' => t('Search result totals'),
-  );
-  return $blocks;
-}
-*/
-
-
-/**
- *
- * Implements hook_block_configure().
- */
-function ampp_projects_block_configure($delta) {
-  $form = array();
-  switch($delta) {
-    case 'ampp_search_result_totals':
-      $form['result_totals_set_precision'] = array(
-          '#type' => 'checkbox',
-          '#title' => t('Round'),
-          '#description' => t('If checked, the number will be rounded.'),
-          '#default_value' => variable_get('result_totals_set_precision', 1),
-      );
-      $form['result_totals_precision'] = array(
-          '#type' => 'textfield',
-          '#title' => t('Precision'),
-          '#default_value' => variable_get('result_totals_precision'),
-          '#description' => t('Specify how many digits to print after the decimal point.'),
-          '#dependency' => array('edit-options-set-precision' => array(TRUE)),
-          '#size' => 2,
-      );
-  return $form;
-  }
-}
-
-
-/**
- *
- * Implements hook_block_save().
- */
-function ampp_projects_block_save($delta = '', $edit = array()){
-  switch($delta) {
-    case 'ampp_search_result_totals':
-      variable_set('result_totals_set_precision', (int)$edit['result_totals_set_precision']);
-      variable_set('result_totals_precision', (int)$edit['result_totals_precision']);
-    break;
-  }
-  return;
-}
-
-
-/**
- * Implementation of hook_block_view
- */
-function ampp_projects_block_view($delta = '') {
-  $block = array();
-
-  switch ($delta) {
-    case 'ampp_search':
-      // $block['subject'] = t('Search Projects'); // Most forms don't have a subject
-      // $block['content'] = drupal_get_form('ampp_search_form');
-      break;
-
-    case 'ampp_search_result_totals':
-      $block['content'] = total_block_content();
-      break;
-  }
-
-  return $block;
-}
-
 
 /**
  * Implementation of hook_menu().
@@ -669,39 +561,43 @@ function ampp_projects_menu() {
  * possible to use views totla count.
  * TODO: Find a way to use views to get count
  */
-function ampp_search_result_count($JSON = true, $amount = false) {
+function ampp_search_result_count($JSON = TRUE, $display_amount = FALSE) {
   global $amp_db_exists;
   if (!$amp_db_exists) {
     return;
   }
 
-  $args = _ampp_get_search_arguments(TRUE);
-  // Debug functions:
-  // watchdog('ampp_projects', 'ajax GET: ' . serialize($_GET));
-  // watchdog('ampp_projects', 'ajax ARGS: ' . serialize($args));
+  if ($JSON && !empty($_GET['preview_amount'])) {
+    $display_amount = TRUE;
+  }
+
 
   $view = views_get_view('projects_search_result');
   $tmpview = $view->clone_view();
   $tmpview->set_display('panel_pane_1');
+  $args = _ampp_get_search_arguments(TRUE);
   $tmpview->set_arguments($args);
   $tmpview->pre_execute();
   $tmpview->execute();
-
-  // watchdog('ampp_projects', 'ajax TOTAL: ' . $tmpview->total_rows);
-
   $output = $tmpview->total_rows;
 
-  if ($amount || ($JSON && isset($_GET["PreviewAmount"]) && $_GET["PreviewAmount"])) {
-    $output .= ' (' . t('Commitment amount') . ': '. format_number(get_total_amount(0, $args), 0) . ' ' . variable_get('currency_code') . ' )';
+  if ($display_amount) {
+    $amount_commitment = amp_get_transactions_amount(AMP_TRANSACTION_TYPE_COMMITMENT);
+
+    $t_args = array(
+      '@amount' => format_number($amount_commitment, 0),
+      '@currency' => variable_get('currency_code', ''),
+    );
+    $output .= ' (' . t('Commitment amount: @amount @currency', $t_args) . ')';
   }
 
   if ($JSON) {
     $response = array('count' => $output);
     drupal_json_output($response);
     drupal_exit();
-  } else {
-    return $output;
   }
+
+  return $output;
 }
 
 /**

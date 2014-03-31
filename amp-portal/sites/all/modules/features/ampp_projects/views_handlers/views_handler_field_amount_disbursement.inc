@@ -17,10 +17,7 @@ class views_handler_field_amount_disbursement extends views_handler_field_amount
 
     if ($pos !== FALSE) {
       $donor_ids_array = explode(",", substr($donor_ids, 1, strlen($donor_ids) - 2));
-      // Transaction types are:
-      // Commitments = 0, Disbursements = 1, Expenditures = 2
-      $transactino_type = 1;
-      $values->amp_activity_amount_disbursement = $this->get_amount($values->amp_activity_id, array_unique($donor_ids_array), $transactino_type);
+      $values->amp_activity_amount_disbursement = $this->get_amount($values->amp_activity_id, array_unique($donor_ids_array), AMP_TRANSACTION_TYPE_DISBURSEMENT);
     }
 
     return parent::render($values);

@@ -333,10 +333,6 @@ function amp_activity_views_pre_execute(&$view) {
     $view->build_info[$query_name]->groupBy('cached_amp_activity.actual_start_date');
     $view->build_info[$query_name]->groupBy('cached_amp_activity.actual_completion_date');
 
-    // Required for arguments.
-    // @TODO: add them conditionally.
-    // $view->build_info[$query_name]->groupBy('amp_org_role.activity');
-
     if (isset($view->get_total_amount_type)) {
       $expression = '(fd.transaction_amount / getexchange(cur.currency_code, fd.transaction_date ))';
       $view->build_info[$query_name]->groupBy($expression);

@@ -71,18 +71,16 @@ function amp_activity_get_amp_activities() {
 function _amp_activity_get_child_sector_ids($parent_sector_id) {
   $child_sector_ids = array();
 
-  db_set_active('amp_projects');
+  db_set_active(AMP_DATABASE);
   $child_ids = db_select('amp_sector', 'amps')
     ->fields('amps', array('amp_sector_id'))
     ->condition('amps.parent_sector_id', $parent_sector_id, '=')->execute()
-    ->fetchAll(PDO::FETCH_COLUMN);
+    ->fetchCol();
   db_set_active();
 
-  if (!empty($child_ids)) {
-    foreach ($child_ids as $child_id) {
-      $child_sector_ids[] = $child_id;
-      $child_sector_ids = array_merge($child_sector_ids, _amp_activity_get_child_sector_ids($child_id));
-    }
+  foreach ($child_ids as $child_id) {
+    $child_sector_ids[] = $child_id;
+    $child_sector_ids = array_merge($child_sector_ids, _amp_activity_get_child_sector_ids($child_id));
   }
 
   return $child_sector_ids;
@@ -94,6 +92,7 @@ function _amp_activity_get_child_sector_ids($parent_sector_id) {
 function _amp_activity_get_location_parent_ids($location_id) {
   $parent_location_ids = array();
 
+  // @TODO: Cleanup!
   if (!empty($_GET['RegionalProjects'])) {
     $include_regional = $_GET['RegionalProjects'];
   }
@@ -107,20 +106,19 @@ function _amp_activity_get_location_parent_ids($location_id) {
     return $parent_location_ids;
   }
 
-  db_set_active('amp_projects');
+  db_set_active(AMP_DATABASE);
   $parent_ids = db_select('amp_category_value_location', 'acvl')
     ->fields('acvl', array('parent_location'))
     ->condition('acvl.id', $location_id, '=')
     ->isNotNull('acvl.parent_location')
     ->execute()
-    ->fetchAll(PDO::FETCH_COLUMN);
+    ->fetchCol();
   db_set_active();
 
-  if (!empty($parent_ids)) {
-    foreach ($parent_ids as $parent_id) {
-      $parent_location_ids[] = $parent_id;
-      $parent_location_ids = array_merge($parent_location_ids, _amp_activity_get_location_parent_ids($parent_id));
-    }
+  foreach ($parent_ids as $parent_id) {
+    $parent_location_ids[] = $parent_id;
+
+    $parent_location_ids = array_merge($parent_location_ids, _amp_activity_get_location_parent_ids($parent_id));
   }
 
   return $parent_location_ids;
@@ -131,22 +129,19 @@ function _amp_activity_get_location_parent_ids($location_id) {
  */
 function _amp_activity_get_child_program_ids($program_id) {
   $child_program_ids = array();
-  db_set_active('amp_projects');
 
+  db_set_active(AMP_DATABASE);
   $child_ids = db_select('amp_team', 'amp_team')
     ->fields('amp_team', array('amp_team_id'))
     ->condition('amp_team.parent_team_id', $program_id, '=')
     ->execute()
-    ->fetchAll(PDO::FETCH_COLUMN);
-
-  if (!empty($child_ids)) {
-    foreach ($child_ids as $child_id) {
-      $child_program_ids[] = $child_id;
-      $child_program_ids = array_merge($child_program_ids, _amp_activity_get_child_program_ids($child_id));
-    }
-  }
-
+    ->fetchCol();
   db_set_active();
+
+  foreach ($child_ids as $child_id) {
+    $child_program_ids[] = $child_id;
+    $child_program_ids = array_merge($child_program_ids, _amp_activity_get_child_program_ids($child_id));
+  }
 
   return $child_program_ids;
 }

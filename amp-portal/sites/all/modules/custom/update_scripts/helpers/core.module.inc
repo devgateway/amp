@@ -18,6 +18,10 @@ function _us_install_modules($module_names, $action = 'install') {
     return $results;
   }
 
+  if (is_string($module_names)) {
+    $module_names = array($module_names);
+  }
+
   // Collect data for all modules to be able to determine dependencies.
   $files = system_rebuild_module_data();
 
@@ -166,6 +170,10 @@ function _us_install_module($module_name) {
  * Disable a list of modules.
  */
 function _us_disable_modules($module_names) {
+  if (is_string($module_names)) {
+    $module_names = array($module_names);
+  }
+
   _us_install_modules($module_names, 'disable');
 }
 
@@ -180,6 +188,10 @@ function _us_disable_module($module_name) {
  * Uninstall a list of modules.
  */
 function _us_uninstall_modules($module_names) {
+  if (is_string($module_names)) {
+    $module_names = array($module_names);
+  }
+
   // Make sure the install API is available.
   include_once DRUPAL_ROOT . '/includes/install.inc';
 

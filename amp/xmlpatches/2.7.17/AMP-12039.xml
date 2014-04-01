@@ -164,7 +164,8 @@ xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.
                        update dg_message set message_utf8='Financing Instrument:',orig_message='Financing Instrument:' where message_key ='282729486' and lang_iso='en';
                        update dg_message set message_utf8='Instrument de Financement:' where message_key ='282729486' and lang_iso='fr';
                        update dg_message set message_utf8='Class:',orig_message='Class:' where message_key ='-500877530' and lang_iso='en';
-            		  delete from dg_message where message_key='-1357503883'; --already fixed. It is an old message on the DB
+            		   delete from dg_message where message_key='-1357503883'; --already fixed. It is an old message on the DB
+               		   delete from dg_message where message_key='1372567318';	
                 </lang>
                 </script>
         </apply>

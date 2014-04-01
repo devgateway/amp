@@ -232,7 +232,7 @@
 		<table cellpadding="5px" cellspacing="5px" valign="top" width="100%" border=1 class="inside">
 			<tr>
 				<td colspan="2" class="inside">
-					<digi:trn>Please enter a </digi:trn><strong><digi:trn>name</digi:trn></strong><digi:trn> for this category:</digi:trn>
+					<digi:trn>Please enter a </digi:trn><strong><digi:trn> name </digi:trn></strong><digi:trn> for this category:</digi:trn>
 					<font color="red">*</font>
 					&nbsp;&nbsp;
 					<html:text property="categoryName" />
@@ -240,7 +240,7 @@
 			</tr>
 			<tr valign="top">
 				<td class="inside" width=50%>
-					<digi:trn>You can enter a</digi:trn><strong><digi:trn> description </digi:trn></strong><digi:trn>for this category:</digi:trn>
+					<digi:trn>You can enter a </digi:trn><strong><digi:trn> description </digi:trn></strong><digi:trn> for this category:</digi:trn>
 					<br />
 					<html:textarea property="description" styleClass="adm_category_desc" />
 				</td>

@@ -294,7 +294,8 @@ public class GPIReport1 extends GPIAbstractReport {
 			} else {
 				auxRow.setColumn3(0);
 			}
-			auxList.add(i, auxRow);
+			//AMP-17181
+			//auxList.add(i, auxRow);
 		}
 		return auxList;
 	}

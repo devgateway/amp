@@ -202,7 +202,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 										</tr>
 										<tr>
 											<td align="left" width="100%" valign="center" class="inside">
-												<digi:trn key="aim:mandatoryFields">The fields marked <font color="red">*</font> are mandatory</digi:trn>
+												<digi:trn>The fields marked </digi:trn><digi:trn><font color="red"> * </font></digi:trn><digi:trn> are mandatory</digi:trn>
 											</td>
 										</tr>
 										<tr>

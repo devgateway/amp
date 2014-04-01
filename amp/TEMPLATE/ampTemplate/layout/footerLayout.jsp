@@ -17,8 +17,9 @@
 	
 	 </div>
 <div class="dgf_footer">
-<img src="/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif" class="dgf_logo_footer" /><br />
-1889 F Street, NW, Second Floor, Washington, D.C. 20006, USA<br>
+<img src="/TEMPLATE/ampTemplate/img_2/dgf_logo_bottom.gif" class="dgf_logo_footer" />
+<br/>
+1110 Vermont Ave., NW, Ste. 500 , Washington, DC 20005 USA<br>
 info@developmentgateway.org, Tel: +1.202.572.9200, Fax: +1 202.572.9290
 </div>
 <!-- FOOTER END  -->

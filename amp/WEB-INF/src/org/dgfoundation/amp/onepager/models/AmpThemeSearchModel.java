@@ -95,14 +95,14 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				if (isExactMatch())
 					return ret;
 
-				
-				if (def != null) {
+				//AMP-16739 the default program is always the root of hierarchy 
+				/*if (def != null) {
 					AmpTheme defUsed = new AmpTheme();
 					defUsed.setName(def.getName());
 					defUsed.setAmpThemeId(def.getAmpThemeId());
 					defUsed.setTransientBoolean(true);
 					ret.add(0, defUsed);
-				}
+				}*/
 			} catch (Exception e) {
 				throw new DgException("Cannot retrive all themes from db", e);
 			} finally {

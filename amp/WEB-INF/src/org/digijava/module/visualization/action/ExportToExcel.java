@@ -775,7 +775,7 @@ public class ExportToExcel extends Action {
 	                cell.setCellStyle(data.subHeaderCS);
 	            //}
 	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(data.numberPrjTrn);
+	            headerText = new HSSFRichTextString(data.avgPrjZSizeTrn);
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(data.subHeaderCS);
 	

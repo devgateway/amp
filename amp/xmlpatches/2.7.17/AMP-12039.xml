@@ -166,6 +166,15 @@ xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.
                        update dg_message set message_utf8='Class:',orig_message='Class:' where message_key ='-500877530' and lang_iso='en';
             		  delete from dg_message where message_key='-1357503883'; --already fixed. It is an old message on the DB
                 	  delete from dg_message where message_key='1372567318';
+                	  delete from dg_message where message_key='-1277758424';
+                	   delete from dg_message where message_key='-1629152287';
+                	   delete from dg_message where message_key='-816675458';
+                	   delete from dg_message where message_key='-900831747';
+                	   delete from dg_message where message_key='2139649666';
+                	   delete from dg_message where message_key='-1552898448';
+                	    delete from dg_message where message_key='781866398';	
+                	    delete from dg_message where message_key='307915861';
+                	   
                 </lang>
                 </script>
         </apply>

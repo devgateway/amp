@@ -177,6 +177,7 @@
     
     <form-bean name="lastVersionsForm" type="org.digijava.module.versioning.form.AmpLastVersionsForm"/>
     <form-bean name="aimOrgProfileReport" type="org.digijava.module.aim.form.OrgProfileReportForm"/>
+    <form-bean name="emptyForm" type="org.digijava.module.aim.form.EmptyForm"/>
     
 </form-beans>
 
@@ -220,10 +221,15 @@
       <forward name="success" path="/aim/addPledge.do" redirect="true"/>
       <forward name="forward" path="/aim/viewPledgesList.do" redirect="true"/>
     </action>
-    <action name="viewPledgesForm" path="/aim/viewPledgesList" scope="session" type="org.digijava.module.fundingpledges.action.ShowPledgesList">
+    <action name="viewPledgesForm" path="/aim/viewPledgesList" scope="request" type="org.digijava.module.fundingpledges.action.ShowPledgesList">
       <forward name="forward" path="/showLayout.do?layout=viewPledgesList"/>
     </action>
-	
+	<action name="emptyForm" path="/aim/viewPledge" scope="request" type="org.digijava.module.fundingpledges.action.ViewPledge">
+      <forward name="forward" path="/showLayout.do?layout=viewPledge" />
+    </action>
+    <action name="pledgeForm" path="/aim/viewPledgeData" scope="request" type="org.digijava.module.fundingpledges.action.ViewPledgeData">
+		<forward name="forward" path="/showLayout.do?layout=viewPledgeData" />
+    </action>
     <action name="aimViewAhSurveisForm" path="/aim/viewAhSurveis" scope="session" type="org.digijava.module.aim.action.ViewAhSurveis" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewAhSurveis" />
     </action>

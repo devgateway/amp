@@ -413,16 +413,16 @@
 
     <!-- tab Views -->
 	<page page="myTabs" name="aim_myTabs" title="My Tabs" />
-        <page page="feedback" name="feedback" title="Feedback/Contact" />
-		<page name="showActivityLog" title="AMP - Activity Log" />
-        <page page="addEditData" name="addEditData" title="Add/Edit data" />
-		<page page="assignNewIndicator" name="assignNewIndicator" title="Assign New Indicator" />
-        <page page="viewEditIndicator" name="viewEditIndicator" title="View/Edit Indicator" />
-        <page page="viewIndicators" name="viewIndicators" title="Indicator manager" />
-        <page page="selectLocationForIndicatorValue" name="selectLocationForIndicatorValue" title="Select location" />
-		<page page="addNewIndicator" name="addNewIndicator" title="Add New Indicator" />
-         <page page="selectActivityForIndicator" name="selectActivityForIndicator" title="Select activity" />
-		<page page="selectProgramForIndicator" name="selectProgramForIndicator" title="Select program" />
+	<page page="feedback" name="feedback" title="Feedback/Contact" />
+	<page name="showActivityLog" title="AMP - Activity Log" />
+	<page page="addEditData" name="addEditData" title="Add/Edit data" />
+	<page page="assignNewIndicator" name="assignNewIndicator" title="Assign New Indicator" />
+	<page page="viewEditIndicator" name="viewEditIndicator" title="View/Edit Indicator" />
+	<page page="viewIndicators" name="viewIndicators" title="Indicator manager" />
+	<page page="selectLocationForIndicatorValue" name="selectLocationForIndicatorValue" title="Select location" />
+	<page page="addNewIndicator" name="addNewIndicator" title="Add New Indicator" />
+	<page page="selectActivityForIndicator" name="selectActivityForIndicator" title="Select activity" />
+	<page page="selectProgramForIndicator" name="selectProgramForIndicator" title="Select program" />
 <!-- program settings -->
     <page page="programConfigurationPage" name="programConfigurationPage" title="Configuration Page" />
     <page page="addDisbOrderToDisb" name="aim_addDisbOrderToDisbPopupLayout" title="Disbursement Order For Activity" />
@@ -442,8 +442,10 @@
 	<page name="viewPledgesList" page="viewPledgesList" title =" - Pledges List " />
 	<page page="selectPledgeLocation" name="selectPledgeLocation" title="AMP - Select Location" />
 	<page page="selectPledgeProgram" name="selectPledgeProgram" title="AMP - Select Location" />
+	<page page="viewPledge" name="viewPledge" title="AMP - Select Location" />
+	<page page="viewPledgeData" name="viewPledgeData" title="AMP - Select Location" /> <!-- bootstrap iframe -->
 
-<page page="components/addContactPopin" name="aim_contactComponentPopIn" title="AMP - Select Organization" />
+	<page page="components/addContactPopin" name="aim_contactComponentPopIn" title="AMP - Select Organization" />
 	<page page="assignActivitiesJSON" name="aim_assignActivitiesJSON" title="AMP - Assign Activities" />
 	<page page="updateTeamMembersJSON" name="aim_updateTeamMembersJSON" title="AMP - Update Team Member" />
 	<page page="teamMembersAddFromAdminJSON" name="aim_teamMembersAddFromAdminJSON" title="AMP - Assign Team Member" />

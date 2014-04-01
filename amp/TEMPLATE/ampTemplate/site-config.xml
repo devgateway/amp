@@ -798,6 +798,7 @@
 				<page>tabManagerData</page>
 				<page>selectPledgeLocation</page>
 				<page>selectPledgeProgram</page>
+				<page>viewPledgeData</page>
 				<page>previewActivityPopin</page>
                 <page>aim_addOrgGrpPopupLayout</page>
 			</module>

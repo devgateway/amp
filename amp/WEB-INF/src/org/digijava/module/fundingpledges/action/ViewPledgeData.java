@@ -23,9 +23,9 @@ public class ViewPledgeData extends Action {
         	
 		request.setAttribute("bootstrap_insert", true); // for the big layout to know to adapt the page for modern-web-standards insets
 		PledgeForm plForm = (PledgeForm) form;
-		java.util.Map<String, String[]> params = request.getParameterMap();
-		for(String param:params.keySet())
-			System.out.format("param[%s] = %s\n", param, Arrays.asList(params.get(param)));
+//		java.util.Map<String, String[]> params = request.getParameterMap();
+//		for(String param:params.keySet())
+//			System.out.format("param[%s] = %s\n", param, Arrays.asList(params.get(param)));
 		Long pledgeId = Long.parseLong(request.getParameter("id"));		
 		FundingPledges fp = PledgesEntityHelper.getPledgesById(pledgeId);
 		plForm.importPledgeData(fp);

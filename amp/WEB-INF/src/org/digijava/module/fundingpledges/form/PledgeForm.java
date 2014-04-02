@@ -120,8 +120,6 @@ public class PledgeForm extends ActionForm implements Serializable {
 	private Long selectedOrgId;
 	private Long selectedOrgGrpId;
 	private String titleFreeText;
-	//private Collection<AmpCurrency> validcurrencies;
-	//private String currencyCode;
 	private PledgeFormContact contact1 = new PledgeFormContact();
 	private PledgeFormContact contact2 = new PledgeFormContact();
 	private String additionalInformation;
@@ -158,6 +156,9 @@ public class PledgeForm extends ActionForm implements Serializable {
 	 */
 	private List<FundingPledgesDetailsShim> selectedFunding = new ArrayList<>();
 	
+	// fields for viewing
+	private String effectiveName;
+	
 	public void reset() {
 		this.setTitleFreeText(null);
 		this.setPledgeId(null);
@@ -179,6 +180,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 		this.selectedRootSector = null;
 		this.implemLocationLevel = null;
 		this.levelId = null;
+		this.setEffectiveName(null);
 	}
 	
 	/**
@@ -190,6 +192,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 		this.setPledgeId(fp.getId());
 		this.setTitleFreeText(fp.getTitleFreeText());
 		this.setPledgeTitleId(fp.getTitle() == null ? null : fp.getTitle().getId());
+		this.setEffectiveName(fp.getEffectiveName());
 		this.setSelectedOrgGrpId(fp.getOrganizationGroup().getAmpOrgGrpId());
 		this.setAdditionalInformation(fp.getAdditionalInformation());
 		this.setWhoAuthorizedPledge(fp.getWhoAuthorizedPledge());
@@ -845,6 +848,25 @@ public class PledgeForm extends ActionForm implements Serializable {
 	@java.lang.SuppressWarnings("all")
 	public void setSelectedFunding(final List<FundingPledgesDetailsShim> selectedFunding) {
 		this.selectedFunding = selectedFunding;
+	}
+	
+	public void setEffectiveName(String effectiveName){
+		this.effectiveName = effectiveName;
+	}
+	
+	public String getEffectiveName(){
+		return this.effectiveName;
+	}
+	
+	public String getSelectedOrgGrpName(){
+		if (selectedOrgGrpId == null)
+			return null;
+		return PledgesEntityHelper.getOrgGroupById(selectedOrgGrpId).getOrgGrpName();
+	}
+	
+	public String getAcvlValue(Long acvlId){
+		if (acvlId == null) return null;
+		return CategoryManagerUtil.loadAcvOrNull(acvlId).getValue();
 	}
 	
 	@java.lang.Override

@@ -2,6 +2,7 @@
 package org.digijava.module.fundingpledges.form;
 
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
@@ -29,6 +30,10 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 		this.fundingYear = getLongFrom(fpd.getFundingYear());
 	}
 	
+	public String getCurrencyCode(){
+		return currencyId == null ? null : CurrencyUtil.getCurrency(this.currencyId).getCurrencyCode();
+	}
+	
 	public static Long getIdFrom(Identifiable id) {
 		return id == null ? null : (Long)id.getIdentifier();
 	}
@@ -41,7 +46,7 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 			return null;
 		}
 	}
-	
+		
 	@java.lang.SuppressWarnings("all")
 	public Long getPledgeTypeId() {
 		return this.pledgeTypeId;

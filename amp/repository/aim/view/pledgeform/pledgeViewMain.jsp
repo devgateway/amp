@@ -42,11 +42,10 @@
     <![endif]-->
   </head>
   <body class="main_side" id="bootstrap-iframe">
-  DADADA
   	<logic:present name="PNOTIFY_ERROR_MESSAGE" scope="request">
   		<script type="text/javascript">
   			$(document).ready(function(){
-  				show_error_message("Not allowed to edit pledge", '<c:out value="${PNOTIFY_ERROR_MESSAGE}" />');
+  				show_error_message("<c:out value="${PNOTIFY_ERROR_TITLE}" />", '<c:out value="${PNOTIFY_ERROR_MESSAGE}" />');
   			});
   		 </script>
   	</logic:present>
@@ -54,35 +53,27 @@
 <logic:notPresent name="PNOTIFY_ERROR_MESSAGE" scope="request">
  	<div id="pledge_form_big_div"> 
 		<aim:renderFormSubsection title="Pledge Identification">
-			<jsp:include page="pledgeIdentification.jsp"></jsp:include>
+			<jsp:include page="pledgeIdentificationView.jsp"></jsp:include>
 		</aim:renderFormSubsection>	
 			
-		<field:display name="Pledge Sector" feature="Pledge Sector and Location">
-			<aim:renderFormSubsection title="Sector" styleId="pledge_form_sectors">
-				<jsp:include page="pledgeSectors.jsp"></jsp:include>
-			</aim:renderFormSubsection>
-		</field:display>
+		<aim:renderFormSubsection title="Sector" styleId="pledge_form_sectors">
+			<jsp:include page="pledgeSectorsView.jsp"></jsp:include>
+		</aim:renderFormSubsection>
 	
- 		<field:display name="Pledge Location" feature="Pledge Sector and Location">
-			<aim:renderFormSubsection title="Location" styleId="pledge_form_locations">			
-				<jsp:include page="pledgelocationslist.jsp"></jsp:include>
-			</aim:renderFormSubsection>
-		</field:display>
+		<aim:renderFormSubsection title="Location" styleId="pledge_form_locations">			
+			<jsp:include page="pledgelocationslistView.jsp"></jsp:include>
+		</aim:renderFormSubsection>
 	
-		<field:display name="Pledge Program" feature="Pledge Sector and Location">
-			<aim:renderFormSubsection title="Program" styleId="pledge_form_programs">
-				<jsp:include page="pledgePrograms.jsp"></jsp:include>
-			</aim:renderFormSubsection>
-		</field:display>
+		<aim:renderFormSubsection title="Program" styleId="pledge_form_programs">
+			<jsp:include page="pledgeProgramsView.jsp"></jsp:include>
+		</aim:renderFormSubsection>
 	
-		<feature:display name="Pledge Funding" module="Pledges">
-			<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
-				<jsp:include page="pledgeFunding.jsp"></jsp:include>
-			</aim:renderFormSubsection>
-		</feature:display>
+		<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
+			<jsp:include page="pledgeFundingView.jsp"></jsp:include>
+		</aim:renderFormSubsection>
 	
-		<jsp:include page="/repository/aim/view/pledgeform/pledgeContacts.jsp"></jsp:include>
-		<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogue.jsp"></jsp:include>
+		<jsp:include page="/repository/aim/view/pledgeform/pledgeContactsView.jsp"></jsp:include>
+		<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogueView.jsp"></jsp:include>
 	
 	</div>
 </logic:notPresent>

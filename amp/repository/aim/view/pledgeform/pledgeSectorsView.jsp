@@ -4,9 +4,6 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 
 <digi:instance property="pledgeForm" />
@@ -25,7 +22,6 @@
 					<tr>
 						<th class="col-xs-8 text-right"><digi:trn>Sector Name</digi:trn></th>
 						<th class="col-xs-3 text-center"><digi:trn>Percentage</digi:trn></th>
-						<th class="col-xs-1 text-center"></th>
 					</tr>
 				</thead>
 				<tbody>	
@@ -34,10 +30,7 @@
 						<c:if test="${selectedSectors.rootId eq rootTheme.keyAsLong}">
 							<tr id="pledge_form_row_for_sector_${selectedSectors.uniqueId}">
 								<td class="text-right"><c:out value="${selectedSectors.hierarchicalName}" /></td>
-								<td>
-									<html:text name="selectedSectors" indexed="true" property="percentage" size="5" styleClass="form-control input-sm validate-percentage validate-percentage-input-pledges-sectors-${rootTheme.keyAsLong}" />
-								</td>
-								<td class="text-center"><button type="button" onclick="sectorsController.onDelete(${selectedSectors.uniqueId});" class="btn btn-danger btn-xs"><digi:trn>Delete</digi:trn></button></td>
+								<td class="text-left bold">${selectedSectors.percentage}%</td>
 							</tr>
 						</c:if>
 					</c:forEach>

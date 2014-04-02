@@ -52,11 +52,6 @@
       
      
     </script>
-    <field:display feature="Structures" name="Show Image">
-    	<script type="text/javascript">
-    		stshowimage = "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>"+ translate('Show Image')+"</a>"
-    	</script>
-    </field:display>
     
     <feature:display name="Structures On Load" module="Map Module">
 		<script type="text/javascript">
@@ -429,6 +424,12 @@
 	}
 	
 </script>
+
+	<field:display feature="Structures" name="Show Image">
+    	<script type="text/javascript">
+    		stshowimage = "<a class='tab_vis_link' id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>"+translate('Show Image')+"</a>";
+    	</script>
+    </field:display>
 	<!-- Filter Styles -->
    	<digi:ref href="/TEMPLATE/ampTemplate/css_2/visualization_yui_tabs.css" type="text/css" rel="stylesheet" />
    	<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/visualization.css" type="text/css" />

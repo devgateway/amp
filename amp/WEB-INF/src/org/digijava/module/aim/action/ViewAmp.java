@@ -16,8 +16,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
@@ -31,11 +33,14 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.LoginForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -289,6 +294,24 @@ public class ViewAmp
             }
             //appSettings.setLanguage(ampAppSettings.getLanguage());
 
+            //as the users is member of only one team we mas ensure that the correct
+            //template settings are load for him
+            AmpTeam currentTeam = member.getAmpTeam();
+            AmpTemplatesVisibility currentTemplate = currentTeam.getFmTemplate();
+            if (currentTemplate == null){
+                currentTemplate = FeaturesUtil.getTemplateVisibility(
+                        FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),
+                        PersistenceManager.getRequestDBSession());
+            }
+            AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
+            ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+            FeaturesUtil.setAmpTreeVisibility(request.getServletContext(), session,ampTreeVisibility);
+            
+            
+            
+            
+            
+            
             String langCode = UserUtils.getUserLangPreferences(
                     usr, site).getNavigationLanguage().getCode();
 

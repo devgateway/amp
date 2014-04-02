@@ -66,7 +66,16 @@ LoggerIdentifiable, Cloneable {
 	protected Long budgetprogram;
 
 	//protected String govAgreementNumber;
+	private String testVisibility;
+	
 
+	public String getTestVisibility() {
+		return testVisibility;
+	}
+
+	public void setTestVisibility(String testVisibility) {
+		this.testVisibility = testVisibility;
+	}
 
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
 	@VersionableFieldSimple(fieldTitle = "Internal ID", blockSingleChange = true)

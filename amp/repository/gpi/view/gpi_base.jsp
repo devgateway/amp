@@ -196,7 +196,7 @@
 				                                            	<%aStyle = ""; %>
 				                                            </logic:equal>
 				                                            <li class="<%=selected%>">
-				                                                <digi:link href="/gpi.do?reportId=${element.indicatorCode}&reset=true&header=true" target="_self">
+				                                                <digi:link href="/gpi.do?reportId=${element.indicatorCode}&reset=false&header=true" target="_self">
 				                                                   	<div style="max-width: 80px; font-size: 11px; font-weight: bold;">
 				                                                       	<digi:trn>Indicator</digi:trn>&nbsp;<bean:write name="element" property="indicatorCode"/>
 				                                                    </div>

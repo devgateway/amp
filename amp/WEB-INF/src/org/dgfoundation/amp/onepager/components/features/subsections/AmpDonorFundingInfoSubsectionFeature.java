@@ -68,7 +68,8 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				CategoryConstants.TYPE_OF_ASSISTENCE_NAME, true, false);
 		
 		
-		
+	     financingInstrument.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
+	     typeOfAssistance.getChoiceContainer().add(new AttributeModifier("style", "max-width: 210px!important;"));
 		loanTerms =  new AmpTextAreaFieldPanel("loanTerms", 
 				          new PropertyModel<String>(model, "loanTerms"), 
 				          "Loan Terms", false, false, false);

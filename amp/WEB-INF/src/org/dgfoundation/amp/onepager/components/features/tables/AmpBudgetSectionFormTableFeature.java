@@ -122,7 +122,16 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
 		add(percentageValidationField);
 		
 		final AmpMinSizeCollectionValidationField<AmpActivityBudgetStructure> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivityBudgetStructure>(
-				"minSizeProgramValidator", listModel, "minSizeProgramValidator");
+				"minSizeProgramValidator", listModel, "minSizeProgramValidator"){
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				
+				//the required star should be visible, depending on whether the validator is active or not
+				reqStar.setVisible(isVisible());
+						
+			}	
+		};
 		minSizeCollectionValidationField.setIndicatorAppender(iValidator);
 		add(minSizeCollectionValidationField);
 		

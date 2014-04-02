@@ -1790,10 +1790,10 @@ public class ExportActivityToWord extends Action {
                             eshIssuesTable.addRowData(new ExportSectionHelperRowData(issue.getName() + "  " + DateConversion.ConvertDateToString(issue.getIssueDate()), null, null, false));
                             if (issue.getMeasures() != null && !issue.getMeasures().isEmpty()) {
                                 for (AmpMeasure measure : (Set<AmpMeasure>) issue.getMeasures()) {
-                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" �" + measure.getName(), null, null, false)));
+                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" \u2022" + measure.getName()+"  " + DateConversion.ConvertDateToString(measure.getMeasureDate()), null, null, false)));
                                     if(measure.getActors() != null && !measure.getActors().isEmpty()) {
                                         for (AmpActor actor : (Set<AmpActor>) measure.getActors()) {
-                                            eshIssuesTable.addRowData((new ExportSectionHelperRowData("  �" + actor.getName(), null, null, false)));
+                                            eshIssuesTable.addRowData((new ExportSectionHelperRowData(" \t \u2022" + actor.getName(), null, null, false)));
                                         }
                                     }
                                 }

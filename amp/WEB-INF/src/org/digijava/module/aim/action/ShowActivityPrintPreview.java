@@ -864,6 +864,7 @@ public class ShowActivityPrintPreview
                                 Measures measure = new Measures();
                                 measure.setId(ampMeasure.getAmpMeasureId());
                                 measure.setName(ampMeasure.getName());
+                                measure.setMeasureDate(FormatHelper.formatDate(ampMeasure.getMeasureDate()));
                                 ArrayList actorList = new ArrayList();
                                 if(ampMeasure.getActors() != null
                                    && ampMeasure.getActors().size() > 0) {

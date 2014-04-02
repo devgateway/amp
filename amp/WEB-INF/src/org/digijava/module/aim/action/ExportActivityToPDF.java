@@ -1628,7 +1628,7 @@ public class ExportActivityToPDF extends Action {
 					com.lowagie.text.List measuresSubList=new com.lowagie.text.List(false,20);  //is not numbered list
 					measuresSubList.setListSymbol("-");
 					for (Measures measure : issue.getMeasures()) {
-						ListItem measureItem=new ListItem(new Phrase(measure.getName(),plainFont));
+						ListItem measureItem=new ListItem(new Phrase(measure.getName()+" \t"+measure.getMeasureDate(),plainFont));
 						measuresSubList.add(measureItem);
 						if(FeaturesUtil.isVisibleField("Actors", ampContext) && measure.getActors()!=null && measure.getActors().size()>0){
 							com.lowagie.text.List actorsSubList=new com.lowagie.text.List(false,20); //is not numbered list

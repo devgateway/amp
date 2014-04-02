@@ -12,6 +12,7 @@ public class Measures {
 	private Long id;
 	private String name;
 	private String nameTrimmed ;
+	private String measureDate;
 	private ArrayList<AmpActor> actors;
 	/**
 	 * @return Returns the actors.
@@ -64,5 +65,11 @@ public class Measures {
 	}
 	public void setNameTrimmed(String nameTrimmed) {
 		this.nameTrimmed = nameTrimmed;
+	}
+	public String getMeasureDate() {
+		return measureDate;
+	}
+	public void setMeasureDate(String measureDate) {
+		this.measureDate = measureDate;
 	}
 }

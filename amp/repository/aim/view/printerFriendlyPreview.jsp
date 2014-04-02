@@ -2091,19 +2091,21 @@ body {background:none;}
 											<c:if test="${!empty aimEditActivityForm.issues.issues}">
 												<table width="100%" cellSpacing="2" cellPadding="2" border="0">
 												<c:forEach var="issue" items="${aimEditActivityForm.issues.issues}">
-													<tr><td valign="top">
+													<tr><td valign="top"  colspan="3">
 														<li class="level1"><b><c:out value="${issue.name}"/> <field:display feature="Issues" name="Issue Date"><c:out value="${issue.issueDate}"/> </field:display> </b></li>
 													</td></tr>
 													<field:display name="Measures Taken" feature="Issues">
 														<c:if test="${!empty issue.measures}">
 															<c:forEach var="measure" items="${issue.measures}">
-																<tr><td>
-																	<li class="level2"><i><c:out value="${measure.name}"/></i></li>
+																<tr><td></td><td colspan="2">
+																	<li class="level2"><i><c:out value="${measure.name}"/>  <c:out value="${measure.measureDate}"/></i></li>
 																</td></tr>
 																<field:display name="Actors" feature="Issues">
 																	<c:if test="${!empty measure.actors}">
 																		<c:forEach var="actor" items="${measure.actors}">
-																			<tr><td>
+																			<tr>
+																			<td colspan="2"></td>
+																			<td>
 																				<li class="level3"><c:out value="${actor.name}"/></li>
 																			</td></tr>
 																		</c:forEach>

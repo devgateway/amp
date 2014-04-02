@@ -8,10 +8,16 @@ function writeError(str, append)
 }
 
 function getRowLevel(id){
-	return id.substring(0, id.indexOf("@"));
+	if (id!=null){
+		return id.substring(0, id.indexOf("@"));
+	}
+	return "";
 }
 function getRowRelativeNo(id){
-	return id.substring(id.indexOf("@")+1);
+	if (id!=null){
+		return id.substring(id.indexOf("@")+1);
+	}
+	return "";
 }
 
 function toggleRows(caller,hideId){
@@ -24,7 +30,7 @@ function toggleRows(caller,hideId){
 	var parentTR =$("tr[id='"+hideId+"']")[0];
 	//Get the project name div
 	var parentdiv =$("tr[id='"+hideId+"'] td:eq(1) div:eq(1)")[0];
-	var title=parentTR.title;
+	var depthRelatVar=parentTR.depthRelatVar;
 	
 	var amountcell_1 = caller.parentNode.parentNode.parentNode.children[2].children[0];
 	var amountcell_2;
@@ -34,8 +40,8 @@ function toggleRows(caller,hideId){
 	var tb = document.getElementById('reportTable');
 	var len = tb.rows.length;
 	var found=false;
-	var hideDepth=getRowLevel(title);
-	var hideRelat=getRowRelativeNo(title);
+	var hideDepth=getRowLevel(depthRelatVar);
+	var hideRelat=getRowRelativeNo(depthRelatVar);
 
 	//hideAllRows();
 	if(caller.alt=='hidden') {
@@ -97,8 +103,9 @@ function toggleRows(caller,hideId){
 			continue;
 		}
 		
-		var rowDepth=getRowLevel(tb.rows[i].title);
-		var rowRelat=getRowRelativeNo(tb.rows[i].title);
+		var rowDepth=getRowLevel(tb.rows[i].getAttribute('depthRelatVar'));
+		var rowRelat=getRowRelativeNo(tb.rows[i].getAttribute('depthRelatVar'));
+	
  		if(tb.rows[i].id!=null && tb.rows[i].id==hideId && !found) {
 			found=true;
 			continue;
@@ -145,8 +152,8 @@ function toggleRows(caller,hideId){
 	found = false;
 	if (closing){
 		for(i=0 ; i< imgs.length; i++){
-			var imgDepth=getRowLevel(imgs[i].title);
-			var imgRelat=getRowRelativeNo(imgs[i].title);
+			var imgDepth=getRowLevel(imgs[i].depthRelatVar);
+			var imgRelat=getRowRelativeNo(imgs[i].depthRelatVar);
 			if ((imgDepth == hideDepth) && (imgRelat == hideRelat) && (imgs[i].name==hideId)){
 				found = true;
 				continue;

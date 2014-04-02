@@ -43,7 +43,7 @@ public class AmpLocationFormTableFeature extends
 
 	private static final long serialVersionUID = 1L;
 	private IModel<Set<AmpActivityLocation>> setModel;
-
+	
 	public IModel<Set<AmpActivityLocation>> getSetModel() {
 		return setModel;
 	}
@@ -123,11 +123,21 @@ public class AmpLocationFormTableFeature extends
 		add(uniqueCollectionValidationField);
 		
 		final AmpMinSizeCollectionValidationField<AmpActivityLocation> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivityLocation>(
-				"minSizeValidator", listModel, "Location required validator");
+				"minSizeValidator", listModel, "Location required validator"){
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				
+				//the required star should be visible, depending on whether the validator is active or not
+				reqStar.setVisible(isVisible());
+						
+			}		
+		};
 		minSizeCollectionValidationField.setIndicatorAppender(iValidator);
+		
 		add(minSizeCollectionValidationField);
-
-
+		
+		
         final AmpTreeCollectionValidatorField<AmpActivityLocation> treeCollectionValidatorField = new AmpTreeCollectionValidatorField<AmpActivityLocation>("treeValidator", listModel, "Tree Validator") {
             @Override
             public AmpAutoCompleteDisplayable getItem(AmpActivityLocation l) {
@@ -338,4 +348,6 @@ public class AmpLocationFormTableFeature extends
         }
         set.add(activityLocation);
     }
+    
+ 
 }

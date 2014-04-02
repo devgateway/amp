@@ -46,7 +46,7 @@
   	<logic:present name="PNOTIFY_ERROR_MESSAGE" scope="request">
   		<script type="text/javascript">
   			$(document).ready(function(){
-  				show_error_message('<c:out value="${PNOTIFY_ERROR_TITLE}" />', '<c:out value="${PNOTIFY_ERROR_MESSAGE}" />', 'error', 150000);
+  				show_error_message('<c:out value="${PNOTIFY_ERROR_TITLE}" />', '<c:out value="${PNOTIFY_ERROR_MESSAGE}" />', 'success', 5000);
   			});
   		 </script>
   	</logic:present>

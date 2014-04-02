@@ -48,7 +48,7 @@ function show_error_message(title, text, the_type, the_delay)
 		the_type = 'error';
 	
 	if (!the_delay)
-		the_delay = 2000;
+		the_delay = 2500;
 //	var the_stack = null;
 //	var the_before_open = function(pnotify) {
 //        					// Position this notice relative to the mouse cursor

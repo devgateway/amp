@@ -118,7 +118,7 @@ function pledge_form_cancel(bigDivSelector){
 init_amp_magic('pledge_form_big_div');
 
 function register_heart_beat(){
-	//setInterval(do_heart_beat, 1300);
+	setInterval(do_heart_beat, 1000);
 }
 
 function do_heart_beat(){

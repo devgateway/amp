@@ -50,6 +50,7 @@ public class SavePledge extends Action {
     			if (errors.isEmpty())
     			{
     				ARUtil.writeResponse(response, "ok");
+    				AddPledge.markPledgeEditorClosed(request.getSession());
     				return null;
     			}
     			JSONArray arr = new JSONArray();

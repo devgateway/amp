@@ -16,6 +16,13 @@ import org.digijava.module.fundingpledges.form.PledgeForm;
 
 public class ViewPledgeData extends Action {
 
+	public static void pump_flash_attribute(HttpServletRequest request, String attrName){
+		if (request.getSession().getAttribute(attrName) != null){
+			request.setAttribute(attrName, request.getSession().getAttribute(attrName));
+			request.getSession().removeAttribute(attrName);
+		}
+	}
+	
 	public ActionForward execute(ActionMapping mapping,
             ActionForm form,
             HttpServletRequest request,
@@ -23,9 +30,10 @@ public class ViewPledgeData extends Action {
         	
 		request.setAttribute("bootstrap_insert", true); // for the big layout to know to adapt the page for modern-web-standards insets
 		PledgeForm plForm = (PledgeForm) form;
-//		java.util.Map<String, String[]> params = request.getParameterMap();
-//		for(String param:params.keySet())
-//			System.out.format("param[%s] = %s\n", param, Arrays.asList(params.get(param)));
+		
+		pump_flash_attribute(request, "PNOTIFY_ERROR_MESSAGE");
+		pump_flash_attribute(request, "PNOTIFY_ERROR_TITLE");
+		
 		Long pledgeId = Long.parseLong(request.getParameter("id"));		
 		FundingPledges fp = PledgesEntityHelper.getPledgesById(pledgeId);
 		plForm.importPledgeData(fp);

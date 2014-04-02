@@ -42,10 +42,13 @@ function clean_all_error_messages()
  * @param text
  * @param the_type: one of 'error', 'warning', 'success': http://sciactive.github.io/pnotify/#demos-simple
  */
-function show_error_message(title, text, the_type)
+function show_error_message(title, text, the_type, the_delay)
 {
 	if (!the_type)
 		the_type = 'error';
+	
+	if (!the_delay)
+		the_delay = 2000;
 //	var the_stack = null;
 //	var the_before_open = function(pnotify) {
 //        					// Position this notice relative to the mouse cursor
@@ -65,7 +68,7 @@ function show_error_message(title, text, the_type)
 	    //type: 'error',
 	    /*addclass: "stack-bottomleft",
 	    stack: stack_bottomleft,*/
-	    'delay': 2000,
+	    'delay': the_delay,
 	    maxonscreen: 5,
 	    mouse_reset: false,
 	    width: '250px'//,

@@ -1,5 +1,6 @@
 package org.digijava.module.fundingpledges.action;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.forms.ItemGateKeeper;
 import org.dgfoundation.amp.forms.LockVerificationResult;
 import org.digijava.kernel.request.TLSUtils;
@@ -31,11 +33,28 @@ import com.google.common.collect.HashBiMap;
 
 public class AddPledge extends Action {
 	
-	public final static ItemGateKeeper pledgesGateKeeper = new ItemGateKeeper();
+//	public final static ItemGateKeeper pledgesGateKeeper = new ItemGateKeeper();
 	//public final static String PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR = "pledgeEditedByCurrentUser"; // session[this] = the last time this user has edited a pledge (heartbeat)
-	public final static String PLEDGE_ID_EDITED_BY_CURRENT_SESSION_ATTR = "pledgeEditedByCurrentUser"; // session[this] = the last time this user has edited a pledge (heartbeat)
-	public final static String PLEDGE_NEW_PLEDGE = "newPledge";
+//	public final static String PLEDGE_ID_EDITED_BY_CURRENT_SESSION_ATTR = "pledgeEditedByCurrentUser"; // session[this] = the last time this user has edited a pledge (heartbeat)
+//	public final static String PLEDGE_NEW_PLEDGE = "newPledge";
+	public final static String PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR = "pledgeEditorTimestamp"; // session[this] = the last time this user has edited a pledge
+	//public final static String PLEDGE_ID_EDITED_BY_CURRENT_SESSION_ATTR = "pledgeEditorId"; // session[this] = the id of the pledge currently edited by user
+	public final static Long PLEDGE_EDITOR_EXCLUSIVITY_TIMEOUT = 2000l; // nr. of miliseconds 
 	
+	public boolean equalIds(Long a, Long b){
+		if (a == null)
+			return b == null;
+		return a.equals(b);
+	}
+	
+	public static void markPledgeEditorOpened(HttpSession session){
+		session.setAttribute(PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR, System.currentTimeMillis());
+	}
+	
+	public static void markPledgeEditorClosed(HttpSession session){
+		session.removeAttribute(PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR);
+	}
+
 	public String editRightCheck(PledgeForm plForm, HttpServletRequest request, HttpServletResponse response){
 		TeamMember currentMember = TeamMemberUtil.getLoggedInTeamMember();
 		
@@ -44,30 +63,19 @@ public class AddPledge extends Action {
 			return TranslatorWorker.translateText("Only logged-in members can edit pledges");
 		};
 		
-		// check that nobody else is editing same pledge
-		String pledgeIdStr = plForm.getPledgeId() == null ? PLEDGE_NEW_PLEDGE + currentMember.getMemberId() : plForm.getPledgeId().toString();
-		LockVerificationResult lvr = pledgesGateKeeper.canCurrentUserEdit(pledgeIdStr);	
-		if (!lvr.isActionAllowed()){
-			AmpTeamMember owner = TeamMemberUtil.getAmpTeamMember(lvr.currentOwner);
-			return TranslatorWorker.translateText("An another user is currently editing this pledge") + ": " + owner.getUser().getName() + "(" + owner.getAmpTeam().getName() + ")";
+		if (!currentMember.getPledger())
+			return TranslatorWorker.translateText("You are not allowed to edit pledges");
+		
+		Long timeStamp = (Long) request.getSession().getAttribute(PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR);
+		if (timeStamp != null){
+			long elapsedMillies = System.currentTimeMillis() - timeStamp;
+			//Long editedId = (Long) request.getSession().getAttribute(PLEDGE_ID_EDITED_BY_CURRENT_SESSION_ATTR);
+			if (elapsedMillies < PLEDGE_EDITOR_EXCLUSIVITY_TIMEOUT){
+				return TranslatorWorker.translateText("You cannot open two Pledge Editors at the same time. Please close the other one");
+			}
 		}
 		
-//		// check that current user is not editing a different pledge
-//		Long lastTouch = (Long) request.getSession().getAttribute(PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR);
-//		if (lastTouch == null)
-//			return null; //ok
-//		if (lastTouch + pledgesGateKeeper.LOCK_TIMEOUT < System.currentTimeMillis()){
-//			// whatever lock was in there, it expired -> allow
-//			return null;
-//		}
-//		// gone till here -> the current user is editing a pledge, let's see whether it is the present one
-		String id = (String) request.getSession().getAttribute(PLEDGE_ID_EDITED_BY_CURRENT_SESSION_ATTR);
-		if (id == null){
-			// first-comer
-			return null;			
-		}
-		if (!id.equals(pledgeIdStr))
-			return TranslatorWorker.translateText("You can only edit a single pledge at the same moment of time");
+		markPledgeEditorOpened(request.getSession());
 		return null;
 	};
 	
@@ -75,10 +83,7 @@ public class AddPledge extends Action {
 		TeamMember currentMember = TeamMemberUtil.getLoggedInTeamMember();
 		if (currentMember == null)
 			return;
-		
-		String pledgeIdStr = plForm.getPledgeId() == null ? PLEDGE_NEW_PLEDGE + currentMember.getMemberId() : plForm.getPledgeId().toString();
-		pledgesGateKeeper.refreshLock(pledgeIdStr, currentMember.getMemberId());
-		TLSUtils.getRequest().getSession().setAttribute(PLEDGE_ID_EDITED_BY_CURRENT_SESSION_ATTR, pledgeIdStr);
+		markPledgeEditorOpened(TLSUtils.getRequest().getSession());
 	};
 	
     public ActionForward execute(ActionMapping mapping,
@@ -99,12 +104,21 @@ public class AddPledge extends Action {
     			plForm.setPledgeId(Long.parseLong(request.getParameter("pledgeId")));
     		}
     			
-//    		String editRightsMsg = editRightCheck(plForm, request, response);
-//    		if (editRightsMsg != null)
-//    		{
-//    			request.setAttribute("PNOTIFY_ERROR_MESSAGE", editRightsMsg);
-//    			return mapping.findForward("forward");
-//    		}
+    		String editRightsMsg = editRightCheck(plForm, request, response);
+    		if (editRightsMsg != null){
+    			request.getSession().setAttribute("PNOTIFY_ERROR_MESSAGE", editRightsMsg);
+    			request.getSession().setAttribute("PNOTIFY_ERROR_TITLE", TranslatorWorker.translateText("Error"));
+    			if (plForm.getPledgeId() == null)
+    				response.sendRedirect("/viewPledgesList.do"); // cannot view empty
+    			else
+    			{
+    				response.sendRedirect("/viewPledge.do?id=" + plForm.getPledgeId());
+//    				String s = (String) request.getAttribute("PNOTIFY_ERROR_MESSAGE");
+//    				String z = (String) request.getAttribute("PNOTIFY_ERROR_TITLE");    				
+    				//response.sendRedirect("/viewPledge.do?id=" + plForm.getPledgeId() + "&PNOTIFY_ERROR_MESSAGE=" + URLEncoder.encode(s, "UTF-8") + "&PNOTIFY_ERROR_TITLE=" + URLEncoder.encode(z, "UTF-8"));
+    			}
+    			return null;
+    		}
     		
     		String yearToSpecify = TranslatorWorker.translateText("unspecified");
             

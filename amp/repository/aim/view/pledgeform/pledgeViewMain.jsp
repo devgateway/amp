@@ -42,15 +42,15 @@
     <![endif]-->
   </head>
   <body class="main_side" id="bootstrap-iframe">
+  	
   	<logic:present name="PNOTIFY_ERROR_MESSAGE" scope="request">
   		<script type="text/javascript">
   			$(document).ready(function(){
-  				show_error_message("<c:out value="${PNOTIFY_ERROR_TITLE}" />", '<c:out value="${PNOTIFY_ERROR_MESSAGE}" />');
+  				show_error_message('<c:out value="${PNOTIFY_ERROR_TITLE}" />', '<c:out value="${PNOTIFY_ERROR_MESSAGE}" />', 'error', 150000);
   			});
   		 </script>
   	</logic:present>
 
-<logic:notPresent name="PNOTIFY_ERROR_MESSAGE" scope="request">
  	<div id="pledge_form_big_div"> 
 		<aim:renderFormSubsection title="Pledge Identification">
 			<jsp:include page="pledgeIdentificationView.jsp"></jsp:include>
@@ -76,7 +76,7 @@
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogueView.jsp"></jsp:include>
 	
 	</div>
-</logic:notPresent>
+
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/repository/bootstrap/bootstrap.min.js"></script>
     <script src="/repository/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>

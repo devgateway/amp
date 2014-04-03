@@ -404,6 +404,10 @@
             value = "<digi:trn>Type</digi:trn>";
             return value;
          }
+        if(text == "Show Image") {
+        	value = "<digi:trn>Show Image</digi:trn>";
+            return value;
+        }
         return text;
     	}
 	

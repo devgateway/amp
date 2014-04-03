@@ -166,7 +166,7 @@ function setHoveredRow(rowId) {
 				<tr>
 					<td>
 					<div class="report">
-					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" class="inside" style="margin-top:15px;">
+					<table width="100%" cellspacing="0" cellpadding="0" id="dataTable" class="inside dataTable" style="margin-top:15px;">
 					<tr style="background-color: #C7D4DB; color: #000000; fnt-size:12px;" align="center">
 							<td width="25%" align="center" class="inside">
 								<b> 

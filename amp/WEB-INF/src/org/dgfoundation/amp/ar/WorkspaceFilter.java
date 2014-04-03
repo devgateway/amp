@@ -171,7 +171,7 @@ public class WorkspaceFilter
 		//return "1163, 2498, 1301";
 		//return "2498, 1301";
 		//return /*"33"; */"36";
-		//return "2,14,18,20,21";
+		//return "41, 43, 44, 45";
 		//return "20, 21"; // masha
 		//return "24";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Activity with Zones')";

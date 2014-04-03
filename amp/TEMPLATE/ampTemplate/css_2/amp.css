@@ -1075,4 +1075,8 @@ table.component-funding-table tr
 /* 
 	AMP-specific changes to the SAM YUI skin END
 	we do not want to change the YUI css files for obvious reasons, so instead we'll be using this file included right after the sam css
-*/
+*/ 
+
+.dataTable li{
+	list-style-position: inside;
+}

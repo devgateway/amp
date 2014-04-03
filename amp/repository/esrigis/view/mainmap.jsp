@@ -584,7 +584,7 @@
         		<c:forEach  var="structureType" items="${requestScope.structureTypesList}">
 	          	<tr>
 	          		<td>
-	          			${structureType.name}
+	          			<digi:trn>${structureType.name}</digi:trn>
 	          		</td>
 	            	<td align="center">
 	            		<img id="imgPlaceholder" src="/esrigis/mainmap.do~action=displayIcon~id=${structureType.typeId}" style="border:1px solid black;width: 20px;height: 20px;"/>

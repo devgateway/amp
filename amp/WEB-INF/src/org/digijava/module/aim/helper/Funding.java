@@ -84,7 +84,7 @@ public class Funding implements Serializable {
 	private String code;
 	private String fundingClassificationDate;
 	private Long groupVersionedFunding;
-	private Float capitalSpendingPercentage;
+	private Float capitalSpendingPercentage;	
 	
 	public boolean equals(Object e) {
 		if (e instanceof Funding) {

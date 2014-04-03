@@ -145,6 +145,7 @@ public class FundingCalculationsHelper {
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
 			if (fundDet.getPledgeid() != null) {
 				fundingDetail.setPledge(fundDet.getPledgeid().getId());
+				fundingDetail.setAttachedPledgeName(fundDet.getPledgeid().getEffectiveName());
 			}
 			// TOTALS
 			if (updateTotals) addToTotals(adjType, fundDet, amt);

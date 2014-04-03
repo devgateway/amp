@@ -26,64 +26,6 @@ public class FundingDetail implements Serializable, Comparable
 	private int transactionType;
 	//private int adjustmentType;
 	
-	public Date getReportingDate() {
-		return reportingDate;
-	}
-
-	public void setReportingDate(Date reportingDate) {
-		this.reportingDate = reportingDate;
-	}
-
-	public void setRecipientOrganisation(AmpOrganisation recipientOrganisation)
-	{
-		this.recipientOrganisation = recipientOrganisation;
-	}
-
-	public void setRecipientOrganisationRole(AmpRole recipientRole)
-	{
-		this.recipientOrganisationRole = recipientRole;
-	}
-	
-	public AmpOrganisation getRecipientOrganisation()
-	{
-		return recipientOrganisation;
-	}
-	
-	public AmpRole getRecipientOrganisationRole()
-	{
-		return recipientOrganisationRole;
-	}
-	
-	public void setComponentOrganisation(AmpOrganisation compOrganisation)
-	{
-		this.componentOrganisation = compOrganisation;
-	}
-	
-	public AmpOrganisation getComponentOrganisation()
-	{
-		return this.componentOrganisation;
-	}
-	
-	public void setComponentTransactionDescription(String ctDescription)
-	{
-		this.componentTransactionDescription = ctDescription;
-	}
-
-	public String getComponentTransactionDescription()
-	{
-		return this.componentTransactionDescription;
-	}
-	
-	public Float getCapitalPercent()
-	{
-		return this.capitalPercent;
-	}
-	
-	public void setCapitalPercent(Float capitalPercent)
-	{
-		this.capitalPercent = capitalPercent;
-	}
-	
 	private Date reportingDate;
 	private AmpCategoryValue adjustmentTypeName;
 	private String transactionDate;
@@ -113,45 +55,8 @@ public class FundingDetail implements Serializable, Comparable
     private AmpOrganisation componentOrganisation;
     private String componentTransactionDescription;
        
+    private String attachedPledgeName;
 	
-    @Override
-    public String toString()
-    {
-    	return String.format("%s %s at %s (type = %d)", this.transactionAmount, this.currencyCode, this.transactionDate, this.transactionType);
-    }
-    
-	public AmpCategoryValue getPledgename() {
-		if (this.pledge!=null && !this.pledge.equals(0L)){
-			FundingPledges pledge = PledgesEntityHelper.getPledgesById(this.pledge);
-			return pledge.getTitle();
-		}
-		return pledgename;
-	}
-
-	public void setPledgename(AmpCategoryValue pledgename) {
-		this.pledgename = pledgename;
-	}
-    
-    public Long getPledge() {
-		if (pledge!=null){
-			return pledge;
-		}else{
-			return 0L;
-		}
-	}
-
-	public void setPledge(Long pledge) {
-		this.pledge = pledge;
-	}
-
-		public IPAContract getContract() {
-            return contract;
-        }
-
-        public void setContract(IPAContract contract) {
-            this.contract = contract;
-        }
-
         /*
 	private Long regionId;
 	private String regionName;
@@ -347,60 +252,152 @@ public class FundingDetail implements Serializable, Comparable
 		return ampComponentFundingId;
 	}
 
+	public Long getFundDetId() {
+		return fundDetId;
+	}
 
-        public Long getFundDetId() {
-                return fundDetId;
-        }
+	public String getDisbOrderId() {
+		return disbOrderId;
+	}
 
-        public String getDisbOrderId() {
-                return disbOrderId;
-        }
-
-        public void setAmpComponentFundingId(Long ampComponentFundingId) {
+	public void setAmpComponentFundingId(Long ampComponentFundingId) {
 		this.ampComponentFundingId = ampComponentFundingId;
 	}
 
-        public void setFundDetId(Long fundDetId) {
-                this.fundDetId = fundDetId;
-        }
+	public void setFundDetId(Long fundDetId) {
+		this.fundDetId = fundDetId;
+	}
 
-        public void setDisbOrderId(String disbOrderId) {
-                this.disbOrderId = disbOrderId;
-        }
-        
-        
-        public String getFormattedRate(){
-	 String returnValue=null;
-	 if (getFixedExchangeRate()!=null){
-		 DecimalFormat decFor=new DecimalFormat();
-		 BigDecimal fixedExchangeRate=new BigDecimal(getFixedExchangeRate().replace(",", "."));
-		 returnValue=decFor.format(fixedExchangeRate);
-	 }
-	 return returnValue;
- }
+	public void setDisbOrderId(String disbOrderId) {
+		this.disbOrderId = disbOrderId;
+	}
 
-		public int compareTo(Object o) {
-			// TODO Auto-generated method stub
-			FundingDetail obj=(FundingDetail) o;
-			return this.getFundingId().compareTo(obj.getFundingId());
+	public String getFormattedRate() {
+		String returnValue = null;
+		if (getFixedExchangeRate() != null) {
+			DecimalFormat decFor = new DecimalFormat();
+			BigDecimal fixedExchangeRate = new BigDecimal(
+					getFixedExchangeRate().replace(",", "."));
+			returnValue = decFor.format(fixedExchangeRate);
 		}
+		return returnValue;
+	}
 
-		public Long getFundingId() {
-			return fundingId;
-		}
+	public Date getReportingDate() {
+		return reportingDate;
+	}
 
-		public void setFundingId(Long fundingId) {
-			this.fundingId = fundingId;
-		}
+	public void setReportingDate(Date reportingDate) {
+		this.reportingDate = reportingDate;
+	}
 
-		public void setDisbursementOrderRejected(
-				Boolean disbursementOrderRejected) {
-			this.disbursementOrderRejected = disbursementOrderRejected;
-		}
+	public void setRecipientOrganisation(AmpOrganisation recipientOrganisation) {
+		this.recipientOrganisation = recipientOrganisation;
+	}
 
-		public Boolean getDisbursementOrderRejected() {
-			return disbursementOrderRejected;
+	public void setRecipientOrganisationRole(AmpRole recipientRole) {
+		this.recipientOrganisationRole = recipientRole;
+	}
+
+	public AmpOrganisation getRecipientOrganisation() {
+		return recipientOrganisation;
+	}
+
+	public AmpRole getRecipientOrganisationRole() {
+		return recipientOrganisationRole;
+	}
+
+	public void setAttachedPledgeName(String attachedPledgeName){
+		this.attachedPledgeName = attachedPledgeName;
+	}
+	
+	public String getAttachedPledgeName(){
+		return this.attachedPledgeName;
+	}
+	
+	public void setComponentOrganisation(AmpOrganisation compOrganisation) {
+		this.componentOrganisation = compOrganisation;
+	}
+
+	public AmpOrganisation getComponentOrganisation() {
+		return this.componentOrganisation;
+	}
+
+	public void setComponentTransactionDescription(String ctDescription) {
+		this.componentTransactionDescription = ctDescription;
+	}
+
+	public String getComponentTransactionDescription() {
+		return this.componentTransactionDescription;
+	}
+
+	public Float getCapitalPercent() {
+		return this.capitalPercent;
+	}
+
+	public void setCapitalPercent(Float capitalPercent) {
+		this.capitalPercent = capitalPercent;
+	}
+
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		FundingDetail obj = (FundingDetail) o;
+		return this.getFundingId().compareTo(obj.getFundingId());
+	}
+
+	public Long getFundingId() {
+		return fundingId;
+	}
+
+	public void setFundingId(Long fundingId) {
+		this.fundingId = fundingId;
+	}
+
+	public void setDisbursementOrderRejected(Boolean disbursementOrderRejected) {
+		this.disbursementOrderRejected = disbursementOrderRejected;
+	}
+
+	public Boolean getDisbursementOrderRejected() {
+		return disbursementOrderRejected;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s %s at %s (type = %d)", this.transactionAmount,
+				this.currencyCode, this.transactionDate, this.transactionType);
+	}
+
+	public AmpCategoryValue getPledgename() {
+		if (this.pledge != null && !this.pledge.equals(0L)) {
+			FundingPledges pledge = PledgesEntityHelper
+					.getPledgesById(this.pledge);
+			return pledge.getTitle();
 		}
-      
-        
+		return pledgename;
+	}
+
+	public void setPledgename(AmpCategoryValue pledgename) {
+		this.pledgename = pledgename;
+	}
+
+	public Long getPledge() {
+		if (pledge != null) {
+			return pledge;
+		} else {
+			return 0L;
+		}
+	}
+
+	public void setPledge(Long pledge) {
+		this.pledge = pledge;
+	}
+
+	public IPAContract getContract() {
+		return contract;
+	}
+
+	public void setContract(IPAContract contract) {
+		this.contract = contract;
+	}
+ 
 }

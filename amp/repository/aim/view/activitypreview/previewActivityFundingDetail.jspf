@@ -10,7 +10,10 @@ first row (always):
 second row (if any):	
 	col 1: spacing
 	col 2,3,4: recipient
-	
+
+other rows (if any): capital spending percent / classification / attached pledge
+	col 1: spacing
+	col 2,3,4:  	
  --%>
 <tr bgcolor="#ffffff">
 	<td width="40%" align="right"  bgcolor="#FFFFFF">
@@ -58,6 +61,14 @@ second row (if any):
 		<td colspan="1">&nbsp;</td>
 		<td colspan="3" align="right">
 			<digi:trn>Classification</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="classification"/></b>&nbsp;			
+		</td>
+	</tr>
+</logic:present>
+<logic:present name="fundingDetail" property="attachedPledgeName">
+	<tr>
+		<td colspan="1" align="right"><digi:trn>Source Pledge</digi:trn>:</td>
+		<td colspan="3" align="left">
+			<b><bean:write name="fundingDetail" property="attachedPledgeName"/></b>&nbsp;			
 		</td>
 	</tr>
 </logic:present>

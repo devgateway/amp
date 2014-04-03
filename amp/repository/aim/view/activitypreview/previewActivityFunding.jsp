@@ -21,18 +21,12 @@
 	<table width="95%" cellspacing="1" cellpadding="0" border="0" align="center">
 				<tr>
 					<td>
-					<table width="100%" border="0" align="right" cellpadding="0"
-						cellSpacing=8 class="">
-						<logic:notEmpty name="aimEditActivityForm"
-							property="funding.fundingOrganizations">
-							<logic:iterate name="aimEditActivityForm"
-								property="funding.fundingOrganizations" id="fundingOrganization"
-								type="org.digijava.module.aim.helper.FundingOrganization">
+					<table width="100%" border="0" align="right" cellpadding="0" cellSpacing=8 class="">
+						<logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
+							<logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
 
 								<logic:notEmpty name="fundingOrganization" property="fundings">
-									<logic:iterate name="fundingOrganization" indexId="index"
-										property="fundings" id="funding"
-										type="org.digijava.module.aim.helper.Funding">
+									<logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
 										<tr>
 											<td>
 											<table cellspacing="1" cellpadding="0" border="0" width="100%">
@@ -136,8 +130,7 @@
 																		</td>
 																	</tr>
 																</module:display>
-																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment"
-																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
+																<logic:notEmpty name="funding" property="modeOfPayment">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn>Mode of Payment</digi:trn>'>
@@ -150,7 +143,7 @@
 																			</logic:notEmpty>
 																		</td>
 																	</tr>
-																</module:display>
+																</logic:notEmpty>
 																
 																<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
@@ -204,7 +197,7 @@
 																		</td>
 																	</tr>
 																</module:display>
-																<logic:present name="funding" property="fundingClassificationDate">
+																<logic:notEmpty name="funding" property="fundingClassificationDate">
 																<tr>
 																	<td align="left" width="150">
 																		<a title='<digi:trn>Funding Classification Date</digi:trn>'>
@@ -213,10 +206,10 @@
 																	</td>
 																	<td width="1">:</td>
 																	<td align="left">
-																			<b><digi:trn><bean:write name="funding" property="fundingClassificationDate"/></digi:trn></b>
+																			<b><bean:write name="funding" property="fundingClassificationDate"/></b>
 																	</td>
 																</tr>
-																</logic:present>																
+																</logic:notEmpty>
 															</table>
 															</td>
 														</tr>

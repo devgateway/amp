@@ -2187,7 +2187,9 @@ public class ExportActivityToWord extends Action {
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Agreement Code", null, null, true))
 										.addRowData(agreementCode));
 					}
-					eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Classification Date", null, null, true)
+					
+					if (fnd.getFundingClassificationDate() != null)
+						eshDonorInfo.addRowData(new ExportSectionHelperRowData("Funding Classification Date", null, null, true)
 										.addRowData(DateConversion.ConvertDateToString(fnd.getFundingClassificationDate())));
                     
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
@@ -2226,7 +2228,7 @@ public class ExportActivityToWord extends Action {
 										|| (fndDet.getTransactionType() == Constants.DISBURSEMENT_ORDER && visibleModuleDisbOrders)) {
 
         	                            //convert TransactionAmount to toCurrCode										
-										Double total=0D;
+//										Double total=0D;
 										java.sql.Date dt = new java.sql.Date(fndDet.getTransactionDate().getTime());
 
         	                			double frmExRt;

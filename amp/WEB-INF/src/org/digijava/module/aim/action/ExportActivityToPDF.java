@@ -2621,7 +2621,7 @@ public class ExportActivityToPDF extends Action {
 		
 		for (FundingDetail fd : details)
 		{
-			buildFundingInfoInnerTable(fundingTable, fd, fmTemplate, ampContext);
+			buildFundingInfoInnerTable(fundingTable, fd, fmTemplate, fundingTable, ampContext);
 		}
 		createSubtotalRow(fundingTable, "SUBTOTAL " + fundingRegionName + ":", subtotal, currencyCode);
 	}
@@ -3049,7 +3049,10 @@ public class ExportActivityToPDF extends Action {
 		mainLayout.addCell(cell2);
 	}
 	
-	private void buildFundingInfoInnerTable(PdfPTable infoTable, FundingDetail fd,String []fmFields,ServletContext ampContext) throws WorkerException {
+	private void buildFundingInfoInnerTable(
+			PdfPTable infoTable, FundingDetail fd,
+			String[] fmFields, PdfPTable fundingTable, ServletContext ampContext) throws WorkerException {
+		
 		PdfPCell innerCell = new PdfPCell();
 
 		if (FeaturesUtil.isVisibleModule(fmFields[0], ampContext)) {
@@ -3112,7 +3115,15 @@ public class ExportActivityToPDF extends Action {
 		} else {
 			addEmptyCell(infoTable);
 		}
-
+		
+		if (fd.getAttachedPledgeName() != null) {
+			
+			PdfPCell plCommCell1=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Source Pledge") + ": " + fd.getAttachedPledgeName()), titleFont));
+			plCommCell1.setBorder(0);
+			plCommCell1.setBackgroundColor(new Color(255,255,204));
+			plCommCell1.setColspan(4);
+			fundingTable.addCell(plCommCell1);
+		}
 	}	
 	
 	private void addEmptyCell(PdfPTable infoTable){
@@ -3120,7 +3131,6 @@ public class ExportActivityToPDF extends Action {
 		innerCell.setBorder(0);
 		innerCell.setBorder(0);
 		infoTable.addCell(innerCell);
-
 	}
 	
 	private String  getEditTagValue(HttpServletRequest request,String editKey) throws Exception{

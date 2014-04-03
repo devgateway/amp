@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.struts.action.ActionForm;
+import org.dgfoundation.amp.algo.AlgoUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -229,13 +230,13 @@ public class PledgeForm extends ActionForm implements Serializable {
 		this.contact2.setAlternateTelephone(fp.getContactAlternativeTelephone_1());
 		//this.setFundingPledgesDetails(fp.getFundingPledgesDetails());
 		this.setSelectedSectors(new ArrayList<IdNamePercentage>());
-		for (FundingPledgesSector sec : fp.getSectorlist()) selectedSectors.add(PLEDGE_SECTOR_EXTRACTOR.apply(sec.getSector()).setPercentageChained(sec.getSectorpercentage()));
+		for (FundingPledgesSector sec : AlgoUtils.sortByIds(fp.getSectorlist())) selectedSectors.add(PLEDGE_SECTOR_EXTRACTOR.apply(sec.getSector()).setPercentageChained(sec.getSectorpercentage()));
 		this.setSelectedLocs(new ArrayList<IdNamePercentage>());
-		for (FundingPledgesLocation loc : fp.getLocationlist()) selectedLocs.add(PLEDGE_LOCATION_EXTRACTOR.apply(loc.getLocation()).setPercentageChained(loc.getLocationpercentage()));
+		for (FundingPledgesLocation loc : AlgoUtils.sortByIds(fp.getLocationlist())) selectedLocs.add(PLEDGE_LOCATION_EXTRACTOR.apply(loc.getLocation()).setPercentageChained(loc.getLocationpercentage()));
 		this.setSelectedProgs(new ArrayList<IdNamePercentage>());
-		for (FundingPledgesProgram prog : fp.getProgramlist()) selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(prog.getProgram()).setPercentageChained(prog.getProgrampercentage()));
+		for (FundingPledgesProgram prog : AlgoUtils.sortByIds(fp.getProgramlist())) selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(prog.getProgram()).setPercentageChained(prog.getProgrampercentage()));
 		this.setSelectedFunding(new ArrayList<FundingPledgesDetailsShim>());
-		for (FundingPledgesDetails fpd : fp.getFundingPledgesDetails()) this.selectedFunding.add(new FundingPledgesDetailsShim(fpd));
+		for (FundingPledgesDetails fpd : AlgoUtils.sortByIds(fp.getFundingPledgesDetails())) this.selectedFunding.add(new FundingPledgesDetailsShim(fpd));
 	}
 	
 	public void cleanLocationData(boolean cleanLevelData) {
@@ -331,7 +332,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 				res.add(new DisableableKeyValue(new KeyValue(country.getId().toString(), country.getName()), !forbiddenLocations.contains(country.getId())));
 				return selectSingleAvailableOption(res);
 			}
-			Collection<AmpCategoryValueLocations> levelLocations = DynLocationManagerUtil.getLocationsByLayer(implLocationValue);
+			Collection<AmpCategoryValueLocations> levelLocations = AlgoUtils.sortByIds(DynLocationManagerUtil.getLocationsByLayer(implLocationValue));
 			for (AmpCategoryValueLocations loc : levelLocations) res.add(new DisableableKeyValue(new KeyValue(loc.getId().toString(), loc.getName()), !forbiddenLocations.contains(loc.getId())));
 		}
 		return selectSingleAvailableOption(res);
@@ -469,7 +470,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 	}
 	
 	/**
-	 * returns set of ids all the selected programs
+	 * returns set of ids all the selected sectors
 	 * @return Set<ACVL.id>
 	 */
 	public Set<Long> getAllSectors() {
@@ -501,7 +502,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 		AmpTheme theme = ProgramUtil.getThemeById(themeId);
 		res.add(new DisableableKeyValue(theme.getAmpThemeId(), prefix + theme.getName(), !forbidden.contains(themeId)));
 		if (selected.contains(themeId)) return; // stop iterating when we're down to something selected
-		for (AmpTheme subTheme : theme.getSiblings()) findProgramsRecursively(res, subTheme.getAmpThemeId(), forbidden, selected, prefix + "\u00bb ");
+		for (AmpTheme subTheme : AlgoUtils.sortByIds(theme.getSiblings())) findProgramsRecursively(res, subTheme.getAmpThemeId(), forbidden, selected, prefix + "\u00bb ");
 	}
 	
 	void findSectorsRecursively(List<DisableableKeyValue> res, Long sectorId, Set<Long> forbidden, Set<Long> selected, String prefix) {
@@ -509,7 +510,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 		AmpSector sector = SectorUtil.getAmpSector(sectorId);
 		res.add(new DisableableKeyValue(sector.getAmpSectorId(), prefix + sector.getName(), !forbidden.contains(sectorId)));
 		if (selected.contains(sectorId)) return; // stop iterating when we're down to something selected
-		for (AmpSector subSector : sector.getSiblings()) findSectorsRecursively(res, subSector.getAmpSectorId(), forbidden, selected, prefix + "\u00bb ");
+		for (AmpSector subSector : AlgoUtils.sortByIds(sector.getSiblings())) findSectorsRecursively(res, subSector.getAmpSectorId(), forbidden, selected, prefix + "\u00bb ");
 	}
 	
 	public List<IdWithValueShim> getValidCurrencies() {

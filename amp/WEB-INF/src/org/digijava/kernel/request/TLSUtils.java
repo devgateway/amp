@@ -13,7 +13,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Thread-local storage utils: data stored per-current-request in the TLS area, to avoid carrying HttpServletRequest deep inside the stack
- * @author simple
+ * @author Dolghier Constantin
  *
  */
 public class TLSUtils {

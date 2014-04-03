@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ page import="org.digijava.module.fundingpledges.form.PledgeForm"%>
 
+<digi:instance property="pledgeForm" />
 <div id='pledge_form_locations_data'>
 	<c:if test="${empty pledgeForm.selectedLocsList}">
 		<div class="text-center"><h3><digi:trn>No Locations</digi:trn></h3></div>

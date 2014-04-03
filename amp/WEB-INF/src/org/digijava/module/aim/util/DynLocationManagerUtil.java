@@ -832,12 +832,10 @@ public class DynLocationManagerUtil {
 		return getLocationsByLayer(CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 	}
 
-	public static Set<AmpCategoryValueLocations> getLocationsByLayer(
-			HardCodedCategoryValue hcLayer) {
+	public static Set<AmpCategoryValueLocations> getLocationsByLayer(HardCodedCategoryValue hcLayer) {
 		try {
 			AmpCategoryValue layer = hcLayer.getAmpCategoryValueFromDB();
 			return getLocationsByLayer(layer);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -867,32 +865,21 @@ public class DynLocationManagerUtil {
 	 * @param cvLayer
 	 * @return
 	 */
-	public static Set<AmpCategoryValueLocations> getLocationsByLayer(
-			AmpCategoryValue cvLayer) {
+	public static Set<AmpCategoryValueLocations> getLocationsByLayer(AmpCategoryValue cvLayer) {
 		TreeSet<AmpCategoryValueLocations> returnSet = new TreeSet<AmpCategoryValueLocations>(
 				alphabeticalLocComp);
-		Session dbSession = null;
 		try {
-			dbSession = PersistenceManager.getSession();
+			Session dbSession = PersistenceManager.getSession();
 			String queryString = "select loc from "
 					+ AmpCategoryValueLocations.class.getName()
 					+ " loc where (loc.parentCategoryValue=:cvId) ";
 			Query qry = dbSession.createQuery(queryString);
 			qry.setLong("cvId", cvLayer.getId());
 			returnSet.addAll(qry.list());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
-		if (returnSet.size() > 0)
 			return returnSet;
-		return null;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static List<String> getParents(AmpCategoryValueLocations loc) {

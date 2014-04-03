@@ -1,7 +1,11 @@
 package org.dgfoundation.amp.algo;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.util.Identifiable;
@@ -46,6 +50,18 @@ public class AlgoUtils {
 		for(Identifiable elem:input)
 			set.add((Long) elem.getIdentifier());
 		return set;
+	}
+	
+	public static<K extends Identifiable> List<K> sortByIds(Collection<K> objs){
+		List<K> res = new ArrayList<>(objs);
+		Collections.sort(res, new Comparator<Identifiable>(){
+			@Override public int compare(Identifiable arg0, Identifiable arg1) {
+				Long id0 = (Long) arg0.getIdentifier();
+				Long id1 = (Long) arg1.getIdentifier();
+				return id0.compareTo(id1);
+			}
+		});
+		return res;
 	}
 	 
 }

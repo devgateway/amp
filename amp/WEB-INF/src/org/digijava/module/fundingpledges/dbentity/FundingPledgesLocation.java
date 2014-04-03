@@ -3,13 +3,18 @@ package org.digijava.module.fundingpledges.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.Identifiable;
 
-public class FundingPledgesLocation {
+public class FundingPledgesLocation implements Identifiable{
 	
 	private Long id;
 	private FundingPledges pledgeid;
 	private AmpCategoryValueLocations location;
 	private Float locationpercentage;
+	
+	@Override public Object getIdentifier(){
+		return this.id;
+	}
 	
 	public int hashCode() {
 		return location.getId().hashCode();

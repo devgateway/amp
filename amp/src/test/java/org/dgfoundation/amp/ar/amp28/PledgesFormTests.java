@@ -8,10 +8,13 @@ import java.util.List;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
+import org.digijava.module.fundingpledges.form.PledgeForm;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -34,8 +37,62 @@ public class PledgesFormTests extends AmpTestCase
 		TestSuite suite = new TestSuite(PledgesFormTests.class.getName());
 		suite.addTest(new PledgesFormTests("testPledgesEntityHelperSanity"));
 		suite.addTest(new PledgesFormTests("testFetchEntities"));
+		suite.addTest(new PledgesFormTests("testPledgeFundingCalculator"));
+		suite.addTest(new PledgesFormTests("testPledgeFormUtils"));
+		suite.addTest(new PledgesFormTests("testPledgeFormFundingUtils"));
 		//suite.addTest(new MultilingualTests28("testSerializationAllLanguagesFilled"));
 		return suite;
+	}
+	
+	public void testPledgeFormFundingUtils(){
+		PledgeForm pledgeForm = new PledgeForm();
+		pledgeForm.importPledgeData(PledgesEntityHelper.getPledgesById(3L));
+		assertEquals(3, pledgeForm.getSelectedFunding().size());
+		assertEquals("[767676.00 curr: 96, ToA: 2119, fundingYear: 2006, pledgeTypeId: 2137, 200000.00 curr: 95, ToA: 2124, fundingYear: 2020, pledgeTypeId: 2137, 1.00 curr: 95, ToA: 2119, fundingYear: 2005, pledgeTypeId: 2137]", 
+				pledgeForm.getSelectedFunding().toString());
+	}
+	
+	public void testPledgeFormUtils(){
+		PledgeForm pledgeForm = new PledgeForm();
+		pledgeForm.importPledgeData(PledgesEntityHelper.getPledgesById(3L));
+		
+		// sectors
+		testDisableableKeyValues(pledgeForm.getAllRootSectors(), new DisableableKeyValue(-1l, "Please select from below", true),
+				new DisableableKeyValue(57l, "DAC 5 Sector Code", true),
+				new DisableableKeyValue(58l, "Budget Classification", true));
+		pledgeForm.setSelectedRootSector(58l);
+		assertEquals("[enabled: KeyValue: (-1, Please select from below), enabled: KeyValue: (6480, 02 TRANSDNISTRIAN CONFLICT), enabled: KeyValue: (6475, 1-DEMOCRATIC COUNTRY), enabled: KeyValue: (6476, » 1.1 Democracy consolidation), enabled: KeyValue: (6477, » 1.2 Judiciary system), enabled: KeyValue: (6478, » 1.3 Corruption fight), enabled: KeyValue: (6479, » 1.4 Borders and law order), disabled: KeyValue: (6481, 3 NATIONAL COMPETITIVENESS), enabled: KeyValue: (6487, 4 HUMAN RESOURCES), enabled: KeyValue: (6488, » 4.1 Education), enabled: KeyValue: (6489, » 4.2 Health), enabled: KeyValue: (6490, » 4.3 Labor force), enabled: KeyValue: (6491, » 4.4 Social protection), disabled: KeyValue: (6492, 5 REGIONAL DEVELOPMENT)]",
+				pledgeForm.getAllLegalSectors().toString());
+		
+		// programs
+		testDisableableKeyValues(pledgeForm.getAllRootPrograms(), new DisableableKeyValue(-1l, "Please select from below", true),
+				new DisableableKeyValue(4l, "Older Program", true),
+				new DisableableKeyValue(1l, "Program #1", true));
+		pledgeForm.setSelectedRootProgram(4l);
+		assertEquals("[enabled: KeyValue: (-1, Please select from below), disabled: KeyValue: (4, Older Program), disabled: KeyValue: (5, » OP1 name), disabled: KeyValue: (6, » » OP11 name), disabled: KeyValue: (7, » » » OP111 name), enabled: KeyValue: (8, » » » OP112 name), enabled: KeyValue: (9, » OP2 name)]", 
+				pledgeForm.getAllLegalPrograms().toString());
+		
+		// locations
+		pledgeForm.setLevelId(69l);
+		assertEquals("[KeyValue: (0, Please select from below), KeyValue: (77, Region), KeyValue: (78, Zone), KeyValue: (79, District)]", 
+				pledgeForm.getAllValidImplementationLocationChoices().toString());
+		pledgeForm.setImplemLocationLevel(78l);
+		assertEquals("[enabled: KeyValue: (0, Please select from below), enabled: KeyValue: (9108, Bulboaca), enabled: KeyValue: (9109, Hulboaca), enabled: KeyValue: (9110, Dolboaca), disabled: KeyValue: (9111, Glodeni), disabled: KeyValue: (9112, Raureni), disabled: KeyValue: (9113, Apareni), disabled: KeyValue: (9114, Tiraspol), enabled: KeyValue: (9115, Slobozia), enabled: KeyValue: (9116, Camenca)]", 
+				pledgeForm.getAllValidLocations().toString());		
+	}
+	
+	public void testPledgeFundingCalculator(){
+		FundingPledges pledge = PledgesEntityHelper.getPledgesById(3L);
+		assertEquals("1033246.28", String.format("%.2f", pledge.getTotalPledgedAmount("USD")));
+		assertEquals("842399.95", String.format("%.2f", pledge.getTotalPledgedAmount("EUR"))); // approximate value
+		
+		pledge = PledgesEntityHelper.getPledgesById(4L);
+		assertEquals("938069.75", String.format("%.2f", pledge.getTotalPledgedAmount("USD")));  // approximate value
+		assertEquals("800999.00", String.format("%.2f", pledge.getTotalPledgedAmount("EUR")));
+		
+		pledge = PledgesEntityHelper.getPledgesById(5L);
+		assertEquals("1061513.34", String.format("%.2f", pledge.getTotalPledgedAmount("USD")));  // approximate value
+		assertEquals("780000.00", String.format("%.2f", pledge.getTotalPledgedAmount("EUR")));
 	}
 	
 	public void testFetchEntities()
@@ -110,6 +167,7 @@ public class PledgesFormTests extends AmpTestCase
     protected void setUp() throws Exception
     {
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
+		FeaturesUtil.overriddenFields.put("Use Free Text", true);
 		super.setUp();
         // do nothing now                
     }

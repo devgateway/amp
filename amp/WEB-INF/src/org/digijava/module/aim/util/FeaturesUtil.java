@@ -2253,18 +2253,32 @@ public class FeaturesUtil {
 	}
 	
 	public static boolean isVisibleField(String fieldName){
+		if (overriddenFields.containsKey(fieldName))
+			return overriddenFields.get(fieldName);
 		return isVisibleField(fieldName, TLSUtils.getRequest().getSession().getServletContext(),TLSUtils.getRequest().getSession());
 	}
 	
 	public static boolean isVisibleField(String fieldName,HttpSession session){
+		if (overriddenFields.containsKey(fieldName))
+			return overriddenFields.get(fieldName);
+
 		return isVisibleField(fieldName, TLSUtils.getRequest().getSession().getServletContext(),session);
 	}
-	
+
+	/**
+	 * for testcases, since the implementation is lame and does not allow one to supply a dummy FM instance
+	 */
+	public static HashMap<String, Boolean> overriddenFields = new HashMap<>();
+
 	public static boolean isVisibleField(String fieldName, ServletContext ampContext,HttpSession session){
+		if (overriddenFields.containsKey(fieldName))
+			return overriddenFields.get(fieldName);
+		
 		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
 		AmpFieldsVisibility fieldToTest=ampTreeVisibility.getFieldByNameFromRoot(fieldName);
 		if(fieldToTest!=null)
 			return fieldToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
+		
 		return false;
 	}
 	

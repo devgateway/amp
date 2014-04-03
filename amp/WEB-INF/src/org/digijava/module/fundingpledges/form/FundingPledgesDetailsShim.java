@@ -46,6 +46,10 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 			return null;
 		}
 	}
+	
+	@Override public String toString(){
+		return String.format("%.2f curr: %s, ToA: %d, fundingYear: %d, pledgeTypeId: %d", this.amount, this.currencyId, this.typeOfAssistanceId, this.fundingYear, this.pledgeTypeId);
+	}
 		
 	@java.lang.SuppressWarnings("all")
 	public Long getPledgeTypeId() {

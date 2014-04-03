@@ -17,11 +17,12 @@ import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-public class FundingPledgesDetails implements FundingInformationItem{
+public class FundingPledgesDetails implements FundingInformationItem, Identifiable{
 	
 	private long id;
 	private FundingPledges pledgeid;
@@ -35,6 +36,10 @@ public class FundingPledgesDetails implements FundingInformationItem{
 	public java.sql.Timestamp getFunding_date() {
 		Timestamp retVal = Timestamp.valueOf(new StringBuffer(getFundingYear()).append("-01-01 00:00:00").toString());
 		return retVal;
+	}
+	
+	public Object getIdentifier(){
+		return this.id;
 	}
 	
 	@Override public Double getTransactionAmount(){

@@ -2,13 +2,18 @@
 package org.digijava.module.fundingpledges.dbentity;
 
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.Identifiable;
 
-public class FundingPledgesProgram {
+public class FundingPledgesProgram implements Identifiable{
 
 	private Long id;
 	private FundingPledges pledgeid;
 	private AmpTheme program;
 	private Float programpercentage;
+
+	@Override public Object getIdentifier(){
+		return this.id;
+	}
 
 	public int hashCode() {
 		return program.getAmpThemeId().hashCode();

@@ -237,14 +237,15 @@ public class AMPStartupListener extends HttpServlet implements
 
 			AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE), session);
 			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-			ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+			FeaturesUtil.setAmpTreeVisibility(ampContext, null, ampTreeVisibility);
+
 			ampContext.setAttribute("FMcache", "read");
 
 			// currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility
 			// Template"),session);
 			// ampTreeVisibilityAux.buildAmpTreeVisibilityMultiLevel(currentTemplate);
 			// ampTreeVisibilityAux2.displayVisibilityTreeForDebug(ampTreeVisibilityAux);
-			// ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+
 			Collection ampColumns = FeaturesUtil.getAMPColumnsOrder();
 			ampContext.setAttribute("ampColumnsOrder", ampColumns);
 
@@ -278,7 +279,7 @@ public class AMPStartupListener extends HttpServlet implements
 			CustomFieldsUtil.parseXMLFile(sce.getServletContext().getResourceAsStream("/WEB-INF/custom-fields.xml"));
 			
 			logger.info("Checking if any MTEF columns need to be created...");
-			DynamicColumnsUtil.createInexistentMtefColumns(ampContext);
+			DynamicColumnsUtil.createInexistentMtefColumns(ampContext,null);
 			
 			logger.info("loading the i18ned views description and checking for consistency with the database...");
 			for(String viewName:InternationalizedViewsRepository.i18Models.keySet())

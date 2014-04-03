@@ -414,13 +414,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		if (!publicMode) {
 
 			ServletContext ampContext = getServlet().getServletContext();
-			AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext
-					.getAttribute("ampTreeVisibility");
-
-            /*
-            PdfPTable regionalFundingTable = getRegionalFundingTable(filterResults);
-            layoutTable1.addCell(regionalFundingTable);
-            */
+			AmpTreeVisibility ampTreeVisibility =FeaturesUtil.getAmpTreeVisibility(ampContext, session); 
 
 
 			if (FeaturesUtil.getFieldVisibility("Millennium Development Goals")

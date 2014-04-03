@@ -158,7 +158,8 @@
 														<field:display name="Sub Program Level 8" feature="NPD Dashboard"> </field:display>
 														<%
 								                          ServletContext x=session.getServletContext();
-								                          	org.dgfoundation.amp.visibility.AmpTreeVisibility atv=(org.dgfoundation.amp.visibility.AmpTreeVisibility)x.getAttribute("ampTreeVisibility");
+								                          	org.dgfoundation.amp.visibility.AmpTreeVisibility atv=org.digijava.module.aim.util.FeaturesUtil.getAmpTreeVisibility(x, session);
+								                          	
 								                          	int i;
 								                          	for(i=1;i<=8;i++)
 								                          	{

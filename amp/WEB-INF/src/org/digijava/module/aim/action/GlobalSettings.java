@@ -119,10 +119,11 @@ public class GlobalSettings extends Action {
 	    	FeaturesUtil.switchLogicInstance();	    	
 	     	
 	    	ServletContext ampContext = this.getServlet().getServletContext();
+	    	
 			AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
 			AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateById(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE));
 	    	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-	    	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+	    	FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
 	    	
 		}
 		gsForm.setGsfCol(col);

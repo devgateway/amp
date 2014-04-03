@@ -18,6 +18,7 @@ import org.dgfoundation.amp.onepager.util.FMInfo;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.util.FMUtil.PathException;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Component used by the wicket:fm tag in order to
@@ -51,7 +52,7 @@ public class TransparentFMWebMarkupContainer extends TransparentWebMarkupContain
 		if (names != null){
 			ServletContext context   = ((WebApplication)Application.get()).getServletContext();
 			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
-			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
+			AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(context, session.getHttpSession());
 
 			StringTokenizer tok = new StringTokenizer(names, ";");
 			while (tok.hasMoreElements()) {

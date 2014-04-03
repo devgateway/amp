@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.jcr.Node;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -84,6 +85,7 @@ public class PIUseCase {
 		 * || form.getDonorGroups().isEmpty()) { form.setDonorGroups(DbUtil.getAllOrgGroups()); } if (form.getFinancingInstruments() == null || form.getFinancingInstruments().isEmpty()) {
 		 * form.setFinancingInstruments(DbUtil.getAllFinancingInstruments()); }
 		 */
+		HttpSession session=request.getSession();
 		if (form.getCalendars() == null || form.getCalendars().isEmpty()) {
 			form.setCalendars(DbUtil.getAllFisCalenders());
 		}
@@ -134,7 +136,7 @@ public class PIUseCase {
 					"selectedStatuses");
 			form.getSectorStatusesElements().add(activityStatusElement);
 
-			if (FeaturesUtil.isVisibleField("Sector", ampContext)) {
+			if (FeaturesUtil.isVisibleField("Sector", ampContext,session)) {
 				HierarchyListableImplementation rootAmpSectors = new HierarchyListableImplementation();
 				rootAmpSectors.setLabel("Primary Sectors");
 				rootAmpSectors.setUniqueId(0 + "");
@@ -146,7 +148,7 @@ public class PIUseCase {
 				HierarchyListableUtil.changeTranslateable(sectorsElement.getRootHierarchyListable(), false);
 			}
 
-			if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)) {
+			if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext,session)) {
 				HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
 				rootSecondaryAmpSectors.setLabel("Secondary Sectors");
 				rootSecondaryAmpSectors.setUniqueId("0");
@@ -158,7 +160,7 @@ public class PIUseCase {
 				HierarchyListableUtil.changeTranslateable(secondarySectorsElement.getRootHierarchyListable(), false);
 			}
 
-			if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext)) {
+			if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext,session)) {
 				HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
 				rootTertiaryAmpSectors.setLabel("Tertiary Sector");
 				rootTertiaryAmpSectors.setUniqueId("0");

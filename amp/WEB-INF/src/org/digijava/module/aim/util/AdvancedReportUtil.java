@@ -44,6 +44,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import java.text.Collator;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 /**
  * AdvancedReportUtil.java
@@ -394,13 +395,13 @@ public final class AdvancedReportUtil {
 		ampReport.setColumns(cols1);
 	}
 	public static String getAidEffectivenesForExport(ServletContext ampContext,
-			AmpActivityVersion activity) {
+			AmpActivityVersion activity,HttpSession session) {
 		String aidEffectivenesToAdd = "";
 
 		if (FeaturesUtil
 				.isVisibleModule(
 						"/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit",
-						ampContext)) {
+						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses parallel project implementation unit")
 					+ ":\n";
@@ -414,7 +415,7 @@ public final class AdvancedReportUtil {
 
 		if (FeaturesUtil.isVisibleModule(
 				"/Activity Form/Aid Effectivenes/Project Implementation Mode",
-				ampContext)
+				ampContext,session)
 				&& ampCategoryValue != null) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project Implementation Mode") + ":\n";
@@ -424,7 +425,7 @@ public final class AdvancedReportUtil {
 		if (FeaturesUtil
 				.isVisibleModule(
 						"/Activity Form/Aid Effectivenes/Project has been approved by IMAC",
-						ampContext)) {
+						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project has been approved by IMAC") + ":\n";
 			aidEffectivenesToAdd += activity.getImacApproved() + "\n";
@@ -433,7 +434,7 @@ public final class AdvancedReportUtil {
 		if (FeaturesUtil
 				.isVisibleModule(
 						"/Activity Form/Aid Effectivenes/Government is meber of project steering committee",
-						ampContext)) {
+						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Government is meber of project steering committee")
 					+ ":\n";
@@ -442,14 +443,14 @@ public final class AdvancedReportUtil {
 		if (FeaturesUtil
 				.isVisibleModule(
 						"/Activity Form/Aid Effectivenes/Aid Effectivenes/Project is on budget",
-						ampContext)) {
+						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project is on budget") + ":\n";
 			aidEffectivenesToAdd += activity.getOnBudget() + "\n";
 		}
 		if (FeaturesUtil.isVisibleModule(
 				"/Activity Form/Aid Effectivenes/Project is on parliament",
-				ampContext)) {
+				ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project is on parliament") + ":\n";
 			aidEffectivenesToAdd += activity.getOnParliament() + "\n";
@@ -457,7 +458,7 @@ public final class AdvancedReportUtil {
 		if (FeaturesUtil
 				.isVisibleModule(
 						"/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account",
-						ampContext)) {
+						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project disburses directly into the Goverment single treasury account")
 					+ ":\n";
@@ -466,7 +467,7 @@ public final class AdvancedReportUtil {
 		if (FeaturesUtil
 				.isVisibleModule(
 						"/Activity Form/Aid Effectivenes/Project uses national financial management systems",
-						ampContext)) {
+						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses national financial management systems")
 					+ ":\n";
@@ -476,7 +477,7 @@ public final class AdvancedReportUtil {
 		if (FeaturesUtil
 				.isVisibleModule(
 						"/Activity Form/Aid Effectivenes/Project uses national procurement systems",
-						ampContext)) {
+						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses national procurement systems")
 					+ ":\n";
@@ -485,7 +486,7 @@ public final class AdvancedReportUtil {
 		if (FeaturesUtil
 				.isVisibleModule(
 						"/Activity Form/Aid Effectivenes/Project uses national audit systems",
-						ampContext)) {
+						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses national audit systems")
 					+ ":\n";

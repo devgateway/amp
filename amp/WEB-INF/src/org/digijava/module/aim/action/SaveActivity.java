@@ -3307,7 +3307,7 @@ public class SaveActivity extends Action {
 //
 //	private boolean isSectorEnabled() {
 // 	    ServletContext ampContext = getServlet().getServletContext();
-//	    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+
 //		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 //		if(currentTemplate!=null)
 //			if(currentTemplate.getFeatures()!=null)
@@ -3324,7 +3324,7 @@ public class SaveActivity extends Action {
 //	private boolean isStatusEnabled() {
 // 	   ServletContext ampContext = getServlet().getServletContext();
 //
-//	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+
 //
 //		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 //		if(currentTemplate!=null)
@@ -3336,7 +3336,7 @@ public class SaveActivity extends Action {
 //	private boolean isFieldEnabled(String fieldName) {
 //		ServletContext ampContext = getServlet().getServletContext();
 //
-//		   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+
 //
 //			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 //			if(currentTemplate!=null)
@@ -3496,7 +3496,6 @@ public class SaveActivity extends Action {
 //	}
 //	  private boolean isPrimarySectorEnabled() {
 //	 	    ServletContext ampContext = getServlet().getServletContext();
-//		    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 //			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 //			if(currentTemplate!=null)
 //				return currentTemplate.fieldExists("Primary Sector");
@@ -3505,7 +3504,7 @@ public class SaveActivity extends Action {
 //	  
 //	  private boolean isSecondarySectorEnabled() {
 //	 	    ServletContext ampContext = getServlet().getServletContext();
-//		    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+
 //			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 //			if(currentTemplate!=null)
 //				return currentTemplate.fieldExists("Secondary Sector");

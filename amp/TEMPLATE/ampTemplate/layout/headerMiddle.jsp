@@ -712,16 +712,16 @@ function adminHelp(){
                           </module:display>
 						<%	
 							boolean showDashboard = false;
-						  	if(FeaturesUtil.isVisibleFeature("NPD Dashboard", request.getSession().getServletContext())) {
+						  	if(FeaturesUtil.isVisibleFeature("NPD Dashboard", request.getSession().getServletContext(),request.getSession())) {
 						  		showDashboard = true;
 						  	}
-						  	if(FeaturesUtil.isVisibleModule("GIS DASHBOARD", request.getSession().getServletContext())) {
+						  	if(FeaturesUtil.isVisibleModule("GIS DASHBOARD", request.getSession().getServletContext(),request.getSession())) {
 						  		showDashboard = true;
 						  	}
-						  	if(FeaturesUtil.isVisibleModule("Map Module", request.getSession().getServletContext())) {
+						  	if(FeaturesUtil.isVisibleModule("Map Module", request.getSession().getServletContext(),request.getSession())) {
 						  		showDashboard = true;
 						  	}
-                            if(FeaturesUtil.isVisibleModule("Visualization Dashboards", request.getSession().getServletContext())) {
+                            if(FeaturesUtil.isVisibleModule("Visualization Dashboards", request.getSession().getServletContext(),request.getSession())) {
                                 showDashboard = true;
                             }
 						  							  	

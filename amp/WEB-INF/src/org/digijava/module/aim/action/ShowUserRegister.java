@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -37,14 +38,15 @@ public class ShowUserRegister extends Action {
 			javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
 
 		try {
+			HttpSession session=request.getSession();
 			// Evaluate if the user is not logged.
 			TeamMember currentTeamMember = (TeamMember) request.getSession().getAttribute("currentMember");
 			if (currentTeamMember == null) {
 				// Check for permission in the FM to avoid using the URL to call
 				// the action directly.
 				ServletContext context = request.getSession().getServletContext();
-				if (!FeaturesUtil.isVisibleModule("Login - User Management", context)
-						|| !FeaturesUtil.isVisibleFeature("Enable New User Registration", context)) {
+				if (!FeaturesUtil.isVisibleModule("Login - User Management", context,session)
+						|| !FeaturesUtil.isVisibleFeature("Enable New User Registration", context,session)) {
 					logger.error("UNAUTHORIZED ATTEMPT TO CREATE NEW USER.");
 					return mapping.findForward(null);
 				}

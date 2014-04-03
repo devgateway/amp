@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.jcr.Node;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -74,6 +75,7 @@ public class GPIUseCase {
 	 * Action from the UseCase, so this method can be used from elsewhere.
 	 */
 	public GPIForm setupFiltersData(GPIForm form, HttpServletRequest request, ServletContext ampContext) {
+		HttpSession session=request.getSession();
 		if (form.getCalendars() == null || form.getCalendars().isEmpty()) {
 			form.setCalendars(DbUtil.getAllFisCalenders());
 		}
@@ -124,7 +126,7 @@ public class GPIUseCase {
 					"selectedStatuses");
 			form.getSectorStatusesElements().add(activityStatusElement);
 
-			if (FeaturesUtil.isVisibleField("Sector", ampContext)) {
+			if (FeaturesUtil.isVisibleField("Sector", ampContext,session)) {
 				HierarchyListableImplementation rootAmpSectors = new HierarchyListableImplementation();
 				rootAmpSectors.setLabel("Primary Sectors");
 				rootAmpSectors.setUniqueId(0 + "");
@@ -136,7 +138,7 @@ public class GPIUseCase {
 				HierarchyListableUtil.changeTranslateable(sectorsElement.getRootHierarchyListable(), false);
 			}
 
-			if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)) {
+			if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext,session)) {
 				HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
 				rootSecondaryAmpSectors.setLabel("Secondary Sectors");
 				rootSecondaryAmpSectors.setUniqueId("0");
@@ -148,7 +150,7 @@ public class GPIUseCase {
 				HierarchyListableUtil.changeTranslateable(secondarySectorsElement.getRootHierarchyListable(), false);
 			}
 
-			if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext)) {
+			if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext,session)) {
 				HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
 				rootTertiaryAmpSectors.setLabel("Tertiary Sector");
 				rootTertiaryAmpSectors.setUniqueId("0");
@@ -272,7 +274,7 @@ public class GPIUseCase {
 		filter.setFinancingInstruments(GPIUtils.getFinancingInstruments(form.getSelectedFinancingIstruments()));
 		filter.setStartYear(form.getSelectedStartYear());
 		filter.setEndYer(form.getSelectedEndYear());
-		filter.setProgramSectionVisible(FeaturesUtil.isVisibleModule("/Activity Form/Program", request.getServletContext()));
+		filter.setProgramSectionVisible(FeaturesUtil.isVisibleModule("/Activity Form/Program", request.getServletContext(),request.getSession()));
 
 		// Get all surveys.
 		Collection<AmpGPISurvey> commonData = getCommonSurveyData();

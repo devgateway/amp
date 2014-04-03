@@ -67,9 +67,9 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		public int doStartTag() throws JspException {
 	
  	   ServletContext ampContext=pageContext.getServletContext();
+ 	   HttpSession session=pageContext.getSession();
  try{
-	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-
+	   AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
 		   if(ampTreeVisibility!=null)
 			   if(!existFieldinDB(ampTreeVisibility)){
 				   synchronized (this) {
@@ -89,7 +89,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		                             
 		                             AmpTemplatesVisibility  currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 		                             ampTreeVisibility. buildAmpTreeVisibility(currentTemplate);
-		                             ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+		                             FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
 		                          } catch (DgException ex) {
 		                          	throw new JspException(ex);	
 		                           	}
@@ -100,14 +100,13 @@ public class FieldVisibilityTag extends BodyTagSupport {
 					  }
 				  }
 		   		}
-		   		ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		   		ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
 		   		if(ampTreeVisibility!=null)
 		   		   if(!isFeatureTheParent(ampTreeVisibility)){
 					   FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
 		   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 		   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-		   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-
+		   			   FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
 				   } 
 //	   }
 	   
@@ -127,7 +126,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
        
        try {
     	   ServletContext ampContext=pageContext.getServletContext();
-    	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+    	   AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, pageContext.getSession());
     	   
     	   /* name, feature, enable
     	    * 

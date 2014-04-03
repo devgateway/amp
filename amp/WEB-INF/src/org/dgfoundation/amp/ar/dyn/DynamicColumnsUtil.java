@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
@@ -31,7 +32,7 @@ public class DynamicColumnsUtil {
 	private static ArrayList<AmpColumns> cachedMtefColumnList	= 	null;
 	private static ArrayList<AmpMeasures> cachedMtefMeasureList	= 	null;
 	
-	public static void createInexistentMtefColumns (ServletContext sCtx) {
+	public static void createInexistentMtefColumns (ServletContext sCtx,HttpSession session) {
 		List<Integer> mtefYears		= showInexistentMtefYears();
 		if ( mtefYears != null && mtefYears.size() > 0 ) {
 			for ( Integer year: mtefYears ) {
@@ -43,7 +44,7 @@ public class DynamicColumnsUtil {
 				col.setCellType("org.dgfoundation.amp.ar.cell.ComputedAmountCell");
 				
 				logger.info("Adding MTEF column for year " + year + "/" + (year+1) );
-				dynamicallyCreateNewColumn(col,"Funding Information", sCtx);
+				dynamicallyCreateNewColumn(col,"Funding Information", sCtx,session);
 			}
 			DynamicColumnsUtil.cachedMtefColumnList	= null;
 			MathExpressionRepository.buildMtefColumn();
@@ -56,9 +57,9 @@ public class DynamicColumnsUtil {
 	 * @param newCol create a new AmpColumn object and give it to this function as parameter
 	 * @param featureName name of the parent feature of this field   
 	 */
-	public static void dynamicallyCreateNewColumn(AmpColumns newCol, String featureName, ServletContext sCtx) {
+	public static void dynamicallyCreateNewColumn(AmpColumns newCol, String featureName, ServletContext sCtx,HttpSession session) {
 		ColumnSavingEngine cse	= new ColumnSavingEngine(newCol, featureName, sCtx);
-		cse.startSavingProcess();
+		cse.startSavingProcess(session);
 	}
 	
 	

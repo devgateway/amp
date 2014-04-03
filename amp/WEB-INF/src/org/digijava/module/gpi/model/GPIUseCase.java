@@ -272,6 +272,7 @@ public class GPIUseCase {
 		filter.setFinancingInstruments(GPIUtils.getFinancingInstruments(form.getSelectedFinancingIstruments()));
 		filter.setStartYear(form.getSelectedStartYear());
 		filter.setEndYer(form.getSelectedEndYear());
+		filter.setProgramSectionVisible(FeaturesUtil.isVisibleModule("/Activity Form/Program", request.getServletContext()));
 
 		// Get all surveys.
 		Collection<AmpGPISurvey> commonData = getCommonSurveyData();

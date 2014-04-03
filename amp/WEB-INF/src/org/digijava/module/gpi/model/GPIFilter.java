@@ -24,6 +24,7 @@ public class GPIFilter {
 	Collection<AmpCategoryValue> financingInstruments;
 	int startYear;
 	int endYer;
+	private boolean isProgramSectionVisible;
 
 	public AmpFiscalCalendar getCalendar() {
 		return calendar;
@@ -95,6 +96,14 @@ public class GPIFilter {
 
 	public void setEndYer(int endYer) {
 		this.endYer = endYer;
+	}
+
+	public boolean isProgramSectionVisible() {
+		return isProgramSectionVisible;
+	}
+
+	public void setProgramSectionVisible(boolean isProgramSectionVisible) {
+		this.isProgramSectionVisible = isProgramSectionVisible;
 	}
 
 }

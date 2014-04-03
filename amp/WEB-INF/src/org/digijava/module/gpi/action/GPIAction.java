@@ -20,43 +20,43 @@ public class GPIAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
 
 		logger.debug("GPIAction begin");
-		GPIForm piForm = (GPIForm) form;
+		GPIForm gpiForm = (GPIForm) form;
 		GPIUseCase useCase = new GPIUseCase();
 		
 		// Reformat some data because how the arrays come from the page.
-		piForm = formatFilters(piForm);
+		gpiForm = formatFilters(gpiForm);
 
 		// Setup filters.
 		ServletContext ampContext = getServlet().getServletContext();
-		useCase.setupFiltersData(piForm, request, ampContext);
-		if (piForm.isReset()) {
-			useCase.resetFilterSelections(piForm, ((TeamMember) request.getSession().getAttribute("currentMember")).getAppSettings());
+		useCase.setupFiltersData(gpiForm, request, ampContext);
+		if (gpiForm.isReset()) {
+			useCase.resetFilterSelections(gpiForm, ((TeamMember) request.getSession().getAttribute("currentMember")).getAppSettings());
 		}
 
 		// Setup common data.
-		piForm.setAvailableGPIReports(useCase.setupAvailableGPIReports());
+		gpiForm.setAvailableGPIReports(useCase.setupAvailableGPIReports());
 		String piReportCode = request.getParameter("reportId");
-		piForm.setGPIReport(useCase.getGPIReport(piReportCode));
+		gpiForm.setGPIReport(useCase.getGPIReport(piReportCode));
 
 		// Create report.
-		if (piForm.getGPIReport() == null) {
+		if (gpiForm.getGPIReport() == null) {
 			return mapping.findForward("forward");
 		}
 		// Create report.
-		GPIAbstractReport report = useCase.createReport(piForm, request);
-		piForm.setMainTableRows(report.getReportRows());
-		piForm.setMiniTable(report.getMiniTable());
+		GPIAbstractReport report = useCase.createReport(gpiForm, request);
+		gpiForm.setMainTableRows(report.getReportRows());
+		gpiForm.setMiniTable(report.getMiniTable());
 
 		// Set output.
-		if (piForm.isPrintPreview()) {
-			piForm.setPrintPreview(false);
+		if (gpiForm.isPrintPreview()) {
+			gpiForm.setPrintPreview(false);
 			return mapping.findForward("print");
-		} else if (piForm.isExportPDF() || piForm.isExportXLS()) {
+		} else if (gpiForm.isExportPDF() || gpiForm.isExportXLS()) {
 			GPIExportUseCase pdfUseCase = new GPIExportUseCase();
-			pdfUseCase.exportReport(getServlet(), response, request, piForm.getGPIReport().getIndicatorCode(), piForm.getMainTableRows(), piForm.getMiniTable(), piForm.getStartYear(),
-					piForm.getEndYear(), (piForm.isExportPDF()) ? "PDF" : "XLS", piForm.getSelectedCurrency());
-			piForm.setExportPDF(false);
-			piForm.setExportXLS(false);
+			pdfUseCase.exportReport(getServlet(), response, request, gpiForm.getGPIReport().getIndicatorCode(), gpiForm.getMainTableRows(), gpiForm.getMiniTable(), gpiForm.getStartYear(),
+					gpiForm.getEndYear(), (gpiForm.isExportPDF()) ? "PDF" : "XLS", gpiForm.getSelectedCurrency());
+			gpiForm.setExportPDF(false);
+			gpiForm.setExportXLS(false);
 			return null;
 		} else {
 			return mapping.findForward("forward");

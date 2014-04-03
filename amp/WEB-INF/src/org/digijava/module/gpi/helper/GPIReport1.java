@@ -52,6 +52,11 @@ public class GPIReport1 extends GPIAbstractReport {
 	public Collection<GPIReportAbstractRow> generateReport(Collection<AmpGPISurvey> commonData, GPIFilter filter) {
 
 		Collection<GPIReportAbstractRow> list = new ArrayList<GPIReportAbstractRow>();
+		
+		if(!filter.isProgramSectionVisible()) {
+			return list;
+		}
+		
 		GPIReport1Row auxRow = null;
 		int yearRange = filter.getEndYer() - filter.getStartYear() + 1;
 		Date[] startDates = new Date[yearRange];

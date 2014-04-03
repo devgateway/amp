@@ -1,4 +1,4 @@
-<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+<%@page import="org.digijava.module.aim.helper.FormatHelper,org.dgfoundation.amp.ar.AmpARFilter"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -133,7 +133,7 @@ function setHoveredRow(rowId) {
 <digi:instance property="viewPledgesForm" />
 
 <digi:form action="/viewPledgesList.do" method="post">
-
+<c:set var="usedCurrency"><%=AmpARFilter.getDefaultCurrency().getCurrencyCode()%></c:set>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" vAlign="top" align="center" border="0">
 	
 	<tr>
@@ -163,7 +163,6 @@ function setHoveredRow(rowId) {
 					</td>
 				</tr>
 				<logic:notEmpty name="viewPledgesForm" property="allFundingPledges">
-
 				<tr>
 					<td>
 					<div class="report">
@@ -178,9 +177,8 @@ function setHoveredRow(rowId) {
 									<digi:trn>Organization Group</digi:trn>
 								</b>							</td>
 							<td width="25%" align="center" class="inside">
-								<b> 
-									<digi:trn>Total Amount</digi:trn>
-								</b>							</td>
+								<b><digi:trn>Total Pledged Amount</digi:trn></b> (${usedCurrency})
+							</td>
 							<td width="19%" align="center" class="inside">
 								<b> 
 									<digi:trn>Years</digi:trn>
@@ -192,21 +190,21 @@ function setHoveredRow(rowId) {
 						</tr>
                        <tbody class="yui-dt-data">
 						<c:forEach var="allFundingPledges" items="${viewPledgesForm.allFundingPledges}" varStatus="index">
-							<c:set var="pledgeId" value="${allFundingPledges.key.id}" />
-							<c:set var="pledgeUsed" value="${allFundingPledges.value}" />
+							<c:set var="pledgeId" value="${allFundingPledges.id}" />
+							<c:set var="pledgeUsed" value="${allFundingPledges.usedInActivityFunding}" />
 							
 							<tr style="height: 25px">
 								<td width="25%" align="center" class="inside"><a href="/viewPledge.do?id=${pledgeId}">
-									<c:out value="${allFundingPledges.key.effectiveName }" />
+									<c:out value="${allFundingPledges.effectiveName }" />
 								</a></td>
 								<td width="25%" align="center" class="inside">
-									<bean:write name="allFundingPledges" property="key.organizationGroup.orgGrpName" />
+									<bean:write name="allFundingPledges" property="organizationGroup.orgGrpName" />
 								</td>
 								<td width="25%" align="center" class="inside">
-									<aim:formatNumber value="${allFundingPledges.key.totalAmount}" />
+									<aim:formatNumber value="${allFundingPledges.getTotalPledgedAmount(usedCurrency)}" />
 								</td>
 								<td width="19%" align="center" class="inside">
-									<c:forEach var="year" items="${allFundingPledges.key.yearsList}" varStatus="index">
+									<c:forEach var="year" items="${allFundingPledges.yearsList}" varStatus="index">
 										<li> <digi:trn>${year}</digi:trn>&nbsp;</li>
 									</c:forEach>
 								</td>	

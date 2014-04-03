@@ -57,6 +57,8 @@ public class FundingCalculationsHelper {
 	DecimalWraper totalCommitments = new DecimalWraper();
 	DecimalWraper unDisbursementsBalance = new DecimalWraper();
 	DecimalWraper totalMtef = new DecimalWraper();
+	DecimalWraper totalPledged = new DecimalWraper();
+	
 	boolean debug;
 	
 	/**
@@ -80,7 +82,7 @@ public class FundingCalculationsHelper {
 	 * @param updateTotals - if false, then only fundDetailList will be built, without updating the totals
 	 */
 	public void doCalculations(Collection<? extends FundingInformationItem> details, String userCurrencyCode, boolean updateTotals) {
-		Iterator<? extends FundingInformationItem> fundDetItr = details.iterator();
+		//Iterator<? extends FundingInformationItem> fundDetItr = details.iterator();
 		fundDetailList = new ArrayList<FundingDetail>();
 		int indexId = 0;
 		String toCurrCode = Constants.DEFAULT_CURRENCY;
@@ -90,19 +92,14 @@ public class FundingCalculationsHelper {
 		}
 		String decimalSeparatorStr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);
 		char decimalSeparatorChar = decimalSeparatorStr == null ? '.' : (decimalSeparatorStr.isEmpty() ? '.' : decimalSeparatorStr.charAt(0));
-		while (fundDetItr.hasNext()) {
-			FundingInformationItem fundDet = fundDetItr.next();
-			AmpCategoryValue adjType = null;
-			if (fundDet.getAdjustmentType() != null) adjType = fundDet.getAdjustmentType(); else {
-				adjType = actualAdjustmentType;
-			}
+		for (FundingInformationItem fundDet:details)
+		{
+			AmpCategoryValue adjType = actualAdjustmentType;
+			if (fundDet.getAdjustmentType() != null)
+				adjType = fundDet.getAdjustmentType();
 			FundingDetail fundingDetail = new FundingDetail();
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
-			if (fundDet instanceof AmpFundingDetail) {
-				fundingDetail.setFundDetId(((AmpFundingDetail)fundDet).getAmpFundDetailId());
-			} else if (fundDet instanceof AmpFundingMTEFProjection) {
-				fundingDetail.setFundDetId(((AmpFundingMTEFProjection)fundDet).getAmpFundingMTEFProjectionId());
-			}
+			fundingDetail.setFundDetId(fundDet.getDbId());
 			
 //			String baseCurrCode		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
 			if (fundDet.getFixedExchangeRate() != null && fundDet.getFixedExchangeRate().doubleValue() != 1) {
@@ -114,8 +111,10 @@ public class FundingCalculationsHelper {
 			fundingDetail.setAdjustmentTypeName(fundDet.getAdjustmentType());
 			fundingDetail.setContract(fundDet.getContract());
 			java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
+			
 			Double fixedExchangeRate = fundDet.getFixedExchangeRate();
-			if (fixedExchangeRate != null && (Math.abs(fixedExchangeRate.doubleValue()) < 1.0E-15)) fixedExchangeRate = null;
+			if (fixedExchangeRate != null && (Math.abs(fixedExchangeRate.doubleValue()) < 1.0E-15))
+				fixedExchangeRate = null;
 			double frmExRt;
 			if (fixedExchangeRate == null) {
 				frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
@@ -123,7 +122,8 @@ public class FundingCalculationsHelper {
 				frmExRt = fixedExchangeRate;
 			}
 			double toExRt;
-			if (userCurrencyCode != null) toCurrCode = userCurrencyCode;
+			if (userCurrencyCode != null)
+				toCurrCode = userCurrencyCode;
 			if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(toCurrCode)) {
 				toExRt = frmExRt;
 			} else {
@@ -156,11 +156,14 @@ public class FundingCalculationsHelper {
 	
 	protected void addToTotals(AmpCategoryValue adjType, FundingInformationItem fundDet, DecimalWraper amt) {
 		/**
-		 * no adjustment type for MTEF transactions, so this "if" is outside the PLANNED / ACTUAL / PIPELINE branching if's
+		 * no adjustment type for MTEF transactions or PLEDGED amounts, so this "if" is outside the PLANNED / ACTUAL / PIPELINE branching if's
 		 */
 		if (fundDet.getTransactionType().intValue() == Constants.MTEFPROJECTION) {
-			totalMtef.setValue(totalMtef.getValue().add(amt.getValue()));
+			totalMtef.add(amt);
 			return;
+		}
+		if (fundDet.getTransactionType().intValue() == Constants.PLEDGE){
+			totalPledged.add(amt);
 		}
 		if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
 			//fundingDetail.setAdjustmentTypeName("Planned");
@@ -364,6 +367,10 @@ public class FundingCalculationsHelper {
 	@java.lang.SuppressWarnings("all")
 	public DecimalWraper getTotalMtef() {
 		return this.totalMtef;
+	}
+	
+	public DecimalWraper getTotalPledged(){
+		return this.totalPledged;
 	}
 	
 	@java.lang.SuppressWarnings("all")

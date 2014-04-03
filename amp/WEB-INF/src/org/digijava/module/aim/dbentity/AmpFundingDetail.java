@@ -135,6 +135,10 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 		this.fixedExchangeRate = fixedExchangeRate;
 	}
 	
+	public Long getDbId(){
+		return this.getAmpFundDetailId();
+	}
+	
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub

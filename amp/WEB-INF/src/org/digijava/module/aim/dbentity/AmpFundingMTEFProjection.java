@@ -88,7 +88,11 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		public void setProjectionDate(Date projectionDate) {
 			this.projectionDate = projectionDate;
 		}
-		
+
+		@Override public Long getDbId(){
+			return getAmpFundingMTEFProjectionId();
+		}
+
 		@Override
 		protected Object clone() throws CloneNotSupportedException {
 			return super.clone();

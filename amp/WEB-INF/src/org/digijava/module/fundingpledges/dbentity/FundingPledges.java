@@ -4,9 +4,12 @@ package org.digijava.module.fundingpledges.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -52,7 +55,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 	private String contactAlternativeName_1;
 	private String contactAlternativeTelephone_1;
 	private String contactAlternativeEmail_1;
-	private Double totalAmount;
+
 	private TreeSet<String> yearsList;
 	
 	@Override
@@ -79,6 +82,9 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 			return this.getTitle() == null ? "(null)" : this.getTitle().getValue();
 	}
 	
+	public boolean isUsedInActivityFunding(){
+		return !PledgesEntityHelper.getFundingRelatedToPledges(this).isEmpty();
+	}
 	// trash getters / setters below
 	
 	@java.lang.SuppressWarnings("all")
@@ -252,11 +258,20 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 		return this.contactAlternativeEmail_1;
 	}
 	
-	@java.lang.SuppressWarnings("all")
-	public Double getTotalAmount() {
-		return this.totalAmount;
+	/**
+	 * calculates the sum of all the pledges <strong>in the currency of the workspace</strong>
+	 * @param currencyCode: the currency to make calculatins in. If null, then use defaultCurrency (workspace / base)
+	 * @return
+	 */
+	public Double getTotalPledgedAmount(String currencyCode) {
+		FundingCalculationsHelper calc = new FundingCalculationsHelper();
+		if (currencyCode == null)
+			currencyCode = AmpARFilter.getDefaultCurrency().getCurrencyCode();
+		calc.doCalculations(this.getFundingPledgesDetails(), currencyCode, true);
+		return calc.getTotalPledged().doubleValue();
 	}
 	
+		
 	@java.lang.SuppressWarnings("all")
 	public TreeSet<String> getYearsList() {
 		return this.yearsList;
@@ -433,10 +448,6 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 		this.contactAlternativeEmail_1 = contactAlternativeEmail_1;
 	}
 	
-	@java.lang.SuppressWarnings("all")
-	public void setTotalAmount(final Double totalAmount) {
-		this.totalAmount = totalAmount;
-	}
 	
 	@java.lang.SuppressWarnings("all")
 	public void setYearsList(final TreeSet<String> yearsList) {

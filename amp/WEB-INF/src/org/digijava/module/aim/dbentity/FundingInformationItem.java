@@ -27,5 +27,6 @@ public interface FundingInformationItem {
 	public IPAContract getContract();
 	public String getExpCategory();
 	public FundingPledges getPledgeid();
-	public Float getCapitalSpendingPercentage();	
+	public Float getCapitalSpendingPercentage();
+	public Long getDbId();
 }

@@ -5,13 +5,23 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
-public class FundingPledgesDetails {
+public class FundingPledgesDetails implements FundingInformationItem{
 	
 	private long id;
 	private FundingPledges pledgeid;
@@ -27,6 +37,69 @@ public class FundingPledgesDetails {
 		return retVal;
 	}
 	
+	@Override public Double getTransactionAmount(){
+		return FeaturesUtil.applyThousandsForVisibility(this.getAmount());
+	}
+	
+	@Override public Double getAbsoluteTransactionAmount(){
+		return this.getAmount();
+	}
+	
+	@Override public AmpCurrency getAmpCurrencyId(){
+		return this.getCurrency();
+	}
+	
+	@Override public Date getTransactionDate(){
+		int transactionYear = this.fundingYear == null ? 2014 : Integer.parseInt(this.fundingYear);
+		return new GregorianCalendar(transactionYear, 1, 1).getTime(); //1st of february
+	}
+			
+	@Override public Date getReportingDate(){
+		return getTransactionDate();
+	}
+	
+	@Override public AmpOrganisation getRecipientOrg(){
+		return null;
+	}
+	
+	@Override public AmpRole getRecipientRole()	{
+		return null;
+	}
+	
+	@Override public Integer getTransactionType(){
+		return Constants.PLEDGE;
+	}
+	
+	@Override public AmpCategoryValue getAdjustmentType(){
+		return CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
+	}
+	
+	@Override public String getDisbOrderId(){
+		return null;
+	}
+	
+	@Override public Double getFixedExchangeRate(){
+		return null;
+	}
+	
+	@Override public IPAContract getContract(){
+		return null;
+	}
+	
+	@Override public String getExpCategory(){
+		return null;
+	}
+	
+	@Override public Float getCapitalSpendingPercentage(){
+		return null;
+	}
+	
+	@Override public Long getDbId(){
+		return this.id;
+	}
+
+	
+	// trash getters / setters go below
 	public int hashCode() {
 		return System.identityHashCode(this);
 	}
@@ -113,5 +186,9 @@ public class FundingPledgesDetails {
 	@java.lang.SuppressWarnings("all")
 	public void setFundingYear(final String fundingYear) {
 		this.fundingYear = fundingYear;
+	}
+	
+	@Override public String toString(){
+		return String.format("%.2f %s", this.getAmount(), this.getCurrency().getCurrencyCode());
 	}
 }

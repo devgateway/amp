@@ -35,17 +35,15 @@ public class ShowPledgesList extends Action {
 		
 		List<FundingPledges> pledges = PledgesEntityHelper.getPledges();
 		Collections.sort(pledges);
-		TreeMap<FundingPledges, Boolean> map = new TreeMap<FundingPledges, Boolean>();
 		
-		for (Iterator iterator = pledges.iterator(); iterator.hasNext();) {
-			FundingPledges pledge = (FundingPledges) iterator.next();
-			pledge.setTotalAmount((double) 0);
+		for (FundingPledges pledge: pledges) {
+			//pledge.setTotalAmount((double) 0);
 			pledge.setYearsList(new TreeSet<String>());
 			Collection<FundingPledgesDetails> fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
 			if (fpdl!=null) {
 				for (Iterator iterator2 = fpdl.iterator(); iterator2.hasNext();) {
 					FundingPledgesDetails fpd = (FundingPledgesDetails) iterator2.next();
-					pledge.setTotalAmount(pledge.getTotalAmount() + fpd.getAmount());
+				//	pledge.setTotalAmount(pledge.getTotalAmount() + fpd.getAmount());
 					if (fpd.getFundingYear()!=null) {
 						pledge.getYearsList().add(fpd.getFundingYear());
 					} else {
@@ -55,14 +53,14 @@ public class ShowPledgesList extends Action {
 				
 				}
 			}
-			List<AmpFundingDetail> fundsRelated = PledgesEntityHelper.getFundingRelatedToPledges(pledge);
-			if (fundsRelated == null || fundsRelated.size()==0) {
-				map.put(pledge, false);
-			} else {
-				map.put(pledge, true);
-			}
+//			List<AmpFundingDetail> fundsRelated = PledgesEntityHelper.getFundingRelatedToPledges(pledge);
+//			if (fundsRelated == null || fundsRelated.size()==0) {
+//				map.put(pledge, false);
+//			} else {
+//				map.put(pledge, true);
+//			}
 		}
-		plForm.setAllFundingPledges(map);
+		plForm.setAllFundingPledges(pledges);
 		return mapping.findForward("forward");
     		
 	}

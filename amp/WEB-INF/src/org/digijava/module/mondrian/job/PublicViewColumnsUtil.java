@@ -24,7 +24,7 @@ public class PublicViewColumnsUtil
 			{
 				"amp_activity_group", "amp_activity", "amp_activity_version",
 				"v_donor_funding", "v_component_funding", "v_contribution_funding", "v_pledges_funding", "v_regional_funding",
-				"v_regions_cached", "v_m_sectors", "v_m_secondary_sectors"
+				"v_regions_cached", "v_m_sectors", "v_m_secondary_sectors", "v_pledges_funding_st"
 			});
 	
 	/**

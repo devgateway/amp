@@ -339,6 +339,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
 				if(!submited){
 					submited=true;
+					logger.debug("form submited");
 					processAndUpdateForm(true, am, form, target, this.getButton());
 	                if(!form.hasError()){
 	                    HashMap<String, String> commitmentErrors = new HashMap<String, String>();
@@ -364,7 +365,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					else
 						onError(target, form);
 	                submited=false;
+				}else{
+					logger.debug("submited avoided");
 				}
+			
 			}
 
 			@Override

@@ -119,7 +119,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						"Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
 							@Override
 							public Object getDisplayValue(FundingPledges arg0) {
-								return arg0.getTitle();
+								return arg0.getEffectiveName();
 							}
 						}, false);
 				pledgeSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));

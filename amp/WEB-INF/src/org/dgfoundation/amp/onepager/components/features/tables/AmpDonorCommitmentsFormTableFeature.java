@@ -114,7 +114,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 								"Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
 					@Override
 					public Object getDisplayValue(FundingPledges arg0) {
-						return arg0.getTitle();
+						return arg0.getEffectiveName();
 					}
 				}, false));
 				item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){

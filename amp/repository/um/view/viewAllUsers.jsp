@@ -9,23 +9,23 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <c:set var="translationBan">
-	<digi:trn key="um:confirmBanMsg">Do you really want to ban the user ?</digi:trn>
+	<digi:trn jsFriendly="true" key="um:confirmBanMsg">Do you really want to ban the user ?</digi:trn>
 </c:set>
 
 <c:set var="translationUnban">
-	<digi:trn key="um:confirmUnbanMsg">Do you really want to remove the ban ?</digi:trn>
+	<digi:trn jsFriendly="true" key="um:confirmUnbanMsg">Do you really want to remove the ban ?</digi:trn>
 </c:set>
 
 <script language="JavaScript">
 
 
 function banUser(txt) {
-  var ban=confirm('${translationBan}');
+  var ban=confirm("${translationBan}");
   return ban;
   }
   
  function unbanUser(txt) {
-  var ban=confirm('${translationUnban}');
+  var ban=confirm("${translationUnban}");
   return ban;
   }
   

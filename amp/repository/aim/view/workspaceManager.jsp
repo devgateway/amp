@@ -997,7 +997,7 @@
     
     function validateAddedMember(){
         if(document.getElementsByName('role')[0].selectedIndex==0){
-            alert('<digi:trn>Role not entered</digi:trn>');
+            alert("<digi:trn jsFriendly='true'>Role not entered</digi:trn>");
             return false;
         }
         return true;

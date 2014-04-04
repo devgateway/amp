@@ -251,6 +251,9 @@ function getRelatedTab (name) {
 	else if (name == 'selectedDonorGroups') {
 	return 'selectedDonnorAgency';	
 	}
+	else if(name== 'selectedContractingAgencyGroups') {
+		return 'selectedContractingAgency';
+	}
 	else {
 		return null;
 	}

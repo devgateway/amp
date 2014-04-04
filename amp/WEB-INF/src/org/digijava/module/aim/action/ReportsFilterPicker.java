@@ -281,16 +281,17 @@ public class ReportsFilterPicker extends Action {
 	 * @param filterForm - the form where to add the filtering elem
 	 * @param featureName - the feature's basic name, like "Executing" or "Contracting". <b>Should not</b> contain the word "Agency" (it is added automatically) and should be Capitalized
 	 * @param roleCode - the role code, from Constants.ROLE_CODE_XXXXX_AGENCY
-	 * @param ampContext
+	 * @param session
+	 * @param includeParent  - creates the parent-children id mapping
 	 */
-	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode,HttpSession session)
+	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode,HttpSession session,boolean includeParent)
 	{
 		if (!Character.isUpperCase(featureName.charAt(0)))
 			throw new RuntimeException("invalid feature name: must be a single term beginning with an upper case" + featureName);
 		if (featureName.contains("Agenc"))
 			throw new RuntimeException("invalid feature name: should not contain the word 'Agency' or derivated' " + featureName);
 
-		addAgencyFilter(filterForm, featureName + " Agency", roleCode, featureName + " Agencies", "filter_" + featureName.toLowerCase() + "_agencies_div", "selected" + featureName + "Agency",session);
+		addAgencyFilter(filterForm, featureName + " Agency", roleCode, featureName + " Agencies", "filter_" + featureName.toLowerCase() + "_agencies_div", "selected" + featureName + "Agency",session,includeParent);
 	}
 
 	/**
@@ -301,9 +302,9 @@ public class ReportsFilterPicker extends Action {
 	 * @param rootElementName - the root element name to be displayed on form
 	 * @param filterDivId - the id to contain the filter
 	 * @param selectId - the id of the generated select
-	 * @param ampContext
+	 * @param includeParent - includes the parent ids of the objects
 	 */
-	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId,HttpSession session)
+	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId,HttpSession session,boolean includeParent)
 	{		
 	 	if (FeaturesUtil.isVisibleFeature(featureName,session) ) {
  	 		Collection<AmpOrganisation> relevantAgencies = (ReportsUtil.getAllOrgByRoleOfPortfolio(roleCode));
@@ -313,6 +314,11 @@ public class ReportsFilterPicker extends Action {
  	 		rootRelevantAgencies.setUniqueId("0");
  	 		rootRelevantAgencies.setChildren( relevantAgencies );
  	 		GroupingElement<HierarchyListableImplementation> relevantAgenciesElement = new GroupingElement<HierarchyListableImplementation>(rootElementName, filterDivId, rootRelevantAgencies, selectId);
+ 	 		if (includeParent) {
+ 	 	 	 	for (AmpOrganisation donor:relevantAgencies) {
+ 	 	 	 		rootRelevantAgencies.getParentMapping().put(donor.getAmpOrgId(),donor.getOrgGrpId().getAmpOrgGrpId());
+ 	 	 	 	}
+ 	 	 	 }
  	 		filterForm.getRelatedAgenciesElements().add(relevantAgenciesElement);
 		}	
 	}
@@ -624,19 +630,19 @@ public class ReportsFilterPicker extends Action {
 		StopWatch.next("Filters", true, "Donor stuff");
  	 	// 	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filderDivId, String selectId, ServletContext ampContext)
  	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency",session)){
- 	 		addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY,session);
+ 	 		addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY,session,false);
  	 	}
  	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency",session)){
- 	 		addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY,session);
+ 	 		addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY,session,true);
  	 	}
  	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency",session)){
- 	 		addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY,session);
+ 	 		addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY,session,false);
  	 	}
  	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization",session)){
-			addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg",session);
+			addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg",session,false);
  	 	}
  	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency",session)){
-			addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY,session);
+			addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY,session,false);
  	 	}
 
 		// Contracting Agency Groups, based off Donor Groups

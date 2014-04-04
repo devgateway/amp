@@ -527,6 +527,10 @@ public class PledgeForm extends ActionForm implements Serializable {
 		return FeaturesUtil.isVisibleField("Pledge Funding - Aid Modality");
 	}
 	
+	public boolean getFundingShowYearRange(){
+		return FeaturesUtil.isVisibleField("Pledge Funding - Year Range");
+	}
+	
 	public int deleteUniquelyIdentifiable(Collection<? extends UniquelyIdentifiable> col, long id) {
 		int res = 0;
 		Iterator<? extends UniquelyIdentifiable> it = col.iterator();

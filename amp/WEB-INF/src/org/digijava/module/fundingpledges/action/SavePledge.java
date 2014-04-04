@@ -234,20 +234,19 @@ public class SavePledge extends Action {
 			pledge.setFundingPledgesDetails(pledgeFunds);
 		}		
 		pledgeFunds.clear();
-		for(FundingPledgesDetailsShim shim:selectedFunding)
-		{
-			FundingPledgesDetails fps = new FundingPledgesDetails();
-			fps.setPledgeid(pledge);
-			fps.setAmount(shim.getAmount());
-			fps.setAidmodality(CategoryManagerUtil.loadAcvOrNull(shim.getAidModalityId()));
-			fps.setCurrency(shim.getCurrencyId() == null ? null : CurrencyUtil.getAmpcurrency(shim.getCurrencyId()));
-			fps.setFundingYear(shim.getFundingYear() == null ? null : shim.getFundingYear().toString());
-			fps.setPledgetype(CategoryManagerUtil.loadAcvOrNull(shim.getPledgeTypeId()));
-			fps.setTypeOfAssistance(CategoryManagerUtil.loadAcvOrNull(shim.getTypeOfAssistanceId()));
-			session.save(fps);
-			pledgeFunds.add(fps);
+		List<ValidationError> errs = new ArrayList<>();
+		for(FundingPledgesDetailsShim shim:selectedFunding){
+			if (shim.getFundingYearEnd() != null && shim.getFundingYearEnd() < shim.getFundingYear()){
+				errs.add(new ValidationError("Range Year Start must be before Range Year End"));
+			}
+			else
+			{
+				FundingPledgesDetails fps = shim.buildFundingPledgesDetail(pledge);
+				session.save(fps);
+				pledgeFunds.add(fps);
+			}
 		}
-    	return new ArrayList<>();
+    	return errs;
     }
 
 }

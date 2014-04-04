@@ -73,22 +73,26 @@ $(document).ready(function() // enable javascript-backed ajax forms
 	
 });
 
+function pledge_form_do_validation(bigDivSelector){
+	return amp_bootstrap_form_validate(bigDivSelector);
+}
+
 /**
  * returns true IFF all elements have "validation ok" after onblur being fired on them all
  * @param bigDivSelector
  * @returns {Boolean}
  */
 function pledge_form_validate(bigDivSelector){
-	var validation_ok = amp_bootstrap_form_validate(bigDivSelector);
+	var validation_ok = pledge_form_do_validation(bigDivSelector);
 	if (validation_ok)
 		show_error_message("Validation Result", "Everything ok!", "success");
-	else
-		show_error_message("Validation Result", "Found errors. Please check areas in red");
+/*	else
+		show_error_message("Validation Result", "Found errors. Please check areas in red");*/ // no need for supplemental message - each validation error shows ones anyway
 	return validation_ok;
 }
 
 function pledge_form_submit(bigDivSelector){
-	var validated = pledge_form_validate(bigDivSelector);
+	var validated = pledge_form_do_validation(bigDivSelector);
 	if (!validated)
 		return;
 	var data = getFormData('#pledge_form_big_div');

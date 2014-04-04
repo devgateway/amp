@@ -14,6 +14,11 @@ AmpValidator.prototype.setAllowEmpty = function(newVal){
 	return this;
 };
 
+AmpValidator.prototype.setErrMsg = function(errMsg){
+	this.errMsg = errMsg;
+	return this;
+};
+
 /**
  * input: DOM element
  * @param elem
@@ -79,6 +84,27 @@ function amp_validator_check_percentage(itemsClass){
 	};
 }
 
+function amp_validator_check_year_range(itemsClass){
+	return function(inputItem){	
+		
+		var yearRangeStartItem = $('.validate-year-range-start.' + itemsClass);
+		if (!isYearValidator(yearRangeStartItem.val()))
+			return {success: false, error_message: please_enter_year_message};
+
+		var yearRangeEndItem = $('.validate-year-range-end.' + itemsClass);
+		if (!isYearValidator(yearRangeEndItem.val()))
+			return {success: false, error_message: please_enter_year_message};
+		
+		var yearStart = yearRangeStartItem.val();
+		var yearEnd = yearRangeEndItem.val();
+		if (yearEnd < yearStart)
+			return {success: false, error_message: "Start Year should be before End Year", validate_class: itemsClass};
+			
+		return {success: true};			
+	};
+}
+
+
 function selectHasValue(selectVal){
 	if (typeof(selectVal) == 'undefined')
 		return false;
@@ -120,6 +146,18 @@ function get_validator_for_element(elem)
 
 	if ($(elem).is('.validate-year'))
 		return new AmpValidator(isYearValidator, please_enter_year_message);
+	
+	if ($(elem).is('.validate-year-range-start, .validate-year-range-end')){
+		var classList = $(elem).attr('class').split(/\s+/); // generate a list of the classes the element has
+		for(var i = 0; i < classList.length; i++){
+			var className = classList[i];
+			if (className.indexOf("validate-year-range-group-") == 0){
+				return new AmpValidator(amp_validator_check_year_range(className)).setAllowEmpty(false).setErrMsg(please_enter_year_message); //amp_bootstrap_forms_check_percentage(elem, className);	
+			}
+		};
+				
+		return new AmpValidator(isYearRangeStartValidator(elem)).setAllowEmpty(false);
+	}
 	
 	if ($(elem).is('input.validate-percentage'))
 	{

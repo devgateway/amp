@@ -15,6 +15,7 @@
 		<many-to-one name="currency" column="currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="typeOfAssistance" column="type_of_assistance" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
 		<many-to-one name="aidmodality" column="aid_modality" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
-		<property name="fundingYear" column="year" type="java.lang.String"/>
+		<property name="fundingYear" column="year" type="java.lang.String" />
+		<property name="fundingYearEnd" column="yearEnd" type="java.lang.Long" />
 	</class>
 </hibernate-mapping>

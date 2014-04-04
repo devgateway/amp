@@ -40,10 +40,21 @@
 						<%@include file="renderShimList.jspf" %>
 					</div>										
 				</div>
-				<div class="col-xs-6">
-					<label for="pledgeFundingYear_${indexLoc}"><digi:trn key="aim:year">Year</digi:trn></label>
-					<input name="selectedFunding[${indexLoc}].fundingYear" type="text" id="pledgeFundingYear_${indexLoc}" class="form-control input-sm validate-year" value="${selectedFunding.fundingYear}"/> 					
-				</div>
+				
+				<div class="col-xs-6">				
+					<c:choose>
+						<c:when test="${pledgeForm.fundingShowYearRange}">
+							<label for="pledgeFundingYearStart_${indexLoc}"><digi:trn key="aim:year">Pledge Year Range</digi:trn></label> <br />
+							<input name="selectedFunding[${indexLoc}].fundingYear" type="text" id="pledgeFundingYearStart_${indexLoc}" class="form-control input-sm inline-input validate-year-range-start validate-year-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingYear}"/>
+							&nbsp;&nbsp; &dash; &nbsp;&nbsp;
+							<input name="selectedFunding[${indexLoc}].fundingYearEnd" type="text" id="pledgeFundingYearEnd_${indexLoc}" class="form-control input-sm inline-input validate-year-range-end validate-year-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingYearEnd}"/>
+						</c:when>
+						<c:otherwise>
+							<label for="pledgeFundingYear_${indexLoc}"><digi:trn key="aim:year">Year</digi:trn></label>
+							<input name="selectedFunding[${indexLoc}].fundingYear" type="text" id="pledgeFundingYear_${indexLoc}" class="form-control input-sm validate-year" value="${selectedFunding.fundingYear}"/>
+						</c:otherwise> 
+					</c:choose>
+					</div>					
 				<c:if test="${pledgeForm.fundingShowTypeOfAssistance}">
 					<div class="col-xs-6">
 						<label for="pledgeTypeOfAssistanceDropDown_${indexLoc}"><digi:trn key="aim:typeOfAssistance">Type Of Assistance</digi:trn></label> <br />

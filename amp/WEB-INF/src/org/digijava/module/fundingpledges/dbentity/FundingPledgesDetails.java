@@ -31,7 +31,8 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 	private AmpCategoryValue aidmodality;
 	private Double amount;
 	private AmpCurrency currency;
-	private String fundingYear;
+	private String fundingYear;  // also functions as a "Funding Year Start" when [Pledge Funding]/[Pledge Funding - Year Range] is enabled
+	private Long fundingYearEnd; // only meaningful when [Pledge Funding]/[Pledge Funding - Year Range] is enabled
 	
 	public java.sql.Timestamp getFunding_date() {
 		Timestamp retVal = Timestamp.valueOf(new StringBuffer(getFundingYear()).append("-01-01 00:00:00").toString());
@@ -193,7 +194,15 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 		this.fundingYear = fundingYear;
 	}
 	
+	public Long getFundingYearEnd() {
+		return fundingYearEnd;
+	}
+
+	public void setFundingYearEnd(Long fundingYearEnd) {
+		this.fundingYearEnd = fundingYearEnd;
+	}
+
 	@Override public String toString(){
 		return String.format("%.2f %s", this.getAmount(), this.getCurrency().getCurrencyCode());
-	}
+	}	
 }

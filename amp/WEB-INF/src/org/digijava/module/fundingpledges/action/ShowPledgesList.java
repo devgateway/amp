@@ -37,31 +37,25 @@ public class ShowPledgesList extends Action {
 		Collections.sort(pledges);
 		
 		for (FundingPledges pledge: pledges) {
-			//pledge.setTotalAmount((double) 0);
 			pledge.setYearsList(new TreeSet<String>());
-			Collection<FundingPledgesDetails> fpdl = PledgesEntityHelper.getPledgesDetails(pledge.getId());
-			if (fpdl!=null) {
-				for (Iterator iterator2 = fpdl.iterator(); iterator2.hasNext();) {
-					FundingPledgesDetails fpd = (FundingPledgesDetails) iterator2.next();
-				//	pledge.setTotalAmount(pledge.getTotalAmount() + fpd.getAmount());
-					if (fpd.getFundingYear()!=null) {
-						pledge.getYearsList().add(fpd.getFundingYear());
-					} else {
-						String unspecified = TranslatorWorker.translateText("unspecified");
-						pledge.getYearsList().add(unspecified);
-					}
-				
-				}
+			for(FundingPledgesDetails fpd:pledge.getFundingPledgesDetails()){
+				pledge.getYearsList().add(getYearsDescription(fpd));
 			}
-//			List<AmpFundingDetail> fundsRelated = PledgesEntityHelper.getFundingRelatedToPledges(pledge);
-//			if (fundsRelated == null || fundsRelated.size()==0) {
-//				map.put(pledge, false);
-//			} else {
-//				map.put(pledge, true);
-//			}
 		}
 		plForm.setAllFundingPledges(pledges);
 		return mapping.findForward("forward");
-    		
+	}
+	
+	/**
+	 * constructs a string of the form "undefined", "year" or "yearstart - yearend", describing a pledge detail
+	 * @param fpd
+	 * @return
+	 */
+	public static String getYearsDescription(FundingPledgesDetails fpd){
+		if (fpd.getFundingYear() == null)
+			return TranslatorWorker.translateText("unspecified");
+		if (fpd.getFundingYearEnd() != null && !fpd.getFundingYearEnd().toString().equals(fpd.getFundingYear()))
+			return String.format("%s - %s", fpd.getFundingYear(), fpd.getFundingYearEnd());
+		return fpd.getFundingYear();
 	}
 }

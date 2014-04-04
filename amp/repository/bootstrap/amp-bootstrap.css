@@ -64,6 +64,11 @@ div.form-control{
 	max-width: 92%;
 }
 
+input.inline-input {
+	display: inline-block;
+	width: 40%;
+}
+
 .underlined {
 	margin-left: 7%;
 	margin-right: 3%;

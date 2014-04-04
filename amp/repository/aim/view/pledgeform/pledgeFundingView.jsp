@@ -34,8 +34,16 @@
 				</div>
 				
 				<div class="col-xs-6">
-					<span class="bold"><digi:trn key="aim:year">Year</digi:trn></span>
-					<span>${selectedFunding.fundingYear}</span>
+					<c:choose>
+						<c:when test="${pledgeForm.fundingShowYearRange}">
+							<span class="bold"><digi:trn key="aim:year">Pledge Year Range</digi:trn></span>:
+							<span>${selectedFunding.fundingYear}&nbsp;&nbsp; &dash; &nbsp;&nbsp;${selectedFunding.fundingYearEnd}</span>
+						</c:when>
+						<c:otherwise>
+							<span class="bold"><digi:trn key="aim:year">Year</digi:trn></span>:
+							<span>${selectedFunding.fundingYear}</span>
+						</c:otherwise>
+					</c:choose>
 				</div>
 				
 				<c:set var="acvlId" value="${selectedFunding.typeOfAssistanceId}" />

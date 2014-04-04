@@ -194,29 +194,27 @@ function setHoveredRow(rowId) {
 							<c:set var="pledgeUsed" value="${allFundingPledges.usedInActivityFunding}" />
 							
 							<tr style="height: 25px">
-								<td width="25%" align="center" class="inside"><a href="/viewPledge.do?id=${pledgeId}">
+								<td width="24%" align="center" class="inside"><a href="/viewPledge.do?id=${pledgeId}">
 									<c:out value="${allFundingPledges.effectiveName }" />
 								</a></td>
-								<td width="25%" align="center" class="inside">
+								<td width="24%" align="center" class="inside">
 									<bean:write name="allFundingPledges" property="organizationGroup.orgGrpName" />
 								</td>
-								<td width="25%" align="center" class="inside">
+								<td width="24%" align="center" class="inside">
 									<aim:formatNumber value="${allFundingPledges.getTotalPledgedAmount(usedCurrency)}" />
 								</td>
-								<td width="19%" align="center" class="inside">
+								<td width="19%" align="left" class="inside">
 									<c:forEach var="year" items="${allFundingPledges.yearsList}" varStatus="index">
 										<li> <digi:trn>${year}</digi:trn>&nbsp;</li>
 									</c:forEach>
 								</td>	
-								<td width="6%" align="center" class="inside">
-									<a class="itr" href="/addPledge.do?pledgeId=${pledgeId}" title="<digi:trn key="aim:ClickToEditPledge">Click on this icon to edit pledge</digi:trn>&nbsp;">
-	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0">									
-									</a>
-								</td>
-								<td width="3%" align="center" class="inside">
+								<td width="9%" align="center" class="inside">
+									<a class="itr" href="/addPledge.do?pledgeId=${pledgeId}" title="<digi:trn key="aim:ClickToEditPledge">Click on this icon to edit pledge</digi:trn>">
+	                                   	<img src= "../ampTemplate/images/application_edit.png" border="0"></a>
+									&nbsp;
 									<a class="itr" href="javascript:removePledge('${pledgeId}','${pledgeUsed}');" title="<digi:trn key="aim:ClickToDeletePledge">Click on this icon to delete pledge</digi:trn>&nbsp;">
 	                                   	<img src= "../ampTemplate/images/trash_12.gif" border="0">
-									</a>
+									</a>									
 								</td>
 							</tr>
 						</c:forEach>

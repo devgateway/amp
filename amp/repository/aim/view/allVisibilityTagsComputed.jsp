@@ -824,6 +824,7 @@
 <field:display name="Remove Pledge Sector Button" feature="Pledge Sector and Location"></field:display>
 <field:display name="Pledge Funding - Type Of Assistance" feature="Pledge Funding"></field:display>
 <field:display name="Pledge Funding - Aid Modality" feature="Pledge Funding"></field:display>
+<field:display name="Pledge Funding - Year Range" feature="Pledge Funding"></field:display>
 <field:display name="Add Pledge Funding Button" feature="Pledge Funding"></field:display>
 <field:display name="Remove Pledge Funding Button" feature="Pledge Funding"></field:display>
 <field:display name="Pledge Contact 1 - Name" feature="Pledge Contact 1"></field:display>

@@ -5,6 +5,8 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 
 public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
@@ -15,6 +17,7 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 	private Long currencyId;
 	private Long fundingYear;
 	private long uniqueId = PledgeForm.uniqueIds.getAndIncrement();
+	private Long fundingYearEnd;
 	
 	public FundingPledgesDetailsShim(AmpCurrency currency) {
 		this.amount = 0.0;
@@ -28,6 +31,22 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 		this.amount = fpd.getAmount();
 		this.currencyId = getIdFrom(fpd.getCurrency());
 		this.fundingYear = getLongFrom(fpd.getFundingYear());
+		this.fundingYearEnd = fpd.getFundingYearEnd();
+		if (fundingYearEnd == null || fundingYearEnd < fundingYear) // if not funding-year-end is specified or an invalid value is specified, copy the funding-year-start value
+			this.fundingYearEnd = fundingYear;
+	}
+	
+	public FundingPledgesDetails buildFundingPledgesDetail(FundingPledges pledge){
+		FundingPledgesDetails fps = new FundingPledgesDetails();
+		fps.setPledgeid(pledge);
+		fps.setAmount(this.getAmount());
+		fps.setAidmodality(CategoryManagerUtil.loadAcvOrNull(this.getAidModalityId()));
+		fps.setCurrency(this.getCurrencyId() == null ? null : CurrencyUtil.getAmpcurrency(this.getCurrencyId()));
+		fps.setFundingYear(this.getFundingYear() == null ? null : this.getFundingYear().toString());
+		fps.setFundingYearEnd(this.getFundingYearEnd());
+		fps.setPledgetype(CategoryManagerUtil.loadAcvOrNull(this.getPledgeTypeId()));
+		fps.setTypeOfAssistance(CategoryManagerUtil.loadAcvOrNull(this.getTypeOfAssistanceId()));
+		return fps;
 	}
 	
 	public String getCurrencyCode(){
@@ -116,6 +135,14 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 		this.fundingYear = fundingYear;
 	}
 	
+	public Long getFundingYearEnd() {
+		return fundingYearEnd;
+	}
+
+	public void setFundingYearEnd(Long fundingYearEnd) {
+		this.fundingYearEnd = fundingYearEnd;
+	}
+
 	@java.lang.SuppressWarnings("all")
 	public void setUniqueId(final long uniqueId) {
 		this.uniqueId = uniqueId;

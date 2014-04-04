@@ -1329,7 +1329,7 @@ public class CurrencyUtil {
     		logger.error("AMP_CURRENCY_RATE table consistency check - FAIL:" + errMsg);
     		throw new AimException(errMsg);
     	} else {
-    		logger.info("AMP_CURRENCY_RATE table consistency check - PASS");
+    		logger.debug("AMP_CURRENCY_RATE table consistency check - PASS");
     	}
     }
 }

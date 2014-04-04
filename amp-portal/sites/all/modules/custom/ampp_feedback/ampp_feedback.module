@@ -89,6 +89,7 @@ function ampp_feedback_form_alter(&$form, &$form_state, $form_id) {
         // Load includes/common.inc from the hierarchical select module.
         module_load_include('inc', 'hierarchical_select', 'includes/common');
 
+        $vocabulary_name = NULL;
         if (empty($form_state['build_info']['args'][0]['vocab'])) {
           $vocabulary_name = 'institutions';
         }
@@ -445,35 +446,3 @@ function ampp_feedback_preprocess_page(&$vars) {
     $vars['messages'] = ampp_status_messages(NULL, FALSE);
   }
 }
-
-/**
- * Implementation of hook_block_info
-
-function ampp_feedback_block_info() {
-  $blocks['feedback'] = array(
-    'info' => t('Feedback'),
-  );
-
-  return $blocks;
-}
-*/
-/**
- * Implementation of hook_block_view
-
-function ampp_feedback_block_view($delta = '') {
-  $block = array();
-  switch ($delta) {
-    case 'feedback':
-      drupal_get_form('feedback_form');
-      $block['subject'] = t('Quick contact');
-      if (isset($_SESSION['feedback_form_success_message'])) {
-        $block['content'] = $_SESSION['feedback_form_success_message'];
-        unset($_SESSION['feedback_form_success_message']);
-      }
-      else
-        $block['content'] = drupal_get_form('feedback_form');
-      break;
-  }
-  return $block;
-}
- */

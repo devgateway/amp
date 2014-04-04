@@ -422,10 +422,6 @@ div.views-slideshow-ddblock-cycle-vsd-default div.slide-text-bottom {
   bottom: 0;
 }
 
-.slide .slide-inner {
-  position: relative;
-}
-
 div.views-slideshow-ddblock-cycle-vsd-default div.slide-text {
   background: url("../images/transparent_bg.png") repeat scroll 0 0 transparent !important;
   height: auto;

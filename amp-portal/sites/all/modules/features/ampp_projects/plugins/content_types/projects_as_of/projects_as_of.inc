@@ -50,10 +50,10 @@ function _amp_projects_get_projects_as_of_records() {
   foreach ($result as $record) {
     if ($record->date) {
       if (isValidTimeStamp($record->date)) {
-        $date = format_date($record->date, 'short');
+        $date = format_date($record->date, 'shortest');
       }
       else {
-        $date = format_date(strtotime($record->date), 'short');
+        $date = format_date(strtotime($record->date), 'shortest');
       }
     }
     else {

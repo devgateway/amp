@@ -65,7 +65,7 @@ function _amp_projects_get_data_quality_records() {
   $result = db_query($query);
   $data_quality = array();
   foreach ($result as $record) {
-    $data_quality[$record->name] = format_date(strtotime($record->latest_date), 'short');
+    $data_quality[$record->name] = format_date(strtotime($record->latest_date), 'shortest');
   }
   db_set_active();
 

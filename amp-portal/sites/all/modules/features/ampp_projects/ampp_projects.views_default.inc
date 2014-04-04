@@ -359,7 +359,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_start_date']['hide_empty'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['hide_alter_empty'] = 0;
-  $handler->display->display_options['fields']['actual_start_date']['date_format'] = 'short';
+  $handler->display->display_options['fields']['actual_start_date']['date_format'] = 'shortest';
   /* Field: Activity: End date */
   $handler->display->display_options['fields']['actual_completion_date']['id'] = 'actual_completion_date';
   $handler->display->display_options['fields']['actual_completion_date']['table'] = 'cached_amp_activity';
@@ -381,7 +381,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_completion_date']['hide_empty'] = 0;
   $handler->display->display_options['fields']['actual_completion_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_completion_date']['hide_alter_empty'] = 0;
-  $handler->display->display_options['fields']['actual_completion_date']['date_format'] = 'short';
+  $handler->display->display_options['fields']['actual_completion_date']['date_format'] = 'shortest';
   /* Field: Activity: Commitment amount */
   $handler->display->display_options['fields']['commitment_amount']['id'] = 'commitment_amount';
   $handler->display->display_options['fields']['commitment_amount']['table'] = 'cached_amp_activity';

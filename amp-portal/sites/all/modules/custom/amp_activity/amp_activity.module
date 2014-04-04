@@ -30,7 +30,7 @@ function amp_activity_views_api() {
 /**
  * Returns...
  *
- * @TODO: Add more cache The cached_amp_activity table is updated rarely
+ * @TODO: Add more cache, the cached_amp_activity table is updated rarely.
  */
 function amp_activity_get_amp_activities() {
   $activities_list = & drupal_static(__FUNCTION__, NULL);
@@ -61,6 +61,7 @@ function amp_activity_get_amp_activities() {
   foreach ($snippets as $case) {
     $db_or->where("cached_amp_activity.amp_activity_id IN (${case})");
   }
+  $query->condition($db_or);
 
   $results = $query->execute()->fetchCol();
   db_set_active();

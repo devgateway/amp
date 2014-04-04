@@ -1723,6 +1723,13 @@ var structureID=1;
 						"<div class='infotab'>" + noTabTemplate + "</div>");
 			}
 			
+			var imagetoshow='';
+			if (stimage){
+				imagetoshow = '<a target="_blank" href="'+previewActivityUrl+'">' 
+				+ '<img style="cursor:pointer;" src="/aim/displayStructureImage.do?structureId=' 
+				+ structure.id + '" border="0"></a>';
+			}
+			
 			if (structure.shape == "") {
 				var pt = new esri.geometry.Point(structure.lon,structure.lat, map.spatialReference);
 				var transpt = esri.geometry.geographicToWebMercator(pt);
@@ -1739,9 +1746,7 @@ var structureID=1;
 						"Coordinates" : structure.lat + " , " + structure.lon,
 						"Type_id" : structure.typeId,
 						"Id":structureID++,
-						"Structure Image" : '<a target="_blank" href="'+previewActivityUrl+'">' 
-						+ '<img style="cursor:pointer;" src="/aim/displayStructureImage.do?structureId=' 
-							+ structure.id + '" border="0"></a>'
+						"Structure Image" : imagetoshow
 						
 					});
 				structurespoint.push(pgraphic);

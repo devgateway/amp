@@ -63,5 +63,19 @@ public class AlgoUtils {
 		});
 		return res;
 	}
+	
+	public static Long getIdFrom(Identifiable id) {
+		return id == null ? null : (Long)id.getIdentifier();
+	}
+	
+	public static Long getLongFrom(String z) {
+		if (z == null) return null;
+		try {
+			return Long.parseLong(z);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	 
 }

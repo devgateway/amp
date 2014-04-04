@@ -43,11 +43,11 @@
 				
 				<div class="col-xs-6">				
 					<c:choose>
-						<c:when test="${pledgeForm.fundingShowYearRange}">
-							<label for="pledgeFundingYearStart_${indexLoc}"><digi:trn key="aim:year">Pledge Year Range</digi:trn></label> <br />
-							<input name="selectedFunding[${indexLoc}].fundingYear" type="text" id="pledgeFundingYearStart_${indexLoc}" class="form-control input-sm inline-input validate-year-range-start validate-year-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingYear}"/>
+						<c:when test="${pledgeForm.fundingShowDateRange}">
+							<label for="pledgeFundingDateStart_${indexLoc}"><digi:trn key="aim:year">Pledge Time Frame</digi:trn></label> <br />
+							<input name="selectedFunding[${indexLoc}].fundingDateStart" type="text" id="pledgeFundingDateStart_${indexLoc}" data-date-format="YYYY-MM-DD" class="form-control input-sm inline-input validate-date-range-start date-range-start validate-date-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingDateStart}"/>
 							&nbsp;&nbsp; &dash; &nbsp;&nbsp;
-							<input name="selectedFunding[${indexLoc}].fundingYearEnd" type="text" id="pledgeFundingYearEnd_${indexLoc}" class="form-control input-sm inline-input validate-year-range-end validate-year-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingYearEnd}"/>
+							<input name="selectedFunding[${indexLoc}].fundingDateEnd" type="text" id="pledgeFundingDateEnd_${indexLoc}" data-date-format="YYYY-MM-DD" class="form-control input-sm inline-input validate-date-range-end date-range-end validate-date-range-group-${selectedFunding.uniqueId}" value="${selectedFunding.fundingDateEnd}"/>
 						</c:when>
 						<c:otherwise>
 							<label for="pledgeFundingYear_${indexLoc}"><digi:trn key="aim:year">Year</digi:trn></label>

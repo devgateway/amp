@@ -181,7 +181,7 @@ function setHoveredRow(rowId) {
 							</td>
 							<td width="19%" align="center" class="inside">
 								<b> 
-									<digi:trn>Years</digi:trn>
+									<digi:trn>Time frame</digi:trn>
 								</b>							</td>
 							<td colspan="4" align="center" class="inside">
 								<b> 

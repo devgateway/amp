@@ -16,6 +16,8 @@
 		<many-to-one name="typeOfAssistance" column="type_of_assistance" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
 		<many-to-one name="aidmodality" column="aid_modality" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
 		<property name="fundingYear" column="year" type="java.lang.String" />
-		<property name="fundingYearEnd" column="yearEnd" type="java.lang.Long" />
+		
+		<property name="fundingDateStart" column="dateStart" type="java.util.Date" />
+		<property name="fundingDateEnd" column="dateEnd" type="java.util.Date" />
 	</class>
 </hibernate-mapping>

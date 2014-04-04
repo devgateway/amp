@@ -234,13 +234,15 @@ public class SavePledge extends Action {
 			pledge.setFundingPledgesDetails(pledgeFunds);
 		}		
 		pledgeFunds.clear();
+		boolean dateRangeEnabled = FundingPledgesDetails.isDateRangeEnabled();
 		List<ValidationError> errs = new ArrayList<>();
+		
 		for(FundingPledgesDetailsShim shim:selectedFunding){
-			if (shim.getFundingYearEnd() != null && shim.getFundingYearEnd() < shim.getFundingYear()){
-				errs.add(new ValidationError("Range Year Start must be before Range Year End"));
+			if (dateRangeEnabled && shim.getFundingDateEndAsDate() != null && shim.getFundingDateStartAsDate() != null && 
+					shim.getFundingDateEndAsDate().before(shim.getFundingDateStartAsDate())){
+				errs.add(new ValidationError("Timeframe Start must be before Timeframe End"));
 			}
-			else
-			{
+			else {
 				FundingPledgesDetails fps = shim.buildFundingPledgesDetail(pledge);
 				session.save(fps);
 				pledgeFunds.add(fps);

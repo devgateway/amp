@@ -30,7 +30,7 @@ $(document).ready(function()
 	$('#pledge_contact_1 input[name]').keyup(function(){
 		if ($('#sameContactCheckBox').is(":checked")) // copy values from contact1 to contact2 as they are typed, IFF the corresponding checkbox is checked
 			copy_from_contact_1_to_contact_2(this);
-		});
+		});	
 });
 
 

@@ -104,6 +104,28 @@ function amp_validator_check_year_range(itemsClass){
 	};
 }
 
+function amp_validator_check_date_range(itemsClass){
+	return function(inputItem){	
+	
+		var dateRangeStartItem = $('.validate-date-range-start.' + itemsClass);
+		var dateRangeEndItem = $('.validate-date-range-end.' + itemsClass);
+		
+		var dateStart = moment(dateRangeStartItem.val(), 'YYYY-MM-DD');
+		var dateEnd = moment(dateRangeEndItem.val(), 'YYYY-MM-DD');
+
+		if (!dateStart.isValid())
+			return {success: false, error_message: please_enter_date_message};
+
+		if (!dateEnd.isValid())
+			return {success: false, error_message: please_enter_date_message};
+		
+		
+		if (dateEnd < dateStart)
+			return {success: false, error_message: "Start Date should be before End Date", validate_class: itemsClass};
+			
+		return {success: true};			
+	};
+}
 
 function selectHasValue(selectVal){
 	if (typeof(selectVal) == 'undefined')
@@ -154,8 +176,18 @@ function get_validator_for_element(elem)
 			if (className.indexOf("validate-year-range-group-") == 0){
 				return new AmpValidator(amp_validator_check_year_range(className)).setAllowEmpty(false).setErrMsg(please_enter_year_message); //amp_bootstrap_forms_check_percentage(elem, className);	
 			}
-		};
-				
+		};				
+		return new AmpValidator(isYearRangeStartValidator(elem)).setAllowEmpty(false);
+	}
+
+	if ($(elem).is('.validate-date-range-start, .validate-date-range-end')){
+		var classList = $(elem).attr('class').split(/\s+/); // generate a list of the classes the element has
+		for(var i = 0; i < classList.length; i++){
+			var className = classList[i];
+			if (className.indexOf("validate-date-range-group-") == 0){
+				return new AmpValidator(amp_validator_check_date_range(className)).setAllowEmpty(false).setErrMsg(please_enter_date_message); //amp_bootstrap_forms_check_percentage(elem, className);	
+			}
+		};				
 		return new AmpValidator(isYearRangeStartValidator(elem)).setAllowEmpty(false);
 	}
 	

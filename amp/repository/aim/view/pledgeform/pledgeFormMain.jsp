@@ -28,6 +28,7 @@
     <link href="/repository/bootstrap/jquery.pnotify.default.icons.css" media="all" rel="stylesheet" type="text/css" />
 <!-- <link href="/repository/bootstrap/lightbox/ekko-lightbox.min.css" media="all" rel="stylesheet" type="text/css" />  -->        
     <link href="/repository/bootstrap/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+    <link href="/repository/bootstrap/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
     <link href="/repository/bootstrap/amp-bootstrap.css" rel="stylesheet" type="text/css" /> <!-- this should always be included last -->
     
     <!-- THESE 4 FILES SHOULD ALWAYS BE THE FIRST INCLUDED JS, IN THIS ORDER -->
@@ -49,6 +50,7 @@
 		var please_enter_something_message = '<digi:trn jsFriendly="true">Please enter something</digi:trn>';
 		var please_enter_number_message = '<digi:trn jsFriendly="true">Please enter number</digi:trn>';
 		var please_enter_year_message = '<digi:trn jsFriendly="true">Please enter an year</digi:trn>';
+		var please_enter_date_message = '<digi:trn jsFriendly="true">Please enter a date</digi:trn>';
 	</script>    
   </head>
   <body class="main_side" id="bootstrap-iframe">
@@ -123,6 +125,8 @@
     <script src="/repository/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/repository/bootstrap/jquery.pnotify.min.js" type="text/javascript"></script>
     <script src="/repository/bootstrap/bootstrap-dialog.min.js" type="text/javascript"></script>
+    <script src="/repository/bootstrap/datetimepicker/moment-with-langs.min.js" type="text/javascript"></script>   
+    <script src="/repository/bootstrap/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
     <script src="/repository/bootstrap/bootstrap-utils.js" type="text/javascript"></script>
  <!--   <script src="/repository/bootstrap/lightbox/ekko-lightbox.min.js" type="text/javascript"></script>  --> 
 	<div id="iframe-hack-end-marker"></div>

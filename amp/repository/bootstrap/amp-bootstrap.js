@@ -99,7 +99,22 @@ function init_custom_looks(divId)
 		'data-style': 'btn-primary btn-xs',
 		//size: 5
 	});
-	$(divId + ' select.live-search').attr('data-live-search', 'true'); // Struts is stupid and does not allow to inject custom attributes 
+	$(divId + ' select.live-search').attr('data-live-search', 'true'); // Struts is stupid and does not allow to inject custom attributes
+	
+    $(divId + ' .date-range-start').each(function(){
+    	$(this).datetimepicker({pickTime: false});
+    	$(this).on("dp.change", function(e) {
+    		$(divId).parent().find('.date-range-end').data("DateTimePicker").setMinDate(e.date);
+    	});
+    });
+    
+    $(divId + ' .date-range-end').each(function(){
+    	$(this).datetimepicker({pickTime: false});
+    	$(this).on("dp.change", function(e) {
+    		$(divId).parent().find('.date-range-start').data("DateTimePicker").setMaxDate(e.date);
+    	});
+    });
+
 }
 
 function init_amp_magic(divIdInput){

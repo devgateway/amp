@@ -43,8 +43,12 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 	private Date fundingDateEnd; // only meaningful when [Pledge Funding]/[Pledge Funding - Year Range] is enabled
 	
 	public java.sql.Timestamp getFunding_date() {
-		Timestamp retVal = Timestamp.valueOf(new StringBuffer(getFundingYear()).append("-01-01 00:00:00").toString());
-		return retVal;
+		java.sql.Timestamp dateStart = fundingDateStart == null ? null : new Timestamp(fundingDateStart.getTime());
+		java.sql.Timestamp yearStamp = fundingYear == null ? null : Timestamp.valueOf(new StringBuffer(getFundingYear()).append("-01-01 00:00:00").toString());
+		if (isDateRangeEnabled())
+			return dateStart == null ? yearStamp : dateStart; // prioritize dateStart
+		
+		return yearStamp == null ? dateStart : yearStamp; // prioritize yearStamp
 	}
 	
 	public Object getIdentifier(){

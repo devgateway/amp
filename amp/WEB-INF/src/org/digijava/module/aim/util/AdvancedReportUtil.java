@@ -410,7 +410,7 @@ public final class AdvancedReportUtil {
 		}
 		AmpCategoryValue ampCategoryValue = CategoryManagerUtil
 				.getAmpCategoryValueFromListByKey(
-						CategoryConstants.PROJECT_IMPLEMENTATION_MODE_NAME,
+						CategoryConstants.PROJECT_IMPLEMENTATION_MODE_KEY,
 						activity.getCategories());
 
 		if (FeaturesUtil.isVisibleModule(
@@ -442,7 +442,7 @@ public final class AdvancedReportUtil {
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
-						"/Activity Form/Aid Effectivenes/Aid Effectivenes/Project is on budget",
+						"/Activity Form/Aid Effectivenes/Project is on budget",
 						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project is on budget") + ":\n";

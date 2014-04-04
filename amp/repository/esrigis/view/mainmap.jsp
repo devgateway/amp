@@ -49,7 +49,7 @@
       var showexpanded=false;
       var stshowimage = "";
       var highlightColorsSelectedOption = <%= FeaturesUtil.getEsriMapsRegionsHighlightSelectedColourScheme()%>
-      
+      var stimage= false;
      
     </script>
     
@@ -64,6 +64,12 @@
 		showexpanded = true;
 		</script>
 	</field:display>
+	<field:display feature="Structures" name="Show Image">
+		<script type="text/javascript">
+			stimage = true; 
+		</script>
+	</field:display>
+	
 	
     <!-- Map Scripts -->
     <script type="text/javascript"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>

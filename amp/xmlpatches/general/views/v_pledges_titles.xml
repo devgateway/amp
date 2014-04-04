@@ -21,9 +21,10 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_pledges_titles;
 				CREATE OR REPLACE VIEW v_pledges_titles AS 
-        			(( SELECT p.id AS pledge_id, val.category_value AS title, val.id AS title_id
+       			(( SELECT p.id AS pledge_id, val.category_value AS title, val.id AS title_id
            				FROM amp_funding_pledges p
       					JOIN amp_category_value val ON p.title = val.id
+      					WHERE NOT EXISTS (SELECT * FROM amp_funding_pledges z WHERE z.id = p.id AND z.titlefreetext IS NOT NULL AND z.titlefreetext &lt;&gt; '')
      				)
 					UNION
 						(SELECT p.id AS pledge_id, p.titlefreetext, null 

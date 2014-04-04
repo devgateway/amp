@@ -1403,15 +1403,9 @@ public class AmpMessageActions extends DispatchAction {
 
 	 private String getRelatedActivity(Long actId){
 		 String retValue;
-		 String actName=null;
-		 try {
-			//it can't be null
-			actName=ActivityUtil.getActivityName(actId);
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
-		retValue=actName+"("+actId+")";
-		return retValue;
+		 String actName = ActivityUtil.getActivityName(actId);
+		 retValue = actName + "(" + actId + ")";
+		 return retValue;
 	 }
 
 	 /**

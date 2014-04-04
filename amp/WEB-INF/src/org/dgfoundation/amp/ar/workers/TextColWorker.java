@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.sql.rowset.serial.SerialClob;
+import javax.sql.rowset.serial.SerialException;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportGenerator;
@@ -40,36 +41,25 @@ public class TextColWorker extends ColumnWorker {
 	 */
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
 		Long ownerId = new Long(rs.getLong(1));
-		// added Clob support
-		String value = "";
+
+		String value;
 
 		Object objValue = rs.getObject(2);
-		if (objValue!=null){
-			if (objValue instanceof SerialClob) {
-				SerialClob clobValue = (SerialClob) objValue;
-				String line;
-				String str = "";
-				BufferedReader b = new BufferedReader(clobValue.getCharacterStream());
-				try {
-					while ((line = b.readLine()) != null) {
-						str += line;
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				value = str;
-	
-			} else {
-				value = this.retrieveValueFromRSObject( objValue );
-
+		if (objValue == null)
+			value = "";
+		else if (objValue instanceof SerialClob){
+			value = serialClobToString((SerialClob) objValue);
 		}
+		else {
+			value = objValue.toString();
 		}
 		
 		boolean thirdColumnIsLanguage = (rsmd.getColumnCount() == 3) && rsmd.getColumnLabel(1).equals("amp_activity_id") && 
 				(rsmd.getColumnLabel(3).equals("locale") || rsmd.getColumnLabel(3).equals("language"));
+		boolean thirdRowIsId = rsmd.getColumnCount() > 2 && (!thirdColumnIsLanguage) && (!this.viewName.equals("v_pledges_funding_range_date"));
 		
 		Long id = null;
-		if (rsmd.getColumnCount() > 2 && (!thirdColumnIsLanguage)) {
+		if (thirdRowIsId) {
 			id = new Long(rs.getLong(3));
 		}
 		
@@ -84,12 +74,26 @@ public class TextColWorker extends ColumnWorker {
 	 * @see org.dgfoundation.amp.ar.workers.ColumnWorker#getCellFromCell(org.dgfoundation.amp.ar.cell.Cell)
 	 */
 	protected Cell getCellFromCell(Cell src) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	protected String retrieveValueFromRSObject( Object rsObj ) {
 		return rsObj.toString();
+	}
+	
+	protected String serialClobToString(SerialClob clobValue){
+		try{
+			String line;
+			StringBuilder str = new StringBuilder();
+			BufferedReader b = new BufferedReader(clobValue.getCharacterStream());
+			while ((line = b.readLine()) != null) {
+				str.append(line);
+			}
+			return str.toString();
+		}
+		catch(SerialException | IOException e){
+			throw new RuntimeException(e);
+		}
 	}
 
 	public Cell newCellInstance() {

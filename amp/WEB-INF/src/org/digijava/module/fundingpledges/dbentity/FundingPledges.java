@@ -76,7 +76,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 	 * @return
 	 */
 	public String getEffectiveName(){
-		if (PledgesEntityHelper.useFreeText())
+		if (PledgesEntityHelper.useFreeText() && (this.titleFreeText != null) && (!this.titleFreeText.isEmpty()))
 			return this.titleFreeText;
 		else 
 			return this.getTitle() == null ? "(null)" : this.getTitle().getValue();

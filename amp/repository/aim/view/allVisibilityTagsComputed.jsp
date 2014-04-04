@@ -805,7 +805,9 @@
 <field:display feature="Pledges Columns" name="Point of Contact"></field:display>
 <field:display feature="Pledges Columns" name="Alternate Contact"></field:display>
 <field:display feature="Pledges Columns" name="Pledges sectors"></field:display>
-
+<field:display feature="Pledges Columns" name="Pledges Detail Start Date"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Detail End Date"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Detail Date Range"></field:display>
 
 <feature:display name="Pledges Names" module="Pledges"></feature:display>
 <field:display name="Use Category Manager" feature="Pledges Names"></field:display>

@@ -4605,7 +4605,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
          * @return activity name
          * @author dare
          */
-        public static String getActivityName(Long actId) throws DgException{
+        public static String getActivityName(Long actId){
         	Session session=null;
     		String queryString =null;
     		Query query=null;    		

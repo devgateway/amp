@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -29,7 +28,6 @@ import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.CategCell;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -59,7 +57,6 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.hibernate.Session;
 
 /**
  * 
@@ -78,7 +75,6 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected int extractableCount; // looks like extractable.size() [need to check!]
 	private List<String> columnsToBeRemoved;
 	private boolean debugMode = false;
-	private boolean pledgereport = false;
 	private boolean cleanupMetadata = true;
 	private boolean mtefExtractOnlyDonorData = false;
 	private Set<String> fundingOrgHiers;
@@ -152,7 +148,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		return out;
 	}
-	
+		
 	/**
 	 * retrieves columns from the database. Only the columns that are specified
 	 * in the reportMetadata are going to be retrieved. Each column is retrieved
@@ -741,13 +737,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			tac.absorbColumn(funding);
 			newcol.getItems().add(tac);
 		}
-		
-		// make order to measurements
-//		List<AmpReportMeasures> listMeasurement = new ArrayList<AmpReportMeasures>( reportMetadata.getMeasures());
-//		Collections.sort(listMeasurement);
-
-		
-		
+				
 		//List<Column> columnlist = newcol.getItems();
 		List<Column> tmpColumnList = new ArrayList<Column>(newcol.getItems().size());
 		// add columns as measurements order

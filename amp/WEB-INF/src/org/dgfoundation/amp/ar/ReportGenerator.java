@@ -21,6 +21,7 @@ import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
 /**
  * 
@@ -38,6 +39,7 @@ public abstract class ReportGenerator {
 	protected GroupReportData report;
 	
 	protected AmpARFilter filter;
+	protected boolean pledgereport = false;
 	
 	protected AmpReports reportMetadata;
 	protected FilterCacher filterCacher;
@@ -54,6 +56,14 @@ public abstract class ReportGenerator {
 	 * prepares the extracted data for display
 	 */
 	protected abstract void prepareData();
+	
+	/**
+	 * shit workaround for stupid Pledges architecture
+	 * @return
+	 */
+	protected String getBaseEntityNameById(long actId){
+		return this.pledgereport ? PledgesEntityHelper.getPledgesById(actId).getEffectiveName() : ActivityUtil.getActivityName(actId);
+	}
 	
 	/**
 	 * retrieve the categories that will serve to create subsets (subColumnS) of
@@ -85,7 +95,7 @@ public abstract class ReportGenerator {
 		prepareData();
 //		String popa = this.report.prettyPrint();
 		//logger.error("the report is " + report.prettyPrint());
-		//logger.error("report is, in code, " + describeReportInCode(report, 0, true));
+		logger.error("report is, in code, " + describeReportInCode(report, 0, true));
 		long endTS = System.currentTimeMillis();
 		columnCachers.clear(); // cleanup memory used for holding columns
 		logger.info("Report "+getReport().getName()+" generated in "+(endTS-startTS)/1000.0+" seconds. Data retrieval completed in "+(retrTS-startTS)/1000.0+" seconds");				
@@ -187,7 +197,7 @@ public abstract class ReportGenerator {
 	 * @param depth
 	 * @return
 	 */
-	public static String describeElements(List<ReportData> items, int depth)
+	public String describeElements(List<ReportData> items, int depth)
 	{
 		StringBuffer res = new StringBuffer();
 		for(int i = 0; i < items.size(); i++)
@@ -249,7 +259,7 @@ public abstract class ReportGenerator {
 	 * @param depth
 	 * @return
 	 */
-	public static String describeReportInCode(GroupReportData report, int depth)
+	public String describeReportInCode(GroupReportData report, int depth)
 	{
 		return describeReportInCode(report, depth, false);
 	}
@@ -261,7 +271,7 @@ public abstract class ReportGenerator {
 	 * @param describeLayout
 	 * @return
 	 */
-	public static String describeReportInCode(GroupReportData report, int depth, boolean describeLayout)
+	public String describeReportInCode(GroupReportData report, int depth, boolean describeLayout)
 	{
 		String elements = describeElements(report.getItems(), depth + 1);
 		//System.out.println("elements: " + describeElements(report.getItems(), depth + 1));
@@ -271,7 +281,7 @@ public abstract class ReportGenerator {
 		return String.format("%sGroupReportModel.%s(\"%s\",\n%s)\n%s%s", prefixString(depth) ,functionName, report.getName(), elements, withTrailCells, describeLayoutString);
 	}
 	
-	public static String describeColumns(List<Column> columns, int depth)
+	public String describeColumns(List<Column> columns, int depth)
 	{
 		StringBuffer res = new StringBuffer();
 		for(int i = 0; i < columns.size(); i++)
@@ -290,7 +300,7 @@ public abstract class ReportGenerator {
 		return res.toString();
 	}
 	
-	public static String describeColumn(CellColumn col, int depth)
+	public String describeColumn(CellColumn col, int depth)
 	{
 		try
 		{
@@ -302,14 +312,14 @@ public abstract class ReportGenerator {
 				Cell value = col.getByOwner(actId);
 				if (nr > 0)
 					values.append(", ");
-				String actName = ActivityUtil.getActivityName(actId);
+				String actName = getBaseEntityNameById(actId);
 				String cellValue = value.toString();
 				values.append(String.format("\"%s\", \"%s\"", actName, cellValue));
 				nr ++;
 			}
 			if (ownerIds.isEmpty())
 				values.append("MUST_BE_EMPTY");
-			StringBuffer res = new StringBuffer(String.format("%sSimpleColumnModel.withContents(\"%s\", %s)", prefixString(depth), col.getName(), values.toString()));
+			StringBuffer res = new StringBuffer(String.format("%sSimpleColumnModel.withContents(\"%s\", %s).setIsPledge(%b)", prefixString(depth), col.getName(), values.toString(), this.pledgereport));
 			return res.toString();
 		}
 		catch(Exception e)
@@ -318,13 +328,13 @@ public abstract class ReportGenerator {
 		}
 	}
 	
-	public static String describeGroupColumn(GroupColumn col, int depth)
+	public String describeGroupColumn(GroupColumn col, int depth)
 	{
 		String columnsList = describeColumns(col.getItems(), depth + 1); 
 		return String.format("%sGroupColumnModel.withSubColumns(\"%s\",\n%s)", prefixString(depth), col.getName(), columnsList);
 	}
 	
-	public static String describeCRDInCode(ColumnReportData crd, int depth)
+	public String describeCRDInCode(ColumnReportData crd, int depth)
 	{
 		String elements = describeColumns(crd.getItems(), depth + 1);
 		String withTrailCells = buildTrailCellsDescription(crd.getTrailCells(), depth);

@@ -6,6 +6,7 @@ import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
+import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 
 /**
  * a model (sketch) of a CellColumn
@@ -15,6 +16,7 @@ import org.dgfoundation.amp.testutils.ReportTestingUtils;
 public class SimpleColumnModel extends ColumnModel {
 	
 	Map<String, String> correctContents;
+	protected boolean isPledge = false;
 	
 	private SimpleColumnModel(String name, Map<String, String> contents)
 	{
@@ -24,6 +26,10 @@ public class SimpleColumnModel extends ColumnModel {
 			this.correctContents = new HashMap<String, String>(contents);
 	}
 	
+	public SimpleColumnModel setIsPledge(boolean isPledge){
+		this.isPledge = isPledge;
+		return this;
+	}
 	/**
 	 * generates a sketch of a CellColumn defined by its name and (optionally) contents. If contents is not specified, the a check on it is simply not run
 	 * @param name [mandatory non-null] name 
@@ -97,7 +103,7 @@ public class SimpleColumnModel extends ColumnModel {
 		
 		for(Long activityId: activityIds)
 		{
-			String activityName = ReportTestingUtils.getActivityName(activityId);//System.out.println("da da");
+			String activityName = this.isPledge ? PledgesEntityHelper.getPledgesById(activityId).getEffectiveName() : ReportTestingUtils.getActivityName(activityId);//System.out.println("da da");
 			String activityCorOutput = correctContents.get(activityName);
 			if (activityCorOutput == null)
 				return String.format("SimpleColumnModel %s, activity %s should not exist in the output", this.getName(), activityName);

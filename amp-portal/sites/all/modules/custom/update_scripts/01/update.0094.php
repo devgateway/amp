@@ -7,4 +7,4 @@ $modules = array(
     'devel_node_access',
 );
 // Uninstall modules
-_us_install_modules($modules);
+_us_uninstall_modules($modules);

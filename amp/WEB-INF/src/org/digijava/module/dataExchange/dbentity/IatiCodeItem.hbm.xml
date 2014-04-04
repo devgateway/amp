@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.dataExchange.dbentity.IatiCodeItem" table="de_iati_code_item" lazy="false">
+        <cache usage="read-write" />
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="native">
+                <param name="sequence">DE_iati_code_item_seq</param>
+            </generator>
+        </id>
+        <property name="name" column="name" type="java.lang.String" />
+        <property name="code" column="code" type="java.lang.String" />
+        <property name="updateDate" column="update_date" type="java.util.Date" />
+
+
+        <many-to-one name="type" column="code_type" lazy="false"
+                     class="org.digijava.module.dataExchange.dbentity.IatiCodeType" cascade="none" />
+
+    </class>
+</hibernate-mapping>

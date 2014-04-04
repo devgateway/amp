@@ -15,7 +15,7 @@
 		<page name="de_showSources" page="showSources" title="List Of Sources" />
 		<page name="de_showLogItemDetails" page="showLogItemDetails" title="" />
 		<page name="uploadMultiactionNew" title="" />
-
+		<page name="codeImporter" title="IATI Code Importer" />
 	</secondary-pages>
 	<module>
 	</module>

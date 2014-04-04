@@ -10,6 +10,7 @@
 		<form-bean name="createSourceForm" type="org.digijava.module.dataExchange.form.CreateSourceForm"/>
 		<form-bean name="manageSourceForm" type="org.digijava.module.dataExchange.form.ManageSourceForm"/>
 		<form-bean name="importFormNew" type="org.digijava.module.dataExchange.form.ImportFormNew"/>
+		<form-bean name="codeImporterForm" type="org.digijava.module.dataExchange.form.CodeImporterForm"/>
 
 	</form-beans>
 	<action-mappings>
@@ -69,6 +70,11 @@
 			<forward name="sessions" path="/dataExchange/importActionNew.do?action=listUploadSessions" redirect="true"/>
 			<forward name="sources" path="/dataExchange/manageSource.do"/>
 
+		</action>
+
+		<action  name="codeImporterForm" path="/dataExchange/codeImporter" scope="session" type="org.digijava.module.dataExchange.action.CodeImporter" validate="false" parameter="action">
+			<forward name="forward" path="/showLayout.do?layout=codeImporter" />
+			<forward name="afterUpload" path="/dataExchange/codeImporter.do?action=view" redirect="true"/>
 		</action>
 
 		

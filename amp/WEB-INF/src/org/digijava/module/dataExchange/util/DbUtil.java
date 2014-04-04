@@ -5,6 +5,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.dataExchange.dbentity.AmpDEUploadSession;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.dbentity.IatiCodeType;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -130,6 +131,43 @@ public class DbUtil {
         return retVal.toString();
     }
 
+    private static String generateNames (Set<String> names) {
+        StringBuilder retVal = new StringBuilder();
+        Iterator<String> it = names.iterator();
+        while (it.hasNext()) {
+            retVal.append("'").append(it.next()).append("'");
+            if (it.hasNext()) retVal.append(",");
+        }
+        return retVal.toString();
+    }
+
+    public static List<IatiCodeType> getCodetypeListByNames(Set<String> names) {
+        List<IatiCodeType> retVal = null;
+        try {
+            StringBuilder queryStr = new StringBuilder("from ").
+                    append(IatiCodeType.class.getName()).
+                    append(" ct where ct.name in (").append(generateNames(names)).
+                    append(")");
+            Session sess = PersistenceManager.getRequestDBSession();
+            retVal = sess.createQuery(queryStr.toString()).list();
+        } catch (DgException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return retVal;
+    }
+
+    public static List<IatiCodeType> getAllCodetypes() {
+        List<IatiCodeType> retVal = null;
+        try {
+            StringBuilder queryStr = new StringBuilder("from ").
+                    append(IatiCodeType.class.getName());
+            Session sess = PersistenceManager.getRequestDBSession();
+            retVal = sess.createQuery(queryStr.toString()).list();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return retVal;
+    }
 
 
 }

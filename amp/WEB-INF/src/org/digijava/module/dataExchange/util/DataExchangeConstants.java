@@ -1,5 +1,8 @@
 package org.digijava.module.dataExchange.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DataExchangeConstants {
 
 //	public static String ADJUSTMENT_TYPE_ACTUAL = "Actual";
@@ -65,5 +68,54 @@ public class DataExchangeConstants {
 	public static final String IATI_DISBURSEMENT_CHANNEL = "Disbursement Channel";
 	public static final String TEST = "test";
 	public static final String IATI_ACTIVITY = "Activity";
-	
+
+    public static final Map <String, String> AmpToIATI = new HashMap<String, String>()
+    {
+        {
+            put(IATI_ORGANIZATION_TYPE, "OrganisationType");
+            put(IATI_ACTIVITY_STATUS, "ActivityStatus");
+            put(IATI_VOCABULARY_CODE, "Vocabulary");
+            put(IATI_AID_TYPE, "AidTypeFlag");
+            put(IATI_DISBURSEMENT_CHANNEL, "DisbursementChannel");
+        }
+    };
+
+
+    /* All IATI Code types
+
+    "ActivityDateType"
+    "ActivityScope"
+    "ActivityStatus"
+    "AidTypeFlag"
+    "BudgetIdentifier"
+    "BudgetIdentifierVocabulary"
+    "BudgetType"
+    "ConditionType"
+    "ContactType"
+    "DescriptionType"
+    "DisbursementChannel"
+    "DocumentCategory-category"
+    "DocumentCategory"
+    "FileFormat"
+    "GazetteerAgency"
+    "GeographicalPrecision"
+    "IndicatorMeasure"
+    "LoanRepaymentPeriod"
+    "LoanRepaymentType"
+    "LocationType"
+    "OrganisationRole"
+    "OrganisationType"
+    "PolicyMarker"
+    "PublisherType"
+    "RegionVocabulary"
+    "RelatedActivityType"
+    "ResultType"
+    "TiedStatus"
+    "TransactionType"
+    "VerificationStatus"
+    "Vocabulary"
+    */
+
+
+
 }

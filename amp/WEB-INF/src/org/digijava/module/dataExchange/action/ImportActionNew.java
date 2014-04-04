@@ -16,6 +16,7 @@ import org.digijava.module.dataExchange.engine.SourceBuilder;
 import org.digijava.module.dataExchange.form.ImportFormNew;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
+import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.util.DbUtil;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
@@ -543,9 +544,37 @@ public class ImportActionNew extends DispatchAction {
             }
         }
 
+        List<IatiCodeType> allCodetypes = DbUtil.getAllCodetypes();
+        Map <String, IatiCodeType> iatiNameCodetypeMap = new HashMap<String, IatiCodeType>();
+        for (IatiCodeType type : allCodetypes) {
+            iatiNameCodetypeMap.put(type.getAmpName(), type);
+        }
+
         Map <String, Set<DEMappingFields>> groupFldsByPath = new HashMap <String, Set<DEMappingFields>>();
         TreeSet <String>ampClassSet = new TreeSet<String>();
         for (DEMappingFields fld : uniqueFields) {
+            if (iatiNameCodetypeMap.containsKey(fld.getIatiPath())) {
+                //String IATIAmpPath = iatiNameCodetypeMap.get(fld.getIatiPath());
+                IatiCodeType codeType = iatiNameCodetypeMap.get(fld.getIatiPath());
+
+                String iatiValue =fld.getIatiValues();
+                String processedIatiValue = null;
+
+                if (codeType != null && iatiValue.indexOf("|")>-1) {
+                    processedIatiValue = iatiValue.substring(iatiValue.lastIndexOf("|") + 1);
+                } else {
+                    processedIatiValue = iatiValue;
+                }
+
+                String codeName = null;
+                if (codeType != null){
+                    codeName = codeType.getNameForCode(processedIatiValue);
+                }
+                if (codeName != null) {
+                    fld.setIatiValues(codeName);
+                }
+            }
+
             if (groupFldsByPath.get(fld.getAmpClass()) == null) {
                 ampClassSet.add(fld.getAmpClass());
                 groupFldsByPath.put(fld.getAmpClass(), new HashSet<DEMappingFields>());
@@ -553,8 +582,16 @@ public class ImportActionNew extends DispatchAction {
             groupFldsByPath.get(fld.getAmpClass()).add(fld);
         }
 
+        //Set IATI code names if exist
+
+
         myform.setGroupFldsByPath(groupFldsByPath);
         myform.setAmpClasses(ampClassSet);
+
+
+
+
+
 
         myform.setPage(IATI_IMPORT_PAGE_MAPPING);
         return mapping.findForward("forward");
@@ -854,7 +891,6 @@ public class ImportActionNew extends DispatchAction {
         Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, null);
         myform.setIatiImportedProjectMap(items);
 
-
         Set<String> countryISOs = sess.getSelCountries();
 
         myform.setSelCountries(countryISOs.toArray(new String[0]));
@@ -863,6 +899,7 @@ public class ImportActionNew extends DispatchAction {
         myform.setCountryActMap(countryActMap);
         myform.setPage(IATI_IMPORT_PAGE_MAPPING);
         myform.setUpSess(sess);
+
         return mapping.findForward("map");
     }
 

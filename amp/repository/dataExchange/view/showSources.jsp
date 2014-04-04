@@ -110,6 +110,7 @@ function page (page){
 	    <td align="right">&nbsp;</td>
 	    <td align=right><a href="/dataExchange/mapFields.do" class="t_sm">
 	    	<b><digi:trn>Mapping Tool</digi:trn></b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    	<a href="/dataExchange/codeImporter.do?action=view" class="t_sm"><b>[+] <digi:trn>Import IATI Codes</digi:trn></b></a>
 	    	<a href="/dataExchange/importActionNew.do" class="t_sm"><b>[+] <digi:trn>IATI XML File</digi:trn></b></a>
 	    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true&displaySource=false" class="t_sm"><b>[+] <digi:trn>Create New Configuration</digi:trn></b></a>
 	    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true&displaySource=true" class="t_sm"><b>[+] <digi:trn>Create New Source</digi:trn></b></a>

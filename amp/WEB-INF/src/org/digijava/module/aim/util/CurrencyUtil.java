@@ -15,8 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.management.RuntimeErrorException;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -1299,4 +1297,39 @@ public class CurrencyUtil {
 //			return getAmpcurrency(tm.getAppSettings().getCurrencyId());
 //		return getDefaultCurrency();
 //	}
+	
+	/**
+	 * checks AMP_CURRENCY_RATE table for invalid entries
+	 * @throws AimException
+	 */
+	public static void checkDatabaseSanity() throws AimException {
+    	String errMsg = null;
+    	Session session	= null;
+    	try {
+    		session = PersistenceManager.getRequestDBSession(); 
+    		List<?> res = session.createSQLQuery("SELECT * FROM amp_currency_rate "
+    				+ "WHERE from_currency_code IS NULL OR to_currency_code IS NULL OR exchange_rate IS NULL "
+    				+ "OR exchange_rate <=0 OR from_currency_code=to_currency_code LIMIT 1").list();
+			if (!res.isEmpty()) {
+				errMsg = "AMP_CURRECNY_RATE contains invalid entries. The following constraints must be met: " + System.lineSeparator()
+						+ "1) NOT NULL: to_currecny_code, from_currency_code, exchange_rate, exchange_rate_date; " + System.lineSeparator()
+						+ "2) currency_rate > 0; " + System.lineSeparator()
+						+ "3) from_currency_code <> to_currency_code; " + System.lineSeparator()
+						+ "4) unique tuples (from, to, date).";
+			}
+    	}catch(Exception ex) {
+    		errMsg = ex.getMessage();
+    	}
+    	finally {
+    		if( session!=null && session.getTransaction()!=null && session.getTransaction().isActive() ) {
+    			session.getTransaction().commit();
+    		}
+    	}
+    	if ( errMsg!=null ) {
+    		logger.error("AMP_CURRENCY_RATE table consistency check - FAIL:" + errMsg);
+    		throw new AimException(errMsg);
+    	} else {
+    		logger.info("AMP_CURRENCY_RATE table consistency check - PASS");
+    	}
+    }
 }

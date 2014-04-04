@@ -35,6 +35,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.QuartzJobForm;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -310,7 +311,7 @@ public class AMPStartupListener extends HttpServlet implements
 			else 
 				logger.info("\t... JackRabbit startup failed!");
 			
-			checkReportColumnsSanity();
+			checkDatabaseSanity();
 			
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
@@ -318,11 +319,12 @@ public class AMPStartupListener extends HttpServlet implements
 		}
 	}
 	
-	protected void checkReportColumnsSanity()
+	protected void checkDatabaseSanity()
 	{
 		try
 		{
 			ReportsUtil.checkDatabaseSanity();
+			CurrencyUtil.checkDatabaseSanity();
 		}
 		catch(Exception e)
 		{

@@ -1,4 +1,4 @@
-#<?php
+<?php
 
 /**
  * Fix errors in feeds module hook_cron().

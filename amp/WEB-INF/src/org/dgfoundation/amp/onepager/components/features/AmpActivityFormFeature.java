@@ -66,8 +66,10 @@ import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPa
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -618,6 +620,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     public void component(Component component, IVisit<Object> objectIVisit) {
                         IModel<?> model = component.getDefaultModel();
                         AbstractTextComponent atc = (AbstractTextComponent) component;
+                        logger.error(component.getParent().getId());	
                         boolean required = false;
                         List<IValidator> validators = atc.getValidators();
                         for (IValidator validator : validators) {
@@ -631,6 +634,23 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                 break;
                             }
                         }
+                        /* Validator for date will make the date field mandatory only when there is an amount entered
+                         *  in proposed project code field AMP-17234
+                         *  Review to make is more readable 
+                         */
+                        if(component.getParent().getParent().getId().equalsIgnoreCase("proposedDate") && 
+                        		(component.getParent().getParent().getParent().get("proposedAmount").getDefaultModel().getObject()!=null
+                        		|| ((AmpTextFieldPanel)component.getParent().getParent().getParent().get("proposedAmount")).getTextContainer().isRequired())){
+                        	((AmpDatePickerFieldPanel)component.getParent().getParent()).getDate().setRequired(true);
+                        	if(((AmpDatePickerFieldPanel)component.getParent().getParent()).getDate().getDefaultModel().getObject()==null){
+                        		component.error(new ValidationError().addKey("RequiredProposedAmount"));
+                        		target.add(component.getParent());
+                        	}
+                    	}else if(component.getParent().getParent().getId().equalsIgnoreCase("proposedDate") && 
+                        		component.getParent().getParent().getParent().get("proposedAmount").getDefaultModel().getObject()==null){
+                    		((AmpDatePickerFieldPanel)component.getParent().getParent()).getDate().setRequired(false);
+                    	}
+                        
                         if (model instanceof TranslationDecoratorModel && required) {
                             TranslationDecoratorModel tdm = (TranslationDecoratorModel) model;
 

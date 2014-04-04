@@ -1876,6 +1876,7 @@
    <action path="/aim/addressBook" name="addressbookForm" scope="session" parameter="actionType" type="org.digijava.module.aim.action.AddressBookActions">
      	<forward name="addOrEditContact" path="/showLayout.do?layout=addContact" />
      	<forward name="showAllContacts" path="/showLayout.do?layout=allContacts"/>
+     	<forward name="showAllContactsAfterSave" path="/aim/addressBook.do?actionType=viewAddressBook" redirect="true" />
      	<forward name="printPreview" path="/showLayout.do?layout=contactsPrintPreview"/>
    </action>
 

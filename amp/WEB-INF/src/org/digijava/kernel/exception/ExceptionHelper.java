@@ -257,6 +257,14 @@ public class ExceptionHelper {
     	return false;
     }
     
+    public static String getFullRequestURI(HttpServletRequest request){
+    	String uri = request.getScheme() + "://" +
+                request.getServerName() + 
+                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) +
+                request.getRequestURI() +
+               (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+    	return uri;
+    }
     /**
      * called when an exception is on its way of being processed
      * @param info
@@ -270,13 +278,13 @@ public class ExceptionHelper {
         boolean isDoubleException = isRenderingAnException(request);
         if (isDoubleException)
         {
-    		printReducedStacktrace(response, "an exception was caught; moreover, an exception was generated while trying to generate the error page. Stopping\n");
+    		printReducedStacktrace(response, "an exception was caught; moreover, an exception was generated while trying to generate the error page. Stopping. The webpage was: " + getFullRequestURI(request) + "\n");
         	return null;
         }
         
         if (checkForInfiniteRecursion(request, response))
         {
-        	printReducedStacktrace(response, "looks like AMP went into an infinite jsp:include loop");
+        	printReducedStacktrace(response, "looks like AMP went into an infinite jsp:include loop. The webpage was: " + getFullRequestURI(request));
         	return null;
         }
         

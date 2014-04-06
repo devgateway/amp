@@ -37,26 +37,9 @@ public class ViewActivityHistory extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		final Comparator<Object> compareVersions = new Comparator<Object>() {
-			public int compare(Object o1, Object o2) {
-				try {
-					AmpActivityVersion a1 = (AmpActivityVersion) o1;
-					AmpActivityVersion a2 = (AmpActivityVersion) o2;
-					Long i1 = Long.valueOf(a1.getCreatedDate().getTime());
-					if (a1.getModifiedDate() != null) {
-						i1 = Long.valueOf(a1.getModifiedDate().getTime());
-					}
-					Long i2 = Long.valueOf(a2.getCreatedDate().getTime());
-					if (a2.getModifiedDate() != null) {
-						i2 = Long.valueOf(a2.getModifiedDate().getTime());
-					}
-					return (i1.compareTo(i2)) * -1;
-				} catch (NullPointerException e) {
-					// Data error.
-					logger.error(e);
-					e.printStackTrace();
-					return 0;
-				}
+		final Comparator<AmpActivityVersion> compareVersions = new Comparator<AmpActivityVersion>() {
+			public int compare(AmpActivityVersion o1, AmpActivityVersion o2) {
+				return o2.getAmpActivityId().compareTo(o1.getAmpActivityId()); // ids are generated in ascending order of modification - return LAST 5 versions
 			}
 		};
 
@@ -82,16 +65,12 @@ public class ViewActivityHistory extends Action {
 			i++;
 		}
 		// hForm.getActivities().addAll(currentActivity.getAmpActivityGroup().getActivities());
-		boolean ispartofamanagetmentworkspace = false;
-		boolean iscurrentworkspacemanager = false;
 		
 		TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
 		AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
 		
-		if (ampCurrentMember.getAmpMemberRole().getTeamHead())
-			iscurrentworkspacemanager = true;
-		if (ampCurrentMember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT))
-			ispartofamanagetmentworkspace = true;
+		boolean ispartofamanagetmentworkspace = ampCurrentMember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT);
+		boolean iscurrentworkspacemanager = ampCurrentMember.getAmpMemberRole().getTeamHead();
 		
 		//If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
 		hForm.setEnableadvanceoptions(!ispartofamanagetmentworkspace & iscurrentworkspacemanager);

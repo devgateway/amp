@@ -28,13 +28,12 @@ public class ProjectAdapter implements MappingEntityAdapter {
         SQLQuery q = sess.createSQLQuery(queryStr.toString());
         List<Long> ids = q.list();
 
-        StringBuilder objQueryStr = new StringBuilder("from ");
-        objQueryStr.append(AmpActivity.class.getName());
-        objQueryStr.append(" act where act.ampActivityId in(");
+        StringBuilder objQueryStr = new StringBuilder("select * from amp_activity_version");
+        objQueryStr.append(" act where act.amp_activity_id in(");
         objQueryStr.append(MappingEntityAdapterUtil.generateIdWhereClause(ids));
         objQueryStr.append(")");
-        Query objQuery = sess.createQuery(objQueryStr.toString());
-        objQuery.setCacheable(true);
+        Query objQuery = sess.createSQLQuery(objQueryStr.toString()).addEntity(AmpActivity.class);
+        objQuery.setCacheable(true); 
         return objQuery.list();
     }
 

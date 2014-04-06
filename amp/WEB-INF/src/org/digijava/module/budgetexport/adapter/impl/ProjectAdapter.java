@@ -3,7 +3,6 @@ package org.digijava.module.budgetexport.adapter.impl;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapter;
 import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
@@ -28,13 +27,12 @@ public class ProjectAdapter implements MappingEntityAdapter {
         SQLQuery q = sess.createSQLQuery(queryStr.toString());
         List<Long> ids = q.list();
 
-        StringBuilder objQueryStr = new StringBuilder("from ");
-        objQueryStr.append(AmpActivity.class.getName());
-        objQueryStr.append(" act where act.ampActivityId in(");
+        StringBuilder objQueryStr = new StringBuilder("select * from amp_activity_version");
+        objQueryStr.append(" act where act.amp_activity_id in(");
         objQueryStr.append(MappingEntityAdapterUtil.generateIdWhereClause(ids));
         objQueryStr.append(")");
-        Query objQuery = sess.createQuery(objQueryStr.toString());
-        objQuery.setCacheable(true);
+        Query objQuery = sess.createSQLQuery(objQueryStr.toString()).addEntity(AmpActivity.class);
+        objQuery.setCacheable(true); 
         return objQuery.list();
     }
 

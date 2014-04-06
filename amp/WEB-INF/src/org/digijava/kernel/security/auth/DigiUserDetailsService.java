@@ -87,7 +87,9 @@ public class DigiUserDetailsService
                 return getUserDetails( (User) results.get(0));
             }
         }
-
+        catch(UsernameNotFoundException ex){
+        	throw ex; // rethrow - this will not print it
+        }
         catch (Exception ex) {
 
             throw new DataRetrievalFailureException("Unable to load user: " +

@@ -30,42 +30,21 @@ import org.hibernate.Session;
 
 public class ViewActivityHistory extends Action {
 
-	private ServletContext ampContext = null;
-
 	private static Logger logger = Logger.getLogger(EditActivity.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		final Comparator<AmpActivityVersion> compareVersions = new Comparator<AmpActivityVersion>() {
-			public int compare(AmpActivityVersion o1, AmpActivityVersion o2) {
-				return o2.getAmpActivityId().compareTo(o1.getAmpActivityId()); // ids are generated in ascending order of modification - return LAST 5 versions
-			}
-		};
-
 		ViewActivityHistoryForm hForm = (ViewActivityHistoryForm) form;
 		// Load current activity, get group and retrieve past versions.
 		Session session = PersistenceManager.getRequestDBSession();
 		AmpActivityVersion currentActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class, hForm.getActivityId());
-		hForm.setActivities(new ArrayList<AmpActivityVersion>());
 
 		// AMP-7706: Filter last 5 versions.
-		// List<AmpActivity> auxList = new
-		// ArrayList<AmpActivity>(currentActivity.getAmpActivityGroup().getActivities());
-		List<AmpActivityVersion> auxList = null;
-		Query qry = session.createQuery("select ag.activities from org.digijava.module.aim.dbentity.AmpActivityGroup ag where ag.ampActivityGroupId = ?");
+		Query qry = session.createQuery("SELECT act FROM " + AmpActivityVersion.class.getName() + " act WHERE act.ampActivityGroup.ampActivityGroupId = ? ORDER BY act.ampActivityId DESC").setMaxResults(ActivityVersionUtil.numberOfVersions());
 		qry.setParameter(0, currentActivity.getAmpActivityGroup().getAmpActivityGroupId());
-		auxList = qry.list();
-		Collections.sort(auxList, compareVersions);
-		Iterator<AmpActivityVersion> iter = auxList.iterator();
-		int i = 0;
-		while (iter.hasNext() && i < ActivityVersionUtil.numberOfVersions()) {
-			AmpActivityVersion auxActivity = iter.next();
-			hForm.getActivities().add(auxActivity);
-			i++;
-		}
-		// hForm.getActivities().addAll(currentActivity.getAmpActivityGroup().getActivities());
-		
+		hForm.setActivities(new ArrayList<AmpActivityVersion>(qry.list()));
+			
 		TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
 		AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
 		

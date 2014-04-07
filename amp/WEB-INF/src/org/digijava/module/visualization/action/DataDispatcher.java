@@ -2517,21 +2517,21 @@ public class DataDispatcher extends DispatchAction {
 					if(i != endDate.getYear())
 						yearLabels.append(",");
 				}
-				if(amtTotal.compareTo(BigDecimal.ZERO) == 1){
+				BigDecimal donutGrandTotal = hm.get(acGrandTotal).divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				if(donutGrandTotal.compareTo(BigDecimal.ZERO) == 1){
 					Iterator<AmpCategoryValue> it = categoryValues.iterator();
-					BigDecimal total = hm.get(acGrandTotal);
-					BigDecimal unallocated = hm.get(acUnallocated);
+					BigDecimal unallocated = hm.get(acUnallocated).divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 
 					while (it.hasNext()){
 						AmpCategoryValue value = it.next();
-						BigDecimal currentCVvalue = hm.get(value);
-						BigDecimal percentage = getPercentage(currentCVvalue, total);
+						BigDecimal currentCVvalue = hm.get(value).divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+						BigDecimal percentage = getPercentage(currentCVvalue, donutGrandTotal);
 		                if(percentage.compareTo(new BigDecimal(1)) == 1){
 	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue()) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ currentCVvalue.divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue()) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
 					
-					BigDecimal percentage = getPercentage(unallocated, total);
+					BigDecimal percentage = getPercentage(unallocated, donutGrandTotal);
 					if(percentage.compareTo(new BigDecimal(1)) == 1)
 						xmlString.append("<dataField name=\""  +TranslatorWorker.translateText("Unallocated") + "\" id=\"-1\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ unallocated.divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText("Unallocated") + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 				} else {

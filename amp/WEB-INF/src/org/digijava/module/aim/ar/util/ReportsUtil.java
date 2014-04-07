@@ -128,33 +128,25 @@ public class ReportsUtil {
 	/**
 	 * throws an exception containing the error message if the database does not respect some kind of minimum sanity checks. Returns normally if everything is fine
 	 */
-	public static void checkDatabaseSanity() throws ReportException
+	public static void checkDatabaseSanity(Session session) throws ReportException
 	{
-		Session session	= null;
 		String errMsg = "";
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			List<?> res = session.createSQLQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE " + 
-					"(SELECT count(*) from amp_report_column arc2 WHERE arc2.amp_report_id = arc.amp_report_id AND arc2.columnid = arc.columnid) > 1").list();
-			if (!res.isEmpty())
-				errMsg += "The following reports have a column repeated at least twice each: amp_report_id IN (" + Util.toCSString(res) + ")" + System.lineSeparator();
-			
-			res = session.createSQLQuery("select DISTINCT(columnname) from amp_columns col WHERE " + 
-					"(SELECT count(*) FROM amp_columns col2 WHERE col.columnname = col2.columnname) > 1").list();
-			if (!res.isEmpty())
-				errMsg += "The following column(s) are defined at least twice in amp_columns: (" + Util.toCSString(res) + ")" + System.lineSeparator();
+		
+		logger.debug("Database sanity check - in progress...");
+		List<?> res = session.createSQLQuery("select DISTINCT(amp_report_id) from amp_report_column arc WHERE " + 
+				"(SELECT count(*) from amp_report_column arc2 WHERE arc2.amp_report_id = arc.amp_report_id AND arc2.columnid = arc.columnid) > 1").list();
+		if (!res.isEmpty())
+			errMsg += "The following reports have a column repeated at least twice each: amp_report_id IN (" + Util.toCSString(res) + ")" + System.lineSeparator();
+		
+		res = session.createSQLQuery("select DISTINCT(columnname) from amp_columns col WHERE " + 
+				"(SELECT count(*) FROM amp_columns col2 WHERE col.columnname = col2.columnname) > 1").list();
+		if (!res.isEmpty())
+			errMsg += "The following column(s) are defined at least twice in amp_columns: (" + Util.toCSString(res) + ")" + System.lineSeparator();
 
-			res = session.createSQLQuery("SELECT result.measurename FROM "
-					+ "(SELECT count(measurename), measurename FROM amp_measures GROUP BY measurename HAVING count(measurename) >1 ) AS result").list(); 
-			if (!res.isEmpty())
-				errMsg +="Duplicate measurenames are found in AMP_MEASURES tables: (" + Util.toCSString(res) + ")" + System.lineSeparator();
-		}catch(Exception ex) {
-			logger.error(ex.getMessage());
-			errMsg += ex.getMessage();
-		}finally {
-			if ( session!=null && session.getTransaction() != null && session.getTransaction().isActive() )
-				session.getTransaction().commit();
-		}
+		res = session.createQuery("select m.measureName from AmpMeasures as m group by m.measureName having count(m) >1").list(); 
+		if (!res.isEmpty())
+			errMsg +="Duplicate measurenames are found in AMP_MEASURES tables: (" + Util.toCSString(res) + ")" + System.lineSeparator();
+
 		if( !errMsg.isEmpty() ) {
 			logger.error("Database sanity check - FAIL: " + errMsg);
 			throw new ReportException(errMsg);

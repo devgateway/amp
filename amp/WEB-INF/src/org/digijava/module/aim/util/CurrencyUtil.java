@@ -1302,30 +1302,21 @@ public class CurrencyUtil {
 	 * checks AMP_CURRENCY_RATE table for invalid entries
 	 * @throws AimException
 	 */
-	public static void checkDatabaseSanity() throws AimException {
+	public static void checkDatabaseSanity(Session session) throws AimException {
     	String errMsg = null;
-    	Session session	= null;
-    	try {
-    		session = PersistenceManager.getRequestDBSession(); 
-    		List<?> res = session.createSQLQuery("SELECT * FROM amp_currency_rate "
-    				+ "WHERE from_currency_code IS NULL OR to_currency_code IS NULL OR exchange_rate IS NULL "
-    				+ "OR exchange_rate <=0 OR from_currency_code=to_currency_code LIMIT 1").list();
-			if (!res.isEmpty()) {
-				errMsg = "AMP_CURRECNY_RATE contains invalid entries. The following constraints must be met: " + System.lineSeparator()
-						+ "1) NOT NULL: to_currecny_code, from_currency_code, exchange_rate, exchange_rate_date; " + System.lineSeparator()
-						+ "2) currency_rate > 0; " + System.lineSeparator()
-						+ "3) from_currency_code <> to_currency_code; " + System.lineSeparator()
-						+ "4) unique tuples (from, to, date).";
-			}
-    	}catch(Exception ex) {
-    		errMsg = ex.getMessage();
-    	}
-    	finally {
-    		if( session!=null && session.getTransaction()!=null && session.getTransaction().isActive() ) {
-    			session.getTransaction().commit();
-    		}
-    	}
-    	if ( errMsg!=null ) {
+    	logger.debug("Database sanity check - in progress...");
+		Query query = session.createQuery("select r from AmpCurrencyRate r "
+				+ "where r.fromCurrencyCode is null or r.toCurrencyCode is null or r.exchangeRate is null "
+				+ "or r.exchangeRate <=0 or r.fromCurrencyCode=r.toCurrencyCode").setMaxResults(1);
+		List<?> res = query.list();
+		if (!res.isEmpty()) {
+			errMsg = "AMP_CURRENCY_RATE contains invalid entries. The following constraints must be met: " + System.lineSeparator()
+					+ "1) NOT NULL: to_currency_code, from_currency_code, exchange_rate, exchange_rate_date; " + System.lineSeparator()
+					+ "2) currency_rate > 0; " + System.lineSeparator()
+					+ "3) from_currency_code <> to_currency_code; " + System.lineSeparator()
+					+ "4) unique tuples (from, to, date).";
+		}
+		if ( errMsg!=null ) {
     		logger.error("AMP_CURRENCY_RATE table consistency check - FAIL:" + errMsg);
     		throw new AimException(errMsg);
     	} else {

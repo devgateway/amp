@@ -44,6 +44,7 @@ import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.message.jobs.CloseExpiredActivitiesJob;
 import org.digijava.module.mondrian.job.PublicViewColumnsUtil;
 import org.hibernate.Session;
 import org.quartz.Scheduler;
@@ -321,14 +322,16 @@ public class AMPStartupListener extends HttpServlet implements
 	
 	protected void checkDatabaseSanity()
 	{
-		try
-		{
-			ReportsUtil.checkDatabaseSanity();
-			CurrencyUtil.checkDatabaseSanity();
-		}
-		catch(Exception e)
-		{
+		Session session = null; 
+		try{
+			session = PersistenceManager.getRequestDBSession();
+			
+			ReportsUtil.checkDatabaseSanity(session);
+			CurrencyUtil.checkDatabaseSanity(session);
+		}catch(Exception e){
 			throw new Error("database does not conform to minimum sanity requirements, shutting down AMP", e);
+		}finally {
+			CloseExpiredActivitiesJob.cleanupSession(session);
 		}
 	}
 	

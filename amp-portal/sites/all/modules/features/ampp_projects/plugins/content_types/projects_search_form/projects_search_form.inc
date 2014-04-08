@@ -216,12 +216,18 @@ function projects_search_form($form, &$form_state, $conf) {
 
     $period_start_default = '';
     if (isset($_GET['period_start'])) {
-      $period_start_default = date_format($_GET['period_start'], $format);
+      $date_format_info = date_parse_from_format($format, $_GET['period_start']);
+      if ($date_format_info && empty($date_format_info['error_count'])) {
+        $period_start_default = $_GET['period_start'];
+      }
     }
 
     $period_end_default = '';
     if (isset($_GET['period_end'])) {
-      $period_end_default = date_format($_GET['period_end'], $format);
+      $date_format_info = date_parse_from_format($format, $_GET['period_end']);
+      if ($date_format_info && empty($date_format_info['error_count'])) {
+        $period_end_default = $_GET['period_end'];
+      }
     }
 
     $form['period'] = array(
@@ -271,7 +277,7 @@ function projects_search_form($form, &$form_state, $conf) {
       '#attributes' => array(
         'class' => array('clearfix'),
       ),
-      '#weight' => 2,
+      '#weight' => 2.1,
     );
   }
 

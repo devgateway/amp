@@ -92,7 +92,7 @@ YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 				'Region','Status','Primary Sector','Primary Sector Sub-Sector','National Planning Objectives','District','Zone'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
-				 'Component Type','Region','Status','Primary Sector','National Planning Objectives','District','Zone'
+				 '	','Region','Status','Primary Sector','National Planning Objectives','District','Zone','Component Name','Project Title'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Costing Donor','Parent National Planning Objectives', 'National Planning Objectives', 'Primary Program', 

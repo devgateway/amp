@@ -9,8 +9,6 @@ $amp_db_exists = FALSE;
 function ampp_projects_init() {
   //Let's check if AMP database is configured and if not throw a worning message and also do not try to connect to it later
   amp_db_exists();
-
-  ampp_projects_check_currency_code();
 }
 
 /**
@@ -24,27 +22,6 @@ function amp_db_exists() {
   global $databases;
   if (isset($databases['amp_projects']) && is_array($databases['amp_projects'])) {
     $amp_db_exists = TRUE;
-  }
-}
-
-/**
- * Get currency code.
- */
-function ampp_projects_check_currency_code() {
-  global $amp_db_exists;
-  if (!$amp_db_exists) return;
-
-  db_set_active('amp_projects');
-  $currency_code = db_select('amp_global_settings', 'settings')
-    ->condition('settings.settingsname', 'Base Currency', "=")
-    ->fields('settings',array('settingsvalue'))
-    ->execute()
-    ->fetchField();
-  db_set_active();
-
-  $current_code = variable_get('currency_code', NULL);
-  if ($current_code != $currency_code) {
-    variable_set('currency_code', $currency_code);
   }
 }
 

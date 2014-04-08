@@ -10,7 +10,7 @@ class views_handler_field_amount extends views_handler_field {
   function label() {
     $suffix = '';
 
-    $currency_code = variable_get('currency_code', '');
+    $currency_code = amp_activity_get_base_currency();
     if (!empty($currency_code)) {
       $suffix = " ($currency_code)";
     }

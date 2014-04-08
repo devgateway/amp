@@ -33,8 +33,8 @@ function ampp_projects_search_result_totals_content_type_render($subtype, $conf,
   $html = '<div class="search-results-total-amounts view-projects-search-result">';
   $html .= '<table class="views-table commitment-disbursement"><thead><tr>';
   $html .= '<th></th>';
-  $html .= '<th>' . t('Commitment amount') . ' (' . variable_get('currency_code') . ")" . '</th>';
-  $html .= '<th>' . t('Disbursement amount') . ' (' . variable_get('currency_code') . ")" . '</th>';
+  $html .= '<th>' . t('Commitment amount') . ' (' . amp_activity_get_base_currency() . ")" . '</th>';
+  $html .= '<th>' . t('Disbursement amount') . ' (' . amp_activity_get_base_currency() . ")" . '</th>';
   $html .= '</tr></thead>';
 
   $html .= '<td>' . t("Total") . ':' . '</td>';

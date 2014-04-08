@@ -75,6 +75,32 @@ function amp_activity_get_amp_activities() {
 }
 
 /**
+ * Get AMP base curency code from cache.
+ */
+function amp_activity_get_base_currency() {
+  $cache_id = __FUNCTION__;
+  if ($cache = cache_get($cache_id)) {
+    return $cache->data;
+  }
+
+  db_set_active(AMP_DATABASE);
+
+  $currency_code = db_select('amp_global_settings', 'settings')
+    ->condition('settings.settingsname', 'Base Currency', "=")
+    ->fields('settings',array('settingsvalue'))
+    ->execute()
+    ->fetchField();
+
+  db_set_active();
+
+  // Store the curency code in cache for one week.
+  $timestamp = REQUEST_TIME + (60 * 60 * 24 * 7);
+  cache_set($cache_id, $currency_code, 'cache', $timestamp);
+
+  return $currency_code;
+}
+
+/**
  * Returns an array of 'Activity Budget' options.
  */
 function _amp_activity_get_onoff_budget_ids() {

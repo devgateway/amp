@@ -141,7 +141,7 @@ function amp_activity_projects_search_form_preview_amount() {
 
   $t_args = array(
     '@amount' => format_number($amount_commitment, 0),
-    '@currency' => variable_get('currency_code', ''),
+    '@currency' => amp_activity_get_base_currency(),
   );
 
   return '<span>' . t('Commitment amount: @amount @currency', $t_args) . '</span>';

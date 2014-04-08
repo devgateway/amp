@@ -25,13 +25,15 @@ class amp_activity_handler_filter_activity_filter_public extends views_handler_f
    */
   function query() {
     // This is a hackish attempt to optimize the query.
-    $use_statically_cached_ids = TRUE;
+    $use_statically_cached_ids = variable_get('ampp_use_statically_cached_ids', TRUE);
     if ($use_statically_cached_ids) {
       // Get an array of 'public' activities.
       $items = amp_activity_get_amp_activities();
 
-      $placeholder = ':db_filter_public_placeholder';
-      $this->query->add_where_expression(0, "$this->table.$this->real_field IN ($placeholder)", array($placeholder => $items));
+      if (!empty($items)) {
+        $placeholder = ':db_filter_public_placeholder';
+        $this->query->add_where_expression(0, "$this->table.$this->real_field IN ($placeholder)", array($placeholder => $items));
+      }
 
       return;
     }

@@ -1052,144 +1052,151 @@ public class DynLocationManagerUtil {
 		}
 	};
 
-	public static ErrorCode importExcelFile(InputStream inputStream,
-			Option option) throws AimException {
-		POIFSFileSystem fsFileSystem = null;
-		try {
-			fsFileSystem = new POIFSFileSystem(inputStream);
-			HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
-			HSSFSheet hssfSheet = workBook.getSheetAt(0);
-			Row hssfRow = hssfSheet.getRow(0);
-			int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
-			List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
-					CategoryManagerUtil
-							.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
-			int i = 1;
-			int hierarchyNumberOfCells=implLocs.size();
-			// last five cells are not hierarchy cells and first cell is db id
-			if (hierarchyNumberOfCells+6 != physicalNumberOfCells) {
-				return ErrorCode.NUMBER_NOT_MATCH;
-			}
-			for (AmpCategoryValue location : implLocs) {
-				if (!hssfRow.getCell(i).getStringCellValue()
-						.equals(location.getValue())) {
-					return ErrorCode.NAME_NOT_MATCH;
-				}
-				i++;
-			}
-			i--;
-			
-			for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows(); j++) {
-				AmpCategoryValueLocations parentLoc=null;
-				hssfRow = hssfSheet.getRow(j);
-				Cell cell =hssfRow.getCell(0);
-				Long databaseId=null;
-				if(cell!=null){
-					switch(cell.getCellType()){
-						case Cell.CELL_TYPE_STRING:databaseId=(cell.getStringCellValue()==null||(cell.getStringCellValue()!=null&&cell.getStringCellValue().trim().equals("")))?null:Long.parseLong(cell.getStringCellValue());break;
-						case Cell.CELL_TYPE_NUMERIC:databaseId=(long) cell.getNumericCellValue();break;
-					}
-				}
-				List<String> locationNames = new ArrayList<String>();
-				int k = 1;
-				
-				for (; k <=hierarchyNumberOfCells; k++) {
-					cell = hssfRow.getCell(k);
-					if (cell == null) {
-						k=hierarchyNumberOfCells+1;
-						break;
-					}
-					String location = getValue(cell);
-					if(location==null||location.trim().length()==0){
-						k=hierarchyNumberOfCells+1;
-						break;
-					}
-					locationNames.add(location);
-				}
-				cell=hssfRow.getCell(k++);
-				String lalitude=getValue(cell);
-				cell=hssfRow.getCell(k++);
-				String longitude=getValue(cell);
-				cell=hssfRow.getCell(k++);
-				String geoID=getValue(cell);
-				if (geoID!=null && geoID.contains(".0")){
-					geoID = geoID.replace(".0", "");
-				}
-				cell=hssfRow.getCell(k++);
-				String iso=getValue(cell);
-				cell=hssfRow.getCell(k++);
-				String iso3=getValue(cell);
-					for (k = 0; k < locationNames.size(); k++) {
-						String name = locationNames.get(k);
-						AmpCategoryValue implLoc = implLocs.get(k);
-						if (k == locationNames.size() - 1) {
-							AmpCategoryValueLocations location=new AmpCategoryValueLocations(); ;
-							AmpCategoryValueLocations currentLoc = getLocationByName(
-									name, implLoc, parentLoc);
-							if (currentLoc != null) {
-								if (option.equals(Option.NEW)) {
-									break;
-								}
-								else{
-									location=currentLoc;
-								}
-							}
-							else{
-								if (option.equals(Option.OVERWRITE)) {
-									if(databaseId!=null&&databaseId!=0){
-										location=getLocationByIdRequestSession(databaseId);
-									}
-									else{
-										break;
-									}
-								}
-							}
-							if(location!=null){
-								if(location.getParentCategoryValue()!=null&&!location.getParentCategoryValue().equals(implLoc)){
-									break;
-								}
-								location.setName(name);
-								location.setGsLat(lalitude);
-								location.setGsLong(longitude);
-								location.setGeoCode(geoID);
-								location.setIso(iso);
-								location.setIso3(iso3);
-								location.setParentCategoryValue(implLoc);
-								location.setParentLocation(parentLoc);
-								boolean edit=(location.getId()==null)?false:true;
-								LocationUtil.saveLocation(location, edit);
-							}
-							
-						} else {
-							parentLoc=getLocationByName(name, implLoc,
-									parentLoc);
-							if(parentLoc==null){
-								return ErrorCode.INCORRECT_CONTENT;
-							}	
-						}
-					}
-			}
+    public static ErrorCode importExcelFile(InputStream inputStream, Option option) throws AimException {
+        POIFSFileSystem fsFileSystem = null;
+        try {
+            fsFileSystem = new POIFSFileSystem(inputStream);
+            HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
 
-		} 
-		catch (NullPointerException e) {
-			logger.error("file is not ok");
-			throw new AimException("Cannot import regions", e);
-		}
-		catch (IllegalStateException e) {
-			logger.error("file is not ok", e);
-			return ErrorCode.INCORRECT_CONTENT;
-		}
-		catch(IOException e){
-			logger.error("file is not ok", e);
-			return ErrorCode.INCORRECT_CONTENT;
-		}
-		catch (Exception e) {
-			logger.error(e);
-			throw new AimException("Cannot import regions", e);
-		}
-		return ErrorCode.CORRECT_CONTENT;
+            HSSFSheet hssfSheet = workBook.getSheetAt(0);
+            Row hssfRow = hssfSheet.getRow(0);
 
-	}
+            int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
+            List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
+                    CategoryManagerUtil
+                            .getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
+            int i = 1;
+            int hierarchyNumberOfCells=implLocs.size();
+            // last five cells are not hierarchy cells and first cell is db id
+            if (hierarchyNumberOfCells+6 != physicalNumberOfCells) {
+                return ErrorCode.NUMBER_NOT_MATCH;
+            }
+
+            for (AmpCategoryValue location : implLocs) {
+                if (!hssfRow.getCell(i).getStringCellValue().equals(location.getValue())) {
+                    return ErrorCode.NAME_NOT_MATCH;
+                }
+                i++;
+            }
+
+            for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows() - 1; j++) {
+                AmpCategoryValueLocations parentLoc=null;
+                hssfRow = hssfSheet.getRow(j);
+
+                if (hssfRow != null) {
+
+                    Cell cell = hssfRow.getCell(0);
+                    Long databaseId = null;
+
+                    if (cell != null) {
+                        switch (cell.getCellType()) {
+                            case Cell.CELL_TYPE_STRING:
+                                databaseId = (cell.getStringCellValue() == null || (cell.getStringCellValue() != null && cell.getStringCellValue().trim().equals(""))) ? null : Long.parseLong(cell.getStringCellValue());
+                                break;
+                            case Cell.CELL_TYPE_NUMERIC:
+                                databaseId = (long) cell.getNumericCellValue();
+                                break;
+                        }
+                    }
+
+                    List<String> locationNames = new ArrayList<String>();
+                    int k = 1;
+
+                    for (; k <= hierarchyNumberOfCells; k++) {
+                        cell = hssfRow.getCell(k);
+                        if (cell == null) {
+                            k = hierarchyNumberOfCells + 1;
+                            break;
+                        }
+                        String location = getValue(cell);
+                        if (location == null || location.trim().length() == 0) {
+                            k = hierarchyNumberOfCells + 1;
+                            break;
+                        }
+                        locationNames.add(location);
+                    }
+
+                    cell = hssfRow.getCell(k++);
+                    String lalitude = getValue(cell);
+                    cell = hssfRow.getCell(k++);
+                    String longitude = getValue(cell);
+                    cell = hssfRow.getCell(k++);
+                    String geoID = getValue(cell);
+                    if (geoID != null && geoID.contains(".0")) {
+                        geoID = geoID.replace(".0", "");
+                    }
+                    cell = hssfRow.getCell(k++);
+                    String iso = getValue(cell);
+                    cell = hssfRow.getCell(k++);
+                    String iso3 = getValue(cell);
+                    for (k = 0; k < locationNames.size(); k++) {
+                        String name = locationNames.get(k);
+                        AmpCategoryValue implLoc = implLocs.get(k);
+                        if (k == locationNames.size() - 1) {
+                            AmpCategoryValueLocations location = new AmpCategoryValueLocations();
+
+                            AmpCategoryValueLocations currentLoc = getLocationByName(name, implLoc, parentLoc);
+                            if (currentLoc != null) {
+                                if (option.equals(Option.NEW)) {
+                                    break;
+                                } else {
+                                    location = currentLoc;
+                                }
+                            } else {
+                                if (option.equals(Option.OVERWRITE)) {
+                                    if (databaseId != null && databaseId != 0) {
+                                        location = getLocationByIdRequestSession(databaseId);
+                                    } else {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (location != null) {
+                                if (location.getParentCategoryValue() != null && !location.getParentCategoryValue().equals(implLoc)) {
+                                    break;
+                                }
+                                location.setName(name);
+                                location.setGsLat(lalitude);
+                                location.setGsLong(longitude);
+                                location.setGeoCode(geoID);
+                                location.setIso(iso);
+                                location.setIso3(iso3);
+                                location.setParentCategoryValue(implLoc);
+                                location.setParentLocation(parentLoc);
+                                boolean edit = location.getId() != null;
+                                LocationUtil.saveLocation(location, edit);
+                            }
+
+                        } else {
+                            parentLoc = getLocationByName(name, implLoc, parentLoc);
+                            if (parentLoc == null) {
+                                return ErrorCode.INCORRECT_CONTENT;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        catch (NullPointerException e) {
+            logger.error("file is not ok");
+            throw new AimException("Cannot import regions", e);
+        }
+        catch (IllegalStateException e) {
+            logger.error("file is not ok", e);
+            return ErrorCode.INCORRECT_CONTENT;
+        }
+        catch(IOException e){
+            logger.error("file is not ok", e);
+            return ErrorCode.INCORRECT_CONTENT;
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw new AimException("Cannot import regions", e);
+        }
+
+        return ErrorCode.CORRECT_CONTENT;
+    }
 
 	private static String getValue(Cell cell) {
 		String value=null;

@@ -2535,11 +2535,10 @@ public class ExportActivityToWord extends Action {
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities", ampContext,session)){
 			
 			columnName=TranslatorWorker.translateText("Modalities");
-			columnVal = identification.getSsc_modalities();
-							
-			if (columnVal != null) {
-				columnVal = TranslatorWorker.translateText(columnVal);
-			}
+			columnName=TranslatorWorker.translateText("Modalities");
+			//for AMP-17127 they are multiple modalities for activities of SSC
+			columnVal=identification.getSscModalitiesAsString("\n");
+			
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 

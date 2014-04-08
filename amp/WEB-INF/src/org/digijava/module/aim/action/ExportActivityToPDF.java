@@ -269,13 +269,8 @@ public class ExportActivityToPDF extends Action {
 			}
 
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities", ampContext,session)){
-				
 				columnName=TranslatorWorker.translateText("Modalities");
-				columnVal = identification.getSsc_modalities();
-								
-				if (columnVal != null) {
-					columnVal = TranslatorWorker.translateText(columnVal);
-				}
+				columnVal=identification.getSscModalitiesAsString("\n");
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
 			}
 

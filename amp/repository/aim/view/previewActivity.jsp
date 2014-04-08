@@ -608,8 +608,15 @@ function collapseAll() {
 
 			<module:display name="/Activity Form/Funding/Modalities" parentModule="/Activity Form/Funding">
 				<digi:trn>Modalities</digi:trn>:&nbsp;<br />
-				<b><c:out value="${aimEditActivityForm.identification.ssc_modalities}"/></b>
+				<c:if test="${not empty aimEditActivityForm.identification.ssc_modalities}">				
+				<b>
+				<c:forEach var="modality" items="${aimEditActivityForm.identification.ssc_modalities}">
+					${modality}<br/>
+				</c:forEach>
+				</b>
+				</c:if>
 				<hr />
+				
 			</module:display>
 
 			

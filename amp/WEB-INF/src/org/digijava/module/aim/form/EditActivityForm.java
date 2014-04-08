@@ -24,6 +24,7 @@ import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
@@ -495,7 +496,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		
 		private String ssc_typeOfCooperation;
 		private String ssc_typeOfImplementation;
-		private String ssc_modalities;
+		private String[] ssc_modalities;
         private Integer fundingSourcesNumber;
 
         private String FY;
@@ -1277,11 +1278,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.ssc_typeOfImplementation = ssc_typeOfImplementation;
 		}
 
-		public String getSsc_modalities() {
+		public String[] getSsc_modalities() {
 			return ssc_modalities;
 		}
 
-		public void setSsc_modalities(String ssc_modalities) {
+		public void setSsc_modalities(String[] ssc_modalities) {
 			this.ssc_modalities = ssc_modalities;
 		}
 
@@ -1291,6 +1292,17 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
         public void setFundingSourcesNumber(Integer fundingSourcesNumber) {
             this.fundingSourcesNumber = fundingSourcesNumber;
+        }
+        public String getSscModalitiesAsString(String newLineCharacter){
+        	String modality="";
+			if(identification.getSsc_modalities()!=null ){
+				for(int i=0;i<identification.getSsc_modalities().length;i++){
+					if(identification.getSsc_modalities()[i]!=null){
+						modality+=TranslatorWorker.translateText(identification.getSsc_modalities()[i]) +newLineCharacter;
+					}
+				}
+			}
+			return modality;
         }
 
 	}

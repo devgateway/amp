@@ -793,14 +793,24 @@ public class EditActivity extends Action {
             	eaForm.getIdentification().setApprovalStatus(Constants.EDITED_STATUS);
             }
         }
+        //AMP-17127
+        //for modalities that is a SSC category we have to add the SSC prefix
+        List<AmpCategoryValue> modalities = CategoryManagerUtil.getAmpCategoryValuesFromListByKey("SSC_" + CategoryConstants.MODALITIES_KEY, activity.getCategories());
+        String []actModalities=null;
+        if(modalities!=null && modalities.size()>0){
+        	actModalities=new String[modalities.size()];
+        	int m=0;
+        	for (AmpCategoryValue modal : modalities) {
+        		actModalities[m]=modal.getLabel();
+				m++;
+			}        	
+         }
+        eaForm.getIdentification().setSsc_modalities(actModalities );
 
-        AmpCategoryValue modalities = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.MODALITIES_KEY, activity.getCategories());
-        eaForm.getIdentification().setSsc_modalities(modalities == null ? null : modalities.getLabel());
-
-        AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
+        AmpCategoryValue typeOfCooperation = CategoryManagerUtil.getAmpCategoryValueFromListByKey("SSC_" +CategoryConstants.TYPE_OF_COOPERATION_KEY, activity.getCategories());
         eaForm.getIdentification().setSsc_typeOfCooperation(typeOfCooperation == null ? null :typeOfCooperation.getLabel());
 
-        AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
+        AmpCategoryValue typeOfImplementation = CategoryManagerUtil.getAmpCategoryValueFromListByKey("SSC_" +CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY, activity.getCategories());
         eaForm.getIdentification().setSsc_typeOfImplementation(typeOfImplementation == null ? null :typeOfImplementation.getLabel());
 
         eaForm.getIdentification().setFundingSourcesNumber(activity.getFundingSourcesNumber());

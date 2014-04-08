@@ -162,7 +162,13 @@ body {background:none;}
 									<b><digi:trn>Modalities</digi:trn></b>
 								</td>
 								<td bgcolor="#ffffff">
-									<c:out value="${aimEditActivityForm.identification.ssc_modalities}"/>
+										<c:if test="${not empty aimEditActivityForm.identification.ssc_modalities}">				
+										<b>
+										<c:forEach var="modality" items="${aimEditActivityForm.identification.ssc_modalities}">
+											${modality}<br/>
+										</c:forEach>
+										</b>
+										</c:if>
 									</td>
 								</tr>
 								</module:display>

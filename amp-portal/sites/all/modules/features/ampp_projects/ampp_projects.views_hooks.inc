@@ -217,7 +217,7 @@ function _ampp_get_search_arguments($for_views = FALSE) {
     switch ($name) {
       case 'sectors':
         // Returns an aggregated list of sector IDs for views or as sepparate keys for each:
-        // 'sectors', 'primarysectors', 'secondarysectors'
+        // 'sectors', 'sectors_primary', 'sectors_secondary'
         $values = _ampp_get_search_argument_sectors($name, $for_views);
         if ($for_views) {
           $processed_arguments[$argkey] = $values;
@@ -378,17 +378,17 @@ function _ampp_get_search_argument_sectors($name, $for_views) {
 
   $arg_name = _ampp_get_search_argument_query_translation('sectors');
   $list['sectors'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
-  $arg_name = _ampp_get_search_argument_query_translation('primarysectors');
-  $list['primarysectors'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
-  $arg_name = _ampp_get_search_argument_query_translation('secondarysectors');
-  $list['secondarysectors'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
+  $arg_name = _ampp_get_search_argument_query_translation('sectors_primary');
+  $list['sectors_primary'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
+  $arg_name = _ampp_get_search_argument_query_translation('sectors_secondary');
+  $list['sectors_secondary'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
 
-  if (empty($list['sectors']) && empty($list['primarysectors']) && empty($list['secondarysectors'])) {
+  if (empty($list['sectors']) && empty($list['sectors_primary']) && empty($list['sectors_secondary'])) {
     return ($for_views) ? 'all' : $list;
   }
 
-  if ($list['sectors'] === 'all' && $list['primarysectors'] === 'all' && $list['secondarysectors'] === 'all') {
-    return ($for_views) ? 'all' : array('sectors' => '', 'primarysectors' => '', 'secondarysectors' => '');
+  if ($list['sectors'] === 'all' && $list['sectors_primary'] === 'all' && $list['sectors_secondary'] === 'all') {
+    return ($for_views) ? 'all' : array('sectors' => '', 'sectors_primary' => '', 'sectors_secondary' => '');
   }
 
   // Get an aggregated list of sectors.

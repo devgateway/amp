@@ -273,7 +273,7 @@ function projects_search_form($form, &$form_state, $conf) {
       '#attributes' => array(
         'class' => array('clearfix'),
       ),
-      '#weight' => 3,
+      '#weight' => 2,
     );
   }
 
@@ -406,7 +406,7 @@ function projects_search_form_submit($form, &$form_state) {
     }
   }
 
-  if (!empty($_GET['country_level_projects'])) {
+  if (!empty($_REQUEST['country_level_projects'])) {
     $arguments['country_level_projects'] = TRUE;
   }
 

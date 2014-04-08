@@ -817,9 +817,6 @@ div.views-slideshow-ddblock-cycle-vsd-default div.slide-text-inner {
 .page-search .item-list {float:left}
 .page-search .view-footer {float:right;padding:10px;font-weight:bold}
 
-.page-search ul.token-input-list-facebook li input {padding:0;margin:0; border: 0}
-.page-search ul.token-input-list, .page-search ul.token-input-list-facebook {width:87%;padding-top:1px;padding-bottom:1px}
-
 div.hidden-locations {position:absolute;width:150px;height:150px;background:#c4deed;color:#333333;font-size:12px;overflow:auto;margin-top:-15px;margin-left:25px;border:1px solid #c3c3c3;padding:5px;-moz-border-radius: 5px 5px 5px 5px;  -o-border-radius: 5px 5px 5px 5px;  -webkit-border-radius: 5px 5px 5px 5px;  border-radius: 5px 5px 5px 5px;  -moz-box-shadow: 3px 3px 3px #cccccc;-webkit-box-shadow: 3px 3px 3px #cccccc;box-shadow: 3px 3px 3px #cccccc;z-index:9999}
 span.more-locations {text-decoration:underline;color:#02578A}
 
@@ -926,7 +923,6 @@ span.more-locations {text-decoration:underline;color:#02578A}
 #ampp-search-form .form-item-budget label[for=edit-budget] {width: auto; font-weight: bold; }
 #ampp-search-form .form-item.form-item-budget label {float: none; width: auto}
 #ampp-search-form .form-item-budget input.form-radio {padding: 0; margin: 0}
-#ampp-search-form .form-item-budget .form-item-budget {float: left; clear: none; margin-right: 10px; width: auto}
 
 #ampp-search-form #edit-period {
   overflow: hidden;

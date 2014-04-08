@@ -714,7 +714,6 @@ li.token-input-input-token p {
 .rounded-corner.pane ul.token-input-list, .rounded-corner.pane ul.token-input-list-facebook {-moz-border-radius: 10px 10px 10px 10px;  -o-border-radius: 10px 10px 10px 10px;  -webkit-border-radius: 10px 10px 10px 10px;  border-radius: 10px 10px 10px 10px;}
 .rounded-corner.region {border: 1px solid #d0d0d0; -moz-border-radius: 10px 10px 10px 10px; -o-border-radius: 10px 10px 10px 10px; -webkit-border-radius: 10px 10px 10px 10px; border-radius: 10px 10px 10px 10px;padding:1px}
 
-ul.token-input-list, ul.token-input-list-facebook {clear: none;  width: 470px;  border: 1px solid #cacaca; float: left; padding: 0 0 0 15px}
 .page-homepage .rounded-corner.pane .feedback-form .form-textarea-wrapper textarea {-moz-border-radius: 10px 10px 0 0; -o-border-radius: 10px 10px 0 0; -webkit-border-radius: 10px 10px 0 0; border-radius: 10px 10px 0 0; padding: 5px;}
 #other_news {padding:0px 5px;font:900 14px/18px Tahoma,Arial,sans-serif;color:#000000}
 .page-homepage .ampphome-contact-social .pane-feedback .feedback-form {padding: 0 0 10px 10px}
@@ -741,7 +740,7 @@ div.token-input-dropdown,div.token-input-dropdown-facebook {max-height:300px;ove
 .page-homepage .rounded-corner.pane h2.pane-title, .page-homepage .rounded-corner.pane h2 {padding:13px 0 0 45px;background-position:8px 8px !important}
 
 .hierarchical-select .selects .form-select {width:99%;margin:10px 5px 0 2px;min-height:27px;border:1px solid #CACACA;padding:3px;-moz-border-radius: 10px 0 0 0; -o-border-radius: 10px 0 0 0; -webkit-border-radius: 10px 0 0 0; border-radius: 10px 0 0 0;}
-#ampp-search-form .modal-list-more {padding: 5px 5px 5px 10px;}
+
 .page-homepage .ui-dialog-content #modal-sector-iframe {width:95%;height:383px}
 .page-homepage .ui-dialog-content #modal-sector-iframe body {overflow:hidden}
 .hierarchical-select-wrapper .hierarchical-select .selects {width:100%}
@@ -756,11 +755,8 @@ div.token-input-dropdown,div.token-input-dropdown-facebook {max-height:300px;ove
 .dropbox table td {padding:3px}
 
 .page-search #ampp-search-form .form-item-sector, .page-search #ampp-search-form .form-item-donor, .page-search #ampp-search-form .form-item-agency, .page-search #ampp-search-form .form-item-region, .page-search #ampp-search-form .form-item-keyword {width:96%}
-.page-search ul.token-input-list, .page-search ul.token-input-list-facebook {width:83%; float: left; background: #ffffff}
-.page-search .form-item .form-text, .page-search .form-item .form-text {width:83%;padding:2px 7px 2px 16px}
 
-#ampp-search-form .form-type-checkbox .form-checkbox {float: left; margin: 0 5px 0 0;}
-#ampp-search-form .form-type-checkbox label.option {float: none; width: auto;}
+
 .pane-ampp-projects-ampp-search-result-totals .total-amounts.view-projects-search-result, .pane-search-result-totals .total-amounts.view-projects-search-result {float: right; margin-top: 0}
 .pane-projects-as-of {right: 0; margin-top: 0px}
 div.pane-search-result-totals, div.pane-projects-as-of {clear:both; float:right;}

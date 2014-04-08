@@ -2,16 +2,23 @@
 #ampp-search-form {
 }
 
-#ampp-search-form .form-item label,
-.page-search .form-item label {
+#ampp-search-form .form-item label {
   float: left;
   font-weight: normal;
-  width: 115px;
+  line-height: 28px;
+  width: 120px;
 }
 
 #ampp-search-form .description {
   clear: both;
-  margin-left: 115px;
+  margin-left: 120px;
+}
+
+#ampp-search-form .modal-selection {
+  display: inline-block;
+  height: 28px;
+  margin: 0px 8px;
+  vertical-align: middle;
 }
 
 #ampp-search-form .form-submit {
@@ -62,6 +69,57 @@
 .views-field-location-names .more-locations {
   cursor: pointer;
 }
+
 .views-field-location-names .hidden-locations {
   display:none;
+}
+
+#ampp-search-form .token-input-list-facebook input {
+  border: 0;
+  margin:0;
+  padding: 0;
+}
+
+#ampp-search-form .token-input-list-facebook {
+  background: #FFFFFF;
+  border: 1px solid #CACACA;
+  float: left;
+  padding: 0px;
+  width: 83%;
+}
+
+.page-homepage #ampp-search-form .token-input-list-facebook {
+  width: 470px;
+}
+
+#ampp-search-form .token-input-input-token-facebook {
+  margin: 3px;
+}
+
+#ampp-search-form .token-input-input-token-facebook input {
+  padding: 1px 3px;
+}
+
+#ampp-search-form .form-select {
+  padding: 4px;
+}
+
+#ampp-search-form .form-type-checkbox .form-checkbox {
+  float: left;
+  margin: 6px 6px 6px 0;
+}
+
+#ampp-search-form .form-item-budget .form-item-budget {
+  clear: none;
+  float: left;
+  margin: 0 10px 0 0;
+}
+
+#ampp-search-form .form-type-checkbox label.option {
+  float: none;
+  width: auto;
+}
+
+#ampp-search-form .form-radios label.option {
+  line-height: normal;
 }

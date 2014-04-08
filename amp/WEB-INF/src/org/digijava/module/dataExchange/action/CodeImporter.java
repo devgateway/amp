@@ -113,7 +113,7 @@ public class CodeImporter extends DispatchAction {
                 } catch (Exception ex) {
 
                 }
-            } else if (contentType.equals("application/zip")) {
+            } else if (contentType.equals("application/zip") || contentType.equals("application/x-zip-compressed")) {
                 ZipInputStream zip = new ZipInputStream(upFile.getInputStream());
                 ZipEntry entry = null;
                 while ((entry = zip.getNextEntry()) != null) {

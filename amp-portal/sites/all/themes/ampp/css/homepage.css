@@ -676,7 +676,7 @@ li.token-input-input-token p {
 .page-homepage #col2 .pane-ampp-projects-ampp-search {width: 320px}
 .page-homepage #col2 #ampp-search-form .form-item-sector, .page-homepage #col2 #ampp-search-form .form-item-donor, .page-homepage #col2 #ampp-search-form .form-item-region, .page-homepage #col2 #ampp-search-form .form-item-keyword {width: auto}
 .page-homepage #col2 .rounded-corner .form-item .form-text, .page-homepage #col2 .form-item .form-text {width:230px; margin-left:0px; margin-right:10px;}
-.page-homepage #col2 .rounded-corner .form-item-institutions .hierarchical-select .selects .form-select {width:260px;margin-bottom:10px;}
+.page-homepage #col2 .rounded-corner .form-item-institutions .form-select {width:260px;}
 .page-homepage #col2 .feedback-form .form-textarea-wrapper textarea {width: 260px}
 .page-homepage #col2 .feedback-form .resizable-textarea .grippie {width: 258px; margin-left: 0}
 .page-homepage #col2 .captcha.form-wrapper .fieldset-wrapper {margin-left: 0}

@@ -22,7 +22,7 @@
 }
 
 #ampp-search-form .form-submit {
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 #ampp-search-form .form-type-date-popup {
@@ -59,7 +59,11 @@
   display: inline;
 }
 #ampp-search-form .form-actions.calculating .search-form-throbber {
+  background-image: url("../../../../../misc/throbber.gif");
+  background-position: 0px -19px;
+  background-repeat: no-repeat;
   display: inline;
+  padding-left: 16px;
 }
 #ampp-search-form .form-actions.calculating .search-form-info {
   display: none;

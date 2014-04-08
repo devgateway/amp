@@ -325,10 +325,7 @@ h2.pane-title {
   padding: 5px 5px 5px 10px;
 }
 .page-homepage .rounded-corner .feedback-form .form-item .form-text {margin-left:0px;width: 465px;}
-.page-homepage .rounded-corner .pane-projects-search-form .form-item-period-start-date input,
-.page-homepage .rounded-corner .pane-projects-search-form .form-item-period-end-date input {
-  width: 80px;
-}
+
 .page-homepage .rounded-corner .pane-projects-search-form .container-inline-date .form-item, .container-inline-date .form-item input {
   margin-bottom:0px;
 }
@@ -573,13 +570,6 @@ div.views-slideshow-ddblock-cycle-vsd-default div.container-inner {
   padding: 5px;
 }
 
-.page-homepage .form-item .form-text,
-.page-search .form-item .form-text {
-  width: 500px;
-  border: 1px solid #cacaca;
-  padding: 5px;
-}
-
 #edit-captcha-response {
   -moz-border-radius: 10px 10px 10px 10px;
   -o-border-radius: 10px 10px 10px 10px;
@@ -588,8 +578,8 @@ div.views-slideshow-ddblock-cycle-vsd-default div.container-inner {
 }
 
 .feedback-form .resizable-textarea .grippie {
-  margin-left: 107px;
-  width: 485px;
+  margin-left: 100px;
+  width: 483px;
 }
 
 .feedback-form .form-submit,
@@ -763,7 +753,7 @@ div.pane-search-result-totals, div.pane-projects-as-of {clear:both; float:right;
 .view-top-activities-by-disbursment table th, .view-top-activities-by-disbursment table td {font-size: 10px; padding: 10px; vertical-align: top; background: #ffffff}
 .view-top-activities-by-disbursment table th {background: #dddddd}
 .view-top-activities-by-disbursment table {margin: 20px 0}
-.commitment-disbursement td.commitment, .commitment-disbursement td.disbursement {text-align:right;}
+.commitment-disbursement-table td.commitment, .commitment-disbursement-table td.disbursement {text-align:right;}
 .rounded-corner.pane .panel-pane.pane-projects-search-form .pane-content {padding: 0 0 10px 20px;}
 .page-homepage #col2 .ampphome-news .pane-content {padding: 0 0 20px}
 .page-homepage #ampp-search-form ul li input[type=text] {border: 0; margin-left: 0px}

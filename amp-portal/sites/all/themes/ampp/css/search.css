@@ -35,7 +35,7 @@
 }
 
 #ampp-search-form .container-inline-date .form-text {
-  width: 140px;
+  width: 160px;
 }
 
 #ampp-search-form .container-inline-date .date-padding {
@@ -80,12 +80,26 @@
   padding: 0;
 }
 
+.page-search .form-text {
+  background: #FFFFFF;
+  border: 1px solid #CACACA;
+  padding: 5px;
+  width: 83%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 #ampp-search-form .token-input-list-facebook {
   background: #FFFFFF;
   border: 1px solid #CACACA;
   float: left;
   padding: 0px;
+  padding-left: 4px;
   width: 83%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .page-homepage #ampp-search-form .token-input-list-facebook {
@@ -102,6 +116,7 @@
 
 #ampp-search-form .form-select {
   padding: 4px;
+  width: 160px;
 }
 
 #ampp-search-form .form-type-checkbox .form-checkbox {

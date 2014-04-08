@@ -66,7 +66,6 @@ Drupal.ampp.updateSearchFormInfo = function(timeout) {
   ajax_settings = {
     url: settings.projectsSearchForm.forminfo_endpoint,
     cache: false, // @TODO: Remove!
-    type: 'GET',
     dataType: 'json', // Prevent auto-evaluation of response.
     global: false, // Do not trigger global AJAX events.
     success: function(response) {
@@ -228,6 +227,27 @@ Drupal.behaviors.projectsSearchFormInit = {
           },
         });
       }
+    }
+
+    if (settings.projectsSearchForm.resultstotal_endpoint) {
+      $.ajax({
+        url: settings.projectsSearchForm.resultstotal_endpoint,
+        data: Drupal.ampp.getSearchFormData(),
+        dataType: 'json', // Prevent auto-evaluation of response.
+        global: false, // Do not trigger global AJAX events.
+        success: function(response) {
+          if (response['commitment']) {
+            $('.commitment', '.search-results-total-amounts').html(response['commitment']);
+          }
+          if (response['disbursement']) {
+            $('.disbursement', '.search-results-total-amounts').html(response['disbursement']);
+          }
+        },
+        error: function (response) {
+          // @TODO: handle errors.
+          // console.log(response, 'error');
+        },
+      });
     }
 
     // @TODO: Move to the projects_search_result plugin.

@@ -30,6 +30,13 @@ function ampp_projects_menu() {
     _projects_search_form_menu_helper($items, $file_path);
   }
 
+  $items['ampp_search/results_total'] = array(
+    'page callback' => 'ampp_search_get_results_total',
+    'page arguments' => array(),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -58,7 +65,7 @@ function ampp_projects_date_popup_process_alter(&$element, &$form_state, $contex
 /**
  * Get the total amount for given type of transactions:
  *  - AMP_TRANSACTION_TYPE_COMMITMENT for commitments
- *  - AMP_TRANSACTION_TYPE_DISBURSEMENT for disbursments
+ *  - AMP_TRANSACTION_TYPE_DISBURSEMENT for disbursements
  */
 function amp_get_transactions_amount($transaction_type) {
   $args = _ampp_get_search_arguments(TRUE);
@@ -105,4 +112,30 @@ function amp_get_transactions_amount($transaction_type) {
   cache_set($cache_id, $total_amount, 'cache', CACHE_TEMPORARY);
 
   return $total_amount;
+}
+
+/**
+ * Menu callback for ampp_search/results_total.
+ *
+ * @TODO: Cleanup and remove old URL mapping.
+ */
+function ampp_search_get_results_total() {
+  $values = array(
+    'commitment' => 0,
+    'disbursement' => 0,
+  );
+
+  $commitment_amount = amp_get_transactions_amount(AMP_TRANSACTION_TYPE_COMMITMENT);
+  $disbursement_amount = amp_get_transactions_amount(AMP_TRANSACTION_TYPE_DISBURSEMENT);
+
+  if (module_exists('format_number')) {
+    $values['commitment'] = empty($commitment_amount) ? '0' : format_number($commitment_amount, 0);
+    $values['disbursement'] = empty($disbursement_amount) ? '0' : format_number($disbursement_amount, 0);
+  }
+  else {
+    $values['commitment'] = empty($commitment_amount) ? '0' : number_format(intval($commitment_amount));
+    $values['disbursement'] = empty($disbursement_amount) ? '0' : number_format(intval($disbursement_amount));
+  }
+
+  drupal_json_output($values);
 }

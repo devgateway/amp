@@ -1,13 +1,15 @@
 <?php
 
-/*
- * define plugin
+/**
+ * @file
+ * Displays a table containing the total commitments and disbursements for the current search results.
  */
 $plugin = array(
   'single' => TRUE,
   'title' => t('Search Result Totals'),
-  'description' => t('Search Result Totals'),
+  'description' => t('Displays a table containing the total commitments and disbursements for the current search results.'),
   'category' => array(t('AMPP Widgets')),
+  'hook theme' => 'search_result_totals_content_type_theme',
 );
 
 /**
@@ -15,41 +17,40 @@ $plugin = array(
  */
 function ampp_projects_search_result_totals_content_type_render($subtype, $conf, $panel_args, $context) {
   $block = new stdClass();
-  $block->content = t('Could not connect to the activities database. Please try again later. If the problem persists contact the site administrator.');
+  $block->content = '';
 
   if (!amp_activity_check_db()) {
     return $block;
   }
 
-  $amount_commitment = amp_get_transactions_amount(AMP_TRANSACTION_TYPE_COMMITMENT);
-  $amount_disbursement = amp_get_transactions_amount(AMP_TRANSACTION_TYPE_DISBURSEMENT);
+  $variables = array(
+    'commitment_header' => t('Commitment amount') . ' (' . amp_activity_get_base_currency() . ")",
+    'disbursement_header' => t('Disbursement amount') . ' (' . amp_activity_get_base_currency() . ")",
+    'commitment_amount' => t('calculating...'),
+    'disbursement_amount' => t('calculating...'),
+  );
+  $block->content = theme('search_result_totals', $variables);
 
-  if (module_exists('format_number')) {
-    $amount_commitment = empty($amount_commitment) ? '0' : format_number($amount_commitment, 0);
-    $amount_disbursement = empty($amount_disbursement) ? '0' : format_number($amount_disbursement, 0);
-  }
-  else {
-    $amount_commitment = empty($amount_commitment) ? '0' : number_format(intval($amount_commitment));
-    $amount_disbursement = empty($amount_disbursement) ? '0' : number_format(intval($amount_disbursement));
-  }
-
-  $html = '<div class="search-results-total-amounts view-projects-search-result">';
-  $html .= '<table class="views-table commitment-disbursement"><thead><tr>';
-  $html .= '<th></th>';
-  $html .= '<th>' . t('Commitment amount') . ' (' . amp_activity_get_base_currency() . ")" . '</th>';
-  $html .= '<th>' . t('Disbursement amount') . ' (' . amp_activity_get_base_currency() . ")" . '</th>';
-  $html .= '</tr></thead>';
-
-  $html .= '<td>' . t('Total') . ':' . '</td>';
-  $html .= '<td class="commitment">' . $amount_commitment . '</td>';
-  $html .= '<td class="disbursement">' . $amount_disbursement . '</td>';
-  $html .= '</tr></thead>';
-
-  $html .= '</table>';
-  $html .= '</div>';
-
-  $block->content = $html;
+  // Add the endpoint to JS.
+  $form_js_settings = array();
+  $form_js_settings['resultstotal_endpoint'] = url('ampp_search/results_total');
+  drupal_add_js(array('projectsSearchForm' => $form_js_settings), 'setting');
 
   return $block;
 }
 
+/**
+ *
+ */
+function search_result_totals_content_type_theme(&$theme, $plugin) {
+  $theme['search_result_totals'] = array(
+    'variables' => array(
+      'commitment_header' => NULL,
+      'disbursement_header' => NULL,
+      'commitment_amount' => NULL,
+      'disbursement_amount' => NULL,
+    ),
+    'path' => $plugin['path'],
+    'template' => 'search_result_totals',
+  );
+}

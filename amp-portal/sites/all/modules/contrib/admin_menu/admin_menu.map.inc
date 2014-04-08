@@ -1,5 +1,4 @@
 <?php
-// $Id: admin_menu.map.inc,v 1.1 2011/12/23 05:58:57 vamirbekyan Exp $
 
 /**
  * @file
@@ -18,7 +17,6 @@ function filter_admin_menu_map() {
   }
   $map['admin/config/content/formats/%filter_format'] = array(
     'parent' => 'admin/config/content/formats',
-    'hide' => 'admin/config/content/formats/list',
     'arguments' => array(
       array('%filter_format' => array_keys(filter_formats())),
     ),
@@ -35,7 +33,6 @@ function menu_admin_menu_map() {
   }
   $map['admin/structure/menu/manage/%menu'] = array(
     'parent' => 'admin/structure/menu',
-    'hide' => 'admin/structure/menu/list',
     'arguments' => array(
       array('%menu' => array_keys(menu_get_menus())),
     ),
@@ -52,7 +49,6 @@ function node_admin_menu_map() {
   }
   $map['admin/structure/types/manage/%node_type'] = array(
     'parent' => 'admin/structure/types',
-    'hide' => 'admin/structure/types/list',
     'arguments' => array(
       array('%node_type' => array_keys(node_type_get_types())),
     ),
@@ -136,7 +132,6 @@ function taxonomy_admin_menu_map() {
   }
   $map['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name'] = array(
     'parent' => 'admin/structure/taxonomy',
-    'hide' => 'admin/structure/taxonomy/list',
     'arguments' => array(
       array('%taxonomy_vocabulary_machine_name' => array_keys(taxonomy_vocabulary_get_names())),
     ),
@@ -151,12 +146,17 @@ function views_ui_admin_menu_map() {
   if (!user_access('administer views')) {
     return;
   }
-  // @todo Requires patch to views_ui.
-  $map['admin/structure/views/edit/%views_ui_cache'] = array(
+  $views = array();
+  foreach (views_get_enabled_views() as $name => $view) {
+    $views[] = $name;
+  }
+  if (empty($views)) {
+    return;
+  }
+  $map['admin/structure/views/view/%views_ui_cache'] = array(
     'parent' => 'admin/structure/views',
-    'hide' => 'admin/structure/views/list',
     'arguments' => array(
-      array('%views_ui_cache' => array_keys(views_get_all_views())),
+      array('%views_ui_cache' => $views),
     ),
   );
   return $map;

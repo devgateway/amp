@@ -1,7 +1,18 @@
-// $Id: CHANGELOG.txt,v 1.1 2011/12/23 05:58:59 vamirbekyan Exp $
 
 Admin Menu 7.x-3.x, xxxx-xx-xx
 ------------------------------
+#1177202 by das-peter, dereine, sun: Fixed copying and re-injection of child
+  router items breaks badly. Change them by reference instead.
+  Requires latest Views 3.x code.
+#1212064 by sun: Updated admin_views default views for VBO 3.x.
+#1196590 by sun: Fixed errors and notices for admin_views with Views 3.
+#1144768 by idlewilder, sun: Fixed devel modules to skip are not displayed.
+#1079374 by WillHall: Fixed JS Error: unrecognized expression: [href=/].
+#1114132 by joelstein, sun: Added Field UI to list of developer modules.
+#1008380 by bdragon, sun: Updated admin_views for D7.
+#1146644 by sun: Fixed PHP 5.3 compability in tests.
+#442560 by sun: Fixed 'defer' script attribute breaks Drupal.behaviors in FF3.6.
+#1022902 by matglas86, sun: Updated for changed core Toolbar styles.
 
 
 Admin Menu 7.x-3.0-RC1, 2010-01-07

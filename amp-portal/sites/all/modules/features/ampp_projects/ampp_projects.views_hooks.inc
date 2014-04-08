@@ -195,15 +195,16 @@ function _ampp_get_search_arguments($for_views = FALSE) {
   $processed_arguments = array();
   // Untill we use exposed filters instead of arguments, we need to send them to views in the right order.
   $arguments_list = array(
-    '0' => 'organisations_dn',
-    '1' => 'sectors',
-    '2' => 'locations',
-    '3' => 'keywords',
-    '4' => 'budget',
-    '5' => 'programs',
-    '6' => 'period_start',
-    '7' => 'period_end',
-    '8' => 'organisations_ba',
+    '0' => 'keywords',
+    '1' => 'organisations_dn',
+    '2' => 'organisations_ba',
+    '3' => 'status',
+    '4' => 'sectors',
+    '5' => 'locations',
+    '6' => 'programs',
+    '7' => 'budget',
+    '8' => 'period_start',
+    '9' => 'period_end',
   );
 
   foreach ($arguments_list as $delta => $name) {

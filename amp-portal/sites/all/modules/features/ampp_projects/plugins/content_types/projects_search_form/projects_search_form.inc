@@ -17,6 +17,7 @@ $plugin = array(
   'defaults' => array(
     'search_path' => 'search',
     'period_flag' => FALSE,
+    'activity_status_flag' => FALSE,
     'budget_flag' => FALSE,
     'country_level_projects_flag' => FALSE,
     'preview_amount_flag' => FALSE,
@@ -253,6 +254,29 @@ function projects_search_form($form, &$form_state, $conf) {
     $form['period']['period_end']['#suffix'] = '</div>';
   }
 
+  if (!empty($conf['activity_status_flag'])) {
+    $options = array(
+      '' => t('Show all projects'),
+    ) + _amp_activity_get_activity_status_options();
+
+    // Get the activity status from URL and sanatzie the value.
+    $status_default = 'all';
+    if (isset($_GET['status'])) {
+      $status_default = (int) $_GET['status'];
+    }
+
+    $form['status'] = array(
+      '#type' => 'select',
+      '#title' => t('Status Filter'),
+      '#options' => $options,
+      '#default_value' => $status_default,
+      '#attributes' => array(
+        'class' => array('clearfix'),
+      ),
+      '#weight' => 3,
+    );
+  }
+
   if (!empty($conf['budget_flag'])) {
     $options = array(
       'all' => t('Show all projects'),
@@ -462,6 +486,13 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
     '#default_value' => $conf['period_flag'],
   );
 
+  $form['activity_status_flag'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display status filter.'),
+    '#description' => t('Displays an activity status filter.'),
+    '#default_value' => $conf['activity_status_flag'],
+  );
+
   $form['budget_flag'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show On/Off-budget checkbox'),
@@ -479,7 +510,7 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
   $form['preview_amount_flag'] = array(
     '#type' => 'checkbox',
     '#title' => t('Pre-calculate amount(s)'),
-    '#description' => t('Pre-calculate Commitment amount and show next to "project to show" number'),
+    '#description' => t('Calculates the Commitment amount and shows the information next to submit button.'),
     '#default_value' => $conf['preview_amount_flag'],
   );
 

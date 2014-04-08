@@ -27,6 +27,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['query']['options']['disable_sql_rewrite'] = TRUE;
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
   $handler->display->display_options['query']['options']['query_comment'] = FALSE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
@@ -428,6 +429,20 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['sorts']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['sorts']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['sorts']['actual_start_date']['field'] = 'actual_start_date';
+  /* Contextual filter: Activity: Name */
+  $handler->display->display_options['arguments']['name']['id'] = 'name';
+  $handler->display->display_options['arguments']['name']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['arguments']['name']['field'] = 'name';
+  $handler->display->display_options['arguments']['name']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['name']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['name']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['name']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['name']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['name']['glossary'] = 0;
+  $handler->display->display_options['arguments']['name']['limit'] = '0';
+  $handler->display->display_options['arguments']['name']['transform_dash'] = 0;
+  $handler->display->display_options['arguments']['name']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['name']['use_like'] = 1;
   /* Contextual filter: Organization Role: Organisation having Role */
   $handler->display->display_options['arguments']['organisation_role']['id'] = 'organisation_role';
   $handler->display->display_options['arguments']['organisation_role']['table'] = 'amp_org_role';
@@ -441,6 +456,30 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['organisation_role']['role_value'] = array(
     'DN' => 'DN',
   );
+  /* Contextual filter: Organization Role: Organisation having Role */
+  $handler->display->display_options['arguments']['organisation_role_1']['id'] = 'organisation_role_1';
+  $handler->display->display_options['arguments']['organisation_role_1']['table'] = 'amp_org_role';
+  $handler->display->display_options['arguments']['organisation_role_1']['field'] = 'organisation_role';
+  $handler->display->display_options['arguments']['organisation_role_1']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['organisation_role_1']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['organisation_role_1']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['organisation_role_1']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['organisation_role_1']['break_phrase'] = 1;
+  $handler->display->display_options['arguments']['organisation_role_1']['not'] = 0;
+  $handler->display->display_options['arguments']['organisation_role_1']['role_value'] = array(
+    'BA' => 'BA',
+  );
+  /* Contextual filter: Activity Status: Activity Status ID */
+  $handler->display->display_options['arguments']['amp_status_id']['id'] = 'amp_status_id';
+  $handler->display->display_options['arguments']['amp_status_id']['table'] = 'cached_v_status';
+  $handler->display->display_options['arguments']['amp_status_id']['field'] = 'amp_status_id';
+  $handler->display->display_options['arguments']['amp_status_id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['amp_status_id']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['amp_status_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['amp_status_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['amp_status_id']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['amp_status_id']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['amp_status_id']['not'] = 0;
   /* Contextual filter: Sector: Activity Sectors */
   $handler->display->display_options['arguments']['amp_sector_id']['id'] = 'amp_sector_id';
   $handler->display->display_options['arguments']['amp_sector_id']['table'] = 'amp_activity_sector';
@@ -463,31 +502,6 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['location_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['location_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['location_id']['not'] = 0;
-  /* Contextual filter: Activity: Name */
-  $handler->display->display_options['arguments']['name']['id'] = 'name';
-  $handler->display->display_options['arguments']['name']['table'] = 'cached_amp_activity';
-  $handler->display->display_options['arguments']['name']['field'] = 'name';
-  $handler->display->display_options['arguments']['name']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['name']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['name']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['name']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['name']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['name']['glossary'] = 0;
-  $handler->display->display_options['arguments']['name']['limit'] = '0';
-  $handler->display->display_options['arguments']['name']['transform_dash'] = 0;
-  $handler->display->display_options['arguments']['name']['break_phrase'] = 0;
-  $handler->display->display_options['arguments']['name']['use_like'] = 1;
-  /* Contextual filter: Category Values: Activities Projects Budget */
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['id'] = 'amp_categoryvalue_id';
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['table'] = 'amp_activities_categoryvalues';
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['field'] = 'amp_categoryvalue_id';
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary_options']['items_per_page'] = '25';
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['break_phrase'] = 1;
-  $handler->display->display_options['arguments']['amp_categoryvalue_id']['not'] = 0;
   /* Contextual filter: Program: Activity Programs */
   $handler->display->display_options['arguments']['amp_program_id']['id'] = 'amp_program_id';
   $handler->display->display_options['arguments']['amp_program_id']['table'] = 'amp_activity_program';
@@ -499,6 +513,17 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['amp_program_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['amp_program_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['amp_program_id']['not'] = 0;
+  /* Contextual filter: Category Values: Activities Projects Budget */
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['id'] = 'amp_categoryvalue_id';
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['table'] = 'amp_activities_categoryvalues';
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['field'] = 'amp_categoryvalue_id';
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['break_phrase'] = 1;
+  $handler->display->display_options['arguments']['amp_categoryvalue_id']['not'] = 0;
   /* Contextual filter: Activity: Start date */
   $handler->display->display_options['arguments']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['arguments']['actual_start_date']['table'] = 'cached_amp_activity';
@@ -515,19 +540,6 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['actual_completion_date']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['actual_completion_date']['summary_options']['override'] = TRUE;
   $handler->display->display_options['arguments']['actual_completion_date']['condition_operator'] = '<=';
-  /* Contextual filter: Organization Role: Organisation having Role */
-  $handler->display->display_options['arguments']['organisation_role_1']['id'] = 'organisation_role_1';
-  $handler->display->display_options['arguments']['organisation_role_1']['table'] = 'amp_org_role';
-  $handler->display->display_options['arguments']['organisation_role_1']['field'] = 'organisation_role';
-  $handler->display->display_options['arguments']['organisation_role_1']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['organisation_role_1']['default_argument_skip_url'] = 0;
-  $handler->display->display_options['arguments']['organisation_role_1']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['organisation_role_1']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['organisation_role_1']['break_phrase'] = 1;
-  $handler->display->display_options['arguments']['organisation_role_1']['not'] = 0;
-  $handler->display->display_options['arguments']['organisation_role_1']['role_value'] = array(
-    'BA' => 'BA',
-  );
   /* Filter criterion: Activity: Filter Public */
   $handler->display->display_options['filters']['filter_public']['id'] = 'filter_public';
   $handler->display->display_options['filters']['filter_public']['table'] = 'cached_amp_activity';

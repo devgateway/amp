@@ -258,3 +258,39 @@ function _amp_activity_get_child_program_ids($program_id) {
 
   return $child_program_ids;
 }
+
+/**
+ * Returns a list of activity status options.
+ *
+ * @TODO: Translate options using the AMP dg_messages translation.
+ */
+function _amp_activity_get_activity_status_options() {
+  $options = &drupal_static(__FUNCTION__);
+  if (isset($options)) {
+    return $options;
+  }
+
+  db_set_active(AMP_DATABASE);
+
+  // Get the amp_category_class_id.
+  $subquery = db_select('amp_category_class')
+    ->fields('amp_category_class', array('id'))
+    ->condition('amp_category_class.keyname', 'activity_status', '=');
+
+  // Get category values for 'Activity Status'.
+  $query = db_select('amp_category_value')
+    ->distinct()
+    ->fields('amp_category_value', array('id', 'category_value'))
+    ->orderBy('amp_category_value.index_column')
+    ->condition('amp_category_value.amp_category_class_id', $subquery, 'IN');
+
+  $result = $query->execute();
+
+  db_set_active();
+
+  foreach ($result as $record) {
+    $options[$record->id] = check_plain($record->category_value);
+  }
+
+  return $options;
+}

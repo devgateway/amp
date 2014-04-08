@@ -291,6 +291,27 @@ function amp_activity_views_data_alter(&$data) {
     ),
   );
 
+  /**
+   * TABLE DEFINITION: cached_v_status.
+   */
+  $data['cached_v_status']['table']['group'] = t('Activity Status');
+  $data['cached_v_status']['table']['join'] = array(
+    'cached_amp_activity' => array(
+      'left_field' => 'amp_activity_id',
+      'field' => 'amp_activity_id'
+    ),
+  );
+
+  $data['cached_v_status']['amp_status_id'] = array(
+    'title' => t('Activity Status ID'),
+    'help' => t('Filters Activities by status ID.'),
+    'argument' => array(
+      'handler' => 'views_handler_argument_numeric',
+    ),
+    // The status field is displayed only on some settings.
+    // @see: amp_activity_handler_field_status
+  );
+
   return $data;
 }
 

@@ -728,7 +728,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String conditions;
 		private String ssc_typeOfCooperation;
 		private String ssc_typeOfImplementation;
-		private String ssc_modalities;
+		private String [] ssc_modalities;
 		private Integer fundingSourcesNumber;
 		private String FY;
 		private List<LabelValueBean> yearsRange;
@@ -1027,7 +1027,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		
 		@java.lang.SuppressWarnings("all")
-		public String getSsc_modalities() {
+		public String[] getSsc_modalities() {
 			return this.ssc_modalities;
 		}
 		
@@ -1462,7 +1462,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		
 		@java.lang.SuppressWarnings("all")
-		public void setSsc_modalities(final String ssc_modalities) {
+		public void setSsc_modalities(String[] ssc_modalities) {
 			this.ssc_modalities = ssc_modalities;
 		}
 		
@@ -2092,6 +2092,17 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public java.lang.String toString() {
 			return "EditActivityForm.Identification(ampId=" + this.getAmpId() + ", budgetCV=" + this.getBudgetCV() + ", budgetCVOff=" + this.getBudgetCVOff() + ", budgetCVOn=" + this.getBudgetCVOn() + ", team=" + this.getTeam() + ", title=" + this.getTitle() + ", projectComments=" + this.getProjectComments() + ", objectives=" + this.getObjectives() + ", description=" + this.getDescription() + ", purpose=" + this.getPurpose() + ", results=" + this.getResults() + ", lessonsLearned=" + this.getLessonsLearned() + ", projectImpact=" + this.getProjectImpact() + ", activitySummary=" + this.getActivitySummary() + ", contractingArrangements=" + this.getContractingArrangements() + ", condSeq=" + this.getCondSeq() + ", linkedActivities=" + this.getLinkedActivities() + ", conditionality=" + this.getConditionality() + ", projectManagement=" + this.getProjectManagement() + ", procurementSystem=" + this.getProcurementSystem() + ", reportingSystem=" + this.getReportingSystem() + ", auditSystem=" + this.getAuditSystem() + ", institutions=" + this.getInstitutions() + ", accessionInstrument=" + this.getAccessionInstrument() + ", projectCategory=" + this.getProjectCategory() + ", govAgreementNumber=" + this.getGovAgreementNumber() + ", budgetCodeProjectID=" + this.getBudgetCodeProjectID() + ", budgetCheckbox=" + this.getBudgetCheckbox() + ", governmentApprovalProcedures=" + this.getGovernmentApprovalProcedures() + ", jointCriteria=" + this.getJointCriteria() + ", humanitarianAid=" + this.getHumanitarianAid() + ", crisNumber=" + this.getCrisNumber() + ", selOrgs=" + java.util.Arrays.deepToString(this.getSelOrgs()) + ", selectedOrganizations=" + java.util.Arrays.deepToString(this.getSelectedOrganizations()) + ", acChapter=" + this.getAcChapter() + ", status=" + this.getStatus() + ", createdBy=" + this.getCreatedBy() + ", modifiedBy=" + this.getModifiedBy() + ", approvedBy=" + this.getApprovedBy() + ", createdDate=" + this.getCreatedDate() + ", updatedDate=" + this.getUpdatedDate() + ", approvalDate=" + this.getApprovalDate() + ", draft=" + this.getDraft() + ", actAthEmail=" + this.getActAthEmail() + ", actAthAgencySource=" + this.getActAthAgencySource() + ", actAthFirstName=" + this.getActAthFirstName() + ", actAthLastName=" + this.getActAthLastName() + ", conditions=" + this.getConditions() + ", ssc_typeOfCooperation=" + this.getSsc_typeOfCooperation() + ", ssc_typeOfImplementation=" + this.getSsc_typeOfImplementation() + ", ssc_modalities=" + this.getSsc_modalities() + ", fundingSourcesNumber=" + this.getFundingSourcesNumber() + ", FY=" + this.getFY() + ", yearsRange=" + this.getYearsRange() + ", selectedFYs=" + java.util.Arrays.deepToString(this.getSelectedFYs()) + ", resetselectedFYs=" + this.getResetselectedFYs() + ", vote=" + this.getVote() + ", subVote=" + this.getSubVote() + ", subProgram=" + this.getSubProgram() + ", projectCode=" + this.getProjectCode() + ", ministryCode=" + this.getMinistryCode() + ", gbsSbs=" + this.getGbsSbs() + ", approvalStatus=" + this.getApprovalStatus() + ", previousApprovalStatus=" + this.getPreviousApprovalStatus() + ", wasDraft=" + this.getWasDraft() + ", convenioNumcont=" + this.getConvenioNumcont() + ", levelCollection=" + this.getLevelCollection() + ", activityLevel=" + this.getActivityLevel() + ", author=" + this.getAuthor() + ", clasiNPD=" + this.getClasiNPD() + ", budgetCodes=" + java.util.Arrays.deepToString(this.getBudgetCodes()) + ", chapterCodes=" + this.getChapterCodes() + ", chapterYears=" + this.getChapterYears() + ", chapterCode=" + this.getChapterCode() + ", chapterForPreview=" + this.getChapterForPreview() + ", chapterYear=" + this.getChapterYear() + ", budgetsectors=" + this.getBudgetsectors() + ", budgetorgs=" + this.getBudgetorgs() + ", budgetdepartments=" + this.getBudgetdepartments() + ", budgetprograms=" + this.getBudgetprograms() + ", selectedbudgedsector=" + this.getSelectedbudgedsector() + ", selectedorg=" + this.getSelectedorg() + ", selecteddepartment=" + this.getSelecteddepartment() + ", selectedprogram=" + this.getSelectedprogram() + ", statusId=" + this.getStatusId() + ", statusReason=" + this.getStatusReason() + ", projectImplUnitId=" + this.getProjectImplUnitId() + ")";
 		}
+        public String getSscModalitiesAsString(String newLineCharacter){
+        	String modality="";
+			if(identification.getSsc_modalities()!=null ){
+				for(int i=0;i<identification.getSsc_modalities().length;i++){
+					if(identification.getSsc_modalities()[i]!=null){
+						modality+=TranslatorWorker.translateText(identification.getSsc_modalities()[i]) +newLineCharacter;
+					}
+				}
+			}
+			return modality;
+        }		
 	}
 	
 	public class Planning {

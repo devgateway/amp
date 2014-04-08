@@ -119,7 +119,7 @@ function ampp_general_query_content_type_edit_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Where clause'),
     '#default_value' => $conf['where'] ? $conf['where'] : '',
-    '#description' => t('Valid SQL syntax should be used. Use "!iso2" marker for user navigatoin language value.'),
+    '#description' => t('Valid SQL syntax should be used. Use ":iso2" marker for user navigatoin language value.'),
     '#element_validate' => array('ampp_general_query_where_validate'),
   );
 
@@ -162,6 +162,8 @@ function query_form_validate($form, &$form_state) {
   db_set_active($form_state['values']['database']);
   try {
     $query = ampp_general_build_query($form_state['values']);
+    $sql = (string) $query;
+    drupal_set_message($sql, 'query to be executed');
     $result = $query->execute();
   }
   catch (Exception $e) {
@@ -176,10 +178,6 @@ function query_form_validate($form, &$form_state) {
 function ampp_general_build_query($conf) {
   global $language;
 
-  // Expand labels.
-  $labels_arr = explode(',', $conf['labels']);
-  $labels_arr = array_filter($labels_arr);
-
   // Expand columns.
   $columns_arr = explode(',', $conf['columns']);
   $columns_arr = array_filter($columns_arr);
@@ -190,7 +188,7 @@ function ampp_general_build_query($conf) {
   $select_query->fields($table_name, $columns_arr);
 
   if (!empty($conf['where'])) {
-    $select_query->where($conf['where'], array('!iso2' => $language->language));
+    $select_query->where($conf['where'], array(':iso2' => $language->language));
   }
 
   if (!empty($conf['sortable'])) {

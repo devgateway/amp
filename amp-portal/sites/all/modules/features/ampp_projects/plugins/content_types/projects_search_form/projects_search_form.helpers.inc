@@ -705,13 +705,7 @@ function ampp_search_ajax_locations_form() {
  */
 function get_location_path($childLocationId, $depth = 999) {
   // we need to show the full hierarchy but not country
-
-  global $amp_db_exists;
   global $language;
-
-  if (!$amp_db_exists) {
-    return;
-  }
 
   $allParentIds = array();
 

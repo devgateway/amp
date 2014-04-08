@@ -75,6 +75,32 @@ function amp_activity_get_amp_activities() {
 }
 
 /**
+ * Test the AMP DB connection and check if 'cached_amp_activity' table exists.
+ */
+function amp_activity_check_db() {
+  $table_exists = &drupal_static(__FUNCTION__);
+  if (isset($table_exists) && !empty($table_exists)) {
+    return TRUE;
+  }
+
+  db_set_active(AMP_DATABASE);
+
+  $table_exists = db_select('pg_class', 'pg_class')
+    ->condition('pg_class.relname', 'cached_amp_activity', "=")
+    ->fields('pg_class', array('relname'))
+    ->execute()
+    ->fetchField();
+
+  db_set_active();
+
+  if (!empty($table_exists)) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
  * Get AMP base curency code from cache.
  */
 function amp_activity_get_base_currency() {
@@ -87,7 +113,7 @@ function amp_activity_get_base_currency() {
 
   $currency_code = db_select('amp_global_settings', 'settings')
     ->condition('settings.settingsname', 'Base Currency', "=")
-    ->fields('settings',array('settingsvalue'))
+    ->fields('settings', array('settingsvalue'))
     ->execute()
     ->fetchField();
 

@@ -15,14 +15,15 @@ $plugin = array(
  *
  */
 function ampp_projects_data_quality_content_type_render($subtype, $conf, $panel_args, $context) {
-  global $amp_db_exists;
   $block = new stdClass();
-  $block->content = '';
+  $block->content = t('Could not connect to the activities database. Please try again later. If the problem persists contact the site administrator.');
 
-  if ($amp_db_exists) {
-    $data_quality = _amp_projects_get_data_quality_records();
-    $block->content = theme('ampp_projects_data_quality', array('quality_records' => $data_quality));
+  if (!amp_activity_check_db()) {
+    return $block;
   }
+
+  $data_quality = _amp_projects_get_data_quality_records();
+  $block->content = theme('ampp_projects_data_quality', array('quality_records' => $data_quality));
 
   return $block;
 }

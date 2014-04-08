@@ -18,19 +18,19 @@ $plugin = array(
  *
  */
 function ampp_feedback_feedback_content_type_render($subtype, $conf, $panel_args, $context) {
-  global $amp_db_exists;
   $block = new stdClass();
-  $block->content = '';
+  $block->content = t('Could not connect to the activities database. Please try again later. If the problem persists contact the site administrator.');
+
+  if (!amp_activity_check_db()) {
+    return $block;
+  }
 
   if (isset($_SESSION['feedback_form_success_message'])) {
     $block->content = $_SESSION['feedback_form_success_message'];
     unset($_SESSION['feedback_form_success_message']);
   } else {
-     $block->content = drupal_get_form('feedback_form', $conf);
+    $block->content = drupal_get_form('feedback_form', $conf);
   }
-
-  // let's persist the vocab conf value
-  //variable_set('ampp_feedback_hide_vocab_' . $conf['pane_id'], $conf['vocab']);
 
   return $block;
 }

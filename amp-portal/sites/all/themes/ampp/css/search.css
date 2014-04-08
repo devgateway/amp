@@ -66,11 +66,11 @@
 }
 
 /* @TODO: Remove this hack. */
-.views-field-location-names .more-locations {
+.view-projects-search-result .more-locations {
   cursor: pointer;
 }
 
-.views-field-location-names .hidden-locations {
+.view-projects-search-result .hidden-locations {
   display:none;
 }
 

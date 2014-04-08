@@ -71,19 +71,17 @@ $plugin = array(
  * Run-time rendering of the body of the block.
  */
 function projects_search_form_block_render($subtype, $conf, $args, $context) {
-  global $amp_db_exists;
-
-  // Merge in plugin defaults, prevents not defined warnings on existing panels.
-  $plugin_definition = ctools_get_plugins('ctools', 'content_types', $subtype);
-  $conf = drupal_array_merge_deep($plugin_definition['defaults'], $conf);
-
   $block = new stdClass();
   $block->title = t('Projects search');
   $block->content = t('Could not connect to the activities database. Please try again later. If the problem persists contact the site administrator.');
 
-  if (!$amp_db_exists) {
+  if (!amp_activity_check_db()) {
     return $block;
   }
+
+  // Merge in plugin defaults, prevents not defined warnings on existing panels.
+  $plugin_definition = ctools_get_plugins('ctools', 'content_types', $subtype);
+  $conf = drupal_array_merge_deep($plugin_definition['defaults'], $conf);
 
   $block->content = drupal_get_form('projects_search_form', $conf);
 

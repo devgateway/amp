@@ -14,20 +14,23 @@ $plugin = array(
  *
  */
 function ampp_projects_search_result_totals_content_type_render($subtype, $conf, $panel_args, $context) {
-  global $amp_db_exists;
   $block = new stdClass();
-  $block->content = '';
+  $block->content = t('Could not connect to the activities database. Please try again later. If the problem persists contact the site administrator.');
+
+  if (!amp_activity_check_db()) {
+    return $block;
+  }
 
   $amount_commitment = amp_get_transactions_amount(AMP_TRANSACTION_TYPE_COMMITMENT);
   $amount_disbursement = amp_get_transactions_amount(AMP_TRANSACTION_TYPE_DISBURSEMENT);
 
   if (module_exists('format_number')) {
-    $amount_commitment = empty($amount_commitment) ? "0" : format_number($amount_commitment, 0);
-    $amount_disbursement = empty($amount_disbursement) ? "0" : format_number($amount_disbursement, 0);
+    $amount_commitment = empty($amount_commitment) ? '0' : format_number($amount_commitment, 0);
+    $amount_disbursement = empty($amount_disbursement) ? '0' : format_number($amount_disbursement, 0);
   }
   else {
-    $amount_commitment = empty($amount_commitment) ? "0" : number_format(intval($amount_commitment));
-    $amount_disbursement = empty($amount_disbursement) ? "0" : number_format(intval($amount_disbursement));
+    $amount_commitment = empty($amount_commitment) ? '0' : number_format(intval($amount_commitment));
+    $amount_disbursement = empty($amount_disbursement) ? '0' : number_format(intval($amount_disbursement));
   }
 
   $html = '<div class="search-results-total-amounts view-projects-search-result">';
@@ -37,7 +40,7 @@ function ampp_projects_search_result_totals_content_type_render($subtype, $conf,
   $html .= '<th>' . t('Disbursement amount') . ' (' . amp_activity_get_base_currency() . ")" . '</th>';
   $html .= '</tr></thead>';
 
-  $html .= '<td>' . t("Total") . ':' . '</td>';
+  $html .= '<td>' . t('Total') . ':' . '</td>';
   $html .= '<td class="commitment">' . $amount_commitment . '</td>';
   $html .= '<td class="disbursement">' . $amount_disbursement . '</td>';
   $html .= '</tr></thead>';

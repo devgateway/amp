@@ -15,14 +15,15 @@ $plugin = array(
  *
  */
 function ampp_projects_projects_as_of_content_type_render($subtype, $conf, $panel_args, $context) {
-  global $amp_db_exists;
   $block = new stdClass();
-  $block->content = '';
+  $block->content = t('Could not connect to the activities database. Please try again later. If the problem persists contact the site administrator.');
 
-  if ($amp_db_exists) {
-    $date = _amp_projects_get_projects_as_of_records();
-    $block->content = theme('ampp_projects_projects_as_of', array('date' => $date));
+  if (!amp_activity_check_db()) {
+    return $block;
   }
+
+  $date = _amp_projects_get_projects_as_of_records();
+  $block->content = theme('ampp_projects_projects_as_of', array('date' => $date));
 
   return $block;
 }

@@ -24,20 +24,22 @@ $plugin = array(
  *
  */
 function ampp_projects_commitments_report_content_type_render($subtype, $conf, $panel_args, $context) {
-  global $amp_db_exists;
   $block = new stdClass();
-  $block->content = '';
-  if ($amp_db_exists) {
-    $reports_info = _amp_projects_get_commitments_report($conf['ndays'], $conf['sort'], $conf['sort_direction']);
-    $commitments_report = $reports_info['reports'];
-    $curr_symbol = empty($conf['currency_symbol']) ? '' : ' ' . $conf['currency_symbol'];
-    $block->content = theme('ampp_projects_commitments_report', array(
-      'curr_symbol' => $curr_symbol,
-      'commitments_report' => $commitments_report,
-      'total_amount' => $reports_info['total_amount'],
-      'total_org_count' => $reports_info['total_org_count']
-    ));
+  $block->content = t('Could not connect to the activities database. Please try again later. If the problem persists contact the site administrator.');
+
+  if (!amp_activity_check_db()) {
+    return $block;
   }
+
+  $reports_info = _amp_projects_get_commitments_report($conf['ndays'], $conf['sort'], $conf['sort_direction']);
+  $commitments_report = $reports_info['reports'];
+  $curr_symbol = empty($conf['currency_symbol']) ? '' : ' ' . $conf['currency_symbol'];
+  $block->content = theme('ampp_projects_commitments_report', array(
+    'curr_symbol' => $curr_symbol,
+    'commitments_report' => $commitments_report,
+    'total_amount' => $reports_info['total_amount'],
+    'total_org_count' => $reports_info['total_org_count']
+  ));
 
   return $block;
 }

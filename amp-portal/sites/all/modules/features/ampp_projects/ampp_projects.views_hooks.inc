@@ -195,7 +195,7 @@ function _ampp_get_search_arguments($for_views = FALSE) {
   $processed_arguments = array();
   // Untill we use exposed filters instead of arguments, we need to send them to views in the right order.
   $arguments_list = array(
-    '0' => 'donors',
+    '0' => 'organisations_dn',
     '1' => 'sectors',
     '2' => 'locations',
     '3' => 'keywords',
@@ -203,7 +203,7 @@ function _ampp_get_search_arguments($for_views = FALSE) {
     '5' => 'programs',
     '6' => 'period_start',
     '7' => 'period_end',
-    '8' => 'agencies',
+    '8' => 'organisations_ba',
   );
 
   foreach ($arguments_list as $delta => $name) {
@@ -237,6 +237,16 @@ function _ampp_get_search_arguments($for_views = FALSE) {
         }
         break;
 
+        case 'budget':
+          // Translate budget IDs for views.
+          if ($for_views) {
+            $processed_arguments[$argkey] = _ampp_get_search_argument_budget($name, $for_views);
+          }
+          else {
+            $processed_arguments[$argkey] = _ampp_get_search_argument_value($name, $for_views);
+          }
+          break;
+
       default:
         $processed_arguments[$argkey] = _ampp_get_search_argument_value($name, $for_views);
         break;
@@ -249,24 +259,38 @@ function _ampp_get_search_arguments($for_views = FALSE) {
 /**
  * Helper function for _ampp_get_search_arguments()
  *
- * This function make sure the arguments get to views in all cases.
+ * Translates old pemanent URLs to work with the current filters.
  */
 function _ampp_get_search_argument_query_translation($name) {
-  $arg_mapping = array(
-    'agencies' => 'agency',
-    'donors' => 'donor',
-    'keywords' => 'keyword',
-    'locations' => 'region',
-    'primary_sectors' => 'primary_sector',
-    'programs' => 'program',
-    'secondary_sectors' => 'secondary_sector',
-    'sectors' => 'sector',
+  $old_args_mapping = array(
+    'sector' => 'sectors',
+
+    'primary_sector' => 'sectors_primary',
+    'primarysectors' => 'sectors_primary',
+
+    'secondary_sector' => 'sectors_secondary',
+    'secondarysectors' => 'sectors_secondary',
+
+    'program' => 'programs',
+
+    'region' => 'locations',
+
+    'donor' => 'organisations_dn',
+    'donors' => 'organisations_dn',
+
+    'agencies' => 'organisations_ba',
+    'agency' => 'organisations_ba',
+
+    'keyword' => 'keywords',
   );
 
-  if (isset($arg_mapping[$name])) {
-    $new_name = $arg_mapping[$name];
-    if (isset($_REQUEST[$new_name])) {
-      return $new_name;
+  foreach ($old_args_mapping as $old_key => $new_key) {
+    if ($new_key != $name) {
+      continue;
+    }
+
+    if (isset($_GET[$new_key])) {
+      return $new_key;
     }
   }
 
@@ -292,9 +316,45 @@ function _ampp_get_search_argument_value($name, $for_views) {
 /**
  * Helper function for _ampp_get_search_arguments()
  */
+function _ampp_get_search_argument_budget($name, $for_views) {
+  $options = _amp_activity_get_onoff_budget_ids();
+
+  if (empty($_REQUEST[$name])) {
+    return 'all';
+  }
+
+  switch ($_REQUEST[$name]) {
+    case 'off':
+    case 'on':
+      if (array_key_exists($_REQUEST[$name], $options)) {
+        return $options[$_REQUEST[$name]];
+      }
+  }
+
+  return 'all';
+}
+
+/**
+ * Helper function for _ampp_get_search_arguments()
+ */
 function _ampp_get_search_argument_location($name, $for_views) {
   if (empty($_REQUEST[$name]) || $_REQUEST[$name] === 'all') {
     return ($for_views) ? 'all' : '';
+  }
+
+  $include_country_level_projects = FALSE;
+  if (!empty($_GET['country_level_projects'])) {
+    $include_country_level_projects = TRUE;
+  }
+  if (!empty($_GET['RegionalProjects'])) {
+    $include_country_level_projects = TRUE;
+  }
+  if (!empty($_GET['showregionalprojects'])) {
+    $include_country_level_projects = TRUE;
+  }
+
+  if ($include_country_level_projects) {
+    drupal_static('_amp_activity_get_location_parent_ids', TRUE);
   }
 
   // We need to add all descendant locations.

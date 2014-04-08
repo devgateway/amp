@@ -3,6 +3,8 @@
 /**
  * @file
  * Projects Search Result
+ *
+ * @TODO: Create an URL alias only when requested.
  */
 
 $plugin = array(
@@ -98,9 +100,10 @@ function ampp_projects_projects_search_result_render($subtype, $conf, $panel_arg
     $url_query_args = _ampp_get_search_arguments(FALSE);
     $url_query_args = array_filter($url_query_args);
 
-    $url_query_args['show_info_column'] = $conf['show_info_column'];
     $url_query_args['show_status_column'] = $conf['show_status_column'];
-    $url_query_args['showregionalprojects'] = empty($_GET['showregionalprojects']) ? 'all' : $_GET['showregionalprojects'];
+    if (!empty($_GET['country_level_projects'])) {
+      $url_query_args['country_level_projects'] = TRUE;
+    }
 
     $url_args = array(
       'attributes' => array(

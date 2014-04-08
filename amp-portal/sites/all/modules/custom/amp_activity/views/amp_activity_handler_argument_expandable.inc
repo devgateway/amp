@@ -47,5 +47,6 @@ class amp_activity_handler_argument_expandable extends views_handler_argument_nu
       $extra_ids = $callback($id);
       $this->value = array_merge($this->value, $extra_ids);
     }
+    $this->value = array_unique($this->value);
   }
 }

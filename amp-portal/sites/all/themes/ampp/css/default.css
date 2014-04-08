@@ -823,8 +823,7 @@ div.views-slideshow-ddblock-cycle-vsd-default div.slide-text-inner {
 div.hidden-locations {position:absolute;width:150px;height:150px;background:#c4deed;color:#333333;font-size:12px;overflow:auto;margin-top:-15px;margin-left:25px;border:1px solid #c3c3c3;padding:5px;-moz-border-radius: 5px 5px 5px 5px;  -o-border-radius: 5px 5px 5px 5px;  -webkit-border-radius: 5px 5px 5px 5px;  border-radius: 5px 5px 5px 5px;  -moz-box-shadow: 3px 3px 3px #cccccc;-webkit-box-shadow: 3px 3px 3px #cccccc;box-shadow: 3px 3px 3px #cccccc;z-index:9999}
 span.more-locations {text-decoration:underline;color:#02578A}
 
-.page-search #ampp-search-form #edit-submit,#ampp-search-form input[type=submit] {float:none;margin-right:10px}
-#search_result_count {display:inline}
+#ampp-search-form .info {margin-left:10px;}
 .breadcrumb a,.breadcrumb a:link,.breadcrumb a:visited,.breadcrumb a:hover {color:#bbbbbb}
 .view-id-projects_search_result table.views-table {width:1000px; margin-bottom: 30px}
 .view-id-projects_search_result table.views-table .views-field-actual-completion-date,.view-projects-search-result table.views-table .views-field-actual-start-date {width: 100px; font-size: 9px}
@@ -924,29 +923,14 @@ span.more-locations {text-decoration:underline;color:#02578A}
 	font-weight: bold;
 }
 
-#ampp-search-form #edit-period .container-inline-date {float: left; clear: none;}
-#ampp-search-form #edit-period .container-inline-date #edit-period-start-datepicker-popup-0 {width: 140px}
-#ampp-search-form #edit-period .container-inline-date .description {margin-left: 0px}
-#ampp-search-form #edit-period .container-inline-date #edit-period-end-datepicker-popup-0 {width: 140px}
-#ampp-search-form #edit-period .container-inline-date label[for=edit-period-end-datepicker-popup-0] {width: auto; margin-right: 10px}
-#ampp-search-form #edit-period .container-inline-date .date-padding {padding: 0}
-
 #ampp-search-form .form-item-budget label[for=edit-budget] {width: auto; font-weight: bold; }
 #ampp-search-form .form-item.form-item-budget label {float: none; width: auto}
 #ampp-search-form .form-item-budget input.form-radio {padding: 0; margin: 0}
 #ampp-search-form .form-item-budget .form-item-budget {float: left; clear: none; margin-right: 10px; width: auto}
-#ampp-search-form .form-item-budget {float: left; width: 100%; margin-bottom: 5px}
-#ampp-search-form .form-item-country-level-projects {margin-bottom: 20px}
-#ampp-search-form .form-item-country-level-projects #edit-country-level-projects {margin-top: 3px; margin-left: 0}
 
-#ampp-search-form .form-item-sector,
-#ampp-search-form .form-item-primary-sector,
-#ampp-search-form .form-item-secondary-sector,
-#ampp-search-form .form-item-program,
-#ampp-search-form .form-item-donor,
-#ampp-search-form .form-item-region,
-#ampp-search-form .form-type-item {float: left; clear: none; margin: 10px 0 0}
-#ampp-search-form div span.modal-list-more {margin: 10px 5px}
+#ampp-search-form #edit-period {
+  overflow: hidden;
+}
 
 .page-search #ampp-search-form .form-item-sector,
 .page-search #ampp-search-form .form-item-primary-sector,

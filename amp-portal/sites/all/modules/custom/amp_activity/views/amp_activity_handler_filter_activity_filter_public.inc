@@ -36,6 +36,7 @@ class amp_activity_handler_filter_activity_filter_public extends views_handler_f
       return;
     }
 
+    // The code bellow should match the query created by amp_activity_get_amp_activities().
     $this->query->set_group_operator('AND', 0);
 
     $group = 0;

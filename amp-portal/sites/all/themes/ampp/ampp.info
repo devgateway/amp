@@ -45,6 +45,7 @@ stylesheets[all][] = css/pane-layouts.css
 stylesheets[all][] = css/pane-styles.css
 stylesheets[all][] = css/sidebar-menu.css
 stylesheets[all][] = css/color.css
+stylesheets[all][] = css/search.css
 
 css[default.css][name] = 'Your custom global styles'
 css[default.css][description] = 'This file holds all the globally active custom CSS of your theme.'

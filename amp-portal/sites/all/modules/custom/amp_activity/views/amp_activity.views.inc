@@ -272,6 +272,14 @@ function amp_activity_views_data_alter(&$data) {
       'left_field' => 'amp_activity_id',
       'field' => 'amp_activity_id',
       'type' => 'INNER',
+      'extra' => array(
+        array(
+          'field' => 'amp_categoryvalue_id',
+          'value' => _amp_activity_get_onoff_budget_ids(),
+          'operator' => 'IN',
+          'numeric' => TRUE,
+        ),
+      ),
     )
   );
 

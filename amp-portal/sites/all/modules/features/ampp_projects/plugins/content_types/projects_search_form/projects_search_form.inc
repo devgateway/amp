@@ -4,60 +4,73 @@
  * @file
  * Projects search form
  *
+ * @TODO: Remove the hardcoded IDs for form elements.
  */
+
+include_once('projects_search_form.helpers.inc');
+
 $plugin = array(
   'single' => TRUE,
   'title' => t('Projects Search Form'),
-  'description' => t('Projects Search Form'),
+  'description' => t('Provides a search form for AMP Activities (projects).'),
   'category' => array(t('AMPP Widgets'), -9),
   'defaults' => array(
     'search_path' => 'search',
-    'budget_flag' => 0,
-    'country_level_projects_flag' => 0,
-    'sectors_flag' => 1,
-    'primary_sectors_flag' => 0,
-    'secondary_sectors_flag' => 0,
-    'programs_flag' => 0,
-    'donors_flag' => 1,
-    'agencies_flag' => 0,
-    'locations_flag' => 1,
-    'period_flag' => 0,
-    'keywords_flag' => 1,
-    'sectors_popup' => 0,
-    'primary_sectors_popup' => 0,
-    'secondary_sectors_popup' => 0,
-    'programs_popup' => 0,
-    'donors_popup' => 0,
-    'agencies_popup' => 0,
-    'locations_popup' => 0,
-    'sectors_label' => 'Sectors',
-    'primary_sectors_label' => 'Primary Sectors',
-    'secondary_sectors_label' => 'Secondary Sectors',
-    'programs_label' => 'Programs',
-    'donors_label' => 'Donors',
-    'agencies_label' => 'Beneficiary Agency',
-    'locations_label' => 'Locations',
-    'keywords_label' => 'Keywords',
-    'preview_amount' => 0,
+    'period_flag' => FALSE,
+    'budget_flag' => FALSE,
+    'country_level_projects_flag' => FALSE,
+    'preview_amount_flag' => FALSE,
+
+    'sectors' => array(
+      'show' => TRUE,
+      'label' => 'Sectors',
+      'popup' => FALSE,
+    ),
+    'sectors_primary' => array(
+      'show' => FALSE,
+      'label' => 'Primary Sectors',
+      'popup' => FALSE,
+    ),
+    'sectors_secondary' => array(
+      'show' => FALSE,
+      'label' => 'Secondary Sectors',
+      'popup' => FALSE,
+    ),
+    'organisations_dn' => array(
+      'show' => TRUE,
+      'label' => 'Donors',
+      'popup' => FALSE,
+    ),
+    'organisations_ba' => array(
+      'show' => FALSE,
+      'label' => 'Beneficiary Agency',
+      'popup' => FALSE, // @TODO: Add callback in ampp_search_modalform_callback().
+    ),
+    'programs' => array(
+      'show' => FALSE,
+      'label' => 'Programs',
+      'popup' => FALSE,
+    ),
+    'locations' => array(
+      'show' => TRUE,
+      'label' => 'Locations',
+      'popup' => FALSE,
+    ),
+    'keywords' => array(
+      'show' => TRUE,
+      'label' => 'Keywords',
+      // 'popup' => FALSE,
+    ),
   ),
-  'render callback' => 'ampp_projects_projects_search_form_render'
+
+  'render callback' => 'projects_search_form_block_render'
 );
 
 /**
  * Run-time rendering of the body of the block.
- *
- * @param $subtype
- * @param $conf
- *   Configuration as done at admin time.
- * @param $args
- * @param $context
- *   Context - in this case we don't have any.
- *
- * @return
- *   An object with at least title and content members.
  */
-function ampp_projects_projects_search_form_render($subtype, $conf, $args, $context) {
-  module_load_include('inc', 'node', 'node.pages');
+function projects_search_form_block_render($subtype, $conf, $args, $context) {
+  global $amp_db_exists;
 
   // Merge in plugin defaults, prevents not defined warnings on existing panels.
   $plugin_definition = ctools_get_plugins('ctools', 'content_types', $subtype);
@@ -65,344 +78,277 @@ function ampp_projects_projects_search_form_render($subtype, $conf, $args, $cont
 
   $block = new stdClass();
   $block->title = t('Projects search');
-  $block->content = drupal_get_form('ampp_projects_projects_search_form_form', $conf);
+  $block->content = t('Could not connect to the activities database. Please try again later. If the problem persists contact the site administrator.');
+
+  if (!$amp_db_exists) {
+    return $block;
+  }
+
+  $block->content = drupal_get_form('projects_search_form', $conf);
+
+  // Load the plugin specific JavaScript.
+  drupal_add_js($plugin_definition['path'] . '/projects_search_form.js');
+
+  // @TODO: Use libraries API.
+  $module_path = drupal_get_path('module', 'ampp_projects');
+  drupal_add_js($module_path . '/tokeninput/src/jquery.tokeninput.js');
 
   return $block;
 }
 
 /**
- *
+ * Returns a search form for AMP Activities (projects).
  */
-function project_search_form_uidatepicker($form, $form_state) {
-  drupal_add_library('system', 'ui.datepicker');
-  drupal_add_js("(function ($) { $('.datepicker').datepicker(); })(jQuery);", array(
-    'type' => 'inline',
-    'scope' => 'footer',
-    'weight' => 5
-  ));
+function projects_search_form($form, &$form_state, $conf) {
+  // By default we don't include the popup specific JS.
+  $include_popup_javascript = FALSE;
+
+  // Pass the pane configuration to the submit handler.
+  $form_state['conf'] = $conf;
+
+  // Get the 'popup icon' HTML.
+  $theme_path = path_to_theme();
+  $img_vars = array('path' => $theme_path . '/images/list.png');
+  $popup_icon = theme('image', $img_vars);
+
+  // @TODO: Remove this hack!
+  unset($form['#attributes']['id']);
+  $form['#attributes']['id'][] = 'ampp-search-form';
+
+  foreach ($conf as $field_name => $field_info) {
+    if (!is_array($field_info)) {
+      continue;
+    }
+
+    if (empty($field_info['show'])) {
+      continue;
+    }
+
+    // Default value for autocomplete fields is added using the token libary.
+    $form[$field_name] = array(
+      '#type' => 'textfield',
+      '#title' => t($field_info['label']),
+      '#description' => '',
+      '#size' => 30,
+      '#maxlength' => 64,
+    );
+
+    // Cleanup style.
+    $form[$field_name]['#prefix'] = '<div class="clearfix">';
+    $form[$field_name]['#suffix'] = '</div>';
+
+    // Setup autocomplete fields using the token library.
+    if ($field_name != 'keywords') {
+      $form[$field_name]['#pre_render'] = array(
+        'projects_search_form_pre_render_autocomplete_fields',
+      );
+    }
+
+    // Setup the dialog popup behavior.
+    if (!empty($field_info['popup'])) {
+      $include_popup_javascript = TRUE;
+
+      $popup_args = array(
+        'html' => TRUE,
+        'query' => array('format' => 'simple'),
+        'attributes' => array(
+          'class' => 'modal-selection',
+          'rel' => 'edit-' . drupal_html_class($field_name),
+          'title' => t($field_info['label'] . ' selection')
+        )
+      );
+
+      $popup_url = 'ampp_search/modalform/' . $field_name;
+
+      $form[$field_name]['#field_suffix'] = ' <span class="modal-list-more">';
+      $form[$field_name]['#field_suffix'] .= l($popup_icon, $popup_url, $popup_args);
+      $form[$field_name]['#field_suffix'] .= '</span>';
+    }
+
+    // Add description text to autocomplete fields.
+    // @TODO: Use filter names to generate descriptions.
+    switch ($field_name) {
+      case 'sectors':
+        $form[$field_name]['#description'] = t('Start typing a sector name then choose from the list.');
+        break;
+
+      case 'sectors_primary':
+        $form[$field_name]['#description'] = t('Start typing a primary sector name then choose from the list.');
+        break;
+
+      case 'sectors_secondary':
+        $form[$field_name]['#description'] = t('Start typing a secondary sector name then choose from the list.');
+        break;
+
+      case 'programs':
+        $form[$field_name]['#description'] = t('Start typing a program name then choose from the list.');
+        break;
+
+      case 'locations':
+        $form[$field_name]['#description'] = t('Start typing a location name then choose from the list.');
+        break;
+
+      case 'organisations_dn':
+        $form[$field_name]['#description'] = t('Start typing a donor name then choose from the list.');
+        break;
+
+      case 'organisations_ba':
+        $form[$field_name]['#description'] = t('Start typing a beneficiary agency name then choose from the list.');
+        break;
+
+      case 'keywords':
+        $form[$field_name]['#description'] = t('Search in project titles.');
+
+        // The keywords field needs to be after the period fields.
+        $form[$field_name]['#weight'] = 2;
+
+        // Add the default value.
+        if (isset($_GET[$field_name])) {
+          $form[$field_name]['#default_value'] = check_plain($_GET[$field_name]);
+        }
+        break;
+    }
+  }
+
+  if (!empty($conf['period_flag'])) {
+    // Get the input date format.
+    $localized_date_formats = locale_get_localized_date_format(array($GLOBALS['language']->language));
+    $format = $localized_date_formats['date_format_ampp_cal'];
+
+    $period_start_default = '';
+    if (isset($_GET['period_start'])) {
+      $period_start_default = date_format($_GET['period_start'], $format);
+    }
+
+    $period_end_default = '';
+    if (isset($_GET['period_end'])) {
+      $period_end_default = date_format($_GET['period_end'], $format);
+    }
+
+    $form['period'] = array(
+      '#type' => 'item',
+      '#title' => t('Period from'),
+      '#weight' => 1,
+    );
+
+    $form['period']['period_start'] = array(
+      '#type' => 'date_popup',
+      '#description' => t('Records with no value are ignored.'),
+      '#default_value' => $period_start_default,
+      '#date_type' => DATE_UNIX,
+      '#date_timezone' => date_default_timezone(),
+      '#date_format' => $format,
+      '#date_year_range' => _amp_activity_activities_period_range_limits(),
+    );
+    $form['period']['period_end'] = array(
+      '#type' => 'date_popup',
+      '#default_value' => $period_end_default,
+      '#date_type' => DATE_UNIX,
+      '#date_timezone' => date_default_timezone(),
+      '#date_format' => $format,
+      '#date_year_range' => _amp_activity_activities_period_range_limits(),
+    );
+
+    $form['period']['period_start']['#prefix'] = '<div class="clearfix">';
+    $form['period']['period_end']['#suffix'] = '</div>';
+  }
+
+  if (!empty($conf['budget_flag'])) {
+    $options = array(
+      'all' => t('Show all projects'),
+      'on' => t('On-budget only'),
+      'off' => t('Off-budget only')
+    );
+
+    // Get the budget status from URL and sanatzie the value.
+    $budget_default = 'all';
+    if (isset($_GET['budget'])) {
+      switch ($_GET['budget']) {
+        case 'on':
+          $budget_default = 'on';
+          break;
+        case 'off':
+          $budget_default = 'off';
+          break;
+      }
+    }
+
+    $form['budget'] = array(
+      '#type' => 'radios',
+      '#title' => t('Show on-budget projects'),
+      // '#description' => t('NOTE: There are some activities with no declared budget.'),
+      '#options' => $options,
+      '#default_value' => $budget_default,
+      '#attributes' => array(
+        'class' => array('clearfix'),
+      ),
+      '#weight' => 3,
+    );
+  }
+
+  if (!empty($conf['country_level_projects_flag'])) {
+    $clp_default = FALSE;
+    if (!empty($_GET['country_level_projects'])) {
+      $clp_default = TRUE;
+    }
+
+    $form['country_level_projects'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Include higher geographical levels'),
+      '#weight' => 4,
+      '#default_value' => $clp_default,
+    );
+  }
+
+  if (!empty($conf['preview_amount_flag'])) {
+    $form['preview_amount'] = array(
+      '#type' => 'hidden',
+      '#value' => TRUE,
+      '#weight' => 3,
+    );
+  }
+
+  $form['actions'] = array(
+    '#type' => 'actions',
+    '#weight' => 50,
+  );
+
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Show'),
+  );
+
+  $form['actions']['throbber'] = array(
+    '#prefix' => '<span class="search-form-throbber">',
+    '#markup' =>  t('calculating...'),
+    '#suffix' => '</span>',
+  );
+
+  $form['actions']['form_info'] = array(
+    '#prefix' => '<span class="search-form-info">',
+    '#markup' =>  '',
+    '#suffix' => '</span>',
+  );
+
+  // Add the autocompmlete and forminfo endpoint to JS.
+  $form_js_settings = array();
+  $form_js_settings['autocomplete_endpoint'] = url('ampp_search/autocomplete');
+  $form_js_settings['forminfo_endpoint'] = url('ampp_search/forminfo');
+  $form_js_settings['modalform_values_endpoint'] = url('ampp_search/modalform_values');
+
+  drupal_add_js(array('projectsSearchForm' => $form_js_settings), 'setting');
+
+  if ($include_popup_javascript) {
+    drupal_add_library('system', 'ui.dialog');
+  }
 
   return $form;
 }
 
 /**
- * Returns an edit form for the projects search
+ * Submit callback for projects_search_form().
  */
-function ampp_projects_projects_search_form_form($form, &$form_state, $conf) {
-  global $amp_db_exists;
-  if (!$amp_db_exists) {
-    return array(
-      '#markup' => t('Could not connect to the database. Please try again later. If the problem persists contact the site administrator.'),
-    );
-  }
-
-  global $language;
-
-  $theme_path = path_to_theme();
-  $img_vars = array('path' => $theme_path . '/images/list.png');
-  $icon = theme('image', $img_vars);
-
-  $form_state['conf'] = $conf;
-
-  unset($form['#attributes']['id']);
-  $form['#attributes']['id'][] = 'ampp-search-form';
-
-  if ($conf["sectors_flag"] == 1) {
-    $form['sector'] = array(
-      '#type' => 'textfield',
-      '#title' => t($conf['sectors_label']),
-      '#size' => 30,
-      '#maxlength' => 64,
-      '#description' => t('Start typing sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-    );
-    if (!isset($conf['sectors_popup']) || $conf['sectors_popup'] == 0) {
-      $form['sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-sectores', array(
-          'html' => TRUE,
-          'query' => array('format' => 'simple'),
-          'attributes' => array(
-            'class' => 'modal-selection',
-            'rel' => 'edit-sector',
-            'title' => t($conf['sectors_label'] . ' selection')
-          )
-        )) . '</span>';
-    }
-  }
-
-  if ($conf["primary_sectors_flag"] == 1) {
-    $form['primary_sector'] = array(
-      '#type' => 'textfield',
-      '#title' => t($conf['primary_sectors_label']),
-      '#size' => 30,
-      '#maxlength' => 64,
-      '#description' => t('Start typing primary sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-    );
-    if (!isset($conf['primary_sectors_popup']) || $conf['primary_sectors_popup'] == 0) {
-      $form['primary_sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-primarysectors', array(
-          'html' => TRUE,
-          'query' => array('format' => 'simple'),
-          'attributes' => array(
-            'class' => 'modal-selection',
-            'rel' => 'edit-primary-sector',
-            'title' => t($conf['primary_sectors_label'] . ' selection')
-          )
-        )) . '</span>';
-    }
-  }
-
-  if ($conf["secondary_sectors_flag"] == 1) {
-    $form['secondary_sector'] = array(
-      '#type' => 'textfield',
-      '#title' => t($conf['secondary_sectors_label']),
-      '#size' => 30,
-      '#maxlength' => 64,
-      '#description' => t('Start typing secondary sector name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-    );
-    if (!isset($conf['secondary_sectors_popup']) || $conf['secondary_sectors_popup'] == 0) {
-      $form['secondary_sector']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-secondarysectors', array(
-          'html' => TRUE,
-          'query' => array('format' => 'simple'),
-          'attributes' => array(
-            'class' => 'modal-selection',
-            'rel' => 'edit-secondary-sector',
-            'title' => t($conf['secondary_sectors_label'] . ' selection')
-          )
-        )) . '</span>';
-    }
-  }
-
-  if ($conf["programs_flag"] == 1) {
-    $form['program'] = array(
-      '#type' => 'textfield',
-      '#title' => t($conf['programs_label']),
-      '#size' => 30,
-      '#maxlength' => 64,
-      '#description' => t('Start typing program name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-    );
-    if (!isset($conf['programs_popup']) || $conf['programs_popup'] == 0) {
-      $form['program']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-programs', array(
-          'html' => TRUE,
-          'query' => array('format' => 'simple'),
-          'attributes' => array(
-            'class' => 'modal-selection',
-            'rel' => 'edit-program',
-            'title' => t($conf['programs_label'] . ' selection')
-          )
-        )) . '</span>';
-    }
-  }
-
-  if ($conf["donors_flag"] == 1) {
-    $form['donor'] = array(
-      '#type' => 'textfield',
-      '#title' => t($conf['donors_label']),
-      '#size' => 30,
-      '#maxlength' => 64,
-      '#description' => t('Start typing donor name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-    );
-    if (!isset($conf['donors_popup']) || $conf['donors_popup'] == 0) {
-      $form['donors_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-donors', array(
-          'html' => TRUE,
-          'query' => array('format' => 'simple'),
-          'attributes' => array(
-            'class' => 'modal-selection',
-            'rel' => 'edit-donor',
-            'title' => t($conf['donors_label'] . ' selection')
-          )
-        )) . '</span>';
-    }
-  }
-
-  if ($conf["agencies_flag"] == 1) {
-    $form['agency'] = array(
-      '#type' => 'textfield',
-      '#title' => t($conf['agencies_label']),
-      '#size' => 30,
-      '#maxlength' => 64,
-      '#description' => t('Start typing agency name then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-    );
-    if (!isset($conf['agencies_popup']) || $conf['agencies_popup'] == 0) {
-      $form['agencies_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-agencies', array(
-          'html' => TRUE,
-          'query' => array('format' => 'simple'),
-          'attributes' => array(
-            'class' => 'modal-selection',
-            'rel' => 'edit-agency',
-            'title' => t($conf['agencies_label'] . ' selection')
-          )
-        )) . '</span>';
-    }
-  }
-
-  if ($conf["locations_flag"] == 1) {
-    $form['region'] = array(
-      '#type' => 'textfield',
-      '#title' => t($conf['locations_label']),
-      '#size' => 30,
-      '#maxlength' => 64,
-      '#description' => t('Start typing region then choose from list. Multiple entries possible. Logical OR is used between multiple values.')
-    );
-    if (!isset($conf['locations_popup']) || $conf['locations_popup'] == 0) {
-      $form['locations_flag']['#suffix'] = '<span class="modal-list-more"> ' . l($icon, 'ampp_search/ajax-regions', array(
-          'html' => TRUE,
-          'query' => array('format' => 'simple'),
-          'attributes' => array(
-            'class' => 'modal-selection',
-            'rel' => 'edit-region',
-            'title' => t($conf['locations_label'] . ' selection')
-          )
-        )) . '</span>';
-    }
-  }
-
-  if ($conf["period_flag"] == 1) {
-    $lang_arr = locale_get_localized_date_format(array($language->language));
-    $years_range_arr = activities_period_range();
-    $years_past = (date('Y') > $years_range_arr[0]) ? date('Y') - $years_range_arr[0] : 0;
-    $years_future = ($years_range_arr[1] > date('Y')) ? $years_range_arr[1] - date('Y') : 0;
-
-    $form['period'] = array(
-      '#type' => 'item',
-      '#title' => t('Period from'),
-      'period_start' => array(
-        '#type' => 'date_popup',
-        '#title' => '',
-        '#default_value' => '',
-        '#date_type' => DATE_UNIX,
-        '#date_timezone' => date_default_timezone(),
-        '#date_format' => $lang_arr['date_format_ampp_cal'],
-        '#date_year_range' => '-' . $years_past . ':+' . $years_future,
-        '#description' => t('Records with no value are ignored.'),
-      ),
-      'period_end' => array(
-        '#type' => 'date_popup',
-        '#title' => '',
-        '#default_value' => '',
-        '#date_type' => DATE_UNIX,
-        '#date_timezone' => date_default_timezone(),
-        '#date_format' => $lang_arr['date_format_ampp_cal'],
-        '#date_year_range' => '-' . $years_past . ':+' . $years_future,
-      ),
-    );
-  }
-
-  if ($conf["keywords_flag"] == 1) {
-    $form['keyword'] = array(
-      '#type' => 'textfield',
-      '#title' => t($conf['keywords_label']),
-      '#size' => 30,
-      '#description' => t('Search in project titles'),
-    );
-  }
-
-  if ($conf["budget_flag"] == 1) {
-    $form['budget'] = array(
-      '#type' => 'radios',
-      '#title' => t('Show on-budget projects'),
-      '#options' => array(
-        'all' => t('Show both on and off budget projects'),
-        OnOffBudgetIds::$onBudgetProjectsId => t('On-budget only'),
-        OnOffBudgetIds::$offBudgetProjectsId => t('Off-budget only')
-      ),
-      '#default_value' => 'all',
-    );
-  }
-
-  if ($conf["country_level_projects_flag"] == 1) {
-    $form['country_level_projects'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Include higher geographical levels'),
-      //'#value' => 1,
-    );
-  }
-
-  if ($conf["preview_amount"] == 1) {
-    $form['preview_amount'] = array(
-      '#type' => 'hidden',
-      '#value' => $conf["preview_amount"],
-      '#attributes' => array('id' => array('preview_amount')),
-    );
-  }
-
-  global $amp_db_exists;
-
-  if ($amp_db_exists) {
-    $form['submit'] = array('#type' => 'submit', '#value' => t('Show'));
-
-    $preview_amount = isset($conf['preview_amount']) ? (bool) $conf['preview_amount'] : FALSE;
-
-    $html_markup = t('projects to show is') . '&nbsp;';
-    $html_markup .= '<div id="search_result_count">';
-    $html_markup .= ampp_search_result_count(FALSE, $preview_amount);
-    $html_markup .= '</div>';
-    $html_markup .= '<span id="loading-count">' . t('loading') . '...</span>';
-
-    $form['results_count'] = array(
-      '#markup' =>  $html_markup,
-    );
-  }
-  else {
-    $form['results_count'] = array('#markup' => '<div class="messages error"><ul><li>' . t('AMP database is not configured properly.') . '</li></ul><span><img id="close" src="/sites/all/themes/ampp/images/cancel_icon.gif"></span></div>');
-  }
-
-  // Fill search form textfields.
-  // Form should be filled only on search result page
-  // @TODO: Cleanup!!!
-  $form_settings = array();
-  $form_settings['selectedSectors'] = ampp_get_sectors_from_url();
-  $form_settings['selectedPrimarySectors'] = ampp_get_primarysectors_from_url();
-  $form_settings['selectedSecondarySectors'] = ampp_get_secondarysectors_from_url();
-  $form_settings['selectedPrograms'] = ampp_get_programs_from_url();
-  $form_settings['selectedDonors'] = ampp_get_donors_from_url();
-  $form_settings['selectedAgencies'] = ampp_get_agencies_from_url();
-  $form_settings['selectedLocations'] = ampp_get_locations_from_url();
-
-  $period = ampp_get_period_from_url();
-  if ($period['period_start'] != 'all') {
-    $form_settings['selectedPeriodStart'] = format_date(strtotime($period['period_start']), 'ampp_cal');
-  }
-  if ($period['period_end'] != 'all') {
-    $form_settings['selectedPeriodEnd'] = format_date(strtotime($period['period_end']), 'ampp_cal');
-  }
-
-  $form_settings['selectedKeywords'] = ampp_get_keywords_from_url();
-
-  if ($conf['budget_flag'] == 1) {
-    $arr = ampp_get_onoffbudget_from_url();
-    if (is_array($arr)) {
-      $i = 0;
-      while ($i < count($arr)) {
-        switch ($arr[$i]) {
-          case OnOffBudgetIds::$offBudgetProjectsId:
-            $form_settings['selectedBudget'] = OnOffBudgetIds::$offBudgetProjectsId;
-            break;
-          case OnOffBudgetIds::$onBudgetProjectsId:
-            $form_settings['selectedBudget'] = OnOffBudgetIds::$onBudgetProjectsId;
-            break;
-        }
-        $i++;
-      }
-    }
-    else {
-      $form_settings['selectedOffBudget'] = 'all';
-    }
-  }
-  if ($conf["country_level_projects_flag"] == 1) {
-    $regionalprojects = ampp_get_regionalprojects_from_url();
-    if ($regionalprojects == 1) {
-      $form_settings['selectedRegionalProjects'] = 1;
-    }
-  }
-
-  $settings = array();
-  $settings['ampp_projects']['form_settings'] = $form_settings;
-  drupal_add_js($settings, 'setting');
-
-  return $form;
-}
-
-/*
- *
- */
-function ampp_projects_projects_search_form_form_submit($form, &$form_state) {
+function projects_search_form_submit($form, &$form_state) {
   $conf = $form_state['conf'];
   $submit_path = $conf['search_path'];
 
@@ -410,48 +356,86 @@ function ampp_projects_projects_search_form_form_submit($form, &$form_state) {
   $arguments = _ampp_get_search_arguments(FALSE);
   $arguments = array_filter($arguments);
 
-  $flags_list = array(
-    'agencies_flag' => 'agencies',
-    'budget_flag' => 'budget',
-    'donors_flag' => 'donors',
-    'keywords_flag' => 'keywords',
-    'locations_flag' => 'locations',
-    'period_flag' => '',
-    'primary_sectors_flag' => 'primarysectors',
-    'programs_flag' => 'programs',
-    'secondary_sectors_flag' => 'secondarysectors',
-    'sectors_flag' => 'sectors',
-  );
-
   // Filter out fields that are not enabled, makes the URL shorter.
-  foreach ($flags_list as $flag_name => $arg_name) {
-    if (!empty($conf[$flag_name])) {
+  foreach ($conf as $field_name => $field_info) {
+    if (!is_array($field_info)) {
       continue;
     }
 
-    switch ($flag_name) {
+    if (!empty($conf[$field_name]['show'])) {
+      continue;
+    }
+
+    if (isset($arguments[$field_name]) && $arguments[$field_name] == '') {
+      continue;
+    }
+
+    switch ($field_name) {
       case 'period_flag':
         unset($arguments['period_start']);
         unset($arguments['period_end']);
         break;
 
       default:
-        unset($arguments[$arg_name]);
+        unset($arguments[$field_name]);
         break;
     }
   }
 
-  if ($conf['country_level_projects_flag'] == 1) {
-    $arguments['showregionalprojects'] = empty($form_state['values']['country_level_projects']) ? 'all' : $form_state['values']['country_level_projects'];
+  if (!empty($_GET['country_level_projects'])) {
+    $arguments['country_level_projects'] = TRUE;
   }
 
   drupal_goto($submit_path, array('query' => $arguments));
 }
 
-/*
- *
+/**
+ * Setup the jQuery Token Input library for autocomplete fields.
+ */
+function projects_search_form_pre_render_autocomplete_fields($element) {
+  $field_name = $element['#name'];
+
+  // We need at least an empty array in order to intialize the token widget.
+  $form_js_settings = array();
+  $form_js_settings['autocomplete'][$field_name] = array();
+
+  // @TODO: Remove this mapping.
+  $field_values_callback_map = array(
+    'sectors' => 'ampp_get_sectors_from_url',
+    'sectors_primary' => 'ampp_get_primarysectors_from_url',
+    'sectors_secondary' => 'ampp_get_secondarysectors_from_url',
+    'programs' => 'ampp_get_programs_from_url',
+    'locations' => 'ampp_get_locations_from_url',
+    'organisations_dn' => 'ampp_get_donors_from_url',
+    'organisations_ba' => 'ampp_get_agencies_from_url',
+  );
+
+  $autocomplete_info[$field_name] = NULL;
+  // Check if we have a values callback.
+  if (array_key_exists($field_name, $field_values_callback_map)) {
+    $callback = $field_values_callback_map[$field_name];
+
+    if (function_exists($callback)) {
+      // Get the values from URL.
+      $values = $callback();
+
+      // Add the default values to javascript settings.
+      if (!empty($values)) {
+        $form_js_settings['autocomplete'][$field_name] = $values;
+      }
+    }
+  }
+
+  drupal_add_js(array('projectsSearchForm' => $form_js_settings), 'setting');
+
+  return $element;
+}
+
+/**
+ * Provides the pane settings form.
  */
 function ampp_projects_projects_search_form_content_type_edit_form($form, &$form_state) {
+  $plugin_defaults = $form_state['plugin']['defaults'];
   $conf = $form_state['conf'];
 
   $form['note_at_least_one'] = array(
@@ -460,222 +444,97 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
     '#weight' => 0,
   );
 
-  // hide($form['override_title']);
-  // hide($form['override_title_text']);
-  // hide($form['override_title_markup']);
+  // Hide the override_title description text.
+  unset($form['override_title_markup']);
 
   $form['search_path'] = array(
     '#type' => 'textfield',
-    '#title' => t('Search result path'),
-    '#size' => 60,
-    '#description' => t('Search result path'),
-    '#default_value' => isset($conf['search_path']) ? $conf['search_path'] : $form_state['plugin']['defaults']['search_path'],
+    '#title' => t('Search path'),
+    '#description' => t('This should point to a page that contains the "Projects Search Result" block. Filter values will be submitted to that page.'),
+    '#default_value' => $conf['search_path'],
     '#required' => TRUE,
-  );
-
-  $form['sectors_flag'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show Sectors search field'),
-    '#description' => t('Show sectors search field'),
-    '#default_value' => isset($conf['sectors_flag']) ? intval($conf['sectors_flag']) : $form_state['plugin']['defaults']['sectors_flag'],
-    '#id' => 'sectors_flag',
-  );
-  $form['sectors_popup'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Disable Sectors popup select'),
-    '#default_value' => isset($conf['sectors_popup']) ? intval($conf['sectors_popup']) : $form_state['plugin']['defaults']['sectors_popup'],
-    '#dependency' => array('sectors_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-  $form['sectors_label'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Sectors label'),
-    '#default_value' => isset($conf['sectors_label']) ? t($conf['sectors_label']) : t($form_state['plugin']['defaults']['sectors_label']),
-    '#dependency' => array('sectors_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-
-  $form['primary_sectors_flag'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show Primary Sectors search field'),
-    '#description' => t('Show primary sectors search field'),
-    '#default_value' => isset($conf['primary_sectors_flag']) ? intval($conf['primary_sectors_flag']) : $form_state['plugin']['defaults']['primary_sectors_flag'],
-    '#id' => 'primary_sectors_flag',
-  );
-  $form['primary_sectors_popup'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Disable Primary Sectors popup select'),
-    '#default_value' => isset($conf['primary_sectors_popup']) ? intval($conf['primary_sectors_popup']) : $form_state['plugin']['defaults']['primary_sectors_popup'],
-    '#dependency' => array('primary_sectors_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-  $form['primary_sectors_label'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Primary Sectors label'),
-    '#default_value' => isset($conf['primary_sectors_label']) ? t($conf['primary_sectors_label']) : t($form_state['plugin']['defaults']['primary_sectors_label']),
-    '#dependency' => array('primary_sectors_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-
-  $form['secondary_sectors_flag'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show Secondary Sectors search field'),
-    '#description' => t('Show secondary sectors search field'),
-    '#default_value' => isset($conf['secondary_sectors_flag']) ? intval($conf['secondary_sectors_flag']) : $form_state['plugin']['defaults']['secondary_sectors_flag'],
-    '#id' => 'secondary_sectors_flag',
-  );
-  $form['secondary_sectors_popup'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Disable Secondary Sectors popup select'),
-    '#default_value' => isset($conf['secondary_sectors_popup']) ? intval($conf['secondary_sectors_popup']) : $form_state['plugin']['defaults']['secondary_sectors_popup'],
-    '#dependency' => array('secondary_sectors_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-  $form['secondary_sectors_label'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Secondary Sectors label'),
-    '#default_value' => isset($conf['secondary_sectors_label']) ? t($conf['secondary_sectors_label']) : t($form_state['plugin']['defaults']['secondary_sectors_label']),
-    '#dependency' => array('secondary_sectors_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-
-  $form['programs_flag'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show Programs search field'),
-    '#description' => t('Show programs search field'),
-    '#default_value' => isset($conf['programs_flag']) ? intval($conf['programs_flag']) : $form_state['plugin']['defaults']['programs_flag'],
-    '#id' => 'programs_flag',
-  );
-  $form['programs_popup'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Disable Programs popup select'),
-    '#default_value' => isset($conf['programs_popup']) ? intval($conf['programs_popup']) : $form_state['plugin']['defaults']['programs_popup'],
-    '#dependency' => array('programs_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-  $form['programs_label'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Programs label'),
-    '#default_value' => isset($conf['programs_label']) ? t($conf['programs_label']) : t($form_state['plugin']['defaults']['programs_label']),
-    '#dependency' => array('programs_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-
-  $form['donors_flag'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show Donors search field'),
-    '#description' => t('Show donors search field'),
-    '#default_value' => isset($conf['donors_flag']) ? intval($conf['donors_flag']) : $form_state['plugin']['defaults']['donors_flag'],
-    '#id' => 'donors_flag',
-  );
-  $form['donors_popup'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Disable Donors popup select'),
-    '#default_value' => isset($conf['donors_popup']) ? intval($conf['donors_popup']) : $form_state['plugin']['defaults']['donors_popup'],
-    '#dependency' => array('donors_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-  $form['donors_label'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Donors label'),
-    '#default_value' => isset($conf['donors_label']) ? t($conf['donors_label']) : t($form_state['plugin']['defaults']['donors_label']),
-    '#dependency' => array('donors_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-
-  $form['agencies_flag'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show "Beneficiary Agencies" search field'),
-    '#description' => t('Show "Beneficiary Agencies" search field'),
-    '#default_value' => isset($conf['agencies_flag']) ? intval($conf['agencies_flag']) : $form_state['plugin']['defaults']['agencies_flag'],
-    '#id' => 'agencies_flag',
-  );
-  $form['agencies_popup'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Disable Agencies popup select'),
-    '#default_value' => isset($conf['agencies_popup']) ? intval($conf['agencies_popup']) : $form_state['plugin']['defaults']['agencies_popup'],
-    '#dependency' => array('agencies_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-  $form['agencies_label'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Agencies label'),
-    '#default_value' => isset($conf['agencies_label']) ? t($conf['agencies_label']) : t($form_state['plugin']['defaults']['agencies_label']),
-    '#dependency' => array('agencies_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-
-  $form['locations_flag'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show Locations search field'),
-    '#description' => t('Show locations search field'),
-    '#default_value' => isset($conf['locations_flag']) ? intval($conf['locations_flag']) : $form_state['plugin']['defaults']['locations_flag'],
-    '#id' => 'locations_flag',
-  );
-  $form['locations_popup'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Disable Locations popup select'),
-    '#default_value' => isset($conf['locations_popup']) ? intval($conf['locations_popup']) : $form_state['plugin']['defaults']['locations_popup'],
-    '#dependency' => array('locations_flag' => array(1)),
-    '#dependency_type' => 'disable',
-  );
-  $form['locations_label'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Locations label'),
-    '#default_value' => isset($conf['locations_label']) ? t($conf['locations_label']) : t($form_state['plugin']['defaults']['locations_label']),
-    '#dependency' => array('locations_flag' => array(1)),
-    '#dependency_type' => 'disable',
   );
 
   $form['period_flag'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Show Period range search fields'),
-    '#description' => t('Show Start and End year select controls'),
-    '#default_value' => isset($conf['period_flag']) ? intval($conf['period_flag']) : $form_state['plugin']['defaults']['period_flag'],
-    '#id' => 'period_flag',
-  );
-
-  $form['keywords_flag'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show Keywords search field'),
-    '#description' => t('Show keywords search field'),
-    '#default_value' => isset($conf['keywords_flag']) ? intval($conf['keywords_flag']) : $form_state['plugin']['defaults']['keywords_flag'],
-    '#id' => 'keywords_flag',
-  );
-  $form['keywords_label'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Keywords label'),
-    '#default_value' => isset($conf['keywords_label']) ? t($conf['keywords_label']) : t($form_state['plugin']['defaults']['keywords_label']),
-    '#dependency' => array('keywords_flag' => array(1)),
-    '#dependency_type' => 'disable',
+    '#title' => t('Show period range filters'),
+    '#description' => t('Displays a pair of date fields that can be used to filter projects by their implementation period.'),
+    '#default_value' => $conf['period_flag'],
   );
 
   $form['budget_flag'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Show On-budget/Off-budget projects flags'),
-    '#description' => t('Show on-budget projects flag'),
-    '#default_value' => isset($conf['budget_flag']) ? intval($conf['budget_flag']) : $form_state['plugin']['defaults']['budget_flag'],
+    '#title' => t('Show On/Off-budget checkbox'),
+    '#description' => t('Displays a checkbox that can be used to filter project by their budget status.'),
+    '#default_value' => $conf['budget_flag'],
   );
 
   $form['country_level_projects_flag'] = array(
     '#type' => 'checkbox',
     '#title' => t('Include higher geographical levels flag'),
     '#description' => t('Include higher geographical levels flag'),
-    '#default_value' => isset($conf['country_level_projects_flag']) ? intval($conf['country_level_projects_flag']) : $form_state['plugin']['defaults']['country_level_projects_flag'],
+    '#default_value' => $conf['country_level_projects_flag'],
   );
 
-  $form['preview_amount'] = array(
+  $form['preview_amount_flag'] = array(
     '#type' => 'checkbox',
     '#title' => t('Pre-calculate amount(s)'),
     '#description' => t('Pre-calculate Commitment amount and show next to "project to show" number'),
-    '#default_value' => isset($conf['preview_amount']) ? intval($conf['preview_amount']) : $form_state['plugin']['defaults']['preview_amount'],
+    '#default_value' => $conf['preview_amount_flag'],
   );
+
+  // Create the columns fieldset.
+  $form['filters'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Filters visibility and labels'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  foreach ($plugin_defaults as $field_name => $field_info) {
+    if (!is_array($field_info)) {
+      continue;
+    }
+
+    $form['filters'][$field_name] = array(
+      '#tree' => TRUE,
+    );
+
+    $form['filters'][$field_name]['show'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show the ' . $field_info['label'] . ' filter'),
+      '#default_value' => $plugin_defaults[$field_name]['show'],
+    );
+
+    $form['filters'][$field_name]['label'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Label'),
+      '#size' => 30,
+      '#default_value' => $plugin_defaults[$field_name]['label'],
+      '#dependency' => array(
+        'edit-' . drupal_html_class($field_name) . '-show' => array(1),
+      ),
+    );
+
+    // Display the popup option only if the filter supports it.
+    if (isset($field_info['popup'])) {
+      $form['filters'][$field_name]['popup'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show filter popup icon'),
+        '#description' => t('Adds a small icon next to the field. When clicked a window will popup with all the available filter options.'),
+        '#default_value' => $plugin_defaults[$field_name]['popup'],
+        '#dependency' => array(
+          'edit-' . drupal_html_class($field_name) . '-show' => array(1),
+        ),
+      );
+    }
+  }
 
   return $form;
 }
 
-/*
- * handles edit for submit
+/**
+ * Submit callback for ampp_projects_projects_search_form_content_type_edit_form().
  */
 function ampp_projects_projects_search_form_content_type_edit_form_submit(&$form, &$form_state) {
   foreach (array_keys($form_state['plugin']['defaults']) as $key) {

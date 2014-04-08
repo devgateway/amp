@@ -1,0 +1,67 @@
+
+#ampp-search-form {
+}
+
+#ampp-search-form .form-item label,
+.page-search .form-item label {
+  float: left;
+  font-weight: normal;
+  width: 115px;
+}
+
+#ampp-search-form .description {
+  clear: both;
+  margin-left: 115px;
+}
+
+#ampp-search-form .form-submit {
+  margin-right: 10px;
+}
+
+#ampp-search-form .form-type-date-popup {
+  margin-bottom: 0;
+}
+
+#ampp-search-form .container-inline-date {
+  float: left;
+  clear: none;
+}
+
+#ampp-search-form .container-inline-date .form-text {
+  width: 140px;
+}
+
+#ampp-search-form .container-inline-date .date-padding {
+  padding: 0;
+}
+
+#ampp-search-form .container-inline-date .description {
+  margin: 0;
+}
+
+#ampp-search-form .container-inline-date label[for=edit-period-end-datepicker-popup-0] {
+  width: auto;
+  margin-right: 10px;
+}
+
+/* Define the search form info block style. */
+#ampp-search-form .form-actions .search-form-throbber {
+  display: none;
+}
+#ampp-search-form .form-actions .search-form-info {
+  display: inline;
+}
+#ampp-search-form .form-actions.calculating .search-form-throbber {
+  display: inline;
+}
+#ampp-search-form .form-actions.calculating .search-form-info {
+  display: none;
+}
+
+/* @TODO: Remove this hack. */
+.views-field-location-names .more-locations {
+  cursor: pointer;
+}
+.views-field-location-names .hidden-locations {
+  display:none;
+}

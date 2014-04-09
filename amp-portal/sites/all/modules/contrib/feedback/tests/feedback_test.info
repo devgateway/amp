@@ -1,0 +1,13 @@
+name = Feedback testing
+description = Tests Feedback module functionality. Do not enable.
+core = 7.x
+package = Testing
+hidden = TRUE
+dependencies[] = feedback
+
+; Information added by drupal.org packaging script on 2011-09-26
+version = "7.x-2.x-dev"
+core = "7.x"
+project = "feedback"
+datestamp = "1316996260"
+

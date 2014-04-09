@@ -1,0 +1,4 @@
+
+name = AMP Internationalization
+description = Provides AMP SQL translation helper functions.
+core = 7.x

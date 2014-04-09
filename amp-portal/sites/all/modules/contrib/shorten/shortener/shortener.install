@@ -1,0 +1,6 @@
+<?php
+
+/**
+ * @file
+ *   (Un)installs the Shorten URLs Input Filter module.
+ */

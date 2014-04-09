@@ -1,0 +1,297 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the panelizer module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function panelizer_requirements($phase) {
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    $node_view = page_manager_get_task('node_view');
+    if ($node_view['disabled']) {
+      $requirements['panelizer'] = array(
+        'title' => t('Panelizer'),
+        'value' => t('You must enable the %node_view page template in <a href="@url">page manager</a> to use panelizer.', array('%node_view' => 'node_view', '@url' => url('admin/structure/pages'))),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+
+  return $requirements;
+}
+
+/**
+ * Implements hook_schema().
+ */
+function panelizer_schema() {
+  // This should always point to our 'current' schema. This makes it
+  // relatively easy to keep a record of schema as we make changes to it.
+  return panelizer_schema_1();
+}
+
+/**
+ * Schema version 1 for Panels in D6.
+ */
+function panelizer_schema_1() {
+  $schema = array();
+
+  $common_fields = array(
+    'no_blocks' => array(
+      'type' => 'int',
+      'size' => 'tiny',
+      'description' => 'Whether or not the node disable sidebar blocks.',
+      'default' => 0,
+    ),
+    'css_id' => array(
+      'type' => 'varchar',
+      'length' => '255',
+      'description' => 'The CSS ID this panel should use.',
+      'default' => '',
+    ),
+    'css' => array(
+      'type' => 'text',
+      'size' => 'big',
+      'description' => 'Any CSS the author provided for the panel.',
+      'object default' => '',
+    ),
+    'pipeline' => array(
+      'type' => 'varchar',
+      'length' => '255',
+      'description' => 'The render pipeline this panel uses.',
+      'default' => 'standard',
+    ),
+    'contexts' => array(
+      'type' => 'text',
+      'size' => 'big',
+      'description' => 'The contexts configured by the node author.',
+      'serialize' => TRUE,
+      'object default' => array(),
+    ),
+    'relationships' => array(
+      'type' => 'text',
+      'size' => 'big',
+      'description' => 'The relationship contexts configured by the node author.',
+      'serialize' => TRUE,
+      'object default' => array(),
+    ),
+    'did' => array(
+      'type' => 'int',
+      'not null' => TRUE,
+      'description' => 'The display ID of the panel.',
+    ),
+  );
+
+  $schema['panelizer_entity'] = array(
+    'export' => array(
+      'bulk export' => FALSE,
+      'can disable' => FALSE,
+      'identifier' => 'panelizer_node',
+    ),
+    'description' => 'Node panelizer references.',
+    'fields' => array(
+      'entity_type' => array(
+        'description' => 'The type of the entity this panel is attached to.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'entity_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The entity ID this panel is attached to.',
+      ),
+      'revision_id' => array(
+        'description' => 'The revision id of the entity.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'The name of the default being used if there is one.',
+      ),
+    ) + $common_fields,
+    'primary key' => array('entity_type', 'entity_id', 'revision_id'),
+  );
+
+  $schema['panelizer_defaults'] = array(
+    'description' => 'Node type panelizer references.',
+    'export' => array(
+      'primary key' => 'pnid',
+      'key' => 'name',
+      'key name' => 'Name',
+      'admin_title' => 'title',
+      'identifier' => 'panelizer',
+      'default hook' => 'panelizer_defaults',
+      'api' => array(
+        'owner' => 'panelizer',
+        'api' => 'panelizer',
+        'minimum_version' => 1,
+        'current_version' => 1,
+      ),
+      // 'create callback' => 'panelizer_export_create_callback',
+      'save callback' => 'panelizer_export_save_callback',
+      'export callback' => 'panelizer_export_export_callback',
+      'delete callback' => 'panelizer_export_delete_callback',
+      'subrecords callback' => 'panelizer_export_delete_callback_subrecords',
+    ),
+    'fields' => array(
+      'pnid' => array(
+        'type' => 'serial',
+        'description' => 'The database primary key.',
+        'no export' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'The unique name of this default.',
+      ),
+      'title' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'The human readable title of this default.',
+      ),
+      'panelizer_type' => array(
+        'type' => 'varchar',
+        'length' => '32',
+        'description' => 'The panelizer entity type, such as node or user.',
+      ),
+      'panelizer_key' => array(
+        'type' => 'varchar',
+        'length' => '128',
+        'description' => 'The panelizer entity bundle.',
+      ),
+    ) + $common_fields,
+    'primary key' => array('pnid'),
+    'indexes' => array(
+      'name' => array('name'),
+      'type_key' => array('panelizer_type', 'panelizer_key'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function panelizer_install() {
+  // Set the module weight so it can execute after Panels.
+  db_update('system')
+    ->fields(array(
+      'weight' => 21,
+    ))
+    ->condition('name', 'panelizer')
+    ->execute();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function panelizer_uninstall() {
+  db_delete('variable')
+    ->condition('name', 'panelizer_defaults_%')
+    ->execute();
+  db_delete('variable')
+    ->condition('name', 'panelizer_node:%')
+    ->execute();
+}
+
+/**
+ * Update the panelizer variable to be more feature module friendly.
+ */
+function panelizer_update_7100() {
+  $panelizer_defaults = variable_get('panelizer_defaults', array());
+
+  if (!empty($panelizer_defaults)) {
+    foreach ($panelizer_defaults as $entity => $bundles) {
+      foreach ($bundles as $bundle => $values) {
+        variable_set('panelizer_defaults_' . $entity . '_' . $bundle, $values);
+      }
+    }
+  }
+
+  variable_del('panelizer_defaults');
+  return t('Updated panelizer variables.');
+}
+
+/**
+ * Update the panelizer node table to be the panelizer entity table.
+ */
+function panelizer_update_7101() {
+  // Rename the table.
+  db_rename_table('panelizer_node', 'panelizer_entity');
+
+  // Remove the primary key.
+  db_drop_primary_key('panelizer_entity');
+
+  // Add the entity type.
+  $entity_type = array(
+    'description' => 'The type of the entity this panel is attached to.',
+    'type' => 'varchar',
+    'length' => 255,
+  );
+
+  db_add_field('panelizer_entity', 'entity_type', $entity_type);
+
+  // Rename nid to entity_id.
+  $entity_id = array(
+    'type' => 'int',
+    'not null' => TRUE,
+    'default' => 0,
+    'description' => 'The entity ID this panel is attached to.',
+  );
+
+  db_change_field('panelizer_entity', 'nid', 'entity_id', $entity_id);
+
+  // Update the entity_type field to 'node' since all pre-existing
+  // panelizer objects are nodes.
+  db_update('panelizer_entity')
+    ->fields(array('entity_type' => 'node'))
+    ->execute();
+
+  // Add the new index
+  db_add_primary_key('panelizer_entity', array('entity_type', 'entity_id'));
+}
+
+/**
+ * Add revision support.
+ */
+function panelizer_update_7102() {
+  // Remove the primary key.
+  db_drop_primary_key('panelizer_entity');
+
+  // Add the entity type.
+  $revision_id = array(
+    'description' => 'The revision id of the entity.',
+    'type' => 'int',
+    'unsigned' => TRUE,
+  );
+
+  db_add_field('panelizer_entity', 'revision_id', $revision_id);
+
+  db_query("UPDATE {panelizer_entity} pe LEFT JOIN {node} n ON pe.entity_id = n.nid SET pe.revision_id = n.nid");
+
+  // Add the new index
+  db_add_primary_key('panelizer_entity', array('entity_type', 'entity_id', 'revision_id'));
+
+  return t('Added revision support.');
+}
+
+/**
+ * Set primary keys to NOT NULL.
+ */
+function panelizer_update_7103() {
+  $schema = panelizer_schema_1();
+
+  db_change_field('panelizer_entity', 'entity_type', 'entity_type', $schema['panelizer_entity']['fields']['entity_type']);
+  db_change_field('panelizer_entity', 'revision_id', 'revision_id', $schema['panelizer_entity']['fields']['revision_id']);
+  db_change_field('panelizer_defaults', 'pnid', 'pnid', $schema['panelizer_defaults']['fields']['pnid']);
+}

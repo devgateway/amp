@@ -237,6 +237,7 @@ public class FilterUtil {
 		form.setSelectedDonnorAgency( FilterUtil.getObjectsIds(filter.getDonnorgAgency()) );
 		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
+		form.setSelectedresponsibleorg(FilterUtil.getObjectsIds(filter.getResponsibleorg()) );
 		form.setSelectedContractingAgency( FilterUtil.getObjectsIds(filter.getContractingAgency()) );
 		
 		form.setAmountinthousands(filter.computeEffectiveAmountInThousand());			

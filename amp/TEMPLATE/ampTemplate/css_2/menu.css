@@ -18,12 +18,16 @@
 	top: -10000px;
 	left: -10000px;
 	z-index:9999;
-	
+	opacity: 0.9;
+	min-width: 170px;
+	_width: 250px;
 }
 .yuiampmenubar li, .yuiampmenu li {
 	list-style-type: none;
-		z-index:9999;
-
+	z-index:9999;
+	float: left;
+	border-spacing: 0px;
+	display: block;
 }
 .yuiampmenubar ul, .yuiampmenu ul, .yuiampmenubar li, .yuiampmenu li, .yuiampmenu h6, .yuiampmenubar h6 {
 	margin: 0;
@@ -32,10 +36,13 @@
 }
 .yuiampmenuitemlabel, .yuiampmenubaritemlabel {
 	text-align: left;
+	vertical-align: middle;
+	display: block;
 	white-space: nowrap;
 	font-family:  Arial, sans-serif;
 	font-size: 10px;
 	line-height:1.5em !important;
+	cursor: pointer;
 }
 .yuiampmenubar ul {
 	*zoom: 1;
@@ -54,13 +61,16 @@
 .yuiampmenubaritem {
 	float: left;
 }
-.yuiampmenubaritemlabel, .yuiampmenuitemlabel {
+.yuiampmenubaritemlabel {
 	display: block;
 }
 .yuiampmenuitemlabel .helptext {
 	font-style: normal;
 	display: block;
 	margin: -1em 0 0 10em;
+}
+.yuiampmenuitem span  {
+	float: left;
 }
 .yuiamp-menu-shadow {
 	position: absolute;
@@ -90,7 +100,7 @@
 	overflow: auto;
 }
 .yuiamp-skin-amp .yuiampmenubar {
-	font-size: 93%;
+	font-size: 100%;
 	line-height: 2;
 	*line-height: 1.9;
 	background: repeat-x 0 0;
@@ -135,6 +145,7 @@
 	line-height: 1.5;
 	*line-height: 1.45;
 	z-index:9999;
+	display: table;
 }
 .yuiamp-skin-amp .yuiampmenubar .yuiampmenu, .yuiamp-skin-amp .yuiampmenu .yuiampmenu {
 	font-size: 100%;
@@ -146,25 +157,23 @@
 	margin-top:5px;
 }
 .yuiamp-skin-amp .yuiampmenu .bd {
-	
 	line-height:1.5em;
 	z-index:9999;
-
 }
 .yuiamp-skin-amp .yuiampmenu ul {
 	padding: 0px 0;
 	z-index:9999;
-
+	display: block;
 }
-ul.first-of-type {
+#mainmenuHeader > div:FIRST-CHILD >  ul {
 	border-width: 0;
 	z-index:9999;
-
+	display: table-row;
+	border-spacing: 6px;
+	top: -1px;
 }
 .main_menu ul.first-of-type {
 	border-width: 0;
-
-
 }
 ul.first-of-type ul {
 	border-width: 0;
@@ -173,8 +182,13 @@ ul.first-of-type ul {
 	border-right:2px solid #ccc;
 	border-bottom:2px solid #ccc;
 		z-index:9999;
-
-
+	display: table-cell;
+	border-spacing: 0px;
+	float: left;
+	margin-top: -3px !important;
+}
+ul.first-of-type ul il{
+   min-width: inherit;
 }
 .yuiamp-skin-amp .yuiampmenu h6 {
 	font-weight: bold;
@@ -214,26 +228,31 @@ ul.first-of-type ul {
 	background-color:#F2F2F2;
 	margin-right:5px;
 	border:1px solid #E8E8E8;
-	float:left;
-	display:block;
-	
+	float:none;
+	vertical-align: middle;
+	display:table-cell;
 }
 .yuiamp-skin-amp .yuiampmenuitem li {
-padding:3px;
+	padding:3px;
 	border-bottom:1px solid #E8E8E8;
 	border-left:1px solid #E8E8E8;
-	display:block;
-
-	
+	display:table-cell;
 }
 .yuiamp-skin-amp .yuiampmenuitem li a:hover{
-text-decoration:underline;
+text-decoration:underline;	
+}
+.yuiamp-skin-amp .yuiampmenuitem .arrow {padding: 4px 8px 5px 0px; border: 0px; cursor:pointer; float: left;}
 
-	
+.yuiamp-skin-amp .yuiampmenuitem a {color:#376091; font-size:11px; font-weight:bold; padding: 0px 5px 0px 10px; cursor:pointer;}
+.yuiamp-skin-amp .yuiampmenuitem a:hover {color:#3974bb; font-size:11px; font-weight:bold; padding: 0 5px 0 10px; cursor:pointer;}
+.yuiamp-skin-amp .yuiampmenuitem img {
+	border: 0px;
+	padding: 0px;
+	vertical-align: middle; 
+	margin: 0px;
+	display: block;
 }
 
-.yuiamp-skin-amp .yuiampmenuitem a {color:#376091; font-size:11px; font-weight:bold; padding: 0 5px 0 10px; cursor:pointer;}
-.yuiamp-skin-amp .yuiampmenuitem a:hover {color:#3974bb; font-size:11px; font-weight:bold; padding: 0 5px 0 10px; cursor:pointer;}
 .yuiamp-skin-amp .yuiampmenuitemlabel, A.yuiampmenuitemlabel:visited{
 	color:#376091;
 	padding: 0 5px 0 10px;
@@ -286,8 +305,11 @@ text-decoration:underline;
 	padding:2px 20px;
 }
 
+li.yuiampmenuitem_drop {
+	clear: both;
+	width: 97%;
+}
 
-.yuiampmenuitem_drop {}
 
 #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
 html.ie #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px 0px 0px;}
@@ -295,9 +317,9 @@ html.ie #usr_menu_logged{width:340px;float:right;text-align:right;margin:0px 0px
 #usr_menu_logged a:hover {color:#fff; font-size:12px;text-decoration:underline;}
 /*-------menu fixes by rafy-------*/
  html.chrome li#yui-gen14 {margin-top:-2px;}
-html.ie9 .bd_drop ul.first-of-type, html.ie8 .bd_drop ul.first-of-type, html.ie7 .bd_drop ul.first-of-type,  html.gecko .bd_drop ul.first-of-type {border:none;margin-top:3px;}
-.bd_drop ul.first-of-type .bd_drop ul.first-of-type{margin-top:-3px;border-right:2px solid #E8E8E8;border-top:2px solid #fff;border-bottom:2px solid #E8E8E8;}
-html.chrome .bd_drop ul li ul.first-of-type {border:none;margin-top:15px;z-index:9999;float:left;}
+ html.ie9 .bd_drop ul.first-of-type, html.ie8 .bd_drop ul.first-of-type, html.ie7 .bd_drop ul.first-of-type {border:none;margin-top:3px;}
+.bd_drop ul.first-of-type .bd_drop ul.first-of-type{border-right:2px solid #E8E8E8;border-top:2px solid #fff;border-bottom:2px solid #E8E8E8;}
+html.chrome .bd_drop ul li ul.first-of-type {border:none;z-index:9999;float:left;}
 html.ie div.header {height:46px;}
 html.ie .yui-navset *{z-index:1;}
 html.ie .main_menu *{z-index:9000;}

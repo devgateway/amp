@@ -47,7 +47,7 @@
 </script>  
 
 <logic:present name="currentMember" scope="session">
-	<script language=javascript>
+	<script type="text/javascript">
 	function showUserProfile(id){
 		<digi:context name="information" property="context/aim/default/userProfile.do" />
 		//openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
@@ -76,48 +76,6 @@ table tr td {font-size:11px;}
 ${fn:replace(message,quote,escapedQuote)}
 </c:set>
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
-<!-- HEADER START-->
-<center>
-
-<div class="header">
-
-		<div class="login_nav">
-			
-			<digi:insert attribute="loginWidget"/>
-			
-		</div>
-		<div class="logo">
-		<table width="480" border="0" cellspacing="0" cellpadding="0">
-			<tr>
-				<td width="50" style="vertical-align: middle;">
-				<logic:notPresent name="currentMember" scope="session">
-		            <a href="/" style="text-decoration: none">
-		            <img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br/>
-		            </a>
-		        </logic:notPresent>
-		         <logic:present name="currentMember" scope="session">
-		        	<a href="/aim" style="text-decoration: none">
-		            <img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br/>
-		            </a>
-		        </logic:present>
-				</td>
-				<td style="padding-left:10px;">
-				<logic:notPresent name="currentMember" scope="session">
-            		<a href="/" style="text-decoration: none">
-            		<span class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></span>
-            		</a>
-            	</logic:notPresent>
-            	<logic:present name="currentMember" scope="session">
-	            		<a href="/aim" style="text-decoration: none">
-	            		<span class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></span>
-	            		</a>
-            		</logic:present>
-				</td>
-			</tr>
-		</table>
-        </div>
-</div>
-</center>
-<!--HEADER END -->
+<jsp:include page="/TEMPLATE/ampTemplate/layout/header.jsp"/>
 
 

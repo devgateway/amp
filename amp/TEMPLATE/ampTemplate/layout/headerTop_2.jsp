@@ -109,58 +109,10 @@ table tr td {font-size:11px;}
  		<bean:define id="userLogged" name="currentUser" scope="session" type="org.digijava.kernel.user.User" />
 	 </logic:notEmpty>
  </logic:empty>
-<div style="text-align:center">
-<!-- HEADER START -->
-<div class="header">
-	<div class="centering">
-		<div class="logo">
-		<table width="480" border="0" cellspacing="0" cellpadding="0">
-			<tr>
-				<td width="50" style="vertical-align: middle;">
-					<logic:present name="currentMember" scope="session">
-			            <a href="/aim" style="text-decoration: none">
-			            	<img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br/>
-			            </a>
-			        </logic:present>
-			        <logic:notPresent name="currentMember" scope="session">
-			            <a href="/" style="text-decoration: none">
-			            	<img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br/>
-			            </a>
-			        </logic:notPresent>
-				</td>
-				<td>
-					<logic:present name="currentMember" scope="session">
-	            		<a href="/aim" style="text-decoration: none">
-	            		<span class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></span>
-	            		</a>
-	            	</logic:present>
-	            	<logic:notPresent name="currentMember" scope="session">
-		            		<a href="/" style="text-decoration: none">
-		            		<span class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></span>
-		            		</a>
-	            	</logic:notPresent>
-				</td>
-			</tr>
-		</table>
-		</div>
-		
-		<div id="usr_menu_logged2">
-			<a href="javascript:showUserProfile(${teamMember.memberId})">${teamMember.memberName}</a>			
-			<a>${userLogged.name}</a>			
-			<img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">		
-			
-			<c:set var="translation">
-                <digi:trn>Workspace Name</digi:trn>
-              </c:set>
-              <span title="${translation}">                
-                	<strong style="color:#FFFFFF"><c:out value="${teamMember.teamName}"/></strong>	
-              </span>              
-			 	
-		</div>
-	</div>
-</div>
-<!-- HEADER END -->
-</div>
+
+<jsp:include page="/TEMPLATE/ampTemplate/layout/header.jsp"/>
+
+
 <script type="text/javascript">
 	function selectwkspace(id){
 		var url = "/selectTeam.do?id="+id;

@@ -100,10 +100,11 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 
 /* HEADER */
 .header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
-.logo {color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:8px 0px 0px 0px;}
-.logo a {color:#FFFFFF; font-size:18px; font-weight:bold;}
-.amp_label {padding-top:7px !important;font-size:14px;}
-.logo td {text-align: left; vertical-align: middle;}
+.logo {color:#FFFFFF; font-size:14px; font-weight:bold; float:left;padding:0px; width:480px; border: 0px; margin: 8px 0px 0px 0px; display: inline;}
+.logo a {color:#FFFFFF; text-decoration: none !important;  display: table-cell;}
+.logo img {widht:50px; height: 34px; border: 0px; vertical-align: middle; float:left;}
+.logo .title {display: table-cell; padding-left: 8px; vertical-align: middle; }
+.logo .title .label {display: block;}
 .top_nav {position:absolute; right:30px; top:30px;}
 .top_nav a {color:#FFFFFF;}
 .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;margin:0px 20px 0px 0px;}
@@ -122,7 +123,7 @@ html.chrome #show_login_pop_box{z-index:9999;}
 /* MENU */
 .main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;}
 .gisbody .main_menu {height:25px;   margin:0 auto;text-align:center;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;}
-html.chrome .bd_drop{margin-top:-15px;}
+html.chrome .bd_drop{margin-top:15px;}
 .menu_item {background-color:#F2F2F2; border:1px solid #E8E8E8; width:auto; float:left; margin-right:5px;}
 .menu_item_cont {padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
 .menu_item_sel {background-color:#FF6000; border:1px solid #FF6000; width:auto; float:left; margin-right:5px;}

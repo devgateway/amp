@@ -7,17 +7,18 @@
 
 <digi:secure actions="ADMIN, TRANSLATE">
 
-	<script>
+	<script type="text/javascript">
 	function switchTranslation(mode) {
 	      <digi:context name="switchUrl" property="context/module/moduleinstance/switchMode.do" />
 	      document.modeSwitchForm.action = "<%= switchUrl %>?translationMode="+mode;
 	      document.modeSwitchForm.submit();
 	  }
 	</script>
-
+	<span>
 	<digi:form method="post" action="/switchMode.do" style="display:none;" >
 	<html:hidden property="backUrl"/>
 	</digi:form>
+	</span>
 			<logic:equal name="modeSwitchForm" property="translationMode" value="false">
 				<li class="yuiampmenuitem_drop">
                     <a id="switchTranslationMode" class="yuiampmenuitemlabel" onclick="return canExit()" href="javascript:switchTranslation(true)">

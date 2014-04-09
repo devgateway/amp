@@ -482,7 +482,10 @@ function showPopin() {
 }
 
 function hidePopin() {
-	popinPanels['Panel1'].hide();
+	if (popinPanels['Panel1']!=null) {
+		popinPanels['Panel1'].hide();
+	}
+
 }
 
 function showExport() {
@@ -666,6 +669,13 @@ function resetToDefaults(){
 	callbackChildren.call(document.getElementById("fiscalCalendar_dropdown_Id"), null);	
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
+	//Get array of graphs
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		document.getElementById(allGraphs[idx].children[0].id+"StartYear").value = document.getElementById("defaultStartYear").value;
+		document.getElementById(allGraphs[idx].children[0].id+"EndYear").value = document.getElementById("defaultEndYear").value;
+	}
+
 }
 
 function removeOptionsDropdown(object){
@@ -1048,6 +1058,11 @@ function callbackApplyFilter(e){
 		document.getElementById("agencyType_dropdown").value = document.getElementById("agencyTypeQuickFilter_dropdown").value;
 	}
 	
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		document.getElementById(allGraphs[idx].children[0].id+"StartYear").value = "";
+		document.getElementById(allGraphs[idx].children[0].id+"EndYear").value = "";
+	}
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
 		return;
@@ -1252,6 +1267,12 @@ function applyFilterPopin(e){
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;
 	
+	//refresh chart year's slider selection
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		document.getElementById(allGraphs[idx].children[0].id+"StartYear").value = document.getElementById("defaultStartYear").value;
+		document.getElementById(allGraphs[idx].children[0].id+"EndYear").value = document.getElementById("defaultEndYear").value;
+	}
 	var dashboardType = document.getElementById("dashboardType").value;
 	if (dashboardType==1) {
 		document.getElementById("agencyType").value = document.getElementById("agencyType_dropdown").options[document.getElementById("agencyType_dropdown").selectedIndex].value;
@@ -1278,9 +1299,12 @@ function applyFilterPopin(e){
 	}
 	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
-	document.getElementById("showAcronymForOrgNames").value = document.getElementById("show_acronym_for_org_names").checked;
+	if (document.getElementById("showAcronymForOrgNames")!=null) {
+		document.getElementById("showAcronymForOrgNames").value = document.getElementById("show_acronym_for_org_names").checked;
+	}
+	if (document.getElementById("showOnlyNationalProjects")!=null) {
 	document.getElementById("showOnlyNationalProjects").value = document.getElementById("show_only_national_projects").checked;
-	
+	}	
 	document.getElementById("transactionType").value = document.getElementById("transaction_type").options[document.getElementById("transaction_type").selectedIndex].value;
 	document.getElementById("transactionType_dropdown").value = document.getElementById("transactionType").value;
 	document.getElementById("adjustment_type_quick").value = document.getElementById("adjustmentType").value;
@@ -2333,7 +2357,12 @@ function  saveAdditionalInfo(id, type){
         success:additionalInfoResponseSuccess,
         failure:additionalInfoResponseFailure
     };
-
+function updateSliderValues (idContainer,startYear,endYear){
+	var startYearObject = document.getElementById(idContainer + "StartYear");
+	var endYearObject = document.getElementById(idContainer + "EndYear");
+	startYearObject.value = startYear;
+	endYearObject.value = endYear;
+}
 function getValueToFlash(idContainer, field){
 	
 	if (field == 'Currency'){

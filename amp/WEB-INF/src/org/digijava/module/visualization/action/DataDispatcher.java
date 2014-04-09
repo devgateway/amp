@@ -748,8 +748,18 @@ public class DataDispatcher extends DispatchAction {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), true);//IsProfile determines if the amounts were already divided
 
-		Long startYear, endYear;
-		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+		Long startYear = null;
+		Long endYear = null;
+		if(request.getParameter("SectorProfileStartYear") != null 
+				&& !request.getParameter("SectorProfileStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("SectorProfileEndYear") != null 
+				&& !request.getParameter("SectorProfileEndYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("SectorProfileStartYear"));
+			endYear = Long.parseLong(request.getParameter("SectorProfileEndYear"));
+
+		}
+		else if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
 		{
 			startYear = Long.parseLong(request.getParameter("startYear"));
@@ -1125,8 +1135,18 @@ public class DataDispatcher extends DispatchAction {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), true);//IsProfile determines if the amounts were already divided
 
-		Long startYear, endYear;
-		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+		Long startYear = null;
+		Long endYear = null;
+		if(request.getParameter("ProgramProfileStartYear") != null 
+				&& !request.getParameter("ProgramProfileStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("ProgramProfileEndYear") != null 
+				&& !request.getParameter("ProgramProfileEndYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("ProgramProfileStartYear"));
+			endYear = Long.parseLong(request.getParameter("ProgramProfileEndYear"));
+
+		}
+		else if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
 		{
 			startYear = Long.parseLong(request.getParameter("startYear"));
@@ -1484,8 +1504,18 @@ public class DataDispatcher extends DispatchAction {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), true);
 
-		Long startYear, endYear;
-		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+		Long startYear = null;
+		Long endYear = null;
+		if(request.getParameter("OrganizationProfileStartYear") != null 
+				&& !request.getParameter("OrganizationProfileStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("OrganizationProfileEndYear") != null 
+				&& !request.getParameter("OrganizationProfileEndYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("OrganizationProfileStartYear"));
+			endYear = Long.parseLong(request.getParameter("OrganizationProfileEndYear"));
+
+		}
+		else if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
 		{
 			startYear = Long.parseLong(request.getParameter("startYear"));
@@ -1827,8 +1857,18 @@ public class DataDispatcher extends DispatchAction {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), true);
 
-		Long startYear, endYear;
-		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+		Long startYear = null;
+		Long endYear = null;
+		if(request.getParameter("BeneficiaryAgencyProfileStartYear") != null 
+				&& !request.getParameter("BeneficiaryAgencyProfileStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("BeneficiaryAgencyProfileEndYear") != null 
+				&& !request.getParameter("BeneficiaryAgencyProfileEndYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("BeneficiaryAgencyProfileStartYear"));
+			endYear = Long.parseLong(request.getParameter("BeneficiaryAgencyProfileEndYear"));
+
+		}
+		else if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
 		{
 			startYear = Long.parseLong(request.getParameter("startYear"));
@@ -2158,8 +2198,18 @@ public class DataDispatcher extends DispatchAction {
 		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		Long startYear, endYear;
-		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+		Long startYear = null;
+		Long endYear = null;
+		if(request.getParameter("AidModalityStartYear") != null 
+				&& !request.getParameter("AidModalityStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("AidModalityEndYear") != null 
+				&& !request.getParameter("AidModalityEndYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("AidModalityStartYear"));
+			endYear = Long.parseLong(request.getParameter("AidModalityEndYear"));
+
+		}
+		else if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
 		{
 			startYear = Long.parseLong(request.getParameter("startYear"));
@@ -2389,8 +2439,18 @@ public class DataDispatcher extends DispatchAction {
 		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		Long startYear, endYear;
-		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+		Long startYear = null;
+		Long endYear = null;
+		if(request.getParameter("BudgetBreakdownStartYear") != null 
+				&& !request.getParameter("BudgetBreakdownStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("BudgetBreakdownEndYear") != null 
+				&& !request.getParameter("BudgetBreakdownEndYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("BudgetBreakdownStartYear"));
+			endYear = Long.parseLong(request.getParameter("BudgetBreakdownEndYear"));
+
+		}
+		else if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
 		{
 			startYear = Long.parseLong(request.getParameter("startYear"));
@@ -2654,8 +2714,18 @@ public class DataDispatcher extends DispatchAction {
 		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		Long startYear, endYear;
-		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+		Long startYear = null;
+		Long endYear = null;
+		if(request.getParameter("AidPredictabilityStartYear") != null 
+				&& !request.getParameter("AidPredictabilityStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("AidPredictabilityEndYear") != null 
+				&& !request.getParameter("AidPredictabilityEndYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("AidPredictabilityStartYear"));
+			endYear = Long.parseLong(request.getParameter("AidPredictabilityEndYear"));
+
+		}
+		else if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
 		{
 			startYear = Long.parseLong(request.getParameter("startYear"));
@@ -2803,8 +2873,18 @@ public class DataDispatcher extends DispatchAction {
 		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		Long startYear, endYear;
-		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+		Long startYear = null;
+		Long endYear = null;
+		if(request.getParameter("AidPredictabilityStartYear") != null 
+				&& !request.getParameter("AidPredictabilityStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("AidPredictabilityEndYear") != null 
+				&& !request.getParameter("AidPredictabilityEndYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("AidPredictabilityStartYear"));
+			endYear = Long.parseLong(request.getParameter("AidPredictabilityEndYear"));
+
+		}
+		else if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
 		{
 			startYear = Long.parseLong(request.getParameter("startYear"));
@@ -3054,12 +3134,24 @@ public class DataDispatcher extends DispatchAction {
 		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		Long startYear, endYear;
-		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+		Long startYear = null;
+		Long endYear = null;
+		if(request.getParameter("FundingsStartYear") != null 
+				&& !request.getParameter("FundingsStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("FundingsEndYear") != null 
+				&& !request.getParameter("FundingsEndYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("FundingsStartYear"));
+			endYear = Long.parseLong(request.getParameter("FundingsEndYear"));
+
+		}
+	
+		else if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
 		{
 			startYear = Long.parseLong(request.getParameter("startYear"));
 			endYear = Long.parseLong(request.getParameter("endYear"));
+				
 		}
 		else
 		{
@@ -3521,8 +3613,18 @@ public class DataDispatcher extends DispatchAction {
 
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		Long startYear, endYear;
-		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+		Long startYear = null;
+		Long endYear = null;
+		if(request.getParameter("RegionProfileStartYear") != null 
+				&& !request.getParameter("RegionProfileStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("RegionProfileEndYear") != null 
+				&& !request.getParameter("RegionProfileEndYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("RegionProfileStartYear"));
+			endYear = Long.parseLong(request.getParameter("RegionProfileEndYear"));
+
+		}
+		else if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
 				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
 		{
 			startYear = Long.parseLong(request.getParameter("startYear"));

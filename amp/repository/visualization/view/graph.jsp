@@ -63,6 +63,9 @@
 <input type="hidden" id="${graph.containerId}ShowFontFamily" value="Verdana"/>
 <input type="hidden" id="${graph.containerId}DataAction" value="get${graph.containerId}GraphData" />
 <input type="hidden" id="${graph.containerId}DataField" value="dataField" />
+<input type="hidden" id="${graph.containerId}StartYear" value="" />
+<input type="hidden" id="${graph.containerId}EndYear" value="" />
+
 <input type="hidden" id="${graph.containerId}ItemId"/>
 <input type="hidden" id="${graph.containerId}TitleLegendTrn" value="<digi:trn>${graph.name}</digi:trn>" />
 			<c:if test="${fromLaunchGraphAction}">

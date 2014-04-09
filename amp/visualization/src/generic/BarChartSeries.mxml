@@ -324,8 +324,22 @@
 				messageLoading.text = trnMessageLoading;
 
 				thumbCount = Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'sliderThumbCount')}")));
+				var params:Object = {};
+				var selectedStartYear:Number = NaN;
+				var selectedEndYear:Number = NaN;
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")) != "") {
+					selectedStartYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")));
+					params[idContainer+"StartYear"] = selectedStartYear;
+					
+				}
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")) != "") {
+					selectedEndYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")));
+					params[idContainer+"EndYear"] = selectedEndYear;
+						
+				}
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				
 				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
 				var labelArray:Array = new Array();
 				if (sliderLabels==null || sliderLabels.length==0){
@@ -337,14 +351,31 @@
 						labelArray.push(sliderLabels.split(",")[year]);
 					}
 				}
+				
 				if (thumbCount==1){
 					showTrackHighlight = false;
 					sliderYear.labels = labelArray;
-					sliderYear.values[0] = endYear;
+					if (!isNaN(selectedEndYear)) {
+						sliderYear.values[0] = selectedEndYear;
+					}
+					else {
+						sliderYear.values[0] = endYear;
+					}
 				} else {
 					sliderYear.labels = labelArray;
-					sliderYear.values[0] = startYear;
-					sliderYear.values[1] = endYear;
+					if (!isNaN(selectedStartYear)) {
+						sliderYear.values[0] = selectedStartYear;
+					}
+					else {
+						sliderYear.values[0] = startYear;
+					}
+					if (!isNaN(selectedEndYear)) {
+						sliderYear.values[1] = selectedEndYear;
+					}
+					else {
+						sliderYear.values[1] = endYear;
+					}
+						
 				}
 				
 				var strDomain:String = "";
@@ -359,7 +390,6 @@
 					strDomain = curUrl.split('/')[2];
 				}
 				service.url = strProtocol + "//" + strDomain + strUrl;
-				var params:Object = {};
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 
 				params["format"] = "xml";
@@ -446,10 +476,22 @@
 				
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
-
 				thumbCount = Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'sliderThumbCount')}")));
-				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
-				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")) != "") {
+					startYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")));
+				}
+				else{
+					startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				}
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")) != "") {
+					endYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")));
+				}
+				else{
+					endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+					
+				}
+				
 				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
 				var labelArray:Array = new Array();
 				if (sliderLabels==null || sliderLabels.length==0){
@@ -470,7 +512,6 @@
 					sliderYear.values[0] = startYear;
 					sliderYear.values[1] = endYear;
 				}
-
 				var params:Object = {};
 				params["divide"] = divide;
 				params["format"] = "xml";
@@ -545,10 +586,6 @@
 			  return text.length>45? text.substr(0,42)+"..." : text;
 		    }   
 			
-			private function getShortText (text:String):String{
-				return text.length>45? text.substr(0,42)+"..." : text;
-			}
-			
 			private function getLegendX(currentIndex:Number ,x:Number):Number{
 				return (currentIndex < 4) ? currentIndex*160 : (currentIndex < 8) ? (currentIndex-4)*160 : (currentIndex-8)*160;
 			}
@@ -584,6 +621,7 @@
 					params["startYear"] = sliderYear.values[0];
 					params["endYear"] = sliderYear.values[1];
 				}
+				ExternalInterface.call("function(){ updateSliderValues('" + idContainer + "',"+params["startYear"]+","+params["endYear"]+")}");
 				printLabel.text = trnYears + ": " + sliderYear.labels[sliderYear.values[0]-startYear] + " to " + sliderYear.labels[sliderYear.values[1]-startYear] +" - " + trnCurrency + ": " + currCode;
 				service.send(params);
 				messageLoadingPanel.visible = true;

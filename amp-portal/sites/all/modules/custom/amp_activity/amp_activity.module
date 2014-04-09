@@ -28,53 +28,6 @@ function amp_activity_views_api() {
 }
 
 /**
- * Returns...
- *
- * @TODO: Add more cache, the cached_amp_activity table is updated rarely.
- */
-function amp_activity_get_amp_activities() {
-  $activities_list = &drupal_static(__FUNCTION__, NULL);
-
-  if (isset($activities_list)) {
-    return $activities_list;
-  }
-
-  db_set_active(AMP_DATABASE);
-
-  $query = db_select('cached_amp_activity', 'cached_amp_activity');
-  $query->addField('cached_amp_activity', 'amp_activity_id');
-
-  $query->where('cached_amp_activity.draft <> TRUE');
-  $query->where('cached_amp_activity.amp_team_id IS NOT NULL');
-  $query->where('cached_amp_activity.approval_status IN (\'approved\', \'startedapproved\')');
-
-  // Get Activities which have one parent of type "Management"? I guess!?!
-  $case_one_sub = "SELECT amp_team_id FROM amp_team WHERE access_type = 'Management'";
-  $case_one = "SELECT amp_team_id FROM amp_team WHERE parent_team_id IN ($case_one_sub)";
-  $snippets[] = $case_one;
-
-  // It sure does something... but I don't know what to name it.
-  $case_two_sub = "SELECT amp_org_id FROM amp_team_orgs WHERE amp_team_id IN ($case_one)";
-  $case_two = "SELECT DISTINCT(activity) FROM amp_org_role WHERE organisation IN ($case_two_sub)";
-  $snippets[] = $case_two;
-
-  $db_or = db_or();
-  foreach ($snippets as $case) {
-    $db_or->where("cached_amp_activity.amp_activity_id IN (${case})");
-  }
-  $query->condition($db_or);
-
-  $results = $query->execute()->fetchCol();
-  db_set_active();
-
-  if (!empty($results) && is_array($results)) {
-    $activities_list = $results;
-  }
-
-  return $activities_list;
-}
-
-/**
  * Test the AMP DB connection and check if 'cached_amp_activity' table exists.
  */
 function amp_activity_check_db() {

@@ -24,21 +24,6 @@ class amp_activity_handler_filter_activity_filter_public extends views_handler_f
    * Create a custom filter query.
    */
   function query() {
-    // This is a hackish attempt to optimize the query.
-    $use_statically_cached_ids = variable_get('ampp_use_statically_cached_ids', TRUE);
-    if ($use_statically_cached_ids) {
-      // Get an array of 'public' activities.
-      $items = amp_activity_get_amp_activities();
-
-      if (!empty($items)) {
-        $placeholder = ':db_filter_public_placeholder';
-        $this->query->add_where_expression(0, "$this->table.$this->real_field IN ($placeholder)", array($placeholder => $items));
-      }
-
-      return;
-    }
-
-    // The code bellow should match the query created by amp_activity_get_amp_activities().
     $this->query->set_group_operator('AND', 0);
 
     $group = 0;

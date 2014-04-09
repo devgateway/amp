@@ -212,7 +212,7 @@ function _ampp_get_search_arguments($for_views = FALSE) {
 
     // In some situations args migth end up in the request under a different name.
     // @TODO: Cleanup projects_search_form content type.
-    $name = _ampp_get_search_argument_query_translation($name);
+    $name = _amp_activity_get_search_argument_translation($name);
 
     switch ($name) {
       case 'sectors':
@@ -255,47 +255,6 @@ function _ampp_get_search_arguments($for_views = FALSE) {
   }
 
   return $processed_arguments;
-}
-
-/**
- * Helper function for _ampp_get_search_arguments()
- *
- * Translates old pemanent URLs to work with the current filters.
- */
-function _ampp_get_search_argument_query_translation($name) {
-  $old_args_mapping = array(
-    'sector' => 'sectors',
-
-    'primary_sector' => 'sectors_primary',
-    'primarysectors' => 'sectors_primary',
-
-    'secondary_sector' => 'sectors_secondary',
-    'secondarysectors' => 'sectors_secondary',
-
-    'program' => 'programs',
-
-    'region' => 'locations',
-
-    'donor' => 'organisations_dn',
-    'donors' => 'organisations_dn',
-
-    'agencies' => 'organisations_ba',
-    'agency' => 'organisations_ba',
-
-    'keyword' => 'keywords',
-  );
-
-  foreach ($old_args_mapping as $old_key => $new_key) {
-    if ($new_key != $name) {
-      continue;
-    }
-
-    if (isset($_GET[$new_key])) {
-      return $new_key;
-    }
-  }
-
-  return $name;
 }
 
 /**
@@ -376,11 +335,11 @@ function _ampp_get_search_argument_location($name, $for_views) {
 function _ampp_get_search_argument_sectors($name, $for_views) {
   $list = array();
 
-  $arg_name = _ampp_get_search_argument_query_translation('sectors');
+  $arg_name = _amp_activity_get_search_argument_translation('sectors');
   $list['sectors'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
-  $arg_name = _ampp_get_search_argument_query_translation('sectors_primary');
+  $arg_name = _amp_activity_get_search_argument_translation('sectors_primary');
   $list['sectors_primary'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
-  $arg_name = _ampp_get_search_argument_query_translation('sectors_secondary');
+  $arg_name = _amp_activity_get_search_argument_translation('sectors_secondary');
   $list['sectors_secondary'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
 
   if (empty($list['sectors']) && empty($list['sectors_primary']) && empty($list['sectors_secondary'])) {

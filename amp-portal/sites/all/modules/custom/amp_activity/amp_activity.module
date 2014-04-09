@@ -346,3 +346,42 @@ function _amp_activity_get_activity_status_options() {
 
   return $options;
 }
+
+/**
+ * Translates old pemanent URLs to work with the current filters.
+ */
+function _amp_activity_get_search_argument_translation($name) {
+  $old_args_mapping = array(
+    'sector' => 'sectors',
+
+    'primary_sector' => 'sectors_primary',
+    'primarysectors' => 'sectors_primary',
+
+    'secondary_sector' => 'sectors_secondary',
+    'secondarysectors' => 'sectors_secondary',
+
+    'program' => 'programs',
+
+    'region' => 'locations',
+
+    'donor' => 'organisations_dn',
+    'donors' => 'organisations_dn',
+
+    'agencies' => 'organisations_ba',
+    'agency' => 'organisations_ba',
+
+    'keyword' => 'keywords',
+  );
+
+  foreach ($old_args_mapping as $old_key => $new_key) {
+    if ($new_key != $name) {
+      continue;
+    }
+
+    if (isset($_GET[$new_key])) {
+      return $new_key;
+    }
+  }
+
+  return $name;
+}

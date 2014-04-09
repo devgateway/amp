@@ -115,7 +115,7 @@
 }
 
 .zunia-feed-box .attachment-before a.zunia-logo {
-  background: url(../images/zunia-big-logo.png) 0 0 no-repeat;
+  background: url("../images/zunia-big-logo.png") 0 0 no-repeat;
   display: block;
   height: 67px;
   text-indent: -5000px;
@@ -139,7 +139,7 @@
 }
 
 .zunia-feed-box .views-slideshow-controls-top a {
-  background: url(../images/bullets.png) no-repeat scroll 0 -100px;
+  background: url("../images/bullets.png") no-repeat scroll 0 -100px;
   display: block;
   float: left;
   height: 16px;
@@ -157,7 +157,7 @@
 }
 
 .zunia-feed-box .view-content {
-  background: url(../images/zunia-cell-vertical-separator.png) 0 50% no-repeat;
+  background: url("../images/zunia-cell-vertical-separator.png") 0 50% no-repeat;
   display: table-cell;
   height: 128px;
   margin-left: 210px;
@@ -369,7 +369,7 @@ h2.pane-title {
   float: left;
   padding: 0px;
   margin: 0 10px 15px 0;
-  background: url("/sites/all/themes/ampp/images/block-heading.png") repeat-x scroll 0 0 #F2F2F2;
+  background: url("../images/block-heading.png") repeat-x scroll 0 0 #F2F2F2;
   height: auto;
   border: 1px solid #d0d0d0;
 }
@@ -504,19 +504,20 @@ div.views-slideshow-ddblock-cycle-vsd-default div.slide-body-inner {
   display: block;
   width: 8px;
   height: 8px;
-  background: url("/sites/all/themes/ampp/images/slideshow_bullet_passive.png") repeat-x scroll 0pt 0pt transparent;
+  background: url("../images/slideshow_bullet_passive.png") repeat-x scroll 0pt 0pt transparent;
 }
 
 .views-slideshow-pager-field-item.active span {
   display: block;
   width: 8px;
   height: 8px;
-  background: url("/sites/all/themes/ampp/images/slideshow_bullet.png") repeat-x scroll 0pt 0pt transparent;
+  background: url("../images/slideshow_bullet.png") repeat-x scroll 0pt 0pt transparent;
 }
 
 div.views-slideshow-ddblock-cycle-vsd-default div.container-inner {
   height: 220px;
   position: relative;
+  overflow: hidden;
   z-index: 0;
 }
 

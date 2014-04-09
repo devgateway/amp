@@ -482,7 +482,9 @@ function showPopin() {
 }
 
 function hidePopin() {
-	popinPanels['Panel1'].hide();
+	if (popinPanels['Panel1']!=null) {
+		popinPanels['Panel1'].hide();
+	}
 }
 
 function showExport() {
@@ -666,6 +668,12 @@ function resetToDefaults(){
 	callbackChildren.call(document.getElementById("fiscalCalendar_dropdown_Id"), null);	
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
+	//Get array of graphs
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		document.getElementById(allGraphs[idx].children[0].id+"StartYear").value = document.getElementById("defaultStartYear").value;
+		document.getElementById(allGraphs[idx].children[0].id+"EndYear").value = document.getElementById("defaultEndYear").value;
+	}
 }
 
 function removeOptionsDropdown(object){
@@ -1047,6 +1055,11 @@ function callbackApplyFilter(e){
 		document.getElementById("agencyType").value = document.getElementById("agencyTypeQuickFilter_dropdown").value;
 		document.getElementById("agencyType_dropdown").value = document.getElementById("agencyTypeQuickFilter_dropdown").value;
 	}
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		document.getElementById(allGraphs[idx].children[0].id+"StartYear").value = "";
+		document.getElementById(allGraphs[idx].children[0].id+"EndYear").value = "";
+	}
 	
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
@@ -1250,6 +1263,12 @@ function applyFilterPopin(e){
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;
 	
+	//refresh chart year's slider selection
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		document.getElementById(allGraphs[idx].children[0].id+"StartYear").value = document.getElementById("defaultStartYear").value;
+		document.getElementById(allGraphs[idx].children[0].id+"EndYear").value = document.getElementById("defaultEndYear").value;
+	}
 	var dashboardType = document.getElementById("dashboardType").value;
 	if (dashboardType==1) {
 		document.getElementById("agencyType").value = document.getElementById("agencyType_dropdown").options[document.getElementById("agencyType_dropdown").selectedIndex].value;
@@ -2330,6 +2349,12 @@ function  saveAdditionalInfo(id, type){
         failure:additionalInfoResponseFailure
     };
 
+function updateSliderValues (idContainer,startYear,endYear){
+	var startYearObject = document.getElementById(idContainer + "StartYear");
+	var endYearObject = document.getElementById(idContainer + "EndYear");
+	startYearObject.value = startYear;
+	endYearObject.value = endYear;
+}    
 function getValueToFlash(idContainer, field){
 	
 	if (field == 'Currency'){

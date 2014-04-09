@@ -1293,6 +1293,9 @@ function initializeGlobalVariables(){
 				<input type="hidden" id="RegionProfileDataField" value="dataField" />
 				<input type="hidden" id="RegionProfileItemId" value="${visualizationform.filter.regionId}" />
 				<input type="hidden" id="RegionProfileTitleLegendTrn" value="<digi:trn>Region Profile</digi:trn>" />
+				<input type="hidden" id="RegionProfileStartYear" name="RegionProfileStartYear" value="" />
+				<input type="hidden" id="RegionProfileEndYear" name="RegionProfileEndYear"  value="" />
+				
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'RegionProfile')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'RegionProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'RegionProfile', true)" title="<digi:trn>Donut Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'RegionProfile', true)" title="<digi:trn>Line Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'RegionProfile', true)" title="<digi:trn>Data View</digi:trn>"/></div>
@@ -1334,6 +1337,9 @@ function initializeGlobalVariables(){
 				&nbsp;<input type="checkbox" id="SectorProfileIgnore" style="display: none;" checked="checked"><label id="SectorProfileIgnoreLabel" style="display: none;" for="SectorProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 				<input type="hidden" id="SectorProfileDataAction" value="getSectorProfileGraphData" />
 				<input type="hidden" id="SectorProfileDataField" value="dataField" />
+				<input type="hidden" id="SectorProfileStartYear" value="" />
+				<input type="hidden" id="SectorProfileEndYear" value="" />
+				
 				<input type="hidden" id="SectorProfileItemId" value="${visualizationform.filter.sectorId}" />
 				<input type="hidden" id="SectorProfileTitleLegendTrn" value="<digi:trn>Sector Profile</digi:trn>" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'SectorProfile')">
@@ -1399,7 +1405,10 @@ function initializeGlobalVariables(){
 				&nbsp;<input type="checkbox" id="FundingsRotateDataLabel"><label id="FundingsRotateDataLabelLabel" for="FundingsRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
 				&nbsp;<input type="checkbox" id="FundingsIgnore" style="display: none;" checked="checked"><label id="FundingsIgnoreLabel" style="display: none;" for="FundingsIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 				<input type="hidden" id="FundingsDataAction" value="getFundingsGraphData" />
-				<input type="hidden" id="FundingsDataField" value="dataField" />
+				<input type="hidden" id="FundingsDataField" value="dataFielda0" />
+				<input type="hidden" id="FundingsStartYear" name="FundingsStartYear" value="a" />
+				<input type="hidden" id="FundingsEndYear" name="FundingsEndYear" value="" />
+				
 				<input type="hidden" id="FundingsTitleLegendTrn" value="<digi:trn>ODA historical trend</digi:trn>" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'Fundings')">
 				</div>
@@ -1443,6 +1452,9 @@ function initializeGlobalVariables(){
 					&nbsp;<input type="checkbox" id="ODAGrowthIgnore" style="display: none;" checked="checked"><label id="ODAGrowthIgnoreLabel" style="display: none;" for="ODAGrowthIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 					<input type="hidden" id="ODAGrowthDataAction" value="getODAGrowthGraphData" />
 					<input type="hidden" id="ODAGrowthDataField" value="dataField" />
+					<input type="hidden" id="ODAGrowthStartYear" value="" />
+					<input type="hidden" id="ODAGrowthEndYear" value="" />
+					
 					<input type="hidden" id="ODAGrowthTitleLegendTrn" value="<digi:trn>ODA Growth</digi:trn>" />
 					<br/>
 					<input type="hidden" id="ODAGrowthDropdownCurrentTitle" value="<digi:trn jsFriendly='true'>Year</digi:trn>">
@@ -1513,6 +1525,9 @@ function initializeGlobalVariables(){
 				&nbsp;<input type="checkbox" id="AidPredictabilityIgnore" style="display: none;" checked="checked"><label id="AidPredictabilityIgnoreLabel" style="display: none;" for="AidPredictabilityIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 				<input type="hidden" id="AidPredictabilityDataAction" value="getAidPredictabilityGraphData" />
 				<input type="hidden" id="AidPredictabilityDataField" value="dataField" />
+				<input type="hidden" id="AidPredictabilityStartYear" value="" />
+				<input type="hidden" id="AidPredictabilityEndYear" value="" />
+				
 				<input type="hidden" id="AidPredictabilityTitleLegendTrn" value="<digi:trn>Aid Predictability</digi:trn>" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'AidPredictability')">
 				</div>
@@ -1580,6 +1595,9 @@ function initializeGlobalVariables(){
 				&nbsp;<input type="checkbox" id="AidTypeIgnore" style="display: none;" checked="checked"><label id="AidTypeIgnoreLabel" style="display: none;" for="AidTypeIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 				<input type="hidden" id="AidTypeDataAction" value="getAidTypeGraphData" />
 				<input type="hidden" id="AidTypeDataField" value="dataField" />
+				<input type="hidden" id="AidTypeStartYear" value="" />
+				<input type="hidden" id="AidTypeEndYear" value="" />
+				
 				<input type="hidden" id="AidTypeTitleLegendTrn" value="<digi:trn>Aid Type</digi:trn>" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'AidType')">
 				</div>
@@ -1647,6 +1665,9 @@ function initializeGlobalVariables(){
 				<input type="hidden" id="AidModalityTitleLegendTrn" value="<digi:trn>Aid Modality</digi:trn>" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'AidModality')">
 				<input type="hidden" id="AidModalityDataAction" value="getAidModalityGraphData" />
+				<input type="hidden" id="AidModalityStartYear" value="" />
+				<input type="hidden" id="AidModalityEndYear" value="" />
+			
 				<input type="hidden" id="AidModalityDataField" value="dataField" />
 				</div>
 			</div>
@@ -1706,6 +1727,9 @@ function initializeGlobalVariables(){
 					&nbsp;<input type="checkbox" id="OrganizationProfileIgnore" style="display: none;" checked="checked"><label id="OrganizationProfileIgnoreLabel" style="display: none;" for="OrganizationProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 					<input type="hidden" id="OrganizationProfileDataAction" value="getOrganizationProfileGraphData" />
 					<input type="hidden" id="OrganizationProfileDataField" value="dataField" />
+					<input type="hidden" id="OrganizationProfileStartYear" value="" />
+					<input type="hidden" id="OrganizationProfileEndYear" value="" />
+					
 					<input type="hidden" id="OrganizationProfileTitleLegendTrn" value="<digi:trn>Organization Profile</digi:trn>" />
 					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'OrganizationProfile')">
 					</div>
@@ -1767,6 +1791,9 @@ function initializeGlobalVariables(){
 					&nbsp;<input type="checkbox" id="SectorProfileIgnore" style="display: none;" checked="checked"><label id="SectorProfileIgnoreLabel" style="display: none;" for="SectorProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 					<input type="hidden" id="SectorProfileDataAction" value="getSectorProfileGraphData" />
 					<input type="hidden" id="SectorProfileDataField" value="dataField" />
+					<input type="hidden" id="SectorProfileStartYear" value="" />
+					<input type="hidden" id="SectorProfileEndYear" value="" />
+					
 					<input type="hidden" id="SectorProfileItemId" value="${visualizationform.filter.sectorId}" />
 					<input type="hidden" id="SectorProfileTitleLegendTrn" value="<digi:trn>Sector Profile</digi:trn>" />
 					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'SectorProfile')">
@@ -1829,6 +1856,9 @@ function initializeGlobalVariables(){
 					&nbsp;<input type="checkbox" id="RegionProfileIgnore" style="display: none;" checked="checked"><label id="RegionProfileIgnoreLabel" style="display: none;" for="RegionProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 					<input type="hidden" id="RegionProfileDataAction" value="getRegionProfileGraphData" />
 					<input type="hidden" id="RegionProfileDataField" value="dataField" />
+					<input type="hidden" id="RegionProfileStartYear" value="" />
+					<input type="hidden" id="RegionProfileEndYear" value="" />
+					
 					<input type="hidden" id="RegionProfileItemId" value="${visualizationform.filter.regionId}" />
 					<input type="hidden" id="RegionProfileTitleLegendTrn" value="<digi:trn>Region Profile</digi:trn>" />
 					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'RegionProfile')">

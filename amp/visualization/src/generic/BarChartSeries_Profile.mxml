@@ -300,8 +300,22 @@
 				messageLoadingPanel.title = trnMessageLoadingPanel;
 				messageLoading.text = trnMessageLoading;
 				
+				var params:Object = {};
+				var selectedStartYear:Number = NaN;
+				var selectedEndYear:Number = NaN;
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")) != "") {
+					selectedStartYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")));
+					params[idContainer+"StartYear"] = selectedStartYear;
+					
+				}
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")) != "") {
+					selectedEndYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")));
+					params[idContainer+"EndYear"] = selectedEndYear;
+					
+				}
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				
 				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
 				var labelArray:Array = new Array();
 				if (sliderLabels==null || sliderLabels.length==0){
@@ -314,8 +328,18 @@
 					}
 				}
 				sliderYear.labels = labelArray;
-				sliderYear.values[0] = startYear;
-				sliderYear.values[1] = endYear;
+				if (!isNaN(selectedStartYear)) {
+					sliderYear.values[0] = selectedStartYear;
+				}
+				else {
+					sliderYear.values[0] = startYear;
+				}
+				if (!isNaN(selectedEndYear)) {
+					sliderYear.values[1] = selectedEndYear;
+				}
+				else {
+					sliderYear.values[1] = endYear;
+				}
 
 				var strDomain:String = "";
 				var strProtocol:String = "";
@@ -332,13 +356,11 @@
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 
 				if(start == "true"){
-					var params:Object = {
-						"format" : "xml",
-						"typeofaid" : "true",
-						"itemId" : itemId,
-						"action": dataAction,
-						"divide": divide
-					};
+					params["format"]="xml";
+					params["typeofaid"]= "true";
+					params["itemId"] = itemId;
+					params["action"] = dataAction;
+					params["divide"] = divide;
 					service.send(params);
 				}
 				try {
@@ -381,8 +403,19 @@
 				dc.visible = false;
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
-				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
-				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")) != "") {
+					startYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")));
+				}
+				else{
+					startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				}
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")) != "") {
+					endYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")));
+				}
+				else{
+					endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+					
+				}
 				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
 				var labelArray:Array = new Array();
 				if (sliderLabels==null || sliderLabels.length==0){
@@ -429,6 +462,7 @@
 				params["endYear"] = sliderYear.values[1];
 				params["action"] = dataAction;
 				printLabel.text = trnYears + ": " + sliderYear.labels[sliderYear.values[0]-startYear] + " to " + sliderYear.labels[sliderYear.values[1]-startYear] +" - " + trnCurrency + ": " + currCode;
+				ExternalInterface.call("function(){ updateSliderValues('" + idContainer + "',"+params["startYear"]+","+params["endYear"]+")}");
 				
 				service.send(params);
 				var delayer:Delay = new Delay(captureSnapshot,4000,1); //capture snapshot

@@ -1,6 +1,7 @@
 package org.digijava.module.aim.util;
 
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.GPISetup;
 import org.hibernate.Session;
@@ -37,5 +38,16 @@ public class GPISetupUtil {
 		session = PersistenceManager.getRequestDBSession();
 		session.saveOrUpdate(setup);
 	}
-
+	
+	public static void saveDescription(Long id, String description) {
+		try {
+			Session session = null;
+			session = PersistenceManager.getRequestDBSession();
+			AmpGPISurveyIndicator indicator = (AmpGPISurveyIndicator) session.load(AmpGPISurveyIndicator.class, id);
+			indicator.setDescription(description);
+			session.saveOrUpdate(indicator);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

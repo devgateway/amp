@@ -13,6 +13,7 @@ public class AmpGPISurveyIndicator implements Serializable {
 	private String status;
 	private Set<AmpGPISurveyQuestion> questions;
 	private Set<AmpGPISurveyIndicatorCalcFormula> calcFormulas;
+	private String description;
 
 	public static class GPISurveyIndicatorComparator implements Comparator<AmpGPISurveyIndicator>, Serializable {
 
@@ -85,6 +86,14 @@ public class AmpGPISurveyIndicator implements Serializable {
 
 	public void setCalcFormulas(Set<AmpGPISurveyIndicatorCalcFormula> calcFormulas) {
 		this.calcFormulas = calcFormulas;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

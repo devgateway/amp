@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +32,7 @@ public class ManageGPI extends DispatchAction {
 
 		// If there is a previous setup then populate the values in the form.
 		// Notice the table amp_gpi_setup should never have more than one
-		// record!!! (at least for now).
+		// record!!! (at least for now maybe we change the approach in the future).
 		GPISetup setup = GPISetupUtil.getSetup();
 		if (setup != null) {
 			gpiForm.setIndicator5aActualDisbursement(setup.getIndicator5aActualDisbursement());
@@ -39,6 +40,9 @@ public class ManageGPI extends DispatchAction {
 			gpiForm.setIndicator6ScheduledDisbursements(setup.getIndicator6ScheduledDisbursements());
 			gpiForm.setIndicator9bDisbursements(setup.getIndicator9bDisbursements());
 		}
+		
+		// Populate the list of available indicators.
+		gpiForm.setIndicators(DbUtil.getAllGPISurveyIndicators(false));
 
 		return mapping.findForward("forward");
 	}
@@ -49,7 +53,6 @@ public class ManageGPI extends DispatchAction {
 		if (setup == null) {
 			setup = new GPISetup();
 		}
-
 		if (!"".equals(gpiForm.getIndicator5aActualDisbursement())) {
 			setup.setIndicator5aActualDisbursement(gpiForm.getIndicator5aActualDisbursement());
 		}
@@ -63,6 +66,16 @@ public class ManageGPI extends DispatchAction {
 			setup.setIndicator9bDisbursements(gpiForm.getIndicator9bDisbursements());
 		}
 		GPISetupUtil.saveGPISetup(setup);
+		
+		Enumeration<String> params = request.getParameterNames();
+		while (params.hasMoreElements()) {
+			String paramName = params.nextElement().toString();
+			if (paramName.startsWith("indicator_")) {
+				String auxId = paramName.substring(10);
+				GPISetupUtil.saveDescription(new Long(auxId), request.getParameter(paramName));
+			}
+		}
+		
 		return mapping.findForward("save");
 	}
 }

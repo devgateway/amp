@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 
 public class ManageGPIForm extends ActionForm {
@@ -13,6 +14,8 @@ public class ManageGPIForm extends ActionForm {
 	private String indicator5aPlannedDisbursement;
 	private String indicator6ScheduledDisbursements;
 	private String indicator9bDisbursements;
+	private Collection<AmpGPISurveyIndicator> indicators;
+	private AmpGPISurveyIndicator indicator;
 
 	public ManageGPIForm() {
 	}
@@ -25,7 +28,8 @@ public class ManageGPIForm extends ActionForm {
 		return indicator5aActualDisbursement;
 	}
 
-	public void setIndicator5aActualDisbursement(String indicator5aActualDisbursement) {
+	public void setIndicator5aActualDisbursement(
+			String indicator5aActualDisbursement) {
 		this.indicator5aActualDisbursement = indicator5aActualDisbursement;
 	}
 
@@ -33,7 +37,8 @@ public class ManageGPIForm extends ActionForm {
 		return indicator5aPlannedDisbursement;
 	}
 
-	public void setIndicator5aPlannedDisbursement(String indicator5aPlannedDisbursement) {
+	public void setIndicator5aPlannedDisbursement(
+			String indicator5aPlannedDisbursement) {
 		this.indicator5aPlannedDisbursement = indicator5aPlannedDisbursement;
 	}
 
@@ -41,7 +46,8 @@ public class ManageGPIForm extends ActionForm {
 		return indicator6ScheduledDisbursements;
 	}
 
-	public void setIndicator6ScheduledDisbursements(String indicator6ScheduledDisbursements) {
+	public void setIndicator6ScheduledDisbursements(
+			String indicator6ScheduledDisbursements) {
 		this.indicator6ScheduledDisbursements = indicator6ScheduledDisbursements;
 	}
 
@@ -55,6 +61,22 @@ public class ManageGPIForm extends ActionForm {
 
 	public void setMeasures(Map<String, String> measures) {
 		this.measures = measures;
+	}
+
+	public Collection<AmpGPISurveyIndicator> getIndicators() {
+		return indicators;
+	}
+
+	public void setIndicators(Collection<AmpGPISurveyIndicator> indicators) {
+		this.indicators = indicators;
+	}
+
+	public AmpGPISurveyIndicator getIndicator() {
+		return indicator;
+	}
+
+	public void setIndicator(AmpGPISurveyIndicator indicator) {
+		this.indicator = indicator;
 	}
 
 }

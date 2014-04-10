@@ -240,11 +240,14 @@ public class GroupReportDataXLS extends XLSExporter{
 		//for translation purposes
 //		Site site = RequestUtils.getSite(request);
 //		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-						
+
+        boolean isPlain = (request.getParameter("plainReport") == null ||
+                !request.getParameter("plainReport").equalsIgnoreCase("true")) ? false:true;
+
 		GroupReportData rd = (GroupReportData) item;
 		AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
-		
-		this.makeColSpan(rd.getTotalDepth(),false);	
+
+        if (!isPlain) this.makeColSpan(rd.getTotalDepth(),false);
 		rowId.inc();
 		colId.reset();
 		row = sheet.createRow(rowId.shortValue());
@@ -268,8 +271,8 @@ public class GroupReportDataXLS extends XLSExporter{
 			String translatedCurrency = TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrencyName());
             translatedNotes = translatedNotes.replaceAll("\n", " ");
 			cell.setCellValue(translatedNotes+translatedCurrency/*+"\n"*/);
-			
-			this.makeColSpan(rd.getTotalDepth(),false);
+
+            if (!isPlain) this.makeColSpan(rd.getTotalDepth(),false);
 						
 			rowId.inc();
 			colId.reset();
@@ -286,8 +289,8 @@ public class GroupReportDataXLS extends XLSExporter{
 			cs.setFont(font);		
 			cell.setCellStyle(cs);
 			row.setHeightInPoints(30);
-			
-			this.makeColSpan(rd.getTotalDepth(),false);
+
+            if (!isPlain) this.makeColSpan(rd.getTotalDepth(),false);
 			
 			rowId.inc();
 			colId.reset();
@@ -297,7 +300,7 @@ public class GroupReportDataXLS extends XLSExporter{
 				cell=row.createCell(colId.shortValue());
 				translatedReportDescription = translatedReportDescription.replaceAll("\n", " ");
 				cell.setCellValue(translatedReportDescription+" "+this.metadata.getReportDescription());
-				this.makeColSpan(rd.getTotalDepth(),false);
+                if (!isPlain) this.makeColSpan(rd.getTotalDepth(),false);
 				rowId.inc();
 				colId.reset();
 			}

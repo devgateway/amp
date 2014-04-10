@@ -36,14 +36,14 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  */
 public class GetVersionsForDocumentManager extends Action {
 	
-	HttpServletRequest myRequest;
+//	HttpServletRequest myRequest;
 	DocumentManagerForm myForm;
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,javax.servlet.http.HttpServletRequest request,javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 		
 		myForm							= (DocumentManagerForm) form;
-		myRequest						= request;
+//		myRequest						= request;
 		
 		ArrayList<DocumentData> docs	= new ArrayList<DocumentData>();
 		myForm.setOtherDocuments(docs);
@@ -125,7 +125,7 @@ public class GetVersionsForDocumentManager extends Action {
 		
 		docData.setCurrentVersionNeedsApproval(versionNeedsApproval);
 		
-		docData.process(myRequest);
+		docData.process();
 		docData.computeIconPath( false );
 		return true;
 	}

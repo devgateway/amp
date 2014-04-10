@@ -558,8 +558,7 @@ public class DocumentManager extends Action {
 					continue;
 				}
 				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, documentNodeBaseVersionUUID, 
-							nodeWrapper.getUuid() /*if it's original,node then this value is equal to documentNodeBaseVersionUUID, otherwise it's node's visible version uuid */, 
-							request);
+							nodeWrapper.getUuid() /*if it's original,node then this value is equal to documentNodeBaseVersionUUID, otherwise it's node's visible version uuid */);
 				
 				if ( !CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && showActionButtons) {
 					/**
@@ -721,7 +720,7 @@ public class DocumentManager extends Action {
 			 */
 			if (documentNode == null) {
 				try {
-				  throw new Exception("Document with uuid '" + uuid + "' not found !");
+				  logger.error("JACKRABBIT: no document found", new Exception("Document with uuid '" + uuid + "' not found !"));
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -763,7 +762,7 @@ public class DocumentManager extends Action {
 					continue;
 				}
 				
-				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null, request);
+				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null);
 				
 				if(showActionsButton){
 					documentData.setHasUnshareRights(DocumentManagerRights.hasUnshareRights(documentNode, request, CrConstants.SHARED_DOCS_TAB));

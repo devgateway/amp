@@ -480,13 +480,21 @@ public class NodeWrapper{
 		try {
 			jcrWriteSession.save();
 			node.checkin();
+			logger.error(String.format("CREATED JackRabbit node with uuid = %s, name = %s", this.getUuid(), this.tryGetName()));
 			return true;
 		}
 		catch (Exception E) {
 			E.printStackTrace();
 			return false;
 		}
-
+	}
+	
+	public String tryGetName(){
+		try{
+			return this.getName();
+		}catch(Exception e){
+			return "<cannot get name>";
+		}
 	}
 	
 	public String getUuid () {
@@ -728,7 +736,7 @@ public class NodeWrapper{
 				}
 			}
 		} catch (Exception e) {
-			logger.warn("Document " + this.getName() + " has no label container node");
+			//logger.warn("Document " + this.getName() + " has no label container node");
 			//e.printStackTrace();
 		}
 		return labels;

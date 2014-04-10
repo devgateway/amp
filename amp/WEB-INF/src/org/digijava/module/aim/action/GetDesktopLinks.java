@@ -135,7 +135,7 @@ public class GetDesktopLinks extends TilesAction {
 				if (fileName == null && nodeWrapper.getWebLink() == null)
 					continue;
 
-				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null, request);
+				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null);
 
 				if (!isPublicVersion) {
 					hasShowVersionsRights = DocumentManagerRights.hasShowVersionsRights(documentNode, request);

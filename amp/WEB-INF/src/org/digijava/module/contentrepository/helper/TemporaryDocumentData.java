@@ -108,7 +108,7 @@ public class TemporaryDocumentData extends DocumentData {
 		this.setShowVersionHistory(false);
 		this.setCmDocTypeId( dmForm.getDocType() );
 		
-		this.process( request );
+		this.process();
 		this.computeIconPath(true);
 	}
 	

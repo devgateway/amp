@@ -53,7 +53,7 @@ public class DownloadFile extends Action {
 			}
 			
 			NodeWrapper nodeWrapper = new NodeWrapper(node);
-			DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, nodeWrapper.getName(), null, null, request);
+			DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, nodeWrapper.getName(), null, null);
 			BoundedList<DocumentData> recentUUIDs = (BoundedList<DocumentData>)(request.getSession().getAttribute(Constants.MOST_RECENT_RESOURCES));
 			recentUUIDs.add(documentData);
 			

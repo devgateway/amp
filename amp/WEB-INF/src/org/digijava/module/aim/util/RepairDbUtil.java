@@ -26,31 +26,19 @@ public class RepairDbUtil {
 		String qryStr = null;
 		
 		try{
-				session				= PersistenceManager.getSession();
-				Connection	conn	= session.connection();
-				Statement st		= conn.createStatement();
-				qryStr 				= "UPDATE amp_activity_version SET activity_creator=NULL WHERE activity_creator NOT IN (SELECT amp_team_mem_id FROM amp_team_member)" ;
-				int result			= st.executeUpdate(qryStr);
-				conn.close();
+			session				= PersistenceManager.getSession();
+			qryStr 				= "UPDATE amp_activity_version SET activity_creator=NULL WHERE activity_creator NOT IN (SELECT amp_team_mem_id FROM amp_team_member)" ;
+			int result			= session.createSQLQuery(qryStr).executeUpdate();
 				
-				if (result > 0) {
-					logger.error ("There was an error with inexistent activity creator in AmpActivity --- updated " + result + "rows" );
-				}
+			if (result > 0) {
+				logger.error ("There was an error with inexistent activity creator in AmpActivity --- updated " + result + "rows" );
+			}
 		}
 	
 		
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 			ex.printStackTrace(System.out);
-		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
 		}
 	}
 	
@@ -59,31 +47,19 @@ public class RepairDbUtil {
 		String qryStr = null;
 		
 		try{
-				session				= PersistenceManager.getSession();
-				Connection	conn	= session.connection();
-				Statement st		= conn.createStatement();
-				qryStr 				= "DELETE FROM amp_team_page_filters WHERE page NOT IN (SELECT amp_page_id FROM amp_pages)" ;
-				int result			=  st.executeUpdate(qryStr);
-				conn.close();
+			session				= PersistenceManager.getSession();
+			qryStr 				= "DELETE FROM amp_team_page_filters WHERE page NOT IN (SELECT amp_page_id FROM amp_pages)" ;
+			int result			= session.createSQLQuery(qryStr).executeUpdate();
 				
-				if (result > 0) {
-					logger.error ("There was an error with inexistent amp_page in amp_team_page_filter --- deleted " + result + "rows" );
-				}
+			if (result > 0) {
+				logger.error ("There was an error with inexistent amp_page in amp_team_page_filter --- deleted " + result + "rows" );
+			}
 		}
 	
 		
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 			ex.printStackTrace(System.out);
-		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
 		}
 	}
 	
@@ -92,38 +68,28 @@ public class RepairDbUtil {
 		String qryStr = null;
 		
 		try{
-				session				= PersistenceManager.getSession();
-				Connection	conn	= session.connection();
-				Statement st		= conn.createStatement();
-				qryStr 				= "UPDATE dg_user SET banned=FALSE WHERE banned=TRUE  AND dg_user.id in (select amp_team_member.user_ from amp_team_member)" ;
-				int result			=  st.executeUpdate(qryStr);
-				conn.close();
+			session				= PersistenceManager.getSession();
+			qryStr 				= "UPDATE dg_user SET banned=FALSE WHERE banned=TRUE  AND dg_user.id in (select amp_team_member.user_ from amp_team_member)" ;
+			int result			=  session.createSQLQuery(qryStr).executeUpdate();
 				
-				if (result > 0) {
-					logger.error ("There was an error with banned users still appearing in teams --- updated " + result + "rows" );
-				}
+			if (result > 0) {
+				logger.error ("There was an error with banned users still appearing in teams --- updated " + result + "rows" );
+			}
 		}
-	
 		
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
 	}
 	
 	
 	public static void repairDocumentNoLongerInContentRepository(String uuid, String className) {
+		logger.error("JACKRABBIT asked to cleanup non-existing node with uuid=" + uuid + ", className = " + className);
+		/*logger.error("TEMPORARY SHIM, NOT DELETING ANYTHING", new RuntimeException("BOZO"));
+		return;*//*
 		int numOfObjectsDeleted			= DocumentManagerUtil.deleteObjectsReferringDocument(uuid, className); 
 		if ( numOfObjectsDeleted > 0 )
-			logger.error ("There was an error with " + className + " using deleted documents. Deleting " + numOfObjectsDeleted + "rows" );
+			logger.error ("There was an error with " + className + " using deleted documents. Deleting " + numOfObjectsDeleted + "rows", new RuntimeException("this should not happen"));*/
 	}
 }

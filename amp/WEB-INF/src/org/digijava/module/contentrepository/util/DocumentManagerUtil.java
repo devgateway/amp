@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.jcr.InvalidItemStateException;
 import javax.jcr.NamespaceException;
@@ -335,6 +337,55 @@ public class DocumentManagerUtil {
 		}
 		return null;
 	}
+
+	public static boolean isVersionable(Node node){
+		try{
+			return node.getVersionHistory().getNodes().getSize() > 0;
+		}
+		catch(Exception e){return false;}		
+	}
+	
+	/**
+	* DEBUG CODE
+	*/
+	public static Set<DocumentData> collectRepository(Node node, Set<DocumentData> bld) throws RepositoryException{
+		DocumentData dd = DocumentData.buildFromNode(node);
+		if ((dd != null) && (dd.getName() != null)){
+			bld.add(dd);
+			
+			if (isVersionable(node)){
+				VersionHistory vh = node.getVersionHistory();
+				NodeIterator niter	= vh.getNodes();
+				while (niter.hasNext()){
+					Node n = niter.nextNode();
+					DocumentData docData = DocumentData.buildFromNodeVersion(n, dd);
+					docData.setName(dd.getName() + " VERSION with uuid = " + docData.getUuid());
+					bld.add(docData);
+				}
+			}
+		}
+		
+		NodeIterator children = node.getNodes();
+		while(children.hasNext()){
+			collectRepository(children.nextNode(), bld);
+		}
+		return bld;
+	}
+	/**
+	 * debug-only function: return blabla
+	 * @param session
+	 * @param bld
+	 * @return
+	 */
+	public static Set<DocumentData> collectRepository(Session session, Set<DocumentData> bld){
+		try{
+			collectRepository(session.getRootNode() , bld);
+		}
+		catch(Exception e){
+			e.printStackTrace(); // this is a debug-only function, so it is acceptable
+		}
+		return bld;
+	}
 	
 	public static Node getReadNode(String uuid, HttpServletRequest request) {
 		Session session	= getReadSession(request);
@@ -343,7 +394,10 @@ public class DocumentManagerUtil {
 			//session.refresh(false);
 			return session.getNodeByUUID(uuid);
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();  DEBUG CODE - DO NOT DELETE THE COMMENTED CODE BELOW
+//			Set<DocumentData> allDocuments = collectRepository(session, new TreeSet<DocumentData>(DocumentData.COMPARATOR_BY_NAME));
+//			for(DocumentData doc:allDocuments)
+//				logger.error("\t" + doc.toString());
 			return null;
 		}
 	}
@@ -496,15 +550,21 @@ public class DocumentManagerUtil {
 	private static boolean deleteDocument (String uuid, HttpServletRequest request) {
 		if (uuid != null) {
 			Node node		= DocumentManagerUtil.getWriteNode(uuid, request);
+			String name = new NodeWrapper(node).tryGetName();
+			boolean successfully = false;
 			try {
 				Node parent		= node.getParent();
 				node.remove();
 				parent.save();
 				
 				SetAttributes.unpublish(uuid);
+				successfully = true;
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+			finally{
+				logger.error(String.format("DELETED JackRabbit node with uuid = %s, name = %s, success: %b", uuid, name, successfully));
 			}
 		}
 		return false;
@@ -573,7 +633,7 @@ public class DocumentManagerUtil {
 					continue;
 				}
 				
-				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, documentNodeBaseVersionUUID, nodeWrapper.getUuid(), request);				
+				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, documentNodeBaseVersionUUID, nodeWrapper.getUuid());				
 				ret.add(documentData);
 			}	
 			return ret;

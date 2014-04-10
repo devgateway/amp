@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.jcr.Node;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +45,7 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
@@ -697,7 +699,21 @@ public class EditActivity extends Action {
         //request.getParameterMap().put("viewAllRights", tmp);
 
         SelectDocumentDM.clearContentRepositoryHashMap(request);
-
+        
+        if (false) // debug code for AMP-17265
+        {
+        	logger.error("scanning DB for lost documents...");
+        	List<String> uuids = PersistenceManager.getSession().createSQLQuery("SELECT DISTINCT(uuid) FROM amp_activity_document").list();
+        	Set<String> missingUuids = new HashSet<String>();
+        	for(String uuid:uuids){
+        		Node documentNode = DocumentManagerUtil.getReadNode(uuid, TLSUtils.getRequest());
+        		if (documentNode == null)
+        			missingUuids.add(uuid);
+        	}
+        	logger.error("missing uuids: " + missingUuids.toString());
+        	logger.error("done scanning DB");
+        	//Node documentNode	= DocumentManagerUtil.getReadNode(uuid, myRequest);
+        }
         //Added because of a problem with the save as draft and redirect; also because of problem with logframe link from activity form
         try {
         	//this does not work, throws java.lang.IllegalStateException: No modifications are allowed to a locked ParameterMap

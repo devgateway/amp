@@ -2,6 +2,7 @@ package org.digijava.module.contentrepository.helper;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,11 @@ import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocToOrgDAO;
 
 public class DocumentData implements Comparable<DocumentData>, Serializable{
+	public static final Comparator<DocumentData> COMPARATOR_BY_NAME = new Comparator<DocumentData>(){
+		@Override
+		public int compare(DocumentData arg0, DocumentData arg1) {
+			return arg0.getName().compareTo(arg1.getName());
+		}};
 	String name				= null;
 	String uuid				= null;
 	String title			= null;
@@ -276,7 +282,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 		this.needsApproval = needsApproval;
 	}
 	
-	public void process(HttpServletRequest request) {
+	public void process() {
 		if (cmDocTypeId != null) {
 			AmpCategoryValue docTypeCv	= CategoryManagerUtil.getAmpCategoryValueFromDb(cmDocTypeId);
 			if ( docTypeCv != null ) {
@@ -483,7 +489,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	 * @param request - may be null
 	 * @return
 	 */
-	public static DocumentData buildFromNodeWrapper(NodeWrapper nodeWrapper, String fileName, String uuid, String nodeVersionUUID, HttpServletRequest request)
+	public static DocumentData buildFromNodeWrapper(NodeWrapper nodeWrapper, String fileName, String uuid, String nodeVersionUUID)
 	{
 		DocumentData documentData		= new DocumentData();
 		documentData.setName(fileName );
@@ -509,14 +515,45 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 		documentData.setIndex(nodeWrapper.getIndex());
 		documentData.setCategory(nodeWrapper.getCategory());
 		
-		if (request != null)
+//		if (request != null)
 		{
-			documentData.process(request);
+			documentData.process();
 			documentData.computeIconPath(true);			
 		}
 		
 		documentData.setOrganisations(DocToOrgDAO.getOrganisationsAsString(documentData.getUuid()));
 		
 		return documentData;
+	}
+	
+	/**
+	 * debug-only code!!! Do not use it in production unless you graduated somewhere in Cordoba!
+	 * @param node
+	 * @param forcedUuid
+	 * @return
+	 */
+	public static DocumentData buildFromNode(javax.jcr.Node node){
+		NodeWrapper nodeWrapper	= new NodeWrapper(node);
+		String fileName	= nodeWrapper.getName();
+		if (fileName == null)
+			return null;
+		DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null);
+		return documentData;
+	}
+	
+	/**
+	 * debug only code, argentina-style workaround, DO NOT USE IN PRODUCTION CODE
+	 * @param node
+	 * @param parent
+	 * @return
+	 */
+	public static DocumentData buildFromNodeVersion(javax.jcr.Node node, DocumentData parent){
+		NodeWrapper nodeWrapper = new NodeWrapper(node);
+		DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, parent.getName(), parent.getUuid(), parent.getUuid());
+		return documentData;
+	}
+	
+	@Override public String toString(){
+		return String.format("file name = '%s', size = %.2f MB, uuid = %s", this.getName(), this.getFileSize(), this.getUuid());
 	}
 }

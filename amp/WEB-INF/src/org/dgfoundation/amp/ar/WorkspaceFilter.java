@@ -257,7 +257,7 @@ public class WorkspaceFilter
 	public static String generateWorkspaceFilterQuery(HttpSession session, Long forcedTeamMemberId)
 	{
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (forcedTeamMemberId != null && forcedTeamMemberId != AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES)
+		if (forcedTeamMemberId != null && AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES.compareTo(forcedTeamMemberId)!=0)
 			tm = TeamMemberUtil.getTeamMember(forcedTeamMemberId);
 
         //Hotfix for timor budget integration report

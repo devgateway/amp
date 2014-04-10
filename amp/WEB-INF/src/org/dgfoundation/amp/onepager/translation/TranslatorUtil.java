@@ -26,6 +26,7 @@ public final class TranslatorUtil {
 	public static Logger logger = Logger.getLogger(TranslatorUtil.class);
 
     public static List<String> localeCache;
+    public static String defaultLocaleCache;
 
 	public static boolean isTranslatorMode(Session session) {
 		AmpAuthWebSession ampSession=(AmpAuthWebSession) session;
@@ -90,7 +91,14 @@ public final class TranslatorUtil {
         return localeCache;
     }
 
-
+    public static String getDefaultLocaleCache(){
+    	if(defaultLocaleCache==null){
+    		AmpAuthWebSession session = (AmpAuthWebSession) Session.get();
+            Site site = session.getSite();
+            defaultLocaleCache=site.getDefaultLanguage().getCode();
+    	}
+    	return defaultLocaleCache;
+    }
     public static void insertAvailableLanguages(javax.servlet.http.HttpServletRequest request)
     {
     	request.setAttribute("all_locales", getLocaleCache(RequestUtils.getSite(request)));

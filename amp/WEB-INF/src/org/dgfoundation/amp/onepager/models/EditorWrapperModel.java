@@ -3,6 +3,11 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
@@ -12,14 +17,12 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
-import org.digijava.module.translation.util.ContentTranslationUtil;
-
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * @author aartimon@dginternational.org 
@@ -67,7 +70,17 @@ public class EditorWrapperModel extends LocaleAwareProxyModel<String> {
 			keyModel.setObject(newKey);
 
             //if we cloned the editors we need to put all the old values in the session
-            List<String> languages = TranslatorUtil.getLocaleCache();
+			
+			List<String> languages ;
+			//if multilingual is enable we use all the language active for the current instance
+			if ("true".equalsIgnoreCase(FeaturesUtil
+					.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL))) {
+				languages=TranslatorUtil.getLocaleCache();
+			}
+			else{
+				//if multilingual is not active, we use only ONE language, the default one for the site
+				languages =new ArrayList<String>(Arrays.asList(TranslatorUtil.getDefaultLocaleCache()));
+			}
             IModel<String> langModel = getLangModel();
             if (langModel == null){
                 langModel = Model.of("");

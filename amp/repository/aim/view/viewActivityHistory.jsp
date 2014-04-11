@@ -61,7 +61,9 @@
 				</c:if>
 				<c:if test="${item.modifiedBy ne null}"> 
 					<td>
-					<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
+					<logic:notEmpty name="currentMember" scope="session">
+						<input name="compareCheckboxes" type="checkbox" value="${item.ampActivityId}" onchange="monitorCheckbox()" onclick="monitorCheckbox()" onkeyup="monitorCheckbox()" onkeypress="monitorCheckbox()"/>
+					</logic:notEmpty>
 					</td>
 					<td>
 						${item.modifiedBy.user.firstNames}  ${item.modifiedBy.user.lastName}
@@ -104,6 +106,9 @@
 			<input type="hidden" name="showMergeColumn" id="showMergeColumn" />
 			<input type="hidden" name="method" id="method" />
 			<input type="hidden" name="ampActivityId" id="ampActivityId" />
-			<input type="button" id="SubmitButton" value="<digi:trn>Compare versions</digi:trn>" onclick="submitCompare()"/>
+			<logic:notEmpty name="currentMember" scope="session">
+				<input type="button" id="SubmitButton" value="<digi:trn>Compare versions</digi:trn>" onclick="submitCompare()"/>
+			 </logic:notEmpty>
+		
 		</digi:form>		
 	</div>

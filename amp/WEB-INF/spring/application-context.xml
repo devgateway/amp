@@ -44,10 +44,12 @@
     <http pattern="/aim/pdfExport.do**" security="none" />
 
 	<http pattern="/aim/viewNewAdvancedReport.do**" security="none" />
-	
+
+	<http pattern="/aim/viewActivityHistory.do**" security="none" />
 	<http pattern="/exception/showExceptionReport.do**" security="none" />
 
-    <!--<http pattern="/aim/viewActivityPreview.do**" security="none"  />-->
+    <http pattern="/aim/viewActivityPreview.do**" security="none"  />
+   
     
     <http pattern="/aim/exportActToPDF.do**" security="none"  />
   
@@ -76,7 +78,6 @@
 	<http pattern="/aim/default/reportsPublicView.do**" security="none" />
 	
 	
-	
 	<http pattern="/gis/showPublicGis.do**" security="none" />
 	<http pattern="/gis/getFoundingDetails.do**" security="none" />
 	<http pattern="/gis/showAdditionalGraphics.do**" security="none" />
@@ -93,7 +94,10 @@
 	<!-- alllow bypass for login page -->
 	<http pattern="/showLayout.do\?layout=login" request-matcher="regex"
 		security="none" />
-
+	
+	<http pattern="/showLayout.do\?layout=viewActivityHistory" request-matcher="regex"
+		security="none" />
+		
 	<!-- import digi module spring configuration files -->
 	<beans:import resource="classpath:../../repository/**/module-spring.xml" />
 
@@ -101,16 +105,17 @@
 	<!-- <debug/> -->
 
     <!-- Pages with anonymous access -->
-    <http pattern="/aim/viewActivityPreview.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+  <!--   <http pattern="/aim/viewActivityPreview.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
-    <http pattern="/visualization/launchDashboard.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+   -->
+     <http pattern="/visualization/launchDashboard.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
     <http pattern="/calendar/showCalendarView.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
-     <http pattern="/calendar/showEvents.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+    <http pattern="/calendar/showEvents.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
     <http pattern="/gis/pdfExport.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >

@@ -1,13 +1,6 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
-
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,7 +10,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ViewActivityHistoryForm;
@@ -46,6 +38,9 @@ public class ViewActivityHistory extends Action {
 		hForm.setActivities(new ArrayList<AmpActivityVersion>(qry.list()));
 			
 		TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
+
+		//it also can be accessed anonymously
+		if (currentMember!=null) {
 		AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMember(currentMember.getMemberId());
 		
 		boolean ispartofamanagetmentworkspace = ampCurrentMember.getAmpTeam().getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT);
@@ -53,6 +48,7 @@ public class ViewActivityHistory extends Action {
 		
 		//If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
 		hForm.setEnableadvanceoptions(!ispartofamanagetmentworkspace & iscurrentworkspacemanager);
+		}
 		
 		return mapping.findForward("forward");
 	}

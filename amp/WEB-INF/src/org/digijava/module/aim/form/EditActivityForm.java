@@ -2121,6 +2121,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String revisedCompDate;
 		private Collection activityCloseDates;
 		private Long creditTypeId;
+		private Integer proposedProjectLife;
 		
 		public BigDecimal getProjectPeriod() {
 			BigDecimal projectPeriod = null;
@@ -2396,6 +2397,16 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.SuppressWarnings("all")
 		public java.lang.String toString() {
 			return "EditActivityForm.Planning(actRankCollection=" + this.getActRankCollection() + ", lineMinRank=" + this.getLineMinRank() + ", planMinRank=" + this.getPlanMinRank() + ", originalAppDate=" + this.getOriginalAppDate() + ", revisedAppDate=" + this.getRevisedAppDate() + ", originalStartDate=" + this.getOriginalStartDate() + ", revisedStartDate=" + this.getRevisedStartDate() + ", contractingDate=" + this.getContractingDate() + ", disbursementsDate=" + this.getDisbursementsDate() + ", proposedCompDate=" + this.getProposedCompDate() + ", originalCompDate=" + this.getOriginalCompDate() + ", currentCompDate=" + this.getCurrentCompDate() + ", revisedCompDate=" + this.getRevisedCompDate() + ", activityCloseDates=" + this.getActivityCloseDates() + ", creditTypeId=" + this.getCreditTypeId() + ")";
+		}
+
+		@java.lang.SuppressWarnings("all")
+		public Integer getProposedProjectLife() {
+			return proposedProjectLife;
+		}
+
+		@java.lang.SuppressWarnings("all")
+		public void setProposedProjectLife(Integer proposedProjectLife) {
+			this.proposedProjectLife = proposedProjectLife;
 		}
 	}
 	

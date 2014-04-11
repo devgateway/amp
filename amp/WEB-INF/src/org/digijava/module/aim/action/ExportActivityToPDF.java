@@ -842,7 +842,11 @@ public class ExportActivityToPDF extends Action {
 
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements", ampContext,session)){
 					outputValue+=TranslatorWorker.translateText("Final Date for Disbursements ")+ "\t: " + myForm.getPlanning().getDisbursementsDate()+"\n";
-				}				
+				}
+				
+				if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life", ampContext, session)) {
+                    outputValue += TranslatorWorker.translateText("Proposed Project Life")+ "\t: " + myForm.getPlanning().getProposedProjectLife() +"\n";
+                }
 
 				if(FeaturesUtil.isVisibleField("Duration of Project", ampContext,session)){
                     outputValue+=TranslatorWorker.translateText("Duration of Project");

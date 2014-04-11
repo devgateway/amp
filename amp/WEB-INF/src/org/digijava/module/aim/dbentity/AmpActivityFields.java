@@ -511,6 +511,9 @@ LoggerIdentifiable, Cloneable {
 
     @VersionableFieldSimple(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME)
     protected Integer fundingSourcesNumber;
+    
+    @VersionableFieldSimple(fieldTitle = "Proposed Project Life")
+    protected Integer proposedProjectLife;
 
 	/**
 	 * whether this is a PROJECT or a South-South Cooperation
@@ -2159,5 +2162,13 @@ contactName = string;
 
 	public void setGpiSurvey(Set <AmpGPISurvey> gpiSurvey) {
 		this.gpiSurvey = gpiSurvey;
+	}
+	
+	public Integer getProposedProjectLife() {
+		return proposedProjectLife;
+	}
+
+	public void setProposedProjectLife(Integer proposedProjectLife) {
+		this.proposedProjectLife = proposedProjectLife;
 	}
 }

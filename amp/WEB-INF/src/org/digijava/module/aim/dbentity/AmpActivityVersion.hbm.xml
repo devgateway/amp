@@ -334,6 +334,7 @@
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 
 		<property name="activityType" column="activity_type" type="java.lang.Long" />
+		<property name="proposedProjectLife" column="proposed_project_life" type="java.lang.Integer" />
 
 	' 
 	>

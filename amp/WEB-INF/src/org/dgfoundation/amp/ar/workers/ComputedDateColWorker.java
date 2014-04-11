@@ -26,6 +26,7 @@ public class ComputedDateColWorker extends ColumnWorker {
 	private static final String PROPOSED_START_DATE = "proposed_start_date";
 	private static final String ACTUAL_COMPLETION_DATE = "actual_completion_date";
 	private static final String PROPOSED_COMPLETION_DATE = "proposed_completion_date";
+	private static final String ORIGINAL_COMPLETION_DATE = "original_comp_date";
 
 	/**
 	 * @param condition
@@ -51,7 +52,10 @@ public class ComputedDateColWorker extends ColumnWorker {
 		if (rs.getDate(PROPOSED_COMPLETION_DATE) != null) {
 			values.put(ArConstants.PROPOSED_COMPLETION_DATE_VALUE, new BigDecimal(rs.getDate(PROPOSED_COMPLETION_DATE).getTime()));
 		}
-
+		
+		if (rs.getDate(ORIGINAL_COMPLETION_DATE) != null) {
+			values.put(ArConstants.ORIGINAL_COMPLETION_DATE_VALUE, new BigDecimal(rs.getDate(ORIGINAL_COMPLETION_DATE).getTime()));
+		}
 		
 		if (rs.getDate(ACTIVITY_CLOSE_DATE) != null) {
 			values.put(ArConstants.ACTIVITY_CLOSE_DATE_VALUE, new BigDecimal(rs.getDate(ACTIVITY_CLOSE_DATE).getTime()));

@@ -703,7 +703,8 @@ deleted 6 fields, do not reinsert
 <field:display name="External Financing" feature="Admin NPD"></field:display> 
 <field:display name="FY" feature="Budget"></field:display> 
 <field:display name="Final Date for Contracting" feature="Planning"></field:display> 
-<field:display name="Final Date for Disbursements" feature="Planning"></field:display> 
+<field:display name="Final Date for Disbursements" feature="Planning"></field:display>
+<field:display name="Proposed Project Life" feature="Planning"></field:display> 
 <field:display name="Financial Instrument" feature="Budget"></field:display> 
 <field:display name="Financing Instrument" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization Id" feature="Funding Information"></field:display> 
@@ -1055,7 +1056,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Activity Count" feature="Computed Fields"></field:display>
 <field:display name="Percentage of Disbursement" feature="Computed Fields"></field:display>
 <field:display name="Commitment Gap" feature="Computed Fields"></field:display>
-
+<field:display name="Calculated Project Life" feature="Computed Fields"></field:display>
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>
 <field:display feature="Pledges Columns" name="Pledges Titles"></field:display>

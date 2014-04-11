@@ -5,6 +5,8 @@ import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 /**
  * @author Sebastian Dimunzio Apr 15, 2009
@@ -16,7 +18,7 @@ public class MathExpression {
 	 * @author Sebastian Dimunzio Apr 27, 2009
 	 */
 	public enum Operation {
-		ADD, SUBTRACT, DIVIDE, DIVIDE_ROUND_TWO_DECIMALS, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP, DATE_MONTH_DIFF, SUM;
+		ADD, SUBTRACT, DIVIDE, DIVIDE_ROUND_TWO_DECIMALS, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP, DATE_MONTH_DIFF, DATE_DAY_DIFF, SUM;
 	}
 
 	private Operation operation = null;
@@ -151,6 +153,8 @@ public class MathExpression {
 				return oper1.multiply(oper2);
 			case DATE_MONTH_DIFF:
 				return getMonthDifference(oper1, oper2);
+			case DATE_DAY_DIFF:
+				return getDayDifference(oper1, oper2);
 			}
 		} catch (Exception e) {
 			throw new Exception(e);
@@ -189,6 +193,23 @@ public class MathExpression {
 		}
 
 		return new BigDecimal(count * ((negaitveResult) ? -1 : 1));
+	}
+	
+	public static BigDecimal getDayDifference(BigDecimal date1, BigDecimal date2) {
+		/*
+		 * long fromMillis = date2.longValue(); long toMillis = date1.longValue(); int negative = 1; if (fromMillis > toMillis) { negative = -1; } long diffMillis = toMillis - fromMillis; return new
+		 * BigDecimal(negative * (diffMillis / 1000 / 60 / 60 / 24));
+		 */
+		DateTime start = new DateTime(date2.longValue());
+		DateTime end = new DateTime(date1.longValue());
+		Days d = null;
+		if (start.isBefore(end) || start.isEqual(end)) {
+			d = Days.daysBetween(start, end);
+		} else {
+			d = Days.daysBetween(end, start);
+		}
+		int days = d.getDays();
+		return new BigDecimal(days);
 	}
 
 	public boolean constainsVariable(String var) {

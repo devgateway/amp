@@ -179,6 +179,7 @@ public final class ArConstants {
     public final static String ACTUAL_COMPLETION_DATE_VALUE = "ACTUAL_COMPLETION_DATE_VALUE";
     public final static String PROPOSED_COMPLETION_DATE_VALUE = "PROPOSED_COMPLETION_DATE_VALUE";
     public final static String CURRENT_DATE_VALUE="CURRENT_DATE_VALUE";
+    public final static String ORIGINAL_COMPLETION_DATE_VALUE = "ORIGINAL_COMPLETION_DATE_VALUE";
     //end computed filds 
     
 	public final static String PLANNED="Planned";

@@ -19,6 +19,8 @@ public class MathExpressionRepository {
 	public static final String OVERAGE_PROJECT = "overageProjects";
 
 	public static final String AGE_OF_PROJECT = "ageOfProject";
+	
+	public static final String CALCULATED_PROJECT_LIFE = "calculatedProjectLife";
 
 	public static final String PREDICTABILITY_OF_FUNDING = "predictabilityOfFunding";
 
@@ -106,6 +108,7 @@ public class MathExpressionRepository {
 		// Build all expression
 		buildOverageProjects();
 		buildAgeOfProject();
+		buildCalculatedProjectLife();
 		buildPredictabilityOfFunding();
 		buildAverageSizeofProjects();
 		buildActualDisbursementVariance();
@@ -223,6 +226,18 @@ public class MathExpressionRepository {
 			logger.error(e);
 		}
 
+	}
+	
+	/**
+	 * calculatedProjectLife (Difference between Planned Start Date AND Original Completion Date) 
+	 */
+	private static void buildCalculatedProjectLife() {
+		try {
+			MathExpression oper = new MathExpression(MathExpression.Operation.DATE_DAY_DIFF, ArConstants.ORIGINAL_COMPLETION_DATE_VALUE, ArConstants.PROPOSED_START_DATE_VALUE);
+			expresions.put(CALCULATED_PROJECT_LIFE, oper);
+		} catch (Exception e) {
+			logger.error(e);
+		}			
 	}
 
 	/**

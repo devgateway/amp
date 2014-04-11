@@ -928,9 +928,6 @@ public class AmpReportGenerator extends ReportGenerator {
 		{
 			//Column subcol = subcols.next();
 			Column subcol=gcol.getItem(i);
-            if(subcol.getName() == null) {
-                subcol.setName("FAKE");
-            }
 			fixEmptyGroupColumns(subcol, groupColumnName); // this will be a nop if this is a simple column
 			boolean matchesGroupColumnFilter = (groupColumnName == null) || subcol.getName().equals(groupColumnName); 
 			if ((subcol instanceof GroupColumn) && subcol.getItems().isEmpty() && matchesGroupColumnFilter)
@@ -952,7 +949,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			return;
 		
 		GroupColumn gc = (GroupColumn) col;
-		if (ArConstants.REAL_DISBURSEMENTS.equals(gc.getName()))
+		if (gc.getName().equals(ArConstants.REAL_DISBURSEMENTS))
 		{
 			cleanupRealDisbursements((GroupColumn) col, allMandatoryRoles);
 			return;
@@ -1067,11 +1064,6 @@ public class AmpReportGenerator extends ReportGenerator {
 			createHierarchies();
 		
 		report.setTotalActualCommitments(this.getTotalActualCommitments());
-		
-        //AMP-17215: The reason for calling removeChildrenWithoutActivities here is to remove possible empty cells that will break postProcess().
-        //That happens when "Allow empty funding columns for year, quarter and month" is selected AND there are no results to show.
-        report.removeChildrenWithoutActivities();
-        
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
 		report.removeChildrenWithoutActivities(); //postProcess might have created some more empty children

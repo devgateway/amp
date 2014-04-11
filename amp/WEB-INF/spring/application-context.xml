@@ -68,8 +68,6 @@
 	<http pattern="/aim/viewTeamReports.do*" security="none" />
 	<http pattern="/viewTeamReports.do*" security="none" />
 
-	<http pattern="/contentrepository/documentManager.do**" security="none" />
-
 	<!-- move this to the reports module -->
 	<http pattern="/reportsPublicView.do**" security="none" />
 	<http pattern="/aim/default/reportsPublicView.do**" security="none" />
@@ -125,6 +123,12 @@
     <http pattern="/reportsFilterPicker.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
+
+    <http pattern="/contentrepository/documentManager.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+
+
 
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm">

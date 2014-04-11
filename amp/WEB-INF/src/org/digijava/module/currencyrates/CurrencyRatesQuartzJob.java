@@ -142,13 +142,19 @@ public class CurrencyRatesQuartzJob implements Job {
 				AmpCurrencyRate currRate = new AmpCurrencyRate();
 				//currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
 				Double value = wsCurrencyValues.get(currencies[i]);
-				if (value!=null && value .equals(WSCurrencyClient.INVALID_CURRENCY_CODE)) {
+				if (value!=null && value .equals(WSCurrencyClient.INVALID_CURRENCY_CODE) && value >0D) {
 					logger.info(currencies[i]+ " Not Supported...");
 					continue;
 				} else if (value == WSCurrencyClient.CONNECTION_ERROR) {
 					logger.info("Connection Error trying to get "+ currencies[i]);
 					continue;
+				}else{
+					if (value==null || value<=0D){
+						logger.info("0 rate for  "+ currencies[i]);
+						continue;
+					}
 				}
+				
 				
 				currRate.setExchangeRate(value);
 				Date aDate=new Date();

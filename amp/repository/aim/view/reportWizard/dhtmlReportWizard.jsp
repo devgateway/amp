@@ -283,13 +283,15 @@ body {
 					<div class="ft" align="right">
 						<button id="last_save_button" type="button" class="buttonx_dis yui-button" onclick="$(this).attr('disabled',true);saveReportEngine.saveReport();" disabled="disabled">
 							${saveBtn}
-						</button>						
-						&nbsp;&nbsp;&nbsp;
-						<c:if test="${not empty saveAndOpenBtn}">
-							<button id="last_save_and_open_button" type="button" class="buttonx_dis" onclick="$(this).attr('disabled',true);saveReportEngine.saveAndOpenReport();" disabled="disabled">
-								${saveAndOpenBtn}
-							</button>
-						</c:if>
+						</button>
+						<feature:display name="Save and Open Button"  module="Report Generator">
+							&nbsp;&nbsp;&nbsp;
+							<c:if test="${not empty saveAndOpenBtn}">
+								<button id="last_save_and_open_button" type="button" class="buttonx_dis" onclick="$(this).attr('disabled',true);saveReportEngine.saveAndOpenReport();" disabled="disabled">
+									${saveAndOpenBtn}
+								</button>
+							</c:if>
+						</feature:display>
 					</div>
 				</div>
 			</td></tr>

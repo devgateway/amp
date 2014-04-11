@@ -171,7 +171,8 @@
 <feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
-<feature:display name="Filter Button" module="Report Generator"></feature:display> 
+<feature:display name="Filter Button" module="Report Generator"></feature:display>
+<feature:display name="Save and Open Button"  module="Report Generator"></feature:display>
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 

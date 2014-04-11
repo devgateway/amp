@@ -356,6 +356,11 @@ public class GroupColumn extends Column<Column> {
 							e.printStackTrace();
 						}
             		}
+            		if(fYear == null) {
+            			//AMP-17215: Sometimes fYear is null (ie: no data on report but showing all columns) and in that case we have to change it to "" or it will fail later
+            			//(ie: this.getName().equals(bla) which is used widely in the code), neither we can keep cc as null because is used after in this method.
+            			fYear = "";
+            		}
             		cc = new AmountCellColumn( fYear );
             	}else if(category.equalsIgnoreCase(ArConstants.MONTH)){
             		String fMonth	= monthMapping.get(element.getValue().toString());
@@ -366,6 +371,9 @@ public class GroupColumn extends Column<Column> {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+            		}
+            		if(fMonth == null) {
+            			fMonth = "";
             		}
             		cc = new AmountCellColumn( fMonth );
                 	}
@@ -788,8 +796,8 @@ public class GroupColumn extends Column<Column> {
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
-			boolean passesFilter = this.getName().equals(ArConstants.COLUMN_FUNDING) && fundingYearPassesFilter(element, this.getReportGenerator().getFilter());
-			passesFilter |= (!this.getName().equals(ArConstants.COLUMN_FUNDING));
+			boolean passesFilter = ArConstants.COLUMN_FUNDING.equals(this.getName()) && fundingYearPassesFilter(element, this.getReportGenerator().getFilter());
+			passesFilter |= (!ArConstants.COLUMN_FUNDING.equals(this.getName()));
 			if (passesFilter)
 			{
 				List subTrailCells = element.getTrailCells();

@@ -23,6 +23,7 @@
 		<action login-required="false" pattern="/reportsPublicView" />
 		<action login-required="false" pattern="/getDesktopReports" />
 		<action login-required="false" pattern="/viewActivityPreview" />
+		<action login-required="false" pattern="/viewActivityHistory" />
 		<action login-required="false" pattern="/previewActivity" />
 		<action login-required="false" pattern="/viewTeamReports" />
 		<action login-required="true" pattern="/npdSettingsAction" />

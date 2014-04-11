@@ -120,6 +120,7 @@ function SaveReportEngine ( savingMessage, failureMessage ) {
 	this.savingMessage	= savingMessage;
 	this.divEl			=  document.getElementById("savingReportDiv");
 	this.titlePanel		= null;
+	this.forceOverwrite = false; // true: overwrite report on saving, regardless of it having the same name as a report
 }
 
 SaveReportEngine.prototype.checkEnter		= function (e) {
@@ -174,8 +175,9 @@ SaveReportEngine.prototype.failure			= function(o) {
 	this.divEl.innerHTML			= this.failureMessage;
 };
 
-SaveReportEngine.prototype.decideToShowTitlePanel	= function ()
+SaveReportEngine.prototype.decideToShowTitlePanel	= function () // actually this is the "Save" button
 {
+	this.forceOverwrite = true;
 	this.showTitlePanel(); // always show title panel
 //	if ( getReportTitle() == "" )
 //			this.showTitlePanel();
@@ -234,6 +236,7 @@ SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {
 						"&hideActivities="+getHideActivities() +
 						"&useFilters="+getUseFilters()+
 						"&openReport=" + openReport + 
+						"&forceNameOverwrite=" + this.forceOverwrite + 
 						getReportTitles() + 
 						//"&reportContextId="+getReportContextId()+
 						"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+

@@ -152,7 +152,7 @@ public class ReportWizardAction extends MultiAction {
 		}
 		else { // If there is a report title in the request then it means that the report should be saved
 			try{
-				if ( "true".equalsIgnoreCase( request.getParameter("dynamicSaveReport") ) ) 
+				if ( "true".equalsIgnoreCase(request.getParameter("dynamicSaveReport")) || "true".equals(request.getParameter("forceNameOverwrite"))) 
 					return this.modeDynamicSave(mapping, form, request, response);
 				else
 					return this.modeSave(mapping, form, request, response);
@@ -608,7 +608,11 @@ public class ReportWizardAction extends MultiAction {
 		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
 		String ampReportId			= request.getParameter("reportId");
-		if ( ampReportId == null ||ampReportId.length() == 0 )
+		String backupAmpReportId = (String) request.getSession().getAttribute("report_wizard_current_id");
+		
+		if (ampReportId == null || ampReportId.isEmpty())
+			ampReportId = backupAmpReportId;
+		if (ampReportId == null || ampReportId.isEmpty())
 			throw new Exception ("No reportId found in request");
 		
 		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ampReportId);		

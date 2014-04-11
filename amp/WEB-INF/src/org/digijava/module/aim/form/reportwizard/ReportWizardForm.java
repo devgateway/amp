@@ -38,6 +38,7 @@ public class ReportWizardForm extends ActionForm {
 	private String projecttitle = "Project Title";
 	private Boolean budgetExporter = false;
 	private Long reportCategory = new Long(0);
+	private Boolean forceNameOverwrite = false;
 	
 	@java.lang.SuppressWarnings("all")
 	public ReportWizardForm() {
@@ -281,6 +282,14 @@ public class ReportWizardForm extends ActionForm {
 	@java.lang.SuppressWarnings("all")
 	public void setReportCategory(final Long reportCategory) {
 		this.reportCategory = reportCategory;
+	}
+	
+	public boolean getForceNameOverwrite(){
+		return this.forceNameOverwrite;
+	}
+	
+	public void setForceNameOverwrite(boolean forceNameOverwrite){
+		this.forceNameOverwrite = forceNameOverwrite;
 	}
 	
 	@java.lang.Override

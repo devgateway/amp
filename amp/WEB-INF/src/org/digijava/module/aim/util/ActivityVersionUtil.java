@@ -217,7 +217,8 @@ public class ActivityVersionUtil {
 	}
 
 	public static int numberOfVersions() {
-		int aux = 5; // Default value after apply patch if no redeployed.
+		return 999999; //AMP-17263: no good reason to have this reason, so effectively disabling it
+		/*int aux = 5; // Default value after apply patch if no redeployed.
 		String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.VERSION_QUEUE_SIZE);
 		if (gsValue != null) {
 			try {
@@ -226,7 +227,7 @@ public class ActivityVersionUtil {
 				logger.error(e);
 			}
 		}
-		return aux;
+		return aux;*/
 	}
 	
 	public static boolean isVersioningEnabled(){

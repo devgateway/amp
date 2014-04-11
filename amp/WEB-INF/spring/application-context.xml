@@ -65,9 +65,6 @@
 	
 	<http pattern="/visualization/showProjectsList.do**" security="none" />
 	
-	<http pattern="/aim/reportsFilterPicker.do**" security="none" />
-	<http pattern="/reportsFilterPicker.do**" security="none" />
-	
 	<http pattern="/aim/viewTeamReports.do*" security="none" />
 	<http pattern="/viewTeamReports.do*" security="none" />
 
@@ -122,6 +119,12 @@
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
 
+    <http pattern="/aim/reportsFilterPicker.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+    <http pattern="/reportsFilterPicker.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
 
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm">

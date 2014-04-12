@@ -297,10 +297,7 @@ public class BudgetExportUtil {
 
         Collections.sort(tmpList, new Comparator<HierarchyListable>() {
             public int compare(HierarchyListable o1, HierarchyListable o2) {
-            	//there were some null activities, this introduces an extra check to avoid a NPE
-            	String label1 = o1.getLabel() != null ? o1.getLabel() : "";
-            	String label2 = o2.getLabel() != null ? o2.getLabel() : "";
-                return label1.compareTo(label2);
+                return o1.getLabel().compareTo(o2.getLabel());
             }
         });
 

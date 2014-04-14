@@ -460,15 +460,15 @@ function adminHelp(){
 																	type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
 																<logic:equal name="currentMember" property="teamId"
 																	scope="session" value="${team.ampTeamId}">
-																	<li class="yuiampmenuitemlabel yuimenuitemlabel">
-																		<a href="#"><bean:write name="team"
+																	<li class="yuiampmenuitem_drop">
+																		<a class="yuiampmenuitemlabel yuimenuitemlabel" href="#"><bean:write name="team"
 																				property="name" /></a>
 																	</li>
 																</logic:equal>
 																<logic:notEqual name="currentMember" property="teamId"
 																	scope="session" value="${team.ampTeamId}">
-																	<li class="yuiampmenuitemlabel yuimenuitemlabel">
-																		<a
+																	<li class="yuiampmenuitem_drop">
+																		<a class="yuiampmenuitemlabel yuimenuitemlabel"
 																		href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>'
 																		onclick="return canExit()"><bean:write name="team"
 																				property="name" /></a>

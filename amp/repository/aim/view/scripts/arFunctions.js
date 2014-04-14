@@ -518,13 +518,14 @@ function RowManagerProperty(skippedClass, baseId, markerColor) {
 }
 
 function sortHierarchy( columnName, prevOrder ) {
+	columnName = columnName.trim();
 	//alert (columnName + "!!");
 	var descending			= 1; 
 	if ( prevOrder=="descending" ) 
 		descending			= 0;
 	var subForm				= document.getElementsByName("aimAdvancedReportForm")[0];
 	for ( var i=0; i<subForm.levelPicked.options.length; i++ ) {
-		if (subForm.levelPicked.options[i].text == columnName) { 
+		if (subForm.levelPicked.options[i].text.trim() == columnName) { 
 			subForm.levelPicked.selectedIndex	= i;
 			break;
 		}

@@ -377,7 +377,7 @@ public class ExportActivityToWord extends Action {
 		            if(FeaturesUtil.isVisibleModule("/Activity Form/Program", ampContext,session)){
 		            	
 		            	if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs", ampContext,session)){		           
-				            if(programs.getNationalPlanObjectivePrograms()!=null){
+				            if(programs.getPrimaryPrograms()!=null && programs.getPrimaryPrograms().size()>0){
 								cell = new RtfCell();
 								cell.setBorder(0);
 								cell.add(new Paragraph(TranslatorWorker.translateText("Primary Programs").toUpperCase(), BOLDFONT));						
@@ -395,7 +395,7 @@ public class ExportActivityToWord extends Action {
 		            	
 		            	
 			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs", ampContext,session)){		           
-				            if(programs.getNationalPlanObjectivePrograms()!=null){
+				            if(programs.getSecondaryPrograms()!=null && programs.getSecondaryPrograms().size()>0){
 								cell = new RtfCell();
 								cell.setBorder(0);
 								cell.add(new Paragraph(TranslatorWorker.translateText("Secondary Programs").toUpperCase(), BOLDFONT));						
@@ -409,7 +409,7 @@ public class ExportActivityToWord extends Action {
 							}
 			            }
 			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs", ampContext,session)){		           
-				            if(programs.getNationalPlanObjectivePrograms()!=null){
+				            if(programs.getTertiaryPrograms()!=null && programs.getTertiaryPrograms().size()>0){
 								cell = new RtfCell();
 								cell.setBorder(0);
 								cell.add(new Paragraph(TranslatorWorker.translateText("Tertiary Programs").toUpperCase(), BOLDFONT));						
@@ -2608,11 +2608,11 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1, columnName,
 					processEditTagValue(request, identification.getProjectComments()), null);
 		}
-
-		if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext,session)){
-			columnName=TranslatorWorker.translateText("NPD Clasification");
-			generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification.getClasiNPD()), null);
-		}
+//Commented out for AMP-16421
+//		if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext,session)){
+//			columnName=TranslatorWorker.translateText("NPD Clasification");
+//			generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification.getClasiNPD()), null);
+//		}
 		
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext,session)) {
 			columnName=TranslatorWorker.translateText("Lessons Learned");
@@ -3213,8 +3213,8 @@ public class ExportActivityToWord extends Action {
 		if (identification.getTeam() != null 
 				&& identification.getTeam().getTeamLead() != null 
 				&& identification.getTeam().getTeamLead().getUser() != null) {
-			columnVal += identification.getTeam().getTeamLead().getUser().getFirstNames();
-			columnVal += identification.getTeam().getTeamLead().getUser().getLastName();
+			columnVal += identification.getTeam().getTeamLead().getUser().getFirstNames()+" " ;
+			columnVal += identification.getTeam().getTeamLead().getUser().getLastName()+" ";
 			columnVal += identification.getTeam().getTeamLead().getUser().getEmail();
 		}
 		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Data Team Leader")+": ",columnVal,CELLCOLORGRAY);

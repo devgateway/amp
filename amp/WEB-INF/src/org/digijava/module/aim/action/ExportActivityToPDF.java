@@ -349,11 +349,11 @@ public class ExportActivityToPDF extends Action {
 				columnName=TranslatorWorker.translateText("Contract Number");
 				createGeneralInfoRow(mainLayout,columnName,activity.getConvenioNumcont());
 			}
-
-			if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext,session)){
-				columnName=TranslatorWorker.translateText("NPD Clasification");
-				createGeneralInfoRow(mainLayout,columnName,activity.getClasiNPD());
-			}			
+//Commented out for AMP-16421 seems to be old code
+//			if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext,session)){
+//				columnName=TranslatorWorker.translateText("NPD Clasification");
+//				createGeneralInfoRow(mainLayout,columnName,activity.getClasiNPD());
+//			}			
 
 			//Lessons learned
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext,session)){
@@ -1032,20 +1032,19 @@ public class ExportActivityToPDF extends Action {
 				createGeneralInfoRow(mainLayout,columnName,result);
 			}
 			
-			//NPD Programs
-			if(FeaturesUtil.isVisibleFeature("NPD Programs", ampContext,session)){
+			//
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Program", ampContext,session)){
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective", ampContext,session)){
-					//National Plan Objective
-					if(myForm.getPrograms().getNationalPlanObjectivePrograms()!=null){
-						columnName=TranslatorWorker.translateText("National Plan Objective");
-						String result= buildProgramsOutput(myForm.getPrograms().getNationalPlanObjectivePrograms());
-						createGeneralInfoRow(mainLayout,columnName,result);
-					}
+					if(myForm.getPrograms().getNationalPlanObjectivePrograms()!=null && myForm.getPrograms().getNationalPlanObjectivePrograms().size()>0){
+							columnName=TranslatorWorker.translateText("National Plan Objective");
+							String result= buildProgramsOutput(myForm.getPrograms().getNationalPlanObjectivePrograms());
+							createGeneralInfoRow(mainLayout,columnName,result);
+						}
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs", ampContext,session)){
 					//Primary Programs
-					if(myForm.getPrograms().getPrimaryPrograms()!=null){
+					if(myForm.getPrograms().getPrimaryPrograms()!=null && myForm.getPrograms().getPrimaryPrograms().size() >0){
 						columnName=TranslatorWorker.translateText("Primary Programs");
 						String result= buildProgramsOutput(myForm.getPrograms().getPrimaryPrograms());
 						createGeneralInfoRow(mainLayout,columnName,result);						
@@ -1054,7 +1053,7 @@ public class ExportActivityToPDF extends Action {
 
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs", ampContext,session)){
 					//secondary Programs
-					if(myForm.getPrograms().getSecondaryPrograms()!=null){
+					if(myForm.getPrograms().getSecondaryPrograms()!=null && myForm.getPrograms().getSecondaryPrograms().size()>0){
 						columnName=TranslatorWorker.translateText("Secondary Programs");
 						String result= buildProgramsOutput(myForm.getPrograms().getSecondaryPrograms());
 						createGeneralInfoRow(mainLayout,columnName,result);
@@ -1063,7 +1062,7 @@ public class ExportActivityToPDF extends Action {
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs", ampContext,session)){
 					//tertiary Programs
-					if(myForm.getPrograms().getTertiaryPrograms()!=null){
+					if(myForm.getPrograms().getTertiaryPrograms()!=null && myForm.getPrograms().getTertiaryPrograms().size()>0){
 						columnName=TranslatorWorker.translateText("Tertiary Programs");
 						String result= buildProgramsOutput(myForm.getPrograms().getTertiaryPrograms());
 						createGeneralInfoRow(mainLayout,columnName,result);
@@ -2945,13 +2944,13 @@ public class ExportActivityToPDF extends Action {
 				}
 				
 				//Consumption Rate
-				/*if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext))*/
+				if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext,session))
 				{
 					addTotalsOutput(fundingTable, "Consumption Rate", myForm.getFunding().getConsumptionRate(), currencyCode);
 				}
 				
 				// Delivery Rate
-				/*if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext))*/
+				if(FeaturesUtil.isVisibleFeature("Delivery Rate", ampContext,session))
 				{
 					addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), currencyCode);
 				}	

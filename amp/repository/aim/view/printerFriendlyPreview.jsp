@@ -494,37 +494,41 @@ body {background:none;}
 									</logic:present>
 									
 									<module:display name="/Activity Form/Identification/Accession Instrument" parentModule="/Activity Form/Identification">
+									<c:if test="${aimEditActivityForm.identification.accessionInstrument > 0}">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
 									  <digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>		</b>								</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.accessionInstrument > 0}">
+											
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.accessionInstrument}"/>
-											</c:if>&nbsp;</td>
+											&nbsp;</td>
 									</tr>
+									</c:if>
 									</module:display>
 									<module:display name="/Activity Form/Identification/Project Implementing Unit" parentModule="/Activity Form/Identification">
+										<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">
 										<tr>
 											<td width="30%" align="right" valign="top" nowrap="nowrap">
 												<b><digi:trn>Project Implementing Unit</digi:trn></b>
 											</td>
 											<td bgcolor="#ffffff">
-												<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">
 													<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/>
-												</c:if>&nbsp;
+												&nbsp;
 											</td>
 										</tr>
+										</c:if>
 									</module:display>
 
 									<module:display name="/Activity Form/Identification/A.C. Chapter" parentModule="/Activity Form/Identification">
+									<c:if test="${aimEditActivityForm.identification.acChapter > 0}">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>
 									  <digi:trn key="aim:acChapter"> A.C. Chapter</digi:trn>	</b>										</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.acChapter > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/>
-											</c:if>&nbsp;</td>
+											&nbsp;</td>
 									</tr>
+									</c:if>
 									</module:display>
 
 									<module:display name="/Activity Form/Identification/Cris Number" parentModule="/Activity Form/Identification">
@@ -537,55 +541,64 @@ body {background:none;}
 									</module:display>
 
 									<module:display name="/Activity Form/Identification/Procurement System" parentModule="/Activity Form/Identification">
+									<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:ProcurementSystem">Procurement System</digi:trn></b></td>
 										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.procurementSystem > 0}">
+											
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.procurementSystem}"/>
-											</c:if>&nbsp;</td>
+											&nbsp;</td>
 									</tr>
+									</c:if>
 									</module:display>
 										<module:display name="/Activity Form/Identification/Reporting System" parentModule="/Activity Form/Identification">
+									<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:ReportingSystem">Reporting System</digi:trn></b></td>
 										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.reportingSystem > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.reportingSystem}"/>
-											</c:if>&nbsp;</td>
+											&nbsp;</td>
 									</tr>
+									</c:if>
 									</module:display>								
 
 									<module:display name="/Activity Form/Identification/Audit System" parentModule="/Activity Form/Identification">
+									<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:AuditSystem">Audit System</digi:trn></b></td>
 										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.auditSystem > 0}">
+											
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.auditSystem}"/>
-											</c:if>&nbsp;</td>
+											&nbsp;</td>
 									</tr>
+									</c:if>									
 									</module:display>
 
 									<module:display name="/Activity Form/Identification/Institutions" parentModule="/Activity Form/Identification">
+									<c:if test="${aimEditActivityForm.identification.institutions > 0}">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b><digi:trn key="aim:Institutions">Institutions</digi:trn></b></td>
 										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.institutions > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.institutions}"/>
-											</c:if>&nbsp;</td>
+											&nbsp;</td>
 									</tr>
+									</c:if>
 									</module:display>
 
 									<module:display name="/Activity Form/Identification/Project Category" parentModule="/Activity Form/Identification">
+									<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
 									  <digi:trn key="aim:ProjectCategory">Project Category</digi:trn>		</b>								</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
+											
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/>
-											</c:if>&nbsp;</td>
+											&nbsp;</td>
 									</tr>
+									</c:if>
 									</module:display>
 									<module:display name="/Activity Form/Identification/Government Agreement Number" parentModule="/Activity Form/Identification">
+									<c:if test="${not empty aimEditActivityForm.identification.govAgreementNumber}">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
 									  <digi:trn key="aim:step1:GovernmentAgreementNumTitle">Government Agreement Number</digi:trn>		</b>								</td>
@@ -593,6 +606,7 @@ body {background:none;}
 											<c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/>&nbsp;
 										</td>
 									</tr>
+									</c:if>
 									</module:display>
 <!-- end identification in the same order as previewActivity -->									
 									<field:display name="Contracting Arrangements" feature="Identification">
@@ -923,8 +937,8 @@ body {background:none;}
 									</module:display>
 								
                                
-                                 <feature:display name="Location" module="Project ID and Planning">
-                               		<field:display name="Implementation Location" feature="Location">
+                                 <module:display name="/Activity Form/Location" parentModule="/Activity Form">
+                               		<module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
 											<b>
@@ -981,11 +995,8 @@ body {background:none;}
 											</c:if>
 										</td>
 									</tr>
-									</field:display>
-
-
-                                    
-                                    <field:display name="Implementation Level" feature="Location">	  
+									</module:display>
+                                    <module:display name="/Activity Form/Location/Implementation Level" parentModule="/Activity Form/Location">	  
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -998,9 +1009,9 @@ body {background:none;}
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.levelId}"/>
 											</c:if>										</td>
 									</tr>
-									</field:display>
+									</module:display>
 									
-								  <field:display name="Implementation Location" feature="Location">	  
+								  <module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">	  
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -1013,9 +1024,9 @@ body {background:none;}
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.implemLocationLevel}"/>
 											</c:if>										</td>
 									</tr>
-									</field:display>
+									</module:display>
 									
-                            </feature:display>   
+                            </module:display>
 							<module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
 								<c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 									<tr>
@@ -1576,7 +1587,7 @@ body {background:none;}
 									</tr>
 									</module:display>
 								  </logic:present>  
-                                    <feature:display name="Regional Funding" module="Funding">
+                                    <module:display name="/Activity Form/Regional Funding" parentModule="/Activity Form">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -1698,7 +1709,7 @@ body {background:none;}
 												</table>
 											</c:if>										</td>
 									</tr>
-									</feature:display>
+									</module:display>
 									
 									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="false">
                                     <module:display name="Components" parentModule="PROJECT MANAGEMENT">
@@ -2474,11 +2485,11 @@ body {background:none;}
 									</tr>								
 									</module:display>									 
 									
-                                    <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
-									<feature:display name="Donor Contact Information" module="Contact Information">
+                                    <module:display name="/Activity Form/Contacts" parentModule="/Activity Form">
+									<module:display name="/Activity Form/Contacts/Donor Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
 												<td width="30%" align="right" valign="top" nowrap="nowrap" class="t-name">
-													<digi:trn>Donor funding contact information</digi:trn>
+													<b><digi:trn>Donor funding contact information</digi:trn></b>
 												</td>
 												<td>
 													<c:if test="${not empty aimEditActivityForm.contactInformation.donorContacts}">
@@ -2496,8 +2507,8 @@ body {background:none;}
 													</c:if>
 												</td>
 											</tr>
-											</feature:display>
-											<feature:display name="Government Contact Information" module="Contact Information">
+											</module:display>
+											<module:display name="/Activity Form/Contacts/Mofed Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
 												<td width="30%" align="right" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>MOFED contact information</digi:trn>
@@ -2518,8 +2529,8 @@ body {background:none;}
 													</c:if>
 												</td>
 											</tr>
-											</feature:display>
-											<feature:display name="Project Coordinator Contact Information" module="Contact Information">
+											</module:display>
+											<module:display name="/Activity Form/Contacts/Project Coordinator Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
 												<td width="30%" align="right" valign="top" nowrap="nowrap"class="t-name">
 													<digi:trn>Project Coordinator Contact Information</digi:trn>
@@ -2540,8 +2551,8 @@ body {background:none;}
 													</c:if>
 												</td>
 											</tr>
-											</feature:display>
-											<feature:display name="Sector Ministry Contact Information" module="Contact Information">
+											</module:display>
+											<module:display name="/Activity Form/Contacts/Sector Ministry Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
 												<td width="30%" align="right" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>Sector Ministry Contact Information</digi:trn>
@@ -2562,8 +2573,8 @@ body {background:none;}
 													</c:if>
 												</td>
 											</tr>
-										</feature:display>
-										<feature:display name="Implementing/Executing Agency Contact Information" module="Contact Information">
+										</module:display>
+										<module:display name="/Activity Form/Contacts/Implementing Executing Agency Contact Information" parentModule="/Activity Form/Contacts">
 											<tr>
 												<td width="30%" align="right" valign="top" nowrap="nowrap" class="t-name">
 													<digi:trn>Implementing/Executing Agency Contact Information</digi:trn>
@@ -2584,7 +2595,7 @@ body {background:none;}
 													</c:if>
 												</td>
 											</tr>
-										</feature:display>
+										</module:display>
 									</module:display>
 									
 							 		<field:display name="Activity Performance"  feature="Activity Dashboard">
@@ -2770,7 +2781,6 @@ body {background:none;}
 									</logic:notEmpty>
 					
 									<logic:notEmpty name="aimEditActivityForm" property="structures">
-									<field:display name="Structures Column" feature="Structures">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" >
 											<b>
@@ -2837,55 +2847,54 @@ body {background:none;}
 	</logic:iterate>										
 										</td>
 									</tr>
-									</field:display>
 									</logic:notEmpty>
 									
 
-									<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
-									<field:display name="${customField.FM_field}" feature="Step${customField.step.step}">												
-										<tr>
-											<td width="30%" align="right" valign="top" nowrap="nowrap" >
-												<b>													
-													<digi:trn key="aim:customfield:${customField.name}">${customField.name}</digi:trn>
-												</b>														
-											</td>
-											<td bgcolor="#ffffff">
-												<c:choose>
-													<c:when test="<%=customField instanceof ComboBoxCustomField%>">
-														<c:set var="idx" value="${customField.value}"/>	
-														<c:out value="${customField.options[idx]}"/>									
-													</c:when>
-													<c:when test="<%=customField instanceof CategoryCustomField%>">
-														<c:if test="${customField.value > 0}" >
-															<category:getoptionvalue categoryValueId="${customField.value}"/>
-														</c:if>								
-													</c:when>
-													<c:when test="<%=customField instanceof DateCustomField%>">																
-														<c:out value="${customField.strDate}"/>	
-													</c:when>
-													<c:when test="<%=customField instanceof RadioOptionCustomField%>">
-														<logic:iterate name="customField" property="options" id="option" >
-															<logic:equal name="option" property="key"  value="${customField.value}">
-																<c:out value="${option.value}"/> 
-															</logic:equal>
-														</logic:iterate>
-													</c:when>
-													<c:when test="<%=customField instanceof CheckCustomField%>">
-														<c:if test="${customField.value == true}" >
-															<c:out value="${customField.labelTrue}"/>
-														</c:if>
-														<c:if test="${customField.value == false}" >
-															<c:out value="${customField.labelFalse}"/>
-														</c:if>
-													</c:when>
-													<c:otherwise>		
-														<c:out value="${customField.value}"/>																												
-													</c:otherwise>
-												</c:choose>
-											</td>
-										</tr>
-									</field:display>
-									</logic:iterate>
+<%-- 									<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index"> --%>
+<%-- 									<field:display name="${customField.FM_field}" feature="Step${customField.step.step}">												 --%>
+<!-- 										<tr> -->
+<!-- 											<td width="30%" align="right" valign="top" nowrap="nowrap" > -->
+<!-- 												<b>													 -->
+<%-- 													<digi:trn key="aim:customfield:${customField.name}">${customField.name}</digi:trn> --%>
+<!-- 												</b>														 -->
+<!-- 											</td> -->
+<!-- 											<td bgcolor="#ffffff"> -->
+<%-- 												<c:choose> --%>
+<%-- 													<c:when test="<%=customField instanceof ComboBoxCustomField%>"> --%>
+<%-- 														<c:set var="idx" value="${customField.value}"/>	 --%>
+<%-- 														<c:out value="${customField.options[idx]}"/>									 --%>
+<%-- 													</c:when> --%>
+<%-- 													<c:when test="<%=customField instanceof CategoryCustomField%>"> --%>
+<%-- 														<c:if test="${customField.value > 0}" > --%>
+<%-- 															<category:getoptionvalue categoryValueId="${customField.value}"/> --%>
+<%-- 														</c:if>								 --%>
+<%-- 													</c:when> --%>
+<%-- 													<c:when test="<%=customField instanceof DateCustomField%>">																 --%>
+<%-- 														<c:out value="${customField.strDate}"/>	 --%>
+<%-- 													</c:when> --%>
+<%-- 													<c:when test="<%=customField instanceof RadioOptionCustomField%>"> --%>
+<%-- 														<logic:iterate name="customField" property="options" id="option" > --%>
+<%-- 															<logic:equal name="option" property="key"  value="${customField.value}"> --%>
+<%-- 																<c:out value="${option.value}"/>  --%>
+<%-- 															</logic:equal> --%>
+<%-- 														</logic:iterate> --%>
+<%-- 													</c:when> --%>
+<%-- 													<c:when test="<%=customField instanceof CheckCustomField%>"> --%>
+<%-- 														<c:if test="${customField.value == true}" > --%>
+<%-- 															<c:out value="${customField.labelTrue}"/> --%>
+<%-- 														</c:if> --%>
+<%-- 														<c:if test="${customField.value == false}" > --%>
+<%-- 															<c:out value="${customField.labelFalse}"/> --%>
+<%-- 														</c:if> --%>
+<%-- 													</c:when> --%>
+<%-- 													<c:otherwise>		 --%>
+<%-- 														<c:out value="${customField.value}"/>																												 --%>
+<%-- 													</c:otherwise> --%>
+<%-- 												</c:choose> --%>
+<!-- 											</td> -->
+<!-- 										</tr> -->
+<%-- 									</field:display> --%>
+<%-- 									</logic:iterate> --%>
 
 
     	</table>

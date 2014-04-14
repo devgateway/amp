@@ -1397,7 +1397,6 @@ function collapseAll() {
 <!-- PROGRAM SECTION -->
 <module:display name="/Activity Form/Program" parentModule="/Activity Form">
 <c:if test="${not empty aimEditActivityForm.programs.primaryPrograms}">
-Hola carolo
 	<fieldset>
 		<legend>
 			<span class=legend_label id="programlink" style="cursor: pointer;">

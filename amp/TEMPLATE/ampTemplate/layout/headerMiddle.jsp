@@ -361,11 +361,11 @@ function adminHelp(){
 
 	function help(){
 	 <digi:context name="rev" property="/help/help.do~blankPage=true" />
-		openURLinWindow("<%=rev%>
-			", 1024, 768);
-			}
-		</script>
-		<!-- 
+		openURLinWindow("<%=rev%>",1024,768);
+	}
+
+</script>
+<!-- 
 <c:set var="message">
 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
 </c:set>

@@ -58,7 +58,7 @@
 				</logic:iterate>
 			</logic:notEmpty>
 		</logic:notEmpty>
-  		<td nowrap="nowrap" class="reportHeader" onclick="sortHierarchy( '${repHierarchy.column.columnName}', '${hSortOrder}' )"
+  		<td nowrap="nowrap" class="reportHeader" onclick="sortHierarchy( (this).childNodes[0].nodeValue, '${hSortOrder}' )"
   		rowspan="${columnReport.maxColumnDepth+1}">
   			
   			<digi:trn>${repHierarchy.column.columnName}</digi:trn> 

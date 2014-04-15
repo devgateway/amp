@@ -247,10 +247,9 @@ function ampp_search_get_modalform_values() {
  */
 function ampp_search_result_export() {
   $view = views_get_view('projects_search_result');
-  $tmpview = $view->clone_view();
-  $tmpview->set_display('feed_1');
+  $view->set_display('feed_1');
 
   $args = _ampp_get_search_arguments(TRUE);
 
-  echo $tmpview->preview('feed_1', $args);
+  echo $view->preview('feed_1', $args);
 }

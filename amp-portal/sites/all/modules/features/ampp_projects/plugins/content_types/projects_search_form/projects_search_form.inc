@@ -218,7 +218,8 @@ function projects_search_form($form, &$form_state, $conf) {
     if (isset($_GET['period_start'])) {
       $date_format_info = date_parse_from_format($format, $_GET['period_start']);
       if ($date_format_info && empty($date_format_info['error_count'])) {
-        $period_start_default = $_GET['period_start'];
+        $period_start_default = implode('-', array($date_format_info['year'], $date_format_info['month'], $date_format_info['day']));
+        $period_start_default .= ' 00:00:00';
       }
     }
 
@@ -226,7 +227,8 @@ function projects_search_form($form, &$form_state, $conf) {
     if (isset($_GET['period_end'])) {
       $date_format_info = date_parse_from_format($format, $_GET['period_end']);
       if ($date_format_info && empty($date_format_info['error_count'])) {
-        $period_end_default = $_GET['period_end'];
+        $period_end_default = implode('-', array($date_format_info['year'], $date_format_info['month'], $date_format_info['day']));
+        $period_end_default .= ' 00:00:00';
       }
     }
 
@@ -240,7 +242,7 @@ function projects_search_form($form, &$form_state, $conf) {
       '#type' => 'date_popup',
       '#description' => t('Records with no value are ignored.'),
       '#default_value' => $period_start_default,
-      '#date_type' => DATE_UNIX,
+      '#date_type' => DATE_DATETIME,
       '#date_timezone' => date_default_timezone(),
       '#date_format' => $format,
       '#date_year_range' => _amp_activity_activities_period_range_limits(),
@@ -248,7 +250,7 @@ function projects_search_form($form, &$form_state, $conf) {
     $form['period']['period_end'] = array(
       '#type' => 'date_popup',
       '#default_value' => $period_end_default,
-      '#date_type' => DATE_UNIX,
+      '#date_type' => DATE_DATETIME,
       '#date_timezone' => date_default_timezone(),
       '#date_format' => $format,
       '#date_year_range' => _amp_activity_activities_period_range_limits(),

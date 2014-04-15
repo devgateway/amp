@@ -93,35 +93,34 @@ function amp_get_transactions_amount($transaction_type) {
   }
 
   $view = views_get_view('projects_search_result');
-  $tmpview = $view->clone_view();
-  $tmpview->set_display('panel_pane_1');
+  $view->set_display('panel_pane_1');
 
   // Load all rows, this makes the query very slow!
-  $tmpview->set_items_per_page(0);
+  $view->set_items_per_page(0);
 
   // Prepare the view.
-  $tmpview->set_arguments($args);
-  $tmpview->build('panel_pane_1');
+  $view->set_arguments($args);
+  $view->build('panel_pane_1');
 
   // We don't need a count query.
   // @TODO: Make use_count_query() return FALSE in order not to execute_count_query();
   // $view->get_total_rows = FALSE;
   // $view->query->pager->use_count_query()
 
-  $tmpview->pre_execute();
+  $view->pre_execute();
 
   // Remove unused fields and order by.
-  $tmpview->query->orderby = array();
-  foreach ($tmpview->query->fields as $key => $value) {
+  $view->query->orderby = array();
+  foreach ($view->query->fields as $key => $value) {
     if ($key != 'amp_activity_id') {
-      unset($tmpview->query->fields[$key]);
+      unset($view->query->fields[$key]);
     }
   }
 
   // Execute the view and get the list of filtered public activities.
-  $tmpview->execute();
+  $view->execute();
   $activities_list = array();
-  foreach ($tmpview->result as $row) {
+  foreach ($view->result as $row) {
     $activities_list[] = $row->amp_activity_id;
   }
 
@@ -130,7 +129,7 @@ function amp_get_transactions_amount($transaction_type) {
 
   // If the view is filtered by Donors, only show values for the selected Donors.
   $donors_list = array();
-  foreach ($tmpview->argument as $argument_handler) {
+  foreach ($view->argument as $argument_handler) {
     if (isset($argument_handler->role_value) && in_array('DN', $argument_handler->role_value)) {
       if ($argument_handler->argument != 'all' && !empty($argument_handler->value)) {
         $donors_list = $argument_handler->value;

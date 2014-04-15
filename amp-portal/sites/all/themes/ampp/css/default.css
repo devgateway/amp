@@ -801,7 +801,6 @@ div.views-slideshow-ddblock-cycle-vsd-default div.slide-text-inner {
 .view-footer .view-projects-search-result table td {border:0;border-right:1px solid #cccccc}
 .view-footer .view-projects-search-result table td.views-field-transaction-amount-disbursement {border:0}
 .page-search .item-list {float:left}
-.page-search .view-footer {float:right;padding:10px;font-weight:bold}
 
 div.hidden-locations {position:absolute;width:150px;height:150px;background:#c4deed;color:#333333;font-size:12px;overflow:auto;margin-top:-15px;margin-left:25px;border:1px solid #c3c3c3;padding:5px;-moz-border-radius: 5px 5px 5px 5px;  -o-border-radius: 5px 5px 5px 5px;  -webkit-border-radius: 5px 5px 5px 5px;  border-radius: 5px 5px 5px 5px;  -moz-box-shadow: 3px 3px 3px #cccccc;-webkit-box-shadow: 3px 3px 3px #cccccc;box-shadow: 3px 3px 3px #cccccc;z-index:9999}
 span.more-locations {text-decoration:underline;color:#02578A}

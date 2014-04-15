@@ -134,6 +134,15 @@ function amp_activity_views_data_alter(&$data) {
     'help' => t('The final date for disbursements.'),
   ) + $_date_handler_base;
 
+  $data['cached_amp_activity']['proposed_project_life'] = array(
+    'title' => t('Proposed Project Life'),
+    'help' => t('The proposed project life in days.'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+  );
+
   /**
    * CUSTOM FIELDS: cached_amp_activity.
    */

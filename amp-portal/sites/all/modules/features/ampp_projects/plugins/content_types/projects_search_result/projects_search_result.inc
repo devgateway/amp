@@ -88,6 +88,10 @@ $plugin = array(
       'show' => FALSE,
       'label' => 'Final Date for Disbursements',
     ),
+    'proposed_project_life' => array(
+      'show' => FALSE,
+      'label' => 'Proposed Project Life',
+    ),
     'commitment_amount' => array(
       'show' => TRUE,
       'label' => t('Commitment amount'),

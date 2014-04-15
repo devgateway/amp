@@ -56,6 +56,7 @@ function ampp_projects_views_default_views() {
     'actual_completion_date' => 'actual_completion_date',
     'contracting_date' => 'contracting_date',
     'disbursments_date' => 'disbursments_date',
+    'proposed_project_life' => 'proposed_project_life',
     'commitment_amount' => 'commitment_amount',
     'disbursement_amount' => 'disbursement_amount',
   );
@@ -155,6 +156,12 @@ function ampp_projects_views_default_views() {
     ),
     'disbursments_date' => array(
       'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    'proposed_project_life' => array(
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
@@ -586,6 +593,31 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['disbursments_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['disbursments_date']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['disbursments_date']['date_format'] = 'shortest';
+  /* Field: Activity: Proposed Project Life */
+  $handler->display->display_options['fields']['proposed_project_life']['id'] = 'proposed_project_life';
+  $handler->display->display_options['fields']['proposed_project_life']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['proposed_project_life']['field'] = 'proposed_project_life';
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['proposed_project_life']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['proposed_project_life']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['proposed_project_life']['separator'] = '';
+  $handler->display->display_options['fields']['proposed_project_life']['format_plural'] = 1;
+  $handler->display->display_options['fields']['proposed_project_life']['format_plural_singular'] = '1 day';
+  $handler->display->display_options['fields']['proposed_project_life']['format_plural_plural'] = '@count days';
   /* Field: Activity: Commitment amount */
   $handler->display->display_options['fields']['commitment_amount']['id'] = 'commitment_amount';
   $handler->display->display_options['fields']['commitment_amount']['table'] = 'cached_amp_activity';
@@ -841,6 +873,7 @@ function ampp_projects_views_default_views() {
     t('Actual Completion Date'),
     t('Final Date for Contracting'),
     t('Final Date for Disbursements'),
+    t('Proposed Project Life'),
     t('Commitment amount'),
     t('Disbursement amount'),
     t('All'),

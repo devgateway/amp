@@ -721,8 +721,7 @@ li.token-input-input-token p {
 
 .ampphome-donor-map .views-slideshow-controls-bottom {background:none}
 .dgone-footer .total-amounts {float:right;margin-right:10px}
-.page-search .views-field-commitment-amount, .page-search .views-field-disbursement-amount,.page-search .dgone-footer .total-amounts td.views-field {text-align:right}
-.view-activity-icon {cursor:pointer;}
+.dgone-footer .total-amounts td.views-field {text-align:right}
 .page-search div.token-input-dropdown,
 .page-search div.token-input-dropdown-facebook {width:auto}
 div.token-input-dropdown,div.token-input-dropdown-facebook {max-height:300px;overflow:auto}

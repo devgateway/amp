@@ -797,12 +797,6 @@ div.views-slideshow-ddblock-cycle-vsd-default div.slide-text-inner {
   color: #ffffff;
 }
 
-.page-search .view-projects-search-result table td {background:#ffffff;padding:1px 15px 1px 5px;border:1px solid #cccccc;font-size:10px;font-family:Verdana;vertical-align:top}
-.page-search .view-projects-search-result table th {background:#c7d4db;font-size:10px;padding:10px 5px;border:1px solid #ffffff;text-align:left}
-.views-field-amp-activity-id a img {padding:5px}
-.page-search .view-projects-search-result table tr.odd td {background:#ffffff;padding:1px 5px}
-.page-search .view-projects-search-result table tr.even td {background:#f2f2f2;padding:1px 5px}
-.view-footer .view-projects-search-result .view-content {margin:10px 0}
 .view-footer .view-projects-search-result tr,.view-footer .view-projects-search-result td {border:0}
 .view-footer .view-projects-search-result table td {border:0;border-right:1px solid #cccccc}
 .view-footer .view-projects-search-result table td.views-field-transaction-amount-disbursement {border:0}
@@ -815,7 +809,6 @@ span.more-locations {text-decoration:underline;color:#02578A}
 #ampp-search-form .info {margin-left:10px;}
 .breadcrumb a,.breadcrumb a:link,.breadcrumb a:visited,.breadcrumb a:hover {color:#bbbbbb}
 .view-id-projects_search_result table.views-table {width:1000px; margin-bottom: 30px}
-.view-id-projects_search_result table.views-table .views-field-actual-completion-date,.view-projects-search-result table.views-table .views-field-actual-start-date {width: 100px; font-size: 9px}
 .view-id-projects_search_result table.views-table th a img{vertical-align:top;padding:0 5px}
 #section-content {margin:0 0px}
 .social-footer {width:1000px;margin:0 auto;text-align:center}

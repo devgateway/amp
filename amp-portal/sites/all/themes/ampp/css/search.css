@@ -142,3 +142,41 @@
 #ampp-search-form .form-radios label.option {
   line-height: normal;
 }
+
+.view-projects-search-result {
+  font-size: 10px;
+}
+
+.view-projects-search-result .even td {
+  background: #F2F2F2;
+}
+
+.view-projects-search-result th {
+  background: #C7D4DB;
+  border: 1px solid #FFFFFF;
+  padding: 10px 5px;
+}
+
+.view-projects-search-result td {
+  background: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  font-family: Verdana;
+  padding: 1px 5px;
+  vertical-align: top;
+}
+
+.view-projects-search-result .views-field-view-link {
+  text-align: center;
+  width: 3em;
+}
+
+.view-projects-search-result .transaction-header,
+.view-projects-search-result .transaction-field {
+  text-align:right;
+  min-width: 70px;
+}
+
+.view-projects-search-result .date-field {
+  font-size: 9px;
+  min-width: 70px;
+}

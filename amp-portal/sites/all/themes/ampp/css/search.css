@@ -166,6 +166,7 @@
 }
 
 .view-projects-search-result .views-field-view-link {
+  padding: 5px;
   text-align: center;
   width: 3em;
 }

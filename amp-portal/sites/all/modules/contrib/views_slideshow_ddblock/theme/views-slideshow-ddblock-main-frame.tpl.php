@@ -39,7 +39,7 @@ $settings = $views_slideshow_ddblock_slider_settings;
           <?php if ($settings['output_type'] == 'view_fields'): ?>
             <?php foreach ($views_slideshow_ddblock_slider_items as $slider_item): ?>
               <div class="slide clear-block border">
-                <div class="slide-inner clear-block border">
+                <div class="slide-inner clear-block border clearfix">
                   <?php print $slider_item['slide_image']; ?>
 
                   <?php if (!empty($slider_item['slide_title']) || !empty($slider_item['slide_text'])): ?>

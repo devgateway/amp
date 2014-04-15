@@ -545,14 +545,18 @@ span img#feedback-close {
   width: auto;
 }
 
+div.views-slideshow-ddblock-cycle-vsd-default div.slide-inner {
+  height: 220px;
+}
+
 div.views-slideshow-ddblock-cycle-vsd-default div.slide-inner img {
   height: auto;
 }
 
 div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-next-slide a.next,
 div.views-slideshow-ddblock-cycle-vsd-default div.views-slideshow-ddblock-prev-next-slide a.prev {
-  height: 170px;
   display: block;
+  height: 220px;
   width: 100px;
   z-index: 9999;
 }

@@ -2850,53 +2850,6 @@ body {background:none;}
 									</logic:notEmpty>
 									
 
-<%-- 									<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index"> --%>
-<%-- 									<field:display name="${customField.FM_field}" feature="Step${customField.step.step}">												 --%>
-<!-- 										<tr> -->
-<!-- 											<td width="30%" align="right" valign="top" nowrap="nowrap" > -->
-<!-- 												<b>													 -->
-<%-- 													<digi:trn key="aim:customfield:${customField.name}">${customField.name}</digi:trn> --%>
-<!-- 												</b>														 -->
-<!-- 											</td> -->
-<!-- 											<td bgcolor="#ffffff"> -->
-<%-- 												<c:choose> --%>
-<%-- 													<c:when test="<%=customField instanceof ComboBoxCustomField%>"> --%>
-<%-- 														<c:set var="idx" value="${customField.value}"/>	 --%>
-<%-- 														<c:out value="${customField.options[idx]}"/>									 --%>
-<%-- 													</c:when> --%>
-<%-- 													<c:when test="<%=customField instanceof CategoryCustomField%>"> --%>
-<%-- 														<c:if test="${customField.value > 0}" > --%>
-<%-- 															<category:getoptionvalue categoryValueId="${customField.value}"/> --%>
-<%-- 														</c:if>								 --%>
-<%-- 													</c:when> --%>
-<%-- 													<c:when test="<%=customField instanceof DateCustomField%>">																 --%>
-<%-- 														<c:out value="${customField.strDate}"/>	 --%>
-<%-- 													</c:when> --%>
-<%-- 													<c:when test="<%=customField instanceof RadioOptionCustomField%>"> --%>
-<%-- 														<logic:iterate name="customField" property="options" id="option" > --%>
-<%-- 															<logic:equal name="option" property="key"  value="${customField.value}"> --%>
-<%-- 																<c:out value="${option.value}"/>  --%>
-<%-- 															</logic:equal> --%>
-<%-- 														</logic:iterate> --%>
-<%-- 													</c:when> --%>
-<%-- 													<c:when test="<%=customField instanceof CheckCustomField%>"> --%>
-<%-- 														<c:if test="${customField.value == true}" > --%>
-<%-- 															<c:out value="${customField.labelTrue}"/> --%>
-<%-- 														</c:if> --%>
-<%-- 														<c:if test="${customField.value == false}" > --%>
-<%-- 															<c:out value="${customField.labelFalse}"/> --%>
-<%-- 														</c:if> --%>
-<%-- 													</c:when> --%>
-<%-- 													<c:otherwise>		 --%>
-<%-- 														<c:out value="${customField.value}"/>																												 --%>
-<%-- 													</c:otherwise> --%>
-<%-- 												</c:choose> --%>
-<!-- 											</td> -->
-<!-- 										</tr> -->
-<%-- 									</field:display> --%>
-<%-- 									</logic:iterate> --%>
-
-
     	</table>
         
 </c:if>

@@ -128,7 +128,6 @@ function _amp_projects_get_commitments_report($number_of_days, $order_field, $or
   $query->condition('amp_funding_detail.transaction_date', $past_date, '>=');
 
   // Order results.
-  $order_field = ($order_field == 'name') ?  : 'transaction_amount_in_base_currency';
   switch ($order_field) {
     case 'name':
       $query->orderBy('organisation_name', $order_direction);

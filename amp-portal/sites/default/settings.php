@@ -456,6 +456,6 @@ $conf['maintenance_theme'] = 'ampp';
 if (file_exists(dirname(__FILE__) . '/custom.settings.php')) {
   include_once('custom.settings.php');
 }
-else {
-  die('Environment specific configuration file "custom.settings.php" is missing.');
-}
+// else {
+//   die('Environment specific configuration file "custom.settings.php" is missing.');
+// }

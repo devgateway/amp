@@ -292,12 +292,12 @@ a.file-download-icon.icon-zip {
 /*  Listing styling in RTE
 ------------------------------------------------------------------------------*/
 .pane-content ol {
-	list-style-type: decimal;
-	padding-left:15px;
+  list-style-type: decimal;
+  padding-left:15px;
 }
 .pane-content ul {
-	list-style-type: none;
-	padding-left: 15px;
+  list-style-type: none;
+  padding-left: 15px;
 }
 .twitter-container .social-media-item .item-list ul li,
 .social-media-item .item-list ul {

@@ -1,7 +1,7 @@
 /* $Id: preview.css,v 1.1 2012/08/06 21:52:35 vamirbekyan Exp $ */
 
 div.color-form h2 {
-	display: none;
+  display: none;
 }
 
 div.lock, div.unlock {
@@ -17,7 +17,7 @@ a {
 }
 #color_scheme_form #palette .form-item label {
   width: 20em;
-} 
+}
 #placeholder {
   top: 50px !important;
 }
@@ -95,7 +95,7 @@ html.js #preview {
   clear: both;
   padding: 0 15px;
   font: bold 14px/1.2 Arial, sans-serif;
-  color: #FFF; 
+  color: #FFF;
 }
 
 #preview-main-menu-links li,
@@ -108,7 +108,7 @@ html.js #preview {
 #preview-main-menu-links a,
 #preview-secondary-menu-links a {
   padding: 0 5px;
-  color: #FFF; 
+  color: #FFF;
   text-decoration: none;
 }
 #preview-main-menu-links,

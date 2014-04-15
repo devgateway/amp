@@ -10,7 +10,7 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td {margin: 0;padding: 0;border: 0;outline: 0;font-size: 100%;background: transparent;font-family: Tahoma, Arial, Verdana;}
-img	{vertical-align: middle;}
+img  {vertical-align: middle;}
 body {line-height: 1;}
 ol, ul {list-style: none;}
 blockquote, q {quotes: none;}

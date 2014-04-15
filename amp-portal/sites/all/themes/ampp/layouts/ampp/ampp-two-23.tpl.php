@@ -6,7 +6,7 @@
     <div class="grid_12 alpha omega"><?php print $content['header']; ?></div>
     <div class="clear"></div>
   </div>
-  
+
   <div class="dgtwo-columns margin-top-10"><div class="dgtwo-columns-inner">
     <div class="col col2 grid_9 alpha"><?php print $content['col_2']; ?></div>
     <div class="col col3 grid_3 omega"><?php print $content['col_3']; ?></div>

@@ -25,7 +25,7 @@ function ampp_system_themes_page_alter(&$themes) {
  */
 function ampp_page_alter(&$page) {
  if(isset($_GET['format']) && $_GET['format'] == 'simple') {
-  	unset($page['page_top']['toolbar']);
+    unset($page['page_top']['toolbar']);
   }
 }
 

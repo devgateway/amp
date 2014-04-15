@@ -39,7 +39,7 @@ $info = array(
     'default' => array(
       'title' => t('AMPP'),
       'colors' => array(
-        'site_title' => '#fefefe',  
+        'site_title' => '#fefefe',
         'site_slogan' => '#fefefd',
         'top_header_bg' => '#4c6b7d',
         'top_header_menu_font' => '#fefefc',
@@ -56,7 +56,7 @@ $info = array(
     'blue' => array(
       'title' => t('AMPP Blue'),
       'colors' => array(
-        'site_title' => '#fefefe',  
+        'site_title' => '#fefefe',
         'site_slogan' => '#fefefd',
         'top_header_bg' => '#00699d',
         'top_header_menu_font' => '#fefefc',
@@ -69,7 +69,7 @@ $info = array(
       ),
     ),
   ),
-  
+
   // CSS files (excluding @import) to rewrite with new color scheme.
   'css' => array(
     'css/color.css',

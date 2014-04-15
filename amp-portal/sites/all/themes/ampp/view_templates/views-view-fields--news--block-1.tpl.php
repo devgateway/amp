@@ -24,11 +24,11 @@
  */
 ?>
 <?php foreach ($fields as $id => $field): ?>
-  
+
   <?php if ($id == 'title'): ?>
     <?php print '<div class="news-top-row">'; ?>
   <?php endif; ?>
-  
+
   <?php if (!empty($field->separator)): ?>
     <?php print $field->separator; ?>
   <?php endif; ?>
@@ -37,9 +37,9 @@
     <?php print $field->label_html; ?>
     <?php print $field->content; ?>
   <?php print $field->wrapper_suffix; ?>
-  
+
   <?php if ($id == 'created'): ?>
     <?php print '</div>'; ?>
   <?php endif; ?>
-  
+
 <?php endforeach; ?>

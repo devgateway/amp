@@ -8,7 +8,7 @@
   <?php print $styles; ?>
   <?php
     if ($is_front && !theme_get_setting('no_bg_image', 'ampp')) {
-      $bg_image_path = theme_get_setting('bg_image_path', 'ampp'); 
+      $bg_image_path = theme_get_setting('bg_image_path', 'ampp');
       print '<style>body {background:#ffffff url("' . file_create_url($bg_image_path) . '") no-repeat fixed center top;}</style>';
     }
   ?>

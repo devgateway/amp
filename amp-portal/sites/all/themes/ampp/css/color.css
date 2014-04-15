@@ -63,7 +63,7 @@ background: -ms-linear-gradient(top,  #333333 0%,#4c6b7d 100%); /* IE10+ */
 background: linear-gradient(to bottom,  #333333 0%,#4c6b7d 100%); /* W3C */
 *filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#4c6b7d',GradientType=0 ); /* IE7 */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#4c6b7d',GradientType=0 )\9; /* IE8 */
-*zoom: 1;	/* IE7 */
+*zoom: 1;  /* IE7 */
 }
 
 .rounded-corner.pane .panel-pane .pane-content {

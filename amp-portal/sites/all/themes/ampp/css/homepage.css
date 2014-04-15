@@ -214,6 +214,10 @@
   width: 670px;
 }
 
+.page-homepage #col2 {
+  width: 330px;
+}
+
 .page-admin #col1 {
   width: 570px;
 }
@@ -350,7 +354,7 @@ h2.pane-title {
 }
 
 .page-homepage .ampphome-news-slideshow-container {
-  float: left;
+  float: right;
 }
 
 

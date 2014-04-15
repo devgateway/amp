@@ -453,7 +453,7 @@ $conf['maintenance_theme'] = 'ampp';
  *
  * @see: sample.settings.php
  */
-if (file_exists(DRUPAL_ROOT . '/' . conf_path() . '/custom.settings.php')) {
+if (file_exists(dirname(__FILE__) . '/custom.settings.php')) {
   include_once('custom.settings.php');
 }
 else {

@@ -211,13 +211,15 @@ function projects_search_form($form, &$form_state, $conf) {
 
   if (!empty($conf['period_flag'])) {
     // Get the input date format.
-    $localized_date_formats = locale_get_localized_date_format(array($GLOBALS['language']->language));
-    $format = $localized_date_formats['date_format_ampp_cal'];
+    // $localized_date_formats = locale_get_localized_date_format(array($GLOBALS['language']->language));
+    // $format = $localized_date_formats['date_format_ampp_cal'];
+    $format = variable_get('date_format_ampp_cal', 'm/d/Y');
 
     $period_start_default = '';
     if (isset($_GET['period_start'])) {
-      $date_format_info = date_parse_from_format($format, $_GET['period_start']);
-      if ($date_format_info && empty($date_format_info['error_count'])) {
+      // @TODO: Find a way to validate localized date formats: date_parse_from_format() doesn't exist on PHP v5.2.
+      preg_match('/(?<month>[0-9]{1,2})\/(?<day>[0-9]{1,2})\/(?<year>[0-9]{4})/', $_GET['period_start'], $date_format_info);
+      if (!empty($date_format_info) && checkdate($date_format_info['month'], $date_format_info['day'], $date_format_info['year'])) {
         $period_start_default = implode('-', array($date_format_info['year'], $date_format_info['month'], $date_format_info['day']));
         $period_start_default .= ' 00:00:00';
       }
@@ -225,8 +227,9 @@ function projects_search_form($form, &$form_state, $conf) {
 
     $period_end_default = '';
     if (isset($_GET['period_end'])) {
-      $date_format_info = date_parse_from_format($format, $_GET['period_end']);
-      if ($date_format_info && empty($date_format_info['error_count'])) {
+      // @TODO: Find a way to validate localized date formats: date_parse_from_format() doesn't exist on PHP v5.2.
+      preg_match('/(?<month>[0-9]{1,2})\/(?<day>[0-9]{1,2})\/(?<year>[0-9]{4})/', $_GET['period_end'], $date_format_info);
+      if (!empty($date_format_info) && checkdate($date_format_info['month'], $date_format_info['day'], $date_format_info['year'])) {
         $period_end_default = implode('-', array($date_format_info['year'], $date_format_info['month'], $date_format_info['day']));
         $period_end_default .= ' 00:00:00';
       }

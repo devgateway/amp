@@ -50,14 +50,46 @@ $plugin = array(
       'show' => TRUE,
       'label' => t('Locations'),
     ),
+    'proposed_approval_date' => array(
+      'show' => FALSE,
+      'label' => 'Proposed Approval Date',
+    ),
+    'actual_approval_date' => array(
+      'show' => FALSE,
+      'label' => 'Actual Approval Date',
+    ),
+    'proposed_start_date' => array(
+      'show' => FALSE,
+      'label' => 'Proposed Start Date',
+    ),
     'actual_start_date' => array(
       'show' => TRUE,
-      'label' => t('Start date'),
+      'label' => 'Actual Start Date',
+    ),
+    // 'proposed_project_life' => array(
+    //   'show' => FALSE,
+    //   'label' => 'Proposed Project Life',
+    // ),
+    // 'original_comp_date' => array(
+    //   'show' => FALSE,
+    //   'label' => 'Original Completion Date',
+    // ),
+    'proposed_completion_date' => array(
+      'show' => FALSE,
+      'label' => 'Proposed Completion Date',
     ),
     'actual_completion_date' => array(
       'show' => TRUE,
-      'label' => t('End date'),
+      'label' => 'Actual Completion Date',
     ),
+    // 'contracting_date' => array(
+    //   'show' => FALSE,
+    //   'label' => 'Final Date for Contracting',
+    // ),
+    // 'disbursments_date' => array(
+    //   'show' => FALSE,
+    //   'label' => 'Final Date for Disbursements',
+    // ),
     'commitment_amount' => array(
       'show' => TRUE,
       'label' => t('Commitment amount'),
@@ -163,7 +195,9 @@ function ampp_projects_preprocess_html(&$variables) {
 function ampp_projects_projects_search_result_content_type_edit_form($form, &$form_state) {
   ctools_include('dependent');
 
-  $conf = $form_state['conf'];
+  // Merge in plugin defaults, prevents not defined warnings on existing panels.
+  $plugin_defaults = $form_state['plugin']['defaults'];
+  $conf = drupal_array_merge_deep($plugin_defaults, $form_state['conf']);
 
   $form['note_show_columns'] = array(
     '#type' => 'item',
@@ -201,7 +235,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#collapsed' => TRUE,
   );
 
-  foreach ($conf as $field_name => $field_info) {
+  foreach ($plugin_defaults as $field_name => $field_info) {
     if (!is_array($field_info)) {
       continue;
     }
@@ -213,14 +247,14 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     $form['columns'][$field_name]['show'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show ' . $field_info['label'] . ' column'),
-      '#default_value' => $field_info['show'],
+      '#default_value' => $conf[$field_name]['show'],
     );
 
     $form['columns'][$field_name]['label'] = array(
       '#type' => 'textfield',
       '#title' => t('Label'),
       '#size' => 30,
-      '#default_value' => $field_info['label'],
+      '#default_value' => $conf[$field_name]['label'],
       '#dependency' => array(
         'edit-' . drupal_html_class($field_name) . '-show' => array(1),
       ),

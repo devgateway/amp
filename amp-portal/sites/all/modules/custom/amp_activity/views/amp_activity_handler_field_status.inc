@@ -102,6 +102,6 @@ class amp_activity_handler_field_status extends views_handler_field {
     parent::query();
 
     // Setup the translated field alias; field_alias is already a unique string.
-    $this->field_translation_alias = $this->field_alias . '__status_' . $this->position;
+    $this->field_translation_alias = '_activity_status_' . $this->position;
   }
 }

@@ -28,14 +28,6 @@ body {
   font: 100 12px/1.5 Tahoma,Arial,sans-serif;
 }
 
-body.page-homepage .container-gradient-top {
-  //background: #fafafa url(../images/container-gradient-top-home.png) 0 0 repeat-x;
-}
-
-.container-gradient-top {
-  //background: #fafafa url(../images/container-gradient-top.png) 0 0 repeat-x;
-}
-
 .messages.error {margin-left:0px !important;}
 
 /* Text Defs
@@ -957,3 +949,15 @@ div.views-slideshow-ddblock-cycle-vsd-default div.slide-title-inner {padding:5px
 .counter-container #counter ul {display: inline-block; padding: 10px;}
 .counter-container #counter ul lable {padding-right: 10px;}
 .counter-container #counter ul strong {float: none;}
+
+html.js fieldset.collapsible {
+  border: 1px solid #CACACA;
+  margin: 1em 0;
+  padding-left: 1em;
+}
+
+html.js fieldset.collapsible.collapsed {
+  border-bottom: 0;
+  border-left: 0;
+  border-right: 0;
+}

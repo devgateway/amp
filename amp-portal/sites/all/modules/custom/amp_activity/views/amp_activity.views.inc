@@ -56,9 +56,12 @@ function amp_activity_views_data_alter(&$data) {
     ),
   );
 
-  $data['cached_amp_activity']['actual_start_date'] = array(
-    'title' => t('Start date'),
-    'help' => t('Date of the start of project'),
+  /**
+   * DATE FIELDS: cached_amp_activity.
+   */
+
+  // Define the base for all date specific handlers.
+  $_date_handler_base = array(
     'argument' => array(
       'handler' => 'amp_activity_handler_argument_date',
     ),
@@ -68,23 +71,53 @@ function amp_activity_views_data_alter(&$data) {
     ),
     'sort' => array(
       'handler' => 'views_handler_sort_date',
-    )
+    ),
   );
 
+  $data['cached_amp_activity']['date_created'] = array(
+    'title' => t('Created Date'),
+    'help' => t('The date when the activity was created.'),
+  ) + $_date_handler_base;
+
+  $data['cached_amp_activity']['date_updated'] = array(
+    'title' => t('Updated Date'),
+    'help' => t('The date when the activity was last update.'),
+  ) + $_date_handler_base;
+
+  $data['cached_amp_activity']['proposed_approval_date'] = array(
+    'title' => t('Proposed Approval Date'),
+    'help' => t('The proposed approval date of the activity.'),
+  ) + $_date_handler_base;
+
+  $data['cached_amp_activity']['proposed_approval_date'] = array(
+    'title' => t('Proposed Approval Date'),
+    'help' => t('The proposed approval date of the activity.'),
+  ) + $_date_handler_base;
+
+  $data['cached_amp_activity']['actual_approval_date'] = array(
+    'title' => t('Actual Approval Date'),
+    'help' => t('The actual approval date of the activity.'),
+  ) + $_date_handler_base;
+
+  $data['cached_amp_activity']['proposed_start_date'] = array(
+    'title' => t('Proposed Start Date'),
+    'help' => t('The proposed start date of the activity.'),
+  ) + $_date_handler_base;
+
+  $data['cached_amp_activity']['actual_start_date'] = array(
+    'title' => t('Actual Start Date'),
+    'help' => t('The actual start date of the activity.'),
+  ) + $_date_handler_base;
+
+  $data['cached_amp_activity']['proposed_completion_date'] = array(
+    'title' => t('Proposed Completion Date'),
+    'help' => t('The proposed completion date of the activity.'),
+  ) + $_date_handler_base;
+
   $data['cached_amp_activity']['actual_completion_date'] = array(
-    'title' => t('End date'),
-    'help' => t('Date of the actual completion'),
-    'argument' => array(
-      'handler' => 'amp_activity_handler_argument_date',
-    ),
-    'field' => array(
-      'handler' => 'amp_activity_handler_field_date_convert',
-      'click sortable' => TRUE,
-    ),
-    'sort' => array(
-      'handler' => 'views_handler_sort_date',
-    )
-  );
+    'title' => t('Actual Completion Date'),
+    'help' => t('The actual completion date of the activity.'),
+  ) + $_date_handler_base;
 
   /**
    * CUSTOM FIELDS: cached_amp_activity.
@@ -164,6 +197,28 @@ function amp_activity_views_data_alter(&$data) {
     ),
   );
 
+  $data['cached_amp_activity']['commitment_amount'] = array(
+    'title' => t('Commitment amount'),
+    'help' => t('Transaction Commitment amount'),
+    'field' => array(
+      'handler' => 'amp_activity_handler_field_transaction',
+      'real field' => 'amp_activity_id',
+      'amp transaction type' => AMP_TRANSACTION_TYPE_COMMITMENT,
+      'float' => TRUE,
+    ),
+  );
+
+  $data['cached_amp_activity']['disbursement_amount'] = array(
+    'title' => t('Disbursement amount'),
+    'help' => t('Transaction Disbursement amount'),
+    'field' => array(
+      'handler' => 'amp_activity_handler_field_transaction',
+      'real field' => 'amp_activity_id',
+      'amp transaction type' => AMP_TRANSACTION_TYPE_DISBURSEMENT,
+      'float' => TRUE,
+    ),
+  );
+
   /**
    * TABLE DEFINITION: amp_org_role.
    */
@@ -173,7 +228,7 @@ function amp_activity_views_data_alter(&$data) {
       'left_field' => 'amp_activity_id',
       'field' => 'activity',
       'type' => 'INNER',
-    )
+    ),
   );
 
   $data['amp_org_role']['organisation_role'] = array(
@@ -229,7 +284,7 @@ function amp_activity_views_data_alter(&$data) {
       'left_table' => 'amp_activity_location',
       'left_field' => 'amp_location_id',
       'field' => 'amp_location_id'
-    )
+    ),
   );
 
   // We need amp_activity_location to get the Location ID.
@@ -280,7 +335,7 @@ function amp_activity_views_data_alter(&$data) {
           'numeric' => TRUE,
         ),
       ),
-    )
+    ),
   );
 
   $data['amp_activities_categoryvalues']['amp_categoryvalue_id'] = array(
@@ -353,24 +408,6 @@ function amp_activity_views_pre_execute(&$view) {
         }
       }
       break;
-  }
-
-  // Find a better place to add these GROUP BY.
-  foreach (array('query', 'count_query') as $query_name) {
-    // Required for fields.
-    $view->build_info[$query_name]->groupBy('cached_amp_activity.amp_activity_id');
-
-    if (isset($view->get_total_amount_type)) {
-      // We don't need a count query.
-      $view->get_total_rows = FALSE;
-
-      $expression = '(fd.transaction_amount / getexchange(cur.currency_code, fd.transaction_date ))';
-      $view->build_info[$query_name]->groupBy($expression);
-    }
-    else {
-      $view->build_info[$query_name]->groupBy('cached_amp_activity.actual_start_date');
-      $view->build_info[$query_name]->groupBy('cached_amp_activity.actual_completion_date');
-    }
   }
 
   // Alter the XLS export.

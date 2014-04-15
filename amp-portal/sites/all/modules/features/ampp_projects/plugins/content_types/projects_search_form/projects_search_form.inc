@@ -463,8 +463,11 @@ function projects_search_form_pre_render_autocomplete_fields($element) {
  * Provides the pane settings form.
  */
 function ampp_projects_projects_search_form_content_type_edit_form($form, &$form_state) {
+  ctools_include('dependent');
+
+  // Merge in plugin defaults, prevents not defined warnings on existing panels.
   $plugin_defaults = $form_state['plugin']['defaults'];
-  $conf = $form_state['conf'];
+  $conf = drupal_array_merge_deep($plugin_defaults, $form_state['conf']);
 
   $form['note_at_least_one'] = array(
     '#type' => 'item',
@@ -538,14 +541,14 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
     $form['filters'][$field_name]['show'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show the ' . $field_info['label'] . ' filter'),
-      '#default_value' => $plugin_defaults[$field_name]['show'],
+      '#default_value' => $conf[$field_name]['show'],
     );
 
     $form['filters'][$field_name]['label'] = array(
       '#type' => 'textfield',
       '#title' => t('Label'),
       '#size' => 30,
-      '#default_value' => $plugin_defaults[$field_name]['label'],
+      '#default_value' => $conf[$field_name]['label'],
       '#dependency' => array(
         'edit-' . drupal_html_class($field_name) . '-show' => array(1),
       ),
@@ -557,7 +560,7 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
         '#type' => 'checkbox',
         '#title' => t('Show filter popup icon'),
         '#description' => t('Adds a small icon next to the field. When clicked a window will popup with all the available filter options.'),
-        '#default_value' => $plugin_defaults[$field_name]['popup'],
+        '#default_value' => $conf[$field_name]['popup'],
         '#dependency' => array(
           'edit-' . drupal_html_class($field_name) . '-show' => array(1),
         ),

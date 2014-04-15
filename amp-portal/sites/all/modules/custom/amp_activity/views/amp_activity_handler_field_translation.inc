@@ -181,7 +181,7 @@ class amp_activity_handler_field_translation extends views_handler_field {
       return;
     }
 
-    // Setup the translated field alias; field_alias is already a unique string.
-    $this->field_translation_alias = $this->field_alias . '__' . $this->amp_entity_type . '_' . $this->position;
+    // Setup the translated field alias.
+    $this->field_translation_alias = '_' . $this->amp_entity_type . '_' . $this->position;
   }
 }

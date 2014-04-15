@@ -7,41 +7,6 @@
  */
 
 /**
- * Implements hook_views_data_alter().
- */
-function ampp_projects_views_data_alter(&$data) {
-  // TABLE: cached_amp_activity
-  $data['cached_amp_activity']['commitment_amount'] = array(
-    'title' => t('Commitment amount'),
-    'help' => t('Transaction Commitment amount'),
-    'field' => array(
-      'handler' => 'views_handler_field_amount_commitment',
-      'float' => TRUE,
-    ),
-  );
-
-  $data['cached_amp_activity']['disbursement_amount'] = array(
-    'title' => t('Disbursement amount'),
-    'help' => t('Transaction Disbursement amount'),
-    'field' => array(
-      'handler' => 'views_handler_field_amount_disbursement',
-      'float' => TRUE,
-    ),
-  );
-
-  // TABLE: amp_funding
-  // Required for commitment_amount and disbursement_amount.
-  $data['amp_funding']['table']['group'] = t('Funding');
-  $data['amp_funding']['table']['join'] = array(
-    // Directly links to amp_activity table.
-    'cached_amp_activity' => array(
-      'left_field' => 'amp_activity_id',
-      'field' => 'amp_activity_id',
-    ),
-  );
-}
-
-/**
  * Implements hook_views_pre_build().
  */
 function ampp_projects_views_pre_build(&$view) {
@@ -86,81 +51,9 @@ function ampp_projects_views_query_alter(&$view, &$query) {
     foreach ($where['conditions'] as $k => $v) {
       if ($v['field'] == 'cached_amp_activity.name' && $v['operator'] == 'ILIKE') {
         unset($where['conditions'][$k]);
-        $view->query->add_where_expression(0, 'unaccent(' . $translate_field . ') ILIKE unaccent(\'' . $v['value'] . '\')');
+        $view->query->add_where_expression(0, 'UNACCENT(' . $translate_field . ') ILIKE UNACCENT(\'' . $v['value'] . '\')');
       }
     }
-  }
-
-  // @TODO: Cleanup, move to a field handler.
-  if (isset($view->get_total_amount_type)) {
-    $view->query->fields = array();
-    $view->query->orderby = array();
-    $view->query->add_field(NULL, 'cached_amp_activity.amp_activity_id', 'amp_activity_id');
-    $view->query->add_field(NULL, '(fd.transaction_amount / getexchange(cur.currency_code, fd.transaction_date))', 'amount');
-
-    // joining the 'amp_funding' table
-    $join = new views_join;
-    $join->table = 'amp_funding';
-    $join->left_table = 'cached_amp_activity';
-    $join->left_field = 'amp_activity_id';
-    $join->field = 'amp_activity_id';
-    $join->type = 'LEFT';
-    $join->adjusted = 'TRUE';
-    $view->query->table_queue['amp_funding'] = array(
-      'table' => 'amp_funding',
-      'num' => 1,
-      'alias' => 'f',
-      'join' => $join,
-      'relationship' => 'cached_amp_activity'
-    );
-    // add the table
-    $view->query->tables['amp_funding']['amp_activity_id'] = array(
-      'count' => 1,
-      'alias' => 'f'
-    );
-
-    // joining the 'amp_funding_detail' table
-    $join = new views_join;
-    $join->table = 'amp_funding_detail';
-    $join->left_table = 'amp_funding';
-    $join->left_field = 'amp_funding_id';
-    $join->field = 'amp_funding_id';
-    $join->type = 'LEFT';
-    $join->adjusted = 'TRUE';
-    $view->query->table_queue['amp_funding_detail'] = array(
-      'table' => 'amp_funding_detail',
-      'num' => 1,
-      'alias' => 'fd',
-      'join' => $join,
-      'relationship' => 'amp_funding'
-    );
-    // add the table
-    $view->query->tables['amp_funding_detail']['amp_funding_id'] = array(
-      'count' => 1,
-      'alias' => 'fd'
-    );
-
-    // joining the 'amp_currency' table
-    $join = new views_join;
-    $join->table = 'amp_currency';
-    $join->left_table = 'amp_funding_detail';
-    $join->left_field = 'amp_currency_id';
-    $join->field = 'amp_currency_id';
-    $join->type = 'LEFT';
-    $join->adjusted = 'TRUE';
-    $view->query->table_queue['amp_currency'] = array(
-      'table' => 'amp_currency',
-      'num' => 1,
-      'alias' => 'cur',
-      'join' => $join,
-      'relationship' => 'amp_funding_detail'
-    );
-    $view->query->tables['amp_currency']['amp_currency_id'] = array(
-      'count' => 1,
-      'alias' => 'cur'
-    );
-    $view->query->group_operator = 'AND';
-    $view->query->add_where(0, 'fd.transaction_type', $view->get_total_amount_type, '=');
   }
 }
 

@@ -18,6 +18,12 @@ define('AMP_TRANSACTION_TYPE_DISBURSEMENT', 1); // Disbursement.
 define('AMP_TRANSACTION_TYPE_EXPENDITURE', 2); // Expenditure.
 
 /**
+ * Define some of the AMP adjustment type constants.
+ */
+define('AMP_ADJUSTMENT_TYPE_ACTUAL', 'Actual');
+define('AMP_ADJUSTMENT_TYPE_PLANNED', 'Planned');
+
+/**
  * Implements hook_views_api().
  */
 function amp_activity_views_api() {
@@ -298,6 +304,73 @@ function _amp_activity_get_activity_status_options() {
   }
 
   return $options;
+}
+
+/**
+ * Get the ID for an adjustment type.
+ */
+function _amp_activity_get_adjustment_type_id($adjustment_type) {
+  db_set_active(AMP_DATABASE);
+
+  $query = db_select('amp_category_value', 'amp_category_value');
+
+  $join_condition = "amp_category_class.keyname = 'adjustment_type' AND amp_category_class.id = amp_category_value.amp_category_class_id";
+  $query->innerJoin('amp_category_class', 'amp_category_class', $join_condition);
+
+  $adjustment_type_id = $query->fields('amp_category_value', array('id'))
+    ->condition('amp_category_value.category_value', $adjustment_type, '=')
+    ->execute()->fetchField();
+  db_set_active();
+
+  return $adjustment_type_id;
+}
+
+/**
+ * Get the funding details for a list of activities.
+ */
+function _amp_activity_get_activity_funding_details($transaction_type, $adjustment_type_id, $activities_list, $donors_list = NULL) {
+  $amounts_in_base_currency = array();
+
+  if (empty($activities_list)) {
+    return $amounts_in_base_currency;
+  }
+
+  db_set_active(AMP_DATABASE);
+
+  // Prepare an expresion that can get the transaction_amount amount in the base curency.
+  $transaction_amount_expression = 'SUM(amp_funding_detail.transaction_amount / getexchange(currency_code.currency_code, amp_funding_detail.transaction_date))';
+
+  $query = db_select('amp_funding', 'amp_funding');
+  $query->leftJoin('amp_funding_detail', 'amp_funding_detail', 'amp_funding_detail.amp_funding_id = amp_funding.amp_funding_id');
+  $query->leftJoin('amp_currency', 'currency_code', 'currency_code.amp_currency_id = amp_funding_detail.amp_currency_id');
+
+  $query->fields('amp_funding', array('amp_activity_id'))
+    ->addExpression($transaction_amount_expression, 'transaction_amount_in_base_currency');
+
+  $query->condition('amp_funding.amp_activity_id', $activities_list, 'IN')
+    ->condition('amp_funding_detail.transaction_type', $transaction_type, "=")
+    ->groupBy('amp_funding.amp_activity_id');
+
+  $query->condition('amp_funding_detail.adjustment_type', $adjustment_type_id, '=');
+
+  // Filter funding details by donors.
+  if (!empty($donors_list)) {
+    if (count($donors_list) == 1) {
+      $query->condition('amp_funding.amp_donor_org_id', reset($donors_list), "=");
+    }
+    else {
+      $query->condition('amp_funding.amp_donor_org_id', $donors_list, "IN");
+    }
+  }
+
+  $result = $query->execute();
+  foreach ($result as $record) {
+    $amounts_in_base_currency[$record->amp_activity_id] = $record->transaction_amount_in_base_currency;
+  }
+
+  db_set_active();
+
+  return $amounts_in_base_currency;
 }
 
 /**

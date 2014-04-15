@@ -48,7 +48,7 @@ Drupal.ampp.getSearchFormData = function() {
 /**
  * Updates the projects_search_form info.
  */
-Drupal.ampp.updateSearchFormInfo = function(timeout) {
+Drupal.ampp.updateSearchFormInfo = function(timeout, callback) {
   var settings = Drupal.settings;
 
   // Clear all requests that were not executed.
@@ -75,6 +75,10 @@ Drupal.ampp.updateSearchFormInfo = function(timeout) {
     },
     complete: function () {
       $('.form-actions', search_form).removeClass('calculating');
+
+      if (callback) {
+        callback();
+      }
     },
     error: function (response) {
       // @TODO: handle errors.
@@ -229,27 +233,6 @@ Drupal.behaviors.projectsSearchFormInit = {
       }
     }
 
-    if (settings.projectsSearchForm.resultstotal_endpoint) {
-      $.ajax({
-        url: settings.projectsSearchForm.resultstotal_endpoint,
-        data: Drupal.ampp.getSearchFormData(),
-        dataType: 'json', // Prevent auto-evaluation of response.
-        global: false, // Do not trigger global AJAX events.
-        success: function(response) {
-          if (response['commitment']) {
-            $('.commitment', '.search-results-total-amounts').html(response['commitment']);
-          }
-          if (response['disbursement']) {
-            $('.disbursement', '.search-results-total-amounts').html(response['disbursement']);
-          }
-        },
-        error: function (response) {
-          // @TODO: handle errors.
-          // console.log(response, 'error');
-        },
-      });
-    }
-
     // @TODO: Move to the projects_search_result plugin.
     $('.more-locations').click(function(){
       var activityId = $(this).attr('id');
@@ -261,7 +244,30 @@ Drupal.behaviors.projectsSearchFormInit = {
     });
 
     // Update the search form info.
-    Drupal.ampp.updateSearchFormInfo(Drupal.ampp.delay);
+    Drupal.ampp.updateSearchFormInfo(Drupal.ampp.delay, function() {
+      if (settings.projectsSearchForm.resultstotal_endpoint) {
+        $.ajax({
+          url: settings.projectsSearchForm.resultstotal_endpoint,
+          data: Drupal.ampp.getSearchFormData(),
+          dataType: 'json', // Prevent auto-evaluation of response.
+          global: false, // Do not trigger global AJAX events.
+          success: function(response) {
+            if (response['commitment']) {
+              $('.commitment', '.search-results-total-amounts').html(response['commitment']);
+            }
+            if (response['disbursement']) {
+              $('.disbursement', '.search-results-total-amounts').html(response['disbursement']);
+            }
+          },
+          error: function (response) {
+            // @TODO: handle errors.
+            // console.log(response, 'error');
+          },
+        });
+      }
+    });
+
+
   }
 };
 

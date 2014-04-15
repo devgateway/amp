@@ -47,12 +47,16 @@ function ampp_projects_views_default_views() {
     'program_names' => 'program_names',
     'location_names' => 'location_names',
     'status_name' => 'status_name',
+    'proposed_approval_date' => 'proposed_approval_date',
+    'actual_approval_date' => 'actual_approval_date',
+    'proposed_start_date' => 'proposed_start_date',
     'actual_start_date' => 'actual_start_date',
+    'proposed_completion_date' => 'proposed_completion_date',
     'actual_completion_date' => 'actual_completion_date',
     'commitment_amount' => 'commitment_amount',
     'disbursement_amount' => 'disbursement_amount',
   );
-  $handler->display->display_options['style_options']['default'] = 'actual_start_date';
+  $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
     'view_link' => array(
       'align' => '',
@@ -98,7 +102,31 @@ function ampp_projects_views_default_views() {
       'align' => '',
       'separator' => '',
     ),
+    'proposed_approval_date' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    'actual_approval_date' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    'proposed_start_date' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
     'actual_start_date' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    'proposed_completion_date' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -339,7 +367,73 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['status_name']['hide_empty'] = 0;
   $handler->display->display_options['fields']['status_name']['empty_zero'] = 0;
   $handler->display->display_options['fields']['status_name']['hide_alter_empty'] = 0;
-  /* Field: Activity: Start date */
+  /* Field: Activity: Proposed Approval Date */
+  $handler->display->display_options['fields']['proposed_approval_date']['id'] = 'proposed_approval_date';
+  $handler->display->display_options['fields']['proposed_approval_date']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['proposed_approval_date']['field'] = 'proposed_approval_date';
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['proposed_approval_date']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['proposed_approval_date']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['proposed_approval_date']['date_format'] = 'shortest';
+  /* Field: Activity: Actual Approval Date */
+  $handler->display->display_options['fields']['actual_approval_date']['id'] = 'actual_approval_date';
+  $handler->display->display_options['fields']['actual_approval_date']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['actual_approval_date']['field'] = 'actual_approval_date';
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['actual_approval_date']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['actual_approval_date']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['actual_approval_date']['date_format'] = 'shortest';
+  /* Field: Activity: Proposed Start Date */
+  $handler->display->display_options['fields']['proposed_start_date']['id'] = 'proposed_start_date';
+  $handler->display->display_options['fields']['proposed_start_date']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['proposed_start_date']['field'] = 'proposed_start_date';
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['proposed_start_date']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['proposed_start_date']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['proposed_start_date']['date_format'] = 'shortest';
+  /* Field: Activity: Actual Start Date */
   $handler->display->display_options['fields']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['fields']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['actual_start_date']['field'] = 'actual_start_date';
@@ -361,7 +455,29 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_start_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['date_format'] = 'shortest';
-  /* Field: Activity: End date */
+  /* Field: Activity: Proposed Completion Date */
+  $handler->display->display_options['fields']['proposed_completion_date']['id'] = 'proposed_completion_date';
+  $handler->display->display_options['fields']['proposed_completion_date']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['proposed_completion_date']['field'] = 'proposed_completion_date';
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['proposed_completion_date']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['proposed_completion_date']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['proposed_completion_date']['date_format'] = 'shortest';
+  /* Field: Activity: Actual Completion Date */
   $handler->display->display_options['fields']['actual_completion_date']['id'] = 'actual_completion_date';
   $handler->display->display_options['fields']['actual_completion_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['fields']['actual_completion_date']['field'] = 'actual_completion_date';
@@ -404,6 +520,9 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['commitment_amount']['hide_empty'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['empty_zero'] = 0;
   $handler->display->display_options['fields']['commitment_amount']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['commitment_amount']['set_precision'] = 1;
+  $handler->display->display_options['fields']['commitment_amount']['precision'] = '0';
+  $handler->display->display_options['fields']['commitment_amount']['format_plural'] = 0;
   /* Field: Activity: Disbursement amount */
   $handler->display->display_options['fields']['disbursement_amount']['id'] = 'disbursement_amount';
   $handler->display->display_options['fields']['disbursement_amount']['table'] = 'cached_amp_activity';
@@ -425,10 +544,13 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['disbursement_amount']['hide_empty'] = 0;
   $handler->display->display_options['fields']['disbursement_amount']['empty_zero'] = 0;
   $handler->display->display_options['fields']['disbursement_amount']['hide_alter_empty'] = 0;
-  /* Sort criterion: Activity: Start date */
-  $handler->display->display_options['sorts']['actual_start_date']['id'] = 'actual_start_date';
-  $handler->display->display_options['sorts']['actual_start_date']['table'] = 'cached_amp_activity';
-  $handler->display->display_options['sorts']['actual_start_date']['field'] = 'actual_start_date';
+  $handler->display->display_options['fields']['disbursement_amount']['set_precision'] = 1;
+  $handler->display->display_options['fields']['disbursement_amount']['precision'] = '0';
+  $handler->display->display_options['fields']['disbursement_amount']['format_plural'] = 0;
+  /* Sort criterion: Activity: Updated Date */
+  $handler->display->display_options['sorts']['date_updated']['id'] = 'date_updated';
+  $handler->display->display_options['sorts']['date_updated']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['sorts']['date_updated']['field'] = 'date_updated';
   /* Contextual filter: Activity: Name */
   $handler->display->display_options['arguments']['name']['id'] = 'name';
   $handler->display->display_options['arguments']['name']['table'] = 'cached_amp_activity';
@@ -524,7 +646,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['not'] = 0;
-  /* Contextual filter: Activity: Start date */
+  /* Contextual filter: Activity: Actual Start Date */
   $handler->display->display_options['arguments']['actual_start_date']['id'] = 'actual_start_date';
   $handler->display->display_options['arguments']['actual_start_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['actual_start_date']['field'] = 'actual_start_date';
@@ -532,7 +654,7 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['actual_start_date']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['actual_start_date']['summary_options']['override'] = TRUE;
   $handler->display->display_options['arguments']['actual_start_date']['condition_operator'] = '>=';
-  /* Contextual filter: Activity: End date */
+  /* Contextual filter: Activity: Actual Completion Date */
   $handler->display->display_options['arguments']['actual_completion_date']['id'] = 'actual_completion_date';
   $handler->display->display_options['arguments']['actual_completion_date']['table'] = 'cached_amp_activity';
   $handler->display->display_options['arguments']['actual_completion_date']['field'] = 'actual_completion_date';
@@ -623,8 +745,12 @@ function ampp_projects_views_default_views() {
     t('Program Names'),
     t('Location Names'),
     t('Status'),
-    t('Start date'),
-    t('End date'),
+    t('Proposed Approval Date'),
+    t('Actual Approval Date'),
+    t('Proposed Start Date'),
+    t('Actual Start Date'),
+    t('Proposed Completion Date'),
+    t('Actual Completion Date'),
     t('Commitment amount'),
     t('Disbursement amount'),
     t('All'),

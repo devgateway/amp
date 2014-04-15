@@ -63,9 +63,12 @@ function ampp_projects_date_popup_process_alter(&$element, &$form_state, $contex
 }
 
 /**
- * Get the total amount for given type of transactions:
- *  - AMP_TRANSACTION_TYPE_COMMITMENT for commitments
- *  - AMP_TRANSACTION_TYPE_DISBURSEMENT for disbursements
+ * Get the total amount for a given transaction type.
+ *
+ * @param
+ *   A transaction type ID:
+ *    - AMP_TRANSACTION_TYPE_COMMITMENT for commitments
+ *    - AMP_TRANSACTION_TYPE_DISBURSEMENT for disbursements
  */
 function amp_get_transactions_amount($transaction_type) {
   $args = _ampp_get_search_arguments(TRUE);
@@ -92,21 +95,54 @@ function amp_get_transactions_amount($transaction_type) {
   $view = views_get_view('projects_search_result');
   $tmpview = $view->clone_view();
   $tmpview->set_display('panel_pane_1');
-  $tmpview->set_arguments($args);
-
-  // Change the views query to get the total amounts for $transaction_type.
-  $tmpview->get_total_amount_type = $transaction_type;
 
   // Load all rows, this makes the query very slow!
   $tmpview->set_items_per_page(0);
 
-  $tmpview->pre_execute();
-  $tmpview->execute();
+  // Prepare the view.
+  $tmpview->set_arguments($args);
+  $tmpview->build('panel_pane_1');
 
-  $total_amount = 0;
-  foreach ($tmpview->result as $row) {
-    $total_amount = $total_amount + $row->amount;
+  // We don't need a count query.
+  // @TODO: Make use_count_query() return FALSE in order not to execute_count_query();
+  // $view->get_total_rows = FALSE;
+  // $view->query->pager->use_count_query()
+
+  $tmpview->pre_execute();
+
+  // Remove unused fields and order by.
+  $tmpview->query->orderby = array();
+  foreach ($tmpview->query->fields as $key => $value) {
+    if ($key != 'amp_activity_id') {
+      unset($tmpview->query->fields[$key]);
+    }
   }
+
+  // Execute the view and get the list of filtered public activities.
+  $tmpview->execute();
+  $activities_list = array();
+  foreach ($tmpview->result as $row) {
+    $activities_list[] = $row->amp_activity_id;
+  }
+
+  // Only display 'Actual' commitments and disbursements.
+  $adjustment_type_id = _amp_activity_get_adjustment_type_id(AMP_ADJUSTMENT_TYPE_ACTUAL);
+
+  // If the view is filtered by Donors, only show values for the selected Donors.
+  $donors_list = array();
+  foreach ($tmpview->argument as $argument_handler) {
+    if (isset($argument_handler->role_value) && in_array('DN', $argument_handler->role_value)) {
+      if ($argument_handler->argument != 'all' && !empty($argument_handler->value)) {
+        $donors_list = $argument_handler->value;
+      }
+    }
+  }
+
+  // Get all transactions amount in the base currency.
+  $all_transactions = _amp_activity_get_activity_funding_details($transaction_type, $adjustment_type_id, $activities_list, $donors_list);
+
+  // Add all transactions.
+  $total_amount = (int) array_sum($all_transactions);
 
   // Store the total amount in cache.
   cache_set($cache_id, $total_amount, 'cache', CACHE_TEMPORARY);

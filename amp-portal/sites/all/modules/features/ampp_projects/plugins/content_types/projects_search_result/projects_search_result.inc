@@ -207,7 +207,7 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
   );
 
   // Hide the override_title description text.
-  unset($form['override_title_markup']);
+  $form['override_title_markup']['#access'] = FALSE;
 
   $form['show_info_column'] = array(
     '#type' => 'checkbox',

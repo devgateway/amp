@@ -476,7 +476,7 @@ function ampp_projects_projects_search_form_content_type_edit_form($form, &$form
   );
 
   // Hide the override_title description text.
-  unset($form['override_title_markup']);
+  $form['override_title_markup']['#access'] = FALSE;
 
   $form['search_path'] = array(
     '#type' => 'textfield',

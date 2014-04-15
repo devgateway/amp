@@ -30,8 +30,11 @@ function ampp_projects_ext_source_content_type_render($subtype, $conf, $panel_ar
  * Implementing hook_content_type_edit_form()
  */
 function ampp_projects_ext_source_content_type_edit_form($form, &$form_state) {
-  $conf = $form_state['conf'];
+  // Merge in plugin defaults, prevents not defined warnings on existing panels.
+  $plugin_defaults = $form_state['plugin']['defaults'];
+  $conf = drupal_array_merge_deep($plugin_defaults, $form_state['conf']);
 
+  // Hide the override_title description text.
   $form['override_title_markup']['#access'] = FALSE;
 
   $form['source'] = array(
@@ -40,7 +43,7 @@ function ampp_projects_ext_source_content_type_edit_form($form, &$form_state) {
     '#size' => 60,
     '#maxlength' => 255,
     '#title' => t("Absolute url to the external source"),
-    '#default_value' => $conf['source'] ? $conf['source'] : $form_state['plugin']['defaults']['source'],
+    '#default_value' => $conf['source'],
   );
 
   $form['width'] = array(
@@ -49,7 +52,7 @@ function ampp_projects_ext_source_content_type_edit_form($form, &$form_state) {
     '#size' => 4,
     '#maxlength' => 4,
     '#description' => t("Width of the iframe in pixels"),
-    '#default_value' => $conf['width'] ? $conf['width'] : $form_state['plugin']['defaults']['width'],
+    '#default_value' => $conf['width'],
     '#element_validate' => array('_width_height_validate'),
   );
 
@@ -59,7 +62,7 @@ function ampp_projects_ext_source_content_type_edit_form($form, &$form_state) {
     '#size' => 4,
     '#maxlength' => 4,
     '#description' => t("Height of the iframe in pixels"),
-    '#default_value' => $conf['height'] ? $conf['height'] : $form_state['plugin']['defaults']['height'],
+    '#default_value' => $conf['height'],
     '#element_validate' => array('_width_height_validate'),
   );
 

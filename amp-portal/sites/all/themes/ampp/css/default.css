@@ -863,53 +863,39 @@ span.more-locations {text-decoration:underline;color:#02578A}
 }
 
 
-.pane-content .commitments_report {
-	width: 100%;
+.commitments-report-table {
+  width: 100%;
 }
 
-.pane-content .commitments_report .commitments_report-header {
-	background: #c7d4db;
-	text-align: left;
-	font-weight: bold;
+.rounded-corner .pane-commitments-report {
+  border-radius: 10px 10px 20px 20px;
+  overflow: hidden;
 }
 
-.pane-content .commitments_report .commitments_report-header td {
-	padding: 1px 5px;
+.commitments-report-table thead,
+.commitments-report-table tfoot {
+  background: #C7D4DB;
 }
 
-.pane-content .commitments_report .commitments_report-header .commitments_report-column-2  {
-	text-align: center;
+.commitments-report-table .row {
+  border-bottom: 1px solid #CCCCCC;
 }
 
-.pane-content .commitments_report .commitments_report-header .commitments_report-column-1
-.pane-content .commitments_report .commitments_report-header .commitments_report-column-2 {
-		border: 1px solid #ffffff;
+.commitments-report-table th {
+  padding: 3px 5px;
 }
 
-.pane-content .commitments_report .commitments_report-row-even,
-.pane-content .commitments_report .commitments_report-row-odd {
-	background-color: #eee;
-	border-bottom: 1px solid #ccc;
-	padding: 0.1em 0.6em;
+.commitments-report-table td {
+  background: #FFFFFF;
+  padding: 1px 5px;
 }
 
-.pane-content .commitments_report .commitments_report-row-even td {
-	background: #f2f2f2;
-	padding: 1px 5px;
+.commitments-report-table .column-two  {
+  text-align: right;
 }
 
-.pane-content .commitments_report .commitments_report-row-odd td {
-	background: #ffffff;
-	padding: 1px 5px;
-}
-
-.pane-content .commitments_report .commitments_report-row-even td.commitments_report-column-2,
-.pane-content .commitments_report .commitments_report-row-odd td.commitments_report-column-2 {
-	text-align: right;
-}
-
-.pane-content .commitments_report tr:last-child td {
-	font-weight: bold;
+.commitments-report-table .row-even td {
+  background: #F2F2F2;
 }
 
 #ampp-search-form .form-item-budget label[for=edit-budget] {width: auto; font-weight: bold; }

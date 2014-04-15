@@ -3283,6 +3283,19 @@ public class DbUtil {
 			PersistenceManager.releaseSession(sess);
 		}
 	}
+	
+	public static void updateField(String className, Long id, String fieldName, Object newValue) {
+		try {
+			 Session session = PersistenceManager.getRequestDBSession();
+			 String idName = PersistenceManager.sf().getClassMetadata(className).getIdentifierPropertyName();
+			 Query query = session.createQuery("update " + className + " c set c."+fieldName + "=:val where c."+ idName + "=:id");
+			 query.setParameter("val", newValue);
+			 query.setParameter("id", id);
+			 query.executeUpdate();
+		} catch (DgException ex) {
+			logger.error(String.format("Could not update \"%s.%s\"=\"%s\". Cause: %s",  className, fieldName,  String.valueOf(newValue), ex.getMessage()));
+		}
+	}
 
 	public static AmpSectorScheme getAmpSectorSchemeById(Long schemeId) {
 		Session session = null;

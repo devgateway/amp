@@ -10,11 +10,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.translation.entity.ContentTrnClassFieldPair;
 import org.digijava.module.translation.form.ContentTrnImportExportForm;
 import org.digijava.module.translation.util.ContentTranslationUtil;
@@ -242,6 +246,7 @@ public class ContentTrnImportExport extends DispatchAction {
                     	throw new RuntimeException("disallowed locale: " + locale);
                     //If new item
                     if (trnItem == null) {
+                    	if( isValidEntry(rowIdx+1, objectClass, fieldName, objectId, locale, trn) ) {
                         trnItem = new AmpContentTranslation();
                         trnItem.setObjectClass(objectClass);
                         trnItem.setObjectId(objectId);
@@ -249,6 +254,7 @@ public class ContentTrnImportExport extends DispatchAction {
                         trnItem.setLocale(locale);
                         trnItem.setTranslation(trn);
                         objectsForDb.add(trnItem);
+                    	}
                     } else if (!trnItem.getTranslation().equals(trn)){ //If needs to be updated
                         trnItem.setTranslation(trn);
                         objectsForDb.add(trnItem);
@@ -263,5 +269,32 @@ public class ContentTrnImportExport extends DispatchAction {
 
         return view(mapping, form, request, response);
     }
-
+    
+    private boolean isValidEntry(int rowIdx, String objectClass, String fieldName, Long objectId, String locale, String trn) throws DgException{
+    	String strErr = null; 
+    	boolean isCritical = false;
+    	try {
+    		Class<?> clazz = Class.forName(objectClass);
+    		InternationalizedPropertyDescription property = InternationalizedModelDescription.getForProperty(clazz, fieldName);
+    		if( property == null ){
+    			strErr = String.format("Cause: Field \"%s\" not found in \"%s\" class.",  fieldName, objectClass);
+    			isCritical = true;
+    		}else if (DbUtil.getObject(clazz, objectId) == null ){
+    			strErr = String.format("Cause: No record found for \"%s\" class with id=\"%d\"", objectClass, objectId);
+    		}else if (!property.field.isAnnotationPresent(TranslatableField.class)) {
+    			strErr = String.format("Cause: the field \"%s\" from class \"%s\" is not translatable", fieldName, objectClass);
+    		}// else "No content was predefined to translate, but it seems that we should allow new fields (without any content, even in "en") to be defined in the import
+    	} catch(ClassNotFoundException ex) {
+    		strErr = String.format("Cause: Class \"%s\" not found.", objectClass);
+    		isCritical = true;
+    		logger.debug(ex.getMessage());
+    	}
+    	if( strErr!=null ) {
+    		strErr = String.format("Ignoring invalid entry at row %d: (%s, %s, %d, %s, %s). %s", rowIdx, objectClass, fieldName, objectId, locale, trn, strErr);
+    		logger.warn(strErr);
+    		if (isCritical) 
+    			throw new DgException(strErr);
+    	}
+    	return strErr==null;
+    }
 }

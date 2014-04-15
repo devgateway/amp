@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -840,11 +841,14 @@ public class ContentTranslationUtil {
 
     public static void saveOrUpdateContentTrns(Collection <AmpContentTranslation> objectsForDb) {
         try {
-            Session session = PersistenceManager.getRequestDBSession();
             for (AmpContentTranslation trn : objectsForDb) {
-                session.saveOrUpdate(trn);
+                DbUtil.saveOrUpdateObject(trn);
+                //update default entry in BaseLanguage - needed when multilingual is disabled 
+                if( getBaseLanguage().equalsIgnoreCase(trn.getLocale()) ){
+                	DbUtil.updateField(trn.getObjectClass(), trn.getObjectId(),trn.getFieldName(), trn.getTranslation() );
+                }
             }
-        } catch (DgException e) {
+        } catch (Exception e) {
             logger.error("error saving trns!", e);
         }
 

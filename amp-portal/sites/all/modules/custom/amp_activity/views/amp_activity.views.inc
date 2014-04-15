@@ -197,6 +197,26 @@ function amp_activity_views_data_alter(&$data) {
     ),
   );
 
+  $data['cached_amp_activity']['period_start_date'] = array(
+    'title' => t('Period Start Date'),
+    'help' => t('Activity period start date.'),
+    'argument' => array(
+      'handler' => 'amp_activity_handler_argument_period',
+      'real field' => 'actual_start_date',
+      'amp real field' => 'period_start_field',
+    ),
+  );
+
+  $data['cached_amp_activity']['period_end_date'] = array(
+    'title' => t('Period End Date'),
+    'help' => t('Activity period end date.'),
+    'argument' => array(
+      'handler' => 'amp_activity_handler_argument_period',
+      'real field' => 'actual_completion_date',
+      'amp real field' => 'period_end_field',
+    ),
+  );
+
   $data['cached_amp_activity']['commitment_amount'] = array(
     'title' => t('Commitment amount'),
     'help' => t('Transaction Commitment amount'),

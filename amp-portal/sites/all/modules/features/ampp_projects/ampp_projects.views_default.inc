@@ -646,22 +646,22 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['break_phrase'] = 1;
   $handler->display->display_options['arguments']['amp_categoryvalue_id']['not'] = 0;
-  /* Contextual filter: Activity: Actual Start Date */
-  $handler->display->display_options['arguments']['actual_start_date']['id'] = 'actual_start_date';
-  $handler->display->display_options['arguments']['actual_start_date']['table'] = 'cached_amp_activity';
-  $handler->display->display_options['arguments']['actual_start_date']['field'] = 'actual_start_date';
-  $handler->display->display_options['arguments']['actual_start_date']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['actual_start_date']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['actual_start_date']['summary_options']['override'] = TRUE;
-  $handler->display->display_options['arguments']['actual_start_date']['condition_operator'] = '>=';
-  /* Contextual filter: Activity: Actual Completion Date */
-  $handler->display->display_options['arguments']['actual_completion_date']['id'] = 'actual_completion_date';
-  $handler->display->display_options['arguments']['actual_completion_date']['table'] = 'cached_amp_activity';
-  $handler->display->display_options['arguments']['actual_completion_date']['field'] = 'actual_completion_date';
-  $handler->display->display_options['arguments']['actual_completion_date']['default_argument_type'] = 'fixed';
-  $handler->display->display_options['arguments']['actual_completion_date']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['actual_completion_date']['summary_options']['override'] = TRUE;
-  $handler->display->display_options['arguments']['actual_completion_date']['condition_operator'] = '<=';
+  /* Contextual filter: Activity: Period Start Date */
+  $handler->display->display_options['arguments']['period_start_date']['id'] = 'period_start_date';
+  $handler->display->display_options['arguments']['period_start_date']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['arguments']['period_start_date']['field'] = 'period_start_date';
+  $handler->display->display_options['arguments']['period_start_date']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['period_start_date']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['period_start_date']['summary_options']['override'] = TRUE;
+  $handler->display->display_options['arguments']['period_start_date']['condition_operator'] = '>=';
+  /* Contextual filter: Activity: Period End Date */
+  $handler->display->display_options['arguments']['period_end_date']['id'] = 'period_end_date';
+  $handler->display->display_options['arguments']['period_end_date']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['arguments']['period_end_date']['field'] = 'period_end_date';
+  $handler->display->display_options['arguments']['period_end_date']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['period_end_date']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['period_end_date']['summary_options']['override'] = TRUE;
+  $handler->display->display_options['arguments']['period_end_date']['condition_operator'] = '<=';
   /* Filter criterion: Activity: Filter Public */
   $handler->display->display_options['filters']['filter_public']['id'] = 'filter_public';
   $handler->display->display_options['filters']['filter_public']['table'] = 'cached_amp_activity';

@@ -16,6 +16,8 @@ $plugin = array(
     'show_info_column' => TRUE,
     'show_status_column' => FALSE,
     'show_export_links' => FALSE,
+    'period_start_field' => 'actual_start_date',
+    'period_end_field' => 'actual_completion_date',
 
     // @TODO: Extract default settings from the view fields list.
     'name' => array(
@@ -225,6 +227,58 @@ function ampp_projects_projects_search_result_content_type_edit_form($form, &$fo
     '#type' => 'checkbox',
     '#title' => t('Enable Export To XLS option'),
     '#default_value' => $conf['show_export_links'],
+  );
+
+  // Get a list of view date fields.
+  $view = views_get_view('projects_search_result');
+  $view->set_display('panel_pane_1');
+  $period_field_options = array();
+  foreach ($view->display_handler->get_handlers('field') as $field => $handler) {
+    $handler_class = get_class($handler);
+    if ($handler_class == 'amp_activity_handler_field_date_convert') {
+      $label = check_plain($handler->options['label']);
+      $period_field_options[$field] = t($label);
+    }
+  }
+  $view->destroy();
+
+  $form['period'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Period Filter Settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['period']['startflag'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use alternative field for the period start date filter.'),
+    '#default_value' => ($conf['period_start_field'] != $plugin_defaults['period_start_field']) ? TRUE : FALSE,
+  );
+
+  $form['period']['period_start_field'] = array(
+    '#type' => 'select',
+    '#title' => t('Field'),
+    '#default_value' => $conf['period_start_field'],
+    '#options' => $period_field_options,
+    '#dependency' => array(
+      'edit-startflag' => array(1),
+    ),
+  );
+
+  $form['period']['endflag'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use alternative field for the period end date filter.'),
+    '#default_value' => ($conf['period_end_field'] != $plugin_defaults['period_end_field']) ? TRUE : FALSE,
+  );
+
+  $form['period']['period_end_field'] = array(
+    '#type' => 'select',
+    '#title' => t('Field'),
+    '#default_value' => $conf['period_end_field'],
+    '#options' => $period_field_options,
+    '#dependency' => array(
+      'edit-endflag' => array(1),
+    ),
   );
 
   // Create the columns fieldset.

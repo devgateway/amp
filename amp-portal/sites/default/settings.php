@@ -444,6 +444,18 @@ ini_set('session.cookie_lifetime', 2000000);
 # $conf['allow_authorize_operations'] = FALSE;
 
 /**
- * Add local overwrites
+ * Use a custom theme for the maintenance page.
  */
-if (file_exists(dirname(__FILE__) . '/custom.settings.php')) include 'custom.settings.php';
+$conf['maintenance_theme'] = 'ampp';
+
+/**
+ * Allow environment specific configuration overrides.
+ *
+ * @see: sample.settings.php
+ */
+if (file_exists(DRUPAL_ROOT . '/' . conf_path() . '/custom.settings.php')) {
+  include_once('custom.settings.php');
+}
+else {
+  die('Environment specific configuration file "custom.settings.php" is missing.');
+}

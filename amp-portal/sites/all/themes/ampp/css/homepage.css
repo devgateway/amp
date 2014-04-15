@@ -208,15 +208,10 @@
 #col2 {
   float: right;
   margin: 10px 0;
-  padding: 1px;
 }
 
 .page-homepage #col1 {
   width: 670px;
-}
-
-.page-homepage #col2 {
-  width: 320px;
 }
 
 .page-admin #col1 {
@@ -362,6 +357,13 @@ h2.pane-title {
 /* end of homepage styling */
 
 /* page-admin styling */
+
+.ampphome-layout #col1 .row {
+  width: 654px;
+}
+.ampphome-layout #col1 .col-last {
+  margin-right: 0;
+}
 
 .page-admin .ampphome-donor-container,
 .page-admin .ampphome-map-container {

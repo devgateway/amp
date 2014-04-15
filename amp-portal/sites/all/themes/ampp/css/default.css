@@ -884,6 +884,7 @@ span.more-locations {text-decoration:underline;color:#02578A}
 }
 
 .commitments-report-table .column-two  {
+  min-width: 80px;
   text-align: right;
 }
 

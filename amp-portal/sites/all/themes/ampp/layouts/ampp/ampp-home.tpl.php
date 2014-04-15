@@ -7,22 +7,22 @@
 
   <div class="clearfix">
     <div id="col1">
-      <div class="ampphome-search clearfix">
+      <div class="ampphome-search row clearfix">
         <div class="ampphome-search-container"><?php print $content['search']; ?></div>
       </div>
 
-      <div class="ampphome-donor-map clearfix">
-        <div class="ampphome-donor-container"><?php print $content['donor_profile']; ?></div>
-        <div class="ampphome-map-container"><?php print $content['map']; ?></div>
+      <div class="ampphome-donor-map row clearfix">
+        <div class="ampphome-donor-container col-first"><?php print $content['donor_profile']; ?></div>
+        <div class="ampphome-map-container col-last"><?php print $content['map']; ?></div>
       </div>
 
-      <div class="ampphome-contact-social clearfix">
+      <div class="ampphome-contact-social row clearfix">
         <div class="ampphome-contact-container"><?php print $content['quick_contact']; ?></div>
       </div>
     </div>
 
     <div id="col2">
-      <div class="ampphome-news">
+      <div class="ampphome-news clearfix">
         <div class="ampphome-news-slideshow-container"><?php print $content['news_slideshow']; ?></div>
       </div>
     </div>

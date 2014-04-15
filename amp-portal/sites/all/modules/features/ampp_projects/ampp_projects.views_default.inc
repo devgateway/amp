@@ -51,8 +51,11 @@ function ampp_projects_views_default_views() {
     'actual_approval_date' => 'actual_approval_date',
     'proposed_start_date' => 'proposed_start_date',
     'actual_start_date' => 'actual_start_date',
+    'original_comp_date' => 'original_comp_date',
     'proposed_completion_date' => 'proposed_completion_date',
     'actual_completion_date' => 'actual_completion_date',
+    'contracting_date' => 'contracting_date',
+    'disbursments_date' => 'disbursments_date',
     'commitment_amount' => 'commitment_amount',
     'disbursement_amount' => 'disbursement_amount',
   );
@@ -126,6 +129,12 @@ function ampp_projects_views_default_views() {
       'align' => '',
       'separator' => '',
     ),
+    'original_comp_date' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
     'proposed_completion_date' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
@@ -133,6 +142,18 @@ function ampp_projects_views_default_views() {
       'separator' => '',
     ),
     'actual_completion_date' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    'contracting_date' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+    ),
+    'disbursments_date' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -455,6 +476,28 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_start_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['actual_start_date']['date_format'] = 'shortest';
+  /* Field: Activity: Original Completion Date */
+  $handler->display->display_options['fields']['original_comp_date']['id'] = 'original_comp_date';
+  $handler->display->display_options['fields']['original_comp_date']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['original_comp_date']['field'] = 'original_comp_date';
+  $handler->display->display_options['fields']['original_comp_date']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['original_comp_date']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['original_comp_date']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['original_comp_date']['date_format'] = 'shortest';
   /* Field: Activity: Proposed Completion Date */
   $handler->display->display_options['fields']['proposed_completion_date']['id'] = 'proposed_completion_date';
   $handler->display->display_options['fields']['proposed_completion_date']['table'] = 'cached_amp_activity';
@@ -499,6 +542,50 @@ function ampp_projects_views_default_views() {
   $handler->display->display_options['fields']['actual_completion_date']['empty_zero'] = 0;
   $handler->display->display_options['fields']['actual_completion_date']['hide_alter_empty'] = 0;
   $handler->display->display_options['fields']['actual_completion_date']['date_format'] = 'shortest';
+  /* Field: Activity: Final Date for Contracting */
+  $handler->display->display_options['fields']['contracting_date']['id'] = 'contracting_date';
+  $handler->display->display_options['fields']['contracting_date']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['contracting_date']['field'] = 'contracting_date';
+  $handler->display->display_options['fields']['contracting_date']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['contracting_date']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['contracting_date']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['contracting_date']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['contracting_date']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['contracting_date']['date_format'] = 'shortest';
+  /* Field: Activity: Final Date for Disbursements */
+  $handler->display->display_options['fields']['disbursments_date']['id'] = 'disbursments_date';
+  $handler->display->display_options['fields']['disbursments_date']['table'] = 'cached_amp_activity';
+  $handler->display->display_options['fields']['disbursments_date']['field'] = 'disbursments_date';
+  $handler->display->display_options['fields']['disbursments_date']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['disbursments_date']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['disbursments_date']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['disbursments_date']['date_format'] = 'shortest';
   /* Field: Activity: Commitment amount */
   $handler->display->display_options['fields']['commitment_amount']['id'] = 'commitment_amount';
   $handler->display->display_options['fields']['commitment_amount']['table'] = 'cached_amp_activity';
@@ -749,8 +836,11 @@ function ampp_projects_views_default_views() {
     t('Actual Approval Date'),
     t('Proposed Start Date'),
     t('Actual Start Date'),
+    t('Original Completion Date'),
     t('Proposed Completion Date'),
     t('Actual Completion Date'),
+    t('Final Date for Contracting'),
+    t('Final Date for Disbursements'),
     t('Commitment amount'),
     t('Disbursement amount'),
     t('All'),

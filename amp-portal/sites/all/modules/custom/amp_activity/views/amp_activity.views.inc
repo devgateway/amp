@@ -99,6 +99,11 @@ function amp_activity_views_data_alter(&$data) {
     'help' => t('The actual approval date of the activity.'),
   ) + $_date_handler_base;
 
+  $data['cached_amp_activity']['original_comp_date'] = array(
+    'title' => t('Original Completion Date'),
+    'help' => t('The activity original completion date.'),
+  ) + $_date_handler_base;
+
   $data['cached_amp_activity']['proposed_start_date'] = array(
     'title' => t('Proposed Start Date'),
     'help' => t('The proposed start date of the activity.'),
@@ -117,6 +122,16 @@ function amp_activity_views_data_alter(&$data) {
   $data['cached_amp_activity']['actual_completion_date'] = array(
     'title' => t('Actual Completion Date'),
     'help' => t('The actual completion date of the activity.'),
+  ) + $_date_handler_base;
+
+  $data['cached_amp_activity']['contracting_date'] = array(
+    'title' => t('Final Date for Contracting'),
+    'help' => t('The final date for contracting.'),
+  ) + $_date_handler_base;
+
+  $data['cached_amp_activity']['disbursments_date'] = array(
+    'title' => t('Final Date for Disbursements'),
+    'help' => t('The final date for disbursements.'),
   ) + $_date_handler_base;
 
   /**

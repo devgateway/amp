@@ -68,14 +68,10 @@ $plugin = array(
       'show' => TRUE,
       'label' => 'Actual Start Date',
     ),
-    // 'proposed_project_life' => array(
-    //   'show' => FALSE,
-    //   'label' => 'Proposed Project Life',
-    // ),
-    // 'original_comp_date' => array(
-    //   'show' => FALSE,
-    //   'label' => 'Original Completion Date',
-    // ),
+    'original_comp_date' => array(
+      'show' => FALSE,
+      'label' => 'Original Completion Date',
+    ),
     'proposed_completion_date' => array(
       'show' => FALSE,
       'label' => 'Proposed Completion Date',
@@ -84,14 +80,14 @@ $plugin = array(
       'show' => TRUE,
       'label' => 'Actual Completion Date',
     ),
-    // 'contracting_date' => array(
-    //   'show' => FALSE,
-    //   'label' => 'Final Date for Contracting',
-    // ),
-    // 'disbursments_date' => array(
-    //   'show' => FALSE,
-    //   'label' => 'Final Date for Disbursements',
-    // ),
+    'contracting_date' => array(
+      'show' => FALSE,
+      'label' => 'Final Date for Contracting',
+    ),
+    'disbursments_date' => array(
+      'show' => FALSE,
+      'label' => 'Final Date for Disbursements',
+    ),
     'commitment_amount' => array(
       'show' => TRUE,
       'label' => t('Commitment amount'),

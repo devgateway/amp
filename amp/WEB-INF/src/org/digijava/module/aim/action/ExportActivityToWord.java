@@ -2647,10 +2647,10 @@ public class ExportActivityToWord extends Action {
 					processEditTagValue(request, identification.getProjectComments()), null);
 		}
 
-		if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext,session)){
-			columnName=TranslatorWorker.translateText("NPD Clasification");
-			generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification.getClasiNPD()), null);
-		}
+//		if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext,session)){
+//			columnName=TranslatorWorker.translateText("NPD Clasification");
+//			generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification.getClasiNPD()), null);
+//		}
 		
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext,session)) {
 			columnName=TranslatorWorker.translateText("Lessons Learned");
@@ -3251,8 +3251,8 @@ public class ExportActivityToWord extends Action {
 		if (identification.getTeam() != null 
 				&& identification.getTeam().getTeamLead() != null 
 				&& identification.getTeam().getTeamLead().getUser() != null) {
-			columnVal += identification.getTeam().getTeamLead().getUser().getFirstNames();
-			columnVal += identification.getTeam().getTeamLead().getUser().getLastName();
+			columnVal += identification.getTeam().getTeamLead().getUser().getFirstNames()+" ";
+			columnVal += identification.getTeam().getTeamLead().getUser().getLastName()+" ";
 			columnVal += identification.getTeam().getTeamLead().getUser().getEmail();
 		}
 		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Data Team Leader")+": ",columnVal,CELLCOLORGRAY);

@@ -67,6 +67,11 @@ function ampp_projects_commitments_report_content_type_theme(&$theme, $plugin) {
  *
  */
 function _amp_projects_get_commitments_report($number_of_days, $order_field, $order_direction) {
+  $cache_id = __FUNCTION__;
+  if ($cache = cache_get($cache_id)) {
+    return $cache->data;
+  }
+
   db_set_active(AMP_DATABASE);
 
   $query = db_select('amp_funding', 'af');
@@ -153,11 +158,17 @@ function _amp_projects_get_commitments_report($number_of_days, $order_field, $or
   $total_amount = format_number($total_amount, '2');
   db_set_active();
 
-  return array(
+  $results = array(
     'reports' => $reports,
     'total_amount' => $total_amount,
     'total_org_count' => $total_records_count,
   );
+
+  // Store the results in cache for 12h.
+  $timestamp = REQUEST_TIME + (60 * 60 * 12);
+  cache_set($cache_id, $results, 'cache', $timestamp);
+
+  return $results;
 }
 
 /**

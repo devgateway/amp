@@ -22,7 +22,7 @@
 		<property name="action" column="action" type="java.lang.String" />
 		<property name="objectId" column="objectId" type="java.lang.String" />
 		<property name="objectType" column="objectType" type="java.lang.String" />
-		<property name="objectName" column="objectName" type="java.lang.String" />
+		<property name="objectName" column="objectName" type="text" />
 		<property name="detail" column="detail" type="java.lang.String" />
 
 	</class>

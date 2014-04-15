@@ -24,20 +24,26 @@ class amp_activity_handler_field_view_activity extends views_handler_field {
 
     // Build the JavaScript for the popup.
     $popup_info = variable_get('amp_activity_popup_str', 'location=no,menubar=no,status=no,toolbar=no,width=800,height=600,scrollbars=yes');
-    $window_open_js = "window.open('${amp_activity_url}', 'activityInfo', '${popup_info}')";
+    $window_open_js = "window.open('${amp_activity_url}', 'activityInfo', '${popup_info}'); return false;";
 
     $icon_info = array(
       'path' => $icon_path,
       'alt' => t('view'),
-      'title' => t('View activity in new window.'),
       'attributes' => array(
         'class' => array(
           'view-activity-icon',
         ),
+      ),
+    );
+    $icon_markup = theme('image', $icon_info);
+
+    $l_args = array(
+      'html' => TRUE,
+      'title' => t('View activity in new window.'),
+      'attributes' => array(
         'onclick' => $window_open_js,
       ),
     );
-
-    return theme('image', $icon_info);
+    return l($icon_markup, $amp_activity_url, $l_args);
   }
 }

@@ -7,6 +7,10 @@
 
 <digi:instance property="pledgeForm" />
 
+<aim:renderFormSubsection title="Pledge Documents">
+	<jsp:include page="pledgeDocumentsView.jsp"></jsp:include>
+</aim:renderFormSubsection>
+
 <c:if test="${not empty pledgeForm.additionalInformation}">
 	<aim:renderFormSubsection title="Additional Information">
 		<div class="view-textarea" style="width: 80%; margin-left: 7%">

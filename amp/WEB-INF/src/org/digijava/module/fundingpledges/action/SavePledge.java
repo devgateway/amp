@@ -25,16 +25,20 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
+import org.digijava.module.fundingpledges.form.DocumentShim;
 import org.digijava.module.fundingpledges.form.FundingPledgesDetailsShim;
 import org.digijava.module.fundingpledges.form.IdNamePercentage;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.fundingpledges.form.PledgeFormContact;
+import org.digijava.module.fundingpledges.form.TransientDocumentShim;
 import org.hibernate.Session;
 
 public class SavePledge extends Action {
@@ -53,20 +57,19 @@ public class SavePledge extends Action {
     				AddPledge.markPledgeEditorClosed(request.getSession());
     				return null;
     			}
-    			JSONArray arr = new JSONArray();
-    			String[] fields = new String[] {"errMsg"};
-    			for(ValidationError err:errors)
-    				arr.put(new JSONObject(err, fields));
-    			String errs = arr.toString();
-    			ARUtil.writeResponse(response, errs);
-    			return null;
     		}
-    		catch(Exception e)
-    		{
-    			ARUtil.writeResponse(response, "Error while trying to save: " + e.getLocalizedMessage());
-    			logger.error("error while trying to save pledge", e);
-    			return null;
+    		catch(Exception e){
+    			errors.add(new ValidationError("Error while trying to save: " + e.getLocalizedMessage()));
+    			logger.error("exception while trying to save pledge", e);
     		}
+    		// gone till here -> errors is not empty
+			JSONArray arr = new JSONArray();
+			String[] fields = new String[] {"errMsg"};
+			for(ValidationError err:errors)
+				arr.put(new JSONObject(err, fields));
+			String errs = arr.toString();
+			ARUtil.writeResponse(response, errs);
+			return null;
     }
     
     /**
@@ -123,6 +126,7 @@ public class SavePledge extends Action {
     	res.addAll(do_save_programs(session, pledge, plForm.getSelectedProgs()));
     	res.addAll(do_save_locations(session, pledge, plForm.getSelectedLocs()));
     	res.addAll(do_save_funding(session, pledge, plForm.getSelectedFunding()));
+    	res.addAll(do_save_documents(session, pledge, plForm.getSelectedDocsList(), plForm.getInitialDocuments()));
     	session.saveOrUpdate(pledge);
     		
     	return res;
@@ -250,5 +254,53 @@ public class SavePledge extends Action {
 		}
     	return errs;
     }
-
+    
+    protected List<ValidationError> do_save_documents(Session session, FundingPledges pledge, List<DocumentShim> docs, Set<String> preexistingIds){
+    	
+		Set<FundingPledgesDocument> pledgeDocs = pledge.getDocuments();
+		if (pledgeDocs == null){
+			pledgeDocs = new HashSet<>();
+			pledge.setDocuments(pledgeDocs);
+		}
+		pledgeDocs.clear();
+    	
+    	Set<String> stillExistingIds = new HashSet<String>();
+    	List<ValidationError> errs = new ArrayList<>();
+    	for(DocumentShim doc:docs){
+    		/**
+    		 * any document falls into one of the following 3 categories:
+    		 * 1. exists in both <strong>docs</strong> and <strong>preexistingIds</strong> (KEPT file); ACTION: nothing except creating a FPD entry
+    		 * 2. only exists in <strong>docs</strong> (ADDED file); ACTION: (a) check it is a TemporaryDocumentShim (b) serialize to JR  (c) create FPD entry
+    		 * 3. only exists in <strong>preexistingIds</strong>(DELETED file); ACTION: delete from repo
+    		 */
+    		FundingPledgesDocument fpd = null;
+    		String uuid;
+   			uuid = doc.getUuid();
+   			if (uuid == null || uuid.isEmpty()){
+   				// no UUID -> temp file -> just added
+   				TransientDocumentShim justAddedFile = (TransientDocumentShim) doc;
+   				fpd = justAddedFile.serializeAndGetPledgeEntry(pledge);
+   			}
+   			else
+   			{
+   				// should be preexisting file
+   				if (!preexistingIds.contains(uuid)){ // sanity check
+   					throw new RuntimeException("Document with UUID " + uuid + " not existing in preexistingIds!");
+   				}
+   				stillExistingIds.add(uuid);
+   				fpd = doc.buildPledgeEntry(pledge);
+   			}
+   			session.save(fpd);
+   			pledgeDocs.add(fpd);
+    	}
+    	Set<String> deletedUuids = new HashSet<>(preexistingIds);
+    	deletedUuids.removeAll(stillExistingIds);
+     	if (!deletedUuids.isEmpty()){
+     		logger.warn("Pledge " + pledge.getId() + " (name = " + pledge.getEffectiveName() + ") has been left without some documents, deleting...");
+    		for(String uuidToDelete:deletedUuids){
+    			DocumentManagerUtil.deleteNode(null, uuidToDelete);
+    		}
+    	}
+    	return errs;
+    }
 }

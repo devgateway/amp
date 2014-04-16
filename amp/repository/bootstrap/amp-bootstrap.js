@@ -117,6 +117,37 @@ function init_custom_looks(divId)
 
 }
 
+function init_ajax_upload(divId){
+	$(function () {
+		$(divId + ' .fileupload').each(function(){
+			debugger;
+			var item = this;
+			var url = $(item).closest('.file-upload-container').attr('data-post-url');
+			$(item).fileupload({
+				'url': url,
+				dataType: 'json',
+				done: function (e, data) {
+//					$.each(data.result, function (index, file) {
+//						alert(index);
+//						alert(file.name);
+//					});
+					$.each(data.result, function (index, file) {
+						$('<p/>').text(file.name).appendTo(divId + ' .files-list');
+					});
+				},
+				progressall: function (e, data) {
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					$(divId + ' .progress .progress-bar').css(
+							'width',
+							progress + '%'
+					);
+				}
+			}).prop('disabled', !$.support.fileInput)
+	        	.parent().addClass($.support.fileInput ? undefined : 'disabled');
+		});
+		});
+}
+
 function init_amp_magic(divIdInput){
 	var divId = divIdInput;
 	$(document).ready(function(){
@@ -124,5 +155,6 @@ function init_amp_magic(divIdInput){
 			divId = '#' + divId;
 		init_custom_looks(divId);
 		init_validation(divId);
+		init_ajax_upload(divId);
 	});
 }

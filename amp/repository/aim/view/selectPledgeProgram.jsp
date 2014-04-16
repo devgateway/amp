@@ -20,6 +20,12 @@
 	} else if ("pledge_funding_refresh_data".equals(request.getParameter("extraAction")))
 	{
 		%><jsp:include page="/repository/aim/view/pledgeform/pledgeFunding.jsp"></jsp:include><%
+	} else if ("pledge_document_refresh_data".equals(request.getParameter("extraAction")))
+	{
+		%><jsp:include page="/repository/aim/view/pledgeform/pledgeDocuments.jsp"></jsp:include><%
+	} else if ("pledge_document_refresh_add".equals(request.getParameter("extraAction")))
+	{
+		%><jsp:include page="/repository/aim/view/pledgeform/pledgeDocumentsAddDocument.jsp"></jsp:include><% 				
     } else 
     	
     { // not ajax: render the full bootstrap iframe 

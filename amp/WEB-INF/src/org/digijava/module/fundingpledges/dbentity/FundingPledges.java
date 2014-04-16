@@ -58,6 +58,8 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 
 	private TreeSet<String> yearsList;
 	
+	private Set<FundingPledgesDocument> documents;
+	
 	@Override
 	public boolean equals(Object o) {
 		if (o == null) return false;
@@ -452,5 +454,13 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 	@java.lang.SuppressWarnings("all")
 	public void setYearsList(final TreeSet<String> yearsList) {
 		this.yearsList = yearsList;
+	}
+	
+	public Set<FundingPledgesDocument> getDocuments(){
+		return this.documents;
+	}
+	
+	public void setDocuments(Set<FundingPledgesDocument> documents){
+		this.documents = documents;
 	}
 }

@@ -58,7 +58,11 @@
 			<key column="pledge_id"/>
 			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesSector" />
 		</set>
-		
+		<set name="documents" lazy="true" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write"/>
+			<key column="pledge_id"/>
+			<one-to-many class="org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument" />
+		</set>		
 		<set name="fundingPledgesDetails" cascade="all-delete-orphan" table="AMP_FUNDING_PLEDGES_DETAILS">
 			<cache usage="read-write" />
 			<key column="pledge_id" />

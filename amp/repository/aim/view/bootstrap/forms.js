@@ -230,7 +230,7 @@ InteractiveFormArea.prototype.submitClicked = function(elem, noIds) {
 	if (!noIds)
 	{
 		this.hideAddArea();
-		selectedIds = this.getIdsOf(this.selects.last());		
+		selectedIds = this.selects.length > 0 ? this.getIdsOf(this.selects.last()) : '0'; // no select configured -> post dummt thing		
 		if (selectedIds == '')
 		{
 			// nothing selected -> get outta here

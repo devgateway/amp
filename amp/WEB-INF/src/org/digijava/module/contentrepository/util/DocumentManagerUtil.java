@@ -228,15 +228,15 @@ public class DocumentManagerUtil {
 	public static Session getReadSession(HttpServletRequest request) {
 		synchronized (repoLock)
 		{		
-			Session jcrSession		= annulateSessionIfNotAlive((Session) request.getAttribute(JCR_READ_SESSION));			
+			Session jcrSession		= annulateSessionIfNotAlive((Session) request.getAttribute(JCR_READ_SESSION));
 			
 			if (jcrSession == null)
-				jcrSession = getSession(request.getServletContext(), null);
+				jcrSession = getSession(request.getSession().getServletContext(), null);
 			
 			if (jcrSession == null)
 			{
 				logger.warn("trying to open a JCR read session for the second time...");
-				jcrSession = getSession(request.getServletContext(), null);
+				jcrSession = getSession(request.getSession().getServletContext(), null);
 			}
 			
 			if (jcrSession == null)
@@ -293,12 +293,12 @@ public class DocumentManagerUtil {
 				SimpleCredentials creden	= new SimpleCredentials(userName, userName.toCharArray());
 
 				if (jcrSession == null)
-					jcrSession = getSession(request.getServletContext(), creden);
+					jcrSession = getSession(request.getSession().getServletContext(), creden);
 				
 				if (jcrSession == null)
 				{
 					logger.warn("trying to open a JCR write session for the second time...");
-					jcrSession = getSession(request.getServletContext(), creden);
+					jcrSession = getSession(request.getSession().getServletContext(), creden);
 				}
 					
 				if (jcrSession == null)
@@ -546,28 +546,39 @@ public class DocumentManagerUtil {
 		else
 			return new Boolean(false);
 	}
-		
-	private static boolean deleteDocument (String uuid, HttpServletRequest request) {
-		if (uuid != null) {
-			Node node		= DocumentManagerUtil.getWriteNode(uuid, request);
-			String name = new NodeWrapper(node).tryGetName();
-			boolean successfully = false;
-			try {
-				Node parent		= node.getParent();
-				node.remove();
-				parent.save();
-				
-				SetAttributes.unpublish(uuid);
-				successfully = true;
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			finally{
-				logger.error(String.format("DELETED JackRabbit node with uuid = %s, name = %s, success: %b", uuid, name, successfully));
-			}
+	
+	/**
+	 * deleted a node from JR repo
+	 * @param session - the session OR null. If null, the current TLS request's session will be used
+	 * @param uuid
+	 * @return
+	 */
+	public static boolean deleteNode(Session session, String uuid){
+		if (uuid == null)
+			return false;
+		if (session == null)
+			session = getWriteSession(TLSUtils.getRequest());
+		boolean successfully = false;
+		String name = "";
+		try {
+			Node node = session.getNodeByUUID(uuid);
+			name = new NodeWrapper(node).tryGetName();
+			Node parent = node.getParent();
+			node.remove();
+			parent.save();			
+			successfully = true;
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally{
+			logger.error(String.format("DELETED JackRabbit node with uuid = %s, name = %s, success: %b", uuid, name, successfully));
 		}
 		return false;
+	}
+	
+	private static boolean deleteDocument(String uuid, HttpServletRequest request) {
+		return deleteNode(getWriteSession(request), uuid);
 	}
 	
 	public static Property getPropertyFromNode(Node n, String propertyName) {

@@ -212,7 +212,8 @@
 <feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 
 <feature:display name="Pledge Contact 2" module="Pledges"></feature:display> 
 <feature:display name="Pledge Funding" module="Pledges"></feature:display> 
-<feature:display name="Pledge Additional Information" module="Pledges"></feature:display> 
+<feature:display name="Pledge Additional Information" module="Pledges"></feature:display>
+<feature:display name="Pledge Attached Files" module="Pledges"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
 <feature:display name="Program" module="Program"></feature:display> 
 <feature:display name="Project Coordinator Contact Information" module="Contact Information"></feature:display> 

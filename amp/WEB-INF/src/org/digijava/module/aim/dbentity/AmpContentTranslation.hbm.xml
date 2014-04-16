@@ -9,10 +9,10 @@
 			</generator>
 		</id>
 
-		<property name="objectClass" column="object_class" type="java.lang.String" not-null="true" index="AMP_CONTENT_TRANSLATION_object_class_idx,AMP_CONTENT_TRANSLATION_object_class_id_idx" unique-key="entityTranslationPerIdLocale" />
-		<property name="objectId" column="object_id" type="java.lang.Long" not-null="true" index="AMP_CONTENT_TRANSLATION_object_id_idx,AMP_CONTENT_TRANSLATION_object_class_id_idx" unique-key="entityTranslationPerIdLocale" />
-		<property name="fieldName" column="field_name" type="java.lang.String" not-null="true" index="AMP_CONTENT_TRANSLATION_field_name_idx" unique-key="entityTranslationPerIdLocale" />
-        <property name="locale" column="locale" type="java.lang.String" not-null="true" index="AMP_CONTENT_TRANSLATION_locale_idx" unique-key="entityTranslationPerIdLocale" />
+		<property name="objectClass" column="object_class" type="java.lang.String" not-null="true" index="AMP_CONTENT_TRANSLATION_object_class_idx,AMP_CONTENT_TRANSLATION_object_class_id_idx" <!-- unique-key="entityTranslationPerIdLocale"  --> />
+		<property name="objectId" column="object_id" type="java.lang.Long" not-null="true" index="AMP_CONTENT_TRANSLATION_object_id_idx,AMP_CONTENT_TRANSLATION_object_class_id_idx" <!-- unique-key="entityTranslationPerIdLocale"  --> />
+		<property name="fieldName" column="field_name" type="java.lang.String" not-null="true" index="AMP_CONTENT_TRANSLATION_field_name_idx" <!-- unique-key="entityTranslationPerIdLocale"  --> />
+        <property name="locale" column="locale" type="java.lang.String" not-null="true" index="AMP_CONTENT_TRANSLATION_locale_idx" <!-- unique-key="entityTranslationPerIdLocale"  --> />
 		<property name="translation" column="translation" type="java.lang.String" not-null="true" index="AMP_CONTENT_TRANSLATION_translation_idx"/>
 	</class>
 </hibernate-mapping>

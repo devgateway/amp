@@ -6,6 +6,7 @@
 		checkboxtext: label to attach to checkbox [OPTIONAL, DO NOT TRANSLATE IT]
 	call with <jsp:param name="" value="1"/"2" />
 --%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>

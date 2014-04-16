@@ -9,11 +9,13 @@ import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
+import org.digijava.module.fundingpledges.form.DocumentShim;
 import org.digijava.module.fundingpledges.form.PledgeForm;
 
 import junit.framework.Test;
@@ -40,8 +42,26 @@ public class PledgesFormTests extends AmpTestCase
 		suite.addTest(new PledgesFormTests("testPledgeFundingCalculator"));
 		suite.addTest(new PledgesFormTests("testPledgeFormUtils"));
 		suite.addTest(new PledgesFormTests("testPledgeFormFundingUtils"));
+		suite.addTest(new PledgesFormTests("testPledgeFormDocuments"));
 		//suite.addTest(new MultilingualTests28("testSerializationAllLanguagesFilled"));
 		return suite;
+	}
+	
+	protected void assertShimEquals(DocumentShim doc, String fileName, String title, String uuid, double size){
+		assertEquals(title, doc.getTitle());
+		assertEquals(fileName, doc.getFileName());
+		assertEquals(uuid, doc.getUuid());
+		assertEquals(size, doc.getFileSizeInBytes());
+	}
+	
+	public void testPledgeFormDocuments(){
+		
+		PledgeForm pledgeForm = new PledgeForm();
+		pledgeForm.importPledgeData(PledgesEntityHelper.getPledgesById(3L));
+		assertEquals(3, pledgeForm.getSelectedDocsList().size());
+//		assertShimEquals(pledgeForm.getSelectedDocsList().get(0), "aaaa.png", "документ проекта", "4e478d3e-41a4-4b35-b4de-52c07ecd9d5a", 480000);
+//		assertShimEquals(pledgeForm.getSelectedDocsList().get(1), "AMP-17265-amp27.patch", "yahoo", "96e0a2be-53b0-4f16-bb02-a8bc7dc46778", 480000);
+//		assertShimEquals(pledgeForm.getSelectedDocsList().get(2), "SSC Implementation Notes.doc", "some ssc implementation notes", "03b4ed7a-b4d7-4204-8a0b-613131edf9f0", 480000);
 	}
 	
 	public void testPledgeFormFundingUtils(){
@@ -166,9 +186,21 @@ public class PledgesFormTests extends AmpTestCase
 	@Override
     protected void setUp() throws Exception
     {
+		org.apache.struts.mock.MockServletContext mockServletContext = new org.apache.struts.mock.MockServletContext();
+		org.apache.struts.mock.MockHttpSession mockSession = new org.apache.struts.mock.MockHttpSession(mockServletContext);
+		org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
+		
+		mockRequest.setHttpSession(mockSession);
+		TLSUtils.populate(mockRequest);
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
+
 		FeaturesUtil.overriddenFields.put("Use Free Text", true);
 		super.setUp();
         // do nothing now                
     }
+	
+	@Override
+	protected void tearDown() throws Exception{
+		DocumentManagerUtil.closeJCRSessions(TLSUtils.getRequest());
+	}
 }

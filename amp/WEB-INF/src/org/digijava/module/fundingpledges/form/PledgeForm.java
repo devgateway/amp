@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
@@ -33,9 +34,11 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.IdWithValueShim;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.fundingpledges.action.DisableableKeyValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesSector;
@@ -157,8 +160,20 @@ public class PledgeForm extends ActionForm implements Serializable {
 	 */
 	private List<FundingPledgesDetailsShim> selectedFunding = new ArrayList<>();
 	
+	private List<DocumentShim> selectedDocs = new ArrayList<>();
+	
+	/**
+	 * UUIDs of documents which were in the database
+	 */
+	private Set<String> initialDocuments = new HashSet<String>();
+	
 	// fields for viewing
 	private String effectiveName;
+	
+	/**
+	 * for the AJAX upload - Struts 1.3.10 has a bug where one cannot download files without having specified them in the form https://issues.apache.org/jira/browse/STR-3173
+	 */
+	private FormFile files; 
 	
 	public void reset() {
 		this.setTitleFreeText(null);
@@ -175,6 +190,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 		this.selectedFunding.clear();
 		this.selectedSectors.clear();
 		this.selectedLocs.clear();
+		this.selectedDocs.clear();
 		this.selectedProgs.clear();
 		this.cleanLocationData(true);
 		this.selectedRootProgram = null;
@@ -182,6 +198,8 @@ public class PledgeForm extends ActionForm implements Serializable {
 		this.implemLocationLevel = null;
 		this.levelId = null;
 		this.setEffectiveName(null);
+		this.files = null;
+		this.initialDocuments.clear();
 	}
 	
 	/**
@@ -237,6 +255,14 @@ public class PledgeForm extends ActionForm implements Serializable {
 		for (FundingPledgesProgram prog : AlgoUtils.sortByIds(fp.getProgramlist())) selectedProgs.add(PLEDGE_PROGRAM_EXTRACTOR.apply(prog.getProgram()).setPercentageChained(prog.getProgrampercentage()));
 		this.setSelectedFunding(new ArrayList<FundingPledgesDetailsShim>());
 		for (FundingPledgesDetails fpd : AlgoUtils.sortByIds(fp.getFundingPledgesDetails())) this.selectedFunding.add(new FundingPledgesDetailsShim(fpd));
+		
+		this.setSelectedDocs(new ArrayList<DocumentShim>());
+		for(FundingPledgesDocument fpdoc:AlgoUtils.sortByIds(fp.getDocuments())) this.selectedDocs.add(DocumentShim.buildFrom(fpdoc));
+		for(DocumentShim docShim:this.selectedDocs){
+			if (docShim.getUuid() != null && !docShim.getUuid().isEmpty()) // collect uuids
+				this.initialDocuments.add(docShim.getUuid());
+		}		
+		this.files = null;
 	}
 	
 	public void cleanLocationData(boolean cleanLevelData) {
@@ -624,7 +650,21 @@ public class PledgeForm extends ActionForm implements Serializable {
 		return this.pledgeId == null;
 	}
 	
+	public DocumentShim getSelectedDocs(int index) {
+		return selectedDocs.get(index);
+	}
 	
+	public void setSelectedDocs(int index, DocumentShim entry) {
+		this.selectedDocs.set(index, entry);
+	}
+	
+	public List<DocumentShim> getSelectedDocsList() {
+		return selectedDocs;
+	}
+	
+	public void setSelectedDocsList(List<DocumentShim> selectedDocs) {
+		this.selectedDocs = selectedDocs;
+	}
 	
 	// TRASH GETTERS AND SETTERS BELOW
 	@java.lang.SuppressWarnings("all")
@@ -824,6 +864,10 @@ public class PledgeForm extends ActionForm implements Serializable {
 		this.selectedLocs = selectedLocs;
 	}
 	
+	public void setSelectedDocs(List<DocumentShim> selectedDocs){
+		this.selectedDocs = selectedDocs;
+	}
+	
 	@java.lang.SuppressWarnings("all")
 	public void setSelectedRootProgram(final Long selectedRootProgram) {
 		this.selectedRootProgram = selectedRootProgram;
@@ -861,6 +905,26 @@ public class PledgeForm extends ActionForm implements Serializable {
 	
 	public String getEffectiveName(){
 		return this.effectiveName;
+	}
+	
+	public FormFile getFiles() {
+		return files;
+	}
+
+	public void setFiles(FormFile files) {
+		this.files = files;
+	}
+
+	public Set<String> getInitialDocuments(){
+		return this.initialDocuments;
+	}
+	
+	/**
+	 * called when adding a JUST-UPLOADED document
+	 * @param docShim
+	 */
+	public void addNewDocument(DocumentShim docShim){
+		this.selectedDocs.add(docShim);
 	}
 	
 	public String getSelectedOrgGrpName(){

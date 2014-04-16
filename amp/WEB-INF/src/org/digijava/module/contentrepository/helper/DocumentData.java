@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocToOrgDAO;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class DocumentData implements Comparable<DocumentData>, Serializable{
 	public static final Comparator<DocumentData> COMPARATOR_BY_NAME = new Comparator<DocumentData>(){
@@ -32,6 +34,9 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	String index = null;
 	String organisations = null;
 	
+	/**
+	 * megabytes
+	 */
 	double fileSize			= 0;
 	Calendar date = null;
 	String iconPath			= null;
@@ -243,6 +248,10 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 		this.cmDocType = cmDocType;
 	}*/
 	
+	/**
+	 * megabytes
+	 * @return
+	 */
 	public double getFileSize() {
 		return fileSize;
 	}
@@ -492,7 +501,9 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	public static DocumentData buildFromNodeWrapper(NodeWrapper nodeWrapper, String fileName, String uuid, String nodeVersionUUID)
 	{
 		DocumentData documentData		= new DocumentData();
-		documentData.setName(fileName );
+		documentData.setName(nodeWrapper.getName());
+		if (fileName != null)
+			documentData.setName(fileName );
 		if (uuid == null)
 			documentData.setUuid(nodeWrapper.getUuid());
 		else
@@ -527,7 +538,17 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	}
 	
 	/**
-	 * debug-only code!!! Do not use it in production unless you graduated somewhere in Cordoba!
+	 * Uses the JR session from HttpServletRequest. throws exception in case of any kind of error
+	 * @param uuid
+	 * @return
+	 */
+	public static DocumentData buildFromUuid(String uuid){
+		NodeWrapper nodeWrapper = DocumentManagerUtil.getReadNodeWrapper(uuid, TLSUtils.getRequest());
+		return buildFromNodeWrapper(nodeWrapper, null, null, null);
+	}
+	
+	/**
+	 * debug-only code!!! DO NOT USE IN PRODUCTION CODE
 	 * @param node
 	 * @param forcedUuid
 	 * @return
@@ -542,7 +563,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	}
 	
 	/**
-	 * debug only code, argentina-style workaround, DO NOT USE IN PRODUCTION CODE
+	 * debug only code, DO NOT USE IN PRODUCTION CODE
 	 * @param node
 	 * @param parent
 	 * @return

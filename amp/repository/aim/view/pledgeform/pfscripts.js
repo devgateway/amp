@@ -70,7 +70,14 @@ $(document).ready(function() // enable javascript-backed ajax forms
 			[] // no select's - that area is empty
 		);
 	}
-	
+
+	if ($('#pledge_form_documents').size() > 0)
+	{
+		window.documentsController = new InteractiveFormArea('#pledge_form_documents', '/selectPledgeProgram.do', 'selected_document', 'pledge_document',
+			[] // no select's - that area is empty
+		);
+	}
+
 });
 
 function pledge_form_do_validation(bigDivSelector){

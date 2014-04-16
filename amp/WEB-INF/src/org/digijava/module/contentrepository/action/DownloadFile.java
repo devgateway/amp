@@ -35,7 +35,9 @@ public class DownloadFile extends Action {
 		String nodeUUID		= request.getParameter("uuid"); 
 		
 		if (nodeUUID != null) {
-			Node node				= DocumentManagerUtil.getReadNode(nodeUUID, request);			
+			Node node				= DocumentManagerUtil.getReadNode(nodeUUID, request);
+			if (node == null)
+				throw new RuntimeException("node with uuid = " + nodeUUID + " not found!");
 			Property contentType	= node.getProperty(CrConstants.PROPERTY_CONTENT_TYPE);
 			Property name			= node.getProperty(CrConstants.PROPERTY_NAME);
 			Property data			= node.getProperty(CrConstants.PROPERTY_DATA);

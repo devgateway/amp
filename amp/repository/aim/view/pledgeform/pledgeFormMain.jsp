@@ -29,6 +29,7 @@
 <!-- <link href="/repository/bootstrap/lightbox/ekko-lightbox.min.css" media="all" rel="stylesheet" type="text/css" />  -->        
     <link href="/repository/bootstrap/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
     <link href="/repository/bootstrap/datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="/repository/bootstrap/upload/jquery.fileupload.css" rel="stylesheet" type="text/css" />
     <link href="/repository/bootstrap/amp-bootstrap.css" rel="stylesheet" type="text/css" /> <!-- this should always be included last -->
     
     <!-- THESE 4 FILES SHOULD ALWAYS BE THE FIRST INCLUDED JS, IN THIS ORDER -->
@@ -125,6 +126,10 @@
     <script src="/repository/bootstrap/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="/repository/bootstrap/jquery.pnotify.min.js" type="text/javascript"></script>
     <script src="/repository/bootstrap/bootstrap-dialog.min.js" type="text/javascript"></script>
+    <script src="/repository/bootstrap/jquery.ui.widget.js" type="text/javascript"></script>
+	<script src="/repository/bootstrap/upload/jquery.iframe-transport.js" type="text/javascript"></script>
+    <script src="/repository/bootstrap/upload/jquery.fileupload.js" type="text/javascript"></script>
+    
     <script src="/repository/bootstrap/datetimepicker/moment-with-langs.min.js" type="text/javascript"></script>   
     <script src="/repository/bootstrap/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
     <script src="/repository/bootstrap/bootstrap-utils.js" type="text/javascript"></script>

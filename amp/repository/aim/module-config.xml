@@ -167,6 +167,7 @@
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation</hibernate-class>
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram</hibernate-class>
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesSector</hibernate-class>
+		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesDocument</hibernate-class>		
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails</hibernate-class>
 		
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgLocation</hibernate-class>

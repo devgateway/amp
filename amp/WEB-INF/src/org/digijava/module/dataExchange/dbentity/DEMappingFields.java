@@ -41,6 +41,7 @@ public class DEMappingFields implements Serializable {
     private String iatiPath;
     private String iatiItems;
     private String iatiValues;
+    private String iatiValuesForDisplay;
     private String iatiLang;
     private Long ampId;  
     private String ampValues;
@@ -49,6 +50,13 @@ public class DEMappingFields implements Serializable {
     private int tmpId;
     private boolean dirty; //Modified and unsaved
 
+    public String getIatiValuesForDisplay() {
+        return iatiValuesForDisplay;
+    }
+
+    public void setIatiValuesForDisplay(String iatiValuesForDisplay) {
+        this.iatiValuesForDisplay = iatiValuesForDisplay;
+    }
 
     public Set<AmpDEUploadSession> getUploadSessionsLinked() {
         return uploadSessionsLinked;

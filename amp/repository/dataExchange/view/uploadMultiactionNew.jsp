@@ -80,9 +80,15 @@
 		color:black;
 	}
 	
-	div.wizardBtn {
+	div.wizardNav {
 		height:20px;
 		width:50px;
+		border: 1px solid #B8B7B7;
+		cursor:pointer;
+		vertical-align:middle;
+	};
+	
+	div.wizardBtn {
 		color:white;
 		background-color: #4b687a;
 		align:center;
@@ -99,8 +105,6 @@
 	}
 	
 	div.wizardBtnDisabled {
-		height:20px;
-		width:50px;
 		color:#d4d4d4;
 		background-color: #a6a8a9;
 	}
@@ -123,11 +127,7 @@
 -->
 </style>
 	
-<script language="javascript">
-	function submitForm() {
-		$("form[name='importFormNew']").submit();
-	}
-	
+	<script language="javascript">
 	var contentBusy = function (show) {
 		if (show) {
 			var containerSize = $("#mainTableContainer");
@@ -143,8 +143,8 @@
 			$("#busyCover").css("display", "none");
 		}
 	};
-</script>		
-
+</script>
+	
 <bean:define name="importFormNew" property="page" id="pageId"/>
 
 <c:set var="IATI_IMPORT_PAGE_UPLOAD"><%=ImportActionNew.IATI_IMPORT_PAGE_UPLOAD%></c:set>
@@ -192,82 +192,6 @@
 					</logic:notEqual>
 						
 					</td>
-					<%--
-					<td width="3" style="border-bottom: 1px solid #b8b7b7">
-						&nbsp;
-					</td>
-					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_FILTERS) %>">
-					<td class="defaultTab" style="border-bottom: none;">Country filter
-					</logic:equal>
-					<logic:notEqual name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_FILTERS) %>">
-						<c:choose>
-							<c:when test="${pageId == IATI_IMPORT_PAGE_UPLOAD}">
-									<td class="inactiveTab" style="border-bottom: none;"><a class="tabLinks" href="javascript:submitForm()">Country filter</a>
-							</c:when>
-							<c:when test="${pageId == IATI_IMPORT_PAGE_SESSIONS}">
-								<td class="disabledTab" style="border-bottom: none;">Country filter
-							</c:when>
-							<c:when test="${(pageId == IATI_IMPORT_PAGE_MAPPING || pageId == IATI_IMPORT_PAGE_LOGS) && not empty curSessId}">
-								<td class="disabledTab" style="border-bottom: none;">Country filter
-							</c:when>
-							<c:otherwise>
-								<td class="inactiveTab" style="border-bottom: none;"><a class="tabLinks" href="/dataExchange/importActionNew.do?action=showFilters">Country filter</a>
-							</c:otherwise>
-						</c:choose>
-					</logic:notEqual>
-						
-					</td>
-					<td width="3" style="border-bottom: 1px solid #b8b7b7">
-						&nbsp;
-					</td>
-					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">
-					<td class="defaultTab" style="border-bottom: none;">Mapping
-					</logic:equal>
-					<logic:notEqual name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">
-					<c:choose>
-							<c:when test="${pageId == IATI_IMPORT_PAGE_UPLOAD}">
-								<td class="disabledTab" style="border-bottom: none;">Mapping	
-							</c:when>
-							<c:when test="${pageId == IATI_IMPORT_PAGE_SESSIONS}">
-								<td class="disabledTab" style="border-bottom: none;">Mapping
-							</c:when>
-							<c:when test="${pageId == IATI_IMPORT_PAGE_FILTERS}">
-								<td class="inactiveTab" style="border-bottom: none;"><a class="tabLinks" href="javascript:submitForm();">Mapping</a>
-							</c:when>
-							<c:otherwise>
-								<td class="inactiveTab" style="border-bottom: none;"><a class="tabLinks" href="/dataExchange/importActionNew.do?action=loadUploadSession&objId=${curSessId}">Mapping</a>
-							</c:otherwise>
-						</c:choose>
-					</logic:notEqual>
-						
-					</td>
-					<td width="3" style="border-bottom: 1px solid #b8b7b7">
-						&nbsp;
-					</td>
-					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_LOGS) %>">
-					<td class="defaultTab" style="border-bottom: none;">Logs
-					</logic:equal>
-					<logic:notEqual name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_LOGS) %>">
-					<c:choose>
-							<c:when test="${pageId == IATI_IMPORT_PAGE_UPLOAD}">
-								<td class="disabledTab" style="border-bottom: none;">Logs	
-							</c:when>
-							<c:when test="${pageId == IATI_IMPORT_PAGE_SESSIONS}">
-								<td class="disabledTab" style="border-bottom: none;">Logs	
-							</c:when>
-							<c:when test="${pageId == IATI_IMPORT_PAGE_FILTERS}">
-								<td class="disabledTab" style="border-bottom: none;">Logs	
-							</c:when>
-							<c:when test="${pageId == IATI_IMPORT_PAGE_MAPPING}">
-								<td class="inactiveTab" style="border-bottom: none;">
-									<a class="tabLinks" href="javascript:submitForm()">Logs</a>
-							</c:when>
-							<c:otherwise>
-								<td class="inactiveTab" style="border-bottom: none;">				
-							</c:otherwise>
-						</c:choose>
-					</logic:notEqual>
-					--%>	
 					</td>
 					<td width="548" style="border-bottom: 1px solid #b8b7b7">
 						&nbsp;
@@ -318,23 +242,26 @@
 							
 							<td width="500" align="right" valign="middle">
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_UPLOAD) %>">
-									<td width="50" nowrap><div class="wizardBtnDisabled">&lt;back</td>
+									<td width="50" nowrap><div class="wizardNav wizardBtnDisabled">&lt;back</td>
 									<td width="50" nowrap>
-										<div class="wizardBtn">
-											<a class="wizardLink" href="javascript:submitForm()">next</a>&nbsp;&raquo;
+										<div id="next" class="wizardNav wizardBtnDisabled">
+											<input type="hidden" value="submit">
+											next&nbsp;&raquo;
 										</div>
 									</td>
 								</logic:equal>
 
 								<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_FILTERS) %>">
 									<td width="50" nowrap>
-										<div class="wizardBtn">
-											&laquo;&nbsp;<a class="wizardLink" href="javascript:navigateTo('/dataExchange/importActionNew.do?action=showUploadScreen')">back</a>
+										<div class="wizardNav wizardBtn">
+											<input type="hidden" value="/dataExchange/importActionNew.do?action=showUploadScreen">
+											&laquo;&nbsp;back
 										</div>
 									</td>
 									<td width="50" nowrap>
-										<div class="wizardBtn">
-											<a class="wizardLink" href="javascript:submitForm();">next</a>&nbsp;&raquo;
+										<div id="next" class="wizardNav wizardBtn">
+											<input type="hidden" value="submit">
+											next&nbsp;&raquo;
 										</div>
 									</td>
 								</logic:equal>
@@ -342,38 +269,37 @@
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">
 								<c:if test="${empty curSessId}">
 									<td width="50" nowrap>
-										<div class="wizardBtn">
-											&laquo;&nbsp;<a class="wizardLink" href="/dataExchange/importActionNew.do?action=showFilters">
-												back
-												</a>
+										<div class="wizardNav wizardBtn">
+											<input type="hidden" value="/dataExchange/importActionNew.do?action=showFilters">
+											&laquo;&nbsp;back
 										</div>
 									</td>
 								</c:if>
 								<c:if test="${not empty curSessId}">
 									<td width="50" nowrap>
-										<div class="wizardBtnDisabled">
+										<div class="wizardNav wizardBtnDisabled">
 											&laquo;&nbsp;back
 										</div>
 									</td>
 								</c:if>
 								<td width="50" nowrap>
-									<div class="wizardBtn">
-										<a class="wizardLink" href="javascript:submitForm();">
-											next
-										</a>&nbsp;&raquo;
+									<div class="wizardNav wizardBtn">
+										<input type="hidden" value="submit">
+											next&nbsp;&raquo;
 									</div>
 								</td>
 							</logic:equal>
 							
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_LOGS) %>">
 								<td width="50" nowrap>
-									<div class="wizardBtn">
-										&laquo;&nbsp;<a class="wizardLink" href="/dataExchange/importActionNew.do?action=loadUploadSession&objId=${curSessId}">back</a>
+									<div class="wizardNav wizardBtn">
+										<input type="hidden" value="/dataExchange/importActionNew.do?action=loadUploadSession&objId=${curSessId}">
+										&laquo;&nbsp;back
 									</div>
 								</td>
 								
 								<td width="50" nowrap>
-									<div class="wizardBtnDisabled">
+									<div class="wizardNav wizardBtnDisabled">
 										next&nbsp;&raquo;
 									</div>
 								</td>
@@ -423,7 +349,27 @@
 						</digi:form>
 						
 						
-		
+					<script language="javascript">
+						$('input[type=file]').change(function(e){
+							checkSelFile();
+						});
+						
+						function checkSelFile() {
+							var originatorObj = $('input[type=file]');
+							var nextBtn = $("#next");
+							if (originatorObj.val() == null || originatorObj.val().trim().length == 0) {
+								if (nextBtn.hasClass("wizardBtn")) {
+									nextBtn.removeClass("wizardBtn").addClass("wizardBtnDisabled");
+								}
+							} else {
+								
+								nextBtn.removeClass("wizardBtnDisabled").addClass("wizardBtn");
+							}
+						}
+						
+						checkSelFile();
+						
+					</script>
 					</logic:equal>
 					
 					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_LOGS) %>">
@@ -555,6 +501,25 @@
 										</logic:notEmpty>
 									</table>
 						</digi:form>
+						
+						<script language="javascript">
+						$("input[type=checkbox][name='selCountries']").change(function(e){
+							checkSelCountry();
+						});
+						
+						function checkSelCountry() {
+							var checkedCountries = $("input[type=checkbox][name='selCountries']:checked");
+							var nextBtn = $("#next");
+							if (checkedCountries.length > 0) {
+								nextBtn.removeClass("wizardBtnDisabled").addClass("wizardBtn");
+							} else {
+								nextBtn.removeClass("wizardBtn").addClass("wizardBtnDisabled");
+							}
+						}
+						
+						checkSelCountry();
+						
+					</script>
 					</logic:equal>
 					
 					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">
@@ -584,7 +549,7 @@
 					
 					table.optionsContainerTable {
 						width:498px;
-						height:190px;
+						height:180px;
 						position:absolute;
 					}
 					
@@ -597,7 +562,11 @@
 					}
 					
 					td.infoWnd {
-						border: 1px solid black;	
+						border: 1px solid black;
+						background-color:#B8B7B7;
+						color:black;
+						font-size: 11px !important;
+						font-weight:normal;
 					}
 					
 					td.optionItem {
@@ -632,12 +601,12 @@
 						<div id="optionsDiv" class="optionsContainer">
 						<table class="optionsContainerTable">
 							<tr>
-								<td>
+								<td align="left">
 									<div id="content" class="flowContainer">
 									</div>
 								</td>
 							</tr><tr>
-								<td id="info" height="12" class="infoWnd">Total
+								<td align="left" id="info" height="12" class="infoWnd">Total
 								</td>
 							</tr>
 						</table>
@@ -938,5 +907,22 @@
 		contentBusy(true);
 		window.location.href=url;
 	}
+
+
+	function submitForm() {
+		$("form[name='importFormNew']").submit();
+	}
 	
+	$("div.wizardNav").click (function (e) {
+		var originatorObj = $(e.target);
+		var navHolder = originatorObj.find("input");
+		if (navHolder.val() != null && originatorObj.hasClass("wizardBtn")) {
+			if (navHolder.val()=="submit") {
+				submitForm();
+			} else {
+				navigateTo(navHolder.val());
+			}
+		}
+		
+	});	
 </script>

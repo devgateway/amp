@@ -337,6 +337,7 @@ public class ImportActionNew extends DispatchAction {
 
 
         AmpDEUploadSession dbSess = DbUtil.getAmpDEUploadSession(sess.getId(), true);
+        //AmpDEUploadSession dbSess = myform.getUpSess();
 
         List<DELogPerItem> forUpdate = new ArrayList<DELogPerItem>();
         List<DELogPerItem> forCreate = new ArrayList<DELogPerItem>();
@@ -480,7 +481,11 @@ public class ImportActionNew extends DispatchAction {
                 if (!contains) it.remove();
             }
             DEImportValidationEventHandler toXmllog = new DEImportValidationEventHandler();
-            xmlSrc = toXml(parsed, toXmllog);
+            try {
+                xmlSrc = toXml(parsed, toXmllog);
+            } catch (Exception ex) {
+                int gg = 1;
+            }
             sess.setFileSrc(xmlSrc);
             //upSess.setFileSrc(modifiedXML);
         } else {
@@ -571,7 +576,9 @@ public class ImportActionNew extends DispatchAction {
                     codeName = codeType.getNameForCode(processedIatiValue);
                 }
                 if (codeName != null) {
-                    fld.setIatiValues(codeName);
+                    fld.setIatiValuesForDisplay(codeName);
+                } else {
+                    fld.setIatiValuesForDisplay(fld.getIatiValues());
                 }
             }
 
@@ -638,7 +645,7 @@ public class ImportActionNew extends DispatchAction {
             }*/
             JSONObject newObj = new JSONObject();
             newObj.accumulate("iatiItems", fld.getIatiItems());
-            newObj.accumulate("iatiValues", fld.getIatiValues());
+            newObj.accumulate("iatiValues", fld.getIatiValuesForDisplay());
             newObj.accumulate("tmpId", fld.getTmpId());
             newObj.accumulate("ampId", fld.getAmpId());
             newObj.accumulate("ampValues", fld.getAmpValues());
@@ -827,6 +834,14 @@ public class ImportActionNew extends DispatchAction {
 
         if (!forDeleteIds.isEmpty()) DbUtil.deleteMappings(forDeleteIds);
 
+        /*
+        for (DEMappingFields mf : forCreate) {
+            if (mf.getUploadSessionsLinked() == null) {
+                Set<AmpDEUploadSession> upSessSet = new HashSet<AmpDEUploadSession>();
+                upSessSet.add(upSess);
+                mf.setUploadSessionsLinked(upSessSet);
+            }
+        } */
         upSess.getMappedFields().addAll(forCreate);
         DbUtil.saveObject(upSess);
 

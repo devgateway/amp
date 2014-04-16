@@ -160,7 +160,8 @@ public class DbUtil {
         List<IatiCodeType> retVal = null;
         try {
             StringBuilder queryStr = new StringBuilder("from ").
-                    append(IatiCodeType.class.getName());
+                    append(IatiCodeType.class.getName()).
+                    append(" ct order by ct.name");
             Session sess = PersistenceManager.getRequestDBSession();
             retVal = sess.createQuery(queryStr.toString()).list();
         } catch (Exception e) {

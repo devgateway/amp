@@ -233,7 +233,7 @@ body {
 							<div class="tab selected" id="rtab">
 								<div class="tab_cont">
 									<span class="step_num">1</span>
-									<a href="#type_step_div" ><c:out value="${detailsStepName}"/></a>
+									<a href="#type_step_div" ><c:out escapeXml="false" value="${detailsStepName}"/></a>
 								</div>
 							</div>
 							<div class="tab" id="rtab">

@@ -2276,9 +2276,11 @@ public class DEImportBuilder {
 
                         if (retVal != null) {
                             retVal.put(iAct, iWorker.getAccumulate());
-                            for (AmpMappedField ampMF : activityLogs) {
-                                if (ampMF.getItem() != null && ampMF.getItem().getId() != null) {    //Add serialized ones
-                                    retVal.get(iAct).add(ampMF.getItem());
+                            if (activityLogs != null) {
+                                for (AmpMappedField ampMF : activityLogs) {
+                                    if (ampMF.getItem() != null && ampMF.getItem().getId() != null) {    //Add serialized ones
+                                        retVal.get(iAct).add(ampMF.getItem());
+                                    }
                                 }
                             }
                         }

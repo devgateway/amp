@@ -460,33 +460,39 @@ public class ImportActionNew extends DispatchAction {
         upSess.setSelCountries(selCountries);
         AmpDEUploadSession sess = myform.getUpSess();
 
+
         //Modify XML on initial serialization (will not be able to change country filters anymore)
         String xmlSrc = null;
         if (upSess.getId() == null) {
-            DEImportValidationEventHandler fromXmllog = new DEImportValidationEventHandler();
-            InputStream is = myform.getFile().getInputStream();
-            IatiActivities parsed = fromXml(is, fromXmllog);
-            Set<String> countryISOs = selCountries;
-            for (Iterator it = parsed.getIatiActivityOrAny().iterator(); it.hasNext();) {
-                IatiActivity iatiAct = (IatiActivity) it.next();
-                Set<String> countryCode = getActivityCountries(iatiAct);
-                boolean contains = false;
-                for (String iso : countryCode) {
-                    if (countryISOs.contains(iso)) {
-                        contains = true;
-                        break;
+            if (myform.getCountryList().size() > 1) {
+                DEImportValidationEventHandler fromXmllog = new DEImportValidationEventHandler();
+                InputStream is = myform.getFile().getInputStream();
+                IatiActivities parsed = fromXml(is, fromXmllog);
+                Set<String> countryISOs = selCountries;
+                for (Iterator it = parsed.getIatiActivityOrAny().iterator(); it.hasNext();) {
+                    IatiActivity iatiAct = (IatiActivity) it.next();
+                    Set<String> countryCode = getActivityCountries(iatiAct);
+                    boolean contains = false;
+                    for (String iso : countryCode) {
+                        if (countryISOs.contains(iso)) {
+                            contains = true;
+                            break;
+                        }
                     }
-                }
 
-                if (!contains) it.remove();
+                    if (!contains) it.remove();
+                }
+                DEImportValidationEventHandler toXmllog = new DEImportValidationEventHandler();
+                try {
+                    xmlSrc = toXml(parsed, toXmllog);
+                } catch (Exception ex) {
+                    int gg = 1;
+                }
+                sess.setFileSrc(xmlSrc);
+            } else {
+                xmlSrc = new String(myform.getFile().getFileData(), "UTF-8");
+                sess.setFileSrc(xmlSrc);
             }
-            DEImportValidationEventHandler toXmllog = new DEImportValidationEventHandler();
-            try {
-                xmlSrc = toXml(parsed, toXmllog);
-            } catch (Exception ex) {
-                int gg = 1;
-            }
-            sess.setFileSrc(xmlSrc);
             //upSess.setFileSrc(modifiedXML);
         } else {
             xmlSrc = upSess.getFileSrc();
@@ -580,6 +586,8 @@ public class ImportActionNew extends DispatchAction {
                 } else {
                     fld.setIatiValuesForDisplay(fld.getIatiValues());
                 }
+            } else {
+                fld.setIatiValuesForDisplay(fld.getIatiValues());
             }
 
             if (groupFldsByPath.get(fld.getAmpClass()) == null) {

@@ -359,7 +359,7 @@ saveReportEngine	= null;
 		
 		var timestamp = new Date().getTime();
 		
-		YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?timestamp=" + timestamp + "&reportContextId=" + reportContextId , {
+		YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?timestamp=" + timestamp + "&reportContextId=" + reportContextId + "&overwriteBackUrl=" + window.location.pathname , {
 			success: function(o) {
 				document.getElementById("myFilter").innerHTML	= o.responseText;
 				YAHOO.amptab.afterFiltersLoad();

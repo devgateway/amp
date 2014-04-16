@@ -29,6 +29,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.request.resource.AbstractResource.WriteCallback;
+import org.apache.wicket.request.resource.IResource.Attributes;
+import org.apache.wicket.util.string.Strings;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
@@ -162,7 +165,8 @@ public class SelectPledgeProgram extends Action {
 		// shamelessly copypasted from https://github.com/klaalo/jQuery-File-Upload-Java/blob/master/src/info/sudr/file/UploadServlet.java
 		
 		PrintWriter writer = response.getWriter();
-		response.setContentType("application/json");
+		response.setContentType(decideContentType(request)); //"application/json"
+		//boolean escape = response.getContentType().equals("text/")
 		JSONArray json = new JSONArray();
 		try {
 			FormFile file = pledgeForm.getFiles();
@@ -196,5 +200,26 @@ public class SelectPledgeProgram extends Action {
 		}
 		return null;
 	}
+	
+	/**
+	 * partial copy-paste off AbstractFileUploadResource.java
+	 * @param request
+	 */
+	protected String decideContentType(javax.servlet.http.HttpServletRequest request){
+		String accept = request.getHeader("Accept");
+		if (wantsHtml(accept)){
+			// Internet Explorer
+			return "text/plain";
+		}
+		else{
+			// a real browser
+			return "application/json";
+        }
+    }
+
+    protected boolean wantsHtml(String acceptHeader)
+    {    	
+        return acceptHeader != null && acceptHeader.contains("text/html");
+    }
 }
 

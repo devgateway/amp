@@ -1002,8 +1002,7 @@ body {background:none;}
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
-											<digi:trn key="aim:level">
-										    Implementation Level</digi:trn>
+											<digi:trn key="aim:level">Implementation Level</digi:trn>
 										  </b>
 										</td>
 <td bgcolor="#ffffff">
@@ -1029,7 +1028,7 @@ body {background:none;}
 									
                             </module:display>
 							<module:display name="/Activity Form/Program/National Plan Objective" parentModule="/Activity Form/Program">
-								<c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+								<c:if test="${not empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b><digi:trn>National Plan</digi:trn></b>
@@ -1065,28 +1064,31 @@ body {background:none;}
                                       </TD>
 									</TR>
                                       </field:display> 
-                                     <field:display name="Primary Program" feature="NPD Programs">
-                                     <c:if test="${aimEditActivityForm.programs.primaryPrograms != null} }">
+									</feature:display>
+                                   </module:display>
+                                   
+                                     <module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
+                                     <c:if test="${not empty aimEditActivityForm.programs.primaryPrograms }">
                                            <TR>
 												<td width="27%" align="right" valign="top" nowrap="nowrap">
-																												<b>
-										     <digi:trn key="aim:primary Programs"> Primary Programs</digi:trn>
+								<b>
+										     <digi:trn key="aim:primary Programs">Primary Programs</digi:trn>
 																												</b></TD>
 
 						  <TD bgcolor="#ffffff">
 								<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
-                                	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%s<br/>
                                 </c:forEach>
                    		</TD>
 						</TR>
 						</c:if>
-										</field:display>
-										<field:display name="Secondary Program" feature="NPD Programs">
-											<c:if test="${aimEditActivityForm.programs.secondaryPrograms != null} }">
+										</module:display>
+										<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
+											<c:if test="${not empty  aimEditActivityForm.programs.secondaryPrograms  }">
                                          	<TR>
 												<td width="27%" align="right" valign="top" nowrap="nowrap" >
 													<b>	
-											  <digi:trn key="aim:secondary Programs"> Secondary Programs</digi:trn>
+											  <digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn>
 													</b></TD>
 <TD bgcolor="#ffffff">
                                                       <c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
@@ -1095,36 +1097,23 @@ body {background:none;}
                                         		</TD>
 											</TR>
 											</c:if>
-										</field:display>
-									</feature:display>
-                                   </module:display>
-                            
-							<%-- <feature:display name="Program" module="Program">
-                            <field:display name="National Planning Objectives" feature="NPD Programs">                       
-                          	<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap">
-											<b>
-                                                  <digi:trn key="national Plan Objective">National Plan Objective</digi:trn>
-                        					</b>
-                        				</td>
-							<td bgcolor="#ffffff">
-							<table width="100%" cellSpacing="2" cellPadding="1">
-                                                        <c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
-                                                          <c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
-                                                          <c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
-                                                          <tr><td>
-                                                                                 ${nationalPlanObjectivePrograms.hierarchyNames}
-                                                          <td align="right">
-                                                                    ${nationalPlanObjectivePrograms.programPercentage}%
-                                                          </td></tr>                                                          
-                                                          </c:forEach>
+										</module:display>
+										<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
+											<c:if test="${not empty aimEditActivityForm.programs.tertiaryPrograms  }">
+                                         	<TR>
+												<td width="27%" align="right" valign="top" nowrap="nowrap" >
+													<b>	
+											  <digi:trn key="aim:secondary Programs">Tertiary Programs</digi:trn>
+													</b></TD>
+<TD bgcolor="#ffffff">
+                                                      <c:forEach var="program" items="${aimEditActivityForm.programs.tertiaryPrograms}">
+	                                                      <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                      </c:forEach>
+                                        		</TD>
+											</TR>
+											</c:if>
+										</module:display>										
 
-                                                        </c:if>
-                            </table>
-							</td>
-							</tr>
-						</field:display>
-                            </feature:display> --%>   
                                     <feature:display name="Sectors" module="Project ID and Planning">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" class="t-name">

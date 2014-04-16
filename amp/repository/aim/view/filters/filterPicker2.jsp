@@ -179,13 +179,24 @@
 			<digi:trn>Specify keywords to look for in the project data.</digi:trn>
 		</c:set>
 		<digi:trn>Keyword Search</digi:trn>
-		<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
-			src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
+
+        <c:set var="trnAnyKeyword">
+            <digi:trn>Any keyword</digi:trn>
+        </c:set>
+
+        <c:set var="trnAnyKeywords">
+            <digi:trn>All keywords</digi:trn>
+        </c:set>
+
+            <span>
+                <img onmouseout="UnTip()" onmouseover='Tip("${tooltip_translation}")' height="15px"
+                    src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
+            </span>
 			<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
 			&nbsp;
 			<html:select property="searchMode" styleClass="inp-text" style="width: 150px;">
-				<option value="0"><digi:trn>Any keyword</digi:trn></option>
-				<option value="1"><digi:trn>All keywords</digi:trn></option>
+				<option value="0"><c:out value="${trnAnyKeyword}" /></option>
+				<option value="1"><c:out value="${trnAnyKeywords}" /></option>
 			</html:select>
 			
 	</div>
@@ -212,10 +223,10 @@
 				<!-- notice that in case of queryEngine filters, this file (included by queryEngine.jsp) has its submit button action overrided by submitQuery() -->
 				<input class="buttonx_sm" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>');"
 					value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" />
-				
-				<html:button onclick="resetFilter('${reportCD.contextId}')" styleClass="buttonx_sm" property="reset" styleId="filterPickerResetButton">
-					<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
-				</html:button>
+
+                <input class="buttonx_sm" id="filterPickerResetButton" type="button" name="reset" onclick="resetFilter('${reportCD.contextId}')"
+                       value="<digi:trn key='rep:filer:ResetAndStartOver'>Reset and Start Over</digi:trn>" />
+
 </div>
 </div>
 

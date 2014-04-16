@@ -338,6 +338,10 @@ public class TrnTag
         // determine User permissions
         if (showLinks&& (invisibleLinks==null||!invisibleLinks)){
         	String relativeSourceURL = RequestUtils.getRelativeSourceURL(request).replaceFirst("/default/", "/");
+        	String backUrlParam = request.getParameter("overwriteBackUrl");
+        	if( backUrlParam!=null ) {
+        		relativeSourceURL = backUrlParam; 
+        	}
 			try{
         	backUrl = java.net.URLEncoder.encode(relativeSourceURL,"UTF-8");
         	} catch (Exception ex){

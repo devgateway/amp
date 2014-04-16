@@ -1454,6 +1454,17 @@ function collapseAll() {
 					</table>
 				</c:forEach>
 			</module:display>
+			<module:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
+				<hr/><br/><digi:trn>Program Description</digi:trn><br/>
+					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
+				  		<tr>
+					  	<td width=100%>
+					  	<b><c:set var="programDescription" value="${aimEditActivityForm.programs.programDescription}"/>
+							<digi:edit key="${programDescription}"/></b>
+					  	</td>
+					</tr>
+					</table>
+			</module:display>						
 		</div>
 	</fieldset>
 	</c:if>

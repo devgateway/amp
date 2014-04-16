@@ -1111,7 +1111,21 @@ body {background:none;}
                                         		</TD>
 											</TR>
 											</c:if>
-										</module:display>										
+										</module:display>
+										<module:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
+											<c:if test="${not empty aimEditActivityForm.programs.programDescription}">
+                                         	<TR>
+												<td width="27%" align="right" valign="top" nowrap="nowrap" >
+													<b>	
+											  <digi:trn key="aim:secondary Programs">Program Description</digi:trn>
+													</b></TD>
+												<TD bgcolor="#ffffff">
+					  							<c:set var="programDescription" value="${aimEditActivityForm.programs.programDescription}"/>
+														<digi:edit key="${programDescription}"/>
+                                        		</TD>
+											</TR>
+											</c:if>
+										</module:display>		
 
                                     <feature:display name="Sectors" module="Project ID and Planning">
 									<tr>

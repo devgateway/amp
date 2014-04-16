@@ -422,6 +422,20 @@ public class ExportActivityToWord extends Action {
 								programsTbl.addCell(cell);
 							}
 			            }
+			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description", ampContext,session)){		           
+				            if(programs.getTertiaryPrograms()!=null && programs.getTertiaryPrograms().size()>0){
+								cell = new RtfCell();
+								cell.setBorder(0);
+								cell.add(new Paragraph(TranslatorWorker.translateText("Program Description").toUpperCase(), BOLDFONT));						
+								programsTbl.addCell(cell);
+								programsTbl.addCell(new RtfCell());
+								columnVal= processEditTagValue(request,  programs.getProgramDescription());
+								cell = new RtfCell();
+								cell.setBorder(0);
+								cell.add(new Paragraph(columnVal,PLAINFONT));
+								programsTbl.addCell(cell);
+							}
+			            }			            
 		            } 
 		            
 		            doc.add(programsTbl);

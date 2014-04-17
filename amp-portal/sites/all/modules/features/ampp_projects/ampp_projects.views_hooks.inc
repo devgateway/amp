@@ -226,43 +226,57 @@ function _ampp_get_search_argument_location($name, $for_views) {
  * Returns either an array of sectors keyed by sector type or an aggregated array of all sectors.
  */
 function _ampp_get_search_argument_sectors($name, $for_views) {
+  $cached = &drupal_static(__FUNCTION__);
+  if ($for_views && !empty($cached['aggregated'])) {
+    return $cached['aggregated'];
+  }
+  else if (!$for_views && !empty($cached['keyed'])) {
+    return $cached['keyed'];
+  }
+
   $list = array();
 
   $arg_name = _amp_activity_get_search_argument_translation('sectors');
   $list['sectors'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
+
   $arg_name = _amp_activity_get_search_argument_translation('sectors_primary');
   $list['sectors_primary'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
+
   $arg_name = _amp_activity_get_search_argument_translation('sectors_secondary');
   $list['sectors_secondary'] = empty($_REQUEST[$arg_name]) ? '' : $_REQUEST[$arg_name];
 
-  if (empty($list['sectors']) && empty($list['sectors_primary']) && empty($list['sectors_secondary'])) {
-    return ($for_views) ? 'all' : $list;
+  foreach ($list as $key => $value) {
+    if (is_string($value) && $value == 'all') {
+      $list[$key] = '';
+    }
   }
 
-  if ($list['sectors'] === 'all' && $list['sectors_primary'] === 'all' && $list['sectors_secondary'] === 'all') {
-    return ($for_views) ? 'all' : array('sectors' => '', 'sectors_primary' => '', 'sectors_secondary' => '');
+  if (!$for_views) {
+    $cached['keyed'] = $list;
+    return $cached['keyed'];
+  }
+
+  if (empty($list['sectors']) && empty($list['sectors_primary']) && empty($list['sectors_secondary'])) {
+    return 'all';
   }
 
   // Get an aggregated list of sectors.
   $aggregated_list = array();
   foreach ($list as $key => $value) {
-    // Strip out arguments that don't have any influence.
-    if ($value === 'all') {
-      $list[$key] = '';
-      break;
+    if (empty($value)) {
+      continue;
     }
 
-    if (is_string($value)) {
+    if (!is_array($value)) {
       $value = explode(',', urldecode($value));
     }
-    $aggregated_list += $value;
+
+    $aggregated_list = array_merge($aggregated_list, $value);
   }
 
-  if ($for_views) {
-    return implode(',', $aggregated_list);
-  }
+  $cached['aggregated'] = implode(',', $aggregated_list);
 
-  return $list;
+  return $cached['aggregated'];
 }
 
 /**

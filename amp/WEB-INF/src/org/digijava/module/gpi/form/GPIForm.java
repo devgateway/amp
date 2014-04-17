@@ -39,6 +39,7 @@ public class GPIForm extends ActionForm {
 	private String[] selectedSectors;
 	private String[] selectedDonors;
 	private String[] selectedFinancingIstruments;
+	private String[] selectedDonorTypes;
 
 	/*
 	 * Available values in filters.
@@ -55,6 +56,7 @@ public class GPIForm extends ActionForm {
 	Collection<GroupingElement<HierarchyListableImplementation>> financingInstrumentsElements;
 	Collection<GroupingElement<HierarchyListableImplementation>> donorElements;
 	Collection<GroupingElement<HierarchyListableImplementation>> sectorStatusesElements;
+	Collection<GroupingElement<HierarchyListableImplementation>> donorTypeElements;
 
 	public Collection<GroupingElement<HierarchyListableImplementation>> getSectorStatusesElements() {
 		return sectorStatusesElements;
@@ -366,6 +368,23 @@ public class GPIForm extends ActionForm {
 
 	public void setGpiReport(AmpGPISurveyIndicator gpiReport) {
 		this.gpiReport = gpiReport;
+	}
+
+	public String[] getSelectedDonorTypes() {
+		return selectedDonorTypes;
+	}
+
+	public void setSelectedDonorTypes(String[] selectedDonorTypes) {
+		this.selectedDonorTypes = selectedDonorTypes;
+	}
+
+	public Collection<GroupingElement<HierarchyListableImplementation>> getDonorTypeElements() {
+		return donorTypeElements;
+	}
+
+	public void setDonorTypeElements(
+			Collection<GroupingElement<HierarchyListableImplementation>> donorTypeElements) {
+		this.donorTypeElements = donorTypeElements;
 	}
 
 }

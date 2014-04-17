@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.GPIDefaultFilters;
 import org.digijava.module.aim.dbentity.GPISetup;
 import org.digijava.module.aim.form.ManageGPIForm;
 import org.digijava.module.aim.form.ViewAhSurveisForm;
@@ -43,6 +44,11 @@ public class ManageGPI extends DispatchAction {
 		
 		// Populate the list of available indicators.
 		gpiForm.setIndicators(DbUtil.getAllGPISurveyIndicators(false));
+		
+		// Populate the list of available donor types.
+		gpiForm.setAvailableDonorTypes(DbUtil.getAllOrgTypesOfPortfolio());
+		// Find previously saved donor types.
+		gpiForm.setSelectedDonorTypes(GPISetupUtil.getSavedFilters(GPIDefaultFilters.GPI_DEFAULT_FILTER_ORG_GROUP));
 
 		return mapping.findForward("forward");
 	}
@@ -73,6 +79,16 @@ public class ManageGPI extends DispatchAction {
 			if (paramName.startsWith("indicator_")) {
 				String auxId = paramName.substring(10);
 				GPISetupUtil.saveDescription(new Long(auxId), request.getParameter(paramName));
+			}
+		}
+		
+		GPISetupUtil.cleanupSavedDonorTypes();
+		params = request.getParameterNames();
+		while (params.hasMoreElements()) {
+			String paramName = params.nextElement().toString();
+			if (paramName.startsWith("donorTypes_")) {
+				String auxId = paramName.substring(11);
+				GPISetupUtil.saveDonorType(new Long(auxId));
 			}
 		}
 		

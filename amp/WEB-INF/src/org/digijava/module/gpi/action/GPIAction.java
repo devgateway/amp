@@ -65,28 +65,44 @@ public class GPIAction extends Action {
 
 	private GPIForm formatFilters(GPIForm piForm) {
 		// TODO: Create an object that will have all filters.
-		if (piForm.getSelectedDonors() != null && piForm.getSelectedDonors().length > 0 && !piForm.getSelectedDonors()[0].isEmpty() && !piForm.getSelectedDonors()[0].equals("0")) {
+		if (piForm.getSelectedDonorTypes() != null && piForm.getSelectedDonorTypes().length > 0 && !piForm.getSelectedDonorTypes()[0].isEmpty() && !piForm.getSelectedDonorTypes()[0].equals("0") && !piForm.getSelectedDonorTypes()[0].contains("String")) {
+			if(piForm.getSelectedDonorTypes().length == 1) {
+				// Filters from popup.
+				piForm.setSelectedDonorTypes(piForm.getSelectedDonorTypes()[0].split(","));
+			} else {
+				// Saved filters.
+				piForm.setSelectedDonorTypes(piForm.getSelectedDonorTypes());
+			}
+		} else {
+			piForm.setSelectedDonorTypes(null);
+		}
+		
+		if (piForm.getSelectedDonors() != null && piForm.getSelectedDonors().length > 0 && !piForm.getSelectedDonors()[0].isEmpty() && !piForm.getSelectedDonors()[0].equals("0") && !piForm.getSelectedDonors()[0].contains("String")) {
 			piForm.setSelectedDonors(piForm.getSelectedDonors()[0].split(","));
 		} else {
 			piForm.setSelectedDonors(null);
 		}
-		if (piForm.getSelectedDonorGroups() != null && piForm.getSelectedDonorGroups().length > 0 && !piForm.getSelectedDonorGroups()[0].isEmpty() && !piForm.getSelectedDonorGroups()[0].equals("0")) {
+		
+		if (piForm.getSelectedDonorGroups() != null && piForm.getSelectedDonorGroups().length > 0 && !piForm.getSelectedDonorGroups()[0].isEmpty() && !piForm.getSelectedDonorGroups()[0].equals("0") && !piForm.getSelectedDonorGroups()[0].contains("String")) {
 			piForm.setSelectedDonorGroups(piForm.getSelectedDonorGroups()[0].split(","));
 		} else {
 			piForm.setSelectedDonorGroups(null);
 		}
-		if (piForm.getSelectedStatuses() != null && piForm.getSelectedStatuses().length > 0 && !piForm.getSelectedStatuses()[0].isEmpty() && !piForm.getSelectedStatuses()[0].equals("0")) {
+		
+		if (piForm.getSelectedStatuses() != null && piForm.getSelectedStatuses().length > 0 && !piForm.getSelectedStatuses()[0].isEmpty() && !piForm.getSelectedStatuses()[0].equals("0") && !piForm.getSelectedStatuses()[0].contains("String")) {
 			piForm.setSelectedStatuses(piForm.getSelectedStatuses()[0].split(","));
 		} else {
 			piForm.setSelectedStatuses(null);
 		}
-		if (piForm.getSelectedSectors() != null && piForm.getSelectedSectors().length > 0 && !piForm.getSelectedSectors()[0].isEmpty() && !piForm.getSelectedSectors()[0].equals("0")) {
+		
+		if (piForm.getSelectedSectors() != null && piForm.getSelectedSectors().length > 0 && !piForm.getSelectedSectors()[0].isEmpty() && !piForm.getSelectedSectors()[0].equals("0") && !piForm.getSelectedSectors()[0].contains("String")) {
 			piForm.setSelectedSectors(piForm.getSelectedSectors()[0].split(","));
 		} else {
 			piForm.setSelectedSectors(null);
 		}
+		
 		if (piForm.getSelectedFinancingIstruments() != null && piForm.getSelectedFinancingIstruments().length > 0 && !piForm.getSelectedFinancingIstruments()[0].isEmpty()
-				&& !piForm.getSelectedFinancingIstruments()[0].equals("0")) {
+				&& !piForm.getSelectedFinancingIstruments()[0].equals("0") && !piForm.getSelectedFinancingIstruments()[0].contains("String")) {
 			piForm.setSelectedFinancingIstruments(piForm.getSelectedFinancingIstruments()[0].split(","));
 		} else {
 			piForm.setSelectedFinancingIstruments(null);

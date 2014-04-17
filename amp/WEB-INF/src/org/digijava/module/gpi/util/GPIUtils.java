@@ -10,6 +10,7 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
@@ -106,6 +107,19 @@ public class GPIUtils {
 		}
 		return ret;
 	}
+	
+	public final static boolean containOrgTypes(Collection<AmpOrgType> orgs1, AmpOrgType org2) throws Exception {
+		boolean ret = false;
+		Iterator<AmpOrgType> iter1 = orgs1.iterator();
+		while (iter1.hasNext()) {
+			AmpOrgType aux1 = iter1.next();
+			if (aux1.getAmpOrgTypeId().equals(org2.getAmpOrgTypeId())) {
+				ret = true;
+				break;
+			}
+		}
+		return ret;
+	}
 
 	public final static Collection<AmpOrganisation> getDonorsCollection(String[] donors) throws Exception {
 		Collection<AmpOrganisation> retDonors = null;
@@ -153,6 +167,18 @@ public class GPIUtils {
 			}
 		}
 		return retGrp;
+	}
+	
+	public final static Collection<AmpOrgType> getDonorTypes(String[] groups) throws Exception {
+		Collection<AmpOrgType> retType = null;
+		if (groups != null && groups.length > 0) {
+			retType = new ArrayList<AmpOrgType>();
+			for (int i = 0; i < groups.length; i++) {
+				String grpId = groups[i];
+				retType.add(DbUtil.getOrgType(new Long(grpId)));
+			}
+		}
+		return retType;
 	}
 
 	public final static Collection<AmpSector> getSectors(String[] sectors) throws Exception {

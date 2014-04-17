@@ -106,6 +106,12 @@ public class GPIReport9b extends GPIAbstractReport {
 				Iterator<AmpFunding> iFunding = auxActivity.getFunding().iterator();
 				while (iFunding.hasNext()) {
 					AmpFunding auxFunding = iFunding.next();
+					
+					// Filter by donor type.
+					if (filter.getDonorTypes() != null && !GPIUtils.containOrgTypes(filter.getDonorTypes(), auxFunding.getAmpDonorOrgId().getOrgGrpId().getOrgType())) {
+						// Ignore this AmpGPISurvey and continue with the next.
+						continue;
+					}
 
 					// Filter by organization.
 					if (filter.getDonors() != null && !GPIUtils.containOrganisations(filter.getDonors(), auxFunding.getAmpDonorOrgId())) {

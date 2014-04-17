@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 
 public class ManageGPIForm extends ActionForm {
 
@@ -16,6 +17,8 @@ public class ManageGPIForm extends ActionForm {
 	private String indicator9bDisbursements;
 	private Collection<AmpGPISurveyIndicator> indicators;
 	private AmpGPISurveyIndicator indicator;
+	private Collection<String> selectedDonorTypes;
+	private Collection<AmpOrgType> availableDonorTypes; 
 
 	public ManageGPIForm() {
 	}
@@ -77,6 +80,22 @@ public class ManageGPIForm extends ActionForm {
 
 	public void setIndicator(AmpGPISurveyIndicator indicator) {
 		this.indicator = indicator;
+	}
+
+	public Collection<String> getSelectedDonorTypes() {
+		return selectedDonorTypes;
+	}
+
+	public void setSelectedDonorTypes(Collection<String> selectedDonorTypes) {
+		this.selectedDonorTypes = selectedDonorTypes;
+	}
+
+	public Collection<AmpOrgType> getAvailableDonorTypes() {
+		return availableDonorTypes;
+	}
+
+	public void setAvailableDonorTypes(Collection<AmpOrgType> availableDonorTypes) {
+		this.availableDonorTypes = availableDonorTypes;
 	}
 
 }

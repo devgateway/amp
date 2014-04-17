@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -22,6 +23,7 @@ public class GPIFilter {
 	Collection<AmpSector> sectors;
 	Collection<AmpCategoryValue> statuses;
 	Collection<AmpCategoryValue> financingInstruments;
+	Collection<AmpOrgType> donorTypes;
 	int startYear;
 	int endYer;
 	private boolean isProgramSectionVisible;
@@ -104,6 +106,14 @@ public class GPIFilter {
 
 	public void setProgramSectionVisible(boolean isProgramSectionVisible) {
 		this.isProgramSectionVisible = isProgramSectionVisible;
+	}
+
+	public Collection<AmpOrgType> getDonorTypes() {
+		return donorTypes;
+	}
+
+	public void setDonorTypes(Collection<AmpOrgType> donorTypes) {
+		this.donorTypes = donorTypes;
 	}
 
 }

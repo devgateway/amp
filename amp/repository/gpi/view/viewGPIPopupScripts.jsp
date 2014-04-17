@@ -263,6 +263,7 @@
 	
 	function resetGPIFilters() {
 		 $("input[name='selectedDonors']:checked").attr('checked', false);
+		 $("input[name='selectedDonorTypes']:checked").attr('checked', false);
 		 $("input[name='selectedDonorGroups']:checked").attr('checked', false);
 		 $("input[name='selectedStatuses']:checked").attr('checked', false);
 		 $("input[name='selectedFinancingIstruments']:checked").attr('checked', false);
@@ -270,6 +271,7 @@
 		  var filterForm = document.getElementsByName("gpiForm")[0]; 
 		  var selectedArray = new Array();
  			filterForm.selectedDonors.value= selectedArray;
+ 			filterForm.selectedDonorTypes.value= selectedArray;
  			filterForm.selectedDonorGroups.value= selectedArray;
  			filterForm.selectedStatuses.value= selectedArray;
  			filterForm.selectedSectors.value= selectedArray;
@@ -302,8 +304,10 @@
         //Donors
         var txtSelectedValuesObj = filterForm.selectedDonors;
         setSelectedValues(txtSelectedValuesObj,'selectedDonors');
-      
-       
+            
+      	//Donor Types
+        var txtSelectedValuesObj = filterForm.selectedDonorTypes;
+        setSelectedValues(txtSelectedValuesObj,'selectedDonorTypes');
 
         //groups
         var txtSelectedValuesObj = filterForm.selectedDonorGroups;

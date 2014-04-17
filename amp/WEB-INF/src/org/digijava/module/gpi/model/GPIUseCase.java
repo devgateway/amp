@@ -3,6 +3,7 @@ package org.digijava.module.gpi.model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.UserUtils;
@@ -24,14 +26,17 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.GPIDefaultFilters;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.GPISetupUtil;
 import org.digijava.module.aim.util.HierarchyListableUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -92,7 +97,8 @@ public class GPIUseCase {
 			GroupingElement<HierarchyListableImplementation> finInstrElement = new GroupingElement<HierarchyListableImplementation>("Financing Instrument", "filter_financing_instr_div",
 					rootFinancingInstrument, "selectedFinancingIstruments");
 			form.getFinancingInstrumentsElements().add(finInstrElement);
-		}
+		}		 	 	
+		
 		if (form.getDonorElements() == null || form.getDonorElements().isEmpty()) {
 			Collection<AmpOrgGroup> donorGroups = DbUtil.getAllOrgGroups();
 			form.setDonorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
@@ -114,7 +120,19 @@ public class GPIUseCase {
 					"selectedDonors");
 			form.getDonorElements().add(donorsElement);
 			HierarchyListableUtil.changeTranslateable(donorsElement.getRootHierarchyListable(), false);
+			
+			List<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
+			Collections.sort(donorTypes, new DbUtil.HelperAmpOrgTypeNameComparator()); 	 	
+	 	 	HierarchyListableUtil.changeTranslateable(donorTypes, false);
+	 	 	form.setDonorTypeElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
+			HierarchyListableImplementation rootOrgType = new HierarchyListableImplementation();
+	 	 	rootOrgType.setLabel("All Donor Types");
+	 	 	rootOrgType.setUniqueId("0");
+	 	 	rootOrgType.setChildren(donorTypes);
+	 	 	GroupingElement<HierarchyListableImplementation> donorTypeElement = new GroupingElement<HierarchyListableImplementation>("Donor Types", "filter_donor_types_div", rootOrgType, "selectedDonorTypes");
+			form.getDonorElements().add(donorTypeElement);
 		}
+			
 		if (form.getSectorStatusesElements() == null || form.getSectorStatusesElements().isEmpty()) {
 			form.setSectorStatusesElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
 			Collection<AmpCategoryValue> activityStatusValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
@@ -197,6 +215,17 @@ public class GPIUseCase {
 		form.setSelectedSectors(null);
 		form.setSelectedStatuses(null);
 		form.setSelectedFinancingIstruments(null);
+		
+		// Look for default donor types.
+		Collection<String> auxDonorTypes = new ArrayList<String>();
+		try {
+			auxDonorTypes = GPISetupUtil.getSavedFilters(GPIDefaultFilters.GPI_DEFAULT_FILTER_ORG_GROUP);
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String[] donorTypes = auxDonorTypes.toArray(new String[auxDonorTypes.size()]);
+		form.setSelectedDonorTypes(donorTypes);
 	}
 
 	/*
@@ -268,6 +297,7 @@ public class GPIUseCase {
 		filter.setCalendar(DbUtil.getAmpFiscalCalendar(new Long(form.getSelectedCalendar())));
 		filter.setCurrency(CurrencyUtil.getAmpcurrency(form.getSelectedCurrency()));
 		filter.setDonors(GPIUtils.getDonorsCollection(form.getSelectedDonors()));
+		filter.setDonorTypes(GPIUtils.getDonorTypes(form.getSelectedDonorTypes()));
 		filter.setDonorGroups(GPIUtils.getDonorGroups(form.getSelectedDonorGroups()));
 		filter.setSectors(GPIUtils.getSectors(form.getSelectedSectors()));
 		filter.setStatuses(GPIUtils.getStatuses(form.getSelectedStatuses()));

@@ -113,6 +113,12 @@ public class GPIReport1 extends GPIAbstractReport {
 						// Ignore this AmpGPISurvey and continue with the next.
 						continue;
 					}
+					
+					// Filter by donor type.
+					if (filter.getDonorTypes() != null && !GPIUtils.containOrgTypes(filter.getDonorTypes(), auxFunding.getAmpDonorOrgId().getOrgGrpId().getOrgType())) {
+						// Ignore this AmpGPISurvey and continue with the next.
+						continue;
+					}
 
 					Iterator<AmpFundingDetail> iFD = auxFunding.getFundingDetails().iterator();
 					while (iFD.hasNext()) {

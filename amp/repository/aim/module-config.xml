@@ -191,6 +191,7 @@
         <hibernate-class>org.digijava.module.aim.dbentity.AmpContentTranslation</hibernate-class>
         
         <hibernate-class>org.digijava.module.aim.dbentity.GPISetup</hibernate-class>
+        <hibernate-class>org.digijava.module.aim.dbentity.GPIDefaultFilters</hibernate-class>
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

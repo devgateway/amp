@@ -361,9 +361,9 @@ var tabView = new YAHOO.widget.TabView('demo');
 							<span class="clear"></span>
 							<div class="innerTab">
 								<ul class="groupingSelectors">
-									<c:forEach var="element"
-										items="${gpiForm.donorElements}">
-										<li><a  href="#" onclick="showFilterDiv('${element.htmlDivId}','donorTab_search');return false;"><digi:trn>${element.name}</digi:trn>
+									<c:forEach var="element" items="${gpiForm.donorElements}">
+										<li>
+											<a  href="#" onclick="showFilterDiv('${element.htmlDivId}','donorTab_search');return false;"><digi:trn>${element.name}</digi:trn>
 												(${element.rootHierarchyListable.countDescendants-1}) </a>
 										</li>
 									</c:forEach>

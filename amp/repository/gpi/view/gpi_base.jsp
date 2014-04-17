@@ -60,6 +60,7 @@
 				    <html:hidden property="selectedCalendar"/>
 				    <html:hidden property="selectedCurrency"/>
 				    <html:hidden property="selectedDonors"/>
+				    <html:hidden property="selectedDonorTypes"/>
 				    <html:hidden property="selectedDonorGroups"/>
 				    <html:hidden property="selectedStatuses"/>
 				    <html:hidden property="selectedSectors"/>
@@ -123,6 +124,17 @@
 							                                                <c:if test="${gpiForm.selectedCurrency != null}">
 							                                                	<digi:trn><bean:write name="gpiForm" property="selectedCurrency"/></digi:trn>
 							                                                </c:if>
+							                                                
+							                                                </li><li><digi:trn key="rep:pop:Donors">Donor Types</digi:trn>:
+							                                                <c:if test="${gpiForm.selectedDonorTypes == null}">
+							                                                	<digi:trn key="All">All</digi:trn>
+							                                                </c:if>
+							                                                <c:if test="${gpiForm.selectedDonorTypes != null}">
+							                                                	<logic:iterate id="idDonorTypes" property="selectedDonorTypes" name="gpiForm">
+							                                                    	<%=org.digijava.module.aim.util.DbUtil.getOrgType(new Long(idDonorTypes.toString()))%>
+							                                                    </logic:iterate>
+							                                                </c:if>
+							                                                
 							                                                </li><li><digi:trn key="rep:pop:Donors">Donors</digi:trn>:
 							                                                <c:if test="${gpiForm.selectedDonors == null}">
 							                                                	<digi:trn key="All">All</digi:trn>

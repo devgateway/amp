@@ -26,7 +26,7 @@ request.getParameter("print");
 	            <table width="100%" border="0" cellpadding="5" cellspacing="0">
 		            <tr>
 		                <td class="subtitle-blue-3" style="width: 70%; text-align: left;">
-		                    <digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn> <digi:trn key="aim:report">Report</digi:trn>&nbsp;<bean:write name="parisIndicatorForm" property="piReport.indicatorCode"/>
+		                    <digi:trn>Global Partnership Indicator</digi:trn> <digi:trn key="aim:report">Report</digi:trn>&nbsp;<bean:write name="gpiForm" property="gpiReport.indicatorCode"/>
 		                </td>
 		            </tr>
 		            <tr>
@@ -40,7 +40,7 @@ request.getParameter("print");
 		                        </tr>
 		                        <tr>
 		                            <td style="padding:5">
-		                                <strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15">&nbsp;<bean:write name="parisIndicatorForm" property="piReport.name"/></p></strong>
+		                                <strong><p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15">&nbsp;<bean:write name="gpiForm" property="gpiReport.name"/></p></strong>
 		                            </td>
 		                        </tr>
 		                    </table>
@@ -48,33 +48,18 @@ request.getParameter("print");
 		            </tr>
 		            <tr>
 		                <td class="td_right_left1">
-                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="1">
+                            <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="1">
                                 <jsp:include page="/repository/gpi/view/gpi_1.jsp"></jsp:include>
                             </logic:equal>
-                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="4">
-                                <jsp:include page="/repository/gpi/view/ggpi_4.jsp"></jsp:include>
+                            <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="5a">
+                                <jsp:include page="/repository/gpi/view/gpi_5a.jsp"></jsp:include>
                             </logic:equal>
-                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="5a">
-                                <jsp:include page="/repository/gpi/view/ggpi_5a.jsp"></jsp:include>
+                            <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="6">
+                                <jsp:include page="/repository/gpi/view/gpi_6.jsp"></jsp:include>
                             </logic:equal>
-                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="5b">
-                                <jsp:include page="/repository/gpi/view/ggpi_5b.jsp"></jsp:include>
+                            <logic:equal name="gpiForm" property="gpiReport.indicatorCode" value="9b">
+                                <jsp:include page="/repository/gpi/view/gpi_9b.jsp"></jsp:include>
                             </logic:equal>
-                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="6">
-                                <jsp:include page="/repository/gpi/view/ggpi_6.jsp"></jsp:include>
-                            </logic:equal>
-                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="7">
-                                <jsp:include page="/repository/gpi/view/ggpi_7.jsp"></jsp:include>
-                            </logic:equal>
-                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="9">
-                                <jsp:include page="/repository/gpi/view/ggpi_9.jsp"></jsp:include>
-                            </logic:equal>
-                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="10a">
-                                <jsp:include page="/repository/gpi/view/ggpi_10a.jsp"></jsp:include>
-                            </logic:equal>
-                            <logic:equal name="parisIndicatorForm" property="piReport.indicatorCode" value="10b">
-	                        	<jsp:include page="/repository/gpi/view/ggpi_10b.jsp"></jsp:include>
-							</logic:equal>
 	                    </td>
 	                </tr>
 	                <tr>

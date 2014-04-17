@@ -441,8 +441,8 @@
 		if(document.getElementById("reportIsEmpty") != null) {
 			alert("<digi:trn jsFriendly='true'>No survey data found.</digi:trn>");
 		} else {
-			document.gpiForm.exportXLS.value = true;
-	        document.gpiForm.submit();
+			document.getElementsByName('exportXLS')[0].value = true;
+	        document.getElementsByName('gpiForm')[0].submit();
 		}
     }
 

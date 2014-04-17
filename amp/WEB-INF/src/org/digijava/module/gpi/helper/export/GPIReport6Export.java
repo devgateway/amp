@@ -9,13 +9,13 @@ import java.util.Map;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.gpi.helper.row.GPIReport1Row;
+import org.digijava.module.gpi.helper.row.GPIReport6Row;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
 import org.digijava.module.gpi.util.GPIConstants;
 
-public class GPIReport1Export extends GPIAbstractExport {
+public class GPIReport6Export extends GPIAbstractExport {
 
-	public GPIReport1Export(Site site, String langcode, String currency) {
+	public GPIReport6Export(Site site, String langcode, String currency) {
 		super(site, langcode, currency);
 	}
 
@@ -24,7 +24,7 @@ public class GPIReport1Export extends GPIAbstractExport {
 		Iterator iter = rows.iterator();
 		ArrayList<AuxRow3> list = new ArrayList();
 		while (iter.hasNext()) {
-			GPIReport1Row row = (GPIReport1Row) iter.next();
+			GPIReport6Row row = (GPIReport6Row) iter.next();
 			AuxRow3 auxRow = new AuxRow3();
 			auxRow.setDonorGroup(row.getDonorGroup().getOrgGrpName());
 			auxRow.setYear(new Integer(row.getYear()).toString());
@@ -42,19 +42,19 @@ public class GPIReport1Export extends GPIAbstractExport {
 		parameters.put("GPI_REPORT_NUMBER", TranslatorWorker.translateText("GPI", this.getLangCode(), this
 				.getSite().getId())
 				+ " "
-				+ GPIConstants.GPI_REPORT_1
+				+ GPIConstants.GPI_REPORT_6
 				+ " "
 				+ TranslatorWorker.translateText("Report", this.getLangCode(), this.getSite().getId()));
 		parameters.put("GPI_COL1", TranslatorWorker.translateText("Donors", this.getLangCode(), this.getSite().getId()));
 		parameters.put("GPI_COL2", TranslatorWorker.translateText("Disbursement Year", this.getLangCode(), this
 				.getSite().getId()));
 		parameters.put("GPI_COL3", TranslatorWorker.translateText(
-				"Number of projects using country results framework", this.getLangCode(), this
+				"Disbursed On Budget Aid Financing", this.getLangCode(), this
 						.getSite().getId()));
-		parameters.put("GPI_COL4", TranslatorWorker.translateText("Total number of projects",
+		parameters.put("GPI_COL4", TranslatorWorker.translateText("Total Aid Financing",
 				this.getLangCode(), this.getSite().getId()));
 		parameters.put("GPI_COL5", TranslatorWorker.translateText(
-				"Indicator 1", this.getLangCode(),
+				"Indicator 6", this.getLangCode(),
 				this.getSite().getId()));
 		parameters.put("GPI_LAST_YEAR", new Integer(year).toString());
 		parameters.put("GPI_CURRENCY_MSG", TranslatorWorker.translateText("All the amounts are in thousands (000) ",

@@ -1,7 +1,13 @@
 package org.digijava.module.gpi.action;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -71,7 +77,14 @@ public class GPIAction extends Action {
 				piForm.setSelectedDonorTypes(piForm.getSelectedDonorTypes()[0].split(","));
 			} else {
 				// Saved filters.
-				piForm.setSelectedDonorTypes(piForm.getSelectedDonorTypes());
+				//TODO: Find out why sometimes the list has an extra element with wrong value.
+				List<String> auxTypes = new ArrayList<String>();
+				for(int i = 0; i<piForm.getSelectedDonorTypes().length; i++) {
+					if(piForm.getSelectedDonorTypes()[i] != null && piForm.getSelectedDonorTypes()[i] != "" && piForm.getSelectedDonorTypes()[i].indexOf("String") == -1) {
+						auxTypes.add(piForm.getSelectedDonorTypes()[i]);
+					}
+				}				
+				piForm.setSelectedDonorTypes(auxTypes.toArray(new String[auxTypes.size()]));
 			}
 		} else {
 			piForm.setSelectedDonorTypes(null);

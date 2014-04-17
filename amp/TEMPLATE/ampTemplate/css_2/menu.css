@@ -308,6 +308,7 @@ text-decoration:underline;
 li.yuiampmenuitem_drop {
 	clear: both;
 	width: 97%;
+	padding-right: 0px !important;
 }
 
 

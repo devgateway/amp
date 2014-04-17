@@ -251,7 +251,7 @@ function adminHelp(){
 									<div class="bd bd_drop">
 										<ul>
 											<feature:display name="Language Option" module="Tools">
-												<li ><a class="yuiampmenuitemlabel" href="#"> <digi:trn
+												<li class="yuiampmenuitem_drop"><a class="yuiampmenuitemlabel" href="#"> <digi:trn
 															key="aim:deflanguage">Language</digi:trn>
 												</a>
 													<div id="reports2" class="yuiampmenu">
@@ -811,7 +811,7 @@ function adminHelp(){
 						<div class="bd bd_drop">
 							<ul>
 								<feature:display name="Language Option" module="Tools">
-									<li><a class="yuiampmenuitemlabel" href="#"> <digi:trn
+									<li class="yuiampmenuitem_drop"><a class="yuiampmenuitemlabel" href="#"> <digi:trn
 												key="aim:deflanguage">Language</digi:trn>
 									</a>
 										<div id="reports2" class="yuiampmenu">

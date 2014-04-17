@@ -404,7 +404,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Component Description" feature="Identification"></field:display>
 <field:display name="Type of Cooperation" feature="Identification"></field:display>
 <field:display name="Type of Implementation" feature="Identification"></field:display>
-<field:display name="Modalities" feature="Identification"></field:display>            
+<field:display name="Modalities" feature="Identification"></field:display>
+    
 <field:display name="Activity Performance" feature="Activity Dashboard"></field:display> 
 <field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard"></field:display> 
 <field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard"></field:display> 
@@ -446,7 +447,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Programs Button - National Plan Objective" feature="Program"></field:display> 
 <field:display name="Add Programs Button - Primary Programs" feature="Program"></field:display> 
 <field:display name="Add Programs Button - Secondary Programs" feature="Program"></field:display>
-<field:display name="Add Programs Button - Tertiary Programs" feature="Program"></field:display> 
+<field:display name="Add Programs Button - Tertiary Programs" feature="Program"></field:display>
+         
 <field:display name="Add Projection" feature ="MTEF Projections"></field:display> 
 <field:display name="Add Projection" feature="MTEF Projections"></field:display> 
 <field:display name="Add Regional Funding Link" feature="Regional Funding"></field:display> 
@@ -808,8 +810,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Tertiary Program Level 6" feature="NPD Programs"></field:display> 
 <field:display name="Tertiary Program Level 7" feature="NPD Programs"></field:display> 
 <field:display name="Tertiary Program Level 8" feature="NPD Programs"></field:display>  
-
-
+<field:display name="Program Description" feature="NPD Programs"></field:display>
 <field:display name="Parent National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 

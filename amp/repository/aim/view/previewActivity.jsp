@@ -1392,7 +1392,40 @@ function collapseAll() {
 	<%@include file="activitypreview/programs.jspf" %>
 </module:display>
 <!-- END PROGRAM SECTION -->
+<!-- program description --> 
+					<module:display name="/Activity Form/Program/Program Description"
+						parentModule="/Activity Form/Program">
+						<fieldset>
+							<legend>
+								<span class="legend_label" style="cursor: pointer;"><digi:trn>Program Description</digi:trn></span>
+							</legend>
+							<div class="toggleDiv">
+								<table width="100%" cellSpacing="2" cellPadding="1"
+									style="font-size: 11px;">
+										<tr>
+											<td width="85%"><b><c:set var="programDescription"
+														value="${aimEditActivityForm.programs.programDescription}" />
+													<digi:edit key="${programDescription}" /></b></td>
 
+										</tr>
+								</table>
+							</div>
+						</fieldset>
+
+						<hr />
+						<br />
+						<legend>
+							<span class="legend_label" style="cursor: pointer;"><digi:trn>Program Description</digi:trn></span>
+						</legend>
+						<digi:trn>Program Description</digi:trn>
+						<br />
+						<table width="100%" cellSpacing="2" cellPadding="1"
+							style="font-size: 11px;">
+							<tr>
+								<td width=100%></td>
+							</tr>
+						</table>
+					</module:display> <!-- end program description -->
 <!-- SECTORS SECTION -->
 <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
 <fieldset>

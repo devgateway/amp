@@ -211,7 +211,7 @@ public class IatiActivityWorker {
 				JAXBElement i = (JAXBElement)contentItem;
 				if(i.getName().equals(new QName("title"))){
 					JAXBElement<TextType> item = (JAXBElement<TextType>)i;
-                    if (item.getValue().getLang().equals(this.getLang())) {
+                    if (item.getValue().getLang() == null || item.getValue().getLang().equals(this.getLang())) {
     					title += printTextType(item);
                     }
 				}

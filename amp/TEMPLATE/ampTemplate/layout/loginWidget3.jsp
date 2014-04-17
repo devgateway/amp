@@ -52,20 +52,21 @@
 
 	        
 </script>
-<div id="show_login_pop_box" style="width: 270px;">
-						<form action="/aim/postLogin.do" id="loginForm" method="post" style="margin:0;z-index:9999" onsubmit="ajaxLogin();return false;">
+<div id="show_login_pop_box">
+						<form action="/aim/postLogin.do" id="loginForm" method="post" onsubmit="ajaxLogin();return false;">
 				    				<label for="j_username">
 				    					<digi:trn>Username</digi:trn>:
 				    				</label>
 				    			
-				    				<input name="j_username" type="text" class="inputx" style="width:150px" id="j_username">
+				    				<input name="j_username" type="text" class="inputx" id="j_username">
 				    		
     								<label for="j_password">
     									<digi:trn>Password</digi:trn>:</label>
     							
-	    							<input name="j_password" type="password" class="inputx" style="width:150px" id="j_password">
-	    							<br/>
-	    							<input type="submit"  class="buttonx_sm_lgn"  onclick="ajaxLogin();return false" value='<digi:trn>Login</digi:trn>'>
+	    							<input name="j_password" type="password" class="inputx" id="j_password">
+	    							<div class="clear">
+	    								<input type="submit"  class="buttonx_sm_lgn"  onclick="ajaxLogin();return false" value='<digi:trn>Login</digi:trn>'>
+	    							</div>
   									
 	    			</form>
 			<div id="result">

@@ -25,7 +25,7 @@ span.docTitle619{border:1px solid red;text-align:left;}
 .buttonx_dis {background-color:#979797; border-top: 1px solid #C5C5C5; border-left:1px solid #C5C5C5; border-right:1px solid #5D5D5D; border-bottom:1px solid #5D5D5D; font-size:11px; color:#D9D9D9; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 .buttonx_sm {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; cursor:pointer}
 .tabSubmit .buttonx_sm {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px;margin:10px 0px 0px 0px; cursor:pointer}
-.buttonx_sm_lgn {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px; margin-right:10px;cursor:pointer;}
+.buttonx_sm_lgn {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding:2px; margin-right:0px;cursor:pointer;}
 .button_green {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; margin-top:10px; margin-bottom:15px; cursor:pointer}
 .button_green_btm {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; margin-top:10px; margin-bottom:5px; cursor:pointer}
 .button_green_btm_sm {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:9px; color:#FFFFFF; font-weight:bold; padding-left:1px; padding-right:1px; padding-top:1px; padding-bottom:1px; margin-top:5px; margin-bottom:5px; cursor:pointer}
@@ -108,8 +108,12 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .top_nav {position:absolute; right:30px; top:30px;}
 .top_nav a {color:#FFFFFF;}
 .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;margin:0px 20px 0px 0px;}
+#loginForm {margin:0;z-index:9999;}
 .login_nav a {color:#FFFFFF;}
+.login_nav input { width:150px;}
+.login_nav .buttonx_sm_lgn {width:auto !important; display: block; float: right;}
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
+.clear {clear:both;}
 top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px; height:30px;}
 .workspace_info {width:100px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;text-align:right;float:right;margin:-0px 0px 0px 50px;z-index:9990;}
@@ -117,7 +121,6 @@ html.ie .workspace_info {width:100px; margin:0 auto; height:30px; color:#000000;
 .loginWidget{color: #376091; text-align: left; white-space: nowrap;font-family:  Arial, sans-serif;font-size: 11px;font-weight: bold;text-transform:uppercase;}
 .workspace_info select{width:150px;font-size:10px;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
-html.chrome #show_login_pop_box{z-index:9999;}
 #login_menu{width:330px; float:right; margin:10px 0px 0px 0px;color:#fff;}
 
 /* MENU */
@@ -239,8 +242,8 @@ a.settingsbut{float:left;display:block;width:250px;}
 #add_filt_btn_box {display:none; margin-top:3px;}
 #add_label_btn_box {display:none; margin-top:3px;}
 #show_action_box {display:none; margin-top:3px; font-size:11px;}
-#show_login_pop_box {display:none; margin:37px 0px 0px 55px;width:240px; padding:10px;border:1px solid #CCCCCC; background-color:#FFFFFF;z-index:9999;position:absolute;}
-html.chrome #show_login_pop_box{display:none; margin:37px 0px 0px 55px;width:240px; padding:10px;border:1px solid #CCCCCC; background-color:#FFFFFF;z-index:9999;position:absolute;}
+#show_login_pop_box {display:none; margin:37px 0px 0px 55px;width:270px; padding:10px;border:1px solid #CCCCCC; background-color:#FFFFFF;z-index:9999;position:absolute;}
+html.chrome #show_login_pop_box{margin-top:52px;}
 #show_login_pop_box label{color:#000; padding:5px;display:inline-block;}
 .resource_label_gr a {color:#FFFFFF;}
 .resource_label_or a {color:#FFFFFF;}

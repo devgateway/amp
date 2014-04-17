@@ -83,6 +83,11 @@ $drupal_hash_salt = '';
 // $conf['cache_class_cache_form'] = 'DrupalDatabaseCache';
 
 /**
+ * Do no generate short URLs in the "Projects Search Result" widget.
+ */
+// $conf['ampp_generate_short_urls'] = FALSE;
+
+/**
  * Override the PHP environment error settings:
  *
  * @see http://www.php.net/manual/en/errorfunc.configuration.php

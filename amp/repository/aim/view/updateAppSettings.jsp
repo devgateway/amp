@@ -400,6 +400,25 @@ function loadShareRules(){
 									</html:select>
 								</td>
 							</tr>
+							
+							
+							<tr>
+								<td class="inside">
+									<div class="bold_12"><digi:trn>Show all set up countries in filters</digi:trn></div>
+								</td>
+								<td class="inside">
+									<html:select property="showAllCountries" styleClass="inputx insidex">
+										<html:option value="false">
+												Off
+										</html:option>
+										<html:option value="true">
+												On
+										</html:option>
+									</html:select>
+								</td>
+							</tr>
+							
+							
 							<tr>
 								<c:if test="${aimUpdateAppSettingsForm.allowPublishingResources!=2}">
 										<c:set var="displayDiv">display: none;</c:set>

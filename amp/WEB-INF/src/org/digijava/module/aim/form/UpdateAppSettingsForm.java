@@ -83,7 +83,17 @@ public class UpdateAppSettingsForm extends ActionForm {
 	private List<TeamMember> teamMembers;
 	private Boolean resetTeamMembers;
 
-  public Collection getReports() {
+    private Boolean showAllCountries;
+
+    public Boolean getShowAllCountries() {
+        return showAllCountries;
+    }
+
+    public void setShowAllCountries(Boolean showAllCountries) {
+        this.showAllCountries = showAllCountries;
+    }
+
+    public Collection getReports() {
 		return reports;
 	}
 

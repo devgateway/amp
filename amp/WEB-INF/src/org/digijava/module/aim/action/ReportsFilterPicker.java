@@ -741,29 +741,81 @@ public class ReportsFilterPicker extends Action {
 		
 		if (true) { 
 			StopWatch.next("Filters", true, "start rendering regions");
-			Collection<AmpCategoryValueLocations> regions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
+
+
+            TeamMember currentMember = (TeamMember)session.getAttribute("currentMember");
+            AmpTeamMember ampCurrentMember = null;
+            AmpApplicationSettings ampAppSettings = null;
+            if (currentMember != null) {
+                ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
+                ampAppSettings = DbUtil.getTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
+            }
+
+            Set<AmpCategoryValueLocations> filterCountries = new HashSet<AmpCategoryValueLocations>();
+            if (ampAppSettings.getShowAllCountries()) {
+                AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
+                if (layer == null) {
+                    logger
+                            .error("No Country value found in category Implementation Location. Please correct this.");
+                } else {
+                    Set<AmpCategoryValueLocations> countries = DynLocationManagerUtil.getLocationsByLayer(layer);
+                    for (AmpCategoryValueLocations loc : countries) {
+                        if (loc.getChildLocations() != null && !loc.getChildLocations().isEmpty()) {
+                            filterCountries.add(loc);
+                        }
+                    }
+                }
+            } else {
+                filterCountries.add(DynLocationManagerUtil.getDefaultCountry());
+            }
+
+
+
+			//Collection<AmpCategoryValueLocations> regions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
 			try {
-				HierarchyListableUtil.changeTranslateable(regions, false);
+                for (AmpCategoryValueLocations country : filterCountries) {
+                    HierarchyListableUtil.changeTranslateable(country.getChildLocations(), false);
+                }
+
 			}
 			catch (LazyInitializationException e) {
 				logger.warn("The regions had to be loaded again");
 				logger.warn(e.getMessage());
 				DynLocationManagerUtil.clearRegionsOfDefaultCountryCache();
-				regions		= DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
-				HierarchyListableUtil.changeTranslateable(regions, false);
+				//regions		= DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
+				//HierarchyListableUtil.changeTranslateable(regions, false);
 			}
-			
-			Iterator<AmpCategoryValueLocations> it = regions.iterator();
-			while (it.hasNext()) {
-				AmpCategoryValueLocations loc = (AmpCategoryValueLocations) it
-						.next();
-				loc.getCountDescendants();
-			}
+
+            for (AmpCategoryValueLocations country : filterCountries) {
+                Iterator<AmpCategoryValueLocations> it = country.getChildLocations().iterator();
+                while (it.hasNext()) {
+                    AmpCategoryValueLocations loc = (AmpCategoryValueLocations) it
+                            .next();
+                    loc.getCountDescendants();
+                }
+            }
 			
 			HierarchyListableImplementation rootRegions	= new HierarchyListableImplementation();
-			rootRegions.setLabel("All Regions");
-			rootRegions.setUniqueId("0");
-			rootRegions.setChildren( regions );
+
+
+            if (filterCountries.size() > 1) {
+                rootRegions.setLabel("All Locations");
+                rootRegions.setUniqueId("0");
+                rootRegions.setChildren(filterCountries);
+                for (AmpCategoryValueLocations country : filterCountries) {
+                    HierarchyListableImplementation countryRoot	= new HierarchyListableImplementation();
+                    countryRoot.setLabel(country.getLabel());
+                    countryRoot.setUniqueId(country.getUniqueId());
+                    countryRoot.setChildren(country.getChildren());
+                }
+
+            } else {
+                rootRegions.setLabel("All Regions");
+                rootRegions.setUniqueId("0");
+    			rootRegions.setChildren( filterCountries.iterator().next().getChildren() );
+            }
+
+
 			GroupingElement<HierarchyListableImplementation> regionsElement	=
 					new GroupingElement<HierarchyListableImplementation>("Regions", "filter_regions_div", 
 							rootRegions, "regionSelected");

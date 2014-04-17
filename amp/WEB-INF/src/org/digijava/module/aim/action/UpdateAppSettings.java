@@ -121,6 +121,8 @@ public class UpdateAppSettings extends Action {
 				uForm.setReportEndYear(reportEndYear);
 				uForm.setLanguage(ampAppSettings.getLanguage());
 				uForm.setValidation(ampAppSettings.getValidation());
+                uForm.setShowAllCountries(ampAppSettings.getShowAllCountries());
+
                 if (ampAppSettings.getCurrency() != null) {
 				    uForm.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
                 }
@@ -260,6 +262,7 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setAllowAddTeamRes( uForm.getAllowAddTeamRes() );
 				ampAppSettings.setAllowShareTeamRes(uForm.getAllowShareAccrossWRK());
 				ampAppSettings.setAllowPublishingResources(uForm.getAllowPublishingResources());
+                ampAppSettings.setShowAllCountries(uForm.getShowAllCountries());
 				//
 				AmpReports ampReport = DbUtil.getAmpReports(uForm.getDefaultReportForTeamId());
 				//

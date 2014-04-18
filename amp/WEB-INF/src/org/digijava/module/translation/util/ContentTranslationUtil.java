@@ -271,7 +271,7 @@ public class ContentTranslationUtil {
                     			if (o.getClass().isAnnotationPresent(TranslatableClass.class) &&
                                     !o.getClass().isAssignableFrom(AmpActivityVersion.class) //not supported
                                     )
-                                cloneTranslations(o);
+                                cloneTranslations(o, formTranslations);
                     			else {
                     				//we don't have mixed collections, no point in iterating forward through the collection
                     				break;

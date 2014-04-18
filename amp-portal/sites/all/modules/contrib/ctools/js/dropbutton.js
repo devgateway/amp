@@ -1,4 +1,4 @@
-// $Id: dropbutton.js,v 1.1 2011/12/23 05:53:14 vamirbekyan Exp $
+// $Id$
 /**
  * @file
  * Implement a simple, clickable dropbutton menu.

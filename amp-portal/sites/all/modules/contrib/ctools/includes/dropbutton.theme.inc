@@ -1,5 +1,5 @@
 <?php
-// $Id: dropbutton.theme.inc,v 1.1 2011/12/23 05:58:42 vamirbekyan Exp $
+// $Id$
 
 /**
  * @file

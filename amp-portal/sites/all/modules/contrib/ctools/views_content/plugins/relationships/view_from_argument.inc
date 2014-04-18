@@ -1,5 +1,5 @@
 <?php
-// $Id: view_from_argument.inc,v 1.1 2011/12/23 06:03:46 vamirbekyan Exp $
+// $Id$
 
 /**
  * @file

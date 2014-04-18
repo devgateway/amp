@@ -8,7 +8,7 @@
 				<param name="sequence">AMP_MEASURES_seq</param>
 			</generator>
 		</id>
-		<property column="measureName" name="measureName" type="java.lang.String" unique="true" />
+		<property column="measureName" name="measureName" type="java.lang.String" />
 		<property column="aliasName" name="aliasName" type="java.lang.String" />
 		<property column="type" name="type" type="java.lang.String" />
         <property name="expression" column="expression" type="java.lang.String" />

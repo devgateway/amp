@@ -143,13 +143,13 @@ public class ReportsUtil {
 		if (!res.isEmpty())
 			errMsg += "The following column(s) are defined at least twice in amp_columns: (" + Util.toCSString(res) + ")" + System.lineSeparator();
 
-		res = session.createQuery("select m.measureName from AmpMeasures as m group by m.measureName having count(m) >1").list(); 
+		res = session.createQuery("select m.measureName from AmpMeasures as m group by m.measureName, m.type having count(m) >1").list(); 
 		if (!res.isEmpty())
 			errMsg +="Duplicate measurenames are found in AMP_MEASURES tables: (" + Util.toCSString(res) + ")" + System.lineSeparator();
 
 		if( !errMsg.isEmpty() ) {
 			logger.error("Database sanity check - FAIL: " + errMsg);
-			throw new ReportException(errMsg);
+			throw new Error(errMsg);
 		}else {
 			logger.debug("Database sanity check - PASS");
 		}

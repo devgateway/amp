@@ -13,13 +13,14 @@
 				SELECT measureid, replacewith FROM (
 					SELECT measurename, measureid, max(measureid) OVER w AS replacewith, rank() OVER w AS pos 
 					FROM amp_measures 
-					 WINDOW w AS (PARTITION BY measurename ORDER BY measureid DESC  ) 
+					 WINDOW w AS (PARTITION BY measurename, type ORDER BY measureid DESC  ) 
 				) AS result WHERE pos &gt;1;
 				
 				UPDATE amp_report_measures rep SET measureid=(SELECT replacewith FROM amp_invalid_measures tmp WHERE rep.measureid=tmp.measureid)
 				WHERE rep.measureid IN (SELECT measureid FROM amp_invalid_measures);
 				
 				DELETE FROM amp_measures WHERE measureid IN (SELECT measureid FROM amp_invalid_measures);
+				ALTER TABLE amp_measures ADD CONSTRAINT amp_measures_unique UNIQUE(measurename, type);
 			</lang>
 		</script>
 	</apply>

@@ -55,7 +55,13 @@ public class IatiCodeType {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        String descriptionMod = null;
+        if (description != null && description.length() > 255) { //has to be 255 chars max
+            descriptionMod = description.substring(0, 252) + "...";
+        } else {
+            descriptionMod = description;
+        }
+        this.description = descriptionMod;
     }
 
     public Set<IatiCodeItem> getItems() {

@@ -656,7 +656,8 @@ public class ImportActionNew extends DispatchAction {
             newObj.accumulate("iatiValues", fld.getIatiValuesForDisplay());
             newObj.accumulate("tmpId", fld.getTmpId());
             newObj.accumulate("ampId", fld.getAmpId());
-            newObj.accumulate("ampValues", fld.getAmpValues());
+            String ampVal = fld.getAmpValues() != null ? fld.getAmpValues().replaceAll("'", "&lsquo;") : null;
+            newObj.accumulate("ampValues", ampVal);
 
 
             objects.add(newObj);
@@ -675,7 +676,8 @@ public class ImportActionNew extends DispatchAction {
 
     public ActionForward getOptionsAjaxAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         String maxResultCountStr = request.getParameter("maxResultCount");
-        String searchStr = request.getParameter("searchStr");
+        //String searchStr = request.getParameter("searchStr");
+        String searchStr = request.getHeader("searchStr");
         int maxResultCount = Integer.parseInt(maxResultCountStr);
 
         Map<Long, String> sortedLabels = (Map<Long,String>) request.getSession().getAttribute(IATI_LABELS_SORTED);
@@ -696,7 +698,7 @@ public class ImportActionNew extends DispatchAction {
         for (java.util.Map.Entry<Long, String> item : sortedLabels.entrySet()) {
             if (searchStr == null || searchStr.trim().isEmpty() || (item.getValue() != null && item.getValue().toLowerCase().contains(searchStr.toLowerCase()))) {
 
-                objArray.add(new JSONObject().accumulate("id", item.getKey()).accumulate("val", item.getValue()));
+                objArray.add(new JSONObject().accumulate("id", item.getKey()).accumulate("val", item.getValue().replaceAll("'", "&lsquo;")));
             }
             if (maxResultCount > 0 && objArray.size() >= maxResultCount) break;
         }
@@ -854,8 +856,15 @@ public class ImportActionNew extends DispatchAction {
         DbUtil.saveObject(upSess);
 
         request.getSession().removeAttribute(IATI_LABELS_SORTED);
-        //myform.resetForm();
-        return mapping.findForward("logs");
+
+        String retMapping = null;
+        if (request.getParameter("stayOnPage") != null && request.getParameter("stayOnPage").equals("true")) {
+            return showMapping(mapping, form, request, response);
+        } else {
+            return mapping.findForward("logs");
+        }
+
+
     }
 
     private IatiActivities fromXml(InputStream is, DEImportValidationEventHandler log) throws SAXException, JAXBException {

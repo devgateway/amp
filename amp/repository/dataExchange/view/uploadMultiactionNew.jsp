@@ -267,6 +267,10 @@
 								</logic:equal>
 								
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">
+								<td width="50" nowrap>
+									<img id='mappingSaveDis' style="display:block;" src='/TEMPLATE/ampTemplate/images/save_dis.png'>
+									<img id='mappingSave' style="display:none; cursor:pointer;" src='/TEMPLATE/ampTemplate/images/save.png'>
+								</td>
 								<c:if test="${empty curSessId}">
 									<td width="50" nowrap>
 										<div class="wizardNav wizardBtn">
@@ -384,7 +388,6 @@
 								
 								function executeImport(id) {
 									$("input[type='hidden'][name='objId']").val(id);
-									console.log($("input[type='hidden'][name='objId']"));
 									$("form[name='importFormNew']").submit();
 								}
 						</script>
@@ -631,7 +634,7 @@
 						</table>
 		
 						</digi:form>
-					
+
 					
 					<script language="javascript">
 						
@@ -747,10 +750,12 @@
 						
 						var getAutosuggestOptionValues = function (queryStr, maxNumber) {
 							var url = "../../dataExchange/importActionNew.do?action=getOptionsAjaxAction";
+							console.log(queryStr.substring(0, 64));
 							$.ajax({
-							  type: 'POST',
+							  type: 'GET',
 							  url: url,
-							  data:{searchStr:queryStr , maxResultCount:maxNumber},
+							  data:{maxResultCount:maxNumber},
+							  headers:{searchStr:queryStr.substring(0, 32)},
 							  success: autocompleteRequestSuccess,
 							  dataType: "json"
 							});
@@ -814,6 +819,7 @@
 							  error: updateMappingError,
 							  dataType: "json"
 							});
+							setModified();
 						}
 						
 						var updateMappingSuccess = function (data, textStatus, jqXHR) {
@@ -834,6 +840,22 @@
 						}
 						
 						checkForDefaultValues();
+						
+						
+						var modified = false;
+						setModified = function() {
+							modified = true;
+							console.log($("#mappingSave"));
+							$("#mappingSaveDis").css("display","none");
+							$("#mappingSave").css("display","block");
+							
+						}
+						
+						$("#mappingSave").click(function(e){
+							var curForm = $("form[name='importFormNew']");
+							curForm.attr("action", curForm.attr("action") + "&stayOnPage=true")
+							submitForm();
+						});
 						
 					</script>
 					</logic:equal>

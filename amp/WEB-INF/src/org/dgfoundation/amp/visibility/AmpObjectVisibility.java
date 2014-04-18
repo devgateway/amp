@@ -29,7 +29,7 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL,Permissible.PermissibleProperty.PROPERTY_TYPE_CLUSTER_ID})
 	protected String name;
 	
-	protected Set items;
+	protected Set<AmpObjectVisibility> items;
 	protected Set allItems;
 	protected String nameTrimmed;
 	protected String properName;
@@ -78,12 +78,21 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Set getItems() {
+	
+	public Set<AmpObjectVisibility> getItems() {
 		return items;
 	}
-	public void setItems(Set items) {
+	
+	public void setItems(Set<AmpObjectVisibility> items) {
 		this.items = items;
 	}
+	
+	public Set<AmpObjectVisibility> getOrCreateItems(){
+		if (items == null)
+			items = new TreeSet<>();
+		return getItems();
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -139,7 +148,7 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 		if(this.getItems()==null) return null;
 		
 		if (this.sortedItems == null || this.sortedItems.size() != this.items.size() ) {
-			 TreeSet<AmpObjectVisibility> mySet=new TreeSet<AmpObjectVisibility>(FeaturesUtil.ALPHA_ORDER);
+			 TreeSet<AmpObjectVisibility> mySet=new TreeSet<>(FeaturesUtil.ALPHA_ORDER);
 			 mySet.addAll(this.getItems());
 			 this.sortedItems	= mySet;
 		}

@@ -37,7 +37,7 @@ String currentDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.F
 	<digi:trn key="aim:report:displayofficialamplogo">Displays the Official AMP Logo</digi:trn>
 </c:set>
 <c:set var="logostatementpaneltitle">
-	<digi:trn key="aim:report:logostatementpaneltitle">Logo/Statement Panel</digi:trn>
+	<digi:trn key="aim:report:logostatementpaneltitle">Excel Export Options</digi:trn>
 </c:set>
 <c:set var="statement">
 	<digi:trn key="aim:report:statement">Statement</digi:trn>
@@ -137,7 +137,7 @@ addLoadEvent(addpanel);
 <style>
 <!--
 .toolbar{
-	width: 140px;
+	/* width: 140px; */
 	background: #f2f2f2; 
 	background-color: #f2f2f2f; 
 	padding: 3px 3px 3px 3px; 
@@ -145,7 +145,9 @@ addLoadEvent(addpanel);
 	top: 10px; 
 	left: 10px;
 	bottom: 100px;	
-	border:1px solid #CCCCCC;	
+	border:1px solid #CCCCCC;
+	display: inline-block;
+	margin-bottom: 15px;
 }
 .toolbartable{
 }
@@ -174,6 +176,7 @@ addLoadEvent(addpanel);
 	String rcidParam = "&reportContextId=" + ReportContextData.getCurrentReportContextId(request, true);
 				
 	String viewParamXLS="/xlsExport.do";
+	String viewParamRichXLS="/xlsExport.do?richReport=true";
 	String viewParamPlainXLS="/xlsExport.do?plainReport=true";
 	String viewParamPDF="/pdfExport.do";
 	String viewParamCSV="/csvExport.do"+viewParam;
@@ -188,13 +191,17 @@ addLoadEvent(addpanel);
 		var form=document.getElementById("exportSettingsForm");
 		if (type == "xls") {
 			form.action = "/aim"+"<%=viewParamXLS%>";
-		}if (type == "plainXls") {
+		} else if (type == 'richXls'){
+			form.action = "/aim"+"<%=viewParamRichXLS%>";
+		}
+		if (type == "plainXls") {
 			form.action = "/aim"+"<%=viewParamPlainXLS%>";
 		} else if (type == "pdf") {
 			form.action = "/aim"+"<%=viewParamPDF%>";
 		}
 		<feature:display name="Show Options on Export" module="Report and Tab Options">
-			options = true;
+			if (type != 'richXls')
+				options = true;
 		</feature:display>
 		
 		if (options){
@@ -237,7 +244,7 @@ addLoadEvent(addpanel);
 			<a href="javascript:window.location.reload();"><digi:trn key="rep:tool:ReloadReport">Reload Report</digi:trn></a></td>				
 		-->
 
-		<td noWrap align=left valign="center">	
+		<td noWrap align=left valign="middle">	
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">	
 				<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;" title="<digi:trn>Download as PDF</digi:trn>">
 					<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
@@ -248,28 +255,34 @@ addLoadEvent(addpanel);
 			</logic:equal>
 		</td>
 
-		<td noWrap align=left valign="center">
+		<td noWrap align=left valign="middle">
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">			
 				<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;" title="<digi:trn>Download as XLS</digi:trn>">
 					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" title="Export to Excel" />
 				</a>
 			</logic:notEqual>
 			<logic:equal name="viewable" property="totalUniqueRows" value="0">			
-					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon_gray.gif" border="0" title="Report is empty. Nothing to export" />
+				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon_gray.gif" border="0" title="Report is empty. Nothing to export" />
 			</logic:equal>
 		</td>
 
-		<td noWrap align=left valign="center">		
+		<td noWrap align=left valign="middle">		
 			<logic:notEqual name="viewable" property="totalUniqueRows" value="0">	
 				<a href="#" target="_blank" onclick="toggleActionForm('plainXls'); return false;" title="<digi:trn>Download as Plain XLS</digi:trn>">
 					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon.jpg" border="0" alt="Export to Excel as Plain Report" />
 				</a>
 			</logic:notEqual>
 			<logic:equal name="viewable" property="totalUniqueRows" value="0">		
-					<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon_gray.gif" border="0" title="Report is empty. Nothing to export" />
+				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon_gray.gif" border="0" title="Report is empty. Nothing to export" />
 			</logic:equal>
 		</td>
-		
+
+		<%--<td noWrap align=left valign="middle" style="background-color: #CFCFCF">		
+			<a href="#" target="_blank" onclick="toggleActionForm('richXls'); return false;" title="<digi:trn>Download as Rich XLS</digi:trn>">
+				<img src="/TEMPLATE/ampTemplate/module/aim/images/xls_icon.jpg" border="0" hspace="2" vspace="2" alt="Export as Rich Excel" />
+			</a>
+		</td> --%>
+				
 		<c:set var="downloadAsCsv">
 			<digi:trn>Download as CSV</digi:trn>
 		</c:set>
@@ -460,13 +473,23 @@ function openPrinter(){
 								<option value="true">${enable}</option>
 							</select>
 						</td>
-					</tr>
-					<tr>
-						<td align="center" colspan="2">&nbsp;</td>
-					</tr>
-					<tr>
-						<td align="center" colspan="2">&nbsp;</td>
-					</tr>
+					</tr>	
+								
+					<tr id="richExportRow">
+						<td>
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
+							<digi:trn key="rep:pop:publicPortalMode">Rich Export Format</digi:trn>
+						</td>
+						<td>
+							<select name="richReport">
+								<option selected="selected" value="true">${enable}</option>							
+								<option value="false">${disable}</option>
+							</select>
+						</td>
+					</tr>				
+					<tr><td align="center" colspan="2">&nbsp;</td></tr>
+					<tr><td align="center" colspan="2">&nbsp;</td></tr>
+					
 					<tr>
 						<td align="center" colspan="2">
 							<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" 

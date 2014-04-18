@@ -131,6 +131,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 					for(Column element2:columnsOnCurrentLine)
 					{
 						colId.set(colIdBaseValue + element2.getPositionInHeading().getStartColumn());
+						int colcol = colId.intValue(); // save the value because processing further after might change it
 						//int medium = getAverageLengthOfCells(element2, 10);
 						
 						//if (!"-".equalsIgnoreCase(element2.getName(metadata.getHideActivities())))
@@ -152,7 +153,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 							
 							if (element2 instanceof CellColumn) // we are at the bottom of the columns hierarchy
 							{
-								calculateAndSetColumnWidth(colId.intValue(), (CellColumn) element2, translatedCellValue);
+								calculateAndSetColumnWidth(colcol, (CellColumn) element2, translatedCellValue);
 							}
 						}
 

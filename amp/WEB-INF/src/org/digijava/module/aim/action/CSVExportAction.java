@@ -34,6 +34,7 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+import org.dgfoundation.amp.ar.view.xls.XLSExportType;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -128,8 +129,7 @@ public class CSVExportAction
 	
 	    HSSFRow row = sheet.createRow(rowId.intValue());
 	
-	    GroupReportDataXLS grdx = ARUtil.instatiateGroupReportDataXLS(request.getSession(), wb, sheet, row, rowId,
-	        colId, null, rd);
+	    GroupReportDataXLS grdx = ARUtil.instatiateGroupReportDataXLS(request.getSession(), wb, sheet, row, rowId, colId, null, rd, XLSExportType.SIMPLE_XLS_EXPORT);
 	
 	    grdx.setMetadata(report);
 	

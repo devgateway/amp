@@ -591,10 +591,10 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	}
 	
 	public int getNumOfHierarchies() {
-			int ret	= 0;
-			if ( this.hierarchies != null )
-				ret	= this.hierarchies.size();
-			return ret;
+		int ret	= 0;
+		if ( this.hierarchies != null )
+			ret	= this.hierarchies.size();
+		return ret;
 	}
 	
 	public String getHierarchiesPath() {

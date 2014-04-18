@@ -52,6 +52,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
+import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -615,6 +616,9 @@ public class ReportWizardAction extends MultiAction {
 		if (ampReportId == null || ampReportId.isEmpty())
 			throw new Exception ("No reportId found in request");
 		
+		if (!AmpMath.isLong(ampReportId))
+			return modeSave(mapping, form, request, response);
+		
 		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ampReportId);		
 		
 		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
@@ -624,7 +628,7 @@ public class ReportWizardAction extends MultiAction {
 		
 		if (filter == null)
 			throw new Exception ("No filter object found in http Session");
-		
+				
 		Long reportId				= Long.parseLong(ampReportId);
 		
 		String ampReportTitle			= request.getParameter("reportTitle");

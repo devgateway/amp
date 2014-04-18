@@ -62,7 +62,13 @@ public class GroupReportDataXLS extends XLSExporter{
 	 */
 	protected TreeMap<Integer, Integer> columnWidths = new TreeMap<Integer, Integer>();
 	
-	private boolean machineFriendlyColName = false;	
+	private boolean machineFriendlyColName = false;
+	
+	/**
+	 * only makes sense for the top-level parent
+	 */
+	private XLSExportType exportType;
+	
 	/**
 	 * @param parent
 	 * @param item
@@ -97,9 +103,7 @@ public class GroupReportDataXLS extends XLSExporter{
 		
 		this.showHeadings();
 		
-		this.createTrailCellsCase1();
-
-
+		this.createPrologueTrailCellsForGRD();
 		//iterate the data
 		Iterator i = grd.getItems().iterator();
 		while (i.hasNext()) {
@@ -107,7 +111,7 @@ public class GroupReportDataXLS extends XLSExporter{
 			this.invokeChildExporter(element);
 		}
 		
-		this.createTrailCellsCase2();
+		this.createConcludingTrailCellsForReport();
 		
 		if (this.getParent() == null)
 			setColumnWidths();	
@@ -120,23 +124,18 @@ public class GroupReportDataXLS extends XLSExporter{
 	{
         if (columnWidths != null && !columnWidths.isEmpty()) {
             int nrColumns = columnWidths.lastKey();
-            for(int i = 0; i <= nrColumns; i++)
-            {
-                try
-                {
-                    if (columnWidths.containsKey(i))
-                    {
+            for(int i = 0; i <= nrColumns; i++){
+                try{
+                    if (columnWidths.containsKey(i)){
                         sheet.setColumnWidth(i, Math.min(columnWidths.get(i), MAX_COLUMN_WIDTH * 256));
                     }
-                    else
-                    {
-                        sheet.autoSizeColumn(i);
+                    else{
+                        sheet.autoSizeColumn(i, true);
                         if (sheet.getColumnWidth(i) > MAX_COLUMN_WIDTH * 256)
                             sheet.setColumnWidth(i, MAX_COLUMN_WIDTH * 256);
                     }
                 }
-                catch(Exception e)
-                {
+                catch(Exception e){
                     logger.error(e);
                     // autoSizeColumn() or setColumnWidth() sometime fail
                 }
@@ -151,32 +150,32 @@ public class GroupReportDataXLS extends XLSExporter{
 	protected void showHeadings () {
 		GroupReportData grd = (GroupReportData) item;
 		//show Headings:		
-		ReportHeadingsXLS headings=new ReportHeadingsXLS(this,grd.getFirstColumnReport());
+		ReportHeadingsXLS headings=new ReportHeadingsXLS(this, grd.getFirstColumnReport());
 		headings.setAutoSize(this.isAutoSize());
 		headings.setMachineFriendlyColName(this.machineFriendlyColName);
 		headings.generate();
 	}
 	
-	protected void createTrailCellsCase1 () {
+	protected void createPrologueTrailCellsForGRD () {
 		//		trail cells:
 		GroupReportData grd = (GroupReportData) item;
-		if ((grd != null) && ((GroupReportData)grd.getParent() != null) && ((GroupReportData)grd.getParent()).getLevelDepth() != 0){
+		if ((grd != null) && (grd.getParent() != null) && (grd.getParent().getLevelDepth() != 0)){
 			TrailCellsXLS trails2=new TrailCellsXLS(this,grd);
 			trails2.generate();
 		}
 		
 	}
-	protected void createTrailCellsCase2 () {
+	protected void createConcludingTrailCellsForReport () {
 		GroupReportData grd = (GroupReportData) item;
-		if ((grd.getParent() == null) || ((GroupReportData)grd.getParent()).getLevelDepth() == 0){
-			TrailCellsXLS trails2=new TrailCellsXLS(this,grd);
+		if ((grd.getParent() == null) || (grd.getParent().getLevelDepth() == 0)) {
+			TrailCellsXLS trails2 = new TrailCellsXLS(this,grd);
 			trails2.generate();
 		}
 	}
 	
 	public void createHeaderLogoAndStatement(HttpServletRequest request, AdvancedReportForm reportForm, String realPath) throws Exception {
 		
-		HttpSession session 	=  request.getSession();
+//		HttpSession session 	=  request.getSession();
 		//for translation purposes
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		GroupReportData rd = (GroupReportData) item;
@@ -242,13 +241,15 @@ public class GroupReportDataXLS extends XLSExporter{
 		//for translation purposes
 //		Site site = RequestUtils.getSite(request);
 //		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		boolean isPlain = (request.getParameter("plainReport") == null ||
-                !request.getParameter("plainReport").equalsIgnoreCase("true")) ? false:true;
 
 		GroupReportData rd = (GroupReportData) item;
 		AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
 
-        if (!isPlain) this.makeColSpan(rd.getTotalDepth(),false);
+		boolean isPlain = getArchExportType() == XLSExportType.PLAIN_XLS_EXPORT;
+		
+        if (!isPlain)
+        	this.makeColSpan(rd.getTotalDepth(), false);
+        
 		rowId.inc();
 		colId.reset();
 		row = sheet.createRow(rowId.shortValue());
@@ -311,4 +312,17 @@ public class GroupReportDataXLS extends XLSExporter{
 		this.machineFriendlyColName = machineFriendlyColName;
 	}
 
+	/**
+	 * use this instead of directly accessing {@link #exportType} - the field will be null for non-parents!
+	 * @return
+	 */
+	public XLSExportType getArchExportType(){
+		return ((GroupReportDataXLS) this.getArchParent()).exportType;
+	}
+	
+	public void setExportType(XLSExportType exportType){
+		if (this.parent != null)
+			throw new RuntimeException("only allowed to set exportType for archParent!");
+		this.exportType = exportType;
+	}
 }

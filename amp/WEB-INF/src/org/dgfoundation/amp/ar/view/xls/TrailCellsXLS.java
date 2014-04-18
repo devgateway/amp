@@ -84,15 +84,7 @@ public class TrailCellsXLS extends XLSExporter {
 			}
 			HSSFCell cell = this.getCell(hierarchyStyle);
 			
-			String modifiedName = (grd.getName()==null)?"":grd.getName();
-
-			int pos = modifiedName.indexOf(':'); 
-			if (pos >= 0)
-				modifiedName = modifiedName.substring(pos + 1).trim();
-			
-			
-			if (grd.getParent().getParent() == null)
-				modifiedName = "TOTAL";
+			String modifiedName = getDisplayedName(grd);
 			if (grd.getReportMetadata().isHideActivities()!=null && !(grd.getReportMetadata().getType() == ArConstants.PLEDGES_TYPE)){
 				if (grd.getReportMetadata()!=null && grd.getReportMetadata().isHideActivities())
 					//cell.setCellValue(indent + modified);

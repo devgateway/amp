@@ -13,6 +13,8 @@ import java.util.Hashtable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.dgfoundation.amp.ar.view.xls.XLSExportType;
+
 /**
  * Class describing a viewable behaviour. Viewable objects always have a viewer
  * name for each view modes (types). A viewer is responsible for showing the contents of the cell to the end user. 
@@ -86,10 +88,10 @@ public abstract class Viewable implements Cloneable {
 	}
 	
 	public void invokeExporter(Exporter parent, boolean useBudgetClasses) {
-		this.invokeExporter(parent, useBudgetClasses, false);
+		this.invokeExporter(parent, useBudgetClasses, XLSExportType.SIMPLE_XLS_EXPORT);
 	}
 	
-	public void invokeExporter(Exporter parent, boolean useBudgetClasses, boolean isPlainReport) {
+	public void invokeExporter(Exporter parent, boolean useBudgetClasses, XLSExportType exportType) {
 		// try to instantiate the Generator
 		try {
 			// get the exporter class for this Viewable
@@ -97,28 +99,16 @@ public abstract class Viewable implements Cloneable {
 			Class c = Class.forName(viewer);
 			// get the first constructor - it SHOULD be the one that receives an
 			// Exporter object (parent)
-			Constructor cons	= ARUtil.getConstrByParamNo(c,2,useBudgetClasses, isPlainReport);
+			Constructor cons	= ARUtil.getConstrByParamNo(c,2,useBudgetClasses, exportType);
 			// instantiate an exporter object with reference to the parent
-			ARUtil.getConstrByParamNo(c,2);
+			//ARUtil.getConstrByParamNo(c,2);
 			Exporter exp = (Exporter) cons.newInstance(new Object[] { parent,
 					this });
 			// invoke generate method to this object
 			exp.generate();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		} 
 	}
 
 	public String getViewerPath() {

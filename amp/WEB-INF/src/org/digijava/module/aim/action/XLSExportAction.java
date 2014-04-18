@@ -51,6 +51,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+import org.dgfoundation.amp.ar.view.xls.XLSExportType;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -90,6 +91,10 @@ public class XLSExportAction extends Action {
 	    }
 	    
 	    logger.info("reportContextId: " + ReportContextData.getFromRequest(true).getContextId()); // DO NOT DELETE THIS CALL - it ensures that a ReportContextMap exists
+		boolean isPlain = "true".equals(request.getParameter("plainReport"));
+		boolean isRich = "true".equals(request.getParameter("richReport"));
+		XLSExportType exportType = XLSExportType.buildWithParams(isPlain, isRich);
+
 	    
 	    AmpReports report = null;
 	    try {
@@ -112,9 +117,11 @@ public class XLSExportAction extends Action {
 		
 		rd.setCurrentView(GenericViews.XLS);
 		
+		String exportFileName = rd.getName().replace(" ", "_") + "_" + exportType + ".xls";
+		
 		if (session.getAttribute("currentMember")!=null ||  rd.getReportMetadata().getPublicReport()){
 	     response.setContentType("application/msexcel");
-	     	response.setHeader("Content-Disposition","attachment; filename="+ rd.getName().replace(" ","_") +".xls");
+	     	response.setHeader("Content-Disposition","attachment; filename=" + exportFileName);
 	        AdvancedReportForm reportForm = (AdvancedReportForm) form;
 	        //
 			AmpReports r = ReportContextData.getFromRequest().getReportMeta();
@@ -183,14 +190,12 @@ public class XLSExportAction extends Action {
 			rd.applyLevelSorter();
 		}
 		
-		String plainReportParam = request.getParameter("plainReport");
-		Boolean isPlainReport = plainReportParam != null ? Boolean.valueOf(plainReportParam): false;
-		
+		rd.computeRowSpan(0, 0, Integer.MAX_VALUE - 100);
+
 		String publicPortalModeParam = request.getParameter("publicPortalMode");
 		Boolean isPublicPortalMode = publicPortalModeParam != null ? Boolean.valueOf(publicPortalModeParam): false;
-
-		GroupReportDataXLS grdx	= ARUtil.instatiateGroupReportDataXLS(request.getSession(), wb, sheet, row, rowId,
-		        colId, null, rd, isPlainReport);
+			
+		GroupReportDataXLS grdx	= ARUtil.instatiateGroupReportDataXLS(request.getSession(), wb, sheet, row, rowId, colId, null, rd, exportType);
 		
 		grdx.setMetadata(r);
 		grdx.setFilter(arf);

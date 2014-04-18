@@ -44,6 +44,9 @@ import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.PlainColumnReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.PlainGroupReportDataXLS;
+import org.dgfoundation.amp.ar.view.xls.RichColumnReportDataXLS;
+import org.dgfoundation.amp.ar.view.xls.RichGroupReportDataXLS;
+import org.dgfoundation.amp.ar.view.xls.XLSExportType;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
@@ -167,7 +170,15 @@ public final class ARUtil {
 		}
 	}
 	
-	public static Constructor getConstrByParamNo(Class c, int paramNo, boolean useBudgetClasses, boolean isPlainReport) {
+	/**
+	 * hacks method for overriding the requested class in some cases
+	 * @param c
+	 * @param paramNo
+	 * @param useBudgetClasses
+	 * @param isPlainReport
+	 * @return
+	 */
+	public static Constructor getConstrByParamNo(Class c, int paramNo, boolean useBudgetClasses, XLSExportType exportType) {
 			if ( useBudgetClasses ) {
 				if (TextColWorker.class.equals(c))
 					c 	= BudgetTextColWorker.class;
@@ -181,18 +192,23 @@ public final class ARUtil {
 					c	= BudgetGroupReportDataXLS.class;
 				if ( ColumnReportDataXLS.class.equals(c) )
 					c	= BudgetColumnReportDataXLS.class;
-			}else if ( isPlainReport ) {
+			} else if (exportType == XLSExportType.PLAIN_XLS_EXPORT) {
 				if ( GroupReportDataXLS.class.equals(c) )
 					c	= PlainGroupReportDataXLS.class;
 				if ( ColumnReportDataXLS.class.equals(c) )
 					c	= PlainColumnReportDataXLS.class;
+			} else if (exportType == XLSExportType.RICH_XLS_EXPORT){
+				if (GroupReportDataXLS.class.equals(c))
+					c = RichGroupReportDataXLS.class;
+				if (ColumnReportDataXLS.class.equals(c))
+					c = RichColumnReportDataXLS.class;
 			}
 			
 			return ARUtil.getConstrByParamNo(c, paramNo);
 	}
 	
 	public static Constructor getConstrByParamNo(Class c, int paramNo, boolean useBudgetClasses) {
-		return getConstrByParamNo(c, paramNo, useBudgetClasses, false);
+		return getConstrByParamNo(c, paramNo, useBudgetClasses, XLSExportType.SIMPLE_XLS_EXPORT);
 	}
 	
 	public static Constructor getConstrByParamNo(Class c, int paramNo) {
@@ -691,13 +707,13 @@ public final class ARUtil {
 				ArConstants.syntheticColumns;
 	}
 	
-	public static GroupReportDataXLS instatiateGroupReportDataXLS (HttpSession session, HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
-			IntWrapper colId, Long ownerId, GroupReportData rd) {
-		return instatiateGroupReportDataXLS(session, wb, sheet, row, rowId, colId, ownerId, rd, false);
-	}
+//	public static GroupReportDataXLS instatiateGroupReportDataXLS (HttpSession session, HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+//			IntWrapper colId, Long ownerId, GroupReportData rd) {
+//		return instatiateGroupReportDataXLS(session, wb, sheet, row, rowId, colId, ownerId, rd, false);
+//	}
 
 	public static GroupReportDataXLS instatiateGroupReportDataXLS (HttpSession session, HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
-			IntWrapper colId, Long ownerId, GroupReportData rd, boolean isPlainReport) {
+			IntWrapper colId, Long ownerId, GroupReportData rd, XLSExportType exportType) {
 		if (session != null ) {
 			String budgetTypeReport	= (String) session.getAttribute(BudgetExportConstants.BUDGET_EXPORT_TYPE );
 			if (budgetTypeReport != null ) {
@@ -707,15 +723,18 @@ public final class ARUtil {
 			}
 		}
 
-		if (isPlainReport){
-			GroupReportDataXLS grd	= new PlainGroupReportDataXLS(wb, sheet, row, rowId,
-					colId, null, rd);
-			return grd;
+		switch(exportType){
+			case PLAIN_XLS_EXPORT:
+				return new PlainGroupReportDataXLS(wb, sheet, row, rowId, colId, null, rd);
 			
-		}else{
-			GroupReportDataXLS grd	= new GroupReportDataXLS(wb, sheet, row, rowId,
-					colId, null, rd);
-			return grd;
+			case SIMPLE_XLS_EXPORT:
+				return new GroupReportDataXLS(wb, sheet, row, rowId, colId, null, rd);
+				
+			case RICH_XLS_EXPORT:
+				return new RichGroupReportDataXLS(wb, sheet, row, rowId, colId, null, rd);
+				
+			default:
+				throw new RuntimeException("Unknown Excel export type: " + exportType);
 		}
 	}
 		

@@ -20,8 +20,12 @@ import org.apache.poi.hssf.usermodel.contrib.HSSFRegionUtil;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.Region;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.dgfoundation.amp.ar.Exporter;
+import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * 
@@ -61,7 +65,7 @@ public abstract class XLSExporter extends Exporter {
 	protected HSSFCellStyle hierarchyLevel1Style = null;
 	protected HSSFCellStyle hierarchyOtherStyle = null;
 	protected HSSFCellStyle amountHierarchyLevel1Style = null;
-	protected HSSFCellStyle amountHierarchyOtherStyle = null;	
+	protected HSSFCellStyle amountHierarchyOtherStyle = null;
 	/*********************************************************/
 
 	protected IntWrapper rowId;
@@ -91,11 +95,15 @@ public abstract class XLSExporter extends Exporter {
 	}
 
 	protected HSSFCell getRegularCell() {
-		return getRegularCell(row);
+//		if (row == null)
+//			row = sheet.createRow(rowId.shortValue());
+		return getRegularCell(getOrCreateRow());
 	}
 
 	protected HSSFCell getCell(HSSFCellStyle style) {
-		return getCell(row, style);
+//		if (row == null)
+//			row = sheet.createRow(rowId.shortValue());		
+		return getCell(getOrCreateRow(), style);
 	}
 
 	protected HSSFCell getCell(HSSFRow row, HSSFCellStyle style) {
@@ -143,7 +151,6 @@ public abstract class XLSExporter extends Exporter {
 		}
 		return amountStyle;
 	}
-
 	
 	protected HSSFCellStyle getAmountHierarchyLevel1Style() {
 		if (amountHierarchyLevel1Style == null) {
@@ -281,24 +288,26 @@ public abstract class XLSExporter extends Exporter {
 		return hierarchyOtherStyle;
 	}
 	
-	public void makeColSpanAndRowSpan(int colSpan, int rowSpan, Boolean border)
-	{
+	public HSSFCell createCenteredCell(String contents, HSSFCellStyle cellStyle, boolean borderRight, int rowSpan, int colSpan){
+		row = getOrCreateRow();
+		HSSFCell cell = this.getCell(row, cellStyle);
+		cell.setCellValue(contents);
+		makeColSpanAndRowSpan(1, rowSpan, borderRight);
+		return cell;
+	}
 	
+	public void makeColSpanAndRowSpan(int colSpan, int rowSpan, Boolean borderRight)
+	{
+		//System.out.format("making colspan (minX, minY, maxX, maxY) = (%d, %d, %d, %d)\n", colId.intValue(), rowId.intValue(), colId.intValue() + colSpan - 1, rowId.intValue() + rowSpan - 1);
 		if (colSpan == 1 && rowSpan == 1)
 			return;
 		CellRangeAddress r = new CellRangeAddress(rowId.intValue(), rowId.intValue() + rowSpan - 1, colId.intValue(), colId.intValue() + colSpan - 1);
 //		Region r=new Region(rowId.intValue(), colId.shortValue(), rowId.intValue() + rowSpan - 1, (short) (colId.shortValue() + colSpan - 1));
-		if (border){
-			HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
-			HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
+		HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
+		HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
+		if (borderRight)
 			HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
-			HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
-		}else{
-			HSSFRegionUtil.setBorderBottom(HSSFCellStyle.BORDER_NONE, r, sheet, wb);
-			HSSFRegionUtil.setBorderLeft(HSSFCellStyle.BORDER_NONE, r, sheet, wb);
-			HSSFRegionUtil.setBorderRight(HSSFCellStyle.BORDER_NONE, r, sheet, wb);
-			HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_NONE, r, sheet, wb);
-		}	
+		HSSFRegionUtil.setBorderTop(HSSFCellStyle.BORDER_THIN, r, sheet, wb);
 		sheet.addMergedRegion(r);
 		sheet.autoSizeColumn(colId.intValue());
 		colId.inc(colSpan);
@@ -506,11 +515,29 @@ public abstract class XLSExporter extends Exporter {
 	{
 		// do nothing
 	}
+
+	/**
+	 * hack extracted from some places in order to at least not copy the mess
+	 * @param grd
+	 * @return
+	 */
+	public String getDisplayedName(ReportData<?> grd){
+		String modifiedName = (grd.getName() == null) ? "" : grd.getName();
+
+		int pos = modifiedName.indexOf(':'); 
+		if (pos >= 0)
+			modifiedName = modifiedName.substring(pos + 1).trim();
+				
+		if (grd.getParent() != null && grd.getParent().getParent() == null)
+			modifiedName = TranslatorWorker.translateText("TOTAL").toUpperCase();
+
+		return modifiedName;
+	}
 	
-//    public boolean isAutoSize() {
-//        return autoSize;
-//}
-//public void setAutoSize(boolean autoSize) {
-//        this.autoSize = autoSize;
-//}
+	public HSSFRow getOrCreateRow(){
+		row = sheet.getRow(rowId.shortValue());
+		if (row == null)
+			row = sheet.createRow(rowId.shortValue());
+		return row;
+	}
 }

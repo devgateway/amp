@@ -97,7 +97,7 @@ public class PlainColumnReportDataXLS extends ColumnReportDataXLS {
 	
 	@Override
 	protected void invokeChildExporter( Viewable element) {
-			element.invokeExporter(this, false, true);
+			element.invokeExporter(this, false, XLSExportType.PLAIN_XLS_EXPORT);
 	}
 	
 	@Override

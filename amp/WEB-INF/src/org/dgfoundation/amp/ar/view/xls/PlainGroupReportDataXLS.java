@@ -53,10 +53,11 @@ public class PlainGroupReportDataXLS extends GroupReportDataXLS {
 		headings.generate();
 	}	
 	@Override
-	protected void createTrailCellsCase1 () {
+	protected void createPrologueTrailCellsForGRD () {
 	}
+	
 	@Override
-	protected void createTrailCellsCase2() {
+	protected void createConcludingTrailCellsForReport() {
 		GroupReportData grd = (GroupReportData) item;
 		if (grd.getParent() != null && ((GroupReportData)grd.getParent()).getLevelDepth() == 0){
 			GroupReportData groupReport = (GroupReportData) item;
@@ -66,15 +67,12 @@ public class PlainGroupReportDataXLS extends GroupReportDataXLS {
 	}
 	@Override
 	protected void invokeChildExporter( Viewable element) {
-		element.invokeExporter(this, false, true);
+		element.invokeExporter(this, false, XLSExportType.PLAIN_XLS_EXPORT);
 	}
 	
 	@Override
 	public void createHeaderLogoAndStatement(HttpServletRequest request, AdvancedReportForm reportForm, String realPath) throws Exception {
+		// do nothing
 	}
 	
-//	@Override
-//	public void createHeaderNameAndDescription(HttpServletRequest request) throws Exception {
-//	}
-
 }

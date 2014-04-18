@@ -95,6 +95,23 @@ public abstract class Exporter {
 	public void setParent(Exporter parent) {
 		this.parent = parent;
 	}
+	
+	/**
+	 * cached result of {@link #getArchParent()}
+	 */
+	private Exporter _arch_parent = null;
+	
+	/**
+	 * iterates upto the top of the hier
+	 * @return
+	 */
+	public Exporter getArchParent(){
+		if (this.parent == null)
+			return this;
+		if (_arch_parent == null)
+			_arch_parent = this.parent.getArchParent();
+		return _arch_parent;
+	}
 
 	/**
 	 * method implemented by any exporter, that creates the required objects that can be displayed in output. 

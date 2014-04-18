@@ -664,7 +664,12 @@ public class AmpReportGenerator extends ReportGenerator {
 					continue;
 				CategAmountCell cac = (CategAmountCell) el2;
 				double dbl = cac.getAmount();
-				total = total.add(new BigDecimal(dbl));
+				try{
+					total = total.add(new BigDecimal(dbl));
+				}
+				catch(Exception e){
+					logger.error("PoS: " + cac.getAmount());
+				}
 			}
 			if (removeActualCommitmentsSubcolumn){ //If it was added for calculation purposes, remove it
 				removeableColumn = column;

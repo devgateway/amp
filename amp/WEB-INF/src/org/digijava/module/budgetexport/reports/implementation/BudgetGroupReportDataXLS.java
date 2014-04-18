@@ -58,12 +58,12 @@ public class BudgetGroupReportDataXLS extends GroupReportDataXLS {
 	}
 	
 	@Override
-	protected void createTrailCellsCase1 () {
+	protected void createPrologueTrailCellsForGRD() {
 		
 	}
 	
 	@Override
-	protected void createTrailCellsCase2 () {
+	protected void createConcludingTrailCellsForReport() {
 	}
 	
 	@Override

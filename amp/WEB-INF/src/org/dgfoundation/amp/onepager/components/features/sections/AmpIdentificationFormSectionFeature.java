@@ -144,11 +144,13 @@ implements AmpRequiredComponentContainer{
 			public String getObject() {
 				if (title.getTextAreaContainer().getModelObject() == null)
 					return null;
-				String stitle=(String) title.getTextAreaContainer().getModelObject();
+
+				String sTitle = title.getTextAreaContainer().getModelObject();
 				ServletContext context = ((WebApplication) Application.get())
 						.getServletContext();
+
                 List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
-                        context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, stitle, 2);
+                        context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, sTitle, 2);
                 if (! list.isEmpty()) {
                     String ret = TranslatorUtil
                             .getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";

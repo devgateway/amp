@@ -45,11 +45,9 @@ import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.action.GlobalSettings;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -144,30 +142,46 @@ implements AmpRequiredComponentContainer{
 			public String getObject() {
 				if (title.getTextAreaContainer().getModelObject() == null)
 					return null;
-				String stitle=(String) title.getTextAreaContainer().getModelObject();
-				ServletContext context = ((WebApplication) Application.get())
-						.getServletContext();
-				List<String> list = LuceneUtil.findActivitiesMoreLikeThis(
-						context.getRealPath("/")
-								+ LuceneUtil.ACTVITY_INDEX_DIRECTORY,stitle,
-						2);
-				if (!list.isEmpty()) {
-					String ret=TranslatorUtil
-							.getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";
-					boolean moreThanSelf=false;
-					for (String string : list) 
-						if(string!=null && string.trim().compareTo(stitle.trim())!=0) {
-							moreThanSelf=true;
-							ret+=" - "+string+ "\n";
-						}
-					if(moreThanSelf) return ret;
-					else return null;
-					
-				} else
-					return null;
 
-			}
-		};
+                String sTitle = title.getTextAreaContainer().getModelObject();
+                ServletContext context = ((WebApplication) Application.get())
+                        .getServletContext();
+
+                List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
+                        context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, sTitle, 2);
+                if (! list.isEmpty()) {
+                    String ret = TranslatorUtil
+                            .getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";
+                    boolean moreThanSelf = false;
+                    // avoiding comparison with itself
+                    Long activityId = null;
+                    if (AmpIdentificationFormSectionFeature.this.am.getObject() != null) {
+                        activityId = AmpIdentificationFormSectionFeature.this.am.getObject().getAmpActivityId();
+                    }
+
+                    // the activity has not been saved yet (even as a draft)
+                    /* we should include then all results found
+                    if (activityId == null) {
+                        return null;
+                    }*/
+
+                    for (AmpActivity activity : list)
+                        if (activityId == null || (activity.getAmpId() != null
+                                && activityId.longValue() != Long.valueOf(activity.getAmpId()).longValue())) {
+                            moreThanSelf = true;
+                            ret += " - " + activity.getName() + "\n";
+                        }
+                    if (moreThanSelf) {
+                        return ret;
+                    } else {
+                        return null;
+                    }
+
+                } else {
+                    return null;
+                }
+            }
+        };
 			
 			titleSimilarityWarning=new AmpWarningComponentPanel<String>("titleSimilarityWarning", "Project Title Similarity Warning", warningModel);
 			titleSimilarityWarning.setOutputMarkupId(true);

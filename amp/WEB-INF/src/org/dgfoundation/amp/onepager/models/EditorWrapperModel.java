@@ -23,6 +23,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * @author aartimon@dginternational.org 
@@ -73,9 +74,8 @@ public class EditorWrapperModel extends LocaleAwareProxyModel<String> {
 			
 			List<String> languages ;
 			//if multilingual is enable we use all the language active for the current instance
-			if ("true".equalsIgnoreCase(FeaturesUtil
-					.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL))) {
-				languages=TranslatorUtil.getLocaleCache();
+			if (ContentTranslationUtil.multilingualIsEnabled()) {
+				languages = TranslatorUtil.getLocaleCache();
 			}
 			else{
 				//if multilingual is not active, we use only ONE language, the default one for the site

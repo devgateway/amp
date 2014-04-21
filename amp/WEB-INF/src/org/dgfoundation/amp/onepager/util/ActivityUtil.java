@@ -148,7 +148,7 @@ public class ActivityUtil {
 
 		a.setDeleted(false);
 
-        if ("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+        if (ContentTranslationUtil.multilingualIsEnabled())
             ContentTranslationUtil.cloneTranslations(a, am.getTranslationHashMap().values());
 
 		//is versioning activated?

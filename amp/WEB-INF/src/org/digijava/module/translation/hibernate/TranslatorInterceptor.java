@@ -34,7 +34,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
-        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+        if (!ContentTranslationUtil.multilingualIsEnabled())
             return false;
 
         //existing entities
@@ -67,7 +67,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+        if (!ContentTranslationUtil.multilingualIsEnabled())
             return false;
 
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
@@ -85,7 +85,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public void postFlush(Iterator entities) {
-        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+        if (!ContentTranslationUtil.multilingualIsEnabled())
             return;
 
     	// try here to update the translations
@@ -115,7 +115,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+        if (!ContentTranslationUtil.multilingualIsEnabled())
             return;
 
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){
@@ -139,7 +139,7 @@ public class TranslatorInterceptor extends EmptyInterceptor{
      */
     @Override
     public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
-        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+        if (!ContentTranslationUtil.multilingualIsEnabled())
             return false;
 
         if (entity.getClass().getAnnotation(TranslatableClass.class) != null){

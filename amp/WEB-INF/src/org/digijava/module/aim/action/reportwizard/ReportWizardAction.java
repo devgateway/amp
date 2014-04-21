@@ -153,10 +153,10 @@ public class ReportWizardAction extends MultiAction {
 		}
 		else { // If there is a report title in the request then it means that the report should be saved
 			try{
-				if ( "true".equalsIgnoreCase(request.getParameter("dynamicSaveReport")) || "true".equals(request.getParameter("forceNameOverwrite"))) 
-					return this.modeDynamicSave(mapping, form, request, response);
-				else
-					return this.modeSave(mapping, form, request, response);
+//				if ( "true".equalsIgnoreCase(request.getParameter("dynamicSaveReport")) || "true".equals(request.getParameter("forceNameOverwrite"))) 
+//					return this.modeDynamicSave(mapping, form, request, response);
+//				else
+					return this.modeSave(mapping, form, request, response, !"true".equals(request.getParameter("forceNameOverwrite")));
 			}
 			catch(DuplicateReportNameException e) {
 				logger.info( e.getMessage() );
@@ -405,7 +405,10 @@ public class ReportWizardAction extends MultiAction {
 	}
 	
 	/**
-	 * save a brand new report
+	 * handles the following 3 cases:
+	 * 	1. save a brand new report (myForm.reportId == null)
+	 *  2. "save" over an existing report (myForm.reportId != null, saveACopy = false)
+	 *  3. "save as" (myForm.reportId != null, saveACopy = true)
 	 * @param mapping
 	 * @param form
 	 * @param request
@@ -414,7 +417,7 @@ public class ReportWizardAction extends MultiAction {
 	 * @throws java.lang.Exception
 	 */
 	public ActionForward modeSave(ActionMapping mapping, ActionForm form, 
-			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+			HttpServletRequest request, HttpServletResponse response, boolean saveACopy) throws java.lang.Exception {
 
 		ReportWizardForm myForm		= (ReportWizardForm) form;
         myForm.setWorkspaceLinked(Boolean.valueOf(request.getParameter("workspaceLinked"))); //Struts for some reason ignores this field and I am tired of it
@@ -422,64 +425,60 @@ public class ReportWizardAction extends MultiAction {
 		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
 		
-		if ( AdvancedReportUtil.checkDuplicateReportName(myForm.getReportTitle(), teamMember.getMemberId(), myForm.getReportId(), myForm.getDesktopTab()) ) {
-			myForm.setDuplicateName(true);
-			throw new DuplicateReportNameException("The name " + myForm.getReportTitle() + " is already used by another report");
-		}
+//		if ( AdvancedReportUtil.checkDuplicateReportName(myForm.getReportTitle(), teamMember.getMemberId(), myForm.getReportId(), myForm.getDesktopTab()) ) {
+//			myForm.setDuplicateName(true);
+//			throw new DuplicateReportNameException("The name " + myForm.getReportTitle() + " is already used by another report");
+//		}
 			
 		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
-		Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();		
+		Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();
 		
-		AmpReports ampReport	= new AmpReports();
-		if ( "donor".equals(myForm.getReportType()) ) 
+		AmpReports ampReport = null;
+		AmpReports oldReport = loadSourceReport(request);
+		
+		boolean createReportFromScratch = (oldReport == null || saveACopy);		
+			
+		if (createReportFromScratch){
+			
+			ampReport = new AmpReports();
+			if ( "donor".equals(myForm.getReportType()) ) 
 				ampReport.setType( new Long(ArConstants.DONOR_TYPE) );
-		if ( "regional".equals(myForm.getReportType()) ) 
+			if ( "regional".equals(myForm.getReportType()) ) 
 				ampReport.setType( new Long(ArConstants.REGIONAL_TYPE) );
-		if ( "component".equals(myForm.getReportType()) ) 
+			if ( "component".equals(myForm.getReportType()) ) 
 				ampReport.setType( new Long(ArConstants.COMPONENT_TYPE) );
-		if ( "contribution".equals(myForm.getReportType()) ) 
+			if ( "contribution".equals(myForm.getReportType()) ) 
 				ampReport.setType( new Long(ArConstants.CONTRIBUTION_TYPE) );
-		if ( "pledge".equals(myForm.getReportType()) ) 
-			ampReport.setType( new Long(ArConstants.PLEDGES_TYPE) );
+			if ( "pledge".equals(myForm.getReportType()) ) 
+				ampReport.setType( new Long(ArConstants.PLEDGES_TYPE) );
+			
+			ampReport.setDrilldownTab( myForm.getDesktopTab() );
+		} else
+			ampReport = oldReport;
+		
+		if (myForm.getPublicReport() != null && myForm.getPublicReport()){
+			boolean updatingPublishedDate = ampReport.getPublicReport() == null || (!ampReport.getPublicReport()); // report was NOT public but is public now
+			if (updatingPublishedDate){
+				ampReport.setPublishedDate(new Date(System.currentTimeMillis()));
+			}
+		}
 		
 		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
 		ampReport.setHideActivities( myForm.getHideActivities() );
 		ampReport.setOptions( myForm.getReportPeriod() );
 		ampReport.setReportDescription( myForm.getReportDescription() );
 		ampReport.setName( myForm.getReportTitle().trim() );
-		ampReport.setDrilldownTab( myForm.getDesktopTab() );
 		ampReport.setPublicReport(myForm.getPublicReport());
 		ampReport.setWorkspaceLinked(myForm.getWorkspaceLinked());
-		if(myForm.getReportCategory()!=null && myForm.getReportCategory()!=0){
+		if (myForm.getReportCategory() != null && myForm.getReportCategory() != 0){
 			ampReport.setReportCategory(CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getReportCategory()));
 		}else{
 			ampReport.setReportCategory(null);
 		}
 		
-		if(myForm.getPublicReport()!=null&&myForm.getPublicReport()){
-			if(myForm.getReportId()==null){
-				ampReport.setPublishedDate(new Date(System.currentTimeMillis()));
-			}
-			else{
-				boolean wasPublic = DbUtil.isPublicReport(myForm.getReportId());
-				if(!wasPublic||(myForm.getOriginalTitle()!=null && !myForm.getOriginalTitle().equals(myForm.getReportTitle()))){
-					ampReport.setPublishedDate(new Date(System.currentTimeMillis()));
-				}
-			}
-			
-		}
-		ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns() );
-		
-		if ( myForm.getBudgetExporter() != null && myForm.getBudgetExporter() )
-			ampReport.setBudgetExporter(true);
-		else
-			ampReport.setBudgetExporter(false);
-		
-		if ( myForm.getReportId() != null ) {
-				if ( myForm.getOriginalTitle()!=null && myForm.getOriginalTitle().equals(myForm.getReportTitle()) )
-						ampReport.setAmpReportId( myForm.getReportId() );
-		}
-		
+		ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns() );	
+		ampReport.setBudgetExporter(myForm.getBudgetExporter() != null && myForm.getBudgetExporter());
+				
 		if ( myForm.getAmpTeamMember() == null ) {
 				ampReport.setOwnerId( ampTeamMember );
 		}
@@ -594,83 +593,80 @@ public class ReportWizardAction extends MultiAction {
 		return null;		
 	}
 	
-	/**
-	 * saves a report based on an another one. In short, copies a report into a new one (with different filters, name and maybe owner). If the "new report" has the same name as the new one, it is overwritten - subject to ownership not changing
-	 * @param mapping
-	 * @param form
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws java.lang.Exception in case of an error or forbidden operation (like overwriting a different user's report)
-	 */
-	public ActionForward modeDynamicSave(ActionMapping mapping, ActionForm form, 
-			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception { 
-		
-		ReportWizardForm myForm		= (ReportWizardForm) form;
-		
+	private AmpReports loadSourceReport(HttpServletRequest request){
 		String ampReportId			= request.getParameter("reportId");
 		String backupAmpReportId = (String) request.getSession().getAttribute("report_wizard_current_id");
 		
 		if (ampReportId == null || ampReportId.isEmpty())
 			ampReportId = backupAmpReportId;
 		if (ampReportId == null || ampReportId.isEmpty())
-			throw new Exception ("No reportId found in request");
+			throw new RuntimeException("No reportId found in request");
 		
 		if (!AmpMath.isLong(ampReportId))
-			return modeSave(mapping, form, request, response);
+			return null;
 		
 		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ampReportId);		
-		
-		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
-		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
-		
+				
 		AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
 		
 		if (filter == null)
-			throw new Exception ("No filter object found in http Session");
+			throw new RuntimeException("No filter object found in http Session");
 				
 		Long reportId				= Long.parseLong(ampReportId);
-		
-		String ampReportTitle			= request.getParameter("reportTitle");
-		if ( ampReportTitle == null || ampReportTitle.length() == 0 )
-			throw new Exception ("No reportTitle found in request");
-		
-		AmpReports sourceReport = ReportWizardAction.loadAmpReport(reportId, request);
-		if ( sourceReport == null )
-			throw new Exception ("There was a problem getting access to the old report");
-		
-		AmpReports ampReport = ReportWizardAction.duplicateReportData(reportId, request); // make a detached copy
-		if ( ampReport == null )
-			throw new Exception ("There was a problem duplicating report");
-
-		
-		if ( ampReportTitle.equals(ampReport.getName()) ) { // we need to override the report
-			if (sourceReport.getOwnerId() == null)
-				throw new RuntimeException("unknown owner id of source report");
-			if (!sourceReport.getOwnerId().getAmpTeamMemId().equals(ampTeamMember.getAmpTeamMemId()))
-			{
-				myForm.setOverwritingForeignReport(true);
-				throw new Exception("you are not allowed to override someone else's report");
-			}
-			ampReport.setAmpReportId( reportId );
-			AmpFilterData.deleteOldFilterData( reportId );
-		}
-		
-		if ( AdvancedReportUtil.checkDuplicateReportName(ampReportTitle, teamMember.getMemberId(), reportId, myForm.getDesktopTab() ) ) {
-			myForm.setDuplicateName(true);
-			throw new DuplicateReportNameException("The name " + ampReportTitle + " is already used by another report");
-		}
-		
-		ampReport.setName( ampReportTitle );
-		ampReport.setOwnerId( ampTeamMember );
-		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
-		ampReport.setFilterDataSet( AmpFilterData.createFilterDataSet(ampReport, filter) );
-		
-		return serializeReportAndOpen(ampReport, teamMember, mapping, myForm, false, request, response);
+				
+		AmpReports sourceReport = (AmpReports) PersistenceManager.getSession().load(AmpReports.class, reportId);
+		return sourceReport;
 	}
+//	/**
+//	 * saves a report based on an another one. In short, copies a report into a new one (with different filters, name and maybe owner). If the "new report" has the same name as the new one, it is overwritten - subject to ownership not changing
+//	 * @param mapping
+//	 * @param form
+//	 * @param request
+//	 * @param response
+//	 * @return
+//	 * @throws java.lang.Exception in case of an error or forbidden operation (like overwriting a different user's report)
+//	 */
+//	public ActionForward modeDynamicSave(ActionMapping mapping, ActionForm form, 
+//			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception { 
+//		
+//		ReportWizardForm myForm		= (ReportWizardForm) form;
+//		
+//		AmpReports sourceReport = loadSourceReport();
+//		if ( sourceReport == null )
+//			throw new Exception ("There was a problem getting access to the old report");
+//		
+//		AmpReports ampReport = ReportWizardAction.duplicateReportData(reportId, request); // make a detached copy
+//		if ( ampReport == null )
+//			throw new Exception ("There was a problem duplicating report");
+//
+//		
+//		if ( ampReportTitle.equals(ampReport.getName()) ) { // we need to override the report
+//			if (sourceReport.getOwnerId() == null)
+//				throw new RuntimeException("unknown owner id of source report");
+//			if (!sourceReport.getOwnerId().getAmpTeamMemId().equals(ampTeamMember.getAmpTeamMemId()))
+//			{
+//				myForm.setOverwritingForeignReport(true);
+//				throw new Exception("you are not allowed to override someone else's report");
+//			}
+//			ampReport.setAmpReportId( reportId );
+//			AmpFilterData.deleteOldFilterData( reportId );
+//		}
+//		
+//		if ( AdvancedReportUtil.checkDuplicateReportName(ampReportTitle, teamMember.getMemberId(), reportId, myForm.getDesktopTab() ) ) {
+//			myForm.setDuplicateName(true);
+//			throw new DuplicateReportNameException("The name " + ampReportTitle + " is already used by another report");
+//		}
+//		
+//		ampReport.setName( ampReportTitle );
+//		ampReport.setOwnerId( ampTeamMember );
+//		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
+//		ampReport.setFilterDataSet( AmpFilterData.createFilterDataSet(ampReport, filter) );
+//		
+//		return serializeReportAndOpen(ampReport, teamMember, mapping, myForm, false, request, response);
+//	}
 	
-	private void addFields (Long [] sourceVector, Collection availableFields, Collection container, 
-						Class reportFieldClass, AmpCategoryValue level ) throws Exception {
+	private void addFields (Long [] sourceVector, Collection<?> availableFields, Collection container, 
+						Class<?> reportFieldClass, AmpCategoryValue level ) throws Exception {
 		if ( sourceVector == null )
 				return;
 		for (int i=0; i<sourceVector.length; i++ ) {

@@ -23,6 +23,7 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -173,6 +174,9 @@ public class ShowTeamReports extends Action {
         Collator collator = Collator.getInstance(currentLocale);
         collator.setStrength(Collator.PRIMARY);
 
+//		AmpReports rep = (AmpReports) PersistenceManager.getSession().load(AmpReports.class, 6073L);
+//		logger.error("report #" + rep.getAmpReportId() + " has name = " + rep.getName() + " in locale " + TLSUtils.getEffectiveLangCode());
+        
 		if (rf.getCurrentPage() == 0) {
 			rf.setCurrentPage(FIRST_PAGE);
 		}

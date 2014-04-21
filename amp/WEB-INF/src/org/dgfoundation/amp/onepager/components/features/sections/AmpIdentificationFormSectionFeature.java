@@ -45,6 +45,7 @@ import org.dgfoundation.amp.onepager.validators.StringRequiredValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.action.GlobalSettings;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -52,6 +53,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 
 /**
@@ -86,8 +88,7 @@ implements AmpRequiredComponentContainer{
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
 			title.getTextAreaContainer().setRequired(true);
-		if ("true".equalsIgnoreCase(FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL))) {
+		if (ContentTranslationUtil.multilingualIsEnabled()){
 			
 			//we only disable the language switcher if we are in multilingual mode
 

@@ -24,6 +24,7 @@ import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTe
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -172,7 +173,7 @@ public class TranslationDecorator extends Panel {
     }
 
     private static boolean isTranslatable(IModel<?> model){
-        if ("false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL)))
+        if (!ContentTranslationUtil.multilingualIsEnabled())
             return false; //Multilingual disabled
 
         if (model instanceof TranslationDecoratorModel)

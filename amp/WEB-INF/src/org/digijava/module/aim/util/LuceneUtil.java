@@ -963,77 +963,80 @@ public class LuceneUtil implements Serializable {
 	 * @return a list of similar {@link AmpActivityVersion} titles
 	 * 
 	 */
-	public static List<String> findActivitiesMoreLikeThis(String index,
-			String origSearchString, int maxLuceneResults) {
-		Searcher indexSearcher = null;
-		IndexReader ir = null;
+    public static List<AmpActivity> findActivitiesMoreLikeThis(String index,
+                                                               String origSearchString, int maxLuceneResults) {
+        Searcher indexSearcher = null;
+        IndexReader ir = null;
 
-		try {
-			ir = IndexReader.open(index);
-			//listDocuments(ir);
-			logger.info("Lucene index reader has " + ir.numDocs()
-					+ " docs in it");
-			indexSearcher = new IndexSearcher(index);
+        try {
+            ir = IndexReader.open(index);
+            logger.info("Lucene index reader has " + ir.numDocs()
+                    + " docs in it");
+            indexSearcher = new IndexSearcher(index);
 
-			MoreLikeThis mlt = new MoreLikeThis(ir);
-			mlt.setMinDocFreq(1);
-			mlt.setMinWordLen(2);
-			mlt.setBoost(true);
-			mlt.setMinTermFreq(1);
-			
-				
-			mlt.setFieldNames(new String[] { "name" });
-			mlt.setAnalyzer(analyzer);
-			//System.out.println("mlt.describeparams="+mlt.describeParams());
-		
+            MoreLikeThis mlt = new MoreLikeThis(ir);
+            mlt.setMinDocFreq(1);
+            mlt.setMinWordLen(2);
+            mlt.setBoost(true);
+            mlt.setMinTermFreq(1);
 
-			Reader reader = new StringReader(origSearchString);
-			Query query = mlt.like(reader);
-			reader.close();
-			TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
-			logger.info("found " + topDocs.totalHits + " topDocs");
-			
-			int minDocumentScore = Integer.parseInt(FeaturesUtil
-					.getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_TITLE_SIMILARITY_SENSITIVITY));
-					
-			
-			List<String> titles = new ArrayList<String>();
-			for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
-				//skip documents with a score lower than #minDocumentScore
-				if(scoreDoc.score<minDocumentScore) continue;
 
-				Document doc = indexSearcher.doc(scoreDoc.doc);
+            mlt.setFieldNames(new String[] { "name" });
+            mlt.setAnalyzer(analyzer);
+            //System.out.println("mlt.describeparams="+mlt.describeParams());
 
-				// Get the title of the activity
-				String str = doc.get("name");
-				titles.add(str);
-			}
 
-			return titles;
+            Reader reader = new StringReader(origSearchString);
+            Query query = mlt.like(reader);
+            reader.close();
+            TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
+            logger.info("found " + topDocs.totalHits + " topDocs");
 
-		} catch (CorruptIndexException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				ir.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			try {
-				indexSearcher.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+            int minDocumentScore = Integer.parseInt(FeaturesUtil
+                    .getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_TITLE_SIMILARITY_SENSITIVITY));
 
-		return null;
-	}
+
+            List<AmpActivity> activityTitles = new ArrayList<AmpActivity>();
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                //skip documents with a score lower than #minDocumentScore
+                if (scoreDoc.score < minDocumentScore) {
+                    continue;
+                }
+
+                Document doc = indexSearcher.doc(scoreDoc.doc);
+
+                AmpActivity activityWithIdAndTitle = new AmpActivity();
+                activityWithIdAndTitle.setAmpId(doc.get(ID_FIELD));
+                // Set the title of the activity
+                activityWithIdAndTitle.setName(doc.get("name"));
+                activityTitles.add(activityWithIdAndTitle);
+            }
+
+            return activityTitles;
+
+        } catch (CorruptIndexException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            try {
+                ir.close();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            try {
+                indexSearcher.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
     
 	public static Hits search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
 		QueryParser parser = new QueryParser(field, analyzer);

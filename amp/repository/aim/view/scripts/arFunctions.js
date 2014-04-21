@@ -517,12 +517,15 @@ function RowManagerProperty(skippedClass, baseId, markerColor) {
 	this.baseId				= baseId;
 }
 
-function sortHierarchy( columnName, prevOrder ) {
+function sortHierarchy( columnNameList, prevOrder ) {
+	var columnName = null;
+	if( columnNameList.length>0 ) {
+		columnName = columnNameList[0].innerHTML.trim();
+	} else return;
 	//alert (columnName + "!!");
 	var descending			= 1; 
 	if ( prevOrder=="descending" ) 
 		descending			= 0;
-	columnName = columnName.trim();
 	var subForm				= document.getElementsByName("aimAdvancedReportForm")[0];
 	for ( var i=0; i<subForm.levelPicked.options.length; i++ ) {
 		if (subForm.levelPicked.options[i].text.trim() == columnName) { 

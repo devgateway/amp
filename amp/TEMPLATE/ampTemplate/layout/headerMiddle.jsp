@@ -666,21 +666,7 @@ function adminHelp(){
 					</div></li>
 			</module:display>
 			<%
-				boolean showDashboard = false;
-						if (FeaturesUtil.isVisibleFeature("NPD Dashboard", request.getSession().getServletContext(), request.getSession())) {
-							showDashboard = true;
-						}
-						if (FeaturesUtil.isVisibleModule("GIS DASHBOARD", request.getSession().getServletContext(), request.getSession())) {
-							showDashboard = true;
-						}
-						if (FeaturesUtil.isVisibleModule("Map Module", request.getSession().getServletContext(), request.getSession())) {
-							showDashboard = true;
-						}
-						if (FeaturesUtil.isVisibleModule("Visualization Dashboards", request.getSession().getServletContext(), request.getSession())) {
-							showDashboard = true;
-						}
-			%>
-			<%
+				boolean showDashboard = FeaturesUtil.isVisibleFeature("NPD Dashboard") || FeaturesUtil.isVisibleModule("GIS DASHBOARD") || FeaturesUtil.isVisibleModule("Map Module") || FeaturesUtil.isVisibleModule("Visualization Dashboards");
 				if (showDashboard) {
 			%>
 			<li class="yuiampmenuitem">

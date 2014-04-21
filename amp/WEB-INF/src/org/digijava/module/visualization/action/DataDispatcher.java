@@ -3186,8 +3186,8 @@ public class DataDispatcher extends DispatchAction {
 		totalCommitments = totalDisbursements = totalExpenditures = new BigDecimal(0);
 		
 		ServletContext ampContext = getServlet().getServletContext();
-		boolean expendituresVisible = FeaturesUtil.isVisibleFeature("Expenditures", ampContext,session);
-		boolean pledgesVisible = FeaturesUtil.isVisibleModule("Pledges", ampContext,session);
+		boolean expendituresVisible = FeaturesUtil.isVisibleFeature("Expenditures");
+		boolean pledgesVisible = FeaturesUtil.isVisibleModule("Pledges");
 
 		StringBuffer csvString = new StringBuffer();
         String text = TranslatorWorker.translateText("Year");

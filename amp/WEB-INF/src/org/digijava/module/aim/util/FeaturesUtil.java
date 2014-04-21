@@ -2269,20 +2269,21 @@ public class FeaturesUtil {
 		return false;
 	}
 	
-	public static boolean isVisibleFeature(String featureName,HttpSession session)
+	public static boolean isVisibleFeature(String featureName)
 	{
-		return isVisibleFeature(featureName, TLSUtils.getRequest().getSession().getServletContext(),session);
+		return isVisibleFeature(featureName, TLSUtils.getRequest().getSession());
 	}
 	
-	public static boolean isVisibleFeature(String featureName, ServletContext ampContext,HttpSession session){
-		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
-		AmpFeaturesVisibility featureToTest=ampTreeVisibility.getFeatureByNameFromRoot(featureName);
-		if(featureToTest!=null)
+	public static boolean isVisibleFeature(String featureName, HttpSession session){
+		ServletContext ampContext = session.getServletContext();
+		AmpTreeVisibility ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(session.getServletContext(), session);
+		AmpFeaturesVisibility featureToTest = ampTreeVisibility.getFeatureByNameFromRoot(featureName);
+		if (featureToTest != null)
 			return featureToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;
 	}
 
-	public static boolean isVisibleModule(String moduleName, ServletContext ampContext,HttpSession session){
+	public static boolean isVisibleModule(String moduleName, ServletContext ampContext, HttpSession session){
 		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
 		AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot(moduleName);
 		if(moduleToTest!=null)
@@ -2290,10 +2291,11 @@ public class FeaturesUtil {
 		return false;
 	}
 	
-	public static boolean isVisibleModule(String moduleName,HttpSession session){
-		return isVisibleModule(moduleName, TLSUtils.getRequest().getSession().getServletContext(),session);
+	public static boolean isVisibleModule(String moduleName){
+		return isVisibleModule(moduleName, TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
 	}
-	public static AmpTreeVisibility getAmpTreeVisibility(ServletContext ampContext,HttpSession session){
+	
+	public static AmpTreeVisibility getAmpTreeVisibility(ServletContext ampContext, HttpSession session){
 			if (session != null
 				&& session.getAttribute("ampTreeVisibility") != null) {
 			AmpTreeVisibility currentOnSession = (AmpTreeVisibility) session

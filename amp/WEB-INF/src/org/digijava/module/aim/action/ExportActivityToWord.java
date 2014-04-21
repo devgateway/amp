@@ -354,7 +354,7 @@ public class ExportActivityToWord extends Action {
 	            /**
 	             * PROGRAMS PART
 	             */
-				if (FeaturesUtil.isVisibleFeature("NPD Programs", ampContext,session)) {
+				if (FeaturesUtil.isVisibleFeature("NPD Programs")) {
 					
 		            Table programsTbl = null;
 		            programsTbl = new Table(1);
@@ -2489,7 +2489,7 @@ public class ExportActivityToWord extends Action {
 			}
 			// UNDISBURSED BALANCE
 			if (FeaturesUtil
-					.isVisibleFeature("Undisbursed Balance", ampContext,session)) {
+					.isVisibleFeature("Undisbursed Balance")) {
 				totalAmountType = TranslatorWorker.translateText(
 						"UNDISBURSED BALANCE") + ":";
 				totalsOutput = "";

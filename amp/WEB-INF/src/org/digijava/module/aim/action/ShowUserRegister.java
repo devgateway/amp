@@ -46,7 +46,7 @@ public class ShowUserRegister extends Action {
 				// the action directly.
 				ServletContext context = request.getSession().getServletContext();
 				if (!FeaturesUtil.isVisibleModule("Login - User Management", context,session)
-						|| !FeaturesUtil.isVisibleFeature("Enable New User Registration", context,session)) {
+						|| !FeaturesUtil.isVisibleFeature("Enable New User Registration")) {
 					logger.error("UNAUTHORIZED ATTEMPT TO CREATE NEW USER.");
 					return mapping.findForward(null);
 				}

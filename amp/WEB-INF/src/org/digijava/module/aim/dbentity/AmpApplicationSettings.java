@@ -30,7 +30,7 @@ public class AmpApplicationSettings implements Serializable {
 	
 	private String validation;
 
-    private Boolean showAllCountries;
+    private Boolean showAllCountries = false;
 
 //	private Boolean useDefault; /*
 //								 * use customized settings or use default team
@@ -53,7 +53,9 @@ public class AmpApplicationSettings implements Serializable {
     }
 
     public void setShowAllCountries(Boolean showAllCountries) {
-        this.showAllCountries = showAllCountries;
+    	if (showAllCountries == null)
+    		return;
+    	this.showAllCountries = showAllCountries;
     }
 
     public AmpReports getDefaultTeamReport() {

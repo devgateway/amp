@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -2707,5 +2708,13 @@ public class TeamUtil {
         	logger.debug("cannot get acts "+e.getMessage());
         }
     	return false;
+    }
+    
+    /**
+     * uses {@link TLSUtils} to get the current request's current member
+     * @return
+     */
+    public static TeamMember getCurrentMember(){
+    	return (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
     }
 }

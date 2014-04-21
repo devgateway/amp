@@ -58,10 +58,9 @@
 				</logic:iterate>
 			</logic:notEmpty>
 		</logic:notEmpty>
-  		<td nowrap="nowrap" class="reportHeader" onclick="sortHierarchy(  (this).childNodes[0].nodeValue, '${hSortOrder}' )"
+  		<td nowrap="nowrap" class="reportHeader" onclick="sortHierarchy( $(this).contents().filter('.headerName'), '${hSortOrder}' )"
   		rowspan="${columnReport.maxColumnDepth+1}">
-  			
-  			<digi:trn>${repHierarchy.column.columnName}</digi:trn> 
+  			<span class="headerName"><digi:trn>${repHierarchy.column.columnName}</digi:trn></span> 
 
   			<c:if test="${sortIconPath!=''}">
   				<img src= "${sortIconPath}" align="absmiddle" border="0"/>

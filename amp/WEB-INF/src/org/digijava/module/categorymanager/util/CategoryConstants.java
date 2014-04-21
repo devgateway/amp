@@ -1,5 +1,6 @@
 package org.digijava.module.categorymanager.util;
 
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -253,6 +254,8 @@ public class CategoryConstants {
 		private String categoryKey;
 		private boolean protectOnDelete;
 		
+		private Long databaseAcvlId = null;
+		
 		public String getValueKey() {
 			return valueKey;
 		}
@@ -291,16 +294,19 @@ public class CategoryConstants {
 		 */
 		public AmpCategoryValue getAmpCategoryValueFromDB()
 		{
-			AmpCategoryClass c = CategoryManagerUtil.loadAmpCategoryClassByKey(this.getCategoryKey());
-			if (c == null)
-				return null;
-			for(AmpCategoryValue categoryValue : c.getPossibleValues())
-			{
-				if (categoryValue.getValue().equalsIgnoreCase(this.getValueKey())) {
-					return categoryValue;
+			if (databaseAcvlId == null){
+				AmpCategoryClass c = CategoryManagerUtil.loadAmpCategoryClassByKey(this.getCategoryKey());
+				if (c != null){
+					for(AmpCategoryValue categoryValue : c.getPossibleValues())
+						if (categoryValue.getValue().equalsIgnoreCase(this.getValueKey())) {
+							databaseAcvlId = categoryValue.getId();
+							break;
+						}
 				}
-			}			
-			return null;
+			}
+			if (databaseAcvlId == null)
+				return null;
+			return (AmpCategoryValue) PersistenceManager.getSession().get(AmpCategoryValue.class, databaseAcvlId);
 		}
 		
 		public boolean equalsCategoryValue(AmpCategoryValue value)

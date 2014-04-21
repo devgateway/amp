@@ -29,7 +29,7 @@
 				<div class="col-xs-6">
 					<div class="form-inline" >
 						<span class="bold"><digi:trn key="aim:amount">Amount</digi:trn></span>: 
-						<span>${selectedFunding.amount}</span>&nbsp;<span class="bold">${selectedFunding.currencyCode}</span>
+						<span><c:out value="${selectedFunding.amount}"/></span>&nbsp;<span class="bold">${selectedFunding.currencyCode}</span>
 					</div>										
 				</div>
 				

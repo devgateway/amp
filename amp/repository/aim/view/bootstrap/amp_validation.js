@@ -28,7 +28,7 @@ AmpValidator.prototype.validate = function(elem){
 	var _self = this;
 	var result;
 	if ((elem.value.trim().length == 0) && (!_self.allowEmpty))
-		result = false;
+		result = {success: false, error_message: please_enter_something_message, validate_class: false};
 	else
 		result = _self.validatorFunc(elem.value.trim());
 	//if ('success' in result)
@@ -151,7 +151,7 @@ function get_validator_for_element(elem)
 		return new AmpValidator(selectHasValue, please_enter_something_message);
 
 	if ($(elem).is('.validate-mandatory-number'))
-		return new AmpValidator(function(value){return (value.length > 0) && looksLikeNumber(value);}, please_enter_something_message).setAllowEmpty(false);
+		return new AmpValidator(function(value){return (value.length > 0) && looksLikeAmount(value);}, please_enter_number_message).setAllowEmpty(false);
 
 	if ($(elem).is('input.validate-mandatory') || $(elem).is('textarea.validate-mandatory'))
 	{

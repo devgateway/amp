@@ -80,6 +80,19 @@ function looksLikeNumber(nr){
 	return number > 0;
 }
 
+function looksLikeAmount(nr){
+	if (nr.length == 0)
+		return true;
+	
+	nr = nr.replace(/\s/g, '').replace(/\./g, '').replace(/,/g, '');
+			
+	if (isNaN(nr))
+		return false;
+	
+	var number = parseInt(nr);
+	return number > 0;
+}
+
 function isYearValidator(input){
 	var nr = input;
 	return looksLikeNumber(nr) && (parseInt(nr) > 1900) && (parseInt(nr) < 2100);

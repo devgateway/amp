@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -85,7 +87,8 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 	}
 	
 	public boolean isUsedInActivityFunding(){
-		return !PledgesEntityHelper.getFundingRelatedToPledges(this).isEmpty();
+		return PersistenceManager.getLong(PersistenceManager.getSession().
+				createQuery("SELECT COUNT(*) FROM " + AmpFundingDetail.class.getName() + " p WHERE p.pledgeid = " + this.getId()).uniqueResult()) > 0;
 	}
 	// trash getters / setters below
 	

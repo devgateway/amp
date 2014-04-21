@@ -4,19 +4,21 @@ package org.digijava.module.fundingpledges.form;
 import java.util.Date;
 
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+
 import static org.dgfoundation.amp.algo.AlgoUtils.*;
 
 public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 	private Long pledgeTypeId;
 	private Long typeOfAssistanceId;
 	private Long aidModalityId;
-	private Double amount;
+	private String amount;
 	private Long currencyId;
 	private Long fundingYear;
 	private long uniqueId = PledgeForm.uniqueIds.getAndIncrement();
@@ -25,7 +27,7 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 	private String fundingDateEnd;
 	
 	public FundingPledgesDetailsShim(AmpCurrency currency) {
-		this.amount = 0.0;
+		this.amount = "0";
 		this.currencyId = currency.getAmpCurrencyId();
 	}
 	
@@ -33,7 +35,7 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 		this.pledgeTypeId = getIdFrom(fpd.getPledgetype());
 		this.typeOfAssistanceId = getIdFrom(fpd.getTypeOfAssistance());
 		this.aidModalityId = getIdFrom(fpd.getAidmodality());
-		this.amount = fpd.getAmount();
+		this.amount = FormatHelper.formatNumber(fpd.getAmount());
 		this.currencyId = getIdFrom(fpd.getCurrency());
 		this.fundingYear = getLongFrom(fpd.getFundingYear());
 		this.fundingDateStart = FundingPledgesDetails.formatDate(fpd.getFundingDateStart());
@@ -43,7 +45,7 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 	public FundingPledgesDetails buildFundingPledgesDetail(FundingPledges pledge){
 		FundingPledgesDetails fps = new FundingPledgesDetails();
 		fps.setPledgeid(pledge);
-		fps.setAmount(this.getAmount());
+		fps.setAmount(FormatHelper.parseDouble(this.getAmount()));
 		fps.setAidmodality(CategoryManagerUtil.loadAcvOrNull(this.getAidModalityId()));
 		fps.setCurrency(this.getCurrencyId() == null ? null : CurrencyUtil.getAmpcurrency(this.getCurrencyId()));
 		fps.setFundingYear(this.getFundingYear() == null ? null : this.getFundingYear().toString());
@@ -90,7 +92,7 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
-	public Double getAmount() {
+	public String getAmount() {
 		return this.amount;
 	}
 	
@@ -125,7 +127,7 @@ public class FundingPledgesDetailsShim implements UniquelyIdentifiable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
-	public void setAmount(final Double amount) {
+	public void setAmount(final String amount) {
 		this.amount = amount;
 	}
 	

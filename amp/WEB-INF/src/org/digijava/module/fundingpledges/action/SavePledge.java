@@ -236,7 +236,7 @@ public class SavePledge extends Action {
 		if (pledgeFunds == null){
 			pledgeFunds = new HashSet<>();
 			pledge.setFundingPledgesDetails(pledgeFunds);
-		}		
+		}
 		pledgeFunds.clear();
 		boolean dateRangeEnabled = FundingPledgesDetails.isDateRangeEnabled();
 		List<ValidationError> errs = new ArrayList<>();

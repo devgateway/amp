@@ -102,7 +102,8 @@ YAHOO.widget.WicketContactAutoComplete = function(inputId, callbackUrl, containe
         	autoComplete.collapseContainer();
         }
         else {
-        	autoComplete.getInputEl().focus(); // Needed to keep widget active
+        	//autoComplete.getInputEl().focus(); // Needed to keep widget active
+			this._bFocused = true; // For Chrome
             setTimeout(function() { // For IE
             	autoComplete.sendQuery("");
             },0);

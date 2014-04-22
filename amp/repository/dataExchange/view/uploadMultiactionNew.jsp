@@ -811,6 +811,7 @@
 						
 						var updateMapping = function (objIdPar, newValPar) {
 							var url = "../../dataExchange/importActionNew.do?action=updateMapping";
+							contentBusy(true);
 							$.ajax({
 							  type: 'POST',
 							  url: url,
@@ -823,9 +824,12 @@
 						}
 						
 						var updateMappingSuccess = function (data, textStatus, jqXHR) {
+							contentBusy(false);
 						}
 						
 						var updateMappingError = function (data, textStatus, jqXHR) {
+							contentBusy(false);
+							alert ("Error updating mapping item !");
 						}
 						
 						var checkForDefaultValues = function() {

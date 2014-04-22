@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:form action="/gpi" type="org.digijava.module.gpi.form.GPIForm" name="gpiForm">
 	<table cellspacing="0" cellpadding="0" border="1" class="inside" width="100%" 
@@ -68,10 +69,20 @@
 	                   <bean:write name="element" property="year"/>
 	               </td>
 	               <td align="center" class="inside" style="font-size: 11px; color: #484846;">
-                       <aim:formatNumber value="${element.column1}"/>
+                       <c:if test="${element.column1 != null}">
+                       		<aim:formatNumber value="${element.column1}"/>
+                    	</c:if>
+                    	<c:if test="${element.column1 == null}">
+                    		N/D
+                    	</c:if>
                    </td>
                    <td align="center" class="inside" style="font-size: 11px; color: #484846;">
-                       <aim:formatNumber value="${element.column2}"/>
+                       <c:if test="${element.column2 != null}">
+                       		<aim:formatNumber value="${element.column2}"/>
+                    	</c:if>
+                    	<c:if test="${element.column2 == null}">
+                    		N/D
+                    	</c:if>
                    </td>
                    <td align="center" class="inside" style="font-size: 11px; color: #484846;">
                        <fmt:formatNumber type="number" value="${element.column3}" pattern="###" maxFractionDigits="0" />%

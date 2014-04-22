@@ -20,6 +20,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -307,7 +308,7 @@ public class GPIUseCase {
 		filter.setProgramSectionVisible(FeaturesUtil.isVisibleModule("/Activity Form/Program", request.getServletContext(),request.getSession()));
 
 		// Get all surveys.
-		Collection<AmpGPISurvey> commonData = getCommonSurveyData();
+		Collection<AmpActivityVersion> commonData = getCommonSurveyData();
 
 		// Execute the logic for generating each report.
 		preMainReportRows = report.generateReport(commonData, filter);
@@ -325,16 +326,16 @@ public class GPIUseCase {
 	 * PI reports because GPI uses one survey per activity, thus sharing it to
 	 * all donors and its fundings).
 	 */
-	private Collection<AmpGPISurvey> getCommonSurveyData() {
+	private Collection<AmpActivityVersion> getCommonSurveyData() {
 
-		Collection<AmpGPISurvey> commonData = null;
+		Collection<AmpActivityVersion> commonData = null;
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			// Set the query to return AmpGPISurvey objects.
-			Criteria criteria = session.createCriteria(AmpGPISurvey.class);
-			criteria.setFetchMode("ampActivityId.funding", FetchMode.JOIN).setFetchMode("ampActivityId.funding.fundingDetails", FetchMode.JOIN);
-			criteria.addOrder(Order.asc("ampGPISurveyId"));
+			//TODO: replace this query by a view that has both activities and fundings (to save time).
+			Criteria criteria = session.createCriteria(AmpActivity.class);
+			//criteria.setFetchMode("ampActivityId.funding", FetchMode.JOIN).setFetchMode("ampActivityId.funding.fundingDetails", FetchMode.JOIN);
+			//criteria.addOrder(Order.asc("ampGPISurveyId"));
 
 			// criteria.setMaxResults(500);
 
@@ -342,12 +343,12 @@ public class GPIUseCase {
 			// activity.
 			// criteria.createAlias("ampActivityId", "activityTable");
 
-			DetachedCriteria liveActivityVersions = DetachedCriteria.forClass(AmpActivity.class).setProjection(Projections.property("ampActivityId"));
-			criteria.add(Property.forName("ampActivityId").in(liveActivityVersions));
+			//DetachedCriteria liveActivityVersions = DetachedCriteria.forClass(AmpActivity.class).setProjection(Projections.property("ampActivityId"));
+			//criteria.add(Property.forName("ampActivityId").in(liveActivityVersions));
 
 			// TODO: we need Hibernate 4 to use Criteria Queries for this (needs
 			// nested subqueries with multiple params)
-			SQLQuery latestSurveysOnlySQL = session.createSQLQuery("SELECT s.amp_gpisurvey_id AS survey_ids FROM "
+			/*SQLQuery latestSurveysOnlySQL = session.createSQLQuery("SELECT s.amp_gpisurvey_id AS survey_ids FROM "
 					+ "(select max(survey_date) AS max_date,amp_activity_id from amp_gpi_survey group by amp_activity_id) AS r "
 					+ "INNER JOIN amp_gpi_survey s ON s.amp_activity_id=r.amp_activity_id AND s.survey_date=r.max_date" + " UNION "
 					+ "select amp_gpisurvey_id AS survey_ids from amp_gpi_survey where survey_date is null and amp_activity_id "
@@ -356,7 +357,7 @@ public class GPIUseCase {
 
 			List<Long> latestSurveysOnlyList = latestSurveysOnlySQL.list();
 
-			criteria.add(Property.forName("ampGPISurveyId").in(latestSurveysOnlyList));
+			criteria.add(Property.forName("ampGPISurveyId").in(latestSurveysOnlyList));*/
 
 			commonData = criteria.list();
 		} catch (Exception e) {

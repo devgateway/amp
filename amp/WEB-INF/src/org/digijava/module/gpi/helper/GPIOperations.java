@@ -2,6 +2,7 @@ package org.digijava.module.gpi.helper;
 
 import java.util.Collection;
 
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -15,7 +16,7 @@ import org.digijava.module.gpi.model.GPIFilter;
 
 public interface GPIOperations {
 
-	public abstract Collection<GPIReportAbstractRow> generateReport(Collection<AmpGPISurvey> commonData, GPIFilter filter);
+	public abstract Collection<GPIReportAbstractRow> generateReport(Collection<AmpActivityVersion> commonData, GPIFilter filter);
 
 	public abstract Collection<GPIReportAbstractRow> reportPostProcess(Collection<GPIReportAbstractRow> baseReport, int startYear, int endYear) throws Exception;
 }

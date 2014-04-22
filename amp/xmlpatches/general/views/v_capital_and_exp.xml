@@ -21,7 +21,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 			    	create or replace view v_capital_and_exp as 
-	select amp_activity_id, 'Capital' from amp_activity UNION select amp_activity_id, 'Expenditure' from amp_activity order by amp_activity_id;
+	select amp_activity_id, 'Capital' as cap_exp from amp_activity UNION select amp_activity_id, 'Expenditure' as cap_exp from amp_activity order by amp_activity_id;
 			</lang>
 		</script>
 	</apply>

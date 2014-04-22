@@ -63,7 +63,8 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
         	autoComplete.collapseContainer();
         }
         else {
-        	autoComplete.getInputEl().focus(); // Needed to keep widget active
+        	//autoComplete.getInputEl().focus(); // Needed to keep widget active
+        	this._bFocused = true; // For Chrome
             setTimeout(function() { // For IE
             	autoComplete.sendQuery("");
             },0);

@@ -58,7 +58,7 @@
 				</logic:iterate>
 			</logic:notEmpty>
 		</logic:notEmpty>
-  		<td nowrap="nowrap" class="reportHeader" onclick="sortHierarchy( $(this).contents().filter('.headerName'), '${hSortOrder}' )"
+  		<td nowrap="nowrap" class="reportHeader" onclick="sortHierarchy( $(this).find('.headerName').html(), '${hSortOrder}' )"
   		rowspan="${columnReport.maxColumnDepth+1}">
   			<span class="headerName"><digi:trn>${repHierarchy.column.columnName}</digi:trn></span> 
 

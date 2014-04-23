@@ -559,11 +559,8 @@ function toggleSettings(){
 				<logic:iterate name="generatedReport" property="levelSorters" id="sorter" indexId="levelId">
 					<div id="level-sorter">
 					<logic:present name="sorter">
-						<digi:trn key="rep:pop:Level">Level</digi:trn> 
-							<bean:write name="levelId"/> 
-							<digi:trn key="rep:pop:sortedBy">sorted by</digi:trn> 
-							<bean:write name="sorter"/>
-						<br>		
+						<digi:trn key="rep:pop:Level">Level</digi:trn>&nbsp;<bean:write name="levelId"/>&nbsp;<digi:trn key="rep:pop:sortedBy">sorted by</digi:trn>&nbsp;<bean:write name="sorter"/>
+						<br />		
 					</logic:present>
 				</div>
 				</logic:iterate>

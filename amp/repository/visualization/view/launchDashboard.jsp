@@ -555,7 +555,7 @@ function initializeGlobalVariables(){
 												<ul class="root_list">
 													<li style="margin-left: -15px">
 														<input type="checkbox" id="region_national"
-															name="national_region_check" value="-1"/>
+															name="national_region_check"/>
 														<span><digi:trn>National</digi:trn>
 													</span></li>
 													<li style="margin-left: -15px">

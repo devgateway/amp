@@ -1044,7 +1044,7 @@ public class DbUtil {
         //Filter for National projects too (not excluding regional projects).
         String oqlNational = "";
         if (filter.getNationalProjectsToo()) {
-	    	oqlNational += " act.ampActivityId IN (" + DashboardUtil.getInStatement(DashboardUtil.getNationalActivityList());
+	    	oqlNational = " act.ampActivityId IN (" + DashboardUtil.getInStatement(DashboardUtil.getNationalActivityList()) + ")";
 	    }
         
         if(oqlNational.equals("")) {

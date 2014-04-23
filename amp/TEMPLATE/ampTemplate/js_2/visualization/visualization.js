@@ -1303,7 +1303,7 @@ function applyFilterPopin(e){
 		document.getElementById("showAcronymForOrgNames").value = document.getElementById("show_acronym_for_org_names").checked;
 	}
 	if (document.getElementById("showOnlyNationalProjects")!=null) {
-	document.getElementById("showOnlyNationalProjects").value = document.getElementById("show_only_national_projects").checked;
+		document.getElementById("showOnlyNationalProjects").value = document.getElementById("show_only_national_projects").checked;
 	}	
 	document.getElementById("transactionType").value = document.getElementById("transaction_type").options[document.getElementById("transaction_type").selectedIndex].value;
 	document.getElementById("transactionType_dropdown").value = document.getElementById("transactionType").value;
@@ -1312,8 +1312,16 @@ function applyFilterPopin(e){
 	var params = "";
 	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
 	params = params + "&orgIds=" + getSelectionsFromElement("organization_check",false);
-	params = params + "&regionIds=" + getSelectionsFromElement("region_check",false);
+	
+	//AMP-15870: Need to remove the -1:All parameter here in order to get consistent results (and not to change the same java code in all dashboards).
+	var auxRegions = getSelectionsFromElement("region_check",false);
+	if(auxRegions != null && auxRegions.substring(0, 2) == "-1" && auxRegions.length > 2) {
+		auxRegions = auxRegions.substring(3, auxRegions.length);
+	}
+	
+	params = params + "&regionIds=" + auxRegions;
 	params = params + "&zoneIds=" + getSelectionsFromElement("zone_check",false);
+	params = params + "&nationalProjectsToo=" + document.getElementById("region_national").checked;
 	params = params + "&selSectorConfigId=" + getSelectionsFromElement("sector_config_check",false);
 	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
 	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);

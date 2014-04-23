@@ -143,7 +143,7 @@ public class DEMappingFields implements Serializable {
 		result	=
 			this.getIatiPath().compareTo(o.getIatiPath()) == 0 && 
 			this.getIatiItems().compareTo(o.getIatiItems()) == 0 && 
-			this.getIatiValues().compareTo(o.getIatiValues())==0 && 
+			this.getIatiValues().trim().compareTo(o.getIatiValues().trim())==0 &&
 			this.getIatiLangSafe().compareTo(lang)==0 &&
 			this.getAmpClass().compareTo(o.getAmpClass())==0
 			;

@@ -155,95 +155,83 @@ YAHOO.amptab.initDisplayOfMemberSelectors       = function(bigDivId) {
 		}
 	};
 
-function toggleCheckChildren(checkboxEl) {
-	var parentTdEl				= checkboxEl.parentNode;
-	for (var i=0; i<=5; i++) {
-		if (parentTdEl.nodeName.toLowerCase()=="li") break;
-		parentTdEl		= parentTdEl.parentNode;
-	}
-	var descendantCheckboxes	= parentTdEl.getElementsByTagName('input');
-	for (var i=0; i<descendantCheckboxes.length; i++ ) {
-		descendantCheckboxes[i].checked	= checkboxEl.checked ;
-		toggleByParent (getRelatedTab(descendantCheckboxes[i].name),descendantCheckboxes[i].value,checkboxEl.checked);
-		//necessary for related donor groups and agencies
-		//root is selected we need to show all groups/agencies. Checked or unchecked
-		if ( $(checkboxEl).hasClass("root_checkbox")) {
-			toggleRelatedGroups (getRelatedTab(descendantCheckboxes[i].name),true);
+/**
+ * recursively goes from an element upto the top of the filters. Top of filters is detected through an ugly heuristic: if elem.nodeName is NOT one of (li, ul, ol, table, tr, td, tbody)
+ * @param elem
+ */
+function uncheckAllParents(elem){
+	var acceptableElems = ['ul', 'ol', 'li', 'table', 'tbody', 'tr', 'td'];
+	while (elem != null){
+		if ($.inArray(elem.nodeName.toLowerCase(), acceptableElems) < 0)
+			return;
+		if (elem.nodeName.toLowerCase() == 'li'){
+			$(elem).children('table').find('input[type="checkbox"]').prop('checked', false);
+			/**
+			 * this selector will only check a single element, because of the HTML structure:
+			 * <li>
+			 * 		<table>
+			 * 		<ul>
+			 * 			<li>
+			 * 			<li>
+			 * 			<li>
+			 */
 		}
-		else {
-			//we need to hide the non related and show related
-			toggleRelatedGroups (getRelatedTab(checkboxEl.name));
-		}
+		elem = elem.parentNode;
 	}
-	if (isTopHierarchy(checkboxEl.name)) {
-	var childrenTab = getRelatedTab(checkboxEl.name);
-	refreshRelatedGroups(childrenTab,getRelatedTab(childrenTab));
-	refreshRelatedGroups(checkboxEl.name,childrenTab);
+}
+
+function toggleCheckChildren(checkboxEl){
 	
-	}
-	else {
-		refreshRelatedGroups(checkboxEl.name,getRelatedTab(checkboxEl.name));
+	var parentTdEl = $(checkboxEl).closest('li').get(0); // the <li> parent of the checkbox
+	$(parentTdEl).find('input').prop('checked', checkboxEl.checked); // all the children of the just-checked checkbox are set/unset child according to the parent
+	
+	if (!checkboxEl.checked) { // checkbox has just been unselected -> unselected all parents
+		uncheckAllParents(parentTdEl.parentNode); // this will only be relevant for hierarchical lists like locations / programs / sectors
 	}
 	
-	if ( ! checkboxEl.checked ) {
-		var tempParent				= parentTdEl.parentNode;
-		var nodeName				= tempParent.nodeName.toLowerCase();
-		while ( tempParent != null && 
-				(nodeName=="li" || nodeName=="ul" || 
-						nodeName=="td" || nodeName=="tr" ||	
-							nodeName=="table") ) {
-			
-			if ( nodeName=="li" ) {
-				for ( var i=0; i<tempParent.childNodes.length; i++) {
-					var tempNode	= tempParent.childNodes[i];
-					if ( tempNode.nodeName.toLowerCase()=="table" )
-						tempNode.getElementsByTagName("input")[0].checked	= false;
-					if ( tempNode.nodeName.toLowerCase()=="input" )
-						tempNode.checked	= false;
-				}
-			}
-			tempParent				= tempParent.parentNode;
-			nodeName				= tempParent.nodeName.toLowerCase();
-		}
-	}
+	var curGroup = checkboxEl.name;
+	var groupsToClean = new Array(); // a side-effect of running showOrHideCheckboxesInGroup is that all the children are set - resetting them as an afterthought. Ugly hack, but code will be dropped in couple of months anyway
+	while (curGroup != null){
+		// hide all child-category checkboxes which have a parent which is unselected in the current category
+		// if current category has no selected item -> this is equivalent to "all selected"
+		showOrHideCheckboxesInGroup(curGroup, groupsToClean);
+		curGroup = getRelatedTab(curGroup);
+	};
+	
+	for(var i = 0; i < groupsToClean.length; i++) // clean up side-effect
+		$('input:checkbox[name="' + groupsToClean[i] + '"]').prop('checked', false);
 }
 
-function isTopHierarchy (name) {
-	return (name=='selectedDonorTypes');
-		
-}
-function refreshRelatedGroups(parent,children) {
-	if (children == null) 
-		return;
-	var isOneSelected = $('input:checkbox[name="'+parent+'"]:checked').size() > 0;
-    if (isOneSelected == false) 
-      {
-    	$('input:checkbox[name="'+children+'"]').closest("li").show();
-      }
-    else {
-    	$('input:checkbox[name="'+children+'"]:not(:checked)').each(function() {
-    	$(this).closest("li").hide();
-    	});
-    }
-    
-}
-
-
-function toggleRelatedGroups (name,forceShow) {
-	if (name == null) {
-		return
-	}
-$('input:checkbox[name="'+name+'"][parentid]').each(function() {
-		var liElement =  $(this).closest("li");
-		if (liElement!=null) {
-			if ($(this).is(':checked') == true || true == forceShow)
-				liElement.show();
-			else 
-				liElement.hide();
-		}
+function showOrHideCheckboxesInGroup(parentGroup, groupsToClean){
+	var childGroup = getRelatedTab(parentGroup);
+	if (childGroup == null) 
+		return; // this is a leaf-level category -> nothing related to refresh
+	var selectedIds = new Object(); // values of selected parent elements: poor man's HashMap
+	var anySelected = false; // whether selectedIds has any value, since JS's map.keys.length() is slow, consumes memory and does not work on IE8- 
+	$('input:checkbox[name="' + parentGroup + '"]:checked').each(function(){
+		selectedIds[this.value] = "ahem"; // mark as having been checked
+		anySelected = true; 
 	});
+	groupsToClean.push(childGroup);
+	$('input:checkbox[name="' + childGroup + '"]').each(function(){
+		var parentValue = $(this).attr('parentid');
+		var shouldBeShown = (!anySelected) || (parentValue && selectedIds.hasOwnProperty(parentValue));
+		if (shouldBeShown){
+			$(this).prop('checked', true);
+			$(this).closest('li').css('display', 'block');
+		}else{
+			$(this).prop('checked', false);
+			$(this).closest('li').css('display', 'none');
+		}
+	});	
 }
 
+/**
+ * returns the name of the checkboxes which are logical children of a given type of checkboxes
+ * (type] of checkbox = input[type='checkbox'].name)
+ * @param name
+ * @returns
+ */
 function getRelatedTab (name) {
 	if (name =='selectedDonorTypes') {
 		return  'selectedDonorGroups';
@@ -258,12 +246,6 @@ function getRelatedTab (name) {
 		return null;
 	}
 	
-}
-function toggleByParent (name,id,check) {
-	if (name==null) {
-		return;
-	}
-	$("input[name="+name+"][type='checkbox'][parentid="+id+"]").trigger( "click" );
 }
 	 
 function DivManager(divId, propertyObj) {

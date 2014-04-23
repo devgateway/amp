@@ -588,12 +588,12 @@ function toggleSettings(){
 				</table>
 			</logic:equal>
 			<logic:notEqual name="viewFormat" value="print">
+				<div id="fixAutomaticDivWithHeight100">
 				<table id='reportTable' class="html2ReportTable inside" width="100%" cellpadding="0" cellspacing="0">
 				      <bean:define id="viewable" name="generatedReport" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				      <jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
-				      </tr>
-				      </tbody>
 				</table>
+				</div>
 			</logic:notEqual>
 		</td>
 		</tr>

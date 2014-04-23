@@ -136,7 +136,10 @@ function amp_activity_views_data_alter(&$data) {
 
   // Only expose "Proposed Project Life" field handler if the table column exists.
   // This field was only added in AMP v2.7.20 (AMP-17073)
-  if (db_field_exists('cached_amp_activity', 'proposed_project_life')) {
+  db_set_active(AMP_DATABASE);
+  $include_proposed_project_life = db_field_exists('cached_amp_activity', 'proposed_project_life');
+  db_set_active();
+  if ($include_proposed_project_life) {
     $data['cached_amp_activity']['proposed_project_life'] = array(
       'title' => t('Proposed Project Life'),
       'help' => t('The proposed project life in days.'),

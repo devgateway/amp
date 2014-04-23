@@ -205,48 +205,44 @@ public class AmpFilterData implements Serializable {
 	}
 	
 	public static void deleteOldFilterData ( Long ampReportId ) {
-		Session sess 	= null;
-		Transaction tx	= null;
+//		Session sess 	= null;
+//		Transaction tx	= null;
 		try {
-			sess	= PersistenceManager.openNewSession();
-			tx		= sess.beginTransaction();
+//			sess	= PersistenceManager.openNewSession();
+	//		tx		= sess.beginTransaction();
 			String qryStr	= "select a from "
 				+ AmpFilterData.class.getName() + " a "
 				+ "where (a.filterRelObj=:report)";
-			Query query		= sess.createQuery(qryStr);
-			query.setLong("report", ampReportId);
-			List results	= query.list();
+			Query query		= PersistenceManager.getSession().createQuery(qryStr).setLong("report", ampReportId);
+			List<AmpFilterData> results	= query.list();
 			
-			if ( results != null ) {
-				Iterator iter	= results.iterator();
-				boolean cleared	= false;
-				while (iter.hasNext()) {
-					AmpFilterData afd	= (AmpFilterData)iter.next();
-					if ( !cleared ) {
-						cleared	= true;
-						afd.getFilterRelObj().getFilterDataSet().clear();
-					} 
-					afd.setFilterRelObj(null);
-					sess.delete(afd);
-				}
+			boolean cleared	= false;
+			for(AmpFilterData afd:results){
+				if (!cleared) {
+					cleared	= true;
+					afd.getFilterRelObj().getFilterDataSet().clear();
+				} 
+				afd.setFilterRelObj(null);
+				PersistenceManager.getSession().delete(afd);
 			}
-			tx.commit();
+			//tx.commit();
 			
 		} catch (Exception e) {
-			logger.error("Rolling back transaction of deleting exising filters before saving new ones");
-			tx.rollback();
-			e.printStackTrace();
+			throw new RuntimeException(e);
+			//logger.error("Rolling back transaction of deleting exising filters before saving new ones");
+			//tx.rollback();
+			//e.printStackTrace();
 		}
-		finally{
-			if ( sess != null ) {
-				try {
-					sess.close();
-				}
-				catch (HibernateException e) {
-					logger.error("Unable to close manually opened hibernate session");
-				}
-			}
-		}
+//		finally{
+//			if ( sess != null ) {
+//				try {
+//					sess.close();
+//				}
+//				catch (HibernateException e) {
+//					logger.error("Unable to close manually opened hibernate session");
+//				}
+//			}
+//		}
 		
 	} 
 	

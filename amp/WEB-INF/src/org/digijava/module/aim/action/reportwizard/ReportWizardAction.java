@@ -436,7 +436,7 @@ public class ReportWizardAction extends MultiAction {
 		AmpReports ampReport = null;
 		AmpReports oldReport = loadSourceReport(request);
 		
-		boolean createReportFromScratch = (oldReport == null || saveACopy);		
+		boolean createReportFromScratch = (oldReport == null || saveACopy);
 			
 		if (createReportFromScratch){
 			
@@ -540,22 +540,20 @@ public class ReportWizardAction extends MultiAction {
 			}
 		}
 		
+		if ( ampReport.getAmpReportId() != null )
+			AmpFilterData.deleteOldFilterData(ampReport.getAmpReportId());
+		
 		AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
 		if ( filter != null && myForm.getUseFilters()) {
-			if ( ampReport.getAmpReportId()!=null )
-				AmpFilterData.deleteOldFilterData( ampReport.getAmpReportId() );
 			Set<AmpFilterData> fdSet	= AmpFilterData.createFilterDataSet(ampReport, filter);
 			if ( ampReport.getFilterDataSet() == null )
 				ampReport.setFilterDataSet(fdSet);
 			else {
 				ampReport.getFilterDataSet().clear();
 				ampReport.getFilterDataSet().addAll(fdSet);
-			}
-				
+			}			
 		}
-		else
-			if ( ampReport.getAmpReportId()!=null )
-				AmpFilterData.deleteOldFilterData( ampReport.getAmpReportId() );
+			
 		
 		return serializeReportAndOpen(ampReport, teamMember, mapping, myForm, true, request, response);
 	}

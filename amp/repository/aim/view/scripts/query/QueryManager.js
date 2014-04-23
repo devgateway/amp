@@ -1,4 +1,5 @@
 function buildLabels() {
+	debugger;
 	var selectionList 	= createSelectionList();
 	queryManager		= new QueryManager(selectionList, "queryLabelsDiv");
 	queryManager.render();

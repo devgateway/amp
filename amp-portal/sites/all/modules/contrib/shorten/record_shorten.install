@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ *   Records shortened URLs.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function record_shorten_schema() {
+  $schema = array();
+  $schema['record_shorten'] = array(
+    'description' => 'Records shortened URLs.',
+    'fields' => array(
+      'sid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'The ID of the shortened URL.',
+      ),
+      'original' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The original (long) URL.',
+      ),
+      'short' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The new (short) URL.',
+      ),
+      'service' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The service used to shorten the URL.',
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The User ID of the user who created the shortened URL.',
+      ),
+      'hostname' => array(
+        'description' => 'The IP address of the user who created the shortened URL.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => ''
+      ),
+      'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The time the shortened URL was created.',
+      ),
+    ),
+    'indexes' => array(
+      'sid' => array('sid'),
+    ),
+    'primary key' => array('sid'),
+  );
+  return $schema;
+}

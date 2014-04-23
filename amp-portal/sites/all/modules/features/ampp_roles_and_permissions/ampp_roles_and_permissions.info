@@ -1,0 +1,10 @@
+name = AMPP roles and permissions
+description = All roles and permissions go here
+core = 7.x
+package = Features
+version = 7.x-1.0
+project = ampp_roles_and_permissions
+dependencies[] = features
+features[features_api][] = api:2
+features[user_permission][] = access site errors reports
+features[user_role][] = editor

@@ -1,0 +1,87 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Update Scripts module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function update_scripts_schema() {
+  $schema = array();
+
+  $schema['update_scripts'] = array(
+    'description' => 'Stores which script was run and when it was ran.',
+    'fields' => array(
+      'lid' => array(
+        'description' => 'ID of the log entry.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'path' => array(
+        'description' => 'Path to the script that was executed.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'started' => array(
+        'description' => 'The UNIX timestamp when the script started to run.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'finished' => array(
+        'description' => 'The UNIX timestamp when the script ended its running.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'with_errors' => array(
+        'description' => 'Whether or not there were any errors while running the update script.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'queries' => array(
+        'description' => 'The queries ran during this script\'s execution. Serialized array.',
+        'type' => 'text',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'not null' => FALSE,
+      ),
+      'errors' => array(
+        'description' => 'The outcome of this script. Serialized array.',
+        'type' => 'text',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('lid'),
+    'indexes' => array(
+      'update_scripts_path' => array('path'),
+      'update_scripts_started' => array('started'),
+      'update_scripts_finished' => array('finished'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function update_scripts_install() {
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function update_scripts_uninstall() {
+  variable_del('update_scripts_no_auto');
+  variable_del('update_scripts_maintenance');
+  variable_del('update_scripts_directory');
+}
+

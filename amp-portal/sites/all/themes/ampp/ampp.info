@@ -1,0 +1,62 @@
+; $Id: ampp.info,v 1.10 2012/08/06 21:52:36 vamirbekyan Exp $
+name = AMPP for D7
+description = AMP Public site for D7.
+
+screenshot = screenshot.png
+version = 0.1
+core = 7.x
+engine = phptemplate
+
+regions[header] = Header
+regions[content_top] = Top content
+regions[content] = Content
+regions[content_bottom] = Bottom content
+
+features[] = logo
+#features[] = name
+#features[] = slogan
+#features[] = node_user_picture
+#features[] = comment_user_picture
+features[] = favicon
+#features[] = main_menu
+#features[] = secondary_menu
+
+settings['toggle_name'] = 1
+settings['toggle_slogan'] = 1
+settings['toggle_amp_menu'] = 1
+settings['toggle_dg_footer'] = 1
+
+; 960 Grid System CSS
+stylesheets[all][] = css/960gs/reset.css
+stylesheets[all][] = css/960gs/960.css
+
+; Custom CSS
+stylesheets[all][] = css/default.css
+stylesheets[all][] = css/drupal.css
+stylesheets[all][] = css/header-footer.css
+
+; Content Specific custom CSS
+stylesheets[all][] = css/about.css
+stylesheets[all][] = css/feedback.css
+stylesheets[all][] = css/homepage.css
+stylesheets[all][] = css/homepage-carrousel.css
+stylesheets[all][] = css/listing.css
+stylesheets[all][] = css/pane-layouts.css
+stylesheets[all][] = css/pane-styles.css
+stylesheets[all][] = css/sidebar-menu.css
+stylesheets[all][] = css/color.css
+stylesheets[all][] = css/search.css
+
+css[default.css][name] = 'Your custom global styles'
+css[default.css][description] = 'This file holds all the globally active custom CSS of your theme.'
+css[default.css][options][weight] = '10'
+
+css[color.css][name] = 'Styles to be used by color module'
+css[color.css][description] = 'This file holds all the styles that will be managed by color module.'
+css[color.css][options][weight] = '12'
+
+; Custom JavaScript
+scripts[] = js/script.js
+
+; Panels layouts and styles.
+plugins[panels][layouts] = layouts

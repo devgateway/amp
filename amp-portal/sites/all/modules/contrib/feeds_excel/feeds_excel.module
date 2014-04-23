@@ -1,0 +1,448 @@
+<?php
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function feeds_excel_ctools_plugin_api($owner, $api) {
+  if ($owner == 'feeds' && $api == 'plugins') {
+    return array('version' => 1);
+  }
+}
+
+
+/**
+* Implements hook_feeds_plugins().
+*/
+function feeds_excel_feeds_plugins() {
+  $info = array();
+  $info['ExcelParser'] = array(
+    'name' => 'Excel parser',
+    'description' => 'Parses an excel file.',
+    'help' => 'ExcelParser uses the phpExcelReader library to read in an excel file. The values of an excel file can be referenced via tokens in the mapping.',
+    'handler' => array(
+      'parent' => 'FeedsParser', // A plugin needs to derive either directly or indirectly from FeedsFetcher, FeedsParser or FeedsProcessor.
+      'class' => 'FeedsExcelParser',
+      'file' => 'ExcelParser.inc',
+      'path' => drupal_get_path('module', 'feeds_excel'),
+    ),
+  );
+  return $info;
+}
+
+/**
+ * Helper wrapper for library inclusion.
+ */
+function _feeds_excel_include_libraries() {
+  // Try to get the basic path via libraries API.
+  if (module_exists('libraries')) {
+    $path = libraries_get_path('phpExcelReader');
+    $reader = '/Excel/reader.php';
+    $oleread = '/Excel/oleread.inc';
+
+    // Import the external library
+    require_once($path . $reader);
+    require_once($path . $oleread);
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Adds token legend to feeds UI mapping form, as its not possibel via any feeds
+ * parser method.
+ */
+function feeds_excel_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'feeds_ui_mapping_form') {
+    $config = $form['#importer']->getConfig();
+    if ($config['parser']['plugin_key'] == 'ExcelParser') {
+
+      $form['legend_sources'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Legend sources'),
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+        '#weight' => 50,
+      );
+      $form['save']['#weight'] = 99;
+
+      if (module_exists('token')) {
+        $form['legend_sources']['#description'] = t('Use the listed tokens as source, to import the corresponding values to the selected target.');
+        $token_types = array(
+          'excel-file',
+          'excel-sheet',
+        );
+        switch ($config['parser']['config']['mapping_mode']) {
+          case 'rows':
+            $token_types[] = 'excel-row';
+            break;
+          case 'columns':
+            $token_types[] = 'excel-column';
+            break;
+        }
+        if ($config['content_type']) {
+          $token_types[] = 'node';
+        }
+
+        $form['legend_sources']['token_tree'] = array(
+          '#theme' => 'token_tree',
+          '#token_types' => $token_types,
+          '#global_types' => TRUE,
+        );
+      }
+      else {
+        $form['legend_sources']['#description'] = t('Enable the !token module to see the list of available tokens.', array('!token' => l('Token', 'http://drupal.org/project/token')));
+      }
+    }
+  }
+}
+
+
+/**
+ * Implements of hook_token_info().
+ *
+ * Token implementation fo excel file, sheet, row and column.
+ * @TODO (2.x): use token chaining with file, sheet, range, row/column, cell
+ *
+ */
+function feeds_excel_token_info($type = 'all') {
+  $types = array(
+    'excel-file' => array(
+      'name' => t('Excel file'),
+      'description' => t('Tokens for an individual excel file.'),
+      'needs-data' => 'excel-file',
+    ),
+    'excel-sheet' => array(
+      'name' => t('Excel sheet'),
+      'description' => t('Tokens for an individual excel sheet.'),
+      'needs-data' => 'excel-sheet',
+    ),
+    'excel-row' => array(
+      'name' => t('Excel row'),
+      'description' => t('Tokens for an individual excel row.'),
+      'needs-data' => 'excel-row',
+    ),
+    'excel-column' => array(
+      'name' => t('Excel column'),
+      'description' => t('Tokens for an individual excel column.'),
+      'needs-data' => 'excel-column',
+    ),
+  );
+
+  $tokens = array(
+    // The excel file itself (also known as workbook).
+    'excel-file' => array(
+      'path' => array(
+        'name' => t('Path'),
+        'description' => t('The path the excel file is located.'),
+      ),
+      'url' => array(
+        'name' => t('URL'),
+        'description' => t('The absolute url the excel file is located.'),
+      ),
+    ),
+    // The excel worksheet
+    'excel-sheet' => array(
+      'id' => array(
+        'name' => t('Sheet ID'),
+        'description' => t('Id of the sheet within the excel file.'),
+      ),
+      'name' => array(
+        'name' => t('Name'),
+        'description' => t('The human readable name of the sheet'),
+      ),
+      'cell-1-1-formatted' => array(
+        'name' => t('Cell R1C1 (formatted)'),
+        'description' => t('Raw data of the given cell within the sheet.'),
+      ),
+      'cell-1-1' => array(
+        'name' => t('Cell R1C1'),
+        'description' => t('Raw string of the given cell within the sheet.'),
+      ),
+    ),
+    'excel-row' => array(
+      'row' => array(
+        'name' => t('Row number'),
+        'description' => t('Number of row.'),
+      ),
+      //'cells' => t('Number of cells in row item.'),
+      'range-id' => array(
+        'name' => t('Range ID'),
+        'description' => t('ID of the define Range of config "iterative"'),
+      ),
+      'column-offset' => array(
+        'name' => t('Column offset'),
+        'description' => t('Column offset of row item.'),
+      ),
+      'column-1-formatted' => array(
+        'name' => t('Cell in Column 1 (formatted)'),
+        'description' => t('formatted data out of the cell in the given column (1) in the row.'),
+      ),
+      'column-1' => array(
+        'name' => t('Cell in Column 1'),
+        'description' => t('Raw data out of the cell in the given column (1) in the row.'),
+      ),
+      'x-1-formatted' => array(
+        'name' => t('Cell with offset 1 (formatted)'),
+        'description' => t('Formatted data of cell with given position (1 for first cell) in row.'),
+      ),
+      'x-1' => array(
+        'name' => t('Cell with offset 1'),
+        'description' => t('Raw data of cell with given position (1 for first cell) in row.'),
+      ),
+    ),
+    // A single column of an excel sheet.
+    'excel-column' => array(
+      'row-1-formatted' => array(
+        'name' => t('Cell in row 1 (formatted)'),
+        'description' => t('formatted data out of given column in current range\'s column.'),
+      ),
+      'row-1' => array(
+        'name' => t('Cell in row 1'),
+        'description' => t('Raw data out of given column in current range\'s column.'),
+      ),
+      'y-1-formatted' => array(
+        'name' => t('Cell with offset 1 (formatted)'),
+        'description' => t('formatted data of cell with given position in item (1 for first cell in column).'),
+      ),
+      'y-1' => array(
+        'name' => t('Cell with offset 1'),
+        'description' => t('Raw data of cell with given position in item (1 for first cell in column).'),
+      ),
+      'column' => array(
+        'name' => t('Number of column'),
+        'description' => t('Number of column.'),
+      ),
+      'column-alpha' => array(
+        'name' => t('Name of column'),
+        'description' => t('Alpha value of column (like A or BF)'),
+      ),
+      //'cells' => t('Number of cells in column item.'),
+      'row-offset' => array(
+        'name' => t('Row offset'),
+        'description' => t('Row offset of column item.'),
+      ),
+    ),
+  );
+  return array(
+    'types' => $types,
+    'tokens' => $tokens,
+  );
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function feeds_excel_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $values = array();
+  switch ($type) {
+    case 'excel-file':
+      $func = '_feeds_excel_token_values__excel_file';
+      break;
+    case 'excel-sheet':
+      $func = '_feeds_excel_token_values__excel_sheet';
+      break;
+    case 'excel-row':
+      $func = '_feeds_excel_token_values__excel_row';
+      break;
+    case 'excel-column':
+      $func = '_feeds_excel_token_values__excel_column';
+      break;
+  }
+
+  $replacements = array();
+  // After we got our callback, we process each token.
+  if (!empty($func) && function_exists($func) && isset($data[$type])) {
+    $sanitize = !empty($options['sanitize']);
+    foreach ($tokens as $name => $original) {
+      $value = $func($data[$type], $name, $original, $sanitize);
+      // Callback has to return a explicit value, else we do not add it to the
+      // replacement array. Non defined tokens are handled via $options['clear]
+      // in token_replace().
+      if (isset($value)) {
+        $replacements[$original] = $value;
+      }
+    }
+  }
+  return $replacements;
+}
+
+/**
+ * Helper function for rendering token values for excel file tokens.
+ *
+ * @param object $object
+ *  the exce file object to build the token value for.
+ * @param string $token_name
+ *  the specific token name, like passed to hook_tokens() as $tokens key.
+ * @param string $original_token
+ *  the original complete token, containing type and name, like passed to
+ *  hook_tokens() as $tokens value.
+ * @return string
+ *  rendered token value for the given token
+ *  or nothing if token name is not defined.
+ */
+function _feeds_excel_token_values__excel_file($object, $token_name, $original_token, $sanitize) {
+  switch ($token_name) {
+    case 'path':
+      return $sanitize ? check_url($object->filepath) : $object->filepath;
+    case 'url':
+      return url($object->filepath, array('absolute' => TRUE));
+  }
+}
+
+/**
+ * Helper function for rendering token values for excel sheet tokens.
+ *
+ * @param object $object
+ *  the exce sheet object to build the token value for.
+ * @param string $token_name
+ *  the specific token name, like passed to hook_tokens() as $tokens key.
+ * @param string $original_token
+ *  the original complete token, containing type and name, like passed to
+ *  hook_tokens() as $tokens value.
+ * @return string
+ *  rendered token value for the given token
+ */
+function _feeds_excel_token_values__excel_sheet($object, $token_name, $original_token, $sanitize) {
+  // Subpattern for preg_match
+  $subpattern = array();
+
+  if ($token_name == 'id') {
+    return $sanitize ? check_plain($object->id) : $object->id;
+  }
+  elseif ($token_name == 'name') {
+    return $sanitize ? check_plain($object->name) : $object->name;
+  }
+  // A special fixed cell.
+  elseif (is_array($object->fixed_cells)
+          && preg_match('&^cell-([0-9]+)-([0-9]+)(-formatted)?$&is', $token_name, $subpattern)) {
+    $row = $subpattern[1];
+    $column = $subpattern[2];
+    $formatted = !empty($subpattern[3]);
+    foreach ($object->fixed_cells as $id => $cell) {
+      // We found the correct cell.
+      if ($cell['row'] == $row && $cell['column'] == $column) {
+        $key = ($formatted) ? 'value' : 'raw';
+        return $sanitize ? check_plain($cell[$key]) : $cell[$key];
+      }
+    }
+    // @TODO: check if fixed cells are only valid, if they appear in fixed_cells
+    // array. If so we have to return nothing here.
+    return '';
+  }
+  // No other valid token names.
+}
+
+/**
+ * Helper function for rendering token values for excel row tokens.
+ *
+ * @param object $object
+ *  the exce row object to build the token value for.
+ * @param string $token_name
+ *  the specific token name, like passed to hook_tokens() as $tokens key.
+ * @param string $original_token
+ *  the original complete token, containing type and name, like passed to
+ *  hook_tokens() as $tokens value.
+ * @return string
+ *  rendered token value for the given token
+ */
+function _feeds_excel_token_values__excel_row($object, $token_name, $original_token, $sanitize) {
+  // Subpattern for preg_match
+  $subpattern = array();
+
+  if ($token_name == 'row') {
+    return $sanitize ? check_plain($object->row) : $object->row;
+  }
+  elseif ($token_name == 'range-id') {
+    return $sanitize ? check_plain($object->meta['range_id']) : $object->meta['range_id'];
+  }
+  elseif ($token_name == 'column-offset') {
+    return $sanitize ? check_plain($object->meta['range_col_offset']) : $object->meta['range_col_offset'];
+  }
+  // Token name is somtehing like x-111-formatted or x-111
+  elseif (is_array($object->cells)
+          && preg_match('&^x-([0-9]+)(-formatted)?$&is', $token_name, $subpattern)) {
+    $x = $subpattern[1];
+    $formatted = !empty($subpattern[2]);
+    foreach ($object->cells as $id => $cell) {
+      // We found the correct cell.
+      if ($cell['x'] == $x) {
+        $key = ($formatted) ? 'value' : 'raw';
+        return $sanitize ? check_plain($cell[$key]) : $cell[$key];
+      }
+    }
+    return '';
+  }
+  // Token name is somtheing like column-111-formatted or column-111
+  elseif (is_array($object->cells)
+          && preg_match('&^column-([0-9]+)(-formatted)?$&is', $token_name, $subpattern)) {
+    $column = $subpattern[1];
+    $formatted = !empty($subpattern[2]);
+    foreach ($object->cells as $id => $cell) {
+      // We found the correct cell.
+      if ($cell['column'] == $column) {
+        $key = ($formatted) ? 'value' : 'raw';
+        return $sanitize ? check_plain($cell[$key]) : $cell[$key];
+      }
+    }
+    return '';
+  }
+}
+
+/**
+ * Helper function for rendering token values for excel column tokens.
+ *
+ * @param object $object
+ *  the exce column object to build the token value for.
+ * @param string $token_name
+ *  the specific token name, like passed to hook_tokens() as $tokens key.
+ * @param string $original_token
+ *  the original complete token, containing type and name, like passed to
+ *  hook_tokens() as $tokens value.
+ * @return string
+ *  rendered token value for the given token
+ */
+function _feeds_excel_token_values__excel_column($object, $token_name, $original_token, $sanitize) {
+  // Subpattern for preg_match
+  $subpattern = array();
+
+  if ($token_name == 'column') {
+    return $sanitize ? check_plain($object->column) : $object->column;
+  }
+  elseif ($token_name == 'column-alpha') {
+    return $sanitize ? check_plain(ExcelRange::num2alpha($object->column)) : ExcelRange::num2alpha($object->column);
+  }
+  elseif ($token_name == 'range-id') {
+    return $sanitize ? check_plain($object->meta['range_id']) : $object->meta['range_id'];
+  }
+  elseif ($token_name == 'row-offset') {
+    return $sanitize ? check_plain($object->meta['range_col_offset']) : $object->meta['range_col_offset'];
+  }
+  // Token name is somtehing like y-111-formatted or y-111
+  elseif (is_array($object->cells)
+          && preg_match('&^y-([0-9]+)(-formatted)?$&is', $token_name, $subpattern)) {
+    $y = $subpattern[1];
+    $formatted = !empty($subpattern[2]);
+    foreach ($object->cells as $id => $cell) {
+      // We found the correct cell.
+      if ($cell['y'] == $y) {
+        $key = ($formatted) ? 'value' : 'raw';
+        return $sanitize ? check_plain($cell[$key]) : $cell[$key];
+      }
+    }
+    return '';
+  }
+  // Token name is somtehing like row-111-formatted or row-111
+  elseif (is_array($object->cells)
+          && preg_match('&^row-([0-9]+)(-formatted)?$&is', $token_name, $subpattern)) {
+    $row = $subpattern[1];
+    $formatted = !empty($subpattern[2]);
+    foreach ($object->cells as $id => $cell) {
+      // We found the correct cell.
+      if ($cell['row'] == $row) {
+        $key = ($formatted) ? 'value' : 'raw';
+        return $sanitize ? check_plain($cell[$key]) : $cell[$key];
+      }
+    }
+    return '';
+  }
+}

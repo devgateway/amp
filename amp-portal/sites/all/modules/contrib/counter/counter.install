@@ -1,0 +1,154 @@
+<?php
+/**
+ * Install the module with a new database table
+ * @file
+ */
+
+function counter_install() {
+  drupal_set_message(st('Installing Counter module'));
+  counter_update_7000();
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function counter_schema() {
+  $schema['counter'] = array(
+    'fields' => array(
+      'counter_id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+      ),
+      'counter_ip' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'counter_date' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'counter_page' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '0',
+      ),
+    ),
+    'primary key' => array('counter_id'),
+  );
+  
+  $schema['counter_data'] = array(
+    'fields' => array(
+      'counter_name'  => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => 0),
+      'counter_value' => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('counter_name'),
+  );
+  // site_counter, unique_visitor, registered_user, unregistered_user, published_node, unpublished_node 
+  return $schema;
+}
+
+function counter_update_7000() {
+  $ret = array();
+  
+  /*
+  $schema = counter_schema();
+  _drupal_initialize_schema('counter', $schema);
+  
+  foreach ($schema as $name => $table) {
+    if (!db_table_exists($name)) { 
+      db_create_table($ret, $name, $table);
+    }
+  }
+  */
+  
+  //site_counter
+  $sql = " SELECT count(*) as total FROM {counter} c ";
+  $counter_total = db_query($sql)->fetchField();
+
+  $sql = " SELECT count(*) as total FROM {counter_data} WHERE counter_name= 'site_counter' ";
+  $counter_name_exist = db_query($sql)->fetchField();
+  
+  if (!$counter_name_exist) {
+    $sql = " INSERT INTO {counter_data} (counter_name, counter_value) VALUES ('site_counter', '$counter_total')";             
+    db_query($sql);    
+  }
+  //unique_visitor
+  $sql = " SELECT count(*) as total FROM (SELECT counter_ip FROM {counter} GROUP BY counter_ip) c";
+  $counter_total = db_query($sql)->fetchField();
+  
+  $sql = " SELECT count(*) as total FROM {counter_data} WHERE counter_name= 'unique_visitor' ";
+  $counter_name_exist = db_query($sql)->fetchField();
+  
+  if (!$counter_name_exist) {
+    $sql = " INSERT INTO {counter_data} (counter_name,counter_value) VALUES ('unique_visitor','$counter_total')";             
+    db_query($sql);    
+  }  
+  //registered_user
+  $sql = " SELECT count(*) as total FROM {users} WHERE access<>0 and uid<>0";
+  $counter_total = db_query($sql)->fetchField();
+  
+  $sql = " SELECT count(*) as total FROM {counter_data} WHERE counter_name= 'registered_user' ";
+  $counter_name_exist = db_query($sql)->fetchField();
+  
+  if (!$counter_name_exist) {
+    $sql = " INSERT INTO {counter_data} (counter_name,counter_value) VALUES ('registered_user', '$counter_total')";            
+    db_query($sql);    
+  }
+  //unregistered_user
+  $sql = " SELECT count(*) as total FROM {users} WHERE access=0 and uid<>0";
+  $counter_total = db_query($sql)->fetchField();
+  
+  $sql = " SELECT count(*) as total FROM {counter_data} WHERE counter_name= 'unregistered_user' ";
+  $counter_name_exist = db_query($sql)->fetchField();
+  
+  if (!$counter_name_exist) {
+    $sql = " INSERT INTO {counter_data} (counter_name,counter_value) VALUES ('unregistered_user', '$counter_total')";             
+    db_query($sql);    
+  }
+  //published_node
+  $sql = " SELECT count(*) as total FROM {node} WHERE status=1";
+  $counter_total = db_query($sql)->fetchField();
+  
+  $sql = " SELECT count(*) as total FROM {counter_data} WHERE counter_name= 'published_node' ";
+  $counter_name_exist = db_query($sql)->fetchField();
+  
+  if (!$counter_name_exist) {
+    $sql = " INSERT INTO {counter_data} (counter_name,counter_value) VALUES ('published_node', '$counter_total')";             
+    db_query($sql);    
+  }
+  //unpublished_node
+  $sql = " SELECT count(*) as total FROM {node} WHERE status=0";
+  $counter_total = db_query($sql)->fetchField();
+  
+  $sql = " SELECT count(*) as total FROM {counter_data} WHERE counter_name= 'unpublished_node' ";
+  $counter_name_exist = db_query($sql)->fetchField();
+  
+  if (!$counter_name_exist) {
+    $sql = " INSERT INTO {counter_data} (counter_name,counter_value) VALUES ('unpublished_node','$counter_total')";             
+    db_query($sql);    
+  }
+
+  //blocked_user
+  $sql = " SELECT count(*) as total FROM {users} WHERE status=0 and uid<>0";
+  $counter_total = db_query($sql)->fetchField();
+  
+  $sql = " SELECT count(*) as total FROM {counter_data} WHERE counter_name= 'blocked_user' ";
+  $counter_name_exist = db_query($sql)->fetchField();
+  
+  if (!$counter_name_exist) {
+    $sql = " INSERT INTO {counter_data} (counter_name,counter_value) VALUES ('blocked_user','$counter_total')";             
+    db_query($sql);    
+  }
+  
+  if (db_table_exists('counter')) {
+    db_add_index('counter', 'counter_date', array('counter_date'));
+    db_add_index('counter', 'counter_ip', array('counter_ip')); 
+  }
+  
+  return $ret;  
+}

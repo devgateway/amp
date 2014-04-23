@@ -1,0 +1,24 @@
+name = AMP Activity
+description = Adds Drupal integration for AMP 'cached_amp_activity' and related tables.
+core = 7.x
+
+dependencies[] = amp_i18n
+dependencies[] = views
+
+; Views handlers
+files[] = views/amp_activity_handler_argument_date.inc
+files[] = views/amp_activity_handler_argument_expandable.inc
+files[] = views/amp_activity_handler_argument_organisation_role.inc
+files[] = views/amp_activity_handler_argument_period.inc
+files[] = views/amp_activity_handler_argument_string.inc
+files[] = views/amp_activity_handler_field_date_convert.inc
+files[] = views/amp_activity_handler_field_location_names.inc
+files[] = views/amp_activity_handler_field_organisation_names.inc
+files[] = views/amp_activity_handler_field_program_names.inc
+files[] = views/amp_activity_handler_field_sector_names.inc
+files[] = views/amp_activity_handler_field_status.inc
+files[] = views/amp_activity_handler_field_transaction.inc
+files[] = views/amp_activity_handler_field_translation.inc
+files[] = views/amp_activity_handler_field_translation_filtered.inc
+files[] = views/amp_activity_handler_field_view_activity.inc
+files[] = views/amp_activity_handler_filter_activity_filter_public.inc

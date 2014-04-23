@@ -1,7 +1,0 @@
-7.x-1.x-dev
-===========
-
-- Fix coder issues with name of user settings function similar to hook_user().
-- Fix function name in hook_element_info().
-- Remove D6 stuff from .install script.
-- #1091914 by SQP, tinker: Port format_number module to D7 from D6.

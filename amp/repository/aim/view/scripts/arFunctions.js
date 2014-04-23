@@ -517,11 +517,7 @@ function RowManagerProperty(skippedClass, baseId, markerColor) {
 	this.baseId				= baseId;
 }
 
-function sortHierarchy( columnNameList, prevOrder ) {
-	var columnName = null;
-	if( columnNameList.length>0 ) {
-		columnName = columnNameList[0].innerHTML.trim();
-	} else return;
+function sortHierarchy( columnName, prevOrder ) {
 	//alert (columnName + "!!");
 	var descending			= 1; 
 	if ( prevOrder=="descending" ) 

@@ -20,6 +20,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -27,6 +29,8 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
@@ -115,7 +119,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	protected Form<AmpActivityVersion> activityForm;
 	private static final Integer GO_TO_DESKTOP=1;
 	private static final Integer STAY_ON_PAGE=2;
-	private boolean submited;
+
 	public Form<AmpActivityVersion> getActivityForm() {
 		return activityForm;
 	}
@@ -255,7 +259,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
 		feedbackPanel.setOutputMarkupPlaceholderTag(true);
 		feedbackPanel.setOutputMarkupId(true);
-		
+		//this will be use to decorate all submit buttons
+		AttributePrepender isSubmit = new AttributePrepender("data-is_submit", new Model<String>("true"), "");
 		
 		//do not show errors in this feedbacklabel (they will be shown for each component)
         int[] filteredErrorLevels = new int[]{FeedbackMessage.ERROR};
@@ -317,7 +322,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         IndicatingAjaxLink cancelButton = new IndicatingAjaxLink("warnPanelCancel") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                target.appendJavaScript("hideWarningPanel();");
+                target.appendJavaScript("hideWarningPanel();enableButtons();");
             }
         };
         cancelButton.add(new AttributeModifier("value", TranslatorUtil.getTranslatedText("Cancel")));
@@ -327,7 +332,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         IndicatingAjaxLink saveButton = new IndicatingAjaxLink("warnPanelSave") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                target.appendJavaScript("hideWarningPanel();");
+                target.appendJavaScript("hideWarningPanel();enableButtons();");
                 //TODO: fix draft param
                 saveMethod(target, am, feedbackPanel, false, redirected);
             }
@@ -337,10 +342,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
         //add ajax submit button
 		final AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.MODULE, true) {
+			
+			
 			@Override
 			protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
-				if(!submited){
-					submited=true;
+
 					processAndUpdateForm(true, am, form, target, this.getButton());
 	                if(!form.hasError()){
 	                    HashMap<String, String> commitmentErrors = new HashMap<String, String>();
@@ -363,48 +369,65 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	                    else
 	                        saveMethod(target, am, feedbackPanel, false, redirected);
 	                }
-					else
+					else{
 						onError(target, form);
-	                submited=false;
-				}
+					}
+					//we only remove disable on buttons tagged as submit ones
+				target.appendJavaScript("enableButtons();");
 			}
+			
 
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
+				//if any error happens we enable again all buttons (tagged as submit
+				target.appendJavaScript("enableButtons();");
 				formSubmitErrorHandle(form, target, feedbackPanel);
 			}
 
+
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				generateEnableButtonsOnError(attributes);
+			}
 		};
 		
 		
 		
-		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model<String>("window.onbeforeunload = null;  for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), "");
-		
+		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model<String>("window.onbeforeunload = null;  for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();disableButton();"), "");
+
+		saveAndSubmit.getButton().add(isSubmit);
 		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
+		
 		saveAndSubmit.getButton().add(updateEditors);
 		saveAndSubmit.getButton().setDefaultFormProcessing(false);
 		
 		activityForm.add(saveAndSubmit);
-
+		
         AmpAjaxLinkField saveAsDraft = new AmpAjaxLinkField("saveAsDraft", "Save as Draft", "Save as Draft") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
+            	target.appendJavaScript("enableButtons();");
             }
+            //agregar el evento que reprende los botones
         };
-		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();"));
+        
+        saveAsDraft.getButton().add(isSubmit);
+        
+		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();disableButton();"));
 		saveAsDraft.setVisible(true);
 		saveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         activityForm.add(saveAsDraft);
-
 		activityForm.add(new Behavior(){
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
 				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpActivityFormFeature.class, "saveNavigationPanel.js")));
 				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpActivityFormFeature.class, "previewLogframe.js")));
+				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpActivityFormFeature.class, "enabelDisableButtons.js")));
 			}
 		});
+		
 
 		final RadioGroup<Integer> myDraftOpts = new RadioGroup<Integer>("draftRedirectedGroup", new Model<Integer>(GO_TO_DESKTOP));
 		Radio<Integer> radioDesktop=new Radio<Integer>("draftRedirectedDesktop", new Model<Integer>(GO_TO_DESKTOP));
@@ -435,9 +458,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         final AmpButtonField cancelSaveAsDraft = new AmpButtonField("saveAsDraftCanceld", "Cancel", AmpFMTypes.MODULE, true) {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            	target.appendJavaScript("enableButtons();");
+            }
+            @Override
+            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+            	generateEnableButtonsOnError(attributes);
             }
         };
-        cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();"));
+        cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();disableButton();"));
+        cancelSaveAsDraft.add(isSubmit);
         cancelSaveAsDraft.setVisible(true);
         cancelSaveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         cancelSaveAsDraft.setOutputMarkupId(true);
@@ -446,8 +475,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				if(!submited){
-					submited=true;
 					//reenable buttons
 	                target.appendJavaScript("hideDraftPanel();");
 	                processAndUpdateForm(false, am, form, target, this.getButton());
@@ -460,14 +487,19 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	                    target.add(cancelSaveAsDraft);
 	                    onError(target, form);
 	                }
-				submited=false;
-				}
+					target.appendJavaScript("enableButtons();");
 			}
 			
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
+				target.appendJavaScript("enableButtons();");
 				formSubmitErrorHandle(form, target, feedbackPanel); 
+			}
+			
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				generateEnableButtonsOnError(attributes);
 			}
 		};
 		
@@ -478,8 +510,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 		saveAsDraftAction.getButton().setDefaultFormProcessing(false); //disable global validation of the form
 		saveAsDraftAction.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
-		saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model<String>(onClickSaveAsDraft), ""));
+		saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model<String>(onClickSaveAsDraft+" disableButton();"), ""));
 		saveAsDraftAction.getButton().add(updateEditors);
+		saveAsDraftAction.add(isSubmit);
 		activityForm.add(saveAsDraftAction);
 		
 		// this div will be "submitted" by the autoSaveTimer
@@ -538,22 +571,26 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpButtonField logframe = new AmpButtonField("logframe", "Logframe", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				target.appendJavaScript("enableButtons();");
+			}
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				generateEnableButtonsOnError(attributes);
 			}
 		};
 		if (am.getObject().getAmpActivityId() == null)
 			logframe.setVisible(false);
 		else{
-			logframe.getButton().add(new AttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");"));
+			logframe.getButton().add(new AttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");disableButton();"));
 			logframe.setVisible(true);
 		}
+		logframe.getButton().add(isSubmit);
 		logframe.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
 		activityForm.add(logframe);
 		
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				if(!submited){
-					submited=true;
 					//reenable buttons
 					if (am.getObject().getAmpActivityId() == null){
 						target.appendJavaScript("alert('" + TranslatorUtil.getTranslatedText("You need to save this activity before being able to preview it!") + "');");
@@ -561,25 +598,27 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					else{
 						target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
 					}
-					submited=false;
-				}
+					target.appendJavaScript("enableButtons();");
 			}
 			
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
-				if(!submited){
-					submited=true;
+
 					target.add(feedbackPanel);
-				}
-				submited=false;
+					target.appendJavaScript("enableButtons();");
+			}
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+				generateEnableButtonsOnError(attributes);
 			}
 		};
 		//disable on click preview
 		preview.getButton().add(new AttributeModifier("class", new Model("sideMenuButtons")));
+		preview.getButton().add(new AttributePrepender("onclick", new Model<String>( " disableButton();"), ""));
 		if (am.getObject().getAmpActivityId() == null)
 			preview.setVisible(false);
-		
+		preview.getButton().add(isSubmit);
 		activityForm.add(preview);
 		
 		featureList = new ListView<AmpComponentPanel>("featureList", listModel) {
@@ -609,6 +648,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		quickMenu(am, listModel);
 	}
+
 
     private void processAndUpdateForm(boolean notDraft, IModel<AmpActivityVersion> am, final Form<?> form, final AjaxRequestTarget target, IndicatingAjaxButton button) {
         am.setObject(am.getObject());
@@ -986,4 +1026,19 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		list.setReuseItems(false);
 		activityForm.add(list);
 	}
+
+	private void generateEnableButtonsOnError(AjaxRequestAttributes attributes) {
+		AjaxCallListener listener = new AjaxCallListener() {
+			@Override
+			public CharSequence getFailureHandler(Component component) {
+				// if the ajax call failed we enable the buttons may be it make
+				// no sense but not to leave the
+				// buttons useless (although if we had an ajax failure the may
+				// already be useless)
+				return "enableButtons();";
+			}
+		};
+		attributes.getAjaxCallListeners().add(listener);
+	}
+	
 }

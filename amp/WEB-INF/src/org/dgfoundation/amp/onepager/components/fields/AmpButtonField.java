@@ -8,7 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
@@ -31,6 +34,8 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 
+
+
 /**
  * Encaspulates a html button of type {@link AjaxButton}
  * 
@@ -47,6 +52,7 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		return button;
 	}
 
+	
 	/**
 	 * Escalated method invoker for wrapped {@link AjaxButton#onSubmit()}
 	 * 
@@ -54,6 +60,10 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 	 * @param form
 	 */
 	protected abstract void onSubmit(AjaxRequestTarget target, Form<?> form);
+	protected  void updateAjaxAttributes(AjaxRequestAttributes attributes){
+		
+	}
+	
 
 	/**
 	 * 
@@ -88,7 +98,13 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				AmpButtonField.this.onSubmit(target, form);
 			}
-
+			@Override
+			protected void updateAjaxAttributes(AjaxRequestAttributes attributes)
+			{
+				super.updateAjaxAttributes(attributes);
+				
+				AmpButtonField.this.updateAjaxAttributes(attributes);
+			}
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				AmpButtonField.this.onError(target, form);

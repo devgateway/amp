@@ -506,42 +506,7 @@ public class ImportActionNew extends DispatchAction {
 
         Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, logItems);
 
-
-
-        //Map <IatiActivity, Set<DEMappingFields>> importMap = myform.getIatiImportedProjectMap();
-        //Map <String, Set<IatiActivity>> countryActMap = myform.getCountryActMap();
-
-
-
-
-
-
-
-
-
-        //Filter by country
-        //Map<IatiActivity ,Set<DEMappingFields>> filteredImportMap = new HashMap<IatiActivity, Set<DEMappingFields>>();
-
-
-        //Set<IatiActivity> uniqueFileterdActivities = new HashSet<IatiActivity>();//In case if the same acivity has a few countries
-        /*
-        if (selCountries != null && selCountries.length > 0) {
-            for (int cidx = 0; cidx < selCountries.length; cidx ++) {
-                Set<IatiActivity> tmp = countryActMap.get(selCountries[cidx]);
-                uniqueFileterdActivities.addAll(tmp);
-            }
-        }*/
-
-        /*
-        for (IatiActivity iact : uniqueFileterdActivities){
-            filteredImportMap.put(iact, importMap.get(iact));
-        }
-        */
-
-        //filteredImportMap = items;
-
         myform.setIatiImportedProjectMapFiltered(items);
-
 
         Set<DEMappingFields> uniqueFields = new HashSet<DEMappingFields>();
         int tmpId = 0;
@@ -597,9 +562,6 @@ public class ImportActionNew extends DispatchAction {
             groupFldsByPath.get(fld.getAmpClass()).add(fld);
         }
 
-        //Set IATI code names if exist
-
-
         myform.setGroupFldsByPath(groupFldsByPath);
         myform.setAmpClasses(ampClassSet);
 
@@ -639,18 +601,17 @@ public class ImportActionNew extends DispatchAction {
 
         //objects.addAll(selFlds);
 
+        List<DEMappingFields> selFldsSorted = new ArrayList<DEMappingFields>(selFlds);
+        Collections.sort(selFldsSorted, new Comparator() {
+            @Override
+            public int compare(Object o, Object o2) {
+                DEMappingFields cast1 = (DEMappingFields) o;
+                DEMappingFields cast2 = (DEMappingFields) o2;
+                return cast1.getIatiValues().compareTo(cast2.getIatiValues());
+            }
+        });
 
-        for (DEMappingFields fld : selFlds) {
-
-            /*
-            Map.Entry<Long, String> linkedAmpObj = null;
-            if (fld.getAmpId() > 0) {
-                for (Map.Entry<Long, String> linkedAmpObjIter :  allEntities.entrySet()) {
-                    if (fld.getAmpId().equals(linkedAmpObjIter.getKey())) {
-
-                    }
-                }
-            }*/
+        for (DEMappingFields fld : selFldsSorted) {
             JSONObject newObj = new JSONObject();
             newObj.accumulate("iatiItems", fld.getIatiItems());
             newObj.accumulate("iatiValues", fld.getIatiValuesForDisplay());
@@ -658,8 +619,6 @@ public class ImportActionNew extends DispatchAction {
             newObj.accumulate("ampId", fld.getAmpId());
             String ampVal = fld.getAmpValues() != null ? fld.getAmpValues().replaceAll("'", "&lsquo;") : null;
             newObj.accumulate("ampValues", ampVal);
-
-
             objects.add(newObj);
         }
 

@@ -1477,7 +1477,7 @@ public class DataExchangeUtils {
 						ampActivity.setModifiedBy(oldVersion.getTeam().getTeamLead());
 					
 					//the imported version from IATI should not be the current version
-					//ampActGroup.setAmpActivityLastVersion(ampActivity);
+					ampActGroup.setAmpActivityLastVersion(ampActivity);
 					session.update(ampActGroup);
 				}
 				

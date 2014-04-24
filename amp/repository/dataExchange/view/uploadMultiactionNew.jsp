@@ -750,7 +750,6 @@
 						
 						var getAutosuggestOptionValues = function (queryStr, maxNumber) {
 							var url = "../../dataExchange/importActionNew.do?action=getOptionsAjaxAction";
-							console.log(queryStr.substring(0, 64));
 							$.ajax({
 							  type: 'GET',
 							  url: url,
@@ -849,7 +848,6 @@
 						var modified = false;
 						setModified = function() {
 							modified = true;
-							console.log($("#mappingSave"));
 							$("#mappingSaveDis").css("display","none");
 							$("#mappingSave").css("display","block");
 							

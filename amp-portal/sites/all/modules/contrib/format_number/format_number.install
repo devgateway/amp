@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Module installation/uninstallation hooks.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function format_number_uninstall() {
+  variable_del('format_number_user_configurable');
+  variable_del('format_number_thousands_sep');
+  variable_del('format_number_decimal_point');
+}

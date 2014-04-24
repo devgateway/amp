@@ -1,0 +1,19 @@
+### Eclipse Workspace Patch 1.0
+#P ampp
+Index: sites/all/modules/contrib/views_export_xls/views-export-xls-view-xls.tpl.php
+===================================================================
+RCS file: /wwwroot/repository/drupal/ampp/sites/all/modules/contrib/views_export_xls/views-export-xls-view-xls.tpl.php,v
+retrieving revision 1.2
+diff -u -r1.2 views-export-xls-view-xls.tpl.php
+--- sites/all/modules/contrib/views_export_xls/views-export-xls-view-xls.tpl.php	10 Dec 2012 19:43:02 -0000	1.2
++++ sites/all/modules/contrib/views_export_xls/views-export-xls-view-xls.tpl.php	11 Jun 2013 12:30:23 -0000
+@@ -11,7 +11,8 @@
+  * - $themed_rows: a array of rows with themed fields.
+  * @ingroup views_templates
+  */
+-
++  set_time_limit(600);
++  
+   $path = drupal_get_path('module', 'views_export_xls');
+ 
+   if (!isset($filename) || empty($filename)) {

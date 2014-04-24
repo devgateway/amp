@@ -83,7 +83,7 @@ function ampp_general_filter_default_formats() {
             'AutoFormat.PurifierLinkify.DocURL' => '#%s',
             'AutoFormat.PurifierLinkify' => 0,
             'AutoFormat.RemoveEmpty.RemoveNbsp.Exceptions' => 'td
-    th',
+  th',
             'AutoFormat.RemoveEmpty.RemoveNbsp' => 0,
             'AutoFormat.RemoveEmpty' => 0,
             'AutoFormat.RemoveSpansWithoutAttributes' => 0,
@@ -101,23 +101,23 @@ function ampp_general_filter_default_formats() {
             'Core.AggressivelyFixLt' => 1,
             'Core.CollectErrors' => 0,
             'Core.ColorKeywords' => 'maroon:#800000
-    red:#FF0000
-    orange:#FFA500
-    yellow:#FFFF00
-    olive:#808000
-    purple:#800080
-    fuchsia:#FF00FF
-    white:#FFFFFF
-    lime:#00FF00
-    green:#008000
-    navy:#000080
-    blue:#0000FF
-    aqua:#00FFFF
-    teal:#008080
-    black:#000000
-    silver:#C0C0C0
-    gray:#808080
-    ',
+  red:#FF0000
+  orange:#FFA500
+  yellow:#FFFF00
+  olive:#808000
+  purple:#800080
+  fuchsia:#FF00FF
+  white:#FFFFFF
+  lime:#00FF00
+  green:#008000
+  navy:#000080
+  blue:#0000FF
+  aqua:#00FFFF
+  teal:#008080
+  black:#000000
+  silver:#C0C0C0
+  gray:#808080
+  ',
             'Core.ConvertDocumentToFragment' => 1,
             'Core.DirectLexLineNumberSyncInterval' => 0,
             'Core.Encoding' => 'utf-8',
@@ -125,7 +125,7 @@ function ampp_general_filter_default_formats() {
             'Core.EscapeInvalidTags' => 0,
             'Core.EscapeNonASCIICharacters' => 0,
             'Core.HiddenElements' => 'script
-    style',
+  style',
             'Core.Language' => 'en',
             'Null_Core.LexerImpl' => 1,
             'Null_Core.MaintainLineNumbers' => 1,
@@ -146,12 +146,12 @@ function ampp_general_filter_default_formats() {
             'HTML.Attr.Name.UseCDATA' => 0,
             'HTML.BlockWrapper' => 'p',
             'HTML.CoreModules' => 'Structure
-    Text
-    Hypertext
-    List
-    NonXMLCommonAttributes
-    XMLCommonAttributes
-    CommonAttributes',
+  Text
+  Hypertext
+  List
+  NonXMLCommonAttributes
+  XMLCommonAttributes
+  CommonAttributes',
             'Null_HTML.CustomDoctype' => 1,
             'HTML.Doctype' => 'XHTML 1.0 Transitional',
             'HTML.FlashAllowFullScreen' => 0,
@@ -177,11 +177,11 @@ function ampp_general_filter_default_formats() {
             'Output.TidyFormat' => 0,
             'Test.ForceNoIconv' => 0,
             'URI.AllowedSchemes' => 'http
-    https
-    mailto
-    ftp
-    nntp
-    news',
+  https
+  mailto
+  ftp
+  nntp
+  news',
             'Null_URI.Base' => 1,
             'URI.DefaultScheme' => 'http',
             'URI.Disable' => 0,

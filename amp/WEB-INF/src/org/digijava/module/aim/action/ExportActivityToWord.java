@@ -423,7 +423,7 @@ public class ExportActivityToWord extends Action {
 							}
 			            }
 			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description", ampContext,session)){		           
-				            if(programs.getTertiaryPrograms()!=null && programs.getTertiaryPrograms().size()>0){
+				            if(programs.getProgramDescription()!=null ){
 								cell = new RtfCell();
 								cell.setBorder(0);
 								cell.add(new Paragraph(TranslatorWorker.translateText("Program Description").toUpperCase(), BOLDFONT));						

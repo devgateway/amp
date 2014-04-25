@@ -1396,7 +1396,6 @@ function collapseAll() {
 
 <!-- PROGRAM SECTION -->
 <module:display name="/Activity Form/Program" parentModule="/Activity Form">
-<c:if test="${not empty aimEditActivityForm.programs.primaryPrograms}">
 	<fieldset>
 		<legend>
 			<span class=legend_label id="programlink" style="cursor: pointer;">
@@ -1405,7 +1404,7 @@ function collapseAll() {
 		</legend>
 		<div id="programdiv" class="toggleDiv">
 			<module:display name="/Activity Form/Program/Primary Programs" parentModule="/Activity Form/Program">
-			
+			<c:if test="${not empty aimEditActivityForm.programs.primaryPrograms}">
 				<digi:trn>Primary Programs</digi:trn>
 				 <hr/>
 				<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
@@ -1423,8 +1422,10 @@ function collapseAll() {
 					</table>
 					<hr>
 				</c:forEach>	
+				</c:if>
 			</module:display>
 			<module:display name="/Activity Form/Program/Secondary Programs" parentModule="/Activity Form/Program">
+			<c:if test="${not empty aimEditActivityForm.programs.secondaryPrograms}">
 				<digi:trn>Secondary Programs</digi:trn><br/>
 				<c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
 					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
@@ -1438,8 +1439,10 @@ function collapseAll() {
 					</tr>
 					</table>
 				</c:forEach>
+			</c:if>
 			</module:display>
 			<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
+			<c:if test="${not empty aimEditActivityForm.programs.tertiaryPrograms}">
 				<digi:trn>Tertiary Programs</digi:trn><br/>
 				<c:forEach var="program" items="${aimEditActivityForm.programs.tertiaryPrograms}">
 					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
@@ -1453,8 +1456,10 @@ function collapseAll() {
 					</tr>
 					</table>
 				</c:forEach>
+			</c:if>
 			</module:display>
 			<module:display name="/Activity Form/Program/Program Description" parentModule="/Activity Form/Program">
+			<c:if test="${not empty aimEditActivityForm.programs.programDescription}">
 				<hr/><br/><digi:trn>Program Description</digi:trn><br/>
 					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 				  		<tr>
@@ -1464,10 +1469,10 @@ function collapseAll() {
 					  	</td>
 					</tr>
 					</table>
+			</c:if>
 			</module:display>						
 		</div>
 	</fieldset>
-	</c:if>
 </module:display>
 <!-- END PROGRAM SECTION -->
 

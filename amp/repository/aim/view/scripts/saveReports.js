@@ -131,7 +131,9 @@ SaveReportEngine.prototype.saveReport		= function () {
 	this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
 	var postString		= "dynamicSaveReport=true" +
 						"&reportTitle="+this.getReportName() + 
-						"&reportId="+this.getReportId();
+						"&reportId="+this.getReportId()+
+						"&forceNameOverwrite=" + this.overwritingReport+
+						"&useFilters=true";
 	//alert (postString);
 	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
 };

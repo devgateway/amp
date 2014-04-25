@@ -420,6 +420,7 @@ public class ReportWizardAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response, boolean saveACopy) throws java.lang.Exception {
 
 		ReportWizardForm myForm		= (ReportWizardForm) form;
+		boolean dynamicSaveReport = Boolean.valueOf( request.getParameter("dynamicSaveReport") );
         myForm.setWorkspaceLinked(Boolean.valueOf(request.getParameter("workspaceLinked"))); //Struts for some reason ignores this field and I am tired of it
 		
 		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
@@ -464,76 +465,78 @@ public class ReportWizardAction extends MultiAction {
 		}
 		
 		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
-		ampReport.setHideActivities( myForm.getHideActivities() );
-		ampReport.setOptions( myForm.getReportPeriod() );
-		ampReport.setReportDescription( myForm.getReportDescription() );
 		ampReport.setName( myForm.getReportTitle().trim() );
-		ampReport.setPublicReport(myForm.getPublicReport());
 		ampReport.setWorkspaceLinked(myForm.getWorkspaceLinked());
-		if (myForm.getReportCategory() != null && myForm.getReportCategory() != 0){
-			ampReport.setReportCategory(CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getReportCategory()));
-		}else{
-			ampReport.setReportCategory(null);
-		}
-		
-		ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns() );	
-		ampReport.setBudgetExporter(myForm.getBudgetExporter() != null && myForm.getBudgetExporter());
-				
-		if ( myForm.getAmpTeamMember() == null ) {
-				ampReport.setOwnerId( ampTeamMember );
-		}
-		else
-				ampReport.setOwnerId( myForm.getAmpTeamMember() );
-		
-		ampReport.setColumns( new HashSet<AmpReportColumn>() );
-		ampReport.setHierarchies( new HashSet<AmpReportHierarchy>() );
-		ampReport.setMeasures( new HashSet<AmpReportMeasures>() );
-		
-		AmpCategoryValue level1		= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
-		
-		this.addFields(myForm.getSelectedColumns(), availableCols, ampReport.getColumns(), AmpReportColumn.class, level1);
-		this.addFields(myForm.getSelectedHierarchies(), availableCols, ampReport.getHierarchies(), AmpReportHierarchy.class, level1);
-		this.addFields(myForm.getSelectedMeasures(), availableMeas, ampReport.getMeasures(), AmpReportMeasures.class, level1);
-		
-		/* If all columns are set as hierarchies we add the Project Title column */
-		if (  ampReport.getColumns() != null && ampReport.getHierarchies() != null ) {
-			int numOfCols		= ampReport.getColumns().size();
-			int numOfHiers		= ampReport.getHierarchies().size();
-			/* "Cumulative Commitment", and "Cumulative Disbursement" are not treated as columns so if they appear 
-			 * we need to substract them from the total number of cols */
-			for ( AmpReportColumn tempRepCol: ampReport.getColumns() ) {
-				if ( ArConstants.COLUMN_CUMULATIVE_COMMITMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
-					numOfCols--;
-					continue;
-				}
-				if ( ArConstants.COLUMN_CUMULATIVE_DISBURSEMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
-					numOfCols--;
-					continue;
-				}
-				if ( ArConstants.COLUMN_UNDISB_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
-					numOfCols--;
-					continue;
-				}
-				if ( ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
-					numOfCols--;
-					continue;
-				}
+		if (! dynamicSaveReport ) {
+			ampReport.setHideActivities( myForm.getHideActivities() );
+			ampReport.setOptions( myForm.getReportPeriod() );
+			ampReport.setReportDescription( myForm.getReportDescription() );
+			ampReport.setPublicReport(myForm.getPublicReport());
+			if (myForm.getReportCategory() != null && myForm.getReportCategory() != 0){
+				ampReport.setReportCategory(CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getReportCategory()));
+			}else{
+				ampReport.setReportCategory(null);
 			}
-			if ( numOfCols == numOfHiers && (ampReport.getHideActivities() == null || !ampReport.getHideActivities()) ) {
-				for ( AmpColumns tempCol: availableCols ) {
-					if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
-						if (!AdvancedReportUtil.isColumnAdded(ampReport.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {
-							AmpReportColumn titleCol			= new AmpReportColumn();
-							titleCol.setLevel(level1);
-							titleCol.setOrderId( new Long((ampReport.getColumns().size()+1)));
-							titleCol.setColumn(tempCol); 
-							ampReport.getColumns().add(titleCol);
-							break;
-						}else{
-							/*if Project Title column is already added then remove it from hierarchies list*/
-							if(!FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECT_TITLE_HIRARCHY).equalsIgnoreCase("true"))
-							AdvancedReportUtil.removeColumnFromHierarchies(ampReport.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
-							break;
+			
+			ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns() );	
+			ampReport.setBudgetExporter(myForm.getBudgetExporter() != null && myForm.getBudgetExporter());
+					
+			if ( myForm.getAmpTeamMember() == null ) {
+					ampReport.setOwnerId( ampTeamMember );
+			}
+			else
+					ampReport.setOwnerId( myForm.getAmpTeamMember() );
+			
+			ampReport.setColumns( new HashSet<AmpReportColumn>() );
+			ampReport.setHierarchies( new HashSet<AmpReportHierarchy>() );
+			ampReport.setMeasures( new HashSet<AmpReportMeasures>() );
+			
+			AmpCategoryValue level1		= CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.ACTIVITY_LEVEL_KEY , 0L);
+			
+			this.addFields(myForm.getSelectedColumns(), availableCols, ampReport.getColumns(), AmpReportColumn.class, level1);
+			this.addFields(myForm.getSelectedHierarchies(), availableCols, ampReport.getHierarchies(), AmpReportHierarchy.class, level1);
+			this.addFields(myForm.getSelectedMeasures(), availableMeas, ampReport.getMeasures(), AmpReportMeasures.class, level1);
+			
+			/* If all columns are set as hierarchies we add the Project Title column */
+			if (  ampReport.getColumns() != null && ampReport.getHierarchies() != null ) {
+				int numOfCols		= ampReport.getColumns().size();
+				int numOfHiers		= ampReport.getHierarchies().size();
+				/* "Cumulative Commitment", and "Cumulative Disbursement" are not treated as columns so if they appear 
+				 * we need to substract them from the total number of cols */
+				for ( AmpReportColumn tempRepCol: ampReport.getColumns() ) {
+					if ( ArConstants.COLUMN_CUMULATIVE_COMMITMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
+						numOfCols--;
+						continue;
+					}
+					if ( ArConstants.COLUMN_CUMULATIVE_DISBURSEMENT.equals(tempRepCol.getColumn().getColumnName()) ) {
+						numOfCols--;
+						continue;
+					}
+					if ( ArConstants.COLUMN_UNDISB_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
+						numOfCols--;
+						continue;
+					}
+					if ( ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE.equals(tempRepCol.getColumn().getColumnName()) ) {
+						numOfCols--;
+						continue;
+					}
+				}
+				if ( numOfCols == numOfHiers && (ampReport.getHideActivities() == null || !ampReport.getHideActivities()) ) {
+					for ( AmpColumns tempCol: availableCols ) {
+						if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
+							if (!AdvancedReportUtil.isColumnAdded(ampReport.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {
+								AmpReportColumn titleCol			= new AmpReportColumn();
+								titleCol.setLevel(level1);
+								titleCol.setOrderId( new Long((ampReport.getColumns().size()+1)));
+								titleCol.setColumn(tempCol); 
+								ampReport.getColumns().add(titleCol);
+								break;
+							}else{
+								/*if Project Title column is already added then remove it from hierarchies list*/
+								if(!FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECT_TITLE_HIRARCHY).equalsIgnoreCase("true"))
+								AdvancedReportUtil.removeColumnFromHierarchies(ampReport.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
+								break;
+							}
 						}
 					}
 				}

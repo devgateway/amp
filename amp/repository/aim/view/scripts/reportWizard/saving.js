@@ -195,7 +195,6 @@ SaveReportEngine.prototype.saveReport	= function () {
 						"&workspaceLinked="+getWorkspaceLinked() +
 						"&hideActivities="+getHideActivities() +
 						"&useFilters="+getUseFilters()+
-						//"&reportContextId="+getReportContextId()+
 						"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
 						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
 	

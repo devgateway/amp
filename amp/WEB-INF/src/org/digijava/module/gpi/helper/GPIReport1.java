@@ -295,11 +295,13 @@ public class GPIReport1 extends GPIAbstractReport {
 		while (iterColl.hasNext()) {
 			// Calculate percentages.
 			GPIReport1Row auxRow = (GPIReport1Row) iterColl.next();
-			if (auxRow.getColumn2().doubleValue() > 0) {
+			if(auxRow.getColumn2() != null) {
 				if (auxRow.getColumn2().doubleValue() > 0) {
-					auxRow.setColumn3(new BigDecimal(auxRow.getColumn1()).multiply(new BigDecimal(100)).divide(new BigDecimal(auxRow.getColumn2()), RoundingMode.HALF_UP).floatValue());
-				} else {
-					auxRow.setColumn3(0);
+					if (auxRow.getColumn2().doubleValue() > 0) {
+						auxRow.setColumn3(new BigDecimal(auxRow.getColumn1()).multiply(new BigDecimal(100)).divide(new BigDecimal(auxRow.getColumn2()), RoundingMode.HALF_UP).floatValue());
+					} else {
+						auxRow.setColumn3(0);
+					}
 				}
 			}
 

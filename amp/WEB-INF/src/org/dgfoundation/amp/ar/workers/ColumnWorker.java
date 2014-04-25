@@ -151,7 +151,7 @@ public abstract class ColumnWorker {
 		
 		CellColumn cc = null;
 		
-		String queryCondition = "WHERE amp_activity_id IN (" + filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition!=null ? internalCondition:"");
+		String queryCondition = "WHERE " + filterCacher.getPrimaryKeyName() + " IN (" + filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition!=null ? internalCondition:"");
 		String queryView = viewName;
 		
 		//PreparedStatement ps;
@@ -160,8 +160,6 @@ public abstract class ColumnWorker {
 			//if debug override the query
 			 queryView = "TEST_" + viewName;
 			 queryCondition = "";
-		}else if (pledgereport){
-			queryCondition = "WHERE pledge_id IN (" + filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition != null ? internalCondition:"");
 		}
 		
 		try {

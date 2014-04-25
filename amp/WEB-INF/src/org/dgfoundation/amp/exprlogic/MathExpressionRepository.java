@@ -86,17 +86,10 @@ public class MathExpressionRepository {
 	 * Pledge Columns
 	 */
 	public static final String PERCENTAGE_OF_DISBURSEMENT= "percentageOfDisbursement";
-	public static final String COMMITMENT_GAP= "commitmentGap";
 
 	public static final String PERCENTAGE_OF_TOTAL_COMMITMENTS = "percentageOfTotalCommitments";
 
     public static final String DISBURSEMENT_RATION = "disbursmentRatio";
-	//@Deprecated
-	//public static final String MTEF_COLUMN	= "mtefColumn";
-	
-	//public static final String PLEDGES_COMMITMENT_GAP = "commitmentgap";
-	
-	//public static final String PLEDGES_TOTAL = "totalpledge";
 
 	private static Hashtable<String, MathExpression> expresions = new Hashtable<String, MathExpression>();
 
@@ -145,11 +138,7 @@ public class MathExpressionRepository {
 		buildSelectdYearOfPlannedDisbursements();
 		
 		buildPercentageOfDisbursement();
-		buildCommitmentGap();
 		buildPercentageOfTotalCommitments();
-//		buildPledgesGap();
-//		buildTotalPledged();
-
 
         buildDisbursementRatio();//AMP-15581
 	}
@@ -189,18 +178,7 @@ public class MathExpressionRepository {
 		} catch (Exception e) {
 			logger.error(e);
 		}
-	}
-	
-	
-	private static void buildCommitmentGap() {
-		try {
-			MathExpression m1 = new MathExpression(MathExpression.Operation.SUBTRACT, ArConstants.PLEDGED_TOTAL, ArConstants.ACTUAL_COMMITMENT);
-			expresions.put(COMMITMENT_GAP, m1);
-		} catch (Exception e) {
-			logger.error(e);
-		}
-	}
-	
+	}		
 	
 	/**
 	 * buildOverageProjects Current Date - Proposed Completion

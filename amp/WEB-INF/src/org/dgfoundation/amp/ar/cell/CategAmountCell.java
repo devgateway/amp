@@ -209,7 +209,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 			ArConstants.COLUMN_CAPITAL_EXPENDITRURE, ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT,
 			ArConstants.DONOR_GROUP, ArConstants.DONOR_TYPE_COL, ArConstants.TERMS_OF_ASSISTANCE, ArConstants.FINANCING_INSTRUMENT, ArConstants.ACTIVITY_PLEDGES_TITLE_NAME,
 			ArConstants.FUNDING_STATUS, ArConstants.MODE_OF_PAYMENT, ArConstants.COMPONENT_NAME, ArConstants.COMPONENT_TYPE_S, ArConstants.AGREEMENT_CODE, ArConstants.AGREEMENT_TITLE_CODE,
-			ArConstants.PLEDGES_METADATA_NAME+ArConstants.TERMS_OF_ASSISTANCE
+			ArConstants.PLEDGES_METADATA_NAME + ArConstants.TERMS_OF_ASSISTANCE
 		};
 	public final static Set<String> fundingFilteringColumns = new HashSet<String>(Arrays.asList(fundingFilteringColumnsArr));
 	
@@ -250,7 +250,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	}
 	
 @Override
-public Cell filter(Cell metaCell,Set ids) {
+public Cell filter(Cell metaCell, Set ids) {
 	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);
 	if(ret==null) return null;
 		
@@ -263,14 +263,19 @@ public Cell filter(Cell metaCell,Set ids) {
 			return null;
 	}
 	
-	if (!passesFilter(ArConstants.RELATED_PROJECTS, metaCell, ret))
-		if (!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))
+	
+	if (!passesFilter(ArConstants.RELATED_PROJECTS, metaCell, ret)){
+		// relatedProject filter is enabled but does not pass -> let's decide whether it is relevant
+		// it is relevant when NOT doing one of: COSTING_GRAND_TOTAL, ACTUAL_PLEDGE
+		if (!ret.isGlobalAmount()){
 			return null;
+		}
+	}
     
 	if (metaCell.getColumn().getName().equals(ArConstants.DONOR) || metaCell.getColumn().getName().equals(ArConstants.RELATED_PROJECTS))
 	{
  	 	if (!passesFilter(metaCell.getColumn().getName(), metaCell, ret))
- 	 		if (!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))
+ 	 		if (!ret.isGlobalAmount())
  	 			return null;  
 	}
 		
@@ -386,6 +391,15 @@ public Cell filter(Cell metaCell,Set ids) {
 		return internal.equals(m);
 	}
 	
+	/**
+	 * returns true IFF this cell holds an amount which is not splitable by hier. Examples: COSTING_GRAND_TOTAL, ACTUAL PLEDGE (total amount pledged for a pledge)
+	 * @return
+	 */
+	public boolean isGlobalAmount(){
+		return this.existsMetaString(ArConstants.COSTING_GRAND_TOTAL) || 
+				//(ArConstants.ACTUAL.equals(getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) && existsMetaString(ArConstants.PLEDGES_METADATA_NAME + ArConstants.TERMS_OF_ASSISTANCE));
+				ArConstants.PLEDGE.equals(getMetaValueString(ArConstants.TRANSACTION_TYPE));
+	}
 
 	/**
 	 * cleans all metadata which is safe to be deleted after the report has been generated and is only used for viewing

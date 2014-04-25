@@ -181,14 +181,12 @@ public class CellColumn<K extends Cell> extends Column<K> {
 	public Column filterCopy(CellFilterCriteria crit)
 	{
 		CellColumn dest = (CellColumn) this.newInstance();
-		Iterator i = items.iterator();
-		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
+		for(Cell element:items){
 			Cell destCell = crit.filter(element);
 			if (destCell != null)
 				dest.addCell(destCell);
 		}
-		return dest;		
+		return dest;
 	}
 
 	/*

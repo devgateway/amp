@@ -16,7 +16,7 @@ public abstract class FilterCacher {
 	
 	private AmpARFilter filter;
 	private Connection connection;
-	protected String primaryKeyName;
+	protected final String primaryKeyName;
 	
 	public FilterCacher(AmpARFilter filter)
 	{
@@ -59,5 +59,9 @@ public abstract class FilterCacher {
 	{
 		closeConnection();
 	}	
+	
+	public String getPrimaryKeyName(){
+		return primaryKeyName;
+	}
 	 
 }

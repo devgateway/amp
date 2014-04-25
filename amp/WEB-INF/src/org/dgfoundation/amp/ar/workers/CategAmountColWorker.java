@@ -174,12 +174,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 
 		if (columnsMetaData.containsKey("adjustment_type_name"))
 		{
-		   	adj_type = rs.getString("adjustment_type_name");
-//		    // AMP-16688, please delete for AMP 2.8
-//		    if (adj_type.equals("Bilateral SSC"))
-//		    	adj_type = "Actual";
-//		    if (adj_type.equals("Triangular SSC"))
-//		    	adj_type = "Planned";		    	
+			adj_type = rs.getString("adjustment_type_name");    	
 		}
 		
 		if(columnsMetaData.containsKey("donor_type_name"))

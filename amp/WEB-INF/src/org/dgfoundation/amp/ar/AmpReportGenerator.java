@@ -172,7 +172,6 @@ public class AmpReportGenerator extends ReportGenerator {
 			
 		// build extractable, extractableNames, generated
 		while (i.hasNext()) {
-			boolean skypIt=false;
 			AmpReportColumn element2 = (AmpReportColumn) i.next();
 			AmpColumns element = element2.getColumn();
 			//if we are showing an summarized report we will hidden columns with row values
@@ -299,11 +298,9 @@ public class AmpReportGenerator extends ReportGenerator {
 				}else{
 					extractorView  = col.getExtractorView();
 				}
-				logger.info("Extracting column " + col.getColumnName()
-						+ " with view " + extractorView);
+				logger.info("Extracting column " + col.getColumnName() + " with view " + extractorView);
 				String columnName = col.getColumnName();
-				String relatedContentPersisterClass = col
-						.getRelatedContentPersisterClass();
+				String relatedContentPersisterClass = col.getRelatedContentPersisterClass();
 
 				//logger.debug("Seeking class " + cellTypeName);
 
@@ -351,6 +348,18 @@ public class AmpReportGenerator extends ReportGenerator {
 				
 				if ((extractorView != null) && extractorView.equals("v_mtef_funding"))
 					columnFilterSQLClause = generate_mtef_filter_statement(columnFilterSQLClause, col.getAliasName());
+				
+//				if (pledgereport/* && extractorView.equals("v_pledges_funding_st")*/){
+//					//columnFilterSQLClause = " AND (pledge_id IN (-1, 10))"; 
+//					//columnFilterSQLClause = "AND (pledge_id IN (-1, 10)) AND (related_project_id IN (select distinct(vdf.amp_activity_id) from v_donor_funding vdf where vdf.pledge_id = 10))"; // BOZO! DELETE THIS FROM COMMIT!
+//					columnFilterSQLClause = "AND (pledge_id IN (-1, 10))"; // BOZO! DELETE THIS FROM COMMIT!
+//					// select amp_activity_id from amp_activity where (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')
+//					String relatedProjectsQuery = "SELECT amp_activity_id FROM amp_activity WHERE (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')";
+//					if (extractorView.equals("v_pledges_funding_st"))
+//						columnFilterSQLClause += String.format(" AND (related_project_id IN (%s))", relatedProjectsQuery);
+//					if (extractorView.equals("v_pledges_projects"))
+//						columnFilterSQLClause += String.format(" AND (amp_activity_id IN (%s))", relatedProjectsQuery);
+//				}
 				
 				ce.setInternalCondition(columnFilterSQLClause);
 				ce.setSession(this.session);
@@ -996,16 +1005,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		try {
 			
 			applyPercentagesToFilterColumns();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error(e);
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error(e);
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 			e.printStackTrace();
 			logger.error(e);
 		}
@@ -1283,18 +1283,9 @@ public class AmpReportGenerator extends ReportGenerator {
 			// column used by hierarchy
 			CellColumn hc = (CellColumn) rd.getColumn(c.getColumnName());
 			Collection hcIds = hc.getOwnerIds();
-			// we remove from the list of all ids in all columns, the ones
-			// present in the hierarchy column.
+			// we remove from the list of all ids in all columns, the ones present in the hierarchy column.
 			allIds.removeAll(hcIds);
-			// now we have the ids of the items that do not have the hierarchy
-			// cells present, and we need to add fakes so we can
-			// show the Unallocated hierarchy
-			// if(hc.getName().equals("Sub-Sector")){
-			// //"
-			// Cell fakeC = hc.getWorker().newCellInstance();
-			// fakeC.setOwnerId(new Long(340));
-			// hc.addCell(fakeC);
-			// }
+			// now we have the ids of the items that do not have the hierarchy cells present, and we need to add fakes so we can show the Unallocated hierarchy
 
 			for (Long id:allIds) {
 				Cell fakeC = hc.getWorker().newCellInstance();
@@ -1323,15 +1314,11 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		// now we can create the hierarchy tree
 		for (AmpReportHierarchy element:orderedHierarchies) {
-			// TODO: the set is NOT a list, so the hierarchies are unordered.
 			AmpColumns c = element.getColumn();
 
 			try {
 				report = report.horizSplitByCateg(c.getColumnName());
-			} catch (UnidentifiedItemException e) {
-				logger.error(e);
-				e.printStackTrace();
-			} catch (IncompatibleColumnException e) {
+			} catch (UnidentifiedItemException | IncompatibleColumnException e) {
 				logger.error(e);
 				e.printStackTrace();
 			}

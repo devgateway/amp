@@ -58,7 +58,7 @@ public class LaunchDashboard extends Action {
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 		HttpSession session = request.getSession();
-		request.setAttribute("compatibility_shim", "chrome=1; IE=7");
+		request.setAttribute("compatibility_shim", "chrome=1; IE=8");
 		VisualizationForm dForm = (VisualizationForm) form;
 		AmpDashboard dashboard = dForm.getDashboard();
         String dashId = request.getParameter("id") != null ? (String) request.getParameter("id") : null;

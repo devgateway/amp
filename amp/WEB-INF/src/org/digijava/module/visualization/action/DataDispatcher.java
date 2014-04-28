@@ -685,7 +685,7 @@ public class DataDispatcher extends DispatchAction {
 		children.add(rootTotDisbs);
 		
 		rootNumOfProjs.put("type", "NumberOfProjs");
-		rootNumOfProjs.put("value", visualizationForm.getSummaryInformation().getNumberOfProjects().toString());
+		rootNumOfProjs.put("value", visualizationForm.getSummaryInformation().getNumberOfProjects() != null ? visualizationForm.getSummaryInformation().getNumberOfProjects().toString() : "0");
 		children.add(rootNumOfProjs);
 		
 		rootNumOfSecs.put("type", "NumberOfSecs");

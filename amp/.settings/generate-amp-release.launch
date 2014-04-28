@@ -7,14 +7,15 @@
 <stringAttribute key="M2_PROFILES" value=""/>
 <listAttribute key="M2_PROPERTIES">
 <listEntry value="serverName=local"/>
-<listEntry value="jdbc.db=amp_madagascar_26"/>
+<listEntry value="jdbc.db=amp-ssudan-stg-tc7"/>
 <listEntry value="jdbc.user=postgres"/>
-<listEntry value="jdbc.password=amp"/>
+<listEntry value="jdbc.password=m0n1t0r"/>
 </listAttribute>
 <stringAttribute key="M2_RUNTIME" value="EMBEDDED"/>
 <booleanAttribute key="M2_SKIP_TESTS" value="false"/>
+<intAttribute key="M2_THREADS" value="1"/>
 <booleanAttribute key="M2_UPDATE_SNAPSHOTS" value="false"/>
 <booleanAttribute key="M2_WORKSPACE_RESOLUTION" value="false"/>
 <stringAttribute key="org.eclipse.debug.core.ATTR_REFRESH_SCOPE" value="${workspace}"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc}"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:/amp-2.7-release}"/>
 </launchConfiguration>

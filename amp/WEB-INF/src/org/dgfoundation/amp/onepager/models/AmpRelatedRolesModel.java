@@ -49,4 +49,13 @@ public class AmpRelatedRolesModel extends AbstractReadOnlyModel<List<AmpRole>> {
 		}
 		return new ArrayList<AmpRole>(set);
 	}
+
+	public String[] getRoleFilter() {
+		return roleFilter;
+	}
+
+	public void setRoleFilter(String[] roleFilter) {
+		this.roleFilter = roleFilter;
+	}
+	
 }

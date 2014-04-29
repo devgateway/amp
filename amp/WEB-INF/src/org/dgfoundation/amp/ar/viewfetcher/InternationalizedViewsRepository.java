@@ -256,10 +256,7 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("donor_type_name", "org_type_id", AmpOrgType.class, "orgType")).
 						addTrnColDef("terms_assist_name", "terms_assist_id").
 						addTrnColDef("financing_instrument_name", "financing_instrument_id"));
-				
-				addViewDef(this, new I18nViewDescription("v_pledges_districts").
-						addColumnDef(new I18nViewColumnDescription("location_name", "location_id", AmpCategoryValueLocations.class, "name")));
-				
+								
 				addViewDef(this, new I18nViewDescription("v_pledges_donor").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_donor_org_id", AmpOrganisation.class, "name")));
 				

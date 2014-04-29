@@ -15,20 +15,23 @@ import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 
 public abstract class SyntheticCellGenerator {
-	private String metaDataName	= null;
-	private String measureName	= null;
-	private String originalMeasureName	= null;
+	private final String metaDataName;
+	private final String measureName;
+	private final String originalMeasureName;
 	
-	public SyntheticCellGenerator(String metaDataName, String measureName,
-			String originalMeasureName) {
+	public SyntheticCellGenerator(String metaDataName, String measureName, String originalMeasureName) {
 		super();
 		this.metaDataName = metaDataName;
 		this.measureName = measureName;
 		this.originalMeasureName = originalMeasureName;
 	}
-
-
-
+	
+//	/**
+//	 * should only be used by super-constructors
+//	 */
+//	protected SyntheticCellGenerator(){
+//		
+//	}
 
 	public Collection<CategAmountCell> generate(Collection<CategAmountCell> cells, int order) {
 		ArrayList<CategAmountCell> retCells	= new ArrayList<CategAmountCell>();
@@ -91,29 +94,9 @@ public abstract class SyntheticCellGenerator {
 	public void setSession ( HttpSession session) {}
 	
 
-	/**
-	 * @return the metaDataName
-	 */
-	public String getMetaDataName() {
+	protected String getMetaDataName() {
 		return metaDataName;
 	}
-
-
-
-
-
-
-	/**
-	 * @param metaDataName the metaDataName to set
-	 */
-	public void setMetaDataName(String metaDataName) {
-		this.metaDataName = metaDataName;
-	}
-
-
-
-
-
 
 	/**
 	 * @return the measureName
@@ -122,33 +105,13 @@ public abstract class SyntheticCellGenerator {
 		return measureName;
 	}
 
-
-
-
-
-
-	/**
-	 * @param measureName the measureName to set
-	 */
-	public void setMeasureName(String measureName) {
-		this.measureName = measureName;
-	}
-
-
 	/**
 	 * @return the originalMeasureName
 	 */
-	public String getOriginalMeasureName() {
+	protected String getOriginalMeasureName() {
 		return originalMeasureName;
 	}
 
-
-	/**
-	 * @param originalMeasureName the originalMeasureName to set
-	 */
-	public void setOriginalMeasureName(String originalMeasureName) {
-		this.originalMeasureName = originalMeasureName;
-	} 
 		
 	@Override
 	public String toString()

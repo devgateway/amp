@@ -121,6 +121,7 @@ public final class ArConstants {
 	public final static String PLEDGES_COMMITMENT="Pledges Commitments";
 	public final static String PLEDGES_DISBURSEMENT="Pledges Disbursements";
 	public final static String PLEDGE="Pledge";
+	public final static String FUNDING_TYPE_COMMITMENT_GAP = "Commitment Gap";
 	public final static String PLEDGES_METADATA_NAME="Pledges ";
 	//public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
 	public final static java.sql.Date PLEDGE_FAKE_YEAR = new java.sql.Date(0);
@@ -350,7 +351,8 @@ public final class ArConstants {
 			new SyntheticColumnsMeta("Planned Disbursements", new CapitalSplitTotalsCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements","Planned Disbursements")),
 			new SyntheticColumnsMeta("Actual Disbursements - Capital", new CapitalCellGenerator(ArConstants.CAPITAL_PERCENT, "Actual Disbursements - Capital","Actual Disbursements")),
 			new SyntheticColumnsMeta("Actual Disbursements - Recurrent", new ActualDisbRecurrentCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements - Recurrent","Actual Disbursements")),
-			new SyntheticColumnsMeta("Actual Disbursements", new ActualDisbSplitCapRecTotalsCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements","Actual Disbursements"))
+			new SyntheticColumnsMeta("Actual Disbursements", new ActualDisbSplitCapRecTotalsCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements","Actual Disbursements")),
+			new SyntheticColumnsMeta("Commitment Gap", new CommitmentGapCellGenerator())
 	) ;
 
 	public static final String ACTIVITY_ID = "ACTIVITY_ID";

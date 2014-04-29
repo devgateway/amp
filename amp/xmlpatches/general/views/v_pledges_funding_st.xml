@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
 	<jira>AMP-14167</jira>
 	<keyword>Views</keyword>
-	<author>Alexandru Artimon</author>
+	<author>Constantin Dolghier</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -19,6 +19,9 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+			<!-- if you are changing this view to eliminate a.draft != true, also eliminate it from v_pledges_projects!
+			else you will get inconsistent results when doing pledges reports with hierarchies by related_project
+			 -->
 			DROP VIEW IF EXISTS v_pledges_funding_st;
 			
 			CREATE OR REPLACE VIEW v_pledges_funding_st AS 
@@ -45,7 +48,7 @@
 			   LEFT JOIN amp_category_value cval3 ON cval3.id = afd.adjustment_type
 			   
 			   LEFT JOIN amp_activity a ON a.amp_activity_id = ampf.amp_activity_id
-			  WHERE a.amp_team_id IS NOT NULL
+			  WHERE (a.amp_team_id IS NOT NULL) AND (a.draft != true) AND (a.deleted != true)
 			UNION ALL 
 			         SELECT f.id AS pledge_id,  
 			            fd.id AS amp_fund_detail_id, fd.id AS id,  
@@ -63,14 +66,15 @@
 			            a.amp_activity_id AS related_project_id
 			           FROM amp_funding_pledges f
 			      JOIN amp_funding_pledges_details fd ON f.id = fd.pledge_id
-			   LEFT JOIN amp_category_value cval ON cval.id = fd.type_of_assistance
-			   LEFT JOIN amp_currency c ON c.amp_currency_id = fd.currency
-			   LEFT JOIN amp_org_group b ON b.amp_org_grp_id = f.amp_org_grp_id
-			   LEFT JOIN amp_org_type ot ON ot.amp_org_type_id = b.org_type
-			   LEFT JOIN amp_category_value cval2 ON cval2.id = fd.aid_modality
-			   LEFT JOIN (SELECT pledge_id, max(amp_funding_id) as amp_funding_id FROM amp_funding_detail GROUP BY pledge_id) afd ON afd.pledge_id = f.id
-			   LEFT JOIN amp_funding ampf ON ampf.amp_funding_id = afd.amp_funding_id
-			   LEFT JOIN amp_activity a ON a.amp_activity_id = ampf.amp_activity_id;
+				LEFT JOIN amp_category_value cval ON cval.id = fd.type_of_assistance
+				LEFT JOIN amp_currency c ON c.amp_currency_id = fd.currency
+				LEFT JOIN amp_org_group b ON b.amp_org_grp_id = f.amp_org_grp_id
+				LEFT JOIN amp_org_type ot ON ot.amp_org_type_id = b.org_type
+				LEFT JOIN amp_category_value cval2 ON cval2.id = fd.aid_modality
+				LEFT JOIN (SELECT pledge_id, max(amp_funding_id) as amp_funding_id FROM amp_funding_detail GROUP BY pledge_id) afd ON afd.pledge_id = f.id
+				LEFT JOIN amp_funding ampf ON ampf.amp_funding_id = afd.amp_funding_id
+				LEFT JOIN amp_activity a ON a.amp_activity_id = ampf.amp_activity_id
+				WHERE (a.draft != true) AND (a.deleted != true);
         </lang>
 		</script>
 	</apply>

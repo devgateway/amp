@@ -27,5 +27,4 @@ public class FundingTypeSortedString extends SortedString {
 	public int getOrder() {
 		return order;		
 	}
-
 }

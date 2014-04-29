@@ -72,7 +72,6 @@ public class AmpReportGenerator extends ReportGenerator {
 	public final static boolean USE_FILTER_CACHING = true;
 	
 	List<AmpReportColumn> extractable; // columns extractable while building the report
-	protected int extractableCount; // looks like extractable.size() [need to check!]
 	private List<String> columnsToBeRemoved;
 	private boolean debugMode = false;
 	private boolean cleanupMetadata = true;
@@ -148,7 +147,36 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		return out;
 	}
+	
+	/**
+	 * fills {@link #extractable}, returns list of generatedColumns
+	 * divides the column set into those that can be extracted (extractorView!=null) and those that are to be generated
+	 */
+	protected List<AmpReportColumn> generateExtractableAndGeneratedColumns(){		
+		this.extractable = new ArrayList<>();
+		List<AmpReportColumn> generated = new ArrayList<>();
+					
+		// build extractable, generated
+		for(AmpReportColumn element2:reportMetadata.getOrderedColumns()){
+			AmpColumns element = element2.getColumn();
+						
+			if (element.getExtractorView() != null) {
+				extractable.add(element2);
+			} else
+				generated.add(element2);
+		}
 		
+		// also add hierarchical columns to extractable
+		for (AmpReportHierarchy element:reportMetadata.getHierarchies()) {
+			AmpReportColumn arc = new AmpReportColumn();
+			arc.setColumn(element.getColumn());
+			arc.setOrderId(1L);
+			extractable.add(arc);
+		}
+		
+		return generated;
+	}
+	
 	/**
 	 * retrieves columns from the database. Only the columns that are specified
 	 * in the reportMetadata are going to be retrieved. Each column is retrieved
@@ -156,53 +184,15 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * retrieved.
 	 * 
 	 */
-	protected void retrieveData()
+	@Override protected void retrieveData()
 	{
 		GeneratedPropertyDescription._generatedPropertyCached = GeneratedPropertyDescription._generatedPropertyCalls = 0;
 		
-		// divide the column set into those that can be extracted
-		// (extractorView!=null) and those that are to be generated
-
-		Set<String> extractableNames = new TreeSet<String>();
-		
-		extractable = new ArrayList<AmpReportColumn>();
-		List<AmpReportColumn> generated = new ArrayList<AmpReportColumn>();
-		List<AmpReportColumn> colNames = reportMetadata.getOrderedColumns();
-		Iterator<AmpReportColumn> i = colNames.iterator();
-			
-		// build extractable, extractableNames, generated
-		while (i.hasNext()) {
-			AmpReportColumn element2 = (AmpReportColumn) i.next();
-			AmpColumns element = element2.getColumn();
-			//if we are showing an summarized report we will hidden columns with row values
-			
-			
-			if (element.getColumnName().equals(ArConstants.COLUMN_TOTAL))
-				extractableCount--;
-			
-			if (element.getExtractorView() != null) {
-				extractable.add(element2);
-				if ((!element.getColumnName().equals(ArConstants.COLUMN_PROPOSED_COST) || (!element.getColumnName().equals(ArConstants.COSTING_GRAND_TOTAL))))
-					extractableNames.add(element.getColumnName());
-			} else
-				generated.add(element2);
-			}
-		
-
-		extractableCount += extractableNames.size();
-
-		// also add hierarchical columns to extractable:
-		for (AmpReportHierarchy element:reportMetadata.getHierarchies()) {
-			AmpReportColumn arc = new AmpReportColumn();
-			arc.setColumn(element.getColumn());
-			arc.setOrderId(1L);
-			extractable.add(arc);
-		}
+		List<AmpReportColumn> generated = generateExtractableAndGeneratedColumns();
 					
 		if(!filter.isJustSearch())
 		{
-		    this.columnsToBeRemoved = ColumnFilterGenerator.appendFilterRetrievableColumns(extractable, filter);
-		   // extractableCount += this.columnsToBeRemoved.size();		    
+		    this.columnsToBeRemoved = ColumnFilterGenerator.appendFilterRetrievableColumns(extractable, filter);	    
 		}
 		else
 			this.columnsToBeRemoved = new ArrayList<String>();
@@ -278,15 +268,11 @@ public class AmpReportGenerator extends ReportGenerator {
 			}
 		}
 		
-		Iterator<AmpReportColumn> i = extractable.iterator();
-		
 		try {
 
-			while (i.hasNext()) {
-				
+			for(AmpReportColumn rcol:extractable){
 				long extractStartTime = System.currentTimeMillis();
 				
-				AmpReportColumn rcol = i.next();
 				AmpColumns col = rcol.getColumn();
 				String cellTypeName = col.getCellType();
 				String extractorView = "";
@@ -349,17 +335,22 @@ public class AmpReportGenerator extends ReportGenerator {
 				if ((extractorView != null) && extractorView.equals("v_mtef_funding"))
 					columnFilterSQLClause = generate_mtef_filter_statement(columnFilterSQLClause, col.getAliasName());
 				
-//				if (pledgereport/* && extractorView.equals("v_pledges_funding_st")*/){
-//					//columnFilterSQLClause = " AND (pledge_id IN (-1, 10))"; 
-//					//columnFilterSQLClause = "AND (pledge_id IN (-1, 10)) AND (related_project_id IN (select distinct(vdf.amp_activity_id) from v_donor_funding vdf where vdf.pledge_id = 10))"; // BOZO! DELETE THIS FROM COMMIT!
-//					columnFilterSQLClause = "AND (pledge_id IN (-1, 10))"; // BOZO! DELETE THIS FROM COMMIT!
-//					// select amp_activity_id from amp_activity where (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')
+				if (pledgereport/* && extractorView.equals("v_pledges_funding_st")*/){
+					//columnFilterSQLClause = " AND (pledge_id IN (-1, 10))"; 
+					//columnFilterSQLClause = "AND (pledge_id IN (-1, 10)) AND (related_project_id IN (select distinct(vdf.amp_activity_id) from v_donor_funding vdf where vdf.pledge_id = 10))"; // BOZO! DELETE THIS FROM COMMIT!
+					//columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24, 25, 26, 27, 28, 29))"; // BOZO! DELETE THIS FROM COMMIT!
+//					columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24))"; // BOZO! DELETE THIS FROM COMMIT!
+//					columnFilterSQLClause = "AND (pledge_id IN (24))"; // BOZO! DELETE THIS FROM COMMIT!				
+					// select amp_activity_id from amp_activity where (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')
 //					String relatedProjectsQuery = "SELECT amp_activity_id FROM amp_activity WHERE (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')";
+//					String relatedProjectsQuery = "SELECT amp_activity_id FROM amp_activity WHERE (name like '%FED/2009/021-608%') OR (name like '%FED/2009/021-608%') OR (name like '%S064713%')";
 //					if (extractorView.equals("v_pledges_funding_st"))
 //						columnFilterSQLClause += String.format(" AND (related_project_id IN (%s))", relatedProjectsQuery);
 //					if (extractorView.equals("v_pledges_projects"))
 //						columnFilterSQLClause += String.format(" AND (amp_activity_id IN (%s))", relatedProjectsQuery);
-//				}
+//					if (extractorView.equals("v_pledges_funding_st"))
+//						columnFilterSQLClause += String.format(" AND (transaction_date between '2009-01-01' AND '2009-12-31')");
+				}
 				
 				ce.setInternalCondition(columnFilterSQLClause);
 				ce.setSession(this.session);
@@ -377,12 +368,10 @@ public class AmpReportGenerator extends ReportGenerator {
 						if ( newCells!=null )
 							column.getItems().addAll(newCells);
 					}
-				} 
-				
+				}
 
 				if (relatedContentPersisterClass != null) {
-					column.setRelatedContentPersisterClass(Class
-							.forName(relatedContentPersisterClass));
+					column.setRelatedContentPersisterClass(Class.forName(relatedContentPersisterClass));
 					// instantiate a relatedContentPersister bean to get the
 					// ARDimension and store it for later use
 					Constructor contentPersisterCons = ARUtil.getConstrByParamNo(column.getRelatedContentPersisterClass(), 0);
@@ -655,7 +644,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		//Calculate global totals for Computed Measures that require it
 		TotalAmountColumn removeableColumn = null;
 		BigDecimal total = new BigDecimal(0);
-		for(Column el:newcol.getItems())
+		for(Column<?> el:newcol.getItems())
 		{
 			if (!(el instanceof TotalAmountColumn))
 				continue;
@@ -1146,8 +1135,12 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	public final static Integer getInteger(String z)
 	{
-		try
-		{
+		if (z == null || z.isEmpty())
+			return null;
+		char ch = z.charAt(0); // fast-track: avoid throwing exceptions, as there are very expensive
+		if (ch < '0' || ch > '9')
+			return null;
+		try{
 			return Integer.parseInt(z);
 		}
 		catch(Exception e)
@@ -1368,7 +1361,6 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		rawColumns = new GroupColumn(ArConstants.COLUMN_RAW_DATA);
 		this.filter = filter;
-		extractableCount = 0;
 		
 		if (!(reportMetadata.getType()==ArConstants.PLEDGES_TYPE)){
 			ReportContextData.getFromRequest().setPledgeReport(false);

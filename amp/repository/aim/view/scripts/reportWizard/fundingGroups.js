@@ -113,10 +113,11 @@ YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
-		 'Related Projects', 'Pledges Donor Group', 'Pledges Regions', 'Pledges Aid Modality'
-		, 'Pledges Type Of Assistance'
-		, 'Pledges Titles'
-		
+		'Related Projects', 'Pledges Donor Group', 'Pledges Regions', 'Pledges Aid Modality',
+		'Pledges Type Of Assistance',
+		'Pledges Titles', 'Pledges sectors', 'Pledges Secondary Sectors', 'Pledges Tertiary Sectors', 
+		'Pledges Programs', 'Pledges Secondary Programs', 'Pledges Tertiary Programs', 
+		'Pledges Regions', 'Pledges Zones'
 	);
 
 YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(

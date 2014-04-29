@@ -75,11 +75,7 @@ public class GroupColumn extends Column<Column> {
     { 
    		GroupColumn dest = null;
 		dest = new GroupColumn(this);
-		Iterator i = this.iterator();
-		while (i.hasNext())
-		{
-			Column element = (Column) i.next();
-				
+		for(Column element:this.getItems()){
 			if( ( category.equals(ArConstants.TERMS_OF_ASSISTANCE) || category.equals(ArConstants.MODE_OF_PAYMENT) ) 
 					&& element instanceof TotalCommitmentsAmountColumn){ 
 				continue;
@@ -87,8 +83,7 @@ public class GroupColumn extends Column<Column> {
 				
 			Column splitted = element.verticalSplitByCateg(category, ids, generateTotalCols, reportMetadata);
 				
-			if(splitted != null)
-			{
+			if(splitted != null){
 				dest.addColumn(splitted);
 				splitted.setContentCategory(category);
 			}
@@ -207,12 +202,7 @@ public class GroupColumn extends Column<Column> {
     	  ARUtil.insertEmptyColumns(category, src, metaSet, myFilters);
        } 
         
-   		String unspecified = "";
-   		try {
-			unspecified = TranslatorWorker.translateText("Unspecified",reportMetadata.getLocale(),reportMetadata.getSiteId());
-		} catch (WorkerException e) {
-			e.printStackTrace();
-		}
+   		String unspecified = TranslatorWorker.translateText("Unspecified");
         
         while (i.hasNext()) {
         	Categorizable element = (Categorizable) i.next();
@@ -650,10 +640,10 @@ public class GroupColumn extends Column<Column> {
         GroupColumn dest = new GroupColumn(this.getName());
         for(Column element:items)
         {
-//            if (filter.toString().equals("ACOOPECH - phase III / (Source : MAECD / A032462-001)") && 
-//            		element.toString().equals("Actual Pledge (1 items)") &&
-//            		(element.getParent() != null) && element.getParent().toString().equals("Fiscal Year 2010 (2 items)"))
-//            	System.out.println("BOZO BREAKPOINT TO REMOVE");
+            if (filter.toString().equals("Programme d'appui à la politique nationale des Transports (FED/2009/021-608)") && 
+            		element.toString().equals("Actual Commitments (1 items)") &&
+            		(element.getParent() != null) && element.getParent().toString().equals("Fiscal Year 2009 (3 items)"))
+            	System.out.println("BOZO BREAKPOINT TO REMOVE");
             dest.addColumn(element.filterCopy(filter, ids));
         }
         return dest;

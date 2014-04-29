@@ -232,8 +232,8 @@ public class GroupReportData extends ReportData<ReportData> {
 		return true;
 	}
 	
-	
-	public void postProcess() {
+//	public static int totalMergedCells;
+	@Override public void postProcess() {
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			ReportData element = (ReportData) i.next();
@@ -247,14 +247,8 @@ public class GroupReportData extends ReportData<ReportData> {
 		try {			
 			trailCells = new ArrayList<AmountCell>();
 			// firstly create the array, containing the trail cells of the first child - we basically only care about the array size and cell types here
-			if (items.size() > 0)
-			{
+			if (items.size() > 0){
 				ReportData<? extends Viewable> data = items.get(0);
-				
-				//ReportData firstRd = (ReportData) items.get(0);
-				//items.get(0).getTrailCells().iterator();
-				//for (AmountCell c:firstRd.getTrailCells())
-				
 				for(AmountCell caca:data.getTrailCells())
 				{
 					if (shouldDisplayTrailCell(caca))
@@ -269,31 +263,30 @@ public class GroupReportData extends ReportData<ReportData> {
 					
 				//logger.debug("GroupTrail.size=" + trailCells.size());
 
-				i = items.iterator();
-				while (i.hasNext()) {
-					ReportData<? extends Viewable> element = (ReportData) i.next();
+				for(ReportData<?> element:items){
 					if (element.getTrailCells().size() < trailCells.size()) {
-						logger
-								.error("INVALID Report TrailCells size for report: "
+						logger.error("INVALID Report TrailCells size for report: "
 										+ element.getParent().getName()
 										+ "->"
 										+ element.getName());
-						logger.error("ReportTrail.getTrailCells().size()="
-								+ element.getTrailCells().size());
-					} else
-						for (int j = 0; j < trailCells.size(); j++) {
-							AmountCell newc = null;
-							
-							AmountCell c = trailCells.get(j);
-							AmountCell c2 = element.getTrailCells().get(j);
-							if (c != null){
-								newc = c.merge(c2);
-								newc.setColumn(c2.getColumn());
-							}
-							trailCells.remove(j);
-							trailCells.add(j, newc);
-
+						logger.error("ReportTrail.getTrailCells().size()=" + element.getTrailCells().size());
+						continue;
+					}
+					logger.error("merging " + trailCells.size() + " cells...");
+					if (element instanceof GroupReportData)
+						System.out.println("BOZO breakpoint");
+					for (int j = 0; j < trailCells.size(); j++) {							
+						AmountCell c = trailCells.get(j);
+						AmountCell c2 = element.getTrailCells().get(j);
+						if (c != null){
+							c.mergeWithCell(c2);
+							c.setColumn(c2.getColumn());
+//							totalMergedCells += c.getMergedCells().size();
 						}
+//						if (c != null && c.getMergedCells().size() > 10)
+//							logger.error("setting nr of cells = " + c.getMergedCells().size());
+						//trailCells.set(j, newc);
+					}
 				}
 			}
 			

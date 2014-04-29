@@ -15,6 +15,7 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Categorizable;
 import org.dgfoundation.amp.ar.CellColumn;
+import org.dgfoundation.amp.ar.CommitmentGapCellGenerator;
 import org.dgfoundation.amp.ar.FundingTypeSortedString;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.MetaInfoSet;
@@ -396,9 +397,10 @@ public Cell filter(Cell metaCell, Set ids) {
 	 * @return
 	 */
 	public boolean isGlobalAmount(){
-		return this.existsMetaString(ArConstants.COSTING_GRAND_TOTAL) || 
-				//(ArConstants.ACTUAL.equals(getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) && existsMetaString(ArConstants.PLEDGES_METADATA_NAME + ArConstants.TERMS_OF_ASSISTANCE));
-				ArConstants.PLEDGE.equals(getMetaValueString(ArConstants.TRANSACTION_TYPE));
+		boolean isAmountIndependentOfHier = this.existsMetaString(ArConstants.COSTING_GRAND_TOTAL);
+		isAmountIndependentOfHier |= ArConstants.PLEDGE.equals(getMetaValueString(ArConstants.TRANSACTION_TYPE));
+		isAmountIndependentOfHier |= CommitmentGapCellGenerator.COMMITMENT_GAP_FUNDING_TYPE.equals(this.getMetaData().getMetaInfo(ArConstants.FUNDING_TYPE));
+		return isAmountIndependentOfHier;
 	}
 
 	/**

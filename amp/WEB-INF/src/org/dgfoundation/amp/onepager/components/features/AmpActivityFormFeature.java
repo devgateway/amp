@@ -64,6 +64,7 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
@@ -72,6 +73,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
@@ -203,7 +205,25 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						toggleFormComponent (enabled,target,ifs,visit);
 					}
 				});
-
+		visitChildren(AmpAidEffectivenessFormSectionFeature.class,
+				new IVisitor<AmpAidEffectivenessFormSectionFeature, Void>() {
+					@Override
+					public void component(
+							AmpAidEffectivenessFormSectionFeature ifs,
+							IVisit<Void> visit) {
+						toggleFormComponent (enabled,target,ifs,visit);
+					}
+				});
+		visitChildren(AmpProposedProjectCost.class,
+				new IVisitor<AmpProposedProjectCost, Void>() {
+					@Override
+					public void component(
+							AmpProposedProjectCost ifs,
+							IVisit<Void> visit) {
+						toggleFormComponent (enabled,target,ifs,visit);
+					}
+				});
+		
 	}
 	private void toggleFormComponent (boolean enabled, final AjaxRequestTarget target,
 			AmpRequiredComponentContainer ifs, IVisit<Void> visit) {
@@ -679,8 +699,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                          *  Review to make is more readable 
                          */
                         if(component.getParent().getParent().getId().equalsIgnoreCase("proposedDate") && 
-                        		(component.getParent().getParent().getParent().get("proposedAmount").getDefaultModel().getObject()!=null
-                        		|| ((AmpTextFieldPanel)component.getParent().getParent().getParent().get("proposedAmount")).getTextContainer().isRequired())){
+                        		component.getParent().getParent().getParent().get("proposedAmount").getDefaultModel().getObject()!=null ){
                         	((AmpDatePickerFieldPanel)component.getParent().getParent()).getDate().setRequired(true);
                         	if(((AmpDatePickerFieldPanel)component.getParent().getParent()).getDate().getDefaultModel().getObject()==null){
                         		component.error(new ValidationError().addKey("RequiredProposedAmount"));

@@ -7,14 +7,15 @@ import java.util.Set;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.markup.html.basic.Label;
-
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
@@ -29,7 +30,10 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class AmpAidEffectivenessFormSectionFeature extends
-		AmpFormSectionFeaturePanel {
+		AmpFormSectionFeaturePanel 
+		implements AmpRequiredComponentContainer {
+	
+	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 
 	public AmpAidEffectivenessFormSectionFeature(String id, String fmName,
 			IModel<AmpActivityVersion> am) throws Exception {
@@ -86,6 +90,7 @@ public class AmpAidEffectivenessFormSectionFeature extends
 				CategoryConstants.PROJECT_IMPLEMENTATION_MODE_NAME, true,
 				false, null, AmpFMTypes.MODULE);
 		projectImplementationMode.getChoiceContainer().setRequired(true);
+		requiredFormComponents.add(projectImplementationMode.getChoiceContainer());
 		add(projectImplementationMode);
 
 		// imacApproved
@@ -166,7 +171,11 @@ public class AmpAidEffectivenessFormSectionFeature extends
 							TranslatorUtil.getTranslatedText(fieldTitle))));
 		}
 		yesNoDontKnowField.getChoiceContainer().setRequired(required);
+		requiredFormComponents.add(yesNoDontKnowField.getChoiceContainer());
 		add(yesNoDontKnowField);
 	}
 
+	public List<FormComponent<?>> getRequiredFormComponents() {
+		return requiredFormComponents;
+	}
 }

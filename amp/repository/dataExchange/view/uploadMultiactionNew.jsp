@@ -541,6 +541,18 @@
 						background-color:#feff90;
 					}
 					
+					.autocompleteDropdownSameAsText {
+						border: 1px solid silver;
+						font-size: 11px !important;
+						font-family: Arial,Helvetica,sans-serif;
+						cursor:pointer;
+						
+					}
+					
+					.autocompleteDropdownSameAsText:hover {
+						background-color:#feff90;
+					}
+					
 					div.optionsContainer {
 						width:500px;
 						height:200px;
@@ -602,18 +614,22 @@
 					-->
 					</style>
 						<div id="optionsDiv" class="optionsContainer">
-						<table class="optionsContainerTable">
-							<tr>
-								<td align="left">
-									<div id="content" class="flowContainer">
-									</div>
-								</td>
-							</tr><tr>
-								<td align="left" id="info" height="12" class="infoWnd">Total
-								</td>
-							</tr>
-						</table>
-					</div>
+							<table class="optionsContainerTable">
+								<tr>
+									<td align="left">
+										<div id="content" class="flowContainer">
+										</div>
+									</td>
+								</tr><tr>
+									<td align="left" id="info" height="12" class="infoWnd">Total
+									</td>
+								</tr>
+							</table>
+						</div>
+						
+						<div id="sameAsOptionsDiv" class="optionsContainer">
+										<div id="sameAsContent" class="flowContainer"></div>
+						</div>
 						
 						<digi:form action="/importActionNew.do?action=saveMapping" method="post">
 						<table>
@@ -681,7 +697,7 @@
 								optionsMarkup.push("<td width='300'>");
 								optionsMarkup.push(element.iatiValues);
 								optionsMarkup.push("</td>");
-								optionsMarkup.push("<td width='500'>");
+								optionsMarkup.push("<td width='500' align='left'>");
 								optionsMarkup.push("<div style='width: 500px;' id='");
 								optionsMarkup.push(objIdStrPrefix);
 								optionsMarkup.push(element.tmpId);
@@ -689,9 +705,20 @@
 								optionsMarkup.push("<input name='selAmpValue' type='hidden' value='");
 								optionsMarkup.push(element.ampId);
 								optionsMarkup.push("'>");
-								optionsMarkup.push("<input class='autocompleteDropdownText' type='text' style='width: 500px;' value='");
-								optionsMarkup.push(element.ampValues);
+								optionsMarkup.push("<input name='sameAsTmpId' type='hidden' value='");
+								optionsMarkup.push(element.sameAsTmpId);
 								optionsMarkup.push("'>");
+								if (element.sameAsTmpId == null || element.sameAsTmpId == -1) {
+									optionsMarkup.push("<input class='autocompleteDropdownText' type='text' style='width: 495px;' value='");
+									optionsMarkup.push(element.ampValues);
+									optionsMarkup.push("'>");
+								} else {
+									optionsMarkup.push("<input class='autocompleteDropdownText' type='text' style='width: 50px;' value='Same As'>");
+									optionsMarkup.push("<input class='autocompleteDropdownSameAsText' type='text' style='width: 440px;' value='");
+									optionsMarkup.push(element.sameAsText);
+									optionsMarkup.push("'>");
+									
+								}
 								optionsMarkup.push("</div>");
 								optionsMarkup.push("</td>");
 							});
@@ -718,7 +745,9 @@
 						var curEvtObj = null;
 							
 						function setAutocompleteEvtListeners () {
+							$(".optionsContainer").css("display","none");
 							$("input.autocompleteDropdownText").click(function(e) {
+								$(".optionsContainer").css("display","none");
 								var originatorObj = $(e.target);
 								curEvtObj = originatorObj;
 								var originatorObjAbsPos = originatorObj.position();
@@ -739,13 +768,15 @@
 							
 							
 							$("input.autocompleteDropdownText").keyup(function(e) {
-								
 								if (timeoutObj != null) {
 									window.clearTimeout (timeoutObj);
 								}
 								timeoutObj = window.setTimeout("getAutosuggestOptionValues(curEvtObj.val(), 100)", 300);
 								
 							});
+							
+							$("input.autocompleteDropdownSameAsText").click(sameAsEvtListener);
+							$("input.autocompleteDropdownSameAsText").keyup(sameAsEvtListener);
 						}
 						
 						var getAutosuggestOptionValues = function (queryStr, maxNumber) {
@@ -797,7 +828,9 @@
 								
 								var newId = originatorObj.find(".objId").val();
 								curEvtObj.parent().find("input[type='hidden'][name='selAmpValue']").val(newId);
-								
+								if (newId != -2) { //Not "Same As"
+									curEvtObj.parent().find("input[type='hidden'][name='sameAsTmpId']").val("-1");	
+								}
 								
 								var objTmpIdStr = curEvtObj.parent().attr("id");
 								var objTmpId = objTmpIdStr.substring (objIdStrPrefix.length);
@@ -822,7 +855,122 @@
 							setModified();
 						}
 						
+						var curSameAsEvtObj = null;
+						
 						var updateMappingSuccess = function (data, textStatus, jqXHR) {
+							if (data != null) { //"Same As"
+								curEvtObj.parent().find(".autocompleteDropdownSameAsText").remove();
+								curEvtObj.css("width","50px");
+								var sameAsMappingInput = $("<input class='autocompleteDropdownSameAsText' type='text' style='width: 440px;'>");
+								curEvtObj.parent().append(sameAsMappingInput);
+							} else {
+								curEvtObj.css("width","495px");
+								curEvtObj.parent().find(".autocompleteDropdownSameAsText").remove();
+							}
+							
+							$("input.autocompleteDropdownSameAsText").unbind("click");
+							$("input.autocompleteDropdownSameAsText").unbind("keyup");
+							$("input.autocompleteDropdownSameAsText").click(sameAsEvtListener);
+							$("input.autocompleteDropdownSameAsText").keyup(sameAsEvtListener);
+							
+							contentBusy(false);
+						}
+						
+						var sameAsEvtListener = function(e) {
+								$(".optionsContainer").css("display","none");
+								var originatorObj = $(e.target);
+								curSameAsEvtObj = originatorObj;
+								var originatorObjAbsPos = originatorObj.position();
+								var optionsContainerDiv = $("#sameAsOptionsDiv");
+								optionsContainerDiv.css("display", "block");
+								optionsContainerDiv.css("left", originatorObjAbsPos.left + "px");
+								optionsContainerDiv.css("top", originatorObjAbsPos.top+20 + "px");
+								optionsContainerDiv.css("width", originatorObj.width() + "px");
+								optionsContainerDiv.find(".flowContainer").css("width", originatorObj.width() + "px");
+								optionsContainerDiv.find(".flowContainer").css("height", optionsContainerDiv.height() + "px");
+								var hiddenInput = originatorObj.parent().find("input[type='hidden'][name='sameAsTmpId']");
+
+								if (timeoutObj != null) {
+									window.clearTimeout (timeoutObj);
+								}
+								timeoutObj = window.setTimeout("getSameAsAutosuggestOptionValues(curSameAsEvtObj.val())", 300);
+
+							}
+						
+						var getSameAsAutosuggestOptionValues = function (queryStr) {
+							var url = "../../dataExchange/importActionNew.do?action=getSameAsOptionsAjaxAction";
+							$.ajax({
+							  type: 'GET',
+							  url: url,
+							  headers:{searchStr:queryStr.substring(0, 32)},
+							  success: sameAsAutocompleteRequestSuccess,
+							  dataType: "json"
+							});
+						}
+						
+						var sameAsAutocompleteRequestSuccess = function (data, textStatus, jqXHR) {
+							var optionsContainer = $("#sameAsOptionsDiv #sameAsContent");
+							
+							
+							var optionsMarkup = [];
+							optionsMarkup.push("<table width='100%'>");
+							$(data.items).each(function(index, element) {
+					    	optionsMarkup.push("<tr>");
+					    	optionsMarkup.push("<td align='left' nowrap class='optionItem'>");
+				    		optionsMarkup.push(element.text);
+					    	optionsMarkup.push("<input class='objId' type='hidden' value='");
+					    	optionsMarkup.push(element.tmpId);
+					    	optionsMarkup.push("'>");
+					    	optionsMarkup.push("<input class='objCaption' type='hidden' value='");
+					    	optionsMarkup.push(element.text);
+					    	optionsMarkup.push("'>");
+					    	optionsMarkup.push("</td>");
+					    	optionsMarkup.push("</tr>");
+					    	
+							});
+							optionsMarkup.push("</table>");
+							optionsContainer.html(optionsMarkup.join(''));
+							
+							$("td.optionItem").click(function (e) {
+								var originatorObj = $(e.target);
+								$("#optionsDiv").css("display", "none");
+								var newVal = originatorObj.find(".objCaption").val();
+								if (newVal.trim() == "") newVal = "EMPTY VALUE";
+								curSameAsEvtObj.val(newVal);
+								
+								var newId = originatorObj.find(".objId").val();
+								curSameAsEvtObj.parent().find("input[type='hidden'][name='sameAsTmpId']").val(newId);
+
+								$(".optionsContainer").css("display","none");
+								
+								var objTmpIdStr = curSameAsEvtObj.parent().attr("id");
+								var objTmpId = objTmpIdStr.substring (objIdStrPrefix.length);
+								var newId = originatorObj.find(".objId").val();
+								updateSameAsMapping(objTmpId, newId);
+								
+							});
+						}
+						
+						var updateSameAsMapping = function (objIdPar, newValPar) {
+							var url = "../../dataExchange/importActionNew.do?action=updateSameAsMapping";
+							contentBusy(true);
+							$.ajax({
+							  type: 'POST',
+							  url: url,
+							  data:{objId: objIdPar, newVal: newValPar},
+							  success: updateSameAsMappingSuccess,
+							  error: updateSameAsMappingError,
+							  dataType: "json"
+							});
+							setModified();
+						}
+
+						var updateSameAsMappingError = function (data, textStatus, jqXHR) {
+							contentBusy(false);
+							alert ("Error updating mapping item !");
+						}
+						
+						var updateSameAsMappingSuccess = function (data, textStatus, jqXHR) {
 							contentBusy(false);
 						}
 						
@@ -834,10 +982,15 @@
 						var checkForDefaultValues = function() {
 							$("input[type='hidden'][name='selAmpValue']").each(function(index, element) {
 								var elementObj = $(element);
-								if (elementObj.val() == null || elementObj.val()=="0" || elementObj.val()=="") {
-									elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val("Unmapped");
-								} else if (elementObj.val()==-1) {
-									elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val("Add new");
+								var sameAsVal = elementObj.parent().find("input[type='hidden'][name='sameAsTmpId']").val();
+								if (sameAsVal == null || sameAsVal < 0) {
+									if (elementObj.val() == null || elementObj.val()=="0" || elementObj.val()=="") {
+										elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val("Unmapped");
+									} else if (elementObj.val()==-1) {
+										elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val("Add new");
+									}
+								} else {
+									elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val("Same As");
 								}
 							});
 						}

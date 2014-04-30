@@ -20,33 +20,15 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.ContactInfoUtil;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.dbentity.AmpMappedField;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.pojo.DEProposedProjectCost;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
@@ -77,8 +59,17 @@ import org.digijava.module.editor.exception.EditorException;
  *
  */
 public class IatiActivityWorker {
+    private boolean ignoreSameAsCheck = false;
     private boolean saveObjects = true;
     private Set<DEMappingFields> accumulate = new HashSet<DEMappingFields>();
+
+    public boolean isIgnoreSameAsCheck() {
+        return ignoreSameAsCheck;
+    }
+
+    public void setIgnoreSameAsCheck(boolean ignoreSameAsCheck) {
+        this.ignoreSameAsCheck = ignoreSameAsCheck;
+    }
 
     public Set<DEMappingFields> getAccumulate() {
         return accumulate;
@@ -226,9 +217,9 @@ public class IatiActivityWorker {
 			return true;
 		return false;
 	}
-	
+
 		// TODO Auto-generated method stub
-	public ArrayList<AmpMappedField> checkContent(int noAct, String hierarchies) { 
+	public ArrayList<AmpMappedField> checkContent(int noAct, String hierarchies) {
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
 		if(this.getiActivity()!=null && this.getiActivity().getHierarchy()!=null)
 			if(hierarchies!=null && !hierarchies.contains(this.getiActivity().getHierarchy())) 
@@ -350,9 +341,13 @@ public class IatiActivityWorker {
 	
 
 
-	public ArrayList<AmpMappedField> populateActivity(AmpActivityVersion a){
+
+	public ArrayList<AmpMappedField> populateActivity(AmpActivityVersion a, AmpActivityVersion prevVer, DESourceSetting settings){
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
-		
+		boolean isCreate = prevVer == null;
+
+
+
 		ArrayList<JAXBElement<TextType>> iatiTitleList = new ArrayList<JAXBElement<TextType>>();
 		ArrayList<JAXBElement<CodeType>> iatiStatusList = new ArrayList<JAXBElement<CodeType>>();
 		ArrayList<JAXBElement<CodeType>> iatiImplementationLevelList = new ArrayList<JAXBElement<CodeType>>();
@@ -401,17 +396,30 @@ public class IatiActivityWorker {
 				iatiRepOrgList, iatiSectorList, iatiBudgetList, iatiTransactionList,iatiPlannedDisbList,
 				iatiDescriptionList, iatiOtherIdList, iatiActDateList,
 				iatiContactList, iatiLocationList,iatiDefaultFinanceType, iatiDefaultAidType, iatiID);
-		
-		processTitle(a, iatiTitleList);
-		processIdentificationStep(a,iatiStatusList,iatiImplementationLevelList,iatiDescriptionList,iatiID);
+
+        if ((isCreate && settings.importEnabled("Title")) || (!isCreate && settings.updateEnabled("Title"))) {
+		    processTitle(a, iatiTitleList);
+        }
+
+
+		processIdentificationStep(a,iatiStatusList,iatiImplementationLevelList,iatiDescriptionList,iatiID, isCreate, settings);
+
 		processPlanningStep(a,iatiActDateList);
-		processSectorsStep(a,iatiSectorList,allClassificationConfiguration);
-		processRelOrgsStep(a,iatiPartOrgList);
+
+        if ((isCreate && settings.importEnabled("Sector")) || (!isCreate && settings.updateEnabled("Sector"))) {
+		    processSectorsStep(a,iatiSectorList,allClassificationConfiguration);
+        }
+	    processRelOrgsStep(a,iatiPartOrgList);
+
 		processActInternalIdsStep(a,iatiOtherIdList, iatiRepOrgList);
-		processBudgetStep(a,iatiBudgetList,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency);
-		processFundingStep(a,iatiTransactionList,iatiPlannedDisbList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
-		processLocationStep(a,iatiLocationList);
-		processContactsStep(a,iatiContactList);
+		processBudgetStep(a,iatiBudgetList,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency, isCreate, settings);
+		processFundingStep(a,iatiTransactionList,iatiPlannedDisbList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList, isCreate, settings);
+        if ((isCreate && settings.importEnabled("Location")) || (!isCreate && settings.updateEnabled("Location"))) {
+            processLocationStep(a,iatiLocationList);
+        }
+        if ((isCreate && settings.importEnabled("Contacts")) || (!isCreate && settings.updateEnabled("Contacts"))) {
+		    processContactsStep(a,iatiContactList);
+        }
 		return logs;
 	}
 	
@@ -543,7 +551,8 @@ public class IatiActivityWorker {
 			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
 			ArrayList<ReportingOrg> iatiRepOrgList,
 			ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
-			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency) {
+			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency,
+            boolean isCreate, DESourceSetting settings) {
 		// TODO Auto-generated method stub
 		if(iatiBudgetList.isEmpty()) return;
 		JAXBElement<CodeReqType> iatiDefFinTypeLocal = null;
@@ -577,7 +586,8 @@ public class IatiActivityWorker {
 			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency, 
 			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, 
 			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
-			ArrayList<ReportingOrg> iatiRepOrgList) {
+			ArrayList<ReportingOrg> iatiRepOrgList,
+            boolean isCreate, DESourceSetting settings) {
 		
 		if(iatiTransactionList.isEmpty()) return;
 		JAXBElement<CodeReqType> iatiDefFinTypeLocal = null;
@@ -1225,12 +1235,16 @@ public class IatiActivityWorker {
 		}
 	}
 
-	private void processIdentificationStep(AmpActivityVersion a, ArrayList<JAXBElement<CodeType>> iatiStatusList,ArrayList<JAXBElement<CodeType>> iatiImplementationLevelList, ArrayList<Description> iatiDescriptionList,ArrayList<IatiIdentifier> iatiIDList) {
-		processStatus(a,iatiStatusList);
-		processImplementationLevel(a,iatiImplementationLevelList);
-		processDescriptions(a,iatiDescriptionList);
-		processIatiID(a,iatiIDList);
-		
+	private void processIdentificationStep(AmpActivityVersion a, ArrayList<JAXBElement<CodeType>> iatiStatusList,ArrayList<JAXBElement<CodeType>> iatiImplementationLevelList, ArrayList<Description> iatiDescriptionList,ArrayList<IatiIdentifier> iatiIDList, boolean isCreate, DESourceSetting settings) {
+        if ((isCreate && settings.importEnabled("Status")) || (!isCreate && settings.updateEnabled("Status"))) {
+		    processStatus(a,iatiStatusList);
+        }
+	    processImplementationLevel(a,iatiImplementationLevelList);
+        if ((isCreate && settings.importEnabled("Description")) || (!isCreate && settings.updateEnabled("Description"))) {
+		    processDescriptions(a,iatiDescriptionList);
+        }
+	    processIatiID(a,iatiIDList);
+
 	}
 
 	private void processIatiID(AmpActivityVersion a, ArrayList<IatiIdentifier> iatiIDList) {
@@ -1811,6 +1825,9 @@ public class IatiActivityWorker {
 			String iatiValues, String iatiLang, Long ampId, String ampClass,
 			Long sourceId, String feedFileName, String status,
 			DEMappingFields checkMappedField, AmpMappedField log) {
+        if (checkMappedField != null && checkMappedField.getSameAsMaping() != null) {
+            checkMappedField = checkMappedField.getSameAsMaping();
+        }
 		if(checkMappedField==null )
 			{
 			//field has to be mapped
@@ -1908,8 +1925,18 @@ public class IatiActivityWorker {
 		DEMappingFields mf = new DEMappingFields(iatiPath.trim(), iatiItems.trim(), iatiValues.trim(), iatiLang==null?this.getLang():iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);
 		for (Iterator ot = allAmpDEMappingFields.iterator(); ot.hasNext();) {
 			DEMappingFields deMappingFields = (DEMappingFields) ot.next();
-			if(mf.compare(deMappingFields)) 
+
+            /*
+			if((ignoreSameAsCheck || deMappingFields.getSameAsMaping() == null) && mf.compare(deMappingFields)) {
 				return deMappingFields;
+            } else if(!ignoreSameAsCheck && deMappingFields.getSameAsMaping() != null && mf.compare(deMappingFields.getSameAsMaping())) {
+                return deMappingFields.getSameAsMaping();
+            } */
+
+            if(mf.compare(deMappingFields)) {
+                return (!ignoreSameAsCheck && deMappingFields.getSameAsMaping()!=null) ?
+                        deMappingFields.getSameAsMaping():deMappingFields;
+            }
 		}
 		return null;
 	}

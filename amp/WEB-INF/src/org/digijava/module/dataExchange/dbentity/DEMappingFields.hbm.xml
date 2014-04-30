@@ -19,6 +19,13 @@
 		<property name="feedFileName" column="feed_file_name" type="java.lang.String" />
 		<property name="status" column="status" type="java.lang.String" />
 		<property name="creationDate" type="java.sql.Timestamp" column="creation_date" generated="always" />
+
+        <!--
+        <property name="sameAsMaping" type="org.digijava.module.dataExchange.dbentity.DEMappingFields" column="same_as"/>
+        -->
+
+        <many-to-one name="sameAsMaping" column="same_as" lazy="false"
+                     class="org.digijava.module.dataExchange.dbentity.DEMappingFields" cascade="none" />
         <!--
         <many-to-one name="uploadSession" column="upload_session" class="org.digijava.module.dataExchange.dbentity.AmpDEUploadSession" cascade="none"/>
         -->

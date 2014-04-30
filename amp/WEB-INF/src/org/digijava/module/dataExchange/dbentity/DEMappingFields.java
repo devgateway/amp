@@ -50,6 +50,8 @@ public class DEMappingFields implements Serializable {
     private int tmpId;
     private boolean dirty; //Modified and unsaved
 
+    private DEMappingFields sameAsMaping;
+
     public String getIatiValuesForDisplay() {
         return iatiValuesForDisplay;
     }
@@ -141,8 +143,8 @@ public class DEMappingFields implements Serializable {
 		try{
 			if(o.getIatiPath()!=null && o.getIatiItems()!=null && o.getIatiValues()!=null && lang!=null && o.getAmpClass()!=null )
 		result	=
-			this.getIatiPath().compareTo(o.getIatiPath()) == 0 && 
-			this.getIatiItems().compareTo(o.getIatiItems()) == 0 && 
+			this.getIatiPath().compareTo(o.getIatiPath()) == 0 &&
+			this.getIatiItems().compareTo(o.getIatiItems()) == 0 &&
 			this.getIatiValues().trim().compareTo(o.getIatiValues().trim())==0 &&
 			this.getIatiLangSafe().compareTo(lang)==0 &&
 			this.getAmpClass().compareTo(o.getAmpClass())==0
@@ -244,5 +246,12 @@ public class DEMappingFields implements Serializable {
     public String getIatiLangSafe() {
      return getIatiLang()==null?"en":getIatiLang();
     }
-	   
+
+    public DEMappingFields getSameAsMaping() {
+        return sameAsMaping;
+    }
+
+    public void setSameAsMaping(DEMappingFields sameAsMaping) {
+        this.sameAsMaping = sameAsMaping;
+    }
 }

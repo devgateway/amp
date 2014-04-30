@@ -72,13 +72,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.ComponentsUtil;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -153,9 +147,17 @@ public class DEImportBuilder {
 	private static Logger logger = Logger.getLogger(DEImportBuilder.class);
 	private DEImportItem ampImportItem;
 	private ArrayList<String> changedIDs;
+    private boolean ignoreSameAsCheck = false;
 
+    public boolean isIgnoreSameAsCheck() {
+        return ignoreSameAsCheck;
+    }
 
-	public HashMap<String, Boolean> getHashFields() {
+    public void setIgnoreSameAsCheck(boolean ignoreSameAsCheck) {
+        this.ignoreSameAsCheck = ignoreSameAsCheck;
+    }
+
+    public HashMap<String, Boolean> getHashFields() {
 		return this.getAmpImportItem().getHashFields();
 	}
 
@@ -2214,7 +2216,14 @@ public class DEImportBuilder {
 							if( iWorker.existActivityByTitleIatiId(deLogPerItem.getName())){
 								Long grpId = new Long(deLogPerItem.getItemType());
 								AmpActivityVersion ampActivity = new AmpActivityVersion();
-								activityLogs	=	iWorker.populateActivity(ampActivity);
+
+                                AmpActivityVersion prevVersion = null;
+
+                                if (grpId > -0l) {
+                                    prevVersion = DataExchangeUtils.getAmpActivityGroupById(grpId).getAmpActivityLastVersion();
+                                }
+
+								activityLogs	=	iWorker.populateActivity(ampActivity, prevVersion, this.getDESourceSetting());
 								AmpTeam team = getAssignedWorkspace();
 								ampActivity.setApprovalStatus(getApprovalStatus());
 								DataExchangeUtils.saveActivity(request,grpId, ampActivity, team);
@@ -2262,7 +2271,12 @@ public class DEImportBuilder {
 				IatiActivityWorker iWorker= new IatiActivityWorker(iAct, logAct);
 
                 //Only need to get structure
-                if (retVal != null) iWorker.setSaveObjects(false);
+                if (retVal != null) {
+                    iWorker.setSaveObjects(false);
+                }
+
+                iWorker.setIgnoreSameAsCheck(ignoreSameAsCheck);
+
 
 				noAct ++;
 				ArrayList<AmpMappedField> activityLogs = null;
@@ -2296,8 +2310,27 @@ public class DEImportBuilder {
 								logger.info(".......Starting importing activity "+noAct);
 								//System.out.println(".......Starting importing activity "+noAct);
 								Long grpId = new Long(deLogPerItem.getItemType());
-								AmpActivityVersion ampActivity = new AmpActivityVersion();
-								activityLogs	=	iWorker.populateActivity(ampActivity);
+
+                                AmpActivityVersion prevVersion = null;
+                                AmpActivityVersion ampActivity = null;
+
+                                if (grpId > -0l) {
+                                    prevVersion = DataExchangeUtils.getAmpActivityGroupById(grpId).getAmpActivityLastVersion();
+                                    AmpTeamMember modBy = prevVersion.getModifiedBy() == null ? prevVersion.getCreatedBy() : prevVersion.getModifiedBy();
+                                    try {
+                                        ampActivity = ActivityVersionUtil.cloneActivity(prevVersion, modBy);
+                                        ampActivity.setAmpActivityId(null);
+                                    } catch (CloneNotSupportedException e) {
+                                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                                    }
+                                } else {
+                                    ampActivity = new AmpActivityVersion();
+                                }
+
+
+
+
+								activityLogs	=	iWorker.populateActivity(ampActivity, prevVersion, this.getDESourceSetting());
 								AmpTeam team = getAssignedWorkspace();
 								ampActivity.setApprovalStatus(getApprovalStatus());
 								DataExchangeUtils.saveActivity(request,grpId, ampActivity, team);

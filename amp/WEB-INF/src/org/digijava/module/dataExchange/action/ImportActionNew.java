@@ -158,14 +158,14 @@ public class ImportActionNew extends DispatchAction {
     }
 
     private Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap(DESourceSetting dess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, String itemId) {
-        return getImportedItemMap(dess, is, request, logItems, itemId);
+        return getImportedItemMap(dess, is, request, logItems, false, itemId);
     }
 
-    private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap(DESourceSetting dess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems) {
-        return getImportedItemMap(dess, is, request, logItems, null);
+    private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap(DESourceSetting dess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, boolean ignoreSameAs) {
+        return getImportedItemMap(dess, is, request, logItems, ignoreSameAs, null);
     }
 
-    private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap(DESourceSetting dess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, String itemId) {
+    private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap(DESourceSetting dess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, boolean ignoreSameAs, String itemId) {
         Map <IatiActivity, Set<DEMappingFields>> items = null;
         DEImportBuilder deib = new DEImportBuilder();
         DEImportItem deii = new DEImportItem();
@@ -196,6 +196,7 @@ public class ImportActionNew extends DispatchAction {
         execLog.setDeSourceSetting(dess);
 
         if (itemId == null) {
+            deib.setIgnoreSameAsCheck(ignoreSameAs);
             items = deib.processIATIFeedReturnItems(request,execLog, null,"check", null);
         } else {
             items = deib.processIATIFeedReturnItems(request,execLog, null,"import", itemId);
@@ -323,7 +324,7 @@ public class ImportActionNew extends DispatchAction {
 
         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
 
-        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, logItems);
+        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, logItems, false);
         Map <String, Set<IatiActivity>> countryActMap = getCountryActivityMap (items);
 
         Set<String> selCountries = sess.getSelCountries();
@@ -421,7 +422,7 @@ public class ImportActionNew extends DispatchAction {
 
         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
 
-        Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap = getImportedItemMap(dess, is, request, logItems, String.valueOf(selLogItem.getId()));
+        Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap = getImportedItemMap(dess, is, request, logItems, false, String.valueOf(selLogItem.getId()));
 
         //Update import date
         Date newDateTime = new Date();
@@ -459,6 +460,7 @@ public class ImportActionNew extends DispatchAction {
         Set<String> selCountries = new HashSet<String> (Arrays.asList(myform.getSelCountries()));
         upSess.setSelCountries(selCountries);
         AmpDEUploadSession sess = myform.getUpSess();
+
 
 
         //Modify XML on initial serialization (will not be able to change country filters anymore)
@@ -504,7 +506,7 @@ public class ImportActionNew extends DispatchAction {
 
         InputStream is = new ByteArrayInputStream(xmlSrc.getBytes("UTF-8"));
 
-        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, logItems);
+        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, logItems, true);
 
         myform.setIatiImportedProjectMapFiltered(items);
 
@@ -617,6 +619,8 @@ public class ImportActionNew extends DispatchAction {
             newObj.accumulate("iatiValues", fld.getIatiValuesForDisplay());
             newObj.accumulate("tmpId", fld.getTmpId());
             newObj.accumulate("ampId", fld.getAmpId());
+            newObj.accumulate("sameAsTmpId", fld.getSameAsMaping() == null ? -1 : fld.getSameAsMaping().getTmpId());
+            newObj.accumulate("sameAsText", fld.getSameAsMaping() == null ? "" : fld.getSameAsMaping().getIatiValuesForDisplay());
             String ampVal = fld.getAmpValues() != null ? fld.getAmpValues().replaceAll("'", "&lsquo;") : null;
             newObj.accumulate("ampValues", ampVal);
             objects.add(newObj);
@@ -654,10 +658,17 @@ public class ImportActionNew extends DispatchAction {
         addNewObj.accumulate("val", "Add new");
         objArray.add(addNewObj);
 
-        for (java.util.Map.Entry<Long, String> item : sortedLabels.entrySet()) {
-            if (searchStr == null || searchStr.trim().isEmpty() || (item.getValue() != null && item.getValue().toLowerCase().contains(searchStr.toLowerCase()))) {
+        JSONObject sameAsObj = new JSONObject();
+        sameAsObj.accumulate("id", "-2");
+        sameAsObj.accumulate("val", "Same as");
+        objArray.add(sameAsObj);
 
-                objArray.add(new JSONObject().accumulate("id", item.getKey()).accumulate("val", item.getValue().replaceAll("'", "&lsquo;")));
+        for (java.util.Map.Entry<Long, String> item : sortedLabels.entrySet()) {
+            if (item.getValue() != null) {
+                if (searchStr == null || searchStr.trim().isEmpty() || (item.getValue() != null && item.getValue().toLowerCase().contains(searchStr.toLowerCase()))) {
+
+                    objArray.add(new JSONObject().accumulate("id", item.getKey()).accumulate("val", item.getValue().replaceAll("'", "&lsquo;")));
+                }
             }
             if (maxResultCount > 0 && objArray.size() >= maxResultCount) break;
         }
@@ -668,6 +679,73 @@ public class ImportActionNew extends DispatchAction {
         PrintWriter out = response.getWriter();
         retObj.write(out);
         out.close();
+        return null;
+    }
+
+    public ActionForward getSameAsOptionsAjaxAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+        ImportFormNew myform = (ImportFormNew) form;
+        String searchStr = request.getHeader("searchStr");
+        List<DEMappingFields> selFldsSorted = new ArrayList<DEMappingFields>(myform.getSelFlds());
+        Collections.sort(selFldsSorted, new Comparator() {
+            @Override
+            public int compare(Object o, Object o2) {
+                DEMappingFields cast1 = (DEMappingFields) o;
+                DEMappingFields cast2 = (DEMappingFields) o2;
+                return cast1.getIatiValues().compareTo(cast2.getIatiValues());
+            }
+        });
+
+        JSONObject sameAsMap = new JSONObject();
+        JSONArray items = new JSONArray();
+        for (DEMappingFields mf : selFldsSorted) {
+            if ((mf.getAmpId() != null && (mf.getAmpId() > 0l ||  mf.getAmpId() == -1l))) {//Allow "Same As" only to AMP mapped objects
+                if (searchStr == null || searchStr.trim().isEmpty() || mf.getIatiValuesForDisplay().toLowerCase().contains(searchStr.toLowerCase())) {
+                    JSONObject sameAsItem = new JSONObject();
+                    sameAsItem.accumulate("text", mf.getIatiValuesForDisplay());
+                    sameAsItem.accumulate("tmpId", mf.getTmpId());
+                    items.add(sameAsItem);
+                }
+            }
+        }
+        sameAsMap.accumulate("items", items);
+
+        response.setContentType("application/json");
+        PrintWriter pw = response.getWriter();
+        sameAsMap.write(pw);
+        pw.close();
+
+        return null;
+    }
+
+    public ActionForward updateSameAsMapping(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+        ImportFormNew myform = (ImportFormNew) form;
+
+        String objIdStr = request.getParameter("objId");
+        int objId = Integer.parseInt(objIdStr);
+        String newValStr = request.getParameter("newVal");
+        Long newVal = Long.parseLong(newValStr);
+        Map<Long, String> sortedLabels = (Map<Long,String>) request.getSession().getAttribute(IATI_LABELS_SORTED);
+
+        String newAmpObjTitle = sortedLabels.get(newVal);
+
+        Set<DEMappingFields> selFlds = myform.getSelFlds();
+
+        DEMappingFields setAsSameAs = null;
+
+        for (DEMappingFields mf : selFlds) {
+            if (mf.getTmpId() == newVal) {
+                setAsSameAs = mf;
+                break;
+            }
+        }
+
+        for (DEMappingFields mf : selFlds) {
+            if (mf.getTmpId() == objId) {
+                mf.setSameAsMaping(setAsSameAs);
+                mf.setDirty(true);
+            }
+        }
+
         return null;
     }
 
@@ -686,12 +764,38 @@ public class ImportActionNew extends DispatchAction {
 
         for (DEMappingFields mf : selFlds) {
             if (mf.getTmpId() == objId) {
-                mf.setAmpId(newVal);
-                mf.setAmpValues(newAmpObjTitle);
-                mf.setDirty(true);
+                if (!newVal.equals(-2l)) { //Not "Same As" mapping
+                    mf.setAmpId(newVal);
+                    mf.setAmpValues(newAmpObjTitle);
+                    mf.setSameAsMaping(null);
+                    mf.setDirty(true);
+                } else {
+                    mf.setAmpId(null);
+                    mf.setAmpValues(null);
+                    mf.setDirty(true);
+                }
             }
         }
 
+
+        if (newVal.equals(-2l)) { //Generate "Same As" mapping items
+            JSONObject sameAsMap = new JSONObject();
+            JSONArray items = new JSONArray();
+            for (DEMappingFields mf : selFlds) {
+                if (mf.getAmpId() != null) {//Allow "Same As" only to AMP mapped objects
+                    JSONObject sameAsItem = new JSONObject();
+                    sameAsItem.accumulate("text", mf.getIatiValuesForDisplay());
+                    sameAsItem.accumulate("tmpId", mf.getTmpId());
+                    items.add(sameAsItem);
+                }
+            }
+            sameAsMap.accumulate("items", items);
+
+            response.setContentType("application/json");
+            PrintWriter pw = response.getWriter();
+            sameAsMap.write(pw);
+            pw.close();
+        }
 
 
 
@@ -751,17 +855,19 @@ public class ImportActionNew extends DispatchAction {
         Set <Long> forDeleteIds = new HashSet<Long>();
         for (Map.Entry<String, Set<DEMappingFields>> iter : groupFldsByPath.entrySet()) {
             for (DEMappingFields mf :iter.getValue()) {
-                if (mf.isDirty() && mf.getAmpId()!= null && !mf.getAmpId().equals(0l)) {
-                    if (mf.getId() == null || mf.getId().equals(0l)) {
-                        forCreate.add(mf);
-                    } else {
-                        forUpdate.add(mf);
+                if (mf.isDirty()) {
+                     if ((mf.getAmpId()!= null && !mf.getAmpId().equals(0l)) || mf.getSameAsMaping()!= null) {
+                        if (mf.getId() == null || mf.getId().equals(0l)) {
+                            forCreate.add(mf);
+                        } else {
+                            forUpdate.add(mf);
+                        }
                     }
-                }
 
-                if (mf.isDirty() && (mf.getAmpId()== null || mf.getAmpId().equals(0l))) {
-                    forDelete.add(mf);
-                    forDeleteIds.add(mf.getId());
+                    if ((mf.getAmpId()== null || mf.getAmpId().equals(0l)) && mf.getSameAsMaping() == null) {
+                        forDelete.add(mf);
+                        forDeleteIds.add(mf.getId());
+                    }
                 }
             }
         }
@@ -781,6 +887,7 @@ public class ImportActionNew extends DispatchAction {
                     if (itermf.getId().equals(mf.getId())) {
                         itermf.setAmpValues(mf.getAmpValues());
                         itermf.setAmpId(mf.getAmpId());
+                        itermf.setSameAsMaping(mf.getSameAsMaping());
                     }
                 }
 
@@ -879,7 +986,7 @@ public class ImportActionNew extends DispatchAction {
         DESourceSetting dess = sess.getSettingsAssigned();
         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
 
-        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, null);
+        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, null, true);
         myform.setIatiImportedProjectMap(items);
 
         Set<String> countryISOs = sess.getSelCountries();

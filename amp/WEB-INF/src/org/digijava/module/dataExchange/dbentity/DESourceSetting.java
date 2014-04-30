@@ -2,8 +2,7 @@
  * 
  */
 package org.digijava.module.dataExchange.dbentity;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.dataExchange.util.WrapperSourceSetting;
@@ -70,6 +69,9 @@ public class DESourceSetting implements XmlWrappable{
 	private Sdm attachedFile ;
 	
 	private Sdm previousAttachedFile ;
+
+    private Map<String, Boolean> importFlds;
+    private Map<String, Boolean> updateFlds;
 
 	/**
 	 * @return the isImport
@@ -339,5 +341,49 @@ public class DESourceSetting implements XmlWrappable{
 	public void setPreviousAttachedFile(Sdm previousAttachedFile) {
 		this.previousAttachedFile = previousAttachedFile;
 	}
+
+    private void initSelectedFields() {
+        importFlds = new HashMap<String, Boolean>();
+        updateFlds = new HashMap<String, Boolean>();
+        if (fields != null && !fields.isEmpty()) {
+            for (String fld : fields) {
+                StringTokenizer st = new StringTokenizer(fld, "|||");
+                String name = st.nextToken();
+                String imp = st.nextToken();
+                String upd = st.nextToken();
+                importFlds.put(name, new Boolean(imp));
+                updateFlds.put(name, new Boolean(upd));
+            }
+        }
+
+    }
+
+    public boolean importEnabled(String fldName) {
+        boolean retVal = false;
+        if (importFlds == null) {
+            initSelectedFields();
+        }
+
+        if (importFlds.containsKey(fldName)) {
+            retVal = importFlds.get(fldName).booleanValue();
+        }
+
+        return retVal;
+    }
+
+    public boolean updateEnabled(String fldName) {
+        boolean retVal = false;
+
+        if (updateFlds == null) {
+            initSelectedFields();
+        }
+
+        if (updateFlds.containsKey(fldName)) {
+            retVal = updateFlds.get(fldName).booleanValue();
+        }
+
+        return retVal;
+
+    }
 	
 }

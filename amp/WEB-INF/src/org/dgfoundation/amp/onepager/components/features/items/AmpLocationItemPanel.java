@@ -15,6 +15,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
@@ -45,13 +46,14 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                                 final AmpUniqueCollectionValidatorField<AmpActivityLocation> uniqueCollectionValidationField,
                                 final AmpCollectionValidatorField minSizeCollectionValidationField,
                                 final AmpCollectionValidatorField treeCollectionValidatorField,
+                                final AmpComponentPanel locationPercentageRequired,
                                 final IModel<Set<AmpActivityLocation>> setModel, final ListView<AmpActivityLocation> list) {
 		super(id, model, fmName, true);
 		
 		this.locationModel = model;
 		
 		PropertyModel<Double> percModel = new PropertyModel<Double>(model, "locationPercentage");
-		AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField,true){
+		AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField,locationPercentageRequired.isVisible()){
 			private static final long serialVersionUID = 1L;
 			@Override
 			protected void onBeforeRender() {

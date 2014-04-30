@@ -13,6 +13,7 @@ public class IdNamePercentage implements Comparable<IdNamePercentage>, UniquelyI
 	public final Long rootId;
 	public final String rootName;
 	public final String hierarchicalName;
+	
 	public Float percentage;
 	private long uniqueId = PledgeForm.uniqueIds.getAndIncrement();
 	
@@ -36,8 +37,20 @@ public class IdNamePercentage implements Comparable<IdNamePercentage>, UniquelyI
 		return a == null ? 0 : a.intValue();
 	}
 	
+	/**
+	 * returns either {@link #percentage} or null, in case {@link #percentage} = 0
+	 * @return
+	 */
+	public Float getPercentageOrNull(){
+		return (this.percentage == null || Math.abs(this.percentage) < 0.01) ? null : this.percentage;
+	}
+	
+	public String getPercentageDisplayed(){
+		return getPercentageOrNull() == null ? "(n/a) " : String.format("%.2f", this.percentage);
+	}
+	
 	public IdNamePercentage setPercentageChained(Float perc) {
-		this.percentage = perc;
+		setPercentage(perc);
 		return this;
 	}
 	
@@ -78,7 +91,7 @@ public class IdNamePercentage implements Comparable<IdNamePercentage>, UniquelyI
 	
 	@java.lang.SuppressWarnings("all")
 	public void setPercentage(final Float percentage) {
-		this.percentage = percentage;
+		this.percentage = percentage == null ? 0.0f : percentage;
 	}
 	
 	@java.lang.SuppressWarnings("all")

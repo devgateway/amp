@@ -33,7 +33,7 @@
 						<c:if test="${selectedProgs.rootId eq rootTheme.keyAsLong}">
 							<tr id="pledge_form_row_forprog_${selectedProgs.uniqueId}">
 								<td class="text-right"><c:out value="${selectedProgs.hierarchicalName}" /></td>
-								<td class="text-left bold">${selectedProgs.percentage}%</td>
+								<td class="text-left bold">${selectedProgs.percentageDisplayed}%</td>
 							</tr>
 						</c:if>
 					</c:forEach>

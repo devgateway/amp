@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
+import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.forms.ValidationError;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -119,7 +120,7 @@ public class SavePledge extends Action {
     	pledge.setAdditionalInformation(plForm.getAdditionalInformation());
     	pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
     	pledge.setFurtherApprovalNedded(plForm.getFurtherApprovalNedded());
-    		
+    	    	
     	res.addAll(do_save_contact1(pledge, plForm.getContact1()));
     	res.addAll(do_save_contact2(pledge, plForm.getContact2()));
     	res.addAll(do_save_sectors(session, pledge, plForm.getSelectedSectors()));
@@ -182,12 +183,12 @@ public class SavePledge extends Action {
 		{
 			FundingPledgesSector fps = new FundingPledgesSector();
 			fps.setPledgeid(pledge);
-			fps.setSectorpercentage(sector.getPercentage());
+			fps.setSectorpercentage(sector.getPercentageOrNull());
 			fps.setSector(SectorUtil.getAmpSector(sector.getId()));
 			session.save(fps);
 			pledgesSectors.add(fps);
 		}
-    	return new ArrayList<>();
+		return new ArrayList<>();
     }
     
     protected List<ValidationError> do_save_programs(Session session, FundingPledges pledge, List<IdNamePercentage> selectedPrograms) throws Exception
@@ -202,7 +203,7 @@ public class SavePledge extends Action {
 		{
 			FundingPledgesProgram fps = new FundingPledgesProgram();
 			fps.setPledgeid(pledge);
-			fps.setProgrampercentage(program.getPercentage());
+			fps.setProgrampercentage(program.getPercentageOrNull());
 			fps.setProgram(ProgramUtil.getThemeById(program.getId()));
 			session.save(fps);
 			pledgesPrograms.add(fps);
@@ -222,7 +223,7 @@ public class SavePledge extends Action {
 		{
 			FundingPledgesLocation fps = new FundingPledgesLocation();
 			fps.setPledgeid(pledge);
-			fps.setLocationpercentage(location.getPercentage());
+			fps.setLocationpercentage(location.getPercentageOrNull());
 			fps.setLocation(DynLocationManagerUtil.getLocation(location.getId(), true));
 			session.save(fps);
 			pledgesLocs.add(fps);

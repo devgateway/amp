@@ -76,7 +76,7 @@ public class GroupColumn extends Column<Column> {
    		GroupColumn dest = null;
 		dest = new GroupColumn(this);
 		for(Column element:this.getItems()){
-			if( ( category.equals(ArConstants.TERMS_OF_ASSISTANCE) || category.equals(ArConstants.MODE_OF_PAYMENT) ) 
+			if((category.equals(ArConstants.TERMS_OF_ASSISTANCE) || category.equals(ArConstants.MODE_OF_PAYMENT))
 					&& element instanceof TotalCommitmentsAmountColumn){ 
 				continue;
 			}
@@ -173,7 +173,7 @@ public class GroupColumn extends Column<Column> {
      * @param generateTotalCols true when creating TotalAmountColumnS instead of CellColumnS
      * @return a GroupColumn that holds the categorized Data
      */
-    public static GroupColumn verticalSplitByCateg_internal(CellColumn src, String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
+    public static GroupColumn verticalSplitByCateg_internal(CellColumn<? extends CategAmountCell> src, String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
     	
     	//logger.error(String.format("called with cat = %s,  generateTotalCalls = %s", category, generateTotalCols));
     	if (src instanceof TotalComputedMeasureColumn)
@@ -187,7 +187,7 @@ public class GroupColumn extends Column<Column> {
 			public int compare(MetaInfo a, MetaInfo b){
 				return ((Comparable)a.value).compareTo((Comparable) b.value);
 			}});
-        Iterator<? extends CategAmountCell> i = src.iterator();
+       // Iterator<? extends CategAmountCell> i = src.iterator();
        
         AmpARFilter myFilters	= null;
         try{
@@ -202,10 +202,12 @@ public class GroupColumn extends Column<Column> {
     	  ARUtil.insertEmptyColumns(category, src, metaSet, myFilters);
        } 
         
-   		String unspecified = TranslatorWorker.translateText("Unspecified");
-        
-        while (i.hasNext()) {
-        	Categorizable element = (Categorizable) i.next();
+       String unspecified = TranslatorWorker.translateText("Unspecified");
+       
+       SimpleDateFormat pledgesfakeyear = new SimpleDateFormat("yyyy"); // ugly hack since AMP 1 times
+       String pledgesFakeYear = pledgesfakeyear.format(new Date(ArConstants.PLEDGE_FAKE_YEAR.getTime())).toString();
+ 
+       for(Categorizable element:src.getItems()){
             if(!element.isShow()) continue;
             MetaInfo minfo = element.getMetaData().getMetaInfo(category);
             if (minfo == null || minfo.getValue() == null) 
@@ -220,10 +222,7 @@ public class GroupColumn extends Column<Column> {
                 	
                 	//Replace the year in pledges report for unspecified dates funding
                 	if (reportMetadata.getType() == ArConstants.PLEDGES_TYPE){
-	                	SimpleDateFormat pledgesfakeyear = new SimpleDateFormat("yyyy");
-	                	String year = pledgesfakeyear.format(new Date(ArConstants.PLEDGE_FAKE_YEAR.getTime())).toString();
-
-	                	if (minfo.getValue().toString().equalsIgnoreCase(year)){
+	                	if (minfo.getValue().toString().equalsIgnoreCase(pledgesFakeYear)){
 	                		element.getMetaData().replace(new MetaInfo(minfo2.getCategory(), unspecified));
 	                		//minfo2.setValue(unspecified);
 	                	}
@@ -376,9 +375,8 @@ public class GroupColumn extends Column<Column> {
             
             cc.setContentCategory(category);
             //iterate the src column and add the items with same MetaInfo
-            Iterator<? extends CategAmountCell> ii = src.iterator();
-            while (ii.hasNext()) {
-            	CategAmountCell item = ii.next();
+            //Iterator<? extends CategAmountCell> ii = src.iterator();
+            for(CategAmountCell item:src.getItems()){
     			
     			//add terms of assistance total items if this subcategory was forced from above.
     			//this means ALL cells be added here regardless of their category
@@ -413,7 +411,7 @@ public class GroupColumn extends Column<Column> {
     					continue;
     				try
     				{
-        				Cell obj = (Cell)(((Cell) item).clone());
+        				Cell obj = (Cell)(item.clone());
         				if (obj instanceof CategAmountCell)
         					((CategAmountCell) obj).cloneMetaData();
     					cc.addCell(obj);
@@ -427,8 +425,7 @@ public class GroupColumn extends Column<Column> {
     				continue;
     			}
     			
-    			if(item.hasMetaInfo(element)) 
-    			{
+    			if(item.hasMetaInfo(element)){
     				cc.addCell(item);
     			}
     		}
@@ -509,22 +506,16 @@ public class GroupColumn extends Column<Column> {
 //        }
         
         if(ret.getItems().size()==0) {
-        	AmountCellColumn acc=new AmountCellColumn(ret);
-        	Iterator<? extends CategAmountCell> ii = src.iterator();
-        	while (ii.hasNext()) {
-				AmountCell element = (AmountCell) ii.next();
+        	AmountCellColumn acc = new AmountCellColumn(ret);
+        	for(CategAmountCell element:src.getItems()){
 				acc.addCell(element);
 			}
         	
-        	//fixed problem when there is only  TOTAL_COMMITMENTS  or UNDISBURSED_BALANCE selected
-        	// ret=acc;
-        	 ret.getItems().add(acc);
-        	 acc.setParent(ret);
+        	ret.getItems().add(acc);
+        	acc.setParent(ret);
         }
         
         return ret;
-        
-       
     }
 
     /**

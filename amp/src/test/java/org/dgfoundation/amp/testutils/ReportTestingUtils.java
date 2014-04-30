@@ -50,7 +50,7 @@ public class ReportTestingUtils
 	 */
 	public static GroupReportData runReportOn(String reportName, AmpReportModifier modifier, String... activityNames)
 	{		
-		Session hibSession = PersistenceManager.getSession();
+//		Session hibSession = PersistenceManager.getSession();
 		
 		AmpReports report = loadReportByName(reportName);
 		
@@ -70,7 +70,7 @@ public class ReportTestingUtils
 			modifier.modifyAmpReportSettings(report, filter);
 		
 		ReportContextData.getFromRequest(mockRequest, false).setFilter(filter);
-		AmpReportGenerator arg = new AmpReportGenerator(report, filter, true);
+		AmpReportGenerator arg = new MyAmpReportGenerator(report, filter, true, modifier);
 		arg.setCleanupMetadata(true);
 		arg.generate();
 		

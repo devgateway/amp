@@ -222,14 +222,24 @@ public final class ArConstants {
 			}};
 
 	
-	public final static String COLUMN_COUNTRY="Country";
-	public final static String COLUMN_REGION="Region";
-	public final static String COLUMN_ZONE="Zone";
-	public final static String COLUMN_DISTRICT="District";
+	public final static String COLUMN_COUNTRY = "Country";
+	public final static String COLUMN_REGION = "Region";
+	public final static String COLUMN_ZONE = "Zone";
+	public final static String COLUMN_DISTRICT = "District";
+
+	public final static String COLUMN_PLEDGE_REGION = "Pledges Regions";
+	public final static String COLUMN_PLEDGE_ZONE = "Pledges Zones";
+	public final static String COLUMN_PLEDGE_DISTRICT = "Pledges Districts";
+	
 	public final static String COLUMN_SECTOR_LOCATION="Sector Location";
 	
 	public final static List<String> LOCATION_COLUMNS	= 
-		Arrays.asList(new String[]{ArConstants.COLUMN_REGION, ArConstants.COLUMN_ZONE, ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_SECTOR_LOCATION} );
+		Arrays.asList(new String[]{
+				ArConstants.COLUMN_REGION, ArConstants.COLUMN_PLEDGE_REGION,
+				ArConstants.COLUMN_ZONE, ArConstants.COLUMN_PLEDGE_ZONE,
+				ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_PLEDGE_DISTRICT,
+				ArConstants.COLUMN_SECTOR_LOCATION} 
+		);
 	
 	public final static List<String> PROGRAMS_COLUMNS	= 
 		Arrays.asList(new String[]{"National Planning Objectives Level 1",

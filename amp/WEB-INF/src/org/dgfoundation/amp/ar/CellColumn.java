@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -497,7 +498,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 	{//this.toString().equals("Fiscal Year 2011 (6 items)")
 		if (category.equals(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE) && (!this.getName().equals(ArConstants.REAL_DISBURSEMENTS)))
 			return null; // only REAL DISBURSEMENTS columns can be split by real disbursements
-		return GroupColumn.verticalSplitByCateg_internal(this, category, ids, generateTotalCols, reportMetadata);
+		return GroupColumn.verticalSplitByCateg_internal((CellColumn<? extends CategAmountCell>)this, category, ids, generateTotalCols, reportMetadata);
 	}
 	
 	@Override

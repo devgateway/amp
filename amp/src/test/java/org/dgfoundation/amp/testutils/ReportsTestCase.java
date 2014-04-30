@@ -120,14 +120,13 @@ public abstract class ReportsTestCase extends AmpTestCase
 	protected void runReportTest(String testName, String reportName, String[] activities, GroupReportModel correctResult)
 	{
 		runReportTest(testName, reportName, activities, correctResult, null, null);
-	}
+	}	
 
 	public final static AmpReportModifier makeTabReportModifier = new AmpReportModifier() {
 		
 		@Override
 		public void modifyAmpReportSettings(AmpReports report, AmpARFilter filter) {
-			filter.setWidget(true);
-			
+			filter.setWidget(true);			
 		}
 	};
 

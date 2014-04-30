@@ -68,12 +68,12 @@ public abstract class ARDimension {
     			put("Sector Tag Sub-Sector", "Sector Tag");
     			put("Sector Tag Sub-Sub-Sector", "Sector Tag Sub-Sector");
     			
-    			put("Region", "Country");
-    			put("Zone", "Region");
-    			put("District", "Zone");
+    			put(ArConstants.COLUMN_REGION, ArConstants.COLUMN_COUNTRY);
+    			put(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_REGION);
+    			put(ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_ZONE);
     			
-    			put("Pledges Zones", "Pledges Regions");
-    			put("Pledges Districts", "Pledges Zones");    			
+    			put(ArConstants.COLUMN_PLEDGE_ZONE, ArConstants.COLUMN_PLEDGE_REGION);
+    			put(ArConstants.COLUMN_PLEDGE_DISTRICT, ArConstants.COLUMN_PLEDGE_ZONE);    			
     		}});
 
     /**

@@ -10,7 +10,12 @@
         <script>
             <lang delimiter=";" type="postgres">
 				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
-            </lang>
+				UPDATE amp_columns set celltype='org.dgfoundation.amp.ar.cell.MetaTextCell' 
+					WHERE columnname IN 
+						('Pledges Districts', 'Pledges National Plan Objectives', 'Pledges Programs', 'Pledges Regions', 
+						'Pledges Secondary Programs', 'Pledges Secondary Sectors', 'Pledges sectors', 
+						'Pledges Tertiary Programs', 'Pledges Tertiary Sectors', 'Pledges Zones');            
+			</lang>
         </script>
     </apply>
 </tns:patch>

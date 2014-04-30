@@ -30,7 +30,7 @@
 						<c:if test="${selectedSectors.rootId eq rootTheme.keyAsLong}">
 							<tr id="pledge_form_row_for_sector_${selectedSectors.uniqueId}">
 								<td class="text-right"><c:out value="${selectedSectors.hierarchicalName}" /></td>
-								<td class="text-left bold">${selectedSectors.percentage}%</td>
+								<td class="text-left bold">${selectedSectors.percentageDisplayed}%</td>
 							</tr>
 						</c:if>
 					</c:forEach>

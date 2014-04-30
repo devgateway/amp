@@ -68,7 +68,7 @@ public class PledgesFormTests extends AmpTestCase
 		PledgeForm pledgeForm = new PledgeForm();
 		pledgeForm.importPledgeData(PledgesEntityHelper.getPledgesById(3L));
 		assertEquals(3, pledgeForm.getSelectedFunding().size());
-		assertEquals("[767676.00 curr: 96, ToA: 2119, fundingYear: 2006, pledgeTypeId: 2137, 200000.00 curr: 95, ToA: 2124, fundingYear: 2020, pledgeTypeId: 2137, 1.00 curr: 95, ToA: 2119, fundingYear: 2005, pledgeTypeId: 2137]", 
+		assertEquals("[767 676 curr: 96, ToA: 2119, fundingYear: 2006, pledgeTypeId: 2137, 200 000 curr: 95, ToA: 2124, fundingYear: 2020, pledgeTypeId: 2137, 1 curr: 95, ToA: 2119, fundingYear: 2005, pledgeTypeId: 2137]", 
 				pledgeForm.getSelectedFunding().toString());
 	}
 	

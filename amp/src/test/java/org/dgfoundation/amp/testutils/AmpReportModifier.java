@@ -8,7 +8,10 @@ import org.digijava.module.aim.dbentity.*;
  * @author Dolghier Constantin
  *
  */
-public interface AmpReportModifier 
+public abstract class AmpReportModifier 
 {
-	public void modifyAmpReportSettings(AmpReports report, AmpARFilter filter);
+	public abstract void modifyAmpReportSettings(AmpReports report, AmpARFilter filter);
+	public String getColumnFilter(String stockQuery, AmpColumns col, String extractorView){
+		return null; //do nothing
+	}
 }

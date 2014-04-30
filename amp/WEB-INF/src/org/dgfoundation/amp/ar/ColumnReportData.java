@@ -264,7 +264,7 @@ public class ColumnReportData extends ReportData<Column> {
 		}
 		
 		HashSet<Cell> allSplitterCells = new HashSet<Cell>();
-		this.appendAllSplitterCells(allSplitterCells);		
+		this.appendAllSplitterCells(allSplitterCells);
 		
 		/**
 		 * compute whether we are allowed to create "UNALLOCATED" subreports here - it is disallowed to create one when both of the following apply: <br />

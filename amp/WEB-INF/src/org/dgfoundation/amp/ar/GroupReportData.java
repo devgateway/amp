@@ -272,9 +272,7 @@ public class GroupReportData extends ReportData<ReportData> {
 						logger.error("ReportTrail.getTrailCells().size()=" + element.getTrailCells().size());
 						continue;
 					}
-					logger.error("merging " + trailCells.size() + " cells...");
-					if (element instanceof GroupReportData)
-						System.out.println("BOZO breakpoint");
+//					logger.error("merging " + trailCells.size() + " cells...");
 					for (int j = 0; j < trailCells.size(); j++) {							
 						AmountCell c = trailCells.get(j);
 						AmountCell c2 = element.getTrailCells().get(j);

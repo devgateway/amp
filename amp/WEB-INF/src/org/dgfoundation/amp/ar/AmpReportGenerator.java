@@ -245,6 +245,42 @@ public class AmpReportGenerator extends ReportGenerator {
 		return columnFilterSQLClause;
 	}
 
+	protected String buildColumnFilterSQLClause(AmpColumns col, String extractorView){
+		// get the column bound condition:
+		String columnFilterSQLClause = "";
+		
+		if(!filter.isJustSearch()) {
+			columnFilterSQLClause = ColumnFilterGenerator
+				.generateColumnFilterSQLClause(filter, col, true);
+		}
+
+		if (columnFilterSQLClause.length() > 0)
+			logger.info("Column " + col.getColumnName()
+					+ " appendable SQL filter: ..."
+					+ columnFilterSQLClause);
+
+		if ((extractorView != null) && extractorView.endsWith("v_mtef_funding")) // v_mtef_funding OR cached_v_mtef_funding
+			columnFilterSQLClause = generate_mtef_filter_statement(columnFilterSQLClause, col.getAliasName());
+		
+		if (pledgereport/* && extractorView.equals("v_pledges_funding_st")*/){
+			//columnFilterSQLClause = " AND (pledge_id IN (-1, 10))"; 
+			//columnFilterSQLClause = "AND (pledge_id IN (-1, 10)) AND (related_project_id IN (select distinct(vdf.amp_activity_id) from v_donor_funding vdf where vdf.pledge_id = 10))"; // BOZO! DELETE THIS FROM COMMIT!
+			//columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24, 25, 26, 27, 28, 29))"; // BOZO! DELETE THIS FROM COMMIT!
+//			columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24))"; // BOZO! DELETE THIS FROM COMMIT!
+//			columnFilterSQLClause = "AND (pledge_id IN (24))"; // BOZO! DELETE THIS FROM COMMIT!				
+			// select amp_activity_id from amp_activity where (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')
+//			String relatedProjectsQuery = "SELECT amp_activity_id FROM amp_activity WHERE (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')";
+//			String relatedProjectsQuery = "SELECT amp_activity_id FROM amp_activity WHERE (name like '%FED/2009/021-608%') OR (name like '%FED/2009/021-608%') OR (name like '%S064713%')";
+//			if (extractorView.equals("v_pledges_funding_st"))
+//				columnFilterSQLClause += String.format(" AND (related_project_id IN (%s))", relatedProjectsQuery);
+//			if (extractorView.equals("v_pledges_projects"))
+//				columnFilterSQLClause += String.format(" AND (amp_activity_id IN (%s))", relatedProjectsQuery);
+//			if (extractorView.equals("v_pledges_funding_st"))
+//				columnFilterSQLClause += String.format(" AND (transaction_date between '2009-01-01' AND '2009-12-31')");
+		}
+		return columnFilterSQLClause;	
+	}
+	
 	/**
 	 * creates the data structures for the list of columns.
 	 * 
@@ -305,19 +341,6 @@ public class AmpReportGenerator extends ReportGenerator {
 
 				ColumnWorker ce = null;
 
-				// get the column bound condition:
-				String columnFilterSQLClause = "";
-				
-				if(!filter.isJustSearch()) {
-					columnFilterSQLClause = ColumnFilterGenerator
-						.generateColumnFilterSQLClause(filter, col, true);
-				}
-
-				if (columnFilterSQLClause.length() > 0)
-					logger.info("Column " + col.getColumnName()
-							+ " appendable SQL filter: ..."
-							+ columnFilterSQLClause);
-
 				if (extractorView != null) {
 
 					Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 4, this.session);
@@ -331,26 +354,8 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 				
 				ce.setRelatedColumn(col);
-				
-				if ((extractorView != null) && extractorView.equals("v_mtef_funding"))
-					columnFilterSQLClause = generate_mtef_filter_statement(columnFilterSQLClause, col.getAliasName());
-				
-				if (pledgereport/* && extractorView.equals("v_pledges_funding_st")*/){
-					//columnFilterSQLClause = " AND (pledge_id IN (-1, 10))"; 
-					//columnFilterSQLClause = "AND (pledge_id IN (-1, 10)) AND (related_project_id IN (select distinct(vdf.amp_activity_id) from v_donor_funding vdf where vdf.pledge_id = 10))"; // BOZO! DELETE THIS FROM COMMIT!
-					//columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24, 25, 26, 27, 28, 29))"; // BOZO! DELETE THIS FROM COMMIT!
-//					columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24))"; // BOZO! DELETE THIS FROM COMMIT!
-//					columnFilterSQLClause = "AND (pledge_id IN (24))"; // BOZO! DELETE THIS FROM COMMIT!				
-					// select amp_activity_id from amp_activity where (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')
-//					String relatedProjectsQuery = "SELECT amp_activity_id FROM amp_activity WHERE (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')";
-//					String relatedProjectsQuery = "SELECT amp_activity_id FROM amp_activity WHERE (name like '%FED/2009/021-608%') OR (name like '%FED/2009/021-608%') OR (name like '%S064713%')";
-//					if (extractorView.equals("v_pledges_funding_st"))
-//						columnFilterSQLClause += String.format(" AND (related_project_id IN (%s))", relatedProjectsQuery);
-//					if (extractorView.equals("v_pledges_projects"))
-//						columnFilterSQLClause += String.format(" AND (amp_activity_id IN (%s))", relatedProjectsQuery);
-//					if (extractorView.equals("v_pledges_funding_st"))
-//						columnFilterSQLClause += String.format(" AND (transaction_date between '2009-01-01' AND '2009-12-31')");
-				}
+
+				String columnFilterSQLClause = buildColumnFilterSQLClause(col, extractorView);
 				
 				ce.setInternalCondition(columnFilterSQLClause);
 				ce.setSession(this.session);
@@ -1165,18 +1170,15 @@ public class AmpReportGenerator extends ReportGenerator {
 	
 	protected void applyYearRangeSettings(GroupColumn column)
 	{
-		Iterator it = column.iterator();
+		Iterator<Column> it = column.iterator();
 		while (it.hasNext())
 		{
-			Object item = it.next();
-			if (item instanceof Column)
-			{
-				String yearStr = ((Column) item).getName();
-				Integer year = getYearInteger(yearStr);
-				if (year != null)
-					if (!filter.passesYearRangeFilter(year))
-						it.remove();
-			}
+			Column<?> item = it.next();
+			String yearStr = item.getName();
+			Integer year = getYearInteger(yearStr);
+			if (year != null)
+				if (!filter.passesYearRangeFilter(year))
+					it.remove();
 		} 
 	}
 		

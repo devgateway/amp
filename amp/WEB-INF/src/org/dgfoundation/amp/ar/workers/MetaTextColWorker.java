@@ -5,6 +5,8 @@ package org.dgfoundation.amp.ar.workers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -31,11 +33,18 @@ public class MetaTextColWorker extends TextColWorker {
 		super(condition, viewName, columnName, generator);
 		// TODO Auto-generated constructor stub
 	}
+
+	Set<Long> reportsTypesWithHiers = new HashSet<Long>(){{
+			this.add(0l + ArConstants.DONOR_TYPE);
+			this.add(0l + ArConstants.COMPONENT_TYPE);
+			this.add(0l + ArConstants.PLEDGES_TYPE);
+			}};
 	
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException
 	{
 		TextCell tc = (TextCell) super.getCellFromRow(rs);
 		MetaTextCell mtc = new MetaTextCell(tc);
+		
 		
 		boolean thisViewHasPercentage = (columnName.indexOf("National Planning Objectives") > -1);
 		thisViewHasPercentage |= (columnName.contains(ArConstants.COLUMN_ANY_SECTOR) && (!columnName.equalsIgnoreCase(ArConstants.COLUMN_SECTOR_GROUP))); 
@@ -43,9 +52,7 @@ public class MetaTextColWorker extends TextColWorker {
 	
  		//TODO I think the columnName comparisons with ArConstants should be replaced by comparisons with the values from 
  		// category manager "Implementation Location"
-		thisViewHasPercentage |= ((columnName.equals(ArConstants.COUNTRY) || columnName.equals(ArConstants.REGION) || columnName.equals(ArConstants.DISTRICT) || 
-			columnName.equals(ArConstants.ZONE)) &&  				 
-			(generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE || generator.getReportMetadata().getType()==ArConstants.COMPONENT_TYPE));
+		thisViewHasPercentage |= ArConstants.LOCATION_COLUMNS.contains(columnName) && reportsTypesWithHiers.contains(generator.getReportMetadata().getType());  				 
 		
 		thisViewHasPercentage |= (columnName.equals("Componente"));
 		thisViewHasPercentage |= (columnName.equals("Primary Program") || columnName.equals("Secondary Program") || columnName.equals("Tertiary Program"));

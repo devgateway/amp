@@ -80,7 +80,7 @@ function amp_validator_check_percentage(itemsClass){
 		if (foundError || (floatDiffers(totalValue, 0) && floatDiffers(totalValue, 100)))
 			return {success: false, error_message: "Sum of percentages should be either 0 or 100", validate_class: itemsClass};
 			
-		return {success: true};			
+		return {success: true};
 	};
 }
 

@@ -25,7 +25,7 @@
 			<c:set var="indexLoc" value="${indexLoc+1}"/>
 			<tr id="pledge_form_row_for_location_${selectedLocs.uniqueId}">
 				<td class="text-right">${selectedLocs.hierarchicalName}</td>
-				<td class="text-left bold">${selectedLocs.percentage}%</td>
+				<td class="text-left bold">${selectedLocs.percentageDisplayed}%</td>
 			</tr>
 		</c:forEach>
 		</tbody> 

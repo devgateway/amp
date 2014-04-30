@@ -21,6 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpLocationItemPanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
@@ -98,6 +99,9 @@ public class AmpLocationFormTableFeature extends
 		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
 		wmc.add(iValidator);
 		
+		final AmpComponentPanel locationPercentageRequired = new AmpComponentPanel("locationPercentageRequired", "Location percentage required"){};
+        add(locationPercentageRequired);
+		
 		final AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField=
 			new AmpPercentageCollectionValidatorField<AmpActivityLocation>("locationPercentageTotal",listModel,"locationPercentageTotal") {
 				private static final long serialVersionUID = 1L;
@@ -154,7 +158,7 @@ public class AmpLocationFormTableFeature extends
 			protected void populateItem(final ListItem<AmpActivityLocation> item) {
 				AmpLocationItemPanel li = new AmpLocationItemPanel("locationItem", item.getModel(), "Location Item", 
 						disablePercentagesForInternational, am, regionalFundingFeature, percentageValidationField, 
-						uniqueCollectionValidationField, minSizeCollectionValidationField, treeCollectionValidatorField, setModel, list);
+						uniqueCollectionValidationField, minSizeCollectionValidationField, treeCollectionValidatorField,locationPercentageRequired, setModel, list);
 				item.add(li);
 			}
 		};

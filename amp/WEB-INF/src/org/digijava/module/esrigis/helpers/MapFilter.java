@@ -119,7 +119,7 @@ public class MapFilter {
 	private Boolean disbursementsVisible = true;
 	private Boolean pledgeVisible = true;
 	private Boolean expendituresVisible = true;
-	private Boolean fromPublicView;
+	private Boolean fromPublicView = false;
 	private Boolean showOnlyApprovedActivities;
 
 	private Long activityId;

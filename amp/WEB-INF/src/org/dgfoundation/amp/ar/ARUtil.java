@@ -249,7 +249,7 @@ public final class ARUtil {
 			Session session = PersistenceManager.getSession();
 			r = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
 			if (r == null)
-				throw new RuntimeException("no report with ampReportId = " + ampReportId + " found!");
+				throw new RuntimeException("No report with ampReportId = " + ampReportId + " found!");
 		}
 		
 		r.setSiteId(siteId);
@@ -282,15 +282,18 @@ public final class ARUtil {
 	}
 	
 	public static void generateReportNotFoundPage(HttpServletResponse response){
+		generateReportResponse(response, "Report with given id not found!");
+	}
+	
+	public static void generateReportResponse(HttpServletResponse response, String messsage, Object... args){
 		String url = "/";
-		String alert = TranslatorWorker.translateText("Report with given id not found!");
+		String alert = String.format(TranslatorWorker.translateText(messsage), args);
 		String script = "<script>if ((typeof opener !== 'undefined') && (opener != null)) {opener.close();};\n" 
 			+ "alert('"+ alert +"');\n" 
 			+ "window.location=('"+ url +"');\n"
 			+ "</script>";
 		writeResponse(response, script);
 	}
-
 	
 	/**
 	 * generates a report given the data from an AmpReports instance and some filters
@@ -755,5 +758,19 @@ public final class ARUtil {
 				throw new RuntimeException("Unknown Excel export type: " + exportType);
 		}
 	}
-		
+	
+	public static boolean hasCurrentUserAccessRight(AmpReports report) {
+		HttpServletRequest request = TLSUtils.getRequest();
+		if( report!=null ) {
+			TeamMember tm = (TeamMember) request.getSession().getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+			if( tm==null || tm.getTeamId()==null ) { 
+				if( report.getPublicReport() )
+					return true;
+			} else {
+				if( AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES.equals(tm.getTeamId()) || tm.getTeamId().equals(report.getOwnerId().getAmpTeam().getAmpTeamId()) )
+					return true;
+			}
+		}
+		return false;
+	}	
 }

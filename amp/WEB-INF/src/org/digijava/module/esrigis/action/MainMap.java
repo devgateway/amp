@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.kernel.exception.DgException;
@@ -33,8 +34,10 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructureType;
+import org.digijava.module.aim.exception.reports.ReportException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -119,7 +122,21 @@ public class MainMap extends Action {
 		
 		if (request.getParameter("exportreport") != null) {
 			filter.setModeexport(true);
-			AmpARFilter reportfilter = ReportContextData.getFromRequest().getFilter();
+			//create ReportContextData if it doesn't exists
+			ReportContextData.getFromRequest(true);
+			AmpReports report = null;
+			try{
+				report = ARUtil.getReferenceToReport();
+			} catch(Exception ex) {
+				logger.error(ex.getMessage());
+				ARUtil.generateReportResponse(response, ex.getMessage());
+				return null;
+			}
+			AmpARFilter reportfilter = getReportFilter(report);
+			if( !ARUtil.hasCurrentUserAccessRight(report) ) {
+				ARUtil.generateReportResponse(response, "Access denied to ampReportId=%d", report.getId());
+				return null;
+			}
 			filter.setReportfilterquery(reportfilter.getGeneratedFilterQuery());
 			filter.setCurrencyId(reportfilter.getCurrency() == null ? null : reportfilter.getCurrency().getAmpCurrencyId());
 			if (reportfilter.getRenderStartYear()!=null && reportfilter.getRenderStartYear()!=0){
@@ -167,7 +184,18 @@ public class MainMap extends Action {
 		return mapping.findForward("forward");
 	}
 	
-	
+	private AmpARFilter getReportFilter(AmpReports report) throws ReportException {
+		AmpARFilter reportFilter = ReportContextData.getFromRequest().getFilter();
+		if( reportFilter == null ) {
+			try{
+				reportFilter = ReportContextData.getFromRequest().loadOrCreateFilter(false, report);
+			} catch(Exception ex) {
+				logger.error(ex.getMessage());
+				throw new ReportException("Could not find filters attched to ampReportId="+(report==null? report : report.getAmpReportId()), ex);
+			}
+		}
+		return reportFilter;
+	}
 	
 	private Integer getDefaultStartYear(HttpServletRequest request) {
 		AmpApplicationSettings tempSettings = getAppSetting(request);

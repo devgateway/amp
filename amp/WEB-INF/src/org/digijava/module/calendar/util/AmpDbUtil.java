@@ -521,7 +521,7 @@ public class AmpDbUtil {
 					logger.error("releaseSession() failed");
 				}
 			}
-			return ampModule.getId();
+			return ampModule!= null ? ampModule.getId() : 0l;
 	  }
 	  
 	  public static AmpModulesVisibility getComponentFMfromName(String name){

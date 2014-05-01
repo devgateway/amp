@@ -316,7 +316,8 @@ public class CreateEditSourceActions extends DispatchAction {
 				compFM.setName(key);
 				compFM.setIatiName(value);
 				compFM.setId(AmpDbUtil.getComponentFMIdfromName(compFM.getName()));
-				compFM.setState(AmpDbUtil.getComponentState(compFM.getName()));
+				//compFM.setState(AmpDbUtil.getComponentState(compFM.getName()));
+                compFM.setState(true);
 				compFM.setImportComp(compFM.isState());
 				compFM.setAutoOverwrite(false);
 				componentsList.add(compFM);

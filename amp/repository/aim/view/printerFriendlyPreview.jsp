@@ -2774,6 +2774,18 @@ body {background:none;}
                                                          </c:if>                                                        
                                                          </td>
                                                        </tr>
+                                                        <module:display name="/Activity Form/Funding/Total Number of Funding Sources" parentModule="/Activity Form/Funding">
+														 <tr bgcolor="#ffffff">
+														<td>
+															<digi:trn>Total Number of Funding Sources</digi:trn>  
+														</td>
+                                                        <td bgcolor="#FFFFFF" align="left" width="150">
+                                                          <c:if test="${aimEditActivityForm.identification.fundingSourcesNumber!=null}">
+                                                             ${aimEditActivityForm.identification.fundingSourcesNumber}                                                          
+                                                         </c:if>                                                        
+                                                         </td>
+                                                       </tr>
+														</module:display>
                                               		</table>
                             				</c:if>										</td>
 									</tr>

@@ -54,13 +54,33 @@ function spawnEditBox(labelId) {
 		editor.style.display = "inline"; //show the old editor
 	
 	var labelValue = label.innerHTML;
+	//IE8 and earlier does not support trim
+	if(typeof String.prototype.trim == 'function') {
+		labelValue = labelValue.trim();
+	}
+	else {
+		labelValue = labelValue.replace(/^\s+|\s+$/g, '');
+	}
 	if (label.tagName == "INPUT")
 		labelValue = label.value;
 
 	editor.value = labelValue;
+	//set the position of the cursor
+	if(editor.createTextRange) {
+          var range = elem.createTextRange();
+          range.move('character', 0);
+          range.select();
+      }
+	  else {
+          if(editor.selectionStart) {
+        	  editor.focus();
+        	  editor.setSelectionRange(0, 0);
+          }
+          else
+        	  editor.focus();
+      }
 	//onblur is reset upon cancel or save must be set again
 	editor.setAttribute('onblur', 'saveEditBox("'+ myId +'")');
-	editor.focus();
 	
 }
 

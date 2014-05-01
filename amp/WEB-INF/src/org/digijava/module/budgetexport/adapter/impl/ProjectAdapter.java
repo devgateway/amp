@@ -23,19 +23,13 @@ import java.util.List;
 public class ProjectAdapter implements MappingEntityAdapter {
     @Override
     public List<HierarchyListable> getAllObjects() throws DgException {
-        Session sess = PersistenceManager.getRequestDBSession();
-        StringBuilder queryStr = new StringBuilder("select distinct activity.amp_activity_id from v_titles activity");
-        SQLQuery q = sess.createSQLQuery(queryStr.toString());
-        List<Long> ids = q.list();
-
-        StringBuilder objQueryStr = new StringBuilder("from ");
-        objQueryStr.append(AmpActivity.class.getName());
-        objQueryStr.append(" act where act.ampActivityId in(");
-        objQueryStr.append(MappingEntityAdapterUtil.generateIdWhereClause(ids));
-        objQueryStr.append(")");
-        Query objQuery = sess.createQuery(objQueryStr.toString());
-        objQuery.setCacheable(true);
-        return objQuery.list();
+    	 Session sess = PersistenceManager.getRequestDBSession();
+         StringBuilder objQueryStr = new StringBuilder("from ");
+         objQueryStr.append(AmpActivity.class.getName());
+         objQueryStr.append(" act where act.name is not null");
+         Query objQuery = sess.createQuery(objQueryStr.toString());
+         objQuery.setCacheable(true);
+         return objQuery.list();
     }
 
     @Override

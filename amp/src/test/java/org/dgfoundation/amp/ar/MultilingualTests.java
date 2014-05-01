@@ -32,7 +32,7 @@ import junit.framework.TestSuite;
 
 public class MultilingualTests extends TestCase
 {
-	public MultilingualTests(String name)
+	private MultilingualTests(String name)
 	{
 		super(name);
 	}

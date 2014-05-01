@@ -144,12 +144,12 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 			if (colDesc == null || !colDesc.getDeleteOriginal())
 			{
 				// either a raw column OR one which needs the original fetched, it will be fetched via SELECT
-				columnStrings.add(columnName);
+				columnStrings.add("\"" + columnName + "\"");
 			}
 			else
 			{
 				// do not fetch it from the DB as it would be useless - save time, memory and bandwidth
-				columnStrings.add(String.format("'' as %s", columnName)); // instead, replace with a constant so as not to displace the column numbering
+				columnStrings.add(String.format("'' as \"%s\"", columnName)); // instead, replace with a constant so as not to displace the column numbering
 			}
 			if (colDesc != null)
 			{

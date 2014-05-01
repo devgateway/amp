@@ -20,8 +20,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	create or replace view v_capital_and_exp as 
-	select amp_activity_id, 'Capital' from amp_activity UNION select amp_activity_id, 'Expenditure' from amp_activity order by amp_activity_id;
+				DROP VIEW IF EXISTS v_capital_and_exp;
+				CREATE OR REPLACE VIEW v_capital_and_exp AS 
+					SELECT amp_activity_id, 'Capital' AS type FROM amp_activity 
+						UNION 
+					SELECT amp_activity_id, 'Expenditure' AS type FROM amp_activity ORDER BY amp_activity_id;
 			</lang>
 		</script>
 	</apply>

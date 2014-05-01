@@ -38,7 +38,7 @@ public class InternationalizedViewsRepository {
 		
 		@Override
 		public String calculateValue(ResultSet resultSet) throws SQLException{
-			return sqlconcat(resultSet.getString("agreement_title"), " - ", resultSet.getString("Agreement_Code"));
+			return sqlconcat(resultSet.getString("agreement_title"), " - ", resultSet.getString("Agreement Code"));
 		}
 	};	
 	

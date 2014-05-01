@@ -20,6 +20,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_mode_of_payment_capital_recurrent;
 				CREATE OR REPLACE VIEW v_mode_of_payment_capital_recurrent AS 
 					SELECT distinct f.amp_activity_id, 
 							CASE cv.category_value
@@ -29,7 +30,8 @@
 								WHEN 'Capital Development' THEN 'Capital'   
 								ELSE 'Capital/Recurrent not selected'
 								END, 
-						cv.id FROM amp_funding f, amp_category_value cv 
+						cv.id AS txt
+					  FROM amp_funding f, amp_category_value cv 
 					  WHERE f.mode_of_payment_category_va=cv.id;
         	</lang>
 		</script>

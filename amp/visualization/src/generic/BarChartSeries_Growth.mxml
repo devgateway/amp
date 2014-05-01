@@ -49,7 +49,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 			import flash.events.MouseEvent;
 			
 			import mx.collections.ArrayCollection;
-			import mx.controls.Alert;
 			import mx.core.DragSource;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
@@ -298,16 +297,60 @@ OTHER DEALINGS IN THE SOFTWARE.
 				}
 								
 				previousYear.dataProvider = previousYearCol;
-				previousYear.selectedIndex = previousYearCol.length-1;
-				currentYear.selectedIndex = currentYearCol.length-1;
-				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				
 				var params:Object = {
 					"format" : "xml",
 					"typeofaid" : "true",
 					"action": dataAction,
 					"divide": divide
 				};
+				var selectedStartYear:Number = NaN;
+				var selectedEndYear:Number = NaN;
+				
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")) != "") {
+					selectedStartYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")));
+					params[idContainer+"StartYear"] = selectedStartYear;
+					
+				}
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")) != "") {
+					selectedEndYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")));
+					params[idContainer+"EndYear"] = selectedEndYear;
+					
+				}
+					
+				if (!isNaN(selectedStartYear)) {
+					for (var i:int = 0; i < previousYear.dataProvider.length; i++)
+					{
+						var o:Object = previousYear.dataProvider.getItemAt(i);
+						if (o.label == selectedStartYear)
+						{
+							previousYear.selectedIndex = i;
+							break; 
+						}
+						
+					}
+				}
+				else {
+					previousYear.selectedIndex = previousYearCol.length-1;
+				}
+				
+				if (!isNaN(selectedEndYear)) {
+					for (var i:int = 0; i < currentYear.dataProvider.length; i++)
+					{
+						var o:Object = currentYear.dataProvider.getItemAt(i);
+						if (o.label == selectedEndYear)
+						{
+							currentYear.selectedIndex = i;
+							break; 
+						}
+						
+					}	}
+				else {
+					currentYear.selectedIndex = currentYearCol.length-1;
+				}
+				
 				params["previousYear"] = previousYear.selectedItem.data;
 				params["currentYear"] = currentYear.selectedItem.data;
 				
@@ -394,7 +437,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 				previousYear.dataProvider = previousYearCol;
 				previousYear.selectedIndex = previousYearCol.length-1;
 				currentYear.selectedIndex = currentYearCol.length-1;
-				
 				var params = {
 					"format" : "xml",
 					"typeofaid" : "true",
@@ -452,6 +494,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 			protected function combo_change(cmb:Number):void
 			{
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				if (cmb==2){
 					//endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
 					endYear = Number(currentYear.selectedItem.data);//this fill the combo of current year with all posible values
@@ -475,6 +518,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 				};
 				params["previousYear"] = previousYear.selectedItem.data;
 				params["currentYear"] = currentYear.selectedItem.data;
+				ExternalInterface.call("function(){ updateSliderValues('" + idContainer + "',"+params["previousYear"]+","+params["currentYear"]+")}");
+				
 				service.send(params);
 				messageLoadingPanel.visible = true;
 				sizeLoadingPanel(300, 200);

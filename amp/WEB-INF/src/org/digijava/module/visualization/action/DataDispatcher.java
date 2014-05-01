@@ -3987,8 +3987,29 @@ public class DataDispatcher extends DispatchAction {
         Date startDate = null;
         Date endDate = null;
         
-        Long year = request.getParameter("currentYear") == null? filter.getEndYear() : Long.parseLong(request.getParameter("currentYear"));
-        Long previousYear = request.getParameter("previousYear") == null? filter.getEndYear()-1 : Long.parseLong(request.getParameter("previousYear"));
+        Long year = null;
+		Long previousYear = null;
+		if(request.getParameter("ODAGrowthStartYear") != null 
+				&& !request.getParameter("ODAGrowthStartYear").toString().equalsIgnoreCase("")
+				&& request.getParameter("ODAGrowthEndYear") != null 
+				&& !request.getParameter("ODAGrowthEndYear").toString().equalsIgnoreCase(""))
+		{
+			previousYear = Long.parseLong(request.getParameter("ODAGrowthStartYear"));
+			year = Long.parseLong(request.getParameter("ODAGrowthEndYear"));
+
+		}
+		else if(request.getParameter("currentYear") != null && request.getParameter("previousYear") != null 
+				&& !request.getParameter("currentYear").toString().equalsIgnoreCase("") && !request.getParameter("previousYear").toString().equalsIgnoreCase(""))
+		{
+			year = Long.parseLong(request.getParameter("currentYear"));
+			previousYear = Long.parseLong(request.getParameter("previousYear"));
+		}
+		else
+		{
+			year = filter.getEndYear();
+			previousYear = filter.getEndYear()-1;
+		}
+		
        
         if (filter.getYearToCompare()==null || filter.getYearToCompare().intValue()==0 || filter.getYearToCompare().intValue()>= filter.getEndYear()){
         	filter.setYearToCompare(filter.getEndYear()-1);

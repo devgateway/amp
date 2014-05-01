@@ -319,8 +319,28 @@ function trim1 (str) {
 								<logic:iterate id="appStatus" name="createSourceForm" property="approvalStatusValues">
 		                    		<html:radio property="approvalStatus" value="${appStatus.key}"><digi:trn>${appStatus.value}</digi:trn></html:radio> <br />
                     			</logic:iterate>
+                    			
+        				<br>
+        				
+        				<br>
+                <b><digi:trn>Please choose the funding type</digi:trn>:</b><br />
+								<html:radio property="regionalFunding" value="false"><digi:trn>Donor funding</digi:trn></html:radio> <br />
+								<html:radio property="regionalFunding" value="true"><digi:trn>Regional funding</digi:trn></html:radio> <br />
+
+								<br>
+                <b><digi:trn>Please choose the default location</digi:trn>:</b><br />
+								<html:select property="defaultLocationID" styleClass="inputx" style="margin-top:5px;">
+        					<html:optionsCollection property="locationList" label="name" value="id"/>
+        				</html:select>
+        				
+        				
+        			<br /><br />
 							</fieldset>
 							<br />
+							
+							
+							
+							
 							</c:if>
 							<%-- <fieldset>
 								<legend><span class=legend_label><digi:trn>Filter and Identifier</digi:trn></span></legend>

@@ -580,6 +580,7 @@ public class ImportActionNew extends DispatchAction {
                                      HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         ImportFormNew myform = (ImportFormNew) form;
         String selAmpClass = request.getParameter("selectedClass");
+        myform.setSelAmpClass(selAmpClass);
 
         TreeMap<Long, String> allEntities = DataExchangeUtils.getAllAmpEntitiesByClass(selAmpClass);
 
@@ -638,10 +639,14 @@ public class ImportActionNew extends DispatchAction {
     }
 
     public ActionForward getOptionsAjaxAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+
+        ImportFormNew myform = (ImportFormNew) form;
+
+
         String maxResultCountStr = request.getParameter("maxResultCount");
-        //String searchStr = request.getParameter("searchStr");
         String searchStr = request.getHeader("searchStr");
         int maxResultCount = Integer.parseInt(maxResultCountStr);
+
 
         Map<Long, String> sortedLabels = (Map<Long,String>) request.getSession().getAttribute(IATI_LABELS_SORTED);
         JSONArray objArray = new JSONArray();
@@ -653,10 +658,12 @@ public class ImportActionNew extends DispatchAction {
         unmappedObj.accumulate("val", "Unmapped");
         objArray.add(unmappedObj);
 
-        JSONObject addNewObj = new JSONObject();
-        addNewObj.accumulate("id", "-1");
-        addNewObj.accumulate("val", "Add new");
-        objArray.add(addNewObj);
+        if (myform.getSelAmpClass().equalsIgnoreCase("Activity")) {
+            JSONObject addNewObj = new JSONObject();
+            addNewObj.accumulate("id", "-1");
+            addNewObj.accumulate("val", "Add new");
+            objArray.add(addNewObj);
+        }
 
         JSONObject sameAsObj = new JSONObject();
         sameAsObj.accumulate("id", "-2");

@@ -4,6 +4,7 @@
 package org.digijava.module.dataExchange.dbentity;
 import java.util.*;
 
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.dataExchange.util.WrapperSourceSetting;
 import org.digijava.module.dataExchange.util.XmlWrappable;
@@ -72,8 +73,26 @@ public class DESourceSetting implements XmlWrappable{
 
     private Map<String, Boolean> importFlds;
     private Map<String, Boolean> updateFlds;
+    private AmpCategoryValueLocations defaultLocation;
+    private boolean regionalFundings;
 
-	/**
+    public boolean isRegionalFundings() {
+        return regionalFundings;
+    }
+
+    public void setRegionalFundings(boolean regionalFundings) {
+        this.regionalFundings = regionalFundings;
+    }
+
+    public AmpCategoryValueLocations getDefaultLocation() {
+        return defaultLocation;
+    }
+
+    public void setDefaultLocation(AmpCategoryValueLocations defaultLocation) {
+        this.defaultLocation = defaultLocation;
+    }
+
+    /**
 	 * @return the isImport
 	 */
 	public Boolean getIsImport() {

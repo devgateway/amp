@@ -23,9 +23,11 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
@@ -91,6 +93,12 @@ public class CreateEditSourceActions extends DispatchAction {
 				}
 			}
 		}
+
+        if (ss.getDefaultLocation() != null) {
+            myform.setDefaultLocationID(ss.getDefaultLocation().getId());
+        }
+        myform.setRegionalFunding(ss.isRegionalFundings());
+
 		myform.setName(ss.getName());
 		myform.setApprovalStatus(ss.getApprovalStatus());
 		myform.setImportStrategy(ss.getImportStrategy());
@@ -159,6 +167,18 @@ public class CreateEditSourceActions extends DispatchAction {
 			srcSetting.setImportStrategy( myForm.getImportStrategy() );
 			srcSetting.setUniqueIdentifier( myForm.getUniqueIdentifier() );
 			srcSetting.setApprovalStatus( myForm.getApprovalStatus() );
+
+            if (myForm.getDefaultLocationID() != null) {
+                Collection<AmpCategoryValueLocations> locs = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
+                for (AmpCategoryValueLocations loc : locs) {
+                    if (loc.getId().equals(myForm.getDefaultLocationID())) {
+                        srcSetting.setDefaultLocation(loc);
+                        break;
+                    }
+                }
+            }
+
+            srcSetting.setRegionalFundings(myForm.isRegionalFunding());
 			
 			if ( myForm.getTeamValues() != null ) {
 				for (AmpTeam selTeam: myForm.getTeamValues() ) {
@@ -269,7 +289,12 @@ public class CreateEditSourceActions extends DispatchAction {
 	private void fillForm (CreateSourceForm myform, HttpServletRequest request) throws Exception{
 		String[] langArray = {"1","2","3"};
 		if(myform.getLanguages() == null || myform.getLanguages().length < 1) myform.setLanguages(langArray);
-		
+
+        Collection<AmpCategoryValueLocations> locs = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
+        myform.setLocationList(new ArrayList(locs));
+
+
+
 		List<KeyValue> importStrategyValues	= new ArrayList<KeyValue>();
 		importStrategyValues.add(new KeyValue(DESourceSetting.IMPORT_STRATEGY_NEW_PROJ, "Import only new projects") );
 		importStrategyValues.add(new KeyValue(DESourceSetting.IMPORT_STRATEGY_UPD_PROJ, "Update existing projects") );

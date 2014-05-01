@@ -17,7 +17,11 @@
 		<property name="languageId" column="language_id" type="java.lang.String" />
 		<property name="importStrategy" column="import_strategy" type="java.lang.String" />
 		<property name="url" column="url" type="java.lang.String" />
-		
+
+        <property name="regionalFundings" column="is_regional_funding" type="java.lang.Boolean" not-null="true"/>
+
+        <many-to-one name="defaultLocation" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" column="default_location"/>
+
 		<many-to-one name="attachedFile" class="org.digijava.module.sdm.dbentity.Sdm" cascade="delete" column="attached_doc_id" unique="true"/>
 		<many-to-one name="previousAttachedFile" class="org.digijava.module.sdm.dbentity.Sdm" cascade="delete" column="previous_attached_doc_id" unique="true"/>
 		

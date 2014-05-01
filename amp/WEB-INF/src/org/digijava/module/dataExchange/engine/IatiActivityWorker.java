@@ -609,21 +609,40 @@ public class IatiActivityWorker {
 		if(activity.getFunding() == null) 
 			activity.setFunding(new HashSet());
 		Set<AmpFunding> fundings = activity.getFunding();
+
+        if (activity.getRegionalFundings() == null) {
+            activity.setRegionalFundings(new HashSet());
+        } else {
+            activity.getRegionalFundings().clear();
+        }
+
+        Set<AmpRegionalFunding> regionalFundings = activity.getRegionalFundings();
 		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
 			Transaction transaction = (Transaction) it.next();
 			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,
 					iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
 					proposedProjectCost, isCreate, settings);
-			if(f!=null)
-				fundings.add(f);
+
+            if(f!=null) {
+                if (!settings.isRegionalFundings()) {
+				    fundings.add(f);
+                } else {
+                    regionalFundings.addAll(getRegFundingsFromFunding(f, settings.getDefaultLocation(), activity));
+                }
+            }
 		}
 		for (Iterator<PlannedDisbursement> it = iatiPlannedDisbList.iterator(); it.hasNext();) {
 			PlannedDisbursement plannedDisb = (PlannedDisbursement) it.next();
 			AmpFunding f = getFundingIATItoAMP(activity,plannedDisb,typeOfAssistance, financingInstrument, iatiDefaultCurrency,
 					iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
 					proposedProjectCost, isCreate, settings);
-			if(f!=null)
-				fundings.add(f);
+            if(f!=null) {
+                if (!settings.isRegionalFundings()) {
+                    fundings.add(f);
+                } else {
+                    regionalFundings.addAll(getRegFundingsFromFunding(f, settings.getDefaultLocation(), activity));
+                }
+            }
 		}
 		if(isValidString(proposedProjectCost.getCurrency()) )
 				proposedProjectCost.setCurrency(iatiDefaultCurrency);
@@ -638,6 +657,23 @@ public class IatiActivityWorker {
 //		activity.getFunding().addAll(fundings);
 
 	}
+
+    private Set<AmpRegionalFunding> getRegFundingsFromFunding(AmpFunding fnd, AmpCategoryValueLocations loc, AmpActivityVersion act) {
+        Set<AmpRegionalFunding> retVal = new HashSet<AmpRegionalFunding>();
+        for (AmpFundingDetail afd : fnd.getFundingDetails()) {
+            AmpRegionalFunding regFnd = new AmpRegionalFunding();
+            regFnd.setActivity(act);
+            regFnd.setTransactionType(afd.getTransactionType());
+            regFnd.setAdjustmentType(afd.getAdjustmentType());
+            regFnd.setCurrency(afd.getAmpCurrencyId());
+            regFnd.setTransactionAmount(afd.getTransactionAmount());
+            regFnd.setTransactionDate(afd.getTransactionDate());
+            regFnd.setRegionLocation(loc);
+            retVal.add(regFnd);
+        }
+        return retVal;
+    }
+
 	
 	private AmpFunding getBudgetIATItoAMP(AmpActivityVersion activity, Budget budget, AmpCategoryValue typeOfAssistance, 
 			AmpCategoryValue financingInstrument, String iatiDefaultCurrency, Set<AmpFunding> fundings, 
@@ -976,7 +1012,7 @@ public class IatiActivityWorker {
 			}
 		}
 		
-		if(ampOrg == null) 
+		if(!settings.isRegionalFundings() && ampOrg == null)
 		{
 				ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
 				//we can not import funding with Donor null

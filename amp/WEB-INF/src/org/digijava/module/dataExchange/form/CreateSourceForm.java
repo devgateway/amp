@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
@@ -65,8 +66,46 @@ public class CreateSourceForm extends ActionForm {
 	private String [] moduleId;
 	private String [] moduleImport;
 	private String [] moduleAOW;
-	
-	public class ComponentFM{
+
+    private AmpCategoryValueLocations defaultLocation;
+    private List<AmpCategoryValueLocations> locationList;
+    private Long defaultLocationID;
+
+    private boolean regionalFunding;
+
+    public AmpCategoryValueLocations getDefaultLocation() {
+        return defaultLocation;
+    }
+
+    public void setDefaultLocation(AmpCategoryValueLocations defaultLocation) {
+        this.defaultLocation = defaultLocation;
+    }
+
+    public List<AmpCategoryValueLocations> getLocationList() {
+        return locationList;
+    }
+
+    public void setLocationList(List<AmpCategoryValueLocations> locationList) {
+        this.locationList = locationList;
+    }
+
+    public Long getDefaultLocationID() {
+        return defaultLocationID;
+    }
+
+    public void setDefaultLocationID(Long defaultLocationID) {
+        this.defaultLocationID = defaultLocationID;
+    }
+
+    public boolean isRegionalFunding() {
+        return regionalFunding;
+    }
+
+    public void setRegionalFunding(boolean regionalFunding) {
+        this.regionalFunding = regionalFunding;
+    }
+
+    public class ComponentFM{
 		private long id;
 		private String name;
 		private String iatiName;

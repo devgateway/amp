@@ -171,11 +171,11 @@
 					</td>
 					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_SESSIONS) %>">
 					<td class="defaultTab" style="border-bottom: none;">
-						Sessions						
+						<digi:trn>Sessions</digi:trn>
 					</logic:equal>
 					<logic:notEqual name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_SESSIONS) %>">
 					<td class="inactiveTab" style="border-bottom: none;">
-						<a class="tabLinks" href="javascript:navigateTo('/dataExchange/importActionNew.do')">Sessions</a>
+						<a class="tabLinks" href="javascript:navigateTo('/dataExchange/importActionNew.do')"><digi:trn>Sessions</digi:trn></a>
 					</logic:notEqual>
 						
 					</td>
@@ -184,11 +184,11 @@
 					</td>
 					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_UPLOAD) %>">
 					<td class="defaultTab" style="border-bottom: none;">
-						New session
+						<digi:trn>New session</digi:trn>
 					</logic:equal>
 					<logic:notEqual name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_UPLOAD) %>">
 					<td class="inactiveTab" style="border-bottom: none;">
-						<a class="tabLinks" href="javascript:navigateTo('/dataExchange/importActionNew.do?action=showUploadScreen')">New session</a>
+						<a class="tabLinks" href="javascript:navigateTo('/dataExchange/importActionNew.do?action=showUploadScreen')"><digi:trn>New session</digi:trn></a>
 					</logic:notEqual>
 						
 					</td>
@@ -211,42 +211,42 @@
 							<!-- Breadcramb -->
 							<td width="500" align="left">
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_UPLOAD) %>">
-									<span class="breadcrambCurrent">Upload</span>
+									<span class="breadcrambCurrent"><digi:trn>Upload</digi:trn></span>
 							</logic:equal>
 							<logic:notEqual name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_UPLOAD) %>">
-								<span class="breadcrambOther">Upload</span>
+								<span class="breadcrambOther"><digi:trn>Upload</digi:trn></span>
 							</logic:notEqual>
 							&raquo;
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_FILTERS) %>">
-								<span class="breadcrambCurrent">Country Filter</span>
+								<span class="breadcrambCurrent"><digi:trn>Country Filter</digi:trn></span>
 							</logic:equal>
 							<logic:notEqual name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_FILTERS) %>">
-								<span class="breadcrambOther">Country Filter</span>
+								<span class="breadcrambOther"><digi:trn>Country Filter</digi:trn></span>
 							</logic:notEqual>
 							&raquo;
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">
-								<span class="breadcrambCurrent">Mapping</span>
+								<span class="breadcrambCurrent"><digi:trn>Mapping</digi:trn></span>
 							</logic:equal>
 							<logic:notEqual name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">
-								<span class="breadcrambOther">Mapping</span>
+								<span class="breadcrambOther"><digi:trn>Mapping</digi:trn></span>
 							</logic:notEqual>
 							&raquo;
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_LOGS) %>">
-								<span class="breadcrambCurrent">Logs</span>
+								<span class="breadcrambCurrent"><digi:trn>Logs</digi:trn></span>
 							</logic:equal>
 							<logic:notEqual name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_LOGS) %>">
-								<span class="breadcrambOther">Logs</span>
+								<span class="breadcrambOther"><digi:trn>Logs</digi:trn></span>
 							</logic:notEqual>
 							</td>
 							<!-- end of Breadcramb -->
 							
 							<td width="500" align="right" valign="middle">
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_UPLOAD) %>">
-									<td width="50" nowrap><div class="wizardNav wizardBtnDisabled">&lt;back</td>
+									<td width="50" nowrap><div class="wizardNav wizardBtnDisabled">&lt;<digi:trn>back</digi:trn></td>
 									<td width="50" nowrap>
 										<div id="next" class="wizardNav wizardBtnDisabled">
 											<input type="hidden" value="submit">
-											next&nbsp;&raquo;
+											<digi:trn>next</digi:trn>&nbsp;&raquo;
 										</div>
 									</td>
 								</logic:equal>
@@ -255,13 +255,13 @@
 									<td width="50" nowrap>
 										<div class="wizardNav wizardBtn">
 											<input type="hidden" value="/dataExchange/importActionNew.do?action=showUploadScreen">
-											&laquo;&nbsp;back
+											&laquo;&nbsp;<digi:trn>back</digi:trn>
 										</div>
 									</td>
 									<td width="50" nowrap>
 										<div id="next" class="wizardNav wizardBtn">
 											<input type="hidden" value="submit">
-											next&nbsp;&raquo;
+											<digi:trn>next</digi:trn>&nbsp;&raquo;
 										</div>
 									</td>
 								</logic:equal>
@@ -275,21 +275,21 @@
 									<td width="50" nowrap>
 										<div class="wizardNav wizardBtn">
 											<input type="hidden" value="/dataExchange/importActionNew.do?action=showFilters">
-											&laquo;&nbsp;back
+											&laquo;&nbsp;<digi:trn>back</digi:trn>
 										</div>
 									</td>
 								</c:if>
 								<c:if test="${not empty curSessId}">
 									<td width="50" nowrap>
 										<div class="wizardNav wizardBtnDisabled">
-											&laquo;&nbsp;back
+											&laquo;&nbsp;<digi:trn>back</digi:trn>
 										</div>
 									</td>
 								</c:if>
 								<td width="50" nowrap>
 									<div class="wizardNav wizardBtn">
 										<input type="hidden" value="submit">
-											next&nbsp;&raquo;
+											<digi:trn>next</digi:trn>&nbsp;&raquo;
 									</div>
 								</td>
 							</logic:equal>
@@ -298,13 +298,13 @@
 								<td width="50" nowrap>
 									<div class="wizardNav wizardBtn">
 										<input type="hidden" value="/dataExchange/importActionNew.do?action=loadUploadSession&objId=${curSessId}">
-										&laquo;&nbsp;back
+										&laquo;&nbsp;<digi:trn>back</digi:trn>
 									</div>
 								</td>
 								
 								<td width="50" nowrap>
 									<div class="wizardNav wizardBtnDisabled">
-										next&nbsp;&raquo;
+										<digi:trn>next</digi:trn>&nbsp;&raquo;
 									</div>
 								</td>
 								
@@ -334,8 +334,8 @@
 									<td>
 										<input type="hidden" class="inputx" style="width:95%;" value="" name="name">							
 										<fieldset>
-											<legend><span class="legend_label">Select Configuration</span></legend>
-											<b>Please choose the configuration that will be used:</b><br>
+											<legend><span class="legend_label"><digi:trn>Select Configuration</digi:trn></span></legend>
+											<b><digi:trn>Please choose the configuration that will be used</digi:trn>:</b><br>
 											<html:select name="importFormNew" property="configurationId" styleClass="inputx" style="margin-top:5px;width:500px">
 												<html:optionsCollection name="importFormNew" property="configurations" label="name" value="id"/>
 											</html:select>
@@ -1030,13 +1030,13 @@
 						</logic:empty>
 						<tr>
 							<td class="inside" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" align="center">
-								File Name
+								<digi:trn>File Name</digi:trn>
 							</td>
 							<td class="inside" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" align="center">
-								Upload Date
+								<digi:trn>Upload Date</digi:trn>
 							</td>
 							<td class="inside" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" align="center">
-								Last Edit Date
+								<digi:trn>Last Edit Date</digi:trn>
 							</td>
 							<td class="inside" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" align="center">
 								&nbsp;

@@ -118,10 +118,10 @@ td.defaultTab {
 <digi:form action="/codeImporter.do?action=upload" method="post" enctype="multipart/form-data">
 	<table class="defaultTable" width=1000 border=1 bordercolor="#B8B7B7" cellpadding="0" cellspacing="0" style="margin:10px;">
 		<tr>
-			<td colspan=2 align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b>IATI Codes</b></td>
+			<td colspan=2 align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b><digi:trn>IATI Codes</digi:trn></b></td>
 		</tr>
 		<tr>
-			<td class="inside" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" align="center" width="300">Code Types</td>
+			<td class="inside" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" align="center" width="300"><digi:trn>Code Types</digi:trn></td>
 			<td class="inside" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" align="center">Code Items</td>
 		</tr>
 		<tr>
@@ -150,13 +150,13 @@ td.defaultTab {
 						&nbsp;
 						</td>
 						<td class="innerNavTabs defaultTab" id="itemListTab" height="20" width="70">
-							Item List
+							<digi:trn>Item List</digi:trn>
 						</td>
 						<td width="5" style="border-bottom: 1px solid #b8b7b7">
 						&nbsp;
 						</td>
 						<td class="innerNavTabs inactiveTab" id="propertiesTab" height="20" width="70">
-							Properties
+							<digi:trn>Properties</digi:trn>
 						</td>
 						<td width="460" style="border-bottom: 1px solid #b8b7b7">
 							&nbsp;
@@ -195,7 +195,7 @@ td.defaultTab {
 		</tr>
 		<tr>
 			<td colspan="2" nowrap align="right">
-				Upload IATI codes (xml or zip) <html:file name="codeImporterForm" property="file"/> <html:submit value="Upload"/>
+				<digi:trn>Upload IATI codes (xml or zip)</digi:trn> <html:file name="codeImporterForm" property="file"/> <html:submit value="Upload"/>
 			</td>
 		</tr>
 	</table>

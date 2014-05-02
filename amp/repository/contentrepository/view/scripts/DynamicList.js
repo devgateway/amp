@@ -210,46 +210,45 @@ AbstractDynamicList.prototype.sendRequestPublic	= function (shouldRetrieveFilter
 			new RetrieveFilters(this));
 };
 
-AbstractDynamicList.prototype.sendResetRequest		= function (shouldRetrieveFilters) {
-	this.resetFilterData(shouldRetrieveFilters);
+AbstractDynamicList.prototype.sendResetRequest		= function (panelId, shouldRetrieveFilters) {
+	this.resetFilterData(panelId, shouldRetrieveFilters);
 	this.sendRequest(shouldRetrieveFilters);
 };
 
-AbstractDynamicList.prototype.resetFilterData		= function (shouldRetrieveFilters) {
-	var panel = this.fPanel;
-	
-	var elems = panel.element.getElementsByTagName('select');
-		
-		//panel.getBody().getElementByTagName('select');
-	
-	for(var i=0; i < elems.length; i++)
-		{
+AbstractDynamicList.prototype.resetFilterData		= function (panelId, shouldRetrieveFilters) {
+	var panel = document.getElementById(panelId);
+
+	// clean-up filters
+	var elems = panel.getElementsByTagName('select');
+	for (var i = 0; i < elems.length; i++) {
 		var optList = elems[i];
 		
-		for(var optInd=0; optInd < optList.length; optInd++)
-		{
-		if(optInd==0)
-			{
-			optList[optInd].setAttribute("selected","true");
-			optList[optInd].selected=true;
-			}
+		for (var optInd = 0; optInd < optList.length; optInd++) {
+            if (optInd == 0) {
+                optList[optInd].setAttribute("selected", "true");
+                optList[optInd].selected=true;
+            } else {
+                optList[optInd].removeAttribute("selected");
+                optList[optInd].selected=false;
+            }
 			
-		else
-			{
-			optList[optInd].removeAttribute("selected");
-			optList[optInd].selected=false;
-			}
-			
-		}
-	    
-		
-		}
+	    }
+	}
+
 	var filterFrom = document.getElementById('filterFromDate');
 	var filterTo = document.getElementById('filterToDate');
 	filterFrom.value="";
 	filterTo.value="";
-		
-	
+
+	// clean-up labels
+	// empty popup first
+	var labelPanelBoxes = $("div#LabelPanelmainLabels").find("input[type='checkbox']");
+	labelPanelBoxes.attr("checked", false);
+	// then filter settings
+    this.emptyLabels();
+
+    // trigger search with current reset filter/label/keyword filters
+    this.searchBtn.click();
 };
 
 AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
@@ -307,10 +306,13 @@ AbstractDynamicList.prototype.createReqString	= function () {
 	return this.reqString;
 }
 
-AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId,hide) {
-	
-	if ( this.fPanel == null && hide == false) {
-		var divEl		= document.getElementById(divId);
+AbstractDynamicList.prototype.getFilterPanel = function (buttonId, divId, hide) {
+
+	if ( this.fPanel == null && (typeof hide === 'undefined' || hide == false)) {
+		var divEl = document.getElementById(divId);
+		if (divEl == null) {
+		    return null;
+		}
 		
 		var panel 		= 
 			new YAHOO.widget.Panel("FilterPanel"+divId, { width:"400px", 
@@ -319,7 +321,9 @@ AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId,hide) {
 				effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 				context:[buttonId,"tl","bl"]} );
 		panel.setHeader(this.trnObj.filters);
+
 		panel.setBody(divEl);
+
 		panel.render(document.body);
 		
 		this.fPanel		= panel;

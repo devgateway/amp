@@ -96,7 +96,7 @@ function validateChangeRangeDefaultValue(){
 
 function validateCustomFields(form) {	
 	if (typeof form.gsfValue != "undefined") {
- 		if (form.gsfValue.value=='') {
+ 		if (form.gsfValue.value=='' && isRequired(form)) {
  	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value);        
  	 		return false;
  		}
@@ -105,6 +105,13 @@ function validateCustomFields(form) {
  	 		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value);
 			return false;
 		}
+	}
+	return true;
+}
+
+function isRequired(form){
+	if( form.globalSettingsNameTranslated.id=="gstv_Public_Portal_URL" ) {
+		return $("#gstv_Public_Portal").parent().find(".inp-text").val() == "true";
 	}
 	return true;
 }

@@ -99,7 +99,8 @@ public class GlobalSettings extends Action {
 			while (token.hasMoreTokens()) {
 	                    String element = token.nextToken();
 	                    String[] nameValue= element.split("=");
-	                    this.updateGlobalSetting(Long.parseLong(nameValue[0]), nameValue[1]);
+	                    //allow empty fields, like Public Portal URL when Public Portal = false
+	                    this.updateGlobalSetting(Long.parseLong(nameValue[0]), nameValue.length<2 ? "" : nameValue[1]);
                         }
 			
 			//this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());

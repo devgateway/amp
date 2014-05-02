@@ -201,15 +201,17 @@ border-right: 1px solid rgb(208, 208, 208);
 		if(menuPanelForTeam){
 			menuPanelForTeam.hide();
 		}
-		if(privateListObj && privateListObj.getFilterPanel()){
+
+		if(privateListObj && privateListObj.getFilterPanel(null, 'privateListObjDivId', false)){
 			privateListObj.getFilterPanel().hide();
 		}
-		if(teamListObj && teamListObj.getFilterPanel()){
+		if(teamListObj && teamListObj.getFilterPanel(null, 'teamListObjDivId', false)){
 			teamListObj.getFilterPanel().hide();
 		}
-		if(sharedListObj && sharedListObj.getFilterPanel()){
+		if(sharedListObj && sharedListObj.getFilterPanel(null, 'sharedListObjDivId', false)){
 			sharedListObj.getFilterPanel().hide();
 		}
+
 		if(fPanel){
 			fPanel.hide();
 		}
@@ -228,7 +230,7 @@ border-right: 1px solid rgb(208, 208, 208);
 		var sharedDoc =  document.getElementById("shared_res");
 		var publicDoc =  document.getElementById("public_res");
 		
-		closePopups();
+		//closePopups();
 		
 		if (myDoc !=null) {
 			visibleTabs ++;
@@ -347,7 +349,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	
 		templateFPanel	= new FilterAsYouTypePanel("templateLabelButtonId", 
 				getTemplateLabelsCb("docFromTemplateForm", "templateFilterInfoDiv"), "templateMainLabels", trnObj);
-		templateFPanel.initLabelArray(false);		
+		templateFPanel.initLabelArray(false);
 	}
 	
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
@@ -468,7 +470,7 @@ border-right: 1px solid rgb(208, 208, 208);
 		document.getElementById(objListStr+'SearchStr').value='';
 		var targetList = eval(objListStr +'ListObj');
         // reset filters and lables
-        targetList.resetFilterData();
+        targetList.resetFilterData(targetList.fDivId);
         // execute the request with empty data
         targetList.sendRequest();
 	}

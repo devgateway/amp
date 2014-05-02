@@ -15,7 +15,7 @@
                 <td><span wicket:id="financingId"/></td>
             </tr>
         </wicket:fm>
-        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms">
+        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms;Funding Classification Date">
             <tr align="left">
                 <wicket:fm fmNames="Funding Status">
                     <td><span wicket:id="fundingStatus"/></td>
@@ -23,8 +23,12 @@
                 <wicket:fm fmNames="Mode of Payment">
                     <td><span wicket:id="modeOfPayment"/></td>
                 </wicket:fm>
-                <td><span wicket:id="loanTerms"/></td>
-                <td><span wicket:id="fundingClassificationDate"/></td>
+                <wicket:fm fmNames="Loan Terms">
+                	<td><span wicket:id="loanTerms"/></td>
+                </wicket:fm>
+                <wicket:fm fmNames="Funding Classification Date">
+                	<td><span wicket:id="fundingClassificationDate"/></td>
+               	</wicket:fm>
             </tr>
         </wicket:fm>
 	</table>

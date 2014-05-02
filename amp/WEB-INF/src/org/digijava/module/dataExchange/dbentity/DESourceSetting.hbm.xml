@@ -18,7 +18,7 @@
 		<property name="importStrategy" column="import_strategy" type="java.lang.String" />
 		<property name="url" column="url" type="java.lang.String" />
 
-        <property name="regionalFundings" column="is_regional_funding" type="java.lang.Boolean" not-null="true"/>
+        <property name="regionalFundings" column="is_regional_funding" type="java.lang.Boolean"/>
 
         <many-to-one name="defaultLocation" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" column="default_location"/>
 

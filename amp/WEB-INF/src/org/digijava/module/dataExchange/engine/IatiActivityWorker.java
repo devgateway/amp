@@ -644,15 +644,19 @@ public class IatiActivityWorker {
                 }
             }
 		}
-		if(isValidString(proposedProjectCost.getCurrency()) )
-				proposedProjectCost.setCurrency(iatiDefaultCurrency);
-		activity.setCurrencyCode(proposedProjectCost.getCurrency());
 
-		if(proposedProjectCost.getDate() == null)
-			proposedProjectCost.setDate(new Date());
-		activity.setFunDate(proposedProjectCost.getDate());
-		
-		activity.setFunAmount(proposedProjectCost.getAmount());
+        if ((isCreate && settings.importEnabled("Other Funding Items")) || (!isCreate && settings.updateEnabled("Other Funding Items"))) {
+            if(isValidString(proposedProjectCost.getCurrency()) )
+                proposedProjectCost.setCurrency(iatiDefaultCurrency);
+            activity.setCurrencyCode(proposedProjectCost.getCurrency());
+
+            if(proposedProjectCost.getDate() == null)
+                proposedProjectCost.setDate(new Date());
+            activity.setFunDate(proposedProjectCost.getDate());
+
+            activity.setFunAmount(proposedProjectCost.getAmount());
+        }
+
 		
 //		activity.getFunding().addAll(fundings);
 
@@ -870,7 +874,8 @@ public class IatiActivityWorker {
 //				ampFunding.setDonorObjective(af.getDonorObjective());
 //				ampFunding.setGroupVersionedFunding(af.getGroupVersionedFunding());
 				ampFunding = af;
-                ampFunding.getFundingDetails().clear();
+                //ampFunding.getFundingDetails().clear();
+                removeFundingDetails(ampFunding, Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.PLANNED, false);
 				ampFunding.getFundingDetails().addAll(ampFundDetails);
 				found = true;
 				break;
@@ -1039,11 +1044,17 @@ public class IatiActivityWorker {
 			//the transaction is not C,D,E and will not be imported.
 				else  return null;
 
+        if(a.getFunding() == null) {
+            a.setFunding(new HashSet<AmpFunding>());
+        } /*else {
+            removeFundingDetails
+            a.getFunding().clear();
+        }   */
+
 		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
-		if(ampFundings == null) 
-			ampFundings = new HashSet<AmpFunding>();
-		AmpFunding ampFunding = new AmpFunding();
-		boolean found = false;
+
+
+        AmpFunding ampFunding = null;
 		for (AmpFunding af : ampFundings) {
 			if(ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
 //				ampFunding.setFinancingId(af.getFinancingId());
@@ -1057,18 +1068,19 @@ public class IatiActivityWorker {
 //				ampFunding.setDonorObjective(af.getDonorObjective());
 //				ampFunding.setGroupVersionedFunding(af.getGroupVersionedFunding());
 				ampFunding = af;
-                ampFunding.getFundingDetails().clear();
+                //ampFunding.getFundingDetails().clear();
+                removeFundingDetails(ampFunding, Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.PLANNED, false);
 				ampFunding.getFundingDetails().addAll(ampFundDetails);
-				found = true;
 				break;
 			}
 		}
 		
 		
 		//AmpFunding ampFunding = new AmpFunding();
-		ampFunding.setActive(true);
+
 		//ampFunding.setAmpDonorOrgId(ampOrg);
-		if(found==false){
+		if(ampFunding == null){
+            ampFunding = new AmpFunding();
 			ampFunding.setAmpDonorOrgId(ampOrg);
 			ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
 			ampFunding.setFundingDetails(ampFundDetails);
@@ -1076,6 +1088,8 @@ public class IatiActivityWorker {
 			ampFunding.setFinancingInstrument(financingInstrument);
 			ampFunding.setModeOfPayment(modeOfPayment);
 		}
+
+        ampFunding.setActive(true);
 		
 		
 		if(a !=null ) 
@@ -1098,6 +1112,22 @@ public class IatiActivityWorker {
 		
 		return ampFunding;
 	}
+
+    private void removeFundingDetails (AmpFunding fnd, int transactionType, int adjustmentType, boolean removeIatiImported) {
+        AmpCategoryValue adjustmentTypeCatVal =
+                CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY,   new Long(adjustmentType));
+        if (fnd != null && fnd.getFundingDetails() != null) {
+            for (Iterator<AmpFundingDetail> it = fnd.getFundingDetails().iterator(); it.hasNext();) {
+                AmpFundingDetail fndDet = it.next();
+                if (fndDet.getTransactionType() == transactionType &&
+                        fndDet.getAdjustmentType().getId() == adjustmentTypeCatVal.getId()) {
+                    if (!fndDet.isIatiAdded() || (fndDet.isIatiAdded() && removeIatiImported)) {
+                        it.remove();
+                    }
+                }
+            }
+        }
+    }
 
 	
 	private AmpOrganisation findFundingOrganization(
@@ -1130,6 +1160,7 @@ public class IatiActivityWorker {
 			if(currencyValue.doubleValue()==0) return;
 			
 			AmpFundingDetail ampFundDet = new AmpFundingDetail();
+            ampFundDet.setIatiAdded(true);
 			ampFundDet.setTransactionType(new Integer(transactionType));
 			ampFundDet.setTransactionDate(tDate);
 			ampFundDet.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY,   new Long(adjustmentType)));

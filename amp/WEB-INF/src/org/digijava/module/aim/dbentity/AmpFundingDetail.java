@@ -68,8 +68,17 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	private String expCategory;
 	private String disbOrderId;
 	private IPAContract contract;
-	
-	public AmpFundingDetail() {
+	private boolean iatiAdded = false; //nonpersistant
+
+    public boolean isIatiAdded() {
+        return iatiAdded;
+    }
+
+    public void setIatiAdded(boolean iatiAdded) {
+        this.iatiAdded = iatiAdded;
+    }
+
+    public AmpFundingDetail() {
 	}
 	
 	public AmpFundingDetail(Integer transactionType, AmpCategoryValue adjustmentType, Double transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Float percent, Double fixedExchangeRate) {

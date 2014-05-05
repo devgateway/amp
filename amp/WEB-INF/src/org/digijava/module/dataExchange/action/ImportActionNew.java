@@ -218,14 +218,18 @@ public class ImportActionNew extends DispatchAction {
     private Map<String, Integer> getCountrySetActCountFromActivities(IatiActivities acts) {
         Map<String, Integer> retVal = new HashMap<String, Integer>();
         for (Iterator it = acts.getIatiActivityOrAny().iterator(); it.hasNext();) {
-            IatiActivity act = (IatiActivity) it.next();
-            Set<String> countryISOs = getActivityCountries(act);
 
-            for (String countryISO : countryISOs) {
-                if (retVal.get(countryISO) == null) {
-                    retVal.put(countryISO, new Integer(0));
+            Object tmp = it.next();
+            if (tmp instanceof org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity) {
+                IatiActivity act = (IatiActivity) tmp;
+                Set<String> countryISOs = getActivityCountries(act);
+
+                for (String countryISO : countryISOs) {
+                    if (retVal.get(countryISO) == null) {
+                        retVal.put(countryISO, new Integer(0));
+                    }
+                    retVal.put(countryISO, retVal.get(countryISO) + 1);
                 }
-                retVal.put(countryISO, retVal.get(countryISO) + 1);
             }
         }
         return retVal;
@@ -472,13 +476,16 @@ public class ImportActionNew extends DispatchAction {
                 IatiActivities parsed = fromXml(is, fromXmllog);
                 Set<String> countryISOs = selCountries;
                 for (Iterator it = parsed.getIatiActivityOrAny().iterator(); it.hasNext();) {
-                    IatiActivity iatiAct = (IatiActivity) it.next();
-                    Set<String> countryCode = getActivityCountries(iatiAct);
+                    Object tmp = it.next();
                     boolean contains = false;
-                    for (String iso : countryCode) {
-                        if (countryISOs.contains(iso)) {
-                            contains = true;
-                            break;
+                    if (tmp instanceof org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity) {
+                        IatiActivity iatiAct = (IatiActivity) tmp;
+                        Set<String> countryCode = getActivityCountries(iatiAct);
+                        for (String iso : countryCode) {
+                            if (countryISOs.contains(iso)) {
+                                contains = true;
+                                break;
+                            }
                         }
                     }
 

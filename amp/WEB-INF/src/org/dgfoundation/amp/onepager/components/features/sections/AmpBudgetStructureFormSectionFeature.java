@@ -29,9 +29,9 @@ public class AmpBudgetStructureFormSectionFeature extends AmpFormSectionFeatureP
 			IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 		this.fmType = AmpFMTypes.MODULE;
-		AmpBudgetSectionFormTableFeature npdTable = new AmpBudgetSectionFormTableFeature(
-				"npoTable1", "Budget Structure", am,true);
-		add(npdTable);
+		AmpBudgetSectionFormTableFeature bsTable = new AmpBudgetSectionFormTableFeature(
+				"bsTable", "Budget Structure", am,true);
+		add(bsTable);
 	}
 
 }

@@ -29,6 +29,7 @@ import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
+import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
@@ -6775,6 +6776,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Issues issues = null;
 	private Issues observations = null;
 	private boolean totDisbIsBiggerThanTotCom;
+	private List<AmpActivityBudgetStructure> budgetStructure;
 	
 	public EditActivityForm() {
 		reset = false;
@@ -6812,6 +6814,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.regFundingPageCurrCode = null;
 			//this.funding=null;
 			this.issues = null;
+			this.budgetStructure = null;
 			this.observations = null;
 			reset = false;
 			if (this.customFields != null && this.customFields.size() > 0) {
@@ -7368,6 +7371,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
+	public List<AmpActivityBudgetStructure> getBudgetStructure() {
+		return budgetStructure;
+	}
+	
+	@java.lang.SuppressWarnings("all")
 	public boolean isTotDisbIsBiggerThanTotCom() {
 		return this.totDisbIsBiggerThanTotCom;
 	}
@@ -7652,6 +7660,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
+	public void setBudgetStructure(List<AmpActivityBudgetStructure> budgetStructure) {
+		this.budgetStructure = budgetStructure;
+	}
+	
+	@java.lang.SuppressWarnings("all")
 	public void setContactInfo(final ContactInformation contactInfo) {
 		this.contactInfo = contactInfo;
 	}
@@ -7846,6 +7859,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		final java.lang.Object this$comments = this.getComments();
 		final java.lang.Object other$comments = other.getComments();
 		if (this$comments == null ? other$comments != null : !this$comments.equals(other$comments)) return false;
+		final java.lang.Object this$budgetStructure = this.getBudgetStructure();
+		final java.lang.Object other$budgetStructure = other.getBudgetStructure();
+		if (this$budgetStructure == null ? other$budgetStructure != null : !this$budgetStructure.equals(other$budgetStructure)) return false;
 		final java.lang.Object this$phisycalProgress = this.getPhisycalProgress();
 		final java.lang.Object other$phisycalProgress = other.getPhisycalProgress();
 		if (this$phisycalProgress == null ? other$phisycalProgress != null : !this$phisycalProgress.equals(other$phisycalProgress)) return false;
@@ -7976,6 +7992,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		result = result * PRIME + ($contactInfo == null ? 0 : $contactInfo.hashCode());
 		final java.lang.Object $comments = this.getComments();
 		result = result * PRIME + ($comments == null ? 0 : $comments.hashCode());
+		final java.lang.Object $budgetStructure = this.getBudgetStructure();
+		result = result * PRIME + ($budgetStructure == null ? 0 : $budgetStructure.hashCode());
 		final java.lang.Object $phisycalProgress = this.getPhisycalProgress();
 		result = result * PRIME + ($phisycalProgress == null ? 0 : $phisycalProgress.hashCode());
 		final java.lang.Object $indicatorME = this.getIndicatorME();
@@ -7997,4 +8015,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public java.lang.String toString() {
 		return "EditActivityForm(errors=" + this.getErrors() + ", messages=" + this.getMessages() + ", activityId=" + this.getActivityId() + ", context=" + this.getContext() + ", editAct=" + this.isEditAct() + ", editKey=" + this.getEditKey() + ", reset=" + this.isReset() + ", svAction=" + this.getSvAction() + ", isPreview=" + this.getIsPreview() + ", buttonText=" + this.getButtonText() + ", activityExists=" + this.getActivityExists() + ", workingTeamLeadFlag=" + this.getWorkingTeamLeadFlag() + ", teamLead=" + this.isTeamLead() + ", pageId=" + this.getPageId() + ", fileImport=" + this.getFileImport() + ", popupView=" + this.isPopupView() + ", currCode=" + this.getCurrCode() + ", currencies=" + this.getCurrencies() + ", serializeFlag=" + this.isSerializeFlag() + ", customFields=" + this.getCustomFields() + ", customFieldsSteps=" + this.getCustomFieldsSteps() + ", fundingCurrCode=" + this.getFundingCurrCode() + ", regFundingPageCurrCode=" + this.getRegFundingPageCurrCode() + ", contactInformation=" + this.getContactInformation() + ", activityContacts=" + this.getActivityContacts() + ", mofedContacts=" + this.getMofedContacts() + ", donorContacts=" + this.getDonorContacts() + ", sectorMinistryContacts=" + this.getSectorMinistryContacts() + ", projCoordinatorContacts=" + this.getProjCoordinatorContacts() + ", implExecutingAgencyContacts=" + this.getImplExecutingAgencyContacts() + ", structures=" + this.getStructures() + ", lineMinistryObservations=" + this.getLineMinistryObservations() + ", esriapiurl=" + this.getEsriapiurl() + ", displayProgram=" + this.getDisplayProgram() + ", surveyFundings=" + this.getSurveyFundings() + ", draftRedirectedPage=" + this.getDraftRedirectedPage() + ", warningMessges=" + this.getWarningMessges() + ", identification=" + this.getIdentification() + ", aidEffectivenes=" + this.getAidEffectivenes() + ", planning=" + this.getPlanning() + ", location=" + this.getLocation() + ", sectors=" + this.getSectors() + ", components=" + this.getComponents() + ", programs=" + this.getPrograms() + ", crossIssues=" + this.getCrossIssues() + ", funding=" + this.getFunding() + ", documents=" + this.getDocuments() + ", agencies=" + this.getAgencies() + ", survey=" + this.getSurvey() + ", surveys=" + this.getSurveys() + ", ampAhsurveys=" + this.getAmpAhsurveys() + ", contactInfo=" + this.getContactInfo() + ", comments=" + this.getComments() + ", phisycalProgress=" + this.getPhisycalProgress() + ", indicatorME=" + this.getIndicatorME() + ", contracts=" + this.getContracts() + ", costing=" + this.getCosting() + ", issues=" + this.getIssues() + ", observations=" + this.getObservations() + ", totDisbIsBiggerThanTotCom=" + this.isTotDisbIsBiggerThanTotCom() + ")";
 	}
+
+	
+
+	
 }

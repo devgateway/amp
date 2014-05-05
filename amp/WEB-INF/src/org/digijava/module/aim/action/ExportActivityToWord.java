@@ -502,6 +502,12 @@ public class ExportActivityToWord extends Action {
 				for (Table tbl : proposedProjectCostTables) {
                     doc.add(tbl);
                 }
+				
+				List<Table> budgetStructureTables = getBudgetStructureTables(myForm, request, ampContext, activity);
+				for (Table tbl : budgetStructureTables) {
+                    doc.add(tbl);
+                }
+				
 				List<Table> contractsTables = getContractsTables(request,myForm);
 				for (Table tbl : contractsTables) {
 					doc.add(tbl);
@@ -1571,6 +1577,33 @@ public class ExportActivityToWord extends Action {
 	
 	
 	        retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
+		}
+        return retVal;
+    }
+    
+    /*
+     * Budget Structure
+     */
+    private List<Table> getBudgetStructureTables (EditActivityForm myForm, HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
+        List<Table> retVal = new ArrayList<Table>();
+        HttpSession session=request.getSession();
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Budget Structure",ampContext,session)) {
+
+	        ExportSectionHelper eshTitle = new ExportSectionHelper("Budget Structure", true).setWidth(100f).setAlign("left");
+	        retVal.add(createSectionTable(eshTitle, request, ampContext));
+
+            ExportSectionHelper eshBudgetStructureTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+
+            if(act.getActBudgetStructure().size()>0){
+            	Iterator<AmpActivityBudgetStructure> it = act.getActBudgetStructure().iterator();
+            	while(it.hasNext()){
+            		AmpActivityBudgetStructure abs = it.next();
+            		 eshBudgetStructureTable.addRowData(new ExportSectionHelperRowData(abs.getBudgetStructureName(), null, null,  true).
+                             addRowData(abs.getBudgetStructurePercentage()+"%"));
+            	}
+            }
+	
+	        retVal.add(createSectionTable(eshBudgetStructureTable, request, ampContext));
 		}
         return retVal;
     }

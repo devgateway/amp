@@ -48,6 +48,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -384,6 +385,9 @@ public class EditActivity extends Action {
           eaForm.getFunding().setProProjCost(null);
         }
       }
+      
+      ArrayList<AmpActivityBudgetStructure> budgetStructure = DbUtil.getBudgetStructure(eaForm.getActivityId());
+      eaForm.setBudgetStructure(budgetStructure);
       List nationalPlanObjectivePrograms=new ArrayList();
       List primaryPrograms=new ArrayList();
       List secondaryPrograms=new ArrayList();

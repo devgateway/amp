@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -29,6 +30,7 @@ import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -69,7 +71,7 @@ public class AmpLocationFormTableFeature extends
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpActivityLocation>());
 
-		AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = new AbstractReadOnlyModel<List<AmpActivityLocation>>() {
+		final AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = new AbstractReadOnlyModel<List<AmpActivityLocation>>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -100,6 +102,17 @@ public class AmpLocationFormTableFeature extends
 		wmc.add(iValidator);
 		final AmpComponentPanel locationPercentageRequired = new AmpComponentPanel("locationPercentageRequired", "Location percentage required"){};
         add(locationPercentageRequired);
+		final Label totalLabel = new Label("totalPercLocation", new Model() {
+			@Override
+			public String getObject() {
+				double total=0;
+				for(AmpActivityLocation item:listModel.getObject())
+					total+=item.getLocationPercentage();
+				return Double.toString(total);
+			}
+		});
+		totalLabel.setOutputMarkupId(true);
+		add(totalLabel);
 		final AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField=
 			new AmpPercentageCollectionValidatorField<AmpActivityLocation>("locationPercentageTotal",listModel,"locationPercentageTotal") {
 				private static final long serialVersionUID = 1L;
@@ -155,7 +168,7 @@ public class AmpLocationFormTableFeature extends
 			protected void populateItem(final ListItem<AmpActivityLocation> item) {
 				AmpLocationItemPanel li = new AmpLocationItemPanel("locationItem", item.getModel(), "Location Item", 
 						disablePercentagesForInternational, am, regionalFundingFeature, percentageValidationField, 
-						uniqueCollectionValidationField, minSizeCollectionValidationField, treeCollectionValidatorField,locationPercentageRequired, setModel, list);
+						uniqueCollectionValidationField, minSizeCollectionValidationField, treeCollectionValidatorField,locationPercentageRequired, setModel, list,totalLabel);
 				item.add(li);
 			}
 		};

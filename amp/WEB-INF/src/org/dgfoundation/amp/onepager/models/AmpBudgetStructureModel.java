@@ -15,6 +15,7 @@ public class AmpBudgetStructureModel implements IModel{
 	
 	@Override
 	public void detach() {
+		setModel.detach();
 	}
 
 	@Override

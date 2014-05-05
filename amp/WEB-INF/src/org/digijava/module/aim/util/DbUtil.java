@@ -35,6 +35,7 @@ import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -505,6 +506,7 @@ public class DbUtil {
 		}
 		return funding;
 	}
+	
 
 //	public static int countActivitiesByQuery(String sQuery,
 //			ArrayList<FilterParam> params) {
@@ -5632,6 +5634,29 @@ public class DbUtil {
 		}
 		return comments;
 	}
+	
+	public static ArrayList getBudgetStructure(Long aid) {
+		Session session = null;
+		Query qry = null;
+		ArrayList budgetStructure = new ArrayList();
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select o from " + AmpActivityBudgetStructure.class.getName()
+					+ " o " + "where (o.activity=:aid)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("aid", aid, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				AmpActivityBudgetStructure bs = (AmpActivityBudgetStructure) itr.next();
+				budgetStructure.add(bs);
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get all budget structures");
+			logger.debug("Exceptiion " + e);
+		}
+		return budgetStructure;
+	}
 
 	public static ArrayList getAllCommentsByActivityId(Long aid, Session session) {
 		Query qry = null;
@@ -7638,4 +7663,5 @@ public class DbUtil {
 		}
 		return image;
 	}
+	
 }

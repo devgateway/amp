@@ -46,6 +46,7 @@ public class AmpPercentageTextField extends AmpTextFieldPanel<Double> {
 		textContainer.add(new AttributeModifier("style", "width: 40px;"));
 	}
 	
+	//constructor added so we can include 0 value in range validator
 	public AmpPercentageTextField(String id, IModel<Double> model,
 			String fmName,
 			AmpPercentageCollectionValidatorField<?> validationHiddenField,boolean required) {

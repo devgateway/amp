@@ -1558,7 +1558,43 @@ function collapseAll() {
 	</div>
 </fieldset>
 </module:display>
-<!-- END PROPOSED PROJECT COST -->	
+<!-- END PROPOSED PROJECT COST -->
+
+<!-- BUDGET STRUCTURE -->
+<module:display name="/Activity Form/Budget Structure" parentModule="/Activity Form">
+<fieldset>
+	<legend>
+		<span class=legend_label id="proposedcostlink" style="cursor: pointer;">
+			<digi:trn>Budget Structure</digi:trn>
+		</span>	</legend>
+	<div id="budgetstructurediv" class="toggleDiv">
+		<c:if test="${aimEditActivityForm.budgetStructure!=null}">
+			<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%" >
+				<tr bgcolor="#f0f0f0">
+					<td>
+						<digi:trn key="aim:cost">Name</digi:trn>					
+					</td>
+					<td>
+						<digi:trn key="aim:cost">Percentage</digi:trn>					
+					</td>
+				</tr>
+				<c:forEach var="budgetStructure" items="${aimEditActivityForm.budgetStructure}" >
+					<tr bgcolor="#f0f0f0">
+						<td bgcolor="#f0f0f0" align="left" width="150">
+									<b>${budgetStructure.budgetStructureName}</b>						
+						</td>
+						<td bgcolor="#f0f0f0" align="left" width="150">
+									<b>${budgetStructure.budgetStructurePercentage}%</b>						
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:if>
+	</div>
+</fieldset>
+</module:display>
+<!-- END BUDGET STRUCTURE -->
+	
 	<module:display name="/Activity Form/Funding" parentModule="/Activity Form">
 		<fieldset>
 			<legend>

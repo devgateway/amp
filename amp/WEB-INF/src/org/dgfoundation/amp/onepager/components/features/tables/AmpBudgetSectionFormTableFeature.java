@@ -1,7 +1,3 @@
-/**
- * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
- *
-*/
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.text.NumberFormat;
@@ -51,8 +47,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
- * @author aartimon@dginternational.org
- * since Oct 21, 2010
+ * @author apopescu@dginternational.org
+ * since Nov 21, 2013
  */
 public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <AmpActivityVersion,AmpActivityBudgetStructure>{
 
@@ -74,6 +70,18 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpActivityBudgetStructure>());
 		
+		Collection<AmpCategoryValue> posVal =  CategoryManagerUtil.getAmpCategoryValueCollectionByKey("budgetStructure");
+		Iterator<AmpCategoryValue> it = posVal.iterator();
+		while(it.hasNext()){
+			AmpCategoryValue acv = it.next();
+			AmpActivityBudgetStructure abs = new AmpActivityBudgetStructure();
+			abs.setActivity(am.getObject());
+			abs.setBudgetStructureName(acv.getValue());
+			abs.setBudgetStructurePercentage(new Float(0));
+			if(!setModel.getObject().contains(abs))
+				setModel.getObject().add(abs);
+		}
+		
 		AbstractReadOnlyModel<List<AmpActivityBudgetStructure>> listModel = new AbstractReadOnlyModel<List<AmpActivityBudgetStructure>>() {
 			private static final long serialVersionUID = 1L;
 
@@ -90,7 +98,7 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
 							specificProgs.add(prog);
 					}
 				}
-				Collection<AmpCategoryValue> posVal =  CategoryManagerUtil.getAmpCategoryValueCollectionByKey("budgetStructure");
+				/*Collection<AmpCategoryValue> posVal =  CategoryManagerUtil.getAmpCategoryValueCollectionByKey("budgetStructure");
 				Iterator<AmpCategoryValue> it = posVal.iterator();
 				while(it.hasNext()){
 					AmpCategoryValue acv = it.next();
@@ -100,7 +108,7 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
 					abs.setBudgetStructurePercentage(new Float(0));
 					if(!specificProgs.contains(abs))
 						setModel.getObject().add(abs);
-				}
+				}*/
 				return new ArrayList<AmpActivityBudgetStructure>(specificProgs);
 			}
 		};
@@ -157,7 +165,7 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
 		amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("1")));
 		add(amount);*/
 		
-		AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>("proposedAmount1",
+		AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>("totalBudgetAmount",
 				new AmpBudgetStructureModel(new PropertyModel<Set<AmpActivityBudgetStructure>>(am, "actBudgetStructure")), "",true,true) {
 			public IConverter getInternalConverter(java.lang.Class<?> type) {
 				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
@@ -180,7 +188,7 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
         treeCollectionValidatorField.setIndicatorAppender(iValidator);
         add(treeCollectionValidatorField);
 */
-		list = new ListView<AmpActivityBudgetStructure>("listProgs", listModel) {
+		list = new ListView<AmpActivityBudgetStructure>("listBudget", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
 			protected void populateItem(final ListItem<AmpActivityBudgetStructure> item) {
@@ -191,13 +199,13 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
 				AmpPercentageTextField percentageField = new AmpPercentageTextField("percent", percModel, "budgetStructurePercentage",percentageValidationField,false){
 					@Override
 					protected void onAjaxOnUpdate(final AjaxRequestTarget target) {
-						onFundingDetailChanged(target);
+						onBudgetSectionChanged(target);
 					}
 				};
 				percentageField.getTextContainer().add(new AttributeModifier("style", "width: 40px;"));
 				item.add(percentageField);
 				
-				item.add(new Label("name", item.getModelObject().getBudgetStructureName()).setEscapeModelStrings(false));
+				item.add(new Label("name", new PropertyModel<String>(item.getModel(), "budgetStructureName")).setEscapeModelStrings(false));
 				
 			}
 		};
@@ -227,7 +235,7 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
 		
 	}
 
-	protected void onFundingDetailChanged(AjaxRequestTarget target) {
+	protected void onBudgetSectionChanged(AjaxRequestTarget target) {
 		send(AmpBudgetSectionFormTableFeature.this, Broadcast.BREADTH, new TotalBudgetStructureUpdateEvent(target));
 	}
 }

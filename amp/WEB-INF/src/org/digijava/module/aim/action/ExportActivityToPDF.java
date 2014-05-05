@@ -34,6 +34,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -1262,6 +1263,20 @@ public class ExportActivityToPDF extends Action {
 					}
 				}
 				
+				createGeneralInfoRow(mainLayout,columnName,costOutput);
+			}
+			
+			/**
+			 * Budget Structure
+			 */
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Budget Structure", ampContext,session)){
+				String costOutput="";
+				columnName=TranslatorWorker.translateText("Budget Structure");
+				if(myForm.getBudgetStructure().size()>0){
+					for(AmpActivityBudgetStructure abs: myForm.getBudgetStructure()){
+						costOutput += " "+abs.getBudgetStructureName()+": "+abs.getBudgetStructurePercentage()+"%\n";
+					}
+				}
 				createGeneralInfoRow(mainLayout,columnName,costOutput);
 			}
 			

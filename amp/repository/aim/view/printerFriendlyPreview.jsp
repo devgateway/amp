@@ -2790,6 +2790,38 @@ body {background:none;}
                             				</c:if>										</td>
 									</tr>
 								  </module:display>
+								  
+								  <module:display name="/Activity Form/Funding/Proposed Project Cost" parentModule="/Activity Form/Funding">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b>
+									  <digi:trn key="aim:proposedPrjectCost">Budget Structure</digi:trn></b>
+									  </td>
+									<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.budgetStructure != null}">
+                                                  <table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%">
+                                                      	<tr bgcolor="#ffffff">
+															<td>
+															<digi:trn>Name</digi:trn> 
+															</td>
+															<td>
+															<digi:trn>Percentage</digi:trn> 
+															</td>
+														</tr>
+														<c:forEach var="budgetStructure" items="${aimEditActivityForm.budgetStructure}" >
+															<tr bgcolor="#ffffff">
+																<td bgcolor="#FFFFFF" align="left" width="150">
+																			<b>${budgetStructure.budgetStructureName}</b>						
+																</td>
+																<td bgcolor="#FFFFFF" align="left" width="150">
+																			<b>${budgetStructure.budgetStructurePercentage}%</b>						
+																</td>
+															</tr>
+														</c:forEach>
+                                              		</table>
+                            				</c:if>										</td>
+									</tr>
+								  </module:display>
 								
                                 
                                  <logic:present name="currentMember" scope="session">

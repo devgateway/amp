@@ -47,7 +47,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                                 final AmpCollectionValidatorField minSizeCollectionValidationField,
                                 final AmpCollectionValidatorField treeCollectionValidatorField,
                                 final AmpComponentPanel locationPercentageRequired,
-                                final IModel<Set<AmpActivityLocation>> setModel, final ListView<AmpActivityLocation> list) {
+                                final IModel<Set<AmpActivityLocation>> setModel, final ListView<AmpActivityLocation> list,final Label totalLabel) {
 		super(id, model, fmName, true);
 		
 		this.locationModel = model;
@@ -61,6 +61,11 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 					this.setEnabled(!disablePercentagesForInternational.getObject());
 				}
 				super.onBeforeRender();
+			}
+			@Override
+			protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+				// TODO Auto-generated method stub
+				target.add(totalLabel);
 			}
 		};				
 		add(percentageField);
@@ -137,6 +142,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 					regionalFundingFeature.getList().removeAll();
 					target.add(regionalFundingFeature);
 					target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+					target.add(totalLabel);
 					
 				}
                 percentageValidationField.reloadValidationField(target);

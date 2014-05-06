@@ -1837,19 +1837,29 @@ public class ExportActivityToWord extends Action {
 
                         ExportSectionHelper eshIssuesTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
                         for (AmpIssues issue : issues) {
-                            eshIssuesTable.addRowData(new ExportSectionHelperRowData(issue.getName() + "  " + DateConversion.ConvertDateToString(issue.getIssueDate()), null, null, false));
-                            if (issue.getMeasures() != null && !issue.getMeasures().isEmpty()) {
+                        	String issueName = issue.getName();
+                        	if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Date", ampContext, session)){
+                        		issueName += "  " + DateConversion.ConvertDateToString(issue.getIssueDate()); 	
+                        	}
+                            eshIssuesTable.addRowData(new ExportSectionHelperRowData(issueName, null, null, false));
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure", ampContext, session) && 
+                            	issue.getMeasures() != null && !issue.getMeasures().isEmpty()) {
                                 for (AmpMeasure measure : (Set<AmpMeasure>) issue.getMeasures()) {
-                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" \u2022" + measure.getName()+"  " + DateConversion.ConvertDateToString(measure.getMeasureDate()), null, null, false)));
-                                    if(measure.getActors() != null && !measure.getActors().isEmpty()) {
+                                	String measureName= measure.getName();
+                                	if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure/Date", ampContext, session)) {
+                                		measureName += "  " + DateConversion.ConvertDateToString(measure.getMeasureDate());
+                                	}
+                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" \u2022" +measureName , null, null, false)));
+                                    if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure/Actor", ampContext, session) && measure.getActors() != null && !measure.getActors().isEmpty()) {
                                         for (AmpActor actor : (Set<AmpActor>) measure.getActors()) {
                                             eshIssuesTable.addRowData((new ExportSectionHelperRowData(" \t \u2022" + actor.getName(), null, null, false)));
                                         }
                                     }
                                 }
                             }
-                            retVal.add(createSectionTable(eshIssuesTable, request, ampContext));
-                        }
+                         }
+                        retVal.add(createSectionTable(eshIssuesTable, request, ampContext));
+                        
                     }
            }
 

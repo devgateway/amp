@@ -2109,9 +2109,8 @@ body {background:none;}
                                     </logic:equal>
 								  
 								  
-                               	  <module:display name="Issues" parentModule="PROJECT MANAGEMENT">
-								  <feature:display name="Issues" module="Issues">
-								  <field:display name="Issues" feature="Issues">
+								<module:display name="/Activity Form/Issues Section" parentModule="/Activity Form">
+								<module:display name="/Activity Form/Issues Section/Issue" parentModule="/Activity Form/Issues Section">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -2123,15 +2122,17 @@ body {background:none;}
 												<table width="100%" cellSpacing="2" cellPadding="2" border="0">
 												<c:forEach var="issue" items="${aimEditActivityForm.issues.issues}">
 													<tr><td valign="top"  colspan="3">
-														<li class="level1"><b><c:out value="${issue.name}"/> <field:display feature="Issues" name="Issue Date"><c:out value="${issue.issueDate}"/> </field:display> </b></li>
+														<li class="level1"><b><c:out value="${issue.name}"/> <module:display name="/Activity Form/Issues Section/Issue/Date" parentModule="/Activity Form/Issues Section/Issue">
+													<c:out value="${issue.issueDate}"/> </module:display></b></li>
 													</td></tr>
-													<field:display name="Measures Taken" feature="Issues">
+														<module:display name="/Activity Form/Issues Section/Issue/Measure" parentModule="/Activity Form/Issues Section/Issue">
 														<c:if test="${!empty issue.measures}">
 															<c:forEach var="measure" items="${issue.measures}">
 																<tr><td></td><td colspan="2">
-																	<li class="level2"><i><c:out value="${measure.name}"/>  <c:out value="${measure.measureDate}"/></i></li>
+																	<li class="level2"><i><c:out value="${measure.name}"/><module:display name="/Activity Form/Issues Section/Issue/Measure/Date" parentModule="/Activity Form/Issues Section/Issue/Measure">
+									  							<c:out value="${measure.measureDate}"/></module:display></i></li>
 																</td></tr>
-																<field:display name="Actors" feature="Issues">
+																	<module:display name="/Activity Form/Issues Section/Issue/Measure/Actor" parentModule="/Activity Form/Issues Section/Issue/Measure">
 																	<c:if test="${!empty measure.actors}">
 																		<c:forEach var="actor" items="${measure.actors}">
 																			<tr>
@@ -2141,17 +2142,16 @@ body {background:none;}
 																			</td></tr>
 																		</c:forEach>
 																	</c:if>
-																</field:display>
+																	</module:display>
 															</c:forEach>
 														</c:if>
-													</field:display>
+														</module:display>
 												</c:forEach>
 												</table>
 											</c:if>
 										</td>
 									</tr>
-									</field:display>
-									</feature:display>
+									</module:display>
 									</module:display>
                              <module:display name="Document" parentModule="PROJECT MANAGEMENT">       
                                    	<feature:display name="Related Documents" module="Document">

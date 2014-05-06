@@ -1640,20 +1640,27 @@ public class ExportActivityToPDF extends Action {
 		issuesCell2.setBackgroundColor(new Color(255,255,255));
 		issuesCell2.setBorder(0);
 		if(myForm.getIssues().getIssues()!=null && myForm.getIssues().getIssues().size()>0){
-			com.lowagie.text.List issuesList=new com.lowagie.text.List(false,20);  //is not numbered list
-			issuesList.setListSymbol(new Chunk("\u2022"));
 			for (org.digijava.module.aim.helper.Issues issue : myForm.getIssues().getIssues()) {
-				if(FeaturesUtil.isVisibleField("Issue Date", ampContext,session)){
-					ListItem issueItem=new ListItem(new Phrase(issue.getName()+" \t"+issue.getIssueDate(),plainFont));
-					issuesList.add(issueItem);
-				}				
-				if(FeaturesUtil.isVisibleField("Measures Taken", ampContext,session) && issue.getMeasures()!=null){
+				com.lowagie.text.List issuesList=new com.lowagie.text.List(false,20);  //is not numbered list
+				issuesList.setListSymbol(new Chunk("\u2022"));
+				String issueName = issue.getName();
+				if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Date", ampContext, session)){
+					issueName += " \t"+issue.getIssueDate();
+				}
+				ListItem issueItem=new ListItem(new Phrase(issueName,plainFont));
+				issuesList.add(issueItem);
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure", ampContext, session) && 
+						issue.getMeasures()!=null){
 					com.lowagie.text.List measuresSubList=new com.lowagie.text.List(false,20);  //is not numbered list
 					measuresSubList.setListSymbol("-");
 					for (Measures measure : issue.getMeasures()) {
-						ListItem measureItem=new ListItem(new Phrase(measure.getName()+" \t"+measure.getMeasureDate(),plainFont));
+						String measureName = measure.getName();
+						if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure/Date", ampContext, session)) {
+                    		measureName += " \t"+measure.getMeasureDate();
+                    	}
+						ListItem measureItem=new ListItem(new Phrase(measureName,plainFont));
 						measuresSubList.add(measureItem);
-						if(FeaturesUtil.isVisibleField("Actors", ampContext,session) && measure.getActors()!=null && measure.getActors().size()>0){
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure/Actor", ampContext, session) && measure.getActors()!=null && measure.getActors().size()>0){
 							com.lowagie.text.List actorsSubList=new com.lowagie.text.List(false,20); //is not numbered list
 							actorsSubList.setListSymbol(new Chunk("\u2022"));
 							for (AmpActor actor : measure.getActors()) {
@@ -1665,8 +1672,8 @@ public class ExportActivityToPDF extends Action {
 					}
 					issuesList.add(measuresSubList);
 				}					
+				issuesCell2.addElement(issuesList);
 			}
-			issuesCell2.addElement(issuesList);
 		}
 		mainLayout.addCell(issuesCell2);
 	}

@@ -2165,18 +2165,25 @@ function collapseAll() {
 							<digi:trn key="aim:issuename:${issue.id}">
 							<c:out value="${issue.name}" />
 							</digi:trn> 
-								<c:out value="${issue.issueDate}" />
+						<module:display name="/Activity Form/Issues Section/Issue/Date" parentModule="/Activity Form/Issues Section/Issue">
+								 <c:out value="${issue.issueDate}" />
+						</module:display>
 							</b>						</li>					</td>
 				</tr>
+					<module:display name="/Activity Form/Issues Section/Issue/Measure" parentModule="/Activity Form/Issues Section/Issue">
 					<c:if test="${!empty issue.measures}">
 						<c:forEach var="measure" items="${issue.measures}">
 							<tr>
 								<td></td>
 								<td colspan="2">
 									<li class="level2"><i> <digi:trn key="aim:${measure.nameTrimmed}">
-										<c:out value="${measure.name}" />
-										</digi:trn> <c:out value="${measure.measureDate}" /> </i>									</li>								</td>
+										<c:out value="${measure.name}" /></digi:trn>
+									<module:display name="/Activity Form/Issues Section/Issue/Measure/Date" parentModule="/Activity Form/Issues Section/Issue/Measure">
+										 <c:out value="${measure.measureDate}" />
+									</module:display>
+										</i>									</li>								</td>
 							</tr>
+								<module:display name="/Activity Form/Issues Section/Issue/Measure/Actor" parentModule="/Activity Form/Issues Section/Issue/Measure">
 								<c:if test="${!empty measure.actors}">
 									<c:forEach var="actor" items="${measure.actors}">
 										<tr>
@@ -2190,8 +2197,10 @@ function collapseAll() {
 										</tr>
 									</c:forEach>
 								</c:if>
+								</module:display>
 						</c:forEach>
 					</c:if>
+					</module:display>
 			</c:forEach>
 		</table>
 	</c:if>

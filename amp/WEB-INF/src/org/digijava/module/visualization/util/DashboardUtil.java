@@ -1141,6 +1141,12 @@ public class DashboardUtil {
 				filter.setCurrencyIdDefault(filter.getCurrencyId());
 			}
 		}
+		
+		if(dashboard != null && teamMember!= null) {
+			filter.setWorkspaceOnly(dashboard.getShowOnlyDataFromThisWorkspace());
+			filter.setWorkspaceOnlyQuickFilter(dashboard.getShowOnlyDataFromThisWorkspace());
+		}
+		
 		List<CategoryConstants.HardCodedCategoryValue> adjustmentTypeList = new ArrayList<CategoryConstants.HardCodedCategoryValue>();
 		adjustmentTypeList.add(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 		adjustmentTypeList.add(CategoryConstants.ADJUSTMENT_TYPE_PLANNED);

@@ -26,6 +26,7 @@ public class DashboardForm extends ActionForm {
 	private int baseType;
 	private int pivot;
 	private Boolean showInMenu;
+	private Boolean showOnlyDataFromThisWorkspace;
 	private Boolean showAcronymForOrgNames;
 	private Integer maxYearFilter;
 	private Integer minYearFilter;
@@ -114,6 +115,13 @@ public class DashboardForm extends ActionForm {
 	}
 	public void setShowAcronymForOrgNames(Boolean showAcronymForOrgNames) {
 		this.showAcronymForOrgNames = showAcronymForOrgNames;
+	}
+	public Boolean getShowOnlyDataFromThisWorkspace() {
+		return showOnlyDataFromThisWorkspace;
+	}
+	public void setShowOnlyDataFromThisWorkspace(
+			Boolean showOnlyDataFromThisWorkspace) {
+		this.showOnlyDataFromThisWorkspace = showOnlyDataFromThisWorkspace;
 	}
 	
 }

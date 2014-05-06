@@ -103,6 +103,7 @@ function saveDashboard() {
 	  </digi:trn>
 	</c:set>
 	document.getElementById("showInMenu2").value = document.getElementById("show_in_menu").checked;
+	document.getElementById("showOnlyDataFromThisWorkspace2").value = document.getElementById("show_only_data_from_this_workspace").checked;
 	document.getElementById("showAcronymForOrgNames2").value = document.getElementById("show_acronym_for_org_names").checked;
 	if (validateData()){
 		var i = 0;
@@ -268,6 +269,13 @@ function validateData(){
 					</td>
 				</tr>
 				<tr>
+					<td><b><digi:trn>Show Only Data From This Workspace</digi:trn></b>
+						<input type="checkbox" id="show_only_data_from_this_workspace"/>
+						<html:hidden property="showOnlyDataFromThisWorkspace" styleId="showOnlyDataFromThisWorkspace2" />
+					</td>
+				</tr>
+				<tr>
+				<tr>
 					<td><b><digi:trn>Show Acronym for Organization names on graphics</digi:trn></b>
 						<input type="checkbox" id="show_acronym_for_org_names"/>
 						<html:hidden property="showAcronymForOrgNames" styleId="showAcronymForOrgNames2" />
@@ -419,6 +427,11 @@ function init(){
 		document.getElementById("show_in_menu").checked = true;
 	} else {
 		document.getElementById("show_in_menu").checked = false;
+	}
+	if (document.getElementById("showOnlyDataFromThisWorkspace2").value=='true') {
+		document.getElementById("show_only_data_from_this_workspace").checked = true;
+	} else {
+		document.getElementById("show_only_data_from_this_workspace").checked = false;
 	}
 	if (document.getElementById("showAcronymForOrgNames2").value=='true') {
 		document.getElementById("show_acronym_for_org_names").checked = true;

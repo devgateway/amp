@@ -36,6 +36,7 @@ public class SaveDashboard extends Action {
 		dashboard.setBaseType(dForm.getBaseType());
 		dashboard.setPivot(dForm.getPivot());
 		dashboard.setShowInMenu(dForm.getShowInMenu());
+		dashboard.setShowOnlyDataFromThisWorkspace(dForm.getShowOnlyDataFromThisWorkspace());
 		dashboard.setShowAcronymForOrgNames(dForm.getShowAcronymForOrgNames());
 		dashboard.setMaxYearFilter(dForm.getMaxYearFilter());
 		dashboard.setMinYearFilter(dForm.getMinYearFilter());

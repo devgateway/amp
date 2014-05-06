@@ -103,6 +103,7 @@ function saveDashboard() {
 	  </digi:trn>
 	</c:set>
 	document.getElementById("showInMenu2").value = document.getElementById("show_in_menu").checked;
+	document.getElementById("showOnlyDataFromThisWorkspace2").value = document.getElementById("show_only_data_from_this_workspace").checked;
 	if (validateData()){
 		var i = 0;
 		var param = "";
@@ -267,6 +268,12 @@ function validateData(){
 					</td>
 				</tr>
 				<tr>
+					<td><b><digi:trn>Show Only Data From This Workspace</digi:trn></b>
+						<input type="checkbox" id="show_only_data_from_this_workspace"/>
+						<html:hidden property="showOnlyDataFromThisWorkspace" styleId="showOnlyDataFromThisWorkspace2" />
+					</td>
+				</tr>
+				<tr>
 					<td><b><digi:trn>Default Max Year Filter</digi:trn></b>
 						<html:text property="maxYearFilter" styleId="maxYearFilter"/>
 						<span><digi:trn>Both values must be set (and bigger than 0) to be used as default filter.</digi:trn></span>
@@ -413,6 +420,11 @@ function init(){
 	} else {
 		document.getElementById("show_in_menu").checked = false;
 	}
+	if (document.getElementById("showOnlyDataFromThisWorkspace2").value=='true') {
+		document.getElementById("show_only_data_from_this_workspace").checked = true;
+	} else {
+		document.getElementById("show_only_data_from_this_workspace").checked = false;
+	}	
 	numGraphs = <%=idx%>;
 	tempGraphs = <%=idx%>;
 	if (tempGraphs==0){

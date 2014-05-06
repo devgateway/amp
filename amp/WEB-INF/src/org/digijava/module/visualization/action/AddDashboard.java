@@ -32,6 +32,7 @@ public class AddDashboard extends Action {
 			dForm.setBaseType(dashboard.getBaseType());
 			dForm.setPivot(dashboard.getPivot());
 			dForm.setShowInMenu(dashboard.getShowInMenu());
+			dForm.setShowOnlyDataFromThisWorkspace(dashboard.getShowOnlyDataFromThisWorkspace());
 			dForm.setMaxYearFilter(dashboard.getMaxYearFilter());
 			dForm.setMinYearFilter(dashboard.getMinYearFilter());
 			dForm.setTransactionTypeFilter(dashboard.getTransactionTypeFilter());

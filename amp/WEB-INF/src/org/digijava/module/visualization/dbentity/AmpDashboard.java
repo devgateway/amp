@@ -21,6 +21,7 @@ public class AmpDashboard implements Serializable {
 	private int baseType;
 	private int pivot;
 	private Boolean showInMenu;
+	private Boolean showOnlyDataFromThisWorkspace;
 	private Integer maxYearFilter;
 	private Integer minYearFilter;
 	private Integer transactionTypeFilter;
@@ -78,6 +79,13 @@ public class AmpDashboard implements Serializable {
 	}
 	public void setTransactionTypeFilter(Integer transactionTypeFilter) {
 		this.transactionTypeFilter = transactionTypeFilter;
+	}
+	public Boolean getShowOnlyDataFromThisWorkspace() {
+		return showOnlyDataFromThisWorkspace;
+	}
+	public void setShowOnlyDataFromThisWorkspace(
+			Boolean showOnlyDataFromThisWorkspace) {
+		this.showOnlyDataFromThisWorkspace = showOnlyDataFromThisWorkspace;
 	}
 	
 }

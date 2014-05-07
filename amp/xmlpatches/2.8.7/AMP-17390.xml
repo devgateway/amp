@@ -6,8 +6,6 @@
     <keyword>GPI</keyword>
     <author>gkvizhinadze</author>
     <description>regional funding processing. Set initial value for new "nonnull" field is_regional_funding</description>
-    <trigger type="all">
-    </trigger>
     <apply>
         <script>
             <lang delimiter=";" type="postgres">

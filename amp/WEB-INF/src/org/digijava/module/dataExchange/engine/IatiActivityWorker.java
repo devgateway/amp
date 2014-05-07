@@ -414,6 +414,18 @@ public class IatiActivityWorker {
 		processActInternalIdsStep(a,iatiOtherIdList, iatiRepOrgList);
 		processBudgetStep(a,iatiBudgetList,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency, isCreate, settings);
 		processFundingStep(a,iatiTransactionList,iatiPlannedDisbList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList, isCreate, settings);
+
+        if (settings.isRegionalFundings()) {
+            a.getRegionalFundings().clear();
+            if (a.getFunding() != null) {
+                for (AmpFunding af : a.getFunding()) {
+                    a.getRegionalFundings()
+                            .addAll(getRegFundingsFromFunding(af, settings.getDefaultLocation(), a));
+                }
+            }
+            a.getFunding().clear();
+        }
+
         if ((isCreate && settings.importEnabled("Location")) || (!isCreate && settings.updateEnabled("Location"))) {
             processLocationStep(a,iatiLocationList);
         }
@@ -626,9 +638,9 @@ public class IatiActivityWorker {
             if(f!=null) {
                 if (!settings.isRegionalFundings()) {
 				    fundings.add(f);
-                } else {
+                }/*else {
                     regionalFundings.addAll(getRegFundingsFromFunding(f, settings.getDefaultLocation(), activity));
-                }
+                }  */
             }
 		}
 		for (Iterator<PlannedDisbursement> it = iatiPlannedDisbList.iterator(); it.hasNext();) {
@@ -639,9 +651,9 @@ public class IatiActivityWorker {
             if(f!=null) {
                 if (!settings.isRegionalFundings()) {
                     fundings.add(f);
-                } else {
+                } /*else {
                     regionalFundings.addAll(getRegFundingsFromFunding(f, settings.getDefaultLocation(), activity));
-                }
+                }   */
             }
 		}
 
@@ -1056,7 +1068,7 @@ public class IatiActivityWorker {
 
         AmpFunding ampFunding = null;
 		for (AmpFunding af : ampFundings) {
-			if(ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
+			if(ampOrg != null && ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
 //				ampFunding.setFinancingId(af.getFinancingId());
 //				ampFunding.setModeOfPayment(af.getModeOfPayment());
 //				ampFunding.setFundingStatus(af.getFundingStatus());

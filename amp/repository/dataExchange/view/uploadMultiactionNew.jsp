@@ -655,6 +655,9 @@
 					<script language="javascript">
 						
 						
+						var unmappedString = "<digi:trn>Unmapped</digi:trn>";
+						var addNewString = "<digi:trn>Add new</digi:trn>";
+						var sameAsString = "<digi:trn>Same As</digi:trn>";
 						
 						
 						
@@ -713,7 +716,10 @@
 									optionsMarkup.push(element.ampValues);
 									optionsMarkup.push("'>");
 								} else {
-									optionsMarkup.push("<input class='autocompleteDropdownText' type='text' style='width: 50px;' value='Same As'>");
+									optionsMarkup.push("<input class='autocompleteDropdownText' type='text' style='width: 50px;' value='");
+									optionsMarkup.push(sameAsString);
+									optionsMarkup.push("'>");
+									
 									optionsMarkup.push("<input class='autocompleteDropdownSameAsText' type='text' style='width: 440px;' value='");
 									optionsMarkup.push(element.sameAsText);
 									optionsMarkup.push("'>");
@@ -800,8 +806,20 @@
 							$(data.objects).each(function(index, element) {
 					    	optionsMarkup.push("<tr>");
 					    	optionsMarkup.push("<td nowrap class='optionItem'>");
+
+								var caption = null;					    	
+					    	if (element.val == "Unmapped") {
+					    		caption =  unmappedString;
+					    	} else if (element.val == "Add new") {
+					    		caption =  addNewString;
+					    	} else if (element.val == "Same as") {
+					    		caption =  sameAsString;
+					    	} else {
+					    		caption =  element.val;
+					    	}
+					    	
 					    	if (element.val != null) {
-					    		optionsMarkup.push(element.val);
+					    		optionsMarkup.push(caption);
 					    	} else {
 					    		optionsMarkup.push("EMPTY VALUE");
 					    	}
@@ -809,7 +827,7 @@
 					    	optionsMarkup.push(element.id);
 					    	optionsMarkup.push("'>");
 					    	optionsMarkup.push("<input class='objCaption' type='hidden' value='");
-					    	optionsMarkup.push(element.val);
+					    	optionsMarkup.push(caption);
 					    	optionsMarkup.push("'>");
 					    	optionsMarkup.push("</td>");
 					    	optionsMarkup.push("</tr>");
@@ -985,12 +1003,12 @@
 								var sameAsVal = elementObj.parent().find("input[type='hidden'][name='sameAsTmpId']").val();
 								if (sameAsVal == null || sameAsVal < 0) {
 									if (elementObj.val() == null || elementObj.val()=="0" || elementObj.val()=="") {
-										elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val("Unmapped");
+										elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val(unmappedString);
 									} else if (elementObj.val()==-1) {
-										elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val("Add new");
+										elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val(addNewString);
 									}
 								} else {
-									elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val("Same As");
+									elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val(sameAsString);
 								}
 							});
 						}

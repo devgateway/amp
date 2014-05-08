@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <module-config>
 	<name>dataExchange</name>
+	<default-instance>admin</default-instance>
 	<security login-required="true" default="READ">
 		<action login-required="true" pattern="/exportWizard"/>  
 		<action login-required="true" pattern="/export"/> 

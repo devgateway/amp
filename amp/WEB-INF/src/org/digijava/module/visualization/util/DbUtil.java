@@ -688,12 +688,20 @@ public class DbUtil {
 	            //query.setLong("transactionType", transactionType);
 	            //query.setString("adjustmentType",adjustmentTypeActual);
             //}
+            System.out.println(query.getQueryString());
             activities = query.list();
         }
         catch (Exception e) {
             logger.error(e);
             throw new DgException("Cannot load activities from db", e);
         }
+        
+        Iterator iter = activities.iterator();
+        while(iter.hasNext()){
+        	Object[] aux = (Object[])iter.next();
+        	logger.warn(""+aux[0]+"-"+aux[1]+"-"+aux[2]);
+        }
+        
         return activities;
 
      }
@@ -737,7 +745,8 @@ public class DbUtil {
 	            String oql = "select distinct agency ";
 	            String specialInner = "";
 	            String specialCondition = "";
-	            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+	            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+	            		|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
 	            	specialInner = " inner join act.orgrole orole inner join orole.role role ";
 	            
 	            switch (filter.getAgencyType()) {
@@ -753,6 +762,10 @@ public class DbUtil {
 	            	case org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY:
 	            		specialInner += " inner join orole.organisation agency ";
 	            		specialCondition = " and role.roleCode='BA' ";
+	            		break;
+	            	case org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION:
+	            		specialInner += " inner join orole.organisation agency ";
+	            		specialCondition = " and role.roleCode='RO' ";
 	            		break;
 	            }
 	        	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, specialCondition, true);

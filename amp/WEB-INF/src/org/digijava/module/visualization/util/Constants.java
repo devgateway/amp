@@ -4,6 +4,7 @@ public class Constants {
 	public static final int DONOR_AGENCY = 0;
     public static final int EXECUTING_AGENCY = 1;
     public static final int BENEFICIARY_AGENCY = 2;
+    public static final int RESPONSIBLE_ORGANIZATION = 3;
     
 	public static class DashboardType {
 	    public static final int DONOR = 1;

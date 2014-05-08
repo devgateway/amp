@@ -2288,6 +2288,8 @@ function drawGraph(id){
 		changeChart('start', 'donut', id, true);
 	else if (id.indexOf("Profile")!=-1)
 		changeChart(null, 'bar_profile', id, true);
+	else if (id.indexOf("ResponsibleOrganization")!=-1)
+		changeChart(null, 'bar_profile', id, true);
 	else if (id.indexOf("Growth")!=-1)
 		changeChart(null, 'bar_growth', id, true);
 	else
@@ -2446,6 +2448,7 @@ function updateGraph(e, chartName){
 }
 
 function changeChart(e, chartType, container, useGeneric){
+	//alert("changeChart"+e+chartType);
 	var startMovie = false;
 	//Get the calling object to select it and remove style.
 	if(e != null){

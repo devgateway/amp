@@ -21,6 +21,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpLocationItemPanel;
@@ -29,11 +30,7 @@ import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -289,11 +286,21 @@ public class AmpLocationFormTableFeature extends
 			}
 		};
 
+        AmpTeamMember ampCurrentMember = ((AmpAuthWebSession)this.getSession()).getAmpCurrentMember();
+        AmpApplicationSettings ampAppSettings = null;
+        if (ampCurrentMember != null) {
+            ampAppSettings = org.digijava.module.aim.util.DbUtil.getTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
+        }
+
+        Boolean allSetupCountries = (ampAppSettings == null || !ampAppSettings.getShowAllCountries())? new Boolean(false) : new Boolean(true);
+
 		searchLocations.getModelParams().put(AmpLocationSearchModel.PARAM.LAYER,
 				implementationLocation.getChoiceModel());
 	
 		searchLocations.getModelParams().put(AmpLocationSearchModel.PARAM.LEVEL,
 				implementationLevel.getChoiceModel());
+
+        searchLocations.getModelParams().put(AmpLocationSearchModel.PARAM.ALL_SETUP_COUNTRIES, allSetupCountries);
 		
 		
 		add(searchLocations);

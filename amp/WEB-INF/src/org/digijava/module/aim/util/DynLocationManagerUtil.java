@@ -875,6 +875,7 @@ public class DynLocationManagerUtil {
 					+ " loc where (loc.parentCategoryValue=:cvId) ";
 			Query qry = dbSession.createQuery(queryString);
 			qry.setLong("cvId", cvLayer.getId());
+            qry.setCacheable(true);
 			returnSet.addAll(qry.list());
 			return returnSet;
 		} catch (Exception e) {

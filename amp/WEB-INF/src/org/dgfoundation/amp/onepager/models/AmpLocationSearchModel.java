@@ -34,7 +34,7 @@ public class AmpLocationSearchModel extends
     public static final String PARENT_DELIMITER="\\] \\[";
 	
 	public enum PARAM implements AmpAutoCompleteModelParam {
-		LAYER, LEVEL
+		LAYER, LEVEL, ALL_SETUP_COUNTRIES
 	};
 
 	public AmpLocationSearchModel(String input,String language,
@@ -49,6 +49,7 @@ public class AmpLocationSearchModel extends
 		Collection<AmpCategoryValueLocations> ret = new TreeSet<AmpCategoryValueLocations>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
 		IModel<Set<AmpCategoryValue>> layerModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LAYER);
 		IModel<Set<AmpCategoryValue>> levelModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LEVEL);
+        Boolean allSetupCountries = (Boolean) getParam(PARAM.ALL_SETUP_COUNTRIES);
         AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
         AmpTeamMember currentMember = wicketSession.getAmpCurrentMember();
         AmpCategoryValueLocations assignedRegion = null;
@@ -68,9 +69,20 @@ public class AmpLocationSearchModel extends
 				&& CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(cvLayer)) {
 			// then we can only return the current default country of the system
 			try {
-				AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getDefaultCountry();
+                Set<AmpCategoryValueLocations> filterCountries = new HashSet<AmpCategoryValueLocations>();
+                if (!allSetupCountries) {
+                    filterCountries.add(DynLocationManagerUtil.getDefaultCountry());
+                } else {//AMP-16857
+                    Set<AmpCategoryValueLocations> countries = DynLocationManagerUtil.getLocationsByLayer(cvLayer);
+                    for (AmpCategoryValueLocations loc : countries) {
+                        if (loc.getChildLocations() != null && !loc.getChildLocations().isEmpty()) {
+                            filterCountries.add(loc);
+                        }
+                    }
+                }
+
 				ret = new ArrayList<AmpCategoryValueLocations>();
-				ret.add(defCountry);
+				ret.addAll(filterCountries);
 				return ret;
 
 			} catch (Exception e) {

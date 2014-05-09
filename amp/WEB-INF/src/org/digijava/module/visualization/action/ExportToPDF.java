@@ -218,6 +218,7 @@ public class ExportToPDF extends Action {
             this.programProfTrn = TranslatorWorker.translateText("Program Profile");
             this.secProgramProfTrn = TranslatorWorker.translateText("Secondary Program Profile");
 	        this.organizationProfTrn = TranslatorWorker.translateText("Organization Profile");
+	        this.beneficiaryAgencyProfTrn = TranslatorWorker.translateText("Beneficiary Agency Profile");
 	        this.responsibleOrganizationProfTrn = TranslatorWorker.translateText("Responsible Organization Profile");
 	        this.plannedTrn = TranslatorWorker.translateText("Planned");
             this.actualTrn = TranslatorWorker.translateText("Actual");

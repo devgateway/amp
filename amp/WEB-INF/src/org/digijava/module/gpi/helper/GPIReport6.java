@@ -344,6 +344,9 @@ public class GPIReport6 extends GPIAbstractReport {
 			GPIReport6Row auxRow = (GPIReport6Row) iterColl.next();
 			if(auxRow.getColumn2() != null) {
 				if (auxRow.getColumn2().doubleValue() > 0) {
+					if(auxRow.getColumn1() == null) {
+						auxRow.setColumn1(new BigDecimal(0));
+					}
 					auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2(), RoundingMode.HALF_UP).floatValue());
 				} else {
 					auxRow.setColumn3(0);

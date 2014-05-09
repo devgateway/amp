@@ -369,6 +369,9 @@ public class GPIReport5a extends GPIAbstractReport {
 			GPIReport5aRow auxRow = (GPIReport5aRow) iterColl.next();
 			if(auxRow.getColumn2() != null) {
 				if (auxRow.getColumn2().doubleValue() > 0) {
+					if(auxRow.getColumn1() == null) {
+						auxRow.setColumn1(new BigDecimal(0));
+					}
 					auxRow.setColumn3(auxRow.getColumn1().multiply(new BigDecimal(100)).divide(auxRow.getColumn2(), RoundingMode.HALF_UP).floatValue());
 				} else {
 					auxRow.setColumn3(0);

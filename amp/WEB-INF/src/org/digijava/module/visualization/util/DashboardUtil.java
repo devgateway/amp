@@ -1155,6 +1155,7 @@ public class DashboardUtil {
         filter.setOrganizations(DbUtil.getOrganisationSkeletons());
 		filter.setImplementingAgencyList(DbUtil.getOrganisationSkeletons());
 		filter.setBeneficiaryAgencyList(DbUtil.getOrganisationSkeletons());
+		filter.setResponsibleOrganizationList(DbUtil.getOrganisationSkeletons());
 		filter.setSecondaryProgramsList(DbUtil.getPrograms(2));
 		filter.setPeacebuilderMarkerList(new ArrayList<AmpCategoryValue>());
 		ArrayList<AmpCategoryValue> catList = new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PEACE_MARKERS_KEY));

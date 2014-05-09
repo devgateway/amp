@@ -139,6 +139,7 @@ public class DashboardFilter {
     private List<AmpOrganisation> donorAgencyList;
     private List<OrganizationSkeleton> implementingAgencyList;
     private List<OrganizationSkeleton> beneficiaryAgencyList;
+    private List<OrganizationSkeleton> responsibleOrganizationList;
     private List<AmpCategoryValue> peacebuilderMarkerList;
     private List<AmpCategoryValue> peacebuildingList;
     private List<AmpSector>secondarySectors;
@@ -151,6 +152,9 @@ public class DashboardFilter {
     private Long[] beneficiaryAgencyIds;
     private Long[] selBeneficiaryAgencyIds;
     private Long beneficiaryAgencyId;
+    private Long[] responsibleOrganizationIds;
+    private Long[] selResponsibleOrganizationIds;
+    private Long responsibleOrganizationId;
     private Long[] secondarySectorsIds;
     private Long secondarySectorsId;
     private Long[] peacebuilderMarkerIds;
@@ -1296,6 +1300,40 @@ public class DashboardFilter {
 
 	public void setNationalProjectsToo(Boolean nationalProjectsToo) {
 		this.nationalProjectsToo = nationalProjectsToo;
+	}
+
+	public List<OrganizationSkeleton> getResponsibleOrganizationList() {
+		return responsibleOrganizationList;
+	}
+
+	public void setResponsibleOrganizationList(
+			List<OrganizationSkeleton> responsibleOrganizationList) {
+		this.responsibleOrganizationList = responsibleOrganizationList;
+	}
+
+	public Long[] getResponsibleOrganizationIds() {
+		return responsibleOrganizationIds;
+	}
+
+	public void setResponsibleOrganizationIds(Long[] responsibleOrganizationIds) {
+		this.responsibleOrganizationIds = responsibleOrganizationIds;
+	}
+
+	public Long[] getSelResponsibleOrganizationIds() {
+		return selResponsibleOrganizationIds;
+	}
+
+	public void setSelResponsibleOrganizationIds(
+			Long[] selResponsibleOrganizationIds) {
+		this.selResponsibleOrganizationIds = selResponsibleOrganizationIds;
+	}
+
+	public Long getResponsibleOrganizationId() {
+		return responsibleOrganizationId;
+	}
+
+	public void setResponsibleOrganizationId(Long responsibleOrganizationId) {
+		this.responsibleOrganizationId = responsibleOrganizationId;
 	}
 		
 	

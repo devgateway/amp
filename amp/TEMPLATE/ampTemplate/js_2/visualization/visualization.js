@@ -2305,6 +2305,8 @@ function drawGraph(id){
 		changeChart('start', 'donut', id, true);
 	else if (id.indexOf("Profile")!=-1)
 		changeChart(null, 'bar_profile', id, true);
+	else if (id.indexOf("ResponsibleOrganization")!=-1)
+		changeChart(null, 'bar_profile', id, true);
 	else if (id.indexOf("Growth")!=-1)
 		changeChart(null, 'bar_growth', id, true);
 	else

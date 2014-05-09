@@ -121,6 +121,7 @@ public class ExportToWord extends Action {
     String secProgramProfTrn = "";
     String organizationProfTrn = "";
     String beneficiaryAgencyProfTrn = "";
+    String responsibleOrganizationProfTrn = "";
     String plannedTrn = "";
     String actualTrn = "";
     String yearTrn = "";
@@ -157,6 +158,7 @@ public class ExportToWord extends Action {
         String financingInstOpt = request.getParameter("financingInstOpt");
         String organizationOpt = request.getParameter("organizationOpt");
         String beneficiaryAgencyOpt = request.getParameter("beneficiaryAgencyOpt");
+        String responsibleOrganizationOpt = request.getParameter("responsibleOrganizationOpt");
         String sectorOpt = request.getParameter("sectorOpt");
         String regionOpt = request.getParameter("regionOpt");
         String NPOOpt = request.getParameter("NPOOpt");
@@ -226,6 +228,7 @@ public class ExportToWord extends Action {
             this.secProgramProfTrn = TranslatorWorker.translateText("Secondary Program Profile");
             this.organizationProfTrn = TranslatorWorker.translateText("Organization Profile");
             this.beneficiaryAgencyProfTrn = TranslatorWorker.translateText("Beneficiary Agency Profile");
+            this.responsibleOrganizationProfTrn = TranslatorWorker.translateText("Responsible Organization");
             this.plannedTrn = TranslatorWorker.translateText("Planned");
             this.actualTrn = TranslatorWorker.translateText("Actual");
             this.yearTrn = TranslatorWorker.translateText("Year");
@@ -741,6 +744,8 @@ public class ExportToWord extends Action {
 					getBudgetBreakdownTable(budgetBreakdownOpt, doc, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("BeneficiaryAgencyProfile"))
 					getBeneficiaryAgencyProfileTable(beneficiaryAgencyOpt, doc, vForm, request, amountDescription);
+				if (ampGraph.getContainerId().equals("ResponsibleOrganization"))
+					getResponsibleOrganizationTable(responsibleOrganizationOpt, doc, vForm, request, amountDescription);
 				
 			}
             //close document
@@ -1712,6 +1717,74 @@ public class ExportToWord extends Action {
             doc.add(new Paragraph(" "));
         }
         if (beneficiaryAgencyOpt.equals("2") || beneficiaryAgencyOpt.equals("3")){
+            SimpleTable organizationGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getBeneficiaryAgencyGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            organizationGraph.setWidthpercentage(100);
+            organizationGraph.addElement(row);
+            doc.add(organizationGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getResponsibleOrganizationTable(String responsibleOrganizationOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
+    	//Beneficiary Agency Profile Table.
+        if (!responsibleOrganizationOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(responsibleOrganizationProfTrn + amountDesc, SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (responsibleOrganizationOpt.equals("1") || responsibleOrganizationOpt.equals("3")){
+            Table organizationProfTbl = null;
+            String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
+            if (organizationProfRows.length>1){
+	            int colspan = organizationProfRows[1].split(">").length; 
+	            organizationProfTbl = new Table(colspan);
+	            organizationProfTbl.setWidth(100);
+	            //RtfCell organizationProfTitleCell = new RtfCell(new Paragraph(organizationProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+	            //organizationProfTitleCell.setColspan(colspan);
+	            //organizationProfTitleCell.setBackgroundColor(TITLECOLOR);
+	            //organizationProfTbl.addCell(organizationProfTitleCell);
+	            RtfCell cell = new RtfCell(new Paragraph(organizationTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            cell.setBackgroundColor(TITLECOLOR);
+	            organizationProfTbl.addCell(cell);
+	            String[] singleRow = organizationProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            	cell.setBackgroundColor(TITLECOLOR);
+	            	organizationProfTbl.addCell(cell);
+				}
+	            int count = 0;
+	            for (int i = 2; i < organizationProfRows.length; i++) {
+	            	singleRow = organizationProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	                	if(j > 0) {
+		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+	                	}
+	                	else
+	                		cell = new RtfCell(new Paragraph(singleRow[j]));
+	                	if (count % 2 == 0)
+	    		        	cell.setBackgroundColor(CELLCOLOR);
+	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+	                	organizationProfTbl.addCell(cell);
+	    			}
+	            	count++;
+				}
+	            doc.add(organizationProfTbl);
+            }
+            doc.add(new Paragraph(" "));
+        }
+        if (responsibleOrganizationOpt.equals("2") || responsibleOrganizationOpt.equals("3")){
             SimpleTable organizationGraph = new SimpleTable();
             SimpleCell row = new SimpleCell(SimpleCell.ROW);
             SimpleCell cel = new SimpleCell(SimpleCell.CELL);

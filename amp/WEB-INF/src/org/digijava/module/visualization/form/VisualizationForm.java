@@ -285,6 +285,7 @@ public class VisualizationForm extends ActionForm {
 		private BufferedImage regionGraph;
 		private BufferedImage ODAGrowthGraph;
 		private BufferedImage beneficiaryAgencyGraph;
+		private BufferedImage responsibleOrganizationGraph;
 		private String fundingTableData;
 		private String budgetTableData;
 		private String NPOTableData;
@@ -299,6 +300,7 @@ public class VisualizationForm extends ActionForm {
 		private String regionTableData;
 		private String ODAGrowthTableData;
 		private String beneficiaryAgencyTableData;
+		private String responsibleOrganizationTableData;
 		private int exportFundingsOption = 3;
 		private int exportAidPredictabilityOption = 3;
 		private int exportAidPredictabilityQuarterOption = 3;
@@ -315,6 +317,7 @@ public class VisualizationForm extends ActionForm {
 		private int exportODAGrowthOption = 3;
 		private int exportBudgetBreakdownOption = 3;
 		private int exportBeneficiaryAgencyProfileOption = 3;
+		private int exportResponsibleOrganizationOption = 3;
 		
 		public BufferedImage getAidPredictabilityGraph() {
 			return aidPredictabilityGraph;
@@ -670,6 +673,33 @@ public class VisualizationForm extends ActionForm {
 		public void setExportSecondaryProgramProfileOption(
 				int exportSecondaryProgramProfileOption) {
 			this.exportSecondaryProgramProfileOption = exportSecondaryProgramProfileOption;
+		}
+
+		public BufferedImage getResponsibleOrganizationGraph() {
+			return responsibleOrganizationGraph;
+		}
+
+		public void setResponsibleOrganizationGraph(
+				BufferedImage responsibleOrganizationGraph) {
+			this.responsibleOrganizationGraph = responsibleOrganizationGraph;
+		}
+
+		public String getResponsibleOrganizationTableData() {
+			return responsibleOrganizationTableData;
+		}
+
+		public void setResponsibleOrganizationTableData(
+				String responsibleOrganizationTableData) {
+			this.responsibleOrganizationTableData = responsibleOrganizationTableData;
+		}
+
+		public int getExportResponsibleOrganizationOption() {
+			return exportResponsibleOrganizationOption;
+		}
+
+		public void setExportResponsibleOrganizationOption(
+				int exportResponsibleOrganizationOption) {
+			this.exportResponsibleOrganizationOption = exportResponsibleOrganizationOption;
 		}
 
 

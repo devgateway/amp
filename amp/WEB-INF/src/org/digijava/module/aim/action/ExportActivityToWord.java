@@ -2344,13 +2344,22 @@ public class ExportActivityToWord extends Action {
 	                            } else if (transTypeKey.equals("Commitment")&&adjTypeKey.equals("Planned")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Commitment")+" "+TranslatorWorker.translateText("Planned")+ ":";
 	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue());
-	                            } else if (transTypeKey.equals("Disbursement")&&adjTypeKey.equals("Actual")){
+	                            } 
+	                            else if (transTypeKey.equals("Commitment")&&adjTypeKey.equals("Pipeline")) {
+	                             	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Commitment")+" "+TranslatorWorker.translateText("Pipeline")+ ":";
+	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue());
+	                            }else if (transTypeKey.equals("Disbursement")&&adjTypeKey.equals("Actual")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Disbursement")+" "+TranslatorWorker.translateText("Actual")+ ":";
 	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue());
 	                            } else if (transTypeKey.equals("Disbursement")&&adjTypeKey.equals("Planned")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Disbursement")+" "+TranslatorWorker.translateText("Planned")+ ":";
 	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue());
-	                            } else if (transTypeKey.equals("Expenditure")&&adjTypeKey.equals("Actual")){
+	                            }
+	                            else if (transTypeKey.equals("Estimated Disbursement")&&adjTypeKey.equals("Actual")){
+	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Estimated Disbursement")+" "+TranslatorWorker.translateText("Actual")+ ":";
+	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualEDD().doubleValue());
+	                            }
+	                            else if (transTypeKey.equals("Expenditure")&&adjTypeKey.equals("Actual")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Expenditure")+" "+TranslatorWorker.translateText("Actual")+ ":";
 	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue());
 	                            } else if (transTypeKey.equals("Expenditure")&&adjTypeKey.equals("Planned")){

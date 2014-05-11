@@ -186,8 +186,8 @@
 							<div class="search_results">
 							<c:if test="${searchform.queryType==-1||searchform.queryType==0}">
 								<div class="${search_results_block_class}"><span
-									class="button_green">${fn:length(resultActivities)}</span>
-								 ${resultFound} <span class="button_green"><digi:trn>Activities</digi:trn></span>
+									class="button_green default_cursor">${fn:length(resultActivities)}</span>
+								 ${resultFound} <span class="button_green default_cursor"><digi:trn>Activities</digi:trn></span>
 									<ul>
 										<c:forEach items="${resultActivities}" var="activity">
 											<li>
@@ -222,7 +222,7 @@
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==2}">
 								<div class="${search_results_block_class}"><span
-									class="button_green">${fn:length(resultTabs)}</span> ${resultFound} <span class="button_green"><digi:trn>Tabs</digi:trn></span>
+									class="button_green default_cursor">${fn:length(resultTabs)}</span> ${resultFound} <span class="button_green default_cursor"><digi:trn>Tabs</digi:trn></span>
 								<ul>
 									<c:forEach items="${resultTabs}" var="tab">
 										<li><a
@@ -235,7 +235,7 @@
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==1}">
 								<div class="${search_results_block_class}"><span
-									class="button_green">${fn:length(resultReports)}</span> ${resultFound} <span class="button_green"><digi:trn>Reports</digi:trn></span> 
+									class="button_green default_cursor">${fn:length(resultReports)}</span> ${resultFound} <span class="button_green default_cursor"><digi:trn>Reports</digi:trn></span> 
 									<ul>
 										<c:forEach items="${resultReports}" var="report">
 											<li><a
@@ -249,8 +249,8 @@
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==3}">
 								<div class="search_results_block_last"><span
-									class="button_green">${fn:length(resultResources)}</span>
-								${resultFound} <span class="button_green"><digi:trn>Resources</digi:trn></span>
+									class="button_green default_cursor">${fn:length(resultResources)}</span>
+								${resultFound} <span class="button_green default_cursor"><digi:trn>Resources</digi:trn></span>
 									<ul>
 										<c:forEach items="${resultResources}" var="resource">
 											<li><c:choose>

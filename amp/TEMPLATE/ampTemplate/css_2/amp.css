@@ -29,6 +29,7 @@ span.docTitle619{border:1px solid red;text-align:left;}
 .button_green {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; margin-top:10px; margin-bottom:15px; cursor:pointer}
 .button_green_btm {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; margin-top:10px; margin-bottom:5px; cursor:pointer}
 .button_green_btm_sm {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:9px; color:#FFFFFF; font-weight:bold; padding-left:1px; padding-right:1px; padding-top:1px; padding-bottom:1px; margin-top:5px; margin-bottom:5px; cursor:pointer}
+.default_cursor {cursor:default;}
 .inputx, td input.inp-text, table#addUserContainer tr td input,   td select {border:1px solid #D0D0D0; background-color:#FFFFFF;}
 td select.inp-text-orgType{width:250px;}
 td input#keyWordTextField{height:22px;}

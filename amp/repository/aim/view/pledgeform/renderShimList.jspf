@@ -8,7 +8,7 @@
 <select id="${select_id}" ${extra_tags}>
 	<c:forEach var="ch" items="${select_values}">
 		<option value="${ch.id}"
-			<c:if test="${ch.id eq select_init_value}">selected="selected"></c:if>
+			<c:if test="${ch.id eq select_init_value}">selected="selected"</c:if>
 			>
 		<c:out value="${ch.value}" />
 		</option> <%-- c:out does automatic escaping, unlike ${} --%>

@@ -19,7 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-					drop view v_budget_structure;
+					drop view IF EXISTS v_budget_structure;
 					create or replace view v_budget_structure as (SELECT bs.amp_activity_id,
 					bs.budget_structure_name || ' ' || bs.budget_structure_percentage||'%' as budget_structure_name,
 			 		cv.id,bs.budget_structure_percentage 

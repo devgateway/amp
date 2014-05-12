@@ -60,18 +60,23 @@
 			<jsp:include page="pledgeSectorsView.jsp"></jsp:include>
 		</aim:renderFormSubsection>
 	
-		<aim:renderFormSubsection title="Location" styleId="pledge_form_locations">			
-			<jsp:include page="pledgelocationslistView.jsp"></jsp:include>
-		</aim:renderFormSubsection>
+		<field:display name="Pledge Location" feature="Pledge Sector and Location">
+			<aim:renderFormSubsection title="Location" styleId="pledge_form_locations">			
+				<jsp:include page="pledgelocationslistView.jsp"></jsp:include>
+			</aim:renderFormSubsection>
+		</field:display>
 	
-		<aim:renderFormSubsection title="Program" styleId="pledge_form_programs">
-			<jsp:include page="pledgeProgramsView.jsp"></jsp:include>
-		</aim:renderFormSubsection>
+		<field:display name="Pledge Program" feature="Pledge Sector and Location">
+			<aim:renderFormSubsection title="Program" styleId="pledge_form_programs">
+				<jsp:include page="pledgeProgramsView.jsp"></jsp:include>
+			</aim:renderFormSubsection>
+		</field:display>
 	
-		<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
-			<jsp:include page="pledgeFundingView.jsp"></jsp:include>
-		</aim:renderFormSubsection>
-	
+		<feature:display name="Pledge Funding" module="Pledges">
+			<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
+				<jsp:include page="pledgeFundingView.jsp"></jsp:include>
+			</aim:renderFormSubsection>
+		</feature:display>
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeContactsView.jsp"></jsp:include>
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogueView.jsp"></jsp:include>
 	

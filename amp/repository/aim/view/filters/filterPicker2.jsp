@@ -43,7 +43,7 @@
 <div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right: 5px">
 	<ul class="yui-nav" style="border-bottom: 1px solid #CCCCCC">
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a></li>
-		<logic:notEqual name="is_pledge_report" value="true" scope="request">
+		<logic:notEqual name="is_pledge_report" value="true" scope="session">
 			<logic:notEmpty name="aimReportsFilterPickerForm" property="relatedAgenciesElements">
 				<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
 			</logic:notEmpty>
@@ -70,7 +70,7 @@
 	<% 
 		StopWatch.next("Filters", true, "related agencies tab begin");
 	%>
-        <logic:notEqual name="is_pledge_report" value="true" scope="request">
+        <logic:notEqual name="is_pledge_report" value="true" scope="session">
         	<logic:notEmpty name="aimReportsFilterPickerForm" property="relatedAgenciesElements">
             	<div id="relAgenciesTab" class="yui-hidden clrfix" style="height: 91%;">
                 	<div class="grayBorder clrfix">
@@ -127,7 +127,7 @@
 		%>				
 		<div id="otherCriteriaTab" class="yui-hidden clrfix"  style="height: 91%;">
 			<div class="grayBorder clrfix">
-				<logic:notEqual name="is_pledge_report" value="true" scope="request">
+				<logic:notEqual name="is_pledge_report" value="true" scope="session">
 				<c:set var="reqSelectorHeaderSize" scope="request" value="13" />
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="otherCriteriaElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="otherCriteriaPropertyObj" />
@@ -145,7 +145,7 @@
 				</logic:notEqual>
 				<%-- See details in https://jira.dgfoundation.org/browse/AMP-14926. --%>
 				<feature:display name="Actual Approval Year" module="Filter Section">
-				<logic:notEqual name="is_pledge_report" value="true" scope="request">
+				<logic:notEqual name="is_pledge_report" value="true" scope="session">
 				<div style="width: 17%; height: 30%; padding: 10px; float: left;">
 					<span style="white-space: nowrap"><b><digi:trn>Actual Approval Year</digi:trn> </b></span>
 						<div style="margin-top:10px;">
@@ -173,7 +173,7 @@
 	</div>
 </div>
 <div class="clrfix" style="height: 15%;">
-<logic:notEqual name="is_pledge_report" value="true" scope="request">
+<logic:notEqual name="is_pledge_report" value="true" scope="session">
 	<div style="width:60%; float:left; font-size: 12px;text-align: center;">
 		<c:set var="tooltip_translation">
 			<digi:trn>Specify keywords to look for in the project data.</digi:trn>

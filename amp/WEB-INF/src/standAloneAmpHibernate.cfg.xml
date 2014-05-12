@@ -16,8 +16,8 @@
    -->
   <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
   <property name="hibernate.connection.url">jdbc:postgresql://localhost/amp_tests_26_amp27</property>
-  <property name="hibernate.connection.username">postgres</property>
-  <property name="hibernate.connection.password">postgres</property>
+  <property name="hibernate.connection.username">amp</property>
+  <property name="hibernate.connection.password">amp</property>
   <!--
   		END ALTER HERE
    -->
@@ -30,6 +30,6 @@
   <property name="jdbc.use_get_generated_keys">true</property>
   <property name="jdbc.use_streams_for_binary">false</property>
   <property name="query.substitutions">true 1, false 0, yes 'Y', no 'N'</property>
-  <property name="hbm2ddl.auto">update</property>
+<!-- <property name="hbm2ddl.auto">update</property>  -->  
  </session-factory>
 </hibernate-configuration>

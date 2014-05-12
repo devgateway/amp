@@ -221,27 +221,10 @@ public class ColumnFilterGenerator {
 				
 			}
 	
-		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
+		} catch (HibernateException | DgException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 			e.printStackTrace();
 			ARUtil.logger.error(e);
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			ARUtil.logger.error(e);
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			ARUtil.logger.error(e);
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			ARUtil.logger.error(e);
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			ARUtil.logger.error(e);
-		}
+		}  
 		return addedColumnNames;
 	}
 }

@@ -49,4 +49,8 @@ public class AmpColumnsFilters implements Serializable {
 	public void setViewFieldName(String viewFieldName) {
 		this.viewFieldName = viewFieldName;
 	}
+	
+	@Override public String toString(){
+		return String.format("ACF: (bean: %s, view: %s, column: %s", this.beanFieldName, this.viewFieldName, this.column);
 	}
+}

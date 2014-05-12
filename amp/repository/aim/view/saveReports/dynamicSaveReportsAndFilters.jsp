@@ -69,7 +69,6 @@
 		<input type="hidden" id="saveReportId" value="${reportObject.ampReportId}" />
 		<input type="hidden" id="saveOriginalReportName" value="${reportObject.name}" />
 		<div class="bd" id="titlePanelBody">
-			<%-- <%@ include file="/repository/aim/view/multilingual/multilingualFieldEntry.jsp" %>  --%>
 			<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
 				<jsp:param name="attr_name" value="multilingual_tab_title" />
 				<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />

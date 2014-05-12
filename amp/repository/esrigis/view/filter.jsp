@@ -599,7 +599,9 @@ function initializeTranslations(){
 	<html:hidden property="filter.yearsInRange" styleId="yearsInRange" />
 	<html:hidden property="filter.workspaceOnly" styleId="workspaceOnly" />
 	<html:hidden property="filter.currencyId" styleId="currencyId" />
+	<html:hidden property="filter.defaultCurrencyId" styleId="defaultCurrencyId" />
 	<html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
+	<html:hidden property="filter.defaultFiscalCalendarId" styleId="defaultFiscalCalendarId" />
 	<html:hidden property="filter.startYear" styleId="startYear"/>
 	<html:hidden property="filter.endYear" styleId="endYear" />
 	<html:hidden property="filter.defaultStartYear" styleId="defaultStartYear"/>

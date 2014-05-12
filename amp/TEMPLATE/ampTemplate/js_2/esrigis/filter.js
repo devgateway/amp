@@ -191,6 +191,12 @@ function resetToDefaults(){
 		document.getElementById("transaction_type_127").checked = false;
 	}
 	
+	document.getElementById("currencies_dropdown_ids").value = document.getElementById("defaultCurrencyId").value;
+	document.getElementById("fiscalCalendar_dropdown_Id").value = document.getElementById("defaultFiscalCalendarId").value;
+	if (document.getElementById("selected_Peacebuilding_Marker_Id") != null) {
+		document.getElementById("selected_Peacebuilding_Marker_Id").selectedIndex  = 0;
+	}
+	document.getElementById("budget_dropdown").value = document.getElementById("onBudget").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
 	document.getElementById("budget_dropdown").selectedIndex = 0;

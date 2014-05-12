@@ -41,6 +41,7 @@ public class MapFilter {
 	private static final long serialVersionUID = 1L;
 	private boolean isinitialized;
 	private Long currencyId;
+	private Long defaultCurrencyId;
 	private Boolean workspaceOnly;
 	private TeamMember teamMember;
 	private List<AmpCurrency> currencies;
@@ -110,6 +111,7 @@ public class MapFilter {
 	private int transactionType;
 	private List<AmpFiscalCalendar> fiscalCalendars;
 	private Long fiscalCalendarId;
+	private Long defaultFiscalCalendarId;
 	private Integer largestProjectNumber;
 	private Boolean divideThousands;
 	private Integer divideThousandsDecimalPlaces;
@@ -1099,5 +1101,21 @@ public class MapFilter {
 
 	public void setSelectedSecondaryPrograms(Long[] selectedSecondaryPrograms) {
 		this.selectedSecondaryPrograms = selectedSecondaryPrograms;
+	}
+
+	public Long getDefaultFiscalCalendarId() {
+		return defaultFiscalCalendarId;
+	}
+
+	public void setDefaultFiscalCalendarId(Long defaultFiscalCalendarId) {
+		this.defaultFiscalCalendarId = defaultFiscalCalendarId;
+	}
+
+	public Long getDefaultCurrencyId() {
+		return CurrencyUtil.getCurrencyByCode("USD").getAmpCurrencyId();
+	}
+
+	public void setDefaultCurrencyId(Long defaultCurrencyId) {
+		this.defaultCurrencyId = defaultCurrencyId;
 	}
 }

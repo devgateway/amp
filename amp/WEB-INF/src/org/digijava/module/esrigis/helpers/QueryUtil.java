@@ -366,6 +366,7 @@ public class QueryUtil {
 		if (value != null) {
 			Long fisCalId = Long.parseLong(value);
 			filter.setFiscalCalendarId(fisCalId);
+			filter.setDefaultFiscalCalendarId(fisCalId);
 		}
 		
 		if (filter.getLargestProjectNumber() == null) {

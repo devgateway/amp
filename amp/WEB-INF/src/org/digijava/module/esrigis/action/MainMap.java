@@ -329,6 +329,7 @@ public class MainMap extends Action {
 		if (value != null) {
 			Long fisCalId = Long.parseLong(value);
 			filter.setFiscalCalendarId(fisCalId);
+			filter.setDefaultFiscalCalendarId(fisCalId);
 		}
 		if (filter.getLargestProjectNumber() == null) {
 			filter.setLargestProjectNumber(10);

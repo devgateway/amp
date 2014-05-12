@@ -6,7 +6,7 @@
 <li id="config_${item.mainEntity.id}"><input type="checkbox"
 	id="config_${item.mainEntity.id}_radio" name="sector_config_check"
 	title="${item.mainEntity.name}" value="${item.mainEntity.id}"
-	onclick="allOptionChecked(this,'sector_check','sub_sector_check');">
+	onclick="allDescendantsChecked(this,'config_${item.mainEntity.id}');">
 	<span>${item.mainEntity.classification.secSchemeName} </span> <br />
 	<ul style="list-style-type: none">
 		<c:forEach items="${item.subordinateEntityList}" var="sectorHelper">

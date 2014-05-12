@@ -6,6 +6,16 @@ function checkUncheckRelatedEntities(option,name,id){
 	uncheckAllRelatedEntities(name);
 	checkRelatedEntities(option,name,id);
 }
+
+function allDescendantsChecked(option, id){
+if (option.checked) {
+	$('#'+id+' :checkbox').attr('checked', 'checked');
+}
+else {
+	$('#'+id+' :checkbox').removeAttr('checked');
+}
+}
+
 function allOptionChecked(option,name,subname){
 	if(option.checked)
 	{

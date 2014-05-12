@@ -244,25 +244,21 @@ public class AmpReportGenerator extends ReportGenerator {
 		columnFilterSQLClause += " AND (extract(year from currency_date) = " + fundingYear + ")";
 		return columnFilterSQLClause;
 	}
-
-	protected String buildColumnFilterSQLClause(AmpColumns col, String extractorView){
-		// get the column bound condition:
-		String columnFilterSQLClause = "";
+	
+	/**
+	 * ugly! in case the reports engine survives mondrification, this will have to be properly handled through inheritance and dissolving of amp_columns_filters
+	 * @param col
+	 * @param extractorView
+	 * @return "" for nop, else an AND-prefixed SQL query
+	 */
+	protected String buildColumnFilterSQLClauseForPledges(AmpColumns col, String extractorView){
+		Set<ViewDonorFilteringInfo> filteredColumns = ColumnFilterGenerator.pledgesViews.get(extractorView);
+		if (filteredColumns == null)
+			return "";
 		
-		if(!filter.isJustSearch()) {
-			columnFilterSQLClause = ColumnFilterGenerator
-				.generateColumnFilterSQLClause(filter, col, true);
-		}
-
-		if (columnFilterSQLClause.length() > 0)
-			logger.info("Column " + col.getColumnName()
-					+ " appendable SQL filter: ..."
-					+ columnFilterSQLClause);
-
-		if ((extractorView != null) && extractorView.endsWith("v_mtef_funding")) // v_mtef_funding OR cached_v_mtef_funding
-			columnFilterSQLClause = generate_mtef_filter_statement(columnFilterSQLClause, col.getAliasName());
+		return ColumnFilterGenerator.generateColumnFilterSQLClause(filter, filteredColumns);
 		
-		if (pledgereport/* && extractorView.equals("v_pledges_funding_st")*/){
+//		if (pledgereport/* && extractorView.equals("v_pledges_funding_st")*/){
 			//columnFilterSQLClause = " AND (pledge_id IN (-1, 10))"; 
 			//columnFilterSQLClause = "AND (pledge_id IN (-1, 10)) AND (related_project_id IN (select distinct(vdf.amp_activity_id) from v_donor_funding vdf where vdf.pledge_id = 10))"; // BOZO! DELETE THIS FROM COMMIT!
 			//columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24, 25, 26, 27, 28, 29))"; // BOZO! DELETE THIS FROM COMMIT!
@@ -277,7 +273,26 @@ public class AmpReportGenerator extends ReportGenerator {
 //				columnFilterSQLClause += String.format(" AND (amp_activity_id IN (%s))", relatedProjectsQuery);
 //			if (extractorView.equals("v_pledges_funding_st"))
 //				columnFilterSQLClause += String.format(" AND (transaction_date between '2009-01-01' AND '2009-12-31')");
-		}
+//		}
+	}
+	
+	protected String buildColumnFilterSQLClause(AmpColumns col, String extractorView){
+		
+		if (filter.isJustSearch())
+			return "";
+		
+		String columnFilterSQLClause = "";
+		if (pledgereport)
+			columnFilterSQLClause = buildColumnFilterSQLClauseForPledges(col, extractorView);
+		else		
+			columnFilterSQLClause = ColumnFilterGenerator.generateColumnFilterSQLClause(filter, col.getFilters());
+
+		if (columnFilterSQLClause.length() > 0)
+			logger.info("Column " + col.getColumnName()	+ " appendable SQL filter: ..."	+ columnFilterSQLClause);
+
+		if ((extractorView != null) && extractorView.endsWith("v_mtef_funding")) // v_mtef_funding OR cached_v_mtef_funding
+			columnFilterSQLClause = generate_mtef_filter_statement(columnFilterSQLClause, col.getAliasName());
+		
 		return columnFilterSQLClause;	
 	}
 	

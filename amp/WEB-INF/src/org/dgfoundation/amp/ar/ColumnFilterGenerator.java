@@ -6,16 +6,17 @@ package org.dgfoundation.amp.ar;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -31,9 +32,22 @@ import org.digijava.module.aim.util.Identifiable;
  */
 public class ColumnFilterGenerator {
 
-	protected static Logger logger = Logger
-			.getLogger(ColumnFilterGenerator.class);
+	protected static Logger logger = Logger.getLogger(ColumnFilterGenerator.class);
 
+	/**
+	 * Map<extractor_view, Set<by_view_column_name>>
+	 */
+	public final static Map<String, Set<ViewDonorFilteringInfo>> pledgesViews = new HashMap<String, Set<ViewDonorFilteringInfo>>(){{
+		put(ArConstants.VIEW_PLEDGES_FUNDING, new HashSet<ViewDonorFilteringInfo>());
+			get(ArConstants.VIEW_PLEDGES_FUNDING).add(new ViewDonorFilteringInfo("aid_modality_id", "aidModalities"));
+			get(ArConstants.VIEW_PLEDGES_FUNDING).add(new ViewDonorFilteringInfo("financing_instrument_id", "financingInstruments"));
+			get(ArConstants.VIEW_PLEDGES_FUNDING).add(new ViewDonorFilteringInfo("terms_assist_id", "typeOfAssistance"));
+		put("v_pledges_aid_modality", new HashSet<ViewDonorFilteringInfo>());
+			get("v_pledges_aid_modality").add(new ViewDonorFilteringInfo("amp_modality_id", "aidModalities"));
+		put("v_pledges_type_of_assistance", new HashSet<ViewDonorFilteringInfo>());
+			get("v_pledges_type_of_assistance").add(new ViewDonorFilteringInfo("terms_assist_code", "typeOfAssistance"));			
+	}};
+	
 	/**
 	 * Attaches hard coded filters for hard coded columns. The FUNDING columns
 	 * are hard coded, because they do not appear in amp_columns table,
@@ -64,14 +78,7 @@ public class ColumnFilterGenerator {
 			AmpColumnsFilters acf6= new AmpColumnsFilters(c,"activityPledgesTitle","activity_pledges_title_id");
 			c.getFilters().add(acf6);
 		}
-	 
-		if (ArConstants.VIEW_PLEDGES_FUNDING.equals(c.getExtractorView())){
-			AmpColumnsFilters acf3= new AmpColumnsFilters(c,"financingInstruments","financing_instrument_id");
-			c.getFilters().add(acf3);
-			AmpColumnsFilters acf4= new AmpColumnsFilters(c,"typeOfAssistance","terms_assist_id");
-			c.getFilters().add(acf4);
-		}
-		
+	 		
 		if (ArConstants.VIEW_CONTRIBUTION_FUNDING.equals(c.getExtractorView())) {
 			//TODO: add filters here
 			AmpColumnsFilters acf = new AmpColumnsFilters(c,"donorGroups","org_grp_id");
@@ -133,28 +140,17 @@ public class ColumnFilterGenerator {
 	 *            operators , otherwise it will use OR
 	 * @return the complete SQL logical clause
 	 */
-	public static String generateColumnFilterSQLClause(AmpARFilter f, AmpColumns c,
-			boolean exclusive) {
+	public static String generateColumnFilterSQLClause(AmpARFilter f, Set<? extends ColumnFilteringInfo> filters) {
 		// get all bindings between this column and possible filter properties:
 		StringBuffer sb = new StringBuffer("");
-		Set<AmpColumnsFilters> filters = c.getFilters();
 		if (filters != null) {
-			for(AmpColumnsFilters cf:filters) {
+			for(ColumnFilteringInfo cf:filters) {
 				try {
-					Object property = PropertyUtils.getSimpleProperty(f, cf
-							.getBeanFieldName());
+					Object property = PropertyUtils.getSimpleProperty(f, cf.getBeanFieldName());
 					if (property == null)
 						continue;
-					sb.append((exclusive ? " AND " : " OR ")
-							+ generatePropertyFilterSQLClause(property, cf
-									.getViewFieldName()));
-				} catch (IllegalAccessException e) {
-					logger.error(e);
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					logger.error(e);
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
+					sb.append(" AND " + generatePropertyFilterSQLClause(property, cf.getViewFieldName()));
+				} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 					logger.error(e);
 					e.printStackTrace();
 				}
@@ -193,20 +189,21 @@ public class ColumnFilterGenerator {
 		try {
 			Query query;
 			Session session = PersistenceManager.getRequestDBSession();
-			query = session.createQuery("from "
-					+ AmpColumnsFilters.class.getName());
-			Iterator i = query.list().iterator();
-			while (i.hasNext()) {
-				AmpColumnsFilters cf = (AmpColumnsFilters) i.next();
-				
+			query = session.createQuery("from "	+ AmpColumnsFilters.class.getName());
+			List<AmpColumnsFilters> allFilters = query.list();
+			for(AmpColumnsFilters cf:allFilters)
+			{
 				if (cf == null)
 					continue;
+				
 				if (cf.getColumn() == null)
 					continue;
-				if(colNames.contains(cf.getColumn().getColumnName())) continue;
 				
-				Object property = PropertyUtils.getSimpleProperty(filter, cf
-						.getBeanFieldName());
+				if(colNames.contains(cf.getColumn().getColumnName()))
+					continue;
+				
+				Object property = PropertyUtils.getSimpleProperty(filter, cf.getBeanFieldName());
+				
 				if (property == null)
 					continue;
 				
@@ -214,7 +211,7 @@ public class ColumnFilterGenerator {
 					AmpReportColumn arc = new AmpReportColumn();
 					arc.setColumn(cf.getColumn());
 					arc.setOrderId(1L);
-					logger.info("Adding additional column "+cf.getColumn().getColumnName()+" because selected filter "+cf.getBeanFieldName()+" is filterRetrievable");
+					//logger.info("Adding additional column " + cf.getColumn().getColumnName() + " because selected filter "+cf.getBeanFieldName()+" is filterRetrievable");
 					extractable.add(arc);
 					addedColumnNames.add(arc.getColumn().getColumnName());
 				}

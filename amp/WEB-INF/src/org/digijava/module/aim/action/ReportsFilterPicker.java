@@ -678,6 +678,8 @@ public class ReportsFilterPicker extends Action {
 		
 		//private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
 		addFinancingLocationElement(filterForm, null, "All Financing Instrument Values", CategoryConstants.FINANCING_INSTRUMENT_KEY, "Financing Instrument", "filter_financing_instr_div", "selectedFinancingInstruments");
+		addFinancingLocationElement(filterForm, null, "All Aid Modality Values", CategoryConstants.AID_MODALITY_KEY, "Aid Modality", "filter_aid_modality_div", "selectedAidModalities");
+		
 		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance");
 		if (FeaturesUtil.isVisibleField("Mode of Payment") && isFalse(filterForm.getPledged())) {
 			addFinancingLocationElement(filterForm, "Mode of Payment", "All Mode of Payment Values", CategoryConstants.MODE_OF_PAYMENT_KEY, "Mode of Payment", "filter_mode_of_payment_div", "selectedModeOfPayment");
@@ -830,10 +832,13 @@ public class ReportsFilterPicker extends Action {
 				govProceduresDO.setUniqueId(ONLY_GOV_PROCEDURES);
 				children.add(govProceduresDO);
 			}
-			GroupingElement<HierarchyListableImplementation> activitySettingsElement	=
+			
+			if (!filterForm.isPledgeReport()){
+				GroupingElement<HierarchyListableImplementation> activitySettingsElement	=
 					new GroupingElement<HierarchyListableImplementation>("Activity Display Settings", "filter_act_settings_div", 
 							activitySettings, "selectedActivitySettings");
-			filterForm.getFinancingLocationElements().add(activitySettingsElement);
+				filterForm.getFinancingLocationElements().add(activitySettingsElement);
+			}
 		}
 		
 		
@@ -1418,6 +1423,7 @@ public class ReportsFilterPicker extends Action {
 
 		arf.setProjectCategory(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectCategory()));
 		arf.setFinancingInstruments(pumpCategoryValueSetFromForm(filterForm.getSelectedFinancingInstruments()));
+		arf.setAidModalities(pumpCategoryValueSetFromForm(filterForm.getSelectedAidModalities()));
 		arf.setTypeOfAssistance(pumpCategoryValueSetFromForm(filterForm.getSelectedTypeOfAssistance()));
 		arf.setModeOfPayment(pumpCategoryValueSetFromForm(filterForm.getSelectedModeOfPayment()));
 		arf.setProjectImplementingUnits(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectImplUnit()));

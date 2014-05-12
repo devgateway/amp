@@ -327,6 +327,7 @@ public class AMPStartupListener extends HttpServlet implements
 			session = PersistenceManager.getRequestDBSession();
 			
 			ReportsUtil.checkDatabaseSanity(session);
+			ReportsUtil.checkPledgesViewsSanity(session);
 			CurrencyUtil.checkDatabaseSanity(session);
 		}catch(Exception e){
 			throw new Error("database does not conform to minimum sanity requirements, shutting down AMP", e);

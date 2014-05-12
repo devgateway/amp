@@ -5,18 +5,17 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.dgfoundation.amp.ar.ColumnFilteringInfo;
+
 /**
  * @author mihai
  *
  */
-public class AmpColumnsFilters implements Serializable {
+public class AmpColumnsFilters extends ColumnFilteringInfo implements Serializable {
 	private Long id;
 	private AmpColumns column;
-	private String beanFieldName;
-	private String viewFieldName;
 	
 	public AmpColumnsFilters(){
-		
 	}
 	
 	public AmpColumnsFilters(AmpColumns column, String beanFieldName, String viewFieldName) {
@@ -28,26 +27,17 @@ public class AmpColumnsFilters implements Serializable {
 	public Long getId() {
 		return id;
 	}
+	
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
 	public AmpColumns getColumn() {
 		return column;
 	}
+	
 	public void setColumn(AmpColumns column) {
 		this.column = column;
-	}
-	public String getBeanFieldName() {
-		return beanFieldName;
-	}
-	public void setBeanFieldName(String beanFieldName) {
-		this.beanFieldName = beanFieldName;
-	}
-	public String getViewFieldName() {
-		return viewFieldName;
-	}
-	public void setViewFieldName(String viewFieldName) {
-		this.viewFieldName = viewFieldName;
 	}
 	
 	@Override public String toString(){

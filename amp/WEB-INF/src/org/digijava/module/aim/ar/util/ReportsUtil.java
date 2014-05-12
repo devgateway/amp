@@ -1,10 +1,14 @@
 package org.digijava.module.aim.ar.util;
 
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ColumnFilterGenerator;
+import org.dgfoundation.amp.ar.ViewDonorFilteringInfo;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -13,9 +17,15 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.exception.reports.ReportException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.caching.AmpCaching;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+/**
+ * various utils for reports
+ * @author Dolghier Constantin
+ *
+ */
 public class ReportsUtil {
 	private static Logger logger	= Logger.getLogger(ReportsUtil.class);
 	
@@ -125,10 +135,17 @@ public class ReportsUtil {
 		return null;
 	}	
 	
+	public static void throwErrorIfNotEmpty(String errMsg){
+		if (!errMsg.isEmpty()) {
+			logger.error("Database sanity check - FAIL: " + errMsg);
+			throw new Error(errMsg);
+		}
+	}
+	
 	/**
 	 * throws an exception containing the error message if the database does not respect some kind of minimum sanity checks. Returns normally if everything is fine
 	 */
-	public static void checkDatabaseSanity(Session session) throws ReportException
+	public static void checkDatabaseSanity(Session session) throws Exception
 	{
 		String errMsg = "";
 		
@@ -147,11 +164,31 @@ public class ReportsUtil {
 		if (!res.isEmpty())
 			errMsg +="Duplicate measurenames are found in AMP_MEASURES tables: (" + Util.toCSString(res) + ")" + System.lineSeparator();
 
-		if( !errMsg.isEmpty() ) {
-			logger.error("Database sanity check - FAIL: " + errMsg);
-			throw new Error(errMsg);
-		}else {
-			logger.debug("Database sanity check - PASS");
+		throwErrorIfNotEmpty(errMsg);
+		logger.debug("Database sanity check - PASS");
+	}
+	
+	public static void checkPledgesViewsSanity(Session session) throws Exception{
+		String errMsg = "";
+		logger.debug("Checking pledges reports sanity...");
+		
+		ArrayList<Field> fields = new ArrayList<Field>();
+		ContentTranslationUtil.getAllFields(fields, AmpARFilter.class); // getting into _fields_ the list of all the fields of the class
+		Map<String, Field> fieldsByNames = new HashMap<String, Field>();
+		for(Field field:fields)
+			fieldsByNames.put(field.getName(), field);
+		
+		for(String viewName:ColumnFilterGenerator.pledgesViews.keySet()){
+			Set<ViewDonorFilteringInfo> filteredColumns = ColumnFilterGenerator.pledgesViews.get(viewName);
+			Set<String> colNames = SQLUtils.getTableColumns(viewName);
+			for(ViewDonorFilteringInfo dfi:filteredColumns){
+				if (!colNames.contains(dfi.getViewFieldName()))
+					errMsg += String.format("The view %s does not contain column %s referenced in the ColumnFiltersConf", viewName, dfi.getViewFieldName());
+				if (!fieldsByNames.containsKey(dfi.getBeanFieldName()))
+					errMsg += String.format("AmpARFilter does not contain property %s referenced in the ColumnFiltersConf for view %s", dfi.getBeanFieldName(), dfi.getViewFieldName());
+			}
 		}
+		throwErrorIfNotEmpty(errMsg);
+		logger.debug("Pledges reports sanity - PASS");
 	}
 }

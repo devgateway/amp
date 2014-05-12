@@ -41,7 +41,49 @@ public class PledgeReportsTests extends ReportsTestCase
 		suite.addTest(new PledgeReportsTests("testRichPledgeByPrimarySector"));
 		suite.addTest(new PledgeReportsTests("testRichPledgeBySecondarySector"));
 		suite.addTest(new PledgeReportsTests("testRichPledgeByRegion"));
+		suite.addTest(new PledgeReportsTests("testPledgeFilterByAidModality"));
+		suite.addTest(new PledgeReportsTests("testPledgeFilterByTypeOfAssistance"));
 		return suite;
+	}
+	
+	public void testPledgeFilterByAidModality(){
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17423-aid-modality-filtered-development",
+				ColumnReportDataModel.withColumns("AMP-17423-aid-modality-filtered-development",
+					SimpleColumnModel.withContents("Pledges Titles", "Test pledge 1", "Test pledge 1").setIsPledge(true), 
+					SimpleColumnModel.withContents("Pledges Aid Modality", "Test pledge 1", "Development of shared analytical studies").setIsPledge(true), 
+					GroupColumnModel.withSubColumns("Funding",
+						GroupColumnModel.withSubColumns("2012",
+							SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25").setIsPledge(true))), 
+					GroupColumnModel.withSubColumns("Total Costs",
+						SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25").setIsPledge(true)))
+				.withTrailCells(null, null, "1,25", "1,25"))
+			.withTrailCells(null, null, "1,25", "1,25")
+			.withPositionDigest(true,
+				"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pledges Aid Modality: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 3, colSpan: 1))",
+				"(line 1:RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+				"(line 2:RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))");
+
+		runReportTest("Pledge report filtered by AidModality", "AMP-17423-aid-modality-filtered-development", new String[] {"irrelevant since this is a pledge report"}, fddr_correct);
+	}
+	
+	public void testPledgeFilterByTypeOfAssistance(){
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17423-type-of-assistance-filter",
+				ColumnReportDataModel.withColumns("AMP-17423-type-of-assistance-filter",
+						SimpleColumnModel.withContents("Pledges Titles", "Test pledge 1", "Test pledge 1").setIsPledge(true), 
+						SimpleColumnModel.withContents("Pledges Type Of Assistance", "Test pledge 1", "second type of assistance").setIsPledge(true), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2014",
+								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "265 568,98").setIsPledge(true))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "265 568,98").setIsPledge(true)))
+					.withTrailCells(null, null, "265 568,98", "265 568,98"))
+				.withTrailCells(null, null, "265 568,98", "265 568,98")
+				.withPositionDigest(true,
+					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pledges Type Of Assistance: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 3, colSpan: 1))",
+					"(line 1:RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1))",
+					"(line 2:RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1))");
+
+		runReportTest("Pledge report filtered by ToA", "AMP-17423-type-of-assistance-filter", new String[] {"irrelevant since this is a pledge report"}, fddr_correct);					
 	}
 	
 	public void testRichPledgeByRegion(){

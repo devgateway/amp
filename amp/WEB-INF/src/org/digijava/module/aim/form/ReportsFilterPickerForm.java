@@ -5,7 +5,11 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+
 import org.apache.struts.action.ActionForm;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.filters.GroupingElement;
@@ -62,6 +66,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	// private Object[] selectedDonors;
 	private Object[] selectedRisks;
 	private Object[] selectedFinancingInstruments;
+	private Object[] selectedAidModalities;
 	private Long[] selectedTypeOfAssistance;
 	private Long[] selectedModeOfPayment;
 	private Object[] selectedDonorTypes; // ids of AmpOrgType
@@ -318,6 +323,10 @@ public class ReportsFilterPickerForm extends ActionForm {
 	@java.lang.SuppressWarnings("all")
 	public Object[] getSelectedFinancingInstruments() {
 		return this.selectedFinancingInstruments;
+	}
+	
+	public Object[] getSelectedAidModalities(){
+		return this.selectedAidModalities;
 	}
 	
 	@java.lang.SuppressWarnings("all")
@@ -774,7 +783,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setFinancingLocationElements(final Collection<GroupingElement<HierarchyListableImplementation>> financingLocationElements) {
 		this.financingLocationElements = financingLocationElements;
 	}
-	
+
 	@java.lang.SuppressWarnings("all")
 	public void setModeOfPayment(final Collection<GroupingElement<HierarchyListableImplementation>> modeOfPayment) {
 		this.modeOfPayment = modeOfPayment;
@@ -883,6 +892,10 @@ public class ReportsFilterPickerForm extends ActionForm {
 	@java.lang.SuppressWarnings("all")
 	public void setSelectedFinancingInstruments(final Object[] selectedFinancingInstruments) {
 		this.selectedFinancingInstruments = selectedFinancingInstruments;
+	}
+	
+	public void setSelectedAidModalities(final Object[] selectedAidModalities){
+		this.selectedAidModalities = selectedAidModalities;
 	}
 	
 	@java.lang.SuppressWarnings("all")
@@ -1303,6 +1316,11 @@ public class ReportsFilterPickerForm extends ActionForm {
 	@java.lang.SuppressWarnings("all")
 	public void setShowWorkspaceFilter(final boolean showWorkspaceFilter) {
 		this.showWorkspaceFilter = showWorkspaceFilter;
+	}
+	
+	public boolean isPledgeReport(){
+		Object attr = TLSUtils.getRequest().getSession().getAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE);
+		return (attr != null && attr.toString().equals("true")) || (this.reporttype != null && this.reporttype.longValue() == ArConstants.PLEDGES_TYPE);
 	}
 	
 	@java.lang.Override

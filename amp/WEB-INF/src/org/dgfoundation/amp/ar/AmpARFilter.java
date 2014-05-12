@@ -316,6 +316,7 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpOrganisation> donnorgAgency;
 
 	private Set<AmpCategoryValue> financingInstruments = null;
+	private Set<AmpCategoryValue> aidModalities = null;
 	private Set<AmpCategoryValue> projectCategory = null;
 
 	
@@ -965,8 +966,8 @@ public class AmpARFilter extends PropertyListable {
 			String DONOR_GROUP_FILTER = "SELECT v.pledge_id FROM v_pledges_donor_group v WHERE amp_org_grp_id IN ("
 					+ Util.toCSString(donorGroups) + ")";
 
-			String FINANCING_INSTR_FILTER = "SELECT v.pledge_id FROM v_pledges_aid_modality v WHERE amp_modality_id IN ("
-				+ Util.toCSString(financingInstruments) + ")";
+			String AID_MODALITIES_FILTER = "SELECT v.pledge_id FROM v_pledges_aid_modality v WHERE amp_modality_id IN ("
+				+ Util.toCSString(aidModalities) + ")";
 			
 			String TYPE_OF_ASSISTANCE_FILTER = "SELECT v.pledge_id FROM v_pledges_type_of_assistance v WHERE terms_assist_code IN ("
 				+ Util.toCSString(typeOfAssistance) + ")";
@@ -1007,8 +1008,8 @@ public class AmpARFilter extends PropertyListable {
 			if (donorTypes != null && donorTypes.size() > 0)
 				PledgequeryAppend(DONOR_TYPE_FILTER);
 			
-			if (financingInstruments != null && financingInstruments.size() > 0){
-				PledgequeryAppend(FINANCING_INSTR_FILTER);
+			if (aidModalities != null && aidModalities.size() > 0){
+				PledgequeryAppend(AID_MODALITIES_FILTER);
 			}
 			if (typeOfAssistance != null && typeOfAssistance.size() > 0){
 				PledgequeryAppend(TYPE_OF_ASSISTANCE_FILTER);
@@ -1110,6 +1111,7 @@ public class AmpARFilter extends PropertyListable {
 				+ Util.toCSStringForIN(regions) + ")";
 		String FINANCING_INSTR_FILTER = "SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("
 				+ Util.toCSStringForIN(financingInstruments) + ")";
+		String AID_MODALITIES_FILTER = "SELECT amp_activity_id FROM v_modalities WHERE level_code IN (" + Util.toCSStringForIN(aidModalities) + ")";
 		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank IN ("
 	 	 		+ Util.toCSStringForIN(lineMinRank) + ")";
 	 	String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank IN ("
@@ -1500,6 +1502,8 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(REGION_FILTER);
 		if (financingInstruments != null && financingInstruments.size() > 0)
 			queryAppend(FINANCING_INSTR_FILTER);
+		if (aidModalities != null && !aidModalities.isEmpty())
+			queryAppend(AID_MODALITIES_FILTER);
 		if (risks != null && risks.size() > 0)
 			queryAppend(RISK_FILTER);
 		if ((lineMinRank != null) && (lineMinRank.size() > 0))
@@ -1798,6 +1802,14 @@ public class AmpARFilter extends PropertyListable {
 		this.financingInstruments = financingInstruments;
 	}
 
+	public Set<AmpCategoryValue> getAidModalities(){
+		return this.aidModalities;
+	}
+	
+	public void setAidModalities(Set<AmpCategoryValue> aidModalities){
+		this.aidModalities = aidModalities;
+	}
+	
 	public void setProjectCategory(Set<AmpCategoryValue> projectCategory) {
 		this.projectCategory = projectCategory;
 	}

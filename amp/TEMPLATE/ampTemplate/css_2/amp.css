@@ -51,7 +51,8 @@ table.inside1, td.inside1 {background:#fff;padding:0px 5px ;}
 table.inside, td.inside_zebra {}
 td.tdInsideHeader{background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x;padding:3px;text-align:center;}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
-td.inside {margin: 0; padding: 4px; border-bottom:1px solid #b8b7b7}
+td.inside {margin: 0; padding: 4px; border-bottom:1px solid #b8b7b7;}
+li.bullet {margin-left:14px;}
 #level-sorter {font-style: italic;font-size: 9px;font-family: Arial;margin-left: 3px; margin-top: 3px;margin-left: 3px; }
 
 #exportDiv td.inside

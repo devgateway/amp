@@ -2,6 +2,8 @@ package org.digijava.module.search.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -10,6 +12,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -47,13 +50,19 @@ public class Search extends Action {
 		} else {
 			// If it's a tab we need to redirect
 			if (request.getParameter("ampReportId") != null) {
-				Long ampReportId = Long.parseLong(request
-						.getParameter("ampReportId"));
+				String ampReportParam =  request.getParameter("ampReportId");
+				Long ampReportId = Long.parseLong(ampReportParam);
 				
 				if (ampReportId != null) {
 
 					AmpReports rep = (AmpReports) DbUtil.getAmpReports(new Long(ampReportId));
 					session.setAttribute(Constants.CURRENT_TAB_REPORT, rep);
+					Map<String, ReportContextData> map = (Map<String, ReportContextData>) session.getAttribute("reportContext");
+					if (!map.containsKey(ampReportParam))
+					{
+						ReportContextData result = new ReportContextData(ampReportParam);
+						map.put(ampReportParam, result);
+					}
 					if (rep.getDrilldownTab())
 					{
 						return mapping.findForward("redirectTab");

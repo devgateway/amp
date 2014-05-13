@@ -1,14 +1,19 @@
 package org.dgfoundation.amp.ar.amp28;
 
 
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.testmodels.ColumnReportDataModel;
 import org.dgfoundation.amp.testmodels.GroupColumnModel;
 import org.dgfoundation.amp.testmodels.GroupReportModel;
 import org.dgfoundation.amp.testmodels.SimpleColumnModel;
+import org.dgfoundation.amp.testutils.AmpReportModifier;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.PledgesFilterModifier;
 import org.dgfoundation.amp.testutils.ReportsTestCase;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.ProgramUtil;
 
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.NULL_PLACEHOLDER;
 import static org.dgfoundation.amp.testutils.ReportTestingUtils.MUST_BE_EMPTY;
@@ -41,7 +46,50 @@ public class PledgeReportsTests extends ReportsTestCase
 		suite.addTest(new PledgeReportsTests("testPledgeFilterByTypeOfAssistance"));
 		suite.addTest(new PledgeReportsTests("testPledgeFilterBySector"));
 		suite.addTest(new PledgeReportsTests("testPledgeFilterByRegion"));
+		suite.addTest(new PledgeReportsTests("testPledgeFilterByProgramNothing"));
+		suite.addTest(new PledgeReportsTests("testPledgeFilterByProgramSomething"));
 		return suite;
+	}
+	
+	public void testPledgeFilterByProgramNothing(){
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17423-programs")
+				.withTrailCells()
+				.withPositionDigest(true);
+		runReportTest("Pledge report filtered by Program", "AMP-17423-programs", new String[] {"irrelevant since this is a pledge report"}, fddr_correct);
+	}
+	
+	public void testPledgeFilterByProgramSomething(){
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17423-programs",
+				ColumnReportDataModel.withColumns("AMP-17423-programs",
+						SimpleColumnModel.withContents("Pledges Titles", "Test pledge 1", "Test pledge 1", "ACVL Pledge Name 2", "ACVL Pledge Name 2").setIsPledge(true), 
+						SimpleColumnModel.withContents("Pledges Programs", "Test pledge 1", "Subprogram p1.b", "ACVL Pledge Name 2", "Subprogram p1.b").setIsPledge(true), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2012",
+								SimpleColumnModel.withContents("Actual Commitments", MUST_BE_EMPTY).setIsPledge(true), 
+								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25").setIsPledge(true)), 
+							GroupColumnModel.withSubColumns("2014",
+								SimpleColumnModel.withContents("Actual Commitments", "ACVL Pledge Name 2", "50 000").setIsPledge(true), 
+								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 244,98").setIsPledge(true))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Commitments", "ACVL Pledge Name 2", "50 000").setIsPledge(true), 
+							SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23", "ACVL Pledge Name 2", "938 069,75").setIsPledge(true)))
+					.withTrailCells(null, null, "0", "1,25", "50 000", "1 033 244,98", "50 000", "1 971 315,98"))
+				.withTrailCells(null, null, "0", "1,25", "50 000", "1 033 244,98", "50 000", "1 971 315,98")
+				.withPositionDigest(true,
+					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pledges Programs: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 4), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 6, colSpan: 2))",
+					"(line 1:RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 2), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 2))",
+					"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1))");
+		
+		AmpReportModifier modifier = new AmpReportModifier() {
+			
+			@Override public void modifyAmpReportSettings(AmpReports report, AmpARFilter filter) {
+				filter.setSelectedPrimaryPrograms(new java.util.HashSet<AmpTheme>(){{
+					add(ProgramUtil.getThemeById(2L));
+					add(ProgramUtil.getThemeById(3L));
+				}});
+				filter.postprocess();
+			}};
+		runReportTest("Pledge report filtered by Program", "AMP-17423-programs", new String[] {"irrelevant since this is a pledge report"}, fddr_correct, modifier, "en");
 	}
 	
 	public void testPledgeFilterByRegion(){

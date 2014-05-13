@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-9868</jira>
+  <keyword>category_manager</keyword>
+  <keyword>budget</keyword>
+  <author>Alex</author>
+  <description>This moves the budget field backend to the category manager</description>
+  
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+     CREATE or REPLACE VIEW v_on_off_budget AS 
+		SELECT a.amp_activity_id AS amp_activity_id,
+		case 
+			when acv.category_value='On' then 'yes' 
+			when acv.category_value='Off' then 'no' 
+			when acv.id is null then 'unallocated' 
+			else acv.category_value||'' 
+		end as budget 
+		
+		
+		FROM 
+		amp_activities_categoryvalues aac  
+		 JOIN amp_category_value acv on aac.amp_categoryvalue_id=acv.id 
+		 JOIN amp_category_class acc on (acc.id=acv.amp_category_class_id AND acc.keyName='activity_budget') 
+		 RIGHT JOIN amp_activity a ON  a.amp_activity_id=aac.amp_activity_id 
+		
+		order by a.amp_activity_id; 
+
+	UPDATE amp_fields_visibility set name='On/Off/Treasure Budget' where name='On/Off Budget';
+	UPDATE amp_columns set columnName='On/Off/Treasure Budget' where columnName='On/Off Budget';
+      
+      </lang>
+    </script>
+  </apply>
+
+</tns:patch>

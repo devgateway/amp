@@ -1,0 +1,44 @@
+<wicket:extend>
+<span wicket:id="featureLabel"/>
+	<div style="height: 20px; width: 100%;">
+		<div style="float: left; width: 100%;">
+			<a href="#" onclick="$(this).parent().parent().siblings('div:first').slideToggle();return false;">
+			<b><span wicket:id="donorOrg"/></b>			
+			</a>
+			<wicket:trn>From</wicket:trn><span wicket:id="sourceOrg"/><wicket:trn>as the</wicket:trn><b><span wicket:id="sourceRoleLabel"/></b>						
+		</div>
+
+		<div wicket:id="delFunding" style="float: right;"/>
+	</div>
+	<div class="collapsable">
+		<div style="clear:both; height:1px;">&nbsp;</div>
+		<table width="0" border="0" cellspacing="2" cellpadding="2">
+			<tr>
+				<td>
+					<span wicket:id="active"/>
+				</td>
+				<td>
+					<span wicket:id="delegatedCooperation"/>
+				</td>
+				<td>
+					<span wicket:id="delegatedPartner"/>
+				</td>
+			</tr>
+		</table>
+		<div style="margin-top: 15px" wicket:id="fundingInfoSubsection"/>
+		<div style="margin-top: 15px" wicket:id="mtefProjectionsSubsection"/>
+		<div style="margin-top: 15px" wicket:id="commitments"/>
+		<div style="margin-top: 15px" wicket:id="disbOrders"/>
+		<div style="margin-top: 15px" wicket:id="estimatedDisbursements"/>
+		<div style="margin-top: 15px" wicket:id="releaseOfFunds"/>
+		<div style="margin-top: 15px" wicket:id="disbursements"/>
+		<div style="margin-top: 15px" wicket:id="expenditures"/>
+		
+		<div style="margin-top: 15px" wicket:id="donorObjective"/>
+		<div style="margin-top: 15px" wicket:id="conditions"/>
+	
+		<span wicket:id="orgRoleSelector"/>
+		<span wicket:id="changeOrg"/>		
+		<span wicket:id="addAnotherFunding" style="margin-left:130px;"/>
+	</div>
+</wicket:extend>

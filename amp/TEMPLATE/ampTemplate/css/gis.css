@@ -1,0 +1,38 @@
+.tableElement TD {
+	border:1px solid white;
+}
+.tableEven {
+	background-color:#EEF5F9;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+.tableHeader {
+	background-color:#4A687A;
+	color:white;
+	padding:2px;
+}		 
+.Hovered {
+	background-color:#a5bcf2;
+}
+SELECT {
+	Font-size:10px;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	width:350px;
+}
+
+/** hack for AMP-15531: first lowercase the whole text, then uppercase first letter only, so that "AAAA" and "aaaa" are both displayed as "Aaaa"
+*/
+.gis_title
+{
+	text-transform: lowercase;
+}
+
+.gis_title:FIRST-LETTER{
+	text-transform: uppercase;
+}

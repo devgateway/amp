@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-12490</jira>
+  <keyword>Dashboard</keyword>
+  <author>Mauricio</author> 
+  <description>Add graphs to the table</description>
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+		INSERT INTO amp_graph(id, name, extract_method, container_id, bar_graph_enabled, bar_profile_graph_enabled, line_graph_enabled, pie_graph_enabled, data_list_enabled, bar_growth_graph_enabled) 
+		VALUES(nextval('amp_graph_seq'), 'ODA historical trend', 'getFundingsGraphData', 'Fundings', true, false, true, false, true, false);
+
+		INSERT INTO amp_graph(id, name, extract_method, container_id, bar_graph_enabled, bar_profile_graph_enabled, line_graph_enabled, pie_graph_enabled, data_list_enabled, bar_growth_graph_enabled) 
+		VALUES(nextval('amp_graph_seq'), 'Aid Predictability', 'getAidPredictabilityGraphData', 'AidPredictability', true, false, true, false, true, false);
+
+		INSERT INTO amp_graph(id, name, extract_method, container_id, bar_graph_enabled, bar_profile_graph_enabled, line_graph_enabled, pie_graph_enabled, data_list_enabled, bar_growth_graph_enabled) 
+		VALUES(nextval('amp_graph_seq'), 'Aid Type', 'getAidTypeGraphData', 'AidType', true, false, true, true, true, false);
+
+		INSERT INTO amp_graph(id, name, extract_method, container_id, bar_graph_enabled, bar_profile_graph_enabled, line_graph_enabled, pie_graph_enabled, data_list_enabled, bar_growth_graph_enabled) 
+		VALUES(nextval('amp_graph_seq'), 'Aid Modality', 'getAidModalityGraphData', 'AidModality', true, false, true, true, true, false);
+
+		INSERT INTO amp_graph(id, name, extract_method, container_id, bar_graph_enabled, bar_profile_graph_enabled, line_graph_enabled, pie_graph_enabled, data_list_enabled, bar_growth_graph_enabled) 
+		VALUES(nextval('amp_graph_seq'), 'Sector Profile', 'getSectorProfileGraphData', 'SectorProfile', true, false, true, true, true, false);
+
+		INSERT INTO amp_graph(id, name, extract_method, container_id, bar_graph_enabled, bar_profile_graph_enabled, line_graph_enabled, pie_graph_enabled, data_list_enabled, bar_growth_graph_enabled) 
+		VALUES(nextval('amp_graph_seq'), 'Region Profile', 'getRegionProfileGraphData', 'RegionProfile', true, false, true, true, true, false);
+
+		INSERT INTO amp_graph(id, name, extract_method, container_id, bar_graph_enabled, bar_profile_graph_enabled, line_graph_enabled, pie_graph_enabled, data_list_enabled, bar_growth_graph_enabled) 
+		VALUES(nextval('amp_graph_seq'), 'Donor Profile', 'getDonorProfileGraphData', 'DonorProfile', true, false, true, true, true, false);
+
+		INSERT INTO amp_graph(id, name, extract_method, container_id, bar_graph_enabled, bar_profile_graph_enabled, line_graph_enabled, pie_graph_enabled, data_list_enabled, bar_growth_graph_enabled) 
+		VALUES(nextval('amp_graph_seq'), 'ODA Growth', 'getODAGrowthGraphData', 'ODAGrowth', false, false, false, false, true, true);
+
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

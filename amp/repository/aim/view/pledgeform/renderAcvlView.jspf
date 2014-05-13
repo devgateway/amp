@@ -1,0 +1,6 @@
+<c:if test="${not empty acvlId}">
+	<div class="col-xs-6">
+		<span class="pledge-acvl-view-label bold">${acvlLabel}</span>:
+		<span class="pledge-acvl-view-name"><c:out value="${pledgeForm.getAcvlValue(acvlId)}" /></span>
+	</div>
+</c:if>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-15096</jira>
+	<keyword>Multilingual autocomplete</keyword>
+	<author>mihai</author>
+	<description></description>
+	<apply>
+		<script>
+			<lang delimiter="@" type="postgres">
+			CREATE OR REPLACE FUNCTION contentmatch(_object_class character varying, _field_name character varying, _locale character, _search_text character varying)
+  			RETURNS bigint[] AS
+			$BODY$                                                                                                                                                                                                                                
+   			declare                                                                                                                                                                                                                                    
+           	declare ret bigint[];
+	   		declare wildcard character;
+   			begin                                                                                                                                                                                                                                     
+	   		SELECT array_agg(object_id) INTO ret FROM amp_content_translation WHERE
+			object_class like '%'||_object_class||'%' AND field_name=_field_name AND locale=_locale AND unaccent(translation) ilike unaccent(_search_text);                                                                                                                                                          
+		   	return ret;                                                                                                                                                                                                                              
+   		   	END;                                                                                                                                                                                                                                       
+   			$BODY$
+ 			LANGUAGE plpgsql VOLATILE@
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-13058</jira>
+    <keyword>GIS Result Matrix</keyword>
+    <author>George</author>
+    <description>Add global setting for regional or district funding switch</description> 
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+		insert into util_global_settings_possible_ (setting_name, value_id, value_shown) VALUES ('GIS Funding Type', 'donor', 'Donor Fundings');
+		insert into util_global_settings_possible_ (setting_name, value_id, value_shown) VALUES ('GIS Funding Type', 'regional', 'Regional Fundings');
+		insert into amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) values (nextval('amp_global_settings_seq'),'GIS Funding Type', 'donor', 'v_g_settings_gis_funding_type', 'Calculate GIS map shading according donor or regional fndings', 'general');
+		CREATE OR REPLACE VIEW "v_g_settings_gis_funding_type" AS SELECT util_global_settings_possible_.value_id AS id, util_global_settings_possible_.value_shown AS value FROM util_global_settings_possible_ WHERE ((util_global_settings_possible_.setting_name)::text = 'GIS Funding Type'::text);
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

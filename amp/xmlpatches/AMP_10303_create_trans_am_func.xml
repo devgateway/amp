@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-10303</jira>
+    <keyword>Gis</keyword>
+    <keyword>Result Matrix</keyword>
+    <keyword>PieChart</keyword>
+    <author>Medea Gugushvili</author>
+    <description>Function that will return amounts in the base currency</description>
+       <apply>
+        <script>
+            <lang  delimiter="@" type="postgres">
+              CREATE OR REPLACE FUNCTION gettransactionamountinbasecurr(fdId bigint)
+  				RETURNS double precision AS
+				$BODY$  		
+				declare r double precision;
+				declare code char(3);
+				declare dateFD timestamp without time zone;
+                declare amount double precision;
+                begin
+                select transaction_amount/fixed_exchange_rate into r from amp_funding_detail where amp_fund_detail_id =fdId;
+                if r is not null then return r;end if;
+                select cur.currency_code, transaction_date, transaction_amount into code,dateFD,amount from amp_currency cur inner join amp_funding_detail det on cur.amp_currency_id=det.amp_currency_id where det.amp_fund_detail_id =fdId;
+                return amount/getExchange(code,dateFD);
+                end;
+                $BODY$
+                LANGUAGE plpgsql VOLATILE@
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

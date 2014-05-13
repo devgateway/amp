@@ -1,0 +1,176 @@
+package org.dgfoundation.amp.onepager.components.features.items;
+
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.models.AmpAgreementSearchModel;
+import org.dgfoundation.amp.onepager.models.AutocompleteAcronymTitleModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.module.aim.dbentity.AmpAgreement;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.util.DbUtil;
+
+import java.util.Date;
+import java.util.HashSet;
+
+public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
+	private static final long serialVersionUID = 1L;
+
+	public AmpAgreementItemPanel(String id, final IModel<AmpFunding> model,
+			String fmName) {
+		super(id, model, fmName);
+		
+		final Model<AmpAgreement> editAgModel = new Model<AmpAgreement>(new AmpAgreement());
+		
+		final PropertyModel<AmpAgreement> agreement = new PropertyModel<AmpAgreement>(model, "agreement");
+		final Label agreementTextLabel = new Label("agreementText", 
+				new AutocompleteAcronymTitleModel(new PropertyModel<String>(agreement, "code"),
+												  new PropertyModel<String>(agreement, "title"), 
+												  TranslatorUtil.getTranslation("No agreement was selected!")));
+		agreementTextLabel.setOutputMarkupId(true);
+		add(agreementTextLabel);
+
+        final Form<AmpAgreement> newAgreementForm = new Form<AmpAgreement>("newAgreement", editAgModel);
+        newAgreementForm.setVisibilityAllowed(false);
+
+        AmpEditLinkField editAgreement = new AmpEditLinkField("editAgreement", "Edit Agreement") {
+            @Override
+            protected void onConfigure() {
+                if (agreement.getObject() == null)
+                    this.setVisibilityAllowed(false);
+                else
+                    this.setVisibilityAllowed(true);
+            }
+
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                //prepare the editing
+                editAgModel.setObject(agreement.getObject());
+                newAgreementForm.setVisibilityAllowed(true);
+                target.add(this.getParent());
+            }
+        };
+        add(editAgreement);
+
+        AmpDeleteLinkField deleteAgreement = new AmpDeleteLinkField("deleteAgreement", "Delete Agreement") {
+            @Override
+            protected void onConfigure() {
+                if (agreement.getObject() == null)
+                    this.setVisibilityAllowed(false);
+                else
+                    this.setVisibilityAllowed(true);
+            }
+
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                model.getObject().setAgreement(null);
+                target.add(this.getParent());
+            }
+        };
+        add(deleteAgreement);
+
+		final AmpAutocompleteFieldPanel<AmpAgreement> search = new AmpAutocompleteFieldPanel<AmpAgreement>(
+				"search", "Search Agreements", AmpAgreementSearchModel.class) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected String getChoiceValue(AmpAgreement choice) {
+				return DbUtil.filter(choice.getTitle());
+			}
+			
+			@Override
+			protected AmpAgreement getSelectedChoice(Long objId) {
+				if (objId.equals(-1L)){
+					AmpAgreement ag = new AmpAgreement();
+					ag.setId(-1L);
+					return ag;
+				}
+				return super.getSelectedChoice(objId);
+			}
+			
+			@Override
+			protected boolean showAcronyms() {
+				return true;
+			}
+			
+
+			@Override
+			protected String getAcronym(AmpAgreement choice) {
+				return DbUtil.filter(choice.getCode());
+			}
+			
+			@Override
+			public void onSelect(AjaxRequestTarget target, AmpAgreement choice) {
+					model.getObject().setAgreement(choice);
+					if (choice.getId() != null && choice.getId() < 0){
+						newAgreementForm.setVisibilityAllowed(true);
+						editAgModel.setObject(agreement.getObject());
+					}
+				target.add(this.getParent());
+			}
+
+			@Override
+			public Integer getChoiceLevel(AmpAgreement choice) {
+				return null;
+			}
+		};
+		search.setOutputMarkupId(true);
+		add(search);
+		
+		AmpTextFieldPanel<String> agCode = new AmpTextFieldPanel<String>("newAgCode", new PropertyModel<String>(editAgModel, "code"), "Code");
+		agCode.getTextContainer().setRequired(true);
+		newAgreementForm.add(agCode);
+		AmpTextFieldPanel<String> agTitle = new AmpTextFieldPanel<String>("newAgTitle", new PropertyModel<String>(editAgModel, "title"), "Title");
+        agTitle.getTextContainer().add(new AttributeModifier("size", new Model<String>("50")));
+		agTitle.getTextContainer().setRequired(true);
+		newAgreementForm.add(agTitle);
+		
+		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgEfDate", new PropertyModel<Date>(editAgModel, "effectiveDate"), "Effective Date"));
+		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgSgDate", new PropertyModel<Date>(editAgModel, "signatureDate"), "Signature Date"));
+		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgClDate", new PropertyModel<Date>(editAgModel, "closeDate"), "Close Date"));
+		AmpButtonField submit = new AmpButtonField("submit", "Save", true, true) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				IModel<AmpAgreement> formModel = (IModel<AmpAgreement>) form.getModel();
+				AmpAgreement ag = formModel.getObject();
+				Session wSession = Session.get();
+				HashSet<AmpAgreement> agItems = wSession.getMetaData(OnePagerConst.AGREEMENT_ITEMS);
+				if (agItems == null){
+					agItems = new HashSet<AmpAgreement>();
+					wSession.setMetaData(OnePagerConst.AGREEMENT_ITEMS, agItems);
+				}
+                agItems.add(ag);
+				model.getObject().setAgreement(ag);
+				target.add(agreementTextLabel);
+				editAgModel.setObject(new AmpAgreement());
+				newAgreementForm.setVisibilityAllowed(false);
+				target.add(newAgreementForm.getParent());
+				target.add(search);
+			}
+		};
+		newAgreementForm.add(submit);
+
+        AmpAjaxLinkField cancel = new AmpAjaxLinkField("cancel", "Cancel", "Cancel") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                newAgreementForm.setVisibilityAllowed(false);
+                target.add(newAgreementForm.getParent());
+            }
+        };
+        newAgreementForm.add(cancel);
+		newAgreementForm.setOutputMarkupId(true);
+		add(newAgreementForm);
+
+	}
+
+}

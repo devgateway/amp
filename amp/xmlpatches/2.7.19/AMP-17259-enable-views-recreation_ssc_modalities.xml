@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-17259</jira>
+	<keyword>Views</keyword>
+	<author>Julian de Anquin</author>
+	<description>Recreate views modified by this commit and modify amp_category_value por ssc_modalities</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';
+				update amp_category_class  set is_multiselect =true where keyname ='SSC_modalities';
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

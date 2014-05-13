@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpContactProperty" table="AMP_CONTACT_PROPERTIES">
+		<cache usage="read-write" />
+	  	<id name="id" column="property_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_CONTACT_PROPERTIES_seq</param>
+			</generator>
+		</id>
+		
+		<property name="name" column="name" type="java.lang.String" />
+		<property name="value" column="value" type="java.lang.String" />
+		<property name="extensionValue" column="extension_value" type="java.lang.String"></property>
+		
+		<many-to-one name="contact"  column="contact_id" class="org.digijava.module.aim.dbentity.AmpContact" cascade="save-update" lazy="false"/>
+		
+	</class>
+</hibernate-mapping>

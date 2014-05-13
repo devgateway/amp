@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-17102</jira>
+	<keyword>Views</keyword>
+	<author>Constantin Dolghier</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			    DROP VIEW IF EXISTS vportal_top_last_modified;
+CREATE OR REPLACE VIEW vportal_top_last_modified AS 
+         SELECT a.amp_activity_id, translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion'::character varying, 'name'::character varying, a.amp_activity_id, 'amp_activity_version'::character varying, 'name'::character varying, 'amp_activity_id'::character varying, 'ro'::bpchar) AS name, string_agg(translate_field('org.digijava.module.aim.dbentity.AmpOrganisation'::character varying, 'name'::character varying, o.amp_org_id, 'amp_organisation'::character varying, 'name'::character varying, 'amp_org_id'::character varying, 'ro'::bpchar)::text, ','::text) AS org_names, to_char(a.modified_date, 'DD-MM-YYYY'::text) AS date_label, 'ro'::text AS lang, a.modified_date
+           FROM amp_activity a, amp_organisation o, amp_funding f
+          WHERE a.draft &lt;&gt; true AND (a.approval_status::text = ANY (ARRAY['started_approved'::character varying::text, 'approved'::character varying::text])) AND a.modified_date IS NOT NULL AND f.amp_donor_org_id = o.amp_org_id AND f.amp_activity_id = a.amp_activity_id
+          GROUP BY a.amp_activity_id, to_char(a.modified_date, 'DD-MM-YYYY'::text), a.modified_date
+UNION 
+         SELECT a.amp_activity_id, translate_field('org.digijava.module.aim.dbentity.AmpActivityVersion'::character varying, 'name'::character varying, a.amp_activity_id, 'amp_activity_version'::character varying, 'name'::character varying, 'amp_activity_id'::character varying, 'en'::bpchar) AS name, string_agg(translate_field('org.digijava.module.aim.dbentity.AmpOrganisation'::character varying, 'name'::character varying, o.amp_org_id, 'amp_organisation'::character varying, 'name'::character varying, 'amp_org_id'::character varying, 'en'::bpchar)::text, ','::text) AS org_names, to_char(a.modified_date, 'DD-MM-YYYY'::text) AS date_label, 'en'::text AS lang, a.modified_date
+           FROM amp_activity a, amp_organisation o, amp_funding f
+          WHERE a.draft &lt;&gt; true AND (a.approval_status::text = ANY (ARRAY['started_approved'::character varying::text, 'approved'::character varying::text])) AND a.modified_date IS NOT NULL AND f.amp_donor_org_id = o.amp_org_id AND f.amp_activity_id = a.amp_activity_id
+          GROUP BY a.amp_activity_id, to_char(a.modified_date, 'DD-MM-YYYY'::text), a.modified_date
+  ORDER BY 6 DESC;
+       		</lang>
+		</script>
+	</apply>
+</tns:patch>
+

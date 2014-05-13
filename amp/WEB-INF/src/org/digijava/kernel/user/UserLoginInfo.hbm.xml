@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.kernel.user.UserLoginInfo" table="DG_USER_LOGIN_INFO">
+		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="assigned" />
+		</id>
+		<property name="lastVisit" column="LAST_VISIT" type="java.util.Date" />
+		<property name="secondToLastVisit" column="SECOND_TO_LAST_VISIT" type="java.util.Date" />
+		<property name="numberOfSessions" column="NUMBER_OF_SESSIONS" type="long" />
+	</class>
+</hibernate-mapping>

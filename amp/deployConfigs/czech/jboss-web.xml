@@ -1,0 +1,22 @@
+<jboss-web>
+<context-root>/</context-root>
+<virtual-host>czech.ampdev.net</virtual-host>
+ <class-loading java2ClassLoadingCompliance="false">
+ <loader-repository>
+ com.example:loader=amp-czech.war
+ <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
+ </loader-repository>
+ </class-loading>
+
+<resource-ref>
+	<!-- NEVER CHANGE THIS!! THE UNIFIED JNDI DATASOURCE ALIAS, VALID ONLY INSIDE THIS WAR -->
+	<!-- USE THIS NAME FOR LOOKUPS: java:comp/env/ampDS -->
+ 	<res-ref-name>ampDS</res-ref-name>
+ 	
+	<res-type>javax.sql.DataSource</res-type>
+	
+	<!-- THIS IS THE RELATED JNDI DATASOURCE NAME. SET THIS TO THE REAL C3P0/JBOSS DATASOURCE -->
+	<jndi-name>czechDS</jndi-name>
+
+</resource-ref>
+</jboss-web>

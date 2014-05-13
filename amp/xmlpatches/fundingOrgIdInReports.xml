@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-10326</jira>
+  <keyword>Funding Org Id</keyword>
+  <author>Dare</author> 
+  <trigger type="all">
+      <condition  type="entryInTableMissing" tablename="amp_columns" columnname="extractorView" columnvalue="v_funding_org_id" />
+  </trigger> 
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+      	insert into amp_columns (columnId,columnName, cellType, extractorView) values (nextval('AMP_COLUMNS_seq'),'Funding Organization Id','org.dgfoundation.amp.ar.cell.TextCell','v_funding_org_id' );
+      	
+      	CREATE  or replace VIEW v_funding_org_id AS select f.amp_activity_id AS amp_activity_id,f.financing_id AS funding_org_id  
+from amp_funding f join amp_activity a ON 
+(f.amp_activity_id = a.amp_activity_id and f.financing_id is not NULL and f.financing_id!='') 
+order by f.amp_activity_id;
+      </lang>
+    </script>
+  </apply>
+
+</tns:patch>

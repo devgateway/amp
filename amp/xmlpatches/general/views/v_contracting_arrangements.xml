@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMPOPS-666</jira>
+	<keyword>Views</keyword>
+	<author>Dolghier Constantin</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_contracting_arrangements;
+				CREATE OR REPLACE VIEW v_contracting_arrangements AS 
+				SELECT act.amp_activity_id, txt.body, act.amp_activity_id AS act_id, act.draft, act.approval_status AS status, txt.language AS locale
+				FROM amp_activity act, dg_editor txt
+				WHERE txt.editor_key::text = act.contracting_arrangements;
+        	</lang>
+		</script>
+	</apply>
+</tns:patch>

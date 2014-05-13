@@ -1,0 +1,11 @@
+<c:if test="${not empty viewFieldValue}">
+	<div class="row">
+		<div class="col-xs-4">
+			<span class="info-view-title bold">${viewFieldName}</span>
+		</div>
+	
+		<div class="col-xs-6 col-xs-offset-1">
+			<span class="info-view-value"><c:out value="${viewFieldValue}" /></span>
+		</div>	
+	</div>
+</c:if>	

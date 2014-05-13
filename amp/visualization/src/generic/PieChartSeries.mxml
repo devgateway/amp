@@ -1,0 +1,652 @@
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				xmlns:axiis="http://www.axiis.org/2009"
+				xmlns:degrafa="http://www.degrafa.com/2007"
+				xmlns:charts="org.axiis.charts.*"
+				xmlns:geometry="com.degrafa.geometry.*" 
+				xmlns:Examples="Examples.*"
+				backgroundGradientColors="[0xDDDDDD,0xF5F5F5]"
+				layout="absolute"
+				creationComplete="application1_creationCompleteHandler(event);" xmlns:debug="org.axiis.debug.*" >
+	
+	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)" method="POST">
+		<mx:request>
+			<format>xml</format>
+			<donut>true</donut>
+		</mx:request>
+	</mx:HTTPService>
+	<mx:Script>
+		<![CDATA[
+			import com.exportUtil.*;
+			
+			import flash.external.ExternalInterface;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.events.IndexChangedEvent;
+			import mx.events.MoveEvent;
+			import mx.events.SliderEvent;
+			import mx.managers.DragManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ArrayUtil;
+
+			import mx.rpc.events.FaultEvent;
+			
+			import org.axiis.core.AxiisSprite;
+			import org.axiis.data.DataSet;
+			import org.axiis.events.LayoutItemEvent;
+			//Variables for the service URL
+			private var curUrl:String = "";
+			private var strUrl:String = "";
+			private var dataAction:String = "";
+
+			//Variables for translated messages
+			private var trnMessagePanel:String = "";
+			private var trnMessageEmpty:String = "";
+			private var trnMessageLoadingPanel:String = "";
+			private var trnMessageLoading:String = "";
+			private var trnYears:String = "";
+			private var trnCurrency:String = "";
+
+			private var xS:int; 
+			private var yS:int;
+			
+			
+			private var groupSeparator:String = null;
+			private var decimalSeparator:String = null;
+			private var decimalsToShow:String = null;
+			private var currCode:String = null;
+			private var palette:Array = new Array();
+			
+			private var ds:DataSet = new DataSet();
+			
+			public function start():void
+			{
+				
+				//perform aggregations to create data values for our nested wedges
+				//ds.aggregateData(service.lastResult, "sector.amount", ["amount"]);
+				//ds.aggregateData(service.lastResult, "sector", ["aggregates.amount_amount_sum"]);
+				
+				//Set our max scale value.
+				//dataProvider = service.lastResult.sector;
+				
+				//perform aggregations to create data values for our nested wedges
+				if(isNaN(sliderYear.value))
+				{
+					var labelArray:Array = new Array();
+					try {
+						startYear = service.lastResult[dataField].startYear;
+						endYear = service.lastResult[dataField].endYear;
+						sliderYear.value = endYear;
+						labelArray = service.lastResult[dataField].yearsLabels.split(",")
+					} catch (errObject:Error) {
+						startYear = service.lastResult[dataField][0].startYear;
+						endYear = service.lastResult[dataField][0].endYear;
+						labelArray = service.lastResult[dataField][0].yearLabels.split(",")
+						sliderYear.value = endYear;
+					}
+					
+					/*					for (var index:Number=startYear; index <= endYear; index++){
+						labelArray[labelArray.length] = index;
+					}*/
+					sliderYear.labels = labelArray;
+				}
+				
+				//Set our max scale value.
+				dataProvider = service.lastResult[dataField];
+				if("length" in service.lastResult[dataField]) // If it's not empty
+				{
+					dc.visible = true;
+					messagePanel.visible = false;
+					sizePanel(0, 0);
+				}
+				else if ("name" in service.lastResult[dataField] && service.lastResult[dataField]["name"] != ""){
+					dc.visible = true;
+					messagePanel.visible = false;
+					sizePanel(0, 0);
+				}
+				else
+				{
+					dc.visible = false;
+					messagePanel.visible = true;
+					sizePanel(300, 200);
+				}
+//				dc.setStyle("borderStyle","solid");
+				
+				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
+				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
+				decimalsToShow = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DecimalsToShow')}"));
+				currCode = LoaderInfo(this.root.loaderInfo).parameters.currCode;
+				var paletteStr:String = null;
+				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
+				var palArray = paletteStr.split(",");
+				//palette = new Array();
+				for (var i:Number = 0; i < palArray.length; i++){
+					var tmp:Number = palArray[i];
+					palette.push(tmp);
+				}
+				if (groupSeparator == ""){
+					groupSeparator = " ";
+				}
+				
+				//Set formatting for the numbers in the chart
+				formatter.decimalSeparatorFrom=decimalSeparator;
+				formatter.decimalSeparatorTo=decimalSeparator;
+				formatter.thousandsSeparatorFrom=groupSeparator;
+				formatter.thousandsSeparatorTo=groupSeparator;
+				formatter.precision = decimalsToShow;
+				
+				dc.invalidateDisplayList();
+				var delayer:Delay = new Delay(captureSnapshot,4000,1); //capture snapshot
+				//Set the title and the rest of the parameters for legend
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
+				currCode = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Currency')}"));
+				var fontFamily:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontFamily')}"));
+				var fontSize:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontSize')}"));
+				var boldTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Bold')}"));
+				var showLegend:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowLegend')}"));
+				
+				chartLabel.text = title;
+				if(fontFamily != "")
+					chartLabel.setStyle("fontFamily", fontFamily);
+				else
+					chartLabel.setStyle("fontFamily", "Arial");
+				
+				chartLabel.setStyle("fontSize", fontSize);
+				
+				if(boldTitle == "true")
+					chartLabel.setStyle("fontWeight", "bold");
+				else
+					chartLabel.setStyle("fontWeight", "normal");
+				
+				if(showLegend == "true") 
+					legendLayout.visible = true;
+				else
+					legendLayout.visible = false;
+
+				messageLoadingPanel.visible = false;
+				sizeLoadingPanel(0, 0);
+				//dc.visible = true;
+				printLabel.text = trnYears + ": " + sliderYear.labels[sliderYear.values[0]-startYear] + " to " + sliderYear.labels[sliderYear.values[1]-startYear] +" - " + trnCurrency + ": " + currCode;
+				sliderYear.setVisible(true);
+			}
+			private function sizeLoadingPanel(w:uint, h:uint):void {
+				messageLoadingPanel.width = w;
+				messageLoadingPanel.height = h;
+			}			
+			private function captureSnapshot():void
+			{
+				sliderYear.visible = false;
+				printLabel.visible = true;
+				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
+				var strDomain:String = "";
+				var strProtocol:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
+					strDomain = "localhost:8081";
+				}
+				else
+				{
+					strProtocol = curUrl.split('/')[0];
+					strDomain = curUrl.split('/')[2];
+				}
+				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
+				printLabel.visible = false;
+				sliderYear.visible = true;
+			}
+			//Used to rotate wedge labels 180 degrees for readability
+			private function transposeLabel1(wedge:Object):Boolean
+			{
+				if ((wedge.startAngle + wedge.arc / 2) > 90 && (wedge.startAngle + wedge.arc / 2) < 270)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			
+			public function colorFunction(val:Object):Number
+			{
+				return Number(val) & -0x333333;
+			}
+			public function wrapIt(val:String):String
+			{
+				if (val != null){
+					return val + "%";
+				}
+				return "";
+			}
+			
+			public function dataTipFunction(val:Object):String
+			{
+				if (val != null){
+					//return val.data.label + "\n" + val.data.value;
+					return "<b>" + String(val.data.label) + "</b><br/>" + formatter.format(Number(val.data.value)) + " " + currCode;
+				}
+				return "";
+			}
+			
+			
+			protected function service_resultHandler(event:ResultEvent):void
+			{
+				start();
+			}
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				//Initialize variables and get the URL for the service that will provide data
+				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				var start:Boolean = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
+				curUrl = String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
+				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
+				strUrl ="/visualization/dataDispatcher.do";
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
+
+				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
+				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
+				trnMessageLoadingPanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoadingPanel','')}"));
+				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
+				trnYears = String(ExternalInterface.call("function(){ return getValueToFlash('trnYears','')}"));
+				trnCurrency = String(ExternalInterface.call("function(){ return getValueToFlash('trnCurrency','')}"));
+				
+				messagePanel.title = trnMessagePanel;
+				messageEmpty.text = trnMessageEmpty;
+				messageLoadingPanel.title = trnMessageLoadingPanel;
+				messageLoading.text = trnMessageLoading;
+				
+				var params:Object = {};
+				var selectedStartYear:Number = NaN;
+				var selectedEndYear:Number = NaN;
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")) != "") {
+					selectedStartYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")));
+					params[idContainer+"StartYear"] = selectedStartYear;
+					
+				}
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")) != "") {
+					selectedEndYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")));
+					params[idContainer+"EndYear"] = selectedEndYear;
+					
+				}
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				
+				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
+				var labelArray:Array = new Array();
+				if (sliderLabels==null || sliderLabels.length==0){
+					for(var year:int = startYear; year <= endYear; year++){
+						labelArray.push(year);
+					} 
+				} else {
+					for(var year:int = 0 ; year < sliderLabels.split(",").length-1; year++){
+						labelArray.push(sliderLabels.split(",")[year]);
+					}
+				}
+				sliderYear.labels = labelArray;
+				if (!isNaN(selectedStartYear)) {
+					sliderYear.values[0] = selectedStartYear;
+				}
+				else {
+					sliderYear.values[0] = startYear;
+				}
+				if (!isNaN(selectedEndYear)) {
+					sliderYear.values[1] = selectedEndYear;
+				}
+				else {
+					sliderYear.values[1] = endYear;
+				}
+				
+				var strDomain:String = "";
+				var strProtocol:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
+					strDomain = "localhost:8081";
+				}
+				else
+				{
+					strProtocol = curUrl.split('/')[0];
+					strDomain = curUrl.split('/')[2];
+				}
+				service.url = strProtocol + "//" + strDomain + strUrl;
+				params["format"] = "xml";
+				params[	"donut"] = "true";
+				params[	"action"] = dataAction;
+				
+				
+				//Handle special parameter cases
+				if(idContainer == "AidType"){
+					params["format"] = "xml";
+					params["donut"] = "true";
+					params[	"typeofaid"] = "true";
+					params["action"] = dataAction;
+				}
+				if(itemId != null && itemId != "-1"){
+					params["itemId"] = itemId;
+				}
+				if(start)
+					service.send(params);
+				
+				try {
+					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
+//					ExternalInterface.addCallback("refreshGraphNoData", refreshGraphNoData);			
+				}
+				catch(errObject:Error){
+					//Fail silently when running standalone
+				}
+			}
+			
+			public function refreshGraph():void
+			{
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
+
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
+				var params:Object = {
+					"format" : "xml",
+					"donut": "true",
+					"action": dataAction
+				};
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")) != "") {
+					startYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'StartYear')}")));
+				}
+				else{
+					startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				}
+				if (String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")) != "") {
+					endYear =  Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'EndYear')}")));
+				}
+				else{
+					endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+					
+				}
+				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
+				var labelArray:Array = new Array();
+				if (sliderLabels==null || sliderLabels.length==0){
+					for(var year:int = startYear; year <= endYear; year++){
+						labelArray.push(year);
+					} 
+				} else {
+					for(var year:int = 0 ; year < sliderLabels.split(",").length-1; year++){
+						labelArray.push(sliderLabels.split(",")[year]);
+					}
+				}
+				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
+				
+				//Handle special parameter cases
+				if(idContainer == "AidType"){
+					params = {
+						"format" : "xml",
+						"donut": "true",
+						"typeofaid" : "true",
+						"action": dataAction
+					};
+				}
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
+				if(itemId != null && itemId != "-1"){
+					params["itemId"] = itemId;
+				}
+				service.send(params);
+//				start();
+			}
+			
+			protected function sliderYear_changeHandler(event:SliderEvent):void
+			{
+				var delayer:Delay = new Delay(captureSnapshot,4000,1);
+
+				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				// TODO Auto-generated method stub
+				var params:Object = {};
+				params["year"] = sliderYear.value;
+				params["format"] = "xml";
+				params["donut"] = "true";
+				params["action"] = dataAction;
+				
+				//Handle special parameter cases
+				if(idContainer == "AidType"){
+					params["typeofaid"] = "true";
+				}
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
+				ExternalInterface.call("function(){ updateSliderValues('" + idContainer + "',"+params["startYear"]+","+params["endYear"]+")}");
+				printLabel.text = trnYears + ": " + sliderYear.labels[sliderYear.values[0]-startYear] + " to " + sliderYear.labels[sliderYear.values[1]-startYear] +" - " + trnCurrency + ": " + currCode;
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
+				service.send(params);
+				sliderYear.setVisible(false);
+			}
+			
+			private function sizePanel(w:uint, h:uint):void {
+				messagePanel.width = w;
+				messagePanel.height = h;
+			}
+			public function itemClick(evt:LayoutItemEvent):void{
+				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				var startYear:Number = null;
+				var endYear:Number = null;
+				if (sliderYear.visible == true){
+					startYear = sliderYear.values[0];
+					endYear = sliderYear.values[1];
+				}
+				ExternalInterface.call("itemClick",evt.item.data.id,idContainer,startYear,endYear);
+			}
+			//Section added for Drag&drop of Title
+			
+			private function mouseOverHandler(event:MouseEvent):void 
+			{                
+				var dragInitiator:Label=Label(event.currentTarget);
+				var ds:DragSource = new DragSource();
+				ds.addData(dragInitiator, "text");               
+				
+				xS=event.localX; 
+				yS=event.localY;
+				
+				var textProxy:Label = new Label();
+				textProxy.text = dragInitiator.text;
+				textProxy.setStyle("fontSize", dragInitiator.getStyle("fontSize"));
+				textProxy.setStyle("fontFamily", dragInitiator.getStyle("fontFamily"));
+				DragManager.doDrag(dragInitiator, ds, event, textProxy, -xS, -yS);
+			}
+			private function dragEnterHandler(event:DragEvent):void {
+				if (event.dragSource.hasFormat("text"))
+				{
+					DragManager.acceptDragDrop(Canvas(event.currentTarget));
+				}
+			}
+			
+			private function dragDropHandler(event:DragEvent):void {
+				Label(event.dragInitiator).x = Canvas(event.currentTarget).mouseX;
+				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
+			}
+
+
+			protected function service_faultHandler(event:FaultEvent):void
+			{
+				dc.visible = false;
+				messagePanel.title = "Network Error.";
+				messagePanel.visible = true;
+				sizePanel(300, 200);
+			}
+
+		]]>
+	</mx:Script>
+	<mx:CurrencyFormatter currencySymbol=""
+						  precision="0"
+						  id="formatter"
+						  alignSymbol="right"
+						  useThousandsSeparator="true"/>
+	
+	<!-- Data Provider -->
+	<mx:Object id="dataProvider"/>
+	
+	<!-- Preference Settings -->
+	<mx:Number id="startYear"></mx:Number>
+	<mx:Number id="endYear"></mx:Number>
+	<mx:Number id="angleGap">.5</mx:Number>
+	<mx:Number id="innerRadi1">.4</mx:Number>
+	<mx:Number id="innerRadi2">.78</mx:Number>
+	<mx:Number id="outerRadi1">.78</mx:Number>
+	<mx:Number id="outerRadi2">1</mx:Number>
+
+	<mx:String id="itemId">-1</mx:String>
+	<mx:String id="dataField">dataField</mx:String>
+	<mx:String id="fontFamily">Arial</mx:String>
+	<mx:Number id="fontSize">12</mx:Number>
+	<mx:String id="fontWeight">bold</mx:String>
+	<mx:String id="dataFontFamily">Arial</mx:String>
+	<mx:Number id="dataFontSize">12</mx:Number>
+	<mx:String id="dataFontWeight">bold</mx:String>
+	
+	<!-- Common calculations used by geometries -->
+	<axiis:NumericExpression id="outerRadius" value="{(dc.width/2)*outerRadi2}"/>
+	<axiis:NumericExpression id="center" value="{boundsRadius.value/2}"/>
+	<axiis:NumericExpression id="boundsRadius" value="{Math.min(this.height,this.width)}"/>
+	
+	<mx:Resize id="resize" />
+	
+	<mx:Canvas id="mxc1" 
+			   backgroundColor="white"
+			   horizontalCenter="0"
+			   verticalCenter="0"
+			   width="634" 
+			   height="460"
+			   dragEnter="dragEnterHandler(event);" 
+			   dragDrop="dragDropHandler(event);"
+			   >
+		
+		<!-- Data Canvas that holds our geometries -->
+		<axiis:DataCanvas id="dc"
+						  width="{mxc1.width}"
+						  height="{mxc1.height}"
+						  horizontalCenter="0"
+						  verticalCenter="0"
+						  showDataTips="false"
+						  
+						  >
+			<axiis:layouts>
+				<!-- innerWedgeGroup:  This renders the inner ring of wedges -->
+				
+				<axiis:WedgeStackGroup id="innerWedgeGroup"
+									   x="70"
+									   y="50"
+									   dataProvider="{dataProvider}"
+									   startAngle="0"
+									   outerRadiusRatio=".85"
+									   innerRadiusRatio=".4"
+									   width="{350}"
+									   height="{350}"
+									   labelField="percentage"
+									   dataField="percentage"
+									   fill="{innerWedgeFill}"
+									   fontFamily="{fontFamily}"
+									   fontSize="{fontSize}"
+									   fontWeight="{fontWeight}"
+									   fontColor="0xFFFFFF"
+									   labelFunction="wrapIt"
+									   itemClick="this.itemClick(event);"
+									   dataTipLabelFunction="{dataTipFunction}"
+									   >
+					<!--
+					targets="{[innerWedgeFillStop1,outerWedgeFill, outerWedgeGroup ,outerWedgeGroup.label]}"	
+					properties="{['color','color','outerRadiusRatio','fontWeight']}"
+					values="{[colorFunction,colorFunction,1.1,'bold']}"/>
+					
+					-->	
+					
+					<axiis:states>
+						<axiis:State enterStateEvent="mouseOver"
+									 exitStateEvent="mouseOut"
+									 propagateToAncestorsSiblings="false"
+									 propagateToAncestors="false"
+									 propagateToDescendents="true"
+									 targets="{[innerWedgeFillStop1, innerWedgeGroup]}"	
+									 properties="{['color', 'outerRadiusRatio']}"
+									 values="{[colorFunction, 1]}"/>
+					</axiis:states>
+					
+				</axiis:WedgeStackGroup>
+				<axiis:VBoxLayout id="legendLayout" 
+								  x="{innerWedgeGroup.width+70}"
+								  y="85"
+								  height="300"
+								  dataProvider="{dataProvider}"
+								  dataField="value" 
+								  showDataTips="false"
+								  > 
+					<axiis:drawingGeometries> 
+						<degrafa:RegularRectangle 
+							id="legendSquare" width="20" height="10"
+							fill="{legendFill}"
+							y="{legendLayout.currentReference.y+4}" 
+							x="{legendLayout.currentReference.x}"/> 
+						<degrafa:RasterText 
+							id="legendText" 
+							y="{legendLayout.currentReference.y}" 
+							x="{legendLayout.currentReference.x+22}" 
+							text="{legendLayout.currentDatum['label']}" 
+							fontFamily="{fontFamily}"
+							fontWeight="{fontWeight}"
+							fontSize="{fontSize}"
+							width="200"
+							wordWrap="true"
+							/> 
+					</axiis:drawingGeometries> 
+				</axiis:VBoxLayout> 
+			</axiis:layouts>
+			
+			<!-- Palletes used to generate our colors -->
+			<axiis:palettes>
+				<axiis:LayoutPalette layout="{innerWedgeGroup}" colors="{palette}" id="wedgePalette"/> 
+				<axiis:LayoutPalette layout="{legendLayout}" colors="{palette}" id="legendPalette"/> 
+				<!--<axiis:LayoutAutoPalette id="wedgePalette" colorFrom="0xD20000" colorTo="0x0000BD" layout="{innerWedgeGroup}"/>
+				<axiis:LayoutAutoPalette id="legendPalette" colorFrom="0xD20000" colorTo="0x0000BD" layout="{legendLayout}"/>-->
+			</axiis:palettes>
+			
+			<!-- Fills that use the colors generated by our palettes -->
+			<axiis:fills>
+				<degrafa:RadialGradientFill id="legendFill" cx="{legendLayout.width/2}" cy="{legendLayout.width/2}" radius="{(legendLayout.width/2)*innerRadi2}">
+					<degrafa:GradientStop color="{legendPalette.currentColor | 0x333333}" ratio=".6" />
+					<degrafa:GradientStop color="{legendPalette.currentColor}" id="innerWedgeFillStop2" ratio=".92" />
+					<degrafa:GradientStop color="{legendPalette.currentColor &amp; -0x352234}" ratio="1"/>
+				</degrafa:RadialGradientFill>
+				<degrafa:RadialGradientFill id="innerWedgeFill" cx="{innerWedgeGroup.width/2}" cy="{innerWedgeGroup.width/2}" radius="{(innerWedgeGroup.width/2)*innerRadi2}">
+					<degrafa:GradientStop color="{wedgePalette.currentColor | 0x333333}" ratio=".6" />
+					<degrafa:GradientStop color="{wedgePalette.currentColor}" id="innerWedgeFillStop1" ratio=".92" />
+					<degrafa:GradientStop color="{wedgePalette.currentColor &amp; -0x352234}" ratio="1"/>
+				</degrafa:RadialGradientFill>
+				<degrafa:SolidFill color="0xFFFF00" id="rollOverFill0" alpha=".9"/>
+				<degrafa:SolidFill color="0xFF00FF" id="rollOverFill1" alpha=".9"/>
+			</axiis:fills>
+			
+			<axiis:strokes>
+				<degrafa:SolidStroke color="0" alpha=".6" pixelHinting="true" id="outerWedgeStroke"/>
+			</axiis:strokes>
+			
+		</axiis:DataCanvas>
+		
+		<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
+		<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="true" allowThumbOverlap="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="410" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
+		<mx:Label width="450" x="10" y="25" id="printLabel" height="36" fontSize="12" visible="false"/>
+	</mx:Canvas>
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageEmpty" fontFamily="Arial" fontWeight="bold" fontSize="14" color="black" text="No data for the selected year"/>
+	</mx:Panel>
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Loading" width="0" height="0" id="messageLoadingPanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageLoading" fontWeight="bold" fontSize="13" color="black" text="Loading data..."/>
+	</mx:Panel>
+</mx:Application>

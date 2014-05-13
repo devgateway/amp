@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" 
+xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+        <jira>AMP-17073</jira>
+        <keyword>Add project life field in planification step of the activity form</keyword>
+        <author>ginchauspe</author>
+        <description>Add project life field in planification step of the activity form</description>
+        <apply>
+        <script>
+            <lang  delimiter=";" type="postgres">
+			INSERT INTO amp_columns(columnid,columnName,aliasname, cellType, extractorview)  
+ 			values(nextval('amp_columns_seq'),'Proposed Project Life','proposedProjectLife', 'org.dgfoundation.amp.ar.cell.TextCell','v_proposed_project_life');
+ 			
+ 			INSERT INTO amp_columns(columnid, columnName, aliasname, tokenexpression, cellType, extractorview, description)
+				VALUES (nextval('amp_columns_seq'),'Calculated Project Life','calculatedProjectLife', 'calculatedProjectLife',  'org.dgfoundation.amp.ar.cell.ComputedDateCell','v_computed_dates','Difference in days between Planned Start Date and Actual Completion Date');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

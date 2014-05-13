@@ -1,0 +1,41 @@
+<wicket:extend>
+		<tr wicket:id="tableHeading"><td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="right"><b class="ins_title"><wicket:trn key="aim:sector">Sector</wicket:trn></b></td>
+				<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="aim:percentage">Percentage</wicket:trn></b></td>	
+				<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+			</tr>
+		<tr wicket:id="listSectors">
+			<td class="inside" align="right">
+			<span class="sectorNameLabel" wicket:id="sectorLabel"/></td>
+			<td class="inside"><span wicket:id="percentage"/></td>
+			<td class="inside" align="left"><span wicket:id="delSector"/></td>
+		</tr>
+		<tr>
+			<td class="sectorNameLabel" align="right"><wicket:trn>Total Allocated</wicket:trn></td>
+			<td class="inside"><span wicket:id="totalPercSector"></span></td>
+		</tr>
+		<tr>
+			<td class="inside" align="left" colspan="3">
+				<span wicket:id="ajaxIndicator"/>
+				<span wicket:id="sectorPercentageTotal"/>
+				<span wicket:id="minSizeSectorsValidator"/>
+				
+				<span wicket:id="uniqueSectorsValidator"/>
+				<span wicket:id="treeSectorsValidator"/>
+				
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" class="inside" align="center">
+				<table>
+					<tr>
+						<td>
+							<span wicket:id="searchSectors"/>	
+						</td>
+						<td>
+							<span wicket:id="dividePercentage"/>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+</wicket:extend>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-12505</jira>
+  <keyword>Managed Funds</keyword>
+   <keyword>Organization type</keyword>
+  <author>Medea</author> 
+  <trigger type="all">
+      <condition  type="entryInTableMissing" tablename="amp_org_type" columnname="org_type_classification" columnvalue="FUND" />
+  </trigger> 
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+		INSERT INTO amp_org_type(amp_org_type_id, org_type, org_type_code, org_type_is_governmental, org_type_classification) VALUES (nextval('amp_org_type_seq'), 'FUND', 'FUND', false,'FUND');
+      </lang>
+    </script>
+  </apply>
+
+</tns:patch>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" 
+xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+        <jira>AMP-12039</jira>
+        <keyword>translations with html</keyword>
+        <author>eperez</author>
+        <description>Some translation tags have HTML in them</description>
+        <apply>
+                <script>
+                        <lang delimiter=";" type="postgres" >
+                     	update dg_message set message_utf8='Actual',orig_message='Actual' where message_key ='-1187359563' and lang_iso='en';
+                        update dg_message set message_utf8='Effectif' where message_key ='-1187359563' and lang_iso='fr';
+ 						update dg_message set message_utf8='Next',orig_message='Next' where message_key ='228837199' and lang_iso='en';
+                        update dg_message set message_utf8='Suivant' where message_key ='228837199' and lang_iso='fr';
+                        update dg_message set message_utf8='Следующий' where message_key ='228837199' and lang_iso='ru';
+                        update dg_message set message_utf8='Próximo' where message_key ='228837199' and lang_iso='pt';
+                        update dg_message set message_utf8='Pledge Information',orig_message='Pledge Information' where message_key ='-1175640852' and lang_iso='en';
+                        update dg_message set message_utf8='Upload Flag',orig_message='Upload Flag' where message_key ='-658355556' and lang_iso='en';
+                        update dg_message set message_utf8='Добавить флага' where message_key ='-658355556' and lang_iso='ru';
+                        update dg_message set message_utf8='Organization',orig_message='Organization' where message_key ='-1881383974' and lang_iso='en';
+                        update dg_message set message_utf8='Planned Expenditures',orig_message='Planned Expenditures' where message_key ='1040589783' and lang_iso='en';
+                        update dg_message set message_utf8='Actual Expenditures',orig_message='Actual Expenditures' where message_key ='1393742749' and lang_iso='en';
+                        update dg_message set message_utf8='Фактические расходы' where message_key ='1393742749' and lang_iso='ru';
+                        update dg_message set message_utf8='Fax',orig_message='Fax' where message_key ='-336947436' and lang_iso='en';
+                        update dg_message set message_utf8='Previous',orig_message='Previous' where message_key ='-1787239861' and lang_iso='en';
+                        update dg_message set message_utf8='Précédent' where message_key ='-1787239861' and lang_iso='fr';
+                        update dg_message set message_utf8='Anterior' where message_key ='-1787239861' and lang_iso='pt';
+                        update dg_message set message_utf8='List of Organization Types',orig_message='List of Organization Types' where message_key ='-1556268366' and lang_iso='en';
+                        update dg_message set message_utf8='Список типов организаций' where message_key ='-1556268366' and lang_iso='ru';
+                        update dg_message set message_utf8='Liste des Types d''Organisations' where message_key ='-1556268366' and lang_iso='fr';
+                        update dg_message set message_utf8='Click on this icon to forward message',orig_message='Click on this icon to forward message' where message_key ='1387632825' and lang_iso='en';
+						update dg_message set message_utf8='Cliquez sur cette icône pour transférer le message' where message_key ='1387632825' and lang_iso='fr';
+                  		update dg_message set message_utf8='Clique neste ícone para encaminhar a mensagem' where message_key ='1387632825' and lang_iso='pt';
+                  		update dg_message set message_utf8='Нажмите на этот значок, чтобы вперед сообщений' where message_key ='1387632825' and lang_iso='ru';
+                        update dg_message set message_utf8='Composants par nature',orig_message='Composants par nature' where message_key ='-333810563' and lang_iso='en';
+                        update dg_message set message_utf8='IPA Contracting Status (edit activity form page 13)',orig_message='IPA Contracting Status (edit activity form page 13)' where message_key ='1310728925' and lang_iso='en';
+                        update dg_message set message_utf8='Statut du contrat IPA (Modifier la page 13 du formulaire d''activité)' where message_key ='1310728925' and lang_iso='fr';
+                        update dg_message set message_utf8='IPA Договаривающиеся Статус (править формы деятельности стр. 13)' where message_key ='1387632825' and lang_iso='ru';
+                        update dg_message set message_utf8='IPA status de contrato (Edit forma de atividade Página 13)' where message_key ='1387632825' and lang_iso='pt';
+                        update dg_message set message_utf8='Click on this icon to delete tab',orig_message='Click on this icon to delete tab' where message_key ='1023581115' and lang_iso='en';
+						update dg_message set message_utf8='Haga clic en este icono para borrar la viñeta' where message_key ='1023581115' and lang_iso='es';
+                        update dg_message set message_utf8='Cliquez sur cette icône pour supprimer l''onglet' where message_key ='1023581115' and lang_iso='fr';
+                        update dg_message set message_utf8='Нажмите на этот значок, чтобы удалить вкладку' where message_key ='1023581115' and lang_iso='ru';
+                        update dg_message set message_utf8='Clique neste ícone para excluir a guia' where message_key ='1023581115' and lang_iso='pt';
+                        update dg_message set message_utf8='Organization:',orig_message='Organization:' where message_key ='1356880651' and lang_iso='en';
+                        update dg_message set message_utf8='Type of Assistance:',orig_message='Type of Assistance:' where message_key ='-1861749629' and lang_iso='en';
+                        update dg_message set message_utf8='Click on this icon to edit message',orig_message='Click on this icon to edit message' where message_key ='-1519237748' and lang_iso='en';
+						update dg_message set message_utf8='Cliquez sur cette icône pour modifier le message' where message_key ='-1519237748' and lang_iso='fr';
+                        update dg_message set message_utf8='Нажмите на этот значок, чтобы редактировать сообщения' where message_key ='-1519237748' and lang_iso='ru';
+                        update dg_message set message_utf8='Clique neste ícone para alterar a mensagem' where message_key ='-1519237748' and lang_iso='pt';
+                        update dg_message set message_utf8='Commitments:',orig_message='Commitments:' where message_key ='465831392' and lang_iso='en';
+                        update dg_message set message_utf8='Role:',orig_message='Role:' where message_key ='-445684374' and lang_iso='en';
+                        update dg_message set message_utf8='Papel:' where message_key ='-445684374' and lang_iso='pt';
+                        update dg_message set message_utf8='Click on this icon to edit report',orig_message='Click on this icon to edit report' where message_key ='-1340699369' and lang_iso='en';
+						update dg_message set message_utf8='Haga clic en este icono para editar el informe' where message_key ='-1340699369' and lang_iso='es';
+                        update dg_message set message_utf8='Cliquez sur cette icône pour modifier le rapport' where message_key ='-1340699369' and lang_iso='fr';
+                        update dg_message set message_utf8='Нажмите на этот значок, чтобы изменить отчет' where message_key ='-1340699369' and lang_iso='ru';
+                        update dg_message set message_utf8='Clique neste ícone para alterar o relatório' where message_key ='-1340699369' and lang_iso='pt';
+                        update dg_message set message_utf8='Click on this icon to delete the dashboard',orig_message='Click on this icon to delete the dashboard' where message_key ='4516683' and lang_iso='en';
+                        update dg_message set message_utf8='Нажмите на этот значок, чтобы удалить панель' where message_key ='4516683' and lang_iso='ru';
+                        update dg_message set message_utf8='Click on this icon to reply message' where message_key ='-891835810' and lang_iso='en';
+						update dg_message set message_utf8='Cliquez sur cette icône pour répondre au message' where message_key ='-891835810' and lang_iso='fr';
+                        update dg_message set message_utf8='Нажмите на этот значок, чтобы сообщение Ответить' where message_key ='-891835810' and lang_iso='ru';
+                        update dg_message set message_utf8='Clique neste ícone para responder à mensagem' where message_key ='-891835810' and lang_iso='pt';
+                        update dg_message set message_utf8='Delegated Cooperation:',orig_message='Delegated Cooperation:' where message_key ='1864704772' and lang_iso='en';
+                        update dg_message set message_utf8='CTRL+> - next result',orig_message='CTRL+> - next result' where message_key ='582831641' and lang_iso='en';
+                        update dg_message set message_utf8='CTRL+> - Résultats Précédents' where message_key ='582831641' and lang_iso='fr';
+                        update dg_message set message_utf8='CTRL +> - следующий результат' where message_key ='582831641' and lang_iso='ru';
+                        update dg_message set message_utf8='CTRL +> - Resultados Anterior' where message_key ='582831641' and lang_iso='pt';
+                        update dg_message set message_utf8='source de financement du gouvernement',orig_message='source de financement du gouvernement' where message_key ='-1358963668' and lang_iso='en';
+                        update dg_message set message_utf8='Name:',orig_message='Name:' where message_key ='-363816269' and lang_iso='en';
+                        update dg_message set message_utf8='Name',orig_message='Name' where message_key ='1336015399' and lang_iso='en';
+						delete from dg_message where message_key='1192528612'; --this is just an space (nbsp) should be deleted
+                        update dg_message set message_utf8='IPA Contracting activity category (edit activity form page 13)',orig_message='IPA Contracting activity category (edit activity form page 13)' where message_key ='1893460718' and lang_iso='en';
+                        update dg_message set message_utf8='Click on this icon to edit pledge' where message_key ='1152458204' and lang_iso='en';
+						update dg_message set message_utf8='Cliquez sur cette icône pour modifier promesse' where message_key ='1152458204' and lang_iso='fr';
+                        update dg_message set message_utf8='IPA Contracting Type (edit activity form page 13)',orig_message='IPA Contracting Type (edit activity form page 13)' where message_key ='1612037029' and lang_iso='en';
+                        update dg_message set message_utf8='Click on this icon to delete pledge',orig_message='Click on this icon to delete pledge' where message_key ='589393307' and lang_iso='en';
+						update dg_message set message_utf8='Cliquez sur cet icône pour supprimer la promesse' where message_key ='589393307' and lang_iso='fr';
+                        update dg_message set message_utf8='Click on this icon to edit the dashboard',orig_message='Click on this icon to edit the dashboard' where message_key ='-19161110' and lang_iso='en';
+                        update dg_message set message_utf8='Нажмите на этот значок, чтобы изменить приборную панель' where message_key ='-19161110' and lang_iso='ru';
+                        update dg_message set message_utf8='Percentage:',orig_message='Percentage:' where message_key ='-76495932' and lang_iso='en';
+                        update dg_message set message_utf8='Funding Status:',orig_message='Funding Status:' where message_key ='-580179063' and lang_iso='en';
+                        update dg_message set message_utf8='Click on this icon to delete report',orig_message='Click on this icon to delete report' where message_key ='-1903764266' and lang_iso='en';
+                        update dg_message set message_utf8='Delegated Partner:',orig_message='Delegated Partner:' where message_key ='-576663401' and lang_iso='en';
+                        update dg_message set message_utf8='of',orig_message='of' where message_key ='-99956693' and lang_iso='en';
+						update dg_message set message_utf8='de' where message_key ='-99956693' and lang_iso='fr';
+                        update dg_message set message_utf8='из' where message_key ='-99956693' and lang_iso='ru';
+                        update dg_message set message_utf8='de' where message_key ='-99956693' and lang_iso='pt';
+                        update dg_message set message_utf8='Actual Commitments',orig_message='Actual Commitments' where message_key ='-672083821' and lang_iso='en';
+                        update dg_message set message_utf8='Engagements Effectifs' where message_key ='-672083821' and lang_iso='fr';
+                        update dg_message set message_utf8='Other links',orig_message='Other links' where message_key ='925397747' and lang_iso='en';
+                        update dg_message set message_utf8='Другие ссылки' where message_key ='925397747' and lang_iso='ru';
+                        update dg_message set message_utf8='Autres Liens' where message_key ='521005443' and lang_iso='fr';
+                        update dg_message set message_utf8='Other links',orig_message='Other links' where message_key ='521005443' and lang_iso='en';
+                        update dg_message set message_utf8='Другие ссылки' where message_key ='521005443' and lang_iso='ru';
+                        update dg_message set message_utf8='Всего обязательства' where message_key ='23680153' and lang_iso='ru';
+                        update dg_message set message_utf8='Mode of Payment:',orig_message='Mode of Payment:' where message_key ='-1462829308' and lang_iso='en';
+                        update dg_message set message_utf8='Click on this icon to edit tab',orig_message='Click on this icon to edit tab' where message_key ='-1261061350' and lang_iso='en';
+                        update dg_message set message_utf8='Click on this icon to delete message',orig_message='Click on this icon to delete message' where message_key ='-1794380371' and lang_iso='en';
+                       update dg_message set message_utf8='Cliquez sur cette icône pour supprimer le message' where message_key ='-1794380371' and lang_iso='fr';
+                       update dg_message set message_utf8='Нажмите на этот значок, чтобы удалить сообщение' where message_key ='-1794380371' and lang_iso='ru';
+                       update dg_message set message_utf8='Clique neste ícone para apagar a mensagem' where message_key ='-1794380371' and lang_iso='pt';
+                       update dg_message set message_utf8='Logframe Category',orig_message='Logframe Category' where message_key ='-1260390705' and lang_iso='en';
+                       update dg_message set message_utf8='Catégorie du cadre logique' where message_key ='-1260390705' and lang_iso='fr';
+					   update dg_message set message_utf8='Value:',orig_message='Value:' where message_key ='132191501' and lang_iso='en';
+					   update dg_message set message_utf8='Manage Indicators',orig_message='Manage Indicators' where message_key ='1520382678' and lang_iso='en';
+					   update dg_message set message_utf8='Gérer les Indicateurs' where message_key ='1520382678' and lang_iso='fr';
+					   update dg_message set message_utf8='Управление показатели' where message_key ='1520382678' and lang_iso='ru';
+					   update dg_message set message_utf8='Please Indicate any Further Approval Needed',orig_message='Please Indicate any Further Approval Needed' where message_key ='210134920' and lang_iso='en';
+					   update dg_message set message_utf8='Veuillez indiquer toute autre approbation requise' where message_key ='210134920' and lang_iso='fr';
+					   update dg_message set message_utf8='Planned Commitments',orig_message='Planned Commitments' where message_key ='563450137' and lang_iso='en';
+     				   update dg_message set message_utf8='Other links',orig_message='Other links' where message_key ='-786858990' and lang_iso='en';
+ 					   update dg_message set message_utf8='Autres Liens' where message_key ='-786858990' and lang_iso='fr';
+					   update dg_message set message_utf8='Другие ссылки' where message_key ='-786858990' and lang_iso='ru';
+                       update dg_message set message_utf8='Planned',orig_message='Planned' where message_key ='-1949880773' and lang_iso='en';                                                 
+ 					   update dg_message set message_utf8='Who Has Authorized Pledge?',orig_message='Who Has Authorized Pledge?' where message_key ='-398419024' and lang_iso='en';
+					   update dg_message set message_utf8='Qui a autorisé la Promesse?' where message_key ='-398419024' and lang_iso='fr';
+					   update dg_message set message_utf8='Activity List',orig_message='Activity List' where message_key ='405608968' and lang_iso='en';
+					   update dg_message set message_utf8='Listes des Activités' where message_key ='405608968' and lang_iso='fr';
+					   update dg_message set message_utf8='Список операций' where message_key ='405608968' and lang_iso='ru';
+					   update dg_message set message_utf8='Other links',orig_message='Other links' where message_key ='-1689065703' and lang_iso='en';
+ 					   update dg_message set message_utf8='Autres Liens' where message_key ='-1689065703' and lang_iso='fr';
+					   update dg_message set message_utf8='Другие ссылки' where message_key ='-1689065703' and lang_iso='ru';
+					   update dg_message set message_utf8='Pledge Title',orig_message='Pledge Title' where message_key ='-1115314984' and lang_iso='en';
+					  update dg_message set message_utf8='Titre Promesse' where message_key ='-1115314984' and lang_iso='fr';
+                       update dg_message set message_utf8='Telephone',orig_message='Telephone' where message_key ='141465211' and lang_iso='en';
+						update dg_message set message_utf8='Téléphone' where message_key ='141465211' and lang_iso='fr';
+ 					   update dg_message set message_utf8='Other links',orig_message='Other links' where message_key ='925397747' and lang_iso='en';
+ 					   update dg_message set message_utf8='Autres Liens' where message_key ='925397747' and lang_iso='fr';
+					   update dg_message set message_utf8='Другие ссылки' where message_key ='925397747' and lang_iso='ru';
+					    update dg_message set message_utf8='Title',orig_message='Title' where message_key ='2006961871' and lang_iso='en';
+                	    update dg_message set message_utf8='Titre' where message_key ='2006961871' and lang_iso='fr';
+                        update dg_message set message_utf8='Debursări curente',orig_message='Actual Disbursements' where message_key ='1497276551' and lang_iso='ro';
+                        update dg_message set message_utf8='Actual Disbursements',orig_message='Actual Disbursements' where message_key ='1497276551' and lang_iso='en';
+                        update dg_message set message_utf8='Versements Effectifs' where message_key ='1497276551' and lang_iso='fr';
+                        update dg_message set message_utf8='Ministry',orig_message='Ministry' where message_key ='-706208282' and lang_iso='en';
+						update dg_message set message_utf8='Ministère' where message_key ='-706208282' and lang_iso='fr';
+ 						update dg_message set message_utf8='Search',orig_message='Search' where message_key ='-1112181809' and lang_iso='en';
+                        update dg_message set message_utf8='Поиск',orig_message='Поиск' where message_key ='-1112181809' and lang_iso='ru';
+                        update dg_message set message_utf8='Rechercher' where message_key ='-1112181809' and lang_iso='fr';
+  						update dg_message set message_utf8='Planned Disbursements',orig_message='Planned Disbursements' where message_key ='-860530803' and lang_iso='en';
+                        update dg_message set message_utf8='Планируемые Выплаты' where message_key ='-860530803' and lang_iso='ru';
+                        update dg_message set message_utf8='Country',orig_message='Country' where message_key ='-1021613299' and lang_iso='en';
+                        update dg_message set message_utf8='Страна' where message_key ='-1021613299' and lang_iso='ru';
+                        update dg_message set message_utf8='Pays' where message_key ='-1021613299' and lang_iso='fr';
+ 						update dg_message set message_utf8='Translation Manager',orig_message='Translation Manager' where message_key ='-1186563857' and lang_iso='en';
+            		    update dg_message set message_utf8='Gestionnaire de Traductions' where message_key ='-1186563857' and lang_iso='fr';          
+ 						update dg_message set message_utf8='Address',orig_message='Address' where message_key ='-922333077' and lang_iso='en';                                                                               
+                        update dg_message set message_utf8='Adresse' where message_key ='-922333077' and lang_iso='fr';
+ 						update dg_message set message_utf8='Type Code',orig_message='Type Code *' where message_key ='-969699573' and lang_iso='en';                                                                               
+                        update dg_message set message_utf8='Код типа' where message_key ='-969699573' and lang_iso='ru';                                                                               
+                        update dg_message set message_utf8='Code Type' where message_key ='-969699573' and lang_iso='fr';
+                        update dg_message set message_utf8='Tipo de código' where message_key ='-969699573' and lang_iso='pt';
+                        update dg_message set message_utf8='Tipo de código' where message_key ='-969699573' and lang_iso='es';
+                        update dg_message set message_utf8='Pledges List',orig_message='Pledges List' where message_key ='-1717815670' and lang_iso='en';                                                                               
+                       update dg_message set message_utf8='Liste des Promesses' where message_key ='-1717815670' and lang_iso='fr';
+                       update dg_message set message_utf8='Flag',orig_message='Flag' where message_key ='-1301249645' and lang_iso='en';
+                       update dg_message set message_utf8='Флаг' where message_key ='-1301249645' and lang_iso='ru';
+                       update dg_message set message_utf8='Drapeau' where message_key ='-1301249645' and lang_iso='fr';
+                       update dg_message set message_utf8='Email',orig_message='Email' where message_key ='1968158227' and lang_iso='en';
+                       update dg_message set message_utf8='Financing Instrument:',orig_message='Financing Instrument:' where message_key ='282729486' and lang_iso='en';
+                       update dg_message set message_utf8='Instrument de Financement:' where message_key ='282729486' and lang_iso='fr';
+                       update dg_message set message_utf8='Class:',orig_message='Class:' where message_key ='-500877530' and lang_iso='en';
+            		  delete from dg_message where message_key='-1357503883'; --already fixed. It is an old message on the DB
+                	  delete from dg_message where message_key='1372567318';
+                	  delete from dg_message where message_key='-1277758424';
+                	   delete from dg_message where message_key='-1629152287';
+                	   delete from dg_message where message_key='-816675458';
+                	   delete from dg_message where message_key='-900831747';
+                	   delete from dg_message where message_key='2139649666';
+                	   delete from dg_message where message_key='-1552898448';
+                	    delete from dg_message where message_key='781866398';	
+                	    delete from dg_message where message_key='307915861';
+                	   
+                </lang>
+                </script>
+        </apply>
+</tns:patch>

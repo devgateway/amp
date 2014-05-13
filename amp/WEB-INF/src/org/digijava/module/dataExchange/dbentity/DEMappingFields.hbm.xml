@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.dataExchange.dbentity.DEMappingFields" table="amp_de_mapping_fields">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_DE_MAPPING_FIELDS_seq</param>
+			</generator>
+		</id>
+		<property name="iatiPath" column="iati_path" type="java.lang.String" />
+		<property name="iatiItems" column="iati_items" type="java.lang.String" />
+		<property name="iatiValues" column="iati_values" type="java.lang.String" />
+		<property name="iatiLang" column="iati_lang" type="java.lang.String" />
+		<property name="ampId" column="amp_id" type="java.lang.Long" />
+		<property name="ampValues" column="amp_values" type="java.lang.String" />
+		<property name="ampClass" column="amp_class" type="java.lang.String" />
+		<property name="sourceId" column="source_id" type="java.lang.Long" />
+		<property name="feedFileName" column="feed_file_name" type="java.lang.String" />
+		<property name="status" column="status" type="java.lang.String" />
+		<property name="creationDate" type="java.sql.Timestamp" column="creation_date" generated="always" />
+
+        <!--
+        <property name="sameAsMaping" type="org.digijava.module.dataExchange.dbentity.DEMappingFields" column="same_as"/>
+        -->
+
+        <many-to-one name="sameAsMaping" column="same_as" lazy="false"
+                     class="org.digijava.module.dataExchange.dbentity.DEMappingFields" cascade="none" />
+        <!--
+        <many-to-one name="uploadSession" column="upload_session" class="org.digijava.module.dataExchange.dbentity.AmpDEUploadSession" cascade="none"/>
+        -->
+
+        <set name="uploadSessionsLinked" cascade="save-update" table="de_mapping_fields_up_sessions">
+            <key column="id"/>
+            <many-to-many column="sess_id" class="org.digijava.module.dataExchange.dbentity.AmpDEUploadSession"/>
+        </set>
+
+	</class>
+</hibernate-mapping>

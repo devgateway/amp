@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the AMPP Homepage feature.
+ */
+
+include_once('ampp_homepage.features.inc');

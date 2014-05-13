@@ -1,0 +1,17 @@
+### Eclipse Workspace Patch 1.0
+#P ampp
+Index: sites/all/modules/contrib/wysiwyg/editors/tinymce.inc
+===================================================================
+RCS file: /wwwroot/repository/drupal/ampp/sites/all/modules/contrib/wysiwyg/editors/tinymce.inc,v
+retrieving revision 1.2
+diff -u -r1.2 tinymce.inc
+--- sites/all/modules/contrib/wysiwyg/editors/tinymce.inc	10 Jan 2012 22:43:14 -0000	1.2
++++ sites/all/modules/contrib/wysiwyg/editors/tinymce.inc	3 Apr 2013 05:27:48 -0000
+@@ -186,6 +186,7 @@
+     $settings['theme_advanced_styles'] = implode(';', array_filter(explode("\n", str_replace("\r", '', $config['css_classes']))));
+   }
+ 
++  $settings['popup_css'] = $editor['library path'].'/themes/'.$theme.'/skins/default/dialog.css';
+   if (isset($config['css_setting'])) {
+     if ($config['css_setting'] == 'theme') {
+       $settings['content_css'] = implode(',', wysiwyg_get_css());

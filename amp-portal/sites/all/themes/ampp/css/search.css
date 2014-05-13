@@ -1,0 +1,183 @@
+
+#ampp-search-form {
+}
+
+#ampp-search-form .form-item label {
+  float: left;
+  font-weight: normal;
+  line-height: 28px;
+  width: 120px;
+}
+
+#ampp-search-form .description {
+  clear: both;
+  margin-left: 120px;
+}
+
+#ampp-search-form .modal-selection {
+  display: inline-block;
+  height: 28px;
+  margin: 0px 8px;
+  vertical-align: middle;
+}
+
+#ampp-search-form .form-submit {
+  margin-right: 8px;
+}
+
+#ampp-search-form .form-type-date-popup {
+  margin-bottom: 0;
+}
+
+#ampp-search-form .container-inline-date {
+  float: left;
+  clear: none;
+}
+
+#ampp-search-form .container-inline-date .form-text {
+  width: 160px;
+}
+
+#ampp-search-form .container-inline-date .date-padding {
+  padding: 0;
+}
+
+#ampp-search-form .container-inline-date .description {
+  margin: 0;
+}
+
+#ampp-search-form .container-inline-date label[for=edit-period-end-datepicker-popup-0] {
+  width: auto;
+  margin-right: 10px;
+}
+
+/* Define the search form info block style. */
+#ampp-search-form .form-actions .search-form-throbber {
+  display: none;
+}
+#ampp-search-form .form-actions .search-form-info {
+  display: inline;
+}
+#ampp-search-form .form-actions.calculating .search-form-throbber {
+  background-image: url("../../../../../misc/throbber.gif");
+  background-position: 0px -19px;
+  background-repeat: no-repeat;
+  display: inline;
+  padding-left: 16px;
+}
+#ampp-search-form .form-actions.calculating .search-form-info {
+  display: none;
+}
+
+/* @TODO: Remove this hack. */
+.view-projects-search-result .more-locations {
+  cursor: pointer;
+}
+
+.view-projects-search-result .hidden-locations {
+  display:none;
+}
+
+#ampp-search-form .token-input-list-facebook input {
+  border: 0;
+  margin:0;
+  padding: 0;
+}
+
+.page-search .form-text {
+  background: #FFFFFF;
+  border: 1px solid #CACACA;
+  padding: 5px;
+  width: 83%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#ampp-search-form .token-input-list-facebook {
+  background: #FFFFFF;
+  border: 1px solid #CACACA;
+  float: left;
+  padding: 0px;
+  padding-left: 4px;
+  width: 83%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.page-homepage #ampp-search-form .token-input-list-facebook {
+  width: 470px;
+}
+
+#ampp-search-form .token-input-input-token-facebook {
+  margin: 3px;
+}
+
+#ampp-search-form .token-input-input-token-facebook input {
+  padding: 1px 3px;
+}
+
+#ampp-search-form .form-select {
+  padding: 4px;
+  width: 160px;
+}
+
+#ampp-search-form .form-type-checkbox .form-checkbox {
+  float: left;
+  margin: 6px 6px 6px 0;
+}
+
+#ampp-search-form .form-item-budget .form-item-budget {
+  clear: none;
+  float: left;
+  margin: 0 10px 0 0;
+}
+
+#ampp-search-form .form-type-checkbox label.option {
+  float: none;
+  width: auto;
+}
+
+#ampp-search-form .form-radios label.option {
+  line-height: normal;
+}
+
+.view-projects-search-result {
+  font-size: 10px;
+}
+
+.view-projects-search-result .even td {
+  background: #F2F2F2;
+}
+
+.view-projects-search-result th {
+  background: #C7D4DB;
+  border: 1px solid #FFFFFF;
+  padding: 10px 5px;
+}
+
+.view-projects-search-result td {
+  background: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  font-family: Verdana;
+  padding: 1px 5px;
+  vertical-align: top;
+}
+
+.view-projects-search-result .views-field-view-link {
+  padding: 5px;
+  text-align: center;
+  width: 3em;
+}
+
+.view-projects-search-result .transaction-header,
+.view-projects-search-result .transaction-field {
+  text-align:right;
+  min-width: 70px;
+}
+
+.view-projects-search-result .date-field {
+  font-size: 9px;
+  min-width: 70px;
+}

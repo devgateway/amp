@@ -1,0 +1,127 @@
+<?php
+
+/**
+ * @file
+ * Test the Reroute Email module.
+ *
+ */
+class RerouteEmailTestCase extends DrupalWebTestCase {
+  protected $admin_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Reroute Email test',
+      'description' => 'Test Reroute Email modules ability to reroute mail.',
+      'group' => 'Reroute Email',
+    );
+  }
+
+  /**
+   * Enable modules and create user with specific permissions.
+   */
+  function setUp() {
+    parent::setUp('reroute_email', 'contact');
+    $this->admin_user = $this->drupalCreateUser(array('administer contact forms', 'access site-wide contact form', 'administer reroute email'));
+  }
+
+  /**
+   * Basic tests for reroute_email.
+   *
+   * @todo: There are enough of these now that they can be refactored into
+   * some decent utility functions, instead of all this copy and paste.
+   */
+  function testBasicNotification() {
+    $reroute_destination = "rerouted@example.com";
+    $original_destination = "original@example.com";
+    $additional_destination = "additional@example.com";
+    // Login the admin user.
+    $this->drupalLogin($this->admin_user);
+
+    // Configure to reroute normally to rerouted@example.com.
+    $post = array(
+      'reroute_email_address' => $reroute_destination,
+      'reroute_email_enable' => TRUE,
+      'reroute_email_enable_message' => TRUE,
+    );
+    $this->drupalPost("admin/config/development/reroute_email", $post, t('Save configuration'));
+    $this->assertText(t("The configuration options have been saved."));
+
+    // Configure the contact settings to send to $original_destination.
+    $this->drupalPost('admin/structure/contact/edit/1', array('recipients' => $original_destination), t('Save'));
+
+    // Go to the contact page and send an email.
+    $post = array('subject' => "Test test test", 'message' => 'This is a test');
+        $this->drupalPost("contact", $post, t("Send message"));
+    $this->assertText(t("Your message has been sent"));
+    $mails = $this->drupalGetMails();
+    $mail = end($mails);
+    $this->assertMail('to', $reroute_destination, t("Email was rerouted to @address", array('@address' => $reroute_destination)));
+    $searchFor = t("Originally to: @to", array('@to' => $original_destination));
+    $hasInfo = preg_match("/$searchFor/", $mail['body']);
+    $this->assertTrue($hasInfo, t('Found the correct "Originally to" line in the body'));
+    $this->verbose(t("Email body was:") . print_r("<pre>{$mail['body']}</pre>", TRUE));
+    $this->assertTrue(strpos($mail['body'], 'Originally to') !== FALSE, t('Body does contain "Originally to"'));
+
+    // Now try sending to one of the additional email addresses that should not be rerouted.
+    // Configure two email addresses in reroute form.
+    // Body injection is still turned on.
+    $post = array(
+      'reroute_email_enable' => TRUE,
+      'reroute_email_address' => "$reroute_destination, $additional_destination",
+      'reroute_email_enable_message' => TRUE,
+    );
+    $this->drupalPost("admin/config/development/reroute_email", $post, t('Save configuration'));
+    $this->assertText(t("The configuration options have been saved."));
+
+    // Configure the contact settings to point to the additional recipient.
+    $this->drupalPost('admin/structure/contact/edit/1', array('recipients' => $additional_destination), t('Save'));
+
+    // Go to the contact page and send an email.
+    $post = array('subject' => "Test test test", 'message' => 'This is a test');
+    $this->drupalPost("contact", $post, t("Send message"));
+    $this->assertText(t("Your message has been sent"));
+    $mails = $this->drupalGetMails();
+    $mail = end($mails);;
+    $this->assertMail('to', $additional_destination, t("Email was not rerouted because destination was in whitelist"));
+
+
+    // Now change the configuration to disable reroute and set the original email recipients.
+    $post = array(
+      'reroute_email_enable' => FALSE,
+      'reroute_email_address' => $reroute_destination,
+      'reroute_email_enable_message' => TRUE,
+    );
+    $this->drupalPost("admin/config/development/reroute_email", $post, t('Save configuration'));
+    $this->assertText(t("The configuration options have been saved."));
+    // Set the contact form to send to original_destination.
+    $this->drupalPost('admin/structure/contact/edit/1', array('recipients' => $original_destination), t('Save'));
+    // Go to the contact page and send an email.
+    $post = array('subject' => "Test test test", 'message' => 'This is a test');
+    $this->drupalPost("contact", $post, t("Send message"));
+    $this->assertText(t("Your message has been sent"));
+    $mails = $this->drupalGetMails();
+    $mail = end($mails);
+    // Mail should not be rerouted - should go to $original_destination.
+    $this->assertMail('to', $original_destination, t("Mail not rerouted - sent to original destination."));
+    $this->verbose(t("Email 'to' was:") . print_r("<pre>{$mail['to']}</pre>", TRUE));
+
+    // Configure to reroute without body injection.
+    $post = array(
+      'reroute_email_address' => $reroute_destination,
+      'reroute_email_enable' => TRUE,
+      'reroute_email_enable_message' => FALSE,
+    );
+    $this->drupalPost("admin/config/development/reroute_email", $post, t('Save configuration'));
+    $this->assertText(t("The configuration options have been saved."));
+    // Go to the contact page and send an email.
+    $post = array('subject' => "Test test test", 'message' => 'This is a test');
+    $this->drupalPost("contact", $post, t("Send message"));
+    $this->assertText(t("Your message has been sent"));
+    $mails = $this->drupalGetMails();
+    $mail = end($mails);
+    // There should be nothing in the body except the contact message - no
+    // body injection like 'Originally to'.
+    $this->assertTrue(strpos($mail['body'], 'Originally to') === FALSE, t('Body does not contain "Originally to"'));
+    $this->assertTrue($mail['headers']['X-Rerouted-Original-To'] == $original_destination, t('X-Rerouted-Original-To is correctly set to the original destination email'));
+  }
+}

@@ -1,0 +1,63 @@
+<?php
+// $Id: feeds_imagegrabber.install,v 1.1 2012/01/20 19:32:51 vamirbekyan Exp $
+
+/**
+ * @file
+ * Schema definitions install/update/uninstall hooks.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function feeds_imagegrabber_schema() {
+  $schema['feeds_imagegrabber'] = array(
+    'description' => 'stores the settings of feeds image grabber per feed node',
+    'fields' => array(
+      'feed_nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'The feed nid for which the feeds image grabber is enabled',
+      ),
+      'enabled' => array(
+        'description' => 'Current enabled status for this feed nid',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'unsigned' => TRUE,
+      ),
+      'id_class' => array(
+        'description' => 'Identifying tag attribute an ID (1) or Class(2) or nothing (0)?',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'unsigned' => TRUE,
+      ),
+      'id_class_desc' => array(
+        'description' => 'Identifying tag attribute value.',
+        'type' => 'varchar',
+        'length' => '128',
+      ),
+      'feeling_lucky' => array(
+        'description' => 'Get the first image from between the tags or not',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'unsigned' => TRUE,
+      ),
+      'exec_time' => array(
+        'description' => 'Percentage of PHP maximum execution time to utilize for grabbing image for each feed item.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 10,
+        'unsigned' => TRUE,
+      ),
+    ),
+    'primary key' => array(
+      'feed_nid',
+    ),
+  );
+
+  return $schema;
+}

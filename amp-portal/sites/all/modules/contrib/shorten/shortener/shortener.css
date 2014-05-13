@@ -1,0 +1,16 @@
+
+.shortener-toggle {
+  cursor: pointer;
+  font-size: 85%;
+  margin-left: 0.5em;
+}
+
+.shortener-toggle:before {
+  content: "(";
+  font-size: 85%;
+}
+
+.shortener-toggle:after {
+  content: ")";
+  font-size: 85%;
+}

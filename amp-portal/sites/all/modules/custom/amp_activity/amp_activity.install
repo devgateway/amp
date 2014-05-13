@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the amp_activity module.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Makes sure amp_activity hooks are triggered after ampp_projects hooks.
+ */
+function amp_activity_install() {
+  db_update('system')
+    ->fields(array('weight' => 0))
+    ->condition('name', 'amp_activity')
+    ->execute();
+
+  db_update('system')
+    ->fields(array('weight' => 30))
+    ->condition('name', 'ampp_projects')
+    ->execute();
+}

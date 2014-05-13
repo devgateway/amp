@@ -147,6 +147,17 @@ public final class AdvancedReportUtil {
 		}		
 	}	
 
+	/**
+	 * fetches a column using its name
+	 * @param name
+	 * @return
+	 */
+	public static AmpColumns getColumnByName(String name){
+		return (AmpColumns) PersistenceManager.getSession()
+				.createQuery("SELECT c FROM " + AmpColumns.class.getName() + " c WHERE c.columnName=:name")
+				.setString("name", name).uniqueResult();
+	}
+	
 	public static List<AmpMeasures> getMeasureList()
 	{
 		Session session = null;

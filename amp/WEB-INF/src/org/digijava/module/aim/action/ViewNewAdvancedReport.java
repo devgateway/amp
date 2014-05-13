@@ -190,10 +190,7 @@ public class ViewNewAdvancedReport extends Action {
 		boolean resetSettings = "true".equals(request.getParameter("resetSettings"));// || (!"true".equals(request.getParameter("cached")));
 		AmpARFilter filter = ReportContextData.getFromRequest().loadOrCreateFilter(resetSettings, report);
 		
-		if (tm ==null)
-		{
-			filter.setPublicView(true);
-		}
+		filter.setPublicView(tm == null);
 		
 		int progressValue = 0;
 		

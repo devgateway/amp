@@ -3,7 +3,9 @@ package org.digijava.module.aim.ar.util;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.util.*;
+import java.util.Map.Entry;
 
+import org.apache.batik.gvt.renderer.DynamicRenderer;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -16,6 +18,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.exception.reports.ReportException;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
@@ -168,6 +171,12 @@ public class ReportsUtil {
 		logger.debug("Database sanity check - PASS");
 	}
 	
+	/**
+	 * checks that the "while fetching view X, filter by columns Y in case they are set in the filter bean" table is sane, e.g. references existing views and columns in them
+	 * also checks that "fetch column X if filter field Y is not null" configuration is valid
+	 * @param session
+	 * @throws Exception
+	 */
 	public static void checkPledgesViewsSanity(Session session) throws Exception{
 		String errMsg = "";
 		logger.debug("Checking pledges reports sanity...");
@@ -178,14 +187,23 @@ public class ReportsUtil {
 		for(Field field:fields)
 			fieldsByNames.put(field.getName(), field);
 		
-		for(String viewName:ColumnFilterGenerator.pledgesViews.keySet()){
-			Set<ViewDonorFilteringInfo> filteredColumns = ColumnFilterGenerator.pledgesViews.get(viewName);
+		for(String viewName:ColumnFilterGenerator.PLEDGES_VIEWS_FILTERED_COLUMNS.keySet()){
+			Set<ViewDonorFilteringInfo> filteredColumns = ColumnFilterGenerator.PLEDGES_VIEWS_FILTERED_COLUMNS.get(viewName);
 			Set<String> colNames = SQLUtils.getTableColumns(viewName);
 			for(ViewDonorFilteringInfo dfi:filteredColumns){
 				if (!colNames.contains(dfi.getViewFieldName()))
 					errMsg += String.format("The view %s does not contain column %s referenced in the ColumnFiltersConf", viewName, dfi.getViewFieldName());
 				if (!fieldsByNames.containsKey(dfi.getBeanFieldName()))
 					errMsg += String.format("AmpARFilter does not contain property %s referenced in the ColumnFiltersConf for view %s", dfi.getBeanFieldName(), dfi.getViewFieldName());
+			}
+		}
+		
+		for(Entry<String, List<String>> entries:ColumnFilterGenerator.PLEDGES_COLUMNS_FILTERS.entrySet()){
+			if (!fieldsByNames.containsKey(entries.getKey()))
+				errMsg += String.format("field %s referenced in PLEDGES_COLUMNS_FILTERS does not exist in the DB", entries.getKey());
+			for(String colName:entries.getValue()){
+				if (AdvancedReportUtil.getColumnByName(colName) == null)
+					errMsg += String.format("column %s referenced in PLEDGES_COLUMNS_FILTERS does not exist in the DB", colName);
 			}
 		}
 		throwErrorIfNotEmpty(errMsg);

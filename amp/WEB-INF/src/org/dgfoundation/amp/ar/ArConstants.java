@@ -7,9 +7,13 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -233,13 +237,23 @@ public final class ArConstants {
 	
 	public final static String COLUMN_SECTOR_LOCATION="Sector Location";
 	
-	public final static List<String> LOCATION_COLUMNS	= 
-		Arrays.asList(new String[]{
-				ArConstants.COLUMN_REGION, ArConstants.COLUMN_PLEDGE_REGION,
-				ArConstants.COLUMN_ZONE, ArConstants.COLUMN_PLEDGE_ZONE,
-				ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_PLEDGE_DISTRICT,
-				ArConstants.COLUMN_SECTOR_LOCATION} 
-		);
+	public final static List<String> LOCATION_COLUMNS_LIST = Arrays.asList(new String[]{
+			ArConstants.COLUMN_REGION, ArConstants.COLUMN_PLEDGE_REGION,
+			ArConstants.COLUMN_ZONE, ArConstants.COLUMN_PLEDGE_ZONE,
+			ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_PLEDGE_DISTRICT,
+			ArConstants.COLUMN_SECTOR_LOCATION});
+	
+	public final static Set<String> LOCATION_COLUMNS = new HashSet<String>(LOCATION_COLUMNS_LIST);
+	
+	public final static Set<String> SECTOR_COLUMNS = new HashSet<String>(
+			Arrays.asList(new String[]{
+					"Primary Sector", "Primary Sector Sub-Sector", "Primary Sector Sub-Sub-Sector",
+					"Secondary Sector Sub-Sector", "Secondary Sector", "Secondary Sector Sub-Sub-Sector",
+					"Tertiary Sector", "Tertiary Sector Sub-Sector", "Tertiary Sector Sub-Sub-Sector",
+					"Sector Tag", "Sector Tag Sub-Sector", "Sector Tag Sub-Sub-Sector",
+					"Pledges Secondary Sectors", "Pledges sectors", "Pledges Tertiary Sectors"
+			} 
+			));
 	
 	public final static List<String> PROGRAMS_COLUMNS	= 
 		Arrays.asList(new String[]{"National Planning Objectives Level 1",

@@ -24,6 +24,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpColumnsFilters;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.Identifiable;
 
 /**
@@ -37,15 +38,47 @@ public class ColumnFilterGenerator {
 	/**
 	 * Map<extractor_view, Set<by_view_column_name>>
 	 */
-	public final static Map<String, Set<ViewDonorFilteringInfo>> pledgesViews = new HashMap<String, Set<ViewDonorFilteringInfo>>(){{
-		put(ArConstants.VIEW_PLEDGES_FUNDING, new HashSet<ViewDonorFilteringInfo>());
-			get(ArConstants.VIEW_PLEDGES_FUNDING).add(new ViewDonorFilteringInfo("aid_modality_id", "aidModalities"));
-			get(ArConstants.VIEW_PLEDGES_FUNDING).add(new ViewDonorFilteringInfo("financing_instrument_id", "financingInstruments"));
-			get(ArConstants.VIEW_PLEDGES_FUNDING).add(new ViewDonorFilteringInfo("terms_assist_id", "typeOfAssistance"));
-		put("v_pledges_aid_modality", new HashSet<ViewDonorFilteringInfo>());
-			get("v_pledges_aid_modality").add(new ViewDonorFilteringInfo("amp_modality_id", "aidModalities"));
-		put("v_pledges_type_of_assistance", new HashSet<ViewDonorFilteringInfo>());
-			get("v_pledges_type_of_assistance").add(new ViewDonorFilteringInfo("terms_assist_code", "typeOfAssistance"));			
+	public final static Map<String, Set<ViewDonorFilteringInfo>> PLEDGES_VIEWS_FILTERED_COLUMNS = new HashMap<String, Set<ViewDonorFilteringInfo>>(){{
+		put(ArConstants.VIEW_PLEDGES_FUNDING, new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("aid_modality_id", "aidModalities"));
+			add(new ViewDonorFilteringInfo("financing_instrument_id", "financingInstruments"));
+			add(new ViewDonorFilteringInfo("terms_assist_id", "typeOfAssistance"));
+		}});
+		
+		put("v_pledges_aid_modality", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("amp_modality_id", "aidModalities"));
+		}});
+		
+		put("v_pledges_type_of_assistance", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("terms_assist_code", "typeOfAssistance"));
+		}});
+		
+		put("v_pledges_sectors", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("amp_sector_id", "sectorsAndAncestors"));
+		}});
+		
+		put("v_pledges_secondary_sectors", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("amp_sector_id", "secondarySectorsAndAncestors"));
+		}});
+		
+		put("v_pledges_tertiary_sectors", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("amp_sector_id", "tertiarySectorsAndAncestors"));
+		}});
+	}};
+	
+	/**
+	 * Map<AmpARFilter.propertyName, Set<AmpColumns.name>>
+	 */
+	public final static Map<String, List<String>> PLEDGES_COLUMNS_FILTERS = new HashMap<String, List<String>>(){{
+		put("sectorsAndAncestors", new ArrayList<String>(){{
+			add("Pledges sectors");
+		}});
+		put("secondarySectorsAndAncestors", new ArrayList<String>(){{
+			add("Pledges Secondary Sectors");
+		}});
+		put("tertiarySectorsAndAncestors", new ArrayList<String>(){{
+			add("Pledges Tertiary Sectors");
+		}});
 	}};
 	
 	/**
@@ -159,8 +192,99 @@ public class ColumnFilterGenerator {
 		return sb.toString();
 
 	}
+
+	public static boolean propertyIsDefined(Object obj, String propName){
+		try{
+			Object property = PropertyUtils.getSimpleProperty(obj, propName);
+			return property != null;
+		}
+		catch(IllegalAccessException | InvocationTargetException | NoSuchMethodException e){
+			throw new RuntimeException(e);
+		}
+	}
 	
+	/**
+	 * iterates a list of (AmpARFilter.property -> Column) assocs and adds the missing ones
+	 * @param extractable
+	 * @param filter
+	 * @param colFilters
+	 * @return
+	 */
+	protected static List<String> appendFilterRetrievableColumns(List<AmpReportColumn> extractable, AmpARFilter filter, Map<String, List<AmpColumns>> colFilters)
+	{
+		// check which columns are selected in the filter and have attached
+		// columns that are filter retrievable
+		List<String> addedColumnNames=new ArrayList<String>();
+		TreeSet<String> colNames = new TreeSet<String>();
+		for(AmpReportColumn col:extractable){
+			colNames.add(col.getColumn().getColumnName());
+		}
+		
+		// iterate all of the non-null properties of AmpARFilter which are configured in AmpColumnsFilters and fetch the corresponding column
+		for(String propName:colFilters.keySet()){
+
+			if (!propertyIsDefined(filter, propName))
+				continue;
+				
+			for(AmpColumns col:colFilters.get(propName)){
+				
+				if (colNames.contains(col.getColumnName()))
+					continue; //column already added to the to-be-fetched list
 	
+				AmpReportColumn arc = new AmpReportColumn();
+				arc.setColumn(col);
+				arc.setOrderId(1L);
+				//logger.info("Adding additional column " + cf.getColumn().getColumnName() + " because selected filter "+cf.getBeanFieldName()+" is filterRetrievable");
+				extractable.add(arc);
+				addedColumnNames.add(arc.getColumn().getColumnName());
+			}
+		} 
+		return addedColumnNames;
+	}
+	
+	/**
+	 * during refactoring this should become an AmpARFilter instance method
+	 * @return
+	 */
+	public static Map<String, List<AmpColumns>> getPledgesColumnFilters(){
+		Map<String, List<AmpColumns>> res = new HashMap<String, List<AmpColumns>>();
+		for(String propName: PLEDGES_COLUMNS_FILTERS.keySet()){
+			res.put(propName, new ArrayList<AmpColumns>());
+			for(String colName: PLEDGES_COLUMNS_FILTERS.get(propName))
+				res.get(propName).add(AdvancedReportUtil.getColumnByName(colName));
+		}
+		return res;
+	}
+	
+	/**
+	 * during refactoring this should become an AmpARFilter instance method
+	 * @return
+	 */
+	public static Map<String, List<AmpColumns>> getNormalColumnFilters(){
+		Map<String, List<AmpColumns>> res = new HashMap<String, List<AmpColumns>>();
+		Session session = PersistenceManager.getSession();
+		Query query = session.createQuery("from "	+ AmpColumnsFilters.class.getName());
+		List<AmpColumnsFilters> allFilters = query.list();
+		// scan the in-db AmpColumnsFilters and distribute the entries by beanFieldName
+		for(AmpColumnsFilters acf:allFilters){
+			if (acf.getColumn() != null && acf.getColumn().getFilterRetrievable() != null && acf.getColumn().getFilterRetrievable()){
+				if (!res.containsKey(acf.getBeanFieldName()))
+					res.put(acf.getBeanFieldName(), new ArrayList<AmpColumns>());
+				res.get(acf.getBeanFieldName()).add(acf.getColumn());
+			}
+				
+		}
+		return res;
+	}
+	
+	/**
+	 * Map<AmpARFilter.beanName, List<AmpColumns> to fetch if the given property is not null>
+	 * @param forPledges
+	 * @return
+	 */
+	public static Map<String, List<AmpColumns>> getColumnFilters(boolean forPledges){
+		return forPledges ? getPledgesColumnFilters() : getNormalColumnFilters();
+	}
 	
 	/**
 	 * Append filter retrievable columns to list. those are columns that appear
@@ -168,60 +292,20 @@ public class ColumnFilterGenerator {
 	 * applied the content of the columns has to be present (it holds extra
 	 * metadata like percentages, etc...)
 	 * 
+	 * TODO: during refactoring this would become a simple method within AmpARFilter (see the {@link #getNormalColumnFilters()} and {@link #getPledgesColumnFilters()} methods above)
 	 * @see http://bugs.digijava.org/jira/browse/AMP-3454?focusedCommentId=39811#action_39811
 	 * @param extractable
 	 *            the list of already extractable columns
 	 * @param filter
 	 * @return the no of cols added
 	 */
-	public static List<String> appendFilterRetrievableColumns(
-			List<AmpReportColumn> extractable, AmpARFilter filter) {
+	public static List<String> appendFilterRetrievableColumns(List<AmpReportColumn> extractable, AmpARFilter filter) {
 		// check which columns are selected in the filter and have attached
 		// columns that are filter retrievable
-		List<String> addedColumnNames=new ArrayList<String>();
-		TreeSet<String> colNames = new TreeSet<String>();
-		Iterator<AmpReportColumn> iterator2 = extractable.iterator();
-		while (iterator2.hasNext()) {
-			AmpReportColumn elem = (AmpReportColumn) iterator2.next();
-			colNames.add(elem.getColumn().getColumnName());
-		}
-		
-		try {
-			Query query;
-			Session session = PersistenceManager.getRequestDBSession();
-			query = session.createQuery("from "	+ AmpColumnsFilters.class.getName());
-			List<AmpColumnsFilters> allFilters = query.list();
-			for(AmpColumnsFilters cf:allFilters)
-			{
-				if (cf == null)
-					continue;
-				
-				if (cf.getColumn() == null)
-					continue;
-				
-				if(colNames.contains(cf.getColumn().getColumnName()))
-					continue;
-				
-				Object property = PropertyUtils.getSimpleProperty(filter, cf.getBeanFieldName());
-				
-				if (property == null)
-					continue;
-				
-				if(cf.getColumn().getFilterRetrievable()!=null && cf.getColumn().getFilterRetrievable().booleanValue()) {
-					AmpReportColumn arc = new AmpReportColumn();
-					arc.setColumn(cf.getColumn());
-					arc.setOrderId(1L);
-					//logger.info("Adding additional column " + cf.getColumn().getColumnName() + " because selected filter "+cf.getBeanFieldName()+" is filterRetrievable");
-					extractable.add(arc);
-					addedColumnNames.add(arc.getColumn().getColumnName());
-				}
-				
-			}
-	
-		} catch (HibernateException | DgException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-			ARUtil.logger.error(e);
+		try {			
+			return appendFilterRetrievableColumns(extractable, filter, getColumnFilters(filter.isPledgeFilter()));
+		} catch (HibernateException e) {
+			throw new RuntimeException(e);
 		}  
-		return addedColumnNames;
 	}
 }

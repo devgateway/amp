@@ -1,9 +1,5 @@
 package org.dgfoundation.amp.ar.amp28;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import org.dgfoundation.amp.testmodels.ColumnReportDataModel;
 import org.dgfoundation.amp.testmodels.GroupColumnModel;

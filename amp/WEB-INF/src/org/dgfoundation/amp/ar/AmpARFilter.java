@@ -528,11 +528,13 @@ public class AmpARFilter extends PropertyListable {
 	private boolean budgetExport;
 	
 	private void queryAppend(String filter) {
-		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
+		if (filter != null && !filter.isEmpty())
+			generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
 	
-	private void PledgequeryAppend(String filter) {
-		generatedFilterQuery += " AND id IN (" + filter + ")";
+	private void pledgeQueryAppend(String filter) {
+		if (filter != null && !filter.isEmpty())
+			generatedFilterQuery += " AND id IN (" + filter + ")";
 	}
 	
 	/**
@@ -944,6 +946,38 @@ public class AmpARFilter extends PropertyListable {
 		generateFilterQuery(request, workspaceFilter, false);
 	}
 	
+	/**
+	 * generates SQL subquery which selects activity ids of activities which use one of the sectors of a given sector scheme
+	 * @param s the set of sectors
+	 * @param classificationName one of "Primary" / "Secondary" / "Tertiary" / "Tag"
+	 * @return
+	 */
+	protected static String generateSectorFilterSubquery(Set<AmpSector> s, String classificationName){
+		if (s == null || s.isEmpty())
+			return null;
+		String subquery = "SELECT DISTINCT(aas.amp_activity_id) FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
+				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
+				+ "AND c.name='" + classificationName +"' AND aas.amp_sector_id in ("
+				+ Util.toCSStringForIN(s) + ")";
+		return subquery;
+	}
+	
+	/**
+	 * generates SQL subquery which selects pledge ids of pledges which use one of the sectors of a given sector scheme
+	 * @param s the set of sectors
+	 * @param classificationName one of "Primary" / "Secondary" / "Tertiary" / "Tag"
+	 * @return
+	 */
+	protected static String generatePledgesSectorFilterSubquery(Set<AmpSector> s, String classificationName){
+		if (s == null || s.isEmpty())
+			return null;
+		String subquery = "SELECT fps.pledge_id FROM amp_funding_pledges_sector fps, amp_sector s, amp_classification_config c "
+				+ "WHERE fps.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
+				+ "AND c.name='" + classificationName +"' AND fps.amp_sector_id in ("
+				+ Util.toCSStringForIN(s) + ")";
+		return subquery;
+	}
+
 	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter, boolean skipPledgeCheck) {
 		initFilterQuery(); //reinit filters or else they will grow indefinitely
 		if ( !skipPledgeCheck &&  !workspaceFilter && ReportContextData.getFromRequest().isPledgeReport()){
@@ -951,10 +985,10 @@ public class AmpARFilter extends PropertyListable {
 			indexedParams=new ArrayList<FilterParam>();
 			
 			
-			String WORKSPACE_ONLY="";
+			String WORKSPACE_ONLY = "";
 			if (this.workspaceonly && "Management".equals(this.getAccessType())){
-					WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE v.approval_status IN ("+Util.toCSString(activityStatus)+")";
-					PledgequeryAppend(WORKSPACE_ONLY);
+				WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE v.approval_status IN ("+Util.toCSString(activityStatus)+")";
+				pledgeQueryAppend(WORKSPACE_ONLY);
 			}
 			
 			String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
@@ -971,10 +1005,6 @@ public class AmpARFilter extends PropertyListable {
 			
 			String TYPE_OF_ASSISTANCE_FILTER = "SELECT v.pledge_id FROM v_pledges_type_of_assistance v WHERE terms_assist_code IN ("
 				+ Util.toCSString(typeOfAssistance) + ")";
-			
-			String SECTOR_FILTER = "SELECT pledge_id FROM v_pledges_sectors ps, amp_sector s"
-				+ " WHERE ps.amp_sector_id=s.amp_sector_id"
-				+ " AND ps.amp_sector_id in ("+ Util.toCSString(sectors) + ")";
 			
 			String REGION_SELECTED_FILTER = "";
 			if (locationSelected!=null) {
@@ -999,26 +1029,28 @@ public class AmpARFilter extends PropertyListable {
 			}
 			
 			if (donnorgAgency != null && donnorgAgency.size() > 0){
-				PledgequeryAppend(DONNOR_AGENCY_FILTER);
+				pledgeQueryAppend(DONNOR_AGENCY_FILTER);
 			}
 			
 			if (donorGroups != null && donorGroups.size() > 0)
-				PledgequeryAppend(DONOR_GROUP_FILTER);
+				pledgeQueryAppend(DONOR_GROUP_FILTER);
 			
 			if (donorTypes != null && donorTypes.size() > 0)
-				PledgequeryAppend(DONOR_TYPE_FILTER);
+				pledgeQueryAppend(DONOR_TYPE_FILTER);
 			
 			if (aidModalities != null && aidModalities.size() > 0){
-				PledgequeryAppend(AID_MODALITIES_FILTER);
+				pledgeQueryAppend(AID_MODALITIES_FILTER);
 			}
 			if (typeOfAssistance != null && typeOfAssistance.size() > 0){
-				PledgequeryAppend(TYPE_OF_ASSISTANCE_FILTER);
+				pledgeQueryAppend(TYPE_OF_ASSISTANCE_FILTER);
 			}
-			if (sectors != null && sectors.size() > 0){
-				PledgequeryAppend(SECTOR_FILTER);
-			}
+			pledgeQueryAppend(generatePledgesSectorFilterSubquery(sectors, "Primary"));
+			pledgeQueryAppend(generatePledgesSectorFilterSubquery(secondarySectors, "Secondary"));
+			pledgeQueryAppend(generatePledgesSectorFilterSubquery(tertiarySectors, "Tertiary"));
+			pledgeQueryAppend(generatePledgesSectorFilterSubquery(tagSectors, "Tag"));
+			
 			if (!REGION_SELECTED_FILTER.equals("")) {
-				PledgequeryAppend(REGION_SELECTED_FILTER);
+				pledgeQueryAppend(REGION_SELECTED_FILTER);
 			}
 		
 			return;
@@ -1063,10 +1095,7 @@ public class AmpARFilter extends PropertyListable {
 		// String SECTOR_FILTER="(("+PARENT_SECTOR_FILTER+") UNION
 		// ("+SUB_SECTOR_FILTER+"))";
 
-		String SECTOR_FILTER = "SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
-				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
-				+ "AND c.name='Primary' AND aas.amp_sector_id in ("
-				+ Util.toCSStringForIN(sectors) + ")";
+		String SECTOR_FILTER = generateSectorFilterSubquery(sectors, "Primary");
 
 		String NATIONAL_PLAN_FILTER = "SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id "
 				+ "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='National Plan Objective' AND "
@@ -1091,21 +1120,11 @@ public class AmpARFilter extends PropertyListable {
 		// amp_sector_id IN ("+Util.toCSString(secondarySectors,true)+")";
 		// String SECONDARY_SECTOR_FILTER="(("+SECONDARY_PARENT_SECTOR_FILTER+")
 		// UNION ("+SECONDARY_SUB_SECTOR_FILTER+"))";
-		String SECONDARY_SECTOR_FILTER = "SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
-				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
-				+ "AND c.name='Secondary' AND aas.amp_sector_id in ("
-				+ Util.toCSStringForIN(secondarySectors) + ")";
+		String SECONDARY_SECTOR_FILTER = generateSectorFilterSubquery(secondarySectors, "Secondary");
 
-       String TERTIARY_SECTOR_FILTER = "SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
-				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
-				+ "AND c.name='Tertiary' AND aas.amp_sector_id in ("
-				+ Util.toCSStringForIN(tertiarySectors) + ")";
+       String TERTIARY_SECTOR_FILTER = generateSectorFilterSubquery(tertiarySectors, "Tertiary");
        
-       String TAG_SECTOR_FILTER = "SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
-				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
-				+ "AND c.name='Tag' AND aas.amp_sector_id in ("
-				+ Util.toCSStringForIN(tagSectors) + ")";
-
+       String TAG_SECTOR_FILTER = generateSectorFilterSubquery(tagSectors, "Tag");
 
 		String REGION_FILTER = "SELECT amp_activity_id FROM v_regions WHERE name IN ("
 				+ Util.toCSStringForIN(regions) + ")";
@@ -1476,18 +1495,12 @@ public class AmpARFilter extends PropertyListable {
 		if (workspaces != null && workspaces.size() > 0)
 			queryAppend(WORKSPACE_FILTER);
 		// if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
-		if (sectors != null && sectors.size() != 0) {
-			queryAppend(SECTOR_FILTER);
-		}
-		if (secondarySectors != null && secondarySectors.size() != 0) {
-			queryAppend(SECONDARY_SECTOR_FILTER);
-		}
-        if (tertiarySectors != null && !tertiarySectors.isEmpty()) {
-			queryAppend(TERTIARY_SECTOR_FILTER);
-		}
-        if (tagSectors != null && tagSectors.size() > 0 ) {
-        	queryAppend(TAG_SECTOR_FILTER);
-        }
+		
+		queryAppend(SECTOR_FILTER);
+		queryAppend(SECONDARY_SECTOR_FILTER);
+		queryAppend(TERTIARY_SECTOR_FILTER);
+		queryAppend(TAG_SECTOR_FILTER);
+
 		if (nationalPlanningObjectives != null
 				&& nationalPlanningObjectives.size() != 0) {
 			queryAppend(NATIONAL_PLAN_FILTER);

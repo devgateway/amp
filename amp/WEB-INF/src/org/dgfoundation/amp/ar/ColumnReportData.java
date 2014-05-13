@@ -297,7 +297,7 @@ public class ColumnReportData extends ReportData<Column> {
 
 			dest.addReport(crd);
 
-			int locationLevel		= ArConstants.LOCATION_COLUMNS.indexOf(cat.getColumn().getName().trim() );
+			int locationLevel		= ArConstants.LOCATION_COLUMNS_LIST.indexOf(cat.getColumn().getName().trim() );
 						
 			// construct the Set of ids that match the filter:
 			Set<Long> ids = new TreeSet<Long>();

@@ -296,8 +296,7 @@ public class FilterUtil {
 		// for each sector we have also to add the subsectors
 		if (selectedSectors != null && selectedSectors.size() > 0) {
 			arf.setSectors(SectorUtil.getSectorDescendents(selectedSectors));
-			if ( !arf.isPledgeFilter())
-				arf.setSectorsAndAncestors(makeUnion(arf.getSectors(), SectorUtil.getAmpParentSectors(selectedSectors)));
+			arf.setSectorsAndAncestors(makeUnion(arf.getSectors(), SectorUtil.getAmpParentSectors(selectedSectors)));
 		} else {
 			arf.setSectors(null);
 			arf.setSelectedSectors(null);
@@ -306,8 +305,7 @@ public class FilterUtil {
 
 		if (selectedSecondarySectors != null && selectedSecondarySectors.size() > 0) {
 			arf.setSecondarySectors(SectorUtil.getSectorDescendents(selectedSecondarySectors));
-			if ( !arf.isPledgeFilter())
-				arf.setSecondarySectorsAndAncestors(makeUnion(arf.getSecondarySectors(), SectorUtil.getAmpParentSectors(selectedSecondarySectors)));
+			arf.setSecondarySectorsAndAncestors(makeUnion(arf.getSecondarySectors(), SectorUtil.getAmpParentSectors(selectedSecondarySectors)));
 		} else {
 			arf.setSecondarySectors(null);
 			arf.setSelectedSecondarySectors(null);
@@ -315,8 +313,7 @@ public class FilterUtil {
 		}
         if (selectedTertiarySectors != null && selectedTertiarySectors.size() > 0) {
             arf.setTertiarySectors(SectorUtil.getSectorDescendents(selectedTertiarySectors));
-            if ( !arf.isPledgeFilter())
-            	arf.setTertiarySectorsAndAncestors(makeUnion(arf.getTertiarySectors(), SectorUtil.getAmpParentSectors(selectedTertiarySectors)));
+            arf.setTertiarySectorsAndAncestors(makeUnion(arf.getTertiarySectors(), SectorUtil.getAmpParentSectors(selectedTertiarySectors)));
         } else {
             arf.setTertiarySectors(null);
             arf.setSelectedTertiarySectors(null);
@@ -325,8 +322,7 @@ public class FilterUtil {
         	
     	if (selectedTagSectors != null && selectedTagSectors.size() > 0) {
 			arf.setTagSectors(SectorUtil.getSectorDescendents(selectedTagSectors));
-			if ( !arf.isPledgeFilter())
-				arf.setTagSectorsAndAncestors(makeUnion(arf.getTagSectors(), SectorUtil.getAmpParentSectors(selectedTagSectors)));
+			arf.setTagSectorsAndAncestors(makeUnion(arf.getTagSectors(), SectorUtil.getAmpParentSectors(selectedTagSectors)));
 		} else {
 			arf.setTagSectors(null);
 			arf.setSelectedTagSectors(null);

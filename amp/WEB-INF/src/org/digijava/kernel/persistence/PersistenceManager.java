@@ -471,7 +471,6 @@ public class PersistenceManager {
 			try {
 				return getRequestDBSession();
 			} catch (DgException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		return null;

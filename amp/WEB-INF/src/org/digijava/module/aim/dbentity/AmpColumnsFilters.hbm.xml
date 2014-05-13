@@ -9,10 +9,8 @@
 			</generator>
 		</id>
 
-		<many-to-one name="column" column="column_id"
-			class="org.digijava.module.aim.dbentity.AmpColumns" />
-		<property name="beanFieldName" column="bean_field_name" type="java.lang.String" />
-		<property name="viewFieldName" column="view_field_name" type="java.lang.String" />
-
+		<many-to-one name="column" column="column_id" class="org.digijava.module.aim.dbentity.AmpColumns" />
+		<property name="beanFieldName" column="bean_field_name" type="java.lang.String"  />
+		<property name="viewFieldName" column="view_field_name" type="java.lang.String"  />
 	</class>
 </hibernate-mapping>

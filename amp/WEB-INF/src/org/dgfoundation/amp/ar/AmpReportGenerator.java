@@ -252,7 +252,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @return "" for nop, else an AND-prefixed SQL query
 	 */
 	protected String buildColumnFilterSQLClauseForPledges(AmpColumns col, String extractorView){
-		Set<ViewDonorFilteringInfo> filteredColumns = ColumnFilterGenerator.pledgesViews.get(extractorView);
+		Set<ViewDonorFilteringInfo> filteredColumns = ColumnFilterGenerator.PLEDGES_VIEWS_FILTERED_COLUMNS.get(extractorView);
 		if (filteredColumns == null)
 			return "";
 		

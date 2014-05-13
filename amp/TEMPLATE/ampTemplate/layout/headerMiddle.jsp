@@ -243,9 +243,9 @@ function adminHelp(){
 							<c:set var="message">
 								<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
 							</c:set> 
-							<a class="yuiampmenuitemlabel" href="/admin.do" module="aim">
+							<span class="yuiampmenuitemlabel" href="/admin.do" module="aim">
 								<digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
-							</a>
+							</span>
 						</li>
 						<module:display name="Tools" parentModule="PROJECT MANAGEMENT">
 							<li class="yuiampmenuitem">

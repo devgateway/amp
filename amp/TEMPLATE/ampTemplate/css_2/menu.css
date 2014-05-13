@@ -171,6 +171,7 @@
 	display: table-row;
 	border-spacing: 6px;
 	top: -1px;
+	width:900px;
 }
 .main_menu ul.first-of-type {
 	border-width: 0;
@@ -226,9 +227,8 @@ ul.first-of-type ul il{
 
 .yuiamp-skin-amp .yuiampmenuitem {
 	background-color:#F2F2F2;
-	margin-right:5px;
+	margin:6px 6px 0px 0px;
 	border:1px solid #E8E8E8;
-	float:none;
 	vertical-align: middle;
 	display:table-cell;
 }

@@ -63,9 +63,11 @@ public class GroupReportModel extends ReportModel
 	public GroupReportModel withPositionDigest(boolean total, String... lines)
 	{
 		this.positionDigest = new ArrayList<String>();
-		for(String lineDigest:lines)
-			positionDigest.add(lineDigest);
-		this.positionDigestIsTotal = total;
+		if( lines!=null ) {		
+			for(String lineDigest:lines)
+				positionDigest.add(lineDigest);
+			this.positionDigestIsTotal = total;
+		}
 		return this;
 	}
 	

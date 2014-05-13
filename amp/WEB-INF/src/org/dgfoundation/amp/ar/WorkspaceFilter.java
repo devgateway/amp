@@ -178,6 +178,7 @@ public class WorkspaceFilter
 		return TEAM_FILTER;
 		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537', '8723851641', '8723851222')";
 		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537')";
+		//return "select amp_activity_id from amp_activity where amp_id in ('666666')";
 	}
 	
 	/**

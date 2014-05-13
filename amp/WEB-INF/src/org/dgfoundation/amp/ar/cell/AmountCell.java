@@ -627,6 +627,8 @@ public class AmountCell extends Cell {
 	{
 		if (this.getOwnerId() == null)
 			this.setOwnerId(another.getOwnerId());
+		if (another.getMergedCells().isEmpty() && Math.abs(another.getOriginalAmount()) <= 0.00001)
+			return;
 		if (another.getMergedCells().isEmpty())
 			this.getMergedCells().add(another);
 		else

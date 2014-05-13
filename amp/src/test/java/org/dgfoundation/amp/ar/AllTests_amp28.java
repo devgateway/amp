@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
+import org.dgfoundation.amp.ar.amp28.MiscReportsTest28;
 import org.dgfoundation.amp.ar.amp28.MiscTests28;
 import org.dgfoundation.amp.ar.amp28.MultilingualTests28;
 import org.dgfoundation.amp.ar.amp28.PledgeReportsTests;
@@ -40,6 +41,7 @@ public class AllTests_amp28
 		suite.addTest(MiscTests28.suite());
 		suite.addTest(ProgramsTests.suite());
 		suite.addTest(PledgeReportsTests.suite());
+		suite.addTest(MiscReportsTest28.suite());
 		//$JUnit-END$
 		return suite;
 	}

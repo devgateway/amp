@@ -18,6 +18,9 @@ public abstract class ReportModel implements Comparable<ReportModel>{
 	
 	public ReportModel[] sort(ReportModel[] src)
 	{
+		if( src==null ) {
+			return null;
+		}
 		ReportModel[] dest = new ReportModel[src.length];
 		for(int i = 0; i < src.length; i++)
 			dest[i] = src[i];

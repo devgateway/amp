@@ -506,5 +506,10 @@ public class CellColumn<K extends Cell> extends Column<K> {
 	{
 		return true;
 	}
+	
+	public List<Cell> getCells(){
+		return (List<Cell>) items;
+	}
+
 }
 

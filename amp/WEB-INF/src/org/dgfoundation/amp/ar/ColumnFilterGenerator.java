@@ -36,6 +36,7 @@ public class ColumnFilterGenerator {
 	protected static Logger logger = Logger.getLogger(ColumnFilterGenerator.class);
 
 	/**
+	 * ...when fetching view V, filter entries by AmpARFilter property
 	 * Map<extractor_view, Set<by_view_column_name>>
 	 */
 	public final static Map<String, Set<ViewDonorFilteringInfo>> PLEDGES_VIEWS_FILTERED_COLUMNS = new HashMap<String, Set<ViewDonorFilteringInfo>>(){{
@@ -64,21 +65,91 @@ public class ColumnFilterGenerator {
 		put("v_pledges_tertiary_sectors", new HashSet<ViewDonorFilteringInfo>(){{
 			add(new ViewDonorFilteringInfo("amp_sector_id", "tertiarySectorsAndAncestors"));
 		}});
+				
+		put("v_pledges_districts", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("location_id", "relatedLocations"));
+		}});
+	
+		put("v_pledges_regions", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("location_id", "relatedLocations"));
+		}});
+		
+		put("v_pledges_zones", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("location_id", "relatedLocations"));
+		}});
+		
+		put("v_pledges_npd_objectives", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("amp_program_id", "relatedNatPlanObjs"));
+		}});
+		
+		put("v_pledges_programs", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("amp_program_id", "relatedPrimaryProgs"));
+		}});
+		
+		put("v_pledges_secondary_programs", new HashSet<ViewDonorFilteringInfo>(){{
+			add(new ViewDonorFilteringInfo("amp_program_id", "relatedSecondaryProgs"));
+		}});
+		
+//		put("v_pledges_tertiary_programs", new HashSet<ViewDonorFilteringInfo>(){{
+//			add(new ViewDonorFilteringInfo("amp_program_id", "relatedTertiaryProgs"));
+//		}});
 	}};
 	
 	/**
-	 * Map<AmpARFilter.propertyName, Set<AmpColumns.name>>
+	 * Map<AmpARFilter.propertyName, Set<AmpColumns.name>> - columns to also fetch when the report uses a said filter
 	 */
 	public final static Map<String, List<String>> PLEDGES_COLUMNS_FILTERS = new HashMap<String, List<String>>(){{
+		
 		put("sectorsAndAncestors", new ArrayList<String>(){{
 			add("Pledges sectors");
 		}});
+		
 		put("secondarySectorsAndAncestors", new ArrayList<String>(){{
 			add("Pledges Secondary Sectors");
 		}});
+		
 		put("tertiarySectorsAndAncestors", new ArrayList<String>(){{
 			add("Pledges Tertiary Sectors");
 		}});
+		
+		put("relatedLocations", new ArrayList<String>(){{
+			add("Pledges Regions");
+			add("Pledges Zones");
+			add("Pledges Districts");
+		}});
+		
+		put("relatedPrimaryProgs", new ArrayList<String>(){{
+			add("Pledges Programs");
+		}});
+		
+		put("relatedSecondaryProgs", new ArrayList<String>(){{
+			add("Pledges Secondary Programs");
+		}});
+		
+//		put("relatedTertiaryProgs", new ArrayList<String>(){{
+//			add("Pledges Tertiary Programs");
+//		}});		
+				
+		put("relatedNatPlanObjs", new ArrayList<String>(){{
+			add("Pledges National Plan Objectives");
+		}});
+		
+//		put("relatedNatPlanObjs", new ArrayList<String>(){{
+//			for(int i = 1; i <= 8; i++)
+//				add("National Planning Objectives Level " + i);
+//			add("National Planning Objectives");
+//		}});
+//		put("relatedPrimaryProgs", new ArrayList<String>(){{
+//			for(int i = 1; i <= 8; i++)
+//				add("Primary Program Level " + i);
+//			add("Primary Program");
+//		}});
+//		put("relatedSecondaryProgs", new ArrayList<String>(){{
+//			for(int i = 1; i <= 8; i++)
+//				add("Secondary Program Level " + i);
+//			add("Secondary Program");
+//		}});		
+		
 	}};
 	
 	/**
@@ -210,7 +281,7 @@ public class ColumnFilterGenerator {
 	 * @param colFilters
 	 * @return
 	 */
-	protected static List<String> appendFilterRetrievableColumns(List<AmpReportColumn> extractable, AmpARFilter filter, Map<String, List<AmpColumns>> colFilters)
+	protected static List<String> appendFilterRetrievableColumns(List<AmpReportColumn> extractable, Set<String> filterRetrievableCols)
 	{
 		// check which columns are selected in the filter and have attached
 		// columns that are filter retrievable
@@ -220,24 +291,17 @@ public class ColumnFilterGenerator {
 			colNames.add(col.getColumn().getColumnName());
 		}
 		
-		// iterate all of the non-null properties of AmpARFilter which are configured in AmpColumnsFilters and fetch the corresponding column
-		for(String propName:colFilters.keySet()){
-
-			if (!propertyIsDefined(filter, propName))
-				continue;
-				
-			for(AmpColumns col:colFilters.get(propName)){
-				
-				if (colNames.contains(col.getColumnName()))
-					continue; //column already added to the to-be-fetched list
-	
-				AmpReportColumn arc = new AmpReportColumn();
-				arc.setColumn(col);
-				arc.setOrderId(1L);
-				//logger.info("Adding additional column " + cf.getColumn().getColumnName() + " because selected filter "+cf.getBeanFieldName()+" is filterRetrievable");
-				extractable.add(arc);
-				addedColumnNames.add(arc.getColumn().getColumnName());
-			}
+		for(String retrievableColumnName:filterRetrievableCols){
+			if (colNames.contains(retrievableColumnName))
+				continue; //column already added to the to-be-fetched list
+			AmpColumns col = AdvancedReportUtil.getColumnByName(retrievableColumnName);
+		
+			AmpReportColumn arc = new AmpReportColumn();
+			arc.setColumn(col);
+			arc.setOrderId(1L);
+			//logger.info("Adding additional column " + cf.getColumn().getColumnName() + " because selected filter "+cf.getBeanFieldName()+" is filterRetrievable");
+			extractable.add(arc);
+			addedColumnNames.add(arc.getColumn().getColumnName());
 		} 
 		return addedColumnNames;
 	}
@@ -278,12 +342,31 @@ public class ColumnFilterGenerator {
 	}
 	
 	/**
-	 * Map<AmpARFilter.beanName, List<AmpColumns> to fetch if the given property is not null>
+	 * Map<AmpARFilter.beanName, List<AmpColumns.columnName> to fetch if the given property is not null>
 	 * @param forPledges
 	 * @return
 	 */
 	public static Map<String, List<AmpColumns>> getColumnFilters(boolean forPledges){
 		return forPledges ? getPledgesColumnFilters() : getNormalColumnFilters();
+	}
+	
+	/**
+	 * returns set of names of all columns which should be checked / retrieved according to this filter
+	 * TODO: during refactoring, move to AmpARFilter
+	 * @param filter
+	 * @return
+	 */
+	public static Set<String> getFilterRetrievableColumns(AmpARFilter filter){
+		Map<String, List<AmpColumns>> cols = getColumnFilters(filter.isPledgeFilter());
+		Set<String> res = new HashSet<String>();
+		// iterate all of the non-null properties of AmpARFilter which are configured in AmpColumnsFilters and fetch the corresponding column
+		for(String propName:cols.keySet()){
+			if (propertyIsDefined(filter, propName)){
+				for(AmpColumns col:cols.get(propName))
+					res.add(col.getColumnName());
+			}
+		}
+		return res;
 	}
 	
 	/**
@@ -303,7 +386,7 @@ public class ColumnFilterGenerator {
 		// check which columns are selected in the filter and have attached
 		// columns that are filter retrievable
 		try {			
-			return appendFilterRetrievableColumns(extractable, filter, getColumnFilters(filter.isPledgeFilter()));
+			return appendFilterRetrievableColumns(extractable, getFilterRetrievableColumns(filter));
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
 		}  

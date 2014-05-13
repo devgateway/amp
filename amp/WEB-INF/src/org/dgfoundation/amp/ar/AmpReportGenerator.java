@@ -7,6 +7,7 @@
 package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * 
@@ -426,76 +428,57 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @throws InvocationTargetException 
 	 * @throws IllegalAccessException 
 	 */
-	protected void applyPercentagesToFilterColumns() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		Iterator<AmpReportColumn> i = extractable.iterator();
+	protected void applyPercentagesToFilterColumns(){
 		TextCell fakeMc = new TextCell();
-		Set<String> hierarchyNames=new TreeSet<String>();
-		Iterator itH = reportMetadata.getHierarchies().iterator();
-		while (itH.hasNext()) {
-			AmpReportHierarchy h = (AmpReportHierarchy) itH.next();
-			hierarchyNames.add(h.getColumn().getColumnName());
-		}
+		Set<String> hierarchyNames = reportMetadata.getHierarchyNames();
 		
-		
-		while (i.hasNext()) {
-			AmpReportColumn elem = i.next();
-			boolean filterSelected=false;
-			for (AmpColumnsFilters acf:elem.getColumn().getFilters()) {
-				Object property = PropertyUtils.getSimpleProperty(filter, acf
-						.getBeanFieldName());
-				if (property != null) filterSelected = true;
-			}
+		Set<String> filterRetrievableColumnNames =  ColumnFilterGenerator.getFilterRetrievableColumns(filter);
+		for(AmpReportColumn elem:extractable){
+			String colName = elem.getColumn().getColumnName();
+			boolean filterSelected = filterRetrievableColumnNames.contains(colName);
 			
 			//do not apply percentage for columns that were not selected in filters or for columns that are actually hierarchies
-			if (!filterSelected || hierarchyNames.contains(elem.getColumn().getColumnName())) continue;
+			if (!filterSelected || hierarchyNames.contains(colName))
+				continue;
 			
-			if (elem.getColumn().getFilterRetrievable() != null && elem.getColumn().getFilterRetrievable().booleanValue()) {
-				CellColumn c = rawColumnsByName.get(elem.getColumn()
-						.getColumnName());
-				// construct a unique set of cell values to fake the metacells of
-				// hierarchies
-				Set<String> cellValues = new TreeSet<String>();
-				Iterator<Cell> iterator = c.iterator();
-				while (iterator.hasNext()) {
-					// all filterRetrievable are metatextcells
-					Cell cell = (Cell) iterator.next();
-					cellValues.add((String) cell.getValue());
-				}
-				// iterate all funding columns and apply them:
-				fakeMc.setColumn(c);
-				//NEVER apply this for regional reports with regional metaCell:
-				if((fakeMc.getColumn().getName().equals(ArConstants.REGION) || fakeMc.getColumn().getName().equals(ArConstants.DISTRICT) || fakeMc.getColumn().getName().equals(ArConstants.ZONE) ) && reportMetadata.getType().equals(ArConstants.REGIONAL_TYPE))
-					continue;
-				Iterator<String> metaValuesIt = cellValues.iterator();
-				while (metaValuesIt.hasNext()) {
-					String value = (String) metaValuesIt.next();
-					fakeMc.setValue(value);
+			CellColumn c = rawColumnsByName.get(elem.getColumn().getColumnName());
+			// construct a unique set of cell values to fake the metacells of
+			// hierarchies
+			Set<String> cellValues = new TreeSet<String>();
+			Iterator<Cell> iterator = c.iterator();
+			while (iterator.hasNext()) {
+				Cell cell = iterator.next();
+				cellValues.add((String) cell.getValue()); // all retrievables are TextCells (?)
+			}
+			// iterate all funding columns and apply them:
+			fakeMc.setColumn(c);
+			//NEVER apply this for regional reports with regional metaCell:
+			if (reportMetadata.getType().equals(ArConstants.REGIONAL_TYPE) &&
+					(fakeMc.getColumn().getName().equals(ArConstants.REGION) || fakeMc.getColumn().getName().equals(ArConstants.DISTRICT) || fakeMc.getColumn().getName().equals(ArConstants.ZONE) ))
+				continue;
 
-					Iterator<Cell> fundingIt = rawColumnsByName.get(
-							ArConstants.COLUMN_FUNDING).iterator();
-					while (fundingIt.hasNext()) {
-						CategAmountCell cac = (CategAmountCell) fundingIt
-								.next();
-						cac.applyMetaFilter(c.getName(), fakeMc, cac, false, false);
-					}
+			for(String value:cellValues){
+				fakeMc.setValue(value);
+
+				List<CategAmountCell> cells = rawColumnsByName.get(ArConstants.COLUMN_FUNDING).getCells();
+				for(CategAmountCell cac:cells){
+					cac.applyMetaFilter(c.getName(), fakeMc, cac, false, false);
+				}
 					
-					for ( CellColumn tempCellColumn: rawColumnsByName.values() ) {
-						if (tempCellColumn.getName().toLowerCase().contains("mtef")) {
-							Iterator<Cell> mtefCellIt	= tempCellColumn.iterator();
-							while (mtefCellIt.hasNext()) {
-								CategAmountCell cacParent = (CategAmountCell) mtefCellIt.next();
-								if ( cacParent.getMergedCells() != null ) 
-									for ( Object cacObj: cacParent.getMergedCells() ) {
-										CategAmountCell cac	= (CategAmountCell) cacObj;
-										cac.applyMetaFilter(c.getName(), fakeMc, cac, false, false); 
-									}
-							}
+				for (CellColumn tempCellColumn: rawColumnsByName.values() ) {
+					if (tempCellColumn.getName().toLowerCase().contains("mtef")) {
+						List<CategAmountCell> tempCells = tempCellColumn.getCells();
+						for(CategAmountCell cacParent:tempCells)
+							if ( cacParent.getMergedCells() != null ){
+								for ( Object cacObj: cacParent.getMergedCells() ) {
+									CategAmountCell cac	= (CategAmountCell) cacObj;
+									cac.applyMetaFilter(c.getName(), fakeMc, cac, false, false); 
+								}
 						}
 					}
-					
 				}
+					
 			}
-
 		}
 	}
 
@@ -1011,14 +994,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		Values.nr_CTV_called = 0;
 		Values.cumulative_CTV_sizes = 0;
 		
-		try {
-			
-			applyPercentagesToFilterColumns();
-		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			e.printStackTrace();
-			logger.error(e);
-		}
-		
+		applyPercentagesToFilterColumns();
 		applyExchangeRate();
 
 		createTotals();

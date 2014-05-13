@@ -43,4 +43,5 @@ public class AmpColumnsFilters extends ColumnFilteringInfo implements Serializab
 	@Override public String toString(){
 		return String.format("ACF: (bean: %s, view: %s, column: %s", this.beanFieldName, this.viewFieldName, this.column);
 	}
+	
 }

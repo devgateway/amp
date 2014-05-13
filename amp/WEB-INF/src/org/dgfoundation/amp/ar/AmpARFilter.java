@@ -1007,7 +1007,7 @@ public class AmpARFilter extends PropertyListable {
 				+ Util.toCSString(typeOfAssistance) + ")";
 			
 			String REGION_SELECTED_FILTER = "";
-			if (locationSelected!=null) {
+			if (locationSelected != null) {
 				Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
 				allSelectedLocations.addAll(locationSelected);
 				
@@ -1015,6 +1015,8 @@ public class AmpARFilter extends PropertyListable {
 				this.pledgesLocations = new ArrayList<AmpCategoryValueLocations>();
 				this.pledgesLocations.addAll(allSelectedLocations);
 				DynLocationManagerUtil.populateWithAscendants(this.pledgesLocations, locationSelected);
+				
+				this.relatedLocations = allSelectedLocations;
 				
 				String allSelectedLocationString = Util.toCSString(allSelectedLocations);
 				String subSelect = "SELECT aal.pledge_id FROM amp_funding_pledges_location aal, amp_location al " +

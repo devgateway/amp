@@ -29,6 +29,11 @@ public class AmpReportColumn  implements Serializable, Comparable
 	@Level
 	private AmpCategoryValue level;
 	
+	/**
+	 * whether this column was artificially added by the filter (not a part of the report specification)
+	 */
+	private boolean addedByFilter;
+	
 //	private boolean generated;
 	
 	private static AmpCategoryValue defaultLevel = null;
@@ -100,5 +105,14 @@ public class AmpReportColumn  implements Serializable, Comparable
 			return "AmpReportColumn [null]";
 		return "ARC: " + column.toString() + "";
 	}
+	
+	public boolean isAddedByFilter(){
+		return addedByFilter;
+	}
+	
+	public void setAddedByFilter(boolean addedByFilter){
+		this.addedByFilter = addedByFilter;
+	}
+
 	
 }

@@ -393,6 +393,9 @@ function initializeGlobalVariables(){
 													<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/>
 													<br />
 												</c:if>
+													<html:checkbox property="filter.showGroupsNotOrgs" styleId="show_groups_not_orgs">
+														<digi:trn>Show Organization groups instead of Organizations</digi:trn>
+													</html:checkbox>
 												<hr />
 												<br />
 												<digi:trn>For Time Series Comparison, what data do you want to show?</digi:trn>

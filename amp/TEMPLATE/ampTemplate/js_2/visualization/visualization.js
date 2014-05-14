@@ -631,6 +631,9 @@ function resetToDefaults(){
 	if (document.getElementById("workspace_only")!=null){
 		document.getElementById("workspace_only").checked = false;
 	}
+	if (document.getElementById("show_groups_not_orgs")!=null){
+		document.getElementById("show_groups_not_orgs").checked = false;
+	}
 	
 	if (dashboardType==4){ // if it is a Deal Dashboard
 		document.getElementById("implementing_agency_dropdown_id").selectedIndex = 0;
@@ -1173,6 +1176,7 @@ function callbackApplyFilter(e){
 	params = params + "&secondaryProgramIds=" + getQueryParameter("secondaryProgramIds");
 	params = params + "&showAcronymForOrgNames=" + document.getElementById("show_acronym_for_org_names").checked;
 	params = params + "&showOnlyNationalProjects=" + document.getElementById("show_only_national_projects").checked;
+	params = params + "&showGroupsNotOrgs=" + document.getElementById("show_groups_not_orgs").checked;
 
 	loadingPanel.show();
 
@@ -1297,6 +1301,9 @@ function applyFilterPopin(e){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 		document.getElementById("workspaceOnlyQuickFilter").checked = document.getElementById("workspace_only").checked;
 	}
+	if (document.getElementById("showGroupsNotOrgs")!=null){
+		document.getElementById("showGroupsNotOrgs").value = document.getElementById("show_groups_not_orgs").checked;
+	}
 	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	if (document.getElementById("showAcronymForOrgNames")!=null) {
@@ -1331,6 +1338,7 @@ function applyFilterPopin(e){
 		params = params + "&implementingAgencyIds=" + getSelectionsFromElement("implementing_agency_check",false);
 		params = params + "&secondaryProgramIds=" + getSelectionsFromElement("secondary_program_check",false);
 	}
+	params = params + "&showGroupsNotOrgs=" + document.getElementById("show_groups_not_orgs").checked;
 
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
@@ -2820,6 +2828,9 @@ function launchDashboard(){
 	}
 	if (document.getElementById("workspace_only")!=null){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
+	}
+	if (document.getElementById("show_groups_not_orgs")!=null){
+		document.getElementById("showGroupsNotOrgs").value = document.getElementById("show_groups_not_orgs").checked;
 	}
 	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	

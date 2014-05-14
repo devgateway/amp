@@ -15,6 +15,7 @@
 <html:hidden property="filter.yearToCompare" styleId="yearToCompare"/>
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
 <html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
+<html:hidden property="filter.showGroupsNotOrgs" styleId="showGroupsNotOrgs"/>
 <html:hidden property="filter.showAmountsInThousands" styleId="showAmountsInThousands"/>
 <html:hidden property="filter.showAmountsInThousandsDefault" styleId="showAmountsInThousandsDefault"/>
 <html:hidden property="filter.showMonochrome" styleId="showMonochrome"/>

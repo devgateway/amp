@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.m2e.Maven2LaunchConfigurationType">
+<booleanAttribute key="M2_DEBUG_OUTPUT" value="false"/>
+<stringAttribute key="M2_GOALS" value="generate-resources"/>
+<booleanAttribute key="M2_NON_RECURSIVE" value="false"/>
+<booleanAttribute key="M2_OFFLINE" value="false"/>
+<stringAttribute key="M2_PROFILES" value=""/>
+<listAttribute key="M2_PROPERTIES">
+<listEntry value="serverName=local"/>
+<listEntry value="jdbc.db=amp_ssudan_stg"/>
+<listEntry value="jdbc.user=postgres"/>
+<listEntry value="jdbc.password=amp"/>
+<listEntry value="jdbc.port=5430"/>
+</listAttribute>
+<stringAttribute key="M2_RUNTIME" value="EMBEDDED"/>
+<booleanAttribute key="M2_SKIP_TESTS" value="false"/>
+<intAttribute key="M2_THREADS" value="1"/>
+<booleanAttribute key="M2_UPDATE_SNAPSHOTS" value="false"/>
+<booleanAttribute key="M2_WORKSPACE_RESOLUTION" value="false"/>
+<stringAttribute key="org.eclipse.debug.core.ATTR_REFRESH_SCOPE" value="${workspace}"/>
+<mapAttribute key="org.eclipse.debug.core.environmentVariables">
+<mapEntry key="ANT_OPTS" value="-Xmx1024"/>
+<mapEntry key="MAVEN_OPTS" value="-Xmx1024m"/>
+</mapAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/CDC-1.0%Foundation-1.0"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx1024m"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc}"/>
+</launchConfiguration>

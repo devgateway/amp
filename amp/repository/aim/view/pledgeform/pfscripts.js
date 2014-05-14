@@ -121,9 +121,18 @@ function go_to_pledge_list(){
 	parent.window.location = '/viewPledgesList.do';
 }
 
+/**
+ * send a POST requesting for the PledgeForm lock to be released and then go to the pledge-list-page
+ * @param bigDivSelector
+ */
 function pledge_form_cancel(bigDivSelector){
-	BootstrapDialog.alert("I want banana!");
-	//go_to_pledge_list();
+	//BootstrapDialog.alert("I want banana!");
+	$.post("/selectPledgeProgram.do",
+			{extraAction: 'cancel'},
+			function(data){
+				if (data.trim() == 'ok')
+					go_to_pledge_list();
+			});
 }
 
 init_amp_magic('pledge_form_big_div');

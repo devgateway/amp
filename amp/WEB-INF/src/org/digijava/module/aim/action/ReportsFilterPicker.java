@@ -146,7 +146,9 @@ public class ReportsFilterPicker extends Action {
 			}
 			if (ampReportId.length() > 0 && report != null && report.getDrilldownTab())
 				request.getSession().setAttribute(Constants.CURRENT_TAB_REPORT, report);
-		}
+		} else {
+            filterForm.setPledged(false);
+        }
 		
  		// init form
 		if (request.getParameter("init") != null)
@@ -482,13 +484,19 @@ public class ReportsFilterPicker extends Action {
     private static List<AmpCategoryValueLocations> getRootLocations(){    	
         TeamMember currentMember = TeamUtil.getCurrentMember();
         AmpApplicationSettings ampAppSettings = null;
+        boolean showAllCountries = false;
         if (currentMember != null) {
             AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
-            ampAppSettings = DbUtil.getTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
+            if (ampCurrentMember != null) {
+                ampAppSettings = DbUtil.getTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
+                showAllCountries = ampAppSettings != null && ampAppSettings.getShowAllCountries();
+            } else {
+                showAllCountries = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_ALL_COUNTRIES));
+            }
         }
 
-    	List<AmpCategoryValueLocations> filterCountries = new ArrayList<>();
-        if (ampAppSettings.getShowAllCountries()) {
+    	List<AmpCategoryValueLocations> filterCountries = new ArrayList<AmpCategoryValueLocations>();
+        if (showAllCountries) {
             AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
             if (layer == null) {
                 logger.error("No Country value found in category Implementation Location. Please correct this.");

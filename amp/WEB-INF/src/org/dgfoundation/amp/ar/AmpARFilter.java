@@ -963,6 +963,22 @@ public class AmpARFilter extends PropertyListable {
 	}
 	
 	/**
+	 * generates SQL subquery which selects activity ids of activities which use one of the sectors of a given sector scheme
+	 * @param s the set of sectors
+	 * @param classificationName one of "Primary" / "Secondary" / "Tertiary" / "Tag"
+	 * @return
+	 */
+	protected static String generateProgramFilterSubquery(Collection<AmpTheme> s, String classificationName){
+		if (s == null || s.isEmpty())
+			return null;
+		String subquery = "SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id "
+				+ "inner join AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='" + classificationName + "' AND "
+				+ " aap.amp_program_id in ("
+				+ Util.toCSStringForIN(s) + ")";
+		return subquery;
+	}
+
+	/**
 	 * generates SQL subquery which selects pledge ids of pledges which use one of the sectors of a given sector scheme
 	 * @param s the set of sectors
 	 * @param classificationName one of "Primary" / "Secondary" / "Tertiary" / "Tag"
@@ -974,6 +990,22 @@ public class AmpARFilter extends PropertyListable {
 		String subquery = "SELECT fps.pledge_id FROM amp_funding_pledges_sector fps, amp_sector s, amp_classification_config c "
 				+ "WHERE fps.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
 				+ "AND c.name='" + classificationName +"' AND fps.amp_sector_id in ("
+				+ Util.toCSStringForIN(s) + ")";
+		return subquery;
+	}
+
+	/**
+	 * generates SQL subquery which selects activity ids of activities which use one of the sectors of a given sector scheme
+	 * @param s the set of sectors
+	 * @param classificationName one of "Primary" / "Secondary" / "Tertiary" / "Tag"
+	 * @return
+	 */
+	protected static String generatePledgesProgramFilterSubquery(Collection<AmpTheme> s, String classificationName){
+		if (s == null || s.isEmpty())
+			return null;
+		String subquery = "SELECT fpp.pledge_id FROM amp_funding_pledges_program fpp inner join amp_theme p on fpp.amp_program_id=p.amp_theme_id "
+				+ "inner join AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=getprogramsettingid(fpp.amp_program_id) where ps.name='" + classificationName + "' AND "
+				+ " fpp.amp_program_id in ("
 				+ Util.toCSStringForIN(s) + ")";
 		return subquery;
 	}
@@ -1051,6 +1083,10 @@ public class AmpARFilter extends PropertyListable {
 			pledgeQueryAppend(generatePledgesSectorFilterSubquery(tertiarySectors, "Tertiary"));
 			pledgeQueryAppend(generatePledgesSectorFilterSubquery(tagSectors, "Tag"));
 			
+			pledgeQueryAppend(generatePledgesProgramFilterSubquery(nationalPlanningObjectives, "National Plan Objective"));
+			pledgeQueryAppend(generatePledgesProgramFilterSubquery(primaryPrograms, "Primary Program"));
+			pledgeQueryAppend(generatePledgesProgramFilterSubquery(secondaryPrograms, "Secondary Program"));
+
 			if (!REGION_SELECTED_FILTER.equals("")) {
 				pledgeQueryAppend(REGION_SELECTED_FILTER);
 			}
@@ -1098,21 +1134,6 @@ public class AmpARFilter extends PropertyListable {
 		// ("+SUB_SECTOR_FILTER+"))";
 
 		String SECTOR_FILTER = generateSectorFilterSubquery(sectors, "Primary");
-
-		String NATIONAL_PLAN_FILTER = "SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id "
-				+ "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='National Plan Objective' AND "
-				+ " aap.amp_program_id in ("
-				+ Util.toCSStringForIN(nationalPlanningObjectives) + ")";
-
-		String PRIMARY_PROGRAM_FILTER = "SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id "
-				+ "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='Primary Program' AND "
-				+ " aap.amp_program_id in ("
-				+ Util.toCSStringForIN(primaryPrograms) + ")";
-
-		String SECONDARY_PROGRAM_FILTER = "SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id "
-				+ "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='Secondary Program' AND "
-				+ " aap.amp_program_id in ("
-				+ Util.toCSStringForIN(secondaryPrograms) + ")";
 
 		// String SECONDARY_PARENT_SECTOR_FILTER=
 		// "SELECT amp_activity_id FROM v_secondary_sectors WHERE amp_sector_id
@@ -1503,16 +1524,10 @@ public class AmpARFilter extends PropertyListable {
 		queryAppend(TERTIARY_SECTOR_FILTER);
 		queryAppend(TAG_SECTOR_FILTER);
 
-		if (nationalPlanningObjectives != null
-				&& nationalPlanningObjectives.size() != 0) {
-			queryAppend(NATIONAL_PLAN_FILTER);
-		}
-		if (primaryPrograms != null && primaryPrograms.size() != 0) {
-			queryAppend(PRIMARY_PROGRAM_FILTER);
-		}
-		if (secondaryPrograms != null && secondaryPrograms.size() != 0) {
-			queryAppend(SECONDARY_PROGRAM_FILTER);
-		}
+		queryAppend(generateProgramFilterSubquery(nationalPlanningObjectives, "National Plan Objective"));
+		queryAppend(generateProgramFilterSubquery(primaryPrograms, "Primary Program"));
+		queryAppend(generateProgramFilterSubquery(secondaryPrograms, "Secondary Program"));
+		
 		if (regions != null && regions.size() > 0)
 			queryAppend(REGION_FILTER);
 		if (financingInstruments != null && financingInstruments.size() > 0)

@@ -83,4 +83,8 @@ public abstract class AmpAjaxLinkField extends AmpFieldPanel<Void> {
 		this(id, fmName, buttonCaption);
 		this.fmType = fmType;
 	}
+	protected void addTooltip(){ 
+		button.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
+	}
+
 }

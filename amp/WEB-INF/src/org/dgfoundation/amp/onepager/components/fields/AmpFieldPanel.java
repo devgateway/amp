@@ -313,7 +313,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 				}
 				//when we configure the title we add the tooltip
 				if(!"".equals(titleTooltip.getDefaultModel().getObject().toString()) && titleTooltip.getDefaultModel().getObject().toString().trim().length()>0 ){
-					titleLabel.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
+					addTooltip();
 				}
 			}
 		};
@@ -323,7 +323,15 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		newLine.setVisible(!hideNewLine);
 		add(newLine);
 	}
-
+	/**
+	 * on standard fields we add the tooltip to the label if you need it added on the component itself please override these method
+	 * please see {@link AmpButtonField} or {@link AmpAjaxLinkField}
+	 */
+	protected void addTooltip(){ 
+		// 
+		titleLabel.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
+	}
+	
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,
 			boolean hideLabel, boolean hideNewLine) {
 		this(id, model, fmName, hideLabel, hideNewLine, false);
@@ -337,6 +345,14 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 */
 	public IConverter getInternalConverter(final Class<?> type) {
 		return null;
+	}
+
+	public Label getTitleTooltip() {
+		return titleTooltip;
+	}
+
+	public void setTitleTooltip(Label titleTooltip) {
+		this.titleTooltip = titleTooltip;
 	}
 
 }

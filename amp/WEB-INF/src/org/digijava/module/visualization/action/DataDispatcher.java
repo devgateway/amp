@@ -2528,7 +2528,11 @@ public class DataDispatcher extends DispatchAction {
             }
     		String organizationData = "";
     		int index = 0;
-    		list = new LinkedList(map.entrySet());
+    		if(filter.getShowGroupsNotOrgs()) {
+        		list = new LinkedList(groupedMap.entrySet());
+        	} else {
+        		list = new LinkedList(map.entrySet());
+        	}
 			Iterator it = list.iterator();
 			csvString = new StringBuffer();
 			csvString.append("Year,");
@@ -2541,21 +2545,33 @@ public class DataDispatcher extends DispatchAction {
 	        while(it.hasNext()){
                 //Long[] key = it.next();
                 Map.Entry entry = (Map.Entry)it.next();
-                AmpOrganisation org = (AmpOrganisation) entry.getKey();
+                String name = null;
+                Long id = null;
+                if(filter.getShowGroupsNotOrgs()) {
+                	id = ((AmpOrgGroup) entry.getKey()).getAmpOrgGrpId();
+                	name = ((AmpOrgGroup) entry.getKey()).getOrgGrpName();
+				} else {
+					id = ((AmpOrganisation) entry.getKey()).getAmpOrgId();
+					name = ((AmpOrganisation) entry.getKey()).getName();
+				}
                 if (index <= 4){
-	                csvString.append(org.getName().replace(",", ";"));
+	                csvString.append(name.replace(",", ";"));
 	                csvString.append("#");
-		            csvString.append(org.getAmpOrgId());
+		            csvString.append(id);
 		            csvString.append(",");
                 }
-                organizationData += "<" + org.getName() + ">";
+                organizationData += "<" + name + ">";
                 for (Long i = startYear; i <= endYear; i++) {
-        			Long[] ids = {org.getAmpOrgId()};
+        			Long[] ids = {id};
         			DashboardFilter newFilter2 = filter.getCopyFilterForFunding();
         			//newFilter2.setStartYear(startYear);
                 	//newFilter2.setEndYear(endYear);        			
                 	newFilter2.setAgencyType(respOrgConstant);//set beneficiary agency 
-                	newFilter2.setSelOrgIds(ids);
+                	if(filter.getShowGroupsNotOrgs()) {
+        				newFilter2.setOrgGroupIds(ids);
+        			} else {
+        				newFilter2.setSelOrgIds(ids);
+        			}
                     startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
                     DecimalWraper fundingCal = DbUtil.getFunding(newFilter2, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
@@ -2584,8 +2600,13 @@ public class DataDispatcher extends DispatchAction {
             ArrayList<Long> ids = new ArrayList<Long>();
             while(it.hasNext()){
             	Map.Entry entry = (Map.Entry)it.next();
-                AmpOrganisation org = (AmpOrganisation) entry.getKey();
-    			ids.add(org.getAmpOrgId());
+            	Long id = null;
+            	if(filter.getShowGroupsNotOrgs()) {
+                	id = ((AmpOrgGroup) entry.getKey()).getAmpOrgGrpId();
+				} else {
+					id = ((AmpOrganisation) entry.getKey()).getAmpOrgId();
+				}
+    			ids.add(id);
             }
             Long[] idsArray = new Long[ids.size()];
             String idsArrayStr = "";
@@ -2607,7 +2628,11 @@ public class DataDispatcher extends DispatchAction {
                 startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                 endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
                 //DashboardFilter newFilter = filter.getCopyFilterForFunding();
-    			newFilter.setSelOrgIds(idsArray);
+                if(filter.getShowGroupsNotOrgs()) {
+    				newFilter.setOrgGroupIds(idsArray);
+    			} else {
+    				newFilter.setSelOrgIds(idsArray);
+    			}
 	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
                 BigDecimal amount = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                 if (ids.size()==0){

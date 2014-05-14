@@ -4,6 +4,9 @@
  */
 package org.dgfoundation.amp.onepager.components.features;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -19,7 +22,7 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
  * 
  * @author mpostelnicu@dgateway.org since Sep 28, 2010
  */
-public abstract class AmpFeaturePanel<T> extends AmpComponentPanel<T> {
+public abstract class AmpFeaturePanel<T> extends AmpComponentPanel<T> implements IHeaderContributor {
 	/**
 	 * 
 	 */
@@ -52,5 +55,8 @@ public abstract class AmpFeaturePanel<T> extends AmpComponentPanel<T> {
 	public Label getLabelContainer(){
 		return labelContainer;
 	}
-	
+	@Override
+	public void renderHead(IHeaderResponse response){
+			response.render(OnDomReadyHeaderItem.forScript("Opentip.findElements();"));
+	}	
 }

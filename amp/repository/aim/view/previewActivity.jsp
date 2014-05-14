@@ -1412,19 +1412,6 @@ function collapseAll() {
 							</div>
 						</fieldset>
 
-						<hr />
-						<br />
-						<legend>
-							<span class="legend_label" style="cursor: pointer;"><digi:trn>Program Description</digi:trn></span>
-						</legend>
-						<digi:trn>Program Description</digi:trn>
-						<br />
-						<table width="100%" cellSpacing="2" cellPadding="1"
-							style="font-size: 11px;">
-							<tr>
-								<td width=100%></td>
-							</tr>
-						</table>
 					</module:display> <!-- end program description -->
 <!-- SECTORS SECTION -->
 <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">

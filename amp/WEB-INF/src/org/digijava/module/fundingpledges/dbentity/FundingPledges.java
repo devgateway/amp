@@ -22,6 +22,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private AmpCategoryValue title;
+	private AmpCategoryValue status;
 	private String titleFreeText;
 	private String additionalInformation;
 	private String whoAuthorizedPledge;
@@ -100,6 +101,11 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 	@java.lang.SuppressWarnings("all")
 	public AmpCategoryValue getTitle() {
 		return this.title;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public AmpCategoryValue getStatus() {
+		return this.status;
 	}
 	
 	@java.lang.SuppressWarnings("all")
@@ -290,6 +296,11 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 	@java.lang.SuppressWarnings("all")
 	public void setTitle(final AmpCategoryValue title) {
 		this.title = title;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public void setStatus(final AmpCategoryValue status) {
+		this.status = status;
 	}
 	
 	@java.lang.SuppressWarnings("all")

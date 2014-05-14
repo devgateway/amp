@@ -63,7 +63,7 @@ public class AddPledge extends Action {
 			return TranslatorWorker.translateText("Only logged-in members can edit pledges");
 		};
 		
-		if (!currentMember.getPledger())
+		if (currentMember.getPledger() == null || !currentMember.getPledger())
 			return TranslatorWorker.translateText("You are not allowed to edit pledges");
 		
 		Long timeStamp = (Long) request.getSession().getAttribute(PLEDGE_TIMESTAMP_EDITED_BY_CURRENT_SESSION_ATTR);

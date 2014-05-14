@@ -131,6 +131,8 @@ public class PledgeForm extends ActionForm implements Serializable {
 	private String furtherApprovalNedded;
 	//private String defaultCurrency;
 	private Long pledgeTitleId;
+	private Long pledgeStatusId;
+	
 	//private Collection<String> years;
 	private String year;
 	private boolean locationsMultiselect = false;
@@ -179,6 +181,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 		this.setTitleFreeText(null);
 		this.setPledgeId(null);
 		this.setPledgeTitleId(null);
+		this.setPledgeStatusId(null);
 		//this.setFundingPledges(null);
 		this.setSelectedOrgId(null);
 		this.setSelectedOrgGrpId(null);
@@ -211,6 +214,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 		this.setPledgeId(fp.getId());
 		this.setTitleFreeText(fp.getTitleFreeText());
 		this.setPledgeTitleId(fp.getTitle() == null ? null : fp.getTitle().getId());
+		this.setPledgeStatusId(fp.getStatus() == null ? null : fp.getStatus().getId());
 		this.setEffectiveName(fp.getEffectiveName());
 		this.setSelectedOrgGrpId(fp.getOrganizationGroup().getAmpOrgGrpId());
 		this.setAdditionalInformation(fp.getAdditionalInformation());
@@ -393,6 +397,9 @@ public class PledgeForm extends ActionForm implements Serializable {
 		return getShimsForCategoryClass(CategoryConstants.PLEDGES_NAMES_KEY, this.getPledgeTitleId());
 	}
 	
+	public List<IdWithValueShim> getPledgeStatuses(){
+		return getShimsForCategoryClass(CategoryConstants.ACTIVITY_STATUS_KEY, this.getPledgeStatusId());
+	}
 	public List<IdWithValueShim> getPledgeTypes() {
 		return getShimsForCategoryClass(CategoryConstants.PLEDGES_TYPES_KEY, null);
 	}
@@ -722,6 +729,11 @@ public class PledgeForm extends ActionForm implements Serializable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
+	public Long getPledgeStatusId() {
+		return this.pledgeStatusId;
+	}
+
+	@java.lang.SuppressWarnings("all")
 	public String getYear() {
 		return this.year;
 	}
@@ -834,6 +846,11 @@ public class PledgeForm extends ActionForm implements Serializable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
+	public void setPledgeStatusId(final Long pledgeStatusId) {
+		this.pledgeStatusId = pledgeStatusId;
+	}
+
+	@java.lang.SuppressWarnings("all")
 	public void setYear(final String year) {
 		this.year = year;
 	}
@@ -933,134 +950,20 @@ public class PledgeForm extends ActionForm implements Serializable {
 		return PledgesEntityHelper.getOrgGroupById(selectedOrgGrpId).getOrgGrpName();
 	}
 	
+	public String getPledgeStatus(){
+		if (pledgeStatusId == null)
+			return null;
+		return CategoryManagerUtil.loadAcvOrNull(pledgeStatusId).getValue();
+	}
+	
 	public String getAcvlValue(Long acvlId){
 		if (acvlId == null) return null;
 		return CategoryManagerUtil.loadAcvOrNull(acvlId).getValue();
 	}
 	
-	@java.lang.Override
-	@java.lang.SuppressWarnings("all")
-	public boolean equals(final java.lang.Object o) {
-		if (o == this) return true;
-		if (!(o instanceof PledgeForm)) return false;
-		final PledgeForm other = (PledgeForm)o;
-		if (!other.canEqual((java.lang.Object)this)) return false;
-		final java.lang.Object this$pledgeId = this.getPledgeId();
-		final java.lang.Object other$pledgeId = other.getPledgeId();
-		if (this$pledgeId == null ? other$pledgeId != null : !this$pledgeId.equals(other$pledgeId)) return false;
-		final java.lang.Object this$selectedOrgId = this.getSelectedOrgId();
-		final java.lang.Object other$selectedOrgId = other.getSelectedOrgId();
-		if (this$selectedOrgId == null ? other$selectedOrgId != null : !this$selectedOrgId.equals(other$selectedOrgId)) return false;
-		final java.lang.Object this$selectedOrgGrpId = this.getSelectedOrgGrpId();
-		final java.lang.Object other$selectedOrgGrpId = other.getSelectedOrgGrpId();
-		if (this$selectedOrgGrpId == null ? other$selectedOrgGrpId != null : !this$selectedOrgGrpId.equals(other$selectedOrgGrpId)) return false;
-		final java.lang.Object this$titleFreeText = this.getTitleFreeText();
-		final java.lang.Object other$titleFreeText = other.getTitleFreeText();
-		if (this$titleFreeText == null ? other$titleFreeText != null : !this$titleFreeText.equals(other$titleFreeText)) return false;
-		final java.lang.Object this$contact1 = this.getContact1();
-		final java.lang.Object other$contact1 = other.getContact1();
-		if (this$contact1 == null ? other$contact1 != null : !this$contact1.equals(other$contact1)) return false;
-		final java.lang.Object this$contact2 = this.getContact2();
-		final java.lang.Object other$contact2 = other.getContact2();
-		if (this$contact2 == null ? other$contact2 != null : !this$contact2.equals(other$contact2)) return false;
-		final java.lang.Object this$additionalInformation = this.getAdditionalInformation();
-		final java.lang.Object other$additionalInformation = other.getAdditionalInformation();
-		if (this$additionalInformation == null ? other$additionalInformation != null : !this$additionalInformation.equals(other$additionalInformation)) return false;
-		final java.lang.Object this$whoAuthorizedPledge = this.getWhoAuthorizedPledge();
-		final java.lang.Object other$whoAuthorizedPledge = other.getWhoAuthorizedPledge();
-		if (this$whoAuthorizedPledge == null ? other$whoAuthorizedPledge != null : !this$whoAuthorizedPledge.equals(other$whoAuthorizedPledge)) return false;
-		final java.lang.Object this$furtherApprovalNedded = this.getFurtherApprovalNedded();
-		final java.lang.Object other$furtherApprovalNedded = other.getFurtherApprovalNedded();
-		if (this$furtherApprovalNedded == null ? other$furtherApprovalNedded != null : !this$furtherApprovalNedded.equals(other$furtherApprovalNedded)) return false;
-		final java.lang.Object this$pledgeTitleId = this.getPledgeTitleId();
-		final java.lang.Object other$pledgeTitleId = other.getPledgeTitleId();
-		if (this$pledgeTitleId == null ? other$pledgeTitleId != null : !this$pledgeTitleId.equals(other$pledgeTitleId)) return false;
-		final java.lang.Object this$year = this.getYear();
-		final java.lang.Object other$year = other.getYear();
-		if (this$year == null ? other$year != null : !this$year.equals(other$year)) return false;
-		if (this.isLocationsMultiselect() != other.isLocationsMultiselect()) return false;
-		final java.lang.Object this$implemLocationLevel = this.getImplemLocationLevel();
-		final java.lang.Object other$implemLocationLevel = other.getImplemLocationLevel();
-		if (this$implemLocationLevel == null ? other$implemLocationLevel != null : !this$implemLocationLevel.equals(other$implemLocationLevel)) return false;
-		final java.lang.Object this$levelId = this.getLevelId();
-		final java.lang.Object other$levelId = other.getLevelId();
-		if (this$levelId == null ? other$levelId != null : !this$levelId.equals(other$levelId)) return false;
-		final java.lang.Object this$selectedLocs = this.getSelectedLocs();
-		final java.lang.Object other$selectedLocs = other.getSelectedLocs();
-		if (this$selectedLocs == null ? other$selectedLocs != null : !this$selectedLocs.equals(other$selectedLocs)) return false;
-		final java.lang.Object this$selectedRootProgram = this.getSelectedRootProgram();
-		final java.lang.Object other$selectedRootProgram = other.getSelectedRootProgram();
-		if (this$selectedRootProgram == null ? other$selectedRootProgram != null : !this$selectedRootProgram.equals(other$selectedRootProgram)) return false;
-		final java.lang.Object this$selectedProgs = this.getSelectedProgs();
-		final java.lang.Object other$selectedProgs = other.getSelectedProgs();
-		if (this$selectedProgs == null ? other$selectedProgs != null : !this$selectedProgs.equals(other$selectedProgs)) return false;
-		final java.lang.Object this$selectedRootSector = this.getSelectedRootSector();
-		final java.lang.Object other$selectedRootSector = other.getSelectedRootSector();
-		if (this$selectedRootSector == null ? other$selectedRootSector != null : !this$selectedRootSector.equals(other$selectedRootSector)) return false;
-		final java.lang.Object this$selectedSectors = this.getSelectedSectors();
-		final java.lang.Object other$selectedSectors = other.getSelectedSectors();
-		if (this$selectedSectors == null ? other$selectedSectors != null : !this$selectedSectors.equals(other$selectedSectors)) return false;
-		final java.lang.Object this$selectedFunding = this.getSelectedFunding();
-		final java.lang.Object other$selectedFunding = other.getSelectedFunding();
-		if (this$selectedFunding == null ? other$selectedFunding != null : !this$selectedFunding.equals(other$selectedFunding)) return false;
-		return true;
-	}
-	
-	@java.lang.SuppressWarnings("all")
-	public boolean canEqual(final java.lang.Object other) {
-		return other instanceof PledgeForm;
-	}
-	
-	@java.lang.Override
-	@java.lang.SuppressWarnings("all")
-	public int hashCode() {
-		final int PRIME = 59;
-		int result = 1;
-		final java.lang.Object $pledgeId = this.getPledgeId();
-		result = result * PRIME + ($pledgeId == null ? 0 : $pledgeId.hashCode());
-		final java.lang.Object $selectedOrgId = this.getSelectedOrgId();
-		result = result * PRIME + ($selectedOrgId == null ? 0 : $selectedOrgId.hashCode());
-		final java.lang.Object $selectedOrgGrpId = this.getSelectedOrgGrpId();
-		result = result * PRIME + ($selectedOrgGrpId == null ? 0 : $selectedOrgGrpId.hashCode());
-		final java.lang.Object $titleFreeText = this.getTitleFreeText();
-		result = result * PRIME + ($titleFreeText == null ? 0 : $titleFreeText.hashCode());
-		final java.lang.Object $contact1 = this.getContact1();
-		result = result * PRIME + ($contact1 == null ? 0 : $contact1.hashCode());
-		final java.lang.Object $contact2 = this.getContact2();
-		result = result * PRIME + ($contact2 == null ? 0 : $contact2.hashCode());
-		final java.lang.Object $additionalInformation = this.getAdditionalInformation();
-		result = result * PRIME + ($additionalInformation == null ? 0 : $additionalInformation.hashCode());
-		final java.lang.Object $whoAuthorizedPledge = this.getWhoAuthorizedPledge();
-		result = result * PRIME + ($whoAuthorizedPledge == null ? 0 : $whoAuthorizedPledge.hashCode());
-		final java.lang.Object $furtherApprovalNedded = this.getFurtherApprovalNedded();
-		result = result * PRIME + ($furtherApprovalNedded == null ? 0 : $furtherApprovalNedded.hashCode());
-		final java.lang.Object $pledgeTitleId = this.getPledgeTitleId();
-		result = result * PRIME + ($pledgeTitleId == null ? 0 : $pledgeTitleId.hashCode());
-		final java.lang.Object $year = this.getYear();
-		result = result * PRIME + ($year == null ? 0 : $year.hashCode());
-		result = result * PRIME + (this.isLocationsMultiselect() ? 79 : 97);
-		final java.lang.Object $implemLocationLevel = this.getImplemLocationLevel();
-		result = result * PRIME + ($implemLocationLevel == null ? 0 : $implemLocationLevel.hashCode());
-		final java.lang.Object $levelId = this.getLevelId();
-		result = result * PRIME + ($levelId == null ? 0 : $levelId.hashCode());
-		final java.lang.Object $selectedLocs = this.getSelectedLocs();
-		result = result * PRIME + ($selectedLocs == null ? 0 : $selectedLocs.hashCode());
-		final java.lang.Object $selectedRootProgram = this.getSelectedRootProgram();
-		result = result * PRIME + ($selectedRootProgram == null ? 0 : $selectedRootProgram.hashCode());
-		final java.lang.Object $selectedProgs = this.getSelectedProgs();
-		result = result * PRIME + ($selectedProgs == null ? 0 : $selectedProgs.hashCode());
-		final java.lang.Object $selectedRootSector = this.getSelectedRootSector();
-		result = result * PRIME + ($selectedRootSector == null ? 0 : $selectedRootSector.hashCode());
-		final java.lang.Object $selectedSectors = this.getSelectedSectors();
-		result = result * PRIME + ($selectedSectors == null ? 0 : $selectedSectors.hashCode());
-		final java.lang.Object $selectedFunding = this.getSelectedFunding();
-		result = result * PRIME + ($selectedFunding == null ? 0 : $selectedFunding.hashCode());
-		return result;
-	}
-	
-	@java.lang.Override
-	@java.lang.SuppressWarnings("all")
-	public java.lang.String toString() {
-		return "PledgeForm(pledgeId=" + this.getPledgeId() + ", selectedOrgId=" + this.getSelectedOrgId() + ", selectedOrgGrpId=" + this.getSelectedOrgGrpId() + ", titleFreeText=" + this.getTitleFreeText() + ", contact1=" + this.getContact1() + ", contact2=" + this.getContact2() + ", additionalInformation=" + this.getAdditionalInformation() + ", whoAuthorizedPledge=" + this.getWhoAuthorizedPledge() + ", furtherApprovalNedded=" + this.getFurtherApprovalNedded() + ", pledgeTitleId=" + this.getPledgeTitleId() + ", year=" + this.getYear() + ", locationsMultiselect=" + this.isLocationsMultiselect() + ", implemLocationLevel=" + this.getImplemLocationLevel() + ", levelId=" + this.getLevelId() + ", selectedLocs=" + this.getSelectedLocs() + ", selectedRootProgram=" + this.getSelectedRootProgram() + ", selectedProgs=" + this.getSelectedProgs() + ", selectedRootSector=" + this.getSelectedRootSector() + ", selectedSectors=" + this.getSelectedSectors() + ", selectedFunding=" + this.getSelectedFunding() + ")";
-	}
+//	@java.lang.Override
+//	@java.lang.SuppressWarnings("all")
+//	public java.lang.String toString() {
+//		return "PledgeForm(pledgeId=" + this.getPledgeId() + ", selectedOrgId=" + this.getSelectedOrgId() + ", selectedOrgGrpId=" + this.getSelectedOrgGrpId() + ", titleFreeText=" + this.getTitleFreeText() + ", contact1=" + this.getContact1() + ", contact2=" + this.getContact2() + ", additionalInformation=" + this.getAdditionalInformation() + ", whoAuthorizedPledge=" + this.getWhoAuthorizedPledge() + ", furtherApprovalNedded=" + this.getFurtherApprovalNedded() + ", pledgeTitleId=" + this.getPledgeTitleId() + ", year=" + this.getYear() + ", locationsMultiselect=" + this.isLocationsMultiselect() + ", implemLocationLevel=" + this.getImplemLocationLevel() + ", levelId=" + this.getLevelId() + ", selectedLocs=" + this.getSelectedLocs() + ", selectedRootProgram=" + this.getSelectedRootProgram() + ", selectedProgs=" + this.getSelectedProgs() + ", selectedRootSector=" + this.getSelectedRootSector() + ", selectedSectors=" + this.getSelectedSectors() + ", selectedFunding=" + this.getSelectedFunding() + ")";
+//	}
 }

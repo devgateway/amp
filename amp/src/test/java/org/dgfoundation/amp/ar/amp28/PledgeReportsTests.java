@@ -48,9 +48,82 @@ public class PledgeReportsTests extends ReportsTestCase
 		suite.addTest(new PledgeReportsTests("testPledgeFilterByRegion"));
 		suite.addTest(new PledgeReportsTests("testPledgeFilterByProgramNothing"));
 		suite.addTest(new PledgeReportsTests("testPledgeFilterByProgramSomething"));
+		suite.addTest(new PledgeReportsTests("testPledgeStatusFlat"));
+		suite.addTest(new PledgeReportsTests("testPledgeStatusHier"));
 		return suite;
 	}
 	
+	public void testPledgeStatusFlat(){
+		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-16003-flat",
+				ColumnReportDataModel.withColumns("AMP-16003-flat",
+						SimpleColumnModel.withContents("Pledges Titles", "Test pledge 1", "Test pledge 1", "ACVL Pledge Name 2", "ACVL Pledge Name 2", "free text name 2", "free text name 2", "Heavily used pledge", "Heavily used pledge").setIsPledge(true), 
+						SimpleColumnModel.withContents("Pledge Status", "Test pledge 1", "second status", "Heavily used pledge", "default status").setIsPledge(true), 
+						GroupColumnModel.withSubColumns("Funding",
+							GroupColumnModel.withSubColumns("2012",
+								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25", "free text name 2", "1 044 176,71").setIsPledge(true)), 
+							GroupColumnModel.withSubColumns("2013",
+								SimpleColumnModel.withContents("Actual Pledge", "Heavily used pledge", "1 800 000").setIsPledge(true)), 
+							GroupColumnModel.withSubColumns("2014",
+								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 244,98", "Heavily used pledge", "8 200 000").setIsPledge(true))), 
+						GroupColumnModel.withSubColumns("Total Costs",
+							SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 044 176,71", "Heavily used pledge", "10 000 000").setIsPledge(true)))
+					.withTrailCells(null, null, "1 044 177,96", "1 800 000", "9 233 244,98", "13 015 492,69"))
+				.withTrailCells(null, null, "1 044 177,96", "1 800 000", "9 233 244,98", "13 015 492,69")
+				.withPositionDigest(true,
+					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Pledge Status: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 3), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 5, colSpan: 1))",
+					"(line 1:RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 4, colSpan: 1))",
+					"(line 2:RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1))");
+		runReportTest("Pledge report with Pledge Status Column", "AMP-16003-flat", new String[] {"irrelevant since this is a pledge report"}, fddr_correct);
+	}
+	
+	public void testPledgeStatusHier(){
+		GroupReportModel fddr_correct = GroupReportModel.withGroupReports("AMP-16003-by-pledge-status",
+				GroupReportModel.withColumnReports("AMP-16003-by-pledge-status",
+						ColumnReportDataModel.withColumns("Pledge Status: Pledge Status Unallocated",
+							SimpleColumnModel.withContents("Pledges Titles", "ACVL Pledge Name 2", "ACVL Pledge Name 2", "free text name 2", "free text name 2").setIsPledge(true), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2012",
+									SimpleColumnModel.withContents("Actual Pledge", "free text name 2", "1 044 176,71").setIsPledge(true)), 
+								GroupColumnModel.withSubColumns("2013",
+									SimpleColumnModel.withContents("Actual Pledge", MUST_BE_EMPTY).setIsPledge(true)), 
+								GroupColumnModel.withSubColumns("2014",
+									SimpleColumnModel.withContents("Actual Pledge", MUST_BE_EMPTY).setIsPledge(true))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Pledge", "ACVL Pledge Name 2", "938 069,75", "free text name 2", "1 044 176,71").setIsPledge(true)))
+						.withTrailCells(null, "1 044 176,71", "0", "0", "1 982 246,46"),
+						ColumnReportDataModel.withColumns("Pledge Status: default status",
+							SimpleColumnModel.withContents("Pledges Titles", "Heavily used pledge", "Heavily used pledge").setIsPledge(true), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2012",
+									SimpleColumnModel.withContents("Actual Pledge", MUST_BE_EMPTY).setIsPledge(true)), 
+								GroupColumnModel.withSubColumns("2013",
+									SimpleColumnModel.withContents("Actual Pledge", "Heavily used pledge", "1 800 000").setIsPledge(true)), 
+								GroupColumnModel.withSubColumns("2014",
+									SimpleColumnModel.withContents("Actual Pledge", "Heavily used pledge", "8 200 000").setIsPledge(true))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Pledge", "Heavily used pledge", "10 000 000").setIsPledge(true)))
+						.withTrailCells(null, "0", "1 800 000", "8 200 000", "10 000 000"),
+						ColumnReportDataModel.withColumns("Pledge Status: second status",
+							SimpleColumnModel.withContents("Pledges Titles", "Test pledge 1", "Test pledge 1").setIsPledge(true), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2012",
+									SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1,25").setIsPledge(true)), 
+								GroupColumnModel.withSubColumns("2013",
+									SimpleColumnModel.withContents("Actual Pledge", MUST_BE_EMPTY).setIsPledge(true)), 
+								GroupColumnModel.withSubColumns("2014",
+									SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 244,98").setIsPledge(true))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								SimpleColumnModel.withContents("Actual Pledge", "Test pledge 1", "1 033 246,23").setIsPledge(true)))
+						.withTrailCells(null, "1,25", "0", "1 033 244,98", "1 033 246,23"))
+					.withTrailCells(null, "1 044 177,96", "1 800 000", "9 233 244,98", "13 015 492,69"))
+				.withTrailCells(null, "1 044 177,96", "1 800 000", "9 233 244,98", "13 015 492,69")
+				.withPositionDigest(true,
+					"(line 0:RHLC Pledges Titles: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 3), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 4, colSpan: 1))",
+					"(line 1:RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1), RHLC 2014: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 1))",
+					"(line 2:RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Pledge: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))");
+		runReportTest("Pledge report with Pledge Status Hier", "AMP-16003-by-pledge-status", new String[] {"irrelevant since this is a pledge report"}, fddr_correct);
+	}
+
 	public void testPledgeFilterByProgramNothing(){
 		GroupReportModel fddr_correct = GroupReportModel.withColumnReports("AMP-17423-programs")
 				.withTrailCells()

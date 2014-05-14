@@ -117,7 +117,7 @@ YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
 		'Pledges Type Of Assistance',
 		'Pledges Titles', 'Pledges sectors', 'Pledges Secondary Sectors', 'Pledges Tertiary Sectors', 
 		'Pledges Programs', 'Pledges Secondary Programs', 'Pledges Tertiary Programs', 
-		'Pledges Regions', 'Pledges Zones'
+		'Pledges Regions', 'Pledges Zones', 'Pledge Status'
 	);
 
 YAHOO.amp.reportwizard.fundingGroups["incompatible_hierarchies"]= new Array(

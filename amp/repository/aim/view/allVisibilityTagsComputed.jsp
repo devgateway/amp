@@ -208,7 +208,8 @@
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
 <feature:display name="Pledge Donor Information" module="Pledges"></feature:display> 
-<feature:display name="Pledge Sector and Location" module="Pledges"></feature:display> 
+<feature:display name="Pledge Sector and Location" module="Pledges"></feature:display>
+<feature:display name="Pledge Status" module="Pledges"></feature:display> 
 <feature:display name="Pledge Contact 1" module="Pledges"></feature:display> 
 <feature:display name="Pledge Contact 2" module="Pledges"></feature:display> 
 <feature:display name="Pledge Funding" module="Pledges"></feature:display> 
@@ -792,6 +793,7 @@
 <field:display feature="Pledges Columns" name="Pledges Titles"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Donor Group"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
+<field:display feature="Pledges Columns" name="Pledge Status"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Zones"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Districts"></field:display>

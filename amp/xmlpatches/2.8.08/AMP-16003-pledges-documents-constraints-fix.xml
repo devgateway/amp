@@ -9,12 +9,9 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				<!-- add constraints -->
-				ALTER TABLE amp_funding_pledges_document ALTER COLUMN pledge_id SET NOT NULL;
-				ALTER TABLE amp_funding_pledges_document ALTER COLUMN title SET NOT NULL;
-				ALTER TABLE amp_funding_pledges_document ALTER COLUMN uuid SET NOT NULL;
-				CREATE INDEX amp_funding_pledges_document_uuids ON amp_funding_pledges_document (uuid);
-				ALTER TABLE amp_funding_pledges_document ADD CONSTRAINT single_copy_document_per_pledge UNIQUE (pledge_id, title, uuid);
+				<!-- dropping constaint because the process of re-saving of a pledge with documents temporarily breaks it -->
+				ALTER TABLE amp_funding_pledges_document DROP CONSTRAINT IF EXISTS single_copy_document_per_pledge;
+			<!-- ALTER TABLE amp_funding_pledges_document ADD CONSTRAINT single_copy_document_per_pledge UNIQUE (pledge_id, title, uuid); -->	
 			</lang>
 		</script>
 	</apply>

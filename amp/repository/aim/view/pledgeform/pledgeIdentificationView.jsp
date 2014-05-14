@@ -19,6 +19,10 @@
 <c:set var="viewFieldValue">${pledgeForm.selectedOrgGrpName}</c:set>
 <%@include file="pledgeViewField.jspf" %>
 
+<c:set var="viewFieldName"><digi:trn>Pledge Status</digi:trn></c:set>
+<c:set var="viewFieldValue">${pledgeForm.pledgeStatus}</c:set>
+<%@include file="pledgeViewField.jspf" %>
+
 <field:display name="Who Authorized Pledge" feature="Pledge Donor Information">
 	<c:set var="viewFieldName"><digi:trn>Who Has Authorized Pledge?</digi:trn></c:set>
 	<c:set var="viewFieldValue">${pledgeForm.whoAuthorizedPledge}</c:set>

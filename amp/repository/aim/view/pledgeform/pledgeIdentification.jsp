@@ -37,19 +37,39 @@
 <%--<div class="highlight text-center h5 bold"><digi:trn key="aim:donorInformation">Donor Information</digi:trn></div>  --%>
 
 <div class="container-fluid">
-	<div class="col-xs-4 h6 bold">
-		<span class="red">*</span> <digi:trn>Organization Group</digi:trn>
+	<div class="label-and-select">
+		<div class="col-xs-4 h6 bold">
+			<span class="red">*</span> 
+			<label for="org_grp_dropdown_id"><digi:trn>Organization Group</digi:trn></label>
+		</div>
+	
+		<div class="col-xs-6 col-xs-offset-1">
+			<html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id" styleClass="validate-mandatory">
+				<c:forEach var="orgGroup" items="${pledgeForm.orgGroups}">
+					<option value="${orgGroup.id}"<c:if test="${pledgeForm.selectedOrgGrpId == orgGroup.id}">selected="selected"</c:if> >
+						<c:out value="${orgGroup.value}" />
+					</option>
+				</c:forEach>
+			</html:select>
+		</div>
 	</div>
 	
-	<div class="col-xs-6 col-xs-offset-1">
-		<html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id" styleClass="validate-mandatory">
-			<c:forEach var="orgGroup" items="${pledgeForm.orgGroups}">
-				<option value="${orgGroup.id}"<c:if test="${pledgeForm.selectedOrgGrpId == orgGroup.id}">selected="selected"</c:if> >
-					<c:out value="${orgGroup.value}" />
-				</option>
-			</c:forEach>
-		</html:select>
-	</div>
+	<div class="clearfix">&nbsp;</div>
+	<feature:display name="Pledge Status" module="Pledges">
+		<div class="label-and-select">
+			<div class="col-xs-4 h6 bold">
+				<span class="red">*</span> 
+				<label for="pledgeStatusDropDown"><digi:trn>Pledge Status</digi:trn></label>
+			</div>
+	
+			<div class="col-xs-6 col-xs-offset-1">
+				<c:set var="select_id" value="pledgeStatusDropDown" /><c:set var="extra_tags">name="pledgeStatusId" class="validate-mandatory"</c:set>
+				<c:set var="select_values" value="${pledgeForm.pledgeStatuses}" />
+				<c:set var="select_init_value" value="${pledgeForm.pledgeStatusId}" />
+				<%@include file="renderShimList.jspf" %>
+			</div>
+		</div>
+	</feature:display>
 	
 	<div class="clearfix">&nbsp;</div>
 	<field:display name="Who Authorized Pledge" feature="Pledge Donor Information">

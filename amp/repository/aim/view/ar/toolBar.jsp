@@ -189,6 +189,7 @@ addLoadEvent(addpanel);
 		var options = false;
 		if (type == null) return false;
 		var form=document.getElementById("exportSettingsForm");
+		$(form).find('#richExportRow').css('display', type == 'xls' ? 'table-row' : 'none'); // hide the "rich export" option for the non-Excel-export options
 		if (type == "xls") {
 			form.action = "/aim"+"<%=viewParamXLS%>";
 		} else if (type == 'richXls'){

@@ -115,6 +115,7 @@ public class SavePledge extends Action {
   		pledge.setTitleFreeText(plForm.getTitleFreeText());  // copy both - one of them will be null and that's it
 //   		}else{
   		pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));
+  		pledge.setStatus(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeStatusId()));
  
   		pledge.setOrganizationGroup(PledgesEntityHelper.getOrgGroupById(plForm.getSelectedOrgGrpId()));
     	pledge.setAdditionalInformation(plForm.getAdditionalInformation());

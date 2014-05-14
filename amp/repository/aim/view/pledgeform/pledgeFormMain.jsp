@@ -34,7 +34,7 @@
     
     <!-- THESE 4 FILES SHOULD ALWAYS BE THE FIRST INCLUDED JS, IN THIS ORDER -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/repository/bootstrap/jquery.min.js"></script>
 	<script src="/repository/bootstrap/amp-bootstrap.js" type="text/javascript"></script>       
     <script src="/repository/aim/view/pledgeform/pfscripts.js" type="text/javascript"></script>
     <script src="/repository/aim/view/bootstrap/amp_validation.js" type="text/javascript"></script>

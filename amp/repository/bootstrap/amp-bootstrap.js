@@ -133,7 +133,6 @@ function init_custom_looks(divId)
 function init_ajax_upload(divId){
 	$(function () {
 		$(divId + ' .fileupload').each(function(){
-			debugger;
 			var item = this;
 			var url = $(item).closest('.file-upload-container').attr('data-post-url');
 			$(item).fileupload({

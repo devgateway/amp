@@ -155,6 +155,12 @@ public class SelectPledgeProgram extends Action {
 				return null;
 			}
 			
+			if (extraAction.equals("cancel")){
+				AddPledge.markPledgeEditorClosed(request.getSession());
+				ARUtil.writeResponse(response, "ok");
+				return null;
+			}
+
 			// {id: 'program_item_select', action: 'themeSelected', attr: 'themeId'} - ignored
 			// {id: 'sector_item_select', action: 'sectorSelected', attr: 'sectorId'} - ignored
 		}

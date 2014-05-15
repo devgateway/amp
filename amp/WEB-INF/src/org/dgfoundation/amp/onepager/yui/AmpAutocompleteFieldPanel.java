@@ -23,6 +23,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
@@ -244,7 +245,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 					public Map getObject() {
 						Map<String, CharSequence> variables = new HashMap<String, CharSequence>(
 								2);
-						variables.put("noResults", TranslatorUtil.getTranslation("No results found"));
+                        variables.put("noResults", Strings.toEscapedUnicode(TranslatorUtil.getTranslation("No results found")));
 						return variables;
 					}
 				};

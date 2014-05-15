@@ -161,6 +161,6 @@ public class GlobalSettingsConstants {
 
     public static final String SHOW_ALL_COUNTRIES = "Show all countries";
 
-
+    public static final String SUPPORT_EMAIL = "Support Email";
 
 }

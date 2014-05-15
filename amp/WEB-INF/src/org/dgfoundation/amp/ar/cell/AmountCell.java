@@ -273,20 +273,26 @@ public class AmountCell extends Cell {
 		 * 
 		 */
 		HashSet<String> summedCells	= new HashSet<String>();
-		HashMap<Long, CategAmountCell> percentageless = new HashMap<Long, CategAmountCell>();
+		HashMap<Long, List<CategAmountCell>> percentageless = new HashMap<Long, List<CategAmountCell>>();
 		HashSet<Long> percentagefulIds = new HashSet<Long>();
-		
+		//boolean displayDebugData = this.getColumn().getAbsoluteColumnName().startsWith("Total Costs") && mergedCells != null && mergedCells.size() == 4;
 		if (mergedCells != null)
 		{
+			//if (displayDebugData) logger.error("getAmount() of " + mergedCells.size() + " cells and path of " + this.getColumn().getAbsoluteColumnName());
 			merged_cells_get_amount_calls ++;
 			merged_cells_get_amount_iterations += mergedCells.size();
 			
 			for(AmountCell element:mergedCells)
-			{					
-				if ( element instanceof CategAmountCell && ((CategAmountCell)element).getColumnPercent() == null ) {
+			{
+				//if (displayDebugData) logger.error("\telement[" + element.getOwnerId() + "] has class " + element.getClass().getName() + " and origAmount of " + element.getOriginalAmount());
+				//if (displayDebugData) logger.error("\t\tand the column percent is " +element.getColumnPercent());
+				if (element instanceof CategAmountCell && (element.getColumnPercent() == null)) {
 					CategAmountCell caCell	= (CategAmountCell)element;
-					if (caCell.getOwnerId() != null)
-						percentageless.put(caCell.getOwnerId(), caCell);
+					if (caCell.getOwnerId() != null){
+						if (!percentageless.containsKey(caCell.getOwnerId()))
+							percentageless.put(caCell.getOwnerId(), new ArrayList<CategAmountCell>());
+						percentageless.get(caCell.getOwnerId()).add(caCell);
+					}
 					String idString			= caCell.getId() + "_" + caCell.getOwnerId();
 					if ( !summedCells.contains(idString) ) {
 						ret += element.getAmount();
@@ -301,19 +307,22 @@ public class AmountCell extends Cell {
 				}
 			}
 		}
-		
+		//if (displayDebugData){
+		//	logger.error("percentagefulIds = " + percentagefulIds);
+		//	logger.error("percentageless = " + percentageless);
+		//}
 		// now fix part (3) described above: decrease each "double element"'s cost once
 		for(Long ownerId:percentagefulIds)
 			if (percentageless.containsKey(ownerId))
 			{
-				CategAmountCell cell = percentageless.get(ownerId);
-				if (!cell.hasMetaInfo(CategAmountCell.disablePercentMetaInfo))
-				{
-					double toDecrease = percentageless.get(ownerId).getAmount(); 
-					ret -= toDecrease;
-				}
+				for(CategAmountCell cell:percentageless.get(ownerId))
+					if (!cell.hasMetaInfo(CategAmountCell.disablePercentMetaInfo))
+					{
+						double toDecrease = cell.getAmount(); 
+						ret -= toDecrease;
+					}
 			}
-		
+		//if (displayDebugData) logger.error("\t the returned amount is " + ret);
 		// logger.info("******total amount for owner
 		// "+this.getOwnerId()+"="+ret);		
 		return ret;

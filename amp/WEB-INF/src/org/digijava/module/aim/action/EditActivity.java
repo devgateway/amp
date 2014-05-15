@@ -1450,13 +1450,13 @@ public class EditActivity extends Action {
 	 	  eaForm.getAgencies().setRegOrgPercentage(new HashMap<String, String>());
 	 	  eaForm.getAgencies().setRespOrgPercentage(new HashMap<String, String>());
 
-          Set relOrgs = activity.getOrgrole();
+          Set<AmpOrgRole> relOrgs = activity.getOrgrole();
           if (relOrgs != null) {
-            Iterator relOrgsItr = relOrgs.iterator();
+            Iterator<AmpOrgRole> relOrgsItr = relOrgs.iterator();
             AmpOrgRole orgRole = null;
             AmpOrganisation organisation = null;
             while (relOrgsItr.hasNext()) {
-              orgRole = (AmpOrgRole) relOrgsItr.next();
+              orgRole = relOrgsItr.next();
               organisation = DbUtil.getOrganisation(orgRole.getOrganisation().getAmpOrgId());
               //
               if (orgRole.getRole().getRoleCode().equals(Constants.RESPONSIBLE_ORGANISATION)

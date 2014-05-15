@@ -152,6 +152,9 @@ public class AmpAidEffectivenessFormSectionFeature extends
 
 	private void addFields(List<String> l, String fieldTitle, String wicketId,
 			String modelProperty, String label, boolean required) {
+		if(fieldTitle==null){
+				fieldTitle="";
+		}
 		IChoiceRenderer renderer = new IChoiceRenderer() {
 			public Object getDisplayValue(Object object) {
 				return object;
@@ -164,12 +167,8 @@ public class AmpAidEffectivenessFormSectionFeature extends
 
 		AmpGroupFieldPanel<String> yesNoDontKnowField = new AmpGroupFieldPanel<String>(
 				wicketId, new PropertyModel<String>(am, modelProperty), l,
-				label, false, false, renderer);
-		if (fieldTitle != null) {
-			yesNoDontKnowField.getTitleLabel().add(
-					new AttributeModifier("title", new Model<String>(
-							TranslatorUtil.getTranslatedText(fieldTitle))));
-		}
+				label, false, false, renderer,fieldTitle);
+
 		yesNoDontKnowField.getChoiceContainer().setRequired(required);
 		requiredFormComponents.add(yesNoDontKnowField.getChoiceContainer());
 		add(yesNoDontKnowField);

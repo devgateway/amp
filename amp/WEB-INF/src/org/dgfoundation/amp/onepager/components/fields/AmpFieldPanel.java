@@ -183,14 +183,16 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	}
 
 	public AmpFieldPanel(String id, String fmName, boolean hideLabel) {
-		this(id, null, fmName, hideLabel);
+		this(id, fmName, hideLabel,"");
+	}
+	public AmpFieldPanel(String id, String fmName, boolean hideLabel,String tooltip) {
+		this(id, null, fmName, hideLabel,tooltip);
 	}
 
 	public AmpFieldPanel(String id, String fmName, boolean hideLabel,
 			boolean hideNewLine) {
 		this(id, null, fmName, hideLabel, hideNewLine);
 	}
-
 	/**
 	 * @param id
 	 *            the component id
@@ -200,7 +202,18 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 */
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,
 			boolean hideLabel) {
-		this(id, model, fmName, hideLabel, hideLabel);
+		this(id, model, fmName,hideLabel,"");	
+	}
+	/**
+	 * @param id
+	 *            the component id
+	 * @param fmName
+	 *            the FM name Constructs a new AMPFieldPanel, with the component
+	 *            id and the feature manager name for this field
+	 */
+	public AmpFieldPanel(String id, IModel<T> model, String fmName,
+			boolean hideLabel,String tooltip) {
+		this(id, model, fmName, hideLabel, hideLabel,tooltip);
 
 	}
 
@@ -211,17 +224,39 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	public AmpFieldPanel(String id, IModel<T> model, String fmName) {
 		this(id, model, fmName, false);
 	}
-
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,
 			boolean hideLabel, boolean hideNewLine,
 			final boolean showReqStarForNotReqComp) {
-		this(id, model, fmName, hideLabel, hideNewLine,
-				showReqStarForNotReqComp, false);
+		this(id, model, fmName,hideLabel, hideNewLine,showReqStarForNotReqComp,"");
 	}
-
+	public AmpFieldPanel(String id, IModel<T> model, String fmName,
+			boolean hideLabel, boolean hideNewLine,final boolean showReqStarForNotReqComp,
+			String tooltip) {
+		this(id, model, fmName, hideLabel, hideNewLine,
+				showReqStarForNotReqComp, false,tooltip);
+	}
 	public AmpFieldPanel(String id, IModel<T> model, final String fmName,
 			boolean hideLabel, boolean hideNewLine,
 			final boolean showReqStarForNotReqComp, boolean enableReqStar) {
+		this(id, model, fmName,hideLabel, hideNewLine,showReqStarForNotReqComp, 
+				enableReqStar,"");
+	}
+	/**
+	 * If we need to provide a default tooltip we should pass it to the constructor
+	 * other wise the default will be no tooltip
+	 * @param id
+	 * @param model
+	 * @param fmName
+	 * @param hideLabel
+	 * @param hideNewLine
+	 * @param showReqStarForNotReqComp
+	 * @param enableReqStar
+	 * @param tooltip 
+	 */
+	
+	public AmpFieldPanel(String id, IModel<T> model, final String fmName,
+			boolean hideLabel, boolean hideNewLine,
+			final boolean showReqStarForNotReqComp, boolean enableReqStar,String tooltip) {
 		super(id, model, fmName, AmpFMTypes.MODULE);
 		this.fmType = AmpFMTypes.MODULE;
 
@@ -248,7 +283,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		add(requiredStar);
 		//for the edit of the tooltip
 
-		titleTooltip = new TrnLabel("tooltipEditor","",TranslatorWorker.generateTrnKey("tooltip_" + this.getFMName()),true) {
+		titleTooltip = new TrnLabel("tooltipEditor",tooltip,TranslatorWorker.generateTrnKey("tooltip_" + this.getFMName()),true) {
 
 			/**
 			 * 
@@ -341,10 +376,15 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		tooltipIcon.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
 		tooltipIcon.setVisible(true);
 	}
-	
+
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,
 			boolean hideLabel, boolean hideNewLine) {
-		this(id, model, fmName, hideLabel, hideNewLine, false);
+		this(id,  model, fmName,
+				hideLabel, hideNewLine,"");
+	}
+	public AmpFieldPanel(String id, IModel<T> model, String fmName,
+			boolean hideLabel, boolean hideNewLine,String tooltip) {
+		this(id, model, fmName, hideLabel, hideNewLine, false,tooltip);
 	}
 
 	/**

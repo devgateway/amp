@@ -158,7 +158,7 @@ public class GlobalSettingsConstants {
     public static final String CURRENCY_WS_PASSWORD="Currency exchange rate webservice password";
 
 	public static final String CURRENCY_WS_CLASS = "Currency exchange rate webservice implementation";
-    
 
+    public static final String SUPPORT_EMAIL = "Support Email";
 
 }

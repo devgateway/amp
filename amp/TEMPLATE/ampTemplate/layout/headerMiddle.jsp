@@ -3,13 +3,14 @@
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
-<%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <!-- Dependencies -->
 <%@page import="org.digijava.module.aim.helper.Constants"%>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
@@ -869,13 +870,19 @@ function adminHelp(){
 									</li>
 								</feature:display>
 
-								<feature:display name="Support Request Form" module="HELP">
-									<li class="yuiampmenuitem_drop">
-										<a class="yuiampmenuitemlabel" href="http://support.ampdev.net/" target="_blank"> 
-											<digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
-										</a>
-									</li>
-								</feature:display>
+								<%-- Do not add this field to the Global FM,
+                                    because we can turn if off/on from the Global Settings --%>
+                                <c:set var="supportEmailAddress">
+                                    <%=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SUPPORT_EMAIL)%>
+                                </c:set>
+                                <c:if test="${not empty fn:trim(supportEmailAddress)}">
+                                    <li class="yuiampmenuitem_drop">
+                                        <a class="yuiampmenuitemlabel" href="mailto:${supportEmailAddress}">
+                                            <digi:trn key="aim:supportrequestform">Write email to support team</digi:trn>
+                                        </a>
+                                    </li>
+                                </c:if>
+
 								<feature:display name="About AMP" module="HELP">
 									<li class="yuiampmenuitem_drop">
 										<% siteDomain = (org.digijava.kernel.request.SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE); session.setAttribute("site", siteDomain); %> 

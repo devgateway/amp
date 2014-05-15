@@ -172,9 +172,9 @@ public class WorkspaceFilter
 		//return "2498, 1301";
 		//return /*"33"; */"36";
 		//return "2,14,18,20,21";
-		//return "3642"; // masha
+		//return "39"; // masha
 		//return "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id >= 37";
-		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Activity with Zones')";
+		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('SubNational no percentages')";
 		return TEAM_FILTER;
 		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537', '8723851641', '8723851222')";
 		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537')";

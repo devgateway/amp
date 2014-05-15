@@ -95,13 +95,6 @@ public class GPIReport9b extends GPIAbstractReport {
 					continue;
 				}
 
-				// Create set of years (no duplicates) that will be used to
-				// populate the report.
-				// ie: if an activity has a funding with 3 funding details (each
-				// commitment/disbursement/expenditure) will add it ONLY ONE
-				// TIME per year.
-				Set<Integer> yearsFromFunding = new HashSet<Integer>();
-
 				Iterator<AmpFunding> iFunding = auxActivity.getFunding().iterator();
 				while (iFunding.hasNext()) {
 					AmpFunding auxFunding = iFunding.next();
@@ -194,7 +187,8 @@ public class GPIReport9b extends GPIAbstractReport {
 								}
 							}
 							
-							if(auxSurvey != null) {
+							// Check if the survey has responses because the activityform saves the survey automatically even with no responses.
+							if(auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0) {
 								auxRow.setColumn1(amount.multiply(new BigDecimal(coefficient)));
 								auxRow.setColumn2(amount);
 								auxRow.setColumn3(0);

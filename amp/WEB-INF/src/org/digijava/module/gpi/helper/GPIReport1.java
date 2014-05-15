@@ -90,15 +90,19 @@ public class GPIReport1 extends GPIAbstractReport {
 					continue;
 				}
 
+				// Create a set of years (no duplicates) that will be used to populate the report.
+				// ie: if an activity has 2 funding with some funding details:
+				// F1 - FD1 - 2010
+				// F1 - FD2 - 2010
+				// F1 - FD3 - 2014
+				// F2 - FD1 - 2012
+				// F2 - FD2 - 2013
+				// F2 - FD3 - 2014
+				// Then we will count ONLY 1 project for 2010, 2012, 2013 and 2014.
+				Set<Integer> yearsFromFunding = new HashSet<Integer>();
+				
 				Iterator<AmpFunding> iFunding = auxActivity.getFunding().iterator();
-				while (iFunding.hasNext()) {
-					// Create set of years (no duplicates) that will be used to
-					// populate the report.
-					// ie: if an activity has a funding with 3 funding details (each
-					// commitment/disbursement/expenditure) will add it ONLY ONE
-					// TIME per year.
-					Set<Integer> yearsFromFunding = new HashSet<Integer>();
-
+				while (iFunding.hasNext()) {					
 					AmpFunding auxFunding = iFunding.next();
 
 					// Filter by organization.
@@ -132,32 +136,30 @@ public class GPIReport1 extends GPIAbstractReport {
 
 						Calendar calendar = Calendar.getInstance();
 						calendar.setTime(auxFundingDetail.getTransactionDate());
-						yearsFromFunding.add(calendar.get(Calendar.YEAR));
-					}
+						if(!yearsFromFunding.contains(calendar.get(Calendar.YEAR))) {
+							Integer auxYear = calendar.get(Calendar.YEAR);
+							yearsFromFunding.add(auxYear);
+							
+							auxRow = new GPIReport1Row();
+							// Check survey answers for this
+							// AmpGPISurvey.
+							AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity.getGpiSurvey().iterator().next() : null);						
+							boolean[] showColumn = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_1, auxSurvey);
 
-					Iterator<Integer> iYears = yearsFromFunding.iterator();
-					while (iYears.hasNext()) {
-						Integer auxYear = iYears.next();
-
-						auxRow = new GPIReport1Row();
-
-						// Check survey answers for this
-						// AmpGPISurvey.
-						AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity.getGpiSurvey().iterator().next() : null);						
-						boolean[] showColumn = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_1, auxSurvey);
-
-						if(auxSurvey != null) {
-							if (showColumn[0]) {
-								auxRow.setColumn1(new Integer(1));
-							} else {
-								auxRow.setColumn1(new Integer(0));
+							// Check if the survey has responses because the activityform saves the survey automatically even with no responses.
+							if(auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0) {
+								if (showColumn[0]) {
+									auxRow.setColumn1(new Integer(1));
+								} else {
+									auxRow.setColumn1(new Integer(0));
+								}
+								auxRow.setColumn2(new Integer(1));
 							}
-							auxRow.setColumn2(new Integer(1));
-						}
-						auxRow.setColumn3(0);
-						auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
-						auxRow.setYear(auxYear);
-						list.add(auxRow);
+							auxRow.setColumn3(0);
+							auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
+							auxRow.setYear(auxYear);
+							list.add(auxRow);
+						}						
 					}
 				}
 			}

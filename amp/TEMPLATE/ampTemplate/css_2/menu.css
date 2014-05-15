@@ -216,7 +216,7 @@ ul.first-of-type ul {
 	border:1px solid #E8E8E8;
 	float:left;
 	display:block;
-	
+	width: auto !important;
 }
 .yuiamp-skin-amp .yuiampmenuitem li {
 padding:3px;

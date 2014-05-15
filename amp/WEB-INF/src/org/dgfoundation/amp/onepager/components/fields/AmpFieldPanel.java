@@ -27,8 +27,10 @@ import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior2;
@@ -58,6 +60,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	protected FormComponent<?> formComponent;
 	IndicatingAjaxLink editTooltipLink ;
 	protected String fmName;
+	protected Image tooltipIcon;
 
 
 	/**
@@ -290,7 +293,11 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
         editTooltipLink.setVisible(TranslatorUtil.isTranslatorMode(getSession()));
         editTooltipLink.add(new AttributeModifier("data-ot",TranslatorWorker.translateText("Please click to enter tooltip, save an empty value for disabling the tooltip")));
         add(editTooltipLink);
-
+        tooltipIcon=new Image("tooltip_icon", new ContextRelativeResource("/TEMPLATE/ampTemplate/img_2/ico_quest.gif"));
+        
+        tooltipIcon.setVisible(false);
+        add(tooltipIcon);
+        
 		
 
 		titleLabel = new TrnLabel("fieldLabel", fmName) {
@@ -314,6 +321,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 				//when we configure the title we add the tooltip
 				if(!"".equals(titleTooltip.getDefaultModel().getObject().toString()) && titleTooltip.getDefaultModel().getObject().toString().trim().length()>0 ){
 					addTooltip();
+					
 				}
 			}
 		};
@@ -330,6 +338,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	protected void addTooltip(){ 
 		// 
 		titleLabel.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
+		tooltipIcon.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
+		tooltipIcon.setVisible(true);
 	}
 	
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,

@@ -37,13 +37,17 @@
 	
 	<http pattern="/aim/csvExport.do**" security="none" />
 	
-	<http pattern="/viewNewAdvancedReport.do**" security="none" />
-	
+	<http pattern="/viewNewAdvancedReport.do**" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+ 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	</http>
+	<http pattern="/aim/viewNewAdvancedReport.do**" entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+ 		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	</http>
 	<http pattern="/aim/xlsExport.do**" security="none" />
 
     <http pattern="/aim/pdfExport.do**" security="none" />
 
-	<http pattern="/aim/viewNewAdvancedReport.do**" security="none" />
+	
 
 	<http pattern="/aim/viewActivityHistory.do**" security="none" />
 	<http pattern="/exception/showExceptionReport.do**" security="none" />

@@ -165,9 +165,16 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 			logger.error("Can't translate:", e);
 		}
 		
+		//since buttons dont have title we add the tooltip directly to the button itself
+		if(!"".equals(titleTooltip.getDefaultModel().getObject().toString()) && titleTooltip.getDefaultModel().getObject().toString().trim().length()>0 ){
+			
+		}
 		addFormComponent(button);
 	}
-
+	
+	protected void addTooltip(){ 
+		button.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
+	}
 	public AmpButtonField(String id, String fmName, AmpFMTypes fmType,
 			boolean hideNewLine) {
 		this(id, fmName, true, hideNewLine);

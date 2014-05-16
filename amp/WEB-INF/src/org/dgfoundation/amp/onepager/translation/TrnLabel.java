@@ -37,7 +37,16 @@ public class TrnLabel extends Label {
 
 	private String key;
 	private String label;
+	private boolean isTolltip;
 
+	
+
+	public TrnLabel(String id, String label) {
+		this(id, label,TranslatorWorker.generateTrnKey(label),false);
+	}
+	public TrnLabel(String id, String label,String key){
+		this(id, label,key,false);
+	}
 	
 	/**
 	 * NOT MEANT FOR GENERAL USE, only translation classes may use
@@ -45,12 +54,16 @@ public class TrnLabel extends Label {
 	 * the key specified as atribute in html, then use TrnLabel.getPlainTrnLabel(String id, IModel<?> model)
 	 * @param id
 	 */
-	public TrnLabel(String id, String label) {
+	public TrnLabel(String id, String label,String key,boolean pIstooltip) {
 		super(id, label);
 		this.label = label;
+		addKeyAttribute(key);
+		this.isTolltip=pIstooltip;
 		super.setDefaultModelObject(translate(label));
-		addKeyAttribute(TranslatorWorker.generateTrnKey(label));
+
 	}
+	
+	
 	public TrnLabel(String id, IModel<String> label) {
 		this(id, label.getObject());
 	}
@@ -101,9 +114,16 @@ public class TrnLabel extends Label {
 		String genKey = TranslatorWorker.generateTrnKey(value);
 		String translatedValue;
 		try {
+			if(!this.isTolltip){
 			translatedValue = TranslatorWorker.getInstance(genKey).
 									translateFromTree(genKey, site, session.getLocale().getLanguage(), 
 											value, TranslatorWorker.TRNTYPE_LOCAL, null);
+			}else{
+				
+				translatedValue = TranslatorWorker.getInstance(this.key).
+						translateFromTree(this.key, site, session.getLocale().getLanguage(), 
+								value, TranslatorWorker.TRNTYPE_LOCAL, null);
+			}
 			return translatedValue;
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);

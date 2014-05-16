@@ -38,7 +38,22 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 	public AmpGroupFieldPanel(String id, IModel<T> model,
 			List<? extends T> choicesList, String fmName,
 			boolean hideLabel, boolean nullValid, IChoiceRenderer<? super T> renderer) {
-		super(id, fmName, hideLabel);
+		this(id, model,choicesList, fmName,hideLabel, nullValid, renderer,"");
+	}
+	/**
+	 * Construct a group field panel for a {@link RadioChoice} (so just single select)
+	 * @param id
+	 * @param model
+	 * @param choicesList
+	 * @param fmName
+	 * @param hideLabel
+	 * @param nullValid
+	 * @param renderer
+	 */
+	public AmpGroupFieldPanel(String id, IModel<T> model,
+			List<? extends T> choicesList, String fmName,
+			boolean hideLabel, boolean nullValid, IChoiceRenderer<? super T> renderer,String tooltip) {
+		super(id, fmName, hideLabel,tooltip);
 		choiceContainer = new RadioChoice<T>("choice", model, choicesList,renderer);
 		((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);

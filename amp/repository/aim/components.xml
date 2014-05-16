@@ -167,22 +167,7 @@
 	<page name="teamConfiguration" title=" - Configure Team" />
 	<page name="viewProjectPdf" title=" - View Project PDF " />
 	<page page="viewActivityDetails" name="aim_viewActivityDetails" title="AMP - View Activity Details" />
-	<page name="addActivityStep1" title=" - Add Activity - Identification | Planning" />
-	<page name="addActivityStep1_5" title=" - Add Activity - References" />
-	<page name="addActivityStep2" title=" - Add Activity - Location | Sectors" />
-	<page name="addActivityStep3" title=" - Add Activity - Funding" />
-	<page name="addActivityStep4" title=" - Add Activity - Regional Funding" />
-	<page name="addActivityStep5" title=" - Add Activity - Components" />
-	<page name="addActivityStep6" title=" - Add Activity - Related Documents" />
-	<page name="addActivityStep7" title=" - Add Activity - Related Organizations" />
-	<page name="addActivityStep8" title=" - Add Activity - Contact Details | Conditions" />
-	<page name="addActivityStep10" title=" - Add Activity - Monitoring and Evaluation" />
-	<page name="addActivityStep11" title=" - Add Activity - Project Costs" />
-	<page name="addActivityStep12" title=" - Add Activity - Level Linker" />
-    <page name="addActivityStep13" title=" - Add Activity -IPA Contracting" />
-    <page name="addActivityStep17" title=" - Add Activity -Paris Indicators" />
-    <page name="addActivityStep14" title=" - Add Activity - Regional Observations" />
-	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
+
 	<page name="locationManager" title=" - Region Manager" />
         <page name="newLocationManager" title=" - Region Manager" />
     <page page="dynLocationManager/dynLocationManager" name="aim_dynLocationManager" title=" - Region Manager" />
@@ -200,17 +185,6 @@
 	<page page="selectOrganization" name="aim_orgPopupLayout" title="AMP - Select Organization" />
 	<page page="components/selectOrganization" title="AMP - Select Organization" />
 	<page page="components/selectOrganization" name="aim_orgComponentPopUp" title="AMP - Select Organization" />
-
-	<page page="addFunding" name="aim_fundingPopupLayout" title="AMP - Add Funding" />
-	 <page page="importFunding" name="aim_fundingImportPopupLayout" title="AMP - Import Funding"/>
-	<page page="editEUActivity" name="aim_editEUActivity" title="AMP - Edit Activity" />
-    <page page="editIPAContract" name="aim_editIPAContract" title="AMP - Edit Activity" />
-    <page page="saveErrors" name="aim_saveErrors" title="AMP - Save Activity" />
-	<page page="addRegionalFunding" name="aim_addRegionalFunding" title="AMP - Add Regional Funding" />
-	<page page="selectSector" name="aim_selSectorPopupLayout" title="AMP - Select Sector" />
-	<page page="selectSectorForind" name="aim_selectSectorForind" title="AMP - Select Sector" />
-	<page page="editSectorForind" name="aim_selectSectorForindEdit" title="AMP - Select Sector" />
-	<page page="addActivityProgram" name="aim_addActivityProgram" title="AMP - Add Activity Program" />
 
 	<page name="donorTeamList" title=" - Donor Teams List" />
 	<page name="donorTeamActivities" title=" - Donor Team Activities" />

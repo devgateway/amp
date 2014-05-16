@@ -25,7 +25,6 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
-import org.digijava.module.aim.action.AddFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.helper.FormatHelper;

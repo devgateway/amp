@@ -483,4 +483,7 @@ div.trnpanel div.trn-row a:hover {
 
 tr.wicketFundingRowItem:nth-child(even) {}
 tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
+
+.tooltip-logo { height: 14px; width: 14px;}
+.tooltip-align{vertical-align:middle;}
 /* -- ONE PAGER END -- */

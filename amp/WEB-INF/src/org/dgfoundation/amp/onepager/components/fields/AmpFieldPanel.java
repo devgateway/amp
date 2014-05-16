@@ -328,7 +328,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
         editTooltipLink.setVisible(TranslatorUtil.isTranslatorMode(getSession()));
         editTooltipLink.add(new AttributeModifier("data-ot",TranslatorWorker.translateText("Please click to enter tooltip, save an empty value for disabling the tooltip")));
         add(editTooltipLink);
-        tooltipIcon=new Image("tooltip_icon", new ContextRelativeResource("/TEMPLATE/ampTemplate/img_2/ico_quest.gif"));
+        tooltipIcon=new Image("tooltip_icon", new ContextRelativeResource("/TEMPLATE/ampTemplate/img_2/tooltip-icon.png"));
         
         tooltipIcon.setVisible(false);
         add(tooltipIcon);

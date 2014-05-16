@@ -101,8 +101,17 @@ public class AmpLocationSearchModel extends
 			Criteria criteria = dbSession
 					.createCriteria(AmpCategoryValueLocations.class);
 			criteria.setCacheable(true);
+
+/*
 			Junction junction = Restrictions.conjunction().add(
 					Restrictions.eq("parentCategoryValue", cvLayer));
+					*/
+            Junction junction = Restrictions.conjunction();
+
+            if (!CategoryConstants.IMPLEMENTATION_LOCATION_ALL.equalsCategoryValue(cvLayer)) {
+                junction.add(Restrictions.eq("parentCategoryValue", cvLayer));
+            }
+
 			if (input.trim().length() > 0) {
 				if(isExactMatch()) {
 					String[] strings = input.split(PARENT_DELIMITER);

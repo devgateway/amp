@@ -388,6 +388,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Type of Cooperation" feature="Identification"></field:display>
 <field:display name="Type of Implementation" feature="Identification"></field:display>
 <field:display name="Modalities" feature="Identification"></field:display>
+<field:display name="SSC Modalities" feature="Identification"></field:display>
     
 <field:display name="Activity Performance" feature="Activity Dashboard"></field:display> 
 <field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard"></field:display> 

@@ -6,9 +6,13 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 <%
 	{
+		if (ReportContextData.contextIdExists()){
+			ReportContextData.getFromRequest(true); // instantiate a RCD instance - will crash if no ampReportId exists in the context (this is ok), will create a new RCD if not existing (That is ok too - we might render this tab without having gone through viewNewAdvancedReport)
+		}
 		org.digijava.module.aim.dbentity.AmpReports report = (org.digijava.module.aim.dbentity.AmpReports) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_TAB_REPORT);
 		//Long currentTabAmpReportId = (report != null) ? report.getAmpReportId() : null;
 		if (report != null)

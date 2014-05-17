@@ -57,12 +57,6 @@ public class Search extends Action {
 
 					AmpReports rep = (AmpReports) DbUtil.getAmpReports(new Long(ampReportId));
 					session.setAttribute(Constants.CURRENT_TAB_REPORT, rep);
-					Map<String, ReportContextData> map = (Map<String, ReportContextData>) session.getAttribute("reportContext");
-					if (map!=null && !map.containsKey(ampReportParam))
-					{
-						ReportContextData result = new ReportContextData(ampReportParam);
-						map.put(ampReportParam, result);
-					}
 					if (rep.getDrilldownTab())
 					{
 						return mapping.findForward("redirectTab");

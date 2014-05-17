@@ -8,8 +8,7 @@
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%
 
-	if (ReportContextData.contextIdExists())
-	{
+	if (ReportContextData.contextIdExists()){
 		pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
 	}	
 %>

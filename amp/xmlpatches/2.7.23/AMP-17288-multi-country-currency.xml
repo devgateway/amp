@@ -10,7 +10,7 @@
   <apply>
     <script>
       <lang delimiter=";" type="sql">
-		insert into amp_category_value_location (id,parent_category_value,location_name,code) values((select max(id)+1 from amp_category_value_location),
+		insert into amp_category_value_location (id,parent_category_value,location_name,code) values(nextval('amp_category_value_location_seq'),
 		(select acv.id 
 		from amp_category_value acv where acv.category_value='Country'),'Multi-country','98975');
       </lang>

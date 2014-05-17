@@ -13,7 +13,7 @@
 				UPDATE amp_gpi_survey_indicator SET indicator_code = '5a' WHERE name LIKE 'Indicator 5a';				
 				UPDATE amp_gpi_survey_indicator SET indicator_code = '6' WHERE name LIKE 'Indicator 6';				
 				UPDATE amp_gpi_survey_indicator SET indicator_code = '9b' WHERE name LIKE 'Indicator 9b';
-				ALTER TABLE amp_gpi_survey_indicator DROP COLUMN indicator_number;
+				ALTER TABLE amp_gpi_survey_indicator DROP COLUMN IF EXISTS indicator_number;
 			</lang>
 		</script>
 	</apply>

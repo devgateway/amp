@@ -770,12 +770,16 @@
 												</c:forEach>
 											</tbody>
 										</table>
-										<center><input type="button" class="buttonx_sm btn_save" value='<digi:trn>Create new Contact</digi:trn>' onclick="saveContact('new')">
-										<input type="button" class="buttonx_sm btn_save" value='<digi:trn>Overwrite</digi:trn>' onclick="saveContact('overwrite')">
-										<input type="button" class="buttonx_sm btn_save" value='<digi:trn>Cancel</digi:trn>'  onclick="saveContact('cancel')"></center>
+										<center><input type="button" class="buttonx_sm btn_save" value="<digi:trn>Create new Contact</digi:trn>" onclick="saveContact('new')" />
+										<input type="button" class="buttonx_sm btn_save" value="<digi:trn>Overwrite</digi:trn>" onclick="saveContact('overwrite')" />
+										<input type="button" class="buttonx_sm btn_save" value="<digi:trn>Cancel</digi:trn>"  onclick="saveContact('cancel')" /></center>
 									</c:when>
 									<c:otherwise>
-										<center><input type="button" class="buttonx_sm btn_save" value='<digi:trn>Save</digi:trn>' onclick="saveContact('check')"></center>
+                                        <span>
+										    <center>
+                                                <input type="button" class="buttonx_sm btn_save" value="<digi:trn>Save</digi:trn>" onclick="saveContact('check')" />
+                                            </center>
+                                        </span>
 									</c:otherwise>
 								</c:choose>
 							</digi:form>

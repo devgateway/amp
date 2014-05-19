@@ -1862,6 +1862,7 @@ public class DataDispatcher extends DispatchAction {
 	    			} else {
 	    				newFilter.setSelOrgIds(idsArray);
 	    			}
+	                newFilter.setFiscalCalendarId(fiscalCalendarId);
 		            DecimalWraper[] fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), true);
 		            BigDecimal value = null;
                 	if(fundingCal[j] == null) {

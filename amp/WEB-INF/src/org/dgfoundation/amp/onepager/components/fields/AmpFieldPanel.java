@@ -61,7 +61,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	IndicatingAjaxLink editTooltipLink ;
 	protected String fmName;
 	protected Image tooltipIcon;
-
+	protected boolean hideLabel;
+	protected boolean showTooltipIfLabelHidden;
 
 	/**
 	 * @see #addFormComponent(FormComponent)
@@ -183,14 +184,15 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	}
 
 	public AmpFieldPanel(String id, String fmName, boolean hideLabel) {
-		this(id, fmName, hideLabel,"");
+		this(id, fmName, hideLabel,"",false,"");
 	}
-	public AmpFieldPanel(String id, String fmName, boolean hideLabel,String tooltip) {
-		this(id, null, fmName, hideLabel,tooltip);
+	public AmpFieldPanel(String id, String fmName, boolean hideLabel,String tooltip,boolean showTooltipIfLabelHidden,String aditionalTooltipKey) {
+		this(id, null,showTooltipIfLabelHidden,aditionalTooltipKey, fmName, hideLabel,tooltip);
 	}
-
-	public AmpFieldPanel(String id, String fmName, boolean hideLabel,
-			boolean hideNewLine) {
+	public AmpFieldPanel(String id, String fmName, boolean hideLabel,boolean hideNewLine) {
+		this(id,fmName,false,"","",hideLabel,hideNewLine);
+	}
+	public AmpFieldPanel(String id, String fmName, boolean showTooltipIfLabelHidden,String aditionalTooltipKey,String tooltip,boolean hideLabel,boolean hideNewLine) {
 		this(id, null, fmName, hideLabel, hideNewLine);
 	}
 	/**
@@ -200,9 +202,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 *            the FM name Constructs a new AMPFieldPanel, with the component
 	 *            id and the feature manager name for this field
 	 */
-	public AmpFieldPanel(String id, IModel<T> model, String fmName,
-			boolean hideLabel) {
-		this(id, model, fmName,hideLabel,"");	
+	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel) {
+		this(id, model,false,"", fmName,hideLabel,"");	
 	}
 	/**
 	 * @param id
@@ -211,9 +212,9 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 *            the FM name Constructs a new AMPFieldPanel, with the component
 	 *            id and the feature manager name for this field
 	 */
-	public AmpFieldPanel(String id, IModel<T> model, String fmName,
+	public AmpFieldPanel(String id, IModel<T> model,boolean showTooltipIfLabelHidden,String aditionalTooltipKey, String fmName,
 			boolean hideLabel,String tooltip) {
-		this(id, model, fmName, hideLabel, hideLabel,tooltip);
+		this(id, model,showTooltipIfLabelHidden, aditionalTooltipKey,fmName, hideLabel, hideLabel,tooltip);
 
 	}
 
@@ -227,18 +228,18 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,
 			boolean hideLabel, boolean hideNewLine,
 			final boolean showReqStarForNotReqComp) {
-		this(id, model, fmName,hideLabel, hideNewLine,showReqStarForNotReqComp,"");
+		this(id, model,false,"", fmName,hideLabel, hideNewLine,showReqStarForNotReqComp,"");
 	}
-	public AmpFieldPanel(String id, IModel<T> model, String fmName,
+	public AmpFieldPanel(String id, IModel<T> model, boolean showTooltipIfLabelHidden,String aditionalTooltipKey,String fmName,
 			boolean hideLabel, boolean hideNewLine,final boolean showReqStarForNotReqComp,
 			String tooltip) {
-		this(id, model, fmName, hideLabel, hideNewLine,
+		this(id, model, showTooltipIfLabelHidden,aditionalTooltipKey,fmName, hideLabel, hideNewLine,
 				showReqStarForNotReqComp, false,tooltip);
 	}
 	public AmpFieldPanel(String id, IModel<T> model, final String fmName,
 			boolean hideLabel, boolean hideNewLine,
 			final boolean showReqStarForNotReqComp, boolean enableReqStar) {
-		this(id, model, fmName,hideLabel, hideNewLine,showReqStarForNotReqComp, 
+		this(id, model,false,"", fmName,hideLabel, hideNewLine,showReqStarForNotReqComp, 
 				enableReqStar,"");
 	}
 	/**
@@ -254,14 +255,21 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 * @param tooltip 
 	 */
 	
-	public AmpFieldPanel(String id, IModel<T> model, final String fmName,
+	public AmpFieldPanel(String id, IModel<T> model, boolean showTooltipIfLabelHidden,String aditionalTooltipKey,final String fmName,
 			boolean hideLabel, boolean hideNewLine,
 			final boolean showReqStarForNotReqComp, boolean enableReqStar,String tooltip) {
 		super(id, model, fmName, AmpFMTypes.MODULE);
 		this.fmType = AmpFMTypes.MODULE;
-
+		this.hideLabel=hideLabel;
 		setOutputMarkupId(true);
 		this.fmName = fmName;
+		boolean showTooltipEditor=false;
+		this.showTooltipIfLabelHidden=showTooltipIfLabelHidden;
+		//we show the edittooltip icon only if we are in translator mode and
+		//the label is not hidden or we choose to show it even if hidden 
+		if(TranslatorUtil.isTranslatorMode(getSession()) &&(!hideLabel || showTooltipIfLabelHidden )){
+			showTooltipEditor=true;
+		}
 
 		Label requiredStar = new Label("requiredStar", new Model<String>("")) {
 			private static final long serialVersionUID = 1L;
@@ -283,7 +291,10 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		add(requiredStar);
 		//for the edit of the tooltip
 
-		titleTooltip = new TrnLabel("tooltipEditor",tooltip,TranslatorWorker.generateTrnKey("tooltip_" + this.getFMName()),true) {
+		if(!"".equals(aditionalTooltipKey) && aditionalTooltipKey.trim().length()>0){
+			aditionalTooltipKey="_"+aditionalTooltipKey;
+		}
+		titleTooltip = new TrnLabel("tooltipEditor",tooltip,TranslatorWorker.generateTrnKey("tooltip_" + this.getFMName()+aditionalTooltipKey),true) {
 
 			/**
 			 * 
@@ -307,12 +318,12 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 				}
 			}
 		};
-		
-		titleTooltip.setVisible(TranslatorUtil.isTranslatorMode(getSession()));
+		//please see at the beggining of the method the conditions to show the tooltip editor
+		titleTooltip.setVisible(showTooltipEditor);
 		titleTooltip.setOutputMarkupId(true);
 		add(titleTooltip);
 		newLineTooltip = new WebMarkupContainer("newLineTooltip");
-		newLineTooltip.setVisible(TranslatorUtil.isTranslatorMode(getSession()));
+		newLineTooltip.setVisible(showTooltipEditor);
 		add(newLineTooltip);
 		
 		editTooltipLink = new IndicatingAjaxLink("editTooltipLink") {
@@ -325,7 +336,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
         	
  
         };
-        editTooltipLink.setVisible(TranslatorUtil.isTranslatorMode(getSession()));
+        editTooltipLink.setVisible(showTooltipEditor);
         editTooltipLink.add(new AttributeModifier("data-ot",TranslatorWorker.translateText("Please click to enter tooltip, save an empty value for disabling the tooltip")));
         add(editTooltipLink);
         tooltipIcon=new Image("tooltip_icon", new ContextRelativeResource("/TEMPLATE/ampTemplate/img_2/tooltip-icon.png"));
@@ -372,19 +383,20 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 */
 	protected void addTooltip(){ 
 		// 
-		titleLabel.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
-		tooltipIcon.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
-		tooltipIcon.setVisible(true);
+		if(!hideLabel || showTooltipIfLabelHidden){
+			titleLabel.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
+			tooltipIcon.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
+			tooltipIcon.setVisible(true);
+		}
 	}
 
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,
 			boolean hideLabel, boolean hideNewLine) {
-		this(id,  model, fmName,
-				hideLabel, hideNewLine,"");
+		this(id,  model,false,"", fmName,hideLabel, hideNewLine,"");
 	}
-	public AmpFieldPanel(String id, IModel<T> model, String fmName,
+	public AmpFieldPanel(String id, IModel<T> model, boolean showTooltipIfLabelHidden,String aditionalTooltipKey,String fmName,
 			boolean hideLabel, boolean hideNewLine,String tooltip) {
-		this(id, model, fmName, hideLabel, hideNewLine, false,tooltip);
+		this(id, model,showTooltipIfLabelHidden,aditionalTooltipKey, fmName, hideLabel, hideNewLine, false,tooltip);
 	}
 
 	/**

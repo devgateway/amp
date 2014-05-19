@@ -89,7 +89,10 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 	
 	
 	public AmpButtonField(String id, String fmName, String buttonCaption, boolean hideLabel, boolean hideNewLine) {
-		super(id, fmName, hideLabel, hideNewLine);
+		//we show even if the label is hidden
+		//we do not provide additional key to the tooltip
+		//we do not provide a default tooltip
+		super(id, fmName,true,"","", hideLabel, hideNewLine);
 		button = new IndicatingAjaxButton("fieldButton", new Model<String>(
 				fmName)) {
 			private static final long serialVersionUID = -5699378405978605979L;

@@ -160,7 +160,6 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	public String getAjaxIndicatorMarkupId() {
 		return indicatorAppender.getMarkupId();
 	}
-
 	/**
 	 * Instantiates a new autocomplete component
 	 * 
@@ -175,7 +174,25 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			String id,
 			String fmName,
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
-		this(id, fmName, false, objectListModelClass);
+		this(id,
+		fmName,"",
+		objectListModelClass);
+	}
+	/**
+	 * Instantiates a new autocomplete component
+	 * 
+	 * @param id
+	 *            the Wicket id
+	 * @param fmName
+	 *            the FM name @see {@link AmpFMTypes}
+	 * @param objectListModelClass
+	 *            the model to retrieve the list of items
+	 */
+	public AmpAutocompleteFieldPanel(
+			String id,
+			String fmName,String aditionalTooltipKey,
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
+		this(id, fmName,aditionalTooltipKey, false, objectListModelClass);
 	}
 	
 	/**
@@ -211,14 +228,23 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
 		this(id, fmName, false, objectListModelClass,useCache);
 	}
-	
 	public AmpAutocompleteFieldPanel(
 			String id,
 			String fmName,
 			boolean hideLabel,
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
 			final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar) {
-		super(id, null, fmName, hideLabel, true);
+		this(id,fmName,"",hideLabel,objectListModelClass,clazz, jsName,autoCompeleteVar);		
+	}
+
+	public AmpAutocompleteFieldPanel(
+			String id,
+			String fmName,String aditionalTooltipKey,
+			boolean hideLabel,
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
+			final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar) {
+		//super(id, null, fmName, hideLabel );
+		super(id, null,false,aditionalTooltipKey, fmName,hideLabel,"");
 		this.modelParams = new HashMap<AmpAutoCompleteModelParam, Object>();
 		this.objectListModelClass = objectListModelClass;
 		toggleButton = new WebMarkupContainer("toggleButton");
@@ -310,7 +336,15 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		};
 		textField.add(onSelectBehavior);
 	}
-	
+
+	public AmpAutocompleteFieldPanel(
+			String id,
+			String fmName,
+			boolean hideLabel,
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
+		this(id,fmName,"",hideLabel,objectListModelClass);
+		
+	}
 	/**
 	 * Constructs a new component. Initializes all subcomponents
 	 * 
@@ -320,10 +354,10 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 */
 	public AmpAutocompleteFieldPanel(
 			String id,
-			String fmName,
+			String fmName,String aditionalTooltipKey,
 			boolean hideLabel,
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
-		this(id, fmName, hideLabel, objectListModelClass, AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js","WicketAutoComplete");
+		this(id, fmName,aditionalTooltipKey, hideLabel, objectListModelClass, AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js","WicketAutoComplete");
 	}
 
     /**

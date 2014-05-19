@@ -37,14 +37,20 @@ public abstract class AmpAjaxLinkField extends AmpFieldPanel<Void> {
 	 * @param form
 	 */
 	protected abstract void onClick(AjaxRequestTarget target);
-	
+	public AmpAjaxLinkField(String id, String fmName, String buttonCaption) {
+		this(id, fmName, buttonCaption,"");
+	}
 	/**
 	 * 
 	 * @param id
 	 * @param fmName
 	 */
-	public AmpAjaxLinkField(String id, String fmName, String buttonCaption) {
-		super(id, fmName,true);
+	public AmpAjaxLinkField(String id, String fmName, String buttonCaption,String aditionalTooltipKey) {
+		//show tooltip even when label hidden
+		//no special tooltip
+		//We provide the tooltip additional key provided as parameter
+		super(id, fmName,true,"",true,aditionalTooltipKey);
+		
 		button = new IndicatingAjaxLink("fieldButton") {
 			private static final long serialVersionUID = -5699378405978605979L;
 

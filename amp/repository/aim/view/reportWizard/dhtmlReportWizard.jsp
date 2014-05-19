@@ -267,6 +267,7 @@ body {
 						<%-- <%@ include file="/repository/aim/view/multilingual/multilingualFieldEntry.jsp" %>  --%>
 						<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
 							<jsp:param name="attr_name" value="multilingual_report_title" />
+							<jsp:param name="originalReportTitle" value="${aimReportWizardForm.reportTitle}"/>
 							<jsp:param name="onkeyup" value="repManager.checkSteps();" />
 							<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />
 						</jsp:include>

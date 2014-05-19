@@ -10,7 +10,7 @@
         <script>
             <lang delimiter=";" type="postgres">
                 INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) VALUES
-                    ((select max(id) + 1 FROM amp_global_settings), 'Support Email', '', '',
+                    (nextval('amp_global_settings_seq') , 'Support Email', '', '',
                     'The email address of a support team', 'general');
             </lang>
         </script>

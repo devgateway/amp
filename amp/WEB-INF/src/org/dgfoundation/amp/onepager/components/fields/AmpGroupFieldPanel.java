@@ -53,7 +53,10 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 	public AmpGroupFieldPanel(String id, IModel<T> model,
 			List<? extends T> choicesList, String fmName,
 			boolean hideLabel, boolean nullValid, IChoiceRenderer<? super T> renderer,String tooltip) {
-		super(id, fmName, hideLabel,tooltip);
+		//dont show tooltip if label hidden
+		//dont provide aditional key to tooltip
+		//we do provide the default tooltip
+		super(id, fmName,false,tooltip, hideLabel,"");
 		choiceContainer = new RadioChoice<T>("choice", model, choicesList,renderer);
 		((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);

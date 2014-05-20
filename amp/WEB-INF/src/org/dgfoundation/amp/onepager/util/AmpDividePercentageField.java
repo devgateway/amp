@@ -21,10 +21,13 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 	
 	private IModel<Set<T>> setModel;
 	private IModel<ListView<T>> list;
-	
 	public AmpDividePercentageField(String id, String fmName,
 			String buttonCaption, IModel<Set<T>> setModel, IModel<ListView<T>> list) {
-		super(id, fmName, buttonCaption);
+		this(id, fmName,buttonCaption, setModel, list,"");
+	}
+	public AmpDividePercentageField(String id, String fmName,
+			String buttonCaption, IModel<Set<T>> setModel, IModel<ListView<T>> list,String aditionalTooltipKey) {
+		super(id, fmName, buttonCaption,aditionalTooltipKey);
 		this.setModel = setModel;
 		this.list = list;
 	}

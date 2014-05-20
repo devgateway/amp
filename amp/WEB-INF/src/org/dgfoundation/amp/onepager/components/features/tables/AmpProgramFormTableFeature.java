@@ -180,7 +180,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		add(list);
 
 
-		add(new AmpDividePercentageField<AmpActivityProgram>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, new Model<ListView<AmpActivityProgram>>(list)){
+		add(new AmpDividePercentageField<AmpActivityProgram>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, new Model<ListView<AmpActivityProgram>>(list),programSettingsString){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -200,7 +200,12 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 			
 		});
 		
-		final AmpAutocompleteFieldPanel<AmpTheme> searchThemes=new AmpAutocompleteFieldPanel<AmpTheme>("search","Add Program",AmpThemeSearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpTheme> searchThemes=new AmpAutocompleteFieldPanel<AmpTheme>("search","Add Program",programSettingsString,AmpThemeSearchModel.class) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 9205254457879832345L;
+
 			@Override
 			protected String getChoiceValue(AmpTheme choice) {
 				//transientBoolean used internally to flag the default theme

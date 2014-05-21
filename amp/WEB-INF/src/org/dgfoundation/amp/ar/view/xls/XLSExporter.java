@@ -253,6 +253,7 @@ public abstract class XLSExporter extends Exporter {
             }
             */
             cs.setFont(font);
+            cs.setWrapText(true);
             hierarchyLevel1Style = cs;
         }
 		
@@ -282,6 +283,7 @@ public abstract class XLSExporter extends Exporter {
             }
             */
             cs.setFont(font);
+            cs.setWrapText(true);
             hierarchyOtherStyle = cs;
         }
 		

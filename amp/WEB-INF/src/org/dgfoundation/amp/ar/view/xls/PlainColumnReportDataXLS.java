@@ -64,6 +64,7 @@ public class PlainColumnReportDataXLS extends ColumnReportDataXLS {
 	
 	private HSSFCellStyle getPlainHierarchyStyle() {
 		HSSFCellStyle cs = wb.createCellStyle();
+		cs.setWrapText(true);
 		HSSFFont font= wb.createFont();
 		font.setFontName(HSSFFont.FONT_ARIAL);
 		font.setFontHeightInPoints(new Short("8"));

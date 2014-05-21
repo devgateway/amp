@@ -672,10 +672,12 @@ public class ImportActionNew extends DispatchAction {
             objArray.add(addNewObj);
         }
 
+        /* AMP-17402
         JSONObject sameAsObj = new JSONObject();
         sameAsObj.accumulate("id", "-2");
         sameAsObj.accumulate("val", "Same as");
         objArray.add(sameAsObj);
+*/
 
         for (java.util.Map.Entry<Long, String> item : sortedLabels.entrySet()) {
             if (item.getValue() != null) {

@@ -9,6 +9,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.GPISetup;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -57,6 +58,7 @@ public class GPIForm extends ActionForm {
 	Collection<GroupingElement<HierarchyListableImplementation>> donorElements;
 	Collection<GroupingElement<HierarchyListableImplementation>> sectorStatusesElements;
 	Collection<GroupingElement<HierarchyListableImplementation>> donorTypeElements;
+	private GPISetup setup;
 
 	public Collection<GroupingElement<HierarchyListableImplementation>> getSectorStatusesElements() {
 		return sectorStatusesElements;
@@ -385,6 +387,14 @@ public class GPIForm extends ActionForm {
 	public void setDonorTypeElements(
 			Collection<GroupingElement<HierarchyListableImplementation>> donorTypeElements) {
 		this.donorTypeElements = donorTypeElements;
+	}
+
+	public GPISetup getSetup() {
+		return setup;
+	}
+
+	public void setSetup(GPISetup setup) {
+		this.setup = setup;
 	}
 
 }

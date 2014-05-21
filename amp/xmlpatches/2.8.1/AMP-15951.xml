@@ -18,9 +18,9 @@
             	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
             	VALUES(1,'Indicator 1',1,'1',null);
             	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
-            	VALUES(2,'Indicator 5a',1,'6',null);
+            	VALUES(2,'Indicator 5a',1,'5a',null);
             	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
-            	VALUES(3,'Indicator 6',0,'5a',null);            	
+            	VALUES(3,'Indicator 6',0,'6',null);            	
             	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
             	VALUES(4,'Indicator 9b',4,'9b',null);
             	

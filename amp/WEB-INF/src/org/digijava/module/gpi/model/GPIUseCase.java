@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.GPIDefaultFilters;
+import org.digijava.module.aim.dbentity.GPISetup;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -281,6 +282,8 @@ public class GPIUseCase {
 	 */
 	public GPIAbstractReport createReport(GPIForm form, HttpServletRequest request) throws Exception {
 		// Create the report.
+		GPISetup setup = GPISetupUtil.getSetup();
+		form.setSetup(setup);
 		GPIAbstractReport report = null;
 		if (form.getGPIReport().getIndicatorCode().equals(GPIConstants.GPI_REPORT_1)) {
 			report = new GPIReport1();

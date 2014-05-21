@@ -224,10 +224,12 @@
 										                		<tr>
 												                    <td width="40%">
 												                        <p style="font-size: 20px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><strong><digi:trn key="aim:gpiIndicator">Global Partnership Indicator</digi:trn> <digi:trn key="aim:report">Report</digi:trn>&nbsp;<bean:write name="gpiForm" property="gpiReport.indicatorCode"/></strong></p>
-												                    </td>
+												                    </td>												                    
 										                    		<td width="60%" align="right" style="font-size: 11px; padding-right: 15px;">
-									                           			<p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15" style="vertical-align: bottom;">&nbsp;<digi:trn><bean:write name="gpiForm" property="gpiReport.description"/></digi:trn></p>
-										                    		</td>
+										                    			<logic:notEmpty name="gpiForm" property="setup">
+									                           				<p><img src="/TEMPLATE/ampTemplate/images/info.png" width="15" height="15" style="vertical-align: bottom;">&nbsp;<digi:trn><bean:write name="gpiForm" property="gpiReport.description"/></digi:trn></p>
+																		</logic:notEmpty>										                           				
+										                    		</td>											                    	
 										                    	</tr>
 										                  	</table>
 										        

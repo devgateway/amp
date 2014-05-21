@@ -41,6 +41,15 @@
 	            </div>
 	        </td>
 		</tr>
+		<logic:empty name="gpiForm" property="setup">
+			<tr>
+	            <td width="100%" align="center" height="65" colspan="5" />
+	                <div align="center">
+	                    <strong><font color="red"><digi:trn>Report cant be generated because the Indicator Fields have not been set in Global Partnership Indicators Manager.</digi:trn></font></strong>
+	                </div>
+	            </td>
+	        </tr>	
+		</logic:empty>
 		<logic:empty name="gpiForm" property="mainTableRows">
 	        <tr>
 	            <td width="100%" align="center" height="65" colspan="5" />

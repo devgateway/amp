@@ -20,9 +20,9 @@ function getAmpAjaxCallBackUrl(){
 /**
  * The function will swap the label with an text box that submits through ajax 
  */
-function spawnEditBox(labelId) {
+function spawnEditBox(labelId, javascript) {
 	var myId = labelId;
-	var editId = myId+".editor";
+	var editId = myId+"-editor";
 	var editor = document.getElementById(editId);
 	var label = document.getElementById(myId);
 	
@@ -32,7 +32,7 @@ function spawnEditBox(labelId) {
 		//spawn a new edit box
 		editor = document.createElement('input');
 		editor.setAttribute('id', editId);
-		var keypress = 'var kc=event.keyCode; if (kc==27) showLabel("'+ myId +'"); else if (kc!=13) { return true; } else saveEditBox("'+ myId +'");';
+		var keypress = 'var kc=event.keyCode; if (kc==27) showLabel("'+ myId +'"); else if (kc!=13) { return true; } else saveEditBox("'+ myId+'","'+javascript+'");'; 
 		editor.setAttribute('onkeypress', 'if (Wicket.Browser.isSafari()) { return; }; ' + keypress);
 		editor.setAttribute('onkeydown', 'if (!Wicket.Browser.isSafari()) { return; }; ' + keypress);
 		editor.setAttribute('class', 'inputx');
@@ -80,7 +80,7 @@ function spawnEditBox(labelId) {
         	  editor.focus();
       }
 	//onblur is reset upon cancel or save must be set again
-	editor.setAttribute('onblur', 'saveEditBox("'+ myId +'")');
+	editor.setAttribute('onblur', 'saveEditBox("'+ myId +'","'+javascript+'")');
 	
 }
 
@@ -98,7 +98,7 @@ function updateLabel(labelId, newValue) {
  */
 function showLabel(labelId) {
 	var label = document.getElementById(labelId);
-	var editor = document.getElementById(labelId+".editor");
+	var editor = document.getElementById(labelId+"-editor");
 	
 	editor.setAttribute('onblur', '');
 	label.style.display = "inline";
@@ -108,16 +108,23 @@ function showLabel(labelId) {
 /**
  * Submits the new value for the translation
  */
-function saveEditBox(labelId){
+function saveEditBox(labelId,postProcessActions){
 	var label = document.getElementById(labelId);
-	var editor = document.getElementById(labelId+".editor");
+	var editor = document.getElementById(labelId+"-editor");
 	
 	var params = '&method=translate' + 
 				 '&editorKey='+editor.getAttribute("key") + 
 				 '&editorVal='+editor.value +
 				 '&labelId='+labelId;
 	
+	//post save actions
+	if (postProcessActions != "undefined" && postProcessActions!=null) {
+		var tmpFunc = new Function(postProcessActions);
+		tmpFunc();
+		params += '&postSaveActions=true';
+	}
 	var wcall = Wicket.Ajax.get({"u":getAmpAjaxCallBackUrl() + params});
+	
 }
 
 function wicketSwitchTranslationMode(){

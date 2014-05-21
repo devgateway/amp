@@ -58,8 +58,9 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	protected WebMarkupContainer newLine;
 	protected WebMarkupContainer newLineTooltip;
 	protected FormComponent<?> formComponent;
-	IndicatingAjaxLink editTooltipLink ;
-	protected String fmName;
+	IndicatingAjaxLink editTooltipLink;
+    IndicatingAjaxLink editTitleLink;
+    protected String fmName;
 	protected Image tooltipIcon;
 	protected boolean hideLabel;
 	protected boolean showTooltipIfLabelHidden;
@@ -263,13 +264,18 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		this.hideLabel=hideLabel;
 		setOutputMarkupId(true);
 		this.fmName = fmName;
-		boolean showTooltipEditor=false;
+		boolean showTooltipEditor = false;
+        boolean showTitleEditor = false;
 		this.showTooltipIfLabelHidden=showTooltipIfLabelHidden;
 		//we show the edittooltip icon only if we are in translator mode and
 		//the label is not hidden or we choose to show it even if hidden 
-		if(TranslatorUtil.isTranslatorMode(getSession()) &&(!hideLabel || showTooltipIfLabelHidden )){
-			showTooltipEditor=true;
+		if (TranslatorUtil.isTranslatorMode(getSession()) && (!hideLabel || showTooltipIfLabelHidden )) {
+			showTooltipEditor = true;
 		}
+
+        if (TranslatorUtil.isTranslatorMode(getSession())) {
+            showTitleEditor = true;
+        }
 
 		Label requiredStar = new Label("requiredStar", new Model<String>("")) {
 			private static final long serialVersionUID = 1L;
@@ -289,6 +295,22 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		};
 		// requiredStar.setVisible(!hideNewLine||enableReqStar);
 		add(requiredStar);
+
+        editTitleLink = new IndicatingAjaxLink("editTitleLink") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                target.appendJavaScript("spawnEditBox('"+ titleLabel.getMarkupId() +"');");
+
+            }
+
+
+        };
+        editTitleLink.setVisible(showTitleEditor);
+        editTitleLink.add(new AttributeModifier("data-ot", TranslatorWorker.translateText("Please click to edit field label")));
+        add(editTitleLink);
+
+
 		//for the edit of the tooltip
 
 		if(!"".equals(aditionalTooltipKey) && aditionalTooltipKey.trim().length()>0){

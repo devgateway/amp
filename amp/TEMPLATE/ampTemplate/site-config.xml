@@ -662,13 +662,11 @@
 				<page>aim_assignFieldPermissions</page>
 				<!-- New Org Selector -->
 				<page>aim_orgSelectorSearchForm</page>
-				<page>aim_editIPAContract</page>
 				<page>aim_saveErrors</page>
                 
 				<page>previewLogframe</page>
 				<page>aim_fundingImportPopupLayout</page>
 				<page>aim_fundingPopupLayout</page>
-				<page>aim_editEUActivity</page>
 				<page>aim_locPopupLayout</page>
 				<page>aim_locPopinLayout</page>
 				<page>aim_selectCreateIndicatorForStep9</page>

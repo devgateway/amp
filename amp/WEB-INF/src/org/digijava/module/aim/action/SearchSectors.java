@@ -15,7 +15,7 @@ import org.digijava.module.aim.util.SectorUtil;
 public class SearchSectors
     extends Action {
 
-  private static Logger logger = Logger.getLogger(SelectLocation.class);
+  private static Logger logger = Logger.getLogger(SearchSectors.class);
 
   public ActionForward execute(ActionMapping mapping, ActionForm form,
                                javax.servlet.http.HttpServletRequest request,

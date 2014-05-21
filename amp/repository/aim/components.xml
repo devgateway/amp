@@ -194,8 +194,6 @@
 	<page name="meActivityIndicators" title=" - ME Activity Indicator List" />
 	<page name="selectCreateIndicators" title=" - ME Select/Create Indicators" />
 	<page page="selectCreateIndicatorForStep9" name="aim_selectCreateIndicatorForStep9" title=" - ME Select/Create Indicators" />
-	<page name="editSurveyList" title=" - Aid Harmonization Indicators" />
-	<page name="editSurvey" title=" - Aid Harmonization Indicators" />
 
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />

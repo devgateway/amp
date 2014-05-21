@@ -46,7 +46,6 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.admin.helper.AmpActivityFake;
-import org.digijava.module.aim.action.RecoverySaveParameters;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;

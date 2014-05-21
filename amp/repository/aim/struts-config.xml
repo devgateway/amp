@@ -343,10 +343,6 @@
     <action path="/aim/viewEUActivityDetails" scope="request" type="org.digijava.module.aim.action.ViewEUActivity" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_euActivityDetails" />
     </action>
-    <action name="aimIPAContractForm" path="/aim/editIPAContract" scope="session" type="org.digijava.module.aim.action.EditIPAContract">
-      <forward name="forward" path="/showLayout.do?layout=aim_editIPAContract" />
-    </action>
-
     <action name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter1" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons" />
     </action>
@@ -662,18 +658,6 @@
     </action>
     <action name="aimSurveyForm" path="/aim/getSurveyList" scope="request" type="org.digijava.module.aim.action.GetSurveyList" validate="false" />
     <action name="aimEditSurveyForm" path="/aim/getSurvey" scope="session" type="org.digijava.module.aim.action.GetSurvey" validate="false" />
-<!--    <action name="aimEditActivityForm" path="/aim/editSurveyList" scope="session" type="org.digijava.module.aim.action.EditSurveyList" validate="false">-->
-<!--      <forward name="forward" path="/showLayout.do?layout=editSurveyList" />-->
-<!--      <forward name="edit" path="/aim/editSurvey.do" />-->
-<!--      <forward name="index" path="/aim/index.do" redirect="true" />-->
-<!--      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />-->
-<!--    </action>-->
-    <action name="aimEditActivityForm" path="/aim/editSurvey" scope="session" type="org.digijava.module.aim.action.EditSurvey" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=editSurvey" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-      <forward name="survey" path="/aim/editSurveyList.do" />
-      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" />
-    </action>
        
     <action name="aimSelectFilteredCurrencyRatesForm" path="/aim/selectFilteredRates" scope="request" type="org.digijava.module.aim.action.SelectFilteredCurrencyRates" validate="false">
       <forward name="forward" path="/showLayout.do?layout=selectFilteredRates" />
@@ -1177,10 +1161,6 @@
     	<forward name="forward" path="/showLayout.do?layout=viewActivityDifferences" />
     	<forward name="reload"  path="/aim/viewActivityPreview.do" />
     	<forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    
-    <action name="aimEUActivityForm" path="/aim/editEUActivity" scope="session" type="org.digijava.module.aim.action.EditEUActivity">
-      <forward name="forward" path="/showLayout.do?layout=aim_editEUActivity" />
     </action>
 
     <action name="aimEditActivityForm" path="/aim/addActivity" scope="session" type="org.digijava.module.aim.action.AddAmpActivity">

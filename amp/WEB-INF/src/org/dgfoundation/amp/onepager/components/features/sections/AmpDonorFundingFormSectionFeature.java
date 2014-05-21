@@ -16,6 +16,8 @@ import java.util.TreeMap;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -32,15 +34,26 @@ import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.*;
-import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
+import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -55,7 +68,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * @author mpostelnicu@dgateway.org since Nov 3, 2010
  */
 public class AmpDonorFundingFormSectionFeature extends
-		AmpFormSectionFeaturePanel implements AmpRequiredComponentContainer{
+		AmpFormSectionFeaturePanel implements AmpRequiredComponentContainer {
 	private static final long serialVersionUID = 1L;
 	private TreeMap<AmpOrganisation, AmpFundingGroupFeaturePanel> listItems = new TreeMap<AmpOrganisation, AmpFundingGroupFeaturePanel>();
 	protected ListEditor<AmpOrganisation> list;
@@ -181,6 +194,38 @@ public class AmpDonorFundingFormSectionFeature extends
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
 
+		 final String expandAllKey = TranslatorWorker.generateTrnKey("Expand all");
+         final AjaxLink expandAllLink = new AjaxLink("expandDonorItems"){
+        	
+        	 final String javascript = "$(this).parents('div:eq(2)').find('.collapsable').show();$('#expandDonorItems-editor').hide();$('#expandDonorItems').hide();$('#collapseDonorItems').show();";
+             public void onClick(AjaxRequestTarget target) {
+            	   //we don't need any action to be prepended here  
+             }
+            
+            @Override
+                protected void onConfigure() {
+                        super.onConfigure();
+                        configureTranslationMode(this,expandAllKey, javascript);
+            }
+        };
+        add(expandAllLink);
+        
+        
+        final String collapseAllKey = TranslatorWorker.generateTrnKey("Collapse all");
+        final AjaxLink collapseAllLink = new AjaxLink("collapseDonorItems"){
+            final String javascript = "$(this).parents('div:eq(2)').find('.collapsable').hide();$('#expandDonorItems').show();$('#collapseDonorItems').hide();$('#collapseDonorItems-editor').hide();";
+            public void onClick(AjaxRequestTarget target) {
+            //we don't need any action to be prepended here  
+           }
+           
+           @Override
+               protected void onConfigure() {
+                       super.onConfigure();
+                       configureTranslationMode(this,collapseAllKey, javascript);
+           }
+       };
+       add(collapseAllLink);
+       
 		// group fields in FM under "Proposed Project Cost"
 		AmpProposedProjectCost propProjectCost = new AmpProposedProjectCost(
 				"propProjCost", "Proposed Project Cost", am);
@@ -416,5 +461,22 @@ public class AmpDonorFundingFormSectionFeature extends
 	public List<FormComponent<?>> getRequiredFormComponents() {
 		return requiredFormComponents;
 	}
+	
+	 private void configureTranslationMode (AjaxLink link,String key, String javascript) {
+    if (TranslatorUtil.isTranslatorMode(getSession())){
+            link.setOutputMarkupId(true);
+            link.add(new AttributeAppender("style", new Model<String>("text-decoration: underline; color: #0CAD0C;"), ""));
+            link.add(new AttributeModifier("key", key));
+            link.add(new AttributeModifier("onclick", "spawnEditBox(this.id,\""+javascript+"\")"));
+            
+            
+    }
+    else{
+    	    link.add(AttributeModifier.remove("key"));
+            link.add(AttributeModifier.remove("onclick"));
+            link.add(new AttributeModifier("onclick", javascript));
+        
+    }
+}
 
 }

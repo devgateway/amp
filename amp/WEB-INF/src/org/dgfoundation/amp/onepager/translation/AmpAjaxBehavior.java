@@ -77,6 +77,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 		String key = request.getRequestParameters().getParameterValue("editorKey").toString();
 		String message = request.getRequestParameters().getParameterValue("editorVal").toString();
 		String pLabelId = request.getRequestParameters().getParameterValue("labelId").toString();
+		String postSaveActions = request.getRequestParameters().getParameterValue("postSaveActions").toString();
 		
 		AmpAuthWebSession session = (AmpAuthWebSession)Session.get();
 		Locale locale = session.getLocale();
@@ -107,8 +108,15 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 			logger.error("Can't save translation: ", e1);
 			message = message + "(not saved due to error!)";
 		}
+		String javascript = "updateLabel(\""+pLabelId+"\", \""+message+"\");";
 		
-		target.appendJavaScript("updateLabel(\""+pLabelId+"\", \""+message+"\");showLabel(\""+pLabelId+"\");window.status='';");
+		//if post save actions were already executed we don't to show the label because this
+		//behavior was taken care by previously executed actions
+		if (postSaveActions == null) {
+			javascript += "showLabel(\""+pLabelId+"\");";
+		}
+		javascript+="window.status='';";
+		target.appendJavaScript(javascript);
 	}
 	
 	private void switchTranslatorMode(Request request, AjaxRequestTarget target){

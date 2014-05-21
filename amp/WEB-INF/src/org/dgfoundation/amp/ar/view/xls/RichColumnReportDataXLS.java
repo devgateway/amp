@@ -78,6 +78,7 @@ public class RichColumnReportDataXLS extends ColumnReportDataXLS {
 			cs.setDataFormat(df.getFormat("General"));
 		
 			cs.setFont(font);
+			cs.setWrapText(true);
 			crdStyle = cs;
 		}
 		return crdStyle;

@@ -58,7 +58,7 @@ public class MapFilter {
 	
 	private BigDecimal fundingLimit;
 	private Boolean fundingLimitAbove;
-	private Long onBudget;
+	private Long selectedBudget;
 	private List<AmpCategoryValue> financingInstruments;
 	private List<AmpCategoryValue> typeofassistences;
 	private List<AmpCategoryValue> projectstatus;
@@ -77,6 +77,7 @@ public class MapFilter {
 	private List<EntityRelatedListHelper<AmpClassificationConfiguration, EntityRelatedListHelper<AmpSector, AmpSector>>> configWithSectorAndSubSectors;
 	private Long selSectorConfigId;
 	private List<AmpClassificationConfiguration> sectorConfigs;
+	private List <AmpCategoryValue> budgets;
 
 	private List<AmpOrgType> organizationsTypeSelected;
 	private List<AmpOrgGroup> orgGroups;
@@ -249,6 +250,8 @@ public class MapFilter {
 			}
 		}
 		selectedfilter.setTypeofassistance(seltypesofassiss);
+	
+		selectedfilter.setSelectedBudget(CategoryManagerUtil.getAmpCategoryValueFromDb(selectedBudget).getValue());
 		
 		if (selStructureTypes != null) {
 			ArrayList<String> selstructurestr = new ArrayList<String>();
@@ -880,12 +883,12 @@ public class MapFilter {
 		return fundingLimitAbove;
 	}
 
-	public void setOnBudget(Long onBudget) {
-		this.onBudget = onBudget;
+	public void setSelectedBudget(Long onBudget) {
+		this.selectedBudget = onBudget;
 	}
 
-	public Long getOnBudget() {
-		return onBudget;
+	public Long getSelectedBudget() {
+		return selectedBudget;
 	}
 
 	public void setStructureTypes(List<AmpStructureType> structureTypes) {
@@ -1117,5 +1120,13 @@ public class MapFilter {
 
 	public void setDefaultCurrencyId(Long defaultCurrencyId) {
 		this.defaultCurrencyId = defaultCurrencyId;
+	}
+
+	public List<AmpCategoryValue> getBudgets() {
+		return budgets;
+	}
+
+	public void setBudgets(List<AmpCategoryValue> budgets) {
+		this.budgets = budgets;
 	}
 }

@@ -384,7 +384,12 @@ public class MainMap extends Action {
 		categoryvaluesprojectstatus = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
 		filter.setProjectstatus(categoryvaluesprojectstatus);
 
-        filter.setPeacebuildingMarkers(DbHelper.getPeacebuildingMarkers());
+
+		List<AmpCategoryValue> budgets = null;
+		budgets = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY);
+		filter.setBudgets(budgets);
+
+		filter.setPeacebuildingMarkers(DbHelper.getPeacebuildingMarkers());
         if (filter.getPeacebuildingMarkers() != null &&
                 !filter.getPeacebuildingMarkers().isEmpty()) {
             filter.setSelectedPeacebuildingMarkerId(filter.getPeacebuildingMarkers().get(0).getId());

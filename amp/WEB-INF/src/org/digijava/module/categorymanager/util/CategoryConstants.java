@@ -201,6 +201,8 @@ public class CategoryConstants {
 		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "On Budget", true);
 	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_OFF = 
 		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "Off Budget", true);
+	 public static final HardCodedCategoryValue ACTIVITY_TREASURY = 
+			 new CategoryConstants.HardCodedCategoryValue("activity_budget", "Treasury", true);
 
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_ACTUAL = 
 		 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Actual", true);

@@ -149,16 +149,7 @@ public class DbHelper {
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !QueryUtil.inArray(-1l,filter.getSelStructureTypes() );
 		boolean programCondition = (natPlanObjIds!= null && natPlanObjIds.length>0) || (primaryProgramsIds!= null && primaryProgramsIds.length>0) || (secondaryProgramsIds!= null && secondaryProgramsIds.length>0);
-		AmpCategoryValue budgetOn = null;
-		AmpCategoryValue budgetOff = null;
-		try {
-			budgetOn = CategoryConstants.ACTIVITY_BUDGET_ON.getAmpCategoryValueFromDB();
-			budgetOff = CategoryConstants.ACTIVITY_BUDGET_OFF.getAmpCategoryValueFromDB();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
+		
 		/*
 		 * We are selecting sectors which are funded In selected year by the
 		 * selected organization
@@ -197,7 +188,7 @@ public class DbHelper {
 				oql += " inner join act.structures str  ";
 			}
 			// Status
-			if ((filter.getSelprojectstatus()) != null || (filter.getOnBudget() != null)) {
+			if ((filter.getSelprojectstatus()) != null || (filter.getSelectedBudget() != null)) {
 				oql += " join  act.categories as categories ";
 			}
 
@@ -317,13 +308,9 @@ public class DbHelper {
 								.getInStatement(filter.getSelprojectstatus())
 						+ ") ";
 			}
-			// On/Off budget
-			if (filter.getOnBudget() != null) {
-				if (filter.getOnBudget() == 1) {
-					oql += " and categories.id in (" + budgetOn.getId() + ") ";
-				} else if (filter.getOnBudget() == 2) {
-					oql += " and categories.id in (" + budgetOff.getId() + ") ";
-				}
+			// On/Off/treasury budget
+			if (filter.getSelectedBudget() != null && filter.getSelectedBudget() != 0) {
+					oql += " and categories.id in (" + filter.getSelectedBudget() + ") ";
 			}
 			// Type of assistance
 			if (filter.getSeltypeofassistence() != null) {

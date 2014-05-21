@@ -12,7 +12,7 @@ public class SimpleFilter {
 	private ArrayList<String> typeofassistance;
 	private ArrayList<String> financinginstrument;
 	private ArrayList<String> structuretypes;
-	private boolean onbudget;
+	private String selectedBudget;
 	private String organizationgroup;
 	private ArrayList<SimpleDonor> selecteddonors;
 	private ArrayList<SimpleDonor> impselecteddonors;
@@ -113,12 +113,12 @@ public class SimpleFilter {
 		this.structuretypes = structuretypes;
 	}
 
-	public boolean isOnbudget() {
-		return onbudget;
+	public String getSelectedBudget() {
+		return selectedBudget;
 	}
 
-	public void setOnbudget(boolean onbudget) {
-		this.onbudget = onbudget;
+	public void setSelectedBudget(String selectedBudget) {
+		this.selectedBudget = selectedBudget;
 	}
 
 	public String getOrganizationgroup() {

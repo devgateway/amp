@@ -537,12 +537,12 @@ function initializeTranslations(){
 													<b><digi:trn>Budget</digi:trn>:</b>
 												</td>
 												<td>
-													<html:select property="filter.onBudget"
+													<html:select property="filter.selectedBudget"
 													styleId="budget_dropdown" styleClass="dropdwn_sm"
 													style="width:80px;">
 													<html:option value="0"><digi:trn>None</digi:trn></html:option>
-													<html:option value="1"><digi:trn>On budget</digi:trn></html:option>
-													<html:option value="2"><digi:trn>Off budget</digi:trn></html:option>
+													<html:optionsCollection property="filter.budgets"
+															label="value" value="id" />
 												   </html:select>
 												</td>
 											</tr>
@@ -607,7 +607,7 @@ function initializeTranslations(){
 	<html:hidden property="filter.defaultStartYear" styleId="defaultStartYear"/>
 	<html:hidden property="filter.defaultEndYear" styleId="defaultEndYear" />
 	<html:hidden property="filter.transactionType" styleId="transactionType" />
-	<html:hidden property="filter.onBudget" styleId="onBudget" />
+	<html:hidden property="filter.selectedBudget" styleId="selectedBudget" />
 	<html:hidden property="filter.selectedPeacebuildingMarkerId" styleId="selectedPeacebuildingMarkerId" />
 		
 </digi:form>

@@ -382,8 +382,6 @@ public class ActivityUtil {
 		
 		if (act.getComponentFundings() != null)
 			act.getComponentFundings().size();
-		if (act.getComponentProgress() != null)
-			act.getComponentProgress().size();
 		if (act.getCosts() != null)
 			act.getCosts().size();
 		if (act.getMember() != null)

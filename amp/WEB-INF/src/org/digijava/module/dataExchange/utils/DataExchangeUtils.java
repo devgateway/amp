@@ -956,14 +956,7 @@ public class DataExchangeUtils {
 				//exp.getActivity().setComponents(new HashSet());
 				//exp.getComponent().setActivities(new HashSet());
 				DataExchangeUtils.addObjectoToAmp(exp);
-			}
-			for (Iterator itcomm = acfs.getPhyProgress().iterator(); itcomm.hasNext();) {
-				AmpPhysicalPerformance pp =  (AmpPhysicalPerformance) itcomm.next();
-				//pp.getAmpActivityId().setComponents(new HashSet());
-				//pp.getComponent().setActivities(new HashSet());
-				DataExchangeUtils.addObjectoToAmp(pp);
-			}
-			
+			}			
 		}
 		
 		

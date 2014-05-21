@@ -68,7 +68,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -1009,84 +1008,6 @@ public class DbUtil {
 		return component;
 	}
 
-	public static ArrayList getAmpPhysicalProgress(Long ampActivityId,
-			Long componentId) {
-		ArrayList progress = new ArrayList();
-		Query q = null;
-		Session session = null;
-		String queryString = null;
-		AmpPhysicalPerformance ampPhysicalPerformance = null;
-		Iterator iter = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			queryString = " select Progress from "
-					+ AmpPhysicalPerformance.class.getName()
-					+ " Progress where (Progress.ampActivityId=:ampActivityId )";
-			if (componentId != null) {
-				queryString += " and (Progress.component=:componentId) ";
-			}
-			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			if (componentId != null) {
-				q.setLong("componentId", componentId);
-			}
-			iter = q.list().iterator();
-
-			while (iter.hasNext()) {
-
-				ampPhysicalPerformance = (AmpPhysicalPerformance) iter.next();
-				logger.debug("Title :"
-						+ (String) ampPhysicalPerformance.getTitle());
-				logger.debug("DESCRIPTION :"
-						+ (String) ampPhysicalPerformance.getDescription());
-				progress.add(ampPhysicalPerformance);
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp PhysicalPerformance", ex);
-			// ////System.out.println(ex.toString()) ;
-		}
-		logger.debug("Getting funding Executed successfully " + progress.size());
-		return progress;
-	}
-
-	public static ArrayList getAmpPhysicalProgress(Long ampActivityId,
-			Long componentId, Session session) {
-		ArrayList progress = new ArrayList();
-		Query q = null;
-		String queryString = null;
-		AmpPhysicalPerformance ampPhysicalPerformance = null;
-		Iterator iter = null;
-		try {
-			queryString = " select Progress from "
-					+ AmpPhysicalPerformance.class.getName()
-					+ " Progress where (Progress.ampActivityId=:ampActivityId )";
-			if (componentId != null) {
-				queryString += " and (Progress.component=:componentId) ";
-			}
-			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			if (componentId != null) {
-				q.setLong("componentId", componentId);
-			}
-			iter = q.list().iterator();
-
-			while (iter.hasNext()) {
-
-				ampPhysicalPerformance = (AmpPhysicalPerformance) iter.next();
-				logger.debug("Title :"
-						+ (String) ampPhysicalPerformance.getTitle());
-				logger.debug("DESCRIPTION :"
-						+ (String) ampPhysicalPerformance.getDescription());
-				progress.add(ampPhysicalPerformance);
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp PhysicalPerformance", ex);
-			// ////System.out.println(ex.toString()) ;
-		}
-		logger.debug("Getting funding Executed successfully " + progress.size());
-		return progress;
-	}
-
 	public static Collection getAmpFunding(Long ampActivityId, Long ampFundingId) {
 		Session session = null;
 		Query q = null;
@@ -1361,40 +1282,6 @@ public class DbUtil {
 		}
 		logger.debug("Getting Amp Component Executed successfully ");
 		return comp;
-	}
-
-	public static AmpPhysicalPerformance getAmpPhysicalProgressDescription(
-			Long ampPpId) {
-		Query q = null;
-		Session session = null;
-		String queryString = null;
-		AmpPhysicalPerformance ampPhysicalPerformance = null;
-		Iterator iter = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			queryString = " select Progress from "
-					+ AmpPhysicalPerformance.class.getName()
-					+ " Progress where (Progress.ampPpId=:ampPpId )";
-			q = session.createQuery(queryString);
-			q.setParameter("ampPpId", ampPpId, Hibernate.LONG);
-			iter = q.list().iterator();
-
-			if (iter.hasNext()) {
-
-				ampPhysicalPerformance = (AmpPhysicalPerformance) iter.next();
-				logger.debug("Title :"
-						+ (String) ampPhysicalPerformance.getTitle());
-				logger.debug("DESCRIPTION :"
-						+ (String) ampPhysicalPerformance.getDescription());
-				// progress.add(ampPhysicalPerformance);
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp PhysicalPerformance", ex);
-			// ////System.out.println(ex.toString()) ;
-		}
-		logger.debug("Getting funding Executed successfully ");
-		return ampPhysicalPerformance;
 	}
 
 	public static Collection getCreatedOrEditedActivities(Long ampTeamId) {

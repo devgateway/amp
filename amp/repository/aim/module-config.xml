@@ -52,7 +52,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganisation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRole</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLevel</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpPhysicalPerformance</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpKmDocuments</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTheme</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFiscalCalendar</hibernate-class>

@@ -246,12 +246,6 @@
 				column="amp_structure_id" />
 		</set>
 		
-		<set name="componentProgress" lazy="true" inverse="true" cascade="all-delete-orphan">
-		    <cache usage="read-write" />
-			<key column="amp_activity_id" />
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpPhysicalPerformance" />
-		</set>
-	
 		
 		<set name="componentFundings" lazy="true" inverse="true" cascade="all-delete-orphan">
 			<cache usage="read-write" />

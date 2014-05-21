@@ -180,42 +180,6 @@ method="post">
 
 							</tr>
 
-							<%--
-
-							<logic:notEmpty name="aimPhysicalProgressForm" property="physicalProgress">
-
-							<TR bgcolor="#f4f4f2">
-
-                                 <TD colspan="4">
-
-									<TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
-
-										<logic:iterate name="aimPhysicalProgressForm"  property="physicalProgress" id="phyPP" 
-
-											type="org.digijava.module.aim.dbentity.AmpPhysicalPerformance">
-
-											<TR>
-
-												<TD width="50%">
-
-													<bean:write name="phyPP" property="title" />	
-
-												</TD>
-
-											</TR>
-
-										</logic:iterate>
-
-									</TABLE>
-
-								</TD>
-
-							</TR>
-
-							</logic:notEmpty>
-
-							--%>
-
 							<TR>
 
 								<TD width="100%" bgcolor="#F4F4F2" align="center">

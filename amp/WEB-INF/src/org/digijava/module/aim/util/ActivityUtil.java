@@ -78,7 +78,6 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
@@ -110,7 +109,6 @@ import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Measures;
-import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -719,7 +717,6 @@ public class ActivityUtil {
           components.setCommitments(new ArrayList());
           components.setDisbursements(new ArrayList());
           components.setExpenditures(new ArrayList());
-          components.setPhyProgress(new ArrayList());
 
           Collection<AmpComponentFunding> componentsFunding = ActivityUtil.getFundingComponentActivity(ampComp.
               getAmpComponentId(), activity.getAmpActivityId());
@@ -745,21 +742,6 @@ public class ActivityUtil {
             else if (fd.getTransactionType() == Constants.EXPENDITURE) {
               components.getExpenditures().add(fd);
             }
-          }
-          Collection<AmpPhysicalPerformance> physicalPerf = ActivityUtil.getPhysicalProgressComponentActivity(
-        		  											ampComp.getAmpComponentId(), activity.getAmpActivityId());
-          Iterator<AmpPhysicalPerformance> physicalPerfIterator = physicalPerf.iterator();
-          while (physicalPerfIterator.hasNext()) {
-            AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) physicalPerfIterator.
-                next();
-            PhysicalProgress pp = new PhysicalProgress();
-            pp.setDescription(ampPhyPerf.getDescription());
-            pp.setPid(ampPhyPerf.getAmpPpId());
-            pp.setReportingDate(
-                DateConversion.ConvertDateToString(
-                    ampPhyPerf.getReportingDate()));
-            pp.setTitle(ampPhyPerf.getTitle());
-            components.getPhyProgress().add(pp);
           }
           List list = null;
           if (components.getCommitments() != null) {
@@ -854,30 +836,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
   // function for getting fundings for components and ids ends here
 
   //function for physical progress
-
-  public static Collection<AmpPhysicalPerformance> getPhysicalProgressComponentActivity(Long id,
-      Long actId) {
-    Collection col = null;
-    logger.info(" inside getting the Physical Progress.....");
-    Session session = null;
-
-    try {
-      session = PersistenceManager.getSession();
-      String qryStr = "select a from " + AmpPhysicalPerformance.class.getName() +
-          " a " +
-          "where amp_component_id = '" + id + "' and amp_activity_id = '" +
-          actId + "'";
-      Query qry = session.createQuery(qryStr);
-      //Iterator itr = qry.list().iterator();
-      col = qry.list();
-
-    }
-    catch (Exception e) {
-      logger.debug("Exception in getAmpComponents() " + e.getMessage());
-      e.printStackTrace(System.out);
-    }
-    return col;
-  }
 
   public static Collection getAmpIssues(Long actId) {
 	  	Collection issues = null;

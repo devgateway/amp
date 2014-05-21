@@ -1970,20 +1970,6 @@ public class ExportActivityToWord extends Action {
 							"Components Physical Progress", ampContext,session)) {
 						ExportSectionHelper sectionHelper = new ExportSectionHelper(
 								"Physical progress of the component", true);
-
-						if (comp.getPhyProgress() != null
-								&& comp.getPhyProgress().size() > 0) {
-							for (PhysicalProgress phy : comp.getPhyProgress()) {
-								ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-										phy.getTitle());
-								rowData.addRowData(phy.getReportingDate())
-										.addRowData(phy.getDescription());
-
-								sectionHelper.addRowData(rowData);
-							}
-							retVal.add(createSectionTable(sectionHelper,
-									request, ampContext));
-						}
 					}
 
 				} else if (GlobalSettings.getInstance()

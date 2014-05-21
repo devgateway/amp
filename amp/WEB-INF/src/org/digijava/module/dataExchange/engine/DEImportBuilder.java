@@ -62,7 +62,6 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -1019,22 +1018,6 @@ public class DEImportBuilder {
 						
 						//cft.get
 					}
-					Set phyProgess = new HashSet();
-					for (Iterator itComm = component.getPhysicalProgress().iterator(); itComm.hasNext();) {
-						org.digijava.module.dataExchange.jaxb.ActivityType.Component.PhysicalProgress pp = (org.digijava.module.dataExchange.jaxb.ActivityType.Component.PhysicalProgress) itComm.next();
-						AmpPhysicalPerformance ampPhyPerf = new AmpPhysicalPerformance();
-						if(pp.getDescription()!=null && isValidString(pp.getDescription().getValue()))
-							ampPhyPerf.setDescription(pp.getDescription().getValue());
-						ampPhyPerf.setReportingDate(DataExchangeUtils.XMLGregorianDateToDate(pp.getReportingDate().getDate()));
-						
-						if(pp.getTitle()!=null && isValidString(pp.getTitle().getValue()))
-							ampPhyPerf.setTitle(pp.getTitle().getValue());
-						ampPhyPerf.setAmpActivityId(activity);
-						ampPhyPerf.setComponent(ampComp);
-						ampPhyPerf.setComments(" ");
-						phyProgess.add(ampPhyPerf);
-					}
-					tempComp.setPhyProgress(phyProgess);
 					//addCollectionToAmp(acfs);
 			
 				tempComps.add(tempComp);

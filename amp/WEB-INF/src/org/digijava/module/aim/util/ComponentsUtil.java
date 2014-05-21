@@ -24,7 +24,6 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -317,28 +316,6 @@ public class ComponentsUtil {
             qry = session.createQuery(queryString);
             qry.setParameter("id", id, Hibernate.LONG);
 
-            col = qry.list();
-        } catch (Exception ex) {
-            logger.error("Unable to get Component for editing from database " + ex.getMessage());
-            ex.printStackTrace(System.out);
-        }
-        return col;
-    }
-
-    /*
-     * To get the physical progress for a component from the physical progress table...
-     * parameter passed is the amp component id
-     */
-    public static Collection getComponentPhysicalProgress(Long id) {
-        Collection col = null;
-        String queryString = null;
-        Session session = null;
-        Query qry = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            queryString = "select co from " + AmpPhysicalPerformance.class.getName() + " co where co.component=:id";
-            qry = session.createQuery(queryString);
-            qry.setParameter("id", id, Hibernate.LONG);
             col = qry.list();
         } catch (Exception ex) {
             logger.error("Unable to get Component for editing from database " + ex.getMessage());

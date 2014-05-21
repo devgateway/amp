@@ -21,7 +21,6 @@ public class Components<T> implements Comparable , Serializable{
 	private Collection<T> expenditures;
 	private String reportingDate;	
 	private String currencyCode;
-	private Collection<PhysicalProgress> phyProgress;
 	private String code;
 	private String url;
 	private Long  type_Id;
@@ -70,18 +69,8 @@ public class Components<T> implements Comparable , Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	/**
-	 * @return Returns the phyProgress.
-	 */
-	public Collection<PhysicalProgress> getPhyProgress() {
-		return phyProgress;
-	}
-	/**
-	 * @param phyProgress The phyProgress to set.
-	 */
-	public void setPhyProgress(Collection<PhysicalProgress> phyProgress) {
-		this.phyProgress = phyProgress;
-	}
+
+
 	/**
 	 * @return Returns the reportingDate.
 	 */

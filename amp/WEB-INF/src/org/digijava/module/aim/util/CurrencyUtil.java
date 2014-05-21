@@ -1108,7 +1108,6 @@ public class CurrencyUtil {
 		try {
 			session = PersistenceManager.getSession();
 			//queryString = " select Progress from " +
-			// AmpPhysicalPerformance.class.getName() + " Progress where
 			// (Progress.ampActivityId=:ampActivityId )";
 			queryString = "select distinct ac.currencyCode from "
 					+ AmpCurrency.class.getName()

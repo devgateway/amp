@@ -36,7 +36,6 @@ import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
@@ -661,16 +660,6 @@ public class ExportBuilder {
 			}
 		}
 		
-		
-		if (ampColumnEntry.getElementByName("physicalProgress").canExport()){
-			for (PhysicalProgress pProgress : component.getPhyProgress()) {
-				ActivityType.Component.PhysicalProgress physicalProgress = objectFactory.createActivityTypeComponentPhysicalProgress();
-				physicalProgress.setTitle(buildFreeText(pProgress.getTitle()));
-				physicalProgress.setDescription(buildFreeText(pProgress.getDescription()));
-				physicalProgress.setReportingDate(buildDate(getDate(pProgress.getReportingDate()), ampColumnEntry.isMandatory()));
-				retValue.getPhysicalProgress().add(physicalProgress);
-			}
-		}
 		
 		return retValue;
 	}

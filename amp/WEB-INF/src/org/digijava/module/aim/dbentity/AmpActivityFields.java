@@ -248,8 +248,7 @@ LoggerIdentifiable, Cloneable {
 
 	@VersionableCollection(fieldTitle = "Component Fundings")
 	protected Set<AmpComponentFunding> componentFundings;
-	@VersionableCollection(fieldTitle = "Physical Progress")
-	protected Set<AmpPhysicalPerformance> componentProgress;
+
 
 	@VersionableFieldSimple(fieldTitle = "Proposed Start Date")
 	protected Date proposedStartDate;
@@ -1970,14 +1969,6 @@ contactName = string;
 
 	public Set<AmpComponentFunding> getComponentFundings() {
 		return componentFundings;
-	}
-
-	public Set<AmpPhysicalPerformance> getComponentProgress() {
-		return componentProgress;
-	}
-
-	public void setComponentProgress(Set<AmpPhysicalPerformance> componentProgress) {
-		this.componentProgress = componentProgress;
 	}
 
 	public AmpActivityGroup getAmpActivityGroup() {

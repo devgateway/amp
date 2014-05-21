@@ -48,7 +48,6 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -74,7 +73,6 @@ import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
@@ -1229,27 +1227,6 @@ public class ShowActivityPrintPreview
 			}
 
 			ComponentsUtil.calculateFinanceByYearInfo(tempComp,fundingComponentActivity);
-
-			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
-						.getPhysicalProgressComponentActivity(tempComp.getComponentId(), actId);
-
-			if (phyProgress != null && phyProgress.size() > 0) {
-				Collection physicalProgress = new ArrayList();
-				Iterator phyProgItr = phyProgress.iterator();
-				while (phyProgItr.hasNext()) {
-					AmpPhysicalPerformance phyPerf = (AmpPhysicalPerformance) phyProgItr
-							.next();
-					PhysicalProgress phyProg = new PhysicalProgress();
-					phyProg.setPid(phyPerf.getAmpPpId());
-					phyProg.setDescription(phyPerf.getDescription());
-					phyProg.setReportingDate(DateConversion
-							.ConvertDateToString(phyPerf.getReportingDate()));
-					phyProg.setTitle(phyPerf.getTitle());
-					physicalProgress.add(phyProg);
-				}
-				tempComp.setPhyProgress(physicalProgress);
-			}
-
 			selectedComponents.add(tempComp);
 		}
 

@@ -2497,43 +2497,7 @@ public class ExportActivityToPDF extends Action {
 							phProgressNestedCell.setBackgroundColor(new Color(244,244,242));
 							phProgressNestedCell.setBorder(0);
 							phProgressNestedCell.setColspan(2);
-							componentsNestedTable.addCell(phProgressNestedCell);
-							
-							if(comp.getPhyProgress()!=null && comp.getPhyProgress().size()>0){
-								for (PhysicalProgress phy : comp.getPhyProgress()) {
-									//ph progress title
-									PdfPCell phProgressCell=new PdfPCell();
-									phProgressCell.setBackgroundColor(new Color(255,255,255));
-									phProgressCell.setBorder(0);
-									p1=new Paragraph(TranslatorWorker.translateText(phy.getTitle())+"-",titleFont);									
-									phProgressCell.addElement(p1);									
-									componentsNestedTable.addCell(phProgressCell);
-									
-									phProgressCell=new PdfPCell();
-									phProgressCell.setBackgroundColor(new Color(255,255,255));
-									phProgressCell.setBorder(0);
-									p1=new Paragraph(phy.getReportingDate()+"\n",plainFont);
-									phProgressCell.addElement(p1);
-									componentsNestedTable.addCell(phProgressCell);
-									
-									phProgressCell=new PdfPCell();
-									phProgressCell.setBackgroundColor(new Color(255,255,255));
-									phProgressCell.setBorder(0);
-									p1=new Paragraph(new Phrase(TranslatorWorker.translateText("Description")+":" ,plainFont));
-									phProgressCell.addElement(p1);
-									componentsNestedTable.addCell(phProgressCell);
-									
-									phProgressCell=new PdfPCell();
-									p1=new Paragraph(TranslatorWorker.translateText(phy.getDescription())+"\n",plainFont);
-									p1.setAlignment(Element.ALIGN_LEFT);
-									phProgressCell.addElement(p1);
-									phProgressCell.setBackgroundColor(new Color(255,255,255));
-									phProgressCell.setBorder(0);
-									componentsNestedTable.addCell(phProgressCell);
-									
-								}
-								
-							}
+							componentsNestedTable.addCell(phProgressNestedCell);							
 						}
 						
 					}else if(GlobalSettings.getInstance().getShowComponentFundingByYear() && FeaturesUtil.isVisibleModule("Components Resume", ampContext,session)){ //true case

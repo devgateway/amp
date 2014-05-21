@@ -29,7 +29,6 @@
     <form-bean name="aimViewQuickLinksForm" type="org.digijava.module.aim.form.ViewQuickLinksForm" />
     <form-bean name="aimQuickLinkForm" type="org.digijava.module.aim.form.QuickLinkForm" />
     <form-bean name="aimMyDesktopForm" type="org.digijava.module.aim.form.MyDesktopForm" />
-    <form-bean name="aimAddLocationForm" type="org.digijava.module.aim.form.AddLocationForm" />
     <form-bean name="aimNewAddLocationForm" type="org.digijava.module.aim.form.NewAddLocationForm" />
     <form-bean name="aimFiscalCalendarForm" type="org.digijava.module.aim.form.FiscalCalendarForm" />
     <form-bean name="aimAddFiscalCalForm" type="org.digijava.module.aim.form.AddFiscalCalendarForm" />
@@ -565,18 +564,7 @@
     <action name="aimThemeForm" path="/aim/assignThemeIndicator" scope="request" type="org.digijava.module.aim.action.AssignThemeIndicator" validate="false">
       <forward name="forward" path="/aim/overallIndicatorManager.do" redirect="true" />
     </action>
-    <action name="aimAddLocationForm" path="/aim/addLocation" scope="session" type="org.digijava.module.aim.action.AddLocation" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=addLocation" />
-    </action>
-    <action input="/showLayout.do?layout=addLocation" name="aimAddLocationForm" path="/aim/addLocation" scope="session" type="org.digijava.module.aim.action.AddLocation" validate="true">
-      <forward name="forward" path="/showLayout.do?layout=addLocation" />
-      <forward name="added" path="/aim/locationManager.do" redirect="true" />
-    </action>
-    <action name="aimAddLocationForm" path="/aim/locationManager" scope="session" type="org.digijava.module.aim.action.LocationManager" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=locationManager" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-      <action name="aimNewAddLocationForm" path="/aim/newLocationManager" scope="session" type="org.digijava.module.aim.action.NewLocationManager" validate="false">
+	<action name="aimNewAddLocationForm" path="/aim/newLocationManager" scope="session" type="org.digijava.module.aim.action.NewLocationManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=newLocationManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

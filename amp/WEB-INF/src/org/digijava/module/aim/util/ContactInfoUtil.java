@@ -22,21 +22,12 @@ public class ContactInfoUtil {
 	
 	public static void saveOrUpdateContact(AmpContact contact) throws Exception{
 		Session session= null;
-		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
 //beginTransaction();
 			session.saveOrUpdate(contact);
 			//tx.commit();
 		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("update failed",ex);
 		}
 	}
@@ -44,7 +35,6 @@ public class ContactInfoUtil {
 	
 	public static void deleteContact(AmpContact contact) throws Exception{
 		Session session= null;
-		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
 //beginTransaction();
@@ -54,33 +44,8 @@ public class ContactInfoUtil {
 			session.delete(contact);
 			//tx.commit();
 		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("delete failed",ex);
 		}
-	}
-	
-	public static List<AmpContact> getContacts() throws Exception{
-		Session session=null;
-		String queryString =null;
-		Query query=null;
-		List<AmpContact> contacts=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-			queryString= "select cont from " + AmpContact.class.getName()+" cont";
-			query=session.createQuery(queryString);
-			contacts=(List<AmpContact>)query.list();
-		}catch(Exception ex) {
-			logger.error("couldn't load contacts" + ex.getMessage());	
-			ex.printStackTrace();
-		}
-		return contacts;
 	}
 	
 	public static AmpContact getContact(Long id) throws Exception{
@@ -100,25 +65,6 @@ public class ContactInfoUtil {
 		}
 		return returnValue;
 	}
-	
-	public static List<AmpContact> searchContacts(String keyword) throws Exception{
-		List<AmpContact> contacts=null;
-		Session session=null;
-		String queryString =null;
-		Query query=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-			queryString="select distinct(contact) from " + AmpContact.class.getName() + " contact left join contact.properties property where contact.name like '%"+keyword+"%' or contact.lastname like '%"
-			+keyword+"%' or (property.value like '%" + keyword + "%' and property.name='"+Constants.CONTACT_PROPERTY_NAME_EMAIL +"')";
-			query=session.createQuery(queryString);
-			contacts=query.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return contacts;
-	}
-	
-
 	
 	public static int getContactsCount(String email,Long id) throws Exception{
 		int retValue=0;
@@ -311,21 +257,12 @@ public class ContactInfoUtil {
 	
 	public static void saveOrUpdateActivityContact(AmpActivityContact activityContact) throws Exception{
 		Session session= null;
-		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
 //beginTransaction();
 			session.saveOrUpdate(activityContact);
 			//tx.commit();
 		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}
-			}
 			throw new AimException("update failed",ex);
 		}
 	}
@@ -407,110 +344,31 @@ public class ContactInfoUtil {
 	
 	public static void saveOrUpdateContactProperty(AmpContactProperty property) throws Exception{
 		Session session= null;
-		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
 //beginTransaction();
 			session.saveOrUpdate(property);
 			//tx.commit();
 		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("update failed",ex);
 		}
-	}
-	
-	public static void deleteContactProperty(AmpContactProperty property) throws Exception{
-		Session session= null;
-		Transaction tx=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
-			session.delete(property);
-			//tx.commit();
-		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
-			throw new AimException("delete failed",ex);
-		}
-	}
-	
-	public static List<AmpContactProperty> getContactProperties(AmpContact contact){		
-		return getContactProperties(contact.getId());
-	}
-	
-	public static List<AmpContactProperty> getContactProperties(Long contactId){
-		List<AmpContactProperty> properties=null;
-		Session session=null;
-		String queryString =null;
-		Query query=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-			queryString= "select prop from " + AmpContactProperty.class.getName()+ " prop where prop.contact.id="+contactId;
-			query=session.createQuery(queryString);
-			properties=(List<AmpContactProperty>) query.list();
-		} catch (Exception e) {
-			logger.error("couldn't load Properties" + e.getMessage());	
-			e.printStackTrace();
-		}
-		return properties;
-	}
-	
-	public static List<String> getContactEmails(Long contactId){
-		List<String> emails=null;
-		Session session=null;
-		String queryString =null;
-		Query query=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-			queryString= "select prop.value from " + AmpContactProperty.class.getName()+ " prop where prop.contact.id="+contactId+
-			" and prop.name='"+Constants.CONTACT_PROPERTY_NAME_EMAIL+"'";
-			query=session.createQuery(queryString);
-			emails=(List<String>) query.list();
-		} catch (Exception e) {
-			logger.error("couldn't load Emails" + e.getMessage());	
-			e.printStackTrace();
-		}
-		return emails;
 	}
 	
 	
 	public static void saveOrUpdateOrganisationContact(AmpOrganisationContact orgContact) throws Exception{
 		Session session= null;
-		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
 //beginTransaction();
 			session.saveOrUpdate(orgContact);
 			//tx.commit();
 		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("update failed",ex);
 		}
 	}
 	
 	public static void deleteOrgContact(AmpOrganisationContact orgContact) throws Exception{
 		Session session= null;
-		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
 //beginTransaction();
@@ -518,14 +376,6 @@ public class ContactInfoUtil {
 //session.flush();
 			//tx.commit();
 		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("delete failed",ex);
 		}
 	}
@@ -657,64 +507,4 @@ public class ContactInfoUtil {
 
         return phoneCategoryValue;
     }
-
-    /*
-        Normalizes primary contacts. If no primary contact selected for any contact type it will select
-        te first one from the list.
-    */
-    public static void normalizeActivityContacts (EditActivityForm.ActivityContactInfo contactInfo) {
-        //Donor contacts
-        if (contactInfo.getDonorContacts() != null && !contactInfo.getDonorContacts().isEmpty()) {
-            if (contactInfo.getPrimaryDonorContId() == null ) {
-                contactInfo.setPrimaryDonorContId(new String());
-            }
-            contactInfo.setPrimaryDonorContId(getCategoryPrimaryContactId (contactInfo.getDonorContacts()));
-        }
-
-        //MOFED contacts
-        if (contactInfo.getMofedContacts() != null && !contactInfo.getMofedContacts().isEmpty()) {
-            contactInfo.setPrimaryMofedContId(getCategoryPrimaryContactId (contactInfo.getMofedContacts()));
-        }
-
-        //projCoordinator contacts
-        if (contactInfo.getProjCoordinatorContacts() != null && !contactInfo.getProjCoordinatorContacts().isEmpty()) {
-            contactInfo.setPrimaryProjCoordContId(getCategoryPrimaryContactId (contactInfo.getProjCoordinatorContacts()));
-        }
-
-        //SecMinCont contacts
-        if (contactInfo.getSectorMinistryContacts() != null && !contactInfo.getSectorMinistryContacts().isEmpty()) {
-            contactInfo.setPrimarySecMinContId(getCategoryPrimaryContactId (contactInfo.getSectorMinistryContacts()));
-        }
-
-        //primaryImplExecuting contacts
-        if (contactInfo.getImplExecutingAgencyContacts() != null && !contactInfo.getImplExecutingAgencyContacts().isEmpty()) {
-            contactInfo.setPrimaryImplExecutingContId(getCategoryPrimaryContactId (contactInfo.getImplExecutingAgencyContacts()));
-        }
-    }
-   
-	 
-	 private static String getCategoryPrimaryContactId (List <AmpActivityContact> contacts) {
-	 	boolean hasPrimary = false;
-	 	String primaryContactTmpId = null;
-	 	String primaryId = null;
-	 	
-	 	for (AmpActivityContact contact : contacts) {
-	 		if (!hasPrimary && contact.getPrimaryContact() != null && contact.getPrimaryContact().booleanValue() == true) {
-	 			hasPrimary = true;
-	 			primaryContactTmpId = contact.getContact().getTemporaryId();
-	 		} else if (hasPrimary && contact.getPrimaryContact() != null && contact.getPrimaryContact().booleanValue() == true) {
-	 			//If somehow we have 2 contacts set as primary
-	 			contact.setPrimaryContact(new Boolean(false));
-	 		}
-	 	}
-	 	
-	 	if (hasPrimary) {
-	 		primaryId = primaryContactTmpId;
-	 	} else {
-	 		//Set first as a primary if no primary exists
-	 		primaryId = contacts.get(0).getContact().getTemporaryId();
-	 		contacts.get(0).setPrimaryContact(new Boolean(true));
-	 	}
-	 	return primaryId;
-	 }
 }

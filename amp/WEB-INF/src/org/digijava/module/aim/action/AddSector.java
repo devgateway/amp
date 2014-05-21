@@ -62,15 +62,15 @@ public class AddSector extends Action {
 		}
 		else{
 			session.setAttribute("Id",schemeId);
-			logger.debug("setting the session::::::::::::::::::::");
+			//logger.debug("setting the session::::::::::::::::::::");
 		}
 		if(parent!=null)
 		{
 			 addSectorForm.setLevelType(parent);
 		}
-		logger.debug(addSectorForm.getLevelType());
-		logger.debug("Add===================================================Sector:;:::::::"+session.getAttribute("Id"));
-		logger.debug("outside event if    value of schemeId============="+schemeId);
+//		logger.debug(addSectorForm.getLevelType());
+//		logger.debug("Add===================================================Sector:;:::::::"+session.getAttribute("Id"));
+//		logger.debug("outside event if    value of schemeId============="+schemeId);
 		
 		if(event!=null)
 		{

@@ -171,8 +171,6 @@
 	<page name="locationManager" title=" - Region Manager" />
         <page name="newLocationManager" title=" - Region Manager" />
     <page page="dynLocationManager/dynLocationManager" name="aim_dynLocationManager" title=" - Region Manager" />
-<!--	<page name="locationManager" title=" - Location Manager" />
-	<page page="addLocation" name="aim_addlocPopupLayout" title=" - Region Manager" /> -->
 	<page name="addLocation" title=" - Region Manager" />
         <page page="addNewRegion" name="addNewLocation" title=" - Region Manager" />
 	<page page="addOrgGroup" name="aim_addOrgGrpPopupLayout" title=" - Add Organization Group" />

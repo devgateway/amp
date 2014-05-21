@@ -184,6 +184,9 @@ public class CategoryConstants {
 		new CategoryConstants.HardCodedCategoryValue("implementation_location", "Zone", true);
 	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_DISTRICT	= 
 		new CategoryConstants.HardCodedCategoryValue("implementation_location", "District", true);
+    public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_ALL	=
+            new CategoryConstants.HardCodedCategoryValue("implementation_location", "All", true);
+
 	public static final HardCodedCategoryValue IMPLEMENTATION_LOCATION_SECTOR	= 
 			new CategoryConstants.HardCodedCategoryValue("implementation_location", "Sector Location", true);
 	
@@ -193,11 +196,13 @@ public class CategoryConstants {
 		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "National", true);
 	public static final HardCodedCategoryValue IMPLEMENTATION_LEVEL_REGIONAL = 
 		 new CategoryConstants.HardCodedCategoryValue("implementation_level", "Regional", true);
-	 
+
 	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_ON = 
 		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "On Budget", true);
 	 public static final HardCodedCategoryValue ACTIVITY_BUDGET_OFF = 
 		 new CategoryConstants.HardCodedCategoryValue("activity_budget", "Off Budget", true);
+	 public static final HardCodedCategoryValue ACTIVITY_TREASURY = 
+			 new CategoryConstants.HardCodedCategoryValue("activity_budget", "Treasury", true);
 
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_ACTUAL = 
 		 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Actual", true);

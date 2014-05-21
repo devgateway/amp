@@ -69,11 +69,8 @@ import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
-import org.digijava.module.aim.dbentity.AmpReportCache;
-import org.digijava.module.aim.dbentity.AmpReportLocation;
 import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
-import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -95,7 +92,6 @@ import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.helper.AmpProjectBySector;
 import org.digijava.module.aim.helper.Assistance;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CountryBean;
@@ -4817,153 +4813,6 @@ public class DbUtil {
 		return ampTermsAssist;
 	}
 
-	public static Collection getAmpReportSector(Long ampActivityId) {
-		Session session = null;
-		ArrayList sectors = new ArrayList();
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from "
-					+ AmpReportSector.class.getName() + " a "
-					+ "where (a.ampActivityId=:ampActivityId)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				AmpReportSector act = (AmpReportSector) itr.next();
-				if (sectors.indexOf(act.getSectorName()) == -1)
-					sectors.add(act.getSectorName());
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get activity sectors" + ex);
-		}
-		return sectors;
-	}
-
-	public static Collection getAmpReportSectorId(Long ampActivityId) {
-		Session session = null;
-		Collection sectors = new ArrayList();
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from "
-					+ AmpReportSector.class.getName() + " a "
-					+ "where (a.ampActivityId=:ampActivityId)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				AmpReportSector act = (AmpReportSector) itr.next();
-				// AmpSector
-				// ampSector=DbUtil.getAmpParentSector(act.getAmpSectorId());
-				sectors.add(act);
-			}
-
-		} catch (Exception ex) {
-			logger.warn("Unable to get activity sectors" + ex);
-		}
-		return sectors;
-	}
-
-	public static Collection getAmpReportSectors(String inClause) {
-		Session session = null;
-		ArrayList sectors = new ArrayList();
-		ArrayList activityId = new ArrayList();
-
-		try {
-			logger.debug("Team Id:" + inClause);
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select report from "
-					+ AmpReportCache.class.getName()
-					+ " report where (report.ampTeamId in("
-					+ inClause
-					+ ")) and (report.reportType='1') group by report.ampActivityId";
-			Query qry = session.createQuery(queryString);
-			Iterator itr = qry.list().iterator();
-			inClause = null;
-			while (itr.hasNext()) {
-				AmpReportCache ampReportCache = (AmpReportCache) itr.next();
-				if (inClause == null)
-					inClause = "'" + ampReportCache.getAmpActivityId() + "'";
-				else
-					inClause = inClause + ",'"
-							+ ampReportCache.getAmpActivityId() + "'";
-			}
-			logger.debug("Activity Id:" + inClause);
-			queryString = "select sector from "
-					+ AmpReportSector.class.getName()
-					+ " sector where (sector.ampActivityId in(" + inClause
-					+ ")) order by sector.sectorName,sector.ampActivityId";
-			AmpProjectBySector ampProjectBySector = null;
-			// logger.debug("Query String: " + queryString);
-			qry = session.createQuery(queryString);
-			// qry.setParameter("ampTeamId",ampTeamId,Hibernate.LONG);
-			// logger.debug("Size: " + qry.list().size());
-			itr = qry.list().iterator();
-			int flag = 0;
-			while (itr.hasNext()) {
-				AmpReportSector ampReportSector = (AmpReportSector) itr.next();
-				if (ampProjectBySector == null) {
-					// logger.debug("Start: ");
-					ampProjectBySector = new AmpProjectBySector();
-					ampProjectBySector.setAmpActivityId(new ArrayList());
-				} else if (!(ampProjectBySector.getSector().getAmpSectorId()
-						.equals(ampReportSector.getAmpSectorId()))) {
-					ampProjectBySector.getAmpActivityId().addAll(activityId);
-					sectors.add(ampProjectBySector);
-					ampProjectBySector = new AmpProjectBySector();
-					ampProjectBySector.setAmpActivityId(new ArrayList());
-					activityId.clear();
-					flag = 0;
-				}
-				if (flag == 0) {
-					ampProjectBySector.setSector(ampReportSector);
-					flag = 1;
-				}
-				if (activityId.indexOf(ampReportSector.getAmpActivityId()) == -1) {
-					// logger.debug("Id: " +
-					// ampReportSector.getAmpActivityId());
-					activityId.add(ampReportSector.getAmpActivityId());
-				}
-				if (!itr.hasNext()) {
-					ampProjectBySector.getAmpActivityId().addAll(activityId);
-					sectors.add(ampProjectBySector);
-				}
-			}
-
-			logger.debug("Sectors size: " + sectors.size());
-
-		} catch (Exception ex) {
-			logger.error("Unable to get activity sectors" + ex.getMessage());
-		}
-		return sectors;
-	}
-
-	public static Collection getAmpReportLocation(Long ampActivityId) {
-		Session session = null;
-		Collection regions = new ArrayList();
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from "
-					+ AmpReportLocation.class.getName() + " a "
-					+ "where (a.ampActivityId=:ampActivityId)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				AmpReportLocation act = (AmpReportLocation) itr.next();
-				if (act.getRegion() != null)
-					regions.add(act.getRegion());
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get activity sectors" + ex);
-		}
-		return regions;
-	}
-
 	public static AmpLevel getAmpLevel(Long id) {
 		Session session = null;
 		AmpLevel level = null;
@@ -6700,47 +6549,6 @@ public class DbUtil {
 		return col;
 	}
 
-	/* get amp report cache of a particular activity specified by ampActId */
-	public static Collection getActivityReportCache(Long ampActId) {
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select repCache from "
-					+ AmpReportCache.class.getName() + " repCache "
-					+ " where (repCache.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-		} catch (Exception e1) {
-			logger.error("could not retrieve AmpReportCache " + e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		return col;
-	}
-
-	/* get amp report location of a particular activity specified by ampActId */
-	public static Collection getActivityReportLocation(Long ampActId) {
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select repLoc from "
-					+ AmpReportLocation.class.getName() + " repLoc "
-					+ " where (repLoc.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-		} catch (Exception e1) {
-			logger.error("could not retrieve AmpReportLocation "
-					+ e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		return col;
-	}
-
 	/*
 	 * get amp activity report physical performance of a particular activity
 	 * specified by ampActId
@@ -6759,30 +6567,6 @@ public class DbUtil {
 			col = qry.list();
 		} catch (Exception e1) {
 			logger.error("could not retrieve AmpReportPhysicalPerformance "
-					+ e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		return col;
-	}
-
-	/*
-	 * get amp activity report sector of a particular activity specified by
-	 * ampActId
-	 */
-	public static Collection getActivityReportSector(Long ampActId) {
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select repSector from "
-					+ AmpReportSector.class.getName() + " repSector "
-					+ " where (repSector.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-		} catch (Exception e1) {
-			logger.error("could not retrieve AmpReportSector "
 					+ e1.getMessage());
 			e1.printStackTrace(System.out);
 		}

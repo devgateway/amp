@@ -75,6 +75,6 @@ public class AmpReportHierarchy implements Serializable, Comparable
 	@Override
 	public String toString()
 	{
-		return String.format("hiearchy on %s", column);
+		return String.format("hierarchy on %s", column);
 	}
 }

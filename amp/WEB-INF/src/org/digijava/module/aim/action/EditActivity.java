@@ -877,12 +877,6 @@ public class EditActivity extends Action {
 
           eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
 
-        //Budget classification
-      	eaForm.getIdentification().setSelectedbudgedsector(ActivityUtil.getBudgetSector(eaForm.getActivityId()));
-      	eaForm.getIdentification().setSelectedorg(ActivityUtil.getBudgetOrganization(eaForm.getActivityId()));
-      	eaForm.getIdentification().setSelecteddepartment(ActivityUtil.getBudgetDepartment(eaForm.getActivityId()));
-      	eaForm.getIdentification().setSelectedprogram(ActivityUtil.getBudgetProgram(eaForm.getActivityId()));
-
 
       	eaForm.getIdentification().setBudgetsectors(BudgetDbUtil.getBudgetSectors());
       	eaForm.getIdentification().setBudgetprograms(BudgetDbUtil.getBudgetPrograms());

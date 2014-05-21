@@ -179,45 +179,8 @@ public class ActivityVersionUtil {
 		return ret.toString();
 	}
 
-	public static void deleteOldActivityVersions() throws Exception {
-
-		Comparator VersionActivityComparator = new Comparator() {
-			public int compare(Object a, Object b) {
-				AmpActivityVersion auxA = (AmpActivityVersion) a;
-				AmpActivityVersion auxB = (AmpActivityVersion) b;
-
-				// Dec.
-				return auxA.getAmpActivityId().compareTo(auxB.getAmpActivityId()) * -1;
-			}
-		};
-
-		// Get from GS the max number of versions plus one.
-		int numberOfVersions = numberOfVersions() + 1;
-
-		// Get the list of groups and iterate through their activities sorted by
-		// ID descending.
-		Session session = PersistenceManager.getSession();
-		Collection<AmpActivityGroup> groups = session.createQuery(
-				"SELECT grp FROM " + AmpActivityGroup.class.getName() + " grp").list();
-		Iterator<AmpActivityGroup> iterGroups = groups.iterator();
-		while (iterGroups.hasNext()) {
-			AmpActivityGroup auxGroup = iterGroups.next();
-			Set<AmpActivityVersion> activitiesFromGroup = auxGroup.getActivities();
-			List<AmpActivityVersion> sortedActivitiesFromGroup = new ArrayList(activitiesFromGroup);
-			Collections.sort(sortedActivitiesFromGroup, VersionActivityComparator);
-			for (int i = 0; i < sortedActivitiesFromGroup.size(); i++) {
-				if (i < numberOfVersions) {
-					logger.warn("Version not deleted: " + sortedActivitiesFromGroup.get(i).getAmpActivityId());
-				} else {
-					ActivityUtil.deleteActivity(sortedActivitiesFromGroup.get(i).getAmpActivityId());
-					logger.warn("Version deleted: " + sortedActivitiesFromGroup.get(i).getAmpActivityId());
-				}
-			}
-		}
-	}
-
 	public static int numberOfVersions() {
-		return 999999; //AMP-17263: no good reason to have this reason, so effectively disabling it
+		return 999999; //AMP-17263: no good reason to have this feature, so effectively disabling it
 		/*int aux = 5; // Default value after apply patch if no redeployed.
 		String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.VERSION_QUEUE_SIZE);
 		if (gsValue != null) {

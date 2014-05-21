@@ -364,7 +364,6 @@
     <action forward="/showLayout.do?layout=layoutFinancingBreakdownFilter" path="/aim/viewFinancingBreakdownFilter"  name="aimFinancingBreakdownForm" type="org.digijava.module.aim.form.FinancingBreakdownForm" validate="false"/>
     <action forward="/showLayout.do?layout=layoutActivityDashboard" name="aimActivityDashboardForm" path="/aim/viewActivityDashboard" />
     <action forward="/showLayout.do?layout=layoutChannelOverview" name="aimChannelOverviewForm" type="org.digijava.module.aim.action.ViewChannelOverview" path="/aim/viewChannelOverview" />
-    <action forward="/showLayout.do?layout=layoutReferences" path="/aim/viewReferences" name="aimReferenceForm" type="org.digijava.module.aim.form.ReferenceForm" validate="false"/>
     <action forward="/showLayout.do?layout=layoutIndicatorValues" name="aimViewIndicatorForm" path="/aim/viewIndicatorValues" />
     <action forward="/showLayout.do?layout=layoutChannelOverviewObjective" path="/aim/viewChannelOverviewObjective" />
     <action forward="/showLayout.do?layout=layoutRegionalObservations" path="/aim/viewRegionalObservations" name="aimRegionalObservationsForm" type="org.digijava.module.aim.form.RegionalObservationsForm" validate="false" />
@@ -426,8 +425,7 @@
     <action name="aimViewIndicatorForm" path="/aim/meIndicatorValues" scope="request" type="org.digijava.module.aim.action.ViewIndicatorValues" validate="false" />
     
     <action path="/aim/selectActivityTabs" type="org.digijava.module.aim.action.ViewSelectActivityTabs" scope="request">
-    	<forward name="channelOverview" path="/aim/viewChannelOverview.do?tabIndex=0" redirect="true" />
-    	<forward name="references" path="/aim/viewReferences.do?tabIndex=1" redirect="true" />    	
+    	<forward name="channelOverview" path="/aim/viewChannelOverview.do?tabIndex=0" redirect="true" />   	
     	<forward name="financialProgress" path="/aim/viewFinancingBreakdown.do?tabIndex=2" redirect="true" />    	
     	<forward name="physicalProgress" path="/aim/viewPhysicalProgress.do?tabIndex=3" redirect="true" />   	
     	<forward name="documents" path="/aim/viewKnowledge.do?tabIndex=4" redirect="true" />   	
@@ -440,7 +438,6 @@
     </action>
     
     <action name="aimChannelOverviewForm" path="/aim/channelOverview" scope="request" type="org.digijava.module.aim.action.ViewChannelOverview" validate="false" />
-    <action name="aimReferenceForm" path="/aim/reference" scope="request" type="org.digijava.module.aim.action.ViewReferences" validate="false" />
     <action name="aimChannelOverviewObjectiveForm" path="/aim/channelOverviewObjective" scope="request" type="org.digijava.module.aim.action.ViewChannelOverviewObjective" validate="false" />
     <action name="aimPhysicalProgressForm" path="/aim/physicalProgress" scope="session" type="org.digijava.module.aim.action.ViewPhysicalProgress" validate="false" />
     <action name="aimRegionalObservationsForm" path="/aim/regionalObservations" scope="session" type="org.digijava.module.aim.action.ViewRegionalObservations" validate="false" />
@@ -1434,7 +1431,6 @@
     <action name="aimAdvancedReportForm" path="/aim/viewNewAdvancedReport" scope="session" type="org.digijava.module.aim.action.ViewNewAdvancedReport" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewNewAdvancedReport" />
     </action>
-    <action path="/aim/projectFicheExport" type="org.digijava.module.aim.action.ProjectFicheExport" validate="false" />
 
     <action name="aimAdvancedReportForm" path="/aim/pdfExport" scope="session" type="org.digijava.module.aim.action.PDFExportAction" validate="false" />
     <action name="aimAdvancedReportForm" path="/aim/xlsExport" scope="session" type="org.digijava.module.aim.action.XLSExportAction" validate="false" />
@@ -1708,8 +1704,6 @@
     <action name="invalidDataList" path="/aim/invalidSectorPercentages" type="org.digijava.module.aim.action.InvalidSectorPercentages" validate="false">
       <forward name="forward" path="/showLayout.do?layout=invalidSectorPercentages" />
     </action>
-    <action name="aimEditActivityForm" path="/aim/getFundingTotals" scope="session" type="org.digijava.module.aim.action.GetFundingTotals" validate="false" />
-    <action name="aimEditActivityForm" path="/aim/validateAmounts" scope="session" type="org.digijava.module.aim.action.ValidateFundingAmounts" validate="false" />
      
     <action path="/aim/export" scope="session" type="org.digijava.module.dataExchange.action.SimpleExportAction" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=export" />    	

@@ -572,10 +572,6 @@
                 viewChannelOverview.jsp
     </teaser>
 
-	<teaser name="reference" action="reference.do">
-                viewReferences.jsp
-    </teaser>
-
 	<teaser name="channelOverviewObjective" action="channelOverviewObjective.do">
                 viewChannelOverviewObjective.jsp
     </teaser>

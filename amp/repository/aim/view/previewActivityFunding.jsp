@@ -180,7 +180,7 @@
                                                                 </module:display>
 
                                                                 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
-																	parentModule="/Activity Form/Funding/Funding Group/Funding Classification">
+																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150">
 																			<a title='<digi:trn>Agreement Title</digi:trn>'>

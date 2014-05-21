@@ -164,7 +164,7 @@
 													onmouseout="switchColors(this);" onmouseover="switchColors(this);" 
 													style="-moz-border-radius:3px;border-radius: 3px;padding:3px;background-color: ${label.backgroundColor}; color: ${label.color};cursor: pointer">X</span>
 												</logic:equal>
-													&nbsp;&nbsp;
+													<br>
 										</logic:iterate>
 										</div>
 									</logic:notEmpty>

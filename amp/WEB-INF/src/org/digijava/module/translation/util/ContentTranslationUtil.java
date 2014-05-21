@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.Multilingual;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
@@ -65,7 +67,7 @@ public class ContentTranslationUtil {
         if (currentLocale == null)
             return stateModified;
 
-        String objClass = getObjectClass(obj);
+        String objClass = getObjectClassName(obj);
         try{
             /*
                 Iterate all String fields and replace them with their translation
@@ -208,15 +210,30 @@ public class ContentTranslationUtil {
         //check if multilingual is enabled
         if (!multilingualIsEnabled())
         	return;
-
-        Hibernate.initialize(obj);
-        String objClass = getObjectClass(obj);
+        cloneTranslations(obj, formTranslations, new HashSet<String>());
+    }
+    
+    /**
+     * Method that will clone the translations for all the translatable fields
+     * in the current object; see [// item #00000001] for the place where the id's are used
+     *
+     * @param obj Object that needs translation cloning
+     * @param formTranslations the list of translations that were modified using the activity form
+     * @param processed keeps track of processed object to avoid infinite recursive calls via circular references 
+     */
+    private static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations, Set<String> processed){
+    	Hibernate.initialize(obj);
+        String objClass = getObjectClassName(obj);
+        Long objId = getObjectId(obj);
+        
+        String processedId = objClass+objId;
+        if( processed.contains(processedId) ) return;
+        processed.add(processedId);
+        
         String currentLocale = TLSUtils.getEffectiveLangCode();
 
-        Class clazz = obj.getClass();
+        Class clazz = getObjectClass(obj);
         try{
-            Long objId = getObjectId(obj);
-
             /*
                 Iterate all String fields and replace their contents with an id pointing
                 to an FieldTranslationPack containing the old translations of the field
@@ -271,7 +288,7 @@ public class ContentTranslationUtil {
                     			if (o.getClass().isAnnotationPresent(TranslatableClass.class) &&
                                     !o.getClass().isAssignableFrom(AmpActivityVersion.class) //not supported
                                     )
-                                cloneTranslations(o, formTranslations);
+                                cloneTranslations(o, formTranslations, processed);
                     			else {
                     				//we don't have mixed collections, no point in iterating forward through the collection
                     				break;
@@ -279,6 +296,14 @@ public class ContentTranslationUtil {
                     		}
                     	}
                     }
+                }else if( field.getType().isAnnotationPresent(TranslatableClass.class) ) { //scan deeper levels
+                	String fieldName = field.getName();
+                    Method methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
+                    Object o = methGetField.invoke(obj);
+                     
+                	if(o!=null) {
+                		cloneTranslations(o, formTranslations, processed);
+                	}
                 }
             }
         } catch (Exception e){
@@ -303,7 +328,7 @@ public class ContentTranslationUtil {
     public static boolean prepareTranslations(Object obj, Serializable id, Object[] previousState, Object[] currentState,
     		String[] propertyNames){
     	boolean stateModified = false;
-        boolean isVersionable =  obj instanceof Versionable;
+        boolean isVersionable =  obj instanceof Multilingual;
     	//get new object id - hibernate already updated it
         Long objectId = (Long)id;
         Class clazz = Hibernate.getClass(obj);
@@ -422,7 +447,7 @@ public class ContentTranslationUtil {
      * @param entity current object
      */
     public static void evictEntityFromCache(Object entity){
-        String key = getCacheKey(getObjectClass(entity), getObjectId(entity));
+        String key = getCacheKey(getObjectClassName(entity), getObjectId(entity));
         cache.evict(key);
     }
 
@@ -669,7 +694,7 @@ public class ContentTranslationUtil {
         try {
             session = PersistenceManager.openNewSession();
 
-            String objClass = getObjectClass(entity);
+            String objClass = getObjectClassName(entity);
             StringBuilder query = new StringBuilder();
             query.append("delete from ");
             query.append(AmpContentTranslation.class.getName());
@@ -805,7 +830,11 @@ public class ContentTranslationUtil {
         return null;
     }
 
-    private static String getObjectClass(Object obj){
+    public static Class getObjectClass(Object obj) {
+    	return Hibernate.getClass(obj);
+    }
+    
+    public static String getObjectClassName(Object obj){
         return Hibernate.getClass(obj).getName();
     }
 

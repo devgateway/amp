@@ -72,7 +72,7 @@ public class TranslationDecoratorModel extends LocaleAwareProxyModel<String> {
         Field field = pm.getPropertyField();
         //get parent object
         Object parentObject = pm.getInnermostModelOrObject();
-        String className = parentObject.getClass().getName();
+        String className = ContentTranslationUtil.getObjectClassName(parentObject);
         String fieldName = field.getName();
         Long objId = ContentTranslationUtil.getObjectId(parentObject);
         Long originalObjId = objId;

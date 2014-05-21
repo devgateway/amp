@@ -10,10 +10,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
+@TranslatableClass(displayName = "Funding")
 public class AmpFunding implements Serializable, Versionable, Cloneable {
 	
 	private static final long serialVersionUID = 1L;

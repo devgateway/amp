@@ -2,7 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import org.digijava.module.aim.util.Output;
 
-public interface Versionable {
+public interface Versionable extends Multilingual {
 
 	/**
 	 * Used to identify that's the same object when comparing 

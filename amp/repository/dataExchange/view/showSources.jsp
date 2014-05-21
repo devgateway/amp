@@ -109,12 +109,17 @@ function page (page){
 	    <td>&nbsp;</td>
 	    <td align="right">&nbsp;</td>
 	    <td align=right><a href="/dataExchange/mapFields.do" class="t_sm">
+	    	<%--
 	    	<b><digi:trn>Mapping Tool</digi:trn></b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	    	<a href="/dataExchange/codeImporter.do?action=view" class="t_sm"><b>[+] <digi:trn>Import IATI Codes</digi:trn></b></a>
-	    	<a href="/dataExchange/importActionNew.do" class="t_sm"><b>[+] <digi:trn>IATI XML File</digi:trn></b></a>
-	    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true&displaySource=false" class="t_sm"><b>[+] <digi:trn>Create New Configuration</digi:trn></b></a>
+	    	--%>
+	    	<a href="/dataExchange/codeImporter.do?action=view" class="t_sm"><b><digi:trn>Import IATI Codes</digi:trn></b></a>&nbsp;
+	    	<a href="/dataExchange/importActionNew.do" class="t_sm"><b><digi:trn>Import IATI XML File</digi:trn></b></a>&nbsp;
+	    	
+	    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true&displaySource=false" class="t_sm"><b><digi:trn>Create New Import Configuration</digi:trn></b></a>
+	    	<%--
 	    	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true&displaySource=true" class="t_sm"><b>[+] <digi:trn>Create New Source</digi:trn></b></a>
 	    	<a href="/dataExchange/manageSource.do?showResources=true" class="t_sm"><b><digi:trn>List Of Sources</digi:trn></b></a>
+	    	--%>
 	    </td>
 	  </tr>
 	</table>
@@ -125,7 +130,7 @@ function page (page){
 	<table class="inside" width=980 cellpadding="0" cellspacing="0" style="margin:10px;">
 		<tr>
 		<td colspan="5" align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside>			
-			<b class="ins_header"><digi:trn>List of configurations</digi:trn></b></td>
+			<b class="ins_header"><digi:trn>IATI XML Import Configurations</digi:trn></b></td>
 		</tr>
 		<tr>
 		    <td width="300" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class=inside>

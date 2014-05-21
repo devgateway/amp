@@ -149,45 +149,45 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                                     "title",
                                     CategoryConstants.CONTACT_TITLE_KEY,
                                     new PropertyModel<AmpCategoryValue>(contactModel, "title"),
-                                    CategoryConstants.CONTACT_TITLE_NAME, true, true, true);
+                                    CategoryConstants.CONTACT_TITLE_NAME, true, true, false);
                     item.add(contactTitle);
                     
                     
-                    AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(contactModel,"name"),"contact first name",true,true);
+                    AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(contactModel,"name"),"contact first name",false,true);
                     name.getTextContainer().setRequired(true);
                     name.getTextContainer().add(new AttributeModifier("size", "50"));
                     name.setTextContainerDefaultMaxSize();
                     item.add(name);
-                    AmpTextFieldPanel<String> lastname=new AmpTextFieldPanel<String>("lastname",new PropertyModel<String>(contactModel,"lastname"),"contact lastname",true,true);
+                    AmpTextFieldPanel<String> lastname=new AmpTextFieldPanel<String>("lastname",new PropertyModel<String>(contactModel,"lastname"),"contact lastname",false,true);
                     lastname.getTextContainer().setRequired(true);
                     lastname.getTextContainer().add(new AttributeModifier("size", "50"));
                     lastname.setTextContainerDefaultMaxSize();
                     item.add(lastname);
                     
-                    AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactModel, "Add Contact Email",true,Constants.CONTACT_PROPERTY_NAME_EMAIL);
+                    AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactModel, "Add Contact Email",false,Constants.CONTACT_PROPERTY_NAME_EMAIL);
                     item.add(detailEmail);
                     
-                    AmpTextFieldPanel<String> function=new  AmpTextFieldPanel<String>("function",new PropertyModel<String>(contactModel,"function"),"contact function",true);
+                    AmpTextFieldPanel<String> function=new  AmpTextFieldPanel<String>("function",new PropertyModel<String>(contactModel,"function"),"contact function",false);
                     function.setTextContainerDefaultMaxSize();
                     function.getTextContainer().add(new AttributeModifier("size", "50"));
                     item.add(function);
                     
-                    AmpTextFieldPanel<String> organisationName=new  AmpTextFieldPanel<String>("organisationName",new PropertyModel<String>(contactModel,"organisationName"),"organisationName",true);
+                    AmpTextFieldPanel<String> organisationName=new  AmpTextFieldPanel<String>("organisationName",new PropertyModel<String>(contactModel,"organisationName"),"organisationName",false);
                     organisationName.setTextContainerDefaultMaxSize();
                     organisationName.getTextContainer().add(new AttributeModifier("size", "50"));
                     item.add(organisationName);
                     
-                    AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactModel, "Contact Organizations", true);
+                    AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactModel, "Contact Organizations", false);
                     contactOrganizations.setOutputMarkupId(true);
                     item.add(contactOrganizations);
                     
-                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactModel,"Add Contact Phone",true,Constants.CONTACT_PROPERTY_NAME_PHONE); 
+                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactModel,"Add Contact Phone",false,Constants.CONTACT_PROPERTY_NAME_PHONE); 
                     item.add(detailPhone);
 
-                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactModel,"Add Contact Fax",true,Constants.CONTACT_PROPERTY_NAME_FAX);  
+                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactModel,"Add Contact Fax",false,Constants.CONTACT_PROPERTY_NAME_FAX);  
                     item.add(detailFax);
 
-                    item.add(new AmpTextAreaFieldPanel("officeaddress",new PropertyModel<String>(contactModel,"officeaddress"),"contact office address",false, true, true));
+                    item.add(new AmpTextAreaFieldPanel("officeaddress",new PropertyModel<String>(contactModel,"officeaddress"),"contact office address",false, false, true));
                 } catch (Exception ex) {
 
                 }

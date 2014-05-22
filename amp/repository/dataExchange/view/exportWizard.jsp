@@ -15,7 +15,7 @@
 <%@page import="org.digijava.module.dataExchange.util.ExportHelper"%>
 
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 
 <script type="text/javascript">
   if (YAHOOAmp != null){
@@ -30,9 +30,9 @@
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
     <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/styles.css" />
 
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/logger-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/new/treeview-min.js"></script>
-    <script type="text/javascript" src="/TEMPLATE/ampTemplate/script/yui/tabview-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/logger/logger-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/treeview/treeview-min.js"></script>
+    <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script>
 
     <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>
 
@@ -58,11 +58,11 @@
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > .</script>
 -->
 	
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/border_tabs.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
-	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
-
+	<link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters.css"/>
+	
 	<br>
 	<br>
 
@@ -73,7 +73,7 @@
 	<script type="text/javascript">
     var tabView = null;
 	  
-	YAHOOAmp.namespace("YAHOOAmp.amp.dataExchange");
+	YAHOOAmp.namespace("amp.dataExchange");
 	YAHOOAmp.amp.dataExchange.numOfSteps	= 2; // have to be 3 when we include additional fields
 		
 	YAHOOAmp.amp.dataExchange.tabLabels	= new Array("tab_select_filed", "tab_additional_filed", "tab_filter");

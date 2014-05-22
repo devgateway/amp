@@ -56,12 +56,8 @@ public class AmpGPIItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey> {
 			protected void populateItem(final ListItem<AmpGPISurveyIndicator> item) {
 				AmpGPISurveyIndicator sv = item.getModelObject();
 
-				Label indCode = new Label("indCode", new PropertyModel<String>(sv, "indicatorCode"));
-				item.add(indCode);
 				Label indName = new TrnLabel("indName", new PropertyModel<String>(sv, "name"));
 				item.add(indName);
-
-				String code = sv.getIndicatorCode();
 
 				AmpGPIQuestionItemFeaturePanel q = new AmpGPIQuestionItemFeaturePanel("qList", "GPI Questions List", PersistentObjectModel.getModel(sv), survey);
 				item.add(q);

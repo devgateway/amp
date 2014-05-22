@@ -18,10 +18,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.models.GPIYesNoAnswerModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
-import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpGPISurveyQuestion;
@@ -30,7 +29,7 @@ import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import java.util.Collections;
 
 public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurveyIndicator> {
-
+	
 	/**
 	 * @param id
 	 * @param fmName
@@ -46,7 +45,7 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
 				qq.getAmpTypeId().getName();
 			}
 		}
-
+		
 		final AbstractReadOnlyModel<List<AmpGPISurveyQuestion>> listModel = new AbstractReadOnlyModel<List<AmpGPISurveyQuestion>>() {
 			private static final long serialVersionUID = 3706184421451839215L;
 
@@ -95,28 +94,18 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
 					response.setAmpGPISurveyId(survey.getObject());
 					response.setAmpQuestionId(item.getModelObject());
 					responses.add(response);
-				}
+				}				
 
-				IModel<AmpGPISurveyResponse> responseModel = PersistentObjectModel.getModel(response);
-
-				Label indName = new TrnLabel("qtext", new Model<String>() {
-					PropertyModel<String> pm = new PropertyModel<String>(item.getModelObject(), "questionText");
-
-					@Override
-					public String getObject() {
-						return (item.getModelObject().getParentQuestion() != null ? "- " : "") + pm.getObject();
-					}
-				});
+				// Create a label with a dynamic value (in this case a question from DB) that can be translatable and can have a tooltip.
+				AmpLabelFieldPanel indName = new AmpLabelFieldPanel("qtext", new Model<String>(""), 
+						new PropertyModel<String>(item.getModelObject(), "questionText").getObject(), false);
 
 				if (item.getModelObject().getParentQuestion() != null) {
 					indName.add(new AttributeModifier("style", "padding-left:4em;font-style:italic"));
 				}
-
 				item.add(indName);
 
-				AmpTextFieldPanel<String> references = new AmpTextFieldPanel<String>("references", new PropertyModel<String>(responseModel, "references"), "References:", false, true);
-				item.add(references);
-
+				IModel<AmpGPISurveyResponse> responseModel = PersistentObjectModel.getModel(response);
 				String qtype = item.getModelObject().getAmpTypeId().getName();
 				if (qtype.compareTo("yes-no") == 0) {
 					final String[] elements = new String[] { "Yes", "No" };
@@ -140,10 +129,10 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
 					WebMarkupContainer hidden = new WebMarkupContainer("answer");
 					hidden.setVisible(false);
 					item.add(hidden);
-				}
+				}				
 			}
 		};
 		list.setReuseItems(true);
-		add(list);
-	}
+		add(list);				
+	}	
 }

@@ -107,7 +107,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .logo a {color:#FFFFFF; text-decoration: none !important;  display: table-cell;}
 .logo img {widht:50px; height: 34px; border: 0px; vertical-align: middle; float:left;}
 .logo .title {display: table-cell; padding-left: 8px; vertical-align: middle; }
-.logo .title .label {display: block;}
+.logo .title .label {display: block; text-align: left;}
 .top_nav {position:absolute; right:30px; top:30px;}
 .top_nav a {color:#FFFFFF;}
 .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;margin:0px 20px 0px 0px;}

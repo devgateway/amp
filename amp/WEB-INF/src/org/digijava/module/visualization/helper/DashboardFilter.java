@@ -44,6 +44,7 @@ public class DashboardFilter {
     private Boolean showAcronymForOrgNames;
     private Boolean showOnlyNationalProjects;
     private Boolean nationalProjectsToo;
+    private Boolean showGroupsNotOrgs;
     private TeamMember teamMember;
     private List<AmpCurrency>currencies;
     private List<OrganizationSkeleton> organizations;
@@ -214,6 +215,7 @@ public class DashboardFilter {
     	newFilter.setShowAcronymForOrgNames(this.getShowAcronymForOrgNames());
     	newFilter.setShowOnlyNationalProjects(this.getShowOnlyNationalProjects());
     	newFilter.setNationalProjectsToo(this.getNationalProjectsToo());
+    	newFilter.setShowGroupsNotOrgs(this.getShowGroupsNotOrgs());
     	return newFilter;
     }
 	
@@ -1334,6 +1336,14 @@ public class DashboardFilter {
 
 	public void setResponsibleOrganizationId(Long responsibleOrganizationId) {
 		this.responsibleOrganizationId = responsibleOrganizationId;
+	}
+
+	public Boolean getShowGroupsNotOrgs() {
+		return showGroupsNotOrgs;
+	}
+
+	public void setShowGroupsNotOrgs(Boolean showGroupsNotOrgs) {
+		this.showGroupsNotOrgs = showGroupsNotOrgs;
 	}
 		
 	

@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -932,6 +933,7 @@ public class DashboardUtil {
 		filter.setShowProjectsRanking(false);
 		filter.setShowAcronymForOrgNames(false);
 		filter.setNationalProjectsToo(false);
+		filter.setShowGroupsNotOrgs(false);
 		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
@@ -1185,5 +1187,29 @@ public class DashboardUtil {
         }
         return dashboardNames;
 	}
-
+	
+    /**
+     * This method will get a map with organizations and translate it into a map of org groups.
+     * @param map
+     * @return
+     */
+    public static Map<AmpOrgGroup, BigDecimal> groupOrganizations(
+                    Map<AmpOrganisation, BigDecimal> map) {
+        Map<AmpOrgGroup, BigDecimal> retGroup = new HashMap<AmpOrgGroup, BigDecimal>();
+        Iterator<Entry<AmpOrganisation, BigDecimal>> i = map.entrySet()
+                        .iterator();
+        while (i.hasNext()) {
+        	Entry<AmpOrganisation, BigDecimal> entry = i.next();                    
+            AmpOrgGroup auxGroup = DbUtil.getOrganisation(entry.getKey().getAmpOrgId()).getOrgGrpId();
+            if (retGroup.containsKey(auxGroup)) {
+            	BigDecimal auxSum = retGroup.get(auxGroup);
+                // Replace org group and add the values.
+                retGroup.put(auxGroup, auxSum.add(entry.getValue())); 
+            } else {
+            	// New org group.
+                retGroup.put(auxGroup, entry.getValue());
+            }                               
+        }
+        return sortByValue(retGroup, null);
+    }
 }

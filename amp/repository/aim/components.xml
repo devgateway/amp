@@ -16,31 +16,6 @@
 	<page name="addQuickLink" title="Add link" />
   <page name="editQuickLink" title="Edit link" />
 	<page name="showMyTask" title=" - My Task List " />
-	<page name="showMyMessages" title=" - My Message List " />
-	<page name="viewChannelOverviewDescription" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="editPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="addAmpProjectDetails" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="editAmpProjectDetails" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="createPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="addPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="addAmpPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="editAmpPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="addKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="editAmpKnowledge" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="createKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="createKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="getKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="getKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="deleteKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="deleteKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="updateKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="updateKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="deleteAmpActivity" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="addLocationList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="createLocationList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="createOrganisationList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="getPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="deletePhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="addAmpOrganisations" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="editAmpOrganisations" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="addFAOrgList" title="AMP: Ethiopia: AIM Dashboard: Detail" />

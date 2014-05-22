@@ -399,30 +399,6 @@ html>body #mainEmpty {
 	<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 </c:set>
 
-<digi:form action="/viewProjectDetails.do">
-<html:hidden property="type" />
-<html:hidden property="projectComments" />
-<html:hidden property="description" />
-<html:hidden property="objectives" />					
-<TABLE width="100%" cellSpacing="3" cellPadding="3" vAlign="top">
-	<TR>
-		<TD>
-			<SPAN class=crumb>
-				<div id="gen" title='<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>'>
-				<digi:link href="/viewMyDesktop.do" styleClass="comment">
-					<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-				</digi:link></div>&nbsp;&gt;&nbsp;
-				<div id="gen" title='<digi:trn key="aim:clickToViewActivity">Click here to view Activity</digi:trn>'>
-           	<digi:link href="/viewChannelOverview.do" name="urlTabs" styleClass="comment">
-     						<digi:trn key="aim:activity">Activity</digi:trn>
-				</digi:link></div>&nbsp;&gt;&nbsp;
-     					<digi:trn key="aim:activityDetails">Details</digi:trn>
-			</SPAN>
-		</TD>
-	</TR>
-</TABLE>
-</digi:form>
-
 <TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left"><tr><td class="td_top1">
 <TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left"><tr><td>
 

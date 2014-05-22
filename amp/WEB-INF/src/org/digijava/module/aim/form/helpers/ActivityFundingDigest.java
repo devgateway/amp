@@ -14,8 +14,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FilterParams;
-import org.digijava.module.aim.helper.FinancingBreakdown;
-import org.digijava.module.aim.helper.FinancingBreakdownWorker;
+
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;

@@ -284,11 +284,6 @@
       <forward name="view" path="/aim/viewMyDesktop.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-		<action path="/aim/viewMyMessage" scope="session" type="org.digijava.module.aim.action.ViewMyMessage" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=showMyMessages" />
-      <forward name="view" path="/aim/viewMyDesktop.do" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
     <action name="aimReportsFilterPickerForm" path="/aim/reportsFilterPicker" scope="request" type="org.digijava.module.aim.action.ReportsFilterPicker" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_filterPicker2" />
       <forward name="mydesktop" path="/aim/showDesktop.do" redirect="true" />

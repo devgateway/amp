@@ -712,6 +712,14 @@ public class DashboardUtil {
 	            qry = " and role.roleCode='BA' and orole.organisation in (" + getInStatement(selectedOrganizations) + ") ";
 	        }
 			break;
+			
+        case org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION:
+            if (orgGroupView) {
+                qry = " and role.roleCode='RO' and orole.organisation.orgGrpId.ampOrgGrpId in (" + getInStatement(selectedOrgGroups) + ") ";
+            } else {
+                qry = " and role.roleCode='RO' and orole.organisation in (" + getInStatement(selectedOrganizations) + ") ";
+            }
+            break;
 
 		default:
 			break;

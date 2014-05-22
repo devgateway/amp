@@ -81,6 +81,8 @@ public class DbUtil {
         	queryString.append(" where  role.roleCode='EA' ");
         else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
         	queryString.append(" where  role.roleCode='BA' ");
+        else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+            queryString.append(" where  role.roleCode='RO' ");
         else
 			queryString.append(" where  role.roleCode='DN' ");
 
@@ -158,6 +160,8 @@ public class DbUtil {
         	queryString.append(" where  role.roleCode='EA' ");
         else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
         	queryString.append(" where  role.roleCode='BA' ");
+        else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+            queryString.append(" where  role.roleCode='RO' ");
         else
 			queryString.append(" where  role.roleCode='DN' ");
          if (orgGroupId != null&&orgGroupId !=-1) {
@@ -829,7 +833,8 @@ public class DbUtil {
         	oql = "select fd, act.ampId, " + AmpActivityVersion.hqlStringForName("act") + " ";
         }
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY
+            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			oql += ", orole.percentage ";
 		
         if (locationCondition)
@@ -940,7 +945,8 @@ public class DbUtil {
         
         //Join  for Organization/Organization Groups and their role
         if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY
+            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
  
         if (specialInner!=null && specialInner.length()>0)
@@ -1027,6 +1033,10 @@ public class DbUtil {
 	        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
 	        } 
         }
+        
+        /*if(filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION) {
+        	oql += " and role.roleCode='RO' ";
+		}*/
         
         //Filter for Category Values
         if (peaceMarkerCondition) {
@@ -1454,7 +1464,8 @@ public class DbUtil {
         //This determines if this query needs additional joins for role and role percentage
         Boolean organizationRoleQuery = false;
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			organizationRoleQuery = true;
     	
 		 if (filter.getTransactionType()==Constants.MTEFPROJECTION){
@@ -1579,7 +1590,8 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
-        	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)            	
+            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+                    || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)                             	
            		oql = "select fp, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
             else
             	if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
@@ -1588,7 +1600,8 @@ public class DbUtil {
             		oql = "select fp, f.ampDonorOrgId.ampOrgId, " + AmpOrganisation.hqlStringForName("f.ampDonorOrgId");
             	}
 		} else {
-			if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+            		|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
 				oql = "select fd, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
 	        else
 	        	if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
@@ -1597,7 +1610,8 @@ public class DbUtil {
 	        		oql = "select fd, f.ampDonorOrgId.ampOrgId, " + AmpOrganisation.hqlStringForName("f.ampDonorOrgId");	        		
             	}
 		}
-		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+                || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
 			oql += ", orole.percentage ";
 		if (locationCondition)
         	oql += ", actloc.locationPercentage ";
@@ -1605,7 +1619,8 @@ public class DbUtil {
         	oql += ", actsec.sectorPercentage ";
         
         String specialInner = null;
-    	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY
+                || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     		specialInner = " inner join act.orgrole orole inner join orole.role role inner join orole.organisation roleOrg ";
     	  
     	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, null, true);
@@ -1748,7 +1763,8 @@ public class DbUtil {
         	oql += " inner join act.categories categ ";
 		}
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
@@ -1978,7 +1994,8 @@ public class DbUtil {
         if(!(filter.getFromPublicView() !=null && filter.getFromPublicView()) || (tm != null && tm.getTeamAccessType().equals("Management")))
         	oql += " inner join act.ampActivityGroup actGroup ";
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
     	
     	if (donorCondition || implementingCondition || beneficiaryCondition)
@@ -2252,7 +2269,8 @@ public class DbUtil {
 		}
     	
         if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
         if (sectorCondition) 
         	oql += " where config.id=:config  ";

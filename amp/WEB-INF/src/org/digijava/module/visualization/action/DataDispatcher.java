@@ -2349,11 +2349,11 @@ public class DataDispatcher extends DispatchAction {
 			        }
 		        }
 	            visualizationForm.getExportData().setBeneficiaryAgencyTableData(organizationData);
-	    		
-	    		if(divide){
-	    			filter.setDivideThousands(false);
-	    		}	    			    		
     		}	
+	    	
+    		if(divide){
+	    		filter.setDivideThousands(false);
+	    	}	    			    		    			
 	    	
     		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     		response.setHeader("Pragma", "no-cache");

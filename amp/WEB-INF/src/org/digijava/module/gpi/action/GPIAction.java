@@ -24,34 +24,37 @@ public class GPIAction extends Action {
 	private static Logger logger = Logger.getLogger(GPIAction.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
-
 		logger.debug("GPIAction begin");
 		GPIForm gpiForm = (GPIForm) form;
-		GPIUseCase useCase = new GPIUseCase();
-		
-		// Reformat some data because how the arrays come from the page.
-		gpiForm = formatFilters(gpiForm);
-
-		// Setup filters.
-		ServletContext ampContext = getServlet().getServletContext();
-		useCase.setupFiltersData(gpiForm, request, ampContext);
-		if (gpiForm.isReset()) {
-			useCase.resetFilterSelections(gpiForm, ((TeamMember) request.getSession().getAttribute("currentMember")).getAppSettings());
+		try {			
+			GPIUseCase useCase = new GPIUseCase();
+			
+			// Reformat some data because how the arrays come from the page.
+			gpiForm = formatFilters(gpiForm);
+	
+			// Setup filters.
+			ServletContext ampContext = getServlet().getServletContext();
+			useCase.setupFiltersData(gpiForm, request, ampContext);
+			if (gpiForm.isReset()) {
+				useCase.resetFilterSelections(gpiForm, ((TeamMember) request.getSession().getAttribute("currentMember")).getAppSettings());
+			}
+	
+			// Setup common data.
+			gpiForm.setAvailableGPIReports(useCase.setupAvailableGPIReports());
+			String piReportCode = request.getParameter("reportId");
+			gpiForm.setGPIReport(useCase.getGPIReport(piReportCode));
+	
+			// Create report.
+			if (gpiForm.getGPIReport() == null) {
+				return mapping.findForward("forward");
+			}
+			// Create report.
+			GPIAbstractReport report = useCase.createReport(gpiForm, request);
+			gpiForm.setMainTableRows(report.getReportRows());
+			gpiForm.setMiniTable(report.getMiniTable());
+		} catch(Exception e){
+			logger.error(e);
 		}
-
-		// Setup common data.
-		gpiForm.setAvailableGPIReports(useCase.setupAvailableGPIReports());
-		String piReportCode = request.getParameter("reportId");
-		gpiForm.setGPIReport(useCase.getGPIReport(piReportCode));
-
-		// Create report.
-		if (gpiForm.getGPIReport() == null) {
-			return mapping.findForward("forward");
-		}
-		// Create report.
-		GPIAbstractReport report = useCase.createReport(gpiForm, request);
-		gpiForm.setMainTableRows(report.getReportRows());
-		gpiForm.setMiniTable(report.getMiniTable());
 
 		// Set output.
 		if (gpiForm.isPrintPreview()) {

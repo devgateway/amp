@@ -235,6 +235,10 @@ function adminHelp(){
 		 <digi:context name="admin" property="/help/admin/help.do~blankPage=true" />
 		openURLinWindow("<%=admin%>",1024,768);
 }
+
+function openAdmin () {
+	document.location.href="/admin.do";
+}
 </script>
 		<div class="yuiamp-skin-amp">
 			<div id="mainmenuHeader" class="yuiampmenu">
@@ -244,7 +248,7 @@ function adminHelp(){
 							<c:set var="message">
 								<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
 							</c:set> 
-							<span class="yuiampmenuitemlabel" href="/admin.do" module="aim">
+							<span class="yuiampmenuitemlabel" onclick="openAdmin();" module="aim">
 								<digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
 							</span>
 						</li>

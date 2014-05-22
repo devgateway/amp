@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -35,7 +37,10 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
@@ -1486,6 +1491,15 @@ public class DEImportBuilder {
 		}
 		return null;
 	}
+
+    private Editor createEditor(Site site, String key, String language){
+        Editor editor = new Editor();
+        editor.setSiteId(site.getSiteId());
+        editor.setSite(site);
+        editor.setEditorKey(key);
+        editor.setLanguage(language);
+        return editor;
+    }
 	
 	private Editor createEditor(String siteId, String key, String language){
 		Editor editor = new Editor();
@@ -2340,7 +2354,8 @@ public class DEImportBuilder {
 								DEMappingFields item = checkedActivity.getItem();
 								item.setAmpId(ampActivity.getAmpActivityGroup().getAmpActivityGroupId());//getAmpActivityId());
 								item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(),iWorker.getIatiID()));
-							    DataExchangeUtils.addObjectoToAmp(item);
+                                fixEmptyEditorFields(ampActivity, request);
+                                DataExchangeUtils.addObjectoToAmp(item);
 								logger.info("..................End importing activity "+noAct);
 								//System.out.println("..................End importing activity "+noAct);
 							}
@@ -2353,6 +2368,70 @@ public class DEImportBuilder {
 			}
         if (retVal == null) iLog.saveObject(log.getDeSourceSetting());
 	}
+
+    private void fixEmptyEditorFields(AmpActivityVersion ampActivity, HttpServletRequest request) {
+        String prefix ="_iati_import_";
+        Site site = RequestUtils.getSite(request);
+
+        String[] flds = {"LessonsLearned",
+                "Objective",
+        "Results",
+        "Purpose",
+        "ProjectComments",
+        "ProjectImpact",
+        "ActivitySummary",
+        "ContractingArrangements",
+        "CondSeq",
+        "LinkedActivities",
+        "Conditionality",
+        "ProjectManagement",
+        "Description"};
+
+        Class noparams[] = {};
+        Class clazz = null;
+        try {
+            clazz = Class.forName("org.digijava.module.aim.dbentity.AmpActivityVersion");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        long curMillis = System.currentTimeMillis();
+        Date curDate = new Date();
+        for (int idx = 0; idx < flds.length; idx ++) {
+            String getter = new StringBuilder("get").append(flds[idx]).toString();
+
+            try {
+                Method method = clazz.getMethod(getter, noparams);
+                String val = (String) method.invoke(ampActivity, null);
+
+                if (val == null || val.trim().isEmpty()) {
+                    String key = new StringBuilder(prefix).append(flds[idx]).append("_").append(curMillis).toString();
+                    Editor ed = createEditor(site, key, "en");
+                    ed.setLastModDate(curDate);
+                    ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
+                    ed.setBody("");
+                    try {
+                        org.digijava.module.editor.util.DbUtil.saveEditor(ed);
+                    } catch (EditorException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    Class[] param = new Class[1];
+                    param[0] = String.class;
+                    String setter = new StringBuilder("set").append(flds[idx]).toString();
+                    Method set = clazz.getMethod(setter, param);
+                    set.invoke(ampActivity, key);
+                }
+
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+    }
 
     private void processLog(DELogPerExecution log, SourceSettingDAO iLog, IatiActivityWorker iWorker, ArrayList<AmpMappedField> activityLogs, String actionType) {
         processLog(log, iLog, iWorker, activityLogs, actionType, false);

@@ -30,7 +30,7 @@ public class ActivityNameFilteringMapFilter extends MapFilter
 		this.setSelprojectstatus(null);
 		this.setSelLocationIds(null);
 		this.setSelorganizationsTypes(null);
-		this.setOnBudget(null);
+		this.setSelectedBudget(null);
 		this.setSeltypeofassistence(null);
 		this.setSelfinancingInstruments(null);
 		this.setFromPublicView(null);

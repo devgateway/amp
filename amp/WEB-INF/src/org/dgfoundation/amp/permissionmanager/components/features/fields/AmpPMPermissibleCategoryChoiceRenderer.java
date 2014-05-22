@@ -43,7 +43,7 @@ public class AmpPMPermissibleCategoryChoiceRenderer extends ChoiceRenderer {
 		if(!(object instanceof Class)) return super.getDisplayValue(object);
 		else{
 			String s = ((Class)object).getSimpleName();
-			if("AmpActivity".compareTo(s)==0) result=TranslatorUtil.getTranslation("Activity");
+			if("AmpActivityVersion".compareTo(s)==0) result=TranslatorUtil.getTranslation("Activity");
 			if("AmpFieldsVisibility".compareTo(s)==0) result= TranslatorUtil.getTranslation("Field");
 			if("AmpFeaturesVisibility".compareTo(s)==0) result= TranslatorUtil.getTranslation("Feature");
 			if("AmpModulesVisibility".compareTo(s)==0) result= TranslatorUtil.getTranslation("Module");

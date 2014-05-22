@@ -3,6 +3,7 @@ package org.digijava.module.visualization.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,8 +73,12 @@ import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
+import org.joda.time.DateTimeFieldType;
 import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.GregorianChronology;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class DashboardUtil {
 	
@@ -155,7 +160,7 @@ public class DashboardUtil {
         Long[] ids2 = {0l};
         DashboardFilter newFilter = filter.getCopyFilterForFunding();
 		newFilter.setSelLocationIds(ids2);
-		DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType());
+		DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType(), false)[0];
 		BigDecimal total = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 		if (total.compareTo(BigDecimal.ZERO) == 1)
 			map.put(tempLoc2, total);
@@ -203,7 +208,7 @@ public class DashboardUtil {
 			Long[] ids = {sector.getAmpSectorId()};
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelSectorIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType());
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType(), false)[0];
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(sector, total);
 		}
@@ -225,7 +230,7 @@ public class DashboardUtil {
 			Long[] ids = {location.getId()};
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelLocationIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType());
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType(), false)[0];
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        if(total.doubleValue()!=0d){
 	        	map.put(location, total);
@@ -606,12 +611,63 @@ public class DashboardUtil {
             }
         }
         return oql.toString();
-	}    
+	}
+    
+    /**
+     * Given a FiscalYearId and a Date, will return the year where the date belongs (reusing existent methods). 
+     * @param fiscalCalendarId
+     * @param date
+     * @return
+     */
+	public static int getFiscalYearFromDate(AmpFiscalCalendar fiscalCalendar,
+			Date date) {
+		int year = -1;
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		// Get the current year (normal calendar) for the date.
+		int auxYear = cal.get(Calendar.YEAR);
+		if (fiscalCalendar != null) {
+			// Get the date when this FiscalYear ends (using existent methods).
+			DateTime startDate = new DateTime(getStartDate(fiscalCalendar, auxYear));
+			DateTime endDate = new DateTime(getEndDate(fiscalCalendar, auxYear));
+			DateTime auxDate = new DateTime(date);
+			DateTimeComparator comparator = DateTimeComparator.getInstance(DateTimeFieldType.secondOfMinute());
 
-    public static Date getStartDate(Long fiscalCalendarId, int year) {
+			if (comparator.compare(auxDate, startDate) < 0) {
+				auxYear--;
+			} else if (comparator.compare(auxDate, endDate) > 0) {
+				auxYear++;
+			}
+			year = auxYear;
+			if (fiscalCalendar.getYearOffset() != null) {
+				year += fiscalCalendar.getYearOffset().intValue();
+			}
+		} else {
+			// No special calendar used then return the normal year.
+			year = auxYear;
+		}
+		return year;
+	}
+    
+    public static Date getStartDate(Long AmpFiscalCalendarId, int year) {
+    	AmpFiscalCalendar fiscalCalendar = null;
+    	if(AmpFiscalCalendarId != null) {
+    		fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(AmpFiscalCalendarId);
+    	}
+    	return getStartDate(fiscalCalendar, year);
+    }
+    
+    public static Date getEndDate(Long AmpFiscalCalendarId, int year) {
+    	AmpFiscalCalendar fiscalCalendar = null;
+    	if(AmpFiscalCalendarId != null) {
+    		fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(AmpFiscalCalendarId);
+    	}
+    	return getEndDate(fiscalCalendar, year);
+    }
+
+    public static Date getStartDate(AmpFiscalCalendar calendar, int year) {
         Date startDate = null;
-        if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-            AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
+        if (calendar != null) {
             if (calendar.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
                 startDate = getStartOfYear(year, calendar.getStartMonthNum() - 1, calendar.getStartDayNum());
             } else {      
@@ -627,10 +683,9 @@ public class DashboardUtil {
         return startDate;
     }
 
-    public static Date getEndDate(Long fiscalCalendarId, int year) {
+    public static Date getEndDate(AmpFiscalCalendar calendar, int year) {
         Date endDate = null;
-        if (fiscalCalendarId != null && fiscalCalendarId != -1) {
-            AmpFiscalCalendar calendar = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalendarId);
+        if (calendar != null) {
             if (calendar.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
                 //we need data including the last day of toYear,this is till the first day of toYear+1
                 int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
@@ -714,12 +769,12 @@ public class DashboardUtil {
 			break;
 			
         case org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION:
-            if (orgGroupView) {
-                qry = " and role.roleCode='RO' and orole.organisation.orgGrpId.ampOrgGrpId in (" + getInStatement(selectedOrgGroups) + ") ";
-            } else {
-                qry = " and role.roleCode='RO' and orole.organisation in (" + getInStatement(selectedOrganizations) + ") ";
-            }
-            break;
+        	if (orgGroupView) {
+	            qry = " and role.roleCode='RO' and orole.organisation.orgGrpId.ampOrgGrpId in (" + getInStatement(selectedOrgGroups) + ") ";
+	        } else {
+	            qry = " and role.roleCode='RO' and orole.organisation in (" + getInStatement(selectedOrganizations) + ") ";
+	        }
+			break;
 
 		default:
 			break;
@@ -1196,28 +1251,29 @@ public class DashboardUtil {
         return dashboardNames;
 	}
 	
-    /**
-     * This method will get a map with organizations and translate it into a map of org groups.
-     * @param map
-     * @return
-     */
-    public static Map<AmpOrgGroup, BigDecimal> groupOrganizations(
-                    Map<AmpOrganisation, BigDecimal> map) {
-        Map<AmpOrgGroup, BigDecimal> retGroup = new HashMap<AmpOrgGroup, BigDecimal>();
-        Iterator<Entry<AmpOrganisation, BigDecimal>> i = map.entrySet()
-                        .iterator();
-        while (i.hasNext()) {
-        	Entry<AmpOrganisation, BigDecimal> entry = i.next();                    
-            AmpOrgGroup auxGroup = DbUtil.getOrganisation(entry.getKey().getAmpOrgId()).getOrgGrpId();
-            if (retGroup.containsKey(auxGroup)) {
-            	BigDecimal auxSum = retGroup.get(auxGroup);
-                // Replace org group and add the values.
-                retGroup.put(auxGroup, auxSum.add(entry.getValue())); 
-            } else {
-            	// New org group.
-                retGroup.put(auxGroup, entry.getValue());
-            }                               
-        }
-        return sortByValue(retGroup, null);
-    }
+	/**
+	 * This method will get a map with organizations and translate it into a map of org groups.
+	 * @param map
+	 * @return
+	 */
+	public static Map<AmpOrgGroup, BigDecimal> groupOrganizations(
+			Map<AmpOrganisation, BigDecimal> map) {
+		Map<AmpOrgGroup, BigDecimal> retGroup = new HashMap<AmpOrgGroup, BigDecimal>();
+		Iterator<Entry<AmpOrganisation, BigDecimal>> i = map.entrySet()
+				.iterator();
+		while (i.hasNext()) {
+			Entry<AmpOrganisation, BigDecimal> entry = i.next();			
+			AmpOrgGroup auxGroup = DbUtil.getOrganisation(entry.getKey().getAmpOrgId()).getOrgGrpId();
+			if (retGroup.containsKey(auxGroup)) {
+				BigDecimal auxSum = retGroup.get(auxGroup);
+				// Replace org group and add the values.
+				retGroup.put(auxGroup, auxSum.add(entry.getValue())); 
+			} else {
+				// New org group.
+				retGroup.put(auxGroup, entry.getValue());
+			}				
+		}
+		return sortByValue(retGroup, null);
+	}
+
 }

@@ -7,14 +7,18 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -47,6 +52,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.SectorUtil;
@@ -82,7 +88,7 @@ public class DbUtil {
         else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
         	queryString.append(" where  role.roleCode='BA' ");
         else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
-            queryString.append(" where  role.roleCode='RO' ");
+        	queryString.append(" where  role.roleCode='RO' ");
         else
 			queryString.append(" where  role.roleCode='DN' ");
 
@@ -161,7 +167,7 @@ public class DbUtil {
         else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
         	queryString.append(" where  role.roleCode='BA' ");
         else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
-            queryString.append(" where  role.roleCode='RO' ");
+        	queryString.append(" where  role.roleCode='RO' ");
         else
 			queryString.append(" where  role.roleCode='DN' ");
          if (orgGroupId != null&&orgGroupId !=-1) {
@@ -797,11 +803,12 @@ public class DbUtil {
      * @throws org.digijava.kernel.exception.DgException
      */
     @SuppressWarnings("unchecked")
-    public static DecimalWraper getFunding(DashboardFilter filter, Date startDate,
+    public static DecimalWraper[] getFunding(DashboardFilter filter, Date startDate,
             Date endDate, Long assistanceTypeId,
             Long financingInstrumentId,
-            int transactionType, String adjustmentTypeActual) throws DgException {
-        DecimalWraper total = null;
+            int transactionType, String adjustmentTypeActual,
+            boolean groupByYears) throws DgException {
+        DecimalWraper[] totals = null;
         String oql = "";
         String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -833,8 +840,8 @@ public class DbUtil {
         	oql = "select fd, act.ampId, " + AmpActivityVersion.hqlStringForName("act") + " ";
         }
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY
-            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY
+    				|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			oql += ", orole.percentage ";
 		
         if (locationCondition)
@@ -891,21 +898,61 @@ public class DbUtil {
             		
             	afda.add(currentFd);
             }
+                              
+            // groupByYears is used to reduce the number of queries needed to create the line-charts where each category needs to be grouped by year.
+            // The logic is simple, we make 1 query for the n years range (ie: 2010-2015) and then we return an array of DecimalWrapper objects, one for each year.
+            // IMPORTANT NOTE: be sure the property fiscalCalendarId has been set on the filter object.
+            if(groupByYears) {
+            	// Determinate years range.
+            	Calendar calendar = Calendar.getInstance();
+            	calendar.setTime(startDate);
+            	int start = calendar.get(Calendar.YEAR);
+            	calendar.setTime(endDate);            	
+            	int end = calendar.get(Calendar.YEAR);
+            	int years = end - start + 1;
+            	// Each element in map will have a year as key and an array of AmpFundingDetail as value (TreeMap is used because it will keep the years sorted).
+            	Map<Integer, ArrayList<AmpFundingDetail>> fundingsGroupedByYear = new TreeMap<Integer, ArrayList<AmpFundingDetail>>();
+            	totals = new DecimalWraper[years];
+            	Iterator<AmpFundingDetail> iFundings = afda.iterator();
+            	while(iFundings.hasNext()) {
+            		// We need to identify the year for the transaction date according to the FiscalYearId (ie: '01/01/2010' could be grouped in 2009 if the fiscal calendar starts in July not January).
+            		AmpFundingDetail ampFundingDetail = iFundings.next();
+            		AmpFiscalCalendar fiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(filter.getFiscalCalendarId());
+            		int year = DashboardUtil.getFiscalYearFromDate(fiscalCalendar, ampFundingDetail.getTransactionDate());
+            		// If is the first AmpFundingDetail for this years we initialize the List.
+            		if(!fundingsGroupedByYear.containsKey(new Integer(year))) {
+            			fundingsGroupedByYear.put(new Integer(year), new ArrayList<AmpFundingDetail>());
+            		}
+            		fundingsGroupedByYear.get(new Integer(year)).add(ampFundingDetail);
+            	}
+            	// The result can be processed year by year in the same way we where not grouping and then stored in the totals array. 
+            	int i = 0;
+            	List<Entry<Integer, ArrayList<AmpFundingDetail>>> auxFundingsList = new LinkedList<Entry<Integer, ArrayList<AmpFundingDetail>>>(fundingsGroupedByYear.entrySet());
+            	Iterator<Entry<Integer, ArrayList<AmpFundingDetail>>> iYears = auxFundingsList.iterator();
+            	while(iYears.hasNext()) {           		
+            		Entry entry = (Map.Entry) iYears.next();
+            		ArrayList<AmpFundingDetail> auxFundings = (ArrayList<AmpFundingDetail>) entry.getValue();
+            		FundingCalculationsHelper cal = new FundingCalculationsHelper();
+            		cal.doCalculations(auxFundings, currCode, true);
+            		totals[i] = extractTotals(cal, transactionType, adjustmentTypeActual);;
+            		i++;
+            	}            	
+            } else {
+            	// This is the normal behavior (donut charts, top charts, etc).
+            	totals = new DecimalWraper[1];
+            	/*the objects returned by query  and   selected currency
+                are passed doCalculations  method*/
+                FundingCalculationsHelper cal = new FundingCalculationsHelper();
+                cal.doCalculations(afda, currCode, true);
+                totals[0] = extractTotals(cal, transactionType, adjustmentTypeActual);
+            }            
             
-            
-            /*the objects returned by query  and   selected currency
-            are passed doCalculations  method*/
-            FundingCalculationsHelper cal = new FundingCalculationsHelper();
-            cal.doCalculations(afda, currCode, true);
-            total = extractTotals(cal, transactionType, adjustmentTypeActual);
         } catch (Exception e) {
             logger.error(e);
             throw new DgException(
                     "Cannot load fundings from db", e);
         }
-
-
-        return total;
+        return totals;
     }
 
     private static String getHQLQuery(DashboardFilter filter, Long[] orgIds, Long[] orgGroupIds, boolean locationCondition, boolean sectorCondition, boolean programCondition, Long[] locationIds, Long[] sectorIds, Long[] programIds, Long assistanceTypeId, Long financingInstrumentId, TeamMember tm, boolean fundingTypeSpecified, boolean donorFundingOnly) {
@@ -945,8 +992,8 @@ public class DbUtil {
         
         //Join  for Organization/Organization Groups and their role
         if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY
-            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY
+    				|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
  
         if (specialInner!=null && specialInner.length()>0)
@@ -1033,10 +1080,9 @@ public class DbUtil {
 	        	oql += " and role.roleCode='BA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelBeneficiaryAgencyIds()) + ") ";
 	        } 
         }
-        
         /*if(filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION) {
         	oql += " and role.roleCode='RO' ";
-		}*/
+        }*/
         
         //Filter for Category Values
         if (peaceMarkerCondition) {
@@ -1464,8 +1510,8 @@ public class DbUtil {
         //This determines if this query needs additional joins for role and role percentage
         Boolean organizationRoleQuery = false;
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
-            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+    				|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			organizationRoleQuery = true;
     	
 		 if (filter.getTransactionType()==Constants.MTEFPROJECTION){
@@ -1590,8 +1636,8 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
-            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
-                    || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)                             	
+        	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+        			|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)            	
            		oql = "select fp, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
             else
             	if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
@@ -1600,8 +1646,8 @@ public class DbUtil {
             		oql = "select fp, f.ampDonorOrgId.ampOrgId, " + AmpOrganisation.hqlStringForName("f.ampDonorOrgId");
             	}
 		} else {
-            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
-            		|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+			if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+					|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
 				oql = "select fd, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
 	        else
 	        	if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
@@ -1610,8 +1656,8 @@ public class DbUtil {
 	        		oql = "select fd, f.ampDonorOrgId.ampOrgId, " + AmpOrganisation.hqlStringForName("f.ampDonorOrgId");	        		
             	}
 		}
-        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
-                || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+				|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
 			oql += ", orole.percentage ";
 		if (locationCondition)
         	oql += ", actloc.locationPercentage ";
@@ -1619,8 +1665,8 @@ public class DbUtil {
         	oql += ", actsec.sectorPercentage ";
         
         String specialInner = null;
-        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY
-                || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+    	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY
+    			|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     		specialInner = " inner join act.orgrole orole inner join orole.role role inner join orole.organisation roleOrg ";
     	  
     	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, null, true);
@@ -1763,8 +1809,8 @@ public class DbUtil {
         	oql += " inner join act.categories categ ";
 		}
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
-            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+    				|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
@@ -1994,8 +2040,8 @@ public class DbUtil {
         if(!(filter.getFromPublicView() !=null && filter.getFromPublicView()) || (tm != null && tm.getTeamAccessType().equals("Management")))
         	oql += " inner join act.ampActivityGroup actGroup ";
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
-            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+    				|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
     	
     	if (donorCondition || implementingCondition || beneficiaryCondition)
@@ -2269,8 +2315,8 @@ public class DbUtil {
 		}
     	
         if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
-            	|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
+    				|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
         if (sectorCondition) 
         	oql += " where config.id=:config  ";

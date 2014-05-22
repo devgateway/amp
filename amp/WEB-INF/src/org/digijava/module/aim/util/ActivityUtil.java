@@ -77,12 +77,10 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
-import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
@@ -1540,24 +1538,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		
 	}
   
-  public static void deleteActivityPhysicalComponentReportSession(Long ampActId, Session session)throws Exception{
-	  Collection col = null;
-      Query qry = null;
-      String queryString = "select phyCompReport from "
-          + AmpPhysicalComponentReport.class.getName()
-          + " phyCompReport "
-          + " where (phyCompReport.ampActivityId=:ampActId)";
-      qry = session.createQuery(queryString);
-      qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-      col = qry.list();
-      
-      Iterator itrCompRep = col.iterator();
-      while(itrCompRep.hasNext()){
-    	  AmpPhysicalComponentReport compRep = (AmpPhysicalComponentReport)itrCompRep.next();
-    	  session.delete(compRep);
-      }
-  }
-  
   /**
    * @deprecated
    * VERY SLOW. Use {@link #getAllTeamAmpActivitiesResume(Long, boolean, String, String...)}
@@ -1587,51 +1567,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
           act = new ArrayList<AmpActivity> ();
       }
       return act;
-  }
-
-  public static void deleteActivityPhysicalComponentReport(Collection
-      phyCompReport, Session session) throws Exception{
-      if (phyCompReport != null) {
-        Iterator phyReportItr = phyCompReport.iterator();
-        while (phyReportItr.hasNext()) {
-          AmpPhysicalComponentReport phyReport = (AmpPhysicalComponentReport) phyReportItr.next();
-          //AmpPhysicalComponentReport physicalReport = (AmpPhysicalComponentReport) session.load(AmpPhysicalComponentReport.class, phyReport.getAmpReportId());
-          session.delete(phyReport);
-        }
-      }
-  }
-  
-  public static void deleteActivityReportPhyPerformanceSession(Long ampActId, Session session) throws Exception {
-		Collection col = null;
-		Query qry = null;
-		String queryString = "select phyPer from "
-				+ AmpReportPhysicalPerformance.class.getName() + " phyPer "
-				+ " where (phyPer.ampActivityId=:ampActId)";
-		qry = session.createQuery(queryString);
-		qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-		col = qry.list();
-		
-		Iterator itr = col.iterator();
-		while (itr.hasNext()) {
-			AmpReportPhysicalPerformance repPhy = (AmpReportPhysicalPerformance) itr.next();
-			session.delete(repPhy);
-		}
-  }
-  
-  public static void deleteActivityReportPhyPerformance(Collection phyPerform, Session session) throws Exception {
-      if (phyPerform != null) {
-        Iterator phyPerformItr = phyPerform.iterator();
-        while (phyPerformItr.hasNext()) {
-          AmpReportPhysicalPerformance repPhyTemp = (
-              AmpReportPhysicalPerformance) phyPerformItr.next();
-          /*AmpReportPhysicalPerformance repPhyPerform = (
-              AmpReportPhysicalPerformance) session.load
-              (AmpReportPhysicalPerformance.class, repPhyTemp.getAmpPpId());*/
-          session.delete(repPhyTemp);
-        }
-      }
-  }
-  
+  } 
   
   public static void deleteActivityIndicatorsSession(Long ampActivityId,Session session) throws Exception{
 		Collection col = null;
@@ -2306,8 +2242,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
     	ActivityUtil.deleteActivityContent(ampAct,session);
     	Long ampActId = ampAct.getAmpActivityId();
-    	ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
-	  	ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
 	  	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
 	  	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
     }
@@ -2316,8 +2250,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     	ActivityUtil.deleteActivityContent(ampAct,session);
     	Long ampActId = ampAct.getAmpActivityId();
     	ActivityUtil.removeMergeSources(ampActId, session);
-    	ActivityUtil.deleteActivityPhysicalComponentReportSession(ampActId, session);
-    	ActivityUtil.deleteActivityReportPhyPerformanceSession(ampActId, session);
     	ActivityUtil.deleteActivityIndicatorsSession(ampActId, session);
     }
     

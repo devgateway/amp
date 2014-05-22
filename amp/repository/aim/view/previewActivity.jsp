@@ -2021,31 +2021,6 @@ function collapseAll() {
 							</FONT>					
 						</td>
 				  </tr>
-				<!-- Field not found -->
-				<field:display name="Components Physical Progress" feature="Activity - Component Step">
-					<tr>
-						<td class="prv_right">
-							<digi:trn key="aim:physicalProgressOfTheComponent">Physical progress of the component</digi:trn>
-						</td>
-					</tr>
-					<c:if test="${!empty comp.phyProgress}">
-						<c:forEach var="phyProg" items="${comp.phyProgress}">
-							<tr>
-								<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-								<b> 
-									<c:out value="${phyProg.title}"/> - 
-									<c:out value="${phyProg.reportingDate}" />
-								</b>								
-								</td>
-							</tr>
-							<tr>
-								<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i> 
-									<digi:trn key="aim:description">Description</digi:trn> :</i> 
-									<c:out value="${phyProg.description}"/>								</td>
-							</tr>
-						</c:forEach>
-					</c:if>
-					</field:display>
 				</table>				</td>
 			</tr>
 		</table>

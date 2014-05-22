@@ -67,9 +67,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPages;
-import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpReportLog;
-import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -5484,30 +5482,6 @@ public class DbUtil {
 		return year.intValue();
 	}
 
-	public static ArrayList getAmpReportPhysicalPerformance(Long ampActivityId) {
-		Session session = null;
-		ArrayList progress = new ArrayList();
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from "
-					+ AmpReportPhysicalPerformance.class.getName() + " a "
-					+ "where (a.ampActivityId=:ampActivityId)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				AmpReportPhysicalPerformance act = (AmpReportPhysicalPerformance) itr
-						.next();
-				progress.add(act.getTitle() + " : " + act.getDescription());
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get activity sectors" + ex);
-		}
-		return progress;
-	}
-
 	public static Group getGroup(String key, Long siteId) {
 		Session session = null;
 		Group group = null;
@@ -6385,79 +6359,6 @@ public class DbUtil {
 			ex.printStackTrace(System.out);
 		}
 		return indc;
-	}
-
-//	/*
-//	 * Methods called to retrieve data that have to be deleted while an activity
-//	 * is deleted by Admin start here
-//	 */
-//	/* get amp comments of a particular activity specified by ampActId */
-//	public static Collection getActivityAmpComments(Long ampActId) {
-//		Session session = null;
-//		Collection col = null;
-//		Query qry = null;
-//		try {
-//			session = PersistenceManager.getRequestDBSession();
-//			String queryString = "select com from "
-//					+ AmpComments.class.getName() + " com "
-//					+ " where (com.ampActivityId=:ampActId)";
-//			qry = session.createQuery(queryString);
-//			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-//			col = qry.list();
-//		} catch (Exception e1) {
-//			logger.error("could not retrieve AmpComments " + e1.getMessage());
-//			e1.printStackTrace(System.out);
-//		}
-//		return col;
-//	}
-
-	/*
-	 * get ampActivity physical component report of a particular activity
-	 * specified by ampActId
-	 */
-	public static Collection getActivityPhysicalComponentReport(Long ampActId) {
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select phyCompReport from "
-					+ AmpPhysicalComponentReport.class.getName()
-					+ " phyCompReport "
-					+ " where (phyCompReport.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-		} catch (Exception e1) {
-			logger.error("could not retrieve AmpPhysicalComponentReport "
-					+ e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		return col;
-	}
-
-	/*
-	 * get amp activity report physical performance of a particular activity
-	 * specified by ampActId
-	 */
-	public static Collection getActivityRepPhyPerformance(Long ampActId) {
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select phyPer from "
-					+ AmpReportPhysicalPerformance.class.getName() + " phyPer "
-					+ " where (phyPer.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-		} catch (Exception e1) {
-			logger.error("could not retrieve AmpReportPhysicalPerformance "
-					+ e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		return col;
 	}
 
 	/* get amp ME indicator value of a particular activity specified by ampActId */

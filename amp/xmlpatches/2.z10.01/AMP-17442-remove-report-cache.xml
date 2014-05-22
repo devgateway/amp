@@ -17,7 +17,17 @@
       	DROP SEQUENCE IF EXISTS amp_report_sector_seq;
 
       	DROP TABLE IF EXISTS amp_report_sector_project;
-      	DROP SEQUENCE IF EXISTS amp_report_sector_project_seq;      	
+      	DROP SEQUENCE IF EXISTS amp_report_sector_project_seq;
+      	
+		DROP TABLE IF EXISTS amp_physical_component_report;
+      	DROP SEQUENCE IF EXISTS amp_physical_component_report_seq;
+      	
+		DROP TABLE IF EXISTS AMP_REPORT_PHYSICAL_PERFORMANC;
+      	DROP SEQUENCE IF EXISTS AMP_REPORT_PHYSICAL_PERFORMANC_seq;
+
+		DROP TABLE IF EXISTS amp_report_modality;
+      	DROP SEQUENCE IF EXISTS AMP_REPORTS_seq;
+      	
       </lang>
     </script>
   </apply>

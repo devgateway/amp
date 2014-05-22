@@ -708,7 +708,6 @@
 				<page>aim_printerFriendlyPreview</page>
 				<page>aim_viewActivityDetails</page>
 				<page>aim_projectDetails</page>
-				<page>viewbyProjectbyDonor_NoLayout</page>
 				<page>aim_addRegionalFunding</page>
 				<page>aim_addMEIndicator</page>
 				<page>aim_deleteIndicator</page>

@@ -483,17 +483,6 @@ function toggleSettings(){
                 </c:if>
              </td>
              </tr>
-             <tr>
-             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
-				<strong><digi:trn key="rep:pop:SelectedRange">Selected Range:</digi:trn></strong>
-                    <c:set var="all" scope="page">
-                	<digi:trn key="rep:pop:SelectedRangeAll">All</digi:trn>
-                </c:set>
-                
-            	<i><digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn></i> <%=(arf.getRenderStartYear() > 0)?arf.getRenderStartYear():pageContext.getAttribute("all")%> |
-                <i><digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn></i> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
-              </td>
-             </tr>
            </table>
            </div>
     	</div>

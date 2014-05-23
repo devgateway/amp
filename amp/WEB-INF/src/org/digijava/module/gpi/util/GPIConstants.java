@@ -11,4 +11,6 @@ public interface GPIConstants {
 	public static final int NUMBER_OF_SURVEY_QUESTIONS = 6;
 	public static final String ALL_DONORS = "All Donors";
 	public static final String MISSION = "Mission";
+	
+	public static final String NO_DATA = "N/D";
 }

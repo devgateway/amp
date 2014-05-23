@@ -68,6 +68,12 @@
 .showActions {
 	white-space: nowrap;
 }
+.wordWrap {
+word-wrap: break-word;
+white-space: pre-wrap; 
+white-space: -moz-pre-wrap; 
+white-space: -pre-wrap; 
+}
 
 div.actionsDivItem a span {
 color : #376091;
@@ -401,8 +407,20 @@ font-weight : bold;
 	<digi:trn>Show only web links</digi:trn>
 </c:set>
 
+
+<c:set var="yearPublication">
+	<digi:trn>Publ. Year</digi:trn>
+</c:set>
 <c:set var="trans_headerYearofPubl">
-	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Publ. Year</digi:trn></b></span>
+<c:choose>
+     <c:when test="${yearPublication.length() < 15}">
+		 <span style='font-size:12px; font-family: Arial,sans-serif;'><b>${yearPublication}</b></span>
+     </c:when>
+    <c:otherwise>
+         <span style='font-size:12px; font-family: Arial,sans-serif;' class='wordWrap'><b>${yearPublication}</b></span>
+    </c:otherwise>
+</c:choose>
+    
 </c:set>
 
 <c:set var="trans_wait">
@@ -443,7 +461,7 @@ myTable.enhanceMarkup = function(markupName) {
     	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:150},
     	        {key:"date",type:"date",label:"${trans_headerDate}",sortable:true},
     	        {key:"yearOfPublication",type:"text",label:"${trans_headerYearofPubl}",sortable:true},
-    	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
+    	     	{key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
     	        {key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
     	        {key:"labels",label:"${trans_headerLabels}",sortable:false,width:100},
     	        {key:"actions",label:"${trans_headerActions}",sortable:false,width:150}

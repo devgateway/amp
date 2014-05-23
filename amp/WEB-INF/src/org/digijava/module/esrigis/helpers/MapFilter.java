@@ -251,8 +251,9 @@ public class MapFilter {
 		}
 		selectedfilter.setTypeofassistance(seltypesofassiss);
 	
-		selectedfilter.setSelectedBudget(CategoryManagerUtil.getAmpCategoryValueFromDb(selectedBudget).getValue());
-		
+		if (selectedBudget != null && CategoryManagerUtil.getAmpCategoryValueFromDb(selectedBudget) != null) {
+			selectedfilter.setSelectedBudget(CategoryManagerUtil.getAmpCategoryValueFromDb(selectedBudget).getValue());
+		}
 		if (selStructureTypes != null) {
 			ArrayList<String> selstructurestr = new ArrayList<String>();
 			for (Iterator iterator = DbHelper.getAllStructureTypes().iterator(); iterator

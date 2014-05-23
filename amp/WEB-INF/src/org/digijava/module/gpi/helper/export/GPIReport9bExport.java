@@ -28,8 +28,16 @@ public class GPIReport9bExport extends GPIAbstractExport {
 			AuxRow3 auxRow = new AuxRow3();
 			auxRow.setDonorGroup(row.getDonorGroup().getOrgGrpName());
 			auxRow.setYear(new Integer(row.getYear()).toString());
-			auxRow.setColumn1(FormatHelper.getDecimalFormat().format(row.getColumn1()));
-			auxRow.setColumn2(FormatHelper.getDecimalFormat().format(row.getColumn2()));
+			if(row.getColumn1() != null) {
+				auxRow.setColumn1(FormatHelper.getDecimalFormat().format(row.getColumn1()));
+			} else {
+				auxRow.setColumn1(GPIConstants.NO_DATA);
+			}
+			if(row.getColumn2() != null) {
+				auxRow.setColumn2(FormatHelper.getDecimalFormat().format(row.getColumn2()));
+			} else {
+				auxRow.setColumn2(GPIConstants.NO_DATA);
+			}
 			auxRow.setColumn3(new Integer(new Float(row.getColumn3()).intValue()).toString() + "%");
 			list.add(auxRow);
 		}

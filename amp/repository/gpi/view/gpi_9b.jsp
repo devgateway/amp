@@ -82,7 +82,7 @@
                        		<aim:formatNumber value="${element.column1}"/>
                     	</c:if>
                     	<c:if test="${element.column1 == null}">
-                    		N/D
+                    		<digi:trn><%=org.digijava.module.gpi.util.GPIConstants.NO_DATA %></digi:trn>
                     	</c:if>
                    </td>
                    <td align="center" class="inside" style="font-size: 11px; color: #484846;">
@@ -90,7 +90,7 @@
                        		<aim:formatNumber value="${element.column2}"/>
                     	</c:if>
                     	<c:if test="${element.column2 == null}">
-                    		N/D
+                    		<digi:trn><%=org.digijava.module.gpi.util.GPIConstants.NO_DATA %></digi:trn>
                     	</c:if>
                    </td>
                    <td align="center" class="inside" style="font-size: 11px; color: #484846;">

@@ -7,9 +7,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,23 +57,18 @@
 			<jsp:include page="pledgeSectorsView.jsp"></jsp:include>
 		</aim:renderFormSubsection>
 	
-		<field:display name="Pledge Location" feature="Pledge Sector and Location">
-			<aim:renderFormSubsection title="Location" styleId="pledge_form_locations">			
-				<jsp:include page="pledgelocationslistView.jsp"></jsp:include>
-			</aim:renderFormSubsection>
-		</field:display>
+		<aim:renderFormSubsection title="Location" styleId="pledge_form_locations">			
+			<jsp:include page="pledgelocationslistView.jsp"></jsp:include>
+		</aim:renderFormSubsection>
 	
-		<field:display name="Pledge Program" feature="Pledge Sector and Location">
-			<aim:renderFormSubsection title="Program" styleId="pledge_form_programs">
-				<jsp:include page="pledgeProgramsView.jsp"></jsp:include>
-			</aim:renderFormSubsection>
-		</field:display>
+		<aim:renderFormSubsection title="Program" styleId="pledge_form_programs">
+			<jsp:include page="pledgeProgramsView.jsp"></jsp:include>
+		</aim:renderFormSubsection>
 	
-		<feature:display name="Pledge Funding" module="Pledges">
-			<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
-				<jsp:include page="pledgeFundingView.jsp"></jsp:include>
-			</aim:renderFormSubsection>
-		</feature:display>
+		<aim:renderFormSubsection title="Pledge Information" styleId="pledge_form_funding">
+			<jsp:include page="pledgeFundingView.jsp"></jsp:include>
+		</aim:renderFormSubsection>
+		
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeContactsView.jsp"></jsp:include>
 		<jsp:include page="/repository/aim/view/pledgeform/pledgeEpilogueView.jsp"></jsp:include>
 	

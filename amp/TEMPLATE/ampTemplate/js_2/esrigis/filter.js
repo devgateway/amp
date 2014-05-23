@@ -206,7 +206,7 @@ function resetToDefaults(){
 	if (document.getElementById("selected_Peacebuilding_Marker_Id") != null) {
 		document.getElementById("selected_Peacebuilding_Marker_Id").selectedIndex  = 0;
 	}
-	document.getElementById("budget_dropdown").value = document.getElementById("onBudget").value;
+	document.getElementById("budget_dropdown").value = document.getElementById("selectedBudget").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
 	document.getElementById("budget_dropdown").selectedIndex = 0;
@@ -625,7 +625,7 @@ function applyFilterPopin(e){
 			document.getElementById("transactionType").value = document.getElementById("transaction_type_127").value;
 		}
 	}
-	document.getElementById("onBudget").value = document.getElementById("budget_dropdown").options[document.getElementById("budget_dropdown").selectedIndex].value;
+	document.getElementById("selectedBudget").value = document.getElementById("budget_dropdown").options[document.getElementById("budget_dropdown").selectedIndex].value;
 	if (document.getElementById("selected_Peacebuilding_Marker_Id")!= null){
 		document.getElementById("selectedPeacebuildingMarkerId").value = document.getElementById("selected_Peacebuilding_Marker_Id").options[document.getElementById("selected_Peacebuilding_Marker_Id").selectedIndex].value;
 	}

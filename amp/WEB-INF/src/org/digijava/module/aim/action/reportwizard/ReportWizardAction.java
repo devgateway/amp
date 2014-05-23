@@ -425,17 +425,21 @@ public class ReportWizardAction extends MultiAction {
 		
 		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
-		
-//		if ( AdvancedReportUtil.checkDuplicateReportName(myForm.getReportTitle(), teamMember.getMemberId(), myForm.getReportId(), myForm.getDesktopTab()) ) {
-//			myForm.setDuplicateName(true);
-//			throw new DuplicateReportNameException("The name " + myForm.getReportTitle() + " is already used by another report");
-//		}
+
 			
 		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
 		Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();
 		
 		AmpReports ampReport = null;
-		AmpReports oldReport = loadSourceReport(request);
+		AmpReports oldReport = null;
+		
+		/* I am not sure how this was implemented before, but i couldn't find where the constant REPORT_ID_QUERY_ENGINE is checked  
+		 * It was throwing an exception because {@link QueryEngine} sets the report ID to -7 and this class was trying to load the report
+		 * from the database which of course doesn't exist
+		 */
+		if (!ReportContextData.REPORT_ID_QUERY_ENGINE.equalsIgnoreCase(request.getParameter("reportId"))) {
+			oldReport = loadSourceReport(request);
+		}
 		
 		boolean createReportFromScratch = (oldReport == null || saveACopy);
 			
@@ -541,6 +545,12 @@ public class ReportWizardAction extends MultiAction {
 					}
 				}
 			}
+		}else{
+			// If it's comes from advance search use the report stored in {@Link ReportContextData}  
+			ampReport = ReportContextData.getFromRequest().getReportMeta();
+			ampReport.setAmpReportId(null);
+			ampReport.setOwnerId( ampTeamMember );
+			ampReport.setName(myForm.getReportTitle());
 		}
 		
 		if ( ampReport.getAmpReportId() != null )

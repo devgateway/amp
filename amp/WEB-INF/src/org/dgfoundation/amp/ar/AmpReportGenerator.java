@@ -416,7 +416,8 @@ public class AmpReportGenerator extends ReportGenerator {
 			}
 
 		} catch (Exception e) {
-			logger.error("Exception: ", e);
+			throw new RuntimeException(e);
+			//logger.error("Exception: ", e);
 		}
 
 	}

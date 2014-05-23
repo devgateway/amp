@@ -33,8 +33,8 @@ public class ActualDisbRecurrentCellGenerator extends SyntheticCellGenerator {
 		
 		
 		MetaInfo<String> mi	= metaData.getMetaInfo(this.getMetaDataName() );
-		if ( CategoryConstants.MODE_OF_PAYMENT_SALARIES_WAGES.getValueKey().equals( mi.getValue() ) || 
-				CategoryConstants.MODE_OF_PAYMENT_GOODS_SERVICES.getValueKey().equals( mi.getValue() ) ) {
+		if (mi != null && (CategoryConstants.MODE_OF_PAYMENT_SALARIES_WAGES.getValueKey().equals( mi.getValue() ) || 
+				CategoryConstants.MODE_OF_PAYMENT_GOODS_SERVICES.getValueKey().equals( mi.getValue())) ) {
 			return originalAmount;
 		}
 			

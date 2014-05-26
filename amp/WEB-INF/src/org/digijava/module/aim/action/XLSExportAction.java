@@ -136,8 +136,14 @@ public class XLSExportAction extends Action {
 			
 		Map<Long, MetaInfo<String>> sorters = ReportContextData.getFromRequest().getReportSorters();
 		//XLSExporter.resetStyles();
-	        
+ 		if ( sorters != null && sorters.size() > 0 ) {
+			rd.importLevelSorters(sorters, r.getHierarchies().size());
+			rd.applyLevelSorter();
+		}	        
 		
+		//AMP-17009: refresh report headings for sorted reports 
+		rd.calculateReportHeadings();
+
 		HSSFWorkbook wb = new HSSFWorkbook();
 		
 		if (numberOfColumns > 250)
@@ -185,11 +191,6 @@ public class XLSExportAction extends Action {
 		footer.setRight( "Page " + HSSFFooter.page() + " of " + HSSFFooter.numPages() );
 			 
 
-		if ( sorters != null && sorters.size() > 0 ) {
-			rd.importLevelSorters(sorters, r.getHierarchies().size());
-			rd.applyLevelSorter();
-		}
-		
 		rd.computeRowSpan(0, 0, Integer.MAX_VALUE - 100);
 
 		String publicPortalModeParam = request.getParameter("publicPortalMode");

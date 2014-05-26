@@ -62,6 +62,20 @@ public class GetDesktopReports extends TilesAction {
 					if ( (userActiveTabs != null) && (!found) )
 						reports.add(defaultTeamReport);
 				}
+				
+				//update currentTabReport reference to reflect the locale change
+                AmpReports currentTabReport = (AmpReports)session.getAttribute(Constants.CURRENT_TAB_REPORT);
+                Long currentTabReportId = currentTabReport==null? null: currentTabReport.getId();
+                if( currentTabReportId!=null ) {
+                	for(AmpReports r:userActiveTabs) {
+                		if( r.getAmpReportId().equals(currentTabReportId) ) {
+                			currentTabReport = r;
+                			break;
+                		}
+                	}
+                	session.setAttribute(Constants.CURRENT_TAB_REPORT, currentTabReport);
+                }
+				
 				//After Tanzania: Team Leaders should see all
 //				if (tm.getTeamHead() == true) {
 //					reports.addAll(TeamUtil.getAllTeamReports(userReports));

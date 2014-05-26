@@ -173,7 +173,7 @@ html.chrome .bd_drop{margin-top:15px;}
 .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:160px !important; }
 .right_menu_box_big {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:218px; }
 /*--rafy--*/
-.right_menu_cont {padding:10px; font-size:11px;}
+.right_menu_cont {padding:10px; font-size:11px;word-wrap:break-word;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
 .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px; padding-left:7px; background-position: 4px -1px;}

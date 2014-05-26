@@ -431,15 +431,7 @@ public class ReportWizardAction extends MultiAction {
 		Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();
 		
 		AmpReports ampReport = null;
-		AmpReports oldReport = null;
-		
-		/* I am not sure how this was implemented before, but i couldn't find where the constant REPORT_ID_QUERY_ENGINE is checked  
-		 * It was throwing an exception because {@link QueryEngine} sets the report ID to -7 and this class was trying to load the report
-		 * from the database which of course doesn't exist
-		 */
-		if (!ReportContextData.REPORT_ID_QUERY_ENGINE.equalsIgnoreCase(request.getParameter("reportId"))) {
-			oldReport = loadSourceReport(request);
-		}
+		AmpReports oldReport = loadSourceReport(request);
 		
 		boolean createReportFromScratch = (oldReport == null || saveACopy);
 			
@@ -625,7 +617,7 @@ public class ReportWizardAction extends MultiAction {
 				
 		Long reportId				= Long.parseLong(ampReportId);
 				
-		AmpReports sourceReport = (AmpReports) PersistenceManager.getSession().load(AmpReports.class, reportId);
+		AmpReports sourceReport = reportId > 0 ? (AmpReports) PersistenceManager.getSession().load(AmpReports.class, reportId) : null;
 		return sourceReport;
 	}
 //	/**

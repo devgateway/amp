@@ -121,6 +121,8 @@ public class MainMap extends Action {
 		filter.setProjectstatus(categoryvaluesprojectstatus);
 		
 		if (request.getParameter("exportreport") != null) {
+			
+			populateFilterForExport(filter);
 			filter.setModeexport(true);
 			//create ReportContextData if it doesn't exists
 			ReportContextData.getFromRequest(true);
@@ -238,6 +240,17 @@ public class MainMap extends Action {
 	}
 
 	
+	private void populateFilterForExport (MapFilter filter) {
+		try {
+			filter.setProgramElements(QueryUtil.initializePrograms());
+		} catch (DgException e) {
+			logger.error("Exception while initializing AmpThemes for GIS",e);
+		}
+		List<AmpCategoryValue> budgets = null;
+		budgets = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY);
+		filter.setBudgets(budgets);
+		
+	}
 	/**
 	 * 
 	 * @param filter

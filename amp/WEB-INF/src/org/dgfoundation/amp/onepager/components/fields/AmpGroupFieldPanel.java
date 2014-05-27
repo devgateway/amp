@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Collection;
 import java.util.List;
+
 import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -56,7 +57,7 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 		//dont show tooltip if label hidden
 		//dont provide aditional key to tooltip
 		//we do provide the default tooltip
-		super(id, fmName,false,tooltip, hideLabel,"");
+		super(id, fmName,false,tooltip, false,hideLabel,"");
 		choiceContainer = new RadioChoice<T>("choice", model, choicesList,renderer);
 		((RadioChoice<?>)choiceContainer).setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);

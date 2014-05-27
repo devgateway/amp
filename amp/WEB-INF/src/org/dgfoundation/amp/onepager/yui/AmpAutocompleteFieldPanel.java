@@ -244,7 +244,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
 			final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar) {
 		//super(id, null, fmName, hideLabel );
-		super(id, null,false,aditionalTooltipKey, fmName,hideLabel,"");
+		super(id, null,false,aditionalTooltipKey, fmName,hideLabel,"",false);
 		this.modelParams = new HashMap<AmpAutoCompleteModelParam, Object>();
 		this.objectListModelClass = objectListModelClass;
 		toggleButton = new WebMarkupContainer("toggleButton");

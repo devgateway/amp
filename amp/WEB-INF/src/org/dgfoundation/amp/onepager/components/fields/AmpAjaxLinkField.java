@@ -5,6 +5,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -49,8 +50,8 @@ public abstract class AmpAjaxLinkField extends AmpFieldPanel<Void> {
 		//show tooltip even when label hidden
 		//no special tooltip
 		//We provide the tooltip additional key provided as parameter
-		super(id, fmName,true,"",true,aditionalTooltipKey);
-		
+		super(id, fmName,true,"",true,true,aditionalTooltipKey);
+
 		button = new IndicatingAjaxLink("fieldButton") {
 			private static final long serialVersionUID = -5699378405978605979L;
 
@@ -92,5 +93,7 @@ public abstract class AmpAjaxLinkField extends AmpFieldPanel<Void> {
 	protected void addTooltip(){ 
 		button.add(new AttributeModifier("data-ot",titleTooltip.getDefaultModel().getObject().toString()));
 	}
-
+	protected String getTranslatorTooltipJavascript(){
+		return "spawnEditBox('"+ button.getMarkupId() +"');";
+	}
 }

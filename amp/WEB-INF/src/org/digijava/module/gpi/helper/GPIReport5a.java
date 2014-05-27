@@ -202,13 +202,13 @@ public class GPIReport5a extends GPIAbstractReport {
 								}
 							}
 	
-							AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity.getGpiSurvey().iterator().next() : null);
+							//AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity.getGpiSurvey().iterator().next() : null);
 							auxRow.setColumn1(null);
 							auxRow.setColumn2(null);
 							auxRow.setColumn3(-1);
 	
 							// Check if the survey has responses because the activityform saves the survey automatically even with no responses.
-							if(auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0) {
+							//if(auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0) {
 								switch (column) {
 									case 1:
 										auxRow.setColumn1(amount);									
@@ -220,11 +220,12 @@ public class GPIReport5a extends GPIAbstractReport {
 										continue;
 									}
 								auxRow.setColumn3(0);
-							}
+							//}
 							
 							auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
 							auxRow.setYear(calendar.get(Calendar.YEAR));
 							list.add(auxRow);
+							System.out.println(auxFunding.getAmpDonorOrgId().getName());
 						}
 					}
 				}

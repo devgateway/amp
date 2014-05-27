@@ -18,9 +18,9 @@
             	INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
 				VALUES(1,'Indicator 1',1,'1',null);
 				INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
-				VALUES(2,'Indicator 5a',1,'5a',null);
+				VALUES(2,'Indicator 5a',0,'5a',null);
 				INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
-				VALUES(3,'Indicator 6',0,'6',null);            	
+				VALUES(3,'Indicator 6',1,'6',null);            	
 				INSERT INTO amp_gpi_survey_indicator(amp_indicator_id, name, total_question, indicator_code, status)
 				VALUES(4,'Indicator 9b',4,'9b',null);
 				
@@ -33,8 +33,10 @@
 				
 				INSERT INTO amp_gpi_survey_question(amp_question_id, question_text, amp_indicator_id, parent_question_id, question_number, amp_type_id, status)
 				VALUES(1, 'Does this project use the country results framework?', 1, null, 1, 1, null);              
+				
 				INSERT INTO amp_gpi_survey_question(amp_question_id, question_text, amp_indicator_id, parent_question_id, question_number, amp_type_id, status)
-				VALUES(2, 'Is this project on budget and subject to parliamentary scrutiny?', 2, null, 2, 1, null);
+				VALUES(2, 'Is this project on budget and subject to parliamentary scrutiny?', 3, null, 2, 1, null);
+				
 				INSERT INTO amp_gpi_survey_question(amp_question_id, question_text, amp_indicator_id, parent_question_id, question_number, amp_type_id, status)
 				VALUES(3, 'Does the project use national budget execution procedures?', 4, null, 3, 1, null);
 				INSERT INTO amp_gpi_survey_question(amp_question_id, question_text, amp_indicator_id, parent_question_id, question_number, amp_type_id, status)

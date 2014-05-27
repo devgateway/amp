@@ -181,22 +181,24 @@ public class GPIReport9b extends GPIAbstractReport {
 								// AmpGPISurvey.
 								AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity.getGpiSurvey().iterator().next() : null);
 								boolean[] answers = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_9b, auxSurvey);
-								float coefficient = 0;
-								for (int i = 0; i < 4; i++) {
-									if (answers[i]) {
-										coefficient += 0.25;
+								if(answers != null) {
+									float coefficient = 0;
+									for (int i = 0; i < 4; i++) {
+										if (answers[i]) {
+											coefficient += 0.25;
+										}
 									}
+									
+									// Check if the survey has responses because the activityform saves the survey automatically even with no responses.
+									if(auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0) {
+										auxRow.setColumn1(amount.multiply(new BigDecimal(coefficient)));
+										auxRow.setColumn2(amount);
+										auxRow.setColumn3(0);
+									}
+									auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
+									auxRow.setYear(calendar.get(Calendar.YEAR));
+									list.add(auxRow);
 								}
-								
-								// Check if the survey has responses because the activityform saves the survey automatically even with no responses.
-								if(auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0) {
-									auxRow.setColumn1(amount.multiply(new BigDecimal(coefficient)));
-									auxRow.setColumn2(amount);
-									auxRow.setColumn3(0);
-								}
-								auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
-								auxRow.setYear(calendar.get(Calendar.YEAR));
-								list.add(auxRow);
 							}
 						}
 					}

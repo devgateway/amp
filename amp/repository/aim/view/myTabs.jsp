@@ -13,6 +13,7 @@
 		if (ReportContextData.contextIdExists()){
 			ReportContextData.getFromRequest(true); // instantiate a RCD instance - will crash if no ampReportId exists in the context (this is ok), will create a new RCD if not existing (That is ok too - we might render this tab without having gone through viewNewAdvancedReport)
 		}
+		
 		org.digijava.module.aim.dbentity.AmpReports report = (org.digijava.module.aim.dbentity.AmpReports) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_TAB_REPORT);
 		//Long currentTabAmpReportId = (report != null) ? report.getAmpReportId() : null;
 		if (report != null)
@@ -207,11 +208,18 @@ var myTabsObject;
 		
 		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
 		allTabsPanel.hide();
+		document.addEventListener("click", preventTabClickEvent, true);
 		startajaxtabs("MyTabs");
 		reloadTab("MyTabs",id);
 		hideMoreTabs();
 	}
 
+	function preventTabClickEvent(e){
+		if ($(e.target).parents('#MyTabs').length > 0 ) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
+	}
 	function hideMoreTabs(){
 		if(isListEmpty()){
 			var l = document.getElementById('MyTabs').getElementsByTagName("li").length;

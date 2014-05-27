@@ -7,7 +7,8 @@ var defaultcontentarray=new Object();
 var bustcacheparameter="";
 
 
-function ajaxpage(url, containerid, targetobj)
+
+function ajaxpage(url, containerid, targetobj,isLoad)
 {
 	var page_request = false;
 	if (window.XMLHttpRequest) // if Mozilla, Safari etc
@@ -37,6 +38,9 @@ function ajaxpage(url, containerid, targetobj)
 		return
 	};
 	document.getElementById(containerid).innerHTML = loadstatustext;
+	if (true != isLoad) {
+		document.addEventListener("click", preventTabClickEvent, true);
+	}
 	page_request.onreadystatechange=function()
 	{
 		loadpage(page_request, containerid);
@@ -51,6 +55,7 @@ function loadpage(page_request, containerid)
 {
 	if (page_request.readyState == 4 && (page_request.status==200 || window.location.href.indexOf("http")==-1))
 	{
+		document.removeEventListener('click', preventTabClickEvent, true);
 		document.getElementById(containerid).innerHTML = page_request.responseText;
 		try
 		{	
@@ -148,7 +153,7 @@ function reloadTab(tabcontentid,tabid) {
 var thetab=document.getElementById(tabid);
 if (thetab!=null)
 	if (thetab.getAttribute("rel")){
-		ajaxpage(thetab.getAttribute("href"), thetab.getAttribute("rel"), thetab);
+		ajaxpage(thetab.getAttribute("href"), thetab.getAttribute("rel"), thetab,true);
 		loadobjs(thetab.getAttribute("rev"));
 	}
 }

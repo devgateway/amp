@@ -337,6 +337,7 @@ public class GPIUseCase {
 			session = PersistenceManager.getRequestDBSession();
 			//TODO: replace this query by a view that has both activities and fundings (to save time).
 			Criteria criteria = session.createCriteria(AmpActivity.class);
+			criteria.add(Restrictions.isNotNull("team"));
 			//criteria.setFetchMode("ampActivityId.funding", FetchMode.JOIN).setFetchMode("ampActivityId.funding.fundingDetails", FetchMode.JOIN);
 			//criteria.addOrder(Order.asc("ampGPISurveyId"));
 

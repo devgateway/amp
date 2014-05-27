@@ -208,11 +208,18 @@ var myTabsObject;
 		
 		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
 		allTabsPanel.hide();
+		document.addEventListener("click", preventTabClickEvent, true);
 		startajaxtabs("MyTabs");
 		reloadTab("MyTabs",id);
 		hideMoreTabs();
 	}
 
+	function preventTabClickEvent(e){
+		if ($(e.target).parents('#MyTabs').length > 0 ) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
+	}
 	function hideMoreTabs(){
 		if(isListEmpty()){
 			var l = document.getElementById('MyTabs').getElementsByTagName("li").length;

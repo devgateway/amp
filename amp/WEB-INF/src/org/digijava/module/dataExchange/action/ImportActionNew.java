@@ -289,7 +289,7 @@ public class ImportActionNew extends DispatchAction {
                 }
 
                 if (title != null && iatiIdt != null) {
-                    filteredActNames.add(new StringBuilder(title).append(" - ").append(iatiIdt).toString());
+                    filteredActNames.add(new StringBuilder(title.replace("\n","").replaceAll("\\s+", " ")).append(" - ").append(iatiIdt).toString());
                     break;
                 }
             }

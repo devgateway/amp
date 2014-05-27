@@ -19,6 +19,8 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpGPISurveyQuestion;
+import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -61,6 +63,7 @@ public class GPIReport1 extends GPIAbstractReport {
 		int yearRange = filter.getEndYer() - filter.getStartYear() + 1;
 		Date[] startDates = new Date[yearRange];
 		Date[] endDates = new Date[yearRange];
+		AmpGPISurveyQuestion question1 = GPIUtils.getQuestionsByCode(reportCode).get(0);
 
 		try {
 			// Setup year ranges according the selected calendar.
@@ -143,11 +146,10 @@ public class GPIReport1 extends GPIAbstractReport {
 							auxRow = new GPIReport1Row();
 							// Check survey answers for this
 							// AmpGPISurvey.
-							AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity.getGpiSurvey().iterator().next() : null);						
-							boolean[] showColumn = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_1, auxSurvey);
-
-							// Check if the survey has responses because the activityform saves the survey automatically even with no responses.
-							if(auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0) {
+							AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity.getGpiSurvey().iterator().next() : null);
+							boolean[] showColumn = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_1, auxSurvey);					
+							// If there was an answer (yes or no).
+							if (auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0 && showColumn != null) {
 								if (showColumn[0]) {
 									auxRow.setColumn1(new Integer(1));
 								} else {

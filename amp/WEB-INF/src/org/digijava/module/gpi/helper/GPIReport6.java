@@ -186,7 +186,7 @@ public class GPIReport6 extends GPIAbstractReport {
 								auxRow.setColumn2(null);
 								auxRow.setColumn3(0);
 								// Check if the survey has responses because the activityform saves the survey automatically even with no responses.
-								if(auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0) {
+								if(auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0  && answers != null) {
 									if (answers[0]) {
 										auxRow.setColumn1(amount);
 									} else {

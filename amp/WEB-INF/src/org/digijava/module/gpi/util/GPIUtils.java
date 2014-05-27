@@ -2,12 +2,20 @@ package org.digijava.module.gpi.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
+import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
+import org.digijava.module.aim.dbentity.AmpGPISurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpGPISurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpGPISurveyResponse;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -20,6 +28,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.gpi.helper.row.GPIReportAbstractRow;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class GPIUtils {
 
@@ -246,10 +256,18 @@ public class GPIUtils {
 	// TODO: Now the questions/answers are hardcoded, lets change it by
 	// selecting the right answer for the current question.
 	public static boolean[] getSurveyAnswers(String reportCode, AmpGPISurvey survey) throws Exception {
+		
+		Comparator<AmpGPISurveyResponse> comparator = new Comparator<AmpGPISurveyResponse>() {
+			public int compare(AmpGPISurveyResponse a, AmpGPISurveyResponse b) {
+				return a.getAmpQuestionId().getQuestionNumber()
+						.compareTo(b.getAmpQuestionId().getQuestionNumber());
+			}
+		};
+		
 		// Set the number of columns for each report.
 		boolean[] columns = null;
 		if (GPIConstants.GPI_REPORT_1.equals(reportCode)) {
-			columns = new boolean[3];
+			columns = new boolean[1];
 		} else if (GPIConstants.GPI_REPORT_6.equals(reportCode)) {
 			columns = new boolean[1];
 		} else if (GPIConstants.GPI_REPORT_9b.equals(reportCode)) {
@@ -260,7 +278,9 @@ public class GPIUtils {
 		// sorted).
 		String[] answers = new String[GPIConstants.NUMBER_OF_SURVEY_QUESTIONS];
 		if(survey != null) {
-			Collection<AmpGPISurveyResponse> responses = survey.getResponses();
+			// First sort the responses by its query order.
+			List<AmpGPISurveyResponse> responses = new ArrayList<AmpGPISurveyResponse>(survey.getResponses());
+			Collections.sort(responses, comparator);
 			Iterator<AmpGPISurveyResponse> iter = responses.iterator();
 			while (iter.hasNext()) {
 				AmpGPISurveyResponse auxResponse = iter.next();
@@ -273,19 +293,40 @@ public class GPIUtils {
 			// Remember: columns[0] is the first column :)
 			// Remember: answers[0] is the first question :D
 			if (GPIConstants.GPI_REPORT_1.equals(reportCode)) {
-				columns[0] = ("Yes".equalsIgnoreCase(answers[0]));
-				columns[1] = ("Yes".equalsIgnoreCase(answers[0]));
-				columns[2] = ("Yes".equalsIgnoreCase(answers[0]));
+				// Check if the question has a valid answer (yes/no) because the activityform saves the survey automatically even with no responses.
+				if(answers[0].trim().equals("")) {
+					columns = null;
+				} else {
+					columns[0] = ("Yes".equalsIgnoreCase(answers[0]));
+				}
 			} else if (GPIConstants.GPI_REPORT_9b.equals(reportCode)) {
 				// In this case "columns" means "answers" :)
-				columns[0] = ("Yes".equalsIgnoreCase(answers[0]));
-				columns[1] = ("Yes".equalsIgnoreCase(answers[1]));
-				columns[2] = ("Yes".equalsIgnoreCase(answers[2]));
-				columns[3] = ("Yes".equalsIgnoreCase(answers[3]));
+				if(answers[2].trim().equals("") && answers[3].trim().equals("") && answers[4].trim().equals("") && answers[5].trim().equals("")) {
+					// None of the 4 questions have been answeres (yes/no) so this funding is invalid.
+					columns = null;
+				} else {
+					columns[0] = ("Yes".equalsIgnoreCase(answers[2]));
+					columns[1] = ("Yes".equalsIgnoreCase(answers[3]));
+					columns[2] = ("Yes".equalsIgnoreCase(answers[4]));
+					columns[3] = ("Yes".equalsIgnoreCase(answers[5]));
+				}
 			} else if (GPIConstants.GPI_REPORT_6.equals(reportCode)) {
-				columns[0] = ("Yes".equalsIgnoreCase(answers[0]));
+				// Check if the question has a valid answer (yes/no) because the activityform saves the survey automatically even with no responses.
+				if(answers[1].trim().equals("")) {
+					columns = null;
+				} else {
+					columns[0] = ("Yes".equalsIgnoreCase(answers[1]));
+				}
 			}
 		}
 		return columns;
+	}
+	
+	public static List<AmpGPISurveyQuestion> getQuestionsByCode(String code) {
+		Session session = PersistenceManager.getSession();
+		Query query = session.createSQLQuery("SELECT * FROM amp_gpi_survey_question agsq WHERE amp_indicator_id = (SELECT amp_indicator_id FROM amp_gpi_survey_indicator agsi WHERE indicator_code like ?)")
+				.addEntity(AmpGPISurveyQuestion.class).setString(0, code);
+		//List<AmpGPISurveyQuestion> list = new ArrayList<AmpGPISurveyQuestion>();
+		return query.list();
 	}
 }

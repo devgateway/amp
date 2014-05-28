@@ -320,6 +320,17 @@ function allOptionChecked(option,name,subname){
 	}
 }
 
+function checkIfAnyChecked(name) {
+	var some = false;
+	var controls = $("input[name='"+name+"']");
+	for(var i = 0; i < controls.length; i++) {
+		if($(controls[i]).is(':checked')) {	
+			some = true;
+		}
+	}
+	return some;
+}
+
 function uncheckAllRelatedEntities(name){
 	$("input[name='"+name+"']").removeAttr('checked');
 }
@@ -631,9 +642,9 @@ function resetToDefaults(){
 	if (document.getElementById("workspace_only")!=null){
 		document.getElementById("workspace_only").checked = false;
 	}
-    if (document.getElementById("show_groups_not_orgs")!=null){
-        document.getElementById("show_groups_not_orgs").checked = false;
-    }
+	if (document.getElementById("show_groups_not_orgs")!=null){
+		document.getElementById("show_groups_not_orgs").checked = false;
+	}
 	
 	if (dashboardType==4){ // if it is a Deal Dashboard
 		document.getElementById("implementing_agency_dropdown_id").selectedIndex = 0;
@@ -1162,6 +1173,15 @@ function callbackApplyFilter(e){
 		}
 	}
 	
+	document.getElementById('region_national').checked = document.getElementById("show_only_national_projects").checked;
+	// If the quick filter "show only national projects" is checked then we need to check "National" on the advanced filters
+	// and uncheck all the other options in order to remain consistent.
+	if (document.getElementById("show_only_national_projects")!=null && document.getElementById("show_only_national_projects").checked) {
+		document.getElementById('region_national').checked = document.getElementById("show_only_national_projects").checked;
+		document.getElementById('region_check_all').checked = false;
+		allOptionChecked(document.getElementById('region_check_all'),'region_check','zone_check');
+	}
+	
 	var params = "";
 	params = params + "&orgGroupIds=" + getQueryParameter("orgGroupIds");
 	params = params + "&orgIds=" + getQueryParameter("orgIds");
@@ -1177,6 +1197,7 @@ function callbackApplyFilter(e){
 	params = params + "&showAcronymForOrgNames=" + document.getElementById("show_acronym_for_org_names").checked;
 	params = params + "&showOnlyNationalProjects=" + document.getElementById("show_only_national_projects").checked;
 	params = params + "&showGroupsNotOrgs=" + document.getElementById("show_groups_not_orgs").checked;
+	params = params + "&nationalProjectsToo=" + document.getElementById("region_national").checked;
 
 	loadingPanel.show();
 
@@ -1301,17 +1322,27 @@ function applyFilterPopin(e){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 		document.getElementById("workspaceOnlyQuickFilter").checked = document.getElementById("workspace_only").checked;
 	}
-    if (document.getElementById("showGroupsNotOrgs")!=null){
-        document.getElementById("showGroupsNotOrgs").value = document.getElementById("show_groups_not_orgs").checked;
-    }
+	if (document.getElementById("showGroupsNotOrgs")!=null){
+		document.getElementById("showGroupsNotOrgs").value = document.getElementById("show_groups_not_orgs").checked;
+	}
 	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	if (document.getElementById("showAcronymForOrgNames")!=null) {
 		document.getElementById("showAcronymForOrgNames").value = document.getElementById("show_acronym_for_org_names").checked;
 	}
-	if (document.getElementById("showOnlyNationalProjects")!=null) {
-		document.getElementById("showOnlyNationalProjects").value = document.getElementById("show_only_national_projects").checked;
-	}	
+	
+	// If the advanced filter "National" is checked AND no other regional option is checked then we need to check "Show Only National Projects"
+	// in the quick filter in order to remain consistent.
+	if (document.getElementById("region_national")!=null && document.getElementById("region_national").checked) {		
+		if(!checkIfAnyChecked('region_check') && !checkIfAnyChecked('zone_check') && !document.getElementById("region_check_all").checked) {
+			document.getElementById('show_only_national_projects').checked = document.getElementById("region_national").checked;
+		} else {
+			document.getElementById('show_only_national_projects').checked = false;
+		}
+	} else {
+		document.getElementById('show_only_national_projects').checked = false;
+	}
+	
 	document.getElementById("transactionType").value = document.getElementById("transaction_type").options[document.getElementById("transaction_type").selectedIndex].value;
 	document.getElementById("transactionType_dropdown").value = document.getElementById("transactionType").value;
 	document.getElementById("adjustment_type_quick").value = document.getElementById("adjustmentType").value;
@@ -1339,6 +1370,7 @@ function applyFilterPopin(e){
 		params = params + "&secondaryProgramIds=" + getSelectionsFromElement("secondary_program_check",false);
 	}
 	params = params + "&showGroupsNotOrgs=" + document.getElementById("show_groups_not_orgs").checked;
+	params = params + "&showOnlyNationalProjects=" + document.getElementById("show_only_national_projects").checked;
 
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
@@ -2829,9 +2861,9 @@ function launchDashboard(){
 	if (document.getElementById("workspace_only")!=null){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 	}
-    if (document.getElementById("show_groups_not_orgs")!=null){
-        document.getElementById("showGroupsNotOrgs").value = document.getElementById("show_groups_not_orgs").checked;
-    }
+	if (document.getElementById("show_groups_not_orgs")!=null){
+		document.getElementById("showGroupsNotOrgs").value = document.getElementById("show_groups_not_orgs").checked;
+	}
 	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	
 	if (document.getElementById("transaction_type_0").checked == true) {

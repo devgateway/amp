@@ -123,7 +123,8 @@ public class AmpSectorsFormTableFeature extends
 			public String getObject() {
 				double total=0;
 				for(AmpActivitySector a:listModel.getObject())
-					total+=a.getSectorPercentage();
+					if (a.getSectorPercentage() != null)
+						total += a.getSectorPercentage();
 				return Double.toString(total);
 			}
 		});

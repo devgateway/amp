@@ -102,9 +102,10 @@ public class AmpLocationFormTableFeature extends
 		final Label totalLabel = new Label("totalPercLocation", new Model() {
 			@Override
 			public String getObject() {
-				double total=0;
+				double total = 0;
 				for(AmpActivityLocation item:listModel.getObject())
-					total+=item.getLocationPercentage();
+					if (item.getLocationPercentage() != null)
+						total += item.getLocationPercentage();
 				return Double.toString(total);
 			}
 		});

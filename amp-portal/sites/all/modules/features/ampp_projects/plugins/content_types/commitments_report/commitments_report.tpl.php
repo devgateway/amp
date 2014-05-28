@@ -19,7 +19,7 @@
 
   <tfoot>
     <tr>
-      <th class="column-one"><?php print t('TOTAL (!total)', array('!total' => $total_org_count)); ?></th>
+      <th class="column-one"><?php print t('TOTAL (!total)', array('!total' => $total_entries_count)); ?></th>
       <th class="column-two"><?php print $total_amount . $currency_symbol; ?></th>
     </tr>
   </tfoot>

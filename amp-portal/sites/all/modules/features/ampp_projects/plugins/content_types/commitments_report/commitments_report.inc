@@ -41,7 +41,7 @@ function ampp_projects_commitments_report_content_type_render($subtype, $conf, $
     'currency_symbol' => $conf['currency_symbol'],
     'commitments_report' => $reports,
     'total_amount' => $reports_info['total_amount'],
-    'total_org_count' => $reports_info['total_org_count']
+    'total_entries_count' => $reports_info['total_entries_count']
   ));
 
   return $block;
@@ -56,7 +56,7 @@ function ampp_projects_commitments_report_content_type_theme(&$theme, $plugin) {
       'currency_symbol' => NULL,
       'commitments_report' => NULL,
       'total_amount' => NULL,
-      'total_org_count' => NULL
+      'total_entries_count' => NULL
     ),
     'path' => $plugin['path'],
     'template' => 'commitments_report'
@@ -109,10 +109,10 @@ function _amp_projects_get_commitments_report($number_of_days, $order_field, $or
   $query->addExpression($i18n_info['expression'], 'organisation_name', $i18n_info['args']);
   $query->groupBy('amp_organisation.amp_org_id');
 
-  // Get the number of organizations.
-  $query->addExpression('COUNT(amp_organisation.amp_org_id)', 'organisation_count');
+  // Get the number of activities.
+  $query->addExpression('COUNT(DISTINCT(cached_amp_activity.amp_activity_id))', 'activities_count');
 
-  // Prepare an expresion that can get the transaction_amount in the base curency.
+  // Prepare an expresion that can get the transaction_amount in the base currency.
   $transaction_amount_expression = 'SUM(amp_funding_detail.transaction_amount / getexchange(amp_currency.currency_code, amp_funding_detail.transaction_date))';
   $query->addExpression($transaction_amount_expression, 'transaction_amount_in_base_currency');
 
@@ -142,15 +142,15 @@ function _amp_projects_get_commitments_report($number_of_days, $order_field, $or
   $result = $query->execute();
   $reports = array();
   $total_amount = 0.00;
-  $total_records_count = 0;
+  $total_entries_count = 0;
 
   foreach ($result as $record) {
     $total_amount += floatval($record->transaction_amount_in_base_currency);
-    $total_records_count += $record->organisation_count;
+    $total_entries_count += $record->activities_count;
     $record->transaction_amount_in_base_currency = format_number($record->transaction_amount_in_base_currency, '2');
     $reports[] = array(
       'name' => $record->organisation_name,
-      'count' => $record->organisation_count,
+      'count' => $record->activities_count,
       'amount' => $record->transaction_amount_in_base_currency,
     );
   }
@@ -160,7 +160,7 @@ function _amp_projects_get_commitments_report($number_of_days, $order_field, $or
   $results = array(
     'reports' => $reports,
     'total_amount' => $total_amount,
-    'total_org_count' => $total_records_count,
+    'total_entries_count' => $total_entries_count,
   );
 
   // Store the results in cache for 12h.

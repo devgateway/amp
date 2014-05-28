@@ -543,14 +543,13 @@ function toggleSettings(){
 <!--<span>Level Sorters</span>-->
 	<logic:notEmpty name="reportMeta" property="hierarchies">
 		<logic:notEmpty name="generatedReport" property="levelSorters">
+			<bean:define id="hierarchies" name="reportMeta" property="hierarchiesArray" /> 
 			<tr>
 				<td align="left">
 				<logic:iterate name="generatedReport" property="levelSorters" id="sorter" indexId="levelId">
 					<span style="font-style: italic;font-size: 9px;font-family: Arial;margin-left: 3px; margin-top: 3px;margin-left: 3px">
 					<logic:present name="sorter">
-						<digi:trn key="rep:pop:Level">Level</digi:trn> 
-							<bean:write name="levelId"/> 
-							<digi:trn key="rep:pop:sortedBy">sorted by</digi:trn> 
+							<digi:trn>${hierarchies[levelId].column.columnName}</digi:trn>&nbsp;<digi:trn key="rep:pop:sortedBy">sorted by</digi:trn> 
 							<bean:write name="sorter"/>
 						<br>		
 					</logic:present>

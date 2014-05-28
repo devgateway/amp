@@ -8,9 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -92,7 +90,7 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		//we show even if the label is hidden
 		//we do not provide additional key to the tooltip
 		//we do not provide a default tooltip
-		super(id, fmName,true,"","", hideLabel, hideNewLine);
+		super(id, fmName,true,"",true,"", hideLabel, hideNewLine);
 		button = new IndicatingAjaxButton("fieldButton", new Model<String>(
 				fmName)) {
 			private static final long serialVersionUID = -5699378405978605979L;
@@ -211,4 +209,8 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 			
 		
 	}
+	protected String getTranslatorTooltipJavascript(){
+		return "spawnEditBox('"+ button.getMarkupId() +"');";
+	}
+
 }

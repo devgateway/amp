@@ -6,8 +6,9 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Iterator;
 import java.util.List;
-import org.apache.wicket.Component;
+
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -15,10 +16,6 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractChoice;
@@ -38,7 +35,6 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
@@ -64,6 +60,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	protected Image tooltipIcon;
 	protected boolean hideLabel;
 	protected boolean showTooltipIfLabelHidden;
+	protected boolean showTranslatorIconIfLabelHidden;
 
 	/**
 	 * @see #addFormComponent(FormComponent)
@@ -185,16 +182,16 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	}
 
 	public AmpFieldPanel(String id, String fmName, boolean hideLabel) {
-		this(id, fmName, hideLabel,"",false,"");
+		this(id, fmName, hideLabel,"",false,false,"");
 	}
-	public AmpFieldPanel(String id, String fmName, boolean hideLabel,String tooltip,boolean showTooltipIfLabelHidden,String aditionalTooltipKey) {
-		this(id, null,showTooltipIfLabelHidden,aditionalTooltipKey, fmName, hideLabel,tooltip);
+	public AmpFieldPanel(String id, String fmName, boolean hideLabel,String tooltip,boolean showTranslatorIconIfLabelHidden,boolean showTooltipIfLabelHidden,String aditionalTooltipKey) {
+		this(id, null,showTooltipIfLabelHidden,aditionalTooltipKey, fmName, hideLabel,tooltip,showTranslatorIconIfLabelHidden);
 	}
 	public AmpFieldPanel(String id, String fmName, boolean hideLabel,boolean hideNewLine) {
-		this(id,fmName,false,"","",hideLabel,hideNewLine);
+		this(id,fmName,false,"",false,"",hideLabel,hideNewLine);
 	}
-	public AmpFieldPanel(String id, String fmName, boolean showTooltipIfLabelHidden,String aditionalTooltipKey,String tooltip,boolean hideLabel,boolean hideNewLine) {
-		this(id, null, fmName, hideLabel, hideNewLine);
+	public AmpFieldPanel(String id, String fmName, boolean showTooltipIfLabelHidden,String aditionalTooltipKey,boolean showTranslatorIconIfLabelHidden,String tooltip,boolean hideLabel,boolean hideNewLine) {
+		this(id,  null,showTooltipIfLabelHidden,aditionalTooltipKey, fmName,hideLabel, hideNewLine,tooltip,showTranslatorIconIfLabelHidden);
 	}
 	/**
 	 * @param id
@@ -204,7 +201,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 *            id and the feature manager name for this field
 	 */
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel) {
-		this(id, model,false,"", fmName,hideLabel,"");	
+		this(id, model,false,"", fmName,hideLabel,"",false);	
 	}
 	/**
 	 * @param id
@@ -214,8 +211,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 *            id and the feature manager name for this field
 	 */
 	public AmpFieldPanel(String id, IModel<T> model,boolean showTooltipIfLabelHidden,String aditionalTooltipKey, String fmName,
-			boolean hideLabel,String tooltip) {
-		this(id, model,showTooltipIfLabelHidden, aditionalTooltipKey,fmName, hideLabel, hideLabel,tooltip);
+			boolean hideLabel,String tooltip,boolean showTranslatorIconIfLabelHidden) {
+		this(id, model,showTooltipIfLabelHidden, aditionalTooltipKey,fmName, hideLabel, hideLabel,tooltip,showTranslatorIconIfLabelHidden);
 
 	}
 
@@ -229,19 +226,19 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,
 			boolean hideLabel, boolean hideNewLine,
 			final boolean showReqStarForNotReqComp) {
-		this(id, model,false,"", fmName,hideLabel, hideNewLine,showReqStarForNotReqComp,"");
+		this(id, model,false,"", fmName,hideLabel, hideNewLine,showReqStarForNotReqComp,"",false);
 	}
 	public AmpFieldPanel(String id, IModel<T> model, boolean showTooltipIfLabelHidden,String aditionalTooltipKey,String fmName,
 			boolean hideLabel, boolean hideNewLine,final boolean showReqStarForNotReqComp,
-			String tooltip) {
+			String tooltip,boolean showTranslatorIconIfLabelHidden) {
 		this(id, model, showTooltipIfLabelHidden,aditionalTooltipKey,fmName, hideLabel, hideNewLine,
-				showReqStarForNotReqComp, false,tooltip);
+				showReqStarForNotReqComp, false,tooltip,showTranslatorIconIfLabelHidden);
 	}
 	public AmpFieldPanel(String id, IModel<T> model, final String fmName,
 			boolean hideLabel, boolean hideNewLine,
 			final boolean showReqStarForNotReqComp, boolean enableReqStar) {
 		this(id, model,false,"", fmName,hideLabel, hideNewLine,showReqStarForNotReqComp, 
-				enableReqStar,"");
+				enableReqStar,"",false);
 	}
 	/**
 	 * If we need to provide a default tooltip we should pass it to the constructor
@@ -258,7 +255,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	
 	public AmpFieldPanel(String id, IModel<T> model, boolean showTooltipIfLabelHidden,String aditionalTooltipKey,final String fmName,
 			boolean hideLabel, boolean hideNewLine,
-			final boolean showReqStarForNotReqComp, boolean enableReqStar,String tooltip) {
+			final boolean showReqStarForNotReqComp, boolean enableReqStar,String tooltip,boolean showTranslatorIconIfLabelHidden) {
 		super(id, model, fmName, AmpFMTypes.MODULE);
 		this.fmType = AmpFMTypes.MODULE;
 		this.hideLabel=hideLabel;
@@ -273,7 +270,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 			showTooltipEditor = true;
 		}
 
-        if (TranslatorUtil.isTranslatorMode(getSession())) {
+		if ((TranslatorUtil.isTranslatorMode(getSession()) && (!hideLabel || showTranslatorIconIfLabelHidden))) {
             showTitleEditor = true;
         }
 
@@ -300,7 +297,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                target.appendJavaScript("spawnEditBox('"+ titleLabel.getMarkupId() +"');");
+                target.appendJavaScript(getTranslatorTooltipJavascript());
 
             }
 
@@ -414,11 +411,11 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,
 			boolean hideLabel, boolean hideNewLine) {
-		this(id,  model,false,"", fmName,hideLabel, hideNewLine,"");
+		this(id,  model,false,"", fmName,hideLabel, hideNewLine,"",false);
 	}
 	public AmpFieldPanel(String id, IModel<T> model, boolean showTooltipIfLabelHidden,String aditionalTooltipKey,String fmName,
-			boolean hideLabel, boolean hideNewLine,String tooltip) {
-		this(id, model,showTooltipIfLabelHidden,aditionalTooltipKey, fmName, hideLabel, hideNewLine, false,tooltip);
+			boolean hideLabel, boolean hideNewLine,String tooltip,boolean showTranslatorIconIfLabelHidden) {
+		this(id, model,showTooltipIfLabelHidden,aditionalTooltipKey, fmName, hideLabel, hideNewLine, false,tooltip,showTranslatorIconIfLabelHidden);
 	}
 
 	/**
@@ -438,5 +435,19 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	public void setTitleTooltip(Label titleTooltip) {
 		this.titleTooltip = titleTooltip;
 	}
+	
+	public boolean isShowTranslatorIconIfLabelHidden() {
+		return showTranslatorIconIfLabelHidden;
+	}
 
+	public void setShowTranslatorIconIfLabelHidden(
+			boolean showTranslatorIconIfLabelHidden) {
+		this.showTranslatorIconIfLabelHidden = showTranslatorIconIfLabelHidden;
+	}
+
+	protected String getTranslatorTooltipJavascript(){
+		return "spawnEditBox('"+ titleLabel.getMarkupId() +"');";
+	}
+	
+	
 }

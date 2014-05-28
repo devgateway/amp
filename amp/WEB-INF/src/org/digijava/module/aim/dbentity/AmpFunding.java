@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -32,7 +33,11 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private Date originalCompDate;
 	private Date lastAuditDate;
 	private Date reportingDate;
+	
+	@TranslatableField
 	private String conditions;
+	
+	@TranslatableField
 	private String donorObjective;
 	private String language;
 	private String version;

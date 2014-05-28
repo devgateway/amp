@@ -141,9 +141,6 @@ public class XLSExportAction extends Action {
 			rd.applyLevelSorter();
 		}	        
 		
-		//AMP-17009: refresh report headings for sorted reports 
-		rd.calculateReportHeadings();
-
 		HSSFWorkbook wb = new HSSFWorkbook();
 		
 		if (numberOfColumns > 250)

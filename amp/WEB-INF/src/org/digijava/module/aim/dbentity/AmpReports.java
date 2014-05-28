@@ -306,7 +306,13 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	public Set<AmpReportHierarchy> getHierarchies() {
 		return hierarchies;
 	}
-
+	/**
+	 * @return the hierarchies as an Array
+	 */
+	public AmpReportHierarchy[] getHierarchiesArray() {
+		return hierarchies.toArray(new AmpReportHierarchy[hierarchies.size()]);
+	}
+	
     /**
      * Some of the columns should have total information. This must be taken into account when spans for the total row is calculated
      * @return number of columns that have additional total information.

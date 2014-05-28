@@ -34,19 +34,19 @@ function validate () {
 	<digi:errors/>
 	<table>
 		<tr>
-			<td>Name <font color="red">*</font></td>
+			<td><digi:trn>Name</digi:trn> <font color="red">*</font></td>
 			<td><html:text name="suspendLoginManagerForm" property="currentObj.name"/></td>
 		</tr>
 		<tr>
-			<td>Text</td>
+			<td><digi:trn>Text</digi:trn></td>
 			<td><html:text name="suspendLoginManagerForm" property="currentObj.reasonText"/></td>
 		</tr>
 		<tr>
-			<td>Expires</td>
+			<td><digi:trn>Expires</digi:trn></td>
 			<td><html:checkbox name="suspendLoginManagerForm" property="currentObj.expires"/></td>
 		</tr>
 		<tr>
-			<td>Date</td>
+			<td><digi:trn>Date</digi:trn></td>
 			<td><html:text name="suspendLoginManagerForm" property="currentObj.formatedDate" styleId="txtExpireDate"/>
 				<!--
 				<a id="clear1" href='javascript:clearDate(document.getElementById("txtExpireDate"), "clear1")'>remove</a>
@@ -55,7 +55,7 @@ function validate () {
 				</td>
 		</tr>
 		<tr>
-			<td>Active</td>
+			<td><digi:trn>Active</digi:trn></td>
 			<td><html:checkbox name="suspendLoginManagerForm" property="currentObj.active"/></td>
 		</tr>
 		<tr>

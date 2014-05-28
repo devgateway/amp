@@ -100,7 +100,7 @@
 			
 		</td>
 	</tr>
-	<tr><td><a href="/um/suspendLoginManager.do~action=add">Add</a></td></tr>
+	<tr><td><a href="/um/suspendLoginManager.do~action=add"><digi:trn>Add</digi:trn></a></td></tr>
 </table>
 <td width=20>&nbsp;</td>
     <td width=300 valign=top>

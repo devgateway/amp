@@ -416,8 +416,10 @@ public final class AdvancedReportUtil {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses parallel project implementation unit")
 					+ ":\n";
-			aidEffectivenesToAdd += activity.getProjectImplementationUnit()
-					+ ":\n";
+			if(activity.getProjectImplementationUnit()!=null){
+				aidEffectivenesToAdd += activity.getProjectImplementationUnit();
+			}	
+			aidEffectivenesToAdd +=" \n";
 		}
 		AmpCategoryValue ampCategoryValue = CategoryManagerUtil
 				.getAmpCategoryValueFromListByKey(
@@ -439,8 +441,10 @@ public final class AdvancedReportUtil {
 						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project has been approved by IMAC") + ":\n";
-			aidEffectivenesToAdd += activity.getImacApproved() + "\n";
-
+			if(activity.getImacApproved()!=null){
+				aidEffectivenesToAdd += activity.getImacApproved() + "\n";
+			}
+			aidEffectivenesToAdd +=" \n";
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
@@ -449,7 +453,10 @@ public final class AdvancedReportUtil {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Government is meber of project steering committee")
 					+ ":\n";
-			aidEffectivenesToAdd += activity.getNationalOversight() + "\n";
+			if(activity.getNationalOversight()!=null){
+				aidEffectivenesToAdd += activity.getNationalOversight() ; 
+			}
+			aidEffectivenesToAdd +=" \n";
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
@@ -457,14 +464,20 @@ public final class AdvancedReportUtil {
 						ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project is on budget") + ":\n";
-			aidEffectivenesToAdd += activity.getOnBudget() + "\n";
+			if(activity.getOnBudget()!=null){
+				aidEffectivenesToAdd += activity.getOnBudget();	
+			}
+			aidEffectivenesToAdd += "\n";
 		}
 		if (FeaturesUtil.isVisibleModule(
 				"/Activity Form/Aid Effectivenes/Project is on parliament",
 				ampContext,session)) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project is on parliament") + ":\n";
-			aidEffectivenesToAdd += activity.getOnParliament() + "\n";
+			if(activity.getOnParliament()!=null){
+				aidEffectivenesToAdd += activity.getOnParliament() ;
+			}
+			aidEffectivenesToAdd += "\n";
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
@@ -473,7 +486,10 @@ public final class AdvancedReportUtil {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project disburses directly into the Goverment single treasury account")
 					+ ":\n";
-			aidEffectivenesToAdd += activity.getOnTreasury() + "\n";
+			if(activity.getOnTreasury()!=null){
+				aidEffectivenesToAdd += activity.getOnTreasury();	
+			}
+			aidEffectivenesToAdd +=  "\n";
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
@@ -482,8 +498,11 @@ public final class AdvancedReportUtil {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses national financial management systems")
 					+ ":\n";
-			aidEffectivenesToAdd += activity.getNationalFinancialManagement()
-					+ "\n";
+			if(activity.getNationalFinancialManagement()!=null){
+				aidEffectivenesToAdd += activity.getNationalFinancialManagement();	
+			}
+			
+			aidEffectivenesToAdd += "\n";
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
@@ -492,7 +511,10 @@ public final class AdvancedReportUtil {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses national procurement systems")
 					+ ":\n";
-			aidEffectivenesToAdd += activity.getNationalProcurement() + "\n";
+			if(activity.getNationalProcurement()!=null){
+				aidEffectivenesToAdd += activity.getNationalProcurement();
+			}
+			aidEffectivenesToAdd +=  "\n";
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
@@ -501,7 +523,10 @@ public final class AdvancedReportUtil {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses national audit systems")
 					+ ":\n";
-			aidEffectivenesToAdd += activity.getNationalAudit() + "\n";
+			if(activity.getNationalAudit()!=null){
+				aidEffectivenesToAdd += activity.getNationalAudit();
+			}
+			aidEffectivenesToAdd +=  "\n";
 
 		}
 		return aidEffectivenesToAdd;

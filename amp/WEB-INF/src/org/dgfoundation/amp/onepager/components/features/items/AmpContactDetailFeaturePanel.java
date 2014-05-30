@@ -96,7 +96,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 
 	public AmpContactDetailFeaturePanel(String id,final IModel<AmpContact> model,final String fmName, boolean hideLabel,final String contactProperty) throws Exception {
 		super(id, model, fmName, hideLabel);
-		final IModel<Set<AmpContactProperty>> setModel=new PropertyModel<Set<AmpContactProperty>>(model, "properties");
+		final IModel<Set<AmpContactProperty>> setModel=new PropertyModel<Set<AmpContactProperty>>(model,"properties");
 		if (setModel.getObject() == null)
 			setModel.setObject(new TreeSet<AmpContactProperty>());
 		
@@ -129,7 +129,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 			}
 
 		};
-		final WebMarkupContainer resultcontainer = new WebMarkupContainer("resultcontainer");
+		final WebMarkupContainer resultcontainer = new   WebMarkupContainer("resultcontainer");
 		final ListView<AmpContactProperty> detailsList = new ListView<AmpContactProperty>("detailsList", listModel) {
 
 			private static final long serialVersionUID = 1L;
@@ -252,9 +252,9 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 				fakeContact1.setValue("");
 //				contactProperties.clear();
 //				contactProperties.addAll(detailsList.getModelObject());
-				Set<AmpContactProperty> contactProperties = setModel.getObject();
-                if(contactProperties == null){
-                    contactProperties = new TreeSet<AmpContactProperty>();
+				Set<AmpContactProperty> contactProperties=setModel.getObject();
+                if(contactProperties==null){
+                    contactProperties=new TreeSet<AmpContactProperty>();
                     setModel.setObject(contactProperties);
                 }
 				contactProperties.add(fakeContact1);

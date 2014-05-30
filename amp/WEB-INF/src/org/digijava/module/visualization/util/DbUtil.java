@@ -3,7 +3,6 @@ package org.digijava.module.visualization.util;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +31,6 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -48,7 +46,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -56,20 +53,18 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.dbentity.AmpDashboardGraph;
 import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.DashboardForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.LongType;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -245,7 +240,7 @@ public class DbUtil {
 			String queryString = "SELECT s.* FROM amp_sector s "
 					+ "WHERE s.parent_sector_id =:id " ;
              qry = session.createSQLQuery(queryString).addEntity(AmpSector.class);
-             qry.setParameter("id", id, Hibernate.LONG);
+             qry.setParameter("id", id, LongType.INSTANCE);
              col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception while getting sub-sectors : " + ex);
@@ -2490,7 +2485,7 @@ public class DbUtil {
                 + AmpOrganisation.class.getName() + " o "
                 + "where (o.ampOrgId=:id) and (o.deleted is null or o.deleted = false) ";
             Query qry = session.createQuery(queryString);
-            qry.setParameter("id", id, Hibernate.LONG);
+            qry.setParameter("id", id, LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
             while (itr.hasNext()) {
                 org = (AmpOrganisation) itr.next();
@@ -2513,7 +2508,7 @@ public class DbUtil {
                 + AmpOrganisation.class.getName() + " o "
                 + "where (o.orgGrpId=:id) and (o.deleted is null or o.deleted = false) ";
             Query qry = session.createQuery(queryString);
-            qry.setParameter("id", id, Hibernate.LONG);
+            qry.setParameter("id", id, LongType.INSTANCE);
             orgs = qry.list();
             
         } catch (Exception ex) {
@@ -2533,7 +2528,7 @@ public class DbUtil {
                 + AmpOrgGroup.class.getName() + " o "
                 + "where (o.ampOrgGrpId=:id)";
             Query qry = session.createQuery(queryString);
-            qry.setParameter("id", id, Hibernate.LONG);
+            qry.setParameter("id", id, LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
             while (itr.hasNext()) {
                 orgGrp = (AmpOrgGroup) itr.next();
@@ -2749,7 +2744,7 @@ public class DbUtil {
                 + AmpDashboard.class.getName() + " d where (d.id=:id)";
             Query qry = session.createQuery(queryString);
             qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				dash = (AmpDashboard) itr.next();
@@ -2791,7 +2786,7 @@ public class DbUtil {
                 + AmpGraph.class.getName() + " g where (g.id=:id)";
             Query qry = session.createQuery(queryString);
             qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				graph = (AmpGraph) itr.next();
@@ -2814,7 +2809,7 @@ public class DbUtil {
                 + AmpTheme.class.getName() + " p where (p.ampThemeId=:id)";
             Query qry = session.createQuery(queryString);
             qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				prog = (AmpTheme) itr.next();
@@ -2836,7 +2831,7 @@ public class DbUtil {
                 + AmpDashboardGraph.class.getName() + " dg where (dg.dashboard=:id)";
             Query qry = session.createQuery(queryString);
             qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			dashGraphs = qry.list();
         } catch (Exception ex) {
             logger.error("Unable to get dashboardGraphs from database", ex);
@@ -2856,7 +2851,7 @@ public class DbUtil {
                 + AmpDashboardGraph.class.getName() + " d where (d.id=:id)";
             Query qry = session.createQuery(queryString);
             qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				dashGraph = (AmpDashboardGraph) itr.next();

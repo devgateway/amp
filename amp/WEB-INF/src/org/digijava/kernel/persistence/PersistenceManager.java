@@ -45,17 +45,16 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
-import org.hibernate.EntityMode;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.metadata.ClassMetadata;
 
@@ -161,7 +160,7 @@ public class PersistenceManager {
 	 * @return
 	 */
 	public static Session openNewSession() {
-		 org.hibernate.classic.Session openSession = sf.openSession();
+		 org.hibernate.Session openSession = sf.openSession();
 		 addSessionToStackTraceMap(openSession);
 		 return openSession;
 	}
@@ -191,12 +190,14 @@ public class PersistenceManager {
 	/**
 	 * Gets a RAW jdbc connection to the database. Use with caution ! Close it yourself manually when done!
 	 * @return
-	 * @throws SQLException
+	 * @throws SQLException 
 	 */
 	public static Connection getJdbcConnection() throws SQLException {
 		SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
 		return sfi.getConnectionProvider().getConnection();
 	}
+
+
 	
 	/**
 	 * Shows the open remaining hibernate sessions upon AMP server shutdown. It displays the
@@ -423,7 +424,7 @@ public class PersistenceManager {
 				Iterator rowIter = rows.iterator();
 				while (rowIter.hasNext()) {
 					Object item = rowIter.next();
-					Serializable id = meta.getIdentifier(item, EntityMode.POJO);
+					Serializable id = meta.getIdentifier(item,(SessionImplementor)session);
 					if (id == null) {
 						String errMsg = "One of the object identities is null for class: " +className; 
                         logger.error(errMsg);
@@ -695,7 +696,7 @@ public class PersistenceManager {
 	 * @return
 	 */
 	public static Session getRequestDBSession(boolean createNew) {
-		org.hibernate.classic.Session sess = PersistenceManager.sf.getCurrentSession();
+		Session sess = PersistenceManager.sf.getCurrentSession();
 		
 		Transaction transaction=sess.getTransaction();
 //		if(transaction!=null && transaction.isActive()) {

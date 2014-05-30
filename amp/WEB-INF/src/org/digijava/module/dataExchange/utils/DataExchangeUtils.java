@@ -8,8 +8,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,7 +36,22 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
@@ -56,15 +69,14 @@ import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.util.ExportBuilder;
-import org.digijava.module.message.jobs.ActivityVersionDeletionJob;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.LongType;
 import org.hibernate.type.NullableType;
+import org.hibernate.type.StringType;
 import org.springframework.util.FileCopyUtils;
 
 /**
@@ -119,7 +131,7 @@ public class DataExchangeUtils {
             queryString = "select o from " + DEMappingFields.class.getName()
                 + " o where o.id=:id)";
             qry = sess.createQuery(queryString);
-            qry.setParameter("id", id, Hibernate.LONG);
+            qry.setParameter("id", id, LongType.INSTANCE);
 
             List  result=qry.list();
             if (result.size() > 0){
@@ -173,7 +185,7 @@ public class DataExchangeUtils {
 			session = PersistenceManager.getRequestDBSession();
 			qryStr = "select f from " + DEMappingFields.class.getName() + " f where f.ampClass=:ampClass order by f.iatiValues";
 			qry = session.createQuery(qryStr);
-            qry.setParameter("ampClass", ampClass, Hibernate.STRING);
+            qry.setParameter("ampClass", ampClass, StringType.INSTANCE);
             if(startIndex!=-1)
              {
             	qry.setFirstResult(startIndex);
@@ -210,7 +222,7 @@ public class DataExchangeUtils {
 			session = PersistenceManager.getRequestDBSession();
 			qryStr = "select f from " + DEMappingFields.class.getName() + " f where f.ampClass=:ampClass order by f."+sort+" "+sortOrder;
 			qry = session.createQuery(qryStr);
-            qry.setParameter("ampClass", ampClass, Hibernate.STRING);
+            qry.setParameter("ampClass", ampClass, StringType.INSTANCE);
             if(startIndex!=-1)
              {
             	qry.setFirstResult(startIndex);
@@ -248,7 +260,7 @@ public class DataExchangeUtils {
 			session = PersistenceManager.getRequestDBSession();
 			qryStr = "select count(*) from " + DEMappingFields.class.getName() + " f where f.ampClass=:ampClass ";
 			qry = session.createQuery(qryStr);
-            qry.setParameter("ampClass", ampClass, Hibernate.STRING);
+            qry.setParameter("ampClass", ampClass, StringType.INSTANCE);
             resultList	=  (Integer)qry.uniqueResult();
 		}
 		catch (Exception ex) {
@@ -563,7 +575,7 @@ public class DataExchangeUtils {
             queryString = "select o from " + AmpOrganisation.class.getName()
                 + String.format(" o where (TRIM(%s)=:orgName) and (o.deleted is null or o.deleted = false) ", orgNameHql);
             qry = sess.createQuery(queryString);
-            qry.setParameter("orgName", name.trim(), Hibernate.STRING);
+            qry.setParameter("orgName", name.trim(), StringType.INSTANCE);
 
             List  result=qry.list();
             if (result.size() > 0){
@@ -668,7 +680,7 @@ public class DataExchangeUtils {
             queryString = "select o from " + AmpOrganisation.class.getName()
                 + " o where (TRIM(o.orgCode)=:orgCode) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
-            qry.setParameter("orgCode", code.trim(), Hibernate.STRING);
+            qry.setParameter("orgCode", code.trim(), StringType.INSTANCE);
 
             List  result=qry.list();
             if (result.size() > 0){
@@ -888,7 +900,7 @@ public class DataExchangeUtils {
             queryString = "select o from " + AmpSector.class.getName()
                 + String.format(" o where (TRIM(%s)=:sectorName) and (o.deleted is null or o.deleted = false) ", sectorNameHql);
             qry = sess.createQuery(queryString);
-            qry.setParameter("sectorName", name.trim(), Hibernate.STRING);
+            qry.setParameter("sectorName", name.trim(), StringType.INSTANCE);
 
             List  result=qry.list();
             if (result.size() > 0){
@@ -920,8 +932,8 @@ public class DataExchangeUtils {
             queryString = "select o from " + AmpSector.class.getName()
                 + String.format(" o where (LOWER(TRIM(%s))=:sectorName) and (LOWER(TRIM(o.sectorCodeOfficial))=:sectorCode) and (o.deleted is null or o.deleted = false) ", sectorNameHql);
             qry = sess.createQuery(queryString);
-            qry.setParameter("sectorName", name.trim().toLowerCase(), Hibernate.STRING);
-            qry.setParameter("sectorCode", code.trim().toLowerCase(), Hibernate.STRING);
+            qry.setParameter("sectorName", name.trim().toLowerCase(), StringType.INSTANCE);
+            qry.setParameter("sectorCode", code.trim().toLowerCase(), StringType.INSTANCE);
 
             List  result=qry.list();
             if (result.size() > 0){
@@ -1012,7 +1024,7 @@ public class DataExchangeUtils {
             queryString = "select o from " + AmpTheme.class.getName()
                 + String.format(" o where (TRIM(%s)=:programName)", themeNameHql);
             qry = sess.createQuery(queryString);
-            qry.setParameter("programName", name.trim(), Hibernate.STRING);
+            qry.setParameter("programName", name.trim(), StringType.INSTANCE);
 
             List  result=qry.list();
             if (result.size() > 0){
@@ -1044,8 +1056,8 @@ public class DataExchangeUtils {
             queryString = "select o from " + AmpTheme.class.getName()
                 + String.format(" o where (TRIM(%s)=:programName) and (TRIM(o.themeCode)=:themeCode)", themeNameHql);
             qry = sess.createQuery(queryString);
-            qry.setParameter("programName", name.trim(), Hibernate.STRING);
-            qry.setParameter("themeCode", code.trim(), Hibernate.STRING);
+            qry.setParameter("programName", name.trim(), StringType.INSTANCE);
+            qry.setParameter("themeCode", code.trim(), StringType.INSTANCE);
 
             List  result=qry.list();
             if (result.size() > 0){
@@ -1265,10 +1277,10 @@ public class DataExchangeUtils {
 
 	public static void generateHashMapTypes(HashMap<String, NullableType> hmType) {
 		// TODO Auto-generated method stub
-//		hmType.put(DataExchangeConstants.COLUMN_KEY_ID, Hibernate.LONG);
-//		hmType.put(DataExchangeConstants.COLUMN_KEY_AMPID, Hibernate.STRING);
-//		hmType.put(DataExchangeConstants.COLUMN_KEY_PTIP, Hibernate.STRING);
-//		hmType.put(DataExchangeConstants.COLUMN_KEY_TITLE, Hibernate.STRING);
+//		hmType.put(DataExchangeConstants.COLUMN_KEY_ID, LongType.INSTANCE);
+//		hmType.put(DataExchangeConstants.COLUMN_KEY_AMPID, StringType.INSTANCE);
+//		hmType.put(DataExchangeConstants.COLUMN_KEY_PTIP, StringType.INSTANCE);
+//		hmType.put(DataExchangeConstants.COLUMN_KEY_TITLE, StringType.INSTANCE);
 		
 	}
 

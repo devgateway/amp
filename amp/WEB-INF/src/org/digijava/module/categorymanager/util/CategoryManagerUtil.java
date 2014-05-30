@@ -9,6 +9,7 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,28 +18,22 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
-import org.digijava.module.categorymanager.tags.CategoryValueTagClass;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
-import java.util.Collections;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 public class CategoryManagerUtil {
 	private static Logger logger = Logger.getLogger(CategoryManagerUtil.class);
@@ -249,8 +244,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				+ AmpCategoryValue.class.getName()
 				+ " v join v.ampCategoryClass as c where c.keyName=:key AND v.index=:index";
 			qry			= dbSession.createQuery(queryString);
-			qry.setParameter("key", categoryKey, Hibernate.STRING);
-			qry.setParameter("index", categoryIndex, Hibernate.LONG);
+			qry.setParameter("key", categoryKey, StringType.INSTANCE);
+			qry.setParameter("index", categoryIndex, LongType.INSTANCE);
 			returnCollection	= qry.list();
 
 		} catch (Exception ex) {

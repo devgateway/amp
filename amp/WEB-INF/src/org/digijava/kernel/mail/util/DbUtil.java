@@ -34,11 +34,11 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.MailSpool;
 import org.digijava.kernel.mail.exception.MailSpoolException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.CalendarType;
 
 public class DbUtil {
   private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -271,7 +271,7 @@ public class DbUtil {
 
         Query q = session.createQuery(querryString);
         date.add(Calendar.MINUTE,(minute.intValue() * -1));
-        q.setParameter("dateParam", date,Hibernate.CALENDAR);
+        q.setParameter("dateParam", date,CalendarType.INSTANCE);
         spoolList = q.list();
       }
       catch (Exception ex) {

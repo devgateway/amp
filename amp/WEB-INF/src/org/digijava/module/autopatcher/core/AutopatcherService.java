@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.LineNumberReader;
 import java.sql.BatchUpdateException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -13,10 +12,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -26,6 +21,9 @@ import org.digijava.kernel.service.ServiceException;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.engine.spi.SessionImplementor;
 
 /**
  * AutopatcherService.java
@@ -93,7 +91,7 @@ public class AutopatcherService extends AbstractServiceImpl {
 					logger.info("Applying patch " + element.getAbsolutePath());
 					logger.debug("Executing sql commands: " + sb.toString());
 
-					Connection connection = session.connection();
+					Connection connection = ((SessionImplementor)session).connection();
 					connection.setAutoCommit(false);
 
 					try {

@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.exception.AimException;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.LongType;
 
 /**
  * @author mihai
@@ -31,7 +31,7 @@ public final class EUActivityUtil {
 			String queryString = "select eu from " + EUActivity.class.getName() +
  			 " eu " +  "where (eu.activity.ampActivityId=:actId)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("actId",actId,Hibernate.LONG);
+			qry.setParameter("actId",actId,LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				EUActivity act = (EUActivity) itr.next();

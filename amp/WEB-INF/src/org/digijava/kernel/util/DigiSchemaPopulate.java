@@ -37,7 +37,8 @@ import java.util.Enumeration;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.internal.SessionImpl;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.LogonSite;
 import org.digijava.kernel.entity.Locale;
@@ -219,7 +220,7 @@ class DigiInitUtil {
         try {
             session = PersistenceManager.getSession();
 //beginTransaction();
-            st = session.connection().createStatement();
+            st = ((SessionImplementor)session).connection().createStatement();
 
             for (int i = 0; i < commands.length; i++) {
 

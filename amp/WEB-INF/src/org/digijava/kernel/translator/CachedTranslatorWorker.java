@@ -27,6 +27,8 @@ import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.entity.Message;
@@ -40,7 +42,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Criteria;
-import org.hibernate.EntityMode;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -48,8 +49,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-
-import javax.servlet.http.HttpSession;
+import org.hibernate.engine.spi.SessionImplementor;
 
 public class CachedTranslatorWorker extends TranslatorWorker {
 
@@ -184,7 +184,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
 				Message realMsg = (Message) ses.get(Message.class, message);
 				if(realMsg!=null) {
 					obj=realMsg;
-					Serializable identifier=PersistenceManager.getClassMetadata(Message.class).getIdentifier(realMsg, EntityMode.POJO);
+					Serializable identifier=PersistenceManager.getClassMetadata(Message.class).getIdentifier(realMsg, (SessionImplementor)PersistenceManager.getSession());
 					messageCache.put(identifier, realMsg);
 				}
 			} catch (HibernateException e) {

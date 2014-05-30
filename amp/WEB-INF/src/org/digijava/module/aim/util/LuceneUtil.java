@@ -15,7 +15,14 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +61,13 @@ import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
@@ -62,6 +75,7 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.engine.spi.SessionImplementor;
 
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -388,7 +402,7 @@ public class LuceneUtil implements Serializable {
     	int ret = -1;
 		try{
 			Session session = PersistenceManager.getSession();
-			Connection	conn	= session.connection();
+			Connection	conn	= ((SessionImplementor)session).connection();
 			Statement st		= conn.createStatement();
 			String qryStr		= "select max(amp_activity_id) mid from v_titles";
 
@@ -428,7 +442,7 @@ public class LuceneUtil implements Serializable {
 
 		try{
 			session				= PersistenceManager.getSession();
-			Connection	conn	= session.connection();
+			Connection	conn	= ((SessionImplementor)session).connection();
 			
 			Statement st		= conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY );
 			qryStr 				= "select * from v_titles where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";

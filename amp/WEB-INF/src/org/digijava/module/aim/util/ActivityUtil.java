@@ -5,16 +5,10 @@
 
 package org.digijava.module.aim.util;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.math.BigInteger;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,20 +20,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.error.ExceptionFactory;
-import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
-import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
-import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -47,7 +33,6 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.User;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
@@ -60,54 +45,37 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.CMSContentItem;
-import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivityItem;
-import org.digijava.module.aim.helper.AmpProjectDonor;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Measures;
-import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -115,7 +83,6 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.visualization.util.DashboardUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -123,6 +90,9 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 /**
  * ActivityUtil is the persister class for all activity related
@@ -178,7 +148,7 @@ public class ActivityUtil {
       		"inner join amp_activity_components aac on (aac.amp_component_id = ac.amp_component_id) " +
       		"where (aac.amp_activity_id=:actId)";
       Query qry = session.createSQLQuery(queryString).addEntity(AmpComponent.class);
-      qry.setParameter("actId", actId, Hibernate.LONG);
+      qry.setParameter("actId", actId, LongType.INSTANCE);
       col = qry.list();
     }
     catch (Exception e) {
@@ -479,7 +449,7 @@ public class ActivityUtil {
 	          AmpTheme.class.getName() +
 	          " prog where (prog.activityId=:actId) ";
 	      Query qry = session.createQuery(queryString);
-	      qry.setParameter("actId", activityId, Hibernate.LONG);
+	      qry.setParameter("actId", activityId, LongType.INSTANCE);
 	      col = qry.list();
 	    }
 	    catch (Exception e) {
@@ -498,7 +468,7 @@ public class ActivityUtil {
 	      session = PersistenceManager.getRequestDBSession();
 	      String queryString = "select locs.* from amp_activity_location locs where (locs.amp_activity_id=:actId) ";
 	      Query qry = session.createSQLQuery(queryString).addEntity(AmpActivityLocation.class);
-	      qry.setParameter("actId", activityId, Hibernate.LONG);
+	      qry.setParameter("actId", activityId, LongType.INSTANCE);
 	      col = qry.list();
 	    }
 	    catch (Exception e) {
@@ -593,7 +563,7 @@ public class ActivityUtil {
       session = PersistenceManager.getRequestDBSession();
       String queryString = "select a.* from amp_activity_sector a " + "where a.amp_activity_id=:actId";
       Query qry = session.createSQLQuery(queryString).addEntity(AmpActivitySector.class);
-      qry.setParameter("actId", actId, Hibernate.LONG);
+      qry.setParameter("actId", actId, LongType.INSTANCE);
       sectors = qry.list();
     }
     catch (Exception ex) {
@@ -610,7 +580,7 @@ public class ActivityUtil {
       String queryString = "select aor from " + AmpOrgRole.class.getName() +
           " aor " + "where (aor.activity=:actId)";
       Query qry = session.createQuery(queryString);
-      qry.setParameter("actId", id, Hibernate.LONG);
+      qry.setParameter("actId", id, LongType.INSTANCE);
       orgroles = qry.list();
     }
     catch (Exception ex) {
@@ -638,8 +608,8 @@ public class ActivityUtil {
 	      		"inner join amp_activity aa on (aa.amp_activity_id = aor.activity) " +
 	      		"where (aa.amp_activity_id=:actId) and (aor.amp_org_role_id=:orgRoleId)";
 	      Query qry = session.createSQLQuery(queryString).addEntity(AmpRole.class);
-	      qry.setParameter("actId", actId, Hibernate.LONG);
-	      qry.setParameter("orgRoleId", orgRoleId, Hibernate.LONG);
+	      qry.setParameter("actId", actId, LongType.INSTANCE);
+	      qry.setParameter("orgRoleId", orgRoleId, LongType.INSTANCE);
 	      if ((qry.list() != null) && (qry.list().size()>0)) {
 	    	  role = (AmpRole)qry.list().get(0);
 	      }
@@ -664,8 +634,8 @@ public class ActivityUtil {
 	      		"inner join amp_activity aa on (aa.amp_activity_id = aor.activity) " +
 	      		"where (aa.amp_activity_id=:actId) and (aor.amp_org_role_id=:orgRoleId)";
 	      Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
-	      qry.setParameter("actId", actId, Hibernate.LONG);
-	      qry.setParameter("orgRoleId", orgRoleId, Hibernate.LONG);
+	      qry.setParameter("actId", actId, LongType.INSTANCE);
+	      qry.setParameter("orgRoleId", orgRoleId, LongType.INSTANCE);
 	      if ((qry.list() != null) && (qry.list().size()>0)) {
 	    	  organisation = (AmpOrganisation) qry.list().get(0);
 	      }
@@ -685,7 +655,7 @@ public class ActivityUtil {
 	    		  + AmpActivity.class.getName()	+ " a "
 	    		  + "where f.ampActivityId=a.ampActivityId and (f.ampDonorOrgId=:orgId)";
 	      Query qry = session.createQuery(queryString);
-	      qry.setParameter("orgId", id, Hibernate.LONG);
+	      qry.setParameter("orgId", id, LongType.INSTANCE);
 	      orgrolesCount = (Integer)qry.uniqueResult();
 	    }
 	    catch (Exception ex) {
@@ -844,7 +814,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	      String qryStr = "select a from " + AmpIssues.class.getName() +
 	          " a where a.activity.ampActivityId=:actId ";
 	      Query qry = session.createQuery(qryStr);
-	      qry.setParameter("actId", actId, Hibernate.LONG);
+	      qry.setParameter("actId", actId, LongType.INSTANCE);
 	      issues = qry.list();
 	      // get issues measures
 	      AmpIssues ampIssues = null;
@@ -884,7 +854,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	      String qryStr = "select a from " + AmpMeasure.class.getName() +
 	          " a where a.amp_issue_id=:issueId ";
 	      Query qry = session.createQuery(qryStr);
-	      qry.setParameter("issueId", issueId, Hibernate.LONG);
+	      qry.setParameter("issueId", issueId, LongType.INSTANCE);
 	      col = qry.list();
 	    }
 	    catch (Exception e) {
@@ -903,7 +873,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	      String qryStr = "select a from " + AmpActor.class.getName() +
 	          " a where a.amp_measure_id=:measureId ";
 	      Query qry = session.createQuery(qryStr);
-	      qry.setParameter("measureId", measureId, Hibernate.LONG);
+	      qry.setParameter("measureId", measureId, LongType.INSTANCE);
 	      col = qry.list();
 	    }
 	    catch (Exception e) {
@@ -1401,7 +1371,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     		String.format(" ampAct where upper(%s) like upper(:name)",
     		AmpActivityVersion.hqlStringForName("ampAct"));
       qry = session.createQuery(queryString);
-      qry.setParameter("name", "%" + name + "%", Hibernate.STRING);
+      qry.setParameter("name", "%" + name + "%", StringType.INSTANCE);
       col = qry.list();
       logger.debug("the size of the ampActivity : " + col.size());
     }
@@ -1468,20 +1438,20 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
           }
         }
         String deleteActivityComments = "DELETE FROM amp_comments WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        Connection con = session.connection();
+        Connection con = ((SessionImplementor)session).connection();
         Statement stmt = con.createStatement();
         stmt.executeUpdate(deleteActivityComments);
         logger.info("comments deleted");
         
         //Delete the connection with Team.
         String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-         con = session.connection();
+         con = ((SessionImplementor)session).connection();
          stmt = con.createStatement();
         int deletedRows = stmt.executeUpdate(deleteActivityTeam);
         
         //Delete the connection with amp_physical_performance.
         String deletePhysicalPerformance = "DELETE FROM amp_physical_performance WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        con = session.connection();
+        con = ((SessionImplementor)session).connection();
         stmt = con.createStatement();
         deletedRows = stmt.executeUpdate(deletePhysicalPerformance);
         
@@ -1514,8 +1484,8 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		String queryString2 = "select act from " + AmpActivityVersion.class.getName() + " act where (act.mergeSource2=:activityId)";
 		Query qry1 = session.createQuery(queryString1);
 		Query qry2 = session.createQuery(queryString2);
-		qry1.setParameter("activityId", ampActivityId, Hibernate.LONG);
-		qry2.setParameter("activityId", ampActivityId, Hibernate.LONG);
+		qry1.setParameter("activityId", ampActivityId, LongType.INSTANCE);
+		qry2.setParameter("activityId", ampActivityId, LongType.INSTANCE);
 		
 		Collection col =qry1.list();
 		if (col != null && col.size() > 0) {
@@ -1576,7 +1546,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 				+ IndicatorActivity.class.getName() + " indAct "
 				+ " where (indAct.activity=:ampActId)";
 		qry = session.createQuery(queryString);
-		qry.setParameter("ampActId", ampActivityId, Hibernate.LONG);
+		qry.setParameter("ampActId", ampActivityId, LongType.INSTANCE);
 		col = qry.list();
 		
 		Iterator itrIndAct = col.iterator();
@@ -2044,7 +2014,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     }
                 queryString += "  and lower(" + activityName + ") like lower(:searchStr) group by gr.ampActivityLastVersion.ampActivityId," + activityName + " order by " + activityName;
     			query=session.createQuery(queryString);
-                query.setParameter("searchStr", searchStr + "%", Hibernate.STRING);
+                query.setParameter("searchStr", searchStr + "%", StringType.INSTANCE);
     			activities=query.list();
     		}catch(Exception ex) {
     			logger.error("couldn't load Activities" + ex.getMessage());

@@ -13,6 +13,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.SectorUtil;
 import org.hibernate.Session;
+import org.hibernate.engine.spi.SessionImplementor;
 
 
 public class UpdateDB {
@@ -44,7 +45,7 @@ public class UpdateDB {
 
 			//con = DriverManager.getConnection(url, username, passwd);
 			session = PersistenceManager.getSession();
-			con = session.connection();
+			con = ((SessionImplementor)session).connection();
 
 			Statement stmt = con.createStatement();
 			ResultSet rs = null;

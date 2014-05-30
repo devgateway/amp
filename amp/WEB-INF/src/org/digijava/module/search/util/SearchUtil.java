@@ -39,6 +39,7 @@ import org.digijava.module.search.helper.Resource;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.type.LongType;
 
 public class SearchUtil {
 
@@ -204,7 +205,7 @@ public class SearchUtil {
 
 			//not a very nice solution, but I kept the old code and idea and just added some speed
 			String newQueryString = "SELECT f.amp_activity_id, f.amp_id, " + AmpActivityVersion.sqlStringForName("f.amp_activity_id") + " AS name, f.approval_status, f.draft FROM amp_activity f WHERE f.amp_activity_id in ("+filter.getGeneratedFilterQuery()+")";
-			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", org.hibernate.Hibernate.LONG);
+			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", LongType.INSTANCE);
 			newQuery		  = newQuery.addScalar("amp_id", org.hibernate.type.StandardBasicTypes.STRING);
 			newQuery		  = newQuery.addScalar("name", org.hibernate.type.StandardBasicTypes.STRING);
 			newQuery = newQuery.addScalar("approval_status",org.hibernate.type.StandardBasicTypes.STRING);

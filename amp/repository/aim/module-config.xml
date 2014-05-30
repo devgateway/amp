@@ -78,10 +78,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTermsAssist</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpPages</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFilters</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamReports</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportCache</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportSector</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportLocation</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamReports</hibernate-class>				
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegion</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpZone</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpWoreda</hibernate-class>
@@ -92,7 +89,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgGroup</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpField</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComments</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpPhysicalComponentReport</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamPageFilters</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRole</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumns</hibernate-class>
@@ -109,8 +105,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentFunding</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalFunding</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegionalFunding</hibernate-class>		
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportsOptions</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurvey</hibernate-class>

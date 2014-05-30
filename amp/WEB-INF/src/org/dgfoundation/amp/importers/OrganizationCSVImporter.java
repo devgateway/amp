@@ -7,15 +7,13 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.type.StringType;
 
 
 /**
@@ -47,7 +45,7 @@ public class OrganizationCSVImporter extends CSVImporter {
                + AmpOrgGroup.class.getName() + " o "
                + "where (o.orgGrpCode=:code)";
            Query qry = session.createQuery(queryString);
-           qry.setParameter("code", code, Hibernate.STRING);
+           qry.setParameter("code", code, StringType.INSTANCE);
            Iterator itr = qry.list().iterator();
            if (itr.hasNext()) {
 			orgGrp = (AmpOrgGroup) itr.next();
@@ -63,7 +61,7 @@ public class OrganizationCSVImporter extends CSVImporter {
 				// + "where (o.orgType=:name)";
 				+ String.format("where (%s=:name)", AmpOrgType.hqlStringForName("o"));
            Query qry = session.createQuery(queryString);
-           qry.setParameter("name", name, Hibernate.STRING);
+           qry.setParameter("name", name, StringType.INSTANCE);
            Iterator itr = qry.list().iterator();
            if (itr.hasNext()) {
 			orgGrp = (AmpOrgType) itr.next();

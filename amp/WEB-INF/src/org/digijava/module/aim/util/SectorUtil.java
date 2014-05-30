@@ -1,8 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,7 +18,6 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
@@ -32,10 +28,11 @@ import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.util.caching.AmpCaching;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
 
 /**
  * Utility class for persisting all Sector with Scheme related entities
@@ -76,7 +73,7 @@ public class SectorUtil {
 			}
 
 			Query qry = session.createQuery(qryStr);
-			// qry.setParameter("orgType", orgType, Hibernate.LONG) ;
+			// qry.setParameter("orgType", orgType, LongType.INSTANCE) ;
 			if (ampSecSchemeId != null) {
 				qry.setLong("ampSecSchemeId", ampSecSchemeId);
 			}
@@ -152,7 +149,7 @@ public class SectorUtil {
 			String queryString = "select a from " + AmpActivity.class.getName()
 					+ " a " + "where (a.ampActivityId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			AmpActivity ampActivity = null;
 			while (itr.hasNext()) {
@@ -385,7 +382,7 @@ public class SectorUtil {
 						+ " and (s.deleted is null or s.deleted = false) order by " + AmpSector.hqlStringForName("s");
 
 				qry = session.createQuery(queryString);
-				qry.setParameter("parentSectorId", parentSecId, Hibernate.LONG);
+				qry.setParameter("parentSectorId", parentSecId, LongType.INSTANCE);
 			}
 			itr = qry.list().iterator();
 
@@ -436,7 +433,7 @@ public class SectorUtil {
 					+ " s where (s.ampSectorId=:ampSectorId) and (s.deleted is null or s.deleted = false) ";
 
 			qry = session.createQuery(queryString);
-			qry.setParameter("ampSectorId", sectorId, Hibernate.LONG);
+			qry.setParameter("ampSectorId", sectorId, LongType.INSTANCE);
 			itr = qry.list().iterator();
 
 			if (itr.hasNext()) {
@@ -479,7 +476,7 @@ public class SectorUtil {
 //					+ " s where (s.themeIndicatorId=:themeIndicatorId)";
 //
 //			qry = session.createQuery(queryString);
-//			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
+//			qry.setParameter("themeIndicatorId", indicatorId, LongType.INSTANCE);
 //			itr = qry.list().iterator();
 //
 //			if (itr.hasNext()) {
@@ -509,7 +506,7 @@ public class SectorUtil {
 					+ " s where (s.themeIndicatorId=:themeIndicatorId) and s.sectorId=:sectorId";
 
 			qry = session.createQuery(queryString);
-			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
+			qry.setParameter("themeIndicatorId", indicatorId, LongType.INSTANCE);
 			qry.setLong("sectorId", sectorId);
 			indSectors = qry.list();
 			if (indSectors != null && indSectors.size() > 0) {
@@ -550,7 +547,7 @@ public class SectorUtil {
 					+ " s where (s.ampSecSchemeId=:ampSectorSchemeId)";
 
 			qry = session.createQuery(queryString);
-			qry.setParameter("ampSectorSchemeId", id, Hibernate.LONG);
+			qry.setParameter("ampSectorSchemeId", id, LongType.INSTANCE);
 			itr = qry.list().iterator();
 
 			if (itr.hasNext()) {
@@ -670,7 +667,7 @@ public class SectorUtil {
 					+ AmpSector.class.getName()
 					+ " Sector where Sector.parentSectorId is not null and Sector.parentSectorId.ampSectorId=:ampSectorId and (Sector.deleted is null or Sector.deleted = false) ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampSectorId", ampSectorId, Hibernate.LONG);
+			q.setParameter("ampSectorId", ampSectorId, LongType.INSTANCE);
 			iter = q.list().iterator();
 
 			while (iter.hasNext()) {
@@ -704,7 +701,7 @@ public class SectorUtil {
 			queryString = " select Sector from " + AmpSector.class.getName()
 					+ " Sector where Sector.ampSectorId=:ampSectorId and (Sector.deleted is null or Sector.deleted = false) ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampSectorId", ampSectorId, Hibernate.LONG);
+			q.setParameter("ampSectorId", ampSectorId, LongType.INSTANCE);
 			iter = q.list().iterator();
 
 			ampSector = (AmpSector) iter.next();
@@ -795,8 +792,8 @@ public class SectorUtil {
 			// (sector.ampSecSchemeId = :ampSecSchemeId) and (act.ampActivityId
 			// = :ampActivityId)";
 			q = session.createQuery(queryString);
-			q.setParameter("ampSecSchemeId", ampSecSchemeId, Hibernate.LONG);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+			q.setParameter("ampSecSchemeId", ampSecSchemeId, LongType.INSTANCE);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
 
 			iter = q.list().iterator();
 
@@ -895,7 +892,7 @@ public class SectorUtil {
 					+ " s where (s.ampSectorId=:ampSectorId) and (s.deleted is null or s.deleted = false) ";
 
 			Query qry = sess.createQuery(qryString);
-			qry.setParameter("ampSectorId", sectorId, Hibernate.LONG);
+			qry.setParameter("ampSectorId", sectorId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 
 			if (itr.hasNext()) {
@@ -1097,7 +1094,7 @@ public class SectorUtil {
 					+ AmpSector.class.getName()
 					+ " pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null and (pi.deleted is null or pi.deleted = false) order by " + AmpSector.hqlStringForName("pi");
 			qry = session.createQuery(queryString);
-			qry.setParameter("schemeId", schemeId, Hibernate.INTEGER);
+			qry.setParameter("schemeId", schemeId, IntegerType.INSTANCE);
 			col = qry.list();
 			// session.flush();
 		} catch (Exception ex) {
@@ -1176,7 +1173,7 @@ public class SectorUtil {
 					") order by " + AmpSector.hqlStringForName("pi");
 
 			qry = session.createQuery(queryString);
-			qry.setParameter("schemeId", schemeId, Hibernate.INTEGER);
+			qry.setParameter("schemeId", schemeId, IntegerType.INSTANCE);
 			col = qry.list();
 			// session.flush();
 		} catch (Exception ex) {
@@ -1207,7 +1204,7 @@ public class SectorUtil {
 			queryString = "select pi from " + AmpSectorScheme.class.getName()
 					+ " pi where pi.ampSecSchemeId=:schemeId";
 			qry = session.createQuery(queryString);
-			qry.setParameter("schemeId", schemeId, Hibernate.INTEGER);
+			qry.setParameter("schemeId", schemeId, IntegerType.INSTANCE);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get report names  from database "

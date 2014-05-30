@@ -6,9 +6,9 @@ import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,11 +31,14 @@ import org.digijava.module.aim.helper.MEIndicatorRisk;
 import org.digijava.module.aim.helper.MEIndicatorValue;
 import org.digijava.module.aim.helper.PriorCurrentValues;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 @Deprecated
 public class MEIndicatorsUtil
@@ -178,7 +181,7 @@ public class MEIndicatorsUtil
 			String qryStr = "select indVal from " + AmpMEIndicatorValue.class.getName() +
 					" indVal where (indVal.activityId=:actId)" ;
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("actId",actId,Hibernate.LONG);
+			qry.setParameter("actId",actId,LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext())
 			{
@@ -338,7 +341,7 @@ public class MEIndicatorsUtil
 				+ AmpMEIndicatorValue.class.getName()
 				+ " ampMeIndValId where (ampMeIndValId.meIndicatorId=:meIndicatorId)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("meIndicatorId",meIndicatorId,Hibernate.LONG);
+			qry.setParameter("meIndicatorId",meIndicatorId,LongType.INSTANCE);
 			col = qry.list();
 		}
 		catch(Exception exp)
@@ -371,7 +374,7 @@ public class MEIndicatorsUtil
 								+AmpMECurrValHistory.class.getName()
 								+" ampMECurrValHistoryId where (ampMECurrValHistoryId.meIndValue=:meIndValue)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("meIndValue",meIndValue,Hibernate.LONG);
+			qry.setParameter("meIndValue",meIndValue,LongType.INSTANCE);
 			col = qry.list();
 		}
 		catch(Exception e1)
@@ -448,17 +451,17 @@ public class MEIndicatorsUtil
 					+ " or code=:code) and " +
 							"(meind.ampMEIndId !=:id)" ;
 				qry = session.createQuery(queryString);
-				qry.setParameter("id", id, Hibernate.LONG);
-				qry.setParameter("code", code.trim(), Hibernate.STRING);
-				qry.setParameter("name", name.trim(), Hibernate.STRING);
+				qry.setParameter("id", id, LongType.INSTANCE);
+				qry.setParameter("code", code.trim(), StringType.INSTANCE);
+				qry.setParameter("name", name.trim(), StringType.INSTANCE);
 			} else {
 				queryString = "select count(*) from "
 					+ AmpMEIndicators.class.getName() + " meind "
 					+ "where ( name=:name"
 					+ " or code=:code)" ;
 				qry = session.createQuery(queryString);
-				qry.setParameter("code", code.trim(), Hibernate.STRING);
-				qry.setParameter("name", name.trim(), Hibernate.STRING);
+				qry.setParameter("code", code.trim(), StringType.INSTANCE);
+				qry.setParameter("name", name.trim(), StringType.INSTANCE);
 
 			}
 			Iterator itr = qry.list().iterator();
@@ -558,7 +561,7 @@ public class MEIndicatorsUtil
 			String qryStr = "select indVal from " + AmpMEIndicatorValue.class.getName() + "" +
 					" indVal where (indVal.activityId=:actId)" ;
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("actId",actId,Hibernate.LONG);
+			qry.setParameter("actId",actId,LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext())
 			{
@@ -605,7 +608,7 @@ public class MEIndicatorsUtil
 						"indVal where (indVal.activityId=:actId)" ;
 
 				qry = session.createQuery(qryStr);
-				qry.setParameter("actId",actId,Hibernate.LONG);
+				qry.setParameter("actId",actId,LongType.INSTANCE);
 				Iterator itr = qry.list().iterator();
 				while (itr.hasNext()) {
 					AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
@@ -718,7 +721,7 @@ public class MEIndicatorsUtil
 						"indVal where (indVal.activityId=:actId)" ;
 
 				qry = session.createQuery(qryStr);
-				qry.setParameter("actId",actId,Hibernate.LONG);
+				qry.setParameter("actId",actId,LongType.INSTANCE);
 				Iterator itr = qry.list().iterator();
 				while (itr.hasNext()) {
 					AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
@@ -921,7 +924,7 @@ public class MEIndicatorsUtil
 			String qryStr = "select meCh from " + AmpMECurrValHistory.class.getName() + "" +
 					" meCh where (meCh.meIndValue=:indVal)";
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("indVal",indValId,Hibernate.LONG);
+			qry.setParameter("indVal",indValId,LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 //beginTransaction();
 			while (itr.hasNext()) {
@@ -1003,7 +1006,7 @@ public class MEIndicatorsUtil
 			}
 				}
 
-				Connection con = session.connection();
+				Connection con = ((SessionImplementor)session).connection();
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery(qryStr);
 				while (rs.next()) {
@@ -1077,7 +1080,7 @@ public class MEIndicatorsUtil
 			String qryStr = "select indVal from " + AmpMEIndicatorValue.class.getName() + "" +
 					" indVal where (indVal.activityId=:actId)" ;
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("actId",actId,Hibernate.LONG);
+			qry.setParameter("actId",actId,LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 
@@ -1245,7 +1248,7 @@ public class MEIndicatorsUtil
 
 			Query qry = session.createQuery(qryStr);
 
-			qry.setParameter("actId",actId,Hibernate.LONG);
+			qry.setParameter("actId",actId,LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				Object[] obj = (Object[]) itr.next();
@@ -1370,7 +1373,7 @@ public class MEIndicatorsUtil
 			String qryStr = "select pivalues from " + AmpMECurrValHistory.class.getName() + "" +
 							" pivalues where (pivalues.meIndValue=:tempId)" ;
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("tempId",tempId,Hibernate.LONG);
+			qry.setParameter("tempId",tempId,LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while(itr.hasNext())
 			{
@@ -1549,7 +1552,7 @@ public class MEIndicatorsUtil
 			String qryStr = "select r.ratingValue from " + AmpIndicatorRiskRatings.class.getName() + "" +
 					" r where (r.ratingName=:name)";
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("name",name,Hibernate.STRING);
+			qry.setParameter("name",name,StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				Integer temp = (Integer) itr.next();
@@ -1582,7 +1585,7 @@ public class MEIndicatorsUtil
 			String qryStr = "select r.ratingName from " + AmpIndicatorRiskRatings.class.getName() + "" +
 					" r where (r.ratingValue=:risk)";
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("risk",new Integer(risk),Hibernate.INTEGER);
+			qry.setParameter("risk",new Integer(risk),IntegerType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				riskName = (String) itr.next();
@@ -1616,7 +1619,7 @@ public class MEIndicatorsUtil
 			String qryStr = "select meIndVal from " + AmpMEIndicatorValue.class.getName() +
 							" meIndVal where (meIndVal.meIndicatorId=:meId)";
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("meId",meId,Hibernate.LONG);
+			qry.setParameter("meId",meId,LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while(itr.hasNext())
 			{

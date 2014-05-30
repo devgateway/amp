@@ -12,9 +12,9 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.LongType;
 
 public class ExportUtil {
 
@@ -38,7 +38,7 @@ public class ExportUtil {
             else{
             	queryString = "select act from "  + AmpActivity.class.getName() + " act where (act.team=:teamId)";
             	qry=session.createQuery(queryString);
-            	qry.setParameter("teamId", teamId, Hibernate.LONG);
+            	qry.setParameter("teamId", teamId, LongType.INSTANCE);
             }
             retValue = qry.list();
         } catch(Exception e) {
@@ -174,7 +174,7 @@ public class ExportUtil {
             
             
             Query qry=session.createQuery(from.toString() + mainWhere.toString() );
-            qry.setParameter("teamId", teamId, Hibernate.LONG);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             retValue = qry.list();
         } catch(Exception e) {
             logger.debug("Exception from getAllTeamAmpActivities()");

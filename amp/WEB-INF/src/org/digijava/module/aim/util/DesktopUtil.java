@@ -27,9 +27,10 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.DateType;
+import org.hibernate.type.LongType;
 
 public class DesktopUtil {
 
@@ -47,7 +48,7 @@ public class DesktopUtil {
 					" (t.parentTeamId=:id)";
 			logger.info("GetAllChildrens 1= " + qryStr);
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("id",teamId,Hibernate.LONG);
+			qry.setParameter("id",teamId,LongType.INSTANCE);
 			col = qry.list();
 			while (col != null && col.size() > 0) {
 				String qryParam = "";
@@ -106,7 +107,7 @@ public class DesktopUtil {
 							" where a.team in (" + param + ") and (a.activityCreator=:mId " +
 									"or a.approvalStatus like 'approved' or a.approvalStatus like 'edited')";
 					qry = session.createQuery(qryStr);
-					qry.setParameter("mId",memberId,Hibernate.LONG);
+					qry.setParameter("mId",memberId,LongType.INSTANCE);
 				} else {
 					qryStr = "select a from " + AmpActivity.class.getName() + " a " +
 							"where a.team in (" + param + ") and a.approvalStatus like 'approved'";
@@ -526,8 +527,8 @@ public class DesktopUtil {
 									+ " and (act.actualCompletionDate is not null)"  
 									+ " and (act.actualCompletionDate>=:currentDate)";
 			q = session.createQuery(queryString);
-			q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
-			q.setParameter("currentDate", currentDate, Hibernate.DATE);
+			q.setParameter("ampTeamId", ampTeamId, LongType.INSTANCE);
+			q.setParameter("currentDate", currentDate, DateType.INSTANCE);
 			actList = q.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get AmpActivity [getCreatedOrEditedActivities()]", ex);

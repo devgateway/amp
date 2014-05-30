@@ -7,7 +7,6 @@ import org.hibernate.MappingException;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.id.SequenceGenerator;
 import org.hibernate.type.Type;
-import org.hibernate.util.PropertiesHelper;
 
 
 /**
@@ -65,6 +64,10 @@ PROCEDURE CREATE_AMP_SEQ    (   seqName IN varchar2 ,
 
 */
  
+/**
+ * @deprecated
+ *
+ */
 public class AMPSequenceGenerator extends SequenceGenerator {
 
 	private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AMPSequenceGenerator.class.getName());
@@ -75,7 +78,7 @@ public class AMPSequenceGenerator extends SequenceGenerator {
 
 	public void configure(Type type, Properties params, Dialect dialect) throws MappingException {
 		this.parameters = params.getProperty(PARAMETERS);
-		this.sequenceName = PropertiesHelper.getString(SEQUENCE, params, "hibernate_sequence");
+		this.sequenceName = null;// THIS CLASS IS DEPRECATED, does not worth fixing PropertiesHelper.getString(SEQUENCE, params, "hibernate_sequence");
 		this.tableName = params.getProperty(SequenceGenerator.TABLE);
 		this.pkColumnName = params.getProperty(SequenceGenerator.PK);
 		super.configure(type, params, dialect);

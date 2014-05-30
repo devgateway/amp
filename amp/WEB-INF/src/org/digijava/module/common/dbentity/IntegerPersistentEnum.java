@@ -8,6 +8,7 @@ import java.sql.Types;
 import java.util.Properties;
 
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
@@ -62,24 +63,8 @@ public class IntegerPersistentEnum implements UserType, ParameterizedType{
 		return x.hashCode();
 	}
 
-	/**
-	 * @see org.hibernate.usertype.UserType#nullSafeGet(java.sql.ResultSet, java.lang.String[], java.lang.Object)
-	 */
-	public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
-		int value = rs.getInt(names[0]);
-		return rs.wasNull() ? null : Enum.get(value);
-	}
 
-	/**
-	 * @see org.hibernate.usertype.UserType#nullSafeSet(java.sql.PreparedStatement, java.lang.Object, int)
-	 */
-	public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
-		if (value == null) {
-			st.setNull(index, Types.INTEGER);
-		} else {
-			st.setInt(index, ((Enum)value).getValue());
-		}
-	}
+
 
 	/**
 	 * @see org.hibernate.usertype.UserType#deepCopy(java.lang.Object)
@@ -114,5 +99,24 @@ public class IntegerPersistentEnum implements UserType, ParameterizedType{
 	 */
 	public Object replace(Object original, Object target, Object owner) throws HibernateException {
 		return original;
+	}
+
+	@Override
+	public Object nullSafeGet(ResultSet rs, String[] names,
+			SessionImplementor session, Object owner)
+			throws HibernateException, SQLException {
+		int value = rs.getInt(names[0]);
+		return rs.wasNull() ? null : Enum.get(value);
+	}
+
+	@Override
+	public void nullSafeSet(PreparedStatement st, Object value, int index,
+			SessionImplementor session) throws HibernateException, SQLException {
+		if (value == null) {
+			st.setNull(index, Types.INTEGER);
+		} else {
+			st.setInt(index, ((Enum)value).getValue());
+		}
+
 	}
 }

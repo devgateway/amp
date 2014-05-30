@@ -31,30 +31,27 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.dbentity.CalendarSettings;
-import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.common.dbentity.ItemStatus;
-import org.digijava.module.message.dbentity.CalendarEvent;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.CalendarType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 public class DbUtil {
 
@@ -150,14 +147,14 @@ public class DbUtil {
 			q.setMaxResults(maxResult);
 
 			// add value -----
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
 
 			if (status != null)
-				q.setParameter("status", status, Hibernate.STRING);
+				q.setParameter("status", status, StringType.INSTANCE);
 
 			if (userId != null)
-				q.setParameter("userId", userId, Hibernate.LONG);
+				q.setParameter("userId", userId, LongType.INSTANCE);
 
 			java.util.Calendar currentDate = java.util.Calendar.getInstance();
 			q.setCalendar("curDate1", currentDate);
@@ -236,11 +233,11 @@ public class DbUtil {
 			q.setMaxResults(maxResult);
 
 			// add value -----
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
 
 			if (status != null)
-				q.setParameter("status", status, Hibernate.STRING);
+				q.setParameter("status", status, StringType.INSTANCE);
 
 			java.util.Calendar currentDate = java.util.Calendar.getInstance();
 			currentDate.set(java.util.Calendar.HOUR, 0);
@@ -366,9 +363,9 @@ public class DbUtil {
 
 			java.util.Calendar currentDate = java.util.Calendar.getInstance();
 
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
-			q.setParameter("status", status, Hibernate.STRING);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
+			q.setParameter("status", status, StringType.INSTANCE);
 			q.setCalendar("curDate1", currentDate);
 			q.setCalendar("curDate2", currentDate);
 
@@ -442,9 +439,9 @@ public class DbUtil {
 			q.setMaxResults(maxResult);
 
 			q.setCacheable(true);
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
-			q.setParameter("status", status, Hibernate.STRING);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
+			q.setParameter("status", status, StringType.INSTANCE);
 
 			list = q.list();
 
@@ -519,9 +516,9 @@ public class DbUtil {
 					" c, c.calendarItem ci" +
 			" where (c.siteId=:siteId) and (c.instanceId=:instanceId) and ci.calendar.id = c.id and ci.creationDate > :lastIndexDate");
 
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
-			q.setParameter("lastIndexDate", calendar, Hibernate.CALENDAR);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
+			q.setParameter("lastIndexDate", calendar, CalendarType.INSTANCE);
 
 			events = q.list();
 
@@ -577,10 +574,10 @@ public class DbUtil {
 
 			q.setFirstResult(firstResult);
 			q.setMaxResults(maxResult);
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
 
-			q.setParameter("status", status, Hibernate.STRING);
+			q.setParameter("status", status, StringType.INSTANCE);
 
 			java.util.Calendar fromDateCalendar = new GregorianCalendar();
 			java.util.Calendar toDateCalendar = new GregorianCalendar();
@@ -638,10 +635,10 @@ public class DbUtil {
 					" rs where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) and (rs.status=:status) " +
 			" and ( ((rs.endDate >= :fromDate) and (rs.endDate <= :toDate)) or ((rs.startDate >= :fromDate) and (rs.startDate <= :toDate)) ) order by rs.startDate desc");
 
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
 
-			q.setParameter("status", status, Hibernate.STRING);
+			q.setParameter("status", status, StringType.INSTANCE);
 
 			java.util.Calendar fromDateCalendar = new GregorianCalendar();
 			java.util.Calendar toDateCalendar = new GregorianCalendar();
@@ -693,8 +690,8 @@ public class DbUtil {
 					" rs where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) " +
 			" and (rs.startDate <=:curDate1 and rs.endDate >=:curDate2) order by rs.startDate desc");
 
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
 
 			java.util.Calendar currentDate = java.util.Calendar.getInstance();
 
@@ -749,8 +746,8 @@ public class DbUtil {
 
 			q.setFirstResult(firstResult);
 			q.setMaxResults(maxResult);
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
 
 			java.util.Calendar currentDate = java.util.Calendar.getInstance();
 
@@ -807,7 +804,7 @@ public class DbUtil {
 						" c where (ci.calendar.id=c.id) and (c.status = :status) and (ci.userId = :userId) and " +
 				"(c.startDate <=:curDate1 and c.endDate >=:curDate2) order by c.startDate desc");
 
-				q.setParameter("status", status, Hibernate.STRING);
+				q.setParameter("status", status, StringType.INSTANCE);
 			}
 			else {
 				q = session.createQuery("select c from " + CalendarItem.class.getName() + " ci, " + Calendar.class.getName() +
@@ -821,7 +818,7 @@ public class DbUtil {
 
 			java.util.Calendar currentDate = java.util.Calendar.getInstance();
 
-			q.setParameter("userId", userId, Hibernate.LONG);
+			q.setParameter("userId", userId, LongType.INSTANCE);
 
 			q.setCalendar("curDate1", currentDate);
 			q.setCalendar("curDate2", currentDate);
@@ -879,7 +876,7 @@ public class DbUtil {
 						" c where (ci.calendar.id=c.id) and (c.status = :status) and (ci.userId = :userId) and " +
 				"( ((c.endDate >= :fromDate) and (c.endDate <= :toDate)) or ((c.startDate >= :fromDate) and  (c.startDate <= :toDate)) ) order by c.startDate desc");
 
-				q.setParameter("status", status, Hibernate.STRING);
+				q.setParameter("status", status, StringType.INSTANCE);
 			}
 			else {
 				q = session.createQuery("select c from " +
@@ -893,7 +890,7 @@ public class DbUtil {
 			q.setFirstResult(firstResult);
 			q.setMaxResults(maxResult);
 
-			q.setParameter("userId", userId, Hibernate.LONG);
+			q.setParameter("userId", userId, LongType.INSTANCE);
 
 			java.util.Calendar fromDateCalendar = java.util.Calendar.
 			getInstance();
@@ -952,7 +949,7 @@ public class DbUtil {
 						" c where (ci.calendar.id=c.id) and (c.status = :status) and (ci.userId = :userId) and " +
 				"( ((c.endDate >= :fromDate) and (c.endDate <= :toDate)) or ((c.startDate >= :fromDate) and  (c.startDate <= :toDate)) ) order by c.startDate desc");
 
-				q.setParameter("status", status, Hibernate.STRING);
+				q.setParameter("status", status, StringType.INSTANCE);
 			}
 			else {
 				q = session.createQuery("select c from " +
@@ -963,7 +960,7 @@ public class DbUtil {
 
 			}
 
-			q.setParameter("userId", userId, Hibernate.LONG);
+			q.setParameter("userId", userId, LongType.INSTANCE);
 
 			java.util.Calendar fromDateCalendar = java.util.Calendar.
 			getInstance();
@@ -1013,8 +1010,8 @@ public class DbUtil {
 
 			Query q = session.createQuery(queryString.toString());
 
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
 
 			q.setCacheable(true);
 			list = q.list();
@@ -1380,11 +1377,11 @@ public class DbUtil {
 
 			// set query parameters
 
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
 
 			if (status != null)
-				q.setParameter("status", status, Hibernate.STRING);
+				q.setParameter("status", status, StringType.INSTANCE);
 
 			Integer uniqueResult = ( (Integer) q.uniqueResult());
 			logger.debug("uniquie result:" + uniqueResult);
@@ -1424,9 +1421,9 @@ public class DbUtil {
 			" ci, " + Calendar.class.getName() +
 			" c where (ci.id=c.id) and (c.siteId=:siteId) and (c.instanceId=:instanceId) order by c.startDate desc");
 	
-			q.setParameter("siteId", siteId, Hibernate.STRING);
-			q.setParameter("instanceId", instanceId, Hibernate.STRING);
-			//q.setParameter("userId", userId, Hibernate.LONG);
+			q.setParameter("siteId", siteId, StringType.INSTANCE);
+			q.setParameter("instanceId", instanceId, StringType.INSTANCE);
+			//q.setParameter("userId", userId, LongType.INSTANCE);
 			events = q.list();
 
 		}

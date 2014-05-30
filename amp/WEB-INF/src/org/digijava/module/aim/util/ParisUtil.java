@@ -14,10 +14,11 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.ParisIndicatorReportHelper;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
 
 
 /**
@@ -121,7 +122,7 @@ public class ParisUtil {
 			session = PersistenceManager.getSession();
 			queryString ="select pi from "+AmpAhsurveyIndicator.class.getName()+" pi where pi.ampIndicatorId=:pid";	
 			qry = session.createQuery(queryString);
-			qry.setParameter("pid",pid,Hibernate.INTEGER);
+			qry.setParameter("pid",pid,IntegerType.INSTANCE);
 			col = qry.list();
 		}
 		catch(Exception ex) 		
@@ -159,7 +160,7 @@ public class ParisUtil {
 			session = PersistenceManager.getSession();
 			queryString ="select pi from "+ AmpAhsurveyQuestion.class.getName()+" pi where pi.ampIndicatorId=:pid";
 			qry = session.createQuery(queryString);
-			qry.setParameter("pid",pid,Hibernate.INTEGER);
+			qry.setParameter("pid",pid,IntegerType.INSTANCE);
 			col = qry.list();
 			
 		}
@@ -250,7 +251,7 @@ public class ParisUtil {
 			session = PersistenceManager.getSession();
 			queryString = "select pi from "+ AmpAhsurveyQuestion.class.getName()+" pi where pi.ampQuestionId=:qid";
 			qry = session.createQuery(queryString);
-			qry.setParameter("qid",qid,Hibernate.LONG);
+			qry.setParameter("qid",qid,LongType.INSTANCE);
 			col = qry.list();
 			
 		}

@@ -4,7 +4,6 @@ package org.digijava.module.aim.util;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -36,12 +35,13 @@ import org.digijava.module.aim.helper.AmpLocations;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 public class LocationUtil {
 
@@ -454,7 +454,7 @@ public class LocationUtil {
 			String queryString = "select a from " + AmpActivity.class.getName()
 					+ " a " + "where (a.ampActivityId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			iter = qry.list().iterator();
 			AmpActivity ampActivity = null;
 			while (iter.hasNext()) {
@@ -491,7 +491,7 @@ public class LocationUtil {
 		Iterator iter = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			Connection connection = session.connection();
+			Connection connection = 	((SessionImplementor)session).connection();
 			
 			//String queryString = "select distinct region_id, region from v_regions;";
 			String queryString = "select distinct amp_region_id as region_id, name as region from amp_region order by region";
@@ -590,7 +590,7 @@ public class LocationUtil {
 			String queryString = "select l from " + AmpLocation.class.getName()
 					+ " l " + "where (l.ampLocationId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				ampLocation = (AmpLocation) itr.next();
@@ -611,7 +611,7 @@ public class LocationUtil {
 			String queryString = "select r from " + AmpRegion.class.getName()
 					+ " r " + "where (r.ampRegionId=:id) order by r.regionCode, r.name ";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				region = (AmpRegion) itr.next();
@@ -633,7 +633,7 @@ public class LocationUtil {
 			String queryString = "select z from " + AmpZone.class.getName()
 					+ " z " + "where (z.ampZoneId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				zone = (AmpZone) itr.next();
@@ -655,7 +655,7 @@ public class LocationUtil {
 			String queryString = "select w from " + AmpWoreda.class.getName()
 					+ " w " + "where (w.ampWoredaId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				woreda = (AmpWoreda) itr.next();
@@ -924,7 +924,7 @@ public class LocationUtil {
 			queryString = " select l from " + AmpRegion.class.getName()
 					+ " l where l.country=:country order by l.name";
 			q = session.createQuery(queryString);
-			q.setParameter("country", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY),Hibernate.STRING);
+			q.setParameter("country", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY),StringType.INSTANCE);
 			iter = q.list().iterator();
 
 			while (iter.hasNext()) {
@@ -988,9 +988,9 @@ public class LocationUtil {
 			String queryString = "select c from " + Country.class.getName()
 									+ " c where (c.countryName=:name) or (c.iso=:iso) or (c.iso3=:iso3)";
 			Query q = session.createQuery(queryString);
-			q.setParameter("name", name, Hibernate.STRING);
-			q.setParameter("iso", iso, Hibernate.STRING);
-			q.setParameter("iso3", iso3, Hibernate.STRING);
+			q.setParameter("name", name, StringType.INSTANCE);
+			q.setParameter("iso", iso, StringType.INSTANCE);
+			q.setParameter("iso3", iso3, StringType.INSTANCE);
 			if (null != q.list() && q.list().size() > 0)
 				result = false;
 		}

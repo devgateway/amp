@@ -388,7 +388,7 @@ public class UpdateAppSettings extends Action {
 //					+ AmpApplicationSettings.class.getName() + " a WHERE  "
 //					+ "a.team=:teamId";
 //			Query query = session.createQuery(queryString);
-//			query.setParameter("teamId", teamId, Hibernate.LONG);
+//			query.setParameter("teamId", teamId, LongType.INSTANCE);
 //			Collection reports = query.list();
 //			Iterator iterator = reports.iterator();
 //

@@ -6,19 +6,16 @@
  */
 package org.dgfoundation.amp.harvest;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.hibernate.Hibernate;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpExternalMapping;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpExternalMapping;
+import org.hibernate.type.StringType;
 
 /**
  * 
@@ -47,8 +44,8 @@ public class DBUtil {
 				+ "WHERE (a.objectType=:objType) and (a.externalSource=:extSource)";
 			Query qry = session.createQuery(queryString);
 			PersistenceManager.releaseSession(session);
-			qry.setParameter("objType", objectType, Hibernate.STRING);
-			qry.setParameter("extSource", externalSource, Hibernate.STRING);
+			qry.setParameter("objType", objectType, StringType.INSTANCE);
+			qry.setParameter("extSource", externalSource, StringType.INSTANCE);
 	
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {

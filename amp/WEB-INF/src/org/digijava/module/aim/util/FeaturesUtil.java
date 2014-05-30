@@ -26,17 +26,29 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpColumnsOrder;
+import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpFeature;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpSiteFlag;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.dbentity.FeatureTemplates;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.Logic;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 
 /**
  * @author medea
@@ -474,7 +486,7 @@ public class FeaturesUtil {
  	 		queryString = "select a from " + AmpHomeThumbnail.class.getName()
  	 		+ " a where (a.placeholder=:placeholder) ";
  	 		q = session.createQuery(queryString);
- 	 		q.setParameter("placeholder", placeholder, Hibernate.INTEGER);
+ 	 		q.setParameter("placeholder", placeholder, IntegerType.INSTANCE);
  	 		c = q.list();
  	 		if(c.size()!=0)
  	 			thumbnail=(AmpHomeThumbnail) c.iterator().next();
@@ -1298,7 +1310,7 @@ public class FeaturesUtil {
 			queryString = "select a from " + AmpModulesVisibility.class.getName()
 			+ " a where (a.name=:moduleName) ";
 			q = session.createQuery(queryString);
-			q.setParameter("moduleName", moduleName, Hibernate.STRING);
+			q.setParameter("moduleName", moduleName, StringType.INSTANCE);
 			c = q.list();
 			if(c.size()!=0)
 				id=(AmpModulesVisibility) c.iterator().next();
@@ -1326,7 +1338,7 @@ public class FeaturesUtil {
 			queryString = "select a from " + AmpFieldsVisibility.class.getName()
 			+ " a where (a.name=:fieldName) ";
 			q = session.createQuery(queryString);
-			q.setParameter("fieldName", fieldName, Hibernate.STRING);
+			q.setParameter("fieldName", fieldName, StringType.INSTANCE);
 			c = q.list();
 			if(c.size()!=0)
 				id=(AmpFieldsVisibility) c.iterator().next();
@@ -1354,7 +1366,7 @@ public class FeaturesUtil {
 			queryString = "select a from " + AmpFeaturesVisibility.class.getName()
 			+ " a where (a.name=:featureName) ";
 			q = session.createQuery(queryString);
-			q.setParameter("featureName", featureName, Hibernate.STRING);
+			q.setParameter("featureName", featureName, StringType.INSTANCE);
 			c = q.list();
 			if(c.size()!=0)
 				id=(AmpFeaturesVisibility) c.iterator().next();

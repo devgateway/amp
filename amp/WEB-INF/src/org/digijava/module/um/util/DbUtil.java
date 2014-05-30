@@ -27,14 +27,6 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.digijava.module.um.dbentity.SuspendLogin;
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.ContentAlert;
@@ -45,7 +37,6 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.OrganizationType;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
@@ -59,9 +50,15 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.um.dbentity.ResetPassword;
+import org.digijava.module.um.dbentity.SuspendLogin;
 import org.digijava.module.um.exception.UMException;
-
-import sun.security.util.BigInt;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -809,7 +806,7 @@ public class DbUtil {
                 + Locale.class.getName()
                 + " l where (l.code=:code)";
             qry = session.createQuery(queryString);
-            qry.setParameter("code", code, Hibernate.STRING);
+            qry.setParameter("code", code, StringType.INSTANCE);
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
                 locale = (Locale) itr.next();
@@ -1076,7 +1073,7 @@ public class DbUtil {
             String queryString = "select o from " + AmpOrganisation.class.getName()
                 + " o where (o.orgGrpId=:orgGrpId) and (o.deleted is null or o.deleted = false)  order by o.name asc";
             qry = sess.createQuery(queryString);
-            qry.setParameter("orgGrpId", Id, Hibernate.LONG);
+            qry.setParameter("orgGrpId", Id, LongType.INSTANCE);
             col = qry.list();
         } catch(Exception e) {
             logger.debug("Exception from getOrgByGroup()");
@@ -1135,7 +1132,7 @@ public class DbUtil {
             String queryString = "select o from " + AmpOrgGroup.class.getName()
                 + " o where (o.orgType=:orgTypeId) order by o.orgGrpName asc";
             qry = sess.createQuery(queryString);
-            qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+            qry.setParameter("orgTypeId", Id, LongType.INSTANCE);
             col = qry.list();
         } catch(Exception e) {
             logger.debug("Exception from getOrgGroupByType()");
@@ -1170,7 +1167,7 @@ public class DbUtil {
             String queryString = "select o from " + AmpOrganisation.class.getName()
                 + " o where (o.orgType=:orgTypeId) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
-            qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+            qry.setParameter("orgTypeId", Id, LongType.INSTANCE);
             col = qry.list();
         } catch(Exception e) {
             logger.debug("Exception from getOrgByType()");

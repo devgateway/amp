@@ -22,26 +22,18 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
-import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
@@ -58,15 +50,12 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
-import org.digijava.module.aim.util.caching.AmpCaching;
-import org.digijava.module.translation.util.DbUtil;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.LazyInitializationException;
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 
 public class ProgramUtil {
@@ -135,7 +124,7 @@ public class ProgramUtil {
 				String qryStr = "select theme from " + AmpTheme.class.getName()
 						+ " theme where (theme.themeCode=:code)";
 				Query qry = session.createQuery(qryStr);
-				qry.setParameter("code", code, Hibernate.STRING);
+				qry.setParameter("code", code, StringType.INSTANCE);
 				Iterator itr = qry.list().iterator();
 				if (itr.hasNext()) {
 					theme = (AmpTheme) itr.next();
@@ -158,7 +147,7 @@ public class ProgramUtil {
 				String qryStr = "select theme from " + AmpTheme.class.getName()
 						+ " theme where (" + themeNameHql + "=:name)";
 				Query qry = session.createQuery(qryStr);
-				qry.setParameter("name", name, Hibernate.STRING);
+				qry.setParameter("name", name, StringType.INSTANCE);
 				Iterator itr = qry.list().iterator();
 				if (itr.hasNext()) {
 					theme = (AmpTheme) itr.next();
@@ -505,7 +494,7 @@ public class ProgramUtil {
 									+ AmpIndicatorSector.class.getName()
 									+ " SectInd where (SectInd.themeIndicatorId=:themeIndicatorId)";
 				Query qry = session.createQuery(queryString);
-				qry.setParameter("themeIndicatorId",themeIndicatorId,Hibernate.LONG);
+				qry.setParameter("themeIndicatorId",themeIndicatorId,LongType.INSTANCE);
 				Iterator indItr = qry.list().iterator();
 				while(indItr.hasNext())
 				{
@@ -589,7 +578,7 @@ public class ProgramUtil {
 									+ AmpThemeIndicatorValue.class.getName()
 									+ " thIndValId where (thIndValId.indicatorId=:indicatorId)";
 				Query qry = session.createQuery(queryString);
-				qry.setParameter("indicatorId",themeIndicatorId,Hibernate.LONG);
+				qry.setParameter("indicatorId",themeIndicatorId,LongType.INSTANCE);
 				Iterator indItr = qry.list().iterator();
 				while(indItr.hasNext())
 				{
@@ -621,7 +610,7 @@ public class ProgramUtil {
                                                                 + AmpThemeIndicatorValue.class.getName()
                                                                 + " thIndValId where (thIndValId.themeIndicatorId=:themeIndicatorId)";
                         Query qry = session.createQuery(queryString);
-                        qry.setParameter("themeIndicatorId",themeIndicatorId,Hibernate.LONG);
+                        qry.setParameter("themeIndicatorId",themeIndicatorId,LongType.INSTANCE);
                         col = qry.list();
                 }
                 catch(Exception e1) {
@@ -652,7 +641,7 @@ public class ProgramUtil {
 				String queryString1 = "select subT from " +AmpTheme.class.getName()
 									+ " subT where (subT.parentThemeId=:parentThemeId)";
 				qry = session.createQuery(queryString1);
-				qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+				qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
 				tempCol1 = qry.list();
 				if(!tempCol1.isEmpty())
 				{
@@ -666,7 +655,7 @@ public class ProgramUtil {
 						String queryString2 = "select subT from " +AmpTheme.class.getName()
 											+ " subT where (subT.parentThemeId=:parentThemeId)";
 						qry = session.createQuery(queryString2);
-						qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+						qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
 						tempCol2 = qry.list();
 						if(!tempCol2.isEmpty())
 						{
@@ -680,7 +669,7 @@ public class ProgramUtil {
 								String queryString3 = "select subT from " +AmpTheme.class.getName()
 													+ " subT where (subT.parentThemeId=:parentThemeId)";
 								qry = session.createQuery(queryString3);
-								qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+								qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
 								tempCol3 = qry.list();
 								if(!tempCol3.isEmpty())
 								{
@@ -694,7 +683,7 @@ public class ProgramUtil {
 										String queryString4 = "select subT from " +AmpTheme.class.getName()
 															+ " subT where (subT.parentThemeId=:parentThemeId)";
 										qry = session.createQuery(queryString4);
-										qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+										qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
 										tempCol4 = qry.list();
 										if(!tempCol4.isEmpty())
 										{
@@ -708,7 +697,7 @@ public class ProgramUtil {
 												String queryString5 = "select subT from " +AmpTheme.class.getName()
 																	+ " subT where (subT.parentThemeId=:parentThemeId)";
 												qry = session.createQuery(queryString5);
-												qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+												qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
 												tempCol5 = qry.list();
 												if(!tempCol5.isEmpty())
 												{
@@ -722,7 +711,7 @@ public class ProgramUtil {
 														String queryString6 = "select subT from " +AmpTheme.class.getName()
 																			+ " subT where (subT.parentThemeId=:parentThemeId)";
 														qry = session.createQuery(queryString6);
-														qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+														qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
 														tempCol6 = qry.list();
 														if(!tempCol6.isEmpty())
 														{
@@ -736,7 +725,7 @@ public class ProgramUtil {
 																String queryString7 = "select subT from " +AmpTheme.class.getName()
 																					+ " subT where (subT.parentThemeId=:parentThemeId)";
 																qry = session.createQuery(queryString7);
-																qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+																qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
 																tempCol7 = qry.list();
 																if(!tempCol7.isEmpty())
 																{
@@ -750,7 +739,7 @@ public class ProgramUtil {
 																		String queryString8 = "select subT from " +AmpTheme.class.getName()
 																							+ " subT where (subT.parentThemeId=:parentThemeId)";
 																		qry = session.createQuery(queryString8);
-																		qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+																		qry.setParameter("parentThemeId",parentThemeId,LongType.INSTANCE);
 																		tempCol8 = qry.list();
 																		if(!tempCol8.isEmpty())
 																		{

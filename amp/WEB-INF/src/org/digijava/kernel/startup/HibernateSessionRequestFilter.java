@@ -51,7 +51,13 @@ public class HibernateSessionRequestFilter implements Filter {
 		try {
 
             log.debug("Starting a database transaction");
-            PersistenceManager.getCurrentSession().beginTransaction();
+            
+            Transaction transaction = PersistenceManager.getCurrentSession().getTransaction();
+
+            if(transaction.isActive()) 
+            	transaction.commit();
+            transaction=PersistenceManager.getCurrentSession().beginTransaction();
+            
  
             // Call the next filter (continue request processing)
             chain.doFilter(request, response);

@@ -27,10 +27,11 @@ import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 public class ComponentsUtil {
 
@@ -105,7 +106,7 @@ public class ComponentsUtil {
             session = PersistenceManager.getRequestDBSession();
             queryString = "select co from " + AmpComponentType.class.getName() + " co where (TRIM(co.name)=:name)";
             qry = session.createQuery(queryString);
-            qry.setParameter("name",name.trim(),Hibernate.STRING);
+            qry.setParameter("name",name.trim(),StringType.INSTANCE);
             col = qry.list();
             if (col.size() > 0){
             	return new ArrayList<AmpComponentType>(col).get(0);
@@ -124,7 +125,7 @@ public class ComponentsUtil {
             session = PersistenceManager.getRequestDBSession();
             queryString = "select co from " + AmpComponentType.class.getName() + " co where co.type_id=:id";
             qry = session.createQuery(queryString);
-            qry.setParameter("id", id, Hibernate.LONG);
+            qry.setParameter("id", id, LongType.INSTANCE);
 
             col = qry.list();
             if (col.size() > 0){
@@ -146,7 +147,7 @@ public class ComponentsUtil {
             session = PersistenceManager.getRequestDBSession();
             queryString = "select co from " + AmpComponent.class.getName() + " co where co.ampComponentId=:id";
             qry = session.createQuery(queryString);
-            qry.setParameter("id", id, Hibernate.LONG);
+            qry.setParameter("id", id, LongType.INSTANCE);
 
             col = qry.list();
         } catch (Exception ex) {
@@ -314,7 +315,7 @@ public class ComponentsUtil {
             session = PersistenceManager.getRequestDBSession();
             queryString = "select co from " + AmpComponentFunding.class.getName() + " co where co.component=:id";
             qry = session.createQuery(queryString);
-            qry.setParameter("id", id, Hibernate.LONG);
+            qry.setParameter("id", id, LongType.INSTANCE);
 
             col = qry.list();
         } catch (Exception ex) {
@@ -347,7 +348,7 @@ public class ComponentsUtil {
             String componentTitle = InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("co.ampComponentId");
             queryString = "select co from " + AmpComponent.class.getName() + " co where " + componentTitle + "=:title";
             qry = session.createQuery(queryString);
-            qry.setParameter("title", title, Hibernate.STRING);
+            qry.setParameter("title", title, StringType.INSTANCE);
 
             col = qry.list();
         } catch (Exception ex) {
@@ -384,7 +385,7 @@ public class ComponentsUtil {
             qry = session.createQuery(queryString);
             
            
-            qry.setParameter("title", title, Hibernate.STRING);
+            qry.setParameter("title", title, StringType.INSTANCE);
             if (excludeId != null)
             	qry.setLong("excludeId", excludeId);
            
@@ -420,8 +421,8 @@ public class ComponentsUtil {
                 String componentTitle = InternationalizedModelDescription.getForProperty(AmpComponent.class, "title").getSQLFunctionCall("co.ampComponentId");
                 queryString = "select co from " + AmpComponent.class.getName() + " as co inner join co.activities ac inner join ac.ampActivityGroup actGroup where " + componentTitle + "=:title and actGroup.ampActivityGroupId <> :groupId ";
                 qry = session.createQuery(queryString);
-                qry.setParameter("title", title, Hibernate.STRING);
-                qry.setParameter("groupId", g.getAmpActivityGroupId(), Hibernate.LONG);
+                qry.setParameter("title", title, StringType.INSTANCE);
+                qry.setParameter("groupId", g.getAmpActivityGroupId(), LongType.INSTANCE);
 
                 col = qry.list();
             } catch (Exception ex) {
@@ -450,7 +451,7 @@ public class ComponentsUtil {
             session = PersistenceManager.getRequestDBSession();
             queryString = "select co from " + AmpComponent.class.getName() + " co where co.code=:code";
             qry = session.createQuery(queryString);
-            qry.setParameter("code", code, Hibernate.STRING);
+            qry.setParameter("code", code, StringType.INSTANCE);
 
             col = qry.list();
         } catch (Exception ex) {
@@ -511,7 +512,7 @@ public class ComponentsUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select ami from " + AmpComponentsIndicators.class.getName() + " ami where (ami.ampCompIndId=:id)";
             query = session.createQuery(queryString);
-            query.setParameter("id", id, Hibernate.LONG);
+            query.setParameter("id", id, LongType.INSTANCE);
             ampCoInd = query.list();
         } catch (Exception ex) {
             logger.error("Unable to retrieve Indicator/s for a give Component");
@@ -560,17 +561,17 @@ public class ComponentsUtil {
                     + " or code=:code) and " +
                     "(ami.ampCompIndId !=:id)";
                 qry = session.createQuery(queryString);
-                qry.setParameter("id", id, Hibernate.LONG);
-                qry.setParameter("code", code.trim(), Hibernate.STRING);
-                qry.setParameter("name", name.trim(), Hibernate.STRING);
+                qry.setParameter("id", id, LongType.INSTANCE);
+                qry.setParameter("code", code.trim(), StringType.INSTANCE);
+                qry.setParameter("name", name.trim(), StringType.INSTANCE);
             } else {
                 queryString = "select count(*) from "
                     + AmpComponentsIndicators.class.getName() + " ami "
                     + "where ( name=:name"
                     + " or code=:code)";
                 qry = session.createQuery(queryString);
-                qry.setParameter("code", code.trim(), Hibernate.STRING);
-                qry.setParameter("name", name.trim(), Hibernate.STRING);
+                qry.setParameter("code", code.trim(), StringType.INSTANCE);
+                qry.setParameter("name", name.trim(), StringType.INSTANCE);
 
             }
             Iterator itr = qry.list().iterator();

@@ -30,7 +30,6 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -106,7 +105,6 @@ import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
 import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
 import org.hibernate.Hibernate;
@@ -115,6 +113,10 @@ import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.internal.SessionImpl;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -214,7 +216,7 @@ public class DbUtil {
 					+ AmpTeamMember.class.getName()
 					+ " tm where (tm.ampTeam=:teamId)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setParameter("teamId", teamId, LongType.INSTANCE);
 			//
 			Collection col = qry.list();
 			if (col != null && col.size() > 0) {
@@ -224,7 +226,7 @@ public class DbUtil {
 								+ AmpReports.class.getName()
 								+ " r where (r.ampReportId=:repId)";
 						qry = session.createQuery(queryString);
-						qry.setParameter("repId", reportId[i], Hibernate.LONG);
+						qry.setParameter("repId", reportId[i], LongType.INSTANCE);
 						Iterator itr = qry.list().iterator();
 						if (itr.hasNext()) {
 							AmpReports ampReport = (AmpReports) itr.next();
@@ -261,8 +263,8 @@ public class DbUtil {
 								+ " tr where (tr.team=:teamId) and "
 								+ " (tr.report=:repId)";
 						qry = session.createQuery(queryString);
-						qry.setParameter("teamId", teamId, Hibernate.LONG);
-						qry.setParameter("repId", reportId[i], Hibernate.LONG);
+						qry.setParameter("teamId", teamId, LongType.INSTANCE);
+						qry.setParameter("repId", reportId[i], LongType.INSTANCE);
 						itr = qry.list().iterator();
 						if (itr.hasNext()) {
 							AmpTeamReports ampTeamRep = (AmpTeamReports) itr
@@ -314,7 +316,7 @@ public class DbUtil {
 					+ " tm where (tm.ampTeamId=:teamId)";
 
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setParameter("teamId", teamId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			AmpTeam team = null;
 			if (itr.hasNext()) {
@@ -346,9 +348,9 @@ public class DbUtil {
 									+ " (teamRep.report=:rId)";
 							Query tmpQry = session.createQuery(tempQry);
 							tmpQry.setParameter("tId", team.getAmpTeamId(),
-									Hibernate.LONG);
+									LongType.INSTANCE);
 							tmpQry.setParameter("rId", report.getAmpReportId(),
-									Hibernate.LONG);
+									LongType.INSTANCE);
 							Iterator tmpItr = tmpQry.list().iterator();
 							if (!tmpItr.hasNext()) {
 								AmpTeamReports tr = new AmpTeamReports();
@@ -453,7 +455,7 @@ public class DbUtil {
 					+ " f "
 					+ "where (f.ampFundingId=:fundId) order by f.transactionDate";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("fundId", fundId, Hibernate.LONG);
+			qry.setParameter("fundId", fundId, LongType.INSTANCE);
 			fundingDetails = qry.list();
 
 		} catch (Exception ex) {
@@ -472,7 +474,7 @@ public class DbUtil {
 					+ AmpFundingDetail.class.getName() + " f "
 					+ "where (f.contract=:cId) and f.transactionType=1";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("cId", c.getId(), Hibernate.LONG);
+			qry.setParameter("cId", c.getId(), LongType.INSTANCE);
 			fundingDetails = qry.list();
 
 		} catch (Exception ex) {
@@ -491,7 +493,7 @@ public class DbUtil {
 			String queryString = "select f from " + AmpFunding.class.getName()
 					+ " f " + "where (f.ampActivityId=:actId)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("actId", actId, Hibernate.LONG);
+			qry.setParameter("actId", actId, LongType.INSTANCE);
 			funding = qry.list();
 
 		} catch (Exception ex) {
@@ -568,7 +570,7 @@ public class DbUtil {
 			String queryString = "select f.message from "
 					+ Message.class.getName() + " f " + "where (f.key=:keyTrn)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("keyTrn", keyTrn, Hibernate.STRING);
+			qry.setParameter("keyTrn", keyTrn, StringType.INSTANCE);
 			funding = qry.list();
 
 		} catch (Exception ex) {
@@ -593,8 +595,8 @@ public class DbUtil {
 					+ AmpActivityInternalId.class.getName() + " a "
 					+ "where (a.ampActivityId=:actId) and (a.ampOrgId=:orgId)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("actId", actId, Hibernate.LONG);
-			qry.setParameter("orgId", orgId, Hibernate.LONG);
+			qry.setParameter("actId", actId, LongType.INSTANCE);
+			qry.setParameter("orgId", orgId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 
 			if (itr.hasNext()) {
@@ -616,7 +618,7 @@ public class DbUtil {
 					+ "where aaii.amp_activity_id=:actId";
 			Query qry = session.createSQLQuery(queryString).addEntity(
 					AmpActivityInternalId.class);
-			qry.setParameter("actId", actId, Hibernate.LONG);
+			qry.setParameter("actId", actId, LongType.INSTANCE);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get Activity Internal Id :" + ex);
@@ -657,7 +659,7 @@ public class DbUtil {
 			String queryString = "select a from " + AmpActivity.class.getName()
 					+ " a " + "where (a.ampActivityId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				AmpActivity activity = (AmpActivity) itr.next();
@@ -683,7 +685,7 @@ public class DbUtil {
 			String queryString = "select a from " + AmpActivity.class.getName()
 					+ " a " + "where (a.ampActivityId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				AmpActivity activity = (AmpActivity) itr.next();
@@ -729,7 +731,7 @@ public class DbUtil {
 					+ " act";
 			qryStr += " where (act.team=:team)";
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("team", teamId, Hibernate.LONG);
+			qry.setParameter("team", teamId, LongType.INSTANCE);
 			Iterator itr1 = qry.list().iterator();
 			while (itr1.hasNext()) {
 				AmpActivity act = (AmpActivity) itr1.next();
@@ -769,7 +771,7 @@ public class DbUtil {
 			String queryString = "select r from " + AmpRole.class.getName()
 					+ " r " + "where (r.roleCode=:code)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("code", roleCode, Hibernate.STRING);
+			qry.setParameter("code", roleCode, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext())
 				role = (AmpRole) itr.next();
@@ -862,7 +864,7 @@ public class DbUtil {
 			String queryString = "select a from " + AmpActivity.class.getName()
 					+ " a " + "where (a.ampActivityId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			AmpActivity ampActivity = null;
 			while (itr.hasNext()) {
@@ -964,7 +966,7 @@ public class DbUtil {
 			queryString = " select c from " + AmpComponent.class.getName()
 					+ " c where (c.activity.ampActivityId=:ampActivityId )";
 			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
 			iter = q.list().iterator();
 
 			while (iter.hasNext()) {
@@ -1017,8 +1019,8 @@ public class DbUtil {
 					+ AmpFunding.class.getName()
 					+ " f where (f.ampActivityId=:ampActivityId ) and (f.ampFundingId=:ampFundingId)";
 			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			ampFundings = q.list();
 			logger.debug("DbUtil : getAmpFunding() returning collection of size  "
 					+ ampFundings.size());
@@ -1042,7 +1044,7 @@ public class DbUtil {
 			queryString = "select f from " + AmpFunding.class.getName()
 					+ " f where (f.ampActivityId=:ampActivityId) ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
 			ampFundings = q.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get AmpFunding collection from database",
@@ -1104,10 +1106,10 @@ public class DbUtil {
 					+ " and  f.transactionType=:transactionType  "
 					+ " and  f.adjustmentType=:adjustmentType ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
 			list = q.list();
 			if (list.size() != 0) {
 				iter = list.iterator();
@@ -1166,10 +1168,10 @@ public class DbUtil {
 					+ " and (f.transactionType=:transactionType) "
 					+ " and (f.adjustmentType=:adjustmentType) group by f.ampFundingId";
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
 			list = q.list();
 			if (list.size() != 0) {
 				iter = list.iterator();
@@ -1203,10 +1205,10 @@ public class DbUtil {
 					+ " and (f.transactionType=:transactionType) "
 					+ " and (f.adjustmentType=:adjustmentType) group by f.fiscalYear";
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
 
 			c = q.list();
 		} catch (Exception ex) {
@@ -1239,9 +1241,9 @@ public class DbUtil {
 					+ " and (f.transactionType=:transactionType) "
 					+ " group by f.fiscalYear";
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
+					IntegerType.INSTANCE);
 
 			c = q.list();
 		} catch (Exception ex) {
@@ -1265,7 +1267,7 @@ public class DbUtil {
 			queryString = " select c from " + AmpComponent.class.getName()
 					+ " c where (c.ampComponentId=:cid )";
 			q = session.createQuery(queryString);
-			q.setParameter("cid", cid, Hibernate.LONG);
+			q.setParameter("cid", cid, LongType.INSTANCE);
 			iter = q.list().iterator();
 
 			if (iter.hasNext()) {
@@ -1296,7 +1298,7 @@ public class DbUtil {
 					+ Constants.ACTIVITY_NEEDS_APPROVAL_STATUS + ") ) "
 					+ " and act.draft != :draftValue";
 			q = session.createQuery(queryString);
-			q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
+			q.setParameter("ampTeamId", ampTeamId, LongType.INSTANCE);
 			q.setBoolean("draftValue", true);
 
 			actList = q.list();
@@ -1320,7 +1322,7 @@ public class DbUtil {
 					+ AmpActivityVersion.class.getName()
 					+ " act where act.ampActivityId=:actId";
 			q = session.createQuery(qry);
-			q.setParameter("actId", actId, Hibernate.LONG);
+			q.setParameter("actId", actId, LongType.INSTANCE);
 			Iterator itr = q.list().iterator();
 			while (itr.hasNext()) {
 				AmpActivityVersion act = (AmpActivityVersion) itr.next();
@@ -1357,11 +1359,11 @@ public class DbUtil {
 					+ " and ( act.activityCreator=:ampTeamMemId "
 					+ " or act.approvalStatus=:status1 or act.approvalStatus=:status2)";
 			q = session.createQuery(queryString);
-			q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
-			q.setParameter("ampTeamMemId", ampTeamMemId, Hibernate.LONG);
+			q.setParameter("ampTeamId", ampTeamId, LongType.INSTANCE);
+			q.setParameter("ampTeamMemId", ampTeamMemId, LongType.INSTANCE);
 			/* } */
-			q.setParameter("status1", "approved", Hibernate.STRING);
-			q.setParameter("status2", "edited", Hibernate.STRING);
+			q.setParameter("status1", "approved", StringType.INSTANCE);
+			q.setParameter("status2", "edited", StringType.INSTANCE);
 			actList = q.list();
 
 		} catch (Exception ex) {
@@ -1392,7 +1394,7 @@ public class DbUtil {
 			queryString = "select f from " + AmpFunding.class.getName()
 					+ " f where (f.ampFundingId=:ampFundingId) ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			iter = q.list().iterator();
 			if (iter.hasNext()) {
 				ampFunding = (AmpFunding) iter.next();
@@ -1425,8 +1427,8 @@ public class DbUtil {
 					+ " p where (p.ampFunding=:ampFundingId) "
 					+ " and (p.projected=:adjType) order by p.projectionDate ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-			q.setParameter("adjType", adjType, Hibernate.INTEGER);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
+			q.setParameter("adjType", adjType, IntegerType.INSTANCE);
 			c = q.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get quarterly data from database", ex);
@@ -1480,9 +1482,9 @@ public class DbUtil {
 					+ "order by f.transactionDate ";
 
 			q = session.createQuery(queryString);
-			q.setParameter("fundId", ampFundingId, Hibernate.LONG);
-			q.setParameter("trsType", transactionType, Hibernate.INTEGER);
-			q.setParameter("adjType", adjustmentType, Hibernate.INTEGER);
+			q.setParameter("fundId", ampFundingId, LongType.INSTANCE);
+			q.setParameter("trsType", transactionType, IntegerType.INSTANCE);
+			q.setParameter("adjType", adjustmentType, IntegerType.INSTANCE);
 
 			c = q.list();
 
@@ -1590,8 +1592,8 @@ public class DbUtil {
 					+ AmpFiscalCalendar.class.getName()
 					+ " where startMonthNum=:start and startDayNum=:start and yearOffset=:offset";
 			qry = session.createQuery(queryString);
-			qry.setParameter("start", new Integer(1), Hibernate.INTEGER);
-			qry.setParameter("offset", new Integer(0), Hibernate.INTEGER);
+			qry.setParameter("start", new Integer(1), IntegerType.INSTANCE);
+			qry.setParameter("offset", new Integer(0), IntegerType.INSTANCE);
 			if (qry.list().size() != 0)
 				fid = ((AmpFiscalCalendar) qry.list().get(0))
 						.getAmpFiscalCalId();
@@ -1614,7 +1616,7 @@ public class DbUtil {
 					+ "where f.baseCal=:baseCalParam order by f.name";
 			qry = session.createQuery(queryString);
 			qry.setParameter("baseCalParam",
-					BaseCalendar.BASE_GREGORIAN.getValue(), Hibernate.STRING);
+					BaseCalendar.BASE_GREGORIAN.getValue(), StringType.INSTANCE);
 
 			if (qry.list() != null)
 				calendar = ((AmpFiscalCalendar) qry.list().get(0));
@@ -1677,7 +1679,7 @@ public class DbUtil {
 			String queryString = "select f from " + AmpActivity.class.getName()
 					+ " f where (f.internalId=:orgId)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("orgId", orgId, Hibernate.LONG);
+			qry.setParameter("orgId", orgId, LongType.INSTANCE);
 			activities = qry.list();
 		} catch (Exception e) {
 			logger.error("Unable to get all activities");
@@ -1696,7 +1698,7 @@ public class DbUtil {
 					+ AmpActivityInternalId.class.getName()
 					+ " f,"+AmpActivityGroup.class.getName()+" g where f.ampActivity = g.ampActivityLastVersion and (f.organisation=:orgId)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("orgId", orgId, Hibernate.LONG);
+			qry.setParameter("orgId", orgId, LongType.INSTANCE);
 			activitiesCount = (Integer) qry.uniqueResult();
 		} catch (Exception e) {
 			logger.error("Unable to get all activities");
@@ -1716,7 +1718,7 @@ public class DbUtil {
 					+ AmpFiscalCalendar.class.getName()
 					+ " f where (f.ampFiscalCalId=:ampFisCalId)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("ampFisCalId", ampFisCalId, Hibernate.LONG);
+			qry.setParameter("ampFisCalId", ampFisCalId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				ampFisCal = (AmpFiscalCalendar) itr.next();
@@ -1738,7 +1740,7 @@ public class DbUtil {
 			String queryString = "select u from " + User.class.getName()
 					+ " u where (u.email=:email)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("email", email, Hibernate.STRING);
+			qry.setParameter("email", email, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				user = (User) itr.next();
@@ -1760,7 +1762,7 @@ public class DbUtil {
 			String queryString = "select u from " + User.class.getName()
 					+ " u where (u.id=:userId)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("userId", userId, Hibernate.LONG);
+			qry.setParameter("userId", userId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				user = (User) itr.next();
@@ -1868,7 +1870,7 @@ public class DbUtil {
 			String queryString = "select u from " + User.class.getName()
 					+ " u " + "where (u.id=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", userId, Hibernate.LONG);
+			qry.setParameter("id", userId, LongType.INSTANCE);
 			Iterator itrTemp = qry.list().iterator();
 			while (itrTemp.hasNext()) {
 				user = (User) itrTemp.next();
@@ -1936,7 +1938,7 @@ public class DbUtil {
 			String queryString = "select r from " + AmpReports.class.getName()
 					+ " r " + "where (r.ampReportId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				ampReports = (AmpReports) itr.next();
@@ -1958,8 +1960,8 @@ public class DbUtil {
 					+ AmpReportLog.class.getName() + " r "
 					+ "where (r.report=:id and r.member.ampTeamMemId=:member)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", report_id, Hibernate.LONG);
-			qry.setParameter("member", member_id, Hibernate.LONG);
+			qry.setParameter("id", report_id, LongType.INSTANCE);
+			qry.setParameter("member", member_id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				ampReportMemberLog = (AmpReportLog) itr.next();
@@ -1984,7 +1986,7 @@ public class DbUtil {
 			String queryString = "select r from " + AmpReports.class.getName()
 					+ " r " + "where (r.ampReportId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itrTemp = qry.list().iterator();
 			AmpReports ampReports = null;
 			while (itrTemp.hasNext()) {
@@ -2019,7 +2021,7 @@ public class DbUtil {
 			qryStr = "select tr from " + AmpTeamReports.class.getName()
 					+ " tr " + "where (tr.team=:tId)";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("tId", teamId, Hibernate.LONG);
+			qry.setParameter("tId", teamId, LongType.INSTANCE);
 			Iterator tempItr = qry.list().iterator();
 			String params = "";
 			while (tempItr.hasNext()) {
@@ -2063,7 +2065,7 @@ public class DbUtil {
 			String queryString = "select p from " + AmpPages.class.getName()
 					+ " p " + "where (p.ampPageId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itrTemp = qry.list().iterator();
 			AmpPages ampPage = null;
 			while (itrTemp.hasNext()) {
@@ -2094,7 +2096,7 @@ public class DbUtil {
 			String queryString = "select p from " + AmpPages.class.getName()
 					+ " p " + "where (p.ampPageId=:id)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("id", pageId, Hibernate.LONG);
+			qry.setParameter("id", pageId, LongType.INSTANCE);
 			Iterator itrTemp = qry.list().iterator();
 			while (itrTemp.hasNext()) {
 				page = (AmpPages) itrTemp.next();
@@ -2124,7 +2126,7 @@ public class DbUtil {
 			String queryString = "select f from " + AmpFilters.class.getName()
 					+ " f " + "where (f.ampFilterId=:id)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("id", filterId, Hibernate.LONG);
+			qry.setParameter("id", filterId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				filter = (AmpFilters) itr.next();
@@ -2146,8 +2148,8 @@ public class DbUtil {
 					+ AmpTeamPageFilters.class.getName() + " tpf "
 					+ "where (tpf.team=:tId) and (tpf.page=:pId)";
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("tId", teamId, Hibernate.LONG);
-			qry.setParameter("pId", pageId, Hibernate.LONG);
+			qry.setParameter("tId", teamId, LongType.INSTANCE);
+			qry.setParameter("pId", pageId, LongType.INSTANCE);
 
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
@@ -2169,8 +2171,8 @@ public class DbUtil {
 					+ AmpTeamPageFilters.class.getName() + " tpf "
 					+ "where (tpf.team=:tId) and (tpf.page=:pId)";
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("tId", teamId, Hibernate.LONG);
-			qry.setParameter("pId", pageId, Hibernate.LONG);
+			qry.setParameter("tId", teamId, LongType.INSTANCE);
+			qry.setParameter("pId", pageId, LongType.INSTANCE);
 
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
@@ -2257,7 +2259,7 @@ public class DbUtil {
 			String queryString = "select c from " + Country.class.getName()
 					+ " c " + "where (c.iso=:iso)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("iso", iso, Hibernate.STRING);
+			qry.setParameter("iso", iso, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				country = (Country) itr.next();
@@ -2278,7 +2280,7 @@ public class DbUtil {
 			String queryString = "select c from " + Country.class.getName()
 					+ " c " + "where (c.countryName=:name)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("name", name, Hibernate.STRING);
+			qry.setParameter("name", name, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				country = (Country) itr.next();
@@ -2299,7 +2301,7 @@ public class DbUtil {
 			String queryString = "select c from " + Country.class.getName()
 					+ " c " + "where (c.countryId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				country = (Country) itr.next();
@@ -2421,7 +2423,7 @@ public class DbUtil {
 					+ AmpOrganisation.class.getName()
 					+ " o where (o.ampFiscalCalId=:ampFisCalId) and (o.deleted is null or o.deleted = false) ";
 			qry = sess.createQuery(queryString);
-			qry.setParameter("ampFisCalId", fiscalCalId, Hibernate.LONG);
+			qry.setParameter("ampFisCalId", fiscalCalId, LongType.INSTANCE);
 			Iterator<AmpOrganisation> itr = qry.list().iterator();
 			col = new ArrayList<AmpOrganisation>();
 			while (itr.hasNext()) {
@@ -2470,7 +2472,7 @@ public class DbUtil {
 					+ AmpFiscalCalendar.class.getName()
 					+ " f where (f.name=:name)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("name", name, Hibernate.STRING);
+			qry.setParameter("name", name, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				ampFisCal = (AmpFiscalCalendar) itr.next();
@@ -2506,7 +2508,7 @@ public class DbUtil {
             appendNotIn("org.ampOrgId", excludeIds, queryString);
 
 			Query qry = session.createQuery(queryString.toString());
-			qry.setParameter("orgType", orgType, Hibernate.LONG);
+			qry.setParameter("orgType", orgType, LongType.INSTANCE);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to search ", ex);
@@ -2605,7 +2607,7 @@ public class DbUtil {
 					+ keyword
 					+ "%') and (org.deleted is null or org.deleted = false)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("orgType", orgType, Hibernate.LONG);
+			qry.setParameter("orgType", orgType, LongType.INSTANCE);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.debug("Unable to search " + ex);
@@ -2632,7 +2634,7 @@ public class DbUtil {
             appendNotIn("org.ampOrgId", excludeIds, queryString);
 
 			Query qry = session.createQuery(queryString.toString());
-			qry.setParameter("orgType", orgType, Hibernate.LONG);
+			qry.setParameter("orgType", orgType, LongType.INSTANCE);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to search ", ex);
@@ -3062,7 +3064,7 @@ public class DbUtil {
 					+ AmpFundingDetail.class.getName()
 					+ " f where (f.ampCurrencyId=:currId)";
 			qry = sess.createQuery(queryString);
-			qry.setParameter("currId", currId, Hibernate.LONG);
+			qry.setParameter("currId", currId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			col = new ArrayList();
 			while (itr.hasNext()) {
@@ -3085,7 +3087,7 @@ public class DbUtil {
 			String queryString = "select a from " + AmpActivity.class.getName()
 					+ " a where (a.themeId=:themeId)";
 			qry = sess.createQuery(queryString);
-			qry.setParameter("themeId", themeId, Hibernate.LONG);
+			qry.setParameter("themeId", themeId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			col = new ArrayList();
 			while (itr.hasNext()) {
@@ -3115,7 +3117,7 @@ public class DbUtil {
 					themeId);
 
 			// qry = sess.createQuery(queryString);
-			// qry.setParameter("themeId", themeId, Hibernate.LONG);
+			// qry.setParameter("themeId", themeId, LongType.INSTANCE);
 			Iterator itr = themeToBeDeleted.getActivities().iterator();
 
 			col = new ArrayList();
@@ -3441,7 +3443,8 @@ public class DbUtil {
 	public static void deleteAllStamps(String idxName) {
 		Connection con;
 		try {
-			con = PersistenceManager.getSession().connection();
+		
+			con =((SessionImpl)PersistenceManager.getSession()).connection();
 			con.setAutoCommit(false);
 			con.createStatement().execute(
 					"DELETE FROM amp_lucene_index WHERE idxName like '"
@@ -3510,11 +3513,11 @@ public class DbUtil {
 					+ " group by f.fiscalQuarter";
 
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
-			q.setParameter("fiscalYear", fiscalYear, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
+			q.setParameter("fiscalYear", fiscalYear, IntegerType.INSTANCE);
 			c = q.list();
 			logger.debug("No of Quarters : " + q.list().size());
 		} catch (Exception ex) {
@@ -3544,7 +3547,7 @@ public class DbUtil {
 			queryString = "select f from " + AmpFiscalCalendar.class.getName()
 					+ " f where (f.ampFiscalCalId=:fiscalCalId) ";
 			q = session.createQuery(queryString);
-			q.setParameter("fiscalCalId", fiscalCalId, Hibernate.LONG);
+			q.setParameter("fiscalCalId", fiscalCalId, LongType.INSTANCE);
 			collection = q.list();
 			if (collection.size() > 0) {
 				fc = (AmpFiscalCalendar) collection.toArray()[0];
@@ -3588,7 +3591,7 @@ public class DbUtil {
 					+ " f where f.ampActivityId=:ampActivityId";
 
 			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
 			int i = 0;
 			Iterator iter = q.list().iterator();
 			while (iter.hasNext()) {
@@ -3620,7 +3623,7 @@ public class DbUtil {
 					+ " f where f.ampActivityId=:ampActivityId";
 
 			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
 
 			Iterator iter = q.list().iterator();
 			while (iter.hasNext()) {
@@ -3650,8 +3653,8 @@ public class DbUtil {
 	 * AmpClosingDateHistory.class.getName() +
 	 * " a where (a.ampFundingId=:ampFundingId) " + " and (a.type=:type)"; q =
 	 * session.createQuery(queryString); q.setParameter("ampFundingId",
-	 * ampFundingId, Hibernate.LONG); q.setParameter("type", type,
-	 * Hibernate.INTEGER); c = q.list(); if (c.size() != 0) { iter =
+	 * ampFundingId, LongType.INSTANCE); q.setParameter("type", type,
+	 * IntegerType.INSTANCE); c = q.list(); if (c.size() != 0) { iter =
 	 * c.iterator(); if (iter.hasNext()) { d = (Date) iter.next(); } } } catch
 	 * (Exception ex) { logger.error("Unable to get closing date from database",
 	 * ex); } logger.debug("getClosingDate() returning date:" + d); return d; }
@@ -3678,8 +3681,8 @@ public class DbUtil {
 					+ " and (ampOrg.ampOrgId=:ampDonorOrgId)";
 
 			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			q.setParameter("ampDonorOrgId", ampDonorOrgId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
+			q.setParameter("ampDonorOrgId", ampDonorOrgId, LongType.INSTANCE);
 			if (q.list() != null) {
 				iter = q.list().iterator();
 				if (iter.hasNext())
@@ -3707,9 +3710,9 @@ public class DbUtil {
 					+ " f where (f.ampDonorOrgId =:ampDonorOrgId) and (f.ampTermsAssistId =:ampTermsAssistId) and (f.ampActivityId =:ampActivityId)";
 			logger.debug("querystring " + queryString);
 			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			q.setParameter("ampDonorOrgId", ampDonorOrgId, Hibernate.LONG);
-			q.setParameter("ampTermsAssistId", ampTermsAssistId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
+			q.setParameter("ampDonorOrgId", ampDonorOrgId, LongType.INSTANCE);
+			q.setParameter("ampTermsAssistId", ampTermsAssistId, LongType.INSTANCE);
 			funding = q.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get Funding records from database", ex);
@@ -3833,10 +3836,10 @@ public class DbUtil {
 					+ " and (f.adjustmentType=:adjustmentType) ";
 
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
 			ampFundings = q.list();
 			logger.debug("size of result " + ampFundings.size());
 		} catch (Exception ex) {
@@ -3869,7 +3872,7 @@ public class DbUtil {
 					+ AmpFunding.class.getName()
 					+ " f where (f.ampActivityId=:ampActivityId) ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
 			iter = q.list().iterator();
 			while (iter.hasNext()) {
 				AmpFunding ampFunding = (AmpFunding) iter.next();
@@ -3891,8 +3894,8 @@ public class DbUtil {
 			logger.debug("queryString :" + queryString);
 			q = session.createQuery(queryString);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
 			iter = q.list().iterator();
 			logger.debug("Size: " + q.list().size());
 			amount = new DecimalWraper();
@@ -3983,7 +3986,7 @@ public class DbUtil {
 			queryString = "select a.ampPageId from " + AmpPages.class.getName()
 					+ " a where (a.pageCode=:pageCode) ";
 			q = session.createQuery(queryString);
-			q.setParameter("pageCode", pageCode, Hibernate.STRING);
+			q.setParameter("pageCode", pageCode, StringType.INSTANCE);
 			c = q.list();
 			if (c.size() != 0) {
 				iter = c.iterator();
@@ -4017,7 +4020,7 @@ public class DbUtil {
 			queryString = "select a.ampPageId from " + AmpPages.class.getName()
 					+ " a where (a.pageName=:pageName) ";
 			q = session.createQuery(queryString);
-			q.setParameter("pageName", pageName, Hibernate.STRING);
+			q.setParameter("pageName", pageName, StringType.INSTANCE);
 			c = q.list();
 			if (c.size() != 0) {
 				iter = c.iterator();
@@ -4048,7 +4051,7 @@ public class DbUtil {
 					+ AmpOrganisation.class.getName()
 					+ " o where (o.ampSecSchemeId=:ampSecSchemeId ) and (o.deleted is null or o.deleted = false) ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampSecSchemeId", ampSecSchemeId, Hibernate.LONG);
+			q.setParameter("ampSecSchemeId", ampSecSchemeId, LongType.INSTANCE);
 
 			ampOrgs = q.list();
 			logger.debug("DbUtil : getOrgId() returning collection of size  "
@@ -4123,11 +4126,11 @@ public class DbUtil {
 					+ AmpFundingDetail.class.getName()
 					+ " fd where (fd.ampFundingId = :ampFundingId ) and (fd.fiscalYear = :forcastYear) and (fd.transactionType=:transactionType) and (fd.adjustmentType=:adjustmentType) group by fd.fiscalYear ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-			q.setParameter("forcastYear", forcastYear, Hibernate.INTEGER);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
+			q.setParameter("forcastYear", forcastYear, IntegerType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
 
 			iter = q.list().iterator();
 			while (iter.hasNext()) {
@@ -4158,10 +4161,10 @@ public class DbUtil {
 					+ AmpFundingDetail.class.getName()
 					+ " fd where (fd.ampFundingId = :ampFundingId ) and (fd.transactionType=:transactionType) and (fd.adjustmentType=:adjustmentType) group by fd.ampFundingId ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
 
 			iter = q.list().iterator();
 			while (iter.hasNext()) {
@@ -4231,10 +4234,10 @@ public class DbUtil {
 					+ " and (f.adjustmentType=:adjustmentType) ";
 
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
 			list = q.list();
 			logger.debug("size of result " + list.size());
 			iter = list.iterator();
@@ -4287,11 +4290,11 @@ public class DbUtil {
 					+ " and (f.fiscalYear=:fiscalYear) ";
 
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
-			q.setParameter("fiscalYear", fiscalYear, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
+			q.setParameter("fiscalYear", fiscalYear, IntegerType.INSTANCE);
 			list = q.list();
 
 			iter = list.iterator();
@@ -4352,12 +4355,12 @@ public class DbUtil {
 					+ " and (f.fiscalYear=:fiscalYear) "
 					+ " and (f.fiscalQuarter=:fiscalQuarter) ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
 			q.setParameter("transactionType", transactionType,
-					Hibernate.INTEGER);
-			q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
-			q.setParameter("fiscalYear", fiscalYear, Hibernate.INTEGER);
-			q.setParameter("fiscalQuarter", fiscalQuarter, Hibernate.INTEGER);
+					IntegerType.INSTANCE);
+			q.setParameter("adjustmentType", adjustmentType, IntegerType.INSTANCE);
+			q.setParameter("fiscalYear", fiscalYear, IntegerType.INSTANCE);
+			q.setParameter("fiscalQuarter", fiscalQuarter, IntegerType.INSTANCE);
 			list = q.list();
 
 			iter = list.iterator();
@@ -4439,7 +4442,7 @@ public class DbUtil {
 			queryString = "select f from " + AmpFunding.class.getName()
 					+ " f where (f.ampDonorOrgId=:ampDonorOrgId)";
 			q = session.createQuery(queryString);
-			q.setParameter("ampDonorOrgId", ampDonorOrgId, Hibernate.LONG);
+			q.setParameter("ampDonorOrgId", ampDonorOrgId, LongType.INSTANCE);
 			fundingIds = q.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get Donors from database", ex);
@@ -4462,7 +4465,7 @@ public class DbUtil {
 					+ AmpActivity.class.getName()
 					+ " activity where activity.modality.ampModalityId = :ampModalityId";
 			q = session.createQuery(queryString);
-			q.setParameter("ampModalityId", ampModalityId, Hibernate.LONG);
+			q.setParameter("ampModalityId", ampModalityId, LongType.INSTANCE);
 			projects = q.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get Donors from database", ex);
@@ -4505,7 +4508,7 @@ public class DbUtil {
 					+ AmpOrganisation.class.getName()
 					+ " o where (o.orgType =:orgType) and (o.deleted is null or o.deleted = false) ";
 			q = session.createQuery(queryString);
-			q.setParameter("orgType", orgType, Hibernate.STRING);
+			q.setParameter("orgType", orgType, StringType.INSTANCE);
 			// logger.debug("No of Org records : " + q.list().size());
 			donorGroups = q.list();
 		} catch (Exception ex) {
@@ -4529,9 +4532,9 @@ public class DbUtil {
 					+ " f where (f.ampDonorOrgId =:ampDonorOrgId) and (f.fundingTermsCode =:fundingTermsCode ) ";
 			logger.debug("querystring " + queryString);
 			q = session.createQuery(queryString);
-			q.setParameter("ampDonorOrgId", ampDonorOrgId, Hibernate.LONG);
+			q.setParameter("ampDonorOrgId", ampDonorOrgId, LongType.INSTANCE);
 			q.setParameter("fundingTermsCode", fundingTermsCode,
-					Hibernate.STRING);
+					StringType.INSTANCE);
 			logger.debug("No of funding records : " + q.list().size());
 			funding = q.list();
 		} catch (Exception ex) {
@@ -4559,8 +4562,8 @@ public class DbUtil {
 					+ AmpFunding.class.getName()
 					+ " f where (f.ampDonorOrgId =:ampDonorOrgId) and (f.ampTermsAssistId =:ampTermsAssistId)";
 			q = session.createQuery(queryString);
-			q.setParameter("ampDonorOrgId", ampDonorOrgId, Hibernate.LONG);
-			q.setParameter("ampTermsAssistId", ampTermsAssistId, Hibernate.LONG);
+			q.setParameter("ampDonorOrgId", ampDonorOrgId, LongType.INSTANCE);
+			q.setParameter("ampTermsAssistId", ampTermsAssistId, LongType.INSTANCE);
 			logger.debug("querystring " + queryString);
 			funding = q.list();
 		} catch (Exception ex) {
@@ -4587,8 +4590,8 @@ public class DbUtil {
 					+ " and (f.orgRoleCode=:orgRoleCode) ";
 
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-			q.setParameter("orgRoleCode", orgRoleCode, Hibernate.STRING);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
+			q.setParameter("orgRoleCode", orgRoleCode, StringType.INSTANCE);
 
 			c = q.list();
 		} catch (Exception ex) {
@@ -4610,8 +4613,8 @@ public class DbUtil {
 					+ AmpFunding.class.getName()
 					+ " f where (f.ampActivityId=:ampActivityId ) and (f.ampDonorOrgId=:ampDonorOrgId)";
 			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			q.setParameter("ampDonorOrgId", ampDonorOrgId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
+			q.setParameter("ampDonorOrgId", ampDonorOrgId, LongType.INSTANCE);
 			ampFundings = q.list();
 			logger.debug("DbUtil : getFundingId() returning collection of size  "
 					+ ampFundings.size());
@@ -4637,7 +4640,7 @@ public class DbUtil {
 			queryString = "select activity from " + AmpActivity.class.getName()
 					+ " activity";
 			q = session.createQuery(queryString);
-			// q.setParameter("activity.getOrgrole().getOrganisation().getAmpOrgId",ampOrgId,Hibernate.LONG)
+			// q.setParameter("activity.getOrgrole().getOrganisation().getAmpOrgId",ampOrgId,LongType.INSTANCE)
 			// ;
 			Collection act = q.list();
 
@@ -4675,7 +4678,7 @@ public class DbUtil {
 			queryString = "select a from " + AmpTermsAssist.class.getName()
 					+ " a where (a.ampTermsAssistId=:ampTermsAssistId) ";
 			q = session.createQuery(queryString);
-			q.setParameter("ampTermsAssistId", ampTermsAssistId, Hibernate.LONG);
+			q.setParameter("ampTermsAssistId", ampTermsAssistId, LongType.INSTANCE);
 			c = q.list();
 			if (c.size() != 0) {
 				iter = c.iterator();
@@ -4707,7 +4710,7 @@ public class DbUtil {
 			String queryString = "select l from " + AmpLevel.class.getName()
 					+ " l " + "where (l.ampLevelId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				level = (AmpLevel) itr.next();
@@ -4958,7 +4961,7 @@ public class DbUtil {
 			String queryString = "select f from " + AmpOrgType.class.getName()
 					+ " f where (f.ampOrgTypeId=:ampOrgTypeId)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("ampOrgTypeId", ampOrgTypeId, Hibernate.LONG);
+			qry.setParameter("ampOrgTypeId", ampOrgTypeId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				ampOrgType = (AmpOrgType) itr.next();
@@ -4979,7 +4982,7 @@ public class DbUtil {
 			String queryString = "select l from " + AmpOrgGroup.class.getName()
 					+ " l " + "where (l.ampOrgGrpId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				grp = (AmpOrgGroup) itr.next();
@@ -5001,7 +5004,7 @@ public class DbUtil {
 			String queryString = "select l from " + AmpOrgGroup.class.getName()
 					+ " l " + "where (" + orgGrpName + "=:name)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("name", name, Hibernate.STRING);
+			qry.setParameter("name", name, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				grp = (AmpOrgGroup) itr.next();
@@ -5026,7 +5029,7 @@ public class DbUtil {
 				queryString += " and l.ampOrgGrpId!=" + id;
 			}
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("name", name, Hibernate.STRING);
+			qry.setParameter("name", name, StringType.INSTANCE);
 			Integer amount = (Integer) qry.uniqueResult();
 			if (amount != null && amount.intValue() > 0) {
 				duplicateName = true;
@@ -5051,7 +5054,7 @@ public class DbUtil {
 					+ " where org.orgType=:orgType";
 			queryString += "  order by " + orgGrpName;
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("orgType", orgType, Hibernate.LONG);
+			qry.setParameter("orgType", orgType, LongType.INSTANCE);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to search " + ex);
@@ -5073,7 +5076,7 @@ public class DbUtil {
 					+ " where lower(" + orgGrpName + ") like '%" + keyword
 					+ "%') and org.orgType=:orgType";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("orgType", orgType, Hibernate.LONG);
+			qry.setParameter("orgType", orgType, LongType.INSTANCE);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to search " + ex);
@@ -5133,7 +5136,7 @@ public class DbUtil {
 					+ AmpOrganisation.class.getName()
 					+ " o where (o.orgGrpId=:orgGrpId) and (o.deleted is null or o.deleted = false) ";
 			qry = sess.createQuery(queryString);
-			qry.setParameter("orgGrpId", Id, Hibernate.LONG);
+			qry.setParameter("orgGrpId", Id, LongType.INSTANCE);
 			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Exception from getOrgByGroup(): " + e);
@@ -5153,7 +5156,7 @@ public class DbUtil {
 			queryString = "select o from " + AmpOrgGroup.class.getName()
 					+ " o where (o.orgType=:orgTypeId)";
 			qry = sess.createQuery(queryString);
-			qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+			qry.setParameter("orgTypeId", Id, LongType.INSTANCE);
 			if (null != qry.list() && qry.list().size() > 0) {
 				return true;
 			}
@@ -5161,14 +5164,14 @@ public class DbUtil {
 			// queryString = "select o from " + AmpOrganisation.class.getName()
 			// + " o where (o.orgTypeId=:orgTypeId)";
 			// qry = sess.createQuery(queryString);
-			// qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+			// qry.setParameter("orgTypeId", Id, LongType.INSTANCE);
 			// if (null != qry.list() && qry.list().size() > 0)
 			// return true;
 			// else {
 			// queryString = "select o from " + AmpOrgGroup.class.getName()
 			// + " o where (o.orgType=:orgTypeId)";
 			// qry = sess.createQuery(queryString);
-			// qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+			// qry.setParameter("orgTypeId", Id, LongType.INSTANCE);
 			// if (null != qry.list() && qry.list().size() > 0)
 			// return true;
 			// }
@@ -5191,7 +5194,7 @@ public class DbUtil {
 			String queryString = "select o from " + AmpOrgType.class.getName()
 					+ " o where (o.ampOrgTypeId=:typeId)";
 			qry = sess.createQuery(queryString);
-			qry.setParameter("typeId", typeId, Hibernate.LONG);
+			qry.setParameter("typeId", typeId, LongType.INSTANCE);
 			col = qry.list();
 			Iterator itr = col.iterator();
 			while (itr.hasNext()) {
@@ -5217,14 +5220,14 @@ public class DbUtil {
 						+ AmpOrganisation.class.getName()
 						+ " o where (o.orgCode=:code) and (o.deleted is null or o.deleted = false) ";
 				qry = sess.createQuery(queryString);
-				qry.setParameter("code", code, Hibernate.STRING);
+				qry.setParameter("code", code, StringType.INSTANCE);
 			} else if ("edit".equals(action)) {
 				queryString = "select o from "
 						+ AmpOrganisation.class.getName()
 						+ " o where (o.orgCode=:code) and (o.ampOrgId!=:id) and (o.deleted is null or o.deleted = false) ";
 				qry = sess.createQuery(queryString);
-				qry.setParameter("code", code, Hibernate.STRING);
-				qry.setParameter("id", id, Hibernate.LONG);
+				qry.setParameter("code", code, StringType.INSTANCE);
+				qry.setParameter("id", id, LongType.INSTANCE);
 			}
 			col = qry.list();
 		} catch (Exception e) {
@@ -5245,7 +5248,7 @@ public class DbUtil {
 					+ " o "
 					+ "where (o.ampOrgId=:id) and (o.deleted is null or o.deleted = false) ";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			org = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get organisation from database", ex);
@@ -5286,7 +5289,7 @@ public class DbUtil {
 			String queryString = "select o from " + AmpField.class.getName()
 					+ " o " + "where (o.ampFieldId=:id)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("id", fieldId, Hibernate.STRING);
+			qry.setParameter("id", fieldId, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				field = (AmpField) itr.next();
@@ -5332,8 +5335,8 @@ public class DbUtil {
 					+ " o "
 					+ "where (o.ampFieldId=:fid) and (o.ampActivityId=:aid)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("fid", fid, Hibernate.LONG);
-			qry.setParameter("aid", aid, Hibernate.LONG);
+			qry.setParameter("fid", fid, LongType.INSTANCE);
+			qry.setParameter("aid", aid, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				AmpComments com = (AmpComments) itr.next();
@@ -5356,7 +5359,7 @@ public class DbUtil {
 			String queryString = "select o from " + AmpComments.class.getName()
 					+ " o " + "where (o.ampActivityId=:aid)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("aid", aid, Hibernate.LONG);
+			qry.setParameter("aid", aid, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				AmpComments com = (AmpComments) itr.next();
@@ -5379,7 +5382,7 @@ public class DbUtil {
 			String queryString = "select o from " + AmpActivityBudgetStructure.class.getName()
 					+ " o " + "where (o.activity=:aid)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("aid", aid, Hibernate.LONG);
+			qry.setParameter("aid", aid, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				AmpActivityBudgetStructure bs = (AmpActivityBudgetStructure) itr.next();
@@ -5400,7 +5403,7 @@ public class DbUtil {
 			String queryString = "select o from " + AmpComments.class.getName()
 					+ " o " + "where (o.ampActivityId=:aid)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("aid", aid, Hibernate.LONG);
+			qry.setParameter("aid", aid, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				AmpComments com = (AmpComments) itr.next();
@@ -5423,7 +5426,7 @@ public class DbUtil {
 			String queryString = "select o from " + IPAContract.class.getName()
 					+ " o " + "where (o.activity=:aid)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("aid", aid, Hibernate.LONG);
+			qry.setParameter("aid", aid, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				IPAContract com = (IPAContract) itr.next();
@@ -5445,7 +5448,7 @@ public class DbUtil {
 			String queryString = "select l from " + AmpComments.class.getName()
 					+ " l " + "where (l.ampCommentId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				comment = (AmpComments) itr.next();
@@ -5490,8 +5493,8 @@ public class DbUtil {
 			String qryStr = "select grp from " + Group.class.getName()
 					+ " grp " + "where (grp.key=:key) and (grp.site=:sid)";
 			Query qry = session.createQuery(qryStr);
-			qry.setParameter("key", key, Hibernate.STRING);
-			qry.setParameter("sid", siteId, Hibernate.LONG);
+			qry.setParameter("key", key, StringType.INSTANCE);
+			qry.setParameter("sid", siteId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				group = (Group) itr.next();
@@ -5516,7 +5519,7 @@ public class DbUtil {
 //					+ " act where (act.team.ampTeamId in(" + inClause
 //					+ ")) and (act.approvalStatus=:status)";
 //			q = session.createQuery(queryString);
-//			q.setParameter("status", "approved", Hibernate.STRING);
+//			q.setParameter("status", "approved", StringType.INSTANCE);
 //			actList = (ArrayList) q.list();
 //			// logger.debug("Approved Activity List Size: " + actList.size());
 //
@@ -5597,7 +5600,7 @@ public class DbUtil {
 //					+ " activity where (activity.ampActivityId=:id)";
 //
 //			q = session.createQuery(queryString);
-//			q.setParameter("id", id, Hibernate.LONG);
+//			q.setParameter("id", id, LongType.INSTANCE);
 //			// logger.debug("Activity List: " + q.list().size());
 //			iterActivity = q.list().iterator();
 //			while (iterActivity.hasNext()) {
@@ -5955,7 +5958,7 @@ public class DbUtil {
 			 * qry = "select res from " + AmpAhsurvey.class.getName() +
 			 * " res where (res.ampAHSurveyId=:surveyId)"; Query query =
 			 * session.createQuery(qry); query.setParameter("surveyId",
-			 * surveyId, Hibernate.LONG); response = ( (AmpAhsurvey)
+			 * surveyId, LongType.INSTANCE); response = ( (AmpAhsurvey)
 			 * query.list().get(0)).getResponses();
 			 */
 
@@ -5966,7 +5969,7 @@ public class DbUtil {
 			qry = "select resp from " + AmpAhsurveyResponse.class.getName()
 					+ " resp where resp.ampAHSurveyId=:surveyId";
 			Query query = session.createQuery(qry);
-			query.setParameter("surveyId", surveyId, Hibernate.LONG);
+			query.setParameter("surveyId", surveyId, LongType.INSTANCE);
 			response = query.list();
 
 			qry = "select fund from "
@@ -5974,9 +5977,9 @@ public class DbUtil {
 					+ " fund where (fund.ampDonorOrgId=:donorId) and (fund.ampActivityId=:activityId)";
 			query = session.createQuery(qry);
 			query.setParameter("donorId", svy.getAmpDonorOrgId().getAmpOrgId(),
-					Hibernate.LONG);
+					LongType.INSTANCE);
 			query.setParameter("activityId", svy.getAmpActivityId()
-					.getAmpActivityId(), Hibernate.LONG);
+					.getAmpActivityId(), LongType.INSTANCE);
 			fundingSet = query.list();
 
 			if (response.size() < 1) // new survey
@@ -6111,7 +6114,7 @@ public class DbUtil {
 			String qry = "select svy from " + AmpAhsurvey.class.getName()
 					+ " svy where (svy.ampAHSurveyId=:surveyId)";
 			Query q = session.createQuery(qry);
-			q.setParameter("surveyId", surveyId, Hibernate.LONG);
+			q.setParameter("surveyId", surveyId, LongType.INSTANCE);
 			survey = (AmpAhsurvey) q.list().get(0);
 		} catch (Exception ex) {
 			logger.debug("Unable to get survey : ", ex);
@@ -6248,7 +6251,7 @@ public class DbUtil {
 					+ AmpAhsurveyResponse.class.getName()
 					+ " res where (res.ampAHSurveyId=:surveyId)";
 			Integer resposeSize = (Integer) session.createQuery(qry)
-					.setParameter("surveyId", surveyId, Hibernate.LONG)
+					.setParameter("surveyId", surveyId, LongType.INSTANCE)
 					.uniqueResult();
 			// logger.debug("Response size : " + resposeSize.intValue());
 			if (resposeSize.intValue() < 1) {
@@ -6314,7 +6317,7 @@ public class DbUtil {
 					+ AmpAhsurveyIndicator.class.getName()
 					+ " indc where (indc.ampIndicatorId=:id)";
 			indc = (AmpAhsurveyIndicator) session.createQuery(qry)
-					.setParameter("id", id, Hibernate.LONG).list().get(0);
+					.setParameter("id", id, LongType.INSTANCE).list().get(0);
 
 		} catch (Exception ex) {
 			logger.debug("Unable to get survey indicator : " + ex.getMessage());
@@ -6352,7 +6355,7 @@ public class DbUtil {
 					+ AmpGPISurveyIndicator.class.getName()
 					+ " indc where (indc.ampIndicatorId=:id)";
 			indc = (AmpGPISurveyIndicator) session.createQuery(qry)
-					.setParameter("id", id, Hibernate.LONG).list().get(0);
+					.setParameter("id", id, LongType.INSTANCE).list().get(0);
 
 		} catch (Exception ex) {
 			logger.debug("Unable to get GPI survey indicator : " + ex.getMessage());
@@ -6373,7 +6376,7 @@ public class DbUtil {
                 + " indAct "
                 + " where (indAct.activity=:ampActId)";
             qry = session.createQuery(queryString);
-            qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+            qry.setParameter("ampActId", ampActId, LongType.INSTANCE);
             col = qry.list();
         } catch (Exception e1) {
             logger.error("could not retrieve AmpReportSector " + e1.getMessage());
@@ -6510,10 +6513,10 @@ public class DbUtil {
 
 				qry = session.createQuery(queryString);
 				qry.setParameter("siteId", site.getId().toString(),
-						Hibernate.STRING);
-				qry.setParameter("locale", navLang.getCode(), Hibernate.STRING);
+						StringType.INSTANCE);
+				qry.setParameter("locale", navLang.getCode(), StringType.INSTANCE);
 				qry.setParameter("msgLangKey", country.getMessageLangKey(),
-						Hibernate.STRING);
+						StringType.INSTANCE);
 				msgCol = qry.list();
 
 				if (msgCol != null && msgCol.size() != 0) {
@@ -7198,8 +7201,8 @@ public class DbUtil {
 			String queryString = "select o from " + AmpStructureImg.class.getName()
 					+ " o " + "where (o.structure.ampStructureId=:structureId and o.id=:imgId)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("structureId", structureId, Hibernate.LONG);
-			qry.setParameter("imgId", imgId, Hibernate.LONG);
+			qry.setParameter("structureId", structureId, LongType.INSTANCE);
+			qry.setParameter("imgId", imgId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				image = (AmpStructureImg) itr.next();
@@ -7224,7 +7227,7 @@ public class DbUtil {
 					+ AmpStructureImg.class.getName()+ " o1 " + 
 					" where o1.structure.ampStructureId=:structureId)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("structureId", structureId, Hibernate.LONG);
+			qry.setParameter("structureId", structureId, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				image = (AmpStructureImg) itr.next();

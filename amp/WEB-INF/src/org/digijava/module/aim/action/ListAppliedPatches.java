@@ -17,16 +17,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionServlet;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.form.ListAppliedPatchesForm;
 import org.digijava.module.autopatcher.core.PatchFile;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.engine.spi.SessionImplementor;
 
 public class ListAppliedPatches extends Action {
 	private static Logger logger 				= Logger.getLogger(ListAppliedPatches.class);
@@ -78,7 +79,7 @@ public class ListAppliedPatches extends Action {
 		
 		try{
 				session				= PersistenceManager.getSession();
-				Connection	conn	= session.connection();
+				Connection	conn	= ((SessionImplementor)session).connection();
 				Statement st		= conn.createStatement();
 
 				Query query = session.createQuery("select plm from " + PatchFile.class.getName() + " plm order by plm.invoked desc");

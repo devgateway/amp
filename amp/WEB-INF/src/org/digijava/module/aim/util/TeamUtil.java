@@ -5,7 +5,6 @@
 package org.digijava.module.aim.util;
 
 import java.io.Serializable;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +19,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +51,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.Constants.GlobalSettings;
 import org.digijava.module.aim.helper.DonorTeam;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.ReportsCollection;
@@ -60,12 +58,13 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
 import org.digijava.module.contentrepository.helper.CrConstants;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 /**
  * Persister class for all Team/Workspaces related Objects
@@ -116,12 +115,12 @@ public class TeamUtil {
 //            }
 
             Query qry = session.createQuery(qryStr);
-          //  qry.setParameter("team", team, Hibernate.STRING);
+          //  qry.setParameter("team", team, StringType.INSTANCE);
             if(wTypeFlag) {
-                qry.setParameter("wType", workspaceType, Hibernate.STRING);
+                qry.setParameter("wType", workspaceType, StringType.INSTANCE);
             }
 //            if(tCatFlag) {
-//                qry.setParameter("typeId", teamCategoryId, Hibernate.LONG);
+//                qry.setParameter("typeId", teamCategoryId, LongType.INSTANCE);
 //            }
 
             col = qry.list();
@@ -452,7 +451,7 @@ public class TeamUtil {
             String qryStr = "select t from " + AmpTeam.class.getName() + " t "
                 + "where (t.ampTeamId=:id)";
             Query qry = session.createQuery(qryStr);
-            qry.setParameter("id", id, Hibernate.LONG);
+            qry.setParameter("id", id, LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
                 AmpTeam team = (AmpTeam) itr.next();
@@ -484,7 +483,7 @@ public class TeamUtil {
                     + AmpTeamMember.class.getName() + " t "
                     + "where (t.ampTeam=:teamId)";
                 qry = session.createQuery(qryStr);
-                qry.setParameter("teamId", team.getAmpTeamId(), Hibernate.LONG);
+                qry.setParameter("teamId", team.getAmpTeamId(), LongType.INSTANCE);
                 Iterator itr1 = qry.list().iterator();
                 int numMem = 0;
                 if(itr1.hasNext()) {
@@ -499,7 +498,7 @@ public class TeamUtil {
                 qryStr = "select count(*) from " + AmpActivity.class.getName()
                     + " act " + "where (act.team=:teamId)";
                 qry = session.createQuery(qryStr);
-                qry.setParameter("teamId", team.getAmpTeamId(), Hibernate.LONG);
+                qry.setParameter("teamId", team.getAmpTeamId(), LongType.INSTANCE);
                 itr1 = qry.list().iterator();
                 int numAct = 0;
                 if(itr1.hasNext()) {
@@ -514,7 +513,7 @@ public class TeamUtil {
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "
                     + "where (t.parentTeamId.ampTeamId=:teamId)";
                 qry = session.createQuery(qryStr);
-                qry.setParameter("teamId", team.getAmpTeamId(), Hibernate.LONG);
+                qry.setParameter("teamId", team.getAmpTeamId(), LongType.INSTANCE);
                 itr1 = qry.list().iterator();
                 Collection childWorkspaces = new ArrayList();
                 while(itr1.hasNext()) {
@@ -560,7 +559,7 @@ public class TeamUtil {
             String qryStr = "select t from " + AmpTeam.class.getName() + " t "
             		+ String.format("where (%s=:name)", teamNameHql);
             Query qry = session.createQuery(qryStr);
-            qry.setParameter("name", team.getName(), Hibernate.STRING);
+            qry.setParameter("name", team.getName(), StringType.INSTANCE);
             Iterator tempItr = qry.list().iterator();
             if(tempItr.hasNext()) {
                 AmpTeam tempTeam = (AmpTeam) tempItr.next();
@@ -577,7 +576,7 @@ public class TeamUtil {
             qryStr = "select t from " + AmpTeam.class.getName() + " t "
                 + "where (t.ampTeamId=:id)";
             qry = session.createQuery(qryStr);
-            qry.setParameter("id", team.getAmpTeamId(), Hibernate.LONG);
+            qry.setParameter("id", team.getAmpTeamId(), LongType.INSTANCE);
             logger.debug("Getting the team with id " + team.getAmpTeamId());
             tempItr = qry.list().iterator();
             if(tempItr.hasNext()) {
@@ -611,7 +610,7 @@ public class TeamUtil {
                     + "where (t.parentTeamId.ampTeamId=:parId)";
                 qry = session.createQuery(qryStr);
                 qry.setParameter("parId", updTeam.getAmpTeamId(),
-                                 Hibernate.LONG);
+                                 LongType.INSTANCE);
 
                 Iterator itr = qry.list().iterator();
                 while(itr.hasNext()) {
@@ -682,7 +681,7 @@ public class TeamUtil {
             qryStr = "select count(*) from " + AmpTeamMember.class.getName()
                 + " tm" + " where (tm.ampTeam=:teamId)";
             qry = session.createQuery(qryStr);
-            qry.setParameter("teamId", teamId, Hibernate.LONG);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
 
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
@@ -717,7 +716,7 @@ public class TeamUtil {
             qryStr = "select count(*) from " + AmpActivity.class.getName()
                 + " tm" + " where (tm.team=:teamId)";
             qry = session.createQuery(qryStr);
-            qry.setParameter("teamId", teamId, Hibernate.LONG);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
 
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
@@ -1216,8 +1215,8 @@ public class TeamUtil {
                 + AmpTeamPageFilters.class.getName() + " tpf "
                 + "where (tpf.team=:tId) and (tpf.page=:pId)";
             qry = session.createQuery(qryStr);
-            qry.setParameter("tId", teamId, Hibernate.LONG);
-            qry.setParameter("pId", pageId, Hibernate.LONG);
+            qry.setParameter("tId", teamId, LongType.INSTANCE);
+            qry.setParameter("pId", pageId, LongType.INSTANCE);
             Iterator tpfItr = qry.list().iterator();
             while(tpfItr.hasNext()) {
                 AmpTeamPageFilters ampTpf = (AmpTeamPageFilters) tpfItr.next();
@@ -1271,7 +1270,7 @@ public class TeamUtil {
                 String qryStr = "select t from " + AmpTeam.class.getName()
                     + " t " + "where (t.relatedTeamId=:tId)";
                 Query qry = session.createQuery(qryStr);
-                qry.setParameter("tId", teamId, Hibernate.LONG);
+                qry.setParameter("tId", teamId, LongType.INSTANCE);
                 Iterator itr = qry.list().iterator();
                 while(itr.hasNext()) {
                     AmpTeam ampTeam = (AmpTeam) itr.next();
@@ -1336,9 +1335,9 @@ public class TeamUtil {
                 + " act where "
                 + "(act.team=:teamId) and (act.approvalStatus=:status)";
             Query qry = session.createQuery(qryStr);
-            qry.setParameter("teamId", teamId, Hibernate.LONG);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             qry.setParameter("status", Constants.APPROVED_STATUS,
-                             Hibernate.STRING);
+                             StringType.INSTANCE);
             col = qry.list();
             
              
@@ -1461,7 +1460,7 @@ public class TeamUtil {
             String qry = "select tm from " + AmpTeam.class.getName()
                 + " tm where tm.parentTeamId.ampTeamId=:ampTeamId";
             q = session.createQuery(qry);
-            q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
+            q.setParameter("ampTeamId", ampTeamId, LongType.INSTANCE);
             if(q != null && q.list().size() > 0)
                 ans = false;
             else
@@ -1493,7 +1492,7 @@ public class TeamUtil {
             String queryString = "select t from " + AmpTeam.class.getName()
             	+ String.format(" t where (%s=:teamName)", teamNameHql);
             qry = session.createQuery(queryString);
-            qry.setParameter("teamName", teamName, Hibernate.STRING);
+            qry.setParameter("teamName", teamName, StringType.INSTANCE);
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
                 team = (AmpTeam) itr.next();
@@ -1710,7 +1709,7 @@ public class TeamUtil {
                 + AmpActivity.class.getName()
                 + " act where (act.team=:teamId)";
             Query qry = session.createQuery(queryString);
-            qry.setParameter("teamId", teamId, Hibernate.LONG);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
             while(itr.hasNext()) {
                 Integer numActivities = (Integer) itr.next();
@@ -1795,7 +1794,7 @@ public class TeamUtil {
             }
 			qry = session.createQuery(queryString);
             if(keyword!=null){
-            	qry.setParameter("name", "%" + keyword + "%", Hibernate.STRING);
+            	qry.setParameter("name", "%" + keyword + "%", StringType.INSTANCE);
             } 
 			
 			col=(ArrayList) qry.list();
@@ -1830,7 +1829,7 @@ public class TeamUtil {
             String queryString = "select tr.report.ampReportId, tr.teamView from "
                 + AmpTeamReports.class.getName() + " tr where (tr.team=:teamId) ";
             Query qry = session.createQuery(queryString);
-            qry.setParameter("teamId", teamId, Hibernate.LONG);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
             List<Object[]> rs = qry.list();
             Map<Long, Boolean> map = new TreeMap<Long, Boolean>(); // we want them ordered by id
             for(Object[] item:rs)
@@ -2004,7 +2003,7 @@ public class TeamUtil {
                     + AmpTeamReports.class.getName()
                     + " tr where (tr.team=:teamId)";
                 qry = session.createQuery(queryString);
-                qry.setParameter("teamId", teamId, Hibernate.LONG);
+                qry.setParameter("teamId", teamId, LongType.INSTANCE);
                 Iterator itr = qry.list().iterator();
                 col = new ArrayList();
                 StringBuffer qryBuffer = new StringBuffer();
@@ -2291,7 +2290,7 @@ public class TeamUtil {
                 qry = session.createQuery(queryString);
                 if ( getTabs!=null )
            		  qry.setBoolean("getTabs", getTabs);
-                qry.setParameter("teamId", teamId, Hibernate.LONG);
+                qry.setParameter("teamId", teamId, LongType.INSTANCE);
                count=qry.list().size();
             }else if(inlcludeMemberReport){
          	   queryString="select distinct r from " + AmpReports.class.getName()+
@@ -2376,8 +2375,8 @@ public class TeamUtil {
                 + AmpTeamReports.class.getName()
                 + " tr where (tr.team=:teamId) and (tr.report=:reportId)";
             Query qry = session.createQuery(queryString);
-            qry.setParameter("teamId", teamId, Hibernate.LONG);
-            qry.setParameter("reportId", reportId, Hibernate.LONG);
+            qry.setParameter("teamId", teamId, LongType.INSTANCE);
+            qry.setParameter("reportId", reportId, LongType.INSTANCE);
             Iterator itr = qry.list().iterator();
             if(itr.hasNext()) {
                 ampTeamRep = (AmpTeamReports) itr.next();
@@ -2560,7 +2559,7 @@ public class TeamUtil {
                 + " t " + "where (t.parentTeamId.ampTeamId=:ampTeamId)";
             logger.debug("Query String:" + queryString);
             Query qry = session.createQuery(queryString);
-            qry.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
+            qry.setParameter("ampTeamId", ampTeamId, LongType.INSTANCE);
             Iterator itrTemp = qry.list().iterator();
             AmpTeam ampTeam = null;
             LinkedList<AmpTeam> list = new LinkedList<AmpTeam>();

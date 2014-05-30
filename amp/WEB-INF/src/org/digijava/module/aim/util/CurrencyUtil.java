@@ -22,7 +22,10 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpCurrencyRate;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyRates;
@@ -30,11 +33,14 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.caching.AmpCaching;
-import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.DateType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 public class CurrencyUtil {
 
@@ -154,8 +160,8 @@ public class CurrencyUtil {
 				qryStr += ") and cRate.exchangeRateDate between :fromDate and :toDate order by " +
 						"cRate.exchangeRateDate desc,cRate.toCurrencyCode";
 				qry = session.createQuery(qryStr);
-				qry.setParameter("fromDate",fromDate,Hibernate.DATE);
-				qry.setParameter("toDate",toDate,Hibernate.DATE);
+				qry.setParameter("fromDate",fromDate,DateType.INSTANCE);
+				qry.setParameter("toDate",toDate,DateType.INSTANCE);
 
 				Iterator <AmpCurrencyRate> itr2 = qry.list().iterator();
 				AmpCurrencyRate cRate = null;
@@ -282,7 +288,7 @@ public class CurrencyUtil {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 					"where (curr.activeFlag=:flag) order by curr.currencyCode "+sortOrder;
 				qry = session.createQuery(qryStr);
-				qry.setParameter("flag",new Integer(active),Hibernate.INTEGER);
+				qry.setParameter("flag",new Integer(active),IntegerType.INSTANCE);
 			}
 			col = qry.list();
 		} catch (Exception e) {
@@ -330,7 +336,7 @@ public class CurrencyUtil {
 			qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 					"where (curr.currencyCode=:code)";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("code",code,Hibernate.STRING);
+			qry.setParameter("code",code,StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				AmpCurrency curr = (AmpCurrency) itr.next();
@@ -375,9 +381,9 @@ public class CurrencyUtil {
 
 			}
 			qry = session.createQuery(qryStr);
-			qry.setParameter("code",currCode,Hibernate.STRING);
+			qry.setParameter("code",currCode,StringType.INSTANCE);
 			if (id != null) {
-				qry.setParameter("id",id,Hibernate.LONG);
+				qry.setParameter("id",id,LongType.INSTANCE);
 			}
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
@@ -484,7 +490,7 @@ public class CurrencyUtil {
 					"where (curr.ampCurrencyId=:id)";
 			qry = session.createQuery(qryStr);
 			logger.debug("Checking with the id " + currency.getAmpCurrencyId());
-			qry.setParameter("id",currency.getAmpCurrencyId(),Hibernate.LONG);
+			qry.setParameter("id",currency.getAmpCurrencyId(),LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				// currency object already exist, update the object
@@ -586,10 +592,10 @@ public class CurrencyUtil {
 					" crate where (crate.toCurrencyCode=:code) and (crate.fromCurrencyCode=:fromCurrencyCode) and " +
 					"(crate.exchangeRateDate=:date)";
 				qry = session.createQuery(qryStr);
-				qry.setParameter("code",cr.getCurrencyCode(),Hibernate.STRING);
-				qry.setParameter("fromCurrencyCode", baseCurrencyCode, Hibernate.STRING);
+				qry.setParameter("code",cr.getCurrencyCode(),StringType.INSTANCE);
+				qry.setParameter("fromCurrencyCode", baseCurrencyCode, StringType.INSTANCE);
 				Date exRtDate = DateConversion.getDate(cr.getExchangeRateDate());
-				qry.setParameter("date",exRtDate,Hibernate.DATE);
+				qry.setParameter("date",exRtDate,DateType.INSTANCE);
 				Iterator tmpItr = qry.list().iterator();
 				if (tmpItr.hasNext()) {
 					AmpCurrencyRate currencyRate = (AmpCurrencyRate) tmpItr.next();
@@ -670,7 +676,7 @@ public class CurrencyUtil {
 			String queryString = "select c from " + AmpCurrency.class.getName()
 					+ " c where (c.currencyCode=:currCode)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("currCode", currCode, Hibernate.STRING);
+			qry.setParameter("currCode", currCode, StringType.INSTANCE);
 			Iterator<AmpCurrency> itr = qry.list().iterator();
 			if (itr.hasNext())
 				ampCurrency = itr.next();
@@ -697,7 +703,7 @@ public class CurrencyUtil {
 			}
 			String queryString = "select c from " + AmpCurrency.class.getName()	+ " c where (c.ampCurrencyId=:id)";
 			qry1 = sess.createQuery(queryString);
-			qry1.setParameter("id", id, Hibernate.LONG);
+			qry1.setParameter("id", id, LongType.INSTANCE);
 			ampCurrency = (AmpCurrency)qry1.uniqueResult();
 
             if (ampCurrency == null) {
@@ -737,7 +743,7 @@ public class CurrencyUtil {
 			String queryString = "select c from " + AmpCurrency.class.getName()
 					+ " c " + "where (c.ampCurrencyId=:id)";
 			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, Hibernate.LONG);
+			qry.setParameter("id", id, LongType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				ampCurrency = (AmpCurrency) itr.next();
@@ -762,7 +768,7 @@ public class CurrencyUtil {
 					+ " c " + "where (c.currencyCode=:id)";
 			Query qry = session.createQuery(queryString);
 			qry.setCacheable(true);
-			qry.setParameter("id", currCode, Hibernate.STRING);
+			qry.setParameter("id", currCode, StringType.INSTANCE);
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				ampCurrency = (AmpCurrency) itr.next();
@@ -861,9 +867,9 @@ public class CurrencyUtil {
 					+ " f where (f.toCurrencyCode='" + currencyCode + "') and (f.exchangeRateDate='" + currencyDate + "')";
 //			logger.debug("queryString:" + queryString);
 			q = session.createQuery(queryString);
-//			q.setParameter("currencyCode", currencyCode, Hibernate.STRING);
+//			q.setParameter("currencyCode", currencyCode, StringType.INSTANCE);
 
-//			q.setParameter("exchangeRateDate", exchangeRateDate,Hibernate.DATE);
+//			q.setParameter("exchangeRateDate", exchangeRateDate,DateType.INSTANCE);
 			boolean searchOther = false;
 			if (q.list().size() > 0){
 				exchangeRate = (Double) q.list().get(0);
@@ -879,9 +885,9 @@ public class CurrencyUtil {
 						+ " f where (f.toCurrencyCode=:currencyCode) and (f.exchangeRateDate<:exchangeRateDate) order by f.exchangeRateDate desc";
 				q = session.createQuery(queryString);
 					q.setParameter("currencyCode", currencyCode,
-							Hibernate.STRING);
+							StringType.INSTANCE);
 					q.setParameter("exchangeRateDate", exchangeRateDate,
-							Hibernate.DATE);
+							DateType.INSTANCE);
 					if (q.list().size() > 0){
 						exchangeRate = (Double) q.list().get(0);
 						Iterator itr = q.list().iterator();
@@ -894,9 +900,9 @@ public class CurrencyUtil {
 								+ " f where (f.toCurrencyCode=:currencyCode) and (f.exchangeRateDate>:exchangeRateDate) order by f.exchangeRateDate";
 						q = session.createQuery(queryString);
 						q.setParameter("currencyCode", currencyCode,
-								Hibernate.STRING);
+								StringType.INSTANCE);
 						q.setParameter("exchangeRateDate", exchangeRateDate,
-								Hibernate.DATE);
+								DateType.INSTANCE);
 						if (q.list().size() > 0){
 							exchangeRate = (Double) q.list().get(0);
 							Iterator itr = q.list().iterator();
@@ -974,8 +980,8 @@ public class CurrencyUtil {
 					+ " f where (f.ampFundingId=:ampFundingId) and (f.orgRoleCode=:orgRoleCode)"
 					+ " group by f.ampFundingId";
 			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-			q.setParameter("orgRoleCode", orgRoleCode, Hibernate.STRING);
+			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
+			q.setParameter("orgRoleCode", orgRoleCode, StringType.INSTANCE);
 			c = q.list();
 			if (c.size() != 0) {
 				iter = c.iterator();
@@ -1117,7 +1123,7 @@ public class CurrencyUtil {
 					+ AmpFunding.class.getName()
 					+ " af where (afd.ampFundingId=af.ampFundingId) and (afd.ampCurrencyId=ac.ampCurrencyId) and (af.ampActivityId=:ampActivityId)";
 			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
 			currency = q.list();
 			Iterator iter = currency.iterator();
 			while (iter.hasNext()) {
@@ -1160,7 +1166,7 @@ public class CurrencyUtil {
 
 				qryStr = "select curr from " + AmpCurrencyRate.class.getName() + " curr where curr.toCurrencyCode=:code ";
 				qry = session.createQuery(qryStr);
-				qry.setParameter("code",code,Hibernate.STRING);
+				qry.setParameter("code",code,StringType.INSTANCE);
 			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()");
@@ -1187,7 +1193,7 @@ public class CurrencyUtil {
 
 				qryStr = "select curr from " + AmpCurrencyRate.class.getName() + " curr where curr.dataSource=:id ";
 				qry = session.createQuery(qryStr);
-				qry.setParameter("id",id,Hibernate.INTEGER);
+				qry.setParameter("id",id,IntegerType.INSTANCE);
 			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()");
@@ -1214,7 +1220,7 @@ public class CurrencyUtil {
 
 				qryStr = "select curr from " + AmpCurrencyRate.class.getName() + " curr where curr.ampCurrencyRateId=:id ";
 				qry = session.createQuery(qryStr);
-				qry.setParameter("id",id,Hibernate.LONG);
+				qry.setParameter("id",id,LongType.INSTANCE);
 			col = qry.list();
 		} catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()");

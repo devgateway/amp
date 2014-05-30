@@ -35,17 +35,18 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.jdbc.ReturningWork;
+import org.hibernate.type.StringType;
 import org.springframework.beans.BeanWrapperImpl;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 public final class Util {
 
@@ -216,8 +217,8 @@ public final class Util {
 									.getName()
 							+ " e "
 							+ " where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
-	          q.setParameter("siteId", site.getSiteId(), Hibernate.STRING);
-	          q.setParameter("editorKey", key, Hibernate.STRING);
+	          q.setParameter("siteId", site.getSiteId(), StringType.INSTANCE);
+	          q.setParameter("editorKey", key, StringType.INSTANCE);
 	          List result = q.list();
 	          if(result.size()==0) return "";
 	          Iterator i=result.iterator();
@@ -361,75 +362,66 @@ public final class Util {
 	 * @see CategAmountColWorker
 	 * @see AmountCell
 	 */
-	public static double getExchange(String currencyCode, java.sql.Date currencyDate) {
-		
-		String baseCurrency	= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
-		if ( baseCurrency == null )
-			baseCurrency = Constants.DEFAULT_CURRENCY;
-		
-		if( baseCurrency.equals(currencyCode)) return 1;
+	public static double getExchange(final String currencyCode, final java.sql.Date currencyDate) {
 
-		Connection conn = null;
-		double ret = 1;
-		
+		String baseCurrency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+		if (baseCurrency == null)
+			baseCurrency = Constants.DEFAULT_CURRENCY;
+
+		if (baseCurrency.equals(currencyCode))
+			return 1;
+
 		// we try the digi cache:
-		AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
+		final AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
 
 		Double cacheRet = (Double) ratesCache.get(new String(currencyCode + currencyDate));
 		if (cacheRet != null)
 			return cacheRet.doubleValue();
-		Session sess = null;
-		try {
-			sess = PersistenceManager.getSession();
-			conn = sess.connection();
-		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
+		Session sess = PersistenceManager.getSession();
+		double fret = sess.doReturningWork(new ReturningWork<Double>() {
+			@Override
+			public Double execute(Connection conn) throws SQLException {
 
-		String query = "SELECT getExchange(?,?)";
-		PreparedStatement ps;
-		try {
-			ps = conn.prepareStatement(query);
-			ps.setString(1, currencyCode);
-			ps.setDate(2, currencyDate);
+				double ret = 1;
 
-			ResultSet rs = ps.executeQuery();
+				String query = "SELECT getExchange(?,?)";
+				PreparedStatement ps;
+				try {
+					ps = conn.prepareStatement(query);
+					ps.setString(1, currencyCode);
+					ps.setDate(2, currencyDate);
 
-			if (rs.next())
-				ret = rs.getDouble(1);
-			else
-				new RuntimeException("cannot get exchange rate for " + currencyCode).printStackTrace();
+					ResultSet rs = ps.executeQuery();
 
-			rs.close();
+					if (rs.next())
+						ret = rs.getDouble(1);
+					else
+						new RuntimeException("cannot get exchange rate for " + currencyCode).printStackTrace();
 
-		} catch (SQLException e) {
-			logger.error("Unable to get exchange rate for currencty "
-					+ currencyCode + " for the date " + currencyDate);
-			logger.error(e);
-			e.printStackTrace();
-		}
-		
-		//BOZO SHMOZO CHANGE GETEXCHANGE FUNCTION IN POSTGRES
-		//select * from amp_currency_rate where to_currency_code='EUR' and date_trunc('day', exchange_rate_date)<='2010-12-31' order by exchange_rate_date desc 
-		
-		try {
-			PersistenceManager.releaseSession(sess);
-		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+					rs.close();
 
-//		logger.debug("rate for " + currency + " to " + baseCurrency + " on " + currencyDate
-//				+ " is " + ret);
-			ratesCache
-					.put(new String(currencyCode + currencyDate), new Double(ret));
+				} catch (SQLException e) {
+					logger.error("Unable to get exchange rate for currencty " + currencyCode + " for the date "
+							+ currencyDate);
+					logger.error(e);
+					e.printStackTrace();
+				}
 
-		return ret;
+				// BOZO SHMOZO CHANGE GETEXCHANGE FUNCTION IN POSTGRES
+				// select * from amp_currency_rate where to_currency_code='EUR'
+				// and date_trunc('day', exchange_rate_date)<='2010-12-31' order
+				// by exchange_rate_date desc
 
+				// logger.debug("rate for " + currency + " to " + baseCurrency +
+				// " on " + currencyDate
+				// + " is " + ret);
+				ratesCache.put(new String(currencyCode + currencyDate), new Double(ret));
+
+				return ret;
+			}
+
+		});
+		return fret;
 	}
 	/**
 	 * As the name implies only the years are checked by this function. 

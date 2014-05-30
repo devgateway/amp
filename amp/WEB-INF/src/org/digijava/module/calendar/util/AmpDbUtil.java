@@ -13,7 +13,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
@@ -23,10 +22,11 @@ import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.entity.AmpEventType;
 import org.digijava.module.calendar.exception.CalendarException;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 
 public class AmpDbUtil {
   private static Logger logger = Logger.getLogger(AmpDbUtil.class);
@@ -480,8 +480,8 @@ public class AmpDbUtil {
 		     AmpCalendar.class.getName() +
 			 " c where (c.id=:calendarId)");
 	
-			q.setParameter("calendarId", calendarId, Hibernate.LONG);
-			//q.setParameter("userId", userId, Hibernate.LONG);
+			q.setParameter("calendarId", calendarId, LongType.INSTANCE);
+			//q.setParameter("userId", userId, LongType.INSTANCE);
 			id = q.list();
 
 		}
@@ -504,7 +504,7 @@ public class AmpDbUtil {
 				String queryString = "select m from " + AmpModulesVisibility.class.getName()
 						+ " m where (m.name=:name)";
 				qry = session.createQuery(queryString);
-				qry.setParameter("name", name, Hibernate.STRING);
+				qry.setParameter("name", name, StringType.INSTANCE);
 				Iterator itr = qry.list().iterator();
 				if (itr.hasNext()) {
 					ampModule = (AmpModulesVisibility) itr.next();
@@ -534,7 +534,7 @@ public class AmpDbUtil {
 				String queryString = "select m from " + AmpModulesVisibility.class.getName()
 						+ " m where (m.name=:name)";
 				qry = session.createQuery(queryString);
-				qry.setParameter("name", name, Hibernate.STRING);
+				qry.setParameter("name", name, StringType.INSTANCE);
 				Iterator itr = qry.list().iterator();
 				if (itr.hasNext()) {
 					ampModule = (AmpModulesVisibility) itr.next();

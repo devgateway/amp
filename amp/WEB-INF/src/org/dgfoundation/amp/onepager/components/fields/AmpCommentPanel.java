@@ -9,12 +9,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableMultiLineLabel;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -41,9 +41,9 @@ import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.LongType;
 
 /**
  * Comment panel to be used in AjaxTabbedPanel, wrapped by a AmpCommentTab
@@ -128,9 +128,9 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			                + " o "
 			                + "where (o.ampFieldId=:fid) and (o.ampActivityId=:aid)";
 			            Query qry = session.createQuery(queryString);
-			            qry.setParameter("fid", field.getAmpFieldId(), Hibernate.LONG);
+			            qry.setParameter("fid", field.getAmpFieldId(), LongType.INSTANCE);
 			            qry.setParameter("aid", activityModel.getObject()
-								.getAmpActivityId(), Hibernate.LONG);
+								.getAmpActivityId(), LongType.INSTANCE);
 			            Iterator itr = qry.list().iterator();
 			            while (itr.hasNext()) {
 			                AmpComments com = (AmpComments) itr.next();

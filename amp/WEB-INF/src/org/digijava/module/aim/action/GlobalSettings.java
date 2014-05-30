@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -21,11 +20,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -45,7 +44,7 @@ import org.digijava.module.currencyrates.CurrencyRatesService;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.id.IdentityGenerator.GetGeneratedKeysDelegate;
+import org.hibernate.engine.spi.SessionImplementor;
 
 public class GlobalSettings extends Action {
 	private static Logger logger 				= Logger.getLogger(GlobalSettings.class);
@@ -272,7 +271,7 @@ public class GlobalSettings extends Action {
 
 		try{
 				session				= PersistenceManager.getSession();
-				Connection	conn	= session.connection();
+				Connection	conn	=((SessionImplementor)session).connection();
 				Statement st		= conn.createStatement();
 				qryStr 				= "select id, value from "+tableName ;
 				//qry 				= session.createSQLQuery(qryStr,"kv",KeyValue.class);

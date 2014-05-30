@@ -7,9 +7,9 @@ import java.util.List;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.type.LongType;
 
 /**
  * Utility for searching for incorrect data.
@@ -37,7 +37,7 @@ public class InvalidDataUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 		Query query = session.createQuery(oql);
 		if(filter){
-			query.setParameterList("id_list", activityIds,Hibernate.LONG);
+			query.setParameterList("id_list", activityIds,LongType.INSTANCE);
 		}
 		List dataset = query.list();
 		if (dataset!=null && dataset.size()>0){

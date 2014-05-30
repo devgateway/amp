@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -21,7 +20,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQLDialect;
-import org.hibernate.engine.TypedValue;
+import org.hibernate.engine.spi.TypedValue;
 
 public class SQLUtils {
 	
@@ -30,16 +29,34 @@ public class SQLUtils {
 	 * @param tableName - the table / view whose columns to fetch
 	 * @param crashOnDuplicates - whether to throw exception in case the table/view has duplicate names
 	 * @return
+	 * @throws SQLException 
 	 */
 	public static LinkedHashSet<String> getTableColumns(final String tableName, boolean crashOnDuplicates)
 	{
 		LinkedHashSet<String> res = new LinkedHashSet<String>();
 		String query = String.format("SELECT c.column_name FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
-		for(Object obj: fetchAsList(org.digijava.kernel.persistence.PersistenceManager.getSession().connection(), query, 1))
-		{
-			if (crashOnDuplicates && res.contains((String) obj))
-				throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
-			res.add((String) obj);
+		Connection jdbcConnection=null;
+		try {
+			jdbcConnection = PersistenceManager.getJdbcConnection();
+			
+			for(Object obj: fetchAsList(jdbcConnection				
+					, query, 1))
+			{
+				if (crashOnDuplicates && res.contains((String) obj))
+					throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
+				res.add((String) obj);
+			}
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally { 
+			try {
+				jdbcConnection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return res;
 	}

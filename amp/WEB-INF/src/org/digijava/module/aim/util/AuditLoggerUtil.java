@@ -5,18 +5,14 @@
 
 package org.digijava.module.aim.util;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.Collator;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,21 +23,18 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.user.User;
-
-import com.lowagie.text.Row;
+import org.hibernate.type.DateType;
+import org.hibernate.type.StringType;
 /**
  * ActivityUtil is the persister class for all activity related
  * entities
@@ -133,11 +126,11 @@ public class AuditLoggerUtil {
 				+ " f where f.objectType=:objectType and f.action=:actionObj and f.objectId=:objectId ";
 			qry = session.createQuery(qryStr);
 			qry.setParameter("objectType", objType.toString(),
-					Hibernate.STRING);
+					StringType.INSTANCE);
 			qry.setParameter("actionObj", addAction.toString(),
-					Hibernate.STRING);
+					StringType.INSTANCE);
 			qry.setParameter("objectId", objId.toString(),
-					Hibernate.STRING);
+					StringType.INSTANCE);
 			return qry.list();
 		} catch (Exception e) {
 			logger.error("Exception:", e);
@@ -382,8 +375,8 @@ public class AuditLoggerUtil {
 					+ AmpAuditLogger.class.getName()
 					+ " f where f.objectType=:objectType and f.objectId=:objectId order by f.modifyDate desc";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("objectType", AmpActivityVersion.class.getCanonicalName(), Hibernate.STRING);
-			qry.setParameter("objectId", activityId, Hibernate.STRING);
+			qry.setParameter("objectType", AmpActivityVersion.class.getCanonicalName(), StringType.INSTANCE);
+			qry.setParameter("objectId", activityId, StringType.INSTANCE);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -452,7 +445,7 @@ public class AuditLoggerUtil {
 				AmpAuditLogger.class.getName() 
 				+ " f where f.modifyDate >= :dateParam";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("dateParam",getDateRange(interval),Hibernate.DATE);
+			qry.setParameter("dateParam",getDateRange(interval),DateType.INSTANCE);
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -486,7 +479,7 @@ public class AuditLoggerUtil {
 				+ " where action<>'login' and (loggedDate <= :dateParam or loggedDate=null)";
 			
 			qry = session.createQuery(qryStr);
-			qry.setParameter("dateParam",getDateRange(Integer.parseInt(interval)),Hibernate.DATE);
+			qry.setParameter("dateParam",getDateRange(Integer.parseInt(interval)),DateType.INSTANCE);
 			int rowCount = qry.executeUpdate();
 			logger.info("Row deleted from audit logger = " + rowCount);
 		

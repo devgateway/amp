@@ -25,22 +25,22 @@ package org.digijava.module.sdm.util;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.common.util.ImageInfo;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.exception.SDMException;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.common.util.ImageInfo;
+import org.hibernate.type.StringType;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -150,8 +150,8 @@ public class DbUtil {
 
             q = session.createQuery(queryString);
 
-            q.setParameter("siteId", siteId, Hibernate.STRING);
-            q.setParameter("instanceId", instanceId, Hibernate.STRING);
+            q.setParameter("siteId", siteId, StringType.INSTANCE);
+            q.setParameter("instanceId", instanceId, StringType.INSTANCE);
 
             list = q.list();
             if (list.size() == 0) {

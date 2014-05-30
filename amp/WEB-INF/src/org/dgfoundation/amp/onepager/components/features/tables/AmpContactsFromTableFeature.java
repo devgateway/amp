@@ -181,10 +181,10 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     contactOrganizations.setOutputMarkupId(true);
                     item.add(contactOrganizations);
                     
-                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactModel,"Add Contact Phone",false,Constants.CONTACT_PROPERTY_NAME_PHONE); 
+                    AmpContactDetailFeaturePanel detailPhone = new AmpContactDetailFeaturePanel("addContactPhone", contactModel, "Add Contact Phone", false, Constants.CONTACT_PROPERTY_NAME_PHONE);
                     item.add(detailPhone);
 
-                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactModel,"Add Contact Fax",false,Constants.CONTACT_PROPERTY_NAME_FAX);  
+                    AmpContactDetailFeaturePanel detailFax = new AmpContactDetailFeaturePanel("addContactFax", contactModel, "Add Contact Fax", false, Constants.CONTACT_PROPERTY_NAME_FAX);
                     item.add(detailFax);
 
                     item.add(new AmpTextAreaFieldPanel("officeaddress",new PropertyModel<String>(contactModel,"officeaddress"),"contact office address",false, false, true));

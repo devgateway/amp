@@ -2182,9 +2182,9 @@ public class DEImportBuilder {
 				if( "check".compareTo(actionType) ==0 )
 					//CHECK content
 					{
-						System.out.println(".......Starting processing activity "+noAct);
+						//System.out.println(".......Starting processing activity "+noAct);
 						activityLogs	=	iWorker.checkContent(noAct, this.getHierarchies());
-						System.out.println("..................End processing activity "+noAct);
+						//System.out.println("..................End processing activity "+noAct);
 					}
 				else
 					if( "import".compareTo(actionType) ==0 )
@@ -2267,7 +2267,7 @@ public class DEImportBuilder {
 					//CHECK content
 					{
 						logger.info(".......Starting processing activity "+noAct);
-						//System.out.println(".......Starting processing activity "+noAct);
+						////System.out.println(".......Starting processing activity "+noAct);
 
 						activityLogs	=	iWorker.checkContent(noAct, this.getHierarchies());
 
@@ -2282,7 +2282,7 @@ public class DEImportBuilder {
                             }
                         }
 						logger.info("..................End processing activity "+noAct);
-						//System.out.println("..................End processing activity "+noAct);
+						////System.out.println("..................End processing activity "+noAct);
 					}
 				else
 					if( "import".compareTo(actionType) ==0 )
@@ -2291,7 +2291,7 @@ public class DEImportBuilder {
 							DELogPerItem deLogPerItem = DataExchangeUtils.getDELogPerItemById(new Long(itemId));
 							if( iWorker.existActivityByTitleIatiId(deLogPerItem.getName())){
 								logger.info(".......Starting importing activity "+noAct);
-								//System.out.println(".......Starting importing activity "+noAct);
+								////System.out.println(".......Starting importing activity "+noAct);
 								Long grpId = new Long(deLogPerItem.getItemType());
 
                                 AmpActivityVersion prevVersion = null;
@@ -2325,7 +2325,7 @@ public class DEImportBuilder {
 								item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(),iWorker.getIatiID()));
 							    DataExchangeUtils.addObjectoToAmp(item);
 								logger.info("..................End importing activity "+noAct);
-								//System.out.println("..................End importing activity "+noAct);
+								////System.out.println("..................End importing activity "+noAct);
 							}
 							else continue;
 						}
@@ -2524,7 +2524,7 @@ public class DEImportBuilder {
 				if( prevIds.get(entry.getKey()).compareTo(currIds.get(entry.getKey())) ==0 )
 					resultIDs.add(entry.getKey());
 			}
-			//System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+			////System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
         }
 		
 		return resultIDs;
@@ -2554,7 +2554,7 @@ public class DEImportBuilder {
 			Elements ids = act.getElementsByTag("iati-identifier");
 			for (Iterator iterator2 = ids.iterator(); iterator2.hasNext();) {
 				Element id = (Element) iterator2.next();
-				//System.out.println(id.text());
+				////System.out.println(id.text());
 				result.put(id.text(), actMD5);
 			}
 		}

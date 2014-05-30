@@ -62,7 +62,7 @@ public class AmpPMLinkTree extends LinkTree {
 				//super.onNodeLinkClicked(node, tree, target);
 				//AmpPMLinkTree.this.onNodeLinkClicked(node, tree, target);
 				//target.add(AmpPMLinkTree.this);
-				System.out.println("aaa");
+				//System.out.println("aaa");
 			}
 
 			@Override
@@ -83,7 +83,7 @@ public class AmpPMLinkTree extends LinkTree {
 
 					public void onClick(AjaxRequestTarget target)
 					{
-						System.out.println("aaa");//onNodeLinkClicked(model.getObject(), tree, target);
+						//System.out.println("aaa");//onNodeLinkClicked(model.getObject(), tree, target);
 					}
 				};
 

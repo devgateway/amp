@@ -150,7 +150,7 @@ public class Values extends HashMap<String, BigDecimal> {
 	public void collectCellVariables(CategAmountCell cell) {
 
 		if (cell.getMergedCells().size() > 0)
-			System.out.println("BOZO BOZO BREAK POINT");
+			//System.out.println("BOZO BOZO BREAK POINT");
 		this.addValue(ArConstants.TOTAL_COMMITMENTS, tokens.get(TokenNames.TOTAL_COMMITMENTS).evaluate(cell));
 
 		this.addValue(ArConstants.ACTUAL_COMMITMENT, tokens.get(TokenNames.ACTUAL_COMMITMENTS).evaluate(cell));

@@ -8,7 +8,7 @@ public class TrendJrxml
 	{
 		try
 		{
-			////System.out.println(" In Trend Analysis Report Creation ");	
+			//////System.out.println(" In Trend Analysis Report Creation ");	
 			FileOutputStream out2; // declare a file output object
 			PrintStream p2; // declare a print stream object
 			File fopen = new File(filePath);	
@@ -51,11 +51,11 @@ public class TrendJrxml
 //						DYNAMIC CCCCCCCCC
 						String dc;
 						int colCnt = 15+(n*4)+3+2;
-						////System.out.println(" Cnt = " + colCnt);
+						//////System.out.println(" Cnt = " + colCnt);
 //						 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 						for(int k=1; k<=colCnt; k++)
 						{
-							////System.out.println("k="+k);
+							//////System.out.println("k="+k);
 							dc="c"+k;
 							p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 						}
@@ -977,7 +977,7 @@ public class TrendJrxml
 	{
 		try
 		{
-			////System.out.println(" In Trend Analysis Report Creation ");	
+			//////System.out.println(" In Trend Analysis Report Creation ");	
 			FileOutputStream out2; // declare a file output object
 			PrintStream p2; // declare a print stream object
 			File fopen = new File(filePath);	
@@ -1026,11 +1026,11 @@ public class TrendJrxml
 //						DYNAMIC CCCCCCCCC
 						String dc;
 						int colCnt = 15+(n*4)+3+2;
-						////System.out.println(" Cnt = " + colCnt);
+						//////System.out.println(" Cnt = " + colCnt);
 //						 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 						for(int k=1; k<=colCnt; k++)
 						{
-							////System.out.println("k="+k);
+							//////System.out.println("k="+k);
 							dc="c"+k;
 							p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 						}

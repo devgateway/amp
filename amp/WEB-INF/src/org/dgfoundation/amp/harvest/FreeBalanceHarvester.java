@@ -164,7 +164,7 @@ public class FreeBalanceHarvester {
 				//do not add zeros
 				if(n.doubleValue()==0) continue;
 				
-				////System.out.println("line="+(++lineNr)+" activity="+extActivityId+" component="+componentName+" expenditure="+compFundName+" amount="+n.toString());
+				//////System.out.println("line="+(++lineNr)+" activity="+extActivityId+" component="+componentName+" expenditure="+compFundName+" amount="+n.toString());
 
 
 				

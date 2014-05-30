@@ -777,7 +777,7 @@ public class ReportWizardAction extends MultiAction {
 				if (!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)
 							&& !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
 								ampThemesOrdered.add(aco);
-						//System.out.println("	----------------ADDED!");
+						////System.out.println("	----------------ADDED!");
 					}
 			}
 		}

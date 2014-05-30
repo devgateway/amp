@@ -1220,7 +1220,7 @@ public class TranslatorWorker {
             logger.error("Error updating translation. siteId="
                          + message.getSiteId() + ", key = " + message.getKey() +
                          ",locale=" + message.getLocale(), e);
-//        	System.out.println("Error updating translation. msg="+message.getMessage()+" siteId="
+//        	//System.out.println("Error updating translation. msg="+message.getMessage()+" siteId="
 //                  + message.getSiteId() + ", key = " + message.getKey() +
 //                  ",locale=" + message.getLocale());
             throw new WorkerException("TranslatorWorker.HibExUpdateMessage.err", e);

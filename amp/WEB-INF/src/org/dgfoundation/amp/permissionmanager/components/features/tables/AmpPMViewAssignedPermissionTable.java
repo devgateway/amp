@@ -79,7 +79,7 @@ public class AmpPMViewAssignedPermissionTable extends AmpComponentPanel {
 			@Override
 			protected void populateItem(final ListItem<AmpPMPermContentBean> item) {
 				AmpPMPermContentBean p = item.getModel().getObject();
-				//System.out.println(p.getName());
+				////System.out.println(p.getName());
 				item.add(new Label("label", p.getLabel()));
 				//item.add(new Label("path", p.getEdit()));
 				//item.add(new Label("strategy", p.get));

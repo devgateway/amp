@@ -45,7 +45,7 @@ public class AmpPMViewFieldPermissionTableFeaturePanel extends AmpFormTableFeatu
 			@Override
 			protected void populateItem(final ListItem<AmpPMFieldPermissionViewer> item) {
 				AmpPMFieldPermissionViewer p = item.getModel().getObject();
-				//System.out.println(p.getName());
+				////System.out.println(p.getName());
 				item.add(new Label("name", p.getName()));
 				item.add(new Label("path", p.getPath()));
 				item.add(new Label("strategy", p.getStrategy()));

@@ -66,7 +66,7 @@ public class AllTests_amp28
 			DigiConfigManager.initialize("./repository");
 			PersistenceManager.initialize(false, null);
 //			Configuration cfg = HibernateClassLoader.getConfiguration();
-			System.out.println("AMP started up!");
+			//System.out.println("AMP started up!");
 			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
 		}
 		catch(Exception e)

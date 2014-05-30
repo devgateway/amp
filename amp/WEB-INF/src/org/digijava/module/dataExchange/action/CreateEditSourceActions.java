@@ -126,8 +126,8 @@ public class CreateEditSourceActions extends DispatchAction {
 		myForm.getListComponents();
 		DESourceSetting srcSetting	= null;
 		if(myForm.isDisplaySource()){
-			System.out.println(myForm.getConfigurationId());
-			System.out.println(myForm.getConfigurations().size());
+			//System.out.println(myForm.getConfigurationId());
+			//System.out.println(myForm.getConfigurations().size());
 		}
 		if(!myForm.isDisplaySource()){
 			for(int i=0; i<myForm.getListComponents().size();i++){
@@ -356,7 +356,7 @@ public class CreateEditSourceActions extends DispatchAction {
 		
 		//myform.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true) );
 		myform.setActivityTree(ExportHelper.getIATIActivityStruct("Activity","activityTree","Activity",request) );
-		System.out.println(" ");
+		//System.out.println(" ");
 	}
 	
 	private void attachFile(CreateSourceForm form) throws FileNotFoundException, IOException {

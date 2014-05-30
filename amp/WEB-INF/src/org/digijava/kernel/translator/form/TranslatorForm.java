@@ -157,13 +157,13 @@ public final class TranslatorForm extends ActionForm {
 		ActionMapping mapping,
 		HttpServletRequest request) {
 
-		//		System.out.println("into Validate");
+		//		//System.out.println("into Validate");
 
 		ActionErrors errors = new ActionErrors();
 
 		if (strData.equals("")) {
 
-			//		      System.out.println("Errors Detected");
+			//		      //System.out.println("Errors Detected");
 			errors.add(
 				"Translated text ",
 				new ActionMessage("error.username.required"));

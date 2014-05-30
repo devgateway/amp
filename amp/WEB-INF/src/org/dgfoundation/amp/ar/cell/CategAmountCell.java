@@ -241,7 +241,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 		String recipientName = this.getMetaValueString(ArConstants.RECIPIENT_NAME);
 		
 //		if ((sourceRole == null) || (sourceName == null) || (recipientRole == null) || (recipientName == null) || (metaCell == null) || (metaCell.getValue() == null))
-//			System.out.println("my name is msh");
+//			//System.out.println("my name is msh");
 		
 		passesTest = (sourceRole.equals(columnRoleCode) && sourceName.equals(metaCell.getValue().toString())) // all transactions have a non-null source
 					||

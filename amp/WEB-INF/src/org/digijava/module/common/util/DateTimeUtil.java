@@ -95,7 +95,7 @@ public class DateTimeUtil {
 		// AMP-2828 by mouhamad
 		pattern = pattern.replace("m", "M");
 		
-		//System.out.println(pattern);
+		////System.out.println(pattern);
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
         Date result=null;
 		//if(date.contains("-")) date=date.replaceAll("-", "/");

@@ -71,7 +71,7 @@ public class FeatureManager extends MultiAction {
 		else
 		{
 			String x=(String)fmForm.get("ampFeatures");
-			////System.out.println(x);
+			//////System.out.println(x);
 			Collection features = FeaturesUtil.getAMPFeatures();
 			Collection newToAddFeatures=new ArrayList();
 			for(Iterator it=features.iterator();it.hasNext();)

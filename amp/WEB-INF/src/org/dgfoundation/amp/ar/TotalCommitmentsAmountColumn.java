@@ -84,7 +84,7 @@ public class TotalCommitmentsAmountColumn extends TotalAmountColumn {
 			super.addCell(cell);
 		else
 		{
-			//System.out.println(cell.getAmount());
+			////System.out.println(cell.getAmount());
 			// nothing to add - do nothing so as not to pollute the column with "zeroes with ownerIds"
 		}
 	}

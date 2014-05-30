@@ -350,7 +350,7 @@ public class DashboardUtil {
 		//long startTime = System.currentTimeMillis();
 		Collection activityListReduced = DbUtil.getActivities(filter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 		//long endTime = System.currentTimeMillis();
-		//System.out.println("Total elapsed time in execution: "+ (endTime-startTime));
+		////System.out.println("Total elapsed time in execution: "+ (endTime-startTime));
        
 		HashMap<Long, AmpActivityVersion> activityList = new HashMap<Long, AmpActivityVersion>();
         Iterator iter = activityListReduced.iterator();

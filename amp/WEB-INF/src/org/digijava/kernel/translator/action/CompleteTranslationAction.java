@@ -649,13 +649,13 @@ public class CompleteTranslationAction extends DispatchAction
 
 			List<TranslatorBean> sm = new ArrayList<TranslatorBean>();
 			if(request.getParameter("expired") != null && request.getParameter("expired").equals("on")){
-				System.out.println("Reached here expired");
+				//System.out.println("Reached here expired");
 				 sm = new TranslatorWorker().getMessagesForPrefix(search,siteId,rootSiteId,request.getAttribute("radio_locale1").toString(),request.getAttribute("radio_locale2").toString(),true,startFrom,50);
 			}else{
-				System.out.println("Reached here non expired");
+				//System.out.println("Reached here non expired");
 				 sm = new TranslatorWorker().getMessagesForPrefix(search,siteId,rootSiteId,request.getAttribute("radio_locale1").toString(),request.getAttribute("radio_locale2").toString(),false,startFrom,50);
 			}
-			System.out.println("Count " + sm.size());
+			//System.out.println("Count " + sm.size());
 			message = setupForm(sm, request);
 			request.setAttribute("No_rows",String.valueOf(sm.size()));
 		}catch(WorkerException we){
@@ -799,11 +799,11 @@ public class CompleteTranslationAction extends DispatchAction
 						time = source.getCreated().getTime();
 
 					if(target.getMessage() == null){
-						System.out.println("TARGET MESSAGE IS NULL");
+						//System.out.println("TARGET MESSAGE IS NULL");
 					}
 
 					if(source.getMessage() == null){
-						System.out.println("SOURCE MESSAGE IS NULL");
+						//System.out.println("SOURCE MESSAGE IS NULL");
 					}
 
 					if((source.getMessage()!=null)&&((time>=0)||(source.getCreated()==null))){

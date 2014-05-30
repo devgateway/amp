@@ -64,7 +64,7 @@ public class QueryEngine extends Action{
 		for ( AmpColumns tempCol: availableCols ) {
 			if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ){
 				projTitleCol	= tempCol;
-				System.out.println( projTitleCol.getFilters().size() );
+				//System.out.println( projTitleCol.getFilters().size() );
 				break;
 			}
 		}

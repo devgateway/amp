@@ -224,7 +224,7 @@ public class IatiActivityWorker {
 		if(this.getiActivity()!=null && this.getiActivity().getHierarchy()!=null)
 			if(hierarchies!=null && !hierarchies.contains(this.getiActivity().getHierarchy())) 
 			{
-				System.out.println("Skipping activity no "+noAct+ " - Hierarchy no: "+this.getiActivity().getHierarchy());
+				//System.out.println("Skipping activity no "+noAct+ " - Hierarchy no: "+this.getiActivity().getHierarchy());
 				return null;
 			}
 		try{
@@ -238,7 +238,7 @@ public class IatiActivityWorker {
 					if(i.getName().equals(new QName("title"))){
 						JAXBElement<TextType> item = (JAXBElement<TextType>)i;
                         if (item.getValue().getLang() == null || item.getValue().getLang().equals(this.getLang())) {
-                            System.out.println("Activity "+noAct+":" + printTextType(item)+"#");
+                            //System.out.println("Activity "+noAct+":" + printTextType(item)+"#");
                             this.title += printTextType(item);
                         }
 					}
@@ -1505,7 +1505,7 @@ public class IatiActivityWorker {
 				//title
 				if(i.getName().equals(new QName("title"))){
 					JAXBElement<TextType> item = (JAXBElement<TextType>)i;
-					System.out.println("activity title:" + printTextType(item)+"#");
+					//System.out.println("activity title:" + printTextType(item)+"#");
 					iatiTitleList.add(item);
 				}
 				
@@ -1934,12 +1934,12 @@ public class IatiActivityWorker {
 				if(isIatiValueok(iatiValues))
 				{
 					checkMappedField = addMappingField(iatiPath,iatiItems,iatiValues,iatiLang,ampId,ampClass,sourceId,feedFileName,status);
-					System.out.println("Activity:"+this.getTitle()+"# ADDED Logging path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
+					//System.out.println("Activity:"+this.getTitle()+"# ADDED Logging path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
 					log.setItem(checkMappedField);
 				}
 				else{
 					checkMappedField = new DEMappingFields(iatiPath, iatiItems, iatiValues, iatiLang, ampId, ampClass.toString(), sourceId, feedFileName, status);
-					System.out.println("Activity:"+this.getTitle()+"# ERROR to add path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
+					//System.out.println("Activity:"+this.getTitle()+"# ERROR to add path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
 				}
 				log.add(iatiItems);
 				log.add(iatiValues);
@@ -1948,7 +1948,7 @@ public class IatiActivityWorker {
 			//entity is not mapped yet or it has be marked to be added as new, but was not added yet
 			if(checkMappedField.getAmpId()==null || (checkMappedField.getAmpId().longValue() == -1 && DataExchangeConstants.IATI_ACTIVITY.compareTo(iatiPath)!=0))
 			{
-				System.out.println("Activity:"+this.getTitle()+"# Logging path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
+				//System.out.println("Activity:"+this.getTitle()+"# Logging path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
 				log.add(iatiItems);
 				log.add(iatiValues);
 			}

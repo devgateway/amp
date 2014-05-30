@@ -63,7 +63,7 @@ public class EsriTestCases extends EsriTestCase
 			};
 		checkSimpleLocations(fundings, bla);
 		
-		System.out.println(fundings.size());
+		//System.out.println(fundings.size());
 	}
 
 	public void testCommitmentsFunding() throws Exception
@@ -86,7 +86,7 @@ public class EsriTestCases extends EsriTestCase
 		
 		checkSimpleLocations(fundings, bla);
 		
-		System.out.println(fundings.size());
+		//System.out.println(fundings.size());
 	}
 
 	public void testDisbursementsFunding() throws Exception
@@ -108,7 +108,7 @@ public class EsriTestCases extends EsriTestCase
 				new SimpleLocation("Moldova", "0.00", "0.00", "789123.00")};
 		checkSimpleLocations(fundings, bla);
 		
-		System.out.println(fundings.size());
+		//System.out.println(fundings.size());
 	}
 
 }

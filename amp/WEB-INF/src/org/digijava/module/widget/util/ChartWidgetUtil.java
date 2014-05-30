@@ -321,12 +321,12 @@ public class ChartWidgetUtil {
             session.saveOrUpdate(widget);
             //tx.commit();
         } catch (Exception e) {
-            //System.out.println(e);
+            ////System.out.println(e);
             if (tx != null) {
                 try {
                     tx.rollback();
                 } catch (Exception e1) {
-                    //System.out.println(e1);
+                    ////System.out.println(e1);
                     throw new DgException("Cannot rallback chart widget save");
                 }
             }

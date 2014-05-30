@@ -14,7 +14,7 @@ public class MultiXlsJrxml
 	{
 		try
 		{
-			//////System.out.println( cnt +"DYNAMIC Multi-JRXML..");
+			////////System.out.println( cnt +"DYNAMIC Multi-JRXML..");
                     FileOutputStream out,out2; // declare a file output object
                     PrintStream p,p2; // declare a print stream object
 
@@ -24,7 +24,7 @@ public class MultiXlsJrxml
 					p.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 					p2 = new PrintStream(out2);
 
-         	////System.out.println("creating now- dynamic trend...");
+         	//////System.out.println("creating now- dynamic trend...");
 
 			int n=cnt;//cnt;
 			int center=0;//(12-n)*30;
@@ -63,11 +63,11 @@ public class MultiXlsJrxml
 //						DYNAMIC CCCCCCCCC
 						String dc;
 						int colCnt = 5+ (n*4) + 5 + 3;
-						////System.out.println(" Cnt = " + colCnt);
+						//////System.out.println(" Cnt = " + colCnt);
 //						 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 						for(int k=1; k<=colCnt; k++)
 						{
-							////System.out.println("k="+k);
+							//////System.out.println("k="+k);
 							dc="c"+k;
 							p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 						}

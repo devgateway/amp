@@ -15,14 +15,14 @@ public class ViewProjectsXlsJrxml
 	{
 		try
 		{
-			//////System.out.println( cnt +"DYNAMIC Multi-JRXML..");
+			////////System.out.println( cnt +"DYNAMIC Multi-JRXML..");
 			FileOutputStream out2; // declare a file output object
 			PrintStream p2; // declare a print stream object
 			File fopen = new File(filePath);	
 			out2 = new FileOutputStream(fopen);
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-			//////System.out.println("creating now- dynamic trend...");
+			////////System.out.println("creating now- dynamic trend...");
 
 			int n=cnt;//cnt;
 			int center=0;//(12-n)*30;

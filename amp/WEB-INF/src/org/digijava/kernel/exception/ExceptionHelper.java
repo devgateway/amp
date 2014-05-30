@@ -180,8 +180,8 @@ public class ExceptionHelper {
     	}
     	boolean ret = (res > maxAllowed) ||
     			stackTrace.length >= 1020; // Java only keeps 1024 of them anyway
-    	if (ret)
-    		System.out.println("res = " + res + ", stackDepth = " + stackTrace.length + ", dying");
+    	//if (ret)
+    		//System.out.println("res = " + res + ", stackDepth = " + stackTrace.length + ", dying");
     	return ret;
     }
     
@@ -204,7 +204,7 @@ public class ExceptionHelper {
     	{
         	PrintWriter writer = response.getWriter();
     		writer.write(message);
-    		//System.out.println(message);
+    		////System.out.println(message);
     		logger.error(message);
     		StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
     		for(int i = 0; i < 200; i++)
@@ -213,7 +213,7 @@ public class ExceptionHelper {
     			logger.error(stackTrace[i].toString());
     		}
     		writer.write("\n....\n");
-    		System.out.println("\n....\n");
+    		//System.out.println("\n....\n");
     		for(int i = stackTrace.length - 200; i < stackTrace.length; i++)
     		{
     			writer.write(stackTrace[i].toString() + "\n");

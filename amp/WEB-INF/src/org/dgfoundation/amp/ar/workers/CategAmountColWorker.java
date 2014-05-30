@@ -249,7 +249,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 
 		if("donor_name".equals(headMetaName)){
 			String donorName = retrieveValueFromRS(rs,columnsMetaData.get(  "donor_name") );
-			//System.out.println("donor name is " + donorName);
+			////System.out.println("donor name is " + donorName);
 			headMeta = this.getCachedMetaInfo(ArConstants.DONOR, (donorName != null) ? donorName.trim() : donorName);			
 		}
 

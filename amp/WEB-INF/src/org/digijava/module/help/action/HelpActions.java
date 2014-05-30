@@ -365,13 +365,13 @@ public class HelpActions extends DispatchAction {
 	     out = new PrintWriter(os, true);	
 	     		if(key.length() != 0){
 					 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
-					 System.out.println("Key:"+key);
+					 //System.out.println("Key:"+key);
 					 Hits hits =  LuceneUtil.helpSearch("title", key, request.getSession().getServletContext());
 			
 			         String artikleTitle;
 					 
 					 HelpForm help = (HelpForm) form;	
-					 System.out.println("hits.length():"+hits.length());
+					 //System.out.println("hits.length():"+hits.length());
 					  int hitCount = hits.length();   
 			    	   
 			    	  if(hitCount == 0){

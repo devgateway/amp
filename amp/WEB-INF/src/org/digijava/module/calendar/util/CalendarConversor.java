@@ -159,12 +159,12 @@ public class CalendarConversor {
                newHoliday.setHolidayName("" + monthlyHoliday[j]) ;
                newHoliday.setHolidayType("monthly") ;
                holiday.add(newHoliday) ;           // inserts the holiday
-               // System.out.println("monthly holiday : " + monthlyHoliday[j]) ;               
+               // //System.out.println("monthly holiday : " + monthlyHoliday[j]) ;               
             }
-            // System.out.println("month = " + i) ;            
+            // //System.out.println("month = " + i) ;            
          }         
       } catch (Exception e) {
-         System.out.println(e) ;
+         //System.out.println(e) ;
       }      
    }
 
@@ -215,10 +215,10 @@ public class CalendarConversor {
                newHoliday.setHolidayType("annual") ;
                holiday.add(newHoliday) ;           // inserts the holiday
             }
-            // System.out.println(newHoliday.getHolidayName()) ;            
+            // //System.out.println(newHoliday.getHolidayName()) ;            
          }         
       } catch (Exception e) {
-         System.out.println(e) ;
+         //System.out.println(e) ;
       }      
       
    }
@@ -432,9 +432,9 @@ public class CalendarConversor {
       int until = ( (month-1) * 30) + date ;
       if (until <= 37 && year <= 1575) {   // I don't remember what i did here
          until += 28 ;
-         System.out.println("until = " + until) ;
-         System.out.println("until = " + until) ;
-         System.out.println("until = " + until) ;         
+         //System.out.println("until = " + until) ;
+         //System.out.println("until = " + until) ;
+         //System.out.println("until = " + until) ;         
          gregorianMonths[0] = 31 ;
       } else {
          until += (newYearDay - 1) ;
@@ -548,7 +548,7 @@ public class CalendarConversor {
       /* determine the actual equivalent ethiopian date */
       int m = 0 ;
       for (m=1; m < ethiopianMonths.length; m++) {
-         // System.out.println(m + " ==>\t " + until + "  " + "[" + ethiopianMonths[m] + "]") ;
+         // //System.out.println(m + " ==>\t " + until + "  " + "[" + ethiopianMonths[m] + "]") ;
          if (until <= ethiopianMonths[m]) {
             dayObj.setDate((m == 1 || ethiopianMonths[m] == 0 ? until + (30 - tahissas) : until)) ;
             break ;
@@ -729,7 +729,7 @@ public class CalendarConversor {
     * @since          2.1
     */
    public static Day toEthiopianDate(int gMonth, int gDate, int gYear) {
-      System.out.println("From Gregorian Date to Ethiopian Date ---------------------") ;            
+      //System.out.println("From Gregorian Date to Ethiopian Date ---------------------") ;            
       /* Saint name assigned to Ethiopian calendar */
       String[] saintName = {"Yohaniss", "Mathiwoss", "Markos", "Lukus"} ;
 
@@ -826,7 +826,7 @@ public class CalendarConversor {
       else 
          betweenMeskeremOneandJanuaryOne -= (eLeapYears - gLeapYears) ;
       
-      System.out.println("eLeapYears = " + eLeapYears + ", gLeapYears = " + gLeapYears) ;
+      //System.out.println("eLeapYears = " + eLeapYears + ", gLeapYears = " + gLeapYears) ;
 
       /* calculates the number of days between Meskerem and gMonth/gDay/gYear */
       int eUntil = betweenMeskeremOneandJanuaryOne + gUntil ;
@@ -837,9 +837,9 @@ public class CalendarConversor {
       int eMonth = 0 ;
       int eDate  = eUntil ;
       int numberOfMonths = 0 ;
-//      System.out.println("eUntil ===> " + eUntil) ;
-//      System.out.println("gUntil ===> " + gUntil) ;      
-//      System.out.println("betweenMeskeremOneandJanuaryOne ===> " + betweenMeskeremOneandJanuaryOne) ;    
+//      //System.out.println("eUntil ===> " + eUntil) ;
+//      //System.out.println("gUntil ===> " + gUntil) ;      
+//      //System.out.println("betweenMeskeremOneandJanuaryOne ===> " + betweenMeskeremOneandJanuaryOne) ;    
       while (eUntil > ethiopianMonths[eMonth])  {
          /* keeps track of months and it is mainly used to reflect the Eth New Year that may 
             occur depending on the source date */
@@ -879,8 +879,8 @@ public class CalendarConversor {
       eDay.setDayName(weekDays[ getEthiopianDayIndex(eDay.getMonth(), eDay.getDate(), eDay.getYear()) ] ) ;
       eDay.setYearName(saintName[eDay.getYear() % 4]) ;
             
- //     System.out.println(getEthiopianDayIndex(eDay.getMonth(), eDay.getDate(), eDay.getYear()) + "; " + gMonth + "/" + gDate + "/" + gYear + "\t" + eMonth + "/" + eDate + "/" + eYear) ;
-      System.out.println() ;
+ //     //System.out.println(getEthiopianDayIndex(eDay.getMonth(), eDay.getDate(), eDay.getYear()) + "; " + gMonth + "/" + gDate + "/" + gYear + "\t" + eMonth + "/" + eDate + "/" + eYear) ;
+      //System.out.println() ;
       return eDay ;
    } 
 
@@ -912,7 +912,7 @@ public class CalendarConversor {
     * @since          2.1
     */
    public static Day toGregorianDate(int eMonth, int eDate, int eYear) {
-      System.out.println("From Ethiopian Date to Gregorian Date *****************************************") ;
+      //System.out.println("From Ethiopian Date to Gregorian Date *****************************************") ;
       /* Saint name assigned to Ethiopian calendar */
       String[] saintName = {"Yohaniss", "Mathiwoss", "Markos", "Lukus"} ;
 
@@ -1000,7 +1000,7 @@ public class CalendarConversor {
       else 
          betweenJanuaryOneAndMeskeremOne += (eLeapYears - gLeapYears) ;
       
-      System.out.println("eLeapYears = " + eLeapYears + ", gLeapYears = " + gLeapYears) ;
+      //System.out.println("eLeapYears = " + eLeapYears + ", gLeapYears = " + gLeapYears) ;
 
       /* calculates the number of days between Meskerem and gMonth/gDay/gYear */
       int gUntil = betweenJanuaryOneAndMeskeremOne + eUntil ;
@@ -1011,9 +1011,9 @@ public class CalendarConversor {
       int gMonth = 0 ;
       int gDate  = eUntil ;
       int numberOfMonths = 0 ;
-//      System.out.println("gUntil ===> " + gUntil) ;
-//      System.out.println("eUntil ===> " + eUntil) ;      
-//      System.out.println("betweenJanuaryOneAndMeskeremOne ===> " + betweenJanuaryOneAndMeskeremOne) ;    
+//      //System.out.println("gUntil ===> " + gUntil) ;
+//      //System.out.println("eUntil ===> " + eUntil) ;      
+//      //System.out.println("betweenJanuaryOneAndMeskeremOne ===> " + betweenJanuaryOneAndMeskeremOne) ;    
       while (gUntil > gregorianMonths[gMonth])  {
          /* keeps track of months and it is mainly used to reflect the Eth New Year that may 
             occur depending on the source date */
@@ -1066,8 +1066,8 @@ public class CalendarConversor {
       gDay.setGregorianYear(gYear) ;
       gDay.setGregorianDay( gregorianWeekDays[getEthiopianDayIndex(eMonth, eDate, eYear)] ) ;
             
-  //    System.out.println(getEthiopianDayIndex(eMonth, eDate, eYear) + "; " + eMonth + "/" + eDate + "/" + eYear + "\t" + gMonth + "/" + gDate + "/" + gYear) ;
-      System.out.println() ;
+  //    //System.out.println(getEthiopianDayIndex(eMonth, eDate, eYear) + "; " + eMonth + "/" + eDate + "/" + eYear + "\t" + gMonth + "/" + gDate + "/" + gYear) ;
+      //System.out.println() ;
       
       return gDay ;
    } 

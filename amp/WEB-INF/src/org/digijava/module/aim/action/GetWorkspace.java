@@ -41,7 +41,7 @@ public class GetWorkspace extends Action {
 		boolean permitted = false;
 		HttpSession session = request.getSession();
 		TeamMember tmember = (TeamMember) session.getAttribute("currentMember");
-		////System.out.println("-----------------------------------"+tmember.getTeamHead());
+		//////System.out.println("-----------------------------------"+tmember.getTeamHead());
 		if(tmember!=null)
 			permitted=tmember.getTeamHead();
 		if (session.getAttribute("ampAdmin") != null) {

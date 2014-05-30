@@ -672,8 +672,8 @@ public class LuceneUtil implements Serializable {
     	for(Field field:fields)
     	{
     		res.put(field.name(), field.stringValue());
-    		if (field.name().equals("id") && field.stringValue().equals("4892"))
-    			System.out.println("this is a breakpoint and I am gonna hit it");
+    		//if (field.name().equals("id") && field.stringValue().equals("4892"))
+    			//System.out.println("this is a breakpoint and I am gonna hit it");
     	}
     	return res;
     }
@@ -983,7 +983,7 @@ public class LuceneUtil implements Serializable {
 
             mlt.setFieldNames(new String[] { "name" });
             mlt.setAnalyzer(analyzer);
-            //System.out.println("mlt.describeparams="+mlt.describeParams());
+            ////System.out.println("mlt.describeparams="+mlt.describeParams());
 
 
             Reader reader = new StringReader(origSearchString);

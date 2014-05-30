@@ -11,8 +11,8 @@ public class QdrJrxml
        {		
 		  try
 			{
-			////System.out.println("DYNAMIC Multi-JRXML..");
-			////System.out.println(filePath);
+			//////System.out.println("DYNAMIC Multi-JRXML..");
+			//////System.out.println(filePath);
 
 //			File fopen = new File("TrendAnalysisPdf_new.jrxml");
 			FileOutputStream out2; // declare a file output object
@@ -23,7 +23,7 @@ public class QdrJrxml
 					p2 = new PrintStream(out2);
 					p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 
-			////System.out.println("creating now- dynamic trend...");
+			//////System.out.println("creating now- dynamic trend...");
 
 int n=cnt;//cnt;
 int center=0;//(12-n)*30;
@@ -562,7 +562,7 @@ for(int j=0;j<n;j++)
 	p2.println("</textElement>");
 	p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 	p2.println("</textField>");
-	////System.out.println(x + "1 : "+ctextkey);
+	//////System.out.println(x + "1 : "+ctextkey);
 	
 	c += 1;
 	ctextkey="c"+c;
@@ -588,7 +588,7 @@ for(int j=0;j<n;j++)
 	p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 	p2.println("</textField>");
 	
-	////System.out.println(x+ " 2 : "+ctextkey);
+	//////System.out.println(x+ " 2 : "+ctextkey);
 	
 	c += 1;
 	ctextkey="c"+c;
@@ -613,7 +613,7 @@ for(int j=0;j<n;j++)
 	p2.println("</textElement>");
 	p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 	p2.println("</textField>");
-	////System.out.println(x + "3 : "+ctextkey);
+	//////System.out.println(x + "3 : "+ctextkey);
 	
 	
 	c += 1;
@@ -639,11 +639,11 @@ for(int j=0;j<n;j++)
 	p2.println("</textElement>");
 	p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 	p2.println("</textField>");
-	////System.out.println( x + "4 : "+ctextkey);
+	//////System.out.println( x + "4 : "+ctextkey);
 	
 	x += 75;
 	c += 1;
-	////System.out.println(" c : " + c);
+	//////System.out.println(" c : " + c);
 }//for2
 
 

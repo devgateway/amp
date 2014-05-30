@@ -1141,7 +1141,7 @@ public class DbHelper {
         allFunding.addAll(nonMtefFunding);
 
 		aaa = System.currentTimeMillis() - aaa;
-		System.out.println("getting fundingIds took " + aaa / 1000.0 + " seconds");
+		//System.out.println("getting fundingIds took " + aaa / 1000.0 + " seconds");
 
         return generateFundingSummaries(allFunding, currCode, adjustmentType, impLevel, decimalsToShow, divideByDenominator);            
     }

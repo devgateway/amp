@@ -105,7 +105,7 @@ public class getNPDgraph extends Action {
             //generate map for this graph
             String map = ChartUtilities.getImageMap("npdChartMap", info);
             //String map = getImageMap("npdChartMap", info, new StandardToolTipTagFragmentGenerator(), new StandardURLTagFragmentGenerator());
-            ////System.out.println(map);
+            //////System.out.println(map);
 
             //save map with timestamp from request for later use
             //timestemp is generated with javascript before sending ajax request.

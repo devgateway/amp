@@ -64,7 +64,7 @@ public final class TranslatorLocaleUpdate extends Action {
 
 
 		DgUtil.switchLanguage(locale,request,response);
-		System.out.println("Switch locale completed " + nav.getLocalesSelected());
+		//System.out.println("Switch locale completed " + nav.getLocalesSelected());
 
 		return new ActionForward(request.getParameter("back_url"),true);
 

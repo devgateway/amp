@@ -49,7 +49,7 @@ public class ActivityPreviewTests extends ReportsTestCase
 		assertEquals(1, funding.getFundingDetails().size());
 		assertEquals(Constants.MTEFPROJECTION, funding.getFundingDetails().get(0).getTransactionType());
 		assertEquals("789 123", funding.getSubtotalMTEFs());
-		//System.out.println(fo.getOrgName());
+		////System.out.println(fo.getOrgName());
 	}
 	
 	public void testPureFunding()

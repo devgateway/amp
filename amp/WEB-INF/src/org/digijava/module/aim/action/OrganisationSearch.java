@@ -27,12 +27,12 @@ public class OrganisationSearch extends Action {
 		if (request.getParameter("orgSelReset") != null
 				&& request.getParameter("orgSelReset").equals("false")) {
 			eaForm.setOrgSelReset(false);
-			////System.out.println("Inside IF");  //
+			//////System.out.println("Inside IF");  //
 		} else {
 			eaForm.setOrgSelReset(true);
 			eaForm.setPagedCol(null);
 			eaForm.reset(mapping, request);
-			////System.out.println("Inside ELSE");  //
+			//////System.out.println("Inside ELSE");  //
 		}
 
 		int page;
@@ -45,7 +45,7 @@ public class OrganisationSearch extends Action {
                 page = 1;
             }
 		}
-		////System.out.println("page = " + page); //
+		//////System.out.println("page = " + page); //
 		if (eaForm.getNumResults() == 0 || eaForm.isOrgSelReset()) {
 			eaForm.setTempNumResults(10);
 			//eaForm.setOrgTypes(DbUtil.getAllOrgTypes());

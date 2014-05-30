@@ -333,7 +333,7 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							wb.write(outstr);
 							
 							/*
-							System.out.println("Writing XLS");
+							//System.out.println("Writing XLS");
 							response.setContentLength(sw.toString().length());
 							out.write(sw.toString());
 							*/
@@ -341,7 +341,7 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							// process FO to PDF
 						} else {
 							// if this is PDF, then need to generate PDF from the FO xml
-							System.out.println("Creating PDF!");
+							//System.out.println("Creating PDF!");
 							try {
 								ByteArrayInputStream bain = new ByteArrayInputStream(sw.toString().getBytes("UTF-8"));
 								ByteArrayOutputStream baout = new ByteArrayOutputStream(16384);
@@ -381,21 +381,21 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 	public void convertFO2PDF(ByteArrayInputStream bain,
 			ByteArrayOutputStream baout) throws IOException, FOPException {
 
-		System.out.println("Construct driver");
+		//System.out.println("Construct driver");
 		Driver driver = new Driver();
 
-		System.out.println("Setup Renderer (output format)");
+		//System.out.println("Setup Renderer (output format)");
 		driver.setRenderer(Driver.RENDER_PDF);
 
 		try {
 			driver.setOutputStream(baout);
-			System.out.println("Setup input");
+			//System.out.println("Setup input");
 			try {
 				driver.setInputSource(new InputSource(bain));
 
-				System.out.println("Process FO");
+				//System.out.println("Process FO");
 				driver.run();
-				System.out.println("PDF file generation completed");
+				//System.out.println("PDF file generation completed");
 			} finally {
 			}
 		} finally {

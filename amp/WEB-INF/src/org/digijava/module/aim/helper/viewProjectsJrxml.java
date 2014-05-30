@@ -9,14 +9,14 @@ public class viewProjectsJrxml
 	{
 		try
 		{
-			//////System.out.println( cnt +"DYNAMIC Multi-JRXML..");
+			////////System.out.println( cnt +"DYNAMIC Multi-JRXML..");
 			FileOutputStream out2; // declare a file output object
 			PrintStream p2; // declare a print stream object
 			File fopen = new File(filePath);	
 			out2 = new FileOutputStream(fopen);
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-			//////System.out.println("creating now- dynamic trend...");
+			////////System.out.println("creating now- dynamic trend...");
 
 			int n=cnt;//cnt;
 			int center=0;//(12-n)*30;
@@ -47,7 +47,7 @@ public class viewProjectsJrxml
 			//DYNAMIC CCCCCCCCC
 			String dc;
 			int colCnt = 25;
-			////System.out.println(" Cnt = " + colCnt);
+			//////System.out.println(" Cnt = " + colCnt);
 			// gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 			for(int k=1; k<=colCnt; k++)
 			{
@@ -920,15 +920,15 @@ public class viewProjectsJrxml
 	{
 		try
 		{
-			////System.out.println(" Height is JRXML ::::::::" + h);
-			//////System.out.println( cnt +"DYNAMIC Multi-JRXML..");
+			//////System.out.println(" Height is JRXML ::::::::" + h);
+			////////System.out.println( cnt +"DYNAMIC Multi-JRXML..");
 			FileOutputStream out2; // declare a file output object
 			PrintStream p2; // declare a print stream object
 			File fopen = new File(filePath);	
 			out2 = new FileOutputStream(fopen);
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-			//////System.out.println("creating now- dynamic trend...");
+			////////System.out.println("creating now- dynamic trend...");
 
 			int n=cnt;//cnt;
 			int center=0;//(12-n)*30;
@@ -965,7 +965,7 @@ public class viewProjectsJrxml
 			//DYNAMIC CCCCCCCCC
 			String dc;
 			int colCnt = 25;
-			////System.out.println(" Cnt = " + colCnt);
+			//////System.out.println(" Cnt = " + colCnt);
 			// gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 			for(int k=1; k<=colCnt; k++)
 			{
@@ -1496,7 +1496,7 @@ public class viewProjectsJrxml
 			p2.println("y='0'");
 			p2.println("width='90'");
 //			p2.println("height='110'");
-			////System.out.println(" C4 Height ::::::::" + height);
+			//////System.out.println(" C4 Height ::::::::" + height);
 			p2.println("height='"+height+"'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -1518,7 +1518,7 @@ public class viewProjectsJrxml
 			p2.println("y='0'");
 			p2.println("width='90'");
 //			p2.println("height='110'");
-			////System.out.println(" C5 Height ::::::::" + height);
+			//////System.out.println(" C5 Height ::::::::" + height);
 			p2.println("height='"+height+"'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -1687,7 +1687,7 @@ public class viewProjectsJrxml
 			p2.println("y='0'");
 			p2.println("width='63'");
 //			p2.println("height='110'");
-			////System.out.println(" C6 Height ::::::::" + height);
+			//////System.out.println(" C6 Height ::::::::" + height);
 			p2.println("height='"+height+"'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");

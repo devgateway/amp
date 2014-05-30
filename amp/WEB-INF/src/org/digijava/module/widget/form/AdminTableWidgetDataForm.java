@@ -87,7 +87,7 @@ public class AdminTableWidgetDataForm extends ActionForm {
 	 */
 	@SuppressWarnings("unchecked")
 	public void setRow(List rows) {
-		System.out.println("setRow(List)");
+		//System.out.println("setRow(List)");
 		this.rows = rows;
 	}
 	

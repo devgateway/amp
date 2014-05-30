@@ -48,7 +48,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		final Form form = new Form("ampGlobalPMForm")
 		{
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				System.out.println("ampGlobalPMForm submitted");
+				//System.out.println("ampGlobalPMForm submitted");
 			}
 		};
 		form.setOutputMarkupId(true);

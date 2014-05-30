@@ -141,7 +141,10 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 	 */
 	public final static void cleanupSession(Session session)
 	{
-		try{session.getTransaction().commit();}catch(Exception e){System.out.println("error committing transaction");e.printStackTrace();}
+		try{session.getTransaction().commit();}catch(Exception e){
+			//System.out.println("error committing transaction");
+			e.printStackTrace();
+		}
 		try{session.close();}catch(Exception e){};
 		try{PersistenceManager.removeClosedSessionsFromMap();}catch(Exception e){};
 		try{

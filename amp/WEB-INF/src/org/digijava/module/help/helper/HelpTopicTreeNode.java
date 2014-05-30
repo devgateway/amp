@@ -102,7 +102,7 @@ public class HelpTopicTreeNode {
 			buf.append("]");
 		}
 		buf.append("}");
-//		System.out.println(buf.toString());
+//		//System.out.println(buf.toString());
 		return buf.toString();
 	}
 	

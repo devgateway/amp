@@ -14,7 +14,7 @@ public class SbpJrxml
        {		
 		  try
 			{
-			////System.out.println("DYNAMIC Multi-JRXML..");
+			//////System.out.println("DYNAMIC Multi-JRXML..");
 
 //			File fopen = new File("TrendAnalysisPdf_new.jrxml");
 			FileOutputStream out2; // declare a file output object
@@ -24,7 +24,7 @@ public class SbpJrxml
 			out2 = new FileOutputStream(fopen);
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-			////System.out.println("creating now- dynamic trend...");
+			//////System.out.println("creating now- dynamic trend...");
 
 int n=cnt;//cnt;
 int totalIndex = n;
@@ -1812,7 +1812,7 @@ x =82;y=0;
 for(int j=0;j<n;j++)
 {
 ctextkey="c"+c;
-////System.out.println("cccccccc"+c);
+//////System.out.println("cccccccc"+c);
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x+"'");
@@ -1839,7 +1839,7 @@ c++;
 
 
 ctextkey="c"+c;
-////System.out.println("cccccccc"+c);
+//////System.out.println("cccccccc"+c);
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x+"'");
@@ -1864,7 +1864,7 @@ p2.println("</textField>");
 x +=60;
 c++;
 ctextkey="c"+c;
-////System.out.println("cccccccc"+c);
+//////System.out.println("cccccccc"+c);
 
 
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
@@ -1891,7 +1891,7 @@ p2.println("</textField>");
 x +=60;
 c++;
 ctextkey="c"+c;
-////System.out.println("cccccccc"+c);
+//////System.out.println("cccccccc"+c);
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x+"'");
@@ -1926,7 +1926,7 @@ y=0;
 //for3
 for(int j=0;j<4;j++)
 {
-	////System.out.println("total c"+c);
+	//////System.out.println("total c"+c);
 ctextkey="c"+c;
 
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");

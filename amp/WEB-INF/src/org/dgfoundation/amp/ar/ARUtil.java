@@ -420,7 +420,7 @@ public final class ARUtil {
 //		boolean a = containsMeasureWhichContains(measureName, measures);
 //		boolean b = containsMeasureWithExact(measureName, measures);
 //		if (a != b)
-//			System.out.println("BOZO CE XUINEA!");
+//			//System.out.println("BOZO CE XUINEA!");
 //		return a;
 //	}
 	
@@ -501,7 +501,7 @@ public final class ARUtil {
 				Iterator periodIter					= periods.iterator();
 				while ( periodIter.hasNext() ) {
 					Object period			= periodIter.next();
-					//System.out.println("Year found:" + period );
+					////System.out.println("Year found:" + period );
 					int difference			= 0;
 					if ( prevPeriod != null && 
 							(difference=ARUtil.periodDifference(type, prevPeriod, period)) > 1 ) {
@@ -527,7 +527,7 @@ public final class ARUtil {
 		if ( ArConstants.YEAR.equals( type ) ) {
 			Integer firstEl		= (Integer) first;
 			Integer lastEl			= (Integer) last;
-			//System.out.println("Adding year:" + (((Integer)period) + step) );
+			////System.out.println("Adding year:" + (((Integer)period) + step) );
 			if ( firstEl != null && 
 					(((Integer)period) + step) < firstEl )
 				return null;

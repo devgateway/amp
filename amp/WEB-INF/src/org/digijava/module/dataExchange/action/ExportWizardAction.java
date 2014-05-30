@@ -189,8 +189,8 @@ public class ExportWizardAction extends DispatchAction {
 		TeamMember tm = null;
         if (session.getAttribute("currentMember") != null)
         	tm = (TeamMember) session.getAttribute("currentMember");
-        if(tm!=null)
-        	System.out.println("++++++++++++++++"+tm.getEmail());
+     //   if(tm!=null)
+        	//System.out.println("++++++++++++++++"+tm.getEmail());
 		
         ExportForm eForm = (ExportForm)form;
 		response.setContentType("text/xml");

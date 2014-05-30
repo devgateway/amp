@@ -103,7 +103,7 @@ private static Logger logger =
 							Message msg = new TranslatorWorker().getByKey(request.getParameter("key"),"en",siteId);
 							if(msg.getMessage() != null){
 								tForm.setMessageEn(msg.getMessage());
-								System.out.println("Data " + msg.getMessage());
+								//System.out.println("Data " + msg.getMessage());
 							}else{
 								tForm.setMessageEn("");
 								}

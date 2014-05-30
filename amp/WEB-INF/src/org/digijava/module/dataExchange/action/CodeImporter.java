@@ -141,7 +141,7 @@ public class CodeImporter extends DispatchAction {
 
 
             } else { //unsupported type
-                System.out.println("xz");
+                //System.out.println("xz");
             }
 
             List <IatiCodeType> updated = new ArrayList<IatiCodeType>(checkExistingAndSave(newTypes));

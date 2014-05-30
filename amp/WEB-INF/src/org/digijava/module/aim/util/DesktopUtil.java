@@ -249,7 +249,7 @@ public class DesktopUtil {
 						if (sectSect != null || !sectSect.isEmpty() || sectSect.iterator()!=null) {
 							
 							Iterator sItr = sectSect.iterator();
-							//////System.out.println(sItr.toString()+" -----------------------");
+							////////System.out.println(sItr.toString()+" -----------------------");
 							while (sItr.hasNext()) {
 								AmpActivitySector asect = (AmpActivitySector) sItr.next();
 								

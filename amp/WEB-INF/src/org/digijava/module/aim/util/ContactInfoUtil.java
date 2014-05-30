@@ -247,7 +247,7 @@ public class ContactInfoUtil {
 					lastnameRow = lastnameRow.replace("\\", "");
 				}
 				
-				//System.out.println(nameRow);
+				////System.out.println(nameRow);
 				retValue[i]=new String(nameRow + " " + lastnameRow);					
 				i++;
 			}

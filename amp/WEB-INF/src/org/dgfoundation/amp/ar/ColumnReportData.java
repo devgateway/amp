@@ -529,7 +529,7 @@ public class ColumnReportData extends ReportData<Column> {
 						if (ArConstants.PLANNED_DISBURSEMENTS.equals(columnName))
 							plannedDisbursements += caca.getAmount();
 				
-						//System.out.println("THE COLUMN NAME IS:" + columnName);
+						////System.out.println("THE COLUMN NAME IS:" + columnName);
 					}
 		}
 		subReportTotals.put(ArConstants.TOTAL_ACTUAL_COMMITMENT, actualCommitments);
@@ -565,7 +565,7 @@ public class ColumnReportData extends ReportData<Column> {
 			return; //nothing to do
 		
 		Set<Long> allRelevantIds = column.getOwnerIds();
-		//System.out.println("doehali cu " + allRelevantIds.size());
+		////System.out.println("doehali cu " + allRelevantIds.size());
 		for(Column col:this.getColumns())
 			col.filterByIds(allRelevantIds);
 	}
@@ -849,8 +849,8 @@ public class ColumnReportData extends ReportData<Column> {
 			}
 			
 		}
-		//System.out.println("Shouldn't get here !!! " + this.toString() + " !! prev rows: " + numOfPreviousRows);
-		//System.out.println("!! ");
+		////System.out.println("Shouldn't get here !!! " + this.toString() + " !! prev rows: " + numOfPreviousRows);
+		////System.out.println("!! ");
 		
 	}	
 

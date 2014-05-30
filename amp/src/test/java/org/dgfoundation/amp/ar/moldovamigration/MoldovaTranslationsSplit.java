@@ -49,7 +49,7 @@ public class MoldovaTranslationsSplit
 //		
 //		System.out.format("conversion done with %d warning messages\n", warningMessages.size());
 //		for(int i = 0; i < warningMessages.size(); i++)
-//			System.out.println(warningMessages.get(i).toString());
+//			//System.out.println(warningMessages.get(i).toString());
 		doOrganisationNamesTranslations();
 		
 		try
@@ -260,7 +260,7 @@ public class MoldovaTranslationsSplit
 	
 	protected void removeRomanianProjectTitleAsAColumn()
 	{
-		System.out.println("replacing all references to column ROMANIAN_PROJECT_TITLE to references to PROJECT_TITLE");
+		//System.out.println("replacing all references to column ROMANIAN_PROJECT_TITLE to references to PROJECT_TITLE");
 		
 		// ROMANIAN PROJECT TITLE: amp_column_id = 276
 		long ROMANIAN_PROJ_TITLE_COLUMN_ID = 276;
@@ -282,15 +282,15 @@ public class MoldovaTranslationsSplit
 			SortedMap<Long, Long> reportCols = colsByReport.get(amp_report_id);
 			if (!reportCols.containsKey(ROMANIAN_PROJ_TITLE_COLUMN_ID))
 				continue;
-			System.out.println("redoing report with amp_report_id = " + amp_report_id + ", which has the column RO-PROJ-TITLE with order_id = " + reportCols.get(ROMANIAN_PROJ_TITLE_COLUMN_ID));
+			//System.out.println("redoing report with amp_report_id = " + amp_report_id + ", which has the column RO-PROJ-TITLE with order_id = " + reportCols.get(ROMANIAN_PROJ_TITLE_COLUMN_ID));
 			if (!reportCols.containsKey(PROJECT_TITLE_COLUMN_ID))
 			{
-				System.out.println("\tproject does not contain the PROJECT TITLE column, just replacing RO-PROJECT-TITLE with PROJECT-TITLE");
+				//System.out.println("\tproject does not contain the PROJECT TITLE column, just replacing RO-PROJECT-TITLE with PROJECT-TITLE");
 				executeQuery("UPDATE amp_report_column set columnid = " + PROJECT_TITLE_COLUMN_ID + " WHERE amp_report_id = " + amp_report_id + " AND columnid = " + ROMANIAN_PROJ_TITLE_COLUMN_ID);
 				continue;
 			}
 			// remove ROMANIAN PROJECT TITLE and renumber the following columns
-			System.out.println("\tproject contains the PROJECT TITLE column, left-shifting all columns which appear after RO_PROJ_TITLE in the report");
+			//System.out.println("\tproject contains the PROJECT TITLE column, left-shifting all columns which appear after RO_PROJ_TITLE in the report");
 			executeQuery("DELETE FROM amp_report_column WHERE amp_report_id = " + amp_report_id + " AND columnid = " + ROMANIAN_PROJ_TITLE_COLUMN_ID);
 			executeQuery("UPDATE amp_report_column SET order_id = order_id - 1 WHERE amp_report_id = " + amp_report_id + " AND order_id > " + reportCols.get(ROMANIAN_PROJ_TITLE_COLUMN_ID));
 		}
@@ -302,10 +302,10 @@ public class MoldovaTranslationsSplit
 	protected void doPurposesTranslations()
 	{
 		List<TranslationsPack> translations = collectTranslations("purpose", false, '/');
-		System.out.println("=== PROJECT PURPOSES ===");
+		//System.out.println("=== PROJECT PURPOSES ===");
 		for(TranslationsPack pack: translations)
 		{
-			System.out.println(pack);
+			//System.out.println(pack);
 			saveDgEditorTranslation(pack);
 		}
 	}
@@ -316,10 +316,10 @@ public class MoldovaTranslationsSplit
 	protected void doProjectDescriptionTranslations()
 	{
 		List<TranslationsPack> translations = collectTranslations("description", true, '/');
-		System.out.println("=== PROJECT DESCRIPTIONS ===");
+		//System.out.println("=== PROJECT DESCRIPTIONS ===");
 		for(TranslationsPack pack: translations)
 		{
-			System.out.println(pack);
+			//System.out.println(pack);
 			saveDgEditorTranslation(pack);
 		}
 	}
@@ -330,10 +330,10 @@ public class MoldovaTranslationsSplit
 	protected void doProjectObjectivesTranslations()
 	{
 		List<TranslationsPack> translations = collectTranslations("objectives", true, '/');
-		System.out.println("=== PROJECT OBJECTIVES ===");
+		//System.out.println("=== PROJECT OBJECTIVES ===");
 		for(TranslationsPack pack: translations)
 		{
-			System.out.println(pack);
+			//System.out.println(pack);
 			saveDgEditorTranslation(pack);
 		}
 	}	
@@ -344,10 +344,10 @@ public class MoldovaTranslationsSplit
 	protected void doProjectResultsTranslations()
 	{
 		List<TranslationsPack> translations = collectTranslations("results", true, '/');
-		System.out.println("=== PROJECT RESULTS ===");
+		//System.out.println("=== PROJECT RESULTS ===");
 		for(TranslationsPack pack: translations)
 		{
-			System.out.println(pack);
+			//System.out.println(pack);
 			saveDgEditorTranslation(pack);
 		}
 	}	
@@ -358,10 +358,10 @@ public class MoldovaTranslationsSplit
 	protected void doProjectImpactTranslations()
 	{
 		List<TranslationsPack> translations = collectTranslations("project_impact", true, '/');
-		System.out.println("=== PROJECT IMPACT SUMMARIES ===");
+		//System.out.println("=== PROJECT IMPACT SUMMARIES ===");
 		for(TranslationsPack pack: translations)
 		{
-			System.out.println(pack);
+			//System.out.println(pack);
 			saveDgEditorTranslation(pack);
 		}
 	}	
@@ -372,10 +372,10 @@ public class MoldovaTranslationsSplit
 	protected void doProjectActivitySummaryTranslations()
 	{
 		List<TranslationsPack> translations = collectTranslations("activity_summary", true, '/');
-		System.out.println("=== PROJECT ACTIVITY SUMMARIES ===");
+		//System.out.println("=== PROJECT ACTIVITY SUMMARIES ===");
 		for(TranslationsPack pack: translations)
 		{
-			System.out.println(pack);
+			//System.out.println(pack);
 			saveDgEditorTranslation(pack);
 		}
 	}	
@@ -384,7 +384,7 @@ public class MoldovaTranslationsSplit
 	{
 		if (!DO_UPDATES)
 		{
-			System.out.println("NOT UPDATING dg_editor, disabled");
+			//System.out.println("NOT UPDATING dg_editor, disabled");
 			return;
 		}
 		if (pack.englishTranslation != null)
@@ -598,7 +598,7 @@ public class MoldovaTranslationsSplit
 	{
 		if (!DO_UPDATES)
 		{
-			System.out.println("NOT updating, as it is disabled");
+			//System.out.println("NOT updating, as it is disabled");
 			return;
 		}
 		// write English translation
@@ -712,7 +712,7 @@ public class MoldovaTranslationsSplit
 			return null;
 		
 //		if (result.startsWith("Cooperarea parcurilor "))
-//			System.out.println("interrupted");
+//			//System.out.println("interrupted");
 		if (removeNewLines)
 			result = result.replace('\n', ' ').replace('\r', ' ').replaceAll("  ", " ");
 		
@@ -752,7 +752,7 @@ public class MoldovaTranslationsSplit
 	
 	public static int executeQuery(final String query)
 	{
-		System.out.println("executing query " + query);
+		//System.out.println("executing query " + query);
 		try
 		{
 			Session session = PersistenceManager.getRequestDBSession();

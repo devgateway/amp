@@ -139,7 +139,7 @@ public class DocTabManagerAction extends MultiAction {
 			jsonConfig.setExcludes(new String[] {"children", "node" });
 			JSONObject jsonObj		= JSONObject.fromObject(dfJSON, jsonConfig);
 			
-			System.out.println(jsonObj.toString());
+			//System.out.println(jsonObj.toString());
 			response.setContentType("text/json");
 			response.setCharacterEncoding("UTF-8");
 			PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-8" );

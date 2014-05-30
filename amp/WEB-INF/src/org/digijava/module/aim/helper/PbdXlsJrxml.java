@@ -14,14 +14,14 @@ public class PbdXlsJrxml
 	{
 		try
 		{
-			//////System.out.println( cnt +"DYNAMIC Multi-JRXML..");
+			////////System.out.println( cnt +"DYNAMIC Multi-JRXML..");
 			FileOutputStream out2; // declare a file output object
 			PrintStream p2; // declare a print stream object
 			File fopen = new File(filePath);	
 			out2 = new FileOutputStream(fopen);
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-			////System.out.println("creating now- dynamic trend.......................................");
+			//////System.out.println("creating now- dynamic trend.......................................");
 
 			int n=cnt;//cnt;
 			int center=0;//(12-n)*30;
@@ -1039,11 +1039,11 @@ p2.println("</title>");
 			
 			x += 59;
 			c += 2;
-			////System.out.println("cccccccccccccc   "+c);
+			//////System.out.println("cccccccccccccc   "+c);
 			}//for2
 			
 			c=7+(4*n)+3;
-						////System.out.println("cccccccccccccc12222222   "+c);
+						//////System.out.println("cccccccccccccc12222222   "+c);
 			for(int j=0;j<n+1;j++)
 			{
 			ctextkey="c"+c;

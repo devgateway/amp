@@ -2383,7 +2383,7 @@ public class DataDispatcher extends DispatchAction {
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
 		
-		System.out.println(request.getParameterNames());
+		//System.out.println(request.getParameterNames());
 
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
         String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
@@ -2661,7 +2661,7 @@ public class DataDispatcher extends DispatchAction {
 	                		value = fundingCal[j].getValue();
 	                	}
 	                    BigDecimal amount = value.divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-	                    System.out.println(name+"-"+i+"-"+amount);
+	                    //System.out.println(name+"-"+i+"-"+amount);
 	                    organizationData += amount.compareTo(BigDecimal.ZERO) == 0 ? "0>" : amount.toPlainString() + ">";
 		                if (index <= 4){
 		                    if(allData.containsKey(i)){

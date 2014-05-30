@@ -663,7 +663,7 @@ public class ThemeForm extends ActionForm {
 		if(name != null) {
 				encodeName = name.replace("'", "\\'");
 				encodeName = encodeName.replace("\"", "\\'");
-				//System.out.println(encodeName);
+				////System.out.println(encodeName);
 			
 		}
 		return encodeName;

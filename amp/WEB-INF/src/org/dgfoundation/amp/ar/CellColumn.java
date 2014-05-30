@@ -312,7 +312,7 @@ public class CellColumn<K extends Cell> extends Column<K> {
 //	public int getNewRowSpan()
 //	{
 ////		if (this.getName().equals("Actual Disbursements"))
-////			System.out.println("afigheti");
+////			//System.out.println("afigheti");
 //		return this.positionInHeading.getRowSpan(); // a CellColumn is a leaf - so it always go upto the bottom of the report's heading
 //	}
 

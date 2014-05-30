@@ -669,7 +669,7 @@ public class UpdateDB {
 	
 	String computeActivityStartDate(String val)
 	{
-		//////System.out.println(" UpdateDB  Test1 passed");
+		////////System.out.println(" UpdateDB  Test1 passed");
 		String query ="", res="";
 		try
 		{
@@ -687,14 +687,14 @@ public class UpdateDB {
 			{
 				res=null;
 			}
-			//////System.out.println(val + "  ASD " + res);
+			////////System.out.println(val + "  ASD " + res);
 
 		
 			return(res);
 		}
 		catch(Exception e)
 		{
-					////System.out.println( "ActivityStartDate :"+e);
+					//////System.out.println( "ActivityStartDate :"+e);
 		}
 		return query;
 	}
@@ -702,7 +702,7 @@ public class UpdateDB {
 
 	String computeActivityCloseDate(String val)
 	{
-		//////System.out.println("Test2 passed");
+		////////System.out.println("Test2 passed");
 		String query ="", res="";
 		try
 		{
@@ -721,14 +721,14 @@ public class UpdateDB {
 			{
 				res=null;
 			}
-			//////System.out.println(val + "  ACD " + res);
+			////////System.out.println(val + "  ACD " + res);
 
 
 			return(res);
 		}
 		catch(Exception e)
 		{
-					////System.out.println("ActivityCloseDate : "+e);
+					//////System.out.println("ActivityCloseDate : "+e);
 		}
 		return query;
 	}
@@ -736,7 +736,7 @@ public class UpdateDB {
 
 	String computeActivityOrigCloseDate(String val)
 	{
-		//////System.out.println("Test3 passed");
+		////////System.out.println("Test3 passed");
 		String query ="", res="";
 		try
 		{
@@ -755,14 +755,14 @@ public class UpdateDB {
 			{
 				res=null;
 			}
-			//////System.out.println(val + "  AOCD " + res);
+			////////System.out.println(val + "  AOCD " + res);
 
 
 			return(res);
 		}
 		catch(Exception e)
 		{
-					////System.out.println(" ActivityOrigCloseDate :"+e);
+					//////System.out.println(" ActivityOrigCloseDate :"+e);
 		}
 		return query;
 	}
@@ -788,18 +788,18 @@ public class UpdateDB {
 			ocd = "'"+ocd+"'";
 		}
 
-		//////System.out.println("Test4 passed");
+		////////System.out.println("Test4 passed");
 		query = "update amp_activity set activity_start_date = "+sdd+", activity_close_date = "+cdd ;
 		query+= " , original_comp_date ="+ocd+"  where amp_activity_id = "+ id;	
-		////System.out.println(query);		
+		//////System.out.println(query);		
 
 		Statement stmt = connection.createStatement();
 		int cols = stmt.executeUpdate(query);
-		//////System.out.println( cols +" columns updated");
+		////////System.out.println( cols +" columns updated");
 		}
 		catch(Exception e)
 		{
-			////System.out.println(" updateAmpActivityDates :"+ e);
+			//////System.out.println(" updateAmpActivityDates :"+ e);
 		}
 	}
 

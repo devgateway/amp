@@ -41,7 +41,7 @@ public abstract class ReportsTestCase extends AmpTestCase
 			throw new RuntimeException(e);
 		}
 		GroupReportData report = ReportTestingUtils.runReportOn(reportName, modifier, activities);
-		//System.out.println(ReportTestingUtils.describeReportInCode(report, 1, true));
+		////System.out.println(ReportTestingUtils.describeReportInCode(report, 1, true));
 //		checkThatAllCRDsHaveIdenticalReportHeadingsLayoutData(report);
 		String error = correctResult.matches(report);
 		assertNull(String.format("test %s, report %s: %s", testName, reportName, error), error);

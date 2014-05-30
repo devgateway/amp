@@ -1372,7 +1372,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			debugMode = false;
 
 
-		logger.error("Master report query:" + filter.getGeneratedFilterQuery());
+		logger.info("Master report query:" + filter.getGeneratedFilterQuery());
 
 		// remove the columns that are also hierarchies
 

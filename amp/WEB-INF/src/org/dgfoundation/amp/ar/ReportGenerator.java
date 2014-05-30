@@ -276,7 +276,7 @@ public abstract class ReportGenerator {
 	public String describeReportInCode(GroupReportData report, int depth, boolean describeLayout)
 	{
 		String elements = describeElements(report.getItems(), depth + 1);
-		//System.out.println("elements: " + describeElements(report.getItems(), depth + 1));
+		////System.out.println("elements: " + describeElements(report.getItems(), depth + 1));
 		String withTrailCells = buildTrailCellsDescription(report.getTrailCells(), depth);
 		String functionName = containsGroupReports(report) ? "withGroupReports" : "withColumnReports";
 		String describeLayoutString = describeLayout ? String.format("\n%s%s", prefixString(depth), generateLayoutString(report.digestReportHeadingData(true), depth)) : "";

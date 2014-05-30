@@ -407,8 +407,8 @@ public class HelpUtil {
 				if (editors!=null && editors.size()>0){
 					for (Editor editor : editors) {
 						if(editor.getBody()!=null){
-							if (editor.getEditorKey().equals("help-admin-2116913595-1357837306810"))
-								System.out.println("I am atrociously handsome");
+							//if (editor.getEditorKey().equals("help-admin-2116913595-1357837306810"))
+								//System.out.println("I am atrociously handsome");
 							String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;
 							Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
 							Matcher matcher = pattern.matcher(editor.getBody());
@@ -606,7 +606,7 @@ public class HelpUtil {
 
     public static List<Editor> getAllHelpKey(String lang) throws
     EditorException {
-System.out.println("lang:"+lang);
+//System.out.println("lang:"+lang);
     	
 	Session session = null;
 	List<Editor> helpTopics = new ArrayList<Editor>();
@@ -631,7 +631,7 @@ System.out.println("lang:"+lang);
 	
 	Session session = null;
 	Query query = null;
-	  System.out.println("GetAllHelpData");
+	  //System.out.println("GetAllHelpData");
 	Collection helpTopics = new ArrayList();
 	HelpSearchData helpsearch;
 	
@@ -648,7 +648,7 @@ System.out.println("lang:"+lang);
 			helpsearch = new HelpSearchData();
 			  Editor edt = (Editor) itr.next();
 			
-			   //System.out.println("body:"+edt.getBody());
+			   ////System.out.println("body:"+edt.getBody());
 			
 				helpsearch.setBody(edt.getBody());
 				helpsearch.setLastModDate(edt.getLastModDate());
@@ -778,7 +778,7 @@ System.out.println("lang:"+lang);
 					xml+= "<item text=\""+newCode+"\" id=\""+ topic.getHelpTopicId()+"\"/>";
 				}else{
 					xml+= "<item  text=\""+newCode+"\" id=\"" +topic.getHelpTopicId()+"\">";
-                        System.out.println("name:"+newCode+" Topic_PRNT:"+topic.getHelpTopicId());
+                        //System.out.println("name:"+newCode+" Topic_PRNT:"+topic.getHelpTopicId());
                      if (!item.getChildren().isEmpty() || item.getChildren().size() > 0) {
 						 xml += renderTopicTree(item.getChildren(),request,true);
 					 }

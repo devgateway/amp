@@ -51,8 +51,8 @@ public class EditSector extends Action {
 							String flag = request.getParameter("flag");
 							if(request.getParameter("flag")==null)
 								flag = "false";
-							////System.out.println(flag);
-							////System.out.println("FLAG========================"+editSectorForm.getJspFlag());
+							//////System.out.println(flag);
+							//////System.out.println("FLAG========================"+editSectorForm.getJspFlag());
 						 if(flag.equalsIgnoreCase("false"))
 						 	{
 

@@ -47,7 +47,7 @@ public class XmlPatcherConditionWorker extends
 		List<Serializable> scripts = getEntity().getContent();
 		try {
 			String test = null;
-			//System.out.println("scripts.length = " + scripts.size());
+			////System.out.println("scripts.length = " + scripts.size());
 			for (Object obj : scripts) {
 				//ignore white spaces
 				if(obj instanceof String) continue;

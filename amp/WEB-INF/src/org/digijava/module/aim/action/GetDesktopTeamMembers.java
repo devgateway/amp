@@ -30,19 +30,19 @@ public class GetDesktopTeamMembers extends TilesAction {
 		
 		if (session.getAttribute(Constants.MY_TEAM_MEMBERS) == null) {
 			TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-			//System.out.println("######### "+tm.getMemberName()+"  team head:" +tm.getTeamHead() );
+			////System.out.println("######### "+tm.getMemberName()+"  team head:" +tm.getTeamHead() );
 			if (tm != null) {
 		 		Collection members = TeamMemberUtil.getAllTeamMembersToDesktop(tm.getTeamId());
 				session.setAttribute(Constants.MY_TEAM_MEMBERS,members);
-				//System.out.println("######### "+tm.getMemberName()+"  team head:" +tm.getTeamHead() );
+				////System.out.println("######### "+tm.getMemberName()+"  team head:" +tm.getTeamHead() );
 				if(tm.getTeamHead())
 				{
-					//System.out.println("-------team leader"+tm.getMemberName());
+					////System.out.println("-------team leader"+tm.getMemberName());
 					session.setAttribute("teamHead", "true");
 				}
 				if("Workspace Manager".compareTo(tm.getRoleName())==0)
 					{
-						//System.out.println("****team leader"+tm.getMemberName());
+						////System.out.println("****team leader"+tm.getMemberName());
 						session.setAttribute("teamHead", "true");
 					}
 			}

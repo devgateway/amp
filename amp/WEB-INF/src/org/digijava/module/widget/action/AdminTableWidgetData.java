@@ -216,7 +216,7 @@ public class AdminTableWidgetData extends DispatchAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
-		System.out.println(dForm.getRows());
+		//System.out.println(dForm.getRows());
 		WiTable wTable = TableWidgetUtil.getFromSession(request);
 		org.digijava.module.widget.table.util.TableWidgetUtil.saveTable(wTable);
 		

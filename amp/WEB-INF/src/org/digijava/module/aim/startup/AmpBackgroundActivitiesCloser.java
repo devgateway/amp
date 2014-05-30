@@ -128,7 +128,7 @@ public class AmpBackgroundActivitiesCloser
 		
 		// set country
         user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(FeaturesUtil.getDefaultCountryIso()));
-        ////System.out.println(" this is the default country.... "+countryIso);
+        //////System.out.println(" this is the default country.... "+countryIso);
         //user.setCountry(new Country(countryIso));
 		//user.setCountry(new Country(org.digijava.module.aim.helper.Constants.COUNTRY_ISO));
 

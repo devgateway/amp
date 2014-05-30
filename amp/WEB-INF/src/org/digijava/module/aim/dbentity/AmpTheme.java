@@ -316,7 +316,7 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 		if(name != null) {
 				encodeName = name.replace("'", " ");
 				//encodeName = encodeName.replaceAll("\"", "\\\'");
-				//System.out.println(encodeName);
+				////System.out.println(encodeName);
 
 		}
 		return encodeName;

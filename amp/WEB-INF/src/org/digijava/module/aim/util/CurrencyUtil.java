@@ -1129,7 +1129,7 @@ public class CurrencyUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp PhysicalPerformance", ex);
-			//////System.out.println(ex.toString()) ;
+			////////System.out.println(ex.toString()) ;
 		} finally {
 			try {
 				if (session != null) {

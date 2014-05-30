@@ -46,7 +46,7 @@ public class InternationalizedModelDescription {
 	
 	protected void scanClass(Class<?> modelClass)
 	{
-		System.out.println("IMD: scanning class " + modelClass);
+		//System.out.println("IMD: scanning class " + modelClass);
 		
 		if (modelClass.getAnnotation(TranslatableClass.class) == null)
 			throw new RuntimeException("asked to scan class " + modelClass + ", which is translatable");

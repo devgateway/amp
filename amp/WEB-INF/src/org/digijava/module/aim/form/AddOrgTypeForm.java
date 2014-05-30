@@ -18,7 +18,7 @@ public class AddOrgTypeForm extends ActionForm {
 	
 	public void reset(ActionMapping mapping, HttpServletRequest req) {
 		if (reset.booleanValue()) {
-			////System.out.println("inside reset: clearing properties");
+			//////System.out.println("inside reset: clearing properties");
 			ampOrgTypeId = null;
 			orgType = null;
 			orgTypeCode = null;

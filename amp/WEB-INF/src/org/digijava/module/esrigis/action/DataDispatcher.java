@@ -936,7 +936,7 @@ public class DataDispatcher extends MultiAction {
    		long ccc = System.currentTimeMillis();
 		 
    		long secondPartMillies = ccc - bbb;
-   		//System.out.println("doing the second part took " + secondPartMillies);
+   		////System.out.println("doing the second part took " + secondPartMillies);
    		//watch STRUCTS here
 		PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());

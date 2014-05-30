@@ -71,7 +71,7 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 		final Form addPermForm = new Form ("addPermissionForm")
 		{
 			protected void onSubmit() {
-				System.out.println("addPermissionForm submitted");
+				//System.out.println("addPermissionForm submitted");
 			}
 		};
 		addPermForm.setOutputMarkupId(true);
@@ -97,10 +97,10 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				// TODO Auto-generated method stub
-				System.out.println("savePermissionButton  submit pressed");
+				//System.out.println("savePermissionButton  submit pressed");
 				cpModel.setObject(null);
 				addPermForm.clearInput();
-				System.out.println("PM new permission created");
+				//System.out.println("PM new permission created");
 			}
 		};
 		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model("buttonx")));

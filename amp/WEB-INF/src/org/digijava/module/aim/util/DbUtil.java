@@ -520,7 +520,7 @@ public class DbUtil {
 //
 //		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
 //				+ sQuery + " ) ";
-//		// System.out.println("MASTER query count activities::: " + query);
+//		// //System.out.println("MASTER query count activities::: " + query);
 //		PreparedStatement ps;
 //
 //		try {
@@ -556,7 +556,7 @@ public class DbUtil {
 //				logger.error("Error parsing date filters");
 //			}
 //		}
-//		// System.out.println("--------------------- "+ii);
+//		// //System.out.println("--------------------- "+ii);
 //		return ii;
 //	}
 
@@ -578,7 +578,7 @@ public class DbUtil {
 		if (funding != null)
 			if (!funding.isEmpty())
 				s = ((String) (funding.iterator().next()));
-		// ////System.out.println("aaaaaaaaaaaaa"+s);
+		// //////System.out.println("aaaaaaaaaaaaa"+s);
 		return s;
 	}
 
@@ -973,7 +973,7 @@ public class DbUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp PhysicalPerformance", ex);
-			// ////System.out.println(ex.toString()) ;
+			// //////System.out.println(ex.toString()) ;
 		}
 		logger.debug("Getting components executed successfully "
 				+ component.size());
@@ -1276,7 +1276,7 @@ public class DbUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp Component", ex);
-			// ////System.out.println(ex.toString()) ;
+			// //////System.out.println(ex.toString()) ;
 		}
 		logger.debug("Getting Amp Component Executed successfully ");
 		return comp;
@@ -1795,7 +1795,7 @@ public class DbUtil {
 				ampAppSettings = (AmpApplicationSettings) itr.next();
 				ampAppSettings.setDefaultTeamReport(null);
 				update(ampAppSettings);
-				// ////System.out.println("Am updatat: " +
+				// //////System.out.println("Am updatat: " +
 				// ampAppSettings.getAmpAppSettingsId());
 			}
 		} catch (Exception e) {
@@ -4103,7 +4103,7 @@ public class DbUtil {
 			statusItem = (AmpStatus) session.load(AmpStatus.class, id);
 		} catch (Exception ex) {
 			logger.error("DbUtil:getAmpStatus: Unable to get Amp Status ", ex);
-			// ////System.out.println(ex.toString()) ;
+			// //////System.out.println(ex.toString()) ;
 		}
 		logger.debug("DbUtil: getAmpStatus(id) executed successfully ");
 		return statusItem;
@@ -6934,7 +6934,7 @@ public class DbUtil {
 			if (result.size() > 0) {
 				obResult = (AmpOrganisation) result.get(0);
 			}
-			// System.out.println("DBUTIL.GETORGANISATIONBYNAME() : " +
+			// //System.out.println("DBUTIL.GETORGANISATIONBYNAME() : " +
 			// qry.getQueryString());
 		} catch (Exception e) {
 			logger.debug("Exception from getOrganisationByName(): " + e);

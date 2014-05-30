@@ -225,7 +225,7 @@ public class GPIReport5a extends GPIAbstractReport {
 							auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
 							auxRow.setYear(calendar.get(Calendar.YEAR));
 							list.add(auxRow);
-							System.out.println(auxFunding.getAmpDonorOrgId().getName());
+							//System.out.println(auxFunding.getAmpDonorOrgId().getName());
 						}
 					}
 				}

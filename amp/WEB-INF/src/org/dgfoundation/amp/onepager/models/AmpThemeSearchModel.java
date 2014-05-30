@@ -57,7 +57,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				//The following line was commented out because it added only the parent hierarchy in the list.
 				//getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, false);
 				if (input.trim().length() > 0){
-					//System.out.println("name="+input);
+					////System.out.println("name="+input);
 					Object o = getTextCriterion("name", input);
 					if (o instanceof SimpleExpression){
 						crit.add(((SimpleExpression)o).ignoreCase());

@@ -110,7 +110,7 @@ public class MultilingualTests28 extends AmpTestCase
 			request.addParameter("AmpReports_name_en", "english");
 			request.addParameter("AmpReports_name_ru", "русский");
 			MultilingualInputFieldValues.serialize(victimReportRu, "name", null, session, request);
-			System.out.println("done serializing");			
+			//System.out.println("done serializing");			
 			
 			// current language is now russian
 			shouldFail(new AmpRunnable(){public void run(){
@@ -119,7 +119,7 @@ public class MultilingualTests28 extends AmpTestCase
 			shouldFail(new AmpRunnable(){public void run(){
 					ReportTestingUtils.loadReportByName("дохлый отчет");
 				}});
-			System.out.println("done testing 1");
+			//System.out.println("done testing 1");
 			
 			TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
 			// current language is now english
@@ -134,13 +134,13 @@ public class MultilingualTests28 extends AmpTestCase
 					ReportTestingUtils.loadReportByName("русский");
 				}});
 					
-			System.out.println("done testing 3");
+			//System.out.println("done testing 3");
 			assertEquals(Long.valueOf(54L), ReportTestingUtils.loadReportByName("english"));
 			
 			TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
 			assertEquals(Long.valueOf(54L), ReportTestingUtils.loadReportByName("русский"));
 			
-			System.out.println("done testing 4");
+			//System.out.println("done testing 4");
 		}
 		finally
 		{

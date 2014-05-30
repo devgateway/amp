@@ -817,7 +817,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 						+ AmpActivityVersion.class.getName()+" av where av.ampActivityId in:list";
 				Query qry = session.createQuery(qryGroups);
 				qry.setParameterList("list", idActivities);
-				//System.out.println(result.size());
+				////System.out.println(result.size());
 				colAv = qry.list();
 				for(AmpActivityVersion act:colAv){
 					if (act.getUpdatedDate().before(date))
@@ -1990,7 +1990,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 					nameRow = nameRow.replace('\r', ' ');
 					nameRow = nameRow.replace("\\", "");
 					}
-					//System.out.println(nameRow);
+					////System.out.println(nameRow);
 					retValue[i]=nameRow+"("+row[1]+")";
 					i++;					
 				}
@@ -2061,7 +2061,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 					nameRow = nameRow.replace('\r', ' ');
 					nameRow = nameRow.replace("\\", "");
 					}
-					//System.out.println(nameRow);
+					////System.out.println(nameRow);
 					retValue[i]=nameRow+"("+row[1]+")";
 					i++;
 				}

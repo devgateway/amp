@@ -64,7 +64,7 @@ public class CategoryLabelsUtil {
 //							if ( labelValue.getUsedByValues() == null )
 //								labelValue.setUsedByValues( new HashSet<AmpCategoryValue>() );
 //							labelValue.getUsedByValues().add( categoryValue );
-							System.out.println( categoryValue.getId() +  "=>" + lc.getLabelsId()[i]);
+							//System.out.println( categoryValue.getId() +  "=>" + lc.getLabelsId()[i]);
 						}
 					}
 				}

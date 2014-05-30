@@ -224,28 +224,28 @@ public class AmountCell extends Cell {
 				};
 		SortedSet<AmountCell> v = new TreeSet<AmountCell>(comparator);
 		v.addAll(input);
-		System.out.println("=== mergedCells dump start ===");
+		//System.out.println("=== mergedCells dump start ===");
 		int i = 0;
 		for(AmountCell cell:v)
 		{
 			i++;
-			System.out.println("i = " + i + ", cell = " + cell);
+			//System.out.println("i = " + i + ", cell = " + cell);
 		}
-		System.out.println("=== DONE ===");
+		//System.out.println("=== DONE ===");
 	}
 	
 	private static void printSet(String title, Set<? extends Object> uset)
 	{
 		SortedSet set = new TreeSet();
 		set.addAll(uset);
-		System.out.println("==== printing " + title + " =====");
+		//System.out.println("==== printing " + title + " =====");
 		int i = 0;
 		for(Object obj:set)
 		{
 			i++;
-			System.out.println("i = " + i + ", item = " + obj);
+			//System.out.println("i = " + i + ", item = " + obj);
 		}
-		System.out.println("=== DONE ===");
+		//System.out.println("=== DONE ===");
 	}
 	
 	public static long merged_cells_get_amount_calls = 0;

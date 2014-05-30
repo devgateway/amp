@@ -50,10 +50,10 @@ public class AmpSectorSearchModel extends
 //			BOZO, CONSTANTIN			
 //			debug / research code: please leave it here until I remove it later
 //			String myQuery = "select sec from " + AmpSector.class.getName() + " sec where sec.name like '%у%'";
-//			System.out.println("aaaa start aaaa");
+//			//System.out.println("aaaa start aaaa");
 //			for(AmpSector ampSec:((List<AmpSector>)(session.createQuery(myQuery).list())))
-//				System.out.println(ampSec.getName());
-//			System.out.println("aaaa end aaaa");
+//				//System.out.println(ampSec.getName());
+//			//System.out.println("aaaa end aaaa");
 			
 			Integer maxResults = (Integer) getParams().get(
 					AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);

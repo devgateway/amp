@@ -111,7 +111,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 					translatedName += columnReport.getName().substring(columnReport.getName().indexOf(":"));
 				}
 			}catch (WorkerException e)
-				{////System.out.println(e);
+				{//////System.out.println(e);
 				
 				}
 			

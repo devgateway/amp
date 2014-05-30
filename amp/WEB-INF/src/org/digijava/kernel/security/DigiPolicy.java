@@ -252,10 +252,10 @@ public class DigiPolicy
 
     /*
         public PermissionCollection getPermissions(ProtectionDomain pd) {
-            //  System.out.println( "ProtectionDomain version called" );
+            //  //System.out.println( "ProtectionDomain version called" );
             Principal[] principals = pd.getPrincipals();
             if (principals == null) {
-                System.out.println("Policy check returned no permissions");
+                //System.out.println("Policy check returned no permissions");
                 return new Permissions();
             }
             PermissionCollection pc = new Permissions();
@@ -272,7 +272,7 @@ public class DigiPolicy
                     }
                 }
             }
-//    System.out.println( "%%% Printing out permissions " );
+//    //System.out.println( "%%% Printing out permissions " );
 //    DigiSecurityManager.printPermissions ( pc );
             return pc;
         }

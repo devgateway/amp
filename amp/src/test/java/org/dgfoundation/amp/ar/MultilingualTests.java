@@ -74,7 +74,7 @@ public class MultilingualTests extends TestCase
 		assertTrue(sectorNamesRu.contains("3 Национальная конкурентноспособность"));
 		assertTrue(sectorNamesRu.contains("02 Приднестровский конфликт"));
 
-		System.out.println(sectorNamesEn.size() + sectorNamesRu.size());
+		//System.out.println(sectorNamesEn.size() + sectorNamesRu.size());
 	}
 	
 	public void testActivityDonorNames()
@@ -133,7 +133,7 @@ public class MultilingualTests extends TestCase
 		assertTrue(orgNamesRu.contains("Всемирный банк"));
 		assertTrue(orgNamesRu.contains("Министерство финансов"));
 		assertTrue(orgNamesRu.contains("Норвегия"));
-		//System.out.println("msh " + orgNamesEn.size() + ", " + orgNamesRu.size());
+		////System.out.println("msh " + orgNamesEn.size() + ", " + orgNamesRu.size());
 	}
 		
 	public void testGetOrgGroups()

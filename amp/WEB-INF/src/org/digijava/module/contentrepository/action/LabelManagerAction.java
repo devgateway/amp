@@ -94,7 +94,7 @@ public class LabelManagerAction extends MultiAction {
 		jsonConfig.setExcludes(new String[] {"children", "node" });
 		JSONArray jsonArray		= JSONArray.fromObject(labelList, jsonConfig);
 		
-		System.out.println(jsonArray.toString());
+		//System.out.println(jsonArray.toString());
 		response.setContentType("text/json");
 		response.setCharacterEncoding("UTF-8");
 		PrintStream ps						= new PrintStream( response.getOutputStream(), false, "UTF-8" );

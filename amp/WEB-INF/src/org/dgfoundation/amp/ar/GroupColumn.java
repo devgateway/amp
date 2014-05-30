@@ -150,7 +150,7 @@ public class GroupColumn extends Column<Column> {
        	List<Column> columns = this.getItems();
        	for(Column column:columns)
        	{
-       		//System.out.println("column = " + column);
+       		////System.out.println("column = " + column);
        		if (column.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS) || column.getName().equals(ArConstants.REAL_DISBURSEMENTS))
        		{
        			detachCells(column);
@@ -634,7 +634,7 @@ public class GroupColumn extends Column<Column> {
             if (filter.toString().equals("Programme d'appui à la politique nationale des Transports (FED/2009/021-608)") && 
             		element.toString().equals("Actual Commitments (1 items)") &&
             		(element.getParent() != null) && element.getParent().toString().equals("Fiscal Year 2009 (3 items)"))
-            	System.out.println("BOZO BREAKPOINT TO REMOVE");
+            	//System.out.println("BOZO BREAKPOINT TO REMOVE");
             dest.addColumn(element.filterCopy(filter, ids));
         }
         return dest;

@@ -237,8 +237,8 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 				{
 				if(moduleByNameFromRoot.getItems().containsKey(this.getName())) return true;
 				}
-			//else //System.out.println("errror in FM - feature: "+this.getModule());
-		//else //System.out.println("errror in FM - feature: "+this.getModule());		
+			//else ////System.out.println("errror in FM - feature: "+this.getModule());
+		//else ////System.out.println("errror in FM - feature: "+this.getModule());		
 		return false;
 	}
 	

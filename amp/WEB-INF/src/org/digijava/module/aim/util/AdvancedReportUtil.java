@@ -323,7 +323,7 @@ public final class AdvancedReportUtil {
 		            	Iterator<AmpReports> itr2	= atm.getReports().iterator();
 		            	while (itr2.hasNext()) {
 		            		if ( qid.equals( itr2.next().getAmpReportId() ) ){
-		            			//System.out.println("removing relation to ampTeamMember");
+		            			////System.out.println("removing relation to ampTeamMember");
 		            			itr2.remove();
 		            		}
 						}

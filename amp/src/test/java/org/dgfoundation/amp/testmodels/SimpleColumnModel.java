@@ -103,7 +103,7 @@ public class SimpleColumnModel extends ColumnModel {
 		
 		for(Long activityId: activityIds)
 		{
-			String activityName = this.isPledge ? PledgesEntityHelper.getPledgesById(activityId).getEffectiveName() : ReportTestingUtils.getActivityName(activityId);//System.out.println("da da");
+			String activityName = this.isPledge ? PledgesEntityHelper.getPledgesById(activityId).getEffectiveName() : ReportTestingUtils.getActivityName(activityId);////System.out.println("da da");
 			String activityCorOutput = correctContents.get(activityName);
 			if (activityCorOutput == null)
 				return String.format("SimpleColumnModel %s, activity %s should not exist in the output", this.getName(), activityName);

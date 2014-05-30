@@ -107,7 +107,7 @@ public class SearchSectors
 
       }
       else {
-        ////System.out.println("no input in keyword field.....");
+        //////System.out.println("no input in keyword field.....");
       }
 
     return mapping.findForward("forward");

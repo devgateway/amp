@@ -296,7 +296,7 @@ public class MapsConfiguration extends DispatchAction {
 //		String filePath = getServlet().getServletContext().getRealPath("/")
 //				+ "TEMPLATE/ampTemplate/img_2/gis";
 //		if (!fileName.equals("")) {
-//			System.out.println("Server path:" + filePath);
+//			//System.out.println("Server path:" + filePath);
 //
 //			// Create file
 //			

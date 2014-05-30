@@ -569,7 +569,7 @@ public class DataExchangeUtils {
             if (result.size() > 0){
             	obResult= (AmpOrganisation) result.get(0);
             }
-            //System.out.println("DBUTIL.GETORGANISATIONBYNAME() : " + qry.getQueryString());
+            ////System.out.println("DBUTIL.GETORGANISATIONBYNAME() : " + qry.getQueryString());
         } catch (Exception e) {
             logger.debug("Exception from getOrganisationByName(): " + e);
             e.printStackTrace(System.out);
@@ -674,7 +674,7 @@ public class DataExchangeUtils {
             if (result.size() > 0){
             	obResult= (AmpOrganisation) result.get(0);
             }
-            //System.out.println("DBUTIL.GETORGANISATIONBYNAME() : " + qry.getQueryString());
+            ////System.out.println("DBUTIL.GETORGANISATIONBYNAME() : " + qry.getQueryString());
         } catch (Exception e) {
             logger.debug("Exception from getOrganisationByName(): " + e);
             e.printStackTrace(System.out);
@@ -1168,7 +1168,7 @@ public class DataExchangeUtils {
 		return ret;
 	}
 	public static String convertEntityCharacters(String tempIdref){
-		System.out.println("Attempting conversion...");
+		//System.out.println("Attempting conversion...");
 			//temp replacement string
 		String replaceStr=null;
 		
@@ -1791,7 +1791,7 @@ public class DataExchangeUtils {
 				hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
 			}
 			String foo = messageDigest.toString();
-			//System.out.println("sessionid "+s+" md5 version is "+hexString.toString());
+			////System.out.println("sessionid "+s+" md5 version is "+hexString.toString());
 			result=hexString+"";
 		}catch(NoSuchAlgorithmException nsae){
 		            

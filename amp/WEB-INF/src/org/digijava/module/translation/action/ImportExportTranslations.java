@@ -170,7 +170,7 @@ public class ImportExportTranslations extends Action {
 			session.removeAttribute(SESSION_FILE);
 			session.removeAttribute(SESSION_ROOT);
 			long endTime = System.currentTimeMillis();
-			System.out.println("Export finished in "+((endTime-startTime))+" milliseconds");
+			//System.out.println("Export finished in "+((endTime-startTime))+" milliseconds");
 		}
 		
 		
@@ -268,7 +268,7 @@ public class ImportExportTranslations extends Action {
 				form = null;
 				request.getSession().removeAttribute("aimTranslatorManagerForm"); //???
 				long endTime = System.currentTimeMillis();
-				System.out.println("Export finished in "+((endTime-startTime))+" milliseconds");
+				//System.out.println("Export finished in "+((endTime-startTime))+" milliseconds");
 				return null;
 			} else {
 				ActionErrors errors = new ActionErrors();

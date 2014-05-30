@@ -43,7 +43,7 @@ public class StandaloneServiceContext
             throw new IllegalArgumentException("Path " + rootPath + " does not point to directory");
         }
         this.rootDir = root;
-        System.out.println("DummyServletContext: " + root.getAbsolutePath());
+        //System.out.println("DummyServletContext: " + root.getAbsolutePath());
     }
     /**
      * getRealPath

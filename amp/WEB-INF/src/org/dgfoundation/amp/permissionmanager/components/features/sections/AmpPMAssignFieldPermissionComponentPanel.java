@@ -63,7 +63,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		final Form form = new Form("ampFieldPMForm")
 		{
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				System.out.println("ampFieldPMForm submitted");
+				//System.out.println("ampFieldPMForm submitted");
 			}
 		};
 		form.setOutputMarkupId(true);
@@ -184,7 +184,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		
 		AmpButtonField saveAndSubmit = new AmpButtonField("saveFieldPermissionButton", "Save Field Permission Button","Save", true, true){
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form){
-					System.out.println("saveFieldPermissionButton  submit pressed");
+					//System.out.println("saveFieldPermissionButton  submit pressed");
 					if(PMUtil.ROLE_PERMISSION.compareTo(permissionChoiceModel.getObject()) == 0)
 						PMUtil.assignFieldsPermission(iTreeModel, gatesSetModel, null);
 					if(PMUtil.CUMMULATIVE.compareTo(permissionChoiceModel.getObject()) == 0)
@@ -192,7 +192,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 					if(PMUtil.WORKSPACE_PERMISSION.compareTo(permissionChoiceModel.getObject()) == 0)
 						PMUtil.assignFieldsPermission(iTreeModel, null, workspacesSetModel);
 					
-					System.out.println("PM field permission assigned");
+					//System.out.println("PM field permission assigned");
 			}
 		};
 		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model("buttonx")));

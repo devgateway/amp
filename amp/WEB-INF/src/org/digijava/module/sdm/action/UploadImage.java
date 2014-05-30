@@ -50,9 +50,9 @@ public class UploadImage
 
 /*        FormFile formFile = sdmForm.getImage();
 
-      System.out.println("--------- START IMAGE UPLOAD ACTION");
-      System.out.println(sdmForm.getEljApplet());
-      System.out.println("--------- END IMAGE UPLOAD ACTION");
+      //System.out.println("--------- START IMAGE UPLOAD ACTION");
+      //System.out.println(sdmForm.getEljApplet());
+      //System.out.println("--------- END IMAGE UPLOAD ACTION");
 
         if( formFile != null ) {
             if( formFile.getFileSize() != 0 ) {
@@ -60,7 +60,7 @@ public class UploadImage
                     img.setContentType(formFile.getContentType());
                     img.setImage(formFile.getFileData());
                     img.setName(formFile.getFileName());
-                    System.out.println("FILE NAME: " + formFile.getFileName());
+                    //System.out.println("FILE NAME: " + formFile.getFileName());
 
                   DbUtil.updateImage(img);
             }

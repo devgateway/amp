@@ -1,3 +1,0 @@
--- intentionally left blank except creating a view and a cached version of it
--- do not port any changes from pre-AMP 2.6 to it, it has to remain this way!
--- the equivalent functionality is in PublicViewColumnsUtil::maintainPublicViewCaches

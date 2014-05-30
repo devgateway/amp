@@ -1,1 +1,0 @@
-delete from amp_activity_contact where contact_type is null;

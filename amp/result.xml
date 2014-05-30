@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context debug="0" path="/" reloadable="true" swallowOutput="true">
-  
-   <Resource defaultTransactionIsolation="READ_COMMITTED" driverClassName="com.mysql.jdbc.Driver" maxActive="100" maxIdle="30" maxWait="10000" name="ampDS" password="" removeAbandoned="true" type="javax.sql.DataSource" url="jdbc:mysql://localhost:3306/amp_drc_staging?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;jdbcCompliantTruncation=false" username=""/>
-  
-  
-   <Logger className="org.apache.catalina.logger.FileLogger" prefix="" suffix=".log" timestamp="true"/> 
-
-</Context>

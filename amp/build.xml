@@ -6,9 +6,6 @@
 	<property file="${user.home}/ant-global.properties"/>
 		
 	<property file="compat.properties"/>
-    <!-- NOTE: If "dist" target is used, a local
-             "dist" directory will be utilized or created -->
-    <property name="distpath.project" value="./dist"/>
 	<property name="debug" value="true" />
 
 
@@ -125,7 +122,6 @@
         <tstamp/>
 	    <echo message="JVM OK - ${ant.java.version}"/>
         <mkdir  dir="${classes}"/>
-        <mkdir  dir="${distpath.project}"/>
     </target>
 
   <!--compile Java source files-->
@@ -364,28 +360,6 @@
     <!-- Build entire project -->
     <target name="project" depends="clean,prepare,compile,javadoc"/>
 
-    <!-- Clean the distribution directories to prevent dist from failing the second time around -->
-    <target name="cleanDist">
-        <tstamp/>
-        <delete dir="${distpath.project}"/>
-    </target>
-
-    <!-- Create binary distribution -->
-    <target name="dist"
-        description="Create binary distribution" depends="cleanDist, compile">
-
-      <mkdir
-        dir="${distpath.project}"/>
-      <jar compress="true" excludes="**/PersistenceManager.class **/RequestUtils.class"
-        jarfile="${distpath.project}/${project.distname}-${project.version}.jar"
-        basedir="${classes}"/>
-      <copy
-        file="${distpath.project}/${project.distname}-${project.version}.jar"
-        todir="${distpath.project}"/>
-
- 
-
-    </target>
 
     <!-- compile and deploy to the folder specified in digijava.deploy -->
     <target name="deployDir" depends="compile"
@@ -805,7 +779,7 @@
 
 
     <!-- Build project and create distribution-->
-    <target name="all" depends="project,dist"/>
+    <target name="all" depends="project"/>
 	
 	<target name="ecsJar" description="ECS Client Jar">
 		<jar destfile="ecs-client.jar" 

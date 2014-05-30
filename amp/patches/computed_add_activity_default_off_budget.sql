@@ -1,1 +1,0 @@
-insert into amp_global_settings(settingsName,settingsValue,possibleValues, description,section) values('Computed Teams Add Activity Default Off Budget','false','t_Boolean','When adding new activities inside a computed team, the Budget drop-down is set by default to Off Budget','funding');

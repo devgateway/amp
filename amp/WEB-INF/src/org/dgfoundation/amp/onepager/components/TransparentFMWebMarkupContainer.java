@@ -8,11 +8,19 @@ import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.WicketParseException;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
+import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerApp;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMInfo;
 import org.dgfoundation.amp.onepager.util.FMUtil;
@@ -29,6 +37,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * @since Nov 21, 2011
  */
 public class TransparentFMWebMarkupContainer extends TransparentWebMarkupContainer {
+	protected static Logger logger = Logger.getLogger(TransparentFMWebMarkupContainer.class); 
 	private static final long serialVersionUID = 1L;
 	private Model<String> model;
 
@@ -66,7 +75,34 @@ public class TransparentFMWebMarkupContainer extends TransparentWebMarkupContain
 			}
 		}
 		boolean fmMode = ((AmpAuthWebSession)getSession()).isFmMode();
-		if (allInvisible)
+		if (allInvisible) {
+			if( OnePagerApp.IS_DEVELOPMENT_MODE ) {
+				checkInvalidFMDeclarations(names+";");
+			}
 			this.setVisible(fmMode?true:false);
+		}
+	}
+	
+	private void checkInvalidFMDeclarations(final String fmNames){
+		final String markupStr = this.getMarkup().toString();
+		final String markupFileName = FilenameUtils.getName(this.getMarkup().getMarkupResourceStream().locationAsString());
+		Component parent = this.findParent(AmpComponentPanel.class);
+		//final String parentMarkupFileName = FilenameUtils.getName(parent.getMarkup().getMarkupResourceStream().locationAsString());
+		((AmpComponentPanel)parent).visitChildren(AmpComponentPanel.class, new IVisitor<AmpComponentPanel, Object>() {
+            @Override
+            public void component(AmpComponentPanel child, IVisit<Object> visit ) {
+            	//validate children from current markup only
+            	String wickedId = "wicket:id=\""+child.getId()+"\"";
+            	boolean check = markupStr.contains(wickedId);
+            	//if at this point the child component is still marked as visible, though child fm visibility should have been already validated
+            	//then let's see if its FM name was declared in this outer container
+            	if( check && child.isVisible() ) {
+            		if(!fmNames.contains(child.getFMName()+";")){
+            			logger.error(wickedId+" has \""+child.getFMName()+"\" not declared in the FM names=\""+fmNames+"\", file:"+markupFileName);
+            		}
+            	}
+            	visit.dontGoDeeper();
+            }
+		});
 	}
 }

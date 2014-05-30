@@ -225,7 +225,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
 		wmc.add(iValidator);
 		percentageValidationField = new AmpPercentageCollectionValidatorField<AmpOrgRole>(
-				"relOrgPercentageTotal", listModel, "relOrgPercentageTotal") {
+				"relOrgPercentageTotal", listModel, "percentage") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

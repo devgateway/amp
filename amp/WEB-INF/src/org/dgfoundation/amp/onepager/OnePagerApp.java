@@ -46,6 +46,8 @@ import java.net.SocketException;
  * @author mihai
  */
 public class OnePagerApp extends AuthenticatedWebApplication {
+	
+	public static boolean IS_DEVELOPMENT_MODE = false;
 
     private static Logger logger = Logger.getLogger(OnePagerApp.class);
 
@@ -73,6 +75,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
         if (RuntimeConfigurationType.DEVELOPMENT.equals(configurationType)) {
             //enable Wicket-Source if we are in development mode
             WicketSource.configure(this);
+            IS_DEVELOPMENT_MODE = true;
         }
 
         //getResourceSettings().setStripJavaScriptCommentsAndWhitespace(true);

@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import org.digijava.module.aim.util.Output;
 
@@ -15,6 +16,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	private Float 	percentage;
 	private String budgetCode;
 	private String additionalInfo;
+	
 	
     public Float getPercentage() {
 		return percentage;
@@ -144,4 +146,15 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 		return this.getAmpOrgRoleId().compareTo(arg0.getAmpOrgRoleId());
 		else return -1;
 	}
+	
+	public final static Comparator<AmpOrgRole> BY_ACRONYM_AND_NAME_COMPARATOR = new Comparator<AmpOrgRole>() {
+		@Override
+		public int compare(AmpOrgRole o1, AmpOrgRole o2) {
+			if (o1 == null || o1.getOrganisation() == null ||o1.getOrganisation().getAcronymAndName() == null)
+				return 1;
+			if (o2 == null || o2.getOrganisation() == null ||o2.getOrganisation().getAcronymAndName() == null)
+				return -1;
+			return o1.getOrganisation().getAcronymAndName().compareTo(o2.getOrganisation().getAcronymAndName());
+		}
+	};
 }	

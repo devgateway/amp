@@ -39,7 +39,7 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 	 */
 	public AmpRelatedOrganizationsResponsibleTableFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am, final String roleName,AmpDonorFundingFormSectionFeature donorFundingSection) throws Exception {
-		super(id, fmName, am, roleName, donorFundingSection);
+		super(id, fmName, am, roleName, donorFundingSection, null);
 		Long value = Long.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_ORG_GROUP));
 		if (value.longValue()!=-1) {
         setDefaultOrgGroup(DbUtil.getAmpOrgGroup(value));

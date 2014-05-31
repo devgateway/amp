@@ -2725,18 +2725,21 @@ public class DbUtil {
 		return col;
 	}
 
-    public static Collection searchForOrganisationByType(Long orgType) {
-        return searchForOrganisationByType(orgType, (long[]) null);
+    public static List<AmpOrganisation> searchForOrganisationByType(Long orgType) {
+        return searchForOrganisationByType(orgType, null);
     }
 
-	public static Collection searchForOrganisationByType(Long orgType, long[] excludeIds) {
-
-		Session session = null;
-		Collection col = null;
-        StringBuilder queryString = new StringBuilder();
+    /**
+     * returns list of all Organisations which belong to a group which belongs to a type and do not have an id in the exclusion area
+     * @param orgType
+     * @param excludeIds
+     * @return
+     */
+	public static List<AmpOrganisation> searchForOrganisationByType(Long orgType, long[] excludeIds) {
 
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			Session session = PersistenceManager.getRequestDBSession();
+			StringBuilder queryString = new StringBuilder();
 			queryString.append("select distinct org from ")
                     .append(AmpOrganisation.class.getName()).append(" org ")
                     .append(" inner join org.orgGrpId grp where grp.orgType=:orgType and (org.deleted is null or org.deleted = false)");
@@ -2744,12 +2747,11 @@ public class DbUtil {
             appendNotIn("org.ampOrgId", excludeIds, queryString);
 
 			Query qry = session.createQuery(queryString.toString());
-			qry.setParameter("orgType", orgType, Hibernate.LONG);
-			col = qry.list();
+			qry.setLong("orgType", orgType);
+			return qry.list();
 		} catch (Exception ex) {
-			logger.error("Unable to search ", ex);
+			throw new RuntimeException(ex);
 		}
-		return col;
 	}
 
     /**
@@ -5074,22 +5076,19 @@ public class DbUtil {
 		return col;
 	}
 	
-	public static Collection<AmpOrgGroup> getAllOrgGroups() {
-		Session session = null;
-		Collection col = new ArrayList();
-
+	public static List<AmpOrgGroup> getAllOrgGroups() {
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			Session session = PersistenceManager.getRequestDBSession();
 			String orgGrpNameHql = AmpOrgGroup.hqlStringForName("c");
 			String queryString = "select c from " + AmpOrgGroup.class.getName()
 					+ " c order by lower(" + orgGrpNameHql + ") asc";
 			Query qry = session.createQuery(queryString);
-			col = qry.list();
+			return qry.list();
 		} catch (Exception e) {
 			logger.debug("Exception from getAllOrgGroups()");
 			logger.debug(e.toString());
+			return null;
 		}
-		return col;
 	}
 
 	public static Collection<AmpOrgType> getAllOrgTypes() {
@@ -5284,8 +5283,7 @@ public class DbUtil {
 		return duplicateName;
 	}
 
-	public static Collection<AmpOrgGroup> searchForOrganisationGroupByType(
-			Long orgType) {
+	public static Collection<AmpOrgGroup> searchForOrganisationGroupByType(Long orgType) {
 		Session session = null;
 		Collection col = null;
 

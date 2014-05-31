@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.onepager.components;
 
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
@@ -17,6 +18,7 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -29,18 +31,16 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 	private AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel;
 	
 	public AmpSearchOrganizationComponent(String id, IModel<T> model,
-			String fmName,  final AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel){
-		this(id,model,fmName,autocompletePanel,true);	
+			String fmName,  final AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel, List<AmpOrgGroup> availableChoices){
+		this(id, model, fmName, autocompletePanel, availableChoices, true);
 	}
 	
 	public AmpSearchOrganizationComponent(String id, IModel<T> model,
-			String fmName,  final AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel, boolean isLabelVisible ) {
+			String fmName,  final AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel, List<AmpOrgGroup> availableChoices, boolean isLabelVisible ) {
 		super(id, model, fmName);
 		TrnLabel title = new TrnLabel("title", fmName);
 		title.setVisible(isLabelVisible);
 		add(title);
-		
-		
 		
 		ChoiceRenderer cr = new ChoiceRenderer(){
 			@Override
@@ -51,8 +51,11 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 			    return orgGroup.getOrgGrpName();
 			}
 		};
-		IModel<List<? extends AmpOrgGroup>> orgGroupsModel = Model.ofList((List<AmpOrgGroup>) DbUtil.getAllOrgGroups());
+
+		IModel<List<? extends AmpOrgGroup>> orgGroupsModel = Model.ofList(availableChoices == null ? DbUtil.getAllOrgGroups() : availableChoices);
+//			orgGroupsModel = Model.ofList((List<AmpOrgGroup>) DbUtil.searchForOrganisationGroupByType(1l)); // UGLY!
 		orgGroupPanel = new AmpSelectFieldPanel<AmpOrgGroup>("selectOrgType", new Model<AmpOrgGroup>(),  orgGroupsModel, "Select Organization Type", true, true, cr, true);
+		orgGroupPanel.getChoiceContainer().setChoices(orgGroupsModel);
 		orgGroupPanel.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			private static final long serialVersionUID = 1L;
 
@@ -88,5 +91,16 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
         orgGroupPanel.getChoiceContainer().setDefaultModelObject(value);
         autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER,value);
     }
+	
+	/**
+	 * sets the OrgType which will be used for filtering the displayed orgs / orgGroups
+	 * @param orgType
+	 */
+	public void setFilteringOrgType(AmpOrgType orgType){
+		if (orgType != null)
+			autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.TYPE_FILTER, orgType);
+		else
+			autocompletePanel.getModelParams().remove(AmpOrganisationSearchModel.PARAM.TYPE_FILTER);
+	}
 
 }

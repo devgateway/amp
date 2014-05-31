@@ -150,7 +150,7 @@ public class AmpContractOrganizationsSubsectionFeature extends
 			}
 		};
 		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("search", new Model<String> (),
-				"Search Funding Organizations",   searchOrgs );
+				"Search Funding Organizations", searchOrgs, null);
 		add(searchOrganization);
 	}
 

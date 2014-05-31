@@ -13,6 +13,12 @@
 		<property name="orgTypeIsGovernmental" column="org_type_is_governmental" type="java.lang.Boolean" />
 			
 		<property name="classification" column="org_type_classification" type="java.lang.String" />
+		<set name="orgGroups" table="AMP_ORG_GROUP" lazy="true" inverse="true" cascade="none">
+			<key>
+				<column name="org_type" not-null="true" />
+			</key>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgGroup" />			
+		</set>
 
 		<!--
 			<set name="organizations" cascade="delete" inverse="true">

@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorTypeDimension;
@@ -29,7 +30,9 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
     private String classification;
     
     private boolean translateable	= true;
-
+    
+    private Set<AmpOrgGroup> orgGroups;
+    
     public String getClassification() {
         return classification;
     }
@@ -90,7 +93,8 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	public Object getIdentifier() {
 		return ampOrgTypeId;
 	}
-	public Class getDimensionClass() {
+	
+	public Class<?> getDimensionClass() {
 	    return DonorTypeDimension.class;
 	}
 	public Boolean getOrgTypeIsGovernmental() {
@@ -130,10 +134,18 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 		this.translateable = translateable;
 	}
 
+    @Override
     public String getAdditionalSearchString() {
         return this.orgTypeCode;
     }
     
+    public Set<AmpOrgGroup> getOrgGroups(){
+    	return this.orgGroups;
+    }
+    
+    public void setOrgGroups(Set<AmpOrgGroup> aog){
+    	this.orgGroups = aog;
+    }
     
     public static String hqlStringForName(String idSource)
     {

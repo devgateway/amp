@@ -4,7 +4,9 @@
 */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
@@ -23,7 +25,9 @@ import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -40,8 +44,10 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 	 * @throws Exception
 	 */
 	public AmpRelatedOrganizationsOtherTableFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am, final String roleName,AmpDonorFundingFormSectionFeature donorFundingSection) throws Exception {
-		super(id, fmName, am, roleName, donorFundingSection);
+			final IModel<AmpActivityVersion> am, final String roleName,
+			AmpDonorFundingFormSectionFeature donorFundingSection, 
+			final List<AmpOrgGroup> availableOrgGroupChoices) throws Exception {
+		super(id, fmName, am, roleName, donorFundingSection, availableOrgGroupChoices);
 		list.setObject(new ListView<AmpOrgRole>("list", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override

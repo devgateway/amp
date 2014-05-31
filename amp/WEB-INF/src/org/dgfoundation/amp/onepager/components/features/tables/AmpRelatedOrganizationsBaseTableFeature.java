@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -40,7 +41,6 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.*;
-
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -67,14 +67,14 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	private AmpDonorFundingFormSectionFeature donorFundingSection;
     private AmpSearchOrganizationComponent<String> searchOrganization;
 	
-	/**
-	 * 
-	 */
-    
     public void setDefaultOrgGroup(AmpOrgGroup orgGroup) {
     	searchOrganization.setDefaultOrgGroup(orgGroup);
-		
     }
+    
+    public AmpSearchOrganizationComponent<String> getSearchOrganization(){
+    	return searchOrganization;
+    }
+    
 	/**
 	 * Override to notify of newly added roles, if you need to refresh/change other sections of the form
 	 * @param target 
@@ -140,7 +140,8 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	 * @throws Exception
 	 */
 	protected AmpRelatedOrganizationsBaseTableFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am, final String roleName,AmpDonorFundingFormSectionFeature donorFundingSection) throws Exception {
+			final IModel<AmpActivityVersion> am, final String roleName, AmpDonorFundingFormSectionFeature donorFundingSection,
+			final List<AmpOrgGroup> availableOrgGroupChoices) throws Exception {
 		super(id, am, fmName);
 		setModel=new PropertyModel<Set<AmpOrgRole>>(am,"orgrole");
 		this.donorFundingSection=donorFundingSection;
@@ -160,9 +161,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 				Set<AmpOrgRole> specificOrgRoles = new HashSet<AmpOrgRole>();  
 				
 				if(allOrgRoles != null){
-					Iterator<AmpOrgRole> it = allOrgRoles.iterator();
-					while (it.hasNext()) {
-						AmpOrgRole ampOrgRole = (AmpOrgRole) it.next();
+					for(AmpOrgRole ampOrgRole:allOrgRoles){
 						if (ampOrgRole.getRole().getAmpRoleId().compareTo(specificRole.getAmpRoleId()) == 0)
 							specificOrgRoles.add(ampOrgRole);
 					}
@@ -172,16 +171,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 					return ret;
 				
 				ret = new ArrayList<AmpOrgRole>(specificOrgRoles);
-				Collections.sort(ret, new Comparator<AmpOrgRole>() {
-					@Override
-					public int compare(AmpOrgRole o1, AmpOrgRole o2) {
-						if (o1 == null || o1.getOrganisation() == null ||o1.getOrganisation().getAcronymAndName() == null)
-							return 1;
-						if (o2 == null || o2.getOrganisation() == null ||o2.getOrganisation().getAcronymAndName() == null)
-							return -1;
-						return o1.getOrganisation().getAcronymAndName().compareTo(o2.getOrganisation().getAcronymAndName());
-					}
-				});
+				Collections.sort(ret, AmpOrgRole.BY_ACRONYM_AND_NAME_COMPARATOR);
 				return ret;
 			}
 		};
@@ -257,7 +247,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 
 		});
 
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,AmpOrganisationSearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs = new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,AmpOrganisationSearchModel.class) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -314,10 +304,8 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 			}
 		};
 
-		searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (),
-				"Search Organizations",   searchOrgs );
+		searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (), "Search Organizations", searchOrgs, availableOrgGroupChoices);
 		add(searchOrganization);
-
 	}
 	
 	private boolean existOrganization(Set<AmpOrgRole> set, AmpOrgRole ampOrgRole) {

@@ -121,7 +121,7 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 		};
 
 		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchOrgs", new Model<String> (),
-				"Search Organizations",  searchOrgs );
+				"Search Organizations",  searchOrgs, null);
 		add(searchOrganization);
 
 	}

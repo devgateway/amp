@@ -24,6 +24,7 @@ import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceException;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatch;
 import org.digijava.module.xmlpatcher.dbentity.AmpXmlPatchLog;
 import org.digijava.module.xmlpatcher.jaxb.Patch;
@@ -271,7 +272,8 @@ public class XmlPatcherService extends AbstractServiceImpl {
 			throw new ServiceException(e);
 		}
 		logger.info("XML Patcher session finished");
-
+		logger.info("refreshing GlobalSettingsCache...");
+		FeaturesUtil.buildGlobalSettingsCache(FeaturesUtil.getGlobalSettings()); // refresh global settings cache, as the startup process might have changed it (through XML patches, for example) 	
 	}
 
 	/**

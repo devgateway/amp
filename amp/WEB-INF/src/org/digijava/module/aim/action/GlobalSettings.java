@@ -114,7 +114,7 @@ public class GlobalSettings extends Action {
 		List<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
 		if (refreshGlobalSettingsCache) {
 			FeaturesUtil.buildGlobalSettingsCache(col);
-			FeaturesUtil.logGlobalSettingsCache();
+			//FeaturesUtil.logGlobalSettingsCache();
 			org.digijava.module.aim.helper.GlobalSettings globalSettings = (org.digijava.module.aim.helper.GlobalSettings) getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
 	    	globalSettings.setShowComponentFundingByYear(FeaturesUtil.isShowComponentFundingByYear());
 	    	FeaturesUtil.switchLogicInstance();	    	

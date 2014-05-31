@@ -127,7 +127,7 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 			}
 		};
 		AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>("orgSearch", new Model<String> (),
-				"Search Organizations",   searchOrgs );
+				"Search Organizations", searchOrgs, null);
 		add(searchOrganization);
 
 		

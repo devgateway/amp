@@ -313,7 +313,6 @@ public class AMPStartupListener extends HttpServlet implements
 				logger.info("\t... JackRabbit startup failed!");
 			
 			checkDatabaseSanity();
-			
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
 			e.printStackTrace(System.out);

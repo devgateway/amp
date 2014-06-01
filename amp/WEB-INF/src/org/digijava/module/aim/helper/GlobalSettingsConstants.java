@@ -159,6 +159,8 @@ public class GlobalSettingsConstants {
 
 	public static final String CURRENCY_WS_CLASS = "Currency exchange rate webservice implementation";
 	
+	public static final String SHOW_ALL_COUNTRIES = "Show all countries";
+	
 	public static final String ORGANISATION_TYPE_FOR_BENEFICIARY_AGENCY = "Organisation type for Beneficiary Agency";
 
     public static final String SUPPORT_EMAIL = "Support Email";

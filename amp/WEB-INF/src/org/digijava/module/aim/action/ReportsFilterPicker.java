@@ -133,22 +133,18 @@ public class ReportsFilterPicker extends Action {
 //			request.getSession().setAttribute(ArConstants.REPORTS_Z_FILTER,arf);
 //		}
 		
+		filterForm.setPledged(false);
 		if (longAmpReportId != null)
 		{
 			Session session = PersistenceManager.getSession();
 			AmpReports report = (AmpReports) session.get(AmpReports.class, longAmpReportId);
 			if (report != null &&  report.getType() != null ){
 				filterForm.setReporttype(report.getType());
-				if(report.getType() == ArConstants.PLEDGES_TYPE)
-					filterForm.setPledged(true);
-				else
-					filterForm.setPledged(false);
+				filterForm.setPledged(report.getType() == ArConstants.PLEDGES_TYPE);
 			}
 			if (ampReportId.length() > 0 && report != null && report.getDrilldownTab())
 				request.getSession().setAttribute(Constants.CURRENT_TAB_REPORT, report);
-		} else {
-            filterForm.setPledged(false);
-        }
+		}
 		
  		// init form
 		if (request.getParameter("init") != null)

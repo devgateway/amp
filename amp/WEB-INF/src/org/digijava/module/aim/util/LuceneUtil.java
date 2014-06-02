@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -76,6 +77,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.jdbc.ReturningWork;
 
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -418,267 +420,277 @@ public class LuceneUtil implements Serializable {
 		return ret;
     }
     
-    /**
-     * Metod is used for first time index creation
-     * @return
-     */
-    private static Integer createIndex(int chunkNo, int mId, IndexWriter indexWriter){
-		//RAMDirectory index = new RAMDirectory();
-		/*IndexWriter indexWriter = null;
-		try {
-			indexWriter = new IndexWriter(index, analyzer, true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		*/
-		int chunkStart	= chunkNo*CHUNK_SIZE, 
-			chunkEnd	= (chunkNo+1)*CHUNK_SIZE;
-		
-		
-		
+	/**
+	 * Metod is used for first time index creation
+	 * 
+	 * @return
+	 */
+	private static Integer createIndex(final int chunkNo, final int mId, final IndexWriter indexWriter) {
+		// RAMDirectory index = new RAMDirectory();
+		/*
+		 * IndexWriter indexWriter = null; try { indexWriter = new
+		 * IndexWriter(index, analyzer, true); } catch (Exception e) {
+		 * e.printStackTrace(); }
+		 */
+
 		logger.info("Getting activity List for chunk no " + chunkNo + " !");
 		Session session = null;
-		String qryStr = null;
 
-		try{
-			session				= PersistenceManager.getSession();
-			Connection	conn	= ((SessionImplementor)session).connection();
-			
-			Statement st		= conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY );
-			qryStr 				= "select * from v_titles where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			
+		final class Items {
+			int id;
+			String amp_id;
+			String title;
+			String description;
+			String objective;
+			String purpose;
+			String results;
+			String numcont;
+			String CRIS;
+			String budgetNumber;
+			String newBudgetNumber;
+			// String contractingArr;
+			ArrayList<String> componentcode = new ArrayList<String>();
+		}
+		;
 
-			ResultSet rs		= st.executeQuery(qryStr);
-			
-			final class Items {
-				int id;
-				String amp_id;
-				String title;
-				String description;
-				String objective;
-				String purpose;
-				String results;
-				String numcont;
-				String CRIS;
-				String budgetNumber;
-				String newBudgetNumber;
-				//String contractingArr;
-				ArrayList<String> componentcode=new ArrayList<String>();
-			};
-			
-			HashMap list = new HashMap();
-			
-			Items x;
-			
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " activities!");
-			boolean isNext = rs.first();
-			
-			if (!isNext){
-				if ((mId != -1)&&(mId > chunkEnd)){
-					return new Integer(1);
-				}
-				else
-					if ((mId == -1) || (mId < chunkEnd))
+		session = PersistenceManager.getSession();
+
+		Integer wret = session.doReturningWork(new ReturningWork<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				int chunkStart = chunkNo * CHUNK_SIZE, chunkEnd = (chunkNo + 1) * CHUNK_SIZE;
+
+				Statement st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				String qryStr = "select * from v_titles where amp_activity_id >= " + chunkStart
+						+ " and amp_activity_id < " + chunkEnd + " ";
+
+				ResultSet rs = st.executeQuery(qryStr);
+
+				HashMap list = new HashMap();
+
+				Items x;
+
+				rs.last();
+				logger.info("Starting iteration of " + rs.getRow() + " activities!");
+				boolean isNext = rs.first();
+
+				if (!isNext) {
+					if ((mId != -1) && (mId > chunkEnd)) {
+						return new Integer(1);
+					} else if ((mId == -1) || (mId < chunkEnd))
 						return null;
-			}
-						
-			while (isNext){
-				x = new Items();
-				x.id = Integer.parseInt(rs.getString("amp_activity_id"));
-				x.title = rs.getString("name");
-				list.put(x.id, x);
-				isNext = rs.next();
-				//
-			}
-			//the correct view is v_amp_id, the view with name  v_ampid is not used 
-			qryStr = "select * from v_amp_id where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " project id's!");
-			isNext = rs.first();
-			while (isNext){
-				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-				x = (Items) list.get(actId);
-				if (x != null)				 
-					x.amp_id = rs.getString("amp_id");
-				isNext = rs.next();
-				//
-			}
-
-			qryStr = "select * from v_description where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " descriptions!");
-			isNext = rs.first();
-			while (isNext){
-				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-				x = (Items) list.get(actId);
-				if (x != null)				 
-					x.description = rs.getString("ebody");
-				isNext = rs.next();
-				//
-			}
-			
-			qryStr = "select * from v_objectives where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " objectives!");
-			isNext = rs.first();
-			while (isNext){
-				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-				x = (Items) list.get(actId);			
-				if (x != null)				 
-					x.objective = rs.getString("ebody");
-				isNext = rs.next();
-				//
-			}
-
-			qryStr = "select * from v_purposes where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " purposes!");
-			isNext = rs.first();
-			while (isNext){
-				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-				x = (Items) list.get(actId);
-				//you can't use "trim(dg_editor.body)" as column name ....
-				if(x != null)
-					x.purpose = rs.getString("ebody");
-				isNext = rs.next();
-				//
-			}
-			
-			qryStr = "select * from v_results where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " results!");
-			isNext = rs.first();
-			while (isNext){
-				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-				x = (Items) list.get(actId);
-				//you can't use "trim(dg_editor.body)" as column name .... 
-				if (x != null)
-					x.results = rs.getString("ebody");
-				isNext = rs.next();
-				//
-			}
-			
-			
-			//Bolivia contract number
-			qryStr = "select * from v_convenio_numcont where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " results!");
-			isNext = rs.first();
-			while (isNext){
-				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-				x = (Items) list.get(actId);
-				if (x != null)				 
-					x.numcont = rs.getString("numcont");
-				isNext = rs.next();
-				//
-			}
-			
-			
-			//Bolivia component code
-			qryStr = "select * from v_bolivia_component_code where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " amp_activity_components!");
-			isNext = rs.first();
-				
-			while (isNext){
-		    	int currActId = rs.getInt("amp_activity_id");
-		    	x = (Items) list.get(currActId);
-				if (x != null)				 
-					if (rs.getString("code")!=null){
-						x.componentcode.add(rs.getString("code"));
-					}
-				isNext = rs.next();
-			}
-			
-//			// Moldova's romanian title
-//			qryStr = "select * from v_contracting_arrangements where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
-//			rs = st.executeQuery(qryStr);
-//			rs.last();
-//			logger.info("Starting iteration of " + rs.getRow() + " contracting arrangements!");
-//			isNext = rs.first();
-//			while (isNext){
-//				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-//				x = (Items) list.get(actId);
-//				//you can't use "trim(dg_editor.body)" as column name .... 
-//				if (x != null)				 
-//					x.contractingArr = rs.getString("body");
-//				isNext = rs.next();
-//			}
-			
-			// new budget codes
-			qryStr = "select r.activity,string_agg(r.budget_code, ' ; ' ) as budget_codes from amp_org_role r, amp_activity a where a.amp_activity_id=r.activity and activity >= " + chunkStart + " and activity < " + chunkEnd + " group by activity";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " new budget codes!");
-			isNext = rs.first();
-			while (isNext){
-				int actId = Integer.parseInt(rs.getString("activity"));
-				x = (Items) list.get(actId);
-				if (x != null)				 
-					x.newBudgetNumber = rs.getString("budget_codes");
-				isNext = rs.next();
-			}
-			
-			//New fields for Senegal.
-			/*qryStr = "select * from v_senegal_cris_budget where amp_activity_id >= " + chunkStart
-					+ " and amp_activity_id < " + chunkEnd + " ";
-			rs = st.executeQuery(qryStr);
-			rs.last();
-			logger.info("Starting iteration of " + rs.getRow() + " amp_activity_components!");
-			isNext = rs.first();
-
-			while (isNext) {
-				int currActId = rs.getInt("amp_activity_id");
-				x = (Items) list.get(currActId);
-				x.CRIS = rs.getString("cris_number");
-				x.budgetNumber = rs.getString("budget_number");
-				isNext = rs.next();
-			}
-	 	 	*/
-			conn.close();
-
-			logger.info("Building the index ");
-			Iterator it = list.values().iterator();
-			while (it.hasNext()) {
-				Items el = (Items) it.next();
-				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, 
-						el.results,el.numcont, null /*el.contractingArr*/, el.componentcode, el.CRIS, el.budgetNumber, el.newBudgetNumber);
-				if (doc != null)
-					indexWriter.addDocument(doc);
-			}
-			list.clear();
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
 				}
+
+				while (isNext) {
+					x = new Items();
+					x.id = Integer.parseInt(rs.getString("amp_activity_id"));
+					x.title = rs.getString("name");
+					list.put(x.id, x);
+					isNext = rs.next();
+					//
+				}
+				// the correct view is v_amp_id, the view with name v_ampid
+				// is not used
+				qryStr = "select * from v_amp_id where amp_activity_id >= " + chunkStart + " and amp_activity_id < "
+						+ chunkEnd + " ";
+				rs = st.executeQuery(qryStr);
+				rs.last();
+				logger.info("Starting iteration of " + rs.getRow() + " project id's!");
+				isNext = rs.first();
+				while (isNext) {
+					int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+					x = (Items) list.get(actId);
+					if (x != null)
+						x.amp_id = rs.getString("amp_id");
+					isNext = rs.next();
+					//
+				}
+
+				qryStr = "select * from v_description where amp_activity_id >= " + chunkStart
+						+ " and amp_activity_id < " + chunkEnd + " ";
+				rs = st.executeQuery(qryStr);
+				rs.last();
+				logger.info("Starting iteration of " + rs.getRow() + " descriptions!");
+				isNext = rs.first();
+				while (isNext) {
+					int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+					x = (Items) list.get(actId);
+					if (x != null)
+						x.description = rs.getString("ebody");
+					isNext = rs.next();
+					//
+				}
+
+				qryStr = "select * from v_objectives where amp_activity_id >= " + chunkStart
+						+ " and amp_activity_id < " + chunkEnd + " ";
+				rs = st.executeQuery(qryStr);
+				rs.last();
+				logger.info("Starting iteration of " + rs.getRow() + " objectives!");
+				isNext = rs.first();
+				while (isNext) {
+					int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+					x = (Items) list.get(actId);
+					if (x != null)
+						x.objective = rs.getString("ebody");
+					isNext = rs.next();
+					//
+				}
+
+				qryStr = "select * from v_purposes where amp_activity_id >= " + chunkStart + " and amp_activity_id < "
+						+ chunkEnd + " ";
+				rs = st.executeQuery(qryStr);
+				rs.last();
+				logger.info("Starting iteration of " + rs.getRow() + " purposes!");
+				isNext = rs.first();
+				while (isNext) {
+					int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+					x = (Items) list.get(actId);
+					// you can't use "trim(dg_editor.body)" as column name
+					// ....
+					if (x != null)
+						x.purpose = rs.getString("ebody");
+					isNext = rs.next();
+					//
+				}
+
+				qryStr = "select * from v_results where amp_activity_id >= " + chunkStart + " and amp_activity_id < "
+						+ chunkEnd + " ";
+				rs = st.executeQuery(qryStr);
+				rs.last();
+				logger.info("Starting iteration of " + rs.getRow() + " results!");
+				isNext = rs.first();
+				while (isNext) {
+					int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+					x = (Items) list.get(actId);
+					// you can't use "trim(dg_editor.body)" as column name
+					// ....
+					if (x != null)
+						x.results = rs.getString("ebody");
+					isNext = rs.next();
+					//
+				}
+
+				// Bolivia contract number
+				qryStr = "select * from v_convenio_numcont where amp_activity_id >= " + chunkStart
+						+ " and amp_activity_id < " + chunkEnd + " ";
+				rs = st.executeQuery(qryStr);
+				rs.last();
+				logger.info("Starting iteration of " + rs.getRow() + " results!");
+				isNext = rs.first();
+				while (isNext) {
+					int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+					x = (Items) list.get(actId);
+					if (x != null)
+						x.numcont = rs.getString("numcont");
+					isNext = rs.next();
+					//
+				}
+
+				// Bolivia component code
+				qryStr = "select * from v_bolivia_component_code where amp_activity_id >= " + chunkStart
+						+ " and amp_activity_id < " + chunkEnd + " ";
+				rs = st.executeQuery(qryStr);
+				rs.last();
+				logger.info("Starting iteration of " + rs.getRow() + " amp_activity_components!");
+				isNext = rs.first();
+
+				while (isNext) {
+					int currActId = rs.getInt("amp_activity_id");
+					x = (Items) list.get(currActId);
+					if (x != null)
+						if (rs.getString("code") != null) {
+							x.componentcode.add(rs.getString("code"));
+						}
+					isNext = rs.next();
+				}
+
+				// // Moldova's romanian title
+				// qryStr =
+				// "select * from v_contracting_arrangements where amp_activity_id >= "
+				// + chunkStart + " and amp_activity_id < " + chunkEnd +
+				// " ";
+				// rs = st.executeQuery(qryStr);
+				// rs.last();
+				// logger.info("Starting iteration of " + rs.getRow() +
+				// " contracting arrangements!");
+				// isNext = rs.first();
+				// while (isNext){
+				// int actId =
+				// Integer.parseInt(rs.getString("amp_activity_id"));
+				// x = (Items) list.get(actId);
+				// //you can't use "trim(dg_editor.body)" as column name
+				// ....
+				// if (x != null)
+				// x.contractingArr = rs.getString("body");
+				// isNext = rs.next();
+				// }
+
+				// new budget codes
+				qryStr = "select r.activity,string_agg(r.budget_code, ' ; ' ) as budget_codes from amp_org_role r, amp_activity a where a.amp_activity_id=r.activity and activity >= "
+						+ chunkStart + " and activity < " + chunkEnd + " group by activity";
+				rs = st.executeQuery(qryStr);
+				rs.last();
+				logger.info("Starting iteration of " + rs.getRow() + " new budget codes!");
+				isNext = rs.first();
+				while (isNext) {
+					int actId = Integer.parseInt(rs.getString("activity"));
+					x = (Items) list.get(actId);
+					if (x != null)
+						x.newBudgetNumber = rs.getString("budget_codes");
+					isNext = rs.next();
+				}
+
+				// New fields for Senegal.
+				/*
+				 * qryStr =
+				 * "select * from v_senegal_cris_budget where amp_activity_id >= "
+				 * + chunkStart + " and amp_activity_id < " + chunkEnd + " "; rs
+				 * = st.executeQuery(qryStr); rs.last();
+				 * logger.info("Starting iteration of " + rs.getRow() +
+				 * " amp_activity_components!"); isNext = rs.first();
+				 * 
+				 * while (isNext) { int currActId =
+				 * rs.getInt("amp_activity_id"); x = (Items)
+				 * list.get(currActId); x.CRIS = rs.getString("cris_number");
+				 * x.budgetNumber = rs.getString("budget_number"); isNext =
+				 * rs.next(); }
+				 */
+
+				logger.info("Building the index ");
+				Iterator it = list.values().iterator();
+				while (it.hasNext()) {
+					Items el = (Items) it.next();
+					Document doc = activity2Document(String.valueOf(el.id), el.amp_id, el.title, el.description,
+							el.objective, el.purpose, el.results, el.numcont, null /*
+																					 * el
+																					 * .
+																					 * contractingArr
+																					 */, el.componentcode, el.CRIS,
+							el.budgetNumber, el.newBudgetNumber);
+					if (doc != null)
+						try {
+							indexWriter.addDocument(doc);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				}
+				list.clear();
+
+				try {
+					indexWriter.optimize();
+					// indexWriter.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return new Integer(1);
 			}
-		}
-		
-		try {
-			indexWriter.optimize();
-			//indexWriter.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new Integer(1);
+		});
+
+		return wret;
+
 	}
-	
+
     static Map<String, String> digestDocument(Document doc)
     {
     	Map<String, String> res = new LinkedHashMap<String, String>();

@@ -3,6 +3,7 @@ package org.digijava.module.aim.util;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -113,7 +114,7 @@ import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.internal.SessionImpl;
+import org.hibernate.jdbc.Work;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
@@ -3442,21 +3443,25 @@ public class DbUtil {
 		}
 	}
 
-	public static void deleteAllStamps(String idxName) {
+	public static void deleteAllStamps(final String idxName) {
 		Connection con;
 		try {
-		
-			con =((SessionImpl)PersistenceManager.getSession()).connection();
-			con.setAutoCommit(false);
-			con.createStatement().execute(
-					"DELETE FROM amp_lucene_index WHERE idxName like '"
-							+ idxName + "'");
-			con.commit();
+			Session session = PersistenceManager.getSession();
+			session.doWork(new Work() {
+				@Override
+				public void execute(Connection con) throws SQLException {
+					con.setAutoCommit(false);
+					con.createStatement().execute("DELETE FROM amp_lucene_index WHERE idxName like '" + idxName + "'");
+					con.commit();
+
+				}
+			});
 		} catch (Exception e) {
 			logger.error("Error while trying to delete Lucene db stamps: ", e);
 		}
 	}
-
+	
+	
 	public static void deleteStatus(Long id) {
 		AmpStatus oldStatusItem = new AmpStatus();
 		Session sess = null;

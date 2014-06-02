@@ -1194,7 +1194,7 @@ public class DbUtil {
       if (filter.getShowOnlyNationalProjects()) {
     	  oql += " AND act.ampActivityId IN (" + DashboardUtil.getInStatement(DashboardUtil.getNationalActivityList()) + ")";
       }
-      logger.warn(oql);  
+      //logger.warn(oql);
       return oql;
 	}
 	

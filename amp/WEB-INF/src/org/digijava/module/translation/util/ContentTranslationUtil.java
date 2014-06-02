@@ -166,9 +166,9 @@ public class ContentTranslationUtil {
         String objClass = getObjectClassName(obj);
         Long objId = getObjectId(obj);
         
-        String processedId = objClass+objId;
-        if( processed.contains(processedId) ) return;
-        processed.add(processedId);
+//        String processedId = objClass+objId;
+//        if( processed.contains(processedId) ) return;
+//        processed.add(processedId);
         
         String currentLocale = TLSUtils.getEffectiveLangCode();
 
@@ -237,7 +237,7 @@ public class ContentTranslationUtil {
                     		}
                     	}
                     }
-                }else if( field.getType().isAnnotationPresent(TranslatableClass.class) ) { //scan deeper levels
+                }/*else if( field.getType().isAnnotationPresent(TranslatableClass.class) ) { //scan deeper levels
                 	String fieldName = field.getName();
                     Method methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
                     Object o = methGetField.invoke(obj);
@@ -245,7 +245,7 @@ public class ContentTranslationUtil {
                 	if(o!=null) {
                 		cloneTranslations(o, formTranslations, processed);
                 	}
-                }
+                }*/
             }
         } catch (Exception e){
             logger.error("Can't clone translations", e);
@@ -269,7 +269,7 @@ public class ContentTranslationUtil {
     public static boolean prepareTranslations(Object obj, Serializable id, Object[] previousState, Object[] currentState,
     		String[] propertyNames){
     	boolean stateModified = false;
-        boolean isVersionable =  obj instanceof Multilingual;
+        boolean isVersionable = obj instanceof Versionable;
     	//get new object id - hibernate already updated it
         Long objectId = (Long)id;
         Class clazz = Hibernate.getClass(obj);
@@ -771,11 +771,12 @@ public class ContentTranslationUtil {
     }
 
     public static Class getObjectClass(Object obj) {
-    	return Hibernate.getClass(obj);
+    	//return Hibernate.getClass(obj);
+    	return obj.getClass();
     }
     
     public static String getObjectClassName(Object obj){
-        return Hibernate.getClass(obj).getName();
+        return getObjectClass(obj).getName();
     }
 
     /**

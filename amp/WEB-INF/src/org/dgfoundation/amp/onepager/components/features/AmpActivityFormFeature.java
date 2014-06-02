@@ -680,7 +680,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                     public void component(Component component, IVisit<Object> objectIVisit) {
                         IModel<?> model = component.getDefaultModel();
                         AbstractTextComponent atc = (AbstractTextComponent) component;
-                        logger.error(component.getParent().getId());	
+                        //logger.error(component.getParent().getId());	
                         boolean required = false;
                         List<IValidator> validators = atc.getValidators();
                         for (IValidator validator : validators) {

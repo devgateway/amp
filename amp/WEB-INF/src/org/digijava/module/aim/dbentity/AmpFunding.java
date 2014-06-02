@@ -16,7 +16,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
-// @TranslatableClass(displayName = "Funding")
+@TranslatableClass(displayName = "Funding")
 public class AmpFunding implements Serializable, Versionable, Cloneable {
 	
 	private static final long serialVersionUID = 1L;

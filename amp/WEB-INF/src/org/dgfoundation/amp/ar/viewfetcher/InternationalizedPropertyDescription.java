@@ -173,8 +173,7 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 	 * @param idSource
 	 * @return
 	 */
-	public String getSQLFunctionCall(String idSource)
-	{
+	public String getSQLFunctionCall(String idSource){
 		return getSQLFunctionCall(idSource, TLSUtils.getLangCode());
 	}
 		
@@ -182,8 +181,13 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 	 * equivalent to calling {@link #getSQLFunctionCall(null)}
 	 * @return
 	 */
-	public String getSQLFunctionCall()
-	{
+	public String getSQLFunctionCall(){
 		return getSQLFunctionCall(null);
 	}
+	
+	@Override
+	public boolean allIdsHaveValues(){
+		return true;
+	}
+
 }

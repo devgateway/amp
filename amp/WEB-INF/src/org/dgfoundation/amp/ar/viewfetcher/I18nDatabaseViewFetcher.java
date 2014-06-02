@@ -69,7 +69,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 			I18nViewColumnDescription colDesc = viewDesc.getColumnDescription(colNumberToColName.get(colNr));
 			
 			// create cacher for the property. NOTICE: Calculated properties use them at their own discretion(s)
-			PropertyDescription propDescr = colDesc.prop;			
+			PropertyDescription propDescr = colDesc.prop;
 			if (!cachers.containsKey(propDescr))
 				cachers.put(propDescr, new ColumnValuesCacher(propDescr));
 
@@ -226,7 +226,9 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 			
 			if (!cachers.get(colDesc.prop).values.containsKey(idToTranslate))
 			{
-				logger.error("error getting item with id " + idToTranslate + " from view " + viewName + ". This is either a bug or an inconsistent database. Returning null");
+				if (colDesc.prop.allIdsHaveValues()){
+					logger.error("error getting item with id " + idToTranslate + " from view " + viewName + ". This is either a bug or an inconsistent database. Returning null");
+				}
 				return null;
 				//throw new RuntimeException("error getting item with id " + idToTranslate + " from view " + viewName + ", column " + columnLabel);
 			}

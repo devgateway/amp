@@ -136,7 +136,7 @@ public class PIUseCase {
 					"selectedStatuses");
 			form.getSectorStatusesElements().add(activityStatusElement);
 
-			if (FeaturesUtil.isVisibleField("Sector", ampContext,session)) {
+			if (FeaturesUtil.isVisibleField("Sector")) {
 				HierarchyListableImplementation rootAmpSectors = new HierarchyListableImplementation();
 				rootAmpSectors.setLabel("Primary Sectors");
 				rootAmpSectors.setUniqueId(0 + "");
@@ -148,7 +148,7 @@ public class PIUseCase {
 				HierarchyListableUtil.changeTranslateable(sectorsElement.getRootHierarchyListable(), false);
 			}
 
-			if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext,session)) {
+			if (FeaturesUtil.isVisibleField("Secondary Sector")) {
 				HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
 				rootSecondaryAmpSectors.setLabel("Secondary Sectors");
 				rootSecondaryAmpSectors.setUniqueId("0");
@@ -160,7 +160,7 @@ public class PIUseCase {
 				HierarchyListableUtil.changeTranslateable(secondarySectorsElement.getRootHierarchyListable(), false);
 			}
 
-			if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext,session)) {
+			if (FeaturesUtil.isVisibleField("Tertiary Sector")) {
 				HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
 				rootTertiaryAmpSectors.setLabel("Tertiary Sector");
 				rootTertiaryAmpSectors.setUniqueId("0");

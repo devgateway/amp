@@ -96,15 +96,11 @@ public abstract class CategoryManagerBaseTest extends BasicActionTestCaseAdapter
 	}
 	
 	protected void cleanup() {
-		try{
-			AmpCategoryClass category	= CategoryManagerUtil.loadAmpCategoryClassByKey(TEST_ADD_CATEGORY_KEY);
-			Object [] params			= new Object[1];
-			params[0] 					= category.getId();
-			TestUtil.runPrivateMethod(CategoryManager.class, categoryManagerAction, "deleteCategory", params );
-		}
-		catch (NoCategoryClassException e) {
-			logger.info("No category found with key: " + TEST_ADD_CATEGORY_KEY + ". This is normal during setup phase.");
-		}
+	AmpCategoryClass category	= CategoryManagerUtil.loadAmpCategoryClassByKey(TEST_ADD_CATEGORY_KEY);
+	Object [] params			= new Object[1];
+	params[0] 					= category.getId();
+	TestUtil.runPrivateMethod(CategoryManager.class, categoryManagerAction, "deleteCategory", params );
+
 	}
 	
 	public void testAddCategory() {

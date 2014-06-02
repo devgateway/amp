@@ -124,7 +124,7 @@ public class ShowGisDashboard extends Action {
         gisForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
         gisForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
  	 	
- 	 	if (FeaturesUtil.isVisibleField("Sector", ampContext,session)){                
+ 	 	if (FeaturesUtil.isVisibleField("Sector")){                
 	 	 	HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
 	 	 	rootAmpSectors.setLabel("Primary Sectors");
 	 	 	rootAmpSectors.setUniqueId(0 + "");
@@ -134,7 +134,7 @@ public class ShowGisDashboard extends Action {
 	 	 	HierarchyListableUtil.changeTranslateable(sectorsElement.getRootHierarchyListable(), false);
  	 	}
  	 	
- 	 	if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext,session)){
+ 	 	if (FeaturesUtil.isVisibleField("Secondary Sector")){
  	 		HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
  	 		rootSecondaryAmpSectors.setLabel("Secondary Sectors");
  	 		rootSecondaryAmpSectors.setUniqueId("0");
@@ -144,7 +144,7 @@ public class ShowGisDashboard extends Action {
  	 		HierarchyListableUtil.changeTranslateable(secondarySectorsElement.getRootHierarchyListable(), false);
  	 	}
 
-        if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext,session)){
+        if (FeaturesUtil.isVisibleField("Tertiary Sector")){
  	 		HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
  	 		rootTertiaryAmpSectors.setLabel("Tertiary Sector");
  	 		rootTertiaryAmpSectors.setUniqueId("0");

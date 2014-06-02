@@ -411,8 +411,7 @@ public final class AdvancedReportUtil {
 
 		if (FeaturesUtil
 				.isVisibleModule(
-						"/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit",
-						ampContext,session)) {
+						"/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit")) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses parallel project implementation unit")
 					+ ":\n";
@@ -427,8 +426,7 @@ public final class AdvancedReportUtil {
 						activity.getCategories());
 
 		if (FeaturesUtil.isVisibleModule(
-				"/Activity Form/Aid Effectivenes/Project Implementation Mode",
-				ampContext,session)
+				"/Activity Form/Aid Effectivenes/Project Implementation Mode")
 				&& ampCategoryValue != null) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project Implementation Mode") + ":\n";
@@ -437,8 +435,7 @@ public final class AdvancedReportUtil {
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
-						"/Activity Form/Aid Effectivenes/Project has been approved by IMAC",
-						ampContext,session)) {
+						"/Activity Form/Aid Effectivenes/Project has been approved by IMAC")) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project has been approved by IMAC") + ":\n";
 			if(activity.getImacApproved()!=null){
@@ -448,8 +445,7 @@ public final class AdvancedReportUtil {
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
-						"/Activity Form/Aid Effectivenes/Government is meber of project steering committee",
-						ampContext,session)) {
+						"/Activity Form/Aid Effectivenes/Government is meber of project steering committee")) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Government is meber of project steering committee")
 					+ ":\n";
@@ -460,8 +456,7 @@ public final class AdvancedReportUtil {
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
-						"/Activity Form/Aid Effectivenes/Project is on budget",
-						ampContext,session)) {
+						"/Activity Form/Aid Effectivenes/Project is on budget")) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project is on budget") + ":\n";
 			if(activity.getOnBudget()!=null){
@@ -470,8 +465,7 @@ public final class AdvancedReportUtil {
 			aidEffectivenesToAdd += "\n";
 		}
 		if (FeaturesUtil.isVisibleModule(
-				"/Activity Form/Aid Effectivenes/Project is on parliament",
-				ampContext,session)) {
+				"/Activity Form/Aid Effectivenes/Project is on parliament")) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project is on parliament") + ":\n";
 			if(activity.getOnParliament()!=null){
@@ -481,8 +475,7 @@ public final class AdvancedReportUtil {
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
-						"/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account",
-						ampContext,session)) {
+						"/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account")) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project disburses directly into the Goverment single treasury account")
 					+ ":\n";
@@ -493,8 +486,7 @@ public final class AdvancedReportUtil {
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
-						"/Activity Form/Aid Effectivenes/Project uses national financial management systems",
-						ampContext,session)) {
+						"/Activity Form/Aid Effectivenes/Project uses national financial management systems")) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses national financial management systems")
 					+ ":\n";
@@ -506,8 +498,7 @@ public final class AdvancedReportUtil {
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
-						"/Activity Form/Aid Effectivenes/Project uses national procurement systems",
-						ampContext,session)) {
+						"/Activity Form/Aid Effectivenes/Project uses national procurement systems")) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses national procurement systems")
 					+ ":\n";
@@ -518,8 +509,7 @@ public final class AdvancedReportUtil {
 		}
 		if (FeaturesUtil
 				.isVisibleModule(
-						"/Activity Form/Aid Effectivenes/Project uses national audit systems",
-						ampContext,session)) {
+						"/Activity Form/Aid Effectivenes/Project uses national audit systems")) {
 			aidEffectivenesToAdd += TranslatorWorker
 					.translateText("Project uses national audit systems")
 					+ ":\n";

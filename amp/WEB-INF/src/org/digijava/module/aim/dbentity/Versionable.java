@@ -1,8 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
+import org.dgfoundation.amp.error.AmpNotImplementedException;
 import org.digijava.module.aim.util.Output;
 
-public interface Versionable extends Multilingual {
+public interface Versionable {
 
 	/**
 	 * Used to identify that's the same object when comparing 
@@ -12,8 +13,9 @@ public interface Versionable extends Multilingual {
 	 * 
 	 * @param obj
 	 * @return
+	 * @throws AmpNotImplementedException 
 	 */
-	public abstract boolean equalsForVersioning(Object obj);
+	public abstract boolean equalsForVersioning(Object obj) throws AmpNotImplementedException;
 
 	/**
 	 * Used two compare two objects in versioning, 
@@ -21,15 +23,17 @@ public interface Versionable extends Multilingual {
 	 * (see AmpFunding)
 	 * 
 	 * @return
+	 * @throws AmpNotImplementedException 
 	 */
-	public abstract Object getValue();
+	public abstract Object getValue() throws AmpNotImplementedException;
 
 	/**
 	 * Formatted output that will be used to show the contents
 	 * of the object
 	 * @return
+	 * @throws AmpNotImplementedException 
 	 */
-	public abstract Output getOutput();
+	public abstract Output getOutput() throws AmpNotImplementedException;
 
 	/**
 	 * Implement this method to prepare a persistent object (it exists in the DB
@@ -38,7 +42,7 @@ public interface Versionable extends Multilingual {
 	 * 
 	 * @param newActivity
 	 * @return
-	 * @throws Exception
+	 * @throws Exception, AmpNotImplementedException
 	 */
-	public abstract Object prepareMerge(AmpActivityVersion newActivity) throws Exception;
+	public abstract Object prepareMerge(AmpActivityVersion newActivity) throws Exception, AmpNotImplementedException;
 }

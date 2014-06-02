@@ -45,4 +45,11 @@ public interface PropertyDescription
 	 * @return
 	 */
 	public boolean getDeleteOriginal();
+	
+	/**
+	 * if true - ALL ids of this field should have values (example - multilingual-backed ones). 
+	 * Is false, for example, for DG_EDITOR-backed ones, as an entry might be translated into Romanian only and we are running an English report
+	 * @return
+	 */
+	public boolean allIdsHaveValues();
 }

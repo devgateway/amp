@@ -119,4 +119,10 @@ public class GeneratedPropertyDescription implements PropertyDescription
 	{
 		return calculator.getDeleteOriginal();
 	}
+	
+	@Override
+	public boolean allIdsHaveValues(){
+		return true;
+	}
+
 }

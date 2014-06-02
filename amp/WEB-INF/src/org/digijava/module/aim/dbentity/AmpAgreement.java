@@ -3,12 +3,14 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.dgfoundation.amp.error.AmpNotImplementedException;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.util.Output;
 import org.springframework.transaction.annotation.Transactional;
 
 @TranslatableClass (displayName = "Agreement")
-public class AmpAgreement implements Serializable, Multilingual {
+public class AmpAgreement implements Serializable, Versionable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
@@ -64,5 +66,25 @@ public class AmpAgreement implements Serializable, Multilingual {
 	}
 	public void setCloseDate(Date closeDate) {
 		this.closeDate = closeDate;
+	}
+
+	@Override
+	public boolean equalsForVersioning(Object obj) throws AmpNotImplementedException {
+		throw new AmpNotImplementedException();
+	}
+
+	@Override
+	public Object getValue() throws AmpNotImplementedException {
+		throw new AmpNotImplementedException();
+	}
+
+	@Override
+	public Output getOutput() throws AmpNotImplementedException{
+		throw new AmpNotImplementedException();
+	}
+
+	@Override
+	public Object prepareMerge(AmpActivityVersion newActivity) throws Exception, AmpNotImplementedException {
+		throw new AmpNotImplementedException();
 	}
 }

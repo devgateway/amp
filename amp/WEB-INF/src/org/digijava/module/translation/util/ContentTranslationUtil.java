@@ -13,7 +13,6 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.Multilingual;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -160,15 +159,16 @@ public class ContentTranslationUtil {
      * @param obj Object that needs translation cloning
      * @param formTranslations the list of translations that were modified using the activity form
      * @param processed keeps track of processed object to avoid infinite recursive calls via circular references 
+     * and it should be empty at the first function call
      */
     private static void cloneTranslations(Object obj, Collection<AmpContentTranslation> formTranslations, Set<String> processed){
     	Hibernate.initialize(obj);
         String objClass = getObjectClassName(obj);
         Long objId = getObjectId(obj);
         
-//        String processedId = objClass+objId;
-//        if( processed.contains(processedId) ) return;
-//        processed.add(processedId);
+        String processedId = objClass+objId;
+        if( processed.contains(processedId) ) return;
+        processed.add(processedId);
         
         String currentLocale = TLSUtils.getEffectiveLangCode();
 
@@ -237,7 +237,7 @@ public class ContentTranslationUtil {
                     		}
                     	}
                     }
-                }/*else if( field.getType().isAnnotationPresent(TranslatableClass.class) ) { //scan deeper levels
+                }else if( field.getType().isAnnotationPresent(TranslatableClass.class) && Versionable.class.isAssignableFrom(field.getType())) { //scan deeper levels
                 	String fieldName = field.getName();
                     Method methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
                     Object o = methGetField.invoke(obj);
@@ -245,7 +245,7 @@ public class ContentTranslationUtil {
                 	if(o!=null) {
                 		cloneTranslations(o, formTranslations, processed);
                 	}
-                }*/
+                }
             }
         } catch (Exception e){
             logger.error("Can't clone translations", e);
@@ -771,8 +771,8 @@ public class ContentTranslationUtil {
     }
 
     public static Class getObjectClass(Object obj) {
-    	//return Hibernate.getClass(obj);
-    	return obj.getClass();
+    	return Hibernate.getClass(obj);
+    	//return obj.getClass();
     }
     
     public static String getObjectClassName(Object obj){

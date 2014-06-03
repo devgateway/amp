@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,6 +45,8 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.apache.commons.lang.StringEscapeUtils;
+
 
 /**
  * Comment panel to be used in AjaxTabbedPanel, wrapped by a AmpCommentTab
@@ -197,7 +200,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 								} else {
 									replaceComponentTagBody(markupStream,
 											openTag,
-											"<div class=\"comment-word-break\">"+getDefaultModelObjectAsString()+"</div>");
+											"<div class=\"comment-word-break\">"+StringEscapeUtils.escapeHtml(getDefaultModelObjectAsString())+"</div>");
 								}
 							}
 						};
@@ -258,6 +261,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 					AmpTeamMember user = TeamMemberUtil.getAmpTeamMemberCached(memberId);
 					c.setMemberName(user.getUser().getName());
 					c.setComment(trnAddCommentModel.getObject().toString());
+					
 					String msg = savedMsg;
 					
 					if (org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS) == null)

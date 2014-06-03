@@ -75,10 +75,10 @@ public class TransparentFMWebMarkupContainer extends TransparentWebMarkupContain
 			}
 		}
 		boolean fmMode = ((AmpAuthWebSession)getSession()).isFmMode();
+		if( OnePagerApp.IS_DEVELOPMENT_MODE ) {
+			checkInvalidFMDeclarations(names+";");
+		}
 		if (allInvisible) {
-			if( OnePagerApp.IS_DEVELOPMENT_MODE ) {
-				checkInvalidFMDeclarations(names+";");
-			}
 			this.setVisible(fmMode?true:false);
 		}
 	}
@@ -94,9 +94,7 @@ public class TransparentFMWebMarkupContainer extends TransparentWebMarkupContain
             	//validate children from current markup only
             	String wickedId = "wicket:id=\""+child.getId()+"\"";
             	boolean check = markupStr.contains(wickedId);
-            	//if at this point the child component is still marked as visible, though child fm visibility should have been already validated
-            	//then let's see if its FM name was declared in this outer container
-            	if( check && child.isVisible() ) {
+            	if( check ){
             		if(!fmNames.contains(child.getFMName()+";")){
             			logger.error(wickedId+" has \""+child.getFMName()+"\" not declared in the FM names=\""+fmNames+"\", file:"+markupFileName);
             		}

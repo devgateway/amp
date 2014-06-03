@@ -981,6 +981,7 @@
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<version>1.8</version>
 				<executions>
+					<!-- 
 					<execution>
 						<id>add-source</id>
 						<phase>generate-resources</phase>
@@ -993,6 +994,7 @@
 							</sources>
 						</configuration>
 					</execution>
+					 -->
 				</executions>
 			</plugin>
 

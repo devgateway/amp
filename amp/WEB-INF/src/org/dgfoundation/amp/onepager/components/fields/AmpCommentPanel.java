@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -197,7 +198,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 								} else {
 									replaceComponentTagBody(markupStream,
 											openTag,
-											"<div class=\"comment-word-break\">"+getDefaultModelObjectAsString()+"</div>");
+											"<div class=\"comment-word-break\">"+StringEscapeUtils.escapeHtml(getDefaultModelObjectAsString())+"</div>");
 								}
 							}
 						};

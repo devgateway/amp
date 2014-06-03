@@ -15,9 +15,9 @@
   		ALTER HERE to match your configuration
    -->
   <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-  <property name="hibernate.connection.url">jdbc:postgresql://localhost/amp_tests_26_amp28</property>
+  <property name="hibernate.connection.url">jdbc:postgresql://localhost/amp_tests_26_amp27</property>
   <property name="hibernate.connection.username">amp</property>
-  <property name="hibernate.connection.password">amp321</property>
+  <property name="hibernate.connection.password">amp</property>
   <!--
   		END ALTER HERE
    -->

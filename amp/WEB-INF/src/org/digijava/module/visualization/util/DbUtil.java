@@ -1835,9 +1835,9 @@ public class DbUtil {
         }
         
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
-        if (donorCondition) {
+        /*if (donorCondition) {
         	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
-        } 
+        }*/ 
         if (implementingCondition) {
         	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
         } 
@@ -2075,9 +2075,9 @@ public class DbUtil {
         }
 
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
-        if (donorCondition) {
+        /*if (donorCondition) {
         	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
-        } 
+        }*/ 
         if (implementingCondition) {
         	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
         } 
@@ -2329,9 +2329,9 @@ public class DbUtil {
         oql += " and f.sourceRole.roleCode = '" + Constants.ROLE_CODE_DONOR + "'";
 
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
-        if (donorCondition) {
+        /*if (donorCondition) {
         	oql += " and role.roleCode='DN' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelOrgIds()) + ") ";
-        } 
+        }*/ 
         if (implementingCondition) {
         	oql += " and role.roleCode='IA' and orole.organisation in (" + DashboardUtil.getInStatement(filter.getSelImplementingAgencyIds()) + ") ";
         } 

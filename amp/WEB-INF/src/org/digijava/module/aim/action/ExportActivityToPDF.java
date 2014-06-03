@@ -2952,18 +2952,9 @@ public class ExportActivityToPDF extends Action {
 					addTotalsOutput(fundingTable, "UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
 				}
 				
-				//Consumption Rate
-				/*if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext))*/
-				{
-					addTotalsOutput(fundingTable, "Consumption Rate", myForm.getFunding().getConsumptionRate(), currencyCode);
-				}
-				
-				// Delivery Rate
-				if(FeaturesUtil.isVisibleFeature("Delivery Rate"))
-				{
-					addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), currencyCode);
-				}	
-				
+				addTotalsOutput(fundingTable, "Consumption Rate", myForm.getFunding().getConsumptionRate(), currencyCode);
+				addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), currencyCode);
+			
 			}				
 		}
 		PdfPCell fundingCell=new PdfPCell(fundingTable);

@@ -43,7 +43,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGPISurveyIndicatorCalcFormula</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityInternalId</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpAgreement</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpStatus</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpPledge</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSector</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivitySector</hibernate-class>
@@ -51,7 +50,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLocation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrganisation</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRole</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpLevel</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpKmDocuments</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTheme</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFiscalCalendar</hibernate-class>
@@ -75,9 +73,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReports</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportLog</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSectorScheme</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTermsAssist</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpPages</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpFilters</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamReports</hibernate-class>				
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegion</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpZone</hibernate-class>
@@ -89,7 +84,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgGroup</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpField</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComments</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamPageFilters</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRole</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumns</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumnsFilters</hibernate-class>

@@ -56,7 +56,6 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 	private Country countryId;
 	private String orgUrl;
 	private String acronym;
-	private AmpLevel levelId;
 	
 	private AmpCategoryValueLocations region;
     private AmpCategoryValue implemLocationLevel;
@@ -398,18 +397,6 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 		this.countryId = countryId;
 	}
 	
-	/**
-	 * @return Returns the levelId.
-	 */
-	public AmpLevel getLevelId() {
-		return levelId;
-	}
-	/**
-	 * @param levelId The levelId to set.
-	 */
-	public void setLevelId(AmpLevel levelId) {
-		this.levelId = levelId;
-	}
 	/**
 	 * @return Returns the orgGrpId.
 	 */

@@ -13,7 +13,7 @@ public class RepairDbUtil {
 	
 	public static void repairDb() {
 		repairInexistentActivityCreators();
-		repairInexistentPageInPageFilters();
+		//repairInexistentPageInPageFilters();
 	}
 	
 	/**
@@ -42,26 +42,26 @@ public class RepairDbUtil {
 		}
 	}
 	
-	public static void repairInexistentPageInPageFilters() {
-		Session session = null;
-		String qryStr = null;
-		
-		try{
-			session				= PersistenceManager.getSession();
-			qryStr 				= "DELETE FROM amp_team_page_filters WHERE page NOT IN (SELECT amp_page_id FROM amp_pages)" ;
-			int result			= session.createSQLQuery(qryStr).executeUpdate();
-				
-			if (result > 0) {
-				logger.error ("There was an error with inexistent amp_page in amp_team_page_filter --- deleted " + result + "rows" );
-			}
-		}
-	
-		
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		}
-	}
+//	public static void repairInexistentPageInPageFilters() {
+//		Session session = null;
+//		String qryStr = null;
+//		
+//		try{
+//			session				= PersistenceManager.getSession();
+//			qryStr 				= "DELETE FROM amp_team_page_filters WHERE page NOT IN (SELECT amp_page_id FROM amp_pages)" ;
+//			int result			= session.createSQLQuery(qryStr).executeUpdate();
+//				
+//			if (result > 0) {
+//				logger.error ("There was an error with inexistent amp_page in amp_team_page_filter --- deleted " + result + "rows" );
+//			}
+//		}
+//	
+//		
+//		catch (Exception ex) {
+//			logger.error("Exception : " + ex.getMessage());
+//			ex.printStackTrace(System.out);
+//		}
+//	}
 	
 	public static void repairBannedUsersAreStillInATeam() {
 		Session session = null;

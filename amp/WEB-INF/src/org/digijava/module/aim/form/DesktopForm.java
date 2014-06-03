@@ -33,15 +33,11 @@ public class DesktopForm extends ActionForm {
 	private int[] yearRange;
 	private Collection activityRisks;
 
-	private boolean filtersPresent;
 	private Long teamId;
 	private boolean teamHead;
 	private boolean totalCalculated;
 
 	private String searchKey;
-
-	private ArrayList activities;
-	
 
 	private String totalCommitments;
 	private String defCurrency;
@@ -62,18 +58,6 @@ public class DesktopForm extends ActionForm {
 	private String planMinRank;
 	private Collection actRankColl;
 
-	/**
-	 * @return Returns the activities.
-	 */
-	public ArrayList getActivities() {
-		return activities;
-	}
-	/**
-	 * @param activities The activities to set.
-	 */
-	public void setActivities(ArrayList activities) {
-		this.activities = activities;
-	}
 	/**
 	 * @return Returns the calendars.
 	 */
@@ -134,18 +118,7 @@ public class DesktopForm extends ActionForm {
 	public void setDonors(Collection donors) {
 		this.donors = donors;
 	}
-	/**
-	 * @return Returns the filtersPresent.
-	 */
-	public boolean isFiltersPresent() {
-		return filtersPresent;
-	}
-	/**
-	 * @param filtersPresent The filtersPresent to set.
-	 */
-	public void setFiltersPresent(boolean filtersPresent) {
-		this.filtersPresent = filtersPresent;
-	}
+
 	/**
 	 * @return Returns the fltrCalendar.
 	 */

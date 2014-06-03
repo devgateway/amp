@@ -48,7 +48,7 @@ public class AmpRelatedOrgsModel extends AbstractReadOnlyModel<List<AmpOrganisat
 			// This is needed because some countries dont use the Role Selector.
 			if (roleChoiceContainer.getParent().isVisible() == false) {
 				// IMPORTANT: The isVisible() check can not be done on the class AmpOrgRoleSelectorComponent because it will return always true.
-				List<AmpOrganisation> allOrganizations = DbUtil.getAllOrganisation();
+				List<AmpOrganisation> allOrganizations = DbUtil.getAmpOrganisations();
 				return allOrganizations;
 			}
 

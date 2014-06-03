@@ -41,9 +41,6 @@
 
 		<many-to-one name="orgGrpId" column="org_grp_id"
 			class="org.digijava.module.aim.dbentity.AmpOrgGroup" cascade="none" />
-
-		<many-to-one name="levelId" column="level_id"
-			class="org.digijava.module.aim.dbentity.AmpLevel" cascade="none" />
 			
 		<many-to-one name="implemLocationLevel" column="imp_level_id"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />

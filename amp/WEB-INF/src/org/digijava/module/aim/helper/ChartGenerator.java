@@ -60,42 +60,6 @@ public class ChartGenerator {
 	public static final String KEY_RISK_PREFIX="aim:risk:";
 	public static final String KEY_PERFORMANCE_PREFIX="aim:performance:";
 
-	public static String getPortfolioRiskChartFileName(HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight,String url) throws WorkerException {
-		Collection activityIds = new ArrayList();
-		if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
-			ArrayList projects = (ArrayList) session.getAttribute(Constants.AMP_PROJECTS);
-			for (int i = 0;i < projects.size();i ++) {
-				AmpProject proj = (AmpProject) projects.get(i);
-				activityIds.add(proj.getAmpActivityId());
-			}
-		}
-
-		ArrayList col = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorRisks(activityIds);
-
-
-        for (Iterator valIter = col.iterator(); valIter.hasNext(); ) {
-            MEIndicatorRisk item = (MEIndicatorRisk) valIter.next();
-            String value = item.getRisk();
-            String key =  value.toLowerCase();
-            key = key.replaceAll(" ", "");
-            String msg = TranslatorWorker.translateText(key);
-            item.setRisk(msg);
-        }
-
-		Collections.sort(col);
-		ChartParams cp = new ChartParams();
-		cp.setChartHeight(chartHeight);
-		cp.setChartWidth(chartWidth);
-		cp.setData(col);
-		cp.setTitle("");
-		cp.setSession(session);
-		cp.setWriter(pw);
-		cp.setUrl(url);
-
-
-		return generateRiskChart(cp);
-	}
 
 	public static String getActivityRiskChartFileName(Long actId,
 			HttpSession session,PrintWriter pw,
@@ -148,59 +112,6 @@ public class ChartGenerator {
 		cp.setWriter(pw);
 		cp.setUrl(url);
 		return generateRiskChart(cp);
-	}
-
-	public static String getPortfolioPerformanceChartFileName(Long actId,Long indId,
-			Integer page,HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight,String url,boolean includeBaseline, HttpServletRequest request) throws WorkerException {
-
-		Collection activityIds = new ArrayList();
-		if (actId.longValue() < 0) {
-			if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
-				ArrayList projects = (ArrayList) session.getAttribute(Constants.AMP_PROJECTS);
-				for (int i = 0;i < projects.size();i ++) {
-					AmpProject proj = (AmpProject) projects.get(i);
-					activityIds.add(proj.getAmpActivityId());
-				}
-			}
-		} else {
-			activityIds.add(actId);
-		}
-
-		Collection col = new ArrayList();
-		ArrayList temp = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorValues(
-				activityIds,indId,includeBaseline, request);
-
-		if ((actId.longValue() > 0 && indId.longValue() <= 0) ||
-				(actId.longValue() <= 0 && indId.longValue() > 0)) {
-			int st = (page.intValue() - 1) * 30;
-			int ed = st + 30;
-			ed = (ed > temp.size()) ? temp.size() : ed;
-			for (int i = st; i < ed;i ++) {
-				col.add(temp.get(i));
-			}
-		} else {
-			col = temp;
-		}
-        for (Iterator valIter = col.iterator(); valIter.hasNext(); ) {
-            MEIndicatorValue item = (MEIndicatorValue) valIter.next();
-            String value = item.getType();
-            String key = value.toLowerCase();
-            key = key.replaceAll(" ", "");
-            String msg = TranslatorWorker.translateText(key);
-            item.setType(msg);
-        }
-
-		ChartParams cp = new ChartParams();
-		cp.setChartHeight(chartHeight);
-		cp.setChartWidth(chartWidth);
-		cp.setData(col);
-		cp.setTitle("");
-		cp.setSession(session);
-		cp.setWriter(pw);
-		cp.setUrl(url);
-
-		return generatePerformanceChart(cp,request);
 	}
 
 	public static String getActivityPerformanceChartFileName(Long actId,HttpSession session,PrintWriter pw,
@@ -287,37 +198,6 @@ public class ChartGenerator {
 		}
 		
 
-
-//		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
-//			if(valuesActivity!=null && valuesActivity.size()>0){
-//				Iterator<IndicatorActivity> it=valuesActivity.iterator();
-//				while(it.hasNext()){
-//					 IndicatorActivity indActivity=it.next();
-//					 values=indActivity.getValues();
-//					 for(Iterator valuesIter=values.iterator();valuesIter.hasNext();){
-//						AmpIndicatorValue value=(AmpIndicatorValue)valuesIter.next();
-//						String val=new Integer(value.getValueType()).toString();
-//						String key = KEY_PERFORMANCE_PREFIX+ val.toLowerCase();
-//						key = key.replaceAll(" ", "");
-//						String msg = CategoryManagerUtil.translate(key, request, val);
-//						//item.setType(msg);
-//
-//					}
-//				}
-//			}
-
-
-
-//		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId,includeBaseline);
-//        for (Iterator valIter = meIndValues.iterator(); valIter.hasNext(); ) {
-//            MEIndicatorValue item = (MEIndicatorValue) valIter.next();
-//            String value = item.getType();
-//            String key = KEY_PERFORMANCE_PREFIX+ value.toLowerCase();
-//            key = key.replaceAll(" ", "");
-//            String msg = CategoryManagerUtil.translate(key, request, value);
-//            item.setType(msg);
-//        }
-
         String retVal = null;
 
         if (values != null) {
@@ -332,10 +212,6 @@ public class ChartGenerator {
 
             retVal = generatePerformanceChart(cp,request);
         }
-
-
-
-
 
 		return retVal;
 	}

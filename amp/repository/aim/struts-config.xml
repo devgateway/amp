@@ -70,8 +70,6 @@
     <form-bean name="aimSectorsForm" type="org.digijava.module.aim.form.SectorsForm" />
     <form-bean name="aimAddSectorForm" type="org.digijava.module.aim.form.AddSectorForm" />
     <form-bean name="aimSectorClassConfigForm" type="org.digijava.module.aim.form.SectorClassConfigForm" />
-    <form-bean name="aimStatusListForm" type="org.digijava.module.aim.form.StatusListForm" />
-    <form-bean name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" />
     <form-bean name="aimRelatedLinksForm" type="org.digijava.module.aim.form.RelatedLinksForm" />
     <form-bean name="aimMulitlateralbyDonorForm" type="org.digijava.module.aim.form.MulitlateralbyDonorForm" />
     <form-bean name="aimCommitmentbySectorForm" type="org.digijava.module.aim.form.CommitmentbySectorForm" />
@@ -105,8 +103,7 @@
     <form-bean name="aimTeamAuditListForm" type="org.digijava.module.aim.form.TeamAuditForm" />
     <form-bean name="aimMemberReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
     <form-bean name="aimIndicatorForm" type="org.digijava.module.aim.form.IndicatorForm" />
-    <form-bean name="aimTeamPagesForm" type="org.digijava.module.aim.form.TeamPagesForm" />
-    <form-bean name="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm" />
+        <form-bean name="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm" />
     <form-bean name="aimViewActivityHistoryForm" type="org.digijava.module.aim.form.ViewActivityHistoryForm" />
     <form-bean name="aimCompareActivityVersionsForm" type="org.digijava.module.aim.form.CompareActivityVersionsForm" />
     <form-bean name="aimSelectSectorForm" type="org.digijava.module.aim.action.SelectSectorForm" />
@@ -1058,18 +1055,6 @@
     <action name="aimIndicatorForm" path="/aim/indicatorValues" scope="request" type="org.digijava.module.aim.action.IndicatorValues" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_indicatorValues" />
     </action>
-    <action name="aimTeamPagesForm" path="/aim/configureTeamPage" scope="request" type="org.digijava.module.aim.action.ShowConfigureTeamPage">
-      <forward name="showConfigurePages" path="/showLayout.do?layout=teamPagesConfigure" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimTeamPagesForm" path="/aim/showConfigureTeam" scope="request" type="org.digijava.module.aim.action.ShowConfigureTeam">
-      <forward name="showFilters" path="/showLayout.do?layout=configureTeam" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimTeamPagesForm" path="/aim/saveTeamPageConfiguration" scope="request" type="org.digijava.module.aim.action.SaveTeamPageConfiguration">
-      <forward name="forward" path="/aim/showConfigureTeam.do" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
     <action path="/aim/changeTeamReportStatus" scope="request" type="org.digijava.module.aim.action.ChangeTeamReportStatus">
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
@@ -1180,24 +1165,6 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action> 
     <action forward="/showLayout.do?layout=adminHome" path="/aim/admin" type="org.digijava.module.aim.action.ShowAdminHome" />
-     <!--<action name="aimStatusListForm" path="/aim/statusManager" scope="request" type="org.digijava.module.aim.action.StatusManager" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=statusManager" />
-    </action>  -->
-    <action name="aimStatusItemForm" path="/aim/getStatusItem" scope="session" type="org.digijava.module.aim.action.GetStatusItem" validate="false">
-      <forward name="deleteforward" path="/showLayout.do?layout=deleteStatus" />
-      <forward name="editforward" path="/showLayout.do?layout=updateStatus" />
-    </action>
-    <action name="aimStatusItemForm" path="/aim/updateStatus" scope="session" type="org.digijava.module.aim.action.UpdateStatus" validate="false">
-      <forward name="forward" path="/aim/statusManager.do" redirect="true" />
-      <forward name="returnforward" path="/aim/getStatusItem.do" redirect="true" />
-    </action>
-    <action name="aimStatusItemForm" path="/aim/addStatus" scope="request" type="org.digijava.module.aim.action.AddStatus" validate="false">
-      <forward name="addforward" path="/aim/statusManager.do" />
-      <forward name="forward" path="/showLayout.do?layout=addStatus" />
-    </action>
-    <action name="aimStatusItemForm" path="/aim/deleteStatus" scope="request" type="org.digijava.module.aim.action.DeleteStatus" validate="false">
-      <forward name="forward" path="/aim/statusManager.do" redirect="true" />
-    </action>
     <action name="aimAdvancedReportForm" path="/aim/viewNewAdvancedReport" scope="session" type="org.digijava.module.aim.action.ViewNewAdvancedReport" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewNewAdvancedReport" />
     </action>

@@ -27,7 +27,6 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	@TranslatableField
 	private String orgGrpCode;
 	
-	private AmpLevel levelId;	// defunct
 	//private Set organizations; 
 	
 	private AmpOrgType orgType;	// a mandatory field, added for donor-access
@@ -56,18 +55,7 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	public void setAmpOrgGrpId(Long ampOrgGrpId) {
 		this.ampOrgGrpId = ampOrgGrpId;
 	}
-	/**
-	 * @return Returns the levelId.
-	 */
-	public AmpLevel getLevelId() {
-		return levelId;
-	}
-	/**
-	 * @param levelId The levelId to set.
-	 */
-	public void setLevelId(AmpLevel levelId) {
-		this.levelId = levelId;
-	}
+
 	/**
 	 * @return Returns the orgGrpCode.
 	 */

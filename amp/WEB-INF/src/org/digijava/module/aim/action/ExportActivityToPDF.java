@@ -277,7 +277,7 @@ public class ExportActivityToPDF extends Action {
 
 			//objective comments
 			HashMap allComments = new HashMap();
-			ArrayList<AmpComments> colAux	= null;
+			List<AmpComments> colAux	= null;
             Collection ampFields = DbUtil.getAmpFields();
             
             if (ampFields!=null) {

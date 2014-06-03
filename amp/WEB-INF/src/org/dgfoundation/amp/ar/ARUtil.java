@@ -343,25 +343,6 @@ public final class ARUtil {
 		return result;
 	}
 
-	public static Collection getFilterDonors(AmpTeam ampTeam) {
-		ArrayList dbReturnSet = null;
-		ArrayList ret = new ArrayList();
-		dbReturnSet = DbUtil.getAmpDonors(ampTeam.getAmpTeamId());
-		// logger.debug("Donor Size: " + dbReturnSet.size());
-		Iterator iter = dbReturnSet.iterator();
-
-		while (iter.hasNext()) {
-			AmpOrganisation ampOrganisation = (AmpOrganisation) iter.next();
-			if (ampOrganisation.getAcronym().length() > 20) {
-				String temp = ampOrganisation.getAcronym().substring(0, 20)
-						+ "...";
-				ampOrganisation.setAcronym(temp);
-			}
-			ret.add(ampOrganisation);
-		}
-
-		return ret;
-	}
 
 	public static Collection<AmpOrgGroup> filterDonorGroups(Collection donorGroups) {
 		Collection<AmpOrgGroup> ret = new ArrayList<AmpOrgGroup>();

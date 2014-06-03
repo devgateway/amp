@@ -360,7 +360,7 @@ public class EditActivity extends Action {
         }
       }
       
-      ArrayList<AmpActivityBudgetStructure> budgetStructure = DbUtil.getBudgetStructure(eaForm.getActivityId());
+      List<AmpActivityBudgetStructure> budgetStructure = DbUtil.getBudgetStructure(eaForm.getActivityId());
       eaForm.setBudgetStructure(budgetStructure);
       List nationalPlanObjectivePrograms=new ArrayList();
       List primaryPrograms=new ArrayList();
@@ -372,15 +372,14 @@ public class EditActivity extends Action {
       eaForm.getPrograms().setTertiaryPrograms(tertiaryPrograms);
       
     //allComments
-	  ArrayList<AmpComments> colAux	= null;
+	  List<AmpComments> colAux	= null;
       Collection ampFields 			= DbUtil.getAmpFields();
       HashMap allComments 			= new HashMap();
       
       if (ampFields!=null) {
       	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
               AmpField field = (AmpField) itAux.next();
-              	colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),
-                                                    activityId);
+              	colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(), activityId);
               allComments.put(field.getFieldName(), colAux);
             }
       }

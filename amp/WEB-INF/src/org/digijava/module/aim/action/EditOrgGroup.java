@@ -74,7 +74,7 @@ public class EditOrgGroup extends Action {
 			AmpOrgGroup ampGrp = new AmpOrgGroup();
 			ampGrp.setOrgGrpName(editForm.getOrgGrpName());
 			ampGrp.setOrgGrpCode(editForm.getOrgGrpCode());
-			AmpOrgType ot = DbUtil.getOrgType(editForm.getOrgTypeId());
+			AmpOrgType ot = DbUtil.getAmpOrgType(editForm.getOrgTypeId());
 			ampGrp.setOrgType(ot);
 			ARUtil.clearOrgGroupTypeDimensions();
 			

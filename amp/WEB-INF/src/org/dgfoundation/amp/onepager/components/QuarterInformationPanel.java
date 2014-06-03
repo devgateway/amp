@@ -62,7 +62,7 @@ public class QuarterInformationPanel extends AmpFieldPanel {
 			String defaultCalendar = FeaturesUtil
 					.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 			Long fiscalCalId = Long.parseLong(defaultCalendar);
-			fiscalCalendar = DbUtil.getFiscalCalendar(fiscalCalId);
+			fiscalCalendar = DbUtil.getAmpFiscalCalendar(fiscalCalId);
 		}
 
 		int currentFiscalYear = Util.getCurrentFiscalYear();

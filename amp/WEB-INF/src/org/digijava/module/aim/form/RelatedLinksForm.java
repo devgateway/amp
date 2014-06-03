@@ -6,6 +6,7 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,7 +18,7 @@ import org.digijava.module.aim.helper.Documents;
 public class RelatedLinksForm 
 extends ActionForm {
 	
-	private Collection allDocuments;
+	private List<Documents> allDocuments;
 	private Collection relatedLinks;
 	private Collection pages;
 	private String addDocuments;
@@ -79,18 +80,15 @@ extends ActionForm {
 	public void setPages(Collection pages) {
 		this.pages = pages;
 	}
-	/**
-	 * @return Returns the relatedLinks.
-	 */
+
 	public Collection getRelatedLinks() {
 		return relatedLinks;
 	}
-	/**
-	 * @param relatedLinks The relatedLinks to set.
-	 */
+
 	public void setRelatedLinks(Collection relatedLinks) {
 		this.relatedLinks = relatedLinks;
 	}
+			
 	/**
 	 * @return Returns the removeDocuments.
 	 */
@@ -118,13 +116,13 @@ extends ActionForm {
 	/**
 	 * @return Returns the allDocuments.
 	 */
-	public Collection getAllDocuments() {
+	public List<Documents> getAllDocuments() {
 		return allDocuments;
 	}
 	/**
 	 * @param allDocuments The allDocuments to set.
 	 */
-	public void setAllDocuments(Collection allDocuments) {
+	public void setAllDocuments(List<Documents> allDocuments) {
 		this.allDocuments = allDocuments;
 	}
 	/**
@@ -143,7 +141,6 @@ extends ActionForm {
 	public void reset(ActionMapping mapping,HttpServletRequest request) {
 		if (reset) {
 			allDocuments = null;
-			relatedLinks = null;
 			pages = null;
 			addDocuments=  null;
 			removeDocuments = null;

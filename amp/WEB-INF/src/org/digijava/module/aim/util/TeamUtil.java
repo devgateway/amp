@@ -39,16 +39,13 @@ import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DonorTeam;
@@ -800,17 +797,6 @@ public class TeamUtil {
                 session.update(act);
             }
 
-            // Remove reference from AmpTeamPageFilters
-            qryStr = "select tpf from " + AmpTeamPageFilters.class.getName()
-                + " tpf" + " where (tpf.team=:teamId)";
-            qry = session.createQuery(qryStr);
-            qry.setLong("teamId", teamId);
-            itr = qry.list().iterator();
-            while(itr.hasNext()) {
-                AmpTeamPageFilters tpf = (AmpTeamPageFilters) itr.next();
-                session.delete(tpf);
-            }
-            
             try{
 	            // Remove reference from AmpTeamReports
 	            qryStr = "select tr from " + AmpTeamReports.class.getName() + " tr"
@@ -1198,61 +1184,6 @@ public class TeamUtil {
         }
 
         return donors;
-    }
-
-    public static void updateTeamPageConfiguration(Long teamId, Long pageId,
-        Long filters[]) {
-        Session session = null;
-        Transaction tx = null;
-        Query qry = null;
-
-        try {
-            session = PersistenceManager.getSession();
-//beginTransaction();
-            AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class, teamId);
-            AmpPages ampPage = (AmpPages) session.load(AmpPages.class, pageId);
-            String qryStr = "select tpf from "
-                + AmpTeamPageFilters.class.getName() + " tpf "
-                + "where (tpf.team=:tId) and (tpf.page=:pId)";
-            qry = session.createQuery(qryStr);
-            qry.setParameter("tId", teamId, LongType.INSTANCE);
-            qry.setParameter("pId", pageId, LongType.INSTANCE);
-            Iterator tpfItr = qry.list().iterator();
-            while(tpfItr.hasNext()) {
-                AmpTeamPageFilters ampTpf = (AmpTeamPageFilters) tpfItr.next();
-                session.delete(ampTpf);
-            }
-
-            for(int i = 0; i < filters.length; i++) {
-                AmpFilters ampFilter = (AmpFilters) session.load(
-                    AmpFilters.class, filters[i]);
-                AmpTeamPageFilters teamPageFilters = new AmpTeamPageFilters();
-                teamPageFilters.setFilter(ampFilter);
-                teamPageFilters.setPage(ampPage);
-                teamPageFilters.setTeam(ampTeam);
-                session.save(teamPageFilters);
-            }
-            //tx.commit();
-        } catch(Exception e) {
-            logger.error("Unable to update team page filters" + e.getMessage());
-            e.printStackTrace(System.out);
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Exception rbf) {
-                    logger.error("Roll back failed");
-                }
-            }
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
-        }
     }
 
     public static Collection getDonorTeams(Long teamId) {

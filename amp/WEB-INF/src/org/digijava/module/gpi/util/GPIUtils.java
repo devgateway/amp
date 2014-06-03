@@ -187,7 +187,7 @@ public class GPIUtils {
 			for (int i = 0; i < groups.length; i++) {
 				try {
 					String grpId = groups[i];
-					retType.add(DbUtil.getOrgType(new Long(grpId)));
+					retType.add(DbUtil.getAmpOrgType(new Long(grpId)));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -100,7 +100,7 @@ public class EditOrgType extends DispatchAction {
 				 	logger.debug("Invalid org type-id in request scope");
 				 	return mapping.findForward("added");
 				}
-				AmpOrgType otype = DbUtil.getOrgType(editForm.getAmpOrgTypeId());
+				AmpOrgType otype = DbUtil.getAmpOrgType(editForm.getAmpOrgTypeId());
 				if (null == otype) {
 					logger.debug("No Object exists corresponding to ampOrgTypeId in request scope!");
 				  	return mapping.findForward("added");

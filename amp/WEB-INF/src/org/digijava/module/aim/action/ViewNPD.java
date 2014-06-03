@@ -124,9 +124,5 @@ public class ViewNPD extends Action {
 		return result;
 	}
 
-	private List getStatuses() throws AimException {
-		List result = DbUtil.getAllAmpStatusesLVB();
-		return result;
-	}
 
 }

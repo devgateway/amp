@@ -2622,7 +2622,7 @@ public class ExportActivityToWord extends Action {
 			columnName=TranslatorWorker.translateText("Objectives");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getObjectives()),null);
 		}
-		ArrayList<AmpComments> colAux	= null;
+		List<AmpComments> colAux	= null;
         Collection ampFields = DbUtil.getAmpFields();
         
 

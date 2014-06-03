@@ -580,7 +580,7 @@ public class AmpARFilter extends PropertyListable {
 			String gvalue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 			if (gvalue != null){
 				Long fiscalCalId = Long.parseLong(gvalue);
-				setCalendarType(DbUtil.getFiscalCalendar(fiscalCalId));
+				setCalendarType(DbUtil.getAmpFiscalCalendar(fiscalCalId));
 			}
 		}
 		initRenderStartEndYears(settings);

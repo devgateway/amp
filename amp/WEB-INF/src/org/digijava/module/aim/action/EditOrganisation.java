@@ -817,7 +817,7 @@ public class EditOrganisation extends DispatchAction {
       editForm.setOrgGroup(sortedCol);
 
 
-      AmpOrgType orgType = DbUtil.getOrgType(orgTypeId);
+      AmpOrgType orgType = DbUtil.getAmpOrgType(orgTypeId);
       editForm.setType(orgType.getClassification());
       if (orgType.getClassification() != null && orgType.getClassification().equals(Constants.ORG_TYPE_NGO)) {
           editForm.setDacOrgCode(null);

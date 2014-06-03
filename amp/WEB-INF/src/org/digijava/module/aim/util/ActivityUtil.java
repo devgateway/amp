@@ -1426,8 +1426,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
         }
 
         //	 delete all previous comments
-        ArrayList col = org.digijava.module.aim.util.DbUtil.
-            getAllCommentsByActivityId(ampAct.getAmpActivityId(), session);
+        List<AmpComments> col = org.digijava.module.aim.util.DbUtil.getAllCommentsByActivityId(ampAct.getAmpActivityId(), session);
         logger.info("col.size() [Inside deleting]: " + col.size());
         if (col != null) {
           Iterator itr = col.iterator();

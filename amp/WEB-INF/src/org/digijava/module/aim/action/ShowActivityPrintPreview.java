@@ -968,15 +968,14 @@ public class ShowActivityPrintPreview
                 		
                 		
                 //allComments
-                		ArrayList<AmpComments> colAux	= null;
+                		List<AmpComments> colAux	= null;
                         Collection ampFields 			= DbUtil.getAmpFields();
                         HashMap allComments 			= new HashMap();
                         
                         if (ampFields!=null) {
                         	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
                                 AmpField field = (AmpField) itAux.next();
-                                	colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),
-                                                                      actId);
+                                	colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(), actId);
                                 allComments.put(field.getFieldName(), colAux);
                               }
                         }

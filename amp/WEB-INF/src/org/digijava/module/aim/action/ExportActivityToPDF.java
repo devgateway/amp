@@ -2907,6 +2907,7 @@ public class ExportActivityToPDF extends Action {
                         }
 						
 						//UNDISBURSED BALANCE
+                        
 						if(FeaturesUtil.isVisibleFeature("Undisbursed Balance")){
 							output=(funding.getUndisbursementbalance() != null && funding.getUndisbursementbalance().length() > 0)?	funding.getUndisbursementbalance() + currencyCode : "";
 							PdfPCell undisbursedBalanceCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("UNDISBURSED BALANCE:")+" \t\t         "+ output+"\n\n",plainFont));
@@ -2987,18 +2988,9 @@ public class ExportActivityToPDF extends Action {
 					addTotalsOutput(fundingTable, "UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
 				}
 				
-				//Consumption Rate
-				/*if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext))*/
-				{
-					addTotalsOutput(fundingTable, "Consumption Rate", myForm.getFunding().getConsumptionRate(), currencyCode);
-				}
+				addTotalsOutput(fundingTable, "Consumption Rate", myForm.getFunding().getConsumptionRate(), currencyCode);
+				addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), currencyCode);
 				
-				// Delivery Rate
-				if(FeaturesUtil.isVisibleFeature("Delivery Rate"))
-				{
-					addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), currencyCode);
-				}	
-
 				
 			}				
 		}

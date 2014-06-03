@@ -304,6 +304,7 @@ public class UpdateWorkspace extends Action {
 					if (tm.getTeamId() != null) {
 						session.removeAttribute("currentMember");
 						tm.setTeamName(newTeam.getName());
+						tm.setTeamId(newTeam.getAmpTeamId());
 						session.setAttribute("currentMember", tm);
 						PermissionUtil.putInScope(session,
 								GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);

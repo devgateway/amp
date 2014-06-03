@@ -26,19 +26,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpColumnsOrder;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpFeature;
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpSiteFlag;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.digijava.module.aim.dbentity.FeatureTemplates;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -2251,28 +2239,19 @@ public class FeaturesUtil {
 		return false;
 	}
 	
-	public static boolean isVisibleField(String fieldName){
-		if (overriddenFields.containsKey(fieldName))
-			return overriddenFields.get(fieldName);
-		return isVisibleField(fieldName, TLSUtils.getRequest().getSession().getServletContext(),TLSUtils.getRequest().getSession());
-	}
 	
-	public static boolean isVisibleField(String fieldName,HttpSession session){
-		if (overriddenFields.containsKey(fieldName))
-			return overriddenFields.get(fieldName);
-
-		return isVisibleField(fieldName, TLSUtils.getRequest().getSession().getServletContext(),session);
-	}
 
 	/**
 	 * for testcases, since the implementation is lame and does not allow one to supply a dummy FM instance
 	 */
 	public static HashMap<String, Boolean> overriddenFields = new HashMap<>();
 
-	public static boolean isVisibleField(String fieldName, ServletContext ampContext,HttpSession session){
+	public static boolean isVisibleField(String fieldName){
 		if (overriddenFields.containsKey(fieldName))
 			return overriddenFields.get(fieldName);
 		
+		ServletContext  ampContext= TLSUtils.getRequest().getSession().getServletContext();
+		HttpSession session = TLSUtils.getRequest().getSession();
 		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
 		AmpFieldsVisibility fieldToTest=ampTreeVisibility.getFieldByNameFromRoot(fieldName);
 		if(fieldToTest!=null)
@@ -2281,12 +2260,9 @@ public class FeaturesUtil {
 		return false;
 	}
 	
-	public static boolean isVisibleFeature(String featureName)
-	{
-		return isVisibleFeature(featureName, TLSUtils.getRequest().getSession());
-	}
 	
-	public static boolean isVisibleFeature(String featureName, HttpSession session){
+	public static boolean isVisibleFeature(String featureName){
+		HttpSession session = TLSUtils.getRequest().getSession();
 		ServletContext ampContext = session.getServletContext();
 		AmpTreeVisibility ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(session.getServletContext(), session);
 		AmpFeaturesVisibility featureToTest = ampTreeVisibility.getFeatureByNameFromRoot(featureName);
@@ -2295,17 +2271,14 @@ public class FeaturesUtil {
 		return false;
 	}
 
-	public static boolean isVisibleModule(String moduleName, ServletContext ampContext, HttpSession session){
-		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, session);
+	public static boolean isVisibleModule(String moduleName){
+		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
 		AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot(moduleName);
 		if(moduleToTest!=null)
 			return moduleToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;
 	}
 	
-	public static boolean isVisibleModule(String moduleName){
-		return isVisibleModule(moduleName, TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
-	}
 	
 	public static AmpTreeVisibility getAmpTreeVisibility(ServletContext ampContext, HttpSession session){
 			if (session != null

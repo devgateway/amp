@@ -99,17 +99,17 @@ public class Search extends Action {
 					resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword());
 					resultResources = SearchUtil.getResources(searchForm
 							.getKeyword(), request, tm);
-					if ( FeaturesUtil.isVisibleField("Search Feature - Responsible Organization", ampContext,session)) {
+					if ( FeaturesUtil.isVisibleField("Search Feature - Responsible Organization")) {
 						resultActivitiesWithRespOrgs.addAll(SearchUtil
 								.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
 										tm, Constants.ROLE_CODE_RESPONSIBLE_ORG));
 					}
-					if ( FeaturesUtil.isVisibleField("Search Feature - Executing Agency", ampContext,session)) {
+					if ( FeaturesUtil.isVisibleField("Search Feature - Executing Agency")) {
 							resultActivitiesWithExeOrgs.addAll(SearchUtil
 									.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
 											tm, Constants.ROLE_CODE_EXECUTING_AGENCY));
 					}
-					if ( FeaturesUtil.isVisibleField("Search Feature - Implementing Agency", ampContext,session)) {
+					if ( FeaturesUtil.isVisibleField("Search Feature - Implementing Agency")) {
 								resultActivitiesWithImpOrgs.addAll(SearchUtil
 										.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
 												tm, Constants.ROLE_CODE_IMPLEMENTING_AGENCY));

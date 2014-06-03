@@ -203,7 +203,7 @@ public class ExportActivityToWord extends Action {
 	            doc.add(new Paragraph(" "));
 
 	            //References
-	    		if (FeaturesUtil.isVisibleModule("References", ampContext,session)) {
+	    		if (FeaturesUtil.isVisibleModule("References")) {
 		            Table referencesTbl = null;
 					referencesTbl = new Table(1);
 					referencesTbl.setWidth(100);
@@ -240,7 +240,7 @@ public class ExportActivityToWord extends Action {
 	            locationSubTable1.setWidths(new float[]{1f,2f});
 	            locationSubTable1.setWidth(100);
 	            
-	            if(FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Location", ampContext,session)){
+	            if(FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Location")){
 	            	cell = new RtfCell();
 	    			cell.setColspan(2);
 	    			cell.setBorder(0);	            	
@@ -250,7 +250,7 @@ public class ExportActivityToWord extends Action {
     	    				for (String val : loc.getAncestorLocationNames()) {
     	    					columnVal+="["+val+"]";
 							}
-    	    				if(FeaturesUtil.isVisibleField("Regional Percentage", ampContext,session)){
+    	    				if(FeaturesUtil.isVisibleField("Regional Percentage")){
     	    					columnVal+="\t\t"+loc.getPercent()+" %\n";
     	    				}    						
     					}    					
@@ -260,7 +260,7 @@ public class ExportActivityToWord extends Action {
 	            	locationSubTable1.addCell(cell);	            	
 	            }
 	            
-	            if(FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Level", ampContext,session)){	            	
+	            if(FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Level")){	            	
 	            	columnName=TranslatorWorker.translateText("Implementation Level");
 	    			columnVal="";
 	    			catVal = null;
@@ -273,7 +273,7 @@ public class ExportActivityToWord extends Action {
 	    			generateOverAllTableRows(locationSubTable1,columnName,columnVal,null);
 	            }
 	            
-	            if(FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Location", ampContext,session)){
+	            if(FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Location")){
 	            	columnName=TranslatorWorker.translateText("Implementation Location");
 	    			columnVal="";
 	    			catVal = null;
@@ -295,7 +295,7 @@ public class ExportActivityToWord extends Action {
 	            /**
 	             * Sectors Part
 	             */	            
-	            if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors", ampContext,session)){
+	            if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors")){
 	            	 Table sectorsTbl = null;
 	 	            sectorsTbl = new Table(1);
 	 	            sectorsTbl.setWidth(100);
@@ -365,7 +365,7 @@ public class ExportActivityToWord extends Action {
 		            programsTbl.addCell(natPlanTitleCell);
 		            programsTbl.addCell(new RtfCell());
 		            
-		            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective", ampContext,session)){		           
+		            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective")){		           
 			            if (hasContent(programs.getNationalPlanObjectivePrograms())){
 							cell = new RtfCell();
 							cell.setBorder(0);
@@ -380,9 +380,9 @@ public class ExportActivityToWord extends Action {
 							applyEmptyCell(programsTbl,1);
 						}
 		            }
-		            if(FeaturesUtil.isVisibleModule("/Activity Form/Program", ampContext,session)){
+		            if(FeaturesUtil.isVisibleModule("/Activity Form/Program")){
 		            	
-		            	if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs", ampContext,session)){		           
+		            	if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs")){		           
 				            if (hasContent(programs.getPrimaryPrograms())){
 								cell = new RtfCell();
 								cell.setBorder(0);
@@ -400,7 +400,7 @@ public class ExportActivityToWord extends Action {
 			            }
 		            	
 		            	
-			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs", ampContext,session)){		           
+			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs")){		           
 				            if (hasContent(programs.getSecondaryPrograms())){
 								cell = new RtfCell();
 								cell.setBorder(0);
@@ -414,7 +414,7 @@ public class ExportActivityToWord extends Action {
 								programsTbl.addCell(cell);
 							}
 			            }
-			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs", ampContext,session)){		           
+			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs")){		           
 				            if (hasContent(programs.getTertiaryPrograms())){
 								cell = new RtfCell();
 								cell.setBorder(0);
@@ -428,7 +428,7 @@ public class ExportActivityToWord extends Action {
 								programsTbl.addCell(cell);
 							}
 			            }
-			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description", ampContext,session)){		           
+			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Program Description")){		           
 				            if(programs.getProgramDescription()!=null ){
 								cell = new RtfCell();
 								cell.setBorder(0);
@@ -448,7 +448,7 @@ public class ExportActivityToWord extends Action {
 		            doc.add(new Paragraph(" "));
 				}
             
-				if (teamMember != null && FeaturesUtil.isVisibleModule("/Activity Form/Funding", ampContext,session)) { 
+				if (teamMember != null && FeaturesUtil.isVisibleModule("/Activity Form/Funding")) { 
 	                List<Table> donorFundingTables = getDonorFundingTables(request, ampContext, activity, myForm);
 					for (Table tbl : donorFundingTables) {
 	                    doc.add(tbl);
@@ -456,7 +456,7 @@ public class ExportActivityToWord extends Action {
 				}
 				
 				//AiddEffectiveness
-	            if(FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes", ampContext,session)){
+	            if(FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")){
 	            	String aidEffectivenesToAdd=AdvancedReportUtil.getAidEffectivenesForExport(ampContext, activity,session);
 	            	if(aidEffectivenesToAdd!=null&&aidEffectivenesToAdd.length()>0){
 	            		addEffectivenessTable( doc,aidEffectivenesToAdd);
@@ -590,7 +590,7 @@ public class ExportActivityToWord extends Action {
 		/**
 		 * Activity - Risk
 		 */
-		if (FeaturesUtil.isVisibleField("Project Risk", ampContext,session)) {
+		if (FeaturesUtil.isVisibleField("Project Risk")) {
 			Table table = new Table(1);
 			table.setWidth(100);
 			table.setAlignment("center");
@@ -639,7 +639,7 @@ public class ExportActivityToWord extends Action {
 		/**
 		 * Activity - Performance
 		 */
-		if (FeaturesUtil.isVisibleField("Activity Performance", ampContext,session)) {
+		if (FeaturesUtil.isVisibleField("Activity Performance")) {
 			Table table = new Table(1);
 			table.setWidth(100);
 			table.setAlignment("center");
@@ -700,7 +700,7 @@ public class ExportActivityToWord extends Action {
 		 * Activity created by
 		 */
 
-		if (FeaturesUtil.isVisibleField("Activity Created By", ampContext,session)) {
+		if (FeaturesUtil.isVisibleField("Activity Created By")) {
 			String actCreatedByString = identification.getActAthEmail() == null ? "(unknown)" : 
 					identification.getActAthFirstName() + " "
 					+ identification.getActAthLastName() + "-"
@@ -715,7 +715,7 @@ public class ExportActivityToWord extends Action {
 		/**
 		 * Activity updated on
 		 */
-		if (FeaturesUtil.isVisibleField("Activity Updated On", ampContext,session)) {
+		if (FeaturesUtil.isVisibleField("Activity Updated On")) {
 			ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 					"Updated On", null, null, true).addRowData(identification
 					.getUpdatedDate());
@@ -725,7 +725,7 @@ public class ExportActivityToWord extends Action {
 		/**
 		 * Activity updated by
 		 */
-		if (FeaturesUtil.isVisibleField("Activity Updated By", ampContext,session)) {
+		if (FeaturesUtil.isVisibleField("Activity Updated By")) {
 			String output = "";
 			if (identification.getModifiedBy() != null) {
 				User user = identification.getModifiedBy().getUser();
@@ -740,7 +740,7 @@ public class ExportActivityToWord extends Action {
 		/**
 		 * Activity created on
 		 */
-		if (FeaturesUtil.isVisibleField("Activity Created On", ampContext,session)) {
+		if (FeaturesUtil.isVisibleField("Activity Created On")) {
 			ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 					"Created On", null, null, true).addRowData(identification
 					.getCreatedDate());
@@ -757,7 +757,7 @@ public class ExportActivityToWord extends Action {
 		HttpSession session=request.getSession();
 		List<Table> retVal = new ArrayList<Table>();
 		if (FeaturesUtil
-				.isVisibleModule("/Activity Form/Contracts", ampContext,session)) {
+				.isVisibleModule("/Activity Form/Contracts")) {
 			ExportSectionHelper sectionHelper = new ExportSectionHelper(
 					"IPA Contracting", true).setWidth(100f).setAlign("left");
 			retVal.add(createSectionTable(sectionHelper, request, ampContext));
@@ -771,8 +771,7 @@ public class ExportActivityToWord extends Action {
 					// name
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Info/Contract Name",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Info/Contract Name")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Contract Name", null, null, true)
 								.addRowData(contract.getContractName());
@@ -782,8 +781,7 @@ public class ExportActivityToWord extends Action {
 					// description
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Info/Contract Description",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Info/Contract Description")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Contract Description", null, null, true)
 								.addRowData(contract.getDescription());
@@ -793,8 +791,7 @@ public class ExportActivityToWord extends Action {
 					// activity category
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Info/Activity Type",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Info/Activity Type")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Activity Category", null, null, true)
 								.addRowData(contract.getActivityCategory() != null ? contract
@@ -805,8 +802,7 @@ public class ExportActivityToWord extends Action {
 					// type
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Info/Contract Type",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Info/Contract Type")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Type", null, null, true).addRowData(contract
 								.getType() != null ? contract.getType()
@@ -817,8 +813,7 @@ public class ExportActivityToWord extends Action {
 					// start of tendering
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Details/Start of Tendering",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Details/Start of Tendering")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Start of Tendering", null, null, true)
 								.addRowData(contract
@@ -829,8 +824,7 @@ public class ExportActivityToWord extends Action {
 					// Signature of Contract
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Details/Signature",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Details/Signature")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Signature of Contract", null, null, true)
 								.addRowData(contract
@@ -841,8 +835,7 @@ public class ExportActivityToWord extends Action {
 					// Contract Organization
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Organizations",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Organizations")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Contract Organization", null, null, true)
 								.addRowData(contract.getOrganization() != null ? contract
@@ -853,8 +846,7 @@ public class ExportActivityToWord extends Action {
 					// Contract Organization
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Details/Contractor Name",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Details/Contractor Name")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Contractor Name", null, null, true)
 								.addRowData(contract
@@ -865,8 +857,7 @@ public class ExportActivityToWord extends Action {
 					// Contract Completion
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Details/Completion",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Details/Completion")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Contract Completion", null, null, true)
 								.addRowData(contract
@@ -877,8 +868,7 @@ public class ExportActivityToWord extends Action {
 					// Status
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Details/Status",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Details/Status")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Status", null, null, true).addRowData(contract
 								.getStatus() != null ? contract.getStatus()
@@ -889,8 +879,7 @@ public class ExportActivityToWord extends Action {
 					// Total Amount
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Funding Allocation/Contract Total Value",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Funding Allocation/Contract Total Value")) {
 						output = contract.getTotalAmount() != null ? contract
 								.getTotalAmount().floatValue()
 								+ " "
@@ -906,8 +895,7 @@ public class ExportActivityToWord extends Action {
 					// Total EC Contribution
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Contract Total Amount",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Contract Total Amount")) {
 						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
 								"Total EC Contribution", null, null, true);
 						sectionHelper.addRowData(rowData);
@@ -916,8 +904,7 @@ public class ExportActivityToWord extends Action {
 					// IB
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IB Amount",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IB Amount")) {
 						if (contract.getTotalECContribIBAmount() != null) {
 							output = contract.getTotalECContribIBAmount()
 									.floatValue()
@@ -940,8 +927,7 @@ public class ExportActivityToWord extends Action {
 					// INV
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/INV Amount",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/INV Amount")) {
 						if (contract.getTotalECContribINVAmount() != null) {
 							output = contract.getTotalECContribINVAmount()
 									.floatValue()
@@ -970,8 +956,7 @@ public class ExportActivityToWord extends Action {
 					// Central
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Central Amount",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Central Amount")) {
 						if (contract.getTotalNationalContribCentralAmount() != null) {
 							output = contract
 									.getTotalNationalContribCentralAmount()
@@ -995,8 +980,7 @@ public class ExportActivityToWord extends Action {
 					// Regional
 					if (FeaturesUtil
 							.isVisibleField(
-									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Regional Amount",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/Regional Amount")) {
 						if (contract.getTotalNationalContribRegionalAmount() != null) {
 							output = contract
 									.getTotalNationalContribRegionalAmount()
@@ -1019,8 +1003,7 @@ public class ExportActivityToWord extends Action {
 					// IFIs
 					if (FeaturesUtil
 							.isVisibleField(
-									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IFI Amount",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IFI Amount")) {
 						if (contract.getTotalNationalContribIFIAmount() != null) {
 							output = contract
 									.getTotalNationalContribIFIAmount()
@@ -1051,8 +1034,7 @@ public class ExportActivityToWord extends Action {
 					// IB
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IB Amount",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Funding Allocation/EU Amounts/IB Amount")) {
 						if (contract.getTotalPrivateContribAmount() != null) {
 							output = contract.getTotalPrivateContribAmount()
 									.floatValue()
@@ -1076,26 +1058,21 @@ public class ExportActivityToWord extends Action {
 
 					if (FeaturesUtil
 							.isVisibleModule(
-									"/Activity Form/Contracts/Contract Item/Contract Disbursements",
-									ampContext,session)) {
+									"/Activity Form/Contracts/Contract Item/Contract Disbursements")) {
 
 						Integer disbFieldsCount = 0;
 						disbFieldsCount += FeaturesUtil
 								.isVisibleModule(
-										"/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type",
-										ampContext,session) ? 1 : 0;
+										"/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type") ? 1 : 0;
 						disbFieldsCount += FeaturesUtil
 								.isVisibleModule(
-										"/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount",
-										ampContext,session) ? 1 : 0;
+										"/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount") ? 1 : 0;
 						disbFieldsCount += FeaturesUtil
 								.isVisibleModule(
-										"/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency",
-										ampContext,session) ? 1 : 0;
+										"/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency") ? 1 : 0;
 						disbFieldsCount += FeaturesUtil
 								.isVisibleModule(
-										"/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date",
-										ampContext,session) ? 1 : 0;
+										"/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date") ? 1 : 0;
 
 						// Total disbursements
 						output = (contract.getTotalDisbursements() != null ? contract
@@ -1154,21 +1131,18 @@ public class ExportActivityToWord extends Action {
 
 									if (FeaturesUtil
 											.isVisibleModule(
-													"/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type",
-													ampContext,session)) {
+													"/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type")) {
 										rowData.addRowData(ipaDisb
 												.getAdjustmentType().getValue());
 									}
 
 									if (FeaturesUtil
 											.isVisibleModule(
-													"/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount",
-													ampContext,session)) {
+													"/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount")) {
 										String currency = "";
 										if (FeaturesUtil
 												.isVisibleModule(
-														"/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency",
-														ampContext,session)) {
+														"/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency")) {
 											currency = ipaDisb.getCurrency()
 													.getCurrencyName();
 										}
@@ -1178,8 +1152,7 @@ public class ExportActivityToWord extends Action {
 
 									if (FeaturesUtil
 											.isVisibleModule(
-													"/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date",
-													ampContext,session)) {
+													"/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date")) {
 										rowData.addRowData(ipaDisb
 												.getDisbDate());
 									}
@@ -1198,29 +1171,25 @@ public class ExportActivityToWord extends Action {
 
 								if (FeaturesUtil
 										.isVisibleModule(
-												"/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type",
-												ampContext,session)) {
+												"/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type")) {
 									rowData.addRowData("Adj. Type Disb.", true);
 								}
 
 								if (FeaturesUtil
 										.isVisibleModule(
-												"/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount",
-												ampContext,session)) {
+												"/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount")) {
 									rowData.addRowData("Amount Disb.", true);
 								}
 
 								if (FeaturesUtil
 										.isVisibleModule(
-												"/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency",
-												ampContext,session)) {
+												"/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency")) {
 									rowData.addRowData("Currency Disb.", true);
 								}
 
 								if (FeaturesUtil
 										.isVisibleModule(
-												"/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date",
-												ampContext,session)) {
+												"/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date")) {
 									rowData.addRowData("Date Disb.", true);
 								}
 								sectionHelper.addRowData(rowData);
@@ -1239,30 +1208,26 @@ public class ExportActivityToWord extends Action {
 
 										if (FeaturesUtil
 												.isVisibleModule(
-														"/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type",
-														ampContext,session)) {
+														"/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type")) {
 											rowData.addRowData(fundingDetail
 													.getAdjustmentTypeName()
 													.getValue());
 										}
 										if (FeaturesUtil
 												.isVisibleModule(
-														"/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount",
-														ampContext,session)) {
+														"/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount")) {
 											rowData.addRowData(fundingDetail
 													.getTransactionAmount());
 										}
 										if (FeaturesUtil
 												.isVisibleModule(
-														"/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency",
-														ampContext,session)) {
+														"/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency")) {
 											rowData.addRowData(fundingDetail
 													.getCurrencyName());
 										}
 										if (FeaturesUtil
 												.isVisibleModule(
-														"/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date",
-														ampContext,session)) {
+														"/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date")) {
 											rowData.addRowData(fundingDetail
 													.getTransactionDate());
 										}
@@ -1286,8 +1251,7 @@ public class ExportActivityToWord extends Action {
 			throws WorkerException, BadElementException {
 		List<Table> retVal = new ArrayList<Table>();
 		HttpSession session=request.getSession();
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Related Documents",
-				ampContext,session)) {
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Related Documents")) {
 			boolean createTable = false;
 			ExportSectionHelper sectionHelper = new ExportSectionHelper(
 					"Related Documents", true);
@@ -1351,7 +1315,7 @@ public class ExportActivityToWord extends Action {
 				}
 			}
 
-//			// links
+			// links
 //			if (myForm.getDocuments().getLinksList() != null
 //					&& myForm.getDocuments().getLinksList().size() > 0) {
 //				createTable = true;
@@ -1424,69 +1388,69 @@ public class ExportActivityToWord extends Action {
 		HttpSession session=request.getSession();
 		String columnName;
 		String columnVal;
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank")){
 			columnName=TranslatorWorker.translateText("Line Ministry Rank")+": ";
 			columnVal = planning.getLineMinRank().equals("-1")?"":planning.getLineMinRank();
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Ministry of Planning Rank", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Ministry of Planning Rank")){
 			columnName=TranslatorWorker.translateText("Ministry of Planning Rank")+": ";
 			columnVal = planning.getPlanMinRank().equals("-1")?"":planning.getPlanMinRank();
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date")){
 			columnName=TranslatorWorker.translateText("Proposed Approval Date") +": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalAppDate(),null);
 		}
 
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date")){
 			columnName=TranslatorWorker.translateText("Actual Approval Date")+": "; 
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedAppDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date")){
 			columnName=TranslatorWorker.translateText("Proposed Start Date") + ":";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalStartDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date")){
 			columnName=TranslatorWorker.translateText("Actual Start Date") +": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedStartDate(),null);
 		}
 		
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life", ampContext, session)) {
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Project Life")) {
             columnName = TranslatorWorker.translateText("Proposed Project Life") + ": ";
             generateOverAllTableRows(planningSubTable1, columnName, planning.getProposedProjectLife() == null ? ""
                     : String.valueOf(planning.getProposedProjectLife()), null);
         }
 			
-        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext,session)) {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date")) {
             columnName = TranslatorWorker.translateText("Original Completion Date")+": ";
             generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null);
         }
         
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date")){
 			columnName=TranslatorWorker.translateText("Proposed Completion Date")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getProposedCompDate(),null);
 		}
 
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date")){
 			columnName=TranslatorWorker.translateText("Actual Completion Date")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getCurrentCompDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting")){
 			columnName=TranslatorWorker.translateText("Final Date for Contracting")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getContractingDate(),null);
 		}
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements")){
 			columnName=TranslatorWorker.translateText("Final Date for Disbursements")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getDisbursementsDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleField("Duration of Project", ampContext,session)){
+		if(FeaturesUtil.isVisibleField("Duration of Project")){
 			columnName=TranslatorWorker.translateText("Duration of Project")+": ";
             columnVal = "";
             if (planning.getProjectPeriod() != null) {
@@ -1502,7 +1466,7 @@ public class ExportActivityToWord extends Action {
     private List<Table> getStructures (EditActivityForm myForm, HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws CloneNotSupportedException,BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
         HttpSession session=request.getSession();
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Structures",ampContext,session)) {
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Structures")) {
 
 	        ExportSectionHelper eshTitle = new ExportSectionHelper("Structures", true).setWidth(100f).setAlign("left");
 	
@@ -1539,7 +1503,7 @@ public class ExportActivityToWord extends Action {
     private List<Table> getProposedProjectCostTables (EditActivityForm myForm, HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
         HttpSession session=request.getSession();
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Proposed Project Cost",ampContext,session)) {
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Proposed Project Cost")) {
 
 	        ExportSectionHelper eshTitle = new ExportSectionHelper("Proposed Project Cost", true).setWidth(100f).setAlign("left");
 	        retVal.add(createSectionTable(eshTitle, request, ampContext));
@@ -1587,7 +1551,7 @@ public class ExportActivityToWord extends Action {
     private List<Table> getBudgetStructureTables (EditActivityForm myForm, HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
         HttpSession session=request.getSession();
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Budget Structure",ampContext,session)) {
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Budget Structure")) {
 
 	        ExportSectionHelper eshTitle = new ExportSectionHelper("Budget Structure", true).setWidth(100f).setAlign("left");
 	        retVal.add(createSectionTable(eshTitle, request, ampContext));
@@ -1618,35 +1582,34 @@ public class ExportActivityToWord extends Action {
         HttpSession session=request.getSession();
         ExportSectionHelper eshTitle = new ExportSectionHelper("Contact Information", true).setWidth(100f).setAlign("left");
 
-        if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts", ampContext,session)){
+        if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts")){
 
         	retVal.add(createSectionTable(eshTitle, request, ampContext));
 			
         	ExportSectionHelper eshContactInfoTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
 
 			// Donor funding contact information
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Donor Contact Information",ampContext,session)) {
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Donor Contact Information")) {
 				buildContactInfoOutput(eshContactInfoTable,	"Donor funding contact information", myForm
 								.getContactInformation().getDonorContacts(),ampContext, request);
 			}
 			// MOFED contact information
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Mofed Contact Information",
-					ampContext,session)) {
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Mofed Contact Information")) {
 				buildContactInfoOutput(eshContactInfoTable,"MOFED contact information", myForm
 								.getContactInformation().getMofedContacts(),ampContext, request);
 			}
 			// Sec Min funding contact information
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information",	ampContext,session)) {
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information")) {
 				buildContactInfoOutput(eshContactInfoTable,	"Sector Ministry contact information", myForm
 								.getContactInformation().getSectorMinistryContacts(), ampContext, request);
 			}
 			// Project Coordinator contact information
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information",	ampContext,session)) {
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information")) {
 				buildContactInfoOutput(eshContactInfoTable,	"Proj. Coordinator contact information", myForm					.getContactInformation()
 								.getProjCoordinatorContacts(), ampContext,request);
 			}
 			// Implementing/executing agency contact information
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Implementing Executing Agency Contact Information",ampContext,session)) {
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Implementing Executing Agency Contact Information")) {
 				buildContactInfoOutput(eshContactInfoTable,"Implementing/Executing Agency contact information",	myForm.getContactInformation()
 								.getImplExecutingAgencyContacts(), ampContext,request);
 			}
@@ -1711,7 +1674,7 @@ public class ExportActivityToWord extends Action {
 		ExportSectionHelper eshTitle = new ExportSectionHelper("Related Organizations", true).setWidth(100f).setAlign("left");
 		ExportSectionHelper eshRelatedOrgsTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations")){
 			retVal.add(createSectionTable(eshTitle, request, ampContext));
 
 			if (act.getOrgrole() != null && !act.getOrgrole().isEmpty()) {
@@ -1733,42 +1696,42 @@ public class ExportActivityToWord extends Action {
 					Set<AmpOrgRole> groupedRoleSet = roleGrouper.get(roleCode);
 
 					if (roleCode.equals(Constants.FUNDING_AGENCY) &&
-							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Donor Organization", ampContext,session)){
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Donor Organization")){
 						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Donor Agency",false);
 					}
 
 					if (roleCode.equals(Constants.RESPONSIBLE_ORGANISATION) &&
-							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization", ampContext,session)){
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization")){
 						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Responsible Organization");
 					}
 
 					if (roleCode.equals(Constants.EXECUTING_AGENCY) &&
-							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency", ampContext,session)){
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency")){
 						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Executing Agency");
 					}
 
 					if (roleCode.equals(Constants.IMPLEMENTING_AGENCY) &&
-							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency", ampContext,session)){
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency")){
 						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Implementing Agency");
 					}
 
 					if (roleCode.equals(Constants.BENEFICIARY_AGENCY) &&
-							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency", ampContext,session)){
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency")){
 						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Beneficiary Agency");
 					}
 
 					if (roleCode.equals(Constants.CONTRACTING_AGENCY) &&
-							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency", ampContext,session)){
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency")){
 						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Contracting Agency");
 					}
 
 					if (roleCode.equals(Constants.SECTOR_GROUP) &&
-							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Sector Group", ampContext,session)){
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Sector Group")){
 						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Sector Group");
 					}
 
 					if (roleCode.equals(Constants.REGIONAL_GROUP) &&
-							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Regional Group", ampContext,session)){
+							FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Regional Group")){
 						buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Regional Group");
 					}
 
@@ -1778,7 +1741,7 @@ public class ExportActivityToWord extends Action {
 			} else {
 				// This section has been adapted from ExportActivityToPDF, someday all exports should be reviewed and merged.
 				if (form.getFunding().getFundingOrganizations() != null && form.getFunding().getFundingOrganizations().size() > 0) {					
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding", ampContext,session)) {
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding")) {
 						buildRoleOrgInfo(form.getFunding().getFundingOrganizations(), "Donor Agency", eshRelatedOrgsTable);
 					}
 					retVal.add(createSectionTable(eshRelatedOrgsTable, request, ampContext));
@@ -1828,7 +1791,7 @@ public class ExportActivityToWord extends Action {
     private List<Table> getIssuesTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
         HttpSession session=request.getSession();
-        if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section", ampContext,session)){
+        if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section")){
         	ExportSectionHelper eshTitle = new ExportSectionHelper("Issues", true).setWidth(100f).setAlign("left");
             retVal.add(createSectionTable(eshTitle, request, ampContext));
 
@@ -1838,19 +1801,19 @@ public class ExportActivityToWord extends Action {
                         ExportSectionHelper eshIssuesTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
                         for (AmpIssues issue : issues) {
                         	String issueName = issue.getName();
-                        	if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Date", ampContext, session)){
+                        	if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Date")){
                         		issueName += "  " + DateConversion.ConvertDateToString(issue.getIssueDate()); 	
                         	}
                             eshIssuesTable.addRowData(new ExportSectionHelperRowData(issueName, null, null, false));
-                            if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure", ampContext, session) && 
+                            if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure") && 
                             	issue.getMeasures() != null && !issue.getMeasures().isEmpty()) {
                                 for (AmpMeasure measure : (Set<AmpMeasure>) issue.getMeasures()) {
                                 	String measureName= measure.getName();
-                                	if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure/Date", ampContext, session)) {
+                                	if (FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure/Date")) {
                                 		measureName += "  " + DateConversion.ConvertDateToString(measure.getMeasureDate());
                                 	}
                                     eshIssuesTable.addRowData((new ExportSectionHelperRowData(" \u2022" +measureName , null, null, false)));
-                                    if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure/Actor", ampContext, session) && measure.getActors() != null && !measure.getActors().isEmpty()) {
+                                    if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section/Issue/Measure/Actor") && measure.getActors() != null && !measure.getActors().isEmpty()) {
                                         for (AmpActor actor : (Set<AmpActor>) measure.getActors()) {
                                             eshIssuesTable.addRowData((new ExportSectionHelperRowData(" \t \u2022" + actor.getName(), null, null, false)));
                                         }
@@ -1891,19 +1854,16 @@ public class ExportActivityToWord extends Action {
         HttpSession session=request.getSession();
         ExportSectionHelper eshTitle = new ExportSectionHelper("Components", true).setWidth(100f).setAlign("left");
         
-        if (FeaturesUtil.isVisibleModule("/Activity Form/Components", ampContext,session)) {
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Components")) {
         	retVal.add(createSectionTable(eshTitle, request, ampContext));
         	
 			boolean visibleModuleCompCommitments = FeaturesUtil.isVisibleModule(
-							"/Activity Form/Components/Component/Components Commitments",
-							ampContext,session);
+							"/Activity Form/Components/Component/Components Commitments");
 			boolean visibleModuleCompDisbursements = FeaturesUtil.isVisibleModule(
-							"/Activity Form/Components/Component/Components Disbursements",
-							ampContext,session);
+							"/Activity Form/Components/Component/Components Disbursements");
 			boolean visibleModuleCompExpenditures = FeaturesUtil
 					.isVisibleModule(
-							"/Activity Form/Components/Component/Components Expenditures",
-							ampContext,session);
+							"/Activity Form/Components/Component/Components Expenditures");
 			if (myForm.getComponents().getSelectedComponents() != null) {
 				for (Components<FundingDetail> comp : myForm.getComponents().getSelectedComponents()) {
 				if (!GlobalSettings.getInstance()
@@ -1967,15 +1927,14 @@ public class ExportActivityToWord extends Action {
 							request, ampContext));
 
 					if (FeaturesUtil.isVisibleField(
-							"Components Physical Progress", ampContext,session)) {
+							"Components Physical Progress")) {
 						ExportSectionHelper sectionHelper = new ExportSectionHelper(
 								"Physical progress of the component", true);
 					}
 
 				} else if (GlobalSettings.getInstance()
 						.getShowComponentFundingByYear()
-						&& FeaturesUtil.isVisibleModule("Components Resume",
-								ampContext,session)) {
+						&& FeaturesUtil.isVisibleModule("Components Resume")) {
 					ExportSectionHelper fundingByYearSection = new ExportSectionHelper(
 							null, false).setWidth(100f).setAlign("left");
 					ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
@@ -2036,19 +1995,18 @@ public class ExportActivityToWord extends Action {
 			ExportSectionHelperRowData sectionHelper = new ExportSectionHelperRowData(
 					getTransactionTypeLable(compFnd.getTransactionType()),
 					null, null, true);
-			if (FeaturesUtil.isVisibleModule(componentFMfields[0], ampContext,session)) {
+			if (FeaturesUtil.isVisibleModule(componentFMfields[0])) {
 				sectionHelper.addRowData(
 						compFnd.getAdjustmentTypeNameTrimmed(), true);
 			}
-			if (FeaturesUtil.isVisibleModule(componentFMfields[1], ampContext,session)) {
+			if (FeaturesUtil.isVisibleModule(componentFMfields[1])) {
 				String output = compFnd.getTransactionAmount().toString();
-				if (FeaturesUtil.isVisibleModule(componentFMfields[2],
-						ampContext,session)) {
+				if (FeaturesUtil.isVisibleModule(componentFMfields[2])) {
 					output += compFnd.getCurrencyCode();
 				}
 				sectionHelper.addRowData(output);
 			}
-			if (FeaturesUtil.isVisibleModule(componentFMfields[3], ampContext,session)) {
+			if (FeaturesUtil.isVisibleModule(componentFMfields[3])) {
 				sectionHelper.addRowData(compFnd.getTransactionDate());
 			}
 			
@@ -2061,13 +2019,13 @@ public class ExportActivityToWord extends Action {
 				String descriptionFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Description";
 				String orgNameFm = "/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization";
 				
-				if (FeaturesUtil.isVisibleModule(orgNameFm, ampContext,session))
+				if (FeaturesUtil.isVisibleModule(orgNameFm))
 				{
 					String orgString = compFnd.getComponentOrganisation() != null ? compFnd.getComponentOrganisation().getName() : "";
 					sectionHelper.addRowData(TranslatorWorker.translateText("Organization") + ":" + orgString);
 				}
 				
-				if (FeaturesUtil.isVisibleModule(descriptionFm, ampContext,session))
+				if (FeaturesUtil.isVisibleModule(descriptionFm))
 				{
 					String compTransStr = compFnd.getComponentTransactionDescription() == null ? "" : compFnd.getComponentTransactionDescription();
 					sectionHelper.addRowData(TranslatorWorker.translateText("Transaction Description") + ": " + compTransStr);
@@ -2087,17 +2045,17 @@ public class ExportActivityToWord extends Action {
         List<Table> retVal = new ArrayList<Table>();
         HttpSession session =request.getSession();
         ExportSectionHelper eshTitle = new ExportSectionHelper("Regional Fundings", true).setWidth(100f).setAlign("left");
-        	if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding", ampContext,session)){
+        	if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding")){
                 retVal.add(createSectionTable(eshTitle, request, ampContext));
 
                 if (act.getRegionalFundings() != null && !act.getRegionalFundings().isEmpty()) {
                     Set<AmpRegionalFunding> regFnds = act.getRegionalFundings();
                 	boolean visibleModuleRegCommitments = FeaturesUtil.isVisibleModule(
-    								"/Activity Form/Regional Funding/Region Item/Commitments",ampContext,session);
+    								"/Activity Form/Regional Funding/Region Item/Commitments");
     				boolean visibleModuleRegDisbursements = FeaturesUtil.isVisibleModule(
-    								"/Activity Form/Regional Funding/Region Item/Disbursements", ampContext,session);
+    								"/Activity Form/Regional Funding/Region Item/Disbursements");
     				boolean visibleModuleRegExpenditures = FeaturesUtil.isVisibleModule(
-    						"/Activity Form/Regional Funding/Region Item/Expenditures", ampContext,session);
+    						"/Activity Form/Regional Funding/Region Item/Expenditures");
     				
                     
     				for (AmpRegionalFunding regFnd : regFnds) {
@@ -2163,26 +2121,26 @@ public class ExportActivityToWord extends Action {
             retVal.add(createSectionTable(eshTitle, request, ampContext));
             
         	boolean visibleModuleCommitments = FeaturesUtil.isVisibleModule(
-					"/Activity Form/Funding/Funding Group/Funding Item/Commitments", ampContext,session);
+					"/Activity Form/Funding/Funding Group/Funding Item/Commitments");
 			boolean visibleModuleDisbursement = FeaturesUtil.isVisibleModule(
-					"/Activity Form/Funding/Funding Group/Funding Item/Disbursements", ampContext,session);
+					"/Activity Form/Funding/Funding Group/Funding Item/Disbursements");
 			boolean visibleModuleExpenditures = FeaturesUtil.isVisibleModule(
-					"/Activity Form/Funding/Funding Group/Funding Item/Expenditures", ampContext,session);
+					"/Activity Form/Funding/Funding Group/Funding Item/Expenditures");
 			boolean visibleModuleRoF = FeaturesUtil.isVisibleModule(
-					"/Activity Form/Funding/Funding Group/Funding Item/Release of Funds", ampContext,session);
+					"/Activity Form/Funding/Funding Group/Funding Item/Release of Funds");
 			boolean visibleModuleEDD = FeaturesUtil.isVisibleModule(
-					"/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements", ampContext,session);
+					"/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements");
 			boolean visibleModuleDisbOrders = FeaturesUtil.isVisibleModule(
-							"/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders", ampContext,session);
+							"/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders");
             boolean visibleModuleMTEFProjections = FeaturesUtil.isVisibleModule(
-                    "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections", ampContext,session);
+                    "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections");
         	
         	
             if (act.getFunding() != null && !act.getFunding().isEmpty()) {
                 for (AmpFunding fnd : (Set<AmpFunding>)act.getFunding()) {
                     ExportSectionHelper eshDonorInfo = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
                     /*if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification", ampContext))*/{
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id", ampContext,session)) {
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id")) {
                         eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Id", null, null, true)).addRowData(fnd.getFinancingId()));
                     }
 
@@ -2195,37 +2153,37 @@ public class ExportActivityToWord extends Action {
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Organization Role", null, null, true)).addRowData(orgRole != null ? orgRole.getName():""));
                     }
 
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", ampContext,session)) {
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence")) {
                         AmpCategoryValue typeOfAssistance = fnd.getTypeOfAssistance();
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Type of Assistance", null, null, true)).addRowData(typeOfAssistance != null ? typeOfAssistance.getLabel():""));
                     }
 
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", ampContext,session)) {
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument")) {
                         AmpCategoryValue financingInstrument = fnd.getFinancingInstrument();
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Financial Instrument", null, null, true)).addRowData(financingInstrument != null ? financingInstrument.getLabel():""));
                     }
                     
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status",	ampContext,session)) {
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status")) {
 						String fndStatus = fnd.getFundingStatus() != null ? fnd.getFundingStatus().getValue() : " ";
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Status", null, null, true))
 										.addRowData(fndStatus));
 					}
 
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment", ampContext,session)) {
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment")) {
 						String modeOfPayment = fnd.getModeOfPayment() != null ? fnd.getModeOfPayment().getValue() : " ";
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Mode of Payment", null, null, true))
 										.addRowData(modeOfPayment));
 					}
                     }
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective", ampContext,session)) {
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective")) {
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Donor Objective", null, null, true))
 										.addRowData(fnd.getDonorObjective()));
 					}
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions", ampContext,session)) {
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Conditions")) {
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Conditions", null, null, true))
 										.addRowData(fnd.getConditions()));
 					}
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext,session)) {
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement")) {
 						String agreementTitle = fnd.getAgreement() != null ? fnd.getAgreement().getTitle() : " ";
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Agreement Title", null, null, true))
 										.addRowData(agreementTitle));
@@ -2600,18 +2558,18 @@ public class ExportActivityToWord extends Action {
 		String columnVal;
 		RtfCell cell;
 		HttpSession session=request.getSession();
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Title", ampContext,session)) {
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Title")) {
 			columnName = TranslatorWorker.translateText("Activity Name");
 			generateOverAllTableRows(identificationSubTable1, columnName, identification.getTitle(), null);
 		}
 
 		//AMPID cells
-		if(FeaturesUtil.isVisibleField("AMP ID", ampContext,session)){
+		if(FeaturesUtil.isVisibleField("AMP ID")){
 			columnName=TranslatorWorker.translateText("AMP ID");
 			generateOverAllTableRows(identificationSubTable1,columnName,identification.getAmpId(),null);					
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")){
 			columnName=TranslatorWorker.translateText("Status");
 			columnVal="";
 			catVal = null;
@@ -2628,7 +2586,7 @@ public class ExportActivityToWord extends Action {
 		}
 		
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Cooperation", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Cooperation")){
 			
 			columnName=TranslatorWorker.translateText("Type of Cooperation");
 			columnVal = identification.getSsc_typeOfCooperation();
@@ -2639,7 +2597,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Implementation", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Implementation")){
 			
 			columnName=TranslatorWorker.translateText("Type of Implementation");
 			columnVal = identification.getSsc_typeOfImplementation();
@@ -2650,7 +2608,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities")){
 			
 			columnName=TranslatorWorker.translateText("Modalities");
 			columnName=TranslatorWorker.translateText("Modalities");
@@ -2660,7 +2618,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective")){
 			columnName=TranslatorWorker.translateText("Objectives");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getObjectives()),null);
 		}
@@ -2679,7 +2637,7 @@ public class ExportActivityToWord extends Action {
               }
         }
 
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments", ampContext,session)) {
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments")) {
 			TeamMember teamMember = (TeamMember) request.getSession().getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 			//objective comments
 			if(teamMember!=null ){ //Objective Comments shouldn't show up on Publc View
@@ -2689,17 +2647,17 @@ public class ExportActivityToWord extends Action {
 	            for (Object commentKey : allComments.keySet()) {            	
 					String key=(String)commentKey;
 					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
-					if(key.equalsIgnoreCase("Objective Assumption") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Assumption", ampContext,session)){
+					if(key.equalsIgnoreCase("Objective Assumption") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Assumption")){
 						for (AmpComments value : values) {
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption")+" :",PLAINFONT));
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),BOLDFONT));
 						}					
-					}else if(key.equalsIgnoreCase("Objective Verification") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Verification", ampContext,session)){
+					}else if(key.equalsIgnoreCase("Objective Verification") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Verification")){
 						for (AmpComments value : values) {
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Verification")+" :",PLAINFONT));
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),BOLDFONT));
 						}					
-					}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Objectively Verifiable Indicators", ampContext,session)) {
+					}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Objectively Verifiable Indicators")) {
 						for (AmpComments value : values) {
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators")+" :",PLAINFONT));
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),BOLDFONT));						
@@ -2710,18 +2668,18 @@ public class ExportActivityToWord extends Action {
 			}
 		}
 		
-		if (FeaturesUtil.isVisibleField("Contract Number", ampContext,session)) {
+		if (FeaturesUtil.isVisibleField("Contract Number")) {
 			columnName = TranslatorWorker.translateText("Contract Number");
 			generateOverAllTableRows(identificationSubTable1, columnName,
 					identification.getConvenioNumcont(), null);
 		}
 
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Description", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Description")){
 			columnName=TranslatorWorker.translateText("Description");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getDescription()),null);
 		}
 
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments", ampContext,session)) {
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments")) {
 			columnName = TranslatorWorker.translateText("Project Comments");
 			generateOverAllTableRows(identificationSubTable1, columnName,
 					processEditTagValue(request, identification.getProjectComments()), null);
@@ -2732,48 +2690,48 @@ public class ExportActivityToWord extends Action {
 //			generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification.getClasiNPD()), null);
 //		}
 		
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext,session)) {
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned")) {
 			columnName=TranslatorWorker.translateText("Lessons Learned");
 			generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification.getLessonsLearned()), null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Impact", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Impact")){
 			columnName=TranslatorWorker.translateText("Project Impact");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getProjectImpact()),null);
 		}
 		
-		if(identification.getActivitySummary() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Summary", ampContext,session)){
+		if(identification.getActivitySummary() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Summary")){
 			columnName=TranslatorWorker.translateText("Activity Summary");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getActivitySummary()),null);
 		}
 		
-		if(identification.getContractingArrangements() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Contracting Arrangements", ampContext,session)){
+		if(identification.getContractingArrangements() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Contracting Arrangements")){
 			columnName=TranslatorWorker.translateText("Contracting Arrangements");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getContractingArrangements()),null);
 		}
 		
-		if(identification.getCondSeq() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionality and Sequencing", ampContext,session)){
+		if(identification.getCondSeq() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionality and Sequencing")){
 			columnName=TranslatorWorker.translateText("Conditionality and Sequencing");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getCondSeq()),null);
 		}
 		
-		if(identification.getLinkedActivities() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Linked Activities", ampContext,session)){
+		if(identification.getLinkedActivities() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Linked Activities")){
 			columnName=TranslatorWorker.translateText("Linked Activities");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getLinkedActivities()),null);
 		}
 		
-		if(identification.getConditionality() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionalities", ampContext,session)){
+		if(identification.getConditionality() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionalities")){
 			columnName=TranslatorWorker.translateText("Conditionalities");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getConditionality()),null);
 		}
 		
-		if(identification.getProjectManagement() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Management", ampContext,session)){
+		if(identification.getProjectManagement() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Management")){
 			columnName=TranslatorWorker.translateText("Project Management");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getProjectManagement()),null);
 		}
 
 		if (FeaturesUtil.isVisibleModule(
-				"/Activity Form/Identification/Purpose", ampContext,session)) {
+				"/Activity Form/Identification/Purpose")) {
 			columnName = TranslatorWorker.translateText("Purpose");
 			columnVal = processEditTagValue(request,
 					identification.getPurpose());
@@ -2782,19 +2740,16 @@ public class ExportActivityToWord extends Action {
 		}
 
 		if (FeaturesUtil.isVisibleModule(
-				"/Activity Form/Identification/Purpose Comments", ampContext,session)) {
+				"/Activity Form/Identification/Purpose Comments")) {
 			boolean visiblePurposeAssumtion = FeaturesUtil
 					.isVisibleModule(
-							"/Activity Form/Identification/Purpose Comments/Purpose Assumption",
-							ampContext,session);
+							"/Activity Form/Identification/Purpose Comments/Purpose Assumption");
 			boolean visiblePurposeVerification = FeaturesUtil
 					.isVisibleModule(
-							"/Activity Form/Identification/Purpose Comments/Purpose Verification",
-							ampContext,session);
+							"/Activity Form/Identification/Purpose Comments/Purpose Verification");
 			boolean visiblePurposeIndicators = FeaturesUtil
 					.isVisibleModule(
-							"/Activity Form/Identification/Purpose Comments/Purpose Objectively Verifiable Indicators",
-							ampContext,session);
+							"/Activity Form/Identification/Purpose Comments/Purpose Objectively Verifiable Indicators");
 
 			Table objTable = new Table(2);
 			objTable.getDefaultCell().setBorder(0);
@@ -2844,7 +2799,7 @@ public class ExportActivityToWord extends Action {
 		
 		//Results
 
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results")){
 			
 			columnName=TranslatorWorker.translateText("Results");
 			columnVal=processEditTagValue(request, identification.getResults());
@@ -2853,14 +2808,14 @@ public class ExportActivityToWord extends Action {
 		/**
 		 *  Results Comments
 		 */
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments")){
 
 			boolean visibleResultsAssumption = FeaturesUtil.isVisibleModule(
-							"/Activity Form/Identification/Results Comments/Results Assumption", ampContext,session);
+							"/Activity Form/Identification/Results Comments/Results Assumption");
 			boolean visibleResultsVerification = FeaturesUtil.isVisibleModule(
-							"/Activity Form/Identification/Results Comments/Results Verification", ampContext,session);
+							"/Activity Form/Identification/Results Comments/Results Verification");
 			boolean visibleResultsIndicators = FeaturesUtil.isVisibleModule(
-							"/Activity Form/Identification/Results Comments/Results Objectively Verifiable Indicators", ampContext,session);
+							"/Activity Form/Identification/Results Comments/Results Objectively Verifiable Indicators");
 
 			Table objTable=new Table(2);
 			objTable.getDefaultCell().setBorder(0);
@@ -2888,7 +2843,7 @@ public class ExportActivityToWord extends Action {
 		}
 				
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Accession Instrument", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Accession Instrument")){
 			columnName=TranslatorWorker.translateText("Accession Instrument");
 			columnVal="";
 			catVal = null;
@@ -2901,7 +2856,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}	
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Implementing Unit", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Implementing Unit")){
 			columnName=TranslatorWorker.translateText("Project Implementing Unit");
 			columnVal="";
 			catVal = null;
@@ -2914,7 +2869,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 			
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/A.C. Chapter", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/A.C. Chapter")){
 			columnName=TranslatorWorker.translateText("A.C. Chapter");
 			columnVal="";
 			catVal = null;
@@ -2927,7 +2882,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}	
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Cris Number", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Cris Number")){
 			columnName=TranslatorWorker.translateText("Cris Number");
 			columnVal="";
 			catVal = null;
@@ -2937,7 +2892,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Procurement System", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Procurement System")){
 			columnName=TranslatorWorker.translateText("Procurement System");
 			columnVal="";
 			catVal = null;
@@ -2950,7 +2905,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Reporting System", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Reporting System")){
 			columnName=TranslatorWorker.translateText("Reporting System");
 			columnVal="";
 			catVal = null;
@@ -2963,7 +2918,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Audit System", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Audit System")){
 			columnName=TranslatorWorker.translateText("Audit System");
 			columnVal="";
 			catVal = null;
@@ -2976,7 +2931,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Institutions", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Institutions")){
 			columnName=TranslatorWorker.translateText("Institutions");
 			columnVal="";
 			catVal = null;
@@ -2989,7 +2944,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Category", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Category")){
 			columnName=TranslatorWorker.translateText("Project Category");
 			columnVal="";
 			catVal = null;
@@ -3002,7 +2957,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Agreement Number", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Agreement Number")){
 			columnName=TranslatorWorker.translateText("Government Agreement Number");
 			columnVal="";
 			catVal = null;
@@ -3012,7 +2967,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		//end identification
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Budget", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Budget")){
 			columnName=TranslatorWorker.translateText("Budget");
 
 			if (identification.getBudgetCV()!=null) {
@@ -3052,38 +3007,38 @@ public class ExportActivityToWord extends Action {
 			identificationSubTable1.addCell(cell);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras")){
 			//AMP-16421
 			if(identification.getBudgetCV().equals(identification.getBudgetCVOn())){
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY", ampContext,session)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY")){
 				//	
 					columnName=TranslatorWorker.translateText("FY");
 					generateOverAllTableRows(identificationSubTable1,columnName,identification.getFY(),null);
 				}
-				if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Ministry Code", ampContext,session)) {
+				if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Ministry Code")) {
 					columnName = TranslatorWorker.translateText("Ministry Code");
 					generateOverAllTableRows(identificationSubTable1, columnName, identification.getMinistryCode(), null);
 				}
-				if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Project Code", ampContext,session)) {
+				if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Project Code")) {
 					columnName = TranslatorWorker.translateText("Project Code");
 					generateOverAllTableRows(identificationSubTable1, columnName, identification.getProjectCode(), null);
 				}
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Vote", ampContext,session)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Vote")){
 					columnName=TranslatorWorker.translateText("Vote");
 					generateOverAllTableRows(identificationSubTable1,columnName,identification.getVote(),null);
 				}
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Vote", ampContext,session)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Vote")){
 					columnName=TranslatorWorker.translateText("Sub-Vote");
 					generateOverAllTableRows(identificationSubTable1,columnName,identification.getSubVote(),null);
 				}
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Program", ampContext,session)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Program")){
 					columnName=TranslatorWorker.translateText("Sub-Program");
 					generateOverAllTableRows(identificationSubTable1,columnName,identification.getSubProgram(),null);
 				}
 			}	
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Classification", ampContext,session)) {
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Classification")) {
 			cell = new RtfCell();
 			cell.setColspan(2);
 			cell.setBorder(0);
@@ -3120,7 +3075,7 @@ public class ExportActivityToWord extends Action {
 			identificationSubTable1.addCell(cell);
 		}
 		
-		if(FeaturesUtil.isVisibleField("Organizations and Project ID", ampContext,session)){
+		if(FeaturesUtil.isVisibleField("Organizations and Project ID")){
 			cell = new RtfCell();
 			cell.setBorder(0);
 			cell.add(new Paragraph(TranslatorWorker.translateText("Organizations and Project ID")+": ",PLAINFONT));
@@ -3138,7 +3093,7 @@ public class ExportActivityToWord extends Action {
 			identificationSubTable1.addCell(cell);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")){
 			cell = new RtfCell();
 			cell.setColspan(2);
 			cell.setBorder(0);
@@ -3186,7 +3141,7 @@ public class ExportActivityToWord extends Action {
 		overAllFundingSubTable.setWidth(100);
 		overAllFundingSubTable.setBorder(0);
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Item/Commitments", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Item/Commitments")){
 			if(myForm.getFunding().getTotalCommitments()!=null && myForm.getFunding().getTotalCommitments().length()>0){
 				columnVal =  myForm.getFunding().getTotalCommitments() +" ";
 			}else{
@@ -3206,7 +3161,7 @@ public class ExportActivityToWord extends Action {
 			rowAmountForCell1++;	    		
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Item/Disbursements", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Item/Disbursements")){
 			if(myForm.getFunding().getTotalDisbursements()!=null && myForm.getFunding().getTotalDisbursements().length()>0){
 				columnVal =  myForm.getFunding().getTotalDisbursements() +" ";
 			}else{
@@ -3226,7 +3181,7 @@ public class ExportActivityToWord extends Action {
 			rowAmountForCell1++;
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Item/Expenditures", ampContext,session)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Item/Expenditures")){
 			if(myForm.getFunding().getTotalExpenditures()!=null && myForm.getFunding().getTotalExpenditures().length()>0){
 				columnVal =  myForm.getFunding().getTotalExpenditures() +" ";
 			}else{
@@ -3246,7 +3201,7 @@ public class ExportActivityToWord extends Action {
 			rowAmountForCell1++;
 		}
 		
-		if(FeaturesUtil.isVisibleField("Duration of Project", ampContext,session)){
+		if(FeaturesUtil.isVisibleField("Duration of Project")){
 			if(myForm.getPlanning().getProjectPeriod()!=null){
 				columnVal =  myForm.getPlanning().getProjectPeriod().toString() + " " + TranslatorWorker.translateText("Months");
 			}else{
@@ -3618,7 +3573,7 @@ public class ExportActivityToWord extends Action {
                 if (rd.getFieldOrderedList() != null) {
                     for (String fldTitle : rd.getFieldOrderedList()) { 
                         String visKey = rd.getFldVisibilityKeyMap().get(fldTitle);
-                        if(FeaturesUtil.isVisibleField(visKey, ampContext,session)) {
+                        if(FeaturesUtil.isVisibleField(visKey)) {
                             visibleRowCount ++;
                         }
                     }
@@ -3683,7 +3638,7 @@ public class ExportActivityToWord extends Action {
 
                 idx ++;
 
-                if(visKey == null || (visKey != null && FeaturesUtil.isVisibleField(visKey, ampContext,session))) {
+                if(visKey == null || (visKey != null && FeaturesUtil.isVisibleField(visKey))) {
                     String trnVal = (rowData !=null && rd.getTranslateValues().containsKey(rowData)) ?
                             TranslatorWorker.translateText(rowData) : rowData;
                     RtfCell dataValCell = new RtfCell(new Paragraph(trnVal != null ? trnVal : "-", PLAINFONT));

@@ -2333,37 +2333,37 @@ public class ExportActivityToPDF extends Action {
 		}
 		
 		//links
-		if(myForm.getDocuments().getLinksList()!=null && myForm.getDocuments().getLinksList().size()>0){				
-			for (RelatedLinks doc : (Collection<RelatedLinks>)myForm.getDocuments().getLinksList()) {	
-					//document fields						
-					PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getTitle())+"- \t",titleFont));
-					docTableNameCell1.setBackgroundColor(new Color(255,255,255));
-					docTableNameCell1.setBorder(0);
-					relatedDocnested.addCell(docTableNameCell1);
-					PdfPCell docTableNameCell2=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getUrl(),plainFont)));
-					docTableNameCell2.setBackgroundColor(new Color(255,255,255));
-					docTableNameCell2.setBorder(0);
-					relatedDocnested.addCell(docTableNameCell2);
-					
-					PdfPCell docTableDescCell1=new PdfPCell(new Phrase(TranslatorWorker.translateText("Description")+":",titleFont));
-					docTableDescCell1.setBackgroundColor(new Color(255,255,255));
-					docTableDescCell1.setBorder(0);
-					relatedDocnested.addCell(docTableDescCell1);
-					PdfPCell docTableDescCell2=new PdfPCell(new Paragraph(doc.getRelLink().getDescription(),plainFont));
-					docTableDescCell2.setBackgroundColor(new Color(255,255,255));
-					docTableDescCell2.setBorder(0);
-					relatedDocnested.addCell(docTableDescCell2);
-					
-					PdfPCell docTableDateCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Date")+":",titleFont));
-					docTableDateCell1.setBackgroundColor(new Color(255,255,255));
-					docTableDateCell1.setBorder(0);
-					relatedDocnested.addCell(docTableDateCell1);
-					PdfPCell docTableDateCell2=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getDate(), plainFont)));
-					docTableDateCell2.setBackgroundColor(new Color(255,255,255));
-					docTableDateCell2.setBorder(0);
-					relatedDocnested.addCell(docTableDateCell2);				
-			}				
-		}
+//		if(myForm.getDocuments().getLinksList()!=null && myForm.getDocuments().getLinksList().size()>0){				
+//			for (RelatedLinks doc : (Collection<RelatedLinks>)myForm.getDocuments().getLinksList()) {	
+//					//document fields						
+//					PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getTitle())+"- \t",titleFont));
+//					docTableNameCell1.setBackgroundColor(new Color(255,255,255));
+//					docTableNameCell1.setBorder(0);
+//					relatedDocnested.addCell(docTableNameCell1);
+//					PdfPCell docTableNameCell2=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getUrl(),plainFont)));
+//					docTableNameCell2.setBackgroundColor(new Color(255,255,255));
+//					docTableNameCell2.setBorder(0);
+//					relatedDocnested.addCell(docTableNameCell2);
+//					
+//					PdfPCell docTableDescCell1=new PdfPCell(new Phrase(TranslatorWorker.translateText("Description")+":",titleFont));
+//					docTableDescCell1.setBackgroundColor(new Color(255,255,255));
+//					docTableDescCell1.setBorder(0);
+//					relatedDocnested.addCell(docTableDescCell1);
+//					PdfPCell docTableDescCell2=new PdfPCell(new Paragraph(doc.getRelLink().getDescription(),plainFont));
+//					docTableDescCell2.setBackgroundColor(new Color(255,255,255));
+//					docTableDescCell2.setBorder(0);
+//					relatedDocnested.addCell(docTableDescCell2);
+//					
+//					PdfPCell docTableDateCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Date")+":",titleFont));
+//					docTableDateCell1.setBackgroundColor(new Color(255,255,255));
+//					docTableDateCell1.setBorder(0);
+//					relatedDocnested.addCell(docTableDateCell1);
+//					PdfPCell docTableDateCell2=new PdfPCell(new Paragraph(new Phrase(doc.getRelLink().getDate(), plainFont)));
+//					docTableDateCell2.setBackgroundColor(new Color(255,255,255));
+//					docTableDateCell2.setBorder(0);
+//					relatedDocnested.addCell(docTableDateCell2);				
+//			}				
+//		}
 		relDocCell2.addElement(relatedDocnested);
 		mainLayout.addCell(relDocCell2);
 	}

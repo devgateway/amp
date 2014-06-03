@@ -23,7 +23,6 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
 <digi:context name="digiContext" property="context" />

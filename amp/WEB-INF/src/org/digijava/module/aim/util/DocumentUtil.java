@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
@@ -151,29 +152,29 @@ public class DocumentUtil {
     }
 
 
-    public static List getDocumentsForActivity(Site site,
+    public static List<ManagedDocument> getDocumentsForActivity(Site site,
         AmpActivityVersion activity) throws RepositoryException, DgException {
         Node spaceNode = getActivitySpaceNode(site, activity);
         if (spaceNode == null) {
             // Not configured yet
-            return new ArrayList();
+            return new ArrayList<>();
         }
         return getContentItems(spaceNode);
     }
 
-    public static List getDocumentsForSpace(Site site,
+    public static List<ManagedDocument> getDocumentsForSpace(Site site,
         String activitySpace) throws RepositoryException, DgException {
         Node spaceNode = getDocumentSpace(site, activitySpace);
         if (spaceNode == null) {
             // Not configured yet
-            return new ArrayList();
+            return new ArrayList<>();
         }
         return getContentItems(spaceNode);
     }
 
-    private static List getContentItems(Node node) throws RepositoryException {
-        Iterator iter = node.getNodes();
-        ArrayList nodeList = new ArrayList();
+    private static List<ManagedDocument> getContentItems(Node node) throws RepositoryException {
+    	NodeIterator iter = node.getNodes();
+        ArrayList<ManagedDocument> nodeList = new ArrayList<>();
         while(iter.hasNext()) {
             Node childItem = (Node) iter.next();
 

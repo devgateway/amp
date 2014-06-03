@@ -31,7 +31,6 @@ import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
-import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -224,35 +223,35 @@ public class ExportBuilder {
 				}
 			}	
 		} else if (path.equalsIgnoreCase("activity.documents")){
-			if (ampActivity.getDocuments()  != null){
-				for (Iterator iterator = ampActivity.getDocuments().iterator(); iterator.hasNext();) {
-					CMSContentItem item = (CMSContentItem) iterator.next();
-					if (item.getIsFile()){
-						ActivityType.Documents doc = objectFactory.createActivityTypeDocuments();
-						doc.setDescription(item.getDescription());
-						doc.setTitle(item.getTitle());
-						if (item.getLanguage() != null){
-							doc.setLang(item.getLanguage().getCode());
-						}
-						parent.getDocuments().add(doc);
-					}
-				}
-			}	
+//			if (ampActivity.getDocuments()  != null){
+//				for (Iterator iterator = ampActivity.getDocuments().iterator(); iterator.hasNext();) {
+//					CMSContentItem item = (CMSContentItem) iterator.next();
+//					if (item.getIsFile()){
+//						ActivityType.Documents doc = objectFactory.createActivityTypeDocuments();
+//						doc.setDescription(item.getDescription());
+//						doc.setTitle(item.getTitle());
+//						if (item.getLanguage() != null){
+//							doc.setLang(item.getLanguage().getCode());
+//						}
+//						parent.getDocuments().add(doc);
+//					}
+//				}
+//			}	
 		} else if (path.equalsIgnoreCase("activity.relatedLinks")){
-			if (ampActivity.getDocuments()  != null){
-				for (Iterator iterator = ampActivity.getDocuments().iterator(); iterator.hasNext();) {
-					CMSContentItem item = (CMSContentItem) iterator.next();
-					if (!item.getIsFile()){
-						ActivityType.RelatedLinks link = objectFactory.createActivityTypeRelatedLinks();
-						link.setDescription(item.getDescription());
-						link.setLabel(item.getTitle());
-						if (item.getLanguage() != null){
-							link.setLang(item.getLanguage().getCode());
-						}
-						parent.getRelatedLinks().add(link);
-					}
-				}
-			}	
+//			if (ampActivity.getDocuments()  != null){
+//				for (Iterator iterator = ampActivity.getDocuments().iterator(); iterator.hasNext();) {
+//					CMSContentItem item = (CMSContentItem) iterator.next();
+//					if (!item.getIsFile()){
+//						ActivityType.RelatedLinks link = objectFactory.createActivityTypeRelatedLinks();
+//						link.setDescription(item.getDescription());
+//						link.setLabel(item.getTitle());
+//						if (item.getLanguage() != null){
+//							link.setLang(item.getLanguage().getCode());
+//						}
+//						parent.getRelatedLinks().add(link);
+//					}
+//				}
+//			}	
 		} else if (path.equalsIgnoreCase("activity.relatedOrgs")){
 			if (ampActivity.getOrgrole() != null){
 				for (AmpOrgRole ampOrgRole : ampActivity.getOrgrole()) {

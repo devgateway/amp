@@ -1,6 +1,5 @@
 package org.digijava.module.gis.util;
 
-import org.dgfoundation.amp.harvest.DBUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;

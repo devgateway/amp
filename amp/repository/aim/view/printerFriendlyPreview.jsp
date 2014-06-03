@@ -2232,27 +2232,6 @@ body {background:none;}
 													</logic:notEmpty>
 												</table>
 											</c:if>
-											<c:if test="${!empty aimEditActivityForm.documents.linksList}">
-												<table width="100%" cellSpacing="0" cellPadding="0">
-												<c:forEach var="docList" items="${aimEditActivityForm.documents.linksList}">
-					   							<bean:define id="links" name="docList" property="relLink" />
-													<tr><td>
-														<table width="100%" class="box-border-nopadding">
-															<tr>
-																<td width="2">
-																	<digi:img src="module/aim/images/web-page.gif"/>																</td>
-																<td align="left" vAlign="center">&nbsp;
-																	<b><c:out value="${links.title}"/></b> -
-																	&nbsp;&nbsp;&nbsp;<i><a href="<c:out value="${links.url}"/>">
-																	<c:out value="${links.url}"/></a></i>
-																	<br>&nbsp;
-																	<b>Desc:</b>&nbsp;<c:out value="${links.description}"/>																</td>
-															</tr>
-														</table>
-													</td></tr>
-												</c:forEach>
-												</table>
-											</c:if>
 										</td>
 									</tr>
 									</feature:display>

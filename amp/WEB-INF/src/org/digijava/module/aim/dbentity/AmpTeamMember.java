@@ -23,7 +23,8 @@ public class AmpTeamMember implements Serializable/*, Versionable*/ {
 	private AmpTeamMemberRoles ampMemberRole;
 	private Set<AmpActivityVersion> activities;
 	private Set<AmpReports> reports;
-	private Set links;
+	
+	//private Set links;
 	private Set logs;
 	private Set<AmpMessageState> messages;
 	private Boolean publishDocPermission; /*whether the team member has permissions to add document using templates*/
@@ -109,18 +110,18 @@ public class AmpTeamMember implements Serializable/*, Versionable*/ {
 
 
 
-    /**
-     * @return Returns the links.
-     */
-    public Set getLinks() {
-        return links;
-    }
-    /**
-     * @param links The links to set.
-     */
-    public void setLinks(Set links) {
-        this.links = links;
-    }
+//    /**
+//     * @return Returns the links.
+//     */
+//    public Set getLinks() {
+//        return links;
+//    }
+//    /**
+//     * @param links The links to set.
+//     */
+//    public void setLinks(Set links) {
+//        this.links = links;
+//    }
 	/**
 	 * @return Returns the editableFundingOrgs.
 	 */

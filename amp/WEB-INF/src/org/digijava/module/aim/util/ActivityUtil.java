@@ -1910,7 +1910,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
         /**
          * @author Dare
          * @param partOfName
-         * @return Array of Strings,which have a look like: activity_name(activiti_id) 
+         * @return Array of Strings,which have a look like: activity_name(activity_id) 
          */
         public static String[] loadActivitiesNamesAndIds(TeamMember member) throws DgException{
         	Session session=null;

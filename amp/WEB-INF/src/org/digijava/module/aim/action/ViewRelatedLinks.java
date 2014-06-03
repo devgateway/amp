@@ -22,7 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityVersion ;
-import org.digijava.module.aim.dbentity.CMSContentItem;
+//import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.Constants;
@@ -125,39 +125,40 @@ public class ViewRelatedLinks extends Action {
 		}
 	
 		if (request.getParameter("removeFields") != null){
-			ArrayList list = new ArrayList();
-			list.addAll(pagedCol);
-			for(int i=0;i<rlForm.getDeleteLinks().length;i++) {
-				int n = Integer.parseInt(rlForm.getDeleteLinks()[i]);
-				Documents doc = (Documents)list.get(n);
-				
-				Long actId = doc.getActivityId();
-				Long docId = doc.getDocId();
-				AmpActivityVersion  activity = ActivityUtil.getProjectChannelOverview(actId);
-				Set docList = new HashSet();
-				if (activity != null) {
-					Iterator itr = DbUtil.getActivityDocuments(actId).iterator();
-					boolean found = false;
-					while (itr.hasNext()) {
-						CMSContentItem cmsItem = (CMSContentItem) itr.next();
-						if (found)
-							docList.add(cmsItem);
-						else 
-							if (docId.equals(new Long(cmsItem.getId()))){
-								found = true;
-								//we've found it so we don't add it to the new set
-							}
-							else 
-								docList.add(cmsItem);
-					}
-					
-
-					ActivityUtil.updateActivityDocuments(activity.getAmpActivityId(), docList);
-				}
-			}
-			pagedCol = new ArrayList();
-			pagedCol =DbUtil.getAllDocuments(teamId);
-			rlForm.setAllDocuments(pagedCol);
+			throw new RuntimeException("not implemented!");
+//			ArrayList list = new ArrayList();
+//			list.addAll(pagedCol);
+//			for(int i=0;i<rlForm.getDeleteLinks().length;i++) {
+//				int n = Integer.parseInt(rlForm.getDeleteLinks()[i]);
+//				Documents doc = (Documents)list.get(n);
+//				
+//				Long actId = doc.getActivityId();
+//				Long docId = doc.getDocId();
+//				AmpActivityVersion  activity = ActivityUtil.getProjectChannelOverview(actId);
+//				Set docList = new HashSet();
+//				if (activity != null) {
+//					Iterator itr = DbUtil.getActivityDocuments(actId).iterator();
+//					boolean found = false;
+//					while (itr.hasNext()) {
+//						CMSContentItem cmsItem = (CMSContentItem) itr.next();
+//						if (found)
+//							docList.add(cmsItem);
+//						else 
+//							if (docId.equals(new Long(cmsItem.getId()))){
+//								found = true;
+//								//we've found it so we don't add it to the new set
+//							}
+//							else 
+//								docList.add(cmsItem);
+//					}
+//					
+//
+//					ActivityUtil.updateActivityDocuments(activity.getAmpActivityId(), docList);
+//				}
+//			}
+//			pagedCol = new ArrayList();
+//			pagedCol =DbUtil.getAllDocuments(teamId);
+//			rlForm.setAllDocuments(pagedCol);
 		}
 
 		rlForm.setRelatedLinks(pagedCol);

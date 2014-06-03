@@ -29,7 +29,6 @@ import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
-import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeException;
 import org.digijava.module.aim.helper.AmpLocations;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -76,7 +75,7 @@ public class LocationUtil {
         Class[] classNames =
                 {
         		AmpActivity.class, User.class, AmpRegion.class, AmpWoreda.class, AmpZone.class,
-        		CMSContentItem.class, AmpCurrency.class, AmpLocation.class, AmpOrganisation.class,
+        		/*CMSContentItem.class, */AmpCurrency.class, AmpLocation.class, AmpOrganisation.class,
               };
             String subQryStr="cls.country";
 

@@ -17,7 +17,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.DbUtil;
@@ -29,47 +28,48 @@ public class SaveQuickLink extends Action {
     public ActionForward execute(ActionMapping mapping,ActionForm form,
             HttpServletRequest request,HttpServletResponse response) throws Exception {
         
-    	HttpSession session = request.getSession();
-        String tempId = request.getParameter("id");
-        String linkName = request.getParameter("nm"); 
-        String link = request.getParameter("ln");
-        String action = request.getParameter("factn");
-        Long id = null;
-        
-        if (tempId != null && linkName != null && link != null) {
-            CMSContentItem cmsItem = new CMSContentItem();
-            
-			cmsItem.setDescription(" ");
-			byte file[] = new byte[1];
-			file[0] = 0;
-			cmsItem.setFile(file);            
-            cmsItem.setIsFile(false);
-            cmsItem.setTitle(linkName);
-            cmsItem.setUrl(link);            
-            if (action != null && action.equals("add")) {
-                id = new Long(Long.parseLong(tempId));
-                TeamMemberUtil.addLinkToMember(id,cmsItem);
-            } else if (action != null && action.equals("edit")) {
-                cmsItem.setId(Long.parseLong(tempId));
-                DbUtil.update(cmsItem);
-            }
-			Documents document = new Documents();
-			document.setDocId(new Long(cmsItem.getId()));
-			document.setTitle(cmsItem.getTitle());
-			document.setIsFile(cmsItem.getIsFile());
-			document.setFileName(cmsItem.getFileName());
-			document.setUrl(cmsItem.getUrl());
-			document.setDocDescription(cmsItem.getDescription());  
-			document.setDate(cmsItem.getDate());
-			Collection col = (Collection) session.getAttribute(
-					Constants.MY_LINKS);
-			if (col == null) {
-				col = new ArrayList();
-			}
-			col.add(document);
-			session.setAttribute(Constants.MY_LINKS,col);
-        }
-        return mapping.findForward("forward");
+    	throw new RuntimeException("not implemented!");
+//    	HttpSession session = request.getSession();
+//        String tempId = request.getParameter("id");
+//        String linkName = request.getParameter("nm"); 
+//        String link = request.getParameter("ln");
+//        String action = request.getParameter("factn");
+//        Long id = null;
+//        
+//        if (tempId != null && linkName != null && link != null) {
+//            CMSContentItem cmsItem = new CMSContentItem();
+//            
+//			cmsItem.setDescription(" ");
+//			byte file[] = new byte[1];
+//			file[0] = 0;
+//			cmsItem.setFile(file);            
+//            cmsItem.setIsFile(false);
+//            cmsItem.setTitle(linkName);
+//            cmsItem.setUrl(link);            
+//            if (action != null && action.equals("add")) {
+//                id = new Long(Long.parseLong(tempId));
+//                TeamMemberUtil.addLinkToMember(id,cmsItem);
+//            } else if (action != null && action.equals("edit")) {
+//                cmsItem.setId(Long.parseLong(tempId));
+//                DbUtil.update(cmsItem);
+//            }
+//			Documents document = new Documents();
+//			document.setDocId(new Long(cmsItem.getId()));
+//			document.setTitle(cmsItem.getTitle());
+//			document.setIsFile(cmsItem.getIsFile());
+//			document.setFileName(cmsItem.getFileName());
+//			document.setUrl(cmsItem.getUrl());
+//			document.setDocDescription(cmsItem.getDescription());  
+//			document.setDate(cmsItem.getDate());
+//			Collection col = (Collection) session.getAttribute(
+//					Constants.MY_LINKS);
+//			if (col == null) {
+//				col = new ArrayList();
+//			}
+//			col.add(document);
+//			session.setAttribute(Constants.MY_LINKS,col);
+//        }
+//        return mapping.findForward("forward");
     }
 }
  

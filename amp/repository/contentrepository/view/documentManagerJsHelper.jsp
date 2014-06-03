@@ -1258,8 +1258,11 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 	myForm.webLink.value		= '';
 	myForm.docType.disabled		= false;
 	myForm.yearOfPublication.disabled		= false;
-    myForm.docIndex.value = index ? index : '';
-    myForm.docCategory.value = category ? category : '';
+	if (myForm.docIndex)
+    	myForm.docIndex.value = index ? index : ''; // field might be missing if feature is disabled
+    	
+	if (myForm.docCategory)
+    	myForm.docCategory.value = category ? category : ''; // field might be missing if feature is disabled
 	if (isAUrl == null) {
 		isAUrl	= false;
     }
@@ -1355,7 +1358,7 @@ function selectResourceType(isUrl) {
 		elFile.style.display	= "none";
 		elUrl.style.display		= "";
 	}else{
-		alex					= '�� �� &�"\'(-�_��';
+		//alex					= '�� �� &�"\'(-�_��';
 		elFile.style.display	= "";
 		elUrl.style.display		= "none";
 	}

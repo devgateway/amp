@@ -852,6 +852,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * @return
 	 */
+	@Deprecated
 	public Set getDocuments() {
 		return documents;
 	}

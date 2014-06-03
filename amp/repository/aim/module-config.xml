@@ -121,7 +121,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpFeature</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSiteFlag</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpHomeThumbnail</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpExternalMapping</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGlobalSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpLuceneIndexStamp</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.EUActivity</hibernate-class>
@@ -144,7 +143,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpClassificationConfiguration</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpCategoryValueLocations</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpDesktopTabSelection</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.CMSContentItem</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpIndicatorSubgroup</hibernate-class>
 		<hibernate-class>org.dgfoundation.amp.ar.dbentity.AmpFilterData</hibernate-class>
 		<hibernate-class>org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData</hibernate-class>

@@ -53,7 +53,6 @@ import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -71,10 +70,10 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.ManagedDocument;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.RegionalFunding;
-import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -673,41 +672,7 @@ public class ShowActivityPrintPreview
                 	getComponents(comp, activity.getAmpActivityId(), eaForm);
                 }
                 
-
-                Collection memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
-                Collection actDocs = DocumentUtil.getDocumentsForActivity(RequestUtils.getSite(request), activity);
-                if(actDocs != null && actDocs.size() > 0) {
-                    //Collection docsList = new ArrayList();
-                    Collection linksList = new ArrayList();
-
-                    Iterator docItr = actDocs.iterator();
-                    while(docItr.hasNext()) {
-                        RelatedLinks rl = new RelatedLinks();
-
-                        CMSContentItem cmsItem = (CMSContentItem) docItr
-                            .next();
-                        rl.setRelLink(cmsItem);
-                        rl.setMember(TeamMemberUtil.getAmpTeamMember(tm
-                            .getMemberId()));
-                        Iterator tmpItr = memLinks.iterator();
-                        while(tmpItr.hasNext()) {
-                            Documents doc = (Documents) tmpItr.next();
-                            if(doc.getDocId().longValue() == cmsItem
-                               .getId()) {
-                                rl.setShowInHomePage(true);
-                                break;
-                            }
-                        }
-
-                        if(cmsItem.getIsFile()) {
-                            //docsList.add(rl);
-                        } else {
-                            linksList.add(rl);
-                        }
-                    }
-                    //eaForm.getDocuments().setDocumentList(docsList);
-                    eaForm.getDocuments().setLinksList(linksList);
-                }                
+                Collection<ManagedDocument> actDocs = DocumentUtil.getDocumentsForActivity(RequestUtils.getSite(request), activity);
                 eaForm.getDocuments().setManagedDocumentList(actDocs);
                 // loading the related organizations
                 List executingAgencies = new ArrayList();

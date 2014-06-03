@@ -1351,31 +1351,31 @@ public class ExportActivityToWord extends Action {
 				}
 			}
 
-			// links
-			if (myForm.getDocuments().getLinksList() != null
-					&& myForm.getDocuments().getLinksList().size() > 0) {
-				createTable = true;
-				for (RelatedLinks doc : (Collection<RelatedLinks>) myForm
-						.getDocuments().getLinksList()) {
-
-					ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-							doc.getRelLink().getTitle()).addRowData(doc
-							.getRelLink().getUrl());
-					sectionHelper.addRowData(rowData);
-
-					rowData = new ExportSectionHelperRowData("Description",
-							null, null, true).addRowData(doc.getRelLink()
-							.getDescription());
-					sectionHelper.addRowData(rowData);
-
-					rowData = new ExportSectionHelperRowData("Date", null,
-							null, true).addRowData(doc.getRelLink().getDate());
-					sectionHelper.addRowData(rowData);
-
-					sectionHelper.addRowData(new ExportSectionHelperRowData(
-							null, null, null, false).setSeparator(true));
-				}
-			}
+//			// links
+//			if (myForm.getDocuments().getLinksList() != null
+//					&& myForm.getDocuments().getLinksList().size() > 0) {
+//				createTable = true;
+//				for (RelatedLinks doc : (Collection<RelatedLinks>) myForm
+//						.getDocuments().getLinksList()) {
+//
+//					ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+//							doc.getRelLink().getTitle()).addRowData(doc
+//							.getRelLink().getUrl());
+//					sectionHelper.addRowData(rowData);
+//
+//					rowData = new ExportSectionHelperRowData("Description",
+//							null, null, true).addRowData(doc.getRelLink()
+//							.getDescription());
+//					sectionHelper.addRowData(rowData);
+//
+//					rowData = new ExportSectionHelperRowData("Date", null,
+//							null, true).addRowData(doc.getRelLink().getDate());
+//					sectionHelper.addRowData(rowData);
+//
+//					sectionHelper.addRowData(new ExportSectionHelperRowData(
+//							null, null, null, false).setSeparator(true));
+//				}
+//			}
 			if (createTable){
 				retVal.add(createSectionTable(sectionHelper, request, ampContext));
 			}

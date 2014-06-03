@@ -139,25 +139,11 @@ public class ReportTestingUtils
 	 */
 	public static String getActivityName_notVersion(Long activityId)
 	{
-		Session session = null;
-		Query qry = null;
-		List<AmpActivity> activities = new ArrayList<AmpActivity>();
-		String locale = TLSUtils.getEffectiveLangCode();		
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select r from " + AmpActivity.class.getName()
-					+ " r WHERE r.ampActivityId=:activityId";
-			qry = session.createQuery(queryString);
-			qry.setLong("activityId", activityId);
-			activities = qry.list();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		AmpActivity aa = (AmpActivity) PersistenceManager.getSession().get(AmpActivity.class, activityId);
+		if (aa == null)
+			throw new RuntimeException("no activity with the given id " + activityId + " exists");
 		
-		if (activities.size() >= 1)
-			return activities.get(0).getName();
-		throw new RuntimeException("no activity with the given id " + activityId + " exists");		
+		return aa.getName();				
 	}
 	
 	public static AmpActivityVersion loadActivityByName(String actName)

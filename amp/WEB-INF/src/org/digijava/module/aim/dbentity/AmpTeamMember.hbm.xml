@@ -24,14 +24,6 @@
 				column="amp_activity_id" />
 		</set>
 
-
-		<set name="links" table="AMP_MEMBER_LINKS" lazy="true" cascade="none">
-			<cache usage="read-write" />
-			<key column="amp_team_mem_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.CMSContentItem" column="id" />
-		</set>
-
-
 		<set name="reports" table="AMP_MEMBER_REPORTS" lazy="true" cascade="save-update">
 			<cache usage="read-write" />
 			<key column="amp_member_id" />

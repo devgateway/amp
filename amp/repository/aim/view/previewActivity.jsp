@@ -2253,7 +2253,7 @@ function collapseAll() {
 			</logic:notEmpty>
 		</table>
 	</c:if> 
-	<c:if test="${!empty aimEditActivityForm.documents.linksList}">
+<%--<c:if test="${!empty aimEditActivityForm.documents.linksList}">
 		<table width="100%" cellSpacing="0" cellPadding="0">
 			<c:forEach var="docList" items="${aimEditActivityForm.documents.linksList}" >
 				<bean:define id="links" name="docList" property="relLink" />
@@ -2276,7 +2276,7 @@ function collapseAll() {
 				</tr>
 			</c:forEach>
 		</table>
-	</c:if>
+	</c:if> --%>
 	</div>
 </fieldset>
 </module:display>

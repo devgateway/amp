@@ -52,7 +52,7 @@ public class ActivityDocumentsUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select " + AmpActivityVersion.hqlStringForName("a") + " " +
-            	" from " + AmpActivityDocument.class.getName() + " ad, " + AmpActivity.class.getName() + " a " +
+            	" from " + AmpActivityDocument.class.getName() + " ad, " + AmpActivityVersion.class.getName() + " a " +
                 " where ad.ampActivity=a AND ad.uuid=:uuid";
             
             qry		= session.createQuery(queryString);

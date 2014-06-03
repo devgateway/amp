@@ -81,7 +81,6 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
-import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -627,140 +626,102 @@ public class DbUtil {
 		return col;
 	}
 
-	public static Collection getOrganizations(Long actId, String orgCode) {
-		Session session = null;
-		Collection orgs = new ArrayList();
+//	/**
+//	 * probably not useful anymore, as AmpActivityFields.documents is marked as deprecated
+//	 * @deprecated
+//	 * @param ampActivityId
+//	 * @return
+//	 */
+//	public static List<CMSContentItem> getActivityDocuments(Long ampActivityId) {
+//		Session session = null;
+//		AmpActivityVersion activity = (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, ampActivityId);
+//		return new ArrayList<CMSContentItem>(activity.getDocuments());
+//	}
 
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			AmpActivity activity = (AmpActivity) session.load(
-					AmpActivity.class, actId);
-			Set set = activity.getOrgrole();
-			Iterator itr1 = set.iterator();
-			while (itr1.hasNext()) {
-				AmpOrgRole orgRole = (AmpOrgRole) itr1.next();
-				if (orgRole.getRole().getRoleCode().equals(orgCode)) {
-					if (!orgs.contains(orgRole.getOrganisation())) {
-						orgs.add(orgRole.getOrganisation());
-					}
-				}
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get Organizations :" + ex);
-		}
-		return orgs;
-	}
+//	public static List<org.digijava.module.aim.helper.Documents> getKnowledgeDocuments(Long id) {
+//		Session session = null;
+//		List<org.digijava.module.aim.helper.Documents> docs = new ArrayList<org.digijava.module.aim.helper.Documents>();
+//
+//		try {
+//			session = PersistenceManager.getRequestDBSession();
+//			String queryString = "select a from " + AmpActivity.class.getName()
+//					+ " a " + "where (a.ampActivityId=:id)";
+//			Query qry = session.createQuery(queryString);
+//			qry.setParameter("id", id, LongType.INSTANCE);
+//			Iterator itr = qry.list().iterator();
+//			if (itr.hasNext()) {
+//				AmpActivity activity = (AmpActivity) itr.next();
+//				Set set = activity.getDocuments();
+//				Iterator itr1 = set.iterator();
+//				while (itr1.hasNext()) {
+//					CMSContentItem cmsItem = (CMSContentItem) itr1.next();
+//					Documents document = new Documents();
+//					document.setActivityId(activity.getAmpActivityId());
+//					document.setActivityName(activity.getName());
+//					document.setDocId(new Long(cmsItem.getId()));
+//					document.setTitle(cmsItem.getTitle());
+//					document.setIsFile(cmsItem.getIsFile());
+//					document.setFileName(cmsItem.getFileName());
+//					document.setUrl(cmsItem.getUrl());
+//					document.setDocDescription(cmsItem.getDescription());
+//					document.setDate(cmsItem.getDate());
+//					if (cmsItem.getDocType() != null)
+//						document.setDocType(cmsItem.getDocType().getValue());
+//
+//					if (cmsItem.getDocLanguage() != null)
+//						document.setDocLanguage(cmsItem.getDocLanguage()
+//								.getValue());
+//					document.setDocComment(cmsItem.getDocComment());
+//
+//					logger.debug("Doc Desc :" + document.getDocDescription());
+//					docs.add(document);
+//				}
+//			}
+//		} catch (Exception ex) {
+//			logger.error("Unable to get ActivityDocuments :" + ex);
+//		}
+//		return docs;
+//	}
 
-	public static Collection getActivityDocuments(Long id) {
-		Session session = null;
-		Collection docs = new ArrayList();
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from " + AmpActivity.class.getName()
-					+ " a " + "where (a.ampActivityId=:id)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, LongType.INSTANCE);
-			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				AmpActivity activity = (AmpActivity) itr.next();
-				Set set = activity.getDocuments();
-				Iterator itr1 = set.iterator();
-				while (itr1.hasNext()) {
-					CMSContentItem cmsItem = (CMSContentItem) itr1.next();
-					docs.add(cmsItem);
-				}
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get ActivityDocuments :" + ex);
-		}
-		return docs;
-	}
-
-	public static List<org.digijava.module.aim.helper.Documents> getKnowledgeDocuments(Long id) {
-		Session session = null;
-		List<org.digijava.module.aim.helper.Documents> docs = new ArrayList<org.digijava.module.aim.helper.Documents>();
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select a from " + AmpActivity.class.getName()
-					+ " a " + "where (a.ampActivityId=:id)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, LongType.INSTANCE);
-			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				AmpActivity activity = (AmpActivity) itr.next();
-				Set set = activity.getDocuments();
-				Iterator itr1 = set.iterator();
-				while (itr1.hasNext()) {
-					CMSContentItem cmsItem = (CMSContentItem) itr1.next();
-					Documents document = new Documents();
-					document.setActivityId(activity.getAmpActivityId());
-					document.setActivityName(activity.getName());
-					document.setDocId(new Long(cmsItem.getId()));
-					document.setTitle(cmsItem.getTitle());
-					document.setIsFile(cmsItem.getIsFile());
-					document.setFileName(cmsItem.getFileName());
-					document.setUrl(cmsItem.getUrl());
-					document.setDocDescription(cmsItem.getDescription());
-					document.setDate(cmsItem.getDate());
-					if (cmsItem.getDocType() != null)
-						document.setDocType(cmsItem.getDocType().getValue());
-
-					if (cmsItem.getDocLanguage() != null)
-						document.setDocLanguage(cmsItem.getDocLanguage()
-								.getValue());
-					document.setDocComment(cmsItem.getDocComment());
-
-					logger.debug("Doc Desc :" + document.getDocDescription());
-					docs.add(document);
-				}
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get ActivityDocuments :" + ex);
-		}
-		return docs;
-	}
-
-	public static Collection getAllDocuments(Long teamId) {
-		Session session = null;
-		Collection col = new ArrayList();
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String qryStr = "select act from " + AmpActivity.class.getName()
-					+ " act";
-			qryStr += " where (act.team=:team)";
-			Query qry = session.createQuery(qryStr);
-			qry.setParameter("team", teamId, LongType.INSTANCE);
-			Iterator itr1 = qry.list().iterator();
-			while (itr1.hasNext()) {
-				AmpActivity act = (AmpActivity) itr1.next();
-				Set docs = act.getDocuments();
-				if (docs != null) {
-					Iterator itr2 = docs.iterator();
-					while (itr2.hasNext()) {
-						CMSContentItem cmsItem = (CMSContentItem) itr2.next();
-						Documents document = new Documents();
-						document.setActivityId(act.getAmpActivityId());
-						document.setActivityName(act.getName());
-						document.setDocId(new Long(cmsItem.getId()));
-						document.setTitle(cmsItem.getTitle());
-						document.setIsFile(cmsItem.getIsFile());
-						document.setFileName(cmsItem.getFileName());
-						document.setUrl(cmsItem.getUrl());
-						document.setDocDescription(cmsItem.getDescription());
-						document.setDate(cmsItem.getDate());
-						col.add(document);
-					}
-				}
-			}
-		} catch (Exception e) {
-			logger.error("Cannot get All documents :" + e);
-		}
-
-		return col;
-	}
+//	public static Collection getAllDocuments(Long teamId) {
+//		Session session = null;
+//		Collection col = new ArrayList();
+//
+//		try {
+//			session = PersistenceManager.getRequestDBSession();
+//			String qryStr = "select act from " + AmpActivity.class.getName()
+//					+ " act";
+//			qryStr += " where (act.team=:team)";
+//			Query qry = session.createQuery(qryStr);
+//			qry.setParameter("team", teamId, LongType.INSTANCE);
+//			Iterator itr1 = qry.list().iterator();
+//			while (itr1.hasNext()) {
+//				AmpActivity act = (AmpActivity) itr1.next();
+//				Set docs = act.getDocuments();
+//				if (docs != null) {
+//					Iterator itr2 = docs.iterator();
+//					while (itr2.hasNext()) {
+//						CMSContentItem cmsItem = (CMSContentItem) itr2.next();
+//						Documents document = new Documents();
+//						document.setActivityId(act.getAmpActivityId());
+//						document.setActivityName(act.getName());
+//						document.setDocId(new Long(cmsItem.getId()));
+//						document.setTitle(cmsItem.getTitle());
+//						document.setIsFile(cmsItem.getIsFile());
+//						document.setFileName(cmsItem.getFileName());
+//						document.setUrl(cmsItem.getUrl());
+//						document.setDocDescription(cmsItem.getDescription());
+//						document.setDate(cmsItem.getDate());
+//						col.add(document);
+//					}
+//				}
+//			}
+//		} catch (Exception e) {
+//			logger.error("Cannot get All documents :" + e);
+//		}
+//
+//		return col;
+//	}
 
 	public static AmpRole getAmpRole(String roleCode) {
 		Session session = null;
@@ -7009,25 +6970,25 @@ public class DbUtil {
 
 	}
 
-	/**
-	 * @param id
-	 * @return
-	 * @throws CMSException
-	 */
-	public static CMSContentItem getCMSContentItem(Long id) throws AimException {
-
-		CMSContentItem item = null;
-		Session session = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			item = (CMSContentItem) session.load(CMSContentItem.class, id);
-		} catch (Exception ex) {
-			logger.debug("Unable to get CMS Content Item from database", ex);
-			throw new AimException(
-					"Unable to get CMS Content Item from database", ex);
-		}
-		return item;
-	}
+//	/**
+//	 * @param id
+//	 * @return
+//	 * @throws CMSException
+//	 */
+//	public static CMSContentItem getCMSContentItem(Long id) throws AimException {
+//
+//		CMSContentItem item = null;
+//		Session session = null;
+//		try {
+//			session = PersistenceManager.getRequestDBSession();
+//			item = (CMSContentItem) session.load(CMSContentItem.class, id);
+//		} catch (Exception ex) {
+//			logger.debug("Unable to get CMS Content Item from database", ex);
+//			throw new AimException(
+//					"Unable to get CMS Content Item from database", ex);
+//		}
+//		return item;
+//	}
 
 	public static int getOrgTypesAmount(String name, Long groupId)
 			throws Exception {

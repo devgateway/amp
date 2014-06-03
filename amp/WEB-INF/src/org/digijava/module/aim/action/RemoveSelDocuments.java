@@ -12,7 +12,6 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.util.DocumentUtil;
 
 public class RemoveSelDocuments extends Action {

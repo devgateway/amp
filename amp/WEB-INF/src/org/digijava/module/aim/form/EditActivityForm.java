@@ -5121,7 +5121,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Collection<DocumentData> crDocuments;
 		private Collection managedDocumentList;
 		private long[] selDocs;
-		private Collection linksList;
 		private long[] selLinks;
 		private String[] selManagedDocs;
 		private String actionFlag = null;
@@ -5206,11 +5205,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.SuppressWarnings("all")
 		public long[] getSelDocs() {
 			return this.selDocs;
-		}
-		
-		@java.lang.SuppressWarnings("all")
-		public Collection getLinksList() {
-			return this.linksList;
 		}
 		
 		@java.lang.SuppressWarnings("all")
@@ -5337,12 +5331,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setSelDocs(final long[] selDocs) {
 			this.selDocs = selDocs;
 		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setLinksList(final Collection linksList) {
-			this.linksList = linksList;
-		}
-		
+				
 		@java.lang.SuppressWarnings("all")
 		public void setSelLinks(final long[] selLinks) {
 			this.selLinks = selLinks;
@@ -5439,9 +5428,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object other$managedDocumentList = other.getManagedDocumentList();
 			if (this$managedDocumentList == null ? other$managedDocumentList != null : !this$managedDocumentList.equals(other$managedDocumentList)) return false;
 			if (!java.util.Arrays.equals(this.getSelDocs(), other.getSelDocs())) return false;
-			final java.lang.Object this$linksList = this.getLinksList();
-			final java.lang.Object other$linksList = other.getLinksList();
-			if (this$linksList == null ? other$linksList != null : !this$linksList.equals(other$linksList)) return false;
 			if (!java.util.Arrays.equals(this.getSelLinks(), other.getSelLinks())) return false;
 			if (!java.util.Arrays.deepEquals(this.getSelManagedDocs(), other.getSelManagedDocs())) return false;
 			final java.lang.Object this$actionFlag = this.getActionFlag();
@@ -5498,8 +5484,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object $managedDocumentList = this.getManagedDocumentList();
 			result = result * PRIME + ($managedDocumentList == null ? 0 : $managedDocumentList.hashCode());
 			result = result * PRIME + java.util.Arrays.hashCode(this.getSelDocs());
-			final java.lang.Object $linksList = this.getLinksList();
-			result = result * PRIME + ($linksList == null ? 0 : $linksList.hashCode());
 			result = result * PRIME + java.util.Arrays.hashCode(this.getSelLinks());
 			result = result * PRIME + java.util.Arrays.deepHashCode(this.getSelManagedDocs());
 			final java.lang.Object $actionFlag = this.getActionFlag();
@@ -5521,7 +5505,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.Override
 		@java.lang.SuppressWarnings("all")
 		public java.lang.String toString() {
-			return "EditActivityForm.Documents(documentSpace=" + this.getDocumentSpace() + ", docFile=" + this.getDocFile() + ", docWebResource=" + this.getDocWebResource() + ", docTitle=" + this.getDocTitle() + ", docDescription=" + this.getDocDescription() + ", docDate=" + this.getDocDate() + ", docFileOrLink=" + this.getDocFileOrLink() + ", docReset=" + this.isDocReset() + ", showInHomePage=" + this.isShowInHomePage() + ", pageId=" + this.getPageId() + ", documents=" + this.getDocuments() + ", crDocuments=" + this.getCrDocuments() + ", managedDocumentList=" + this.getManagedDocumentList() + ", selDocs=" + java.util.Arrays.toString(this.getSelDocs()) + ", linksList=" + this.getLinksList() + ", selLinks=" + java.util.Arrays.toString(this.getSelLinks()) + ", selManagedDocs=" + java.util.Arrays.deepToString(this.getSelManagedDocs()) + ", actionFlag=" + this.getActionFlag() + ", pagesToShow=" + this.getPagesToShow() + ", pagesSize=" + this.getPagesSize() + ", startPage=" + this.getStartPage() + ", referenceDocs=" + java.util.Arrays.deepToString(this.getReferenceDocs()) + ", docType=" + this.getDocType() + ", docLang=" + this.getDocLang() + ", docComment=" + this.getDocComment() + ", allReferenceDocNameIds=" + java.util.Arrays.deepToString(this.getAllReferenceDocNameIds()) + ")";
+			return "EditActivityForm.Documents(documentSpace=" + this.getDocumentSpace() + ", docFile=" + this.getDocFile() + ", docWebResource=" + this.getDocWebResource() + ", docTitle=" + this.getDocTitle() + ", docDescription=" + this.getDocDescription() + ", docDate=" + this.getDocDate() + ", docFileOrLink=" + this.getDocFileOrLink() + ", docReset=" + this.isDocReset() + ", showInHomePage=" + this.isShowInHomePage() + ", pageId=" + this.getPageId() + ", documents=" + this.getDocuments() + ", crDocuments=" + this.getCrDocuments() + ", managedDocumentList=" + this.getManagedDocumentList() + ", selDocs=" + java.util.Arrays.toString(this.getSelDocs()) + ", selLinks=" + java.util.Arrays.toString(this.getSelLinks()) + ", selManagedDocs=" + java.util.Arrays.deepToString(this.getSelManagedDocs()) + ", actionFlag=" + this.getActionFlag() + ", pagesToShow=" + this.getPagesToShow() + ", pagesSize=" + this.getPagesSize() + ", startPage=" + this.getStartPage() + ", referenceDocs=" + java.util.Arrays.deepToString(this.getReferenceDocs()) + ", docType=" + this.getDocType() + ", docLang=" + this.getDocLang() + ", docComment=" + this.getDocComment() + ", allReferenceDocNameIds=" + java.util.Arrays.deepToString(this.getAllReferenceDocNameIds()) + ")";
 		}
 	}
 	

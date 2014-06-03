@@ -73,7 +73,6 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.form.ProposedProjCost;
@@ -96,7 +95,6 @@ import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RegionalFundingsHelper;
-import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -1350,47 +1348,6 @@ public class EditActivity extends Action {
             getComponents(activity, eaForm, toCurrCode);
           }
 
-          Collection memLinks = null;
-          if (tm != null)
-            memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
-          Collection actDocs = activity.getDocuments();
-          if (tm != null && actDocs != null && actDocs.size() > 0) {
-            //Collection docsList = new ArrayList();
-            Collection linksList = new ArrayList();
-
-            Iterator docItr = actDocs.iterator();
-            while (docItr.hasNext()) {
-              RelatedLinks rl = new RelatedLinks();
-
-              CMSContentItem cmsItem = (CMSContentItem) docItr
-                  .next();
-              rl.setRelLink(cmsItem);
-              if (tm != null)
-                rl.setMember(TeamMemberUtil.getAmpTeamMember(tm
-                    .getMemberId()));
-              Iterator tmpItr = memLinks.iterator();
-              while (tmpItr.hasNext()) {
-                Documents doc = (Documents) tmpItr.next();
-                if ( cmsItem.getDocType() != null)
-                		doc.setDocType(cmsItem.getDocType().getValue());
-                if (doc.getDocId().longValue() == cmsItem
-                    .getId()) {
-                  rl.setShowInHomePage(true);
-                  break;
-                }
-              }
-
-              if (cmsItem.getIsFile()) {
-                //docsList.add(rl);
-              }
-              else {
-                linksList.add(rl);
-              }
-            }
-            eaForm.getDocuments().setDocuments(DbUtil.getKnowledgeDocuments(eaForm.getActivityId()));
-            //eaForm.getDocuments().setDocumentList(docsList);
-            eaForm.getDocuments().setLinksList(linksList);
-          }
           Site currentSite = RequestUtils.getSite(request);
           eaForm.getDocuments().setManagedDocumentList(DocumentUtil.getDocumentsForActivity(currentSite, activity));
           eaForm.getAgencies().setExecutingAgencies(new ArrayList<AmpOrganisation>());

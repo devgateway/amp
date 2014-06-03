@@ -5,9 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -29,7 +27,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
-import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpMaxSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
@@ -66,6 +63,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	private TransparentWebMarkupContainer updateColSpan2;
 	private AmpDonorFundingFormSectionFeature donorFundingSection;
     private AmpSearchOrganizationComponent<String> searchOrganization;
+    protected boolean orgAddedOrRemoved = false;
 	
     public void setDefaultOrgGroup(AmpOrgGroup orgGroup) {
     	searchOrganization.setDefaultOrgGroup(orgGroup);
@@ -81,6 +79,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	 * @param ampOrgRole
 	 */
 	public void roleAdded(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
+		orgAddedOrRemoved = true;
         changeSearchVisibility(target);
         addFundingAutomatically(target, ampOrgRole);
 	}
@@ -90,6 +89,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
      * @param ampOrgRole
      */
     public void roleRemoved(AjaxRequestTarget target,AmpOrgRole ampOrgRole) {
+    	orgAddedOrRemoved = true;
         changeSearchVisibility(target);
         removeFundingAutomatically(target, ampOrgRole);
     }

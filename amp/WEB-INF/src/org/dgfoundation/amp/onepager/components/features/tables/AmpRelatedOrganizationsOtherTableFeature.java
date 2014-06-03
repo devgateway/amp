@@ -4,14 +4,10 @@
 */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -21,14 +17,10 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundin
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.helper.Constants;
 
 /**
  * @author aartimon@dginternational.org
@@ -60,8 +52,17 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 				
 				item.add(new Label("name", item.getModelObject().getOrganisation().getAcronymAndName()));	
 				
-				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(), "percentage");
-				AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel, "percentage",percentageValidationField);
+				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(), "percentage"); 
+				AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel, "percentage", percentageValidationField) {
+					@Override
+					public void onConfigure() {
+						super.onConfigure();
+						if(orgAddedOrRemoved && !FMUtil.isFmEnabled(this)) {
+							//reset all percentages to null if percentages are hidden and organization list is altered
+							item.getModelObject().setPercentage(null);
+						}
+					}
+				};
 				item.add(percentageField);
 				
 				AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField("delRelOrg", "Delete Related Organisation") {

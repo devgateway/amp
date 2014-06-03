@@ -36,7 +36,10 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.util.DashboardUtil;
 
@@ -119,6 +122,14 @@ public class SwitchLanguage
         //Switch language of dashboars that is a session scope variable to solve AMP-16364
         Collection<AmpDashboard> dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
         request.getSession().setAttribute(Constants.MENU_DASHBOARDS, DashboardUtil.generateIdToNameForDashboards(dashboards));
+        
+        //update Workspace name
+        TeamMember tm = (TeamMember)request.getSession().getAttribute("currentMember");
+        if( tm!=null  ) {
+        	AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+        	tm.setTeamName(ampTeamMember.getAmpTeam().getName());
+        	request.getSession().setAttribute("currentMember", tm);
+        }
 
         return new ActionForward(referrerUrl, true);
     }

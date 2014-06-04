@@ -488,13 +488,7 @@
 			<transaction>ALTER TABLE amp_category_value ADD INDEX cv_index(category_value)</transaction>
 			<transaction>CREATE INDEX amp_currency_to_currency_code ON amp_currency_rate(to_currency_code)</transaction>
 			<transaction>CREATE INDEX amp_currency_exchange_rate_date ON amp_currency_rate(exchange_rate_date)</transaction>
-			<transaction>CREATE INDEX amp_currency_exchange_rate_date_to_currency_idx ON amp_currency_rate(exchange_rate_date, to_currency_code)</transaction>
-			
-			<!-- GIS DATA -->
-			<transaction>INSERT INTO dg_gis_map (SELECT * from ${clean.source}.dg_gis_map)</transaction>
-			<transaction>INSERT INTO dg_gis_map_segment (SELECT * from ${clean.source}.dg_gis_map_segment)</transaction>
-			<transaction>INSERT INTO dg_gis_map_shape (SELECT * from ${clean.source}.dg_gis_map_shape)</transaction>
-			<transaction>INSERT INTO dg_gis_map_point (SELECT * from ${clean.source}.dg_gis_map_point)</transaction>				
+			<transaction>CREATE INDEX amp_currency_exchange_rate_date_to_currency_idx ON amp_currency_rate(exchange_rate_date, to_currency_code)</transaction>		
 		</sql>
 		
 		<echo message="Importing functions and views into ${clean.db}..."/>
@@ -697,11 +691,6 @@
 			<transaction>CREATE INDEX amp_currency_exchange_rate_date ON amp_currency_rate(exchange_rate_date)</transaction>
 			<transaction>CREATE INDEX amp_currency_exchange_rate_date_to_currency_idx ON amp_currency_rate(exchange_rate_date, to_currency_code)</transaction>
 			
-			<!-- GIS DATA -->
-			<transaction>INSERT INTO dg_gis_map (SELECT * from clean.dg_gis_map)</transaction>
-			<transaction>INSERT INTO dg_gis_map_segment (SELECT * from clean.dg_gis_map_segment)</transaction>
-			<transaction>INSERT INTO dg_gis_map_shape (SELECT * from clean.dg_gis_map_shape)</transaction>
-			<transaction>INSERT INTO dg_gis_map_point (SELECT * from clean.dg_gis_map_point)</transaction>
 			<!-- amp_activity is not a table ... currently added by hibernate -->
 			<transaction>DROP TABLE amp_activity CASCADE</transaction>
 			<transaction>DROP SCHEMA clean CASCADE </transaction>

@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.ar;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,12 +12,14 @@ import java.util.Set;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -56,15 +59,25 @@ public class MultilingualTests extends TestCase
 		return suite;
 	}
 	
+	protected List<String> loadSectors(List<Long> ids){
+		List<AmpSector> sectors = PersistenceManager.getSession().createQuery("from " + AmpSector.class.getName() + " s").list();
+		List<String> res = new ArrayList<>();
+		for(AmpSector sec:sectors){
+			res.add(sec.getName());
+		}
+		return res;
+	}
+	
 	public void testTopSectorNames()
 	{
 		List<Long> sectorIds = Arrays.asList(new Long[] {6476L, 6482L, 6488L, 6493L, 6480L});
 		
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
-		List<String> sectorNamesEn = org.digijava.module.gis.util.DbUtil.getTopSectorNames(sectorIds);
+		
+		List<String> sectorNamesEn = loadSectors(sectorIds);
 		
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
-		List<String> sectorNamesRu = org.digijava.module.gis.util.DbUtil.getTopSectorNames(sectorIds);
+		List<String> sectorNamesRu = loadSectors(sectorIds);
 		
 		assertTrue(sectorNamesEn.contains("3 NATIONAL COMPETITIVENESS"));
 		assertTrue(sectorNamesEn.contains("02 TRANSDNISTRIAN CONFLICT"));
@@ -77,31 +90,24 @@ public class MultilingualTests extends TestCase
 		//System.out.println(sectorNamesEn.size() + sectorNamesRu.size());
 	}
 	
-	public void testActivityDonorNames()
-	{		
-		Set<Long> actIds = new HashSet<Long>();
-		for(long i = 0; i < 100; i++)
-			actIds.add(i);
-		
+	public void testActivityDonorNames(){
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
-		Map<Long, Set<String>> donorNamesEn = org.digijava.module.gis.util.DbUtil.getActivityDonorNames(actIds);
+		Set<String> donorNamesEn =
+				new HashSet<String>(
+						PersistenceManager.getSession().createQuery("SELECT " + AmpOrganisation.hqlStringForName("org") + " FROM " + AmpOrganisation.class.getName() + " org").list()
+					);
 
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
-		Map<Long, Set<String>> donorNamesRu = org.digijava.module.gis.util.DbUtil.getActivityDonorNames(actIds);
+		Set<String> donorNamesRu =
+				new HashSet<String>(
+						PersistenceManager.getSession().createQuery("SELECT " + AmpOrganisation.hqlStringForName("org") + " FROM " + AmpOrganisation.class.getName() + " org").list()
+					);
 
 		assertEquals(donorNamesEn.size(), donorNamesRu.size());
-		for(Long actId:donorNamesEn.keySet())
-		{
-			assertTrue(donorNamesRu.keySet().contains(actId));
-			Set<String> en = donorNamesEn.get(actId);
-			Set<String> ru = donorNamesRu.get(actId);
-			assertEquals(en.size(), ru.size());
-			if (en.contains("Finland"))
-				assertTrue(ru.contains("Финляндия"));
-			if (en.contains("World Bank"))
-				assertTrue(ru.contains("Всемирный банк"));
-			
-		}
+		assertTrue(donorNamesEn.contains("Finland"));
+		assertTrue(donorNamesRu.contains("Финляндия"));
+		assertTrue(donorNamesEn.contains("World Bank"));
+		assertTrue(donorNamesRu.contains("Всемирный банк"));
 	}
 		 
 	public void testAmpActivityResume()

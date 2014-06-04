@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -73,36 +74,21 @@ import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
-import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.helper.Assistance;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CountryBean;
-import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.Documents;
-import org.digijava.module.aim.helper.Funding;
-import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.Question;
-import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
-import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -1206,41 +1192,6 @@ public class DbUtil {
 					+ ex.getMessage());
 		}
 		return organizations;
-	}
-
-	/**
-	 * Returns true if org group is used in the widget table otherwise false
-	 * 
-	 * @param orgGroupId
-	 * @return
-	 */
-
-	public static boolean isUsed(Long id, boolean isOrgGroup) {
-		boolean isUsed = true;
-		Session session = null;
-		Query q = null;
-		String queryString = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			queryString = " select val from "
-					+ AmpDaValueFiltered.class.getName()
-					+ " val inner join val.column col where val.filterItemId=:id and col.filterItemProvider=:filterItemProvider";
-			q = session.createQuery(queryString);
-			q.setLong("id", id);
-			if (isOrgGroup) {
-				q.setLong("filterItemProvider", FilterItemProvider.ORG_GROUPS);
-			} else {
-				q.setLong("filterItemProvider",
-						FilterItemProvider.DONORS_FILTER);
-			}
-			if (q.list().size() == 0) {
-				isUsed = false;
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get Org Groups  from database "
-					+ ex.getMessage());
-		}
-		return isUsed;
 	}
 	
 	/**
@@ -3245,6 +3196,5 @@ public class DbUtil {
 			logger.debug("Exceptiion " + e);
 		}
 		return image;
-	}
-	
+	}	
 }

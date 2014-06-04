@@ -1287,7 +1287,9 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
   	}
 
   	public static List<AmpActivityFake> getLastUpdatedActivities() {
- 		String workspaceQuery = Util.toCSStringForIN(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
+ 		//String workspaceQuery = Util.toCSStringForIN(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
+  		//BOZO SHMOZO
+  		String workspaceQuery = "-999";
   		
  		List<AmpActivityFake> res = new ArrayList<AmpActivityFake>();
 		Session session = null;

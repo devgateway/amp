@@ -359,14 +359,6 @@ public class EditOrganisation extends DispatchAction {
       }
       AddOrgForm editForm = (AddOrgForm) form;
       ActionMessages errors = new ActionMessages();
-      if (DbUtil.isUsed(editForm.getAmpOrgId(), false)) {
-
-          errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.deleteOrg"));
-          saveErrors(request, errors);
-          editForm.setActionFlag("edit");
-          return mapping.findForward("forward");
-      }
-
       Collection activities = DbUtil.getAllactivitiesRelatedToOrg(editForm.getAmpOrgId()); //DbUtil.getAllActivities();
       int testFunding = ActivityUtil.getFundingByOrgCount(editForm.getAmpOrgId());
       //Iterator itr1 = activities.iterator();

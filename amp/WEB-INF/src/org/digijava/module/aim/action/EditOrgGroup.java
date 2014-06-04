@@ -114,13 +114,6 @@ public class EditOrgGroup extends Action {
 		if ("delete".equals(action)) {
 
 			Iterator itr1 = DbUtil.getOrgByGroup(editForm.getAmpOrgGrpId()).iterator();
-			if (DbUtil.isUsed(editForm.getAmpOrgGrpId(), true)) {
-				ActionMessages errors = new ActionMessages();
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationGroupManager.deleteOrgGroup"));
-				saveErrors(request, errors);
-				editForm.setAction("edit");
-				return mapping.findForward("forward");
-			}
 			if (itr1.hasNext()) {
 				editForm.setFlag("orgReferences");
 				editForm.setAction("edit");

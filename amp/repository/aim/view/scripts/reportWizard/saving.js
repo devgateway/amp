@@ -120,7 +120,7 @@ function SaveReportEngine ( savingMessage, failureMessage ) {
 	this.savingMessage	= savingMessage;
 	this.divEl			=  document.getElementById("savingReportDiv");
 	this.titlePanel		= null;
-	this.forceOverwrite = false; // true: overwrite report on saving, regardless of it having the same name as a report
+	this.overwritingReport		= false;
 }
 
 SaveReportEngine.prototype.checkEnter		= function (e) {
@@ -175,13 +175,12 @@ SaveReportEngine.prototype.failure			= function(o) {
 	this.divEl.innerHTML			= this.failureMessage;
 };
 
-SaveReportEngine.prototype.decideToShowTitlePanel	= function () // actually this is the "Save" button
+SaveReportEngine.prototype.decideToShowTitlePanel	= function ()
 {
-	this.forceOverwrite = true;
 	if ( getReportTitle() == "" )
-		this.showTitlePanel();
+			this.showTitlePanel();
 	else
-		this.saveReport( aimReportWizardForm);
+			this.saveReport( aimReportWizardForm);
 };
 
 SaveReportEngine.prototype.showTitlePanel	= function () {
@@ -213,8 +212,19 @@ SaveReportEngine.prototype.saveAndOpenReport = function()
 	this.saveAndOrOpenReport(true);
 };
 
+SaveReportEngine.prototype.getOriginalReportName	= function () {
+	return document.getElementById("saveOriginalReportName").value;
+};
+
 SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {	
 	//debugger;
+	if ( getReportTitle() == this.getOriginalReportName() ) {
+		this.overwritingReport	= true;
+	}
+	else { 
+		this.overwritingReport	= false;
+	}
+	
 	var title = getReportTitle();
 	if (title.indexOf('<')!=-1 && title.indexOf('>')!=-1 && title.indexOf('<')<title.indexOf('>')){
         alert("Tags are not allowed on name.");
@@ -229,13 +239,13 @@ SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {
 	var postString		= "reportTitle="+encodeURIComponent(title)+ "&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() + 
 						"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
 						"&reportCategory="+ getReportCategory()+
+						"&forceNameOverwrite=" + this.overwritingReport+
 						"&desktopTab="+getDesktopTab() +
 						"&publicReport="+getPublicReport() +
 						"&workspaceLinked="+getWorkspaceLinked() +
 						"&hideActivities="+getHideActivities() +
 						"&useFilters="+getUseFilters()+
 						"&openReport=" + openReport + 
-						"&forceNameOverwrite=" + this.forceOverwrite + 
 						getReportTitles() + 
 						//"&reportContextId="+getReportContextId()+
 						"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+

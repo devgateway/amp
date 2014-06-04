@@ -263,6 +263,7 @@ body {
 					<div class="hd" style="font-size: 8pt">
 						${plsEnterTitle}
 					</div>
+					<input type="hidden" id="saveOriginalReportName" value="${aimReportWizardForm.reportTitle}" />
 					<div class="bd" id="titlePanelBody">
 						<%-- <%@ include file="/repository/aim/view/multilingual/multilingualFieldEntry.jsp" %>  --%>
 						<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">

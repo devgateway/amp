@@ -432,11 +432,17 @@ public class ReportWizardAction extends MultiAction {
 		
 		AmpReports ampReport = null;
 		AmpReports oldReport = loadSourceReport(request);
-		
 		boolean createReportFromScratch = (oldReport == null || saveACopy);
+		Long reportId = null;
+		if (oldReport!=null) {
+			reportId = oldReport.getId();
+		}
+		if ( AdvancedReportUtil.checkDuplicateReportName(myForm.getReportTitle(), teamMember.getMemberId(), reportId, myForm.getDesktopTab() ) ) {
+			myForm.setDuplicateName(true);
+			throw new DuplicateReportNameException("The name " + myForm.getReportTitle() + " is already used by another report");
+		}
 			
 		if (createReportFromScratch){
-			
 			ampReport = new AmpReports();
 			if ( "donor".equals(myForm.getReportType()) ) 
 				ampReport.setType( new Long(ArConstants.DONOR_TYPE) );

@@ -122,7 +122,7 @@ public class GroupReportDataXLS extends XLSExporter{
 	 */
 	protected void setColumnWidths()
 	{
-		int nrColumns = columnWidths.lastKey();
+		int nrColumns = columnWidths.size()>0 ? columnWidths.lastKey() :0;
 		for(int i = 0; i <= nrColumns; i++){
 			try{
 				if (columnWidths.containsKey(i)){

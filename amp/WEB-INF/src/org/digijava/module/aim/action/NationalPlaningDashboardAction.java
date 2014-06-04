@@ -161,7 +161,7 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 
 		npdForm.setYears(ProgramUtil.getYearsBeanList());
 		npdForm.setDonors(getDonorsList(30));
-		npdForm.setLocations(LocationUtil.getAmpLocations());
+		npdForm.setLocations(new ArrayList<>()); // dummy value
 		
 		return mapping.findForward("viewNPDDashboard");
 	}

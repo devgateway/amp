@@ -152,7 +152,6 @@ import org.digijava.module.aim.util.LocationUtil;
 	                if (ampLoc == null) {
 	                    AmpCategoryValueLocations selectedLoc=DynLocationManagerUtil.getLocation(id, false);
 	                    ampLoc = new AmpLocation();
-	                    ampLoc.setCountry(FeaturesUtil.getDefaultCountryIso());
 	                    ampLoc.setRegionLocation(selectedLoc);
 	                    ampLoc.setLocation(selectedLoc);
 	                    LocationUtil.saveLocation(ampLoc);

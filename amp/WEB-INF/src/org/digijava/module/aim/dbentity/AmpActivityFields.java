@@ -131,7 +131,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Contracts")
 	protected Set contracts;
 	@VersionableCollection(fieldTitle = "Locations")
-	protected Set locations ;
+	protected Set<AmpActivityLocation> locations ;
 	@VersionableCollection(fieldTitle = "Org. Role")
 	protected Set<AmpOrgRole> orgrole;
 	//protected AmpLevel level ; //TO BE DELETED
@@ -647,17 +647,7 @@ LoggerIdentifiable, Cloneable {
 		return language;
 	}
 
-	/**
-	 * @return
-	 */
-	//public AmpLevel getLevel() { //TO BE DELETED
-	//return level;
-	//}
-
-	/**
-	 * @return
-	 */
-	public Set getLocations() {
+	public Set<AmpActivityLocation> getLocations() {
 		return locations;
 	}
 
@@ -769,7 +759,7 @@ LoggerIdentifiable, Cloneable {
 	/**
 	 * @param set
 	 */
-	public void setLocations(Set set) {
+	public void setLocations(Set<AmpActivityLocation> set) {
 		locations = set;
 	}
 

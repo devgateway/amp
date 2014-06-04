@@ -174,24 +174,6 @@
 													</tr>
 													--%>	
 													<tr>
-														<td bgcolor="#f4f4f2" align="center" width="50%">
-															<table width="100%">
-																<tr>
-																	<td><b>
-																		<digi:trn key="aim:location">
-																			Location
-																		</digi:trn> :</b>&nbsp;
-																		<logic:notEmpty name="aimChannelOverviewForm" property="locations">
-																		<logic:iterate name="aimChannelOverviewForm" id="locations"
-																		property="locations" type="org.digijava.module.aim.helper.AmpLocations">
-																			<bean:write name="locations" property="region" />&nbsp;
-																			<bean:write name="locations" property="country" />&nbsp;
-																		</logic:iterate>
-																		</logic:notEmpty>
-																	</td>
-																</tr>
-															</table>														
-														</td>
 														<td align="center" width="50%"  bgcolor="#f4f4f2">
 															<table width="100%" border="0">
 																<tr>

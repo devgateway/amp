@@ -369,20 +369,6 @@ public class ShowActivityPrintPreview
                     	if (actLoc == null)
                     		continue;
                     	AmpLocation loc=actLoc.getLocation();								//AMP-2250
-//                      if (!maxLevel) {
-//                        if (loc.getAmpWoreda() != null) {
-//                          impLevel = 3;
-//                          maxLevel = true;
-//                        }
-//                        else if (loc.getAmpZone() != null
-//                                 && impLevel < 2) {
-//                          impLevel = 2;
-//                        }
-//                        else if (loc.getAmpRegion() != null
-//                                 && impLevel < 1) {
-//                          impLevel = 1;
-//                        }
-//                      }
 
                       if (loc != null) {
                         Location location = new Location();
@@ -418,32 +404,6 @@ public class ShowActivityPrintPreview
 						      eaForm.getFunding().getFundingRegions().add( ampCVRegion );
 						}
 }
-//                        if (loc.getAmpRegion() != null) {
-//                          location.setRegion(loc.getAmpRegion()
-//                                             .getName());
-//                          location.setRegionId(loc.getAmpRegion()
-//                                               .getAmpRegionId());
-//                          if (eaForm.getFunding().getFundingRegions() == null) {
-//                            eaForm.getFunding().setFundingRegions(new ArrayList());
-//                          }
-//                          if (eaForm.getFunding().getFundingRegions().contains(
-//                              loc.getAmpRegion()) == false) {
-//                            eaForm.getFunding().getFundingRegions().add(
-//                                loc.getAmpRegion());
-//                          }
-//                        }
-//                        if (loc.getAmpZone() != null) {
-//                          location
-//                              .setZone(loc.getAmpZone().getName());
-//                          location.setZoneId(loc.getAmpZone()
-//                                             .getAmpZoneId());
-//                        }
-//                        if (loc.getAmpWoreda() != null) {
-//                          location.setWoreda(loc.getAmpWoreda()
-//                                             .getName());
-//                          location.setWoredaId(loc.getAmpWoreda()
-//                                               .getAmpWoredaId());
-//                        }
 
                         if(actLoc.getLocationPercentage()!=null)
                         location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));
@@ -457,37 +417,6 @@ public class ShowActivityPrintPreview
                     }
                     eaForm.getLocation().setSelectedLocs(locs);
                   }
-
-                /*switch(impLevel) {
-                    case 0:
-                        eaForm.setImplementationLevel("country");
-                        break;
-                    case 1:
-                        eaForm.setImplementationLevel("region");
-                        break;
-                    case 2:
-                        eaForm.setImplementationLevel("zone");
-                        break;
-                    case 3:
-                        eaForm.setImplementationLevel("woreda");
-                        break;
-                    default:
-                        eaForm.setImplementationLevel("country");
-                }*/
-                
-//                if (impLevel >= 0) {
-//                	eaForm.getLocation().setImplemLocationLevel( 
-//                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LOCATION_KEY, 
-//                													new Long(impLevel) ).getId()
-//                	);
-//                }
-//                else
-//                	eaForm.getLocation().setImplemLocationLevel( 
-//                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LOCATION_KEY, 
-//									new Long(0) ).getId()
-//                	);
-//                
-                
 
         		Collection sectors = ActivityUtil.getAmpActivitySectors(activity.getAmpActivityId());
 
@@ -807,47 +736,7 @@ public class ShowActivityPrintPreview
                 eaForm.getAgencies().setRegGroups(regGroups);
                 eaForm.getAgencies().setRespOrganisations(respOrganisations);
                 
-                Collection colIssues = ActivityUtil.getAmpIssues(activity.getAmpActivityId());
-                if(colIssues != null
-                   && colIssues.size() > 0) {
-                    ArrayList issueList = new ArrayList();
-                    Iterator iItr = colIssues.iterator();
-                    while(iItr.hasNext()) {
-                        AmpIssues ampIssue = (AmpIssues) iItr.next();
-                        Issues issue = new Issues();
-                        issue.setId(ampIssue.getAmpIssueId());
-                        issue.setName(ampIssue.getName());
-                        issue.setIssueDate(FormatHelper.formatDate(ampIssue.getIssueDate()));
-                        ArrayList measureList = new ArrayList();
-                        if(ampIssue.getMeasures() != null
-                           && ampIssue.getMeasures().size() > 0) {
-                            Iterator mItr = ampIssue.getMeasures().iterator();
-                            while(mItr.hasNext()) {
-                                AmpMeasure ampMeasure = (AmpMeasure) mItr.next();
-                                Measures measure = new Measures();
-                                measure.setId(ampMeasure.getAmpMeasureId());
-                                measure.setName(ampMeasure.getName());
-                                measure.setMeasureDate(FormatHelper.formatDate(ampMeasure.getMeasureDate()));
-                                ArrayList actorList = new ArrayList();
-                                if(ampMeasure.getActors() != null
-                                   && ampMeasure.getActors().size() > 0) {
-                                    Iterator aItr = ampMeasure.getActors().iterator();
-                                    while(aItr.hasNext()) {
-                                        AmpActor actor = (AmpActor) aItr.next();
-                                        actorList.add(actor);
-                                    }
-                                }
-                                measure.setActors(actorList);
-                                measureList.add(measure);
-                            }
-                        }
-                        issue.setMeasures(measureList);
-                        issueList.add(issue);
-                    }
-                    eaForm.getIssues().setIssues(issueList);
-                } else {
-                    eaForm.getIssues().setIssues(null);
-                }
+                eaForm.getIssues().setIssues(null);
 
                 // loading the contact person details and condition
                 eaForm.getContactInfo().setDnrCntFirstName(activity.getContFirstName());

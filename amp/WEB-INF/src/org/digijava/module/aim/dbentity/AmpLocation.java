@@ -17,10 +17,6 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 	private String gisCoordinates ;
 	private String language ;
 	private String version ;
-	private String country ;
-	private String region ;
-	private String zone;
-	private String woreda;
 	private String geoCode;
 	
 	private Set activities;
@@ -36,9 +32,6 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 	public void setLocation(AmpCategoryValueLocations location) {
 		this.location = location;
 	}
-	
-
-
 
 	/**
 	 * @return the regionLocation
@@ -62,87 +55,11 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 		this.activities = activities;
 	}
 	
-	@Deprecated
-	private Country dgCountry;
-	@Deprecated
-	private AmpRegion ampRegion;
-	@Deprecated
-	private AmpZone ampZone;
-	@Deprecated
-	private AmpWoreda ampWoreda;
-
-	@Deprecated
-	public Country getDgCountry() {
-			  return dgCountry;
-	}
-
-	@Deprecated
-	public void setDgCountry(Country dgCountry) {
-			  this.dgCountry = dgCountry;
-	}
-
-	@Deprecated
-	public AmpRegion getAmpRegion() {
-			  return ampRegion;
-	}
-
-	@Deprecated
-	public void setAmpRegion(AmpRegion ampRegion) {
-			  this.ampRegion = ampRegion;
-	}
-
-	@Deprecated
-	public AmpZone getAmpZone() {
-			  return ampZone;
-	}
-
-	@Deprecated
-	public void setAmpZone(AmpZone ampZone) {
-			  this.ampZone = ampZone;
-	}
-
-	@Deprecated
-	public AmpWoreda getAmpWoreda() {
-			  return ampWoreda;
-	}
-
-	@Deprecated
-	public void setAmpWoreda(AmpWoreda ampWoreda) {
-			  this.ampWoreda = ampWoreda;
-	}
-	
-
-
 	/**
 	 * @return
 	 */
 	public Long getAmpLocationId() {
 		return ampLocationId;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getCountry() {
-		return country;
-	}
-	
-	
-
-	public String getZone() {
-		return zone;
-	}
-
-	public void setZone(String zone) {
-		this.zone = zone;
-	}
-
-	public String getWoreda() {
-		return woreda;
-	}
-
-	public void setWoreda(String woreda) {
-		this.woreda = woreda;
 	}
 
 	/**
@@ -183,13 +100,6 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 	/**
 	 * @return
 	 */
-	public String getRegion() {
-		return region;
-	}
-
-	/**
-	 * @return
-	 */
 	public String getVersion() {
 		return version;
 	}
@@ -199,13 +109,6 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 	 */
 	public void setAmpLocationId(Long long1) {
 		ampLocationId = long1;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setCountry(String string) {
-		country = string;
 	}
 
 	/**
@@ -243,12 +146,6 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 		name = string;
 	}
 
-	/**
-	 * @param string
-	 */
-	public void setRegion(String string) {
-		region = string;
-	}
 
 	/**
 	 * @param string
@@ -259,8 +156,6 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 	
 	public String toString() {
 		String ret=new String();
-		if(country!=null) ret+=country;
-		if(region!=null) ret+="-"+region;
 		if(name!=null) ret+=" - "+name;		
 		return ret;
 	}
@@ -300,18 +195,6 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 		if (this.version != null && !this.version.trim().equals("")) {
 			out.getOutputs().add(new Output(null, new String[] { "Version" }, new Object[] { this.version }));
 		}
-		if (this.country != null && !this.country.trim().equals("")) {
-			out.getOutputs().add(new Output(null, new String[] { "Country" }, new Object[] { this.country }));
-		}
-		if (this.region != null && !this.region.trim().equals("")) {
-			out.getOutputs().add(new Output(null, new String[] { "Region" }, new Object[] { this.region }));
-		}
-		if (this.zone != null && !this.zone.trim().equals("")) {
-			out.getOutputs().add(new Output(null, new String[] { "Zone" }, new Object[] { this.zone }));
-		}
-		if (this.woreda != null && !this.woreda.trim().equals("")) {
-			out.getOutputs().add(new Output(null, new String[] { "Woreda" }, new Object[] { this.woreda }));
-		}
 		if (this.location != null) {
 			if (this.location.getName() != null && !this.location.getName().trim().equals("")) {
 				out.getOutputs().add(
@@ -324,8 +207,8 @@ public class AmpLocation implements Serializable, Versionable, Cloneable
 	@Override
 	public Object getValue() {
 		return this.iso3Code + "-" + this.name + "-" + this.description + "-" + this.gisCoordinates + "-"
-				+ this.language + "-" + this.version + "-" + this.country + "-" + this.region + "-" + this.zone + "-"
-				+ this.woreda + (this.location != null ? this.location.getName() : "");
+				+ this.language + "-" + this.version + "-"
+				+ (this.location != null ? this.location.getName() : "");
 	}
 	
 	@Override

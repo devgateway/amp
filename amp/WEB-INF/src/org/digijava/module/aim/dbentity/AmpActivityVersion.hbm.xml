@@ -198,12 +198,6 @@
 		</set>
 		-->
 
-		<!-- set name="locations" table="AMP_ACTIVITY_LOCATION" lazy="true">
-			<cache usage="read-write"/>
-			<key column="amp_activity_id"/>
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpLocation" column="amp_location_id"/>
-			</set-->
-
 		<set name="locations" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id" />

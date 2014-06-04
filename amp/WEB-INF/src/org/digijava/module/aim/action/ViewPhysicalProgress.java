@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.servlet.ServletException;
@@ -57,7 +58,7 @@ public class ViewPhysicalProgress extends TilesAction {
 		    }
 			Long ampActivityId = new Long(request.getParameter("ampActivityId"));
 			formBean.setComponents(ActivityUtil.getAllComponents(ampActivityId));
-			formBean.setIssues(ActivityUtil.getIssues(ampActivityId));
+			formBean.setIssues(new ArrayList()); //dummy value
 		}
 		return null;
 	}

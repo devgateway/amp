@@ -14,20 +14,7 @@
 		<property name="gisCoordinates" column="gis_coordinates" type="java.lang.String" />
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="version" column="version" type="java.lang.String" />
-		<property name="country" column="country" type="java.lang.String" />
-		<property name="region" column="region" type="java.lang.String" />
-		<property name="zone" column="zone" type="java.lang.String" />
-		<property name="woreda" column="woreda" type="java.lang.String" />
 		<property name="geoCode" column="geo_code" type="java.lang.String" />
-
-		<many-to-one name="dgCountry" column="country_id"
-			class="org.digijava.kernel.dbentity.Country" cascade="none" />
-		<many-to-one name="ampRegion" column="region_id"
-			class="org.digijava.module.aim.dbentity.AmpRegion" cascade="none" />
-		<many-to-one name="ampZone" column="zone_id"
-			class="org.digijava.module.aim.dbentity.AmpZone" cascade="none" />
-		<many-to-one name="ampWoreda" column="woreda_id"
-			class="org.digijava.module.aim.dbentity.AmpWoreda" cascade="none" />
 			
 		<set name="activities" lazy="true" cascade="none" inverse="true">
 			<cache usage="read-write" />

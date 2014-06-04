@@ -1114,20 +1114,6 @@ public class EditActivity extends Action {
             	if (actLoc == null)
             		continue;
             	AmpLocation loc=actLoc.getLocation();								//AMP-2250
-//              if (!maxLevel) {
-//                if (loc.getAmpWoreda() != null) {
-//                  impLevel = 3;
-//                  maxLevel = true;
-//                }
-//                else if (loc.getAmpZone() != null
-//                         && impLevel < 2) {
-//                  impLevel = 2;
-//                }
-//                else if (loc.getAmpRegion() != null
-//                         && impLevel < 1) {
-//                  impLevel = 1;
-//                }
-//              }
 
               if (loc != null) {
                 Location location = new Location();
@@ -1166,18 +1152,6 @@ public class EditActivity extends Action {
                     eaForm.getFunding().getFundingRegions().add( ampCVRegion );
                   }
                 }
-//                if (loc.getAmpZone() != null) {
-//                  location
-//                      .setZone(loc.getAmpZone().getName());
-//                  location.setZoneId(loc.getAmpZone()
-//                                     .getAmpZoneId());
-//                }
-//                if (loc.getAmpWoreda() != null) {
-//                  location.setWoreda(loc.getAmpWoreda()
-//                                     .getName());
-//                  location.setWoredaId(loc.getAmpWoreda()
-//                                       .getAmpWoredaId());
-//                }
 
                 if(actLoc.getLocationPercentage()!=null){
                 	String strPercentage	= FormatHelper.formatNumberNotRounded((double)actLoc.getLocationPercentage() );

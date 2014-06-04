@@ -1629,41 +1629,6 @@ public class TeamUtil {
 	  return res;
   	}
 
-    
-    public static boolean hasActivities(Long teamId) {
-        Session session = null;
-        boolean flag = false;
-
-        try {
-            session = PersistenceManager.getSession();
-            String queryString = "select count(*) from "
-                + AmpActivity.class.getName()
-                + " act where (act.team=:teamId)";
-            Query qry = session.createQuery(queryString);
-            qry.setParameter("teamId", teamId, LongType.INSTANCE);
-            Iterator itr = qry.list().iterator();
-            while(itr.hasNext()) {
-                Integer numActivities = (Integer) itr.next();
-                if(numActivities.intValue() != 0) {
-                    flag = true;
-                }
-            }
-        } catch(Exception e) {
-            logger.debug("Exception from hasActivities()");
-            logger.debug(e.toString());
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
-        }
-        return flag;
-    }
 
     public static Collection<AmpActivityVersion> getManagementTeamActivities(Long teamId, String keyword) {
         Session session = null;
@@ -1905,71 +1870,6 @@ public class TeamUtil {
        }
        return size;
    }
-
-
-    /**
-     * Ugly!
-     * @param teamId
-     * @return
-     * @deprecated please use {@link #getAllTeamReports(Long, Integer, Integer)} 
-     */
-    public static Collection getAllTeamReports(Long teamId) {
-        Session session = null;
-        Collection col = new ArrayList();
-        try {
-            session = PersistenceManager.getSession();
-            AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
-
-            String queryString = null;
-            Query qry = null;
-
-            if(team.getAccessType().equalsIgnoreCase(
-                Constants.ACCESS_TYPE_MNGMT)) {
-                queryString = "select r from " + AmpReports.class.getName()
-                    + " r " + " order by r.name";
-                qry = session.createQuery(queryString);
-                col = qry.list();
-            } else {
-                queryString = "select tr from "
-                    + AmpTeamReports.class.getName()
-                    + " tr where (tr.team=:teamId)";
-                qry = session.createQuery(queryString);
-                qry.setParameter("teamId", teamId, LongType.INSTANCE);
-                Iterator itr = qry.list().iterator();
-                col = new ArrayList();
-                StringBuffer qryBuffer = new StringBuffer();
-                AmpTeamReports ampTeamRep = null;
-                while(itr.hasNext()) {
-                    ampTeamRep = (AmpTeamReports) itr.next();
-                    if(qryBuffer.length() != 0)
-                        qryBuffer.append(",");
-                    qryBuffer.append(ampTeamRep.getReport().getAmpReportId());
-                }
-
-                if(qryBuffer != null && qryBuffer.length() > 0) {
-                    queryString = "select r from " + AmpReports.class.getName()
-                        + " r " + "where r.ampReportId in (" + qryBuffer
-                        + ") order by r.name";
-                    qry = session.createQuery(queryString);
-                    col = qry.list();
-                }
-                Collections.sort((ArrayList) col);
-            }
-        } catch(Exception e) {
-            logger.error("Exception from getAllTeamReports()", e);
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
-        }
-        return col;
-    }
 
     /**
      * Returns TeamLeader Reports.
@@ -2248,55 +2148,6 @@ public class TeamUtil {
 	   return getAllTeamReportsCount(teamId, null, false,  null);
    }
 
-
-   public static List getAllTeamAndMemberReports(Long teamId, Integer currentPage, Integer reportPerPage) {
-       Session session = null;
-       List col = new ArrayList();
-       try {
-           session = PersistenceManager.getRequestDBSession();
-           AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
-
-           String queryString = null;
-           Query qry = null;
-           String reportNameHql = AmpReports.hqlStringForName("r");
-           
-           if(team.getAccessType().equalsIgnoreCase(
-               Constants.ACCESS_TYPE_MNGMT)) {        	  
-               queryString = "select r from " + AmpReports.class.getName()
-                   + " r " + " order by " + reportNameHql + " ";
-               qry = session.createQuery(queryString);
-               if (currentPage !=null){
-            	   qry.setFirstResult(currentPage);
-               }
-               if(reportPerPage!=null && reportPerPage.intValue()>0){
-            	   qry.setMaxResults(reportPerPage);
-               }
-               col = qry.list();
-           } else {
-               queryString = "select r from "
-                   + AmpTeamReports.class.getName()+" tr inner join  tr.report r "
-                   + "  where (tr.team=:teamId) order by " + reportNameHql + " ";
-               qry = session.createQuery(queryString);
-               qry.setLong("teamId", teamId);
-               if (currentPage !=null){
-            	   qry.setFirstResult(currentPage);
-               }
-               if(reportPerPage!=null && reportPerPage.intValue()>0){
-            	   qry.setMaxResults(reportPerPage);
-               }
-               col = qry.list();
-           }
-       } catch(Exception e) {
-           logger.error("Exception from getAllTeamReports()", e);
-           throw new RuntimeException(e);
-       }
-       return col;
-   }
-
-    
-    
-    
-
     public static AmpTeamReports getAmpTeamReport(Long teamId, Long reportId) {
         Session session = null;
         AmpTeamReports ampTeamRep = null;
@@ -2560,17 +2411,7 @@ public class TeamUtil {
         AmpTeam currentAmpTeam = TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam();
         return currentAmpTeam;
     }
-
-    public static class HelperAmpTeamNameComparator
-        implements Comparator {
-        public int compare(Object obj1, Object obj2) {
-            AmpTeam team1 = (AmpTeam) obj1;
-            AmpTeam team2 = (AmpTeam) obj2;
-            return team1.getName().compareTo(team2.getName());
-        }
-
-    }
-    
+   
     public static class HelperAmpTeamNameComparatorTrimmed
     implements Comparator {
     public int compare(Object obj1, Object obj2) {
@@ -2580,14 +2421,6 @@ public class TeamUtil {
     }
 
 }
-    
-	public static class HelperAmpTeamNameComparatorDesc implements Comparator {
-	    public int compare(Object obj1, Object obj2) {
-	        AmpTeam team1 = (AmpTeam) obj1;
-	        AmpTeam team2 = (AmpTeam) obj2;
-	        return team2.getName().compareTo(team1.getName());
-	    }
-	}
 	
 	public static class HelperAmpTeamNameComparatorDescTrimmed implements Comparator {
 	    public int compare(Object obj1, Object obj2) {
@@ -2613,31 +2446,6 @@ public class TeamUtil {
  	 		}
  	 	}
  	 	return retValue;
-    }
-    
-    public static boolean hasUserAccessToActivity(Long actId, HttpServletRequest request){
-        Session session = null;
-        Query qry = null;
-
-        HttpSession httpSession = request.getSession();
-        TeamMember tm = (TeamMember) httpSession.getAttribute("currentMember");
-        
-        String qryStr;
-        try {
-        	session = PersistenceManager.getRequestDBSession();
-        	
-        	
-        	qryStr = "select count(*) from " + AmpActivity.class.getName() + " act " + "where (act.team=:teamId) and (act.ampActivityId=:actId)";
-        	qry = session.createQuery(qryStr);
-        	qry.setLong("teamId", tm.getTeamId());
-        	qry.setLong("actId", actId);
-        	Integer acts = (Integer) qry.list().get(0);
-        	if (acts > 0)
-        		return true;
-        } catch(Exception e) {
-        	logger.debug("cannot get acts "+e.getMessage());
-        }
-    	return false;
     }
     
     /**

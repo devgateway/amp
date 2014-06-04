@@ -328,7 +328,6 @@ public class AmpLocationFormTableFeature extends
                                 CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
                 if (regionLocation != null) {
                     ampLoc.setRegionLocation(regionLocation);
-                    ampLoc.setRegion(regionLocation.getName());
                 }
             }
             DbUtil.add(ampLoc);

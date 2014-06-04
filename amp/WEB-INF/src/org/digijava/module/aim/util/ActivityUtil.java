@@ -803,209 +803,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 
   // function for getting fundings for components and ids ends here
 
-  //function for physical progress
-
-  public static Collection getAmpIssues(Long actId) {
-	  	Collection issues = null;
-	    Session session = null;
-
-	    try {
-	      session = PersistenceManager.getRequestDBSession();
-	      String qryStr = "select a from " + AmpIssues.class.getName() +
-	          " a where a.activity.ampActivityId=:actId ";
-	      Query qry = session.createQuery(qryStr);
-	      qry.setParameter("actId", actId, LongType.INSTANCE);
-	      issues = qry.list();
-	      // get issues measures
-	      AmpIssues ampIssues = null;
-	      Collection measures = null;
-	      for (Iterator it = issues.iterator(); it.hasNext();) {
-	    	  ampIssues = (AmpIssues) it.next();
-	    	  measures = getAmpMeasures(ampIssues.getAmpIssueId());
-	    	  if (ampIssues.getMeasures() == null) {
-	    		  ampIssues.setMeasures(Collections.emptySet());
-	    	  }
-	    	  ampIssues.getMeasures().addAll(measures);
-	    	  // get measures actors
-	    	  AmpMeasure ampMeasure = null;
-	    	  Collection actors = null;
-	    	  for (Iterator it2 = measures.iterator(); it2.hasNext();) {
-	    		  ampMeasure = (AmpMeasure) it2.next();
-	    		  actors = getAmpActors(ampMeasure.getAmpMeasureId());
-	    		  if (ampMeasure.getActors() == null) {
-	    			  ampMeasure.setActors(Collections.emptySet());
-	    		  }
-	    		  ampMeasure.getActors().addAll(actors);
-	    	  }
-	      }
-	    }
-	    catch (Exception e) {
-	      logger.debug("Exception in getAmpIssues() " + e.getMessage());
-	    }
-	    return issues;
-  }
-
-  public static Collection getAmpMeasures(Long issueId) {
-	  	Collection col = null;
-	    Session session = null;
-
-	    try {
-	      session = PersistenceManager.getRequestDBSession();
-	      String qryStr = "select a from " + AmpMeasure.class.getName() +
-	          " a where a.amp_issue_id=:issueId ";
-	      Query qry = session.createQuery(qryStr);
-	      qry.setParameter("issueId", issueId, LongType.INSTANCE);
-	      col = qry.list();
-	    }
-	    catch (Exception e) {
-	      logger.debug("Exception in getAmpMeasures() " + e.getMessage());
-	    }
-	    return col;
-  }
-  
-
-  public static Collection getAmpActors(Long measureId) {
-	  	Collection col = null;
-	    Session session = null;
-
-	    try {
-	      session = PersistenceManager.getRequestDBSession();
-	      String qryStr = "select a from " + AmpActor.class.getName() +
-	          " a where a.amp_measure_id=:measureId ";
-	      Query qry = session.createQuery(qryStr);
-	      qry.setParameter("measureId", measureId, LongType.INSTANCE);
-	      col = qry.list();
-	    }
-	    catch (Exception e) {
-	      logger.debug("Exception in getAmpActors() " + e.getMessage());
-	    }
-	    return col;
-  }
-
-//end functino to get components
-  
-  public static ArrayList getRegionalObservations(Long id) {
-		ArrayList<AmpRegionalObservation> list = new ArrayList<AmpRegionalObservation>();
-		Session session = null;
-		try {
-			session = PersistenceManager.getSession();
-			AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
-			Set regObs = activity.getRegionalObservations();
-			Iterator<AmpRegionalObservation> iRegObs = regObs.iterator();
-			while (iRegObs.hasNext()) {
-				AmpRegionalObservation auxRegOb = iRegObs.next();
-				Iterator<AmpRegionalObservationMeasure> iRegMeasures = auxRegOb.getRegionalObservationMeasures()
-						.iterator();
-				while (iRegMeasures.hasNext()) {
-					AmpRegionalObservationMeasure auxRegMeasure = iRegMeasures.next();
-					Iterator<AmpRegionalObservationActor> iRegActors = auxRegMeasure.getActors().iterator();
-					while (iRegActors.hasNext()) {
-						iRegActors.next();
-					}
-				}
-
-				list.add(auxRegOb);
-			}
-		} catch (Exception e) {
-			logger.error(e);
-		}
-		return list;
-	}
-  
-  public static ArrayList getIssues(Long id) {
-    ArrayList list = new ArrayList();
-
-    Session session = null;
-    try {
-      session = PersistenceManager.getSession();
-      AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
-      Set issues = activity.getIssues();
-      if (issues != null && issues.size() > 0) {
-        Iterator iItr = issues.iterator();
-        while (iItr.hasNext()) {
-          AmpIssues ampIssue = (AmpIssues) iItr.next();
-          Issues issue = new Issues();
-          issue.setId(ampIssue.getAmpIssueId());
-          issue.setName(ampIssue.getName());
-          issue.setIssueDate(FormatHelper.formatDate(ampIssue.getIssueDate()));
-          ArrayList mList = new ArrayList();
-          if (ampIssue.getMeasures() != null &&
-              ampIssue.getMeasures().size() > 0) {
-            Iterator mItr = ampIssue.getMeasures().iterator();
-            while (mItr.hasNext()) {
-              AmpMeasure ampMeasure = (AmpMeasure) mItr.next();
-              Measures measure = new Measures();
-              measure.setId(ampMeasure.getAmpMeasureId());
-              measure.setName(ampMeasure.getName());
-              measure.setMeasureDate(FormatHelper.formatDate(ampMeasure.getMeasureDate()));
-                 
-              ArrayList aList = new ArrayList();
-              if (ampMeasure.getActors() != null &&
-                  ampMeasure.getActors().size() > 0) {
-                Iterator aItr = ampMeasure.getActors().iterator();
-                while (aItr.hasNext()) {
-                  AmpActor actor = (AmpActor) aItr.next();
-                  aList.add(actor);
-                }
-              }
-              measure.setActors(aList);
-              mList.add(measure);
-            }
-          }
-          issue.setMeasures(mList);
-          list.add(issue);
-        }
-      }
-    }
-    catch (Exception e) {
-      logger.debug("Exception in getIssues() " + e.getMessage());
-      e.printStackTrace(System.out);
-    }
-    return list;
-  }
-
-  public static Collection getRegionalFundings(Long id) {
-    Collection col = new ArrayList();
-
-    Session session = null;
-    try {
-      session = PersistenceManager.getRequestDBSession();
-      AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
-      col = activity.getRegionalFundings();
-    }
-    catch (Exception e) {
-      logger.debug("Exception in getRegionalFundings() " + e.getMessage());
-      e.printStackTrace(System.out);
-    }
-    return col;
-  }
-
-  public static Collection getRegionalFundings(Long id, Long regId) {
-    Collection col = new ArrayList();
-
-    Session session = null;
-    try {
-      session = PersistenceManager.getRequestDBSession();
-      AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
-      col = activity.getRegionalFundings();
-      ArrayList temp = new ArrayList(col);
-      Iterator itr = temp.iterator();
-      AmpRegionalFunding regionFunding = new AmpRegionalFunding();
-      regionFunding.setAmpRegionalFundingId(regId);
-      while (itr.hasNext()) {
-        AmpRegionalFunding regFund = (AmpRegionalFunding) itr.next();
-        if (regionFunding.equals(regFund)) {
-          col.remove(regFund);
-        }
-      }
-    }
-    catch (Exception e) {
-      logger.debug("Exception in getRegionalFundings() " + e.getMessage());
-      e.printStackTrace(System.out);
-    }
-    return col;
-  }
-
   public static AmpActivity getActivityByNameExcludingGroup(String name , AmpActivityGroup g) {
 	  
 		Session session=null;
@@ -1084,7 +881,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                 
                 StringBuilder donorNames = new StringBuilder();
                 
-                List organizations = new ArrayList(actItem.getFunding());
+                List<AmpFunding> organizations = new ArrayList<>(actItem.getFunding());
                 if (organizations != null && organizations.size() > 1) {
                     Collections.sort(organizations, new Comparator<AmpFunding>() {
                         public int compare(AmpFunding o1, AmpFunding o2) {
@@ -1126,32 +923,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
         return retVal;
     }
 
-  public static AmpActivityVersion getProjectChannelOverview(Long id) {
-    Session session = null;
-    AmpActivityVersion activity = null;
-
-    try {
-      logger.debug("Id is " + id);
-      session = PersistenceManager.getRequestDBSession();
-
-      // modified by Priyajith
-      // Desc: removed the usage of session.load and used the select query
-      // start
-      String queryString = "select a from " + AmpActivityVersion.class.getName()
-          + " a " + "where (a.ampActivityId=:id)";
-      Query qry = session.createQuery(queryString);
-      qry.setLong("id", id);
-      activity =(AmpActivityVersion)qry.uniqueResult();
-      // end
-    }
-    catch (Exception ex) {
-      logger
-          .error("Unable to get Amp Activity getProjectChannelOverview() :"
-                 + ex);
-    }
-    return activity;
-  }
-   /*
+    /*
    * get the  the Contracts for Activity
    * 
    */
@@ -1286,10 +1058,41 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		  return execRate;
   	}
 
+    /**
+     * returns a set of all ampActivityIds passed by the workspace filter
+     * @param session
+     */
+    public static Set<Long> getAllAmpActivityIds(String usedQuery)
+    {
+   		Set<Long> ampActivityIds = new HashSet<Long>();
+   		List<Object> res = PersistenceManager.getSession().createSQLQuery(usedQuery).list();
+   		for(Object aaa:res)
+		{
+			Long ampActivityId = PersistenceManager.getLong(aaa);
+			ampActivityIds.add(ampActivityId);
+		}
+		return ampActivityIds;
+    }
+    
+    /**
+     * returns a set of all ampActivityIds passed by the workspace filter
+     * @param session
+     */
+    public static Set<Long> getAllLegalAmpActivityIds() {
+        return getAllLegalAmpActivityIds(true);
+    }
+
+    public static Set<Long> getAllLegalAmpActivityIds(boolean inclideDrafts)
+    {
+    	String usedQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
+        if (!inclideDrafts) {
+            usedQuery += " and draft=false";
+        }
+    	return getAllAmpActivityIds(usedQuery);
+    }
+    
   	public static List<AmpActivityFake> getLastUpdatedActivities() {
- 		//String workspaceQuery = Util.toCSStringForIN(org.digijava.module.gis.util.DbUtil.getAllLegalAmpActivityIds());
-  		//BOZO SHMOZO
-  		String workspaceQuery = "-999";
+ 		String workspaceQuery = Util.toCSStringForIN(getAllLegalAmpActivityIds());
   		
  		List<AmpActivityFake> res = new ArrayList<AmpActivityFake>();
 		Session session = null;
@@ -1734,25 +1537,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                 }
                 return col;
        }
-  public static boolean isImplLocationCountry(Long actId) {
-                Session session = null;
-                boolean flag = false;
-                try {
-                       session = PersistenceManager.getRequestDBSession();
-                       String queryString = "select apl from " +AmpActivityLocation.class.getName() +
-                       " apl join apl.location l where (apl.activity=:actId) and (l.ampRegion is not NULL or l.ampZone is not  NULL or l.ampWoreda is not NULL)";
-                       Query qry = session.createQuery(queryString);
-                       qry.setLong("actId",actId);
-                       if(qry.list()!=null&&qry.list().size()>0){
-                           flag=true;
-                       }
-                } catch (Exception e) {
-                       logger.error("Unable to get locations");
-                       logger.error(e.getMessage());
-                }
-                return flag;
-       }
-
+ 
   public static class HelperAmpActivityNameComparator
         implements Comparator {
         public int compare(Object obj1, Object obj2) {

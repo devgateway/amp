@@ -25,8 +25,7 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
 	private AmpOrganisation reportingOrganization;
 	private AmpCurrency currency;
 	private String expenditureCategory;
-	@Deprecated
-	private AmpRegion region;
+
 	
 	private AmpCategoryValueLocations regionLocation;
 	/**
@@ -161,22 +160,6 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
 	 */
 	public void setTransactionType(Integer transactionType) {
 		this.transactionType = transactionType;
-	}
-	/**
-	 * @deprecated use regionLocation instead
-	 * @return the region
-	 */
-	@Deprecated
-	public AmpRegion getRegion() {
-		return region;
-	}
-	/**
-	 * @deprecated use regionLocation instead
-	 * @param region the region to set
-	 */
-	@Deprecated
-	public void setRegion(AmpRegion region) {
-		this.region = region;
 	}
 	
 	public boolean equals(Object arg) {

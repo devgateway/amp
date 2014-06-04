@@ -7,7 +7,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
 import org.digijava.module.aim.helper.IndicatorsBean;
@@ -53,7 +52,7 @@ public class ThemeForm extends ActionForm {
   		  private String indType;
   		  private Long indicatorsId[];
   		  private AmpLocation location;
-  		  private Collection<AmpRegion> locationsCol;
+
   		  private Collection<LabelValueBean> selectedlocations;
   		  private String keyword;
   		  private Long selectedLocationId;
@@ -719,14 +718,6 @@ public class ThemeForm extends ActionForm {
 
 	public void setLocation(AmpLocation location) {
 		this.location = location;
-	}
-
-	public Collection<AmpRegion> getLocationsCol() {
-		return locationsCol;
-	}
-
-	public void setLocationsCol(Collection<AmpRegion> locationsCol) {
-		this.locationsCol = locationsCol;
 	}
 
 	public Collection<LabelValueBean> getSelectedlocations() {

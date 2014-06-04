@@ -74,9 +74,6 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportLog</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSectorScheme</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamReports</hibernate-class>				
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpRegion</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpZone</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpWoreda</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentType</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponent</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComponentsIndicators</hibernate-class>

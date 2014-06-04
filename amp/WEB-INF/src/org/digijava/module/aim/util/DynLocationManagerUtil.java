@@ -940,7 +940,6 @@ public class DynLocationManagerUtil {
 							CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 			if (regionLocation != null) {
 				ampLoc.setRegionLocation(regionLocation);
-				ampLoc.setRegion(regionLocation.getName());
 			}
 			DbUtil.add(ampLoc);
 		}

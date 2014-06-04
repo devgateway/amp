@@ -59,7 +59,6 @@ public class AutopatcherService extends AbstractServiceImpl {
 			logger.info("Patch directory is " + realRootPath);
 			Collection<File> allPatchesFiles = PatcherUtil.getAllPatchesFiles(serviceContext.getRealPath(patchesDir));
 			Set allAppliedPatches = PatcherUtil.getAllAppliedPatches(session);
-			PersistenceManager.releaseSession(session);
 			Iterator i = allPatchesFiles.iterator();
 			while (i.hasNext()) {
 				session = PersistenceManager.getSession();
@@ -129,7 +128,6 @@ public class AutopatcherService extends AbstractServiceImpl {
 
 					} finally {
 						connection.setAutoCommit(true);
-						PersistenceManager.releaseSession(session);
 					}
 
 				} catch (Exception e) {

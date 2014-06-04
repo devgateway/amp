@@ -586,14 +586,6 @@ public class ActivityUtil {
     catch (Exception ex) {
       logger.error("Unable to get activity sectors :" + ex);
     }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception ex2) {
-        logger.error("releaseSession() failed ");
-      }
-    }
     return orgroles;
   }
 
@@ -1982,16 +1974,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		    catch (Exception e1) {
 			      logger.error("Could not delete the activity with id : " + ampActId);
 			      e1.printStackTrace(System.out);
-			    }
-			    finally {
-			      if (session != null) {
-			        try {
-			          PersistenceManager.releaseSession(session);
-			        }
-			        catch (Exception e2) {
-			          logger.error("Release session failed");
-			        }
-			      }
 			    }
     }
     

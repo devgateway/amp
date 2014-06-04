@@ -181,16 +181,6 @@ public class SiteUtils {
             logger.debug("Unable to get site from database ", ex);
             throw new DgException("Unable to get site from database ", ex);
         }
-        finally {
-            try {
-                if (session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
-        }
         return site;
     }
 
@@ -210,16 +200,6 @@ public class SiteUtils {
         catch (Exception ex) {
             logger.debug("Unable to get site from database ", ex);
             throw new DgException("Unable to get site from database ", ex);
-        }
-        finally {
-            try {
-                if (session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
         }
         return site;
     }
@@ -401,16 +381,6 @@ public class SiteUtils {
             logger.debug("Unable to get site from database ", ex);
             throw new DgException("Unable to get site from database ", ex);
         }
-        finally {
-            try {
-                if (session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
-        }
     }
     /**
      * Returns List of the child sites for the current site, ordered by site
@@ -436,16 +406,6 @@ public class SiteUtils {
             logger.debug("Unable to get child sites list from database ", ex);
             throw new DgException(
                 "Unable to get child sites list from database ", ex);
-        }
-        finally {
-            try {
-                if (session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
         }
         return sites;
     }

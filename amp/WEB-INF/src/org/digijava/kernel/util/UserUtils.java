@@ -105,14 +105,6 @@ public class UserUtils {
 			logger.warn("Unable to get user preferences", ex);
 			throw new DgException(ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed", ex2);
-			}
-		}
 
 		return result;
 	}
@@ -146,14 +138,6 @@ public class UserUtils {
 			logger.warn("Unable to get user language preferences", ex);
 			throw new DgException(ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed", ex2);
-			}
-		}
 
 		return result;
 	}
@@ -170,7 +154,6 @@ public class UserUtils {
 				preferences.getId().getUser().getId() +
 				" site#" + preferences.getId().getSite().getId());
 		Session sess = null;
-		Transaction tx = null;
 		try {
 			sess = PersistenceManager.
 			getSession();
@@ -199,27 +182,8 @@ public class UserUtils {
 		catch (Exception ex) {
 
 			logger.error("Unable to update user preferences ", ex);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {
-					logger.warn("rollback() failed ", ex);
-				}
-			}
 			throw new DgException(
 					"Unable to update user preferencese", ex);
-		}
-		finally {
-			if (sess != null) {
-				try {
-					PersistenceManager.releaseSession(sess);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed ", ex1);
-				}
-			}
-
 		}
 
 	}
@@ -284,7 +248,6 @@ public class UserUtils {
 				preferences.getId().getUser().getId() +
 				" site#" + preferences.getId().getSite().getId());
 		Session sess = null;
-		Transaction tx = null;
 		try {
 			sess = PersistenceManager.
 			getSession();
@@ -313,27 +276,8 @@ public class UserUtils {
 		catch (Exception ex) {
 
 			logger.error("Unable to update user's language preferences ", ex);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {
-					logger.warn("rollback() failed ", ex);
-				}
-			}
 			throw new DgException(
 					"Unable to update user's language preferencese", ex);
-		}
-		finally {
-			if (sess != null) {
-				try {
-					PersistenceManager.releaseSession(sess);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed ", ex1);
-				}
-			}
-
 		}
 
 	}

@@ -143,15 +143,6 @@ public final class ARUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
 		}
 		return col;
 	}

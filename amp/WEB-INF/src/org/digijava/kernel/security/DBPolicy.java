@@ -137,15 +137,6 @@ public class DBPolicy
         catch (Throwable cause) {
             throw new DgException("Error while loading privileges", cause);
         }
-        finally {
-            if (session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                }
-                catch (Exception ex) {
-                }
-            }
-        }
 
         return newPrincipalPermissionsMap;
     }

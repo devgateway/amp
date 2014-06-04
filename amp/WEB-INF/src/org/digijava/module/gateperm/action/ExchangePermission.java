@@ -119,7 +119,6 @@ public class ExchangePermission extends MultiAction {
 				GatePermission xmlToDbGatePermission = xmlToDbGatePermission(gp, added, updated);
 				session.saveOrUpdate(xmlToDbGatePermission);			
 				//transaction.commit();
-				PersistenceManager.releaseSession(session);
 			}
 			
 			List compPerm = xmlPermissions.getCompositePerm();
@@ -131,7 +130,6 @@ public class ExchangePermission extends MultiAction {
 				CompositePermission xmlToDbCompositePermission = xmlToDbCompositePermission(gp, added, updated);
 				session.saveOrUpdate(xmlToDbCompositePermission);
 				//transaction.commit();
-				PersistenceManager.releaseSession(session);
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -168,7 +166,6 @@ public class ExchangePermission extends MultiAction {
 			if(dbp instanceof GatePermission) {
 			    Session session = PersistenceManager.getRequestDBSession();			    
 			    session.delete(dbp);dbp=null;
-			    PersistenceManager.releaseSession(session);
 		    }
 		}
 				
@@ -213,7 +210,6 @@ public class ExchangePermission extends MultiAction {
 			if(dbp instanceof CompositePermission) {
 			    Session session = PersistenceManager.getRequestDBSession();
 			    session.delete(dbp);dbp=null;
-			    PersistenceManager.releaseSession(session);
 			    }
 		}
 		

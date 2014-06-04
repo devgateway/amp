@@ -130,8 +130,6 @@ public final class PermissionUtil {
 		hs.delete(p);
 		//hs.beginTransaction().commit();
 		
-		PersistenceManager.releaseSession(hs);
-		
 	}
 	
 	public static boolean arrayContains(Object[] a,Object o) {
@@ -263,10 +261,7 @@ public final class PermissionUtil {
     	} catch (DgException e) {
     	    logger.error(e);
     	    throw new RuntimeException("DgException Exception encountered", e);
-    	} finally { 
-    		PersistenceManager.releaseSession(session);
     	}
-
         }
 
     
@@ -284,10 +279,7 @@ public final class PermissionUtil {
 	} catch (DgException e) {
 	    logger.error(e);
 	    throw new RuntimeException("DgException Exception encountered", e);
-	} finally { 
-		PersistenceManager.releaseSession(session);
 	}
-
     }
 
     
@@ -306,10 +298,7 @@ public final class PermissionUtil {
     	} catch (DgException e) {
     	    logger.error(e);
     	    throw new RuntimeException("DgException Exception encountered", e);
-    	} finally { 
-    		PersistenceManager.releaseSession(session);
     	}
-
         }
     
     
@@ -338,10 +327,7 @@ public final class PermissionUtil {
 	    logger.error(e);
 	    // TODO Auto-generated catch block
 	    throw new RuntimeException("DgException Exception encountered", e);
-	} finally { 
-		PersistenceManager.releaseSession(session);
-		}
-
+	}
     }
     
     public static Map<Long, PermissionMap> getAllPermissionMapsForPermissibleClass(Class permClass) {
@@ -367,11 +353,8 @@ public final class PermissionUtil {
 	    logger.error(e);
 	    // TODO Auto-generated catch block
 	    throw new RuntimeException("DgException Exception encountered", e);
-	} finally { 
-		PersistenceManager.releaseSession(session);
-		}
-
-    }
+	}
+	}
     
     public static void cleanGlobalPermissionMapForPermissibleClass(Class permClass) {
     	Session session = null;
@@ -389,9 +372,7 @@ public final class PermissionUtil {
   	} catch (DgException e) {
   		  logger.error(e);
   		   throw new RuntimeException( "DgException Exception encountered", e);
-  	} finally { 
-  		PersistenceManager.releaseSession(session);
-  	}
+  	} 
     }
 	    
   	 
@@ -413,10 +394,7 @@ public final class PermissionUtil {
 	} catch (DgException e) {
 		  logger.error(e);
 		   throw new RuntimeException( "DgException Exception encountered", e);
-	} finally { 
-		PersistenceManager.releaseSession(session);
-	   }
-	  
+	}
     }
 
 
@@ -439,9 +417,7 @@ public final class PermissionUtil {
     	} catch (DgException e) {
     		  logger.error(e);
     		   throw new RuntimeException( "DgException Exception encountered", e);
-    	} finally { 
-    		PersistenceManager.releaseSession(sessionAux);    	  
-        }
+    	} 
     	}
     
     
@@ -462,12 +438,8 @@ public final class PermissionUtil {
   	} catch (DgException e) {
   	    logger.error(e);
   	    throw new RuntimeException( "DgException Exception encountered", e);
-  	} finally { 
-  		PersistenceManager.releaseSession(session);
-  	    
-  	}
-  	  
-      }
+  	}   	  
+    }
 
     
     /**
@@ -498,10 +470,7 @@ public final class PermissionUtil {
 	} catch (DgException e) {
 	    logger.error(e);
 	    throw new RuntimeException("DgException Exception encountered", e);
-	} finally {
-		PersistenceManager.releaseSession(session);
 	}
-
     }
 
 
@@ -544,10 +513,7 @@ public final class PermissionUtil {
 	} catch (DgException e) {
 	    logger.error(e);
 	    throw new RuntimeException("SQLException Exception encountered", e);
-	} finally { 
-		PersistenceManager.releaseSession(session);
 	}
-
     }
 
     
@@ -585,10 +551,7 @@ public final class PermissionUtil {
 	} catch (DgException e) {
 	    logger.error(e);
 	    throw new RuntimeException("SQLException Exception encountered", e);
-	} finally  {
-		PersistenceManager.releaseSession(session);
 	}
-
     }
 
     
@@ -633,10 +596,7 @@ public final class PermissionUtil {
     	} catch (DgException e) {
     	    logger.error(e);
     	    throw new RuntimeException("DgException Exception encountered", e);
-    	} finally  {
-    		PersistenceManager.releaseSession(session);
     	}
-
         }
 
     
@@ -675,12 +635,8 @@ public final class PermissionUtil {
 	} catch (DgException e) {
 	    logger.error(e);
 	    throw new RuntimeException("DgException Exception encountered", e);
-	} finally {
-		PersistenceManager.releaseSession(session);
-
 	}
-
-    }
+}
 
 	public static Session saveGlobalPermission(Class permCatClass,	Long permissionId, String permissibleCategory) throws DgException, HibernateException, SQLException {
 		// TODO Auto-generated method stub
@@ -693,7 +649,6 @@ public final class PermissionUtil {
 			globalPermissionMapForPermissibleClass = (PermissionMap) hs.get(PermissionMap.class,globalPermissionMapIdForPermissibleClass );	
 		
 		if(permissionId.longValue()==0 && globalPermissionMapForPermissibleClass.getId()==null)  {
-			PersistenceManager.releaseSession(hs);
 			 return null;// mapping.getInputForward();
 		} else if(permissionId.longValue()==0) {
 			hs.delete(globalPermissionMapForPermissibleClass);
@@ -710,8 +665,7 @@ public final class PermissionUtil {
 		hs.saveOrUpdate(globalPermissionMapForPermissibleClass);
 		
 		hs.flush();
-		
-		PersistenceManager.releaseSession(hs);
+
 		return null;//mapping.getInputForward();
 
 	}

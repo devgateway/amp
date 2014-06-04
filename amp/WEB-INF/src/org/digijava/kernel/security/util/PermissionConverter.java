@@ -57,7 +57,6 @@ public class PermissionConverter {
 
                 digiPolicy.grant(gp, permission);
             }
-            PersistenceManager.releaseSession(session);
         }
         finally {
             PersistenceManager.cleanup();

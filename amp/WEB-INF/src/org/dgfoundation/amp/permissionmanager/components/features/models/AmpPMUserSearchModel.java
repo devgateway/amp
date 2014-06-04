@@ -78,8 +78,6 @@ public class AmpPMUserSearchModel extends AbstractAmpAutoCompleteModel<User> {
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			PersistenceManager.releaseSession(session);
 		}
 		
 		return ret;

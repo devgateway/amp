@@ -65,8 +65,6 @@ public class LocationUtil {
 			
 		} catch (Exception e) {
 			logger.error("Uanble to get location :" + e);
-		} finally {
-			PersistenceManager.releaseSession(session);
 		}
 		return loc;
 		

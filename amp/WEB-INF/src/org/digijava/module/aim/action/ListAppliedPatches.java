@@ -99,15 +99,6 @@ public class ListAppliedPatches extends Action {
 			logger.error("Exception : " + ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
 		return col;
 	}
 }

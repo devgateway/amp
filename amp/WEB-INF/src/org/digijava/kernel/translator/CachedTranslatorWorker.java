@@ -114,15 +114,6 @@ public class CachedTranslatorWorker extends TranslatorWorker {
                                       key + ", locale=" + locale + ", siteId=" +
                                       siteId + "]", ex);
         }
-        finally {
-            try {
-                if (session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception e) {}
-        }
-
     }
     
     //TODO may be bad idea!
@@ -263,7 +254,6 @@ public class CachedTranslatorWorker extends TranslatorWorker {
             return;
 
         Session ses = null;
-        Transaction tx = null;
         
         @SuppressWarnings("unchecked")
         List messages;
@@ -294,25 +284,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         }
         catch (HibernateException e) {
             logger.error("Error updating translations. key=" + key, e);
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (HibernateException ex1) {
-                    logger.warn("rollback() failed", ex1);
-                }
-            }
             throw new WorkerException("Error updating translations. key=" + key, e);
-        }
-        finally {
-            try {
-                if (ses != null) {
-                    PersistenceManager.releaseSession(ses);
-                }
-            }
-            catch (Exception e) {
-                logger.error("releaseSession() failed. key=" + key, e);
-            }
         }
 
     }

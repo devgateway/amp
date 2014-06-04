@@ -382,25 +382,14 @@ public class DgLoginModule
         List list = null;
         Session session = null;
 
-        try {
-        	session = PersistenceManager.getSession();
-            String queryString = "select u.id, u.password, u.salt from " + User.class.getName() +
-            					 " u where lower(u.email) = :email";
+       	session = PersistenceManager.getSession();
+           String queryString = "select u.id, u.password, u.salt from " + User.class.getName() +
+           					 " u where lower(u.email) = :email";
             
-            Query query = session.createQuery(queryString);
-            query.setString("email", email.toLowerCase());
+        Query query = session.createQuery(queryString);
+        query.setString("email", email.toLowerCase());
             
-            list = query.list();
-
-        }
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex2) {
-                logger.warn("releaseSession() failed", ex2);
-            }
-        }
+        list = query.list();
 
         if (list == null || list.size() == 0) {
             return null;
@@ -418,7 +407,6 @@ public class DgLoginModule
         LoginException {
         Session session = null;
         User user = null;
-        Transaction tx = null;
         try {
             session = PersistenceManager.getSession();
 
@@ -462,25 +450,9 @@ public class DgLoginModule
 
         }
         catch (HibernateException ex) {
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (Throwable cause) {
-                    logger.warn("rollback() failed ", cause);
-                }
-            }
             throw ex;
         }
 
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex2) {
-                logger.warn("releaseSession() failed", ex2);
-            }
-        }
     }
 
 }

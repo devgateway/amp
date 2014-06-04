@@ -130,7 +130,6 @@ public class ManagePermission extends MultiAction {
 	Session hs = PersistenceManager.getSession();
 	Long id = Long.parseLong(request.getParameter("permissionId"));
 	Permission p = (Permission) hs.get(Permission.class, id);
-	PersistenceManager.releaseSession(hs);
 	pf.clear();
 	pf.setName(p.getName());
 	pf.setDescription(p.getDescription());
@@ -257,7 +256,6 @@ public class ManagePermission extends MultiAction {
 	hs.saveOrUpdate(p);
 
 	hs.flush();
-	PersistenceManager.releaseSession(hs);
 
 	return modeListExisting(mapping, pf, request, response);
     }

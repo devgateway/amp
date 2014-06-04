@@ -126,14 +126,6 @@ public class TeamUtil {
             logger.error("Exception from getUnassignedWorkspcaes : "
                          + e.getMessage());
             throw new RuntimeException(e);
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception rsf) {
-                    logger.error("Release Session failed");
-                }
-            }
         }
         return col;
     }
@@ -202,14 +194,6 @@ public class TeamUtil {
             }
         } catch(Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception rsf) {
-                    logger.error("Release session failed");
-                }
-            }
         }
         return col;
     }
@@ -229,15 +213,7 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception rsf) {
-                    logger.error("Release session failed");
-                }
-            }
-        }
+        } 
         return col;
     }
 
@@ -276,14 +252,6 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception rsf) {
-                    logger.error("Release session failed");
-                }
-            }
         }
         return col;
     }
@@ -304,15 +272,7 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception rsf) {
-                    logger.error("Release session failed");
-                }
-            }
-        }
+        } 
         colSet.addAll(col);
         //return col;
         return colSet;
@@ -522,16 +482,7 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception rsf) {
-                    logger.error("Release session failed");
-                }
-            }
         }
-
         return workspace;
     }
 
@@ -545,8 +496,6 @@ public class TeamUtil {
     public static boolean updateTeam(AmpTeam team, Collection childTeams) {
         boolean teamExist = false;
         Session session = null;
-        Transaction tx = null;
-
         try {
 
             session = PersistenceManager.getSession();
@@ -635,35 +584,10 @@ public class TeamUtil {
 
         } catch(Exception e) {
 
-            /*
-             * teamExist = true; logger.error("Execption from updateTeam() :" +
-             * ae.getMessage()); ae.printStackTrace(System.out);
-             */
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Exception rbf) {
-                    logger.error("Rollback failed");
-                }
-            }
             throw new RuntimeException(e);
 
         }
-        /*
-        * catch (Exception e) { logger.error("Execption from updateTeam() :" +
-        * e.getMessage()); e.printStackTrace(System.out); if (tx != null) {
-        * try { tx.rollback(); } catch (Exception rbf) {
-        * logger.error("Rollback failed"); } } }
-        finally
-        */ {
-           if(session != null) {
-               try {
-                   PersistenceManager.releaseSession(session);
-               } catch(Exception rsf) {
-                   logger.error("Release session failed");
-               }
-           }
-       }
+
         return teamExist;
     }
 
@@ -690,14 +614,6 @@ public class TeamUtil {
 
         } catch(Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
         }
         return memExist;
     }
@@ -725,15 +641,7 @@ public class TeamUtil {
 
         } catch(Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
-        }
+        } 
         return memExist;
     }
     
@@ -752,7 +660,6 @@ public class TeamUtil {
 			team.setParentTeamId(null);
 			session.saveOrUpdate(team);
 			//transaction.commit();
-			PersistenceManager.releaseSession(session);
 		} catch (HibernateException e) {
 			logger.error(e);
 			e.printStackTrace();
@@ -772,7 +679,6 @@ public class TeamUtil {
      */
     public static void removeTeam(Long teamId) {
         Session session = null;
-        Transaction tx = null;
         String qryStr = null;
         Query qry = null;
 
@@ -852,8 +758,6 @@ public class TeamUtil {
             
             session.delete(team);
             
-            
-            
             //tx.commit();
         } catch(ObjectNotFoundException objectNotFoundEx) {
             logger.error("Execption from removeTeam() :" + objectNotFoundEx.getMessage());
@@ -861,14 +765,6 @@ public class TeamUtil {
         } catch(Exception ex) {
             logger.error("Execption from removeTeam() :" + ex.getMessage());
             ex.printStackTrace();
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Exception rbf) {
-                    logger.error("Rollback failed");
-                }
-                throw new RuntimeException(ex);
-            }
             throw new RuntimeException(ex);
         }
     }
@@ -917,35 +813,11 @@ public class TeamUtil {
         }
         return member;
     }
-
-//    public static void testDan(AmpTeamMember member, AmpApplicationSettings appSettings) {
-//			Session session = null;
-//			Transaction tx = null;
-//			
-//			try {
-//			session = PersistenceManager.getRequestDBSession();
-////beginTransaction();
-//			session.saveOrUpdate(member);
-//			session.saveOrUpdate(appSettings);
-//			
-//			}catch(Exception e) {
-//	            logger.error("Exception from addTeamMember :" + e);
-//	            e.printStackTrace();
-//	            if(tx != null) {
-//	                try {
-//	                    tx.rollback();
-//	                } catch(Exception rbf) {
-//	                    logger.error("Rollback failed :" + rbf);
-//	                }
-//	            }
-//			}
-//    }
     
     public static void addTeamMember(AmpTeamMember member,
                                      /*AmpApplicationSettings appSettings,*/ 
     								Site site) {
         Session session = null;
-        Transaction tx = null;
        
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -974,13 +846,6 @@ public class TeamUtil {
         } catch(Exception e) {
             logger.error("Exception from addTeamMember :" + e);
             e.printStackTrace();
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Exception rbf) {
-                    logger.error("Rollback failed :" + rbf);
-                }
-            }
             throw new RuntimeException(e);
 
         } 
@@ -1016,57 +881,7 @@ public class TeamUtil {
         return memberExist;
     }
 
-    public static void removeActivitiesFromDonorTeam(Long activities[],
-        Long teamId) {
-        Session session = null;
-        Transaction tx = null;
-        AmpTeamMember member = null;
-
-        try {
-            session = PersistenceManager.getSession();
-//beginTransaction();
-
-            AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
-
-            for(int i = 0; i < activities.length; i++) {
-                AmpActivity activity = (AmpActivity) session.load(
-                    AmpActivity.class, activities[i]);
-
-                team.getActivityList().remove(activity);
-                Iterator membersItr = activity.getMember().iterator();
-                while(membersItr.hasNext()) {
-                    member = (AmpTeamMember) membersItr.next();
-                    if(member.getAmpTeam().getAmpTeamId().equals(teamId)) {
-                        member.getActivities().remove(activity);
-                        session.update(member);
-                    }
-                }
-                session.update(team);
-//session.flush();
-            }
-
-            //tx.commit();
-        } catch(Exception e) {
-
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Exception rbf) {
-                    logger.error("Roll back failed");
-                }
-            }
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
-        }
-    }
-
+ 
     public static void removeActivitiesFromTeam(Long activities[],Long teamId) {
         Session session = null;
         Transaction tx = null;
@@ -1093,97 +908,7 @@ public class TeamUtil {
                 }
             }
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
         }
-
-    }
-
-    public static Collection getAllDonorsToDesktop(Long teamId) {
-        Session session = null;
-        Query qry = null;
-        Collection donors = new ArrayList();
-
-        try {
-            session = PersistenceManager.getSession();
-            Vector teams = new Vector();
-            Vector temp = new Vector();
-
-            teams.add(teamId);
-            temp.add(teamId);
-            String qryStr = "";
-            Long tId = new Long(0);
-            String inclause = "";
-
-            ArrayList dbReturnSet = (ArrayList) getAmpLevel0TeamIds(teamId);
-            if(dbReturnSet.size() == 0)
-                inclause = "'" + teamId + "'";
-            else {
-                Iterator iter = dbReturnSet.iterator();
-                while(iter.hasNext()) {
-                    tId = (Long) iter.next();
-                    if(inclause == null || inclause.trim().length() == 0) {
-                        inclause = "'" + tId + "'";
-                    } else {
-                        inclause = inclause + ",'" + tId + "'";
-                    }
-                }
-            }
-
-            qryStr = "select act.ampActivityId from "
-                + AmpActivity.class.getName() + ""
-                + " act where act.team in (" + inclause.toString() + ")";
-
-            qry = session.createQuery(qryStr);
-            Iterator itr = qry.list().iterator();
-            inclause = "";
-            while(itr.hasNext()) {
-                if(inclause.length() != 0)
-                    inclause += ",";
-                inclause += (Long) itr.next();
-            }
-
-            if(!"".equals(inclause)) {
-                qryStr = "select distinct aor.organisation from "
-                    + AmpOrgRole.class.getName() + " aor, "
-                    + AmpOrganisation.class.getName() + " " + "org, "
-                    + AmpRole.class.getName() + " role where "
-                    + "aor.activity in (" + inclause + ") and "
-                    + "aor.role = role.ampRoleId and "
-                    + "aor.organisation = org.ampOrgId and "
-                    + "role.roleCode = '" + Constants.FUNDING_AGENCY + "' and "
-                    + "(org.deleted is null or org.deleted = false) order by org.acronym asc";
-
-                qry = session.createQuery(qryStr);
-                itr = qry.list().iterator();
-                while(itr.hasNext()) {
-                    AmpOrganisation ampOrg = (AmpOrganisation) itr.next();
-                    if(ampOrg.getAcronym().length() > 20)
-                        ampOrg.setAcronym(ampOrg.getAcronym().substring(0, 20)
-                                          + "...");
-                    donors.add(ampOrg);
-                }
-            }
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
-        }
-
-        return donors;
     }
 
     public static Collection getDonorTeams(Long teamId) {
@@ -1221,14 +946,6 @@ public class TeamUtil {
         } catch(Exception e) {
             throw new RuntimeException(e);
 
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
         }
         return col;
     }
@@ -1283,7 +1000,6 @@ public class TeamUtil {
     public static void assignActivitiesToDonor(Long dnrTeamId,
                                                Long activityId[]) {
         Session session = null;
-        Transaction tx = null;
 
         try {
             session = PersistenceManager.getSession();
@@ -1309,28 +1025,12 @@ public class TeamUtil {
         } catch(Exception e) {
             logger.error("Unable to assignActivitiesToDonor" + e.getMessage());
             e.printStackTrace(System.out);
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Exception rbf) {
-                    logger.error("Rollback failed");
-                }
-            }
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
         }
     }
 
     public static void removeActivitiesFromDonor(Long dnrTeamId, Long activityId[]) {
         Session session = null;
-        Transaction tx = null;
 
         try {
             session = PersistenceManager.getSession();
@@ -1363,22 +1063,7 @@ public class TeamUtil {
         } catch(Exception e) {
             logger.error("Unable to assignActivitiesToDonor" + e.getMessage());
             e.printStackTrace(System.out);
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Exception rbf) {
-                    logger.error("Rollback failed");
-                }
-            }
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
         }
     }
 
@@ -1399,14 +1084,6 @@ public class TeamUtil {
         } catch(Exception ex) {
             logger.error("Unable to get AmpTeam [checkForParentTeam()]", ex);
             throw new RuntimeException(ex);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-            }
         }
         logger.debug("Getting checkForParentTeam Executed successfully ");
         return ans;
@@ -1432,14 +1109,6 @@ public class TeamUtil {
             logger.error("Unable to get team");
             logger.debug("Exceptiion " + e);
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
         }
         return team;
     }
@@ -1780,18 +1449,10 @@ public class TeamUtil {
         } catch(Exception e) {
             logger.error("Exception from getTeamReportsCollection", e);
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
         }
         return col;
     }
+    
     public static List getTeamReportsCollection(Long teamId, int currentPage, int recordPerPage, Boolean tabs, String keyword) {
         Session session = null;
         List col = new ArrayList<ReportsCollection>();
@@ -2167,15 +1828,6 @@ public class TeamUtil {
             logger.debug("Exception from getAmpTeamReport()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
         }
         return ampTeamRep;
     }
@@ -2244,15 +1896,6 @@ public class TeamUtil {
             logger.debug("cannot get All teams");
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-                throw new RuntimeException(ex);
-            }
         }
         return teams;
     }
@@ -2378,15 +2021,6 @@ public class TeamUtil {
             logger.debug("Exception from getAmpLevel0Team()" + e.getMessage());
             logger.debug(e.toString());
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
         }
         return teams;
     }

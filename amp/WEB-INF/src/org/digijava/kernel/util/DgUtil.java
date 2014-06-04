@@ -239,14 +239,6 @@ public class DgUtil {
                     }
                     throw new RuntimeException("Unable to switch Language ", ex);
                 }
-                finally {
-                    try {
-                        PersistenceManager.releaseSession(session);
-                    }
-                    catch (Exception ex) {
-                        logger.warn("releaseSession() failed ", ex);
-                    }
-                }
 
             }
             request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
@@ -481,15 +473,6 @@ public class DgUtil {
 
             throw new RuntimeException("Unable to switch Language ", ex);
         }
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex) {
-                logger.warn("releaseSession() failed ", ex);
-            }
-        }
-
     }
 
     public static String generateUID(String value, boolean hashIt) {
@@ -1249,14 +1232,6 @@ public class DgUtil {
         catch (Exception ex) {
             logger.debug("Unable to get User from database", ex);
             throw new DgException("Unable to get User from database", ex);
-        }
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex2) {
-                logger.warn("releaseSession() failed", ex2);
-            }
         }
 
         if (result == null) {

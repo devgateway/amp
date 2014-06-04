@@ -86,15 +86,6 @@ public class DbUtil {
         } catch(Exception ex0) {
             logger.debug("Unable to get user information from database", ex0);
             throw new UMException("Unable to get user information from database", ex0);
-        } finally {
-            if(sess != null) {
-                try {
-                    PersistenceManager.releaseSession(sess);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed", ex1);
-                }
-            }
-
         }
 
         return userId;
@@ -170,15 +161,6 @@ public class DbUtil {
         } catch(Exception ex0) {
             logger.debug("isCorrectPassword() failed", ex0);
             throw new UMException(ex0.getMessage(), ex0);
-        } finally {
-            if(sess != null) {
-                try {
-                    PersistenceManager.releaseSession(sess);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed ", ex1);
-                }
-            }
-
         }
 
         return iscorrect;
@@ -248,14 +230,6 @@ public class DbUtil {
             }
             throw new UMException(
                 "Unable to update user information into database", ex);
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed ", ex1);
-                }
-            }
         }
         return true;
 
@@ -271,7 +245,6 @@ public class DbUtil {
                                       String newPassword) throws
         UMException {
 
-        Transaction tx = null;
         Session session = null;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.getSession();
@@ -294,24 +267,8 @@ public class DbUtil {
 
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
-
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(HibernateException ex1) {
-                    logger.warn("rollback() failed ", ex1);
-                }
-            }
             throw new UMException(
                 "Unable to update user information into database", ex);
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed ", ex1);
-                }
-            }
         }
     }
 
@@ -335,15 +292,6 @@ public class DbUtil {
         } catch(Exception ex0) {
             logger.debug("Unable to get Image from database ", ex0);
             throw new UMException("Unable to get Image from database ", ex0);
-        } finally {
-            if(sess != null) {
-                try {
-                    PersistenceManager.releaseSession(sess);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed ", ex1);
-                }
-            }
-
         }
 
         return iterImage;
@@ -358,7 +306,6 @@ public class DbUtil {
     public static void updateUserBio(User user) throws
         UMException {
 
-        Transaction tx = null;
         Session session = null;
         try {
             session = PersistenceManager.getSession();
@@ -369,21 +316,8 @@ public class DbUtil {
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Throwable cause) {
-                    logger.warn("rollback() failed ", cause);
-                }
-            }
             throw new UMException(
                 "Unable to update user information into database", ex);
-        } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch(Exception ex2) {
-                logger.warn("eleaseSession() failed ", ex2);
-            }
         }
         try {
             UserUtils.saveUserPreferences(user.getUserPreference());
@@ -402,7 +336,6 @@ public class DbUtil {
     public static void updateUserMarket(User user) throws
         UMException {
 
-        Transaction tx = null;
         Session session = null;
         try {
             session = PersistenceManager.getSession();
@@ -413,22 +346,9 @@ public class DbUtil {
         } catch(Exception ex) {
             logger.debug("Unable to update user information into database", ex);
 
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Throwable cause) {
-                    logger.warn("rollback() failed ", cause);
-                }
-            }
             throw new UMException(
                 "Unable to update user information into database", ex);
-        } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch(Exception ex2) {
-                logger.warn("eleaseSession() failed ", ex2);
-            }
-        }
+        } 
         try {
             UserUtils.saveUserPreferences(user.getUserPreference());
             UserUtils.saveUserLangPreferences(user.getUserLangPreferences());
@@ -496,13 +416,6 @@ public class DbUtil {
         	ex.printStackTrace();
             logger.debug("Unable to update user information into database", ex);
 
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Throwable cause) {
-                    logger.warn("rollback() failed ", cause);
-                }
-            }
             throw new UMException(
                 "Unable to update user information into database", ex);
         }
@@ -571,15 +484,6 @@ public class DbUtil {
             }
             throw new UMException(
                 "Unable to update user information into database", ex);
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed ", ex1);
-                }
-            }
-
         }
 
     }
@@ -609,15 +513,6 @@ public class DbUtil {
         } catch (Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);
             throw new UMException(ex0.getMessage(), ex0);
-        } finally {
-            if (session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch (Exception ex1) {
-                    logger.warn("releaseSession() failed ", ex1);
-                }
-            }
-
         }
 
         return verified ;
@@ -641,19 +536,10 @@ public class DbUtil {
         } catch(Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);
             throw new UMException(ex0.getMessage(), ex0);
-        } finally {
-            if(sess != null) {
-                try {
-                    PersistenceManager.releaseSession(sess);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed ", ex1);
-                }
-            }
-
         }
-
         return iscorrect;
     }
+    
     public static boolean EmailExist(String email, Long id) throws
     UMException {
     Session sess = null;
@@ -682,15 +568,6 @@ public class DbUtil {
     } catch(Exception ex0) {
         logger.debug("isRegisteredEmail() failed", ex0);
         throw new UMException(ex0.getMessage(), ex0);
-    } finally {
-        if(sess != null) {
-            try {
-                PersistenceManager.releaseSession(sess);
-            } catch(Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
-        }
-
     }
 
     return iscorrect;
@@ -698,7 +575,6 @@ public class DbUtil {
     
     public static void saveResetPassword(long userId, String code) throws
         UMException {
-        Transaction tx = null;
         Session session = null;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.getSession();
@@ -725,26 +601,9 @@ public class DbUtil {
             //tx.commit();
         } catch(Exception ex) {
             logger.debug("Unable to put reset password record into database", ex);
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(HibernateException ex1) {
-                    logger.warn("rollback() failed ", ex1);
-                }
-            }
             throw new UMException(
                 "Unable to put reset password record into database", ex);
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed ", ex1);
-                }
-            }
-
         }
-
     }
 
     /**
@@ -787,37 +646,6 @@ public class DbUtil {
         return getList(HowDidYouHear.class.getName(), null);
     }
 
-    /**
-     * Get Languages from DB
-     *
-     * @return
-     * @throws UMException
-     */
-
-    public static Locale getLanguageByCode(String code) throws
-        UMException {
-        Session session = null;
-        Query qry = null;
-        Locale locale = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select l from "
-                + Locale.class.getName()
-                + " l where (l.code=:code)";
-            qry = session.createQuery(queryString);
-            qry.setParameter("code", code, StringType.INSTANCE);
-            Iterator itr = qry.list().iterator();
-            if(itr.hasNext()) {
-                locale = (Locale) itr.next();
-            }
-        } catch(Exception e) {
-            logger.error("Unable to get Locale by code");
-            logger.debug("Exceptiion " + e);
-        }
-        return locale;
-    }
-
     public static List getLanguages() throws UMException {
         return getList(Locale.class.getName(), null);
     }
@@ -850,12 +678,6 @@ public class DbUtil {
         } catch(Exception ex) {
             logger.debug("Unable to get data from " + className, ex);
             throw new UMException("Unable to get data from " + className, ex);
-        } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch(Exception ex2) {
-                logger.warn("releaseSession() failed ", ex2);
-            }
         }
 
         return list;
@@ -890,12 +712,6 @@ public class DbUtil {
         } catch(Exception ex) {
             logger.debug("Unable to get User from database ", ex);
             throw new UMException("Unable to get User from database", ex);
-        } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch(Exception ex2) {
-                logger.warn("releaseSession() failed ", ex2);
-            }
         }
 
         return result;
@@ -913,12 +729,6 @@ public class DbUtil {
             logger.debug("Unable to get username list from database ", ex);
             throw new UMException(
                 "Unable to get username list from database", ex);
-        } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch(Exception ex2) {
-                logger.warn("releaseSession() failed ", ex2);
-            }
         }
 
         return userList;
@@ -954,14 +764,6 @@ public class DbUtil {
         } catch(Exception ex) {
             logger.debug("Unable to get Topics Sites", ex);
             throw new UMException("Unable to get Topics Sites", ex);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
         }
         return null;
     }
@@ -988,14 +790,6 @@ public class DbUtil {
         } catch(Exception ex) {
             logger.debug("Unable to get Topics Sites", ex);
             throw new UMException("Unable to get Topics Sites", ex);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
         }
         return sites;
     }
@@ -1020,14 +814,6 @@ public class DbUtil {
         } catch(Exception ex) {
             logger.debug("Unable to get Group list from database ", ex);
             throw new UMException("Unable to get Group list from database ", ex);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
         }
         return groups;
     }
@@ -1046,12 +832,6 @@ public class DbUtil {
             col = session.createQuery(q).list();
         } catch(Exception ex) {
             logger.error("Unable to get Org Group" + ex);
-        } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed ");
-            }
         }
         return col;
     }
@@ -1078,15 +858,6 @@ public class DbUtil {
         } catch(Exception e) {
             logger.debug("Exception from getOrgByGroup()");
             logger.debug(e.toString());
-        } finally {
-            try {
-                if(sess != null) {
-                    PersistenceManager.releaseSession(sess);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
         }
         return col;
     }
@@ -1105,12 +876,6 @@ public class DbUtil {
             col = session.createQuery(q).list();
         } catch(Exception ex) {
             logger.error("Unable to get Org Types" + ex);
-        } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed ");
-            }
         }
         return col;
     }
@@ -1137,15 +902,6 @@ public class DbUtil {
         } catch(Exception e) {
             logger.debug("Exception from getOrgGroupByType()");
             logger.debug(e.toString());
-        } finally {
-            try {
-                if(sess != null) {
-                    PersistenceManager.releaseSession(sess);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
         }
         return col;
     }
@@ -1172,15 +928,6 @@ public class DbUtil {
         } catch(Exception e) {
             logger.debug("Exception from getOrgByType()");
             logger.debug(e.toString());
-        } finally {
-            try {
-                if(sess != null) {
-                    PersistenceManager.releaseSession(sess);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
         }
         return col;
     }

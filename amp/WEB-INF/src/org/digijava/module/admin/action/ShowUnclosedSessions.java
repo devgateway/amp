@@ -64,70 +64,8 @@ public class ShowUnclosedSessions
 	    formBean.setShowAll(false);
 	}
 
-	Map unclosedSeesionsMap = null; // PersistenceManager.getUnclosedSessions();
-	long totalCount = 0;
-	long totalClosed = 0;
-
-	if (unclosedSeesionsMap != null && unclosedSeesionsMap.size() != 0) {
-	    boolean deleting = false;
-
-	    List unclosedSessions = new ArrayList();
-
-	    Set keySet = unclosedSeesionsMap.keySet();
-	    Iterator iter = keySet.iterator();
-	    while (iter.hasNext()) {
-		UnclosedSessionsForm.UnclosedSessionInfo si = new
-		      UnclosedSessionsForm.UnclosedSessionInfo();
-		Session key = (Session) iter.next();
-		String value = (String) unclosedSeesionsMap.get(key);
-
-		si.setKey(key);
-		si.setValue(value);
-
-		if (!key.isOpen()) {
-		    si.setClosed(true);
-		    ++totalClosed;
-		} else {
-		    si.setClosed(false);
-		}
-		if (formBean.isShowAll()) {
-		    unclosedSessions.add(si);
-		} else {
-		    if (!si.isClosed()) {
-			unclosedSessions.add(si);
-		    }
-		}
-		++totalCount;
-	    }
-	    formBean.setUnclosedSeesions(unclosedSessions);
-	    formBean.setTotalCount(totalCount);
-	    formBean.setTotalClosed(totalClosed);
-	    formBean.setTotalOpened(totalCount - totalClosed);
-
-	    if (formBean.getIndex() >= 0) {
-
-		UnclosedSessionsForm.UnclosedSessionInfo si = (
-		      UnclosedSessionsForm.UnclosedSessionInfo)
-		      unclosedSessions.get(
-		      formBean.getIndex());
-
-		PersistenceManager.releaseSession(si.getKey());
-		deleting = true;
-	    }
-
-
-	    if (deleting) {
-		return new ActionForward("/admin/showUnclosedSessions.do", true);
-	    }
-	    else {
-		return mapping.findForward("forward");
-	    }
-
-	}
-	else {
-	    formBean.setUnclosedSeesions(null);
-	    formBean.setTotalCount(0);
-	}
+    formBean.setUnclosedSeesions(null);
+    formBean.setTotalCount(0);
 	return mapping.findForward("forward");
     }
 }

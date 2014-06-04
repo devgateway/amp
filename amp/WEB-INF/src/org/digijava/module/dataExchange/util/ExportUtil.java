@@ -19,36 +19,7 @@ import org.hibernate.type.LongType;
 public class ExportUtil {
 
     private static Logger logger = Logger.getLogger(ExportUtil.class);
-	
-	/*
-	 * @deprecated do not use. using getActivities();
-	 */
-    public static Collection<AmpActivity> getAllTeamAmpActivities(Long teamId) {
-        Session session = null;
-        Collection<AmpActivity> retValue = null;
 
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "";
-            Query qry = null;
-            if(teamId == null) {
-            	queryString = "select act from "+ AmpActivity.class.getName() + " act where act.team is null";
-            	qry=session.createQuery(queryString);
-            }
-            else{
-            	queryString = "select act from "  + AmpActivity.class.getName() + " act where (act.team=:teamId)";
-            	qry=session.createQuery(queryString);
-            	qry.setParameter("teamId", teamId, LongType.INSTANCE);
-            }
-            retValue = qry.list();
-        } catch(Exception e) {
-            logger.debug("Exception from getAllTeamAmpActivities()");
-            logger.debug(e.toString());
-            throw new RuntimeException(e);
-        }
-        return retValue;
-    }
-	
     
     public static List<AmpActivity> getActivities(Long teamId, Long[] donorTypes, Long[] donorGroups, Long[] donorAgences,
     		Long[] primarySectors, Long[] secondarySectors) {

@@ -92,15 +92,6 @@ public class CategoryManagerUtil {
 			logger.error("Exception : " + ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
 		if ( ret == null || ret.equals("") )
 				ret	= defaultValue;
 		return ret;
@@ -397,13 +388,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		} catch (Exception ex) {
 			logger.error("Unable to get Categories: " + ex.getMessage());
 			ex.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
+		} 
 		if((returnCollection!=null)&&(!returnCollection.isEmpty())){
             return (AmpCategoryClass)returnCollection.toArray()[0];
         }else{
@@ -440,12 +425,6 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		} catch (Exception ex) {
 			logger.error("Unable to get Categories: " + ex.getMessage());
 			ex.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
         if((returnCollection!=null)&&(!returnCollection.isEmpty())){
             return (AmpCategoryClass)returnCollection.toArray()[0];
@@ -746,13 +725,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			logger.error("Unable to get Categories: " + ex.getMessage());
 			error	= "A Hibernate exception occured. See Stacktrace above.";
 			ex.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
+		} 
 		
 		if ( error != null)
 			throw new Exception( error );

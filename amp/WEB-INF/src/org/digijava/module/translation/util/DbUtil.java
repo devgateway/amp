@@ -112,14 +112,6 @@ public class DbUtil {
 			logger.debug("Unable to get Languages ", ex);
 			throw new DgException("Unable to get Languages ", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
-		}
 		return languages;
 	}
 
@@ -162,14 +154,7 @@ public class DbUtil {
 			logger.debug("Unable to get keys for messages", ex);
 			throw new DgException("Unable to get keys for messages", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
-		}
+
 		if (keyPrefixes.size() != 0) {
 			return keyPrefixes;
 		}
@@ -198,16 +183,6 @@ public class DbUtil {
 			throw new DgException(
 					"Unable to get key from database", ex);
 		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed", ex1);
-				}
-			}
-		}
 
 		return false;
 
@@ -222,7 +197,6 @@ public class DbUtil {
 	DgException {
 
 		Session session = null;
-		Transaction tx = null;
 
 		try {
 			session = PersistenceManager.getSession();
@@ -237,28 +211,9 @@ public class DbUtil {
 		catch (Exception ex) {
 			logger.debug("Unable to delete message into database", ex);
 
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {
-					logger.warn("rollback() failed", ex1);
-				}
-			}
 			throw new DgException(
 					"Unable to delete message into database", ex);
 		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed", ex1);
-				}
-			}
-		}
-
 	}
 
 	/**
@@ -363,14 +318,6 @@ public class DbUtil {
 			logger.debug("Unable to get keys for messages", ex);
 			throw new DgException("Unable to get keys for messages", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
-		}
 		if (messages.size() != 0) {
 			return messages;
 		}
@@ -435,14 +382,6 @@ public class DbUtil {
 			logger.debug("Unable to get keys for messages", ex);
 			throw new DgException("Unable to get keys for messages", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
-		}
 		if (messages.size() != 0) {
 			return messages;
 		}
@@ -505,14 +444,6 @@ public class DbUtil {
 		catch (Exception ex) {
 			logger.debug("Unable to get keys for messages", ex);
 			throw new DgException("Unable to get keys for messages", ex);
-		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
 		}
 		if (messages.size() != 0) {
 			return messages;

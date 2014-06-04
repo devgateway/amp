@@ -216,7 +216,6 @@ class DigiInitUtil {
         //-- Just a test
         Session session = null;
         Statement st = null;
-        Transaction tx = null;
         try {
             session = PersistenceManager.getSession();
 //beginTransaction();
@@ -233,34 +232,8 @@ class DigiInitUtil {
             //tx.commit();
         }
         catch (Exception ex) {
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (HibernateException ex3) {
-                    logger.warn("Could not Process Command",ex);
-                }
-            }
             logger.error("Could not Process Command",ex);
         }
-        finally {
-            if (st != null) {
-                try {
-                    st.close();
-                }
-                catch (SQLException ex1) {
-                    logger.warn("Statement.close() failed",ex1);
-                }
-            }
-            try {
-//session.flush();
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex2) {
-                logger.warn("releaseSession() failed",ex2);
-            }
-        }
-
         return true;
     }
 
@@ -290,7 +263,6 @@ class DigiInitUtil {
 
     static void createCommonInstances() throws Exception {
         Session session = null;
-        Transaction tx = null;
         try {
             session = PersistenceManager.getSession();
 //beginTransaction();
@@ -311,27 +283,8 @@ class DigiInitUtil {
         catch (Exception ex) {
             logger.debug("Unable to create common instances",ex);
 
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (HibernateException ex1) {
-                    logger.warn("rollback() failed",ex1);
-                }
-            }
             throw new DgException(
                 "Unable to create common instances", ex);
-        }
-        finally {
-            if (session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                }
-                catch (HibernateException ex1) {
-                    logger.warn("releaseSession() failed",ex1);
-                }
-            }
-
         }
     }
 

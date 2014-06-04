@@ -119,95 +119,10 @@ public class SectorUtil {
 
 		} catch (Exception ex) {
 			logger.debug("Unable to search sectors" + ex);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.debug("releaseSession() failed", ex2);
-			}
-		}
+		} 
 		return col;
 	}// End Search Sector.
 
-	/**
-	 * gets all the sectors attached to an activity
-	 * @param id
-	 * @return
-	 */
-	public static List getAmpSectors(Long id) {
-		ArrayList ampSectors = new ArrayList();
-		AmpSector ampSector = null;
-		Session session = null;
-		Iterator iter = null;
-
-		try {
-			session = PersistenceManager.getSession();
-
-			// modified by Priyajith
-			// desc:used select query instead of session.load
-			// start
-			String queryString = "select a from " + AmpActivity.class.getName()
-					+ " a " + "where (a.ampActivityId=:id)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, LongType.INSTANCE);
-			Iterator itr = qry.list().iterator();
-			AmpActivity ampActivity = null;
-			while (itr.hasNext()) {
-				ampActivity = (AmpActivity) itr.next();
-			}
-			// end
-
-			iter = ampActivity.getSectors().iterator();
-			while (iter.hasNext()) {
-				// ampSector = (AmpSector) iter.next();
-				ampSector = ((AmpActivitySector) iter.next()).getSectorId();
-				ampSectors.add(ampSector);
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp sectors from database :" + ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		logger.debug("Executed successfully " + ampSectors.size());
-		return ampSectors;
-	}
-
-//	public static Collection getSectorActivities(Long sectorId) {
-//
-//		Session sess = null;
-//		Collection col = null;
-//
-//		try {
-//			sess = PersistenceManager.getSession();
-//			AmpSector sector = (AmpSector) sess.load(AmpSector.class, sectorId);
-//
-//			Iterator itr = sector.getAidlist().iterator();
-//			col = new ArrayList();
-//			while (itr.hasNext()) {
-//				col.add(itr.next());
-//			}
-//		} catch (Exception e) {
-//			logger.debug("Exception from getSectorActivities()");
-//			logger.debug(e.toString());
-//		} finally {
-//			try {
-//				if (sess != null) {
-//					PersistenceManager.releaseSession(sess);
-//				}
-//			} catch (Exception ex) {
-//				logger.debug("releaseSession() failed");
-//				logger.debug(ex.toString());
-//			}
-//		}
-//		return col;
-//
-//	}
 
 	public static List<AmpSectorScheme> getAllSectorSchemes() {
 		try {
@@ -262,31 +177,6 @@ public class SectorUtil {
 
 		} catch (Exception e) {
 			logger.error("Cannot get parent sectors, " + e);
-		}
-		return col;
-	}
-
-	public static List<AmpSector> getAllSectorsFromScheme(Long secSchemeId) {
-		Session session = null;
-		List<AmpSector> col = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = "select s from " + AmpSector.class.getName()
-					+ " s " + "where amp_sec_scheme_id = " + secSchemeId + " and (s.deleted is null or s.deleted = false) ";
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-
-		} catch (Exception e) {
-			logger.error("Cannot get parent sectors, " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
 		}
 		return col;
 	}
@@ -402,14 +292,6 @@ public class SectorUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get subsectors");
 			ex.printStackTrace(System.out);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
 		}
 
 		return col;
@@ -449,47 +331,9 @@ public class SectorUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get sector info");
 			logger.debug("Exceptiion " + ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
 		}
-
 		return sec;
 	}
-
-//	public static AmpIndicatorSector getIndIcatorSector(Long indicatorId) {
-//
-//		Session session = null;
-//		Query qry = null;
-//		AmpIndicatorSector indSectorId = null;
-//		Iterator itr = null;
-//
-//		try {
-//			session = PersistenceManager.getRequestDBSession();
-//			String queryString = new String();
-//			queryString = "select s from " + AmpIndicatorSector.class.getName()
-//					+ " s where (s.themeIndicatorId=:themeIndicatorId)";
-//
-//			qry = session.createQuery(queryString);
-//			qry.setParameter("themeIndicatorId", indicatorId, LongType.INSTANCE);
-//			itr = qry.list().iterator();
-//
-//			if (itr.hasNext()) {
-//				indSectorId = (AmpIndicatorSector) itr.next();
-//			}
-//
-//		} catch (Exception e) {
-//			logger.error("Unable to get sector");
-//			logger.debug("Exceptiion " + e);
-//		}
-//
-//		return indSectorId;
-//	}
 
 	public static boolean getIndIcatorSector(Long indicatorId, Long sectorId) {
 
@@ -557,170 +401,9 @@ public class SectorUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get amp_sector_scheme info");
 			logger.debug("Exception " + ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
 		}
-
 		return ampSectorScheme;
 
-	}
-
-	/*
-	 * update sector details
-	 */
-	public static void updateSector(AmpSector sector) {
-
-		if (sector.getParentSectorId() == null
-				&& organisationChanged(sector.getAmpSectorId(),
-						sector.getAmpOrgId()) == true) {
-
-			updateSubSectors(sector, sector.getAmpOrgId());
-		}
-		DbUtil.update(sector);
-	}
-
-	public static ArrayList getAmpSectors() {
-		Session session = null;
-		Query q = null;
-		AmpSector ampSector = null;
-		ArrayList sector = new ArrayList();
-		String queryString = null;
-		Iterator iter = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			queryString = " select Sector from "
-					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is null and (Sector.deleted is null or Sector.deleted = false) order by " + AmpSector.hqlStringForName("Sector");
-			q = session.createQuery(queryString);
-			iter = q.list().iterator();
-
-			while (iter.hasNext()) {
-
-				ampSector = (AmpSector) iter.next();
-				sector.add(ampSector);
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get Sector names  from database "
-					+ ex.getMessage());
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
-		return sector;
-	}
-
-	public static ArrayList getAmpSubSectors() {
-		Session session = null;
-		Query q = null;
-		AmpSector ampSector = null;
-		ArrayList subsector = new ArrayList();
-		String queryString = null;
-		Iterator iter = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			queryString = " select Sector from "
-					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is not null and (Sector.deleted is null or Sector.deleted = false) order by " + AmpSector.hqlStringForName("Sector");
-			q = session.createQuery(queryString);
-			iter = q.list().iterator();
-			while (iter.hasNext()) {
-				ampSector = (AmpSector) iter.next();
-				subsector.add(ampSector);
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp sector names  from database "
-					+ ex.getMessage());
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
-		return subsector;
-	}
-
-	public static ArrayList getAmpSubSectors(Long ampSectorId) {
-		Session session = null;
-		Query q = null;
-		AmpSector ampSector = null;
-		ArrayList subsector = new ArrayList();
-		String queryString = null;
-		Iterator iter = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			queryString = " select Sector from "
-					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is not null and Sector.parentSectorId.ampSectorId=:ampSectorId and (Sector.deleted is null or Sector.deleted = false) ";
-			q = session.createQuery(queryString);
-			q.setParameter("ampSectorId", ampSectorId, LongType.INSTANCE);
-			iter = q.list().iterator();
-
-			while (iter.hasNext()) {
-
-				ampSector = (AmpSector) iter.next();
-				subsector.add(ampSector);
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp sub sectors  from database "
-					+ ex.getMessage());
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
-		return subsector;
-	}
-
-	public static AmpSector getAmpParentSector(Long ampSectorId) {
-		Session session = null;
-		Query q = null;
-		AmpSector ampSector = null;
-		String queryString = null;
-		Iterator iter = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			queryString = " select Sector from " + AmpSector.class.getName()
-					+ " Sector where Sector.ampSectorId=:ampSectorId and (Sector.deleted is null or Sector.deleted = false) ";
-			q = session.createQuery(queryString);
-			q.setParameter("ampSectorId", ampSectorId, LongType.INSTANCE);
-			iter = q.list().iterator();
-
-			ampSector = (AmpSector) iter.next();
-			while (ampSector.getParentSectorId() != null)
-				ampSector = ampSector.getParentSectorId();
-			// ampSectorId=ampSector.getAmpSectorId();
-			// logger.debug("Sector Id: " + ampSectorId);
-
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp sub sectors  from database "
-					+ ex.getMessage());
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
-		return ampSector;
 	}
 
 	public static Set<AmpSector> getAmpParentSectors(
@@ -756,62 +439,8 @@ public class SectorUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp sub sectors from database "
 					+ ex.getMessage());
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
 		}
 		return ret;
-	}
-
-	public static ArrayList getDonorSectors(Long ampSecSchemeId,
-			Long ampActivityId) {
-		logger.debug("In getDonorSectors");
-		Session session = null;
-		Query q = null;
-		AmpSector ampSector = null;
-		ArrayList sector = new ArrayList();
-		String queryString = null;
-		Iterator iter = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			// queryString = " select Sector from " + AmpSector.class.getName()
-			// + " Sector where Sector.parentSectorId is null order by
-			// Sector.name";
-
-			queryString = "select sector from "
-					+ AmpSector.class.getName()
-					+ " sector, "
-					+ AmpActivity.class.getName()
-					+ " act where (sector.ampSecSchemeId = :ampSecSchemeId) and (act.ampActivityId = :ampActivityId) and sector.parentSectorId is null and (sector.deleted is null or sector.deleted = false) ";
-			// queryString = "select sector from " + AmpSector.class.getName() +
-			// " sector, " + AmpActivity.class.getName() + " act where
-			// (sector.ampSecSchemeId = :ampSecSchemeId) and (act.ampActivityId
-			// = :ampActivityId)";
-			q = session.createQuery(queryString);
-			q.setParameter("ampSecSchemeId", ampSecSchemeId, LongType.INSTANCE);
-			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
-
-			iter = q.list().iterator();
-
-			while (iter.hasNext()) {
-				ampSector = (AmpSector) iter.next();
-				sector.add(ampSector);
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get Sector names  from database "
-					+ ex.getMessage());
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
-		return sector;
 	}
 
 	public static Collection searchSectorCode(String key) {
@@ -833,15 +462,6 @@ public class SectorUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from searchSectorCode()");
 			logger.debug(e.toString());
-		} finally {
-			try {
-				if (sess != null) {
-					PersistenceManager.releaseSession(sess);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
 		}
 		return col;
 
@@ -867,57 +487,8 @@ public class SectorUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from searchSectorName()");
 			logger.debug(e.toString());
-		} finally {
-			try {
-				if (sess != null) {
-					PersistenceManager.releaseSession(sess);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
 		}
 		return col;
-	}
-
-	public static boolean organisationChanged(Long sectorId,
-			AmpOrganisation organisation) {
-		logger.debug("in organisationChanged()");
-		Session sess = null;
-		boolean flag = false;
-
-		try {
-			sess = PersistenceManager.getSession();
-			String qryString = "select s from " + AmpSector.class.getName()
-					+ " s where (s.ampSectorId=:ampSectorId) and (s.deleted is null or s.deleted = false) ";
-
-			Query qry = sess.createQuery(qryString);
-			qry.setParameter("ampSectorId", sectorId, LongType.INSTANCE);
-			Iterator itr = qry.list().iterator();
-
-			if (itr.hasNext()) {
-				AmpSector ampSector = (AmpSector) itr.next();
-				logger.debug(ampSector.getAmpOrgId().getName() + " !- "
-						+ organisation.getName());
-				if (ampSector.getAmpOrgId().getAmpOrgId() != organisation
-						.getAmpOrgId()) {
-					flag = true;
-				}
-			}
-		} catch (Exception e) {
-			logger.debug("Exception thrown from fn organisationChanged()");
-			logger.debug(e.toString());
-		} finally {
-			if (sess != null) {
-				try {
-					PersistenceManager.releaseSession(sess);
-				} catch (Exception ex) {
-					logger.debug("releaseSession() 2 failed");
-					logger.debug(ex.toString());
-				}
-			}
-		}
-		return flag;
 	}
 
 	/**
@@ -1045,7 +616,6 @@ public class SectorUtil {
 		return new ArrayList<AmpSector>(ret);
 	}
 
-	// Govind's Starts from here!!
 	/*
 	 * this is to get the sector schemes from the ampSectorScheme table
 	 */
@@ -1069,12 +639,6 @@ public class SectorUtil {
 			logger.error("Unable to get report names  from database "
 					+ ex.getMessage());
 			ex.printStackTrace(System.out);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
 		}
 		return col;
 	}
@@ -1101,91 +665,6 @@ public class SectorUtil {
 			logger.error("Unable to get report names  from database "
 					+ ex.getMessage());
 			ex.printStackTrace(System.out);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
-		return col;
-	}
-
-	/*
-	 * this is to get the level one sectors that has some funding
-	 */
-	public static Collection getFundingLocationSectorLevel1(Integer schemeId) {
-		String queryString = null;
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			queryString = "select pi from "
-					+ AmpSector.class.getName()
-					+ " pi "
-					+ " where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null and (pi.deleted is null or pi.deleted = false) "
-					+ " and "
-					+ "(pi.ampSectorId in (select aas.sectorId from "
-					+ AmpActivitySector.class.getName()
-					+ " aas"
-					+ " where aas.activityId in (select al.activity from "
-					+ AmpActivityLocation.class.getName()
-					+ " al) "
-					+ " and aas.activityId in (select af.ampActivityId from "
-					+ AmpFunding.class.getName()
-					+ " af "
-					+ "where af.ampFundingId in (select afd.ampFundingId from "
-					+ AmpFundingDetail.class.getName()
-					+ " afd)))"
-					+ " or "
-					+ " pi.ampSectorId in (select asec.parentSectorId from "
-					+ AmpSector.class.getName()
-					+ " asec "
-					+ " where (asec.deleted is null or asec.deleted = false) and asec.ampSectorId in (select aas.sectorId from "
-					+ AmpActivitySector.class.getName()
-					+ " aas"
-					+ " where aas.activityId in (select al.activity from "
-					+ AmpActivityLocation.class.getName()
-					+ " al) "
-					+ " and aas.activityId in (select af.ampActivityId from "
-					+ AmpFunding.class.getName()
-					+ " af "
-					+ "where af.ampFundingId in (select afd.ampFundingId from "
-					+ AmpFundingDetail.class.getName()
-					+ " afd))))"
-					+ " or "
-					+ " pi.ampSectorId in (select asector.parentSectorId from "
-					+ AmpSector.class.getName()
-					+ " asector "
-					+ " where (asector.deleted is null or asector.deleted = false) and asector.ampSectorId in  (select asec.parentSectorId from "
-					+ AmpSector.class.getName() + " asec "
-					+ " where (asec.deleted is null or asec.deleted = false) and asec.ampSectorId in (select aas.sectorId from "
-					+ AmpActivitySector.class.getName() + " aas"
-					+ " where aas.activityId in (select al.activity from "
-					+ AmpActivityLocation.class.getName() + " al) "
-					+ " and aas.activityId in (select af.ampActivityId from "
-					+ AmpFunding.class.getName() + " af "
-					+ "where af.ampFundingId in (select afd.ampFundingId from "
-					+ AmpFundingDetail.class.getName() + " afd)))))" +
-
-					") order by " + AmpSector.hqlStringForName("pi");
-
-			qry = session.createQuery(queryString);
-			qry.setParameter("schemeId", schemeId, IntegerType.INSTANCE);
-			col = qry.list();
-			// session.flush();
-		} catch (Exception ex) {
-			logger.error("Unable to get sectors with funding and location from database "
-					+ ex.getMessage());
-			ex.printStackTrace(System.out);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
 		}
 		return col;
 	}
@@ -1210,12 +689,6 @@ public class SectorUtil {
 			logger.error("Unable to get report names  from database "
 					+ ex.getMessage());
 			ex.printStackTrace(System.out);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
 		}
 		return col;
 	}
@@ -1382,7 +855,6 @@ public class SectorUtil {
 
 		Session session = null;
 		AmpClassificationConfiguration config = null;
-		Transaction tx = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			if (configId != null && !configId.equals(0l)) {
@@ -1404,13 +876,6 @@ public class SectorUtil {
 
 		} catch (Exception ex) {
 			logger.error("Unable to save config to database " + ex.getMessage());
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Rollback failed");
-				}
-			}
 			throw new DgException(ex);
 
 		}
@@ -1457,32 +922,6 @@ public class SectorUtil {
 					+ AmpClassificationConfiguration.class.getName()
 					+ " config inner join config.classification cls "
 					+ " where config.primary=true ";
-			qry = session.createQuery(queryString);
-			// There must be only one primary configuration in database
-			return (AmpClassificationConfiguration) qry.uniqueResult();
-
-		} catch (Exception ex) {
-			logger.error("Unable to save config to database " + ex.getMessage());
-			throw new DgException(ex);
-
-		}
-	}
-
-	/**
-	 * Loads AmpClassificationConfiguration bean which is secondary. 
-	 * @return primary configuration
-	 * @throws DgException
-	 */
-	public static AmpClassificationConfiguration getSecondaryConfigClassification()
-			throws DgException {
-		Session session = PersistenceManager.getRequestDBSession();
-		String queryString = null;
-		Query qry = null;
-		try {
-			queryString = "select config from "
-					+ AmpClassificationConfiguration.class.getName()
-					+ " config inner join config.classification cls "
-					+ " where config.name='Secondary' ";
 			qry = session.createQuery(queryString);
 			// There must be only one primary configuration in database
 			return (AmpClassificationConfiguration) qry.uniqueResult();
@@ -1558,7 +997,6 @@ public class SectorUtil {
 	public static void deleteScheme(Long schemeId) {
 		logger.info(" deleting the scheme");
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
 			AmpSectorScheme scheme = (AmpSectorScheme) session.load(
@@ -1569,23 +1007,6 @@ public class SectorUtil {
 		} catch (Exception e) {
 			logger.error("Exception from deleteQuestion() :" + e.getMessage());
 			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception trbf) {
-					logger.error("Transaction roll back failed ");
-					e.printStackTrace(System.out);
-				}
-			}
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Failed to release session :"
-							+ rsf.getMessage());
-				}
-			}
 		}
 	}
 
@@ -1609,12 +1030,6 @@ public class SectorUtil {
 			logger.error("Unable to get report names  from database "
 					+ ex.getMessage());
 			ex.printStackTrace(System.out);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
 		}
 		return schemeId;
 	}
@@ -1622,7 +1037,6 @@ public class SectorUtil {
 	public static void deleteSector(Long sectorId) {
 		logger.info(" deleting the Sector");
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
 			AmpSector sector = (AmpSector) session.load(AmpSector.class,
@@ -1636,57 +1050,7 @@ public class SectorUtil {
 		} catch (Exception e) {
 			logger.error("Exception from deleteQuestion() :" + e.getMessage());
 			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception trbf) {
-					logger.error("Transaction roll back failed ");
-					e.printStackTrace(System.out);
-				}
-			}
-		} /*finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Failed to release session :"
-							+ rsf.getMessage());
-				}
-			}
-		}*/
-	}
-
-	public static void deleteIndSector(Long sectorid, Long indid) {
-
-		logger.info(" deleting the indsectors");
-		Session session = null;
-		Transaction tx = null;
-		AmpThemeIndicators ampThemeInd = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			// beginTransaction();
-			ampThemeInd = (AmpThemeIndicators) session.load(
-					AmpThemeIndicators.class, indid);
-			Iterator itr = ampThemeInd.getSectors().iterator();
-			while (itr.hasNext()) {
-				AmpIndicatorSector ind = (AmpIndicatorSector) itr.next();
-				if (ind.getSectorId().getAmpSectorId().equals(sectorid)) {
-					itr.remove();
-					session.delete(ind);
-
-				}
-			}
-			session.update(ampThemeInd);
-			// tx.commit();
-			// session.flush();
-
-		} catch (Exception e) {
-			// TODO: handle exception
-			logger.error("Exception from deleteIndSectors:" + e.getMessage());
-			e.printStackTrace(System.out);
 		}
-
 	}
 
 	public static Set<AmpSector> getSectorDescendents(
@@ -1722,14 +1086,6 @@ public class SectorUtil {
 		return generatedSectors;
 	}
 
-	// This recursive method helps the generateLevelHierarchy method.
-	public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
-		if (topLevelSector.getParentSectorId() != null) {
-			topLevelSector = getTopLevelParent(topLevelSector
-					.getParentSectorId());
-		}
-		return topLevelSector;
-	}
 
 	/**
 	 * returns set of all (recursive) descendants' ids of a given set of sectors

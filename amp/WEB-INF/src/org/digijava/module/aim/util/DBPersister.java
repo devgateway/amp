@@ -17,7 +17,6 @@ public class DBPersister {
 	
 	public static boolean save(Identifiable o) {
 		Session session=null;
-		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
 //beginTransaction();
@@ -26,24 +25,7 @@ public class DBPersister {
 		} catch (Exception e) {
 			logger.error("Exception saving object of "+o.getClass() +" with identifier "+o.getIdentifier());
 			e.printStackTrace();
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("...Rollback failed");
-					return false;
-				}
-			}
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("...Release session failed");
-					return false;
-				}
-			}
-		}
+		} 
 		return true;
 	}
 

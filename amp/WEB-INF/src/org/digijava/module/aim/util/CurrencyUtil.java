@@ -114,14 +114,6 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getAllActiveRates");
 			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
 		}
 
 		logger.info("returning a collection of size get all active rates function" + col.size());
@@ -188,16 +180,7 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getActiveRates");
 			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
 		}
-
 		logger.info("returning a collection of size...get active rates... " + col.size());
 		return col;
 	}
@@ -328,7 +311,6 @@ public class CurrencyUtil {
 		Session session = null;
 		Query qry = null;
 		String qryStr = null;
-		Transaction tx = null;
 		AmpCaching.getInstance().currencyCache.reset();
 
 		try {
@@ -348,69 +330,11 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from updateCurrencyStatus");
 			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Rollback failed");
-				}
-			}
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
 		}
-	}
-
-	public static boolean currencyCodeExist(String currCode,Long id) {
-		Session session = null;
-		Query qry = null;
-		String qryStr = null;
-		boolean exist = false;
-
-		try {
-			session = PersistenceManager.getSession();
-			qryStr = "select count(*) from " + AmpCurrency.class.getName() + " c where " +
-					"(c.currencyCode=:code)";
-			if (id != null) {
-				qryStr += " and (c.ampCurrencyId!=:id)";
-
-			}
-			qry = session.createQuery(qryStr);
-			qry.setParameter("code",currCode,StringType.INSTANCE);
-			if (id != null) {
-				qry.setParameter("id",id,LongType.INSTANCE);
-			}
-			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				Integer count = (Integer) itr.next();
-				if (count.intValue() > 0) {
-					exist = true;
-				}
-			}
-
-		} catch (Exception e) {
-			logger.error("Exception from currencyCodeExist()");
-			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
-		}
-		return exist;
 	}
 
 	public static void saveCurrency(AmpCurrency curr) {
 		Session session = null;
-		Transaction tx = null;
 		AmpCaching.getInstance().currencyCache.reset();
 
 		try {
@@ -422,55 +346,8 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrency");
 			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Rollback failed");
-				}
-			}
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
 		}
 	}
-	public static void updateCurrency(AmpCurrency curr) {
-		Session session = null;
-		Transaction tx = null;
-
-		try {
-			AmpCaching.getInstance().currencyCache.reset();
-			session = PersistenceManager.getSession();
-//beginTransaction();
-			session.update(curr);
-			//tx.commit();
-
-		} catch (Exception e) {
-			logger.error("Exception from saveCurrency");
-			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Rollback failed");
-				}
-			}
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
-		}
-	}
-
 
 	/**
 	 * Save an AmpCurrency object
@@ -482,7 +359,6 @@ public class CurrencyUtil {
 		Session session = null;
 		Query qry = null;
 		String qryStr = null;
-		Transaction tx = null;
 
 		try {
 			session = PersistenceManager.getSession();
@@ -513,29 +389,12 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrency");
 			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Rollback failed");
-				}
-			}
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
 		}
 	}
 
 	public static void deleteCurrencyRates(Long cRates[]) {
 		AmpCaching.getInstance().currencyCache.reset();
 		Session session = null;
-		Transaction tx = null;
-
 		try {
 			session = PersistenceManager.getSession();
 //beginTransaction();
@@ -549,21 +408,6 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from deleteCurrencyRates");
 			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Rollback failed");
-				}
-			}
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
 		}
 	}
 
@@ -577,7 +421,6 @@ public class CurrencyUtil {
 		Session session = null;
 		Query qry = null;
 		String qryStr = null;
-		Transaction tx = null;
 		AmpCaching.getInstance().currencyCache.reset();
 		
 		try {
@@ -618,44 +461,7 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrencyRates");
 			e.printStackTrace(System.out);
-			
-			if (tx != null) {
-				try {
-					tx.rollback();
-					
-				} catch (Exception rbf) {
-					logger.error("Rollback failed");
-				}
-			}
 			throw e;
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-					
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
-		}
-	}
-
-	public static void addCurrency(AmpCurrency ampCurr,
-			AmpCurrencyRate ampCurrRate) throws AimException {
-		DbUtil.add(ampCurr);
-		DbUtil.add(ampCurrRate);
-		AmpCaching.getInstance().currencyCache.reset();
-	}
-
-	public static void deleteCurrency(AmpCurrency ampCurr,
-			AmpCurrencyRate ampCurrRate) {
-		try {
-			AmpCaching.getInstance().currencyCache.reset();
-			DbUtil.delete(ampCurr);
-			DbUtil.delete(ampCurrRate);
-		} catch (JDBCException e) {
-			// TODO Auto-generated catch block
-			logger.error(e);
 		}
 	}
 
@@ -732,27 +538,7 @@ public class CurrencyUtil {
 	}
 
 	public static AmpCurrency getAmpcurrency(Long id) {
-		AmpCurrency ampCurrency = null;
-		Session session = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			// modified by Priyajith
-			// desc:used select query instead of session.load
-			// start
-			String queryString = "select c from " + AmpCurrency.class.getName()
-					+ " c " + "where (c.ampCurrencyId=:id)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", id, LongType.INSTANCE);
-			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				ampCurrency = (AmpCurrency) itr.next();
-			}
-			// end
-		} catch (Exception ex) {
-			logger.error("Unable to get currency " + ex);
-		} 
-		return ampCurrency;
+		return (AmpCurrency) PersistenceManager.getSession().get(AmpCurrency.class, id);
 	}
 
 	public static AmpCurrency getAmpcurrency(String currCode) {
@@ -761,9 +547,6 @@ public class CurrencyUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			// modified by Priyajith
-			// desc:used select query instead of session.load
-			// start
 			String queryString = "select c from " + AmpCurrency.class.getName()
 					+ " c " + "where (c.currencyCode=:id)";
 			Query qry = session.createQuery(queryString);
@@ -776,12 +559,6 @@ public class CurrencyUtil {
 			// end
 		} catch (Exception ex) {
 			logger.error("Unable to get currency " + ex);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.debug("releaseSession() failed", ex2);
-			}
 		}
 		return ampCurrency;
 	}
@@ -839,178 +616,6 @@ public class CurrencyUtil {
 			logger.error("Unable to get currency " + ex);
 		}
 		return currency;
-	}
-
-	public static double getExchangeRate(String currencyCode,
-			int adjustmentType, Date exchangeRateDate) {
-		//if (logger.isDebugEnabled())
-			//logger.debug("getExchangeRate with currencyCode" + currencyCode);
-
-		Session session = null;
-		Query q = null;
-		Collection c = null;
-		Iterator iter = null;
-		Double exchangeRate = null;
-
-		try {
-			Calendar calendar = new GregorianCalendar();
-			calendar.setTime(exchangeRateDate);
-			String currencyDate=calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH)+1) + "-01";
-		/*	logger.debug("Date: " + exchangeRateDate);
-			logger.debug("Exchange Rate Month: " + calendar.get(Calendar.MONTH));
-			logger.debug("Exchange Rate Year: " + calendar.get(Calendar.YEAR));
-			logger.debug("Currency Code: " + currencyCode);*/
-			session = PersistenceManager.getSession();
-			String queryString = new String();
-			queryString = "select f.exchangeRate from "
-					+ AmpCurrencyRate.class.getName()
-					+ " f where (f.toCurrencyCode='" + currencyCode + "') and (f.exchangeRateDate='" + currencyDate + "')";
-//			logger.debug("queryString:" + queryString);
-			q = session.createQuery(queryString);
-//			q.setParameter("currencyCode", currencyCode, StringType.INSTANCE);
-
-//			q.setParameter("exchangeRateDate", exchangeRateDate,DateType.INSTANCE);
-			boolean searchOther = false;
-			if (q.list().size() > 0){
-				exchangeRate = (Double) q.list().get(0);
-				if (exchangeRate == null)
-					searchOther = true;
-			}
-			else
-				searchOther = true;
-
-			if (searchOther){
-				queryString = "select f.exchangeRate from "
-						+ AmpCurrencyRate.class.getName()
-						+ " f where (f.toCurrencyCode=:currencyCode) and (f.exchangeRateDate<:exchangeRateDate) order by f.exchangeRateDate desc";
-				q = session.createQuery(queryString);
-					q.setParameter("currencyCode", currencyCode,
-							StringType.INSTANCE);
-					q.setParameter("exchangeRateDate", exchangeRateDate,
-							DateType.INSTANCE);
-					if (q.list().size() > 0){
-						exchangeRate = (Double) q.list().get(0);
-						Iterator itr = q.list().iterator();
-						while ((exchangeRate == null)&&(itr.hasNext())) //fix for null currency
-							exchangeRate = (Double) itr.next();
-					}
-					else {
-						queryString = "select f.exchangeRate from "
-								+ AmpCurrencyRate.class.getName()
-								+ " f where (f.toCurrencyCode=:currencyCode) and (f.exchangeRateDate>:exchangeRateDate) order by f.exchangeRateDate";
-						q = session.createQuery(queryString);
-						q.setParameter("currencyCode", currencyCode,
-								StringType.INSTANCE);
-						q.setParameter("exchangeRateDate", exchangeRateDate,
-								DateType.INSTANCE);
-						if (q.list().size() > 0){
-							exchangeRate = (Double) q.list().get(0);
-							Iterator itr = q.list().iterator();
-							while ((exchangeRate == null)&&(itr.hasNext())) //fix for null currency
-								exchangeRate = (Double) itr.next();
-						}
-					}
-				}
-
-		} catch (Exception ex) {
-			logger.debug("Unable to get exchange rate from database " + ex.getMessage());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-/*		if (logger.isDebugEnabled())
-			logger.debug("getExchangeRate() for currency code :" + currencyCode
-					+ "returns " + exchangeRate); */
-		if(exchangeRate!=null)
-			return exchangeRate.doubleValue();
-		return 0;
-	}
-
-	public static Collection getAmpCurrencyRate() {
-
-		Session session = null;
-		Query q = null;
-		Collection c = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = new String();
-			queryString = "select currency from "
-					+ AmpCurrencyRate.class.getName() + " currency";
-			q = session.createQuery(queryString);
-			c = q.list();
-		} catch (Exception ex) {
-			logger.debug("Unable to get exchange rate from database", ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		return c;
-	}
-
-	public static double getExchangeRate(Long ampFundingId, String orgRoleCode) {
-
-		//if (logger.isDebugEnabled())
-			//logger.debug("getExchangeRate with ampFundingId=" + ampFundingId
-				//	+ " orgRoleCode=" + orgRoleCode);
-
-		Session session = null;
-		Query q = null;
-		Collection c = null;
-		Iterator iter = null;
-		AmpCurrency ampCurrency = null;
-		String currencyCode = "";
-		double exchangeRate = 1.0;
-
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = new String();
-			queryString = "select f.ampCurrencyId from "
-					+ AmpFundingDetail.class.getName()
-					+ " f where (f.ampFundingId=:ampFundingId) and (f.orgRoleCode=:orgRoleCode)"
-					+ " group by f.ampFundingId";
-			q = session.createQuery(queryString);
-			q.setParameter("ampFundingId", ampFundingId, LongType.INSTANCE);
-			q.setParameter("orgRoleCode", orgRoleCode, StringType.INSTANCE);
-			c = q.list();
-			if (c.size() != 0) {
-				iter = c.iterator();
-				if (iter.hasNext()) {
-					ampCurrency = (AmpCurrency) iter.next();
-				}
-			} else {
-				if (logger.isDebugEnabled())
-					logger
-							.debug("Unable to get ampCurrencyId from table AmpFunding");
-			}
-
-			if (ampCurrency != null) {
-				currencyCode = ampCurrency.getCurrencyCode();
-				exchangeRate = getExchangeRate(currencyCode);
-			}
-		} catch (Exception ex) {
-			logger.debug("Unable to get exchange rate from database", ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		logger.debug("getExchangeRate(id,orgRoleCode " + exchangeRate);
-		return exchangeRate;
 	}
 
 	public static double getExchangeRate(String currencyCode) {
@@ -1077,112 +682,6 @@ public class CurrencyUtil {
                 }
         }
 
-
-	public static String getCurrencyName(Long currencyId) {
-		Session session = null;
-		String queryString = null;
-		Query q = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			queryString = "select a.currencyCode from "+AmpCurrency.class.getName()+" a where a.ampCurrencyId=:currencyId";
-			q = session.createQuery(queryString);
-			q.setLong("currencyId", currencyId);
-			logger.info("Got currency name : "+q.list().get(0).toString());
-			return q.list().get(0).toString();
-		}
-		catch (Exception ex) {
-			logger.error("Unable to get currency name", ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
-		return null;
-	}
-
-	public static List getAmpCurrency(Long ampActivityId) {
-		List currency = null;
-		Query q = null;
-		Session session = null;
-		String queryString = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			//queryString = " select Progress from " +
-			// (Progress.ampActivityId=:ampActivityId )";
-			queryString = "select distinct ac.currencyCode from "
-					+ AmpCurrency.class.getName()
-					+ " ac, "
-					+ AmpFundingDetail.class.getName()
-					+ " afd, "
-					+ AmpFunding.class.getName()
-					+ " af where (afd.ampFundingId=af.ampFundingId) and (afd.ampCurrencyId=ac.ampCurrencyId) and (af.ampActivityId=:ampActivityId)";
-			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, LongType.INSTANCE);
-			currency = q.list();
-			Iterator iter = currency.iterator();
-			while (iter.hasNext()) {
-				iter.next();
-				logger.debug("Size :" + currency.size());
-				logger.debug("Currency 1:" + (String) currency.get(0));
-				logger.debug("Currency 2:" + (String) currency.get(1));
-
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp PhysicalPerformance", ex);
-			////////System.out.println(ex.toString()) ;
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
-		logger
-				.debug("Getting funding Executed successfully "
-						+ currency.size());
-		return currency;
-
-	}
-
-	/*
-	 * searching for a currency Rate using the code
-	 * added by Govind
-	 */
-	public static Collection getCurrencyRate(String code) {
-		Collection col = new ArrayList();
-		Session session = null;
-		Query qry = null;
-		String qryStr = null;
-		try {
-			session = PersistenceManager.getSession();
-
-				qryStr = "select curr from " + AmpCurrencyRate.class.getName() + " curr where curr.toCurrencyCode=:code ";
-				qry = session.createQuery(qryStr);
-				qry.setParameter("code",code,StringType.INSTANCE);
-			col = qry.list();
-		} catch (Exception e) {
-			logger.error("Exception from getAllCurrencies()");
-			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
-		}
-
-		return col;
-	}
 	public static Collection getCurrencyRateByDataSource(Integer id) {
 		Collection col = new ArrayList();
 		Session session = null;
@@ -1198,45 +697,10 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()");
 			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
 		}
-
 		return col;
 	}
-	public static Collection getCurrencyRateValues(Long id) {
-		Collection col = new ArrayList();
-		Session session = null;
-		Query qry = null;
-		String qryStr = null;
-		try {
-			session = PersistenceManager.getSession();
 
-				qryStr = "select curr from " + AmpCurrencyRate.class.getName() + " curr where curr.ampCurrencyRateId=:id ";
-				qry = session.createQuery(qryStr);
-				qry.setParameter("id",id,LongType.INSTANCE);
-			col = qry.list();
-		} catch (Exception e) {
-			logger.error("Exception from getAllCurrencies()");
-			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
-		}
-
-		return col;
-	}
 	/*
 	 * For Deleting a Currency...
 	 */
@@ -1296,12 +760,6 @@ public class CurrencyUtil {
 		return defaultCurrency;
 	}
 	
-//	public static AmpCurrency getEffectiveCurrency(TeamMember tm)
-//	{
-//		if ((tm != null) && (tm.getAppSettings() != null))
-//			return getAmpcurrency(tm.getAppSettings().getCurrencyId());
-//		return getDefaultCurrency();
-//	}
 	
 	/**
 	 * checks AMP_CURRENCY_RATE table for invalid entries

@@ -105,8 +105,6 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 				}*/
 			} catch (Exception e) {
 				throw new DgException("Cannot retrive all themes from db", e);
-			} finally {
-				PersistenceManager.releaseSession(session);
 			}
 
 			return ret;

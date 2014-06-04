@@ -168,15 +168,6 @@ public class DbUtil {
 			throw new CalendarException(
 					"Unable to get calendar event list from database ", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
-
 		return list;
 	}
 
@@ -255,14 +246,6 @@ public class DbUtil {
 			logger.debug("Unable to get calendar event list from database ", ex);
 			throw new CalendarException(
 					"Unable to get calendar event list from database ", ex);
-		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
 		}
 
 		return list;
@@ -377,15 +360,6 @@ public class DbUtil {
 			throw new CalendarException(
 					"Unable to get calendar event list from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
-
 		return list;
 	}
 
@@ -450,14 +424,6 @@ public class DbUtil {
 			logger.debug("Unable to get calendar event list from database", ex);
 			throw new CalendarException(
 					"Unable to get calendar event list from database", ex);
-		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
 		}
 
 		return list;
@@ -528,14 +494,6 @@ public class DbUtil {
 			throw new CalendarException(
 					"Unable to get events list from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed", ex2);
-			}
-		}
 
 		return events;
 	}
@@ -596,14 +554,6 @@ public class DbUtil {
 			throw new CalendarException(
 					"Unable to get calendar event list from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
 
 		return list;
 	}
@@ -657,14 +607,6 @@ public class DbUtil {
 			throw new CalendarException(
 					"Unable to get calendar event list from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
 
 		return list;
 	}
@@ -705,14 +647,6 @@ public class DbUtil {
 			logger.debug("Unable to get event list from database", ex);
 			throw new CalendarException(
 					"Unable to get event list from database", ex);
-		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
 		}
 
 		return events;
@@ -761,14 +695,6 @@ public class DbUtil {
 			logger.debug("Unable to get event list from database", ex);
 			throw new CalendarException(
 					"Unable to get event list from database", ex);
-		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
 		}
 
 		return events;
@@ -830,14 +756,6 @@ public class DbUtil {
 			logger.debug("Unable to get calendar event list from database", ex);
 			throw new CalendarException(
 					"Unable to get calendar event list from database", ex);
-		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
 		}
 
 		return list;
@@ -909,14 +827,6 @@ public class DbUtil {
 			throw new CalendarException(
 					"Unable to get event list from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
 
 		return list;
 	}
@@ -979,14 +889,6 @@ public class DbUtil {
 			throw new CalendarException(
 					"Unable to get event list from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
 
 		return list;
 	}
@@ -1031,15 +933,6 @@ public class DbUtil {
 					"Unable to get calendar setting from database",
 					ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed", ex2);
-			}
-		}
-
 		return result;
 
 	}
@@ -1102,15 +995,6 @@ public class DbUtil {
 			throw new CalendarException(
 					"Unable to get calendar setting from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
-
 		return settings;
 	}
 
@@ -1124,7 +1008,6 @@ public class DbUtil {
 	CalendarException {
 
 		Session session = null;
-		Transaction tx = null;
 
 		try {
 
@@ -1148,29 +1031,9 @@ public class DbUtil {
 			logger.debug(
 					"Unable to update calendar event information into database",
 					ex);
-
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {
-					logger.warn("rollback() failed ", ex1);
-				}
-			}
 			throw new CalendarException(
 					"Unable to update calendar event information into database",
 					ex);
-		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed ", ex1);
-				}
-			}
-
 		}
 	}
 
@@ -1184,9 +1047,7 @@ public class DbUtil {
 	CalendarException {
 
 		Session session = null;
-		Transaction tx = null;
 		try {
-
 			session = PersistenceManager.getSession();
 //beginTransaction();
 			session.saveOrUpdate(setting);
@@ -1194,32 +1055,8 @@ public class DbUtil {
 
 		}
 		catch (Exception ex) {
-			logger.debug(
-					"Unable to update calendar setting information into database",
-					ex);
-
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {
-					logger.warn("rollback() failed ", ex1);
-				}
-			}
-			throw new CalendarException(
-					"Unable to update calendar setting information into database",
-					ex);
-		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed ", ex1);
-				}
-			}
-
+			logger.debug("Unable to update calendar setting information into database", ex);
+			throw new CalendarException("Unable to update calendar setting information into database", ex);
 		}
 	}
 
@@ -1333,15 +1170,6 @@ public class DbUtil {
 					"Unable to get event item from database",
 					ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("rollback() failed ", ex2);
-			}
-		}
-
 		return calendarItem;
 	}
 
@@ -1397,15 +1225,6 @@ public class DbUtil {
 			throw new CalendarException(
 					"Unable to get number of  event items from database ", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
-
 		return result;
 	}
 	

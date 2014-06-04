@@ -51,8 +51,6 @@ public class LocationsDimension extends ARDimension {
 			locationsMap.put(loc.getId(), loc.getParentLocation()==null?null:loc.getParentLocation().getId() );
 		}
 
-		PersistenceManager.releaseSession(session);
-
 	}
 
 }

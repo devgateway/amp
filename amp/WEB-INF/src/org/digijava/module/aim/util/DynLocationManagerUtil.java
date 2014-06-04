@@ -92,12 +92,6 @@ public class DynLocationManagerUtil {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 
 		return rootLocations;
@@ -118,7 +112,6 @@ public class DynLocationManagerUtil {
 	
 	public static void deleteLocation(Long id, ActionMessages errors) {
 		Session dbSession = null;
-		Transaction tx = null;
 		try {
 			dbSession = PersistenceManager.getSession();
 //beginTransaction();
@@ -143,12 +136,6 @@ public class DynLocationManagerUtil {
 				errors.add("title", new ActionMessage(
 						"error.aim.dynRegionManager.locationIsInUse"));
 			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 	}
 
@@ -160,7 +147,6 @@ public class DynLocationManagerUtil {
 		Collection<AmpCategoryValueLocations> locations = null;
 		Session dbSession = null;
 		HashMap<Long, AmpCategoryValueLocations> locationsMap = new HashMap<Long, AmpCategoryValueLocations>();
-		Transaction tx = null;
 		try {
 			dbSession = PersistenceManager.getSession();
 //beginTransaction();
@@ -226,17 +212,10 @@ public class DynLocationManagerUtil {
 			}
 			//tx.commit();
 		} catch (Exception e) {
-			tx.rollback();
 			if (errors != null)
 				errors.add("title", new ActionMessage(
 						"error.aim.dynRegionManager.treeSavingProblem"));
 			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 	}
 
@@ -314,7 +293,6 @@ public class DynLocationManagerUtil {
 	public static void synchronizeCountries() {
 		logger.info("Starting countries synchronization");
 		Session dbSession = null;
-		Transaction tx = null;
 		Collection<Country> countries = null;
 		try {
 			dbSession = PersistenceManager.getSession();
@@ -420,15 +398,8 @@ public class DynLocationManagerUtil {
 			//tx.commit();
 			logger.info("Countries synchronization done.");
 		} catch (Exception e) {
-			tx.rollback();
 			e.printStackTrace();
 			logger.info("Countries synchronization NOT performed.");
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 	}
 
@@ -473,12 +444,6 @@ public class DynLocationManagerUtil {
 			return loc;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 		return null;
 	}
@@ -516,12 +481,6 @@ public class DynLocationManagerUtil {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 		return null;
 	}
@@ -588,12 +547,6 @@ public class DynLocationManagerUtil {
 			return loc;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 		return null;
 	}
@@ -656,12 +609,6 @@ public class DynLocationManagerUtil {
 			return loc;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 		return null;
 	}
@@ -691,12 +638,6 @@ public class DynLocationManagerUtil {
 			return returnLoc;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 		return null;
 	}
@@ -971,12 +912,6 @@ public class DynLocationManagerUtil {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 		return 0;
 	}

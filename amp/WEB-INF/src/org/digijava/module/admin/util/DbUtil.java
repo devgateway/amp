@@ -68,15 +68,6 @@ public class DbUtil {
 			throw new AdminException(
 					"Unable to get language list from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed", ex2);
-			}
-		}
-
 		return languages;
 	}
 	public static boolean isAvailableLanguage(String code) throws AdminException {
@@ -103,7 +94,6 @@ public class DbUtil {
 
 	public static void createSite(Site site) throws AdminException {
 		Session sess = null;
-		Transaction tx = null;
 		try {
 			sess = PersistenceManager.getSession();
 //beginTransaction();
@@ -112,38 +102,16 @@ public class DbUtil {
 			//tx.commit();
 		}
 		catch (Exception ex) {
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {
-					logger.warn("rollback() failed", ex1);
-				}
-			}
 			logger.debug("Unable to create site", ex);
 			throw new AdminException(
 					"Unable to create site", ex);
 		}
-		finally {
-			if (sess != null) {
-				try {
-					PersistenceManager.releaseSession(sess);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed", ex1);
-				}
-			}
-
-		}
-
 	}
 
 	public static void editSite(Site site) throws AdminException {
 		Session sess = null;
-		Transaction tx = null;
 		try {
-			sess = PersistenceManager.
-			getSession();
+			sess = PersistenceManager.getSession();
 //beginTransaction();
 
 			Iterator iter = site.getModuleInstances().iterator();
@@ -179,27 +147,8 @@ public class DbUtil {
 
 			logger.debug("Unable to modify site", ex);
 
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {
-					logger.warn("rollback() failed", ex1);
-				}
-			}
 			throw new AdminException(
 					"Unable to modify site", ex);
-		}
-		finally {
-			if (sess != null) {
-				try {
-					PersistenceManager.releaseSession(sess);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed", ex1);
-				}
-			}
-
 		}
 	}
 
@@ -213,16 +162,6 @@ public class DbUtil {
 		catch (Exception ex) {
 			logger.debug("Unable to get Site ", ex);
 			throw new AdminException("Unable to get Site ", ex);
-		}
-		finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed", ex1);
-			}
 		}
 		return site;
 	}
@@ -246,22 +185,11 @@ public class DbUtil {
 			logger.debug("Unable to get Group ", ex);
 			throw new AdminException("Unable to get Group ", ex);
 		}
-		finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("relseaseSession() failed ", ex1);
-			}
-		}
 		return group;
 	}
 
 	public static void editGroup(Group group) throws AdminException {
 		Session sess = null;
-		Transaction tx = null;
 		try {
 			sess = PersistenceManager.getSession();
 //beginTransaction();
@@ -280,26 +208,8 @@ public class DbUtil {
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to modify Group ", ex);
-
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {}
-			}
 			throw new AdminException(
 					"Unable to modify Group", ex);
-		}
-		finally {
-			if (sess != null) {
-				try {
-					PersistenceManager.releaseSession(sess);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed ", ex1);
-				}
-			}
-
 		}
 	}
 
@@ -316,34 +226,6 @@ public class DbUtil {
 			logger.debug("Unable to get sites list from database ", ex);
 			throw new AdminException("Unable to get sites list from database ",
 					ex);
-		}
-		finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
-		}
-		return sites;
-	}
-
-	/**
-	 * Return list of child sites
-	 * @param parentId
-	 * @return
-	 * @throws AdminException
-	 * @deprecated use SiteUtils.getChildSites() instead
-	 */
-	public static List getChildSites(Long parentId) throws AdminException {
-		List sites = null;
-		try {
-			sites = SiteUtils.getChildSites(parentId.longValue());
-		}
-		catch (DgException ex) {
-			throw new AdminException(ex);
 		}
 		return sites;
 	}
@@ -362,16 +244,6 @@ public class DbUtil {
 					ex);
 			throw new AdminException(
 					"Unable to get top level sites list from database ", ex);
-		}
-		finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
 		}
 		return sites;
 	}
@@ -393,23 +265,12 @@ public class DbUtil {
 			logger.debug("Unable to get Users group ", ex);
 			throw new AdminException("Unable to get Users group ", ex);
 		}
-		finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
-		}
 		return users;
 	}
 
 	public static void removeUserFromGroup(Long groupId, Long userId) throws
 	AdminException {
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
 //beginTransaction();
@@ -421,32 +282,13 @@ public class DbUtil {
 		catch (Exception ex) {
 			logger.debug("Unable to remove User from group ", ex);
 
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex2) {
-					logger.error("rollback() failed ", ex2);
-				}
-			}
 			throw new AdminException("Unable to remove User from group ", ex);
-		}
-		finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
 		}
 	}
 
 	public static void addUsersToGroup(Long groupId, Long[] userIds) throws
 	AdminException {
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
 //beginTransaction();
@@ -459,25 +301,7 @@ public class DbUtil {
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to add Users to group ", ex);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex2) {
-					logger.error("rollback() failed ", ex2);
-				}
-			}
 			throw new AdminException("Unable to add Users to group ", ex);
-		}
-		finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
 		}
 	}
 
@@ -522,14 +346,6 @@ public class DbUtil {
 			logger.debug("Unable to get site list from database ", ex);
 			throw new AdminException(
 					"Unable to get site list from database", ex);
-		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
 		}
 		return siteList;
 	}
@@ -604,34 +420,7 @@ public class DbUtil {
 			throw new AdminException(
 					"Unable to get site list from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
-
 	}
-
-//	/**
-//	 * Returns site by string id
-//	 * @param siteId site id
-//	 * @return Site object
-//	 * @throws AdminException
-//	 * @deprecated Use SiteCache.lookupByName() instead
-//	 */
-//	public static Site getSite(String siteId) throws AdminException {
-//		Site site = null;
-//		try {
-//			site = SiteCache.lookupByName(siteId);
-//		}
-//		catch (DgException ex) {
-//			throw new AdminException(ex);
-//		}
-//		return site;
-//	}
 
 	public static Site getSite(String domain, String path) throws
 	AdminException {
@@ -665,16 +454,6 @@ public class DbUtil {
 			logger.debug("Unable to get site from database ", ex);
 			throw new AdminException("Unable to get site from database ", ex);
 		}
-		finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
-		}
 		return site;
 	}
 
@@ -692,16 +471,6 @@ public class DbUtil {
 			logger.debug("Unable to get Module Instance from database ", ex);
 			throw new AdminException(
 					"Unable to get Module Instance from database ", ex);
-		}
-		finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
 		}
 		return moduleInstance;
 	}
@@ -778,7 +547,6 @@ public class DbUtil {
 	public static void updateSiteInstance(ModuleInstance instance) throws
 	AdminException {
 		Session sess = null;
-		Transaction tx = null;
 		try {
 			sess = PersistenceManager.
 			getSession();
@@ -790,35 +558,14 @@ public class DbUtil {
 		catch (Exception ex) {
 
 			logger.debug("Unable to update ModuleInstance ", ex);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {
-					logger.warn("rollback() failed ", ex);
-				}
-			}
 			throw new AdminException(
 					"Unable to update ModuleInstance", ex);
 		}
-		finally {
-			if (sess != null) {
-				try {
-					PersistenceManager.releaseSession(sess);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed ", ex1);
-				}
-			}
-
-		}
-
 	}
 
 	public static void editSiteInstances(Site site, List otherInstances) throws
 	AdminException {
 		Session sess = null;
-		Transaction tx = null;
 		try {
 			sess = org.digijava.kernel.persistence.PersistenceManager.
 			getSession();
@@ -848,27 +595,8 @@ public class DbUtil {
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to modify site ", ex);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {
-					logger.warn("rollback() failed ", ex1);
-				}
-			}
 			throw new AdminException(
 					"Unable to modify site", ex);
-		}
-		finally {
-			if (sess != null) {
-				try {
-					PersistenceManager.releaseSession(sess);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed ", ex1);
-				}
-			}
-
 		}
 	}
 
@@ -914,21 +642,12 @@ public class DbUtil {
 			throw new AdminException(
 					"Unable to get group list from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
 		return groupList;
 	}
 
 	public static void updateUser(User user) throws
 	AdminException {
 
-		Transaction tx = null;
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
@@ -942,15 +661,6 @@ public class DbUtil {
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to update user information into database", ex);
-
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (Throwable cause) {
-					logger.warn("rollback() failed ", cause);
-				}
-			}
 			throw new AdminException(
 					"Unable to update user information into database", ex);
 		}
@@ -969,16 +679,6 @@ public class DbUtil {
 			logger.debug("Unable to get permissions from database", ex);
 			throw new AdminException("Unable to get permissions from database",
 					ex);
-		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.debug("Unable to get permissions from database ", ex2);
-				throw new AdminException(
-						"Unable to get permissions from database ", ex2);
-			}
 		}
 		return result;
 	}
@@ -1018,15 +718,6 @@ public class DbUtil {
 			throw new AdminException(
 					"Unable to get locales list from database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
-
 		return locales;
 	}
 
@@ -1035,7 +726,6 @@ public class DbUtil {
 	public static void updateLocale(Locale locale) throws
 	AdminException {
 
-		Transaction tx = null;
 		Session session = null;
 
 		try {
@@ -1058,26 +748,10 @@ public class DbUtil {
 
 			logger.debug("Unable to update locale information into database",
 					ex);
-
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (Throwable cause) {
-					logger.warn("rollback() failed ", cause);
-				}
-			}
 			throw new AdminException(
 					"Unable to update locale information into database", ex);
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
+
 
 	}
 	public static List getCommonInstances() throws AdminException {
@@ -1097,23 +771,12 @@ public class DbUtil {
 			throw new AdminException("Unable to get sites list from database ",
 					ex);
 		}
-		finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
-		}
 		return commonInstances;
 	}
 
 	public static void editCommonInstances(List newInstances) throws
 	AdminException {
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = org.digijava.kernel.persistence.PersistenceManager.
 			getSession();
@@ -1172,27 +835,8 @@ public class DbUtil {
 		}
 		catch (Exception ex) {
 			logger.debug("Unable to modify site ", ex);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				}
-				catch (HibernateException ex1) {
-					logger.warn("rollback() failed ", ex1);
-				}
-			}
 			throw new AdminException(
 					"Unable to modify site", ex);
-		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception ex1) {
-					logger.warn("releaseSession() failed ", ex1);
-				}
-			}
-
 		}
 	}
 

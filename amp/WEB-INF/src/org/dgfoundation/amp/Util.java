@@ -89,20 +89,6 @@ public final class Util {
     return ret;
 	}
 	
-	
-	/**
-	 * Returns a set with objects from the "source" collection, which were identified by "selected" id
-	 * @param source
-	 * @param selected an object whose toString property returns the id of the selected object
-	 * @return the set
-	 * @see Util#getSelectedObjects method
-	 */
-	public static Identifiable getSelectedObject(Collection source, Object selected) {
-		Set ret=getSelectedObjects(source, new Object[] {selected});
-		if(ret.size()==0) return null;
-		return (Identifiable) ret.iterator().next();
-	}
-	
 	/**
 	 * Returns a Collection of the same type as the source, holding 
 	 * the elements of the original collection inside WrapDynaBean items 
@@ -166,108 +152,9 @@ public final class Util {
 		for (int i = 0; i < selected.length; i++) {
 			set.add(session.load(type, new Long(selected[i].toString())));
 		}
-		PersistenceManager.releaseSession(session);
 		return set;
 	}
 	
-	/**
-	 * Returns a set with objects from the "source" collection, which were identified by Ids present in the "selected" array
-	 * @param source a Collection of Identifiable objects
-	 * @param selected an array of objects whose toString property returns the Id of the selected object
-	 * @return a set with objects
-	 * @see Identifiable
-	 */
-	public static Set getSelectedObjects(Collection source, Object[] selected) {
-		Set ret = new HashSet();
-		if(selected==null) return ret;
-		Iterator i = source.iterator();
-		while (i.hasNext()) {
-			Identifiable element = (Identifiable) i.next();
-			for (int k = 0; k < selected.length; k++)
-				if (element.getIdentifier().equals(
-						new Long(selected[k].toString())))
-					ret.add(element);
-		}
-
-		return ret;
-
-	}
-	
-	/**
-	 * This was retrieving editor body text very strangely 
-	 * and was duplicating functionality of editor module.
-	 * @deprecated use same method from {@link DbUtil}. There is an filtering one also.  
-	 * @param site
-	 * @param key
-	 * @param navLang
-	 * @return
-	 * @throws EditorException
-	 */
-	@Deprecated
-	public static String getEditorBody(Site site,String key,  Locale navLang) throws EditorException {
-		String editorBody = null;
-		
-		Session session=null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-
-			Query q = session
-					.createQuery("select e.body,e.language from "
-							+ (org.digijava.module.editor.dbentity.Editor.class)
-									.getName()
-							+ " e "
-							+ " where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
-	          q.setParameter("siteId", site.getSiteId(), StringType.INSTANCE);
-	          q.setParameter("editorKey", key, StringType.INSTANCE);
-	          List result = q.list();
-	          if(result.size()==0) return "";
-	          Iterator i=result.iterator();
-	          Object[] res=null;
-	          while (i.hasNext()) {
-				 res= (Object[]) i.next();
-				if(res[1].equals(navLang.getCode())) editorBody=(String) res[0];				
-			}
-	         if(editorBody==null) editorBody=(String) res[0];
-	          
-
-		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();			
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
-
-		return editorBody;
-	}
-	
-	
-    
-
-	/**
-	 * Return a list of AmpOrganisationS that match the specified role
-	 * 
-	 * @param orgRoles
-	 *            the AmpOrgRole collection with org-role mappings
-	 * @param roleCode
-	 *            the role code
-	 * @return the list of AmpOrgs with that role
-	 * @author mihai 06.05.2007
-	 */
-	public static Collection getOrgsByRole(Collection orgRoles, String roleCode) {
-		ArrayList ret = new ArrayList();
-		Iterator i = orgRoles.iterator();
-		while (i.hasNext()) {
-			AmpOrgRole element = (AmpOrgRole) i.next();
-			if (element.getRole().getRoleCode().equals(roleCode))
-				ret.add(element.getOrganisation());
-		}
-		return ret;
-	}
-
 	
 	public static String toCSStringForIN(Collection col)
 	{

@@ -52,7 +52,6 @@ public class SiteManager {
         Site site = prepareSiteObject(name, siteKey, dirName, hosts, pathes, templateName);
 
         Session sess = null;
-        Transaction tx = null;
         try {
             sess = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
@@ -62,28 +61,8 @@ public class SiteManager {
         }
         catch (Exception ex) {
             logger.debug("Unable to create site ",ex);
-
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (HibernateException ex1) {
-                    logger.warn("rollback() failed ",ex1);
-                }
-            }
             throw new DgException(
                 "Unable to create site", ex);
-        }
-        finally {
-            if (sess != null) {
-                try {
-                    PersistenceManager.releaseSession(sess);
-                }
-                catch (Exception ex1) {
-                    logger.warn("releaseSession() failed ",ex1);
-                }
-            }
-
         }
         SiteUtils.fixDefaultGroupPermissions(site);
 

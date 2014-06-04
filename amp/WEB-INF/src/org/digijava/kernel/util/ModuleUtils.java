@@ -112,16 +112,6 @@ public class ModuleUtils {
             logger.debug("Unable to get site from database ", ex);
             throw new DgException("Unable to get site from database ", ex);
         }
-        finally {
-            try {
-                if (session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
-        }
         return moduleInstance;
     }
 

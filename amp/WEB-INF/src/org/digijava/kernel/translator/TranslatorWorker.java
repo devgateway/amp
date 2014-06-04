@@ -509,21 +509,6 @@ public class TranslatorWorker {
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
         }
-        finally {
-            try {
-                if (session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception e) {
-                String errKey = "TranslatorWorker.SessionRelease.warn";
-                Object[] params = {
-                    e.getMessage()};
-                logger.l7dlog(Level.WARN, errKey, params, e);
-                throw new WorkerException(e.getMessage(), e);
-            }
-        }
-
     }
 
     private Map<String, Message> getMessagesForCriteria(
@@ -561,21 +546,6 @@ public class TranslatorWorker {
                 he.getMessage()};
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
-        }
-        finally {
-            try {
-                if (session != null) {
-                    //returnList.add(session);
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception e) {
-                String errKey = "TranslatorWorker.SessionRelease.warn";
-                Object[] params = {
-                    e.getMessage()};
-                logger.l7dlog(Level.WARN, errKey, params, e);
-                throw new WorkerException(e.getMessage(), e);
-            }
         }
 
         return messageMap;
@@ -691,22 +661,6 @@ public class TranslatorWorker {
                 he.getMessage()};
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
-        }
-
-        finally {
-            try {
-                if (session != null) {
-
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception e) {
-                String errKey = "TranslatorWorker.SessionRelease.warn";
-                Object[] params = {
-                    e.getMessage()};
-                logger.l7dlog(Level.WARN, errKey, params, e);
-                throw new WorkerException(e.getMessage(), e);
-            }
         }
 
     }
@@ -880,22 +834,6 @@ public class TranslatorWorker {
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
         }
-        finally {
-            try {
-                if (session != null) {
-                    //returnList.add(session);
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception e) {
-                String errKey = "TranslatorWorker.SessionRelease.warn";
-                Object[] params = {
-                    e.getMessage()};
-                logger.l7dlog(Level.WARN, errKey, params, e);
-                throw new WorkerException(e.getMessage(), e);
-            }
-        }
-
     }
 
     /**
@@ -973,22 +911,6 @@ public class TranslatorWorker {
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
         }
-        finally {
-            try {
-                if (session != null) {
-                    //returnList.add(session);
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception e) {
-                String errKey = "TranslatorWorker.SessionRelease.warn";
-                Object[] params = {
-                    e.getMessage()};
-                logger.l7dlog(Level.WARN, errKey, params, e);
-                throw new WorkerException(e.getMessage(), e);
-            }
-        }
-
     }
 
     /**
@@ -1162,18 +1084,6 @@ public class TranslatorWorker {
 			}
        	        
         }
-        finally {
-            try {
-                if (ses != null) {
-                    PersistenceManager.releaseSession(ses);
-                }
-            }
-            catch (Exception e) {
-                logger.error("releaseSession() failed. siteId="
-                             + message.getSiteId() + ", key = " + message.getKey() +
-                             ",locale=" + message.getLocale(), e);
-            }
-        }
     }
   
 
@@ -1225,18 +1135,6 @@ public class TranslatorWorker {
 //                  ",locale=" + message.getLocale());
             throw new WorkerException("TranslatorWorker.HibExUpdateMessage.err", e);
         }
-        finally {
-            try {
-                if (ses != null) {
-                    PersistenceManager.releaseSession(ses);
-                }
-            }
-            catch (Exception e) {
-                logger.error("releaseSession() failed. siteId="
-                             + message.getSiteId() + ", key = " + message.getKey() +
-                             ",locale=" + message.getLocale(), e);
-            }
-        }
     }
 
     /**
@@ -1275,18 +1173,6 @@ public class TranslatorWorker {
                          + message.getSiteId() + ", key = " + message.getKey() +
                          ",locale=" + message.getLocale(), e);
             throw new WorkerException("TranslatorWorker.HibExUpdateMessage.err", e);
-        }
-        finally {
-            try {
-                if (ses != null) {
-                    PersistenceManager.releaseSession(ses);
-                }
-            }
-            catch (Exception e) {
-                logger.error("releaseSession() failed. siteId="
-                             + message.getSiteId() + ", key = " + message.getKey() +
-                             ",locale=" + message.getLocale(), e);
-            }
         }
     }
 
@@ -1345,16 +1231,6 @@ public class TranslatorWorker {
             logger.error("Error updating translations. key=" + key, e);
             throw new WorkerException("Error updating translations. key=" + key, e);
         }
-        finally {
-            try {
-                if (ses != null) {
-                    PersistenceManager.releaseSession(ses);
-                }
-            }
-            catch (Exception e) {
-                logger.error("releaseSession() failed. key=" + key, e);
-            }
-        }
     }
 
     protected boolean isKeyExpired(String key) throws
@@ -1386,16 +1262,6 @@ public class TranslatorWorker {
         catch (HibernateException e) {
             logger.error("Error updating translations. key=" + key, e);
             throw new WorkerException("Error updating translations. key=" + key, e);
-        }
-        finally {
-            try {
-                if (ses != null) {
-                    PersistenceManager.releaseSession(ses);
-                }
-            }
-            catch (Exception e) {
-                logger.error("releaseSession() failed. key=" + key, e);
-            }
         }
         return result;
     }
@@ -1464,14 +1330,6 @@ public class TranslatorWorker {
 			result = query.list();
 		} catch (Exception e) {
 			throw new WorkerException(e);
-		}finally{
-			if (session != null){
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception e2) {
-					throw new WorkerException(e2);
-				}
-			}
 		}
     	return result;
     }

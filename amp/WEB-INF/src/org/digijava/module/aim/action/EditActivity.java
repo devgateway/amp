@@ -325,8 +325,6 @@ public class EditActivity extends Action {
     Collection themes = new ArrayList(ProgramUtil.getAllThemes());
     eaForm.getPrograms().setProgramCollection(themes);
 
-    try {
-
       // Checking whether the activity is already opened for editing
       // by some other user
       eaForm.setReset(true);
@@ -1215,78 +1213,6 @@ public class EditActivity extends Action {
 
 
 		  ArrayList regFunds = RegionalFundingsHelper.getRegionalFundings(activity.getRegionalFundings(), toCurrCode, 0);
-          /*Iterator rItr = activity.getRegionalFundings().iterator();
-
-          eaForm.getFunding().setRegionTotalDisb(0);
-          while (rItr.hasNext()) {
-            AmpRegionalFunding ampRegFund = (AmpRegionalFunding)
-                rItr
-                .next();
-
-            double disb = 0;
-            if (ampRegFund.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())  &&
-                ampRegFund.getTransactionType().intValue() == 1)
-              disb = ampRegFund.getTransactionAmount().
-                  doubleValue();
-            //if(!ampCompFund.getCurrency().getCurrencyCode().equals("USD")) {
-            //double toRate=1;
-
-            //	disb/=ARUtil.getExchange(ampCompFund.getCurrency().getCurrencyCode(),new java.sql.Date(ampCompFund.getTransactionDate().getTime()));
-            //}
-
-          eaForm.getFunding().setRegionTotalDisb(eaForm.getFunding().getRegionTotalDisb() +
-                                      disb);
-
-            FundingDetail fd = new FundingDetail();
-			fd.setAdjustmentTypeName(ampRegFund.getAdjustmentType());
-
-//            fd.setAdjustmentType(ampRegFund.getAdjustmentType()
-//                                 .intValue());
-
-            fd.setCurrencyCode(ampRegFund.getCurrency()
-                               .getCurrencyCode());
-            fd.setCurrencyName(ampRegFund.getCurrency()
-                               .getCurrencyName());
-            fd.setTransactionAmount(FormatHelper.formatNumber(
-                                        ampRegFund
-                                        .getTransactionAmount().doubleValue()));
-            fd.setTransactionDate(DateConversion
-                                  .ConvertDateToString(ampRegFund
-                                          .getTransactionDate()));
-            fd.setTransactionType(ampRegFund.getTransactionType()
-                                  .intValue());
-
-            RegionalFunding regFund = new RegionalFunding();
-            regFund.setRegionId( ampRegFund.getRegionLocation().getId() );
-            regFund.setRegionName( ampRegFund.getRegionLocation().getName());
-
-            if (regFunds.contains(regFund) == false) {
-              regFunds.add(regFund);
-            }
-
-            int index = regFunds.indexOf(regFund);
-            regFund = (RegionalFunding) regFunds.get(index);
-            if (fd.getTransactionType() == 0) { // commitments
-              if (regFund.getCommitments() == null) {
-                regFund.setCommitments(new ArrayList());
-              }
-              regFund.getCommitments().add(fd);
-            }
-            else if (fd.getTransactionType() == 1) { // disbursements
-              if (regFund.getDisbursements() == null) {
-                regFund.setDisbursements(new ArrayList());
-              }
-              regFund.getDisbursements().add(fd);
-            }
-            else if (fd.getTransactionType() == 2) { // expenditures
-              if (regFund.getExpenditures() == null) {
-                regFund.setExpenditures(new ArrayList());
-              }
-              regFund.getExpenditures().add(fd);
-            }
-            regFunds.set(index, regFund);
-          }
-*/
           // Sort the funding details based on Transaction date.
           Iterator itr1 = regFunds.iterator();
           int index = 0;
@@ -1526,42 +1452,6 @@ public class EditActivity extends Action {
 		}
 
 
-          // loading the contact person details and condition
-          /*
-          eaForm.getContactInfo().setDnrCntFirstName(activity.getContFirstName());
-          eaForm.getContactInfo().setDnrCntLastName(activity.getContLastName());
-          eaForm.getContactInfo().setDnrCntEmail(activity.getEmail());
-          eaForm.getContactInfo().setDnrCntTitle(activity.getDnrCntTitle());
-          eaForm.getContactInfo().setDnrCntOrganization(activity.getDnrCntOrganization());
-          eaForm.getContactInfo().setDnrCntPhoneNumber(activity.getDnrCntPhoneNumber());
-          eaForm.getContactInfo().setDnrCntFaxNumber(activity.getDnrCntFaxNumber());
-
-          eaForm.getContactInfo().setMfdCntFirstName(activity.getMofedCntFirstName());
-          eaForm.getContactInfo().setMfdCntLastName(activity.getMofedCntLastName());
-          eaForm.getContactInfo().setMfdCntEmail(activity.getMofedCntEmail());
-          eaForm.getContactInfo().setMfdCntTitle(activity.getMfdCntTitle());
-          eaForm.getContactInfo().setMfdCntOrganization(activity.getMfdCntOrganization());
-          eaForm.getContactInfo().setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
-          eaForm.getContactInfo().setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
-
-          eaForm.getContactInfo().setPrjCoFirstName(activity.getPrjCoFirstName());
-          eaForm.getContactInfo().setPrjCoLastName(activity.getPrjCoLastName());
-          eaForm.getContactInfo().setPrjCoEmail(activity.getPrjCoEmail());
-          eaForm.getContactInfo().setPrjCoTitle(activity.getPrjCoTitle());
-          eaForm.getContactInfo().setPrjCoOrganization(activity.getPrjCoOrganization());
-          eaForm.getContactInfo().setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
-          eaForm.getContactInfo().setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
-
-          eaForm.getContactInfo().setSecMiCntFirstName(activity.getSecMiCntFirstName());
-          eaForm.getContactInfo().setSecMiCntLastName(activity.getSecMiCntLastName());
-          eaForm.getContactInfo().setSecMiCntEmail(activity.getSecMiCntEmail());
-          eaForm.getContactInfo().setSecMiCntTitle(activity.getSecMiCntTitle());
-          eaForm.getContactInfo().setSecMiCntOrganization(activity.getSecMiCntOrganization());
-          eaForm.getContactInfo().setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
-          eaForm.getContactInfo().setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
-		  */
-
-
           ActivityContactInfo contactInfo=eaForm.getContactInformation();
           //Reset contact info
           contactInfo.setDonorContacts(new ArrayList<AmpActivityContact>());
@@ -1682,17 +1572,6 @@ public class EditActivity extends Action {
 	    	  AmpContactsWorker.copyContactsToSubLists(activityContacts, eaForm);
 	      }
 
-
-// The if block below doesn't seem to make any sense. I don't see any reason to set the
-// activity creator when editing the activity.
-// If someone still need to re-enable this piece of code at least change the condition
-// eaForm.getIsPreview!=1 => isPreview
-//
-//          if (eaForm.getIsPreview() != 1 && !isPublicView) {
-//            AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.
-//                getMemberId());
-//            activity.setActivityCreator(teamMember);
-//          }
           if (activity.getCondition() != null)
         	  eaForm.getIdentification().setConditions(activity.getCondition().trim());
 
@@ -1873,10 +1752,6 @@ public class EditActivity extends Action {
 
     eaForm.setStructures(structures);
 
-
-    } finally {
-    	org.digijava.kernel.persistence.PersistenceManager.releaseSession(hsession);
-    }
 
     String debugFM = request.getParameter("debugFM");
     if (debugFM != null && "true".equals(debugFM)) {

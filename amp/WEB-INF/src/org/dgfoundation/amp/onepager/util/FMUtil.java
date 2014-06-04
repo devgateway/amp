@@ -472,16 +472,6 @@ public final class FMUtil {
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage()+" while changing FM visible status for "+fmc.getFMName());
 		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
 	}
 	
 	public static final void setFmEnabled(Component c, Boolean value) {

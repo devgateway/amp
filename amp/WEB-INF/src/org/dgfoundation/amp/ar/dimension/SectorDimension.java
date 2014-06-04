@@ -42,9 +42,6 @@ public class SectorDimension extends ARDimension {
 			AmpSector as= (AmpSector) it.next();
 			sectorMap.put(as.getAmpSectorId(), as.getParentSectorId()==null?null:as.getParentSectorId().getAmpSectorId());
 		}
-
-		PersistenceManager.releaseSession(session);
-
 	}
 
 	@Override

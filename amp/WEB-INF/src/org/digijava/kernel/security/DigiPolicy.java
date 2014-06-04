@@ -621,7 +621,6 @@ final class PermissionStorage implements Serializable {
     private PrincipalPermission grantIntoDB(Principal principal, ResourcePermission permission) throws
         Exception {
         Session session = null;
-        Transaction tx = null;
         PrincipalPermission pp = createPrincipalPermission(principal,
             permission);
         try {
@@ -636,26 +635,14 @@ final class PermissionStorage implements Serializable {
             //tx.commit();
         }
         catch (Exception ex) {
-            if (tx != null) {
-                tx.rollback();
-            }
             throw ex;
         }
-        finally {
-            if (session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                }
-                catch (Exception ex) {
-                }
-            }
-        }
+
         return pp;
     }
 
     private void revokeFromDb(List principalPermissionIds) throws Exception {
         Session session = null;
-        Transaction tx = null;
         try {
             session = PersistenceManager.getSession();
 //beginTransaction();
@@ -678,26 +665,13 @@ final class PermissionStorage implements Serializable {
             //tx.commit();
         }
         catch (Exception ex) {
-            if (tx != null) {
-                tx.rollback();
-            }
             throw ex;
-        }
-        finally {
-            if (session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                }
-                catch (Exception ex) {
-                }
-            }
         }
     }
 
     private void removePrincipalsFromDb(Set principals) throws Exception {
         logger.debug("removePrincipalsFromDb(" + principals + ") called");
         Session session = null;
-        Transaction tx = null;
         try {
             session = PersistenceManager.getSession();
 //beginTransaction();
@@ -737,19 +711,7 @@ final class PermissionStorage implements Serializable {
             //tx.commit();
         }
         catch (Exception ex) {
-            if (tx != null) {
-                tx.rollback();
-            }
             throw ex;
-        }
-        finally {
-            if (session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                }
-                catch (Exception ex) {
-                }
-            }
         }
     }
 
@@ -762,7 +724,6 @@ final class PermissionStorage implements Serializable {
                 principalPermissions.clear();
                 permissionToPrincipalPermission.clear();
 
-                try {
                     session = PersistenceManager.getSession();
                     Iterator iter = session.createQuery("from " +
                         PrincipalPermission.class.
@@ -824,16 +785,6 @@ final class PermissionStorage implements Serializable {
                         addToMapping(principalPermission, principal, permission);
                     }
                 }
-                finally {
-                    if (session != null) {
-                        try {
-                            PersistenceManager.releaseSession(session);
-                        }
-                        catch (Exception ex) {
-                        }
-                    }
-                }
-            }
             logger.debug("permissionToPrincipalPermission = " + permissionToPrincipalPermission);
         }
     }

@@ -22,10 +22,6 @@ public class SessionImportLogDAO extends ImportLogDAO {
 	public SessionImportLogDAO() throws HibernateException, SQLException, DgException {
 		this.hbSession	= PersistenceManager.getRequestDBSession();
 	}
-	
-	@Override
-	protected void releaseSession() {
-		;
-	}
+
 
 }

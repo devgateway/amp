@@ -162,14 +162,6 @@ public class TrnUtil {
             logger.debug("Unable to get Languages ",ex);
             throw new DgException("Unable to get Languages ",ex);
         }
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ",ex1);
-            }
-        }
         return languages;
     }
 
@@ -226,47 +218,8 @@ public class TrnUtil {
             logger.debug("Unable to get Languages ",ex);
             throw new DgException("Unable to get Languages ",ex);
         }
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ",ex1);
-            }
-        }
         return languages;
     }
-
-    /**
-     * Returns list of countries sorted according spcified langiage.
-     * @param language ISO code
-     * @return sorted countries
-     */
-    public static Collection getSortedCountries(String isoLanguage) throws DgException {
-      Collection retVal = null;
-      Locale locale = new Locale(isoLanguage, "");
-
-      Set<TrnCountry> cuntries = getCountries (isoLanguage);
-
-      TranslationCallback countryTranslateCallback = new TranslationCallback() {
-        public String getSiteId(Object o) {
-        	return null;
-        }
-
-        public String getTranslationKey(Object o) {
-            TrnCountry country = (TrnCountry) o;
-            return "cn:" + country.getIso();
-        }
-
-        public String getDefaultTranslation(Object o) {
-          TrnCountry country = (TrnCountry) o;
-          return country.getName();
-        }
-      };
-      retVal = sortByTranslation(cuntries, locale, countryTranslateCallback);
-      return retVal;
-    }
-
 
 
     /**
@@ -322,14 +275,6 @@ public class TrnUtil {
             logger.debug("Unable to get Countries ",ex);
             throw new DgException("Unable to get Countries ",ex);
         }
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ",ex1);
-            }
-        }
         return countries;
     }
 
@@ -378,14 +323,6 @@ public class TrnUtil {
         catch (Exception ex) {
             logger.debug("Unable to get Months ",ex);
             throw new DgException("Unable to get Months ",ex);
-        }
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ",ex1);
-            }
         }
         return months;
     }

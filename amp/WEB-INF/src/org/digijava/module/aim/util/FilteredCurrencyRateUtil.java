@@ -38,21 +38,7 @@ public class FilteredCurrencyRateUtil {
 			return PersistenceManager.getRequestDBSession();
 		
 		return PersistenceManager.getSession();
-	}
-	
-	private void closeHibernateSession ( Session s ) {
-		if ( requestDbSession )
-			return;
-		
-		if (s != null) {
-			try {
-				PersistenceManager.releaseSession(s);
-			} catch (Exception rsf) {
-				logger.error("Release session failed :" + rsf.getMessage());
-			}
-		}
-	}
-	
+	}	
 	
 	public List<AmpFilteredCurrencyRate> getAllFilteredCurrencyRates() {
 		 Session sess = null;
@@ -68,9 +54,6 @@ public class FilteredCurrencyRateUtil {
 			logger.error("Could not get all AmpFilteredCurrencyRates: " + e.getMessage() );
 			e.printStackTrace();
 		}
-        finally {
-        	this.closeHibernateSession(sess);
-        }
         
         return result;
         
@@ -78,7 +61,6 @@ public class FilteredCurrencyRateUtil {
 	
 	public void deleteFilteredCurrencyRate(Long id) {
 		Session sess 		= null;
-		 Transaction tx	= null;
 		 try {
 			 sess = this.getHibernateSession();
 //beginTransaction();
@@ -93,26 +75,11 @@ public class FilteredCurrencyRateUtil {
 		 catch (Exception e) {
 			 logger.error("Could not delete AmpFilteredCurrencyRate with id " + id + ": " + e.getMessage() );
 			 e.printStackTrace();
-			 if ( tx != null ) {
-				 logger.info("Try to rollback transaction");
-				 try {
-					 tx.rollback();
-				 }
-				 catch (Exception e1) {
-					 logger.error("Rollback failed");
-					 e1.printStackTrace();
-				 }
-			 }
 		 }
-		 finally {
-			 this.closeHibernateSession(sess);
-		 }
-       
 	}
 	
 	public void addFilteredCurrencyRate( AmpFilteredCurrencyRate f) {
 		Session sess 		= null;
-		 Transaction tx	= null;
 		 try {
 			 sess = this.getHibernateSession();
 //beginTransaction();
@@ -122,19 +89,6 @@ public class FilteredCurrencyRateUtil {
 		 catch (Exception e) {
 			 logger.error("Could not add AmpFilteredCurrencyRate: " + e.getMessage() );
 			 e.printStackTrace();
-			 if ( tx != null ) {
-				 logger.info("Try to rollback transaction");
-				 try {
-					 tx.rollback();
-				 }
-				 catch (Exception e1) {
-					 logger.error("Rollback failed");
-					 e1.printStackTrace();
-				 }
-			 }
-		 }
-		 finally {
-			 this.closeHibernateSession(sess);
 		 }
        
 	}
@@ -162,9 +116,6 @@ public class FilteredCurrencyRateUtil {
 			logger.error("Could not check pair existance: " + e.getMessage() );
 			e.printStackTrace();
 		}
-       finally {
-       	this.closeHibernateSession(sess);
-       }
        
        return result;
        

@@ -124,7 +124,6 @@ public class ColumnSavingEngine {
 	
 	public void saveColumn () {
 		Session dbSession = null;
-		Transaction tx = null;
 		try {
 			dbSession = PersistenceManager.getSession();
 //beginTransaction();
@@ -134,14 +133,7 @@ public class ColumnSavingEngine {
 //session.flush();
 			//tx.commit();
 		} catch (Exception e) {
-			tx.rollback();
 			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 	}
 	

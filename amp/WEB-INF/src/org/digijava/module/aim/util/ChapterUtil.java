@@ -27,7 +27,6 @@ public class ChapterUtil {
 		if(chapterCode != null) {
 			Session hs = PersistenceManager.getRequestDBSession();
 			chapter = (AmpChapter) hs.get(AmpChapter.class, chapterCode);
-			PersistenceManager.releaseSession(hs);
 		}
 		return chapter;
 	}
@@ -37,7 +36,6 @@ public class ChapterUtil {
 		Session hs = PersistenceManager.getRequestDBSession();
 		AmpImputation imp = (AmpImputation) hs.get(AmpImputation.class,
 				imputationCode);
-		PersistenceManager.releaseSession(hs);
 		return imp;
 	}
 
@@ -47,7 +45,6 @@ public class ChapterUtil {
 //beginTransaction();
 		hs.saveOrUpdate(chapter);
 		//t.commit();
-		PersistenceManager.releaseSession(hs);
 	}
 
 	public static void saveImputation(AmpImputation imp) throws DgException,
@@ -56,7 +53,6 @@ public class ChapterUtil {
 //beginTransaction();
 		hs.saveOrUpdate(imp);
 		//transaction.commit();
-		PersistenceManager.releaseSession(hs);
 	}
 
 	public static Collection<Integer> getDistinctChapterYearList() {
@@ -66,7 +62,6 @@ public class ChapterUtil {
 			Query query = hs.createQuery("SELECT distinct(year) FROM "
 					+ AmpChapter.class.getName());
 			ret = query.list();
-			PersistenceManager.releaseSession(hs);
 		} catch (DgException e) {
 			e.printStackTrace();
 			logger.error(e);
@@ -84,7 +79,6 @@ public class ChapterUtil {
 					+ " WHERE year=:year");
 			query.setInteger("year", year);
 			ret = query.list();
-			PersistenceManager.releaseSession(hs);
 		} catch (DgException e) {
 			e.printStackTrace();
 			logger.error(e);

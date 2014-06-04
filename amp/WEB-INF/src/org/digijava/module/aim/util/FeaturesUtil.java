@@ -1059,16 +1059,6 @@ public class FeaturesUtil {
 		catch (Exception ex) {
 			logger.error(ex);
 		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
 		return ft;
 	}
 

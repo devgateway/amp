@@ -239,14 +239,6 @@ public class SpecificUtils {
             throw new DgException(
                 "Unable to get language list from database", ex);
         }
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex2) {
-                logger.warn("releaseSession() failed", ex2);
-            }
-        }
 
         return result;
     }
@@ -267,14 +259,6 @@ public class SpecificUtils {
             logger.debug("Unable to get language list from database", ex);
             throw new DgException(
                 "Unable to get language list from database", ex);
-        }
-        finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            }
-            catch (Exception ex2) {
-                logger.warn("releaseSession() failed", ex2);
-            }
         }
 
         return result;

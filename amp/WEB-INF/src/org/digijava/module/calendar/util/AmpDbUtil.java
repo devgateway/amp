@@ -512,14 +512,6 @@ public class AmpDbUtil {
 			} catch (Exception e) {
 				logger.error("Unable to get currency");
 				logger.debug("Exceptiion " + e);
-			} finally {
-				try {
-					if (session != null) {
-						PersistenceManager.releaseSession(session);
-					}
-				} catch (Exception ex) {
-					logger.error("releaseSession() failed");
-				}
 			}
 			return ampModule!= null ? ampModule.getId() : 0l;
 	  }
@@ -542,14 +534,6 @@ public class AmpDbUtil {
 			} catch (Exception e) {
 				logger.error("Unable to get currency");
 				logger.debug("Exceptiion " + e);
-			} finally {
-				try {
-					if (session != null) {
-						PersistenceManager.releaseSession(session);
-					}
-				} catch (Exception ex) {
-					logger.error("releaseSession() failed");
-				}
 			}
 			return ampModule;
 	  }
@@ -593,14 +577,6 @@ public class AmpDbUtil {
 			} catch (Exception e) {
 				logger.error("Unable to get currency");
 				logger.debug("Exceptiion " + e);
-			} finally {
-				try {
-					if (session != null) {
-						PersistenceManager.releaseSession(session);
-					}
-				} catch (Exception ex) {
-					logger.error("releaseSession() failed");
-				}
 			}
 			return false;
 	  }

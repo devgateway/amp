@@ -19,41 +19,23 @@ public class SourceSettingDAO {
 	public SourceSettingDAO () throws HibernateException, SQLException {
 		this.hbSession	= PersistenceManager.getSession();
 	}
-	
-	protected void releaseSession() {
-		try {
-			PersistenceManager.releaseSession(hbSession);
-		} catch (Exception ex2) {
-			logger.error("releaseSession() failed :" + ex2);
-		}
-	}
-	
+		
 	public List<DESourceSetting> getAllAmpSourceSettingsObjects() {
-		try{
+
 			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss";
 			Query query			= hbSession.createQuery(queryString);
 			List<DESourceSetting> resultList	=  query.list();
 			return resultList;
-		}
-		finally {
-			this.releaseSession();
-		}
 	}
 	
 	public int getAllAmpSourceSettingsObjectsCount() {
-		try{
 			String queryString 	= "select count(*) from "	+ DESourceSetting.class.getName() + " ss";
 			Query query			= hbSession.createQuery(queryString);
 			int resultList	=  (Integer)query.uniqueResult();
 			return resultList;
-		}
-		finally {
-			this.releaseSession();
-		}
 	}
 	
 	public List<DESourceSetting> getPagedAmpSourceSettingsObjects(int fromIndex, String sortBy) {
-		try{
 			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss";
 			//sort
 			if(sortBy!=null){
@@ -81,20 +63,11 @@ public class SourceSettingDAO {
 //			}
 			List<DESourceSetting> resultList	=  query.list();
 			return resultList;
-		}
-		finally {
-			this.releaseSession();
-		}
 	}
 	
 	public DESourceSetting getSourceSettingById(Long id) {
-		try{
 			DESourceSetting ret	= (DESourceSetting)hbSession.load(DESourceSetting.class, id);
 			return ret;
-		}
-		finally {
-			this.releaseSession();
-		}
 	}
 	
 	public static DESourceSetting getSourceSettingByName(String name){
@@ -109,12 +82,6 @@ public class SourceSettingDAO {
 			result = (DESourceSetting)qry.uniqueResult();
 		}catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            }
         }
         return result;
 	}
@@ -130,9 +97,6 @@ public class SourceSettingDAO {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		finally{
-			this.releaseSession();
-		}
 	}
 	
 	public void saveObject(Object object) {
@@ -144,9 +108,6 @@ public class SourceSettingDAO {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-		}
-		finally{
-			this.releaseSession();
 		}
 	}
 	

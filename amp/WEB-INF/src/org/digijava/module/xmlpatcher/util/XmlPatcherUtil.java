@@ -307,9 +307,6 @@ public final class XmlPatcherUtil {
 			AmpXmlPatch p=(AmpXmlPatch) iterator.next();
 			DbUtil.delete(p);
 		}
-		
-		PersistenceManager.releaseSession(session);
-
 	}
 
 	/**
@@ -333,13 +330,6 @@ public final class XmlPatcherUtil {
 		} catch (Exception e) {
 			logger.error(e);
 			throw new RuntimeException(e);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(sess);
-			} catch (HibernateException e) {
-				logger.error(e);
-				throw new RuntimeException(e);
-			} 
 		}
 	}
 
@@ -374,7 +364,6 @@ public final class XmlPatcherUtil {
 			
 			AmpXmlPatch patch = (AmpXmlPatch) session.get(AmpXmlPatch.class,
 					deprecatedId);
-			PersistenceManager.releaseSession(session);
 			if (patch == null) {
 				log.appendToLog("Referenced deprecated patch does not exist: "
 						+ deprecatedId);
@@ -405,7 +394,6 @@ public final class XmlPatcherUtil {
 						+ " p WHERE p.state NOT IN ("
 						+ XmlPatcherConstants.PatchStates.CLOSED+","+XmlPatcherConstants.PatchStates.DEPRECATED+","+XmlPatcherConstants.PatchStates.DELETED+")");
 		List<AmpXmlPatch> list = query.list();
-		PersistenceManager.releaseSession(session);
 		return list;
 	}
 	
@@ -423,7 +411,6 @@ public final class XmlPatcherUtil {
 			throws DgException, HibernateException, SQLException {
 		Session session = PersistenceManager.getRequestDBSession();
 			Integer ret= ((Integer)session.createQuery("select count(*) from " + AmpXmlPatch.class.getName()).iterate().next()).intValue();
-		PersistenceManager.releaseSession(session);
 		return ret;
 	}
 	
@@ -444,7 +431,6 @@ public final class XmlPatcherUtil {
 		Query query = session
 				.createQuery("from " + AmpXmlPatch.class.getName());
 		List<AmpXmlPatch> list = query.list();
-		PersistenceManager.releaseSession(session);
 		return list;
 	}
 	
@@ -484,21 +470,15 @@ public final class XmlPatcherUtil {
 		query.setFirstResult(startIndexInt);
 		query.setMaxResults(recordsInt);
 		List<Object[]> list = query.list();
-		PersistenceManager.releaseSession(session);
 		return list;
 	}
 
 	public static Session getHibernateSession() {
-		try {
-			return PersistenceManager.getSession();
-		} catch (HibernateException e1) {
-			logger.error(e1);
-			throw new RuntimeException(e1);
-		}
+		return PersistenceManager.getSession();
 	}
 
 	public static void closeHibernateSession(Session session) {
-		PersistenceManager.releaseSession(session);
+		//PersistenceManager.releaseSession(session);
 	}
 
 	/**

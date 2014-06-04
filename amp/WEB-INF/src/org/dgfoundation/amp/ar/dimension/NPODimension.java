@@ -36,9 +36,6 @@ public class NPODimension extends ARDimension  {
 			AmpTheme prog= (AmpTheme) it.next();
 			programsMap.put(prog.getAmpThemeId(), prog.getParentThemeId()==null?null:prog.getParentThemeId().getAmpThemeId() );
 		}
-
-		PersistenceManager.releaseSession(session);
-
 	}
 	
 	@Override

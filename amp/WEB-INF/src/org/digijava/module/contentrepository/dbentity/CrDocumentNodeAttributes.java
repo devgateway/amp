@@ -68,13 +68,6 @@ public class CrDocumentNodeAttributes extends ObjectReferringDocument {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(hbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
 		
 		return docAttributes;
 	}
@@ -94,13 +87,6 @@ public class CrDocumentNodeAttributes extends ObjectReferringDocument {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		finally {
-			try {
-				PersistenceManager.releaseSession(hbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
 		}
 		
 		return docNodeAtt;

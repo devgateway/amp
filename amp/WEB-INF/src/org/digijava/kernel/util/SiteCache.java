@@ -241,16 +241,6 @@ public class SiteCache implements Runnable {
             logger.error("load() failed ",ex);
             throw new DgException("load() failed ",ex);
         }
-        finally {
-            if (session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                }
-                catch (Exception ex) {
-                    logger.warn("releaseSession() failed ",ex);
-                }
-            }
-        }
 
         Iterator iter = siteCache.values().iterator();
         while (iter.hasNext()) {

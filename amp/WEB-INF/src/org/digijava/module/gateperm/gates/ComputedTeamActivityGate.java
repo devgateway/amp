@@ -93,7 +93,6 @@ public class ComputedTeamActivityGate extends Gate {
 		//		.getMemberId());
 		
 		//AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-		PersistenceManager.releaseSession(session);
 		User user = TeamMemberUtil.getUserEntityByTMId(tm.getMemberId());//atm.getUser();
 
 		Set relatedTeamsForMember = TeamUtil.getRelatedTeamsForMember(tm);

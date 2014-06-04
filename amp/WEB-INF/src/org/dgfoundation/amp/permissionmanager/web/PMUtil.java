@@ -89,7 +89,6 @@ public final class PMUtil {
 		}
 		if(hs!=null){
 			//pf.setPermissionId(new Long(0));
-			PersistenceManager.releaseSession(hs);
 		}
 
 	}

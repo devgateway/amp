@@ -101,7 +101,6 @@ public class ManagePermissionMap extends MultiAction {
 	Session hs= PermissionUtil.saveGlobalPermission(permCatClass,pf.getPermissionId(), pf.getPermissibleCategory());
 	if(hs!=null){
 		pf.setPermissionId(new Long(0));
-		PersistenceManager.releaseSession(hs);
 	}
 	return mapping.getInputForward();
     }
@@ -137,9 +136,6 @@ public class ManagePermissionMap extends MultiAction {
 	}
 	hs.flush();
 	
-
-	PersistenceManager.releaseSession(hs);
-
 	return modePermissibleCategoryPicked(mapping, pf, request, response);	
     }
 
@@ -206,8 +202,7 @@ public class ManagePermissionMap extends MultiAction {
 	form.getPermissionMaps().clear();
 	HashSet<PermissionMap> ts = new HashSet<PermissionMap>(permissionMapsForPermissibleClass.values());
 	form.getPermissionMaps().addAll(ts);
-	
-	PersistenceManager.releaseSession(hs);
+
 
 	return mapping.getInputForward();
     }

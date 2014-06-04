@@ -48,8 +48,6 @@ public class DonorGroupDimension extends ARDimension {
 			if(as.getOrgGrpId()==null) continue;
 			typeMap.put(as.getOrgGrpId().getAmpOrgGrpId(), as.getOrgGrpId().getOrgType()==null?null:as.getOrgGrpId().getOrgType().getAmpOrgTypeId());
 		}
-		PersistenceManager.releaseSession(session);
-
 	}
 	@Override
 	public Long getParentObject(Long parentId,

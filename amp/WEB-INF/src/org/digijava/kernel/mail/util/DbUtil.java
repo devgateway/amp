@@ -84,7 +84,6 @@ public class DbUtil {
       MailSpoolException {
 
       Session session = null;
-      Transaction tx = null;
       MailSpool spool = new MailSpool();
       try {
 
@@ -120,30 +119,10 @@ public class DbUtil {
               "Unable to update mail spool item information into database",
               ex);
 
-          if (tx != null) {
-              try {
-                  tx.rollback();
-              }
-              catch (HibernateException ex1) {
-                  logger.warn("rollback() failed", ex1);
-              }
-          }
           throw new MailSpoolException(
               "Unable to update mail spool item information into database",
               ex);
       }
-      finally {
-          if (session != null) {
-              try {
-                  PersistenceManager.releaseSession(session);
-              }
-              catch (Exception ex1) {
-                  logger.warn("releaseSession() failed", ex1);
-              }
-          }
-
-      }
-
   }
 
 
@@ -181,18 +160,6 @@ public class DbUtil {
               "Unable to update mail spool item information into database",
               ex);
       }
-      finally {
-          if (session != null) {
-              try {
-                  PersistenceManager.releaseSession(session);
-              }
-              catch (Exception ex1) {
-                  logger.warn("releaseSession() failed", ex1);
-              }
-          }
-
-      }
-
   }
 
   /**
@@ -204,7 +171,6 @@ public class DbUtil {
         MailSpoolException {
 
         Session session = null;
-        Transaction tx = null;
         String querryString;
         GregorianCalendar date = new GregorianCalendar();
         try {
@@ -226,29 +192,9 @@ public class DbUtil {
             logger.debug(
                 "Unable to update mail spool item information into database",
                 ex);
-
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (HibernateException ex1) {
-                    logger.warn("rollback() failed", ex1);
-                }
-            }
             throw new MailSpoolException(
                 "Unable to update mail spool item information into database",
                 ex);
-        }
-        finally {
-            if (session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                }
-                catch (Exception ex1) {
-                    logger.warn("releaseSession() failed", ex1);
-                }
-            }
-
         }
     }
 
@@ -276,13 +222,6 @@ public class DbUtil {
       }
       catch (Exception ex) {
       }
-      finally {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception ex2) {
-        }
-      }
       return spoolList;
     }
 
@@ -307,13 +246,6 @@ public class DbUtil {
         spoolList = q.list();
       }
       catch (Exception ex) {
-      }
-      finally {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception ex2) {
-        }
       }
       return spoolList;
     }

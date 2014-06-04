@@ -477,16 +477,6 @@ public class PersistenceManager {
 		return null;
 	}
 
-	/**
-	 * Releases a Hibernate Session, <b>without</b> committing the underlying
-	 * connection.
-	 * @throws cirrus.hibernate.HibernateException
-	 * @throws java.sql.SQLException
-	 * @deprecated
-	 */
-	public static void releaseSession(Session session){
-	}
-
 	private PersistenceManager() {
 	}
 
@@ -761,15 +751,6 @@ public class PersistenceManager {
 			throw new DgException(
 					"Unable to refresh object into cache", ex);
 		}
-		finally {
-			try {
-				releaseSession(session);
-			}
-			catch (Exception ex2) {
-				logger.warn("releaseSession() failed ", ex2);
-			}
-		}
-
 	}
 	
 	/**

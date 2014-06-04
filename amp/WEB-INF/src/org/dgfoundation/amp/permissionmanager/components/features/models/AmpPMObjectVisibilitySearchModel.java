@@ -121,8 +121,6 @@ public class AmpPMObjectVisibilitySearchModel extends AbstractAmpAutoCompleteMod
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			PersistenceManager.releaseSession(session);
 		}
 		
 		return ret;

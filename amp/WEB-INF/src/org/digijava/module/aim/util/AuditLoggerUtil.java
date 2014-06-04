@@ -255,15 +255,7 @@ public class AuditLoggerUtil {
 			//tx.commit();
 		} catch (Exception ex) {
 			logger.error("Exception : ", ex);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :", rsf);
-				}
-			}
-		}			
+		}
 	}
 	
 	/**
@@ -286,14 +278,6 @@ public class AuditLoggerUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
 		}
 		return col;
 	}
@@ -317,14 +301,6 @@ public class AuditLoggerUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
 		}
 		return col;
 	}
@@ -350,14 +326,6 @@ public class AuditLoggerUtil {
 			o=col.iterator().next();
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
 		}
 		return o;
 	}
@@ -380,14 +348,6 @@ public class AuditLoggerUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
 		}
 		return col;
 	}
@@ -409,14 +369,6 @@ public class AuditLoggerUtil {
 			}
 		} catch (HibernateException e) {
 			logger.error("HibernateException", e);
-		}finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed.", rsf);
-				}
-			}
 		}
 		return auditTrail;
 
@@ -449,14 +401,6 @@ public class AuditLoggerUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
 		}
 		return col;
 	}

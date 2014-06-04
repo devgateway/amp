@@ -23,9 +23,5 @@ public class SessionSourceSettingDAO extends SourceSettingDAO {
 	public SessionSourceSettingDAO() throws HibernateException, SQLException, DgException {
 		this.hbSession	= PersistenceManager.getRequestDBSession();
 	}
-	@Override
-	protected void releaseSession() {
-		;
-	}
 
 }

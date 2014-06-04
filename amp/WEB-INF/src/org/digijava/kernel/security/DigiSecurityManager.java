@@ -364,16 +364,6 @@ public class DigiSecurityManager {
             catch (Exception ex) {
                 throw new DgException("Unable to get user list", ex);
             }
-            finally {
-                if (session != null) {
-                    try {
-                        PersistenceManager.releaseSession(session);
-                    }
-                    catch (Exception ex) {
-                    }
-                }
-            }
-
         }
         return result;
     }

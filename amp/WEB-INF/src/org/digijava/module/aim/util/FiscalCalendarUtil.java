@@ -84,14 +84,6 @@ public class FiscalCalendarUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getAmpFiscalCalendar() :" + e.getMessage());
 			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}			
 		}
 		return d;		
 	}
@@ -126,14 +118,6 @@ public class FiscalCalendarUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getAmpFiscalCalendar() :" + e.getMessage());
 			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}			
 		}
 		return d;		
 	}	
@@ -149,14 +133,6 @@ public class FiscalCalendarUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getAmpFiscalCalendar() :" + e.getMessage());
 			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}			
 		}
 		return fisCal;
 	}
@@ -192,14 +168,6 @@ public class FiscalCalendarUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getYear() :" + e.getMessage());
 			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}			
 		}
 		return fiscalYr;
 	}

@@ -1261,16 +1261,6 @@ public class DataExchangeUtils {
             logger.debug("Unable to get site from database ", ex);
             throw new DgException("Unable to get site from database ", ex);
         }
-        finally {
-            try {
-                if (session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            }
-            catch (Exception ex1) {
-                logger.warn("releaseSession() failed ", ex1);
-            }
-        }
         return site;
     }
 
@@ -1438,13 +1428,6 @@ public class DataExchangeUtils {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Unable to get all sector schemes, " + ex);
-		} finally {
-			try {
-				if (session != null)
-					PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
 		}
 		return col;
 	}
@@ -1525,8 +1508,6 @@ public class DataExchangeUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-        	PersistenceManager.releaseSession(session);
         }
         return result;
     }
@@ -1556,8 +1537,6 @@ public class DataExchangeUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-        	PersistenceManager.releaseSession(session);
         }
         return result1;
     }
@@ -1586,8 +1565,6 @@ public class DataExchangeUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-        	PersistenceManager.releaseSession(session);
         }
         return result1;
     }    
@@ -1616,8 +1593,6 @@ public class DataExchangeUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-        	PersistenceManager.releaseSession(session);
         }
         return result1;
     }    
@@ -1648,8 +1623,6 @@ public class DataExchangeUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-        	PersistenceManager.releaseSession(session);
         }
         return result1;
     }    
@@ -1675,8 +1648,6 @@ public class DataExchangeUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-        	PersistenceManager.releaseSession(session);
         }
         return result1;
     }    
@@ -1711,8 +1682,6 @@ public class DataExchangeUtils {
 
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	        } finally {
-	        	PersistenceManager.releaseSession(session);
 	        }
 	        return result;
 	}
@@ -1760,8 +1729,6 @@ public class DataExchangeUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-        	PersistenceManager.releaseSession(session);
         }
         return ;
 		

@@ -427,13 +427,6 @@ public class DbUtil {
 			logger.error("Uanble to get object of class "
 					+ EUActivity.class.getName() + " width id=" + id
 					+ ". Error was:" + e);
-		} finally {
-
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed " + ex);
-			}
 		}
 		return o;
 	}
@@ -599,8 +592,6 @@ public class DbUtil {
 		} catch (Exception e) {
 			logger.error("Unable to get all activities");
 			logger.debug("Exceptiion " + e);
-		} finally {
-			PersistenceManager.releaseSession(session);
 		}
 		return activities;
 	}

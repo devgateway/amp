@@ -64,14 +64,6 @@ public class HashKeyPatch {
 					logger.error("cannot rolback translation hash code patcher",e2);
 				}
 			}
-		}finally{
-			if (session!=null){
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception e3) {
-					logger.error("cannot close translastion hash code pather db session",e3);
-				}
-			}
 		}
 	}
 	
@@ -153,8 +145,6 @@ public class HashKeyPatch {
 			return gs.getGlobalSettingsValue();
 		} catch (HibernateException e) {
 			e.printStackTrace();
-		}finally{
-			PersistenceManager.releaseSession(session);
 		}
 		return null;
 	}

@@ -458,7 +458,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             protected void onClick(AjaxRequestTarget target) {
             	target.appendJavaScript("enableButtons();");
             }
-            //agregar el evento que reprende los botones
         };
         
         saveAsDraft.getButton().add(isSubmit);

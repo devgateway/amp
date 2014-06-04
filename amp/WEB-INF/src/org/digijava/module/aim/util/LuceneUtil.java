@@ -81,7 +81,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 10L;
+	private static final long serialVersionUID = 11L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -778,12 +778,18 @@ public class LuceneUtil implements Serializable {
 	        {
 	            String luceneValue = buildLuceneValueForField(id, field);
 	            if (luceneValue == null)
-	            	luceneValue = regularFieldNames.get(field);
-	
-	            if ("name".equals(field)){
-	                doc.add(new Field(field, luceneValue, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
-	            } else {
-	                doc.add(new Field(field, luceneValue, Field.Store.NO, Field.Index.ANALYZED));
+	            	luceneValue = regularFieldNames.get(field);	
+	            
+	            // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process. 
+	            try {
+		            if ("name".equals(field)){
+		                doc.add(new Field(field, luceneValue, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+		            } else {
+		                doc.add(new Field(field, luceneValue, Field.Store.NO, Field.Index.ANALYZED));
+		            }
+	            } catch (Exception e) {
+	            	logger.error("Error reindexing document - field:" + field + " - value:" + luceneValue);
+	            	logger.error(e);
 	            }
 	            all = all.concat(" " + luceneValue);
 	        }

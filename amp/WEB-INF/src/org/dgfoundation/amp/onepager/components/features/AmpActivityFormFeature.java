@@ -449,7 +449,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		saveReject.getButton().add(isSubmit);
         
-		saveReject.getButton().add(new AttributeModifier("onclick", "showRejectActivityPanel();disableButton();"));
+		saveReject.getButton().add(new AttributeModifier("onclick", "showRejectActivityPanel();"));
 		saveReject.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons rejectButton")));
         activityForm.add(saveReject);
 		
@@ -504,17 +504,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		myDraftOpts.add(radioStay);
 		activityForm.add(myDraftOpts);
 
-        final AmpButtonField cancelSaveAsDraft = new AmpButtonField("saveAsDraftCanceld", "Cancel", AmpFMTypes.MODULE, true) {
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-            	target.appendJavaScript("enableButtons();");
-            }
-            @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-            	generateEnableButtonsOnError(attributes);
-            }
+		
+        final AmpAjaxLinkField cancelSaveAsDraft = new AmpAjaxLinkField("saveAsDraftCanceld", "Cancel", "Cancel") {
+			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				// TODO Auto-generated method stub
+				
+			}
         };
-        cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();disableButton();"));
+        cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();enableButtons();"));
         cancelSaveAsDraft.add(isSubmit);
         cancelSaveAsDraft.setVisible(true);
         cancelSaveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
@@ -524,11 +522,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				onSubmitSaveAsDraft(am, feedbackPanel, redirected, cancelSaveAsDraft,
+				onSubmitSaveAsDraft(am, feedbackPanel, redirected, this,
 							target, form,false);
 			}
-
-
 			
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
@@ -575,7 +571,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpButtonField rejectActivityAction = new AmpButtonField("rejectActivityAction", "Reject Activity", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				onSubmitSaveAsDraft(am, feedbackPanel, redirected, cancelSaveAsDraft,
+				onSubmitSaveAsDraft(am, feedbackPanel, redirected, this,
 							target, form,true);
 			}
 

@@ -294,14 +294,15 @@ public class GPIUtils {
 			// Remember: answers[0] is the first question :D
 			if (GPIConstants.GPI_REPORT_1.equals(reportCode)) {
 				// Check if the question has a valid answer (yes/no) because the activityform saves the survey automatically even with no responses.
-				if(answers[0].trim().equals("")) {
+				if(answers[0] == null || answers[0].trim().equals("")) {
 					columns = null;
 				} else {
 					columns[0] = ("Yes".equalsIgnoreCase(answers[0]));
 				}
 			} else if (GPIConstants.GPI_REPORT_9b.equals(reportCode)) {
 				// In this case "columns" means "answers" :)
-				if(answers[2].trim().equals("") && answers[3].trim().equals("") && answers[4].trim().equals("") && answers[5].trim().equals("")) {
+				if((answers[2] == null || answers[2].trim().equals("")) && (answers[3] == null || answers[3].trim().equals(""))
+						&& (answers[4] == null || answers[4].trim().equals("")) && (answers[5] == null || answers[5].trim().equals(""))) {
 					// None of the 4 questions have been answeres (yes/no) so this funding is invalid.
 					columns = null;
 				} else {
@@ -312,7 +313,7 @@ public class GPIUtils {
 				}
 			} else if (GPIConstants.GPI_REPORT_6.equals(reportCode)) {
 				// Check if the question has a valid answer (yes/no) because the activityform saves the survey automatically even with no responses.
-				if(answers[1].trim().equals("")) {
+				if(answers[1] == null || answers[1].trim().equals("")) {
 					columns = null;
 				} else {
 					columns[0] = ("Yes".equalsIgnoreCase(answers[1]));

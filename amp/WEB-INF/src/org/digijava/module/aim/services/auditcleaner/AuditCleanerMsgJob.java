@@ -72,7 +72,7 @@ public class AuditCleanerMsgJob implements Job {
 				for (Iterator iterator = alllead.iterator(); iterator.hasNext();) {
 					AmpTeamMember tm = (AmpTeamMember) iterator.next();
 					if (tm != null && tm.getAmpTeamMemId() != null) {
-						createMessageState(message, tm);
+						AmpMessageUtil.createMessageState(message, tm);
 					}
 				}
                AmpMessageUtil.saveOrUpdateMessage(message);
@@ -83,40 +83,5 @@ public class AuditCleanerMsgJob implements Job {
 
 	}
 
-    private void createMessageState(AmpMessage message, AmpTeamMember receiver) throws Exception {
-        AmpMessageState newMessageState = new AmpMessageState();
-        newMessageState.setMessage(message);
-        newMessageState.setSender(receiver.getUser().getName());
-        //newMessageState.setMemberId(memberId);
-        newMessageState.setReceiver(receiver);
-        String receivers = message.getReceivers();
-        if (receivers == null) {
-            receivers = "";
-        } else {
-            if (receivers.length() > 0) {
-                receivers += ", ";
-            }
-        }
-        User user = receiver.getUser();
 
-        receivers += user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + receiver.getAmpTeam().getName() + ";";
-        message.setReceivers(receivers);
-        newMessageState.setRead(false);
-        //check if user's inbox is already full
-
-        Class clazz = AmpAlert.class;
-
-        int maxStorage = -1;
-        AmpMessageSettings setting = AmpMessageUtil.getMessageSettings();
-        if (setting != null && setting.getMsgStoragePerMsgType() != null) {
-            maxStorage = setting.getMsgStoragePerMsgType().intValue();
-        }
-        if (AmpMessageUtil.isInboxFull(clazz, receiver.getAmpTeamMemId()) || AmpMessageUtil.getInboxMessagesCount(clazz, receiver.getAmpTeamMemId(), false, false, maxStorage) >= maxStorage) {
-            newMessageState.setMessageHidden(true);
-        } else {
-            newMessageState.setMessageHidden(false);
-        }
-        //saving current state in db
-        AmpMessageUtil.saveOrUpdateMessageState(newMessageState);
-    }
 }

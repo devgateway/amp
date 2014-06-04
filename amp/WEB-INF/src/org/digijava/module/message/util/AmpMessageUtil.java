@@ -11,12 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.admin.util.hibernate.SeparateSessionManager;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpEmail;
 import org.digijava.module.message.dbentity.AmpEmailReceiver;
 import org.digijava.module.message.dbentity.AmpMessage;
@@ -54,18 +57,8 @@ public class AmpMessageUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
 			session.saveOrUpdate(message);
-			//tx.commit();
 		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("update failed",ex);
 		}
 	}
@@ -82,8 +75,7 @@ public class AmpMessageUtil {
 			query.setParameter("id", messageId);
 			returnValue=(AmpMessage)query.uniqueResult();
 		}catch(Exception ex) {
-			logger.error("couldn't load Message" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Message" ,ex);
 		}
 		return returnValue;
 	}
@@ -97,19 +89,9 @@ public class AmpMessageUtil {
 		Transaction trans=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
 			AmpMessage message=getMessage(id);
 			session.delete(message);
-			//trans.commit();
 		} catch (Exception ex) {
-			if(trans!=null) {
-				try {
-					trans.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("delete failed",ex);
 		}
 	}	
@@ -126,8 +108,7 @@ public class AmpMessageUtil {
 			query.setParameter("relTriggerName", relatedTriggerName);
 			returnValue=(List<TemplateAlert> )query.list();
 		}catch(Exception ex) {
-			logger.error("couldn't load TemplateAlert" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load TemplateAlert" ,ex);	
 		}
 		return returnValue;
 	}
@@ -152,8 +133,7 @@ public class AmpMessageUtil {
 			query.setParameter("id", stateId);
 			returnValue=(AmpMessageState)query.uniqueResult();
 		}catch(Exception ex) {
-			logger.error("couldn't load Message State" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Message State" ,ex);	
 		}
 		return returnValue;
 	}
@@ -163,19 +143,9 @@ public class AmpMessageUtil {
 		Transaction trans=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
 			AmpMessageState state=getMessageState(stateId);
 			session.delete(state);
-			//trans.commit();
 		} catch (Exception ex) {
-			if(trans!=null) {
-				try {
-					trans.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("delete failed",ex);
 		}
 	}	
@@ -185,18 +155,8 @@ public class AmpMessageUtil {
 		Transaction trans=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-//beginTransaction();			
 			session.delete(state);
-			//trans.commit();
 		} catch (Exception ex) {
-			if(trans!=null) {
-				try {
-					trans.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("delete failed",ex);
 		}
 	}
@@ -206,20 +166,10 @@ public class AmpMessageUtil {
 		Transaction trans=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
 			for (AmpMessageState state : states) {
 				session.delete(state);
 			}			
-			//trans.commit();
 		} catch (Exception ex) {
-			if(trans!=null) {
-				try {
-					trans.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("delete failed",ex);
 		}
 	}
@@ -230,18 +180,8 @@ public class AmpMessageUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
 			session.saveOrUpdate(messageState);
-			//tx.commit();
 		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("update failed",ex);
 		}
 	}
@@ -257,8 +197,7 @@ public class AmpMessageUtil {
 			query=session.createQuery(queryString);
 			returnValue=(List<AmpMessageState>)query.list();
 		}catch(Exception ex) {
-			logger.error("couldn't load States" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load States" ,ex);	
 		}
 		return returnValue;
 	}
@@ -278,7 +217,6 @@ public class AmpMessageUtil {
 			if(onlyUnread){
 				queryString+=" and state.read=false";
 			}
-			//queryString+=" order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);
@@ -293,7 +231,7 @@ public class AmpMessageUtil {
                             retValue+=numUnhidden;
                         }
 		}catch(Exception ex) {			
-			ex.printStackTrace();
+			logger.error("Unable to Load Messages",ex);
 			throw new AimException("Unable to Load Messages", ex);
 			
 		}
@@ -326,7 +264,7 @@ public class AmpMessageUtil {
                 }
             }						
 		}catch(Exception ex) {			
-			ex.printStackTrace();
+			logger.error("Unable to unhide Messages", ex);
 			throw new DgException("Unable to unhide Messages", ex);
 			
 		}
@@ -344,7 +282,7 @@ public class AmpMessageUtil {
                         state.setMessageHidden(false);
                         session.update(state);			
 		}catch(Exception ex) {			
-			ex.printStackTrace();
+			logger.error("Unable to unhide Messages", ex);
 			throw new DgException("Unable to unhide Messages", ex);
 			
 		}
@@ -365,7 +303,7 @@ public class AmpMessageUtil {
                         query.setParameter("hidden", hidden);
 			retValue=((Integer)query.uniqueResult()).intValue();			
 		}catch(Exception ex) {			
-			ex.printStackTrace();
+			logger.error("Unable to Load Messages", ex);
 			throw new AimException("Unable to Load Messages", ex);			
 		}
 		return retValue;
@@ -418,8 +356,7 @@ public class AmpMessageUtil {
                             returnValue=loadAllInboxMessagesStates(clazz,teamMemberId,maxStorage,page,msgStoragePerMsgType,sortBy);
                         }
 		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Messages" ,ex);	
 			throw new AimException("Unable to Load Messages", ex);
 			
 		}
@@ -463,8 +400,7 @@ public class AmpMessageUtil {
                             returnValue=loadAllSentOrDraftMessagesStates(clazz,teamMemberId,maxStorage,draft,page,sortBy);
                         }
 		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Messages" ,ex);	
 			throw new AimException("Unable to Load Messages", ex);
 			
 		}
@@ -495,18 +431,8 @@ public class AmpMessageUtil {
 		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
-//beginTransaction();
 			session.saveOrUpdate(setting);
-			//tx.commit();
 		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception e ) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback", e);
-				}			
-			}
 			throw new AimException("update failed",ex);
 		}
 		return true;
@@ -544,8 +470,7 @@ public class AmpMessageUtil {
 				full=true;
 			}
 		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Messages" ,ex);	
 			throw new AimException("Unable to Load Messages", ex);			
 		}
 		return full;
@@ -571,8 +496,7 @@ public class AmpMessageUtil {
 				}
 			}
 		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Messages" ,ex);	
 			throw new AimException("Unable to Load Messages", ex);			
 		}
 		return full;
@@ -642,8 +566,7 @@ public class AmpMessageUtil {
 			
 			updateMsgHiddenVisibleState(session, hiddenMsgsIds,false);			
 		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Messages", ex);	
 			throw new AimException("Unable to Load Messages", ex);			
 		}
 	}
@@ -667,8 +590,7 @@ public class AmpMessageUtil {
 			
 			updateMsgHiddenVisibleState(session, hiddenMsgsIds,false);
 		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Messages",ex);	
 			throw new AimException("Unable to Load Messages", ex);			
 		}
 	}
@@ -693,8 +615,7 @@ public class AmpMessageUtil {
 			updateMsgHiddenVisibleState(session, hiddenMsgsIds,true);
 			
 		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Messages" , ex);	
 			throw new AimException("Unable to Load Messages", ex);			
 		}
 	}
@@ -718,8 +639,7 @@ public class AmpMessageUtil {
 			
 			updateMsgHiddenVisibleState(session, hiddenMsgsIds,true);
 		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Messages",ex);	
 			throw new AimException("Unable to Load Messages", ex);			
 		}
 	}
@@ -744,8 +664,7 @@ public class AmpMessageUtil {
 			
 			updateMsgHiddenVisibleState(session, statesIds,false);
 		}catch(Exception ex) {
-			logger.error("couldn't load Message" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Message" , ex);	
 			throw new AimException("Unable to Load Message", ex);			
 		}
 	}
@@ -771,8 +690,7 @@ public class AmpMessageUtil {
 			
 			updateMsgHiddenVisibleState(session, statesIds,false);
 		}catch(Exception ex) {
-			logger.error("couldn't load Message" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Message", ex);	
 			throw new AimException("Unable to Load Message", ex);			
 		}
 	}
@@ -810,8 +728,7 @@ public class AmpMessageUtil {
 			query.setParameter("tmId", tmId);			
 			state=(AmpMessageState)query.uniqueResult();			
 		}catch(Exception ex) {
-			logger.error("couldn't load Message" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Message",ex);	
 			throw new AimException("Unable to Load Message", ex);			
 		}
 		return state;
@@ -834,8 +751,7 @@ public class AmpMessageUtil {
 			query.setParameter("tmId", tmId);			
 			state=(AmpMessageState)query.uniqueResult();			
 		}catch(Exception ex) {
-			logger.error("couldn't load Message" + ex.getMessage());	
-			ex.printStackTrace();
+			logger.error("couldn't load Message",ex);	
 			throw new AimException("Unable to Load Message", ex);			
 		}
 		return state;
@@ -880,12 +796,6 @@ public class AmpMessageUtil {
 		String queryString =null;
 		Query query=null;
 		try {
-			//select a1.email_id,count(a1.receiver_id) as delivered,(select count(receiver_id) from amp_email_receiver a2 where a1.email_id=a2.email_id group by a2.email_id) as totalReceivers
-			//from amp_email_receiver a1 where a1.status="sent" group by a1.email_id having totalReceivers=delivered
-//			queryString="select rec1.email from " +AmpEmailReceiver.class.getName()+" rec1 where "
-//			+" rec1.status like '"+MessageConstants.SENT_STATUS 
-//			+ "' group by rec1.email having count(rec1.id)=(select count(rec2.id) from "+AmpEmailReceiver.class.getName()
-//			+" rec2 where rec2.email=rec1.email group by rec2.email)";		
 			queryString	= "SELECT email from " + AmpEmail.class.getName() +  " email WHERE ( email.receiver.size = " + 
 					" (SELECT count(rec) from " +AmpEmailReceiver.class.getName() + " rec " +
 							"WHERE rec.email=email AND rec.status like :sentStatus ))" ;
@@ -978,8 +888,8 @@ public class AmpMessageUtil {
 			query.setString("contEmail", Constants.CONTACT_PROPERTY_NAME_EMAIL);
 			contacts=query.list();
 		} catch (Exception ex) {
-			logger.error("couldn't load Contacts " + ex.getMessage());	
-			ex.printStackTrace(); 
+			logger.error("couldn't load Contacts " ,ex);	
+
 		}
 		
 		if(contacts!=null){
@@ -1003,20 +913,15 @@ public class AmpMessageUtil {
 	public static List<AmpMessageState> getUnreadMessagesRelatedToActivity (String activityURL , Long teamMemberId) {
 		List<AmpMessageState> retVal = null;
 		Session session=null;
-		String queryString =null;
-		Query query=null;
 		try {
 			session =  PersistenceManager.getRequestDBSession();
 			Criteria criteria = session.createCriteria(AmpMessageState.class).createAlias("message","msg").createAlias("receiver", "receiver")
 			.add(Restrictions.ilike("msg.objectURL", activityURL)).add(Restrictions.eq("read", false)).add(Restrictions.eq("receiver.ampTeamMemId", teamMemberId));
 			retVal =  criteria.list();			
-//			queryString = " select state from " + AmpMessageState.class.getName() +" state where state.receiver=:teamMemberId and state.read is false and state.message.objectURL like '"+activityURL +"'";
-//			query=session.createQuery(queryString);
-//			query.setLong("teamMemberId", teamMemberId);
-//			retVal = query.list();
+
 		} catch (Exception e) {
-			logger.error("couldn't get messages " + e.getMessage());	
-			e.printStackTrace(); 
+			logger.error("couldn't get messages " ,e);	
+ 
 		}
 		return retVal;
 	}
@@ -1037,8 +942,7 @@ public class AmpMessageUtil {
             query.setString("searchStr", searchStr + "%");
 			contacts=query.list();
 		} catch (Exception ex) {
-			logger.error("couldn't load Contacts " + ex.getMessage());
-			ex.printStackTrace();
+			logger.error("couldn't load Contacts " , ex);
 		}
 
 		if(contacts!=null){
@@ -1058,4 +962,40 @@ public class AmpMessageUtil {
 
 		return retVal;
 	}
+    public static void createMessageState(AmpMessage message, AmpTeamMember receiver) throws Exception {
+        AmpMessageState newMessageState = new AmpMessageState();
+        newMessageState.setMessage(message);
+        newMessageState.setSender(receiver.getUser().getName());
+        //newMessageState.setMemberId(memberId);
+        newMessageState.setReceiver(receiver);
+        String receivers = message.getReceivers();
+        if (receivers == null) {
+            receivers = "";
+        } else {
+            if (receivers.length() > 0) {
+                receivers += ", ";
+            }
+        }
+        User user = receiver.getUser();
+
+        receivers += user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + receiver.getAmpTeam().getName() + ";";
+        message.setReceivers(receivers);
+        newMessageState.setRead(false);
+        //check if user's inbox is already full
+
+        Class clazz = AmpAlert.class;
+
+        int maxStorage = -1;
+        AmpMessageSettings setting = AmpMessageUtil.getMessageSettings();
+        if (setting != null && setting.getMsgStoragePerMsgType() != null) {
+            maxStorage = setting.getMsgStoragePerMsgType().intValue();
+        }
+        if (AmpMessageUtil.isInboxFull(clazz, receiver.getAmpTeamMemId()) || AmpMessageUtil.getInboxMessagesCount(clazz, receiver.getAmpTeamMemId(), false, false, maxStorage) >= maxStorage) {
+            newMessageState.setMessageHidden(true);
+        } else {
+            newMessageState.setMessageHidden(false);
+        }
+        //saving current state in db
+        AmpMessageUtil.saveOrUpdateMessageState(newMessageState);
+    }
 }

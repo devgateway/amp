@@ -178,11 +178,10 @@ SaveReportEngine.prototype.failure			= function(o) {
 SaveReportEngine.prototype.decideToShowTitlePanel	= function () // actually this is the "Save" button
 {
 	this.forceOverwrite = true;
-	this.showTitlePanel(); // always show title panel
-//	if ( getReportTitle() == "" )
-//			this.showTitlePanel();
-//	else
-//			this.saveReport( aimReportWizardForm);
+	if ( getReportTitle() == "" )
+		this.showTitlePanel();
+	else
+		this.saveReport( aimReportWizardForm);
 };
 
 SaveReportEngine.prototype.showTitlePanel	= function () {

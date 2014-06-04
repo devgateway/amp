@@ -89,7 +89,6 @@ import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -434,7 +433,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpAjaxLinkField saveReject=new AmpAjaxLinkField("saveReject", "Reject activity", "Reject activity") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-            	//target.appendJavaScript("alert('on click ');");
+
             }
             @Override
             protected void onBeforeRender() {
@@ -450,8 +449,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		saveReject.getButton().add(isSubmit);
         
-		saveReject.getButton().add(new AttributeModifier("onclick", "showRejectActivityPanel();"));
-
+		saveReject.getButton().add(new AttributeModifier("onclick", "showRejectActivityPanel();disableButton();"));
 		saveReject.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons rejectButton")));
         activityForm.add(saveReject);
 		
@@ -564,12 +562,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpAjaxLinkField cancelRejectActivity=new AmpAjaxLinkField("cancelRejectActivity", "Cancel Reject activity", "Cancel") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-            	//target.appendJavaScript("alert('on click ');");
             	am.getObject().setRejectMessage(null);
             }
 		};
 		cancelRejectActivity.getButton().add(isSubmit);
-		cancelRejectActivity.getButton().add(new AttributeModifier("onclick", "hideRejectActivityPanel();"));
+		cancelRejectActivity.getButton().add(new AttributeModifier("onclick", "hideRejectActivityPanel();enableButtons();"));
 		cancelRejectActivity.setVisible(true);
 		cancelRejectActivity.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         activityForm.add(cancelRejectActivity);
@@ -1154,7 +1151,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			final AmpButtonField cancelSaveAsDraft, AjaxRequestTarget target,
 			Form<?> form, boolean isReject) {
 		// reenable buttons
-		target.appendJavaScript("hideDraftPanel();");
+		if(!isReject){
+			target.appendJavaScript("hideDraftPanel();");	
+		}else{
+			target.appendJavaScript("hideRejectActivityPanel();");
+		}
+		
 		processAndUpdateForm(false, am, form, target,cancelSaveAsDraft.getButton());
 
 		// only in the eventuality that the title field is valid (is not empty)

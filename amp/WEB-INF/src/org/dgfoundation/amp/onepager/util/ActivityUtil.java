@@ -90,7 +90,7 @@ public class ActivityUtil {
 	 * on activation of versioning option
 	 * @param am
 	 */
-	public static void saveActivity(AmpActivityModel am, boolean draft){
+	public static void saveActivity(AmpActivityModel am, boolean draft,boolean rejected){
 		Session session = AmpActivityModel.getHibernateSession();
 		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
@@ -103,7 +103,7 @@ public class ActivityUtil {
 		try 
 		{
 			AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
-			AmpActivityVersion a = saveActivityNewVersion(am, ampCurrentMember, draft, session);
+			AmpActivityVersion a = saveActivityNewVersion(am, ampCurrentMember, draft, session,rejected);
 			am.setObject(a);
 		} catch (Exception exception) {
 			logger.error("Error saving activity:", exception); // Log the exception			
@@ -127,7 +127,7 @@ public class ActivityUtil {
 	 * saves a new version of an activity
 	 * returns newActivity
 	 */
-	public static AmpActivityVersion saveActivityNewVersion(AmpActivityModel am, AmpTeamMember ampCurrentMember, boolean draft, Session session) throws Exception
+	public static AmpActivityVersion saveActivityNewVersion(AmpActivityModel am, AmpTeamMember ampCurrentMember, boolean draft, Session session,boolean rejected) throws Exception
 	{
 		//saveFundingOrganizationRole(a);
         AmpActivityVersion a = am.getObject();
@@ -202,7 +202,7 @@ public class ActivityUtil {
 			session.update(group);
 		}
 
-		setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity);
+		setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity,rejected);
 		a.setAmpActivityGroup(group);
 		Date updatedDate = Calendar.getInstance().getTime();
 		if (a.getCreatedDate() == null)
@@ -250,38 +250,7 @@ public class ActivityUtil {
 		}
 	}
 
-    /*
-     * not used anymore
-	private static void saveFundingOrganizationRole(AmpActivityVersion activity) {
-		//Added for AMP-11544, taken from SaveActivity.java, line 1046-1064. 
-		if(activity.getOrgrole() != null) {
-			Iterator<AmpOrgRole> it = activity.getOrgrole().iterator();
-			while (it.hasNext()) {
-				AmpOrgRole ampOrgRole = (AmpOrgRole) it.next();
-				if (ampOrgRole.getRole().getRoleCode().compareTo(Constants.FUNDING_AGENCY) == 0)
-					it.remove();
-			}
-		}		
-		else
-			activity.setOrgrole(new HashSet<AmpOrgRole>());
-		Set<AmpOrgRole> orgRole = activity.getOrgrole();
-		if (activity.getFunding() != null && activity.getFunding().size() > 0) {
-			AmpRole role = org.digijava.module.aim.util.DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
-			Iterator<AmpFunding> itr = activity.getFunding().iterator();
-			while (itr.hasNext()) {
-				AmpFunding funding = itr.next();
-				AmpOrgRole ampOrgRole = new AmpOrgRole();
-				ampOrgRole.setActivity(activity);
-				ampOrgRole.setRole(role);
-				ampOrgRole.setOrganisation(funding.getAmpDonorOrgId());
-				orgRole.add(ampOrgRole);
-			}
-			activity.setOrgrole(orgRole);
-		}
-	}
-	*/
-
-	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity) {
+	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity,boolean rejected) {
 		Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
 		//Long  activityTeamId=(a.getTeam()!=null)?a.getTeam().getAmpTeamId():teamMemberTeamId;
 		
@@ -292,7 +261,11 @@ public class ActivityUtil {
 		boolean teamLeadFlag    = role.isApprover() ;
 		if(teamLeadFlag/* && activityTeamId.equals(teamMemberTeamId)*/){
 			if(draft){
-				a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+				if(rejected){
+					a.setApprovalStatus(Constants.REJECTED_STATUS);
+				}else{
+					a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+				}
 			}
 			else{
 				a.setApprovalStatus(Constants.APPROVED_STATUS);

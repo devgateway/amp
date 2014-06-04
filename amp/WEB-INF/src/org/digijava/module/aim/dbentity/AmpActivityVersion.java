@@ -22,6 +22,8 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
 	 *    All new fields should be added in {@link AmpActivityFields}
 	 *    
 	 */
+	protected String rejectMessage;
+	
 
 	public AmpActivityVersion() {
 	}
@@ -78,4 +80,12 @@ public class AmpActivityVersion extends AmpActivityFields implements Versionable
     {
     	return InternationalizedModelDescription.getForProperty(AmpActivityVersion.class, "name").getSQLFunctionCall(idSource + ".ampActivityId");
     }
+	public String getRejectMessage() {
+		return rejectMessage;
+	}
+
+	public void setRejectMessage(String rejectMessage) {
+		this.rejectMessage = rejectMessage;
+	}
+    
 }

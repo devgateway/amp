@@ -54,3 +54,33 @@ function hideWarningPanel(){
         warnSavePanel.hide();
     }
 }
+//Functions for the window to reject activity
+var rejectActivityPanel;
+function showRejectActivityPanel(){
+    if(rejectActivityPanel==null){
+    	rejectActivityPanel = new YAHOOAmp.widget.Panel("rejectActivityPanel", {
+            width : "350px",
+            fixedcenter : true,
+            constraintoviewport : true,
+            underlay : "shadow",
+            close : true,
+            visible : true,
+            modal : true,
+            draggable : false
+        });
+        $("span[name=rejectActivityPanelButton]").find('input').removeAttr('disabled');
+        $("#rejectActivityPanel").show();
+        rejectActivityPanel.render();
+
+    }
+    else{
+        $("span[name=saveAsDraftPanelButton]").find('input').removeAttr('disabled');
+        rejectActivityPanel.show();
+    }
+    return false;
+}
+function hideRejectActivityPanel(){
+    if(rejectActivityPanel!=null){
+    	rejectActivityPanel.hide();
+    }
+}

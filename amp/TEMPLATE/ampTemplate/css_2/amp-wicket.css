@@ -480,6 +480,9 @@ div.trnpanel div.trn-row a:hover {
 .holderDiv {
 	clear:left;
 }
+.rejectButton{
+	background-color:red;
+}
 
 tr.wicketFundingRowItem:nth-child(even) {}
 tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}

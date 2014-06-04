@@ -58,7 +58,7 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
 									<div class="padding-two-pixels" wicket:id="saveAndSubmit" />
 									<div class="padding-two-pixels" wicket:id="saveAsDraft" />
-									
+									<div class="padding-two-pixels" wicket:id="saveReject" />
 									<div class="padding-two-pixels" wicket:id="logframe" />
 									 
 									<div class="padding-two-pixels" wicket:id="preview" />
@@ -93,6 +93,29 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 
                         <div class="ft"></div>
                     </div>
+<!-- reject button -->
+                    <div id="rejectActivityPanel" style="display:none">
+                        <div class="hd" style="text-align: left">
+                            <wicket:trn>Reject Activity</wicket:trn>
+                        </div>
+
+
+                        <div class="bd" style="text-align: center">
+                            <p>
+                                <wicket:trn>Would you like to add a message?</wicket:trn>
+                            </p>
+						<!--  Here it will go the textare to add a message-->
+						<span wicket:id="rejectMessage"></span>
+						</div>
+                        <br />
+                        <div style="width:155px; margin-left:auto; margin-right:auto; margin-bottom:10px;"><span name="rejectActivityPanelButton"  wicket:id="rejectActivityAction" /></div>
+                        <div style="width:155px; margin-left:auto; margin-right:auto;"><span wicket:id="cancelRejectActivity" /></div>
+
+
+
+
+                        <div class="ft"></div>
+                    </div>                    
 				</form>
 				</td>
 				<td>

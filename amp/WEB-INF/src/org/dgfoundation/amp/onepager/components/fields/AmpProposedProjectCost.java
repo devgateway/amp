@@ -59,23 +59,17 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 						String js = String.format("$('#%s').change();",((AmpDatePickerFieldPanel) this.getParent().get("proposedDate")).getDate().getMarkupId());
 						target.appendJavaScript(js);
 					}
+					else if (this.getTextContainer().isRequired() && this.getTextContainer().getModel().getObject()!= null) {
+						((AmpDatePickerFieldPanel) this.getParent().get("proposedDate")).getDate().setRequired(true);
+						String js = String.format("$('#%s').change();",((AmpDatePickerFieldPanel) this.getParent().get("proposedDate")).getDate().getMarkupId());
+						target.appendJavaScript(js);
+					}
+				
 				}
-			
-			
+				
 		};
 		amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
-				
-		//validator for poposed project cost amount AMP-17254
-        add(new AmpComponentPanel("proposedAmountRequired", "Required Validator for " + CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME) {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                if (this.isVisible()){
-                	amount.getTextContainer().setRequired(true);
-                	requiredFormComponents.add(amount.getTextContainer());
-                }
-            }
-        });		
+		
         add(amount);
         
 		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {
@@ -106,6 +100,19 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
         final PropertyModel<Date> funDateModel = new PropertyModel<Date>(am, CategoryConstants.PROPOSE_PRJC_DATE_KEY);
         final AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", funDateModel, null, CategoryConstants.PROPOSE_PRJC_DATE_NAME);
         add(date);
+      
+        //validator for poposed project cost amount AMP-17254
+        add(new AmpComponentPanel("proposedAmountRequired", "Required Validator for " + CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()){
+                	amount.getTextContainer().setRequired(true);
+                	//date.getDate().setRequired(true);
+                	requiredFormComponents.add(amount.getTextContainer());
+                }
+            }
+        });		
 	}
 
 	/**

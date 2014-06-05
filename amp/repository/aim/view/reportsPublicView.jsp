@@ -78,6 +78,13 @@ function toggleSettings(){
 		framediv.style.height=737;
 	}
 }
+function preventTabClickEvent(e){
+	if ($(e.target).parents('#PublicTabs').length > 0 ) {
+		e.stopPropagation();
+		e.preventDefault();
+	}
+}
+
 	
 </script>
 

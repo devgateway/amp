@@ -13,5 +13,5 @@
 </style>
 
 <div id="iframe-container">
-	<iframe src="/aim/viewPledgeData.do?id=${param.id}" width="100%" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" id="bootstrap_iframe"></iframe>
+	<iframe src="/aim/viewPledgeData.do?id=${param.id}" onload="window_resized()" width="100%" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" id="bootstrap_iframe"></iframe>
 </div>

@@ -291,7 +291,7 @@ public class ActivityManager extends Action {
 	 * @param session
 	 * @throws DgException 
 	 */
-	private void deleteActivity(ActivityForm actForm, HttpServletRequest request) throws DgException {
+	private void deleteActivity(ActivityForm actForm, HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 		String tIds=request.getParameter("tIds");
 		String advancedAdminDelete = request.getParameter("advancedAdminDelete");

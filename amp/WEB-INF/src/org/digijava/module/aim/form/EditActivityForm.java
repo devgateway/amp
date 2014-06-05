@@ -3826,7 +3826,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private List programLevels;
 		private Long[] selPrograms;
 		private Long selProgramId;
-		private List actPrograms;
+		private List<AmpTheme> actPrograms;
 		private Collection programCollection;
 		private Long[] selectedPrograms;
 		private Long program;
@@ -3881,7 +3881,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		
 		@java.lang.SuppressWarnings("all")
-		public List getActPrograms() {
+		public List<AmpTheme> getActPrograms() {
 			return this.actPrograms;
 		}
 		
@@ -3986,7 +3986,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		
 		@java.lang.SuppressWarnings("all")
-		public void setActPrograms(final List actPrograms) {
+		public void setActPrograms(final List<AmpTheme> actPrograms) {
 			this.actPrograms = actPrograms;
 		}
 		

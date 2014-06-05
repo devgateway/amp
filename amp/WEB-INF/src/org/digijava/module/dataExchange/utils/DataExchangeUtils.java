@@ -173,44 +173,6 @@ public class DataExchangeUtils {
 		}
 		return col;
 	}
-
-	
-	public static Collection<DEMappingFields> getDEMappingFieldsByAmpClass(String ampClass, int startIndex) {
-		Session session = null;
-		Collection col = new ArrayList();
-		String qryStr = null;
-		Query qry = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			qryStr = "select f from " + DEMappingFields.class.getName() + " f where f.ampClass=:ampClass order by f.iatiValues";
-			qry = session.createQuery(qryStr);
-            qry.setParameter("ampClass", ampClass, StringType.INSTANCE);
-            if(startIndex!=-1)
-             {
-            	qry.setFirstResult(startIndex);
-            	qry.setMaxResults(Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE);
-             }
-			
-			col = qry.list();
-
-		}
-		catch (Exception ex) {
-			logger.error("Exception getDEMappingFieldsByAmpClass: " + ex.getMessage());
-			ex.printStackTrace();
-		}
-		finally {
-			if (session != null) {
-				try {
-					;//PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
-		return col;
-	}
 	
 	public static Collection<DEMappingFields> getDEMappingFieldsByAmpClass(String ampClass, int startIndex,String sort,String sortOrder) {
 		Session session = null;
@@ -279,57 +241,6 @@ public class DataExchangeUtils {
 		return resultList;
 	}
 	
-	
-	/**
-	 *
-	 * @author dan
-	 *
-	 * @return
-	 */
-	public static boolean insertDEMappingField(String code, String value, Long ampFieldId, String fieldType, String status ) {
-//		Session session = null;
-//		Transaction tx = null;
-//
-//		try {
-//			//session = PersistenceManager.getSession();
-//			session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-//			DEMappingFields demf = new DEMappingFields();
-//			if(code == null && value == null) return false;
-//			if(code!=null) demf.setImportedFieldCode(code);
-//			 else demf.setImportedFieldCode(null);
-//			
-//			if(value!=null) demf.setImportedFieldValue(value);
-//			 else demf.setImportedFieldValue(null);
-//			
-//			if(ampFieldId!=null) demf.setAmpFieldId(ampFieldId);
-//			 else demf.setAmpFieldId(null);
-//			
-//			if(fieldType!=null) demf.setFieldType(fieldType);
-//			 else demf.setFieldType(null);
-//			
-//			if(status!=null) demf.setStatus(status);
-//			 else demf.setStatus(null);
-//			
-//			session.save(demf);
-//			////tx.commit();
-//		}
-//		catch (Exception ex) {
-//			logger.error("Exception : " + ex.getMessage());
-//		}
-//		finally {
-//			if (session != null) {
-//				try {
-//					;//PersistenceManager.releaseSession(session);
-//				}
-//				catch (Exception rsf) {
-//					logger.error("Release session failed :" + rsf.getMessage());
-//				}
-//			}
-//		}
-
-		return true;
-	}
 	
 	/**
 	 * @author dan
@@ -419,21 +330,6 @@ public class DataExchangeUtils {
 	        activity.setAmpId(ampId);
 	        //session.update(activity);
 	        //tx.commit();
-	        
-//	    }catch (Exception ex) {
-//	        logger.error("Exception from saveActivity().", ex);
-//	        //we can't throw here the exception because we need to rollback the transaction
-//	        ex.printStackTrace();
-//	        if ( tx != null)
-//	        	tx.rollback();
-//	        }
-//	    finally {
-//	    	try {
-//				;//PersistenceManager.releaseSession(session);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//	    }
 		//TODO: update the lucene index
 		//LuceneUtil.addUpdateActivity(request, false, activityId);
 		//for logging the activity
@@ -447,8 +343,6 @@ public class DataExchangeUtils {
 	 */
 	public static void saveActivity(AmpActivity activity, HttpServletRequest request) throws DgException{
 		Session session = null;
-		HttpSession httpSession=request.getSession();
-	    Transaction tx = null;
 
 	    Long activityId = null;
 	    
@@ -520,15 +414,6 @@ public class DataExchangeUtils {
 	        logger.error("Exception from saveActivity().", ex);
 	        //we can't throw here the exception because we need to rollback the transaction
 	        ex.printStackTrace();
-	        if ( tx != null)
-	        	tx.rollback();
-	        }
-	    finally {
-	    	try {
-				;//PersistenceManager.releaseSession(session);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 	    }
 		//TODO: update the lucene index
 		//LuceneUtil.addUpdateActivity(request, false, activityId);
@@ -556,37 +441,6 @@ public class DataExchangeUtils {
 			}
 		}
 		return retVal;
-	}
-	/**
-	 * @author dan
-	 * @param name
-	 * @return
-	 */
-	
-	public static AmpOrganisation getOrganisationByName(String name) {
-		AmpOrganisation obResult=null;
-        Session sess = null;
-        Query qry = null;
-        String queryString = null;
-
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            String orgNameHql = AmpOrganisation.hqlStringForName("o");
-            queryString = "select o from " + AmpOrganisation.class.getName()
-                + String.format(" o where (TRIM(%s)=:orgName) and (o.deleted is null or o.deleted = false) ", orgNameHql);
-            qry = sess.createQuery(queryString);
-            qry.setParameter("orgName", name.trim(), StringType.INSTANCE);
-
-            List  result=qry.list();
-            if (result.size() > 0){
-            	obResult= (AmpOrganisation) result.get(0);
-            }
-            ////System.out.println("DBUTIL.GETORGANISATIONBYNAME() : " + qry.getQueryString());
-        } catch (Exception e) {
-            logger.debug("Exception from getOrganisationByName(): " + e);
-            e.printStackTrace(System.out);
-        }
-        return obResult;
 	}
 	
 	public static String generateQuery(String info, String key, String separator, HashMap<String, String> hs) {
@@ -703,54 +557,12 @@ public class DataExchangeUtils {
 
 	
 	public static AmpOrganisation getOrganizationById(Long id) {
-		Session session = null;
-		AmpOrganisation ampOrg = null;
-		if(id==null) return ampOrg;
-		try {
-			//session = PersistenceManager.getSession();
-			session = PersistenceManager.getRequestDBSession();
-			ampOrg = (AmpOrganisation) session.load(AmpOrganisation.class, id);
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-		}
-		finally {
-			if (session != null) {
-				try {
-					;//PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
-		return ampOrg;
+		if (id==null) return null;		
+		return (AmpOrganisation) PersistenceManager.getSession().load(AmpOrganisation.class, id);
 	}
 	
 	public static AmpActivityGroup getAmpActivityGroupById(Long id) {
-		Session session = null;
-		AmpActivityGroup aag = null;
-		Query qry = null;
-        String queryString = null;
-		try {
-			//session = PersistenceManager.getSession();
-			session = PersistenceManager.getRequestDBSession();
-			aag = (AmpActivityGroup) session.load(AmpActivityGroup.class, id);
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-		}
-		finally {
-			if (session != null) {
-				try {
-					;//PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
-		return aag;
+		return (AmpActivityGroup) PersistenceManager.getSession().load(AmpActivityGroup.class, id);
 	}
 	
 	public static DELogPerItem getDELogPerItemById(Long id) {
@@ -764,16 +576,6 @@ public class DataExchangeUtils {
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 		}
-		finally {
-			if (session != null) {
-				try {
-					;//PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
 		return aag;
 	}
 	
@@ -785,27 +587,7 @@ public class DataExchangeUtils {
 
 	
 	public static AmpSector getSectorById(Long id) {
-		Session session = null;
-		AmpSector ampOrg = null;
-		try {
-			//session = PersistenceManager.getSession();
-			session = PersistenceManager.getRequestDBSession();
-			ampOrg = (AmpSector) session.load(AmpSector.class, id);
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-		}
-		finally {
-			if (session != null) {
-				try {
-					;//PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
-		return ampOrg;
+		return (AmpSector) PersistenceManager.getSession().load(AmpSector.class, id);
 	}
 	
 	
@@ -861,58 +643,15 @@ public class DataExchangeUtils {
 		}
 		return null;
 	}
+	
 	/**
 	 * @author dan
 	 * @param object
 	 */
     public static Object addObjectoToAmp(Object object) {
-        logger.debug("In add " + object.getClass().getName());
-        Session session = null;
-        Transaction tx = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-            session.save(object);
-            ////tx.commit();
-        } catch (Exception e) {
-            logger.error("Unable to add");
-            e.printStackTrace(System.out);
-        }
-        return object;
+    	PersistenceManager.getSession().save(object);
+    	return object;
     }
-	
-	/**
-	 * @author dan
-	 * @param name
-	 * @return
-	 */
-	
-	public static AmpSector getSectorByName(String name) {
-		AmpSector obResult=null;
-        Session sess = null;
-        Query qry = null;
-        String queryString = null;
-
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            String sectorNameHql = AmpSector.hqlStringForName("o");
-            queryString = "select o from " + AmpSector.class.getName()
-                + String.format(" o where (TRIM(%s)=:sectorName) and (o.deleted is null or o.deleted = false) ", sectorNameHql);
-            qry = sess.createQuery(queryString);
-            qry.setParameter("sectorName", name.trim(), StringType.INSTANCE);
-
-            List  result=qry.list();
-            if (result.size() > 0){
-            	obResult= (AmpSector) result.get(0);
-            }
-        } catch (Exception e) {
-            logger.debug("Exception from getSectorByname(): " + e);
-            e.printStackTrace(System.out);
-        }
-        return obResult;
-	}
-
 
 	/**
 	 * @author dan
@@ -945,34 +684,7 @@ public class DataExchangeUtils {
         }
         return obResult;
 	}
-	
-	public static void saveComponents(AmpActivity activity,	HttpServletRequest request,	Collection<Components<AmpComponentFunding>> tempComps) {
-		// TODO Auto-generated method stub
-		
-		for (Iterator it = tempComps.iterator(); it.hasNext();) {
-			Components<AmpComponentFunding> acfs = (Components<AmpComponentFunding>) it.next();
-			for (Iterator itcomm = acfs.getCommitments().iterator(); itcomm.hasNext();) {
-				AmpComponentFunding comm = (AmpComponentFunding) itcomm.next();
-				//comm.getActivity().setComponents(new HashSet());
-				//comm.getComponent().setActivities(new HashSet());
-				DataExchangeUtils.addObjectoToAmp(comm);
-			}
-			for (Iterator itcomm = acfs.getDisbursements().iterator(); itcomm.hasNext();) {
-				AmpComponentFunding disb = (AmpComponentFunding) itcomm.next();
-				//disb.getActivity().setComponents(new HashSet());
-				//disb.getComponent().setActivities(new HashSet());
-				DataExchangeUtils.addObjectoToAmp(disb);
-			}
-			for (Iterator itcomm = acfs.getExpenditures().iterator(); itcomm.hasNext();) {
-				AmpComponentFunding exp = (AmpComponentFunding) itcomm.next();
-				//exp.getActivity().setComponents(new HashSet());
-				//exp.getComponent().setActivities(new HashSet());
-				DataExchangeUtils.addObjectoToAmp(exp);
-			}			
-		}
-		
-		
-	}
+
 
 	/**
 	 * @author dan
@@ -982,61 +694,8 @@ public class DataExchangeUtils {
 
 	
 	public static AmpTheme getProgramById(Long id) {
-		Session session = null;
-		AmpTheme ampOrg = null;
-		try {
-			//session = PersistenceManager.getSession();
-			session = PersistenceManager.getRequestDBSession();
-			ampOrg = (AmpTheme) session.load(AmpTheme.class, id);
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-		}
-		finally {
-			if (session != null) {
-				try {
-					;//PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
-		return ampOrg;
+		return (AmpTheme) PersistenceManager.getSession().load(AmpTheme.class, id);
 	}
-
-	
-	/**
-	 * @author dan
-	 * @param name
-	 * @return
-	 */
-	
-	public static AmpTheme getProgramByName(String name) {
-		AmpTheme obResult=null;
-        Session sess = null;
-        Query qry = null;
-        String queryString = null;
-
-        try {
-            sess = PersistenceManager.getRequestDBSession();
-            String themeNameHql = AmpTheme.hqlStringForName("o");
-            queryString = "select o from " + AmpTheme.class.getName()
-                + String.format(" o where (TRIM(%s)=:programName)", themeNameHql);
-            qry = sess.createQuery(queryString);
-            qry.setParameter("programName", name.trim(), StringType.INSTANCE);
-
-            List  result=qry.list();
-            if (result.size() > 0){
-            	obResult= (AmpTheme) result.get(0);
-            }
-        } catch (Exception e) {
-            logger.debug("Exception from getSectorByname(): " + e);
-            e.printStackTrace(System.out);
-        }
-        return obResult;
-	}
-
 	
 	/**
 	 * @author dan
@@ -1127,42 +786,6 @@ public class DataExchangeUtils {
 		}			
 		return retValue.toString();
 	}
-	
-	public static String renderHiddenElements(AmpDEImportLog tag){
-//		<input type="hidden" name="activityTags[0].select" value="true">
-	
-		StringBuffer retValue = new StringBuffer();
-
-		
-		retValue.append("<input type=\"hidden\" ");
-
-		Pattern pattern = Pattern.compile("[\\]\\[.]");
-		Matcher matcher = pattern.matcher(tag.getKey());
-
-		retValue.append("id=\"");
-		retValue.append("id_"+ matcher.replaceAll(""));
-		retValue.append("\" ");
-		retValue.append("name=\"");
-//			retValue.append("activityTags["+list.indexOf(tag)+"].select");
-		retValue.append(tag.getKey());
-		retValue.append("\" ");
-		retValue.append("value=\"");
-		retValue.append("false");
-		retValue.append("\" ");
-		retValue.append("/>");
-		retValue.append("\n");
-		
-		if (tag.getElements() != null){
-			for (AmpDEImportLog subNode : tag.getElements()) {
-				retValue.append(renderHiddenElements(subNode));
-			}
-		}
-
-		
-		
-		return retValue.toString();
-	}
-
     
 	public static String convertHTMLtoChar(String tempIdref){
 		String result = tempIdref;
@@ -1179,69 +802,16 @@ public class DataExchangeUtils {
 		String ret	=  result.replaceAll("\n", " ").replaceAll("\r", "").replaceAll("<!--.*-->", "").replaceAll("<[^>]*?>", " ");
 		return ret;
 	}
-	public static String convertEntityCharacters(String tempIdref){
-		//System.out.println("Attempting conversion...");
-			//temp replacement string
-		String replaceStr=null;
-		
-			/*
-			 *	for the given string, loop though each entity
-			 * 	character and replace each with the entity 
-			 * 	name
-			 */
-		for(int x=0;x<entityCharacters.length;x++){
-			
-				// Compile regular expression
-		    String patternStr = "("+entityCharacters[x]+")";
- 
-		    //System.out.print("Find "+patternStr+"\t");				//testing system.out
-		    
-		    	//value to replace within string
-		    replaceStr=entityNames[x];
-		   // System.out.print("\tReplace with "+replaceStr);			//testing system.out
-		    
-		    //compile the pattern
-		    Pattern pattern = Pattern.compile(patternStr);
-		    	// Replace all embedded entities with 
-		    Matcher matcher = pattern.matcher(tempIdref);
-	    		//replace with entity name
-		    tempIdref = matcher.replaceAll(replaceStr);	
-		    
-		   // System.out.print("\tnew Results:\t"+tempIdref+"\n");		//testing system.out
-		}
-			//return newly modified string
-		return tempIdref;
-	}
-
 
 	public static void updateActivityNoLogger(AmpActivity activity) throws Exception{
 		// TODO Auto-generated method stub
 		Session session = null;
-		//HttpSession httpSession=request.getSession();
-	    Transaction tx = null;
-
-//	    try {
-	    	//session = PersistenceManager.getSession();
-	    	session = PersistenceManager.getRequestDBSession();
-	    	//session.connection().setAutoCommit(false);
-//beginTransaction();
-
-			//session.saveOrUpdate(activity);
-	        session.update(activity);
-	        //tx.commit();
-	        
-//	    }catch (Exception ex) {
-//	        logger.error("Exception from saveActivity().", ex);
-//	        //we can't throw here the exception because we need to rollback the transaction
-//	        ex.printStackTrace();
-//	        if ( tx != null)
-//	        	tx.rollback();
-//	        }
+    	session = PersistenceManager.getRequestDBSession();
+    	session.update(activity);	        
 		//TODO: update the lucene index
 		//LuceneUtil.addUpdateActivity(request, false, activityId);
 		//for logging the activity
 		//AuditLoggerUtil.logObject(httpSession, request, activity, "add");
-
 	}	
 	
     /**
@@ -1386,51 +956,8 @@ public class DataExchangeUtils {
 		catch (Exception ex) {
 			logger.error("Exception insertDEMappingField: " + ex.getMessage());
 		}
-		finally {
-			if (session != null) {
-				try {
-					;//PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
 	}
 
-	public static Collection<AmpOrganisation> getAllOrganizations() {
-		Session session = null;
-		Collection<AmpOrganisation> col = new ArrayList<AmpOrganisation>();
-
-		try {
-			session = PersistenceManager.getSession();
-			
-			String queryString = " SELECT aorg FROM " + AmpOrganisation.class.getName() + " aorg where (aorg.deleted is null or aorg.deleted = false)  order by name";
-			
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-		} catch (Exception ex) {
-			logger.error("Unable to get Organizations, " + ex);
-		} 
-		return col;
-	}
-	
-	public static Collection<AmpSectorScheme> getAllSectorSchemes() {
-		Session session = null;
-		Collection<AmpSectorScheme> col = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = "select ss from "
-					+ AmpSectorScheme.class.getName() + " ss "
-					+ "order by ss.secSchemeName";
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-		} catch (Exception ex) {
-			logger.error("Unable to get all sector schemes, " + ex);
-		}
-		return col;
-	}
 
 	public static AmpActivityVersion saveActivity(HttpServletRequest request, Long grpId, AmpActivityVersion ampActivity, AmpTeam team) {
 		Session session = null;

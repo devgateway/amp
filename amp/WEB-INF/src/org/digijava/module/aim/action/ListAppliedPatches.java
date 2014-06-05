@@ -69,31 +69,26 @@ public class ListAppliedPatches extends Action {
 		}
 	}
 
+	/**
+	 * function seems to return nothing
+	 * @return
+	 */
 	private List getPatchNames()
 	{
-		Collection ret 	= new Vector();
 		Session session = null;
-		String qryStr = null;
-		Query qry = null;
 		List col = null;
 		
 		try{
-				session				= PersistenceManager.getSession();
-				Connection	conn	= ((SessionImplementor)session).connection();
-				Statement st		= conn.createStatement();
+			session				= PersistenceManager.getSession();
 
-				Query query = session.createQuery("select plm from " + PatchFile.class.getName() + " plm order by plm.invoked desc");
-				col = query.list();
+			Query query = session.createQuery("select plm from " + PatchFile.class.getName() + " plm order by plm.invoked desc");
+			col = query.list();
 				
-				Iterator it = col.iterator();
-
-				while (it.hasNext()) {
-					PatchFile p = (PatchFile) it.next();
-					//logger.info("Getting patches:" + p.getAbsolutePatchName() + "," + p.getInvoked());
-				}
-
-				conn.close();
-
+			Iterator it = col.iterator();
+			while (it.hasNext()) {
+				PatchFile p = (PatchFile) it.next();
+				//logger.info("Getting patches:" + p.getAbsolutePatchName() + "," + p.getInvoked());
+			}
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());

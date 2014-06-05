@@ -143,19 +143,7 @@ public class ShowActivityPrintPreview
                 eaForm.getFunding().setProProjCost(pg);
 
 
-                try {
-                    List actPrgs = new ArrayList();                    
-                    Collection prgSet = ActivityUtil.getActivityPrograms(activity.getAmpActivityId());
-                    if(prgSet != null) {
-                        Iterator prgItr = prgSet.iterator();
-                        while(prgItr.hasNext()) {
-                            actPrgs.add((AmpTheme) prgItr.next());
-                        }
-                    }
-                    eaForm.getPrograms().setActPrograms(actPrgs);
-                } catch(Exception ex) {
-                    ex.printStackTrace();
-                }
+               	eaForm.getPrograms().setActPrograms(ActivityUtil.getActivityPrograms(activity.getAmpActivityId()));
                 if(activity.getName()!=null){
                 	eaForm.getIdentification().setTitle(activity.getName().trim());
                 }
@@ -355,17 +343,13 @@ public class ShowActivityPrintPreview
 
                 
                 // loading the locations
-                int impLevel = 0;
-                
-                Collection<AmpActivityLocation> ampLocs = ActivityUtil.getActivityLocations(activity.getAmpActivityId());
+                List<AmpActivityLocation> ampLocs = ActivityUtil.getActivityLocations(activity.getAmpActivityId());
 
                 if (ampLocs != null && ampLocs.size() > 0) {
-                    List locs = new ArrayList();
+                    List<Location> locs = new ArrayList<>();
 
-                    Iterator locIter = ampLocs.iterator();
                     boolean maxLevel = false;
-                    while (locIter.hasNext()) {
-                    	AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();	//AMP-2250
+                    for(AmpActivityLocation actLoc:ampLocs){
                     	if (actLoc == null)
                     		continue;
                     	AmpLocation loc=actLoc.getLocation();								//AMP-2250
@@ -418,13 +402,11 @@ public class ShowActivityPrintPreview
                     eaForm.getLocation().setSelectedLocs(locs);
                   }
 
-        		Collection sectors = ActivityUtil.getAmpActivitySectors(activity.getAmpActivityId());
+        		List<AmpActivitySector> sectors = ActivityUtil.getAmpActivitySectors(activity.getAmpActivityId());
 
         		if (sectors != null && sectors.size() > 0) {
         			List<ActivitySector> activitySectors = new ArrayList<ActivitySector>();
-        			Iterator sectItr = sectors.iterator();
-        			while (sectItr.hasNext()) {
-        				AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
+        			for(AmpActivitySector ampActSect:sectors) {
         				if (ampActSect != null) {
         					AmpSector sec = ampActSect.getSectorId();
         					if (sec != null) {
@@ -632,15 +614,12 @@ public class ShowActivityPrintPreview
  	 	 	 	eaForm.getAgencies().setRespOrgPercentage(new HashMap<String, String>());
 
 
-                Collection relOrgs = ActivityUtil.getOrgRole(activity.getAmpActivityId());
+                List<AmpOrgRole> relOrgs = ActivityUtil.getOrgRole(activity.getAmpActivityId());
                 if (relOrgs != null) {
-                  Iterator relOrgsItr = relOrgs.iterator();
-                  AmpOrgRole orgRole = null;
                   AmpRole role = null;
                   AmpOrganisation organisation = null;
 
-                  while (relOrgsItr.hasNext()) {
-                      orgRole = (AmpOrgRole) relOrgsItr.next();
+                  for(AmpOrgRole orgRole:relOrgs){
                       role = ActivityUtil.getAmpRole(activity.getAmpActivityId(), orgRole.getAmpOrgRoleId());
                       organisation = ActivityUtil.getAmpOrganisation(activity.getAmpActivityId(), orgRole.getAmpOrgRoleId());
 

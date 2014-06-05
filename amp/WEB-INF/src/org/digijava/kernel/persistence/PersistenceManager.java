@@ -469,12 +469,11 @@ public class PersistenceManager {
 	
 
 	public static Session getSession(){
-			try {
-				return getRequestDBSession();
-			} catch (DgException e) {
-				e.printStackTrace();
-			}
-		return null;
+		try {
+			return getRequestDBSession();
+		} catch (DgException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private PersistenceManager() {

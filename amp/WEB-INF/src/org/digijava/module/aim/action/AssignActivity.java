@@ -57,7 +57,7 @@ public class AssignActivity extends Action {
 			for (int i = 0; i < selActivities.length; i++) {
 				if (selActivities[i] != null) {
 					Long actId = selActivities[i];
-					AmpActivityVersion activity = ActivityUtil.getAmpActivityVersion(actId);
+					AmpActivityVersion activity = ActivityUtil.loadAmpActivity(actId);
 					AmpTeam ampTeam = TeamUtil.getAmpTeam(aForm.getTeamId());
 					activity.setTeam(ampTeam);
 					DbUtil.update(activity);

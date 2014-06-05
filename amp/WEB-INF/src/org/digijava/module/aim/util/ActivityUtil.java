@@ -94,44 +94,9 @@ import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
-/**
- * ActivityUtil is the persister class for all activity related
- * entities
- *
- * @author Priyajith
- */
 public class ActivityUtil {
 
   private static Logger logger = Logger.getLogger(ActivityUtil.class);
-
-
-
-  public static void updateActivityDocuments(Long activityId, Set documents) {
-		Session session = null;
-		AmpActivityVersion oldActivity = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-
-			oldActivity = (AmpActivityVersion) session.load(AmpActivityVersion.class,
-					activityId);
-
-			if (oldActivity == null) {
-				logger.debug("Previous Activity is null");
-				return;
-			}
-
-			oldActivity.setDocuments(documents);
-
-			session.update(oldActivity);
-			//tx.commit();
-			logger.debug("Activity saved");
-		} catch (Exception ex) {
-			logger.error("Exception from saveActivity()  " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		}
-	}
   
   public static List<AmpComponent> getComponents(Long actId) {
     Session session = null;
@@ -155,14 +120,6 @@ public class ActivityUtil {
       logger.error("Unable to get all components");
       logger.error(e.getMessage());
     }
-//    finally {
-//      try {
-//        PersistenceManager.releaseSession(session);
-//      }
-//      catch (Exception ex) {
-//        logger.error("Release Session failed :" + ex);
-//      }
-//    }
     return col;
   }
 
@@ -439,52 +396,18 @@ public class ActivityUtil {
         
   }
 
-  public static Collection getActivityPrograms(Long activityId) {
-	    Session session = null;
-	    Collection col = new ArrayList();
-
-	    try {
-	      session = PersistenceManager.getRequestDBSession();
-	      String queryString = "select prog from " +
+  public static List<AmpTheme> getActivityPrograms(Long activityId) {
+	  String queryString = "select prog from " +
 	          AmpTheme.class.getName() +
 	          " prog where (prog.activityId=:actId) ";
-	      Query qry = session.createQuery(queryString);
-	      qry.setParameter("actId", activityId, LongType.INSTANCE);
-	      col = qry.list();
-	    }
-	    catch (Exception e) {
-	      logger.error("Unable to get activity programs");
-	      logger.error(e.getMessage());
-	    }
-	    return col;
-	  }
+	  return PersistenceManager.getSession().createQuery(queryString).setParameter("actId", activityId, LongType.INSTANCE).list();
+  }
 
-
-  public static Collection getActivityLocations(Long activityId) {
-	    Session session = null;
-	    Collection col = new ArrayList();
-
-	    try {
-	      session = PersistenceManager.getRequestDBSession();
-	      String queryString = "select locs.* from amp_activity_location locs where (locs.amp_activity_id=:actId) ";
-	      Query qry = session.createSQLQuery(queryString).addEntity(AmpActivityLocation.class);
-	      qry.setParameter("actId", activityId, LongType.INSTANCE);
-	      col = qry.list();
-	    }
-	    catch (Exception e) {
-	      logger.error("Unable to get activity locations");
-	      logger.error(e.getMessage());
-	    }
-//	    finally {
-//	      try {
-//	        PersistenceManager.releaseSession(session);
-//	      }
-//	      catch (Exception ex) {
-//	        logger.error("Release Session failed :" + ex);
-//	      }
-//	    }
-	    return col;
-	  }
+  public static List<AmpActivityLocation> getActivityLocations(Long activityId) {
+      String queryString = "select locs.* from amp_activity_location locs where (locs.amp_activity_id=:actId) ";
+      return PersistenceManager.getSession().createSQLQuery(queryString).addEntity(AmpActivityLocation.class)
+    		  .setParameter("actId", activityId, LongType.INSTANCE).list();
+  }
 
   /**
    * Load activity from db.
@@ -529,66 +452,20 @@ public class ActivityUtil {
 	}
   
   public static AmpActivityVersion loadAmpActivity(Long id){
-	  try{
-		 return (AmpActivityVersion) PersistenceManager.getRequestDBSession().load(AmpActivityVersion.class.getName(), id); 
-	  }
-	  catch (Exception e){
-		  throw new RuntimeException(e);
-	  }
+	 return (AmpActivityVersion) PersistenceManager.getSession().load(AmpActivityVersion.class, id); 
   }
-  
-  public static AmpActivityVersion getAmpActivityVersion(Long id) {
-		// TODO: This is a mess, shouldn't be here. Check where it is used and
-		// change it.
-
-		Session session = null;
-		AmpActivityVersion activity = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-
-			activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
-		} catch (Exception e) {
-			logger.error("Unable to getAmpActivity");
-			e.printStackTrace(System.out);
-		}
-		return activity;
-	}
-
-  public static Collection getAmpActivitySectors(Long actId) {
-    Session session = null;
-    Collection sectors = new ArrayList();
-
-    try {
-      session = PersistenceManager.getRequestDBSession();
+ 
+  public static List<AmpActivitySector> getAmpActivitySectors(Long actId) {
       String queryString = "select a.* from amp_activity_sector a " + "where a.amp_activity_id=:actId";
-      Query qry = session.createSQLQuery(queryString).addEntity(AmpActivitySector.class);
-      qry.setParameter("actId", actId, LongType.INSTANCE);
-      sectors = qry.list();
-    }
-    catch (Exception ex) {
-      logger.error("Unable to get activity sectors :" + ex);
-    }
-    return sectors;
+      return PersistenceManager.getSession().createSQLQuery(queryString).addEntity(AmpActivitySector.class)
+    		  .setParameter("actId", actId, LongType.INSTANCE).list();
   }
 
-  public static Collection getOrgRole(Long id) {
-    Session session = null;
-    Collection orgroles = new ArrayList();
-    try {
-      session = PersistenceManager.getSession();
-      String queryString = "select aor from " + AmpOrgRole.class.getName() +
+  public static List<AmpOrgRole> getOrgRole(Long id) {
+	  String queryString = "select aor from " + AmpOrgRole.class.getName() +
           " aor " + "where (aor.activity=:actId)";
-      Query qry = session.createQuery(queryString);
-      qry.setParameter("actId", id, LongType.INSTANCE);
-      orgroles = qry.list();
-    }
-    catch (Exception ex) {
-      logger.error("Unable to get activity sectors :" + ex);
-    }
-    return orgroles;
+      return PersistenceManager.getSession().createQuery(queryString).setParameter("actId", id, LongType.INSTANCE).list();
   }
-
 
   public static AmpRole getAmpRole(Long actId, Long orgRoleId) {
 	    Session session = null;
@@ -738,30 +615,17 @@ public class ActivityUtil {
   // this function is to get the fundings for the components along with the activity Id
 
   public static Collection<AmpComponentFunding> getFundingComponentActivity(Long componentId, Long activityId) {
-    Collection col = null;
-    logger.debug(" inside getting the funding.....");
-    Session session = null;
-
-    try {
-      session = PersistenceManager.getRequestDBSession();
-    	//session = PersistenceManager.getRequestDBSession();
-      String qryStr = "select a from " + AmpComponentFunding.class.getName() +
+	  logger.debug(" inside getting the funding.....");
+	  String qryStr = "select a from " + AmpComponentFunding.class.getName() +
           " a " +
           "where amp_component_id = '" + componentId + "' and activity_id = '" + activityId +
           "'";
-      Query qry = session.createQuery(qryStr);
-      col = qry.list();
-    }
-    catch (Exception e) {
-      logger.debug("Exception in getAmpComponents() " + e.getMessage());
-      e.printStackTrace(System.out);
-    }
-    //getComponents();
-    return col;
+      Query qry = PersistenceManager.getSession().createQuery(qryStr);
+      return qry.list();
   }
   
-public static Collection<AmpActivityVersion> getOldActivities(Session session,int size,Date date){
-		List<AmpActivityVersion> colAv;
+  public static Collection<AmpActivityVersion> getOldActivities(Session session,int size,Date date){
+	  List<AmpActivityVersion> colAv;
 		Collection<AmpActivityVersion> colAll = new ArrayList<AmpActivityVersion>();
 		logger.info(" inside getting the old activities.....");
 		try {
@@ -797,81 +661,26 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 
   public static AmpActivity getActivityByNameExcludingGroup(String name , AmpActivityGroup g) {
 	  
-		Session session=null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-		} catch (DgException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-		
+	  Session session = PersistenceManager.getSession();		
 	  Criteria crit = session.createCriteria(AmpActivity.class);
-	  
 	  Conjunction conjunction = Restrictions.conjunction();
 	  String locale = TLSUtils.getLangCode();
 	  conjunction.add(SQLUtils.getUnaccentILikeExpression("name", name, locale, MatchMode.EXACT));
 	  if(g!=null) conjunction.add(Restrictions.not(Restrictions.eq("ampActivityGroup",g)));
-	  crit.add(conjunction);
-	  
+	  crit.add(conjunction);  
 	  List ret = crit.list();
-	  if(ret.size()>0) return (AmpActivity) ret.get(0);
-				
+	  if(ret.size()>0) return (AmpActivity) ret.get(0);				
 	  return null;
   }
 
-    public static StringBuilder getDonorsForActivity(Long activityId) {
-        StringBuilder donors = new StringBuilder();
-        if (activityId != null) {
-            Session session = PersistenceManager.getSession();
-            String queryString = "select distinct donor from " + AmpFunding.class.getName() + " f inner join f.ampDonorOrgId donor inner join f.ampActivityId act ";
-            queryString += " where act.ampActivityId=:activityId";
-            Query qry = session.createQuery(queryString);
-            qry.setLong("activityId", activityId);
-
-            List<AmpOrganisation> organizations = qry.list();
-            if (organizations != null && organizations.size() > 1) {
-                Collections.sort(organizations, new Comparator<AmpOrganisation>() {
-                    public int compare(AmpOrganisation o1, AmpOrganisation o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
-            }
-
-            if (organizations != null) {
-                for (AmpOrganisation donor : organizations) {
-                    donors.append(donor.getName());
-                    donors.append(", ");
-                }
-
-                if (donors.length() > 1) {
-                    // remove last coma
-                    donors.setLength(donors.length() - 2);
-                }
-            }
-
-        }
-        return donors;
-    }
-
-    public static List getSortedActivitiesByDonors (List<AmpActivityVersion> acts, boolean acs) {
+    public static List<AmpActivityVersion> getSortedActivitiesByDonors (List<AmpActivityVersion> acts, boolean acs) {
         List<AmpActivityVersion> retVal = new ArrayList<AmpActivityVersion>();
 
-        Map <String, AmpActivityVersion> donorNameActivityMap = new HashMap <String, AmpActivityVersion> ();
-        List <AmpActivityVersion> noFundingActivities = null;
+        Map<String, AmpActivityVersion> donorNameActivityMap = new HashMap<String, AmpActivityVersion> ();
+        List<AmpActivityVersion> noFundingActivities = null;
         for (AmpActivityVersion actItem : acts) {
-            if (actItem.getFunding() != null && !actItem.getFunding().isEmpty()) {
-                /*
-                Set <String> nameSorter = new HashSet<String>();
-                for (Object fndObj : actItem.getFunding()) {
-                    AmpFunding fnd = (AmpFunding) fndObj;
-                    nameSorter.add(fnd.getAmpDonorOrgId().getName());
-                }
-                List <String> sortedList = new ArrayList<String>(nameSorter);
-                Collections.sort(sortedList);*/
-                //donorNameActivityMap.put(sortedList.get(0), actItem);
-                //donorNameActivityMap.put(((AmpFunding)actItem.getFunding().iterator().next()).getAmpDonorOrgId().getName(), actItem);
-                
-                StringBuilder donorNames = new StringBuilder();
+            if (actItem.getFunding() != null && !actItem.getFunding().isEmpty()) {                
+            	StringBuilder donorNames = new StringBuilder();
                 
                 List<AmpFunding> organizations = new ArrayList<>(actItem.getFunding());
                 if (organizations != null && organizations.size() > 1) {
@@ -919,48 +728,29 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
    * get the  the Contracts for Activity
    * 
    */
-  
-  public static List getIPAContracts(Long activityId) {
-    Session session = null;
-    List<IPAContract> contrcats = null;
-
-    try {
-      session = PersistenceManager.getRequestDBSession();
-
-     
+  public static List<IPAContract> getIPAContracts(Long activityId) {
+    
       String queryString = "select con from " + IPAContract.class.getName()
           + " con " + "where (con.activity=:activityId)";
-      Query qry = session.createQuery(queryString);
-      qry.setLong("activityId",activityId );
-      contrcats = qry.list();
-      ArrayList<IPAContract> fullContracts=new ArrayList<IPAContract>();
-      String cc="";
-      for(Iterator i=contrcats.iterator();i.hasNext();)
-      {
-    	  IPAContract c=(IPAContract) i.next();
-    	  cc=c.getTotalAmountCurrency().getCurrencyCode();
-    	  double td=0;
-    	  for(Iterator j=c.getDisbursements().iterator();j.hasNext();)
+      Query qry = PersistenceManager.getSession().createQuery(queryString).setLong("activityId",activityId );
+      List<IPAContract> contrcats = qry.list();
+      String cc = "";
+      for(IPAContract c:contrcats){
+    	  cc = c.getTotalAmountCurrency().getCurrencyCode();
+    	  double td = 0;
+    	  for(IPAContractDisbursement cd:c.getDisbursements())
     	  {
-    		  IPAContractDisbursement cd=(IPAContractDisbursement) j.next();
-    		  if(cd.getAmount()!=null)
-    			  td+=cd.getAmount().doubleValue();
+    		  if (cd.getAmount() != null)
+    			  td += cd.getAmount().doubleValue();
     	  }
     	  if(c.getDibusrsementsGlobalCurrency()!=null)
         	   cc=c.getDibusrsementsGlobalCurrency().getCurrencyCode();
     	  c.setTotalDisbursements(new Double(td));
     	  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, c.getTotalAmountCurrency().getCurrencyCode()));
 		  c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, cc));
-		  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
-    	  
+		  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));  
       }
-    }
-     
-    catch (Exception ex) {
-      logger.error(" [getIPAContracts(Long activityId)] Unable to get IPAContracts :"  + ex);
-    }
-    
-    return  contrcats ;
+      return  contrcats ;
   } 
 
   	public static double computeFundingDisbursementIPA(IPAContract contract, String cc){
@@ -1033,13 +823,11 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
 			else usdAmount1=0.0;
 			} catch (AimException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			  	try {
 				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,currCode);
 			} catch (AimException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	
 		  
@@ -1113,44 +901,15 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
    * get the list of all the activities
    * to display in the activity manager of Admin
    */
-  public static List<AmpActivityVersion> getAllActivitiesList() {
-    List col = null;
-    Session session = null;
-    Query qry = null;
-
-    try {
-      session = PersistenceManager.getRequestDBSession();
-      String queryString = "select ampAct from " + AmpActivityVersion.class.getName() +
-          " ampAct";
-      qry = session.createQuery(queryString);
-      col = qry.list();
-      logger.debug("the size of the ampActivity : " + col.size());
-    }
-    catch (Exception e1) {
-      logger.error("Could not retrieve the activities list from getallactivitieslist");
-      e1.printStackTrace(System.out);
-    }
-    return col;
+  	public static List<AmpActivityVersion> getAllActivitiesList() {
+	  String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct";
+	  return PersistenceManager.getSession().createQuery(queryString).list();
   }
   
   public static List<AmpActivityVersion> getAllAssignedActivitiesList() {
-	    List col = null;
-	    Session session = null;
-	    Query qry = null;
-
-	    try {
-	      session = PersistenceManager.getRequestDBSession();
-	      String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct where ampAct.team is not null";
-	      qry = session.createQuery(queryString);
-	      col = qry.list();
-	      logger.debug("the size of the ampActivity : " + col.size());
-	    }
-	    catch (Exception e1) {
-	      logger.error("Could not retrieve the activities list from getallactivitieslist");
-	      e1.printStackTrace(System.out);
-	    }
-	    return col;
-	  }
+	  String queryString = "select ampAct from " + AmpActivityVersion.class.getName() + " ampAct where ampAct.team is not null";
+	  return PersistenceManager.getSession().createQuery(queryString).list();
+  }
   
 
   /*
@@ -1158,67 +917,36 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
    * to display in the activity manager of Admin
    */
   public static List<AmpActivityVersion> getAllActivitiesByName(String name) {
-    List col = null;
-    Session session = null;
-    Query qry = null;
-
-    try {
-      session = PersistenceManager.getSession();
-      String queryString = "select ampAct from " + AmpActivityVersion.class.getName() +
-    		String.format(" ampAct where upper(%s) like upper(:name)",
-    		AmpActivityVersion.hqlStringForName("ampAct"));
-      qry = session.createQuery(queryString);
-      qry.setParameter("name", "%" + name + "%", StringType.INSTANCE);
-      col = qry.list();
-      logger.debug("the size of the ampActivity : " + col.size());
-    }
-    catch (Exception e1) {
-      logger.error("Could not retrieve the activities list from getallactivitiesbyname", e1);
-      e1.printStackTrace();
-    }
-    return col;
+	  String queryString = "select ampAct from " + AmpActivityVersion.class.getName() +
+			  String.format(" ampAct where upper(%s) like upper(:name)",
+					  AmpActivityVersion.hqlStringForName("ampAct"));
+	  return PersistenceManager.getSession().createQuery(queryString)
+			  .setParameter("name", "%" + name + "%", StringType.INSTANCE)
+			  .list();
   }
   
   public static List <AmpActivityGroup> getActivityGroups(Session session , Long actId){
-	  List <AmpActivityGroup> retVal=null;
-	  //Session session = null;
-	  Query qry = null;
-	  try {
-		  //session = PersistenceManager.getRequestDBSession();	      
-	      String queryString ="select group from "+ AmpActivityGroup.class.getName()+" group where group.ampActivityLastVersion.ampActivityId="+actId;
-	      qry = session.createQuery(queryString);
-	      retVal = qry.list();
-	} catch (Exception e) {
-		logger.error("Could not retrieve groups list");
-	    e.printStackTrace(System.out);
-	}
-	  return retVal;
+      String queryString ="select group from "+ AmpActivityGroup.class.getName()+" group where group.ampActivityLastVersion.ampActivityId="+actId;
+      return session.createQuery(queryString).list();
   }
    
     public static void deleteActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
 
         /* delete AMP activity Survey */
-        Set ampSurvey = ampAct.getSurvey();
+        Set<AmpAhsurvey> ampSurvey = ampAct.getSurvey();
         if (ampSurvey != null) {
-          Iterator surveyItr = ampSurvey.iterator();
-          while (surveyItr.hasNext()) {
-            AmpAhsurvey ahSurvey = (AmpAhsurvey) surveyItr.next();
-            Set ahAmpSurvey = ahSurvey.getResponses();
+          for(AmpAhsurvey ahSurvey:ampSurvey){
+            Set<AmpAhsurveyResponse> ahAmpSurvey = ahSurvey.getResponses();
             if (ahSurvey != null) {
-              Iterator ahSurveyItr = ahAmpSurvey.iterator();
-              while (ahSurveyItr.hasNext()) {
-                AmpAhsurveyResponse surveyResp = (AmpAhsurveyResponse)
-                    ahSurveyItr.next();
+              for(AmpAhsurveyResponse surveyResp: ahAmpSurvey){
                 ahSurvey.getResponses().remove(surveyResp);
                 session.delete(surveyResp);
                 session.flush();
-                ahSurveyItr = ahSurvey.getResponses().iterator();
               }
             }
             ampAct.getSurvey().remove(ahSurvey);
             session.delete(ahSurvey);
             session.flush();
-            surveyItr = ampAct.getSurvey().iterator();
           }
         }
 
@@ -1311,28 +1039,14 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
    * @param session
    * @return
    */
-  public static List<AmpActivity> getActivityById(Set<Long> ampActIds ,Session session){
-	  List<AmpActivity> act = null;
-      if (ampActIds != null && !ampActIds.isEmpty()) {
-	  try {
-	      Query qry = null;
-	      String queryString = "select a from "
-	          + AmpActivity.class.getName()
+  public static List<AmpActivity> getActivities(Set<Long> ampActIds){
+	  String queryString = "select a from "
+			  + AmpActivity.class.getName()
 	          + " a where a.ampActivityId in(:ampActIds) ";
 	          //+ " where (phyCompReport.ampActivityId=:ampActId)";
-	      qry = session.createQuery(queryString);
-	      qry.setParameterList("ampActIds", ampActIds);
-	      qry.setCacheable(false);
-	      act = qry.list();
-	  }
-	    catch (Exception e1) {
-	      logger.error("Could not retrieve the activities ");
-	      e1.printStackTrace(System.out);
-	    }
-      } else {
-          act = new ArrayList<AmpActivity> ();
-      }
-      return act;
+	  return PersistenceManager.getSession().createQuery(queryString)
+			  .setParameterList("ampActIds", ampActIds == null ? new HashSet<Long>() : ampActIds)
+			  .setCacheable(false).list();
   } 
   
   public static void deleteActivityIndicatorsSession(Long ampActivityId,Session session) throws Exception{
@@ -1370,19 +1084,8 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 
   public static class ActivityAmounts {
     private Double proposedAmout;
-    @Deprecated
-    private Double plannedAmount;
     private Double actualAmount;
     private Double actualDisbAmount;
-
-    public void AddPalenned(double amount) {
-      if (plannedAmount != null) {
-        plannedAmount = new Double(plannedAmount.doubleValue() + amount);
-      }
-      else {
-        plannedAmount = new Double(amount);
-      }
-    }
 
      public void AddActualDisb(double amount) {
       if (actualDisbAmount != null) {
@@ -1416,13 +1119,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
       return FormatHelper.formatNumber(actualDisbAmount);
     }
 
-    public String plannedAmount() {
-      if (plannedAmount == null|| plannedAmount == 0) {
-        return "N/A";
-      }
-      return FormatHelper.formatNumber(plannedAmount);
-    }
-
     public String proposedAmout() {
       if (proposedAmout == null) {
         return "N/A";
@@ -1453,20 +1149,12 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
       return actualAmount.doubleValue();
     }
 
-    public double getPlannedAmount() {
-      if (plannedAmount == null) {
-        return 0;
-      }
-      return plannedAmount.doubleValue();
-    }
-
     public double getProposedAmout() {
       if (proposedAmout == null) {
         return 0;
       }
       return proposedAmout.doubleValue();
     }
-
   }
 
   public static ActivityAmounts getActivityAmmountIn(AmpActivityVersion act,
@@ -1502,7 +1190,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                   calculations.doCalculations(ampFunding, tocode);
                   //apply program percent
                   result.AddActual(calculations.getTotActualComm().doubleValue()*percent/100);
-                  result.AddPalenned(calculations.getTotPlannedComm().doubleValue()*percent/100);
                   result.AddActualDisb(calculations.getTotActualDisb().doubleValue()*percent/100);
               }
           }
@@ -1512,23 +1199,11 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     return result;
   }
 
-  public static List getActivityProgramsByProgramType(Long actId, String settingName) {
-                Session session = null;
-                List col = new ArrayList();
-                try {
-                       session = PersistenceManager.getRequestDBSession();
-                       String queryString = "select ap from " +AmpActivityProgram.class.getName() +
-                       " ap join ap.programSetting s where (ap.activity=:actId) and (s.name=:settingName)";
-                       Query qry = session.createQuery(queryString);
-                       qry.setLong("actId",actId);
-                       qry.setString("settingName",settingName);
-                       col = qry.list();
-                } catch (Exception e) {
-                       logger.error("Unable to get all components");
-                       logger.error(e.getMessage());
-                }
-                return col;
-       }
+  public static List<AmpActivityProgram> getActivityProgramsByProgramType(Long actId, String settingName) {
+	  String queryString = "select ap from " +AmpActivityProgram.class.getName() +
+			  " ap join ap.programSetting s where (ap.activity=:actId) and (s.name=:settingName)";
+	  return PersistenceManager.getSession().createQuery(queryString).setLong("actId",actId).setString("settingName",settingName).list();
+  }
  
   public static class HelperAmpActivityNameComparator
         implements Comparator {
@@ -1539,34 +1214,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
         }
     }
 
-  /**
-   * Comparator for AmpActivityVersion class.
-   * Compears activities by its ID's.
-   * AmpActivityVersion is comparable itself, but it is comparable by names,
-   * so this class was created to compeare them with ID's
-   * @see AmpActivityVersion#compareTo(AmpActivityVersion)
-   */
-  public static class ActivityIdComparator
-      implements Comparator<AmpActivityVersion> {
 
-    public int compare(AmpActivityVersion act1, AmpActivityVersion act2) {
-      return act1.getAmpActivityId().compareTo(act2.getAmpActivityId());
-    }
-  }
-
-  /**
-   * Creates map from {@link AmpActivityReferenceDoc} collection
-   * where each elements key is the id of {@link AmpCategoryValue} object which is asigned to the element itself
-   *
-   */
-  public static class CategoryIdRefDocMapBuilder implements AmpCollectionUtils.KeyResolver<Long, AmpActivityReferenceDoc>{
-
-	public Long resolveKey(AmpActivityReferenceDoc element) {
-		return element.getCategoryValue().getId();
-	}
-
-  }
-  
   /**
    * generates ampId
    * @param user,actId
@@ -1574,16 +1222,15 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
    * @author dare
  * @param session 
    */
-  public static String generateAmpId(User user,Long actId, Session session) {
-		String retValue=null;		
-		String globSetting="numeric";// TODO This should come from global settings
-		if(globSetting.equals("numeric")){
-			retValue=numericAmpId(user,actId,session);
-		}else if(globSetting.equals("text")){
-			retValue=combinedAmpId(actId);
-		}
-		return retValue;
+  public static String generateAmpId(User user, Long actId, Session session) {
+	  String globSetting = "numeric";// TODO This should come from global settings
+	  if (globSetting.equals("numeric")){
+		  return numericAmpId(user, actId, session);
+	  }
+	  else
+		  return combinedAmpId(actId);
 	}
+  
 /**
  * combines countryId, current member id and last activityId+1 and makes ampId
  * @param user,actId
@@ -1591,23 +1238,20 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
  * @author dare
  * @param session 
  */
-	private static String numericAmpId(User user,Long actId, Session session){
-		String retVal=null;
-		String countryCode=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
-		String userId=user.getId().toString();
-	    Country country=(Country) session.load(Country.class, countryCode);   
-            //    Country country=DbUtil.getDgCountry(countryCode);
-                String countryId="0";
-                if(country!=null){
-                    countryId=country.getCountryId().toString();
-                }
+	private static String numericAmpId(User user, Long actId, Session session){
+		String countryCode = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
+		String userId = user.getId().toString();
+	    Country country = (Country) session.load(Country.class, countryCode);   
+	    String countryId = "0";
+	    if (country != null){
+	    	countryId = country.getCountryId().toString();
+	    }
 		
-		String lastId=null;
-		if(actId!=null){
-			 lastId = actId.toString();	
-		}		
-		retVal=countryId+userId+lastId;
-		return retVal;
+		String lastId = null;
+		if (actId != null){
+			lastId = actId.toString();	
+		}
+		return countryId + userId + lastId;
 	}
 
 	/**
@@ -1616,23 +1260,21 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	 * @return 
 	 * @author dan
 	 */
-		public static String numericAmpId(String user,Long actId){
-			String retVal=null;
-			String countryCode=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
-			String userId=user;
-	                Country country=DbUtil.getDgCountry(countryCode);
-	                String countryId="0";
-	                if(country!=null){
-	                    countryId=country.getCountryId().toString();
-	                }
-			
-			String lastId=null;
-			if(actId!=null){
-				 lastId = actId.toString();	
-			}		
-			retVal=countryId+userId+lastId;
-			return retVal;
+	public static String numericAmpId(String user, Long actId){
+		String countryCode = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
+		String userId = user;
+		Country country = DbUtil.getDgCountry(countryCode);
+		String countryId = "0";
+		if (country != null){
+			countryId = country.getCountryId().toString();
 		}
+			
+		String lastId = null;
+		if (actId != null){
+			lastId = actId.toString();	
+		}		
+		return countryId + userId + lastId;
+	}
 	
 	/**
 	 * combines countryIso and last activityId+1 and makes ampId
@@ -1641,48 +1283,34 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	 * @author dare
 	 */
 	private static String combinedAmpId(Long actId){
-		String retVal=null;
-		String countryCode=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
-		String lastId=null;
-		if(actId!=null){
+		String retVal = null;
+		String countryCode = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
+		String lastId = null;
+		if (actId != null){
 			 lastId = actId.toString();	
 		}	
-		retVal=countryCode.toUpperCase()+"/"+lastId;		
+		retVal = countryCode.toUpperCase() + "/" + lastId;		
 		return retVal;
 	}
 	
-	public static Collection getActivitiesRelatedToAmpTeamMember(Session session, Long ampTeamMemberId) {
-		  try {
-	            String queryStr	= "SELECT a FROM " + AmpActivityVersion.class.getName()  + " a left join a.member m WHERE " +
-	            			"(a.activityCreator=:atmId) OR (a.modifiedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId)  OR (a.modifiedBy = :atmId)";
-	            Query qry = session.createQuery(queryStr);
-	            qry.setLong("atmId", ampTeamMemberId);
-	            
-	            return qry.list();
-	            
-		  }
-		  catch (Exception ex) {
-	        ex.printStackTrace();
-	        logger.error("There was an error getting all activities related to AmpTeamMember " + ampTeamMemberId);
-	        return null;
-		  }
+	public static List<AmpActivityVersion> getActivitiesRelatedToAmpTeamMember(Session session, Long ampTeamMemberId) {
+		String queryStr	= "SELECT a FROM " + AmpActivityVersion.class.getName()  + " a left join a.member m WHERE " +
+				"(a.activityCreator=:atmId) OR (a.modifiedBy=:atmId) OR (a.approvedBy = :atmId) OR (m.ampTeamMemId = :atmId)  OR (a.modifiedBy = :atmId)";
+		return session.createQuery(queryStr).setLong("atmId", ampTeamMemberId).list();
 	}
 	
 	public static String collectionToCSV(Collection<AmpActivityVersion> activities) {
-		if ( activities == null )
+		if (activities == null)
 			return null;
-		String ret	= "";
-		Iterator<AmpActivityVersion> iter	= activities.iterator();
-		while ( iter.hasNext() ) {
-			AmpActivityVersion activity	= iter.next();
-			if ( activity.getName() != null ) {
+		String ret = "";
+		for(AmpActivityVersion activity:activities){
+			if (activity.getName() != null ) {
 				ret	+= "'" + activity.getName() + "'" + ", ";
 			}
 			else
 				ret +=  "' '" + ", ";
 		}
-		return ret.substring(0, ret.length()-2);
-		
+		return ret.substring(0, ret.length() - 2);		
 	}
         
         /**
@@ -1823,21 +1451,9 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
          * @author dare
          */
         public static String getActivityName(Long actId){
-        	Session session=null;
-    		String queryString =null;
-    		Query query=null;    		
-    		String name=null;
-    		try {
-    			session=PersistenceManager.getRequestDBSession();                   
-    			String activityName = AmpActivityVersion.hqlStringForName("gr.ampActivityLastVersion");
-    			queryString ="select " + activityName + " from "+ AmpActivityGroup.class.getName()+" gr where gr.ampActivityLastVersion.ampActivityId = " + actId;                    
-    			query=session.createQuery(queryString);    			
-    			name=(String)query.uniqueResult();    			
-    		}catch(Exception ex) { 
-    			logger.error("couldn't load Activity" + ex.getMessage());	
-    			ex.printStackTrace(); 
-    		} 
-    		return name;
+        	String activityName = AmpActivityVersion.hqlStringForName("gr.ampActivityLastVersion");
+        	String queryString = "select " + activityName + " from "+ AmpActivityGroup.class.getName()+" gr where gr.ampActivityLastVersion.ampActivityId = " + actId;                    
+    		return PersistenceManager.getSession().createQuery(queryString).uniqueResult().toString();    			
         }
         
         /**
@@ -1893,13 +1509,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		return query;
 	}
 
-	public static String getNonDraftActivityQueryString(String label) {
-		String query = null;
-		query = " AND " + label + ".draft = false ";
-		return query;
-	}
-	
-	
     public static ArrayList<AmpActivityFake> getAllActivitiesAdmin(String searchTerm) {
         try {
             Session session = PersistenceManager.getSession();
@@ -1934,47 +1543,33 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
         }
     }
 
-    public static void deleteAmpActivityWithVersions(Long ampActId){
-    	  Session session = null;
-		    Transaction tx = null;
+    public static void deleteAmpActivityWithVersions(Long ampActId) throws Exception{
+	      Session session = PersistenceManager.getSession();
 
-		    try {
-		      session = PersistenceManager.getSession();
-//beginTransaction();
-
-		      List<AmpActivityGroup> groups=getActivityGroups(session , ampActId);
-		      if(groups!=null && groups.size()>0){
-		      		for (AmpActivityGroup ampActivityGroup : groups) {
+	      List<AmpActivityGroup> groups = getActivityGroups(session , ampActId);
+	      if (groups == null && groups.isEmpty()) return;
+	      
+	      for (AmpActivityGroup ampActivityGroup : groups) {
 		      			
-		      			Query qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityGroup = " + ampActivityGroup.getAmpActivityGroupId());
-						qry.executeUpdate();
+	    	  Query qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityGroup = " + ampActivityGroup.getAmpActivityGroupId());
+	    	  qry.executeUpdate();
 						
-		      			Set<AmpActivityVersion> activityversions=ampActivityGroup.getActivities();
-		      			if(activityversions!=null && activityversions.size()>0){
-		      				for (Iterator<AmpActivityVersion> iterator = activityversions.iterator(); iterator.hasNext();) {
-		      					AmpActivityVersion ampActivityVersion=iterator.next();
-		      					ampActivityVersion.setAmpActivityGroup(null);
-		      					session.update(ampActivityVersion);
-		      					deleteFullActivityContent(ampActivityVersion,session);
-		      					session.delete(ampActivityVersion);
-							}
-		      			}
-		      			else{
-		      				AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
-		      				deleteFullActivityContent(ampAct,session);
-	      					session.delete(ampAct);
-		      			}
-		  				session.delete(ampActivityGroup);
-		  			}
-		      	}
-		      //tx.commit();
-//session.flush();
-		      
-		    }
-		    catch (Exception e1) {
-			      logger.error("Could not delete the activity with id : " + ampActId);
-			      e1.printStackTrace(System.out);
-			    }
+	    	  Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
+	    	  if (activityversions != null && activityversions.size() > 0){
+	    		  for (AmpActivityVersion ampActivityVersion: activityversions) {
+	    			  ampActivityVersion.setAmpActivityGroup(null);
+	    			  session.update(ampActivityVersion);
+	    			  deleteFullActivityContent(ampActivityVersion, session);
+	    			  session.delete(ampActivityVersion);
+	    		  }
+	    	  }
+	    	  else{
+	    		  AmpActivityVersion ampAct = (AmpActivityVersion) session.load(AmpActivityVersion.class, ampActId);
+	    		  deleteFullActivityContent(ampAct,session);
+	    		  session.delete(ampAct);
+	    	  }
+	    	  session.delete(ampActivityGroup);
+	      }
     }
     
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{

@@ -196,13 +196,6 @@ public class ActivityVersionUtil {
 	public static boolean isVersioningEnabled(){
 		return (numberOfVersions() > 0);
 	}
-
-	public static AmpActivityVersion getLastActivityFromGroup(Long groupId) throws Exception {
-		AmpActivityVersion auxActivity = null;
-		Session session = PersistenceManager.getSession();
-		auxActivity = ((AmpActivityGroup) session.load(AmpActivityGroup.class, groupId)).getAmpActivityLastVersion();
-		return auxActivity;
-	}
 	
 	public static Long getLastVersionForVersion(Long oldActivity) throws CannotGetLastVersionForVersionException {
 		try {
@@ -218,22 +211,6 @@ public class ActivityVersionUtil {
 			e.printStackTrace();
 			throw new CannotGetLastVersionForVersionException(e);
 		}
-	}
-
-	public static void updateActivityView() {
-		logger.info("Updating amp_activity view.");
-		try {
-			Session session = PersistenceManager.getSession();
-			String query = "CREATE OR REPLACE VIEW `amp_activity` AS  "
-					+ "select  amp_activity_version.*  from    "
-					+ "(`amp_activity_version` join `amp_activity_group` on `amp_activity_version`.`amp_activity_group_id` = `amp_activity_group`.`amp_activity_group_id`)  "
-					+ "where (`amp_activity_version`.`amp_activity_id` = `amp_activity_group`.`amp_activity_last_version_id`)";
-			session.createSQLQuery(query).executeUpdate();
-		} catch (Exception e) {
-			logger.error("Error updating amp_activity view.", e);
-			e.printStackTrace(System.out);
-		}
-		logger.info("Updated amp_activity view.");
 	}
 
 	/**
@@ -274,16 +251,14 @@ public class ActivityVersionUtil {
 	
 	private static void initSet(AmpActivityVersion out, Field field){
 		String setName = Strings.capitalize(field.getName());
-		Class clazz = out.getClass();
+		Class<?> clazz = out.getClass();
 		try {
 			Method method = clazz.getMethod("get" + setName);
-			Set returnSet = null;
-			Set set = (Set) method.invoke(out);
+			Set<Versionable> returnSet = null;
+			Set<Versionable> set = (Set<Versionable>) method.invoke(out);
 			if (set != null && set.size() > 0){
-				Iterator i = set.iterator();
 				returnSet = new HashSet();
-				while (i.hasNext()) {
-					Versionable object = (Versionable) i.next();
+				for(Versionable object:set) {
 					object = (Versionable) object.prepareMerge(out);
 					returnSet.add(object);
 				}

@@ -131,7 +131,7 @@
 							                                                </c:if>
 							                                                <c:if test="${gpiForm.selectedDonorTypes != null}">
 							                                                	<logic:iterate id="idDonorTypes" property="selectedDonorTypes" name="gpiForm">
-							                                                    	<%=org.digijava.module.aim.util.DbUtil.getOrgType(new Long(idDonorTypes.toString()))%>
+							                                                    	<%=org.digijava.module.aim.util.DbUtil.getAmpOrgType(new Long(idDonorTypes.toString()))%>
 							                                                    </logic:iterate>
 							                                                </c:if>
 							                                                

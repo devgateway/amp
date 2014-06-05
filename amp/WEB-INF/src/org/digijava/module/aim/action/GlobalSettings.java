@@ -263,36 +263,14 @@ public class GlobalSettings extends Action {
 	private Collection<KeyValue> getPossibleValues(String tableName)
 	{
 		Collection<KeyValue> ret 	= new Vector<KeyValue>();
-		Session session = null;
-		String qryStr = null;
-		Query qry = null;
+	
 		if (tableName == null || tableName.length() == 0)
 			return ret;
 
-		try{
-				session				= PersistenceManager.getSession();
-				Connection	conn	=((SessionImplementor)session).connection();
-				Statement st		= conn.createStatement();
-				qryStr 				= "select id, value from "+tableName ;
-				//qry 				= session.createSQLQuery(qryStr,"kv",KeyValue.class);
-				ResultSet rs		= st.executeQuery(qryStr);
-				//qry.setString (0, tableName);
-				//Iterator iterator 	= session.iterate(qryStr);
-
-				//Collection coll		= qry.list();
-				//Iterator iterator 	= coll.iterator();
-				while (rs.next()){
-
-					logger.info("Values:" + rs.getString(1) + "," + rs.getString(2) );
-					KeyValue keyValue	= new KeyValue( rs.getString(1), rs.getString(2) );
-					ret.add( keyValue );
-				}
-				conn.close();
-
-		}
-		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-			ex.printStackTrace(System.out);
+		List<Object[]> ls 	= PersistenceManager.getSession().createSQLQuery("select id, value from " + tableName).list();
+		for(Object[] obj:ls){
+			KeyValue keyValue = new KeyValue(PersistenceManager.getString(obj[0]), PersistenceManager.getString(obj[1]));
+			ret.add( keyValue );
 		}
 		return ret;
 	}

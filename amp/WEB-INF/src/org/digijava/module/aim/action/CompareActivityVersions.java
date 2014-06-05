@@ -43,8 +43,6 @@ import org.hibernate.Transaction;
 
 public class CompareActivityVersions extends DispatchAction {
 
-	private ServletContext ampContext = null;
-
 	private static Logger logger = Logger.getLogger(EditActivity.class);
 	
 	public ActionForward unspecified(ActionMapping mapping, ActionForm form,

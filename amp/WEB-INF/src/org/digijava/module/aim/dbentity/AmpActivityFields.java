@@ -2,9 +2,13 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
@@ -19,6 +23,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 @TranslatableClass (displayName = "Activity Form Field")
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
@@ -1886,7 +1892,33 @@ contactName = string;
 
 
 	public String getDonors() {
-		return ActivityUtil.getDonorsForActivity(ampActivityId).toString();
+		StringBuilder donors = new StringBuilder();
+		if (this.getAmpActivityId() != null){
+			Session session = PersistenceManager.getSession();
+			String queryString = "select distinct donor from " + AmpFunding.class.getName() + " f inner join f.ampDonorOrgId donor inner join f.ampActivityId act ";
+			queryString += " where act.ampActivityId=:activityId";
+			Query qry = session.createQuery(queryString).setLong("activityId", this.getAmpActivityId());
+
+			List<AmpOrganisation> organizations = qry.list();
+			if (organizations != null && organizations.size() > 1) {
+				Collections.sort(organizations, new Comparator<AmpOrganisation>() {
+					public int compare(AmpOrganisation o1, AmpOrganisation o2) {
+						return o1.getName().compareTo(o2.getName());
+					}
+				});
+			}
+
+			for (AmpOrganisation donor : organizations) {
+				donors.append(donor.getName());
+				donors.append(", ");
+			}
+
+			if (donors.length() > 1) {
+				// remove last comma
+				donors.setLength(donors.length() - 2);
+			}
+		}
+		return donors.toString();
 	}
 
 

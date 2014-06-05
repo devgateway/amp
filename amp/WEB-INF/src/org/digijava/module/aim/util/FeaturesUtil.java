@@ -435,21 +435,9 @@ public class FeaturesUtil {
 	}
 
 	public static Collection<Country> getAllDgCountries() {
-		Session session = null;
-		Collection<Country> col = new ArrayList();
-		String qryStr = null;
-		Query qry = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			qryStr = "select c from " + Country.class.getName() +
-			" c  "; //order by c.countryName asc";
-			qry = session.createQuery(qryStr);
-			col = qry.list();
-		}catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-		return col;
+		List<AmpOrganisation> orgs = PersistenceManager.getSession().createQuery("from " + AmpOrganisation.class.getName()).list();
+		String qryStr = "select c from " + Country.class.getName() + " c";
+		return PersistenceManager.getSession().createQuery(qryStr).list();
 	}
 
 	public static void deleteThumbnail(int placeholder) {

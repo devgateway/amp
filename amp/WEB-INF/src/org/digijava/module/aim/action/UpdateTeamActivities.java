@@ -119,7 +119,7 @@ public class UpdateTeamActivities extends Action {
 	 		    
 			Long selActivities[] = taForm.getSelActivities();
 			for(Long selActivityId:selActivities){
-				AmpActivityVersion activity=ActivityUtil.getAmpActivityVersion(selActivityId);
+				AmpActivityVersion activity=ActivityUtil.loadAmpActivity(selActivityId);
 				String detail="unassigned from team";
 				List<String> details=new ArrayList<String>();
 				details.add(detail);
@@ -158,7 +158,7 @@ public class UpdateTeamActivities extends Action {
 				for (int i = 0; i < selActivities.length; i++) {
 					if (selActivities[i] != null) {
 						Long actId = selActivities[i];
-						AmpActivityVersion activity=ActivityUtil.getAmpActivityVersion(actId);
+						AmpActivityVersion activity = ActivityUtil.loadActivity(actId);
 						
 						AmpTeam ampTeam = TeamUtil.getAmpTeam(taForm.getTeamId());
 						activity.setTeam(ampTeam);

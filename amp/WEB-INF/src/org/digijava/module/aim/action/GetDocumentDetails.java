@@ -58,7 +58,7 @@ extends Action {
 			Documents document = new Documents();
 			NodeWrapper nodeWrapper = new NodeWrapper(org.digijava.module.contentrepository.util.DocumentManagerUtil.getReadNode(uuid, request));
 			
-			AmpActivityVersion activity = ActivityUtil.getAmpActivityVersion(aId);
+			AmpActivityVersion activity = ActivityUtil.loadAmpActivity(aId);
 			document.setActivityId(activity.getAmpActivityId());
 			document.setActivityName(activity.getName());
 			document.setTitle(nodeWrapper.getTitle());

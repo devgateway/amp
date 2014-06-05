@@ -65,7 +65,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
     private Double totalNationalContribRegionalAmount;
     private Double totalNationalContribIFIAmount;
     private Double totalPrivateContribAmount;
-    private transient Set disbursements;
+    private transient Set<IPAContractDisbursement> disbursements;
     private transient AmpActivityVersion activity;
     private transient AmpOrganisation organization;
     private transient Set<AmpOrganisation> organizations;
@@ -222,11 +222,11 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
         this.description = description;
     }
 
-    public Set getDisbursements() {
+    public Set<IPAContractDisbursement> getDisbursements() {
         return disbursements;
     }
 
-    public void setDisbursements(Set disbursements) {
+    public void setDisbursements(Set<IPAContractDisbursement> disbursements) {
         this.disbursements = disbursements;
     }
 

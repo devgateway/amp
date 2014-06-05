@@ -106,6 +106,9 @@
 </logic:notPresent>
 <logic:present name="bootstrap_insert" scope="request">
 	<digi:insert attribute="body"/>
+	<div class="footerText" >
+    	<digi:insert attribute="footer"/>
+    </div>
 </logic:present>
 </body>
 </html>

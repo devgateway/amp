@@ -409,7 +409,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 	}
 	
 	public List<IdWithValueShim> getAidModalities() {
-		return getShimsForCategoryClass(CategoryConstants.MODALITIES_KEY, null);
+		return getShimsForCategoryClass(CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
 	}
 	
 	/**

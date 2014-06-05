@@ -767,6 +767,10 @@ public class IatiActivityWorker {
 			}
 		}
 		
+		//TODO: Evaluate if we need a more complex mapping here because IATI defines 4 organization roles (http://iatistandard.org/103/codelists/organisation_role/).
+		//		There is an example of that in the method 'processRelOrgsStep'.
+		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
+		
 		ampFunding.setActive(true);
 		//ampFunding.setAmpDonorOrgId(ampOrg);
 		if(!found){
@@ -776,6 +780,7 @@ public class IatiActivityWorker {
 			ampFunding.setTypeOfAssistance(typeOfAssistance);
 			ampFunding.setFinancingInstrument(financingInstrument);
 			ampFunding.setModeOfPayment(null);
+			ampFunding.setSourceRole(role);
 		}
 		Date dateToSet = null;
 		if(startDate!=null)
@@ -791,7 +796,6 @@ public class IatiActivityWorker {
         ampFunding.setFundingDetails(ampFundDetails);
 		if(activity !=null ) 
 			ampFunding.setAmpActivityId(activity);
-		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
 		AmpOrgRole ampOrgRole = new AmpOrgRole();
 		ampOrgRole.setActivity(activity);
@@ -1099,6 +1103,7 @@ public class IatiActivityWorker {
 			ampFunding.setTypeOfAssistance(typeOfAssistance);
 			ampFunding.setFinancingInstrument(financingInstrument);
 			ampFunding.setModeOfPayment(modeOfPayment);
+			ampFunding.setSourceRole(role);
 		}
 
         ampFunding.setActive(true);

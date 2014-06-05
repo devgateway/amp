@@ -1374,23 +1374,23 @@ function collapseAll() {
 <!-- program description --> 
 					<module:display name="/Activity Form/Program/Program Description"
 						parentModule="/Activity Form/Program">
-						<fieldset>
-							<legend>
-								<span class="legend_label" style="cursor: pointer;"><digi:trn>Program Description</digi:trn></span>
-							</legend>
-							<div class="toggleDiv">
-								<table width="100%" cellSpacing="2" cellPadding="1"
-									style="font-size: 11px;">
-										<tr>
-											<td width="85%"><b><c:set var="programDescription"
-														value="${aimEditActivityForm.programs.programDescription}" />
-													<digi:edit key="${programDescription}" /></b></td>
-
-										</tr>
-								</table>
-							</div>
-						</fieldset>
-
+						<c:set var="programDescription" value="${aimEditActivityForm.programs.programDescription}" />
+						<c:if test="${not empty programDescription}">
+							<fieldset>
+								<legend>
+									<span class="legend_label" style="cursor: pointer;"><digi:trn>Program Description</digi:trn></span>
+								</legend>
+								<div class="toggleDiv">
+									<table width="100%" cellSpacing="2" cellPadding="1" style="font-size: 11px;">
+											<tr>
+												<td width="85%">
+													<b><digi:edit key="${programDescription}" /></b>
+												</td>
+											</tr>
+									</table>
+								</div>
+							</fieldset>
+						</c:if>
 					</module:display> <!-- end program description -->
 <!-- SECTORS SECTION -->
 <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">

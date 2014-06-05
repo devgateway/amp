@@ -231,6 +231,37 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						toggleFormComponent (enabled,target,ifs,visit);
 					}
 				});
+		visitChildren(AmpProposedProjectCost.class,
+				new IVisitor<Component, Object>() {
+					@Override
+					public void component(
+							Component component,
+							IVisit<Object> visit) {
+					      /* Validator for date will make the date field mandatory only when there is an amount entered
+                         *  in proposed project code field AMP-17234
+                         *  Review to make is more readable 
+                         */
+						AmpDatePickerFieldPanel proposedDate= null;
+						
+						//if it is saving as draft, disable required validator for proposed date
+						if (!enabled) {
+							proposedDate = (AmpDatePickerFieldPanel)component.get("proposedDate");
+						}
+						//if proposed amount is not entered then, disable required validator for proposed Date
+						else if(component.getParent().getParent().getId().equalsIgnoreCase("proposedDate") && 
+                        		component.getParent().getParent().getParent().get("proposedAmount").getDefaultModel().getObject()==null){
+							proposedDate = (AmpDatePickerFieldPanel)component.getParent().getParent();
+						}
+						if (proposedDate != null)  {
+							proposedDate.getDate().setRequired(false);
+                    		String js = String.format("$('#%s').change();",proposedDate.getDate().getMarkupId());
+    						target.appendJavaScript(js);
+    						visit.stop();
+						}
+					
+					}
+				});
+	      
 		
 	}
 	private void toggleFormComponent (boolean enabled, final AjaxRequestTarget target,
@@ -763,22 +794,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                                 break;
                             }
                         }
-                        /* Validator for date will make the date field mandatory only when there is an amount entered
-                         *  in proposed project code field AMP-17234
-                         *  Review to make is more readable 
-                         */
-                        if(component.getParent().getParent().getId().equalsIgnoreCase("proposedDate") && 
-                        		component.getParent().getParent().getParent().get("proposedAmount").getDefaultModel().getObject()!=null ){
-                        	((AmpDatePickerFieldPanel)component.getParent().getParent()).getDate().setRequired(true);
-                        	if(((AmpDatePickerFieldPanel)component.getParent().getParent()).getDate().getDefaultModel().getObject()==null){
-                        		component.error(new ValidationError().addKey("RequiredProposedAmount"));
-                        		target.add(component.getParent());
-                        	}
-                    	}else if(component.getParent().getParent().getId().equalsIgnoreCase("proposedDate") && 
-                        		component.getParent().getParent().getParent().get("proposedAmount").getDefaultModel().getObject()==null){
-                    		((AmpDatePickerFieldPanel)component.getParent().getParent()).getDate().setRequired(false);
-                    	}
-                        
                         if (model instanceof TranslationDecoratorModel && required) {
                             TranslationDecoratorModel tdm = (TranslationDecoratorModel) model;
 

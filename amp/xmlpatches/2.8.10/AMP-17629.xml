@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+           xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-17629</jira>
+    <keyword>Allow same organization in different roles</keyword>
+    <author>jdeanquin</author>
+    <description>Allow same organization in differents roles of and activity</description>
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) VALUES
+                    (nextval('amp_global_settings_seq') , 'Allow same organization in different roles', 'true', 't_Boolean',
+                    'Allow same organization in different roles in an activty', 'general');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

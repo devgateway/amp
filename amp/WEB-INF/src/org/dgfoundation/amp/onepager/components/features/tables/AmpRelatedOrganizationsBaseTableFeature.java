@@ -37,9 +37,12 @@ import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.module.aim.action.GlobalSettings;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author aartimon@dginternational.org
@@ -288,7 +291,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
                 minSizeCollectionValidationField.reloadValidationField(target);
                 maxSizeCollectionValidationField.reloadValidationField(target);
                 
-				if(!existOrganization(setModel.getObject(), ampOrgRole)){
+				if(!existOrganization(setModel.getObject(), ampOrgRole,specificRole)){
 					setModel.getObject().add(ampOrgRole);
 					roleAdded(target, ampOrgRole);
 				} else {
@@ -307,13 +310,18 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 		searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (), "Search Organizations", searchOrgs, availableOrgGroupChoices);
 		add(searchOrganization);
 	}
-	
-	private boolean existOrganization(Set<AmpOrgRole> set, AmpOrgRole ampOrgRole) {
+//	private boolean existOrganization(Set<AmpOrgRole> set, AmpOrgRole ampOrgRole) {
+//		return existOrganization( set, ampOrgRole,null);
+//	}
+	private boolean existOrganization(Set<AmpOrgRole> set, AmpOrgRole ampOrgRole,AmpRole newRole) {
 		boolean ret = false;
 		Iterator<AmpOrgRole> iter = set.iterator();
 		while(iter.hasNext()) {
-			if(iter.next().getOrganisation().getAmpOrgId().equals(ampOrgRole.getOrganisation().getAmpOrgId())) {
-				ret = true;
+			AmpOrgRole or=iter.next();
+			if(or.getOrganisation().getAmpOrgId().equals(ampOrgRole.getOrganisation().getAmpOrgId())) {
+				if(newRole.equals(or.getRole()) || "false".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_SAME_ORG_IN_DIFF_ROLES))){
+					ret = true;
+				}
 			}
 		}
 		return ret;

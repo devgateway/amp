@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.algo;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -52,6 +54,11 @@ public class AlgoUtils {
 		return set;
 	}
 	
+	/**
+	 * sorts an array of Identifiable objects by the enclosed ids
+	 * @param objs
+	 * @return
+	 */
 	public static<K extends Identifiable> List<K> sortByIds(Collection<K> objs){
 		List<K> res = new ArrayList<>(objs);
 		Collections.sort(res, new Comparator<Identifiable>(){
@@ -64,6 +71,11 @@ public class AlgoUtils {
 		return res;
 	}
 	
+	/**
+	 * returns null if an Identifiable is null, else returns the wrapper identifier
+	 * @param id
+	 * @return
+	 */
 	public static Long getIdFrom(Identifiable id) {
 		return id == null ? null : (Long)id.getIdentifier();
 	}
@@ -77,5 +89,35 @@ public class AlgoUtils {
 		}
 	}
 
-	 
+	/**
+	 * builds an MD5-digester instance
+	 * @return
+	 */
+	public static MessageDigest getMD5Digester(){
+		try{
+			return MessageDigest.getInstance("MD5");
+		}
+		catch(NoSuchAlgorithmException e){
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * digests a String
+	 * @param digester - the digester to use. If null, then {@link #getMD5Digester()} is used to get one
+	 * @param str
+	 * @return
+	 */
+	public static String digestString(MessageDigest digester, String str)
+	{
+		MessageDigest messageDigest = digester == null ? getMD5Digester() : digester;
+		byte[] hash = messageDigest.digest(str.getBytes());
+		// Convert to hex string
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < hash.length; i++) {
+		    sb.append(Integer.toHexString(0xff & hash[i]));
+		}
+		String md5 = sb.toString();
+		return md5;
+	}
 }

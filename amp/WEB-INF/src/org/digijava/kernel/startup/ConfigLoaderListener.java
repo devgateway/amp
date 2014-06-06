@@ -40,6 +40,8 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
@@ -59,7 +61,9 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.translation.util.HashKeyPatch;
+import org.digijava.module.xmlpatcher.core.SimpleSQLPatcher;
 
 /**
  * Parses digi.xml configuration file,
@@ -96,8 +100,7 @@ public class ConfigLoaderListener
     	if(bugFixingVersionString.length()==0) return 0;
     	return Integer.parseInt(bugFixingVersionString);
     }
-   
-
+    
     public void contextInitialized(ServletContextEvent sce) {
         //ResourceStreamHandlerFactory.installIfNeeded();
 
@@ -117,6 +120,7 @@ public class ConfigLoaderListener
             ServiceManager.getInstance().init(serviceContext, 0);
 
             DigiCacheManager.getInstance();
+            new SimpleSQLPatcher().doWork();
             PersistenceManager.initialize(true);
 
             checkDatabaseCompatibility( sce.getServletContext().getRealPath("/compat.properties"));

@@ -165,5 +165,7 @@ public class GlobalSettingsConstants {
 
     public static final String SUPPORT_EMAIL = "Support Email";
     
+    public static final String ALLOW_SAME_ORG_IN_DIFF_ROLES = "Allow same organization in different roles";
+        
 
 }

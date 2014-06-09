@@ -67,6 +67,14 @@ public class ViewNewAdvancedReport extends Action {
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * returns an ActionForward which means "cannot render report". This is fired when firing some POSTed urls after the report has expired (apply settings -> logout o.s.l.t.)
+	 * @param mapping
+	 * @return
+	 */
+	public ActionForward CANNOT_RENDER_REPORT(ActionMapping mapping){
+		return mapping.findForward("index");
+	}
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
@@ -84,7 +92,7 @@ public class ViewNewAdvancedReport extends Action {
 		
 		AdvancedReportForm arf=(AdvancedReportForm) form;
 		
-		String ampReportId 	= request.getParameter("ampReportId");
+		String ampReportId 	= ReportContextData.getCurrentReportContextId(request, false);
 		String cachedStr = request.getParameter("cached");
 		String sortBy = request.getParameter("sortBy");
 		String sortByAsc = request.getParameter("sortByAsc");
@@ -94,21 +102,20 @@ public class ViewNewAdvancedReport extends Action {
 		if (cachedStr != null)
 			cached = Boolean.parseBoolean(cachedStr);		
 
-		boolean shouldRegenerateReport = (!cached && (applySorter == null && sortBy == null || ReportContextData.getFromRequest().getReportMeta() == null));
+		boolean shouldRegenerateReport = (!ReportContextData.reportIsLoaded(request)) // report does not exist in cache 
+				|| // OR
+				((!cached) && (applySorter == null) && (sortBy == null)); // nothing says we should regenerate it, e.g. sorting or caching
 			
 		if (shouldRegenerateReport)
 		{
 			//ReportContextData.cleanContextData();
-			ReportContextData.cleanCurrentReportCaches();
+			if (!ReportContextData.cleanCurrentReportCaches())
+				return CANNOT_RENDER_REPORT(mapping);
 			
-			if ( ampReportId != null )
-			{
-				if (request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS) == null)
-				{
-					Comparator<AmpReports> ampReportsComparator = new Comparator<AmpReports>()
-					{
-						public int compare(AmpReports a, AmpReports b)
-						{
+			if ( ampReportId != null ){
+				if (request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS) == null){
+					Comparator<AmpReports> ampReportsComparator = new Comparator<AmpReports>(){
+						public int compare(AmpReports a, AmpReports b){
 							return a.getAmpReportId().compareTo(b.getAmpReportId());
 						}
 					};
@@ -143,12 +150,11 @@ public class ViewNewAdvancedReport extends Action {
 				recordsPerPage = Integer.MAX_VALUE;
 			}
 		}
-		//check currency code:
 		
 		Map<Long, MetaInfo<String>> sorters = ReportContextData.getFromRequest(true).getReportSorters(true);
 		//String ampReportId = request.getParameter("ampReportId");
 		
-		GroupReportData rd = ReportContextData.getFromRequest().getGeneratedReport();
+		GroupReportData rd = ReportContextData.getFromRequest().getGeneratedReport(true);
 		AmpReports ar;// =  ReportContextData.getFromRequest().getReportMeta();
 		Session session = PersistenceManager.getRequestDBSession();
 		
@@ -176,7 +182,7 @@ public class ViewNewAdvancedReport extends Action {
 		ReportContextData.getFromRequest().setProgressValue(++progressValue);
 		ReportContextData.getFromRequest().setProgressTotalRows(recordsPerPage);
 
-        request.setAttribute(MULTILINGUAL_TAB_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class, Long.parseLong(ampReportId), "name", null, null));
+		request.setAttribute(MULTILINGUAL_TAB_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class, Long.parseLong(ampReportId), "name", null, null));
 
 		if (resetSettings && (ampReportId==null/* || !ampReportId.equals(lastReportId) */)){
 			//BOZO: isn't this "reset done wrong"?
@@ -291,7 +297,9 @@ public class ViewNewAdvancedReport extends Action {
 			}
 		}
 		
-		if (rd==null) return mapping.findForward("index"); //BOZO: why would rd = null here?
+		if (rd==null)
+			return CANNOT_RENDER_REPORT(mapping);
+		
 		rd.setGlobalHeadingsDisplayed(new Boolean(false));
 		rd.calculateReportHeadings();
 		

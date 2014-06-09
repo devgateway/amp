@@ -205,10 +205,23 @@ public class ReportContextData
 
 	private boolean isNullGeneratedReport = true;
 	
-	public GroupReportData getGeneratedReport() {
+	/**
+	 * equivalent to calling {@link #getGeneratedReport(true)}
+	 * @return
+	 */
+	public GroupReportData getGeneratedReport(){
+		return getGeneratedReport(true);
+	}
+	
+	/**
+	 * returns the report encapsulated in this RCD. If none exists and generateIfMissing=true, it will be regenerated
+	 * @param generateIfMissing
+	 * @return
+	 */
+	public GroupReportData getGeneratedReport(boolean generateIfMissing) {
 		if (isNullGeneratedReport)
 			return null;
-		return GroupReportDataCacher.staticRecall(this);
+		return GroupReportDataCacher.staticRecall(this, generateIfMissing);
 	}
 
 	public void setGeneratedReport(GroupReportData generatedReport) {
@@ -395,6 +408,19 @@ public class ReportContextData
 	}
 	
 	/**
+	 * gets (creating if necessary) the session-global ReportContextMap
+	 * @param request
+	 * @return
+	 */
+	public static Map<String, ReportContextData> getReportContextMap(HttpSession session){		
+		if (session.getAttribute("reportContext") == null){
+			session.setAttribute("reportContext", new HashMap<String, ReportContextData>());
+		}
+		Map<String, ReportContextData> map = (Map<String, ReportContextData>) session.getAttribute("reportContext");
+		return map;
+	}
+	
+	/**
 	 * gets a ReportContextData associated with a request.
 	 * @param request
 	 * @return
@@ -403,14 +429,7 @@ public class ReportContextData
 	{
 		String reportId = getCurrentReportContextId(request, true);
 		
-		Map<String, ReportContextData> map = (Map<String, ReportContextData>) request.getSession().getAttribute("reportContext");
-		if (map == null)
-		{
-			if (createIfNotExists)
-				return createWithId(request.getSession(), reportId, false);
-			else
-				throw new IllegalStateException("session does not contain reportContext map!");
-		}
+		Map<String, ReportContextData> map = getReportContextMap(request.getSession());
 		if (!map.containsKey(reportId))
 		{
 			if (createIfNotExists)
@@ -447,19 +466,24 @@ public class ReportContextData
 	}
 	
 	/**
-	 * lock object for all the destructive operations on data shared across sessions
+	 * returns true iff: 1. a reportContextId is defined  2. there is a report loaded in mem for it
+	 * @param request
+	 * @return
 	 */
-	private final static Object RCD_LOCK = new Object();
-	
-	public static void ensureReportContextMapExists()
-	{
-		HttpSession session = TLSUtils.getRequest().getSession();
-		Map<String, ReportContextData> map = (Map<String, ReportContextData>) session.getAttribute("reportContext");
-		if (map == null)
-		{
-			map = new HashMap<String, ReportContextData>();
-			session.setAttribute("reportContext", map);
-		}
+	public static boolean reportIsLoaded(HttpServletRequest request){
+		String ampReportId = getCurrentReportContextId(request, false);
+		if (ampReportId == null)
+			return false; // no reportContextId defined
+		
+		ReportContextData rcd = getReportContextMap(request.getSession()).get(ampReportId);
+		if (rcd == null)
+			return false;
+		
+		if (rcd.getReportMeta() == null)
+			return false;
+		
+		GroupReportData cachedReport = rcd.getGeneratedReport(false);
+		return cachedReport != null;
 	}
 	
 	/**
@@ -471,12 +495,7 @@ public class ReportContextData
 	 */
 	public static ReportContextData createWithId(HttpSession session, String id, boolean overwriteIfExists)
 	{
-		Map<String, ReportContextData> map = (Map<String, ReportContextData>) session.getAttribute("reportContext");
-		if (map == null)
-		{
-			map = new HashMap<String, ReportContextData>();
-			session.setAttribute("reportContext", map);
-		}
+		Map<String, ReportContextData> map = getReportContextMap(session);
 		
 		if ((!overwriteIfExists) && (map.containsKey(id)))
 			return null; // exists
@@ -511,19 +530,22 @@ public class ReportContextData
 	/**
 	 * calls {@link #cleanReportCaches()} on current report
 	 *  will throw exception if no current id exists
+	 *  @return true if managed to clean (e.g. reportContextId exists)
 	 */
-	public static void cleanCurrentReportCaches()
+	public static boolean cleanCurrentReportCaches()
 	{
-		try
-		{
+		try{
 			ReportContextData rcData = getFromRequest(); // this will throw an exception iff RCD does not exist. the enclosing try/catch will swallow it
 			if (rcData != null)
 				rcData.cleanReportCaches();
 		}
-		catch(Exception e)
-		{
-			createWithId(ReportContextData.getCurrentReportContextId(TLSUtils.getRequest(), true), true);
+		catch(Exception e){
+			String reportId = ReportContextData.getCurrentReportContextId(TLSUtils.getRequest(), false);
+			if (reportId == null)
+				return false;
+			createWithId(reportId, true);
 		}
+		return true;
 	}
 	
 	/**
@@ -531,14 +553,10 @@ public class ReportContextData
 	 */
 	public static void clearSession()
 	{
-		try
-		{
+		try{
 			TLSUtils.getRequest().getSession(true).removeAttribute("reportContext");
 		}
-		catch(Exception e)
-		{
-			
-		}
+		catch(Exception e){}
 	}
 	
 	public static String formatNumberUsingCustomFormat(double number){

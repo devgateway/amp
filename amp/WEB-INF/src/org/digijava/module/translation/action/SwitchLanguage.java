@@ -125,10 +125,12 @@ public class SwitchLanguage
         
         //update Workspace name
         TeamMember tm = (TeamMember)request.getSession().getAttribute("currentMember");
-        if( tm!=null  ) {
+        if (tm != null) {
         	AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-        	tm.setTeamName(ampTeamMember.getAmpTeam().getName());
-        	request.getSession().setAttribute("currentMember", tm);
+        	if (ampTeamMember != null){
+        		tm.setTeamName(ampTeamMember.getAmpTeam().getName());
+        		request.getSession().setAttribute("currentMember", tm);
+        	}
         }
 
         return new ActionForward(referrerUrl, true);

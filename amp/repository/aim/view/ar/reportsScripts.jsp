@@ -6,12 +6,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
-<%
-
-	if (ReportContextData.contextIdExists()){
-		pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
-	}	
-%>
 
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
@@ -22,11 +16,6 @@
 	<!-- Jquery Base Library -->
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
-<logic:present name="reportCD">
-	<logic:notEmpty name="reportCD" property="reportMeta">
-		<bean:define id="reportObject" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page" />
-	</logic:notEmpty>
-</logic:present>
 <c:set var="maxFractionDigits"><%= org.digijava.module.aim.helper.FormatHelper.getDefaultFormat().getMaximumFractionDigits() %></c:set>
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
@@ -189,9 +178,8 @@ saveReportEngine	= null;
 <script type="text/javascript">
 		dateFilterErrorMsg = "<digi:trn jsFriendly='true'>'From' date must be on or before 'To' date</digi:trn>";
 		var currentReportId	= -1;
-		<logic:present name="reportObject">
-			currentReportId	= ${reportObject.ampReportId};
-		</logic:present>	
+		
+		currentReportId = <%=ReportContextData.contextIdExists() ? ReportContextData.getCurrentReportContextId(request, true) : "-1" %>
 		
 		YAHOO.namespace("YAHOO.amptab");
 		YAHOO.amptab.init = function() {

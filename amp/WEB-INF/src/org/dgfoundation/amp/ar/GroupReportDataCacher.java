@@ -36,11 +36,17 @@ public class GroupReportDataCacher
 		lru.put(mapKey, reportData);
 	}
 	
-	public GroupReportData recall(ReportContextData key)
+	/**
+	 * returns null if nothing exists AND createIfMissing=false
+	 * @param key
+	 * @param createIfMissing
+	 * @return
+	 */
+	public GroupReportData recall(ReportContextData key, boolean createIfMissing)
 	{
 		int mapKey = System.identityHashCode(key);
 		GroupReportData res = lru.get(mapKey);
-		if (res != null)
+		if (res != null || !createIfMissing)
 			return res;
 		
 		GroupReportData newRes = regenerateGroupReportData(key);
@@ -72,13 +78,11 @@ public class GroupReportDataCacher
 		return res;
 	}
 	
-	public static GroupReportData staticRecall(ReportContextData key)
+	public static GroupReportData staticRecall(ReportContextData key, boolean generateIfMissing)
 	{
 		HttpSession session = TLSUtils.getRequest().getSession();
-		GroupReportDataCacher inst = (GroupReportDataCacher) session.getAttribute(GROUP_REPORT_DATA_CACHER_SESSION_ATTRIBUTE);
-		if (inst == null)
-			throw new IllegalStateException("could not find GroupReportDataCache map in session!");
-		return inst.recall(key);
+		GroupReportDataCacher inst = getOrCreateCacher();
+		return inst.recall(key, generateIfMissing);
 	}
 	
 	public static void staticMemorize(ReportContextData key, GroupReportData reportData)

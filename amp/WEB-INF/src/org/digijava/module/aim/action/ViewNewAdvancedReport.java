@@ -6,15 +6,8 @@
  */
 package org.digijava.module.aim.action;
 
-
-import java.awt.image.renderable.RenderContext;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +16,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -32,46 +24,28 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.taglib.util.TagUtil;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
-import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.Workspace;
-import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.AmpMath;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.hibernate.Query;
+import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 
 /**
@@ -83,11 +57,21 @@ import org.hibernate.Session;
 public class ViewNewAdvancedReport extends Action {
 	private static Logger logger = Logger.getLogger(ViewNewAdvancedReport.class) ;
 	
+	public static final String MULTILINGUAL_TAB_PREFIX = "multilingual_tab";
+	 
 	public ViewNewAdvancedReport() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * returns an ActionForward which means "cannot render report". This is fired when firing some POSTed urls after the report has expired (apply settings -> logout o.s.l.t.)
+	 * @param mapping
+	 * @return
+	 */
+	public ActionForward CANNOT_RENDER_REPORT(ActionMapping mapping){
+		return mapping.findForward("index");
+	}
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
@@ -105,7 +89,7 @@ public class ViewNewAdvancedReport extends Action {
 		
 		AdvancedReportForm arf=(AdvancedReportForm) form;
 		
-		String ampReportId 	= request.getParameter("ampReportId");
+		String ampReportId 	= ReportContextData.getCurrentReportContextId(request, false);
 		String cachedStr = request.getParameter("cached");
 		String sortBy = request.getParameter("sortBy");
 		String sortByAsc = request.getParameter("sortByAsc");
@@ -115,21 +99,20 @@ public class ViewNewAdvancedReport extends Action {
 		if (cachedStr != null)
 			cached = Boolean.parseBoolean(cachedStr);		
 
-		boolean shouldRegenerateReport = (!cached && (applySorter == null && sortBy == null || ReportContextData.getFromRequest().getReportMeta() == null));
+		boolean shouldRegenerateReport = (!ReportContextData.reportIsLoaded(request)) // report does not exist in cache 
+				|| // OR
+				((!cached) && (applySorter == null) && (sortBy == null)); // nothing says we should regenerate it, e.g. sorting or caching
 			
 		if (shouldRegenerateReport)
 		{
 			//ReportContextData.cleanContextData();
-			ReportContextData.cleanCurrentReportCaches();
+			if (!ReportContextData.cleanCurrentReportCaches())
+				return CANNOT_RENDER_REPORT(mapping);
 			
-			if ( ampReportId != null )
-			{
-				if (request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS) == null)
-				{
-					Comparator<AmpReports> ampReportsComparator = new Comparator<AmpReports>()
-					{
-						public int compare(AmpReports a, AmpReports b)
-						{
+			if ( ampReportId != null ){
+				if (request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS) == null){
+					Comparator<AmpReports> ampReportsComparator = new Comparator<AmpReports>(){
+						public int compare(AmpReports a, AmpReports b){
 							return a.getAmpReportId().compareTo(b.getAmpReportId());
 						}
 					};
@@ -155,21 +138,20 @@ public class ViewNewAdvancedReport extends Action {
 		
 		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings();				
 		
-		Integer recordsPerPage = new Integer(100);
+		Integer recordsPerPage = 100;
 		
 		if (ampAppSettings != null){
-			if( ampAppSettings.getDefaultRecordsPerPage().intValue() != 0){
+			if (ampAppSettings.getDefaultRecordsPerPage() != 0) {
 				recordsPerPage = ampAppSettings.getDefaultRecordsPerPage();
 			}else{
 				recordsPerPage = Integer.MAX_VALUE;
 			}
 		}
-		//check currency code:
 		
 		Map<Long, MetaInfo<String>> sorters = ReportContextData.getFromRequest(true).getReportSorters(true);
 		//String ampReportId = request.getParameter("ampReportId");
 		
-		GroupReportData rd = ReportContextData.getFromRequest().getGeneratedReport();
+		GroupReportData rd = ReportContextData.getFromRequest().getGeneratedReport(true);
 		AmpReports ar;// =  ReportContextData.getFromRequest().getReportMeta();
 		Session session = PersistenceManager.getRequestDBSession();
 		
@@ -196,6 +178,8 @@ public class ViewNewAdvancedReport extends Action {
 		
 		ReportContextData.getFromRequest().setProgressValue(++progressValue);
 		ReportContextData.getFromRequest().setProgressTotalRows(recordsPerPage);
+		
+		request.setAttribute(MULTILINGUAL_TAB_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class, Long.parseLong(ampReportId), "name", null, null));
 		
 		if (resetSettings && (ampReportId==null/* || !ampReportId.equals(lastReportId) */)){
 			//BOZO: isn't this "reset done wrong"?
@@ -310,7 +294,9 @@ public class ViewNewAdvancedReport extends Action {
 			}
 		}
 		
-		if (rd==null) return mapping.findForward("index"); //BOZO: why would rd = null here?
+		if (rd==null)
+			return CANNOT_RENDER_REPORT(mapping);
+		
 		rd.setGlobalHeadingsDisplayed(new Boolean(false));
 		rd.calculateReportHeadings();
 		

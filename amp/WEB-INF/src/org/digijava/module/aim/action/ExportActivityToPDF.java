@@ -1086,7 +1086,7 @@ public class ExportActivityToPDF extends Action {
 			 */
 			if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")){
 				
-				String aidEffectivenesToAdd=AdvancedReportUtil.getAidEffectivenesForExport(ampContext, activity,session);
+				String aidEffectivenesToAdd = ActivityUtil.getAidEffectivenesForExport(ampContext, activity,session);
 				if(aidEffectivenesToAdd!=null && aidEffectivenesToAdd.length()>0){
 					buildAidEffectivenessInformationPart(mainLayout,aidEffectivenesToAdd);
 				}

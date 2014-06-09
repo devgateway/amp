@@ -20,7 +20,7 @@ import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.util.DbUtil;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
-import org.digijava.module.dataExchange.utils.Constants;
+import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
@@ -661,15 +661,20 @@ public class ImportActionNew extends DispatchAction {
 
 
         JSONObject unmappedObj = new JSONObject();
-        unmappedObj.accumulate("id", "0");
+        unmappedObj.accumulate("id", DEConstants.AMP_ID_UNMAPPED);
         unmappedObj.accumulate("val", "Unmapped");
         objArray.add(unmappedObj);
 
         if (myform.getSelAmpClass().equalsIgnoreCase("Activity")) {
             JSONObject addNewObj = new JSONObject();
-            addNewObj.accumulate("id", "-1");
+            addNewObj.accumulate("id", DEConstants.AMP_ID_CREATE_NEW);
             addNewObj.accumulate("val", "Add new");
             objArray.add(addNewObj);
+
+            JSONObject dontImport = new JSONObject();
+            dontImport.accumulate("id", DEConstants.AMP_ID_DO_NOT_IMPORT);
+            dontImport.accumulate("val", "Don't import");
+            objArray.add(dontImport);
         }
 
         /* AMP-17402
@@ -714,7 +719,7 @@ public class ImportActionNew extends DispatchAction {
         JSONObject sameAsMap = new JSONObject();
         JSONArray items = new JSONArray();
         for (DEMappingFields mf : selFldsSorted) {
-            if ((mf.getAmpId() != null && (mf.getAmpId() > 0l ||  mf.getAmpId() == -1l))) {//Allow "Same As" only to AMP mapped objects
+            if ( mf.getAmpId() != null && (mf.getAmpId() > 0l || DEConstants.AMP_ID_CREATE_NEW.equals(mf.getAmpId())) ) {//Allow "Same As" only to AMP mapped objects
                 if (searchStr == null || searchStr.trim().isEmpty() || mf.getIatiValuesForDisplay().toLowerCase().contains(searchStr.toLowerCase())) {
                     JSONObject sameAsItem = new JSONObject();
                     sameAsItem.accumulate("text", mf.getIatiValuesForDisplay());
@@ -780,7 +785,7 @@ public class ImportActionNew extends DispatchAction {
 
         for (DEMappingFields mf : selFlds) {
             if (mf.getTmpId() == objId) {
-                if (!newVal.equals(-2l)) { //Not "Same As" mapping
+                if( !DEConstants.AMP_ID_SAME_AS_MAPPING.equals(newVal) ) { //Not "Same As" mapping
                     mf.setAmpId(newVal);
                     mf.setAmpValues(newAmpObjTitle);
                     mf.setSameAsMaping(null);
@@ -794,7 +799,7 @@ public class ImportActionNew extends DispatchAction {
         }
 
 
-        if (newVal.equals(-2l)) { //Generate "Same As" mapping items
+        if (DEConstants.AMP_ID_SAME_AS_MAPPING.equals(newVal)) { //Generate "Same As" mapping items
             JSONObject sameAsMap = new JSONObject();
             JSONArray items = new JSONArray();
             for (DEMappingFields mf : selFlds) {
@@ -950,7 +955,7 @@ public class ImportActionNew extends DispatchAction {
     }
 
     private IatiActivities fromXml(InputStream is, DEImportValidationEventHandler log) throws SAXException, JAXBException {
-        JAXBContext jc = JAXBContext.newInstance(Constants.IATI_JAXB_INSTANCE);
+        JAXBContext jc = JAXBContext.newInstance(DEConstants.IATI_JAXB_INSTANCE);
         Unmarshaller m = jc.createUnmarshaller();
         URL rootUrl   = this.getClass().getResource("/");
         String path="";
@@ -960,7 +965,7 @@ public class ImportActionNew extends DispatchAction {
             e.printStackTrace();
         }
         SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = sf.newSchema(new File(path+Constants.IATI_SCHEMA_LOCATION));
+        Schema schema = sf.newSchema(new File(path+DEConstants.IATI_SCHEMA_LOCATION));
 
         m.setSchema(schema);
         m.setEventHandler(log);
@@ -969,7 +974,7 @@ public class ImportActionNew extends DispatchAction {
     }
 
     private String toXml(IatiActivities parsed, DEImportValidationEventHandler log) throws SAXException, JAXBException {
-        JAXBContext jc = JAXBContext.newInstance(Constants.IATI_JAXB_INSTANCE);
+        JAXBContext jc = JAXBContext.newInstance(DEConstants.IATI_JAXB_INSTANCE);
         URL rootUrl   = this.getClass().getResource("/");
         String path="";
         try {
@@ -978,7 +983,7 @@ public class ImportActionNew extends DispatchAction {
             e.printStackTrace();
         }
         SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = sf.newSchema(new File(path+Constants.IATI_SCHEMA_LOCATION));
+        Schema schema = sf.newSchema(new File(path+DEConstants.IATI_SCHEMA_LOCATION));
         OutputStream bOut = new ByteArrayOutputStream();
         Marshaller marshaller = jc.createMarshaller();
         marshaller.setSchema(schema);
@@ -1001,6 +1006,8 @@ public class ImportActionNew extends DispatchAction {
         AmpDEUploadSession sess = DbUtil.getAmpDEUploadSession(myform.getObjId());
         DESourceSetting dess = sess.getSettingsAssigned();
         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
+        
+        request.setAttribute("isLoad", true);
 
         Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, null, true);
         myform.setIatiImportedProjectMap(items);

@@ -430,7 +430,10 @@
 											    	</c:if>
 											    	<c:if test="${item.logType=='OK'}">
 											    		<img src="/TEMPLATE/ampTemplate/img_2/ok_ico.gif" />
-											    	</c:if>							    	
+											    	</c:if>
+											    	<c:if test="${item.logType=='IGNORE'}">
+											    		<img src="/TEMPLATE/ampTemplate/img_2/alert.ico" />
+											    	</c:if>
 											    </td>
 											    <td bgcolor=#FFFFFF class=inside>
 											    	<div class="t_sm">
@@ -658,6 +661,7 @@
 						var unmappedString = "<digi:trn>Unmapped</digi:trn>";
 						var addNewString = "<digi:trn>Add new</digi:trn>";
 						var sameAsString = "<digi:trn>Same As</digi:trn>";
+						var dontImport = "<digi:trn>Don't import</digi:trn>";
 						
 						
 						
@@ -814,6 +818,8 @@
 					    		caption =  addNewString;
 					    	} else if (element.val == "Same as") {
 					    		caption =  sameAsString;
+					    	} else if (element.val == "Don't import") {
+					    		caption =  dontImport;
 					    	} else {
 					    		caption =  element.val;
 					    	}
@@ -1006,6 +1012,8 @@
 										elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val(unmappedString);
 									} else if (elementObj.val()==-1) {
 										elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val(addNewString);
+									} else if (elementObj.val()==-3) {
+										elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val(dontImport);
 									}
 								} else {
 									elementObj.parent().find(".autocompleteDropdownText").css("color", "#707070").val(sameAsString);

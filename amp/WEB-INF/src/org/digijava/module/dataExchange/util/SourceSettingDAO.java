@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
-import org.digijava.module.dataExchange.utils.Constants;
+import org.digijava.module.dataExchange.utils.DEConstants;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -75,7 +75,7 @@ public class SourceSettingDAO {
 			}
 			Query query			= hbSession.createQuery(queryString);
 			query.setFirstResult(fromIndex);
-			query.setMaxResults(Constants.RECORDS_AMOUNT_PER_PAGE);
+			query.setMaxResults(DEConstants.RECORDS_AMOUNT_PER_PAGE);
 //			if(resultNum!=-1){
 //				query.setMaxResults(resultNum);
 //			}

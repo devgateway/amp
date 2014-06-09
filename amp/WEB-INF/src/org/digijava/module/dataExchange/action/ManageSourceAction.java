@@ -30,7 +30,7 @@ import org.digijava.module.dataExchange.form.ManageSourceForm;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
-import org.digijava.module.dataExchange.utils.Constants;
+import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.sdm.dbentity.Sdm;
 
@@ -93,15 +93,15 @@ public class ManageSourceAction extends MultiAction {
 	throws Exception {
 		int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
 		int lastPage = 1;
-		if (allSourcesAmount > Constants.RECORDS_AMOUNT_PER_PAGE) {
-			lastPage = allSourcesAmount% Constants.RECORDS_AMOUNT_PER_PAGE==0 ? allSourcesAmount / Constants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount / Constants.RECORDS_AMOUNT_PER_PAGE +1;
+		if (allSourcesAmount > DEConstants.RECORDS_AMOUNT_PER_PAGE) {
+			lastPage = allSourcesAmount% DEConstants.RECORDS_AMOUNT_PER_PAGE==0 ? allSourcesAmount / DEConstants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount / DEConstants.RECORDS_AMOUNT_PER_PAGE +1;
 		}
 		
 		
 		int startIndex = 0;
 		//msForm.setShowResources(msForm.isShowResources());
 		if (msForm.getPage() != 0 ) {
-			startIndex = Constants.RECORDS_AMOUNT_PER_PAGE *( msForm.getPage()-1);
+			startIndex = DEConstants.RECORDS_AMOUNT_PER_PAGE *( msForm.getPage()-1);
 		}
 		
 		//get sources

@@ -9,7 +9,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.digijava.module.dataExchange.utils.Constants;
+import org.digijava.module.dataExchange.utils.DEConstants;
 
 @Path("/activities.out")
 public class Porjects {
@@ -18,7 +18,7 @@ public class Porjects {
     public String getActivities() {
     	JAXBContext jc;
 		try {
-			jc = JAXBContext.newInstance(Constants.IDML_JAXB_INSTANCE);
+			jc = JAXBContext.newInstance(DEConstants.IDML_JAXB_INSTANCE);
 			Marshaller m = jc.createMarshaller();
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			java.io.StringWriter sw = new StringWriter();

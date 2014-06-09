@@ -177,7 +177,7 @@ public class DataExchangeUtils {
             if(startIndex!=-1)
              {
             	qry.setFirstResult(startIndex);
-            	qry.setMaxResults(Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE);
+            	qry.setMaxResults(DEConstants.MAPPING_RECORDS_AMOUNT_PER_PAGE);
              }
 			
 			col = qry.list();
@@ -214,7 +214,7 @@ public class DataExchangeUtils {
             if(startIndex!=-1)
              {
             	qry.setFirstResult(startIndex);
-            	qry.setMaxResults(Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE);
+            	qry.setMaxResults(DEConstants.MAPPING_RECORDS_AMOUNT_PER_PAGE);
              }
 			
 			col = qry.list();
@@ -807,7 +807,7 @@ public class DataExchangeUtils {
 	public static Object getElementFromAmp(String fieldType, Object id, CodeValueType element){
 		if( fieldType!=null ){
 			
-			if(Constants.AMP_ORGANIZATION.equals(fieldType)){
+			if(DEConstants.AMP_ORGANIZATION.equals(fieldType)){
 				if (id instanceof Long) {
 					Long newId = (Long) id;
 					return getOrganizationById(newId);
@@ -820,7 +820,7 @@ public class DataExchangeUtils {
 				}
 			}
 			
-			if(Constants.AMP_SECTOR.equals(fieldType)){
+			if(DEConstants.AMP_SECTOR.equals(fieldType)){
 				if (id instanceof Long) {
 					Long newId = (Long) id;
 					return getSectorById(newId);
@@ -832,7 +832,7 @@ public class DataExchangeUtils {
 				}
 			}
 			
-			if(Constants.AMP_PROGRAM.equals(fieldType)){
+			if(DEConstants.AMP_PROGRAM.equals(fieldType)){
 				if (id instanceof Long) {
 					Long newId = (Long) id;
 					return getProgramById(newId);

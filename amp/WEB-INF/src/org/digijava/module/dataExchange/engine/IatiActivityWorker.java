@@ -32,6 +32,7 @@ import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.pojo.DEProposedProjectCost;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
+import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ActivityDate;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Budget;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.CodeReqType;
@@ -61,6 +62,7 @@ import org.digijava.module.editor.exception.EditorException;
 public class IatiActivityWorker {
     private boolean ignoreSameAsCheck = false;
     private boolean saveObjects = true;
+    private boolean isLoad = false;
     private Set<DEMappingFields> accumulate = new HashSet<DEMappingFields>();
 
     public boolean isIgnoreSameAsCheck() {
@@ -334,10 +336,16 @@ public class IatiActivityWorker {
 			}
 			AmpMappedField checkedActivity = checkActivity(this.title, this.iatiID, this.lang);
 			logs.add(checkedActivity);
-			if(checkedActivity!=null && checkedActivity.getItem()!=null && checkedActivity.getItem().getAmpId() !=null){
-				this.ampID = checkedActivity.getItem().getAmpId();
-				if( checkedActivity.getItem().getAmpId().longValue() != -1 )
-						this.existingActivity = true;
+			if( checkedActivity!=null && checkedActivity.getItem()!=null ) {
+				if( (!this.isLoad()) && DEConstants.AMP_ID_DO_NOT_IMPORT.equals(checkedActivity.getItem().getAmpId()) ) {
+					checkedActivity.setWarningMsg("Current activity will not be imported");
+					checkedActivity.setDoNotImport(true);
+					checkedActivity.setMainEntry(true);
+				} else if( checkedActivity.getItem().getAmpId() !=null){
+					this.ampID = checkedActivity.getItem().getAmpId();
+					if( !DEConstants.AMP_ID_CREATE_NEW.equals(this.ampID) && !DEConstants.AMP_ID_DO_NOT_IMPORT.equals(this.ampID) )
+							this.existingActivity = true;
+				}
 			}
 		}
 		catch(Exception e){
@@ -1442,7 +1450,7 @@ public class IatiActivityWorker {
 			}
 			for (Iterator it = activity.getCategories().iterator(); it.hasNext();) {
 				AmpCategoryValue acvAux = (AmpCategoryValue) it.next();
-				if(org.digijava.module.dataExchange.utils.Constants.CATEG_VALUE_ACTIVITY_STATUS.equals(acvAux.getAmpCategoryClass().getKeyName()))
+				if(org.digijava.module.dataExchange.utils.DEConstants.CATEG_VALUE_ACTIVITY_STATUS.equals(acvAux.getAmpCategoryClass().getKeyName()))
 					it.remove();
 			}
 			if(acv!=null)
@@ -1469,7 +1477,7 @@ public class IatiActivityWorker {
 			}
 			for (Iterator it = activity.getCategories().iterator(); it.hasNext();) {
 				AmpCategoryValue acvAux = (AmpCategoryValue) it.next();
-				if(org.digijava.module.dataExchange.utils.Constants.CATEG_VALUE_IMPLEMENTATION_LEVEL.equals(acvAux.getAmpCategoryClass().getKeyName()))
+				if(org.digijava.module.dataExchange.utils.DEConstants.CATEG_VALUE_IMPLEMENTATION_LEVEL.equals(acvAux.getAmpCategoryClass().getKeyName()))
 					it.remove();
 			}
 			if(acv!=null)
@@ -1958,7 +1966,7 @@ public class IatiActivityWorker {
 			}
 		else{
 			//entity is not mapped yet or it has be marked to be added as new, but was not added yet
-			if(checkMappedField.getAmpId()==null || (checkMappedField.getAmpId().longValue() == -1 && DataExchangeConstants.IATI_ACTIVITY.compareTo(iatiPath)!=0))
+			if(checkMappedField.getAmpId()==null || (DEConstants.AMP_ID_CREATE_NEW.equals(checkMappedField.getAmpId()) && DataExchangeConstants.IATI_ACTIVITY.compareTo(iatiPath)!=0))
 			{
 				System.out.println("Activity:"+this.getTitle()+"# Logging path:"+iatiPath+"# items: "+iatiItems+"# values: "+iatiValues);
 				log.add(iatiItems);
@@ -2146,6 +2154,20 @@ public class IatiActivityWorker {
 			else return true;
 		}
 		return false;
+	}
+
+	/**
+	 * @return true if request is part of a session load
+	 */
+	public boolean isLoad() {
+		return isLoad;
+	}
+
+	/**
+	 * @param isLoad flag to notify that the current request is on session load
+	 */
+	public void setIsLoad(boolean isLoad) {
+		this.isLoad = isLoad;
 	}
 
 }

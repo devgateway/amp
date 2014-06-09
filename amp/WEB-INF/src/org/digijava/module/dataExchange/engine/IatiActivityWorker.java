@@ -277,20 +277,25 @@ public class IatiActivityWorker {
 					this.iatiID += item.getContent();
 				}
 
-                else if(contentItem instanceof ReportingOrg){
+                else if (contentItem instanceof ReportingOrg) {
 					ReportingOrg item = (ReportingOrg)contentItem;
-					AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
-					AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
-					if(existOrganization!=null) logs.add(existOrganization);
+
+					AmpMappedField existOrganization = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
+					if (existOrganization != null) {
+                        logs.add(existOrganization);
+                    }
+                    /* AMP-17404 remove organization type from the IATI import
+                    AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
 					if(existOrganizationType!=null) logs.add(existOrganizationType);
+					*/
 				}
 
                 else if(contentItem instanceof ParticipatingOrg){
 					ParticipatingOrg item = (ParticipatingOrg)contentItem;
-					AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
+					// AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
 					AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
 					if(existOrganization!=null) logs.add(existOrganization);
-					if(existOrganizationType!=null) logs.add(existOrganizationType);
+					// if(existOrganizationType!=null) logs.add(existOrganizationType);
 				}
 
                 else if(contentItem instanceof OtherIdentifier){
@@ -305,11 +310,13 @@ public class IatiActivityWorker {
 					if(existLocation!=null) logs.add(existLocation);
 				}
 
-                else if(contentItem instanceof Sector){
+                else if (contentItem instanceof Sector) {
 					Sector item = (Sector)contentItem;
-					AmpMappedField existVocabularyCode = checkVocabularyCode(item);
-					AmpMappedField existSector			= checkSector(item);
-					if(existVocabularyCode!=null) logs.add(existVocabularyCode);
+					AmpMappedField existSector = checkSector(item);
+                    /* AMP-17404 remove 'Sector Scheme from the IATI import'
+                     AmpMappedField existVocabularyCode = checkVocabularyCode(item);
+					 if(existVocabularyCode!=null) logs.add(existVocabularyCode);
+					 */
 					if(existSector!=null) logs.add(existSector);
 				}
 

@@ -946,6 +946,7 @@ public class DataDispatcher extends DispatchAction {
 	    		}
 	        }
 	        
+			visualizationForm.getExportData().setSectorTableData(null);
 			if (lineChart) {
 				String sectorData = "";
 				int index = 0;
@@ -1347,6 +1348,13 @@ public class DataDispatcher extends DispatchAction {
 	    		}
 	        }
 	        
+			if (programSetting==0) {
+	        	visualizationForm.getExportData().setNPOTableData(null);
+			} else if (programSetting==1) {
+	        	visualizationForm.getExportData().setProgramTableData(null);
+			} else {
+				visualizationForm.getExportData().setSecondaryProgramTableData(null);
+			}
 			if (lineChart) {
 				String programData = "";
 				int index = 0;
@@ -1743,6 +1751,7 @@ public class DataDispatcher extends DispatchAction {
         		}
             }
     		
+    		visualizationForm.getExportData().setOrganizationTableData(null);
     		if (lineChart) {
 	    		String organizationData = "";
 	    		int index = 0;
@@ -2166,6 +2175,7 @@ public class DataDispatcher extends DispatchAction {
         		}
             }
     		
+    		visualizationForm.getExportData().setBeneficiaryAgencyTableData(null);
     		if (lineChart) {
 	    		String organizationData = "";
 	    		int index = 0;
@@ -2600,6 +2610,8 @@ public class DataDispatcher extends DispatchAction {
 	            	return null;
         		}
             }
+    		
+    		visualizationForm.getExportData().setResponsibleOrganizationTableData(null);
     		if (lineChart) {
 	    		String organizationData = "";
 	    		int index = 0;
@@ -4430,6 +4442,7 @@ public class DataDispatcher extends DispatchAction {
 	    		}
 	        }
             
+			visualizationForm.getExportData().setRegionTableData(null);
 			if (lineChart) {
 				String regionData = "";
 				int index = 0;

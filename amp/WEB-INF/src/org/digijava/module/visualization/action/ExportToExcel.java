@@ -1323,7 +1323,10 @@ public class ExportToExcel extends Action {
 	        data.headerText = null;
         	data.row = data.sheet6.createRow(data.rowNum++);
         	data.cell = data.row.createCell(data.cellNum++);
-        	String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
+        	String[] sectorProfRows = null;
+        	if(vForm.getExportData().getSectorTableData() != null) {
+        		sectorProfRows= vForm.getExportData().getSectorTableData().split("<");
+        	}
             
         	data.headerText = new HSSFRichTextString(data.sectorProfTrn + amountDesc);
             data.cell.setCellValue(data.headerText);
@@ -1336,7 +1339,7 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.sectorTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            if (sectorProfRows.length>1){
+            if (sectorProfRows != null && sectorProfRows.length>1){
 	            String[] singleRow = sectorProfRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i++) {
 	            	data.cell = data.row.createCell(data.cellNum++);
@@ -1400,7 +1403,10 @@ public class ExportToExcel extends Action {
 	        data.headerText = null;
         	data.row = data.sheet7.createRow(data.rowNum++);
         	data.cell = data.row.createCell(data.cellNum++);
-        	String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
+        	String[] regionProfRows = null;
+        	if(vForm.getExportData().getRegionTableData() != null) {
+        		regionProfRows = vForm.getExportData().getRegionTableData().split("<");
+        	}
             
         	data.headerText = new HSSFRichTextString(data.regionProfTrn + amountDesc);
             data.cell.setCellValue(data.headerText);
@@ -1413,7 +1419,7 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.regionTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            if (regionProfRows.length>1){
+            if (regionProfRows != null && regionProfRows.length>1){
 	            String[] singleRow = regionProfRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i++) {
 	            	data.cell = data.row.createCell(data.cellNum++);
@@ -1478,43 +1484,47 @@ public class ExportToExcel extends Action {
 	        data.headerText = null;
         	data.row = data.sheet8.createRow(data.rowNum++);
         	data.cell = data.row.createCell(data.cellNum++);
-        	String[] organizationProfRows = vForm.getExportData().getOrganizationTableData().split("<");
-            
-        	data.headerText = new HSSFRichTextString(data.organizationProfTrn + amountDesc);
-            data.cell.setCellValue(data.headerText);
-            data.cell.setCellStyle(data.subHeaderCS);
-            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
-            
-            data.cellNum = 0;
-            data.row = data.sheet8.createRow(data.rowNum++);
-            data.cell = data.row.createCell(data.cellNum++);
-            data.headerText = new HSSFRichTextString(data.organizationTrn);
-            data.cell.setCellValue(data.headerText);
-            data.cell.setCellStyle(data.subHeaderCS);
-            if (organizationProfRows.length>1){
-	            String[] singleRow = organizationProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	data.cell = data.row.createCell(data.cellNum++);
-	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
-	 	            data.cell.setCellValue(data.headerText);
-	 	            data.cell.setCellStyle(data.subHeaderCS);
-				}
-	            for (int i = 2; i < organizationProfRows.length; i++) {
-		        	data.cellNum = 0;
-			        data.row = data.sheet8.createRow(data.rowNum++);
-			        HSSFCellStyle st = null;
-			    	if (i == organizationProfRows.length-1)
-			    		st = data.lastCellStyle;
-		            else
-		            	st = data.cellStyle;
-	            	singleRow = organizationProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	            		data.cell = data.row.createCell(data.cellNum++);
-	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
-	 		            data.cell.setCellValue(data.headerText);
-	 		            data.cell.setCellStyle(st);
-	    			}
-				}
+        	String[] organizationProfRows = null;
+        	if(vForm.getExportData().getOrganizationTableData() != null) {
+        		organizationProfRows = vForm.getExportData().getOrganizationTableData().split("<");
+        	}
+            if(organizationProfRows != null) {
+	        	data.headerText = new HSSFRichTextString(data.organizationProfTrn + amountDesc);
+	            data.cell.setCellValue(data.headerText);
+	            data.cell.setCellStyle(data.subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            data.cellNum = 0;
+	            data.row = data.sheet8.createRow(data.rowNum++);
+	            data.cell = data.row.createCell(data.cellNum++);
+	            data.headerText = new HSSFRichTextString(data.organizationTrn);
+	            data.cell.setCellValue(data.headerText);
+	            data.cell.setCellStyle(data.subHeaderCS);
+	            if (organizationProfRows.length>1){
+		            String[] singleRow = organizationProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	data.cell = data.row.createCell(data.cellNum++);
+		 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+		 	            data.cell.setCellValue(data.headerText);
+		 	            data.cell.setCellStyle(data.subHeaderCS);
+					}
+		            for (int i = 2; i < organizationProfRows.length; i++) {
+			        	data.cellNum = 0;
+				        data.row = data.sheet8.createRow(data.rowNum++);
+				        HSSFCellStyle st = null;
+				    	if (i == organizationProfRows.length-1)
+				    		st = data.lastCellStyle;
+			            else
+			            	st = data.cellStyle;
+		            	singleRow = organizationProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		            		data.cell = data.row.createCell(data.cellNum++);
+		 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+		 		            data.cell.setCellValue(data.headerText);
+		 		            data.cell.setCellStyle(st);
+		    			}
+					}
+	            }
             }
 	    }
 	    

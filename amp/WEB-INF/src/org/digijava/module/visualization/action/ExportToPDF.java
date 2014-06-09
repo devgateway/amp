@@ -950,36 +950,38 @@ public class ExportToPDF extends Action {
         }
         if (sectorOpt.equals("1") || sectorOpt.equals("3")){
             PdfPTable sectorProfTbl = null;
-            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
-            if (sectorProfRows.length>1){
-	            int colspan = sectorProfRows[1].split(">").length; 
-	            sectorProfTbl = new PdfPTable(colspan);
-	            sectorProfTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(sectorTrn), HEADERFONT));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            sectorProfTbl.addCell(cell);
-	            String[] singleRow = sectorProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	                sectorProfTbl.addCell(cell);
-				}
-	            for (int i = 2; i < sectorProfRows.length; i++) {
-	            	singleRow = sectorProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) { //Skip first and last column
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	sectorProfTbl.addCell(cell);
-	    			}
-				}
-	            doc.add(sectorProfTbl);
-            }
-            doc.add(new Paragraph(" "));
+            if(vForm.getExportData().getSectorTableData() != null) {
+	            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
+	            if (sectorProfRows.length>1){
+		            int colspan = sectorProfRows[1].split(">").length; 
+		            sectorProfTbl = new PdfPTable(colspan);
+		            sectorProfTbl.setWidthPercentage(100);
+		            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(sectorTrn), HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            sectorProfTbl.addCell(cell);
+		            String[] singleRow = sectorProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		                sectorProfTbl.addCell(cell);
+					}
+		            for (int i = 2; i < sectorProfRows.length; i++) {
+		            	singleRow = sectorProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	if(j > 0) { //Skip first and last column
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	sectorProfTbl.addCell(cell);
+		    			}
+					}
+		            doc.add(sectorProfTbl);
+	            }
+	            doc.add(new Paragraph(" "));
+            }            
         }
         if (sectorOpt.equals("2") || sectorOpt.equals("3")){
             PdfPTable sectorGraph = new PdfPTable(1);
@@ -1004,37 +1006,39 @@ public class ExportToPDF extends Action {
         }
         if (regionOpt.equals("1") || regionOpt.equals("3")){
             PdfPTable regionProfTbl = null;
-            String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
-            if (regionProfRows.length>1){
-	            int colspan = regionProfRows[1].split(">").length; 
-	            regionProfTbl = new PdfPTable(colspan);
-	            regionProfTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(regionTrn), HEADERFONT));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            regionProfTbl.addCell(cell);
-	            String[] singleRow = regionProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	regionProfTbl.addCell(cell);
-				}
-	            
-	            for (int i = 2; i < regionProfRows.length; i++) {
-	            	singleRow = regionProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) { //Skip first and last column
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	regionProfTbl.addCell(cell);
-	    			}
-				}
-	            doc.add(regionProfTbl);
+            if(vForm.getExportData().getRegionTableData() != null) {
+	            String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
+	            if (regionProfRows.length>1){
+		            int colspan = regionProfRows[1].split(">").length; 
+		            regionProfTbl = new PdfPTable(colspan);
+		            regionProfTbl.setWidthPercentage(100);
+		            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(regionTrn), HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            regionProfTbl.addCell(cell);
+		            String[] singleRow = regionProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	regionProfTbl.addCell(cell);
+					}
+		            
+		            for (int i = 2; i < regionProfRows.length; i++) {
+		            	singleRow = regionProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	if(j > 0) { //Skip first and last column
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	regionProfTbl.addCell(cell);
+		    			}
+					}
+		            doc.add(regionProfTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (regionOpt.equals("2") || regionOpt.equals("3")){
             PdfPTable regionGraph = new PdfPTable(1);
@@ -1059,36 +1063,38 @@ public class ExportToPDF extends Action {
         }
         if (organizationOpt.equals("1") || organizationOpt.equals("3")){
             PdfPTable organizationProfTbl = null;
-            String[] organizationProfRows = vForm.getExportData().getOrganizationTableData().split("<");
-            if (organizationProfRows.length>1){
-	            int colspan = organizationProfRows[1].split(">").length; 
-	            organizationProfTbl = new PdfPTable(colspan);
-	            organizationProfTbl.setWidthPercentage(100);
-	            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(organizationTrn), HEADERFONT));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            organizationProfTbl.addCell(cell);
-	            String[] singleRow = organizationProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	organizationProfTbl.addCell(cell);
-				}
-	            for (int i = 2; i < organizationProfRows.length; i++) {
-	            	singleRow = organizationProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) { //Skip first and last column
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	organizationProfTbl.addCell(cell);
-	    			}
-				}
-	            doc.add(organizationProfTbl);
+            if(vForm.getExportData().getOrganizationTableData() != null){
+	            String[] organizationProfRows = vForm.getExportData().getOrganizationTableData().split("<");
+	            if (organizationProfRows.length>1){
+		            int colspan = organizationProfRows[1].split(">").length; 
+		            organizationProfTbl = new PdfPTable(colspan);
+		            organizationProfTbl.setWidthPercentage(100);
+		            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(organizationTrn), HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            organizationProfTbl.addCell(cell);
+		            String[] singleRow = organizationProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	organizationProfTbl.addCell(cell);
+					}
+		            for (int i = 2; i < organizationProfRows.length; i++) {
+		            	singleRow = organizationProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	if(j > 0) { //Skip first and last column
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	organizationProfTbl.addCell(cell);
+		    			}
+					}
+		            doc.add(organizationProfTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (organizationOpt.equals("2") || organizationOpt.equals("3")){
             PdfPTable organizationGraph = new PdfPTable(1);

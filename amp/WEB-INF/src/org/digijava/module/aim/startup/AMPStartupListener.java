@@ -45,7 +45,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.digijava.module.message.jobs.CloseExpiredActivitiesJob;
-import org.digijava.module.mondrian.job.PublicViewColumnsUtil;
+import org.digijava.kernel.job.chachedtables.PublicViewColumnsUtil;
 import org.hibernate.Session;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;

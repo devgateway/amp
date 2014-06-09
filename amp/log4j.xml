@@ -41,28 +41,28 @@
 
    <!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
    <category name="org.apache">
-      <priority value="ERROR"/>
+      <priority value="INFO"/>
    </category>
 
    <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
    <category name="org.quartz">
-      <priority value="ERROR"/>
+      <priority value="INFO"/>
    </category>
 
    <category name="org.digijava"> <!-- DEBUG default -->
-      <priority value="ERROR"/>
+      <priority value="INFO"/>
    </category>
 
    <category name="org.dgfoundation"> <!-- DEBUG default -->
-      <priority value="ERROR"/>
+      <priority value="DEBUG"/>
    </category>
    <category name="org.apache.wicket.devutils.inspector.RenderPerformanceListener">
-   	  <priority value="ERROR"/>   <!-- SET to DEBUG to see wicket page render times -->
+   	  <priority value="DEBUG"/>   <!-- SET to DEBUG to see wicket page render times -->
    </category>
 
    <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->
    <category name="javax.enterprise.resource.webcontainer.jsf">
-      <priority value="ERROR" />
+      <priority value="INFO" />
    </category>
 
    <category name="org.hibernate">
@@ -78,16 +78,16 @@
    </category>
  
  <category name="org.digijava">
-       <priority value="ERROR"/>  
+       <priority value="INFO"/>  
    </category>
  
  
    <category name="org.hibernate.SQL">
-       <priority value="ERROR"/>   <!-- SET to TRACE in order to see queries and their value, INFO is default -->
+       <priority value="INFO"/>   <!-- SET to TRACE in order to see queries and their value, INFO is default -->
    </category>
 
    <category name="org.hibernate.type">
-       <priority value="ERROR"/>   <!-- SET to TRACE in order to see queries and their value, INFO is default -->
+       <priority value="INFO"/>   <!-- SET to TRACE in order to see queries and their value, INFO is default -->
    </category>
    
    <!-- ======================= -->
@@ -95,7 +95,7 @@
    <!-- ======================= -->
 
    <root>
-      <priority value="WARN" />
+      <priority value="INFO" />
       <appender-ref ref="CONSOLE"/>
       <appender-ref ref="default.file"/>
    </root>

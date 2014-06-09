@@ -120,13 +120,6 @@ ${fn:replace(message,quote,escapedQuote)}
 													<digi:trn>Public Reports</digi:trn>
 												</a>
 											</li>
-											<module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING">
-												<li class="yuiampmenuitem_drop">
-													<digi:link styleClass="yuiampmenuitemlabel" href="/mainreports.do" module="mondrian">
-														<digi:trn>Multi-dimensional Reports</digi:trn>
-													</digi:link>
-												</li>
-											</module:display>
 										</ul>
 									</div>
 								</div></li>
@@ -551,13 +544,6 @@ function openAdmin () {
 									<li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 										<a class="yuiampmenuitemlabel" href="/organizationReportWizard.do?reset=true" onclick="return canExit()"> 
 											<digi:trn>Donor Report Generator</digi:trn>
-										</a>
-									</li>
-								</module:display>
-								<module:display name="Multi-dimensional Reports" parentModule="REPORTING">
-									<li class="yuiampmenuitem_drop">
-										<a class="yuiampmenuitemlabel" href="/mondrian/mainreports.do" onclick="return canExit()"> 
-											<digi:trn key="aim:multidimensionalreports">Multi-dimensional Reports</digi:trn>
 										</a>
 									</li>
 								</module:display>

@@ -21,10 +21,7 @@
     <property name="test" location="./WEB-INF/test" />
     <property name="etc" location="./etc" />
     <property name="deployConfigs" location="deployConfigs"/>
-	<property name="dbConfigs" location="dbConfigs"/>
 	<property name="repository" location="./repository"/>
-	<property name="RefreshMondrian" location="./repository/mondrian/sql"/>
-	<property name="MondrianConfig" location="./WEB-INF/queries"/>
 	<property name="jackrabbit" location="./jackrabbit"/>
     <property name="ampTest" location="./WEB-INF/amp-test" />
 	<property name="ampSelenium" location="./WEB-INF/amp-selenium-test" />
@@ -482,7 +479,6 @@
 			<transaction>CREATE TABLE cached_v_secondary_sector LIKE ${clean.source}.cached_v_secondary_sector</transaction>
 			<transaction>CREATE TABLE cached_v_status LIKE ${clean.source}.cached_v_status</transaction>
 			<transaction>CREATE TABLE cached_v_sub_sector LIKE ${clean.source}.cached_v_sub_sector</transaction>
-			<transaction>INSERT INTO off_line_reports (SELECT * from ${clean.source}.off_line_reports)</transaction>
 			
 			<!-- mandatory custom indexes -->
 			<transaction>ALTER TABLE amp_category_value ADD INDEX cv_index(category_value)</transaction>
@@ -683,7 +679,6 @@
 			<transaction>CREATE TABLE cached_v_secondary_sector (LIKE clean.cached_v_secondary_sector)</transaction>
 			<transaction>CREATE TABLE cached_v_status (LIKE clean.cached_v_status)</transaction>
 			<transaction>CREATE TABLE cached_v_sub_sector (LIKE clean.cached_v_sub_sector)</transaction>
-			<transaction>INSERT INTO off_line_reports (SELECT id, name, query, teamid, ispublic, measures, columns, creationdate, type, ownerid FROM clean.off_line_reports)</transaction>
 			
 			<!-- mandatory custom indexes -->
 			<transaction>CREATE INDEX cv_index ON amp_category_value(category_value)</transaction>
@@ -727,7 +722,6 @@
 		</xslt>
 
 		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>
-		<antcall target="copyForAnySQL"/>
 		<antcall target="createDeployConfigCommon"/>
 		
 	</target>
@@ -739,21 +733,8 @@
 		  <entry  key="serverName" value="${serverName}"/>
 		</propertyfile>
 	</target>
-	
-	<target name="copyForAnySQL">
-		<condition property="dbName" value="postgresql">
-		 	<not>
-		 		<isset property="dbName"/>                              
-		 	</not>
-		 </condition>
-		 <echo message="Using ${dbName} Configuration" />
-		<copy file="${dbConfigs}/${dbName}/hibernate-dialect.xml" todir="${src}" overwrite="true"/>
-		<copy file="${dbConfigs}/${dbName}/refresh_mondrian_cache.sql" todir="${RefreshMondrian}" overwrite="true"/>
-		<copy file="${dbConfigs}/${dbName}/AMP.xml" todir="${MondrianConfig}" overwrite="true"/>
-	</target>	
 
-
-<!--	<target name="junit" depends="compileTest">
+	<!--	<target name="junit" depends="compileTest">
         <junit printsummary="yes" haltonfailure="yes" showoutput="yes">
     	    <classpath refid="run.classpath"/>
   		<formatter type="xml"/>

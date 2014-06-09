@@ -843,17 +843,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>pentaho</groupId>
-			<artifactId>mondrian</artifactId>
-			<version>3.0.4</version>
-			<type>jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>com.tonbeller</groupId>
-			<artifactId>jpivot</artifactId>
-			<version>1.8.0-080327</version>
-			<type>jar</type>
+  			<groupId>pentaho</groupId>
+  			<artifactId>mondrian</artifactId>
+  			<version>3.0.4</version>
 		</dependency>
 
 		<dependency>

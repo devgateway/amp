@@ -2,8 +2,6 @@ package org.digijava.module.visualization.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,17 +27,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -47,7 +42,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -64,7 +58,6 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.mondrian.job.PublicViewColumnsUtil;
 import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.VisualizationForm;
@@ -77,8 +70,6 @@ import org.joda.time.DateTimeComparator;
 import org.joda.time.DateTimeFieldType;
 import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.GregorianChronology;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 public class DashboardUtil {
 	

@@ -807,10 +807,7 @@
                 <page>largestProjectsPrinterFriendly</page>
                 <page>exportOptions</page>
 			</module>
-			<module name="mondrian">
-				<page>savehtml</page>
-            </module>
-            <module name="dataExchange">
+			<module name="dataExchange">
 				<page>de_showSourceDetails</page>
 				<page>de_showLogItemDetails</page>
             </module>

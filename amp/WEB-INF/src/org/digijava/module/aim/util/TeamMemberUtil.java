@@ -43,8 +43,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.Calendar;
-import org.digijava.module.mondrian.dbentity.EntityHelper;
-import org.digijava.module.mondrian.dbentity.OffLineReports;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -1522,23 +1520,6 @@ public class TeamMemberUtil {
                     }
                    
 
-//                    qryStr = "select a from " + AmpApplicationSettings.class.getName() +
-//                        " a where (a.member.ampTeamMemId=:memberId)";
-//                    qry = session.createQuery(qryStr);
-//                    qry.setParameter("memberId", id[i], LongType.INSTANCE);
-//
-//                    Collection memAppSettings = qry.list();
-//                    if (memAppSettings != null && !memAppSettings.isEmpty()) {
-//                        Iterator itr = memAppSettings.iterator();
-//                        if (itr.hasNext()) {
-//                            logger.info("Got the app settings..");
-//                            AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
-//                            ampAppSettings.setDefaultTeamReport(null);                            
-//                            session.delete(ampAppSettings);
-//                            logger.info("deleted the app settings..");
-//                        }
-//                    }
-                    
                     qryStr = "select cont from "+AmpContact.class.getName() +" cont where (cont.creator=:memberId) ";
                     qry = session.createQuery(qryStr);
                     qry.setLong("memberId", id[i]);
@@ -1551,11 +1532,6 @@ public class TeamMemberUtil {
                         }
                     }
                    
-                    ArrayList<OffLineReports> reports = new ArrayList<OffLineReports>();
-            		reports = (ArrayList<OffLineReports>) EntityHelper.getReports(ampMember);
-            		for (OffLineReports report : reports) {
-            			EntityHelper.DeleteReport(report);
-					}
                     session.delete(ampMember);
                     
                    

@@ -13,9 +13,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import mondrian.util.Base64;
-
 import org.apache.log4j.Logger;
 import org.bouncycastle.util.encoders.Base64Encoder;
 import org.dgfoundation.amp.algo.AlgoUtils;

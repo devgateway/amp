@@ -17,7 +17,14 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,10 +58,16 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.mondrian.query.MoConstants;
+
 
 
 
@@ -2987,9 +3000,9 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	public static String getOffLineQuery(String query) {
 		String result = query;
-		Pattern p = Pattern.compile(MoConstants.AMP_ACTIVITY_TABLE);
+		Pattern p = Pattern.compile(ArConstants.AMP_ACTIVITY_TABLE);
 		Matcher m = p.matcher(result);
-		result = m.replaceAll(MoConstants.CACHED_ACTIVITY_TABLE);
+		result = m.replaceAll(ArConstants.CACHED_ACTIVITY_TABLE);
 		return result;
 	}
 

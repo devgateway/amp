@@ -18,7 +18,7 @@
 		<property column="filterRetrievable" name="filterRetrievable" type="java.lang.Boolean" />
 		<property column="showRowCalculations" name="showRowCalculations" type="java.lang.Boolean" />
 		
-		<property column="description" name="description" type="java.lang.String" />
+		<property column="description" name="description" type="text" />
 		
 		<set name="filters" cascade="all-delete-orphan" lazy="false">
 			<key column="column_id" />

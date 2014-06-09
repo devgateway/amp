@@ -13,7 +13,7 @@
 		<many-to-one name="title" column="title" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
 		<many-to-one name="status" column="status" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"/>
 		<property name="titleFreeText" column="titleFreeText" type="java.lang.String" />
-		<property name="additionalInformation" column="additionalInformation" type="java.lang.String" />
+		<property name="additionalInformation" column="additionalInformation" type="text" />
 		<property name="whoAuthorizedPledge" column="whoAuthorizedPledge" type="java.lang.String" />
 		<property name="furtherApprovalNedded" column="furtherApprovalNedded" type="java.lang.String" />
 		<property name="contactName" column="contactName" type="java.lang.String"/>

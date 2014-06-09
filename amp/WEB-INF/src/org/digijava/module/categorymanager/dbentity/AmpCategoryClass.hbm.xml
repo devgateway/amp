@@ -11,7 +11,7 @@
 
 		<property name="name" column="category_name" type="java.lang.String" />
 		<property name="keyName" column="keyName" type="java.lang.String" unique="true" />
-		<property name="description" column="description" type="java.lang.String" />
+		<property name="description" column="description" type="text" />
 		<property name="isMultiselect" column="is_multiselect" type="boolean" />
 		<property name="isOrdered" column="is_ordered" type="boolean" />
 

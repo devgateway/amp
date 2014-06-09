@@ -12,7 +12,7 @@
 		<property column="aliasName" name="aliasName" type="java.lang.String" />
 		<property column="type" name="type" type="java.lang.String" />
         <property name="expression" column="expression" type="java.lang.String" />
-        <property name="description" column="description" type="java.lang.String" />
+        <property name="description" column="description" type="text" />
         
 		<set name="reports" table="AMP_REPORT_MEASURES" lazy="true">
 			<cache usage="read-write" />

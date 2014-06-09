@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegionMarkupIdProvider {
 	private static final Logger logger = Logger.getLogger(ComponentVisualErrorBehavior2.class);
@@ -53,7 +54,7 @@ public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegi
 				r.write("<li class=\"feedbackPanel");
 				r.write(message.getLevelAsString().toUpperCase());
 				r.write("\">");
-				r.write(Strings.escapeMarkup(message.getMessage().toString()));
+				r.write(TranslatorWorker.translateText(Strings.escapeMarkup(message.getMessage().toString()).toString()));
 				r.write("</li>");
 				logger.error("Rendered error: " + message.getMessage().toString());
 				message.markRendered();

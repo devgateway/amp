@@ -51,7 +51,7 @@ _big
 									<div class="search_label"><digi:trn>Keyword</digi:trn>:</div>
 								</td>
 								<td align="left" class="tbl_spacing">
-									<input name="" type="text" class="inputx" style="width:90px;" onkeypress="searchEnter(event)" id="keyword" title="${searchDescription}">
+									<input name="" type="text" class="inputx" onkeypress="searchEnter(event)" id="keyword" title="${searchDescription}">
 								</td>
 						</tr>
 						<tr>
@@ -59,7 +59,7 @@ _big
 									<div class="search_label"><digi:trn>Type</digi:trn>:</div>
 								</td>
 								<td align="left" class="tbl_spacing">
-									<select class="dropdwn_sm" style="width: 90px;" id="querytype" >
+									<select class="dropdwn_sm" id="querytype" >
 									<option value="-1"><digi:trn>ALL</digi:trn></option>
 									<option value="0"><digi:trn>Activities</digi:trn></option>
 									<option value="1"><digi:trn>Reports</digi:trn></option>
@@ -73,7 +73,7 @@ _big
 									<div class="search_label"><digi:trn>Mode</digi:trn>:</div>
 								</td>
 								<td align="left">
-									<select class="dropdwn_sm" style="width: 90px;" id="searchMode" >
+									<select class="dropdwn_sm" id="searchMode" >
 									<option value="0"><digi:trn>Any keyword</digi:trn></option>
 									<option value="1"><digi:trn>All keywords</digi:trn></option>
 								</select>

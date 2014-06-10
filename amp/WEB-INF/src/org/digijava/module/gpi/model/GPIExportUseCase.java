@@ -13,6 +13,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.engine.design.JRDesignParameter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
@@ -73,11 +74,16 @@ public class GPIExportUseCase {
 				response.setHeader("Content-Disposition", "attachment; filename=GPI" + reportCode + ".xls");
 				response.setContentType("application/vnd.ms-excel");
 				exporter = new JRXlsExporter();
+				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+				exporter.setParameter(JRXlsExporterParameter.MAXIMUM_ROWS_PER_SHEET, new Integer("-1"));
+				exporter.setParameter(JRXlsExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.FALSE);
+				exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
+				exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+				exporter.getParameters().put(JRDesignParameter.IS_IGNORE_PAGINATION, Boolean.TRUE);
 			}
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			ServletOutputStream servletOutputStream = response.getOutputStream();
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
-			exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);			
 			exporter.exportReport();
 			servletOutputStream.flush();
 			servletOutputStream.close();

@@ -1712,7 +1712,7 @@ body {background:none;}
 																								</digi:trn>
 																																															</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
-																							<FONT color=blue>*</FONT>
+																							
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
@@ -1744,7 +1744,7 @@ body {background:none;}
 																										<c:out value="${fd.adjustmentTypeName.value}"/>	
 																								</digi:trn>																						</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
-																							<FONT color=blue>*</FONT>
+																							
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
@@ -1776,7 +1776,7 @@ body {background:none;}
 																								</digi:trn>
 																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
-																							<FONT color=blue>*</FONT>
+																							
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
@@ -1852,7 +1852,6 @@ body {background:none;}
 																							</field:display>
 																							<field:display name="Components Amount Commitments" feature="Activity - Component Step">
 																								<td align="right" width="100" bgcolor="#ffffff">
-																									<FONT color="blue">*</FONT>
 																									<c:out value="${fd.transactionAmount}"/>
 																								</td>
 																							</field:display>
@@ -1917,7 +1916,7 @@ body {background:none;}
 																							</field:display>
 																							<field:display name="Components Amount Disbursements" feature="Activity - Component Step">
 																							<td align="right" width="100" bgcolor="#ffffff">
-																								<FONT color="blue">*</FONT>
+																								
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Disbursements" feature="Activity - Component Step">
@@ -1954,7 +1953,7 @@ body {background:none;}
 																							</field:display>
 																							<field:display name="Components Amount Expenditures" feature="Activity - Component Step">
 																							<td align="right">
-																								<FONT color=blue>*</FONT>
+																								
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Expenditures" feature="Activity - Component Step">

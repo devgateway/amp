@@ -327,7 +327,7 @@
 								<tr>
 							    <td width="49%" valign="top" style="border: none;" class="inside">
 										<fieldset>
-											<legend><span class="legend_label">Upload a file</span></legend>
+											<legend><span class="legend_label"><digi:trn>Upload a file</digi:trn></span></legend>
 											<html:file name="importFormNew" property="file"/>
 										</fieldset>	
 									</td>

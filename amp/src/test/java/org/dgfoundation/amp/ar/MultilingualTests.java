@@ -25,6 +25,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 import java.util.Arrays;
@@ -267,11 +268,7 @@ public class MultilingualTests extends TestCase
 	
 	public void testActivitiesLoading() throws Exception
 	{
-		TeamMember member = new TeamMember();
-		member.setTeamType(Constants.ACCESS_TYPE_TEAM);
-		member.setTeamId(4L); // "test workspace"
-		member.setMemberId(12L); // ATL in "test workspace"
-		member.setTeamName("test workspace");
+		TeamMember member = new TeamMember(TeamMemberUtil.getAmpTeamMember(12L));// ATL in "test workspace"
 		
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("ru");
 		String z = Util.toCSString(Arrays.asList(ActivityUtil.loadActivitiesNamesAndIds(member)));		

@@ -161,11 +161,8 @@ public class ViewAmp
                 // set the session variable 'ampAdmin' to the value 'yes'
                 session.setAttribute("ampAdmin", new String("yes"));
                 // create a TeamMember object and set it to a session variabe 'currentMember'
-                TeamMember tm = new TeamMember();
-                tm.setMemberName(usr.getName());
-                tm.setMemberId(usr.getId());
+                TeamMember tm = new TeamMember(usr);
                 tm.setTeamName(TranslatorWorker.translateText("AMP Administrator"));
-                tm.setEmail(usr.getEmail());
                 session.setAttribute("currentMember", tm);
                 PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
                 // show the index page with the admin toolbar at the bottom
@@ -241,31 +238,18 @@ public class ViewAmp
                 }
             }
 
-            // checking whether the member is a Team lead. if yes, then
-            // we set the session variable 'teamLeadFlag' as 'true' else 'false'
-            AmpTeamMemberRoles lead = TeamMemberUtil.getAmpTeamHeadRole();
-            TeamMember tm = new TeamMember();
+            TeamMember tm = new TeamMember(member);
 
-            if (lead != null) {
-                if (lead.getAmpTeamMemRoleId().equals(
-                        member.getAmpMemberRole().getAmpTeamMemRoleId()) ||
+			//now teamHead is configured within TeamMember constructor, but leaving this special case here
+			//is it still needed? if yes, then should be moved within TeamMemberUtil.isHeadRole()
+            if (
                         //very ugly but we have no choice - only one team head role possible :(
                         member.getAmpMemberRole().getRole().equals("Top Management")
                         ) {
-                    session.setAttribute("teamLeadFlag", new String(
-                            "true"));
                     tm.setTeamHead(true);
-                } else {
-                    session.setAttribute("teamLeadFlag", new String(
-                            "false"));
-                    tm.setTeamHead(false);
                 }
-            } else {
-                session.setAttribute("teamLeadFlag",
-                        new String("false"));
-                tm.setTeamHead(false);
-            }
-
+            session.setAttribute("teamLeadFlag", String.valueOf(tm.getTeamHead()));
+            
             // Get the team members application settings
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
             ApplicationSettings appSettings = new ApplicationSettings();
@@ -318,39 +302,11 @@ public class ViewAmp
             appSettings.setLanguage(langCode);
             
 
-            tm.setMemberId(member.getAmpTeamMemId());
-            tm.setMemberName(member.getUser().getName());
-            tm.setPledger(member.getUser().getPledger());
-            tm.setRoleId(member.getAmpMemberRole()
-                    .getAmpTeamMemRoleId());
-            tm.setRoleName(member.getAmpMemberRole().getRole());
-            tm.setTeamId(member.getAmpTeam().getAmpTeamId());
             session.setAttribute(Constants.TEAM_ID, tm.getTeamId());
-            tm.setTeamName(member.getAmpTeam().getName());
-            tm.setTeamType(member.getAmpTeam().getTeamCategory());
-            tm.setTeamAccessType(member.getAmpTeam().getAccessType());
-            tm.setComputation(member.getAmpTeam().getComputation());
-            tm.setUseFilters(member.getAmpTeam().getUseFilter());
-            tm.setAddActivity(member.getAmpTeam().getAddActivity());
             tm.setAppSettings(appSettings);
-            tm.setApprover(member.getAmpMemberRole().isApprover());
-            tm.setPublishDocuments(member.getPublishDocPermission());
-            if (usr != null) {
-                tm.setEmail(usr.getEmail());
-            }
-            
             session.setAttribute(Constants.CURRENT_MEMBER, tm);            
             AmpTeam.initializeTeamFiltersSession(member, request, session);
 			
-            // Check whether the user is a transalator for the amp site.
-            // if yes, the system has to show the translator toolbar at the bottom of the pages
-            if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
-                tm.setTranslator(true);
-            } else {
-                tm.setTranslator(false);
-            }
-            
-
             // Set the session infinite. i.e. session never timeouts
             session.setMaxInactiveInterval(-1);
 

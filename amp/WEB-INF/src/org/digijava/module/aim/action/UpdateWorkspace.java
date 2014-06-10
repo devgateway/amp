@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionMessage;
@@ -27,6 +29,7 @@ import org.digijava.module.aim.form.UpdateWorkspaceForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -302,10 +305,7 @@ public class UpdateWorkspace extends Action {
 						.getAttribute("currentMember");
 				if (tm != null) {
 					if (tm.getTeamId() != null) {
-						session.removeAttribute("currentMember");
-						tm.setTeamName(newTeam.getName());
-						tm.setTeamId(newTeam.getAmpTeamId());
-						session.setAttribute("currentMember", tm);
+						session.setAttribute("currentMember", new TeamMember(TeamMemberUtil.getAmpTeamMember(tm.getMemberId())));
 						PermissionUtil.putInScope(session,
 								GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
 					}

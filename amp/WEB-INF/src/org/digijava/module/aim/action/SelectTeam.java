@@ -91,28 +91,17 @@ public class SelectTeam extends Action {
 
 
 
-            AmpTeamMemberRoles lead = TeamMemberUtil
-                    .getAmpTeamHeadRole();
-
-            TeamMember tm = new TeamMember();
-
-            if (lead != null) {
-                if (lead.getAmpTeamMemRoleId().equals(
-                        member.getAmpMemberRole().getAmpTeamMemRoleId()) ||
+            TeamMember tm = new TeamMember(member);
+			//now teamHead is configured within TeamMember constructor, but leaving this special case here
+			//is it still needed? if yes, then should be moved within TeamMemberUtil.isHeadRole()
+            if (
                         //very ugly but we have no choice - only one team head role possible :(
                         member.getAmpMemberRole().getRole().equals("Top Management")
                         ) {
-                    session.setAttribute("teamLeadFlag", new String("true"));
                     tm.setTeamHead(true);
-                } else {
-                    session.setAttribute("teamLeadFlag", new String("false"));
-                    tm.setTeamHead(false);
                 }
-            } else {
-                session.setAttribute("teamLeadFlag", new String("false"));
-                tm.setTeamHead(false);
-            }
-
+            session.setAttribute("teamLeadFlag", String.valueOf(tm.getTeamHead()));
+            
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
             ApplicationSettings appSettings = new ApplicationSettings();
             appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
@@ -134,30 +123,8 @@ public class SelectTeam extends Action {
             appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
             appSettings.setValidation(ampAppSettings.getValidation());
 
-            tm.setMemberId(member.getAmpTeamMemId());
-            tm.setMemberName(member.getUser().getName());
-            tm.setRoleId(member.getAmpMemberRole().getAmpTeamMemRoleId());
-            tm.setRoleName(member.getAmpMemberRole().getRole());
-            tm.setTeamId(member.getAmpTeam().getAmpTeamId());
             session.setAttribute(Constants.TEAM_ID, tm.getTeamId());
-            tm.setTeamName(member.getAmpTeam().getName());
-            tm.setTeamType(member.getAmpTeam().getTeamCategory());
             tm.setAppSettings(appSettings);
-            tm.setEmail(member.getUser().getEmail());
-            tm.setTeamAccessType(member.getAmpTeam().getAccessType());
-            tm.setComputation(member.getAmpTeam().getComputation());
-            tm.setUseFilters(member.getAmpTeam().getUseFilter());
-            tm.setAddActivity(member.getAmpTeam().getAddActivity());
-            tm.setPledger(member.getUser().getPledger());
-            tm.setPublishDocuments(member.getPublishDocPermission());
-            tm.setApprover(member.getAmpMemberRole().isApprover());
-			tm.setWorkspacePrefix(member.getAmpTeam().getWorkspacePrefix());
-
-            if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
-                tm.setTranslator(true);
-            } else {
-                tm.setTranslator(false);
-            }
             
             session.setAttribute(Constants.CURRENT_MEMBER, tm);
             AmpTeam.initializeTeamFiltersSession(member, request, session);

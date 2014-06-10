@@ -456,15 +456,8 @@ public class PIUseCase {
 			Iterator<AmpTeamMember> iterTeamMembers = TeamMemberUtil.getAllTeamMembers().iterator();
 			while (iterTeamMembers.hasNext()) {
 				// Create helper TeamMember.
-				AmpTeamMember auxAmpTeamMember = iterTeamMembers.next();
-				TeamMember auxTeamMember = new TeamMember();
-				auxTeamMember.setMemberId(auxAmpTeamMember.getAmpTeamMemId());
-				auxTeamMember.setMemberName(UserUtils.getUser(auxAmpTeamMember.getUser().getId()).getName());
-				auxTeamMember.setTeamName(auxAmpTeamMember.getAmpTeam().getName());
-				auxTeamMember.setRoleName(auxAmpTeamMember.getAmpMemberRole().getRole());
-				auxTeamMember.setEmail(UserUtils.getUser(auxAmpTeamMember.getUser().getId()).getEmail());
-				auxTeamMember.setTeamId(auxAmpTeamMember.getAmpTeam().getAmpTeamId());
-
+				TeamMember auxTeamMember = new TeamMember(iterTeamMembers.next());
+				
 				// Get the main team node for this team member.
 				Node teamNode = DocumentManagerUtil.getTeamNode(jcrWriteSession, auxTeamMember.getTeamId());
 

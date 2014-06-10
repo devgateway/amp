@@ -123,12 +123,11 @@ public class SwitchLanguage
         Collection<AmpDashboard> dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
         request.getSession().setAttribute(Constants.MENU_DASHBOARDS, DashboardUtil.generateIdToNameForDashboards(dashboards));
         
-        //update Workspace name
+        //refresh team member data
         TeamMember tm = (TeamMember)request.getSession().getAttribute("currentMember");
-        if( tm!=null  ) {
-        	AmpTeamMember ampTeamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-        	tm.setTeamName(ampTeamMember.getAmpTeam().getName());
-        	request.getSession().setAttribute("currentMember", tm);
+        if( tm!=null && tm.getTeamId()!=null ) {
+        	request.getSession().setAttribute("currentMember", new TeamMember(TeamMemberUtil.getAmpTeamMember(tm.getMemberId())));
+        	request.getSession().setAttribute(Constants.USER_WORKSPACES, TeamMemberUtil.getTeamMembers(tm.getEmail()));
         }
 
         return new ActionForward(referrerUrl, true);

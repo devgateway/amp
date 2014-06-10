@@ -1,41 +1,34 @@
 package org.digijava.module.aim.helper;
 
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-
 import java.io.Serializable;
 import java.util.Set;
+
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class TeamMember implements Comparable, Serializable{
 
 	private Long memberId;
-
 	private String memberName;
-
 	private String email;
-
 	private Long roleId;
-
 	private String roleName;
-
 	private Long teamId;
-
 	private String teamName;
-
 	@Deprecated
 	private String teamType; // indicates whether the team is a DONOR team or MOFED team
-	
 	private String teamAccessType; // indicates whether MANAGEMENT or WORKING TEAM
-	
 	private Boolean computation;
-	
 	private Boolean useFilters;
-	
 	private Boolean addActivity;
-	
 	private boolean teamHead;
-
 	private Boolean pledger;
-
 
 	private ApplicationSettings appSettings; /*
 											  * Application settings of the
@@ -43,16 +36,74 @@ public class TeamMember implements Comparable, Serializable{
 											  */
 
 	private boolean translator;
-	
 	private Set activities;
-	
 	private Boolean publishDocuments; /*permissions to make docs public*/
 	private boolean approver;
     private AmpCategoryValue workspacePrefix;
 
+    /**
+     * use {@link #TeamMember(AmpTeamMember)} instead of this one
+     */
+    @Deprecated
 	public TeamMember()
 	{
 		
+	}
+	/**
+	 * TeamMember utility wrapper over AmpTeamMember  
+	 * @param tm
+	 */
+	public TeamMember(AmpTeamMember tm)
+	{
+		if( tm!=null ) {
+			init(tm.getUser());
+			init(tm.getAmpMemberRole());
+			init(tm.getAmpTeam());
+			this.memberId = tm.getAmpTeamMemId();
+			this.publishDocuments = tm.getPublishDocPermission();
+		}
+	}
+	/**
+	 * Use this constructor only if you cannot call {@link #TeamMember(AmpTeamMember)}
+	 * @param u
+	 */
+	public TeamMember(User u) {
+		init(u);
+	}
+	
+	private void init(User u) {
+		if( u!=null ) {
+			this.memberId = u.getId();
+			this.memberName = u.getName();
+			this.email = u.getEmail();
+			this.pledger = u.getPledger();
+			this.translator = DbUtil.isUserTranslator(u.getId());
+		}
+	}
+	
+	private void init(AmpTeamMemberRoles r) {
+		if( r!=null ) {
+			this.roleName = r.getRole();
+			this.roleId = r.getAmpTeamMemRoleId();
+			this.approver = r.isApprover();
+			this.teamHead = TeamMemberUtil.isHeadRole(r);
+		}
+	}
+	
+	private void init(AmpTeam t) {
+		if( t!=null ) {
+			this.teamId = (Long)t.getIdentifier();
+			this.teamName = t.getName();
+			if( t.getType()!=null ) 
+				this.teamType = t.getType().getValue();
+			else 
+				this.teamType = t.getTeamCategory();
+			this.teamAccessType = t.getAccessType();
+			this.computation = t.getComputation();
+			this.useFilters = t.getUseFilter();
+			this.addActivity = t.getAddActivity();
+			this.workspacePrefix = t.getWorkspacePrefix();
+		}
 	}
         
         public TeamMember( String teamName,String teamMemberRole) {
@@ -115,22 +166,10 @@ public class TeamMember implements Comparable, Serializable{
 		return roleId;
 	}
 	/**
-	 * @param roleId The roleId to set.
-	 */
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
-	}
-	/**
 	 * @return Returns the roleName.
 	 */
 	public String getRoleName() {
 		return roleName;
-	}
-	/**
-	 * @param roleName The roleName to set.
-	 */
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
 	}
 	/**
 	 * @return Returns the teamHead.
@@ -156,6 +195,7 @@ public class TeamMember implements Comparable, Serializable{
 	public void setTeamId(Long teamId) {
 		this.teamId = teamId;
 	}
+	
 	/**
 	 * @return Returns the teamName.
 	 */
@@ -173,12 +213,6 @@ public class TeamMember implements Comparable, Serializable{
 	 */
 	public boolean getTranslator() {
 		return translator;
-	}
-	/**
-	 * @param translator The translator to set.
-	 */
-	public void setTranslator(boolean translator) {
-		this.translator = translator;
 	}
 	/**
 	 * @return Returns the activities.
@@ -202,27 +236,12 @@ public class TeamMember implements Comparable, Serializable{
 	}
 
 	/**
-	 * @param teamType The teamType to set.
-	 */
-	@Deprecated
-	public void setTeamType(String teamType) {
-		this.teamType = teamType;
-	}
-
-	/**
 	 * @return Returns the teamAccessType.
 	 */
 	public String getTeamAccessType() {
 		return teamAccessType;
 	}
 
-	/**
-	 * @param teamAccessType The teamAccessType to set.
-	 */
-	public void setTeamAccessType(String teamAccessType) {
-		this.teamAccessType = teamAccessType;
-	}
-	
 	public String toString() {
 		return memberName;
 	}
@@ -231,16 +250,8 @@ public class TeamMember implements Comparable, Serializable{
 		return computation;
 	}
 
-	public void setComputation(Boolean computation) {
-		this.computation = computation;
-	}
-
 	public Boolean getAddActivity() {
 		return addActivity;
-	}
-
-	public void setAddActivity(Boolean addActivity) {
-		this.addActivity = addActivity;
 	}
 
 	/**
@@ -250,32 +261,12 @@ public class TeamMember implements Comparable, Serializable{
 		return pledger;
 	}
 
-	/**
-	 * @param pledger the pledger to set
-	 */
-	public void setPledger(Boolean pledger) {
-		this.pledger = pledger;
-	}
-
 	public Boolean getPublishDocuments() {
 		return publishDocuments;
 	}
 
-	public void setPublishDocuments(Boolean publishDocuments) {
-		this.publishDocuments = publishDocuments;
-	}
-
-	public void setApprover(boolean approver) {
-		this.approver = approver;
-	}
-
 	public boolean isApprover() {
 		return approver;
-	}
-	
-	public void setUseFilters(Boolean useFilters)
-	{
-		this.useFilters = useFilters;
 	}
 	
 	public Boolean getUseFilters()
@@ -287,16 +278,11 @@ public class TeamMember implements Comparable, Serializable{
         return workspacePrefix;
     }
 
-    public void setWorkspacePrefix(AmpCategoryValue workspacePrefix) {
-        this.workspacePrefix = workspacePrefix;
-    }
-
     @Override
 	public int compareTo(Object arg0) {
 		// TODO Auto-generated method stub
 		if(arg0!=null || !(arg0 instanceof Long)) return -1;
 		Long newId = (Long)arg0;
 		return this.getMemberId().compareTo(newId); 
-	}	
-	
+	}
 }

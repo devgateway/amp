@@ -246,9 +246,8 @@ public class AmpMessageActions extends DispatchAction {
     public ActionForward gotoMessagesPage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	HttpSession session = request.getSession();
 
-    	TeamMember teamMember = new TeamMember();
     	 // Get the current team member
-    	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+    	 TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 
     	AmpMessageForm messageForm=(AmpMessageForm)form;
     	messageForm.setSortBy(null);
@@ -682,9 +681,8 @@ public class AmpMessageActions extends DispatchAction {
     	messagesForm.setInboxFull(false);
 
     	HttpSession session = request.getSession();
-    	TeamMember teamMember = new TeamMember();
     	 // Get the current member who has logged in from the session
-    	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+    	 TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 
     	//separate message types: used on myMessages page on desktop
 		int alertType=0;
@@ -1037,9 +1035,8 @@ public class AmpMessageActions extends DispatchAction {
     public ActionForward addMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,	HttpServletResponse response) throws Exception {
         ActionErrors errors = null;
     	HttpSession session = request.getSession();
-    	TeamMember teamMember = new TeamMember();
     	 // Get the current member who has logged in from the session
-    	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+    	 TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
     	//getting settings for message
     	AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
 

@@ -127,30 +127,15 @@ public class TeamMemberUtil {
 
 				while (itr.hasNext()) {
 					AmpTeamMember ampMem = (AmpTeamMember) itr.next();
-					Long id = ampMem.getAmpTeamMemId();
-					User user = UserUtils.getUser(ampMem.getUser().getId());
-					String name = user.getName();
-					String role = ampMem.getAmpMemberRole().getRole();
-					AmpTeamMemberRoles ampRole = ampMem.getAmpMemberRole();
-					AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
-					TeamMember tm = new TeamMember();
-					tm.setMemberId(id);
-					tm.setMemberName(name);
-					tm.setRoleName(role);
-					tm.setEmail(user.getEmail());
-					if (ampRole.getAmpTeamMemRoleId().equals(
-							headRole.getAmpTeamMemRoleId())) {
-						tm.setTeamHead(true);
-					} else {
-						tm.setTeamHead(false);
+					TeamMember tm = new TeamMember(ampMem);
+					if ( !tm.getTeamHead()) {
 						if (ampMem.getActivities() == null) {
 							tm.setActivities(new HashSet());
 						}
 						else
 							tm.setActivities(ampMem.getActivities());
-					}
-					if (!tm.getTeamHead())
 						members.add(tm);
+					}	
 				}
 			} catch (Exception e) {
 				logger.error("Unable to get all team members [getAllTMExceptTL()]", e);
@@ -292,65 +277,14 @@ public class TeamMemberUtil {
 		TeamMember tm = null;
 		AmpTeamMember ampMem	= getTeamHead(teamId);
 		if(ampMem!=null){
-			Long id 	= ampMem.getAmpTeamMemId();
-			User usr 	= UserUtils.getUser(ampMem.getUser().getId());
-			String name = usr.getName();
-			String role = ampMem.getAmpMemberRole().getRole();
-			AmpTeamMemberRoles ampRole = ampMem.getAmpMemberRole();
-			AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
-			tm = new TeamMember();
-			tm.setMemberId(id);
-			tm.setTeamId(teamId);
-			tm.setMemberName(name);
-			tm.setRoleName(role);
-			tm.setEmail(usr.getEmail());
-			tm.setPublishDocuments(ampMem.getPublishDocPermission());
-			tm.setTeamAccessType(ampMem.getAmpTeam().getAccessType());
-			tm.setComputation(ampMem.getAmpTeam().getComputation());
-			tm.setUseFilters(ampMem.getAmpTeam().getUseFilter());
-			tm.setRoleId(ampMem.getAmpMemberRole().getAmpTeamMemRoleId());
-			//tm.setComputation(ampMem.getAmpTeam().getComputation());
-			if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
-				tm.setTeamHead(true);
-			} else {
-				tm.setTeamHead(false);
-			}
-		}	
-
+			tm = new TeamMember(ampMem);
+		}
 		return tm;
 
 	}
 	
 	public static TeamMember getTeamMember(Long ampTeamMemberId) {
-		AmpTeamMember ampMem	= getAmpTeamMember(ampTeamMemberId);
-		Long id 	= ampMem.getAmpTeamMemId();
-		User usr 	= UserUtils.getUser(ampMem.getUser().getId());
-		String name = usr.getName();
-		String role = ampMem.getAmpMemberRole().getRole();
-		AmpTeamMemberRoles ampRole = ampMem.getAmpMemberRole();
-		AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
-		TeamMember tm = new TeamMember();
-		tm.setMemberId(id);
-		tm.setTeamId(ampMem.getAmpTeam().getAmpTeamId());
-		tm.setMemberName(name);
-		tm.setRoleName(role);
-		tm.setEmail(usr.getEmail());
-		tm.setPublishDocuments(ampMem.getPublishDocPermission());
-        tm.setTeamAccessType(ampMem.getAmpTeam().getAccessType());
-        tm.setComputation(ampMem.getAmpTeam().getComputation());
-        tm.setUseFilters(ampMem.getAmpTeam().getUseFilter());
-        tm.setAddActivity(ampMem.getAmpTeam().getAddActivity());
-        tm.setPledger(ampMem.getUser().getPledger());
-        tm.setPublishDocuments(ampMem.getPublishDocPermission());
-        tm.setApprover(ampMem.getAmpMemberRole().isApprover());
-
-		if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
-			tm.setTeamHead(true);
-		} else {
-			tm.setTeamHead(false);
-		}
-		return tm;
-
+		return new TeamMember(getAmpTeamMember(ampTeamMemberId));
 	}
 
 	public static AmpTeamMember getTeamHead(Long teamId) {
@@ -461,28 +395,10 @@ public class TeamMemberUtil {
                         }
 			Iterator<AmpTeamMember> itr = qry.list().iterator();
 			while (itr.hasNext()) {
-				AmpTeamMember ampMem = (AmpTeamMember) itr.next();
-				Long id = ampMem.getAmpTeamMemId();
-				User user = UserUtils.getUser(ampMem.getUser().getId());
-				String name = user.getName();
-				String role = ampMem.getAmpMemberRole().getRole();
-				AmpTeamMemberRoles ampRole = ampMem.getAmpMemberRole();
-				AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
-				TeamMember tm = new TeamMember();
-				tm.setMemberId(id);
-				tm.setMemberName(name);
-				tm.setTeamName(ampMem.getAmpTeam().getName());
-				tm.setRoleName(role);
-				tm.setEmail(user.getEmail());
-				tm.setTeamId(teamId);
-				tm.setPublishDocuments(ampMem.getPublishDocPermission());
-				if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
-					tm.setTeamHead(true);
+				TeamMember tm = new TeamMember((AmpTeamMember) itr.next());
+				if( tm.getTeamHead() ) {
 					//System.out.println("[team member util] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
 					logger.info("[logger] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
-
-				} else {
-					tm.setTeamHead(false);
 				}
 				members.add(tm);
 			}
@@ -516,20 +432,7 @@ public class TeamMemberUtil {
 			if(ampTeamMembers!=null){
 				Iterator<AmpTeamMember> itr = ampTeamMembers.iterator();
 				while (itr.hasNext()) {
-					AmpTeamMember ampMem = (AmpTeamMember) itr.next();
-					Long id = ampMem.getAmpTeamMemId();
-					User user = UserUtils.getUser(ampMem.getUser().getId());
-					String name = user.getName();
-					String role = ampMem.getAmpMemberRole().getRole();
-					TeamMember tm = new TeamMember();
-					tm.setMemberId(id);
-					tm.setMemberName(name);
-					tm.setTeamName(ampMem.getAmpTeam().getName());
-					tm.setRoleName(role);
-					tm.setEmail(user.getEmail());
-					tm.setTeamId(teamId);
-					tm.setPublishDocuments(ampMem.getPublishDocPermission());
-					tm.setTeamHead(false);
+					TeamMember tm = new TeamMember((AmpTeamMember) itr.next());
 					if(members==null){
 						members=new ArrayList<TeamMember>();
 					}
@@ -942,19 +845,7 @@ public class TeamMemberUtil {
 			qry.setParameter("memId", mem.getAmpTeamMemId(), Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
-				AmpTeamMember ampMem = (AmpTeamMember) itr.next();
-				Long id = ampMem.getAmpTeamMemId();
-				User user = UserUtils.getUser(ampMem.getUser().getId());
-				String name = user.getName();
-				String role = ampMem.getAmpMemberRole().getRole();
-				String email=user.getEmail();
-				String teamName=ampMem.getAmpTeam().getName();
-				TeamMember tm = new TeamMember();
-				tm.setMemberId(id);
-				tm.setMemberName(name);
-				tm.setRoleName(role);
-				tm.setEmail(email);
-				tm.setTeamName(teamName);
+				TeamMember tm = new TeamMember((AmpTeamMember) itr.next());
 				col.add(tm);
 			}
 		} catch (Exception e) {
@@ -1237,26 +1128,7 @@ public class TeamMemberUtil {
 			Iterator itr		= results.iterator();
 
 			while ( itr.hasNext() ) {
-				AmpTeamMember ampMem = (AmpTeamMember) itr.next();
-				Long id 	= ampMem.getAmpTeamMemId();
-				Long teamId	= ampMem.getAmpTeam().getAmpTeamId();
-				User usr 	= UserUtils.getUser(ampMem.getUser().getId());
-				String name = usr.getName();
-				String role = ampMem.getAmpMemberRole().getRole();
-				AmpTeamMemberRoles ampRole = ampMem.getAmpMemberRole();
-				AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
-				TeamMember tm = new TeamMember();
-				tm.setMemberId(id);
-				tm.setTeamId(teamId);
-				tm.setMemberName(name);
-				tm.setRoleName(role);
-				tm.setEmail(usr.getEmail());
-				if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(
-						headRole.getAmpTeamMemRoleId())) {
-					tm.setTeamHead(true);
-				} else {
-					tm.setTeamHead(false);
-				}
+				TeamMember tm = new TeamMember((AmpTeamMember) itr.next());
 				col.add( tm );
 			}
 		} catch (Exception e) {
@@ -2191,6 +2063,9 @@ public class TeamMemberUtil {
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
 		return tm;
 	}
-
-    
+	
+	public static boolean isHeadRole(AmpTeamMemberRoles role){
+		AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
+		return (headRole==null || role==null) ? false: headRole.getAmpTeamMemRoleId().equals(role.getAmpTeamMemRoleId());
+	}
 }

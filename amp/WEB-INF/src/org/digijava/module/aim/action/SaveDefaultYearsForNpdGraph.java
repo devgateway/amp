@@ -21,9 +21,8 @@ public class SaveDefaultYearsForNpdGraph extends Action {
 			throws Exception {
 		
 		HttpSession session=request.getSession();
-		TeamMember teamMember = new TeamMember();
 		// Get the current member 
-	    teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+		TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 		
 		NpdForm npdForm=(NpdForm)form;		
 		

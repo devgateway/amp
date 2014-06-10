@@ -81,7 +81,7 @@ public class AmpMappedField {
 
 	public String getWarnings(){
 		if(this.getItem() == null ) return this.getDescription() + (!StringUtils.isEmpty(this.description) ? ". ": "") + this.warningMsg;
-		return StringUtils.isEmpty(this.warningMsg) ? "" : this.getItem().getIatiPath()+": " + this.warningMsg;
+		return StringUtils.isEmpty(this.warningMsg) ? "" : (this.mainEntry ? "" : this.getItem().getIatiPath()+": ") + this.warningMsg;
 	}
 	
 	public String getIatiPath(){

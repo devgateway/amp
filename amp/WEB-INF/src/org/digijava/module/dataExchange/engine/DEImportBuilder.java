@@ -2457,23 +2457,21 @@ public class DEImportBuilder {
 		//compute the logs
 		TreeSet<String> warn = new TreeSet<String>();
 		String logResult = getLogs(activityLogs,"<br/>",warn);
-		boolean doNotImport = isDoNotImport(activityLogs); 
+		if( isDoNotImport(activityLogs) ) {
+			item.setLogType(DELogPerItem.LOG_TYPE_IGNORE);
+		} else 
 		if("".compareTo(logResult)!=0 && "<br/>".compareTo(logResult)!=0)
 		{
 			item.setDescription("<br/>Errors<br/>"+logResult+"<br/>Warnings<br/>"+printArrayList(warn));
-			if( doNotImport ) {
-				item.setLogType(DELogPerItem.LOG_TYPE_IGNORE);
-			} else {
-				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
-				//iLog.saveObject(item);
-				log.getLogItems().add(item);
-				if (saveLogs) iLog.saveObject(log.getDeSourceSetting());
-				return;
-			}
+			item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
+			//iLog.saveObject(item);
+			log.getLogItems().add(item);
+			if (saveLogs) iLog.saveObject(log.getDeSourceSetting());
+			return;
 		} else {
-			item.setLogType(doNotImport ? DELogPerItem.LOG_TYPE_IGNORE : DELogPerItem.LOG_TYPE_OK);
-			item.setDescription("OK" + "<br/>Warnings<br/>"+printArrayList(warn));
+			item.setLogType(DELogPerItem.LOG_TYPE_OK);
 		}
+		item.setDescription("OK" + "<br/>Warnings<br/>"+printArrayList(warn));
 		if(iWorker.getAmpID()!=null && !iWorker.getAmpID().equals(DEConstants.AMP_ID_DO_NOT_IMPORT) && iWorker.getExistingActivity()  && "check".compareTo(actionType) ==0){
 			AmpActivityGroup ampActGroup = DataExchangeUtils.getAmpActivityGroupById(iWorker.getAmpID());
 			AmpActivityVersion actualVersion = ampActGroup.getAmpActivityLastVersion();

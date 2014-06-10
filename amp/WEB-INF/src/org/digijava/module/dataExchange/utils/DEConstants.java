@@ -11,7 +11,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
  * @author dan
  *
  */
-public class Constants {
+public class DEConstants {
 
 	public static final String STATUS_UNAPPROVED = "unapproved";
 	public static final String STATUS_APPROVED = "approved";
@@ -71,5 +71,11 @@ public class Constants {
 	
 	public static final String LOG_PER_EXECUTION_DESC_CHECK = "Check feed source";
 	public static final String LOG_PER_EXECUTION_DESC_IMPORT = "Import activities";
+	
+	//using long to ease comparison with AmpId
+	public static final Long AMP_ID_UNMAPPED = 0l;
+	public static final Long AMP_ID_CREATE_NEW = -1l;
+	public static final Long AMP_ID_SAME_AS_MAPPING = -2l;
+	public static final Long AMP_ID_DO_NOT_IMPORT = -3l; 
 	
 }

@@ -30,7 +30,7 @@ import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DEMappingFieldsDisplay;
 import org.digijava.module.dataExchange.form.MapFieldsForm;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
-import org.digijava.module.dataExchange.utils.Constants;
+import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.dataExchange.utils.ValueComparator;
 
@@ -84,13 +84,13 @@ public class MapFieldsAction extends DispatchAction {
 		
 		int allDEFieldsCounter =  DataExchangeUtils.getCountDEMappingFieldsByAmpClass(ampClassTypeSelected);
 		int lastPage = 1;
-		if (allDEFieldsCounter > Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE) {
-			lastPage = allDEFieldsCounter% Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE==0 ? allDEFieldsCounter / Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE : allDEFieldsCounter / Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE +1;
+		if (allDEFieldsCounter > DEConstants.MAPPING_RECORDS_AMOUNT_PER_PAGE) {
+			lastPage = allDEFieldsCounter% DEConstants.MAPPING_RECORDS_AMOUNT_PER_PAGE==0 ? allDEFieldsCounter / DEConstants.MAPPING_RECORDS_AMOUNT_PER_PAGE : allDEFieldsCounter / DEConstants.MAPPING_RECORDS_AMOUNT_PER_PAGE +1;
 		}
 		
 		int startIndex = 0;
 		if (mForm.getPage() != 0 ) {
-			startIndex = Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE *( mForm.getPage()-1);
+			startIndex = DEConstants.MAPPING_RECORDS_AMOUNT_PER_PAGE *( mForm.getPage()-1);
 		}
 		String sortDB=null;
 		String sort = (mForm.getSort() == null) ? null : mForm.getSort().trim();

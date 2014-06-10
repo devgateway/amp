@@ -30,7 +30,7 @@ import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.util.ImportLogDAO;
 import org.digijava.module.dataExchange.util.SessionImportLogDAO;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
-import org.digijava.module.dataExchange.utils.Constants;
+import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
@@ -114,13 +114,13 @@ public class ShowLogsAction extends MultiAction {
 		else {
 			int allSourcesAmount = new SessionImportLogDAO().getAmpLogPerExectutionObjsCountBySourceSetting(myForm.getSelectedSourceId(),myForm.getSelectedDescription());
 			
-			if (allSourcesAmount > Constants.RECORDS_AMOUNT_PER_PAGE) {
-				lastPage = allSourcesAmount % Constants.RECORDS_AMOUNT_PER_PAGE==0 ? allSourcesAmount / Constants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount / Constants.RECORDS_AMOUNT_PER_PAGE +1;
+			if (allSourcesAmount > DEConstants.RECORDS_AMOUNT_PER_PAGE) {
+				lastPage = allSourcesAmount % DEConstants.RECORDS_AMOUNT_PER_PAGE==0 ? allSourcesAmount / DEConstants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount / DEConstants.RECORDS_AMOUNT_PER_PAGE +1;
 			}
 			
 			int startIndex = 0;
 			if (myForm.getPage() != 0) {
-				startIndex = Constants.RECORDS_AMOUNT_PER_PAGE * (myForm.getPage() -1 );
+				startIndex = DEConstants.RECORDS_AMOUNT_PER_PAGE * (myForm.getPage() -1 );
 			}
 			logs	= new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),myForm.getSelectedDescription(), startIndex, myForm.getSortBy());
 		}
@@ -248,9 +248,9 @@ public class ShowLogsAction extends MultiAction {
 	private Boolean canImportActivities(ShowLogsForm myForm, Long selectedLogPerExecId)
 			throws SQLException, DgException {
 		DELogPerExecution logAux = (DELogPerExecution) new SessionImportLogDAO().loadObject(DELogPerExecution.class,selectedLogPerExecId);
-		if(Constants.LOG_PER_EXECUTION_DESC_IMPORT.compareTo(logAux.getDescription()) == 0) return false;
+		if(DEConstants.LOG_PER_EXECUTION_DESC_IMPORT.compareTo(logAux.getDescription()) == 0) return false;
 		else
-			if(Constants.LOG_PER_EXECUTION_DESC_CHECK.compareTo(logAux.getDescription()) == 0) {
+			if(DEConstants.LOG_PER_EXECUTION_DESC_CHECK.compareTo(logAux.getDescription()) == 0) {
 				List<DELogPerExecution> logs = new SessionImportLogDAO().getAmpLogPerExectutionObjsBySourceSetting(myForm.getSelectedSourceId(),myForm.getSelectedDescription(), 0, "date_desc");
 				for (Iterator<DELogPerExecution> iterator = logs.iterator(); iterator.hasNext();) {
 					DELogPerExecution deLogPerExecution = (DELogPerExecution) iterator.next();

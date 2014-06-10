@@ -13,6 +13,7 @@ public class DELogPerItem implements XmlWrappable{
 	public static final String LOG_TYPE_WARN	= "WARN";
 	public static final String LOG_TYPE_OK		= "OK";
 	public static final String LOG_TYPE_ERROR	= "ERROR";
+	public static final String LOG_TYPE_IGNORE	= "IGNORE";
 	
 	public static final String ITEM_TYPE_ACTIVITY	= "ACTIVITY";
 	

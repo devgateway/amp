@@ -27,7 +27,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.form.ImportForm;
-import org.digijava.module.dataExchange.utils.Constants;
+
 import org.digijava.module.dataExchange.webservice.SinergyClient;
 import org.springframework.util.FileCopyUtils;
 

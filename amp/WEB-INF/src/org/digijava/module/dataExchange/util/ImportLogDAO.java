@@ -8,7 +8,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
-import org.digijava.module.dataExchange.utils.Constants;
+import org.digijava.module.dataExchange.utils.DEConstants;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -99,7 +99,7 @@ public class ImportLogDAO {
 			query.setParameter("description", description);
 		}
 		query.setFirstResult(startIndex);
-		query.setMaxResults(Constants.RECORDS_AMOUNT_PER_PAGE);
+		query.setMaxResults(DEConstants.RECORDS_AMOUNT_PER_PAGE);
 		List<DELogPerExecution> resultList	=  query.list();
 		return resultList;
 	}

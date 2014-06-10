@@ -335,10 +335,9 @@ public class IatiActivityWorker {
 				}*/
 			}
 			AmpMappedField checkedActivity = checkActivity(this.title, this.iatiID, this.lang);
-			logs.add(checkedActivity);
 			if( checkedActivity!=null && checkedActivity.getItem()!=null ) {
 				if( (!this.isLoad()) && DEConstants.AMP_ID_DO_NOT_IMPORT.equals(checkedActivity.getItem().getAmpId()) ) {
-					checkedActivity.setWarningMsg("Current activity will not be imported");
+					checkedActivity.setWarningMsg("This activity will not be imported because the user has chosen to not import it.");
 					checkedActivity.setDoNotImport(true);
 					checkedActivity.setMainEntry(true);
 				} else if( checkedActivity.getItem().getAmpId() !=null){
@@ -347,6 +346,7 @@ public class IatiActivityWorker {
 							this.existingActivity = true;
 				}
 			}
+			logs.add(checkedActivity);
 		}
 		catch(Exception e){
 			e.printStackTrace();

@@ -75,7 +75,7 @@ public class ImportActionNew extends DispatchAction {
         myform.resetForm();
 
         myform.setPage(IATI_IMPORT_PAGE_UPLOAD);
-        List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(0, "name");
+        List<DESourceSetting> sources		= new SessionSourceSettingDAO().getAmpSourceSettingsObjects(0, "name", false);
         List<DESourceSetting> viewSources = new ArrayList<DESourceSetting>();
         for(int i=0;i<sources.size();i++){
             if(sources.get(i).getAttachedFile()==null)

@@ -34,12 +34,24 @@ public class SQLUtils {
 	public static LinkedHashSet<String> getTableColumns(final String tableName, boolean crashOnDuplicates)
 	{
 		LinkedHashSet<String> res = new LinkedHashSet<String>();
-		String query = String.format("SELECT c.column_name FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
-		for(Object obj: fetchAsList(org.digijava.kernel.persistence.PersistenceManager.getSession().connection(), query, 1))
-		{
-			if (crashOnDuplicates && res.contains((String) obj))
-				throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
-			res.add((String) obj);
+		String query = String.format("SELECT c.column_name FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());	
+		Connection connection = null;
+		try {
+			connection = org.digijava.kernel.persistence.PersistenceManager.getSession().connection();
+			for (Object obj : fetchAsList(connection, query, 1)) {
+				if (crashOnDuplicates && res.contains((String) obj))
+					throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
+				res.add((String) obj);
+			}
+
+		} finally {
+			try {
+				if (connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return res;
 	}

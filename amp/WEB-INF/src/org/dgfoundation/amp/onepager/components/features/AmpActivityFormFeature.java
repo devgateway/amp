@@ -66,6 +66,7 @@ import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter
 import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
@@ -231,6 +232,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						toggleFormComponent (enabled,target,ifs,visit);
 					}
 				});
+		
+		
 		visitChildren(AmpProposedProjectCost.class,
 				new IVisitor<Component, Object>() {
 					@Override
@@ -552,7 +555,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				onSubmitSaveAsDraft(am, feedbackPanel, redirected, this,
+				onSubmitSaveAsDraft(am, feedbackPanel, redirected, this,cancelSaveAsDraft,
 							target, form,false);
 			}
 			
@@ -601,7 +604,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpButtonField rejectActivityAction = new AmpButtonField("rejectActivityAction", "Reject Activity", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				onSubmitSaveAsDraft(am, feedbackPanel, redirected, this,
+				onSubmitSaveAsDraft(am, feedbackPanel, redirected, this,cancelSaveAsDraft,
 							target, form,true);
 			}
 
@@ -1157,9 +1160,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	 * @param form
 	 */
 	protected void onSubmitSaveAsDraft(final IModel<AmpActivityVersion> am,
-			final FeedbackPanel feedbackPanel, final Model<Integer> redirected,
-			final AmpButtonField cancelSaveAsDraft, AjaxRequestTarget target,
-			Form<?> form, boolean isReject) {
+	final FeedbackPanel feedbackPanel, final Model<Integer> redirected,
+	final AmpButtonField saveAsDraft,final AmpAjaxLinkField cancelSaveAsDraft, AjaxRequestTarget target,
+	Form<?> form, boolean isReject) {
 		// reenable buttons
 		if(!isReject){
 			target.appendJavaScript("hideDraftPanel();");	
@@ -1167,7 +1170,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			target.appendJavaScript("hideRejectActivityPanel();");
 		}
 		
-		processAndUpdateForm(false, am, form, target,cancelSaveAsDraft.getButton());
+		processAndUpdateForm(false, am, form, target,saveAsDraft.getButton());
 
 		// only in the eventuality that the title field is valid (is not empty)
 		// we proceed with the real save!
@@ -1188,7 +1191,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		}
 		else {
-			target.add(this);
+			target.add(saveAsDraft);
 			target.add(cancelSaveAsDraft);
 			onErrorSaveAsDraft(feedbackPanel, target, form);
 		}

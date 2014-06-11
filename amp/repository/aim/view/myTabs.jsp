@@ -208,7 +208,9 @@ var myTabsObject;
 		
 		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
 		allTabsPanel.hide();
-		document.addEventListener("click", preventTabClickEvent, true);
+		$('#MyTabs .tabs-trigger').click(function(){
+			if (tab_loading) return false;
+		});
 		startajaxtabs("MyTabs");
 		reloadTab("MyTabs",id);
 		hideMoreTabs();
@@ -341,13 +343,13 @@ function toggleSettings(){
 	                    </c:set> --%>
 	                   
 	                    <c:if test="${counter <= 6}">
-	                    <li>
-	                    <c:if test="${fn:length(report.name) > 25}" >
-							<a id='Tab-${report.ampReportId}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${fn:substring(report.name, 0, 25)}" />...</div></a>
-	                    </c:if>
-	                    <c:if test="${fn:length(report.name) <= 25}" >
-							<a id='Tab-${report.ampReportId}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${report.name}" /></div></a>
-	                    </c:if>
+	                    	<li>
+	                    	<c:if test="${fn:length(report.name) > 25}" >
+								<a class="tab-trigger" id='Tab-${report.ampReportId}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${fn:substring(report.name, 0, 25)}" />...</div></a>
+	                    	</c:if>
+	                    	<c:if test="${fn:length(report.name) <= 25}" >
+								<a class="tab-trigger" id='Tab-${report.ampReportId}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${report.name}" /></div></a>
+	                    	</c:if>
 	                                                                
 	                    </li>
 	                    </c:if>

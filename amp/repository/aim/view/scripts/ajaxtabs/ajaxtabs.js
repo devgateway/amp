@@ -37,10 +37,17 @@ function ajaxpage(url, containerid, targetobj,isLoad)
 		document.getElementById(containerid).innerHTML=defaultcontentarray[containerid];
 		return
 	};
-	document.getElementById(containerid).innerHTML = loadstatustext;
+	var element = document.getElementById(containerid);
+	element.innerHTML = loadstatustext;
+	//document.getElementById(containerid).innerHTML = loadstatustext;
 	if (true != isLoad) {
-		document.addEventListener("click", preventTabClickEvent, true);
+		if (document.addEventListener){
+			element.addEventListener("click", preventTabClickEvent, true);
+		} else if (document.attachEvent){
+		    element.attachEvent('click', preventTabClickEvent);
+		}
 	}
+	
 	page_request.onreadystatechange=function()
 	{
 		loadpage(page_request, containerid);
@@ -55,8 +62,14 @@ function loadpage(page_request, containerid)
 {
 	if (page_request.readyState == 4 && (page_request.status==200 || window.location.href.indexOf("http")==-1))
 	{
-		document.removeEventListener('click', preventTabClickEvent, true);
-		document.getElementById(containerid).innerHTML = page_request.responseText;
+		
+		var element = document.getElementById(containerid);
+		if (document.addEventListener){
+			element.addEventListener("click", preventTabClickEvent, true);
+		} else if (document.attachEvent){
+		    element.attachEvent('click', preventTabClickEvent);
+		}
+		element.innerHTML = page_request.responseText;
 		try
 		{	
 

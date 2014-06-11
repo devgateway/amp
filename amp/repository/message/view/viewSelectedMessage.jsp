@@ -53,7 +53,7 @@
 
 
 <c:if test="${not empty messageForm.objectURL}">
-	<b><digi:trn>User profile</digi:trn></b>
+	<b><digi:trn>Related Activity URL</digi:trn></b>
 	<a href="${messageForm.objectURL}" target="_blank">
 		<digi:trn>Click here to view details</digi:trn>
 	</a>

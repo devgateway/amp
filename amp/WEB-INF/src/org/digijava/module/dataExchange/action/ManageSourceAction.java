@@ -30,9 +30,10 @@ import org.digijava.module.dataExchange.form.ManageSourceForm;
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
-import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.sdm.dbentity.Sdm;
+
+import static org.digijava.module.dataExchange.utils.DEConstants.*;
 
 /**
  * @author Alex Gartner
@@ -88,48 +89,40 @@ public class ManageSourceAction extends MultiAction {
 	//	modeExecuteSource(mapping, msForm, request, response);
 		return modeShowSourceList(mapping, msForm, request, response);
 	}
-	
-	public ActionForward modeShowSourceList(ActionMapping mapping, ManageSourceForm msForm,	HttpServletRequest request, HttpServletResponse response)
-	throws Exception {
-		int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
-		int lastPage = 1;
-		if (allSourcesAmount > DEConstants.RECORDS_AMOUNT_PER_PAGE) {
-			lastPage = allSourcesAmount% DEConstants.RECORDS_AMOUNT_PER_PAGE==0 ? allSourcesAmount / DEConstants.RECORDS_AMOUNT_PER_PAGE : allSourcesAmount / DEConstants.RECORDS_AMOUNT_PER_PAGE +1;
-		}
-		
-		
-		int startIndex = 0;
-		//msForm.setShowResources(msForm.isShowResources());
-		if (msForm.getPage() != 0 ) {
-			startIndex = DEConstants.RECORDS_AMOUNT_PER_PAGE *( msForm.getPage()-1);
-		}
-		
-		//get sources
-		List<DESourceSetting> sources		= new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(startIndex, msForm.getSort());
-		List<DESourceSetting> viewSources = new ArrayList<DESourceSetting>();
-		if(msForm.isShowResources()){
-			for(int i=0;i<sources.size();i++){
-				if(sources.get(i).getAttachedFile()!=null)
-					viewSources.add(sources.get(i));
-			}
-		}else{
-			for(int i=0;i<sources.size();i++){
-				if(sources.get(i).getAttachedFile()==null)
-					viewSources.add(sources.get(i));
-			}
-		}
-		msForm.setPagedSources(viewSources);
-		
-		if(msForm.getPage() == 0){
-			msForm.setCurrentPage(1);
-		}else{
-			msForm.setCurrentPage(msForm.getPage());
-		}
-		
-		msForm.setLastPage(lastPage);
-		return mapping.findForward("showSources");
-		
-	}
+
+    public ActionForward modeShowSourceList(ActionMapping mapping, ManageSourceForm msForm,	HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
+        int lastPage = 1;
+        if (allSourcesAmount > RECORDS_AMOUNT_PER_PAGE) {
+            lastPage = allSourcesAmount % RECORDS_AMOUNT_PER_PAGE == 0
+                    ? allSourcesAmount / RECORDS_AMOUNT_PER_PAGE
+                    : allSourcesAmount / RECORDS_AMOUNT_PER_PAGE + 1;
+        }
+
+
+        int startIndex = 0;
+        //msForm.setShowResources(msForm.isShowResources());
+        if (msForm.getPage() != 0 ) {
+            startIndex = RECORDS_AMOUNT_PER_PAGE * (msForm.getPage() - 1);
+        }
+
+        //get sources
+        List<DESourceSetting> sources = new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(startIndex, msForm.getSort());
+
+        msForm.setPagedSources(sources);
+
+        if (msForm.getPage() == 0) {
+            msForm.setCurrentPage(1);
+        } else {
+            msForm.setCurrentPage(msForm.getPage());
+        }
+
+        msForm.setLastPage(lastPage);
+        return mapping.findForward("showSources");
+
+    }
+
 	public ActionForward modeShowSourceListOld(ActionMapping mapping, ManageSourceForm msForm,	HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		

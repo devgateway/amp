@@ -1638,7 +1638,11 @@ public class DbUtil {
         if (filter.getTransactionType()==Constants.MTEFPROJECTION){
         	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
         			|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)            	
-           		oql = "select fp, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
+        		if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
+					oql = "select fp, roleOrg.ampOrgId, dn.acronym ";
+				} else {
+					oql = "select fp, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
+				}        		
             else
             	if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
             		oql = "select fp, f.ampDonorOrgId.ampOrgId, dn.acronym ";            		
@@ -1648,7 +1652,11 @@ public class DbUtil {
 		} else {
 			if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY 
 					|| filter.getAgencyType() == org.digijava.module.visualization.util.Constants.RESPONSIBLE_ORGANIZATION)
-				oql = "select fd, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
+				if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
+					oql = "select fd, roleOrg.ampOrgId, dn.acronym ";
+				} else {
+					oql = "select fd, roleOrg.ampOrgId, " + AmpOrganisation.hqlStringForName("roleOrg");
+				}
 	        else
 	        	if(filter.getShowAcronymForOrgNames().booleanValue() == true) {
 	        		oql = "select fd, f.ampDonorOrgId.ampOrgId, dn.acronym ";

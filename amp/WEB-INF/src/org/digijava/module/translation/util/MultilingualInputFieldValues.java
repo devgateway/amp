@@ -6,10 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import mondrian.util.Pair;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.hibernate.Session;
 
@@ -20,6 +22,8 @@ import org.hibernate.Session;
  */
 public class MultilingualInputFieldValues
 {
+	private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
+	
 	/**
 	 * the TranslatableClass which holds the field
 	 */
@@ -175,6 +179,73 @@ public class MultilingualInputFieldValues
 	}
 	
 	/**
+	 * returns the default name of an entity stored in the request, taking, in order of precedence:
+	 * 1. current language
+	 * 2. base language
+	 * 3. any other language (as specified by {@link #readTranslationsFromRequest(Class, Long, String, String, HttpServletRequest)}
+	 * @param clazz - the class of the stored entity
+	 * @param propertyName - the name of the property whose name we want taken
+	 * @param suffix - the page-specific suffix (relevant when saving multiple entities of the same type per page)
+	 * @param request
+	 * @return
+	 */
+	public static String getDefaultName(Class<?> clazz, String propertyName, String suffix, HttpServletRequest request){
+		Map<String, AmpContentTranslation> acts = readTranslationsFromRequest(clazz, 1L, propertyName, suffix, request);
+		return acts.get("currentLanguage").getTranslation();
+	}
+	
+	/**
+	 * reads all the translations of an entity's field values stored in the request and puts them in a Map, indexed by locale
+	 * the base language gets special treatment, as a value is put there based on a best-effort algorithm. The algorithm is as followes:
+	 * 1. if the user specified a translation in the base language, use it
+	 * 2. if he did not, take any other translation
+	 * 3. if the last step fails, put 'dummy' - THIS SHOULD NOT HAPPEN!!! 
+	 * 
+	 * also the special entry "currentLanguage" is populated according to the rules:
+	 * I) res[TLSUtils.getEffectiveLocale()]
+	 * II) res[ContentTranslationUtil.getBaseLanguage()]
+	 * @param clazz
+	 * @param entityId
+	 * @param propertyName
+	 * @param suffix
+	 * @param request
+	 * @return
+	 */
+	public static Map<String, AmpContentTranslation> readTranslationsFromRequest(Class<?> clazz, long entityId, String propertyName, String suffix, HttpServletRequest request){
+		
+		Map<String, AmpContentTranslation> translations = new HashMap<String, AmpContentTranslation>();
+		
+		String baseLanguage = ContentTranslationUtil.getBaseLanguage();
+		String baseLanguageTranslation = null; // the translation which would be put in place of "base language" if it turns out this does not exist
+		
+		String prefix = build_prefix(clazz, propertyName, suffix);
+		
+		for(String param:request.getParameterMap().keySet())
+		{
+			Pair<String, String> localeValuePair = readParameter(param, prefix, request);
+			if (localeValuePair == null)
+				continue;
+			String locale = localeValuePair.getKey(); 
+			String translation = localeValuePair.getValue();
+			if (baseLanguageTranslation == null && (translation != null) && !translation.trim().isEmpty())
+				baseLanguageTranslation = translation;
+			AmpContentTranslation trans = new AmpContentTranslation(clazz.getName(), entityId, propertyName, locale, translation);
+			translations.put(locale, trans);
+		}
+		
+		if (!translations.containsKey(baseLanguage)){ // user did not enter a value in base language
+			if (baseLanguageTranslation == null){
+				logger.error(String.format("while trying to translate an entity of class %s, id = %d, property= % s, no baseLanguage found, putting 'dummy'", clazz.getName(), entityId, propertyName), new RuntimeException());
+			}
+			translations.put(baseLanguage, new AmpContentTranslation(clazz.getName(), entityId, propertyName, baseLanguage, baseLanguageTranslation));
+		}
+		String currentLanguage = TLSUtils.getEffectiveLangCode();
+		AmpContentTranslation currentLanguageTranslation = translations.containsKey(currentLanguage) ? translations.get(currentLanguage) : translations.get(baseLanguage);
+		translations.put("currentLanguage", currentLanguageTranslation);
+		return translations;
+	}
+	
+	/**
 	 * 1. sets Object.(translated-property)
 	 * 2. builds AmpContentTranslation entries (if multilingual is enabled) and writes these to the database
 	 * 3. writes the object to the DB 
@@ -192,34 +263,11 @@ public class MultilingualInputFieldValues
 		if (session == null)
 			session = PersistenceManager.getRequestDBSession(true);
 		
-		String baseLanguage = ContentTranslationUtil.getBaseLanguage();
-		String currentLanguage = TLSUtils.getEffectiveLangCode();
-		
-		Map<String, AmpContentTranslation> translations = new HashMap<String, AmpContentTranslation>();
 		long entityId = ContentTranslationUtil.getObjectId(obj);
-		String baseLanguageTranslation = null; // the translation which would be put in place of "base language" if it turns out this does not exist
-		
-		String prefix = build_prefix(obj.getClass(), propertyName, suffix);
-				
-		for(String param:request.getParameterMap().keySet())
-		{
-			Pair<String, String> localeValuePair = readParameter(param, prefix, request);
-			if (localeValuePair == null)
-				continue;
-			String locale = localeValuePair.getKey(); 
-			String translation = localeValuePair.getValue();
-			if (baseLanguageTranslation == null)
-				baseLanguageTranslation = translation;
-			AmpContentTranslation trans = new AmpContentTranslation(obj.getClass().getName(), entityId, propertyName, locale, translation);
-			translations.put(locale, trans);
-		}
-		
-		if (!translations.containsKey(baseLanguage)) // user did not enter a value in base language
-			translations.put(baseLanguage, new AmpContentTranslation(obj.getClass().getName(), entityId, propertyName, baseLanguage, 
-				chooseBaseLanguageTranslation(obj, propertyName, baseLanguageTranslation)));
+		Map<String, AmpContentTranslation> translations = readTranslationsFromRequest(obj.getClass(), entityId, propertyName, suffix, request);		
 		
 		// overwrite property and update entity
-		String translationToSet = translations.containsKey(currentLanguage) ? translations.get(currentLanguage).getTranslation() : translations.get(baseLanguage).getTranslation();
+		String translationToSet = translations.get("currentLanguage").getTranslation();
 		ContentTranslationUtil.setProperty(obj, propertyName, translationToSet);
 		session.saveOrUpdate(obj);
 		
@@ -233,10 +281,10 @@ public class MultilingualInputFieldValues
 	}
 	
 	
-	private static String chooseBaseLanguageTranslation(Object obj, String propertyName, String baseLanguageTranslation)
-	{
-		if (baseLanguageTranslation != null)
-			return baseLanguageTranslation;
-		return (String) ContentTranslationUtil.getProperty(obj, propertyName);
-	}
+//	private static String chooseBaseLanguageTranslation(Object obj, String propertyName, String baseLanguageTranslation)
+//	{
+//		if (baseLanguageTranslation != null)
+//			return baseLanguageTranslation;
+//		return (String) ContentTranslationUtil.getProperty(obj, propertyName);
+//	}
 }

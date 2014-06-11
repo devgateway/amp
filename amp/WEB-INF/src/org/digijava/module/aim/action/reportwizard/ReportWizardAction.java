@@ -432,16 +432,7 @@ public class ReportWizardAction extends MultiAction {
 		
 		AmpReports ampReport = null;
 		AmpReports oldReport = loadSourceReport(request);
-		boolean createReportFromScratch = (oldReport == null || saveACopy);
-		Long reportId = null;
-		if (oldReport!=null) {
-			reportId = oldReport.getId();
-		}
-		if ( AdvancedReportUtil.checkDuplicateReportName(myForm.getReportTitle(), teamMember.getMemberId(), reportId, myForm.getDesktopTab() ) ) {
-			myForm.setDuplicateName(true);
-			throw new DuplicateReportNameException("The name " + myForm.getReportTitle() + " is already used by another report");
-		}
-			
+		boolean createReportFromScratch = (oldReport == null || saveACopy);			
 		if (createReportFromScratch){
 			ampReport = new AmpReports();
 			if ( "donor".equals(myForm.getReportType()) ) 
@@ -467,7 +458,7 @@ public class ReportWizardAction extends MultiAction {
 		}
 		
 		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
-		ampReport.setName( myForm.getReportTitle().trim() );
+		ampReport.setName(MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request));
 		ampReport.setWorkspaceLinked(myForm.getWorkspaceLinked());
 		if (! dynamicSaveReport ) {
 			ampReport.setHideActivities( myForm.getHideActivities() );
@@ -543,12 +534,6 @@ public class ReportWizardAction extends MultiAction {
 					}
 				}
 			}
-		}else{
-			// If it's comes from advance search use the report stored in {@Link ReportContextData}  
-			ampReport = ReportContextData.getFromRequest().getReportMeta();
-			ampReport.setAmpReportId(null);
-			ampReport.setOwnerId( ampTeamMember );
-			ampReport.setName(myForm.getReportTitle());
 		}
 		
 		if ( ampReport.getAmpReportId() != null )

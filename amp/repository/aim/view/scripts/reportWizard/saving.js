@@ -120,7 +120,7 @@ function SaveReportEngine ( savingMessage, failureMessage ) {
 	this.savingMessage	= savingMessage;
 	this.divEl			=  document.getElementById("savingReportDiv");
 	this.titlePanel		= null;
-	this.overwritingReport		= false;
+	this.forceOverwrite		= false;
 }
 
 SaveReportEngine.prototype.checkEnter		= function (e) {
@@ -175,12 +175,10 @@ SaveReportEngine.prototype.failure			= function(o) {
 	this.divEl.innerHTML			= this.failureMessage;
 };
 
-SaveReportEngine.prototype.decideToShowTitlePanel	= function ()
+SaveReportEngine.prototype.decideToShowTitlePanel	= function () // actually this is the "Save" button
 {
-	if ( getReportTitle() == "" )
-			this.showTitlePanel();
-	else
-			this.saveReport( aimReportWizardForm);
+	this.forceOverwrite = true;
+	this.showTitlePanel();
 };
 
 SaveReportEngine.prototype.showTitlePanel	= function () {
@@ -212,34 +210,18 @@ SaveReportEngine.prototype.saveAndOpenReport = function()
 	this.saveAndOrOpenReport(true);
 };
 
-SaveReportEngine.prototype.getOriginalReportName	= function () {
-	return document.getElementById("saveOriginalReportName").value;
-};
-
 SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {	
 	//debugger;
-	if ( getReportTitle() == this.getOriginalReportName() ) {
-		this.overwritingReport	= true;
-	}
-	else { 
-		this.overwritingReport	= false;
-	}
-	
-	var title = getReportTitle();
-	if (title.indexOf('<')!=-1 && title.indexOf('>')!=-1 && title.indexOf('<')<title.indexOf('>')){
-        alert("Tags are not allowed on name.");
-        return;
-	}
 	if ( this.titlePanel != null )
 		this.titlePanel.hide();
 	this.divEl.style.visibility		= "";
 	this.divEl.innerHTML			= this.savingMessage + 
 			"... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
 	
-	var postString		= "reportTitle="+encodeURIComponent(title)+ "&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() + 
+	var postString		= "reportTitle=dummy&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() + 
 						"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
 						"&reportCategory="+ getReportCategory()+
-						"&forceNameOverwrite=" + this.overwritingReport+
+						"&forceNameOverwrite=" + this.forceOverwrite+
 						"&desktopTab="+getDesktopTab() +
 						"&publicReport="+getPublicReport() +
 						"&workspaceLinked="+getWorkspaceLinked() +

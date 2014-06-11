@@ -1,0 +1,42 @@
+<%-- renders the part of the tab options common to both logged-in and not-logged-in users --%>
+			<div style="font-family: Arial,sans-serif;font-size: 11px">
+				<logic:equal name="currentFilter" property="changed" value="true">
+					<span style="cursor:pointer;cursor:pointer;font-style: italic;">
+		        		<digi:trn>Please note: Filter(s) have been applied. Click on "Show current settings" to see list of applied filters</digi:trn>
+					</span>
+				</logic:equal>
+			</div>
+			<div class="show_legend">
+				<table border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td style="font-size: 11px;font-family: Arial,sans-serif">
+						<%
+							AmpARFilter af = ReportContextData.getFromRequest().getFilter();
+	            			if (af.getAmountinthousand()!=null && af.getAmountinthousand()==1){%>
+				            	<digi:trn key="rep:pop:AllAmount">
+									Amounts are in thousands (000)
+								</digi:trn>&nbsp;
+		           			<%}%>
+						</td>
+						<td style="font-size: 11px;font-family: Arial,sans-serif">
+	           <%	                	
+	            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==2){%>
+	               			<digi:trn key="rep:pop:AllAmountMillions">
+								Amounts are in millions (000 000)
+							</digi:trn>
+   			   <%}%>				
+				
+							<bean:define id="selCurrency" name="reportCD" property="selectedCurrency" />
+							<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
+							&nbsp;|&nbsp;
+						</td>
+						<td style="font-size: 11px;font-family: Arial,sans-serif">
+							<logic:notEqual name="viewFormat" value="print">
+								<logic:present name="isUserLogged" scope="session">
+	          						<jsp:include page="legendPopup.jsp"/>
+	         					</logic:present>
+	          				</logic:notEqual>
+	          			</td>
+	          		</tr>
+	          	</table>
+			</div>	

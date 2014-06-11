@@ -80,6 +80,7 @@ function isFormModified(formName)
 }
 
 function saveEditedReport(){
+	debugger;
 	if (${aimAdvancedReportForm.reportIsModified} == true || isFormModified('aimAdvancedReportForm')) {
 		if (confirm('<digi:trn key="aim:reportBuilder:saveReportConfirmation">Do you want to save the changes you made to the report ?</digi:trn>')) {
 			<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />

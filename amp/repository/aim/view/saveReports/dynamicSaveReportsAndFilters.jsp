@@ -62,24 +62,29 @@
 	</c:otherwise>
 </c:choose>
  
-<div id="titlePanel" class="invisible-item-hidden yui-skin-sam">
-		<div class="hd" style="font-size: 8pt">
-			${plsEnterTitle}
-		</div>
+<div id="saveTitlePanel" style="display:none">
+	<div class="hd" style="font-size: 8pt">
+		${plsEnterTitle}
+	</div>
+	<div class="bd" id="titlePanelBody" style="padding: 10px 5px">
+		<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
+			<jsp:param name="attr_name" value="multilingual_tab_title" />
+			<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />
+			<jsp:param name="onkeyup" value="return saveReportEngine.checkTabName();" />
+		</jsp:include>
+
 		<input type="hidden" id="saveReportId" value="${reportObject.ampReportId}" />
 		<input type="hidden" id="saveOriginalReportName" value="${reportObject.name}" />
-		<div class="bd" id="titlePanelBody">
-			<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
-				<jsp:param name="attr_name" value="multilingual_tab_title" />
-				<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />
-				<jsp:param name="onkeyup" value="return saveReportEngine.checkTabName();" />
-			</jsp:include>
-		</div>
-		<div class="ft" align="right">
-			<button id="last_save_button" type="button" class="buttonx_dis yui-button" onclick="$(this).attr('disabled',true);saveReportEngine.saveReport();" disabled="disabled">
+		
+		<div align="center">
+			<button id="dynamic_save_button" type="button" class="buttonx" onclick="$(this).attr('disabled',true);saveReportEngine.saveReport();">
 				${saveBtn}
 			</button>
+			&nbsp;&nbsp;&nbsp;
 		</div>
+	</div>
+	<div class="ft" align="center">
+	</div>
 </div>
 
 </logic:notEmpty>

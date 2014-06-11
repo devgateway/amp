@@ -28,6 +28,8 @@
 <link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
+
 <digi:ref href="css_2/report_html2_view.css" type="text/css" rel="stylesheet" /> 
 <style>
 .paging {font-size:11px; color:#CCCCCC; margin-top:10px; margin-bottom:10px; font-family:Arial, Helvetica, sans-serif;}
@@ -127,6 +129,7 @@ function toggleSettings(){
 
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
+
 <div id="mySorter" class="dialog" style="padding:10px 5px;overflow: auto; display: none;">
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 </div>
@@ -212,333 +215,32 @@ function toggleSettings(){
 	</logic:notEqual>
 </logic:notEqual>
 	<logic:equal name="viewFormat" scope="request" value="print">
-	<script language="JavaScript">
-		function load()
-		{
-			window.print();
-		}
-		function unload() {}
-	</script>
+		<!-- trigger printing automatically when viewing a report in "print" mode -->
+		<script type="text/javascript">
+			function load(){
+				window.print();
+			}
+		</script>
 	</logic:equal>
 	<logic:notEqual name="widget" scope="request" value="true">
-	<logic:notEqual name="viewFormat" scope="request" value="print">
-	<tr>
-		<td>
-		<div class="tab_opt_box">
-				<div class="show_hide_setting">
-	        		<b>
-	        			<a style="cursor:pointer;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings}</a>
-	        		</b>
-	        	</div>
-	        	<div class="tab_opt">
-		        	<div class="tab_opt_cont">
-            <logic:notEmpty name="reportMeta" property="hierarchies">
-            	<c:if test="${!ReportsFilter.publicView}">
-	                <a class="settingsLink" style="cursor: pointer;color:#376091;" onClick="showSorter();">
-	                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
-	                </a> | 
-	            </c:if>
-            </logic:notEmpty> 
-                <a class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="showFilter('<%=ReportContextData.getCurrentReportContextId(request, true)%>'); " >
-                <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
-                </a>
-                <%
-                	AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
-                	if (arf.isPublicView()==false){%>
-                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
-	          	 	|
-	          	 	<a class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="initSaveReportEngine(false);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}" >
-	                	${saveFilters}
-	                </a>
-                </feature:display>
-               <%}%>
-               
-           	  <logic:notEqual name="viewFormat" value="foldable">
-           	  	<%if (arf.isPublicView()==false){%>
-           	  	|
-				<a  id="frezzlinkreport" reportContextId='<%=ReportContextData.getCurrentReportContextId(request, true) %>' class="settingsLinkDisable" style="cursor: pointer;color:#376091; " onclick="javascript:frezzreport(<%=ReportContextData.getCurrentReportContextId(request, true) %>)">
-               		<script language="javascript">
-						document.write(msg1);
-					</script>
-                </a>
-                <%} %>  	
-                      	
-           	</logic:notEqual>
-                
-                |<a  class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="showFormat(); " >
-                <digi:trn>Report Settings</digi:trn>
-                </a>
-           
-             &nbsp;<br>
-             <div class="tab_opt_box_cont" style="display:none;" id="currentDisplaySettings" >
-             <table cellpadding="0" cellspacing="0" border="0" width="80%">
-             <tr>
-             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
-			<strong>
-				<digi:trn key="rep:pop:WorkspaceFilters">Workspace Filters:</digi:trn>
-			</strong>
-            <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" scope="session">
-                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" toScope="request"/>
-                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
-                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" />
-             </logic:present>
-             </td>
-             </tr>
-             <tr>
-             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
-			<strong>
-			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
-                <c:if test="${reportCD.filter != null}">
-                	<bean:define id="listable" name="reportCD" property="filter" toScope="request" />
-                	<bean:define id="listableStyle" value="settingsList" toScope="request"/>
-                	<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" />
-                </c:if>
-             </td>
-             </tr>
-             <tr>
-             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
-				<strong><digi:trn key="rep:pop:SelectedRange">Selected Range:</digi:trn></strong>
-				<c:set var="all" scope="page">
-                	<digi:trn key="rep:pop:SelectedRangeAll">All:</digi:trn>
-                </c:set>
-                
-                <digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn> <%=(arf.getRenderStartYear() > 0)?arf.getRenderStartYear():pageContext.getAttribute("all")%> |
-                <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
-             </td>
-             </tr>
-             <tr>
-           </table>
-           </div>
-    	</div>
-    	</div>
-    	</div>
-	</td>
-	</tr>
-	</logic:notEqual>
+		<logic:notEqual name="viewFormat" scope="request" value="print">
+			<!-- not a tab, not a print, e.g. a normal report -->
+			<tr><td><%@include file="/repository/aim/view/ar/opts/report_opts.jspf"%></td></tr>
+		</logic:notEqual>
 	</logic:notEqual>
 
 	<logic:equal name="widget" scope="request" value="true">
-	<table width="100%"> 
-		<tr>
-		<td style="padding-left:-2px;">
-		<digi:secure authenticated="false">
-			<div class="tab_opt_box">
-				<div class="show_hide_setting">
-	        		<b>
-	        			<a style="cursor:pointer;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings}</a>
-	        		</b>
-	        	</div>
-	        	<div class="tab_opt">
-		        	<div class="tab_opt_cont">
-		        		<logic:notEmpty name="reportMeta" property="hierarchies">
-	                		<a class="l_sm" onClick="showSorter();" style="cursor: pointer;text-decoration: underline;">
-	                			<digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
-	                		</a> 
-	                		&nbsp;|&nbsp; 
-	            		</logic:notEmpty> 
-	                	<a class="l_sm" onClick="showFilter('<%=ReportContextData.getCurrentReportContextId(request, true)%>');" style="cursor: pointer;text-decoration: underline;" >
-	                		<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
-	                	</a>
-		                <%
-		                AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
-		                if (arf.isPublicView()==false){%>
-		                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
-			                &nbsp;|&nbsp;
-			          	 	<a style="cursor: pointer;text-decoration: underline;" class="l_sm" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}">
-			                	${saveFilters}
-			                </a>
-		           		</feature:display>
-		           		<%}%>
-		           	  <logic:notEqual name="viewFormat" value="foldable">
-		           	 	 &nbsp;|&nbsp;
-		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlink" reportContextId='<%=ReportContextData.getCurrentReportContextId(request, true) %>' class="l_sm">
-		               		<script language="javascript">
-								document.write((scrolling)?msg2:msg1);
-							</script>
-                		</a>
-           	  
-              </logic:notEqual>
-                 &nbsp;|&nbsp;
-                 <a class="l_sm" onClick="showFormat(); " style="text-decoration: underline;cursor: pointer;">
-                	<digi:trn>Tab Settings</digi:trn>
-                </a>
-           
-            </span>
-             &nbsp;<br>
-             <div class="tab_opt_box_cont" style="display:none;" id="currentDisplaySettings" >
-             <table cellpadding="0" cellspacing="0" border="0" width="80%">
-             <tr>
-             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
-			<strong>
-			<digi:trn key="rep:pop:WorkspaceFilters">Workspace Filters:</digi:trn></strong>
-                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" scope="session">
-                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" toScope="request"/>
-                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
-                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" />
-                </logic:present>
-             </td>
-             </tr>
-             <tr>
-             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
-			<strong>
-			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
-                 <c:if test="${reportCD.filter != null}">
-                	<bean:define id="listable" name="reportCD" property="filter" toScope="request" />
-                	<bean:define id="listableStyle" value="settingsList" toScope="request"/>
-                	<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-		             <jsp:include page="${listable.jspFile}" />
-                </c:if>
-             </td>
-             </tr>
-             <tr>
-             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
-				<strong><digi:trn key="rep:pop:SelectedRange">Selected Range:</digi:trn></strong>
-                    <c:set var="all" scope="page">
-                	<digi:trn key="rep:pop:SelectedRangeAll">All</digi:trn>
-                </c:set>
-                
-            	<i><digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn></i> <%=(arf.getRenderStartYear() > 0)?arf.getRenderStartYear():pageContext.getAttribute("all")%> |
-                <i><digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn></i> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
-              </td>
-             </tr>
-           </table>
-           </div>
-    	</div>
-		</digi:secure>
-		
-		<!-- DESKTOP TAB SETTINGS BOX-->
-		<digi:secure authenticated="true">
-			<div class="tab_opt_box">
-				<div class="show_hide_setting">
-	        		<b>
-	        			<a style="cursor:pointer;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings}</a>
-	        		</b>
-	        	</div>
-	        	<div class="tab_opt">
-		        	<div class="tab_opt_cont">
-		        		<logic:notEmpty name="reportMeta" property="hierarchies">
-	                		<a class="l_sm" onClick="showSorter();" style="cursor: pointer;text-decoration: underline;">
-	                			<digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
-	                		</a> 
-	                		&nbsp;|&nbsp; 
-	            		</logic:notEmpty> 
-	            		<c:if test="${param.queryEngine!='true' }">
-		                	<a class="l_sm" onClick="showFilter('<%=ReportContextData.getCurrentReportContextId(request, true)%>');" style="cursor: pointer;text-decoration: underline;" >
-		                		<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
-		                	</a>
-	                	</c:if>
-		                <%
-		                AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
-		                if (arf.isPublicView()==false){%>
-		                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
-			                &nbsp;|&nbsp;
-			          	 	<a style="cursor: pointer;text-decoration: underline;" class="l_sm" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}">
-			                	${saveFilters}
-			                </a>
-		           		</feature:display>
-		           		<%}%>
-		           	  <logic:notEqual name="viewFormat" value="foldable">
-		           	 	 &nbsp;|&nbsp;
-		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlink" reportContextId='<%=ReportContextData.getCurrentReportContextId(request, true) %>' class="l_sm">
-		               		<script language="javascript">
-								document.write((scrolling)?msg2:msg1);
-							</script>
-                		</a>           	 
-              </logic:notEqual>
-              <c:if test="${param.queryEngine!='true' }">
-                 &nbsp;|&nbsp;
-                 <a class="l_sm" onClick="showFormat(); " style="text-decoration: underline;cursor: pointer;">
-                	<digi:trn>Tab Settings</digi:trn>
-                </a>
-               </c:if>
-           
-            </span>
-             &nbsp;<br>
-             <div class="tab_opt_box_cont" style="display:none;" id="currentDisplaySettings" >
-             <table cellpadding="0" cellspacing="0" border="0" width="80%">
-             <tr>
-             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
-			<strong>
-			<digi:trn key="rep:pop:WorkspaceFilters">Workspace Filters:</digi:trn></strong>
-                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" scope="session">
-                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" toScope="request"/>
-                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
-                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" />
-                </logic:present>
-             </td>
-             </tr>
-             <tr>
-             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
-			<strong>
-			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
-               <c:if test="${reportCD.filter != null}">
-                	<bean:define id="listable" name="reportCD" property="filter" toScope="request" />
-					<bean:define id="listableStyle" value="settingsList" toScope="request"/>
-					<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-					<jsp:include page="${listable.jspFile}" />
-                </c:if>
-             </td>
-             </tr>
-           </table>
-           </div>
-    	</div>
-		</digi:secure>
-	</td>
-	</tr>
-	<tr>
-		<td>
-			<div style="font-family: Arial,sans-serif;font-size: 11px">
-				<logic:equal name="currentFilter" property="changed" value="true">
-					<span style="cursor:pointer;cursor:pointer;font-style: italic;">
-		        		<digi:trn>Please note: Filter(s) have been applied. Click on "Show current settings" to see list of applied filters</digi:trn>
-					</span>
-				</logic:equal>
-			</div>
-			<div class="show_legend">
-				<table border="0" cellspacing="0" cellpadding="0">
-					<tr>
-						<td style="font-size: 11px;font-family: Arial,sans-serif">
-						<%
-							AmpARFilter af = ReportContextData.getFromRequest().getFilter();
-	            			if (af.getAmountinthousand()!=null && af.getAmountinthousand()==1){%>
-				            	<digi:trn key="rep:pop:AllAmount">
-									Amounts are in thousands (000)
-								</digi:trn>&nbsp;
-		           			<%}%>
-						</td>
-						<td style="font-size: 11px;font-family: Arial,sans-serif">
-	           <%	                	
-	            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==2){%>
-	               			<digi:trn key="rep:pop:AllAmountMillions">
-								Amounts are in millions (000 000)
-							</digi:trn>
-   			   <%}%>				
-				
-							<bean:define id="selCurrency" name="reportCD" property="selectedCurrency" />
-							<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
-							&nbsp;|&nbsp;
-						</td>
-						<td style="font-size: 11px;font-family: Arial,sans-serif">
-							<logic:notEqual name="viewFormat" value="print">
-								<logic:present name="isUserLogged" scope="session">
-	          						<jsp:include page="legendPopup.jsp"/>
-	         					</logic:present>
-	          				</logic:notEqual>
-	          			</td>
-	          		</tr>
-	          	</table>
-			</div>	
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<jsp:include page="viewNewAdvancedReportPaginator.jsp"></jsp:include>
-		</td>
-	</tr>
+<!-- <table width="100%">  -->		
+			<tr><td style="padding-left:-2px;">
+				<%@include file="/repository/aim/view/ar/opts/tab_opts.jspf"%>
+			</td></tr>
+			<tr><td>
+				<%@include file="/repository/aim/view/ar/opts/tab_opts_common.jspf"%>
+			</td></tr>
+			<tr><td>
+				<jsp:include page="viewNewAdvancedReportPaginator.jsp"></jsp:include>
+			</td></tr>
+<!-- 	</table> -->
 	</logic:equal>
 <!--<span>Level Sorters</span>-->
 	<logic:notEmpty name="reportMeta" property="hierarchies">

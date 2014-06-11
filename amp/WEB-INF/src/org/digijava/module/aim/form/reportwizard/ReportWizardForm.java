@@ -22,6 +22,11 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean desktopTab = false;
 	private Boolean hideActivities = false;
 	private String reportPeriod = "A";
+	
+	/**
+	 * report title in current language
+	 * <b>DO NOT EVER READ IT FOR INCLUSION INTO AmpReports.name - ONLY USE IT FOR TRANSMITTING "DEFAULT LANGUAGE" NAME TO JAVASCRIPT-SIDE
+	 */
 	private String reportTitle = "";
 	private String reportDescription = "";
 	private String originalTitle = "";
@@ -84,7 +89,10 @@ public class ReportWizardForm extends ActionForm {
 		return this.reportPeriod;
 	}
 	
-	@java.lang.SuppressWarnings("all")
+	/**
+	 * this should NOT normally be called server-side - only use it for server->client data transmission
+	 * @return
+	 */
 	public String getReportTitle() {
 		return this.reportTitle;
 	}

@@ -268,7 +268,6 @@ body {
 						<%-- <%@ include file="/repository/aim/view/multilingual/multilingualFieldEntry.jsp" %>  --%>
 						<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
 							<jsp:param name="attr_name" value="multilingual_report_title" />
-							<jsp:param name="originalReportTitle" value="${aimReportWizardForm.reportTitle}"/>
 							<jsp:param name="onkeyup" value="repManager.checkSteps();" />
 							<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />
 						</jsp:include>
@@ -283,13 +282,13 @@ body {
 						</feature:display>
 					</div>
 					<div class="ft" align="right">
-						<button id="last_save_button" type="button" class="buttonx_dis yui-button" onclick="$(this).attr('disabled',true);saveReportEngine.saveReport();" disabled="disabled">
+						<button id="last_save_button" type="button" class="buttonx_dis yui-button" onclick="debugger;$(this).attr('disabled',true);saveReportEngine.saveReport();" disabled="disabled">
 							${saveBtn}
 						</button>
 						<feature:display name="Save and Open Button"  module="Report Generator">
 							&nbsp;&nbsp;&nbsp;
 							<c:if test="${not empty saveAndOpenBtn}">
-								<button id="last_save_and_open_button" type="button" class="buttonx_dis" onclick="$(this).attr('disabled',true);saveReportEngine.saveAndOpenReport();" disabled="disabled">
+								<button id="last_save_and_open_button" type="button" class="buttonx_dis" onclick="debugger;$(this).attr('disabled',true);saveReportEngine.saveAndOpenReport();" disabled="disabled">
 									${saveAndOpenBtn}
 								</button>
 							</c:if>

@@ -1,18 +1,8 @@
-function getTabTitleEl() {
-	var divEl	= document.getElementById("titlePanelBody");
-	var titleEl	= divEl.getElementsByTagName("input")[0];
-	return titleEl;
-}
-
-function getTabTitle() {
-	return getTabTitleEl().value;
-}
-
 /* Check also reportsScripts.jsp for some initialization of this class. 
    The translated messages and the saveReprotEngine variables are declared there.
 */
 function SaveReportEngine (isTab) {
-	this.saveButton				= new ExtendedButton("last_save_button");
+	this.saveButton				= new ExtendedButton("dynamic_save_button");
 	this.overwritingReport		= false;
 	this.isTab					= isTab;
 }
@@ -22,36 +12,12 @@ SaveReportEngine.prototype.getOriginalReportName	= function () {
 };
 
 SaveReportEngine.prototype.getReportName	= function () {
-	var reportName = getTabTitle(); 
+	var reportName = document.getElementById("saveReportName").value;
 	if(reportName){
 		reportName = trim(reportName);
 	}
 	return reportName;	
 };
-
-SaveReportEngine.prototype.checkTabName	= function () {
-	var saveBtn = document.getElementById("last_save_button");
-	var saveBtnY = new YAHOO.util.Element(saveBtn);
-	var strTitle	= getTabTitle();
-	strTitle		= strTitle.replace(/\s*/, "");
-	if ( strTitle == "" ) {
-		saveBtn.disabled = true;
-		saveBtnY.removeClass("buttonx");
-		saveBtnY.addClass("buttonx_dis");
-		//btnY.setStyle("color", "lightgrey");
-		return false;
-	}
-	else
-	{
-		saveBtn.disabled = false;
-		saveBtnY.removeClass("buttonx_dis");
-		saveBtnY.addClass("buttonx");
-		//btnY.setStyle("color", "");
-		return true;
-	}
-};
-
-
 
 SaveReportEngine.prototype.getReportId		= function () {
 	return document.getElementById("saveReportId").value;
@@ -81,30 +47,36 @@ SaveReportEngine.prototype.checkEnter		= function (e) {
 };
 
 SaveReportEngine.prototype.showPanel		= function () {
-	if ( this.titlePanel == null ) {
-		document.getElementById("titlePanel").style.display	= "block";
-		this.titlePanel	= new YAHOO.widget.Panel("titlePanel", 
+	if (this.panel == null) {
+ 	 	document.getElementById("saveTitlePanel").style.display = "";
+ 	 	this.panel = new YAHOO.widget.Panel("saveTitlePanel", 
 				{ 	visible:true,
 					width: "400px", 
 					constraintoviewport:true, 
 					fixedcenter: true, 
+					underlay: 'shadow',
 					modal: true,
 					close:true, 
 					effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 					visible:false, 
 					draggable:true } );
-		this.titlePanel.render( document.body );
-	}
-	this.titlePanel.show();
-	getTabTitleEl().focus();
-	
+		this.panel.render(document.body);
+		this.innerBody = this.panel.body.innerHTML;
+	} else
+		this.panel.setBody(innerBody);
+	this.panel.setFooter("");
+	this.panel.show();
+	//document.getElementById("saveReportName").focus();
 	};
+	
 SaveReportEngine.prototype.closePanel		= function () {
-	this.titlePanel.close();
-}
+	this.panel.close();
+};
+
 SaveReportEngine.prototype.success		= function (o) {
+	this.panel.setFooter("");
 	if ( o.responseText.length > 2 ) {
-		this.titlePanel.setBody( o.responseText );
+		this.panel.setBody( o.responseText );
 	}
 	else {
 		var message		= null;
@@ -127,7 +99,7 @@ SaveReportEngine.prototype.success		= function (o) {
 				"<digi:trn><input class='buttonx' type='reset' value='OK' onClick='return refresh("+this.isTab+");'></digi:trn>" +
 				"</div>";	
 		
-		this.titlePanel.setBody( message );
+		this.panel.setBody( message );
 		this.doneCopyMessage;
 	
 	}
@@ -143,13 +115,14 @@ function refresh(isTab) {
 }
 
 SaveReportEngine.prototype.failure		= function (o) {
-	this.titlePanel.setFooter("");
-	this.titlePanel.setBody(SaveReportEngine.connectionErrorMessage);
+	this.panel.setFooter("");
+	this.panel.setBody(SaveReportEngine.connectionErrorMessage);
 };
 
 SaveReportEngine.prototype.saveReport		= function () {
-	this.titlePanel.setFooter ("");
-	if ( this.getReportName() == this.getOriginalReportName() ) {
+	//this.titlePanel.setFooter ("");
+	var reportChangedName =  true; //this.getReportName() == this.getOriginalReportName();
+	if (reportChangedName) {
 		this.overwritingReport	= true;
 	}
 	else { 
@@ -157,9 +130,8 @@ SaveReportEngine.prototype.saveReport		= function () {
 	}
 
 	this.saveButton.disable();
-	this.titlePanel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
+	this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
 	var postString		= "dynamicSaveReport=true" +
-						"&reportTitle="+getTabTitle() + 
 						"&reportId="+this.getReportId()+
 						"&forceNameOverwrite=" + this.overwritingReport+
 						"&useFilters=true";

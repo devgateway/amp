@@ -39,12 +39,8 @@
 		<div class="yui-content">
 			<c:forEach items="${dta.locales}" var="cur_locale">  <!-- an input <div> for each language -->	
 				<div>
-				<c:set var="elementTitle" scope="page" value="${dta.translations[cur_locale]}"/>
-				<c:if test="${elementTitle==null && !elementTitle.equals('') && not empty param.originalReportTitle}">
-				 	<c:set var="elementTitle" scope="page" value="${param.originalReportTitle}"/>
-				</c:if>
 					<input type="text" name="${dta.prefix}_${cur_locale}" 
-						value="${elementTitle}"
+						value="${dta.translations[cur_locale]}"
 						placeholder="(${cur_locale})"
 						<c:if test="${not empty param.onkeyup}">
 							onkeyup="${param.onkeyup}"							

@@ -11,8 +11,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
-
 <%
 	MultilingualInputFieldValues dta = (MultilingualInputFieldValues) request.getAttribute(request.getParameter("attr_name"));
 	pageContext.setAttribute("dta", dta);
@@ -56,6 +54,5 @@
 	</div>
 </div>
 <script type="text/javascript">
-	var ${dta.prefix}_tabs = new YAHOO.widget.TabView("${dta.prefix}_holder");
-	${dta.prefix}_tabs.set('activeIndex', 0); // select first tab
+	initMultilingualInput("${dta.prefix}"); // does NOT work in ajax-loaded scenarios! (like for example tabs)
 </script>

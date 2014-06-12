@@ -13,8 +13,7 @@
 			</logic:notEmpty>
 			<c:if test="${param.queryEngine!='true' }">
 				<a class="l_sm"
-					onClick="showFilter('<%=ReportContextData.getCurrentReportContextId(request,
-						true)%>');"
+					onClick="showFilter('<%=ReportContextData.getCurrentReportContextId(request, true)%>');"
 					style="cursor: pointer; text-decoration: underline;"> <digi:trn
 						key="rep:pop:ChangeFilters">Change Filters</digi:trn>
 				</a>
@@ -27,8 +26,8 @@
 				module="Report and Tab Options">
 			                &nbsp;|&nbsp;
 			          	 	<a style="cursor: pointer; text-decoration: underline;"
-					class="l_sm"
-					onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); "
+					class="l_sm" <%-- <%=ReportContextData.getCurrentReportContextId(request, true)%>  --%>
+					onClick="initMultilingualInput('AmpReports_name');initSaveReportEngine(true);saveReportEngine.showPanel(); "
 					title="${saveFiltersTooltip}"> ${saveFilters} </a>
 			</feature:display>
 			<%

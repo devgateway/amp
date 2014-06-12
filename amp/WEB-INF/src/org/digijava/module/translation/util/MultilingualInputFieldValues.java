@@ -100,11 +100,20 @@ public class MultilingualInputFieldValues
 			return res; // no preexisting value -> nothing to write
 		
 		List<AmpContentTranslation> trns = ContentTranslationUtil.loadFieldTranslations(clazz.getName(), id, propertyName);
-		for(AmpContentTranslation trn:trns)
-		{
-			if (locales.contains(trn.getLocale()))  // this row is O(n^2), but since the number of active languages in any installation will never exceed 5, it is ok
-			{
+		for(AmpContentTranslation trn:trns){
+			if (locales.contains(trn.getLocale())){  // this row is O(n^2), but since the number of active languages in any installation will never exceed 5, it is ok
 				res.put(trn.getLocale(), trn.getTranslation());
+			}
+		}
+		if (res.isEmpty() && (id != null) && (id > 0)){
+			// no amp_content_translations entries -> this entry has never been touched by multilingual
+			Object entity = PersistenceManager.getSession().get(clazz, id);
+			if (entity != null){
+				String baseLanTranslation = (String) ContentTranslationUtil.getProperty(entity, propertyName);
+				if (baseLanTranslation != null){
+					String localeToSpecify = locales.contains("en") ? "en" : TLSUtils.getEffectiveLangCode();
+					res.put(localeToSpecify, baseLanTranslation);
+				}
 			}
 		}
 		return res;

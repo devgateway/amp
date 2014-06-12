@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.digijava.module.aim.action.ViewNewAdvancedReport;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
@@ -26,9 +27,6 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 
 public class QueryEngine extends Action{
-	
-	private static final String MULTILINGUAL_TAB_PREFIX = "multilingual_tab";
-	
 	@Override
 	public ActionForward execute(ActionMapping mapping,
 			ActionForm form,
@@ -37,18 +35,15 @@ public class QueryEngine extends Action{
 		
 		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_QUERY_ENGINE);
 		request.getSession().setAttribute("report_wizard_current_id", ReportContextData.REPORT_ID_QUERY_ENGINE);
-		request.setAttribute(MULTILINGUAL_TAB_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class,ReportContextData.QUERY_ENGINE_REPORT_ID , "name", null, null));
-		
 		ReportContextData.createWithId(ReportContextData.REPORT_ID_QUERY_ENGINE, true); // forget everything about previous filter
-		
+		request.setAttribute(ViewNewAdvancedReport.MULTILINGUAL_TAB_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class, null, "name", null, null));
 		//ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm) form;
 		//HttpSession httpSession = request.getSession();
 		//httpSession.removeAttribute(ArConstants.REPORTS_Z_FILTER);
 		
 		//rfpForm.setIsnewreport(true);
 		//rfpForm.setAmpReportId(null);
-		
-		
+			
 		AmpReports reportMeta	= new AmpReports();
 		
 		reportMeta.setColumns( new HashSet<AmpReportColumn>() );

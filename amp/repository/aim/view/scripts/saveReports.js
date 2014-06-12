@@ -7,10 +7,6 @@ function SaveReportEngine (isTab) {
 	this.isTab					= isTab;
 }
 
-SaveReportEngine.prototype.getOriginalReportName	= function () {
-	return document.getElementById("saveOriginalReportName").value;
-};
-
 SaveReportEngine.prototype.getReportName	= function () {
 	var reportName = document.getElementById("saveReportName").value;
 	if(reportName){
@@ -63,13 +59,15 @@ SaveReportEngine.prototype.showPanel		= function () {
 		this.panel.render(document.body);
 		this.innerBody = this.panel.body.innerHTML;
 	} else
-		this.panel.setBody(innerBody);
+		this.panel.setBody(this.innerBody);
 	this.panel.setFooter("");
 	this.panel.show();
-	//document.getElementById("saveReportName").focus();
-	};
+	initMultilingualInput('AmpReports_name');
+	//$('#AmpReports_name_holder .yui-content input').first().focus(); // focus on first-language
+};
 	
 SaveReportEngine.prototype.closePanel		= function () {
+	debugger;
 	this.panel.close();
 };
 
@@ -119,6 +117,16 @@ SaveReportEngine.prototype.failure		= function (o) {
 	this.panel.setBody(SaveReportEngine.connectionErrorMessage);
 };
 
+/**
+ * returns a ready-to-be-appended-to-URI list
+ * somewhat ugly hack, should be rewritten to use jQuery / YUI ajax functionality
+ * SHAMELESS COPYPASTE off saving.js - made until this mess is sorted out and saveReports.js is merged with saving.js
+ */
+function getReportTitles()
+{
+	return '&' + multilingual_serialize('AmpReports_name');
+}
+
 SaveReportEngine.prototype.saveReport		= function () {
 	//this.titlePanel.setFooter ("");
 	var reportChangedName =  true; //this.getReportName() == this.getOriginalReportName();
@@ -132,8 +140,11 @@ SaveReportEngine.prototype.saveReport		= function () {
 	this.saveButton.disable();
 	this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
 	var postString		= "dynamicSaveReport=true" +
-						"&reportId="+this.getReportId()+
-						"&forceNameOverwrite=" + this.overwritingReport+
+						getReportTitles() + 
+						"&reportTitle=dummy" + 
+						"&desktopTab=" + this.isTab +
+						"&reportId="+this.getReportId() +
+						"&forceNameOverwrite=" + this.overwritingReport +
 						"&useFilters=true";
 	//alert (postString);
 	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);

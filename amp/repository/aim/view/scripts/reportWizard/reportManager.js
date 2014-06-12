@@ -473,31 +473,31 @@ NormalReportManager.prototype.checkReportName	= function () {
 	var strTitle	= getReportTitle();
 	strTitle		= strTitle.replace(/\s*/, "");
 	if ( strTitle == "" ) {
-		saveBtn.disabled = true;
-		saveBtnY.removeClass("buttonx");
-		saveBtnY.addClass("buttonx_dis");
+		//saveBtn.disabled = true;
+		//saveBtnY.removeClass("buttonx");
+		//saveBtnY.addClass("buttonx_dis");
 		//btnY.setStyle("color", "lightgrey");
 		
 		if (saveAndOpenBtn != null)
 		{
-			saveAndOpenBtn.disabled = true;
-			saveAndOpenBtnY.removeClass("buttonx");
-			saveAndOpenBtnY.addClass("buttonx_dis");
+			//saveAndOpenBtn.disabled = true;
+			//saveAndOpenBtnY.removeClass("buttonx");
+			//saveAndOpenBtnY.addClass("buttonx_dis");
 		}
 		return false;
 	}
 	else
 	{
-		saveBtn.disabled = false;
-		saveBtnY.removeClass("buttonx_dis");
-		saveBtnY.addClass("buttonx");
+//		saveBtn.disabled = false;
+//		saveBtnY.removeClass("buttonx_dis");
+//		saveBtnY.addClass("buttonx");
 		//btnY.setStyle("color", "");
 
 		if (saveAndOpenBtn != null)
 		{
-			saveAndOpenBtn.disabled = false;
-			saveAndOpenBtnY.removeClass("buttonx_dis");
-			saveAndOpenBtnY.addClass("buttonx");
+//			saveAndOpenBtn.disabled = false;
+//			saveAndOpenBtnY.removeClass("buttonx_dis");
+//			saveAndOpenBtnY.addClass("buttonx");
 		}
 		return true;
 	}

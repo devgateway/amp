@@ -94,6 +94,7 @@
 	<digi:trn key="rep:hideCurrSettings" jsFriendly="true">Hide current settings</digi:trn> 
 </c:set>
 
+<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
 
 <script language="javascript">
 var allTabsPanel = null;

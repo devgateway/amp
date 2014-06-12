@@ -62,6 +62,7 @@
 	</c:otherwise>
 </c:choose>
  
+ <%-- UGLY! preexisting implementation creates multiple divs with the same ID. Should be cleaned up during report wizard cleanup --%>
 <div id="saveTitlePanel" style="display:none">
 	<div class="hd" style="font-size: 8pt">
 		${plsEnterTitle}
@@ -70,15 +71,13 @@
 		<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
 			<jsp:param name="attr_name" value="multilingual_tab_title" />
 			<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />
-			<jsp:param name="onkeyup" value="return saveReportEngine.checkTabName();" />
 		</jsp:include>
-
-		<input type="hidden" id="saveReportId" value="${reportObject.ampReportId}" />
-		<input type="hidden" id="saveOriginalReportName" value="${reportObject.name}" />
+		<%--<jsp:param name="onkeyup" value="return saveReportEngine.checkTabName();" />  --%>
 		
+		<input type="hidden" id="saveReportId" value="${reportObject.ampReportId}" />
 		<div align="center">
 			<button id="dynamic_save_button" type="button" class="buttonx" onclick="$(this).attr('disabled',true);saveReportEngine.saveReport();">
-				${saveBtn}
+			    ${saveBtn}
 			</button>
 			&nbsp;&nbsp;&nbsp;
 		</div>

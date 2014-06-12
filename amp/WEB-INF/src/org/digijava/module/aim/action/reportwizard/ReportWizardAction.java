@@ -146,12 +146,15 @@ public class ReportWizardAction extends MultiAction {
 		/* If there's no report title in the request then we decide to show the wizard */
 		if (request.getParameter("reportTitle") == null){ 
 			if ( "true".equals( request.getParameter("tab") ) )
+				
 				myForm.setDesktopTab(true);
 			else
 				myForm.setDesktopTab(false);
 			return this.modeShow(mapping, form, request, response);
 		}
-		else { // If there is a report title in the request then it means that the report should be saved
+		else { // If there is a report title in the request then it means that the report should be saved. 
+			// NOTE since multilingual report names have been introduced, this is a dummy, ignored parameter - only used as a flag
+			// any request without a "reportTitle" parameter will result in the wizard popin being rendered!
 			try{
 //				if ( "true".equalsIgnoreCase(request.getParameter("dynamicSaveReport")) || "true".equals(request.getParameter("forceNameOverwrite"))) 
 //					return this.modeDynamicSave(mapping, form, request, response);
@@ -160,6 +163,7 @@ public class ReportWizardAction extends MultiAction {
 			}
 			catch(DuplicateReportNameException e) {
 				logger.info( e.getMessage() );
+				myForm.setDuplicateName(true);
 				return mapping.findForward("save");
 			}
 			catch (RuntimeException e) {
@@ -458,9 +462,10 @@ public class ReportWizardAction extends MultiAction {
 		}
 		
 		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
-		ampReport.setName(MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request));
+		ampReport.setName(MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request)); // set the default
 		ampReport.setWorkspaceLinked(myForm.getWorkspaceLinked());
-		if (! dynamicSaveReport ) {
+		ampReport.setOwnerId(myForm.getAmpTeamMember() == null ? ampTeamMember : myForm.getAmpTeamMember());
+		if ((!dynamicSaveReport) || createReportFromScratch) {
 			ampReport.setHideActivities( myForm.getHideActivities() );
 			ampReport.setOptions( myForm.getReportPeriod() );
 			ampReport.setReportDescription( myForm.getReportDescription() );
@@ -471,14 +476,8 @@ public class ReportWizardAction extends MultiAction {
 				ampReport.setReportCategory(null);
 			}
 			
-			ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns() );	
+			ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns());
 			ampReport.setBudgetExporter(myForm.getBudgetExporter() != null && myForm.getBudgetExporter());
-					
-			if ( myForm.getAmpTeamMember() == null ) {
-					ampReport.setOwnerId( ampTeamMember );
-			}
-			else
-					ampReport.setOwnerId( myForm.getAmpTeamMember() );
 			
 			ampReport.setColumns( new HashSet<AmpReportColumn>() );
 			ampReport.setHierarchies( new HashSet<AmpReportHierarchy>() );
@@ -536,6 +535,9 @@ public class ReportWizardAction extends MultiAction {
 			}
 		}
 		
+		if (ampReport.getAmpReportId() != null && ampReport.getAmpReportId() < 0) // query engine etc: must nullify id so that subsequent code creates report from scratch
+			ampReport.setAmpReportId(null);
+		
 		if ( ampReport.getAmpReportId() != null )
 			AmpFilterData.deleteOldFilterData(ampReport.getAmpReportId());
 		
@@ -549,33 +551,54 @@ public class ReportWizardAction extends MultiAction {
 				ampReport.getFilterDataSet().addAll(fdSet);
 			}			
 		}
-			
+		if (otherReportsWithSameNameExist(ampReport))
+			throw new DuplicateReportNameException("a different report with the same name exists");
 		
-		return serializeReportAndOpen(ampReport, teamMember, mapping, myForm, true, request, response);
+		modeReset(mapping, form, request, response);
+		return serializeReportAndOpen(ampReport, teamMember, request, response);
 	}
 
+	/**
+	 * returns true if a report with the same name exists in the database AND that report is not going to be overwritten by the in-memory representation
+	 * @param ampReport
+	 * @return
+	 */
+	public boolean otherReportsWithSameNameExist(AmpReports ampReport){
+		String queryStr = "select r FROM " + AmpReports.class.getName() + " r where " + AmpReports.hqlStringForName("r") + "=:reportName";
+		List<AmpReports> conflicts = PersistenceManager.getSession().createQuery(queryStr).setString("reportName", ampReport.getName()).list();
+		
+		long allowedOtherId = ampReport.getAmpReportId() == null ? -999 : ampReport.getAmpReportId(); // the sole report in the DB which is supposed to have the same name (because we are overwriting it) 
+		for(AmpReports oth:conflicts){
+			if (oth.getAmpReportId().longValue() != allowedOtherId)
+				return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * serializes report to the database. If multilingual is enabled, also saves multilingual translations
 	 * @param ampReport
 	 * @param teamMember
 	 * @param mapping passed to {@link #modeReset(ActionMapping, ActionForm, HttpServletRequest, HttpServletResponse)}
 	 * @param form passed to {@link #modeReset(ActionMapping, ActionForm, HttpServletRequest, HttpServletResponse)}
-	 * @param resetForm if true, the ActionForm will be reset
 	 * @param request
 	 * @param response
 	 * @return
 	 * @throws Exception
 	 */
-	protected ActionForward serializeReportAndOpen(AmpReports ampReport, TeamMember teamMember,
-			ActionMapping mapping, ReportWizardForm form, boolean resetForm, 
+	protected ActionForward serializeReportAndOpen(AmpReports ampReport, TeamMember teamMember, 
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		if (ampReport.getOwnerId() == null)
+			throw new RuntimeException("should not save a report without an ownerId!");
+		
+		if (ampReport.getHideActivities() == null)
+			throw new RuntimeException("should not save a report with a null hideActivities");
+		
 		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
 
 		//public static void serialize(Object obj, String prefix, String propertyName, Session session, HttpServletRequest request)
-		MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);
-		
-		modeReset(mapping, form, request, response);
+		MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);			
 		
 		if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true"))
 		{
@@ -601,14 +624,15 @@ public class ReportWizardAction extends MultiAction {
 		
 		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ampReportId);		
 				
-		AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
+		ReportContextData rcd = ReportContextData.getFromRequest();
+		AmpARFilter filter = rcd.getFilter();
 		
 		if (filter == null)
 			throw new RuntimeException("No filter object found in http Session");
 				
 		Long reportId				= Long.parseLong(ampReportId);
 				
-		AmpReports sourceReport = reportId > 0 ? (AmpReports) PersistenceManager.getSession().load(AmpReports.class, reportId) : null;
+		AmpReports sourceReport = reportId > 0 ? (AmpReports) PersistenceManager.getSession().load(AmpReports.class, reportId) : rcd.getReportMeta();
 		return sourceReport;
 	}
 //	/**

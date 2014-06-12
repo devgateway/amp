@@ -40,6 +40,7 @@
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/ScrollEvent.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportPreviewEngine.js'/>" ></script>
+<script type="text/javascript" src="/repository/aim/view/multilingual/multilingual_scripts.js"></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>	
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/reportWizard/searchColumn.js"/>"></script>
@@ -263,13 +264,10 @@ body {
 					<div class="hd" style="font-size: 8pt">
 						${plsEnterTitle}
 					</div>
-					<input type="hidden" id="saveOriginalReportName" value="${aimReportWizardForm.reportTitle}" />
 					<div class="bd" id="titlePanelBody">
-						<%-- <%@ include file="/repository/aim/view/multilingual/multilingualFieldEntry.jsp" %>  --%>
+						<%--<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />  --%>						
 						<jsp:include page="/repository/aim/view/multilingual/multilingualFieldEntry.jsp">
 							<jsp:param name="attr_name" value="multilingual_report_title" />
-							<jsp:param name="onkeyup" value="repManager.checkSteps();" />
-							<jsp:param name="onkeypress" value="return saveReportEngine.checkEnter(event);" />
 						</jsp:include>
 						<feature:display name="Reports classification"  module="Report Generator">
 							<c:if test="${aimReportWizardForm.desktopTab ==false }">
@@ -282,13 +280,13 @@ body {
 						</feature:display>
 					</div>
 					<div class="ft" align="right">
-						<button id="last_save_button" type="button" class="buttonx_dis yui-button" onclick="debugger;$(this).attr('disabled',true);saveReportEngine.saveReport();" disabled="disabled">
+						<button id="last_save_button" type="button" class="buttonx yui-button" onclick="saveReportEngine.saveReport();">
 							${saveBtn}
 						</button>
 						<feature:display name="Save and Open Button"  module="Report Generator">
 							&nbsp;&nbsp;&nbsp;
 							<c:if test="${not empty saveAndOpenBtn}">
-								<button id="last_save_and_open_button" type="button" class="buttonx_dis" onclick="debugger;$(this).attr('disabled',true);saveReportEngine.saveAndOpenReport();" disabled="disabled">
+								<button id="last_save_and_open_button" type="button" class="buttonx" onclick="saveReportEngine.saveAndOpenReport();">
 									${saveAndOpenBtn}
 								</button>
 							</c:if>

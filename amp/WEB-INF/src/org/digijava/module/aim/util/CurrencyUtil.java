@@ -40,6 +40,7 @@ import org.hibernate.Transaction;
 import org.hibernate.type.DateType;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 
 public class CurrencyUtil {
@@ -359,37 +360,33 @@ public class CurrencyUtil {
 		Session session = null;
 		Query qry = null;
 		String qryStr = null;
-
+		
 		try {
 			session = PersistenceManager.getSession();
 			qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 					"where (curr.ampCurrencyId=:id)";
 			qry = session.createQuery(qryStr);
 			logger.debug("Checking with the id " + currency.getAmpCurrencyId());
-			qry.setParameter("id",currency.getAmpCurrencyId(),LongType.INSTANCE);
-			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
+			qry.setParameter("id",currency.getAmpCurrencyId(),StandardBasicTypes.LONG);
+			if (!qry.list().isEmpty()) {
 				// currency object already exist, update the object
 				logger.debug("Updating the existing currency id ...");
-				AmpCurrency curr = (AmpCurrency) itr.next();
+				AmpCurrency curr = (AmpCurrency) qry.uniqueResult();
 				curr.setCountryName(currency.getCountryName());
 				curr.setCurrencyCode(currency.getCurrencyCode());
 				curr.setCurrencyName(currency.getCurrencyName());
                 curr.setCountryLocation(currency.getCountryLocation());
-//beginTransaction();
 				session.update(curr);
-				//tx.commit();
 			} else {
 				logger.debug("Creating new currency id ...");
-//beginTransaction();
 				session.save(currency);
-				session.save(cRate);
-				//tx.commit();
+				if (cRate != null) {
+					session.save(cRate);
+				}
 			}
 		} catch (Exception e) {
-			logger.error("Exception from saveCurrency");
-			e.printStackTrace(System.out);
-		}
+			logger.error("Exception from saveCurrency",e);
+		} 
 	}
 
 	public static void deleteCurrencyRates(Long cRates[]) {

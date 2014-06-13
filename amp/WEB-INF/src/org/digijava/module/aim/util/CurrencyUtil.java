@@ -35,6 +35,7 @@ import org.hibernate.JDBCException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.StandardBasicTypes;
 
 public class CurrencyUtil {
 
@@ -476,53 +477,33 @@ public class CurrencyUtil {
 		Session session = null;
 		Query qry = null;
 		String qryStr = null;
-		Transaction tx = null;
-
+		
 		try {
 			session = PersistenceManager.getSession();
 			qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 					"where (curr.ampCurrencyId=:id)";
 			qry = session.createQuery(qryStr);
 			logger.debug("Checking with the id " + currency.getAmpCurrencyId());
-			qry.setParameter("id",currency.getAmpCurrencyId(),Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
+			qry.setParameter("id",currency.getAmpCurrencyId(),StandardBasicTypes.LONG);
+			if (!qry.list().isEmpty()) {
 				// currency object already exist, update the object
 				logger.debug("Updating the existing currency id ...");
-				AmpCurrency curr = (AmpCurrency) itr.next();
+				AmpCurrency curr = (AmpCurrency) qry.uniqueResult();
 				curr.setCountryName(currency.getCountryName());
 				curr.setCurrencyCode(currency.getCurrencyCode());
 				curr.setCurrencyName(currency.getCurrencyName());
                 curr.setCountryLocation(currency.getCountryLocation());
-//beginTransaction();
 				session.update(curr);
-				//tx.commit();
 			} else {
 				logger.debug("Creating new currency id ...");
-//beginTransaction();
 				session.save(currency);
-				session.save(cRate);
-				//tx.commit();
+				if (cRate != null) {
+					session.save(cRate);
+				}
 			}
 		} catch (Exception e) {
-			logger.error("Exception from saveCurrency");
-			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Rollback failed");
-				}
-			}
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
-		}
+			logger.error("Exception from saveCurrency",e);
+		} 
 	}
 
 	public static void deleteCurrencyRates(Long cRates[]) {

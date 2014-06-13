@@ -117,7 +117,7 @@ public class UpdateCurrency extends Action {
                 if (curr == null) {
                     curr = new AmpCurrency();
                 }
-
+                curr.setCurrencyName(crForm.getCurrencyName());	
                 if (crForm.getCountryId() == null ||
                     crForm.getCountryId().equals(Long.valueOf( -1))) {
                     return mapping.findForward("forward");
@@ -150,10 +150,11 @@ public class UpdateCurrency extends Action {
         }else{
         	curr.setActiveFlag(new Integer(1));
         }
-        AmpCurrencyRate cRate = new AmpCurrencyRate();
+        AmpCurrencyRate cRate = null;
         if (crForm.getExchangeRate() != null &&
             crForm.getExchangeRateDate() != null &&
             crForm.getExchangeRateDate().trim().length() > 0) {
+        	cRate = new AmpCurrencyRate();
             cRate.setExchangeRate(crForm.getExchangeRate());
             cRate.setExchangeRateDate(
                 DateConversion.getDate(crForm.getExchangeRateDate()));

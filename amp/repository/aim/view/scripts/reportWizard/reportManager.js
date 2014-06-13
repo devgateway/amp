@@ -299,11 +299,12 @@ NormalReportManager.prototype.checkSteps	= function () {
 
 
 NormalReportManager.prototype.callbackRepType = function (type) {
-	var transaction = YAHOO.util.Connect.asyncRequest('GET', "/aim/reportWizard.do?action=getJSONrepType&repType=" + type, callbackRepTypeCall, null);
+	this.callbackRepTypeCall.success =$.proxy(this.callbackRepTypeCall.success,this);
+	var transaction = YAHOO.util.Connect.asyncRequest('GET', "/aim/reportWizard.do?action=getJSONrepType&repType=" + type, this.callbackRepTypeCall, null);
 };
 
 
-var callbackRepTypeCall = {
+NormalReportManager.prototype.callbackRepTypeCall = {
 	  success: function(o) {
 		  try {
 			    var results = YAHOO.lang.JSON.parse(o.responseText);
@@ -326,6 +327,7 @@ var callbackRepTypeCall = {
 
 				var measuresDragAndDropObject = new MyDragAndDropObject('source_measures_ul','dest_measures_ul');
                 measuresDragAndDropObject.createDragAndDropItems();
+                this.checkMeasures ();
                 /* Commented scenario below is workable, but has 2 bugs:
                 1. Items are duplicated while dropping.
                 2. Cannot Drug an item back from the destination */

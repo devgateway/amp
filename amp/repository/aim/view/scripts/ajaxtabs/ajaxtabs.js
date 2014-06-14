@@ -10,6 +10,7 @@ var tab_loading = false;
 
 function ajaxpage(url, containerid, targetobj)
 {
+	//console.log('ajaxpage called for id ' + containerid + ', url:' + url);
 	var page_request = false;
 	if (window.XMLHttpRequest) // if Mozilla, Safari etc
 		page_request = new XMLHttpRequest();
@@ -37,10 +38,8 @@ function ajaxpage(url, containerid, targetobj)
 		document.getElementById(containerid).innerHTML=defaultcontentarray[containerid];
 		return
 	};
-	$('#' + containerid).html(loadstatustext);
-	if (true != isLoad) {
-		document.addEventListener("click", preventTabClickEvent, true);
-	}
+	document.getElementById(containerid).innerHTML = loadstatustext;
+	//('#' + containerid).html(loadstatustext);
 	page_request.onreadystatechange=function()
 	{
 		loadpage(page_request, containerid);
@@ -53,10 +52,21 @@ function ajaxpage(url, containerid, targetobj)
 
 function loadpage(page_request, containerid)
 {
+	//console.log('loadpage called for id:' + containerid + ", readyState = " + page_request.readyState);
+	if (page_request.readyState == 4)
+		tab_loading = false;
 	if (page_request.readyState == 4 && (page_request.status==200 || window.location.href.indexOf("http")==-1))
 	{
-		tab_loading = false;
-		$('#' + containerid).html(page_request.responseText);
+		//console.log('entered the IF');
+		//$('#' + containerid).html(page_request.responseText);
+		document.getElementById(containerid).innerHTML = page_request.responseText;
+		/* CONSTANTIN: the reason why I put back raw javascript instead of jquery(foo).html() is that the jQuery text is:
+		1. barely working
+		2. slower
+		3. makes popins NOT WORK
+		
+		Please refer to https://jira.dgfoundation.org/browse/AMP-17685 and https://jira.dgfoundation.org/browse/AMP-17683 for further reference
+		*/
 		try
 		{	
 

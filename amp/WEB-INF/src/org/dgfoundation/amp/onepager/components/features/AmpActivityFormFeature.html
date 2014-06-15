@@ -72,18 +72,24 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
                         </div>
 
 
-                        <div class="bd" style="text-align: center">
+                        <div class="bd" style="text-indent: 20px;">
                             <p>
                                 <wicket:trn>Where would you like to navigate after save action?</wicket:trn>
                             </p>
-											<span wicket:id="draftRedirectedGroup">
-												<input type="radio" wicket:id="draftRedirectedDesktop">
-													<wicket:trn>Go to the desktop</wicket:trn>
-                                                </input>
-                                                <input type="radio" wicket:id="draftStayOnPage">
-													<wicket:trn>Stay on the activity page</wicket:trn>
-                                                </input>
-											</span></div>
+                            <div wicket:id="draftRedirectedGroup">
+                                <div>
+                                    <input type="radio" wicket:id="draftRedirectedDesktop">
+                                        <wicket:trn>Go to the desktop</wicket:trn>
+                                    </input>
+                                </div>
+                                <div>
+                                    <input type="radio" wicket:id="draftStayOnPage">
+                                        <wicket:trn>Stay on the activity page</wicket:trn>
+                                    </input>
+                                </div>
+                            </div>
+                        </div>
+
                         <br />
                         <div style="width:155px; margin-left:auto; margin-right:auto; margin-bottom:10px;"><span name="saveAsDraftPanelButton"  wicket:id="saveAsDraftAction" /></div>
                         <div style="width:155px; margin-left:auto; margin-right:auto;"><span wicket:id="saveAsDraftCanceld" /></div>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>AMP Unit Tests</title>
+    <link rel="stylesheet" href="qunit.css" />
+  </head>
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+
+    <!-- set up testing env and make sure it is sane -->
+    <script src="qunit.js"></script>
+    <script src="test-config.js" ></script><!-- TODO: use js/config.js -->
+    <script src="http://js.arcgis.com/3.8" data-dojo-config="async: true"></script>
+
+    <!-- lets run some tests  -->
+    <script>
+      console.log('pageload');
+
+      // make QUnit behave for AMD
+      QUnit.config.autostart = false;
+      define('qunit', QUnit);
+
+      // run the tests
+      require([
+        'qunit',
+        'js/config.js',
+        '/test-something.js'
+      ], function(QUnit) {
+        QUnit.start();
+      });
+    </script>
+  </body>
+</script>

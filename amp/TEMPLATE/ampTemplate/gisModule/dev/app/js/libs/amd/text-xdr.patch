@@ -1,0 +1,67 @@
+--- text-latest.js	2014-01-12 19:16:06.000000000 -0500
++++ text.js	2014-01-12 19:21:22.000000000 -0500
+@@ -55,7 +55,9 @@ define(['module'], function (module) {
+         createXhr: masterConfig.createXhr || function () {
+             //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
+             var xhr, i, progId;
+-            if (typeof XMLHttpRequest !== "undefined") {
++            if (typeof XDomainRequest !== "undefined") {
++                return new XDomainRequest();
++            } else if (typeof XMLHttpRequest !== "undefined") {
+                 return new XMLHttpRequest();
+             } else if (typeof ActiveXObject !== "undefined") {
+                 for (i = 0; i < 3; i += 1) {
+@@ -264,7 +266,6 @@ define(['module'], function (module) {
+             text.createXhr())) {
+         text.get = function (url, callback, errback, headers) {
+             var xhr = text.createXhr(), header;
+-            xhr.open('GET', url, true);
+ 
+             //Allow plugins direct access to xhr headers
+             if (headers) {
+@@ -277,29 +278,26 @@ define(['module'], function (module) {
+ 
+             //Allow overrides specified in config
+             if (masterConfig.onXhr) {
+-                masterConfig.onXhr(xhr, url);
++            	masterConfig.onXhr(xhr, url);
+             }
+ 
+-            xhr.onreadystatechange = function (evt) {
+-                var status, err;
+-                //Do not explicitly handle errors, those should be
+-                //visible via console output in the browser.
+-                if (xhr.readyState === 4) {
+-                    status = xhr.status;
+-                    if (status > 399 && status < 600) {
+-                        //An http 4xx or 5xx error. Signal an error.
+-                        err = new Error(url + ' HTTP status: ' + status);
+-                        err.xhr = xhr;
+-                        errback(err);
+-                    } else {
+-                        callback(xhr.responseText);
+-                    }
++            xhr.onload = function () {
++            	var status, err;
+ 
+-                    if (masterConfig.onXhrComplete) {
+-                        masterConfig.onXhrComplete(xhr, url);
+-                    }
+-                }
++            	callback(xhr.responseText);
++
++            	if (masterConfig.onXhrComplete) {
++            		masterConfig.onXhrComplete(xhr, url);
++            	}
+             };
++
++            //The following handlers need to be defined even if empty (IE8 bug) 
++            xhr.onerror = function() {};
++            xhr.onprogress = function() {};
++            xhr.ontimeout = function() {};
++
++            xhr.open('GET', url, true); 
++
+             xhr.send(null);
+         };
+     } else if (masterConfig.env === 'rhino' || (!masterConfig.env &&

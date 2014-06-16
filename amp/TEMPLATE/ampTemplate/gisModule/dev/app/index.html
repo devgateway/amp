@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.8/js/dojo/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.8/js/esri/css/esri.css">
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <div id="gis-plugin">
+      <div id="amp-menu">TODO: get html for #amp-menu</div>
+
+      <div id="sidebar" class="pull-left">
+        <div id="branding">
+          <img  class="logo" src="img/logo.png" />
+          <h4 class="text-center">Country AMP</h4>
+          <h4 class="text-center small">Aid Management Platform</h4>
+        </div>
+
+        <div id="sidebar-tools" class="accordion">
+        </div><!-- end of sidebar-tools -->
+
+
+        <div id="quality-indicator">
+        </div>
+      </div>
+
+      <!-- width may need to be calculated in JS, test css support for 'calc' -->
+      <div id="map-container" class="pull-left" style="width: calc(100% - 300px);" >
+      </div>
+
+    </div>
+    <script src="js/config.js" ></script>
+    <script src="http://js.arcgis.com/3.8" data-dojo-config="async: true"></script>
+    <script src="js/main.js" ></script>
+  </body>
+</html>

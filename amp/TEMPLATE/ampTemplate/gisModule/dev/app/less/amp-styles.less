@@ -1,0 +1,77 @@
+//
+// AMP Variables and bootstrap overrides
+// --------------------------------------------------
+
+// Sidebar code
+#sidebar{
+  width: @amp-sidebar-width;
+  min-height: 94%;
+  background: @amp-bg-inverse;
+  color: @amp-text-inverse;
+
+  .sidebar-tool{
+    width: (@amp-sidebar-width - 2);
+    background: @amp-bg;
+    color: darken(@amp-bg-inverse,3%);
+
+    .accordion-heading{
+      background: darken(@amp-bg-inverse,1%); 
+      padding:4px; 
+      border-bottom: 1px solid lighten(@amp-bg-inverse, 5%); 
+
+      > a {
+        color: @amp-text-inverse; 
+        &:hover,a, a:hover{
+          text-decoration: none;
+        }
+      }
+    }
+
+    .accordion-body{
+      height: auto;
+      > .accordion-inner {
+       padding: 6px;
+      }
+    }
+  }
+}
+
+#map-container {
+  #map-header {
+    background:#222; 
+    height: @amp-map-header-height;
+    opacity: 0.8;
+    color: @amp-text;
+    position: absolute;
+    z-index:50;
+  }
+  #map-canvas { 
+    min-height:300px
+  }
+}
+
+
+#quality-indicator{  
+  background: @amp-bg-inverse;
+  color: @amp-text-inverse;
+  position:fixed; 
+  bottom:0; 
+  width: @amp-sidebar-width; 
+}
+
+#branding {
+  padding:8px;
+  background: darken(@amp-bg-inverse,3%);
+  .logo{
+    max-width: 100px;
+    margin:5px auto;
+    display: block;
+  }
+}
+
+
+// ESRI Overrides
+
+.esriSimpleSliderTL{
+  top: (@amp-map-header-height+10);
+}

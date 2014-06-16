@@ -1,0 +1,39 @@
+{
+  "name": "AMPFrontend",
+  "version": "0.0.1",
+  "description": "Frontend for reengineered DG AMP GIS module buzzword abbr",
+  "repository": "git://github.com/uniphil/amp",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo 'Testing not yet configured...'"
+  },
+  "license": "TODO: what is the license for AMP?",
+  "devDependencies": {
+    "backbone": "~1.1.2",
+    "bootstrap": "~3.1.1",
+    "gulp": "~3.7.0",
+    "gulp-changed": "~0.4.0",
+    "gulp-clean": "~0.3.0",
+    "gulp-csso": "~0.2.9",
+    "gulp-jshint": "~1.6.2",
+    "gulp-less": "~1.2.3",
+    "gulp-livereload": "~2.1.0",
+    "gulp-load-plugins": "~0.5.1",
+    "gulp-plumber": "~0.6.2",
+    "gulp-qunit": "~0.3.3",
+    "gulp-rev-all": "~0.2.1",
+    "gulp-serve": "^0.2.0",
+    "gulp-streamify": "~0.0.5",
+    "gulp-uglify": "~0.3.0",
+    "gulp-util": "~2.2.16",
+    "gulp-watch": "~0.6.5",
+    "jquery": "~2.1.1",
+    "jshint-stylish": "~0.2.0",
+    "qunit": "^0.6.3",
+    "qunitjs": "^1.14.0",
+    "sinon": "^1.10.2",
+    "sinon-qunit": "^2.0.0",
+    "underscore": "~1.6.0",
+    "vinyl-source-stream": "~0.1.1"
+  }
+}

@@ -22,7 +22,6 @@ define(
 
       // Render entire geocoding view.
       render: function () {
-          console.log('base tool render');
 
           //render base
           // TODO: abstract some of this into a new BaseTemplate view:

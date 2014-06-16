@@ -162,8 +162,8 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 		out.setOutputs(new ArrayList<Output>());
 
         out.getOutputs().add(
-				new Output(null, new String[] { "Class:&nbsp;" }, new Object[] { this.ampCategoryClass.getName() }, true));
-		out.getOutputs().add(new Output(null, new String[] { " Value:&nbsp;" }, new Object[] { this.value }, true));
+				new Output(null, new String[] { "Class" }, new Object[] { this.ampCategoryClass.getName() }, true));
+		out.getOutputs().add(new Output(null, new String[] { "Value" }, new Object[] { this.value }, true));
 		return out;
 	}
 	

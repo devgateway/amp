@@ -309,23 +309,38 @@ public class ActivityVersionUtil {
 		return out;
 	}
 	
+	/**
+	 * for the definition of this function, please see JavaDoc for {@link #initSet(AmpActivityVersion, Field)}
+	 * @param obj
+	 * @param newActivity
+	 * @return
+	 */
+	private static Object prepareMerge(Object obj, AmpActivityVersion newActivity) throws Exception {
+		if (obj instanceof Versionable)
+			return ((Versionable) obj).prepareMerge(newActivity);
+		else
+			return obj;
+	}
+	
+	/**
+	 * out.field = new Set[prepareMerge(out.field.each)]
+	 * f(X) = ((Versionable) X.prepareMerge()), if X instanceof Versionable.
+	 * f(X) = X, otherwise 
+	 * @param out
+	 * @param field
+	 */
 	private static void initSet(AmpActivityVersion out, Field field){
 		String setName = Strings.capitalize(field.getName());
-		Class clazz = out.getClass();
+		Class<?> clazz = out.getClass();
 		try {
 			Method method = clazz.getMethod("get" + setName);
-			Set returnSet = null;
-			Set set = (Set) method.invoke(out);
-			if (set != null && set.size() > 0){
-				Iterator i = set.iterator();
-				returnSet = new HashSet();
-				while (i.hasNext()) {
-					Versionable object = (Versionable) i.next();
-					object = (Versionable) object.prepareMerge(out);
-					returnSet.add(object);
-				}
-			}
-			
+			Set<Object> returnSet = null;
+			Set<?> set = (Set<?>) method.invoke(out);
+			if (set != null){
+				returnSet = new HashSet<>();
+				for(Object obj:set)
+					returnSet.add(prepareMerge(obj, out));
+				}			
 			if (Set.class.isAssignableFrom(field.getType()))
 				method = clazz.getMethod("set" + setName, Set.class);
 			else

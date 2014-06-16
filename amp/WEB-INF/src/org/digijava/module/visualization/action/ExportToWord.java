@@ -812,41 +812,43 @@ public class ExportToWord extends Action {
         }
         if (fundingOpt.equals("1") || fundingOpt.equals("3")){
             Table fundingTbl = null;
-            String[] fundingRows = vForm.getExportData().getFundingTableData().split("<");
-            if (fundingRows.length>1){
-	            int colspan = (fundingRows[1].split(">").length + 1)/2; 
-	            fundingTbl = new Table(colspan);
-	            fundingTbl.setWidth(100);
-	            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setBackgroundColor(TITLECOLOR);
-	            fundingTbl.addCell(cell);
-	            String[] singleRow = fundingRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            if(vForm.getExportData().getFundingTableData() != null) {
+	            String[] fundingRows = vForm.getExportData().getFundingTableData().split("<");
+	            if (fundingRows.length>1){
+		            int colspan = (fundingRows[1].split(">").length + 1)/2; 
+		            fundingTbl = new Table(colspan);
+		            fundingTbl.setWidth(100);
+		            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setBackgroundColor(TITLECOLOR);
 		            fundingTbl.addCell(cell);
-				}
-	            int count = 0;
-	            for (int i = 1; i < fundingRows.length; i++) {
-	            	singleRow = fundingRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	            		if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			    fundingTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(fundingTbl);
+		            String[] singleRow = fundingRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i=i+2) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setBackgroundColor(TITLECOLOR);
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            fundingTbl.addCell(cell);
+					}
+		            int count = 0;
+		            for (int i = 1; i < fundingRows.length; i++) {
+		            	singleRow = fundingRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j=j+2) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		            		if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		    			    fundingTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(fundingTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (fundingOpt.equals("2") || fundingOpt.equals("3")){
             SimpleTable fundingGraph = new SimpleTable(); //col,row 
@@ -875,47 +877,49 @@ public class ExportToWord extends Action {
         }
         if (aidPredicOpt.equals("1") || aidPredicOpt.equals("3")){
             Table aidPredTbl = null;
-            String[] aidPredRows = vForm.getExportData().getAidPredicTableData().split("<");
-            if (aidPredRows.length>1){
-	            int colspan = (aidPredRows[1].split(">").length + 1)/2; 
-	            aidPredTbl = new Table(colspan);
-	            aidPredTbl.setWidth(100);
-	            //RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //aidPredTitleCell.setColspan(colspan);
-	            //aidPredTitleCell.setBackgroundColor(TITLECOLOR);
-	            //aidPredTbl.addCell(aidPredTitleCell);
-	            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidPredTbl.addCell(cell);
-	            cell = new RtfCell(new Paragraph(plannedTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidPredTbl.addCell(cell);
-	            cell = new RtfCell(new Paragraph(actualTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidPredTbl.addCell(cell);
-	            int count = 0;
-	            for (int i = 1; i < aidPredRows.length; i++) {
-	            	String[] singleRow = aidPredRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	            		if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			    aidPredTbl.addCell(cell);
-	    			}
-	            	count++;
+            if(vForm.getExportData().getAidPredicTableData() != null) {
+	            String[] aidPredRows = vForm.getExportData().getAidPredicTableData().split("<");
+	            if (aidPredRows.length>1){
+		            int colspan = (aidPredRows[1].split(">").length + 1)/2; 
+		            aidPredTbl = new Table(colspan);
+		            aidPredTbl.setWidth(100);
+		            //RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONTWHITE));
+		            //aidPredTitleCell.setColspan(colspan);
+		            //aidPredTitleCell.setBackgroundColor(TITLECOLOR);
+		            //aidPredTbl.addCell(aidPredTitleCell);
+		            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
+		            aidPredTbl.addCell(cell);
+		            cell = new RtfCell(new Paragraph(plannedTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
+		            aidPredTbl.addCell(cell);
+		            cell = new RtfCell(new Paragraph(actualTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
+		            aidPredTbl.addCell(cell);
+		            int count = 0;
+		            for (int i = 1; i < aidPredRows.length; i++) {
+		            	String[] singleRow = aidPredRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j=j+2) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		            		if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		    			    aidPredTbl.addCell(cell);
+		    			}
+		            	count++;
+		            }
+	            	doc.add(aidPredTbl);	            
 	            }
-            	doc.add(aidPredTbl);	            
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (aidPredicOpt.equals("2") || aidPredicOpt.equals("3")){
             SimpleTable fundingGraph = new SimpleTable();
@@ -944,46 +948,48 @@ public class ExportToWord extends Action {
         }
         if (aidTypeOpt.equals("1") || aidTypeOpt.equals("3")){
             Table aidTypeTbl = null;
-            String[] aidTypeRows = vForm.getExportData().getAidTypeTableData().split("<");
-            if (aidTypeRows.length>1){
-	            int colspan = (aidTypeRows[1].split(">").length + 1)/2; 
-	            aidTypeTbl = new Table(colspan);
-	            aidTypeTbl.setWidth(100);
-	            //RtfCell aidTypeTitleCell = new RtfCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //aidTypeTitleCell.setColspan(colspan);
-	            //aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
-	            //aidTypeTbl.addCell(aidTypeTitleCell);
-	            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidTypeTbl.addCell(cell);
-	            String[] singleRow = aidTypeRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
+            if(vForm.getExportData().getAidTypeTableData() != null) {
+	            String[] aidTypeRows = vForm.getExportData().getAidTypeTableData().split("<");
+	            if (aidTypeRows.length>1){
+		            int colspan = (aidTypeRows[1].split(">").length + 1)/2; 
+		            aidTypeTbl = new Table(colspan);
+		            aidTypeTbl.setWidth(100);
+		            //RtfCell aidTypeTitleCell = new RtfCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONTWHITE));
+		            //aidTypeTitleCell.setColspan(colspan);
+		            //aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
+		            //aidTypeTbl.addCell(aidTypeTitleCell);
+		            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
 		            aidTypeTbl.addCell(cell);
-				}
-	            int count = 0;
-	            for (int i = 1; i < aidTypeRows.length; i++) {
-	            	singleRow = aidTypeRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			    aidTypeTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(aidTypeTbl);
+		            String[] singleRow = aidTypeRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i=i+2) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	cell.setBackgroundColor(TITLECOLOR);
+			            aidTypeTbl.addCell(cell);
+					}
+		            int count = 0;
+		            for (int i = 1; i < aidTypeRows.length; i++) {
+		            	singleRow = aidTypeRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j=j+2) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		    			    aidTypeTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(aidTypeTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (aidTypeOpt.equals("2") || aidTypeOpt.equals("3")){
             SimpleTable fundingGraph = new SimpleTable();
@@ -1012,46 +1018,48 @@ public class ExportToWord extends Action {
         }
         if (financingInstOpt.equals("1") || financingInstOpt.equals("3")){
             Table finInstTbl = null;
-            String[] finInstRows = vForm.getExportData().getFinancingInstTableData().split("<");
-            if (finInstRows.length>1){
-	            int colspan = (finInstRows[1].split(">").length + 1)/2; 
-	            finInstTbl = new Table(colspan);
-	            finInstTbl.setWidth(100);
-	            //RtfCell finInstTitleCell = new RtfCell(new Paragraph(finInstTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //finInstTitleCell.setColspan(colspan);
-	            //finInstTitleCell.setBackgroundColor(TITLECOLOR);
-	            //finInstTbl.addCell(finInstTitleCell);
-	            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            finInstTbl.addCell(cell);
-	            String[] singleRow = finInstRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
+            if(vForm.getExportData().getFinancingInstTableData() != null) {
+	            String[] finInstRows = vForm.getExportData().getFinancingInstTableData().split("<");
+	            if (finInstRows.length>1){
+		            int colspan = (finInstRows[1].split(">").length + 1)/2; 
+		            finInstTbl = new Table(colspan);
+		            finInstTbl.setWidth(100);
+		            //RtfCell finInstTitleCell = new RtfCell(new Paragraph(finInstTrn + " (" + currName + ")", HEADERFONTWHITE));
+		            //finInstTitleCell.setColspan(colspan);
+		            //finInstTitleCell.setBackgroundColor(TITLECOLOR);
+		            //finInstTbl.addCell(finInstTitleCell);
+		            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
 		            finInstTbl.addCell(cell);
-				}
-	            int count = 0;
-	            for (int i = 1; i < finInstRows.length; i++) {
-	            	singleRow = finInstRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			    finInstTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(finInstTbl);
+		            String[] singleRow = finInstRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i=i+2) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	cell.setBackgroundColor(TITLECOLOR);
+			            finInstTbl.addCell(cell);
+					}
+		            int count = 0;
+		            for (int i = 1; i < finInstRows.length; i++) {
+		            	singleRow = finInstRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j=j+2) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		    			    finInstTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(finInstTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (financingInstOpt.equals("2") || financingInstOpt.equals("3")){
             SimpleTable fundingGraph = new SimpleTable();
@@ -1081,46 +1089,48 @@ public class ExportToWord extends Action {
         if (sectorOpt.equals("1") || sectorOpt.equals("3")){
         	if(vForm.getExportData().getSectorTableData() != null) {
 	            Table sectorProfTbl = null;
-	            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
-	            if (sectorProfRows.length>1){
-		            int colspan = sectorProfRows[1].split(">").length; 
-		            sectorProfTbl = new Table(colspan);
-		            sectorProfTbl.setWidth(100);
-		            //RtfCell sectorProfTitleCell = new RtfCell(new Paragraph(sectorProfTrn + " (" + currName + ")", HEADERFONTWHITE));
-		            //sectorProfTitleCell.setColspan(colspan);
-		            //sectorProfTitleCell.setBackgroundColor(TITLECOLOR);
-		            //sectorProfTbl.addCell(sectorProfTitleCell);
-		            RtfCell cell = new RtfCell(new Paragraph(sectorTrn, HEADERFONTWHITE));
-		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            cell.setBackgroundColor(TITLECOLOR);
-		            sectorProfTbl.addCell(cell);
-		            String[] singleRow = sectorProfRows[1].split(">");
-		            for (int i = 1; i < singleRow.length; i++) {
-		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            	cell.setBackgroundColor(TITLECOLOR);
+	            if(vForm.getExportData().getSectorTableData() != null) {
+		            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
+		            if (sectorProfRows.length>1){
+			            int colspan = sectorProfRows[1].split(">").length; 
+			            sectorProfTbl = new Table(colspan);
+			            sectorProfTbl.setWidth(100);
+			            //RtfCell sectorProfTitleCell = new RtfCell(new Paragraph(sectorProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+			            //sectorProfTitleCell.setColspan(colspan);
+			            //sectorProfTitleCell.setBackgroundColor(TITLECOLOR);
+			            //sectorProfTbl.addCell(sectorProfTitleCell);
+			            RtfCell cell = new RtfCell(new Paragraph(sectorTrn, HEADERFONTWHITE));
+			            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            cell.setBackgroundColor(TITLECOLOR);
 			            sectorProfTbl.addCell(cell);
-					}
-		            int count = 0;
-		            for (int i = 2; i < sectorProfRows.length; i++) {
-		            	singleRow = sectorProfRows[i].split(">");
-		            	for (int j = 0; j < singleRow.length; j++) {
-		                	if(j > 0) {
-			                	BigDecimal bd = new BigDecimal(singleRow[j]);
-		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-		                	}
-		                	else
-		                		cell = new RtfCell(new Paragraph(singleRow[j]));
-		                	if (count % 2 == 0)
-		    		        	cell.setBackgroundColor(CELLCOLOR);
-		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		    			    sectorProfTbl.addCell(cell);
-		    			}
-		            	count++;
-					}
-		            doc.add(sectorProfTbl);
+			            String[] singleRow = sectorProfRows[1].split(">");
+			            for (int i = 1; i < singleRow.length; i++) {
+			            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+			            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            	cell.setBackgroundColor(TITLECOLOR);
+				            sectorProfTbl.addCell(cell);
+						}
+			            int count = 0;
+			            for (int i = 2; i < sectorProfRows.length; i++) {
+			            	singleRow = sectorProfRows[i].split(">");
+			            	for (int j = 0; j < singleRow.length; j++) {
+			                	if(j > 0) {
+				                	BigDecimal bd = new BigDecimal(singleRow[j]);
+			                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+			                	}
+			                	else
+			                		cell = new RtfCell(new Paragraph(singleRow[j]));
+			                	if (count % 2 == 0)
+			    		        	cell.setBackgroundColor(CELLCOLOR);
+			                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			    			    sectorProfTbl.addCell(cell);
+			    			}
+			            	count++;
+						}
+			            doc.add(sectorProfTbl);
+		            }
+		            doc.add(new Paragraph(" "));
 	            }
-	            doc.add(new Paragraph(" "));
         	}
         }
         if (sectorOpt.equals("2") || sectorOpt.equals("3")){
@@ -1292,38 +1302,40 @@ public class ExportToWord extends Action {
         }
     	if (ODAGrowthOpt.equals("1") || ODAGrowthOpt.equals("3")){
             Table ODAGrowthTbl = null;
-            String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
-            if (ODAGrowthRows.length>1){
-	            int colspan = (ODAGrowthRows[1].split(">").length); 
-	            ODAGrowthTbl = new Table(colspan);
-	            ODAGrowthTbl.setWidth(100);
-	            String[] singleRow = ODAGrowthRows[1].split(">");
-	            for (int i = 0; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	ODAGrowthTbl.addCell(cell);
-				}
-	            int count = 0;
-	            for (int i = 2; i < ODAGrowthRows.length; i++) {
-	            	singleRow = ODAGrowthRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	ODAGrowthTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(ODAGrowthTbl);
+            if(vForm.getExportData().getODAGrowthTableData() != null) {
+	            String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
+	            if (ODAGrowthRows.length>1){
+		            int colspan = (ODAGrowthRows[1].split(">").length); 
+		            ODAGrowthTbl = new Table(colspan);
+		            ODAGrowthTbl.setWidth(100);
+		            String[] singleRow = ODAGrowthRows[1].split(">");
+		            for (int i = 0; i < singleRow.length; i++) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setBackgroundColor(TITLECOLOR);
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	ODAGrowthTbl.addCell(cell);
+					}
+		            int count = 0;
+		            for (int i = 2; i < ODAGrowthRows.length; i++) {
+		            	singleRow = ODAGrowthRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	ODAGrowthTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(ODAGrowthTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
     	if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
         	SimpleTable ODAGraph = new SimpleTable();
@@ -1352,42 +1364,44 @@ public class ExportToWord extends Action {
         }
         if (NPOOpt.equals("1") || NPOOpt.equals("3")){
             Table NPOProfTbl = null;
-            String[] NPOProfRows = vForm.getExportData().getNPOTableData().split("<");
-            if (NPOProfRows.length>1){
-	            int colspan = NPOProfRows[1].split(">").length; 
-	            NPOProfTbl = new Table(colspan);
-	            NPOProfTbl.setWidth(100);
-	            RtfCell cell = new RtfCell(new Paragraph(NPOTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            NPOProfTbl.addCell(cell);
-	            String[] singleRow = NPOProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	NPOProfTbl.addCell(cell);
-				}
-	            int count = 0;
-	            for (int i = 2; i < NPOProfRows.length; i++) {
-	            	singleRow = NPOProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	NPOProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(NPOProfTbl);
+            if(vForm.getExportData().getNPOTableData() != null) {
+	            String[] NPOProfRows = vForm.getExportData().getNPOTableData().split("<");
+	            if (NPOProfRows.length>1){
+		            int colspan = NPOProfRows[1].split(">").length; 
+		            NPOProfTbl = new Table(colspan);
+		            NPOProfTbl.setWidth(100);
+		            RtfCell cell = new RtfCell(new Paragraph(NPOTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
+		            NPOProfTbl.addCell(cell);
+		            String[] singleRow = NPOProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	cell.setBackgroundColor(TITLECOLOR);
+		            	NPOProfTbl.addCell(cell);
+					}
+		            int count = 0;
+		            for (int i = 2; i < NPOProfRows.length; i++) {
+		            	singleRow = NPOProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	NPOProfTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(NPOProfTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (NPOOpt.equals("2") || NPOOpt.equals("3")){
             SimpleTable NPOGraph = new SimpleTable();
@@ -1416,42 +1430,44 @@ public class ExportToWord extends Action {
         }
         if (programOpt.equals("1") || programOpt.equals("3")){
             Table programProfTbl = null;
-            String[] programProfRows = vForm.getExportData().getProgramTableData().split("<");
-            if (programProfRows.length>1){
-	            int colspan = programProfRows[1].split(">").length; 
-	            programProfTbl = new Table(colspan);
-	            programProfTbl.setWidth(100);
-	            RtfCell cell = new RtfCell(new Paragraph(programTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            programProfTbl.addCell(cell);
-	            String[] singleRow = programProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	programProfTbl.addCell(cell);
-				}
-	            int count = 0;
-	            for (int i = 2; i < programProfRows.length; i++) {
-	            	singleRow = programProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	programProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(programProfTbl);
+            if(vForm.getExportData().getProgramTableData() != null) {
+	            String[] programProfRows = vForm.getExportData().getProgramTableData().split("<");
+	            if (programProfRows.length>1){
+		            int colspan = programProfRows[1].split(">").length; 
+		            programProfTbl = new Table(colspan);
+		            programProfTbl.setWidth(100);
+		            RtfCell cell = new RtfCell(new Paragraph(programTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
+		            programProfTbl.addCell(cell);
+		            String[] singleRow = programProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	cell.setBackgroundColor(TITLECOLOR);
+		            	programProfTbl.addCell(cell);
+					}
+		            int count = 0;
+		            for (int i = 2; i < programProfRows.length; i++) {
+		            	singleRow = programProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	programProfTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(programProfTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (programOpt.equals("2") || programOpt.equals("3")){
             SimpleTable programGraph = new SimpleTable();
@@ -1480,42 +1496,44 @@ public class ExportToWord extends Action {
         }
         if (programOpt.equals("1") || programOpt.equals("3")){
             Table programProfTbl = null;
-            String[] programProfRows = vForm.getExportData().getSecondaryProgramTableData().split("<");
-            if (programProfRows.length>1){
-	            int colspan = programProfRows[1].split(">").length; 
-	            programProfTbl = new Table(colspan);
-	            programProfTbl.setWidth(100);
-	            RtfCell cell = new RtfCell(new Paragraph(programTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            programProfTbl.addCell(cell);
-	            String[] singleRow = programProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	programProfTbl.addCell(cell);
-				}
-	            int count = 0;
-	            for (int i = 2; i < programProfRows.length; i++) {
-	            	singleRow = programProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	programProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(programProfTbl);
+            if(vForm.getExportData().getSecondaryProgramTableData() != null) {
+	            String[] programProfRows = vForm.getExportData().getSecondaryProgramTableData().split("<");
+	            if (programProfRows.length>1){
+		            int colspan = programProfRows[1].split(">").length; 
+		            programProfTbl = new Table(colspan);
+		            programProfTbl.setWidth(100);
+		            RtfCell cell = new RtfCell(new Paragraph(programTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
+		            programProfTbl.addCell(cell);
+		            String[] singleRow = programProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	cell.setBackgroundColor(TITLECOLOR);
+		            	programProfTbl.addCell(cell);
+					}
+		            int count = 0;
+		            for (int i = 2; i < programProfRows.length; i++) {
+		            	singleRow = programProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	programProfTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(programProfTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (programOpt.equals("2") || programOpt.equals("3")){
             SimpleTable programGraph = new SimpleTable();
@@ -1544,47 +1562,49 @@ public class ExportToWord extends Action {
          }
          if (aidPredicQuarterOpt.equals("1") || aidPredicQuarterOpt.equals("3")){
 	            Table aidPredQuarterTbl = null;
-	            String[] aidPredQuarterRows = vForm.getExportData().getAidPredicQuarterTableData().split("<");
-	            if (aidPredQuarterRows.length>1){
-		            int colspan = (aidPredQuarterRows[1].split(">").length + 1)/2; 
-		            aidPredQuarterTbl = new Table(colspan);
-		            aidPredQuarterTbl.setWidth(100);
-		            //RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONTWHITE));
-		            //aidPredTitleCell.setColspan(colspan);
-		            //aidPredTitleCell.setBackgroundColor(TITLECOLOR);
-		            //aidPredTbl.addCell(aidPredTitleCell);
-		            RtfCell cell = new RtfCell(new Paragraph(quarterTrn, HEADERFONTWHITE));
-		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            cell.setBackgroundColor(TITLECOLOR);
-		            aidPredQuarterTbl.addCell(cell);
-		            cell = new RtfCell(new Paragraph(plannedTrn, HEADERFONTWHITE));
-		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            cell.setBackgroundColor(TITLECOLOR);
-		            aidPredQuarterTbl.addCell(cell);
-		            cell = new RtfCell(new Paragraph(actualTrn, HEADERFONTWHITE));
-		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            cell.setBackgroundColor(TITLECOLOR);
-		            aidPredQuarterTbl.addCell(cell);
-		            int count = 0;
-		            for (int i = 1; i < aidPredQuarterRows.length; i++) {
-		            	String[] singleRow = aidPredQuarterRows[i].split(">");
-		            	for (int j = 0; j < singleRow.length; j=j+2) {
-		                	if(j > 0) {
-			                	BigDecimal bd = new BigDecimal(singleRow[j]);
-		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-		                	}
-		                	else
-		                		cell = new RtfCell(new Paragraph(singleRow[j]));
-		            		if (count % 2 == 0)
-		    		        	cell.setBackgroundColor(CELLCOLOR);
-		            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		            		aidPredQuarterTbl.addCell(cell);
-		    			}
-		            	count++;
-					}
-		            doc.add(aidPredQuarterTbl);
+	            if(vForm.getExportData().getAidPredicQuarterTableData() != null) {
+		            String[] aidPredQuarterRows = vForm.getExportData().getAidPredicQuarterTableData().split("<");
+		            if (aidPredQuarterRows.length>1){
+			            int colspan = (aidPredQuarterRows[1].split(">").length + 1)/2; 
+			            aidPredQuarterTbl = new Table(colspan);
+			            aidPredQuarterTbl.setWidth(100);
+			            //RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONTWHITE));
+			            //aidPredTitleCell.setColspan(colspan);
+			            //aidPredTitleCell.setBackgroundColor(TITLECOLOR);
+			            //aidPredTbl.addCell(aidPredTitleCell);
+			            RtfCell cell = new RtfCell(new Paragraph(quarterTrn, HEADERFONTWHITE));
+			            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            cell.setBackgroundColor(TITLECOLOR);
+			            aidPredQuarterTbl.addCell(cell);
+			            cell = new RtfCell(new Paragraph(plannedTrn, HEADERFONTWHITE));
+			            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            cell.setBackgroundColor(TITLECOLOR);
+			            aidPredQuarterTbl.addCell(cell);
+			            cell = new RtfCell(new Paragraph(actualTrn, HEADERFONTWHITE));
+			            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            cell.setBackgroundColor(TITLECOLOR);
+			            aidPredQuarterTbl.addCell(cell);
+			            int count = 0;
+			            for (int i = 1; i < aidPredQuarterRows.length; i++) {
+			            	String[] singleRow = aidPredQuarterRows[i].split(">");
+			            	for (int j = 0; j < singleRow.length; j=j+2) {
+			                	if(j > 0) {
+				                	BigDecimal bd = new BigDecimal(singleRow[j]);
+			                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+			                	}
+			                	else
+			                		cell = new RtfCell(new Paragraph(singleRow[j]));
+			            		if (count % 2 == 0)
+			    		        	cell.setBackgroundColor(CELLCOLOR);
+			            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			            		aidPredQuarterTbl.addCell(cell);
+			    			}
+			            	count++;
+						}
+			            doc.add(aidPredQuarterTbl);
+		            }
+		            doc.add(new Paragraph(" "));
 	            }
-	            doc.add(new Paragraph(" "));
          }
          if (aidPredicQuarterOpt.equals("2") || aidPredicQuarterOpt.equals("3")){
 	         SimpleTable fundingGraph = new SimpleTable();
@@ -1613,46 +1633,48 @@ public class ExportToWord extends Action {
         }
         if (budgetBreakdownOpt.equals("1") || budgetBreakdownOpt.equals("3")){
             Table budgetBreakdownTbl = null;
-            String[] budgetBreakdownRows = vForm.getExportData().getBudgetTableData().split("<");
-            if (budgetBreakdownRows.length>1){
-	            int colspan = (budgetBreakdownRows[1].split(">").length + 1)/2; 
-	            budgetBreakdownTbl = new Table(colspan);
-	            budgetBreakdownTbl.setWidth(100);
-	            //RtfCell aidTypeTitleCell = new RtfCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //aidTypeTitleCell.setColspan(colspan);
-	            //aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
-	            //aidTypeTbl.addCell(aidTypeTitleCell);
-	            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            budgetBreakdownTbl.addCell(cell);
-	            String[] singleRow = budgetBreakdownRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	budgetBreakdownTbl.addCell(cell);
-				}
-	            int count = 0;
-	            for (int i = 1; i < budgetBreakdownRows.length; i++) {
-	            	singleRow = budgetBreakdownRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	budgetBreakdownTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(budgetBreakdownTbl);
+            if(vForm.getExportData().getBudgetTableData() != null) {
+	            String[] budgetBreakdownRows = vForm.getExportData().getBudgetTableData().split("<");
+	            if (budgetBreakdownRows.length>1){
+		            int colspan = (budgetBreakdownRows[1].split(">").length + 1)/2; 
+		            budgetBreakdownTbl = new Table(colspan);
+		            budgetBreakdownTbl.setWidth(100);
+		            //RtfCell aidTypeTitleCell = new RtfCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONTWHITE));
+		            //aidTypeTitleCell.setColspan(colspan);
+		            //aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
+		            //aidTypeTbl.addCell(aidTypeTitleCell);
+		            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
+		            budgetBreakdownTbl.addCell(cell);
+		            String[] singleRow = budgetBreakdownRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i=i+2) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	cell.setBackgroundColor(TITLECOLOR);
+		            	budgetBreakdownTbl.addCell(cell);
+					}
+		            int count = 0;
+		            for (int i = 1; i < budgetBreakdownRows.length; i++) {
+		            	singleRow = budgetBreakdownRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j=j+2) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	budgetBreakdownTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(budgetBreakdownTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (budgetBreakdownOpt.equals("2") || budgetBreakdownOpt.equals("3")){
             SimpleTable budgetBreakdownGraph = new SimpleTable();
@@ -1681,46 +1703,48 @@ public class ExportToWord extends Action {
         }
         if (beneficiaryAgencyOpt.equals("1") || beneficiaryAgencyOpt.equals("3")){
             Table organizationProfTbl = null;
-            String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
-            if (organizationProfRows.length>1){
-	            int colspan = organizationProfRows[1].split(">").length; 
-	            organizationProfTbl = new Table(colspan);
-	            organizationProfTbl.setWidth(100);
-	            //RtfCell organizationProfTitleCell = new RtfCell(new Paragraph(organizationProfTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //organizationProfTitleCell.setColspan(colspan);
-	            //organizationProfTitleCell.setBackgroundColor(TITLECOLOR);
-	            //organizationProfTbl.addCell(organizationProfTitleCell);
-	            RtfCell cell = new RtfCell(new Paragraph(organizationTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            organizationProfTbl.addCell(cell);
-	            String[] singleRow = organizationProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	organizationProfTbl.addCell(cell);
-				}
-	            int count = 0;
-	            for (int i = 2; i < organizationProfRows.length; i++) {
-	            	singleRow = organizationProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	organizationProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(organizationProfTbl);
+            if(vForm.getExportData().getBeneficiaryAgencyTableData() != null) {
+	            String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
+	            if (organizationProfRows.length>1){
+		            int colspan = organizationProfRows[1].split(">").length; 
+		            organizationProfTbl = new Table(colspan);
+		            organizationProfTbl.setWidth(100);
+		            //RtfCell organizationProfTitleCell = new RtfCell(new Paragraph(organizationProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+		            //organizationProfTitleCell.setColspan(colspan);
+		            //organizationProfTitleCell.setBackgroundColor(TITLECOLOR);
+		            //organizationProfTbl.addCell(organizationProfTitleCell);
+		            RtfCell cell = new RtfCell(new Paragraph(organizationTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
+		            organizationProfTbl.addCell(cell);
+		            String[] singleRow = organizationProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	cell.setBackgroundColor(TITLECOLOR);
+		            	organizationProfTbl.addCell(cell);
+					}
+		            int count = 0;
+		            for (int i = 2; i < organizationProfRows.length; i++) {
+		            	singleRow = organizationProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	organizationProfTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(organizationProfTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (beneficiaryAgencyOpt.equals("2") || beneficiaryAgencyOpt.equals("3")){
             SimpleTable organizationGraph = new SimpleTable();
@@ -1749,46 +1773,48 @@ public class ExportToWord extends Action {
         }
         if (responsibleOrganizationOpt.equals("1") || responsibleOrganizationOpt.equals("3")){
             Table organizationProfTbl = null;
-            String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
-            if (organizationProfRows.length>1){
-	            int colspan = organizationProfRows[1].split(">").length; 
-	            organizationProfTbl = new Table(colspan);
-	            organizationProfTbl.setWidth(100);
-	            //RtfCell organizationProfTitleCell = new RtfCell(new Paragraph(organizationProfTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //organizationProfTitleCell.setColspan(colspan);
-	            //organizationProfTitleCell.setBackgroundColor(TITLECOLOR);
-	            //organizationProfTbl.addCell(organizationProfTitleCell);
-	            RtfCell cell = new RtfCell(new Paragraph(organizationTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            organizationProfTbl.addCell(cell);
-	            String[] singleRow = organizationProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	organizationProfTbl.addCell(cell);
-				}
-	            int count = 0;
-	            for (int i = 2; i < organizationProfRows.length; i++) {
-	            	singleRow = organizationProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	organizationProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(organizationProfTbl);
+            if(vForm.getExportData().getBeneficiaryAgencyTableData() != null) {
+	            String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
+	            if (organizationProfRows.length>1){
+		            int colspan = organizationProfRows[1].split(">").length; 
+		            organizationProfTbl = new Table(colspan);
+		            organizationProfTbl.setWidth(100);
+		            //RtfCell organizationProfTitleCell = new RtfCell(new Paragraph(organizationProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+		            //organizationProfTitleCell.setColspan(colspan);
+		            //organizationProfTitleCell.setBackgroundColor(TITLECOLOR);
+		            //organizationProfTbl.addCell(organizationProfTitleCell);
+		            RtfCell cell = new RtfCell(new Paragraph(organizationTrn, HEADERFONTWHITE));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            cell.setBackgroundColor(TITLECOLOR);
+		            organizationProfTbl.addCell(cell);
+		            String[] singleRow = organizationProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	cell.setBackgroundColor(TITLECOLOR);
+		            	organizationProfTbl.addCell(cell);
+					}
+		            int count = 0;
+		            for (int i = 2; i < organizationProfRows.length; i++) {
+		            	singleRow = organizationProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new RtfCell(new Paragraph(singleRow[j]));
+		                	if (count % 2 == 0)
+		    		        	cell.setBackgroundColor(CELLCOLOR);
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	organizationProfTbl.addCell(cell);
+		    			}
+		            	count++;
+					}
+		            doc.add(organizationProfTbl);
+	            }
+	            doc.add(new Paragraph(" "));
             }
-            doc.add(new Paragraph(" "));
         }
         if (responsibleOrganizationOpt.equals("2") || responsibleOrganizationOpt.equals("3")){
             SimpleTable organizationGraph = new SimpleTable();

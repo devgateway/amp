@@ -785,40 +785,54 @@ public class ExportToExcel extends Action {
 	            cellNum = 0;
 	            row = sheet.createRow(rowNum++);
 	            
-	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(vForm.getSummaryInformation().getTotalCommitments().toString());
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(data.lastCellStyle);
-	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(vForm.getSummaryInformation().getTotalDisbursements().toString());
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(data.lastCellStyle);
-	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfProjects().toString());
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(data.lastCellStyle);
-	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+	            if(vForm.getSummaryInformation().getTotalCommitments() != null) {
 	            	cell = row.createCell(cellNum++);
-	                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfOrganizations().toString());
-	                cell.setCellValue(headerText);
-	                cell.setCellStyle(data.lastCellStyle);
+		            headerText = new HSSFRichTextString(vForm.getSummaryInformation().getTotalCommitments().toString());
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(data.lastCellStyle);
+	            }
+	            if(vForm.getSummaryInformation().getTotalDisbursements()!=null){
+	            	cell = row.createCell(cellNum++);
+		            headerText = new HSSFRichTextString(vForm.getSummaryInformation().getTotalDisbursements().toString());
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(data.lastCellStyle);
+	            }
+	            if(vForm.getSummaryInformation().getNumberOfProjects()!=null){
+	            	cell = row.createCell(cellNum++);
+	            	headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfProjects().toString());
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(data.lastCellStyle);
+	            }
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {	            	
+	            	if(vForm.getSummaryInformation().getNumberOfOrganizations()!=null){
+	            		cell = row.createCell(cellNum++);
+		                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfOrganizations().toString());
+		                cell.setCellValue(headerText);
+		                cell.setCellStyle(data.lastCellStyle);
+	            	}
 	            //}
 	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
-	            	cell = row.createCell(cellNum++);
-	                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfRegions().toString());
-	                cell.setCellValue(headerText);
-	                cell.setCellStyle(data.lastCellStyle);
+	            	if(vForm.getSummaryInformation().getNumberOfRegions()!=null){
+		            	cell = row.createCell(cellNum++);
+		                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfRegions().toString());
+		                cell.setCellValue(headerText);
+		                cell.setCellStyle(data.lastCellStyle);
+	            	}
 	            //}
 	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+	            	if(vForm.getSummaryInformation().getNumberOfSectors()!=null){
+		            	cell = row.createCell(cellNum++);
+		                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfSectors().toString());
+		                cell.setCellValue(headerText);
+		                cell.setCellStyle(data.lastCellStyle);		                
+	            	}
+	            //}	            
+	            if(vForm.getSummaryInformation().getAverageProjectSize()!=null){
 	            	cell = row.createCell(cellNum++);
-	                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfSectors().toString());
-	                cell.setCellValue(headerText);
-	                cell.setCellStyle(data.lastCellStyle);
-	            //}
-	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(vForm.getSummaryInformation().getAverageProjectSize().toString());
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(data.lastCellStyle);
+		            headerText = new HSSFRichTextString(vForm.getSummaryInformation().getAverageProjectSize().toString());
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(data.lastCellStyle);
+	            }
 	            
 	        }
 	        
@@ -1005,7 +1019,10 @@ public class ExportToExcel extends Action {
 	        
 	        data.row = data.sheet2.createRow(data.rowNum++);
 	        data.cell = data.row.createCell(data.cellNum++);
-        	String[] fundingRows = vForm.getExportData().getFundingTableData().split("<");
+	        String[] fundingRows = null;
+	        if(vForm.getExportData().getFundingTableData()!=null){
+	        	fundingRows = vForm.getExportData().getFundingTableData().split("<");
+	        }
             
         	data.headerText = new HSSFRichTextString(data.fundingTrn + amountDesc);
             data.cell.setCellValue(data.headerText);
@@ -1018,7 +1035,7 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.yearTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            if (fundingRows.length>1){
+            if (fundingRows != null && fundingRows.length>1){
 	            String[] singleRow = fundingRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
 	            	data.cell = data.row.createCell(data.cellNum++);
@@ -1085,7 +1102,10 @@ public class ExportToExcel extends Action {
 	        data.headerText = null;
         	data.row = data.sheet3.createRow(data.rowNum++);
         	data.cell = data.row.createCell(data.cellNum++);
-        	String[] aidPredRows = vForm.getExportData().getAidPredicTableData().split("<");
+        	String[] aidPredRows = null;
+        	if(vForm.getExportData().getAidPredicTableData()!=null){
+        		aidPredRows = vForm.getExportData().getAidPredicTableData().split("<");
+        	}
             
         	data.headerText = new HSSFRichTextString(data.aidPredTrn + amountDesc);
             data.cell.setCellValue(data.headerText);
@@ -1106,7 +1126,7 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.actualTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            if (aidPredRows.length>1){
+            if (aidPredRows!=null && aidPredRows.length>1){
 	            for (int i = 1; i < aidPredRows.length; i++) {
 		        	data.cellNum = 0;
 			        data.row = data.sheet3.createRow(data.rowNum++);
@@ -1165,7 +1185,10 @@ public class ExportToExcel extends Action {
 	        data.headerText = null;
         	data.row = data.sheet4.createRow(data.rowNum++);
         	data.cell = data.row.createCell(data.cellNum++);
-        	String[] aidTypeRows = vForm.getExportData().getAidTypeTableData().split("<");
+        	String[] aidTypeRows = null;
+        	if(vForm.getExportData().getAidTypeTableData()!= null) {
+        		aidTypeRows = vForm.getExportData().getAidTypeTableData().split("<");
+        	}
             
         	data.headerText = new HSSFRichTextString(data.aidTypeTrn + amountDesc);
             data.cell.setCellValue(data.headerText);
@@ -1178,7 +1201,7 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.yearTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            if (aidTypeRows.length>1){
+            if (aidTypeRows!=null && aidTypeRows.length>1){
 	            String[] singleRow = aidTypeRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
 	            	data.cell = data.row.createCell(data.cellNum++);
@@ -1244,7 +1267,10 @@ public class ExportToExcel extends Action {
 	        data.headerText = null;
         	data.row = data.sheet5.createRow(data.rowNum++);
         	data.cell = data.row.createCell(data.cellNum++);
-        	String[] finInstRows = vForm.getExportData().getFinancingInstTableData().split("<");
+        	String[] finInstRows = null;
+        	if(vForm.getExportData().getFinancingInstTableData()!=null){
+        		finInstRows = vForm.getExportData().getFinancingInstTableData().split("<");
+        	}
             
         	data.headerText = new HSSFRichTextString(data.finInstTrn + amountDesc);
             data.cell.setCellValue(data.headerText);
@@ -1257,7 +1283,7 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.yearTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            if (finInstRows.length>1){
+            if (finInstRows!=null && finInstRows.length>1){
 	            String[] singleRow = finInstRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
 	            	data.cell = data.row.createCell(data.cellNum++);
@@ -1564,7 +1590,10 @@ public class ExportToExcel extends Action {
 	    	data.headerText = null;
 	    	data.row = data.sheet1.createRow(data.rowNum++);
 	    	data.cell = data.row.createCell(data.cellNum++);
-	    	String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
+	    	String[] ODAGrowthRows = null;
+	    	if(vForm.getExportData().getODAGrowthTableData()!=null){
+	    		ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
+	    	}
 
 	    	data.headerText = new HSSFRichTextString(data.ODAGrowthTrn + amountDesc);
 	    	data.cell.setCellValue(data.headerText);
@@ -1572,7 +1601,7 @@ public class ExportToExcel extends Action {
 	            
 	    	data.cellNum = 0;
             data.row = data.sheet1.createRow(data.rowNum++);
-            if (ODAGrowthRows.length>1){
+            if (ODAGrowthRows!=null && ODAGrowthRows.length>1){
 	            String[] singleRow = ODAGrowthRows[1].split(">");
 	            for (int i = 0; i < singleRow.length; i++) {
 	            	data.cell = data.row.createCell(data.cellNum++);
@@ -1636,7 +1665,10 @@ public class ExportToExcel extends Action {
 		        data.headerText = null;
 	        	data.row = data.sheet9.createRow(data.rowNum++);
 	        	data.cell = data.row.createCell(data.cellNum++);
-	        	String[] NPOProfRows = vForm.getExportData().getNPOTableData().split("<");
+	        	String[] NPOProfRows = null;
+	        	if(vForm.getExportData().getNPOTableData()!=null){
+	        		NPOProfRows = vForm.getExportData().getNPOTableData().split("<");
+	        	}
 	            
 	        	data.headerText = new HSSFRichTextString(data.NPOProfTrn + amountDesc);
 	            data.cell.setCellValue(data.headerText);
@@ -1649,7 +1681,7 @@ public class ExportToExcel extends Action {
 	            data.headerText = new HSSFRichTextString(data.NPOTrn);
 	            data.cell.setCellValue(data.headerText);
 	            data.cell.setCellStyle(data.subHeaderCS);
-	            if (NPOProfRows.length>1){
+	            if (NPOProfRows!=null && NPOProfRows.length>1){
 		            String[] singleRow = NPOProfRows[1].split(">");
 		            for (int i = 1; i < singleRow.length; i++) {
 		            	data.cell = data.row.createCell(data.cellNum++);
@@ -1714,7 +1746,10 @@ public class ExportToExcel extends Action {
 		        data.headerText = null;
 	        	data.row = data.sheet10.createRow(data.rowNum++);
 	        	data.cell = data.row.createCell(data.cellNum++);
-	        	String[] programProfRows = vForm.getExportData().getProgramTableData().split("<");
+	        	String[] programProfRows = null;
+	        	if(vForm.getExportData().getProgramTableData()!=null){
+	        		programProfRows = vForm.getExportData().getProgramTableData().split("<");
+	        	}
 	            
 	        	data.headerText = new HSSFRichTextString(data.programProfTrn + amountDesc);
 	            data.cell.setCellValue(data.headerText);
@@ -1727,7 +1762,7 @@ public class ExportToExcel extends Action {
 	            data.headerText = new HSSFRichTextString(data.programTrn);
 	            data.cell.setCellValue(data.headerText);
 	            data.cell.setCellStyle(data.subHeaderCS);
-	            if (programProfRows.length>1){
+	            if (programProfRows!=null && programProfRows.length>1){
 		            String[] singleRow = programProfRows[1].split(">");
 		            for (int i = 1; i < singleRow.length; i++) {
 		            	data.cell = data.row.createCell(data.cellNum++);
@@ -1792,7 +1827,10 @@ public class ExportToExcel extends Action {
 		        data.headerText = null;
 	        	data.row = data.sheet10.createRow(data.rowNum++);
 	        	data.cell = data.row.createCell(data.cellNum++);
-	        	String[] programProfRows = vForm.getExportData().getSecondaryProgramTableData().split("<");
+	        	String[] programProfRows = null;
+	        	if(vForm.getExportData().getSecondaryProgramTableData()!=null){
+	        		programProfRows = vForm.getExportData().getSecondaryProgramTableData().split("<");
+	        	}
 	            
 	        	data.headerText = new HSSFRichTextString(data.secProgramProfTrn + amountDesc);
 	            data.cell.setCellValue(data.headerText);
@@ -1805,7 +1843,7 @@ public class ExportToExcel extends Action {
 	            data.headerText = new HSSFRichTextString(data.programTrn);
 	            data.cell.setCellValue(data.headerText);
 	            data.cell.setCellStyle(data.subHeaderCS);
-	            if (programProfRows.length>1){
+	            if (programProfRows!=null && programProfRows.length>1){
 		            String[] singleRow = programProfRows[1].split(">");
 		            for (int i = 1; i < singleRow.length; i++) {
 		            	data.cell = data.row.createCell(data.cellNum++);
@@ -1870,7 +1908,10 @@ public class ExportToExcel extends Action {
 	        data.headerText = null;
         	data.row = data.sheet11.createRow(data.rowNum++);
         	data.cell = data.row.createCell(data.cellNum++);
-        	String[] aidPredQuarterRows = vForm.getExportData().getAidPredicQuarterTableData().split("<");
+        	String[] aidPredQuarterRows = null;
+        	if(vForm.getExportData().getAidPredicQuarterTableData()!=null){
+        		aidPredQuarterRows = vForm.getExportData().getAidPredicQuarterTableData().split("<");
+        	}
             
         	data.headerText = new HSSFRichTextString(data.aidPredQuarterTrn + amountDesc);
             data.cell.setCellValue(data.headerText);
@@ -1891,7 +1932,7 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.actualTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            if (aidPredQuarterRows.length>1){
+            if (aidPredQuarterRows != null && aidPredQuarterRows.length>1){
 	            for (int i = 1; i < aidPredQuarterRows.length; i++) {
 		        	data.cellNum = 0;
 			        data.row = data.sheet11.createRow(data.rowNum++);
@@ -1949,7 +1990,10 @@ public class ExportToExcel extends Action {
 	        data.headerText = null;
         	data.row = data.sheet12.createRow(data.rowNum++);
         	data.cell = data.row.createCell(data.cellNum++);
-        	String[] budgetBreakdownRows = vForm.getExportData().getBudgetTableData().split("<");
+        	String[] budgetBreakdownRows = null;
+        	if(vForm.getExportData().getBudgetTableData()!=null){
+        		budgetBreakdownRows = vForm.getExportData().getBudgetTableData().split("<");
+        	}
             
         	data.headerText = new HSSFRichTextString(data.budgetBreakdownTrn + amountDesc);
             data.cell.setCellValue(data.headerText);
@@ -1962,7 +2006,7 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.yearTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            if (budgetBreakdownRows.length>1){
+            if (budgetBreakdownRows!=null && budgetBreakdownRows.length>1){
 	            String[] singleRow = budgetBreakdownRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i=i+2) {
 	            	data.cell = data.row.createCell(data.cellNum++);
@@ -2027,7 +2071,10 @@ public class ExportToExcel extends Action {
 	        data.headerText = null;
         	data.row = data.sheet13.createRow(data.rowNum++);
         	data.cell = data.row.createCell(data.cellNum++);
-        	String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
+        	String[] organizationProfRows = null;
+        	if(vForm.getExportData().getBeneficiaryAgencyTableData()!=null){
+        		organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
+        	}
             
         	data.headerText = new HSSFRichTextString(data.beneficiaryAgencyProfTrn + amountDesc);
             data.cell.setCellValue(data.headerText);
@@ -2040,7 +2087,7 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.organizationTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            if (organizationProfRows.length>1){
+            if (organizationProfRows!=null && organizationProfRows.length>1){
 	            String[] singleRow = organizationProfRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i++) {
 	            	data.cell = data.row.createCell(data.cellNum++);
@@ -2105,7 +2152,10 @@ public class ExportToExcel extends Action {
 	        data.headerText = null;
         	data.row = data.sheet13.createRow(data.rowNum++);
         	data.cell = data.row.createCell(data.cellNum++);
-        	String[] organizationProfRows = vForm.getExportData().getResponsibleOrganizationTableData().split("<");
+        	String[] organizationProfRows = null;
+        	if(vForm.getExportData().getResponsibleOrganizationTableData()!=null){
+        		organizationProfRows = vForm.getExportData().getResponsibleOrganizationTableData().split("<");
+        	}
             
         	data.headerText = new HSSFRichTextString(data.responsibleOrganizationProfTrn + amountDesc);
             data.cell.setCellValue(data.headerText);
@@ -2118,7 +2168,7 @@ public class ExportToExcel extends Action {
             data.headerText = new HSSFRichTextString(data.organizationTrn);
             data.cell.setCellValue(data.headerText);
             data.cell.setCellStyle(data.subHeaderCS);
-            if (organizationProfRows.length>1){
+            if (organizationProfRows!=null && organizationProfRows.length>1){
 	            String[] singleRow = organizationProfRows[1].split(">");
 	            for (int i = 1; i < singleRow.length; i++) {
 	            	data.cell = data.row.createCell(data.cellNum++);

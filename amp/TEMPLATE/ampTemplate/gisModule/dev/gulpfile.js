@@ -39,6 +39,7 @@ var paths = {
       all: './app/less/**/*.less'
     },
     images: './app/img/**/*.{png, jpg}',
+    fonts: './app/fonts/**/*.{eot,svg,ttf,woff}',
     tests: './app/test/**'
   },
   aux: {
@@ -50,6 +51,7 @@ var paths = {
     templates: '../dist/js',
     stylesheets: '../dist/css',
     images: '../dist/img',
+    fonts: '../dist/fonts',
     tests: '../dist'  // Note! They go in the dist root!
   }
 };
@@ -92,6 +94,13 @@ gulp.task('img', function() {
     .pipe(gulp.dest(paths.dist.images));
 });
 
+gulp.task('fonts', function() {
+  return gulp.src(paths.app.fonts)
+    .pipe(g.changed(paths.dist.fonts))
+    .pipe(gulp.dest(paths.dist.fonts));
+});
+
+
 gulp.task('tests', function() {
   // simply copies the test files over, see the "test" task that runs them.
   return gulp.src([paths.app.tests,
@@ -127,6 +136,7 @@ gulp.task('watch', ['build'], function() {
   gulp.watch(paths.app.scripts.all, ['js', 'lint']);
   gulp.watch(paths.app.stylesheets.all, ['css']);
   gulp.watch(paths.app.images, ['img']);
+  gulp.watch(paths.app.fonts, ['fonts']);
   gulp.watch(paths.app.templates, ['templates']);
 });
 
@@ -151,7 +161,7 @@ gulp.task('test', ['build', 'tests'], function() {
 });
 
 
-gulp.task('build', ['rootstuff', 'js', 'templates', 'css', 'img']);
+gulp.task('build', ['rootstuff', 'js', 'templates', 'css', 'img', 'fonts']);
 
 
 gulp.task('dev', ['build', 'serve', 'watch', 'reload']);

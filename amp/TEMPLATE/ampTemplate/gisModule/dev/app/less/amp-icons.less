@@ -1,0 +1,28 @@
+/*
+  Check bootstrap icons first to see what you need already exists: 
+  http://getbootstrap.com/components/#glyphicons
+ */
+
+.ampicon{ 
+  position: relative;
+  top: 6px;
+
+  display: inline-block;
+
+  margin-right: 5px;
+  width:30px;
+  height:30px;
+  background-image: url(../img/icons.png);
+}
+
+// List of icons to create, order matters:
+@icons: ampicon-tools, ampicon-search, ampicon-filters, ampicon-layers, ampicon-source-category, ampicon-data-source;
+
+.iconize();
+.iconize(@i: length(@icons)) when (@i > 0) {
+    .iconize((@i - 1)); 
+
+    @value: extract(@icons, @i); // LESS arrays are 1-based
+    .ampicon.@{value}       {background-position:  -40px (-40px * (@i - 1))}
+    .ampicon.@{value}:active,.ampicon.@{value}:hover {background-position:  0 (-40px * (@i - 1))}
+}

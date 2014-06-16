@@ -1,23 +1,22 @@
+<!-- This will be abstracted to a general sidebar-tool template. anywhere that says layer would be dynamic -->
+<div id="<%= title %>" class="sidebar-tool accordion-group">
 
-       <!-- This will be abstracted to a general sidebar-tool template. anywhere that says layer would be dynamic -->
-       <div id="<%= title %>" class="sidebar-tool accordion-group">
+ <div class="accordion-heading">
+   <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#sidebar-tools" href="#collapse-<%= titleID %>">
+     <h4><span class="ampicon <%= iconClass %>"></span> <%= title %></h4>
+   </a>
+ </div>
 
-         <div class="accordion-heading">
-           <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#sidebar-tools" href="#collapse-<%= title %>">
-             <h4><%= title %></h4>
-           </a>
-         </div>
-
-         <div id="collapse-<%= title %>" class="accordion-body collapse">
-           <div class="accordion-inner">
-             <div>
-               <p class="description">layers.description</p>
-             </div>
+ <div id="collapse-<%= title %>" class="accordion-body collapse">
+   <div class="accordion-inner">
+     <div>
+       <p class="description"><%= description %></p>
+     </div>
 
 
-             <div class="content">  
-             <!-- content div will be populated by layer -->
-             </div>
-           </div>
-         </div>
-       </div>
+     <div class="content">
+     <!-- content div will be populated by layer -->
+     </div>
+   </div>
+ </div>
+</div>

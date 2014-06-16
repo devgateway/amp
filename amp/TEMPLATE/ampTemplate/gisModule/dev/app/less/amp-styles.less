@@ -1,33 +1,49 @@
 //
-// AMP Variables and bootstrap overrides
+// AMP layout and bootstrap overrides
 // --------------------------------------------------
 
-// Sidebar code
-#sidebar{
+
+#amp-menu {
+  z-index: @amp-menu-layer;
+  position: relative;  // for layering
+  height: @amp-map-header-height;
+}
+
+
+#sidebar {
+  z-index: @amp-sidebar-layer;
+  position: absolute;
+  top: @amp-menu-height;
+  left: 0;
+  bottom: 0;
   width: @amp-sidebar-width;
-  min-height: 94%;
+  padding-bottom: @amp-sidebar-quality-height;  // quality indicator is position: fixed
   background: @amp-bg-inverse;
   color: @amp-text-inverse;
 
-  .sidebar-tool{
+  .sidebar-tool {
     width: (@amp-sidebar-width - 2);
     background: @amp-bg;
     color: darken(@amp-bg-inverse,3%);
 
-    .accordion-heading{
-      background: darken(@amp-bg-inverse,1%); 
-      padding:4px; 
-      border-bottom: 1px solid lighten(@amp-bg-inverse, 5%); 
+    .accordion-heading {
+      background: darken(@amp-bg-inverse,1%);
+      padding:0 4px;
+      border-bottom: 1px solid lighten(@amp-bg-inverse, 5%);
 
       > a {
-        color: @amp-text-inverse; 
+        display: block;
+        padding:4px;
+        color: @amp-text-inverse;
+        background: darken(@amp-bg-inverse,1%);
+        border-bottom: 1px solid lighten(@amp-bg-inverse, 5%);
         &:hover,a, a:hover{
           text-decoration: none;
         }
       }
     }
 
-    .accordion-body{
+    .accordion-body {
       height: auto;
       > .accordion-inner {
        padding: 6px;
@@ -37,26 +53,35 @@
 }
 
 #map-container {
+  z-index: @amp-map-layer;
+  position: absolute;
+  top: @amp-menu-height;
+  left: @amp-sidebar-width;
+  right: 0;
+  bottom: 0;
+
   #map-header {
-    background:#222; 
+    z-index:50;
+    position: absolute;
     height: @amp-map-header-height;
+    width: 100%;
     opacity: 0.8;
     color: @amp-text;
-    position: absolute;
-    z-index:50;
+    background:#222;
+    border-radius: 0;
   }
-  #map-canvas { 
+  #map-canvas {
     min-height:300px
   }
 }
 
 
-#quality-indicator{  
+#quality-indicator {
   background: @amp-bg-inverse;
   color: @amp-text-inverse;
-  position:fixed; 
-  bottom:0; 
-  width: @amp-sidebar-width; 
+  position:fixed;
+  bottom:0;
+  width: @amp-sidebar-width;
 }
 
 #branding {
@@ -71,7 +96,19 @@
 
 
 // ESRI Overrides
+.esriSimpleSlider{
+  background-color: #333;
+  color:#eee;
+  opacity: 0.8;
+}
 
-.esriSimpleSliderTL{
+.esriSimpleSliderDecrementButton:hover,
+.esriSimpleSliderIncrementButton:hover{
+  background-color: #222;
+  color:#fff;
+  opacity: 1;
+}
+
+.esriSimpleSliderTL {
   top: (@amp-map-header-height+10);
 }

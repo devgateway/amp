@@ -3,7 +3,7 @@ define(
     "underscore",
     "backbone",
     "text!" + APP_ROOT + "/amp/tools/BaseTool/template.html",
-    "text!" + APP_ROOT + "/amp/tools/Layers/templates/template.html"
+    "text!" + APP_ROOT + "/amp/tools/Filters/templates/template.html"
   ],
   function (_, Backbone, BaseTemplate, Template) {
     'use strict';
@@ -12,9 +12,9 @@ define(
 
       baseTemplate: _.template(BaseTemplate),
       template: _.template(Template),
-      title: "Layers",
-      iconClass: "ampicon-layers",
-      description: "Add layers to the map.",
+      title: "Filters",
+      iconClass: "ampicon-filters",
+      description: "Apply filters to the map.",
 
       initialize: function () {
 

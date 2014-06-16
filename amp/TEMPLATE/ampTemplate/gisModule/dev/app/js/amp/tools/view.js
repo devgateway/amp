@@ -3,11 +3,14 @@ define(
     "underscore",
     "backbone",
     'js/amp/tools/Layers/views/LayersView.js',
+    'js/amp/tools/Filters/views/FiltersView.js',
+    'js/amp/tools/Search/views/SearchView.js',
+    'js/amp/tools/Tools/views/ToolsView.js',
   ],
-  function (_, Backbone, LayersView) {
+  function (_, Backbone, LayersView, FiltersView, SearchView, ToolsView) {
     'use strict';
 
-    var ToolsView = Backbone.View.extend({
+    var SidebarToolsView = Backbone.View.extend({
       initialize: function () {
 
       },
@@ -19,18 +22,22 @@ define(
         // TODO each will be each unique tool instantiated on its own.
         this.$el.append('<div id="tool-layers"></div>');
         var layerView = new LayersView({el:'#tool-layers'});
-        layerView.render('Layers');
+        layerView.render();
 
-        this.$el.append('<div id="tool-tools"></div>');
-        var toolsView = new LayersView({el:'#tool-tools'});
-        toolsView.render('Tools');
+        this.$el.append('<div id="tool-search"></div>');
+        var searchView = new SearchView({el:'#tool-search'});
+        searchView.render();
 
         this.$el.append('<div id="tool-filters"></div>');
-        var filtersView = new LayersView({el:'#tool-filters'});
-        filtersView.render('Filters');
+        var filtersView = new FiltersView({el:'#tool-filters'});
+        filtersView.render();
+
+        this.$el.append('<div id="tool-tools"></div>');
+        var toolsView = new ToolsView({el:'#tool-tools'});
+        toolsView.render(); 
       }
     });
 
-    return ToolsView;
+    return SidebarToolsView;
   }
 );

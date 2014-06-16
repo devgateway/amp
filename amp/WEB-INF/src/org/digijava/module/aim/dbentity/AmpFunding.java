@@ -90,6 +90,8 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 		ret.append("-Mode Of Payment:" + (this.modeOfPayment != null ? this.modeOfPayment.getEncodedValue() : ""));
 		ret.append("-Funding Status:" + (this.fundingStatus != null ? this.fundingStatus.getEncodedValue() : ""));
 		ret.append("-Funding Status:" + (this.financingId != null ? this.financingId : ""));
+		if (this.agreement != null)
+			ret.append("-Agreement:" + this.agreement.getValue());
 		// Compare fields from AmpFundingDetail.
 		List<AmpFundingDetail> auxDetails = new ArrayList<AmpFundingDetail>(this.fundingDetails);
 		Collections.sort(auxDetails, fundingDetailsComparator);
@@ -160,6 +162,9 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 		}
 		if (this.financingId != null) {
 			out.getOutputs().add(new Output(null, new String[]{"Financing Id"}, new Object[]{this.financingId}));
+		}
+		if (this.agreement != null) {
+			out.getOutputs().add(new Output(null, new String[]{"Agreement"}, new Object[]{this.agreement.getValue()}));
 		}
 		boolean trnComm = false;
 		boolean trnDisb = false;

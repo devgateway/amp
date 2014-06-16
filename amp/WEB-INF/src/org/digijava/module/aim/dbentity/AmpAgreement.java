@@ -1,9 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
-import org.dgfoundation.amp.error.AmpNotImplementedException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
@@ -69,22 +70,39 @@ public class AmpAgreement implements Serializable, Versionable {
 	}
 
 	@Override
-	public boolean equalsForVersioning(Object obj) throws AmpNotImplementedException {
-		throw new AmpNotImplementedException();
+	public boolean equalsForVersioning(Object obj) {
+		if (!(obj instanceof AmpAgreement)) return false;
+		AmpAgreement oth = (AmpAgreement) obj;
+		if (this.id != null && oth.id != null)
+			return this.id.longValue() == oth.id.longValue();
+		return this.title.equals(oth.title);
 	}
 
 	@Override
-	public Object getValue() throws AmpNotImplementedException {
-		throw new AmpNotImplementedException();
+	public Object getValue(){
+		StringBuffer ret = new StringBuffer();
+		ret.append("-Title:" + (this.title != null ? this.title : ""));
+		ret.append("-Code:" + (this.code != null ? this.code : ""));
+		ret.append("-Signature date:" + (this.signatureDate != null ? this.signatureDate : ""));
+		ret.append("-Effective date:" + (this.effectiveDate != null ? this.effectiveDate : ""));
+		ret.append("-Close date:" + (this.closeDate != null ? this.closeDate : ""));
+		return ret.toString();
 	}
 
 	@Override
-	public Output getOutput() throws AmpNotImplementedException{
-		throw new AmpNotImplementedException();
+	public Output getOutput(){
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(new Output(null, new String[]{"Title"}, new String[] {this.title}));
+		out.getOutputs().add(new Output(null, new String[]{"Code"}, new String[] {this.code}));
+		out.getOutputs().add(new Output(null, new String[]{"Signature Date"}, new String[] {PersistenceManager.getString(this.signatureDate)}));
+		out.getOutputs().add(new Output(null, new String[]{"Effective Date"}, new String[] {PersistenceManager.getString(this.effectiveDate)}));
+		out.getOutputs().add(new Output(null, new String[]{"Close Date"}, new String[] {PersistenceManager.getString(this.closeDate)}));
+		return out;
 	}
 
 	@Override
-	public Object prepareMerge(AmpActivityVersion newActivity) throws Exception, AmpNotImplementedException {
-		throw new AmpNotImplementedException();
+	public Object prepareMerge(AmpActivityVersion newActivity) throws Exception{
+		return this;
 	}
 }

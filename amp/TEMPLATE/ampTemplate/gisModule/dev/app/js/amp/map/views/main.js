@@ -7,7 +7,7 @@ define(
     'js/amp/map/views/mapHeaderInfo.js',
     'js/amp/map/views/basemapGallery.js'
   ],
-  function (_, Backbone, Template, Map, HeaderView, BasemapGalleryView) {
+  function (_, Backbone, Template, Map, MapHeaderView, BasemapGalleryView) {
     'use strict';
 
     var MapView = Backbone.View.extend({
@@ -35,6 +35,9 @@ define(
         });
 
         // Render map header
+        var headerView = new MapHeaderView();
+        var headerHTML = headerView.render();
+        this.$el.find('.map-header').append(headerHTML);
 
         // Render BasemapGallery
         var basemapView = new BasemapGalleryView({map: self.map});

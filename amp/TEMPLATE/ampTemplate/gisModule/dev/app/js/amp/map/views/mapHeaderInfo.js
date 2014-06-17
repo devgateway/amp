@@ -26,7 +26,7 @@ define(
 
       render: function () {
         var self = this;
-        this.$el.append(this.template()).addClass('navbar-brand');
+        this.$el.append(this.template());
         return this.$el;
       }
 

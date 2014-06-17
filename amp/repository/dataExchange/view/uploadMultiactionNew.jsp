@@ -295,6 +295,20 @@
 							</logic:equal>
 							
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_LOGS) %>">
+								
+								<c:set var="showImportAll" scope="page" value="false"/>
+								<logic:iterate id="item" name="importFormNew" property="logItems" indexId="idx">
+								<c:if test="${item.logType=='OK'}">
+									<c:set var="showImportAll" scope="page" value="true"/>
+								</c:if>
+								</logic:iterate>
+								<c:if test="${showImportAll}">
+									<td width="50" nowrap>
+										<div class="wizardNav wizardBtn">
+											<input type="button" class="buttonx_sm"  value="<digi:trn>Import All</digi:trn>" onclick="executeImportAll();"/>
+										</div>
+									</td>
+								</c:if>
 								<td width="50" nowrap>
 									<div class="wizardNav wizardBtn">
 										<input type="hidden" value="/dataExchange/importActionNew.do?action=loadUploadSession&objId=${curSessId}">
@@ -388,6 +402,11 @@
 								
 								function executeImport(id) {
 									$("input[type='hidden'][name='objId']").val(id);
+									$("form[name='importFormNew']").submit();
+								}
+								
+								function executeImportAll() {
+									$("form[name='importFormNew']").attr("action", "/dataExchange/admin/importActionNew.do?action=executeImportAll");
 									$("form[name='importFormNew']").submit();
 								}
 						</script>

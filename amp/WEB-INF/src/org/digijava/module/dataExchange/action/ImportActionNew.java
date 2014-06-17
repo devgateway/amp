@@ -403,6 +403,46 @@ public class ImportActionNew extends DispatchAction {
         return mapping.findForward("forward");
     }
 
+    
+    public ActionForward executeImportAll(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+    	 ImportFormNew myform = (ImportFormNew) form;
+         myform.setPage(IATI_IMPORT_PAGE_LOGS);
+         List<DELogPerItem> iterableLogItems = Collections.unmodifiableList(myform.getLogItems());
+         AmpDEUploadSession sess = myform.getUpSess();
+         DESourceSetting dess = sess.getSettingsAssigned();
+
+
+         DELogPerItem selLogItem = null;
+         for (DELogPerItem delog : iterableLogItems) {
+	         if (!delog.getLogType().equals("OK")) {
+	             	continue;
+	         }
+	         selLogItem = delog;
+	         List<DELogPerItem> logItems = new ArrayList<DELogPerItem>();
+	         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
+	         Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap = getImportedItemMap(dess, is, request, logItems, false, String.valueOf(selLogItem.getId()));
+	
+	         //Update import date
+	         Date newDateTime = new Date();
+	         DELogPerItem dbObj = (DELogPerItem) DbUtil.getObject(DELogPerItem.class, selLogItem.getId());
+	
+	         for (DELogPerItem logItem : logItems) {
+	             if (selLogItem.getName().equals(logItem.getName())) {
+	                 dbObj.update(logItem);
+	                 selLogItem.update(logItem);
+	             }
+	         }
+	
+	         dbObj.setImportDoneOn(newDateTime);
+	         selLogItem.setImportDoneOn(newDateTime);
+	         DbUtil.saveObject(dbObj);
+         }
+         
+         return mapping.findForward("sessions");
+    }
+    	
+    
     public ActionForward executeImport(ActionMapping mapping, ActionForm form,
                                   HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         ImportFormNew myform = (ImportFormNew) form;

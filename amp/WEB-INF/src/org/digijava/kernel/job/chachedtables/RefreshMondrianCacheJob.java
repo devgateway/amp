@@ -52,7 +52,7 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 			// handle special stuff in SQL - right now, create cached_v_m_donor_funding
 			ctx = (ServletContext) arg0.getScheduler().getContext().get(Constants.AMP_SERVLET_CONTEXT);
 			
-			String patchFile = ctx.getRealPath("/repository/mondrian/sql/refresh_mondrian_cache.sql");
+			String patchFile = ctx.getRealPath("/WEB-INF/src/org/digijava/kernel/job/chachedtables/refresh_mondrian_cache.sql");
 		
 			LineNumberReader bis = new LineNumberReader(new FileReader(patchFile));
 			StringBuffer sb = new StringBuffer();

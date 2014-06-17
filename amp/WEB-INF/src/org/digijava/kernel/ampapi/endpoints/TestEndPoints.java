@@ -33,8 +33,8 @@ public class TestEndPoints {
 	@Path("/testjson")
 	@Produces(MediaType.APPLICATION_JSON)
 	public testObj simplejson() {
-		testObj testobj = new testObj("AMP API End Points Test JSON");
-		return testobj;
+		testObj jsonobj = new testObj("AMP API Test End Point - Test JSON Format");
+		return jsonobj;
 	}
 
 	/***
@@ -49,8 +49,16 @@ public class TestEndPoints {
 
 		public testObj(String message) {
 			super();
+			this.setMessage(message);
+			this.Id = this.getId();
+		}
+		
+		public String getMessage() {
+			return Message;
+		}
+
+		public void setMessage(String message) {
 			Message = message;
-			Id = this.getId();
 		}
 
 		public Integer getId() {

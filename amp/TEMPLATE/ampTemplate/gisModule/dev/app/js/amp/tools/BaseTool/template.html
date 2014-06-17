@@ -1,5 +1,5 @@
 <!-- This will be abstracted to a general sidebar-tool template. anywhere that says layer would be dynamic -->
-<div id="<%= title %>" class="sidebar-tool accordion-group">
+<div id="<%= titleID %>" class="sidebar-tool accordion-group">
 
  <div class="accordion-heading">
    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#sidebar-tools" href="#collapse-<%= titleID %>">
@@ -7,7 +7,7 @@
    </a>
  </div>
 
- <div id="collapse-<%= title %>" class="accordion-body collapse">
+ <div id="collapse-<%= titleID %>" class="accordion-body collapse">
    <div class="accordion-inner">
      <div>
        <p class="description"><%= description %></p>

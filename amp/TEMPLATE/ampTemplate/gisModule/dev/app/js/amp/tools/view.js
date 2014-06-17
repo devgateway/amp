@@ -19,7 +19,6 @@ define(
       render: function () {
         console.log('render tools');
 
-        // TODO each will be each unique tool instantiated on its own.
         this.$el.append('<div id="tool-layers"></div>');
         var layerView = new LayersView({el:'#tool-layers'});
         layerView.render();

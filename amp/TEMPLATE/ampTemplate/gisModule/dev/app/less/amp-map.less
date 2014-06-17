@@ -36,10 +36,15 @@
     bottom: 0;
     right: 90px;
 
-    .legend-header > a {
-      color: @amp-text-inverse;      
-      display: block;
-      padding: 4px;
+    .legend-header {      
+      &:hover,a, a:hover{
+        text-decoration: none;
+      }
+      > a {
+          color: @amp-text-inverse;      
+          display: block;
+          padding: 4px;
+      }
     }
 
     #legend-content {

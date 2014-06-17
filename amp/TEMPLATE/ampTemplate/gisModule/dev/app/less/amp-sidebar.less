@@ -19,6 +19,10 @@
   padding-bottom: @amp-sidebar-quality-height;  // quality indicator is position: fixed
   background: @amp-bg-inverse;
   color: @amp-text-inverse;
+    
+  overflow-y: auto;
+  #sidebar-tools {
+  }
 
   .sidebar-tool {
     width: (@amp-sidebar-width - 2);
@@ -30,12 +34,18 @@
       padding:0 4px;
       border-bottom: 1px solid lighten(@amp-bg-inverse, 5%);
 
+      h3 {        
+        font-size:16px;
+        -webkit-margin-before: 0;
+      }
+
       > a {
         display: block;
         padding:4px;
         color: @amp-text-inverse;
         background: darken(@amp-bg-inverse,1%);
         border-bottom: 1px solid lighten(@amp-bg-inverse, 5%);
+
         &:hover,a, a:hover{
           text-decoration: none;
         }
@@ -45,8 +55,20 @@
     .accordion-body {
       height: auto;
       > .accordion-inner {
-       padding: 6px;
       }
+
+      h4 {        
+        font-size:16px;
+        font-weight: 700;
+        background: darken(@amp-bg,10%);
+        color:  darken(@amp-text,10%);
+        padding:4px;
+        -webkit-margin-before: 0;
+        label {
+          margin: 0;
+        }
+      }
+
     }
   }
 }

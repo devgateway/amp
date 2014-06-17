@@ -412,16 +412,26 @@
 			<artifactId>je</artifactId>
 			<version>1.7.0</version>
 		</dependency>
+		 <!-- Jersey  -->
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>1.2</version>
+ 			<groupId>org.glassfish.jersey.containers</groupId>
+			 <!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core" -->
+			 <artifactId>jersey-container-servlet</artifactId>
+			 <version>2.9</version>
+		</dependency>
+		<!-- Required only when you are using JAX-RS Client -->
+		<dependency>
+ 			<groupId>org.glassfish.jersey.core</groupId>
+ 			<artifactId>jersey-client</artifactId>
+ 			<version>2.9</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-core</artifactId>
-			<version>1.2</version>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>2.9</version>
 		</dependency>
+		<!-- End Jersey -->
+		
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
@@ -432,11 +442,7 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.7.1</version>
 		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>1.2</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>jfree</groupId>
 			<artifactId>jfreechart</artifactId>

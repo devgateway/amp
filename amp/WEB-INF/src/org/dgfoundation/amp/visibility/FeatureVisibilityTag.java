@@ -25,9 +25,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
-import com.sun.research.ws.wadl.Request;
-
-
 /**
  * @author dan
  *

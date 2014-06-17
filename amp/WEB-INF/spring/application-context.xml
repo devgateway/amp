@@ -82,8 +82,7 @@
 	<http pattern="/gis/showAdditionalGraphics.do**" security="none" />
 	
 	<http pattern="/esrigis/**" security="none" />
-	<!-- <http pattern="/esrigis/MapsConfiguration.do**" security="none" />
-	<http pattern="/esrigis/datadispatcher.do**" security="none" /> -->
+	<http pattern="/rest/**" security="none" />
 	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
 	
 	<!-- match images -->

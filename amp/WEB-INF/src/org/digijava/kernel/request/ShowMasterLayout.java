@@ -87,7 +87,8 @@ public class ShowMasterLayout
 
             // Pass servlets
             if (uri.startsWith("/servlet/", customPartStart) ||
-                uri.startsWith("/services/", customPartStart)) {
+                uri.startsWith("/services/", customPartStart) ||
+                uri.startsWith("/rest/", customPartStart)) {
 
                 chain.doFilter(request, response);
             }

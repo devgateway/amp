@@ -82,7 +82,7 @@ SaveReportEngine.prototype.success		= function (o) {
 			if ( this.overwritingReport )
 				message	= SaveReportEngine.tabSavedMessage;
 			else
-				message	= SaveReportEngine.doneCopyMessage + SaveReportEngine.checkTabsMessage;
+				message	= SaveReportEngine.doneCopyMessage + " " + SaveReportEngine.checkTabsMessage;
 		} else {
 			if ( this.overwritingReport )
 				message	= SaveReportEngine.reportSavedMessage;

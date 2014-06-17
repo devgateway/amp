@@ -14,7 +14,7 @@ define(
       template: _.template(Template),
       title: "Keyword Search",
       iconClass: "ampicon-search",
-      description: "Search for specific projects.",
+      description: "",
 
       initialize: function () {
 

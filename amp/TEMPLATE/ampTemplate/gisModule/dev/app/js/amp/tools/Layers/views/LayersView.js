@@ -14,7 +14,7 @@ define(
       template: _.template(Template),
       title: "Layers",
       iconClass: "ampicon-layers",
-      description: "Layers tool desc, remove if possible, less is more :).",
+      description: "Tool desc, remove if possible.",
 
       initialize: function () {
 

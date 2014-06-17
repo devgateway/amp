@@ -891,7 +891,9 @@ public class DbHelper {
             oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
         }
 
-        List<Long> workSpaceActivityList = filter.buildFilteredActivitiesList();
+        //AMP-17549
+        List<Long> workSpaceActivityList = getActivitiesIds(filter);        
+        /*List<Long> workSpaceActivityList = filter.buildFilteredActivitiesList();*/
         String inactivities= Util.toCSStringForIN(workSpaceActivityList);
 		oql += " and act.ampActivityId in("+ inactivities +")";
 
@@ -1415,18 +1417,22 @@ public class DbHelper {
 		// Go through the list to determine the children
 		List<Long> tempSectorIds = new ArrayList<Long>();
 		for (AmpSector as : allSectorList) {
-			for (Long i : sectorIds) {
-				if (!tempSectorIds.contains(i))
-					tempSectorIds.add(i);
-				if (as.getParentSectorId() != null
-						&& as.getParentSectorId().getAmpSectorId().equals(i)) {
-					tempSectorIds.add(as.getAmpSectorId());
-				} else if (as.getParentSectorId() != null
-						&& as.getParentSectorId().getParentSectorId() != null
-						&& as.getParentSectorId().getParentSectorId()
-								.getAmpSectorId().equals(i)) {
-					tempSectorIds.add(as.getAmpSectorId());
+			if(sectorIds != null) {
+				for (Long i : sectorIds) {
+					if (!tempSectorIds.contains(i))
+						tempSectorIds.add(i);
+					if (as.getParentSectorId() != null
+							&& as.getParentSectorId().getAmpSectorId().equals(i)) {
+						tempSectorIds.add(as.getAmpSectorId());
+					} else if (as.getParentSectorId() != null
+							&& as.getParentSectorId().getParentSectorId() != null
+							&& as.getParentSectorId().getParentSectorId()
+									.getAmpSectorId().equals(i)) {
+						tempSectorIds.add(as.getAmpSectorId());
+					}
 				}
+			} else {
+				tempSectorIds.add(new Long(-1));
 			}
 		}
 		return (Long[]) tempSectorIds.toArray(new Long[0]);

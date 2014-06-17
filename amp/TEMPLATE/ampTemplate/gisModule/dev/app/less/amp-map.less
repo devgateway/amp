@@ -21,7 +21,39 @@
     border-radius: 0;
   }
   #map-canvas {
-    min-height:300px
+    min-height: 300px
+  }
+
+  #legend {
+    background: @amp-bg-inverse;
+    color: @amp-text-inverse;
+
+    padding: 5px;
+    width: 300px;
+    
+    z-index: 50;
+    position: fixed;    
+    bottom: 0;
+    right: 90px;
+
+    .legend-header > a {
+      color: @amp-text-inverse;      
+      display: block;
+      padding: 4px;
+    }
+
+    #legend-content {
+      background: lighten(@amp-bg,10%);
+      color: @amp-text;   
+      font-size: 12px;
+      padding:4px;
+      overflow-y: scroll;
+      max-height: 200px;
+      h3 {
+        font-weight: 700;
+        font-size: 12px;
+      }
+    }
   }
 }
 
@@ -41,5 +73,5 @@
 }
 
 .esriSimpleSliderTL {
-  top: (@amp-map-header-height+10);
+  top: (@amp-map-header-height + 10);
 }

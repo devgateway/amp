@@ -5,9 +5,10 @@ define(
     "text!" + APP_ROOT + "/amp/map/templates/map-container.html",
     "esri/map",
     'js/amp/map/views/mapHeaderInfo.js',
-    'js/amp/map/views/basemapGallery.js'
+    'js/amp/map/views/basemapGallery.js',
+    'js/amp/map/views/legend.js'
   ],
-  function (_, Backbone, Template, Map, MapHeaderView, BasemapGalleryView) {
+  function (_, Backbone, Template, Map, MapHeaderView, BasemapGalleryView, LegendView) {
     'use strict';
 
     var MapView = Backbone.View.extend({
@@ -35,14 +36,16 @@ define(
         });
 
         // Render map header
-        var headerView = new MapHeaderView();
-        var headerHTML = headerView.render();
-        this.$el.find('.map-header').append(headerHTML);
+        var headerView = new MapHeaderView({el: '.map-header'});
+        headerView.render();
 
         // Render BasemapGallery
-        var basemapView = new BasemapGalleryView({map: self.map});
-        var basemapHTML = basemapView.render();
-        this.$el.find('#basemap-gallery').append(basemapHTML);
+        var basemapView = new BasemapGalleryView({el: '#basemap-gallery', map: self.map});
+        basemapView.render();
+
+        // Render Legend
+        var legendView = new LegendView({el: '#legend'});
+        legendView.render();
 
       }
     });

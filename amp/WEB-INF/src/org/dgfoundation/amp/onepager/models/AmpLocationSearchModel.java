@@ -13,10 +13,8 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Junction;
@@ -101,29 +99,11 @@ public class AmpLocationSearchModel extends
 			Criteria criteria = dbSession
 					.createCriteria(AmpCategoryValueLocations.class);
 			criteria.setCacheable(true);
-			Junction junction = Restrictions.conjunction().add(
-					Restrictions.eq("parentCategoryValue", cvLayer));
-			if (input.trim().length() > 0) {
-				if(isExactMatch()) {
-					String[] strings = input.split(PARENT_DELIMITER);
-					if(strings.length>1) {
-						
-						String locName = strings[strings.length-1].substring(0,strings[strings.length-1].length()-2);
-						junction.add( getTextCriterion("name", locName));
-						String parentName = null;
-						if(strings.length==2)
-							parentName = strings[0].substring(1);
-						else
-							parentName=strings[strings.length-2];
-						criteria.createCriteria("parentLocation").add(getTextCriterion("name", parentName));
-					} else {
-						junction.add(getTextCriterion("name",  input.substring(1, input.length()-2)));
-					}
 
+            if (!CategoryConstants.IMPLEMENTATION_LOCATION_ALL.equalsCategoryValue(cvLayer)) {
+                criteria.add(Restrictions.eq("parentCategoryValue", cvLayer));
+            }
 
-				} else junction.add(getTextCriterion("name", input));
-			}
-			criteria.add(junction);
 			criteria.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)
 				criteria.setMaxResults(maxResults);			

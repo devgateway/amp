@@ -2,7 +2,6 @@
 // AMP layout and bootstrap overrides
 // --------------------------------------------------
 
-
 #amp-menu {
   z-index: @amp-menu-layer;
   position: relative;  // for layering
@@ -52,29 +51,6 @@
   }
 }
 
-#map-container {
-  z-index: @amp-map-layer;
-  position: absolute;
-  top: @amp-menu-height;
-  left: @amp-sidebar-width;
-  right: 0;
-  bottom: 0;
-
-  #map-header {
-    z-index:50;
-    position: absolute;
-    height: @amp-map-header-height;
-    width: 100%;
-    opacity: 0.8;
-    color: @amp-text;
-    background:#222;
-    border-radius: 0;
-  }
-  #map-canvas {
-    min-height:300px
-  }
-}
-
 
 #quality-indicator {
   background: @amp-bg-inverse;
@@ -92,23 +68,4 @@
     margin:5px auto;
     display: block;
   }
-}
-
-
-// ESRI Overrides
-.esriSimpleSlider{
-  background-color: #333;
-  color:#eee;
-  opacity: 0.8;
-}
-
-.esriSimpleSliderDecrementButton:hover,
-.esriSimpleSliderIncrementButton:hover{
-  background-color: #222;
-  color:#fff;
-  opacity: 1;
-}
-
-.esriSimpleSliderTL {
-  top: (@amp-map-header-height+10);
 }

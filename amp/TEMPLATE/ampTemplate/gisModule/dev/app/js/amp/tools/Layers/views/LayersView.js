@@ -10,19 +10,21 @@ define(
 
     var LayersView = BaseToolView.extend({
 
+      title: "Layers",
+      iconClass: "ampicon-layers",
+      description: "Tool desc, remove if possible.",
+
+      template: _.template(Template),
+
       initialize: function() {
         BaseToolView.prototype.initialize.apply(this);
-        this.template = _.template(Template);
-        this.title = "Layers";
-        this.iconClass = "ampicon-layers";
-        this.description = "Tool desc, remove if possible.";
       },
 
       render: function(){
         BaseToolView.prototype.render.apply(this);
 
         // add content
-        this.$el.find('.content').html(this.template({title: this.title}));
+        this.$('.content').html(this.template({title: this.title}));
       }
     });
 

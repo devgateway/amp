@@ -10,12 +10,21 @@ define(
 
     var View = BaseToolView.extend({
 
+      title:  "Tools",
+      iconClass:  "ampicon-tools",
+      description:  "Various tools",
+
+      template:  _.template(Template),
+
       initialize: function() {
         BaseToolView.prototype.initialize.apply(this);
-        this.template = _.template(Template);
-        this.title = "Tools";
-        this.iconClass = "ampicon-tools";
-        this.description = "Various tools";
+      },
+
+      render: function() {
+        BaseToolView.prototype.render.apply(this);
+
+        // add content
+        this.$('.content').html(this.template({title: this.title}));
       }
     });
 

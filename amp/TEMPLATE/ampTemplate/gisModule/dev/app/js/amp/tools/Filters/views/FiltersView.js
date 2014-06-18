@@ -10,12 +10,14 @@ define(
 
     var View = BaseToolView.extend({
 
+      title: "Filters",
+      iconClass: "ampicon-filters",
+      description: "Apply filters to the map.",
+
+      template: _.template(Template),
+
       initialize: function() {
         BaseToolView.prototype.initialize.apply(this);
-        this.template = _.template(Template);
-        this.title = "Filters";
-        this.iconClass = "ampicon-filters";
-        this.description = "Apply filters to the map.";
 
         //TODO: Create all the custom views we need, and push them into filterViews:
         //      These views should inherit from a parent view.
@@ -28,12 +30,22 @@ define(
         //TODO: register listener for FILTER_CHANGED event, then iterate over
         //      filterViews and call createFilterJSON on each model
         //      create master filter object and pass it to the map. to call api and re-render.
+
+        // add content
+        this.$('.content').html(this.template({title: this.title}));
       },
 
       //Intentionally not a 'collection' because it won't be populated by the API, and it holds views not models.
       filterViews:[],
 
-      // TODO -- render: Iterate over filterViews and render them all.
+      render: function() {
+        BaseToolView.prototype.render.apply(this);
+
+        // add content
+        this.$('.content').html(this.template({title: this.title}));
+
+        // TODO -- render: Iterate over filterViews and render them all.
+      }
     });
 
     return View;

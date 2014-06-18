@@ -50,6 +50,7 @@
       var stshowimage = "";
       var highlightColorsSelectedOption = <%= FeaturesUtil.getEsriMapsRegionsHighlightSelectedColourScheme()%>
       var stimage= false;
+      var mtefVisible = false;
      
     </script>
     
@@ -69,9 +70,14 @@
 			stimage = true; 
 		</script>
 	</field:display>
-	
-	
-    <!-- Map Scripts -->
+	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+		<script type="text/javascript">
+			mtefVisible = true;
+		</script>
+													
+    </module:display>
+   <!-- Map Scripts -->
     <script type="text/javascript"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
     <script type="text/javascript" src="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/?v=3.0"></script>
    	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/DecimalFormat.js"/>"></script>

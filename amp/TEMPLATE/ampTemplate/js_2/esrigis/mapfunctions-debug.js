@@ -1311,6 +1311,21 @@ function drawpoints() {
 			map.removeLayer(cL);
 			cL=null;
 		}
+		var content ="<table style='font-size: 11px;'>"
+			+ "<tr><td><b>"+translate('Activity')+"<b></td><td> ${Activity}</td></tr>"
+			+ "<tr><td nowrap><b>"+translate('Donors')+"<b></td><td>${Donors}</td></tr>"
+			+ "<tr><td nowrap><b>"+translate('Location')+"<b></td><td>${Location}</td></tr>"
+			+ "<tr><td nowrap><b>"+translate('Primary Sector')+"<b></td><td>${Primary Sector}</td></tr>"
+			+ "<tr><td nowrap><b>"+translate('Total commitments')+"<b></td><td>${Total commitments}</td></tr>"
+			+ "<tr><td nowrap><b>"+translate('Total disbursements')+"<b></td><td>${Total disbursements}</td></tr>";
+		if (mtefVisible == true) {
+			content += "<tr><td nowrap><b>"+translate('Total MTEF Projections')+"<b></td><td>${Total MTEF Projections}</td></tr>";
+		}
+		content += "<tr><td nowrap><b>"+translate('Commitments for this location')+"<b></td><td>${Commitments for this location}</td></tr>"
+			+ "<tr><td nowrap><b>"+translate('Disbursements for this location')+"<b></td><td>${Disbursements for this location}</td></tr>";
+		if (mtefVisible == true) {
+		content += "<tr><td nowrap><b>"+translate('MTEF Projections for this location')+"<b></td><td>${MTEF Projections for this location}</td></tr></table>";
+		}
 		cL = new esri.ux.layers.ClusterLayer(
 				{
 					displayOnPan : false,
@@ -1323,17 +1338,7 @@ function drawpoints() {
 						template :
 							new esri.InfoTemplate(
 								translate('Activity Details'),
-								"<table style='font-size: 11px;'>"
-										+ "<tr><td><b>"+translate('Activity')+"<b></td><td> ${Activity}</td></tr>"
-										+ "<tr><td nowrap><b>"+translate('Donors')+"<b></td><td>${Donors}</td></tr>"
-										+ "<tr><td nowrap><b>"+translate('Location')+"<b></td><td>${Location}</td></tr>"
-										+ "<tr><td nowrap><b>"+translate('Primary Sector')+"<b></td><td>${Primary Sector}</td></tr>"
-										+ "<tr><td nowrap><b>"+translate('Total commitments')+"<b></td><td>${Total commitments}</td></tr>"
-										+ "<tr><td nowrap><b>"+translate('Total disbursements')+"<b></td><td>${Total disbursements}</td></tr>"
-										+ "<tr><td nowrap><b>"+translate('Total MTEF Projections')+"<b></td><td>${Total MTEF Projections}</td></tr>"
-										+ "<tr><td nowrap><b>"+translate('Commitments for this location')+"<b></td><td>${Commitments for this location}</td></tr>"
-										+ "<tr><td nowrap><b>"+translate('Disbursements for this location')+"<b></td><td>${Disbursements for this location}</td></tr></table>",
-										+ "<tr><td nowrap><b>"+translate('MTEF Projections for this location')+"<b></td><td>${MTEF for this location}</td></tr></table>"),
+								content),
 						width : 400,
 						height : 290
 					},

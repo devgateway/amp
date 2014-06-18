@@ -21,9 +21,13 @@
 	</c:if>
 	<div class="centering">
 		<div class="logo">
-					<a href="/"><img src="/aim/default/displayFlag.do" /></a>
+					<c:set var="homeRedirectUrl" value="/"/>
+					<c:if test="${!empty sessionScope.currentMember}">
+						<c:set var="homeRedirectUrl" value="/index.do"/>
+					</c:if>
+					<a href="${homeRedirectUrl}"><img src="/aim/default/displayFlag.do" /></a>
 					<div class="title">
-						<span class="label"><a href="/"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></a></span>
+						<span class="label"><a href="${homeRedirectUrl}"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></a></span>
 					</div>
 		</div>
 		

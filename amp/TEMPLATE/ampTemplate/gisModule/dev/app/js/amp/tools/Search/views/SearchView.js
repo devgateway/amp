@@ -2,42 +2,25 @@ define(
   [
     "underscore",
     "backbone",
-    "text!" + APP_ROOT + "/amp/tools/BaseTool/template.html",
+    APP_ROOT + "/amp/tools/BaseTool/baseToolView.js",
     "text!" + APP_ROOT + "/amp/tools/Search/templates/template.html"
   ],
-  function (_, Backbone, BaseTemplate, Template) {
+  function (_, Backbone, BaseToolView, Template) {
     'use strict';
 
-    var LayersView = Backbone.View.extend({
+    var View = BaseToolView.extend({
 
-      baseTemplate: _.template(BaseTemplate),
-      template: _.template(Template),
-      title: "Keyword Search",
-      iconClass: "ampicon-search",
-      description: "",
-
-      initialize: function () {
-
-      },
-
-      // Render entire geocoding view.
-      render: function () {
-
-          //render base
-          // TODO: abstract some of this into a new BaseTemplate view:
-          this.$el.html(this.baseTemplate({
-            title: this.title, 
-            titleID:this.title.replace(/ /g,''), 
-            iconClass: this.iconClass,
-            description: this.description
-          }));
-
-          // add content.
-          this.$el.find('.content').html(this.template({title: this.title}));
-
+      initialize: function() {
+        BaseToolView.prototype.initialize.apply(this);
+        this.template = _.template(Template);
+        this.title = "Keyword Search";
+        this.iconClass = "ampicon-search";
+        this.description = "";
       }
     });
 
-    return LayersView;
+    return View;
   }
 );
+
+

@@ -2,39 +2,20 @@ define(
   [
     "underscore",
     "backbone",
-    "text!" + APP_ROOT + "/amp/tools/BaseTool/template.html",
+    APP_ROOT + "/amp/tools/BaseTool/baseToolView.js",
     "text!" + APP_ROOT + "/amp/tools/Layers/templates/template.html"
   ],
-  function (_, Backbone, BaseTemplate, Template) {
+  function (_, Backbone, BaseToolView, Template) {
     'use strict';
 
-    var LayersView = Backbone.View.extend({
+    var LayersView = BaseToolView.extend({
 
-      baseTemplate: _.template(BaseTemplate),
-      template: _.template(Template),
-      title: "Layers",
-      iconClass: "ampicon-layers",
-      description: "Tool desc, remove if possible.",
-
-      initialize: function () {
-
-      },
-
-      // Render entire geocoding view.
-      render: function () {
-
-          //render base
-          // TODO: abstract some of this into a new BaseTemplate view:
-          this.$el.html(this.baseTemplate({
-            title: this.title, 
-            titleID:this.title.replace(/ /g,''), 
-            iconClass: this.iconClass,
-            description: this.description
-          }));
-
-          // add content.
-          this.$el.find('.content').html(this.template({title: this.title}));
-
+      initialize: function() {
+        BaseToolView.prototype.initialize.apply(this);
+        this.template = _.template(Template);
+        this.title = "Layers";
+        this.iconClass = "ampicon-layers";
+        this.description = "Tool desc, remove if possible.";
       }
     });
 

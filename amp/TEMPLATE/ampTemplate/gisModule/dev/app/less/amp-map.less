@@ -2,31 +2,39 @@
 // AMP layout and bootstrap overrides
 // --------------------------------------------------
 
+body {  // TODO: put this in a more appropriate place
+  background: @amp-inverse-bg;
+}
+
 #map-container {
   z-index: @amp-map-layer;
   position: absolute;
   top: @amp-menu-height;
   left: @amp-sidebar-width;
   right: 0;
-  bottom: 0;
+  bottom: 5px;
+  border-radius: 0 0 0 5px;
+  overflow: hidden;
 
   #map-header {
     z-index:50;
     position: absolute;
     height: @amp-map-header-height;
     width: 100%;
-    opacity: 0.8;
-    color: @amp-text;
-    background: #222;
+    color: @amp-map-header;
+    background: @amp-map-header-bg;
     border-radius: 0;
 
     #basemap-gallery{
-      &:hover,a, a:hover{
+      color: @amp-content;
+
+      a,
+      a:hover {
         text-decoration: none;
       }
-      
+
       > a {
-          color: @amp-text-inverse;      
+          color: @amp-inverse;
           display: block;
           padding: 9px;
       }
@@ -37,36 +45,34 @@
   }
 
   #legend {
-    background: @amp-bg-inverse;
-    color: @amp-text-inverse;
-
-    padding: 5px;
-    width: 300px;
-    
     z-index: 50;
-    position: fixed;    
+    position: fixed;
     bottom: 0;
     right: 90px;
+    padding: 5px;
+    width: 300px;
+    color: @amp-inverse;
+    background: @amp-inverse-bg;
 
-    .legend-header {      
+    .legend-header {
       &:hover,a, a:hover{
         text-decoration: none;
       }
 
       > a {
-          color: @amp-text-inverse;      
+          color: #eee;
           display: block;
           padding: 4px;
       }
     }
 
     #legend-content {
-      background: lighten(@amp-bg,10%);
-      color: @amp-text;   
-      font-size: 12px;
-      padding:4px;
-      overflow-y: scroll;
       max-height: 200px;
+      padding:4px;
+      font-size: 12px;
+      overflow-y: scroll;
+      color: #333;
+      background: @amp-content-bg;
 
       h3 {
         font-weight: 700;
@@ -79,16 +85,14 @@
 
 // ESRI Overrides
 .esriSimpleSlider{
-  background-color: #333;
-  color:#eee;
-  opacity: 0.8;
+  color: @amp-inverse;
+  background-color: @amp-map-header-bg;
+  border: none;
 }
 
 .esriSimpleSliderDecrementButton:hover,
-.esriSimpleSliderIncrementButton:hover{
+.esriSimpleSliderIncrementButton:hover {
   background-color: #222;
-  color:#fff;
-  opacity: 1;
 }
 
 .esriSimpleSliderTL {

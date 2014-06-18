@@ -5,65 +5,81 @@
 #amp-menu {
   z-index: @amp-menu-layer;
   position: relative;  // for layering
-  height: @amp-map-header-height;
+  height: @amp-menu-height;
+  color: @amp-content;
+  background: @amp-content-bg;
 }
 
+
+
+#branding {
+  padding:8px;
+  text-transform: uppercase;
+  .logo {
+    max-width: 100px;
+    margin: 5px auto;
+    display: block;
+  }
+}
 
 #sidebar {
   z-index: @amp-sidebar-layer;
   position: absolute;
   top: @amp-menu-height;
   left: 0;
-  bottom: 0;
+  bottom: @amp-sidebar-quality-height;  // quality indicator is position: fixed
   width: @amp-sidebar-width;
-  padding-bottom: @amp-sidebar-quality-height;  // quality indicator is position: fixed
-  background: @amp-bg-inverse;
-  color: @amp-text-inverse;
-    
+  background: @amp-inverse-bg;
+  color: @amp-inverse;
   overflow-y: auto;
+
   #sidebar-tools {
   }
 
   .sidebar-tool {
+    margin-top: 2px;
     width: (@amp-sidebar-width - 2);
-    background: @amp-bg;
-    color: darken(@amp-bg-inverse,3%);
+    color: @amp-content;
+    background: @amp-content-bg;
 
     .accordion-heading {
-      background: darken(@amp-bg-inverse,1%);
-      padding:0 4px;
-      border-bottom: 1px solid lighten(@amp-bg-inverse, 5%);
-
-      h3 {        
-        font-size:16px;
-        -webkit-margin-before: 0;
-      }
 
       > a {
         display: block;
-        padding:4px;
-        color: @amp-text-inverse;
-        background: darken(@amp-bg-inverse,1%);
-        border-bottom: 1px solid lighten(@amp-bg-inverse, 5%);
 
-        &:hover,a, a:hover{
+        &:hover,
+        &:active,
+        &:focus {
           text-decoration: none;
+        }
+
+        &.collapsed {
+          background: @amp-sidebar-item-bg;
+        }
+
+        h3 {
+          margin: 0;
+          padding: 8px;
+          // font: inherit;
+          font-size:16px;
+          line-height: 30px;  // matched to icon
         }
       }
     }
 
     .accordion-body {
       height: auto;
+
       > .accordion-inner {
+        padding: 8px;
       }
 
-      h4 {        
+      h4 {
+        padding: 4px;
         font-size: 16px;
         font-weight: 700;
-        background: darken(@amp-bg,10%);
-        color:  darken(@amp-text,10%);
-        padding: 4px;
-        -webkit-margin-before: 0;
+        background: @amp-content-highlight-bg;
+
         label {
           margin: 0;
         }
@@ -75,19 +91,8 @@
 
 
 #quality-indicator {
-  background: @amp-bg-inverse;
-  color: @amp-text-inverse;
   position:fixed;
   bottom:0;
   width: @amp-sidebar-width;
-}
-
-#branding {
-  padding:8px;
-  background: darken(@amp-bg-inverse,3%);
-  .logo{
-    max-width: 100px;
-    margin:5px auto;
-    display: block;
-  }
+  background: @amp-sidebar-special-bg;
 }

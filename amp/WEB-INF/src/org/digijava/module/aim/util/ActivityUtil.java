@@ -5113,7 +5113,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		 return DbUtil.getMostRecentlyUploadedStructureImage(structureId);
 	 }
 	 
-	 public static String getAidEffectivenesForExport(ServletContext ampContext, AmpActivityVersion activity, HttpSession session) {
+	 public static String getAidEffectivenesForExport( AmpActivityVersion activity) {
 			String aidEffectivenesToAdd = "";
 
 			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit")) {

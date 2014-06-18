@@ -9,22 +9,28 @@ define(
 
     var BaseToolView = Backbone.View.extend({
 
+      defaults: {
+        title: "",
+        iconClass: "",
+        description: ""
+      },
+
       initialize: function () {
+
         this.baseTemplate = _.template(BaseTemplate);
+       
+      },
 
-        this.render = function() {
-          // render base
-          this.$el.html(this.baseTemplate({
-            title: this.title,
-            titleID: this.title.replace(/ /g, '').toLowerCase(),
-            iconClass: this.iconClass,
-            description: this.description
-          }));
-
-          // add content
-          this.$el.find('.content').html(this.template({title: this.title}));
-        };
+      render: function() {
+        // render base
+        this.$el.html(this.baseTemplate({
+          title: this.title,
+          titleID: this.title.replace(/ /g, '').toLowerCase(),
+          iconClass: this.iconClass,
+          description: this.description
+        }));
       }
+
     });
 
     return BaseToolView;

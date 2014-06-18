@@ -16,6 +16,13 @@ define(
         this.title = "Layers";
         this.iconClass = "ampicon-layers";
         this.description = "Tool desc, remove if possible.";
+      },
+
+      render: function(){
+        BaseToolView.prototype.render.apply(this);
+
+        // add content
+        this.$el.find('.content').html(this.template({title: this.title}));
       }
     });
 

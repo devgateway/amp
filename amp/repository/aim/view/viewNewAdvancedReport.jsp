@@ -46,8 +46,19 @@
     width: 200px;
     font-family:Arial, Helvetica, sans-serif;
 }
+
+    <%if ("print".equals(request.getParameter("viewFormat"))) {%>
+        html {
+            background: none !important;
+        }
+
+        body {
+            background: none !important;
+        }
+    <%}%>
+
 </style>
-<!-- Individual YUI JS files --> 
+<!-- Individual YUI JS files -->
 
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 

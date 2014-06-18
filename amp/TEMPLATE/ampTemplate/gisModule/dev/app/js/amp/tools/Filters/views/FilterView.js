@@ -2,8 +2,8 @@
 
 define(
   [
-    "underscore",
-    "backbone",
+    'underscore',
+    'backbone',
     'js/amp/tools/Filters/models/Model.js'
   ],
   function (_, Backbone, FilterModel) {

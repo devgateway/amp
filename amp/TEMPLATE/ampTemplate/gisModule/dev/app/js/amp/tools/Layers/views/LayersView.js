@@ -1,18 +1,18 @@
 define(
   [
-    "underscore",
-    "backbone",
-    APP_ROOT + "/amp/tools/BaseTool/baseToolView.js",
-    "text!" + APP_ROOT + "/amp/tools/Layers/templates/template.html"
+    'underscore',
+    'backbone',
+    APP_ROOT + '/amp/tools/BaseTool/baseToolView.js',
+    'text!' + APP_ROOT + '/amp/tools/Layers/templates/template.html'
   ],
   function (_, Backbone, BaseToolView, Template) {
     'use strict';
 
     var LayersView = BaseToolView.extend({
 
-      title: "Layers",
-      iconClass: "ampicon-layers",
-      description: "Tool desc, remove if possible.",
+      title: 'Layers',
+      iconClass: 'ampicon-layers',
+      description: 'Tool desc, remove if possible.',
 
       template: _.template(Template),
 

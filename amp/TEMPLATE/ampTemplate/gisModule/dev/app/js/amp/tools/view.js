@@ -1,7 +1,7 @@
 define(
   [
-    "underscore",
-    "backbone",
+    'underscore',
+    'backbone',
     'js/amp/tools/Layers/views/LayersView.js',
     'js/amp/tools/Filters/views/FiltersView.js',
     'js/amp/tools/Search/views/SearchView.js',

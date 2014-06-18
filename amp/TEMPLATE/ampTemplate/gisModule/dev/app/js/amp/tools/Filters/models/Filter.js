@@ -1,7 +1,7 @@
 define(
   [
-    "underscore",
-    "backbone"
+    'underscore',
+    'backbone'
   ],
   function (_, backbone ) {
     'use strict';
@@ -18,13 +18,13 @@ define(
 
     var Model = Backbone.Model.extend({      
         defaults: {
-            title: "Filter Name",
-            APIparam: "org",
+            title: 'Filter Name',
+            APIparam: 'org',
             totalCount: 375,
         },
         
         initialize: function(){
-            console.log("init a Filter Model");
+            console.log('init a Filter Model');
         },
         
 

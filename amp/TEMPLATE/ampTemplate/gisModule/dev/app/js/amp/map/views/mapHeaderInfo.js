@@ -3,9 +3,9 @@
  */
 define(
   [
-    "underscore",
-    "backbone",
-    "text!" + APP_ROOT + "/amp/map/templates/map-header-info.html",
+    'underscore',
+    'backbone',
+    'text!' + APP_ROOT + '/amp/map/templates/map-header-info.html',
   ],
   function (_, Backbone, Template) {
     'use strict';
@@ -21,7 +21,7 @@ define(
       },
 
       initialize: function () {
-        _.bindAll(this, "render");
+        _.bindAll(this, 'render');
       },
 
       render: function () {

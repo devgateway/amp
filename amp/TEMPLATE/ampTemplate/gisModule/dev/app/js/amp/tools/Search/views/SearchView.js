@@ -1,18 +1,18 @@
 define(
   [
-    "underscore",
-    "backbone",
-    APP_ROOT + "/amp/tools/BaseTool/baseToolView.js",
-    "text!" + APP_ROOT + "/amp/tools/Search/templates/template.html"
+    'underscore',
+    'backbone',
+    APP_ROOT + '/amp/tools/BaseTool/baseToolView.js',
+    'text!' + APP_ROOT + '/amp/tools/Search/templates/template.html'
   ],
   function (_, Backbone, BaseToolView, Template) {
     'use strict';
 
     var View = BaseToolView.extend({
 
-      title: "Keyword Search",
-      iconClass: "ampicon-search",
-      description: "",
+      title: 'Keyword Search',
+      iconClass: 'ampicon-search',
+      description: '',
 
       template: _.template(Template),
 

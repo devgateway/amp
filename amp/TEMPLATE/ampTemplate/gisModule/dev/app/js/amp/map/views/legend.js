@@ -1,8 +1,8 @@
 define(
   [
-    "underscore",
-    "backbone",
-    "text!" + APP_ROOT + "/amp/map/templates/map-legend.html",
+    'underscore',
+    'backbone',
+    'text!' + APP_ROOT + '/amp/map/templates/map-legend.html',
   ],
   function (_, Backbone, Template) {
     'use strict';
@@ -11,14 +11,14 @@ define(
 
       template: _.template(Template),
 
-      tagName: "div",
+      tagName: 'div',
 
       events: {
 
       },
 
       initialize: function () {
-        _.bindAll(this, "render");
+        _.bindAll(this, 'render');
       },
 
       render: function () {

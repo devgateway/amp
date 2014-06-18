@@ -1,18 +1,18 @@
 define(
   [
-    "underscore",
-    "backbone",
-    APP_ROOT + "/amp/tools/BaseTool/baseToolView.js",
-    "text!" + APP_ROOT + "/amp/tools/Filters/templates/template.html"
+    'underscore',
+    'backbone',
+    APP_ROOT + '/amp/tools/BaseTool/baseToolView.js',
+    'text!' + APP_ROOT + '/amp/tools/Filters/templates/template.html'
   ],
   function (_, Backbone, BaseToolView, Template) {
     'use strict';
 
     var View = BaseToolView.extend({
 
-      title: "Filters",
-      iconClass: "ampicon-filters",
-      description: "Apply filters to the map.",
+      title: 'Filters',
+      iconClass: 'ampicon-filters',
+      description: 'Apply filters to the map.',
 
       template: _.template(Template),
 

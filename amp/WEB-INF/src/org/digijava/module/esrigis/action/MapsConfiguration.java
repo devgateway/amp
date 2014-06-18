@@ -107,7 +107,6 @@ public class MapsConfiguration extends DispatchAction {
 		
 		//Validations
 		if(checkEmptyFields(mapForm)){
-			//request.setAttribute("event", "view");
 			ActionMessages errors = new ActionMessages();
     		errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.mapConfiguration.emptyFields"));
     		if (errors.size() > 0)

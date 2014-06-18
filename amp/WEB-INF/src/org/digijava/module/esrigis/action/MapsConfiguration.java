@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
@@ -20,6 +21,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpStructureType;
@@ -101,9 +103,20 @@ public class MapsConfiguration extends DispatchAction {
 		
 
 		MapsConfigurationForm mapForm = (MapsConfigurationForm) form;
+		HttpSession session = request.getSession();
 		
 		//Validations
-
+		if(checkEmptyFields(mapForm)){
+			//request.setAttribute("event", "view");
+			ActionMessages errors = new ActionMessages();
+    		errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.mapConfiguration.emptyFields"));
+    		if (errors.size() > 0)
+    			{
+    				saveErrors(request, errors);
+    			}
+			return mapping.findForward("addEdit");
+		}
+		
 		AmpMapConfig map;
 		if (mapForm.getMapId() != null
 				&& mapForm.getMapId() > 0) {
@@ -180,6 +193,16 @@ public class MapsConfiguration extends DispatchAction {
 		return mapping.findForward("addEdit");
 	}
 
+	private boolean checkEmptyFields (MapsConfigurationForm form) {
+		if (form.getUrl() == null || form.getUrl().isEmpty() || form.getCount() == null 
+				|| form.getCount().isEmpty())
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
 //	
 //	public ActionForward MapList(ActionMapping mapping, ActionForm form,

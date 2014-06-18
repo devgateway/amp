@@ -689,15 +689,15 @@ public class DataDispatcher extends DispatchAction {
 		rootSecondaryPrograms.put("type", "SecondaryProgramsList");
 		rootSecondaryPrograms.put("top", topSecondaryPrograms);
 		children.add(rootSecondaryPrograms);
-		
+		AmpCurrency currency = CurrencyUtil.getAmpcurrency(visualizationForm.getFilter().getCurrencyId());
 		rootTotComms.put("type", "TotalComms");
 		rootTotComms.put("value", FormatHelper.formatNumberNotRounded( visualizationForm.getSummaryInformation().getTotalCommitments().doubleValue()));
-		rootTotComms.put("curr", visualizationForm.getFilter().getCurrencyCode());
+		rootTotComms.put("curr", currency.getCurrencyName());
 		children.add(rootTotComms);
 		
 		rootTotDisbs.put("type", "TotalDisbs");
 		rootTotDisbs.put("value", FormatHelper.formatNumberNotRounded(visualizationForm.getSummaryInformation().getTotalDisbursements().doubleValue()));
-		rootTotDisbs.put("curr", visualizationForm.getFilter().getCurrencyCode());
+		rootTotDisbs.put("curr", currency.getCurrencyName());
 		children.add(rootTotDisbs);
 		
 		rootNumOfProjs.put("type", "NumberOfProjs");
@@ -718,7 +718,7 @@ public class DataDispatcher extends DispatchAction {
 		
 		rootAvgProjs.put("type", "AvgProjSize");
 		rootAvgProjs.put("value", FormatHelper.formatNumberNotRounded( visualizationForm.getSummaryInformation().getAverageProjectSize().doubleValue()) );
-		rootAvgProjs.put("curr", visualizationForm.getFilter().getCurrencyCode());
+		rootAvgProjs.put("curr", currency.getCurrencyName());
 		children.add(rootAvgProjs);
 		
 		root.put("objectType", "lists");

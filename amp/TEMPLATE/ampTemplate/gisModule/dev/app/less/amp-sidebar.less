@@ -16,7 +16,7 @@
   padding:8px;
   text-transform: uppercase;
   .logo {
-    max-width: 100px;
+    max-width: 65px;
     margin: 5px auto;
     display: block;
   }
@@ -31,9 +31,21 @@
   width: @amp-sidebar-width;
   background: @amp-inverse-bg;
   color: @amp-inverse;
+
   overflow-y: auto;
+  overflow-x: hidden;
+
 
   #sidebar-tools {
+
+    // This sucks, but we need to use panel to make accordion parent collapse work,
+    // but we don't actually want the panel styles.
+    // ticket to watch: https://github.com/twbs/bootstrap/issues/10966
+    >.panel{
+      border:0;
+      border-radius:0;
+      margin:0;
+    }
     
   }
 
@@ -71,10 +83,6 @@
     .accordion-body {
       height: auto;
 
-      > .accordion-inner {
-        padding: 8px;
-      }
-
       h4 {
         padding: 4px;
         font-size: 16px;
@@ -86,8 +94,15 @@
         }
       }
 
+      .filter-type{
+        h4{
+          padding: 5px 15px;
+          margin: 4px 0;
+        }
+      }
     }
   }
+
 }
 
 

@@ -19,19 +19,20 @@ define(
       render: function () {
         console.log('render tools');
 
-        this.$el.append('<div id="tool-layers"></div>');
+        
+        this.$el.append('<div id="tool-layers"  class="panel sidebar-tool"></div>');
         var layerView = new LayersView({el:'#tool-layers'});
         layerView.render();
 
-        this.$el.append('<div id="tool-search"></div>');
+        this.$el.append('<div id="tool-search" class="panel sidebar-tool"></div>');
         var searchView = new SearchView({el:'#tool-search'});
         searchView.render();
 
-        this.$el.append('<div id="tool-filters"></div>');
+        this.$el.append('<div id="tool-filters" class="panel sidebar-tool"></div>');
         var filtersView = new FiltersView({el:'#tool-filters'});
         filtersView.render();
 
-        this.$el.append('<div id="tool-tools"></div>');
+        this.$el.append('<div id="tool-tools" class="panel sidebar-tool"></div>');
         var toolsView = new ToolsView({el:'#tool-tools'});
         toolsView.render(); 
       }

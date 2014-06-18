@@ -2,18 +2,26 @@ define(
   [
     'underscore',
     'backbone',
-    'text!' + APP_ROOT + '/amp/map/templates/map-container.html',
+    'text!' + APP_ROOT + '/amp/map/templates/map-container-template.html',
+    
     'esri/map',
-    'js/amp/map/views/mapHeaderInfo.js',
-    'js/amp/map/views/basemapGallery.js',
-    'js/amp/map/views/legend.js'
+
+    'js/amp/map/views/map-header-view.js',
+    'js/amp/map/views/basemap-gallery-view.js',
+    'js/amp/map/views/legend-view.js'
   ],
-  function (_, Backbone, Template, Map, MapHeaderView, BasemapGalleryView, LegendView) {
+  function (_, Backbone, Template, 
+            Map, 
+            MapHeaderView, BasemapGalleryView, LegendView) {
     'use strict';
 
     var MapView = Backbone.View.extend({
 
       template: _.template(Template),
+
+      initialize: function () {
+
+      },
 
       render: function () {
         var self = this;
@@ -22,11 +30,12 @@ define(
 
         // Render ESRI map
         require(['esri/map'], function(Map) {
+          var mapCanvas = self.$el.find('#map-canvas');
+          mapCanvas.height(self.$el.height());  // TODO: adjust on window resize?
           self.map = new Map('map-canvas', {
             center: [-56.049, 38.485],
             zoom: 3,
-            basemap: 'streets',
-            autoResize: true
+            basemap: 'streets'
           });
         });
 

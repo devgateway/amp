@@ -2,10 +2,10 @@ define(
   [
     'underscore',
     'backbone',
-    'js/amp/tools/Layers/views/LayersView.js',
-    'js/amp/tools/Filters/views/FiltersView.js',
-    'js/amp/tools/Search/views/SearchView.js',
-    'js/amp/tools/Tools/views/ToolsView.js',
+    'js/amp/sidebar/layers/views/layers-view.js',
+    'js/amp/sidebar/filters/views/filters-view.js',
+    'js/amp/sidebar/search/views/search-view.js',
+    'js/amp/sidebar/tools/views/tools-view.js',
   ],
   function (_, Backbone, LayersView, FiltersView, SearchView, ToolsView) {
     'use strict';

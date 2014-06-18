@@ -2,12 +2,12 @@ define(
   [
     'underscore',
     'backbone',
-    'js/amp/map/views/main.js',
-    'js/amp/dataquality/views/main.js',
-    'js/amp/tools/view.js'
+    'js/amp/map/views/main-view.js',
+    'js/amp/dataquality/views/dataquality-view.js',
+    'js/amp/sidebar/sidebar-view.js'
 
   ],
-  function (_, Backbone, MapView, DataQualityView, ToolsView) {
+  function (_, Backbone, MapView, DataQualityView, SidebarView) {
     'use strict';
 
     var GISView = Backbone.View.extend({
@@ -28,8 +28,8 @@ define(
         var dataQualityView = new DataQualityView({el: '#quality-indicator'});
         dataQualityView.render();
 
-        var toolsView = new ToolsView({el: '#sidebar-tools'});
-        toolsView.render();
+        var sidebarView = new SidebarView({el: '#sidebar-tools'});
+        sidebarView.render();
 
       }
     });

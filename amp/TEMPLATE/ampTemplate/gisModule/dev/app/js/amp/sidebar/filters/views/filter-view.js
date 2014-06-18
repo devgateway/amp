@@ -4,7 +4,7 @@ define(
   [
     'underscore',
     'backbone',
-    'js/amp/tools/Filters/models/Model.js'
+    'js/amp/sidebar/Filters/models/Model.js'
   ],
   function (_, Backbone, FilterModel) {
     'use strict';

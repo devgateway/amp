@@ -2,7 +2,7 @@ define(
   [
     'underscore',
     'backbone',
-    'text!' + APP_ROOT + '/amp/tools/BaseTool/template.html',
+    'text!' + APP_ROOT + '/amp/sidebar/base-control/base-control-template.html',
   ],
   function (_, Backbone, BaseTemplate, Template) {
     'use strict';

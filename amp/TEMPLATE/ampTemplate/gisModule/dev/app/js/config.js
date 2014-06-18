@@ -61,7 +61,7 @@ dojoConfig = {
     {
       name: 'gis',
       location: APP_ROOT + '/amp/gis/views',
-      main: 'main'
+      main: 'gis-view'
     }
   ],
   waitSeconds: 50,

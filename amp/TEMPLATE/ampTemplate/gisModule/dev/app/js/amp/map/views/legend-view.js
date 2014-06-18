@@ -1,20 +1,17 @@
-/**
- * Pertinent details contextualizing the data on the map.
- */
 define(
   [
     'underscore',
     'backbone',
-    'text!' + APP_ROOT + '/amp/map/templates/map-header-info.html',
+    'text!' + APP_ROOT + '/amp/map/templates/map-legend-template.html',
   ],
   function (_, Backbone, Template) {
     'use strict';
 
-    var BasemapView = Backbone.View.extend({
+    var LegendView = Backbone.View.extend({
 
       template: _.template(Template),
 
-      tagName: 'span',
+      tagName: 'div',
 
       events: {
 
@@ -27,11 +24,13 @@ define(
       render: function () {
         var self = this;
         this.$el.append(this.template());
-        return this.$el;
+
+        //TODO: chevron toggle: http://jsfiddle.net/zessx/R6EAW/12/
+
       }
 
     });
 
-    return BasemapView;
+    return LegendView;
   }
 );

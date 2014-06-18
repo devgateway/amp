@@ -2,7 +2,7 @@ define(
   [
     'underscore',
     'backbone',
-    'text!' + APP_ROOT + '/amp/dataquality/templates/dataquality.html'
+    'text!' + APP_ROOT + '/amp/dataquality/templates/dataquality-template.html'
   ],
   function (_, Backbone, Template) {
     'use strict';

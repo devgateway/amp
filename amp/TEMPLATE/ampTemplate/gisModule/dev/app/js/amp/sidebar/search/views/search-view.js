@@ -2,19 +2,19 @@ define(
   [
     'underscore',
     'backbone',
-    APP_ROOT + '/amp/tools/BaseTool/baseToolView.js',
-    'text!' + APP_ROOT + '/amp/tools/Tools/templates/template.html'
+    APP_ROOT + '/amp/sidebar/base-control/base-control-view.js',
+    'text!' + APP_ROOT + '/amp/sidebar/search/templates/search-template.html'
   ],
   function (_, Backbone, BaseToolView, Template) {
     'use strict';
 
     var View = BaseToolView.extend({
 
-      title:  'Tools',
-      iconClass:  'ampicon-tools',
-      description:  'Various tools',
+      title: 'Keyword Search',
+      iconClass: 'ampicon-search',
+      description: '',
 
-      template:  _.template(Template),
+      template: _.template(Template),
 
       initialize: function() {
         BaseToolView.prototype.initialize.apply(this);
@@ -31,3 +31,5 @@ define(
     return View;
   }
 );
+
+

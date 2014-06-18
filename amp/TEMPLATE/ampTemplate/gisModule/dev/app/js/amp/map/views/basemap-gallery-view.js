@@ -5,7 +5,7 @@ define(
   [
     'underscore',
     'backbone',
-    'text!' + APP_ROOT + '/amp/map/templates/basemap-gallery.html',
+    'text!' + APP_ROOT + '/amp/map/templates/basemap-gallery-template.html',
   ],
   function (_, Backbone, Template) {
     'use strict';

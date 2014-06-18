@@ -52,9 +52,28 @@ Installing a [livereload browser extension](http://feedback.livereload.com/knowl
 
 #### Run tests
 
-```bash
-$ gulp test
-```
+Command-line tests are currently **not working**:
+
+> ```bash
+> $ gulp test
+> ```
+
+**Instead**, run the tests in-browser:
+
+ 1. Build the site
+    ```bash
+    $ gulp build
+    ```
+ 2. Copy the testing scripts
+    ```bash
+    $ gulp tests
+    ```
+    _note plural `tests`, **not** `test` singular, which tries to run them_
+ 3. Serve the site locally
+    ```bash
+    $ gulp serve
+    ```
+    And then browse to the testing page: [localhost:3000/test-runner.html](http://localhost:3000/test-runner.html)
 
 #### Lint javascript and css sources
 

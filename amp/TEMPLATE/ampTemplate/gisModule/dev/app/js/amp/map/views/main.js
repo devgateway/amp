@@ -15,10 +15,6 @@ define(
 
       template: _.template(Template),
 
-      initialize: function () {
-
-      },
-
       render: function () {
         var self = this;
 
@@ -26,12 +22,11 @@ define(
 
         // Render ESRI map
         require(['esri/map'], function(Map) {
-          var mapCanvas = self.$el.find('#map-canvas');
-          mapCanvas.height(self.$el.height());  // TODO: adjust on window resize?
           self.map = new Map('map-canvas', {
             center: [-56.049, 38.485],
             zoom: 3,
-            basemap: 'streets'
+            basemap: 'streets',
+            autoResize: true
           });
         });
 

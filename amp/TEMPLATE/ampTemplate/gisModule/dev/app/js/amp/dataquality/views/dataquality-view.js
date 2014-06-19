@@ -25,10 +25,10 @@ define(
         this.updateScore();
       },
 
+
       // TODO make sure updateScore is triggered by map filter changes.
       updateScore: function(){
         this.currentScore = this.model.getScore();
-        console.log('score: ' + this.currentScore);
         var styleClass = 'info';
 
 

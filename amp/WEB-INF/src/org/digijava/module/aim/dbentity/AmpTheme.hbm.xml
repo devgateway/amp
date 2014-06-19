@@ -36,8 +36,9 @@
 		<many-to-one name="typeCategoryValue" column="type_category_value_id"
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
 
-		<many-to-one name="activityId" column="amp_activity_id"
+		<!-- <many-to-one name="activityId" column="amp_activity_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" not-null="false" />
+			-->
 		<set name="activities" table="AMP_ACTIVITY_THEME" lazy="true" cascade="none"
 			inverse="true">
 			<cache usage="read-write" />

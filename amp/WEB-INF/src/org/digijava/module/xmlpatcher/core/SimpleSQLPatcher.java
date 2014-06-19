@@ -129,6 +129,100 @@ public class SimpleSQLPatcher {
 
 				"DROP TABLE IF EXISTS amp_report_modality"
 				));
+
+			addPatch(new SimpleSQLPatch(
+					"005",
+					"DROP VIEW IF EXISTS amp_activity CASCADE",
+					"DROP VIEW IF EXISTS v_act_pp_details",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS linked_activities",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS contract_details",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS version",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS cal_type",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS condition_",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS contractors",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS convenio_date_filter",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS classi_code",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS convenio_numcont",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS  customField1",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS  customField2",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS  customField3",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS  customField4",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS  customField5",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS  customField6",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS contracting_arrangements",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS comments",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS cond_seq",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS activity_level_id",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS gbsSbs",
+					"ALTER TABLE  amp_theme DROP COLUMN IF EXISTS amp_activity_id",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS amp_theme_id",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS amp_categ_val_modality_id",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS author",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS plan_min_rank",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS chapter_code",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS funding_sources_number",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS activity_start_date",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS activity_close_date",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS amp_activity_previous_version_id",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS activity_approval_date",
+					
+					"DROP INDEX IF EXISTS amp_activity_version_comments_idx",
+					"DROP INDEX IF EXISTS amp_activity_version_contracting_arrangements_idx",
+					
+					" CREATE OR REPLACE VIEW amp_activity AS select amp_activity_version.* FROM amp_activity_version,amp_activity_group "+
+                    " WHERE amp_activity_version.amp_activity_id = amp_activity_group.amp_activity_last_version_id  "+
+                    " AND (amp_activity_version.deleted IS NULL OR amp_activity_version.deleted = false)",
+					
+					" UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'",
+					" DELETE FROM  amp_columns WHERE extractorview = 'v_convenio_numcont' ",
+					" DELETE FROM  amp_columns WHERE extractorview = 'v_contracting_arrangements'  ",
+					" DELETE FROM  amp_columns WHERE extractorview = 'v_budgeting_year' ",
+					" DELETE FROM  amp_columns WHERE extractorview = 'v_code_chapitre' ",
+					" DELETE FROM  amp_columns WHERE extractorview = 'v_description_chapitre' ",
+					" DELETE FROM  amp_columns WHERE extractorview = 'v_description_imputation' ",
+					" DELETE FROM  amp_columns WHERE extractorview = 'v_imputation' ",
+					
+					" DELETE FROM amp_modules_templates WHERE module = (select id from amp_modules_visibility WHERE name LIKE '/Activity Form/Identification/Linked Activities')",
+					" DELETE FROM amp_modules_visibility WHERE name LIKE '/Activity Form/Identification/Linked Activities'",
+					" DELETE FROM amp_fields_templates WHERE field =(select id  from amp_fields_visibility WHERE name LIKE 'Linked Activities')",
+					" DELETE FROM amp_fields_visibility WHERE name LIKE 'Linked Activities'",
+					" DELETE FROM amp_fields_templates WHERE field =(select id from amp_fields_visibility WHERE name  ='Contract Number')",
+					" DELETE FROM amp_fields_visibility WHERE name  ='Contract Number'",
+					" DELETE FROM amp_fields_templates WHERE field =(SELECT id FROM amp_fields_visibility WHERE name  ='Contract Number')",
+					" DELETE FROM amp_fields_visibility WHERE name  ='Contract Number'",
+					" DELETE FROM amp_features_templates WHERE feature in (SELECT id FROM amp_features_visibility WHERE parent =(SELECT id FROM amp_modules_visibility WHERE name='Custom Fields'))",
+					" DELETE FROM amp_fields_templates WHERE field in (SELECT id FROM amp_fields_visibility WHERE name like 'Custom Field%')",
+					" DELETE FROM amp_fields_visibility WHERE name like 'Custom Field%'",
+					" DELETE FROM amp_features_visibility WHERE parent =(SELECT id FROM amp_modules_visibility WHERE name='Custom Fields')",
+					" DELETE FROM amp_modules_templates WHERE MODULE IN(SELECT ID FROM amp_modules_visibility WHERE name='Custom Fields')",
+					" DELETE FROM amp_modules_visibility WHERE name='Custom Fields'",
+					" DELETE FROM amp_features_visibility WHERE parent =(SELECT id FROM amp_modules_visibility WHERE name='Custom Fields')",
+					
+					" DELETE FROM  amp_modules_templates WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name ='/Activity Form/Identification/Contracting Arrangements')",
+					" DELETE FROM  amp_modules_visibility WHERE name ='/Activity Form/Identification/Contracting Arrangements'",
+					" DELETE FROM  amp_fields_templates WHERE field IN (SELECT id FROM  amp_fields_visibility WHERE name = 'Contracting Arrangements')",
+					" DELETE FROM  amp_fields_visibility WHERE name = 'Contracting Arrangements'",
+					" DELETE FROM  amp_modules_templates WHERE module in(SELECT id FROM amp_modules_visibility WHERE name='/Activity Form/Identification/Conditionality and Sequencing' )",
+					" DELETE FROM amp_modules_visibility WHERE name='/Activity Form/Identification/Conditionality and Sequencing' ",
+					" DELETE FROM  amp_fields_templates WHERE field in(SELECT id FROM amp_fields_visibility WHERE name='Conditionality and Sequencing' )",
+					" DELETE FROM  amp_fields_visibility WHERE name='Conditionality and Sequencing' ",
+					" DELETE FROM  amp_modules_templates WHERE module IN (SELECT id FROM amp_modules_visibility WHERE name = '/Activity Form/Planning/Ministry of Planning Rank')",
+					" DELETE FROM  amp_modules_visibility WHERE name = '/Activity Form/Planning/Ministry of Planning Rank'",
+					" DELETE FROM  amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name ='Ministry of Planning Rank')",
+					" DELETE FROM  amp_fields_visibility WHERE name = 'Ministry of Planning Rank'",
+					" DELETE FROM  amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name = 'Budgeting Year')",
+					" DELETE FROM  amp_fields_visibility WHERE name = 'Budgeting Year'",
+					" DELETE FROM  amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name ='Code Chapitre')",
+					" DELETE FROM  amp_fields_visibility WHERE name ='Code Chapitre'",
+					" DELETE FROM  amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name ='Description Chapitre')",
+					" DELETE FROM  amp_fields_visibility WHERE name ='Description Chapitre'",
+					" DELETE FROM  amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name ='Description Imputation')",
+					" DELETE FROM  amp_fields_visibility WHERE name ='Description Imputation'"
+										
+					
+					));
+		
+		
 	}};
 	DataSource dataSource;
 	

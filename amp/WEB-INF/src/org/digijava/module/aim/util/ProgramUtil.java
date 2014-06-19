@@ -1690,9 +1690,9 @@ public class ProgramUtil {
                      if (themeToBeDeleted.getActivities() != null) {
                          activities.addAll(themeToBeDeleted.getActivities());
                      }
-                     if (themeToBeDeleted.getActivityId() != null) {
-                         activities.add(themeToBeDeleted.getActivityId());
-                     }
+//                     if (themeToBeDeleted.getActivityId() != null) {
+//                         activities.add(themeToBeDeleted.getActivityId());
+//                     }
 
                      String queryString = "select a from " + AmpActivityProgram.class.getName() + " a where (a.program=:program) ";
                      Query qry = sess.createQuery(queryString);

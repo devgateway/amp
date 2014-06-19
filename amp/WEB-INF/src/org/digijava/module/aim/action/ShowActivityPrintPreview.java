@@ -168,22 +168,7 @@ public class ShowActivityPrintPreview
                 if(activity.getActivitySummary()!=null){
                 	eaForm.getIdentification().setActivitySummary(activity.getActivitySummary().trim());
                 }
-
-                // fferreyra: Added null checking for field contracting_arrangements
-                if(activity.getContractingArrangements()!=null){
-                	eaForm.getIdentification().setContractingArrangements(activity.getContractingArrangements().trim());
-                }
-
-                // fferreyra: Added null checking for field cond_seq
-                if(activity.getCondSeq()!=null){
-                	eaForm.getIdentification().setCondSeq(activity.getCondSeq().trim());
-                }
-                
-                // fferreyra: Added null checking for field linked_activities
-                if(activity.getLinkedActivities()!=null){
-                	eaForm.getIdentification().setLinkedActivities(activity.getLinkedActivities().trim());
-                }
-                
+               
                 // fferreyra: Added null checking for field conditionality
                 if(activity.getConditionality()!=null){
                 	eaForm.getIdentification().setConditionality(activity.getConditionality().trim());
@@ -193,14 +178,6 @@ public class ShowActivityPrintPreview
                 if(activity.getProjectManagement()!=null){
                 	eaForm.getIdentification().setProjectManagement(activity.getProjectManagement().trim());
                 }
-                
-                // fferreyra: Added null checking for field contract_details
-                if(activity.getContractDetails()!=null){
-                	eaForm.getContracts().setContractDetails(activity.getContractDetails().trim());
-                }
-                
-            	
-                
                 
                
                 if(activity.getDocumentSpace() == null ||
@@ -234,11 +211,7 @@ public class ShowActivityPrintPreview
                                           toString());
                 else
                     eaForm.getPlanning().setLineMinRank("-1");
-                if(null != activity.getPlanMinRank())
-                    eaForm.getPlanning().setPlanMinRank(activity.getPlanMinRank().
-                                          toString());
-                else
-                    eaForm.getPlanning().setPlanMinRank("-1");
+            
                 
                 eaForm.getPlanning().setActRankCollection(new ArrayList());
                 for(int i = 1; i < 6; i++) {
@@ -460,16 +433,10 @@ public class ShowActivityPrintPreview
         			eaForm.getSectors().setActivitySectors(activitySectors);
         		}
         		
-                if(activity.getThemeId() != null) {
-                    eaForm.getPrograms()
-                        .setProgram(activity.getThemeId()
-                                    .getAmpThemeId());
-                }
                 if(activity.getProgramDescription()!=null){
                 	 eaForm.getPrograms().setProgramDescription(activity.getProgramDescription().trim()); 	
                 }
                 
-               // FundingCalculationsHelper calculations=new FundingCalculationsHelper();  
                 String toCurrCode=null;
                 if (tm != null)
                     toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
@@ -750,9 +717,7 @@ public class ShowActivityPrintPreview
                 eaForm.getContactInfo().setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
                 eaForm.getContactInfo().setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
                 
-                if(activity.getCondition()!=null){
-                	 eaForm.getIdentification().setConditions(activity.getCondition().trim());
-                }
+
                
                 
                 AmpCategoryValue ampCategoryValue = CategoryManagerUtil.
@@ -880,7 +845,7 @@ public class ShowActivityPrintPreview
                 if(activity.getMinistryCode()!=null)
                 	eaForm.getIdentification().setMinistryCode(activity.getMinistryCode().trim());
                 
-                eaForm.getIdentification().setGbsSbs(activity.getGbsSbs());
+//                eaForm.getIdentification().setGbsSbs(activity.getGbsSbs());
                 eaForm.getIdentification().setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
                 eaForm.getIdentification().setJointCriteria(activity.isJointCriteria());
                 eaForm.getIdentification().setHumanitarianAid(activity.isHumanitarianAid());
@@ -920,8 +885,6 @@ public class ShowActivityPrintPreview
                 eaForm.getIdentification().setStatusReason(null);
                 eaForm.getPlanning().setLineMinRank(null);
                 eaForm.getPlanning().setLineMinRank(null);
-                eaForm.getPlanning().setPlanMinRank(null);
-                eaForm.getPlanning().setPlanMinRank(null);
                 eaForm.getIdentification().setCreatedDate(null);
                 eaForm.getIdentification().setUpdatedDate(null);
                 eaForm.getPlanning().setOriginalAppDate(null);
@@ -968,7 +931,6 @@ public class ShowActivityPrintPreview
 				eaForm.getContactInfo().setSecMiCntPhoneNumber(null);
 				eaForm.getContactInfo().setSecMiCntFaxNumber(null);
 				
-                eaForm.getIdentification().setConditions(null);
                 eaForm.getIdentification().setActAthFirstName(null);
                 eaForm.getIdentification().setActAthLastName(null);
                 eaForm.getIdentification().setActAthEmail(null);
@@ -991,7 +953,7 @@ public class ShowActivityPrintPreview
 				eaForm.getIdentification().setSubProgram(null);
 				eaForm.getIdentification().setProjectCode(null);
 				eaForm.getIdentification().setMinistryCode(null);
-				eaForm.getIdentification().setGbsSbs(null);
+//				eaForm.getIdentification().setGbsSbs(null);
 				
 				eaForm.getIdentification().setGovernmentApprovalProcedures(false);
 				eaForm.getIdentification().setJointCriteria(false);               

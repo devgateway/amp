@@ -288,40 +288,6 @@
 
 						</html:select>
 
-						<html:select name="aimDesktopForm" property="planMinRank" styleClass="inp-text">
-
-							<html:option value="-1">PMR</html:option>
-
-							<c:forEach var="mpr" items="${aimDesktopForm.actRankColl}" >
-
-								<c:choose>
-
-									<c:when test="${mpr == aimDesktopForm.planMinRank}">
-
-										<option value='<c:out value="${mpr}" />' selected><c:out value="${mpr}"/></option>
-
-									</c:when>
-
-									<c:otherwise>
-
-										<option value='<c:out value="${mpr}" />'><c:out value="${mpr}"/></option>
-
-									</c:otherwise>
-
-								</c:choose>
-
-							</c:forEach>
-
-							<%--
-
-							<html:option value="-2">PMR+</html:option>
-
-							<html:option value="-3">PMR-</html:option>	--%>
-
-						</html:select>
-
-
-
 						<input type="submit" class="dr-menu" value="<digi:trn key="aim:desktopGoBtn">Go</digi:trn>">
 
 						<input type="submit" class="dr-menu" onclick="resetFilters()" value="<digi:trn key="aim:desktopResetBtn">Reset</digi:trn>">

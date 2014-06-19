@@ -1555,8 +1555,8 @@ public class ActivityUtil {
 	      
 	      for (AmpActivityGroup ampActivityGroup : groups) {
 		      			
-	    	  Query qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityGroup = " + ampActivityGroup.getAmpActivityGroupId());
-	    	  qry.executeUpdate();
+//	    	  Query qry = session.createQuery("UPDATE " + AmpActivityVersion.class.getName()+ " SET ampActivityPreviousVersion = NULL WHERE ampActivityGroup = " + ampActivityGroup.getAmpActivityGroupId());
+//	    	  qry.executeUpdate();
 						
 	    	  Set<AmpActivityVersion> activityversions = ampActivityGroup.getActivities();
 	    	  if (activityversions != null && activityversions.size() > 0){

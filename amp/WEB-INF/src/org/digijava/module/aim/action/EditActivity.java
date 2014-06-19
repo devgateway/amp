@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.jcr.Node;
 import javax.servlet.RequestDispatcher;
@@ -34,8 +33,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.GroupReportData;
-import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -82,9 +79,7 @@ import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
@@ -554,7 +549,6 @@ public class EditActivity extends Action {
     	  eaForm.getIdentification().setSubProgram(null);
     	  eaForm.getIdentification().setProjectCode(null);
     	  eaForm.getIdentification().setMinistryCode(null);
-    	  eaForm.getIdentification().setGbsSbs(null);
     	  eaForm.getIdentification().setGovernmentApprovalProcedures(null);
     	  eaForm.getIdentification().setJointCriteria(null);
     	  /* END - Clearing Tanzania Adds */
@@ -616,8 +610,8 @@ public class EditActivity extends Action {
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.FINANCIAL_INSTRUMENT_KEY, activity.getCategories());
-            if (ampCategoryValue != null)
-              eaForm.getIdentification().setGbsSbs(new Long(ampCategoryValue.getId()));
+//            if (ampCategoryValue != null)
+//              eaForm.getIdentification().setGbsSbs(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
@@ -863,8 +857,7 @@ public class EditActivity extends Action {
           if (activity.getMinistryCode() != null)
               eaForm.getIdentification().setMinistryCode(activity.getMinistryCode().trim());
 
-          if (activity.getGbsSbs() != null)
-            eaForm.getIdentification().setGbsSbs(activity.getGbsSbs());
+
 
           if (activity.isGovernmentApprovalProcedures() != null)
             eaForm.getIdentification().setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
@@ -904,42 +897,12 @@ public class EditActivity extends Action {
 
       	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact());
 
-      	if(activity.getChapter()!=null) {
-      		eaForm.getIdentification().setChapterCode(activity.getChapter().getCode());
-      		eaForm.getIdentification().setChapterYear(activity.getChapter().getYear());
-      		eaForm.getIdentification().setChapterForPreview(activity.getChapter());
-      		logger.info("GETTING CHAPTER AND IMPUTATIONS : "+activity.getChapter().getCode());
-      		logger.info("GETTING CHAPTER AND IMPUTATIONS : "+activity.getChapter().getImputations().size());
-      		//
-//      		Iterator it = activity.getChapter().getImputations().iterator();
-//      		while (it.hasNext()) {
-//
-//      		}
-      	}
-
     	eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());
-
-
-    	eaForm.getIdentification().setContractingArrangements(activity.getContractingArrangements());
-
-
-    	eaForm.getIdentification().setCondSeq(activity.getCondSeq());
-
-
-    	eaForm.getIdentification().setLinkedActivities(activity.getLinkedActivities());
-
 
     	eaForm.getIdentification().setConditionality(activity.getConditionality());
 
 
     	eaForm.getIdentification().setProjectManagement(activity.getProjectManagement());
-
-
-    	eaForm.getContracts().setContractDetails(activity.getContractDetails());
-
-
-  		eaForm.getIdentification().setConvenioNumcont(activity.getConvenioNumcont());
-  		eaForm.getIdentification().setClasiNPD(activity.getClasiNPD());
 
   		if (activity.getProjectComments() != null)
             eaForm.getIdentification().setProjectComments(activity.getProjectComments().trim());
@@ -979,12 +942,6 @@ public class EditActivity extends Action {
           } else {
               eaForm.getPlanning().setLineMinRank("-1");
           }
-          if (null != activity.getPlanMinRank()) {
-              eaForm.getPlanning().setPlanMinRank(activity.getPlanMinRank().toString());
-          } else {
-              eaForm.getPlanning().setPlanMinRank("-1");
-          }
-
           eaForm.getPlanning().setProposedProjectLife(activity.getProposedProjectLife());
 
           eaForm.getPlanning().setActRankCollection(new ArrayList());
@@ -1160,9 +1117,6 @@ public class EditActivity extends Action {
             	List<AmpClassificationConfiguration> classificationConfigs=SectorUtil.getAllClassificationConfigs();
             	eaForm.getSectors().setClassificationConfigs(classificationConfigs);
             }    
-          if (activity.getThemeId() != null) {
-            eaForm.getPrograms().setProgram(activity.getThemeId().getAmpThemeId());
-          }
           
           if (activity.getProgramDescription() != null)
         	  eaForm.getPrograms().setProgramDescription(activity
@@ -1548,8 +1502,6 @@ public class EditActivity extends Action {
 	    	  AmpContactsWorker.copyContactsToSubLists(activityContacts, eaForm);
 	      }
 
-          if (activity.getCondition() != null)
-        	  eaForm.getIdentification().setConditions(activity.getCondition().trim());
 
           if (activity.getActivityCreator() != null) {
             User usr = activity.getActivityCreator().getUser();
@@ -1562,42 +1514,7 @@ public class EditActivity extends Action {
           }
         }
 
-        if(eaForm.getCustomFields()!=null){
-	        Iterator<CustomField<?>> itcf = eaForm.getCustomFields().iterator();
-	        while(itcf.hasNext()){
-	        	CustomField cf = itcf.next();
-	        	try{
-	        		Object value = PropertyUtils.getSimpleProperty(activity, cf.getAmpActivityPropertyName());
-	        		cf.setValue(value);
-	        	}catch(Exception e){
-	        		logger.error("Error getting property [" + cf.getAmpActivityPropertyName() + "] from bean ", e);
-	        	}
-	        }
-        }
       }
-      //Collection statusCol = null;
-      // load the status from the database
-//            if(eaForm.getStatusCollection() == null) { // TO BE DELETED
-//                statusCol = DbUtil.getAmpStatus();
-//                eaForm.setStatusCollection(statusCol);
-//            } else {
-//                statusCol = eaForm.getStatusCollection();
-//            }
-      // Initailly setting the implementation level as "country"
-//      if (eaForm.getLocation().getImplemLocationLevel() == null)
-//        eaForm.getLocation().setImplemLocationLevel(
-//            CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.
-//            IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId()
-//            );
-
-      //Collection modalColl = null;
-      // load the modalities from the database
-      /* if(eaForm.getModalityCollection() == null) { //No need to load modalitiees. Using category manager.
-           modalColl = DbUtil.getAmpModality();
-           eaForm.setModalityCollection(modalColl);
-       } else {
-           modalColl = eaForm.getModalityCollection();
-       }*/
 
       // Initally set the modality as "Project Support"
       Collection financingInstrValues = CategoryManagerUtil.

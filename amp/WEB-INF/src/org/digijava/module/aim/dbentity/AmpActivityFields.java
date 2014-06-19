@@ -40,21 +40,11 @@ LoggerIdentifiable, Cloneable {
 	protected String projectImpact;
 	@VersionableFieldTextEditor(fieldTitle = "Activity Summary")
 	protected String activitySummary;
-	@VersionableFieldTextEditor(fieldTitle = "Contracting Arrangements")
-	protected String contractingArrangements;
-	@VersionableFieldTextEditor(fieldTitle = "condSeq")
-	protected String condSeq;
-	@VersionableFieldTextEditor(fieldTitle = "Linked Activities")
-	protected String linkedActivities;
+
 	@VersionableFieldTextEditor(fieldTitle = "Conditionality")
 	protected String conditionality;
 	@VersionableFieldTextEditor(fieldTitle = "Project Management")
 	protected String projectManagement;
-	@VersionableFieldTextEditor(fieldTitle = "Contract Details")
-	protected String contractDetails;
-
-	//@VersionableFieldTextEditor(fieldTitle = "Code Chapitre")
-	protected AmpChapter chapter;
 
 	@VersionableFieldSimple(fieldTitle = "Activity Budget")
 	protected Integer budget;
@@ -111,21 +101,9 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldTextEditor(fieldTitle = "Minorities")
 	protected String minorities;
 
-	@VersionableFieldSimple(fieldTitle = "Activity Level")
-	protected Long activityLevel;
 	@VersionableFieldSimple(fieldTitle = "Language")
 	protected String language ;
-	@VersionableFieldSimple(fieldTitle = "Version")
-	protected String version ;
-	protected String calType; 	// values GREGORIAN, ETH_CAL, ETH_FISCAL_CAL
-	@VersionableFieldSimple(fieldTitle = "Condition")
-	protected String condition ;
-	@VersionableFieldSimple(fieldTitle = "Approval Date")
-	protected Date activityApprovalDate;  // defunct
-	@VersionableFieldSimple(fieldTitle = "Activity Start Date")
-	protected Date activityStartDate ;    // defunct
-	@VersionableFieldSimple(fieldTitle = "Activity Close Date")
-	protected Date activityCloseDate ;    // defunct
+
 	@VersionableFieldSimple(fieldTitle = "Original Date")
 	protected Date originalCompDate;
 	@VersionableFieldSimple(fieldTitle = "Contracting Date")
@@ -165,10 +143,6 @@ LoggerIdentifiable, Cloneable {
 
 	@VersionableCollection(fieldTitle = "Costs")
 	protected Set costs;
-	//protected AmpModality modality ;
-	protected AmpCategoryValue modality;
-	@VersionableFieldSimple(fieldTitle = "Theme")
-	protected AmpTheme themeId;
 	@VersionableFieldTextEditor(fieldTitle = "Program Description")
 	protected String programDescription;
 	@VersionableFieldSimple(fieldTitle = "Team")
@@ -241,8 +215,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Activity Contacts")
 	protected Set<AmpActivityContact> activityContacts;
 
-	@VersionableFieldSimple(fieldTitle = "Comments")
-	protected String comments;
+
 
 	@VersionableFieldTextEditor(fieldTitle = "Status Reason")
 	protected String statusReason;
@@ -269,8 +242,6 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Proposed Completion Date")
 	protected Date proposedCompletionDate;
 
-	protected User author; // use activityCreator instead
-
 	// This field is defunct
 
 	@VersionableFieldSimple(fieldTitle = "Created By", blockSingleChange = true)
@@ -295,9 +266,6 @@ LoggerIdentifiable, Cloneable {
 	protected AmpTeamMember approvedBy;
 	protected Date approvalDate;
 
-	//protected Set teamList;
-	protected String contractors;
-
 	@VersionableCollection(fieldTitle = "Regional Fundings")
 	protected Set regionalFundings;
 
@@ -313,8 +281,7 @@ LoggerIdentifiable, Cloneable {
 
 	@VersionableFieldSimple(fieldTitle = "Line Ministry Rank")
 	protected Integer lineMinRank;
-	@VersionableFieldSimple(fieldTitle = "Plan Ministry Rank")
-	protected Integer planMinRank;
+
 	protected Collection actRankColl;
 
 	@VersionableFieldSimple(fieldTitle = "Archived")
@@ -432,11 +399,6 @@ LoggerIdentifiable, Cloneable {
 	@VersionableCollection(fieldTitle = "Indicators")
 	protected Set<IndicatorActivity> indicators;
 
-	// Start Bolivia Adds
-	protected Date convenioDateFilter;
-	protected String convenioNumcont;
-	protected String clasiNPD;
-	// End Bolivia Adds
 
 	@VersionableCollection(fieldTitle = "Activity Documents")
 	protected Set<AmpActivityDocument> activityDocuments	= null;
@@ -467,7 +429,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "CRIS Number")
 	protected String crisNumber;
 
-	protected Long gbsSbs;
+	
 
 	@VersionableFieldSimple(fieldTitle = "Government Approval Procedures")
 	protected Boolean governmentApprovalProcedures;
@@ -486,12 +448,6 @@ LoggerIdentifiable, Cloneable {
 	protected boolean createdAsDraft;
 	
 
-	protected String customField1;
-	protected String customField2;   
-	protected Long customField3;
-	protected Date customField4;
-	protected String customField5;
-	protected Boolean customField6;
 
 	/**
 	 * Fields for activity versioning.
@@ -499,12 +455,6 @@ LoggerIdentifiable, Cloneable {
 	protected AmpActivityGroup ampActivityGroup;
 	
 	
-	/**
-	 * @deprecated
-	 * Using the field has no benefit yet, but it's high maintenance
-	 * so it's deprecated for now!
-	 */
-	protected AmpActivityVersion ampActivityPreviousVersion;
 	protected Date modifiedDate;
 
 	@VersionableFieldSimple(fieldTitle = "Modified By")
@@ -600,14 +550,6 @@ LoggerIdentifiable, Cloneable {
 		this.activityDocuments = activityDocuments;
 	}
 
-	public AmpCategoryValue getModality() {
-		return modality;
-	}
-
-	public void setModality(AmpCategoryValue modality) {
-		this.modality = modality;
-	}
-
 	public Set getCosts() {
 		return costs;
 	}
@@ -687,32 +629,6 @@ LoggerIdentifiable, Cloneable {
 
 	public Set getIssues() {
 		return issues;
-	}
-
-	/**
-	 * @return
-	 */
-	//public AmpStatus getStatus() { // TO BE DELETED
-	//return status;
-	//}
-
-	/**
-	 * @return
-	 */
-	public String getVersion() {
-		return version;
-	}
-
-	public Date getActivityStartDate() {
-		return activityStartDate;
-	}
-
-	public String getCondition() {
-		return condition;
-	}
-
-	public Date getActivityCloseDate() {
-		return activityCloseDate;
 	}
 
 	/**
@@ -805,24 +721,7 @@ LoggerIdentifiable, Cloneable {
 	//this.status = status;
 	//}
 
-	/**
-	 * @param string
-	 */
-	public void setVersion(String string) {
-		version = string;
-	}
 
-	public void setActivityStartDate(Date date) {
-		activityStartDate = date;
-	}
-
-	public void setActivityCloseDate(Date date) {
-		activityCloseDate = date;
-	}
-
-	public void setCondition(String string) {
-		condition = string;
-	}
 
 	/**
 	 * @return
@@ -867,14 +766,6 @@ LoggerIdentifiable, Cloneable {
 		this.documents = documents;
 	}
 
-	public AmpTheme getThemeId() {
-		return themeId;
-	}
-
-	public void setThemeId(AmpTheme themeId) {
-		this.themeId = themeId;
-	}
-
 	public AmpTeam getTeam() {
 		return team;
 	}
@@ -904,19 +795,8 @@ LoggerIdentifiable, Cloneable {
 		originalCompDate = date;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getCalType() {
-		return calType;
-	}
 
-	/**
-	 * @param string
-	 */
-	public void setCalType(String string) {
-		calType = string;
-	}
+
 
 
 
@@ -932,34 +812,6 @@ LoggerIdentifiable, Cloneable {
 		return (myName.trim().toLowerCase().compareTo(hisName.trim().toLowerCase()));
 
 	}
-
-	/**
-	 * @return
-	 */
-	public String getComments() {
-		return comments;
-	}
-
-	/**
-	 * @return
-	 */
-	/*public String getContactName() {
-return contactName;
-}*/
-
-	/**
-	 * @param string
-	 */
-	public void setComments(String string) {
-		comments = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	/*public void setContactName(String string) {
-contactName = string;
-}*/
 
 	public Set<AmpActivityContact> getActivityContacts() {
 		return activityContacts;
@@ -1008,19 +860,7 @@ contactName = string;
 	public void setStructures(Set<AmpStructure> structures) {
 		this.structures = structures;
 	}
-	/**
-	 * @return Returns the activityApprovalDate.
-	 */
-	public Date getActivityApprovalDate() {
-		return activityApprovalDate;
-	}
-	/**
-	 * @param activityApprovalDate
-	 *            The activityApprovalDate to set.
-	 */
-	public void setActivityApprovalDate(Date activityApprovalDate) {
-		this.activityApprovalDate = activityApprovalDate;
-	}
+
 	/**
 	 * @return Returns the actualApprovalDate.
 	 */
@@ -1085,19 +925,6 @@ contactName = string;
 	 */
 	public void setProposedStartDate(Date proposedStartDate) {
 		this.proposedStartDate = proposedStartDate;
-	}
-	/**
-	 * @return Returns the author.
-	 */
-	public User getAuthor() {
-		return author;
-	}
-	/**
-	 * @param author
-	 *            The author to set.
-	 */
-	public void setAuthor(User author) {
-		this.author = author;
 	}
 	/**
 	 * @return Returns the createdDate.
@@ -1167,19 +994,6 @@ contactName = string;
 	 */
 	public void setProgramDescription(String programDescription) {
 		this.programDescription = programDescription;
-	}
-	/**
-	 * @return Returns the contractors.
-	 */
-	public String getContractors() {
-		return contractors;
-	}
-	/**
-	 * @param contractors
-	 *            The contractors to set.
-	 */
-	public void setContractors(String contractors) {
-		this.contractors = contractors;
 	}
 
 	/**
@@ -1335,14 +1149,6 @@ contactName = string;
 		this.lineMinRank = lineMinRank;
 	}
 
-	public Integer getPlanMinRank() {
-		return planMinRank;
-	}
-
-	public void setPlanMinRank(Integer planMinRank) {
-		this.planMinRank = planMinRank;
-	}
-
 	public Collection getActRankColl() {
 		return actRankColl;
 	}
@@ -1478,14 +1284,6 @@ contactName = string;
 		FY = fy;
 	}
 
-	public Long getGbsSbs() {
-		return gbsSbs;
-	}
-
-	public void setGbsSbs(Long gbsSbs) {
-		this.gbsSbs = gbsSbs;
-	}
-
 	public String getProjectCode() {
 		return projectCode;
 	}
@@ -1608,14 +1406,6 @@ contactName = string;
 		this.actPrograms = actPrograms;
 	}
 
-	public Long getActivityLevel() {
-		return activityLevel;
-	}
-
-	public void setActivityLevel(Long activityLevel) {
-		this.activityLevel = activityLevel;
-	}
-
 	public Boolean getGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
 	}
@@ -1640,13 +1430,6 @@ contactName = string;
 		this.govAgreementNumber = govAgreementNumber;
 	}
 
-	public void setConvenioDateFilter(Date convenioDateFilter) {
-		this.convenioDateFilter = convenioDateFilter;
-	}
-
-	public Date getConvenioDateFilter() {
-		return convenioDateFilter;
-	}
 
 	public String getProjectImpact() {
 		return projectImpact;
@@ -1664,29 +1447,6 @@ contactName = string;
 		this.activitySummary = activitySummary;
 	}
 
-	public String getContractingArrangements() {
-		return contractingArrangements;
-	}
-
-	public void setContractingArrangements(String contractingArrangements) {
-		this.contractingArrangements = contractingArrangements;
-	}
-
-	public String getCondSeq() {
-		return condSeq;
-	}
-
-	public void setCondSeq(String condSeq) {
-		this.condSeq = condSeq;
-	}
-
-	public String getLinkedActivities() {
-		return linkedActivities;
-	}
-
-	public void setLinkedActivities(String linkedActivities) {
-		this.linkedActivities = linkedActivities;
-	}
 
 	public String getConditionality() {
 		return conditionality;
@@ -1703,15 +1463,6 @@ contactName = string;
 	public void setProjectManagement(String projectManagement) {
 		this.projectManagement = projectManagement;
 	}
-
-	public String getContractDetails() {
-		return contractDetails;
-	}
-
-	public void setContractDetails(String contractDetails) {
-		this.contractDetails = contractDetails;
-	}	
-
 	public String getPrjCoFirstName() {
 		return prjCoFirstName;
 	}
@@ -1824,21 +1575,7 @@ contactName = string;
 		this.secMiCntFaxNumber = secMiCntFaxNumber;
 	}
 
-	public void setConvenioNumcont(String convenioNumcont) {
-		this.convenioNumcont = convenioNumcont;
-	}
 
-	public String getConvenioNumcont() {
-		return convenioNumcont;
-	}
-
-	public String getClasiNPD() {
-		return clasiNPD;
-	}
-
-	public void setClasiNPD(String clasiNPD) {
-		this.clasiNPD = clasiNPD;
-	}
 
 	public String toString(){
 		if(name!=null) return name;
@@ -1921,61 +1658,12 @@ contactName = string;
 		return donors.toString();
 	}
 
-
-	public void setCustomField1(String customField1) {
-		this.customField1 = customField1;
-	}
-
-	public String getCustomField1() {
-		return customField1;
-	}
-
 	public String getBudgetCodeProjectID() {
 		return budgetCodeProjectID;
 	}
 
 	public void setBudgetCodeProjectID(String budgetCodeProjectID) {
 		this.budgetCodeProjectID = budgetCodeProjectID;
-	}
-
-	public void setCustomField2(String customField2) {
-		this.customField2 = customField2;
-	}
-
-	public String getCustomField2() {
-		return customField2;
-	}
-
-	public void setCustomField3(Long customField3) {
-		this.customField3 = customField3;
-	}
-
-	public Long getCustomField3() {
-		return customField3;
-	}
-
-	public void setCustomField4(Date customField4) {
-		this.customField4 = customField4;
-	}
-
-	public Date getCustomField4() {
-		return customField4;
-	}
-
-	public void setCustomField5(String customField5) {
-		this.customField5 = customField5;
-	}
-
-	public String getCustomField5() {
-		return customField5;
-	}
-
-	public void setCustomField6(Boolean customField6) {
-		this.customField6 = customField6;
-	}
-
-	public Boolean getCustomField6() {
-		return customField6;
 	}
 
 	public String getProjectComments() {
@@ -2002,24 +1690,6 @@ contactName = string;
 		this.ampActivityGroup = ampActivityGroup;
 	}
 
-	/**
-	 * @deprecated
-	 * Using the field has no benefit yet, but it's high maintenance
-	 * so it's deprecated for now!
-	 */
-	public AmpActivityVersion getAmpActivityPreviousVersion() {
-		return ampActivityPreviousVersion;
-	}
-
-	/**
-	 * @deprecated
-	 * Using the field has no benefit yet, but it's high maintenance
-	 * so it's deprecated for now!
-	 */
-	public void setAmpActivityPreviousVersion(AmpActivityVersion ampActivityPreviousVersion) {
-		this.ampActivityPreviousVersion = ampActivityPreviousVersion;
-	}
-
 	public Date getModifiedDate() {
 		return modifiedDate;
 	}
@@ -2034,20 +1704,6 @@ contactName = string;
 
 	public void setModifiedBy(AmpTeamMember modifiedBy) {
 		this.modifiedBy = modifiedBy;
-	}
-
-	/**
-	 * @return the chapter
-	 */
-	public AmpChapter getChapter() {
-		return chapter;
-	}
-
-	/**
-	 * @param chapter the chapter to set
-	 */
-	public void setChapter(AmpChapter chapter) {
-		this.chapter = chapter;
 	}
 
 	/**

@@ -695,12 +695,6 @@ function collapseAll() {
 					<hr />
 			</module:display>
 					
-			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-<!--			<field:display name="NPD Clasification" feature="Identification">-->
-<!--				<digi:trn>NPD Clasification</digi:trn>:&nbsp;<br />-->
-<!--				<b><c:out value="${aimEditActivityForm.identification.clasiNPD}"/></b>-->
-<!--				<hr />-->
-<!--			</field:display>-->
 			
 			<module:display name="/Activity Form/Identification/Lessons Learned" parentModule="/Activity Form/Identification">
 				<digi:trn>Lessons Learned</digi:trn>:&nbsp;<br />
@@ -733,33 +727,6 @@ function collapseAll() {
 				</bean:define>
 				<jsp:include page="largeTextPropertyView.jsp" />
 		 	</logic:present> 
-			<logic:present name="aimEditActivityForm" property="identification.contractingArrangements">
-				<bean:define id="moduleName" value="/Activity Form/Identification/Contracting Arrangements" toScope="request"/>
-				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
-				<bean:define id="largeTextLabel" value="Contracting Arrangements" toScope="request"/>
-				<bean:define id="largeTextKey" toScope="request">
-					<c:out value="${aimEditActivityForm.identification.contractingArrangements}"/>
-				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
-			</logic:present>
-			<logic:present name="aimEditActivityForm" property="identification.condSeq">
-				<bean:define id="moduleName" value="/Activity Form/Identification/Conditionality and Sequencing" toScope="request"/>
-				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
-				<bean:define id="largeTextLabel" value="Conditionality and Sequencing" toScope="request"/>
-				<bean:define id="largeTextKey" toScope="request">
-					<c:out value="${aimEditActivityForm.identification.condSeq}" />
-				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
-			</logic:present>
-			<logic:present name="aimEditActivityForm" property="identification.linkedActivities">
-				<bean:define id="moduleName" value="/Activity Form/Identification/Linked Activities" toScope="request"/>
-				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
-				<bean:define id="largeTextLabel" value="Linked Activities" toScope="request"/>
-				<bean:define id="largeTextKey" toScope="request">
-					<c:out value="${aimEditActivityForm.identification.linkedActivities}"/>
-				</bean:define>
-				<jsp:include page="largeTextPropertyView.jsp" />
-			</logic:present>
 			<logic:present name="aimEditActivityForm" property="identification.conditionality">
 				<bean:define id="moduleName" value="/Activity Form/Identification/Conditionalities" toScope="request"/>
 				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
@@ -1145,13 +1112,6 @@ function collapseAll() {
 					<b>${aimEditActivityForm.planning.lineMinRank}</b>				</c:if>
 		</module:display>
 		
-		<module:display name="/Activity Form/Planning/Ministry of Planning Rank" parentModule="/Activity Form/Planning">
-			<hr>
-			<digi:trn>Ministry of Planning Rank</digi:trn>:&nbsp;
-			<c:if test="${aimEditActivityForm.planning.planMinRank == -1}"></c:if> 
-			<c:if test="${aimEditActivityForm.planning.planMinRank != -1}">
-				<b>${aimEditActivityForm.planning.planMinRank}</b>			</c:if>
-		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 			<hr>
@@ -1509,16 +1469,6 @@ function collapseAll() {
 						</td>
 					</c:if>	
 				</tr>
-                <c:if test="${aimEditActivityForm.identification.fundingSourcesNumber != null}">
-                    <tr bgcolor="#f0f0f0">
-                        <td>
-                            <digi:trn>Total Number of Funding Sources</digi:trn>
-                        </td>
-                        <td>
-                            <b>${aimEditActivityForm.identification.fundingSourcesNumber}</b>
-                        </td>
-                    </tr>
-                </c:if>
 			</table>
 		</c:if>
 	</div>

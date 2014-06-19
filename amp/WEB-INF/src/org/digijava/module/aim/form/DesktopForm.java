@@ -55,7 +55,7 @@ public class DesktopForm extends ActionForm {
 	private String resetFliters;
 	
 	private String lineMinRank;
-	private String planMinRank;
+	
 	private Collection actRankColl;
 
 	/**
@@ -455,12 +455,6 @@ public class DesktopForm extends ActionForm {
 	}
 	public void setLineMinRank(String lineMinRank) {
 		this.lineMinRank = lineMinRank;
-	}
-	public String getPlanMinRank() {
-		return planMinRank;
-	}
-	public void setPlanMinRank(String planMinRank) {
-		this.planMinRank = planMinRank;
 	}
 
 }

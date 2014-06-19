@@ -236,16 +236,8 @@ public class ActivityVersionUtil {
 			}
 		}
 
-		//out.setActivityCreator(member);
 		out.setAmpActivityGroup(null);
-		out.setAuthor(null);
-		//out.setTeam(member.getAmpTeam());
-		out.setThemeId(null);
-		out.setModality(null);
 		out.setModifiedBy(member);
-		// out.setCreatedBy(null);
-		out.setChapter(null);
-
 		return out;
 	}
 	

@@ -893,24 +893,6 @@ public class ReportsFilterPicker extends Action {
 							rootLineMinRank, "lineMinRanks");
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
-		if ( FeaturesUtil.isVisibleField("Ministry of Planning Rank")) {
-			Collection<HierarchyListableImplementation> children	= 
-				new ArrayList<HierarchyListableImplementation>();
-			HierarchyListableImplementation rootplanMinRank	= new HierarchyListableImplementation();
-			rootplanMinRank.setLabel("All");
-			rootplanMinRank.setUniqueId("-1");
-			rootplanMinRank.setChildren( children );
-			for (int i=1; i<6 ; i++) {
-				HierarchyListableImplementation planMinDO	= new HierarchyListableImplementation();
-				planMinDO.setLabel( i + "" );
-				planMinDO.setUniqueId( i + "");
-				children.add(planMinDO);
-			}
-			GroupingElement<HierarchyListableImplementation> planMinRankElement	=
-					new GroupingElement<HierarchyListableImplementation>("Planning Ministry Rank", "filter_plan_min_rank_div", 
-							rootplanMinRank, "planMinRanks");
-			filterForm.getOtherCriteriaElements().add(planMinRankElement);
-		}
 		if (FeaturesUtil.isVisibleFeature("Archived")) {
 			if(teamMember!=null){
 				Collection<HierarchyListableImplementation> children	= 
@@ -1357,20 +1339,6 @@ public class ReportsFilterPicker extends Action {
 	 	 	}
 	 	 	arf.setLineMinRank(ranks);
 	 	 }
-	 	 
-		if ( filterForm.getPlanMinRanks() != null && filterForm.getPlanMinRanks().length > 0 ) {
-	 		ArrayList<Integer> ranks        = new ArrayList<Integer>();
-	 	 	for (int i=0; i< filterForm.getPlanMinRanks().length;  i++) {
-	 	 		Integer val     = Integer.parseInt((String)filterForm.getPlanMinRanks()[i]);
-	 	 		if ( val == 0 ) {
-	 	 			ranks   = null;
-	 	 			break;
-	 	 		} else
-	 	 			ranks.add(val);
-	 	 	}
-	 	 	arf.setPlanMinRank(ranks);
-	 	}
-	 	 	
 		//if (!all.equals(filterForm.getRegionSelected()))
 		//	arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? 
 		//					null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );

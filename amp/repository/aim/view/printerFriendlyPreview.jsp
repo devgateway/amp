@@ -304,49 +304,7 @@ body {background:none;}
 	                                        </td>
 										</tr>
 									</module:display>
-									<module:display name="/Activity Form/Identification/Contracting Arrangements" parentModule="/Activity Form/Identification">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-												<digi:trn>Contracting Arrangements</digi:trn>
-									  		</b>								
-									  	</td>
-									  	<td bgcolor="#ffffff">
-                                        <c:if test="${aimEditActivityForm.identification.contractingArrangements!=null}">
-											<c:set var="descKey" value="${aimEditActivityForm.identification.contractingArrangements}" />
-											<digi:edit key="${descKey}"></digi:edit>
-                                        </c:if>										
-                                        </td>
-									</tr>
 									</module:display>
-									<module:display name="/Activity Form/Identification/Conditionality and Sequencing" parentModule="/Activity Form/Identification">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b><digi:trn>Conditionality and Sequencing</digi:trn></b>								
-									  	</td>
-									  	<td bgcolor="#ffffff">
-                                        <c:if test="${aimEditActivityForm.identification.condSeq!=null}">
-											<c:set var="condSeq" value="${aimEditActivityForm.identification.condSeq}" />
-											<digi:edit key="${condSeq}"></digi:edit>
-                                        </c:if>										
-                                        </td>
-									</tr>
-									</module:display>
-									
-									<module:display name="/Activity Form/Identification/Linked Activities" parentModule="/Activity Form/Identification">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b><digi:trn>Linked Activities</digi:trn></b>								
-									  	</td>
-									  	<td bgcolor="#ffffff">
-                                        <c:if test="${aimEditActivityForm.identification.condSeq!=null}">
-											<c:set var="linkedActivities" value="${aimEditActivityForm.identification.linkedActivities}" />
-											<digi:edit key="${linkedActivities}"></digi:edit>
-                                        </c:if>										
-                                        </td>
-									</tr>
-									</module:display>
-									
 									<module:display name="/Activity Form/Identification/Conditionalities" parentModule="/Activity Form/Identification">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
@@ -379,19 +337,6 @@ body {background:none;}
 									</tr>
 									</module:display>									 
                                        <feature:display name="Identification" module="Project ID and Planning">   
-									<field:display name="Contract Number" feature="Planning">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-												<digi:trn key="aim:convenionumcont">Contract Number</digi:trn>		
-									  		</b>								
-									  	</td>
-									  	<td bgcolor="#ffffff">
-                                        	<c:out value="${aimEditActivityForm.identification.convenioNumcont}"/>										
-                                        </td>
-									</tr>
-                                    </field:display>                                    
-                                                                      
 									<module:display name="/Activity Form/Identification/Purpose" parentModule="/Activity Form/Identification">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
@@ -611,22 +556,6 @@ body {background:none;}
 									</c:if>
 									</module:display>
 <!-- end identification in the same order as previewActivity -->									
-									<field:display name="Contracting Arrangements" feature="Identification">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap" >
-											<b>
-												<digi:trn>Contracting Arrangements</digi:trn>
-									  		</b>								
-									  	</td>
-									  	<td bgcolor="#ffffff">
-                                        <c:if test="${aimEditActivityForm.identification.contractingArrangements!=null}">
-											<c:set var="descKey" value="${aimEditActivityForm.identification.contractingArrangements}" />
-											<digi:edit key="${descKey}"></digi:edit>
-                                        </c:if>										
-                                        </td>
-									</tr>
-									</field:display>
-
 									<feature:display name="Budget" module="Project ID and Planning">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
@@ -770,18 +699,7 @@ body {background:none;}
 													${aimEditActivityForm.planning.lineMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
-												<field:display name="Ministry of Planning Rank" feature="Planning">
-												<tr>
-													<td width="32%"><digi:trn key="aim:planMinRank">
-													Ministry of Planning Rank</digi:trn></td>
-													<td width="1">:</td>
-													<td align="left">
-													<c:if test="${aimEditActivityForm.planning.planMinRank == -1}">													</c:if>
-													<c:if test="${aimEditActivityForm.planning.planMinRank != -1}">
-													${aimEditActivityForm.planning.planMinRank}													</c:if>													</td>
-												</tr>
-												</field:display>
-												
+											
 												<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">
@@ -2749,18 +2667,6 @@ body {background:none;}
                                                          </c:if>                                                        
                                                          </td>
                                                        </tr>
-                                                        <module:display name="/Activity Form/Funding/Total Number of Funding Sources" parentModule="/Activity Form/Funding">
-														 <tr bgcolor="#ffffff">
-														<td>
-															<digi:trn>Total Number of Funding Sources</digi:trn>  
-														</td>
-                                                        <td bgcolor="#FFFFFF" align="left" width="150">
-                                                          <c:if test="${aimEditActivityForm.identification.fundingSourcesNumber!=null}">
-                                                             ${aimEditActivityForm.identification.fundingSourcesNumber}                                                          
-                                                         </c:if>                                                        
-                                                         </td>
-                                                       </tr>
-														</module:display>
                                               		</table>
                             				</c:if>										</td>
 									</tr>

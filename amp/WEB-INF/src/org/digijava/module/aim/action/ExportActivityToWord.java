@@ -1394,12 +1394,6 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Ministry of Planning Rank")){
-			columnName=TranslatorWorker.translateText("Ministry of Planning Rank")+": ";
-			columnVal = planning.getPlanMinRank().equals("-1")?"":planning.getPlanMinRank();
-			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
-		}
-		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date")){
 			columnName=TranslatorWorker.translateText("Proposed Approval Date") +": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalAppDate(),null);
@@ -2668,12 +2662,6 @@ public class ExportActivityToWord extends Action {
 			}
 		}
 		
-		if (FeaturesUtil.isVisibleField("Contract Number")) {
-			columnName = TranslatorWorker.translateText("Contract Number");
-			generateOverAllTableRows(identificationSubTable1, columnName,
-					identification.getConvenioNumcont(), null);
-		}
-
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Description")){
 			columnName=TranslatorWorker.translateText("Description");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getDescription()),null);
@@ -2684,11 +2672,6 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1, columnName,
 					processEditTagValue(request, identification.getProjectComments()), null);
 		}
-
-//		if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext,session)){
-//			columnName=TranslatorWorker.translateText("NPD Clasification");
-//			generateOverAllTableRows(identificationSubTable1, columnName, processEditTagValue(request, identification.getClasiNPD()), null);
-//		}
 		
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned")) {
 			columnName=TranslatorWorker.translateText("Lessons Learned");
@@ -2703,21 +2686,6 @@ public class ExportActivityToWord extends Action {
 		if(identification.getActivitySummary() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Summary")){
 			columnName=TranslatorWorker.translateText("Activity Summary");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getActivitySummary()),null);
-		}
-		
-		if(identification.getContractingArrangements() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Contracting Arrangements")){
-			columnName=TranslatorWorker.translateText("Contracting Arrangements");
-			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getContractingArrangements()),null);
-		}
-		
-		if(identification.getCondSeq() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionality and Sequencing")){
-			columnName=TranslatorWorker.translateText("Conditionality and Sequencing");
-			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getCondSeq()),null);
-		}
-		
-		if(identification.getLinkedActivities() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Linked Activities")){
-			columnName=TranslatorWorker.translateText("Linked Activities");
-			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getLinkedActivities()),null);
 		}
 		
 		if(identification.getConditionality() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionalities")){

@@ -43,7 +43,6 @@ function resetFilter(){
         resetElement(aimReportsFilterPickerForm.regionSelected);
         resetElement(aimReportsFilterPickerForm.approvalStatusSelected);
         resetElement(aimReportsFilterPickerForm.lineMinRanks);
-        resetElement(aimReportsFilterPickerForm.planMinRanks);
         resetElement(aimReportsFilterPickerForm.selectedStatuses);
         resetElement(aimReportsFilterPickerForm.selectedFinancingInstruments);
         resetElement (aimReportsFilterPickerForm.selectedContractingAgencyGroups);
@@ -66,7 +65,6 @@ function resetFilter(){
  		resetElement(aimReportsFilterPickerForm.disbursementOrders);
  		resetElement(aimReportsFilterPickerForm.selectedBudgets);
  		resetElement(aimReportsFilterPickerForm.lineMinRanks);
- 		resetElement(aimReportsFilterPickerForm.planMinRanks);
  		resetElement(aimReportsFilterPickerForm.selectedArchivedStatus);
  		if (document.getElementById("workspace_only")!=null){
  			document.getElementById("workspace_only").checked = false;

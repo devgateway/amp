@@ -31,7 +31,6 @@ import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.QuartzJobForm;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.QuartzJobClassUtils;
@@ -272,8 +271,6 @@ public class AMPStartupListener extends HttpServlet implements
 			//AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
 			initializeQuartz(sce);
 
-			CustomFieldsUtil.parseXMLFile(sce.getServletContext().getResourceAsStream("/WEB-INF/custom-fields.xml"));
-			
 			logger.info("Checking if any MTEF columns need to be created...");
 			DynamicColumnsUtil.createInexistentMtefColumns(ampContext,null);
 			

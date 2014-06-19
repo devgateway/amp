@@ -103,10 +103,6 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("amp_activity").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name")));
 
-				
-				addViewDef(this, new I18nViewDescription("v_act_pp_details").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name")));
-				
 				addViewDef(this, new I18nViewDescription("v_actors").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_actor_id", AmpActor.class, "name")));
 				
@@ -449,9 +445,9 @@ public class InternationalizedViewsRepository {
 
 				addViewDef(this, new I18nViewDescription("v_minorities").
 						addColumnDef(new I18nViewColumnDescription("ebody", "v_minorities", "locale")));
-
-				addViewDef(this, new I18nViewDescription("v_contracting_arrangements").
-						addColumnDef(new I18nViewColumnDescription("body", "v_contracting_arrangements", "locale")));
+				//REMOVED DUE TO ACTIVITY CLEAN UP
+//				addViewDef(this, new I18nViewDescription("v_contracting_arrangements").
+//						addColumnDef(new I18nViewColumnDescription("body", "v_contracting_arrangements", "locale")));
 
 				buildProgramsMultilingualData();
 			}

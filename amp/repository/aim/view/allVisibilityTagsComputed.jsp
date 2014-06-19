@@ -581,7 +581,6 @@
 <field:display name="Logframe Preview Button" feature="Logframe" ></field:display> 
 <field:display name="Logframe Preview Button" feature="Logframe"></field:display> 
 <field:display name="Measures Taken" feature="Issues"></field:display> 
-<field:display name="Ministry of Planning Rank" feature="Planning"></field:display> 
 <field:display name="Minorities" feature="Cross Cutting Issues"></field:display> 
 <field:display name="Multi Sector Configuration" feature="Sectors"></field:display> 
 <field:display name="NPD Clasification" feature="Identification"></field:display> 

@@ -350,7 +350,6 @@ public class AmpARFilter extends PropertyListable {
 	private boolean publicView = false;
 	private Set<AmpCategoryValue> budget = null;
 	private Collection<Integer> lineMinRank;
-	private Collection<Integer> planMinRank;
 	
 	/**
 	 * the date is stored in the {@link #sdfIn} hardcoded format
@@ -675,7 +674,6 @@ public class AmpARFilter extends PropertyListable {
 		this.setFromDate(null);
 		this.setToDate(null);
 		this.setLineMinRank(null);
-		this.setPlanMinRank(null);
 		this.setText(null);
 		this.setPageSize(null);
 		this.setGovernmentApprovalProcedures(null);
@@ -1169,10 +1167,6 @@ public class AmpARFilter extends PropertyListable {
 		String AID_MODALITIES_FILTER = "SELECT amp_activity_id FROM v_modalities WHERE level_code IN (" + Util.toCSStringForIN(aidModalities) + ")";
 		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank IN ("
 	 	 		+ Util.toCSStringForIN(lineMinRank) + ")";
-	 	String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank IN ("
-	 	 		+ Util.toCSStringForIN( planMinRank ) + ")";
-		//String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
-		//		+ (regionSelected==null?null:regionSelected.getIdentifier());
 	 	
 	 	String MULTI_DONOR		= "SELECT amp_activity_id FROM v_multi_donor WHERE value = '" + multiDonor + "'";
 	 	
@@ -1551,8 +1545,6 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(RISK_FILTER);
 		if ((lineMinRank != null) && (lineMinRank.size() > 0))
 			queryAppend(LINE_MIN_RANK_FILTER);
-		if ((planMinRank != null)&&(planMinRank.size() > 0))
-			queryAppend(PLAN_MIN_RANK_FILTER);
 		//if (regionSelected != null)
 		//	queryAppend(REGION_SELECTED_FILTER);
 		if (!REGION_SELECTED_FILTER.equals("")) {
@@ -2106,13 +2098,7 @@ public class AmpARFilter extends PropertyListable {
 		this.lineMinRank = lineMinRank;
 	}
 
-	public Collection<Integer> getPlanMinRank() {
-		return planMinRank;
-	}
 
-	public void setPlanMinRank(Collection<Integer> planMinRank) {
-		this.planMinRank = planMinRank;
-	}
 
 	@PropertyListableIgnore
 	public Long getAmpReportId() {

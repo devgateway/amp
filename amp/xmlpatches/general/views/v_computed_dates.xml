@@ -23,10 +23,8 @@
 			<lang delimiter=";" type="postgres">
 				CREATE OR REPLACE VIEW v_computed_dates AS
 				SELECT amp_activity.amp_activity_id, 
-				amp_activity.activity_close_date,
 				amp_activity.actual_start_date, 
 				amp_activity.actual_approval_date,
-				amp_activity.activity_approval_date,
 				amp_activity.proposed_start_date,
 				amp_activity.actual_completion_date,
 				amp_activity.proposed_completion_date,

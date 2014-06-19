@@ -764,7 +764,6 @@ deleted 6 fields, do not reinsert
 <field:display name="Logframe Preview Button" feature="Logframe" ></field:display> 
 <field:display name="Logframe Preview Button" feature="Logframe"></field:display> 
 <field:display name="Measures Taken" feature="Issues"></field:display> 
-<field:display name="Ministry of Planning Rank" feature="Planning"></field:display> 
 <field:display name="Ministry Code" feature="Budget"></field:display>
 <field:display name="Budget Structure" feature="Budget"></field:display>
 <field:display name="Minorities" feature="Cross Cutting Issues"></field:display>
@@ -821,7 +820,6 @@ deleted 6 fields, do not reinsert
  <field:display name="Project Code" feature="Budget"></field:display>
  <field:display name="Sub-Program" feature="Budget"></field:display> 
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
-<field:display name="Code Chapitre" feature="Budget"></field:display>
 <field:display name="Vote" feature="Budget"></field:display>
 <field:display name="Validate Mandatory Vote" feature="Budget"></field:display>
 <field:display name="Validate Mandatory Sub-Vote" feature="Budget"></field:display>
@@ -973,14 +971,11 @@ deleted 6 fields, do not reinsert
 <field:display name="Sub Program Level 7" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub Program Level 8" feature="NPD Dashboard"></field:display> 
 <field:display name="Code Chapitre Dropdown" feature="Budget"></field:display>
-<field:display name="Budgeting Year" feature="Budget"></field:display>
 <field:display name="Budget Classification" feature="Budget"></field:display>
 <field:display name="Budget Department" feature="Budget"></field:display>
 <field:display name="Budget Sector" feature="Budget"></field:display>
 <field:display name="Budget Organization" feature="Budget"></field:display>
 <field:display name="Budget Program" feature="Budget"></field:display>
-<field:display name="Description Chapitre" feature="Budget"></field:display>
-<field:display name="Description Imputation" feature="Budget"></field:display>
 <field:display name="Table CSS class" feature="Table Widgets"></field:display> 
 <field:display name="Table Code" feature="Table Widgets"></field:display> 
 <field:display name="Table Column CSS class" feature="Table Widgets"></field:display> 

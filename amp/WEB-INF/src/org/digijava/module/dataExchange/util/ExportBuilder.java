@@ -158,17 +158,13 @@ public class ExportBuilder {
 			}
 		} else if (path.equalsIgnoreCase("activity.proposedApprovalDate")){
 			parent.setProposedApprovalDate(buildDate(ampActivity.getProposedApprovalDate(), ampColumnEntry.isMandatory() ));
-		} else if (path.equalsIgnoreCase("activity.actualApprovalDate")){
-			parent.setActualApprovalDate(buildDate(ampActivity.getActivityApprovalDate(), ampColumnEntry.isMandatory()));
 		} else if (path.equalsIgnoreCase("activity.proposedStartDate")){
 			parent.setProposedStartDate(buildDate(ampActivity.getProposedStartDate(), ampColumnEntry.isMandatory()));
 		} else if (path.equalsIgnoreCase("activity.actualStartDate")){
 			parent.setActualStartDate(buildDate(ampActivity.getActualStartDate(), ampColumnEntry.isMandatory()));
 		} else if (path.equalsIgnoreCase("activity.modifiedClosingDate")){
 			parent.setModifiedClosingDate(buildDate(ampActivity.getActualCompletionDate(), ampColumnEntry.isMandatory()));
-		} else if (path.equalsIgnoreCase("activity.closingDate")){
-			parent.setModifiedClosingDate(buildDate(ampActivity.getActivityCloseDate(), ampColumnEntry.isMandatory()));
-		} else if (path.equalsIgnoreCase("activity.status")){
+		}  else if (path.equalsIgnoreCase("activity.status")){
 			//if (ampActivity.getApprovalStatus() != null){
 			//AMP-9364
 			CodeValueType buildStatus = buildStatus();

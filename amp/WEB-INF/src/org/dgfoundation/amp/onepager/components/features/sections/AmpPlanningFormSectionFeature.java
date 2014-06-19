@@ -43,11 +43,6 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 		lineMinistryRank.getTextContainer().add(rankModifier);
 		add(lineMinistryRank);
 		
-		AmpTextFieldPanel<Integer> planningMinistryRank = new AmpTextFieldPanel<Integer>(
-				"planningMinistryRank", new PropertyModel<Integer>(actModel, "planMinRank"), "Ministry of Planning Rank", AmpFMTypes.MODULE);
-		planningMinistryRank.getTextContainer().add(rankValidator);
-		planningMinistryRank.getTextContainer().add(rankModifier);
-		add(planningMinistryRank);
                 
 		
 		AmpDatePickerFieldPanel dateOfActualCompletion = new AmpDatePickerFieldPanel(

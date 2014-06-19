@@ -828,23 +828,6 @@
 						</td>
 					</tr>
 					</field:display>
-		
-					<tr><td>&nbsp;</td></tr>
-					<field:display name="Ministry of Planning Rank" feature="Planning">
-					<tr>
-						<td>
-							<digi:trn key="rep:filer:PlanningMinRank">Planning Ministry Rank</digi:trn>
-							<br />
-							<html:select property="planMinRank" style="width: 100px" styleClass="inp-text">
-								<html:option value="-1">
-									<digi:trn key="rep:filer:All">All</digi:trn>
-								</html:option>
-								<html:optionsCollection property="actRankCollection"
-									label="wrappedInstance" value="wrappedInstance" />
-							</html:select>
-						</td>
-					</tr>	
-					</field:display>
 				</table>
 				<logic:notEqual name="widget" value="true" scope="request">
 				<br/>

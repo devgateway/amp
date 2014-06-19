@@ -444,12 +444,6 @@ implements AmpRequiredComponentContainer{
 					new PropertyModel<String>(am, "projectImpact"), "Project Impact", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel("activitySummary",
 					new PropertyModel<String>(am, "activitySummary"), "Activity Summary", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel("contractingArrangements",
-					new PropertyModel<String>(am, "contractingArrangements"), "Contracting Arrangements", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel("linkedActivities",
-					new PropertyModel<String>(am, "linkedActivities"), "Linked Activities", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel("conditionalitySequencing",
-					new PropertyModel<String>(am, "condSeq"), "Conditionality and Sequencing", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel("conditionalities",
 					new PropertyModel<String>(am, "conditionality"), "Conditionalities", true, AmpFMTypes.MODULE));
 			add(new AmpTextAreaFieldPanel("projectManagement",

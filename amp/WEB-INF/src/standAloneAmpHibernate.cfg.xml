@@ -15,15 +15,15 @@
   		ALTER HERE to match your configuration
    -->
   <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-  <property name="hibernate.connection.url">jdbc:postgresql://localhost/amp_tests_26_amp27</property>
+  <property name="hibernate.connection.url">jdbc:postgresql://localhost/amp_tests_210</property>
   <property name="hibernate.connection.username">postgres</property>
-  <property name="hibernate.connection.password">postgres</property>
+  <property name="hibernate.connection.password">m0n1t0r</property>
   <!--
   		END ALTER HERE
    -->
   &dialect;
   <property name="current_session_context_class">thread</property>
-  <property name="cache.region.factory_class">net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory</property>
+  <property name="cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>
   <property name="cache.use_second_level_cache">true</property>
   <property name="cache.use_query_cache">true</property> 
   <property name="show_sql">false</property>

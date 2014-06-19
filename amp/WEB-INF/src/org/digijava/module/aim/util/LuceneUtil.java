@@ -569,22 +569,22 @@ public class LuceneUtil implements Serializable {
 					isNext = rs.next();
 					//
 				}
-
-				// Bolivia contract number
-				qryStr = "select * from v_convenio_numcont where amp_activity_id >= " + chunkStart
-						+ " and amp_activity_id < " + chunkEnd + " ";
-				rs = st.executeQuery(qryStr);
-				rs.last();
-				logger.info("Starting iteration of " + rs.getRow() + " results!");
-				isNext = rs.first();
-				while (isNext) {
-					int actId = Integer.parseInt(rs.getString("amp_activity_id"));
-					x = (Items) list.get(actId);
-					if (x != null)
-						x.numcont = rs.getString("numcont");
-					isNext = rs.next();
-					//
-				}
+//
+//				// Bolivia contract number
+//				qryStr = "select * from v_convenio_numcont where amp_activity_id >= " + chunkStart
+//						+ " and amp_activity_id < " + chunkEnd + " ";
+//				rs = st.executeQuery(qryStr);
+//				rs.last();
+//				logger.info("Starting iteration of " + rs.getRow() + " results!");
+//				isNext = rs.first();
+//				while (isNext) {
+//					int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+//					x = (Items) list.get(actId);
+//					if (x != null)
+//						x.numcont = rs.getString("numcont");
+//					isNext = rs.next();
+//					//
+//				}
 
 				// Bolivia component code
 				qryStr = "select * from v_bolivia_component_code where amp_activity_id >= " + chunkStart
@@ -603,28 +603,6 @@ public class LuceneUtil implements Serializable {
 						}
 					isNext = rs.next();
 				}
-
-				// // Moldova's romanian title
-				// qryStr =
-				// "select * from v_contracting_arrangements where amp_activity_id >= "
-				// + chunkStart + " and amp_activity_id < " + chunkEnd +
-				// " ";
-				// rs = st.executeQuery(qryStr);
-				// rs.last();
-				// logger.info("Starting iteration of " + rs.getRow() +
-				// " contracting arrangements!");
-				// isNext = rs.first();
-				// while (isNext){
-				// int actId =
-				// Integer.parseInt(rs.getString("amp_activity_id"));
-				// x = (Items) list.get(actId);
-				// //you can't use "trim(dg_editor.body)" as column name
-				// ....
-				// if (x != null)
-				// x.contractingArr = rs.getString("body");
-				// isNext = rs.next();
-				// }
-
 				// new budget codes
 				qryStr = "select r.activity,string_agg(r.budget_code, ' ; ' ) as budget_codes from amp_org_role r, amp_activity a where a.amp_activity_id=r.activity and activity >= "
 						+ chunkStart + " and activity < " + chunkEnd + " group by activity";
@@ -661,11 +639,7 @@ public class LuceneUtil implements Serializable {
 				while (it.hasNext()) {
 					Items el = (Items) it.next();
 					Document doc = activity2Document(String.valueOf(el.id), el.amp_id, el.title, el.description,
-							el.objective, el.purpose, el.results, el.numcont, null /*
-																					 * el
-																					 * .
-																					 * contractingArr
-																					 */, el.componentcode, el.CRIS,
+							el.objective, el.purpose, el.results, el.numcont, el.componentcode, el.CRIS,
 							el.budgetNumber, el.newBudgetNumber);
 					if (doc != null)
 						try {
@@ -785,7 +759,7 @@ public class LuceneUtil implements Serializable {
 		 * @param act the activity that will be added
 		 */
 	    public static Document activity2Document(String actId, String projectId, String title, String description,
-				String objective, String purpose, String results, String numcont, String contractingArr, ArrayList<String> componentcodes,
+				String objective, String purpose, String results, String numcont,  ArrayList<String> componentcodes,
 				String CRIS, String budgetNumber, String newBudgetNumber) {
 			Document doc = new Document();
 			String all = new String("");
@@ -865,12 +839,6 @@ public class LuceneUtil implements Serializable {
 				all = all.concat(" " + newBudgetNumber);
 			}
 			
-	//		if (contractingArr != null && contractingArr.length() > 0 ) {
-	//			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.ANALYZED));
-	//			all = all.concat(" " + contractingArr);
-	//			
-	//		}
-			
 			int i =0;
 			if (componentcodes != null && componentcodes.size()>0){
 					
@@ -920,7 +888,7 @@ public class LuceneUtil implements Serializable {
 					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getPurpose(), language),
 					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getResults(), language),
 					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getContactName(), language),
-					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getContractingArrangements(), language),
+
 					componentsCode, newActivity.getCrisNumber(), newActivity.getBudgetCodeProjectID(), LuceneUtil.getBudgetCodesForActivity(newActivity) );
 
 			if (doc != null) {

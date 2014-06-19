@@ -338,18 +338,6 @@ public class ExportActivityToPDF extends Action {
 				columnName=TranslatorWorker.translateText("Project Comments");
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectComments()));
 			}						
-
-			//contract Number
-			if(FeaturesUtil.isVisibleField("Contract Number")){
-				columnName=TranslatorWorker.translateText("Contract Number");
-				createGeneralInfoRow(mainLayout,columnName,activity.getConvenioNumcont());
-			}
-			//Commented out for AMP-16421 seems to be old code
-//			if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext,session)){
-//				columnName=TranslatorWorker.translateText("NPD Clasification");
-//				createGeneralInfoRow(mainLayout,columnName,activity.getClasiNPD());
-//			}			
-
 			//Lessons learned
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned")){
 				columnName=TranslatorWorker.translateText("Lessons Learned");
@@ -364,24 +352,6 @@ public class ExportActivityToPDF extends Action {
 			if(activity.getActivitySummary()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Summary")){
 				columnName=TranslatorWorker.translateText("Activity Summary");
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getActivitySummary()));
-			}
-			//Contracting Arrangements
-			if(activity.getContractingArrangements()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Contracting Arrangements")){
-				columnName=TranslatorWorker.translateText("Contracting Arrangements");
-				columnVal=processEditTagValue(request, activity.getContractingArrangements());
-				createGeneralInfoRow(mainLayout,columnName,columnVal);
-			}
-			//Conditionality and Sequencing
-			if(activity.getCondSeq()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionality and Sequencing")){			
-				columnName=TranslatorWorker.translateText("Conditionality and Sequencing");
-				columnVal=processEditTagValue(request, activity.getCondSeq());
-				createGeneralInfoRow(mainLayout,columnName,columnVal);
-			}			
-			//Linked Activities
-			if(activity.getLinkedActivities()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Linked Activities")){			
-				columnName=TranslatorWorker.translateText("Linked Activities");
-				columnVal=processEditTagValue(request, activity.getLinkedActivities());
-				createGeneralInfoRow(mainLayout,columnName,columnVal);
 			}
 			//Conditionalities
 			if(activity.getConditionality()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionalities")){
@@ -798,16 +768,6 @@ public class ExportActivityToPDF extends Action {
 						outputValue+="\n";
 					}
 				}
-				
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Ministry of Planning Rank")){
-					outputValue+=TranslatorWorker.translateText("Ministry of Planning Rank")+ "\t: ";
-					if(activity.getPlanMinRank()!=null && activity.getPlanMinRank().intValue()>0){
-                                            outputValue+=(activity.getPlanMinRank())+"\n";	    
-					}else{
-						outputValue+="\n";
-					}
-				}
-				
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date")){
 					outputValue+=TranslatorWorker.translateText("Proposed Approval Date ")+ "\t: " + myForm.getPlanning().getOriginalAppDate()+"\n";
@@ -1347,62 +1307,6 @@ public class ExportActivityToPDF extends Action {
 				createGeneralInfoRow(mainLayout,columnName,identification.getCreatedDate());
 			}			
 
-// AMP-13881: commented since custom fields are not in use anymore
-//			/**
-//			 * Custom Fields
-//			 */
-//			if(myForm.getCustomFields()!=null && myForm.getCustomFields().size()>0){
-//				for (CustomField<?> customField : myForm.getCustomFields()) {
-//					if(FeaturesUtil.isVisibleField(customField.getFM_field(), ampContext,session)){
-//						PdfPCell customFields1=new PdfPCell();
-//						customFields1.setBorder(0);
-//						customFields1.setBackgroundColor(new Color(244,244,242));
-//						Paragraph customFields1P=new Paragraph(TranslatorWorker.translateText(customField.getName()),titleFont);
-//						customFields1P.setAlignment(Element.ALIGN_RIGHT);
-//						customFields1.addElement(customFields1P);
-//						mainLayout.addCell(customFields1);
-//						
-//						PdfPCell customFields2=new PdfPCell();
-//						customFields2.setBorder(0);
-//						Paragraph customFields2P=new Paragraph(" ");					
-//						if(customField instanceof ComboBoxCustomField){
-//							customFields2P=new Paragraph(((ComboBoxCustomField) customField).getOptions().get(customField.getValue()),plainFont);
-//						}else if(customField instanceof CategoryCustomField){
-//							if(((CategoryCustomField)customField).getValue()!=null && ((CategoryCustomField)customField).getValue()>0){
-//								catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(((CategoryCustomField)customField).getValue());
-//								if(catVal!=null){
-//									translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
-//									customFields2P=new Paragraph(translatedValue,plainFont);
-//								}
-//							}					
-//						}else if(customField instanceof DateCustomField){
-//							customFields2P=new Paragraph(((DateCustomField) customField).getStrDate(),plainFont);
-//						}else if(customField instanceof RadioOptionCustomField){
-//							String outputVal=" ";
-//							for (String option : ((RadioOptionCustomField) customField).getOptions().keySet()) {
-//								if(option.equals(customField.getValue())){
-//									outputVal+=((RadioOptionCustomField) customField).getOptions().get(option)+" ";
-//								}
-//							}
-//							customFields2P=new Paragraph(outputVal,plainFont);
-//						}else if(customField instanceof CheckCustomField){
-//							if(((CheckCustomField)customField).getValue()!=null && ((CheckCustomField)customField).getValue()){
-//								customFields2P=new Paragraph(((CheckCustomField)customField).getLabelTrue(),plainFont);
-//							}else if(((CheckCustomField)customField).getValue()!=null && !((CheckCustomField)customField).getValue()){
-//								customFields2P=new Paragraph(((CheckCustomField)customField).getLabelFalse(),plainFont);
-//							}
-//						}else{
-//							if(customField.getValue()!=null){
-//								customFields2P=new Paragraph(customField.getValue().toString(),plainFont);
-//							}
-//						}
-//						customFields2.addElement(customFields2P);
-//						mainLayout.addCell(customFields2);
-//					}					
-//					
-//				}
-//			}
-			
 			/**
 			 * Activity - Performance
 			 */

@@ -22,19 +22,14 @@
 		
 		<property name="projectImpact" column="project_impact" type="text" index="amp_activity_version_project_impact_idx" />
 		<property name="activitySummary" column="activity_summary" type="text" index="amp_activity_version_activity_summary_idx" />
-		<property name="contractingArrangements" column="contracting_arrangements" type="text" index="amp_activity_version_contracting_arrangements_idx" />
-		<property name="condSeq" column="cond_seq" type="text" />
-		<property name="linkedActivities" column="linked_activities" type="text" />
+		
 		<property name="conditionality" column="conditionality" type="text" />
 		<property name="projectManagement" column="project_management" type="text" />
-		<property name="contractDetails" column="contract_details" type="text" />
 
-
-		<property name="activityLevel" column="activity_level_id" type="java.lang.Long" />
 
 		<property name="documentSpace" column="document_space" type="java.lang.String" />
 		<property name="language" column="language" type="java.lang.String" />
-		<property name="version" column="version" type="java.lang.String" />
+
 
 		<property name="equalOpportunity" column="equalOpportunity" type="java.lang.String" />
 		<property name="environment" column="environment" type="java.lang.String" />
@@ -55,24 +50,17 @@
 
 		<property name="createdAsDraft" column="created_as_draft" type="boolean" />
 
-		<property name="calType" column="cal_type" type="java.lang.String" />
-		<property name="activityApprovalDate" column="activity_approval_date" type="java.util.Date" />
-		<!-- defunct -->
-		<property name="activityStartDate" column="activity_start_date" type="java.util.Date" />
-		<!-- defunct -->
-		<property name="activityCloseDate" column="activity_close_date" type="java.util.Date" />
 		<!-- defunct -->
 		<property name="originalCompDate" column="original_comp_date" type="java.util.Date" />
 		<!-- defunct -->
 		<property name="contractingDate" column="contracting_date" type="java.util.Date" /><!-- defunct -->
 		<property name="disbursmentsDate" column="disbursments_date" type="java.util.Date" />
-		<!-- defunct -->
-		<property name="condition" column="condition_" type="text" />
+
 
 		<property name="contactName" column="contact_name" type="java.lang.String" /><!-- defunct -->
 
 
-		<property name="comments" column="comments" type="text" index="amp_activity_version_comments_idx" />
+		
 		<property name="statusReason" column="status_reason" type="text" index="amp_activity_version_status_reason_idx" />
 
 		<property name="proposedStartDate" column="proposed_start_date" type="java.util.Date" />
@@ -88,19 +76,11 @@
 		<property name="updatedDate" column="date_updated" type="java.util.Date" />
 		<property name="iatiLastUpdatedDate" column="iati_last_update_date" type="java.util.Date" />
 		
-		
 		<property name="programDescription" column="program_description" type="text" index="amp_activity_version_program_description_idx" />
-		<property name="contractors" column="contractors" type="text" />
 
 		<property access="field" name="funAmount" column="proj_cost_amount" type="java.lang.Double" />
 		<property name="funDate" column="proj_cost_date" type="java.util.Date" />
 		<property name="currencyCode" column="proj_cost_currcode" type="java.lang.String" />
-
-		<!-- Start Bolivia Specific Fields -->
-		<property name="convenioDateFilter" column="convenio_date_filter" type="java.util.Date" />
-		<property name="convenioNumcont" column="convenio_numcont" type="java.lang.String" />
-		<property name="clasiNPD" column="classi_code" type="java.lang.String" />
-		<!-- End Bolivia Specific Fields -->
 
 		<!--
 			tanzania adds
@@ -113,23 +93,17 @@
 		<property name="projectCode" column="project_code" type="java.lang.String" />
 		<property name="ministryCode" column="ministry_code" type="java.lang.String" />
 		<property name="crisNumber" column="cris_number" type="java.lang.String" />
-		<property name="gbsSbs" column="gbsSbs" type="java.lang.Long" />
+		
 		<property name="governmentApprovalProcedures" column="governmentApprovalProcedures"
 			type="java.lang.Boolean" />
 		<property name="jointCriteria" column="jointCriteria" type="java.lang.Boolean" />
 		<property name="humanitarianAid" column="humanitarianAid" type="java.lang.Boolean" />
 		<property name="archived" column="archived" type="java.lang.Boolean" />
 
-		<many-to-one name="themeId" column="amp_theme_id"
-			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" />
-		<!-- <many-to-one name="modality" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>  -->
-		<many-to-one name="modality" column="amp_categ_val_modality_id"
-			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+			
 		<many-to-one name="team" column="amp_team_id"
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
 
-		<many-to-one name="author" column="author" class="org.digijava.kernel.user.User"
-			cascade="none" /><!-- defunct -->
 		<many-to-one name="activityCreator" column="activity_creator"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 
@@ -137,24 +111,11 @@
 
         <property name="fundingSourcesNumber" column="funding_sources_number" type="java.lang.Integer" />
 		<property name="lineMinRank" column="line_min_rank" type="java.lang.Integer" />
-		<property name="planMinRank" column="plan_min_rank" type="java.lang.Integer" />
 
-		<property name="customField1" column="customField1" type="java.lang.String" />
-		<property name="customField2" column="customField2" type="java.lang.String" />
-		<property name="customField3" column="customField3" type="java.lang.Long" />
-		<property name="customField4" column="customField4" type="java.util.Date" />
-		<property name="customField5" column="customField5" type="java.lang.String" />
-		<property name="customField6" column="customField6" type="java.lang.Boolean" />
-		
-		<many-to-one name="chapter" column="chapter_code" class="org.digijava.module.aim.dbentity.AmpChapter" cascade="none" />
 		
 		<many-to-one name="ampActivityGroup" column="amp_activity_group_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityGroup" cascade="none" />
-			
-	
-	
-		<many-to-one name="ampActivityPreviousVersion" column="amp_activity_previous_version_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+
 		<property name="modifiedDate" column="modified_date" type="java.util.Date" />
 		<many-to-one name="modifiedBy" column="modified_by"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />

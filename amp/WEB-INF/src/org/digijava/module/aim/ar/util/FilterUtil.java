@@ -187,14 +187,7 @@ public class FilterUtil {
 	 	 	}
 	 	 	form.setLineMinRanks(temp);
 	 	}
-	 	if ( filter.getPlanMinRank() != null && filter.getPlanMinRank().size() > 0) {
-	 	 	int i = 0;
-	 	 	Object[] temp   = new Object[filter.getPlanMinRank().size()];
-	 	 	for ( Integer intVal:filter.getPlanMinRank() ) {
-	 	 		temp[i++]       = intVal.toString();
-	 	 	}
-	 	 	form.setPlanMinRanks(temp);
-	 	}
+
 	 	if ( filter.getLocationSelected() != null )
 	 		form.setRegionSelected ( FilterUtil.getObjectsIds(filter.getLocationSelected()) );
 		

@@ -23,7 +23,7 @@ import java.util.TreeSet;
 public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable
 {
 	private static final long serialVersionUID = 1L;
-	private AmpActivityVersion activityId;
+	//private AmpActivityVersion activityId;
     private Long ampThemeId ;
 	private AmpTheme parentThemeId ;
 	private String themeCode ;
@@ -194,9 +194,9 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 		return indicators;
 	}
 
-    public AmpActivityVersion getActivityId() {
-        return activityId;
-    }
+//    public AmpActivityVersion getActivityId() {
+//        return activityId;
+//    }
 
     /**
 	 * @param indicators The indicators to set.
@@ -223,9 +223,9 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 		this.indlevel = indlevel;
 	}
 
-	public void setActivityId(AmpActivityVersion activityId) {
-        this.activityId = activityId;
-    }
+//	public void setActivityId(AmpActivityVersion activityId) {
+//        this.activityId = activityId;
+//    }
 
 	@Override
     public boolean equals(Object obj) {

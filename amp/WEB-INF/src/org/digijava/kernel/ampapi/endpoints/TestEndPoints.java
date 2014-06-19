@@ -1,21 +1,26 @@
 package org.digijava.kernel.ampapi.endpoints;
-
+//TODO: Add documentation to this class;
 import java.util.Random;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import org.digijava.kernel.ampapi.mondrian.queries.TestQueries;
 
 /**
  * 
- * @author Diego
- * Sample class to test end points are working properly  
- * Root resource (exposed at "test" path)	
+ * @author Diego Sample class to test end points are working properly Root
+ *         resource (exposed at "test" path)
  */
 
 @Path("test")
 public class TestEndPoints {
+
+	private ServletContext context;
 
 	/**
 	 * Method handling HTTP GET requests. The returned object will be sent to
@@ -32,17 +37,38 @@ public class TestEndPoints {
 	@GET
 	@Path("/testjson")
 	@Produces(MediaType.APPLICATION_JSON)
-	public testObj simplejson() {
-		testObj jsonobj = new testObj("AMP API Test End Point - Test JSON Format");
+	public final testObj simplejson() {
+		testObj jsonobj = new testObj(
+				"AMP API Test End Point - Test JSON Format");
 		return jsonobj;
+	}
+	
+	@GET
+	@Path ("/testquery")
+	@Produces(MediaType.TEXT_PLAIN)
+	public final String queryresult() {
+		TestQueries query = new TestQueries();
+		try {
+			return query.getQuery(context.getRealPath("/WEB-INF/")).toString();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "Can't execute query .. :(";
+	}
+	
+	@Context
+	public void setServletContext(ServletContext context) {
+		System.out.println("servlet context set here");
+		this.context = context;
 	}
 
 	/***
 	 * 
-	 * Auxiliary object that will be converted to JSON 
-	 *
+	 * Auxiliary object that will be converted to JSON
+	 * 
 	 */
-	
+
 	private class testObj {
 		private Integer Id;
 		private String Message;
@@ -52,7 +78,7 @@ public class TestEndPoints {
 			this.setMessage(message);
 			this.Id = this.getId();
 		}
-		
+
 		public String getMessage() {
 			return Message;
 		}

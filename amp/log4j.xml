@@ -34,7 +34,17 @@
             <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n" />
         </layout>
     </appender>
+	
+	<appender name="AMPMONDRIAN" class="org.apache.log4j.ConsoleAppender">
+      <param name="Target" value="System.out"/>
+      <param name="Threshold" value="WARN"/>
 
+      <layout class="org.apache.log4j.PatternLayout">
+         <!-- The default pattern: Date Priority [Category] Message\n -->
+         <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+      </layout>
+   </appender>
+	
    <!-- ================ -->
    <!-- Limit categories -->
    <!-- ================ -->
@@ -97,6 +107,7 @@
    <root>
       <priority value="INFO" />
       <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="AMPMONDRIAN"/>
       <appender-ref ref="default.file"/>
    </root>
 

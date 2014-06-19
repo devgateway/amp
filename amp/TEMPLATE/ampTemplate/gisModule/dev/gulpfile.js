@@ -52,7 +52,7 @@ var paths = {
     stylesheets: '../dist/css',
     images: '../dist/img',
     fonts: '../dist/fonts',
-    tests: '../dist'  // Note! They go in the dist root!
+    tests: '../dist/test'
   }
 };
 

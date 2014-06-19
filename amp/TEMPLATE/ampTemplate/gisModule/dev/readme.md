@@ -73,7 +73,7 @@ Command-line tests are currently **not working**:
     ```bash
     $ gulp serve
     ```
-    And then browse to the testing page: [localhost:3000/test-runner.html](http://localhost:3000/test-runner.html)
+    And then browse to the testing page: [localhost:3000/test/](http://localhost:3000/test/)
 
 #### Lint javascript and css sources
 

@@ -1,3 +1,0 @@
-define({
-  isGood: true
-});

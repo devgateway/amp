@@ -3,15 +3,15 @@ define(
     'underscore',
     'backbone',
     'text!' + APP_ROOT + '/amp/map/templates/map-container-template.html',
-    
+
     'esri/map',
 
     'js/amp/map/views/map-header-view.js',
     'js/amp/map/views/basemap-gallery-view.js',
     'js/amp/map/views/legend-view.js'
   ],
-  function (_, Backbone, Template, 
-            Map, 
+  function (_, Backbone, Template,
+            Map,
             MapHeaderView, BasemapGalleryView, LegendView) {
     'use strict';
 
@@ -30,12 +30,11 @@ define(
 
         // Render ESRI map
         require(['esri/map'], function(Map) {
-          var mapCanvas = self.$el.find('#map-canvas');
-          mapCanvas.height(self.$el.height());  // TODO: adjust on window resize?
           self.map = new Map('map-canvas', {
             center: [-56.049, 38.485],
             zoom: 3,
-            basemap: 'streets'
+            basemap: 'streets',
+            autoResize: true
           });
         });
 

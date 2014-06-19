@@ -6,8 +6,10 @@ define(
     'js/amp/sidebar/filters/views/filters-view.js',
     'js/amp/sidebar/search/views/search-view.js',
     'js/amp/sidebar/tools/views/tools-view.js',
+    'js/amp/sidebar/source-categories/views/source-categories-view.js',
+    'js/amp/sidebar/data-sources/views/data-sources-view.js',
   ],
-  function (_, Backbone, LayersView, FiltersView, SearchView, ToolsView) {
+  function (_, Backbone, LayersView, FiltersView, SearchView, ToolsView, SourceCategoriesView, DataSourcesView) {
     'use strict';
 
     var SidebarToolsView = Backbone.View.extend({
@@ -32,7 +34,15 @@ define(
 
         this.$el.append('<div id="tool-tools" class="panel sidebar-tool"></div>');
         var toolsView = new ToolsView({el:'#tool-tools'});
-        toolsView.render(); 
+        toolsView.render();
+
+        this.$el.append('<div id="tool-sources-category" class="panel sidebar-tool"></div>');
+        var sourceCategoriesView = new SourceCategoriesView({el:'#tool-sources-category'});
+        sourceCategoriesView.render();
+
+        this.$el.append('<div id="tool-data-sources" class="panel sidebar-tool"></div>');
+        var dataSourcesView = new DataSourcesView({el:'#tool-data-sources'});
+        dataSourcesView.render();
       }
     });
 

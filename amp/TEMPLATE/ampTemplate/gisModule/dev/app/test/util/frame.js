@@ -1,8 +1,9 @@
 define(['qunit'], function(QUnit) {
 
-  var testPages = [];
-  var ranPages = [];
-  var testFrames = [];
+  var testPages = [],
+      ranPages = [],
+      testFrames = [],
+      setStatus = function() {};
 
 
   function registerIFrame($iFrame) {
@@ -12,6 +13,11 @@ define(['qunit'], function(QUnit) {
 
   function registerTestPage(path, pageTestFn) {
     testPages.push({path: path, pageTestFn: pageTestFn});
+  }
+
+
+  function registerStatus(statusFn) {
+    setStatus = statusFn;
   }
 
 
@@ -33,7 +39,7 @@ define(['qunit'], function(QUnit) {
 
       // record that this test tried to start
       task.started = true;
-      task.completed = false;
+      task.finished = false;
 
       // when ready, run the test
       $iframe.on('load', function() {
@@ -57,9 +63,11 @@ define(['qunit'], function(QUnit) {
 
       function finishTask() {
         $iframe.off('load');
-        task.completed = true;
+        task.finished = true;
         // start the next available task in this frame
         runNextTask();
+        // update frame status
+        updateStatus();
       }
     }
 
@@ -68,8 +76,23 @@ define(['qunit'], function(QUnit) {
   }
 
 
+  function updateStatus() {
+    var queued = testPages.length;
+    var finished = ranPages.filter(function(task) {
+      return task.finished;
+    }).length;
+    var running = ranPages.length - finished;
+    setStatus({
+      queued: queued,
+      finished: finished,
+      running: running
+    });
+  }
+
+
   function runTests() {
     QUnit.start();
+    updateStatus();
     testFrames.forEach(function(testFrame) {
       activateFrame(testFrame);
     });
@@ -79,6 +102,7 @@ define(['qunit'], function(QUnit) {
   return {
     registerIFrame: registerIFrame,
     testPage: registerTestPage,
+    registerStatus: registerStatus,
     runTests: runTests
   }
 });

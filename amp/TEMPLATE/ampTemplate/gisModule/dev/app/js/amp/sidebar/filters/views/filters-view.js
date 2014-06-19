@@ -44,6 +44,9 @@ define(
         // add content
         this.$('.content').html(this.template({title: this.title}));
 
+        // Sample showing how to set checkbox to 'intermediate' state.
+        this.$('.filter-type input:checkbox').prop('indeterminate', true);
+
         // TODO -- render: Iterate over filterViews and render them all.
       }
     });

@@ -16,7 +16,7 @@ body {  // TODO: put this in a more appropriate place
   border-radius: 0 0 0 5px;
   overflow: hidden;
 
-  // TODO: header bar's height is too big, seems to be fault of #map-header .navbar-brand. but no easy to fix.
+
   #map-header {
     z-index:50;
     position: absolute;
@@ -35,6 +35,12 @@ body {  // TODO: put this in a more appropriate place
       padding-top: @v-pad;
       padding-bottom: @v-pad;
     }
+
+    .navbar-brand{
+      width:60%;
+      border-right: 1px solid #666; 
+    }
+
 
     #basemap-gallery{
       display: inline-block;  // force it to all jump down a line together

@@ -27,7 +27,7 @@
   position: absolute;
   top: @amp-menu-height;
   left: 0;
-  bottom: @amp-sidebar-quality-height;  // quality indicator is position: fixed
+  bottom: 0;
   width: @amp-sidebar-width;
   background: @amp-inverse-bg;
   color: @amp-inverse;
@@ -35,9 +35,16 @@
   overflow-y: auto;
   overflow-x: hidden;
 
+  .vertical-expand {
+    // sticky-footer
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin-bottom: -@amp-sidebar-quality-height;
+  }
+
 
   #sidebar-tools {
-
     // This sucks, but we need to use panel to make accordion parent collapse work,
     // but we don't actually want the panel styles.
     // ticket to watch: https://github.com/twbs/bootstrap/issues/10966
@@ -46,7 +53,6 @@
       border-radius:0;
       margin:0;
     }
-    
   }
 
   .sidebar-tool {
@@ -106,9 +112,11 @@
 }
 
 
+.quality-push,
 #quality-indicator {
-  position:fixed;
-  bottom:0;
+  height: @amp-sidebar-quality-height;
+}
+#quality-indicator {
   width: @amp-sidebar-width;
   background: @amp-sidebar-special-bg;
 }

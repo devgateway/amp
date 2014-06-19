@@ -41,7 +41,6 @@ body {  // TODO: put this in a more appropriate place
       border-right: 1px solid #666; 
     }
 
-
     #basemap-gallery{
       display: inline-block;  // force it to all jump down a line together
       color: @amp-content;
@@ -58,51 +57,51 @@ body {  // TODO: put this in a more appropriate place
       }
     }
   }
+  
   #map-canvas {
     /* always expand to fill the map container */
     height: 100%;
     width: 100%;
     background: @amp-content-bg;
   }
+}
 
-  #legend {
-    z-index: 50;
-    position: fixed;
-    bottom: 0;
-    right: 90px;
-    padding: 5px;
-    width: 300px;
-    color: @amp-inverse;
-    background: @amp-inverse-bg;
+#legend {
+  z-index: 50;
+  position: fixed;
+  bottom: 0;
+  right: 90px;
+  padding: 5px;
+  width: 300px;
+  color: @amp-inverse;
+  background: @amp-inverse-bg;
 
-    .legend-header {
-      &:hover,a, a:hover{
-        text-decoration: none;
-      }
-
-      > a {
-          color: #eee;
-          display: block;
-          padding: 4px;
-      }
+  .legend-header {
+    &:hover,a, a:hover{
+      text-decoration: none;
     }
 
-    #legend-content {
-      max-height: 200px;
-      padding:4px;
-      font-size: 12px;
-      overflow-y: scroll;
-      color: #333;
-      background: @amp-content-bg;
+    > a {
+        color: #eee;
+        display: block;
+        padding: 4px;
+    }
+  }
 
-      h3 {
-        font-weight: 700;
-        font-size: 12px;
-      }
+  #legend-content {
+    max-height: 200px;
+    padding:4px;
+    font-size: 12px;
+    overflow-y: scroll;
+    color: #333;
+    background: @amp-content-bg;
+
+    h3 {
+      font-weight: 700;
+      font-size: 12px;
     }
   }
 }
-
 
 // ESRI Overrides
 .esriSimpleSlider{

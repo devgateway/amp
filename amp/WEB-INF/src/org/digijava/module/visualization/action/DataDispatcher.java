@@ -74,7 +74,9 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import sun.misc.BASE64Decoder;
 
 public class DataDispatcher extends DispatchAction {
+	
 	private static Logger logger = Logger.getLogger(DataDispatcher.class);
+	private static int maxOrgChars = 45;
 	
 	//This class will return the XMLs or CSVs needed for each kind of graph
 	//It will use an instance of VisualizationFilter to handle all filters
@@ -2095,6 +2097,9 @@ public class DataDispatcher extends DispatchAction {
     						name = ((AmpOrganisation) entry.getKey()).getName();
     						id = ((AmpOrganisation) entry.getKey()).getAmpOrgId();
     					}
+    					if(name.length() > maxOrgChars) {
+    						name = name.substring(0, maxOrgChars) + " ...";
+    					}
      	                BigDecimal percentage = getPercentage((BigDecimal) entry.getValue(), organizationTotal);
 	 	                BigDecimal value = (BigDecimal)entry.getValue();
      	               //if(percentage.compareTo(new BigDecimal(0.01)) == 1) //if this is more than 0.01
@@ -2208,6 +2213,9 @@ public class DataDispatcher extends DispatchAction {
 	                	name = org.getName();
 	                	id = org.getAmpOrgId();
 	                }
+	                if(name.length() > maxOrgChars) {
+						name = name.substring(0, maxOrgChars) + " ...";
+					}
 	                if (index <= 4){
 		                csvString.append(name.replace(",", ";"));
 		                csvString.append("#");
@@ -2217,19 +2225,19 @@ public class DataDispatcher extends DispatchAction {
 	                organizationData += "<" + name + ">";
 	                int j = 0;
 	                Long[] ids = {id};
-        			DashboardFilter newFilter2 = filter.getCopyFilterForFunding();
+        			//DashboardFilter newFilter2 = filter.getCopyFilterForFunding();
         			//newFilter2.setStartYear(startYear);
                 	//newFilter2.setEndYear(endYear);
-                	newFilter2.setAgencyType(2);//set beneficiary agency 
+                	newFilter.setAgencyType(2);//set beneficiary agency 
                 	if(filter.getShowGroupsNotOrgs()) {
-                		newFilter2.setOrgGroupIds(ids);
+                		newFilter.setOrgGroupIds(ids);
         			} else {
-        				newFilter2.setSelOrgIds(ids);
+        				newFilter.setSelOrgIds(ids);
         			}
                     startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear.intValue());
                     endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
-                    newFilter2.setFiscalCalendarId(fiscalCalendarId);
-                    DecimalWraper[] fundingCal = DbUtil.getFunding(newFilter2, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), true);
+                    newFilter.setFiscalCalendarId(fiscalCalendarId);
+                    DecimalWraper[] fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), true);
 	                for (Long i = startYear; i <= endYear; i++) {
 	                	BigDecimal value = null;
 	                	if(fundingCal[j] == null) {
@@ -2273,6 +2281,9 @@ public class DataDispatcher extends DispatchAction {
 	                	name = org.getName();
 	                	id = org.getAmpOrgId();
 	                }
+	                if(name.length() > maxOrgChars) {
+						name = name.substring(0, maxOrgChars) + " ...";
+					}
 	    			ids.add(id);
 	            }
 	            Long[] idsArray = new Long[ids.size()];

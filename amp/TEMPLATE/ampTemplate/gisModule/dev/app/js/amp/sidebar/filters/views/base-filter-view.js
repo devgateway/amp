@@ -4,9 +4,12 @@ define(
   [
     'underscore',
     'backbone',
+
     'js/amp/sidebar/filters/models/base-filter-model.js',
     'text!' + APP_ROOT + '/amp/sidebar/filters/templates/filter-title-template.html',
-    'text!' + APP_ROOT + '/amp/sidebar/filters/templates/filter-content-template.html'
+    'text!' + APP_ROOT + '/amp/sidebar/filters/templates/filter-content-template.html',
+
+    'jqueryui/draggable',
   ],
   function (_, Backbone, FilterModel, TitleTemplate, ContentTemplate) {
     'use strict';
@@ -39,24 +42,25 @@ define(
         }
 
         // Add listener to title.
-        //TODO: currently title is parent of content. might cause issues.
-        this.$el.click(function(evt){          
+        this.$('.filter-title').click(function(evt){          
           self.launchFilter();
           evt.preventDefault();
         });    
       },
 
+
+      // called when user clicks on a title.
       launchFilter: function() {
-        //TODO: putting filter in global div modal could cause issues for Backbone view event listening etc...
-        //      maybe make the filter title one view, and the filter content another view...
-        $('#filter-modal').html(this.contentTemplate());
-        $('#filter-modal').modal('show');        
-        // called when user clicks on a title.
+
         this.renderContent();
       },
 
+      // render common box with apply button, cancel button, etc.
       renderContent: function () {
-        // render common box with apply button, reset button, etc.
+        
+        this.$('.modal-placeholder').html(this.contentTemplate(this.model.toJSON()));
+        this.$('.modal-placeholder .modal').modal({show: true, backdrop: false});
+        this.$('.modal-placeholder .modal-dialog').draggable({ cancel: '.modal-body, .cancel', cursor: 'move'  });
 
       },
 

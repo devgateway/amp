@@ -3,6 +3,8 @@
 // --------------------------------------------------
 
 body {  // TODO: put this in a more appropriate place
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: @light;
   background: @amp-inverse-bg;
 }
 
@@ -23,6 +25,7 @@ body {  // TODO: put this in a more appropriate place
     width: 100%;
     color: @amp-map-header;
     background: @amp-map-header-bg;
+    border: none;
     border-radius: 0;
 
     // Set the height of the navbar (in reality a minimum heigth)
@@ -36,9 +39,18 @@ body {  // TODO: put this in a more appropriate place
       padding-bottom: @v-pad;
     }
 
-    .navbar-brand{
+    .navbar-brand {
       width:60%;
-      border-right: 1px solid #666; 
+      border-right: 1px solid @amp-lightline;
+      font-size: 1em;
+      font-weight: @extrabold;
+      color: @amp-inverse;
+
+      small {
+        position: relative;
+        top: 1px;  // align with title baseline
+        color: @amp-inverse-accent;
+      }
     }
 
     #basemap-gallery{
@@ -57,7 +69,7 @@ body {  // TODO: put this in a more appropriate place
       }
     }
   }
-  
+
   #map-canvas {
     /* always expand to fill the map container */
     height: 100%;

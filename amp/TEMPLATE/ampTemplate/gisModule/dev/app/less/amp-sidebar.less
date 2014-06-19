@@ -13,12 +13,19 @@
 
 
 #branding {
-  padding:8px;
+  padding: 21px 10px 13px;
   text-transform: uppercase;
   .logo {
     max-width: 65px;
     margin: 5px auto;
     display: block;
+  }
+  h4 {
+    margin-bottom: 2px;
+  }
+  h4.small {
+    margin-top: 0;
+    margin-bottom: 10px;
   }
 }
 
@@ -66,10 +73,13 @@
       > a {
         display: block;
 
+        color: desaturate(lighten(@amp-emph, 13%), 24%);
+
         &:hover,
         &:active,
         &:focus {
           text-decoration: none;
+          color: desaturate(lighten(@amp-emph, 23%), 30%);
         }
 
         &.collapsed {
@@ -78,10 +88,11 @@
 
         h3 {
           margin: 0;
-          padding: 8px;
-          // font: inherit;
-          font-size:16px;
+          padding: 11px 21px;
+          font-size: 14px;
+          font-weight: @extrabold;
           line-height: 30px;  // matched to icon
+          text-transform: uppercase;
         }
       }
     }
@@ -93,6 +104,7 @@
         padding: 4px;
         font-size: 16px;
         font-weight: 700;
+        color: @amp-emph;
         background: @amp-content-highlight-bg;
 
         label {
@@ -103,13 +115,13 @@
       .description{
         padding: 0 4px;
       }
-      
+
     }
   }
 
 }
 
-// ??What is the 
+// stickyfooter crap for quality indicator
 .quality-push,
 #quality-indicator {
   height: @amp-sidebar-quality-height;
@@ -122,6 +134,9 @@
 
   p {
     margin-bottom: 0;
+  }
+  .label {
+    font-weight: @light;
   }
 }
 

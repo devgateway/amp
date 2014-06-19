@@ -67,7 +67,7 @@ function spawnEditBox(labelId, javascript) {
 	editor.value = labelValue;
 	//set the position of the cursor
 	if(editor.createTextRange) {
-          var range = elem.createTextRange();
+          var range = editor.createTextRange();
           range.move('character', 0);
           range.select();
       }

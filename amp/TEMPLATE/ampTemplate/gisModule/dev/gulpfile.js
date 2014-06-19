@@ -150,7 +150,7 @@ gulp.task('reload', ['serve', 'watch'], function() {
 
 gulp.task('clean', function() {
   return gulp.src(paths.dist.root, {read: false})
-    .pipe(g.clean());
+    .pipe(g.clean({force: true}));
 });
 
 

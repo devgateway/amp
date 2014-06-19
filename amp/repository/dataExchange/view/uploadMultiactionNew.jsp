@@ -21,8 +21,8 @@
 	#uploadBtn{
 	   position: relative;
 	   font-family: calibri;
-	   width: 150px;
-	   height:30px;
+	   width: 90px;
+	   height:20px;
 	   padding: 10px;
 	   -webkit-border-radius: 5px;
 	   -moz-border-radius: 5px;
@@ -30,6 +30,7 @@
 	   text-align: center;
 	   background-color: #DDD;
 	   cursor:pointer;
+	   border: 1px dashed #BBB;
 	  }
 	td.defaultTab {
 		background-color:#f2f2f2;
@@ -372,7 +373,7 @@
 											<legend><span class="legend_label"><digi:trn>Choose file</digi:trn></span></legend>
 <%-- 											<html:file property="file"   name="importFormNew" /> --%>
 											
-											 <div id="uploadBtn" style="height: 20px; width: 120px;border: 1px dashed #BBB; cursor:pointer;" onclick="getFile()"><digi:trn>Click to upload!</digi:trn></div>
+											 <div id="uploadBtn" onclick="getFile()"><digi:trn>Click to upload!</digi:trn></div>
    											 	<div id="uploadLabel" style="display:inline;position:relative;top:-25px;left:60px;text-overflow:ellipsis;overflow:hidden; -o-text-overflow: ellipsis; white-space: nowrap;width:60px;"><digi:trn>No file chosen</digi:trn></div>
 									
 <!--    											 this is file input tag, so i hide it! -->

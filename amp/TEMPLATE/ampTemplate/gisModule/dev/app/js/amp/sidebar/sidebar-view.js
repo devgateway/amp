@@ -17,9 +17,7 @@ define(
 
       // Render entire geocoding view.
       render: function () {
-        console.log('render tools');
 
-        
         this.$el.append('<div id="tool-layers"  class="panel sidebar-tool"></div>');
         var layerView = new LayersView({el:'#tool-layers'});
         layerView.render();

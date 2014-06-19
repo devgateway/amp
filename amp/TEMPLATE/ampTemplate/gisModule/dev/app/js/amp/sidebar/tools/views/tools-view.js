@@ -12,7 +12,7 @@ define(
 
       title:  'Tools',
       iconClass:  'ampicon-tools',
-      description:  'Various tools',
+      description:  '',
 
       template:  _.template(Template),
 

@@ -617,7 +617,7 @@ public final class PMUtil {
 			  PermissionMap aux = auxList.get(0);
 			  session.delete(aux);
 			}
-			session.saveOrUpdate(permissionMap);
+			session.save(permissionMap);
 		
 	}
 	

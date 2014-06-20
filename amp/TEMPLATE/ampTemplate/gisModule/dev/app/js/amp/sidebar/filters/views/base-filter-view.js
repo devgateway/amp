@@ -66,6 +66,7 @@ define(
 
       apply: function () {
         // trigger common event for applying filters.
+        // this.convertTreeToJSONFilter(); //implemented by child, and if not fallback to base.
       },
 
 

@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -36,6 +38,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
@@ -1469,7 +1473,15 @@ public class DEImportBuilder {
 		}
 		return null;
 	}
-	
+    private Editor createEditor(Site site, String key, String language){
+        Editor editor = new Editor();
+        editor.setSiteId(site.getSiteId());
+        editor.setSite(site);
+        editor.setEditorKey(key);
+        editor.setLanguage(language);
+        return editor;
+    }
+
 	private Editor createEditor(String siteId, String key, String language){
 		Editor editor = new Editor();
 		editor.setSiteId(siteId);
@@ -2238,106 +2250,167 @@ public class DEImportBuilder {
         processIATIFeed(request, log, iLog, actionType, itemId, null);
     }
 
-	private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId, Map <IatiActivity, Set<DEMappingFields>> retVal) {
+    private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId, Map <IatiActivity, Set<DEMappingFields>> retVal) {
 		logger.info("SYSOUT: processing iati activities");
 		
 			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
 			int noAct = 0;
-			for (Iterator it = iatiActs.getIatiActivityOrAny().iterator(); it.hasNext();) {
-				Object obj =  it.next();
-				if( !(obj instanceof IatiActivity) ) continue;
-				IatiActivity iAct = (IatiActivity) obj;
-				String logAct = "";
-				String title = "";
-				String iatiID = "";
-				String ampID = null;
-				IatiActivityWorker iWorker= new IatiActivityWorker(iAct, logAct);
+        for (Object obj : iatiActs.getIatiActivityOrAny()) {
+            if (!(obj instanceof IatiActivity)) continue;
+            IatiActivity iAct = (IatiActivity) obj;
+            String logAct = "";
+            String title = "";
+            String iatiID = "";
+            String ampID = null;
+            IatiActivityWorker iWorker = new IatiActivityWorker(iAct, logAct);
 
-                //Only need to get structure
-                if (retVal != null) {
-                    iWorker.setSaveObjects(false);
-                }
+            //Only need to get structure
+            if (retVal != null) {
+                iWorker.setSaveObjects(false);
+            }
 
-                iWorker.setIgnoreSameAsCheck(ignoreSameAsCheck);
+            iWorker.setIgnoreSameAsCheck(ignoreSameAsCheck);
             iWorker.setIsLoad(Boolean.TRUE.equals(request.getAttribute("isLoad")));
 
-				noAct ++;
-				ArrayList<AmpMappedField> activityLogs = null;
-				if( "check".compareTo(actionType) ==0 )
-					//CHECK content
-					{
-						logger.info(".......Starting processing activity "+noAct);
-						////System.out.println(".......Starting processing activity "+noAct);
+            noAct++;
+            ArrayList<AmpMappedField> activityLogs = null;
+            if ("check".compareTo(actionType) == 0)
+            //CHECK content
+            {
+                logger.info(".......Starting processing activity " + noAct);
+                //System.out.println(".......Starting processing activity "+noAct);
 
-						activityLogs	=	iWorker.checkContent(noAct, this.getHierarchies());
+                activityLogs = iWorker.checkContent(noAct, this.getHierarchies());
 
-                        if (retVal != null) {
-                            retVal.put(iAct, iWorker.getAccumulate());
-                            if (activityLogs != null) {
-                                for (AmpMappedField ampMF : activityLogs) {
-                                    if (ampMF.getItem() != null && ampMF.getItem().getId() != null) {    //Add serialized ones
-                                        retVal.get(iAct).add(ampMF.getItem());
-                                    }
-                                }
+                if (retVal != null) {
+                    retVal.put(iAct, iWorker.getAccumulate());
+                    if (activityLogs != null) {
+                        for (AmpMappedField ampMF : activityLogs) {
+                            if (ampMF.getItem() != null && ampMF.getItem().getId() != null) {    //Add serialized ones
+                                retVal.get(iAct).add(ampMF.getItem());
                             }
                         }
-						logger.info("..................End processing activity "+noAct);
-						////System.out.println("..................End processing activity "+noAct);
-					}
-				else
-					if( "import".compareTo(actionType) ==0 )
-						//import
-						{
-						DELogPerItem deLogPerItem = DataExchangeUtils.getDELogPerItemById(new Long(itemId));
-						if( DELogPerItem.LOG_TYPE_IGNORE.equals(deLogPerItem.getLogType()) )
-							continue;
-						if( iWorker.existActivityByTitleIatiId(deLogPerItem.getName())){
-							logger.info(".......Starting importing activity "+noAct);
-							////System.out.println(".......Starting importing activity "+noAct);
-							Long grpId = new Long(deLogPerItem.getItemType());
+                    }
+                }
+                logger.info("..................End processing activity " + noAct);
+                //System.out.println("..................End processing activity "+noAct);
+            } else if ("import".compareTo(actionType) == 0)
+            //import
+            {
+                DELogPerItem deLogPerItem = DataExchangeUtils.getDELogPerItemById(new Long(itemId));
+				if( DELogPerItem.LOG_TYPE_IGNORE.equals(deLogPerItem.getLogType()) )
+					continue;
+                if (iWorker.existActivityByTitleIatiId(deLogPerItem.getName())) {
+                    logger.info(".......Starting importing activity " + noAct);
+                    //System.out.println(".......Starting importing activity "+noAct);
+                    Long grpId = new Long(deLogPerItem.getItemType());
 
-                                AmpActivityVersion prevVersion = null;
-                                AmpActivityVersion ampActivity = null;
+                    AmpActivityVersion prevVersion = null;
+                    AmpActivityVersion ampActivity = null;
 
-                                if (grpId > -0l) {
-                                    prevVersion = DataExchangeUtils.getAmpActivityGroupById(grpId).getAmpActivityLastVersion();
-                                    AmpTeamMember modBy = prevVersion.getModifiedBy() == null ? prevVersion.getCreatedBy() : prevVersion.getModifiedBy();
-                                    try {
-                                        ampActivity = ActivityVersionUtil.cloneActivity(prevVersion, modBy);
-                                        ampActivity.setAmpActivityId(null);
-                                    } catch (CloneNotSupportedException e) {
-                                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                                    }
-                                } else {
-                                    ampActivity = new AmpActivityVersion();
-                                }
-
-
+                    if (grpId > -0l) {
+                        prevVersion = DataExchangeUtils.getAmpActivityGroupById(grpId).getAmpActivityLastVersion();
+                        AmpTeamMember modBy = prevVersion.getModifiedBy() == null ? prevVersion.getCreatedBy() : prevVersion.getModifiedBy();
+                        try {
+                            ampActivity = ActivityVersionUtil.cloneActivity(prevVersion, modBy);
+                            ampActivity.setAmpActivityId(null);
+                        } catch (CloneNotSupportedException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
+                    } else {
+                        ampActivity = new AmpActivityVersion();
+                    }
 
 
-								activityLogs	=	iWorker.populateActivity(ampActivity, prevVersion, this.getDESourceSetting());
-								AmpTeam team = getAssignedWorkspace();
-								ampActivity.setApprovalStatus(getApprovalStatus());
-								DataExchangeUtils.saveActivity(request,grpId, ampActivity, team);
-								
-								//update the AmpId of the DEMappingField.
-								AmpMappedField checkedActivity = iWorker.checkActivity(iWorker.getTitle(),iWorker.getIatiID(), iWorker.getLang());
-								DEMappingFields item = checkedActivity.getItem();
-								item.setAmpId(ampActivity.getAmpActivityGroup().getAmpActivityGroupId());//getAmpActivityId());
-								item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(),iWorker.getIatiID()));
-							    DataExchangeUtils.addObjectoToAmp(item);
-								logger.info("..................End importing activity "+noAct);
-								////System.out.println("..................End importing activity "+noAct);
-							}
-							else continue;
-						}
-				//process log
-				if(activityLogs == null) continue;
+                    activityLogs = iWorker.populateActivity(ampActivity, prevVersion, this.getDESourceSetting());
+                    AmpTeam team = getAssignedWorkspace();
+                    ampActivity.setApprovalStatus(getApprovalStatus());
+                    DataExchangeUtils.saveActivity(request, grpId, ampActivity, team);
 
-                processLog(log, iLog, iWorker, activityLogs, actionType, (retVal == null));
-			}
+                    //update the AmpId of the DEMappingField.
+                    AmpMappedField checkedActivity = iWorker.checkActivity(iWorker.getTitle(), iWorker.getIatiID(), iWorker.getLang());
+                    DEMappingFields item = checkedActivity.getItem();
+                    item.setAmpId(ampActivity.getAmpActivityGroup().getAmpActivityGroupId());//getAmpActivityId());
+                    item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(), iWorker.getIatiID()));
+                    fixEmptyEditorFields(ampActivity, request);
+                    DataExchangeUtils.addObjectoToAmp(item);
+                    logger.info("..................End importing activity " + noAct);
+                    //System.out.println("..................End importing activity "+noAct);
+                } else continue;
+            }
+            //process log
+            if (activityLogs == null) continue;
+
+            processLog(log, iLog, iWorker, activityLogs, actionType, (retVal == null));
+        }
         if (retVal == null) iLog.saveObject(log.getDeSourceSetting());
 	}
+
+    private void fixEmptyEditorFields(AmpActivityVersion ampActivity, HttpServletRequest request) {
+        String prefix ="_iati_import_";
+        Site site = RequestUtils.getSite(request);
+
+        String[] flds = {"LessonsLearned",
+                "Objective",
+        "Results",
+        "Purpose",
+        "ProjectComments",
+        "ProjectImpact",
+        "ActivitySummary",
+        "ContractingArrangements",
+        "CondSeq",
+        "LinkedActivities",
+        "Conditionality",
+        "ProjectManagement",
+        "Description"};
+
+        Class noparams[] = {};
+        Class clazz = null;
+        try {
+            clazz = Class.forName("org.digijava.module.aim.dbentity.AmpActivityVersion");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        long curMillis = System.currentTimeMillis();
+        Date curDate = new Date();
+        for (int idx = 0; idx < flds.length; idx ++) {
+            String getter = new StringBuilder("get").append(flds[idx]).toString();
+
+            try {
+                Method method = clazz.getMethod(getter, noparams);
+                String val = (String) method.invoke(ampActivity, null);
+
+                if (val == null || val.trim().isEmpty()) {
+                    String key = new StringBuilder(prefix).append(flds[idx]).append("_").append(curMillis).toString();
+                    Editor ed = createEditor(site, key, "en");
+                    ed.setLastModDate(curDate);
+                    ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
+                    ed.setBody("");
+                    try {
+                        org.digijava.module.editor.util.DbUtil.saveEditor(ed);
+                    } catch (EditorException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    Class[] param = new Class[1];
+                    param[0] = String.class;
+                    String setter = new StringBuilder("set").append(flds[idx]).toString();
+                    Method set = clazz.getMethod(setter, param);
+                    set.invoke(ampActivity, key);
+                }
+
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+    }
+
+
 
     private void processLog(DELogPerExecution log, SourceSettingDAO iLog, IatiActivityWorker iWorker, ArrayList<AmpMappedField> activityLogs, String actionType) {
         processLog(log, iLog, iWorker, activityLogs, actionType, false);

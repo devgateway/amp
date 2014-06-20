@@ -51,7 +51,9 @@ public class DataExchangeConstants {
 	public static final String COLUMN_KEY_AMPID = "ampid";
 	public static final String COLUMN_KEY_PTIP = "ptip";
 	
-	
+	public static final String IATI_ORGANIZATION_IDENTIFIER = "OrganisationIdentifier";
+	public static final String IATI_DOCUMENT_CATEGORY = "DocumentCategory";
+	public static final String IATI_COLLABORATION_TYPE = "Collaboration Type";
 	public static final String IATI_ORGANIZATION_TYPE = "Organization Type";
 	public static final String IATI_ORGANIZATION = "Organization";
 	public static final String IATI_LOCATION = "Location";
@@ -61,6 +63,7 @@ public class DataExchangeConstants {
 	public static final String IATI_SECTOR = "Sector";
 	//type of assistance
 	public static final String IATI_FINANCE_TYPE = "Finance Type";
+	public static final String IATI_FINANCE_TYPE_CATEGORY = "Finance Type (category)";
 	//financing instrument
 	public static final String IATI_AID_TYPE = "Aid Type";
 	public static final String IMPLEMENTATION_LEVEL_TYPE = "Implementation Level";
@@ -82,40 +85,63 @@ public class DataExchangeConstants {
 
 
     /* All IATI Code types
-
-    "ActivityDateType"
-    "ActivityScope"
-    "ActivityStatus"
-    "AidTypeFlag"
-    "BudgetIdentifier"
-    "BudgetIdentifierVocabulary"
-    "BudgetType"
-    "ConditionType"
-    "ContactType"
-    "DescriptionType"
-    "DisbursementChannel"
-    "DocumentCategory-category"
-    "DocumentCategory"
-    "FileFormat"
-    "GazetteerAgency"
-    "GeographicalPrecision"
-    "IndicatorMeasure"
-    "LoanRepaymentPeriod"
-    "LoanRepaymentType"
-    "LocationType"
-    "OrganisationRole"
-    "OrganisationType"
-    "PolicyMarker"
-    "PublisherType"
-    "RegionVocabulary"
-    "RelatedActivityType"
-    "ResultType"
-    "TiedStatus"
-    "TransactionType"
-    "VerificationStatus"
-    "Vocabulary"
-    */
-
-
+     */
+    public enum IatiCodeTypeEnum{
+    	None("None"),
+    	ActivityDateType("ActivityDateType"),
+    	ActivityScope("ActivityScope"),
+    	ActivityStatus("ActivityStatus"),
+    	AidType("AidType"),
+    	AidTypeFlag("AidTypeFlag"),
+    	BudgetIdentifier("BudgetIdentifier"),
+    	BudgetIdentifierVocabulary("BudgetIdentifierVocabulary"), 
+    	BudgetType("BudgetType"),
+    	CollaborationType("CollaborationType"),
+    	ConditionType("ConditionType"),
+    	ContactType("ContactType"),
+    	DescriptionType("DescriptionType"),
+    	DisbursementChannel("DisbursementChannel"),
+    	DocumentCategoryCategory("DocumentCategory-category"),
+    	DocumentCategory("DocumentCategory"),
+    	FileFormat("FileFormat"),
+    	FinanceTypeCategory("FinanceType-category"),
+    	GazetteerAgency("GazetteerAgency"),
+    	GeographicalPrecision("GeographicalPrecision"),
+    	IndicatorMeasure("IndicatorMeasure"),
+    	LoanRepaymentPeriod("LoanRepaymentPeriod"),
+    	LoanRepaymentType("LoanRepaymentType"),
+    	LocationType("LocationType"),
+    	OrganisationIdentifier("OrganisationIdentifier"),
+    	OrganisationRole("OrganisationRole"),
+    	OrganisationType("OrganisationType"),
+    	PolicyMarker("PolicyMarker"),
+    	PublisherType("PublisherType"),
+    	RegionVocabulary("RegionVocabulary"),
+    	RelatedActivityType("RelatedActivityType"),
+    	ResultType("ResultType"),
+    	Sector("Sector"),
+    	TiedStatus("TiedStatus"),
+    	TransactionType("TransactionType"),
+    	VerificationStatus("VerificationStatus"),
+    	Vocabulary("Vocabulary");
+    	
+    	private String value;
+    	IatiCodeTypeEnum(String value) {
+    		this.value = value;
+    	}
+    	@Override
+    	public String toString(){
+    		return this.value;
+    	}
+    	
+    	public static IatiCodeTypeEnum getValueOf(String value) {
+    		for (IatiCodeTypeEnum typeName:IatiCodeTypeEnum.values()) {
+    			if (typeName.toString().equals(value)) {
+    				return typeName;
+    			}
+    		}
+    		return None;
+    	}
+    };
 
 }

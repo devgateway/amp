@@ -160,4 +160,9 @@ public class AmpColumnEntry {
 	public boolean canExport(){
 		return this.isMandatory() || this.isSelect();
 	}
+	
+	@Override 
+	public String toString() {
+		return this.path;
+	}
 }

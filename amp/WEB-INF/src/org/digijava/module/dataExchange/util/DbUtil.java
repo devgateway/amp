@@ -1,18 +1,26 @@
 package org.digijava.module.dataExchange.util;
 
+import java.math.BigInteger;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.NonUniqueResultException;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.error.AMPException;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.dataExchange.dbentity.AmpDEUploadSession;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.dbentity.IatiCodeItem;
 import org.digijava.module.dataExchange.dbentity.IatiCodeType;
+import org.digijava.module.dataExchange.util.DataExchangeConstants.IatiCodeTypeEnum;
 import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -169,6 +177,51 @@ public class DbUtil {
         }
         return retVal;
     }
-
-
+    
+    public static IatiCodeType getIatiCodeTypeByName(IatiCodeTypeEnum codeTypeName) throws AMPException {
+    	IatiCodeType codeType = null;
+    	String queryStr = "select ct from " + IatiCodeType.class.getName() + " ct where ct.name=:name";
+    	try {
+			Query qry = PersistenceManager.getRequestDBSession().createQuery(queryStr);
+			qry.setParameter("name", codeTypeName.toString());
+			codeType = (IatiCodeType)qry.uniqueResult();
+		} catch (HibernateException | DgException e) {
+			logger.error("Cannot retrieve getIatiCodeTypeByName("+codeTypeName+"): "+e.getMessage());
+			throw new AMPException(e.getCause());
+		}
+    	return codeType;
+    }
+    
+    public static IatiCodeItem getIatiCodeByCode(String code, Long codeTypeId) throws AMPException {
+    	return getIatiCodeByNameOrCode(null, code, codeTypeId);
+    }
+    
+    public static IatiCodeItem getIatiCodeByName(String name, Long codeTypeId) throws AMPException {
+    	return getIatiCodeByNameOrCode(name, null, codeTypeId);
+    }
+    
+    private static IatiCodeItem getIatiCodeByNameOrCode(String name, String code, Long codeTypeId) throws AMPException {
+    	IatiCodeItem retVal = null;
+    	boolean and = false;
+    	try {
+    		String q = "select ici from "+IatiCodeItem.class.getName()+" ici where ici.type.id=:codeTypeId and";
+    		if (StringUtils.isNotBlank(name)) {
+    			q +=" lower(ici.name) like '"+name.toLowerCase().replace("'",  "''")+"'";
+    			and  = true;
+    		}
+    		if (StringUtils.isNotBlank(code))
+    			q += (and ? " and" : "") + " ici.code like '" + code + "'";
+    		Query qry = PersistenceManager.getRequestDBSession().createQuery(q);
+    		qry.setParameter("codeTypeId", BigInteger.valueOf(codeTypeId), Hibernate.BIG_INTEGER);
+    		retVal = (IatiCodeItem)qry.uniqueResult();
+    	} catch (NonUniqueResultException ex) {
+    		logger.error("Multiple IatiCodes for name='"+name+"'"); 
+    		throw new AMPException(ex);
+    	} catch (Exception ex) {
+			logger.error("Could not retrieve Iati Code: " + ex.getMessage());
+			throw new AMPException(ex);
+		}
+    	return retVal;
+    }
+    
 }

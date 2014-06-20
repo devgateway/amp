@@ -138,7 +138,10 @@
    	</xjc>
     <xjc destdir="${gen-src}" schema="./doc/dataExchange/iati-activities-schema.xsd" package="org.digijava.module.dataExchangeIATI.iatiSchema.jaxb">
     	<produces dir="${gen-src}" includes="org/digijava/module/dataExchangeIATI/iatiSchema/jaxb/*.java"/>
-   	</xjc>   	
+   	</xjc>
+  	<xjc destdir="${gen-src}" schema="./doc/dataExchange/v1_03/iati-activities-schema-1_03.xsd" package="org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb">
+    	<produces dir="${gen-src}" includes="org/digijava/module/dataExchangeIATI/iatiSchema/v1_03/jaxb/*.java"/>
+   	</xjc>
    	<xjc destdir="${gen-src}" schema="./doc/translation.xsd" package="org.digijava.module.translation.jaxb">
    		<produces dir="${gen-src}" includes="org/digijava/module/translation/jaxb/*.java"/>
     </xjc>

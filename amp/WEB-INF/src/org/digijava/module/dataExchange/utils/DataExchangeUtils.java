@@ -6,10 +6,10 @@ package org.digijava.module.dataExchange.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,7 +38,23 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteCache;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
@@ -46,7 +62,6 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
@@ -55,12 +70,10 @@ import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
-import org.digijava.module.dataExchange.util.ExportBuilder;
-import org.digijava.module.message.jobs.ActivityVersionDeletionJob;
+import org.digijava.module.dataExchange.util.IatiVersion;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -162,6 +175,24 @@ public class DataExchangeUtils {
 		return col;
 	}
 
+	/**
+	 * Gets the list of iati-amp mappings for a spefic amp class & value
+	 * @param ampClass is of DataExchangeConstatns constant type like IMPLEMENTATION_LEVEL_TYPE
+	 * @return list of DEMappingFields
+	 */
+	public static List<DEMappingFields> getDEMappingFieldsByAmpClassAndAmpValues(String ampClass, String ampValues) {
+		List<DEMappingFields> retVal = new ArrayList<DEMappingFields>();
+		String queryStr = "select mf from " + DEMappingFields.class.getName() + " mf where mf.ampClass=:ampClass and mf.ampValues=:ampValues";
+		try {
+			Query qry = PersistenceManager.getRequestDBSession().createQuery(queryStr);
+			qry.setParameter("ampClass", ampClass);
+			qry.setParameter("ampValues", ampValues);
+			retVal = (List<DEMappingFields>)qry.list();
+		} catch (Exception ex) {
+			logger.error("Could not getDEMappingFieldsByAmpClassAndAmpValue("+ampClass+", "+ampClass+") : "+ ex.getMessage());
+		}
+		return retVal;
+	}
 	
 	public static Collection<DEMappingFields> getDEMappingFieldsByAmpClass(String ampClass, int startIndex) {
 		Session session = null;
@@ -1284,11 +1315,11 @@ public class DataExchangeUtils {
 		Activities activities = (new ObjectFactory()).createActivities();
 		//List<AmpActivity> ampActivities = (List<AmpActivity>) ExportUtil.getWsActivities();
 		for (Iterator iterator = ampActivities.iterator(); iterator.hasNext();) {
-			ExportBuilder eBuilder = null;
+			//ExportBuilder eBuilder = null;
 			AmpActivity ampActivity = (AmpActivity) iterator.next();
 
 			Site site = SiteCache.lookupByName("amp"); // hack, but there are other places in AMP which assume "amp" too
-			eBuilder = new ExportBuilder(ampActivity, site);
+			//eBuilder = new ExportBuilder(ampActivity, site);
 			AmpColumnEntry columns = new AmpColumnEntry();
 			columns.setKey("activityTree.select");
 			columns.setName("activity");
@@ -1367,12 +1398,14 @@ public class DataExchangeUtils {
 			columns.getElements().add(colissues);
 			columns.getElements().add(implementationLevels);
 			columns.getElements().add(physicalProgress);
+			/*
 			try {
 				activities.getActivity().add(eBuilder.getActivityType(columns));
 			} catch (AmpExportException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			*/
 		}
 		return activities;
 	}
@@ -1852,6 +1885,23 @@ public class DataExchangeUtils {
         return allEntities;
     }
 	
+    public static String getSchemaFileLoc(IatiVersion version) {
+    	URL rootUrl   = DataExchangeUtils.class.getResource("/");
+    	String path = null;
+    	switch(version) {
+    	case V_1_03: path = DEConstants.IATI_SCHEMA_LOCATION_V_1_03; break;
+    	}
+    	if (path!=null) {
+    		try {
+				path = rootUrl.toURI().resolve("../../").getPath() + path;
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				path = null;
+			}
+    	}
+    	return path;
+    }
 }
 
 

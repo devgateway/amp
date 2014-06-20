@@ -61,7 +61,7 @@
 	<link rel="stylesheet" type="text/css" href="<digi:file src='/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/border_tabs.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
-	<link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters.css"/>
+	<link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css"/>
 	
 	<br>
 	<br>
@@ -329,6 +329,20 @@
 				<div id="tab_select_filed" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
                     <c:set var="stepNum" value="0" scope="request" />
                     <jsp:include page="toolbar.jsp" />
+                    <div>
+                    	<span class="list_header">
+                    		<digi:trn key="rep:wizard:supportedSchema">Supported IATI Schema</digi:trn>
+                    	</span>
+                    	<div>
+           	        		<html:select name="deExportForm" property="iatiVersion" styleClass="inp-text"  
+   								style="width: 300px;" onchange="">
+                              <c:forEach var="fVar" items="${deExportForm.iatiVersionList}" varStatus="lStatus">
+                                <option value="${fVar.value}">${fVar.value}</option>
+                              </c:forEach>
+                            </html:select>
+                    	
+                    	</div>
+                    </div>
 					<div style="height: 355px; padding-bottom: 40px;">
     					<table cellpadding="5px" style="vertical-align: middle" width="100%">
     						<tr>
@@ -363,7 +377,7 @@
                     Select additional fields
 				</div>
 --%>
-				<div id="tab_filter"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; display: none;">
+				<div id="tab_filter"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; ">
                     <c:set var="stepNum" value="2" scope="request" />
                     <jsp:include page="toolbar.jsp" />
                     <table cellpadding="15px" width="100%" align="center" border="0" >

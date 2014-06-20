@@ -19,12 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP VIEW v_amp_activity_expanded;
 				CREATE OR REPLACE VIEW v_amp_activity_expanded AS 
- 				SELECT av.*, dg_editor.body as expanded_description, dg_editor2.body as expanded_linked_activites
+ 				SELECT av.*, dg_editor.body as expanded_description
 			   FROM amp_activity_version av
-			   LEFT JOIN dg_editor on av.description=dg_editor.editor_key 
-			   LEFT JOIN dg_editor dg_editor2 on av.linked_activities=dg_editor2.editor_key,
-				amp_activity_group
+			   LEFT JOIN dg_editor on av.description=dg_editor.editor_key,
+			   amp_activity_group
 			  WHERE av.amp_activity_id = amp_activity_group.amp_activity_last_version_id AND (av.deleted IS NULL OR av.deleted = false);
 			</lang>
 		</script>

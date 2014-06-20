@@ -15,7 +15,6 @@ import org.digijava.module.aim.util.HierarchyListable;
 public class AmpActivityExpanded extends AmpActivity implements Cloneable, HierarchyListable {
 
 	private String expandedDescription;
-	private String expandedLinkedActivites;
 	
 	public String getExpandedDescription() {
 		return expandedDescription;
@@ -25,17 +24,6 @@ public class AmpActivityExpanded extends AmpActivity implements Cloneable, Hiera
 	public void setExpandedDescription(String expandedDescription) {
 		this.expandedDescription = expandedDescription;
 	}
-
-
-	public String getExpandedLinkedActivites() {
-		return expandedLinkedActivites;
-	}
-
-
-	public void setExpandedLinkedActivites(String expandedLinkedActivites) {
-		this.expandedLinkedActivites = expandedLinkedActivites;
-	}
-
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {

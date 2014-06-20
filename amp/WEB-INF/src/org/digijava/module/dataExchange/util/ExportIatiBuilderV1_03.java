@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -686,7 +687,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	protected void addDocumentLink(IatiActivity iatiAct, AmpActivityExpanded ampAct, AmpColumnEntry parent) throws AmpExportException {
 		if (isNotEmpty(ampAct.getDocuments())) {
 			for (Iterator iter = ampAct.getDocuments().iterator(); iter.hasNext(); ) {
-				CMSContentItem doc = (CMSContentItem) iter.next();
+				Documents doc = (Documents) iter.next();
 				if (!doc.getIsFile()) {
 					DocumentLink iatiDocLink = factory.createDocumentLink();
 					iatiDocLink.setUrl(doc.getUrl());
@@ -699,7 +700,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 								break;
 							case "category":
 								IatiCode pair = getIatiCodeItemPair(DataExchangeConstants.IATI_DOCUMENT_CATEGORY, 
-										doc.getDocType().getValue() , IatiCodeTypeEnum.DocumentCategory);
+										doc.getDocType(), IatiCodeTypeEnum.DocumentCategory);
 								if (pair!=null)
 									iatiDocLink.getTitleOrCategoryOrLanguage().add(
 											factory.createDocumentLinkCategory(getCodeReqType(pair.getCodeName(), pair.getCodeValue())));
@@ -715,13 +716,14 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 	}
 	
 	protected void addRelatedActivity(IatiActivity iatiAct, AmpActivityExpanded ampAct) {
+		/* linked Activities removed in 2.10
 		if (StringUtils.isNotBlank(ampAct.getExpandedLinkedActivites())) {
 			RelatedActivity relAct = factory.createRelatedActivity();
 			String linkedActivities = ampAct.getExpandedLinkedActivites();
 			relAct.getContent().add(linkedActivities);
 			//we do not store other relationship information, but 
 			//iatiAct.getActivityWebsiteOrReportingOrgOrParticipatingOrg().add(relAct);
-		}
+		}*/
 	}	
 	
 	protected CodeReqType getCodeReqType(String content, String code) {

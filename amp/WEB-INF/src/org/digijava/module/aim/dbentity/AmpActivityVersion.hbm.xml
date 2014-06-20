@@ -379,6 +379,5 @@
 
 		&activityFields;
 		<property name="expandedDescription" column="expanded_description" type="java.lang.String" />
-		<property name="expandedLinkedActivites" column="expanded_linked_activites" type="java.lang.String" />
 	</class>
 </hibernate-mapping>

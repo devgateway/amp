@@ -38,6 +38,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.text.regex.RegexBatch;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
@@ -60,36 +61,7 @@ public class DbUtil {
 
     private static Logger logger = Logger.getLogger(DbUtil.class);
     
-	/**
-	 * Flags used for regex matching to strip out all unneeded html.
-	 * Can combine multiple patterns like this = Pattern.DOTALL | Pattern.MULTILINE; 
-	 */
-	private static final int REGEX_FLAGS = Pattern.DOTALL;
-	
-	/**
-	 * Regexes split and ordered so that it will leave only 
-	 * text required for Lucene indexing.  
-	 */
-	private static final String[] HTML_STRIP_REGEXES = 
-	{
-			"<!--.*?-->"						//commented texts
-			, "<!DOCTYPE.*?>"					//doc type tags
-			, "<head.*?>.*?</head>"				//head tag with content
-			, "<script.*?>.*?</script>"			//script tag with content
-			, "<style.*?>.*?</style>"			//style tag with content
-			, "<(link|input|a|br|hr|meta).*?>"	//some tags
-			, "<\\s*?[a-z]+(:[a-z0-9]+)?.*?>"	//Beginnings of tags 
-			, "</\\s*?[a-z]+(:[a-z0-9]+)?.*?>"	//Endings of tags
-			, "&[a-z]*?;"						//&nbsp; and things like that
-			,"\\s{2,}"							//multiple spaces
-	};
-	
-	/**
-	 * Stripps html tags from text.
-	 */
-	private static final RegexBatch htmlStripper = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
-
-    /**
+	 /**
      * Get editor item by key from database
      *
      * @param key
@@ -632,12 +604,7 @@ public class DbUtil {
      */
     public static String getEditorBodyFiltered(Site site, String editorKey, String language) throws EditorException {
     	String body = getEditorBody(site, editorKey, language);
-    	if (body != null){
-    		RegexBatch batch = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
-    		body = batch.replaceAll(body, " "); 
-    		
-    	}
-    	return body;
+    	return DgUtil.cleanHtmlTags(body);
     }
 
     /**

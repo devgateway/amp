@@ -60,7 +60,11 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 
 
-
+/**
+ * @deprecated Use {@link ExportIatiBuilderVX} instead
+ * This Builder was meant for old IATI schema export 
+ * (probably not even 1.01)
+ */
 public class ExportBuilder {
 
 	private AmpActivityVersion ampActivity = null;

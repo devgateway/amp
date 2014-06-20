@@ -58,8 +58,8 @@ public class DEConstants {
 	public static final String CATEG_VALUE_ACTIVITY_EXPORT_OPTIONS = "activity_export_filter_options";
 	public static final String IDML_SCHEMA_LOCATION = "/doc/iati/schemas/IDML2.0.xsd";
 	//public static final String IATI_SCHEMA_LOCATION = "/doc/dataExchange/iati-activities-schema.xsd";
-    public static final String IATI_SCHEMA_LOCATION = "/doc/dataExchange/iati-activities-schema-1_03.xsd";
-
+    public static final String IATI_SCHEMA_LOCATION = "/doc/dataExchange/v1_03/iati-activities-schema-1_03.xsd";
+    public static final String IATI_SCHEMA_LOCATION_V_1_03 = "doc/dataExchange/v1_03/iati-activities-schema-1_03.xsd";
 
 
     public static final String FIELD_ACTIVITY="activity";

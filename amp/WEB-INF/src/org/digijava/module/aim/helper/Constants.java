@@ -224,6 +224,9 @@ public class Constants
 	public static final String PORTFOLIO_PERFORMANCE_CHART_TITLE = "Portfolio - Performance";
 	public static final String PORTFOLIO_RISK_CHART_TITLE = "Portfolio - Risk";
 
+	public static final String BUDGET_STRUCTURE_NAME_OPERATIONS = "Operations";
+	public static final String BUDGET_STRUCTURE_NAME_CAPITAL = "Capital";
+	public static final String BUDGET_STRUCTURE_NAME_SALARIES = "Salaries";
 
 	public static final int CHART_HEIGHT = 350;
 	public static final int CHART_WIDTH = 400;

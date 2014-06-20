@@ -12,17 +12,25 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.dgfoundation.amp.error.AMPException;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
+import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+import org.digijava.module.dataExchange.dbentity.IatiCodeItem;
+import org.digijava.module.dataExchange.dbentity.IatiCodeType;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
+import org.digijava.module.dataExchange.util.DataExchangeConstants.IatiCodeTypeEnum;
+import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 
 public class ExportHelper {
 
@@ -123,7 +131,9 @@ public class ExportHelper {
 		DESourceSetting setting = null ;
 		
 			try {
-				setting = new SessionSourceSettingDAO().getSourceSettingById( new Long(2) );
+				//commenting out the line, and just getting any for now - there is no setting with ID=2, but I guess it was meant to have a base config for export??
+				//setting = new SessionSourceSettingDAO().getSourceSettingById( new Long(2) );
+				setting = new SessionSourceSettingDAO().getAnySourceSetting();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -184,6 +194,57 @@ public class ExportHelper {
 		return retValue.toString();
 	}	
 	
+	/**
+	 * Build Iati Activity tree 
+	 * @param version is Iati XML Schema version (e.g. 1.03)
+	 * @param depth is the maximum depth of the schema tree to generate
+	 * @return
+	 */
+	public static AmpColumnEntry getActivityStruc(IatiVersion version, int depth) {
+		switch(version) {
+		case V_1_03: return getActivityStruct1_03("iati-activity","activityTree","iati-activity", 
+				org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.IatiActivity.class,
+				true, depth);
+		case V_1_04:
+		default: return null;
+		}
+	}
+	
+	private static AmpColumnEntry getActivityStruct1_03(String name, String key, String path, Class clazz, boolean required, int depth) {
+		AmpColumnEntry retValue = new AmpColumnEntry(key + ".select", name, path);
+		retValue.setSelect(required);
+		retValue.setMandatory(required);
+		
+		//check if we reached maximum allowed depth 
+		if (depth==0) return retValue;
+
+		Field[] fields = clazz.getDeclaredFields();
+		int index = -1;
+		
+		for (Field field : fields) {
+			XmlElementRefs xmlElementRefs  = field.getAnnotation(XmlElementRefs.class);
+			if (xmlElementRefs!=null) {
+				for (XmlElementRef xmlElementRef: xmlElementRefs.value()) {
+					String newPath = path + ExportHelper.PATH_DELIM + xmlElementRef.name();
+					String newKey = key + ".elements[" ;
+					retValue.getList().add(getActivityStruct1_03(xmlElementRef.name(), newKey + (++index) + "]", newPath, xmlElementRef.type(), false, depth-1)); 
+					//requires normally should be read from xmlElementRef.required(), but in 1.03 minOccurance is not specified and JAXBs are thought to be all required by default
+				}
+			}
+		}
+
+		return retValue;
+	}
+	
+	/**
+	 * Old XML schema tree structure generation
+	 * @param name
+	 * @param key
+	 * @param path
+	 * @param clazz
+	 * @param required
+	 * @return
+	 */
 								//getActivityStruct("activity","activityTree","activity",ActivityType.class,true)
 	public static AmpColumnEntry getActivityStruct(String name, String key, String path,  Class clazz, boolean required) {
 		AmpColumnEntry retValue = new AmpColumnEntry(key + ".select", name, path);
@@ -206,12 +267,12 @@ public class ExportHelper {
 			if (field.getGenericType() instanceof ParameterizedType) {
 				ParameterizedType type = (ParameterizedType) field.getGenericType();
 				Class claaa = (Class) (type.getActualTypeArguments()[0]);
-				if (claaa.getName().startsWith("org.digijava.module.dataExchange.jaxb")) {
+				if (claaa.getName().startsWith("org.digijava.module.dataExchange.iatiSchema.jaxb")) {
 					retValue.getList().add(getActivityStruct(field.getName(), newKey + (++index) + "]", newPath, claaa, mandatory));
 				}
 			} else {
 				Class claaa = (Class) (field.getGenericType());
-				if (claaa.getName().startsWith("org.digijava.module.dataExchange.jaxb")) {
+				if (claaa.getName().startsWith("org.digijava.module.dataExchange.iatiSchema.jaxb")) {
 					retValue.getList().add(getActivityStruct(field.getName(), newKey + (++index) + "]", newPath, claaa, mandatory));
 				}
 			}
@@ -285,7 +346,7 @@ public class ExportHelper {
 		if (date != null) {
 			try {
 				GregorianCalendar cal = new GregorianCalendar();
-				cal.setTime(date);
+				cal.setTime(date); 
 				retValue = DatatypeFactory.newInstance()
 				.newXMLGregorianCalendar(cal);
 			} catch (Exception e) {
@@ -295,5 +356,28 @@ public class ExportHelper {
 		return retValue;
 	}
 	
+	public static IatiCodeItem getIatiCodeItem(IatiCodeTypeEnum typeName, String iatiCodeName) throws AmpExportException {
+		try {
+			IatiCodeType codeType = DbUtil.getIatiCodeTypeByName(typeName);
+			IatiCodeItem codeItem =  DbUtil.getIatiCodeByName(iatiCodeName, codeType.getId());
+			return codeItem;
+		} catch (AMPException e) {
+			throw new AmpExportException(e.getCause(), AmpExportException.ACTIVITY_DATA_INEFFICIENT);
+		}
+	}
 	
+	/**
+	 * Finds IatiCodeName mapping for ampValue based on ampType
+	 * @param ampType constant type, e.g. DataExchangeConstants.IMPLEMENTATION_LEVEL_TYPE
+	 * @param ampValue AMP value of the entry with the given ampType
+	 * @return
+	 */
+	public static String getIatiCodeName(String ampType, String ampValue) {
+		String iatiCodeName = null;
+		//let's try to find the mapping to IATI the way we can right now - hack
+		List<DEMappingFields> fields = DataExchangeUtils.getDEMappingFieldsByAmpClassAndAmpValues(ampType,ampValue);
+		if (fields.size()>0 && fields.get(0).getIatiValues()!=null)
+			iatiCodeName = fields.get(0).getIatiValues().split("\\|\\|\\|")[0];
+		return iatiCodeName;
+	}
 }

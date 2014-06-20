@@ -15,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
+import org.digijava.module.dataExchange.util.IatiVersion;
 
 public class ExportForm extends ActionForm{
 
@@ -47,6 +48,9 @@ public class ExportForm extends ActionForm{
 	//SectorUtil.getAmpSectorsAndSubSectors(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
 	private Collection<AmpSector> secondarySectorsList =  null;
 	private Long[] secondarySectorsSelected = null;
+	
+	private Collection<IatiVersion> iatiVersionList =  null;
+	private String iatiVersion = null;
 	
 	private String language  = null;
 	
@@ -229,6 +233,26 @@ public class ExportForm extends ActionForm{
 	
 	public boolean isError(){
 		return this.exportLog != null;
+	}
+
+
+	public Collection<IatiVersion> getIatiVersionList() {
+		return iatiVersionList;
+	}
+
+
+	public void setIatiVersionList(Collection<IatiVersion> iatiVersionList) {
+		this.iatiVersionList = iatiVersionList;
+	}
+
+
+	public String getIatiVersion() {
+		return iatiVersion;
+	}
+
+
+	public void setIatiVersion(String iatiVersion) {
+		this.iatiVersion = iatiVersion;
 	}
 }
 

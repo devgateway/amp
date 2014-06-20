@@ -1,8 +1,9 @@
 package org.digijava.module.dataExchange.action;
 
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -22,6 +25,7 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityExpanded;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
@@ -32,12 +36,10 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.form.ExportForm;
-import org.digijava.module.dataExchange.jaxb.Activities;
-import org.digijava.module.dataExchange.jaxb.ActivityType;
-import org.digijava.module.dataExchange.jaxb.ObjectFactory;
-import org.digijava.module.dataExchange.util.ExportBuilder;
 import org.digijava.module.dataExchange.util.ExportHelper;
+import org.digijava.module.dataExchange.util.ExportIatiBuilderVX;
 import org.digijava.module.dataExchange.util.ExportUtil;
+import org.digijava.module.dataExchange.util.IatiVersion;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 
 
@@ -52,7 +54,11 @@ public class ExportWizardAction extends DispatchAction {
 
 		ExportForm eForm = (ExportForm)form;
 
-		eForm.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true));
+		eForm.setIatiVersionList(Arrays.asList(IatiVersion.values()));
+		eForm.setIatiVersion(IatiVersion.V_1_03.toString());
+		//TODO: build tree based on what? common Amp Activity structure, that will be mapped to diff Iati Activity schema versions
+		eForm.setActivityTree(ExportHelper.getActivityStruc(IatiVersion.V_1_03, 2)); //TODO: retrieve from selection
+		//eForm.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true)); 
 
 		eForm.setDonorTypeList(DbUtil.getAllOrgTypesOfPortfolio());
 		eForm.setDonorGroupList(ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio()));
@@ -74,14 +80,13 @@ public class ExportWizardAction extends DispatchAction {
 	throws Exception {
 
 		ExportForm eForm = (ExportForm)form;
+		IatiVersion iatiVersion = IatiVersion.V_1_03;
 
 		if (eForm.getActivityTree() != null && 
 				eForm.getSelectedTeamId() != null && eForm.getSelectedTeamId().longValue()>=0){
 			// TODO: add search criteria. 
 
-			Activities activities = (new ObjectFactory()).createActivities();
-
-			List<AmpActivity> ampActivities  = ExportUtil.getActivities(
+			List<AmpActivityExpanded> ampActivities  = ExportUtil.getActivities(
 					eForm.getSelectedTeamId(),
 					eForm.getDonorTypeSelected(),
 					eForm.getDonorGroupSelected(),
@@ -89,23 +94,23 @@ public class ExportWizardAction extends DispatchAction {
 					eForm.getPrimarySectorsSelected(),
 					eForm.getSecondarySectorsSelected()
 			);
+			ExportIatiBuilderVX eBuilder = ExportIatiBuilderVX.getInstance(iatiVersion, RequestUtils.getSite(request), eForm.getActivityTree());
 
 			try {
 				eForm.setExportLog(null);
-				for (Iterator iterator = ampActivities.iterator(); iterator.hasNext();) {
-					ExportBuilder eBuilder = null;
+				//log.info("START");
+				for (AmpActivityExpanded ampActivity : ampActivities) {
 					try{
-						AmpActivity ampActivity = (AmpActivity) iterator.next();
-
-						eBuilder = new ExportBuilder(ampActivity, RequestUtils.getSite(request));
-						activities.getActivity().add(eBuilder.getActivityType(eForm.getActivityTree()));
+						eBuilder.addActivity(ampActivity);
 					} catch (AmpExportException e) {
-						if (eBuilder!= null && eBuilder.getEroor() != null){
-							eForm.addExportLog(eBuilder.getEroor());
-						}
+						//if (eBuilder!= null && eBuilder.getEroor() != null){
+						//	eForm.addExportLog(eBuilder.getEroor());
+						//}
 						log.error(e);
+						throw e;
 					}
 				}
+				//log.info("END");
 			} catch (Exception e) {
 				log.error(e);
 				throw e;
@@ -115,11 +120,14 @@ public class ExportWizardAction extends DispatchAction {
 			ServletOutputStream outputStream = null;
 			try {
 				// package name
-				JAXBContext	jc = JAXBContext.newInstance("org.digijava.module.dataExchange.jaxb");
+				JAXBContext	jc = JAXBContext.newInstance(eBuilder.getRoot().getClass().getPackage().getName());
+				SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+				Schema schema = sf.newSchema(new File(DataExchangeUtils.getSchemaFileLoc(iatiVersion) ));
 				Marshaller m = jc.createMarshaller();
+				m.setSchema(schema);
 				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 				outputStream = response.getOutputStream();
-				m.marshal(activities, outputStream);
+				m.marshal(eBuilder.getRoot(), outputStream);
 
 			} catch (javax.xml.bind.JAXBException jex) {
 				log.error("dataExchange.export.error JAXB Exception!",jex);

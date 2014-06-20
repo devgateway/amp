@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityExpanded;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -21,9 +22,9 @@ public class ExportUtil {
     private static Logger logger = Logger.getLogger(ExportUtil.class);
 
     
-    public static List<AmpActivity> getActivities(Long teamId, Long[] donorTypes, Long[] donorGroups, Long[] donorAgences,
+    public static List<AmpActivityExpanded> getActivities(Long teamId, Long[] donorTypes, Long[] donorGroups, Long[] donorAgences,
     		Long[] primarySectors, Long[] secondarySectors) {
-    	List<AmpActivity> retValue = null;
+    	List<AmpActivityExpanded> retValue = null;
         Session session = null;    	
 
         if(teamId == null) {
@@ -33,8 +34,8 @@ public class ExportUtil {
     	
         try {
             session = PersistenceManager.getRequestDBSession();
-            StringBuffer from = new StringBuffer("select distinct act from " + AmpActivity.class.getName() + " as act, ");
-            StringBuffer mainWhere =  new StringBuffer(" where (act.team=:teamId) ");
+            StringBuffer from = new StringBuffer("select distinct act from " + AmpActivityExpanded.class.getName() + " as act, ");
+            StringBuffer mainWhere =  new StringBuffer(" where act.team=:teamId ");
             
             if ((primarySectors != null && primarySectors.length > 0) ||
             		(secondarySectors != null && secondarySectors.length > 0)){

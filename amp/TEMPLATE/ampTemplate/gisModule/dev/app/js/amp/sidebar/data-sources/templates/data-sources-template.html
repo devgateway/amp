@@ -1,10 +1,36 @@
 <div class="container-fluid">
+  <h4>Available Sources</h4>
   <div class="form-group">
-    <button type="button" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-floppy-save"></span> Save</button>
-    <button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-floppy-open"></span> Load</button>
+    <div class="radio">
+      <label>
+        <input type="radio" name="data-sources" id="data-source-1" value="data-source-1" checked="checked" />
+          <h5>Pogo Stick Survey</h5>
+          <cite><small>World Bank 1997-1999</small></cite>
+      </label>
+    </div>
   </div>
   <div class="form-group">
-    <button type="button" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-share-alt"></span> Export</button>
-    <button type="button" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-link"></span> Share</button>
+    <div class="radio">
+      <label>
+        <input type="radio" name="data-sources" id="data-source-2" value="data-source-2" />
+          <h5>Favourite fruit for juice</h5>
+          <cite><small>Open Street Maps</small></cite>
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="radio">
+      <label>
+        <input type="radio" name="data-sources" id="data-source-3" value="data-source-3" />
+          <h5>Average age for midlife crises</h5>
+          <cite><small>USAID 2013</small></cite>
+      </label>
+    </div>
+  </div>
+  <h4>Your own data</h4>
+  <div class="form-group">
+    <label for="data-source-file">Upload a file</label>
+    <input type="file" id="data-source-file" />
+    <p class="help-block">Upload some data blah blah</p>
   </div>
 </div>

@@ -1,5 +1,6 @@
 define(
   [
+    'jquery',
     'underscore',
     'backbone',
     'js/amp/sidebar/layers/views/layers-view.js',
@@ -9,7 +10,7 @@ define(
     'js/amp/sidebar/source-categories/views/source-categories-view.js',
     'js/amp/sidebar/data-sources/views/data-sources-view.js',
   ],
-  function (_, Backbone, LayersView, FiltersView, SearchView, ToolsView, SourceCategoriesView, DataSourcesView) {
+  function ($, _, Backbone, LayersView, FiltersView, SearchView, ToolsView, SourceCategoriesView, DataSourcesView) {
     'use strict';
 
     var SidebarToolsView = Backbone.View.extend({
@@ -43,6 +44,24 @@ define(
         this.$el.append('<div id="tool-data-sources" class="panel sidebar-tool"></div>');
         var dataSourcesView = new DataSourcesView({el:'#tool-data-sources'});
         dataSourcesView.render();
+
+        // TODO: where does this jquery behavioural stuff go?
+        // bind all the popovers
+        var popovers = $('.layer-info');
+        popovers.popover();
+        // hide popovers when the drawer closes
+        $('.sidebar-tool').on('hide.bs.collapse', function() {
+          popovers.popover('hide');
+        });
+        popovers.on('show.bs.popover', function() {
+          // hide other open popovers
+          var opening = this;
+          popovers.each(function(i, triggerer) {
+            if (triggerer !== opening) {
+              $(triggerer).popover('hide');
+            }
+          });
+        });
       }
     });
 

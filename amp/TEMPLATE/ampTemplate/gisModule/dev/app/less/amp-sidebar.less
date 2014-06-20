@@ -102,25 +102,18 @@
     .accordion-body {
       height: auto;
 
-      h4 {
-        padding: 4px;
-        font-size: 16px;
-        font-weight: 700;
-        color: @amp-emph;
+      .layer-heading-container {
         background: @amp-content-highlight-bg;
-
-        label {
+        label,
+        h4 {
+          display: inline-block;
           margin: 0;
+          background: transparent;
         }
       }
-
-      .description{
-        padding: 0 4px;
-      }
-
     }
-  }
 
+  }
 }
 
 // stickyfooter crap for quality indicator

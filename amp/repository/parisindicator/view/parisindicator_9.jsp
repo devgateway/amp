@@ -47,7 +47,7 @@
 		</tr>
 		<logic:empty name="parisIndicatorForm" property="mainTableRows">
 	        <tr>
-	            <td width="100%" align="center" height="65" colspan="6"  class="inside_header" >
+	            <td width="100%" align="center" height="65" colspan="6" >
 	                <div align="center">
 	                    <strong><font color="red"><digi:trn key="aim:noSurveyDataFound">No survey data found.</digi:trn></font></strong>
 	                </div>

@@ -609,6 +609,13 @@ public final class PMUtil {
 //			CompositePermission cp1 = PMUtil.createCompositePermissionForFM(ampTreeRootObject.getAmpObjectVisibility().getName()+" Composite Permission " + cal.getTimeInMillis(), gatesSet, workspacesSet);
 			session.save(cp);
 			permissionMap.setPermission(cp);
+			
+			//check if a permission map for this object and category already exists
+			List <PermissionMap> auxList = getOwnPermissionMapListForPermissible(ampTreeRootObject.getAmpObjectVisibility());
+			if (auxList !=null) {
+			  PermissionMap aux = auxList.get(0);
+			  session.delete(aux);
+			}
 			session.save(permissionMap);
 		
 	}
@@ -720,7 +727,7 @@ public final class PMUtil {
 			    	//PMUtil.deletePermissionMap(permissionMap, session);
 			    	p.getPermissibleObjects().remove(permissionMap);
 			    	session.saveOrUpdate(p);
-			    	permissionMap.setPermission(null);
+			    	permissionMap = (PermissionMap) session.load(PermissionMap.class, permissionMap.getId());
 			    	session.delete(permissionMap);
 			    }
 			}

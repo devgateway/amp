@@ -710,11 +710,13 @@ public class GroupColumn extends Column<Column> {
 	}
 	
 	@Override
-	public int getRowSpanInHeading_internal()
-	{
+	public int getRowSpanInHeading_internal() {
+        /* AMP-17646. Did not find any kind of report where this needed. Please revert if you find one
+                      For now, it only brakes the totals
 		if (this.getName().equals(ArConstants.COLUMN_CONTRIBUTION_TOTAL) ||
 				this.getName().equals(ArConstants.COLUMN_TOTAL))
 			return 2;
+        */
 		return 1;
 	}
 	

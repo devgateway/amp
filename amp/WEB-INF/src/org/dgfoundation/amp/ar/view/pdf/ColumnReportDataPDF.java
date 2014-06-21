@@ -110,13 +110,13 @@ public class ColumnReportDataPDF extends PDFExporter {
 				if (columnReport.getName().indexOf(":")>0){
 					translatedName += columnReport.getName().substring(columnReport.getName().indexOf(":"));
 				}
-			}catch (WorkerException e)
+			} catch (WorkerException e) {////System.out.println(e);
 				{//////System.out.println(e);
 				
-				}
+			}
 			
 			PdfPCell pdfc; 
-			if(translatedName.compareTo("")==0)
+			if("".equals(translatedName))
 				pdfc= new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(columnReport.getName()),titleFont));
 			else 
 				pdfc=new PdfPCell(new Paragraph((ExportActivityToPDF.postprocessText(translatedName)),titleFont));
@@ -128,44 +128,27 @@ public class ColumnReportDataPDF extends PDFExporter {
 		// headings
 		Font font = new Font(ExportActivityToPDF.basefont, 9, Font.BOLD);
 		font.setColor(new Color(255,255,255));
-		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) 
-		{
+		if(! columnReport.getGlobalHeadingsDisplayed()) {
 			getExportState().headingCells = new ArrayList<PdfPCell>();
-			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
+			columnReport.setGlobalHeadingsDisplayed(true);
 			int maxColumnDepth = columnReport.getMaxColumnDepth();
 			
 			int zzz = 0;
 			for (int curDepth = 0; curDepth < maxColumnDepth; curDepth++)
 			{
 				boolean anyCellsOnThisRow = false;
-				
-//				if (curDepth == 1 | curDepth == 2) // dummy spacing for "project title"
-//				{
-//					PdfPCell pdfc = new PdfPCell(new Paragraph("", font));
-//				   	
-//					//pdfc.set
-//					pdfc.setHorizontalAlignment(Element.ALIGN_CENTER);
-//					pdfc.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//					pdfc.setColspan(1);
-//					pdfc.setRowspan(1);
-//					pdfc.setBackgroundColor(new Color(51,102,153));
-//					//table.addCell(pdfc);
-//					headingCells.add(pdfc);					
-//				}
 
-				for(Column col:columnReport.getColumns())
-				{
+				for (Column col : columnReport.getColumns()) {
 					col.setCurrentDepth(curDepth);
 					List<Column> columnsOnCurrentLine = col.getSubColumnList();
-					for (Column element2:columnsOnCurrentLine)
-					{
+					for (Column element2 : columnsOnCurrentLine) {
 						zzz ++;
 						// String suffix = " (" + zzz + ")"; DEBUG, leave it here
 						String suffix = "";
 						anyCellsOnThisRow = true;
 						int rowsp = element2.getPositionInHeading().getRowSpan();
 						int colsp = element2.getPositionInHeading().getColSpan();
-						//element2.setMaxNameDisplayLength(16);					
+						//element2.setMaxNameDisplayLength(16);
 					//if ( !StringUtils.isEmpty(element2.getName()) ){
 						String cellValue = element2.getName(metadata.getHideActivities());
 						//this value should be translated
@@ -175,11 +158,10 @@ public class ColumnReportDataPDF extends PDFExporter {
 						font.setSize(deductFontSize(translatedCellValue));
 						PdfPCell pdfc = new MyPdfPCell(new Paragraph((ExportActivityToPDF.postprocessText(translatedCellValue + suffix)), font));
 						   	
-						//pdfc.set
 						pdfc.setHorizontalAlignment(Element.ALIGN_CENTER);
 						pdfc.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						//pdfc.
-						pdfc.setColspan(colsp);
+
+                        pdfc.setColspan(colsp);
 						pdfc.setRowspan(rowsp);
 						pdfc.setBackgroundColor(new Color(51,102,153));
 						//table.addCell(pdfc);
@@ -199,15 +181,13 @@ public class ColumnReportDataPDF extends PDFExporter {
 
 		// add data
 
-		if (metadata.getHideActivities() == null
-				|| metadata.getHideActivities().booleanValue() == false) {
-
-		for (Long element:columnReport.getOwnerIds()) {
-			this.setOwnerId(element);
-			for (Viewable velement:columnReport.getItems()) {
-				velement.invokeExporter(this);
-			}
-		}
+		if (metadata.getHideActivities() == null || !metadata.getHideActivities()) {
+            for (Long element:columnReport.getOwnerIds()) {
+                this.setOwnerId(element);
+                for (Viewable velement:columnReport.getItems()) {
+                    velement.invokeExporter(this);
+                }
+            }
 		}
 		
 		//add trail cells

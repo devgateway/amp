@@ -94,11 +94,14 @@ function resetFilter(){
 
 function resetElement( elem ) {
 	if (elem != null && elem.length > 1)
-		for (var i=0; i<elem.length; i++)
+		for (var i=0; i<elem.length; i++) {
 			elem[i].checked = false;
+			toggleCheckChildren(elem[i]);
+		}
 	else 
 		if (elem!=null){
 			elem.checked	= false;
+			toggleCheckChildren(elem);
 		}
 }
 

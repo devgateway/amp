@@ -131,7 +131,7 @@ public class SimpleSQLPatcher {
 				));
 
 			addPatch(new SimpleSQLPatch(
-					"005",
+					"006",
 					"DROP VIEW IF EXISTS amp_activity CASCADE ",
 					"DROP VIEW IF EXISTS v_amp_activity_expanded ",
 					"DROP VIEW IF EXISTS v_act_pp_details",
@@ -183,6 +183,15 @@ public class SimpleSQLPatcher {
                     " AND (amp_activity_version.deleted IS NULL OR amp_activity_version.deleted = false)",
 					
 					" UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'",
+					
+					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_convenio_numcont')",
+					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_contracting_arrangements' )",
+					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_budgeting_year' )",
+					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_code_chapitre' )",
+					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_description_chapitre' )",
+					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_description_imputation' )",
+					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_imputation' )",
+					" DELETE FROM AMP_REPORTS R WHERE NOT EXISTS(SELECT 1 FROM amp_report_column rc where rc.amp_report_id=r.amp_report_id)",
 					" DELETE FROM  amp_columns WHERE extractorview = 'v_convenio_numcont' ",
 					" DELETE FROM  amp_columns WHERE extractorview = 'v_contracting_arrangements'  ",
 					" DELETE FROM  amp_columns WHERE extractorview = 'v_budgeting_year' ",

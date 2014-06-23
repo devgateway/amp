@@ -132,8 +132,10 @@ public class SimpleSQLPatcher {
 
 			addPatch(new SimpleSQLPatch(
 					"005",
-					"DROP VIEW IF EXISTS amp_activity CASCADE",
+					"DROP VIEW IF EXISTS amp_activity CASCADE ",
+					"DROP VIEW IF EXISTS v_amp_activity_expanded ",
 					"DROP VIEW IF EXISTS v_act_pp_details",
+					
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS linked_activities",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS contract_details",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS version",
@@ -169,6 +171,13 @@ public class SimpleSQLPatcher {
 					"DROP INDEX IF EXISTS amp_activity_version_comments_idx",
 					"DROP INDEX IF EXISTS amp_activity_version_contracting_arrangements_idx",
 					
+					" CREATE OR REPLACE VIEW v_amp_activity_expanded AS " + 
+	 				" SELECT av.*, dg_editor.body as expanded_description "  +
+				    " FROM amp_activity_version av "  +
+				    " LEFT JOIN dg_editor on av.description=dg_editor.editor_key, "  + 
+					" amp_activity_group "  +
+				    " WHERE av.amp_activity_id = amp_activity_group.amp_activity_last_version_id AND (av.deleted IS NULL OR av.deleted = false)",
+				    
 					" CREATE OR REPLACE VIEW amp_activity AS select amp_activity_version.* FROM amp_activity_version,amp_activity_group "+
                     " WHERE amp_activity_version.amp_activity_id = amp_activity_group.amp_activity_last_version_id  "+
                     " AND (amp_activity_version.deleted IS NULL OR amp_activity_version.deleted = false)",

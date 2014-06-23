@@ -14,6 +14,7 @@
      	<META HTTP-EQUIV="EXPIRES" CONTENT="0">		
 		<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 	    <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+	    <link href='/TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
         <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 	</HEAD>
 	

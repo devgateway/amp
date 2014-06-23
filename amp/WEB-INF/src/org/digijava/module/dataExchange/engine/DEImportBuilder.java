@@ -2545,7 +2545,7 @@ public class DEImportBuilder {
 	                 SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 
 	                 // parse the purchase order schema
-	                 Schema schema = sf.newSchema(new File(path+DEConstants.IATI_SCHEMA_LOCATION));
+	                 Schema schema = sf.newSchema(new File(path+DEConstants.IATI_SCHEMA_LOCATION_V_1_03));
 
 	                 m.setSchema(schema);
 	                 m.setEventHandler(log);

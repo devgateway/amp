@@ -174,7 +174,11 @@ public class WorkspaceFilter
 		//return "41, 43, 44, 45";
 		//return "20, 21"; // masha
 		//return "24";
-		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('Activity with Zones')";
+/*		return "SELECT amp_activity_id from amp_activity WHERE name IN ('Eth Water', 'mtef activity 1', 'mtef activity 2', 'ptc activity 1', 'ptc activity 2', 'SSC Project 1', " + 
+				"'SSC Project 2', 'TAC_activity_1', 'TAC_activity_2', 'date-filters-activity', " + 
+				"'Proposed Project Cost 1 - USD', 'Proposed Project Cost 2 - EUR', 'Pure MTEF Project', 'Test MTEF directed', " +  
+				"'AMP-15967-activity-2', 'AMP-15967-activity-1', 'crazy funding 1', 'activity with components', 'Project with documents')";*/
+		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('ptc activity 1', 'ptc activity 2', 'crazy funding 1')";
 		return TEAM_FILTER;
 		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537', '8723851641', '8723851222')";
 		//return "select amp_activity_id from amp_activity where amp_id in ('8723851537')";

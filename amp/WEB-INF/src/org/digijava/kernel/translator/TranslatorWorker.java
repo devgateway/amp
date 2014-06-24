@@ -1260,8 +1260,8 @@ public class TranslatorWorker {
 
         }
         catch (HibernateException e) {
-            logger.error("Error updating translations. key=" + key, e);
-            throw new WorkerException("Error updating translations. key=" + key, e);
+            logger.error("Error updating translations. key=" + key + ", HibernateException=" + e.getMessage());
+            throw new WorkerException("Error updating translations. key=" + key + ", "+e.getMessage(), e);
         }
         return result;
     }

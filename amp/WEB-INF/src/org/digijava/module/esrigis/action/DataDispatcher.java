@@ -302,7 +302,7 @@ public class DataDispatcher extends MultiAction {
 		JSONArray jsonArray = new JSONArray();
 		
 		// fetch activity names
-		List<Long> actIds = DbHelper.getActivitiesIds(maphelperform.getFilter());
+		List<Long> actIds = DbHelper.getActivitiesIds(maphelperform.getFilter(), null);
 		String activityIdsCondition = "WHERE amp_activity_id IN (" + Util.toCSStringForIN(actIds) + ")";		
 		Map<Long, ActivityPoint> activityPoints = new HashMap<Long, ActivityPoint>();		
 		
@@ -646,7 +646,7 @@ public class DataDispatcher extends MultiAction {
 		long startTS = System.currentTimeMillis();
 
 		// fetch activity names
-		List<Long> actIds = DbHelper.getActivitiesIds(maphelperform.getFilter());
+		List<Long> actIds = DbHelper.getActivitiesIds(maphelperform.getFilter(), null);
 		String activityIdsCondition = "WHERE amp_activity_id IN (" + Util.toCSStringForIN(actIds) + ")";		
 		Map<Long, ActivityPoint> activityPoints = new HashMap<Long, ActivityPoint>();		
 		
@@ -894,7 +894,7 @@ public class DataDispatcher extends MultiAction {
 		
 		JSONArray jsonArray = new JSONArray();
 		List<Long> activityIdList = new ArrayList<Long>();
-		activityIdList = DbHelper.getActivitiesIds(maphelperform.getFilter());
+		activityIdList = DbHelper.getActivitiesIds(maphelperform.getFilter(), null);
 		
 		long bbb = System.currentTimeMillis();
 		long gettingActivitiesTime = bbb - aaa;

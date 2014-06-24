@@ -120,7 +120,7 @@ public class DbHelper {
 	 * @return
 	 * @throws DgException
 	 */
-	public static List<Long> getActivitiesIds(MapFilter filter)
+	public static List<Long> getActivitiesIds(MapFilter filter, Boolean forceUseMtefProjections)
 			throws DgException {
 		Long[] orgGroupIds = filter.getSelOrgGroupIds();
 		List<Long> activities = null;
@@ -133,7 +133,8 @@ public class DbHelper {
 		Long [] primaryProgramsIds = filter.getSelectedPrimaryPrograms();
 		Long [] secondaryProgramsIds = filter.getSelectedSecondaryPrograms();
 		
-		boolean useMtefProjections = filter.getTransactionType() == Constants.MTEFPROJECTION;
+		boolean useMtefProjections = forceUseMtefProjections != null ? 
+					forceUseMtefProjections : filter.getTransactionType() == Constants.MTEFPROJECTION;
 		
 		//int transactionType = filter.getTransactionType();
 //		TeamMember teamMember = filter.getTeamMember();
@@ -197,20 +198,15 @@ public class DbHelper {
 			if (!useMtefProjections)
 			{
 				oql += " AND fd.adjustmentType = " + CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase();
-			}
 			
-			switch(filter.getTransactionType())
-			{
-				case Constants.TRANSACTION_TYPE_COMMITMENTS_AND_DISBURSEMENTS:
-					oql += " and (fd.transactionType = 0 or  fd.transactionType =1) "; // commitmens OR disbursements
-					break;
-				
-				case Constants.MTEFPROJECTION:
-					// nothing to filter on
-					break;
-					
-				default:
-					oql += " and fd.transactionType =:transactionType  ";
+				switch(filter.getTransactionType()) {
+					case Constants.TRANSACTION_TYPE_COMMITMENTS_AND_DISBURSEMENTS:
+						oql += " and (fd.transactionType = 0 or  fd.transactionType =1) "; // commitmens OR disbursements
+						break;
+									
+					default:
+						oql += " and fd.transactionType =:transactionType  ";
+				}
 			}
 			
 			if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
@@ -364,35 +360,35 @@ public class DbHelper {
 
 	}
 	
-	public static List<AmpActivityVersion> getActivities(MapFilter filter,HttpServletRequest request)
-			throws DgException {
-
-		List<AmpActivityVersion> activities = null;
-		try {
-			List<Long> ids = getActivitiesIds(filter);
-			if (ids.size()==0){
-				return activities;
-			}
-			String oql = "select distinct act from ";
-			oql += AmpActivityVersion.class.getName() + " act WHERE ampActivityId IN (" + Util.toCSString(ids) + ")";
-			Session session = PersistenceManager.getRequestDBSession();
-			Query query = session.createQuery(oql);
-			
-			activities = query.list();
-		} catch (Exception e) {
-			logger.error(e);
-			throw new DgException("Cannot load activities from db", e);
-		}
-		return activities;
-
-	}
+//	public static List<AmpActivityVersion> getActivities(MapFilter filter,HttpServletRequest request)
+//			throws DgException {
+//
+//		List<AmpActivityVersion> activities = null;
+//		try {
+//			List<Long> ids = getActivitiesIds(filter);
+//			if (ids.size()==0){
+//				return activities;
+//			}
+//			String oql = "select distinct act from ";
+//			oql += AmpActivityVersion.class.getName() + " act WHERE ampActivityId IN (" + Util.toCSString(ids) + ")";
+//			Session session = PersistenceManager.getRequestDBSession();
+//			Query query = session.createQuery(oql);
+//			
+//			activities = query.list();
+//		} catch (Exception e) {
+//			logger.error(e);
+//			throw new DgException("Cannot load activities from db", e);
+//		}
+//		return activities;
+//
+//	}
 
 	public static List<AmpActivityVersion> getActivities(MapFilter filter)
 			throws DgException {
 
 		List<AmpActivityVersion> activities = null;
 		try {
-			List<Long> ids = getActivitiesIds(filter);
+			List<Long> ids = getActivitiesIds(filter, null);
 			String activityIdsCSV = Util.toCSStringForIN(ids);
 			String oql = "select distinct act from ";
 			oql += AmpActivityVersion.class.getName()
@@ -892,7 +888,7 @@ public class DbHelper {
         }
 
         //AMP-17549
-        List<Long> workSpaceActivityList = getActivitiesIds(filter);        
+        List<Long> workSpaceActivityList = getActivitiesIds(filter, mtef);        
         /*List<Long> workSpaceActivityList = filter.buildFilteredActivitiesList();*/
         String inactivities= Util.toCSStringForIN(workSpaceActivityList);
 		oql += " and act.ampActivityId in("+ inactivities +")";

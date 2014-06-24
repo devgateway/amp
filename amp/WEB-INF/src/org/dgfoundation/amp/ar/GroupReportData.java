@@ -110,7 +110,7 @@ public class GroupReportData extends ReportData<ReportData> {
 			element.applyLevelSorter();
 		}
 		
-		if( this.getParent()==null ) {
+		if (this.getParent() == null) {
 			//AMP-17009: refresh report headings for sorted reports 
 			this.calculateReportHeadings();
 		}

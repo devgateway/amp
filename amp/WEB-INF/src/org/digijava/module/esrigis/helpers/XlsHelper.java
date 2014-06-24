@@ -256,7 +256,7 @@ public class XlsHelper {
 		
 		int cacheUses = 0, cacheHits = 0;
 		
-		List<Long> actIds = DbHelper.getActivitiesIds(filter);
+		List<Long> actIds = DbHelper.getActivitiesIds(filter, null);
 		String activityIdsCondition = "WHERE amp_activity_id IN (" + Util.toCSStringForIN(actIds) + ")";
 		
 		// fetch non-html-escaped Activity Descriptions

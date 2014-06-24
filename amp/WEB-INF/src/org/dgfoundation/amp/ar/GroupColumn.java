@@ -689,15 +689,8 @@ public class GroupColumn extends Column<Column> {
 		return ret;
 	}
 
-	/**
-	 * gets the max of all the subcolumns' rowspans and then adds the self rowspan
-	 * only called once, when a CRD is initialized. After that, get the info from positionInHeading
-	 */
-    @Override
-	public int calculateTotalRowSpan()
-	{
-		if (this.getItems().isEmpty())
-		{
+    public int getChildrenMaxRowSpan() {    	
+		if (this.getItems().isEmpty()) {
 			return 0;
 		}
 		int maxColSpan = 0;
@@ -706,24 +699,37 @@ public class GroupColumn extends Column<Column> {
 			if (c != null)
 				maxColSpan = Math.max(maxColSpan, c.calculateTotalRowSpan());
 		}
-		return maxColSpan + getRowSpanInHeading_internal();
+		return maxColSpan;
+    }
+    
+	/**
+	 * gets the max of all the subcolumns' rowspans and then adds the self rowspan
+	 * only called once, when a CRD is initialized. After that, get the info from positionInHeading
+	 */
+    @Override
+	public int calculateTotalRowSpan()
+	{
+		if (this.getItems().isEmpty()) {
+			return 0;
+		}
+		return getChildrenMaxRowSpan() + getRowSpanInHeading_internal();
 	}
 	
 	@Override
 	public int getRowSpanInHeading_internal() {
-        /* AMP-17646. Did not find any kind of report where this needed. Please revert if you find one
-                      For now, it only brakes the totals
-		if (this.getName().equals(ArConstants.COLUMN_CONTRIBUTION_TOTAL) ||
-				this.getName().equals(ArConstants.COLUMN_TOTAL))
-			return 2;
-        */
+//		if (isTotalColumn())
+//			return 2;
 		return 1;
 	}
 	
 	@Override
 	public void setPositionInHeadingLayout(int totalRowSpan, int startingDepth, int startColumn)
 	{
-		this.positionInHeading = new ReportHeadingLayoutCell(this, startingDepth, totalRowSpan, this.getRowSpanInHeading_internal(), startColumn, this.getWidth(), this.getName());
+		int selfRowSpan = this.isTotalColumn() ? totalRowSpan - getChildrenMaxRowSpan() : 1;
+		//selfRowSpan = getRowSpanInHeading_internal();
+		if (selfRowSpan <= 0)
+			throw new RuntimeException("selfRowSpan should be >= 1!");
+		this.positionInHeading = new ReportHeadingLayoutCell(this, startingDepth, totalRowSpan, selfRowSpan, startColumn, this.getWidth(), this.getName());
 		//super.setPositionInHeadingLayout(totalRowSpan, startingDepth);
 		if (this.getItems() == null)
 			return;
@@ -733,6 +739,10 @@ public class GroupColumn extends Column<Column> {
 			item.setPositionInHeadingLayout(totalRowSpan - this.positionInHeading.getRowSpan(), startingDepth + this.positionInHeading.getRowSpan(), startColumn + startColumnSum);
 			startColumnSum += item.getWidth();
 		}
+	}
+	
+	public boolean isTotalColumn(){
+		return this.getName().equals(ArConstants.COLUMN_CONTRIBUTION_TOTAL) || this.getName().equals(ArConstants.COLUMN_TOTAL);
 	}
 	
 	/* (non-Javadoc)

@@ -101,10 +101,9 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 									))
 						)).withTrailCells(null, "957 887", "643 888", "77 222", "100 000", "15 000", "44 333")
 						.withPositionDigest(
-								"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 4, totalRowSpan: 4, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 4, colSpan: 6))", 
-								"(line 1:)",
-								"(line 2:RHLC Actual Disbursements: (startRow: 2, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 5))", 
-								"(line 3:RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC DN-IMPL: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC EXEC-IMPL: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC IMPL-BENF: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC IMPL-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1))"
+								"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 1, totalRowSpan: 3, colSpan: 6))", 
+								"(line 1:RHLC Actual Disbursements: (startRow: 1, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 1, rowSpan: 1, totalRowSpan: 2, colSpan: 5))", 
+								"(line 2:RHLC DN-EXEC: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC DN-IMPL: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC EXEC-IMPL: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC IMPL-BENF: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC IMPL-EXEC: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1))"
 								);
 		
 		runReportTest("flat tab Actual Disbursements + Real Disbursements Report", "aaa", 
@@ -123,9 +122,8 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 												"AMP-15967-activity-1", "100 110", "AMP-15967-activity-2", "97 000", "Eth Water", "545 000", "date-filters-activity", "72 000")
 						))).withTrailCells(null, null, "125 000", "814 110")
 						.withPositionDigest(
-								"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colSpan: 1), RHLC Donor Agency: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colSpan: 2))", 
-								"(line 1:)", 
-								"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1))"
+								"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Donor Agency: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colSpan: 2))", 
+								"(line 1:RHLC Actual Commitments: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Actual Disbursements: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colSpan: 1))"
 								);
 		
 		runReportTest("flat Actual Disbursements + Actual Disbursements Report", "AMP-15967-test-mixed-activities-totals", 
@@ -570,9 +568,8 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 						.withTrailCells(null, "255 166", "0"))
 					.withTrailCells(null, "255 166", "0")
 						.withPositionDigest(
-						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colSpan: 2))",
-						"(line 1:)",
-						"(line 2:RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colSpan: 1))");
+						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colSpan: 2))",
+						"(line 1:RHLC Actual Disbursements: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC Real Disbursements: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colSpan: 1))");
 	
 		runReportTest("Tab with Actual Disb + Real Disb", "act-real-disb", 
 				new String[] {"SSC Project 2", "TAC_activity_1"}, fddr_correct, makeTabReportModifier);			
@@ -672,9 +669,8 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 						.withTrailCells(null, "973,011", "123,654", "3,016,872", "2,221,377"))
 					.withTrailCells(null, "973,011", "123,654", "3,016,872", "2,221,377")
 						.withPositionDigest(true,
-						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 0, colSpan: 1), RHLC MTEF 2011/2012: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC MTEF 2013/2014: (startRow: 0, rowSpan: 3, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 3, colStart: 3, colSpan: 2))",
-						"(line 1:)",
-						"(line 2:RHLC Actual Commitments: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))");
+						"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 0, colSpan: 1), RHLC MTEF 2011/2012: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 1, colSpan: 1), RHLC MTEF 2013/2014: (startRow: 0, rowSpan: 2, totalRowSpan: 2, colStart: 2, colSpan: 1), RHLC Total Costs: (startRow: 0, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 2))",
+						"(line 1:RHLC Actual Commitments: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC Actual Disbursements: (startRow: 1, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1))");
 		
 		runReportTest("Simple Report without an year-range-settings which filters out all years", "AMP-15794", 
 				new String[] {"Eth Water", "mtef activity 1", "mtef activity 2", "ptc activity 1", "ptc activity 2", "SSC Project 1", "SSC Project 2", "TAC_activity_1", "TAC_activity_2", "date-filters-activity", "Proposed Project Cost 1 - USD", "Proposed Project Cost 2 - EUR", "Pure MTEF Project", "Test MTEF directed", "AMP-15967-activity-2", "AMP-15967-activity-1"}, 

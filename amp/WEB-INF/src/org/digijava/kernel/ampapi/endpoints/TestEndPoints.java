@@ -1,14 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints;
 //TODO: Add documentation to this class;
 import java.util.Random;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
 import org.digijava.kernel.ampapi.mondrian.queries.TestQueries;
 
 /**

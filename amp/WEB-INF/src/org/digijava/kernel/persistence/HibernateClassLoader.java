@@ -36,37 +36,43 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.dialect.function.ClassicAvgFunction;
 import org.hibernate.dialect.function.ClassicCountFunction;
 import org.hibernate.dialect.function.ClassicSumFunction;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.persistence.Entity;
+
 /**
  * Hibernate Class loader, see digi.xml file for more details.
- *
+ * 
  * @author Lasha Dolidze
  * @version 1.0
  */
 public class HibernateClassLoader {
 
-	private static Logger logger = I18NHelper.getKernelLogger(
-			HibernateClassLoader.class);
+	private static Logger logger = I18NHelper
+			.getKernelLogger(HibernateClassLoader.class);
 
 	private static SessionFactory sessionFactory;
 	private static Configuration cfg = null;
 	public static String HIBERNATE_CFG_XML = "/hibernate.cfg.xml";
-	
+
 	/**
-	 * for testcases - override the database defined in the {@link #HIBERNATE_CFG_XML} conf file, if not null
+	 * for testcases - override the database defined in the
+	 * {@link #HIBERNATE_CFG_XML} conf file, if not null
 	 */
 	public static String HIBERNATE_CFG_OVERRIDE_DATABASE;
 
 	/**
-	 * get Hibernate SessionFactory object, you will call openSession();
-	 * to obtain a JDBC connection and instantiate a new Session.
-	 * form example:
+	 * get Hibernate SessionFactory object, you will call openSession(); to
+	 * obtain a JDBC connection and instantiate a new Session. form example:
 	 * Session session = HibernateClassLoader.getSessionFactory().openSession();
-	 *
+	 * 
 	 * @return hibernate SessionFactory object
 	 * @throws HibernateException
 	 */
@@ -79,9 +85,9 @@ public class HibernateClassLoader {
 	}
 
 	/**
-	 * initialize hibernate classes for kernel
-	 * see module configuration file for more details
-	 *
+	 * initialize hibernate classes for kernel see module configuration file for
+	 * more details
+	 * 
 	 */
 	public static void initialize(DigiConfig config) {
 
@@ -89,9 +95,9 @@ public class HibernateClassLoader {
 	}
 
 	/**
-	 * initialize hibernate classes for module
-	 * see module configuration file for more details
-	 *
+	 * initialize hibernate classes for module see module configuration file for
+	 * more details
+	 * 
 	 * @param config
 	 */
 	public static void initialize(HashMap config) {
@@ -104,15 +110,37 @@ public class HibernateClassLoader {
 			HibernateClasses classes = moduleConfig.getHibernateClasses();
 			if (classes != null) {
 				loadHibernateClasses(classes);
-			}
-			else {
+			} else {
 				logger.warn("No hibernate classes for module " + moduleName);
+			}
+		}
+
+		/* Add support for annotates classes not finish yet */
+		// the following will detect all classes that are annotated as @Entity
+		ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(
+				false);
+		scanner.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
+
+		/*
+		 * only register classes within package
+		 * org.digijava.kernel.ampapi.postgis.entity need to take the
+		 * configuration file /repository/hibernate-annotated.xml
+		 */
+
+		for (BeanDefinition bd : scanner
+				.findCandidateComponents("org.digijava.kernel.ampapi.postgis.entity")) {
+			String name = bd.getBeanClassName();
+			try {
+				// Add each class to the to the persistence content
+				cfg.addAnnotatedClass(Class.forName(name));
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
 
 	/**
-	 *
+	 * 
 	 * @param classes
 	 */
 	public static void loadHibernateClasses(HibernateClasses classes) {
@@ -121,9 +149,9 @@ public class HibernateClassLoader {
 
 		if (cfg == null) {
 			cfg = new LocalHibernateConfig();
-			cfg.addSqlFunction( "count", new ClassicCountFunction()); 
-			cfg.addSqlFunction( "avg", new ClassicAvgFunction()); 
-			cfg.addSqlFunction( "sum", new ClassicSumFunction()); 
+			cfg.addSqlFunction("count", new ClassicCountFunction());
+			cfg.addSqlFunction("avg", new ClassicAvgFunction());
+			cfg.addSqlFunction("sum", new ClassicSumFunction());
 		}
 
 		if (classes == null) {
@@ -138,24 +166,16 @@ public class HibernateClassLoader {
 
 				// check if class is critical resource to load
 				// see catch block
-				required = ( ( (classes.getRequired() == null ||
-						classes.getRequired().equalsIgnoreCase(
-								"true")) &&
-								(hibernateClass.getRequired() == null ||
-										!hibernateClass.getRequired().
-										equalsIgnoreCase(
-												"false"))) ||
-												( (classes.getRequired() != null &&
-														classes.getRequired().equalsIgnoreCase(
-																"false")) &&
-																(hibernateClass.getRequired() != null &&
-																		hibernateClass.getRequired().equalsIgnoreCase(
-																				"true")))
-				);
+				required = (((classes.getRequired() == null || classes
+						.getRequired().equalsIgnoreCase("true")) && (hibernateClass
+						.getRequired() == null || !hibernateClass.getRequired()
+						.equalsIgnoreCase("false"))) || ((classes.getRequired() != null && classes
+						.getRequired().equalsIgnoreCase("false")) && (hibernateClass
+						.getRequired() != null && hibernateClass.getRequired()
+						.equalsIgnoreCase("true"))));
 
 				if (logger.isDebugEnabled()) {
-					Object[] params = {
-							hibernateClass.getContent()};
+					Object[] params = { hibernateClass.getContent() };
 					logger.l7dlog(Level.DEBUG,
 							"HibernateClassLoader.loadingHibernateClass",
 							params, null);
@@ -163,17 +183,14 @@ public class HibernateClassLoader {
 
 				// adding class to load
 				cfg.addClass(Class.forName(hibernateClass.getContent()));
-			}
-			catch (Exception ex) {
-				Object[] params = {
-						hibernateClass.getContent()};
+			} catch (Exception ex) {
+				Object[] params = { hibernateClass.getContent() };
 				if (required) {
 					logger.l7dlog(Level.FATAL,
 							"HibernateClassLoader.loadingHibernateClass.error",
 							params, null);
 					break;
-				}
-				else {
+				} else {
 					logger.l7dlog(Level.ERROR,
 							"HibernateClassLoader.loadingHibernateClass.error",
 							params, null);
@@ -187,23 +204,23 @@ public class HibernateClassLoader {
 	 *
 	 */
 	public static void buildHibernateSessionFactory() {
-		InputStream inp = HibernateClassLoader.class.getResourceAsStream(
-				HIBERNATE_CFG_XML);
+		InputStream inp = HibernateClassLoader.class
+				.getResourceAsStream(HIBERNATE_CFG_XML);
 		try {
-            if (inp == null) {
-                cfg.setInterceptor(new TranslatorInterceptor());
-                sessionFactory = cfg.buildSessionFactory();
-			}
-			else {
+			if (inp == null) {
+				cfg.setInterceptor(new TranslatorInterceptor());
+				sessionFactory = cfg.buildSessionFactory();
+			} else {
 				Configuration newConfig = cfg.configure(HIBERNATE_CFG_XML);
-                newConfig.setInterceptor(new TranslatorInterceptor());
-                if (HIBERNATE_CFG_OVERRIDE_DATABASE != null)
-                	newConfig.setProperty("hibernate.connection.url", HIBERNATE_CFG_OVERRIDE_DATABASE);
-                HIBERNATE_CFG_OVERRIDE_DATABASE = null; //reset after each session
+				newConfig.setInterceptor(new TranslatorInterceptor());
+				if (HIBERNATE_CFG_OVERRIDE_DATABASE != null)
+					newConfig.setProperty("hibernate.connection.url",
+							HIBERNATE_CFG_OVERRIDE_DATABASE);
+				HIBERNATE_CFG_OVERRIDE_DATABASE = null; // reset after each
+														// session
 				sessionFactory = newConfig.buildSessionFactory();
 			}
-		}
-		catch (Exception ex1) {
+		} catch (Exception ex1) {
 			logger.fatal("Unable to build hibernate session factory", ex1);
 			throw new RuntimeException(ex1);
 		}
@@ -222,13 +239,13 @@ class LocalHibernateConfig extends Configuration {
 	/**
 	 * @see org.hibernate.cfg.Configuration#getConfigurationInputStream(java.lang.String)
 	 */
-	protected InputStream getConfigurationInputStream(String resource) throws
-	HibernateException {
+	protected InputStream getConfigurationInputStream(String resource)
+			throws HibernateException {
 
 		logger.info("Configuration resource: " + resource);
 
-		InputStream stream = HibernateClassLoader.class.getResourceAsStream(
-				resource);
+		InputStream stream = HibernateClassLoader.class
+				.getResourceAsStream(resource);
 		if (stream == null) {
 			logger.warn(resource + " not found");
 			throw new HibernateException(resource + " not found");
@@ -236,5 +253,4 @@ class LocalHibernateConfig extends Configuration {
 		return stream;
 	}
 
-	
 }

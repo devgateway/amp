@@ -10,19 +10,23 @@
 		<wicketVersion>6.15.0</wicketVersion>
 		<tomcatVersion>7.0.54</tomcatVersion>
 		<springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
-		<springVersion>3.0.7.RELEASE</springVersion>		 
-    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	<buildVersion>2.10-SNAPSHOT</buildVersion>
+		<springVersion>3.0.7.RELEASE</springVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<buildVersion>2.10-SNAPSHOT</buildVersion>
 	</properties>
- <repositories> 
+	<repositories>
 		<repository>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <id>central</id>
-          <name>amp</name>
-         <url>http://artifactory.ampdev.net/artifactory/amp</url>
-        </repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>amp</name>
+			<url>http://artifactory.ampdev.net/artifactory/amp</url>
+		</repository>
+		<repository>
+			<id>Hibernate Spatial repo</id>
+			<url>http://www.hibernatespatial.org/repository</url>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -31,61 +35,10 @@
 			</snapshots>
 			<id>central</id>
 			<name>amp</name>
-			 <url>http://artifactory.ampdev.net/artifactory/amp</url>
+			<url>http://artifactory.ampdev.net/artifactory/amp</url>
 		</pluginRepository>
 	</pluginRepositories>
-	<!--
-	    OLD REPO's in case ampdev.net is down at some point
-		<repositories>
-		<repository>
-			<id>AMP Local</id>
-			<url>file://${basedir}/mvn-repo</url>
-		</repository>
 
-		<repository>
-			<id>repo.pentaho.org</id>
-			<name>repo.pentaho.org-releases</name>
-			<url>http://repository.pentaho.org/artifactory/pentaho</url>
-		</repository>
-		<repository>
-			<id>thirdparty.repo.pentaho.org</id>
-			<name>repo.pentaho.org-snapshots</name>
-			<url>http://repository.pentaho.org/artifactory/third-party</url>
-		</repository>
-		<repository>
-			<id>thirdparty-releases</id>
-			<name>JBoss Thirdparty Releases</name>
-			<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases</url>
-		</repository>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>maven-central</id>
-			<name>Maven Repository Switchboard</name>
-			<url>http://repo1.maven.org/maven2</url>
-		</repository>
-		<repository>
-			<id>jboss-public-repository-group</id>
-			<name>JBoss Public Repository Group</name>
-			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<releases>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>maven-central</id>
-			<name>Maven Plugin Repository</name>
-			<url>http://repo1.maven.org/maven2</url>
-		</pluginRepository>
-	</pluginRepositories> -->
-	
 	<dependencies>
 		<dependency>
 			<groupId>antlr</groupId>
@@ -282,6 +235,14 @@
 			<version>4.2.13.Final</version>
 		</dependency>
 
+		<!-- Hibernate spatial -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-spatial</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+		<!-- End hibernate-spatial -->
+
 		<dependency>
 			<groupId>com.lowagie</groupId>
 			<artifactId>itext</artifactId>
@@ -295,7 +256,7 @@
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-api</artifactId>
-			<version>1.6.5</version>			
+			<version>1.6.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
@@ -377,16 +338,16 @@
 			<artifactId>jaxb1-impl</artifactId>
 			<version>2.1.13</version>
 		</dependency>
-        <dependency>
+		<dependency>
 			<groupId>jaxen</groupId>
 			<artifactId>jaxen</artifactId>
 			<version>1.1.4</version>
 		</dependency>
-        <dependency>
-            <groupId>org.ccil.cowan.tagsoup</groupId>
-            <artifactId>tagsoup</artifactId>
-            <version>1.2.1</version>
-        </dependency>
+		<dependency>
+			<groupId>org.ccil.cowan.tagsoup</groupId>
+			<artifactId>tagsoup</artifactId>
+			<version>1.2.1</version>
+		</dependency>
 		<dependency>
 			<groupId>javax.xml</groupId>
 			<artifactId>jaxrpc-api</artifactId>
@@ -412,18 +373,18 @@
 			<artifactId>je</artifactId>
 			<version>1.7.0</version>
 		</dependency>
-		 <!-- Jersey  -->
+		<!-- Jersey -->
 		<dependency>
- 			<groupId>org.glassfish.jersey.containers</groupId>
-			 <!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core" -->
-			 <artifactId>jersey-container-servlet</artifactId>
-			 <version>2.9</version>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core" -->
+			<artifactId>jersey-container-servlet</artifactId>
+			<version>2.9</version>
 		</dependency>
 		<!-- Required only when you are using JAX-RS Client -->
 		<dependency>
- 			<groupId>org.glassfish.jersey.core</groupId>
- 			<artifactId>jersey-client</artifactId>
- 			<version>2.9</version>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>2.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
@@ -431,7 +392,7 @@
 			<version>2.9</version>
 		</dependency>
 		<!-- End Jersey -->
-		
+
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
@@ -442,7 +403,7 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.7.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>jfree</groupId>
 			<artifactId>jfreechart</artifactId>
@@ -508,7 +469,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.2</version>
-			<!-- <scope>test</scope>  -->
+			<!-- <scope>test</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -600,11 +561,8 @@
 			<artifactId>relaxngDatatype</artifactId>
 			<version>20020414</version>
 		</dependency>
-<!-- 	<dependency>
-			<groupId>activesoap</groupId>
-			<artifactId>retroweaver-rt</artifactId>
-			<version>1.1</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>activesoap</groupId> <artifactId>retroweaver-rt</artifactId> 
+			<version>1.1</version> </dependency> -->
 		<dependency>
 			<groupId>com.sun.xml.messaging.saaj</groupId>
 			<artifactId>saaj-impl</artifactId>
@@ -701,19 +659,10 @@
 			<artifactId>wcf</artifactId>
 			<version>1.8.0-070305</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>org.wicketstuff</groupId>
-			<artifactId>tinymce</artifactId>
-			<version>${wicketVersion}</version>
-		</dependency>
-		 -->
-<!-- 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.12.6</version>
-			<scope>provided</scope>
-		</dependency>  -->
+		<!-- <dependency> <groupId>org.wicketstuff</groupId> <artifactId>tinymce</artifactId> 
+			<version>${wicketVersion}</version> </dependency> -->
+		<!-- <dependency> <groupId>org.projectlombok</groupId> <artifactId>lombok</artifactId> 
+			<version>1.12.6</version> <scope>provided</scope> </dependency> -->
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner</artifactId>
@@ -723,7 +672,7 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>r09</version>
-		</dependency>           
+		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-core</artifactId>
@@ -758,8 +707,8 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-devutils</artifactId>
 			<version>${wicketVersion}</version>
-		</dependency>		
-		
+		</dependency>
+
 		<dependency>
 			<groupId>axis</groupId>
 			<artifactId>axis-wsdl4j</artifactId>
@@ -812,13 +761,8 @@
 			<version>${tomcatVersion}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>net.fckeditor</groupId>
-			<artifactId>java-core</artifactId>
-			<version>2.4.2</version>
-		</dependency>
-		 -->
+		<!-- <dependency> <groupId>net.fckeditor</groupId> <artifactId>java-core</artifactId> 
+			<version>2.4.2</version> </dependency> -->
 		<dependency>
 			<groupId>ant</groupId>
 			<artifactId>ant-jakarta-oro</artifactId>
@@ -839,37 +783,37 @@
 		</dependency>
 
 		<dependency>
-  			<groupId>pentaho</groupId>
-  			<artifactId>mondrian</artifactId>
-  			<version>3.6.1</version>
-  			<exclusions>
-  				<exclusion>
-  					<artifactId>servlet-api</artifactId>
-  					<groupId>javax.servlet</groupId>
-  				</exclusion>
-  				<exclusion>
-  					<artifactId>jsp-api</artifactId>
-  					<groupId>javax.servlet</groupId>
-  				</exclusion>
-  				<exclusion>
-  					<artifactId>eigenbase-resgen</artifactId>
-  					<groupId>eigenbase</groupId>
-  				</exclusion>
-  			</exclusions>
+			<groupId>pentaho</groupId>
+			<artifactId>mondrian</artifactId>
+			<version>3.6.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>servlet-api</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jsp-api</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>eigenbase-resgen</artifactId>
+					<groupId>eigenbase</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		
+
 		<dependency>
-			 <groupId>eigenbase</groupId>
+			<groupId>eigenbase</groupId>
 			<artifactId>eigenbase-resgen</artifactId>
-  			<version>1.3.5</version>
+			<version>1.3.5</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>2.0</version>
 		</dependency>
-            
+
 		<dependency>
 			<groupId>org.digijava</groupId>
 			<artifactId>digi-commons</artifactId>
@@ -890,8 +834,8 @@
 			<artifactId>java-core</artifactId>
 			<version>2.5</version>
 		</dependency>
-			
-		
+
+
 		<dependency>
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -906,7 +850,7 @@
 			<groupId>com.sun.mail</groupId>
 			<artifactId>smtp</artifactId>
 			<version>1.4.5</version>
-		</dependency> 		
+		</dependency>
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
@@ -934,36 +878,36 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>				
+				<version>2.3</version>
 				<configuration>
-				<warName>${project.version}</warName>
-				
-				<recompressZippedFiles>false</recompressZippedFiles>
-				 <manifest>
-                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                </manifest>
-                  <archive>
-                    <manifestEntries>
-                        <Specification-Title>${project.name}</Specification-Title>                        
-                        <Implementation-Version>${project.version}</Implementation-Version>
-                        <Implementation-Vendor>Development Gateway</Implementation-Vendor>
-                    </manifestEntries>
-                </archive>                		
-				 <webResources>
-            <resource>
-	              <directory>.</directory>
-	              <includes>
-	                 <include>**/*</include> 
-	              </includes>
-	              <excludes>
-	              	<exclude>META-INF/context.xml</exclude>
-	              	<exclude>WEB-INF/src/**</exclude>
-    				<exclude>.settings/**</exclude>
-    				<exclude>.externalToolBuilders/**</exclude>
-	              </excludes>	             
-            </resource>           
-          </webResources>
-          <webXml>WEB-INF/web.xml</webXml>
+					<warName>${project.version}</warName>
+
+					<recompressZippedFiles>false</recompressZippedFiles>
+					<manifest>
+						<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+					</manifest>
+					<archive>
+						<manifestEntries>
+							<Specification-Title>${project.name}</Specification-Title>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Implementation-Vendor>Development Gateway</Implementation-Vendor>
+						</manifestEntries>
+					</archive>
+					<webResources>
+						<resource>
+							<directory>.</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<excludes>
+								<exclude>META-INF/context.xml</exclude>
+								<exclude>WEB-INF/src/**</exclude>
+								<exclude>.settings/**</exclude>
+								<exclude>.externalToolBuilders/**</exclude>
+							</excludes>
+						</resource>
+					</webResources>
+					<webXml>WEB-INF/web.xml</webXml>
 				</configuration>
 			</plugin>
 
@@ -1070,7 +1014,7 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>					
+					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
 						<source>1.7</source>
 						<target>1.7</target>

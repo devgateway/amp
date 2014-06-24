@@ -1,0 +1,5 @@
+
+
+<hibernate-packages required="false">
+	<hibernate-package>org.digijava.kernel.entity.MailSpool</hibernate-package>
+</hibernate-package>

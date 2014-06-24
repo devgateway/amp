@@ -269,8 +269,7 @@ public class PersistenceManager {
 
 			if (target != null) {
 				if (!target.equalsIgnoreCase("kernel")) {
-					Object modConfig = DigiConfigManager.getModulesConfig().get(
-							target);
+					Object modConfig = DigiConfigManager.getModulesConfig().get(target);
 					if (modConfig != null) {
 						modulesConfig = new HashMap();
 						modulesConfig.put(target, modConfig);

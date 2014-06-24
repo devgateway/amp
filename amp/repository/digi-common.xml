@@ -25,7 +25,7 @@
 		<hibernate-class>org.digijava.kernel.entity.GeoRegion</hibernate-class>
 		<hibernate-class>org.digijava.kernel.user.User</hibernate-class>
 		<hibernate-class>org.digijava.kernel.user.UserLoginInfo</hibernate-class>
-                <hibernate-class>org.digijava.kernel.user.UserContactInfo</hibernate-class>
+        <hibernate-class>org.digijava.kernel.user.UserContactInfo</hibernate-class>
 		<hibernate-class>org.digijava.kernel.request.Site</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.Image</hibernate-class>
 		<hibernate-class>org.digijava.kernel.user.Group</hibernate-class>
@@ -47,8 +47,8 @@
 		<hibernate-class>org.digijava.kernel.entity.AccessLog</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
-                <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
-	</hibernate-classes>
+        <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
+    </hibernate-classes>
 
 	
 <!-- 

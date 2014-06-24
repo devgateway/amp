@@ -33,7 +33,7 @@ public class FilterUtil {
 	 * @param report
 	 * @param filter
 	 */
-	public static void populateFilter(FilterDataSetInterface report, AmpARFilter filter) {
+	public static void populateFilter(FilterDataSetInterface<? extends AmpFilterData> report, AmpARFilter filter) {
 		if ( report.getFilterDataSet()!=null && report.getFilterDataSet().size()>0 ) {
 			for(AmpFilterData item:report.getFilterDataSet()){
 				try {
